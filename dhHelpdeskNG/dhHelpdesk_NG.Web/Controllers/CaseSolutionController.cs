@@ -231,12 +231,10 @@ namespace DH.Helpdesk.Web.Controllers
                 switch (PageId) // back to refrence page
                 {
                     case 0:
-                        return this.RedirectToAction("index", "casesolution");
-                        break;
+                        return this.RedirectToAction("index", "casesolution");                        
 
                     case 1:
-                        return this.RedirectToAction("index", "Cases");
-                        break;
+                        return this.RedirectToAction("index", "Cases");                        
                 }
             }
 
@@ -372,8 +370,7 @@ namespace DH.Helpdesk.Web.Controllers
                 switch (PageId) // back to refrence page
                 {
                     case 1:
-                        return this.RedirectToAction("index", "Cases");
-                        break;
+                        return this.RedirectToAction("index", "Cases");                        
 
                     default:
                         return this.RedirectToAction("index", "casesolution");

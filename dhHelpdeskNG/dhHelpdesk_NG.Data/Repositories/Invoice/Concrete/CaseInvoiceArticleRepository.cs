@@ -166,11 +166,7 @@
                     this.invoiceToEntityMapper.Map(invoice, entity);
                 }
                 this.Commit();
-
-                /* This can be happening at the first time when there is no order and users has added 2 orders 
-                   Where order1 has no article and order 2 has article
-                 */                
-
+            
                 var hasInfoToSave = true;
                 var isNewOrder = false;
                 foreach (var order in invoice.Orders)

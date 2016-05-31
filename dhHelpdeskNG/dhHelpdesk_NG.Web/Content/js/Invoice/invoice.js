@@ -783,7 +783,7 @@ $(function () {
 
 
             var res = "";
-            $.post('/cases/SaveCaseInvoice/', {
+            $.post('/Invoice/SaveCaseInvoice/', {
                 'caseInvoiceArticle': this.GetSavedInvoices(),
                 'customerId': this.CustomerId,
                 'caseId': this.CaseId,
@@ -1359,7 +1359,10 @@ $(function () {
 
                     $('#Place_' + OrderId).val(item.place);
                     $('#UserCode_' + OrderId).val(item.usercode);
-                    $('#CostCentre_' + OrderId).val(item.costcentre.RemoveNonNumerics()).change();
+                    if (item.costcentre != null)
+                        $('#CostCentre_' + OrderId).val(item.costcentre.RemoveNonNumerics()).change();
+                    else
+                        $('#CostCentre_' + OrderId).val("").change();
 
                     dhHelpdesk.CaseArticles.UpdateOtherReferenceTitle(OrderId);
 
@@ -1543,7 +1546,7 @@ $(function () {
                 overflow: "auto",
                 zIndex: 1100,
                 resize: function (event, ui) {
-                    var thisHeight = $(event.target).height(); //todo fix this - if you resize manually, the window wont automatically resize later on
+                    var thisHeight = $(event.target).height(); 
                     var tabsheight = $('#case-invoice-orders-tabs').height();
                     event.preventDefault();
                 },
@@ -1849,7 +1852,7 @@ $(function () {
 
             button.click(function () {
                 if (th.IsNewCase() || th.IsProductAreaChanged()) {
-                    dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("Please save the case and then try again!"));
+                    dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("Please save the case and try again!"));
                     return;
                 }
 
@@ -4027,7 +4030,10 @@ $(function () {
                             order.OU_Id = ord.OU_Id;
                             order.Place = ord.Place;
                             order.UserCode = ord.UserCode;
-                            order.CostCentre = ord.CostCentre.RemoveNonNumerics();
+                            if (ord.CostCentre != null)
+                                order.CostCentre = ord.CostCentre.RemoveNonNumerics();
+                            else
+                                order.CostCentre = "";
                             order.CreditForOrder_Id = ord.CreditForOrder_Id;
                             order.Project_Id = ord.Project_Id;
                             order.OrderState = ord.OrderState;

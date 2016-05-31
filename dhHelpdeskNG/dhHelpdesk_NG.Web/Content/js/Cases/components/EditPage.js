@@ -136,7 +136,7 @@ EditPage.prototype.primaryValidation = function (submitUrl) {
 
     //Check if there is Order which is not invoiced yet
     if (me.invoiceIsActive && me.CaseWillFinish()) {
-        $.get('/Cases/IsThereNotInvoicedOrder/', { caseId: me.p.currentCaseId, myTime: Date.now }, function (res) {
+        $.get('/Invoice/IsThereNotInvoicedOrder/', { caseId: me.p.currentCaseId, myTime: Date.now }, function (res) {
             if (res != null && res)
                 dhHelpdesk.cases.utils.showError(me.p.invoicePreventsToCloseCaseMessage);
             else

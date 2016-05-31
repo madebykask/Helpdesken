@@ -113,8 +113,8 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IGlobalSettingService _globalSettingService;
         private readonly IMailTemplateService _mailTemplateService;
         private readonly ICausingPartService _causingPartService;
-        
-        
+
+        private readonly IInvoiceArticlesModelFactory invoiceArticlesModelFactory;
 
         private readonly ICaseNotifierModelFactory caseNotifierModelFactory;
 
@@ -122,9 +122,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         private readonly IWorkContext workContext;
 
-        private readonly IInvoiceArticleService invoiceArticleService;
-
-        private readonly IInvoiceArticlesModelFactory invoiceArticlesModelFactory;
+        private readonly IInvoiceArticleService invoiceArticleService;        
 
         private readonly IConfiguration configuration;
 
@@ -208,8 +206,7 @@ namespace DH.Helpdesk.Web.Controllers
             IWorkContext workContext,
             ICaseNotifierModelFactory caseNotifierModelFactory,
             INotifierService notifierService,
-            IInvoiceArticleService invoiceArticleService,
-            IInvoiceArticlesModelFactory invoiceArticlesModelFactory,
+            IInvoiceArticleService invoiceArticleService,            
             IConfiguration configuration,
             ICaseSolutionSettingService caseSolutionSettingService,
             IInvoiceHelper invoiceHelper,
@@ -224,6 +221,7 @@ namespace DH.Helpdesk.Web.Controllers
             IWatchDateCalendarService watchDateCalendarServcie,
             ICaseInvoiceSettingsService CaseInvoiceSettingsService,
             ICausingPartService causingPartService,
+            IInvoiceArticlesModelFactory invoiceArticlesModelFactory,
             IReportServiceService reportServiceService)
             : base(masterDataService)
         {
@@ -270,8 +268,7 @@ namespace DH.Helpdesk.Web.Controllers
             this.workContext = workContext;
             this.caseNotifierModelFactory = caseNotifierModelFactory;
             this.notifierService = notifierService;
-            this.invoiceArticleService = invoiceArticleService;
-            this.invoiceArticlesModelFactory = invoiceArticlesModelFactory;
+            this.invoiceArticleService = invoiceArticleService;            
             this.configuration = configuration;
             this.caseSolutionSettingService = caseSolutionSettingService;
             this.invoiceHelper = invoiceHelper;
@@ -290,6 +287,7 @@ namespace DH.Helpdesk.Web.Controllers
             this._defaultExtendCaseLockTime = 60; // Second
             this._causingPartService = causingPartService;
             this._ReportServiceService = reportServiceService;
+            this.invoiceArticlesModelFactory = invoiceArticlesModelFactory;
         }
 
         #endregion
@@ -2387,54 +2385,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         #region --Invoice--
 
-        [HttpPost]
-        public JsonResult SaveCaseInvoice(string caseInvoiceArticle, int customerId, 
-                                          int caseId, string caseKey, string logKey, 
-                                          int? orderIdToXML)
-        {
-            try
-            {
-                if (string.IsNullOrEmpty(caseInvoiceArticle))                    
-                    return Json(new { result = "Error", data = "Invalid Invoice to save!" } );
-
-                if (SessionFacade.CurrentUser == null)
-                    return Json(new { result = "Error", data = "Invoice is not available, refresh the page and try it again." });
-
-                var saveRes = DoInvoiceWork(caseInvoiceArticle, caseId, customerId, orderIdToXML);
-
-                if (saveRes.IsSuccess)
-                {
-                    var caseInvoices = this.invoiceArticleService.GetCaseInvoicesWithTimeZone(caseId, TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
-                    var invoiceArticles = this.invoiceArticlesModelFactory.CreateCaseInvoiceArticlesModel(caseInvoices);
-                    var invoiceModel = new CaseInvoiceModel(customerId, caseId, invoiceArticles, string.Empty, caseKey, logKey);
-                    var serializer = new JavaScriptSerializer();
-                    var caseArticlesJson = serializer.Serialize(invoiceModel.InvoiceArticles);
-                    var warningMessage = saveRes.ResultType == ProcessResult.ResultTypeEnum.WARNING ? saveRes.LastMessage : string.Empty;
-
-                    return Json(new { result = "Success", data = caseArticlesJson, warningMessage = warningMessage });
-                }
-                else
-                {
-                    return Json(new { result = "Error", data = saveRes.LastMessage });
-                }
-            }
-            catch (Exception ex)
-            {
-                return Json(new { result = "Error", data = "Unexpected Error:" + ex.Message });                
-            }
-        }
-
-        [HttpGet]
-        public JsonResult IsThereNotInvoicedOrder(int caseId)
-        {
-            var res = false;
-            
-            var notInvoicedOrders = this.invoiceArticleService.GetInvoiceOrders(caseId, InvoiceOrderFetchStatus.AllNotSent);
-            if (notInvoicedOrders.Any())
-                res = true;
-
-            return Json(res, JsonRequestBehavior.AllowGet);
-        }
+       
 
         #endregion
 
@@ -5023,15 +4974,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         #endregion       
-
-        private ProcessResult DoInvoiceWork(string caseInvoiceData, int caseId, int customerId, int? orderIdToXML)
-        {
-            var caseOverview = this._caseService.GetCaseOverview(caseId);
-            var articles = this.invoiceArticleService.GetArticles(customerId);
-            var Invoices = this.invoiceHelper.ToCaseInvoices(caseInvoiceData, caseOverview, articles, SessionFacade.CurrentUser.Id, orderIdToXML); //there will only be one?
-            return this.invoiceArticleService.DoInvoiceWork(Invoices, caseId, caseOverview.CaseNumber, customerId, orderIdToXML);
-        }
-
+        
         #endregion
     }
 }
