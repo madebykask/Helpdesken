@@ -109,12 +109,12 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                                 int Pos2 = template.Body.IndexOf(str2);
                                 LinkText = template.Body.Substring(Pos1, Pos2 - Pos1);
 
-                                urlSelfService = "<br><a href='" + siteSelfService + "'>" + LinkText + "</a>";
+                                urlSelfService = "<a href='" + siteSelfService + "'>" + LinkText + "</a>";
 
                             }
                             else
                             {
-                                urlSelfService = "<br><a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
+                                urlSelfService = "<a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
                             }
 
                             foreach (var field in fields)
@@ -139,7 +139,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                                             int Pos2 = template.Body.IndexOf(str2);
                                             LinkText = template.Body.Substring(Pos1, Pos2 - Pos1);
 
-                                            urlHelpdesk = "<br><a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
+                                            urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
                                    
 
                                         field.StringValue = urlHelpdesk;
@@ -240,12 +240,12 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                     int Pos2 = template.Body.IndexOf(str2);
                     LinkText = template.Body.Substring(Pos1, Pos2 - Pos1);
 
-                    url = "<br><a href='" + site + "'>" + LinkText + "</a>";
+                    url = "<a href='" + site + "'>" + LinkText + "</a>";
   
                 }
                 else
                 {
-                    url = "<br><a href='" + site + "'>" + site + "</a>";
+                    url = "<a href='" + site + "'>" + site + "</a>";
                 }
 
                 foreach (var field in fields)
@@ -269,7 +269,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                             int Pos2 = template.Body.IndexOf(str2);
                             LinkText = template.Body.Substring(Pos1, Pos2 - Pos1);
 
-                            urlHelpdesk = "<br><a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
+                            urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
 
 
 
@@ -349,12 +349,12 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                             int Pos2 = template.Body.IndexOf(str2);
                             LinkText = template.Body.Substring(Pos1, Pos2 - Pos1);
 
-                            urlSelfService = "<br><a href='" + siteSelfService + "'>" + LinkText + "</a>";
+                            urlSelfService = "<a href='" + siteSelfService + "'>" + LinkText + "</a>";
       
                         }
                         else
                         {
-                            urlSelfService = "<br><a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
+                            urlSelfService = "<a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
                         }
 
                         foreach (var field in fields)
@@ -378,7 +378,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                                     int Pos2 = template.Body.IndexOf(str2);
                                     LinkText = template.Body.Substring(Pos1, Pos2 - Pos1);
 
-                                    urlHelpdesk = "<br><a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
+                                    urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
                 
                                 }
                      
