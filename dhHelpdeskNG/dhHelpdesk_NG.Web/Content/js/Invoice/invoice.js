@@ -1229,7 +1229,7 @@ $(function () {
         },
 
         GetCurrentOrder: function () {
-            var orderId = this._container.find(".case-invoice-order:visible").attr("data-id");
+            var orderId = this._container.find(".case-invoice-order:visible").attr("data-id");            
             var currentOrder = this.GetOrder(orderId);
             if (currentOrder == null) {
                 currentOrder = this.GetInvoice().GetLastOrder();
@@ -1339,11 +1339,11 @@ $(function () {
                     var item = JSON.parse(obj);
                     var OrderId = this.$element.data("orderid")
 
-                    $('#ReportedBy_' + OrderId).val(item.num);
-                    $('#Persons_Name_' + OrderId).val(item.name);
-                    $('#Persons_Email_' + OrderId).val(item.email);
-                    $('#Persons_Phone_' + OrderId).val(item.phone);
-                    $('#Persons_CellPhone_' + OrderId).val(item.CellPhone);
+                    $('#ReportedBy_' + OrderId).val(item.num).change();
+                    $('#Persons_Name_' + OrderId).val(item.name).change();
+                    $('#Persons_Email_' + OrderId).val(item.email).change();
+                    $('#Persons_Phone_' + OrderId).val(item.phone).change();
+                    $('#Persons_CellPhone_' + OrderId).val(item.CellPhone).change();
 
                     $('#RegionId_' + OrderId).val(item.regionid);
                     $('#RegionSelect-Order' + OrderId).val(item.regionid);
@@ -1357,8 +1357,8 @@ $(function () {
                     $('#OUSelect-Order' + OrderId).val(item.ouid);
                     $('#OUSelect-Order' + OrderId).change();
 
-                    $('#Place_' + OrderId).val(item.place);
-                    $('#UserCode_' + OrderId).val(item.usercode);
+                    $('#Place_' + OrderId).val(item.place).change();
+                    $('#UserCode_' + OrderId).val(item.usercode).change();
                     if (item.costcentre != null)
                         $('#CostCentre_' + OrderId).val(item.costcentre.RemoveNonNumerics()).change();
                     else
@@ -1572,7 +1572,7 @@ $(function () {
                                 dhHelpdesk.CaseArticles.SetInvoiceState(_INVOICE_IDLE);
                                 return false;
                             }
-
+                            
                             th.ApplyChanges();
                             th.SaveToDatabase(th.CloseReOpenWindow, th, orderIdToXML);
                         }
@@ -1608,24 +1608,42 @@ $(function () {
                 open: function (event, ui) {
                     $(".ui-dialog-titlebar-close", ui.dialog | ui).hide();
                     dhHelpdesk.CaseArticles.CleanUpAllOrders();
-                    dhHelpdesk.System.RaiseEvent("OnChangeOrder", [th.GetCurrentOrder()]);
+                    dhHelpdesk.System.RaiseEvent("OnChangeOrder", [th.GetCurrentOrder()]);                                       
                     //if (dhHelpdesk.CaseArticles.IsFinishedCase()) {
                     //TODO: need to enable order tabs and others that we need to active them in Finished Case
                     //}
+
+                    if (th._invoices[0]._orders != null && th._invoices[0]._orders.length > 0) {
+                        var hasAtleastOneVisibleOrder = false;
+                        for (i = 0; i < th._invoices[0]._orders.length; i++)
+                            if (th._invoices[0]._orders[i].OrderState != dhHelpdesk.CaseArticles.OrderStates.Deleted && 
+                                th._invoices[0]._orders[i].OrderState != dhHelpdesk.CaseArticles.OrderStates.NotSaved) {
+                                hasAtleastOneVisibleOrder = true;
+                                break;
+                            }
+                        
+                        if (hasAtleastOneVisibleOrder) {
+                            var tabs = $("#case-invoice-orders-tabs");
+                            tab = tabs.find("[href='#case-invoice-order-summary" + th._invoices[0].Id + "']");
+                            tab.click();
+                        }
+                    }
                 }
             });
 
             th._container.parent().addClass("overflow-visible");
+            
             var curOrder = th.GetCurrentOrder();
-
+            
             //// set order actions             
             dhHelpdesk.CaseArticles.OrderActionsInstance = dhHelpdesk.CaseArticles.OrderActions({ actionsContainer: th._container.find("#orderButtonsArea") });
 
+           
             var orderActionsViewModel = dhHelpdesk.CaseArticles.OrderActionsViewModel({
-                creditOrderEnabled: curOrder.IsOrderInvoiced(),
-                creditOrderTitle: dhHelpdesk.Common.Translate("Kreditera order"),
-                creditOrderId: curOrder.Id
-            });
+                    creditOrderEnabled: curOrder.IsOrderInvoiced(),
+                    creditOrderTitle: dhHelpdesk.Common.Translate("Kreditera order"),
+                    creditOrderId: curOrder.Id
+                });
 
             dhHelpdesk.CaseArticles.OrderActionsInstance.get_actionsContainer().prepend($(dhHelpdesk.CaseArticles.CaseInvoiceOrderActionsTemplate.render(orderActionsViewModel)));
 
@@ -1732,6 +1750,8 @@ $(function () {
                         th.ShowAlreadyInvoicedMessage();
                     }
                 });
+
+          
         },
 
         ValidateOpenInvoiceWindow: function () {
@@ -1745,6 +1765,8 @@ $(function () {
         },
 
         CloseInvoiceWindow: function (that) {
+            dhHelpdesk.CaseArticles.LastSelectedTab = null;
+            dhHelpdesk.CaseArticles.LastSelectedTabCaption = "";
             caseButtonsToDisable.removeClass('disabled');
             caseButtonsToDisable.css("pointer-events", "");
             that.CloseContainerDialog();
@@ -2149,11 +2171,8 @@ $(function () {
                 var tabs = this.Container.find("#case-invoice-orders-tabs");
                 var tabIcon = (order.IsOrderInvoiced() ? "<i class='icon-ok icon-green'></i>&nbsp;&nbsp;" : "");
                 var newTab = $("<li class='case-invoice-order-tab active' ><a href='#case-invoice-order" + order.Id + "'>" + tabIcon + order.Caption + "</a><li>");
-                if (this._orders.length == 1) {
-                    tabs.find("ul").prepend(newTab);
-                } else {
-                    tabs.find("li.case-invoice-order-tab:last").after(newTab);
-                }
+                tabs.find("li.case-invoice-order-addnew:last").before(newTab);                 
+                
                 this._refreshTabs();
                 dhHelpdesk.CaseArticles.FillOrderOrganizationData(order);
 
@@ -3764,7 +3783,7 @@ $(function () {
                 tab.click();
                 dhHelpdesk.CaseArticles.LastSelectedTab = null;
                 dhHelpdesk.CaseArticles.LastSelectedTabCaption = "";
-            }
+            }          
         },
 
         GetOrderByCaption: function (orderCaption) {
@@ -3794,6 +3813,9 @@ $(function () {
                                  dhHelpdesk.Common.Translate("Order") + "   " + ordersCount;
 
                 $('#InvoiceModuleBtnOpen').attr("title", buttonHint);
+            } else {
+                $('#InvoiceModuleBtnOpen').val(dhHelpdesk.CaseArticles.invoiceButtonPureCaption);
+                $('#InvoiceModuleBtnOpen').attr("title", "");
             }
         },
 
@@ -3984,9 +4006,30 @@ $(function () {
                         dhHelpdesk.CaseArticles.Initialize($this);
                     }
 
+                    dhHelpdesk.CaseArticles.allVailableOrders = [];
+
+                    if (data.Invoices.length != 0 && (data.Invoices[0].Orders == null || data.Invoices[0].Orders.length == 0))
+                        emptyOrders = true;
+
+                    if (!emptyOrders && (data.Invoices[0].Orders != null || data.Invoices[0].Orders.length > 0)) {
+                        var hasAtleastOneOrder = false;
+                        for (i=0; i < data.Invoices[0].Orders.length; i++)
+                            if (data.Invoices[0].Orders[i].OrderState != dhHelpdesk.CaseArticles.OrderStates.Deleted) {
+                                hasAtleastOneOrder = true;
+                                break;
+                            }
+
+                        if (!hasAtleastOneOrder) {
+                            emptyOrders = true;
+                            for (i = 0; i < data.Invoices[0].Orders.length; i++)
+                                dhHelpdesk.CaseArticles.allVailableOrders.push(data.Invoices[0].Orders[i]);
+                        }
+
+                    }
+
                     if (emptyOrders || (data.Invoices.length != 0 && (data.Invoices[0].Orders == null || data.Invoices[0].Orders.length == 0))) {
 
-                        dhHelpdesk.CaseArticles.allVailableOrders = [];
+                        dhHelpdesk.CaseArticles.UpdateInvoiceButtonStatistics();
                         var blankOrder = new dhHelpdesk.CaseArticles.CreateBlankOrder();
                         invoice.AddOrder(blankOrder);
                         dhHelpdesk.CaseArticles.ApplyChanges();
@@ -3997,7 +4040,7 @@ $(function () {
 
                         dhHelpdesk.CaseArticles.ChangeTab(dhHelpdesk.CaseArticles.LastSelectedTab);
                         dhHelpdesk.CaseArticles.SetInvoiceState(_INVOICE_IDLE);
-
+                        
                         return;
                     }
 
