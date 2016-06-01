@@ -129,5 +129,61 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	ALTER TABLE tblCaseFieldSettings ADD Mail2TicketIdentifier nvarchar(50) NULL
 GO
 
+
+-- New table tblMail2Ticket
+
+/****** Object:  Table [dbo].[tblMail2Ticket]    Script Date: 2016-05-31 13:31:33 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[tblMail2Ticket](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Case_Id] [int] NULL,
+	[Log_id] [int] NULL,
+	[EMailAddress] [nvarchar](100) NOT NULL,
+	[Type] [nvarchar](10) NOT NULL,
+	[CreatedDate] [datetime] NOT NULL,
+ CONSTRAINT [PK_tblMail2Ticket] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[tblMail2Ticket] ADD  CONSTRAINT [DF_tblMail2Ticket_EMailAddress]  DEFAULT ('') FOR [EMailAddress]
+GO
+
+ALTER TABLE [dbo].[tblMail2Ticket] ADD  CONSTRAINT [DF_tblMail2Ticket_Type]  DEFAULT ('') FOR [Type]
+GO
+
+ALTER TABLE [dbo].[tblMail2Ticket] ADD  CONSTRAINT [DF_tblMail2Ticket_CreatedDate]  DEFAULT (getutcdate()) FOR [CreatedDate]
+GO
+
+ALTER TABLE [dbo].[tblMail2Ticket]  WITH CHECK ADD  CONSTRAINT [FK_tblMail2Ticket_tblCase] FOREIGN KEY([Case_Id])
+REFERENCES [dbo].[tblCase] ([Id])
+GO
+
+ALTER TABLE [dbo].[tblMail2Ticket] CHECK CONSTRAINT [FK_tblMail2Ticket_tblCase]
+GO
+
+ALTER TABLE [dbo].[tblMail2Ticket]  WITH CHECK ADD  CONSTRAINT [FK_tblMail2Ticket_tblLog] FOREIGN KEY([Log_id])
+REFERENCES [dbo].[tblLog] ([Id])
+GO
+
+ALTER TABLE [dbo].[tblMail2Ticket] CHECK CONSTRAINT [FK_tblMail2Ticket_tblLog]
+GO
+
+ALTER TABLE [dbo].[tblMail2Ticket]  WITH CHECK ADD  CONSTRAINT [FK_tblMail2Ticket_tblMail2Ticket] FOREIGN KEY([Id])
+REFERENCES [dbo].[tblMail2Ticket] ([Id])
+GO
+
+ALTER TABLE [dbo].[tblMail2Ticket] CHECK CONSTRAINT [FK_tblMail2Ticket_tblMail2Ticket]
+GO
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.24'

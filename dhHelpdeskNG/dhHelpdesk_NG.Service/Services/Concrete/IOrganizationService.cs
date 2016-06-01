@@ -20,5 +20,7 @@
         List<ItemOverview> GetOrganizationUnits(int? departmentId);
 
         List<OU> GetOUs(int? departmentId);
+
+        List<OU> GetCustomerOUs(int customerId);
     }
 }

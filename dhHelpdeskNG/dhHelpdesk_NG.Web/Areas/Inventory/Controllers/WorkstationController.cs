@@ -379,7 +379,11 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                 this.OrganizationService.GetDepartments(customerId).OrderBy(x => x.Name).ToList();
             List<ItemOverview> domains =
                 this.OrganizationService.GetDomains(customerId).OrderBy(x => x.Name).ToList();
-            List<ItemOverview> ous = this.OrganizationService.GetOrganizationUnits().OrderBy(x => x.Name).ToList();
+
+            List<ItemOverview> ous = this.OrganizationService.GetCustomerOUs(customerId)                                                             
+                                                             .Select(o=> new ItemOverview(o.Name, o.Id.ToString()))
+                                                             .OrderBy(x => x.Name).ToList();
+
             List<ItemOverview> buildings = this.PlaceService.GetBuildings(customerId).OrderBy(x => x.Name).ToList();
             List<ItemOverview> floors = this.PlaceService.GetFloors(customerId).OrderBy(x => x.Name).ToList();
             List<ItemOverview> rooms = this.PlaceService.GetRooms(customerId).OrderBy(x => x.Name).ToList();

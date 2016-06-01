@@ -79,6 +79,33 @@
                 organizationUnitOverviews.ToList();
         }
 
+        public List<OU> GetCustomerOUs(int customerId)
+        {
+            var organizationUnitRoot =
+                this.DataContext.OUs.Where(u => u.IsActive != 0 &&
+                                                u.Department != null && 
+                                                u.Department.Customer_Id == customerId &&
+                                                u.Parent_OU_Id == null).ToList();
+
+            var organizationUnitFirstChild =
+                this.DataContext.OUs.Where(u => u.IsActive != 0 &&
+                                                u.Department != null &&
+                                                u.Department.Customer_Id == customerId &&
+                                                u.Parent_OU_Id != null &&
+                                                u.Parent.Parent_OU_Id == null).ToList();
+
+            foreach (var subOU in organizationUnitFirstChild)
+            {
+                subOU.Name = subOU.Parent.Name + " - " + subOU.Name;
+            }
+
+            var organizationUnitOverviews =
+                organizationUnitRoot.Union(organizationUnitFirstChild);
+
+            return
+                organizationUnitOverviews.ToList();
+        }
+
         public IEnumerable<OU> GetActiveAndShowable()
         {
             return this.DataContext.OUs.Where(u => u.IsActive != 0 && u.Show != 0);

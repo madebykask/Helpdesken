@@ -16,5 +16,7 @@
         List<OU> GetOUs(int? departmentId);
         
         IEnumerable<OU> GetActiveAndShowable();
+
+        List<OU> GetCustomerOUs(int customerId);
     }
 }
