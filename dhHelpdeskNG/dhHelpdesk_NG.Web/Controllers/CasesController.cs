@@ -2276,7 +2276,20 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             var prevInfo = this.ExtractPreviousRouteInfo();
-            var res = new RedirectToRouteResult(prevInfo);
+            var refreshRouteInfo = new RouteValueDictionary();
+
+            if (prevInfo != null && prevInfo.Any())
+            {
+                foreach (var p in prevInfo)
+                {
+                    if (p.Key.ToLower() == "language")
+                        refreshRouteInfo.Add(p.Key, language.LanguageID);
+                    else
+                        refreshRouteInfo.Add(p.Key, p.Value);
+                }
+            }
+
+            var res = new RedirectToRouteResult(refreshRouteInfo);
             return res;
         }
 
