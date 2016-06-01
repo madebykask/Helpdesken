@@ -243,7 +243,7 @@
                                             {
                                                 if (e.IsActive != 0)
                                                 {                                                                                            
-                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedPriority)>@e.Code. @e.Name </option>                                       
+                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedPriority)>@e.Code. @Translation.GetCoreTextTranslation(e.Name) </option>                                       
                                                 }
                                             }
                                         </select>
@@ -285,7 +285,7 @@
                                             {
                                                 if (e.IsActive != 0)
                                                 {
-                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedSubState)>@e.Name </option>                                       
+                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedSubState)>@Translation.GetCoreTextTranslation(e.Name) </option>                                       
                                                 }
                                             }
                                         </select>
