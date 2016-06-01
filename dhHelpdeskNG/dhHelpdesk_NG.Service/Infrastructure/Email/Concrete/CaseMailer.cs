@@ -303,7 +303,8 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
             CaseLog log,
             Case newCase,
             string helpdeskMailFromAdress,
-            List<string> files, string AbsoluterUrl)
+            List<string> files, string AbsoluterUrl,
+            MailSenders mailSenders)
         {
             if (log == null || log.Id <= 0 ||
                 !log.SendMailAboutLog ||
@@ -323,6 +324,13 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
 
             if (!String.IsNullOrEmpty(template.Body) && !String.IsNullOrEmpty(template.Subject))
             {
+
+                string customEmailSender4 = mailSenders.DefaultOwnerWGEMail;
+                if (string.IsNullOrWhiteSpace(customEmailSender4))
+                    customEmailSender4 = mailSenders.WGEmail;
+                if (string.IsNullOrWhiteSpace(customEmailSender4))
+                    customEmailSender4 = mailSenders.SystemEmail;
+
                 var to = log.EmailRecepientsInternalLog
                                     .Replace(" ", "")
                                     .Replace(Environment.NewLine, "|")
@@ -387,7 +395,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                         }
 
                         var internalEmail = this.emailFactory.CreateEmailItem(
-                                                        helpdeskMailFromAdress,
+                                                        customEmailSender4,
                                                         internalEmailLog.EmailAddress,
                                                         template.Subject,
                                                         template.Body,

@@ -2101,7 +2101,7 @@ namespace DH.Helpdesk.Services.Services
                                         log,
                                         newCase,
                                         helpdeskMailFromAdress,
-                                        files, cms.AbsoluterUrl);
+                                        files, cms.AbsoluterUrl, cms.CustomeMailFromAddress);
         }
 
         private void SendTemplateEmail(
