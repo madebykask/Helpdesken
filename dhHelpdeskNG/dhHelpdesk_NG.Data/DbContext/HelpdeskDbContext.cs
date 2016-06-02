@@ -270,6 +270,8 @@
 
         public DbSet<Form> Forms { get; set; }
 
+        public DbSet<FormUrlEntity> FormUrls { get; set; }
+
         public DbSet<GlobalSetting> GlobalSettings { get; set; }
 
         public DbSet<HolidayHeader> HolidayHeaders { get; set; }
@@ -640,6 +642,7 @@
             modelBuilder.Configurations.Add(new FormConfiguration());
             modelBuilder.Configurations.Add(new FormFieldConfiguration());
             modelBuilder.Configurations.Add(new FormFieldValueConfiguration());
+            modelBuilder.Configurations.Add(new FormUrlConfiguration());
             modelBuilder.Configurations.Add(new FloorConfiguration());
             modelBuilder.Configurations.Add(new GlobalSettingConfiguration());
             modelBuilder.Configurations.Add(new HolidayConfiguration());
