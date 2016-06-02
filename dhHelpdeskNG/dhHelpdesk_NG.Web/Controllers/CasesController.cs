@@ -3834,7 +3834,7 @@ namespace DH.Helpdesk.Web.Controllers
                     customerSources.Select(
                         it => new SelectListItem()
                         {
-                            Text = Translation.Get(it.SourceName),
+                            Text = Translation.GetCoreTextTranslation(it.SourceName),
                             Value = it.Id.ToString(),
                             Selected = it.Id == m.CustomerRegistrationSourceId
                         }));

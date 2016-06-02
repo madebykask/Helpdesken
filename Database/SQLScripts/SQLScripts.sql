@@ -177,13 +177,5 @@ GO
 ALTER TABLE [dbo].[tblMail2Ticket] CHECK CONSTRAINT [FK_tblMail2Ticket_tblLog]
 GO
 
-ALTER TABLE [dbo].[tblMail2Ticket]  WITH CHECK ADD  CONSTRAINT [FK_tblMail2Ticket_tblMail2Ticket] FOREIGN KEY([Id])
-REFERENCES [dbo].[tblMail2Ticket] ([Id])
-GO
-
-ALTER TABLE [dbo].[tblMail2Ticket] CHECK CONSTRAINT [FK_tblMail2Ticket_tblMail2Ticket]
-GO
-
-
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.24'
