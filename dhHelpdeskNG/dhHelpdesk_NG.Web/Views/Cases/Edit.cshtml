@@ -177,7 +177,57 @@
 
     <script type="text/javascript">
         $(function () {
-            var urlToSend = "@Model.DynamicCase.FormPath".replace(/\\/g, '&#92;');
+            @{
+  
+    string formUrl = string.Empty;
+
+    UriBuilder uriBuilder = new UriBuilder();
+    var queryString = (Model.DynamicCase.FormPath.Contains("?") ? Model.DynamicCase.FormPath.Substring(Model.DynamicCase.FormPath.IndexOf("?")) : "");
+
+
+    //Build URL
+    if (Model.DynamicCase.ExternalSite)
+    {
+
+        uriBuilder.Scheme = Model.DynamicCase.Scheme;
+        uriBuilder.Host = Model.DynamicCase.Host;
+
+        if (!string.IsNullOrEmpty(queryString))
+        {
+            uriBuilder.Path = Model.DynamicCase.FormPath.ToLower().Replace(queryString.ToLower(), "");
+            uriBuilder.Query = (queryString.StartsWith("?") ? queryString.Remove(0, 1) : queryString);
+        }
+        else
+        {
+            uriBuilder.Path = Model.DynamicCase.FormPath;
+        }
+
+        Uri uri = uriBuilder.Uri;
+
+        formUrl = uri.ToString();
+
+    }
+    //Sub Site
+    else
+    {
+        if (!string.IsNullOrEmpty(queryString))
+        {
+            uriBuilder.Path = Path.Combine(Model.DynamicCase.Host, Model.DynamicCase.FormPath.ToLower().Replace(queryString.ToLower(), ""));
+            uriBuilder.Query = (queryString.StartsWith("?") ? queryString.Remove(0, 1) : queryString);
+        }
+        else
+        {
+            uriBuilder.Path = Path.Combine(Model.DynamicCase.Host, Model.DynamicCase.FormPath);
+        }
+
+        Uri uri = uriBuilder.Uri;
+
+        formUrl = (uri.AbsolutePath.EndsWith("/") ? uri.AbsolutePath.Remove(uri.AbsolutePath.LastIndexOf("/"), 1) : "") + uri.Query;
+
+    }
+            }
+
+            var urlToSend = '@formUrl'.replace(/\\/g, '&#92;');
             var currentpage = new dhform({ url: urlToSend, modal: '@Model.DynamicCase.ViewMode' });
         });
     </script>

@@ -4159,7 +4159,7 @@ namespace DH.Helpdesk.Web.Controllers
                 m.DynamicCase.FormPath = m.DynamicCase.FormPath
                     .Replace("[CaseId]", m.case_.Id.ToString())
                     .Replace("[UserId]", SessionFacade.CurrentUser.UserId.ToString())
-                    .Replace("[ApplicationType]", "5")
+                    .Replace("[ApplicationType]", "HD5")
                     .Replace("[Language]", l.LanguageId);
                 m.DynamicCase.FormPath = m.DynamicCase.FormPath.Replace(@"\", @"\\"); //this is because users with backslash in name will have issues with container.js
             }

@@ -177,5 +177,33 @@ GO
 ALTER TABLE [dbo].[tblMail2Ticket] CHECK CONSTRAINT [FK_tblMail2Ticket_tblLog]
 GO
 
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[tblFormUrl]') AND type in (N'U'))
+BEGIN
+            SET ANSI_NULLS ON
+
+            SET QUOTED_IDENTIFIER ON
+
+            CREATE TABLE [dbo].[tblFormUrl](
+            [Id] [int] NOT NULL,
+            [ExternalSite] [bit] NULL,
+            [Scheme] [nvarchar](10) NULL,
+            [Host] [nvarchar](1000) NULL,
+CONSTRAINT [PK_FormUrl] PRIMARY KEY CLUSTERED 
+(
+            [Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+            ALTER TABLE [dbo].[tblFormUrl] ADD  CONSTRAINT [DF_FormUrl_External]  DEFAULT ((0)) FOR [ExternalSite]
+
+END
+
+IF COL_LENGTH('tblForm','FormUrl_Id') IS NULL
+BEGIN
+               ALTER TABLE tblForm ADD FormUrl_Id int NULL
+END
+
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.24'
