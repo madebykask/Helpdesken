@@ -22,7 +22,7 @@
                                 </div>
                                 <div id="collapse@(faq.Id)" class="accordion-body collapse">
                                     <div class="accordion-inner">
-                                        @faq.Answer
+                                        @Html.Raw(faq.Answer.Replace(Environment.NewLine, "<br />"))
                                     </div>
                                 </div>
                             </div>
