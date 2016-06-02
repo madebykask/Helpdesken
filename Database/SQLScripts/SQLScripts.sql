@@ -203,7 +203,14 @@ BEGIN
                ALTER TABLE tblForm ADD FormUrl_Id int NULL
 END
 
+--New fields in tblFormField
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Label' and sysobjects.name = N'tblFormField')
+	ALTER TABLE tblFormField ALTER COLUMN Label nvarchar(200) NULL
+GO
 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Show' and sysobjects.name = N'tblFormField')
+	ALTER TABLE tblFormField ADD Show int NOT NULL Default(1)
+GO
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.24'
