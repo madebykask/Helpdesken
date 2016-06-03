@@ -1450,8 +1450,6 @@ $(function () {
                     }
                     this.allVailableOrders[i].Articles = validArticles;
                     cleanOrders.push(this.allVailableOrders[i]);
-                } else {
-                    cleanOrders.push(this.allVailableOrders[i]);
                 }
 
             }
@@ -1568,7 +1566,10 @@ $(function () {
                             var orderIdToXML = me.attr('data-doInvoiceOrder');
                             me.attr('data-doInvoiceOrder', '');
 
-                            if (!dhHelpdesk.CaseArticles.ValidateOpenInvoiceWindow()) {
+                            var articlesEl = th._container.find(".articles-params-article");
+                            var articleId = articlesEl.val();
+
+                            if (!dhHelpdesk.CaseArticles.ValidateOpenInvoiceWindow(th)) {
                                 dhHelpdesk.CaseArticles.SetInvoiceState(_INVOICE_IDLE);
                                 return false;
                             }
@@ -1587,7 +1588,7 @@ $(function () {
                                 return;
                             }
 
-                            if (!dhHelpdesk.CaseArticles.ValidateOpenInvoiceWindow()) {
+                            if (!dhHelpdesk.CaseArticles.ValidateOpenInvoiceWindow(th)) {
                                 dhHelpdesk.CaseArticles.SetInvoiceState(_INVOICE_IDLE);
                                 return false;
                             }
@@ -1754,7 +1755,13 @@ $(function () {
           
         },
 
-        ValidateOpenInvoiceWindow: function () {
+        ValidateOpenInvoiceWindow: function (invoice) {
+            var articlesEl = invoice._container.find(".articles-params-article");
+            var articleId = articlesEl.val();
+            if (articleId != 0) {
+                dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("You've selected an atricle but it's not added to the list yet!"));
+                return false;
+            }
             for (var i = 0; i < this.allVailableOrders.length; i++) {
                 var order = dhHelpdesk.CaseArticles.GetOrder(this.allVailableOrders[i].Id);
                 /* Deleted orders will be null */
@@ -1769,7 +1776,7 @@ $(function () {
             dhHelpdesk.CaseArticles.LastSelectedTabCaption = "";
             caseButtonsToDisable.removeClass('disabled');
             caseButtonsToDisable.css("pointer-events", "");
-            that.CloseContainerDialog();
+            that.CloseContainer();
         },
 
         CloseReOpenWindow: function (that) {
@@ -1795,7 +1802,8 @@ $(function () {
                 addArticleEl.show();
             }
 
-            articlesEl.append("<option value='0'> </option>");
+            articlesEl.append("<option value='0'>  </option>");
+            articlesEl.append("<option value='0'> &nbsp; </option>");
             for (var i = 0; i < articles.length; i++) {
                 var article = articles[i];
                 articlesEl.append("<option value='" + article.Id + "'>" + article.GetFullName() + "</option>");
@@ -2604,10 +2612,10 @@ $(function () {
             this.DoInvoice = function () {
                 var btnSave = $(".btn.save-invoice");
                 //pass order_id to generate xml for order
-                if (this._articles.length > 0) {
+                if (this._articles.length > 0) {                   
                     btnSave.attr("data-doInvoiceOrder", this.Id);
                     btnSave.click();
-                    dhHelpdesk.System.RaiseEvent("OnChangeOrder", [this]);
+                    dhHelpdesk.System.RaiseEvent("OnChangeOrder", [this]);                    
                 }
                 else {
                     dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("There is no Aticle to send!"));
