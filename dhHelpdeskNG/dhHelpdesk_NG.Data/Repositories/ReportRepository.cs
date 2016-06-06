@@ -311,6 +311,8 @@ namespace DH.Helpdesk.Dal.Repositories
                         : true)
                     && (caseStatusIds.Any() ? c.Status_Id.HasValue && caseStatusIds.Contains(c.Status_Id.Value) : true)
 
+                    orderby c.Id
+
                         select new ReportGeneratorFields
                         {
                             Id = c.Id,
