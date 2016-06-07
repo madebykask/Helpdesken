@@ -148,6 +148,8 @@
 
         public virtual ICollection<Log> Logs { get; set; }
 
+        public virtual ICollection<Mail2Ticket> Mail2Tickets { get; set; }
+
         public bool IsClosed()
         {
             return this.FinishingDate != null;

@@ -318,6 +318,8 @@
 
         public DbSet<Log> Logs { get; set; }
 
+        public DbSet<Mail2Ticket> Mail2Tickets { get; set; }
+
         public DbSet<MailTemplateIdentifierEntity> MailTemplateIdentifiers { get; set; }
 
         public DbSet<MailTemplateLanguageEntity> MailTemplateLanguages { get; set; }
@@ -654,6 +656,7 @@
             modelBuilder.Configurations.Add(new LinkGroupConfiguration());            
             modelBuilder.Configurations.Add(new LogConfiguration());
             modelBuilder.Configurations.Add(new LogFileConfiguration());
+            modelBuilder.Configurations.Add(new Mail2TicketConfiguration());
             modelBuilder.Configurations.Add(new MailTemplateConfiguration());
             modelBuilder.Configurations.Add(new MailTemplateIdentifierConfiguration());
             modelBuilder.Configurations.Add(new MailTemplateLanguageConfiguration());
