@@ -4409,5 +4409,19 @@ GO
 If not exists (select * from tblTextTranslation where Text_Id = 1598 and Language_Id=2)
             insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1598, 'User has admin permissions to inventory', 2)
 GO 
+
+If not exists (select * from tblText where Id = 1599)
+            insert into tblText (Id, Textstring) VALUES (1599, 'Du måste välja ett dokumentnamn')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1599 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1599, 'You must specify a document name', 2)
+GO 
+
+If not exists (select * from tblText where Id = 1600)
+            insert into tblText (Id, Textstring) VALUES (1600, 'Du måste fylla i beskrivning-fältet')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1600 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1600, 'You must add a description', 2)
+GO 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
