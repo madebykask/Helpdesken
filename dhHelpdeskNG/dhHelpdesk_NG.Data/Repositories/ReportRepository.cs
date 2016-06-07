@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.BusinessData.Models.Reports;
+﻿using System.Data.Entity;
+using DH.Helpdesk.BusinessData.Models.Reports;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
@@ -172,7 +173,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
                 where
                     c.Customer_Id == customerId && c.Deleted != 1 &&
-                    (c.RegTime >= periodFrom && c.RegTime <= periodUntil)
+                    (DbFunctions.TruncateTime(c.RegTime) >= DbFunctions.TruncateTime(periodFrom) && DbFunctions.TruncateTime(c.RegTime) <= DbFunctions.TruncateTime(periodUntil))
                     && (caseTypeId.Any() ? caseTypeId.Contains(c.CaseType_Id) : true)
                     &&
                     (workingGroupIds.Any()
@@ -291,7 +292,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
                 where
                     c.Customer_Id == customerId && c.Deleted != 1 &&
-                    (c.RegTime >= periodFrom && c.RegTime <= periodUntil)
+                    (DbFunctions.TruncateTime(c.RegTime) >= DbFunctions.TruncateTime(periodFrom) && DbFunctions.TruncateTime(c.RegTime) <= DbFunctions.TruncateTime(periodUntil))
                     && (caseTypeId.Any() ? caseTypeId.Contains(c.CaseType_Id) : true)
                     &&
                     (workingGroupIds.Any()
