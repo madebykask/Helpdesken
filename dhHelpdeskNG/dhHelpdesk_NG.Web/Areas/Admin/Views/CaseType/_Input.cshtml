@@ -41,6 +41,17 @@
                                 </tr>
                                 <tr>
                                     <td>
+                                        &nbsp;
+                                    </td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" name="casetype.IsEMailDefault" @(Model.CaseType.IsEMailDefault == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="casetype.IsEMailDefault" value="0" />
+                                        &nbsp;@Translation.Get("Standard vid ärenderegistrering via e-post", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
                                         @Translation.Get("Godkännande", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td><label class="checkbox">

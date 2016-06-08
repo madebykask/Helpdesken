@@ -13,6 +13,8 @@
     {
         void ResetDefault(int exclude, int customerId);
 
+        void ResetEmailDefault(int exclude, int customerId);
+
         IEnumerable<ItemOverview> GetOverviews(int customerId);
 
         IEnumerable<ItemOverview> GetOverviews(int customerId, IEnumerable<int> caseTypesIds);
@@ -34,6 +36,15 @@
             foreach (CaseType obj in this.GetMany(s => s.IsDefault == 1 && s.Id != exclude && s.Customer_Id == customerId))
             {
                 obj.IsDefault = 0;
+                this.Update(obj);
+            }
+        }
+
+        public void ResetEmailDefault(int exclude, int customerId)
+        {
+            foreach (CaseType obj in this.GetMany(s => s.IsEMailDefault == 1 && s.Id != exclude && s.Customer_Id == customerId))
+            {
+                obj.IsEMailDefault = 0;
                 this.Update(obj);
             }
         }
