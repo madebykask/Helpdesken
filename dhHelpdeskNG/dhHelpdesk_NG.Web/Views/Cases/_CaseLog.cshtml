@@ -47,22 +47,8 @@
                             <a href="@GetLogLink(r)"> @Html.AttributeEncode(r.TextInternal).ForHtmlView()</a>
                         </td>
                         <td>
-                            @if (r.CaseHistory != null)
-                            {
-                                if (r.CaseHistory.Emaillogs != null)
-                                {                                        
-                                    foreach (var l in r.CaseHistory.Emaillogs)      
-                                    {                                            
-                                    <div>
-                                        <p>
-                                            @l.EmailAddress 
-                                        </p>
-                                    </div>
-                                    }                                    
-                                }                                        
-                            }
-
-                            @if (Model.case_.Mail2Tickets != null)
+                            
+                            @if (Model.case_.Mail2Tickets.Any())
                             {
                                 var countTO = 0;
                                 var countCC = 0;
@@ -81,7 +67,7 @@
                                         if (mail.Type == "to")
                                         {
                                             countTO = countTO + 1;
-                                            mailTO = mailTO + mail.EMailAddress + " ";
+                                            mailTO = mailTO + mail.EMailAddress + "; ";
 
                                             if (mail.EMailAddress == Model.case_.Customer.HelpdeskEmail)
                                             {
@@ -92,7 +78,7 @@
                                         if (mail.Type == "cc")
                                         {
                                             countCC = countCC + 1;
-                                            mailCC = mailCC + mail.EMailAddress + " ";
+                                            mailCC = mailCC + mail.EMailAddress + "; ";
 
                                             if (mail.EMailAddress == Model.case_.Customer.HelpdeskEmail)
                                             {
@@ -103,7 +89,7 @@
                                         if (mail.Type == "bcc")
                                         {
                                             countBCC = countBCC + 1;
-                                            mailBCC = mailBCC + mail.EMailAddress + " ";
+                                            mailBCC = mailBCC + mail.EMailAddress + "; ";
 
                                             if (mail.EMailAddress == Model.case_.Customer.HelpdeskEmail)
                                             {
@@ -167,6 +153,23 @@
                                     <div>
                                         <p id="mailbcc" class="" style="display:none">@mailBCC</p>
                                     </div>
+                                }
+                            }
+                            else
+                            {
+                                if (r.CaseHistory != null)
+                                {
+                                    if (r.CaseHistory.Emaillogs != null)
+                                    {                                        
+                                        foreach (var l in r.CaseHistory.Emaillogs)      
+                                        {                                            
+                                        <div>
+                                            <p>
+                                                @l.EmailAddress 
+                                            </p>
+                                        </div>
+                                        }                                    
+                                    }                                        
                                 }
                             }
                         </td>

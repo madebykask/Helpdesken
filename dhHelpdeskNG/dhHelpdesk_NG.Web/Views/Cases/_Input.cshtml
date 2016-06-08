@@ -1256,14 +1256,14 @@
                                                 var boldTO = false;
                                                 var boldCC = false;
                                                 var boldBCC = false;
-                                                if (Model.case_.Mail2Tickets != null)
+                                                if (Model.case_.Mail2Tickets.Any())
                                                 {
                                                     foreach (var mail in Model.case_.Mail2Tickets)
                                                     {
                                                         if (mail.Type == "to")
                                                         {
                                                             countTO = countTO + 1;
-                                                            mailTO = mailTO + mail.EMailAddress + " ";
+                                                            mailTO = mailTO + mail.EMailAddress + "; ";
 
                                                             if (mail.EMailAddress == Model.case_.Customer.HelpdeskEmail)
                                                             {
@@ -1274,7 +1274,7 @@
                                                         if (mail.Type == "cc")
                                                         {
                                                             countCC = countCC + 1;
-                                                            mailCC = mailCC + mail.EMailAddress + " ";
+                                                            mailCC = mailCC + mail.EMailAddress + "; ";
 
                                                             if (mail.EMailAddress == Model.case_.Customer.HelpdeskEmail)
                                                             {
@@ -1285,7 +1285,7 @@
                                                         if (mail.Type == "bcc")
                                                         {
                                                             countBCC = countBCC + 1;
-                                                            mailBCC = mailBCC + mail.EMailAddress + " ";
+                                                            mailBCC = mailBCC + mail.EMailAddress + "; ";
 
                                                             if (mail.EMailAddress == Model.case_.Customer.HelpdeskEmail)
                                                             {
