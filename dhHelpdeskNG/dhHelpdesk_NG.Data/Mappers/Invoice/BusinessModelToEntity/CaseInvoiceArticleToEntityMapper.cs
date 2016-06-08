@@ -14,6 +14,7 @@
             entity.Ppu = businessModel.Ppu;
             entity.Position = businessModel.Position;
             entity.CreditedForArticle_Id = businessModel.CreditedForArticle_Id;
+            entity.TextForArticle_Id = businessModel.TextForArticle_Id;
         }
     }
 }

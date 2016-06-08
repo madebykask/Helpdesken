@@ -241,24 +241,74 @@
                             }
                         }
 
-                        foreach (var article in order.Articles)
+                        this.Commit();
+
+                        if (order.Articles.Any())
                         {
-                            CaseInvoiceArticleEntity articleEntity;
-                            if (article.Id > 0)
+                            /* First save articles/texts have saved before */ 
+                            foreach (var article in order.Articles.Where(a=> (a.Id > 0 && !a.TextForArticle_Id.HasValue) || 
+                                                                             (a.Id < 0 && a.TextForArticle_Id.HasValue && a.TextForArticle_Id.Value > 0)).ToList())
                             {
-                                articleEntity = this.DbContext.CaseInvoiceArticles.Find(article.Id);
-                                this.articleMapper.Map(article, articleEntity);
+
+                                CaseInvoiceArticleEntity articleEntity;
+                                if (article.Id > 0)
+                                {
+                                    articleEntity = this.DbContext.CaseInvoiceArticles.Find(article.Id);
+                                    this.articleMapper.Map(article, articleEntity);
+                                }
+                                else
+                                {                                    
+                                    articleEntity = new CaseInvoiceArticleEntity();
+                                    this.articleMapper.Map(article, articleEntity);
+                                    articleEntity.Id = 0;
+                                    articleEntity.OrderId = orderEntity.Id;
+                                    this.DbContext.CaseInvoiceArticles.Add(articleEntity);
+                                }                                                          
                             }
-                            else
+                            this.Commit();
+
+                            /* Save articles/texts have not saved yet */
+                            foreach (var article in order.Articles.Where(a => a.Id < 0 && !a.TextForArticle_Id.HasValue).ToList())
                             {
-                                articleEntity = new CaseInvoiceArticleEntity();
+                                var tempId = article.Id;
+                                var articleEntity = new CaseInvoiceArticleEntity();
                                 this.articleMapper.Map(article, articleEntity);
                                 articleEntity.OrderId = orderEntity.Id;
-                                this.DbContext.CaseInvoiceArticles.Add(articleEntity);
+                                this.DbContext.CaseInvoiceArticles.Add(articleEntity);                                
+                                this.Commit();
+                                var newMainArticleId = articleEntity.Id;
+                                foreach (var textArticle in order.Articles.Where(a => a.TextForArticle_Id.HasValue && a.TextForArticle_Id.Value == tempId).ToList())
+                                {
+                                    textArticle.TextForArticle_Id = newMainArticleId;
+                                    var _articleEntity = new CaseInvoiceArticleEntity();
+                                    this.articleMapper.Map(textArticle, _articleEntity);
+                                    _articleEntity.OrderId = orderEntity.Id;
+                                    this.DbContext.CaseInvoiceArticles.Add(_articleEntity);
+                                    this.Commit();
+                                }
                             }
+                            
                         }
 
-                        this.Commit();
+
+                        //foreach (var article in order.Articles.Where(a=> a.Id > 0 && !a.TextForArticle_Id.HasValue))
+                        //{
+                        //    CaseInvoiceArticleEntity articleEntity;
+                        //    if (article.Id > 0)
+                        //    {
+                        //        articleEntity = this.DbContext.CaseInvoiceArticles.Find(article.Id);
+                        //        this.articleMapper.Map(article, articleEntity);
+                        //    }
+                        //    else
+                        //    {   
+                        //        if article.
+                        //        articleEntity = new CaseInvoiceArticleEntity();
+                        //        this.articleMapper.Map(article, articleEntity);
+                        //        articleEntity.OrderId = orderEntity.Id;
+                        //        this.DbContext.CaseInvoiceArticles.Add(articleEntity);
+                        //    }
+                        //}
+                        //this.Commit();
                     }
                 }
             }

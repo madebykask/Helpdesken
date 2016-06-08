@@ -66,7 +66,8 @@
                                             a.Amount,
                                             a.Ppu,
                                             a.Position,
-                                            a.CreditedForArticle_Id)).ToArray(),
+                                            a.CreditedForArticle_Id,
+                                            a.TextForArticle_Id)).ToArray(),
                                             o.Files.Select(f => new CaseInvoiceOrderFile(HttpUtility.UrlDecode(f.FileName))).ToArray())).ToArray());
             if (caseOverview != null)
             {
@@ -196,6 +197,8 @@
             public short Position { get; set; }
 
             public int? CreditedForArticle_Id { get; set; }
+
+            public int? TextForArticle_Id { get; set; }
             
         }
     }    

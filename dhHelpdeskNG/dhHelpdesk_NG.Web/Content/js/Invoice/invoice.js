@@ -920,8 +920,29 @@ $(function () {
 
         CreateBlankArticle: function () {
             var blank = new dhHelpdesk.CaseArticles.InvoiceArticle();
-            blank.Id = dhHelpdesk.Common.GenerateId();
+            blank.Id = dhHelpdesk.Common.GenerateId();            
             return blank;
+        },
+
+        AddTextToArticle: function (articleId) {
+            var article = this.GetArticle(articleId);
+            if (article != null) {
+                var order = this.GetOrder(article.Order.Id);
+                if (order != null) {
+                    if (!this.GetInvoiceStatusOfCurrentOrder()) {
+                        var article = this.CreateBlankArticle();                        
+                        var caseArticle = article.ToCaseArticle();
+                        caseArticle.Article = article;
+                        caseArticle.TextForArticle_Id = articleId;
+                        order.AddArticle(caseArticle);
+                        return caseArticle;
+                    }
+                    else {
+                        this.ShowAlreadyInvoicedMessage();
+                        return null;
+                    }
+                }
+            }
         },
 
         AddBlankArticle: function (orderId) {
@@ -1103,6 +1124,7 @@ $(function () {
                             articles[j].Position = article.Position;
                             articles[j].Ppu = article.Ppu;
                             articles[j].HasPpu = falsearticle.HasPpu;
+                            articles[j].TextForArticle_Id = falsearticle.TextForArticle_Id;
                             articles[j].CreditedForArticle_Id = article.CreditedForArticle_Id;
                             return true;
                         }
@@ -1391,35 +1413,7 @@ $(function () {
             that.get_creditOrderButton = get_creditOrderButton;
 
             return that;
-        },
-
-        CloseContainerDialog: function () {
-            var th = this;
-            th.CloseContainer();
-            return;
-
-
-            var d = $('<div id="adialog">' + 'testmessage' + '<div>');
-            return d.dialog({
-                title: dhHelpdesk.Common.Translate('Meddelande'),
-                buttons: [
-                    {
-                        text: 'Ok',
-                        click: function () {
-                            th.CloseContainer();
-                            d.dialog("close");
-                        }
-                    },
-                    {
-                        text: 'Avbryt',
-                        click: function () {
-                            d.dialog("close");
-                        }
-                    }
-                ],
-                modal: true
-            });
-        },
+        },        
 
         CloseContainer: function () {
             var th = this;
@@ -1434,8 +1428,8 @@ $(function () {
             if (this.allVailableOrders.length == 1)
                 return;
 
-            for (var i = 0; i < this.allVailableOrders.length; i++) {
-                if (this.allVailableOrders[i].Id > 0 && this.allVailableOrders[i].OrderState != dhHelpdesk.CaseArticles.OrderStates.Deleted) {
+            for (var i = 0; i < this.allVailableOrders.length; i++) {                
+                if (this.allVailableOrders[i].Id > 0) {
                     var articles = [];
                     if (this.allVailableOrders[i].Articles != undefined)
                         articles = this.allVailableOrders[i].Articles;
@@ -1450,8 +1444,7 @@ $(function () {
                     }
                     this.allVailableOrders[i].Articles = validArticles;
                     cleanOrders.push(this.allVailableOrders[i]);
-                }
-
+                } 
             }
             this.allVailableOrders = cleanOrders;
         },
@@ -2080,6 +2073,7 @@ $(function () {
                 article.Amount = dhHelpdesk.CaseArticles.DefaultAmount;
                 article.Ppu = this.Ppu;
                 article.HasPpu = this.HasPpu;
+                article.TextForArticle_Id = null;
                 article.CreditedForArticle_Id = null;
 
                 return article;
@@ -2459,88 +2453,113 @@ $(function () {
 
             this.IsOrderInvoiced = function () {
                 return this.OrderState == dhHelpdesk.CaseArticles.OrderStates.Sent;
-            },
-
-            this.EnableAddBlank = function (enable) {
-                var addBlank = this.Container.find(".add-blank-article");
-                if (enable) {
-                    addBlank.css("display", "block");
-                } else {
-                    addBlank.css("display", "none");
-                }
-            },
+            },            
 
             this.AddArticle = function (article) {
-                this._articles.push(article);
-                article.Order = this;
-
-                if (article.Position == null) {
-                    article.Position = this._articles.length - 1;
-                }
-                article.Initialize();
-
+                article.Order = this;                
+                this._articles.push(article);                                
+                article.Position = this.ReOrderingArticles(article.Id);
+                
                 var rows = this.Container.find(".articles-rows");
-                rows.append(article.Container);
-
-                this.EnableAddBlank(this.HasNotBlankArticles());
+                rows.html('');
+                for (ai = 0; ai < this._articles.length; ai++) {
+                    this._articles[ai].Initialize();
+                    rows.append(this._articles[ai].Container);
+                }
+                
+                var mainArticleId = 0;
+                if (article.TextForArticle_Id != null)
+                    mainArticleId = article.TextForArticle_Id;
+                else
+                    mainArticleId = article.Id;
 
                 this.UpdateTotal();
 
                 dhHelpdesk.System.RaiseEvent("OnAddArticle", [this, article]);
             },
 
-            this.DeleteArticle = function (id) {
-                var deletedArticleIds = [];
-                for (var i = 0; i < this._articles.length; i++) {
-                    var article = this._articles[i];
-                    if (article.Id == id) {
-                        this._articles.splice(i, 1);
-                        this._deleteFromContainer(article.Id);
-                        deletedArticleIds.push(article.Id);
-                        this.EnableAddBlank(this.HasNotBlankArticles());
-                        break;
+            this.ReOrderingArticles = function (articleId) {
+                var newSortedArticle = [];
+                var curPos = 0;
+                var onlyArticles = this.GetOnlyArticles();
+                var ret = 0;
+                for (i = 0; i < onlyArticles.length; i++) {
+                    var onlyTextes = this.GetTextsForArticle(onlyArticles[i].Id);
+                    onlyArticles[i].Position = curPos;
+                    curPos++;
+                    newSortedArticle.push(onlyArticles[i]);
+                    if (onlyArticles[i].Id == articleId)
+                        ret = onlyArticles[i].Position;
+
+                    for (j = 0; j < onlyTextes.length; j++) {
+                        onlyTextes[j].Position = curPos;
+                        curPos++;
+                        newSortedArticle.push(onlyTextes[j]);
+                        if (onlyTextes[j].Id == articleId)
+                            ret = onlyTextes[j].Position;
                     }
                 }
-
-                var articlesForDelete = [];
-                for (var j = 0; j < this._articles.length; j++) {
-                    var a = this._articles[j];
-                    if (!a.IsBlank()) {
-                        break;
-                    }
-                    articlesForDelete.push(a.Id);
-                    deletedArticleIds.push(a.Id);
-                }
-
-                this.DeleteArticleTexts(articlesForDelete);
-
-                this.UpdateTotal();
-
-                dhHelpdesk.System.RaiseEvent("OnDeleteArticle", [this, deletedArticleIds]);
+                this._articles = newSortedArticle;
+                return ret;
             },
 
-            this.DeleteArticleTexts = function (articleIds) {
-                if (articleIds == null || !articleIds.length > 0)
-                    return
-                else {
-                    var curIdToDelete = articleIds[0];
-                    //Remove from Order
-                    for (var i = 0; i < this._articles.length; i++) {
-                        var article = this._articles[i];
-                        if (article.Id == curIdToDelete) {
-                            this._articles.splice(i, 1);
-                            this._deleteFromContainer(article.Id);
-                            break;
+            this.GetOnlyArticles = function () {
+                var onlyArticles = [];
+                for (i = 0; i < this._articles.length; i++) {
+                    if (!this._articles[i].IsBlank())
+                        onlyArticles.push(this._articles[i]);
+                }
+
+                return onlyArticles;
+            },
+
+            this.GetTextsForArticle = function (articleId) {
+                var articleTextes = [];
+                for (t = 0; t < this._articles.length; t++) {
+                    if (this._articles[t].TextForArticle_Id == articleId && this._articles[t].IsBlank())
+                        articleTextes.push(this._articles[t]);
+                }
+
+                return articleTextes;
+            },
+
+            this.DeleteArticle = function (id) {                
+                var articlesToDelete = [];
+                var mainArticleId = 0;
+                var articleToDelete = this.GetArticle(id);
+                if (articleToDelete != null) {
+                    if (articleToDelete.TextForArticle_Id == null) {
+                        mainArticleId = id;
+                        articlesToDelete.push(mainArticleId);
+                        var texts = this.GetTextsForArticle(id);
+                        for (var i = 0; i < texts.length; i++) {
+                            articlesToDelete.push(texts[i].Id);
+                        }
+                    } else {
+                        mainArticleId = articleToDelete.TextForArticle_Id;
+                        articlesToDelete.push(id);
+                    }
+
+                    for (var i = 0; i < articlesToDelete.length; i++) {
+                        for (var j = 0; j < this._articles.length; j++) {
+                            var article = this._articles[j];
+                            if (article.Id == articlesToDelete[i]) {
+                                this._articles.splice(j, 1);
+                                this._deleteFromContainer(article.Id);
+                                break;
+                            }
                         }
                     }
-
-                    //Remove from array
-                    articleIds.splice(0, 1);
-                    this.DeleteArticleTexts(articleIds);
+                  
+                    this.ReOrderingArticles(0);
+                } else {
+                    return;
                 }
 
+                this.UpdateTotal();
+                dhHelpdesk.System.RaiseEvent("OnDeleteArticle", [this, articlesToDelete]);
             },
-
+            
             this.GetSortedArticles = function () {
                 return this._articles.sort(function (a1, a2) { return a1.Position - a2.Position; });
             },
@@ -2682,31 +2701,25 @@ $(function () {
                 credited.CreditForOrder_Id = this.Id;
                 credited.Project_Id = this.Project_Id;
 
-                credited.Initialize();
-                var articles = this.GetSortedArticles();
+                credited.Initialize();                
 
-                var lastOneAdded = true;
-                for (var i = 0; i < articles.length; i++) {
-                    var a = articles[i];
-
-                    // means we are going to add an article not text
-                    if (a.Ppu != null)
-                        lastOneAdded = true;
-
+                var onlyArticles = this.GetOnlyArticles();
+                for (var oi = 0; oi < onlyArticles.length; oi++) {
+                    var a = onlyArticles[oi];
                     var article = a.GetCreditedArticle(credited);
-
-                    if (a.Article == null || (a.Article != null && parseFloat(article.Amount) > 0)) {
-                        if (a.Ppu != null || (a.Ppu == null && lastOneAdded)) {
-                            credited.AddArticle(article);
-                            dhHelpdesk.CaseArticles.RefreshArticleData(article);
+                    if (article.Amount > 0) {
+                        credited.AddArticle(article);
+                        dhHelpdesk.CaseArticles.RefreshArticleData(article);
+                        var onlyTexts = this.GetTextsForArticle(a.Id);
+                        for (tj = 0; tj < onlyTexts.length; tj++) {
+                            var artText = onlyTexts[tj];
+                            var textRow = artText.GetCreditedArticle(credited);
+                            textRow.TextForArticle_Id = article.Id;
+                            credited.AddArticle(textRow);
+                            dhHelpdesk.CaseArticles.RefreshArticleData(textRow);
                         }
-                        else
-                            lastOneAdded = false;
-                    }
-                    else {
-                        lastOneAdded = false;
-                    }
-                }
+                    }                               
+                }             
 
                 if (creditAlertToShow != "" && creditAlert) {
                     dhHelpdesk.Common.ShowWarningMessage(creditAlertToShow);
@@ -2787,24 +2800,25 @@ $(function () {
                 var rows = this.Container.find(".articles-rows");
                 var th = this;
                 if (!th.IsInvoiced) {
-                    rows.sortable({
-                        stop: function () {
-                            var newFirstArticle = th.GetArticle(rows.find("tr").first().attr("data-id"));
-                            if (newFirstArticle.IsBlank()) {
-                                rows.sortable("cancel");
-                                return;
-                            }
-                            var i = 0;
-                            rows.find("tr").each(function () {
-                                var article = th.GetArticle($(this).attr("data-id"));
-                                if (article != null) {
-                                    article.Position = i;
-                                }
-                                i++;
-                            });
-                            th.GetArticles().sort(function (a, b) { return a.Position - b.Position; });
-                        }
-                    });
+                    /* Disable sortable rows */
+                    //rows.sortable({
+                    //    stop: function () {
+                    //        var newFirstArticle = th.GetArticle(rows.find("tr").first().attr("data-id"));
+                    //        if (newFirstArticle.IsBlank()) {
+                    //            rows.sortable("cancel");
+                    //            return;
+                    //        }
+                    //        var i = 0;
+                    //        rows.find("tr").each(function () {
+                    //            var article = th.GetArticle($(this).attr("data-id"));
+                    //            if (article != null) {
+                    //                article.Position = i;
+                    //            }
+                    //            i++;
+                    //        });
+                    //        th.GetArticles().sort(function (a, b) { return a.Position - b.Position; });
+                    //    }
+                    //});
 
                     var publicClassName = ".InitiatorFields_" + th.Id;
 
@@ -3050,21 +3064,23 @@ $(function () {
             this.Position = null;
             this.Ppu = null;
             this.HasPpu = false;
-            this.CreditedForArticle_Id = null;
+            this.TextForArticle_Id = null;
+            this.CreditedForArticle_Id = null;            
 
             this.Container = null;
 
             this.ToJson = function () {
                 return '{' +
-                        '"Id":"' + (this.Id >= 0 ? this.Id : 0) + '", ' +
+                        '"Id":"' + (this.Id != null ? this.Id : 0) + '", ' +
                         '"OrderId":"' + (this.Order.Id > 0 ? this.Order.Id : 0) + '", ' +
                         '"ArticleId":"' + (this.Article != null && this.Article.Id > 0 ? this.Article.Id : '') + '", ' +
                         '"Number":"' + this.GetNumber() + '", ' +
                         '"Name":"' + (this.Name != null ? this.Name : '') + '", ' +
                         '"Amount":"' + (this.Amount != null && this.Amount != undefined && !this.IsBlank() ? dhHelpdesk.Math.ConvertStrToDouble(this.Amount) : '') + '", ' +
                         '"Ppu":"' + (this.Ppu != null && this.Ppu != undefined ? dhHelpdesk.Math.ConvertStrToDouble(this.Ppu) : '') + '", ' +
-                        '"Position":"' + this.Position + '", ' +
-                        '"CreditedForArticle_Id":"' + (this.CreditedForArticle_Id != null && !this.IsBlank() ? this.CreditedForArticle_Id : '') + '"' +
+                        '"Position":"' + this.Position + '", ' +                        
+                        '"CreditedForArticle_Id":"' + (this.CreditedForArticle_Id != null && !this.IsBlank() ? this.CreditedForArticle_Id : '') + '", ' +
+                        '"TextForArticle_Id":"' + (this.TextForArticle_Id != null ? this.TextForArticle_Id : '') + '"' +
                     '}';
             };
 
@@ -3077,6 +3093,7 @@ $(function () {
                 clone.Position = this.Position;
                 clone.Ppu = this.Ppu;
                 clone.HasPpu = this.HasPpu;
+                clone.TextForArticle_Id = this.TextForArticle_Id;
                 clone.CreditedForArticle_Id = this.CreditedForArticle_Id;
 
                 return clone;
@@ -3093,6 +3110,7 @@ $(function () {
                 article.Position = this.Position;
                 article.Ppu = this.Ppu;
                 article.HasPpu = this.HasPpu;
+                article.TextForArticle_Id = this.TextForArticle_Id;
 
                 if (article.Article != null) {
                     usedAmounts = 0;
@@ -3996,7 +4014,7 @@ $(function () {
                     var invoice = new dhHelpdesk.CaseArticles.CaseInvoice();
                     var inv = null;
 
-                    /* TODO: Now there is only one Invoice per case, if needs more we should change this line */
+                    /* Note: Now there is only one Invoice per case, if needs more we should change this line */
                     if (data == null || data.Invoices.length == 0) {
                         invoice.Id = dhHelpdesk.Common.GenerateId();
                         invoice.Initialize();
@@ -4128,6 +4146,11 @@ $(function () {
                                     caseArticle.Ppu = article.Ppu;
                                     caseArticle.UnitId = article.UnitId;
                                     caseArticle.Position = article.Position;
+                                    if (article.TextForArticle_Id == undefined)
+                                        caseArticle.TextForArticle_Id = null;
+                                    else
+                                        caseArticle.TextForArticle_Id = article.TextForArticle_Id;
+
                                     caseArticle.CreditedForArticle_Id = article.CreditedForArticle_Id;
 
                                     order.AddArticle(caseArticle);
@@ -4142,10 +4165,8 @@ $(function () {
                     if (callBack != undefined && callBack != null) {
                         callBack(obj);
                     }
-
-                    // Change tab to the last selected tab (Doesn't work for new order)
+                    
                     dhHelpdesk.CaseArticles.ChangeTab(dhHelpdesk.CaseArticles.LastSelectedTab);
-
                     dhHelpdesk.CaseArticles.SetInvoiceState(_INVOICE_IDLE);
 
                 });

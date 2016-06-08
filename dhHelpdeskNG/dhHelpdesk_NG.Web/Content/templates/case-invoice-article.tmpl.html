@@ -12,10 +12,17 @@
                         onchange='dhHelpdesk.CaseArticles.UpdateArticle($(this).parent().parent())' 
                         type='text' class='width80 article-name' maxlength='50' value='{{:Name}}' />
                 <span id="DescriptionCount_{{:Id}}" style="color:GrayText;font-size:smaller">{{:DescriptionCount}} </span>
-            </td>             
-            <td style="width:5%">
-                <a href='javascript:void(0);' onclick='dhHelpdesk.CaseArticles.DeleteArticle($(this).parent().parent())' class='btn btn-small'>x</a>
-            </td>            
+            </td>      
+            {{if IsCredited}}       
+                <td colspan="2" style="width:5px;">
+                    <a href='javascript:void(0);' onclick='dhHelpdesk.CaseArticles.DeleteArticle($(this).parent().parent())' class='btn btn-small'>x</a>
+                </td>            
+            {{else}}
+                <td style="width:5px;">
+                    <a href='javascript:void(0);' onclick='dhHelpdesk.CaseArticles.DeleteArticle($(this).parent().parent())' class='btn btn-small'>x</a>
+                </td>            
+                <td></td>
+            {{/if}}         
         </tr>
     {{/if}}                    
 {{else}}
@@ -32,10 +39,10 @@
             <td>{{:UnitName}}</td>
             <td class="article-ppu-fixed" style='text-align: right;' >{{:Ppu}}</td>
             {{if IsCredited}}
-                <td colspan="2" class="article-total" style="text-align: right;">-{{:Total}}</td>
+                <td colspan="3" class="article-total" style="text-align: right;">-{{:Total}}</td>
             {{else}}
-                <td colspan="2" class="article-total" style="text-align: right;">{{:Total}}</td>
-            {{/if}}
+                <td colspan="3" class="article-total" style="text-align: right;">{{:Total}}</td>
+            {{/if}}            
         </tr>
     {{else}}
         <tr data-id='{{:Id}}' title='{{:Description}}'>
@@ -62,15 +69,21 @@
                 </td>
                 {{/if}}
             {{/if}}
-
-            {{if IsCredited}}              
+        
+            {{if IsCredited}}
                 <td class='article-total'>-{{:Total}}</td>
+                <td colspan="2" style="width:5px">
+                    <a href='javascript:void(0);' onclick='dhHelpdesk.CaseArticles.DeleteArticle($(this).parent().parent())' class='btn btn-small'>x</a>
+                </td>
             {{else}}
-                <td class='article-total'>{{:Total}}</td>               
+                <td class='article-total'>{{:Total}}</td>  
+                <td style="width:5px">
+                    <a href='javascript:void(0);' onclick='dhHelpdesk.CaseArticles.DeleteArticle($(this).parent().parent())' class='btn btn-small'>x</a>
+                </td>             
+                <td style="vertical-align:top;width:5px;">                        
+                    <a id="add-blank-article_{{:Id}}" class="btn btn-small add-blank-article" style="cursor: pointer;" onclick="dhHelpdesk.CaseArticles.AddTextToArticle('{{:Id}}'); return false;"><i class="icon-plus-sign"></i></a>                    
+                </td>            
             {{/if}}
-            <td style="width:5%">
-                <a href='javascript:void(0);' onclick='dhHelpdesk.CaseArticles.DeleteArticle($(this).parent().parent())' class='btn btn-small'>x</a>
-            </td>
         </tr>
     {{/if}}                                
 {{/if}}  

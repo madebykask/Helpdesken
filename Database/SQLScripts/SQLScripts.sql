@@ -212,5 +212,11 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	ALTER TABLE tblFormField ADD Show int NOT NULL Default(1)
 GO
 
+
+IF COL_LENGTH('tblCaseInvoiceArticle','TextForArticle_Id') IS NULL
+BEGIN
+    ALTER TABLE tblCaseInvoiceArticle ADD TextForArticle_Id int NULL
+END
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.24'

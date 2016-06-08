@@ -84,7 +84,8 @@
                                                     a.Amount,
                                                     a.Ppu,
                                                     a.Position,
-                                                    a.CreditedForArticle_Id)).ToArray():null,
+                                                    a.CreditedForArticle_Id,
+                                                    a.TextForArticle_Id)).ToArray():null,
                                  o.Articles != null ?
                                     o.Files.Select(f => this.filesMapper.Map(f)).OrderBy(f => f.FileName).ToArray() : null
                                  ))

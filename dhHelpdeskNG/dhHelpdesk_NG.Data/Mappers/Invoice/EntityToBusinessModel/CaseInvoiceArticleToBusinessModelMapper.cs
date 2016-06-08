@@ -34,7 +34,8 @@
                         entity.Amount,
                         entity.Ppu,
                         entity.Position,
-                        entity.CreditedForArticle_Id);
+                        entity.CreditedForArticle_Id,
+                        entity.TextForArticle_Id);
         }
     }
 }
