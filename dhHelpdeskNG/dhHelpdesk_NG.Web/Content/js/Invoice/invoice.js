@@ -1973,6 +1973,10 @@ $(function () {
             return sortedOrders;
         },
 
+        SortArticles: function (articles) {            
+            return articles.sort(function (a1, a2) { return a1.Position - a2.Position; });
+        },
+
         GetOriginalOrders: function (allOrders) {
             var ret = [];
             for (var i = 0; i < allOrders.length; i++) {
@@ -2512,7 +2516,7 @@ $(function () {
 
                 return onlyArticles;
             },
-
+            
             this.GetTextsForArticle = function (articleId) {
                 var articleTextes = [];
                 for (t = 0; t < this._articles.length; t++) {
@@ -2562,7 +2566,7 @@ $(function () {
             
             this.GetSortedArticles = function () {
                 return this._articles.sort(function (a1, a2) { return a1.Position - a2.Position; });
-            },
+            },            
 
             this.ToJson = function () {
                 var articlesResult = "";
@@ -4114,8 +4118,9 @@ $(function () {
                                 }
                             }
 
-                            invoice.AddOrder(order);
+                            invoice.AddOrder(order);                            
                             if (ord.Articles != null) {
+                                ord.Articles = dhHelpdesk.CaseArticles.SortArticles(ord.Articles);
                                 for (var k = 0; k < ord.Articles.length; k++) {
                                     var article = ord.Articles[k];
                                     var caseArticle = new dhHelpdesk.CaseArticles.CaseInvoiceArticle();
