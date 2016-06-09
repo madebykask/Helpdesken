@@ -88,7 +88,7 @@
                                         customers,
                                         departments,
                                         userDepartments);
-                return deps.Where(d => d.Region_Id == null || (isOnlyActive && d.Region != null && d.Region.IsActive != 0))
+                return deps.Where(d => d.Region_Id == null || isOnlyActive == false || (isOnlyActive && d.Region != null && d.Region.IsActive != 0))
                            .ToList();
             }
         }

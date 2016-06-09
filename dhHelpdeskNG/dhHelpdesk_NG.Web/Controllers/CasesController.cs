@@ -4624,7 +4624,7 @@ namespace DH.Helpdesk.Web.Controllers
         private CaseSettingModel GetCaseSettingModel(int customerId, int userId)
         {
             var ret = new CaseSettingModel();
-
+            const bool IsTakeOnlyActive = true;
             ret.CustomerId = customerId;
             ret.UserId = userId;
 
@@ -4637,7 +4637,20 @@ namespace DH.Helpdesk.Web.Controllers
 
             var customerSettings = this._settingService.GetCustomerSetting(customerId);
 
-            var departments = this._departmentService.GetDepartments(customerId, ActivationStatus.All);
+            var departments = this._departmentService.GetDepartmentsByUserPermissions(userId, customerId, IsTakeOnlyActive);
+            if (!departments.Any())
+            {
+                departments =
+                    this._departmentService.GetDepartments(customerId)
+                        .Where(
+                            d =>
+                            d.Region_Id == null
+                            || IsTakeOnlyActive == false
+                            || (IsTakeOnlyActive && d.Region != null && d.Region.IsActive != 0))
+                        .ToList();
+            }
+
+            //var departments = this._departmentService.GetDepartments(customerId, ActivationStatus.All);
             ret.IsDepartmentChecked = userCaseSettings.Departments != string.Empty;
 
             if (customerSettings != null && customerSettings.ShowOUsOnDepartmentFilter != 0)
@@ -4648,7 +4661,7 @@ namespace DH.Helpdesk.Web.Controllers
             ret.SelectedDepartments = userCaseSettings.Departments;
 
             
-            const bool IsTakeOnlyActive = true;
+            
             ret.RegisteredByCheck = userCaseSettings.RegisteredBy != string.Empty;
             ret.RegisteredByUserList = this._userService.GetUserOnCases(customerId, IsTakeOnlyActive).MapToSelectList(customerSettings);
             if (!string.IsNullOrEmpty(userCaseSettings.RegisteredBy))
