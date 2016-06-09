@@ -96,8 +96,7 @@
             ou.Path = ou.Path ?? string.Empty;
             ou.OUId = ou.OUId ?? string.Empty;
             ou.HomeDirectory = ou.HomeDirectory ?? string.Empty;
-            ou.ScriptPath = ou.ScriptPath ?? string.Empty;
-            ou.SearchKey = ou.SearchKey ?? string.Empty;
+            ou.ScriptPath = ou.ScriptPath ?? string.Empty;            
 
             errors = new Dictionary<string, string>();
 
