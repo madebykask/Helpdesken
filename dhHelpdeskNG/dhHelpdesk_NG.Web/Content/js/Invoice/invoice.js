@@ -9,7 +9,7 @@ $(function () {
 
     //Max floating point digits
     _MAX_FLOATING_POINT = 2;
-    _IGNORE_ZERO_FLOATING_POINT = true;
+    _IGNORE_ZERO_FLOATING_POINT = false;
     var regionUrl = '/Organization/GetRegions/';
     var departmentUrl = '/Organization/GetDepartments/';
     var ouUrl = '/Organization/GetOUs/';
@@ -3219,18 +3219,20 @@ $(function () {
                 var amount = dhHelpdesk.Math.ConvertStrToDouble(eAmount.val());
                 if (!dhHelpdesk.Math.IsDouble(amount)) {
                     amount = dhHelpdesk.CaseArticles.DefaultAmount;
-                    eAmount.val(amount);
+                    eAmount.val(dhHelpdesk.Math.ConvertDoubleToStr(amount, _IGNORE_ZERO_FLOATING_POINT));
                 }
                 this.Amount = amount;
+                eAmount.val(dhHelpdesk.Math.ConvertDoubleToStr(amount, _IGNORE_ZERO_FLOATING_POINT));
 
                 var ePpu = this.Container.find(".article-ppu");
                 if (ePpu.length > 0) {
                     var ppu = dhHelpdesk.Math.ConvertStrToDouble(ePpu.val());
                     if (!dhHelpdesk.Math.IsDouble(ppu) || ppu <= 0) {
                         ppu = dhHelpdesk.CaseArticles.DefaultPpu;
-                        ePpu.val(ppu);
+                        ePpu.val(dhHelpdesk.Math.ConvertDoubleToStr(ppu, _IGNORE_ZERO_FLOATING_POINT));
                     }
                     this.Ppu = ppu;
+                    ePpu.val(dhHelpdesk.Math.ConvertDoubleToStr(ppu, _IGNORE_ZERO_FLOATING_POINT));
                 }
 
                 for (var i = 0; i < dhHelpdesk.CaseArticles.allVailableOrders.length; i++) {
