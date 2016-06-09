@@ -110,10 +110,10 @@ $(function () {
             var sep = this.GetDecimalSeparator();
             strVal = strVal.replace(".", sep);
             var splitedValues = this.SplitFloating(strVal, sep);
-            if (ignoreZeroFloating && (splitedValues.floatingPoint == '00' || splitedValues.floatingPoint == '0' || splitedValues.floatingPoint == '')) {
+            if (ignoreZeroFloating && (splitedValues.floatingPoint == GetMaxFloatingPointZero() || splitedValues.floatingPoint == '0' || splitedValues.floatingPoint == '')) {
                 return splitedValues.integral;
             } else {
-                return splitedValues.integral + (splitedValues.floatingPoint != '' ? sep + splitedValues.floatingPoint : sep + '00');
+                return splitedValues.integral + (splitedValues.floatingPoint != '' ? sep + splitedValues.floatingPoint : sep + this.GetMaxFloatingPointZero());
             }
         },
 
@@ -135,6 +135,10 @@ $(function () {
             var res = { integral: intVal, floatingPoint: floatVal };
             return res;
         },
+
+        GetMaxFloatingPointZero: function () {            
+            return dhHelpdesk.Common.PadLeft("", _MAX_FLOATING_POINT, "0");            
+        }
 
     },
 
