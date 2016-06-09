@@ -129,53 +129,46 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	ALTER TABLE tblCaseFieldSettings ADD Mail2TicketIdentifier nvarchar(50) NULL
 GO
 
+if not exists(select * from sysobjects WHERE Name = N'tblMail2Ticket') 
+BEGIN  
+	CREATE TABLE [dbo].[tblMail2Ticket](
+		[Id] [int] IDENTITY(1,1) NOT NULL,
+		[Case_Id] [int] NULL,
+		[Log_id] [int] NULL,
+		[EMailAddress] [nvarchar](100) NOT NULL,
+		[Type] [nvarchar](10) NOT NULL,
+		[CreatedDate] [datetime] NOT NULL,
+	 CONSTRAINT [PK_tblMail2Ticket] PRIMARY KEY CLUSTERED 
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
 
--- New table tblMail2Ticket
 
-/****** Object:  Table [dbo].[tblMail2Ticket]    Script Date: 2016-05-31 13:31:33 ******/
-SET ANSI_NULLS ON
-GO
 
-SET QUOTED_IDENTIFIER ON
-GO
+	ALTER TABLE [dbo].[tblMail2Ticket] ADD  CONSTRAINT [DF_tblMail2Ticket_EMailAddress]  DEFAULT ('') FOR [EMailAddress]
 
-CREATE TABLE [dbo].[tblMail2Ticket](
-	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[Case_Id] [int] NULL,
-	[Log_id] [int] NULL,
-	[EMailAddress] [nvarchar](100) NOT NULL,
-	[Type] [nvarchar](10) NOT NULL,
-	[CreatedDate] [datetime] NOT NULL,
- CONSTRAINT [PK_tblMail2Ticket] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
 
-GO
+	ALTER TABLE [dbo].[tblMail2Ticket] ADD  CONSTRAINT [DF_tblMail2Ticket_Type]  DEFAULT ('') FOR [Type]
 
-ALTER TABLE [dbo].[tblMail2Ticket] ADD  CONSTRAINT [DF_tblMail2Ticket_EMailAddress]  DEFAULT ('') FOR [EMailAddress]
-GO
 
-ALTER TABLE [dbo].[tblMail2Ticket] ADD  CONSTRAINT [DF_tblMail2Ticket_Type]  DEFAULT ('') FOR [Type]
-GO
+	ALTER TABLE [dbo].[tblMail2Ticket] ADD  CONSTRAINT [DF_tblMail2Ticket_CreatedDate]  DEFAULT (getutcdate()) FOR [CreatedDate]
 
-ALTER TABLE [dbo].[tblMail2Ticket] ADD  CONSTRAINT [DF_tblMail2Ticket_CreatedDate]  DEFAULT (getutcdate()) FOR [CreatedDate]
-GO
 
-ALTER TABLE [dbo].[tblMail2Ticket]  WITH CHECK ADD  CONSTRAINT [FK_tblMail2Ticket_tblCase] FOREIGN KEY([Case_Id])
-REFERENCES [dbo].[tblCase] ([Id])
-GO
+	ALTER TABLE [dbo].[tblMail2Ticket]  WITH CHECK ADD  CONSTRAINT [FK_tblMail2Ticket_tblCase] FOREIGN KEY([Case_Id])
+	REFERENCES [dbo].[tblCase] ([Id])
 
-ALTER TABLE [dbo].[tblMail2Ticket] CHECK CONSTRAINT [FK_tblMail2Ticket_tblCase]
-GO
 
-ALTER TABLE [dbo].[tblMail2Ticket]  WITH CHECK ADD  CONSTRAINT [FK_tblMail2Ticket_tblLog] FOREIGN KEY([Log_id])
-REFERENCES [dbo].[tblLog] ([Id])
-GO
+	ALTER TABLE [dbo].[tblMail2Ticket] CHECK CONSTRAINT [FK_tblMail2Ticket_tblCase]
 
-ALTER TABLE [dbo].[tblMail2Ticket] CHECK CONSTRAINT [FK_tblMail2Ticket_tblLog]
-GO
+
+	ALTER TABLE [dbo].[tblMail2Ticket]  WITH CHECK ADD  CONSTRAINT [FK_tblMail2Ticket_tblLog] FOREIGN KEY([Log_id])
+	REFERENCES [dbo].[tblLog] ([Id])
+
+
+	ALTER TABLE [dbo].[tblMail2Ticket] CHECK CONSTRAINT [FK_tblMail2Ticket_tblLog]
+
+End
 
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[tblFormUrl]') AND type in (N'U'))
 BEGIN
@@ -200,7 +193,7 @@ END
 
 IF COL_LENGTH('tblForm','FormUrl_Id') IS NULL
 BEGIN
-               ALTER TABLE tblForm ADD FormUrl_Id int NULL
+   ALTER TABLE tblForm ADD FormUrl_Id int NULL
 END
 
 --New fields in tblFormField

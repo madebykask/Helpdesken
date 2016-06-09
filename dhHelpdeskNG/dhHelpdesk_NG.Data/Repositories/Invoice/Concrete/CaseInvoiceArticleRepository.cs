@@ -289,26 +289,6 @@
                             }
                             
                         }
-
-
-                        //foreach (var article in order.Articles.Where(a=> a.Id > 0 && !a.TextForArticle_Id.HasValue))
-                        //{
-                        //    CaseInvoiceArticleEntity articleEntity;
-                        //    if (article.Id > 0)
-                        //    {
-                        //        articleEntity = this.DbContext.CaseInvoiceArticles.Find(article.Id);
-                        //        this.articleMapper.Map(article, articleEntity);
-                        //    }
-                        //    else
-                        //    {   
-                        //        if article.
-                        //        articleEntity = new CaseInvoiceArticleEntity();
-                        //        this.articleMapper.Map(article, articleEntity);
-                        //        articleEntity.OrderId = orderEntity.Id;
-                        //        this.DbContext.CaseInvoiceArticles.Add(articleEntity);
-                        //    }
-                        //}
-                        //this.Commit();
                     }
                 }
             }
