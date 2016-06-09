@@ -252,7 +252,7 @@ GO
 
 IF COL_LENGTH('tblFormSettings','CountryName') IS NULL
 BEGIN
-      ALTER TABLE tblFormSettings ADD AreaName NVARCHAR(40) NULL
+      ALTER TABLE tblFormSettings ADD CountryName NVARCHAR(40) NULL
 END
 
 IF COL_LENGTH('tblFormSettings','EmployeeContractXmlPath') IS NULL
