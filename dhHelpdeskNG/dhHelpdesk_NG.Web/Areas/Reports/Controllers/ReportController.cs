@@ -314,6 +314,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                 if (options != null && options.IsPreview)
                 {
                     var previewData = this.reportService.GetReportGeneratorAggregation(this.OperationContext.CustomerId,
+                    this.OperationContext.UserId,
                     this.OperationContext.LanguageId,
                     filters.FieldIds,
                     filters.DepartmentIds,
@@ -333,6 +334,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 
                 var data = this.reportService.GetReportGeneratorData(
                                     this.OperationContext.CustomerId,
+                                    this.OperationContext.UserId,
                                     this.OperationContext.LanguageId,
                                     filters.FieldIds,
                                     filters.DepartmentIds,
@@ -694,7 +696,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 
         private ReportPresentationModel GetReportViewerData(string reportName, ReportSelectedFilter reportSelectedFilter)
         {
-            var reportData = _ReportServiceService.GetReportData(reportName, reportSelectedFilter);
+            var reportData = _ReportServiceService.GetReportData(reportName, reportSelectedFilter, this.OperationContext.UserId,
+                    OperationContext.CustomerId);
 
             ReportPresentationModel model = new ReportPresentationModel();
 

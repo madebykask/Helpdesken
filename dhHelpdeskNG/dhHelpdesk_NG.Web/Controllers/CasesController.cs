@@ -4813,8 +4813,8 @@ namespace DH.Helpdesk.Web.Controllers
             reportSelectedFilter.GeneralParameter.Add(new GeneralParameter("@CaseId", caseId));
             reportSelectedFilter.GeneralParameter.Add(new GeneralParameter("@LanguageId", SessionFacade.CurrentLanguageId));
             reportSelectedFilter.GeneralParameter.Add(new GeneralParameter("@UserId", SessionFacade.CurrentUser.Id));
-            
-            var reportData = _ReportServiceService.GetReportData(reportName, reportSelectedFilter);
+
+            var reportData = _ReportServiceService.GetReportData(reportName, reportSelectedFilter, SessionFacade.CurrentUser.Id, SessionFacade.CurrentCustomer.Id);
 
             ReportModel model = new ReportModel();
 

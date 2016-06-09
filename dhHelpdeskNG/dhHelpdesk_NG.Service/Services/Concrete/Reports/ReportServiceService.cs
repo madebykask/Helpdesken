@@ -63,11 +63,15 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             var administrators = this._userService.SearchSortAndGenerateUsers(userSearch).ToList();            
             reportFilter.Administrators = administrators;
 
-            var departments = this._departmentService.GetDepartments(customerId, ActivationStatus.All);
+            var departments = _departmentService.GetDepartmentsByUserPermissions(userId, customerId);
+            if (!departments.Any())
+                departments = this._departmentService.GetDepartments(customerId, ActivationStatus.All);
             if (addOUsToDepartments)
                 departments = AddOrganizationUnitsToDepartments(departments);
 
-            var workingGroups = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId, false).ToList();                
+            var workingGroups = _workingGroupService.GetWorkingGroups(userId, customerId);
+            if (!workingGroups.Any())
+                workingGroups = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId, false);            
 
             var caseTypes = this._caseTypeService.GetCaseTypes(customerId).ToList();
             var caseTypesInRow = this._caseTypeService.GetChildsInRow(caseTypes).ToList();
@@ -76,15 +80,18 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             var productAreasInRow = this._productAreaService.GetChildsInRow(productAreas).ToList();
     
             reportFilter.Departments = departments.ToList();
-            reportFilter.WorkingGroups = workingGroups;
+            reportFilter.WorkingGroups = workingGroups.ToList();
             reportFilter.CaseTypes = caseTypesInRow;
             reportFilter.ProductAreas = productAreasInRow;
             
             return reportFilter;
         }
-        
-        public ReportData GetReportData(string reportIdentity, ReportSelectedFilter filters)
+
+        public ReportData GetReportData(string reportIdentity, ReportSelectedFilter filters, int userId, int customerId)
         {
+            filters.SeletcedDepartments = EnsureDepartments(filters.SeletcedDepartments, userId, customerId);
+            filters.SelectedWorkingGroups = EnsureWorkingGroups(filters.SelectedWorkingGroups, userId, customerId);
+
             return _reportServiceRepository.GetReportData(reportIdentity, filters);
         }
 
@@ -126,7 +133,22 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             }
 
             return departments;
-        }        
+        }
+
+        private SelectedItems EnsureDepartments(SelectedItems departments, int userId, int customerId)
+        {
+            
+            var allowedDepartmentIds = _departmentService.GetDepartmentsByUserPermissions(userId, customerId).Select(x => x.Id).ToList();
+            var res = new SelectedItems(departments.Any() ? departments.FindAll(x => allowedDepartmentIds.Contains(x)) : allowedDepartmentIds);
+            return res;
+        }
+
+        private SelectedItems EnsureWorkingGroups(SelectedItems workingGroups, int userId, int customerId)
+        {
+            var allowedWorkingGroups = _workingGroupService.GetWorkingGroups(userId, customerId).Select(x => x.Id).ToList();
+            var res = new SelectedItems(workingGroups.Any() ? workingGroups.FindAll(x => allowedWorkingGroups.Contains(x)) : allowedWorkingGroups);
+            return res;
+        }
 
         #endregion
 

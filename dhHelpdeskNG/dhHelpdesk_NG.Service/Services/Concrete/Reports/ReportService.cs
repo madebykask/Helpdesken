@@ -46,19 +46,25 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
         private readonly IReportRepository _reportRepository;
         private readonly IReportFavoriteRepository _reportFavoriteRepository;
         private readonly ICaseService _caseService;
+        private readonly IDepartmentService _departmentService;
+        private readonly IWorkingGroupService _workingGroupService;
 
         public ReportService(
                 IUnitOfWorkFactory unitOfWorkFactory,                 
                 ISurveyService sureyService,
                 ICaseService caseService,
                 IReportRepository reportRepository,
-                IReportFavoriteRepository reportFavoriteRepository)
+                IReportFavoriteRepository reportFavoriteRepository,
+                IDepartmentService departmentService,
+                IWorkingGroupService workingGroupService)
         {
             this.unitOfWorkFactory = unitOfWorkFactory;
             this.sureyService = sureyService;
             this._reportRepository = reportRepository;
             this._caseService = caseService;
             this._reportFavoriteRepository = reportFavoriteRepository;
+            this._departmentService = departmentService;
+            this._workingGroupService = workingGroupService;
         }
 
         #region Reports
@@ -332,6 +338,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
 
         public ReportGeneratorData GetReportGeneratorData(
             int customerId,
+            int userId,
             int languageId,
             List<int> fieldIds,
             List<int> departmentIds,
@@ -378,6 +385,10 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
                 var productAreas = productAreaRep.GetAll().GetByCustomer(customerId);
                 var ous = ouRep.GetAll();
                 var finishingCauses = finishingCauseRep.GetAll().GetByCustomer(customerId);
+
+                //Ensure filters
+                departmentIds = EnsureDepartments(departmentIds, userId, customerId);
+                workingGroupIds = EnsureWorkingGroups(workingGroupIds, userId, customerId);
                 
                 var caseData = _reportRepository.GetCaseList(
                                                customerId,
@@ -399,6 +410,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
 
         public Dictionary<DateTime, int> GetReportGeneratorAggregation(
              int customerId,
+            int userId,
             int languageId,
             List<int> fieldIds,
             List<int> departmentIds,
@@ -426,6 +438,10 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
                 {
                     LoadProductAreaChildrenIds(productAreaId, productAreaChainIds, uow);
                 }
+
+                //Ensure filters
+                departmentIds = EnsureDepartments(departmentIds, userId, customerId);
+                workingGroupIds = EnsureWorkingGroups(workingGroupIds, userId, customerId);
 
                 var caseData = _reportRepository.GetCaseAggregation(
                                                 customerId,
@@ -1548,6 +1564,20 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             {
                 LoadCaseTypeChildrenIds(child.Id, ids, uow);
             }
+        }
+
+        private List<int> EnsureDepartments(List<int> departments, int userId, int customerId)
+        {
+            var allowedDepartmentIds = _departmentService.GetDepartmentsByUserPermissions(userId, customerId).Select(x => x.Id).ToList();
+            var res = departments.Any() ? departments.FindAll(x => allowedDepartmentIds.Contains(x)) : allowedDepartmentIds;
+            return res;
+        }
+
+        private List<int> EnsureWorkingGroups(List<int> workingGroups, int userId, int customerId)
+        {
+            var allowedWorkingGroups = _workingGroupService.GetWorkingGroups(userId, customerId).Select(x => x.Id).ToList();
+            var res = workingGroups.Any() ? workingGroups.FindAll(x => allowedWorkingGroups.Contains(x)) : allowedWorkingGroups;
+            return res;
         }
 
         #endregion
