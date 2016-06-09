@@ -321,6 +321,24 @@ BEGIN
       ALTER TABLE tblFormFieldValue ADD InitialFormFieldText NVARCHAR(2000) NULL
 END
 
+IF  NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[tblFormFieldValueHistory]') AND type in (N'U'))
+BEGIN
+
+	CREATE TABLE [dbo].[tblFormFieldValueHistory](
+		[Id] [int] IDENTITY(1,1) NOT NULL,
+		[Case_Id] [int] NOT NULL,
+		[FormField_Id] [int] NOT NULL,
+		[CaseHistory_Id] [int] NOT NULL,
+		[FormFieldValue] [nvarchar](2000) NOT NULL,
+		[InitialFormFieldValue] [nvarchar](2000) NULL,
+	 CONSTRAINT [PK_tblFormFieldValueHistory_1] PRIMARY KEY CLUSTERED 
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
+
+END
+
 IF COL_LENGTH('tblFormFieldValueHistory','FormFieldText') IS NULL
 BEGIN
       ALTER TABLE tblFormFieldValueHistory ADD FormFieldText NVARCHAR(2000) NULL
