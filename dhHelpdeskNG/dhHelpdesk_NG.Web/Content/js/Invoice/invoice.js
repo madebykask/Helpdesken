@@ -110,7 +110,17 @@ $(function () {
             var sep = this.GetDecimalSeparator();
             strVal = strVal.replace(".", sep);
             var splitedValues = this.SplitFloating(strVal, sep);
-            if (ignoreZeroFloating && (splitedValues.floatingPoint == GetMaxFloatingPointZero() || splitedValues.floatingPoint == '0' || splitedValues.floatingPoint == '')) {
+            var fpTester = '';
+            var floatingPointIsZero = false;
+            for (var mfp = 0; mfp < _MAX_FLOATING_POINT; mfp++) {                
+                if (splitedValues.floatingPoint == fpTester) {
+                    floatingPointIsZero = true;
+                    break;
+                }
+                fpTester += '0';
+            }
+
+            if (ignoreZeroFloating && floatingPointIsZero) {
                 return splitedValues.integral;
             } else {
                 return splitedValues.integral + (splitedValues.floatingPoint != '' ? sep + splitedValues.floatingPoint : sep + this.GetMaxFloatingPointZero());
@@ -1096,7 +1106,7 @@ $(function () {
 
             if (article != null) {
                 if (curAmount <= 0) {
-                    obj.val(dhHelpdesk.Math.ConvertDoubleToStr(article.Amount, _IGNORE_ZERO_FLOATING_POINT));
+                    obj.val(dhHelpdesk.Math.ConvertDoubleToStr(article.Amount, true));
                     dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("Value can't be 0"));
                     return;
                 }
@@ -3188,10 +3198,10 @@ $(function () {
                 model.Description = this.Article != null && this.Article.Description != null ? this.Article.Description : "";
                 model.Id = this.Id;
                 model.Number = this.GetNumber();
-                model.Amount = this.Order.IsInvoiced ? dhHelpdesk.CaseArticles.DoDelimit(dhHelpdesk.Math.ConvertDoubleToStr(this.Amount, _IGNORE_ZERO_FLOATING_POINT)) :
-                                                       dhHelpdesk.Math.ConvertDoubleToStr(this.Amount, _IGNORE_ZERO_FLOATING_POINT);
+                model.Amount = this.Order.IsInvoiced ? dhHelpdesk.CaseArticles.DoDelimit(dhHelpdesk.Math.ConvertDoubleToStr(this.Amount, true)) :
+                                                       dhHelpdesk.Math.ConvertDoubleToStr(this.Amount, true);
 
-                model.DisplayAmount = dhHelpdesk.CaseArticles.DoDelimit(dhHelpdesk.Math.ConvertDoubleToStr(this.Amount, _IGNORE_ZERO_FLOATING_POINT));
+                model.DisplayAmount = dhHelpdesk.CaseArticles.DoDelimit(dhHelpdesk.Math.ConvertDoubleToStr(this.Amount, true));
                 model.UnitName = this.GetUnitName();
                 model.Ppu = this.Order.IsInvoiced ? dhHelpdesk.CaseArticles.DoDelimit(dhHelpdesk.Math.ConvertDoubleToStr(this.GetPpu(), _IGNORE_ZERO_FLOATING_POINT)) :
                                                     dhHelpdesk.Math.ConvertDoubleToStr(this.GetPpu(), _IGNORE_ZERO_FLOATING_POINT);
@@ -3223,10 +3233,10 @@ $(function () {
                 var amount = dhHelpdesk.Math.ConvertStrToDouble(eAmount.val());
                 if (!dhHelpdesk.Math.IsDouble(amount)) {
                     amount = dhHelpdesk.CaseArticles.DefaultAmount;
-                    eAmount.val(dhHelpdesk.Math.ConvertDoubleToStr(amount, _IGNORE_ZERO_FLOATING_POINT));
+                    eAmount.val(dhHelpdesk.Math.ConvertDoubleToStr(amount, true));
                 }
                 this.Amount = amount;
-                eAmount.val(dhHelpdesk.Math.ConvertDoubleToStr(amount, _IGNORE_ZERO_FLOATING_POINT));
+                eAmount.val(dhHelpdesk.Math.ConvertDoubleToStr(amount, true));
 
                 var ePpu = this.Container.find(".article-ppu");
                 if (ePpu.length > 0) {
