@@ -211,5 +211,125 @@ BEGIN
     ALTER TABLE tblCaseInvoiceArticle ADD TextForArticle_Id int NULL
 END
 
+IF COL_LENGTH('tblGlobalSettings','DhPlusDBVersion') IS NULL
+BEGIN
+      ALTER TABLE tblGlobalSettings ADD DhPlusDBVersion NVARCHAR(20) NULL
+END
+
+IF COL_LENGTH('tblGlobalSettings','SiteUrlV4') IS NULL
+BEGIN
+       ALTER TABLE tblGlobalSettings ADD SiteUrlV4 NVARCHAR(200) NULL
+END
+
+IF COL_LENGTH('tblGlobalSettings','SiteUrlV5') IS NULL
+BEGIN
+       ALTER TABLE tblGlobalSettings ADD SiteUrlV5 NVARCHAR(200) NULL
+END
+
+
+GO
+
+IF  NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[tblFormSettings]') AND type in (N'U'))
+BEGIN
+
+	CREATE TABLE [dbo].[tblFormSettings](
+		[Id] [int] IDENTITY(1,1) NOT NULL,
+		[Customer_Id] [int] NULL,
+		[TextType_Id] [int] NULL,
+		[LogTranslations] [bit] NULL,
+	 CONSTRAINT [PK_tblFormSettings] PRIMARY KEY CLUSTERED 
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
+
+	ALTER TABLE [dbo].[tblFormSettings] ADD  CONSTRAINT [DF_tblFormSettings_TextType_Id]  DEFAULT ((200)) FOR [TextType_Id]
+
+	ALTER TABLE [dbo].[tblFormSettings] ADD  CONSTRAINT [DF_tblFormSettings_LogTranslations]  DEFAULT ((0)) FOR [LogTranslations]
+END
+
+GO
+
+IF COL_LENGTH('tblFormSettings','CountryName') IS NULL
+BEGIN
+      ALTER TABLE tblFormSettings ADD AreaName NVARCHAR(40) NULL
+END
+
+IF COL_LENGTH('tblFormSettings','EmployeeContractXmlPath') IS NULL
+BEGIN
+      ALTER TABLE tblFormSettings ADD EmployeeContractXmlPath NVARCHAR(1000) NULL
+END
+
+IF COL_LENGTH('tblFormSettings','DateFormat') IS NULL
+BEGIN
+      ALTER TABLE tblFormSettings ADD [DateFormat] NVARCHAR(20) NULL
+END
+
+IF COL_LENGTH('tblFormSettings','ApiBaseUrl') IS NULL
+BEGIN
+      ALTER TABLE tblFormSettings ADD [ApiBaseUrl] NVARCHAR(2000) NULL
+END
+
+IF COL_LENGTH('tblFormSettings','ApiUserName') IS NULL
+BEGIN
+      ALTER TABLE tblFormSettings ADD [ApiUserName] NVARCHAR(2000) NULL
+END
+
+IF COL_LENGTH('tblFormSettings','ApiPassword') IS NULL
+BEGIN
+      ALTER TABLE tblFormSettings ADD [ApiPassword] NVARCHAR(2000) NULL
+END
+
+IF COL_LENGTH('tblFormSettings','CountryCode') IS NULL
+BEGIN
+      ALTER TABLE tblFormSettings ADD [CountryCode] NVARCHAR(10) NULL
+END
+
+IF COL_LENGTH('tblFormSettings','CountryPrefix') IS NULL
+BEGIN
+      ALTER TABLE tblFormSettings ADD [CountryPrefix] NVARCHAR(3) NULL
+END
+
+
+IF COL_LENGTH('tblOU','SearchKey') IS NULL
+BEGIN
+       ALTER TABLE tblOU ADD SearchKey NVARCHAR(200) NULL
+END
+
+IF COL_LENGTH('tblForm','FormXmlName') IS NULL
+BEGIN
+       ALTER TABLE tblForm ADD FormXmlName NVARCHAR(100) NULL
+END
+
+IF COL_LENGTH('tblForm','DataSource') IS NULL
+BEGIN
+      ALTER TABLE tblForm ADD DataSource int default(1) NULL
+END
+
+IF COL_LENGTH('tblFormField','PreloadOrder') IS NULL
+BEGIN
+      ALTER TABLE tblFormField ADD PreloadOrder int default(999999) NULL
+END
+
+IF COL_LENGTH('tblFormFieldValue','FormFieldText') IS NULL
+BEGIN
+      ALTER TABLE tblFormFieldValue ADD FormFieldText NVARCHAR(2000) NULL
+END
+
+IF COL_LENGTH('tblFormFieldValue','InitialFormFieldText') IS NULL
+BEGIN
+      ALTER TABLE tblFormFieldValue ADD InitialFormFieldText NVARCHAR(2000) NULL
+END
+
+IF COL_LENGTH('tblFormFieldValueHistory','FormFieldText') IS NULL
+BEGIN
+      ALTER TABLE tblFormFieldValueHistory ADD FormFieldText NVARCHAR(2000) NULL
+END
+
+IF COL_LENGTH('tblFormFieldValueHistory','InitialFormFieldText') IS NULL
+BEGIN
+      ALTER TABLE tblFormFieldValueHistory ADD InitialFormFieldText NVARCHAR(2000) NULL
+END
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.24'
