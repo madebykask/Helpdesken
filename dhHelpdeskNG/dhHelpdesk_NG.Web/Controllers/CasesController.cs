@@ -3241,7 +3241,14 @@ namespace DH.Helpdesk.Web.Controllers
             }
             else
             {
-                fd.filterWorkingGroup = this._workingGroupService.GetWorkingGroups(cusId, IsTakeOnlyActive);
+                if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.UserGroupId == 2)
+                {
+                    fd.filterWorkingGroup = this._workingGroupService.GetWorkingGroups(cusId, userId, IsTakeOnlyActive);
+                }
+                else
+                {
+                    fd.filterWorkingGroup = this._workingGroupService.GetWorkingGroups(cusId, IsTakeOnlyActive);
+                }
             }
 
             fd.filterWorkingGroup.Insert(0, ObjectExtensions.notAssignedWorkingGroup());
@@ -3343,7 +3350,15 @@ namespace DH.Helpdesk.Web.Controllers
                 }
                 else
                 {
-                    specificFilter.WorkingGroupList = this._workingGroupService.GetWorkingGroups(customerId, IsTakeOnlyActive);
+                    if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.UserGroupId == 2)
+                    {
+                        specificFilter.WorkingGroupList = this._workingGroupService.GetWorkingGroups(customerId, userId, IsTakeOnlyActive);
+                    }
+                    else
+                    {
+                        specificFilter.WorkingGroupList = this._workingGroupService.GetWorkingGroups(customerId, IsTakeOnlyActive);
+                    }
+                    
                 }
 
                 specificFilter.WorkingGroupList.Insert(0, ObjectExtensions.notAssignedWorkingGroup());

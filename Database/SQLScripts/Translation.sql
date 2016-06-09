@@ -4310,9 +4310,6 @@ GO
 UPDATE tblText Set TextString = 'Användaren har rättighet att administrera Aktuellt' WHERE Id=1331
 GO
 
-UPDATE tblText Set TextString = 'Använd # för att söka efter ärendenummer' WHERE Id=1334
-GO
-
 UPDATE tblText Set TextString = '(Välj bred på högst 3 kolumner för bästa resultat).' WHERE Id=1339
 GO
 
