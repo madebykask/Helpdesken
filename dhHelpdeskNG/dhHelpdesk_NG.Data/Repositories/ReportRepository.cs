@@ -177,8 +177,10 @@ namespace DH.Helpdesk.Dal.Repositories
                     && (caseTypeId.Any() ? caseTypeId.Contains(c.CaseType_Id) : true)
                     &&
                     (workingGroupIds.Any()
-                        ? c.WorkingGroup_Id.HasValue && workingGroupIds.Contains(c.WorkingGroup_Id.Value)
-                        : true)
+                        ? (workingGroupIds.Contains(0) ? !c.WorkingGroup_Id.HasValue ||
+                                                         c.WorkingGroup_Id.HasValue && workingGroupIds.Contains(c.WorkingGroup_Id.Value)
+                                                       : c.WorkingGroup_Id.HasValue && workingGroupIds.Contains(c.WorkingGroup_Id.Value))
+                        : false)                    
                     &&
                     (departmentIds.Any()
                         ? c.Department_Id.HasValue && departmentIds.Contains(c.Department_Id.Value)
@@ -296,8 +298,10 @@ namespace DH.Helpdesk.Dal.Repositories
                     && (caseTypeId.Any() ? caseTypeId.Contains(c.CaseType_Id) : true)
                     &&
                     (workingGroupIds.Any()
-                        ? c.WorkingGroup_Id.HasValue && workingGroupIds.Contains(c.WorkingGroup_Id.Value)
-                        : true)
+                        ? (workingGroupIds.Contains(0) ? !c.WorkingGroup_Id.HasValue || 
+                                                         c.WorkingGroup_Id.HasValue && workingGroupIds.Contains(c.WorkingGroup_Id.Value) 
+                                                       : c.WorkingGroup_Id.HasValue && workingGroupIds.Contains(c.WorkingGroup_Id.Value))
+                        : false)
                     &&
                     (departmentIds.Any()
                         ? c.Department_Id.HasValue && departmentIds.Contains(c.Department_Id.Value)

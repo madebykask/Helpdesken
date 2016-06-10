@@ -63,16 +63,20 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             var administrators = this._userService.SearchSortAndGenerateUsers(userSearch).ToList();            
             reportFilter.Administrators = administrators;
 
-            var departments = _departmentService.GetDepartmentsByUserPermissions(userId, customerId);
+            var departments = _departmentService.GetDepartmentsByUserPermissions(userId, customerId, false);
             if (!departments.Any())
                 departments = this._departmentService.GetDepartments(customerId, ActivationStatus.All);
             if (addOUsToDepartments)
                 departments = AddOrganizationUnitsToDepartments(departments);
 
-            var workingGroups = _workingGroupService.GetWorkingGroups(userId, customerId);
-            if (!workingGroups.Any())
-                workingGroups = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId, false);            
-
+            var workingGroups = new List<WorkingGroupEntity>();
+            var user = _userService.GetUser(userId);
+            /*If user has no wg and is a SystemAdmin or customer admin, he/she can see all available wgs */
+            if (user.UserGroup_Id > UserGroups.Administrator)
+                workingGroups = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId, false).ToList();
+            else
+                workingGroups = _workingGroupService.GetWorkingGroups(customerId, userId, false).ToList();
+            
             var caseTypes = this._caseTypeService.GetCaseTypes(customerId).ToList();
             var caseTypesInRow = this._caseTypeService.GetChildsInRow(caseTypes).ToList();
 
@@ -137,17 +141,41 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
 
         private SelectedItems EnsureDepartments(SelectedItems departments, int userId, int customerId)
         {
-            
-            var allowedDepartmentIds = _departmentService.GetDepartmentsByUserPermissions(userId, customerId).Select(x => x.Id).ToList();
-            var res = new SelectedItems(departments.Any() ? departments.FindAll(x => allowedDepartmentIds.Contains(x)) : allowedDepartmentIds);
-            return res;
+            if (departments.Any())
+                return departments;
+            else
+            {
+                var allowedDepartmentIds = _departmentService.GetDepartmentsByUserPermissions(userId, customerId, false).Select(x => x.Id).ToList();
+                return new SelectedItems(allowedDepartmentIds);                
+            }
         }
 
         private SelectedItems EnsureWorkingGroups(SelectedItems workingGroups, int userId, int customerId)
         {
-            var allowedWorkingGroups = _workingGroupService.GetWorkingGroups(userId, customerId).Select(x => x.Id).ToList();
-            var res = new SelectedItems(workingGroups.Any() ? workingGroups.FindAll(x => allowedWorkingGroups.Contains(x)) : allowedWorkingGroups);
-            return res;
+            var user = _userService.GetUser(userId);
+            var ret = new SelectedItems();
+
+            if (workingGroups.Any())
+                ret = workingGroups;
+            else
+            {
+                var allowedWorkingGroups = new List<int>();
+                /*If user has no wg and is a SystemAdmin or customer admin, he/she can see all available wgs */
+
+                if (user.UserGroup_Id > UserGroups.Administrator)
+                    allowedWorkingGroups = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId, false).Select(w => w.Id).ToList();
+                else
+                {
+                    allowedWorkingGroups = _workingGroupService.GetWorkingGroups(customerId, userId, false).Select(x => x.Id).ToList();
+                    /* If allowed wg is empty, means user has no access to see any case. so we make a false condition */
+                }
+                ret.AddItems(allowedWorkingGroups);
+            }
+
+            if (user.UserGroup_Id > UserGroups.Administrator || (user.ShowNotAssignedWorkingGroups != 0))
+                ret.Add(0); //Not assigned wg
+
+            return new SelectedItems(ret);            
         }
 
         #endregion
