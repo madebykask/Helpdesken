@@ -349,5 +349,69 @@ BEGIN
       ALTER TABLE tblFormFieldValueHistory ADD InitialFormFieldText NVARCHAR(2000) NULL
 END
 
+IF COL_LENGTH('tblRegion','RegionGUID') IS NULL
+BEGIN
+      ALTER TABLE tblRegion ADD RegionGUID uniqueidentifier NULL
+END
+
+IF COL_LENGTH('tblDepartment','DepartmentGUID') IS NULL
+BEGIN
+      ALTER TABLE tblDepartment ADD DepartmentGUID uniqueidentifier NULL
+END
+
+IF COL_LENGTH('tblOU','OUGUID') IS NULL
+BEGIN
+      ALTER TABLE tblOU ADD OUGUID uniqueidentifier NULL
+END
+
+IF COL_LENGTH('tblLink','LinkGUID') IS NULL
+BEGIN
+      ALTER TABLE tblLink ADD LinkGUID uniqueidentifier NULL
+END
+
+IF COL_LENGTH('tblProductArea','ProductAreaGUID') IS NULL
+BEGIN
+      ALTER TABLE tblProductArea ADD ProductAreaGUID uniqueidentifier NULL
+END
+
+IF COL_LENGTH('tblCaseType','CaseTypeGUID') IS NULL
+BEGIN
+      ALTER TABLE tblCaseType ADD CaseTypeGUID uniqueidentifier NULL
+END
+
+IF COL_LENGTH('tblStateSecondary','StateSecondaryGUID') IS NULL
+BEGIN
+      ALTER TABLE tblStateSecondary ADD StateSecondaryGUID uniqueidentifier NULL
+END
+
+IF COL_LENGTH('tblPriority','PriorityGUID') IS NULL
+BEGIN
+      ALTER TABLE tblPriority ADD PriorityGUID uniqueidentifier NULL
+END
+
+IF COL_LENGTH('tblWorkingGroup','WorkingGroupGUID') IS NULL
+BEGIN
+      ALTER TABLE tblWorkingGroup ADD WorkingGroupGUID uniqueidentifier NULL
+END
+
+IF COL_LENGTH('tblStatus','StatusGUID') IS NULL
+BEGIN
+      ALTER TABLE tblStatus ADD StatusGUID uniqueidentifier NULL
+END
+
+IF COL_LENGTH('tblFinishingCause','FinishingCauseGUID') IS NULL
+BEGIN
+      ALTER TABLE tblFinishingCause ADD FinishingCauseGUID uniqueidentifier NULL
+END
+
+IF COL_LENGTH('tblFinishingCauseCategory','FinishingCauseCategoryGUID') IS NULL
+BEGIN
+      ALTER TABLE tblFinishingCauseCategory ADD FinishingCauseCategoryGUID uniqueidentifier NULL
+END
+
+
+
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.24'
