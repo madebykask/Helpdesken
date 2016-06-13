@@ -269,7 +269,7 @@
             this.Bind<IReportServiceRepository>().To<ReportServiceRepository>();
             this.Bind<ICaseFilterFavoriteRepository>().To<CaseFilterFavoriteRepository>();
             this.Bind<IReportFavoriteRepository>().To<ReportFavoriteRepository>();
-            
+            this.Bind<IMail2TicketRepository>().To<Mail2TicketRepository>();
         }
 
         #endregion

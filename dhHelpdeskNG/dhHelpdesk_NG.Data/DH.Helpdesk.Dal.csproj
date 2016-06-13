@@ -418,6 +418,7 @@
     <Compile Include="Repositories\Changes\IChangeGroupRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeLogRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeFileRepository.cs" />
+    <Compile Include="Repositories\Mail2TicketRepository.cs" />
     <Compile Include="Repositories\DataLog\DataLogRepository.cs" />
     <Compile Include="Repositories\EmailLogRepository.cs" />
     <Compile Include="Repositories\FileIndexing\FileIndexingRepository.cs" />
