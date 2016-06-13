@@ -4420,5 +4420,13 @@ GO
 If not exists (select * from tblTextTranslation where Text_Id = 1600 and Language_Id=2)
             insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1600, 'You must add a description', 2)
 GO 
+
+If not exists (select * from tblText where Id = 1601)
+            insert into tblText (Id, Textstring) VALUES (1601, 'E-postadress är inte giltig.')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1601 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1601, 'Email address is not valid.', 2)
+GO 
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
