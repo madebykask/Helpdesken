@@ -488,8 +488,7 @@
             user.PasswordChangedDate = DateTime.Now;
             user.Phone = user.Phone ?? string.Empty;
             user.PostalAddress = user.PostalAddress ?? string.Empty;
-            user.PostalCode = user.PostalCode ?? string.Empty;
-            user.RegTime = DateTime.Now;
+            user.PostalCode = user.PostalCode ?? string.Empty;                        
 
             errors = new Dictionary<string, string>();
 
@@ -531,8 +530,7 @@
             user.PasswordChangedDate = DateTime.Now;
             user.Phone = user.Phone ?? string.Empty;
             user.PostalAddress = user.PostalAddress ?? string.Empty;
-            user.PostalCode = user.PostalCode ?? string.Empty;
-            user.RegTime = DateTime.Now;
+            user.PostalCode = user.PostalCode ?? string.Empty;            
             user.ShowQuickMenuOnStartPage = user.ShowQuickMenuOnStartPage;
             user.Password = user.Password ?? string.Empty;            
 
