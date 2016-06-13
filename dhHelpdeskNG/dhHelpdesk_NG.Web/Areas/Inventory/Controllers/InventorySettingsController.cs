@@ -20,6 +20,9 @@
     using DH.Helpdesk.Web.Infrastructure.ActionFilters;
     using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory;
+    using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Users;
+    using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 
     public class InventorySettingsController : BaseController
     {
@@ -45,6 +48,8 @@
 
         private readonly ILanguageService languageService;
 
+        private readonly IUserPermissionsChecker _userPermissionsChecker;
+
         public InventorySettingsController(
             IMasterDataService masterDataService,
             IInventoryService inventoryService,
@@ -57,6 +62,7 @@
             IServerFieldsSettingsBuilder serverFieldsSettingsBuilder,
             IPrinterFieldsSettingsBuilder printerFieldsSettingsBuilder,
             IInventoryFieldsSettingsBuilder inventoryFieldsSettingsBuilder,
+            IUserPermissionsChecker userPermissionsChecker,
             ILanguageService languageService)
             : base(masterDataService)
         {
@@ -71,6 +77,7 @@
             this.printerFieldsSettingsBuilder = printerFieldsSettingsBuilder;
             this.inventoryFieldsSettingsBuilder = inventoryFieldsSettingsBuilder;
             this.languageService = languageService;
+            this._userPermissionsChecker = userPermissionsChecker;
         }
 
         [HttpGet]
@@ -79,7 +86,10 @@
             List<ItemOverview> inventoryTypes = this.inventoryService.GetInventoryTypes(
                 SessionFacade.CurrentCustomer.Id);
 
+            var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
+
             var viewModel = new SettingsIndexViewModel(inventoryTypes);
+            viewModel.UserHasInventoryAdminPermission = userHasInventoryAdminPermission;
 
             return this.View(viewModel);
         }
@@ -87,6 +97,8 @@
         [HttpGet]
         public ViewResult EditSettings(int inventoryTypeId)
         {
+            var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
+
             switch ((CurrentModes)inventoryTypeId)
             {
                 case CurrentModes.Workstations:

@@ -524,7 +524,7 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
             // Priority
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.Priority_Id != o.Priority_Id && cur.Priority_Id != null)
+                if (cur.Priority_Id != o.Priority_Id)
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
@@ -588,7 +588,7 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
             // Status
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Status_Id.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.Status_Id != o.Status_Id && cur.Status_Id != null)
+                if (cur.Status_Id != o.Status_Id)
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
@@ -624,7 +624,9 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                         if (cur.WatchDate == null)
                         {
                             sb.Append(tdOpenMarkup);
-                            sb.Append(ey);
+                            sb.Append(outFormatter.FormatDate(o.WatchDate.Value));
+                            sb.Append(from);
+                            sb.Append("");
                         }
                         else
                         {

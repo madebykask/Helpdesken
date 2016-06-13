@@ -142,31 +142,34 @@
                         @Html.TextAreaFor(model => model.CaseLog.TextInternal, new { style = "height:105px;", @readonly = true })
                     }
                 </td>
-                @if (Model.templateistrue != 1 && !readonlyMode)
-                {
+                
                     <td>
                         <div class="checkbox">
-                            @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote))
+                            @*@if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote))
                             {
                                 @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutLog, new { @disabled = true})
                             }
                             else
                             {
                                 @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutLog)
-                            }
+                            }*@
+                            @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutLog)
                             <span class="lbl">@Translation.Get("Skicka intern loggpost till", SessionFacade.CurrentCaseLanguageId)</span>
-                            @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote))
+                            @if (Model.templateistrue != 1 && !readonlyMode)
                             {
-                                if (Model.IsItParentCase() || Model.IsItChildCase())
+                                if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote))
                                 {
-                                    <br/>@Html.CheckBox("CaseLog.SendLogToParentChildLog")
-                                    if (Model.IsItParentCase())
+                                    if (Model.IsItParentCase() || Model.IsItChildCase())
                                     {
-                                        <span class="lbl">@Translation.Get("Skicka intern loggpost till underärenden", SessionFacade.CurrentCaseLanguageId)</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="lbl">@Translation.Get("Skicka intern loggpost till huvudärende", SessionFacade.CurrentCaseLanguageId)</span>
+                                        <br/>@Html.CheckBox("CaseLog.SendLogToParentChildLog")
+                                        if (Model.IsItParentCase())
+                                        {
+                                            <span class="lbl">@Translation.Get("Skicka intern loggpost till underärenden", SessionFacade.CurrentCaseLanguageId)</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="lbl">@Translation.Get("Skicka intern loggpost till huvudärende", SessionFacade.CurrentCaseLanguageId)</span>
+                                        }
                                     }
                                 }
                             }
@@ -175,7 +178,7 @@
                             @Html.TextAreaFor(model => model.CaseLog.EmailRecepientsInternalLog, new { @readonly = "readonly" })
                         </div>
                     </td>
-                }
+             
             </tr>
             @*@if (Model.templateistrue != 1)
             {*@

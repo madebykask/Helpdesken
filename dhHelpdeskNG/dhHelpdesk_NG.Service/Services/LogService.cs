@@ -45,6 +45,7 @@
         private readonly IFilesStorage _filesStorage;
         private readonly IFinishingCauseRepository _finishingCauseRepository;
         private readonly IFinishingCauseService _finishingCauseService;
+        private readonly IMail2TicketRepository _mail2TicketRepository;
 
         private readonly IUnitOfWorkFactory unitOfWorkFactory;
 
@@ -86,7 +87,9 @@
             ICaseRepository caseRepository, 
             IProblemLogService problemLogService,
             IFinishingCauseRepository finishingCauseRepository,
-            IFinishingCauseService finishingCauseService, IUnitOfWorkFactory unitOfWorkFactory)
+            IFinishingCauseService finishingCauseService, 
+            IMail2TicketRepository mail2TicketRepository,
+            IUnitOfWorkFactory unitOfWorkFactory)
         {
             this._logRepository = logRepository;
             this._unitOfWork = unitOfWork;
@@ -96,6 +99,7 @@
             this._logFileRepository = logFileRepository;
             this._finishingCauseRepository = finishingCauseRepository;
             this._finishingCauseService = finishingCauseService;
+            this._mail2TicketRepository = mail2TicketRepository;
             this.unitOfWorkFactory = unitOfWorkFactory;
         }
 
@@ -127,6 +131,9 @@
                 }
                 this._logFileRepository.Commit();
             }
+
+            this._mail2TicketRepository.DeleteByLogId(id);
+            this._mail2TicketRepository.Commit();
 
             var l = this._logRepository.GetById(id);
             ret = l.LogGUID;

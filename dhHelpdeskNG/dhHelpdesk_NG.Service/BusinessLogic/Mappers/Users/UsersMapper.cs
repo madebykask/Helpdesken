@@ -85,7 +85,8 @@
                 Email = overview.Email,
                 UserWorkingGroups = overview.UserWorkingGroups,
                 StartPage = overview.StartPage,
-                DocumentPermission = overview.DocumentPermission
+                DocumentPermission = overview.DocumentPermission,
+                InventoryPermission = overview.InventoryPermission
             };
         }
 
@@ -115,6 +116,7 @@
                 user.FAQPermission,
                 user.BulletinBoardPermission,
                 user.DocumentPermission,
+                user.InventoryPermission,
                 user.SetPriorityPermission,
                 user.InvoicePermission,
                 user.DataSecurityPermission,

@@ -76,6 +76,7 @@ namespace DH.Helpdesk.Services.Services.Reports
 
         ReportGeneratorData GetReportGeneratorData(
                                     int customerId,
+                                    int userId,
                                     int languageId,
                                     List<int> fieldIds,
                                     List<int> departmentIds,
@@ -92,6 +93,7 @@ namespace DH.Helpdesk.Services.Services.Reports
 
         Dictionary<DateTime, int> GetReportGeneratorAggregation(
             int customerId,
+            int userId,
             int languageId,
             List<int> fieldIds,
             List<int> departmentIds,

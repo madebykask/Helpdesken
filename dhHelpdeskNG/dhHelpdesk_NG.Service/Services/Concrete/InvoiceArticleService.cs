@@ -11,7 +11,8 @@
     using System;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.BusinessData.Models.Invoice.Xml;
-    using DH.Helpdesk.Common.Enums;   
+    using DH.Helpdesk.Common.Enums;
+    using DH.Helpdesk.Common.Extensions.String;
 
     public class InvoiceArticleService : IInvoiceArticleService
     {
@@ -122,11 +123,15 @@
             {
                 if (CaseInvoices.FirstOrDefault() != null)
                 {
-                    foreach (var Order in CaseInvoices.FirstOrDefault().Orders)
+                    var orders = CaseInvoices.FirstOrDefault().Orders;
+                    if (orders != null)
                     {
-                        if (Order.InvoiceDate != null)
+                        foreach (var Order in orders)                           
                         {
-                            Order.InvoiceDate = TimeZoneInfo.ConvertTimeFromUtc(Order.InvoiceDate ?? new DateTime(1970, 1, 1), TimeZone);
+                            if (Order.InvoiceDate != null)
+                            {
+                                Order.InvoiceDate = TimeZoneInfo.ConvertTimeFromUtc(Order.InvoiceDate ?? new DateTime(1970, 1, 1), TimeZone);
+                            }
                         }
                     }
                 }
@@ -140,11 +145,15 @@
             {
                 if (CaseInvoices.FirstOrDefault() != null)
                 {
-                    foreach (var Order in CaseInvoices.FirstOrDefault().Orders)
+                    var orders = CaseInvoices.FirstOrDefault().Orders;
+                    if (orders != null)
                     {
-                        if (Order.InvoicedByUserId != null)
+                        foreach (var Order in orders)
                         {
-                            Order.InvoicedByUser = this.userService.GetUser(Order.InvoicedByUserId ?? 0).UserID;
+                            if (Order.InvoicedByUserId != null)
+                            {
+                                Order.InvoicedByUser = this.userService.GetUser(Order.InvoicedByUserId ?? 0).UserID;
+                            }
                         }
                     }
                 }
@@ -152,9 +161,9 @@
             return CaseInvoices;
         }
 
-        public void SaveCaseInvoices(IEnumerable<CaseInvoice> invoices, int caseId)
+        public int SaveCaseInvoices(IEnumerable<CaseInvoice> invoices, int caseId)
         {
-            this.caseInvoiceArticleRepository.SaveCaseInvoices(invoices, caseId);
+            return this.caseInvoiceArticleRepository.SaveCaseInvoices(invoices, caseId);
         }
 
         public void DeleteCaseInvoices(int caseId)
@@ -218,10 +227,14 @@
         public ProcessResult DoInvoiceWork(CaseInvoice[] caseInvoiceData, int caseId, decimal caseNumber, int customerId, int? orderIdToXML)
         {            
 
-            this.SaveCaseInvoices(caseInvoiceData, caseId);
+            var newOrderId = this.SaveCaseInvoices(caseInvoiceData, caseId);
             
             if (orderIdToXML.HasValue)
-            {               
+            {   
+                // It means user has pressed Send button directly before save the order
+                if (orderIdToXML <= 0)
+                    orderIdToXML = newOrderId;
+
                 var orderToExport = this.caseInvoiceArticleRepository.GetCaseInvoiceOrder(caseId, orderIdToXML.Value);
                 if (orderToExport != null)
                 {
@@ -313,18 +326,26 @@
             int lineNo = 0;
             foreach (var article in order.Articles)
             {
-                lineNo++;
+                lineNo++;                
                 if (article.ArticleId.HasValue)
-                {                    
+                {        
+                    
+                    var amountStr = article.Amount.HasValue? article.Amount.Value.ToString() : string.Empty;
+                    var ppuStr = article.Ppu.HasValue ? article.Ppu.Value.ToString() : string.Empty;
+
+                    var detectedDecimalSep = DetectDecimalSeparator(ppuStr);
+                    if (string.IsNullOrEmpty(detectedDecimalSep))
+                        detectedDecimalSep = DetectDecimalSeparator(amountStr);
+
                     salesLines.Add(new SalesDocSalesHeaderSalesLine()
                     {
                         LineNo = lineNo.ToString(),
                         LineType = InvoiceXMLLineType.Article,
                         Number = article.Article != null ? article.Article.Number : string.Empty,
                         Description = null,
-                        Quantity = article.Amount.HasValue ? article.Amount.ToString() : string.Empty,
+                        Quantity = amountStr.RoundDecimal(detectedDecimalSep, 2, "."),
                         UnitOfMeasureCode = (article.Article != null && article.Article.Unit != null ? article.Article.Unit.Name : string.Empty),
-                        UnitPrice = article.Ppu.HasValue ? article.Ppu.Value.ToString() : string.Empty
+                        UnitPrice = ppuStr.RoundDecimal(detectedDecimalSep, 2, ".")
                     });
                 }
                 else
@@ -368,6 +389,11 @@
             salesDoc.SalesHeader = salesHeader;
 
             return salesDoc;
+        }
+
+        private string DetectDecimalSeparator(string value)
+        {
+            return string.IsNullOrEmpty(value)? string.Empty : value.GetNonNumeric();
         }
 
         private int GetSequenceNumber(int caseId, CaseInvoiceOrder order)

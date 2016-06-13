@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.BusinessData.Models.Reports;
+﻿using System.Data.Entity;
+using DH.Helpdesk.BusinessData.Models.Reports;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
@@ -172,12 +173,14 @@ namespace DH.Helpdesk.Dal.Repositories
 
                 where
                     c.Customer_Id == customerId && c.Deleted != 1 &&
-                    (c.RegTime >= periodFrom && c.RegTime <= periodUntil)
+                    (DbFunctions.TruncateTime(c.RegTime) >= DbFunctions.TruncateTime(periodFrom) && DbFunctions.TruncateTime(c.RegTime) <= DbFunctions.TruncateTime(periodUntil))
                     && (caseTypeId.Any() ? caseTypeId.Contains(c.CaseType_Id) : true)
                     &&
                     (workingGroupIds.Any()
-                        ? c.WorkingGroup_Id.HasValue && workingGroupIds.Contains(c.WorkingGroup_Id.Value)
-                        : true)
+                        ? (workingGroupIds.Contains(0) ? !c.WorkingGroup_Id.HasValue ||
+                                                         c.WorkingGroup_Id.HasValue && workingGroupIds.Contains(c.WorkingGroup_Id.Value)
+                                                       : c.WorkingGroup_Id.HasValue && workingGroupIds.Contains(c.WorkingGroup_Id.Value))
+                        : false)                    
                     &&
                     (departmentIds.Any()
                         ? c.Department_Id.HasValue && departmentIds.Contains(c.Department_Id.Value)
@@ -291,12 +294,14 @@ namespace DH.Helpdesk.Dal.Repositories
 
                 where
                     c.Customer_Id == customerId && c.Deleted != 1 &&
-                    (c.RegTime >= periodFrom && c.RegTime <= periodUntil)
+                    (DbFunctions.TruncateTime(c.RegTime) >= DbFunctions.TruncateTime(periodFrom) && DbFunctions.TruncateTime(c.RegTime) <= DbFunctions.TruncateTime(periodUntil))
                     && (caseTypeId.Any() ? caseTypeId.Contains(c.CaseType_Id) : true)
                     &&
                     (workingGroupIds.Any()
-                        ? c.WorkingGroup_Id.HasValue && workingGroupIds.Contains(c.WorkingGroup_Id.Value)
-                        : true)
+                        ? (workingGroupIds.Contains(0) ? !c.WorkingGroup_Id.HasValue || 
+                                                         c.WorkingGroup_Id.HasValue && workingGroupIds.Contains(c.WorkingGroup_Id.Value) 
+                                                       : c.WorkingGroup_Id.HasValue && workingGroupIds.Contains(c.WorkingGroup_Id.Value))
+                        : false)
                     &&
                     (departmentIds.Any()
                         ? c.Department_Id.HasValue && departmentIds.Contains(c.Department_Id.Value)
@@ -310,6 +315,8 @@ namespace DH.Helpdesk.Dal.Repositories
                         ? c.Performer_User_Id.HasValue && administratorIds.Contains(c.Performer_User_Id.Value)
                         : true)
                     && (caseStatusIds.Any() ? c.Status_Id.HasValue && caseStatusIds.Contains(c.Status_Id.Value) : true)
+
+                    orderby c.Id
 
                         select new ReportGeneratorFields
                         {

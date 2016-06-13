@@ -4310,9 +4310,6 @@ GO
 UPDATE tblText Set TextString = 'Användaren har rättighet att administrera Aktuellt' WHERE Id=1331
 GO
 
-UPDATE tblText Set TextString = 'Använd # för att söka efter ärendenummer' WHERE Id=1334
-GO
-
 UPDATE tblText Set TextString = '(Välj bred på högst 3 kolumner för bästa resultat).' WHERE Id=1339
 GO
 
@@ -4403,6 +4400,33 @@ If not exists (select * from tblTextTranslation where text_id = 1597 and Languag
 GO
 
 
+If not exists (select * from tblText where Id = 1598)
+            insert into tblText (Id, Textstring) VALUES (1598, 'Användaren har rättighet att administrera inventarier')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1598 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1598, 'User has admin permissions to inventory', 2)
+GO 
+
+If not exists (select * from tblText where Id = 1599)
+            insert into tblText (Id, Textstring) VALUES (1599, 'Du måste välja ett dokumentnamn')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1599 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1599, 'You must specify a document name', 2)
+GO 
+
+If not exists (select * from tblText where Id = 1600)
+            insert into tblText (Id, Textstring) VALUES (1600, 'Du måste fylla i beskrivning-fältet')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1600 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1600, 'You must add a description', 2)
+GO 
+
+If not exists (select * from tblText where Id = 1601)
+            insert into tblText (Id, Textstring) VALUES (1601, 'E-postadress är inte giltig.')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1601 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1601, 'Email address is not valid.', 2)
+GO 
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

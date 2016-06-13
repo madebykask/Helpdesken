@@ -40,6 +40,8 @@
 
         public string Name { get; private set; }
 
+        public bool UserHasInventoryAdminPermission { get; set; }
+
         public static InventorySearchViewModel BuildViewModel(
             InventorySearchFilter currentFilter,
             List<ItemOverview> departments,

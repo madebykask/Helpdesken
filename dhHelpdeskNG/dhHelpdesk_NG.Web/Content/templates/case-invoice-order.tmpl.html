@@ -11,35 +11,39 @@
                         <th>{{:TypeHeader}}</th>
                         <th>{{:PpuHeader}} SEK</th>                        
                         {{if IsInvoiced }}
-                            <th colspan="2" style="text-align: right;"> {{:TotalHeader}}</th>
-                        {{else}}                            
-                            <th colspan="1" style="text-align: right;"> {{:TotalHeader}} </th>
-                            <th class="case-invoice-colextranarrow"></th>                            
+                            <th colspan="3" style="text-align: right;"> {{:TotalHeader}}</th>
+                        {{else}}          
+                            {{if IsCredited }}  
+                                <th colspan="1" style="text-align: right;"> {{:TotalHeader}}</th>
+                                <td colspan="2">
+                                </td>
+                            {{else}}                   
+                                <th colspan="1" style="text-align: right;"> {{:TotalHeader}} </th>
+                                <th class="case-invoice-colextranarrow"></th>                    
+                                <th>                                
+                                </th>        
+                            {{/if}}
                         {{/if}}
+                       
                     </tr>
                     <tbody class='articles-rows'>
-                        {{for Articles tmpl="caseInvoiceArticle" /}}                        
+                        {{for Articles tmpl="caseInvoiceArticle" /}}                                                                       
                     </tbody>
                 </table>
             </td>
-            <td style='vertical-align: top;'>
-            {{if IsInvoiced }}                
-            {{else}}
+            <td style='vertical-align: top;'>           
+            </td>
+        </tr>
+         <tr>        
+            <td style='text-align: right; padding:8px'>
                 {{if IsCredited }}
-                {{else}}                    
-                    <a class="btn btn-small add-blank-article" style="cursor: pointer; display: none;" onclick="dhHelpdesk.CaseArticles.AddBlankArticle('{{:Id}}'); return false;"><i class="icon-plus-sign"></i></a>                    
+                    <span class='textbold'>{{:TotalLabel}} SEK</span> -<span class='articles-total'>{{:Total}}</span>
+                {{else}}        
+                    <span class='textbold'>{{:TotalLabel}} SEK</span> <span class='articles-total'>{{:Total}}</span>
                 {{/if}}
-            {{/if}}
             </td>
         </tr>
     </table>
-    <div class='width100 textbold' style='text-align: right;'>
-        {{if IsCredited }}
-            {{:TotalLabel}}: -<span class='articles-total'>{{:Total}}</span> SEK &nbsp;&nbsp;&nbsp;
-        {{else}}        
-            {{:TotalLabel}}: <span class='articles-total'>{{:Total}}</span> SEK &nbsp;&nbsp;&nbsp;
-        {{/if}}
-    </div>
     
     <div class="row-fluid">
         <div class="span6">
@@ -265,7 +269,7 @@
             <button id="doInvoiceButton_{{:Id}}" class="btn orderButtons" onclick="dhHelpdesk.CaseArticles.DoOrderInvoice('{{:Id}}'); return false;" data-orderid="{{:Id}}">{{:doInvoiceTitle}}</button>
             <button class="btn orderButtons" id="actions-credit-order_{{:Id}}" class="actions-credit-order" onclick="dhHelpdesk.CaseArticles.DoOrderCredit('{{:Id}}'); return false;"> {{:doCreditTitle}}</button>                        
             {{if IsInvoiced }} 
-              <span class="textbold">{{:InvoicedByTitle}}:{{:InvoicedByUser}} - {{:InvoiceDate}} {{:InvoiceTime}}</span>
+              <span>{{:InvoicedByTitle}} {{:InvoicedByUser}} - {{:InvoiceDate}} {{:InvoiceTime}}</span>
             {{/if}}
         </div>            
         

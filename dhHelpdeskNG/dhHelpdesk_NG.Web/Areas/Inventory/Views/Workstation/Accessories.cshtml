@@ -13,7 +13,9 @@
         style = "display: none;";
     }
 }
- 
+@{ var extraData = new ViewDataDictionary();
+   extraData.Add(new KeyValuePair<string,object>("InventoryAdminPermission", Model.UserHasInventoryAdminPermission));  
+ } 
 <script>
     $(function () {
         $('#inventory_types_dropdown').change(function () {
@@ -41,16 +43,21 @@
         foreach (var model in Model.InventoryGridModels)
         {
             @Translation.Get(model.CurrentModeName)
-            @Html.Partial("InventoryGridWithDeleteButton", new InventoryGridModelForDynamicInventory(model, Model.Id))
+            @Html.Partial("InventoryGridWithDeleteButton", new InventoryGridModelForDynamicInventory(model, Model.Id), extraData)
         }
     }
 </table>
-@Translation.Get("Lägg till")
-<div>
-    @Html.DropDownListFor(x => x.InventoryTypeId, Model.InventoryTypes, new { id = "inventory_types_dropdown" })
-</div>
-@using (Html.BeginForm("ConnectInventoryToComputer", "Workstation", new { computerId = Model.Id}, FormMethod.Post, new { id = "log_edit_form" }))
+@if (Model.UserHasInventoryAdminPermission)
 {
-    @Html.DropDownListFor(x => x.InventoryId, Model.Inventories, new { id = "inventories_dropdown" })
-    <input type="submit" value="@Translation.Get("Lägg till")" class="btn" style="@style" id="inventory_button" />
+    @Translation.Get("Lägg till")
+
+    <div>
+        @Html.DropDownListFor(x => x.InventoryTypeId, Model.InventoryTypes, new { id = "inventory_types_dropdown" })
+    </div>
+    using (Html.BeginForm("ConnectInventoryToComputer", "Workstation", new { computerId = Model.Id}, FormMethod.Post, new { id = "log_edit_form" }))
+    {
+        @Html.DropDownListFor(x => x.InventoryId, Model.Inventories, new { id = "inventories_dropdown" })
+        <input type="submit" value="@Translation.Get("Lägg till")" class="btn" style="@style" id="inventory_button" />
+    }
+
 }

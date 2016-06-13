@@ -20,7 +20,8 @@
                 decimal? amount,
                 decimal? ppu,
                 short position,
-                int? creditedForArticle_Id)
+                int? creditedForArticle_Id,
+                int? textForArticle_Id)
         {
             this.OrderId = orderId;
             this.Order = order;
@@ -32,6 +33,7 @@
             this.Name = name;
             this.Id = id;
             this.CreditedForArticle_Id = creditedForArticle_Id;
+            this.TextForArticle_Id = textForArticle_Id;
         }
 
         public CaseInvoiceArticle()
@@ -58,6 +60,8 @@
         public short Position { get; private set; }
 
         public int? CreditedForArticle_Id { get; private set; }
+
+        public int? TextForArticle_Id { get; set; }
 
         public bool IsNew()
         {

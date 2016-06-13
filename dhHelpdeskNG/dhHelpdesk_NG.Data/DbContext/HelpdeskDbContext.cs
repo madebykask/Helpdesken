@@ -270,6 +270,8 @@
 
         public DbSet<Form> Forms { get; set; }
 
+        public DbSet<FormUrlEntity> FormUrls { get; set; }
+
         public DbSet<GlobalSetting> GlobalSettings { get; set; }
 
         public DbSet<HolidayHeader> HolidayHeaders { get; set; }
@@ -315,6 +317,8 @@
         public DbSet<LogicalDrive> LogicalDrives { get; set; }
 
         public DbSet<Log> Logs { get; set; }
+
+        public DbSet<Mail2Ticket> Mail2Tickets { get; set; }
 
         public DbSet<MailTemplateIdentifierEntity> MailTemplateIdentifiers { get; set; }
 
@@ -640,6 +644,7 @@
             modelBuilder.Configurations.Add(new FormConfiguration());
             modelBuilder.Configurations.Add(new FormFieldConfiguration());
             modelBuilder.Configurations.Add(new FormFieldValueConfiguration());
+            modelBuilder.Configurations.Add(new FormUrlConfiguration());
             modelBuilder.Configurations.Add(new FloorConfiguration());
             modelBuilder.Configurations.Add(new GlobalSettingConfiguration());
             modelBuilder.Configurations.Add(new HolidayConfiguration());
@@ -651,6 +656,7 @@
             modelBuilder.Configurations.Add(new LinkGroupConfiguration());            
             modelBuilder.Configurations.Add(new LogConfiguration());
             modelBuilder.Configurations.Add(new LogFileConfiguration());
+            modelBuilder.Configurations.Add(new Mail2TicketConfiguration());
             modelBuilder.Configurations.Add(new MailTemplateConfiguration());
             modelBuilder.Configurations.Add(new MailTemplateIdentifierConfiguration());
             modelBuilder.Configurations.Add(new MailTemplateLanguageConfiguration());

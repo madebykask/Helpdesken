@@ -5,6 +5,6 @@ namespace DH.Helpdesk.Services.Services.Reports
     {
         ReportFilter GetReportFilter(int customerId, int userId, bool addOUsToDepartments = true);
 
-        ReportData GetReportData(string reportIdentity, ReportSelectedFilter filters);        
+        ReportData GetReportData(string reportIdentity, ReportSelectedFilter filters, int userId, int customerId);        
     }
 }

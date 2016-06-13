@@ -47,19 +47,130 @@
                             <a href="@GetLogLink(r)"> @Html.AttributeEncode(r.TextInternal).ForHtmlView()</a>
                         </td>
                         <td>
-                            @if (r.CaseHistory != null)
+                            
+                            @if (Model.case_.Mail2Tickets.Any())
                             {
-                                if (r.CaseHistory.Emaillogs != null)
-                                {                                        
-                                    foreach (var l in r.CaseHistory.Emaillogs)      
-                                    {                                            
+                                var countTO = 0;
+                                var countCC = 0;
+                                var countBCC = 0;
+                                var mailTO = "";
+                                var mailCC = "";
+                                var mailBCC = "";
+                                var boldTO = false;
+                                var boldCC = false;
+                                var boldBCC = false;
+                                var show = false;
+                                foreach (var mail in Model.case_.Mail2Tickets)
+                                {
+                                    if (mail.Log_Id != null)
+                                    {
+                                        if (mail.Type == "to")
+                                        {
+                                            countTO = countTO + 1;
+                                            mailTO = mailTO + mail.EMailAddress + "; ";
+
+                                            if (mail.EMailAddress == Model.case_.Customer.HelpdeskEmail)
+                                            {
+                                                boldTO = true;
+                                            }
+                                        }
+
+                                        if (mail.Type == "cc")
+                                        {
+                                            countCC = countCC + 1;
+                                            mailCC = mailCC + mail.EMailAddress + "; ";
+
+                                            if (mail.EMailAddress == Model.case_.Customer.HelpdeskEmail)
+                                            {
+                                                boldCC = true;
+                                            }
+                                        }
+
+                                        if (mail.Type == "bcc")
+                                        {
+                                            countBCC = countBCC + 1;
+                                            mailBCC = mailBCC + mail.EMailAddress + "; ";
+
+                                            if (mail.EMailAddress == Model.case_.Customer.HelpdeskEmail)
+                                            {
+                                                boldBCC = true;
+                                            }
+                                        }
+                                        show = true;
+                                    }
+                                }
+                                if (show)
+                                {
                                     <div>
-                                        <p>
-                                            @l.EmailAddress 
-                                        </p>
+                                        <input type="hidden" id="lastMailSelected" value="">
+                                        @if (boldTO == true)
+                                        {
+                                            <p>
+                                                <b>TO[@countTO]</b>&nbsp;&nbsp;&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@mailTO" data-expand-element="mailto"></span>
+                                            </p>
+                                        }
+                                        else
+                                        {
+                                            <p>
+                                                TO[@countTO]&nbsp;&nbsp;&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@mailTO" data-expand-element="mailto"></span>
+                                            </p>
+                                        }
                                     </div>
-                                    }                                    
-                                }                                        
+                                    <div>
+                                        <p id="mailto" class="" style="display:none">@mailTO</p>
+                                    </div>
+                                    <div>
+                                        @if (boldCC == true)
+                                        {
+                                            <p>
+                                                <b>CC[@countCC]</b>&nbsp;&nbsp;&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@mailCC" data-expand-element="mailcc"></span>
+                                            </p>
+                                        }
+                                        else
+                                        {
+                                            <p>
+                                                CC[@countCC]&nbsp;&nbsp;&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@mailCC" data-expand-element="mailcc"></span>
+                                            </p>
+                                        }
+                                    </div>
+                                    <div>
+                                        <p id="mailcc" class="" style="display:none">@mailCC</p>
+                                    </div>
+                                    <div>
+                                        @if (boldBCC == true)
+                                        {
+                                            <p>
+                                                <b>BCC[@countBCC]</b>&nbsp;<span class="icon-info-sign ml15" rel="tooltip expander" title="" data-original-title="@mailBCC" data-expand-element="mailbcc"></span>
+                                            </p>
+                                        }
+                                        else
+                                        {
+                                            <p>
+                                                BCC[@countBCC]&nbsp;<span class="icon-info-sign ml15" rel="tooltip expander" title="" data-original-title="@mailBCC" data-expand-element="mailbcc"></span>
+                                            </p>
+                                        }
+                                    </div>
+                                    <div>
+                                        <p id="mailbcc" class="" style="display:none">@mailBCC</p>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                if (r.CaseHistory != null)
+                                {
+                                    if (r.CaseHistory.Emaillogs != null)
+                                    {                                        
+                                        foreach (var l in r.CaseHistory.Emaillogs)      
+                                        {                                            
+                                        <div>
+                                            <p>
+                                                @l.EmailAddress 
+                                            </p>
+                                        </div>
+                                        }                                    
+                                    }                                        
+                                }
                             }
                         </td>
                         <td>

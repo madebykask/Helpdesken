@@ -85,7 +85,7 @@
 
             this.HasOptional(s => s.IsAbout) 
                 .WithRequired(ad => ad.Case)
-                .WillCascadeOnDelete(true); 
+                .WillCascadeOnDelete(true);
 
             this.Property(x => x.AgreedDate).IsOptional();
             this.Property(x => x.ApprovedDate).IsOptional();
@@ -184,6 +184,10 @@
 
             this.HasMany(x => x.Logs)
                 .WithRequired(x => x.Case)
+                .HasForeignKey(x => x.Case_Id);
+
+            this.HasMany(x => x.Mail2Tickets)
+                .WithOptional(x => x.Case)
                 .HasForeignKey(x => x.Case_Id);
 
             this.Property(x => x.RegistrationSourceCustomer_Id).IsOptional();

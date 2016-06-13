@@ -15,5 +15,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels
 
         [NotNull]
         public ServerSearchFilter Filter { get; set; }
+
+        public bool UserHasInventoryAdminPermission { get; set; }
     }
 }

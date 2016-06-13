@@ -26,6 +26,7 @@
             this.Property(a => a.Ppu).IsOptional();
             this.Property(a => a.Position).IsRequired();
             this.Property(o => o.CreditedForArticle_Id).IsOptional();
+            this.Property(o => o.TextForArticle_Id).IsOptional();
 
             this.ToTable("tblCaseInvoiceArticle");            
         }

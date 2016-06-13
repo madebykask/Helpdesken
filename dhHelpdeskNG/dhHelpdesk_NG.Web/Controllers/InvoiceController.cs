@@ -15,6 +15,11 @@
     using DH.Helpdesk.Web.Infrastructure.Mvc;
     using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Web.Models.Invoice;
+    using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Invoice;
+    using DH.Helpdesk.Common.Enums;
+    using DH.Helpdesk.Web.Models.Case;
+    using System.Web.Script.Serialization;
 
     public class InvoiceController : BaseController
     {
@@ -34,17 +39,20 @@
 
         private readonly ILogFileService logFileService;
 
-        private readonly IMasterDataService masterDataService;
+        private readonly IInvoiceArticlesModelFactory invoiceArticlesModelFactory;
+
+        private readonly IMasterDataService masterDataService;        
 
         public InvoiceController(
+            ICaseService caseService,
             IMasterDataService masterDataService, 
             IInvoiceArticleService invoiceArticleService, 
             IWorkContext workContext, 
-            IInvoiceHelper invoiceHelper, 
-            ICaseService caseService, 
+            IInvoiceHelper invoiceHelper,             
             ICaseInvoiceSettingsService caseInvoiceSettingsService, 
             ICaseFileService caseFileService,
             ILogFileService logFileService,
+            IInvoiceArticlesModelFactory invoiceArticlesModelFactory,
             ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory)
             : base(masterDataService)
         {
@@ -57,6 +65,7 @@
             this.caseFileService = caseFileService;
             this.logFileService = logFileService;
             this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Cases);
+            this.invoiceArticlesModelFactory = invoiceArticlesModelFactory;            
         }
 
         [HttpGet]
@@ -79,62 +88,7 @@
             var SettingsValid = this.invoiceArticleService.ValidateInvoiceSettings(customerId);
             return this.Json(SettingsValid, JsonRequestBehavior.AllowGet);
         }
-
-        //[HttpPost]
-        //public void SaveArticles(int caseId, string invoices)
-        //{
-        //    this.invoiceArticleService.SaveCaseInvoices(this.invoiceHelper.ToCaseInvoices(invoices, null, null), caseId);
-        //}
-
-        //[Obsolete]
-        //[HttpPost]
-        //public ActionResult DoInvoice(int customerId, int caseId, string invoices)
-        //{
-        //    try
-        //    {
-        //        var settings = this.caseInvoiceSettingsService.GetSettings(customerId);
-        //        if (settings == null)
-        //        {
-        //            return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError, "Articles invoice failed.");
-        //        }
-
-        //        var caseOverview = this.caseService.GetCaseOverview(caseId);
-        //        var articles = this.invoiceArticleService.GetArticles(customerId);
-        //        var data = this.invoiceHelper.ToCaseInvoices(invoices, caseOverview, articles);
-        //        foreach (var invoice in data)
-        //        {
-        //            var userId = 0;
-        //            if (SessionFacade.CurrentUser.Id != null)
-        //            {
-        //                userId = SessionFacade.CurrentUser.Id;
-        //            }
-        //            invoice.DoInvoice(userId);
-        //        }
-
-        //        var output = this.invoiceHelper.ToOutputXml(data);
-        //        if (output == null)
-        //        {
-        //            return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError, "Articles invoice failed.");
-        //        }
-
-        //        if (!Directory.Exists(settings.ExportPath))
-        //        {
-        //            Directory.CreateDirectory(settings.ExportPath);
-        //        }
-
-        //        var path = Path.Combine(settings.ExportPath, this.invoiceHelper.GetExportFileName());
-        //        output.Save(path);
-
-        //        this.invoiceArticleService.SaveCaseInvoices(data, caseId);    
-
-        //        return new HttpStatusCodeResult((int)HttpStatusCode.OK, "Articles invoiced."); 
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError, ex.Message);                
-        //    }
-        //}
-
+    
         [HttpGet]
         public JsonResult CaseFiles(string id, string logKey)
         {
@@ -149,7 +103,6 @@
                 if (c != null)
                     basePath = masterDataService.GetFilePath(c.Customer_Id);
             }
-
 
             try
             {
@@ -257,6 +210,55 @@
             return this.Json(files.ToArray(), JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        public JsonResult SaveCaseInvoice(string caseInvoiceArticle, int customerId,
+                                          int caseId, string caseKey, string logKey,
+                                          int? orderIdToXML)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(caseInvoiceArticle))
+                    return Json(new { result = "Error", data = "Invalid Invoice to save!" });
+
+                if (SessionFacade.CurrentUser == null)
+                    return Json(new { result = "Error", data = "Invoice is not available, refresh the page and try it again." });
+
+                var saveRes = DoInvoiceWork(caseInvoiceArticle, caseId, customerId, orderIdToXML);
+
+                if (saveRes.IsSuccess)
+                {
+                    var caseInvoices = this.invoiceArticleService.GetCaseInvoicesWithTimeZone(caseId, TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
+                    var invoiceArticles = this.invoiceArticlesModelFactory.CreateCaseInvoiceArticlesModel(caseInvoices);
+                    var invoiceModel = new CaseInvoiceModel(customerId, caseId, invoiceArticles, string.Empty, caseKey, logKey);
+                    var serializer = new JavaScriptSerializer();
+                    var caseArticlesJson = serializer.Serialize(invoiceModel.InvoiceArticles);
+                    var warningMessage = saveRes.ResultType == ProcessResult.ResultTypeEnum.WARNING ? saveRes.LastMessage : string.Empty;
+
+                    return Json(new { result = "Success", data = caseArticlesJson, warningMessage = warningMessage });
+                }
+                else
+                {
+                    return Json(new { result = "Error", data = saveRes.LastMessage });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { result = "Error", data = "Unexpected Error:" + ex.Message });
+            }
+        }
+
+        [HttpGet]
+        public JsonResult IsThereNotInvoicedOrder(int caseId)
+        {
+            var res = false;
+
+            var notInvoicedOrders = this.invoiceArticleService.GetInvoiceOrders(caseId, InvoiceOrderFetchStatus.AllNotSent);
+            if (notInvoicedOrders.Any())
+                res = true;
+
+            return Json(res, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpGet]
         public UnicodeFileContentResult CaseFile(string id, string fileName)
         {
@@ -276,5 +278,14 @@
 
             return new UnicodeFileContentResult(fileContent, fileName);
         }
+
+        private ProcessResult DoInvoiceWork(string caseInvoiceData, int caseId, int customerId, int? orderIdToXML)
+        {
+            var caseOverview = this.caseService.GetCaseOverview(caseId);
+            var articles = this.invoiceArticleService.GetArticles(customerId);
+            var Invoices = this.invoiceHelper.ToCaseInvoices(caseInvoiceData, caseOverview, articles, SessionFacade.CurrentUser.Id, orderIdToXML); //there will only be one?
+            return this.invoiceArticleService.DoInvoiceWork(Invoices, caseId, caseOverview.CaseNumber, customerId, orderIdToXML);
+        }
+    
     }
 }

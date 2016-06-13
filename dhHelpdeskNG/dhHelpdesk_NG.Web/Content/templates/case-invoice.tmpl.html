@@ -1,12 +1,14 @@
 ﻿<div data-id='{{:Id}}' class="case-invoice-container overflow-visible">
     <label class="case-invoice-message error"></label>
-    <div id="case-invoice-orders-tabs" style="overflow:hidden;">
+    <div id="case-invoice-orders-tabs" style="overflow:hidden;min-height:420px">        
         <ul class="nav nav-tabs"> 
-            <li>
+            <li class="case-invoice-order-summary" style="display: none;"><a href="#case-invoice-order-summary{{:Id}}">{{:SummaryTitle}}</a></li>                                 
+        
+            <li class="case-invoice-order-addnew" id="btnAddOrder">
                 <a onclick="dhHelpdesk.CaseArticles.AddOrder('{{:Id}}'); return false;"><i class="icon-plus-sign icon-white" style="cursor: pointer;"></i></a>
             </li> 
-            <li class="case-invoice-order-summary" style="display: none;"><a href="#case-invoice-order-summary{{:Id}}">{{:SummaryTitle}}</a></li>         
-        </ul>
+        </ul>        
+        
         <div class="ml15 mt20">
             <table class='articles-params'>
                 <thead>
@@ -20,7 +22,7 @@
                 <tbody> 
                     <tr>                                                                                       
                         <td class="articles-select-container">
-                            <select class='chosen-select articles-params-article' onfocus='this.size=3;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
+                            <select class='chosen-select articles-params-article'>
                             </select>
                         </td>
                         <td>
@@ -37,9 +39,8 @@
             </table>            
         </div>
         <div class="orders-container tab-content">
-            {{for Orders tmpl="caseInvoiceOrder" /}} 
-            <div id="case-invoice-order-summary{{:Id}}" class="case-invoice-order-summary-container">                                          
-            </div>
+            <div id="case-invoice-order-summary{{:Id}}" class="case-invoice-order-summary-container"></div>
+            {{for Orders tmpl="caseInvoiceOrder" /}}                         
         </div>
     </div>
 </div>

@@ -72,5 +72,10 @@
                 emptyList :
                 this.organizationUnitRepository.GetOUs(departmentId).OrderBy(o=> o.Name).ToList();
         }
+
+        public List<OU> GetCustomerOUs(int customerId)
+        {            
+            return this.organizationUnitRepository.GetCustomerOUs(customerId).OrderBy(o => o.Name).ToList();
+        }
     }
 }

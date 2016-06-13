@@ -46,19 +46,28 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
         private readonly IReportRepository _reportRepository;
         private readonly IReportFavoriteRepository _reportFavoriteRepository;
         private readonly ICaseService _caseService;
+        private readonly IDepartmentService _departmentService;
+        private readonly IWorkingGroupService _workingGroupService;
+        private readonly IUserService _userService;
 
         public ReportService(
                 IUnitOfWorkFactory unitOfWorkFactory,                 
                 ISurveyService sureyService,
                 ICaseService caseService,
                 IReportRepository reportRepository,
-                IReportFavoriteRepository reportFavoriteRepository)
+                IReportFavoriteRepository reportFavoriteRepository,
+                IDepartmentService departmentService,
+                IWorkingGroupService workingGroupService,
+                IUserService userService)
         {
             this.unitOfWorkFactory = unitOfWorkFactory;
             this.sureyService = sureyService;
             this._reportRepository = reportRepository;
             this._caseService = caseService;
             this._reportFavoriteRepository = reportFavoriteRepository;
+            this._departmentService = departmentService;
+            this._workingGroupService = workingGroupService;
+            this._userService = userService;
         }
 
         #region Reports
@@ -332,6 +341,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
 
         public ReportGeneratorData GetReportGeneratorData(
             int customerId,
+            int userId,
             int languageId,
             List<int> fieldIds,
             List<int> departmentIds,
@@ -378,6 +388,10 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
                 var productAreas = productAreaRep.GetAll().GetByCustomer(customerId);
                 var ous = ouRep.GetAll();
                 var finishingCauses = finishingCauseRep.GetAll().GetByCustomer(customerId);
+
+                //Ensure filters
+                departmentIds = EnsureDepartments(departmentIds, userId, customerId);
+                workingGroupIds = EnsureWorkingGroups(workingGroupIds, userId, customerId);
                 
                 var caseData = _reportRepository.GetCaseList(
                                                customerId,
@@ -399,6 +413,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
 
         public Dictionary<DateTime, int> GetReportGeneratorAggregation(
              int customerId,
+            int userId,
             int languageId,
             List<int> fieldIds,
             List<int> departmentIds,
@@ -426,6 +441,10 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
                 {
                     LoadProductAreaChildrenIds(productAreaId, productAreaChainIds, uow);
                 }
+
+                //Ensure filters
+                departmentIds = EnsureDepartments(departmentIds, userId, customerId);
+                workingGroupIds = EnsureWorkingGroups(workingGroupIds, userId, customerId);
 
                 var caseData = _reportRepository.GetCaseAggregation(
                                                 customerId,
@@ -1548,6 +1567,45 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             {
                 LoadCaseTypeChildrenIds(child.Id, ids, uow);
             }
+        }
+
+        private List<int> EnsureDepartments(List<int> departments, int userId, int customerId)
+        {            
+            if (departments.Any())
+                return departments;
+            else
+            {
+                var allowedDepartmentIds = _departmentService.GetDepartmentsByUserPermissions(userId, customerId, false).Select(x => x.Id).ToList();
+                return allowedDepartmentIds;
+            }
+        }
+
+        private List<int> EnsureWorkingGroups(List<int> workingGroups, int userId, int customerId)
+        {
+            var user = _userService.GetUser(userId);            
+            var ret = new List<int>();
+
+            if (workingGroups.Any())                                
+                ret = workingGroups;
+            else
+            {
+                var allowedWorkingGroups = new List<int>();
+                /*If user has no wg and is a SystemAdmin or customer admin, he/she can see all available wgs */
+                
+                if (user.UserGroup_Id > UserGroups.Administrator)
+                    allowedWorkingGroups = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId, false).Select(w => w.Id).ToList();
+                else
+                {
+                    allowedWorkingGroups = _workingGroupService.GetWorkingGroups(customerId, userId, false).Select(x => x.Id).ToList();
+                    /* If allowed wg is empty, means user has no access to see any case. so we make a false condition */                    
+                }
+                ret = allowedWorkingGroups;
+            }
+
+            if (user.UserGroup_Id > UserGroups.Administrator || (user.ShowNotAssignedWorkingGroups != 0))
+                ret.Add(0); //Not assigned wg
+
+            return ret;
         }
 
         #endregion

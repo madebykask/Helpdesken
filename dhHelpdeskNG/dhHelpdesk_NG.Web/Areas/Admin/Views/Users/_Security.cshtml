@@ -303,6 +303,16 @@
         </tr>
         <tr>
             <td>
+                @Translation.Get("Inventarier", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                <input data-field="inventoryPermission" type="checkbox" name="User.InventoryPermission" @(Model.User.InventoryPermission == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.InventoryPermission" value="0" />
+                &nbsp; &nbsp;@Translation.Get("Användaren har rättighet att administrera inventarier", Enums.TranslationSource.TextTranslation)
+            </td>
+        </tr>
+        <tr>
+            <td>
                 @Translation.Get("Fakturering", Enums.TranslationSource.TextTranslation)
             </td>
             <td>

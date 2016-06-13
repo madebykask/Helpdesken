@@ -5,7 +5,7 @@
         NotSaved = 0,
         Saved    = 1,
         Sent     = 2,
-        Delted   = 9
+        Deleted  = 9
     }
 
     public enum InvoiceOrderFetchStatus

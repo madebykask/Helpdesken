@@ -20,5 +20,7 @@
 
         [LocalizedRequired]
         public string Name { get; set; }
+
+        public bool UserHasInventoryAdminPermission { get; set; }
     }
 }

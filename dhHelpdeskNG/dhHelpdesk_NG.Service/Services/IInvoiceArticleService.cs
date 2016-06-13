@@ -21,7 +21,7 @@
 
         DataValidationResult ValidateInvoiceSettings(int customerId);
 
-        void SaveCaseInvoices(IEnumerable<CaseInvoice> invoices, int caseId);
+        int SaveCaseInvoices(IEnumerable<CaseInvoice> invoices, int caseId);
 
         void DeleteCaseInvoices(int caseId);
 

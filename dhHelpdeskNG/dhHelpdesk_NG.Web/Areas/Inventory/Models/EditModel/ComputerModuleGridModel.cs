@@ -13,11 +13,11 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.EditModel
 
     public class ComputerModuleGridModel : IndexModel
     {
-        public ComputerModuleGridModel(List<ItemOverview> overviews, ModuleTypes moduleType)
+        public ComputerModuleGridModel(List<ItemOverview> overviews, ModuleTypes moduleType, bool userInventoryPermission)
         {
             this.Overviews = overviews;
             this.ModuleType = (int)moduleType;
-
+            this.UserHasInventoryAdminPermission = userInventoryPermission;
             this.ModuleTypes = new ModuleTypes().MapToSelectList(moduleType.GetCaption());
         }
         
@@ -35,5 +35,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.EditModel
         public int ModuleType { get; set; }
 
         public SelectList ModuleTypes { get; private set; }
+
+        public bool UserHasInventoryAdminPermission { get; private set; }
+
     }
 }

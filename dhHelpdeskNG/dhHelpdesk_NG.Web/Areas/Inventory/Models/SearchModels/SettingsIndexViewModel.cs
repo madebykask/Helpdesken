@@ -18,6 +18,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels
 
         public List<ItemOverview> InventoryTypes { get; set; }
 
+        public bool UserHasInventoryAdminPermission { get; set; }
+
         public override Tabs Tab
         {
             get

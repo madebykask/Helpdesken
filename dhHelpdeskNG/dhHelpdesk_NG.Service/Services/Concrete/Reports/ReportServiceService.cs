@@ -63,12 +63,20 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             var administrators = this._userService.SearchSortAndGenerateUsers(userSearch).ToList();            
             reportFilter.Administrators = administrators;
 
-            var departments = this._departmentService.GetDepartments(customerId, ActivationStatus.All);
+            var departments = _departmentService.GetDepartmentsByUserPermissions(userId, customerId, false);
+            if (!departments.Any())
+                departments = this._departmentService.GetDepartments(customerId, ActivationStatus.All);
             if (addOUsToDepartments)
                 departments = AddOrganizationUnitsToDepartments(departments);
 
-            var workingGroups = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId, false).ToList();                
-
+            var workingGroups = new List<WorkingGroupEntity>();
+            var user = _userService.GetUser(userId);
+            /*If user has no wg and is a SystemAdmin or customer admin, he/she can see all available wgs */
+            if (user.UserGroup_Id > UserGroups.Administrator)
+                workingGroups = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId, false).ToList();
+            else
+                workingGroups = _workingGroupService.GetWorkingGroups(customerId, userId, false).ToList();
+            
             var caseTypes = this._caseTypeService.GetCaseTypes(customerId).ToList();
             var caseTypesInRow = this._caseTypeService.GetChildsInRow(caseTypes).ToList();
 
@@ -76,15 +84,18 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             var productAreasInRow = this._productAreaService.GetChildsInRow(productAreas).ToList();
     
             reportFilter.Departments = departments.ToList();
-            reportFilter.WorkingGroups = workingGroups;
+            reportFilter.WorkingGroups = workingGroups.ToList();
             reportFilter.CaseTypes = caseTypesInRow;
             reportFilter.ProductAreas = productAreasInRow;
             
             return reportFilter;
         }
-        
-        public ReportData GetReportData(string reportIdentity, ReportSelectedFilter filters)
+
+        public ReportData GetReportData(string reportIdentity, ReportSelectedFilter filters, int userId, int customerId)
         {
+            filters.SeletcedDepartments = EnsureDepartments(filters.SeletcedDepartments, userId, customerId);
+            filters.SelectedWorkingGroups = EnsureWorkingGroups(filters.SelectedWorkingGroups, userId, customerId);
+
             return _reportServiceRepository.GetReportData(reportIdentity, filters);
         }
 
@@ -126,7 +137,46 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             }
 
             return departments;
-        }        
+        }
+
+        private SelectedItems EnsureDepartments(SelectedItems departments, int userId, int customerId)
+        {
+            if (departments.Any())
+                return departments;
+            else
+            {
+                var allowedDepartmentIds = _departmentService.GetDepartmentsByUserPermissions(userId, customerId, false).Select(x => x.Id).ToList();
+                return new SelectedItems(allowedDepartmentIds);                
+            }
+        }
+
+        private SelectedItems EnsureWorkingGroups(SelectedItems workingGroups, int userId, int customerId)
+        {
+            var user = _userService.GetUser(userId);
+            var ret = new SelectedItems();
+
+            if (workingGroups.Any())
+                ret = workingGroups;
+            else
+            {
+                var allowedWorkingGroups = new List<int>();
+                /*If user has no wg and is a SystemAdmin or customer admin, he/she can see all available wgs */
+
+                if (user.UserGroup_Id > UserGroups.Administrator)
+                    allowedWorkingGroups = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId, false).Select(w => w.Id).ToList();
+                else
+                {
+                    allowedWorkingGroups = _workingGroupService.GetWorkingGroups(customerId, userId, false).Select(x => x.Id).ToList();
+                    /* If allowed wg is empty, means user has no access to see any case. so we make a false condition */
+                }
+                ret.AddItems(allowedWorkingGroups);
+            }
+
+            if (user.UserGroup_Id > UserGroups.Administrator || (user.ShowNotAssignedWorkingGroups != 0))
+                ret.Add(0); //Not assigned wg
+
+            return new SelectedItems(ret);            
+        }
 
         #endregion
 

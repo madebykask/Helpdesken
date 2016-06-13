@@ -7,9 +7,12 @@
 @section Actions
 {
     <ul class="secnav">
-        <li>
-            @Html.ActionLink(Translation.Get("Ny arbetsstation"), "New", "Workstaion", new { @class = "btn" })
-        </li>
+        @if (Model.UserHasInventoryAdminPermission)
+        {
+            <li>
+                @Html.ActionLink(Translation.Get("Ny arbetsstation"), "New", "Workstaion", new { @class = "btn" })
+            </li>
+        }
         <li>
             @Html.ActionLink(Translation.Get("Excel"), "ExportGridToExcelFile", "Workstaion", new { @class = "btn", id = "excel_report_inventory_button" })
         </li>

@@ -115,6 +115,13 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             var selectedReport = filter.MapToSelectedFilter();
             var model = GetReportViewerData(reportName, selectedReport);
 
+            /* As we add virtually Dep/WG when they are not selected so we shouldn't save vistual values in the session */
+            if (filter.Deps_OUs == null)
+                selectedReport.SeletcedDepartments.ClearItems();
+
+            if (filter.WorkingGroups == null)
+                selectedReport.SelectedWorkingGroups.ClearItems();
+
             // Save state in session
             if (model != null)
                 SessionFacade.ReportService = new ReportServiceSessionModel()
@@ -314,6 +321,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                 if (options != null && options.IsPreview)
                 {
                     var previewData = this.reportService.GetReportGeneratorAggregation(this.OperationContext.CustomerId,
+                    this.OperationContext.UserId,
                     this.OperationContext.LanguageId,
                     filters.FieldIds,
                     filters.DepartmentIds,
@@ -333,6 +341,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 
                 var data = this.reportService.GetReportGeneratorData(
                                     this.OperationContext.CustomerId,
+                                    this.OperationContext.UserId,
                                     this.OperationContext.LanguageId,
                                     filters.FieldIds,
                                     filters.DepartmentIds,
@@ -694,7 +703,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 
         private ReportPresentationModel GetReportViewerData(string reportName, ReportSelectedFilter reportSelectedFilter)
         {
-            var reportData = _ReportServiceService.GetReportData(reportName, reportSelectedFilter);
+            var reportData = _ReportServiceService.GetReportData(reportName, reportSelectedFilter, this.OperationContext.UserId,
+                    OperationContext.CustomerId);
 
             ReportPresentationModel model = new ReportPresentationModel();
 

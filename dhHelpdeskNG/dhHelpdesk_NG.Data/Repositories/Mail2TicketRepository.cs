@@ -1,0 +1,45 @@
+using System.Collections.Generic;
+using System.Linq;
+
+namespace DH.Helpdesk.Dal.Repositories
+{
+    using DH.Helpdesk.Dal.Enums;
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Domain;
+    using System;    
+    
+
+    public interface IMail2TicketRepository : IRepository<Mail2Ticket>
+    {
+        void DeleteByCaseId(int id);
+        void DeleteByLogId(int id);
+    }
+
+    public class Mail2TicketRepository : RepositoryBase<Mail2Ticket>, IMail2TicketRepository
+    {
+
+        public Mail2TicketRepository(IDatabaseFactory databaseFactory) 
+            : base(databaseFactory)
+        {
+        }
+
+        public void DeleteByCaseId(int id)
+        {
+            var m2ts = this.GetAll().Where(m => m.Case_Id == id).ToList();
+            if (m2ts.Any())
+            {
+                this.DataContext.Mail2Tickets.RemoveRange(m2ts);               
+            }
+        }
+
+        public void DeleteByLogId(int id)
+        {
+            var m2ts = this.GetAll().Where(m => m.Log_Id == id).ToList();
+            if (m2ts.Any())
+            {
+                this.DataContext.Mail2Tickets.RemoveRange(m2ts);                
+            }
+        }
+    }
+    
+}

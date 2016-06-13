@@ -83,6 +83,7 @@
     <Compile Include="EntityConfigurations\Accounts\EmploymentTypeConfiguration.cs" />
     <Compile Include="EntityConfigurations\ActionSetting\ActionSettingConfiguration.cs" />
     <Compile Include="EntityConfigurations\ADFS\ADFSSettingConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Mail2TicketConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CaseSolutionSettingConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CaseStatisticConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CausingPartConfiguration.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="EntityConfigurations\Cases\CaseIsAboutConfiguration.cs" />
     <Compile Include="EntityConfigurations\Changes\ChangeCouncilConfiguration.cs" />
     <Compile Include="EntityConfigurations\CheckLists\CheckListsConfiguration.cs" />
+    <Compile Include="EntityConfigurations\FormUrlConfiguration.cs" />
     <Compile Include="EntityConfigurations\FileViewLogConfiguration.cs" />
     <Compile Include="EntityConfigurations\DailyReport\DailyReportConfiguration.cs" />
     <Compile Include="EntityConfigurations\Grid\GridSettingsEntityConfiguration.cs" />
@@ -416,6 +418,7 @@
     <Compile Include="Repositories\Changes\IChangeGroupRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeLogRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeFileRepository.cs" />
+    <Compile Include="Repositories\Mail2TicketRepository.cs" />
     <Compile Include="Repositories\DataLog\DataLogRepository.cs" />
     <Compile Include="Repositories\EmailLogRepository.cs" />
     <Compile Include="Repositories\FileIndexing\FileIndexingRepository.cs" />

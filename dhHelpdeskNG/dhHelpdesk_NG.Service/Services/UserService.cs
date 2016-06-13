@@ -32,6 +32,7 @@
 
     using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
     using UserGroup = DH.Helpdesk.Domain.UserGroup;
+    using DH.Helpdesk.Common.Tools;
 
     public interface IUserService
     {
@@ -474,21 +475,20 @@
         public void SaveProfileUser(User user, out IDictionary<string, string> errors)
         {
             //var user = this._userRepository.GetById(id);
+            var curTime = DateTime.Now;
 
             user.Address = user.Address ?? string.Empty;
             user.ArticleNumber = user.ArticleNumber ?? string.Empty;
-            user.BulletinBoardDate = user.BulletinBoardDate ?? DateTime.Now;
-            //user.CaseStateSecondaryColor = user.CaseStateSecondaryColor ?? string.Empty;
-            user.ChangeTime = DateTime.Now;
+            user.ChangeTime = curTime;
+            user.BulletinBoardDate = user.BulletinBoardDate ?? curTime;
+            //user.CaseStateSecondaryColor = user.CaseStateSecondaryColor ?? string.Empty;            
             user.CellPhone = user.CellPhone ?? string.Empty;
             user.Email = user.Email ?? string.Empty;
             user.Logo = user.Logo ?? string.Empty;
-            user.LogoBackColor = user.LogoBackColor ?? string.Empty;
-            user.PasswordChangedDate = DateTime.Now;
+            user.LogoBackColor = user.LogoBackColor ?? string.Empty;            
             user.Phone = user.Phone ?? string.Empty;
             user.PostalAddress = user.PostalAddress ?? string.Empty;
-            user.PostalCode = user.PostalCode ?? string.Empty;
-            user.RegTime = DateTime.Now;
+            user.PostalCode = user.PostalCode ?? string.Empty;                        
 
             errors = new Dictionary<string, string>();
 
@@ -511,23 +511,29 @@
                 throw new ArgumentNullException("user");
             }
 
+            errors = new Dictionary<string, string>();
+
+            var userEMail = user.Email.TrimStart().TrimEnd();
+            if (userEMail.Contains(' ') || !EmailHelper.IsValid(userEMail))
+                errors.Add("User.Email", "E-postadress är inte giltig.");
+
+            user.Email = userEMail;
+
+            var curTime = DateTime.Now;
+
             user.Address = user.Address ?? string.Empty;
             user.ArticleNumber = user.ArticleNumber ?? string.Empty;
-            user.BulletinBoardDate = user.BulletinBoardDate ?? DateTime.Now;
-            user.ChangeTime = DateTime.Now;
+            user.BulletinBoardDate = user.BulletinBoardDate ?? curTime;
+            user.ChangeTime = curTime;
             user.CellPhone = user.CellPhone ?? string.Empty;
             user.Email = user.Email ?? string.Empty;
             user.Logo = user.Logo ?? string.Empty;
-            user.LogoBackColor = user.LogoBackColor ?? string.Empty;
-            user.PasswordChangedDate = DateTime.Now;
+            user.LogoBackColor = user.LogoBackColor ?? string.Empty;            
             user.Phone = user.Phone ?? string.Empty;
             user.PostalAddress = user.PostalAddress ?? string.Empty;
-            user.PostalCode = user.PostalCode ?? string.Empty;
-            user.RegTime = DateTime.Now;
+            user.PostalCode = user.PostalCode ?? string.Empty;            
             user.ShowQuickMenuOnStartPage = user.ShowQuickMenuOnStartPage;
-            user.Password = user.Password ?? string.Empty;
-
-            errors = new Dictionary<string, string>();
+            user.Password = user.Password ?? string.Empty;            
 
             List<UserPermission> wrongPermissions;
             if (!this.userPermissionsChecker.CheckPermissions(user, out wrongPermissions))
@@ -707,27 +713,33 @@
                 errors.Add("User permissions", this.translator.Translate("There are wrong permissions for this user group."));
             }
 
-            var hasDublicate = this.GetUsers()
-                            .Any(u => u.UserID.EqualWith(user.UserID));
+            var hasDublicate = this.GetUsers().Any(u => u.UserID.EqualWith(user.UserID));
             if (hasDublicate)
             {
                 errors.Add("User.UserID", "Det här användarnamnet är upptaget. Var vänlig använd något annat.");
             }
 
+            var userEMail = user.Email.TrimStart().TrimEnd();
+            if (userEMail.Contains(' ') || !EmailHelper.IsValid(userEMail))
+                errors.Add("User.Email", "E-postadress är inte giltig.");
+
+            var curTime = DateTime.Now;
+
+            user.Email = userEMail;
             user.Address = user.Address ?? string.Empty;
             user.ArticleNumber = user.ArticleNumber ?? string.Empty;
-            user.BulletinBoardDate = user.BulletinBoardDate ?? DateTime.Now;
+            user.BulletinBoardDate = user.BulletinBoardDate ?? curTime;
             //user.CaseStateSecondaryColor = user.CaseStateSecondaryColor ?? string.Empty;
-            user.ChangeTime = DateTime.Now;
+            user.ChangeTime = curTime;
             user.CellPhone = user.CellPhone ?? string.Empty;
             user.Email = user.Email ?? string.Empty;
             user.Logo = user.Logo ?? string.Empty;
             user.LogoBackColor = user.LogoBackColor ?? string.Empty;
-            user.PasswordChangedDate = DateTime.Now;
+            user.PasswordChangedDate = curTime;
             user.Phone = user.Phone ?? string.Empty;
             user.PostalAddress = user.PostalAddress ?? string.Empty;
             user.PostalCode = user.PostalCode ?? string.Empty;
-            user.RegTime = DateTime.Now;
+            user.RegTime = curTime;
             user.TimeZoneId = user.TimeZoneId;
 
             if (string.IsNullOrEmpty(user.UserID))

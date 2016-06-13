@@ -224,9 +224,25 @@
                     if (filters.SeletcedOUs.Any())
                         _whereStr += string.Format("AND tblCase.OU_Id in ({0}) ", filters.SeletcedOUs.GetSelectedStr().SafeForSqlInject());                        
                 }
-               
-                if (filters.SelectedWorkingGroups.Any())                
-                    _whereStr += string.Format("AND tblCase.WorkingGroup_Id in ({0}) ", filters.SelectedWorkingGroups.GetSelectedStr().SafeForSqlInject());
+
+
+                if (filters.SelectedWorkingGroups.Any())
+                {
+                    if (filters.SelectedWorkingGroups.Contains(0))
+                    {
+                        if (filters.SelectedWorkingGroups.Count == 1)
+                            _whereStr += string.Format("AND tblCase.WorkingGroup_Id is null ", filters.SelectedWorkingGroups.GetSelectedStr().SafeForSqlInject());
+                        else
+                            _whereStr += string.Format("AND (tblCase.WorkingGroup_Id in ({0}) or tblCase.WorkingGroup_Id is null) ", filters.SelectedWorkingGroups.GetSelectedStr().SafeForSqlInject());
+                    }
+                    else
+                        _whereStr += string.Format("AND (tblCase.WorkingGroup_Id in ({0}) ", filters.SelectedWorkingGroups.GetSelectedStr().SafeForSqlInject());
+                }
+                else
+                {
+                    /* false condition to prevent fetch data*/
+                    _whereStr += string.Format("AND tblCase.WorkingGroup_Id in (0) ");
+                }
 
                 if (filters.SelectedCaseTypes.Any())                
                     _whereStr += string.Format("AND tblCase.CaseType_Id in ({0}) ", filters.SelectedCaseTypes.GetSelectedStr().SafeForSqlInject());

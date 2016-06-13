@@ -24,6 +24,8 @@
         public int BulletinBoardPermission { get; set; }
 
         public int DocumentPermission { get; set; }
+
+        public int InventoryPermission { get; set; }
         /// <summary>
         /// Allows user to manage events in calendar    
         /// </summary>

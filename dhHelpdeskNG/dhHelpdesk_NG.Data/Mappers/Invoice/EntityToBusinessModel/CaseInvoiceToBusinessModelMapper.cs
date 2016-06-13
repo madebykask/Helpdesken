@@ -49,6 +49,7 @@
                     entity.Id,
                     entity.CaseId,
                     this.caseMapper.Map(entity.Case),
+                    entity.Orders == null? null :
                     entity.Orders
                         .Select(o => new CaseInvoiceOrder(
                                 o.Id, 
@@ -83,7 +84,8 @@
                                                     a.Amount,
                                                     a.Ppu,
                                                     a.Position,
-                                                    a.CreditedForArticle_Id)).ToArray():null,
+                                                    a.CreditedForArticle_Id,
+                                                    a.TextForArticle_Id)).ToArray():null,
                                  o.Articles != null ?
                                     o.Files.Select(f => this.filesMapper.Map(f)).OrderBy(f => f.FileName).ToArray() : null
                                  ))

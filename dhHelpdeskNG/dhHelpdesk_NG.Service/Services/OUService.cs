@@ -96,8 +96,8 @@
             ou.Path = ou.Path ?? string.Empty;
             ou.OUId = ou.OUId ?? string.Empty;
             ou.HomeDirectory = ou.HomeDirectory ?? string.Empty;
-            ou.ScriptPath = ou.ScriptPath ?? string.Empty;
-                       
+            ou.ScriptPath = ou.ScriptPath ?? string.Empty;            
+
             errors = new Dictionary<string, string>();
 
             if (string.IsNullOrEmpty(ou.Name))

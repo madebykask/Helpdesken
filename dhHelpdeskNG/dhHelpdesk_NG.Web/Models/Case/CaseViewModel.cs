@@ -191,6 +191,8 @@
 
         public DateTime RegTime { get; set; }
 
+        public DateTime ChangeTime { get; set; }
+
         #endregion
 
         public ChildCaseViewModel ChildCaseViewModel { get; set; }

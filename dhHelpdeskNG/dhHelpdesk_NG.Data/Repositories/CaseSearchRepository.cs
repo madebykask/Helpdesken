@@ -750,7 +750,8 @@
             columns.Add("tblRegistrationSourceCustomer.SourceName as RegistrationSourceCustomer");
 
             columns.Add("tblCaseIsAbout.ReportedBy as IsAbout_ReportedBy");
-            columns.Add("tblCaseIsAbout.Person_Name as IsAbout_Persons_Name");            
+            columns.Add("tblCaseIsAbout.Person_Name as IsAbout_Persons_Name");
+            columns.Add("tblCase.AgreedDate");
 
             if (customerSetting != null)
             {

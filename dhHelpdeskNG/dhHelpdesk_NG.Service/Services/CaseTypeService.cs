@@ -132,6 +132,11 @@
                 this.caseTypeRepository.ResetDefault(caseType.Id, caseType.Customer_Id);
             }
 
+            if (caseType.IsEMailDefault == 1)
+            {
+                this.caseTypeRepository.ResetEmailDefault(caseType.Id, caseType.Customer_Id);
+            }
+
             if (errors.Count == 0)
             {
                 this.Commit();

@@ -14,6 +14,38 @@ $(function () {
         }
     }
 
+    $('.icon-info-sign.ml15.expander').on('click', function () {
+        var expandEl = $(this).attr('data-expand-element');
+        var lastSelected = $('#lastMailSelected').val();
+        var displayType = '';
+        if (lastSelected == expandEl) {
+            displayType = 'none';
+            $('#lastMailSelected').val('')
+        }
+        else {
+            displayType = 'block';
+            $('#lastMailSelected').val(expandEl)
+        }
+
+        switch (expandEl) {
+            case "mailto":                
+                $('#mailto').css('display', displayType);
+                $('#mailcc').css('display', 'none');
+                $('#mailbcc').css('display', 'none');
+                break;
+            case "mailcc":                
+                $('#mailcc').css('display', displayType);
+                $('#mailto').css('display', 'none');
+                $('#mailbcc').css('display', 'none');
+                break;
+            case "mailbcc":
+                $('#mailbcc').css('display', displayType);
+                $('#mailto').css('display', 'none');
+                $('#mailcc').css('display', 'none');
+                break;
+        }
+    });
+
     hideShowSaveUserInfoBtn($userId.val());
 
     $userId.on('change', function(ev) {

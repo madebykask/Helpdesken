@@ -113,8 +113,8 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IGlobalSettingService _globalSettingService;
         private readonly IMailTemplateService _mailTemplateService;
         private readonly ICausingPartService _causingPartService;
-        
-        
+
+        private readonly IInvoiceArticlesModelFactory invoiceArticlesModelFactory;
 
         private readonly ICaseNotifierModelFactory caseNotifierModelFactory;
 
@@ -122,9 +122,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         private readonly IWorkContext workContext;
 
-        private readonly IInvoiceArticleService invoiceArticleService;
-
-        private readonly IInvoiceArticlesModelFactory invoiceArticlesModelFactory;
+        private readonly IInvoiceArticleService invoiceArticleService;        
 
         private readonly IConfiguration configuration;
 
@@ -208,8 +206,7 @@ namespace DH.Helpdesk.Web.Controllers
             IWorkContext workContext,
             ICaseNotifierModelFactory caseNotifierModelFactory,
             INotifierService notifierService,
-            IInvoiceArticleService invoiceArticleService,
-            IInvoiceArticlesModelFactory invoiceArticlesModelFactory,
+            IInvoiceArticleService invoiceArticleService,            
             IConfiguration configuration,
             ICaseSolutionSettingService caseSolutionSettingService,
             IInvoiceHelper invoiceHelper,
@@ -224,6 +221,7 @@ namespace DH.Helpdesk.Web.Controllers
             IWatchDateCalendarService watchDateCalendarServcie,
             ICaseInvoiceSettingsService CaseInvoiceSettingsService,
             ICausingPartService causingPartService,
+            IInvoiceArticlesModelFactory invoiceArticlesModelFactory,
             IReportServiceService reportServiceService)
             : base(masterDataService)
         {
@@ -270,8 +268,7 @@ namespace DH.Helpdesk.Web.Controllers
             this.workContext = workContext;
             this.caseNotifierModelFactory = caseNotifierModelFactory;
             this.notifierService = notifierService;
-            this.invoiceArticleService = invoiceArticleService;
-            this.invoiceArticlesModelFactory = invoiceArticlesModelFactory;
+            this.invoiceArticleService = invoiceArticleService;            
             this.configuration = configuration;
             this.caseSolutionSettingService = caseSolutionSettingService;
             this.invoiceHelper = invoiceHelper;
@@ -290,6 +287,7 @@ namespace DH.Helpdesk.Web.Controllers
             this._defaultExtendCaseLockTime = 60; // Second
             this._causingPartService = causingPartService;
             this._ReportServiceService = reportServiceService;
+            this.invoiceArticlesModelFactory = invoiceArticlesModelFactory;
         }
 
         #endregion
@@ -2278,7 +2276,20 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             var prevInfo = this.ExtractPreviousRouteInfo();
-            var res = new RedirectToRouteResult(prevInfo);
+            var refreshRouteInfo = new RouteValueDictionary();
+
+            if (prevInfo != null && prevInfo.Any())
+            {
+                foreach (var p in prevInfo)
+                {
+                    if (p.Key.ToLower() == "language")
+                        refreshRouteInfo.Add(p.Key, language.LanguageID);
+                    else
+                        refreshRouteInfo.Add(p.Key, p.Value);
+                }
+            }
+
+            var res = new RedirectToRouteResult(refreshRouteInfo);
             return res;
         }
 
@@ -2387,54 +2398,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         #region --Invoice--
 
-        [HttpPost]
-        public JsonResult SaveCaseInvoice(string caseInvoiceArticle, int customerId, 
-                                          int caseId, string caseKey, string logKey, 
-                                          int? orderIdToXML)
-        {
-            try
-            {
-                if (string.IsNullOrEmpty(caseInvoiceArticle))                    
-                    return Json(new { result = "Error", data = "Invalid Invoice to save!" } );
-
-                if (SessionFacade.CurrentUser == null)
-                    return Json(new { result = "Error", data = "Invoice is not available, refresh the page and try it again." });
-
-                var saveRes = DoInvoiceWork(caseInvoiceArticle, caseId, customerId, orderIdToXML);
-
-                if (saveRes.IsSuccess)
-                {
-                    var caseInvoices = this.invoiceArticleService.GetCaseInvoicesWithTimeZone(caseId, TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
-                    var invoiceArticles = this.invoiceArticlesModelFactory.CreateCaseInvoiceArticlesModel(caseInvoices);
-                    var invoiceModel = new CaseInvoiceModel(customerId, caseId, invoiceArticles, string.Empty, caseKey, logKey);
-                    var serializer = new JavaScriptSerializer();
-                    var caseArticlesJson = serializer.Serialize(invoiceModel.InvoiceArticles);
-                    var warningMessage = saveRes.ResultType == ProcessResult.ResultTypeEnum.WARNING ? saveRes.LastMessage : string.Empty;
-
-                    return Json(new { result = "Success", data = caseArticlesJson, warningMessage = warningMessage });
-                }
-                else
-                {
-                    return Json(new { result = "Error", data = saveRes.LastMessage });
-                }
-            }
-            catch (Exception ex)
-            {
-                return Json(new { result = "Error", data = "Unexpected Error:" + ex.Message });                
-            }
-        }
-
-        [HttpGet]
-        public JsonResult IsThereNotInvoicedOrder(int caseId)
-        {
-            var res = false;
-            
-            var notInvoicedOrders = this.invoiceArticleService.GetInvoiceOrders(caseId, InvoiceOrderFetchStatus.AllNotSent);
-            if (notInvoicedOrders.Any())
-                res = true;
-
-            return Json(res, JsonRequestBehavior.AllowGet);
-        }
+       
 
         #endregion
 
@@ -3277,7 +3241,14 @@ namespace DH.Helpdesk.Web.Controllers
             }
             else
             {
-                fd.filterWorkingGroup = this._workingGroupService.GetWorkingGroups(cusId, IsTakeOnlyActive);
+                if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.UserGroupId == 2)
+                {
+                    fd.filterWorkingGroup = this._workingGroupService.GetWorkingGroups(cusId, userId, IsTakeOnlyActive);
+                }
+                else
+                {
+                    fd.filterWorkingGroup = this._workingGroupService.GetWorkingGroups(cusId, IsTakeOnlyActive);
+                }
             }
 
             fd.filterWorkingGroup.Insert(0, ObjectExtensions.notAssignedWorkingGroup());
@@ -3379,7 +3350,15 @@ namespace DH.Helpdesk.Web.Controllers
                 }
                 else
                 {
-                    specificFilter.WorkingGroupList = this._workingGroupService.GetWorkingGroups(customerId, IsTakeOnlyActive);
+                    if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.UserGroupId == 2)
+                    {
+                        specificFilter.WorkingGroupList = this._workingGroupService.GetWorkingGroups(customerId, userId, IsTakeOnlyActive);
+                    }
+                    else
+                    {
+                        specificFilter.WorkingGroupList = this._workingGroupService.GetWorkingGroups(customerId, IsTakeOnlyActive);
+                    }
+                    
                 }
 
                 specificFilter.WorkingGroupList.Insert(0, ObjectExtensions.notAssignedWorkingGroup());
@@ -3636,6 +3615,8 @@ namespace DH.Helpdesk.Web.Controllers
 
                 customerId = customerId == 0 ? m.case_.Customer_Id : customerId;
                 //SessionFacade.CurrentCaseLanguageId = m.case_.RegLanguage_Id;
+
+                m.ChangeTime = m.case_.ChangeTime;
             }
 
             var customerUserSetting = this._customerUserService.GetCustomerSettings(customerId, userId);
@@ -3868,7 +3849,7 @@ namespace DH.Helpdesk.Web.Controllers
                     customerSources.Select(
                         it => new SelectListItem()
                         {
-                            Text = Translation.Get(it.SourceName),
+                            Text = Translation.GetCoreTextTranslation(it.SourceName),
                             Value = it.Id.ToString(),
                             Selected = it.Id == m.CustomerRegistrationSourceId
                         }));
@@ -4193,7 +4174,7 @@ namespace DH.Helpdesk.Web.Controllers
                 m.DynamicCase.FormPath = m.DynamicCase.FormPath
                     .Replace("[CaseId]", m.case_.Id.ToString())
                     .Replace("[UserId]", SessionFacade.CurrentUser.UserId.ToString())
-                    .Replace("[ApplicationType]", "5")
+                    .Replace("[ApplicationType]", "HD5")
                     .Replace("[Language]", l.LanguageId);
                 m.DynamicCase.FormPath = m.DynamicCase.FormPath.Replace(@"\", @"\\"); //this is because users with backslash in name will have issues with container.js
             }
@@ -4206,7 +4187,8 @@ namespace DH.Helpdesk.Web.Controllers
 
             m.CaseTemplateTreeButton = this.GetCaseTemplateTreeModel(customerId, userId);
 
-            m.CasePrintView = new ReportModel(false);            
+            m.CasePrintView = new ReportModel(false);
+           
             return m;
         }
 
@@ -4657,7 +4639,7 @@ namespace DH.Helpdesk.Web.Controllers
         private CaseSettingModel GetCaseSettingModel(int customerId, int userId)
         {
             var ret = new CaseSettingModel();
-
+            const bool IsTakeOnlyActive = true;
             ret.CustomerId = customerId;
             ret.UserId = userId;
 
@@ -4670,7 +4652,20 @@ namespace DH.Helpdesk.Web.Controllers
 
             var customerSettings = this._settingService.GetCustomerSetting(customerId);
 
-            var departments = this._departmentService.GetDepartments(customerId, ActivationStatus.All);
+            var departments = this._departmentService.GetDepartmentsByUserPermissions(userId, customerId, IsTakeOnlyActive);
+            if (!departments.Any())
+            {
+                departments =
+                    this._departmentService.GetDepartments(customerId)
+                        .Where(
+                            d =>
+                            d.Region_Id == null
+                            || IsTakeOnlyActive == false
+                            || (IsTakeOnlyActive && d.Region != null && d.Region.IsActive != 0))
+                        .ToList();
+            }
+
+            //var departments = this._departmentService.GetDepartments(customerId, ActivationStatus.All);
             ret.IsDepartmentChecked = userCaseSettings.Departments != string.Empty;
 
             if (customerSettings != null && customerSettings.ShowOUsOnDepartmentFilter != 0)
@@ -4681,7 +4676,7 @@ namespace DH.Helpdesk.Web.Controllers
             ret.SelectedDepartments = userCaseSettings.Departments;
 
             
-            const bool IsTakeOnlyActive = true;
+            
             ret.RegisteredByCheck = userCaseSettings.RegisteredBy != string.Empty;
             ret.RegisteredByUserList = this._userService.GetUserOnCases(customerId, IsTakeOnlyActive).MapToSelectList(customerSettings);
             if (!string.IsNullOrEmpty(userCaseSettings.RegisteredBy))
@@ -4818,8 +4813,8 @@ namespace DH.Helpdesk.Web.Controllers
             reportSelectedFilter.GeneralParameter.Add(new GeneralParameter("@CaseId", caseId));
             reportSelectedFilter.GeneralParameter.Add(new GeneralParameter("@LanguageId", SessionFacade.CurrentLanguageId));
             reportSelectedFilter.GeneralParameter.Add(new GeneralParameter("@UserId", SessionFacade.CurrentUser.Id));
-            
-            var reportData = _ReportServiceService.GetReportData(reportName, reportSelectedFilter);
+
+            var reportData = _ReportServiceService.GetReportData(reportName, reportSelectedFilter, SessionFacade.CurrentUser.Id, SessionFacade.CurrentCustomer.Id);
 
             ReportModel model = new ReportModel();
 
@@ -5020,15 +5015,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         #endregion       
-
-        private ProcessResult DoInvoiceWork(string caseInvoiceData, int caseId, int customerId, int? orderIdToXML)
-        {
-            var caseOverview = this._caseService.GetCaseOverview(caseId);
-            var articles = this.invoiceArticleService.GetArticles(customerId);
-            var Invoices = this.invoiceHelper.ToCaseInvoices(caseInvoiceData, caseOverview, articles, SessionFacade.CurrentUser.Id, orderIdToXML); //there will only be one?
-            return this.invoiceArticleService.DoInvoiceWork(Invoices, caseId, caseOverview.CaseNumber, customerId, orderIdToXML);
-        }
-
+        
         #endregion
     }
 }

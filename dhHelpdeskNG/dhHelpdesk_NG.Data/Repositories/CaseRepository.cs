@@ -89,30 +89,21 @@
 
         public DynamicCase GetDynamicCase(int id)
         {
-            var externalSite = this.DataContext.GlobalSettings.FirstOrDefault().ExternalSite;
-
-            if(!string.IsNullOrEmpty(ConfigurationManager.AppSettings["plus:ExternalSite"]))
-            {
-                externalSite = ConfigurationManager.AppSettings["plus:ExternalSite"];
-            }
-
-            if(string.IsNullOrEmpty(externalSite))
-                externalSite = "";
-
-            if(!externalSite.EndsWith("/"))
-                externalSite = externalSite + "/";
-
             var query = from f in this.DataContext.Forms
+                        join ffu in this.DataContext.FormUrls on f.FormUrl_Id equals ffu.Id
                         join ff in this.DataContext.FormField on f.Id equals ff.Form_Id
                         join ffv in this.DataContext.FormFieldValue on ff.Id equals ffv.FormField_Id
                         where ffv.Case_Id == id
                         select new DynamicCase
                         {
                             CaseId = ffv.Case_Id,
-                            FormPath = externalSite + f.FormPath,
+                            FormPath = f.FormPath,
                             FormName = f.FormName,
                             ViewMode = f.ViewMode,
-                            ExternalPage = f.ExternalPage == 1 ? true : false
+                            ExternalPage = f.ExternalPage == 1 ? true : false,
+                            Scheme = ffu.Scheme,
+                            Host = ffu.Host,
+                            ExternalSite = ffu.ExternalSite
                         };
 
             return query.FirstOrDefault();

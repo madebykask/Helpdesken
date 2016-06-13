@@ -34,6 +34,7 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             int faqPermission,
             int bulletinBoardPermission,
             int documentPermission,
+            int inventoryPermission,
             int setPriorityPermission,
             int invoicePermission,
             int dataSecurityPermission,
@@ -73,6 +74,7 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             this.FollowUpPermission = followUpPermission;
             this.BulletinBoardPermission = bulletinBoardPermission;
             this.DocumentPermission = documentPermission;
+            this.InventoryPermission = inventoryPermission;
             this.SetPriorityPermission = setPriorityPermission;
             this.InvoicePermission = invoicePermission;
             this.DataSecurityPermission = dataSecurityPermission;
@@ -168,6 +170,8 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
         public bool ShowCaseStatistics { get; set; }
 
         public string TimeZoneId { get; set; }
+
+        public int InventoryPermission { get; set; }
 
         public bool IsAdministrator()
         {

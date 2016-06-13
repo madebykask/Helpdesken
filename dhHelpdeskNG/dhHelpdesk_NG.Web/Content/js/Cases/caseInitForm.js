@@ -687,7 +687,7 @@ function CaseInitForm() {
         var caseInvoiceIsActive = $('#CustomerSettings_ModuleCaseInvoice').val().toLowerCase() == 'true';
         /* When invoice is active, user can not change the product area while */
         if (caseInvoiceIsActive) {
-            $.get('/Cases/IsThereNotInvoicedOrder/', { caseId: curCaseId, myTime:Date.now }, function (res) {
+            $.get('/Invoice/IsThereNotInvoicedOrder/', { caseId: curCaseId, myTime:Date.now }, function (res) {
                 if (res != null && res) {
                     ShowToastMessage('ProductArea cannot be changed while you have any order which is not invoiced yet!', 'warning', false);
                 }

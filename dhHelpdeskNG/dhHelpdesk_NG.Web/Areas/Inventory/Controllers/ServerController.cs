@@ -23,6 +23,9 @@
     using DH.Helpdesk.Web.Infrastructure.ActionFilters;
     using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory;
+    using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Users;
+    using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 
     public class ServerController : InventoryBaseController
     {
@@ -36,6 +39,8 @@
 
         private readonly IServerBuilder serverBuilder;
 
+        private readonly IUserPermissionsChecker _userPermissionsChecker;
+
         public ServerController(
             IMasterDataService masterDataService,
             IInventoryService inventoryService,
@@ -46,6 +51,7 @@
             IServerViewModelBuilder serverViewModelBuilder,
             IServerBuilder serverBuilder,
             IExcelFileComposer excelFileComposer,
+            IUserPermissionsChecker userPermissionsChecker,
             IExportFileNameFormatter exportFileNameFormatter)
             : base(masterDataService, exportFileNameFormatter, excelFileComposer, organizationService, placeService)
         {
@@ -54,6 +60,7 @@
             this.computerModulesService = computerModulesService;
             this.serverViewModelBuilder = serverViewModelBuilder;
             this.serverBuilder = serverBuilder;
+            this._userPermissionsChecker = userPermissionsChecker;
         }
 
         [HttpGet]
@@ -68,7 +75,10 @@
                     this.CreateFilterId(TabName.Inventories, InventoryFilterMode.Server.ToString()))
                 ?? ServerSearchFilter.CreateDefault();
 
+            var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
+
             var viewModel = new ServerSearchViewModel((int)CurrentModes.Servers, inventoryTypes, currentFilter);
+            viewModel.UserHasInventoryAdminPermission = userHasInventoryAdminPermission;
 
             return this.View(viewModel);
         }
@@ -122,9 +132,12 @@
                     SessionFacade.CurrentCustomer.Id,
                     SessionFacade.CurrentLanguageId);
 
+            var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
+
             ServerViewModel serverEditModel = this.serverViewModelBuilder.BuildViewModel(model, options, settings);
 
             var viewModel = new ServerEditViewModel(id, serverEditModel );
+            viewModel.UserHasInventoryAdminPermission = userHasInventoryAdminPermission;
 
             return this.View(viewModel);
         }

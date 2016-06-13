@@ -6,11 +6,14 @@
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel;
+    using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
 
     public class NetWorkAdapterController : ComputerModuleBaseController
     {
-        public NetWorkAdapterController(IMasterDataService masterDataService, IComputerModulesService computerModulesService)
-            : base(masterDataService, computerModulesService)
+        public NetWorkAdapterController(IMasterDataService masterDataService, 
+                                        IComputerModulesService computerModulesService,
+                                        IUserPermissionsChecker userPermissionChecker)
+            : base(masterDataService, computerModulesService, userPermissionChecker)
         {
         }
 

@@ -12,6 +12,7 @@
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Link;
     using DH.Helpdesk.Web.Models;
+    using System;
 
     public class HomeController : BaseController
     {
@@ -49,6 +50,8 @@
 
         private readonly IChangeService changeService;
 
+        private readonly ILanguageService languageService;
+
         public HomeController(
             IBulletinBoardService bulletinBoardService,
             ICalendarService calendarService,
@@ -67,7 +70,8 @@
             IWorkContext workContext, 
             ICaseModelFactory caseModelFactory, 
             IModulesInfoFactory modulesInfoFactory, 
-            IChangeService changeService)
+            IChangeService changeService,
+            ILanguageService languageService)
             : base(masterDataService)
         {
             this.bulletinBoardService = bulletinBoardService;
@@ -87,6 +91,7 @@
             this.caseModelFactory = caseModelFactory;
             this.modulesInfoFactory = modulesInfoFactory;
             this.changeService = changeService;
+            this.languageService = languageService;
         }
 
         [HttpGet]
@@ -163,6 +168,24 @@
 
             var customersSettings = this.userService.GetUserCustomersSettings(SessionFacade.CurrentUser.Id);
             var currentCustomerSettings = customersSettings.FirstOrDefault(s => s.CustomerId == this.workContext.Customer.CustomerId);            
+            
+            if (string.IsNullOrEmpty(SessionFacade.CurrentLanguageCode))
+            {
+                var curLanguageId = 0;
+                if (SessionFacade.CurrentLanguageId > 0)
+                    curLanguageId = SessionFacade.CurrentLanguageId;
+                else                     
+                    curLanguageId = SessionFacade.CurrentUser != null? SessionFacade.CurrentUser.LanguageId : 0;
+
+                if (curLanguageId == 0)
+                    throw new ArgumentNullException("Session timeout: Please refresh the page and try again!");
+                else
+                {
+                    var language = this.languageService.GetLanguage(curLanguageId);
+                    SessionFacade.CurrentLanguageCode = language.LanguageID;
+                }                   
+            }
+
             foreach (var module in modules)
             {
                 if (!module.isVisible)

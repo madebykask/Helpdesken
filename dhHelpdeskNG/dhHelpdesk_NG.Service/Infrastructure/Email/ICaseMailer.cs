@@ -37,6 +37,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email
                 Case newCase,
                 string helpdeskMailFromAdress,
                 List<string> files,
-                string AbsoluterUrl);
+                string AbsoluterUrl,
+                MailSenders mailSenders);
     }
 }

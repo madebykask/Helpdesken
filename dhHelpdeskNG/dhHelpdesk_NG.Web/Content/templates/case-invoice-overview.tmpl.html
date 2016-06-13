@@ -19,29 +19,39 @@
         {{for Articles tmpl="caseInvoiceArticleOverview" /}}
         
         <tr>
-           <td colspan="8">{{:Persons_Name}} - {{:CostCentre}}</td>
+           <td colspan="8">{{:ReferenceTitle}} {{:Persons_Name}} - {{:CostCentre}}</td>
         </tr>
         
         <tr>
             {{if IsInvoiced}}
-                <td colspan="6" style='text-align: left;'><span class='textbold'>{{:InvoicedByTitle}}: {{:InvoicedByUser}} - {{:InvoiceDate}}</span>  {{:InvoiceTime}}</td>
+                <td colspan="6" style='text-align: left;'><span>{{:InvoicedByTitle}} {{:InvoicedByUser}} - {{:InvoiceDate}}</span>  {{:InvoiceTime}}</td>
                  {{if IsCredited }}
-                    <td colspan="2" class='textbold' style='text-align: right;'>{{:TotalLabel}}: -{{:Total}}</td>                
+                    <td colspan="2" style='text-align: right;'><span class='textbold'>{{:TotalLabel}} SEK</span> -{{:Total}}</td>                
                  {{else}}
-                    <td colspan="2" class='textbold' style='text-align: right;'>{{:TotalLabel}}: {{:Total}}</td>                
+                    <td colspan="2" style='text-align: right;'><span class='textbold'>{{:TotalLabel}} SEK</span> {{:Total}}</td>                
                  {{/if}}
             {{else}}  
                 {{if IsCredited }}      
-                    <td colspan="8" class='textbold' style='text-align: right;'>{{:TotalLabel}}: -{{:Total}}</td>        
+                    <td colspan="8" style='text-align: right;'><span class='textbold'>{{:TotalLabel}} SEK</span> -{{:Total}}</td>        
                 {{else}}
-                    <td colspan="8" class='textbold' style='text-align: right;'>{{:TotalLabel}}: {{:Total}}</td>        
+                    <td colspan="8" style='text-align: right;'><span class='textbold'>{{:TotalLabel}} SEK</span> {{:Total}}</td>        
                 {{/if}}
             {{/if}}
         </tr>
     {{/for}}
+        <tr>
+            <td colspan="7" class='textbold' style='text-align: right;'>
+                {{:TotalInvoicedLabel}} SEK<br />
+                {{:TotalNotInvoicedLabel}} SEK<br />
+                {{:TotalAllLabel}} SEK
+            </td>
+            <td style='text-align: right;'>
+                 {{:TotalInvoiced}}<br /> 
+                {{:TotalNotInvoiced}}<br />
+                {{:Total}} 
+            </td>
+        </tr>
 </table>
-<div class='textbold' style='text-align: right;'>
-    {{:TotalInvoicedLabel}} &nbsp; {{:TotalInvoiced}} &nbsp;&nbsp;&nbsp;  
-    {{:TotalNotInvoicedLabel}} &nbsp; {{:TotalNotInvoiced}} &nbsp;&nbsp;&nbsp;
-    {{:TotalAllLabel}} &nbsp; {{:Total}}    
+<div>
+       
 </div>

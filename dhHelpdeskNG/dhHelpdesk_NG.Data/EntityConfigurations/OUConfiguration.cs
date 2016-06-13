@@ -44,6 +44,7 @@
             this.Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             this.Property(x => x.Code).IsOptional().HasMaxLength(20);
+            this.Property(x => x.SearchKey).IsOptional().HasMaxLength(200);
 
             this.ToTable("tblou");
         }
