@@ -233,7 +233,7 @@
                         if (filters.SelectedWorkingGroups.Count == 1)
                             _whereStr += string.Format("AND tblCase.WorkingGroup_Id is null ", filters.SelectedWorkingGroups.GetSelectedStr().SafeForSqlInject());
                         else
-                            _whereStr += string.Format("AND (tblCase.WorkingGroup_Id in ({0}) || tblCase.WorkingGroup_Id is null) ", filters.SelectedWorkingGroups.GetSelectedStr().SafeForSqlInject());
+                            _whereStr += string.Format("AND (tblCase.WorkingGroup_Id in ({0}) or tblCase.WorkingGroup_Id is null) ", filters.SelectedWorkingGroups.GetSelectedStr().SafeForSqlInject());
                     }
                     else
                         _whereStr += string.Format("AND (tblCase.WorkingGroup_Id in ({0}) ", filters.SelectedWorkingGroups.GetSelectedStr().SafeForSqlInject());
