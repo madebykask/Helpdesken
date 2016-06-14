@@ -20,8 +20,8 @@ namespace DH.Helpdesk.Domain
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
         public int? CaseSolution_Id { get; set; }
-
-
+        public Guid? LinkGUID { get; set; }
+        
         public virtual Customer Customer { get; set; }
         public virtual Document Document { get; set; }
         public virtual ICollection<User> Us { get; set; }

@@ -30,6 +30,7 @@
         public int? WatchDateCalendar_Id { get; set; }
         public int OverTimeAmount { get; set; }
         public string Code { get; set; }
+        public Guid? DepartmentGUID { get; set; }        
 
         public virtual Country Country { get; set; }
         public virtual Region Region { get; set; }

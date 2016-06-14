@@ -18,7 +18,8 @@
         public int? MailTemplate_Id { get; set; }
         public int? ReminderDays { get; set; }
         public int RecalculateWatchDate { get; set; }
-
+        public Guid? StateSecondaryGUID { get; set; }
+        
         public virtual Customer Customer { get; set; }
         public virtual WorkingGroupEntity WorkingGroup { get; set; }
 

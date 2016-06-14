@@ -29,7 +29,8 @@
         public DateTime CreatedDate { get; set; }
         public int? StateSecondary_Id { get; set; }
         public int? SendExternalEmailToWGUsers { get; set; }
-
+        public Guid? WorkingGroupGUID { get; set; }
+        
         public virtual Customer Customer { get; set; }
         public virtual ICollection<BulletinBoard> BulletinBoards { get; set; }
         public virtual ICollection<Document> Documents { get; set; }

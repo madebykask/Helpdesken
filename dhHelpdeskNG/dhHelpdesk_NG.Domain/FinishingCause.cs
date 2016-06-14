@@ -15,7 +15,8 @@
         public string Name { get; set; }
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
-
+        public Guid? FinishingCauseGUID { get; set; }
+        
         public virtual Customer Customer { get; set; }
         public virtual FinishingCauseCategory FinishingCauseCategory { get; set; }
         public virtual FinishingCause ParentFinishingCause { get; set; }
