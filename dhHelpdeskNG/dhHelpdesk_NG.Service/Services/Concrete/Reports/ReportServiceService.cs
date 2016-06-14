@@ -93,7 +93,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
 
         public ReportData GetReportData(string reportIdentity, ReportSelectedFilter filters, int userId, int customerId)
         {
-            filters.SeletcedDepartments = EnsureDepartments(filters.SeletcedDepartments, userId, customerId);
+            filters.SeletcedDepartments = EnsureDepartments(filters.SeletcedDepartments, filters.SeletcedOUs, userId, customerId);
             filters.SelectedWorkingGroups = EnsureWorkingGroups(filters.SelectedWorkingGroups, userId, customerId);
 
             return _reportServiceRepository.GetReportData(reportIdentity, filters);
@@ -139,9 +139,9 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             return departments;
         }
 
-        private SelectedItems EnsureDepartments(SelectedItems departments, int userId, int customerId)
+        private SelectedItems EnsureDepartments(SelectedItems departments, SelectedItems ous, int userId, int customerId)
         {
-            if (departments.Any())
+            if (departments.Any() || ous.Any())
                 return departments;
             else
             {

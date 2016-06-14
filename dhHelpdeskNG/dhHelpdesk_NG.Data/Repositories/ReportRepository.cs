@@ -25,6 +25,7 @@ namespace DH.Helpdesk.Dal.Repositories
         List<ReportGeneratorFields> GetCaseList(
           int customerId,
           List<int> departmentIds,
+          List<int> ouIds,
           List<int> workingGroupIds,
           List<int> productAreaIds,
           List<int> administratorIds,
@@ -36,6 +37,7 @@ namespace DH.Helpdesk.Dal.Repositories
         Dictionary<DateTime, int> GetCaseAggregation(
             int customerId,
             List<int> departmentIds,
+            List<int> ouIds,
             List<int> workingGroupIds,
             List<int> productAreaIds,
             List<int> administratorIds,
@@ -55,6 +57,7 @@ namespace DH.Helpdesk.Dal.Repositories
         public List<ReportGeneratorFields> GetCaseList(
            int customerId,
            List<int> departmentIds,
+           List<int> ouIds,
            List<int> workingGroupIds,
            List<int> productAreaIds,
            List<int> administratorIds,
@@ -65,6 +68,7 @@ namespace DH.Helpdesk.Dal.Repositories
         {
             var query = GetQuery(customerId,
                 departmentIds,
+                ouIds,
                 workingGroupIds,
                 productAreaIds,
                 administratorIds,
@@ -79,6 +83,7 @@ namespace DH.Helpdesk.Dal.Repositories
         public Dictionary<DateTime, int> GetCaseAggregation(
            int customerId,
            List<int> departmentIds,
+           List<int> ouIds,
            List<int> workingGroupIds,
            List<int> productAreaIds,
            List<int> administratorIds,
@@ -182,9 +187,14 @@ namespace DH.Helpdesk.Dal.Repositories
                                                        : c.WorkingGroup_Id.HasValue && workingGroupIds.Contains(c.WorkingGroup_Id.Value))
                         : false)                    
                     &&
-                    (departmentIds.Any()
-                        ? c.Department_Id.HasValue && departmentIds.Contains(c.Department_Id.Value)
-                        : true)
+
+                     (departmentIds.Any()
+                        ? (ouIds.Any() ? (c.Department_Id.HasValue && departmentIds.Contains(c.Department_Id.Value)) ||
+                                         c.OU_Id.HasValue && ouIds.Contains(c.OU_Id.Value) :
+                                         c.Department_Id.HasValue && departmentIds.Contains(c.Department_Id.Value)
+                                         )
+                        : (ouIds.Any() ? c.OU_Id.HasValue && ouIds.Contains(c.OU_Id.Value) : true))
+                    
                     &&
                     (productAreaIds.Any()
                         ? c.ProductArea_Id.HasValue && productAreaIds.Contains(c.ProductArea_Id.Value)
@@ -210,6 +220,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         private IQueryable<ReportGeneratorFields> GetQuery(int customerId,
            List<int> departmentIds,
+           List<int> ouIds,
            List<int> workingGroupIds,
            List<int> productAreaIds,
            List<int> administratorIds,
@@ -303,9 +314,29 @@ namespace DH.Helpdesk.Dal.Repositories
                                                        : c.WorkingGroup_Id.HasValue && workingGroupIds.Contains(c.WorkingGroup_Id.Value))
                         : false)
                     &&
+                //    if (filters.SeletcedDepartments.Any())
+                //{
+                //    // Dep + OU
+                //    if (filters.SeletcedOUs.Any()) 
+                //        _whereStr += string.Format("AND (tblCase.Department_Id in ({0}) or tblCase.OU_Id in ({1})) ", 
+                //                                   filters.SeletcedDepartments.GetSelectedStr().SafeForSqlInject(),
+                //                                   filters.SeletcedOUs.GetSelectedStr().SafeForSqlInject());                        
+                //    else
+                //        _whereStr += string.Format("AND tblCase.Department_Id in ({0}) ", filters.SeletcedDepartments.GetSelectedStr().SafeForSqlInject());
+                //}
+                //else
+                //{
+                //    // OU only
+                //    if (filters.SeletcedOUs.Any())
+                //        _whereStr += string.Format("AND tblCase.OU_Id in ({0}) ", filters.SeletcedOUs.GetSelectedStr().SafeForSqlInject());                        
+                //}
+
                     (departmentIds.Any()
-                        ? c.Department_Id.HasValue && departmentIds.Contains(c.Department_Id.Value)
-                        : true)
+                        ? (ouIds.Any()? (c.Department_Id.HasValue && departmentIds.Contains(c.Department_Id.Value)) || 
+                                         c.OU_Id.HasValue && ouIds.Contains(c.OU_Id.Value):
+                                         c.Department_Id.HasValue && departmentIds.Contains(c.Department_Id.Value)
+                                         )
+                        : (ouIds.Any()? c.OU_Id.HasValue && ouIds.Contains(c.OU_Id.Value) : true))
                     &&
                     (productAreaIds.Any()
                         ? c.ProductArea_Id.HasValue && productAreaIds.Contains(c.ProductArea_Id.Value)

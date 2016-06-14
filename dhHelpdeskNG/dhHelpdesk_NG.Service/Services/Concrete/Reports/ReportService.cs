@@ -343,8 +343,9 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             int customerId,
             int userId,
             int languageId,
-            List<int> fieldIds,
+            List<int> fieldIds,            
             List<int> departmentIds,
+            List<int> ouIds,
             List<int> workingGroupIds,
             List<int> productAreaIds,
             List<int> administratorIds,
@@ -390,12 +391,13 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
                 var finishingCauses = finishingCauseRep.GetAll().GetByCustomer(customerId);
 
                 //Ensure filters
-                departmentIds = EnsureDepartments(departmentIds, userId, customerId);
+                departmentIds = EnsureDepartments(departmentIds,ouIds, userId, customerId);
                 workingGroupIds = EnsureWorkingGroups(workingGroupIds, userId, customerId);
                 
                 var caseData = _reportRepository.GetCaseList(
                                                customerId,
                                                departmentIds,
+                                               ouIds,
                                                workingGroupIds,
                                                productAreaChainIds,
                                                administratorIds,
@@ -417,6 +419,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             int languageId,
             List<int> fieldIds,
             List<int> departmentIds,
+            List<int> ouIds,
             List<int> workingGroupIds,
             List<int> productAreaIds,
             List<int> administratorIds,
@@ -443,12 +446,13 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
                 }
 
                 //Ensure filters
-                departmentIds = EnsureDepartments(departmentIds, userId, customerId);
+                departmentIds = EnsureDepartments(departmentIds, ouIds, userId, customerId);
                 workingGroupIds = EnsureWorkingGroups(workingGroupIds, userId, customerId);
 
                 var caseData = _reportRepository.GetCaseAggregation(
                                                 customerId,
                                                 departmentIds,
+                                                ouIds,
                                                 workingGroupIds,
                                                 productAreaChainIds,
                                                 administratorIds,
@@ -1569,9 +1573,9 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             }
         }
 
-        private List<int> EnsureDepartments(List<int> departments, int userId, int customerId)
+        private List<int> EnsureDepartments(List<int> departments,List<int> ous, int userId, int customerId)
         {            
-            if (departments.Any())
+            if (departments.Any() || ous.Any())
                 return departments;
             else
             {
