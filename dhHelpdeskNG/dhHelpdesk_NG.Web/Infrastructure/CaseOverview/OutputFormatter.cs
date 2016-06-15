@@ -7,28 +7,37 @@
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.Common.Enums.Cases;
     using Field = DH.Helpdesk.Domain.Field;
-
+    using System.Collections.Generic;    
     public class OutputFormatter
     {
-        public OutputFormatter(bool isLastFirstName)
+        /* fields showing in DateTime format */        
+        private static readonly IList<string> dateTimeFields = new List<string> { "ChangeTime", "RegTime" }.AsReadOnly();
+        public TimeZoneInfo CurrentTimeZone { get; private set; }
+
+        public OutputFormatter(bool isLastFirstName, TimeZoneInfo timeZone)
         {
             this.IsLastFirstName = isLastFirstName;
+            this.CurrentTimeZone = timeZone;
         }
 
         public bool IsLastFirstName { get; set; }
 
         public string FormatField(Field field)
         {
+            var isDateTime = false;
             switch (field.FieldType)
             {
                 case FieldTypes.Date:
                     if (field.DateTimeValue.HasValue)
                     {
-                        return this.FormatDate(field.DateTimeValue.Value);
+                        isDateTime = dateTimeFields.Contains(field.Key);                
+                        return this.FormatDate(field.DateTimeValue.Value, isDateTime);
                     }
                     break;
                 case FieldTypes.Time:
-                    return this.FormatNullableDate(field.DateTimeValue);
+                    isDateTime = dateTimeFields.Contains(field.Key);                
+                    return this.FormatNullableDate(field.DateTimeValue, isDateTime);
+
                 case FieldTypes.NullableHours:
                     return string.IsNullOrEmpty(field.StringValue) ? " - " : string.Format("{0} h", field.StringValue);
                 default:
@@ -52,16 +61,24 @@
             return string.Empty;
         }
 
-        public string FormatDate(DateTime input)
+        public string FormatDate(DateTime input, bool isDateTime = false)
         {
-            return input.ToLocalTime().ToString("yyyy-MM-dd", Thread.CurrentThread.CurrentUICulture);
+            if (isDateTime)
+            {
+                var localTime = TimeZoneInfo.ConvertTimeFromUtc(input, this.CurrentTimeZone);
+                return localTime.ToString("yyyy-MM-dd HH:mm:ss", Thread.CurrentThread.CurrentUICulture);
+            }
+            else
+            {
+                return  input.ToLocalTime().ToString("yyyy-MM-dd", Thread.CurrentThread.CurrentUICulture);                                
+            }
         }
 
-        public string FormatNullableDate(DateTime? input)
+        public string FormatNullableDate(DateTime? input, bool isDateTime = false)
         {
             if (input.HasValue)
             {
-                return this.FormatDate(input.Value);
+                return this.FormatDate(input.Value, isDateTime);
             }
 
             return string.Empty;

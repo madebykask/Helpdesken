@@ -547,7 +547,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var data = new List<Dictionary<string, object>>();
             var customerSettings = this._settingService.GetCustomerSetting(f.CustomerId);
-            var outputFormatter = new OutputFormatter(customerSettings.IsUserFirstLastNameRepresentation == 1);
+            var outputFormatter = new OutputFormatter(customerSettings.IsUserFirstLastNameRepresentation == 1, userTimeZone);
             foreach (var searchRow in m.cases)
             {
                 var jsRow = new Dictionary<string, object>
@@ -888,9 +888,9 @@ namespace DH.Helpdesk.Web.Controllers
             SessionFacade.CurrentCaseSearch = sm;
             #endregion
 
-            var customerSettings = this._settingService.GetCustomerSetting(f.CustomerId);
-            
-            var outputFormatter = new OutputFormatter(customerSettings.IsUserFirstLastNameRepresentation == 1);
+            var customerSettings = this._settingService.GetCustomerSetting(f.CustomerId);            
+
+            var outputFormatter = new OutputFormatter(customerSettings.IsUserFirstLastNameRepresentation == 1, userTimeZone);
             var data = new List<Dictionary<string, object>>();
             foreach (var searchRow in m.cases)
             {                
@@ -1353,6 +1353,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var cu = this._customerUserService.GetCustomerSettings(customerId, userId);
                 var cs = this._settingService.GetCustomerSetting(customerId);
                 var customer = this._customerService.GetCustomer(customerId);
+                var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
 
                 if (cu != null)
                 {
@@ -1373,7 +1374,7 @@ namespace DH.Helpdesk.Web.Controllers
                     const bool isAddEmpty = true;
                     var responsibleUsersAvailable = this._userService.GetAvailablePerformersOrUserId(customerId, m.case_.CaseResponsibleUser_Id);
                     var customerSettings = this._settingService.GetCustomerSetting(customerId);
-                    m.OutFormatter = new OutputFormatter(customerSettings.IsUserFirstLastNameRepresentation == 1);
+                    m.OutFormatter = new OutputFormatter(customerSettings.IsUserFirstLastNameRepresentation == 1, userTimeZone);
                     m.ResponsibleUsersAvailable = responsibleUsersAvailable.MapToSelectList(customerSettings, isAddEmpty);
                     m.SendToDialogModel = this.CreateNewSendToDialogModel(customerId, responsibleUsersAvailable.ToList(), cs);
                     m.CaseLog.SendMailAboutCaseToNotifier = false;
@@ -3625,10 +3626,12 @@ namespace DH.Helpdesk.Web.Controllers
                 throw new ArgumentException(string.Format("No customer settings for this customer '{0}' and user '{1}'", customerId, userId));
             }
 
+            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
+
             var case_ = m.case_;
             var customer = this._customerService.GetCustomer(customerId);
             var customerSetting = this._settingService.GetCustomerSetting(customerId);
-            var outputFormatter = new OutputFormatter(customerSetting.IsUserFirstLastNameRepresentation == 1);
+            var outputFormatter = new OutputFormatter(customerSetting.IsUserFirstLastNameRepresentation == 1, userTimeZone);
             m.OutFormatter = outputFormatter;
             m.customerUserSetting = customerUserSetting;
             m.caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customerId);
@@ -3729,6 +3732,8 @@ namespace DH.Helpdesk.Web.Controllers
 
                 #endregion
             }
+
+            
 
             m.CaseMailSetting = new CaseMailSetting(
                 customer.NewCaseEmailList,
@@ -4179,7 +4184,7 @@ namespace DH.Helpdesk.Web.Controllers
                 m.DynamicCase.FormPath = m.DynamicCase.FormPath.Replace(@"\", @"\\"); //this is because users with backslash in name will have issues with container.js
             }
 
-            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
+            
             if (case_ != null)
             {
                 m.MapCaseToCaseInputViewModel(case_, userTimeZone);
