@@ -1,4 +1,4 @@
-if (window.dhHelpdesk == null)
+ï»¿if (window.dhHelpdesk == null)
     dhHelpdesk = {};
 
 $(function () {
@@ -858,7 +858,7 @@ $(function () {
         },
 
         ShowAlreadyInvoicedMessage: function () {
-            dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("Den här ordern är redan skickat. Du kan inte utföra den här aktiviteten."));
+            dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("Den hÃ¤r ordern Ã¤r redan skickat. Du kan inte utfÃ¶ra den hÃ¤r aktiviteten."));
         },
 
         CreateBlankOrder: function () {
@@ -998,22 +998,22 @@ $(function () {
                                 }
                             }
                             else
-                                dhHelpdesk.Common.ShowErrorMessage(order.Caption + " kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ordern." + orderValidation.Message);
+                                dhHelpdesk.Common.ShowErrorMessage(order.Caption + " kunde inte sparas dÃ¥ det saknas data i ett eller flera obligatoriska fÃ¤lt. Var vÃ¤nlig kontrollera i ordern." + orderValidation.Message);
                         }
                         else {
                             th.ShowAlreadyInvoicedMessage();
                         }
                     }
                     else {
-                        dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("Du måste spara ärendet en gång innan du kan skicka") + ".");
+                        dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("Du mÃ¥ste spara Ã¤rendet en gÃ¥ng innan du kan skicka") + ".");
                     }
                 }
                 else {
                     var _message = "";
                     if (data != null)
                         _message = "- " + data.LastMessage;
-                    dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("Det saknas inställningar för fakturering") + ". " +
-                                        dhHelpdesk.Common.Translate("Var god kontakta systemadministratör") + "." + "<br/>" + _message);
+                    dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("Det saknas instÃ¤llningar fÃ¶r fakturering") + ". " +
+                                        dhHelpdesk.Common.Translate("Var god kontakta systemadministratÃ¶r") + "." + "<br/>" + _message);
                 }
             });
         },
@@ -1526,7 +1526,7 @@ $(function () {
             var projectCode = "-";
             if ($('#case__Project_Id') != undefined && $('#case__Project_Id') != null) {
                 var projectName = $('#case__Project_Id option:selected').text();
-                if (projectName != " ")
+                if (projectName != "Â ")
                     if (projectName != undefined && !dhHelpdesk.Common.IsNullOrEmpty(projectName)) {
                         var splited = projectName.split(' ');
                         if (splited.length > 0)
@@ -1540,7 +1540,7 @@ $(function () {
 
             th._container.dialog({
                 title: dhHelpdesk.Common.Translate("Order") + "  (" +
-                       dhHelpdesk.Common.Translate("Ärende") + " " + caseNumber + " / " +
+                       dhHelpdesk.Common.Translate("Ã„rende") + " " + caseNumber + " / " +
                        dhHelpdesk.Common.Translate("Projekt") + " " + projectCode + ")",
                 modal: true,
                 width: 1100,
@@ -1586,7 +1586,7 @@ $(function () {
                         }
                     },
                     {
-                        text: dhHelpdesk.Common.Translate("Spara och stäng"),
+                        text: dhHelpdesk.Common.Translate("Spara och stÃ¤ng"),
                         'class': 'btn save-close-invoice',
                         click: function () {
                             dhHelpdesk.CaseArticles.SetInvoiceState(_INVOICE_SAVING);
@@ -1821,7 +1821,7 @@ $(function () {
             articlesEl.chosen({
                 width: "500px",
                 height: "100px",
-                placeholder_text_single: dhHelpdesk.Common.Translate("Välj artikel"),
+                placeholder_text_single: dhHelpdesk.Common.Translate("VÃ¤lj artikel"),
                 'no_results_text': '?',
             })
             .change(function () {
@@ -1980,7 +1980,7 @@ $(function () {
                 sortedOrders.push(originalOrders[i]);
                 var creditOrders = this.GetCreditOrdersFor(allOrders, originalOrders[i].Id);
                 for (var j = 0; j < creditOrders.length; j++) {
-                    creditOrders[j].Caption = dhHelpdesk.Common.Translate("Kredit") + " " + (j + 1) + " " + dhHelpdesk.Common.Translate("för") + " " + originalOrders[i].Caption;
+                    creditOrders[j].Caption = dhHelpdesk.Common.Translate("Kredit") + " " + (j + 1) + " " + dhHelpdesk.Common.Translate("fÃ¶r") + " " + originalOrders[i].Caption;
                     sortedOrders.push(creditOrders[j]);
                 }
             }
@@ -2169,7 +2169,7 @@ $(function () {
                         var credits = dhHelpdesk.CaseArticles.GetCreditOrdersFor(dhHelpdesk.CaseArticles.allVailableOrders, sourceOrder.Id);
                         if (sourceOrder != null)
                             order.Caption = dhHelpdesk.Common.Translate("Kredit") + " " + (credits.length + 1) + " " +
-                                            dhHelpdesk.Common.Translate("för") + " " + sourceOrder.Caption;
+                                            dhHelpdesk.Common.Translate("fÃ¶r") + " " + sourceOrder.Caption;
                     }
                     if (order.Id < 0) {
                         dhHelpdesk.CaseArticles.allVailableOrders.push(order);
@@ -2397,7 +2397,7 @@ $(function () {
                     var order = orders[i];
                     var orderValidate = order.Validate();
                     if (!orderValidate.IsValid) {
-                        dhHelpdesk.Common.ShowErrorMessage(order.Caption + " kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ordern." + orderValidate.Message);
+                        dhHelpdesk.Common.ShowErrorMessage(order.Caption + " kunde inte sparas dÃ¥ det saknas data i ett eller flera obligatoriska fÃ¤lt. Var vÃ¤nlig kontrollera i ordern." + orderValidate.Message);
                         return false;
                     }
                 }
@@ -2967,6 +2967,9 @@ $(function () {
 
             this.Validate = function () {
                 var ret = { IsValid: true, Message: "" };
+                if (this.OrderState == dhHelpdesk.CaseArticles.OrderStates.Sent) {
+                    return ret;
+                }
                 var articles = this.GetArticles();
                 for (var i = 0; i < articles.length; i++) {
                     var article = articles[i];
@@ -2982,7 +2985,7 @@ $(function () {
             this.InvoiceValidate = function () {
                 var isValid = true;
                 if (this._articles != null && this._articles.length > 0 && dhHelpdesk.Common.IsNullOrEmpty(this.CostCentre)) {
-                    dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("Kostnadställe saknas!") + " " + this.Caption);
+                    dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("KostnadstÃ¤lle saknas!") + " " + this.Caption);
                     isValid = false;
                 }
                 return isValid;
@@ -3053,7 +3056,7 @@ $(function () {
                     });
                     d.dialog("open");
                 } else {
-                    dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("Det finns inga filer att lägga till") + ". " + dhHelpdesk.Common.Translate("Endast PDF-filer som är bifogade på ärendet går att bifoga."));
+                    dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("Det finns inga filer att lÃ¤gga till") + ". " + dhHelpdesk.Common.Translate("Endast PDF-filer som Ã¤r bifogade pÃ¥ Ã¤rendet gÃ¥r att bifoga."));
                 }
             }
         },
@@ -3411,9 +3414,9 @@ $(function () {
             this.UnitsHeader = dhHelpdesk.Common.Translate("Enheter");
             this.UnitsPriceHeader = dhHelpdesk.Common.Translate("PPE SEK");
             this.DefaultAmount = dhHelpdesk.CaseArticles.DefaultAmount;
-            this.AddButtonLabel = dhHelpdesk.Common.Translate("Lägg till");
+            this.AddButtonLabel = dhHelpdesk.Common.Translate("LÃ¤gg till");
             this.OrderTitle = dhHelpdesk.Common.Translate("Order");
-            this.SummaryTitle = dhHelpdesk.Common.Translate("Översikt");
+            this.SummaryTitle = dhHelpdesk.Common.Translate("Ã–versikt");
             this.TotalLabel = dhHelpdesk.Common.Translate("Total");
             this.TotalAllLabel = dhHelpdesk.Common.Translate("Alla Totalt");
             this.TotalInvoicedLabel = dhHelpdesk.Common.Translate("Skickat Totalt");
@@ -3510,7 +3513,7 @@ $(function () {
             this.CreditOrderId = "";
 
             this.attachedFilesTitle = dhHelpdesk.Common.Translate("Bifogade Filer");
-            this.attachFilesTitle = dhHelpdesk.Common.Translate("Lägg till");
+            this.attachFilesTitle = dhHelpdesk.Common.Translate("LÃ¤gg till");
             this.doInvoiceTitle = dhHelpdesk.Common.Translate("Skicka");
             this.doCreditTitle = dhHelpdesk.Common.Translate("Kreditera");
             this.doDeleteTitle = dhHelpdesk.Common.Translate("Ta bort");
@@ -3572,7 +3575,7 @@ $(function () {
 
             var caseId = spec.caseId || '';
             var files = spec.files || [];
-            var title = spec.title || dhHelpdesk.Common.Translate("Ärendefiler");
+            var title = spec.title || dhHelpdesk.Common.Translate("Ã„rendefiler");
 
             var getCaseId = function () {
                 return caseId;
@@ -3758,7 +3761,7 @@ $(function () {
                 return files;
             };
 
-            var getFile = function (fileName) { //this has a problem if there is a weird filename, example "Ä(4).pdf" todo: fix this
+            var getFile = function (fileName) { //this has a problem if there is a weird filename, example "Ã„(4).pdf" todo: fix this
                 var fs = getFiles();
                 for (var i = 0; i < fs.length; i++) {
                     var f = fs[i];
