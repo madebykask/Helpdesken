@@ -115,12 +115,12 @@
                                             <img src="@Url.Content("~/Content/icons/reports.png")" />
                                             @Translation.Get("Rapporter")</a></li>                                    
                                     }
-                                    @*@if(model.IsDailyReportVisible())
+                                    @if(model.IsDailyReportVisible())
                                     {    
                                         <li><a href="@Url.Action("index", "dailyreport", new { area = "" })">
                                             <img src="@Url.Content("~/Content/icons/dailyreport.png")" />
                                             @Translation.Get("Dagrapport")</a></li>
-                                    }*@
+                                    }
                                     @if(model.IsOperationLogVisible())
                                     {    
                                         <li><a href="@Url.Action("index", "operationlog", new { area = "" })">
@@ -190,7 +190,7 @@
                                     <i class="icon-chevron-down icon-white"></i>
                                 </a>
                                 <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
-                                    @if(model.IsOrderVisible())
+                                   @* @if(model.IsOrderVisible())
                                     {    
                                         <li><a href="@Url.Action("Index", "Orders", new { area = "Orders" })">
                                             <img src="@Url.Content("~/Content/icons/order.png")" />
@@ -201,7 +201,7 @@
                                         <li><a href="@Url.Action("Index", "Orders", new { area = "OrderAccounts" })">
                                             <img src="@Url.Content("~/Content/icons/orderaccount.png")" />
                                             @Translation.Get("Beställning kontobehörighet")</a></li>
-                                    }
+                                    }*@
 
                                     @if(model.IsCheckListVisuble())
                                     {    

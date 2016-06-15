@@ -16,6 +16,7 @@
             this.Property(x => x.Name).IsRequired().HasMaxLength(50).HasColumnName("FinishingCauseCategory");
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            this.Property(x => x.FinishingCauseCategoryGUID).IsOptional();
 
             this.ToTable("tblfinishingcausecategory");
         }

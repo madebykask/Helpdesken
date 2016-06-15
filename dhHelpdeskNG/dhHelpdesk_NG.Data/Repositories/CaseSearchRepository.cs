@@ -965,7 +965,10 @@
 
                 //CoWorkers Cases Only
                 case CaseListTypes.CoWorkerCases:
-                    sb.Append(" and (((tblCase.[ReportedBy] is null or tblCase.[ReportedBy] = '') and tblCase.[RegUserId] = '" + userUserId + "') or tblCase.[ReportedBy] in (" + f.ReportedBy + "))");
+                    if (string.IsNullOrEmpty(f.ReportedBy.Replace(" ", "").Replace("'", "")))
+                        sb.Append(" and (tblCase.[RegUserId] = '" + userUserId + "')");
+                    else
+                        sb.Append(" and (((tblCase.[ReportedBy] is null or tblCase.[ReportedBy] = '') and tblCase.[RegUserId] = '" + userUserId + "') or tblCase.[ReportedBy] in (" + f.ReportedBy + "))");                        
                     break;
 
                 //Manager & Coworkers Cases

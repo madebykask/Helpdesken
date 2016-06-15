@@ -893,8 +893,8 @@
 
             //Get CaseFieldSettings to copy
             var caseFieldSettingsToCopy = this._caseFieldSettingService.GetCaseFieldSettings(customerToCopy.Id);
-            
 
+            var curTime = DateTime.Now;
             foreach (var cfs in caseFieldSettingsToCopy)
             {
                 var newCustomerCaseFieldSettings = new CaseFieldSetting() { };
@@ -907,7 +907,7 @@
                 newCustomerCaseFieldSettings.FieldSize = cfs.FieldSize;
                 newCustomerCaseFieldSettings.ListEdit = cfs.ListEdit;
                 newCustomerCaseFieldSettings.EMailIdentifier = cfs.EMailIdentifier;
-
+                newCustomerCaseFieldSettings.ChangedDate = curTime; 
                 
                 this._customerService.SaveCaseFieldSettingsForCustomerCopy(newCustomerToSave.Id, newCustomerToSave.Language_Id, newCustomerCaseFieldSettings, out errors);
             }
@@ -941,10 +941,7 @@
                         }
 
                     }
-
-                }
-
-                
+                }                
             }
 
 

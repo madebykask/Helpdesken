@@ -21,6 +21,7 @@
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             this.Property(x => x.SearchKey).IsOptional();
             this.Property(x => x.Code).IsOptional().HasMaxLength(20);
+            this.Property(x => x.RegionGUID).IsOptional();
 
             this.ToTable("tblregion");
         }

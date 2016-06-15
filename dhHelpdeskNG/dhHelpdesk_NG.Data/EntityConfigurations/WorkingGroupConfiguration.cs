@@ -47,6 +47,7 @@
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             this.Property(x => x.StateSecondary_Id).IsOptional();
             this.Property(x => x.SendExternalEmailToWGUsers).IsOptional();
+            this.Property(x => x.WorkingGroupGUID).IsOptional();
 
             this.ToTable("tblworkinggroup");
         }
