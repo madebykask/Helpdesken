@@ -513,8 +513,14 @@
 
             errors = new Dictionary<string, string>();
 
-            var userEMail = user.Email.TrimStart().TrimEnd();
-            if (userEMail.Contains(' ') || !EmailHelper.IsValid(userEMail))
+            var userEMail = "";
+            if (user.Email != null)
+            {
+                userEMail = user.Email.TrimStart().TrimEnd();
+                if (userEMail.Contains(' ') || !EmailHelper.IsValid(userEMail))
+                    errors.Add("User.Email", "E-postadress är inte giltig.");
+            }
+            else
                 errors.Add("User.Email", "E-postadress är inte giltig.");
 
             user.Email = userEMail;
@@ -719,10 +725,16 @@
                 errors.Add("User.UserID", "Det här användarnamnet är upptaget. Var vänlig använd något annat.");
             }
 
-            var userEMail = user.Email.TrimStart().TrimEnd();
-            if (userEMail.Contains(' ') || !EmailHelper.IsValid(userEMail))
+            var userEMail = "";
+            if (user.Email != null)
+            {
+                userEMail = user.Email.TrimStart().TrimEnd();
+                if (userEMail.Contains(' ') || !EmailHelper.IsValid(userEMail))
+                    errors.Add("User.Email", "E-postadress är inte giltig.");
+            }
+            else
                 errors.Add("User.Email", "E-postadress är inte giltig.");
-
+            
             var curTime = DateTime.Now;
 
             user.Email = userEMail;
