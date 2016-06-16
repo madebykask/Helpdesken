@@ -19,9 +19,7 @@ $(function () {
 
     var AllTranslations = [];
 
-    var CaseFieldSettings = [];
-
-    var CurrentLanguageId = 1; //defaultlang - swedish    
+    var CaseFieldSettings = [];    
 
     var caseButtonsToDisable = $('.btn.save, .btn.save-close, .btn.save-new, .btn.caseDeleteDialog, ' +
                                  '#case-action-close, #divActionMenu, #btnActionMenu, #divCaseTemplate, #btnCaseTemplateTree, .btn.print-case,' +
@@ -325,23 +323,18 @@ $(function () {
         },
 
         Translate: function (text) {
-            return text;
-            //var AllTranslationsLength = AllTranslations.length;
-            //for (var i = 0; i < AllTranslationsLength; i++) {
-            //    if (AllTranslations[i].TextToTranslate.toLowerCase() === text.toLowerCase()) {
-            //        var AllTranslationsTranslationsLength = AllTranslations[i].Translations.length;
-            //        //for (var j = 0; j <= AllTranslationsTranslationsLength; j++) {
-            //        //    if (AllTranslations[i].Translations[j].Language_Id)
-            //        //    {
-            //        //        if (AllTranslations[i].Translations[j].Language_Id == CurrentLanguageId) { //language_id is sometimes undefined...?? bug. todo fix
-            //        //            return AllTranslations[i].Translations[j].TranslationName;
-            //        //        }
-            //        //    }
-            //        //}
-            //    }
-            //}
+            if (AllTranslations == undefined || AllTranslations == null || AllTranslations.length == 0)
+                return text;
+            
+            for (var tr = 0; tr < AllTranslations.length; tr++) {
+                if (AllTranslations[tr].Key == text)
+                    if (AllTranslations[tr].Value != null)
+                        return AllTranslations[tr].Value;
+                    else
+                        return text;
+            }
 
-            //return text;
+            return text;
         },
 
         TranslateCaseFields: function (text) {
@@ -814,7 +807,7 @@ $(function () {
                         loadAllData(callBack, that);
                     }
                     else {
-                        dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("An error has occurred during save Invoice! <br/> " + returnedData.data));
+                        dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("An error has occurred during save Invoice!") + " <br/>" + returnedData.data);
                         callBack(that);
                     }
                 }
@@ -998,7 +991,7 @@ $(function () {
                                 }
                             }
                             else
-                                dhHelpdesk.Common.ShowErrorMessage(order.Caption + " kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ordern." + orderValidation.Message);
+                                dhHelpdesk.Common.ShowErrorMessage(order.Caption + + " " + dhHelpdesk.Common.Translate("kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ordern.") + orderValidation.Message);
                         }
                         else {
                             th.ShowAlreadyInvoicedMessage();
@@ -1766,7 +1759,7 @@ $(function () {
             var articlesEl = invoice._container.find(".articles-params-article");
             var articleId = articlesEl.val();
             if (articleId != 0) {
-                dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("You've selected an atricle but it's not added to the list yet!"));
+                dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("You've selected an article but it's not added to the list yet!"));
                 return false;
             }
             for (var i = 0; i < this.allVailableOrders.length; i++) {
@@ -2397,7 +2390,7 @@ $(function () {
                     var order = orders[i];
                     var orderValidate = order.Validate();
                     if (!orderValidate.IsValid) {
-                        dhHelpdesk.Common.ShowErrorMessage(order.Caption + " kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ordern." + orderValidate.Message);
+                        dhHelpdesk.Common.ShowErrorMessage(order.Caption + " " + dhHelpdesk.Common.Translate("kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ordern.") + orderValidate.Message);
                         return false;
                     }
                 }
@@ -3322,9 +3315,9 @@ $(function () {
                             if (ret.Message != "")
                                 ret.Message += " ,";
                             if (eName.attr("Id").indexOf("Description_") == 0)
-                                ret.Message += "Beskrivning";
+                                ret.Message += dhHelpdesk.Common.Translate("Beskrivning");
                             else
-                                ret.Message += "Namn";
+                                ret.Message += dhHelpdesk.Common.Translate("Namn");
                             ret.IsValid = false;
                         } else {
                             dhHelpdesk.Common.MakeValid(eName);
@@ -3342,7 +3335,7 @@ $(function () {
                         dhHelpdesk.Common.MakeInvalid(eAmount);
                         if (ret.Message != "")
                             ret.Message += " ,";
-                        ret.Message += "Enheter";
+                        ret.Message += dhHelpdesk.Common.Translate("Enheter");
                         ret.IsValid = false;
                     } else {
                         dhHelpdesk.Common.MakeValid(eAmount);
@@ -3367,7 +3360,7 @@ $(function () {
                         dhHelpdesk.Common.MarkTextInvalid(eArticleRow);
                         if (ret.Message != "")
                             ret.Message += " ,";
-                        ret.Message += "Textrad";
+                        ret.Message += dhHelpdesk.Common.Translate("Textrad");
                     }
                     else {
                         dhHelpdesk.Common.MarkTextValid(eArticleRow);
@@ -3857,9 +3850,9 @@ $(function () {
                 sentCount = invoicedOrders.length;
 
             if (ordersCount > 0) {
-                $('#InvoiceModuleBtnOpen').val(dhHelpdesk.CaseArticles.invoiceButtonPureCaption + " (" + (sentCount) + "/" + (ordersCount) + ")");
-                var buttonHint = dhHelpdesk.Common.Translate("Skickat") + " " + sentCount + "\n" +
-                                 dhHelpdesk.Common.Translate("Order") + "   " + ordersCount;
+                $('#InvoiceModuleBtnOpen').val(dhHelpdesk.CaseArticles.invoiceButtonPureCaption + " (" + (ordersCount) + "/" + (sentCount) + ")");
+                var buttonHint = dhHelpdesk.Common.Translate("Order") + "   " + ordersCount + "\n" +
+                                 dhHelpdesk.Common.Translate("Skickat") + " " + sentCount;
 
                 $('#InvoiceModuleBtnOpen').attr("title", buttonHint);
             } else {
@@ -3945,13 +3938,11 @@ $(function () {
     };
 
     var loadTranslationList = function () {
-        $.getJSON("/Translation/CurrentLanguageId", function (data) {
-            CurrentLanguageId = data;
-        });
-
-        return $.getJSON("/Translation/GetAllCoreTextTranslations", function (data) {
-            AllTranslations = data;
-        });
+        return $.get('/Translation/GetAllTextTranslations', {
+            curTime: Date.now
+        }, function (returnedData) {
+            AllTranslations = returnedData            
+        });        
     };
 
     var loadCaseFieldTranslations = function () {
@@ -4015,9 +4006,9 @@ $(function () {
     };
 
     var loadAllData = function (callBack, obj) {
-        loadTranslationList()
-            .then(loadOrganizationData)
+        loadTranslationList()            
             .then(loadCaseFieldTranslations)
+            .then(loadOrganizationData)
             .then(loadCaseFieldSettings)
             .then(loadCaseInvoiceTemplate)
             .then(loadCaseInvoiceOrderTemplate)
@@ -4196,6 +4187,6 @@ $(function () {
                 });
             });
     };
-
+    
     loadAllData();
 });

@@ -248,7 +248,7 @@
         }
 
         [HttpGet]
-        public JsonResult IsThereNotInvoicedOrder(int caseId)
+        public JsonResult IsThereNotSentOrder(int caseId)
         {
             var res = false;
 

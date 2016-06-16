@@ -349,7 +349,7 @@ function LoadTemplate(id) {
         caseInvoiceIsActive = $('#CustomerSettings_ModuleCaseInvoice').val().toLowerCase() == 'true';
 
     if (caseInvoiceIsActive) {
-        $.get('/Invoice/IsThereNotInvoicedOrder/', { caseId: curCaseId, myTime: Date.now }, function (res) {
+        $.get('/Invoice/IsThereNotSentOrder/', { caseId: curCaseId, myTime: Date.now }, function (res) {
             if (res != null && res) {
                 ShowToastMessage('You cannot use case template while you have any order which is not invoiced yet!', 'warning', false);
             }

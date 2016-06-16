@@ -19,12 +19,12 @@
         {{for Articles tmpl="caseInvoiceArticleOverview" /}}
         
         <tr>
-           <td colspan="8">{{:ReferenceTitle}} {{:Persons_Name}} - {{:CostCentre}}</td>
+           <td colspan="8"><span class="textbold">{{:ReferenceTitle}}</span> {{:Persons_Name}} - {{:CostCentre}}</td>
         </tr>
         
         <tr>
             {{if IsInvoiced}}
-                <td colspan="6" style='text-align: left;'><span>{{:InvoicedByTitle}} {{:InvoicedByUser}} - {{:InvoiceDate}}</span>  {{:InvoiceTime}}</td>
+                <td colspan="6" style='text-align: left;'><span class="textbold">{{:InvoicedByTitle}}</span><span> {{:InvoicedByUser}} - {{:InvoiceDate}}</span>  {{:InvoiceTime}}</td>
                  {{if IsCredited }}
                     <td colspan="2" style='text-align: right;'><span class='textbold'>{{:TotalLabel}} SEK</span> -{{:Total}}</td>                
                  {{else}}
