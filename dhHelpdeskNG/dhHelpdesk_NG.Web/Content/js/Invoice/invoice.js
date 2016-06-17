@@ -2642,6 +2642,14 @@ $(function () {
             this.DoInvoice = function () {
                 var btnSave = $(".btn.save-invoice");
                 //pass order_id to generate xml for order
+
+                var articlesEl = $(document).find(".articles-params-article");
+                var articleId = articlesEl.val();
+                if (articleId != 0) {
+                    dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("Du har valt en artikel, men inte lagt till den än!"));
+                    return false;
+                }
+
                 if (this._articles.length > 0) {
                     btnSave.attr("data-doInvoiceOrder", this.Id);
                     btnSave.click();
@@ -3049,7 +3057,7 @@ $(function () {
                     });
                     d.dialog("open");
                 } else {
-                    dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("Det finns inga filer att lägga till.") + ". " + dhHelpdesk.Common.Translate("Endast PDF-filer som är bifogade på ärendet går att bifoga."));
+                    dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("Det finns inga filer att lägga till.") + " " + dhHelpdesk.Common.Translate("Endast PDF-filer som är bifogade på ärendet går att bifoga."));
                 }
             }
         },
