@@ -351,7 +351,8 @@ function LoadTemplate(id) {
     if (caseInvoiceIsActive) {
         $.get('/Invoice/IsThereNotSentOrder/', { caseId: curCaseId, myTime: Date.now }, function (res) {
             if (res != null && res) {
-                ShowToastMessage('You cannot use case template while you have any order which is not invoiced yet!', 'warning', false);
+                var mes = window.parameters.caseTemplateChangeMessage || '';
+                ShowToastMessage(mes, 'warning', false);                
             }
             else {
                 GetTemplateData(id)

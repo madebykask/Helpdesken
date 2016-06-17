@@ -689,7 +689,8 @@ function CaseInitForm() {
         if (caseInvoiceIsActive) {
             $.get('/Invoice/IsThereNotSentOrder/', { caseId: curCaseId, myTime: Date.now }, function (res) {
                 if (res != null && res) {
-                    ShowToastMessage('ProductArea cannot be changed while you have any order which is not invoiced yet!', 'warning', false);
+                    var mes = window.parameters.productAreaChangeMessage || '';
+                    ShowToastMessage(mes, 'warning', false);
                 }
                 else
                 {

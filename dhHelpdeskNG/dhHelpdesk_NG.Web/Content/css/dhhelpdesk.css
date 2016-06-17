@@ -42,6 +42,10 @@ a, a:hover, a:focus {
     font-weight: bold;
 }
 
+.textnormal {
+    font-weight: normal;
+}
+
 .textred {
     color: red !important;
 }

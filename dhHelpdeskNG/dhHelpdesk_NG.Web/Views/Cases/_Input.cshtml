@@ -34,6 +34,11 @@
         lostChangesConfirmation: '@Html.Raw(Translation.Get("Dina ändringar har inte sparats. Fortsätt?"))',
         finishingDateMessage: '@Html.Raw(Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) + " " + Translation.Get("kan inte vara tidigare än registreringsdatum."))',
         checkInactiveDataErrorMessage: '@Html.Raw(Translation.Get("Problem med kommunikation med servern."))',
+        productAreaChangeMessage: '@Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), 
+                                                    Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)' + " " + 
+                                  '@Translation.Get("kan inte ändra eftersom det finns order som inte är skickade.")', 
+        caseTemplateChangeMessage: '@Translation.Get("Du kan inte använda ärendemall eftersom det finns order som inte är skickade.")', 
+         
         caseRegDate: '@Model.case_.RegTime',      
         caseFieldNames:{
             CustomerId: "case__Customer_Id",
@@ -963,7 +968,7 @@
                                     </tr>
                                     <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ProductArea_Id, CaseSolutionFields.ProductArea)">
                                         <td>
-                                            @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ProductArea_Id, "Produktområde")
+                                            <span id="ProductAreaFieldCaption"> @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ProductArea_Id, "Produktområde") </span>
                                         </td>
                                         <td colspan="2">
                                             <div id="divProductArea" class="btn-group DynamicDropDown">

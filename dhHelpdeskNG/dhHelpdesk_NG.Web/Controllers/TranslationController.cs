@@ -67,12 +67,9 @@ namespace DH.Helpdesk.Web.Controllers
         }
        
         public JsonResult GetAllTextTranslations()
-        {           
-            var texts = GetTextsToJSTranslation();
+        {                       
             var ret = new List<KeyValuePair<string, string>>();
-            foreach (var text in texts)
-                ret.Add(new KeyValuePair<string, string>(text, Translation.GetCoreTextTranslation(text)));
-
+            ret = Translation.GetTranslationsForJS();            
             return this.Json(ret, JsonRequestBehavior.AllowGet);            
         }
 
@@ -107,24 +104,6 @@ namespace DH.Helpdesk.Web.Controllers
             var currentLanguageId = SessionFacade.CurrentLanguageId;
             return Json(currentLanguageId, JsonRequestBehavior.AllowGet);
         }
-
-        
-        private List<string> GetTextsToJSTranslation()
-        {
-            /* Note: Should be carefull to add to this list 
-             *       As it will pass by json, if it be to much, system can't send it. 
-             *       (MaxJsonLength)
-             */
-            var ret = new List<string> 
-                        {
-                            "Avbryt",
-                            "Order",
-                            "Projekt",                                                        
-                            "Spara",
-                            "Spara och stäng",
-                            "Ärende"                            
-                        };
-            return ret;
-        }
+               
     }
 }

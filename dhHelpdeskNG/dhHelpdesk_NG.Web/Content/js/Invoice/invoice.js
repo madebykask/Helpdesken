@@ -327,7 +327,7 @@ $(function () {
                 return text;
             
             for (var tr = 0; tr < AllTranslations.length; tr++) {
-                if (AllTranslations[tr].Key == text)
+                if (AllTranslations[tr].Key.toLowerCase() == text.toLowerCase())
                     if (AllTranslations[tr].Value != null)
                         return AllTranslations[tr].Value;
                     else
@@ -807,7 +807,7 @@ $(function () {
                         loadAllData(callBack, that);
                     }
                     else {
-                        dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("An error has occurred during save Invoice!") + " <br/>" + returnedData.data);
+                        dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("Ett fel har uppstått vid spara Order") + " <br/>" + returnedData.data);
                         callBack(that);
                     }
                 }
@@ -894,14 +894,14 @@ $(function () {
                 if (curInvoice._orders != null && curInvoice._orders.length > 0) {
                     for (i = 0; i < curInvoice._orders.length; i++)
                         if (curInvoice._orders[i].Id < 0) {
-                            dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("New order already added") + " - " + curInvoice._orders[i].Caption);
+                            dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("Ny order är redan skapad") + " - " + curInvoice._orders[i].Caption);
                             return false;
                         }
                 }
                 return true;
             }
             else {
-                dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("Invoice is not available"));
+                dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("Order saknas") + "!");
                 return false;
             }
         },
@@ -1013,7 +1013,7 @@ $(function () {
 
         DoOrderCredit: function (orderId) {
             if (orderId < 0) {
-                dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate('First save the order.'));
+                dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate('Var vänlig spara ordern först.'));
             }
             else {
                 if (this.CanAddNewOrder()) {
@@ -1100,7 +1100,7 @@ $(function () {
             if (article != null) {
                 if (curAmount <= 0) {
                     obj.val(dhHelpdesk.Math.ConvertDoubleToStr(article.Amount, true));
-                    dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("Value can't be 0"));
+                    dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("0 är inte tillåtet"));
                     return;
                 }
 
@@ -1142,7 +1142,7 @@ $(function () {
 
         UpdateCharacterCount: function (objectId) {
             var len = $("#Description_" + objectId).val().length;
-            var newLen = dhHelpdesk.Common.Translate("Tecken kvar") + ": " + (this.MaxDescriptionCount - len).toString();
+            var newLen =  (this.MaxDescriptionCount - len).toString() + " " + dhHelpdesk.Common.Translate("Tecken kvar");
             $("#DescriptionCount_" + objectId).text(newLen);
         },
 
@@ -1170,7 +1170,7 @@ $(function () {
 
                 if (totalOrderAmount - totalCreditUsed > 0) {
                     newAmount = totalOrderAmount - totalCreditUsed;
-                    dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("Maximum amount for this article is") + ": " + dhHelpdesk.Math.ConvertDoubleToStr(newAmount, _IGNORE_ZERO_FLOATING_POINT));
+                    dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("Max antal för denna artikel är") + ": " + dhHelpdesk.Math.ConvertDoubleToStr(newAmount, _IGNORE_ZERO_FLOATING_POINT));
                 }
                 else {
                     newAmount = 0;
@@ -1201,7 +1201,7 @@ $(function () {
                 }
                 else {
                     newAmount = 0;
-                    creditAlertToShow = dhHelpdesk.Common.Translate("All credits already used!");
+                    creditAlertToShow = dhHelpdesk.Common.Translate("Inget kvar att kreditera");
                 }
             }
             else {
@@ -1759,7 +1759,7 @@ $(function () {
             var articlesEl = invoice._container.find(".articles-params-article");
             var articleId = articlesEl.val();
             if (articleId != 0) {
-                dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("You've selected an article but it's not added to the list yet!"));
+                dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("Du har valt en artikel, men inte lagt till den än!"));
                 return false;
             }
             for (var i = 0; i < this.allVailableOrders.length; i++) {
@@ -1882,7 +1882,7 @@ $(function () {
 
             button.click(function () {
                 if (th.IsNewCase() || th.IsProductAreaChanged()) {
-                    dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("Please save the case and try again!"));
+                    dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("Var vänlig spara ärendet och försök igen!"));
                     return;
                 }
 
@@ -2648,7 +2648,7 @@ $(function () {
                     dhHelpdesk.System.RaiseEvent("OnChangeOrder", [this]);
                 }
                 else {
-                    dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("There is no Aticle to send!"));
+                    dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("Det finns inga artiklar att skicka!"));
                 }
             },
 
@@ -2978,7 +2978,7 @@ $(function () {
             this.InvoiceValidate = function () {
                 var isValid = true;
                 if (this._articles != null && this._articles.length > 0 && dhHelpdesk.Common.IsNullOrEmpty(this.CostCentre)) {
-                    dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("Kostnadställe saknas!") + " " + this.Caption);
+                    dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.TranslateCaseFields("CostCentre") + " " + dhHelpdesk.Common.Translate("saknas!") + " - " + this.Caption);
                     isValid = false;
                 }
                 return isValid;
@@ -3049,7 +3049,7 @@ $(function () {
                     });
                     d.dialog("open");
                 } else {
-                    dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("Det finns inga filer att lägga till") + ". " + dhHelpdesk.Common.Translate("Endast PDF-filer som är bifogade på ärendet går att bifoga."));
+                    dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("Det finns inga filer att lägga till.") + ". " + dhHelpdesk.Common.Translate("Endast PDF-filer som är bifogade på ärendet går att bifoga."));
                 }
             }
         },
@@ -3207,7 +3207,7 @@ $(function () {
                 model.IsArticlePpuExists = this.IsArticlePpuExists();
                 model.IsCredited = this.Order.CreditForOrder_Id != null;
                 model.IsInvoiced = this.Order.IsInvoiced;
-                model.DescriptionCount = dhHelpdesk.Common.Translate("Tecken kvar") + " " + (dhHelpdesk.CaseArticles.MaxDescriptionCount - model.Name.length);
+                model.DescriptionCount = (dhHelpdesk.CaseArticles.MaxDescriptionCount - model.Name.length) + " " + dhHelpdesk.Common.Translate("Tecken kvar");
                 return model;
             };
 
@@ -3427,7 +3427,7 @@ $(function () {
         CaseInvoiceOrderViewModel: function () {
             this.Id = null;
             this.ArtNoHeader = dhHelpdesk.Common.Translate("Art nr");
-            this.NameHeader = dhHelpdesk.Common.Translate("Artikelnamn SWE");
+            this.NameHeader = dhHelpdesk.Common.Translate("Artikelnamn SVE");
             this.NameEngHeader = dhHelpdesk.Common.Translate("Artikelnamn ENG");
             this.UnitsHeader = dhHelpdesk.Common.Translate("Enheter");
             this.UnitsPriceHeader = dhHelpdesk.Common.Translate("PPE SEK");
@@ -3946,7 +3946,9 @@ $(function () {
     };
 
     var loadCaseFieldTranslations = function () {
-        return $.getJSON("/Translation/GetCaseFieldsForTranslation", function (data) {
+        return $.get("/Translation/GetCaseFieldsForTranslation", {
+            curTime: Date.now
+        },function (data){ 
             AllCaseFields = data;
         });
     };

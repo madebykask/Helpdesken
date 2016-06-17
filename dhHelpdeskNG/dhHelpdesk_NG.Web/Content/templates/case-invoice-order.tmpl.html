@@ -269,7 +269,7 @@
             <button id="doInvoiceButton_{{:Id}}" class="btn orderButtons" onclick="dhHelpdesk.CaseArticles.DoOrderInvoice('{{:Id}}'); return false;" data-orderid="{{:Id}}">{{:doInvoiceTitle}}</button>
             <button class="btn orderButtons" id="actions-credit-order_{{:Id}}" class="actions-credit-order" onclick="dhHelpdesk.CaseArticles.DoOrderCredit('{{:Id}}'); return false;"> {{:doCreditTitle}}</button>                        
             {{if IsInvoiced }} 
-              <span>{{:InvoicedByTitle}} {{:InvoicedByUser}} - {{:InvoiceDate}} {{:InvoiceTime}}</span>
+              <span class="textbold">{{:InvoicedByTitle}}</span> <span>{{:InvoicedByUser}} - {{:InvoiceDate}} {{:InvoiceTime}}</span>
             {{/if}}
         </div>            
         
