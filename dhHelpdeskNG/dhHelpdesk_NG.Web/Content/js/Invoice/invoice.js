@@ -2,7 +2,7 @@
     dhHelpdesk = {};
 
 $(function () {
-
+    
 
     _INVOICE_IDLE = 0;
     _INVOICE_SAVING = 1;
@@ -952,12 +952,13 @@ $(function () {
             }
         },
 
-        AddBlankArticle: function (orderId) {
+        AddBlankArticle: function (orderId, mainArtId) {
             var order = this.GetOrder(orderId);
             if (order != null) {
                 if (!this.GetInvoiceStatusOfCurrentOrder()) {
                     var article = this.CreateBlankArticle();
                     var caseArticle = article.ToCaseArticle();
+                    caseArticle.TextForArticle_Id = mainArtId;
                     caseArticle.Article = article;
                     order.AddArticle(caseArticle);
                     return caseArticle;
@@ -991,7 +992,7 @@ $(function () {
                                 }
                             }
                             else
-                                dhHelpdesk.Common.ShowErrorMessage(order.Caption + + " " + dhHelpdesk.Common.Translate("kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ordern.") + orderValidation.Message);
+                                dhHelpdesk.Common.ShowErrorMessage(order.Caption + " " + dhHelpdesk.Common.Translate("kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ordern.") + orderValidation.Message);
                         }
                         else {
                             th.ShowAlreadyInvoicedMessage();
@@ -1698,7 +1699,7 @@ $(function () {
                                         currentOrder.AddArticle(child);
 
                                     if (child.Article.TextDemand) {
-                                        var addedElement = dhHelpdesk.CaseArticles.AddBlankArticle(currentOrder.Id);
+                                        var addedElement = dhHelpdesk.CaseArticles.AddBlankArticle(currentOrder.Id, child.Id);
                                         if (elementForFocus == null && addedElement != null)
                                             elementForFocus = $('#Description_' + addedElement.Id);
                                     }
@@ -1726,7 +1727,7 @@ $(function () {
                                     currentOrder.AddArticle(caseArticle);
 
                                 if (caseArticle.Article.TextDemand) {
-                                    var addedElement = dhHelpdesk.CaseArticles.AddBlankArticle(currentOrder.Id);
+                                    var addedElement = dhHelpdesk.CaseArticles.AddBlankArticle(currentOrder.Id, caseArticle.Id);
                                     if (elementForFocus == null && addedElement != null)
                                         elementForFocus = $('#Description_' + addedElement.Id);
                                 }
@@ -1787,12 +1788,14 @@ $(function () {
         },
 
         OpenInvoiceWindow: function (message) {
+            var articleDescriptionDelimiter = '¤¤¤';
+
             var th = dhHelpdesk.CaseArticles;
             th.CreateContainer(message);
             var addArticleEl = th._container.find(".articles-params");
             var articlesSelectContainer = addArticleEl.find(".articles-select-container");
             articlesSelectContainer.empty();
-            var articlesEl = $("<select class='chosen-select articles-params-article'></select>");
+            var articlesEl = $("<select id='articleList' class='chosen-select articles-params-article'></select>");
             articlesSelectContainer.append(articlesEl);
 
             var articles = th.GetInvoiceArticles();
@@ -1806,7 +1809,9 @@ $(function () {
             articlesEl.append("<option value='0'> &nbsp; </option>");
             for (var i = 0; i < articles.length; i++) {
                 var article = articles[i];
-                articlesEl.append("<option value='" + article.Id + "'>" + article.GetFullName() + "</option>");
+                var artDesc = article.Description != null ? article.Description : "";
+                var text = article.Description + articleDescriptionDelimiter + article.GetFullName();
+                articlesEl.append("<option value='" + article.Id + "' >" + text + "</option>");
             }
 
             $('.InitiatorField').hide();
@@ -1817,9 +1822,14 @@ $(function () {
                 placeholder_text_single: dhHelpdesk.Common.Translate("Välj artikel"),
                 'no_results_text': '?',
             })
-            .change(function () {
+            .change(function () {                
                 var selectedArticle = dhHelpdesk.CaseArticles.GetInvoiceArticle(articlesEl.chosen().val());
                 var units_PriceEl = th._container.find(".articles-params-units-price");
+                var t = ''
+                if (selectedArticle != null) {
+                   t = selectedArticle.GetFullName();
+                }
+                $('#articleList_chosen a span').text(t);
 
                 if (selectedArticle != null) {
                     if (selectedArticle.HasChildren()) {
@@ -1841,6 +1851,28 @@ $(function () {
                         }
                     }
                 }
+            });
+
+            $('#articleList').on('chosen:showing_dropdown', function () {
+                $('#articleList_chosen .chosen-results li').each(function () {
+                    var art = this;
+                    var fullText = $(art).text();
+                    if (fullText != " ") {
+                        var newText = '  ';
+                        var tooltip = '';
+                        var splits = fullText.split(articleDescriptionDelimiter);
+                        if (splits.length > 0 && splits[0] != 'null') {
+                            tooltip = splits[0];
+                        }
+
+                        if (splits.length > 1) {
+                            newText = splits[1];
+                        }
+
+                        art.title = tooltip;
+                        $(this).text(newText);
+                    }
+                });
             });
 
             articlesSelectContainer.find("select.chosen-select").addClass("min-width-500 max-width-500 case-invoice-multiselect");
