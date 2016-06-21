@@ -190,13 +190,13 @@
                                     <i class="icon-chevron-down icon-white"></i>
                                 </a>
                                 <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
-                                   @* @if(model.IsOrderVisible())
+                                    @if(model.IsOrderVisible())
                                     {    
                                         <li><a href="@Url.Action("Index", "Orders", new { area = "Orders" })">
                                             <img src="@Url.Content("~/Content/icons/order.png")" />
                                             @Translation.Get("Beställningar")</a></li>
                                     }
-                                    @if (model.IsAccountVisible())
+                                    @*@if (model.IsAccountVisible())
                                     {    
                                         <li><a href="@Url.Action("Index", "Orders", new { area = "OrderAccounts" })">
                                             <img src="@Url.Content("~/Content/icons/orderaccount.png")" />

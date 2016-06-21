@@ -100,6 +100,8 @@
 
         public bool CreateCase { get; set; }
 
+        public bool UserHasAdminOrderPermission { get; set; }
+
         [NotNull]
         public List<WebTemporaryFile> NewFiles { get; set; }
 
