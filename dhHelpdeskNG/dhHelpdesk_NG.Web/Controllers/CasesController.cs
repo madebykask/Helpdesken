@@ -3605,6 +3605,8 @@ namespace DH.Helpdesk.Web.Controllers
             var isCreateNewCase = caseId == 0;
             m.CaseLock = caseLocked;
             m.MailTemplates = this._mailTemplateService.GetCustomMailTemplates(customerId).ToList();
+            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
+
             if (!isCreateNewCase)
             {
                 var markCaseAsRead = string.IsNullOrWhiteSpace(redirectFrom);
@@ -3616,8 +3618,9 @@ namespace DH.Helpdesk.Web.Controllers
 
                 customerId = customerId == 0 ? m.case_.Customer_Id : customerId;
                 //SessionFacade.CurrentCaseLanguageId = m.case_.RegLanguage_Id;
-
-                m.ChangeTime = m.case_.ChangeTime;
+                
+                var userLocal_ChangeTime = TimeZoneInfo.ConvertTimeFromUtc(m.case_.ChangeTime, userTimeZone);
+                m.ChangeTime = userLocal_ChangeTime;
             }
 
             var customerUserSetting = this._customerUserService.GetCustomerSettings(customerId, userId);
@@ -3626,7 +3629,7 @@ namespace DH.Helpdesk.Web.Controllers
                 throw new ArgumentException(string.Format("No customer settings for this customer '{0}' and user '{1}'", customerId, userId));
             }
 
-            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
+            
 
             var case_ = m.case_;
             var customer = this._customerService.GetCustomer(customerId);
