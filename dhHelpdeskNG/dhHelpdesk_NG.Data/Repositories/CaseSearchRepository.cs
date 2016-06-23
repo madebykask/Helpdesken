@@ -836,7 +836,7 @@
             /// tables and joins
             var tables = new List<string>();
             #region adding tables into FROM section
-            tables.Add("from tblCase");
+            tables.Add("from tblCase WITH (NOLOCK) ");
             tables.Add("inner join tblCustomer on tblCase.Customer_Id = tblCustomer.Id "); 
             tables.Add("inner join tblCustomerUser on tblCase.Customer_Id = tblCustomerUser.Customer_Id ");  
             tables.Add("left outer join tblDepartment on tblDepartment.Id = tblCase.Department_Id ");  
