@@ -30,9 +30,11 @@
             EmailResponse emailResponse,
             string mailMessageId = "",
             bool highPriority = false,
-            List<string> files = null);
+            List<string> files = null,
+            string siteSelfService = "",
+            string siteHelpdesk = "");
 
-        EmailResponse SendEmail(EmailItem item, EmailResponse emailResponse);
+        EmailResponse SendEmail(EmailItem item, EmailResponse emailResponse, string siteSelfService = "", string siteHelpdesk = "");
 
         #endregion
     }

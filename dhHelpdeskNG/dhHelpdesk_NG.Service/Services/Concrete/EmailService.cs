@@ -91,7 +91,7 @@
             return res;
         }
 
-        public EmailResponse SendEmail(EmailItem item, EmailResponse emailResponse)
+        public EmailResponse SendEmail(EmailItem item, EmailResponse emailResponse, string siteSelfService = "", string siteHelpdesk = "")
         {
             return this.SendEmail(
                                 item.From,
@@ -102,7 +102,8 @@
                                 emailResponse,
                                 item.MailMessageId,
                                 item.IsHighPriority,
-                                item.Files);
+                                item.Files,
+                                siteSelfService, siteHelpdesk);
         }
 
         public EmailResponse SendEmail(
@@ -114,10 +115,14 @@
             EmailResponse emailResponse,
             string mailMessageId = "", 
             bool highPriority = false,
-            List<string> files = null)
+            List<string> files = null,
+            string siteSelfService = "",
+            string siteHelpdesk = "")
         {
             EmailResponse res = emailResponse;
             var sendTime = DateTime.Now;
+            string urlSelfService;
+            var urlHelpdesk = "";
 
             SmtpClient _smtpClient;
             CultureInfo oldCI = Thread.CurrentThread.CurrentCulture;            
@@ -186,28 +191,70 @@
 
                         if (body.Contains("[/#98]"))
                         {
+                            int count = Regex.Matches(body, "/#98").Count;
+
                             string str1 = "[#98]";
                             string str2 = "[/#98]";
-                            string LinkText;
+                            string LinkText = "";
 
-                            int Pos1 = body.IndexOf(str1) + str1.Length;
-                            int Pos2 = body.IndexOf(str2);
-                            LinkText = body.Substring(Pos1, Pos2 - Pos1);
+                            for (int i = 1; i <= count; i++)
+                            {
+                                int Pos1 = body.IndexOf(str1) + str1.Length;
+                                int Pos2 = body.IndexOf(str2);
+                                LinkText = body.Substring(Pos1, Pos2 - Pos1);
 
-                            body = body.Replace(LinkText + "[/#98]", string.Empty);
+                                urlSelfService = "<a href='" + siteSelfService + "'>" + LinkText + "</a>";
+
+                                var regex = new Regex(Regex.Escape(LinkText + "[/#98]"));
+                                body = regex.Replace(body, string.Empty, 1);
+
+                                regex = new Regex(Regex.Escape("[#98]"));
+                                body = regex.Replace(body, urlSelfService, 1);
+
+                            }
+
+                        }
+                        else
+                        {
+                            urlSelfService = "<a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
+
+                            foreach (var field in fields)
+                                if (field.Key == "[#98]")
+                                    field.StringValue = urlSelfService;
                         }
 
                         if (body.Contains("[/#99]"))
                         {
-                            string str1 = "[#99]";
-                            string str2 = "[/#99]";
-                            string LinkText;
+                            int count = Regex.Matches(body, "/#99").Count;
 
-                            int Pos1 = body.IndexOf(str1) + str1.Length;
-                            int Pos2 = body.IndexOf(str2);
-                            LinkText = body.Substring(Pos1, Pos2 - Pos1);
+                            for (int i = 1; i <= count; i++)
+                            {
 
-                            body = body.Replace(LinkText + "[/#99]", string.Empty);
+                                string str1 = "[#99]";
+                                string str2 = "[/#99]";
+                                string LinkText;
+
+                                int Pos1 = body.IndexOf(str1) + str1.Length;
+                                int Pos2 = body.IndexOf(str2);
+                                LinkText = body.Substring(Pos1, Pos2 - Pos1);
+
+                                urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
+
+                                var regex = new Regex(Regex.Escape(LinkText + "[/#99]"));
+                                body = regex.Replace(body, string.Empty, 1);
+
+                                regex = new Regex(Regex.Escape("[#99]"));
+                                body = regex.Replace(body, urlHelpdesk, 1);
+                           }
+
+                        }
+                        else
+                        {
+                            urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a>";
+
+                            foreach (var field in fields)
+                                if (field.Key == "[#99]")
+                                    field.StringValue = urlHelpdesk;
                         }
 
                         msg.Subject = AddInformationToMailBodyAndSubject(subject, fields);
