@@ -193,16 +193,16 @@
                 @Translation.Get("Beställning", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
-                <input data-field="createOrderPermission" type="checkbox" name="OrderP1" @(Model.OrderP1 == 1 ? "checked=checked" : "") value="1"/>
-                <input type="hidden" name="OrderP1" value="0" />
+                <input data-field="createOrderPermission" type="checkbox" name="OrderP1" id="OrderP1" @(Model.OrderP1 == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="OrderP1" id="hidOrderP1" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren kan skapa beställningar", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
         <tr>
             <td></td>
             <td>
-                <input data-field="administerOrderPermission" type="checkbox" name="OrderP2" @(Model.OrderP2 == 1 ? "checked=checked" : "") value="1"/>
-                <input type="hidden" name="OrderP2" value="0" />
+                <input data-field="administerOrderPermission" type="checkbox" name="OrderP2" id="OrderP2" @(Model.OrderP2 == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="OrderP2" id="hidOrderP2" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren kan administrera beställningar", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
@@ -331,4 +331,19 @@
         </tr>
     </table>
 </div>
+<script type="text/javascript">
+    $('#OrderP1').click(function () {
+        if ($("#OrderP2").prop('checked', true)) {
+            $("#OrderP2").prop('checked', false);
+            $("#hidOrderP2").val(0);
+        }
+    });
 
+    $('#OrderP2').click(function () {
+        if ($("#OrderP1").prop('checked', true)) {
+            $("#OrderP1").prop('checked', false);
+            $("#hidOrderP1").val(0);
+        }
+    });
+
+</script>
