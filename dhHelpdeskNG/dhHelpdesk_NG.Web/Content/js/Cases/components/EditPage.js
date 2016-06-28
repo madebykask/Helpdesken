@@ -538,7 +538,7 @@ EditPage.prototype.init = function (p) {
     me.$btnSaveClose.on('click', Utils.callAsMe(me.onSaveAndCloseClick, me));
     me.$btnSaveNew.on('click', Utils.callAsMe(me.onSaveAndNewClick, me));
 
-    me.$btnPrint = $('.btn.print-case');
+    me.$btnPrint = $('.btn.print-case');    
     me.$printArea = $('#CasePrintArea');
     me.$printDialog = $('#PrintCaseDialog');
 
@@ -601,9 +601,9 @@ EditPage.prototype.init = function (p) {
         }
     });
 
-    $('.lang.dropdown-submenu a').on('click', Utils.callAsMe(me.onPageLeave, me));
-        
-    me.$btnPrint.click(function (e) {
+    $('.lang.dropdown-submenu a').on('click', Utils.callAsMe(me.onPageLeave, me));             
+
+    me.$btnPrint.click(function (e) {        
         $.get("/Cases/ShowCasePrintPreview/",
                 {
                     caseId: p.currentCaseId,
@@ -613,8 +613,9 @@ EditPage.prototype.init = function (p) {
 
                 function (_reportPresentation) {
                     me.$printArea.html(_reportPresentation);
-
-                    $('#PrintCaseDialog').draggable({
+                    
+                    /* Enable if you need to show case print preview*/
+                    /*$('#PrintCaseDialog').draggable({
                         handle: ".modal-header"
                     });
                     
@@ -627,12 +628,13 @@ EditPage.prototype.init = function (p) {
                     var _iframe = $("#caseReportContainer").find("iframe");
                     if (_iframe != null && _iframe != undefined) {
                         update_iFrame(_iframe.attr("id"));                        
-                    }
+                    }*/
                 }
              );       
     });
     
-    var update_iFrame = function (iframeId) {
+    /*Enable if you have case print preview*/
+    /*var update_iFrame = function (iframeId) {
         setTimeout(function () {           
             var elm = document.getElementById(iframeId);
             if (elm != null && elm != undefined) {
@@ -640,7 +642,7 @@ EditPage.prototype.init = function (p) {
                 $(elm).css({ height: newH.toString() + "px" });
             }            
         }, 3000);
-    }
+    }*/
 
     //////// event bind end ///////////
     /*

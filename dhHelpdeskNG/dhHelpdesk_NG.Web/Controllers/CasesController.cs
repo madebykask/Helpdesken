@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using System.Data;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -4832,8 +4833,21 @@ namespace DH.Helpdesk.Web.Controllers
             }
             else
             {
+                var reportDataModel = new List<ReportDataModel>();
+                if (reportData.DataSets[0].DataSet.Rows.Count > 0)
+                {
+                    foreach (DataRow r in reportData.DataSets[0].DataSet.Rows)
+                    {
+                        var row = new ReportDataModel(int.Parse(r.ItemArray[0].ToString()), r.ItemArray[1].ToString(), r.ItemArray[2].ToString(),
+                                                      r.ItemArray[3].ToString(), int.Parse(r.ItemArray[4].ToString()), r.ItemArray[5].ToString());                         
+                        reportDataModel.Add(row);
+                    }
+                }
+
                 ReportViewer reportViewer = new ReportViewer();
-                var basePath = Request.MapPath(Request.ApplicationPath);
+
+                //Use Html view by data 
+                /*var basePath = Request.MapPath(Request.ApplicationPath);
                 var fileLocation = Path.Combine(_reportFolderName, string.Format("{0}.rdl", reportData.ReportName));
                 var reportFile = Path.Combine(basePath, fileLocation);
                 
@@ -4853,7 +4867,8 @@ namespace DH.Helpdesk.Web.Controllers
                 foreach (var dataSet in reportData.DataSets)
                     reportViewer.LocalReport.DataSources.Add(new ReportDataSource(dataSet.DataSetName, dataSet.DataSet));
 
-                model.Report = reportViewer;
+                model.Report = reportViewer;*/
+                model.ReportData = reportDataModel;
             }
 
             return model;
