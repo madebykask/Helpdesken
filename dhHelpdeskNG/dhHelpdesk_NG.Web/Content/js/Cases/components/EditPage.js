@@ -613,36 +613,36 @@ EditPage.prototype.init = function (p) {
 
                 function (_reportPresentation) {
                     me.$printArea.html(_reportPresentation);
+                                        
+                    //$('#PrintCaseDialog').draggable({
+                    //    handle: ".modal-header"
+                    //});
                     
-                    /* Enable if you need to show case print preview*/
-                    /*$('#PrintCaseDialog').draggable({
-                        handle: ".modal-header"
-                    });
-                    
+                    /* show true if you need to show case print preview*/
                     $('#PrintCaseDialog').modal({
                         "backdrop": "static",
                         "keyboard": true,
-                        "show": true
+                        "show": false
                     });
                    
-                    var _iframe = $("#caseReportContainer").find("iframe");
-                    if (_iframe != null && _iframe != undefined) {
-                        update_iFrame(_iframe.attr("id"));                        
-                    }*/
+                    //var _iframe = $("#caseReportContainer").find("iframe");
+                    //if (_iframe != null && _iframe != undefined) {
+                    //    update_iFrame(_iframe.attr("id"));                        
+                    //}
                 }
              );       
     });
     
     /*Enable if you have case print preview*/
-    /*var update_iFrame = function (iframeId) {
-        setTimeout(function () {           
-            var elm = document.getElementById(iframeId);
-            if (elm != null && elm != undefined) {
-                var newH = $(elm).height() + 50;
-                $(elm).css({ height: newH.toString() + "px" });
-            }            
-        }, 3000);
-    }*/
+    //var update_iFrame = function (iframeId) {
+    //    setTimeout(function () {           
+    //        var elm = document.getElementById(iframeId);
+    //        if (elm != null && elm != undefined) {
+    //            var newH = $(elm).height() + 50;
+    //            $(elm).css({ height: newH.toString() + "px" });
+    //        }            
+    //    }, 3000);
+    //}
 
     //////// event bind end ///////////
     /*
