@@ -12,10 +12,8 @@
         public OtherFieldSettingsModel(
                 TextFieldSettingsModel fileName, 
                 TextFieldSettingsModel caseNumber, 
-                TextFieldSettingsModel info, 
-                TextFieldSettingsModel status)
+                TextFieldSettingsModel info)
         {
-            this.Status = status;
             this.Info = info;
             this.CaseNumber = caseNumber;
             this.FileName = fileName;
@@ -32,9 +30,6 @@
         [NotNull]
         [LocalizedDisplay("Övrigt")]
         public TextFieldSettingsModel Info { get; set; }
-         
-        [NotNull]
-        [LocalizedDisplay("Status")]
-        public TextFieldSettingsModel Status { get; set; }   
+           
     }
 }

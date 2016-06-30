@@ -16,7 +16,19 @@
             <td class="span9">
                 @Html.DisplayFor(m => m.OrderTypeName)    
             </td>
-        </tr>  
+        </tr>
+        @if (Model.Status.Show)
+        {
+            <tr>
+                <td class="span3">
+                    @Html.FieldCaption(Model.Status)
+                </td>
+                <td class="span9">
+                    @Html.DropDownListFor(m => m.StatusId, Model.Status.Value)
+                    @Html.ValidationMessageFor(m => m.StatusId)
+                </td>
+            </tr>             
+        }          
         @if (Model.Administrator.Show)
         {
             <tr>

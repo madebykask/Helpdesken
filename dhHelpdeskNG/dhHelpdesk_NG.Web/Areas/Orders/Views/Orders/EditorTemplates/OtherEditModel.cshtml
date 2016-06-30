@@ -5,18 +5,6 @@
 <h4>@Translation.Get("Övrigt")</h4>
 <table class="tableform">
     <tbody>
-        @if (Model.Status.Show)
-        {
-            <tr>
-                <td class="span3">
-                    @Html.FieldCaption(Model.Status)
-                </td>
-                <td class="span9">
-                    @Html.DropDownListFor(m => m.StatusId, Model.Status.Value)
-                    @Html.ValidationMessageFor(m => m.StatusId)
-                </td>
-            </tr>             
-        }        
         @if (Model.FileName.Show)
         {
             <tr>

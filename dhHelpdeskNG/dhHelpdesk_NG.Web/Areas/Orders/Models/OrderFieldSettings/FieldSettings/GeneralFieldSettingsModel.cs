@@ -13,14 +13,16 @@
                 FieldSettingsModel orderNumber, 
                 FieldSettingsModel customer, 
                 TextFieldSettingsModel administrator, 
-                TextFieldSettingsModel domain, 
-                TextFieldSettingsModel orderDate)
+                TextFieldSettingsModel domain,
+                TextFieldSettingsModel orderDate,
+                TextFieldSettingsModel status)
         {
             this.OrderDate = orderDate;
             this.Domain = domain;
             this.Administrator = administrator;
             this.Customer = customer;
             this.OrderNumber = orderNumber;
+            this.Status = status;
         }
 
         [NotNull]
@@ -41,6 +43,10 @@
     
         [NotNull]
         [LocalizedDisplay("Beställningsdatum")]
-        public TextFieldSettingsModel OrderDate { get; set; }    
+        public TextFieldSettingsModel OrderDate { get; set; }
+
+        [NotNull]
+        [LocalizedDisplay("Status")]
+        public TextFieldSettingsModel Status { get; set; }   
     }
 }

@@ -25,6 +25,9 @@
             @Html.EditorFor(m => m.General.Customer)
         </tr>
         <tr>
+            @Html.EditorFor(m => m.General.Status)
+        </tr>
+        <tr>
             @Html.EditorFor(m => m.General.Administrator)
         </tr>
         <tr>
@@ -224,10 +227,7 @@
         </tr>                                                                                                        
         <tr>
             @Html.EditorFor(m => m.Other.Info)
-        </tr>                                                                                                        
-        <tr>
-            @Html.EditorFor(m => m.Other.Status)
-        </tr>                                                                                                        
+        </tr>                                                                                                                                                                                                          
         <tr>
             <td colspan="8" class="header">@Translation.Get("Logg")</td>
         </tr>   

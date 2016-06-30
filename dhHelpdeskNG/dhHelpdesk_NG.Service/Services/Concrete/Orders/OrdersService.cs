@@ -271,7 +271,7 @@
             var propertiesRep = uow.GetRepository<OrderPropertyEntity>();
             var orderTypeRep = uow.GetRepository<OrderType>();
 
-            var statuses = statusesRep.GetAll().GetByCustomer(customerId);
+            var statuses = statusesRep.GetAll().GetByCustomer(customerId).OrderBy(x => x.SortOrder);
             var administrators = administratorsRep.GetAll().GetByCustomer(customerId);
             var domains = domainsRep.GetAll().GetByCustomer(customerId);
             var departments = departmentsRep.GetAll().GetByCustomer(customerId);

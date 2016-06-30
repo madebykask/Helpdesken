@@ -48,6 +48,7 @@
             this.RestoreFieldIfNeeded(updated, () => updated.AdministratorId, existing.AdministratorId, settings.Administrator.Show);
             this.RestoreFieldIfNeeded(updated, () => updated.DomainId, existing.DomainId, settings.Domain.Show);
             this.RestoreFieldIfNeeded(updated, () => updated.OrderDate, existing.OrderDate, settings.OrderDate.Show);
+            this.RestoreFieldIfNeeded(updated, () => updated.StatusId, existing.StatusId, settings.Status.Show);
         }
 
         private void RestoreLog(
@@ -108,7 +109,6 @@
             this.RestoreFieldIfNeeded(updated, () => updated.FileName, existing.FileName, settings.FileName.Show);
             this.RestoreFieldIfNeeded(updated, () => updated.CaseNumber, existing.CaseNumber, settings.CaseNumber.Show);
             this.RestoreFieldIfNeeded(updated, () => updated.Info, existing.Info, settings.Info.Show);
-            this.RestoreFieldIfNeeded(updated, () => updated.StatusId, existing.StatusId, settings.Status.Show);
         }
 
         private void RestoreProgram(

@@ -47,6 +47,7 @@
             AddFirstDifference(history, settings.General.Administrator, firstHistory.Order.General.AdministratorId, firstHistory.Order.General.Administrator);
             AddFirstDifference(history, settings.General.Domain, firstHistory.Order.General.DomainId, firstHistory.Order.General.Domain);
             AddFirstDifference(history, settings.General.OrderDate, firstHistory.Order.General.OrderDate);
+            AddFirstDifference(history, settings.General.Status, firstHistory.Order.General.StatusId, firstHistory.Order.General.Status);
 
             AddFirstDifference(history, settings.Orderer.OrdererId, firstHistory.Order.Orderer.OrdererId);
             AddFirstDifference(history, settings.Orderer.OrdererName, firstHistory.Order.Orderer.OrdererName);
@@ -81,7 +82,7 @@
             AddFirstDifference(history, settings.Other.FileName, firstHistory.Order.Other.FileName);
             AddFirstDifference(history, settings.Other.CaseNumber, firstHistory.Order.Other.CaseNumber);
             AddFirstDifference(history, settings.Other.Info, firstHistory.Order.Other.Info);
-            AddFirstDifference(history, settings.Other.Status, firstHistory.Order.Other.StatusId, firstHistory.Order.Other.Status);
+            //AddFirstDifference(history, settings.Other.Status, firstHistory.Order.Other.StatusId, firstHistory.Order.Other.Status);
 
             AddFirstDifference(history, settings.Receiver.ReceiverId, firstHistory.Order.Receiver.ReceiverId);
             AddFirstDifference(history, settings.Receiver.ReceiverName, firstHistory.Order.Receiver.ReceiverName);
@@ -139,6 +140,9 @@
                 previousHistory.Order.General.DomainId, previousHistory.Order.General.Domain,
                 currentHistory.Order.General.DomainId, currentHistory.Order.General.Domain);
             AddDifference(history, settings.General.OrderDate, previousHistory.Order.General.OrderDate, currentHistory.Order.General.OrderDate);
+            AddDifference(history, settings.General.Status,
+                previousHistory.Order.General.StatusId, previousHistory.Order.General.Status,
+                currentHistory.Order.General.StatusId, currentHistory.Order.General.Status);
 
             AddDifference(history, settings.Orderer.OrdererId, previousHistory.Order.Orderer.OrdererId, currentHistory.Order.Orderer.OrdererId);
             AddDifference(history, settings.Orderer.OrdererName, previousHistory.Order.Orderer.OrdererName, currentHistory.Order.Orderer.OrdererName);
@@ -179,9 +183,9 @@
             AddDifference(history, settings.Other.FileName, previousHistory.Order.Other.FileName, currentHistory.Order.Other.FileName);
             AddDifference(history, settings.Other.CaseNumber, previousHistory.Order.Other.CaseNumber, currentHistory.Order.Other.CaseNumber);
             AddDifference(history, settings.Other.Info, previousHistory.Order.Other.Info, currentHistory.Order.Other.Info);
-            AddDifference(history, settings.Other.Status, 
-                previousHistory.Order.Other.StatusId, previousHistory.Order.Other.Status,
-                currentHistory.Order.Other.StatusId, currentHistory.Order.Other.Status);
+            //AddDifference(history, settings.Other.Status, 
+            //    previousHistory.Order.Other.StatusId, previousHistory.Order.Other.Status,
+            //    currentHistory.Order.Other.StatusId, currentHistory.Order.Other.Status);
 
             AddDifference(history, settings.Receiver.ReceiverId, previousHistory.Order.Receiver.ReceiverId, currentHistory.Order.Receiver.ReceiverId);
             AddDifference(history, settings.Receiver.ReceiverName, previousHistory.Order.Receiver.ReceiverName, currentHistory.Order.Receiver.ReceiverName);

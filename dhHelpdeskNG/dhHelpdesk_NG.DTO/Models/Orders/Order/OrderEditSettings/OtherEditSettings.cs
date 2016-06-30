@@ -7,10 +7,8 @@
         public OtherEditSettings(
                 TextFieldEditSettings fileName, 
                 TextFieldEditSettings caseNumber, 
-                TextFieldEditSettings info, 
-                TextFieldEditSettings status)
+                TextFieldEditSettings info)
         {
-            this.Status = status;
             this.Info = info;
             this.CaseNumber = caseNumber;
             this.FileName = fileName;
@@ -24,8 +22,6 @@
          
         [NotNull]
         public TextFieldEditSettings Info { get; private set; }
-         
-        [NotNull]
-        public TextFieldEditSettings Status { get; private set; }         
+             
     }
 }

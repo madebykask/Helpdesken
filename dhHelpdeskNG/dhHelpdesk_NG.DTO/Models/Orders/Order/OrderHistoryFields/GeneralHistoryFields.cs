@@ -11,13 +11,17 @@
                 UserName administrator, 
                 int? domainId,
                 string domain, 
-                DateTime? orderDate)
+                DateTime? orderDate,
+                int? statusId,
+                string status)
         {
             this.AdministratorId = administratorId;
             this.DomainId = domainId;
             this.OrderDate = orderDate;
             this.Domain = domain;
             this.Administrator = administrator;
+            this.StatusId = statusId;
+            this.Status = Status;
         }
         
         public int? AdministratorId { get; private set; }
@@ -28,6 +32,10 @@
 
         public string Domain { get; private set; }
         
-        public DateTime? OrderDate { get; private set; }    
+        public DateTime? OrderDate { get; private set; }
+
+        public int? StatusId { get; private set; }
+
+        public string Status { get; private set; }
     }
 }

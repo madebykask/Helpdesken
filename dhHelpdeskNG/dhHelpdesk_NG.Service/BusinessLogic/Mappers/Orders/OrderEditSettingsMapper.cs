@@ -64,7 +64,8 @@
                     CreateFieldSetting(editSettings.FindByName(GeneralFields.Customer)),
                     CreateTextFieldSetting(editSettings.FindByName(GeneralFields.Administrator)),
                     CreateTextFieldSetting(editSettings.FindByName(GeneralFields.Domain)),
-                    CreateTextFieldSetting(editSettings.FindByName(GeneralFields.OrderDate)));
+                    CreateTextFieldSetting(editSettings.FindByName(GeneralFields.OrderDate)),
+                    CreateTextFieldSetting(editSettings.FindByName(GeneralFields.Status)));
         }
 
         private static LogEditSettings CreateLogEditSettings(
@@ -120,8 +121,7 @@
             return new OtherEditSettings(
                     CreateTextFieldSetting(editSettings.FindByName(OtherFields.FileName)),
                     CreateTextFieldSetting(editSettings.FindByName(OtherFields.CaseNumber)),
-                    CreateTextFieldSetting(editSettings.FindByName(OtherFields.Info)),
-                    CreateTextFieldSetting(editSettings.FindByName(OtherFields.Status)));
+                    CreateTextFieldSetting(editSettings.FindByName(OtherFields.Info)));
         }
 
         private static ProgramEditSettings CreateProgramEditSettings(

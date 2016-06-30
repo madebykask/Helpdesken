@@ -79,6 +79,7 @@
             var administrator = this.configurableFieldModelFactory.CreateSelectListField(settings.Administrator, options.Administrators, null);
             var domain = this.configurableFieldModelFactory.CreateSelectListField(settings.Domain, options.Domains, null);
             var orderDate = this.configurableFieldModelFactory.CreateNullableDateTimeField(settings.OrderDate, null);
+            var status = this.configurableFieldModelFactory.CreateSelectListField(settings.Status, options.Statuses, null, false);
 
             return new GeneralEditModel(
                             orderNumber,
@@ -86,7 +87,8 @@
                             administrator,
                             domain,
                             orderDate,
-                            options.OrderTypeName);
+                            options.OrderTypeName,
+                            status);
         }
 
         private LogEditModel CreateLogEditModel(
@@ -182,13 +184,11 @@
             var fileName = this.configurableFieldModelFactory.CreateAttachedFiles(settings.FileName, orderId, Subtopic.FileName, new List<string>(0));
             var caseNumber = this.configurableFieldModelFactory.CreateNullableDecimalField(settings.CaseNumber, null);
             var info = this.configurableFieldModelFactory.CreateStringField(settings.Info, null);
-            var status = this.configurableFieldModelFactory.CreateSelectListField(settings.Status, options.Statuses, null);
 
             return new OtherEditModel(
                             fileName,
                             caseNumber,
-                            info,
-                            status);
+                            info);
         }
 
         private ProgramEditModel CreateProgramEditModel(ProgramEditSettings settings)

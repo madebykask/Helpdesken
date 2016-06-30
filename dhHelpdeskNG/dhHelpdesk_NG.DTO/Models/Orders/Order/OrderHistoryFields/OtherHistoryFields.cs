@@ -5,12 +5,8 @@
         public OtherHistoryFields(
                 string fileName, 
                 decimal? caseNumber, 
-                string info, 
-                int? statusId,
-                string status)
+                string info) 
         {
-            this.StatusId = statusId;
-            this.Status = status;
             this.Info = info;
             this.CaseNumber = caseNumber;
             this.FileName = fileName;
@@ -21,9 +17,5 @@
         public decimal? CaseNumber { get; private set; }
         
         public string Info { get; private set; }
-        
-        public int? StatusId { get; private set; } 
-
-        public string Status { get; private set; } 
     }
 }

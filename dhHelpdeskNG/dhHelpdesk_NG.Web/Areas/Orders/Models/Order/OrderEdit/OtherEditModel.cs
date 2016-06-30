@@ -14,13 +14,11 @@
         public OtherEditModel(
             ConfigurableFieldModel<AttachedFilesModel> fileName,
             ConfigurableFieldModel<decimal?> caseNumber,
-            ConfigurableFieldModel<string> info,
-            ConfigurableFieldModel<SelectList> status)
+            ConfigurableFieldModel<string> info)
         {
             this.FileName = fileName;
             this.CaseNumber = caseNumber;
             this.Info = info;
-            this.Status = status;
         }
 
         [NotNull]
@@ -32,12 +30,6 @@
         [NotNull]
         public ConfigurableFieldModel<string> Info { get; set; }
 
-        [NotNull]
-        public ConfigurableFieldModel<SelectList> Status { get; set; }
-
-        [IsId]
-        public int? StatusId { get; set; }
-
         public static OtherEditModel CreateEmpty()
         {
             var files = ConfigurableFieldModel<AttachedFilesModel>.CreateUnshowable();
@@ -46,16 +38,14 @@
             return new OtherEditModel(
                 files,
                 ConfigurableFieldModel<decimal?>.CreateUnshowable(),
-                ConfigurableFieldModel<string>.CreateUnshowable(),
-                ConfigurableFieldModel<SelectList>.CreateUnshowable());
+                ConfigurableFieldModel<string>.CreateUnshowable());
         }
 
         public bool HasShowableFields()
         {
             return this.FileName.Show ||
                 this.CaseNumber.Show ||
-                this.Info.Show ||
-                this.Status.Show;
+                this.Info.Show;
         }
     }
 }

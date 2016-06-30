@@ -7,10 +7,8 @@
         public OtherFieldSettings(
                 TextFieldSettings fileName, 
                 TextFieldSettings caseNumber, 
-                TextFieldSettings info, 
-                TextFieldSettings status)
+                TextFieldSettings info)
         {
-            this.Status = status;
             this.Info = info;
             this.CaseNumber = caseNumber;
             this.FileName = fileName;
@@ -24,8 +22,6 @@
          
         [NotNull]
         public TextFieldSettings Info { get; private set; }
-         
-        [NotNull]
-        public TextFieldSettings Status { get; private set; }         
+            
     }
 }

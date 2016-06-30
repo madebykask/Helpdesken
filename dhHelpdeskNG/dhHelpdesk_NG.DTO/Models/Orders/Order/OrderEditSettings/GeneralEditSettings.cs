@@ -8,14 +8,16 @@
                 FieldEditSettings orderNumber, 
                 FieldEditSettings customer, 
                 TextFieldEditSettings administrator, 
-                TextFieldEditSettings domain, 
-                TextFieldEditSettings orderDate)
+                TextFieldEditSettings domain,
+                TextFieldEditSettings orderDate,
+                TextFieldEditSettings status)
         {
             this.OrderDate = orderDate;
             this.Domain = domain;
             this.Administrator = administrator;
             this.Customer = customer;
             this.OrderNumber = orderNumber;
+            this.Status = status;
         }
 
         [NotNull]
@@ -31,6 +33,9 @@
         public TextFieldEditSettings Domain { get; private set; }
     
         [NotNull]
-        public TextFieldEditSettings OrderDate { get; private set; }     
+        public TextFieldEditSettings OrderDate { get; private set; }
+
+        [NotNull]
+        public TextFieldEditSettings Status { get; private set; } 
     }
 }

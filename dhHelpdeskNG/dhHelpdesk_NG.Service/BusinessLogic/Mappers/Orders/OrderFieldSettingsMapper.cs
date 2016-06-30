@@ -117,7 +117,8 @@
                     CreateFieldSetting(fieldSettings.FindByName(GeneralFields.Customer)),
                     CreateTextFieldSetting(fieldSettings.FindByName(GeneralFields.Administrator)),
                     CreateTextFieldSetting(fieldSettings.FindByName(GeneralFields.Domain)),
-                    CreateTextFieldSetting(fieldSettings.FindByName(GeneralFields.OrderDate)));
+                    CreateTextFieldSetting(fieldSettings.FindByName(GeneralFields.OrderDate)),
+                    CreateTextFieldSetting(fieldSettings.FindByName(GeneralFields.Status)));
         }
 
         private static LogFieldSettings CreateLogFieldSettings(
@@ -173,8 +174,7 @@
             return new OtherFieldSettings(
                     CreateTextFieldSetting(fieldSettings.FindByName(OtherFields.FileName)),
                     CreateTextFieldSetting(fieldSettings.FindByName(OtherFields.CaseNumber)),
-                    CreateTextFieldSetting(fieldSettings.FindByName(OtherFields.Info)),
-                    CreateTextFieldSetting(fieldSettings.FindByName(OtherFields.Status)));
+                    CreateTextFieldSetting(fieldSettings.FindByName(OtherFields.Info)));
         }
 
         private static ProgramFieldSettings CreateProgramFieldSettings(
@@ -332,7 +332,6 @@
             MapTextFieldSettings(updatedSettings.FileName, existingSettings.FindByName(OtherFields.FileName), changedDate);
             MapTextFieldSettings(updatedSettings.CaseNumber, existingSettings.FindByName(OtherFields.CaseNumber), changedDate);
             MapTextFieldSettings(updatedSettings.Info, existingSettings.FindByName(OtherFields.Info), changedDate);
-            MapTextFieldSettings(updatedSettings.Status, existingSettings.FindByName(OtherFields.Status), changedDate);
         }
 
         private static void MapProgramSettings(

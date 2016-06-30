@@ -82,7 +82,8 @@
                         CreateFieldSettingModel(settings.Customer),
                         CreateTextFieldSettingModel(settings.Administrator),
                         CreateTextFieldSettingModel(settings.Domain),
-                        CreateTextFieldSettingModel(settings.OrderDate));
+                        CreateTextFieldSettingModel(settings.OrderDate),
+                        CreateTextFieldSettingModel(settings.Status));
         }
 
         private static LogFieldSettingsModel CreateLogSettings(LogFieldSettings settings)
@@ -134,8 +135,7 @@
             return new OtherFieldSettingsModel(
                         CreateTextFieldSettingModel(settings.FileName),
                         CreateTextFieldSettingModel(settings.CaseNumber),
-                        CreateTextFieldSettingModel(settings.Info),
-                        CreateTextFieldSettingModel(settings.Status));
+                        CreateTextFieldSettingModel(settings.Info));
         }
 
         private static ProgramFieldSettingsModel CreateProgramSettings(ProgramFieldSettings settings)
@@ -222,7 +222,8 @@
                         CreateFieldSettingForUpdate(settings.Customer),
                         CreateTextFieldSettingForUpdate(settings.Administrator),
                         CreateTextFieldSettingForUpdate(settings.Domain),
-                        CreateTextFieldSettingForUpdate(settings.OrderDate));
+                        CreateTextFieldSettingForUpdate(settings.OrderDate),
+                        CreateTextFieldSettingForUpdate(settings.Status));
         }
 
         private static LogFieldSettings CreateLogForUpdate(LogFieldSettingsModel settings)
@@ -274,8 +275,7 @@
             return new OtherFieldSettings(
                         CreateTextFieldSettingForUpdate(settings.FileName),
                         CreateTextFieldSettingForUpdate(settings.CaseNumber),
-                        CreateTextFieldSettingForUpdate(settings.Info),
-                        CreateTextFieldSettingForUpdate(settings.Status));
+                        CreateTextFieldSettingForUpdate(settings.Info));
         }
 
         private static ProgramFieldSettings CreateProgramForUpdate(ProgramFieldSettingsModel settings)
