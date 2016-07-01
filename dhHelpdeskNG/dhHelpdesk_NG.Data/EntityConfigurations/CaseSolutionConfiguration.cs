@@ -133,6 +133,20 @@
             this.Property(x => x.FinishingDescription);
             this.Property(x => x.UpdateNotifierInformation).IsOptional();
             this.Property(x => x.Status).IsRequired();
+            this.Property(x => x.CostCentre).IsOptional();
+
+            this.Property(x => x.IsAbout_CostCentre).IsOptional();
+            this.Property(x => x.IsAbout_Department_Id).IsOptional();
+            this.Property(x => x.IsAbout_OU_Id).IsOptional();
+            this.Property(x => x.IsAbout_PersonsCellPhone).IsOptional();
+            this.Property(x => x.IsAbout_PersonsEmail).IsOptional();
+            this.Property(x => x.IsAbout_PersonsName).IsOptional();
+            this.Property(x => x.IsAbout_PersonsPhone).IsOptional();
+            this.Property(x => x.IsAbout_Place).IsOptional();
+            this.Property(x => x.IsAbout_Region_Id).IsOptional();
+            this.Property(x => x.IsAbout_ReportedBy).IsOptional();
+            this.Property(x => x.IsAbout_UserCode).IsOptional();
+
 
             this.ToTable("tblcasesolution");
         }

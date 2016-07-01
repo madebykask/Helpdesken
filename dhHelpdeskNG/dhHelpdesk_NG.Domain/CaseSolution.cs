@@ -73,6 +73,19 @@ namespace DH.Helpdesk.Domain
         public int? CausingPartId { get; set; }
         public int? RegistrationSource { get; set; }
         public int Status { get; set; }
+        public string CostCentre { get; set; }
+
+        public string IsAbout_ReportedBy { get; set; }
+        public string IsAbout_PersonsName { get; set; }
+        public string IsAbout_PersonsEmail { get; set; }
+        public string IsAbout_PersonsPhone { get; set; }
+        public string IsAbout_PersonsCellPhone { get; set; }
+        public int? IsAbout_Region_Id { get; set; }
+        public int? IsAbout_Department_Id { get; set; }
+        public int? IsAbout_OU_Id { get; set; }
+        public string IsAbout_CostCentre { get; set; }
+        public string IsAbout_Place { get; set; }
+        public string IsAbout_UserCode { get; set; }
     
         public virtual CaseSolutionCategory CaseSolutionCategory { get; set; }
         public virtual CaseSolutionSchedule CaseSolutionSchedule { get; set; }

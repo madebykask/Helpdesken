@@ -3999,6 +3999,25 @@ namespace DH.Helpdesk.Web.Controllers
                         m.case_.OtherCost = caseTemplate.OtherCost;
                         m.case_.Available = caseTemplate.Available;
                         m.case_.ContactBeforeAction = caseTemplate.ContactBeforeAction;
+                        m.case_.CostCentre = caseTemplate.CostCentre;
+                        m.case_.PersonsCellphone = caseTemplate.PersonsCellPhone;
+
+                        if (m.case_.IsAbout == null)
+                            m.case_.IsAbout = new CaseIsAboutEntity();
+
+                        m.case_.IsAbout.Id = 0;
+                        m.case_.IsAbout.ReportedBy = caseTemplate.IsAbout_ReportedBy;
+                        m.case_.IsAbout.Person_Name = caseTemplate.IsAbout_PersonsName;
+                        m.case_.IsAbout.Person_Email = caseTemplate.IsAbout_PersonsEmail;
+                        m.case_.IsAbout.Person_Phone = caseTemplate.IsAbout_PersonsPhone;
+                        m.case_.IsAbout.Person_Cellphone = caseTemplate.IsAbout_PersonsCellPhone;
+                        m.case_.IsAbout.Region_Id = caseTemplate.IsAbout_Region_Id;
+                        m.case_.IsAbout.Department_Id = caseTemplate.IsAbout_Department_Id;
+                        m.case_.IsAbout.OU_Id = caseTemplate.IsAbout_OU_Id;
+                        m.case_.IsAbout.CostCentre = caseTemplate.IsAbout_CostCentre;
+                        m.case_.IsAbout.Place = caseTemplate.IsAbout_Place;
+                        m.case_.IsAbout.UserCode = caseTemplate.UserCode;
+
                         if (caseTemplate.RegistrationSource.HasValue)
                         {
                             m.CustomerRegistrationSourceId = caseTemplate.RegistrationSource.Value;
