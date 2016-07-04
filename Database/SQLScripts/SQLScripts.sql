@@ -159,6 +159,20 @@ Select cs.Id, 66, 3, GETDATE(), GETDATE() from tblCaseSolution cs
 Where cs.Id not in (Select CaseSolution_Id from tblCaseSolutionFieldSettings csf 
 					where cs.Id = csf.CaseSolution_Id and FieldName_Id = 66)
 GO
+
+IF COL_LENGTH('tblCaseSolution','CostCentre') IS NULL
+begin
+    alter table tblCaseSolution 
+	add [CostCentre] nvarchar(50) null
+end
+GO
+
+Insert into tblCaseSolutionFieldSettings
+Select cs.Id, 53, 3, GETDATE(), GETDATE() from tblCaseSolution cs
+Where cs.Id not in (Select CaseSolution_Id from tblCaseSolutionFieldSettings csf 
+					where cs.Id = csf.CaseSolution_Id and FieldName_Id = 53)
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.25'
 

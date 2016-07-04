@@ -176,6 +176,23 @@ function IsWillBeOverwritten(fieldId, val) {
             return IsWillBeOverwrittenByValue('#case__InventoryType', '#case__InventoryType', val);
             break;
 
+
+        case 'InvoiceNumber':
+            return IsWillBeOverwrittenByValue('#case__InvoiceNumber', '#case__InvoiceNumber', val);
+            break;
+
+        case 'System_Id':
+            return IsWillBeOverwrittenByValue('#case__System_Id', '#case__System_Id', val);
+            break;
+            
+        case 'Urgency_Id':
+            return IsWillBeOverwrittenByValue('#case__Urgency_Id', '#case__Urgency_Id', val);
+            break;
+
+        case 'Impact_Id':
+            return IsWillBeOverwrittenByValue('#case__Impact_Id', '#case__Impact_Id', val);
+            break;
+
         case 'WatchDate':
             return IsWillBeOverwrittenByValue('#case__WatchDate', '#case__WatchDate', val);
             break;
@@ -388,12 +405,38 @@ var ApplyTemplate = function (data, doOverwrite) {
                     el = $("#case__InventoryLocation");
                     SetValueIfElVisible(el, val, cfg);
                     break;
+
                 case 'InventoryNumber':
                     el = $("#case__InventoryNumber");
                     SetValueIfElVisible(el, val, cfg);
                     break;
                 case 'InventoryType':
                     el = $("#case__InventoryType");
+                    SetValueIfElVisible(el, val, cfg);
+                    break;
+
+                case 'InvoiceNumber':
+                    el = $("#case__InvoiceNumber");
+                    SetValueIfElVisible(el, val, cfg);
+                    break;
+
+                case 'ReferenceNumber':
+                    el = $("#case__ReferenceNumber");
+                    SetValueIfElVisible(el, val, cfg);
+                    break;
+
+                case 'System_Id':
+                    el = $("#case__System_Id");
+                    SetValueIfElVisible(el, val, cfg);
+                    break;
+
+                case 'Urgency_Id':
+                    el = $("#case__Urgency_Id");
+                    SetValueIfElVisible(el, val, cfg);
+                    break;
+                    
+                case 'Impact_Id':
+                    el = $("#case__Impact_Id");
                     SetValueIfElVisible(el, val, cfg);
                     break;
 
@@ -579,6 +622,26 @@ function IsValueApplicableFor(templateFieldId, val) {
             break;
         case 'InventoryType':
             return $("#case__InventoryType").is(':visible');
+            break;
+
+        case 'InvoiceNumber':
+            return $("#case__InvoiceNumber").is(':visible');
+            break;
+            
+        case 'ReferenceNumber':
+            return $("#case__ReferenceNumber").is(':visible');
+            break;
+
+        case 'System_Id':
+            return $("#case__System_Id").is(':visible');
+            break;
+
+        case 'Urgency_Id':
+            return $("#case__Urgency_Id").is(':visible');
+            break;
+            
+        case 'Impact_Id':
+            return $("#case__Impact_Id").is(':visible');
             break;
 
         case 'WatchDate':

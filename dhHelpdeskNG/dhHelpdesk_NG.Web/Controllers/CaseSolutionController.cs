@@ -332,6 +332,9 @@ namespace DH.Helpdesk.Web.Controllers
                     caseSolution.IsAbout_Place,
                     caseSolution.IsAbout_UserCode,
 
+                    caseSolution.System_Id,
+                    caseSolution.Urgency_Id,
+                    caseSolution.Impact_Id,
                     caseSolution.InventoryLocation,
                     caseSolution.InventoryNumber,
                     caseSolution.InventoryType,
@@ -355,7 +358,9 @@ namespace DH.Helpdesk.Web.Controllers
                     caseSolution.StateSecondary_Id,
                     caseSolution.PersonsEmail,
                     WatchDate = caseSolution.WatchDate.HasValue? caseSolution.WatchDate.Value.ToShortDateString() : string.Empty,
-                    caseSolution.CausingPartId
+                    caseSolution.CausingPartId,
+                    caseSolution.InvoiceNumber,
+                    caseSolution.ReferenceNumber
                 },
                     JsonRequestBehavior.AllowGet);
         }
