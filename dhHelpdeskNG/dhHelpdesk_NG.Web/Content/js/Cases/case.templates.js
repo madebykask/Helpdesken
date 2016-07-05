@@ -101,7 +101,7 @@ function IsWillBeOverwritten(fieldId, val) {
             return IsWillBeOverwrittenByValue('#case__Department_Id', '#case__Department_Id', val);
             break;
         case 'OU_Id':
-            return IsWillBeOverwrittenByValue('#case__OU_Id', '#case__OU_Id', val);
+            return IsWillBeOverwrittenByValue('#case__Ou_Id', '#case__Ou_Id', val);
             break;
         case 'CostCentre':
             return IsWillBeOverwrittenByValue('#case__CostCentre', '#case__CostCentre', val);
@@ -305,16 +305,41 @@ var ApplyTemplate = function (data, doOverwrite) {
 
                 case 'Region_Id':
                     el = $('#case__Region_Id');
+                    var dep_Id = data['Department_Id'];
+                    if (dep_Id != undefined && dep_Id != null) {
+                        $('#CaseTemplate_Department_Id').val(dep_Id);
+                        cfg['doNotTriggerEvent'] = false;
+                    }
+                    else
+                        $('#CaseTemplate_Department_Id').val("");
+
+                    var ou_Id = data['OU_Id'];
+                    if (ou_Id != undefined && ou_Id != null)
+                        $('#CaseTemplate_OU_Id').val(ou_Id);
+                    else
+                        $('#CaseTemplate_OU_Id').val("");
                     SetValueIfElVisible(el, val, cfg);
                     break;
 
                 case 'Department_Id':
                     el = $('#case__Department_Id');
+
+                    var reg_Id = data['Region_Id'];
+                    if (reg_Id != undefined || reg_Id != null) {
+                        cfg['doNotTriggerEvent'] = true;
+                    } else {
+                        var ou_Id = data['OU_Id'];
+                        if (ou_Id != undefined && ou_Id != null)
+                            $('#CaseTemplate_OU_Id').val(ou_Id);
+                        else
+                            $('#CaseTemplate_OU_Id').val("");
+                    }
+                        
                     SetValueIfElVisible(el, val, cfg);
                     break;
 
                 case 'OU_Id':
-                    el = $('#case__OU_Id');
+                    el = $('#case__Ou_Id');
                     SetValueIfElVisible(el, val, cfg);
                     break;
 
@@ -546,7 +571,7 @@ function IsValueApplicableFor(templateFieldId, val) {
             break;
 
         case 'OU_Id':
-            return $('#case__OU_Id').is(':visible');
+            return $('#case__Ou_Id').is(':visible');
             break;
 
         case 'CostCentre':

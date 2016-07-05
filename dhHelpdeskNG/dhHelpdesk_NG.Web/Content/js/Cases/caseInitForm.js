@@ -510,7 +510,20 @@ function CaseInitForm() {
     $('#case__Region_Id').change(function () {
         var regionId = $(this).val();
         var departmentFilterFormat = $('#DepartmentFilterFormat').val();
-        refreshDepartment(regionId, departmentFilterFormat);
+        var templateDep_Id = $("#CaseTemplate_Department_Id").val();
+        $("#CaseTemplate_Department_Id").val('');
+
+        if (templateDep_Id != undefined && templateDep_Id != "") {
+            var templateOU_Id = $("#CaseTemplate_OU_Id").val();
+            $("#CaseTemplate_OU_Id").val('');
+            if (templateOU_Id != undefined && templateOU_Id != "") 
+                refreshDepartment(regionId, departmentFilterFormat, templateDep_Id, templateOU_Id);
+            else
+                refreshDepartment(regionId, departmentFilterFormat, templateDep_Id);
+        } else {
+            refreshDepartment(regionId, departmentFilterFormat);
+        }
+        
     });
 
     $('#case__IsAbout_Region_Id').change(function () {
@@ -518,7 +531,7 @@ function CaseInitForm() {
         var departmentFilterFormat = $('#DepartmentFilterFormat').val();
         refreshIsAboutDepartment(regionId, departmentFilterFormat);
     });
-
+    
     $(publicDepartmentControlName).change(function () {
         // Remove after implementing http://redmine.fastdev.se/issues/10995        
         if (skipRefreshOU)
@@ -526,7 +539,15 @@ function CaseInitForm() {
 
         var departmentId = $(this).val();        
         var departmentFilterFormat = $('#DepartmentFilterFormat').val();
-        refreshOrganizationUnit(departmentId, departmentFilterFormat);
+
+        
+        var templateOU_Id = $("#CaseTemplate_OU_Id").val();
+        $("#CaseTemplate_OU_Id").val('');
+        if (templateOU_Id != undefined && templateOU_Id != "") 
+            refreshOrganizationUnit(departmentId, departmentFilterFormat, templateOU_Id);                
+        else 
+            refreshOrganizationUnit(departmentId, departmentFilterFormat);
+        
         showInvoice(departmentId);
     });
 

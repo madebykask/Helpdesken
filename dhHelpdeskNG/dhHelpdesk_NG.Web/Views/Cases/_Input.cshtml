@@ -205,6 +205,8 @@
                         @Html.Hidden("CurLanguageId", SessionFacade.CurrentLanguageId)
                         @Html.Hidden("SelectedValueCarrier", "")
                         @Html.Hidden("CaseTemplate_WorkingGroup_Id", "")
+                        @Html.Hidden("CaseTemplate_Department_Id", "")
+                        @Html.Hidden("CaseTemplate_OU_Id", "")
                         @Html.Hidden("LastProductAreaId", Model.case_.ProductArea_Id)
 
                         @Html.HiddenFor(model => Model.CaseLock.LockGUID)
