@@ -614,15 +614,15 @@ EditPage.prototype.init = function (p) {
                 function (_reportPresentation) {
                     me.$printArea.html(_reportPresentation);
                                         
-                    //$('#PrintCaseDialog').draggable({
-                    //    handle: ".modal-header"
-                    //});
+                    $('#PrintCaseDialog').draggable({
+                        handle: ".modal-header"
+                    });
                     
                     /* show true if you need to show case print preview*/
                     $('#PrintCaseDialog').modal({
                         "backdrop": "static",
                         "keyboard": true,
-                        "show": false
+                        "show": true
                     });
                    
                     //var _iframe = $("#caseReportContainer").find("iframe");

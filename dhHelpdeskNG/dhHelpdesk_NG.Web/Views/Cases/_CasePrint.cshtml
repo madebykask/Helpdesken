@@ -3,7 +3,7 @@
 @using DH.Helpdesk.Common.Enums
 @model DH.Helpdesk.Web.Models.Shared.ReportModel
           
-<div id="CasePrintArea" style="display:none">
+<div id="CasePrintArea" >
     @if (Model != null && Model.CanShow)
     {
         var tempNewLine = "{{NEWLINE}}";
@@ -23,28 +23,28 @@
                                                                               
                     @{var user = Model.ReportData.Where(d => d.LineType == ReportLineTypes.User).SingleOrDefault(); }
 
-                    <table>
-                        <tr style="height:15px;">
-                            <td style="width: 1050px;text-align:right;">
+                    <table class="printheader">
+                        <tr>
+                            <td style="width: 1050px;">
                                 @(user != null? user.FieldValue : "")
                             </td>
                         </tr>
-                        <tr style="height:15px;">
-                            <td style="width: 1050px;text-align:right;">
+                        <tr>
+                            <td style="width: 1050px;">
                                 @DateTime.Now.ToLocalTime() 
                             </td>
                         </tr>
                     </table>
                                                             
-                    <table border="1" style="border-color:gray">
+                    <table border="1" style="border-color:black" class="printcase">
                         @foreach (var row in Model.ReportData.Where(d=> d.LineType != ReportLineTypes.User))
                         {                          
-                            <tr style="height:40px;">
+                            <tr>
                                 @*<td style="width: 20px;text-align:center;">                                    
                                     @row.LineType
                                 </td>*@
 
-                                <td style="width: 250px;text-align:left;margin-left:20px;" class="textbold">
+                                <td style="width: 250px; margin-left:20px;" class="textbold @row.LineType">
                                     @if (row.LineType == ReportLineTypes.Log && row.FieldName.ToLower() == "lognote")
                                     {
                                         @row.FieldValue.Replace(Environment.NewLine, tempNewLine).RemoveHTMLTags().Replace(tempNewLine, Environment.NewLine).ForHtmlView()
@@ -55,7 +55,7 @@
                                     }
                                 </td>
 
-                                <td style="width: 800px;text-align:left;">
+                                <td style="width: 800px;" class="@row.LineType">
                                     @if (row.LineType == ReportLineTypes.Log && row.FieldName.ToLower() == "lognote")
                                     {
                                         
@@ -88,8 +88,8 @@
             frameDoc.document.write('<html><head>');
             frameDoc.document.write('</head><body>');
             //CSS files.     
-            var css1 = '@Url.Content("~/Content/css/dhHelpdesk.css")';
-            var css2 = '@Url.Content("~/Content/css/bootstrap.css")';
+            var css1 = '@Url.Content("~/Content/css/bootstrap.css")';
+            var css2 = '@Url.Content("~/Content/css/print.css")';
             
             frameDoc.document.write("<link rel='stylesheet' type='text/css' href='"+ css1 + "'>");
             frameDoc.document.write("<link rel='stylesheet' type='text/css' href='" + css2 + "'>");
@@ -106,5 +106,5 @@
     });
 
     /*directly print after load*/
-    $(".btn.sendToPrinter").click();
+    //$(".btn.sendToPrinter").click();
 </script>
