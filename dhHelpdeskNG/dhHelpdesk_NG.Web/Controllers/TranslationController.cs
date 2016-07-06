@@ -68,7 +68,7 @@ namespace DH.Helpdesk.Web.Controllers
        
         public ActionResult GetAllCoreTextTranslations()
         {
-            var texts = _textTranslationService.GetAllTextsAndTranslations(0);
+            var texts = _textTranslationService.GetAllTextsAndTranslations(0).Take(5);
             return this.Json(texts, JsonRequestBehavior.AllowGet);
 
             var serializer = new JavaScriptSerializer { MaxJsonLength = Int32.MaxValue };

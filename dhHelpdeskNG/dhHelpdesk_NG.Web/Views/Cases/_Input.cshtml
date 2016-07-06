@@ -1245,7 +1245,7 @@
                                     <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Description, CaseSolutionFields.Description)">
                                         <td>
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Description, "Beskrivning")
-                                            @if (Model.case_.RegistrationSource == 3)
+                                            @if (Model.case_.RegistrationSource == 3 && 1 == 2)
                                             {
                                                 var countTO = 0;
                                                 var countCC = 0;
@@ -1336,7 +1336,7 @@
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            @if (boldBCC == true)
+                                                            @if (boldBCC== true)
                                                             {
                                                                 <td>
                                                                     <b>BCC[@countBCC]</b>&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@mailBCC" data-expand-element="mailbcc"></span>

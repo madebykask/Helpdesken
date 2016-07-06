@@ -603,10 +603,11 @@ function CaseInitForm() {
 
                     exists = $('#case__Priority_Id option[value=' + data.Priority_Id + ']').length;
                     if (exists > 0 && data.Priority_Id > 0 && !alreadySetByCaseTemplate) {
-                        $("#case__Priority_Id").val(data.Priority_Id);
-                        document.getElementsByClassName('sla-value')[0].setAttribute("value", data.Priority_Id);
+                        $("#case__Priority_Id").val(data.Priority_Id);                        
                         $("#case__Priority_Id").change();
+                        
                     }
+                    $(".sla-value").eq(0).val(data.Priority_Id);
                     $("#ProductAreaHasChild").val(data.HasChild);
                 }
 
