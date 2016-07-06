@@ -1336,7 +1336,7 @@
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            @if (boldBCC== true)
+                                                            @if (boldBCC == true)
                                                             {
                                                                 <td>
                                                                     <b>BCC[@countBCC]</b>&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@mailBCC" data-expand-element="mailbcc"></span>
@@ -1651,6 +1651,18 @@
                                                         }
                                                     }
                                                 </select>
+                                                    if (Model.customerUserSetting.PriorityPermission == 0)
+                                                    {
+                                                        var priority = Model.case_.Priority_Id.HasValue ? Model.priorities.SingleOrDefault(x => x.Id == Model.case_.Priority_Id) : null;
+                                                        if (priority == null)
+                                                        {
+                                                            @Html.HiddenFor(m => m.case_.Priority_Id, new { @class = "sla-value", data_sla = 0 })
+                                                        }
+                                                        else
+                                                        {                                                            
+                                                            @Html.HiddenFor(x => x.case_.Priority_Id, new { @class = "sla-value", data_sla = priority.SolutionTime })
+                                                        }
+                                                    }
                                             }
                                             else
                                             {
