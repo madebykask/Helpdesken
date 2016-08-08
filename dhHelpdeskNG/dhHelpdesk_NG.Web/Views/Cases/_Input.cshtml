@@ -1251,7 +1251,7 @@
                                     <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Description, CaseSolutionFields.Description)">
                                         <td>
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Description, "Beskrivning")
-                                            @if (Model.case_.RegistrationSource == 3)
+                                            @if (Model.case_.RegistrationSource == 3 && 1 == 2)
                                             {
                                                 var countTO = 0;
                                                 var countCC = 0;
@@ -1657,6 +1657,18 @@
                                                         }
                                                     }
                                                 </select>
+                                                    if (Model.customerUserSetting.PriorityPermission == 0)
+                                                    {
+                                                        var priority = Model.case_.Priority_Id.HasValue ? Model.priorities.SingleOrDefault(x => x.Id == Model.case_.Priority_Id) : null;
+                                                        if (priority == null)
+                                                        {
+                                                            @Html.HiddenFor(m => m.case_.Priority_Id, new { @class = "sla-value", data_sla = 0 })
+                                                        }
+                                                        else
+                                                        {                                                            
+                                                            @Html.HiddenFor(x => x.case_.Priority_Id, new { @class = "sla-value", data_sla = priority.SolutionTime })
+                                                        }
+                                                    }
                                             }
                                             else
                                             {

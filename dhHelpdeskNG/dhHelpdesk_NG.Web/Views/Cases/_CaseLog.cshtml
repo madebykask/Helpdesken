@@ -46,7 +46,7 @@
                         <td>
                             <a href="@GetLogLink(r)"> @Html.AttributeEncode(r.TextInternal).ForHtmlView()</a>
                         </td>
-                        <td>
+                        @*<td>
                             
                             @if (Model.case_.Mail2Tickets.Any())
                             {
@@ -155,7 +155,9 @@
                                     </div>
                                 }
                             }
-                            else
+                            
+                            
+                            
                             {
                                 if (r.CaseHistory != null)
                                 {
@@ -171,6 +173,22 @@
                                         }                                    
                                     }                                        
                                 }
+                            }
+                        </td>*@
+                        <td>
+                            @if (r.CaseHistory != null)
+                            {
+                                if (r.CaseHistory.Emaillogs != null)
+                                {                                        
+                                    foreach (var l in r.CaseHistory.Emaillogs)      
+                                    {                                            
+                                    <div>
+                                        <p>
+                                            @l.EmailAddress 
+                                        </p>
+                                    </div>
+                                    }                                    
+                                }                                        
                             }
                         </td>
                         <td>
