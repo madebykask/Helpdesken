@@ -622,7 +622,7 @@ EditPage.prototype.init = function (p) {
                     $('#PrintCaseDialog').modal({
                         "backdrop": "static",
                         "keyboard": true,
-                        "show": true
+                        "show": false
                     });
                    
                     //var _iframe = $("#caseReportContainer").find("iframe");
