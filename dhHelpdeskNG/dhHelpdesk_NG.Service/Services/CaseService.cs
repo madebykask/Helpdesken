@@ -1729,6 +1729,12 @@ namespace DH.Helpdesk.Services.Services
             string recipient,
             TimeZoneInfo userTimeZone)
         {
+
+            if (!string.IsNullOrEmpty((cms.HelpdeskMailFromAdress)))
+            {
+                cms.HelpdeskMailFromAdress = cms.HelpdeskMailFromAdress.Trim();
+            }
+
             var mailTemplateId = (int)mailTemplateEnum;
             var m = this._mailTemplateService.GetMailTemplateForCustomerAndLanguage(case_.Customer_Id, case_.RegLanguage_Id, mailTemplateId);
             if (m != null && !string.IsNullOrEmpty(m.Body) && !string.IsNullOrEmpty(m.Subject))

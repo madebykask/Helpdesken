@@ -61,7 +61,7 @@ var dhform = function (options) {
         else if (_this._options.modal == 2)
         {
             _this._formAreaId = 'dh-form-on-case-area';
-            _this._options.url = _this._options.url.substr(1);
+           // _this._options.url = _this._options.url.substr(1);
             _this.load({ url: _this._options.url });
         }
     })();
