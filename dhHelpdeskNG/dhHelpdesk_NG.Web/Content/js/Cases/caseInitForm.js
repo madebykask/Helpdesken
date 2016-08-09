@@ -686,7 +686,8 @@ function CaseInitForm() {
                         $("#case__Priority_Id").change();
                         
                     }
-                    $(".sla-value").eq(0).val(data.Priority_Id);
+                    if (data.Priority_Id > 0)
+                        $(".sla-value").eq(0).val(data.Priority_Id);
                     $("#ProductAreaHasChild").val(data.HasChild);
                 }
 
