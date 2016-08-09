@@ -3517,7 +3517,7 @@ namespace DH.Helpdesk.Web.Controllers
                             case "productarea_id":
                                 if (productareaCache.ContainsKey(c.Id))
                                 {
-                                    var names = this._productAreaService.GetParentPath(c.Id, customerId).Select(name => Translation.GetCoreTextTranslation(name));
+                                    var names = this._productAreaService.GetParentPath(c.Id, customerId).Select(name => Translation.GetMasterDataTranslation(name));
                                     c.StringValue = string.Join(" - ", names);
                                 }
 
@@ -4120,7 +4120,7 @@ namespace DH.Helpdesk.Web.Controllers
                 if (p != null)
                 {
                     var names =
-                        this._productAreaService.GetParentPath(p.Id, customerId).Select(name => Translation.GetCoreTextTranslation(name));
+                        this._productAreaService.GetParentPath(p.Id, customerId).Select(name => Translation.GetMasterDataTranslation(name));
                     m.ParantPath_ProductArea = string.Join(" - ", names);
                     if (p.SubProductAreas != null && p.SubProductAreas.Where(s => s.IsActive != 0).ToList().Count > 0)
                     {
