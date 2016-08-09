@@ -24,6 +24,7 @@ var publicChangeRegion = '/Cases/ChangeRegion/';
 var publicChangeDepartment = '/Cases/ChangeDepartment/';
 
 var skipRefreshOU = false;
+var skipRefreshIsAbout_OU = false;
 
 function SetFocusToReportedByOnCase() {
     if ($('#ShowReportedBy').val() == 1) {
@@ -204,16 +205,48 @@ function refreshIsAboutDepartment(regionId, departmentFilterFormat, selectedDepa
                     $(publicIsAboutDepartmentControlName).val(selectedDepartmentId);
                     $(publicIsAboutReadOnlyDepartmentName).val(item.name);
                     option.prop("selected", true);
+                    $(publicIsAboutDepartmentControlName).append(option);
+                    skipRefreshIsAbout_OU = true;
+                    $(publicIsAboutDepartmentControlName).trigger('change');
                 }
-                $(publicIsAboutDepartmentControlName).append(option);
+                else
+                    $(publicIsAboutDepartmentControlName).append(option);
             }
         }
     }, 'json').always(function () {
         $(publicIsAboutDepartmentControlName).prop('disabled', false);
+        skipRefreshIsAbout_OU = false;
         refreshIsAboutOrganizationUnit(selectedDepartmentId, departmentFilterFormat, selectedOU);
     }).done(function () {
         $(publicIsAboutOUControlName).prop('disabled', false);
     });
+
+    //$(publicIsAboutDepartmentControlName).val('');
+    //$(publicIsAboutReadOnlyDepartmentName).val('');
+    //var ctlOption = publicIsAboutDepartmentControlName + ' option';
+    //$(publicIsAboutDepartmentControlName).prop('disabled', true);
+    //$(publicIsAboutOUControlName).prop('disabled', true);
+    //$.post(publicChangeRegion, { 'id': regionId, 'customerId': publicCustomerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {
+    //    $(ctlOption).remove();
+    //    $(publicIsAboutDepartmentControlName).append('<option value="">&nbsp;</option>');
+    //    if (data != undefined) {
+    //        for (var i = 0; i < data.list.length; i++) {
+    //            var item = data.list[i];
+    //            var option = $("<option value='" + item.id + "'>" + item.name + "</option>");
+    //            if (option.val() == selectedDepartmentId) {
+    //                $(publicIsAboutDepartmentControlName).val(selectedDepartmentId);
+    //                $(publicIsAboutReadOnlyDepartmentName).val(item.name);
+    //                option.prop("selected", true);
+    //            }
+    //            $(publicIsAboutDepartmentControlName).append(option);
+    //        }
+    //    }
+    //}, 'json').always(function () {
+    //    $(publicIsAboutDepartmentControlName).prop('disabled', false);
+    //    refreshIsAboutOrganizationUnit(selectedDepartmentId, departmentFilterFormat, selectedOU);
+    //}).done(function () {
+    //    $(publicIsAboutOUControlName).prop('disabled', false);
+    //});
 }
 
 function GetComputerUserSearchOptions() {
@@ -520,7 +553,7 @@ function CaseInitForm() {
                 refreshDepartment(regionId, departmentFilterFormat, templateDep_Id, templateOU_Id);
             else
                 refreshDepartment(regionId, departmentFilterFormat, templateDep_Id);
-        } else {
+        } else {  
             refreshDepartment(regionId, departmentFilterFormat);
         }
         
@@ -529,7 +562,20 @@ function CaseInitForm() {
     $('#case__IsAbout_Region_Id').change(function () {
         var regionId = $(this).val();
         var departmentFilterFormat = $('#DepartmentFilterFormat').val();
-        refreshIsAboutDepartment(regionId, departmentFilterFormat);
+        var templateDep_Id = $("#CaseTemplate_IsAbout_Department_Id").val();
+        $("#CaseTemplate_IsAbout_Department_Id").val('');
+
+        if (templateDep_Id != undefined && templateDep_Id != "") {
+            var templateOU_Id = $("#CaseTemplate_IsAbout_OU_Id").val();
+            $("#CaseTemplate_IsAbout_OU_Id").val('');
+            if (templateOU_Id != undefined && templateOU_Id != "")
+                refreshDepartment(regionId, departmentFilterFormat, templateDep_Id, templateOU_Id);
+            else
+                refreshIsAboutDepartment(regionId, departmentFilterFormat, templateDep_Id);
+        } else {
+            refreshIsAboutDepartment(regionId, departmentFilterFormat);
+        }
+        //refreshIsAboutDepartment(regionId, departmentFilterFormat);
     });
     
     $(publicDepartmentControlName).change(function () {
@@ -551,10 +597,22 @@ function CaseInitForm() {
         showInvoice(departmentId);
     });
 
-    $(publicIsAboutDepartmentControlName).change(function () {   
+    $(publicIsAboutDepartmentControlName).change(function () {
+        if (skipRefreshIsAbout_OU)
+            return;
+
         var departmentId = $(this).val();
         var departmentFilterFormat = $('#DepartmentFilterFormat').val();
-        refreshIsAboutOrganizationUnit(departmentId, departmentFilterFormat);
+
+        var templateOU_Id = $("#CaseTemplate_IsAbout_OU_Id").val();
+        $("#CaseTemplate_IsAbout_OU_Id").val('');
+        if (templateOU_Id != undefined && templateOU_Id != "")
+            refreshIsAboutOrganizationUnit(departmentId, departmentFilterFormat, templateOU_Id);
+        else
+            refreshIsAboutOrganizationUnit(departmentId, departmentFilterFormat);
+
+
+        //refreshIsAboutOrganizationUnit(departmentId, departmentFilterFormat);
     });
 
     function showInvoice(departmentId) {

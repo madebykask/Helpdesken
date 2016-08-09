@@ -45,9 +45,8 @@
                         </td>
                         <td>
                             <a href="@GetLogLink(r)"> @Html.AttributeEncode(r.TextInternal).ForHtmlView()</a>
-                        </td>
-                        @*<td>
-                            
+                        </td>                        
+                        <td>                            
                             @if (Model.case_.Mail2Tickets.Any())
                             {
                                 var countTO = 0;
@@ -155,9 +154,7 @@
                                     </div>
                                 }
                             }
-                            
-                            
-                            
+                            else
                             {
                                 if (r.CaseHistory != null)
                                 {
@@ -165,7 +162,7 @@
                                     {                                        
                                         foreach (var l in r.CaseHistory.Emaillogs)      
                                         {                                            
-                                        <div>
+                                         <div>
                                             <p>
                                                 @l.EmailAddress 
                                             </p>
@@ -174,23 +171,7 @@
                                     }                                        
                                 }
                             }
-                        </td>*@
-                        <td>
-                            @if (r.CaseHistory != null)
-                            {
-                                if (r.CaseHistory.Emaillogs != null)
-                                {                                        
-                                    foreach (var l in r.CaseHistory.Emaillogs)      
-                                    {                                            
-                                    <div>
-                                        <p>
-                                            @l.EmailAddress 
-                                        </p>
-                                    </div>
-                                    }                                    
-                                }                                        
-                            }
-                        </td>
+                        </td>                        
                         <td>
                             @if (r.LogFiles != null)
                             {

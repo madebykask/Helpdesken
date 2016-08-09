@@ -207,6 +207,8 @@
                         @Html.Hidden("CaseTemplate_WorkingGroup_Id", "")
                         @Html.Hidden("CaseTemplate_Department_Id", "")
                         @Html.Hidden("CaseTemplate_OU_Id", "")
+                        @Html.Hidden("CaseTemplate_IsAbout_Department_Id", "")
+                        @Html.Hidden("CaseTemplate_IsAbout_OU_Id", "")
                         @Html.Hidden("LastProductAreaId", Model.case_.ProductArea_Id)
 
                         @Html.HiddenFor(model => Model.CaseLock.LockGUID)
@@ -1251,7 +1253,7 @@
                                     <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Description, CaseSolutionFields.Description)">
                                         <td>
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Description, "Beskrivning")
-                                            @if (Model.case_.RegistrationSource == 3 && 1 == 2)
+                                            @if (Model.case_.RegistrationSource == 3)
                                             {
                                                 var countTO = 0;
                                                 var countCC = 0;

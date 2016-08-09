@@ -390,21 +390,46 @@ var ApplyTemplate = function (data, doOverwrite) {
                     el = $('#case__IsAbout_ReportedBy');
                     SetValueIfElVisible(el, val, cfg);
                     break;
-
-                case 'Region_Id':
+                
+                case 'IsAbout_Region_Id':
                     el = $('#case__IsAbout_Region_Id');
+                    var dep_Id = data['IsAbout_Department_Id'];
+                    if (dep_Id != undefined && dep_Id != null) {
+                        $('#CaseTemplate_IsAbout_Department_Id').val(dep_Id);
+                        cfg['doNotTriggerEvent'] = false;
+                    }
+                    else
+                        $('#CaseTemplate_IsAbout_Department_Id').val("");
+
+                    var ou_Id = data['IsAbout_OU_Id'];
+                    if (ou_Id != undefined && ou_Id != null)
+                        $('#CaseTemplate_IsAbout_OU_Id').val(ou_Id);
+                    else
+                        $('#CaseTemplate_IsAbout_OU_Id').val("");
                     SetValueIfElVisible(el, val, cfg);
                     break;
 
                 case 'IsAbout_Department_Id':
                     el = $('#case__IsAbout_Department_Id');
+
+                    var reg_Id = data['IsAbout_Region_Id'];
+                    if (reg_Id != undefined || reg_Id != null) {
+                        cfg['doNotTriggerEvent'] = true;
+                    } else {
+                        var ou_Id = data['IsAbout_OU_Id'];
+                        if (ou_Id != undefined && ou_Id != null)
+                            $('#CaseTemplate_IsAbout_OU_Id').val(ou_Id);
+                        else
+                            $('#CaseTemplate_IsAbout_OU_Id').val("");
+                    }
+
                     SetValueIfElVisible(el, val, cfg);
                     break;
 
                 case 'IsAbout_OU_Id':
                     el = $('#case__IsAbout_Ou_Id');
                     SetValueIfElVisible(el, val, cfg);
-                    break;
+                    break;               
 
                 case 'IsAbout_CostCentre':
                     el = $("#case__IsAbout_CostCentre");
