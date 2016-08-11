@@ -75,7 +75,8 @@ namespace DH.Helpdesk.Services.Services
             CaseLog caseLog, 
             CaseMailSetting caseMailSetting, 
             int userId, 
-            string adUser,           
+            string adUser,
+            string createByApp,
             out IDictionary<string, string> errors,
             Case parentCase = null);
 
@@ -83,7 +84,8 @@ namespace DH.Helpdesk.Services.Services
             Case c,
             int userId,
             string adUser,
-            out IDictionary<string, string> errors,
+            string createdByApp,  
+            out IDictionary<string, string> errors,            
             string defaultUser = "",
             ExtraFieldCaseHistory extraField = null);
 
@@ -93,7 +95,7 @@ namespace DH.Helpdesk.Services.Services
         void MarkAsUnread(int caseId);
         void MarkAsRead(int caseId);
         void SendSelfServiceCaseLogEmail(int caseId, CaseMailSetting cms, int caseHistoryId, CaseLog log, string basePath, TimeZoneInfo userTimeZone, List<CaseFileDto> logFiles = null);
-        void Activate(int caseId, int userId, string adUser, out IDictionary<string, string> errors);
+        void Activate(int caseId, int userId, string adUser, string createByApp, out IDictionary<string, string> errors);
         IList<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user);
         void Commit();
 
@@ -834,12 +836,12 @@ namespace DH.Helpdesk.Services.Services
             this._caseRepository.UpdateFollowUpDate(caseId, time);  
         }
 
-        public void Activate(int caseId, int userId, string adUser, out IDictionary<string, string> errors)
+        public void Activate(int caseId, int userId, string adUser, string createdByApp, out IDictionary<string, string> errors)
         {
             this._caseRepository.Activate(caseId);
             var c = _caseRepository.GetDetachedCaseById(caseId);
             this._caseStatService.UpdateCaseStatistic(c);
-            SaveCaseHistory(c, userId, adUser, out errors);  
+            SaveCaseHistory(c, userId, adUser, createdByApp, out errors);  
         }
 
         public void SendSelfServiceCaseLogEmail(int caseId, CaseMailSetting cms, int caseHistoryId, CaseLog log, string basePath, TimeZoneInfo userTimeZone, List<CaseFileDto> logFiles = null)
@@ -948,6 +950,7 @@ namespace DH.Helpdesk.Services.Services
                 CaseMailSetting caseMailSetting, 
                 int userId, 
                 string adUser, 
+                string createdByApp,
                 out IDictionary<string, string> errors,
                 Case parentCase = null)
         {
@@ -1007,8 +1010,8 @@ namespace DH.Helpdesk.Services.Services
             }
 
             ret = userId == 0 ? 
-                this.SaveCaseHistory(c, userId, adUser, out errors, adUser, extraFields) : 
-                this.SaveCaseHistory(c, userId, adUser, out errors, string.Empty, extraFields);
+                this.SaveCaseHistory(c, userId, adUser, createdByApp, out errors, adUser, extraFields) : 
+                this.SaveCaseHistory(c, userId, adUser, createdByApp, out errors, string.Empty, extraFields);
 
             return ret;
         }
@@ -1127,8 +1130,9 @@ namespace DH.Helpdesk.Services.Services
             Case c,
             int userId,
             string adUser,
+            string createdByApp,
             out IDictionary<string, string> errors,
-                                   string defaultUser = "",
+            string defaultUser = "",
             ExtraFieldCaseHistory extraField = null)
         {
             if (c == null)
@@ -1136,6 +1140,7 @@ namespace DH.Helpdesk.Services.Services
 
             errors = new Dictionary<string, string>();
             var h = this.GenerateHistoryFromCase(c, userId, adUser, defaultUser, extraField);
+            h.CreatedByApp = createdByApp;
             this._caseHistoryRepository.Add(h);
 
             if (errors.Count == 0)

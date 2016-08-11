@@ -1176,7 +1176,7 @@ namespace DH.Helpdesk.Web.Controllers
                                         logFileStr);
 
             var extraField = new ExtraFieldCaseHistory { CaseLog = logStr };
-            this._caseService.SaveCaseHistory(c, SessionFacade.CurrentUser.Id, adUser, out errors, string.Empty, extraField);
+            this._caseService.SaveCaseHistory(c, SessionFacade.CurrentUser.Id, adUser, CreatedByApplications.Helpdesk5, out errors, string.Empty, extraField);
 
             return this.RedirectToAction("edit", "cases", new { id = caseId });
 
@@ -1855,7 +1855,7 @@ namespace DH.Helpdesk.Web.Controllers
                 IDictionary<string, string> errors;
                 string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
                 var extraField = new ExtraFieldCaseHistory { CaseFile = StringTags.Delete + fileName.Trim() };
-                this._caseService.SaveCaseHistory(c, SessionFacade.CurrentUser.Id, adUser, out errors, string.Empty, extraField);
+                this._caseService.SaveCaseHistory(c, SessionFacade.CurrentUser.Id, adUser, CreatedByApplications.Helpdesk5, out errors, string.Empty, extraField);
             }
         }
 
@@ -1883,7 +1883,7 @@ namespace DH.Helpdesk.Web.Controllers
                 if (c != null)
                 {
                     var extraField = new ExtraFieldCaseHistory { LogFile = StringTags.Delete + fileName.Trim() };
-                    this._caseService.SaveCaseHistory(c, SessionFacade.CurrentUser.Id, adUser, out errors, string.Empty, extraField);
+                    this._caseService.SaveCaseHistory(c, SessionFacade.CurrentUser.Id, adUser, CreatedByApplications.Helpdesk5, out errors, string.Empty, extraField);
                 }
             }
         }
@@ -1998,7 +1998,7 @@ namespace DH.Helpdesk.Web.Controllers
             string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
             if (SessionFacade.CurrentUser != null)
                 if (SessionFacade.CurrentUser.ActivateCasePermission == 1)
-                    this._caseService.Activate(id, SessionFacade.CurrentUser.Id, adUser, out errors);
+                    this._caseService.Activate(id, SessionFacade.CurrentUser.Id, adUser, CreatedByApplications.Helpdesk5, out errors);
 
             return this.RedirectToAction("edit", "cases", new { id, redirectFrom = "save", backUrl });
         }
@@ -2642,6 +2642,7 @@ namespace DH.Helpdesk.Web.Controllers
                         caseMailSetting,
                         SessionFacade.CurrentUser.Id,
                         this.User.Identity.Name,
+                        CreatedByApplications.Helpdesk5,
                         out errors,
                         parentCase);                       
             
@@ -2770,7 +2771,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var c = this._caseService.GetCaseById(caseLog.CaseId);
                 // save case and case history
                 c.FinishingDescription = @case.FinishingDescription;
-                int caseHistoryId = this._caseService.SaveCase(c, caseLog, null, SessionFacade.CurrentUser.Id, this.User.Identity.Name, out errors);
+                int caseHistoryId = this._caseService.SaveCase(c, caseLog, null, SessionFacade.CurrentUser.Id, this.User.Identity.Name, CreatedByApplications.Helpdesk5, out errors);
                 caseLog.CaseHistoryId = caseHistoryId;
             }
 

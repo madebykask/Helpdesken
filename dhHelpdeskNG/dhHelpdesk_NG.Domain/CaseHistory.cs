@@ -90,6 +90,7 @@
         public string IsAbout_Persons_Phone { get; set; }
         public string IsAbout_UserCode { get; set; }
         public int? IsAbout_Department_Id { get; set; }
+        public string CreatedByApp { get; set; }
 
 //        /// <summary>
 //        /// Number of parent case (if any)

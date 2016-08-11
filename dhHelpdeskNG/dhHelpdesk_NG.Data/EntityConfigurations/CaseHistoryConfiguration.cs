@@ -135,6 +135,7 @@
             this.Property(x => x.IsAbout_Persons_Phone).IsOptional().HasMaxLength(40);
             this.Property(x => x.IsAbout_UserCode).IsOptional().HasMaxLength(20);
             this.Property(x => x.IsAbout_Department_Id).IsOptional();
+            this.Property(x => x.CreatedByApp).IsOptional();
             
             this.ToTable("tblcasehistory");
         }

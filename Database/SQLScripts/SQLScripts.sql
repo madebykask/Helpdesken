@@ -1514,6 +1514,15 @@ as
 
 	select * from @ResultSet order by InOrder Asc
 
+
+
+
+ IF COL_LENGTH('tblCaseHistory','CreatedByApp') IS NULL
+begin
+    alter table tblCaseHistory 
+	add [CreatedByApp] nvarchar(80) null
+end
+GO
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.25'
 
