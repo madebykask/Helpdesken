@@ -1268,36 +1268,39 @@
                                                 {
                                                     foreach (var mail in Model.case_.Mail2Tickets)
                                                     {
-                                                        if (mail.Type == "to")
+                                                        if (mail.Log_Id == null)
                                                         {
-                                                            countTO = countTO + 1;
-                                                            mailTO = mailTO + mail.EMailAddress + "; ";
-
-                                                            if (mail.EMailAddress == Model.case_.Customer.HelpdeskEmail)
+                                                            if (mail.Type == "to")
                                                             {
-                                                                boldTO = true;
+                                                                countTO = countTO + 1;
+                                                                mailTO = mailTO + mail.EMailAddress + "; ";
+
+                                                                if (mail.EMailAddress == Model.case_.Customer.HelpdeskEmail)
+                                                                {
+                                                                    boldTO = true;
+                                                                }
                                                             }
-                                                        }
 
-                                                        if (mail.Type == "cc")
-                                                        {
-                                                            countCC = countCC + 1;
-                                                            mailCC = mailCC + mail.EMailAddress + "; ";
-
-                                                            if (mail.EMailAddress == Model.case_.Customer.HelpdeskEmail)
+                                                            if (mail.Type == "cc")
                                                             {
-                                                                boldCC = true;
+                                                                countCC = countCC + 1;
+                                                                mailCC = mailCC + mail.EMailAddress + "; ";
+
+                                                                if (mail.EMailAddress == Model.case_.Customer.HelpdeskEmail)
+                                                                {
+                                                                    boldCC = true;
+                                                                }
                                                             }
-                                                        }
 
-                                                        if (mail.Type == "bcc")
-                                                        {
-                                                            countBCC = countBCC + 1;
-                                                            mailBCC = mailBCC + mail.EMailAddress + "; ";
-
-                                                            if (mail.EMailAddress == Model.case_.Customer.HelpdeskEmail)
+                                                            if (mail.Type == "bcc")
                                                             {
-                                                                boldBCC = true;
+                                                                countBCC = countBCC + 1;
+                                                                mailBCC = mailBCC + mail.EMailAddress + "; ";
+
+                                                                if (mail.EMailAddress == Model.case_.Customer.HelpdeskEmail)
+                                                                {
+                                                                    boldBCC = true;
+                                                                }
                                                             }
                                                         }
                                                     }

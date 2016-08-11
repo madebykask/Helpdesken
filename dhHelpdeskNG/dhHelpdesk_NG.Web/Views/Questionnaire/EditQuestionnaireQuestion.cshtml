@@ -63,7 +63,7 @@
                                             @Translation.Get("Nummer", Enums.TranslationSource.TextTranslation):
                                         </td>
                                         <td class="span9">
-                                            @if (Model.LanguageId == LanguageId.Swedish)
+                                            @if (Model.LanguageId == LanguageIds.Swedish)
                                             {
                                                 @Html.EditorFor(model => model.QuestionNumber)
                                                 @Html.ValidationMessageFor(model => model.QuestionNumber)
@@ -88,7 +88,7 @@
                                             @Translation.Get("Visa kommentar", Enums.TranslationSource.TextTranslation):
                                         </td>                                        
                                         <td class="checkbox" style="padding-left: 20px">                                        
-                                            <input type="checkbox" name="ShowNote" @(Model.ShowNote == 1 ? "checked=checked" : "")  @(Model.LanguageId != LanguageId.Swedish ? "disabled" : "") value ="1" />                                        
+                                            <input type="checkbox" name="ShowNote" @(Model.ShowNote == 1 ? "checked=checked" : "")  @(Model.LanguageId != LanguageIds.Swedish ? "disabled" : "") value ="1" />                                        
                                             <input type="hidden" name="ShowNote" value="0" />                                                                                                                 
                                         </td> 
                                     </tr>                                    

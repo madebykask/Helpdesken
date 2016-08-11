@@ -27,7 +27,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if (Model.LanguageId == LanguageId.Swedish)
+                            @if (Model.LanguageId == LanguageIds.Swedish)
                             {                                                                                                
                                 <tr>
                                     <td>
@@ -55,7 +55,7 @@
                                         @Html.HiddenFor(o => o.Options[i].LanguageId)                                       
                                         @Html.HiddenFor(o => o.Options[i].QuestionId)                                       
 
-                                        @if (Model.LanguageId == LanguageId.Swedish)
+                                        @if (Model.LanguageId == LanguageIds.Swedish)
                                         {@Html.TextBoxFor( o => o.Options[i].OptionPos , new {style = "width: 85%;"})}
                                         else
                                         {@Html.TextBoxFor(o => o.Options[i].OptionPos, new { style = "width: 85%;", @readonly = "" })}                                                                                                                                                                                                         
@@ -64,13 +64,13 @@
                                         @Html.TextBoxFor(o => o.Options[i].Option, new { style = "width: 95%;" })                                       
                                     </td>
                                     <td>
-                                        @if (Model.LanguageId == LanguageId.Swedish)
+                                        @if (Model.LanguageId == LanguageIds.Swedish)
                                         {@Html.TextBoxFor(o => o.Options[i].OptionValue, new { style = "width: 85%;" })}
                                         else
                                         {@Html.TextBoxFor(o => o.Options[i].OptionValue, new { style = "width: 85%;", @readonly = "" })}                                                                                                                                                                   
                                     </td>                                    
                                     <td>
-                                        @if (Model.LanguageId != LanguageId.Swedish && Model.Options[i].LanguageId == LanguageId.Swedish)
+                                        @if (Model.LanguageId != LanguageIds.Swedish && Model.Options[i].LanguageId == LanguageIds.Swedish)
                                         {<input type="button" disabled="1" value="@Translation.Get("Delete", Enums.TranslationSource.TextTranslation)" class="btn"/>}
                                         else
                                         {                                                                                       
