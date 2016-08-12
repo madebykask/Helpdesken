@@ -16,32 +16,36 @@ $(function () {
 
     $('.icon-info-sign.ml15.expander').on('click', function () {
         var expandEl = $(this).attr('data-expand-element');
-        var lastSelected = $('#lastMailSelected').val();
+        var logId = $(this).attr('data-expand-log-id');
+        if (logId == undefined)
+            logId = "";
+
+        var lastSelected = $('#lastMailSelected' + logId).val();
         var displayType = '';
         if (lastSelected == expandEl) {
             displayType = 'none';
-            $('#lastMailSelected').val('')
+            $('#lastMailSelected' + logId).val('')
         }
         else {
             displayType = 'block';
-            $('#lastMailSelected').val(expandEl)
+            $('#lastMailSelected' + logId).val(expandEl)
         }
 
         switch (expandEl) {
             case "mailto":                
-                $('#mailto').css('display', displayType);
-                $('#mailcc').css('display', 'none');
-                $('#mailbcc').css('display', 'none');
+                $('#mailto' + logId ).css('display', displayType);
+                $('#mailcc' + logId).css('display', 'none');
+                $('#mailbcc' + logId).css('display', 'none');
                 break;
             case "mailcc":                
-                $('#mailcc').css('display', displayType);
-                $('#mailto').css('display', 'none');
-                $('#mailbcc').css('display', 'none');
+                $('#mailcc' + logId).css('display', displayType);
+                $('#mailto' + logId).css('display', 'none');
+                $('#mailbcc' + logId).css('display', 'none');
                 break;
             case "mailbcc":
-                $('#mailbcc').css('display', displayType);
-                $('#mailto').css('display', 'none');
-                $('#mailcc').css('display', 'none');
+                $('#mailbcc' + logId).css('display', displayType);
+                $('#mailto' + logId).css('display', 'none');
+                $('#mailcc' + logId).css('display', 'none');
                 break;
         }
     });
