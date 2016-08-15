@@ -76,7 +76,7 @@ namespace DH.Helpdesk.Services.Services
             CaseMailSetting caseMailSetting, 
             int userId, 
             string adUser,
-            string createByApp,
+            CaseExtraInfo caseExtraInfo,            
             out IDictionary<string, string> errors,
             Case parentCase = null);
 
@@ -84,7 +84,7 @@ namespace DH.Helpdesk.Services.Services
             Case c,
             int userId,
             string adUser,
-            string createdByApp,  
+            string createdByApp,
             out IDictionary<string, string> errors,            
             string defaultUser = "",
             ExtraFieldCaseHistory extraField = null);
@@ -840,7 +840,7 @@ namespace DH.Helpdesk.Services.Services
         {
             this._caseRepository.Activate(caseId);
             var c = _caseRepository.GetDetachedCaseById(caseId);
-            this._caseStatService.UpdateCaseStatistic(c);
+            this._caseStatService.UpdateCaseStatistic(c);            
             SaveCaseHistory(c, userId, adUser, createdByApp, out errors);  
         }
 
@@ -950,7 +950,7 @@ namespace DH.Helpdesk.Services.Services
                 CaseMailSetting caseMailSetting, 
                 int userId, 
                 string adUser, 
-                string createdByApp,
+                CaseExtraInfo caseExtraInfo,
                 out IDictionary<string, string> errors,
                 Case parentCase = null)
         {
@@ -1009,9 +1009,11 @@ namespace DH.Helpdesk.Services.Services
                 this.AddChildCase(cases.Id, parentCase.Id, out errors);
             }
 
+            extraFields.LeadTime = caseExtraInfo.LeadTimeForNow;
+
             ret = userId == 0 ? 
-                this.SaveCaseHistory(c, userId, adUser, createdByApp, out errors, adUser, extraFields) : 
-                this.SaveCaseHistory(c, userId, adUser, createdByApp, out errors, string.Empty, extraFields);
+                this.SaveCaseHistory(c, userId, adUser, caseExtraInfo.CreatedByApp, out errors, adUser, extraFields) :
+                this.SaveCaseHistory(c, userId, adUser, caseExtraInfo.CreatedByApp, out errors, string.Empty, extraFields);
 
             return ret;
         }
@@ -1952,6 +1954,7 @@ namespace DH.Helpdesk.Services.Services
                 h.LogFile  = extraField.LogFile;
                 h.CaseLog  = extraField.CaseLog;
                 h.ClosingReason = extraField.ClosingReason;
+                h.LeadTime = extraField.LeadTime;
             }
             
             return h;

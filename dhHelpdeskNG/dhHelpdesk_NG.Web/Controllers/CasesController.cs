@@ -1175,7 +1175,7 @@ namespace DH.Helpdesk.Web.Controllers
                                         tmpLog.TextInternal,
                                         logFileStr);
 
-            var extraField = new ExtraFieldCaseHistory { CaseLog = logStr };
+            var extraField = new ExtraFieldCaseHistory { CaseLog = logStr };            
             this._caseService.SaveCaseHistory(c, SessionFacade.CurrentUser.Id, adUser, CreatedByApplications.Helpdesk5, out errors, string.Empty, extraField);
 
             return this.RedirectToAction("edit", "cases", new { id = caseId });
@@ -2593,6 +2593,7 @@ namespace DH.Helpdesk.Web.Controllers
                 #endregion
             }
 
+            var leadTime = 0; 
             if (caseLog != null && caseLog.FinishingType > 0)
             {
                 if (caseLog.FinishingDate == null)
@@ -2605,7 +2606,7 @@ namespace DH.Helpdesk.Web.Controllers
                     if (caseLog.FinishingDate.Value.ToShortDateString() == DateTime.Today.ToShortDateString())
                     {
                         caseLog.FinishingDate = utcNow;
-                    } 
+                    }
                     else
                     {
                         caseLog.FinishingDate = DateTime.SpecifyKind(caseLog.FinishingDate.Value, DateTimeKind.Local).ToUniversalTime();
@@ -2626,15 +2627,36 @@ namespace DH.Helpdesk.Web.Controllers
                 }
 
                 var workTimeCalc = workTimeCalcFactory.Build(case_.RegTime, case_.FinishingDate.Value, deptIds);
-                case_.LeadTime = workTimeCalc.CalculateWorkTime(
+                leadTime = workTimeCalc.CalculateWorkTime(
                     case_.RegTime,
                     case_.FinishingDate.Value.ToUniversalTime(),
+                    case_.Department_Id) - case_.ExternalTime;
+
+                case_.LeadTime = leadTime;
+            }
+            else
+            {                
+                var workTimeCalcFactory = new WorkTimeCalculatorFactory(
+                    ManualDependencyResolver.Get<IHolidayService>(),
+                    curCustomer.WorkingDayStart,
+                    curCustomer.WorkingDayEnd,
+                    TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
+                int[] deptIds = null;
+                if (case_.Department_Id.HasValue)
+                {
+                    deptIds = new int[] { case_.Department_Id.Value };
+                }
+
+                var workTimeCalc = workTimeCalcFactory.Build(case_.RegTime, utcNow, deptIds);
+                leadTime = workTimeCalc.CalculateWorkTime(
+                    case_.RegTime,
+                    utcNow.ToUniversalTime(),
                     case_.Department_Id) - case_.ExternalTime;
             }
 
             var childCasesIds = this._caseService.GetChildCasesFor(case_.Id).Where(it => !it.ClosingDate.HasValue).Select(it => it.Id).ToArray();
 
-
+            var ei = new CaseExtraInfo() { CreatedByApp = CreatedByApplications.Helpdesk5, LeadTimeForNow = leadTime };
             // save case and case history
             int caseHistoryId = this._caseService.SaveCase(
                         case_,
@@ -2642,7 +2664,7 @@ namespace DH.Helpdesk.Web.Controllers
                         caseMailSetting,
                         SessionFacade.CurrentUser.Id,
                         this.User.Identity.Name,
-                        CreatedByApplications.Helpdesk5,
+                        ei,
                         out errors,
                         parentCase);                       
             
@@ -2771,7 +2793,8 @@ namespace DH.Helpdesk.Web.Controllers
                 var c = this._caseService.GetCaseById(caseLog.CaseId);
                 // save case and case history
                 c.FinishingDescription = @case.FinishingDescription;
-                int caseHistoryId = this._caseService.SaveCase(c, caseLog, null, SessionFacade.CurrentUser.Id, this.User.Identity.Name, CreatedByApplications.Helpdesk5, out errors);
+                var ei = new CaseExtraInfo() {CreatedByApp = CreatedByApplications.Helpdesk5, LeadTimeForNow = 0};
+                int caseHistoryId = this._caseService.SaveCase(c, caseLog, null, SessionFacade.CurrentUser.Id, this.User.Identity.Name, ei, out errors);
                 caseLog.CaseHistoryId = caseHistoryId;
             }
 

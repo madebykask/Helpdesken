@@ -10,6 +10,8 @@
 
         public string CaseLog { get; set; }
 
-        public string ClosingReason { get; set; } 
+        public string ClosingReason { get; set; }
+
+        public int LeadTime { get; set; } 
     }
 }
