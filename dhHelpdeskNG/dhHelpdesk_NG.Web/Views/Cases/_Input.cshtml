@@ -34,7 +34,7 @@
         lostChangesConfirmation: '@Html.Raw(Translation.Get("Dina ändringar har inte sparats. Fortsätt?"))',
         finishingDateMessage: '@Html.Raw(Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) + " " + Translation.Get("kan inte vara tidigare än registreringsdatum."))',
         checkInactiveDataErrorMessage: '@Html.Raw(Translation.Get("Problem med kommunikation med servern."))',
-        productAreaChangeMessage: '@Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), 
+        productAreaChangeMessage: '@Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(),
                                                     Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)' + " " + 
                                   '@Translation.Get("kan inte ändra eftersom det finns order som inte är skickade.")', 
         caseTemplateChangeMessage: '@Translation.Get("Du kan inte använda ärendemall eftersom det finns order som inte är skickade.")', 
@@ -522,7 +522,7 @@
                                 <h4><a href="#" class="showbtn"><i class="icon-plus-sign"></i></a>
                                     <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
                                         @Translation.Get("Angående") -&nbsp;  @if (Model.case_.IsAbout != null && @Model.case_.IsAbout.ReportedBy != null)
-                                                                            { @Model.case_.IsAbout.ReportedBy }&nbsp;
+                                                                              { @Model.case_.IsAbout.ReportedBy }&nbsp;
                                                 @if (Model.case_.IsAbout != null && Model.case_.IsAbout.Person_Name != null)
                                                 {
                                                         @Model.case_.IsAbout.Person_Name 
@@ -1347,7 +1347,7 @@
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            @if (boldBCC== true)
+                                                            @if (boldBCC == true)
                                                             {
                                                                 <td>
                                                                     <b>BCC[@countBCC]</b>&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@mailBCC" data-expand-element="mailbcc"></span>
@@ -1539,6 +1539,7 @@
                                             @if (Model.EditMode == Enums.AccessMode.FullAccess)
                                             {
                                                 <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
+                                                <a href="#upload_clipboard_file_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till från Urklipp", SessionFacade.CurrentLanguageId)</a>
                                             }
                                             <div id="divCaseFiles">                                                
                                                 @Html.Partial("_CaseFiles", Model.CaseFilesModel, new ViewDataDictionary { { "CaseInactive", Model.case_.FinishingDate.HasValue } })

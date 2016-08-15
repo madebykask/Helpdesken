@@ -1,4 +1,4 @@
-﻿<div id="upload_files_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabelCase" aria-hidden="true" >
+﻿<div id="upload_files_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabelCase" aria-hidden="true">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h3>&nbsp;</h3>
@@ -11,7 +11,7 @@
     </div>
 </div>
 
-<div id="upload_logfiles_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabelLog" aria-hidden="true" >
+<div id="upload_logfiles_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabelLog" aria-hidden="true">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h3>&nbsp;</h3>
@@ -21,5 +21,28 @@
     </div>
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Stäng", Enums.TranslationSource.TextTranslation)</button>
+    </div>
+</div>
+
+<div id="upload_clipboard_file_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabelCase" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3>&nbsp;</h3>
+    </div>
+    <div class="modal-body max-height-600">
+        <form onsubmit="return false;">
+            <div class="form-group">
+                <label >@Translation.Get("Filnamn"): </label>
+                <input class="form-control" type="text" id="imgFilename" required/>
+            </div>
+            <div class="form-group">
+                <label >@(Translation.Get("Förhandsgranska") + " (" +Translation.Get("Kopiera bilddata till Urklipp och tryck Ctrl + V") +")"): </label>
+                <div id="previewPnl"></div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" id="btnSave" class="btn btn-ok" style="display: none">@Translation.Get("Spara")</button>
+        <button type="button" id="btnCancel" class="btn btn-cancel" data-dismiss="modal">@Translation.Get("Avbryt")</button>
     </div>
 </div>

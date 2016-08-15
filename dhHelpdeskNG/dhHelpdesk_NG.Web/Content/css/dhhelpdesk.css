@@ -3695,5 +3695,9 @@ a.inactive
     padding:1px 2px;
 }
 
+div.modal-body.max-height-600 {
+    max-height: 600px
+}
+
 
 
