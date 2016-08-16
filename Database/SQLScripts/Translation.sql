@@ -4838,20 +4838,29 @@ If not exists (select * from tblTextTranslation where Text_Id = 1659 and Languag
             insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1659, 'can''t be changed because you have unsent orders.', 2)
 GO
 
-If not exists (select * from tbltext where id = 1660)
-	insert into tbltext (id, TextString) VALUES (1660, 'Lägg till från Urklipp')
+
+If not exists (select * from tblText where Id = 1660)
+            insert into tblText (Id, Textstring) VALUES (1660, 'Var vänlig ange ett datum.')
 GO
 
-If not exists (select * from tblTextTranslation where text_id = 1660 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1660, 2, 'Add from clipboard')
+If not exists (select * from tblTextTranslation where Text_Id = 1660 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1660, 'Please enter a date.', 2)
 GO
 
 If not exists (select * from tbltext where id = 1661)
-	insert into tbltext (id, TextString) VALUES (1661, 'Kopiera bilddata till Urklipp och tryck Ctrl + V')
+	insert into tbltext (id, TextString) VALUES (1661, 'Lägg till från Urklipp')
+	GO
+	
+	
+If not exists (select * from tblTextTranslation where text_id = 1661 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1661, 2, 'Add from clipboard')
+GO
+If not exists (select * from tbltext where id = 1662)
+	insert into tbltext (id, TextString) VALUES (1662, 'Kopiera bilddata till Urklipp och tryck Ctrl + V')
 GO
 
-If not exists (select * from tblTextTranslation where text_id = 1661 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1661, 2, 'Copy image data into clipboard and press Ctrl+V')
+If not exists (select * from tblTextTranslation where text_id = 1662 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1662, 2, 'Copy image data into clipboard and press Ctrl+V')
 GO
 
 

@@ -193,6 +193,25 @@
         };
 
         dhHelpdesk.reports.onOtherShow = function (e) {
+            $('#ReportFilter_CaseCreationDate_FromDate').removeClass("error");
+            $('#ReportFilter_CaseCreationDate_ToDate').removeClass("error");
+
+             if ($('#ReportFilter_CaseCreationDate_FromDate').val() == "") {
+                var msg = window.Params.DateIsEmptyMessage;
+                $('#ReportFilter_CaseCreationDate_FromDate').addClass("error");
+                ShowToastMessage(msg, "warning");
+                return;
+            }
+
+            if ($('#ReportFilter_CaseCreationDate_ToDate').val() == "") {
+                var msg = window.Params.DateIsEmptyMessage;
+                $('#ReportFilter_CaseCreationDate_ToDate').addClass("error");
+                ShowToastMessage(msg, "warning");
+                return;
+            }
+
+            
+
             var origReportId = $(reportList).find("option:selected").data("origReportId");
             var isSavedFilter = typeof origReportId !== "undefined";
 
