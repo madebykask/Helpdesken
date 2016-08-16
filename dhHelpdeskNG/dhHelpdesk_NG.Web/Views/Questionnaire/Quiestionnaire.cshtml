@@ -55,8 +55,10 @@
                                         {
                                             <tr>
                                                 <td>
+                                                    <div class="radio">
                                                     @Html.RadioButtonFor(x => questions[index].SelectedOptionId, option.Id)
                                                     @option.Option
+                                                    </div>
                                                 </td>
                                             </tr>
                                         }

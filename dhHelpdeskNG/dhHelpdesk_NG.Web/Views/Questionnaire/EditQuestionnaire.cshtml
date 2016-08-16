@@ -14,15 +14,6 @@
                     <input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn" />
                 </li>
                 <li>
-                    @Html.ActionLink(Translation.Get("Ny", Enums.TranslationSource.TextTranslation) + " " +
-                                     Translation.Get("Fråga", Enums.TranslationSource.TextTranslation),
-                                     "NewQuestionnaireQuestion", "Questionnaire", new { questionnaireId = Model.Id, languageId = Model.LanguageId }, new { @class = "btn" })
-                </li>
-                <li>
-                    @Html.ActionLink(Translation.Get("Förhandsgranska", Enums.TranslationSource.TextTranslation),
-                        "PreviewQuestionnaire", "Questionnaire", new { questionnaireId = Model.Id, languageId = Model.LanguageId }, new { @class = "btn", target = "_blank" })
-                </li>
-                <li>
                     @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "DeleteQuestionnaire",
                         new { questionnaireId = Model.Id },
                         new
@@ -34,6 +25,17 @@
                 </li>
                 <li>
                     @Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "Index", "Questionnaire", new { @class = "btn" })
+                </li>
+                <li class="secspace"></li>
+                <li>
+                    @Html.ActionLink(Translation.Get("Förhandsgranska", Enums.TranslationSource.TextTranslation),
+                        "PreviewQuestionnaire", "Questionnaire", new { questionnaireId = Model.Id, languageId = Model.LanguageId }, new { @class = "btn", target = "_blank" })
+                </li>
+                <li class="secspace"></li>
+                <li>
+                    @Html.ActionLink(Translation.Get("Ny", Enums.TranslationSource.TextTranslation) + " " +
+                                     Translation.Get("Fråga", Enums.TranslationSource.TextTranslation),
+                                     "NewQuestionnaireQuestion", "Questionnaire", new { questionnaireId = Model.Id, languageId = Model.LanguageId }, new { @class = "btn" })
                 </li>
             </ul>
         </div>
@@ -55,7 +57,7 @@
                                 <table class="tableform">
                                     <tr>
                                         <td class="span3">
-                                            @Translation.Get("Språk", Enums.TranslationSource.TextTranslation):
+                                            @Translation.Get("Språk", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td class="span9">
                                             @Html.DropDownListFor(model => model.LanguageId, Model.Languages, new { id = "languageList" })
@@ -63,7 +65,7 @@
                                     </tr>
                                     <tr>
                                         <td class="span3">
-                                            @Translation.Get("Namn", Enums.TranslationSource.TextTranslation):
+                                            @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td class="span9">
                                             @Html.TextBoxFor(model => model.Name)
@@ -72,7 +74,7 @@
                                     </tr>
                                     <tr>
                                         <td class="span3">
-                                            @Translation.Get("Beskrivning", Enums.TranslationSource.TextTranslation):
+                                            @Translation.Get("Beskrivning", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td class="span9">
                                             @Html.TextAreaFor(model => model.Description, new { maxlength = "2000", style = "height:100px;" })
