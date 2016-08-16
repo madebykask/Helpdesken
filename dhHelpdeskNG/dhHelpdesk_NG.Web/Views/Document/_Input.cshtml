@@ -83,7 +83,12 @@
                                             <input type="hidden" name="Id" id="Id" value="@Model.Document.Id" />
                                             @if (Model.UserHasDocumentAdminPermission)
                                             {
-                                                <input type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" name="remove" id="remove" class="btn" onclick="deleteFile(@Model.Document.Id)" />
+                                                @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "DeleteUploadedFile",
+                                                    new { id = Model.Document.Id}, new
+                                                    {
+                                                       @class = "btn deleteDialog",
+                                                        deleteDialogText = Translation.Get("Är du säker på att du vill ta bort bifogad fil", Enums.TranslationSource.TextTranslation) + '?'
+                                                    })
                                             }
                                         </td>
                                     </tr> 

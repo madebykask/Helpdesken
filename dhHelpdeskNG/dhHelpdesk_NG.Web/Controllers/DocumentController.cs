@@ -283,7 +283,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
-        public string DeleteUploadedFile(int id)
+        public ActionResult DeleteUploadedFile(int id)
         {
             var fileToDelete = this._documentService.GetDocument(id);
 
@@ -304,7 +304,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             this._documentService.UpdateSavedFile(fileToDelete);
 
-            return string.Empty;
+            return this.RedirectToAction("edit", "document", new { id = id });
         }
 
         [HttpGet]
