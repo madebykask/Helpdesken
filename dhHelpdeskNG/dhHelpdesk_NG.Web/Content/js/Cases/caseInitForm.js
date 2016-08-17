@@ -129,11 +129,10 @@ function refreshOrganizationUnit(departmentId, departmentFilterFormat, selectedO
     });
 }
 
-function refreshIsAboutOrganizationUnit(departmentId, departmentFilterFormat, selectedOrganizationUnitId) {
+function refreshIsAboutOrganizationUnit(departmentId, departmentFilterFormat, selectedOrganizationUnitId) {    
     $(publicIsAboutOUControlName).val('');
     $(publicIsAboutReadOnlyOUName).val('');
-    var ctlOption = publicIsAboutOUControlName + ' option';
-    //$(publicIsAboutOUControlName).prop('disabled', true);
+    var ctlOption = publicIsAboutOUControlName + ' option';    
     $.post(publicChangeDepartment, { 'id': departmentId, 'customerId': publicCustomerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {
         $(ctlOption).remove();
         $(publicIsAboutOUControlName).append('<option value="">&nbsp;</option>');
@@ -188,7 +187,7 @@ function refreshDepartment(regionId, departmentFilterFormat, selectedDepartmentI
     });
 }
 
-function refreshIsAboutDepartment(regionId, departmentFilterFormat, selectedDepartmentId, selectedOU) {
+function refreshIsAboutDepartment(regionId, departmentFilterFormat, selectedDepartmentId, selectedOU) {    
     $(publicIsAboutDepartmentControlName).val('');
     $(publicIsAboutReadOnlyDepartmentName).val('');
     var ctlOption = publicIsAboutDepartmentControlName + ' option';
@@ -220,34 +219,7 @@ function refreshIsAboutDepartment(regionId, departmentFilterFormat, selectedDepa
     }).done(function () {
         $(publicIsAboutOUControlName).prop('disabled', false);
     });
-
-    //$(publicIsAboutDepartmentControlName).val('');
-    //$(publicIsAboutReadOnlyDepartmentName).val('');
-    //var ctlOption = publicIsAboutDepartmentControlName + ' option';
-    //$(publicIsAboutDepartmentControlName).prop('disabled', true);
-    //$(publicIsAboutOUControlName).prop('disabled', true);
-    //$.post(publicChangeRegion, { 'id': regionId, 'customerId': publicCustomerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {
-    //    $(ctlOption).remove();
-    //    $(publicIsAboutDepartmentControlName).append('<option value="">&nbsp;</option>');
-    //    if (data != undefined) {
-    //        for (var i = 0; i < data.list.length; i++) {
-    //            var item = data.list[i];
-    //            var option = $("<option value='" + item.id + "'>" + item.name + "</option>");
-    //            if (option.val() == selectedDepartmentId) {
-    //                $(publicIsAboutDepartmentControlName).val(selectedDepartmentId);
-    //                $(publicIsAboutReadOnlyDepartmentName).val(item.name);
-    //                option.prop("selected", true);
-    //            }
-    //            $(publicIsAboutDepartmentControlName).append(option);
-    //        }
-    //    }
-    //}, 'json').always(function () {
-    //    $(publicIsAboutDepartmentControlName).prop('disabled', false);
-    //    refreshIsAboutOrganizationUnit(selectedDepartmentId, departmentFilterFormat, selectedOU);
-    //}).done(function () {
-    //    $(publicIsAboutOUControlName).prop('disabled', false);
-    //});
-}
+ }
 
 function GetComputerUserSearchOptions() {
     var options = {
@@ -516,8 +488,6 @@ function GetComputerUserSearchOptionsForIsAbout() {
     return options;
 }
 
-
-
 /**
 * Initializator for case edit form
 */
@@ -569,13 +539,12 @@ function CaseInitForm() {
             var templateOU_Id = $("#CaseTemplate_IsAbout_OU_Id").val();
             $("#CaseTemplate_IsAbout_OU_Id").val('');
             if (templateOU_Id != undefined && templateOU_Id != "")
-                refreshDepartment(regionId, departmentFilterFormat, templateDep_Id, templateOU_Id);
+                refreshIsAboutDepartment(regionId, departmentFilterFormat, templateDep_Id, templateOU_Id);
             else
                 refreshIsAboutDepartment(regionId, departmentFilterFormat, templateDep_Id);
         } else {
             refreshIsAboutDepartment(regionId, departmentFilterFormat);
-        }
-        //refreshIsAboutDepartment(regionId, departmentFilterFormat);
+        }        
     });
     
     $(publicDepartmentControlName).change(function () {
@@ -585,7 +554,6 @@ function CaseInitForm() {
 
         var departmentId = $(this).val();        
         var departmentFilterFormat = $('#DepartmentFilterFormat').val();
-
         
         var templateOU_Id = $("#CaseTemplate_OU_Id").val();
         $("#CaseTemplate_OU_Id").val('');
@@ -609,10 +577,7 @@ function CaseInitForm() {
         if (templateOU_Id != undefined && templateOU_Id != "")
             refreshIsAboutOrganizationUnit(departmentId, departmentFilterFormat, templateOU_Id);
         else
-            refreshIsAboutOrganizationUnit(departmentId, departmentFilterFormat);
-
-
-        //refreshIsAboutOrganizationUnit(departmentId, departmentFilterFormat);
+            refreshIsAboutOrganizationUnit(departmentId, departmentFilterFormat);        
     });
 
     function showInvoice(departmentId) {
@@ -623,7 +588,6 @@ function CaseInitForm() {
             }
         }, 'json');
     }
-
 
     $('#case__Status_Id').change(function () {
         if ($(this).val() > 0) {
