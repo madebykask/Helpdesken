@@ -1523,6 +1523,13 @@ begin
 	add [CreatedByApp] nvarchar(80) null
 end
 GO
+
+
+-- New field in tblFormField
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'SortOrder' and sysobjects.name = N'tblFormField')
+	ALTER TABLE tblFormField ADD SortOrder int Default(0) NOT NULL
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.25'
 
