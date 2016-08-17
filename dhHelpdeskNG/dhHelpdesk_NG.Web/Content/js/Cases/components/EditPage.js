@@ -603,7 +603,22 @@ EditPage.prototype.init = function (p) {
 
     $('.lang.dropdown-submenu a').on('click', Utils.callAsMe(me.onPageLeave, me));             
 
-    me.$btnPrint.click(function (e) {        
+    me.$btnPrint.click(function (e) {
+            
+        /* Setup Print Page */
+        try {
+            var regpath = "HKEY_CURRENT_USER\\Software\\Microsoft\\Internet Explorer\\PageSetup\\" + "Print_Background";
+            var oWSS = new ActiveXObject("WScript.Shell");
+            oWSS.RegWrite(regpath, "yes", "REG_SZ");
+
+
+            var regpath = "HKEY_CURRENT_USER\\Software\\Microsoft\\Internet Explorer\\PageSetup\\" + "Shrink_To_Fit";
+            var oWSS = new ActiveXObject("WScript.Shell");
+            oWSS.RegWrite(regpath, "no", "REG_SZ");
+        }
+        catch (err) {            
+        }
+        
         $.get("/Cases/ShowCasePrintPreview/",
                 {
                     caseId: p.currentCaseId,
