@@ -4962,7 +4962,7 @@ namespace DH.Helpdesk.Web.Controllers
             
             ret = parentRet.OrderBy(p => p.Text).Union(childrenRet.OrderBy(c => c.Text)).ToList();
 
-            return ret;
+            return ret.GroupBy(r => r.Value).Select(g => g.First()).ToList();
 
         }
         #endregion
