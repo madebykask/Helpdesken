@@ -1,8 +1,9 @@
 ﻿"use strict";
 
-function SetValueIfElVisible(el, val, opt) {
+function SetValueIfElVisible(el, val, opt, forceApply) {
     opt = opt || { doOverwrite: false, doNotTriggerEvent: false };
-    if (el && $(el).is(':visible')) {
+
+    if (el && ($(el).is(':visible') || (forceApply && val != null && val != ''))) {
         if (el.val() == "" || opt.doOverwrite) {
             $(el).val(val);
             if (!opt.doNotTriggerEvent) {
@@ -375,20 +376,20 @@ var ApplyTemplate = function (data, doOverwrite) {
 
                 case 'IsAbout_PersonsName':
                     el = $('#case__IsAbout_Person_Name');
-                    SetValueIfElVisible(el, val, cfg);
+                    SetValueIfElVisible(el, val, cfg, true);
                     break;
                 case 'IsAbout_PersonsPhone':
                     el = $('#case__IsAbout_Person_Phone');
-                    SetValueIfElVisible(el, val, cfg);
+                    SetValueIfElVisible(el, val, cfg, true);
                     break;
                 case 'IsAbout_PersonsCellPhone':
                     el = $('#case__IsAbout_Person_Cellphone');
-                    SetValueIfElVisible(el, val, cfg);
+                    SetValueIfElVisible(el, val, cfg, true);
                     break;
               
                 case 'IsAbout_ReportedBy':
                     el = $('#case__IsAbout_ReportedBy');
-                    SetValueIfElVisible(el, val, cfg);
+                    SetValueIfElVisible(el, val, cfg, true);
                     break;
                 
                 case 'IsAbout_Region_Id':
@@ -406,7 +407,7 @@ var ApplyTemplate = function (data, doOverwrite) {
                         $('#CaseTemplate_IsAbout_OU_Id').val(ou_Id);
                     else
                         $('#CaseTemplate_IsAbout_OU_Id').val("");
-                    SetValueIfElVisible(el, val, cfg);
+                    SetValueIfElVisible(el, val, cfg, true);
                     break;
 
                 case 'IsAbout_Department_Id':
@@ -420,35 +421,36 @@ var ApplyTemplate = function (data, doOverwrite) {
                         if (ou_Id != undefined && ou_Id != null)
                             $('#CaseTemplate_IsAbout_OU_Id').val(ou_Id);
                         else
-                            $('#CaseTemplate_IsAbout_OU_Id').val("");
+                            $('#CaseTemplate_IsAbout_OU _Id').val("");
                     }
 
-                    SetValueIfElVisible(el, val, cfg);
+                    SetValueIfElVisible(el, val, cfg, true);
                     break;
 
                 case 'IsAbout_OU_Id':
                     el = $('#case__IsAbout_Ou_Id');
-                    SetValueIfElVisible(el, val, cfg);
+                    cfg['doNotTriggerEvent'] = false;
+                    SetValueIfElVisible(el, val, cfg, true);
                     break;               
 
                 case 'IsAbout_CostCentre':
                     el = $("#case__IsAbout_CostCentre");
-                    SetValueIfElVisible(el, val, cfg);
+                    SetValueIfElVisible(el, val, cfg, true);
                     break;
 
                 case 'IsAbout_PersonsEmail':
                     el = $("#case__IsAbout_Person_Email");
-                    SetValueIfElVisible(el, val, cfg);
+                    SetValueIfElVisible(el, val, cfg, true);
                     break;
 
                 case 'IsAbout_Place':
                     el = $("#case__IsAbout_Place");
-                    SetValueIfElVisible(el, val, cfg);
+                    SetValueIfElVisible(el, val, cfg, true);
                     break;
 
                 case 'IsAbout_UserCode':
                     el = $("#case__IsAbout_UserCode");
-                    SetValueIfElVisible(el, val, cfg);
+                    SetValueIfElVisible(el, val, cfg, true);
                     break;
 
                 case 'InventoryLocation':
