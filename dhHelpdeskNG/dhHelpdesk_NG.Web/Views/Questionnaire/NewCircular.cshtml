@@ -205,17 +205,11 @@
 
                                     <table class="tableform">
                                         <tr>
-                                            <td class="span3">
+                                            <td class="span2">
                                                 @Translation.Get("Urval"):
                                             </td>
-                                            <td class="span1">
-                                                @Translation.Get("Selektera ut")
-                                            </td>
-                                            <td class="span2">
-                                                @Html.DropDownList("procent", Model.Procent, new { style = "width: 80px" })
-                                            </td>
-                                            <td class="span12">
-                                                @Translation.Get("procent av tillgängliga ärenden")
+                                            <td class="span6">
+                                               @Translation.Get("Selektera ut") @Html.DropDownList("procent", Model.Procent, new { style = "width: 60px" }) @Translation.Get("procent av tillgängliga ärenden")
                                             </td>
                                         </tr>
                                     </table>
