@@ -177,10 +177,11 @@ GO
 ALTER Proc [dbo].[sp_GetCaseInfo] 
 	@CaseId int, 	
 	@LanguageId int,
-	@UserId int
-as
-	
+	@UserId int,
+	@UserTimeOffset int = 0
 
+as
+		
 	Declare @CurrentCustomerId int
 	Select @CurrentCustomerId = Customer_Id from tblCase where id = @CaseId
 
@@ -1450,14 +1451,27 @@ as
 	Select @InternalFieldName = FieldName, @InternalFieldCaption = FieldCaption From @AvailableFields where FieldName = 'tblLog.Text_Internal';	      	 
 	Set @InternalFieldCaption = Isnull(@InternalFieldCaption, dbo.GetDefCaseFieldCaption('tbllog_text_internal', @LanguageId)) 
 				
+			  		
+	Insert into @ResultSet (Id, FieldName, FieldCaption, FieldValue, InOrder, LineType) 
+			         values(@FieldId, '[Title]', dbo.TextTranslate('Ärendelogg', @LanguageId), '', @InOrder, 'G')	  	 
+
+	Set @FieldId = @FieldId + 1;
+	Set @InOrder = @InOrder + 1;	  
+	Set @Log_Value = '';
+
 	set @i = 0
-			
+		
+	
+		
 	WHILE (@i < @Nums)
 	BEGIN	 	    
 		set @i = @i + 1		
-		set @Log_Value = CONVERT(VARCHAR(10), @Log_LogDate, 120)  + '  ' + @Log_UserName;	  		
+		declare @logLocalTime DateTime;
+		set @logLocalTime = DATEADD(mi, @UserTimeOffset, @Log_LogDate); 
+
+		set @Log_Value = CONVERT(VARCHAR(19), @logLocalTime, 120);		
 		Insert into @ResultSet (Id, FieldName, FieldCaption, FieldValue, InOrder, LineType) 
-				values(@FieldId, 'LogNote', '', @Log_Value, @InOrder, 'L')	  	 
+				values(@FieldId, 'LogNote', @Log_Value, @Log_UserName, @InOrder, 'L')	  	 
 
 		Set @FieldId = @FieldId + 1;
 		Set @InOrder = @InOrder + 1;	  
@@ -1513,7 +1527,6 @@ as
 	
 
 	select * from @ResultSet order by InOrder Asc
-
 
 
 

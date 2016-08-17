@@ -4862,9 +4862,20 @@ namespace DH.Helpdesk.Web.Controllers
             var reportSelectedFilter = new ReportSelectedFilter();
             reportSelectedFilter.SelectedCustomers.Add(SessionFacade.CurrentCustomer.Id);
 
+            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
+            var localNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, userTimeZone);
+
+            var ad = userTimeZone.GetAdjustmentRules();            
+
+            //TimeZone.CurrentTimeZone.
+            
+            var userTimeOffset = Convert.ToInt32((DateTime.UtcNow - localNow).TotalMinutes);
+            userTimeOffset = userTimeOffset == 0 ? 0 : -userTimeOffset;
+ 
             reportSelectedFilter.GeneralParameter.Add(new GeneralParameter("@CaseId", caseId));
             reportSelectedFilter.GeneralParameter.Add(new GeneralParameter("@LanguageId", SessionFacade.CurrentLanguageId));
             reportSelectedFilter.GeneralParameter.Add(new GeneralParameter("@UserId", SessionFacade.CurrentUser.Id));
+            reportSelectedFilter.GeneralParameter.Add(new GeneralParameter("@UserTimeOffset", userTimeOffset));
 
             var reportData = _ReportServiceService.GetReportData(reportName, reportSelectedFilter, SessionFacade.CurrentUser.Id, SessionFacade.CurrentCustomer.Id);
 

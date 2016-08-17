@@ -45,25 +45,27 @@
                                 </td>*@
 
                                 <td style="width: 250px; margin-left:20px;" class="textbold @row.LineType">
-                                    @if (row.LineType == ReportLineTypes.Log && row.FieldName.ToLower() == "lognote")
+                                    @row.FieldCaption
+                                    @*@if (row.LineType == ReportLineTypes.Log && row.FieldName.ToLower() == "lognote")
                                     {
                                         @row.FieldValue.Replace(Environment.NewLine, tempNewLine).RemoveHTMLTags().Replace(tempNewLine, Environment.NewLine).ForHtmlView()
                                     }
                                     else
                                     {
                                         @row.FieldCaption
-                                    }
+                                    }*@
                                 </td>
 
-                                <td style="width: 800px;" class="@row.LineType">
-                                    @if (row.LineType == ReportLineTypes.Log && row.FieldName.ToLower() == "lognote")
+                                <td style="width: 800px;" class="@row.LineType">                                    
+                                    @row.FieldValue.Replace(Environment.NewLine, tempNewLine).RemoveHTMLTags().Replace(tempNewLine, Environment.NewLine).ForHtmlView()
+                                    @*@if (row.LineType == ReportLineTypes.Log && row.FieldName.ToLower() == "lognote")
                                     {
-                                        
+                                        <p> &nbsp; </p>
                                     }
                                     else
                                     {
                                         @row.FieldValue.Replace(Environment.NewLine, tempNewLine).RemoveHTMLTags().Replace(tempNewLine, Environment.NewLine).ForHtmlView()
-                                    }
+                                    }*@
                                 </td>
                             </tr>                            
                         }
