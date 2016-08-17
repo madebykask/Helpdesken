@@ -586,6 +586,27 @@ namespace DH.Helpdesk.Web.Controllers
                                              Text = x.Name,
                                              Value = x.Value
                                          }).ToList();
+
+            List<SelectListItem> isAbout_Regions = null;
+            List<SelectListItem> isAbout_Departments = null;
+            List<SelectListItem> isAbout_OrganizationUnits = null;
+
+            isAbout_Regions = regions;
+
+            isAbout_Departments = this._departmentService.GetActiveDepartmentsBy(curCustomerId, caseSolution.IsAbout_Region_Id)
+                                         .Select(x => new SelectListItem
+                                         {
+                                             Text = x.DepartmentName,
+                                             Value = x.Id.ToString()
+                                         }).ToList();
+
+            isAbout_OrganizationUnits = this._organizationService.GetOrganizationUnits(caseSolution.IsAbout_Department_Id)
+                                         .Select(x => new SelectListItem
+                                         {
+                                             Text = x.Name,
+                                             Value = x.Value
+                                         }).ToList();
+
             var isCreatingNew = caseSolution.Id == 0;
             var performersList = isCreatingNew ?
                                      this._userService.GetAvailablePerformersOrUserId(curCustomerId)
@@ -644,6 +665,12 @@ namespace DH.Helpdesk.Web.Controllers
                 Departments = departments,
                 
                 OUs = organizationUnits,
+
+                IsAbout_Regions = isAbout_Regions,
+
+                IsAbout_Departments = isAbout_Departments,
+
+                IsAbout_OUs = isAbout_OrganizationUnits,
 
                 Systems = this._systemService.GetSystems(curCustomerId).Select(x => new SelectListItem
                 {

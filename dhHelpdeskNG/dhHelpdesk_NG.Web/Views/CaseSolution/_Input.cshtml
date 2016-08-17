@@ -371,7 +371,7 @@
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_Region_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>
                                         <td class="span9">
-                                            @Html.DropDownListFor(model => model.CaseSolution.IsAbout_Region_Id, Model.Regions, "", new { id = "IsAbout_Region" })
+                                            @Html.DropDownListFor(model => model.CaseSolution.IsAbout_Region_Id, Model.IsAbout_Regions, "", new { id = "IsAbout_Region" })
                                         </td>
                                         <td class="span9">
                                             @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.IsAbout_Region_Id, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_Region_Id)
@@ -386,7 +386,7 @@
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>
                                         <td class="span9">                                            
-                                            @Html.DropDownListFor(model => model.CaseSolution.IsAbout_Department_Id, Model.Departments, "", new { id = "IsAbout_Department" })
+                                            @Html.DropDownListFor(model => model.CaseSolution.IsAbout_Department_Id, Model.IsAbout_Departments, "", new { id = "IsAbout_Department" })
                                         </td>
                                         <td class="span9">
                                             @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.IsAbout_Department_Id, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_Department_Id)
@@ -401,7 +401,7 @@
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_OU_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                             </td>
                                             <td class="span9">
-                                                @Html.DropDownListFor(model => model.CaseSolution.IsAbout_OU_Id, Model.OUs, "", new { id = "IsAbouut_OU" })
+                                                @Html.DropDownListFor(model => model.CaseSolution.IsAbout_OU_Id, Model.IsAbout_OUs, "", new { id = "IsAbout_OU" })
                                             </td>
                                             <td class="span9">
                                                 @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.IsAbout_OU_Id, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.OU_Id)

@@ -70,6 +70,10 @@
         public Infrastructure.Enums.AccessMode EditMode { get; set; }
         public CaseFilesModel CaseFilesModel { get; set; }
 
+        public IList<SelectListItem> IsAbout_Regions { get; set; }
+        public IList<SelectListItem> IsAbout_Departments { get; set; }
+        public IList<SelectListItem> IsAbout_OUs { get; set; }
+
         //public IList<Department> departments { get; set; }
     }
 }
