@@ -173,6 +173,11 @@ Where cs.Id not in (Select CaseSolution_Id from tblCaseSolutionFieldSettings csf
 					where cs.Id = csf.CaseSolution_Id and FieldName_Id = 53)
 GO
 
+-- New field in tblFormField
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'SortOrder' and sysobjects.name = N'tblFormField')
+	ALTER TABLE tblFormField ADD SortOrder int Default(0) NOT NULL
+GO
+
 
 ALTER Proc [dbo].[sp_GetCaseInfo] 
 	@CaseId int, 	
@@ -1084,7 +1089,8 @@ as
            tblCase ON tblFormFieldValue.Case_Id = tblCase.Id INNER JOIN
            tblFormField INNER JOIN
            tblForm ON tblFormField.Form_Id = tblForm.Id ON tblFormFieldValue.FormField_Id = tblFormField.Id
-		Where Case_Id = @CaseId 		
+		Where Case_Id = @CaseId
+		Order by tblFormField.SortOrder 		
 
 		Insert into @ResultSet (Id, FieldName, FieldCaption, FieldValue, InOrder, LineType) 
 					values(@FieldId, '[Title]', 'Self Service', '', @InOrder, 'G')	  	 
@@ -1528,7 +1534,7 @@ as
 
 	select * from @ResultSet order by InOrder Asc
 
-
+Go
 
  IF COL_LENGTH('tblCaseHistory','CreatedByApp') IS NULL
 begin
@@ -1538,10 +1544,6 @@ end
 GO
 
 
--- New field in tblFormField
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'SortOrder' and sysobjects.name = N'tblFormField')
-	ALTER TABLE tblFormField ADD SortOrder int Default(0) NOT NULL
-GO
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.25'
