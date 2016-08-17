@@ -149,8 +149,12 @@
         };
 
         dhHelpdesk.reports.onGeneratedShow = function () {
-            var filters = getFilters();
 
+            if (!dhHelpdesk.reports.doValidation())
+                return;
+
+            var filters = getFilters();
+            
             var getParams = $.param({
                 DepartmentIds: filters.departments,
                 WorkingGroupIds: filters.workingGroups,
@@ -192,25 +196,32 @@
             }
         };
 
-        dhHelpdesk.reports.onOtherShow = function (e) {
+        dhHelpdesk.reports.doValidation = function () {
+
             $('#ReportFilter_CaseCreationDate_FromDate').removeClass("error");
             $('#ReportFilter_CaseCreationDate_ToDate').removeClass("error");
 
-             if ($('#ReportFilter_CaseCreationDate_FromDate').val() == "") {
+            if ($('#ReportFilter_CaseCreationDate_FromDate').val() == "") {
                 var msg = window.Params.DateIsEmptyMessage;
                 $('#ReportFilter_CaseCreationDate_FromDate').addClass("error");
                 ShowToastMessage(msg, "warning");
-                return;
+                return false;
             }
 
             if ($('#ReportFilter_CaseCreationDate_ToDate').val() == "") {
                 var msg = window.Params.DateIsEmptyMessage;
                 $('#ReportFilter_CaseCreationDate_ToDate').addClass("error");
                 ShowToastMessage(msg, "warning");
-                return;
+                return false;
             }
-
             
+            return true;
+        }
+
+        dhHelpdesk.reports.onOtherShow = function (e) {
+                        
+            if (!dhHelpdesk.reports.doValidation())
+                return;
 
             var origReportId = $(reportList).find("option:selected").data("origReportId");
             var isSavedFilter = typeof origReportId !== "undefined";
