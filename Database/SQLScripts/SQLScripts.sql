@@ -1068,12 +1068,16 @@ as
 	set @Nums = 0;
 
 	 /* Self Service Fields */
-	SELECT @Nums = Count(*) 	
+
+	declare @SSTemplateName Nvarchar(Max)
+
+	SELECT @Nums = Count(*), @SSTemplateName = tblForm.FormName 	
 	FROM   tblFormFieldValue INNER JOIN
            tblCase ON tblFormFieldValue.Case_Id = tblCase.Id INNER JOIN
            tblFormField INNER JOIN
            tblForm ON tblFormField.Form_Id = tblForm.Id ON tblFormFieldValue.FormField_Id = tblFormField.Id
 	Where Case_Id = @CaseId
+	Group by tblForm.FormName
 			
 	if (@Nums > 0)
 	begin
@@ -1081,10 +1085,13 @@ as
 		Declare @SSFieldName     Nvarchar(Max);
 		Declare @SSFieldCaption  Nvarchar(Max);
 		Declare @SSFieldValue    Nvarchar(Max);
-
+		
 		DECLARE SelfService_Cursor CURSOR FOR 			
 		
-		SELECT tblFormField.FormFieldName as FieldName, tblFormField.Label as FieldCaption, tblFormFieldValue.FormFieldValue as FieldValue
+
+		SELECT 
+		       tblFormField.FormFieldName as FieldName, tblFormField.Label as FieldCaption, 
+			   tblFormFieldValue.FormFieldValue as FieldValue
 		FROM   tblFormFieldValue INNER JOIN
            tblCase ON tblFormFieldValue.Case_Id = tblCase.Id INNER JOIN
            tblFormField INNER JOIN
@@ -1092,8 +1099,12 @@ as
 		Where Case_Id = @CaseId
 		Order by tblFormField.SortOrder 		
 
+		declare @STitle Nvarchar(Max)
+		
+		set @STitle = dbo.TextTranslate('Utökad ärendeinformation', @LanguageId);
+
 		Insert into @ResultSet (Id, FieldName, FieldCaption, FieldValue, InOrder, LineType) 
-					values(@FieldId, '[Title]', 'Self Service', '', @InOrder, 'G')	  	 
+					values(@FieldId, '[Title]', @STitle, @SSTemplateName, @InOrder, 'G')	  	 
 
 		Set @FieldId = @FieldId + 1;
 		Set @InOrder = @InOrder + 1;

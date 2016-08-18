@@ -4873,6 +4873,16 @@ GO
 
 update tblText set Textstring = '-Välj artikel-' where Id = 1222
 GO
+
+If not exists (select * from tblText where Id = 1664)
+            insert into tblText (Id, Textstring) VALUES (1664, 'Utökad ärendeinformation')
+GO
+
+If not exists (select * from tblTextTranslation where Text_Id = 1664 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1664, 'Extended case infomation', 2)
+GO
+
+
 -- // Invoice Translations 
 
 
