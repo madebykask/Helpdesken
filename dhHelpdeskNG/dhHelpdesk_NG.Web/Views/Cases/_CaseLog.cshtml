@@ -57,13 +57,10 @@
                                     {
                                         var countTO = 0;
                                         var countCC = 0;
-                                        var countBCC = 0;
                                         var mailTO = "";
                                         var mailCC = "";
-                                        var mailBCC = "";
                                         var boldTO = false;
-                                        var boldCC = false;
-                                        var boldBCC = false;
+                                        var boldCC = false; 
                                         var show = false;
                                         foreach (var mail in curLogMail2Tickets)
                                         {                                                
@@ -87,27 +84,14 @@
                                                 }
                                             }
 
-                                            if (mail.Type.ToLower() == "bcc")
-                                            {
-                                                countBCC = countBCC + 1;
-                                                mailBCC += mail.EMailAddress + "; <br />";
-                                                if (mail.EMailAddress == Model.case_.Customer.HelpdeskEmail)
-                                                {
-                                                    boldBCC = true;
-                                                }
-                                            }
                                             show = true;                                            
                                         }
-                                        if (boldTO == false && boldCC == false)
-                                        {
-                                            boldBCC = true;
-                                        }
+                                      
                                         if (show)
                                         {
                                             var lastElmSelectedId = "lastMailSelected" + r.Id;
                                             var logMailToId = "mailto" + r.Id;
                                             var logMailCcId = "mailcc" + r.Id;
-                                            var logMailBccId = "mailbcc" + r.Id;
                                             <div>
                                                 <input type="hidden" id="@lastElmSelectedId"  value="">
                                                 @if (boldTO)
@@ -142,23 +126,6 @@
                                             </div>
                                             <div>
                                                 <p id="@logMailCcId" class="" style="display:none">@Html.Raw(mailCC)</p>
-                                            </div>
-                                            <div>
-                                                @if (boldBCC)
-                                                {
-                                                    <p>
-                                                        <b>BCC[?]</b>&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip expander" title="" data-original-title="@mailBCC" data-expand-element="mailbcc" data-expand-log-id="@r.Id"></span>
-                                                    </p>
-                                                }
-                                                else
-                                                {
-                                                    <p>
-                                                        BCC[?]&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip expander" title="" data-original-title="@mailBCC" data-expand-element="mailbcc" data-expand-log-id="@r.Id"></span>
-                                                    </p>
-                                                }
-                                            </div>
-                                            <div>
-                                                <p id="@logMailBccId" class="" style="display:none">@Html.Raw(mailBCC)</p>
                                             </div>
                                         }
                                     }

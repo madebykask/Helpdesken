@@ -1257,13 +1257,10 @@
                                             {
                                                 var countTO = 0;
                                                 var countCC = 0;
-                                                var countBCC = 0;
                                                 var mailTO = "";
                                                 var mailCC = "";
-                                                var mailBCC = "";
                                                 var boldTO = false;
                                                 var boldCC = false;
-                                                var boldBCC = false;
                                                 if (Model.case_.Mail2Tickets.Any())
                                                 {
                                                     foreach (var mail in Model.case_.Mail2Tickets)
@@ -1291,22 +1288,7 @@
                                                                     boldCC = true;
                                                                 }
                                                             }
-
-                                                            if (mail.Type == "bcc")
-                                                            {
-                                                                countBCC = countBCC + 1;
-                                                                mailBCC = mailBCC + mail.EMailAddress + "; ";
-
-                                                                if (mail.EMailAddress == Model.case_.Customer.HelpdeskEmail)
-                                                                {
-                                                                    boldBCC = true;
-                                                                }
-                                                            }
                                                         }
-                                                    }
-                                                    if (boldTO == false && boldCC == false)
-                                                    {
-                                                        boldBCC = true;
                                                     }
                                                 }
                                                 <div>
@@ -1348,25 +1330,6 @@
                                                         <tr>
                                                             <td>
                                                                  <span id="mailcc" class="" style="display:none">@mailCC</span>                                                                
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            @if (boldBCC == true)
-                                                            {
-                                                                <td>
-                                                                    <b>BCC[?]</b>&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@mailBCC" data-expand-element="mailbcc"></span>
-                                                                </td>
-                                                            }
-                                                            else
-                                                            {
-                                                                <td>
-                                                                    BCC[?]&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@mailBCC" data-expand-element="mailbcc"></span>
-                                                                </td>
-                                                            }
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                 <span id="mailbcc" class="" style="display:none">@mailBCC</span>                                                                
                                                             </td>
                                                         </tr>
                                                     </table>

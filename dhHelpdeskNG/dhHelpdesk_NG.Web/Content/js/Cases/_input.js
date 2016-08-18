@@ -35,17 +35,10 @@ $(function () {
             case "mailto":                
                 $('#mailto' + logId ).css('display', displayType);
                 $('#mailcc' + logId).css('display', 'none');
-                $('#mailbcc' + logId).css('display', 'none');
                 break;
             case "mailcc":                
                 $('#mailcc' + logId).css('display', displayType);
                 $('#mailto' + logId).css('display', 'none');
-                $('#mailbcc' + logId).css('display', 'none');
-                break;
-            case "mailbcc":
-                $('#mailbcc' + logId).css('display', displayType);
-                $('#mailto' + logId).css('display', 'none');
-                $('#mailcc' + logId).css('display', 'none');
                 break;
         }
     });
