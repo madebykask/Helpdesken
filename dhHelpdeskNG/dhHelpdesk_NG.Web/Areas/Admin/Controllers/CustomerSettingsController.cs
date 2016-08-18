@@ -114,7 +114,8 @@
             vmodel.Setting.SMSEMailDomainPassword = setting.SMSEMailDomainPassword;
             vmodel.Setting.SMSEMailDomainUserId = setting.SMSEMailDomainUserId;
             vmodel.Setting.SMSEMailDomainUserName = setting.SMSEMailDomainUserName;
-            vmodel.Setting.EMailRegistrationMailID = setting.EMailRegistrationMailID;            
+            vmodel.Setting.EMailRegistrationMailID = setting.EMailRegistrationMailID;
+            vmodel.Setting.DefaultEmailLogDestination = setting.DefaultEmailLogDestination;
 
             if (customerToSave == null)
                 throw new Exception("No customer found...");
