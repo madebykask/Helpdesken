@@ -1871,7 +1871,7 @@ table th.thpointer {
     word-wrap: break-word;
     line-height:13px;
 }
-.table-cases td {
+.table-cases td, .wordbreak {
     overflow-wrap:break-word;
     word-wrap: break-word;
     line-height:13px;

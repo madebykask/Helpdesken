@@ -13,8 +13,8 @@
                     <tr>
                         <th>@Translation.Get("Datum",SessionFacade.CurrentCaseLanguageId, Enums.TranslationSource.TextTranslation)</th>
                         <th>@Translation.Get("Registrerad av",SessionFacade.CurrentCaseLanguageId, Enums.TranslationSource.TextTranslation)</th>
-                        <th style="width:25%">@Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(),SessionFacade.CurrentCaseLanguageId, Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) </th>
-                        <th style="width:25%">@Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(),SessionFacade.CurrentCaseLanguageId, Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) </th>
+                        <th>@Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(),SessionFacade.CurrentCaseLanguageId, Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) </th>
+                        <th>@Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(),SessionFacade.CurrentCaseLanguageId, Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) </th>
                         <th>@Translation.Get("E-post",SessionFacade.CurrentCaseLanguageId, Enums.TranslationSource.TextTranslation)</th>
                         <th>@Translation.Get("Filer",SessionFacade.CurrentCaseLanguageId, Enums.TranslationSource.TextTranslation)</th>
                     </tr>
@@ -23,30 +23,30 @@
                 @foreach (var r in Model.Logs)
                 {
                     <tr>
-                        <td>
+                        <td style="max-width:105px">
                             @if (r.FinishingDate.HasValue)
                             {
                                 <span class="case-icon solved" title="@Translation.GetCoreTextTranslation("Stängt")"></span>
                             }
                             else
                             {
-                                <span class="case-icon"></span>
+                                @*<span class="case-icon"></span>*@
                             }
                             @{
                                 r.LogDate = TimeZoneInfo.ConvertTimeFromUtc(r.LogDate.ToUniversalTime(), userTimeZone);
                             }
                             <a href="@GetLogLink(r)">@Html.DisplayFor(m => r.LogDate, "DateAndTime") </a>
                         </td>
-                        <td>
+                        <td style="max-width:110px" class="wordbreak">
                             <a href="@GetLogLink(r)">@(r.User == null ? r.RegUser : Html.FormatUserName(r.User, Model.Setting))</a>
                         </td>
-                        <td>
+                        <td class="wordbreak" style="width:25%; max-width:300px">
                             <a href="@GetLogLink(r)"> @Html.AttributeEncode(r.TextExternal).ForHtmlView()</a>
-                        </td>
-                        <td>
+                        </td>                         
+                        <td class="wordbreak" style="width:25%; max-width:300px">
                             <a href="@GetLogLink(r)"> @Html.AttributeEncode(r.TextInternal).ForHtmlView()</a>
-                        </td>                        
-                        <td>                          
+                        </td>               
+                        <td class="wordbreak" style="max-width:150px">                          
                             @{ var curLogMail2Tickets = Model.case_.Mail2Tickets.Where(m => m.Log_Id == r.Id).ToList();  }  
 
                             @if (r.CaseHistory != null)
@@ -143,7 +143,7 @@
                                 }                                        
                             }
                         </td>                        
-                        <td>
+                        <td class="wordbreak" style="max-width:150px">
                             @if (r.LogFiles != null)
                             {
                                 foreach (var l in r.LogFiles)      
@@ -152,10 +152,10 @@
                                     <p>
                                         @if(Model.CaseFilesModel.VirtualDirectory)
                                         {
-                                            <a target="_blank" href="@Html.Action("LogFileLinkVD","Files", new { id = r.Id, fileName = l.FileName })">@l.FileName</a>    
+                                            <a target="_blank" href="@Html.Action("LogFileLinkVD","Files", new { id = r.Id, fileName = l.FileName })"><i class="icon-file"></i> @l.FileName</a>    
                                         }
                                         else{
-                                            <a href="@Url.Action("DownloadLogFile", new { id = r.Id, fileName = l.FileName })">@l.FileName</a>    
+                                            <a href="@Url.Action("DownloadLogFile", new { id = r.Id, fileName = l.FileName })"><i class="icon-file"></i> @l.FileName</a>    
                                         }
                                     </p>
                                 </div>
