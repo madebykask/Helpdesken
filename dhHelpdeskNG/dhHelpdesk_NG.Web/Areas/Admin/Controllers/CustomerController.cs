@@ -186,6 +186,8 @@
                 newCustomerCaseFieldSettings.Required = cfs.Required;
                 newCustomerCaseFieldSettings.ShowExternal = cfs.ShowExternal;
                 newCustomerCaseFieldSettings.EMailIdentifier = cfs.EMailIdentifier;
+                newCustomerCaseFieldSettings.ChangedDate = DateTime.UtcNow;
+                newCustomerCaseFieldSettings.CreatedDate = DateTime.UtcNow;
               
 
                 this._customerService.SaveCaseFieldSettingsForCustomerCopy(customer.Id, customer.Language_Id, newCustomerCaseFieldSettings, out errors);
