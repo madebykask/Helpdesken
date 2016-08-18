@@ -242,6 +242,43 @@ function IsWillBeOverwritten(fieldId, val) {
         case 'StateSecondary_Id':
             return IsWillBeOverwrittenByValue('#case__StateSecondary_Id', '#case__StateSecondary_Id', val);
             break;
+
+        case 'SMS':
+            return IsWillBeOverwrittenByValue('#case__SMS', '#case__SMS', val);
+            break;
+
+        case 'Available':
+            return IsWillBeOverwrittenByValue('#case__Available', '#case__Available', val);
+            break;
+
+        case 'Cost':
+            return IsWillBeOverwrittenByValue('#case__Cost', '#case__Cost', val);
+            break;
+
+        case 'OtherCost':
+            return IsWillBeOverwrittenByValue('#case__OtherCost', '#case__OtherCost', val);
+            break;
+
+        case 'Currency':
+            return IsWillBeOverwrittenByValue('#case__Currency', '#case__Currency', val);
+            break;
+
+        case 'Problem_Id':
+            return IsWillBeOverwrittenByValue('#case__Problem_Id', '#case__Problem_Id', val);
+            break;
+
+        case 'PlanDate':
+            return IsWillBeOverwrittenByValue('#case__PlanDate', '#case__PlanDate', val);
+            break;
+
+        case 'VerifiedDescription':
+            return IsWillBeOverwrittenByValue('#case__VerifiedDescription', '#case__VerifiedDescription', val);
+            break;
+
+        case 'SolutionRate':
+            return IsWillBeOverwrittenByValue('#case__SolutionRate', '#case__SolutionRate', val);
+            break;
+
     }
     return false;
 }
@@ -559,6 +596,51 @@ var ApplyTemplate = function (data, doOverwrite) {
                     el = $("#case__CausingPartId").chosen();
                     SetSingleSelectValueIfElVisible(el, val, cfg);
                     break;
+
+                case 'SMS':
+                    el = $("#case__SMS");
+                    SetCheckboxValueIfElVisible(el, val);
+                    break;
+                
+                case 'Available':
+                    el = $("#case__Available");
+                    SetValueIfElVisible(el, val, cfg);
+                    break;
+
+                case 'Cost':
+                    el = $("#case__Cost");
+                    SetValueIfElVisible(el, val, cfg);
+                    break;
+
+                case 'OtherCost':
+                    el = $("#case__OtherCost");
+                    SetValueIfElVisible(el, val, cfg);
+                    break;
+
+                case 'Currency':
+                    el = $("#case__Currency");
+                    SetValueIfElVisible(el, val, cfg);
+                    break;
+                    
+                case 'Problem_Id':
+                    el = $("#case__Problem_Id");
+                    SetValueIfElVisible(el, val, cfg);
+                    break;
+
+                case 'PlanDate':
+                    el = $("#case__PlanDate");
+                    SetDateValueIfElVisible(el, val, cfg, dateFormat);
+                    break;
+
+                case 'VerifiedDescription':
+                    el = $("#case__VerifiedDescription");
+                    SetValueIfElVisible(el, val, cfg);
+                    break;
+
+                case 'SolutionRate':
+                    el = $("#case__SolutionRate");
+                    SetValueIfElVisible(el, val, cfg);
+                    break;
             }
         }
     }
@@ -741,8 +823,45 @@ function IsValueApplicableFor(templateFieldId, val) {
         case 'Status_Id':
             return $("#case__Status_Id").is(':visible');
             break;
+
         case 'CausingPartId':
             return $("#case__CausingPartId").is(':visible');
+            break;
+
+        case 'SMS':
+            return $("#case__SMS").is(':visible');
+            break;
+
+        case 'Available':
+            return $("#case__Available").is(':visible');
+            break;
+         
+        case 'Cost':
+            return $("#case__Cost").is(':visible');
+            break;
+
+        case 'OtherCost':
+            return $("#case__OtherCost").is(':visible');
+            break;
+
+        case 'Currency':
+            return $("#case__Currency").is(':visible');
+            break;
+
+        case 'Problem_Id':
+            return $("#case__Problem_Id").is(':visible');
+            break;
+
+        case 'PlanDate':
+            return $("#case__PlanDate").is(':visible');
+            break;
+        
+        case 'VerifiedDescription':
+            return $("#case__VerifiedDescription").is(':visible');
+            break;
+
+        case 'SolutionRate':
+            return $("#case__SolutionRate").is(':visible');
             break;
     }
     return false;

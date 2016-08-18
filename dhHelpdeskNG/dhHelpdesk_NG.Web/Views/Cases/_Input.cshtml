@@ -1412,11 +1412,11 @@
                                         <td colspan="2">
                                             @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.SMS, CaseSolutionFields.SMS))
                                             {
-                                                <input type="checkbox" name="case_.SMS" @(Model.case_.SMS == 1 ? "checked=checked" : "") value="1"/>
+                                                <input type="checkbox" id="case__SMS" name="case_.SMS" @(Model.case_.SMS == 1 ? "checked=checked" : "") value="1"/>
                                             }
                                             else
                                             {
-                                                <input type="checkbox" name="case_.SMS" @(Model.case_.SMS == 1 ? "checked=checked" : "") value="1" disabled="disabled"/>
+                                                <input type="checkbox" id="case__SMS" name="case_.SMS" @(Model.case_.SMS == 1 ? "checked=checked" : "") value="1" disabled="disabled"/>
                                             }
                                             <input type="hidden" name="case_.SMS" value="0" />
                                             <span class="lbl">@Translation.Get("Skicka SMS när ärendet avslutas", SessionFacade.CurrentLanguageId).</span>

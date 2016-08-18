@@ -360,7 +360,17 @@ namespace DH.Helpdesk.Web.Controllers
                     WatchDate = caseSolution.WatchDate.HasValue? caseSolution.WatchDate.Value.ToShortDateString() : string.Empty,
                     caseSolution.CausingPartId,
                     caseSolution.InvoiceNumber,
-                    caseSolution.ReferenceNumber
+                    caseSolution.ReferenceNumber,
+                    
+                    SMS = caseSolution.SMS.ToBool(),
+                    caseSolution.Available,
+                    caseSolution.Cost,
+                    caseSolution.OtherCost,
+                    caseSolution.Currency,
+                    caseSolution.Problem_Id,
+                    PlanDate = caseSolution.PlanDate.HasValue ? caseSolution.PlanDate.Value.ToShortDateString() : string.Empty,
+                    VerifiedDescription = caseSolution.VerifiedDescription,
+                    SolutionRate = caseSolution.SolutionRate
                 },
                     JsonRequestBehavior.AllowGet);
         }

@@ -4078,6 +4078,7 @@ namespace DH.Helpdesk.Web.Controllers
                         m.case_.FinishingDescription = caseTemplate.FinishingDescription;
                         m.case_.PlanDate = caseTemplate.PlanDate;
                         m.CaseTemplateName = caseTemplate.Name;
+                        m.case_.SMS = caseTemplate.SMS;
                         // This is used for hide fields(which are not in casetemplate) in new case input
                         m.templateistrue = templateistrue;
                         var finishingCauses = this._finishingCauseService.GetFinishingCauseInfos(customerId);
