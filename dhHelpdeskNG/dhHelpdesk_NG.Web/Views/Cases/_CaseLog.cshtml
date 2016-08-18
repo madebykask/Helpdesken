@@ -98,7 +98,10 @@
                                             }
                                             show = true;                                            
                                         }
-                                        
+                                        if (boldTO == false && boldCC == false)
+                                        {
+                                            boldBCC = true;
+                                        }
                                         if (show)
                                         {
                                             var lastElmSelectedId = "lastMailSelected" + r.Id;
@@ -144,13 +147,13 @@
                                                 @if (boldBCC)
                                                 {
                                                     <p>
-                                                        <b>BCC[@countBCC]</b>&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip expander" title="" data-original-title="@mailBCC" data-expand-element="mailbcc" data-expand-log-id="@r.Id"></span>
+                                                        <b>BCC[?]</b>&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip expander" title="" data-original-title="@mailBCC" data-expand-element="mailbcc" data-expand-log-id="@r.Id"></span>
                                                     </p>
                                                 }
                                                 else
                                                 {
                                                     <p>
-                                                        BCC[@countBCC]&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip expander" title="" data-original-title="@mailBCC" data-expand-element="mailbcc" data-expand-log-id="@r.Id"></span>
+                                                        BCC[?]&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip expander" title="" data-original-title="@mailBCC" data-expand-element="mailbcc" data-expand-log-id="@r.Id"></span>
                                                     </p>
                                                 }
                                             </div>

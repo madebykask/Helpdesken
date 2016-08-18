@@ -1304,6 +1304,10 @@
                                                             }
                                                         }
                                                     }
+                                                    if (boldTO == false && boldCC == false)
+                                                    {
+                                                        boldBCC = true;
+                                                    }
                                                 }
                                                 <div>
                                                     <table>
@@ -1350,13 +1354,13 @@
                                                             @if (boldBCC == true)
                                                             {
                                                                 <td>
-                                                                    <b>BCC[@countBCC]</b>&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@mailBCC" data-expand-element="mailbcc"></span>
+                                                                    <b>BCC[?]</b>&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@mailBCC" data-expand-element="mailbcc"></span>
                                                                 </td>
                                                             }
                                                             else
                                                             {
                                                                 <td>
-                                                                    BCC[@countBCC]&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@mailBCC" data-expand-element="mailbcc"></span>
+                                                                    BCC[?]&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@mailBCC" data-expand-element="mailbcc"></span>
                                                                 </td>
                                                             }
                                                         </tr>
