@@ -185,7 +185,8 @@
                     dataType: "html",
                     success: function (htmlData) {
                         if (isPreview) {
-                            dhHelpdesk.reports.togglePreviewMode(false);
+                            if ($(htmlData).find('#showrun').val() === 'true')
+                                dhHelpdesk.reports.togglePreviewMode(false);
                         }
                         $("#generateReportContainer").html(htmlData);
                     },
