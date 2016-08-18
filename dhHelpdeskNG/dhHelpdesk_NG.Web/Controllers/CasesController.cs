@@ -2541,17 +2541,7 @@ namespace DH.Helpdesk.Web.Controllers
                         case_.Department_Id = oldCase.Department_Id;
                         case_.OU_Id = oldCase.OU_Id;
                         case_.UserCode = oldCase.UserCode;
-                    }
-
-                    if (cu.PriorityPermission == 0)
-                    {
-                        case_.Priority_Id = oldCase.Priority_Id;
-                    }
-
-                    //if (cu.StateSecondaryPermission == 0)
-                    //{
-                    //    case_.StateSecondary_Id = oldCase.StateSecondary_Id;
-                    //}
+                    }                    
                 }
 
                 if (oldCase.StateSecondary_Id.HasValue)
