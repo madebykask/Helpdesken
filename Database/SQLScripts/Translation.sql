@@ -4863,6 +4863,13 @@ If not exists (select * from tblTextTranslation where text_id = 1662 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1662, 2, 'Copy image data into clipboard and press Ctrl+V')
 GO
 
+If not exists (select * from tblText where Id = 1663)
+            insert into tblText (Id, Textstring) VALUES (1663, 'Sök även i loggposter')
+GO
+
+If not exists (select * from tblTextTranslation where Text_Id = 1663 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1663, 'Also search in Log notes', 2)
+GO
 
 update tblText set Textstring = '-Välj artikel-' where Id = 1222
 GO
