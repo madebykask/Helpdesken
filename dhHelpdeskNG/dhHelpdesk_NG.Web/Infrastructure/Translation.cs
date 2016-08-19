@@ -17,7 +17,15 @@
         [System.Obsolete("This is obsolete. Please use either GetMasterDataTranslation, GetCoreTextTranslation, GetForCase, or GetTextTranslationByTextType. This is spotty because it can give translations that isn't necessarily correct (based on texttype) and can give faulty translations")]
         public static string Get(string translate, Enums.TranslationSource source = Enums.TranslationSource.TextTranslation, int customerId = 0)
         {
+            translate = Get(translate, SessionFacade.CurrentLanguageId, source, customerId);            
+            return translate;
+        }
+
+        public static string GetForJS(string translate, Enums.TranslationSource source = Enums.TranslationSource.TextTranslation, int customerId = 0)
+        {
             translate = Get(translate, SessionFacade.CurrentLanguageId, source, customerId);
+            translate = translate.Replace("'", "\\'");
+            translate = translate.Replace("\"", "\\'");
             return translate;
         }
 
@@ -82,7 +90,8 @@
             return translate = Get(translate, languageId, source, customerId, false);
         }
 
-        private static string Get(string translate, int languageId, Enums.TranslationSource source = Enums.TranslationSource.TextTranslation, int customerId = 0, bool DiffTextType = false, int TextTypeId = 0)
+        private static string Get(string translate, int languageId, Enums.TranslationSource source = Enums.TranslationSource.TextTranslation, 
+                                  int customerId = 0, bool DiffTextType = false, int TextTypeId = 0)
         {
             if (source == Enums.TranslationSource.TextTranslation)
             {
@@ -197,7 +206,7 @@
         private static List<string> GetJSTextDictionary()
         {
             /* Note: Should be carefull to add to this list 
-             *       As it will pass by json, if it be to much, system can't send it. 
+             *       As it will pass by json, if it be too much, system can't send it. 
              *       (Depend on MaxJsonLength)
              */
             var ret = new List<string> 

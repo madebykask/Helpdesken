@@ -64,11 +64,11 @@
 
                 buttons: [
                     {
-                        text: '@Translation.Get("OK", Enums.TranslationSource.TextTranslation)',
+                        text: '@Translation.GetForJS("OK", Enums.TranslationSource.TextTranslation)',
                         click: function () {
                             var items = $("#divSendToDialogCase_recipient_emails_listbox option");
                             if (items == undefined || items.index(0) == -1) {                                
-                                ShowToastMessage('@Translation.Get("Ingen mottagare är angiven.", Enums.TranslationSource.TextTranslation)', "warning", false);
+                                ShowToastMessage('@Translation.GetForJS("Ingen mottagare är angiven.", Enums.TranslationSource.TextTranslation)', "warning", false);
                                 $("#divSendToDialogCase_add_emails_button").focus();
                                 return;
                             }
@@ -81,7 +81,7 @@
                         'class': 'btn'
                     },
                     {
-                        text: '@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)',
+                        text: '@Translation.GetForJS("Avbryt", Enums.TranslationSource.TextTranslation)',
                         click: function() {
                             $(this).dialog("close");
                         },

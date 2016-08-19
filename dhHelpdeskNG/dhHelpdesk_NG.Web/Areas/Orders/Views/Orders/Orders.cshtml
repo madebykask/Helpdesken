@@ -49,8 +49,8 @@
     };
 
     $(document).ready(function () {
-        var perPageText = '@Translation.Get("Antal per sida")';
-        var perShowingText = '@Translation.Get("Visar sida")';
+        var perPageText = '@Translation.GetForJS("Antal per sida")';
+        var perShowingText = '@Translation.GetForJS("Visar sida")';
         InitDataTable("Orders_Table", perPageText, perShowingText);
     });
 </script>

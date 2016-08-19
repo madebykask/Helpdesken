@@ -178,13 +178,13 @@
             },
             messages: {
                 "Document.Name": {
-                    required: '@Translation.Get("Du måste välja ett dokumentnamn", Enums.TranslationSource.TextTranslation)'
+                    required: '@Translation.GetForJS("Du måste välja ett dokumentnamn", Enums.TranslationSource.TextTranslation)'
                 },
                 "Document.Description": {
-                    required: '@Translation.Get("Du måste fylla i beskrivning-fältet", Enums.TranslationSource.TextTranslation)'
+                    required: '@Translation.GetForJS("Du måste fylla i beskrivning-fältet", Enums.TranslationSource.TextTranslation)'
                 },
                 "Document.FileName": {
-                    required: '@Translation.Get("Du måste bifoga en fil", Enums.TranslationSource.TextTranslation)'
+                    required: '@Translation.GetForJS("Du måste bifoga en fil", Enums.TranslationSource.TextTranslation)'
                 }
             }
             //            ,
@@ -228,7 +228,7 @@
     });
 
     function deleteFile(id) {
-        if (confirm('@Translation.Get("Är du säker på att du vill ta bort bifogad fil?", Enums.TranslationSource.TextTranslation)')) {
+        if (confirm('@Translation.GetForJS("Är du säker på att du vill ta bort bifogad fil?", Enums.TranslationSource.TextTranslation)')) {
             $.post('/Document/DeleteUploadedFile/' + id, function (result) {
                 window.location.reload()
             });
