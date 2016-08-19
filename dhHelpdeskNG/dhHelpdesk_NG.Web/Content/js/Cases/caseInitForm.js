@@ -887,10 +887,10 @@ function CaseInitForm() {
             pasteCatcher.style.width = "10px";
             document.body.appendChild(pasteCatcher);
             document.getElementById('paste_ff').addEventListener('DOMSubtreeModified', function() {
-                if (pasteMode == 'auto' || ctrlPressed == false)
+                if (pasteMode === 'auto' || ctrlPressed === false)
                     return true;
                 //if paste handle failed - capture pasted object manually
-                if (pasteCatcher.children.length == 1) {
+                if (pasteCatcher.children.length === 1) {
                     if (pasteCatcher.firstElementChild.src != undefined) {
                         //image
                         self.paste_createImage(pasteCatcher.firstElementChild.src);
@@ -947,18 +947,14 @@ function CaseInitForm() {
         this.on_keyboard_action = function (event) {
             k = event.keyCode;
             //ctrl
-            if (k == 17 || event.metaKey || event.ctrlKey) {
-                if (ctrlPressed == false)
+            if (k === 17 || event.metaKey || event.ctrlKey) {
+                if (ctrlPressed === false)
                     ctrlPressed = true;
             }
-            //c
-            if (k == 86) {
-                if (document.activeElement != undefined && document.activeElement.type == 'text') {
-                    //let user paste into some input
-                    return false;
-                }
+            //v
+            if (k === 86) {
 
-                if (ctrlPressed == true && !window.Clipboard)
+                if (ctrlPressed === true && !window.Clipboard)
                     pasteCatcher.focus();
             }
         };
@@ -966,7 +962,7 @@ function CaseInitForm() {
         this.on_keyboardup_action = function (event) {
             k = event.keyCode;
             //ctrl
-            if (k == 17 || event.metaKey || event.ctrlKey || event.key == 'Meta')
+            if (k === 17 || event.metaKey || event.ctrlKey || event.key == 'Meta')
                 ctrlPressed = false;
         };
 
