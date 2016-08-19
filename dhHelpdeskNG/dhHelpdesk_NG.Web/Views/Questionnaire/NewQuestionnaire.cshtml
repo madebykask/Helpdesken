@@ -9,7 +9,7 @@
         <div class="pull-left">
             <ul class="secnav">
                 <li>
-                    <input type="submit" value="@Translation.Get("Save", Enums.TranslationSource.TextTranslation)" class="btn" />
+                    <input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn" />
                 </li>
                 <li>
                     <a href="@Url.Action("Index")" class="btn">
@@ -36,7 +36,7 @@
                                 <table class="tableform">
                                     <tr>
                                         <td class="span3">
-                                            @Translation.Get("Namn", Enums.TranslationSource.TextTranslation):
+                                            @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td class="span9">
                                             @Html.EditorFor(model => model.Name)
@@ -45,7 +45,7 @@
                                     </tr>
                                     <tr>
                                         <td class="span3">
-                                            @Translation.Get("Beskrivning", Enums.TranslationSource.TextTranslation):
+                                            @Translation.Get("Beskrivning", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td class="span9">
                                             @Html.TextAreaFor(model => model.Description, new { maxlength = "2000", style = "height:100px;" })
