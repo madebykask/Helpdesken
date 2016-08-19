@@ -306,18 +306,18 @@
 
         public DbSet<Link> Links { get; set; }
 
-        public DbSet<LocalAdmin> LocalAdmins { get; set; }        
-
-        public DbSet<LogFile> LogFiles { get; set; }
-
-        public DbSet<LogProgram> LogPrograms { get; set; }
-
-        public DbSet<LogSync> LogSyncs { get; set; }
+        public DbSet<LocalAdmin> LocalAdmins { get; set; }
 
         public DbSet<LogicalDrive> LogicalDrives { get; set; }
 
+        public DbSet<LogFile> LogFiles { get; set; }
+
+        public DbSet<LogProgramEntity> LogPrograms { get; set; }
+
         public DbSet<Log> Logs { get; set; }
 
+        public DbSet<LogSync> LogSyncs { get; set; }
+                
         public DbSet<Mail2Ticket> Mail2Tickets { get; set; }
 
         public DbSet<MailTemplateIdentifierEntity> MailTemplateIdentifiers { get; set; }
@@ -656,6 +656,7 @@
             modelBuilder.Configurations.Add(new LinkGroupConfiguration());            
             modelBuilder.Configurations.Add(new LogConfiguration());
             modelBuilder.Configurations.Add(new LogFileConfiguration());
+            modelBuilder.Configurations.Add(new LogProgramConfiguration());
             modelBuilder.Configurations.Add(new Mail2TicketConfiguration());
             modelBuilder.Configurations.Add(new MailTemplateConfiguration());
             modelBuilder.Configurations.Add(new MailTemplateIdentifierConfiguration());

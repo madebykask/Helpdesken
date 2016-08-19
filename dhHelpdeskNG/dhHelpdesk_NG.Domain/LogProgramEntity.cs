@@ -2,7 +2,7 @@
 {
     using global::System;
 
-    public class LogProgram : Entity
+    public class LogProgramEntity : Entity
     {
         public int Case_Id { get; set; }
         public int Customer_Id { get; set; }

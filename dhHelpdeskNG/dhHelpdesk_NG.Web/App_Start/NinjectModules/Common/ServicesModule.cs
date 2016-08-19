@@ -146,7 +146,9 @@
 
             // Reports module
             this.Bind<IReportService>().To<ReportService>();
-            this.Bind<IReportServiceService>().To<ReportServiceService>();            
+            this.Bind<IReportServiceService>().To<ReportServiceService>();
+
+            this.Bind<ILogProgramService>().To<LogProgramService>();            
 
         }
 

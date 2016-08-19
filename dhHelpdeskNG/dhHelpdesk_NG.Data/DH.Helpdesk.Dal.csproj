@@ -83,6 +83,7 @@
     <Compile Include="EntityConfigurations\Accounts\EmploymentTypeConfiguration.cs" />
     <Compile Include="EntityConfigurations\ActionSetting\ActionSettingConfiguration.cs" />
     <Compile Include="EntityConfigurations\ADFS\ADFSSettingConfiguration.cs" />
+    <Compile Include="EntityConfigurations\LogProgramConfiguration.cs" />
     <Compile Include="EntityConfigurations\Mail2TicketConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CaseSolutionSettingConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CaseStatisticConfiguration.cs" />

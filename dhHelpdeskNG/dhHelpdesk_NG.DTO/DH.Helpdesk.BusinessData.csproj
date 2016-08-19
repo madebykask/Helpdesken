@@ -242,6 +242,7 @@
     <Compile Include="Models\Invoice\Xml\ExportInvoiceOrderXML.cs" />
     <Compile Include="Models\Licenses\Computers\ComputerOverview.cs" />
     <Compile Include="Models\DailyReport\Output\DailyReportSubject.cs" />
+    <Compile Include="Models\LogProgram\LogProgram.cs" />
     <Compile Include="Models\MailTemplates\CustomMailTemplateLanguage.cs" />
     <Compile Include="Models\Modules\Output\ModulesOverview.cs" />
     <Compile Include="Models\OperationLog\Output\OperationLogObjectOverview.cs" />
