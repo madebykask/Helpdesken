@@ -86,6 +86,8 @@
 
         public bool CaseRemainingTimeHoursFilter { get; set; }
 
+        public int MaxTextCharacters { get; set; }
+
         public CaseSearchFilter Copy(CaseSearchFilter o)
         {
             var r = new CaseSearchFilter();
@@ -133,6 +135,7 @@
             r.CaseRemainingTime = o.CaseRemainingTime;
             r.SearchThruFiles = o.SearchThruFiles;
             r.CaseFilterFavorite = o.CaseFilterFavorite;
+            r.MaxTextCharacters = o.MaxTextCharacters;
 
             return r;
         }

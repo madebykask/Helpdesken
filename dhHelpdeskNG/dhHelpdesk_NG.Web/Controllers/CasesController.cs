@@ -72,6 +72,7 @@ namespace DH.Helpdesk.Web.Controllers
         private const string ParentPathDefaultValue = "--";
         private const string ChildCasesHashTab = "childcases-tab";
         private const string _reportFolderName = "StaticReports";
+        private const int MaxTextCharCount = 200;
 
         private readonly ICaseService _caseService;
         private readonly ICaseSearchService _caseSearchService;
@@ -502,6 +503,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
             var caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(f.CustomerId).ToArray();
+            f.MaxTextCharacters = 0;
             m.cases = this._caseSearchService.Search(
                 f,
                 m.caseSettings,
@@ -852,6 +854,7 @@ namespace DH.Helpdesk.Web.Controllers
             CaseRemainingTimeData remainingTimeData;
             CaseAggregateData aggregateData;
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
+            f.MaxTextCharacters = MaxTextCharCount;
             m.cases = this._caseSearchService.Search(
                 f,
                 m.caseSettings,
