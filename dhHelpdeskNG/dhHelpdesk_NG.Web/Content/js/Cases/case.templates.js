@@ -33,6 +33,11 @@ function SetDateValueIfElVisible(el, val, opt, format) {
                 autoclose: true
             }).datepicker('setDate', val);
            
+            var readOnly = $(el).attr("readonly");            
+            if (readOnly!= undefined && readOnly.toLowerCase() == 'readonly') {                
+                $(el).val(val);
+            }
+
             if (!opt.doNotTriggerEvent) {
                 $(el).trigger('change');                
             }            
@@ -585,8 +590,11 @@ var ApplyTemplate = function (data, doOverwrite) {
                     SetValueIfElVisible(el, val, cfg);
                     break;
                 case 'StateSecondary_Id':
-                    el = $("#case__StateSecondary_Id");
+                    el = $("#case__StateSecondary_Id");                    
                     SetValueIfElVisible(el, val, cfg);
+                    if (el && (el.val() == "" || cfg.doOverwrite)) {
+                        $(".reaonlySubstate").val(val);
+                    }
                     break;
                 case 'Status_Id':
                     el = $("#case__Status_Id");

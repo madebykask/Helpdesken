@@ -600,6 +600,7 @@ function CaseInitForm() {
                     exists = $('#case__StateSecondary_Id option[value=' + data.StateSecondary_Id + ']').length;
                     if (exists > 0 && data.StateSecondary_Id > 0) {
                         $("#case__StateSecondary_Id").val(data.StateSecondary_Id);
+                        $(".readonlySubstate").val(data.StateSecondary_Id);
                     }
                 }
             }, 'json');
@@ -671,7 +672,7 @@ function CaseInitForm() {
             CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeWorkingGroupFilterUser/', '#Performer_Id', $('#DepartmentFilterFormat').val());
         }
         //set state secondery
-        SelectValueInOtherDropdownOnChange($(this).val(), '/Cases/ChangeWorkingGroupSetStateSecondary/', '#case__StateSecondary_Id');        
+        SelectValueInOtherDropdownOnChange($(this).val(), '/Cases/ChangeWorkingGroupSetStateSecondary/', '#case__StateSecondary_Id', '.readonlySubstate');        
       });
 
     $('#case__StateSecondary_Id').change(function () {

@@ -96,13 +96,15 @@ function close_window() {
     //}
 }
 
-function SelectValueInOtherDropdownOnChange(id, postTo, ctl) {
+function SelectValueInOtherDropdownOnChange(id, postTo, ctl, readonlyElement) {
     var ctlOption = ctl + ' option';
     $.post(postTo, { 'id': id }, function (data) {
         if (data != null) {
             var exists = $(ctlOption + '[value=' + data + ']').length;
             if (exists > 0) {
                 $(ctl).val(data);
+                if (readonlyElement != undefined && readonlyElement!= null)
+                    $(readonlyElement).val(data);
             }
         }
     }, 'json');

@@ -33,13 +33,15 @@ EditPage.prototype.fetchWatchDateByDept = function (deptId) {
         function (response) {
             if (response.result === 'success') {
                 if (response.data != null) {
-                    var dt = new Date(parseInt(response.data.replace("/Date(", "").replace(")/", ""), 10));
+                    var dt = new Date(parseInt(response.data.replace("/Date(", "").replace(")/", ""), 10));                                        
                     me.$watchDate.datepicker('update', dt);
-                }
-                //else {
-                //    me.$watchDate.datepicker('update', '');
-                //}
 
+                    var readOnly = $(me.$watchDateEdit).attr("readonly");
+                    if (readOnly != undefined && readOnly.toLowerCase() == 'readonly') {
+                        var dateText = dt.format('yyyy-MM-dd');
+                        me.$watchDateEdit.val(dateText);
+                    }
+                }               
             }
         });
 };
@@ -518,7 +520,7 @@ EditPage.prototype.init = function (p) {
     me.$SLASelect = $('#case__Priority_Id');
     me.$SLAInput = $('input.sla-value');
     me.$watchDateEdit = $('#case__WatchDate');
-    me.$watchDate = $('#divCase__WatchDate');
+    me.$watchDate = $('#divCase__WatchDate');   
     me.$buttonsToDisable = $('.btn.save, .btn.save-close, .btn.save-new');
     me.$productAreaObj = $('#divProductArea');
     me.$productAreaChildObj = $('#ProductAreaHasChild');
