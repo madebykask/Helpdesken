@@ -1044,7 +1044,68 @@ as
 			Set @InOrder = @InOrder + 1;
 			Set @FieldName = '';
 			End;		
-		  
+		  		 
+				 
+			/* Case Files */ 
+			declare @FileNums int
+			declare @ii int
+
+			SELECT @FileNums = Count(id)
+			FROM   tblCaseFile
+			Where Case_Id = @CaseId						
+
+			if (@FileNums > 0)
+			begin
+				/* Curson defination */
+				
+				Declare @CaseFileName  Nvarchar(Max)
+				DECLARE CaseFile_Cursor CURSOR FOR 			
+		
+				SELECT [FileName] as CaseFile 
+				FROM   tblCaseFile
+				Where Case_Id = @CaseId	
+				Order by CreatedDate						
+		
+				OPEN CaseFile_Cursor
+
+				FETCH NEXT FROM CaseFile_Cursor 
+				INTO @CaseFileName;
+			
+				set @ii = 0
+				
+				declare @AllFileNames Nvarchar(Max)
+				set @AllFileNames = ''
+				WHILE (@ii < @FileNums)
+				BEGIN	 	    
+					set @ii = @ii + 1		
+					set @AllFileNames = @AllFileNames + CHAR(13) + CHAR(10) + @CaseFileName; 					
+			
+					if (@ii < @FileNums)
+					begin
+						FETCH NEXT FROM CaseFile_Cursor 
+						INTO @CaseFileName;
+					end
+
+				End; /* While CaseFile_Cursor */ 
+	
+				CLOSE CaseFile_Cursor;
+				DEALLOCATE CaseFile_Cursor;
+
+				Select @FieldName = FieldName, @FieldCaption = FieldCaption From @AvailableFields where FieldName = 'Filename'
+				If (@FieldName is not null and @FieldName <> '')
+				Begin    
+					set @FieldCaption = Isnull(@FieldCaption, dbo.GetDefCaseFieldCaption(@FieldName, @LanguageId))   
+					Insert into @ResultSet (Id, FieldName, FieldCaption, FieldValue, InOrder, LineType) 
+						Select @FieldId, @FieldName, @FieldCaption, @AllFileNames, @InOrder, 'F'		
+						From @CaseTable c;				 
+
+					Set @FieldId = @FieldId + 1;
+					Set @InOrder = @InOrder + 1;
+				end
+				
+			End -- Case Files
+
+
 			if (@FieldId > @HeaderId + 1)
 			begin
 				set @FieldCaption = dbo.TextTranslate('Ärendeinformation', @LanguageId);
@@ -1063,7 +1124,7 @@ as
 	 
 
 	 Declare @Nums int;
-	declare @i int;
+	 declare @i int;
 
 	set @Nums = 0;
 
@@ -1131,7 +1192,7 @@ as
 				INTO @SSFieldName, @SSFieldCaption, @SSFieldValue;						
 			end
 
-		End; /* While Log_Cursor */ 
+		End; /* While SelfService_Cursor */ 
 	
 		CLOSE SelfService_Cursor;
 		DEALLOCATE SelfService_Cursor;
