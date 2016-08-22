@@ -1496,7 +1496,7 @@ as
 	FROM tblLog l 
 		Left outer Join tblUsers u on (l.User_Id = u.Id),
 		tblSettings s		 
-	WHERE l.Case_Id = @CaseId and s.Customer_Id = @CurrentCustomerId			
+	WHERE l.Case_Id = @CaseId and s.Customer_Id = @CurrentCustomerId and (l.Text_External <> '' or l.Text_Internal <> '')			
 
 	/* Curson defination */
 	DECLARE logData_Cursor CURSOR FOR 			
@@ -1538,9 +1538,7 @@ as
 	Set @Log_Value = '';
 
 	set @i = 0
-		
-	
-		
+					
 	WHILE (@i < @Nums)
 	BEGIN	 	    
 		set @i = @i + 1		
