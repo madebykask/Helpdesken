@@ -12,22 +12,22 @@
                     <table id="tblQuestions" class="table table-striped table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th style="cursor: pointer; cursor: hand;width: 10%" >                                    
+                                <th style="cursor: pointer; cursor: hand;width: 5%" >                                    
                                     @Translation.Get("Position", Enums.TranslationSource.TextTranslation)
                                 </th>
                                 <th style="cursor: pointer; cursor: hand;width: 70%">
                                     @Translation.Get("Alternativ", Enums.TranslationSource.TextTranslation)
                                 </th>                               
-                                <th style="cursor: pointer; cursor: hand;width: 15%">
+                                <th style="cursor: pointer; cursor: hand;width: 12%">
                                     @Translation.Get("Värde", Enums.TranslationSource.TextTranslation)
                                 </th>                               
-                                <th style="cursor: pointer; cursor: hand;width: 10%">
+                                <th style="cursor: pointer; cursor: hand;width: 18%">
                                     @Translation.Get("Åtgärd", Enums.TranslationSource.TextTranslation)
                                 </th>                               
                             </tr>
                         </thead>
                         <tbody>
-                            @if (Model.LanguageId == LanguageId.Swedish)
+                            @if (Model.LanguageId == LanguageIds.Swedish)
                             {                                                                                                
                                 <tr>
                                     <td>
@@ -39,7 +39,7 @@
                                     <td>
                                         @Html.TextBox("optionValue", "0", new { id = "optionValue", style = "width: 85%;background-color:beige"})
                                     </td>                                    
-                                    <td>
+                                    <td style="text-align:center;">
                                         <a id="Addbtn" style="width: 60%" class="btn">
                                             @Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)
                                         </a>                                                                                          
@@ -55,7 +55,7 @@
                                         @Html.HiddenFor(o => o.Options[i].LanguageId)                                       
                                         @Html.HiddenFor(o => o.Options[i].QuestionId)                                       
 
-                                        @if (Model.LanguageId == LanguageId.Swedish)
+                                        @if (Model.LanguageId == LanguageIds.Swedish)
                                         {@Html.TextBoxFor( o => o.Options[i].OptionPos , new {style = "width: 85%;"})}
                                         else
                                         {@Html.TextBoxFor(o => o.Options[i].OptionPos, new { style = "width: 85%;", @readonly = "" })}                                                                                                                                                                                                         
@@ -64,13 +64,13 @@
                                         @Html.TextBoxFor(o => o.Options[i].Option, new { style = "width: 95%;" })                                       
                                     </td>
                                     <td>
-                                        @if (Model.LanguageId == LanguageId.Swedish)
+                                        @if (Model.LanguageId == LanguageIds.Swedish)
                                         {@Html.TextBoxFor(o => o.Options[i].OptionValue, new { style = "width: 85%;" })}
                                         else
                                         {@Html.TextBoxFor(o => o.Options[i].OptionValue, new { style = "width: 85%;", @readonly = "" })}                                                                                                                                                                   
                                     </td>                                    
-                                    <td>
-                                        @if (Model.LanguageId != LanguageId.Swedish && Model.Options[i].LanguageId == LanguageId.Swedish)
+                                    <td style="text-align:center;">
+                                        @if (Model.LanguageId != LanguageIds.Swedish && Model.Options[i].LanguageId == LanguageIds.Swedish)
                                         {<input type="button" disabled="1" value="@Translation.Get("Delete", Enums.TranslationSource.TextTranslation)" class="btn"/>}
                                         else
                                         {                                                                                       

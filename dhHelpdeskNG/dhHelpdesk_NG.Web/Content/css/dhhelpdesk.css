@@ -42,6 +42,10 @@ a, a:hover, a:focus {
     font-weight: bold;
 }
 
+.textnormal {
+    font-weight: normal;
+}
+
 .textred {
     color: red !important;
 }
@@ -57,6 +61,8 @@ a, a:hover, a:focus {
 .textgreen td a {
     color: #0ca759 !important;
 }
+
+
 
 
 
@@ -1865,7 +1871,7 @@ table th.thpointer {
     word-wrap: break-word;
     line-height:13px;
 }
-.table-cases td {
+.table-cases td, .wordbreak {
     overflow-wrap:break-word;
     word-wrap: break-word;
     line-height:13px;
@@ -3688,3 +3694,10 @@ a.inactive
 {
     padding:1px 2px;
 }
+
+div.modal-body.max-height-600 {
+    max-height: 600px
+}
+
+
+

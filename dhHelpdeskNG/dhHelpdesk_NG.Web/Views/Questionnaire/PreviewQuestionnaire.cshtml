@@ -54,9 +54,11 @@
                                     @foreach (var op in item.Options)
                                     {
                                         <tr>    
-                                            <td>                                                                                                
+                                            <td>  
+                                                <div class="radio">                                                                                              
                                                 @Html.RadioButton(item.QuestionNumber,op.OptionText) 
-                                                @op.OptionText                                                
+                                                @op.OptionText    
+                                                </div>                                            
                                             </td> 
                                         </tr>                                                                            
                                     }                                                  

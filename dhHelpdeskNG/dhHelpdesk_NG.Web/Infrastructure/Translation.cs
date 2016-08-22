@@ -3,6 +3,7 @@
     using System.Linq;
     using DH.Helpdesk.Common.Extensions.String;
     using DH.Helpdesk.Common.Enums;
+    using System.Collections.Generic;
 
     public static class Translation
     {
@@ -16,7 +17,15 @@
         [System.Obsolete("This is obsolete. Please use either GetMasterDataTranslation, GetCoreTextTranslation, GetForCase, or GetTextTranslationByTextType. This is spotty because it can give translations that isn't necessarily correct (based on texttype) and can give faulty translations")]
         public static string Get(string translate, Enums.TranslationSource source = Enums.TranslationSource.TextTranslation, int customerId = 0)
         {
+            translate = Get(translate, SessionFacade.CurrentLanguageId, source, customerId);            
+            return translate;
+        }
+
+        public static string GetForJS(string translate, Enums.TranslationSource source = Enums.TranslationSource.TextTranslation, int customerId = 0)
+        {
             translate = Get(translate, SessionFacade.CurrentLanguageId, source, customerId);
+            translate = translate.Replace("'", "\\'");
+            translate = translate.Replace("\"", "\\'");
             return translate;
         }
 
@@ -81,7 +90,8 @@
             return translate = Get(translate, languageId, source, customerId, false);
         }
 
-        private static string Get(string translate, int languageId, Enums.TranslationSource source = Enums.TranslationSource.TextTranslation, int customerId = 0, bool DiffTextType = false, int TextTypeId = 0)
+        private static string Get(string translate, int languageId, Enums.TranslationSource source = Enums.TranslationSource.TextTranslation, 
+                                  int customerId = 0, bool DiffTextType = false, int TextTypeId = 0)
         {
             if (source == Enums.TranslationSource.TextTranslation)
             {
@@ -181,6 +191,89 @@
         public static string getCaseFieldName(this string value)
         {
             return value.Replace("tblLog_", "tblLog.");
+        }
+
+        public static List<KeyValuePair<string, string>> GetTranslationsForJS()
+        {
+            var texts = GetJSTextDictionary();
+            var ret = new List<KeyValuePair<string, string>>();
+            foreach (var text in texts)
+                ret.Add(new KeyValuePair<string, string>(text, Translation.GetCoreTextTranslation(text)));
+
+            return ret;
+        }
+
+        private static List<string> GetJSTextDictionary()
+        {
+            /* Note: Should be carefull to add to this list 
+             *       As it will pass by json, if it be too much, system can't send it. 
+             *       (Depend on MaxJsonLength)
+             */
+            var ret = new List<string> 
+                        {
+                            "saknas!",
+                            "0 är inte tillåtet",
+                            "Alla Totalt",
+                            "Art nr",
+                            "Artikel",
+                            "Artikelnamn ENG",
+                            "Artikelnamn SVE",
+                            "Artiklar att fakturera",
+                            "Avbryt",
+                            "Beskrivning",
+                            "Bifoga",
+                            "Bifogade filer",
+                            "Den här ordern är redan skickat. Du kan inte utföra den här aktiviteten.",
+                            "Det finns inga artiklar att skicka!",
+                            "Det finns inga filer att lägga till.",
+                            "Det saknas inställningar för fakturering",
+                            "Du har valt en artikel, men inte lagt till den än!",
+                            "Du kan inte använda ärendemall eftersom det finns order som inte är skickade.",
+                            "Du kan inte ändra",
+                            "eftersom det finns order som inte är skickade.",
+                            "Du måste spara ärendet en gång innan du kan skicka",
+                            "Ej skickat Totalt",
+                            "Endast PDF-filer som är bifogade på ärendet går att bifoga.",
+                            "Enheter",
+                            "Ett fel har uppstått vid spara Order",
+                            "för",
+                            "Inget kvar att kreditera",
+                            "Kredit",
+                            "Kreditera",
+                            "Kreditera order",
+                            "kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ordern.",                            
+                            "Lägg order",
+                            "Lägg till",
+                            "Max antal för denna artikel är",
+                            "Namn",
+                            "Ny order är redan skapad",
+                            "Order",
+                            "Order saknas",
+                            "Orderreferens",
+                            "PPE SEK",
+                            "Projekt",
+                            "Skicka",
+                            "Skickat",
+                            "Skickat av",
+                            "Skickat Totalt",
+                            "Spara",
+                            "Spara och stäng",
+                            "Spara...",
+                            "Ta bort",
+                            "Tecken kvar",
+                            "Textrad",
+                            "Total",
+                            "Totalt alla ordrar",
+                            "Typ",
+                            "Var god kontakta systemadministratör.",
+                            "Var vänlig spara ordern först.",
+                            "Var vänlig spara ärendet och försök igen!",
+                            "Välj artikel",
+                            "Ärende",
+                            "Ärendefiler",
+                            "Översikt"                            
+                        };
+            return ret;
         }
     }
 

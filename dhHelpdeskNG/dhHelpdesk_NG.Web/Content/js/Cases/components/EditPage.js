@@ -33,13 +33,15 @@ EditPage.prototype.fetchWatchDateByDept = function (deptId) {
         function (response) {
             if (response.result === 'success') {
                 if (response.data != null) {
-                    var dt = new Date(parseInt(response.data.replace("/Date(", "").replace(")/", ""), 10));
+                    var dt = new Date(parseInt(response.data.replace("/Date(", "").replace(")/", ""), 10));                                        
                     me.$watchDate.datepicker('update', dt);
-                }
-                //else {
-                //    me.$watchDate.datepicker('update', '');
-                //}
 
+                    var readOnly = $(me.$watchDateEdit).attr("readonly");
+                    if (readOnly != undefined && readOnly.toLowerCase() == 'readonly') {
+                        var dateText = dt.format('yyyy-MM-dd');
+                        me.$watchDateEdit.val(dateText);
+                    }
+                }               
             }
         });
 };
@@ -136,7 +138,7 @@ EditPage.prototype.primaryValidation = function (submitUrl) {
 
     //Check if there is Order which is not invoiced yet
     if (me.invoiceIsActive && me.CaseWillFinish()) {
-        $.get('/Invoice/IsThereNotInvoicedOrder/', { caseId: me.p.currentCaseId, myTime: Date.now }, function (res) {
+        $.get('/Invoice/IsThereNotSentOrder/', { caseId: me.p.currentCaseId, myTime: Date.now }, function (res) {
             if (res != null && res)
                 dhHelpdesk.cases.utils.showError(me.p.invoicePreventsToCloseCaseMessage);
             else
@@ -518,7 +520,7 @@ EditPage.prototype.init = function (p) {
     me.$SLASelect = $('#case__Priority_Id');
     me.$SLAInput = $('input.sla-value');
     me.$watchDateEdit = $('#case__WatchDate');
-    me.$watchDate = $('#divCase__WatchDate');
+    me.$watchDate = $('#divCase__WatchDate');   
     me.$buttonsToDisable = $('.btn.save, .btn.save-close, .btn.save-new');
     me.$productAreaObj = $('#divProductArea');
     me.$productAreaChildObj = $('#ProductAreaHasChild');
@@ -538,7 +540,7 @@ EditPage.prototype.init = function (p) {
     me.$btnSaveClose.on('click', Utils.callAsMe(me.onSaveAndCloseClick, me));
     me.$btnSaveNew.on('click', Utils.callAsMe(me.onSaveAndNewClick, me));
 
-    me.$btnPrint = $('.btn.print-case');
+    me.$btnPrint = $('.btn.print-case');    
     me.$printArea = $('#CasePrintArea');
     me.$printDialog = $('#PrintCaseDialog');
 
@@ -601,9 +603,24 @@ EditPage.prototype.init = function (p) {
         }
     });
 
-    $('.lang.dropdown-submenu a').on('click', Utils.callAsMe(me.onPageLeave, me));
-        
+    $('.lang.dropdown-submenu a').on('click', Utils.callAsMe(me.onPageLeave, me));             
+
     me.$btnPrint.click(function (e) {
+            
+        /* Setup Print Page */
+        try {
+            var regpath = "HKEY_CURRENT_USER\\Software\\Microsoft\\Internet Explorer\\PageSetup\\" + "Print_Background";
+            var oWSS = new ActiveXObject("WScript.Shell");
+            oWSS.RegWrite(regpath, "yes", "REG_SZ");
+
+
+            var regpath = "HKEY_CURRENT_USER\\Software\\Microsoft\\Internet Explorer\\PageSetup\\" + "Shrink_To_Fit";
+            var oWSS = new ActiveXObject("WScript.Shell");
+            oWSS.RegWrite(regpath, "no", "REG_SZ");
+        }
+        catch (err) {            
+        }
+        
         $.get("/Cases/ShowCasePrintPreview/",
                 {
                     caseId: p.currentCaseId,
@@ -613,34 +630,36 @@ EditPage.prototype.init = function (p) {
 
                 function (_reportPresentation) {
                     me.$printArea.html(_reportPresentation);
-
+                                        
                     $('#PrintCaseDialog').draggable({
                         handle: ".modal-header"
                     });
                     
+                    /* show true if you need to show case print preview*/
                     $('#PrintCaseDialog').modal({
                         "backdrop": "static",
                         "keyboard": true,
-                        "show": true
+                        "show": false
                     });
                    
-                    var _iframe = $("#caseReportContainer").find("iframe");
-                    if (_iframe != null && _iframe != undefined) {
-                        update_iFrame(_iframe.attr("id"));                        
-                    }
+                    //var _iframe = $("#caseReportContainer").find("iframe");
+                    //if (_iframe != null && _iframe != undefined) {
+                    //    update_iFrame(_iframe.attr("id"));                        
+                    //}
                 }
              );       
     });
     
-    var update_iFrame = function (iframeId) {
-        setTimeout(function () {           
-            var elm = document.getElementById(iframeId);
-            if (elm != null && elm != undefined) {
-                var newH = $(elm).height() + 50;
-                $(elm).css({ height: newH.toString() + "px" });
-            }            
-        }, 3000);
-    }
+    /*Enable if you have case print preview*/
+    //var update_iFrame = function (iframeId) {
+    //    setTimeout(function () {           
+    //        var elm = document.getElementById(iframeId);
+    //        if (elm != null && elm != undefined) {
+    //            var newH = $(elm).height() + 50;
+    //            $(elm).css({ height: newH.toString() + "px" });
+    //        }            
+    //    }, 3000);
+    //}
 
     //////// event bind end ///////////
     /*

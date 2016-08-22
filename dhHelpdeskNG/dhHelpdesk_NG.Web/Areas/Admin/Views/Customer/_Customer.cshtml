@@ -312,16 +312,16 @@
         },
         messages: {
             "Customer.CustomerID": {
-                required: "@Translation.Get("Kundnummer")" + " " + "@Translation.Get("måste anges")"
+                required: "@Translation.GetForJS("Kundnummer")" + " " + "@Translation.GetForJS("måste anges")"
             },
             "Customer.Name": {
-                required: "@Translation.Get("Namn")" + " " + "@Translation.Get("måste anges")"
+                required: "@Translation.GetForJS("Namn")" + " " + "@Translation.GetForJS("måste anges")"
             },
             "Customer.WorkingDayStart": {
-                range: "@Translation.Get("Var vänlig ange tid i siffror mellan 0-24 (i.e 8-17)")"
+                range: "@Translation.GetForJS("Var vänlig ange tid i siffror mellan 0-24 (i.e 8-17)")"
             },
             "Customer.WorkingDayEnd": {
-                range: "@Translation.Get("Var vänlig ange tid i siffror mellan 0-24 (i.e 8-17)")"
+                range: "@Translation.GetForJS("Var vänlig ange tid i siffror mellan 0-24 (i.e 8-17)")"
             }
         },
         submitHandler: function (form) {

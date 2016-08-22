@@ -2,7 +2,7 @@
     {{for Orders}}
         <tr class="case-invoice-orderrow">               
              {{if IsInvoiced}}
-                <th colspan="8"><i class='icon-ok icon-green'></i> {{:TitleCaption}} </th>
+                <th colspan="8"><i class='icon-ok icon-green'></i> {{:TitleCaption}} - {{:InvoicedByTitle}} <span class="textnormal"> {{:InvoicedByUser}} - {{:InvoiceDate}} {{:InvoiceTime}} </span></th>
              {{else}}        
                 <th colspan="8"> {{:TitleCaption}} </th> 
              {{/if}}                             
@@ -19,25 +19,15 @@
         {{for Articles tmpl="caseInvoiceArticleOverview" /}}
         
         <tr>
-           <td colspan="8">{{:ReferenceTitle}} {{:Persons_Name}} - {{:CostCentre}}</td>
-        </tr>
-        
-        <tr>
-            {{if IsInvoiced}}
-                <td colspan="6" style='text-align: left;'><span>{{:InvoicedByTitle}} {{:InvoicedByUser}} - {{:InvoiceDate}}</span>  {{:InvoiceTime}}</td>
-                 {{if IsCredited }}
-                    <td colspan="2" style='text-align: right;'><span class='textbold'>{{:TotalLabel}} SEK</span> -{{:Total}}</td>                
-                 {{else}}
-                    <td colspan="2" style='text-align: right;'><span class='textbold'>{{:TotalLabel}} SEK</span> {{:Total}}</td>                
-                 {{/if}}
-            {{else}}  
-                {{if IsCredited }}      
-                    <td colspan="8" style='text-align: right;'><span class='textbold'>{{:TotalLabel}} SEK</span> -{{:Total}}</td>        
-                {{else}}
-                    <td colspan="8" style='text-align: right;'><span class='textbold'>{{:TotalLabel}} SEK</span> {{:Total}}</td>        
-                {{/if}}
+            <td colspan="7"><span class="textbold">{{:ReferenceTitle}}</span> {{:Persons_Name}} - {{:CostCentre}}</td>
+            {{if IsCredited }}
+                    <td style='text-align: right;'><span class='textbold'>{{:TotalLabel}} SEK</span> -{{:Total}}</td>                
+            {{else}}
+                    <td style='text-align: right;'><span class='textbold'>{{:TotalLabel}} SEK</span> {{:Total}}</td>                
             {{/if}}
         </tr>
+        
+        
     {{/for}}
         <tr>
             <td colspan="7" class='textbold' style='text-align: right;'>

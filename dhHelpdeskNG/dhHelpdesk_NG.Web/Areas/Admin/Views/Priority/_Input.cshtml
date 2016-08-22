@@ -346,19 +346,19 @@
             },
             messages: {
                 "Priority.Code": {
-                    required: '@Translation.Get("Du måste ange prioritet", Enums.TranslationSource.TextTranslation)'
+                    required: '@Translation.GetForJS("Du måste ange prioritet", Enums.TranslationSource.TextTranslation)'
                 },
                 "Priority.Name": {
-                    required: '@Translation.Get("Du måste ange ett namn", Enums.TranslationSource.TextTranslation)'
+                    required: '@Translation.GetForJS("Du måste ange ett namn", Enums.TranslationSource.TextTranslation)'
                 },
                 @*"Priority.Description": {
-                    required: '@Translation.Get("Du måste ange en beskrivning", Enums.TranslationSource.TextTranslation)'
+                    required: '@Translation.GetForJS("Du måste ange en beskrivning", Enums.TranslationSource.TextTranslation)'
                 },
                 "Priority.EMailList": {
-                    required: '@Translation.Get("Du måste fylla i listan", Enums.TranslationSource.TextTranslation)'
+                    required: '@Translation.GetForJS("Du måste fylla i listan", Enums.TranslationSource.TextTranslation)'
                 },*@
                 "Priority.FileName": {
-                    requried: '@Translation.Get("Du måste bifoga en fil", Enums.TranslationSource.TextTranslation)'
+                    requried: '@Translation.GetForJS("Du måste bifoga en fil", Enums.TranslationSource.TextTranslation)'
                 }
             },
             submitHandler: function (form) {
@@ -385,7 +385,7 @@
 
     function deleteFile(id) {
         //alert(1);
-        if (confirm('@Translation.Get("Vill du verkligen ta bort bifogad fil?", Enums.TranslationSource.TextTranslation)')) {
+        if (confirm('@Translation.GetForJS("Vill du verkligen ta bort bifogad fil?", Enums.TranslationSource.TextTranslation)')) {
             $.post('/Priority/DeleteUploadedFile/' + id, function (result) {
                 window.location.reload()
             });

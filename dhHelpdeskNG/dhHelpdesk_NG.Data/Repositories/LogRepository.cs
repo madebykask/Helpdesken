@@ -3,11 +3,12 @@ using System.Linq;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
-    using DH.Helpdesk.Dal.Enums;
-    using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Domain;
-    using System;
-    using Log = DH.Helpdesk.Domain.Log;
+    using DH.Helpdesk.BusinessData.Models.LogProgram;
+using DH.Helpdesk.Dal.Enums;
+using DH.Helpdesk.Dal.Infrastructure;
+using DH.Helpdesk.Domain;
+using System;
+using Log = DH.Helpdesk.Domain.Log;
 
     #region LOG
 
@@ -144,16 +145,34 @@ namespace DH.Helpdesk.Dal.Repositories
 
     #region LOGPROGRAM
 
-    public interface ILogProgramRepository : IRepository<LogProgram>
+    public interface ILogProgramRepository : IRepository<LogProgramEntity>
     {
+        void UpdateUserLogin(LogProgram logProgram);
     }
 
-    public class LogProgramRepository : RepositoryBase<LogProgram>, ILogProgramRepository
+    public class LogProgramRepository : RepositoryBase<LogProgramEntity>, ILogProgramRepository
     {
         public LogProgramRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
+        {}
+
+        public void UpdateUserLogin(LogProgram logProgram)
         {
-        }
+            var logProgramEntity = new LogProgramEntity()
+            {
+                Case_Id = logProgram.CaseId,
+                Customer_Id = logProgram.CustomerId,
+                Log_Type = logProgram.LogType,
+                LogText = logProgram.LogText,
+                New_Performer_user_Id = logProgram.New_Performer_user_Id,
+                Old_Performer_User_Id = logProgram.Old_Performer_User_Id,
+                RegTime = logProgram.RegTime,
+                User_Id = logProgram.UserId
+            };
+
+            this.DataContext.LogPrograms.Add(logProgramEntity);
+            this.Commit();            
+        }        
     }
 
     #endregion

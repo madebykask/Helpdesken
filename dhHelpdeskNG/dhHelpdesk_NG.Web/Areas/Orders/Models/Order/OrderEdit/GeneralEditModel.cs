@@ -17,8 +17,9 @@
             ConfigurableFieldModel<string> customer,
             ConfigurableFieldModel<SelectList> administrator,
             ConfigurableFieldModel<SelectList> domain,
-            ConfigurableFieldModel<DateTime?> orderDate, 
-            string orderTypeName)
+            ConfigurableFieldModel<DateTime?> orderDate,
+            string orderTypeName,
+            ConfigurableFieldModel<SelectList> status)
         {
             this.OrderTypeName = orderTypeName;
             this.OrderNumber = orderNumber;
@@ -26,6 +27,7 @@
             this.Administrator = administrator;
             this.Domain = domain;
             this.OrderDate = orderDate;
+            this.Status = status;
         }
 
         public string OrderTypeName { get; private set; }
@@ -51,6 +53,12 @@
         [NotNull]
         public ConfigurableFieldModel<DateTime?> OrderDate { get; set; }
 
+        [NotNull]
+        public ConfigurableFieldModel<SelectList> Status { get; set; }
+
+        [IsId]
+        public int? StatusId { get; set; }
+
         public static GeneralEditModel CreateEmpty()
         {
             return new GeneralEditModel(
@@ -59,7 +67,8 @@
                 ConfigurableFieldModel<SelectList>.CreateUnshowable(),
                 ConfigurableFieldModel<SelectList>.CreateUnshowable(),
                 ConfigurableFieldModel<DateTime?>.CreateUnshowable(),
-                string.Empty);
+                string.Empty,
+                ConfigurableFieldModel<SelectList>.CreateUnshowable());
         }
 
         public bool HasShowableFields()
@@ -68,7 +77,8 @@
                 this.Customer.Show ||
                 this.Administrator.Show ||
                 this.Domain.Show ||
-                this.OrderDate.Show;
+                this.OrderDate.Show ||
+                this.Status.Show;
         }
     }
 }

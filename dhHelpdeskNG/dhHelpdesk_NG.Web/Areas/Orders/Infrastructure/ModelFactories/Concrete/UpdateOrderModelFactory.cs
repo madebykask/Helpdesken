@@ -90,7 +90,8 @@
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.Customer),
                     model.AdministratorId,
                     model.DomainId,
-                    ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.OrderDate));
+                    ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.OrderDate),
+                    model.StatusId);
         }
 
         private static LogEditFields CreateLogFields(LogEditModel model)
@@ -168,8 +169,7 @@
             return new OtherEditFields(
                     fileName,
                     ConfigurableFieldModel<decimal?>.GetValueOrDefault(model.CaseNumber),
-                    ConfigurableFieldModel<string>.GetValueOrDefault(model.Info),
-                    model.StatusId);
+                    ConfigurableFieldModel<string>.GetValueOrDefault(model.Info));
         }
 
         private static ProgramEditFields CreateProgramFields(ProgramEditModel model)

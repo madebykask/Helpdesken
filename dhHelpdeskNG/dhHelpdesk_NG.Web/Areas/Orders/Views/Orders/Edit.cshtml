@@ -6,38 +6,45 @@
 
 @section Actions
 {
-    <ul class="secnav">               
-        <li>
-            @Html.ActionLink(Translation.Get("Spara"), null, null, new { id = "btnSave", @class = "btn" })
-        </li>
+    <ul class="secnav">
+        @if (Model.UserHasAdminOrderPermission)
+        {               
+            <li>
+                @Html.ActionLink(Translation.Get("Spara"), null, null, new { id = "btnSave", @class = "btn" })
+            </li>
+        }
         <li>
             @Html.ActionLink(Translation.Get("Avbryt"), "Index", "Orders", null, new { @class = "btn" })
         </li>
-        <li>
-            @Html.ActionLink(Translation.Get("Ta bort"), "Delete", "Orders", new { id = Model.Id }, 
-                new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Are you sure?") })
-        </li>
-        <li class="secspace"></li>      
-        <li>
-            @Html.CheckBoxFor(m => m.InformOrderer, new { id = "InformOrderer_action"})
-        </li>
-        <li>
-            @Html.LabelFor(m => m.InformOrderer, Translation.Get("Informera beställare"))
-        </li>
-        <li class="secspace"></li>      
-        <li>
-            @Html.CheckBoxFor(m => m.InformReceiver, new { id = "InformReceiver_action"})
-        </li>
-        <li>
-            @Html.LabelFor(m => m.InformReceiver, Translation.Get("Informera mottagare"))
-        </li>
-        <li class="secspace"></li>      
-        <li>
-            @Html.CheckBoxFor(m => m.CreateCase, new { id = "CreateCase_action"})
-        </li>
-        <li>
-            @Html.LabelFor(m => m.CreateCase, Translation.Get("Skapa ärende"))
-        </li>
+        @if (Model.UserHasAdminOrderPermission)
+        {
+            <li>
+                @Html.ActionLink(Translation.Get("Ta bort"), "Delete", "Orders", new { id = Model.Id }, 
+                    new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Are you sure?") })
+            </li>
+        
+            <li class="secspace"></li>      
+            <li>
+                @Html.CheckBoxFor(m => m.InformOrderer, new { id = "InformOrderer_action"})
+            </li>
+            <li>
+                @Html.LabelFor(m => m.InformOrderer, Translation.Get("Informera beställare"))
+            </li>
+            <li class="secspace"></li>      
+            <li>
+                @Html.CheckBoxFor(m => m.InformReceiver, new { id = "InformReceiver_action"})
+            </li>
+            <li>
+                @Html.LabelFor(m => m.InformReceiver, Translation.Get("Informera mottagare"))
+            </li>
+            <li class="secspace"></li>      
+            <li>
+                @Html.CheckBoxFor(m => m.CreateCase, new { id = "CreateCase_action"})
+            </li>
+            <li>
+                @Html.LabelFor(m => m.CreateCase, Translation.Get("Skapa ärende"))
+            </li>
+         }
     </ul>        
 }
 

@@ -13,6 +13,10 @@
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Common.Enums;
+    using DH.Helpdesk.Services.Services.Concrete;
+    using DH.Helpdesk.BusinessData.Models.LogProgram;
+    using DH.Helpdesk.Web.Infrastructure.Extensions;
+    using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 
     public class LoginController : Controller
     {
@@ -25,13 +29,16 @@
 
         private readonly IRouteResolver routeResolver;
 
+        private readonly ILogProgramService _logProgramService;
+
         public LoginController(
                 IUserService userService, 
                 ICustomerService customerService, 
                 IUsersPasswordHistoryService usersPasswordHistoryService,
                 ICaseLockService caseLockService,
                 ILanguageService languageService, 
-                IRouteResolver routeResolver)
+                IRouteResolver routeResolver,
+                ILogProgramService logProgramService)
         {
             this.userService = userService;
             this.customerService = customerService;
@@ -39,6 +46,7 @@
             this._caseLockService = caseLockService;
             this.languageService = languageService;
             this.routeResolver = routeResolver;
+            this._logProgramService = logProgramService;
         }
 
         [HttpGet]
@@ -158,6 +166,20 @@
                                 LoggedOnLastTime = DateTime.UtcNow,
                                 SessionId = Session.SessionID
                             });
+
+                    var logProgramModel = new LogProgram()
+                    {
+                        CaseId = 0,
+                        CustomerId = user.CustomerId,
+                        LogType = 2,  //ToDo: define in Enum
+                        LogText = this.Request.GetIpAddress(),
+                        New_Performer_user_Id = 0,
+                        Old_Performer_User_Id = "0",
+                        RegTime = DateTime.UtcNow,
+                        UserId = user.Id
+                    };
+
+                    _logProgramService.UpdateUserLogin(logProgramModel);
 
                     this.usersPasswordHistoryService.SaveHistory(user.Id, EncryptionHelper.GetMd5Hash(password));
                     this._caseLockService.CaseLockCleanUp();

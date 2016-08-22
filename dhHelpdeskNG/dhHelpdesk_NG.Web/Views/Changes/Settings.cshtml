@@ -8,7 +8,7 @@
     $(function () {
         var parameters = {
             saveSettingsUrl: '@Url.Action("Settings")',
-            settingsSavedSuccessfullyMessage: '@Translation.Get("Settings saved successfully.")'
+            settingsSavedSuccessfullyMessage: '@Translation.GetForJS("Settings saved successfully.")'
         };
 
         applySettingsBehavior(parameters);

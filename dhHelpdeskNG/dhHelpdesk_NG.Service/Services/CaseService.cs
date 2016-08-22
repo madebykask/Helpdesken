@@ -38,6 +38,7 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.Services.Localization;
     using DH.Helpdesk.Services.Services.CaseStatistic;
     using DH.Helpdesk.Services.utils;
+    using System.Text.RegularExpressions;
     using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
 
     public interface ICaseService
@@ -74,7 +75,8 @@ namespace DH.Helpdesk.Services.Services
             CaseLog caseLog, 
             CaseMailSetting caseMailSetting, 
             int userId, 
-            string adUser,           
+            string adUser,
+            CaseExtraInfo caseExtraInfo,            
             out IDictionary<string, string> errors,
             Case parentCase = null);
 
@@ -82,7 +84,8 @@ namespace DH.Helpdesk.Services.Services
             Case c,
             int userId,
             string adUser,
-            out IDictionary<string, string> errors,
+            string createdByApp,
+            out IDictionary<string, string> errors,            
             string defaultUser = "",
             ExtraFieldCaseHistory extraField = null);
 
@@ -92,7 +95,7 @@ namespace DH.Helpdesk.Services.Services
         void MarkAsUnread(int caseId);
         void MarkAsRead(int caseId);
         void SendSelfServiceCaseLogEmail(int caseId, CaseMailSetting cms, int caseHistoryId, CaseLog log, string basePath, TimeZoneInfo userTimeZone, List<CaseFileDto> logFiles = null);
-        void Activate(int caseId, int userId, string adUser, out IDictionary<string, string> errors);
+        void Activate(int caseId, int userId, string adUser, string createByApp, out IDictionary<string, string> errors);
         IList<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user);
         void Commit();
 
@@ -833,12 +836,12 @@ namespace DH.Helpdesk.Services.Services
             this._caseRepository.UpdateFollowUpDate(caseId, time);  
         }
 
-        public void Activate(int caseId, int userId, string adUser, out IDictionary<string, string> errors)
+        public void Activate(int caseId, int userId, string adUser, string createdByApp, out IDictionary<string, string> errors)
         {
             this._caseRepository.Activate(caseId);
             var c = _caseRepository.GetDetachedCaseById(caseId);
-            this._caseStatService.UpdateCaseStatistic(c);
-            SaveCaseHistory(c, userId, adUser, out errors);  
+            this._caseStatService.UpdateCaseStatistic(c);            
+            SaveCaseHistory(c, userId, adUser, createdByApp, out errors);  
         }
 
         public void SendSelfServiceCaseLogEmail(int caseId, CaseMailSetting cms, int caseHistoryId, CaseLog log, string basePath, TimeZoneInfo userTimeZone, List<CaseFileDto> logFiles = null)
@@ -947,6 +950,7 @@ namespace DH.Helpdesk.Services.Services
                 CaseMailSetting caseMailSetting, 
                 int userId, 
                 string adUser, 
+                CaseExtraInfo caseExtraInfo,
                 out IDictionary<string, string> errors,
                 Case parentCase = null)
         {
@@ -1005,9 +1009,11 @@ namespace DH.Helpdesk.Services.Services
                 this.AddChildCase(cases.Id, parentCase.Id, out errors);
             }
 
+            extraFields.LeadTime = caseExtraInfo.LeadTimeForNow;
+
             ret = userId == 0 ? 
-                this.SaveCaseHistory(c, userId, adUser, out errors, adUser, extraFields) : 
-                this.SaveCaseHistory(c, userId, adUser, out errors, string.Empty, extraFields);
+                this.SaveCaseHistory(c, userId, adUser, caseExtraInfo.CreatedByApp, out errors, adUser, extraFields) :
+                this.SaveCaseHistory(c, userId, adUser, caseExtraInfo.CreatedByApp, out errors, string.Empty, extraFields);
 
             return ret;
         }
@@ -1126,8 +1132,9 @@ namespace DH.Helpdesk.Services.Services
             Case c,
             int userId,
             string adUser,
+            string createdByApp,
             out IDictionary<string, string> errors,
-                                   string defaultUser = "",
+            string defaultUser = "",
             ExtraFieldCaseHistory extraField = null)
         {
             if (c == null)
@@ -1135,6 +1142,7 @@ namespace DH.Helpdesk.Services.Services
 
             errors = new Dictionary<string, string>();
             var h = this.GenerateHistoryFromCase(c, userId, adUser, defaultUser, extraField);
+            h.CreatedByApp = createdByApp;
             this._caseHistoryRepository.Add(h);
 
             if (errors.Count == 0)
@@ -1245,58 +1253,10 @@ namespace DH.Helpdesk.Services.Services
                                 {
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(customEmailSender1));                                    
                                     fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 1, userTimeZone);
-
-
                                     string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
-                                    string urlSelfService;
-                                    if (m.Body.Contains("[/#98]"))
-                                    {
-                                        string str1 = "[#98]";
-                                        string str2 = "[/#98]";
-                                        string LinkText;
 
-                                        int Pos1 = m.Body.IndexOf(str1) + str1.Length;
-                                        int Pos2 = m.Body.IndexOf(str2);
-                                        LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
-
-                                        urlSelfService = "<a href='" + siteSelfService + "'>" + LinkText + "</a>";
-
-                                    }
-                                    else
-                                    {
-                                        urlSelfService = "<a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
-                                    }
-
-                                    foreach (var field in fields)
-                                        if (field.Key == "[#98]")
-                                            field.StringValue = urlSelfService;
-
-                                    var urlHelpdesk = "";
                                     var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
-                                   
-                                    if (m.Body.Contains("[/#99]"))
-                                    {
-                                        string str1 = "[#99]";
-                                        string str2 = "[/#99]";
-                                        string LinkText;
-
-                                        int Pos1 = m.Body.IndexOf(str1) + str1.Length;
-                                        int Pos2 = m.Body.IndexOf(str2);
-                                        LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
-
-                                        urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
-               
-                                    }
-                                    else
-                                    {
-                                        urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a>";
-                                    }
-
-                                    foreach (var field in fields)
-                                        if (field.Key == "[#99]")
-                                            field.StringValue = urlHelpdesk;
-
-                                    var e_res = _emailService.SendEmail(customEmailSender1, el.EmailAddress, m.Subject, m.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, files);
+                                    var e_res = _emailService.SendEmail(customEmailSender1, el.EmailAddress, m.Subject, m.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, files, siteSelfService, siteHelpdesk);
                                    
                                     el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                                     var now = DateTime.Now;
@@ -1315,7 +1275,10 @@ namespace DH.Helpdesk.Services.Services
                             {
                                 var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(customEmailSender1));                                
                                 fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 2, userTimeZone);
-                                var e_res = _emailService.SendEmail(customEmailSender1, el.EmailAddress, m.Subject, m.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, files);
+                                string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
+
+                                var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
+                                var e_res = _emailService.SendEmail(customEmailSender1, el.EmailAddress, m.Subject, m.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, files, siteSelfService, siteHelpdesk);
                                 el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                                 var now = DateTime.Now;
                                 el.CreatedDate = now;
@@ -1356,56 +1319,10 @@ namespace DH.Helpdesk.Services.Services
                                             fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 1, userTimeZone);
 
                                             string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
-                                            string urlSelfService;
-                                            if (mm.Body.Contains("[/#98]"))
-                                            {
-                                                string str1 = "[#98]";
-                                                string str2 = "[/#98]";
-                                                string LinkText;
 
-                                                int Pos1 = mm.Body.IndexOf(str1) + str1.Length;
-                                                int Pos2 = mm.Body.IndexOf(str2);
-                                                LinkText = mm.Body.Substring(Pos1, Pos2 - Pos1);
-
-                                                urlSelfService = "<a href='" + siteSelfService + "'>" + LinkText + "</a>";
-                                            
-                                            }
-                                            else
-                                            {
-                                                urlSelfService = "<a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
-                                            }
-
-                                            foreach (var field in fields)
-                                                if (field.Key == "[#98]")
-                                                    field.StringValue = urlSelfService;
-
-                                            var urlHelpdesk = "";
                                             var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
 
-                                            if (mm.Body.Contains("[/#99]"))
-                                            {
-                                                string str1 = "[#99]";
-                                                string str2 = "[/#99]";
-                                                string LinkText;
-
-                                                int Pos1 = mm.Body.IndexOf(str1) + str1.Length;
-                                                int Pos2 = mm.Body.IndexOf(str2);
-                                                LinkText = mm.Body.Substring(Pos1, Pos2 - Pos1);
-
-                                                urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
-                             
-                                            }
-                                            else
-                                            {
-                                                urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a>";
-                                            }
-
-                                            foreach (var field in fields)
-                                                if (field.Key == "[#99]")
-                                                    field.StringValue = urlHelpdesk;
-                                            
-                                            
-                                            var e_res = _emailService.SendEmail(customEmailSender1, el.EmailAddress, mm.Subject, mm.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, files);
+                                            var e_res = _emailService.SendEmail(customEmailSender1, el.EmailAddress, mm.Subject, mm.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, files, siteSelfService, siteHelpdesk);
                                             el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                                             var now = DateTime.Now;
                                             el.CreatedDate = now;
@@ -1466,55 +1383,10 @@ namespace DH.Helpdesk.Services.Services
                                             fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 1, userTimeZone);
 
                                             string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
-                                            string urlSelfService;
-                                            if (m.Body.Contains("[/#98]"))
-                                            {
-                                                string str1 = "[#98]";
-                                                string str2 = "[/#98]";
-                                                string LinkText;
-
-                                                int Pos1 = m.Body.IndexOf(str1) + str1.Length;
-                                                int Pos2 = m.Body.IndexOf(str2);
-                                                LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
-
-                                                urlSelfService = "<a href='" + siteSelfService + "'>" + LinkText + "</a>";
-                                       
-                                            }
-                                            else
-                                            {
-                                                urlSelfService = "<a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
-                                            }
-
-                                            foreach (var field in fields)
-                                                if (field.Key == "[#98]")
-                                                    field.StringValue = urlSelfService;
-
-                                            var urlHelpdesk = "";
+                                            
                                             var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
 
-                                            if (m.Body.Contains("[/#99]"))
-                                            {
-                                                string str1 = "[#99]";
-                                                string str2 = "[/#99]";
-                                                string LinkText;
-
-                                                int Pos1 = m.Body.IndexOf(str1) + str1.Length;
-                                                int Pos2 = m.Body.IndexOf(str2);
-                                                LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
-
-                                                urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
-                                        
-                                            }
-                                            else
-                                            {
-                                                urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a>";
-                                            }
-
-                                            foreach (var field in fields)
-                                                if (field.Key == "[#99]")
-                                                    field.StringValue = urlHelpdesk;
-                                            
-                                            var e_res = _emailService.SendEmail(customEmailSender1, el.EmailAddress, m.Subject, m.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, files);
+                                            var e_res = _emailService.SendEmail(customEmailSender1, el.EmailAddress, m.Subject, m.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, files, siteSelfService, siteHelpdesk);
                                             el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                                             var now = DateTime.Now;
                                             el.CreatedDate = now;
@@ -1556,55 +1428,10 @@ namespace DH.Helpdesk.Services.Services
                             fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 4, userTimeZone);
 
                             string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
-                            string urlSelfService;
-                            if (m.Body.Contains("[/#98]"))
-                            {
-                                string str1 = "[#98]";
-                                string str2 = "[/#98]";
-                                string LinkText;
-
-                                int Pos1 = m.Body.IndexOf(str1) + str1.Length;
-                                int Pos2 = m.Body.IndexOf(str2);
-                                LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
-
-                                urlSelfService = "<a href='" + siteSelfService + "'>" + LinkText + "</a>";
-                      
-                            }
-                            else
-                            {
-                                urlSelfService = "<a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
-                            }
-
-                            foreach (var field in fields)
-                                if (field.Key == "[#98]")
-                                    field.StringValue = urlSelfService;
-
-                            var urlHelpdesk = "";
+                            
                             var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
 
-                            if (m.Body.Contains("[/#99]"))
-                            {
-                                string str1 = "[#99]";
-                                string str2 = "[/#99]";
-                                string LinkText;
-
-                                int Pos1 = m.Body.IndexOf(str1) + str1.Length;
-                                int Pos2 = m.Body.IndexOf(str2);
-                                LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
-
-                                urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
-                            
-                            }
-                            else
-                            {
-                                urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a>";
-                            }
-
-                            foreach (var field in fields)
-                                if (field.Key == "[#99]")
-                                    field.StringValue = urlHelpdesk;
-
-                            var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, GetSmsSubject(customerSetting), m.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, files);
+                            var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, GetSmsSubject(customerSetting), m.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, files, siteSelfService, siteHelpdesk);
                             el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                             var now = DateTime.Now;
                             el.CreatedDate = now;
@@ -1635,54 +1462,10 @@ namespace DH.Helpdesk.Services.Services
                                     fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 5, userTimeZone);
 
                                     string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
-                                    string urlSelfService;
-                                    if (m.Body.Contains("[/#98]"))
-                                    {
-                                        string str1 = "[#98]";
-                                        string str2 = "[/#98]";
-                                        string LinkText;
-
-                                        int Pos1 = m.Body.IndexOf(str1) + str1.Length;
-                                        int Pos2 = m.Body.IndexOf(str2);
-                                        LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
-
-                                        urlSelfService = "<a href='" + siteSelfService + "'>" + LinkText + "</a>";
-                         
-                                    }
-                                    else
-                                    {
-                                        urlSelfService = "<a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
-                                    }
-
-                                    foreach (var field in fields)
-                                        if (field.Key == "[#98]")
-                                            field.StringValue = urlSelfService;
-
-                                    var urlHelpdesk = "";
+                                    
                                     var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
 
-                                    if (m.Body.Contains("[/#99]"))
-                                    {
-                                        string str1 = "[#99]";
-                                        string str2 = "[/#99]";
-                                        string LinkText;
-
-                                        int Pos1 = m.Body.IndexOf(str1) + str1.Length;
-                                        int Pos2 = m.Body.IndexOf(str2);
-                                        LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
-
-                                        urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
-                                    }
-                                    else
-                                    {
-                                        urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a>";
-                                    }
-
-                                    foreach (var field in fields)
-                                        if (field.Key == "[#99]")
-                                            field.StringValue = urlHelpdesk;
-                                    
-                                    var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, files);
+                                    var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, files, siteSelfService, siteHelpdesk);
                                     el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                                     var now = DateTime.Now;
                                     el.CreatedDate = now;
@@ -1725,51 +1508,8 @@ namespace DH.Helpdesk.Services.Services
                             fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 6, userTimeZone);
 
                             string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
-                            string urlSelfService;
-                            if (m.Body.Contains("[/#98]"))
-                            {
-                                string str1 = "[#98]";
-                                string str2 = "[/#98]";
-                                string LinkText;
-
-                                int Pos1 = m.Body.IndexOf(str1) + str1.Length;
-                                int Pos2 = m.Body.IndexOf(str2);
-                                LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
-
-                                urlSelfService = "<a href='" + siteSelfService + "'>" + LinkText + "</a>";
-                            }
-                            else
-                            {
-                                urlSelfService = "<a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
-                            }
-
-                            foreach (var field in fields)
-                                if (field.Key == "[#98]")
-                                    field.StringValue = urlSelfService;
-
-                            var urlHelpdesk = "";
+                            
                             var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
-
-                            if (m.Body.Contains("[/#99]"))
-                            {
-                                string str1 = "[#99]";
-                                string str2 = "[/#99]";
-                                string LinkText;
-
-                                int Pos1 = m.Body.IndexOf(str1) + str1.Length;
-                                int Pos2 = m.Body.IndexOf(str2);
-                                LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
-
-                                urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
-                            }
-                            else
-                            {
-                                urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a>";
-                            }
-
-                            foreach (var field in fields)
-                                if (field.Key == "[#99]")
-                                    field.StringValue = urlHelpdesk;
 
                             var e_res = _emailService.SendEmail(
                                                                 helpdeskMailFromAdress,
@@ -1779,7 +1519,7 @@ namespace DH.Helpdesk.Services.Services
                                                                 fields,
                                                                 EmailResponse.GetEmptyEmailResponse(),
                                                                 el.MessageId,
-                                                                false, files);
+                                                                false, files, siteSelfService, siteHelpdesk);
 
                             el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                             var now = DateTime.Now;
@@ -1817,7 +1557,10 @@ namespace DH.Helpdesk.Services.Services
                                 {
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(helpdeskMailFromAdress));                                    
                                     fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 7, userTimeZone);
-                                    var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, files);
+                                    string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
+
+                                    var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
+                                    var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, files, siteSelfService, siteHelpdesk);
                                     el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                                     var now = DateTime.Now;
                                     el.CreatedDate = now;
@@ -1862,55 +1605,10 @@ namespace DH.Helpdesk.Services.Services
                                     fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 8, userTimeZone);
 
                                     string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
-                                    string urlSelfService;
-                                    if (m.Body.Contains("[/#98]"))
-                                    {
-                                        string str1 = "[#98]";
-                                        string str2 = "[/#98]";
-                                        string LinkText;
-
-                                        int Pos1 = m.Body.IndexOf(str1) + str1.Length;
-                                        int Pos2 = m.Body.IndexOf(str2);
-                                        LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
-
-                                        urlSelfService = "<a href='" + siteSelfService + "'>" + LinkText + "</a>";
-                                 
-                                    }
-                                    else
-                                    {
-                                        urlSelfService = "<a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
-                                    }
-
-                                    foreach (var field in fields)
-                                        if (field.Key == "[#98]")
-                                            field.StringValue = urlSelfService;
-
-                                    var urlHelpdesk = "";
+                     
                                     var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
 
-                                    if (m.Body.Contains("[/#99]"))
-                                    {
-                                        string str1 = "[#99]";
-                                        string str2 = "[/#99]";
-                                        string LinkText;
-
-                                        int Pos1 = m.Body.IndexOf(str1) + str1.Length;
-                                        int Pos2 = m.Body.IndexOf(str2);
-                                        LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
-
-                                        urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
-                                     
-                                    }
-                                    else
-                                    {
-                                        urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a>";
-                                    }
-
-                                    foreach (var field in fields)
-                                        if (field.Key == "[#99]")
-                                            field.StringValue = urlHelpdesk;
-
-                                    var e_res = _emailService.SendEmail(customEmailSender2, el.EmailAddress, m.Subject, m.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, files);
+                                    var e_res = _emailService.SendEmail(customEmailSender2, el.EmailAddress, m.Subject, m.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, files, siteSelfService, siteHelpdesk);
                                     el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                                     var now = DateTime.Now;
                                     el.CreatedDate = now;
@@ -1934,55 +1632,10 @@ namespace DH.Helpdesk.Services.Services
                                     fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 9, userTimeZone);
 
                                     string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
-                                    string urlSelfService;
-                                    if (m.Body.Contains("[/#98]"))
-                                    {
-                                        string str1 = "[#98]";
-                                        string str2 = "[/#98]";
-                                        string LinkText;
 
-                                        int Pos1 = m.Body.IndexOf(str1) + str1.Length;
-                                        int Pos2 = m.Body.IndexOf(str2);
-                                        LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
-
-                                        urlSelfService = "<a href='" + siteSelfService + "'>" + LinkText + "</a>";
-                               
-                                    }
-                                    else
-                                    {
-                                        urlSelfService = "<a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
-                                    }
-
-                                    foreach (var field in fields)
-                                        if (field.Key == "[#98]")
-                                            field.StringValue = urlSelfService;
-
-                                    var urlHelpdesk = "";
                                     var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
 
-                                    if (m.Body.Contains("[/#99]"))
-                                    {
-                                        string str1 = "[#99]";
-                                        string str2 = "[/#99]";
-                                        string LinkText;
-
-                                        int Pos1 = m.Body.IndexOf(str1) + str1.Length;
-                                        int Pos2 = m.Body.IndexOf(str2);
-                                        LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
-
-                                        urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
-                                   
-                                    }
-                                    else
-                                    {
-                                        urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a>";
-                                    }
-
-                                    foreach (var field in fields)
-                                        if (field.Key == "[#99]")
-                                            field.StringValue = urlHelpdesk;
-
-                                    var e_res = _emailService.SendEmail(customEmailSender2, el.EmailAddress, m.Subject, m.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, files);
+                                    var e_res = _emailService.SendEmail(customEmailSender2, el.EmailAddress, m.Subject, m.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, files, siteSelfService, siteHelpdesk);
                                     el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                                     var now = DateTime.Now;
                                     el.CreatedDate = now;
@@ -2008,55 +1661,10 @@ namespace DH.Helpdesk.Services.Services
                                     fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 10, userTimeZone);
 
                                     string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
-                                    string urlSelfService;
-                                    if (m.Body.Contains("[/#98]"))
-                                    {
-                                        string str1 = "[#98]";
-                                        string str2 = "[/#98]";
-                                        string LinkText;
-
-                                        int Pos1 = m.Body.IndexOf(str1) + str1.Length;
-                                        int Pos2 = m.Body.IndexOf(str2);
-                                        LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
-
-                                        urlSelfService = "<a href='" + siteSelfService + "'>" + LinkText + "</a>";
-              
-                                    }
-                                    else
-                                    {
-                                        urlSelfService = "<a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
-                                    }
-
-                                    foreach (var field in fields)
-                                        if (field.Key == "[#98]")
-                                            field.StringValue = urlSelfService;
-
-                                    var urlHelpdesk = "";
+   
                                     var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
-
-                                    if (m.Body.Contains("[/#99]"))
-                                    {
-                                        string str1 = "[#99]";
-                                        string str2 = "[/#99]";
-                                        string LinkText;
-
-                                        int Pos1 = m.Body.IndexOf(str1) + str1.Length;
-                                        int Pos2 = m.Body.IndexOf(str2);
-                                        LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
-
-                                        urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
-                      
-                                    }
-                                    else
-                                    {
-                                        urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a>";
-                                    }
-
-                                    foreach (var field in fields)
-                                        if (field.Key == "[#99]")
-                                            field.StringValue = urlHelpdesk;
                                     
-                                    var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, GetSmsSubject(customerSetting), mt.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, files);
+                                    var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, GetSmsSubject(customerSetting), mt.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, files, siteSelfService, siteHelpdesk);
                                     el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                                     var now = DateTime.Now;
                                     el.CreatedDate = now;
@@ -2128,6 +1736,12 @@ namespace DH.Helpdesk.Services.Services
             string recipient,
             TimeZoneInfo userTimeZone)
         {
+
+            if (!string.IsNullOrEmpty((cms.HelpdeskMailFromAdress)))
+            {
+                cms.HelpdeskMailFromAdress = cms.HelpdeskMailFromAdress.Trim();
+            }
+
             var mailTemplateId = (int)mailTemplateEnum;
             var m = this._mailTemplateService.GetMailTemplateForCustomerAndLanguage(case_.Customer_Id, case_.RegLanguage_Id, mailTemplateId);
             if (m != null && !string.IsNullOrEmpty(m.Body) && !string.IsNullOrEmpty(m.Subject))
@@ -2141,55 +1755,55 @@ namespace DH.Helpdesk.Services.Services
                 var fields = this.GetCaseFieldsForEmail(case_, log, cms, el.EmailLogGUID.ToString(), 3, userTimeZone);
 
                 string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
-                string urlSelfService;
-                if (m.Body.Contains("[/#98]"))
-                {
-                    string str1 = "[#98]";
-                    string str2 = "[/#98]";
-                    string LinkText;
+                //string urlSelfService;
+                //if (m.Body.Contains("[/#98]"))
+                //{
+                //    string str1 = "[#98]";
+                //    string str2 = "[/#98]";
+                //    string LinkText;
 
-                    int Pos1 = m.Body.IndexOf(str1) + str1.Length;
-                    int Pos2 = m.Body.IndexOf(str2);
-                    LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
+                //    int Pos1 = m.Body.IndexOf(str1) + str1.Length;
+                //    int Pos2 = m.Body.IndexOf(str2);
+                //    LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
-                    urlSelfService = "<a href='" + siteSelfService + "'>" + LinkText + "</a>";
+                //    urlSelfService = "<a href='" + siteSelfService + "'>" + LinkText + "</a>";
 
-                }
-                else
-                {
-                    urlSelfService = "<a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
-                }
+                //}
+                //else
+                //{
+                //    urlSelfService = "<a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
+                //}
 
-                foreach (var field in fields)
-                    if (field.Key == "[#98]")
-                        field.StringValue = urlSelfService;
+                //foreach (var field in fields)
+                //    if (field.Key == "[#98]")
+                //        field.StringValue = urlSelfService;
 
-                var urlHelpdesk = "";
+                //var urlHelpdesk = "";
                 var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + case_.Id.ToString();
 
-                if (m.Body.Contains("[/#99]"))
-                {
-                    string str1 = "[#99]";
-                    string str2 = "[/#99]";
-                    string LinkText;
+                //if (m.Body.Contains("[/#99]"))
+                //{
+                //    string str1 = "[#99]";
+                //    string str2 = "[/#99]";
+                //    string LinkText;
 
-                    int Pos1 = m.Body.IndexOf(str1) + str1.Length;
-                    int Pos2 = m.Body.IndexOf(str2);
-                    LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
+                //    int Pos1 = m.Body.IndexOf(str1) + str1.Length;
+                //    int Pos2 = m.Body.IndexOf(str2);
+                //    LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
-                    urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
+                //    urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
 
-                }
-                else
-                {
-                    urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a>";
-                }
+                //}
+                //else
+                //{
+                //    urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a>";
+                //}
 
-                foreach (var field in fields)
-                    if (field.Key == "[#99]")
-                        field.StringValue = urlHelpdesk;
-                
-                var e_res = this._emailService.SendEmail(cms.HelpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId);
+                //foreach (var field in fields)
+                //    if (field.Key == "[#99]")
+                //        field.StringValue = urlHelpdesk;
+
+                var e_res = this._emailService.SendEmail(cms.HelpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, null, siteSelfService, siteHelpdesk);
                 el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                 var now = DateTime.Now;
                 el.CreatedDate = now;
@@ -2340,6 +1954,7 @@ namespace DH.Helpdesk.Services.Services
                 h.LogFile  = extraField.LogFile;
                 h.CaseLog  = extraField.CaseLog;
                 h.ClosingReason = extraField.ClosingReason;
+                h.LeadTime = extraField.LeadTime;
             }
             
             return h;

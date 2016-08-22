@@ -45,6 +45,7 @@
             entity.User_Id = businessModel.AdministratorId;
             entity.Domain_Id = businessModel.DomainId;
             entity.OrderDate = businessModel.OrderDate;
+            entity.OrderState_Id = businessModel.StatusId;
         } 
 
         private static void MapLogFields(Order entity, LogEditFields businessModel)
@@ -97,7 +98,6 @@
             entity.Filename = businessModel.FileName;
             entity.CaseNumber = businessModel.CaseNumber;
             entity.Info = businessModel.Info;
-            entity.OrderState_Id = businessModel.StatusId;
         } 
 
         private static void MapProgramFields(Order entity, ProgramEditFields businessModel)

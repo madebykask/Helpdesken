@@ -5,6 +5,12 @@ var departmentControlId = '#CaseSolution.Department_Id';
 var OUControlName = '#OU';
 var OUControlId = '#CaseSolution.OU_Id';
 
+var isAbout_RegionControlName = '#IsAbout_Region';
+var isAbout_DepartmentControlName = '#IsAbout_Department';
+var isAbout_DepartmentControlId = '#CaseSolution.IsAbout_Department_Id';
+var isAbout_OUControlName = '#IsAbout_OU';
+var isAbout_OUControlId = '#CaseSolution.IsAbout_OU_Id';
+
 // controller methods:
 var changeRegion = '/CaseSolution/ChangeRegion';
 var changeDepartment = '/CaseSolution/ChangeDepartment/';
@@ -18,6 +24,14 @@ $(function () {
 
     $(departmentControlName).change(function () {
         refreshOrganizationUnits($(this).val());   
+    });
+
+    $(isAbout_RegionControlName).change(function () {       
+        refreshIsAbout_Departments($(this).val());
+    });
+
+    $(isAbout_DepartmentControlName).change(function () {        
+        refreshIsAbout_OrganizationUnits($(this).val());
     });
 
     function refreshDepartments(regionId) {
@@ -56,6 +70,46 @@ $(function () {
             }
         }, 'json').always(function () {            
             $(OUControlName).prop('disabled', false);
+        });
+    }
+
+    function refreshIsAbout_Departments(regionId) {
+        $(isAbout_DepartmentControlId).val('');
+        var ctlOption = isAbout_DepartmentControlName + ' option';
+        $.post(changeRegion, { 'regionId': regionId }, function (data) {
+            $(ctlOption).remove();
+            $(isAbout_DepartmentControlName).append('<option value="">&nbsp;</option>');
+            $(isAbout_DepartmentControlName).prop('disabled', true);
+            if (data != undefined) {
+                for (var i = 0; i < data.list.length; i++) {
+                    var item = data.list[i];
+                    var option = $("<option value='" + item.id + "'>" + item.name + "</option>");
+                    $(isAbout_DepartmentControlName).append(option);
+                }
+            }
+        }, 'json').always(function () {
+            $(isAbout_DepartmentControlName).change();
+            $(isAbout_DepartmentControlName).prop('disabled', false);
+        });
+    }
+
+    function refreshIsAbout_OrganizationUnits(departmentId) {
+
+        $(isAbout_OUControlId).val('');
+        var ctlOption = isAbout_OUControlName + ' option';
+        $.post(changeDepartment, { 'departmentId': departmentId }, function (data) {
+            $(ctlOption).remove();
+            $(isAbout_OUControlName).append('<option value="">&nbsp;</option>');
+            $(isAbout_OUControlName).prop('disabled', true);
+            if (data != undefined) {
+                for (var i = 0; i < data.list.length; i++) {
+                    var item = data.list[i];
+                    var option = $("<option value='" + item.id + "'>" + item.name + "</option>");
+                    $(isAbout_OUControlName).append(option);
+                }
+            }
+        }, 'json').always(function () {
+            $(isAbout_OUControlName).prop('disabled', false);
         });
     }
 

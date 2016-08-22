@@ -26,17 +26,17 @@
 
             var confirmDialog = function(d, onOk, onCancel) {
                 return d.dialog({
-                    title: '@Translation.Get("Meddelande")',
+                    title: '@Translation.GetForJS("Meddelande")',
                     buttons: [
                         {
-                            text: '@Translation.Get("OK")',
+                            text: '@Translation.GetForJS("OK")',
                             click: function() {
                                 onOk();
                                 d.dialog("close");
                             }
                         },
                         {
-                            text: '@Translation.Get("Avbryt")',
+                            text: '@Translation.GetForJS("Avbryt")',
                             click: function() {
                                 onCancel();
                                 d.dialog("close");
@@ -49,10 +49,10 @@
 
             var messageDialog= function(d) {
                 return d.dialog({
-                    title: '@Translation.Get("Meddelande")',
+                    title: '@Translation.GetForJS("Meddelande")',
                     buttons: [
                         {
-                            text: '@Translation.Get("Stäng")',
+                            text: '@Translation.GetForJS("Stäng")',
                             click: function() {
                                 d.dialog("close");
                             }
@@ -67,18 +67,19 @@
             var emptyFn = function() {};
 
             $("#case-action-save").click(function (e) {
-               e.preventDefault();
-               $('#case__StateSecondary_Id').removeAttr('disabled');
+               e.preventDefault();               
+               //$('#case__StateSecondary_Id').removeAttr('disabled');
+
             });
 
             $("#case-action-save-and-close").click(function (e) {
-                e.preventDefault();
-                $('#case__StateSecondary_Id').removeAttr('disabled');
+                e.preventDefault();                
+                //$('#case__StateSecondary_Id').removeAttr('disabled');
             });
 
             $("#case-action-save-and-new").click(function (e) {
-                e.preventDefault();
-                $('#case__StateSecondary_Id').removeAttr('disabled');
+                e.preventDefault();                
+                //$('#case__StateSecondary_Id').removeAttr('disabled');
             });
                       
             $("#case-action-close").click(function (e) {
@@ -90,7 +91,7 @@
             
              @*$("#case-action-delete").click(function (e) {                               
                 if (hasNotInvoicedArticles()) {
-                    messageDialog(dc('@Translation.Get("Du får inte ta bort ett ärende som har invalda men ofakturerade artiklar.")'));
+                    messageDialog(dc('@Translation.GetForJS("Du får inte ta bort ett ärende som har invalda men ofakturerade artiklar.")'));
                     return false;
                 }
                 return true;                       
@@ -113,12 +114,12 @@
                         $.post('/cases/markasunread/', { id: '@Model.case_.Id', customerId: '@Model.case_.Customer_Id' }, function (data) {
                             if (data == "Success") {
                                 $('#case__Unread').val(1);
-                                ShowToastMessage('@Translation.Get("Ärendet har markerats som oläst")', "notice");
+                                ShowToastMessage('@Translation.GetForJS("Ärendet har markerats som oläst")', "notice");
                             }
                         });
                     }
                     else {
-                        ShowToastMessage('@Translation.Get("Ärendet kan inte ändras då det är öppet hos en annan användare.")', "error", false);                        
+                        ShowToastMessage('@Translation.GetForJS("Ärendet kan inte ändras då det är öppet hos en annan användare.")', "error", false);                        
                     }
                 });            
         };
@@ -127,7 +128,7 @@
             $.post('@Url.Content("~/Cases/UnLockCase/")', { lockGUID: lockGuid }, function (data) {                
                 if (data != "Success")
                 {                    
-                    ShowToastMessage('@Translation.Get("Ett fel inträffade när ärendet skulle låsas upp automatiskt. Var vänlig kontakta systemadministratören.")', "Error");
+                    ShowToastMessage('@Translation.GetForJS("Ett fel inträffade när ärendet skulle låsas upp automatiskt. Var vänlig kontakta systemadministratören.")', "Error");
                 }
                 if (url) {                    
                     redirectToUrl(url);

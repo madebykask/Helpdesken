@@ -56,8 +56,8 @@ else
 <script>
 
     $(document).ready(function () {
-        var perPageText = '@Translation.Get("Antal per sida",Enums.TranslationSource.TextTranslation)';
-        var perShowingText = '@Translation.Get("Visar sida",Enums.TranslationSource.TextTranslation)';        
+        var perPageText = '@Translation.GetForJS("Antal per sida",Enums.TranslationSource.TextTranslation)';
+        var perShowingText = '@Translation.GetForJS("Visar sida",Enums.TranslationSource.TextTranslation)';        
         InitDataTable("Notifire_Table", perPageText, perShowingText);
     });
 

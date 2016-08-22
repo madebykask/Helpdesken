@@ -44,7 +44,10 @@
                 @Html.DisplayFor(modelItem => item.TotalParticipants)
                 (@Html.DisplayFor(modelItem => item.SentParticipants))
             </td>
-            <td onclick=" window.location.href = '@Url.Action("Statistics", "Questionnaire", new { questionnaireId = questionnaireId, circularId = item.Id })' " class="tdpointer">@Translation.Get("Statistik")
+            <td>
+                <a class="btn" href="@Url.Action("Statistics", "Questionnaire", new { questionnaireId = questionnaireId, circularId = item.Id })" rel="tooltip" title="@Translation.Get("Statistik")">
+                <i class="icon-signal"></i>
+                </a>
             </td>
         </tr>
     }

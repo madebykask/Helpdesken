@@ -271,6 +271,7 @@
     <Compile Include="Infrastructure\TimeZoneResolver\TimeZoneResolver.cs" />
     <Compile Include="Services\CaseStatistic\CaseStatisticService.cs" />
     <Compile Include="Services\Concrete\CaseLockService.cs" />
+    <Compile Include="Services\Concrete\LogProgramService.cs" />
     <Compile Include="Services\Concrete\Reports\ReportServiceService.cs" />
     <Compile Include="Services\Concrete\OrganizationJsonService.cs" />
     <Compile Include="Services\Concrete\Reports\ReportService.cs" />

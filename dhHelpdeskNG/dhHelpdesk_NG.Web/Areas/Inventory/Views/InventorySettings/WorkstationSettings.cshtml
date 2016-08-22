@@ -4,7 +4,7 @@
     $(function () {
         var parameters = {
             saveSettingsUrl: '@Url.Action("WorkstationSettings")',
-            settingsSavedSuccessfullyMessage: '@Translation.Get("Inställningarna sparades")'
+            settingsSavedSuccessfullyMessage: '@Translation.GetForJS("Inställningarna sparades")'
         };
 
         applySettingsBehavior(parameters);

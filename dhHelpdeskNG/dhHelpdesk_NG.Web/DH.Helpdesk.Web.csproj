@@ -412,6 +412,7 @@
     <Content Include="Content\css\images\sort_asc.png" />
     <Content Include="Content\css\images\sort_both.png" />
     <Content Include="Content\css\images\sort_desc.png" />
+    <Content Include="Content\css\print.css" />
     <Content Include="Content\icons\advanced_search.png" />
     <Content Include="Content\icons\ajax-loader.gif" />
     <Content Include="Content\icons\doc-download.png" />
@@ -3155,7 +3156,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>51780</DevelopmentServerPort>
+          <DevelopmentServerPort>51782</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:57747/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

@@ -14,10 +14,10 @@
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <title>@(GlobalSetting != null ? GlobalSetting.ApplicationName : "")</title>
     <script type="text/javascript">
-        var trans_yes = '@Translation.Get("Ja", Enums.TranslationSource.TextTranslation)';
-        var trans_no = '@Translation.Get("Nej", Enums.TranslationSource.TextTranslation)';
+        var trans_yes = '@Translation.GetForJS("Ja", Enums.TranslationSource.TextTranslation)';
+        var trans_no = '@Translation.GetForJS("Nej", Enums.TranslationSource.TextTranslation)';
         var placeholder_text_multiple = '@Html.Raw(Translation.Get("Välj en eller flera"))';
-        var no_results_text = '@Translation.Get("Inga resultat matchar")';
+        var no_results_text = '@Translation.GetForJS("Inga resultat matchar")';
     </script>
     @Styles.Render("~/Content/bundles/css")
     @Styles.Render("~/img-profile/css")
@@ -190,13 +190,13 @@
                                     <i class="icon-chevron-down icon-white"></i>
                                 </a>
                                 <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
-                                   @* @if(model.IsOrderVisible())
+                                    @if(model.IsOrderVisible())
                                     {    
                                         <li><a href="@Url.Action("Index", "Orders", new { area = "Orders" })">
                                             <img src="@Url.Content("~/Content/icons/order.png")" />
                                             @Translation.Get("Beställningar")</a></li>
                                     }
-                                    @if (model.IsAccountVisible())
+                                    @*@if (model.IsAccountVisible())
                                     {    
                                         <li><a href="@Url.Action("Index", "Orders", new { area = "OrderAccounts" })">
                                             <img src="@Url.Content("~/Content/icons/orderaccount.png")" />
@@ -337,10 +337,10 @@
     <script type="text/javascript">
         $(document).ready(function() {
             var timezoneAutodetectRes = "@ViewBag.AutoDetectionResult";
-            var failureMsg = "@Translation.Get("Vi kunde inte ange din tidszon. Var vänlig välj rätt tidszon och klicka på \"Spara\".")";
-            var successMsg = "@Translation.Get("Vi har angett din tidszon baserat på din webbläsare. Om du föredrar att arbeta mot en annan tidszon så kan du ändra det i Profil i toppmenyn."))";
-            @*var noticeMsg = "@string.Format(Translation.Get("Vi har upptäckt att din webbläsares tidszon skiljer sig från den som angetts i din Profil. Om du vill ändra tidszon som du arbetar i, gå till Profil i toppmenyn"), "<a href=\"Profile/Edit/\">", "</a>")";*@
-            var noticeMsg = "@Translation.Get("Vi har upptäckt att din webbläsares tidszon skiljer sig från den som angetts i din Profil. Om du vill ändra tidszon som du arbetar i, gå till Profil i toppmenyn.")";
+            var failureMsg = "@Translation.GetForJS("Vi kunde inte ange din tidszon. Var vänlig välj rätt tidszon och klicka på \"Spara\".")";
+            var successMsg = "@Translation.GetForJS("Vi har angett din tidszon baserat på din webbläsare. Om du föredrar att arbeta mot en annan tidszon så kan du ändra det i Profil i toppmenyn."))";
+            @*var noticeMsg = "@string.Format(Translation.GetForJS("Vi har upptäckt att din webbläsares tidszon skiljer sig från den som angetts i din Profil. Om du vill ändra tidszon som du arbetar i, gå till Profil i toppmenyn"), "<a href=\"Profile/Edit/\">", "</a>")";*@
+            var noticeMsg = "@Translation.GetForJS("Vi har upptäckt att din webbläsares tidszon skiljer sig från den som angetts i din Profil. Om du vill ändra tidszon som du arbetar i, gå till Profil i toppmenyn.")";
             function ShowToastMessage(message, msgType) {
                 msgType = msgType || 'notice';
                 $().toastmessage('showToast', {

@@ -139,12 +139,12 @@
             if ($('#NewPassword').val() != $('#ConfirmPassword').val()) {
                 var e = '@passChangeError';
                 ShowToastMessage(e, "Error");
-                //alert('@Translation.Get("De lösenord du angav stämmer inte överens med varandra. Försök igen", Enums.TranslationSource.TextTranslation)');
+                //alert('@Translation.GetForJS("De lösenord du angav stämmer inte överens med varandra. Försök igen", Enums.TranslationSource.TextTranslation)');
             } else {
                 $.post('/users/EditUserPassword/', { id: $('#id_user').val(), newPassword: $('#NewPassword').val(), confirmPassword: $('#ConfirmPassword').val() }, function (data) {
                     var e = '@passChangeText';
                     ShowToastMessage(e, "Alert");
-                    //alert('@Translation.Get("Lösenordet har ändrats", Enums.TranslationSource.TextTranslation)');
+                    //alert('@Translation.GetForJS("Lösenordet har ändrats", Enums.TranslationSource.TextTranslation)');
 
                 $('#NewPassword').val('');
                 $('#ConfirmPassword').val('');

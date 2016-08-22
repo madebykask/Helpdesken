@@ -226,7 +226,7 @@
     <Compile Include="Users\ModuleEntity.cs" />
     <Compile Include="Users\UserModuleEntity.cs" />
     <Compile Include="WorkstationModules\LogicalDrive.cs" />
-    <Compile Include="LogProgram.cs" />
+    <Compile Include="LogProgramEntity.cs" />
     <Compile Include="LogSync.cs" />
     <Compile Include="MailTemplates\MailTemplateEntity.cs" />
     <Compile Include="MailTemplates\MailTemplateIdentifierEntity.cs" />

@@ -55,6 +55,7 @@
             this.elementaryRulesValidator.ValidateIntegerField(updatedFields.AdministratorId, existingFields.AdministratorId, GeneralFields.Administrator, new ElementaryValidationRule(!settings.Administrator.Show, settings.Administrator.Required));
             this.elementaryRulesValidator.ValidateIntegerField(updatedFields.DomainId, existingFields.DomainId, GeneralFields.Domain, new ElementaryValidationRule(!settings.Domain.Show, settings.Domain.Required));
             this.elementaryRulesValidator.ValidateDateTimeField(updatedFields.OrderDate, existingFields.OrderDate, GeneralFields.OrderDate, new ElementaryValidationRule(!settings.OrderDate.Show, settings.OrderDate.Required));
+            this.elementaryRulesValidator.ValidateIntegerField(updatedFields.StatusId, existingFields.StatusId, GeneralFields.Status, new ElementaryValidationRule(!settings.Status.Show, settings.Status.Required));                        
         }
 
         private void ValidateLogFields(
@@ -114,7 +115,6 @@
             this.elementaryRulesValidator.ValidateStringField(updatedFields.FileName, existingFields.FileName, OtherFields.FileName, new ElementaryValidationRule(!settings.FileName.Show, settings.FileName.Required));                        
             this.elementaryRulesValidator.ValidateDecimalField(updatedFields.CaseNumber, existingFields.CaseNumber, OtherFields.CaseNumber, new ElementaryValidationRule(!settings.CaseNumber.Show, settings.CaseNumber.Required));                        
             this.elementaryRulesValidator.ValidateStringField(updatedFields.Info, existingFields.Info, OtherFields.Info, new ElementaryValidationRule(!settings.Info.Show, settings.Info.Required));
-            this.elementaryRulesValidator.ValidateIntegerField(updatedFields.StatusId, existingFields.StatusId, OtherFields.Status, new ElementaryValidationRule(!settings.Status.Show, settings.Status.Required));                        
         }
 
         private void ValidateProgramFields(

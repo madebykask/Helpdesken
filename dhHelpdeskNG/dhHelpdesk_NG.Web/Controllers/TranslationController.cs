@@ -66,18 +66,11 @@ namespace DH.Helpdesk.Web.Controllers
             return this.Json(TranslatedString, JsonRequestBehavior.AllowGet);
         }
        
-        public ActionResult GetAllCoreTextTranslations()
-        {
-            var texts = _textTranslationService.GetAllTextsAndTranslations(0).Take(5);
-            return this.Json(texts, JsonRequestBehavior.AllowGet);
-
-            var serializer = new JavaScriptSerializer { MaxJsonLength = Int32.MaxValue };
-            var result = new ContentResult
-            {
-                Content = serializer.Serialize(texts),
-                ContentType = "application/json"
-            };
-            return result;
+        public JsonResult GetAllTextTranslations()
+        {                       
+            var ret = new List<KeyValuePair<string, string>>();
+            ret = Translation.GetTranslationsForJS();            
+            return this.Json(ret, JsonRequestBehavior.AllowGet);            
         }
 
         public JsonResult GetCaseFieldsForTranslation()
@@ -111,5 +104,6 @@ namespace DH.Helpdesk.Web.Controllers
             var currentLanguageId = SessionFacade.CurrentLanguageId;
             return Json(currentLanguageId, JsonRequestBehavior.AllowGet);
         }
+               
     }
 }

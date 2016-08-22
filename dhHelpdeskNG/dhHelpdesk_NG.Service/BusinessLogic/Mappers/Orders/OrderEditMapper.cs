@@ -34,7 +34,7 @@
         {
             IQueryable<UnionItemOverview> query = null;
 
-            if (settings.Other.Status.Show)
+            if (settings.General.Status.Show)
             {
                 query = statuses.Select(s => new UnionItemOverview { Id = s.Id, Name = s.Name, Type = "statuses" });
             }
@@ -165,7 +165,8 @@
                     entity.Customer.Name,
                     entity.User_Id,
                     entity.Domain_Id,
-                    entity.OrderDate);
+                    entity.OrderDate,
+                    entity.OrderState_Id);
         }
 
         private static LogEditFields CreateLogEditFields(Order entity)
@@ -217,8 +218,8 @@
             return new OtherEditFields(
                     entity.Filename,
                     entity.CaseNumber,
-                    entity.Info,
-                    entity.OrderState_Id);
+                    entity.Info);
+            //, entity.OrderState_Id);
         }
 
         private static ProgramEditFields CreateProgramEditFields(Order entity)

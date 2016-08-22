@@ -6,6 +6,7 @@
 @Translation.Get("Poster i sökresultat"):
 @Model.CasesFound
 <div>
+    <input type="hidden" id="showrun" value="@((Model.CasesFound <= 1000).ToJavaScriptBool())"/>
     @foreach (var item in Model.Aggregation.OrderBy(x => x.Key))
     {
         <div>

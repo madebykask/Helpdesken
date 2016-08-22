@@ -717,6 +717,7 @@
                 sql.Add("top 500");
             }
 
+            
             var columns = new List<string>();
             #region adding columns in SELECT
             columns.Add("tblCase.Id");
@@ -734,7 +735,12 @@
             columns.Add("tblCase.FinishingDate");
             columns.Add("tblCase.FinishingDescription");
             columns.Add("tblCase.Caption");
-            columns.Add("Cast(tblCase.[Description] as Nvarchar(Max)) as [Description] ");
+            
+            if (f.MaxTextCharacters > 0)
+                columns.Add(string.Format("Cast(tblCase.[Description] as Nvarchar({0})) as [Description] ", f.MaxTextCharacters));                
+            else
+                columns.Add("Cast(tblCase.[Description] as Nvarchar(Max)) as [Description] ");
+
             columns.Add("tblCase.Miscellaneous");
             columns.Add("tblCase.[Status] ");
             columns.Add("tblCase.ExternalTime");

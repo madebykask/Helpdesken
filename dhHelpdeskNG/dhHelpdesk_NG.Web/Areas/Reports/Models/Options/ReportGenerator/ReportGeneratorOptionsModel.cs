@@ -78,7 +78,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Models.Options.ReportGenerator
         public List<int> AdministratorsIds { get; set; }
 
         [LocalizedDisplay("Status")]
-        public int? CaseStatusId { get; set; }
+        public int? CaseStatusIds { get; set; }
 
         [LocalizedDisplay("Produktområde")]
         public List<int> ProductAreaIds { get; set; }
@@ -116,7 +116,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Models.Options.ReportGenerator
                         this.WorkingGroupIds,
                         this.ProductAreaIds,
                         this.AdministratorsIds,
-                        this.CaseStatusId == null ? new List<int>() : new List<int> { this.CaseStatusId.Value },
+                        (this.CaseStatusIds == null || this.CaseStatusIds < 0) ? new List<int>() : new List<int> { this.CaseStatusIds.Value }, //service supports multiple statuses but ui not - converting ui input to service supported list
                         this.CaseTypeIds,
                         this.PeriodFrom,
                         this.PeriodUntil,

@@ -11,5 +11,7 @@
         public const string Domain = "Domain_Id";
 
         public const string OrderDate = "OrderDate";
+
+        public const string Status = "Status";
     }
 }

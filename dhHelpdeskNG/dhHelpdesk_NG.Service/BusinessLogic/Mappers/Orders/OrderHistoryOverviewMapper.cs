@@ -72,7 +72,7 @@
         {
             var order = new FullOrderHistoryFields(            
                             MapDeliveryFields(entity, deliveryDepartment),
-                            MapGeneralFields(entity, domain, administrator),
+                            MapGeneralFields(entity, domain, administrator, orderState),
                             MapLogFields(entity),
                             MapOrdererFields(entity, department, ou),
                             MapOrderFields(entity, orderProperty),
@@ -104,14 +104,16 @@
                 entity.DeliveryInfo3);
         }
 
-        private static GeneralHistoryFields MapGeneralFields(OrderHistoryEntity entity, string domain, UserName administrator)
+        private static GeneralHistoryFields MapGeneralFields(OrderHistoryEntity entity, string domain, UserName administrator, string status)
         {
             return new GeneralHistoryFields(
                 entity.User_Id,
                 administrator,
                 entity.Domain_Id,
                 domain,
-                entity.OrderDate);
+                entity.OrderDate,
+                entity.OrderState_Id,
+                status);
         }
 
         private static LogHistoryFields MapLogFields(OrderHistoryEntity entity)
@@ -165,9 +167,7 @@
             return new OtherHistoryFields(
                 entity.Filename,
                 entity.CaseNumber,
-                entity.Info,
-                entity.OrderState_Id,
-                orderState);
+                entity.Info);
         }
 
         private static ProgramHistoryFields MapProgramFields(OrderHistoryEntity entity)

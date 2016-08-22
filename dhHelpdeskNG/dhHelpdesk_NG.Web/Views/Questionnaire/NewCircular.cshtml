@@ -42,7 +42,7 @@
                                 <table class="tableform">
                                     <tr>
                                         <td class="span3">
-                                            @Translation.Get("Namn"):
+                                            @Translation.Get("Namn")
                                         </td>
                                         <td class="span9">
                                             @Html.TextBoxFor(model => model.CircularName)
@@ -51,7 +51,7 @@
                                     </tr>
                                     <tr>
                                         <td class="span3">
-                                            @Translation.Get("Status"):
+                                            @Translation.Get("Status")
                                         </td>
                                         <td class="span9">
                                             @Translation.Get("Under bearbetning")
@@ -70,7 +70,7 @@
                                     <table class="tableform">
                                         <tr>
                                             <td class="span3">
-                                                @Translation.Get("Avslutsdatum"):
+                                                @Translation.Get("Avslutsdatum")
                                             </td>
                                             <td class="span9">
                                                 @Html.EditorFor(model => model.FinishingDateFrom, "DatePicker", new { id = "finishing_date_from_datepicker" })
@@ -84,7 +84,7 @@
                                     <table>
                                         <tr>
                                             <td class="span12">
-                                                @Translation.Get("Avdelning"):
+                                                @Translation.Get("Avdelning")
                                             </td>
                                             <td class="span1">
                                                 @Translation.Get("Tillgängliga")
@@ -115,7 +115,7 @@
                                     <table>
                                         <tr>
                                             <td class="span12">
-                                                @Translation.Get("Ärendetyp"):
+                                                @Translation.Get("Ärendetyp")
                                             </td>
                                             <td class="span1">
                                                 @Translation.Get("Tillgängliga")
@@ -146,7 +146,7 @@
                                     <table>
                                         <tr>
                                             <td class="span12">
-                                                @Translation.Get("Produktområde"):
+                                                @Translation.Get("Produktområde")
                                             </td>
                                             <td class="span1">
                                                 @Translation.Get("Tillgängliga")
@@ -176,7 +176,7 @@
                                     <table>
                                         <tr>
                                             <td class="span12">
-                                                @Translation.Get("Driftgrupp"):
+                                                @Translation.Get("Driftgrupp")
                                             </td>
                                             <td class="span1">
                                                 @Translation.Get("Tillgängliga")
@@ -205,17 +205,11 @@
 
                                     <table class="tableform">
                                         <tr>
-                                            <td class="span3">
-                                                @Translation.Get("Urval"):
-                                            </td>
-                                            <td class="span1">
-                                                @Translation.Get("Selektera ut")
-                                            </td>
                                             <td class="span2">
-                                                @Html.DropDownList("procent", Model.Procent, new { style = "width: 80px" })
+                                                @Translation.Get("Urval")
                                             </td>
-                                            <td class="span12">
-                                                @Translation.Get("procent av tillgängliga ärenden")
+                                            <td class="span6">
+                                               @Translation.Get("Selektera ut") @Html.DropDownList("procent", Model.Procent, new { style = "width: 60px" }) @Translation.Get("procent av tillgängliga ärenden")
                                             </td>
                                         </tr>
                                     </table>

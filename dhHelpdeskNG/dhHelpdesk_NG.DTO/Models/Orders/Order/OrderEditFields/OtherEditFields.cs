@@ -7,10 +7,8 @@
         public OtherEditFields(
                 string fileName, 
                 decimal? caseNumber, 
-                string info, 
-                int? statusId)
+                string info)
         {
-            this.StatusId = statusId;
             this.Info = info;
             this.CaseNumber = caseNumber;
             this.FileName = fileName;
@@ -22,8 +20,5 @@
         public decimal? CaseNumber { get; private set; }
         
         public string Info { get; private set; }
-        
-        [IsId]
-        public int? StatusId { get; private set; } 
     }
 }

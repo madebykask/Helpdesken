@@ -56,6 +56,17 @@
         AddUserBtn = 52,
         CostCentre = 53,
         LogFileName = 54,
-        PersonsEmail = 55
+        PersonsEmail = 55,        
+        IsAbout_CostCentre = 56,
+        IsAbout_Department_Id = 57,
+        IsAbout_OU_Id = 58,
+        IsAbout_PersonsCellPhone = 59,
+        IsAbout_PersonsEmail = 60,
+        IsAbout_PersonsName = 61,
+        IsAbout_PersonsPhone = 62,
+        IsAbout_Place = 63,
+        IsAbout_Region_Id = 64,
+        IsAbout_ReportedBy = 65,
+        IsAbout_UserCode = 66
     }
 }

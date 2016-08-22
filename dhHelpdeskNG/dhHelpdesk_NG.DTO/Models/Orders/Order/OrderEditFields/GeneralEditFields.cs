@@ -10,14 +10,16 @@
                 int orderNumber, 
                 string customer, 
                 int? administratorId, 
-                int? domainId, 
-                DateTime? orderDate)
+                int? domainId,
+                DateTime? orderDate,
+                int? statusId)
         {
             this.OrderDate = orderDate;
             this.DomainId = domainId;
             this.AdministratorId = administratorId;
             this.Customer = customer;
             this.OrderNumber = orderNumber;
+            this.StatusId = statusId;
         }
 
         public int OrderNumber { get; private set; }
@@ -30,6 +32,9 @@
         [IsId]
         public int? DomainId { get; private set; }
         
-        public DateTime? OrderDate { get; private set; }    
+        public DateTime? OrderDate { get; private set; }
+
+        [IsId]
+        public int? StatusId { get; private set; } 
     }
 }

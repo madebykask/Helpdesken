@@ -98,55 +98,9 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                                                             mailMessageId);
 
                             string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + notifierEmailLog.EmailLogGUID.ToString();
-                            string urlSelfService;
-                            if (template.Body.Contains("[/#98]"))
-                            {
-                                string str1 = "[#98]";
-                                string str2 = "[/#98]";
-                                string LinkText;
 
-                                int Pos1 = template.Body.IndexOf(str1) + str1.Length;
-                                int Pos2 = template.Body.IndexOf(str2);
-                                LinkText = template.Body.Substring(Pos1, Pos2 - Pos1);
-
-                                urlSelfService = "<a href='" + siteSelfService + "'>" + LinkText + "</a>";
-
-                            }
-                            else
-                            {
-                                urlSelfService = "<a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
-                            }
-
-                            foreach (var field in fields)
-                                if (field.Key == "[#98]")
-                                    field.StringValue = urlSelfService;
-
-
-                            if (template.Body.Contains("[/#99]"))
-                            {
-                                foreach (var field in fields)
-                                {
-                                    if (field.Key == "[#99]")
-                                    {
-                                        var urlHelpdesk = field.StringValue;
-                                        var siteHelpdesk = AbsoluterUrl;
-                                    
-                                            string str1 = "[#99]";
-                                            string str2 = "[/#99]";
-                                            string LinkText;
-
-                                            int Pos1 = template.Body.IndexOf(str1) + str1.Length;
-                                            int Pos2 = template.Body.IndexOf(str2);
-                                            LinkText = template.Body.Substring(Pos1, Pos2 - Pos1);
-
-                                            urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
-                                   
-
-                                        field.StringValue = urlHelpdesk;
-                                    }
-                                }
-                            }
-
+                            var siteHelpdesk = AbsoluterUrl;
+                            
                             var notifierEmailItem = this.emailFactory.CreateEmailItem(
                                                             customEmailSender4,
                                                             notifierEmailLog.EmailAddress,
@@ -156,7 +110,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                                                             notifierEmailLog.MessageId,
                                                             log.HighPriority,
                                                             files);
-                            var e_res = this.emailService.SendEmail(notifierEmailItem, EmailResponse.GetEmptyEmailResponse());
+                            var e_res = this.emailService.SendEmail(notifierEmailItem, EmailResponse.GetEmptyEmailResponse(), siteSelfService, siteHelpdesk);
                             notifierEmailLog.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                             var now = DateTime.Now;
                             notifierEmailLog.CreatedDate = now;
@@ -229,55 +183,8 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                                                 mailMessageId);
 
                 string site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + defaultWorkingGroupEmailLog.EmailLogGUID.ToString();
-                string url;
-                if (template.Body.Contains("[/#98]"))
-                {
-                    string str1 = "[#98]";
-                    string str2 = "[/#98]";
-                    string LinkText;
-
-                    int Pos1 = template.Body.IndexOf(str1) + str1.Length;
-                    int Pos2 = template.Body.IndexOf(str2);
-                    LinkText = template.Body.Substring(Pos1, Pos2 - Pos1);
-
-                    url = "<a href='" + site + "'>" + LinkText + "</a>";
-  
-                }
-                else
-                {
-                    url = "<a href='" + site + "'>" + site + "</a>";
-                }
-
-                foreach (var field in fields)
-                    if (field.Key == "[#98]")
-                        field.StringValue = url;
-
-                if (template.Body.Contains("[/#99]"))
-                {
-                    foreach (var field in fields)
-                    {
-                        if (field.Key == "[#99]")
-                        {
-                            var urlHelpdesk = field.StringValue;
-                            var siteHelpdesk = AbsoluterUrl;
-
-                            string str1 = "[#99]";
-                            string str2 = "[/#99]";
-                            string LinkText;
-
-                            int Pos1 = template.Body.IndexOf(str1) + str1.Length;
-                            int Pos2 = template.Body.IndexOf(str2);
-                            LinkText = template.Body.Substring(Pos1, Pos2 - Pos1);
-
-                            urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
-
-
-
-                            field.StringValue = urlHelpdesk;
-                        }
-                    }
-                }
-
+                var siteHelpdesk = AbsoluterUrl;
+                
                 var defaultWorkingGroupEmailItem = this.emailFactory.CreateEmailItem(
                                                 helpdeskMailFromAdress,
                                                 defaultWorkingGroupEmailLog.EmailAddress,
@@ -287,7 +194,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                                                 defaultWorkingGroupEmailLog.MessageId,
                                                 log.HighPriority,
                                                 files);
-                var e_res = this.emailService.SendEmail(defaultWorkingGroupEmailItem, EmailResponse.GetEmptyEmailResponse());
+                var e_res = this.emailService.SendEmail(defaultWorkingGroupEmailItem, EmailResponse.GetEmptyEmailResponse(), site, siteHelpdesk);
                 defaultWorkingGroupEmailLog.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                 var now = DateTime.Now;
                 defaultWorkingGroupEmailLog.CreatedDate = now;
@@ -346,54 +253,8 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                                                         t,
                                                         this.emailService.GetMailMessageId(helpdeskMailFromAdress));
                         string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + internalEmailLog.EmailLogGUID.ToString();
-                        string urlSelfService;
-                        if (template.Body.Contains("[/#98]"))
-                        {
-                            string str1 = "[#98]";
-                            string str2 = "[/#98]";
-                            string LinkText;
-
-                            int Pos1 = template.Body.IndexOf(str1) + str1.Length;
-                            int Pos2 = template.Body.IndexOf(str2);
-                            LinkText = template.Body.Substring(Pos1, Pos2 - Pos1);
-
-                            urlSelfService = "<a href='" + siteSelfService + "'>" + LinkText + "</a>";
-      
-                        }
-                        else
-                        {
-                            urlSelfService = "<a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
-                        }
-
-                        foreach (var field in fields)
-                            if (field.Key == "[#98]")
-                                field.StringValue = urlSelfService;
-
-
-                        foreach (var field in fields)
-                        {
-                            if (field.Key == "[#99]")
-                            {
-                                var urlHelpdesk = field.StringValue;
-                                var siteHelpdesk = AbsoluterUrl;
-                                if (template.Body.Contains("[/#99]"))
-                                {
-                                    string str1 = "[#99]";
-                                    string str2 = "[/#99]";
-                                    string LinkText;
-
-                                    int Pos1 = template.Body.IndexOf(str1) + str1.Length;
-                                    int Pos2 = template.Body.IndexOf(str2);
-                                    LinkText = template.Body.Substring(Pos1, Pos2 - Pos1);
-
-                                    urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
-                
-                                }
-                     
-                                field.StringValue = urlHelpdesk;
-                            }
-                        }
-
+                        var siteHelpdesk = AbsoluterUrl;
+                        
                         var internalEmail = this.emailFactory.CreateEmailItem(
                                                         customEmailSender4,
                                                         internalEmailLog.EmailAddress,
@@ -403,7 +264,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                                                         internalEmailLog.MessageId,
                                                         log.HighPriority,
                                                         files);
-                        var e_res = this.emailService.SendEmail(internalEmail, EmailResponse.GetEmptyEmailResponse());
+                        var e_res = this.emailService.SendEmail(internalEmail, EmailResponse.GetEmptyEmailResponse(), siteSelfService, siteHelpdesk);
                         internalEmailLog.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                         var now = DateTime.Now;
                         internalEmailLog.CreatedDate = now;

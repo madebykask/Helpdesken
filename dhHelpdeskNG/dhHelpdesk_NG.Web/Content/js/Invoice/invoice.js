@@ -2,7 +2,7 @@
     dhHelpdesk = {};
 
 $(function () {
-
+    
 
     _INVOICE_IDLE = 0;
     _INVOICE_SAVING = 1;
@@ -19,9 +19,7 @@ $(function () {
 
     var AllTranslations = [];
 
-    var CaseFieldSettings = [];
-
-    var CurrentLanguageId = 1; //defaultlang - swedish    
+    var CaseFieldSettings = [];    
 
     var caseButtonsToDisable = $('.btn.save, .btn.save-close, .btn.save-new, .btn.caseDeleteDialog, ' +
                                  '#case-action-close, #divActionMenu, #btnActionMenu, #divCaseTemplate, #btnCaseTemplateTree, .btn.print-case,' +
@@ -325,23 +323,18 @@ $(function () {
         },
 
         Translate: function (text) {
-            return text;
-            //var AllTranslationsLength = AllTranslations.length;
-            //for (var i = 0; i < AllTranslationsLength; i++) {
-            //    if (AllTranslations[i].TextToTranslate.toLowerCase() === text.toLowerCase()) {
-            //        var AllTranslationsTranslationsLength = AllTranslations[i].Translations.length;
-            //        //for (var j = 0; j <= AllTranslationsTranslationsLength; j++) {
-            //        //    if (AllTranslations[i].Translations[j].Language_Id)
-            //        //    {
-            //        //        if (AllTranslations[i].Translations[j].Language_Id == CurrentLanguageId) { //language_id is sometimes undefined...?? bug. todo fix
-            //        //            return AllTranslations[i].Translations[j].TranslationName;
-            //        //        }
-            //        //    }
-            //        //}
-            //    }
-            //}
+            if (AllTranslations == undefined || AllTranslations == null || AllTranslations.length == 0)
+                return text;
+            
+            for (var tr = 0; tr < AllTranslations.length; tr++) {
+                if (AllTranslations[tr].Key.toLowerCase() == text.toLowerCase())
+                    if (AllTranslations[tr].Value != null)
+                        return AllTranslations[tr].Value;
+                    else
+                        return text;
+            }
 
-            //return text;
+            return text;
         },
 
         TranslateCaseFields: function (text) {
@@ -814,7 +807,7 @@ $(function () {
                         loadAllData(callBack, that);
                     }
                     else {
-                        dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("An error has occurred during save Invoice! <br/> " + returnedData.data));
+                        dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("Ett fel har uppstått vid spara Order") + " <br/>" + returnedData.data);
                         callBack(that);
                     }
                 }
@@ -901,14 +894,14 @@ $(function () {
                 if (curInvoice._orders != null && curInvoice._orders.length > 0) {
                     for (i = 0; i < curInvoice._orders.length; i++)
                         if (curInvoice._orders[i].Id < 0) {
-                            dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("New order already added") + " - " + curInvoice._orders[i].Caption);
+                            dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("Ny order är redan skapad") + " - " + curInvoice._orders[i].Caption);
                             return false;
                         }
                 }
                 return true;
             }
             else {
-                dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("Invoice is not available"));
+                dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("Order saknas") + "!");
                 return false;
             }
         },
@@ -959,12 +952,13 @@ $(function () {
             }
         },
 
-        AddBlankArticle: function (orderId) {
+        AddBlankArticle: function (orderId, mainArtId) {
             var order = this.GetOrder(orderId);
             if (order != null) {
                 if (!this.GetInvoiceStatusOfCurrentOrder()) {
                     var article = this.CreateBlankArticle();
                     var caseArticle = article.ToCaseArticle();
+                    caseArticle.TextForArticle_Id = mainArtId;
                     caseArticle.Article = article;
                     order.AddArticle(caseArticle);
                     return caseArticle;
@@ -998,7 +992,7 @@ $(function () {
                                 }
                             }
                             else
-                                dhHelpdesk.Common.ShowErrorMessage(order.Caption + " kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ordern." + orderValidation.Message);
+                                dhHelpdesk.Common.ShowErrorMessage(order.Caption + " " + dhHelpdesk.Common.Translate("kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ordern.") + orderValidation.Message);
                         }
                         else {
                             th.ShowAlreadyInvoicedMessage();
@@ -1020,7 +1014,7 @@ $(function () {
 
         DoOrderCredit: function (orderId) {
             if (orderId < 0) {
-                dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate('First save the order.'));
+                dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate('Var vänlig spara ordern först.'));
             }
             else {
                 if (this.CanAddNewOrder()) {
@@ -1107,7 +1101,7 @@ $(function () {
             if (article != null) {
                 if (curAmount <= 0) {
                     obj.val(dhHelpdesk.Math.ConvertDoubleToStr(article.Amount, true));
-                    dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("Value can't be 0"));
+                    dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("0 är inte tillåtet"));
                     return;
                 }
 
@@ -1149,7 +1143,7 @@ $(function () {
 
         UpdateCharacterCount: function (objectId) {
             var len = $("#Description_" + objectId).val().length;
-            var newLen = dhHelpdesk.Common.Translate("Tecken kvar") + ": " + (this.MaxDescriptionCount - len).toString();
+            var newLen =  (this.MaxDescriptionCount - len).toString() + " " + dhHelpdesk.Common.Translate("Tecken kvar");
             $("#DescriptionCount_" + objectId).text(newLen);
         },
 
@@ -1177,7 +1171,7 @@ $(function () {
 
                 if (totalOrderAmount - totalCreditUsed > 0) {
                     newAmount = totalOrderAmount - totalCreditUsed;
-                    dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("Maximum amount for this article is") + ": " + dhHelpdesk.Math.ConvertDoubleToStr(newAmount, _IGNORE_ZERO_FLOATING_POINT));
+                    dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("Max antal för denna artikel är") + ": " + dhHelpdesk.Math.ConvertDoubleToStr(newAmount, _IGNORE_ZERO_FLOATING_POINT));
                 }
                 else {
                     newAmount = 0;
@@ -1208,7 +1202,7 @@ $(function () {
                 }
                 else {
                     newAmount = 0;
-                    creditAlertToShow = dhHelpdesk.Common.Translate("All credits already used!");
+                    creditAlertToShow = dhHelpdesk.Common.Translate("Inget kvar att kreditera");
                 }
             }
             else {
@@ -1705,7 +1699,7 @@ $(function () {
                                         currentOrder.AddArticle(child);
 
                                     if (child.Article.TextDemand) {
-                                        var addedElement = dhHelpdesk.CaseArticles.AddBlankArticle(currentOrder.Id);
+                                        var addedElement = dhHelpdesk.CaseArticles.AddBlankArticle(currentOrder.Id, child.Id);
                                         if (elementForFocus == null && addedElement != null)
                                             elementForFocus = $('#Description_' + addedElement.Id);
                                     }
@@ -1733,7 +1727,7 @@ $(function () {
                                     currentOrder.AddArticle(caseArticle);
 
                                 if (caseArticle.Article.TextDemand) {
-                                    var addedElement = dhHelpdesk.CaseArticles.AddBlankArticle(currentOrder.Id);
+                                    var addedElement = dhHelpdesk.CaseArticles.AddBlankArticle(currentOrder.Id, caseArticle.Id);
                                     if (elementForFocus == null && addedElement != null)
                                         elementForFocus = $('#Description_' + addedElement.Id);
                                 }
@@ -1766,7 +1760,7 @@ $(function () {
             var articlesEl = invoice._container.find(".articles-params-article");
             var articleId = articlesEl.val();
             if (articleId != 0) {
-                dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("You've selected an atricle but it's not added to the list yet!"));
+                dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("Du har valt en artikel, men inte lagt till den än!"));
                 return false;
             }
             for (var i = 0; i < this.allVailableOrders.length; i++) {
@@ -1794,12 +1788,14 @@ $(function () {
         },
 
         OpenInvoiceWindow: function (message) {
+            var articleDescriptionDelimiter = '¤¤¤';
+
             var th = dhHelpdesk.CaseArticles;
             th.CreateContainer(message);
             var addArticleEl = th._container.find(".articles-params");
             var articlesSelectContainer = addArticleEl.find(".articles-select-container");
             articlesSelectContainer.empty();
-            var articlesEl = $("<select class='chosen-select articles-params-article'></select>");
+            var articlesEl = $("<select id='articleList' class='chosen-select articles-params-article'></select>");
             articlesSelectContainer.append(articlesEl);
 
             var articles = th.GetInvoiceArticles();
@@ -1813,7 +1809,9 @@ $(function () {
             articlesEl.append("<option value='0'> &nbsp; </option>");
             for (var i = 0; i < articles.length; i++) {
                 var article = articles[i];
-                articlesEl.append("<option value='" + article.Id + "'>" + article.GetFullName() + "</option>");
+                var artDesc = article.Description != null ? article.Description : "";
+                var text = article.Description + articleDescriptionDelimiter + article.GetFullName();
+                articlesEl.append("<option value='" + article.Id + "' >" + text + "</option>");
             }
 
             $('.InitiatorField').hide();
@@ -1824,9 +1822,14 @@ $(function () {
                 placeholder_text_single: dhHelpdesk.Common.Translate("Välj artikel"),
                 'no_results_text': '?',
             })
-            .change(function () {
+            .change(function () {                
                 var selectedArticle = dhHelpdesk.CaseArticles.GetInvoiceArticle(articlesEl.chosen().val());
                 var units_PriceEl = th._container.find(".articles-params-units-price");
+                var t = ''
+                if (selectedArticle != null) {
+                   t = selectedArticle.GetFullName();
+                }
+                $('#articleList_chosen a span').text(t);
 
                 if (selectedArticle != null) {
                     if (selectedArticle.HasChildren()) {
@@ -1848,6 +1851,28 @@ $(function () {
                         }
                     }
                 }
+            });
+
+            $('#articleList').on('chosen:showing_dropdown', function () {
+                $('#articleList_chosen .chosen-results li').each(function () {
+                    var art = this;
+                    var fullText = $(art).text();
+                    if (fullText != " ") {
+                        var newText = '  ';
+                        var tooltip = '';
+                        var splits = fullText.split(articleDescriptionDelimiter);
+                        if (splits.length > 0 && splits[0] != 'null') {
+                            tooltip = splits[0];
+                        }
+
+                        if (splits.length > 1) {
+                            newText = splits[1];
+                        }
+
+                        art.title = tooltip;
+                        $(this).text(newText);
+                    }
+                });
             });
 
             articlesSelectContainer.find("select.chosen-select").addClass("min-width-500 max-width-500 case-invoice-multiselect");
@@ -1889,7 +1914,7 @@ $(function () {
 
             button.click(function () {
                 if (th.IsNewCase() || th.IsProductAreaChanged()) {
-                    dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("Please save the case and try again!"));
+                    dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("Var vänlig spara ärendet och försök igen!"));
                     return;
                 }
 
@@ -2397,7 +2422,7 @@ $(function () {
                     var order = orders[i];
                     var orderValidate = order.Validate();
                     if (!orderValidate.IsValid) {
-                        dhHelpdesk.Common.ShowErrorMessage(order.Caption + " kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ordern." + orderValidate.Message);
+                        dhHelpdesk.Common.ShowErrorMessage(order.Caption + " " + dhHelpdesk.Common.Translate("kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ordern.") + orderValidate.Message);
                         return false;
                     }
                 }
@@ -2649,13 +2674,21 @@ $(function () {
             this.DoInvoice = function () {
                 var btnSave = $(".btn.save-invoice");
                 //pass order_id to generate xml for order
+
+                var articlesEl = $(document).find(".articles-params-article");
+                var articleId = articlesEl.val();
+                if (articleId != 0) {
+                    dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("Du har valt en artikel, men inte lagt till den än!"));
+                    return false;
+                }
+
                 if (this._articles.length > 0) {
                     btnSave.attr("data-doInvoiceOrder", this.Id);
                     btnSave.click();
                     dhHelpdesk.System.RaiseEvent("OnChangeOrder", [this]);
                 }
                 else {
-                    dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("There is no Aticle to send!"));
+                    dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("Det finns inga artiklar att skicka!"));
                 }
             },
 
@@ -2985,7 +3018,7 @@ $(function () {
             this.InvoiceValidate = function () {
                 var isValid = true;
                 if (this._articles != null && this._articles.length > 0 && dhHelpdesk.Common.IsNullOrEmpty(this.CostCentre)) {
-                    dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("Kostnadställe saknas!") + " " + this.Caption);
+                    dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.TranslateCaseFields("CostCentre") + " " + dhHelpdesk.Common.Translate("saknas!") + " - " + this.Caption);
                     isValid = false;
                 }
                 return isValid;
@@ -3056,7 +3089,7 @@ $(function () {
                     });
                     d.dialog("open");
                 } else {
-                    dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("Det finns inga filer att lägga till") + ". " + dhHelpdesk.Common.Translate("Endast PDF-filer som är bifogade på ärendet går att bifoga."));
+                    dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("Det finns inga filer att lägga till.") + " " + dhHelpdesk.Common.Translate("Endast PDF-filer som är bifogade på ärendet går att bifoga."));
                 }
             }
         },
@@ -3214,7 +3247,7 @@ $(function () {
                 model.IsArticlePpuExists = this.IsArticlePpuExists();
                 model.IsCredited = this.Order.CreditForOrder_Id != null;
                 model.IsInvoiced = this.Order.IsInvoiced;
-                model.DescriptionCount = dhHelpdesk.Common.Translate("Tecken kvar") + " " + (dhHelpdesk.CaseArticles.MaxDescriptionCount - model.Name.length);
+                model.DescriptionCount = (dhHelpdesk.CaseArticles.MaxDescriptionCount - model.Name.length) + " " + dhHelpdesk.Common.Translate("Tecken kvar");
                 return model;
             };
 
@@ -3322,9 +3355,9 @@ $(function () {
                             if (ret.Message != "")
                                 ret.Message += " ,";
                             if (eName.attr("Id").indexOf("Description_") == 0)
-                                ret.Message += "Beskrivning";
+                                ret.Message += dhHelpdesk.Common.Translate("Beskrivning");
                             else
-                                ret.Message += "Namn";
+                                ret.Message += dhHelpdesk.Common.Translate("Namn");
                             ret.IsValid = false;
                         } else {
                             dhHelpdesk.Common.MakeValid(eName);
@@ -3342,7 +3375,7 @@ $(function () {
                         dhHelpdesk.Common.MakeInvalid(eAmount);
                         if (ret.Message != "")
                             ret.Message += " ,";
-                        ret.Message += "Enheter";
+                        ret.Message += dhHelpdesk.Common.Translate("Enheter");
                         ret.IsValid = false;
                     } else {
                         dhHelpdesk.Common.MakeValid(eAmount);
@@ -3367,7 +3400,7 @@ $(function () {
                         dhHelpdesk.Common.MarkTextInvalid(eArticleRow);
                         if (ret.Message != "")
                             ret.Message += " ,";
-                        ret.Message += "Textrad";
+                        ret.Message += dhHelpdesk.Common.Translate("Textrad");
                     }
                     else {
                         dhHelpdesk.Common.MarkTextValid(eArticleRow);
@@ -3434,7 +3467,7 @@ $(function () {
         CaseInvoiceOrderViewModel: function () {
             this.Id = null;
             this.ArtNoHeader = dhHelpdesk.Common.Translate("Art nr");
-            this.NameHeader = dhHelpdesk.Common.Translate("Artikelnamn SWE");
+            this.NameHeader = dhHelpdesk.Common.Translate("Artikelnamn SVE");
             this.NameEngHeader = dhHelpdesk.Common.Translate("Artikelnamn ENG");
             this.UnitsHeader = dhHelpdesk.Common.Translate("Enheter");
             this.UnitsPriceHeader = dhHelpdesk.Common.Translate("PPE SEK");
@@ -3857,9 +3890,9 @@ $(function () {
                 sentCount = invoicedOrders.length;
 
             if (ordersCount > 0) {
-                $('#InvoiceModuleBtnOpen').val(dhHelpdesk.CaseArticles.invoiceButtonPureCaption + " (" + (sentCount) + "/" + (ordersCount) + ")");
-                var buttonHint = dhHelpdesk.Common.Translate("Skickat") + " " + sentCount + "\n" +
-                                 dhHelpdesk.Common.Translate("Order") + "   " + ordersCount;
+                $('#InvoiceModuleBtnOpen').val(dhHelpdesk.CaseArticles.invoiceButtonPureCaption + " (" + (ordersCount) + "/" + (sentCount) + ")");
+                var buttonHint = dhHelpdesk.Common.Translate("Order") + "   " + ordersCount + "\n" +
+                                 dhHelpdesk.Common.Translate("Skickat") + " " + sentCount;
 
                 $('#InvoiceModuleBtnOpen').attr("title", buttonHint);
             } else {
@@ -3945,17 +3978,17 @@ $(function () {
     };
 
     var loadTranslationList = function () {
-        $.getJSON("/Translation/CurrentLanguageId", function (data) {
-            CurrentLanguageId = data;
-        });
-
-        return $.getJSON("/Translation/GetAllCoreTextTranslations", function (data) {
-            AllTranslations = data;
-        });
+        return $.get('/Translation/GetAllTextTranslations', {
+            curTime: Date.now
+        }, function (returnedData) {
+            AllTranslations = returnedData            
+        });        
     };
 
     var loadCaseFieldTranslations = function () {
-        return $.getJSON("/Translation/GetCaseFieldsForTranslation", function (data) {
+        return $.get("/Translation/GetCaseFieldsForTranslation", {
+            curTime: Date.now
+        },function (data){ 
             AllCaseFields = data;
         });
     };
@@ -4015,9 +4048,9 @@ $(function () {
     };
 
     var loadAllData = function (callBack, obj) {
-        loadTranslationList()
-            .then(loadOrganizationData)
+        loadTranslationList()            
             .then(loadCaseFieldTranslations)
+            .then(loadOrganizationData)
             .then(loadCaseFieldSettings)
             .then(loadCaseInvoiceTemplate)
             .then(loadCaseInvoiceOrderTemplate)
@@ -4196,6 +4229,6 @@ $(function () {
                 });
             });
     };
-
+    
     loadAllData();
 });

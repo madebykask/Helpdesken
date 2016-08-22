@@ -218,6 +218,12 @@
             customer.DailyReportEmail = customer.DailyReportEmail ?? string.Empty;
             customer.NewCaseEmailList = customer.NewCaseEmailList ?? string.Empty;
 
+            var helpdeskEMail = "";
+            if (customer.HelpdeskEmail != null)
+                helpdeskEMail = customer.HelpdeskEmail.TrimStart().TrimEnd();
+ 
+            customer.HelpdeskEmail = helpdeskEMail;
+
             #endregion
 
             if(string.IsNullOrEmpty(customer.Name))
@@ -289,6 +295,12 @@
             customer.CaseStatisticsEmailList = customer.CaseStatisticsEmailList ?? string.Empty;
             customer.DailyReportEmail = customer.DailyReportEmail ?? string.Empty;
             customer.NewCaseEmailList = customer.NewCaseEmailList ?? string.Empty;
+
+            var helpdeskEMail = "";
+            if (customer.HelpdeskEmail != null)
+                helpdeskEMail = customer.HelpdeskEmail.TrimStart().TrimEnd();
+
+            customer.HelpdeskEmail = helpdeskEMail;
 
             #endregion
             
@@ -592,6 +604,12 @@
             customer.RegistrationMessage = customer.RegistrationMessage ?? string.Empty;
             customer.ResponsibleReminderEmailList = customer.ResponsibleReminderEmailList ?? string.Empty;
             //customer.CommunicateWithNotifier = customer.CommunicateWithNotifier ?? 1;
+
+            var helpdeskEMail = "";
+            if (customer.HelpdeskEmail != null)
+                helpdeskEMail = customer.HelpdeskEmail.TrimStart().TrimEnd();
+
+            customer.HelpdeskEmail = helpdeskEMail;
 
             if(string.IsNullOrEmpty(customer.Name))
                 errors.Add("Customer.Name", "Du måste ange ett kundnamn");

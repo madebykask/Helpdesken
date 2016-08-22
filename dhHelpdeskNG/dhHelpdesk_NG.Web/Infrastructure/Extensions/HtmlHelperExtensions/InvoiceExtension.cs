@@ -40,7 +40,7 @@
                 var ordersCount = caseArticles.Invoices[0].Orders.Count();
                 var sentCount = caseArticles.Invoices[0].Orders.Where(o=> o.OrderState == (int) InvoiceOrderStates.Sent).Count();
 
-                btnCaptionExtra = string.Format("({0}/{1})", sentCount, ordersCount);
+                btnCaptionExtra = string.Format("({0}/{1})", ordersCount, sentCount);
             }           
                 
             tag.MergeAttribute("data-invoice", string.Empty);

@@ -16,7 +16,7 @@
         <div class="pull-left">
             <ul class="secnav">
                 <li>
-                    <input type="submit" value="@Translation.Get("Save", Enums.TranslationSource.TextTranslation)" class="btn" />
+                    <input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn" />
                 </li>
                 <li>
                     @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "DeleteQuestion",
@@ -52,7 +52,7 @@
                                 <table class="tableform">
                                     <tr>
                                         <td class="span3">
-                                            @Translation.Get("Språk", Enums.TranslationSource.TextTranslation):
+                                            @Translation.Get("Språk", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td class="span9">
                                             @Html.DropDownListFor(model => model.LanguageId, Model.Languages,new {id = "languageList"} )                                            
@@ -60,10 +60,10 @@
                                     </tr>
                                     <tr>
                                         <td class="span3">
-                                            @Translation.Get("Nummer", Enums.TranslationSource.TextTranslation):
+                                            @Translation.Get("Nummer", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td class="span9">
-                                            @if (Model.LanguageId == LanguageId.Swedish)
+                                            @if (Model.LanguageId == LanguageIds.Swedish)
                                             {
                                                 @Html.EditorFor(model => model.QuestionNumber)
                                                 @Html.ValidationMessageFor(model => model.QuestionNumber)
@@ -76,7 +76,7 @@
                                     </tr>
                                     <tr>
                                         <td class="span3">
-                                            @Translation.Get("Fråga", Enums.TranslationSource.TextTranslation):
+                                            @Translation.Get("Fråga", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td class="span9">
                                             @Html.TextAreaFor(model => model.Question, new { maxlength = "1000", style = "height:100px;" })
@@ -85,16 +85,16 @@
                                     </tr>
                                     <tr>
                                         <td class="span3">
-                                            @Translation.Get("Visa kommentar", Enums.TranslationSource.TextTranslation):
+                                            @Translation.Get("Visa kommentar", Enums.TranslationSource.TextTranslation)
                                         </td>                                        
                                         <td class="checkbox" style="padding-left: 20px">                                        
-                                            <input type="checkbox" name="ShowNote" @(Model.ShowNote == 1 ? "checked=checked" : "")  @(Model.LanguageId != LanguageId.Swedish ? "disabled" : "") value ="1" />                                        
+                                            <input type="checkbox" name="ShowNote" @(Model.ShowNote == 1 ? "checked=checked" : "")  @(Model.LanguageId != LanguageIds.Swedish ? "disabled" : "") value ="1" />                                        
                                             <input type="hidden" name="ShowNote" value="0" />                                                                                                                 
                                         </td> 
                                     </tr>                                    
                                     <tr>
                                         <td class="span3">
-                                            @Translation.Get("Text kommentar", Enums.TranslationSource.TextTranslation):
+                                            @Translation.Get("Text kommentar", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td class="span9">                                                                                        
                                             @Html.TextAreaFor(model => model.NoteText, new { maxlength = "1000", style = "height:100px;" })                                            

@@ -23,6 +23,9 @@
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.ActionFilters;
     using DH.Helpdesk.Web.Infrastructure.Tools;
+    using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Users;
+    using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 
     public class OrdersController : BaseController
     {
@@ -48,6 +51,8 @@
 
         private readonly IEmailService emailService;
 
+        private readonly IUserPermissionsChecker _userPermissionsChecker;
+
         public OrdersController(
                 IMasterDataService masterDataService, 
                 IOrdersService ordersService, 
@@ -60,7 +65,8 @@
                 ITemporaryFilesCacheFactory temporaryFilesCacheFactory, 
                 IUpdateOrderModelFactory updateOrderModelFactory, 
                 ILogsModelFactory logsModelFactory, 
-                IEmailService emailService)
+                IEmailService emailService,
+                IUserPermissionsChecker userPermissionsChecker)
             : base(masterDataService)
         {
             this.ordersService = ordersService;
@@ -72,6 +78,7 @@
             this.updateOrderModelFactory = updateOrderModelFactory;
             this.logsModelFactory = logsModelFactory;
             this.emailService = emailService;
+            this._userPermissionsChecker = userPermissionsChecker;
 
             this.filesStateStore = editorStateCacheFactory.CreateForModule(ModuleName.Orders);
             this.filesStore = temporaryFilesCacheFactory.CreateForModule(ModuleName.Orders);
@@ -189,7 +196,11 @@
 
             this.filesStateStore.ClearObjectDeletedFiles(id);
 
+            var userHasAdminOrderPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.AdministerOrderPermission);
+
             var model = this.orderModelFactory.Create(response, this.workContext.Customer.CustomerId);
+            model.UserHasAdminOrderPermission = userHasAdminOrderPermission;
+
             return this.View(model);
         }
 

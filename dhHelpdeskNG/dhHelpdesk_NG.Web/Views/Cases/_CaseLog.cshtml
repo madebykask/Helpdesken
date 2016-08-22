@@ -23,175 +23,127 @@
                 @foreach (var r in Model.Logs)
                 {
                     <tr>
-                        <td>
+                        <td style="max-width:105px">
                             @if (r.FinishingDate.HasValue)
                             {
                                 <span class="case-icon solved" title="@Translation.GetCoreTextTranslation("Stängt")"></span>
                             }
                             else
                             {
-                                <span class="case-icon"></span>
+                                @*<span class="case-icon"></span>*@
                             }
                             @{
                                 r.LogDate = TimeZoneInfo.ConvertTimeFromUtc(r.LogDate.ToUniversalTime(), userTimeZone);
                             }
                             <a href="@GetLogLink(r)">@Html.DisplayFor(m => r.LogDate, "DateAndTime") </a>
                         </td>
-                        <td>
+                        <td style="max-width:110px" class="wordbreak">
                             <a href="@GetLogLink(r)">@(r.User == null ? r.RegUser : Html.FormatUserName(r.User, Model.Setting))</a>
                         </td>
-                        <td>
+                        <td class="wordbreak" style="width:25%; max-width:300px">
                             <a href="@GetLogLink(r)"> @Html.AttributeEncode(r.TextExternal).ForHtmlView()</a>
-                        </td>
-                        <td>
+                        </td>                         
+                        <td class="wordbreak" style="width:25%; max-width:300px">
                             <a href="@GetLogLink(r)"> @Html.AttributeEncode(r.TextInternal).ForHtmlView()</a>
-                        </td>
-                        @*<td>
-                            
-                            @if (Model.case_.Mail2Tickets.Any())
+                        </td>               
+                        <td class="wordbreak" style="max-width:150px">                          
+                            @{ var curLogMail2Tickets = Model.case_.Mail2Tickets.Where(m => m.Log_Id == r.Id).ToList();  }  
+
+                            @if (r.CaseHistory != null)
                             {
-                                var countTO = 0;
-                                var countCC = 0;
-                                var countBCC = 0;
-                                var mailTO = "";
-                                var mailCC = "";
-                                var mailBCC = "";
-                                var boldTO = false;
-                                var boldCC = false;
-                                var boldBCC = false;
-                                var show = false;
-                                foreach (var mail in Model.case_.Mail2Tickets)
-                                {
-                                    if (mail.Log_Id != null)
+                                if (r.CaseHistory.Emaillogs != null)
+                                {   
+                                    if (curLogMail2Tickets.Any())
                                     {
-                                        if (mail.Type == "to")
-                                        {
-                                            countTO = countTO + 1;
-                                            mailTO = mailTO + mail.EMailAddress + "; ";
-
-                                            if (mail.EMailAddress == Model.case_.Customer.HelpdeskEmail)
+                                        var countTO = 0;
+                                        var countCC = 0;
+                                        var mailTO = "";
+                                        var mailCC = "";
+                                        var boldTO = false;
+                                        var boldCC = false; 
+                                        var show = false;
+                                        foreach (var mail in curLogMail2Tickets)
+                                        {                                                
+                                            if (mail.Type.ToLower() == "to")
                                             {
-                                                boldTO = true;
+                                                countTO = countTO + 1;
+                                                mailTO += mail.EMailAddress + "; <br />";
+                                                if (mail.EMailAddress == Model.case_.Customer.HelpdeskEmail)
+                                                {
+                                                    boldTO = true;
+                                                }
                                             }
-                                        }
 
-                                        if (mail.Type == "cc")
-                                        {
-                                            countCC = countCC + 1;
-                                            mailCC = mailCC + mail.EMailAddress + "; ";
-
-                                            if (mail.EMailAddress == Model.case_.Customer.HelpdeskEmail)
+                                            if (mail.Type.ToLower() == "cc")
                                             {
-                                                boldCC = true;
+                                                countCC = countCC + 1;
+                                                mailCC += mail.EMailAddress + "; <br />";
+                                                if (mail.EMailAddress == Model.case_.Customer.HelpdeskEmail)
+                                                {
+                                                    boldCC = true;
+                                                }
                                             }
-                                        }
 
-                                        if (mail.Type == "bcc")
+                                            show = true;                                            
+                                        }
+                                      
+                                        if (show)
                                         {
-                                            countBCC = countBCC + 1;
-                                            mailBCC = mailBCC + mail.EMailAddress + "; ";
-
-                                            if (mail.EMailAddress == Model.case_.Customer.HelpdeskEmail)
-                                            {
-                                                boldBCC = true;
-                                            }
+                                            var lastElmSelectedId = "lastMailSelected" + r.Id;
+                                            var logMailToId = "mailto" + r.Id;
+                                            var logMailCcId = "mailcc" + r.Id;
+                                            <div>
+                                                <input type="hidden" id="@lastElmSelectedId"  value="">
+                                                @if (boldTO)
+                                                {
+                                                    <p>
+                                                        <b>TO[@countTO]</b>&nbsp;&nbsp;&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@mailTO" data-expand-element="mailto" data-expand-log-id="@r.Id"></span>
+                                                    </p>
+                                                }
+                                                else
+                                                {
+                                                    <p>
+                                                        TO[@countTO]&nbsp;&nbsp;&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@mailTO" data-expand-element="mailto" data-expand-log-id="@r.Id"></span>
+                                                    </p>
+                                                }
+                                            </div>
+                                            <div>
+                                                <p id="@logMailToId" class="" style="display:none">@Html.Raw(mailTO)</p>
+                                            </div>
+                                            <div>
+                                                @if (boldCC)
+                                                {
+                                                    <p>
+                                                        <b>CC[@countCC]</b>&nbsp;&nbsp;&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@mailCC" data-expand-element="mailcc" data-expand-log-id="@r.Id"></span>
+                                                    </p>
+                                                }
+                                                else
+                                                {
+                                                    <p>
+                                                        CC[@countCC]&nbsp;&nbsp;&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@mailCC" data-expand-element="mailcc" data-expand-log-id="@r.Id"></span>
+                                                    </p>
+                                                }
+                                            </div>
+                                            <div>
+                                                <p id="@logMailCcId" class="" style="display:none">@Html.Raw(mailCC)</p>
+                                            </div>
                                         }
-                                        show = true;
                                     }
-                                }
-                                if (show)
-                                {
-                                    <div>
-                                        <input type="hidden" id="lastMailSelected" value="">
-                                        @if (boldTO == true)
-                                        {
-                                            <p>
-                                                <b>TO[@countTO]</b>&nbsp;&nbsp;&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@mailTO" data-expand-element="mailto"></span>
-                                            </p>
-                                        }
-                                        else
-                                        {
-                                            <p>
-                                                TO[@countTO]&nbsp;&nbsp;&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@mailTO" data-expand-element="mailto"></span>
-                                            </p>
-                                        }
-                                    </div>
-                                    <div>
-                                        <p id="mailto" class="" style="display:none">@mailTO</p>
-                                    </div>
-                                    <div>
-                                        @if (boldCC == true)
-                                        {
-                                            <p>
-                                                <b>CC[@countCC]</b>&nbsp;&nbsp;&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@mailCC" data-expand-element="mailcc"></span>
-                                            </p>
-                                        }
-                                        else
-                                        {
-                                            <p>
-                                                CC[@countCC]&nbsp;&nbsp;&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@mailCC" data-expand-element="mailcc"></span>
-                                            </p>
-                                        }
-                                    </div>
-                                    <div>
-                                        <p id="mailcc" class="" style="display:none">@mailCC</p>
-                                    </div>
-                                    <div>
-                                        @if (boldBCC == true)
-                                        {
-                                            <p>
-                                                <b>BCC[@countBCC]</b>&nbsp;<span class="icon-info-sign ml15" rel="tooltip expander" title="" data-original-title="@mailBCC" data-expand-element="mailbcc"></span>
-                                            </p>
-                                        }
-                                        else
-                                        {
-                                            <p>
-                                                BCC[@countBCC]&nbsp;<span class="icon-info-sign ml15" rel="tooltip expander" title="" data-original-title="@mailBCC" data-expand-element="mailbcc"></span>
-                                            </p>
-                                        }
-                                    </div>
-                                    <div>
-                                        <p id="mailbcc" class="" style="display:none">@mailBCC</p>
-                                    </div>
-                                }
-                            }
-                            
-                            
-                            
-                            {
-                                if (r.CaseHistory != null)
-                                {
-                                    if (r.CaseHistory.Emaillogs != null)
-                                    {                                        
+                                    else
+                                    {                                     
                                         foreach (var l in r.CaseHistory.Emaillogs)      
                                         {                                            
-                                        <div>
+                                            <div>
                                             <p>
                                                 @l.EmailAddress 
                                             </p>
                                         </div>
-                                        }                                    
-                                    }                                        
-                                }
-                            }
-                        </td>*@
-                        <td>
-                            @if (r.CaseHistory != null)
-                            {
-                                if (r.CaseHistory.Emaillogs != null)
-                                {                                        
-                                    foreach (var l in r.CaseHistory.Emaillogs)      
-                                    {                                            
-                                    <div>
-                                        <p>
-                                            @l.EmailAddress 
-                                        </p>
-                                    </div>
+                                        }
                                     }                                    
                                 }                                        
                             }
-                        </td>
-                        <td>
+                        </td>                        
+                        <td class="wordbreak" style="max-width:150px">
                             @if (r.LogFiles != null)
                             {
                                 foreach (var l in r.LogFiles)      
@@ -200,10 +152,10 @@
                                     <p>
                                         @if(Model.CaseFilesModel.VirtualDirectory)
                                         {
-                                            <a target="_blank" href="@Html.Action("LogFileLinkVD","Files", new { id = r.Id, fileName = l.FileName })">@l.FileName</a>    
+                                            <a target="_blank" href="@Html.Action("LogFileLinkVD","Files", new { id = r.Id, fileName = l.FileName })"><i class="icon-file"></i> @l.FileName</a>    
                                         }
                                         else{
-                                            <a href="@Url.Action("DownloadLogFile", new { id = r.Id, fileName = l.FileName })">@l.FileName</a>    
+                                            <a href="@Url.Action("DownloadLogFile", new { id = r.Id, fileName = l.FileName })"><i class="icon-file"></i> @l.FileName</a>    
                                         }
                                     </p>
                                 </div>

@@ -309,11 +309,39 @@ namespace DH.Helpdesk.Web.Controllers
                 new
                 {
                     dateFormat = Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern,
+                    caseSolution.PersonsName,
+                    caseSolution.PersonsPhone,
+                    caseSolution.PersonsCellPhone,
+                    caseSolution.Region_Id,
+                    caseSolution.Department_Id,
+                    caseSolution.OU_Id,
+                    caseSolution.CostCentre,
+                    caseSolution.Place,
+                    caseSolution.UserCode,
+                    UpdateNotifierInformation = caseSolution.UpdateNotifierInformation.ToBool().ToString(),
+                    
+                    caseSolution.IsAbout_ReportedBy,
+                    caseSolution.IsAbout_PersonsName,
+                    caseSolution.IsAbout_PersonsEmail,
+                    caseSolution.IsAbout_PersonsPhone,
+                    caseSolution.IsAbout_PersonsCellPhone,
+                    caseSolution.IsAbout_Region_Id,
+                    caseSolution.IsAbout_Department_Id,
+                    caseSolution.IsAbout_OU_Id,
+                    caseSolution.IsAbout_CostCentre,
+                    caseSolution.IsAbout_Place,
+                    caseSolution.IsAbout_UserCode,
+
+                    caseSolution.System_Id,
+                    caseSolution.Urgency_Id,
+                    caseSolution.Impact_Id,
+                    caseSolution.InventoryLocation,
+                    caseSolution.InventoryNumber,
+                    caseSolution.InventoryType,
                     caseSolution.CaseType_Id,
                     caseSolution.PerformerUser_Id,
                     caseSolution.Category_Id,
-                    caseSolution.ReportedBy,
-                    caseSolution.Department_Id,
+                    caseSolution.ReportedBy,                    
                     NoMailToNotifier = caseSolution.NoMailToNotifier.ToBool(),
                     caseSolution.ProductArea_Id,
                     caseSolution.Caption,
@@ -330,7 +358,19 @@ namespace DH.Helpdesk.Web.Controllers
                     caseSolution.StateSecondary_Id,
                     caseSolution.PersonsEmail,
                     WatchDate = caseSolution.WatchDate.HasValue? caseSolution.WatchDate.Value.ToShortDateString() : string.Empty,
-                    caseSolution.CausingPartId
+                    caseSolution.CausingPartId,
+                    caseSolution.InvoiceNumber,
+                    caseSolution.ReferenceNumber,
+                    
+                    SMS = caseSolution.SMS.ToBool(),
+                    caseSolution.Available,
+                    caseSolution.Cost,
+                    caseSolution.OtherCost,
+                    caseSolution.Currency,
+                    caseSolution.Problem_Id,
+                    PlanDate = caseSolution.PlanDate.HasValue ? caseSolution.PlanDate.Value.ToShortDateString() : string.Empty,
+                    VerifiedDescription = caseSolution.VerifiedDescription,
+                    SolutionRate = caseSolution.SolutionRate
                 },
                     JsonRequestBehavior.AllowGet);
         }
@@ -556,6 +596,27 @@ namespace DH.Helpdesk.Web.Controllers
                                              Text = x.Name,
                                              Value = x.Value
                                          }).ToList();
+
+            List<SelectListItem> isAbout_Regions = null;
+            List<SelectListItem> isAbout_Departments = null;
+            List<SelectListItem> isAbout_OrganizationUnits = null;
+
+            isAbout_Regions = regions;
+
+            isAbout_Departments = this._departmentService.GetActiveDepartmentsBy(curCustomerId, caseSolution.IsAbout_Region_Id)
+                                         .Select(x => new SelectListItem
+                                         {
+                                             Text = x.DepartmentName,
+                                             Value = x.Id.ToString()
+                                         }).ToList();
+
+            isAbout_OrganizationUnits = this._organizationService.GetOrganizationUnits(caseSolution.IsAbout_Department_Id)
+                                         .Select(x => new SelectListItem
+                                         {
+                                             Text = x.Name,
+                                             Value = x.Value
+                                         }).ToList();
+
             var isCreatingNew = caseSolution.Id == 0;
             var performersList = isCreatingNew ?
                                      this._userService.GetAvailablePerformersOrUserId(curCustomerId)
@@ -614,6 +675,12 @@ namespace DH.Helpdesk.Web.Controllers
                 Departments = departments,
                 
                 OUs = organizationUnits,
+
+                IsAbout_Regions = isAbout_Regions,
+
+                IsAbout_Departments = isAbout_Departments,
+
+                IsAbout_OUs = isAbout_OrganizationUnits,
 
                 Systems = this._systemService.GetSystems(curCustomerId).Select(x => new SelectListItem
                 {

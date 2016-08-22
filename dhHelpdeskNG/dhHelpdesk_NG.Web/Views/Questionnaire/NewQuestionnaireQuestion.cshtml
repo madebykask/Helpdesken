@@ -15,7 +15,7 @@
         <div class="pull-left">
             <ul class="secnav">
                 <li>
-                    <input type="submit" value="@Translation.Get("Save", Enums.TranslationSource.TextTranslation)" class="btn" />
+                    <input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn" />
                 </li>
                 <li>
                     <a href="@Url.Action("EditQuestionnaire",new {questionnaireId = Model.QuestionnaireId, languageId = Model.LanguageId})" class="btn">
@@ -42,7 +42,7 @@
                                 <table class="tableform">
                                     <tr>
                                         <td class="span3">
-                                            @Translation.Get("Tal", Enums.TranslationSource.TextTranslation):
+                                            @Translation.Get("Tal", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td class="span9">
                                             @Html.EditorFor(model => model.QuestionNumber)
@@ -51,7 +51,7 @@
                                     </tr>
                                     <tr>
                                         <td class="span3">
-                                            @Translation.Get("Fråga", Enums.TranslationSource.TextTranslation):
+                                            @Translation.Get("Fråga", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td class="span9">
                                             @Html.TextAreaFor(model => model.Question, new { maxlength = "1000", style = "height:100px;" })
@@ -60,7 +60,7 @@
                                     </tr>
                                     <tr>
                                         <td class="span3">
-                                            @Translation.Get("Visa kommentar", Enums.TranslationSource.TextTranslation):
+                                            @Translation.Get("Visa kommentar", Enums.TranslationSource.TextTranslation)
                                         </td>                                        
                                         <td class="checkbox" style="padding-left: 20px">                                        
                                            <input type="checkbox" name="ShowNote" @(Model.ShowNote == 1 ? "checked=checked" : "") value ="1" />                                        
@@ -69,7 +69,7 @@
                                     </tr>                                    
                                     <tr>
                                         <td class="span3">
-                                            @Translation.Get("Text kommentar", Enums.TranslationSource.TextTranslation):
+                                            @Translation.Get("Text kommentar", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td class="span9">                                                                                        
                                             @Html.TextAreaFor(model => model.NoteText, new { maxlength = "1000", style = "height:100px;" })                                            

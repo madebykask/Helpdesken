@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using System.Data;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -71,6 +72,7 @@ namespace DH.Helpdesk.Web.Controllers
         private const string ParentPathDefaultValue = "--";
         private const string ChildCasesHashTab = "childcases-tab";
         private const string _reportFolderName = "StaticReports";
+        private const int MaxTextCharCount = 200;
 
         private readonly ICaseService _caseService;
         private readonly ICaseSearchService _caseSearchService;
@@ -501,6 +503,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
             var caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(f.CustomerId).ToArray();
+            f.MaxTextCharacters = 0;
             m.cases = this._caseSearchService.Search(
                 f,
                 m.caseSettings,
@@ -851,6 +854,7 @@ namespace DH.Helpdesk.Web.Controllers
             CaseRemainingTimeData remainingTimeData;
             CaseAggregateData aggregateData;
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
+            f.MaxTextCharacters = MaxTextCharCount;
             m.cases = this._caseSearchService.Search(
                 f,
                 m.caseSettings,
@@ -1174,8 +1178,8 @@ namespace DH.Helpdesk.Web.Controllers
                                         tmpLog.TextInternal,
                                         logFileStr);
 
-            var extraField = new ExtraFieldCaseHistory { CaseLog = logStr };
-            this._caseService.SaveCaseHistory(c, SessionFacade.CurrentUser.Id, adUser, out errors, string.Empty, extraField);
+            var extraField = new ExtraFieldCaseHistory { CaseLog = logStr };            
+            this._caseService.SaveCaseHistory(c, SessionFacade.CurrentUser.Id, adUser, CreatedByApplications.Helpdesk5, out errors, string.Empty, extraField);
 
             return this.RedirectToAction("edit", "cases", new { id = caseId });
 
@@ -1854,7 +1858,7 @@ namespace DH.Helpdesk.Web.Controllers
                 IDictionary<string, string> errors;
                 string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
                 var extraField = new ExtraFieldCaseHistory { CaseFile = StringTags.Delete + fileName.Trim() };
-                this._caseService.SaveCaseHistory(c, SessionFacade.CurrentUser.Id, adUser, out errors, string.Empty, extraField);
+                this._caseService.SaveCaseHistory(c, SessionFacade.CurrentUser.Id, adUser, CreatedByApplications.Helpdesk5, out errors, string.Empty, extraField);
             }
         }
 
@@ -1882,7 +1886,7 @@ namespace DH.Helpdesk.Web.Controllers
                 if (c != null)
                 {
                     var extraField = new ExtraFieldCaseHistory { LogFile = StringTags.Delete + fileName.Trim() };
-                    this._caseService.SaveCaseHistory(c, SessionFacade.CurrentUser.Id, adUser, out errors, string.Empty, extraField);
+                    this._caseService.SaveCaseHistory(c, SessionFacade.CurrentUser.Id, adUser, CreatedByApplications.Helpdesk5, out errors, string.Empty, extraField);
                 }
             }
         }
@@ -1997,7 +2001,7 @@ namespace DH.Helpdesk.Web.Controllers
             string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
             if (SessionFacade.CurrentUser != null)
                 if (SessionFacade.CurrentUser.ActivateCasePermission == 1)
-                    this._caseService.Activate(id, SessionFacade.CurrentUser.Id, adUser, out errors);
+                    this._caseService.Activate(id, SessionFacade.CurrentUser.Id, adUser, CreatedByApplications.Helpdesk5, out errors);
 
             return this.RedirectToAction("edit", "cases", new { id, redirectFrom = "save", backUrl });
         }
@@ -2540,17 +2544,7 @@ namespace DH.Helpdesk.Web.Controllers
                         case_.Department_Id = oldCase.Department_Id;
                         case_.OU_Id = oldCase.OU_Id;
                         case_.UserCode = oldCase.UserCode;
-                    }
-
-                    if (cu.PriorityPermission == 0)
-                    {
-                        case_.Priority_Id = oldCase.Priority_Id;
-                    }
-
-                    //if (cu.StateSecondaryPermission == 0)
-                    //{
-                    //    case_.StateSecondary_Id = oldCase.StateSecondary_Id;
-                    //}
+                    }                    
                 }
 
                 if (oldCase.StateSecondary_Id.HasValue)
@@ -2592,6 +2586,7 @@ namespace DH.Helpdesk.Web.Controllers
                 #endregion
             }
 
+            var leadTime = 0; 
             if (caseLog != null && caseLog.FinishingType > 0)
             {
                 if (caseLog.FinishingDate == null)
@@ -2604,7 +2599,7 @@ namespace DH.Helpdesk.Web.Controllers
                     if (caseLog.FinishingDate.Value.ToShortDateString() == DateTime.Today.ToShortDateString())
                     {
                         caseLog.FinishingDate = utcNow;
-                    } 
+                    }
                     else
                     {
                         caseLog.FinishingDate = DateTime.SpecifyKind(caseLog.FinishingDate.Value, DateTimeKind.Local).ToUniversalTime();
@@ -2625,15 +2620,36 @@ namespace DH.Helpdesk.Web.Controllers
                 }
 
                 var workTimeCalc = workTimeCalcFactory.Build(case_.RegTime, case_.FinishingDate.Value, deptIds);
-                case_.LeadTime = workTimeCalc.CalculateWorkTime(
+                leadTime = workTimeCalc.CalculateWorkTime(
                     case_.RegTime,
                     case_.FinishingDate.Value.ToUniversalTime(),
+                    case_.Department_Id) - case_.ExternalTime;
+
+                case_.LeadTime = leadTime;
+            }
+            else
+            {                
+                var workTimeCalcFactory = new WorkTimeCalculatorFactory(
+                    ManualDependencyResolver.Get<IHolidayService>(),
+                    curCustomer.WorkingDayStart,
+                    curCustomer.WorkingDayEnd,
+                    TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
+                int[] deptIds = null;
+                if (case_.Department_Id.HasValue)
+                {
+                    deptIds = new int[] { case_.Department_Id.Value };
+                }
+
+                var workTimeCalc = workTimeCalcFactory.Build(case_.RegTime, utcNow, deptIds);
+                leadTime = workTimeCalc.CalculateWorkTime(
+                    case_.RegTime,
+                    utcNow.ToUniversalTime(),
                     case_.Department_Id) - case_.ExternalTime;
             }
 
             var childCasesIds = this._caseService.GetChildCasesFor(case_.Id).Where(it => !it.ClosingDate.HasValue).Select(it => it.Id).ToArray();
 
-
+            var ei = new CaseExtraInfo() { CreatedByApp = CreatedByApplications.Helpdesk5, LeadTimeForNow = leadTime };
             // save case and case history
             int caseHistoryId = this._caseService.SaveCase(
                         case_,
@@ -2641,6 +2657,7 @@ namespace DH.Helpdesk.Web.Controllers
                         caseMailSetting,
                         SessionFacade.CurrentUser.Id,
                         this.User.Identity.Name,
+                        ei,
                         out errors,
                         parentCase);                       
             
@@ -2769,7 +2786,8 @@ namespace DH.Helpdesk.Web.Controllers
                 var c = this._caseService.GetCaseById(caseLog.CaseId);
                 // save case and case history
                 c.FinishingDescription = @case.FinishingDescription;
-                int caseHistoryId = this._caseService.SaveCase(c, caseLog, null, SessionFacade.CurrentUser.Id, this.User.Identity.Name, out errors);
+                var ei = new CaseExtraInfo() {CreatedByApp = CreatedByApplications.Helpdesk5, LeadTimeForNow = 0};
+                int caseHistoryId = this._caseService.SaveCase(c, caseLog, null, SessionFacade.CurrentUser.Id, this.User.Identity.Name, ei, out errors);
                 caseLog.CaseHistoryId = caseHistoryId;
             }
 
@@ -3516,7 +3534,7 @@ namespace DH.Helpdesk.Web.Controllers
                             case "productarea_id":
                                 if (productareaCache.ContainsKey(c.Id))
                                 {
-                                    var names = this._productAreaService.GetParentPath(c.Id, customerId).Select(name => Translation.GetCoreTextTranslation(name));
+                                    var names = this._productAreaService.GetParentPath(c.Id, customerId).Select(name => Translation.GetMasterDataTranslation(name));
                                     c.StringValue = string.Join(" - ", names);
                                 }
 
@@ -3605,6 +3623,8 @@ namespace DH.Helpdesk.Web.Controllers
             var isCreateNewCase = caseId == 0;
             m.CaseLock = caseLocked;
             m.MailTemplates = this._mailTemplateService.GetCustomMailTemplates(customerId).ToList();
+            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
+
             if (!isCreateNewCase)
             {
                 var markCaseAsRead = string.IsNullOrWhiteSpace(redirectFrom);
@@ -3616,8 +3636,9 @@ namespace DH.Helpdesk.Web.Controllers
 
                 customerId = customerId == 0 ? m.case_.Customer_Id : customerId;
                 //SessionFacade.CurrentCaseLanguageId = m.case_.RegLanguage_Id;
-
-                m.ChangeTime = m.case_.ChangeTime;
+                
+                var userLocal_ChangeTime = TimeZoneInfo.ConvertTimeFromUtc(m.case_.ChangeTime, userTimeZone);
+                m.ChangeTime = userLocal_ChangeTime;
             }
 
             var customerUserSetting = this._customerUserService.GetCustomerSettings(customerId, userId);
@@ -3626,7 +3647,7 @@ namespace DH.Helpdesk.Web.Controllers
                 throw new ArgumentException(string.Format("No customer settings for this customer '{0}' and user '{1}'", customerId, userId));
             }
 
-            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
+            
 
             var case_ = m.case_;
             var customer = this._customerService.GetCustomer(customerId);
@@ -3995,6 +4016,25 @@ namespace DH.Helpdesk.Web.Controllers
                         m.case_.OtherCost = caseTemplate.OtherCost;
                         m.case_.Available = caseTemplate.Available;
                         m.case_.ContactBeforeAction = caseTemplate.ContactBeforeAction;
+                        m.case_.CostCentre = caseTemplate.CostCentre;
+                        m.case_.PersonsCellphone = caseTemplate.PersonsCellPhone;
+
+                        if (m.case_.IsAbout == null)
+                            m.case_.IsAbout = new CaseIsAboutEntity();
+
+                        m.case_.IsAbout.Id = 0;
+                        m.case_.IsAbout.ReportedBy = caseTemplate.IsAbout_ReportedBy;
+                        m.case_.IsAbout.Person_Name = caseTemplate.IsAbout_PersonsName;
+                        m.case_.IsAbout.Person_Email = caseTemplate.IsAbout_PersonsEmail;
+                        m.case_.IsAbout.Person_Phone = caseTemplate.IsAbout_PersonsPhone;
+                        m.case_.IsAbout.Person_Cellphone = caseTemplate.IsAbout_PersonsCellPhone;
+                        m.case_.IsAbout.Region_Id = caseTemplate.IsAbout_Region_Id;
+                        m.case_.IsAbout.Department_Id = caseTemplate.IsAbout_Department_Id;
+                        m.case_.IsAbout.OU_Id = caseTemplate.IsAbout_OU_Id;
+                        m.case_.IsAbout.CostCentre = caseTemplate.IsAbout_CostCentre;
+                        m.case_.IsAbout.Place = caseTemplate.IsAbout_Place;
+                        m.case_.IsAbout.UserCode = caseTemplate.UserCode;
+
                         if (caseTemplate.RegistrationSource.HasValue)
                         {
                             m.CustomerRegistrationSourceId = caseTemplate.RegistrationSource.Value;
@@ -4031,6 +4071,7 @@ namespace DH.Helpdesk.Web.Controllers
                         m.case_.FinishingDescription = caseTemplate.FinishingDescription;
                         m.case_.PlanDate = caseTemplate.PlanDate;
                         m.CaseTemplateName = caseTemplate.Name;
+                        m.case_.SMS = caseTemplate.SMS;
                         // This is used for hide fields(which are not in casetemplate) in new case input
                         m.templateistrue = templateistrue;
                         var finishingCauses = this._finishingCauseService.GetFinishingCauseInfos(customerId);
@@ -4097,7 +4138,7 @@ namespace DH.Helpdesk.Web.Controllers
                 if (p != null)
                 {
                     var names =
-                        this._productAreaService.GetParentPath(p.Id, customerId).Select(name => Translation.GetCoreTextTranslation(name));
+                        this._productAreaService.GetParentPath(p.Id, customerId).Select(name => Translation.GetMasterDataTranslation(name));
                     m.ParantPath_ProductArea = string.Join(" - ", names);
                     if (p.SubProductAreas != null && p.SubProductAreas.Where(s => s.IsActive != 0).ToList().Count > 0)
                     {
@@ -4815,9 +4856,20 @@ namespace DH.Helpdesk.Web.Controllers
             var reportSelectedFilter = new ReportSelectedFilter();
             reportSelectedFilter.SelectedCustomers.Add(SessionFacade.CurrentCustomer.Id);
 
+            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
+            var localNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, userTimeZone);
+
+            var ad = userTimeZone.GetAdjustmentRules();            
+
+            //TimeZone.CurrentTimeZone.
+            
+            var userTimeOffset = Convert.ToInt32((DateTime.UtcNow - localNow).TotalMinutes);
+            userTimeOffset = userTimeOffset == 0 ? 0 : -userTimeOffset;
+ 
             reportSelectedFilter.GeneralParameter.Add(new GeneralParameter("@CaseId", caseId));
             reportSelectedFilter.GeneralParameter.Add(new GeneralParameter("@LanguageId", SessionFacade.CurrentLanguageId));
             reportSelectedFilter.GeneralParameter.Add(new GeneralParameter("@UserId", SessionFacade.CurrentUser.Id));
+            reportSelectedFilter.GeneralParameter.Add(new GeneralParameter("@UserTimeOffset", userTimeOffset));
 
             var reportData = _ReportServiceService.GetReportData(reportName, reportSelectedFilter, SessionFacade.CurrentUser.Id, SessionFacade.CurrentCustomer.Id);
 
@@ -4829,8 +4881,21 @@ namespace DH.Helpdesk.Web.Controllers
             }
             else
             {
+                var reportDataModel = new List<ReportDataModel>();
+                if (reportData.DataSets[0].DataSet.Rows.Count > 0)
+                {
+                    foreach (DataRow r in reportData.DataSets[0].DataSet.Rows)
+                    {
+                        var row = new ReportDataModel(int.Parse(r.ItemArray[0].ToString()), r.ItemArray[1].ToString(), r.ItemArray[2].ToString(),
+                                                      r.ItemArray[3].ToString(), int.Parse(r.ItemArray[4].ToString()), r.ItemArray[5].ToString());                         
+                        reportDataModel.Add(row);
+                    }
+                }
+
                 ReportViewer reportViewer = new ReportViewer();
-                var basePath = Request.MapPath(Request.ApplicationPath);
+
+                //Use Html view by data 
+                /*var basePath = Request.MapPath(Request.ApplicationPath);
                 var fileLocation = Path.Combine(_reportFolderName, string.Format("{0}.rdl", reportData.ReportName));
                 var reportFile = Path.Combine(basePath, fileLocation);
                 
@@ -4850,7 +4915,8 @@ namespace DH.Helpdesk.Web.Controllers
                 foreach (var dataSet in reportData.DataSets)
                     reportViewer.LocalReport.DataSources.Add(new ReportDataSource(dataSet.DataSetName, dataSet.DataSet));
 
-                model.Report = reportViewer;
+                model.Report = reportViewer;*/
+                model.ReportData = reportDataModel;
             }
 
             return model;
@@ -4901,7 +4967,7 @@ namespace DH.Helpdesk.Web.Controllers
             
             ret = parentRet.OrderBy(p => p.Text).Union(childrenRet.OrderBy(c => c.Text)).ToList();
 
-            return ret;
+            return ret.GroupBy(r => r.Value).Select(g => g.First()).ToList();
 
         }
         #endregion
