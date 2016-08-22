@@ -55,7 +55,7 @@
                                     <td style="width: 800px;" class="@row.LineType">                                    
                                         @foreach (var file in files.Where(f=> !string.IsNullOrEmpty(f)).ToList())
                                         {
-                                             <p> <img src="@Url.Content("~/Content/icons/case.png")" style="width:14px;height:14px;"> @file.ForHtmlView() </p>
+                                             <p> <img src="@Url.Content("~/Content/icons/ico-doc-black.png")" > @file.ForHtmlView() </p>
                                         }
                                     </td>
                                 }
