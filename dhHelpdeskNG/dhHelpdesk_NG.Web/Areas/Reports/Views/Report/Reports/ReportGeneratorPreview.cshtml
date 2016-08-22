@@ -3,10 +3,10 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @model DH.Helpdesk.Web.Areas.Reports.Models.Reports.ReportGenerator.ReportGeneratorAggregateModel
 
-@Translation.Get("Poster i sökresultat"):
-@Model.CasesFound
 <div>
-    <input type="hidden" id="showrun" value="@((Model.CasesFound <= 1000).ToJavaScriptBool())"/>
+    @Translation.Get("Poster i sökresultat"): @Model.CasesFound
+
+    <input type="hidden" id="showrun" value='@((Model.CasesFound <= 1000).ToJavaScriptBool())'/>
     @foreach (var item in Model.Aggregation.OrderBy(x => x.Key))
     {
         <div>
