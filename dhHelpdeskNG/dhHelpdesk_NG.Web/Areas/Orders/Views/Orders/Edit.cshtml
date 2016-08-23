@@ -12,16 +12,16 @@
             <li>
                 @Html.ActionLink(Translation.Get("Spara"), null, null, new { id = "btnSave", @class = "btn" })
             </li>
+            <li>
+                @Html.ActionLink(Translation.Get("Ta bort"), "Delete", "Orders", new { id = Model.Id }, 
+                    new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Are you sure?") })
+            </li>
         }
         <li>
             @Html.ActionLink(Translation.Get("Avbryt"), "Index", "Orders", null, new { @class = "btn" })
         </li>
         @if (Model.UserHasAdminOrderPermission)
         {
-            <li>
-                @Html.ActionLink(Translation.Get("Ta bort"), "Delete", "Orders", new { id = Model.Id }, 
-                    new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Are you sure?") })
-            </li>
         
             <li class="secspace"></li>      
             <li>
