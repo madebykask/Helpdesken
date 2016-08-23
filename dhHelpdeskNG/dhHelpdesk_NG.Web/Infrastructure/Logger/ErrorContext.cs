@@ -44,7 +44,7 @@
             res.AppendLine(this.ErrorId.ToString());
             res.AppendLine();
             res.AppendLine();
-            res.AppendLine(String.Format("[0]{1}", this.HttpContext.Request.HttpMethod, this.HttpContext.Request.Url.AbsoluteUri));
+            res.AppendLine(String.Format("[{0}]{1}", this.HttpContext.Request.HttpMethod, this.HttpContext.Request.Url.AbsoluteUri));
             res.AppendLine();
             res.AppendLine(this.Exception.ToString());
             res.AppendLine(LineSeparator);
