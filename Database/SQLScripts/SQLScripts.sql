@@ -1618,6 +1618,12 @@ GO
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'DefaultEmailLogDestination' and sysobjects.name = N'tblSettings')
 	ALTER TABLE tblSettings ADD DefaultEmailLogDestination int NOT NULL Default(0)
 GO
+
+-- New field in tblSettings
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'TimeZone_offset' and sysobjects.name = N'tblSettings')
+	ALTER TABLE tblSettings ADD TimeZone_offset int NOT NULL Default(0)
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.25'
 

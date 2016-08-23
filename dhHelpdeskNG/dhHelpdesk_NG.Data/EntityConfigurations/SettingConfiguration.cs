@@ -129,6 +129,7 @@
             this.Property(x => x.FileIndexingServerName).IsOptional().HasMaxLength(50);
             this.Property(x => x.FileIndexingCatalogName).IsOptional().HasMaxLength(50);
             this.Property(x => x.DefaultEmailLogDestination).IsRequired();
+            this.Property(x => x.TimeZone_offset).IsRequired();
 
             this.ToTable("tblsettings");
         }

@@ -122,7 +122,7 @@ namespace DH.Helpdesk.Domain
         public string FileIndexingServerName { get; set; }
         public string FileIndexingCatalogName { get; set; }
         public int DefaultEmailLogDestination { get; set; }
-
+        public int TimeZone_offset { get; set; }
 
         public virtual OrderState CloseOrderState { get; set; }
         /// <summary>

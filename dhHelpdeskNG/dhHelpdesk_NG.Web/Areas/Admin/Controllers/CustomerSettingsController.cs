@@ -116,6 +116,7 @@
             vmodel.Setting.SMSEMailDomainUserName = setting.SMSEMailDomainUserName;
             vmodel.Setting.EMailRegistrationMailID = setting.EMailRegistrationMailID;
             vmodel.Setting.DefaultEmailLogDestination = setting.DefaultEmailLogDestination;
+            vmodel.Setting.TimeZone_offset = setting.TimeZone_offset;
 
             if (customerToSave == null)
                 throw new Exception("No customer found...");
