@@ -4890,6 +4890,22 @@ If not exists (select * from tblTextTranslation where Text_Id = 1665 and Languag
             insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1665, 'Time settings', 2)
 GO
 
+If not exists (select * from tblText where Id = 1666)
+            insert into tblText (Id, Textstring) VALUES (1666, 'Löst i tid')
+GO
+
+If not exists (select * from tblTextTranslation where Text_Id = 1666 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1666, 'Was solved in time', 2)
+GO
+
+If not exists (select * from tblText where Id = 1667)
+            insert into tblText (Id, Textstring) VALUES (1667, 'Senaste understatus med tidsräkning')
+GO
+
+If not exists (select * from tblTextTranslation where Text_Id = 1667 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1667, 'Latest counting sub status', 2)
+GO
+
 -- // Invoice Translations 
 
 
