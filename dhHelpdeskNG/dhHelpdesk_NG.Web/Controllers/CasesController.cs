@@ -2525,8 +2525,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             DHDomain.Case oldCase = new DHDomain.Case();
             if (edit)
-            {
-                
+            {                
                 #region Editing existing case
                 oldCase = this._caseService.GetDetachedCaseById(case_.Id);
                 var cu = this._customerUserService.GetCustomerSettings(case_.Customer_Id, SessionFacade.CurrentUser.Id);
@@ -2586,6 +2585,8 @@ namespace DH.Helpdesk.Web.Controllers
                 #endregion
             }
 
+            case_.LatestSLACountDate = CalculateLatestSLACountDate(oldCase.StateSecondary_Id, case_.StateSecondary_Id, oldCase.LatestSLACountDate);
+            
             var leadTime = 0; 
             if (caseLog != null && caseLog.FinishingType > 0)
             {
@@ -2746,7 +2747,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var basePath = _masterDataService.GetFilePath(case_.Customer_Id);
             // save case files
-            if (!edit)
+            if (!edit) 
             {
                 var temporaryFiles = this.userTemporaryFilesStorage.FindFiles(case_.CaseGUID.ToString(), ModuleName.Cases);
                 var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, case_.Id, this.workContext.User.UserId)).ToList();
@@ -2770,6 +2771,49 @@ namespace DH.Helpdesk.Web.Controllers
             this.userTemporaryFilesStorage.ResetCacheForObject(caseLog.LogGuid.ToString());
 
             return case_.Id;
+        }
+
+        private DateTime? CalculateLatestSLACountDate(int? oldSubStateId, int? newSubStateId, DateTime? oldSLADate)
+        {
+            DateTime? ret = null;
+            /* -1: Blank | 0: Non-Counting | 1: Counting */
+            var oldSubStateMode = -1;
+            var newSubStateMode = -1;
+            
+            if (oldSubStateId.HasValue)
+            {
+                var oldSubStatus = _stateSecondaryService.GetStateSecondary(oldSubStateId.Value);
+                if (oldSubStatus != null)
+                    oldSubStateMode = oldSubStatus.IncludeInCaseStatistics == 0 ? 0 : 1;
+            }
+
+            if (newSubStateId.HasValue)
+            {
+                var newSubStatus = _stateSecondaryService.GetStateSecondary(newSubStateId.Value);
+                if (newSubStatus != null)
+                    newSubStateMode = newSubStatus.IncludeInCaseStatistics == 0 ? 0 : 1;
+            }
+
+            if (oldSubStateMode == -1 && newSubStateMode == -1)
+                ret = null;
+            else if (oldSubStateMode == -1 && newSubStateMode ==  1)
+                ret = null;
+            else if (oldSubStateMode ==  0 && newSubStateMode ==  1)
+                ret = null;
+            else if (oldSubStateMode ==  0 && newSubStateMode == -1)
+                ret = null;            
+            else if (oldSubStateMode == -1 && newSubStateMode ==  0)
+                ret = DateTime.UtcNow;
+            else if (oldSubStateMode ==  1 && newSubStateMode ==  0)
+                ret = DateTime.UtcNow;
+            else if (oldSubStateMode ==  1 && newSubStateMode == -1)
+                ret = oldSLADate;
+            else if (oldSubStateMode ==  1 && newSubStateMode ==  1)
+                ret = oldSLADate;
+            else if (oldSubStateMode ==  0 && newSubStateMode ==  0)
+                ret = oldSLADate;
+           
+            return ret;
         }
 
         private void UpdateCaseLogForCase(Case @case, CaseLog caseLog)

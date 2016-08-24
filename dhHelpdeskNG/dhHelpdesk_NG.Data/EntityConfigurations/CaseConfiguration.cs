@@ -196,6 +196,8 @@
                 .HasForeignKey(c => c.RegistrationSourceCustomer_Id)
                 .WillCascadeOnDelete(true);
 
+            this.Property(x => x.LatestSLACountDate).IsOptional();
+
             this.ToTable("tblcase");
         }
     }

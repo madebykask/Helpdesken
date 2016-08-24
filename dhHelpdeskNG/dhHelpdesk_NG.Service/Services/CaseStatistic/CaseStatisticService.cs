@@ -13,10 +13,12 @@
     public class CaseStatisticService
     {
         private readonly IUnitOfWorkFactory unitOfWorkFactory;
+        private readonly ISettingService _settingService;
 
-        public CaseStatisticService(IUnitOfWorkFactory unitOfWorkFactory)
+        public CaseStatisticService(IUnitOfWorkFactory unitOfWorkFactory, ISettingService settingService)
         {
             this.unitOfWorkFactory = unitOfWorkFactory;
+            this._settingService = settingService;
         }
         
         public static int? ResolveIsSolvedInTime(DateTime? watchDate, DateTime finishDate, int SLA, int leadTime)
@@ -80,12 +82,17 @@
         }
 
         private void RefreshStatForCase(CaseStatistic stat, Case @case, int SLA)
-        {
+        {            
             if (@case.FinishingDate.HasValue)
             {
+                var baseCalculationTime = @case.FinishingDate.Value;
+                var cs = _settingService.GetCustomerSetting(@case.Customer_Id);
+                if (cs != null && cs.CalcSolvedInTimeByFinishingDate == 0 && @case.LatestSLACountDate.HasValue)
+                    baseCalculationTime = @case.LatestSLACountDate.Value;
+
                 stat.WasSolvedInTime = CaseStatisticService.ResolveIsSolvedInTime(
                     @case.WatchDate,
-                    @case.FinishingDate.Value,
+                    baseCalculationTime,
                     SLA,
                     @case.LeadTime);
             }
