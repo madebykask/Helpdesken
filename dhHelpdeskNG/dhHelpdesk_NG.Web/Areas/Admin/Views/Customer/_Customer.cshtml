@@ -273,11 +273,11 @@
 <h4>@Translation.Get("Tidsinställningar", Enums.TranslationSource.TextTranslation)</h4>
 <div class="formContainer">
     <table class="tableform">
-        <tr class="pull-left">
+        <tr>
             <td class="span3">
                 @Translation.Get("Arbetstid", Enums.TranslationSource.TextTranslation)
             </td>
-            <td class="span9">
+            <td>
                 @Html.TextBoxFor(model => model.Customer.WorkingDayStart, new { style = "width: 40px;" }) @Translation.Get("-", Enums.TranslationSource.TextTranslation) @Html.TextBoxFor(model => model.Customer.WorkingDayEnd, new { style = "width: 40px;" })    
             </td>
         </tr>
@@ -285,7 +285,7 @@
             <td class="span3">
                 @Translation.Get("Löst i tid", Enums.TranslationSource.TextTranslation) 
             </td>
-            <td class="span9">
+            <td>
                 <input type="checkbox" name="setting.CalcSolvedInTimeByFinishingDate" @(Model.Setting.CalcSolvedInTimeByFinishingDate == 1 ? "checked=checked" : "") value="1"/>
                 <input type="hidden" name="setting.CalcSolvedInTimeByFinishingDate" value="0" />
                 &nbsp; @Translation.Get("Senaste understatus med tidsräkning", Enums.TranslationSource.TextTranslation)
