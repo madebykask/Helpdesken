@@ -1562,7 +1562,7 @@ GO
 
 -- New field in tblSettings
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CalcSolvedInTimeByFinishingDate' and sysobjects.name = N'tblSettings')
-	ALTER TABLE tblSettings ADD CalcSolvedInTimeByFinishingDate int NOT NULL Default(1)
+	ALTER TABLE tblSettings ADD CalcSolvedInTimeByFinishingDate int NOT NULL Default(0)
 GO
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.25'
