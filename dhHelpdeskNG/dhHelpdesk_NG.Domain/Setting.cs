@@ -123,6 +123,7 @@ namespace DH.Helpdesk.Domain
         public string FileIndexingCatalogName { get; set; }
         public int DefaultEmailLogDestination { get; set; }
         public int CalcSolvedInTimeByFinishingDate { get; set; }
+        public int TimeZone_offset { get; set; }
 
 
         public virtual OrderState CloseOrderState { get; set; }

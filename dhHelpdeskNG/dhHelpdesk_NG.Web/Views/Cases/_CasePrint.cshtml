@@ -45,28 +45,26 @@
                                 </td>*@
 
                                 <td style="width: 250px; margin-left:20px;" class="textbold @row.LineType">
-                                    @row.FieldCaption
-                                    @*@if (row.LineType == ReportLineTypes.Log && row.FieldName.ToLower() == "lognote")
-                                    {
-                                        @row.FieldValue.Replace(Environment.NewLine, tempNewLine).RemoveHTMLTags().Replace(tempNewLine, Environment.NewLine).ForHtmlView()
-                                    }
-                                    else
-                                    {
-                                        @row.FieldCaption
-                                    }*@
+                                    @row.FieldCaption                                  
                                 </td>
 
-                                <td style="width: 800px;" class="@row.LineType">                                    
-                                    @row.FieldValue.Replace(Environment.NewLine, tempNewLine).RemoveHTMLTags().Replace(tempNewLine, Environment.NewLine).ForHtmlView()
-                                    @*@if (row.LineType == ReportLineTypes.Log && row.FieldName.ToLower() == "lognote")
-                                    {
-                                        <p> &nbsp; </p>
-                                    }
-                                    else
-                                    {
+                                @if (row.LineType == ReportLineTypes.File)
+                                {
+                                    var filesStr = row.FieldValue.Replace(Environment.NewLine, tempNewLine).RemoveHTMLTags();
+                                    var files = filesStr.Split(new string[] { tempNewLine }, StringSplitOptions.None);
+                                    <td style="width: 800px;" class="@row.LineType">                                    
+                                        @foreach (var file in files.Where(f=> !string.IsNullOrEmpty(f)).ToList())
+                                        {
+                                             <p> <img src="@Url.Content("~/Content/icons/ico-doc-black.png")" > @file.ForHtmlView() </p>
+                                        }
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td style="width: 800px;max-width:400px;word-wrap: break-word;line-height:13px;" class="@row.LineType">                                    
                                         @row.FieldValue.Replace(Environment.NewLine, tempNewLine).RemoveHTMLTags().Replace(tempNewLine, Environment.NewLine).ForHtmlView()
-                                    }*@
-                                </td>
+                                    </td>
+                                }
                             </tr>                            
                         }
                     </table>

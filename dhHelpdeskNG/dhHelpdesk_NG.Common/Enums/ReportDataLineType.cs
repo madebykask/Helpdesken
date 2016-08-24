@@ -8,5 +8,6 @@
         public const string Row = "R";
         public const string SelfService = "S";
         public const string Log = "L";
+        public const string File = "F";
     }
 }
