@@ -4882,6 +4882,13 @@ If not exists (select * from tblTextTranslation where Text_Id = 1664 and Languag
             insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1664, 'Extended case infomation', 2)
 GO
 
+If not exists (select * from tblText where Id = 1665)
+            insert into tblText (Id, Textstring) VALUES (1665, 'Tidsinställningar')
+GO
+
+If not exists (select * from tblTextTranslation where Text_Id = 1665 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1665, 'Time settings', 2)
+GO
 
 -- // Invoice Translations 
 
