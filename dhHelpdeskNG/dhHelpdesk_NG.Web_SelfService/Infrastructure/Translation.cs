@@ -6,6 +6,14 @@
 
     public static class Translation
     {
+        public static string GetForJS(string translate, Enums.TranslationSource source = Enums.TranslationSource.TextTranslation, int customerId = 0)
+        {
+            translate = Get(translate, SessionFacade.CurrentLanguageId, source, customerId);
+            translate = translate.Replace("'", "\\'");
+            translate = translate.Replace("\"", "\\'");
+            return translate;
+        }
+
         public static string Get(string translate, Enums.TranslationSource source = Enums.TranslationSource.TextTranslation, int customerId = 0)
         {
             if (source == Enums.TranslationSource.TextTranslation)
