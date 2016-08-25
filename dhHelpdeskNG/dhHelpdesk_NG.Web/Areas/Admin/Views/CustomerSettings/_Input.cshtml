@@ -348,7 +348,7 @@
                                         @Translation.Get("Tillåt endast komplexa lösenord", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td><label class="checkbox">
-                                        <input type="checkbox" name="setting.ComplexPassword" @(Model.Setting.ComplexPassword == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="checkbox" name="setting.ComplexPassword" id="setting_ComplexPassword" @(Model.Setting.ComplexPassword == 1 ? "checked=checked" : "") value="1" onclick="disablePasswordLength($(this))"/>
                                         <input type="hidden" name="setting.ComplexPassword" value="0" />
                                         </label>
                                     </td>
@@ -513,5 +513,15 @@
                 //console.log("toast is closed ...");
             }
         });
+    }
+
+    function disablePasswordLength(t) {
+        if (t.is(':checked')) {
+            $("#Setting_MinPasswordLength :selected").remove();
+            $("#Setting_MinPasswordLength").prop("disabled", true);
+        } else {
+            $("#Setting_MinPasswordLength").prop("disabled", false);
+            $("#Setting_MinPasswordLength").val("0");
+        }
     }
 </script>

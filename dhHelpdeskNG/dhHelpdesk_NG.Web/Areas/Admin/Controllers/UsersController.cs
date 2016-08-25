@@ -31,7 +31,8 @@
         private readonly IUserService _userService;
         private readonly IWorkingGroupService _workingGroupService;
         private readonly ICaseSettingsService _caseSettingsService;
-        private readonly ICaseLockService _caseLockService;        
+        private readonly ICaseLockService _caseLockService;
+        private readonly ISettingService _settingService;
 
         public UsersController(
             IAccountActivityService accountActivityService,
@@ -45,7 +46,8 @@
             IWorkingGroupService workingGroupService,
             ICaseSettingsService caseSettingsService,
             ICaseLockService caseLockService,
-            IMasterDataService masterDataService)
+            IMasterDataService masterDataService,
+            ISettingService settingService)
             : base(masterDataService)
         {
             this._accountActivityService = accountActivityService;
@@ -59,6 +61,7 @@
             this._workingGroupService = workingGroupService;
             this._caseSettingsService = caseSettingsService;
             this._caseLockService = caseLockService;
+            this._settingService = settingService;
         }
 
         [CustomAuthorize(Roles = "3,4")]
@@ -863,7 +866,7 @@
                 if (!aasSelected.Contains(aa))
                     aasAvailable.Add(aa);
             }
-            
+           
             var customersSelected = user.Cs ?? new List<Customer>();
             var selectedCustomersHash = customersSelected.ToDictionary(it => it.Id, it => true);
             var customersAvailable = this.GetAvaliableCustomersFor(user)
@@ -871,7 +874,7 @@
                 .OrderBy(it => it.Name);
             var otsSelected = user.OTs ?? new List<OrderType>();
             var otsAvailable = new List<OrderType>();
-
+            
             foreach (var ot in this._orderTypeService.GetOrderTypes(SessionFacade.CurrentCustomer.Id))
             {
                 if (!otsSelected.Contains(ot))
@@ -1081,6 +1084,14 @@
             {
                 model.OrderP1 = 0;
                 model.OrderP2 = 0;
+            }
+
+            // Edit mode
+            if (user.Id > 0)
+            {
+                var userCustomerSetting = this._settingService.GetCustomerSetting(user.Customer_Id);
+                model.UserCustomerMinPassWordLength = userCustomerSetting.MinPasswordLength;
+                model.CustomerComplexPassword = userCustomerSetting.ComplexPassword;
             }
 
             #endregion
