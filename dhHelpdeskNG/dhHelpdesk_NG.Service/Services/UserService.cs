@@ -813,7 +813,7 @@
                 if (customerSetting.ComplexPassword != 0)
                 {
                     if (!PasswordHelper.IsValid(user.Password))
-                        errors.Add("NewPassWord", "Lösenord är inte giltigt. Minst 8 tecken, varav en stor bokstav, en liten bokstav och en siffra eller ett special tecken.");
+                        errors.Add("NewPassWord", "Lösenord är inte giltigt. Minst 8 tecken, varav en stor bokstav, en liten bokstav och en siffra eller ett special tecken (!@#=$&?*).");
                 }
                 else if (user.Password.Length < MinPasswordLength)
                     errors.Add("NewPassWord", "Lösenord är inte giltigt. Minst antal tecken är: " + MinPasswordLength);
