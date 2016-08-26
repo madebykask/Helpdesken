@@ -4922,6 +4922,29 @@ If not exists (select * from tblTextTranslation where Text_Id = 1669 and Languag
             insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1669, 'Password is not valid. Requirements are 1 upper case letter, 1 lower case letter, 1 number or 1 special character (!@#=$&?*) and at least 8 characters in length.', 2)
 GO
 
+If not exists (select * from tblText where Id = 1670)
+            insert into tblText (Id, Textstring) VALUES (1670, 'Ersätt alltid befintliga värden')
+GO
+
+If not exists (select * from tblTextTranslation where Text_Id = 1670 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1670, 'Always replace values', 2)
+GO
+
+If not exists (select * from tblText where Id = 1671)
+            insert into tblText (Id, Textstring) VALUES (1671, 'Visa på ärendeöversikten')
+GO
+
+If not exists (select * from tblTextTranslation where Text_Id = 1671 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1671, 'Show on caseoverview', 2)
+GO
+
+If not exists (select * from tblText where Id = 1672)
+            insert into tblText (Id, Textstring) VALUES (1672, 'Visa på ärende')
+GO
+
+If not exists (select * from tblTextTranslation where Text_Id = 1672 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1672, 'Show inside case', 2)
+GO
 -- // Invoice Translations 
 
 
