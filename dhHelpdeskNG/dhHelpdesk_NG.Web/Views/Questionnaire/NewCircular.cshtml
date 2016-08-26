@@ -81,124 +81,46 @@
 
                                     </table>
 
-                                    <table>
+                                   <table>
                                         <tr>
-                                            <td class="span12">
+                                            <td class="span3">
                                                 @Translation.Get("Avdelning")
                                             </td>
-                                            <td class="span1">
-                                                @Translation.Get("Tillgängliga")
-                                            </td>
-                                            <td class="span1"></td>
-                                            <td class="span1">
-                                                @Translation.Get("Valda")
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td>
-                                                @Html.ListBox("DPsAvailable", Model.AvailableDepartments, new { style = "width: 340px; height: 100px" })
-
-                                            </td>
-                                            <td>
-                                                <div style="text-align: center;">
-                                                    <input type="button" value="&gt;" id="addDPs" class="btn" />
-                                                    <input type="button" value="&lt;" id="removeDPs" class="btn" />
-                                                </div>
-                                            </td>
-                                            <td>
-                                                @Html.ListBox("SelectedDepartments", Model.SelectedDepartments, new { style = "width: 340px; height: 100px" })
+                                            <td class="span9">
+                                                @Html.DropDownListFor(model => model.SelectedDepartments, Model.AvailableDepartments, new { multiple = "multiple", @class = "chosen-select" })
                                             </td>
                                         </tr>
                                     </table>
 
                                     <table>
                                         <tr>
-                                            <td class="span12">
+                                            <td class="span3">
                                                 @Translation.Get("Ärendetyp")
                                             </td>
-                                            <td class="span1">
-                                                @Translation.Get("Tillgängliga")
-                                            </td>
-                                            <td class="span1"></td>
-                                            <td class="span1">
-                                                @Translation.Get("Valda")
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td>
-                                                @Html.ListBox("CTsAvailable", Model.AvailableCaseTypes, new { style = "width: 340px; height: 100px" })
-
-                                            </td>
-                                            <td>
-                                                <div style="text-align: center;">
-                                                    <input type="button" value="&gt;" id="addCTs" class="btn" />
-                                                    <input type="button" value="&lt;" id="removeCTs" class="btn" />
-                                                </div>
-                                            </td>
-                                            <td>
-                                                @Html.ListBox("SelectedCaseTypes", Model.SelectedCaseTypes, new { style = "width: 340px; height: 100px" })
+                                            <td class="span9">
+                                                @Html.DropDownListFor(model => model.SelectedCaseTypes, Model.AvailableCaseTypes, new { multiple = "multiple", @class = "chosen-select" })
                                             </td>
                                         </tr>
                                     </table>
 
                                     <table>
                                         <tr>
-                                            <td class="span12">
+                                            <td class="span3">
                                                 @Translation.Get("Produktområde")
                                             </td>
-                                            <td class="span1">
-                                                @Translation.Get("Tillgängliga")
-                                            </td>
-                                            <td class="span1"></td>
-                                            <td class="span1">
-                                                @Translation.Get("Valda")
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td>
-                                                @Html.ListBox("PAsAvailable", Model.AvailableProductArea, new { style = "width: 340px; height: 100px" })
-                                            </td>
-                                            <td>
-                                                <div style="text-align: center;">
-                                                    <input type="button" value="&gt;" id="addPAs" class="btn" />
-                                                    <input type="button" value="&lt;" id="removePAs" class="btn" />
-                                                </div>
-                                            </td>
-                                            <td>
-                                                @Html.ListBox("SelectedProductArea", Model.SelectedProductArea, new { style = "width: 340px; height: 100px" })
+                                            <td class="span9">
+                                                @Html.DropDownListFor(model => model.SelectedProductArea, Model.AvailableProductArea, new { multiple = "multiple", @class = "chosen-select" })
                                             </td>
                                         </tr>
                                     </table>
 
                                     <table>
                                         <tr>
-                                            <td class="span12">
+                                            <td class="span3">
                                                 @Translation.Get("Driftgrupp")
                                             </td>
-                                            <td class="span1">
-                                                @Translation.Get("Tillgängliga")
-                                            </td>
-                                            <td class="span1"></td>
-                                            <td class="span1">
-                                                @Translation.Get("Valda")
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td>
-                                                @Html.ListBox("WGsAvailable", Model.AvailableWorkingGroups, new { style = "width: 340px; height: 100px" })
-                                            </td>
-                                            <td>
-                                                <div style="text-align: center;">
-                                                    <input type="button" value="&gt;" id="addWGs" class="btn" />
-                                                    <input type="button" value="&lt;" id="removeWGs" class="btn" />
-                                                </div>
-                                            </td>
-                                            <td>
-                                                @Html.ListBox("SelectedWorkingGroups", Model.SelectedWorkingGroups, new { style = "width: 340px; height: 100px" })
+                                            <td class="span9">
+                                                @Html.DropDownListFor(model => model.SelectedWorkingGroups, Model.AvailableWorkingGroups, new { multiple = "multiple", @class = "chosen-select" })
                                             </td>
                                         </tr>
                                     </table>
@@ -247,11 +169,6 @@
         });
 
         $("#async_subbut").click(function () {
-            $("#SelectedDepartments option").attr("selected", "selected");
-            $("#SelectedCaseTypes option").attr("selected", "selected");
-            $("#SelectedProductArea option").attr("selected", "selected");
-            $("#SelectedWorkingGroups option").attr("selected", "selected");
-
             $("#circular_case_filter_form").submit();
         });
     });
