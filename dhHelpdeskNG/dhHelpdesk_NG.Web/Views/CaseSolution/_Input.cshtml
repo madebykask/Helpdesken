@@ -85,6 +85,14 @@
                                         <input type="hidden" name="Casesolution.Status" value="0" />
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Connect to", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                       @Html.DropDownListFor(model => model.CaseSolution.ConnectedButton, Model.ButtonList, "")
+                                    </td>
+                                </tr>
                             </table>
                         </div>
                     </div>

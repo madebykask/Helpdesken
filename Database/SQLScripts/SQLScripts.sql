@@ -13,16 +13,16 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	ALTER TABLE tblCaseSolution ADD ShowOnCaseOverview int NOT NULL Default(1)
 Go
 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ConnectedButton' and sysobjects.name = N'tblCaseSolution')
+	ALTER TABLE tblCaseSolution ADD ConnectedButton int NULL 
+Go
+
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ShowInsideCase' and sysobjects.name = N'tblCaseSolution')
 	ALTER TABLE tblCaseSolution ADD ShowInsideCase int NOT NULL Default(1)
 Go
 
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'PerformerSetUser_id' and sysobjects.name = N'tblCaseSolution')
 	ALTER TABLE tblCaseSolution ADD PerformerSetUser_id int NULL
-Go
-
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CaseSolutionButton_id' and sysobjects.name = N'tblCaseSolution')
-	ALTER TABLE tblCaseSolution ADD CaseSolutionButton_id int NULL
 Go
 
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'OverWritePopUp' and sysobjects.name = N'tblCaseSolution')

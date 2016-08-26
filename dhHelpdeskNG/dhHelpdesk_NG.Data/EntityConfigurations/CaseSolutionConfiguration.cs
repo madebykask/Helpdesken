@@ -152,6 +152,7 @@
             this.Property(x => x.CaseSolutionButton_id).IsOptional();
             this.Property(x => x.OverWritePopUp).IsRequired();
 
+            this.Property(x => x.ConnectedButton).IsOptional();
 
             this.ToTable("tblcasesolution");
         }

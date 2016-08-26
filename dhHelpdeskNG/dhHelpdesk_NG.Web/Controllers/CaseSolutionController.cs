@@ -54,10 +54,10 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IChangeService _changeService;
         private readonly ICausingPartService _causingPartService;
         private readonly IOrganizationService _organizationService;
-        private readonly IRegistrationSourceCustomerService _registrationSourceCustomerService;
-        
-
+        private readonly IRegistrationSourceCustomerService _registrationSourceCustomerService;        
         private readonly ICaseSolutionSettingService caseSolutionSettingService;
+
+        private const int MAX_QUICK_BUTTONS_COUNT = 5;
 
         public CaseSolutionController(
             ICaseFieldSettingService caseFieldSettingService,
@@ -626,7 +626,27 @@ namespace DH.Helpdesk.Web.Controllers
                                          curCustomerId,
                                          caseSolution.CaseWorkingGroup_Id).MapToSelectList(cs, true);
             const bool TakeOnlyActive = true;
-                                                       
+
+            var usedButtons = _caseSolutionService.GetCaseSolutions(curCustomerId)
+                                                  .Where(c => c.ConnectedButton.HasValue && c.Id != caseSolution.Id)
+                                                  .Select(c => c.ConnectedButton.Value).ToList();
+
+            var buttonList = new List<SelectListItem>();
+            
+            var buttonCaption = Translation.GetCoreTextTranslation("Button");
+            for (var i= 1; i <= MAX_QUICK_BUTTONS_COUNT; i++)
+            {
+                if (!usedButtons.Contains(i))
+                {
+                    buttonList.Add(new SelectListItem()
+                        {
+                            Value = i.ToString(),
+                            Text = string.Format("{0} {1}", buttonCaption, i),
+                            Selected = caseSolution.ConnectedButton == i
+                        });
+                }
+            }
+
             var model = new CaseSolutionInputViewModel
             {
                 CaseSolution = caseSolution,
@@ -726,6 +746,8 @@ namespace DH.Helpdesk.Web.Controllers
                     Text = Translation.Get(x.SourceName),
                     Value = x.Id.ToString()
                 }).ToList(),
+
+                ButtonList = buttonList
             };
 
             if (model.CaseSolution.Id == 0)

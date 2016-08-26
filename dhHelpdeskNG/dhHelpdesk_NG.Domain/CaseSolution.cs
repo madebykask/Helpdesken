@@ -86,11 +86,13 @@ namespace DH.Helpdesk.Domain
         public string IsAbout_CostCentre { get; set; }
         public string IsAbout_Place { get; set; }
         public string IsAbout_UserCode { get; set; }
+        
         public int ShowOnCaseOverview { get; set; }
         public int ShowInsideCase { get; set; }
         public int? PerformerSetUser_id { get; set; }
-        public int? CaseSolutionButton_id { get; set; }
         public int OverWritePopUp { get; set; }
+        
+        public int? ConnectedButton { get; set; }
     
         public virtual CaseSolutionCategory CaseSolutionCategory { get; set; }
         public virtual CaseSolutionSchedule CaseSolutionSchedule { get; set; }
