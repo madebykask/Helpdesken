@@ -64,6 +64,7 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.BusinessData.Models.ReportService;
     using DH.Helpdesk.Services.Services.Reports;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
+    using DH.Helpdesk.Common.Enums.CaseSolution;
 
     public class CasesController : BaseController
     {        
@@ -681,7 +682,7 @@ namespace DH.Helpdesk.Web.Controllers
             
             var customerUser = this._customerUserService.GetCustomerSettings(customerId, userId);
             m.CaseSearchFilterData = this.CreateCaseSearchFilterData(customerId, SessionFacade.CurrentUser, customerUser, SessionFacade.CurrentCaseSearch);
-            m.CaseTemplateTreeButton = this.GetCaseTemplateTreeModel(customerId, userId);
+            m.CaseTemplateTreeButton = this.GetCaseTemplateTreeModel(customerId, userId, CaseSolutionLocationShow.OnCaseOverview);
             this._caseSettingService.GetCaseSettingsWithUser(customerId, userId, SessionFacade.CurrentUser.UserGroupId);
             m.CaseSetting = this.GetCaseSettingModel(customerId, userId);
             var user = this._userService.GetUser(userId);
@@ -2438,11 +2439,11 @@ namespace DH.Helpdesk.Web.Controllers
             }
         }
 
-        private CaseTemplateTreeModel GetCaseTemplateTreeModel(int customerId, int userId)
+        private CaseTemplateTreeModel GetCaseTemplateTreeModel(int customerId, int userId, CaseSolutionLocationShow location)
         {
             var model = new CaseTemplateTreeModel();
             model.CustomerId = customerId;
-            model.CaseTemplateCategoryTree = _caseSolutionService.GetCaseSolutionCategoryTree(customerId, userId);
+            model.CaseTemplateCategoryTree = _caseSolutionService.GetCaseSolutionCategoryTree(customerId, userId, location);
             return model;
         }
 
@@ -4289,7 +4290,7 @@ namespace DH.Helpdesk.Web.Controllers
                 m.MapCaseToCaseInputViewModel(case_, userTimeZone);
             }
 
-            m.CaseTemplateTreeButton = this.GetCaseTemplateTreeModel(customerId, userId);
+            m.CaseTemplateTreeButton = this.GetCaseTemplateTreeModel(customerId, userId, CaseSolutionLocationShow.InsideTheCase);
 
             m.CasePrintView = new ReportModel(false);
            

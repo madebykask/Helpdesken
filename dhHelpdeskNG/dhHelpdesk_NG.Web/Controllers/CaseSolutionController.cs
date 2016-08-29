@@ -709,7 +709,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var buttonList = new List<SelectListItem>();
             
-            var buttonCaption = Translation.GetCoreTextTranslation("Knapp");
+            var buttonCaption = Translation.GetCoreTextTranslation("Button");
             for (var i= 1; i <= MAX_QUICK_BUTTONS_COUNT; i++)
             {
                 if (!usedButtons.Contains(i))

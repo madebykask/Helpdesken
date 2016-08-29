@@ -27,7 +27,7 @@ namespace DH.Helpdesk.Services.Services
         DeleteMessage DeleteCaseSolution(int id, int customerId);
         DeleteMessage DeleteCaseSolutionCategory(int id);
 
-        List<CaseTemplateCategoryNode> GetCaseSolutionCategoryTree(int customerId, int userId);
+        List<CaseTemplateCategoryNode> GetCaseSolutionCategoryTree(int customerId, int userId, CaseSolutionLocationShow location);
         void SaveCaseSolution(CaseSolution caseSolution, CaseSolutionSchedule caseSolutionSchedule, IList<CaseFieldSetting> CaseFieldSetting, out IDictionary<string, string> errors);
         void SaveCaseSolutionCategory(CaseSolutionCategory caseSolutionCategory, out IDictionary<string, string> errors);
         void SaveEmptyForm(Guid formGuid, int caseId);
@@ -71,7 +71,7 @@ namespace DH.Helpdesk.Services.Services
         //    return _caseSolutionRepository.GetAntal(customerId, userid);
         //}
 
-        public List<CaseTemplateCategoryNode> GetCaseSolutionCategoryTree(int customerId, int userId)
+        public List<CaseTemplateCategoryNode> GetCaseSolutionCategoryTree(int customerId, int userId, CaseSolutionLocationShow location)
         {
             List<CaseTemplateCategoryNode> ret1 = new List<CaseTemplateCategoryNode>();
 
@@ -83,13 +83,22 @@ namespace DH.Helpdesk.Services.Services
                                                                          x => x.User_Id).Contains(userId) ||
                                                                          s.WorkingGroup_Id == null)).OrderBy(cs => cs.Name);
 
+            var canShow = false;
             foreach (var casetemplate in noneCatCaseSolutions)
             {
-                CaseTemplateCategoryNode noneCategory = new CaseTemplateCategoryNode();
-                noneCategory.CategoryId = casetemplate.Id;
-                noneCategory.CategoryName = casetemplate.Name;
-                noneCategory.IsRootTemplate = true;
-                ret1.Add(noneCategory);
+
+                canShow = (location == CaseSolutionLocationShow.BothCaseOverviewAndInsideCase) ||
+                          (location == CaseSolutionLocationShow.OnCaseOverview && casetemplate.ShowOnCaseOverview != 0) ||
+                          (location == CaseSolutionLocationShow.InsideTheCase && casetemplate.ShowInsideCase != 0);
+
+                if (canShow)
+                {
+                    CaseTemplateCategoryNode noneCategory = new CaseTemplateCategoryNode();
+                    noneCategory.CategoryId = casetemplate.Id;
+                    noneCategory.CategoryName = casetemplate.Name;
+                    noneCategory.IsRootTemplate = true;
+                    ret1.Add(noneCategory);
+                }
             }
 
 
@@ -115,14 +124,21 @@ namespace DH.Helpdesk.Services.Services
                     curCategory.CaseTemplates = new List<CaseTemplateNode>();
                     foreach (var casetemplate in caseSolutions)
                     {
-                        CaseTemplateNode curCaseTemplate = new CaseTemplateNode();
-                        curCaseTemplate.CaseTemplateId = casetemplate.Id;
-                        curCaseTemplate.CaseTemplateName = casetemplate.Name;
-                        curCaseTemplate.WorkingGroup = casetemplate.WorkingGroup == null
-                            ? ""
-                            : casetemplate.WorkingGroup.WorkingGroupName;
+                        canShow = (location == CaseSolutionLocationShow.BothCaseOverviewAndInsideCase) ||
+                          (location == CaseSolutionLocationShow.OnCaseOverview && casetemplate.ShowOnCaseOverview != 0) ||
+                          (location == CaseSolutionLocationShow.InsideTheCase && casetemplate.ShowInsideCase != 0);
 
-                        curCategory.CaseTemplates.Add(curCaseTemplate);
+                        if (canShow)
+                        {
+                            CaseTemplateNode curCaseTemplate = new CaseTemplateNode();
+                            curCaseTemplate.CaseTemplateId = casetemplate.Id;
+                            curCaseTemplate.CaseTemplateName = casetemplate.Name;
+                            curCaseTemplate.WorkingGroup = casetemplate.WorkingGroup == null
+                                ? ""
+                                : casetemplate.WorkingGroup.WorkingGroupName;
+
+                            curCategory.CaseTemplates.Add(curCaseTemplate);
+                        }
                     }
                 }
 

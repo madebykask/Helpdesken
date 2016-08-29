@@ -59,6 +59,7 @@
     <Compile Include="Collections\NamedObjectCollection.cs" />
     <Compile Include="Constraints\NotifierConstraint.cs" />
     <Compile Include="Enums\AppSettingsKey.cs" />
+    <Compile Include="Enums\CaseSolution\CaseSolutionLocationShow.cs" />
     <Compile Include="Enums\Cases\CaseListTypes.cs" />
     <Compile Include="Enums\Cases\FieldTypes.cs" />
     <Compile Include="Enums\CircularStateId.cs" />
