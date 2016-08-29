@@ -230,6 +230,8 @@
         }
 
         public OutputFormatter OutFormatter { get; set; }
+
+        public List<CaseTemplateButton> CaseTemplateButtons { get; set; }
     }
 
     public class CaseIndexViewModel
@@ -239,6 +241,13 @@
         public CaseSearchResultModel caseSearchResult { get; set; }
         public CaseTemplateTreeModel CaseTemplateTreeButton { get; set; }
         public CaseSettingModel CaseSetting { get; set; }
+    }
+
+    public class CaseTemplateButton
+    {
+        public int CaseTemplateId { get; set; }
+        public string CaseTemplateName { get; set; }
+        public int ButtonNumber { get; set; }        
     }
 
     public class PageSettingsModel

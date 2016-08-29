@@ -117,6 +117,20 @@
                      }
                 </ul>
             </div>
+            <div class="pull-right">
+                 @if (Model.templateistrue != 1)
+                 {
+                    <ul class="secnav">
+                        @if (Model.CaseTemplateButtons != null && Model.CaseTemplateButtons.Any())
+                        {
+                            foreach (var button in Model.CaseTemplateButtons)
+                            {
+                                <li><a href="#" onclick='LoadTemplate("@button.CaseTemplateId.ToString()")' title="@button.CaseTemplateName" class="btn"> @button.ButtonNumber </a></li>
+                            }
+                        }
+                    </ul>
+                 }
+            </div>
         </div>
         <div class="newmode">
             @Html.Partial("_Input", Model)

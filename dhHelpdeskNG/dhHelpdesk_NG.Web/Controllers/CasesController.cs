@@ -3798,7 +3798,18 @@ namespace DH.Helpdesk.Web.Controllers
                 #endregion
             }
 
-            
+
+            var caseTemplateButtons = _caseSolutionService.GetCaseSolutions(customerId)
+                                                          .Where(c => c.Status != 0 && c.ShowInsideCase != 0 && c.ConnectedButton.HasValue)
+                                                          .Select(c => new CaseTemplateButton() 
+                                                                            { 
+                                                                                CaseTemplateId = c.Id, 
+                                                                                CaseTemplateName = c.Name,
+                                                                                ButtonNumber = c.ConnectedButton.Value
+                                                                            })
+                                                          .OrderBy(c=> c.ButtonNumber)
+                                                          .ToList();
+            m.CaseTemplateButtons = caseTemplateButtons;
 
             m.CaseMailSetting = new CaseMailSetting(
                 customer.NewCaseEmailList,

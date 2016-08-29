@@ -362,6 +362,14 @@
         </div>
         <div class="pull-right">
             <ul class="secnav">
+                @if (Model.CaseTemplateButtons != null && Model.CaseTemplateButtons.Any())
+                {
+                    foreach (var button in Model.CaseTemplateButtons)
+                    {
+                        <li><a href="#" onclick='LoadTemplate("@button.CaseTemplateId.ToString()")' title="@button.CaseTemplateName" class="btn"> @button.ButtonNumber </a></li>
+                    }
+                }
+
                 @if(Model.case_.Id > 0)
                 {
                    <li><a title="@Translation.Get("Skriv ut")" class="btn print-case"><i class="icon-file"></i></a></li>
