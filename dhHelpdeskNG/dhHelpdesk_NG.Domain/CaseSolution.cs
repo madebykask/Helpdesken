@@ -89,7 +89,7 @@ namespace DH.Helpdesk.Domain
         
         public int ShowOnCaseOverview { get; set; }
         public int ShowInsideCase { get; set; }
-        public int? PerformerSetUser_id { get; set; }
+        public int? SetCurrentUserAsPerformer { get; set; }
         public int OverWritePopUp { get; set; }
         
         public int? ConnectedButton { get; set; }

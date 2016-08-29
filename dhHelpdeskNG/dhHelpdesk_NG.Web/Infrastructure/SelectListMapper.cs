@@ -11,10 +11,13 @@
     
     public static class SelectListMapper
     {
+        private static readonly string CURRENT_USER_ITEM_CAPTION = "Inloggad användare";
+
         public static SelectList MapToSelectList(
             this IEnumerable<User> userCollection,
             Setting customerSettings,
-            bool addEmpty = false)
+            bool addEmpty = false,
+            bool addCurrentUser = false)
         {
             List<IdName> options;
             if (customerSettings.IsUserFirstLastNameRepresentation == 0)
@@ -34,6 +37,11 @@
                         .Select(
                             it => new IdName() { Id = it.Id.ToString(), Name = string.Format("{0} {1}", it.FirstName, it.SurName) })
                         .ToList();
+            }
+
+            if (addCurrentUser)
+            {
+                options.Insert(0, new IdName() { Id = "-1", Name = string.Format("-- {0} --", Translation.GetCoreTextTranslation(CURRENT_USER_ITEM_CAPTION))});
             }
 
             if (addEmpty)

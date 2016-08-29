@@ -4002,6 +4002,9 @@ namespace DH.Helpdesk.Web.Controllers
                             m.case_.Performer_User_Id = 0;
                         }
 
+                        if (SessionFacade.CurrentUser != null && caseTemplate.SetCurrentUserAsPerformer == 1)
+                            m.case_.Performer_User_Id = SessionFacade.CurrentUser.Id;
+
                         if (caseTemplate.Category_Id != null)
                         {
                             m.case_.Category_Id = caseTemplate.Category_Id.Value;

@@ -4949,6 +4949,28 @@ GO
 
 
 
+If not exists (select * from tblText where Id = 1673)
+            insert into tblText (Id, Textstring) VALUES (1673, 'Inloggad användare')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1673 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1673, 'Logged in user', 2)
+GO
+
+
+If not exists (select * from tblText where Id = 1674)
+            insert into tblText (Id, Textstring) VALUES (1674, 'Koppla till')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1674 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1674, 'Connect to', 2)
+GO
+
+If not exists (select * from tblText where Id = 1675)
+            insert into tblText (Id, Textstring) VALUES (1675, 'Knapp')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1675 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1675, 'Button', 2)
+GO
+
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

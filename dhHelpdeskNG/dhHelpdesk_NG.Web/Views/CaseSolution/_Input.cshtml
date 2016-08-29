@@ -87,7 +87,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Connect to", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Koppla till", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
                                        @Html.DropDownListFor(model => model.CaseSolution.ConnectedButton, Model.ButtonList, "")
@@ -1396,8 +1396,7 @@
                             </table>
                             @Html.HiddenFor(model => model.CaseSolution.Customer_Id)
                             @Html.HiddenFor(model => model.CaseSolution.Id)
-                            @Html.HiddenFor(model => model.CaseSolution.FormGUID)
-                            @Html.HiddenFor(model => model.CaseSolution.PerformerSetUser_id)                            
+                            @Html.HiddenFor(model => model.CaseSolution.FormGUID)                            
                         </div>
                     </div>
                 </div>

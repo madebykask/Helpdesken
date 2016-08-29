@@ -148,7 +148,7 @@
             this.Property(x => x.IsAbout_UserCode).IsOptional();
             this.Property(x => x.ShowOnCaseOverview).IsRequired();
             this.Property(x => x.ShowInsideCase).IsRequired();
-            this.Property(x => x.PerformerSetUser_id).IsOptional();            
+            this.Property(x => x.SetCurrentUserAsPerformer).IsOptional();            
             this.Property(x => x.OverWritePopUp).IsRequired();
             this.Property(x => x.ConnectedButton).IsOptional();
 

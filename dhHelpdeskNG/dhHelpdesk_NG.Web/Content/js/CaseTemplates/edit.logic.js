@@ -144,7 +144,7 @@ $(function () {
 
     $('#WorkingGroup').change(function () {
         // filter administrators
-        CaseCascadingSelectlistChange($(this).val(), $('#CaseSolution_Customer_Id').val(), '/Cases/ChangeWorkingGroupFilterUser/', '#PerformerUser');
+        CaseCascadingSelectlistChange($(this).val(), $('#CaseSolution_Customer_Id').val(), '/CaseSolution/ChangeWorkingGroupFilterUser/', '#PerformerUser');
     });
 
     $('#divFinishingCause ul.dropdown-menu li a').click(function (e) {

@@ -21,9 +21,14 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	ALTER TABLE tblCaseSolution ADD ShowInsideCase int NOT NULL Default(1)
 Go
 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'SetCurrentUserAsPerformer' and sysobjects.name = N'tblCaseSolution')
+	ALTER TABLE tblCaseSolution ADD SetCurrentUserAsPerformer int NULL
+Go
+
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'PerformerSetUser_id' and sysobjects.name = N'tblCaseSolution')
 	ALTER TABLE tblCaseSolution ADD PerformerSetUser_id int NULL
 Go
+
 
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'OverWritePopUp' and sysobjects.name = N'tblCaseSolution')
 	ALTER TABLE tblCaseSolution ADD OverWritePopUp int NOT NULL Default(0)
