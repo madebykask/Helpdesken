@@ -882,7 +882,7 @@ function LoadTemplate(id) {
         caseInvoiceIsActive = $('#CustomerSettings_ModuleCaseInvoice').val().toLowerCase() == 'true';
 
     if (caseInvoiceIsActive) {
-        $.get('/Invoice/IsThereNotSentOrder/', { caseId: curCaseId, myTime: Date.now }, function (res) {
+        $.get('/CaseInvoice/IsThereNotSentOrder/', { caseId: curCaseId, myTime: Date.now }, function (res) {
             if (res != null && res) {
                 var mes = window.parameters.caseTemplateChangeMessage || '';
                 ShowToastMessage(mes, 'warning', false);                

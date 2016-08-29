@@ -962,7 +962,7 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FaqController.cs" />
     <Compile Include="Controllers\FilesController.cs" />
-    <Compile Include="Controllers\InvoiceController.cs" />
+    <Compile Include="Controllers\CaseInvoiceController.cs" />
     <Compile Include="Areas\Licenses\Controllers\ProductsController.cs" />
     <Compile Include="Controllers\NotifiersController.cs" />
     <Compile Include="Controllers\OperationLogController.cs" />

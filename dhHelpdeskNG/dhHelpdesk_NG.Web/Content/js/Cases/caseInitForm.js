@@ -734,7 +734,7 @@ function CaseInitForm() {
         var caseInvoiceIsActive = $('#CustomerSettings_ModuleCaseInvoice').val().toLowerCase() == 'true';
         /* When invoice is active, user can not change the product area while */
         if (caseInvoiceIsActive) {
-            $.get('/Invoice/IsThereNotSentOrder/', { caseId: curCaseId, myTime: Date.now }, function (res) {
+            $.get('/CaseInvoice/IsThereNotSentOrder/', { caseId: curCaseId, myTime: Date.now }, function (res) {
                 if (res != null && res) {
                     var mes = window.parameters.productAreaChangeMessage || '';
                     ShowToastMessage(mes, 'warning', false);

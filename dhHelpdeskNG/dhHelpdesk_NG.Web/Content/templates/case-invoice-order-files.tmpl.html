@@ -3,7 +3,7 @@
         {{for getFiles()}}
         <tr>
             <td>
-                <a href="/invoice/casefile/?id={{>#parent.parent.data.getCaseId()}}&fileName={{:getEncodedFileName()}}"><i class="icon-file"></i>{{:getFileName()}} </a>
+                <a href="/Caseinvoice/casefile/?id={{>#parent.parent.data.getCaseId()}}&fileName={{:getEncodedFileName()}}"><i class="icon-file"></i>{{:getFileName()}} </a>
             </td>
             {{if getIsOrderInvoiced()}}
                 <td></td>

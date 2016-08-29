@@ -790,7 +790,7 @@ $(function () {
 
 
             var res = "";
-            $.post('/Invoice/SaveCaseInvoice/', {
+            $.post('/CaseInvoice/SaveCaseInvoice/', {
                 'caseInvoiceArticle': this.GetSavedInvoices(),
                 'customerId': this.CustomerId,
                 'caseId': this.CaseId,
@@ -980,7 +980,7 @@ $(function () {
 
         DoOrderInvoice: function (orderId) {
             var th = this;
-            $.getJSON("/Invoice/InvoiceSettingsValid/?CustomerId=" + th.CustomerId, function (data) {
+            $.getJSON("/CaseInvoice/InvoiceSettingsValid/?CustomerId=" + th.CustomerId, function (data) {
                 if (data != null && data.IsValid == true) {
                     if (!th.IsNewCase()) {
                         var order = th.GetOrder(orderId);
@@ -1926,7 +1926,7 @@ $(function () {
 
                 button.hide();
                 invoiceButtonIndicator.show();
-                $.get("/invoice/articles/",
+                $.get("/Caseinvoice/articles/",
                     {
                         caseId: th.CaseId,
                         productAreaId: th.ProductAreaElement.val(),
@@ -3960,7 +3960,8 @@ $(function () {
             caseId: dhHelpdesk.CaseArticles.CaseKey
         });
 
-        return $.getJSON("/invoice/casefiles?id=" + dhHelpdesk.CaseArticles.CaseKey +
+        
+        return $.getJSON("/Caseinvoice/casefiles?id=" + dhHelpdesk.CaseArticles.CaseKey +
                                         "&logKey=" + dhHelpdesk.CaseArticles.LogKey, function (data) {
                                             for (var i = 0; i < data.length; i++) {
                                                 var file = data[i];

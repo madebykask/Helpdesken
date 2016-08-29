@@ -22,7 +22,7 @@
     using System.Web.Script.Serialization;
     using DH.Helpdesk.BusinessData.Models.Invoice;
 
-    public class InvoiceController : BaseController
+    public class CaseInvoiceController : BaseController
     {
         private readonly IInvoiceArticleService invoiceArticleService;
 
@@ -44,7 +44,7 @@
 
         private readonly IMasterDataService masterDataService;        
 
-        public InvoiceController(
+        public CaseInvoiceController(
             ICaseService caseService,
             IMasterDataService masterDataService, 
             IInvoiceArticleService invoiceArticleService, 
