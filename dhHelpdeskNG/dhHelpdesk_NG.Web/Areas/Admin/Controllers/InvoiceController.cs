@@ -1,14 +1,17 @@
-﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
+﻿using System.Web.Mvc;
+using System.Collections.Generic;
+using System.Linq;
+namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
-    using System.Web.Mvc;
-
     using DH.Helpdesk.BusinessData.Models.Invoice;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Infrastructure.ModelFactories;
     using DH.Helpdesk.Web.Areas.Admin.Models.Invoice;
     using DH.Helpdesk.Web.Infrastructure.ActionFilters;
+    
+    using DH.Helpdesk.Domain;
 
-    public class CaseInvoiceController : BaseAdminController
+    public class InvoiceController : BaseAdminController
     {
         private readonly ICustomerService customerService;
 
@@ -20,7 +23,7 @@
 
         private readonly ICaseInvoiceSettingsService caseInvoiceSettingsService;
 
-        public CaseInvoiceController(
+        public InvoiceController(
                 IMasterDataService masterDataService, 
                 ICustomerService customerService, 
                 ICaseInvoiceFactory caseInvoiceFactory, 
@@ -47,6 +50,37 @@
             }
 
             var model = this.caseInvoiceFactory.GetSettingsModel(customer, settings);
+            return this.View(model);
+        }
+
+        [HttpGet]
+        public ActionResult ArticleProductAreaIndex(int customerId)
+        {
+            var customer = customerService.GetCustomer(customerId);
+            var model = new InvoiceArticleProductAreaIndexModel(customer);
+            var allProductAreas = productAreaService.GetProductAreasForCustomer(customerId).OrderBy(x => x.Name); 
+            var allInvoiceArticles = invoiceArticleService.GetArticles(customerId);
+
+            foreach (var art in allInvoiceArticles)
+            {
+                if (art.ProductAreas.Any())
+                {
+                    foreach (var prod in art.ProductAreas)
+                    {
+                        model.Add(new InvoiceArticleProductAreaModel
+                        {
+                            InvoiceArticleId = art.Id,
+                            InvoiceArticleName = art.Name, // add desction as well
+                            InvoiceArticleNumber = art.Number,
+                            ProductAreaId = prod.Id,
+                            ProductAreaName = prod.ResolveFullName()
+                        });
+                    }
+                }
+            }
+
+            model.InvoiceArticles = allInvoiceArticles.OrderBy(x => x.Name).ToList();
+            model.ProductAreas = allProductAreas.ToList();
             return this.View(model);
         }
 

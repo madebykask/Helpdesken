@@ -1,0 +1,73 @@
+﻿@model DH.Helpdesk.Web.Areas.Admin.Models.Invoice.InvoiceArticleProductAreaIndexModel
+<div class="secnavs fixed">
+    <div class="pull-left">
+        <ul class="secnav">
+            @*<li>@Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation), "new", new { customerId = Model.Customer.Id }, new { @class = "btn" })</li>*@
+        </ul>
+    </div>    
+    @Html.Partial("_MasterDataPanel", Model.Customer)
+</div>
+<div class="content  invoice-article admin">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#fragment-1">@Translation.Get("Artiklar och produktområden")</a></li>            
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment-1">
+              <div>
+                  <table>
+                      <tr>
+                          <td>@Translation.Get("Artiklar", Enums.TranslationSource.TextTranslation)</td>
+                          <td>
+                              <select id="lstInvoiceArticles" name="" data-field="region" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                     @foreach (var a in Model.InvoiceArticles)
+                                     {             
+                                        <option value="@a.Id">@a.Name - @a.NameEng</option>
+                                     }
+                                 </select>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td style="width:120px">@Translation.Get("Produktområde", Enums.TranslationSource.TextTranslation)</td>
+                          <td style="width:120px">
+                              <select id="lstProductAreas" name="" data-field="region" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                     @foreach (var p in Model.ProductAreas)
+                                     {             
+                                        <option value="@p.Id">@p.Name</option>
+                                     }
+                                 </select>
+                          </td>
+                          <td>
+                             <input type="submit" class="submit btn" value="@Translation.Get("Sök")"/>
+                         </td>
+                      </tr>
+                      <tr>
+                          <td>
+                              &nbsp;
+                          </td>
+                      </tr>
+                  </table>  
+              </div>
+              <div>
+                  <table class="table table-striped table-bordered table-hover" id="tblInviceArticle">
+                      <thead>
+                        <tr>
+                            <th>@Translation.Get("Arikelnamn", Enums.TranslationSource.TextTranslation)</th>
+                            <th>@Translation.Get("Produktområde", Enums.TranslationSource.TextTranslation)</th>
+                            <th>@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</th>
+                        </tr>
+                      </thead>
+                      @foreach (var row in Model)
+                      {
+                        <tr>
+                          <td>@row.InvoiceArticleNumber - @row.InvoiceArticleName</td>
+                          <td>@row.ProductAreaName</td>
+                          <td>Delete Action</td>
+                        </tr>
+                      }
+                  </table>
+              </div>  
+            </div>            
+        </div>        
+    </div>
+</div>

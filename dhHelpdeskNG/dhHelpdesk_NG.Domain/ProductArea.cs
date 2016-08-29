@@ -31,4 +31,15 @@
         public virtual ICollection<Invoice.InvoiceArticleEntity> InvoiceArticles { get; set; }
         //public virtual Priority Priority { get; set; }
     }
+
+    public static class ProductAreaHelper 
+    {
+        public static string ResolveFullName(this ProductArea productArea)
+        {
+            if (productArea.Parent_ProductArea_Id.HasValue)
+                return string.Format("{0} - {1}", ResolveFullName(productArea.ParentProductArea), productArea.Name);
+            else
+                return productArea.Name;
+        }
+    }
 }
