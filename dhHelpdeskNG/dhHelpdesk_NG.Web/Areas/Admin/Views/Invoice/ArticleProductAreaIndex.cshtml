@@ -32,8 +32,20 @@
                           <td style="width:120px">
                               <select id="lstProductAreas" name="" data-field="region" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                      @foreach (var p in Model.ProductAreas)
-                                     {             
-                                        <option value="@p.Id">@p.Name</option>
+                                     {     
+                                         if (p.IsActive == 1)
+                                        {
+                                            <option value="@p.Id">
+                                                @p.Name
+                                            </option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@p.Id" class="DisabledChosen" >
+                                                @p.Name
+                                            </option>
+                                        }        
+                                        
                                      }
                                  </select>
                           </td>
@@ -62,7 +74,7 @@
                         <tr>
                           <td>@row.InvoiceArticleNumber - @row.InvoiceArticleName</td>
                           <td>@row.ProductAreaName</td>
-                          <td>Delete Action</td>
+                          <td><a id="" class="btn bt-small" data-field="" title="@Translation.Get("Ta bort")"><i class="icon-remove"></i></a></td>
                         </tr>
                       }
                   </table>

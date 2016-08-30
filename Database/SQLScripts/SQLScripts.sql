@@ -34,6 +34,24 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	ALTER TABLE tblCaseSolution ADD OverWritePopUp int NOT NULL Default(0)
 Go
 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CreatedDate' and sysobjects.name = N'tblInvoiceArticle_tblProductArea')
+	ALTER TABLE tblInvoiceArticle_tblProductArea ADD CreatedDate DateTime NOT NULL Default getdate()
+Go
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CreatedBy_UserId' and sysobjects.name = N'tblInvoiceArticle_tblProductArea')
+	begin
+		ALTER TABLE tblInvoiceArticle_tblProductArea ADD CreatedBy_UserId int NULL 
+
+		ALTER TABLE [dbo].tblInvoiceArticle_tblProductArea ADD 
+			CONSTRAINT [FK_tblInvoiceArticle_tblProductArea_tblUsers] FOREIGN KEY 
+			(
+				[CreatedBy_UserId]
+			) REFERENCES [dbo].tblUsers (
+				[Id]
+			)	
+	end
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.26'
 

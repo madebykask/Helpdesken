@@ -58,7 +58,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         {
             var customer = customerService.GetCustomer(customerId);
             var model = new InvoiceArticleProductAreaIndexModel(customer);
-            var allProductAreas = productAreaService.GetProductAreasForCustomer(customerId).OrderBy(x => x.Name); 
+            var productAreas = productAreaService.GetAllProductAreas(customerId);
+            var productAreasInRow = productAreaService.GetChildsInRow(productAreas).ToList();
+            
             var allInvoiceArticles = invoiceArticleService.GetArticles(customerId);
 
             foreach (var art in allInvoiceArticles)
@@ -79,8 +81,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 }
             }
 
-            model.InvoiceArticles = allInvoiceArticles.OrderBy(x => x.Name).ToList();
-            model.ProductAreas = allProductAreas.ToList();
+            model.InvoiceArticles = allInvoiceArticles.OrderBy(a => a.Name).ToList();
+            model.ProductAreas = productAreasInRow.ToList();
             return this.View(model);
         }
 
