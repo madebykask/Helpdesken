@@ -914,10 +914,15 @@ function GetTemplateData(id) {
                 }
             }
 
-            if (showOverwriteWarning) {
-                window.overwriteWarning.show(caseTemplate);
-            } else {                
-                window.ApplyTemplate(caseTemplate);
+            var overwriteDirectly = caseTemplate["OverWritePopUp"];
+            if (overwriteDirectly != undefined && overwriteDirectly != null && overwriteDirectly != 0)
+                window.ApplyTemplate(caseTemplate, true);
+            else {
+                if (showOverwriteWarning) {
+                    window.overwriteWarning.show(caseTemplate);
+                } else {
+                    window.ApplyTemplate(caseTemplate);
+                }
             }
         }
     );
