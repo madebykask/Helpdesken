@@ -188,7 +188,7 @@ namespace DH.Helpdesk.Web.Controllers
         public ActionResult New(int? backToPageId)
         {
             // Positive: Send Mail to...
-            var caseSolution = new CaseSolution (){ Customer_Id = SessionFacade.CurrentCustomer.Id, NoMailToNotifier = 1, Status = 1, ShowOnCaseOverview = 1, ShowInsideCase = 1, OverWritePopUp = 0};
+            var caseSolution = new CaseSolution (){ Customer_Id = SessionFacade.CurrentCustomer.Id, NoMailToNotifier = 1, Status = 1, ShowOnCaseOverview = 1, ShowInsideCase = 1, OverWritePopUp = 1};
 
             if (backToPageId == null)
                 ViewBag.PageId = 0;
