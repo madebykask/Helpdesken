@@ -4915,11 +4915,11 @@ If not exists (select * from tblTextTranslation where Text_Id = 1668 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1669)
-            insert into tblText (Id, Textstring) VALUES (1669, 'Lösenord är inte giltigt. Minst 8 tecken, varav en stor bokstav, en liten bokstav och en siffra eller ett special tecken (!@#=$&?*).')
+            insert into tblText (Id, Textstring) VALUES (1669, 'Lösenord är inte giltigt. Minst 8 tecken, varav en stor bokstav, en liten bokstav, en siffra och ett special tecken (!@#=$&?*).')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1669 and Language_Id=2)
-            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1669, 'Password is not valid. Requirements are 1 upper case letter, 1 lower case letter, 1 number or 1 special character (!@#=$&?*) and at least 8 characters in length.', 2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1669, 'Password is not valid. Requirements are 1 upper case letter, 1 lower case letter, 1 number and 1 special character (!@#=$&?*) and at least 8 characters in length.', 2)
 GO
 
 If not exists (select * from tblText where Id = 1670)

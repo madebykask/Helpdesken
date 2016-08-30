@@ -81,7 +81,14 @@
                                         @Translation.Get("Koppla till", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                       @Html.DropDownListFor(model => model.CaseSolution.ConnectedButton, Model.ButtonList, "")
+                                        @if (Model.CaseSolution.ShowInsideCase == 1)
+                                        {
+                                            @Html.DropDownListFor(model => model.CaseSolution.ConnectedButton, Model.ButtonList, "")
+                                        }
+                                        else
+                                        {
+                                            @Html.DropDownListFor(model => model.CaseSolution.ConnectedButton, Model.ButtonList, "", new { disabled = "disabled" })
+                                        }
                                     </td>
                                 </tr>
                                 <tr>

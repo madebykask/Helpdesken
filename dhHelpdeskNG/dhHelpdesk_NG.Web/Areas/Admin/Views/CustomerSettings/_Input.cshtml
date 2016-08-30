@@ -336,15 +336,6 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Minsta tillåtna längd", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                    <td>
-                                        @Html.DropDownListFor(model => model.Setting.MinPasswordLength, Model.MinimumPasswordLength, "", new { style = "width: 60px;" })&nbsp;
-                                        @Translation.Get("tecken", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
                                         @Translation.Get("Tillåt endast komplexa lösenord", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td><label class="checkbox">
@@ -353,6 +344,22 @@
                                         </label>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Minsta tillåtna längd", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @if (Model.Setting.ComplexPassword == 1)
+                                        {
+                                            @Html.DropDownListFor(model => model.Setting.MinPasswordLength, Model.MinimumPasswordLength, "", new { style = "width: 60px;", disabled = "disabled" })
+                                        }
+                                        else
+                                        {
+                                             @Html.DropDownListFor(model => model.Setting.MinPasswordLength, Model.MinimumPasswordLength, "", new { style = "width: 60px;" })
+                                        }
+                                        &nbsp;@Translation.Get("tecken", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr> 
                             </table>
                         </div>
                     </div>
@@ -516,12 +523,19 @@
     }
 
     function disablePasswordLength(t) {
+  
         if (t.is(':checked')) {
-            $("#Setting_MinPasswordLength :selected").remove();
+            $("#Setting_MinPasswordLength").val("0");
             $("#Setting_MinPasswordLength").prop("disabled", true);
         } else {
             $("#Setting_MinPasswordLength").prop("disabled", false);
             $("#Setting_MinPasswordLength").val("0");
         }
+    }
+
+    if ($("setting_ComplexPassword").getAttribute('checked') == "'checked'") {
+        $("#Setting_MinPasswordLength").prop("disabled", false);
+    } else {
+        $("#Setting_MinPasswordLength").prop("disabled", true);
     }
 </script>
