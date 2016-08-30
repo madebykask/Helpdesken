@@ -93,6 +93,9 @@ $(function () {
                 return 0;
 
             strVal = strVal.replace(this.GetDecimalSeparator(), ".");
+            if (strVal == "." || status == ".0" || status == ".00")
+                strVal = 0;
+
             return parseFloat(strVal);
         },
 
@@ -1666,7 +1669,9 @@ $(function () {
                             unitsEl.val(units);
                         }
                         var units_PriceEl = th._container.find(".articles-params-units-price");
-                        var units_Price = units_PriceEl.val();
+                        var units_Price = dhHelpdesk.Math.ConvertStrToDouble(units_PriceEl.val(), _IGNORE_ZERO_FLOATING_POINT);
+                        if (isNaN(units_Price))
+                            units_Price = 0;
 
                         var articlesEl = th._container.find(".articles-params-article");
                         var articleId = articlesEl.val();
