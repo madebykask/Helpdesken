@@ -20,6 +20,8 @@
         public string PriorityName { get; set; }
 
         public bool IsActive { get; set; }
+
+        public string ConnectedToButton { get; set; }
     }
 
     public static class CaseSolutionRowIndexMapper

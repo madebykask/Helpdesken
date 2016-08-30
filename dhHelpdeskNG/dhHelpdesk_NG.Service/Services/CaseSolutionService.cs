@@ -259,6 +259,11 @@ namespace DH.Helpdesk.Services.Services
                                 query.OrderByDescending(l => l.Status);
                         break;
 
+                    case CaseSolutionIndexColumns.ConnectedToButton:
+                        query = (SearchCaseSolutions.Ascending) ?
+                                query.OrderBy(l => l.ConnectedButton) :
+                                query.OrderByDescending(l => l.ConnectedButton);
+                        break;
                     default:                        
                         query = (SearchCaseSolutions.Ascending) ?
                                 query.OrderBy(l => (l.Name != null ? l.Name : string.Empty)) :

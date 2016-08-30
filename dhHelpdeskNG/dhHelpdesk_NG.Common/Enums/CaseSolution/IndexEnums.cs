@@ -12,6 +12,8 @@
 
         public const string Priority = "Priority";
 
-        public const string Status = "Status";        
+        public const string Status = "Status";
+
+        public const string ConnectedToButton = "ConnectedToButton";        
     }
 }

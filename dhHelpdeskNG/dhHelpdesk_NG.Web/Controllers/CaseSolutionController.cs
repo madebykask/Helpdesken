@@ -382,7 +382,8 @@ namespace DH.Helpdesk.Web.Controllers
                     caseSolution.Problem_Id,
                     PlanDate = caseSolution.PlanDate.HasValue ? caseSolution.PlanDate.Value.ToShortDateString() : string.Empty,
                     VerifiedDescription = caseSolution.VerifiedDescription,
-                    SolutionRate = caseSolution.SolutionRate
+                    SolutionRate = caseSolution.SolutionRate,
+                    caseSolution.OverWritePopUp
                 },
                     JsonRequestBehavior.AllowGet);
         }
@@ -610,6 +611,7 @@ namespace DH.Helpdesk.Web.Controllers
                                                          .Where(x => x.TemplatePath == null).ToList();                        
 
             var curUserItem = string.Format("-- {0} --", Translation.GetCoreTextTranslation(CURRENT_USER_ITEM_CAPTION));
+            var connectedToButton = Translation.GetCoreTextTranslation("Knapp");
             var _rows = caseSolutions.Select(cs=> new RowIndexViewModel
                                                         {
                                                             Id = cs.Id,
@@ -623,7 +625,8 @@ namespace DH.Helpdesk.Web.Controllers
                                                                                     string.Format("{0} {1}", cs.PerformerUser.SurName, cs.PerformerUser.FirstName)
                                                                                 ),
                                                             PriorityName = cs.Priority == null ? string.Empty : cs.Priority.Name,
-                                                            IsActive = (cs.Status != 0)
+                                                            IsActive = (cs.Status != 0),
+                                                            ConnectedToButton = cs.ConnectedButton.HasValue ? connectedToButton + " " + cs.ConnectedButton.Value: ""
                                                         }).ToArray();
 
             var activeTab = SessionFacade.FindActiveTab("CaseSolution");
@@ -709,7 +712,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var buttonList = new List<SelectListItem>();
             
-            var buttonCaption = Translation.GetCoreTextTranslation("Button");
+            var buttonCaption = Translation.GetCoreTextTranslation("Knapp");
             for (var i= 1; i <= MAX_QUICK_BUTTONS_COUNT; i++)
             {
                 if (!usedButtons.Contains(i))
