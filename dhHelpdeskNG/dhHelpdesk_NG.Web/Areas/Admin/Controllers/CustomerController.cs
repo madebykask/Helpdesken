@@ -352,7 +352,7 @@
                 setting.CreateCaseFromOrder = vmodel.Setting.CreateCaseFromOrder;
                 setting.ComplexPassword = vmodel.Setting.ComplexPassword;
                 setting.IsUserFirstLastNameRepresentation = vmodel.UserFirstLastNameRepresentationId == UserFirstLastNameModes.LastFirstNameMode ? 0 : 1;
-                setting.CalcSolvedInTimeByFinishingDate = vmodel.Setting.CalcSolvedInTimeByFinishingDate;
+                setting.CalcSolvedInTimeByLatestSLADate = vmodel.Setting.CalcSolvedInTimeByLatestSLADate;
             }
 
             IDictionary<string, string> errors;

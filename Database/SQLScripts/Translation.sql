@@ -4978,5 +4978,29 @@ If not exists (select * from tblTextTranslation where Text_Id = 1676 and Languag
             insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1676, 'Connected to', 2)
 GO
 
+
+If not exists (select * from tblText where Id = 1677)
+            insert into tblText (Id, Textstring) VALUES (1677, 'Avslutsdatum')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1677 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1677, 'Finishing date', 2)
+GO
+
+If not exists (select * from tblText where Id = 1678)
+            insert into tblText (Id, Textstring) VALUES (1678, 'Senaste understatus med Räkna tid')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1678 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1678, 'Latest sub status with Counting SLA', 2)
+GO
+
+If not exists (select * from tblText where Id = 1679)
+            insert into tblText (Id, Textstring) VALUES (1679, 'Löst i tid med Bevakningsdatum')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1679 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1679, 'Solved in time with Watchdate', 2)
+GO
+
+
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

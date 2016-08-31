@@ -49,6 +49,30 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	end
 GO
 
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CalcSolvedInTimeByFinishingDate' and sysobjects.name = N'tblSettings')
+begin
+	DECLARE @sql NVARCHAR(MAX)
+	WHILE 1=1
+	BEGIN
+		SELECT TOP 1 @sql = N'alter table tblSettings drop constraint ['+dc.NAME+N']'
+		from sys.default_constraints dc
+		JOIN sys.columns c
+			ON c.default_object_id = dc.object_id
+		WHERE 
+			dc.parent_object_id = OBJECT_ID('tblSettings')
+		AND c.name = N'CalcSolvedInTimeByFinishingDate'
+		IF @@ROWCOUNT = 0 BREAK
+		EXEC (@sql)
+	END
+	
+	ALTER TABLE tblSettings drop column CalcSolvedInTimeByFinishingDate
+end
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CalcSolvedInTimeByLatestSLADate' and sysobjects.name = N'tblSettings')
+	ALTER TABLE tblSettings ADD CalcSolvedInTimeByLatestSLADate int NOT NULL Default(0)
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.26'
 

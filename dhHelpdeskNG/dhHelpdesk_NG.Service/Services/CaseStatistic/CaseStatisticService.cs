@@ -87,7 +87,7 @@
             {
                 var baseCalculationTime = @case.FinishingDate.Value;
                 var cs = _settingService.GetCustomerSetting(@case.Customer_Id);
-                if (cs != null && cs.CalcSolvedInTimeByFinishingDate == 0 && @case.LatestSLACountDate.HasValue)
+                if (cs != null && cs.CalcSolvedInTimeByLatestSLADate != 0 && @case.LatestSLACountDate.HasValue)
                     baseCalculationTime = @case.LatestSLACountDate.Value;
 
                 stat.WasSolvedInTime = CaseStatisticService.ResolveIsSolvedInTime(
