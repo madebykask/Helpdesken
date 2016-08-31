@@ -2136,6 +2136,14 @@ td.td-bottom-multiselect .btn-group {
   border-width: 5px 5px 0;
 }
 
+.tooltip.bottom .tooltip-arrow {
+  top: 0;
+  left: 50%;
+  margin-left: -5px;
+  border-bottom-color: #62a8d1;
+  border-width: 0 5px 5px;
+}
+
 
 
 /************************MISC********************************************/

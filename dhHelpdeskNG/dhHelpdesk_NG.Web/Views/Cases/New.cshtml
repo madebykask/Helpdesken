@@ -125,7 +125,7 @@
                         {
                             foreach (var button in Model.CaseTemplateButtons)
                             {
-                                <li><a href="#" onclick='LoadTemplate("@button.CaseTemplateId.ToString()")' title="@button.CaseTemplateName" class="btn"> @button.ButtonNumber </a></li>
+                                <li><a href="#" onclick='LoadTemplate("@button.CaseTemplateId.ToString()")' title="@button.CaseTemplateName" class="btn" rel="tooltip" data-placement="bottom" data-original-title="@button.CaseTemplateName"> @button.ButtonNumber </a></li>
                             }
                         }
                     </ul>
