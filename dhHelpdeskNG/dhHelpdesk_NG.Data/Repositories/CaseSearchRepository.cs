@@ -216,6 +216,9 @@
                                         timeLeft =  workTime / 60;
                                         var floatingPoint = workTime % 60;
                                         secSortOrder = floatingPoint.ToString();
+
+                                        if (timeLeft <= 0 && floatingPoint < 0)
+                                            timeLeft--;
                                     }
                                     else if (SLAtime > 0)
                                     {
@@ -228,9 +231,10 @@
                                         secSortOrder = floatingPoint.ToString();
 
                                         if (timeLeft <= 0 && floatingPoint < 0)
-                                            timeLeft--; 
-                                        
+                                            timeLeft--;
                                     }
+
+                                    
 
                                     if (timeLeft.HasValue)
                                     {
