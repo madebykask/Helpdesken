@@ -280,12 +280,15 @@
                             cu.Customer_Id == customerId &&
                             cu.Status != 0
                             && (cu.UserId.ToLower().Contains(s) || cu.FirstName.ToLower().Contains(s)
-                                || cu.SurName.ToLower().Contains(s) || cu.Phone.ToLower().Contains(s)
-                                || cu.Location.ToLower().Contains(s) || cu.Cellphone.ToLower().Contains(s)
+                                || cu.SurName.ToLower().Contains(s) || cu.Phone.ToLower().Contains(s)                                
                                 || cu.Email.ToLower().Contains(s) || cu.UserCode.ToLower().Contains(s)
                                 || (cu.SurName.ToLower() + " " + cu.FirstName.ToLower()).Contains(s)
-                                || (cu.FirstName.ToLower() + " " + cu.SurName.ToLower()).Contains(s)
-                                || cu.Department.DepartmentName.ToLower().Contains(s))
+                                || (cu.FirstName.ToLower() + " " + cu.SurName.ToLower()).Contains(s))
+
+                                /* Disabled because they shouldn't be searchable*/
+                                //|| cu.Location.ToLower().Contains(s) 
+                                //|| cu.Cellphone.ToLower().Contains(s)
+                                //|| cu.Department.DepartmentName.ToLower().Contains(s))
                                 
                         select
                             new UserSearchResults

@@ -1432,7 +1432,7 @@ namespace DH.Helpdesk.Web.Controllers
         #region --Auto Complete Fields--
         [ValidateInput(false)]
         [HttpPost]
-        public ActionResult Search_User(string query, int customerId)
+        public ActionResult Search_User(string query, int customerId, string searchKey)
         {
             var result = this._computerService.SearchComputerUsers(customerId, query);
 
@@ -1449,7 +1449,7 @@ namespace DH.Helpdesk.Web.Controllers
                 result = this._computerService.SearchComputerUsersByDepartments(customerId, query, departmentIds);
             }
 
-            return this.Json(result);
+            return Json(new { searchKey = searchKey, result = result });            
         }
 
         [HttpPost]
