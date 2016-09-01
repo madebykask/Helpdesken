@@ -8,9 +8,10 @@
         public InvoiceArticleProductAreaSelectedFilter()
         { 
             this.SelectedProductAreas = new SelectedItems();
-            this.SelectedInvoiceArticles = new SelectedItems();
-           
+            this.SelectedInvoiceArticles = new SelectedItems();           
         }
+
+        public int CustomerId { get; set; }
 
         public SelectedItems SelectedProductAreas { get; set; }
 

@@ -319,6 +319,7 @@
     <Compile Include="Areas\Admin\Models\ContractCategoryIndexViewModel.cs" />
     <Compile Include="Areas\Admin\Models\AccountActivityIndexViewModel.cs" />
     <Compile Include="Areas\Admin\Models\BuildingViewModels.cs" />
+    <Compile Include="Areas\Admin\Models\Invoice\InvoiceArticleProductAreaFilterJSModel.cs" />
     <Compile Include="Areas\Admin\Models\Invoice\InvoiceArticleProductAreaIndexModel.cs" />
     <Compile Include="Areas\Admin\Models\RegistrationSourceInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\OrganizationHierarchy\OrganizationUnit.cs" />
@@ -383,6 +384,7 @@
     <Content Include="Areas\Admin\Content\js\Common\common.js" />
     <Content Include="Areas\Admin\Content\js\Common\ToggableInactiveList.js" />
     <Content Include="Areas\Admin\Content\js\CaseType\index.js" />
+    <Content Include="Areas\Admin\Content\js\Invoice\invoicearticleIndex.js" />
     <Content Include="Areas\Admin\Content\js\Program\index.js" />
     <Content Include="Areas\Admin\Content\js\EMailGroup\index.js" />
     <Content Include="Areas\Admin\Content\js\OperationLogCategory\index.js" />
@@ -1766,6 +1768,7 @@
     <Content Include="Areas\Admin\Views\BusinessRules\Edit.cshtml" />
     <Content Include="Areas\Reports\Views\Report\Reports\ReportGenerator.cshtml" />
     <Content Include="Areas\Admin\Views\Invoice\ArticleProductAreaIndex.cshtml" />
+    <Content Include="Areas\Admin\Views\Invoice\_ArticleProductAreaIndexRows.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx" />
     <Content Include="Scripts\jquery-1.8.3.js" />

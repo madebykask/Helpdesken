@@ -1,4 +1,11 @@
 ﻿@model DH.Helpdesk.Web.Areas.Admin.Models.Invoice.InvoiceArticleProductAreaIndexModel
+
+@Scripts.Render("~/bundles/admininvoice")
+<script type="text/javascript">
+    window.Params = {
+        ShowSearchResult: '@Url.Content("~/Invoice/ShowSearchResult")',
+    };
+</script>
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
@@ -15,11 +22,12 @@
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment-1">
               <div>
+                  <input type="hidden" id="currentCustomerId" value="@Model.Customer.Id" />
                   <table>
                       <tr>
-                          <td>@Translation.Get("Artiklar", Enums.TranslationSource.TextTranslation)</td>
+                          <td>@Translation.Get("Artikel", Enums.TranslationSource.TextTranslation)</td>
                           <td>
-                              <select id="lstInvoiceArticles" name="" data-field="region" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                              <select id="lstInvoiceArticles" name="lstInvoiceArticles" data-field="region" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                      @foreach (var a in Model.InvoiceArticles)
                                      {             
                                         <option value="@a.Id">@a.Name - @a.NameEng</option>
@@ -30,7 +38,7 @@
                       <tr>
                           <td style="width:120px">@Translation.Get("Produktområde", Enums.TranslationSource.TextTranslation)</td>
                           <td style="width:120px">
-                              <select id="lstProductAreas" name="" data-field="region" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                              <select id="lstProductAreas" name="lstProductAreas" data-field="region" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                      @foreach (var p in Model.ProductAreas)
                                      {     
                                          if (p.IsActive == 1)
@@ -50,7 +58,7 @@
                                  </select>
                           </td>
                           <td>
-                             <input type="submit" class="submit btn" value="@Translation.Get("Sök")"/>
+                             <input type="button" class="btn" id="ShowSearchResult"  value="@Translation.Get("Sök")"/>
                          </td>
                       </tr>
                       <tr>
@@ -60,25 +68,7 @@
                       </tr>
                   </table>  
               </div>
-              <div>
-                  <table class="table table-striped table-bordered table-hover" id="tblInviceArticle">
-                      <thead>
-                        <tr>
-                            <th>@Translation.Get("Arikelnamn", Enums.TranslationSource.TextTranslation)</th>
-                            <th>@Translation.Get("Produktområde", Enums.TranslationSource.TextTranslation)</th>
-                            <th>@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</th>
-                        </tr>
-                      </thead>
-                      @foreach (var row in Model)
-                      {
-                        <tr>
-                          <td>@row.InvoiceArticleNumber - @row.InvoiceArticleName</td>
-                          <td>@row.ProductAreaName</td>
-                          <td><a id="" class="btn bt-small" data-field="" title="@Translation.Get("Ta bort")"><i class="icon-remove"></i></a></td>
-                        </tr>
-                      }
-                  </table>
-              </div>  
+              @Html.Partial("_ArticleProductAreaIndexRows", Model.Rows)
             </div>            
         </div>        
     </div>

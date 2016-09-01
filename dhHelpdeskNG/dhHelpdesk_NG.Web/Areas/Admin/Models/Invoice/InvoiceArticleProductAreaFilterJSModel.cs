@@ -14,6 +14,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.Invoice
         {
 
         }
+        public int CustomerId { get; set; }
+
         public string InvoiceArticles { get; set; }
 
         public string ProductAreas { get; set; }
@@ -26,6 +28,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.Invoice
         public static InvoiceArticleProductAreaSelectedFilter MapToSelectedFilter(this InvoiceArticleProductAreaFilterJSModel articleAndProdAreaFilter)
         {
             var ret = new InvoiceArticleProductAreaSelectedFilter();
+            ret.CustomerId = articleAndProdAreaFilter.CustomerId;
             ret.SelectedProductAreas.AddItems(articleAndProdAreaFilter.ProductAreas);
             ret.SelectedInvoiceArticles.AddItems(articleAndProdAreaFilter.InvoiceArticles);
             

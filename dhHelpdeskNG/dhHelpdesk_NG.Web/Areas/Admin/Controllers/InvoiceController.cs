@@ -60,30 +60,119 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var model = new InvoiceArticleProductAreaIndexModel(customer);
             var productAreas = productAreaService.GetAllProductAreas(customerId);
             var productAreasInRow = productAreaService.GetChildsInRow(productAreas).ToList();
-            
+
+
+
             var allInvoiceArticles = invoiceArticleService.GetArticles(customerId);
 
-            foreach (var art in allInvoiceArticles)
-            {
-                if (art.ProductAreas.Any())
-                {
-                    foreach (var prod in art.ProductAreas)
-                    {
-                        model.Add(new InvoiceArticleProductAreaModel
-                        {
-                            InvoiceArticleId = art.Id,
-                            InvoiceArticleName = art.Name, // add desction as well
-                            InvoiceArticleNumber = art.Number,
-                            ProductAreaId = prod.Id,
-                            ProductAreaName = prod.ResolveFullName()
-                        });
-                    }
-                }
-            }
-
+            // TODO: need to get latest filter from session 
+            var filter = new InvoiceArticleProductAreaSelectedFilter();
+            model.Rows = GetIndexRowModel(customerId, filter, allInvoiceArticles);
+            
             model.InvoiceArticles = allInvoiceArticles.OrderBy(a => a.Name).ToList();
             model.ProductAreas = productAreasInRow.ToList();
             return this.View(model);
+        }
+
+        [HttpGet]
+        public PartialViewResult ShowSearchResult(InvoiceArticleProductAreaFilterJSModel filter)
+        {
+            var selectedSearch = filter.MapToSelectedFilter();
+            var model = GetIndexRowModel(selectedSearch.CustomerId, selectedSearch, null);           
+            return PartialView("_ArticleProductAreaIndexRows.cshtml", model);
+        }
+
+        private InvoiceArticleProductAreaIndexRowsModel GetIndexRowModel(int customerId, 
+                                                                         InvoiceArticleProductAreaSelectedFilter selectedFilter, 
+                                                                         InvoiceArticle[] invoiceArticles = null)
+        {            
+            var model = new InvoiceArticleProductAreaIndexRowsModel();
+
+            /*Selection modes*/
+            // 0: Article(empty)  - ProductArea(empty)   
+            // 1: Article(filled) - ProductArea(empty)   
+            // 2: Article(empty)  - ProductArea(filled)   
+            // 3: Article(filled) - ProductArea(filled)   
+            var selectionMode = 0;
+            if (selectedFilter.SelectedInvoiceArticles.Any())
+            {
+                if (selectedFilter.SelectedProductAreas.Any())
+                    selectionMode = 3;
+                else
+                    selectionMode = 1;
+            }
+            else
+            {
+                if (selectedFilter.SelectedProductAreas.Any())
+                    selectionMode = 2;             
+            }
+
+            var allInvoiceArticles = invoiceArticles == null? invoiceArticleService.GetArticles(customerId) : invoiceArticles;
+            switch (selectionMode)
+            {
+                case 0:
+                    foreach (var art in allInvoiceArticles)
+                    {
+                        if (art.ProductAreas.Any())
+                        {
+                            foreach (var prod in art.ProductAreas)
+                            {
+                                model.Data.Add(new InvoiceArticleProductAreaIndexRowModel
+                                {
+                                    InvoiceArticleId = art.Id,
+                                    InvoiceArticleName = art.Name, // add desction as well
+                                    InvoiceArticleNumber = art.Number,
+                                    ProductAreaId = prod.Id,
+                                    ProductAreaName = prod.ResolveFullName()
+                                });
+                            }
+                        }
+                    }
+                    break;
+                case 1:
+                    foreach (var art in allInvoiceArticles.Where(a=> selectedFilter.SelectedInvoiceArticles.Contains(a.Id)).ToList())
+                    {
+                        if (art.ProductAreas.Any())
+                        {
+                            foreach (var prod in art.ProductAreas)
+                            {
+                                model.Data.Add(new InvoiceArticleProductAreaIndexRowModel
+                                {
+                                    InvoiceArticleId = art.Id,
+                                    InvoiceArticleName = art.Name, // add desction as well
+                                    InvoiceArticleNumber = art.Number,
+                                    ProductAreaId = prod.Id,
+                                    ProductAreaName = prod.ResolveFullName()
+                                });
+                            }
+                        }
+                    }
+                    break;
+                case 2:
+                    foreach (var art in allInvoiceArticles)
+                    {
+                        var selectedProds = art.ProductAreas.Where(p => selectedFilter.SelectedProductAreas.Contains(p.Id)).ToList();
+                        if (selectedProds.Any())
+                        {
+                            foreach (var prod in selectedProds)
+                            {
+                                model.Data.Add(new InvoiceArticleProductAreaIndexRowModel
+                                {
+                                    InvoiceArticleId = art.Id,
+                                    InvoiceArticleName = art.Name, // add desction as well
+                                    InvoiceArticleNumber = art.Number,
+                                    ProductAreaId = prod.Id,
+                                    ProductAreaName = prod.ResolveFullName()
+                                });
+                            }
+                        }
+                    }
+                    break;
+                case 3:
+                    break;
+            }
+                                    
+            return model;
         }
 
         [HttpPost]

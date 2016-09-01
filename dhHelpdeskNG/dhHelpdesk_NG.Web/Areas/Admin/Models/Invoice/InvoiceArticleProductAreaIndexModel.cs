@@ -5,10 +5,10 @@
     using DH.Helpdesk.Domain;
     using System.Collections.Generic;
 
-    public sealed class InvoiceArticleProductAreaModel
+    public sealed class InvoiceArticleProductAreaIndexRowModel
     {
 
-        public InvoiceArticleProductAreaModel()
+        public InvoiceArticleProductAreaIndexRowModel()
         {
 
         }
@@ -24,18 +24,30 @@
 
     }
 
-    public sealed class InvoiceArticleProductAreaIndexModel:List<InvoiceArticleProductAreaModel>
+    public sealed class InvoiceArticleProductAreaIndexRowsModel
+    {
+        public InvoiceArticleProductAreaIndexRowsModel()
+        {
+            Data = new List<InvoiceArticleProductAreaIndexRowModel>(); 
+        }
+
+        public List<InvoiceArticleProductAreaIndexRowModel> Data { get; set; }
+    }
+
+    public sealed class InvoiceArticleProductAreaIndexModel
     {
 
         public InvoiceArticleProductAreaIndexModel(Customer customer)
         {
             Customer = customer;
+            Rows = new InvoiceArticleProductAreaIndexRowsModel();
         }
         
         public Customer Customer { get; private set; }
 
         public List<InvoiceArticle> InvoiceArticles { get; set; }
         public List<ProductArea> ProductAreas { get; set; }
+        public InvoiceArticleProductAreaIndexRowsModel Rows { get; set; }
     }
 
 

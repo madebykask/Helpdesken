@@ -244,6 +244,9 @@
             bundles.Add(new ScriptBundle("~/bundles/report").Include(
                             "~/Areas/Reports/Content/js/reportViewer.logic.js",
                             "~/Areas/Reports/Content/js/reports.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/admininvoice").Include(
+                           "~/Areas/admin/Content/js/invoice/invoicearticleIndex.js"));
             
             bundles.Add(new ScriptBundle("~/bundles/common/admin").Include(
                            "~/Scripts/jquery-1.8.3.min.js",
