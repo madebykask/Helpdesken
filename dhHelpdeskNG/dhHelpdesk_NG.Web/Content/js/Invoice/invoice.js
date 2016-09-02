@@ -10,6 +10,7 @@ $(function () {
     //Max floating point digits
     _MAX_FLOATING_POINT = 2;
     _IGNORE_ZERO_FLOATING_POINT = false;
+    var lastRequestedKey = '';
     var regionUrl = '/Organization/GetRegions/';
     var departmentUrl = '/Organization/GetDepartments/';
     var ouUrl = '/Organization/GetOUs/';
@@ -157,6 +158,15 @@ $(function () {
 
         GenerateId: function () {
             return -dhHelpdesk.Math.GetRandomInt(1, 10000);
+        },
+
+        GenerateRandomKey: function () {
+            function s3() {
+                return Math.floor((1 + Math.random()) * 0x10000)
+                  .toString(16)
+                  .substring(1);
+            }
+            return s3() + '-' + s3() + '-' + s3();
         },
 
         IsNullOrEmpty: function (value) {
@@ -1079,6 +1089,23 @@ $(function () {
 
         },
 
+        UpdateFileAttachment: function (order) {
+            if (order != null) {                
+                var files = order.files.getFiles();
+                this.UpdateFileAttachmentTitle(order.Id, files.length);
+            }
+        },
+
+        UpdateFileAttachmentTitle: function (orderId, val) {
+            if (val > 0) {
+                $("#orderAttachedFilesNum_" + orderId).text(' (' + val + ')');
+                this.ShowAttached(orderId);
+            }
+            else {
+                $("#orderAttachedFilesNum_" + orderId).text('');
+            }            
+        },
+        
         ShowAttached: function (orderId) {
             $('.attachedshow').show();
             $('.icon-plus-sign.showAttached').css("display", "none");
@@ -1287,18 +1314,23 @@ $(function () {
             return OrderIsInvoiced;
         },
 
+       
+
         GetUserSearchOptions: function () {
             var options = {
                 items: 20,
                 minLength: 2,
                 source: function (query, process) {
+                    lastRequestedKey = dhHelpdesk.Common.GenerateRandomKey();
                     return $.ajax({
                         url: '/cases/search_user',
                         type: 'post',
-                        data: { query: query, customerId: $('#case__Customer_Id').val() },
+                        data: { query: query, customerId: $('#case__Customer_Id').val(), searchKey: lastRequestedKey },
                         dataType: 'json',
                         success: function (result) {
-                            var resultList = jQuery.map(result, function (item) {
+                            if (result.searchKey != lastRequestedKey)
+                                return;
+                            var resultList = jQuery.map(result.result, function (item) {
                                 var aItem = {
                                     id: item.Id
                                             , num: item.UserId
@@ -1328,12 +1360,13 @@ $(function () {
                 },
 
                 matcher: function (obj) {
-                    var item = JSON.parse(obj);
+                    var item = JSON.parse(obj);                 
                     return ~item.name.toLowerCase().indexOf(this.query.toLowerCase())
-                        || ~item.name_family.toLowerCase().indexOf(this.query.toLowerCase())
-                        || ~item.num.toLowerCase().indexOf(this.query.toLowerCase())
-                        || ~item.phone.toLowerCase().indexOf(this.query.toLowerCase())
-                        || ~item.email.toLowerCase().indexOf(this.query.toLowerCase());
+                           || ~item.name_family.toLowerCase().indexOf(this.query.toLowerCase())
+                           || ~item.num.toLowerCase().indexOf(this.query.toLowerCase())
+                           || ~item.phone.toLowerCase().indexOf(this.query.toLowerCase())
+                           || ~item.email.toLowerCase().indexOf(this.query.toLowerCase())
+                           || ~item.usercode.toLowerCase().indexOf(this.query.toLowerCase());
                 },
 
                 sorter: function (items) {
@@ -2393,6 +2426,7 @@ $(function () {
                     }
 
                     dhHelpdesk.CaseArticles.UpdateOtherReferenceTitle(currentOrder.Id);
+                    dhHelpdesk.CaseArticles.UpdateFileAttachment(currentOrder);
                 });
             },
 
@@ -2840,7 +2874,17 @@ $(function () {
                 for (var i = 0; i < articles.length; i++) {
                     model.AddArticle(articles[i].GetViewModel());
                 }
-                model.files = this.files.getFiles(model.IsInvoiced);
+                var allFiles = this.files.getFiles();
+                var strFiles = '';
+                for (var af = 0; af < allFiles.length; af++)
+                    if (strFiles == '')
+                        strFiles += allFiles[af].getFileName();
+                    else
+                        strFiles += ' | ' + allFiles[af].getFileName();
+                
+                model.files = allFiles; //this.files.getFiles(model.IsInvoiced);
+                model.FileNameStr = strFiles;
+
                 return model;
             },
 
@@ -3035,7 +3079,11 @@ $(function () {
                     files: this.files.getFiles(),
                     isInvoiced: this.IsOrderInvoiced()
                 });
-                this.Container.find("#files-container").html(dhHelpdesk.CaseArticles.CaseInvoiceOrderFilesTemplate.render(model));
+
+                var files = this.files.getFiles();
+                dhHelpdesk.CaseArticles.UpdateFileAttachmentTitle(this.Id, files.length);
+
+                this.Container.find("#files-container").html(dhHelpdesk.CaseArticles.CaseInvoiceOrderFilesTemplate.render(model));                
             },
 
             this.RemoveOrderFile = function (fileName) {
@@ -3458,7 +3506,7 @@ $(function () {
             this.TotalLabel = dhHelpdesk.Common.Translate("Total");
             this.TotalAllLabel = dhHelpdesk.Common.Translate("Alla Totalt");
             this.TotalInvoicedLabel = dhHelpdesk.Common.Translate("Skickat Totalt");
-            this.TotalNotInvoicedLabel = dhHelpdesk.Common.Translate("Ej skickat Totalt");
+            this.TotalNotInvoicedLabel = dhHelpdesk.Common.Translate("Ej skickat Totalt");            
             this.Total = null;
             this.TotalInvoiced = null;
             this.TotalNotInvoiced = null;
@@ -3549,13 +3597,15 @@ $(function () {
             this.CreditOrderTitle = "";
 
             this.CreditOrderId = "";
-
+           
             this.attachedFilesTitle = dhHelpdesk.Common.Translate("Bifogade Filer");
             this.attachFilesTitle = dhHelpdesk.Common.Translate("Lägg till");
             this.doInvoiceTitle = dhHelpdesk.Common.Translate("Skicka");
             this.doCreditTitle = dhHelpdesk.Common.Translate("Kreditera");
             this.doDeleteTitle = dhHelpdesk.Common.Translate("Ta bort");
             this.SavingMessage = dhHelpdesk.Common.Translate("Spara...");
+
+            this.FileNameStr = "";
 
             this.AddArticle = function (article) {
                 this.Articles.push(article);
@@ -3778,7 +3828,7 @@ $(function () {
             var that = {};
             my = my || {};
 
-            var maxFileSizeMb = spec.maxFileSizeMb || 10;
+            var maxFileSizeMb = spec.maxFileSizeMb || 30;
             var allowedFileTypes = spec.allowedFileTypes || ["application/pdf"];
             var caseId = spec.caseId || '';
             var files = spec.files || [];

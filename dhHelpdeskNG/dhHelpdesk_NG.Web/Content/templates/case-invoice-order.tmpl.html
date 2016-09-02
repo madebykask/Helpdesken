@@ -236,14 +236,14 @@
             <h4>
                 <i style="display:inline-block" class="icon-plus-sign showAttached" onclick="dhHelpdesk.CaseArticles.ShowAttached('{{:Id}}')"></i> 
                 <i style="display:none"   class="icon-minus-sign hideAttached" onclick="dhHelpdesk.CaseArticles.HideAttached('{{:Id}}')"></i>         
-                {{:attachedFilesTitle}}
+                {{:attachedFilesTitle}} <span id="orderAttachedFilesNum_{{:Id}}">  </span> 
             </h4>
             <div class="attachedshow" style="display:none;">
                 <table>
                     <tbody>
                         <tr>                       
                             <td>
-                                {{:attachedFilesTitle}}
+                               {{:attachedFilesTitle}} 
                             </td>                    
                             <td>
                                 <button id="invoiceSelectFile_{{:Id}}" class="btn" onclick="dhHelpdesk.CaseArticles.SelectCaseFiles('{{:Id}}'); return false;">{{:attachFilesTitle}}</button>
