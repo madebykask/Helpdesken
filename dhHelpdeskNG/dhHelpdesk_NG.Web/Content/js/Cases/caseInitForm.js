@@ -26,7 +26,8 @@ var publicChangeDepartment = '/Cases/ChangeDepartment/';
 var skipRefreshOU = false;
 var skipRefreshIsAbout_OU = false;
 
-var lastSearchKey = '';
+var lastInitiatorSearchKey = ''
+var lastIsAboutSearchKey = '';
 
 function SetFocusToReportedByOnCase() {
     if ($('#ShowReportedBy').val() == 1) {
@@ -375,14 +376,14 @@ function GetComputerUserSearchOptionsForIsAbout() {
         items: 20,
         minLength: 2,
         source: function (query, process) {
-            lastInitiatorSearchKey = generateRandomKey();
+            lastIsAboutSearchKey = generateRandomKey();
             return $.ajax({
                 url: '/cases/search_user',
                 type: 'post',
-                data: { query: query, customerId: $('#case__Customer_Id').val(), searchKey: lastInitiatorSearchKey },
+                data: { query: query, customerId: $('#case__Customer_Id').val(), searchKey: lastIsAboutSearchKey },
                 dataType: 'json',
                 success: function (result) {
-                    if (result.searchKey != lastInitiatorSearchKey)
+                    if (result.searchKey != lastIsAboutSearchKey)
                         return;
 
                     var resultList = jQuery.map(result.result, function (item) {
