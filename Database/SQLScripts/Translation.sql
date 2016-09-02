@@ -5000,7 +5000,54 @@ If not exists (select * from tblTextTranslation where Text_Id = 1679 and Languag
             insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1679, 'Solved in time with Watchdate', 2)
 GO
 
+If not exists (select * from tblText where Id = 1680)
+            insert into tblText (Id, Textstring) VALUES (1680, 'Artiklar och produktområden')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1680 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1680, 'Articles and product areas', 2)
+GO
 
+If not exists (select * from tblText where Id = 1681)
+            insert into tblText (Id, Textstring) VALUES (1681, 'Import artiklar')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1681 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1681, 'Import articles', 2)
+GO
+
+If not exists (select * from tblText where Id = 1682)
+            insert into tblText (Id, Textstring) VALUES (1682, 'Export sökväg')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1682 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1682, 'Export path', 2)
+GO
+
+If not exists (select * from tblText where Id = 1683)
+            insert into tblText (Id, Textstring) VALUES (1683, 'Utfärdare')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1683 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1683, 'Issuer', 2)
+GO
+
+If not exists (select * from tblText where Id = 1684)
+            insert into tblText (Id, Textstring) VALUES (1684, 'Vår referens')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1684 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1684, 'Our reference', 2)
+GO
+
+If not exists (select * from tblText where Id = 1685)
+            insert into tblText (Id, Textstring) VALUES (1685, 'Ordernummer/prefix')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1685 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1685, 'Order no/prefix', 2)
+GO
+
+If not exists (select * from tblText where Id = 1686)
+            insert into tblText (Id, Textstring) VALUES (1686, 'Dokumentmall')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1686 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1686, 'Document template', 2)
+GO
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
