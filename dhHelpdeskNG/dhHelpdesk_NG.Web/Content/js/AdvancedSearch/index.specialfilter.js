@@ -16,6 +16,12 @@
         'no_results_text': no_results_text
     });       
 
+    $(".chosen-single-select").chosen({
+        width: "300px",
+        'placeholder_text_multiple': placeholder_text_multiple,
+        'no_results_text': no_results_text
+    });
+
     setTimeout(function () { $(defaultFocusObj).focus(); }, 100);
 
     $('#' + caseTypeDropDown + ' ul.dropdown-menu li a').click(function (e) {

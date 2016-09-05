@@ -8,7 +8,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
     using DH.Helpdesk.Web.Areas.Admin.Infrastructure.ModelFactories;
     using DH.Helpdesk.Web.Areas.Admin.Models.Invoice;
     using DH.Helpdesk.Web.Infrastructure.ActionFilters;
-    
+    using DH.Helpdesk.Web.Infrastructure.Extensions;
+
     using DH.Helpdesk.Domain;
 
     public class InvoiceController : BaseAdminController

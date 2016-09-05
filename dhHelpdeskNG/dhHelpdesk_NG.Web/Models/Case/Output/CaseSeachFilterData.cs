@@ -116,6 +116,8 @@
 
         public IList<ProductArea> ProductAreaList { get; set; }
 
+        public List<SelectListItem> NewProductAreaList { get; set; }
+
         public string FilteredProductArea { get; set; }
 
         public string FilteredProductAreaText { get; set; }

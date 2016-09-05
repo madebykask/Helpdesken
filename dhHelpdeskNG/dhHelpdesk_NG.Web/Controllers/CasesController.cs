@@ -3347,6 +3347,8 @@ namespace DH.Helpdesk.Web.Controllers
             specificFilter.FilteredProductAreaText = ParentPathDefaultValue;
             specificFilter.FilteredClosingReasonText = ParentPathDefaultValue;
 
+            specificFilter.NewProductAreaList = GetProductAreasModel(customerId, null);
+
             var customerfieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customerId);
 
             if (customerfieldSettings.Where(fs => fs.Name == GlobalEnums.TranslationCaseFields.Department_Id.ToString() &&
@@ -5029,6 +5031,46 @@ namespace DH.Helpdesk.Web.Controllers
             return ret.GroupBy(r => r.Value).Select(g => g.First()).ToList();
 
         }
+
+        private List<SelectListItem> GetProductAreasModel(int customerId, int? curProductAreaId)
+        {
+            var allActiveProductAreas = this._productAreaService.GetTopProductAreasForUser(customerId, SessionFacade.CurrentUser, false);
+            var ret = new List<SelectListItem>();
+
+            var parentRet = new List<SelectListItem>();
+            var childrenRet = new List<SelectListItem>();
+
+            var curName = string.Empty;
+
+            foreach (var productArea in allActiveProductAreas)
+            {                
+                curName = productArea.ResolveFullName();
+                parentRet.Add(new SelectListItem() { Value = productArea.Id.ToString(), Text = curName, Selected = (productArea.Id == curProductAreaId) });
+                parentRet.AddRange(GetProductAreaChild(productArea, curProductAreaId));
+            }
+
+            ret = parentRet.OrderBy(p => p.Text).ToList();
+            return ret;
+
+        }
+        private List<SelectListItem> GetProductAreaChild(ProductArea productArea, int? curProductAreaId)
+        {
+            var ret = new List<SelectListItem>();
+            if (productArea.SubProductAreas.Any())
+            {
+                var curName = string.Empty;
+                foreach (var child in productArea.SubProductAreas)
+                {
+                    curName = child.ResolveFullName();
+                    ret.Add(new SelectListItem() { Value = child.Id.ToString(), Text = curName, Selected = (child.Id == curProductAreaId) });
+                    ret.AddRange(GetProductAreaChild(child, curProductAreaId));
+                }
+            }
+            
+            return ret;
+                
+        }
+
         #endregion
 
         #region --General--
