@@ -49,7 +49,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             {
                 settings = new CaseInvoiceSettings(customerId);
             }
-
+            
             var model = this.caseInvoiceFactory.GetSettingsModel(customer, settings);
             return this.View(model);
         }
@@ -63,7 +63,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var productAreasInRow = productAreaService.GetChildsInRow(productAreas).ToList();
 
 
-
+            
             var allInvoiceArticles = invoiceArticleService.GetArticles(customerId);
 
             // TODO: need to get latest filter from session 

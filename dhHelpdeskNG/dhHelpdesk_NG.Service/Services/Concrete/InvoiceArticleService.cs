@@ -255,7 +255,21 @@
             return new ProcessResult(System.Reflection.MethodBase.GetCurrentMethod().Name);
            
         }
-        
+
+        public void DeleteFileByCaseId(int caseId, string fileName)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var caseInvoiceOrderFilesRep = uow.GetRepository<CaseInvoiceOrderFileEntity>();
+                var recToDelete = caseInvoiceOrderFilesRep.Find(f => f.Order.Invoice.CaseId == caseId && f.FileName == fileName).Select(f=> f.Id).ToList();
+                if (recToDelete.Any())
+                {
+                    caseInvoiceOrderFilesRep.DeleteWhere(f => recToDelete.Contains(f.Id));
+                    uow.Save();
+                }
+            }
+        }
+
         private ProcessResult ExportOrder(CaseInvoiceOrder order, CaseInvoiceSettings caseInvoiceSettings, int caseId, decimal caseNumber)
         {            
             try

@@ -32,5 +32,7 @@
         int SaveArticle(InvoiceArticle article);
 
         int SaveUnit(InvoiceArticleUnit unit);
+
+        void DeleteFileByCaseId(int caseId, string fileName);
     }
 }

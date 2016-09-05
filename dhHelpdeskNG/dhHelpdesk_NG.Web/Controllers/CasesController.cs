@@ -160,6 +160,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ICaseInvoiceSettingsService caseInvoiceSettingsService;
 
         private readonly IReportServiceService _ReportServiceService;
+        
          
         #endregion
 
@@ -1855,6 +1856,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var basePath = _masterDataService.GetFilePath(c.Customer_Id);
 
                 this._caseFileService.DeleteByCaseIdAndFileName(int.Parse(id), basePath, fileName.Trim());
+                this.invoiceArticleService.DeleteFileByCaseId(int.Parse(id), fileName.Trim());
 
                 IDictionary<string, string> errors;
                 string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
