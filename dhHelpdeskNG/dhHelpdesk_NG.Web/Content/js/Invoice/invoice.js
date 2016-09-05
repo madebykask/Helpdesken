@@ -1644,6 +1644,7 @@ $(function () {
                 ],
                 autoOpen: false,
                 open: function (event, ui) {
+                    loadCaseFiles();
                     $(".ui-dialog-titlebar-close", ui.dialog | ui).hide();
                     dhHelpdesk.CaseArticles.CleanUpAllOrders();
                     dhHelpdesk.System.RaiseEvent("OnChangeOrder", [th.GetCurrentOrder()]);

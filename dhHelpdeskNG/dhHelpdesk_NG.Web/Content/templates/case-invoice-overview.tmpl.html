@@ -26,10 +26,11 @@
                     <td style='text-align: right;'><span class='textbold'>{{:TotalLabel}} SEK</span> {{:Total}}</td>                
             {{/if}}
         </tr>
-        <tr>
-            <td colspan="8"><span class="textbold"> {{:attachedFilesTitle}} </span> {{:FileNameStr}} </td>            
-        </tr>
-        
+        {{if FileNameStr != '' }}
+            <tr>
+                <td colspan="8"><span class="textbold"> {{:attachedFilesTitle}} </span> {{:FileNameStr}} </td>            
+            </tr>
+        {{/if}}
     {{/for}}
         <tr>
             <td colspan="7" class='textbold' style='text-align: right;'>
