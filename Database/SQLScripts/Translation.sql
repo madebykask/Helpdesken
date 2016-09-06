@@ -5049,5 +5049,14 @@ If not exists (select * from tblTextTranslation where Text_Id = 1686 and Languag
             insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1686, 'Document template', 2)
 GO
 
+If not exists (select * from tblText where Id = 1687)
+            insert into tblText (Id, Textstring) VALUES (1687, 'kan inte ändras eftersom det finns order som är skickade.')																
+																
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1687 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1687, 'can''t be changed because you have sent orders.', 2)
+GO
+
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

@@ -1,6 +1,8 @@
 ﻿if (window.dhHelpdesk == null)
     dhHelpdesk = {};
 
+
+
 $(function () {
     
 
@@ -36,6 +38,18 @@ $(function () {
 
     var creditAlertToShow = "";
     var creditAlert = true;
+
+    var lastProjectSelected = $("#case__Project_Id option:selected");
+    projectElement.change(function () {
+        var invoiced = dhHelpdesk.CaseArticles.GetInvoicedOrders(dhHelpdesk.CaseArticles.allVailableOrders);
+        if (invoiced.length > 0) {
+            dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate('Projekt') + ' ' +
+                                                 dhHelpdesk.Common.Translate('kan inte ändras eftersom det finns order som är skickade.'));
+            lastProjectSelected.attr("selected", true);
+            return;
+        }
+        lastProjectSelected = $("#case__Project_Id option:selected");
+    });
 
     /* Extenstions */
     if (typeof String.prototype.RemoveNonNumerics !== "function") {
@@ -642,6 +656,14 @@ $(function () {
         IsProductAreaChanged: function () {
             var lastProductArea = $('#LastProductAreaId').val();
             if (this.ProductAreaElement.val() != lastProductArea)
+                return true;
+            else
+                return false;
+        },
+
+        IsProjectChanged: function () {
+            var lastProjectId = $('#LastProjectId').val();
+            if (this.ProjectElement.val() != lastProjectId)
                 return true;
             else
                 return false;
@@ -1964,7 +1986,7 @@ $(function () {
                 .addClass("btn");
 
             button.click(function () {
-                if (th.IsNewCase() || th.IsProductAreaChanged()) {
+                if (th.IsNewCase() || th.IsProductAreaChanged() || th.IsProjectChanged()) {
                     dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("Var vänlig spara ärendet och försök igen!"));
                     return;
                 }
@@ -2033,18 +2055,7 @@ $(function () {
             th.ProductAreaElement.change(function () {
                 onChangeProductArea();
             });
-            onChangeProductArea();
-
-            //var lastProjectSelected = $("#case__Project_Id option:selected");
-            //th.ProjectElement.change(function () {
-            //    var canChange = true;
-            //    for (var iw = 0; i < th.allVailableOrders.length; iw++) {
-            //        if (th.allVailableOrders[iw].OrderState == dhHelpdesk.CaseArticles.OrderStates.Saved) {                                                
-            //            lastSel.attr("selected", true);
-            //        }
-            //    };
-                
-            //});
+            onChangeProductArea();            
         },
 
         Validate: function () {
@@ -2904,7 +2915,7 @@ $(function () {
                     if (strFiles == '')
                         strFiles += allFiles[af].getFileName();
                     else
-                        strFiles += '  |  ' + allFiles[af].getFileName();
+                        strFiles += '&nbsp;&nbsp;<b>|</b>&nbsp;&nbsp;' + allFiles[af].getFileName();
                 
                 model.files = allFiles; //this.files.getFiles(model.IsInvoiced);
                 model.FileNameStr = strFiles;
