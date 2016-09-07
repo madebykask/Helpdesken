@@ -5066,6 +5066,12 @@ If not exists (select * from tblTextTranslation where Text_Id = 1688 and Languag
             insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1688, 'Please note. It will be removed from order as well', 2)
 GO
 
-
+If not exists (select * from tblText where Id = 1689)
+            insert into tblText (Id, Textstring) VALUES (1689, 'Du måste välja både artikel och produktområde!')																
+																
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1689 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1689, 'You have to select both article and productarea!', 2)
+GO
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

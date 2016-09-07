@@ -17,7 +17,7 @@
     <div class="secnavs fixed">
         <div class="pull-left">
             <ul class="secnav">
-                <li><input type="button" class="btn" value="Save" onclick = "SaveArticleProduct('')" /> </li>
+                <li><input type="button" class="btn" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" onclick = "SaveArticleProduct('')" /> </li>
                 <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "ArticleProductAreaIndex", new { customerId = Model.Customer.Id }, new { @class = "btn" })</li>
             </ul>
         </div>
