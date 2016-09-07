@@ -73,6 +73,87 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	ALTER TABLE tblSettings ADD CalcSolvedInTimeByLatestSLADate int NOT NULL Default(0)
 GO
 
+
+
+if COL_LENGTH('tblCaseFilterFavorite','RegionFilter') != 400
+BEGIN	
+	alter table tblCaseFilterFavorite alter column RegionFilter nvarchar(200)  null 
+END
+Go
+
+
+if COL_LENGTH('tblCaseFilterFavorite','DepartmentFilter') != 400
+BEGIN	
+	alter table tblCaseFilterFavorite alter column DepartmentFilter nvarchar(200)  null 
+END
+Go
+
+
+if COL_LENGTH('tblCaseFilterFavorite','RegisteredByFilter') != 400
+BEGIN	
+	alter table tblCaseFilterFavorite alter column RegisteredByFilter nvarchar(200)  null 
+END
+Go
+
+if COL_LENGTH('tblCaseFilterFavorite','CaseTypeFilter') != 400
+BEGIN	
+	alter table tblCaseFilterFavorite alter column CaseTypeFilter nvarchar(200)  null 
+END
+Go
+
+if COL_LENGTH('tblCaseFilterFavorite','ProductAreaFilter') != 400
+BEGIN	
+	alter table tblCaseFilterFavorite alter column ProductAreaFilter nvarchar(200)  null 
+END
+Go
+
+if COL_LENGTH('tblCaseFilterFavorite','WorkingGroupFilter') != 400
+BEGIN	
+	alter table tblCaseFilterFavorite alter column WorkingGroupFilter nvarchar(200)  null 
+END
+
+
+if COL_LENGTH('tblCaseFilterFavorite','ResponsibleFilter') != 400
+BEGIN	
+	alter table tblCaseFilterFavorite alter column ResponsibleFilter nvarchar(200)  null 
+END
+
+if COL_LENGTH('tblCaseFilterFavorite','AdministratorFilter') != 400
+BEGIN	
+	alter table tblCaseFilterFavorite alter column AdministratorFilter nvarchar(200)  null 
+END
+Go
+
+if COL_LENGTH('tblCaseFilterFavorite','PriorityFilter') != 400
+BEGIN	
+	alter table tblCaseFilterFavorite alter column PriorityFilter nvarchar(200)  null 
+END
+
+if COL_LENGTH('tblCaseFilterFavorite','StatusFilter') != 400
+BEGIN	
+	alter table tblCaseFilterFavorite alter column StatusFilter nvarchar(200)  null 
+END
+Go
+
+if COL_LENGTH('tblCaseFilterFavorite','SubStatusFilter') != 400
+BEGIN	
+	alter table tblCaseFilterFavorite alter column SubStatusFilter nvarchar(200)  null 
+END
+Go
+
+if COL_LENGTH('tblCaseFilterFavorite','RemainingTimeFilter') != 400
+BEGIN	
+	alter table tblCaseFilterFavorite alter column RemainingTimeFilter nvarchar(200)  null 
+END
+Go
+
+if COL_LENGTH('tblCaseFilterFavorite','ClosingReasonFilter') != 400
+BEGIN	
+	alter table tblCaseFilterFavorite alter column ClosingReasonFilter nvarchar(200)  null 
+END
+Go
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.26'
 

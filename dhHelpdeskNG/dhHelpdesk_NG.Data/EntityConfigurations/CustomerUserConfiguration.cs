@@ -28,6 +28,9 @@
             this.Property(x => x.CaseStateSecondaryFilter).IsOptional().HasMaxLength(50);
             this.Property(x => x.CaseUserFilter).IsOptional().HasMaxLength(50);
             this.Property(x => x.CaseWorkingGroupFilter).IsOptional().HasMaxLength(50);
+            this.Property(x => x.CaseCaseTypeFilter).IsOptional().HasMaxLength(50); 
+            this.Property(x => x.CaseStatusFilter).IsOptional().HasMaxLength(50); 
+            this.Property(x => x.CaseResponsibleFilter).IsOptional().HasMaxLength(50); 
             this.Property(x => x.ShowOnStartPage).IsOptional();
             this.Property(x => x.WatchDatePermission).IsRequired();
             this.Property(x => x.UserInfoPermission).IsRequired();
