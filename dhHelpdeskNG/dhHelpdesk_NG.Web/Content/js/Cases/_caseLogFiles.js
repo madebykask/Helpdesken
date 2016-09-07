@@ -59,7 +59,25 @@ $(function () {
         var that = $(this);
 
         e.stopImmediatePropagation();
-        confirmDialog( params.deleteLogFileConfirmMessage,
+
+        var deleteMessage = params.deleteLogFileConfirmMessage;
+
+        var buttonName = '';
+        buttonName = '#' + that[0].id;
+        var fileName = $(buttonName).attr('data-fileName');
+        if (fileName != undefined && fileName != null)
+            fileName = fileName.toLowerCase();
+        else
+            fileName = "";
+
+        var shouldShowExtra = false;
+        if (fileName.indexOf(".pdf") >= 0)
+            shouldShowExtra = true;
+       
+        if ($("#CaseHasInvoiceOrder").val() != '' && shouldShowExtra)
+            deleteMessage += ' <br/> ' + params.deleteCaseFileExtraInvoiceMessage;
+         
+        confirmDialog(deleteMessage,
             function () {
                 that.triggerHandler('click', [{ self: true }]);
             },

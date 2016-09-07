@@ -67,7 +67,7 @@
             relatedCasesUrl: '@Url.Action("RelatedCasesFull", "Cases")',
             relatedCasesCountUrl: '@Url.Action("RelatedCasesCount", "Cases")',
             getDepartmentOusUrl: '@Url.Action("ChangeDepartment", "Cases")',
-            deleteCaseFileConfirmMessage: '@Translation.GetForJS("Är du säker på att du vill ta bort bifogad fil")' + '?',
+            deleteCaseFileConfirmMessage: '@Translation.GetForJS("Är du säker på att du vill ta bort bifogad fil")' + '?',            
             okText: '@Translation.GetForJS("OK")',
             cancelText: '@Translation.GetForJS("Avbryt")',
             yesText: '@Translation.GetForJS("Ja")',
@@ -211,6 +211,7 @@
                         @Html.Hidden("CaseTemplate_IsAbout_OU_Id", "")
                         @Html.Hidden("LastProductAreaId", Model.case_.ProductArea_Id)
                         @Html.Hidden("LastProjectId", Model.case_.Project_Id)
+                        @Html.Hidden("CaseHasInvoiceOrder", "")
 
                         @Html.HiddenFor(model => Model.CaseLock.LockGUID)
                         @*<input type="button" id="sla_test" value="SLA Test" onclick="CalcSLA();" />*@

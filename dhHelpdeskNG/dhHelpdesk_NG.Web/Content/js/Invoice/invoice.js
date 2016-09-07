@@ -4165,7 +4165,7 @@ $(function () {
                 $("[data-invoice]").each(function () {
                     var $this = $(this);
                     var data = $.parseJSON($this.attr("data-invoice-case-articles"));
-
+                    $('#CaseHasInvoiceOrder').val('');
                     var emptyOrders = false;
                     var invoice = new dhHelpdesk.CaseArticles.CaseInvoice();
                     var inv = null;
@@ -4226,6 +4226,7 @@ $(function () {
                         return;
                     }
 
+                    
                     if (inv.Orders != null) {
                         inv.Orders = dhHelpdesk.CaseArticles.SortOrders(inv.Orders);
                         dhHelpdesk.CaseArticles.allVailableOrders = inv.Orders;
@@ -4311,6 +4312,7 @@ $(function () {
                                     caseArticle.CreditedForArticle_Id = article.CreditedForArticle_Id;
 
                                     order.AddArticle(caseArticle);
+                                    $('#CaseHasInvoiceOrder').val('yes');
                                 }
                             }
                         }

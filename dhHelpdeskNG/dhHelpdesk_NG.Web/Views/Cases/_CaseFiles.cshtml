@@ -51,7 +51,7 @@
                         {
                             if (!caseInactive)
                             {
-                                <a id="@string.Format("delete_casefile_button_{0}", i)" class="btn bt-small" data-field="deleteFile" title="@Translation.Get("Ta bort")"><i class="icon-remove"></i></a> 
+                                <a id="@string.Format("delete_casefile_button_{0}", i)" class="btn bt-small" data-fileName="@file.FileName" data-field="deleteFile" title="@Translation.Get("Ta bort")"><i class="icon-remove"></i></a> 
                             }
                            
                         }
