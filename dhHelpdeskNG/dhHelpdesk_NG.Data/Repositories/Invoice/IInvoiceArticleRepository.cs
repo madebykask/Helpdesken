@@ -9,5 +9,9 @@
         InvoiceArticle[] GetArticles(int customerId);
 
         int SaveArticle(InvoiceArticle article);
+
+        void SaveArticleProductArea(InvoiceArticleProductAreaSelectedFilter selectedItems);
+
+        void DeleteArticleProductArea(int articleid, int productareaid);
     }
 }

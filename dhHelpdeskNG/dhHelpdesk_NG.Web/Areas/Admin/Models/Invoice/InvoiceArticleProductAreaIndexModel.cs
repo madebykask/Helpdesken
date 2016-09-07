@@ -26,11 +26,12 @@
 
     public sealed class InvoiceArticleProductAreaIndexRowsModel
     {
-        public InvoiceArticleProductAreaIndexRowsModel()
+        public InvoiceArticleProductAreaIndexRowsModel(Customer customer)
         {
-            Data = new List<InvoiceArticleProductAreaIndexRowModel>(); 
+            Data = new List<InvoiceArticleProductAreaIndexRowModel>();
+            Customer = customer;
         }
-
+        public Customer Customer { get; private set; }
         public List<InvoiceArticleProductAreaIndexRowModel> Data { get; set; }
     }
 
@@ -40,7 +41,7 @@
         public InvoiceArticleProductAreaIndexModel(Customer customer)
         {
             Customer = customer;
-            Rows = new InvoiceArticleProductAreaIndexRowsModel();
+            Rows = new InvoiceArticleProductAreaIndexRowsModel(customer);
         }
         
         public Customer Customer { get; private set; }

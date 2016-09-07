@@ -11,6 +11,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
     using DH.Helpdesk.Web.Infrastructure.Extensions;
 
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Web.Infrastructure;
 
     public class InvoiceController : BaseAdminController
     {
@@ -76,18 +77,84 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public PartialViewResult ShowSearchResult(InvoiceArticleProductAreaFilterJSModel filter)
+        public ActionResult New(int customerId)
+        {
+            var customer = this.customerService.GetCustomer(customerId);
+            
+
+            //var invoicArticleProdArea = new InvoiceArticleProductArea {  };
+
+            var model = this.CreateInputViewModel(customer);
+
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public JsonResult Save(InvoiceArticleProductAreaFilterJSModel filter)
+        {
+            IDictionary<string, string> errors = new Dictionary<string, string>();
+
+            var selectedItems = filter.MapToSelectedFilter();
+
+            if (selectedItems.SelectedInvoiceArticles.Any() && selectedItems.SelectedProductAreas.Any())            
+                this.invoiceArticleService.SaveArticleProductArea(selectedItems);
+            else
+                return Json(new { res = "error", data = Translation.GetCoreTextTranslation("Du måste välja både artikel och produktområde!") });
+
+            if (errors.Count != 0)
+                return Json(new { res = "error", data = string.Join(" - " ,errors.Values)});
+
+            var target = Url.Action("ArticleProductAreaIndex", "Invoice",
+                        new { customerId = selectedItems.CustomerId, area ="admin" }, Request.Url.Scheme);
+                                
+            return Json(new { res = "sucess", data = target});
+        }
+
+        [HttpPost]
+        public ActionResult DeleteArticleProductArea(int articleid, int productareaid, int customerid)
+        {
+            IDictionary<string, string> errors = new Dictionary<string, string>();
+            this.invoiceArticleService.DeleteArticleProductArea(articleid, productareaid);
+
+            if (errors.Count == 0)
+                return this.RedirectToAction("ArticleProductAreaIndex", "invoice", new { customerId = customerid, area = "admin" });
+
+            var customer = customerService.GetCustomer(customerid);
+            var model = this.CreateInputViewModel(customer);
+
+            return this.View(model);
+        }
+
+        private InvoiceArticleProductAreaInputViewModel CreateInputViewModel(Customer customer)
+        {
+            var allInvoiceArticles = invoiceArticleService.GetArticles(customer.Id).OrderBy(a => a.Name);
+            var productAreas = productAreaService.GetAllProductAreas(customer.Id);
+            var productAreasInRow = productAreaService.GetChildsInRow(productAreas).ToList();
+
+            var model = new InvoiceArticleProductAreaInputViewModel
+            {
+                Customer = customer,
+                ProductAreas = productAreasInRow,
+                Articles = allInvoiceArticles.ToList()
+            };
+
+            return model;
+        }
+
+        [HttpGet]
+        public PartialViewResult _ArticleProductAreaIndexRows(InvoiceArticleProductAreaFilterJSModel filter)
         {
             var selectedSearch = filter.MapToSelectedFilter();
-            var model = GetIndexRowModel(selectedSearch.CustomerId, selectedSearch, null);           
-            return PartialView("_ArticleProductAreaIndexRows.cshtml", model);
+            var model = GetIndexRowModel(selectedSearch.CustomerId, selectedSearch, null);
+            return PartialView(model);            
         }
 
         private InvoiceArticleProductAreaIndexRowsModel GetIndexRowModel(int customerId, 
                                                                          InvoiceArticleProductAreaSelectedFilter selectedFilter, 
                                                                          InvoiceArticle[] invoiceArticles = null)
-        {            
-            var model = new InvoiceArticleProductAreaIndexRowsModel();
+        {
+            var customer = customerService.GetCustomer(customerId);
+            var model = new InvoiceArticleProductAreaIndexRowsModel(customer);
 
             /*Selection modes*/
             // 0: Article(empty)  - ProductArea(empty)   

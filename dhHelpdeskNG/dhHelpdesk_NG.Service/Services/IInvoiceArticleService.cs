@@ -34,5 +34,8 @@
         int SaveUnit(InvoiceArticleUnit unit);
 
         void DeleteFileByCaseId(int caseId, string fileName);
+        void SaveArticleProductArea(InvoiceArticleProductAreaSelectedFilter selectedItems);
+
+        void DeleteArticleProductArea(int articleid, int productareaid);
     }
 }

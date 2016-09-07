@@ -48,8 +48,7 @@
                     'filter.ProductAreas': productarea,
                     curTime: new Date().getTime()
                 },
-                function (articleRows) {
-                    alert(articleRows);
+                function (articleRows) {                    
                     $("#ArticleIndexRows").html(articleRows);
                 }
             );

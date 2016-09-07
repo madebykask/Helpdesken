@@ -111,6 +111,15 @@
             return this.invoiceArticleUnitRepository.SaveUnit(unit);
         }
 
+        public void SaveArticleProductArea(InvoiceArticleProductAreaSelectedFilter selectedItems)
+        {
+            this.invoiceArticleRepository.SaveArticleProductArea(selectedItems);
+        }
+
+        public void DeleteArticleProductArea(int articleid, int productareaid)
+        {
+            this.invoiceArticleRepository.DeleteArticleProductArea(articleid, productareaid);
+        }
         /// <summary>
         /// Will convert order.invoicedate to date with timezone (from utc)
         /// </summary>

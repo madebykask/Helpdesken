@@ -5,13 +5,13 @@
 
     using DH.Helpdesk.Domain.Invoice;
 
-    internal sealed class InvoiceArticleProductAreaConfiguration : EntityTypeConfiguration<InvoiceArticleProductAreaEntity>
-    {
-        internal InvoiceArticleProductAreaConfiguration()
-        {
-            this.HasKey(ap => new { ap.InvoiceArticle_Id, ap.ProductArea_Id });
+    //internal sealed class InvoiceArticleProductAreaConfiguration : EntityTypeConfiguration<InvoiceArticleProductAreaEntity>
+    //{
+    //    internal InvoiceArticleProductAreaConfiguration()
+    //    {
+    //        this.HasKey(ap => new { ap.InvoiceArticle_Id, ap.ProductArea_Id });
 
-            this.ToTable("tblInvoiceArticle_tblProductArea");
-        }
-    }
+    //        this.ToTable("tblInvoiceArticle_tblProductArea");
+    //    }
+    //}
 }
