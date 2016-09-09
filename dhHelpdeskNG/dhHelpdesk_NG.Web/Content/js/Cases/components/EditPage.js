@@ -72,7 +72,7 @@ EditPage.prototype.isProductAreaValid = function () {
 };
 
 
-EditPage.prototype.getValidationErrorMessage = function () {
+EditPage.prototype.getValidationErrorMessage = function (extraMessage) {
     var me = this;
     var validationMessages = me.p.casesScopeInitParameters.validationMessages || '';
     var requiredFieldsMessage = me.p.casesScopeInitParameters.requiredFieldsMessage || '';
@@ -88,7 +88,10 @@ EditPage.prototype.getValidationErrorMessage = function () {
             errorText = '<br />' + '[' + dhHelpdesk.cases.utils.replaceAll(errorText, validationMessage, '').trim() + ']';
         });
         messages.push(errorText);
-    });
+    });    
+
+    messages.push(extraMessage);
+
     return messages.join('');
 };
 
@@ -106,6 +109,7 @@ EditPage.prototype.getDate = function (val) {
 
 EditPage.prototype.isFormValid = function() {
     var me = this;
+    $('#btnAddCaseFile').removeClass('error');
 
     if (!me.isProductAreaValid()) {
         me.$productAreaObj.addClass("error");
@@ -124,10 +128,30 @@ EditPage.prototype.isFormValid = function() {
         };        
     }
     
+    var isCaseFileValid = true;
+    var err = '';
+    if (me.isCaseFileMandatory != 0) {        
+        var caseFiles = $('#case_files_table tbody tr');
+        if (caseFiles != null && caseFiles != undefined) {
+            if (caseFiles.length < 1) {
+                $('#btnAddCaseFile').addClass('error');
+                isCaseFileValid = false;
+                err = '<br />' + '[' + me.p.caseFileCaption + ']';                
+            }
+        }
+    }
 
     if (!me.$form.valid()) {
-        dhHelpdesk.cases.utils.showError(me.getValidationErrorMessage());
+        if (isCaseFileValid)
+            dhHelpdesk.cases.utils.showError(me.getValidationErrorMessage());
+        else
+            dhHelpdesk.cases.utils.showError(me.getValidationErrorMessage(err));
         return false;
+    } else {
+        if (!isCaseFileValid) {
+            dhHelpdesk.cases.utils.showError(me.getValidationErrorMessage(err));
+            return false;
+        }
     }
     
     return true;
@@ -543,6 +567,8 @@ EditPage.prototype.init = function (p) {
     me.$btnPrint = $('.btn.print-case');    
     me.$printArea = $('#CasePrintArea');
     me.$printDialog = $('#PrintCaseDialog');
+
+    me.isCaseFileMandatory = me.p.isCaseFileMandatory;
 
     var invoiceElm = $('#CustomerSettings_ModuleCaseInvoice').val();
     me.invoiceIsActive = invoiceElm != undefined && invoiceElm != null && invoiceElm.toString().toLowerCase() == 'true';

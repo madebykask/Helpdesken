@@ -39,7 +39,11 @@
                                   '@Translation.GetForJS("kan inte ändra eftersom det finns order som inte är skickade.")',        
         caseTemplateChangeMessage: '@Translation.GetForJS("Du kan inte använda ärendemall eftersom det finns order som inte är skickade.")', 
          
-        caseRegDate: '@Model.case_.RegTime',      
+        caseRegDate: '@Model.case_.RegTime', 
+        isCaseFileMandatory: '@Model.caseFieldSettings.getRequired(GlobalEnums.TranslationCaseFields.Filename.ToString())',
+        caseFileCaption: '@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Filename.ToString(), 
+                                                Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)',
+                                
         caseFieldNames:{
             CustomerId: "case__Customer_Id",
             RegionId: "case__Region_Id",
@@ -1506,9 +1510,10 @@
                                         </td>
                                         <td colspan="2">
                                             @if (Model.EditMode == Enums.AccessMode.FullAccess)
-                                            {
-                                                <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
+                                            {                                                
+                                                <a id="btnAddCaseFile" href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>                                                    
                                                 <a href="#upload_clipboard_file_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till från Urklipp", SessionFacade.CurrentLanguageId)</a>
+                                                
                                             }
                                             <div id="divCaseFiles">                                                
                                                 @Html.Partial("_CaseFiles", Model.CaseFilesModel, new ViewDataDictionary { { "CaseInactive", Model.case_.FinishingDate.HasValue } })

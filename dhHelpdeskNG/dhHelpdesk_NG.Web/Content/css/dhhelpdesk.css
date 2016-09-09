@@ -1060,11 +1060,20 @@ label.error
     margin-left: 10px;
 }
 
-input[type=text].error, select.error, textarea.error,  .btn-group.error .btn
+input[type=text].error, select.error, textarea.error, .btn-group.error  .btn
 {
     border: 1px solid #ff0000;
     background-color: #ffeeee;
 }
+
+
+a.error, input[type=¨button].error .btn
+{
+    border: 1px solid #ff0000;
+    background-color: #ffeeee;
+    color:#333333;
+}
+
 
 .ui-state-error
 {
