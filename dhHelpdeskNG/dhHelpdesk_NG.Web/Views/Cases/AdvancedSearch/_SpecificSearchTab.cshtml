@@ -143,8 +143,47 @@
                     </tr>                
                 }
 
+                @*@if (Model.ProductAreaList != null)
+                {
+                    <tr>
+                        <td>
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)
+                        </td>
+                        <td>
+                            <div id="ProductAreaDropDown" class="btn-group pull-left">
+                                <div class="btn breadcrumbs" id="divBreadcrumbs_ProductAreaDropDown">@Model.FilteredProductAreaText</div>
+                                <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
+                                    @Html.ProductAreaDropdownButtonString(Model.ProductAreaList, false)
+                                </ul>
+                                <input type="hidden" class="hidden" value="@Model.FilteredProductArea" id="hid_ProductAreaDropDown" name="hid_ProductAreaDropDown" />
+                            </div>
+                        </td>
+                    </tr>                
+                }*@
+
                 @if (Model.ProductAreaList != null)
                 {
+                    <tr>
+                        <td>
+                            [Product Area List]
+                        </td>
+                        <td>
+                            <select id="productArea" name="productArea" class='chosen-single-select'>    
+                                <option> &nbsp; </option>
+                                @if (Model.NewProductAreaList != null)
+                                {
+                                    foreach (var productArea in Model.NewProductAreaList)
+                                    {                                                                                                           
+                                        <option value="@productArea.Value" @(productArea.Selected ? "Selected" : "")> @productArea.Text </option>
+                                    }
+                                }
+                            </select>
+                        </td>
+                    </tr>
                     <tr>
                         <td>
                             @Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)

@@ -514,6 +514,8 @@
 
         public DbSet<CaseInvoiceSettingsEntity> CaseInvoiceSettings { get; set; }
 
+        //public DbSet<InvoiceArticleProductAreaEntity> InvoiceArticleProductArea { get; set; }
+
         public DbSet<GridSettingsEntity> GridSettings { get; set; }
 
         public DbSet<RegistrationSourceCustomer> RegistrationSourceCustomer { get; set; }
@@ -765,6 +767,7 @@
             modelBuilder.Configurations.Add(new TextTypeConfiguration());
             modelBuilder.Configurations.Add(new CaseInvoiceConfiguration());
             modelBuilder.Configurations.Add(new CaseInvoiceSettingsConfiguration());
+            //modelBuilder.Configurations.Add(new InvoiceArticleProductAreaConfiguration());
 
             // Licenses module configurations
             modelBuilder.Configurations.Add(new ProductConfiguration());

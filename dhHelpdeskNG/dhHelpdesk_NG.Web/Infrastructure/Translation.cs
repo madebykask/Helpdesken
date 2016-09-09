@@ -271,7 +271,8 @@
                             "Välj artikel",
                             "Ärende",
                             "Ärendefiler",
-                            "Översikt"                            
+                            "Översikt",
+                            "kan inte ändras eftersom det finns order som är skickade."
                         };
             return ret;
         }

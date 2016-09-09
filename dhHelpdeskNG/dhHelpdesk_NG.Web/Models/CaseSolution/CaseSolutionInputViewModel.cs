@@ -74,6 +74,7 @@
         public IList<SelectListItem> IsAbout_Departments { get; set; }
         public IList<SelectListItem> IsAbout_OUs { get; set; }
 
-        //public IList<Department> departments { get; set; }
+        public IList<SelectListItem> ButtonList { get; set; }
+        
     }
 }

@@ -1938,6 +1938,7 @@ namespace DH.Helpdesk.Services.Services
             h.CausingPartId = c.CausingPartId;
             h.DefaultOwnerWG_Id = c.DefaultOwnerWG_Id;
             h.RegistrationSourceCustomer_Id = c.RegistrationSourceCustomer_Id;
+            h.LatestSLACountDate = c.LatestSLACountDate;
 
             if (c.IsAbout != null)
             {

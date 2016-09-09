@@ -1,0 +1,51 @@
+﻿@model DH.Helpdesk.Web.Areas.Admin.Models.Invoice.InvoiceArticleProductAreaInputViewModel
+<div class="content  invoice-article admin">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#fragment-1">@Translation.Get("Artiklar och produktområden")</a></li>            
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment-1">
+              <div>
+                  <input type="hidden" id="currentCustomerId" value="@Model.Customer.Id" />
+                  <table>
+                      <tr>
+                          <td>@Translation.Get("Artikel", Enums.TranslationSource.TextTranslation)</td>
+                          <td>
+                              <select id="lstInvoiceArticles" name="lstInvoiceArticles" data-field="region" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                     @foreach (var a in Model.Articles)
+                                     {             
+                                        <option value="@a.Id">@a.Name - @a.NameEng</option>
+                                     }
+                                 </select>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td style="width:120px">@Translation.Get("Produktområde", Enums.TranslationSource.TextTranslation)</td>
+                          <td style="width:120px">
+                              <select id="lstProductAreas" name="lstProductAreas" data-field="region" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                     @foreach (var p in Model.ProductAreas)
+                                     {
+                                         if (p.IsActive == 1)
+                                         {
+                                            <option value="@p.Id">
+                                                @p.Name
+                                            </option>
+                                         }
+                                         else
+                                         {
+                                            <option value="@p.Id" class="DisabledChosen" >
+                                                @p.Name
+                                            </option>
+                                        }        
+                                        
+                                     }
+                                 </select>
+                          </td>
+                      </tr>
+                  </table>  
+              </div>
+            </div>            
+        </div>        
+    </div>
+</div>

@@ -1,6 +1,6 @@
 ﻿@model DH.Helpdesk.BusinessData.Models.Invoice.CaseInvoiceSettings
 
-@using (Html.BeginForm("SaveSettings", "CaseInvoice", FormMethod.Post, new { id = "case_invoice_settings_form" }))
+@using (Html.BeginForm("SaveSettings", "Invoice", FormMethod.Post, new { id = "invoice_settings_form" }))
 {
     @Html.HiddenFor(m => m.Id)
     @Html.HiddenFor(m => m.CustomerId)
@@ -10,7 +10,7 @@
                 <table class="tableform">
                     <tr>
                         <td class="span3">
-                            @Translation.Get("Export path")
+                            @Translation.Get("Export sökväg", Enums.TranslationSource.TextTranslation)
                         </td>
                         <td class="span9">
                             @Html.TextBoxFor(m => m.ExportPath, new { maxlength = "200" })
@@ -18,7 +18,7 @@
                     </tr>
                     <tr>
                         <td class="span3">
-                            @Translation.Get("Currency")
+                            @Translation.Get("Valuta", Enums.TranslationSource.TextTranslation)
                         </td>
                         <td class="span9">
                             @Html.TextBoxFor(m => m.Currency, new { maxlength = "50" })
@@ -26,7 +26,7 @@
                     </tr>
                     <tr>
                         <td class="span3">
-                            @Translation.Get("Issuer")
+                            @Translation.Get("Utfärdare", Enums.TranslationSource.TextTranslation)
                         </td>
                         <td class="span9">
                             @Html.TextBoxFor(m => m.Issuer, new { maxlength = "50" })
@@ -34,7 +34,7 @@
                     </tr>
                     <tr>
                         <td class="span3">
-                            @Translation.Get("Our reference")
+                            @Translation.Get("Vår referens", Enums.TranslationSource.TextTranslation)
                         </td>
                         <td class="span9">
                             @Html.TextBoxFor(m => m.OurReference, new { maxlength = "50" })
@@ -42,7 +42,7 @@
                     </tr>
                     <tr>
                         <td class="span3">
-                            @Translation.Get("Order no prefix")
+                            @Translation.Get("Ordernummer/prefix", Enums.TranslationSource.TextTranslation)
                         </td>
                         <td class="span9">
                             @Html.TextBoxFor(m => m.OrderNoPrefix, new { maxlength = "50" })
@@ -50,7 +50,7 @@
                     </tr>
                     <tr>
                         <td class="span3">
-                            @Translation.Get("Doc template")
+                            @Translation.Get("Dokumentmall", Enums.TranslationSource.TextTranslation)
                         </td>
                         <td class="span9">
                             @Html.TextBoxFor(m => m.DocTemplate, new { maxlength = "50" })
@@ -63,8 +63,8 @@
 }
 <script type="text/javascript">
     $(function() {
-        $("#save_case_invoice_settings").click(function() {
-            $("#case_invoice_settings_form").submit();
+        $("#save_invoice_settings").click(function() {
+            $("#invoice_settings_form").submit();
             return true;
         });
     });

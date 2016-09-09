@@ -20,8 +20,7 @@
                 query =
                     query.Where(
                         u =>
-                        u.UserWorkingGroups != null
-                        && u.UserWorkingGroups.Any(w => workingGroups.Contains(w.WorkingGroup_Id)));
+                        u.UserWorkingGroups.Any(w => workingGroups.Contains(w.WorkingGroup_Id)));
             }
 
             return query;

@@ -26,6 +26,9 @@ var publicChangeDepartment = '/Cases/ChangeDepartment/';
 var skipRefreshOU = false;
 var skipRefreshIsAbout_OU = false;
 
+var lastInitiatorSearchKey = ''
+var lastIsAboutSearchKey = '';
+
 function SetFocusToReportedByOnCase() {
     if ($('#ShowReportedBy').val() == 1) {
         $('#case__ReportedBy').focus();
@@ -221,23 +224,34 @@ function refreshIsAboutDepartment(regionId, departmentFilterFormat, selectedDepa
     });
  }
 
-function GetComputerUserSearchOptions() {
+function generateRandomKey() {
+    function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+          .toString(16)
+          .substring(1);
+    }
+    return s4() + '-' + s4() + '-' + s4();
+}
+
+function GetComputerUserSearchOptions() {    
     var options = {
         items: 20,
         minLength: 2,
-        source: function (query, process) {                        
+        source: function (query, process) {
+            lastInitiatorSearchKey = generateRandomKey();
             return $.ajax({
                 url: '/cases/search_user',
                 type: 'post',
-                data: { query: query, customerId: $('#case__Customer_Id').val() },
+                data: { query: query, customerId: $('#case__Customer_Id').val(), searchKey: lastInitiatorSearchKey},
                 dataType: 'json',
-                success: function (result) {
-                   var resultList = jQuery.map(result, function (item) {
+                success: function (result) {                    
+                    if (result.searchKey != lastInitiatorSearchKey)
+                        return;
+                    
+                   var resultList = jQuery.map(result.result, function (item) {
                         var aItem = {
                             id: item.Id
-                                    , num: item.UserId
-                                    //Changed in HotFix 5.3.13
-                                    //, name: item.SurName + ' ' + item.FirstName
+                                    , num: item.UserId                                   
                                     , name: item.FirstName + ' ' + item.SurName
                                     , email: item.Email
                                     , place: item.Location
@@ -264,7 +278,7 @@ function GetComputerUserSearchOptions() {
             });
         },
 
-        matcher: function (obj) {
+        matcher: function (obj) {            
             var item = JSON.parse(obj);
             //console.log(JSON.stringify(item));
             return ~item.name.toLowerCase().indexOf(this.query.toLowerCase())
@@ -272,7 +286,7 @@ function GetComputerUserSearchOptions() {
                 || ~item.num.toLowerCase().indexOf(this.query.toLowerCase())
                 || ~item.phone.toLowerCase().indexOf(this.query.toLowerCase())
                 || ~item.email.toLowerCase().indexOf(this.query.toLowerCase())
-                || ~item.usercode.toLowerCase().indexOf(this.query.toLowerCase());
+                || ~item.usercode.toLowerCase().indexOf(this.query.toLowerCase());                
         },
 
         sorter: function (items) {
@@ -357,18 +371,22 @@ function GetComputerUserSearchOptions() {
     return options;
 }
 
-function GetComputerUserSearchOptionsForIsAbout() {
+function GetComputerUserSearchOptionsForIsAbout() {    
     var options = {
         items: 20,
         minLength: 2,
         source: function (query, process) {
+            lastIsAboutSearchKey = generateRandomKey();
             return $.ajax({
                 url: '/cases/search_user',
                 type: 'post',
-                data: { query: query, customerId: $('#case__Customer_Id').val() },
+                data: { query: query, customerId: $('#case__Customer_Id').val(), searchKey: lastIsAboutSearchKey },
                 dataType: 'json',
                 success: function (result) {
-                    var resultList = jQuery.map(result, function (item) {
+                    if (result.searchKey != lastIsAboutSearchKey)
+                        return;
+
+                    var resultList = jQuery.map(result.result, function (item) {
                         var aItem = {
                             id: item.Id
                                     , num: item.UserId
@@ -734,7 +752,7 @@ function CaseInitForm() {
         var caseInvoiceIsActive = $('#CustomerSettings_ModuleCaseInvoice').val().toLowerCase() == 'true';
         /* When invoice is active, user can not change the product area while */
         if (caseInvoiceIsActive) {
-            $.get('/Invoice/IsThereNotSentOrder/', { caseId: curCaseId, myTime: Date.now }, function (res) {
+            $.get('/CaseInvoice/IsThereNotSentOrder/', { caseId: curCaseId, myTime: Date.now }, function (res) {
                 if (res != null && res) {
                     var mes = window.parameters.productAreaChangeMessage || '';
                     ShowToastMessage(mes, 'warning', false);
@@ -1093,7 +1111,7 @@ function CaseInitForm() {
                     up.refresh();
 
                     // Raise event about uploaded file
-                    $(document).trigger("OnUploadCaseFile", [up, file]);
+                    //$(document).trigger("OnUploadCaseFile", [up, file]);
                 }
             },
             init: {
@@ -1168,7 +1186,7 @@ function CaseInitForm() {
                     $(".plupload_upload_status").css("display", "inline");
                     up.refresh();
 
-                    $(document).trigger("OnUploadLogFile", [up, file]);
+                    //$(document).trigger("OnUploadLogFile", [up, file]);
                 }
             },
             init: {

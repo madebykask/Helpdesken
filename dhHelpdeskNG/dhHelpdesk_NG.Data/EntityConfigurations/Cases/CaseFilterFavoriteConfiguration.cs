@@ -13,19 +13,20 @@
             this.Property(f => f.User_Id).IsRequired();
             this.Property(f => f.Name).IsRequired().HasMaxLength(80);
 
-            this.Property(f => f.AdministratorFilter).IsOptional().HasMaxLength(80);
-            this.Property(f => f.CaseTypeFilter).IsOptional().HasMaxLength(80);
-            this.Property(f => f.ClosingReasonFilter).IsOptional().HasMaxLength(80);
-            this.Property(f => f.DepartmentFilter).IsOptional().HasMaxLength(80);            
-            this.Property(f => f.PriorityFilter).IsOptional().HasMaxLength(80);
-            this.Property(f => f.ProductAreaFilter).IsOptional().HasMaxLength(80);
-            this.Property(f => f.RegionFilter).IsOptional().HasMaxLength(80);            
-            this.Property(f => f.RemainingTimeFilter).IsOptional().HasMaxLength(80);
-            this.Property(f => f.ResponsibleFilter).IsOptional().HasMaxLength(80);
-            this.Property(f => f.StatusFilter).IsOptional().HasMaxLength(80);
-            this.Property(f => f.SubStatusFilter).IsOptional().HasMaxLength(80);
-            this.Property(f => f.WorkingGroupFilter).IsOptional().HasMaxLength(80);
-            this.Property(f => f.RegisteredByFilter).IsOptional().HasMaxLength(80);
+            this.Property(f => f.AdministratorFilter).IsOptional().HasMaxLength(200);
+            this.Property(f => f.CaseTypeFilter).IsOptional().HasMaxLength(200);
+            this.Property(f => f.ClosingReasonFilter).IsOptional().HasMaxLength(200);
+            this.Property(f => f.DepartmentFilter).IsOptional().HasMaxLength(200);            
+            this.Property(f => f.PriorityFilter).IsOptional().HasMaxLength(200);
+            this.Property(f => f.ProductAreaFilter).IsOptional().HasMaxLength(200);
+            this.Property(f => f.RegionFilter).IsOptional().HasMaxLength(200);            
+            this.Property(f => f.RemainingTimeFilter).IsOptional().HasMaxLength(200);
+            this.Property(f => f.ResponsibleFilter).IsOptional().HasMaxLength(200);
+            this.Property(f => f.StatusFilter).IsOptional().HasMaxLength(200);
+            this.Property(f => f.SubStatusFilter).IsOptional().HasMaxLength(200);
+            this.Property(f => f.WorkingGroupFilter).IsOptional().HasMaxLength(200);
+            this.Property(f => f.RegisteredByFilter).IsOptional().HasMaxLength(200);
+            
 
             this.Property(f => f.ClosingDateStartFilter).IsOptional();
             this.Property(f => f.ClosingDateEndFilter).IsOptional();

@@ -15,7 +15,6 @@ var isAbout_OUControlId = '#CaseSolution.IsAbout_OU_Id';
 var changeRegion = '/CaseSolution/ChangeRegion';
 var changeDepartment = '/CaseSolution/ChangeDepartment/';
 
-
 $(function () {
 
     $(regionControlName).change(function () {
@@ -144,7 +143,7 @@ $(function () {
 
     $('#WorkingGroup').change(function () {
         // filter administrators
-        CaseCascadingSelectlistChange($(this).val(), $('#CaseSolution_Customer_Id').val(), '/Cases/ChangeWorkingGroupFilterUser/', '#PerformerUser');
+        CaseCascadingSelectlistChange($(this).val(), $('#CaseSolution_Customer_Id').val(), '/CaseSolution/ChangeWorkingGroupFilterUser/', '#PerformerUser');
     });
 
     $('#divFinishingCause ul.dropdown-menu li a').click(function (e) {
@@ -186,7 +185,7 @@ $(function () {
     } else {
         SetWeekEnable();
     }
-
+    
     $("#optday").click(function () {
         SetDayEnable();
     });
@@ -214,4 +213,13 @@ $(function () {
 
     checkScheduleChange();
     $("[name$=ScheduleType]").change(checkScheduleChange);
+
+    $("#Casesolution_ShowInsideCase").click(function () {
+        if ($('#Casesolution_ShowInsideCase').is(':checked')) {
+            $("#CaseSolution_ConnectedButton").prop("disabled", false);
+        }else{
+            $("#CaseSolution_ConnectedButton").prop("disabled", true);
+            $("#CaseSolution_ConnectedButton").val("");
+        }
+    });
 });

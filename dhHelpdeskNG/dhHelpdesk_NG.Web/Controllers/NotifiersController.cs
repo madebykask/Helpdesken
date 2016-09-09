@@ -279,11 +279,12 @@ namespace DH.Helpdesk.Web.Controllers
         [BadRequestOnNotValid]
         public RedirectToRouteResult NewNotifier(InputModel model)
         {
-            if ((model.LastName == null || !model.FirstName.Show) || (model.LastName == null || !model.LastName.Show))
+            if (((model.FirstName == null || !model.FirstName.Show) || (model.LastName == null || !model.LastName.Show)) &&  model.DisplayName != null && 
+               !string.IsNullOrEmpty(model.DisplayName.Value))
             {
                 var splitedName = GetSplitedName(model.DisplayName != null? model.DisplayName.Value : string.Empty);
 
-                if (model.LastName == null || !model.FirstName.Show)
+                if (model.FirstName == null || !model.FirstName.Show)
                     model.FirstName = new StringFieldModel(false, "FirstName", splitedName.Key);
 
                 if (model.LastName == null || !model.LastName.Show)
@@ -299,11 +300,12 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]        
         public JsonResult NewNotifierPopup(InputModel model)
         {
-            if ((model.LastName == null || !model.FirstName.Show) || (model.LastName == null || !model.LastName.Show))
+            if (((model.FirstName == null || !model.FirstName.Show) || (model.LastName == null || !model.LastName.Show)) && model.DisplayName != null &&
+                !string.IsNullOrEmpty(model.DisplayName.Value))
             {
                 var splitedName = GetSplitedName(model.DisplayName != null ? model.DisplayName.Value : string.Empty);
 
-                if (model.LastName == null || !model.FirstName.Show)                    
+                if (model.FirstName == null || !model.FirstName.Show)                    
                     model.FirstName = new StringFieldModel(false, "FirstName", splitedName.Key);
 
                 if (model.LastName == null || !model.LastName.Show)

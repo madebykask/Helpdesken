@@ -123,6 +123,7 @@
     <Compile Include="Computers\ComputerType.cs" />
     <Compile Include="CaseSource.cs" />
     <Compile Include="CaseIsAbout.cs" />
+    <Compile Include="Invoice\InvoiceArticleProductAreaEntity.cs" />
     <Compile Include="Mail2Ticket.cs" />
     <Compile Include="FormUrl.cs" />
     <Compile Include="FileViewLogEntity.cs" />

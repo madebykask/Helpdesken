@@ -41,12 +41,54 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Ersätt alltid befintliga värden", SessionFacade.CurrentLanguageId)
+                                    </td>
+                                    <td class="span4">
+                                        <input type="checkbox" name="CaseSolution.OverWritePopUp" @(Model.CaseSolution.OverWritePopUp == 1 ? "checked=checked" : "") value="1" class="switchcheckbox" />
+                                            <input type="hidden" name="CaseSolution.OverWritePopUp" value="0" />
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td>
                                         @Translation.Get("Visa på självservice", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td class="checkbox" style="padding-left: 20px">
                                         <input type="checkbox" name="Casesolution.ShowInSelfService" @(Model.CaseSolution.ShowInSelfService == true ? "checked=checked" : "") value ="true" />
                                         <input type="hidden" name="Casesolution.ShowInSelfService" value="0" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Visa på ärendeöversikten", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="checkbox" style="padding-left: 20px">
+                                        <input type="checkbox" name="Casesolution.ShowOnCaseOverview" @(Model.CaseSolution.ShowOnCaseOverview != 0 ? "checked=checked" : "") value ="1" />
+                                        <input type="hidden" name="Casesolution.ShowOnCaseOverview" value="0" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Visa på ärende", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="checkbox" style="padding-left: 20px">
+                                        <input type="checkbox" name="Casesolution.ShowInsideCase" id="Casesolution_ShowInsideCase" @(Model.CaseSolution.ShowInsideCase != 0 ? "checked=checked" : "") value ="1" />
+                                        <input type="hidden" name="Casesolution.ShowInsideCase" value="0" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Koppla till", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @if (Model.CaseSolution.ShowInsideCase == 1)
+                                        {
+                                            @Html.DropDownListFor(model => model.CaseSolution.ConnectedButton, Model.ButtonList, "")
+                                        }
+                                        else
+                                        {
+                                            @Html.DropDownListFor(model => model.CaseSolution.ConnectedButton, Model.ButtonList, "", new { disabled = "disabled" })
+                                        }
                                     </td>
                                 </tr>
                                 <tr>
@@ -1361,7 +1403,7 @@
                             </table>
                             @Html.HiddenFor(model => model.CaseSolution.Customer_Id)
                             @Html.HiddenFor(model => model.CaseSolution.Id)
-                            @Html.HiddenFor(model => model.CaseSolution.FormGUID)
+                            @Html.HiddenFor(model => model.CaseSolution.FormGUID)                            
                         </div>
                     </div>
                 </div>
@@ -1370,9 +1412,6 @@
     </div>
 </div>
 <script type="text/javascript">
-
-    
- 
 
     var validator = $("#target").validate({
         ignore: "",

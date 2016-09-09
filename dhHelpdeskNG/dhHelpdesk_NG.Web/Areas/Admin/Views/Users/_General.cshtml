@@ -2,10 +2,15 @@
 @model DH.Helpdesk.Web.Areas.Admin.Models.UserInputViewModel
 
 @{
-    var passChangeText = Translation.Get("Lösenordet har ändrats", Enums.TranslationSource.TextTranslation);    
-    
-    var passChangeError = Translation.Get("De lösenord du angav stämmer inte överens med varandra. Försök igen", Enums.TranslationSource.TextTranslation);
+    var passChangeText = Translation.GetForJS("Lösenordet har ändrats", Enums.TranslationSource.TextTranslation);
+
+    //var passChangeError = Translation.GetForJS("Det nya lösenordet bekräftades inte korrekt. Kontrollera att nytt lösenord och bekräftat lösenord stämmer överens", Enums.TranslationSource.TextTranslation);
+
+    //var passLengthError = Translation.GetForJS("Lösenord är inte giltigt. Minst antal tecken är: ", Enums.TranslationSource.TextTranslation) + Model.UserCustomerMinPassWordLength;
+
+    //var passComplexError = Translation.GetForJS("Lösenord är inte giltigt. Minst 8 tecken, varav en stor bokstav, en liten bokstav, en siffra och ett special tecken (!@#=$&?*).", Enums.TranslationSource.TextTranslation);
 }
+
 <div class="formContainer">
     <table class="tableform">
         <tr>
@@ -130,49 +135,81 @@
     function ChangePassword() {
 
         var mod = $('#divPasswordDialog').modal('show');
+        //$("#passConfirmError").addAttr("hidden");
 
         mod.find("#btnClose").on("click", function (e) {
             mod.modal('hide');
         });
 
-        mod.find("#btnSavePassword").on("click", function (e) {
-            if ($('#NewPassword').val() != $('#ConfirmPassword').val()) {
-                var e = '@passChangeError';
-                ShowToastMessage(e, "Error");
-                //alert('@Translation.GetForJS("De lösenord du angav stämmer inte överens med varandra. Försök igen", Enums.TranslationSource.TextTranslation)');
-            } else {
-                $.post('/users/EditUserPassword/', { id: $('#id_user').val(), newPassword: $('#NewPassword').val(), confirmPassword: $('#ConfirmPassword').val() }, function (data) {
-                    var e = '@passChangeText';
-                    ShowToastMessage(e, "Alert");
-                    //alert('@Translation.GetForJS("Lösenordet har ändrats", Enums.TranslationSource.TextTranslation)');
-
-                $('#NewPassword').val('');
-                $('#ConfirmPassword').val('');
-            });
+        mod.find("#btnSavePassword").on("click", function (e) {    
+            var newPassword = $('#NewPassword').val();
+            var confirmPassword= $('#ConfirmPassword').val();
+          
+            var validationPass = validatePassword(newPassword, confirmPassword);
+            if (validationPass.Result) {
+                mod.modal('hide');
+                $.post('/users/EditUserPassword/', { id: $('#id_user').val(), newPassword: newPassword, confirmPassword: confirmPassword },
+                    function (data) {
+                        var e = '@passChangeText';
+                        ShowToastMessage(e, "success");
+                    });
+                
             }
-            mod.modal('hide');
+            else {
+                if (validationPass.Message == '1') {
+                    $("#passConfirmError").show();
+                } else if (validationPass.Message == '2') {
+                    $("#passComplexError").show();
+                } else {
+                    $("#passLengthError").show();
+                }
+                
+                //ShowToastMessage(validationPass.Message, "error");
+            }
+           
+            $('#NewPassword').val('');
+            $('#ConfirmPassword').val('');
+
+           //mod.modal('hide');
         });
 
         mod.on("hide", function () {
             $("#divPasswordDialog #btnSavePassword").off("click");
             $("#divPasswordDialog #btnClose").off("click");
+            $("#passConfirmError").hide();
+            $("#passComplexError").hide();
+            $("#passLengthError").hide();
         });
     }
 
-    function ShowToastMessage(message, msgType) {
-        $().toastmessage('showToast', {
-            text: message,
-            sticky: true,
-            position: 'top-center',
-            type: msgType,
-            closeText: '',
-            stayTime: 10000,
-            inEffectDuration: 1000,
-            width: 500,
-            close: function () {
-                //console.log("toast is closed ...");
+    
+    function validatePassword(password, confirmPassword) {
+        var isComplexPassword= $('#customer_complexpassword').val() != 0;
+        var minPasswordLength = $('#customer_passwordlength').val();
+
+        var isValid = true;
+        var lastMessage = '';
+        if (password !== confirmPassword) {
+            isValid = false;
+            lastMessage = '1';
+        }
+        else if (isComplexPassword) {
+            //var complexPasswordRule = "^(?:(?=.*[a-z])(?:(?=.*[A-Z])(?=.*[\d\W])|(?=.*\W)(?=.*\d))|(?=.*\W)(?=.*[A-Z])(?=.*\d)).{8,}$";
+            var complexPasswordRule = /^(?=.*[A-Z])(?=.*[!@@#=$&?*])(?=.*[0-9])(?=.*[a-z]).{8,}$/;
+            
+            if (!password.match(complexPasswordRule)) {
+                isValid = false;
+                lastMessage = '2';
+            };
+        } else {
+            var passLen = parseInt(minPasswordLength);
+            if (passLen > 0 && password.length < passLen) {
+                isValid = false;
+                lastMessage = '3';
             }
-        });
+        }
+
+        return { Result: isValid, Message: lastMessage };
     }
 
 </script>

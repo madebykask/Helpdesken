@@ -4882,11 +4882,196 @@ If not exists (select * from tblTextTranslation where Text_Id = 1664 and Languag
             insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1664, 'Extended case infomation', 2)
 GO
 
+If not exists (select * from tblText where Id = 1665)
+            insert into tblText (Id, Textstring) VALUES (1665, 'Tidsinställningar')
+GO
 
+If not exists (select * from tblTextTranslation where Text_Id = 1665 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1665, 'Time settings', 2)
+GO
+
+If not exists (select * from tblText where Id = 1666)
+            insert into tblText (Id, Textstring) VALUES (1666, 'Löst i tid')
+GO
+
+If not exists (select * from tblTextTranslation where Text_Id = 1666 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1666, 'Was solved in time', 2)
+GO
+
+If not exists (select * from tblText where Id = 1667)
+            insert into tblText (Id, Textstring) VALUES (1667, 'Senaste understatus med tidsräkning')
+GO
+
+If not exists (select * from tblTextTranslation where Text_Id = 1667 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1667, 'Latest counting sub status', 2)
+GO
+
+If not exists (select * from tblText where Id = 1668)
+            insert into tblText (Id, Textstring) VALUES (1668, 'Lösenord är inte giltig. Minst antal tecken är: ')
+GO
+
+If not exists (select * from tblTextTranslation where Text_Id = 1668 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1668, 'Password is not valid. Minimum number of characters: ', 2)
+GO
+
+If not exists (select * from tblText where Id = 1669)
+            insert into tblText (Id, Textstring) VALUES (1669, 'Lösenord är inte giltigt. Minst 8 tecken, varav en stor bokstav, en liten bokstav, en siffra och ett special tecken (!@#=$&?*).')
+GO
+
+If not exists (select * from tblTextTranslation where Text_Id = 1669 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1669, 'Password is not valid. Requirements are 1 upper case letter, 1 lower case letter, 1 number and 1 special character (!@#=$&?*) and at least 8 characters in length.', 2)
+GO
+
+If not exists (select * from tblText where Id = 1670)
+            insert into tblText (Id, Textstring) VALUES (1670, 'Ersätt alltid befintliga värden')
+GO
+
+If not exists (select * from tblTextTranslation where Text_Id = 1670 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1670, 'Always replace values', 2)
+GO
+
+If not exists (select * from tblText where Id = 1671)
+            insert into tblText (Id, Textstring) VALUES (1671, 'Visa på ärendeöversikten')
+GO
+
+If not exists (select * from tblTextTranslation where Text_Id = 1671 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1671, 'Show on caseoverview', 2)
+GO
+
+If not exists (select * from tblText where Id = 1672)
+            insert into tblText (Id, Textstring) VALUES (1672, 'Visa på ärende')
+GO
+
+If not exists (select * from tblTextTranslation where Text_Id = 1672 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1672, 'Show inside case', 2)
+GO
 -- // Invoice Translations 
 
 
 
+If not exists (select * from tblText where Id = 1673)
+            insert into tblText (Id, Textstring) VALUES (1673, 'Inloggad användare')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1673 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1673, 'Logged in user', 2)
+GO
 
+
+If not exists (select * from tblText where Id = 1674)
+            insert into tblText (Id, Textstring) VALUES (1674, 'Koppla till')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1674 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1674, 'Connect to', 2)
+GO
+
+If not exists (select * from tblText where Id = 1675)
+            insert into tblText (Id, Textstring) VALUES (1675, 'Knapp')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1675 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1675, 'Button', 2)
+GO
+
+If not exists (select * from tblText where Id = 1676)
+            insert into tblText (Id, Textstring) VALUES (1676, 'Kopplat till')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1676 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1676, 'Connected to', 2)
+GO
+
+
+If not exists (select * from tblText where Id = 1677)
+            insert into tblText (Id, Textstring) VALUES (1677, 'Avslutsdatum')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1677 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1677, 'Finishing date', 2)
+GO
+
+If not exists (select * from tblText where Id = 1678)
+            insert into tblText (Id, Textstring) VALUES (1678, 'Senaste understatus med Räkna tid')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1678 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1678, 'Latest sub status with Counting SLA', 2)
+GO
+
+If not exists (select * from tblText where Id = 1679)
+            insert into tblText (Id, Textstring) VALUES (1679, 'Löst i tid med Bevakningsdatum')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1679 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1679, 'Solved in time with Watchdate', 2)
+GO
+
+If not exists (select * from tblText where Id = 1680)
+            insert into tblText (Id, Textstring) VALUES (1680, 'Artiklar och produktområden')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1680 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1680, 'Articles and product areas', 2)
+GO
+
+If not exists (select * from tblText where Id = 1681)
+            insert into tblText (Id, Textstring) VALUES (1681, 'Import artiklar')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1681 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1681, 'Import articles', 2)
+GO
+
+If not exists (select * from tblText where Id = 1682)
+            insert into tblText (Id, Textstring) VALUES (1682, 'Export sökväg')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1682 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1682, 'Export path', 2)
+GO
+
+If not exists (select * from tblText where Id = 1683)
+            insert into tblText (Id, Textstring) VALUES (1683, 'Utfärdare')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1683 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1683, 'Issuer', 2)
+GO
+
+If not exists (select * from tblText where Id = 1684)
+            insert into tblText (Id, Textstring) VALUES (1684, 'Vår referens')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1684 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1684, 'Our reference', 2)
+GO
+
+If not exists (select * from tblText where Id = 1685)
+            insert into tblText (Id, Textstring) VALUES (1685, 'Ordernummer/prefix')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1685 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1685, 'Order no/prefix', 2)
+GO
+
+If not exists (select * from tblText where Id = 1686)
+            insert into tblText (Id, Textstring) VALUES (1686, 'Dokumentmall')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1686 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1686, 'Document template', 2)
+GO
+
+If not exists (select * from tblText where Id = 1687)
+            insert into tblText (Id, Textstring) VALUES (1687, 'kan inte ändras eftersom det finns order som är skickade.')																
+																
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1687 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1687, 'can''t be changed because you have sent orders.', 2)
+GO
+
+
+If not exists (select * from tblText where Id = 1688)
+            insert into tblText (Id, Textstring) VALUES (1688, 'Obs! Den tas även bort från order')																
+																
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1688 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1688, 'Please note. It will be removed from order as well', 2)
+GO
+
+If not exists (select * from tblText where Id = 1689)
+            insert into tblText (Id, Textstring) VALUES (1689, 'Du måste välja både artikel och produktområde!')																
+																
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1689 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1689, 'You have to select both article and productarea!', 2)
+GO
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

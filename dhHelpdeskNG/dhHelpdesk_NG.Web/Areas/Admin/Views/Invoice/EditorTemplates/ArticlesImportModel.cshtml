@@ -1,0 +1,40 @@
+﻿@model DH.Helpdesk.Web.Areas.Admin.Models.Invoice.ArticlesImportModel
+
+@using (Ajax.BeginForm("ArticlesImport", "Invoice", null,
+    new AjaxOptions { HttpMethod = "POST" }, 
+    new { id="articles_import_form", enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(m => m.CustomerId)
+    @Html.AntiForgeryToken()
+    <div style="padding:10px 0 60px;">
+    <div style="border:1px solid #f1f1f1;float:left; min-height:50px;padding:10px;">
+    @Html.TextBoxFor(m => m.File, new { type = "file" })
+    </div>
+    <div style="border:1px solid #f1f1f1;float:left;min-height:50px;padding:10px;margin-left:-1px;">
+    <input id="carticles_import_button" class="btn" type="submit" value="@Translation.Get("Import")" />
+    <img id="articles_import_loading" src="@Url.Content("~/Content/icons/ajax-loader.gif")" style="display: none;" />
+    </div>
+    </div>
+}
+<div id="articles_import_status"></div>
+
+<script type="text/javascript">
+$(function() {
+    var importButton = $("#articles_import_button");
+    var loading = $("#articles_import_loading");
+    var status = $("#articles_import_status");
+
+    $('#articles_import_form').ajaxForm({
+        beforeSend: function () {
+            status.empty();
+            importButton.attr("disabled", true);
+            loading.show();
+        },
+        complete: function (xhr) {
+            importButton.attr("disabled", false);
+            loading.hide();
+            status.html(xhr.responseText);
+        }
+    }); 
+});       
+</script>

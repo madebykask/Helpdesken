@@ -136,6 +136,7 @@
             this.Property(x => x.IsAbout_UserCode).IsOptional().HasMaxLength(20);
             this.Property(x => x.IsAbout_Department_Id).IsOptional();
             this.Property(x => x.CreatedByApp).IsOptional();
+            this.Property(x => x.LatestSLACountDate).IsOptional();
             
             this.ToTable("tblcasehistory");
         }

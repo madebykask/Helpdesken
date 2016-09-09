@@ -20,8 +20,9 @@
     using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Web.Models.Case;
     using System.Web.Script.Serialization;
+    using DH.Helpdesk.BusinessData.Models.Invoice;
 
-    public class InvoiceController : BaseController
+    public class CaseInvoiceController : BaseController
     {
         private readonly IInvoiceArticleService invoiceArticleService;
 
@@ -43,7 +44,7 @@
 
         private readonly IMasterDataService masterDataService;        
 
-        public InvoiceController(
+        public CaseInvoiceController(
             ICaseService caseService,
             IMasterDataService masterDataService, 
             IInvoiceArticleService invoiceArticleService, 
@@ -85,8 +86,15 @@
         [HttpGet]
         public JsonResult InvoiceSettingsValid(int customerId)
         {
+            var invoiceArts = new List<InvoiceArticle>();
+            foreach (var art in invoiceArts)
+            {
+
+            }
             var SettingsValid = this.invoiceArticleService.ValidateInvoiceSettings(customerId);
             return this.Json(SettingsValid, JsonRequestBehavior.AllowGet);
+            
+            
         }
     
         [HttpGet]

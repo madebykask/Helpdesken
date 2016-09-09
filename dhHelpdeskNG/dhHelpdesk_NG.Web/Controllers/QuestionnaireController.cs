@@ -139,7 +139,7 @@
         public ViewResult Index()
         {
             var questionnaires = _questionnaireService.FindQuestionnaireOverviews(SessionFacade.CurrentCustomer.Id);
-            var model = questionnaires.Select(q => new QuestionnaireOverviewModel(q.Id, q.Name, q.Description)).ToList();
+            var model = questionnaires.Select(q => new QuestionnaireOverviewModel(q.Id, q.Name, q.Description)).OrderBy(x => x.Name).ToList();
             return View(model);
         }
 

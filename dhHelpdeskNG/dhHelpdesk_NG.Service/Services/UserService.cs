@@ -33,6 +33,7 @@
     using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
     using UserGroup = DH.Helpdesk.Domain.UserGroup;
     using DH.Helpdesk.Common.Tools;
+    using System.Text.RegularExpressions;
 
     public interface IUserService
     {
@@ -194,7 +195,7 @@
         private readonly IUserPermissionsChecker userPermissionsChecker;
         private readonly ITranslator translator;
         private readonly IUsersPasswordHistoryRepository _userPasswordHistoryRepository;
-        
+        private readonly ISettingRepository _settingRepository;
 
         private readonly IEntityToBusinessModelMapper<Setting, CustomerSettings> customerSettingsToBusinessModelMapper;
         
@@ -220,7 +221,8 @@
             IUserPermissionsChecker userPermissionsChecker, 
             ITranslator translator,
             IUsersPasswordHistoryRepository userPasswordHistoryRepository,
-            IEntityToBusinessModelMapper<Setting, CustomerSettings> customerSettingsToBusinessModelMapper)
+            IEntityToBusinessModelMapper<Setting, CustomerSettings> customerSettingsToBusinessModelMapper,
+            ISettingRepository settingRepository)
         {
             this._accountActivityRepository = accountActivityRepository;
             this._customerRepository = customerRepository;
@@ -243,6 +245,7 @@
             this.translator = translator;
             this._userPasswordHistoryRepository = userPasswordHistoryRepository;
             this.customerSettingsToBusinessModelMapper = customerSettingsToBusinessModelMapper;
+            this._settingRepository = settingRepository;
         }
 
 
@@ -799,7 +802,23 @@
                 errors.Add("User.Customer_Id", "Du måste ange en standardkund");
             }
 
-          
+            // Get passwordlength for Customer
+            var MinPasswordLength = 0;
+            var customerSetting = this._settingRepository.GetCustomerSetting(user.Customer_Id);
+            if (customerSetting != null)
+                MinPasswordLength = customerSetting.MinPasswordLength;
+
+            if (!string.IsNullOrEmpty(user.Password))
+            {
+                if (customerSetting.ComplexPassword != 0)
+                {
+                    if (!PasswordHelper.IsValid(user.Password))
+                        errors.Add("NewPassWord", "Lösenord är inte giltigt. Minst 8 tecken, varav en stor bokstav, en liten bokstav, en siffra och ett special tecken (!@#=$&?*).");
+                }
+                else if (user.Password.Length < MinPasswordLength)
+                    errors.Add("NewPassWord", "Lösenord är inte giltigt. Minst antal tecken är: " + MinPasswordLength);
+            }
+
             if (user.UserWorkingGroups != null)
                 foreach (var delete in user.UserWorkingGroups.ToList())
                     user.UserWorkingGroups.Remove(delete);

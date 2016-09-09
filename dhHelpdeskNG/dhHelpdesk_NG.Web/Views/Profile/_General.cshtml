@@ -2,9 +2,9 @@
 @model DH.Helpdesk.Web.Models.Profile.ProfileInputViewModel
 
 @{
-    var passChangeText = Translation.Get("Lösenordet har ändrats", Enums.TranslationSource.TextTranslation);    
-    
-    var passChangeError = Translation.Get("De lösenord du angav stämmer inte överens med varandra. Försök igen", Enums.TranslationSource.TextTranslation);
+    var passChangeText = Translation.Get("Lösenordet har ändrats", Enums.TranslationSource.TextTranslation);
+
+    var passChangeError = Translation.Get("Det nya lösenordet bekräftades inte korrekt. Kontrollera att nytt lösenord och bekräftat lösenord stämmer överens", Enums.TranslationSource.TextTranslation);
 }
 
 <div class="formContainer">

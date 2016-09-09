@@ -24,6 +24,7 @@ namespace DH.Helpdesk.Web.Controllers
     using Ninject.Infrastructure.Language;
     using DH.Helpdesk.Common.Enums.CaseSolution;
     using System.Threading;
+    using DH.Helpdesk.BusinessData.Models;
 
     public class CaseSolutionController : UserInteractionController
     {
@@ -54,10 +55,11 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IChangeService _changeService;
         private readonly ICausingPartService _causingPartService;
         private readonly IOrganizationService _organizationService;
-        private readonly IRegistrationSourceCustomerService _registrationSourceCustomerService;
-        
-
+        private readonly IRegistrationSourceCustomerService _registrationSourceCustomerService;        
         private readonly ICaseSolutionSettingService caseSolutionSettingService;
+
+        private const int MAX_QUICK_BUTTONS_COUNT = 5;
+        private const string CURRENT_USER_ITEM_CAPTION = "Inloggad användare";
 
         public CaseSolutionController(
             ICaseFieldSettingService caseFieldSettingService,
@@ -186,7 +188,7 @@ namespace DH.Helpdesk.Web.Controllers
         public ActionResult New(int? backToPageId)
         {
             // Positive: Send Mail to...
-            var caseSolution = new CaseSolution (){ Customer_Id = SessionFacade.CurrentCustomer.Id, NoMailToNotifier = 1, Status = 1};
+            var caseSolution = new CaseSolution (){ Customer_Id = SessionFacade.CurrentCustomer.Id, NoMailToNotifier = 1, Status = 1, ShowOnCaseOverview = 1, ShowInsideCase = 1, OverWritePopUp = 1};
 
             if (backToPageId == null)
                 ViewBag.PageId = 0;
@@ -220,6 +222,12 @@ namespace DH.Helpdesk.Web.Controllers
                 caseSolutionInputViewModel.CaseSolution.NoMailToNotifier = 1;
             else
                 caseSolutionInputViewModel.CaseSolution.NoMailToNotifier = 0;
+
+            if (caseSolutionInputViewModel.CaseSolution.PerformerUser_Id == -1)
+            {
+                caseSolutionInputViewModel.CaseSolution.PerformerUser_Id = null;
+                caseSolutionInputViewModel.CaseSolution.SetCurrentUserAsPerformer = 1;
+            }
 
             this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);
 
@@ -264,8 +272,9 @@ namespace DH.Helpdesk.Web.Controllers
             else
                 ViewBag.PageId = backToPageId;
 
-            var model = this.CreateInputViewModel(caseSolution);
 
+            var model = this.CreateInputViewModel(caseSolution);
+            
             return this.View(model);
         }
 
@@ -304,6 +313,9 @@ namespace DH.Helpdesk.Web.Controllers
                 if (!(finishingCause != null && finishingCause.IsActive != 0))
                     caseSolution.FinishingCause_Id = null;
             }
+
+            if (SessionFacade.CurrentUser != null && caseSolution.SetCurrentUserAsPerformer == 1)            
+                caseSolution.PerformerUser_Id = SessionFacade.CurrentUser.Id;
 
             return this.Json(
                 new
@@ -370,7 +382,8 @@ namespace DH.Helpdesk.Web.Controllers
                     caseSolution.Problem_Id,
                     PlanDate = caseSolution.PlanDate.HasValue ? caseSolution.PlanDate.Value.ToShortDateString() : string.Empty,
                     VerifiedDescription = caseSolution.VerifiedDescription,
-                    SolutionRate = caseSolution.SolutionRate
+                    SolutionRate = caseSolution.SolutionRate,
+                    caseSolution.OverWritePopUp
                 },
                     JsonRequestBehavior.AllowGet);
         }
@@ -396,6 +409,12 @@ namespace DH.Helpdesk.Web.Controllers
                 caseSolutionInputViewModel.CaseSolution.NoMailToNotifier = 1;
             else
                 caseSolutionInputViewModel.CaseSolution.NoMailToNotifier = 0;
+
+            if (caseSolutionInputViewModel.CaseSolution.PerformerUser_Id == -1)
+            {
+                caseSolutionInputViewModel.CaseSolution.PerformerUser_Id = null;
+                caseSolutionInputViewModel.CaseSolution.SetCurrentUserAsPerformer = 1;
+            }
 
             this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);
 
@@ -470,7 +489,58 @@ namespace DH.Helpdesk.Web.Controllers
 
             return this.Json(new { list });
         }
-        
+
+        public JsonResult ChangeWorkingGroupFilterUser(int? id, int customerId)
+        {
+            IList<User> performersList;
+            var customerSettings = this._settingService.GetCustomerSetting(customerId);
+            if (customerSettings.DontConnectUserToWorkingGroup == 0 && id > 0)
+            {
+                performersList = this._userService.GetAvailablePerformersForWorkingGroup(customerId, id);
+            }
+            else
+            {
+                performersList = this._userService.GetAvailablePerformersOrUserId(customerId);
+            }
+            
+            var currentUser = new User(){Id= -1, FirstName = string.Format("-- {0} --", Translation.GetCoreTextTranslation(CURRENT_USER_ITEM_CAPTION))};
+            performersList.Insert(0, currentUser);
+            if (customerSettings.IsUserFirstLastNameRepresentation == 1)
+            {
+                return
+                    this.Json(
+                        new
+                        {
+                            list =
+                                performersList.OrderBy(it => it.FirstName)
+                                    .ThenBy(it => it.SurName)
+                                    .Select(
+                                        it =>
+                                        new IdName
+                                        {
+                                            id = it.Id,
+                                            name = string.Format("{0} {1}", it.FirstName, it.SurName)
+                                        })
+                        });
+            }
+
+            return
+                this.Json(
+                    new
+                    {
+                        list =
+                            performersList.OrderBy(it => it.SurName)
+                                .ThenBy(it => it.FirstName)
+                                .Select(
+                                    it =>
+                                    new IdName
+                                    {
+                                        id = it.Id,
+                                        name = string.Format("{0} {1}", it.SurName, it.FirstName)
+                                    })
+                    });
+        }
+
         #endregion
 
         #region Category
@@ -540,19 +610,23 @@ namespace DH.Helpdesk.Web.Controllers
             var caseSolutions = this._caseSolutionService.SearchAndGenerateCaseSolutions(customerId, caseSolutionSearch, isUserFirstLastNameRepresentation)
                                                          .Where(x => x.TemplatePath == null).ToList();                        
 
+            var curUserItem = string.Format("-- {0} --", Translation.GetCoreTextTranslation(CURRENT_USER_ITEM_CAPTION));
+            var connectedToButton = Translation.GetCoreTextTranslation("Knapp");
             var _rows = caseSolutions.Select(cs=> new RowIndexViewModel
                                                         {
                                                             Id = cs.Id,
                                                             Name = cs.Name,
                                                             CategoryName = cs.CaseSolutionCategory == null? string.Empty : cs.CaseSolutionCategory.Name,
                                                             CaseCaption = cs.Caption,
-                                                            PerformerUserName = cs.PerformerUser == null? string.Empty :
+                                                            PerformerUserName = cs.PerformerUser == null? 
+                                                                                (cs.SetCurrentUserAsPerformer == 1?  curUserItem : string.Empty):
                                                                                 (isUserFirstLastNameRepresentation? 
                                                                                     string.Format("{0} {1}", cs.PerformerUser.FirstName, cs.PerformerUser.SurName):
                                                                                     string.Format("{0} {1}", cs.PerformerUser.SurName, cs.PerformerUser.FirstName)
                                                                                 ),
                                                             PriorityName = cs.Priority == null ? string.Empty : cs.Priority.Name,
-                                                            IsActive = (cs.Status != 0)
+                                                            IsActive = (cs.Status != 0),
+                                                            ConnectedToButton = cs.ConnectedButton.HasValue ? connectedToButton + " " + cs.ConnectedButton.Value: ""
                                                         }).ToArray();
 
             var activeTab = SessionFacade.FindActiveTab("CaseSolution");
@@ -618,14 +692,40 @@ namespace DH.Helpdesk.Web.Controllers
                                          }).ToList();
 
             var isCreatingNew = caseSolution.Id == 0;
+
+            if (caseSolution.SetCurrentUserAsPerformer == 1)
+                caseSolution.PerformerUser_Id = -1;
+
             var performersList = isCreatingNew ?
                                      this._userService.GetAvailablePerformersOrUserId(curCustomerId)
-                                         .MapToSelectList(cs, true)
+                                         .MapToSelectList(cs, true, true)
                                      : this._userService.GetAvailablePerformersForWorkingGroup(
                                          curCustomerId,
-                                         caseSolution.CaseWorkingGroup_Id).MapToSelectList(cs, true);
+                                         caseSolution.CaseWorkingGroup_Id).MapToSelectList(cs, true, true);            
             const bool TakeOnlyActive = true;
-                                                       
+
+            
+
+            var usedButtons = _caseSolutionService.GetCaseSolutions(curCustomerId)
+                                                  .Where(c => c.ConnectedButton.HasValue && c.Id != caseSolution.Id)
+                                                  .Select(c => c.ConnectedButton.Value).ToList();
+
+            var buttonList = new List<SelectListItem>();
+            
+            var buttonCaption = Translation.GetCoreTextTranslation("Knapp");
+            for (var i= 1; i <= MAX_QUICK_BUTTONS_COUNT; i++)
+            {
+                if (!usedButtons.Contains(i))
+                {
+                    buttonList.Add(new SelectListItem()
+                        {
+                            Value = i.ToString(),
+                            Text = string.Format("{0} {1}", buttonCaption, i),
+                            Selected = caseSolution.ConnectedButton == i
+                        });
+                }
+            }
+
             var model = new CaseSolutionInputViewModel
             {
                 CaseSolution = caseSolution,
@@ -725,6 +825,8 @@ namespace DH.Helpdesk.Web.Controllers
                     Text = Translation.Get(x.SourceName),
                     Value = x.Id.ToString()
                 }).ToList(),
+
+                ButtonList = buttonList
             };
 
             if (model.CaseSolution.Id == 0)
@@ -890,6 +992,7 @@ namespace DH.Helpdesk.Web.Controllers
             return ret;
 
         }
+        
         private CaseSettingsSolutionAggregate CreateCaseSettingsSolutionAggregate(
             int caseSolutionId,
             IEnumerable<CaseSolutionSettingModel> caseSolutionSettingModels)

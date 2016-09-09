@@ -36,10 +36,14 @@
         checkInactiveDataErrorMessage: '@Html.Raw(Translation.GetForJS("Problem med kommunikation med servern."))',
         productAreaChangeMessage: '@Translation.GetForJS(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(),
                                                     Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)' + " " + 
-                                  '@Translation.GetForJS("kan inte ändra eftersom det finns order som inte är skickade.")', 
+                                  '@Translation.GetForJS("kan inte ändra eftersom det finns order som inte är skickade.")',        
         caseTemplateChangeMessage: '@Translation.GetForJS("Du kan inte använda ärendemall eftersom det finns order som inte är skickade.")', 
          
-        caseRegDate: '@Model.case_.RegTime',      
+        caseRegDate: '@Model.case_.RegTime', 
+        isCaseFileMandatory: '@Model.caseFieldSettings.getRequired(GlobalEnums.TranslationCaseFields.Filename.ToString())',
+        caseFileCaption: '@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Filename.ToString(), 
+                                                Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)',
+                                
         caseFieldNames:{
             CustomerId: "case__Customer_Id",
             RegionId: "case__Region_Id",
@@ -67,7 +71,7 @@
             relatedCasesUrl: '@Url.Action("RelatedCasesFull", "Cases")',
             relatedCasesCountUrl: '@Url.Action("RelatedCasesCount", "Cases")',
             getDepartmentOusUrl: '@Url.Action("ChangeDepartment", "Cases")',
-            deleteCaseFileConfirmMessage: '@Translation.GetForJS("Är du säker på att du vill ta bort bifogad fil")' + '?',
+            deleteCaseFileConfirmMessage: '@Translation.GetForJS("Är du säker på att du vill ta bort bifogad fil")' + '?',            
             okText: '@Translation.GetForJS("OK")',
             cancelText: '@Translation.GetForJS("Avbryt")',
             yesText: '@Translation.GetForJS("Ja")',
@@ -78,7 +82,7 @@
     };  
 
 </script>
-@*<script src="../../Content/js/Invoice/invoice.js"></script>*@
+
 @Scripts.Render("~/bundles/invoices")
 @Scripts.Render("~/bundles/cases/_input")
 @{  
@@ -210,6 +214,8 @@
                         @Html.Hidden("CaseTemplate_IsAbout_Department_Id", "")
                         @Html.Hidden("CaseTemplate_IsAbout_OU_Id", "")
                         @Html.Hidden("LastProductAreaId", Model.case_.ProductArea_Id)
+                        @Html.Hidden("LastProjectId", Model.case_.Project_Id)
+                        @Html.Hidden("CaseHasInvoiceOrder", "")
 
                         @Html.HiddenFor(model => Model.CaseLock.LockGUID)
                         @*<input type="button" id="sla_test" value="SLA Test" onclick="CalcSLA();" />*@
@@ -1504,9 +1510,10 @@
                                         </td>
                                         <td colspan="2">
                                             @if (Model.EditMode == Enums.AccessMode.FullAccess)
-                                            {
-                                                <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
+                                            {                                                
+                                                <a id="btnAddCaseFile" href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>                                                    
                                                 <a href="#upload_clipboard_file_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till från Urklipp", SessionFacade.CurrentLanguageId)</a>
+                                                
                                             }
                                             <div id="divCaseFiles">                                                
                                                 @Html.Partial("_CaseFiles", Model.CaseFilesModel, new ViewDataDictionary { { "CaseInactive", Model.case_.FinishingDate.HasValue } })

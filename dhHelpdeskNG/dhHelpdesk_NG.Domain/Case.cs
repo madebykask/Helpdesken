@@ -110,6 +110,8 @@
         /// </summary>
         public int? CausingPartId { get; set; }
 
+        public DateTime? LatestSLACountDate { get; set; }
+
         public virtual ProductArea ProductArea { get; set; }
         public virtual User LastChangedByUser { get; set; }
         public virtual User Administrator { get; set; }

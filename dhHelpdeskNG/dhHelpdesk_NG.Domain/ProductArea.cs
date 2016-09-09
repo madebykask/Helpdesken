@@ -31,4 +31,6 @@
         public virtual ICollection<Invoice.InvoiceArticleEntity> InvoiceArticles { get; set; }
         //public virtual Priority Priority { get; set; }
     }
+
+    
 }

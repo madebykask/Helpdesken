@@ -243,7 +243,7 @@
     <Compile Include="Areas\Admin\Controllers\BaseAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\BuildingController.cs" />
     <Compile Include="Areas\Admin\Controllers\BusinessRulesController.cs" />
-    <Compile Include="Areas\Admin\Controllers\CaseInvoiceController.cs" />
+    <Compile Include="Areas\Admin\Controllers\InvoiceController.cs" />
     <Compile Include="Areas\Admin\Controllers\CaseTypeController.cs" />
     <Compile Include="Areas\Admin\Controllers\CategoryController.cs" />
     <Compile Include="Areas\Admin\Controllers\CausingPartController.cs" />
@@ -319,6 +319,9 @@
     <Compile Include="Areas\Admin\Models\ContractCategoryIndexViewModel.cs" />
     <Compile Include="Areas\Admin\Models\AccountActivityIndexViewModel.cs" />
     <Compile Include="Areas\Admin\Models\BuildingViewModels.cs" />
+    <Compile Include="Areas\Admin\Models\Invoice\InvoiceArticleProductAreaInputViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\Invoice\InvoiceArticleProductAreaFilterJSModel.cs" />
+    <Compile Include="Areas\Admin\Models\Invoice\InvoiceArticleProductAreaIndexModel.cs" />
     <Compile Include="Areas\Admin\Models\RegistrationSourceInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\OrganizationHierarchy\OrganizationUnit.cs" />
     <Compile Include="Areas\Admin\Models\OrganizationHierarchy\SDepartment.cs" />
@@ -382,6 +385,8 @@
     <Content Include="Areas\Admin\Content\js\Common\common.js" />
     <Content Include="Areas\Admin\Content\js\Common\ToggableInactiveList.js" />
     <Content Include="Areas\Admin\Content\js\CaseType\index.js" />
+    <Content Include="Areas\Admin\Content\js\Invoice\invoicearticleproductareaInput.js" />
+    <Content Include="Areas\Admin\Content\js\Invoice\invoicearticleIndex.js" />
     <Content Include="Areas\Admin\Content\js\Program\index.js" />
     <Content Include="Areas\Admin\Content\js\EMailGroup\index.js" />
     <Content Include="Areas\Admin\Content\js\OperationLogCategory\index.js" />
@@ -961,7 +966,7 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FaqController.cs" />
     <Compile Include="Controllers\FilesController.cs" />
-    <Compile Include="Controllers\InvoiceController.cs" />
+    <Compile Include="Controllers\CaseInvoiceController.cs" />
     <Compile Include="Areas\Licenses\Controllers\ProductsController.cs" />
     <Compile Include="Controllers\NotifiersController.cs" />
     <Compile Include="Controllers\OperationLogController.cs" />
@@ -1705,9 +1710,9 @@
     <Content Include="Content\js\jsrender.min.js.map" />
     <Content Include="Areas\Admin\Views\GlobalSetting\_TranslationsList.cshtml" />
     <Content Include="Areas\Admin\Views\GlobalSetting\_Holidays.cshtml" />
-    <Content Include="Areas\Admin\Views\CaseInvoice\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\CaseInvoice\EditorTemplates\ArticlesImportModel.cshtml" />
-    <Content Include="Areas\Admin\Views\CaseInvoice\EditorTemplates\CaseInvoiceSettings.cshtml" />
+    <Content Include="Areas\Admin\Views\Invoice\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Invoice\EditorTemplates\ArticlesImportModel.cshtml" />
+    <Content Include="Areas\Admin\Views\Invoice\EditorTemplates\CaseInvoiceSettings.cshtml" />
     <Content Include="Areas\Admin\Views\GlobalSetting\_WatchDateCalendar.cshtml" />
     <Content Include="Areas\Licenses\Views\Web.config" />
     <Content Include="Areas\Licenses\Views\Products\Index.cshtml" />
@@ -1764,6 +1769,10 @@
     <Content Include="Areas\Admin\Views\BusinessRules\Index.cshtml" />
     <Content Include="Areas\Admin\Views\BusinessRules\Edit.cshtml" />
     <Content Include="Areas\Reports\Views\Report\Reports\ReportGenerator.cshtml" />
+    <Content Include="Areas\Admin\Views\Invoice\ArticleProductAreaIndex.cshtml" />
+    <Content Include="Areas\Admin\Views\Invoice\_ArticleProductAreaIndexRows.cshtml" />
+    <Content Include="Areas\Admin\Views\Invoice\New.cshtml" />
+    <Content Include="Areas\Admin\Views\Invoice\_InputArticleProductArea.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx" />
     <Content Include="Scripts\jquery-1.8.3.js" />
@@ -3159,7 +3168,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>51782</DevelopmentServerPort>
+          <DevelopmentServerPort>63584</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:57747/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

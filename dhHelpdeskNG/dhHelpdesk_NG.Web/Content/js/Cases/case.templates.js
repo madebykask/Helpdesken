@@ -882,7 +882,7 @@ function LoadTemplate(id) {
         caseInvoiceIsActive = $('#CustomerSettings_ModuleCaseInvoice').val().toLowerCase() == 'true';
 
     if (caseInvoiceIsActive) {
-        $.get('/Invoice/IsThereNotSentOrder/', { caseId: curCaseId, myTime: Date.now }, function (res) {
+        $.get('/CaseInvoice/IsThereNotSentOrder/', { caseId: curCaseId, myTime: Date.now }, function (res) {
             if (res != null && res) {
                 var mes = window.parameters.caseTemplateChangeMessage || '';
                 ShowToastMessage(mes, 'warning', false);                
@@ -914,10 +914,15 @@ function GetTemplateData(id) {
                 }
             }
 
-            if (showOverwriteWarning) {
-                window.overwriteWarning.show(caseTemplate);
-            } else {                
-                window.ApplyTemplate(caseTemplate);
+            var overwriteDirectly = caseTemplate["OverWritePopUp"];
+            if (overwriteDirectly != undefined && overwriteDirectly != null && overwriteDirectly != 0)
+                window.ApplyTemplate(caseTemplate, true);
+            else {
+                if (showOverwriteWarning) {
+                    window.overwriteWarning.show(caseTemplate);
+                } else {
+                    window.ApplyTemplate(caseTemplate);
+                }
             }
         }
     );

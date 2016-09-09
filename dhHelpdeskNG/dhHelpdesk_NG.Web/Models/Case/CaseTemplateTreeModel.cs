@@ -7,8 +7,6 @@ namespace DH.Helpdesk.Web.Models.Case
     {
         public int CustomerId { get; set; }
         
-        public List<CaseTemplateCategoryNode> CaseTemplateCategoryTree { get; set; }
-
-        //public List<CaseSolutionInputViewModel> CaseTemplateCategoryTree { get; set; }
+        public List<CaseTemplateCategoryNode> CaseTemplateCategoryTree { get; set; }        
     }
 }
