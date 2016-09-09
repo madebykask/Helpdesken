@@ -3349,7 +3349,8 @@ namespace DH.Helpdesk.Web.Controllers
             specificFilter.FilteredProductAreaText = ParentPathDefaultValue;
             specificFilter.FilteredClosingReasonText = ParentPathDefaultValue;
 
-            specificFilter.NewProductAreaList = GetProductAreasModel(customerId, null);
+            /* temporary disabled */
+            //specificFilter.NewProductAreaList = GetProductAreasModel(customerId, null);
 
             var customerfieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customerId);
 
