@@ -279,17 +279,33 @@ namespace DH.Helpdesk.Web.Controllers
         [BadRequestOnNotValid]
         public RedirectToRouteResult NewNotifier(InputModel model)
         {
-            if (((model.FirstName == null || !model.FirstName.Show) || (model.LastName == null || !model.LastName.Show)) &&  model.DisplayName != null && 
+            if (((model.FirstName == null || !model.FirstName.Show || string.IsNullOrEmpty(model.FirstName.Value)) ||
+                 (model.LastName == null || !model.LastName.Show || string.IsNullOrEmpty(model.LastName.Value))) && model.DisplayName != null && 
                !string.IsNullOrEmpty(model.DisplayName.Value))
             {
                 var splitedName = GetSplitedName(model.DisplayName != null? model.DisplayName.Value : string.Empty);
 
-                if (model.FirstName == null || !model.FirstName.Show)
+                if (model.FirstName == null || !model.FirstName.Show || string.IsNullOrEmpty(model.FirstName.Value))
                     model.FirstName = new StringFieldModel(false, "FirstName", splitedName.Key);
 
-                if (model.LastName == null || !model.LastName.Show)
+                if (model.LastName == null || !model.LastName.Show || string.IsNullOrEmpty(model.LastName.Value))
                     model.LastName = new StringFieldModel(false, "LastName", splitedName.Value);
             }
+
+            if (model.DisplayName == null || !model.DisplayName.Show || string.IsNullOrEmpty(model.DisplayName.Value))
+            {
+                var firstName = string.Empty;
+                var lastName = string.Empty;
+
+                if (model.FirstName != null)
+                    firstName = model.FirstName.Value;
+
+                if (model.LastName != null)
+                    lastName = model.LastName.Value;
+
+                model.DisplayName = new StringFieldModel(false, "DisplayName", string.Format("{0} {1}", firstName, lastName));
+            }
+
             var newNotifier = this.newNotifierFactory.Create(model, SessionFacade.CurrentCustomer.Id, DateTime.Now);
             this.notifierService.AddNotifier(newNotifier);
             return this.RedirectToAction("Index");
@@ -300,16 +316,31 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]        
         public JsonResult NewNotifierPopup(InputModel model)
         {
-            if (((model.FirstName == null || !model.FirstName.Show) || (model.LastName == null || !model.LastName.Show)) && model.DisplayName != null &&
-                !string.IsNullOrEmpty(model.DisplayName.Value))
+            if (((model.FirstName == null || !model.FirstName.Show || string.IsNullOrEmpty(model.FirstName.Value)) ||
+                 (model.LastName == null || !model.LastName.Show || string.IsNullOrEmpty(model.LastName.Value))) && model.DisplayName != null &&
+               !string.IsNullOrEmpty(model.DisplayName.Value))
             {
                 var splitedName = GetSplitedName(model.DisplayName != null ? model.DisplayName.Value : string.Empty);
 
-                if (model.FirstName == null || !model.FirstName.Show)                    
+                if (model.FirstName == null || !model.FirstName.Show || string.IsNullOrEmpty(model.FirstName.Value))
                     model.FirstName = new StringFieldModel(false, "FirstName", splitedName.Key);
 
-                if (model.LastName == null || !model.LastName.Show)
-                    model.LastName = new StringFieldModel(false,"LastName", splitedName.Value);
+                if (model.LastName == null || !model.LastName.Show || string.IsNullOrEmpty(model.LastName.Value))
+                    model.LastName = new StringFieldModel(false, "LastName", splitedName.Value);
+            }
+
+            if (model.DisplayName == null || !model.DisplayName.Show || string.IsNullOrEmpty(model.DisplayName.Value))
+            {
+                var firstName = string.Empty;
+                var lastName = string.Empty;
+
+                if (model.FirstName != null)
+                    firstName = model.FirstName.Value;
+
+                if (model.LastName != null)
+                    lastName = model.LastName.Value;
+
+                model.DisplayName = new StringFieldModel(false, "DisplayName", string.Format("{0} {1}", firstName, lastName));
             }
 
             var newNotifier = this.newNotifierFactory.Create(model, SessionFacade.CurrentCustomer.Id, DateTime.Now);

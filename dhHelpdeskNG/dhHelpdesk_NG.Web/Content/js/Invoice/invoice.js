@@ -1883,7 +1883,11 @@ $(function () {
             for (var i = 0; i < articles.length; i++) {
                 var article = articles[i];
                 var artDesc = article.Description != null ? article.Description : "";
-                var text = article.Description + articleDescriptionDelimiter + article.GetFullName();
+
+                var text = article.GetFullName();
+                if (artDesc != "")
+                    text = artDesc + articleDescriptionDelimiter + text;
+
                 articlesEl.append("<option value='" + article.Id + "' >" + text + "</option>");
             }
 
@@ -1925,8 +1929,33 @@ $(function () {
                     }
                 }
             });
-
+          
             $('#articleList').on('chosen:showing_dropdown', function () {
+                $('.chosen-search input').on('input', function () {
+                    $('#articleList_chosen .chosen-results li').each(function () {
+                        var art = this;
+                        var fullText = $(art).text();
+                        if (fullText != " ") {
+                            var newText = '  ';
+                            var tooltip = '';
+                            var splits = fullText.split(articleDescriptionDelimiter);
+                            if (splits.length > 0 && splits[0] != 'null') {
+                                tooltip = splits[0];
+                            }
+
+                            if (splits.length > 1) {
+                                newText = splits[1];
+                            }
+
+                            if (newText == ' ' || newText == '  ')
+                                newText = fullText;
+
+                            art.title = tooltip;
+                            $(this).text(newText);
+                        }
+                    });
+                });
+
                 $('#articleList_chosen .chosen-results li').each(function () {
                     var art = this;
                     var fullText = $(art).text();
@@ -1941,6 +1970,9 @@ $(function () {
                         if (splits.length > 1) {
                             newText = splits[1];
                         }
+
+                        if (newText == ' ' || newText == '  ')
+                            newText = fullText;
 
                         art.title = tooltip;
                         $(this).text(newText);
