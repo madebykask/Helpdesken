@@ -189,6 +189,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                                 {
                                     InvoiceArticleId = art.Id,
                                     InvoiceArticleName = art.Name, // add desction as well
+                                    InvoiceArticleNameEng = art.NameEng,
                                     InvoiceArticleNumber = art.Number,
                                     ProductAreaId = prod.Id,
                                     ProductAreaName = prod.ResolveFullName()
@@ -208,6 +209,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                                 {
                                     InvoiceArticleId = art.Id,
                                     InvoiceArticleName = art.Name, // add desction as well
+                                    InvoiceArticleNameEng = art.NameEng,
                                     InvoiceArticleNumber = art.Number,
                                     ProductAreaId = prod.Id,
                                     ProductAreaName = prod.ResolveFullName()
@@ -228,6 +230,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                                 {
                                     InvoiceArticleId = art.Id,
                                     InvoiceArticleName = art.Name, // add desction as well
+                                    InvoiceArticleNameEng = art.NameEng,
                                     InvoiceArticleNumber = art.Number,
                                     ProductAreaId = prod.Id,
                                     ProductAreaName = prod.ResolveFullName()

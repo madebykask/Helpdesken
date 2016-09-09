@@ -282,13 +282,13 @@
                 {
                     Id = s.Id,
                     Name = newParentName,
-                    IsActive = parentState,
+                    IsActive = parentState != 0 ? s.IsActive : parentState,
                     Parent_ProductArea_Id = s.Parent_ProductArea_Id
                 };
                 ret.Add(newPA);
 
                 if (s.SubProductAreas.Any())
-                    ret.AddRange(GetChilds(newParentName, parentState, s.SubProductAreas.ToList(), isTakeOnlyActive));
+                    ret.AddRange(GetChilds(newParentName, newPA.IsActive, s.SubProductAreas.ToList(), isTakeOnlyActive));
             }
 
             return ret;

@@ -11,8 +11,9 @@
          @{
            foreach (var row in Model.Data)
             {
+               
                 <tr>
-                    <td>@row.InvoiceArticleNumber - @row.InvoiceArticleName</td>
+                    <td>@row.InvoiceArticleNumber - @row.InvoiceArticleName - @row.InvoiceArticleNameEng</td>
                     <td>@row.ProductAreaName</td>
                     <td>
                         @*<a id="@string.Format("delete_artprod_button_{0}")" class="btn bt-small" data-field="" title="@Translation.Get("Ta bort")"><i class="icon-remove"></i></a>*@

@@ -16,6 +16,8 @@
 
         public string InvoiceArticleName { get; set; }
 
+        public string InvoiceArticleNameEng { get; set; }
+
         public int ProductAreaId { get; set; }
 
         public string ProductAreaName { get; set; }
