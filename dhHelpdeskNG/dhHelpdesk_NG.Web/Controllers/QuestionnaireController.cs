@@ -38,6 +38,8 @@
 
         private readonly IWorkingGroupService _workingGroupService;
 
+        private readonly IInfoService _infoService;
+
         #endregion
 
         #region Constructors and Destructors
@@ -51,7 +53,8 @@
             ICaseTypeService caseTypeService,
             IProductAreaService productAreaService,
             IWorkingGroupService workingGroupService,
-            IMasterDataService masterDataService)
+            IMasterDataService masterDataService,
+            IInfoService infoService)
             : base(masterDataService)
         {
             _questionnaireService = questionnaireService;
@@ -62,6 +65,7 @@
             _caseTypeService = caseTypeService;
             _productAreaService = productAreaService;
             _workingGroupService = workingGroupService;
+            _infoService = infoService;
         }
 
         #endregion
@@ -716,7 +720,14 @@
 
             this._circularService.SaveAnswers(participant);
 
-            return this.RedirectToAction("Index", "Home");
+            return this.RedirectToAction("QuestionnaireCompleted", "Questionnaire");
+        }
+
+        [HttpGet]
+        public ViewResult QuestionnaireCompleted()
+        {
+            var html = _infoService.GetInfoText(4, OperationContext.CustomerId, OperationContext.LanguageId).Name;
+            return View("QuestionnaireCompleted", model: html);
         }
 
         [HttpGet]
