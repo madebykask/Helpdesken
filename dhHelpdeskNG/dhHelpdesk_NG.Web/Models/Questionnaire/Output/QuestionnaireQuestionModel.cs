@@ -12,14 +12,14 @@
             string question,
             string number,
             bool isShowNote,
-            string noteText,
+            string noteTextLabel,
             List<QuestionnaireQuestionOptionModel> oprions)
         {
             this.Id = id;
             this.Question = question;
             this.Number = number;
             this.IsShowNote = isShowNote;
-            this.NoteText = noteText;
+            this.NoteTextLabel = noteTextLabel;
             this.Options = oprions;
         }
 
@@ -32,6 +32,8 @@
         public string Number { get; private set; }
 
         public bool IsShowNote { get; private set; }
+
+        public string NoteTextLabel { get; private set; }
 
         public string NoteText { get; private set; }
 

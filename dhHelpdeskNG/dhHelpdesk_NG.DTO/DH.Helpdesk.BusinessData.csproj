@@ -393,6 +393,7 @@
     <Compile Include="Models\Questionnaire\Participant.cs" />
     <Compile Include="Models\Questionnaire\Read\CircularOverview.cs" />
     <Compile Include="Models\Questionnaire\Read\ConnectedCase.cs" />
+    <Compile Include="Models\Questionnaire\Read\QuestionnaireDetailedOverview.cs" />
     <Compile Include="Models\Questionnaire\Read\QuestionnaireOverview.cs" />
     <Compile Include="Models\Questionnaire\Read\QuestionnaireQuestionOptionOverview.cs" />
     <Compile Include="Models\Questionnaire\Read\QuestionnaireQuestionOverview.cs" />

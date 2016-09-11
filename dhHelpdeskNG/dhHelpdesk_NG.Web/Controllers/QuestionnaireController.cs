@@ -677,9 +677,9 @@
         [HttpGet]
         public ViewResult Questionnaire(Guid guid)
         {
-            QuestionnaireOverview questionnarie = this._circularService.GetQuestionnaire(guid, this.OperationContext);
+            var detailed = this._circularService.GetQuestionnaire(guid, this.OperationContext);
 
-            List<QuestionnaireQuestionModel> questionnarieQuestionsModel = (from question in questionnarie.Questions
+            List<QuestionnaireQuestionModel> questionnarieQuestionsModel = (from question in detailed.Questionnaire.Questions
                                                                             let options =
                                                                                 question.Options.Select(
                                                                                     option =>
@@ -698,9 +698,10 @@
                                                                                 options)).ToList();
 
             var questionnarieModel = new QuestionnaireModel(
-                questionnarie.Id,
-                questionnarie.Name,
-                questionnarie.Description,
+                detailed.Questionnaire.Id,
+                detailed.Questionnaire.Name,
+                detailed.Questionnaire.Description,
+                detailed.CaseId,
                 questionnarieQuestionsModel);
 
             var questionnarieViewModel = new QuestionnaireViewModel(questionnarieModel, false, guid);

@@ -263,23 +263,29 @@
             this.SendMails(mails, operationContext.DateAndTime);
         }
 
-        public QuestionnaireOverview GetQuestionnaire(Guid guid, OperationContext operationContext)
+        public QuestionnaireDetailedOverview GetQuestionnaire(Guid guid, OperationContext operationContext)
         {
-            int id;
+            var id = 0;
+            var caseId = 0;
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
                 var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
 
                 // todo ef include with join doesn't work
-                id =
+                var circular =
                     circularPartRepository.GetAll()
                         .GetByGuid(guid)
-                        .Select(x => x.QuestionnaireCircular.Questionnaire_Id)
+                        .Select(x => new { id = x.QuestionnaireCircular.Questionnaire_Id, caseId = x.Case_Id })
                         .SingleOrDefault();
+                if (circular != null)
+                {
+                    id = circular.id;
+                    caseId = circular.caseId;
+                }
             }
 
             QuestionnaireOverview overview = this.GetQuestionnaireEntity(id, operationContext);
-            return overview;
+            return new QuestionnaireDetailedOverview{ Questionnaire = overview, CaseId = caseId };
         }
 
         public QuestionnaireOverview GetQuestionnaire(int id, OperationContext operationContext)
