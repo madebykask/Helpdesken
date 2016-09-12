@@ -1881,6 +1881,7 @@ $(function () {
            
             resetTotal();
             function resetTotal() {
+                articlesEl.empty();
                 articlesEl.append("<option value='0'>  </option>");
                 articlesEl.append("<option value='0'> &nbsp; </option>");
                 for (var i = 0; i < articles.length; i++) {
@@ -1971,7 +1972,8 @@ $(function () {
                     lastSearchKey += 1;
                     setTimeout(resetResultSearch, 200, lastSearchKey);
                 });                
-                resetResultSearch(lastSearchKey);
+                lastSearchKey += 1;
+                setTimeout(resetResultSearch, 200, lastSearchKey);
             });
 
             articlesSelectContainer.find("select.chosen-select").addClass("min-width-500 max-width-500 case-invoice-multiselect");

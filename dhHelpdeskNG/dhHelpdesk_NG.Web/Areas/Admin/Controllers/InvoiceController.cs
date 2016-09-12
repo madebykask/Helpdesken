@@ -60,10 +60,17 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         {
             var customer = customerService.GetCustomer(customerId);
             var model = new InvoiceArticleProductAreaIndexModel(customer);
-            var productAreas = productAreaService.GetAllProductAreas(customerId);
-            var productAreasInRow = productAreaService.GetChildsInRow(productAreas).ToList();
-
-
+            var productAreas = productAreaService.GetAll(customerId);
+            var lastLevels = new List<ProductArea>();
+        
+            foreach (var p in productAreas)
+            {
+                if (p.SubProductAreas.Count == 0)
+                {
+                    p.Name = p.ResolveFullName();
+                    lastLevels.Add(p);
+                }
+            }
             
             var allInvoiceArticles = invoiceArticleService.GetArticles(customerId);
 
@@ -72,7 +79,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             model.Rows = GetIndexRowModel(customerId, filter, allInvoiceArticles);
             
             model.InvoiceArticles = allInvoiceArticles.OrderBy(a => a.Name).ToList();
-            model.ProductAreas = productAreasInRow.ToList();
+            model.ProductAreas = lastLevels.OrderBy(l=> l.Name).ToList();
             return this.View(model);
         }
 
@@ -128,13 +135,22 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private InvoiceArticleProductAreaInputViewModel CreateInputViewModel(Customer customer)
         {
             var allInvoiceArticles = invoiceArticleService.GetArticles(customer.Id).OrderBy(a => a.Name);
-            var productAreas = productAreaService.GetAllProductAreas(customer.Id);
-            var productAreasInRow = productAreaService.GetChildsInRow(productAreas).ToList();
+            var productAreas = productAreaService.GetAll(customer.Id);
+            var lastLevels = new List<ProductArea>();
+
+            foreach (var p in productAreas)
+            {
+                if (p.SubProductAreas.Count == 0)
+                {
+                    p.Name = p.ResolveFullName();
+                    lastLevels.Add(p);
+                }
+            }            
 
             var model = new InvoiceArticleProductAreaInputViewModel
             {
                 Customer = customer,
-                ProductAreas = productAreasInRow,
+                ProductAreas = lastLevels.OrderBy(p=> p.Name).ToList(),
                 Articles = allInvoiceArticles.ToList()
             };
 
@@ -240,6 +256,26 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     }
                     break;
                 case 3:
+                    foreach (var art in allInvoiceArticles.Where(a => selectedFilter.SelectedInvoiceArticles.Contains(a.Id)).ToList())
+                    {
+                        var selectedProds = art.ProductAreas.Where(p => selectedFilter.SelectedProductAreas.Contains(p.Id)).ToList();
+                        if (selectedProds.Any())
+                        {
+                            foreach (var prod in selectedProds)
+                            {
+                                model.Data.Add(new InvoiceArticleProductAreaIndexRowModel
+                                {
+                                    InvoiceArticleId = art.Id,
+                                    InvoiceArticleName = art.Name, // add desction as well
+                                    InvoiceArticleNameEng = art.NameEng,
+                                    InvoiceArticleNumber = art.Number,
+                                    ProductAreaId = prod.Id,
+                                    ProductAreaName = prod.ResolveFullName()
+                                });
+                            }
+                        }
+                    }
+                    break;
                     break;
             }
                                     

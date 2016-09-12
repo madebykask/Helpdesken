@@ -32,13 +32,15 @@
 
         IList<ProductAreaEntity> GetAllProductAreas(int customerId);
 
+        IList<ProductAreaEntity> GetAll(int customerId);
+
         ProductAreaEntity GetProductArea(int id);
 
         string GetProductAreaWithChildren(int id, string separator, string valueToReturn);
 
         DeleteMessage DeleteProductArea(int id);
 
-        IList<ProductArea> GetChildsInRow(IList<ProductArea> productAreas, bool isTakeOnlyActive = false);
+        IList<ProductArea> GetChildrenInRow(IList<ProductArea> productAreas, bool isTakeOnlyActive = false);
 
         void SaveProductArea(ProductAreaEntity productArea, int[] wg, out IDictionary<string, string> errors);
 
@@ -213,6 +215,11 @@
             return this.productAreaRepository.GetMany(x => x.Customer_Id == customerId && x.Parent_ProductArea_Id == null).OrderBy(x => x.Name).ToList();
         }
 
+        public IList<ProductAreaEntity> GetAll(int customerId)
+        {
+            return this.productAreaRepository.GetMany(x => x.Customer_Id == customerId).ToList();
+        }
+
         public ProductAreaEntity GetProductArea(int id)
         {
             return this.productAreaRepository.GetById(id);
@@ -259,19 +266,19 @@
             return DeleteMessage.Error;
         }
 
-        public IList<ProductArea> GetChildsInRow(IList<ProductArea> productAreas, bool isTakeOnlyActive = false)
+        public IList<ProductArea> GetChildrenInRow(IList<ProductArea> productAreas, bool isTakeOnlyActive = false)
         {
             var childProductAreas = new List<ProductArea>();
-            var parentProductAreas = productAreas.Where(pa => !pa.Parent_ProductArea_Id.HasValue && (isTakeOnlyActive ? pa.IsActive == 1 : true)).ToList();
+            var parentProductAreas = productAreas.Where(pa => !pa.Parent_ProductArea_Id.HasValue && (isTakeOnlyActive ? pa.IsActive == 1 : true)).ToList<ProductArea>();
             foreach (var p in parentProductAreas)
-            {
-                childProductAreas.AddRange(GetChilds(p.Name, p.IsActive, p.SubProductAreas.ToList(), isTakeOnlyActive));
+            {               
+                childProductAreas.AddRange(GetChildren(p.Name, p.IsActive, p.SubProductAreas.ToList(), isTakeOnlyActive));
             }
 
             return parentProductAreas.Union(childProductAreas).OrderBy(p => p.Name).ToList();
         }
 
-        private IList<ProductArea> GetChilds(string parentName, int parentState, IList<ProductArea> subProductAreas, bool isTakeOnlyActive = false)
+        private IList<ProductArea> GetChildren(string parentName, int parentState, IList<ProductArea> subProductAreas, bool isTakeOnlyActive = false)
         {
             var ret = new List<ProductArea>();
             var newSubProductAreas = subProductAreas.Where(pa => (isTakeOnlyActive ? pa.IsActive == 1 : true)).ToList();
@@ -288,12 +295,47 @@
                 ret.Add(newPA);
 
                 if (s.SubProductAreas.Any())
-                    ret.AddRange(GetChilds(newParentName, newPA.IsActive, s.SubProductAreas.ToList(), isTakeOnlyActive));
+                    ret.AddRange(GetChildren(newParentName, newPA.IsActive, s.SubProductAreas.ToList(), isTakeOnlyActive));
             }
 
             return ret;
         }
 
+        //public IList<ProductArea> GetParentInRow(IList<ProductArea> productAreas, bool isTakeOnlyActive = false)
+        //{
+        //    var allProductAreas = new List<ProductArea>();
+        //    var childProductAreas = productAreas.Where(pa => pa.Parent_ProductArea_Id.HasValue && (isTakeOnlyActive ? pa.IsActive == 1 : true)).ToList();
+        //    foreach (var p in childProductAreas)
+        //    {
+        //        p.Name = p.
+        //        allProductAreas.Add(GetParents(p.Name, p.IsActive, p.SubProductAreas.ToList(), isTakeOnlyActive));
+        //    }
+
+        //    return allProductAreas.OrderBy(p => p.Name).ToList();
+        //}
+
+        //private IList<ProductArea> GetParents(string parentName, int parentState, IList<ProductArea> parentProductAreas, bool isTakeOnlyActive = false)
+        //{
+        //    var ret = new List<ProductArea>();
+        //    var newParentProductAreas = parentProductAreas.Where(pa => (isTakeOnlyActive ? pa.IsActive == 1 : true)).ToList();
+        //    foreach (var s in newParentProductAreas)
+        //    {
+        //        var newParentName = string.Format("{0} - {1}", s.Name, parentName);
+        //        var newPA = new ProductArea()
+        //        {
+        //            Id = s.Id,
+        //            Name = newParentName,
+        //            IsActive = parentState != 0 ? s.IsActive : parentState,
+        //            Parent_ProductArea_Id = s.Parent_ProductArea_Id
+        //        };
+        //        ret.Add(newPA);
+
+        //        if (s.ParentProductArea != null)
+        //            ret.AddRange(GetParent(newParentName, newPA.IsActive, s.SubProductAreas.ToList(), isTakeOnlyActive));
+        //    }
+
+        //    return ret;
+        //}
 
         public void SaveProductArea(ProductAreaEntity productArea, int[] wg, out IDictionary<string, string> errors)
         {
