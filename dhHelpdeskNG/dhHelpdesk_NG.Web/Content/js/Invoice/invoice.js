@@ -3474,7 +3474,7 @@ $(function () {
                             if (ret.Message != "")
                                 ret.Message += " ,";
                             if (eName.attr("Id").indexOf("Description_") == 0)
-                                ret.Message += dhHelpdesk.Common.Translate("Beskrivning");
+                                ret.Message += dhHelpdesk.Common.Translate("Textrad");
                             else
                                 ret.Message += dhHelpdesk.Common.Translate("Namn");
                             ret.IsValid = false;
