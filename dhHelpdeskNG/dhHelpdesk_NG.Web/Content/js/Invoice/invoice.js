@@ -1861,7 +1861,7 @@ $(function () {
         },
 
         OpenInvoiceWindow: function (message) {
-            var articleDescriptionDelimiter = '¤¤¤';
+            var articleDescriptionDelimiter = '¤';
 
             var th = dhHelpdesk.CaseArticles;
             th.CreateContainer(message);
@@ -1872,23 +1872,27 @@ $(function () {
             articlesSelectContainer.append(articlesEl);
 
             var articles = th.GetInvoiceArticles();
+            
             if (articles == null || articles.length == 0) {
                 addArticleEl.hide();
             } else {
                 addArticleEl.show();
             }
+           
+            resetTotal();
+            function resetTotal() {
+                articlesEl.append("<option value='0'>  </option>");
+                articlesEl.append("<option value='0'> &nbsp; </option>");
+                for (var i = 0; i < articles.length; i++) {
+                    var article = articles[i];
+                    var artDesc = article.Description != null ? article.Description : "";
 
-            articlesEl.append("<option value='0'>  </option>");
-            articlesEl.append("<option value='0'> &nbsp; </option>");
-            for (var i = 0; i < articles.length; i++) {
-                var article = articles[i];
-                var artDesc = article.Description != null ? article.Description : "";
+                    var text = article.GetFullName();
+                    if (artDesc != "")
+                        text = artDesc + articleDescriptionDelimiter + text;
 
-                var text = article.GetFullName();
-                if (artDesc != "")
-                    text = artDesc + articleDescriptionDelimiter + text;
-
-                articlesEl.append("<option value='" + article.Id + "' >" + text + "</option>");
+                    articlesEl.append("<option value='" + article.Id + "' >" + text + "</option>");
+                }                
             }
 
             $('.InitiatorField').hide();
@@ -1897,6 +1901,7 @@ $(function () {
                 width: "500px",
                 height: "100px",
                 placeholder_text_single: dhHelpdesk.Common.Translate("Välj artikel"),
+                search_contains:true,
                 'no_results_text': '?',
             })
             .change(function () {                
@@ -1930,32 +1935,13 @@ $(function () {
                 }
             });
           
-            $('#articleList').on('chosen:showing_dropdown', function () {
-                $('.chosen-search input').on('input', function () {
-                    $('#articleList_chosen .chosen-results li').each(function () {
-                        var art = this;
-                        var fullText = $(art).text();
-                        if (fullText != " ") {
-                            var newText = '  ';
-                            var tooltip = '';
-                            var splits = fullText.split(articleDescriptionDelimiter);
-                            if (splits.length > 0 && splits[0] != 'null') {
-                                tooltip = splits[0];
-                            }
+            var lastSearchKey = 0;
+            function resetResultSearch(searchId) {
+                if (searchId != lastSearchKey) {
+                    return;
+                }
 
-                            if (splits.length > 1) {
-                                newText = splits[1];
-                            }
-
-                            if (newText == ' ' || newText == '  ')
-                                newText = fullText;
-
-                            art.title = tooltip;
-                            $(this).text(newText);
-                        }
-                    });
-                });
-
+                resetTotal();
                 $('#articleList_chosen .chosen-results li').each(function () {
                     var art = this;
                     var fullText = $(art).text();
@@ -1978,6 +1964,14 @@ $(function () {
                         $(this).text(newText);
                     }
                 });
+            }
+            
+            $('#articleList').on('chosen:showing_dropdown', function () {
+                $('.chosen-search input').on('input', function () {                                       
+                    lastSearchKey += 1;
+                    setTimeout(resetResultSearch, 200, lastSearchKey);
+                });                
+                resetResultSearch(lastSearchKey);
             });
 
             articlesSelectContainer.find("select.chosen-select").addClass("min-width-500 max-width-500 case-invoice-multiselect");
@@ -1985,8 +1979,6 @@ $(function () {
             caseButtonsToDisable.addClass("disabled");
             caseButtonsToDisable.css("pointer-events", "none");
             th._container.dialog("open");
-
-
 
             if (th.IsFinishedCase()) {
                 $('.case-invoice-container *').attr("disabled", true);
