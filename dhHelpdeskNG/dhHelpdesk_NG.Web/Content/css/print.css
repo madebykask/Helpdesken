@@ -1,11 +1,11 @@
 ﻿/************PRINT LAYOUT**********/
 .printheader {
-    font-size: 11px;
-    text-align:right;
+    font-size: 14px;
+    text-align:left;
     margin-bottom:20px;
 }
 .printcase {
-    font-size: 12px;
+    font-size: 15px;
 }
 
 .printcase td {
@@ -13,15 +13,39 @@
     padding:5px;
 }
 
-    .printcase .textbold {
-        font-weight: bold;
-    }
- .printcase .H {
-        font-weight: bold;
-        font-size:20px;
-    }
+.printcase .textbold {
+    font-weight: bold;
+}
 
- .printcase .G {
-        background-color:#ccc !important;
-        -webkit-print-color-adjust: exact;
-    }
+.printcase .H {
+    font-weight: bold;
+    font-size:20px;
+}
+
+.printcase .G {
+    font-weight: bold;
+    font-size: 18px;
+    background-color:#ccc !important;
+    -webkit-print-color-adjust: exact;
+}
+
+.printCaseGroupRow .G {
+  padding-top: 1.5em;
+}
+
+.printcase .R {    
+    font-size: 16px;    
+}
+
+.printcase .L {    
+    font-size: 16px;    
+}
+
+
+.printcase .F {    
+    font-size: 16px;    
+}
+
+.printcase .S {    
+    font-size: 16px;    
+}

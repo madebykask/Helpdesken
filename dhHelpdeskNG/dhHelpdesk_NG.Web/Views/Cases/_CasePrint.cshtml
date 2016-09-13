@@ -2,7 +2,8 @@
 @using ReportViewerForMvc
 @using DH.Helpdesk.Common.Enums
 @model DH.Helpdesk.Web.Models.Shared.ReportModel
-          
+      
+
 <div id="CasePrintArea" >
     @if (Model != null && Model.CanShow)
     {
@@ -21,53 +22,62 @@
                     @*Enable it if you need to show Report Service Report (Need to change the controller as well)*@
                     @*@Html.ReportViewer(Model.Report)*@
                                                                               
-                    @{var user = Model.ReportData.Where(d => d.LineType == ReportLineTypes.User).SingleOrDefault(); }
+                    @{                        
+                        var user = Model.ReportData.Where(d => d.LineType == ReportLineTypes.User).SingleOrDefault();
+                        var isFirstGroup = true;
+                     }
 
-                    <table class="printheader">
+                     <table class="printheader">
                         <tr>
-                            <td style="width: 1050px;">
-                                @(user != null? user.FieldValue : "")
+                            <td >
+                                @(user != null ? user.FieldValue : "")
                             </td>
                         </tr>
                         <tr>
-                            <td style="width: 1050px;">
+                            <td>
                                 @DateTime.Now.ToLocalTime() 
                             </td>
                         </tr>
                     </table>
-                                                            
+                                                         
                     <table border="1" style="border-color:black" class="printcase">
-                        @foreach (var row in Model.ReportData.Where(d=> d.LineType != ReportLineTypes.User))
-                        {                          
-                            <tr>
-                                @*<td style="width: 20px;text-align:center;">                                    
-                                    @row.LineType
-                                </td>*@
-
-                                <td style="width: 250px; margin-left:20px;" class="textbold @row.LineType">
+                        @foreach (var row in Model.ReportData.Where(d => d.LineType != ReportLineTypes.User))
+                        {
+                            var rowClass = "";
+                            if (row.LineType == ReportLineTypes.Group)
+                            {
+                                if (!isFirstGroup)
+                                {
+                                    rowClass = "printCaseGroupRow";
+                                }
+                                isFirstGroup = false;
+                            }          
+                            <tr class="@rowClass">                                                             
+                                <td style="min-width:180px;max-width:180px; margin-left:20px;line-height:20px;" class="textbold @row.LineType">
                                     @row.FieldCaption                                  
-                                </td>
-
+                                </td>                                                               
+                                
                                 @if (row.LineType == ReportLineTypes.File)
                                 {
                                     var filesStr = row.FieldValue.Replace(Environment.NewLine, tempNewLine).RemoveHTMLTags();
                                     var files = filesStr.Split(new string[] { tempNewLine }, StringSplitOptions.None);
-                                    <td style="width: 800px;" class="@row.LineType">                                    
-                                        @foreach (var file in files.Where(f=> !string.IsNullOrEmpty(f)).ToList())
+                                    <td style="min-width:445px;max-width:445px; line-height:20px;" class="@row.LineType">                                    
+                                        @foreach (var file in files.Where(f => !string.IsNullOrEmpty(f)).ToList())
                                         {
-                                             <p> <img src="@Url.Content("~/Content/icons/ico-doc-black.png")" > @file.ForHtmlView() </p>
+                                                <p> <img src="@Url.Content("~/Content/icons/ico-doc-black.png")" > @file.ForHtmlView() </p>
                                         }
                                     </td>
                                 }
                                 else
                                 {
-                                    <td style="width: 800px;max-width:400px;word-wrap: break-word;line-height:13px;" class="@row.LineType">                                    
-                                        @row.FieldValue.Replace(Environment.NewLine, tempNewLine).RemoveHTMLTags().Replace(tempNewLine, Environment.NewLine).ForHtmlView()
+                                    <td style="min-width:445px;max-width:445px; word-wrap: break-word;line-height:20px;" class="@row.LineType">                                    
+                                        <p>@row.FieldValue.Replace(Environment.NewLine, tempNewLine).RemoveHTMLTags().Replace(tempNewLine, Environment.NewLine).ForHtmlView()</p>
                                     </td>
                                 }
-                            </tr>                            
+                            </tr>                              
                         }
-                    </table>
+                       </table>
+                                   
                 </div>               
             </div>    
         </div>                         
