@@ -1,17 +1,23 @@
 ﻿/************PRINT LAYOUT**********/
 .printheader {
-    font-size: 14px;
+    font-size: 16px;
     text-align:left;
     margin-bottom:20px;
 }
 .printcase {
-    font-size: 15px;
+    font-size: 17px;
 }
 
 .printcase td {
     text-align:left;
     padding:5px;
 }
+
+.printcase td .L {
+    text-align:justify;
+    padding:5px;
+}
+
 
 .printcase .textbold {
     font-weight: bold;
@@ -24,7 +30,7 @@
 
 .printcase .G {
     font-weight: bold;
-    font-size: 18px;
+    font-size: 19px;
     background-color:#ccc !important;
     -webkit-print-color-adjust: exact;
 }
@@ -34,18 +40,18 @@
 }
 
 .printcase .R {    
-    font-size: 16px;    
+    font-size: 17px;    
 }
 
 .printcase .L {    
-    font-size: 16px;    
+    font-size: 17px;    
 }
 
 
 .printcase .F {    
-    font-size: 16px;    
+    font-size: 17px;    
 }
 
 .printcase .S {    
-    font-size: 16px;    
+    font-size: 17px;    
 }

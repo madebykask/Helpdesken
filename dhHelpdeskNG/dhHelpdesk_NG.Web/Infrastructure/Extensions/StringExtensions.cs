@@ -369,5 +369,38 @@
 
             return str.Split(new[] { ",", ";" }, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
         }
+
+        public static string AddCharacterInParts(this string s, int partLength, string charToSearch, string replaceStr)
+        {
+            if (string.IsNullOrEmpty(s))
+                return string.Empty;
+ 
+            if (partLength <= 0)
+                throw new ArgumentException("Part length has to be positive.", "partLength");
+
+            if (s.Length <= partLength)
+                return s;
+
+            var splitedStr = s.SplitInParts(partLength);
+            var newStr = "";
+            foreach (var part in splitedStr)
+                if (!part.Contains(charToSearch))
+                    newStr = newStr + replaceStr + part;
+                else
+                    newStr += part;
+
+            return newStr;
+        }
+
+        public static IEnumerable<String> SplitInParts(this String s, Int32 partLength)
+        {
+            if (s == null)
+                throw new ArgumentNullException("s");
+            if (partLength <= 0)
+                throw new ArgumentException("Part length has to be positive.", "partLength");
+
+            for (var i = 0; i < s.Length; i += partLength)
+                yield return s.Substring(i, Math.Min(partLength, s.Length - i));
+        }
     }
 }
