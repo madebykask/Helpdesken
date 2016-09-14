@@ -189,7 +189,8 @@
         public static IQueryable<OrderState> GetOrderStatuses(this IQueryable<OrderState> query, int customerId)
         {
             query = query.GetByCustomer(customerId)
-                    .Where(s => s.IsActive == 1);
+                    .Where(s => s.IsActive == 1)
+                    .OrderBy(s => s.SortOrder);
 
             return query;
         }
