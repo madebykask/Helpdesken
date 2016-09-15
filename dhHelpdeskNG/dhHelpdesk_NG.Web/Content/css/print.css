@@ -9,15 +9,10 @@
 }
 
 .printcase td {
-    text-align:left;
+    font-size: 17px;
+    text-align:left;    
     padding:5px;
 }
-
-.printcase td .L {
-    text-align:justify;
-    padding:5px;
-}
-
 
 .printcase .textbold {
     font-weight: bold;
@@ -46,7 +41,6 @@
 .printcase .L {    
     font-size: 17px;    
 }
-
 
 .printcase .F {    
     font-size: 17px;    

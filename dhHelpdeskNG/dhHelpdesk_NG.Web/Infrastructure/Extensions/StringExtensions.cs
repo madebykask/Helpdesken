@@ -381,13 +381,71 @@
             if (s.Length <= partLength)
                 return s;
 
-            var splitedStr = s.SplitInParts(partLength);
             var newStr = "";
-            foreach (var part in splitedStr)
-                if (!part.Contains(charToSearch))
-                    newStr = newStr + replaceStr + part;
+            var arryStr = s.Split(new string[] {replaceStr}, StringSplitOptions.RemoveEmptyEntries);
+            for (var i = 0; i < arryStr.Length; i++)
+            {
+                if (arryStr[i].Length > partLength)
+                {
+                    var splitedStr = arryStr[i].SplitInParts(partLength).ToList();
+                    var linesStr = "";
+                    var lastCarryPart = "";
+                    var extraStr = "";
+                    splitedStr.Add(" ");
+                    splitedStr.Add(" ");
+                    foreach (var part in splitedStr)
+                    {
+                        var partProcess = lastCarryPart + part;
+                        lastCarryPart = "";
+                        if (!partProcess.Contains(charToSearch) && partProcess.Length > partLength-1)
+                        {
+                            var _splitedStr = partProcess.SplitInParts(partLength);
+                            var newLongStr = _splitedStr.First();
+
+                            extraStr = "";
+                            var replaceIndex = 0;
+                            replaceIndex = newLongStr.LastIndexOf(" ") > replaceIndex ? newLongStr.LastIndexOf(" ") : replaceIndex;
+                            replaceIndex = newLongStr.LastIndexOf(".") > replaceIndex ? newLongStr.LastIndexOf(".") : replaceIndex;
+                            replaceIndex = newLongStr.LastIndexOf(",") > replaceIndex ? newLongStr.LastIndexOf(",") : replaceIndex;
+                            replaceIndex = newLongStr.LastIndexOf(";") > replaceIndex ? newLongStr.LastIndexOf(";") : replaceIndex;
+                            replaceIndex = newLongStr.LastIndexOf("?") > replaceIndex ? newLongStr.LastIndexOf("?") : replaceIndex;
+                            replaceIndex = newLongStr.LastIndexOf("!") > replaceIndex ? newLongStr.LastIndexOf("!") : replaceIndex;
+                            replaceIndex = newLongStr.LastIndexOf("(") > replaceIndex ? newLongStr.LastIndexOf("(") : replaceIndex;
+                            replaceIndex = newLongStr.LastIndexOf(")") > replaceIndex ? newLongStr.LastIndexOf(")") : replaceIndex;
+                            replaceIndex = newLongStr.LastIndexOf("-") > replaceIndex ? newLongStr.LastIndexOf("-") : replaceIndex;
+                            
+                            var isFirst = true;
+                            foreach (var _part in _splitedStr)
+                                if (isFirst)
+                                    isFirst = false;
+                                else
+                                    lastCarryPart += _part;
+
+                            var _str = string.Empty;
+                            if (replaceIndex == 0) 
+                            {
+                                extraStr = "-";
+                                _str = newLongStr + extraStr;
+                                linesStr += _str + replaceStr;
+                            }
+                            else
+                            {
+                                var baseIndex = replaceIndex + 1;
+                                _str = newLongStr.Substring(0, baseIndex);
+                                lastCarryPart = newLongStr.Substring(baseIndex) + lastCarryPart;
+                                linesStr += _str.Insert(baseIndex, replaceStr) + extraStr;
+                            }                           
+                        }
+                        else
+                            linesStr += partProcess;
+                    }
+                    newStr = newStr + linesStr + lastCarryPart + replaceStr;
+                }
                 else
-                    newStr += part;
+                {
+                    newStr = newStr + arryStr[i] + replaceStr;
+                }                
+            }
 
             return newStr;
         }
