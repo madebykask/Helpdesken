@@ -45,8 +45,8 @@ namespace DH.Helpdesk.Dal.Mappers.Invoice.EntityToBusinessModel
                         entity.Ppu,
                         entity.ProductAreas.ToList(),
                         entity.CustomerId,
-                        entity.TextDemand,
-                        entity.Blocked,
+                        entity.TextDemand.HasValue && entity.TextDemand.Value? true: false,
+                        entity.Blocked.HasValue && entity.Blocked.Value? true: false,
                         this.customerMapper.Map(entity.Customer));
         }
     }

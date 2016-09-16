@@ -633,7 +633,7 @@ EditPage.prototype.init = function (p) {
 
     me.$btnPrint.click(function (e) {
             
-        /* Setup Print Page */
+        /* Setup Print Page 
         try {
             var regpath = "HKEY_CURRENT_USER\\Software\\Microsoft\\Internet Explorer\\PageSetup\\" + "Print_Background";
             var oWSS = new ActiveXObject("WScript.Shell");
@@ -645,7 +645,7 @@ EditPage.prototype.init = function (p) {
             oWSS.RegWrite(regpath, "no", "REG_SZ");
         }
         catch (err) {            
-        }
+        }*/
         
         $.get("/Cases/ShowCasePrintPreview/",
                 {

@@ -47,6 +47,9 @@
                 .HasForeignKey(a => a.CustomerId)
                 .WillCascadeOnDelete(false);
 
+            this.Property(a => a.TextDemand).IsOptional();
+            this.Property(a => a.Blocked).IsOptional();
+
             this.ToTable("tblInvoiceArticle");            
         }
     }

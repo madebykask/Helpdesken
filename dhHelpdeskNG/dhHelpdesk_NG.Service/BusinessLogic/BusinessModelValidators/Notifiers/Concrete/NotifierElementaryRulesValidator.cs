@@ -198,7 +198,7 @@
             this.elementaryRulesValidator.ValidateStringField(
                 validatableNotifier.DisplayName,
                 GeneralField.DisplayName,
-                CreateValidationRule(settings.DisplayName));
+                CreateValidationRule(new FieldProcessingSetting(true, settings.DisplayName.Required)));
 
             this.elementaryRulesValidator.ValidateStringField(
                 validatableNotifier.Place,

@@ -20,11 +20,15 @@
 
         public static string ResolveFullName(this ProductArea productArea)
         {
+            if (productArea == null)
+                return string.Empty;
+
             if (productArea.Parent_ProductArea_Id.HasValue)
                 return string.Format("{0} - {1}", ResolveFullName(productArea.ParentProductArea), 
                                      Translation.GetMasterDataTranslation(productArea.Name));
             else
                 return Translation.GetMasterDataTranslation(productArea.Name);
         }
+        
     }    
 }

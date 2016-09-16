@@ -25,9 +25,9 @@ namespace DH.Helpdesk.Domain.Invoice
 
         public virtual ICollection<ProductArea> ProductAreas { get; set; }
 
-        public bool TextDemand { get; set; }
+        public bool? TextDemand { get; set; }
 
-        public bool Blocked { get; set; }
+        public bool? Blocked { get; set; }
 
         public int CustomerId { get; set; }
 

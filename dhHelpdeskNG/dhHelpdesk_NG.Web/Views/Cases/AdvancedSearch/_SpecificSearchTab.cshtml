@@ -167,7 +167,7 @@
 
                 @if (Model.ProductAreaList != null)
                 {
-                    <tr>
+                    @*<tr>
                         <td>
                             [Product Area List]
                         </td>
@@ -183,7 +183,7 @@
                                 }
                             </select>
                         </td>
-                    </tr>
+                    </tr>*@
                     <tr>
                         <td>
                             @Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)

@@ -28,7 +28,7 @@
 
         IEnumerable<ItemOverview> GetOverviews(int customerId, IEnumerable<int> caseTypesIds);
 
-        IList<CaseType> GetChildsInRow(IList<CaseType> caseTypes, bool isTakeOnlyActive = false);
+        IList<CaseType> GetChildrenInRow(IList<CaseType> caseTypes, bool isTakeOnlyActive = false);
 
         string GetCaseTypeFullName(int caseTypeId);
     }
@@ -158,7 +158,7 @@
             return this.caseTypeRepository.GetOverviews(customerId, caseTypesIds);
         }
 
-        public IList<CaseType> GetChildsInRow(IList<CaseType> caseTypes, bool isTakeOnlyActive = false)
+        public IList<CaseType> GetChildrenInRow(IList<CaseType> caseTypes, bool isTakeOnlyActive = false)
         {
             var childCaseTypes = new List<CaseType>();
             var parentCaseTypes = caseTypes.Where(ct=> !ct.Parent_CaseType_Id.HasValue && (isTakeOnlyActive? ct.IsActive == 1: true)).ToList();
