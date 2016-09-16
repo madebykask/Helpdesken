@@ -85,16 +85,23 @@ using System.Linq;
             public bool ReExtendLockCase(Guid lockGUID, int extendedTimeInSecond)
             {
                 var ret = false;
-                var existingLock = this.GetAll().Where(cl => cl.LockGUID == lockGUID).FirstOrDefault();
+                try
+                {                   
+                    var existingLock = this.GetAll().Where(cl => cl.LockGUID == lockGUID).FirstOrDefault();
 
-                if (existingLock != null)
-                {
-                    existingLock.ExtendedTime = DateTime.Now.AddSeconds(extendedTimeInSecond);
-                    this.Update(existingLock);
-                    this.Commit();
-                    ret = true;
+                    if (existingLock != null)
+                    {
+                        existingLock.ExtendedTime = DateTime.Now.AddSeconds(extendedTimeInSecond);
+                        this.Update(existingLock);
+                        this.Commit();
+                        ret = true;
+                    }
+
                 }
-
+                catch (Exception ex)
+                {
+                    ret = false;
+                }
                 return ret;
             }
 
