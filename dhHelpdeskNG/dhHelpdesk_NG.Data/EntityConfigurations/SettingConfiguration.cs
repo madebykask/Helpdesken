@@ -131,6 +131,7 @@
             this.Property(x => x.DefaultEmailLogDestination).IsRequired();
             this.Property(x => x.CalcSolvedInTimeByLatestSLADate).IsRequired();
             this.Property(x => x.TimeZone_offset).IsRequired();
+            this.Property(x => x.SetUserToAdministrator).IsRequired();
 
             this.ToTable("tblsettings");
         }
