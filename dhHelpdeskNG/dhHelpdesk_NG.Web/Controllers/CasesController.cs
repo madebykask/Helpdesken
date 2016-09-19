@@ -3605,6 +3605,7 @@ namespace DH.Helpdesk.Web.Controllers
                 defaultFileName = fileName.Replace("%", "");
                 defaultFileName = defaultFileName.Replace("?", "");
             }
+
             return defaultFileName;
         }
 

@@ -1,0 +1,45 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule.BusinessRuleIndexModel
+@{
+    ViewBag.Title = "Index";
+}
+
+
+    <div class="secnavs fixed">
+        <div class="secnavs fixed">
+            <div class="pull-left">
+                <ul class="secnav">
+                    <li>@Html.ActionLink(Translation.Get("Add Rule", Enums.TranslationSource.TextTranslation), "AddRule", 
+                                         new { customerId = Model.Customer.Id, moduleId = Model.Module.Id})</li>
+                </ul>
+            </div>
+            @Html.Partial("_MasterDataPanel", Model.Customer)
+        </div>
+    </div>
+    <input type="hidden" id="customerId" value="1" />
+    
+    <div class="content">
+        <div class="container">
+            <ul class="nav nav-tabs" id="myTab">
+                <li class="active">
+                    <a href="#fragment-1">
+                        @Translation.Get(Model.Module.Caption, Enums.TranslationSource.TextTranslation)
+                        @Translation.Get("Business Rule", Enums.TranslationSource.TextTranslation)
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane tab-pane-border active" id="fragment-1">                    
+                    <div class="formContainer">
+                        <table class="tableform">
+                            <tr>
+                                <td class="span3">
+                                    @Translation.Get("Visa i menyn", Enums.TranslationSource.TextTranslation)
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

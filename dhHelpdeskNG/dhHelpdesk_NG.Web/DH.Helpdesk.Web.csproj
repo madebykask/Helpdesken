@@ -242,7 +242,7 @@
     <Compile Include="Areas\Admin\Controllers\AccountActivityController.cs" />
     <Compile Include="Areas\Admin\Controllers\BaseAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\BuildingController.cs" />
-    <Compile Include="Areas\Admin\Controllers\BusinessRulesController.cs" />
+    <Compile Include="Areas\Admin\Controllers\BusinessRulesController-Depricated.cs" />
     <Compile Include="Areas\Admin\Controllers\InvoiceController.cs" />
     <Compile Include="Areas\Admin\Controllers\CaseTypeController.cs" />
     <Compile Include="Areas\Admin\Controllers\CategoryController.cs" />
@@ -299,9 +299,10 @@
     <Compile Include="Areas\Admin\Infrastructure\ModelFactories\CaseInvoiceFactory.cs" />
     <Compile Include="Areas\Admin\Infrastructure\ModelFactories\ICaseInvoiceFactory.cs" />
     <Compile Include="Areas\Admin\Models\AccountActivityInputViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\BusinessRules\BusinessRuleItemViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\BusinessRules\BusinessRulesViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\BusinessRules\EditBusinessRuleViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\BusinessRules-Depricated\BusinessRuleItemViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\BusinessRules-Depricated\BusinessRulesViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\BusinessRules-Depricated\EditBusinessRuleViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\BusinessRule\BusinessRuleIndexModel.cs" />
     <Compile Include="Areas\Admin\Models\CaseTypeInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\CategoryViewModels.cs" />
     <Compile Include="Areas\Admin\Models\CausingPart\CausingPartsViewModel.cs" />
@@ -495,6 +496,7 @@
     <Content Include="Content\js\CaseTemplates\index.logic.js" />
     <Content Include="Content\js\CaseTemplates\edit.logic.js" />
     <Content Include="Content\js\Changes\inventoryDialog.js" />
+    <Compile Include="Areas\Admin\Controllers\BusinessRuleController.cs" />
     <Compile Include="Areas\Inventory\Controllers\ComputerInventoryBaseController.cs" />
     <Compile Include="Areas\Inventory\Controllers\ComputerModelController.cs" />
     <Compile Include="Areas\Inventory\Controllers\ComputerModuleBaseController.cs" />
@@ -1766,13 +1768,14 @@
     <Content Include="Areas\Admin\Views\Users\Index\_LockedCaseTable.cshtml" />
     <Content Include="Areas\Reports\Views\Report\ReportViewer\_PresentReport.cshtml" />
     <Content Include="Areas\Reports\Views\Report\ReportViewer\_Overview.cshtml" />
-    <Content Include="Areas\Admin\Views\BusinessRules\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\BusinessRules\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\BusinessRules-Depricated\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\BusinessRules-Depricated\Edit.cshtml" />
     <Content Include="Areas\Reports\Views\Report\Reports\ReportGenerator.cshtml" />
     <Content Include="Areas\Admin\Views\Invoice\ArticleProductAreaIndex.cshtml" />
     <Content Include="Areas\Admin\Views\Invoice\_ArticleProductAreaIndexRows.cshtml" />
     <Content Include="Areas\Admin\Views\Invoice\New.cshtml" />
     <Content Include="Areas\Admin\Views\Invoice\_InputArticleProductArea.cshtml" />
+    <Content Include="Areas\Admin\Views\BusinessRule\Index.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx" />
     <Content Include="Scripts\jquery-1.8.3.js" />

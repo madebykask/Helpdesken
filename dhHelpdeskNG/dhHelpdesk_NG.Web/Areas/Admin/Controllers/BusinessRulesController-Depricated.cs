@@ -12,13 +12,13 @@ using DH.Helpdesk.Web.Infrastructure;
 
 namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
-    public class BusinessRulesController : BaseAdminController
+    public class DepricatedBusinessRulesController : BaseAdminController
     {
         #region Test_Data will be removed
 
         private static IList<BusinessRuleItemViewModel> _rules;
 
-        static BusinessRulesController()
+        static DepricatedBusinessRulesController()
         {
             _rules = new List<BusinessRuleItemViewModel>();
             for (int i = 1; i < 10; i++)
@@ -38,7 +38,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
         private readonly ICustomerService _customerService;
 
-        public BusinessRulesController(IMasterDataService masterDataService, ICustomerService customerService) 
+        public DepricatedBusinessRulesController(IMasterDataService masterDataService, ICustomerService customerService) 
             : base(masterDataService)
         {
             _customerService = customerService;

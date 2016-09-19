@@ -2,6 +2,7 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.Common.Enums;
 @using DH.Helpdesk.BusinessData.OldComponents
+@using DH.Helpdesk.Common.Enums.BusinessRule
 
 @model DH.Helpdesk.Domain.Customer
 <li><a href="@Url.Action("index", "customer", new { area = "admin" })">@Translation.Get("Välj kund", Enums.TranslationSource.TextTranslation)</a></li>
@@ -230,6 +231,19 @@
                 @Translation.Get("Informationstexter", Enums.TranslationSource.TextTranslation)
             </a>
         </li>
+    </ul>
+</li>
+<li class="line"></li>
+<li class="dropdown-submenu">
+    <a href="#">
+        @Translation.Get("Business Rules", Enums.TranslationSource.TextTranslation)
+    </a>
+    <ul class="dropdown-menu">
+        <li>
+            <a href="@Url.Action("index", "BusinessRule", new {customerId = Model.Id, moduleId = BRModule.CASE})">
+                @Translation.Get("Case", Enums.TranslationSource.TextTranslation)
+            </a>
+        </li>        
     </ul>
 </li>
 
