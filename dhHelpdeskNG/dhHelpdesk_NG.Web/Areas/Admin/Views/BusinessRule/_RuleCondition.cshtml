@@ -1,0 +1,159 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule.BusinessRuleIndexModel
+@{
+    ViewBag.Title = "Rule Condition";
+}
+
+<h4>@Translation.Get("Conditions")</h4>
+
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>
+                #
+            </th>
+            <th>
+                Field
+            </th>
+            <th>
+                From value
+            </th>
+            <th>
+                To value
+            </th>
+            <th>
+                Valid for Inactive items 
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                1
+            </td>
+            <td>
+                <select class="chosen-single-select">
+                    <option>
+                        Process
+                    </option>
+                    <option>
+                        SubStatus
+                    </option>
+                </select>
+            </td>
+            <td>
+                <select class="multiselect multiselect-search" multiple="multiple">                    
+                    <option>
+                        Any
+                    </option>
+                    <option>
+                        Null
+                    </option>
+                    <option>
+                        Item1
+                    </option>
+                    <option>
+                        Item2
+                    </option>
+                    <option>
+                        Item3
+                    </option>
+                </select>
+            </td>
+            <td>
+                <select class="multiselect multiselect-search" multiple="multiple">                    
+                    <option>
+                        Any
+                    </option>
+                    <option>
+                        Null
+                    </option>
+                    <option>
+                        Item1
+                    </option>
+                    <option>
+                        Item2
+                    </option>
+                    <option>
+                        Item3 Item3Item3Item3Item3Item3Item3Item3Item3Item3
+                    </option>
+                </select>
+            </td>
+            <td>
+                <input type="checkbox" />
+            </td>
+             <td>
+                <a href="#" onclick="alert('Delete')"><i class="icon-minus-sign"></i></a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                2
+            </td>
+            <td>
+                <select class="chosen-single-select">
+                    <option>
+                        Process
+                    </option>
+                    <option>
+                        SubStatus
+                    </option>
+                </select>
+            </td>
+            <td>
+                <select class="chosen-select" multiple="multiple">  
+                    <option>
+                        Any
+                    </option>
+                    <option>
+                        Null
+                    </option>
+                    <option>
+                        Item1
+                    </option>
+                    <option>
+                        Item2
+                    </option>
+                    <option>
+                        Item3
+                    </option>
+                </select>
+            </td>
+            <td>
+                <select class="chosen-select" multiple="multiple" >                    
+                    <option>
+                        Any
+                    </option>
+                    <option>
+                        Null
+                    </option>
+                    <option>
+                        Item1
+                    </option>
+                    <option>
+                        Item2
+                    </option>
+                    <option>
+                        Item3
+                    </option>
+                </select>
+            </td>
+            <td>
+                <input type="checkbox" checked="checked"/>
+            </td>
+            <td>
+                <a href="#" onclick="alert('Delete')"><i class="icon-minus-sign"></i></a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a href="#" onclick="alert('Add new row')"><i class="icon-plus-sign"></i></a>
+            </td>
+            <td colspan="5">               
+            </td>            
+        </tr>
+    </tbody>    
+</table>

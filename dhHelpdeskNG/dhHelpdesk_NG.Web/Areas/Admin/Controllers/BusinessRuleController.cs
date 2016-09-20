@@ -30,6 +30,15 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public ActionResult NewRule(int customerId, int moduleId)
+        {
+            var model = new BusinessRuleIndexModel();
+            model.Customer = _customerService.GetCustomer(customerId);
+            model.Module = new BRModuleModel(moduleId);
+            return View(model);
+        }
+
         #endregion
 
 

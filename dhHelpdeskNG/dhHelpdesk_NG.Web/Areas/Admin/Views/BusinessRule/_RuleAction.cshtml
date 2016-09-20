@@ -1,0 +1,109 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule.BusinessRuleIndexModel
+@{
+    ViewBag.Title = "Rule Actions";
+}
+
+<h4>@Translation.Get("Actions")</h4>
+
+<table >          
+    <tbody>
+        <tr>
+            <td>
+                #1
+            </td>            
+            <td>
+                <select class="chosen-single-select">
+                    <option>
+                        Send email
+                    </option>
+                    <option>
+                        Show Alert
+                    </option>
+                    <option>
+                        Refresh
+                    </option>
+                    <option>
+                        Set selected item
+                    </option>
+                </select>
+            </td>
+            <td>
+                Active <input type="checkbox" checked="checked">
+            </td>
+        </tr>
+        <tr>
+            <td> Template </td>
+            <td colspan="2">
+                <select class="chosen-single-select">                    
+                    <option>
+                        Template1 
+                    </option>
+                    <option>
+                        Template2
+                    </option>
+                    <option>
+                        Template3
+                    </option>
+                    <option>
+                        Template4
+                    </option>                    
+                </select>
+            </td>            
+        </tr>
+        <tr>                 
+            <td> Email Group </td>
+            <td colspan="2">
+                <select class="multiselect multiselect-search" multiple="multiple">                    
+                    <option>
+                        Group1 
+                    </option>
+                    <option>
+                        Group2
+                    </option>
+                    <option>
+                        Group3
+                    </option>                    
+                </select>
+            </td>                                         
+        </tr>
+        <tr>                 
+            <td> Working Group </td>
+            <td colspan="2">
+                <select class="multiselect multiselect-search" multiple="multiple">                    
+                    <option>
+                        Working Group1 
+                    </option>
+                    <option>
+                        Working Group2
+                    </option>
+                    <option>
+                        Working Group3
+                    </option>                    
+                </select>
+            </td>                                         
+        </tr>
+        <tr>                 
+            <td> Administrator </td>
+            <td colspan="2">
+                <select class="multiselect multiselect-search" multiple="multiple">                    
+                    <option>
+                        User1  
+                    </option>
+                    <option>
+                        User2
+                    </option>
+                    <option>
+                        User3
+                    </option>                    
+                </select>
+            </td>                                         
+        </tr>
+        <tr>                 
+            <td> Recipients </td>
+            <td colspan="2">
+                <input type="text" value="per@dhsolutions.se;jessica@dhsolutions.se"/>
+            </td>                                         
+        </tr>
+    </tbody>    
+</table>

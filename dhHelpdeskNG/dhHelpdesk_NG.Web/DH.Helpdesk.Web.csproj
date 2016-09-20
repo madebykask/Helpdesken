@@ -1776,6 +1776,10 @@
     <Content Include="Areas\Admin\Views\Invoice\New.cshtml" />
     <Content Include="Areas\Admin\Views\Invoice\_InputArticleProductArea.cshtml" />
     <Content Include="Areas\Admin\Views\BusinessRule\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\BusinessRule\NewRule.cshtml" />
+    <Content Include="Areas\Admin\Views\BusinessRule\_InputRule.cshtml" />
+    <Content Include="Areas\Admin\Views\BusinessRule\_RuleCondition.cshtml" />
+    <Content Include="Areas\Admin\Views\BusinessRule\_RuleAction.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx" />
     <Content Include="Scripts\jquery-1.8.3.js" />

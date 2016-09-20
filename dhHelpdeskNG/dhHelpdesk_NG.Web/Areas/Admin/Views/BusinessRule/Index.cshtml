@@ -9,8 +9,8 @@
         <div class="secnavs fixed">
             <div class="pull-left">
                 <ul class="secnav">
-                    <li>@Html.ActionLink(Translation.Get("Add Rule", Enums.TranslationSource.TextTranslation), "AddRule", 
-                                         new { customerId = Model.Customer.Id, moduleId = Model.Module.Id})</li>
+                    <li>@Html.ActionLink(Translation.Get("New Rule", Enums.TranslationSource.TextTranslation), "NewRule", 
+                                         new { customerId = Model.Customer.Id, moduleId = Model.Module.Id}, new { @class = "btn"})</li>
                 </ul>
             </div>
             @Html.Partial("_MasterDataPanel", Model.Customer)
@@ -33,10 +33,155 @@
                     <div class="formContainer">
                         <table class="tableform">
                             <tr>
-                                <td class="span3">
-                                    @Translation.Get("Visa i menyn", Enums.TranslationSource.TextTranslation)
+                                <td class="span2">
+                                    @Translation.Get("Event filter", Enums.TranslationSource.TextTranslation)
+                                </td>
+                                <td>
+                                    <select>
+                                        <option>
+                                            On Save Case
+                                        </option>
+                                        <option>
+                                            On Delete Case
+                                        </option>
+                                        <option>
+                                            On Finish Case
+                                        </option>
+                                        <option>
+                                            On Open Case
+                                        </option>
+                                    </select>
                                 </td>
                             </tr>
+                            <tr>
+                                <td class="span2">
+                                    @Translation.Get("Condition filter", Enums.TranslationSource.TextTranslation)
+                                </td>
+                                <td class="span2">
+                                    <select>
+                                        <option>
+                                            Process
+                                        </option>
+                                        <option>
+                                            SubState
+                                        </option>                                        
+                                    </select>
+                                </td>
+                                <td>
+                                    <select>
+                                        <option>
+                                            
+                                        </option>
+                                        <option>
+                                            Item1
+                                        </option>
+                                        <option>
+                                            Item2
+                                        </option>
+                                        <option>
+                                            Item3
+                                        </option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="span2">
+                                    @Translation.Get("Action filter", Enums.TranslationSource.TextTranslation)
+                                </td>
+                                <td>
+                                    <select>
+                                        <option>
+                                            
+                                        </option>
+                                        <option>
+                                            Send Email
+                                        </option>
+                                        <option>
+                                            Show Alert
+                                        </option>
+                                        <option>
+                                            Refresh a list
+                                        </option>
+                                        <option>
+                                            Set other field
+                                        </option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                        <table  class="table table-striped table-bordered table-hover table-cases" >
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Rule Name
+                                    </th>
+                                    <th>
+                                        Event
+                                    </th>
+                                    <th>
+                                        Conditions
+                                    </th>
+                                    <th>
+                                        Actions
+                                    </th>
+                                     <th>
+                                        State
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        Rule1
+                                    </td>
+                                    <td>
+                                        On Save Case
+                                    </td>
+                                    <td>
+                                        Process: Process1 to Process2
+                                    </td>
+                                    <td>
+                                        Send Email
+                                    </td>
+                                    <td>
+                                        Active
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Rule2
+                                    </td>
+                                    <td>
+                                        On Save Case
+                                    </td>
+                                    <td>
+                                        SubState: Any to SubState4
+                                    </td>
+                                    <td>
+                                        Send Email
+                                    </td>
+                                     <td>
+                                        Active
+                                    </td>
+                                </tr>
+                                <tr class="inactive">
+                                    <td>
+                                        Rule3
+                                    </td>
+                                    <td>
+                                        On Save Case
+                                    </td>
+                                    <td>
+                                        SubState: Any to Null
+                                    </td>
+                                    <td>
+                                        Show Alert
+                                    </td>
+                                    <td>
+                                        Inactive
+                                    </td>
+                                </tr>
+                            </tbody>                            
                         </table>
                     </div>
                 </div>
