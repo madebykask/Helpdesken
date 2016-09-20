@@ -82,7 +82,11 @@
                 var statusRep = uow.GetRepository<OrderState>();
 
                 var orderTypes = orderTypeRep.GetAll()
-                                    .GetOrderTypes(customerId);
+                                    .GetOrderTypes(customerId).ToList();
+
+                var orderTypesInRow = this.GetChildrenInRow(orderTypes, true).ToList();
+
+
 
                 var administrators = administratorRep.GetAll()
                                     .GetAdministrators(customerId);
@@ -90,8 +94,44 @@
                 var statuses = statusRep.GetAll()
                                     .GetOrderStatuses(customerId);
 
-                return OrderMapper.MapToFilterData(orderTypes, administrators, statuses);
+                return OrderMapper.MapToFilterData(orderTypesInRow, administrators, statuses);
             }
+        }
+
+
+        public IList<OrderType> GetChildrenInRow(IList<OrderType> orderTypes, bool isTakeOnlyActive = false)
+        {
+            var childOrderTypes = new List<OrderType>();
+            var parentOrderTypes = orderTypes.Where(ot => !ot.Parent_OrderType_Id.HasValue && (isTakeOnlyActive ? ot.IsActive == 1 : true)).ToList();
+            foreach (var p in parentOrderTypes)
+            {
+                childOrderTypes.AddRange(GetChilds(p.Name, p.IsActive, p.SubOrderTypes.ToList(), isTakeOnlyActive));
+            }
+
+            return parentOrderTypes.Union(childOrderTypes).OrderBy(c => c.Name).ToList();
+        }
+
+        private IList<OrderType> GetChilds(string parentName, int parentState, IList<OrderType> subOrderTypes, bool isTakeOnlyActive = false)
+        {
+            var ret = new List<OrderType>();
+            var newSubOrderTypes = subOrderTypes.Where(ct => (isTakeOnlyActive ? ct.IsActive == 1 : true)).ToList();
+            foreach (var s in newSubOrderTypes)
+            {
+                var newParentName = string.Format("{0} - {1}", parentName, s.Name);
+                var newCT = new OrderType()
+                {
+                    Id = s.Id,
+                    Name = newParentName,
+                    IsActive = parentState,
+                    Parent_OrderType_Id = s.Parent_OrderType_Id
+                };
+                ret.Add(newCT);
+
+                if (s.SubOrderTypes.Any())
+                    ret.AddRange(GetChilds(newParentName, parentState, s.SubOrderTypes.ToList(), isTakeOnlyActive));
+            }
+
+            return ret;
         }
 
         public SearchResponse Search(SearchParameters parameters)

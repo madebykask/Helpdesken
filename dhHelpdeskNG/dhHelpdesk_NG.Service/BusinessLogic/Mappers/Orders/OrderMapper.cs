@@ -6,11 +6,12 @@
     using DH.Helpdesk.BusinessData.Models.Orders.Index;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Domain;
+    using System.Collections.Generic;
 
     public static class OrderMapper
     {
         public static OrdersFilterData MapToFilterData(
-                                        IQueryable<OrderType> orderTypes,
+                                        IList<OrderType> orderTypes,
                                         IQueryable<User> administrators,
                                         IQueryable<OrderState> statuses)
         {
