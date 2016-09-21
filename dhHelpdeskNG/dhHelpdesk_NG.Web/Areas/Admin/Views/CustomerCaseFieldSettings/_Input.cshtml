@@ -264,7 +264,8 @@
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[4].FieldHelp" value="0" />
                             </td>
                         </tr>
-                        <tr>
+                        @*HD case : #55175 This field used in HD 4 but no usage in HD 5.*@
+                        @*<tr>
                             <td><i class="dh-icon-select" rel="tooltip" title="@Translation.Get("Vallista - dropdown", Enums.TranslationSource.TextTranslation)"></i>
                             </td>
                             <td>
@@ -297,7 +298,7 @@
                                 <input type="text" name="CaseFieldSettingWithLangauges[5].FieldHelp" value="@Model.CaseFieldSettingWithLangauges.getFieldHelp(GlobalEnums.TranslationCaseFields.Customer_Id.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[5].FieldHelp" value="0" />
                             </td>
-                        </tr>
+                        </tr>*@
                         <tr>
                             <td><i class="dh-icon-select" rel="tooltip" title="@Translation.Get("Vallista - dropdown", Enums.TranslationSource.TextTranslation)"></i>
                             </td>
