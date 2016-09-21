@@ -99,8 +99,8 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
 
                             string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + notifierEmailLog.EmailLogGUID.ToString();
 
-                            var siteHelpdesk = AbsoluterUrl;
-                            
+                            //var siteHelpdesk = AbsoluterUrl;
+                            var siteHelpdesk = AbsoluterUrl + "Cases/edit/" + newCase.Id.ToString();
                             var notifierEmailItem = this.emailFactory.CreateEmailItem(
                                                             customEmailSender4,
                                                             notifierEmailLog.EmailAddress,
@@ -183,8 +183,8 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                                                 mailMessageId);
 
                 string site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + defaultWorkingGroupEmailLog.EmailLogGUID.ToString();
-                var siteHelpdesk = AbsoluterUrl;
-                
+                //var siteHelpdesk = AbsoluterUrl;
+                var siteHelpdesk = AbsoluterUrl + "Cases/edit/" + newCase.Id.ToString();
                 var defaultWorkingGroupEmailItem = this.emailFactory.CreateEmailItem(
                                                 helpdeskMailFromAdress,
                                                 defaultWorkingGroupEmailLog.EmailAddress,
@@ -253,8 +253,8 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                                                         t,
                                                         this.emailService.GetMailMessageId(helpdeskMailFromAdress));
                         string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + internalEmailLog.EmailLogGUID.ToString();
-                        var siteHelpdesk = AbsoluterUrl;
-                        
+                        //var siteHelpdesk = AbsoluterUrl;
+                        var siteHelpdesk = AbsoluterUrl + "Cases/edit/" + newCase.Id.ToString();
                         var internalEmail = this.emailFactory.CreateEmailItem(
                                                         customEmailSender4,
                                                         internalEmailLog.EmailAddress,
