@@ -91,16 +91,7 @@ namespace DH.Helpdesk.Dal.Repositories
            List<int> caseTypeId,
            DateTime? periodFrom,
            DateTime? periodUntil)
-        {
-            //var query = GetQuery(customerId,
-            //    departmentIds,
-            //    workingGroupIds,
-            //    productAreaIds,
-            //    administratorIds,
-            //    caseStatusIds,
-            //    caseTypeId,
-            //    periodFrom,
-            //    periodUntil);
+        {       
 
             if (!periodFrom.HasValue)
             {
@@ -169,13 +160,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
                 join user3 in this.DataContext.Users on c.Performer_User_Id equals (int?) user3.Id into user3s
                 from _user3 in user3s.DefaultIfEmpty()
-
-                //join r1 in this.DataContext.Regions on _isAbout.Region_Id equals (int?)r1.Id into rs1
-                //from _r1 in rs1.DefaultIfEmpty()
-
-                //join d1 in this.DataContext.Departments on _isAbout.Department_Id equals (int?)d1.Id into ds1
-                //from _d1 in ds1.DefaultIfEmpty()                                              
-
+       
                 where
                     c.Customer_Id == customerId && c.Deleted != 1 &&
                     (DbFunctions.TruncateTime(c.RegTime) >= DbFunctions.TruncateTime(periodFrom) && DbFunctions.TruncateTime(c.RegTime) <= DbFunctions.TruncateTime(periodUntil))
@@ -203,17 +188,17 @@ namespace DH.Helpdesk.Dal.Repositories
                     (administratorIds.Any()
                         ? c.Performer_User_Id.HasValue && administratorIds.Contains(c.Performer_User_Id.Value)
                         : true)
-                    && (caseStatusIds.Any() ? c.Status_Id.HasValue && caseStatusIds.Contains(c.Status_Id.Value) : true)
+                 
+                    && (caseStatusIds.Any() ? (caseStatusIds.FirstOrDefault() == 1 ? c.FinishingDate.HasValue : !c.FinishingDate.HasValue) : true)
+
 
                 group c by new {c.RegTime.Month, c.RegTime.Year}
                 into g
                 select new {Date = g.Key, Count = g.Count()};
 
+                     
             return query.ToDictionary(x => new DateTime(x.Date.Year, x.Date.Month, 1), y => y.Count);
-
-            //return query.GroupBy(x => new {x.RegistrationDate.Value.Month, x.RegistrationDate.Value.Year})
-            //    .OrderBy(x => x.Key)
-            //    .ToDictionary(x => new DateTime(x.Key.Year, x.Key.Month, 1), y => y.Count());
+   
         }
         
         #region Private Methods
@@ -296,13 +281,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
                 join user3 in this.DataContext.Users on c.Performer_User_Id equals (int?) user3.Id into user3s
                 from _user3 in user3s.DefaultIfEmpty()
-
-                //join r1 in this.DataContext.Regions on _isAbout.Region_Id equals (int?)r1.Id into rs1
-                //from _r1 in rs1.DefaultIfEmpty()
-
-                //join d1 in this.DataContext.Departments on _isAbout.Department_Id equals (int?)d1.Id into ds1
-                //from _d1 in ds1.DefaultIfEmpty()                                              
-
+           
                 where
                     c.Customer_Id == customerId && c.Deleted != 1 &&
                     (DbFunctions.TruncateTime(c.RegTime) >= DbFunctions.TruncateTime(periodFrom) && DbFunctions.TruncateTime(c.RegTime) <= DbFunctions.TruncateTime(periodUntil))
@@ -313,23 +292,7 @@ namespace DH.Helpdesk.Dal.Repositories
                                                          c.WorkingGroup_Id.HasValue && workingGroupIds.Contains(c.WorkingGroup_Id.Value) 
                                                        : c.WorkingGroup_Id.HasValue && workingGroupIds.Contains(c.WorkingGroup_Id.Value))
                         : false)
-                    &&
-                //    if (filters.SeletcedDepartments.Any())
-                //{
-                //    // Dep + OU
-                //    if (filters.SeletcedOUs.Any()) 
-                //        _whereStr += string.Format("AND (tblCase.Department_Id in ({0}) or tblCase.OU_Id in ({1})) ", 
-                //                                   filters.SeletcedDepartments.GetSelectedStr().SafeForSqlInject(),
-                //                                   filters.SeletcedOUs.GetSelectedStr().SafeForSqlInject());                        
-                //    else
-                //        _whereStr += string.Format("AND tblCase.Department_Id in ({0}) ", filters.SeletcedDepartments.GetSelectedStr().SafeForSqlInject());
-                //}
-                //else
-                //{
-                //    // OU only
-                //    if (filters.SeletcedOUs.Any())
-                //        _whereStr += string.Format("AND tblCase.OU_Id in ({0}) ", filters.SeletcedOUs.GetSelectedStr().SafeForSqlInject());                        
-                //}
+                    &&               
 
                     (departmentIds.Any()
                         ? (ouIds.Any()? (c.Department_Id.HasValue && departmentIds.Contains(c.Department_Id.Value)) || 
@@ -345,8 +308,7 @@ namespace DH.Helpdesk.Dal.Repositories
                     (administratorIds.Any()
                         ? c.Performer_User_Id.HasValue && administratorIds.Contains(c.Performer_User_Id.Value)
                         : true)
-                    && (caseStatusIds.Any() ? c.Status_Id.HasValue && caseStatusIds.Contains(c.Status_Id.Value) : true)
-
+                  
                     orderby c.Id
 
                         select new ReportGeneratorFields
@@ -427,7 +389,15 @@ namespace DH.Helpdesk.Dal.Repositories
                                        select r).FirstOrDefault()
 
                         };
-
+            
+            if (caseStatusIds.Any())
+            {
+                if (caseStatusIds.Where(x => x == 1).Any())
+                    return query.Where(x => x.FinishingDate.HasValue);
+                else if (caseStatusIds.Where(x => x == 2).Any())
+                    return query.Where(x => !x.FinishingDate.HasValue);                    
+            }
+            
             return query;
         }
 
