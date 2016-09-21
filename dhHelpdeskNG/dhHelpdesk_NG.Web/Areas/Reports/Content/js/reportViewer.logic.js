@@ -148,8 +148,7 @@
 
         };
 
-        dhHelpdesk.reports.onGeneratedShow = function () {
-
+        dhHelpdesk.reports.onGeneratedShow = function () {           
             if (!dhHelpdesk.reports.doValidation())
                 return;
 
@@ -184,9 +183,13 @@
                     data: getParams,
                     dataType: "html",
                     success: function (htmlData) {
-                        if (isPreview) {
-                            if ($(htmlData).find('#showrun').val() === 'true')
+                        if (isPreview) {                      
+                            if ($(htmlData).find('#showrun').val() === 'true') {                           
                                 dhHelpdesk.reports.togglePreviewMode(false);
+                            }
+                            else {
+                                $("#excelReport").each(function () { this.disabled = false; });
+                            }
                         }
                         $("#generateReportContainer").html(htmlData);
                     },
@@ -439,7 +442,7 @@
             $modal.modal();
         };
 
-        dhHelpdesk.reports.togglePreviewMode = function (state) {
+        dhHelpdesk.reports.togglePreviewMode = function (state) {         
             $("#showReport").each(function () { this.disabled = state; });
             $("#excelReport").each(function () { this.disabled = state; });
         }
@@ -458,7 +461,7 @@
             $("#showReport, #excelReport, #btnPreviewReport").on("click", dhHelpdesk.reports.onGeneratedShow);
             $("#btnSaveFilter").on("click", function (e, d) { return dhHelpdesk.reports.onSave.call(this, e, d, false) });
             $("#btnSaveAsFilter").on("click", function (e, d) { return dhHelpdesk.reports.onSave.call(this, e, d, true) });
-
+        
             $("#lstStatus, #lstfilterAdministrator, #lstfilterDepartment, #lstfilterWorkingGroup, #lstfilterCaseType, #lstfilterProductArea, #CaseRegistrationFromDate, #CaseRegistrationToDate")
                 .on("change", function (e, d) { return dhHelpdesk.reports.togglePreviewMode(true); });
 
