@@ -312,7 +312,7 @@
             var orderTypeRep = uow.GetRepository<OrderType>();
 
             var statuses = statusesRep.GetAll().GetByCustomer(customerId).OrderBy(x => x.SortOrder);
-            var administrators = administratorsRep.GetAll().GetByCustomer(customerId);
+            var administrators = administratorsRep.GetAll().GetByCustomer(customerId).GetActiveUsers(customerId);
             var domains = domainsRep.GetAll().GetByCustomer(customerId);
             var departments = departmentsRep.GetAll().GetByCustomer(customerId);
             var units = ousRep.GetAll();
