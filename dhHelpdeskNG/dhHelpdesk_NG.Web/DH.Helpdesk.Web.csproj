@@ -379,7 +379,7 @@
     <Compile Include="Areas\Admin\Models\SystemInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\UrgencyInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\WorkingGroupInputViewModel.cs" />
-    <Content Include="Areas\Admin\Content\js\BusinessRules\businessRules.list.js" />
+    <Content Include="Areas\Admin\Content\js\BusinessRule\businessRuleInput.js" />
     <Content Include="Areas\Admin\Content\js\CaseOverview\customerOverview.js" />
     <Content Include="Areas\Admin\Content\js\Category\index.js" />
     <Content Include="Areas\Admin\Content\js\CausingPart\index.js" />
@@ -409,6 +409,9 @@
     <Content Include="Areas\Admin\Content\js\Users\index.lockedcase.js" />
     <Content Include="Areas\Admin\Content\js\Users\index.js" />
     <Content Include="Areas\Admin\Content\js\Users\user.js" />
+    <Content Include="Areas\Admin\Content\templates\BusinessRule\rule.tmpl.html" />
+    <Content Include="Areas\Admin\Content\templates\BusinessRule\rule-condition.tmpl.html" />
+    <Content Include="Areas\Admin\Content\templates\BusinessRule\rule-condition-rows.tmpl.html" />
     <Content Include="Areas\Reports\Content\js\reportViewer.logic.js" />
     <Content Include="Areas\Reports\Content\js\reports.js" />
     <Content Include="Content\bootstrap-tagsinput.css" />

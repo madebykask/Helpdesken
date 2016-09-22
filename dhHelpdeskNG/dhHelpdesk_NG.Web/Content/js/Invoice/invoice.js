@@ -1337,9 +1337,7 @@ $(function () {
             }
             return OrderIsInvoiced;
         },
-
        
-
         GetUserSearchOptions: function () {
             var options = {
                 items: 20,

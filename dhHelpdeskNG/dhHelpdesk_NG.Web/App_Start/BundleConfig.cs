@@ -377,8 +377,9 @@
             bundles.Add(new ScriptBundle("~/bundles/cases/caseByIds").Include(
                             "~/Content/js/Cases/caseByIds.logic.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/businessrules/businessRules").Include(
-                "~/Areas/Admin/Content/js/BusinessRules/businessRules.list.js"));
+            bundles.Add(new ScriptBundle("~/bundles/businessrule/businessRules").Include(
+                "~/Content/js/jsrender.min.js",
+                "~/Areas/Admin/Content/js/BusinessRule/businessRuleInput.js"));
 
             #endregion
         }
