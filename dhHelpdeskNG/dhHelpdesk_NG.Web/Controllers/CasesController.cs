@@ -2526,6 +2526,18 @@ namespace DH.Helpdesk.Web.Controllers
                 throw new ArgumentException("Case customer has an invalid value");
             }
 
+            var customerSetting = _settingService.GetCustomerSetting(curCustomer.Id);
+            
+            // offset in Minute
+            var customerTimeOffset = customerSetting.TimeZone_offset;
+            var allTimeZones = TimeZoneInfo.GetSystemTimeZones();
+            var customerTimeZone = allTimeZones.Where(x => x.BaseUtcOffset.TotalMinutes == (double)customerTimeOffset).FirstOrDefault();
+
+            var customerNow = utcNow;
+            if (customerTimeZone != null)
+                customerNow = TimeZoneInfo.ConvertTimeFromUtc(utcNow, customerTimeZone);
+
+            var actionExternalTime = 0;
             DHDomain.Case oldCase = new DHDomain.Case();
             if (edit)
             {                
@@ -2548,7 +2560,7 @@ namespace DH.Helpdesk.Web.Controllers
                         case_.UserCode = oldCase.UserCode;
                     }                    
                 }
-
+                
                 if (oldCase.StateSecondary_Id.HasValue)
                 {
                     var caseSubState = this._stateSecondaryService.GetStateSecondary(oldCase.StateSecondary_Id.Value);
@@ -2573,6 +2585,30 @@ namespace DH.Helpdesk.Web.Controllers
                             oldCase.ChangeTime,
                             utcNow,
                             oldCase.Department_Id) + oldCase.ExternalTime;
+
+                        //customerTimeZone != null
+                        if (1 == 1)
+                        {
+                            workTimeCalcFactory =
+                            new WorkTimeCalculatorFactory(
+                                ManualDependencyResolver.Get<IHolidayService>(),
+                                curCustomer.WorkingDayStart,
+                                curCustomer.WorkingDayEnd,
+                                TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
+
+                            deptIds = null;
+                            if (case_.Department_Id.HasValue)
+                            {
+                                deptIds = new int[] { case_.Department_Id.Value };
+                            }                            
+                            //var changeTimeOnCustomer = TimeZoneInfo.ConvertTimeFromUtc(oldCase.ChangeTime, customerTimeZone);
+
+                            workTimeCalc = workTimeCalcFactory.Build(oldCase.ChangeTime, utcNow, deptIds);
+                            actionExternalTime = workTimeCalc.CalculateWorkTime(
+                                oldCase.ChangeTime,
+                                utcNow,
+                                oldCase.Department_Id);
+                        }
                     }
                 }
 
@@ -2590,7 +2626,9 @@ namespace DH.Helpdesk.Web.Controllers
 
             case_.LatestSLACountDate = CalculateLatestSLACountDate(oldCase.StateSecondary_Id, case_.StateSecondary_Id, oldCase.LatestSLACountDate);
             
-            var leadTime = 0; 
+            var leadTime = 0;
+            var actionLeadTime = 0;            
+            
             if (caseLog != null && caseLog.FinishingType > 0)
             {
                 if (caseLog.FinishingDate == null)
@@ -2630,6 +2668,33 @@ namespace DH.Helpdesk.Web.Controllers
                     case_.Department_Id) - case_.ExternalTime;
 
                 case_.LeadTime = leadTime;
+
+                // Customer LeadTime Calc
+                //customerTimeZone != null && oldCase != null && oldCase.Id > 0
+                if (1 == 1)
+                {
+                    workTimeCalcFactory = new WorkTimeCalculatorFactory(
+                        ManualDependencyResolver.Get<IHolidayService>(),
+                        curCustomer.WorkingDayStart,
+                        curCustomer.WorkingDayEnd,
+                        TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
+                    deptIds = null;
+                    if (oldCase.Department_Id.HasValue)
+                    {
+                        deptIds = new int[] { oldCase.Department_Id.Value };
+                    }
+
+                    //var changeTimeOnCustomer = TimeZoneInfo.ConvertTimeFromUtc(oldCase.ChangeTime, customerTimeZone);
+                    //var finishDateOnCustomer = TimeZoneInfo.ConvertTimeFromUtc(case_.FinishingDate.Value, customerTimeZone);
+                    //var finishDateOnCustomerBasedOnUTC = TimeZoneInfo.ConvertTimeFromUtc(case_.FinishingDate.Value.ToUniversalTime(), customerTimeZone); 
+
+                    workTimeCalc = workTimeCalcFactory.Build(oldCase.ChangeTime, case_.FinishingDate.Value, deptIds);
+                    actionLeadTime = workTimeCalc.CalculateWorkTime(
+                        oldCase.ChangeTime,
+                        case_.FinishingDate.Value.ToUniversalTime(),
+                        oldCase.Department_Id) - actionExternalTime;
+                }
+                
             }
             else
             {                
@@ -2649,11 +2714,43 @@ namespace DH.Helpdesk.Web.Controllers
                     case_.RegTime,
                     utcNow.ToUniversalTime(),
                     case_.Department_Id) - case_.ExternalTime;
+
+
+                 // Customer LeadTime Calc
+                //customerTimeZone != null && oldCase != null && oldCase.Id > 0 || 
+                if (1 == 1)
+                {
+                    workTimeCalcFactory = new WorkTimeCalculatorFactory(
+                        ManualDependencyResolver.Get<IHolidayService>(),
+                        curCustomer.WorkingDayStart,
+                        curCustomer.WorkingDayEnd,
+                        TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
+                    deptIds = null;
+                    if (oldCase.Department_Id.HasValue)
+                    {
+                        deptIds = new int[] { oldCase.Department_Id.Value };
+                    }
+
+                    var changeTimeOnCustomer = TimeZoneInfo.ConvertTimeFromUtc(oldCase.ChangeTime, customerTimeZone);                    
+                    var customerNowOnCustomerBasedOnUTC = TimeZoneInfo.ConvertTimeFromUtc(customerNow.ToUniversalTime(), customerTimeZone);
+
+                    workTimeCalc = workTimeCalcFactory.Build(oldCase.ChangeTime, utcNow, deptIds);
+                    actionLeadTime = workTimeCalc.CalculateWorkTime(
+                        oldCase.ChangeTime,
+                        utcNow.ToUniversalTime(),
+                        oldCase.Department_Id) - actionExternalTime;
+                }
             }
 
             var childCasesIds = this._caseService.GetChildCasesFor(case_.Id).Where(it => !it.ClosingDate.HasValue).Select(it => it.Id).ToArray();
 
-            var ei = new CaseExtraInfo() { CreatedByApp = CreatedByApplications.Helpdesk5, LeadTimeForNow = leadTime };
+            var ei = new CaseExtraInfo() { 
+                        CreatedByApp = CreatedByApplications.Helpdesk5, 
+                        LeadTimeForNow = leadTime,
+                        ActionLeadTime = actionLeadTime,
+                        ActionExternalTime = actionExternalTime
+            };
+
             // save case and case history
             int caseHistoryId = this._caseService.SaveCase(
                         case_,
@@ -2833,7 +2930,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var c = this._caseService.GetCaseById(caseLog.CaseId);
                 // save case and case history
                 c.FinishingDescription = @case.FinishingDescription;
-                var ei = new CaseExtraInfo() {CreatedByApp = CreatedByApplications.Helpdesk5, LeadTimeForNow = 0};
+                var ei = new CaseExtraInfo() {CreatedByApp = CreatedByApplications.Helpdesk5, LeadTimeForNow = 0, ActionLeadTime = 0, ActionExternalTime = 0 };
                 int caseHistoryId = this._caseService.SaveCase(c, caseLog, null, SessionFacade.CurrentUser.Id, this.User.Identity.Name, ei, out errors);
                 caseLog.CaseHistoryId = caseHistoryId;
             }

@@ -1010,6 +1010,8 @@ namespace DH.Helpdesk.Services.Services
             }
 
             extraFields.LeadTime = caseExtraInfo.LeadTimeForNow;
+            extraFields.ActionLeadTime = caseExtraInfo.ActionLeadTime;
+            extraFields.ActionExternalTime = caseExtraInfo.ActionExternalTime;
 
             ret = userId == 0 ? 
                 this.SaveCaseHistory(c, userId, adUser, caseExtraInfo.CreatedByApp, out errors, adUser, extraFields) :
@@ -1884,6 +1886,8 @@ namespace DH.Helpdesk.Services.Services
             h.Description = c.Description;
             h.ExternalTime = c.ExternalTime;
             h.LeadTime = c.LeadTime;
+            h.ActionLeadTime = 0;
+            h.ActionExternalTime = 0;
             h.FinishingDate = c.FinishingDate;
             h.FinishingDescription = c.FinishingDescription;
             h.FollowUpDate = c.FollowUpDate;
@@ -1956,6 +1960,8 @@ namespace DH.Helpdesk.Services.Services
                 h.CaseLog  = extraField.CaseLog;
                 h.ClosingReason = extraField.ClosingReason;
                 h.LeadTime = extraField.LeadTime;
+                h.ActionLeadTime = extraField.ActionLeadTime;
+                h.ActionExternalTime = extraField.ActionExternalTime;
             }
             
             return h;

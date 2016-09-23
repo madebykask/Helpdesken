@@ -12,6 +12,10 @@
 
         public string ClosingReason { get; set; }
 
-        public int LeadTime { get; set; } 
+        public int LeadTime { get; set; }
+
+        public int ActionLeadTime { get; set; }
+
+        public int ActionExternalTime { get; set; } 
     }
 }
