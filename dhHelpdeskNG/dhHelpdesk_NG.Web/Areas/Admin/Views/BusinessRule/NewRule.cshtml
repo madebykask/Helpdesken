@@ -12,11 +12,28 @@
                 <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "Index", new { customerId = Model.Customer.Id, moduleId = Model.Module.Id }, new { @class = "btn" })</li>
             </ul>
         </div>
-    </div>
+    </div>@*
     @Html.Partial("_InputRule", Model)
-    @*@Scripts.Render("~/bundles/businessrule/businessRules")    
+    
+    *@
+    
+     <script type="text/javascript">
+         window.Params = {
+             customerId: '1',
+             ruleId: '1',
+             ruleSectionId: "#ruleArea",
+             ruleTemplatePath: "/areas/admin/content/templates/businessrule/rule.tmpl.html",
+             conditionSectionId: "#conditionArea",
+             conditionSecTemplatePath: "/areas/admin/content/templates/businessrule/rule-condition.tmpl.html",
+             conditionRowsTemplatePath: "/areas/admin/content/templates/businessrule/rule-condition-rows.tmpl.html",
+             actionSectionId: "#actionArea",
+             actionTemplatePath: ""
+         };
+    </script>
+    
+    @Scripts.Render("~/bundles/businessrule/businessRules")    
     <div id="ruleArea">
 
-    </div>*@
+    </div>
 
 }

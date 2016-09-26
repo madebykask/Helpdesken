@@ -57,8 +57,12 @@
                             </td>
                         </tr>
                     </table>
-                    {{for ConditionSection tmpl="conditionSection" /}} 
-                    {{for ActionSection tmpl="actionSection" /}}                     
+                    <div id="conditionArea">
+                        {{for ConditionSection tmpl="ruleConitionSec" /}} 
+                    </div>
+                    <div id="actionArea">
+                        {{for ActionSection tmpl="actionSection" /}}                     
+                    </div>
                 </div>
             </div>
         </div>
