@@ -409,9 +409,10 @@
     <Content Include="Areas\Admin\Content\js\Users\index.lockedcase.js" />
     <Content Include="Areas\Admin\Content\js\Users\index.js" />
     <Content Include="Areas\Admin\Content\js\Users\user.js" />
+    <Content Include="Areas\Admin\Content\templates\BusinessRule\rulePage.tmpl.html" />
     <Content Include="Areas\Admin\Content\templates\BusinessRule\rule.tmpl.html" />
-    <Content Include="Areas\Admin\Content\templates\BusinessRule\rule-condition.tmpl.html" />
-    <Content Include="Areas\Admin\Content\templates\BusinessRule\rule-condition-rows.tmpl.html" />
+    <Content Include="Areas\Admin\Content\templates\BusinessRule\condition.tmpl.html" />
+    <Content Include="Areas\Admin\Content\templates\BusinessRule\condition-rows.tmpl.html" />
     <Content Include="Areas\Reports\Content\js\reportViewer.logic.js" />
     <Content Include="Areas\Reports\Content\js\reports.js" />
     <Content Include="Content\bootstrap-tagsinput.css" />
