@@ -1,0 +1,51 @@
+﻿@model DH.Helpdesk.Web.Models.Contract.ContractIndexViewModel
+
+@*@Scripts.Render("~/bundles/admininvoice")*@
+<script type="text/javascript">
+    window.Params = {
+        ShowSearchResult: '@Url.Action("_ContractsIndexRows", "Contracts", "")',
+    };
+</script>
+<div class="secnavs fixed">
+    <div class="pull-left">
+        @*<ul class="secnav">
+            <li>@Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation), "new", new { customerId = Model.Customer.Id }, new { @class = "btn" })</li>
+        </ul>*@
+    </div>    
+</div>
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#fragment-1">@Translation.Get("Avtal")</a></li>            
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment-1">
+              <div>
+                  <input type="hidden" id="currentCustomerId" value="@Model.Customer.Id" />
+                  <table>
+                      <tr>
+                          <td style="width:100px">@Translation.Get("Artikel", Enums.TranslationSource.TextTranslation)</td>&nbsp;
+                          <td>
+                              <select id="lstContractCategories" name="lstContractCategories" data-field="region" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                     @foreach (var a in Model.ContractCategories)
+                                     {             
+                                        <option value="@a.Id">@a.Name</option>
+                                     }
+                                 </select>
+                          </td>
+                          <td>
+                             <input type="button" class="btn" id="ShowSearchResult"  value="@Translation.Get("Sök")"/>
+                         </td>
+                      </tr>
+                      <tr>
+                          <td colspan="3">
+                              &nbsp;
+                          </td>
+                      </tr>
+                  </table>  
+              </div>
+              @Html.Partial("_ContractsIndexRows", Model.Rows)
+            </div>            
+        </div>        
+    </div>
+</div>

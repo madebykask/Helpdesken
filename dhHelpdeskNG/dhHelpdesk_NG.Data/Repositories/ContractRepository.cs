@@ -2,11 +2,14 @@ namespace DH.Helpdesk.Dal.Repositories
 {
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
+    using System.Collections.Generic;
+    using System.Linq;
 
     #region CONTRACT
 
     public interface IContractRepository : IRepository<Contract>
     {
+        IList<Contract> GetContractsWithCategories(int customerId);
     }
 
     public class ContractRepository : RepositoryBase<Contract>, IContractRepository
@@ -15,6 +18,13 @@ namespace DH.Helpdesk.Dal.Repositories
             : base(databaseFactory)
         {
         }
+
+        public IList<Contract> GetContractsWithCategories(int customerId)
+        {
+            var query = this.DataContext.Contracts.Where(c => c.Finished == 0 && c.ContractCategory.Customer_Id == customerId);            
+            return query.ToList();
+        }
+
     }
 
     #endregion

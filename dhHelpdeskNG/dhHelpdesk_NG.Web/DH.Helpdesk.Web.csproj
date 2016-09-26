@@ -424,6 +424,7 @@
     <Content Include="Content\css\print.css" />
     <Content Include="Content\icons\advanced_search.png" />
     <Content Include="Content\icons\ajax-loader.gif" />
+    <Content Include="Content\icons\deal.png" />
     <Content Include="Content\icons\doc-download.png" />
     <Content Include="Content\icons\doc-edit.png" />
     <Content Include="Content\icons\ico-doc-black.png">
@@ -967,6 +968,7 @@
     <Compile Include="Controllers\ChangeLanguageController.cs" />
     <Compile Include="Controllers\ChangesController.cs" />
     <Compile Include="Controllers\CheckListController.cs" />
+    <Compile Include="Controllers\ContractsController.cs" />
     <Compile Include="Controllers\DailyReportController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FaqController.cs" />
@@ -1340,6 +1342,7 @@
     <Compile Include="Models\CheckLists\CheckListActionsInputModel.cs" />
     <Compile Include="Models\CheckLists\CheckListsModel.cs" />
     <Compile Include="Models\CheckLists\WorkingGroupMapperModel.cs" />
+    <Compile Include="Models\Contract\ContractIndexViewModel.cs" />
     <Compile Include="Models\DailyReports\DailyReportHistoryModel.cs" />
     <Compile Include="Models\DailyReports\DailyReportInputModel.cs" />
     <Compile Include="Models\Documents\DocumentsFilterModel.cs" />
@@ -2373,6 +2376,8 @@
     <Content Include="Views\Cases\_CasePrint.cshtml" />
     <Content Include="Views\CaseSolution\_RowsOverview.cshtml" />
     <Content Include="Views\Questionnaire\QuestionnaireCompleted.cshtml" />
+    <Content Include="Views\Contracts\Index.cshtml" />
+    <Content Include="Views\Contracts\_ContractsIndexRows.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

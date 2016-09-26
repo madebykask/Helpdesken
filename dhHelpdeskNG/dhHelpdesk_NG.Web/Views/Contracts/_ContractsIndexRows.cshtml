@@ -1,0 +1,84 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Models.Contract.ContractsIndexRowsModel
+<div id="ArticleIndexRows">
+    <table class="table table-striped table-bordered table-hover" id="tblInviceArticle">
+        <thead>
+        <tr>
+            <th>@Translation.Get("Nummer", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Ärendenummer", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Kategori", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Leverantör", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Ansvarig", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Startdatum", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Slutdatum", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Uppsägningsdatum", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Löpande", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Avslutad", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Uppföljningsintervall", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Ansvarig uppföljning", Enums.TranslationSource.TextTranslation)</th>
+        </thead>
+         @{
+           foreach (var row in Model.Data)
+            {
+                <tr>
+                    <td>@row.ContractNumber</td>
+                    <td></td>
+                    <td>@row.ContractCategory.Name</td>
+                    <td>@row.Supplier.Name</td>
+                    <td>@row.Department.DepartmentName</td>
+                    <td>@row.ResponsibleUser.SurName @row.ResponsibleUser.FirstName</td>
+                    <td>@row.ContractStartDate</td>
+                    <td>@row.ContractEndDate</td>
+                    <td>@row.NoticeDate</td>
+                    <td>@row.Info</td>
+                    @if (row.Running == 0)
+                    {
+                        <td>@Translation.Get("Nej", Enums.TranslationSource.TextTranslation)</td>
+                    }
+                    else
+                    {
+                        <td>@Translation.Get("Ja", Enums.TranslationSource.TextTranslation)</td>
+                    }
+                    @if (row.Finished == 0)
+                    {
+                        <td>@Translation.Get("Nej", Enums.TranslationSource.TextTranslation)</td>
+                    }
+                    @if (row.FollowUpInterval == 0)
+                    {
+                        <td></td>
+                    }
+                    else if (row.FollowUpInterval == 1)
+                    {
+                        <td>@Translation.Get("Månadsvis", Enums.TranslationSource.TextTranslation)</td>
+                    }
+                    else if (row.FollowUpInterval == 3)
+                    {
+                        <td>@Translation.Get("Kvartalsvis", Enums.TranslationSource.TextTranslation)</td>
+                    }
+                    else if (row.FollowUpInterval == 4)
+                    {
+                        <td>@Translation.Get("Tertialvis", Enums.TranslationSource.TextTranslation)</td>
+                    }
+                    else if (row.FollowUpInterval == 6)
+                    {
+                        <td>@Translation.Get("Halvårsvis", Enums.TranslationSource.TextTranslation)</td>
+                    }
+                    else if (row.FollowUpInterval == 12)
+                    {
+                        <td>@Translation.Get("Årsvis", Enums.TranslationSource.TextTranslation)</td>
+                    }
+                    @if (row.FollowUpResponsibleUser != null)
+                    {
+                        <td>@row.FollowUpResponsibleUser.SurName @row.FollowUpResponsibleUser.FirstName</td>
+                    }else
+                    {
+                        <td></td>   
+                    }
+                </tr>
+            }
+         }
+    </table>
+</div>  
+           

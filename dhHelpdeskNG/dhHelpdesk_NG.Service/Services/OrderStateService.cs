@@ -36,7 +36,7 @@
         public IList<OrderState> GetOrderStates(int customerId)
         {
             //return _orderStateRepository.GetAll().OrderBy(x => x.SortOrder).ToList();
-            return this._orderStateRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
+            return this._orderStateRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.SortOrder).ToList();
         }
 
         public OrderState GetOrderState(int id)
