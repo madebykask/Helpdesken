@@ -21,18 +21,23 @@
          window.Params = {
              customerId: '1',
              ruleId: '1',
-             ruleSectionId: "#ruleArea",
-             ruleTemplatePath: "/areas/admin/content/templates/businessrule/rule.tmpl.html",
-             conditionSectionId: "#conditionArea",
-             conditionSecTemplatePath: "/areas/admin/content/templates/businessrule/rule-condition.tmpl.html",
-             conditionRowsTemplatePath: "/areas/admin/content/templates/businessrule/rule-condition-rows.tmpl.html",
-             actionSectionId: "#actionArea",
+             rulePageAreaId: "#rulePageArea",
+             rulePageAreaTemplatePath: "/areas/admin/content/templates/businessrule/rulePage.tmpl.html",
+
+             ruleSectionId: "#ruleSec",
+             ruleSecTemplatePath: "/areas/admin/content/templates/businessrule/rule.tmpl.html",
+
+             conditionSectionId: "#conditionSec",
+             conditionSecTemplatePath: "/areas/admin/content/templates/businessrule/condition.tmpl.html",
+             conditionRowsTemplatePath: "/areas/admin/content/templates/businessrule/condition-rows.tmpl.html",
+
+             actionSectionId: "#actionSec",
              actionTemplatePath: ""
          };
     </script>
     
     @Scripts.Render("~/bundles/businessrule/businessRules")    
-    <div id="ruleArea">
+    <div id="rulePageArea">
 
     </div>
 

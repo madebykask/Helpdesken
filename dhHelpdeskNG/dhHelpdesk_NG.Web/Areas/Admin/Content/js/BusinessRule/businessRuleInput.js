@@ -3,17 +3,33 @@
 
 
 $(function () {
-    _customerId = window.Params.customerId;
     _ruleId = window.Params.ruleId;
-    _ruleSection = window.Params.ruleSectionId;
-    _conditionSection = window.Params.conditionSectionId;
-    _actionSection = window.Params.actionSectionId;
-    _ruleTemplatePath = window.Params.ruleTemplatePath;
+    _customerId = window.Params.customerId;
+    
+    _rulePageAreaId = window.Params.rulePageAreaId;
+    _rulePageAreaTemplatePath = window.Params.rulePageAreaTemplatePath;
+
+    _ruleSectionId = window.Params.ruleSectionId;
+    _ruleSecTemplatePath = window.Params.ruleSecTemplatePath;
+
+    _conditionSectionId = window.Params.conditionSectionId;
     _conditionSecTemplatePath = window.Params.conditionSecTemplatePath;
-    _conditionTemplatePath = window.Params.conditionTemplatePath;
+    _conditionRowsTemplatePath = window.Params.conditionRowsTemplatePath;
+
+    _actionSectionId = window.Params.actionSectionId;            
     _actionTemplatePath = window.Params.actionTemplatePath;
         
     BR.Models = {
+
+        RulePageViewModel: function (ruleId, customerId) {
+            this.Id = ruleId;
+            this.CustomerId = customerId;
+
+            this.RuleSection = [];
+            this.ConditionSection = [];
+            this.ActionSection = [];
+        },
+
         RuleViewModel: function (){
             this.Id = 1;
             this.Name = "Rule Name 1";            
@@ -50,24 +66,20 @@ $(function () {
             this.Status = null;
         },
 
-        RuleSectionModel: function (sectionId, templatePath) {
+        RuleSectionModel: function (sectionId, template) {
             RuleSec = this;
             this.SectionCaption = "";
             this.RuleTemplate = null;
             this.Model = new BR.Models.RuleViewModel();
-
-            this.ConditionSection = null;
-            this.ActionSection = null;
-
-            var loadRuleTemplate = function (templatePath) {
-                return $.get(templatePath, function (ruleTemplate) {
-                    RuleSec.RuleTemplate = $.templates("rule", ruleTemplate);
-                });
-            };
-
+                        
             loadRuleTemplate(templatePath).then(function () {
                 $(sectionId).html(RuleSec.RuleTemplate.render(RuleSec.Model));
+                $('#setValue').on('click', function () {
+                    RuleSec.Model.Name = 'mine';                    
+                    $(sectionId).html(RuleSec.RuleTemplate.render(RuleSec.Model));
+                });
             });
+            
             
         },
 
@@ -92,16 +104,16 @@ $(function () {
 
             
 
-            loadConditionTemplate(templatePath).then(function () {
+            loadConditionSecTemplate(templatePath).then(function () {
                 ConditionSec.Model = new BR.Models.ConditionSecModel();
-                $(sectionId).html(ConditionSec.ConditionTemplate.render(ConditionSec.Model));
+                $(sectionId).html(ConditionSec.ConditionSecTemplate.render(ConditionSec.Model));                
 
                 var newCon = new BR.Models.ConditionModel();
                 newCon.Id = 1;
                 newCon.Field = "R1";
                 newCon.FromValue = "F1";
                 newCon.ToValue = "T1";
-                ConditionSec.Model.AddCondition(newCon);                
+                ConditionSec.Model.AddCondition(newCon);               
             });
             
             
@@ -124,14 +136,56 @@ $(function () {
 
     BR.Views = {
         BusinessRulePage: function () {
-            this.CustomerId = _customerId;
-            this.Id = _ruleId;
-            this.RuleSection = new BR.Models.RuleSectionModel(_ruleSection, _ruleTemplatePath);
-            this.RuleSection.ConditionSection = new BR.Models.ConditionSectionModel(_conditionSection, _conditionSecTemplatePath);
+            rulePage = this;
+            
+
+            this.RulePageTemplate = null;
+            this.RuleTemplate = null;
+            this.ConditionTemplate = null;
+            this.ConditionRowsTemplate = null;
+
+            this.RuleSection = null; 
+            //this.ConditionSection = new BR.Models.ConditionSectionModel(_conditionSection, _conditionSecTemplatePath);
             //this.RuleSection.ActionSection = new BR.Models.ActionSectionModel(_actionSection, _actionTemplatePath);
 
-            this.Initialize = function() {
-                
+            var loadRulePageTemplate = function () {
+                return $.get(_rulePageAreaTemplatePath, function (rulePageTemplate) {
+                    rulePage.RulePageTemplate = $.templates("rulePageSec", rulePageTemplate);
+                });
+            };
+
+            var loadRuleTemplate = function () {                
+                return $.get(_ruleSecTemplatePath, function (ruleSecTemplate) {
+                    rulePage.RuleTemplate = $.templates("ruleSec", ruleSecTemplate);
+                });
+            };
+
+            var loadConditionTemplate = function () {                
+                return $.get(_conditionSecTemplatePath, function (conditionSecTemplate) {
+                    rulePage.ConditionTemplate = $.templates("conditionSec", conditionSecTemplate);
+                });
+            };
+
+            var loadConditionRowsTemplate = function () {
+                return $.get(_conditionRowsTemplatePath, function (conditionRowsTemplate) {
+                    rulePage.ConditionRowsTemplate = $.templates("conditionRows", conditionRowsTemplate);
+                });
+            };
+
+            var loadTemplates = function() {
+                loadRulePageTemplate()
+                    .then(loadRuleTemplate())
+                    .then(loadConditionTemplate())
+                    .then(loadConditionRowsTemplate())
+                    .then(function () {
+                        $(_rulePageAreaId).html(rulePage.RulePageTemplate.render(BR.Models.RulePageViewModel(_ruleId, _customerId)));
+
+                        //rulePage.RuleSection = new BR.Models.RuleSectionModel(_rule, _ruleTemplatePath);
+                    });
+            };
+
+            this.Initialize = function () {
+                loadTemplates();
             };
 
             this.SavePage = function () {
@@ -143,12 +197,13 @@ $(function () {
     BR.Controllers = {        
         GenerateBR: function () {
             var BRPage = new BR.Views.BusinessRulePage();
+            BRPage.Initialize();
         }        
     }   
 
     var loadPage = function () {        
         var p = BR.Controllers.GenerateBR();
-    };    
+    };
 
-    loadPage();
+    loadPage();    
 });
