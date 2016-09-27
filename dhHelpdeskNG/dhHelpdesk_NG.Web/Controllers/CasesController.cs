@@ -2671,7 +2671,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                 // Customer LeadTime Calc
                 //customerTimeZone != null && oldCase != null && oldCase.Id > 0
-                if (1 == 1)
+                if (oldCase.Id > 0)
                 {
                     workTimeCalcFactory = new WorkTimeCalculatorFactory(
                         ManualDependencyResolver.Get<IHolidayService>(),
@@ -2693,8 +2693,7 @@ namespace DH.Helpdesk.Web.Controllers
                         oldCase.ChangeTime,
                         case_.FinishingDate.Value.ToUniversalTime(),
                         oldCase.Department_Id) - actionExternalTime;
-                }
-                
+                }                                
             }
             else
             {                
@@ -2718,7 +2717,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                  // Customer LeadTime Calc
                 //customerTimeZone != null && oldCase != null && oldCase.Id > 0 || 
-                if (1 == 1)
+                if (oldCase.Id > 0)
                 {
                     workTimeCalcFactory = new WorkTimeCalculatorFactory(
                         ManualDependencyResolver.Get<IHolidayService>(),
