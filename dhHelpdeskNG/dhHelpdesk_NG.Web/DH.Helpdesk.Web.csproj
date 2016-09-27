@@ -830,6 +830,7 @@
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\SupplierEditModel.cs" />
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\UserEditModel.cs" />
     <Compile Include="Areas\Orders\OrdersAreaRegistration.cs" />
+    <Content Include="Content\js\Contract\contractIndex.js" />
     <Content Include="Content\js\Shared\errors.js" />
     <Content Include="Content\js\snippets\clickmultimenu_dropdown.js" />
     <Content Include="Content\js\snippets\jQuery.inactiveValue.validator.js" />

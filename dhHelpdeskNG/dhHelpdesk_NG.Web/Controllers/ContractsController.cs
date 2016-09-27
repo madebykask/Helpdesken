@@ -7,6 +7,8 @@ using System.Web;
 using System.Web.Mvc;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
+using DH.Helpdesk.BusinessData.Models.Contract;
+using DH.Helpdesk.Domain;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -16,12 +18,14 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IContractCategoryService _contractCategoryService;
         private readonly ICustomerService _customerService;
         private readonly IContractService _contractService;
+        private readonly ISupplierService _supplierService;
        
         public ContractsController(
             IUserService userService,
             IContractCategoryService contractCategoryService,
             ICustomerService customerService,
             IContractService contractService,
+            ISupplierService supplierService,
             IMasterDataService masterDataService)
             : base(masterDataService)
         {            
@@ -29,6 +33,7 @@ namespace DH.Helpdesk.Web.Controllers
             this._contractCategoryService = contractCategoryService;
             this._contractService = contractService;
             this._customerService = customerService;
+            this._supplierService = supplierService;
         }
 
 
@@ -41,21 +46,31 @@ namespace DH.Helpdesk.Web.Controllers
             var customer = _customerService.GetCustomer(SessionFacade.CurrentCustomer.Id);
             var model = new ContractIndexViewModel(customer);
             var contractcategories = _contractCategoryService.GetContractCategories(customer.Id);
-            //var filter = new InvoiceArticleProductAreaSelectedFilter();
+            var suppliers = _supplierService.GetActiveSuppliers(customer.Id);
 
-            model.Rows = GetIndexRowModel(customer.Id);
+            var filter = new ContractSelectedFilter();
+
+            model.Rows = GetIndexRowModel(customer.Id, filter);
 
             model.ContractCategories = contractcategories.OrderBy(a => a.Name).ToList();
+            model.Suppliers = suppliers.OrderBy(s => s.Name).ToList();
            
             return this.View(model);
         }
 
-        private ContractsIndexRowsModel GetIndexRowModel(int customerId)
+        private ContractsIndexRowsModel GetIndexRowModel(int customerId, ContractSelectedFilter selectedFilter)
         {
             var customer = _customerService.GetCustomer(customerId);
             var model = new ContractsIndexRowsModel(customer);
+            var allContracts = _contractService.GetContracts(customerId);
+            var selectedContracts = new List<Contract>();
 
-            var allContracts = _contractService.GetContractsWithCategories(customerId);
+            if (selectedFilter.SelectedContractCategories.Any())
+            {
+               
+            }
+
+            
 
             foreach (var con in allContracts)
             {

@@ -9,7 +9,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public interface IContractRepository : IRepository<Contract>
     {
-        IList<Contract> GetContractsWithCategories(int customerId);
+        IList<Contract> GetContracts(int customerId);
     }
 
     public class ContractRepository : RepositoryBase<Contract>, IContractRepository
@@ -19,7 +19,7 @@ namespace DH.Helpdesk.Dal.Repositories
         {
         }
 
-        public IList<Contract> GetContractsWithCategories(int customerId)
+        public IList<Contract> GetContracts(int customerId)
         {
             var query = this.DataContext.Contracts.Where(c => c.Finished == 0 && c.ContractCategory.Customer_Id == customerId);            
             return query.ToList();

@@ -140,6 +140,9 @@
             bundles.Add(new ScriptBundle("~/bundles/advancedsearch/specialfilter").Include(
                         "~/Content/js/AdvancedSearch/index.specialfilter.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/contract").Include(
+                           "~/Content/js/contract/contractIndex.js"));
+
             #region Case editing
             bundles.Add(new StyleBundle("~/cases/dynamic-cases").Include(
                          "~/Content/css/custom/dynamic-cases.css"));

@@ -10,7 +10,7 @@
 
     public interface IContractService
     {
-        IList<Contract> GetContractsWithCategories(int customerId);
+        List<Contract> GetContracts(int customerId);
 
         //ContractCategory GetContractCategory(int id);
 
@@ -33,9 +33,9 @@
             this._unitOfwork = unitOfWork;
         }
 
-        public IList<Contract> GetContractsWithCategories(int customerId)
+        public List<Contract> GetContracts(int customerId)
         {
-            return this._contractRepository.GetContractsWithCategories(customerId).OrderBy(c => c.ContractNumber).ToList();
+            return this._contractRepository.GetContracts(customerId).OrderBy(c => c.ContractNumber).ToList();
         }
 
         

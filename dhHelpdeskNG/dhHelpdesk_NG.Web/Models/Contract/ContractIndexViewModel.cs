@@ -20,6 +20,7 @@ namespace DH.Helpdesk.Web.Models.Contract
 
         public Customer Customer { get; private set; }
         public List<ContractCategory> ContractCategories { get; set; }
+        public List<Supplier> Suppliers { get; set; }
         public ContractsIndexRowsModel Rows { get; set; }
     }
 
