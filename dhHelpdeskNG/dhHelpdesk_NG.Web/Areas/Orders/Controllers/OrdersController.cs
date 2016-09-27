@@ -170,7 +170,7 @@
 
             this.filesStateStore.ClearObjectDeletedItems(id, OrderDeletedItem.Logs);
 
-            return this.RedirectToAction("Edit", new { id });
+            return this.RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -233,7 +233,7 @@
 
             this.filesStateStore.ClearObjectDeletedItems(id, OrderDeletedItem.Logs);
 
-            return this.RedirectToAction("Edit", new { id });
+            return this.RedirectToAction("Index");
         }
 
         [HttpPost]
