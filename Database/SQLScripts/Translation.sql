@@ -5073,5 +5073,29 @@ GO
 If not exists (select * from tblTextTranslation where Text_Id = 1689 and Language_Id=2)
             insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1689, 'You have to select both article and productarea!', 2)
 GO
+
+If not exists (select * from tblText where Id = 1690)
+            insert into tblText (Id, Textstring) VALUES (1690, 'Uppföljningsintervall')																
+																
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1690 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1690, 'Follow up interval', 2)
+GO
+
+If not exists (select * from tblText where Id = 1691)
+            insert into tblText (Id, Textstring) VALUES (1691, 'Ansvarig uppföljning')																
+																
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1691 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1691, 'Responsible follow up', 2)
+GO
+
+If not exists (select * from tblText where Id = 1692)
+            insert into tblText (Id, Textstring) VALUES (1692, 'Uppsägningsdatum')																
+																
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1692 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1692, 'Notice date', 2)
+GO
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
