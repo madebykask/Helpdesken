@@ -2250,6 +2250,12 @@ h4
             color: #eeeeee;
         }
 
+            .datepicker td.today {
+             background-color: #fdf59a;
+            cursor: pointer;
+        }
+
+
         .datepicker td.old,
         .datepicker td.new {
             color: #999999;
