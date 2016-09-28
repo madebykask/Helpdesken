@@ -1,5 +1,5 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
-@model DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule.BusinessRuleIndexModel
+@model DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule.BusinessRuleInputModel
 @{
     ViewBag.Title = "NewRule";
 }
@@ -9,15 +9,16 @@
         <div class="pull-left">
             <ul class="secnav">
                 <li><input type="button" class="btn" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" onclick = "alert('Save')" /> </li>
-                <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "Index", new { customerId = Model.Customer.Id, moduleId = Model.Module.Id }, new { @class = "btn" })</li>
+                <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "Index", new { customerId = Model.CustomerId }, new { @class = "btn" })</li>
             </ul>
         </div>
     </div>
-  @*   @Html.Partial("_InputRule", Model)*@
+    
+    @Html.Partial("_InputRule", Model)
     
     
    
-     <script type="text/javascript">
+      @*<script type="text/javascript">
          window.Params = {
              customerId: '1',
              ruleId: '1',
@@ -39,6 +40,6 @@
     @Scripts.Render("~/bundles/businessrule/businessRules")    
     <div id="rulePageArea">
 
-    </div>
+    </div>*@
 
 }

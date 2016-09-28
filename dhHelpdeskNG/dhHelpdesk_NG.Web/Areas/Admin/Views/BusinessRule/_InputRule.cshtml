@@ -1,5 +1,5 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
-@model DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule.BusinessRuleIndexModel
+@model DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule.BusinessRuleInputModel
 @{
     ViewBag.Title = "Input Rule";
 }
@@ -7,67 +7,78 @@
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
-            <li class="active"><a href="#fragment-1">@Translation.Get("New Rule", Enums.TranslationSource.TextTranslation)</a></li>                        
+            <li class="active"><a href="#fragment-1">@Translation.Get("Rule", Enums.TranslationSource.TextTranslation)</a></li>                        
         </ul>
 
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment-1">
                 <table>
                     <tr>
-                        <td class="span2">RuleName 
+                        <td class="span2">
+                            @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)
                         </td>
                         <td>
-                            <input type="text">
+                            @Html.TextBoxFor(m=> Model.RuleName)
                         </td>
                     </tr>
                     <tr>
-                        <td class="span2">Event 
+                        <td class="span2">
+                            @Translation.Get("Event", Enums.TranslationSource.TextTranslation) 
                         </td>
-                        <td>
-                            <select>
-                                <option></option>
-                                <option>On Save Case</option>
-                                <option>On Open Case</option>
-                                <option>On Delete Case</option>
+                        <td>                            
+                            <select id="Events" name="Events" class="chosen-single-select">                                    
+                                @foreach (var _event in Model.Events)
+                                {
+                                    <option value="@_event.Id"  @(_event.Selected? "Selected":"")> @_event.Name </option>                                
+                                }
                             </select>
                         </td>
                     </tr>
                     <tr>
                         <td class="span2">
-                            Sequence                            
+                            @Translation.Get("Sequence", Enums.TranslationSource.TextTranslation)
                         </td>
                         <td>
-                            <input type="text" />
+                            @Html.TextBoxFor(m=> Model.Sequence)
                         </td>
                     </tr>
                      <tr>
                         <td class="span2">
-                            Continue On Success 
+                            @Translation.Get("Continue on success", Enums.TranslationSource.TextTranslation) 
                         </td>
                         <td>
-                            <input type="checkbox" />                            
+                            @Html.CheckBoxFor(m=> Model.ContinueOnSuccess, new { @class="switchcheckbox"})                           
                         </td>
                     </tr>
                      <tr>
                         <td class="span2">
-                            Continue On Error
+                            @Translation.Get("Continue on error", Enums.TranslationSource.TextTranslation)
                         </td>
                         <td>
-                            <input type="checkbox" />                            
+                            @Html.CheckBoxFor(m=> Model.ContinueOnError, new { @class="switchcheckbox"})
                         </td>
                     </tr>
                     
                     <tr>
                         <td class="span2">
-                            Active                            
+                            @Translation.Get("Active", Enums.TranslationSource.TextTranslation)                            
                         </td>
                         <td>
-                            <input type="checkbox" checked="checked" />
+                             @Html.CheckBoxFor(m => Model.IsActive, new { @class="switchcheckbox"})
                         </td>
                     </tr>
                 </table>
-                @Html.Partial("_RuleCondition", Model)
-                @Html.Partial("_RuleAction", Model)
+
+                @if (Model.Condition != null)
+                {
+                    @Html.Partial("_RuleCondition", Model.Condition)
+                }
+
+                @if (Model.Action != null)
+                {
+                    @Html.Partial("_RuleAction", Model.Action)
+                }
+
             </div>            
         </div>        
     </div>

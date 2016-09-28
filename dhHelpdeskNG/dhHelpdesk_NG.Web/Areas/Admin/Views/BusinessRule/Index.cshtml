@@ -10,7 +10,7 @@
             <div class="pull-left">
                 <ul class="secnav">
                     <li>@Html.ActionLink(Translation.Get("New Rule", Enums.TranslationSource.TextTranslation), "NewRule", 
-                                         new { customerId = Model.Customer.Id, moduleId = Model.Module.Id}, new { @class = "btn"})</li>
+                                         new { customerId = Model.Customer.Id}, new { @class = "btn"})</li>
                 </ul>
             </div>
             @Html.Partial("_MasterDataPanel", Model.Customer)
@@ -22,8 +22,7 @@
         <div class="container">
             <ul class="nav nav-tabs" id="myTab">
                 <li class="active">
-                    <a href="#fragment-1">
-                        @Translation.Get(Model.Module.Caption, Enums.TranslationSource.TextTranslation)
+                    <a href="#fragment-1">                   
                         @Translation.Get("Business Rule", Enums.TranslationSource.TextTranslation)
                     </a>
                 </li>
