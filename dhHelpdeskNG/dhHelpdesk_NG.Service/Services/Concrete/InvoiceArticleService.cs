@@ -447,12 +447,12 @@
         }
 
         private string OrderNoRow(decimal caseNumber, string prefix, int orderNumber, int originalOrderNumber)
-        {
+        {            
             var ret = string.Empty;
             if (originalOrderNumber > 0)
-                ret = string.Format("{0}-{1}{2}-{3}", caseNumber, prefix, originalOrderNumber, orderNumber);                
+                ret = string.Format("{0}{1}-{2}-{3}", prefix, caseNumber, originalOrderNumber, orderNumber);                
             else
-                ret = string.Format("{0}-{1}{2}", caseNumber, prefix, orderNumber);
+                ret = string.Format("{0}{1}-{2}", prefix, caseNumber, orderNumber);
 
             return ret;
         }
