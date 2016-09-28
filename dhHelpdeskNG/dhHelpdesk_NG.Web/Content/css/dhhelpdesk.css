@@ -1267,6 +1267,15 @@ table th.thpointer {
   width: 100%;
   margin-bottom: 20px;
 }
+.tableintableform td, .tableintableform th {
+    padding:8px;
+}
+.tableintableform thead tr th label {
+    font-weight:bold !important;
+}
+.tableintableform .btn {
+    white-space: nowrap;
+}
 
 .tableintable th,
 .tableintable td {
