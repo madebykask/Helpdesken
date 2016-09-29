@@ -8,127 +8,80 @@
 
 <table class="table table-striped table-bordered table-hover">
     <thead>
-        <tr>
-            <th>
-                #
-            </th>
-            <th>
+        <tr>           
+            <th style="width:10%">
                 Field
             </th>
-            <th>
+            <th style="width:25%">
                 From value
             </th>
-            <th>
+            <th style="width:25%">
                 To value
             </th>                      
+            <th>
+
+            </th>
         </tr>
     </thead>
-    <tbody>
+    <tbody>           
         <tr>
             <td>
-                1
+                @Translation.Get("Process")
             </td>
             <td>
-                <select class="chosen-single-select">
-                    <option>
-                        Process
-                    </option>
-                    <option>
-                        SubStatus
-                    </option>
+                @{var procFromSelected = string.Join(",",  Model.ProcessFromValue.Where(p=> p.Selected).Select(p=> p.Value));}
+                <select id="lstProcessFrom" name="lstProcessFrom" class="BR-chosen-select" multiple="multiple">  
+                    @foreach(var process in Model.Process)
+                    {
+                        <option value="@process.Value" @process.Value.ValueIsSelected(procFromSelected )>
+                            @process.Text
+                        </option>
+                    }
                 </select>
             </td>
             <td>
-                <select class="multiselect multiselect-search" multiple="multiple">                    
-                    <option>
-                        [Any]
-                    </option>
-                    <option>
-                        [Null]
-                    </option>
-                    <option>
-                        Item1
-                    </option>
-                    <option>
-                        Item2
-                    </option>
-                    <option>
-                        Item3
-                    </option>
+                @{var procToSelected = string.Join(",", Model.ProcessToValue.Where(p => p.Selected).Select(p => p.Value));}
+                <select id="lstProcessTo" name="lstProcessTo" class="BR-chosen-select" multiple="multiple">  
+                    @foreach(var process in Model.Process)
+                    {
+                        <option value="@process.Value" @process.Value.ValueIsSelected(procToSelected)>
+                            @process.Text
+                        </option>
+                    }
                 </select>
-            </td>
-            <td>
-                <select class="multiselect multiselect-search" multiple="multiple">                    
-                    <option>
-                        [Any]
-                    </option>
-                    <option>
-                        [Null]
-                    </option>
-                    <option>
-                        Item1
-                    </option>
-                    <option>
-                        Item2
-                    </option>
-                    <option>
-                        Item3 Item3Item3Item3Item3Item3Item3Item3Item3Item3
-                    </option>
-                </select>
-            </td>            
-        </tr>
-        <tr>
-            <td>
-                2
-            </td>
-            <td>
-                <select class="chosen-single-select">
-                    <option>
-                        Process
-                    </option>
-                    <option>
-                        SubStatus
-                    </option>
-                </select>
-            </td>
-            <td>
-                <select class="chosen-select" multiple="multiple">  
-                    <option>
-                        [Any]
-                    </option>
-                    <option>
-                        [Null]
-                    </option>
-                    <option>
-                        Item1
-                    </option>
-                    <option>
-                        Item2
-                    </option>
-                    <option>
-                        Item3
-                    </option>
-                </select>
-            </td>
-            <td>
-                <select class="chosen-select" multiple="multiple" >                    
-                    <option>
-                        [Any]
-                    </option>
-                    <option>
-                        [Null]
-                    </option>
-                    <option>
-                        Item1
-                    </option>
-                    <option>
-                        Item2
-                    </option>
-                    <option>
-                        Item3
-                    </option>
-                </select>
-            </td>           
+            </td>  
+            <td></td>         
         </tr>       
+
+        <tr>
+            <td>
+                @Translation.Get("SubStatus")
+            </td>
+            <td>
+                @{var SubStatusFromSelected = string.Join(",", Model.SubStatusFromValue.Where(p => p.Selected).Select(p => p.Value));}
+                <select id="lstSubStatusFrom" name="lstSubStatusFrom" class="BR-chosen-select" multiple="multiple">  
+                    @foreach (var subStatus in Model.SubStatus)
+                    {
+                        <option value="@subStatus.Value" @subStatus.Value.ValueIsSelected(SubStatusFromSelected) >
+                            @subStatus.Text
+                        </option>
+                    }
+                </select>
+            </td>
+            <td>
+                @{var SubStatusToSelected = string.Join(",", Model.SubStatusToValue.Where(p => p.Selected).Select(p => p.Value));}
+                <select id="lstSubStatusTo" name="lstSubStatusTo" class="BR-chosen-select" multiple="multiple">  
+                    @foreach (var subStatus in Model.SubStatus)
+                    {
+                        <option value="@subStatus.Value" @subStatus.Value.ValueIsSelected(SubStatusToSelected)>
+                            @subStatus.Text
+                        </option>
+                    }
+                </select>
+            </td> 
+            
+            <td></td>         
+        </tr>       
+
     </tbody>    
 </table>

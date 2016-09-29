@@ -14,25 +14,35 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
     public class BusinessRuleController : BaseAdminController
     {
         private readonly ICustomerService _customerService;
+        private readonly ISettingService _settingService;
+        private readonly IUserService _userService;
         private readonly IProductAreaService _productAreaService;
         private readonly IStateSecondaryService _subStatusService;
         private readonly IMailTemplateService _mailTemplateService;
         private readonly IEmailGroupService _emailGroupService;
+        private readonly IWorkingGroupService _workingGroupService;
 
         public BusinessRuleController(IMasterDataService masterDataService,
                                       ICustomerService customerService,
+                                      ISettingService settingService,
+                                      IUserService userService,  
                                       IProductAreaService productAreaService,
                                       IStateSecondaryService subStatusService,
                                       IMailTemplateService mailTemplateService,
-                                      IEmailGroupService emailGroupService
+                                      IEmailGroupService emailGroupService,
+                                      IWorkingGroupService workingGroupService
+
                                      )
             : base(masterDataService)
         {
             _customerService = customerService;
+            _settingService = settingService;
+            _userService = userService;
             _productAreaService = productAreaService;
             _subStatusService = subStatusService;
             _mailTemplateService = mailTemplateService;
             _emailGroupService = emailGroupService;
+            _workingGroupService = workingGroupService;
         }
 
         #region Public Methods 
@@ -49,6 +59,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         public ActionResult NewRule(int customerId)
         {
             var model = new BusinessRuleInputModel();
+            model.RuleId = 0;
             model.CustomerId = customerId;
             model.RuleName = string.Empty;
             model.Events = new List<BREvent>();
@@ -132,6 +143,20 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                                                             Text = mg.Name,
                                                             Selected = false
                                                         }).ToList();
+
+            var wgs = _workingGroupService.GetAllWorkingGroupsForCustomer(customerId)
+                                          .Select(wg => new SelectListItem
+                                                        {
+                                                            Value = wg.Id.ToString(),
+                                                            Text = wg.WorkingGroupName,
+                                                            Selected = false
+                                                        }).ToList();
+    
+            var customerSetting = _settingService.GetCustomerSetting(customerId);
+            var performers = this._userService.GetAvailablePerformersOrUserId(customerId);            
+            performers.Insert(0, ObjectExtensions.notAssignedPerformer());
+            var adminList = performers.MapToCustomSelectList(string.Empty, customerSetting);
+
             model.Action = new BRActionModel()
             {
                 Id = 0,
@@ -140,12 +165,21 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 ActionTypeId = 1,
                 EMailTemplates = emailTemplateList,
                 EMailGroups = emailGroupList,
+                WorkingGroups = wgs,
+                Administrators = adminList,
+                Recipients = string.Empty,
                 Sequence = 1
             };
             
             return View(model);
         }
 
+
+        [HttpGet]
+        public JsonResult SaveRule(int customerId, int ruleId, BusinessRuleJSModel data)
+        {
+            return Json("OK", JsonRequestBehavior.AllowGet);
+        }
         #endregion
 
 

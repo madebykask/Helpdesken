@@ -4,82 +4,80 @@
     ViewBag.Title = "Rule Actions";
 }
 
+
 <h4>@Translation.Get("Actions")</h4>
 
 <table >          
     <tbody>       
         <tr>
-            <td> Template </td>
-            <td colspan="2">
-                <select id="Action" name="Action" class="chosen-single-select">                    
-                    <option>
-                        Template1 
-                    </option>
-                    <option>
-                        Template2
-                    </option>
-                    <option>
-                        Template3
-                    </option>
-                    <option>
-                        Template4
-                    </option>                    
+            <td class="span2"> @Translation.Get("Mail Template") </td>
+            <td>
+                <select id="lstEmailTemplates" name="lstEmailTemplates" class="BR-chosen-single-select">                    
+                    @foreach (var template in Model.EMailTemplates)
+                    {
+                        <option value="@template.Value"  @(template.Selected? "Selected":"")> @template.Text </option>                                
+                    }                     
                 </select>
             </td>            
         </tr>
-        <tr>                 
-            <td> Email Group </td>
-            <td colspan="2">
-                <select class="multiselect multiselect-search" multiple="multiple">                    
-                    <option>
-                        Group1 
-                    </option>
-                    <option>
-                        Group2
-                    </option>
-                    <option>
-                        Group3
-                    </option>                    
+        <tr>      
+            <td>
+                @Translation.Get("Email Group")
+            </td>           
+            <td>
+                @{var mailGroupSelected = string.Join(",", Model.EMailGroups.Where(p => p.Selected).Select(p => p.Value));}
+                <select id="lstEmailGroups" name="lstEmailGroups" class="BR-chosen-select" multiple="multiple">  
+                    @foreach (var emailGroup in Model.EMailGroups)
+                    {
+                        <option value="@emailGroup.Value" @emailGroup.Value.ValueIsSelected(mailGroupSelected)>
+                            @emailGroup.Text
+                        </option>
+                    }
                 </select>
-            </td>                                         
-        </tr>
-        <tr>                 
-            <td> Working Group </td>
-            <td colspan="2">
-                <select class="multiselect multiselect-search" multiple="multiple">                    
-                    <option>
-                        Working Group1 
-                    </option>
-                    <option>
-                        Working Group2
-                    </option>
-                    <option>
-                        Working Group3
-                    </option>                    
+            </td>                              
+        </tr>        
+        <tr>      
+            <td>
+                @Translation.Get("Working Group")
+            </td>           
+            <td>
+                @{var workingGroupSelected = string.Join(",", Model.WorkingGroups.Where(p => p.Selected).Select(p => p.Value));}
+                <select id="lstWorkingGroups" name="lstWorkingGroups" class="BR-chosen-select" multiple="multiple">  
+                    @foreach (var workingGroup in Model.WorkingGroups)
+                    {
+                        <option value="@workingGroup.Value" @workingGroup.Value.ValueIsSelected(workingGroupSelected)>
+                            @workingGroup.Text
+                        </option>
+                    }
                 </select>
-            </td>                                         
-        </tr>
-        <tr>                 
-            <td> Administrator </td>
-            <td colspan="2">
-                <select class="multiselect multiselect-search" multiple="multiple">                    
-                    <option>
-                        User1  
-                    </option>
-                    <option>
-                        User2
-                    </option>
-                    <option>
-                        User3
-                    </option>                    
+            </td>                              
+        </tr> 
+        <tr>      
+            <td>
+                @Translation.Get("Administrator")
+            </td>           
+            <td>
+                @{var selectedItems = Model.Administrators.SelectedItems.GetSelectedStr();}
+                
+                <select id="lstAdministrators" name="lstAdministrators" class="BR-chosen-select" multiple="multiple">  
+                    @foreach (var administrator in Model.Administrators.Items)
+                    {
+                        <option value="@administrator.Id" @administrator.Value.ValueIsSelected(selectedItems)>
+                            @administrator.Value
+                        </option>
+                    }
                 </select>
-            </td>                                         
-        </tr>
-        <tr>                 
-            <td> Recipients </td>
-            <td colspan="2">
-                <input type="text" value="per@dhsolutions.se;jessica@dhsolutions.se"/>
-            </td>                                         
-        </tr>
+            </td>                              
+        </tr>              
+        <tr>
+            <td class="span2">
+                @Translation.Get("Recipients", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Html.TextBoxFor(m => Model.Recipients, new { id="recipients", @class="BR-text"})
+            </td>
+        </tr> 
     </tbody>    
 </table>
+
+

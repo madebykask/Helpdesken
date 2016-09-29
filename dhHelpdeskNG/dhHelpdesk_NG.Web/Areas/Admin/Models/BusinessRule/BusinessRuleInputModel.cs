@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.Common.Enums.BusinessRule;
+﻿using DH.Helpdesk.BusinessData.Models.Shared;
+using DH.Helpdesk.Common.Enums.BusinessRule;
 using DH.Helpdesk.Domain;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
         public BusinessRuleInputModel()
         {
         }
+
+        public int RuleId { get; set; }
 
         public int CustomerId { get; set; }
 
@@ -95,5 +98,12 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
         public List<SelectListItem> EMailTemplates { get; set; }
 
         public List<SelectListItem> EMailGroups { get; set; }
+
+        public List<SelectListItem> WorkingGroups { get; set; }
+
+        public CustomSelectList Administrators { get; set; }
+
+        public string Recipients { get; set; }
+
     }
 }

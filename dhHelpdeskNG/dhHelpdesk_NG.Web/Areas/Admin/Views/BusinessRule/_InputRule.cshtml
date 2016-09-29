@@ -4,6 +4,7 @@
     ViewBag.Title = "Input Rule";
 }
 
+@Html.HiddenFor(m=> Model.Rule)
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
@@ -18,7 +19,7 @@
                             @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)
                         </td>
                         <td>
-                            @Html.TextBoxFor(m=> Model.RuleName)
+                            @Html.TextBoxFor(m => Model.RuleName, new { @class="BR-text"})
                         </td>
                     </tr>
                     <tr>
@@ -26,7 +27,7 @@
                             @Translation.Get("Event", Enums.TranslationSource.TextTranslation) 
                         </td>
                         <td>                            
-                            <select id="Events" name="Events" class="chosen-single-select">                                    
+                            <select id="lstEvents" name="lstEvents" class="BR-chosen-single-select">                                    
                                 @foreach (var _event in Model.Events)
                                 {
                                     <option value="@_event.Id"  @(_event.Selected? "Selected":"")> @_event.Name </option>                                
@@ -39,7 +40,7 @@
                             @Translation.Get("Sequence", Enums.TranslationSource.TextTranslation)
                         </td>
                         <td>
-                            @Html.TextBoxFor(m=> Model.Sequence)
+                            @Html.TextBoxFor(m => Model.Sequence, new { id="ruleSequence" , @class="BR-text"})
                         </td>
                     </tr>
                      <tr>
@@ -47,7 +48,7 @@
                             @Translation.Get("Continue on success", Enums.TranslationSource.TextTranslation) 
                         </td>
                         <td>
-                            @Html.CheckBoxFor(m=> Model.ContinueOnSuccess, new { @class="switchcheckbox"})                           
+                            @Html.CheckBoxFor(m=> Model.ContinueOnSuccess, new { @class="switchcheckbox", id="continueOnSuccess"})                           
                         </td>
                     </tr>
                      <tr>
@@ -55,7 +56,7 @@
                             @Translation.Get("Continue on error", Enums.TranslationSource.TextTranslation)
                         </td>
                         <td>
-                            @Html.CheckBoxFor(m=> Model.ContinueOnError, new { @class="switchcheckbox"})
+                            @Html.CheckBoxFor(m=> Model.ContinueOnError, new { @class="switchcheckbox", id="continueOnError"})
                         </td>
                     </tr>
                     
@@ -64,7 +65,7 @@
                             @Translation.Get("Active", Enums.TranslationSource.TextTranslation)                            
                         </td>
                         <td>
-                             @Html.CheckBoxFor(m => Model.IsActive, new { @class="switchcheckbox"})
+                             @Html.CheckBoxFor(m => Model.IsActive, new { @class="switchcheckbox", id="isRuleActive"})
                         </td>
                     </tr>
                 </table>
