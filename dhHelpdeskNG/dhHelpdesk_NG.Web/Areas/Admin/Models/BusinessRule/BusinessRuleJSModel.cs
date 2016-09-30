@@ -53,7 +53,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
     public static class BusinessRuleJSMapper
     {
         private static char[] _SEPARATOR = {','};
-        public static BusinessRuleData MapToSelectedFilter(this BusinessRuleJSModel it)
+        public static BusinessRuleData MapToRuleData(this BusinessRuleJSModel it)
         {
             var ret = new BusinessRuleData();
 
@@ -74,7 +74,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
             ret.EmailGroups.AddItems(it.EmailGroups);
             ret.WorkingGroups.AddItems(it.WorkingGroups);
             ret.Administrators.AddItems(it.Administrators);
-            ret.Recipients = it.Recipients.Split(_SEPARATOR, StringSplitOptions.RemoveEmptyEntries);
+            
+            if (!string.IsNullOrEmpty(it.Recipients))                
+                ret.Recipients = it.Recipients.Split(_SEPARATOR, StringSplitOptions.RemoveEmptyEntries);
             
             return ret;
         }

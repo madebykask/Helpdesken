@@ -4,6 +4,13 @@
     ViewBag.Title = "NewRule";
 }
 
+<script type="text/javascript">
+    window.Params = {
+        saveRuleUrl: '@Url.Content("~/Admin/BusinessRule/SaveRule")'       
+    };
+</script>
+
+
 
 @using (Html.BeginForm("SaveRule", "BusinessRule", FormMethod.Post, new { id = "newRule" }))
 {    

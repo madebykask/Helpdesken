@@ -176,10 +176,12 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
 
         [HttpGet]
-        public JsonResult SaveRule(int customerId, int ruleId, BusinessRuleJSModel data)
+        public JsonResult SaveRule(BusinessRuleJSModel data)
         {
+            var t = data.MapToRuleData();
             return Json("OK", JsonRequestBehavior.AllowGet);
         }
+
         #endregion
 
 

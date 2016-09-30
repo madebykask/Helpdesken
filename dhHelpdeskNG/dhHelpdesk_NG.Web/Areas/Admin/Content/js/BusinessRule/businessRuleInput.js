@@ -2,11 +2,12 @@
     (function ($) {
 
         window.Params = window.Params || {};
-        var saveRuleUrl = window.Params.SaveRuleUrl;                                
+        var saveRuleUrl = window.Params.saveRuleUrl;
 
+       
         var elBtnSaveRule = "#btnSaveRule";
 
-        var elCustomerId = "#customerId";
+        var elCustomerId = "#CustomerId";
         var elRuleId = "#RuleId";
 
         var elRuleName = "#RuleName";
@@ -43,15 +44,15 @@
                 continueOnError: true,
                 ruleActive: true,
 
-                processFrom: [],
-                processTo: [],
-                subStatusFrom: [],
-                subStatusTo: [],
+                processFrom: "",
+                processTo: "",
+                subStatusFrom: "",
+                subStatusTo: "",
 
                 emailTemplate: 0,
-                emailGroups: [],
-                workingGroups: [],
-                administrators: [],
+                emailGroups: "",
+                workingGroups: "",
+                administrators: "",
                 recipients: ""
             };
 
@@ -68,19 +69,19 @@
             });
 
             $(elProcessFromDropDown + " option:selected").each(function () {
-                data.processFrom.push($(this).val());
+                data.processFrom += $(this).val() + ",";
             });
 
             $(elProcessToDropDown + " option:selected").each(function () {
-                data.processTo.push($(this).val());
+                data.processTo += $(this).val() + ",";
             });
 
             $(elSubStatusFromDropDown + " option:selected").each(function () {
-                data.subStatusFrom.push($(this).val());
+                data.subStatusFrom += $(this).val() + ",";
             });
 
             $(elSubStatusToDropDown + " option:selected").each(function () {
-                data.subStatusTo.push($(this).val());
+                data.subStatusTo += $(this).val() + ",";
             });
           
             $(elEmailTemplatsDropDown + " option:selected").each(function () {
@@ -88,15 +89,15 @@
             });
 
             $(elEmailGroupsDropDown + " option:selected").each(function () {
-                data.emailGroups.push($(this).val());
+                data.emailGroups += $(this).val() + ",";
             });
 
             $(elWorkingGroupsDropDown + " option:selected").each(function () {
-                data.workingGroups.push($(this).val());
+                data.workingGroups += $(this).val() + ",";
             });
 
             $(elAdministratorsDropDown + " option:selected").each(function () {
-                data.administrators.push($(this).val());
+                data.administrators += $(this).val() + ",";
             });
 
             data.recipients = $(elRecipients).val();
@@ -105,15 +106,16 @@
         };       
       
         dhHelpdesk.businessRule.saveRule = function () {
-            if (!dhHelpdesk.businessRule.doValidation())
-                return;
+            //if (!dhHelpdesk.businessRule.doValidation())
+            //    return;
 
-            var data = getData();         
+            
+            var data = getData();
           
             $.get(saveRuleUrl,
                 {
-                    customerId: data.customerId,
-                    ruleId: data.ruleId,                    
+                    'data.CustomerId': data.customerId,
+                    'data.RuleId': data.ruleId,
                     'data.RuleName': data.ruleName,
                     'data.EventId': data.event,
                     'data.RuleSequence': data.ruleSequence,
