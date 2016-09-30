@@ -14,7 +14,7 @@
             <th>
                 @Html.LabelFor(m => m.Logs.FirstOrDefault().Text)
             </th>
-            <th></th>
+            @*<th></th>*@
         </tr>
     </thead>
     <tbody>
@@ -31,11 +31,11 @@
                 <td>
                     @log.Text.ForHtmlView()
                 </td>
-                <td>
+                @*<td>
                     <a onclick="deleteLog('@Model.Area', @log.Id, '@Model.Area.ToString().ToLower()_logs_container')" class="btn">
                         @Translation.Get("Ta bort")
                     </a>
-                </td>
+                </td>*@
             </tr>
         }
     </tbody>
