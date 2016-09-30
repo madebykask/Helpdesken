@@ -50,11 +50,18 @@
         public int CalculateWorkTime(
             DateTime fromUTC,
             DateTime untilUTC,
-            int? caseDepartmentId)
+            int? caseDepartmentId,
+            int timeDiff = 0)
         {
             /// Achtung! when changing to daylight saving this two strings could throw exception
             var fetchFromLocal = TimeZoneInfo.ConvertTimeFromUtc(fromUTC, this.companyTimeZone);
             var fetchUntilLocal = TimeZoneInfo.ConvertTimeFromUtc(untilUTC, this.companyTimeZone);
+
+            if (timeDiff != 0)
+            {
+                fetchFromLocal = fromUTC.AddMinutes(timeDiff);
+                fetchUntilLocal = untilUTC.AddMinutes(timeDiff);
+            }
 
             var calcFromDay = fetchFromLocal.RoundToDay();
             var calcToDay = fetchUntilLocal.RoundToDay();

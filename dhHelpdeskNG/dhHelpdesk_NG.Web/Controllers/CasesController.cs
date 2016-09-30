@@ -2529,15 +2529,9 @@ namespace DH.Helpdesk.Web.Controllers
             var customerSetting = _settingService.GetCustomerSetting(curCustomer.Id);
             
             // offset in Minute
-            var customerTimeOffset = customerSetting.TimeZone_offset;
-            var allTimeZones = TimeZoneInfo.GetSystemTimeZones();
-            var customerTimeZone = allTimeZones.Where(x => x.BaseUtcOffset.TotalMinutes == (double)customerTimeOffset).FirstOrDefault();
-
-            var customerNow = utcNow;
-            if (customerTimeZone != null)
-                customerNow = TimeZoneInfo.ConvertTimeFromUtc(utcNow, customerTimeZone);
-
+            var customerTimeOffset = customerSetting.TimeZone_offset;                        
             var actionExternalTime = 0;
+            
             DHDomain.Case oldCase = new DHDomain.Case();
             if (edit)
             {                
@@ -2586,29 +2580,26 @@ namespace DH.Helpdesk.Web.Controllers
                             utcNow,
                             oldCase.Department_Id) + oldCase.ExternalTime;
 
-                        //customerTimeZone != null
-                        if (1 == 1)
+                        
+                        workTimeCalcFactory =
+                        new WorkTimeCalculatorFactory(
+                            ManualDependencyResolver.Get<IHolidayService>(),
+                            curCustomer.WorkingDayStart,
+                            curCustomer.WorkingDayEnd,
+                            TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
+
+                        deptIds = null;
+                        if (case_.Department_Id.HasValue)
                         {
-                            workTimeCalcFactory =
-                            new WorkTimeCalculatorFactory(
-                                ManualDependencyResolver.Get<IHolidayService>(),
-                                curCustomer.WorkingDayStart,
-                                curCustomer.WorkingDayEnd,
-                                TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
-
-                            deptIds = null;
-                            if (case_.Department_Id.HasValue)
-                            {
-                                deptIds = new int[] { case_.Department_Id.Value };
-                            }                            
-                            //var changeTimeOnCustomer = TimeZoneInfo.ConvertTimeFromUtc(oldCase.ChangeTime, customerTimeZone);
-
-                            workTimeCalc = workTimeCalcFactory.Build(oldCase.ChangeTime, utcNow, deptIds);
-                            actionExternalTime = workTimeCalc.CalculateWorkTime(
-                                oldCase.ChangeTime,
-                                utcNow,
-                                oldCase.Department_Id);
-                        }
+                            deptIds = new int[] { case_.Department_Id.Value };
+                        }                            
+                            
+                        workTimeCalc = workTimeCalcFactory.Build(oldCase.ChangeTime, utcNow, deptIds, customerTimeOffset);
+                        actionExternalTime = workTimeCalc.CalculateWorkTime(
+                            oldCase.ChangeTime,
+                            utcNow,
+                            oldCase.Department_Id, customerTimeOffset);
+                        
                     }
                 }
 
@@ -2669,9 +2660,8 @@ namespace DH.Helpdesk.Web.Controllers
 
                 case_.LeadTime = leadTime;
 
-                // Customer LeadTime Calc
-                //customerTimeZone != null && oldCase != null && oldCase.Id > 0
-                if (oldCase.Id > 0)
+                // ActionLeadTime Calc
+                if (oldCase != null && oldCase.Id > 0)
                 {
                     workTimeCalcFactory = new WorkTimeCalculatorFactory(
                         ManualDependencyResolver.Get<IHolidayService>(),
@@ -2684,15 +2674,11 @@ namespace DH.Helpdesk.Web.Controllers
                         deptIds = new int[] { oldCase.Department_Id.Value };
                     }
 
-                    //var changeTimeOnCustomer = TimeZoneInfo.ConvertTimeFromUtc(oldCase.ChangeTime, customerTimeZone);
-                    //var finishDateOnCustomer = TimeZoneInfo.ConvertTimeFromUtc(case_.FinishingDate.Value, customerTimeZone);
-                    //var finishDateOnCustomerBasedOnUTC = TimeZoneInfo.ConvertTimeFromUtc(case_.FinishingDate.Value.ToUniversalTime(), customerTimeZone); 
-
-                    workTimeCalc = workTimeCalcFactory.Build(oldCase.ChangeTime, case_.FinishingDate.Value, deptIds);
+                    workTimeCalc = workTimeCalcFactory.Build(oldCase.ChangeTime, case_.FinishingDate.Value, deptIds, customerTimeOffset);
                     actionLeadTime = workTimeCalc.CalculateWorkTime(
                         oldCase.ChangeTime,
                         case_.FinishingDate.Value.ToUniversalTime(),
-                        oldCase.Department_Id) - actionExternalTime;
+                        oldCase.Department_Id, customerTimeOffset) - actionExternalTime;
                 }                                
             }
             else
@@ -2715,9 +2701,8 @@ namespace DH.Helpdesk.Web.Controllers
                     case_.Department_Id) - case_.ExternalTime;
 
 
-                 // Customer LeadTime Calc
-                //customerTimeZone != null && oldCase != null && oldCase.Id > 0 || 
-                if (oldCase.Id > 0)
+                 // ActionLeadTime Calc                
+                if (oldCase != null && oldCase.Id > 0)
                 {
                     workTimeCalcFactory = new WorkTimeCalculatorFactory(
                         ManualDependencyResolver.Get<IHolidayService>(),
@@ -2730,14 +2715,11 @@ namespace DH.Helpdesk.Web.Controllers
                         deptIds = new int[] { oldCase.Department_Id.Value };
                     }
 
-                    var changeTimeOnCustomer = TimeZoneInfo.ConvertTimeFromUtc(oldCase.ChangeTime, customerTimeZone);                    
-                    var customerNowOnCustomerBasedOnUTC = TimeZoneInfo.ConvertTimeFromUtc(customerNow.ToUniversalTime(), customerTimeZone);
-
-                    workTimeCalc = workTimeCalcFactory.Build(oldCase.ChangeTime, utcNow, deptIds);
+                    workTimeCalc = workTimeCalcFactory.Build(oldCase.ChangeTime, utcNow, deptIds, customerTimeOffset);
                     actionLeadTime = workTimeCalc.CalculateWorkTime(
                         oldCase.ChangeTime,
                         utcNow.ToUniversalTime(),
-                        oldCase.Department_Id) - actionExternalTime;
+                        oldCase.Department_Id, customerTimeOffset) - actionExternalTime;
                 }
             }
 

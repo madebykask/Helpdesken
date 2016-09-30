@@ -156,10 +156,10 @@
     <Compile Include="Models\Accounts\Read\Edit\UserForEdit.cs" />
     <Compile Include="Models\Accounts\Write\AccountForWrite.cs" />
     <Compile Include="Models\ADFS\Input\ADFSSetting.cs" />
-    <Compile Include="Models\BusinessRules-epricated\RuleAction.cs" />
-    <Compile Include="Models\BusinessRules-epricated\RuleActionParam.cs" />
-    <Compile Include="Models\BusinessRules-epricated\RuleCondition.cs" />
-    <Compile Include="Models\BusinessRules-epricated\Rule.cs" />
+    <Compile Include="Models\BusinessRules-Depricated\RuleAction.cs" />
+    <Compile Include="Models\BusinessRules-Depricated\RuleActionParam.cs" />
+    <Compile Include="Models\BusinessRules-Depricated\RuleCondition.cs" />
+    <Compile Include="Models\BusinessRules-Depricated\Rule.cs" />
     <Compile Include="Models\BusinessRules\BusinessRule.cs" />
     <Compile Include="Models\CaseType\CaseTypeItem.cs" />
     <Compile Include="Models\Case\CaseLock\LockedCaseOverview.cs" />
