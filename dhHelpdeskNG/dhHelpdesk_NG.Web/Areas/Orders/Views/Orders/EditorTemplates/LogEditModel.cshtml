@@ -31,7 +31,7 @@
             </td>
             <td>
                 @Html.Partial("_SendToDialog", Model.Log.Value.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "log_send_to_dialog" }, { "Callback", "fillLogSendLogNoteToEmailsTextArea" } }))
-                @Html.TextAreaFor(m => m.Log.Value.Emails, new { id = "log_send_to_emails_textarea", @readonly = "readonly" })
+                @Html.TextBoxFor(m => m.Log.Value.Emails, new { id = "log_send_to_emails_textarea" })
             </td>
         </tr>
     }
