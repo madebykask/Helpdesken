@@ -47,6 +47,8 @@
     using DH.Helpdesk.Domain.ADFS;
 
     using OperatingSystemConfiguration = DH.Helpdesk.Dal.EntityConfigurations.OperatingSystemConfiguration;
+    using DH.Helpdesk.Domain.BusinessRules;
+    using DH.Helpdesk.Dal.EntityConfigurations.BusinessRule;
     
 
     public class HelpdeskDbContext : DbContext, IDbContext
@@ -87,6 +89,14 @@
         public DbSet<Building> Buildings { get; set; }
 
         public DbSet<BulletinBoard> BulletinBoards { get; set; }
+
+        public DbSet<BRRuleEntity> BRRules { get; set; }
+
+        public DbSet<BRConditionEntity> BRConditions { get; set; }
+
+        public DbSet<BRActionEntity> BRActions { get; set; }
+
+        public DbSet<BRActionParamEntity> BRActionParams { get; set; }
 
         public DbSet<Calendar> Calendars { get; set; }
 
@@ -574,9 +584,15 @@
             modelBuilder.Configurations.Add(new AccountTypeConfiguration());
             modelBuilder.Configurations.Add(new AccountEMailLogConfiguration());            
             modelBuilder.Configurations.Add(new ActionSettingConfiguration());
-            modelBuilder.Configurations.Add(new ADFSSettingConfiguration());
+            modelBuilder.Configurations.Add(new ADFSSettingConfiguration());            
             modelBuilder.Configurations.Add(new BuildingConfiguration());
             modelBuilder.Configurations.Add(new BulletinBoardConfiguration());
+
+            modelBuilder.Configurations.Add(new BRRuleConfiguration());
+            modelBuilder.Configurations.Add(new BRConditionConfiguration());
+            modelBuilder.Configurations.Add(new BRActionConfiguration());
+            modelBuilder.Configurations.Add(new BRActionParamConfiguration());
+
             modelBuilder.Configurations.Add(new CalendarConfiguration());
             modelBuilder.Configurations.Add(new CaseConfiguration());
             modelBuilder.Configurations.Add(new CaseSettingConfiguration());

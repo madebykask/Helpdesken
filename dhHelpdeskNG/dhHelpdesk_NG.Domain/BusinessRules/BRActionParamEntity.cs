@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Domain.Orders
+﻿namespace DH.Helpdesk.Domain.BusinessRules
 {
     using global::System;
 

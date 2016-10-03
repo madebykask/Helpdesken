@@ -1,0 +1,431 @@
+﻿namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
+{
+    using System.Collections.Generic;
+    using System.Linq;
+    
+    using DH.Helpdesk.Common.Enums;
+    using DH.Helpdesk.Dal.Dal;
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.BusinessData.Models.BusinessRules;
+    using DH.Helpdesk.Domain.BusinessRules;
+    using DH.Helpdesk.Common.Extensions.Boolean;
+    using DH.Helpdesk.Common.Extensions.Integer;
+    using System;
+    using DH.Helpdesk.Common.Enums.BusinessRule;
+
+    public sealed class BusinessRuleRepository: Repository, IBusinessRuleRepository
+    {
+        #region Constructors and Destructors
+
+        public BusinessRuleRepository(IDatabaseFactory databaseFactory)
+            : base(databaseFactory)
+        {
+        }
+
+        #endregion
+
+        public string SaveBusinessRule(BusinessRuleModel businessRule)
+        {
+            var isNew = businessRule.Id == 0;
+            try
+            {                
+                if (isNew)
+                {
+                    var ruleEntity = new BRRuleEntity()
+                    {
+                        Id = businessRule.Id,
+                        Customer_Id = businessRule.CustomerId,
+                        Event_Id = businessRule.EventId,
+                        Name = businessRule.RuleName,
+                        Sequence = businessRule.RuleSequence,
+                        ContinueOnSuccess = businessRule.ContinueOnSuccess,
+                        ContinueOnError = businessRule.ContinueOnError,
+                        CreatedTime = businessRule.CreatedTime,
+                        ChangedTime = businessRule.ChangedTime,
+                        CreatedByUser_Id = businessRule.CreatedByUserId,
+                        ChangedByUser_Id = businessRule.ChangedByUserId,
+                        Status = businessRule.RuleActive.ToInt()
+                    };
+
+                    this.DbContext.BRRules.Add(ruleEntity);
+                    this.InitializeAfterCommit(businessRule, ruleEntity);
+                }
+                else
+                {
+                    var ruleEntity = this.DbContext.BRRules.Find(businessRule.Id);
+                    
+                    ruleEntity.Event_Id = businessRule.EventId;
+                    ruleEntity.Name = businessRule.RuleName;
+                    ruleEntity.Sequence = businessRule.RuleSequence;
+                    ruleEntity.ContinueOnSuccess = businessRule.ContinueOnSuccess;
+                    ruleEntity.ContinueOnError = businessRule.ContinueOnError;
+                    ruleEntity.ChangedTime = businessRule.ChangedTime;
+                    ruleEntity.ChangedByUser_Id = businessRule.ChangedByUserId;
+                    ruleEntity.Status = businessRule.RuleActive.ToInt();                                                
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message + " " + ex.InnerException != null? ex.InnerException.Message: "";
+            }
+
+            var conResult = SaveBRConditions(businessRule, isNew);
+            if (conResult != "")
+                return conResult;
+
+            var actResult = SaveBRActions(businessRule, isNew);
+            if (actResult != "")
+                return actResult;
+
+            return string.Empty;
+        }
+
+        private string SaveBRConditions(BusinessRuleModel businessRule, bool isNew)
+        {
+            try
+            {                
+                if (isNew)
+                {
+                    var conditionEntity1 = new BRConditionEntity()
+                    {
+                        Id = 0,
+                        Rule_Id = businessRule.Id,
+                        Field_Id = BRFieldType.Process,
+                        FromValue = businessRule.ProcessFrom.GetSelectedStr(),
+                        ToValue = businessRule.ProcessTo.GetSelectedStr(),
+                        Sequence = 1
+                    };
+                    this.DbContext.BRConditions.Add(conditionEntity1);
+                    
+                    var conditionEntity2 = new BRConditionEntity()
+                    {
+                        Id = 0,
+                        Rule_Id = businessRule.Id,
+                        Field_Id = BRFieldType.SubStatus,
+                        FromValue = businessRule.SubStatusFrom.GetSelectedStr(),
+                        ToValue = businessRule.SubStatusTo.GetSelectedStr(),
+                        Sequence = 2
+                    };
+                    this.DbContext.BRConditions.Add(conditionEntity2);
+                }
+                else
+                {
+                    #region Save Process
+                    var conditionEntity1 = this.DbContext.BRConditions.Where(c=> c.Rule_Id == businessRule.Id && c.Field_Id == BRFieldType.Process)
+                                                                      .FirstOrDefault();
+                    
+                    if (conditionEntity1 == null)
+                    {
+                        conditionEntity1 = new BRConditionEntity()
+                        {
+                            Id = 0,
+                            Rule_Id = businessRule.Id,
+                            Field_Id = BRFieldType.Process,
+                            FromValue = businessRule.ProcessFrom.GetSelectedStr(),
+                            ToValue = businessRule.ProcessTo.GetSelectedStr(),
+                            Sequence = 1
+                        };
+
+                        this.DbContext.BRConditions.Add(conditionEntity1);
+                    }
+                    else
+                    {
+                        conditionEntity1.FromValue = businessRule.ProcessFrom.GetSelectedStr();
+                        conditionEntity1.ToValue = businessRule.ProcessTo.GetSelectedStr();                                                
+                    }
+
+                    #endregion
+
+                    #region Save SubStatus
+                    var conditionEntity2 = this.DbContext.BRConditions.Where(c=> c.Rule_Id == businessRule.Id && c.Field_Id == BRFieldType.SubStatus)
+                                                                      .FirstOrDefault();
+                    
+                    if (conditionEntity2 == null)
+                    {
+                        conditionEntity2 = new BRConditionEntity()
+                        {
+                            Id = 0,
+                            Rule_Id = businessRule.Id,
+                            Field_Id = BRFieldType.SubStatus,
+                            FromValue = businessRule.SubStatusFrom.GetSelectedStr(),
+                            ToValue = businessRule.SubStatusTo.GetSelectedStr(),
+                            Sequence = 2
+                        };
+
+                        this.DbContext.BRConditions.Add(conditionEntity2);
+                    }
+                    else
+                    {
+                        conditionEntity2.FromValue = businessRule.SubStatusFrom.GetSelectedStr();
+                        conditionEntity2.ToValue = businessRule.SubStatusTo.GetSelectedStr();                                                
+                    }
+
+                    #endregion
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message + " " + ex.InnerException != null? ex.InnerException.Message: "";
+            }
+            
+            return string.Empty;
+        }
+
+        private string SaveBRActions(BusinessRuleModel businessRule, bool isNew)
+        {
+            try
+            {
+                if (isNew)
+                {
+                    var actionEntity1 = new BRActionEntity()
+                    {
+                        Id = 0,
+                        Rule_Id = businessRule.Id,
+                        ActionType_Id = BRActionType.SendEmail,
+                        Sequence = 1
+                    };
+                    this.DbContext.BRActions.Add(actionEntity1);                                       
+                }
+                else
+                {
+                    #region Save Action
+                    var actionEntity1 = this.DbContext.BRActions.Where(a => a.Rule_Id == businessRule.Id && a.ActionType_Id == BRActionType.SendEmail)
+                                                                   .FirstOrDefault();
+
+                    if (actionEntity1 == null)
+                    {
+                        var conditionEntity1 = new BRActionEntity()
+                        {
+                            Id = 0,
+                            Rule_Id = businessRule.Id,
+                            ActionType_Id = BRActionType.SendEmail,
+                            Sequence = 1
+                        };
+                        this.DbContext.BRActions.Add(actionEntity1);  
+                    }                             
+                    #endregion
+
+                    var resultActionParam = SaveBRActionParams(businessRule, isNew);
+                    if (resultActionParam != "")
+                        return resultActionParam;
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message + " " + ex.InnerException != null ? ex.InnerException.Message : "";
+            }
+
+            return string.Empty;
+        }
+
+        private string SaveBRActionParams(BusinessRuleModel businessRule, bool isNew)
+        {
+            var action = this.DbContext.BRActions.Where(a => a.Rule_Id == businessRule.Id && a.ActionType_Id == BRActionType.SendEmail)
+                                                 .FirstOrDefault();
+
+            try
+            {
+                if (isNew)
+                {
+                    var actionParamEntity1 = new BRActionParamEntity()
+                    {
+                        Id = 0,
+                        RuleAction_Id = action.Id,
+                        ParamType_Id = BRActionParamType.EMailTemplate,
+                        ParamValue = businessRule.EmailTemplate.ToString()                       
+                    };
+                    this.DbContext.BRActionParams.Add(actionParamEntity1);                                       
+
+                    var actionParamEntity2 = new BRActionParamEntity()
+                    {
+                        Id = 0,
+                        RuleAction_Id = action.Id,
+                        ParamType_Id = BRActionParamType.EmailGroup,
+                        ParamValue = businessRule.EmailGroups.GetSelectedStr()
+                    };
+                    this.DbContext.BRActionParams.Add(actionParamEntity2);  
+
+                    var actionParamEntity3 = new BRActionParamEntity()
+                    {
+                        Id = 0,
+                        RuleAction_Id = action.Id,
+                        ParamType_Id = BRActionParamType.WorkingGroup,
+                        ParamValue = businessRule.WorkingGroups.GetSelectedStr()
+                    };
+                    this.DbContext.BRActionParams.Add(actionParamEntity3);  
+
+                    var actionParamEntity4 = new BRActionParamEntity()
+                    {
+                        Id = 0,
+                        RuleAction_Id = action.Id,
+                        ParamType_Id = BRActionParamType.Administrator,
+                        ParamValue = businessRule.Administrators.GetSelectedStr()
+                    };
+                    this.DbContext.BRActionParams.Add(actionParamEntity4);  
+
+                    var actionParamEntity5 = new BRActionParamEntity()
+                    {
+                        Id = 0,
+                        RuleAction_Id = action.Id,
+                        ParamType_Id = BRActionParamType.Recipients,
+                        ParamValue = string.Join(",", businessRule.Recipients)
+                    };
+                    this.DbContext.BRActionParams.Add(actionParamEntity5);  
+                }
+                else
+                {                    
+                    var actionParamEntity1 = this.DbContext.BRActionParams.Where(a => a.RuleAction_Id == action.Id && a.ParamType_Id == BRActionParamType.EMailTemplate)
+                                                                        .FirstOrDefault();
+                    if (actionParamEntity1 == null)
+                    {
+                        actionParamEntity1 = new BRActionParamEntity()
+                        {
+                            Id = 0,
+                            RuleAction_Id = action.Id,
+                            ParamType_Id = BRActionParamType.EMailTemplate,
+                            ParamValue = businessRule.EmailTemplate.ToString()                       
+                        };
+                        this.DbContext.BRActionParams.Add(actionParamEntity1);  
+                    }else{
+                        actionParamEntity1.ParamValue = businessRule.EmailTemplate.ToString();
+                    }
+
+                    var actionParamEntity2 = this.DbContext.BRActionParams.Where(a => a.RuleAction_Id == action.Id && a.ParamType_Id == BRActionParamType.EmailGroup)
+                                                                       .FirstOrDefault();
+                    if (actionParamEntity2 == null)
+                    {
+                        actionParamEntity2 = new BRActionParamEntity()
+                        {
+                            Id = 0,
+                            RuleAction_Id = action.Id,
+                            ParamType_Id = BRActionParamType.EmailGroup,
+                            ParamValue = businessRule.EmailGroups.GetSelectedStr()
+                        };
+                        this.DbContext.BRActionParams.Add(actionParamEntity2);
+                    }
+                    else
+                    {
+                        actionParamEntity2.ParamValue = businessRule.EmailGroups.GetSelectedStr();
+                    }
+
+                    var actionParamEntity3 = this.DbContext.BRActionParams.Where(a => a.RuleAction_Id == action.Id && a.ParamType_Id == BRActionParamType.WorkingGroup)
+                                                                       .FirstOrDefault();
+                    if (actionParamEntity3 == null)
+                    {
+                        actionParamEntity3 = new BRActionParamEntity()
+                        {
+                            Id = 0,
+                            RuleAction_Id = action.Id,
+                            ParamType_Id = BRActionParamType.WorkingGroup,
+                            ParamValue = businessRule.WorkingGroups.GetSelectedStr()
+                        };
+                        this.DbContext.BRActionParams.Add(actionParamEntity3);
+                    }
+                    else
+                    {
+                        actionParamEntity3.ParamValue = businessRule.WorkingGroups.GetSelectedStr();
+                    }
+
+                    var actionParamEntity4 = this.DbContext.BRActionParams.Where(a => a.RuleAction_Id == action.Id && a.ParamType_Id == BRActionParamType.Administrator)
+                                                                       .FirstOrDefault();
+                    if (actionParamEntity4 == null)
+                    {
+                        actionParamEntity4 = new BRActionParamEntity()
+                        {
+                            Id = 0,
+                            RuleAction_Id = action.Id,
+                            ParamType_Id = BRActionParamType.Administrator,
+                            ParamValue = businessRule.Administrators.GetSelectedStr()
+                        };
+                        this.DbContext.BRActionParams.Add(actionParamEntity4);
+                    }
+                    else
+                    {
+                        actionParamEntity4.ParamValue = businessRule.Administrators.GetSelectedStr();
+                    }
+
+                    var actionParamEntity5 = this.DbContext.BRActionParams.Where(a => a.RuleAction_Id == action.Id && a.ParamType_Id == BRActionParamType.Administrator)
+                                                                       .FirstOrDefault();
+                    if (actionParamEntity5 == null)
+                    {
+                        actionParamEntity5 = new BRActionParamEntity()
+                        {
+                            Id = 0,
+                            RuleAction_Id = action.Id,
+                            ParamType_Id = BRActionParamType.Recipients,
+                            ParamValue = string.Join(",", businessRule.Recipients)
+                        };
+                        this.DbContext.BRActionParams.Add(actionParamEntity5);
+                    }
+                    else
+                    {
+                        actionParamEntity5.ParamValue = string.Join(",", businessRule.Recipients);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message + " " + ex.InnerException != null ? ex.InnerException.Message : "";
+            }
+
+            return string.Empty;
+        }
+        
+        public BusinessRuleModel GetRuleData(int ruleId)
+        {
+            var ret = new BusinessRuleModel();
+
+            var ruleEntity = this.DbContext.BRRules.Where(r => r.Id == ruleId).FirstOrDefault();
+            if (ruleEntity != null)
+            {
+                ret.Id = ruleEntity.Id;
+                ret.CustomerId = ruleEntity.Customer_Id;
+                ret.EventId = ruleEntity.Event_Id;
+                ret.RuleName = ruleEntity.Name;
+                ret.ContinueOnSuccess = ruleEntity.ContinueOnSuccess;
+                ret.ContinueOnError = ruleEntity.ContinueOnError;
+                ret.RuleSequence = ruleEntity.Sequence;
+                ret.RuleActive = ruleEntity.Status.ToBool();
+                ret.CreatedByUserId = ruleEntity.CreatedByUser_Id;
+                ret.CreatedTime = ruleEntity.CreatedTime;
+                ret.ChangedByUserId = ruleEntity.ChangedByUser_Id;
+                ret.ChangedTime = ruleEntity.ChangedTime;
+
+                #region conditions
+                var conditionEntity1 = this.DbContext.BRConditions.Where(c => c.Rule_Id == ruleId && c.Field_Id == BRFieldType.Process).FirstOrDefault();
+                if (conditionEntity1 != null)
+                {
+                    ret.ProcessFrom.AddItems(conditionEntity1.FromValue, false);
+                    ret.ProcessTo.AddItems(conditionEntity1.ToValue, false);
+                }
+
+                var conditionEntity2 = this.DbContext.BRConditions.Where(c => c.Rule_Id == ruleId && c.Field_Id == BRFieldType.SubStatus).FirstOrDefault();
+                if (conditionEntity2 != null)
+                {
+                    ret.SubStatusFrom.AddItems(conditionEntity2.FromValue, false);
+                    ret.SubStatusTo.AddItems(conditionEntity2.ToValue, false);
+                }
+                #endregion
+
+                #region actions
+                //var actionEntity1 = this.DbContext.BRActions.Where(c => c.Rule_Id == ruleId && c.ActionType_Id == BRActionType.SendEmail).FirstOrDefault();
+                //if (conditionEntity1 != null)
+                //{
+                //    ret.ProcessFrom = conditionEntity1.FromValue;
+                //    ret.ProcessTo = conditionEntity1.ToValue;
+                //}
+
+                //var conditionEntity2 = this.DbContext.BRConditions.Where(c => c.Rule_Id == ruleId && c.Field_Id == BRFieldType.SubStatus).FirstOrDefault();
+                //if (conditionEntity2 != null)
+                //{
+                //    ret.SubStatusFrom = conditionEntity2.FromValue;
+                //    ret.SubStatusTo = conditionEntity2.ToValue;
+                //}
+                #endregion
+            }
+            
+            return null;       
+        }
+   
+    }
+}

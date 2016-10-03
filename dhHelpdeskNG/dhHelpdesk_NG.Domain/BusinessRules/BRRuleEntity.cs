@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Domain.Orders
+﻿namespace DH.Helpdesk.Domain.BusinessRules
 {
     using global::System;
 
@@ -20,5 +20,6 @@
         public int ChangedByUser_Id { get; set; }
 
         public virtual User CreatedByUser { get; set; }
+        public virtual User ChangedByUser { get; set; }
     }
 }

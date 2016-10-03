@@ -53,12 +53,12 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
     public static class BusinessRuleJSMapper
     {
         private static char[] _SEPARATOR = {','};
-        public static BusinessRuleData MapToRuleData(this BusinessRuleJSModel it)
+        public static BusinessRuleModel MapToRuleData(this BusinessRuleJSModel it)
         {
-            var ret = new BusinessRuleData();
+            var ret = new BusinessRuleModel();
 
             ret.CustomerId = int.Parse(it.CustomerId);
-            ret.RuleId = int.Parse(it.RuleId);
+            ret.Id = int.Parse(it.RuleId);
             ret.RuleName = it.RuleName;
             ret.RuleSequence = int.Parse(it.RuleSequence);
             ret.ContinueOnSuccess = bool.Parse(it.ContinueOnSuccess);

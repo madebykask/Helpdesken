@@ -1,4 +1,5 @@
 ﻿using DH.Helpdesk.BusinessData.Models.Shared;
+using DH.Helpdesk.BusinessData.Models.Shared.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,9 +7,9 @@ using System.Text;
 
 namespace DH.Helpdesk.BusinessData.Models.BusinessRules
 {
-    public class BusinessRuleData
+    public class BusinessRuleModel : INewBusinessModel
     {
-        public BusinessRuleData()
+        public BusinessRuleModel()
         {
             this.ProcessFrom = new SelectedItems();
             this.ProcessTo = new SelectedItems();
@@ -19,9 +20,9 @@ namespace DH.Helpdesk.BusinessData.Models.BusinessRules
             this.Administrators = new SelectedItems();            
         }
 
-        public int CustomerId { get; set; }
+        public int Id { get; set; }
 
-        public int RuleId { get; set; }
+        public int CustomerId { get; set; }        
 
         public string RuleName { get; set; }
 
@@ -34,6 +35,14 @@ namespace DH.Helpdesk.BusinessData.Models.BusinessRules
         public bool ContinueOnError { get; set; }
 
         public bool RuleActive { get; set; }
+
+        public DateTime CreatedTime { get; set; }
+
+        public int CreatedByUserId { get; set; }
+
+        public DateTime ChangedTime { get; set; }
+
+        public int ChangedByUserId { get; set; }
 
         public SelectedItems ProcessFrom { get; set; }
 
@@ -49,7 +58,7 @@ namespace DH.Helpdesk.BusinessData.Models.BusinessRules
 
         public SelectedItems WorkingGroups { get; set; }
 
-        public SelectedItems Administrators { get; set; }
+        public SelectedItems Administrators { get; set; }        
 
         public string[] Recipients { get; set; }        
     }

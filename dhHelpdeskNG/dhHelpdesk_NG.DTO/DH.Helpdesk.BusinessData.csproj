@@ -160,7 +160,7 @@
     <Compile Include="Models\BusinessRules-Depricated\RuleActionParam.cs" />
     <Compile Include="Models\BusinessRules-Depricated\RuleCondition.cs" />
     <Compile Include="Models\BusinessRules-Depricated\Rule.cs" />
-    <Compile Include="Models\BusinessRules\BusinessRule.cs" />
+    <Compile Include="Models\BusinessRules\BusinessRuleModel.cs" />
     <Compile Include="Models\CaseType\CaseTypeItem.cs" />
     <Compile Include="Models\Case\CaseLock\LockedCaseOverview.cs" />
     <Compile Include="Models\Case\CaseOverview\CaseInfoOverview.cs" />
