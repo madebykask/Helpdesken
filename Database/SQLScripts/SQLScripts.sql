@@ -12,6 +12,14 @@ Go
 ALTER TABLE tblSettings ALTER COLUMN LDAPFilter nvarchar(150)
 GO
 
+
+-- New field in tblInventoryTypeProperty
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Unique' and sysobjects.name = N'tblInventoryTypeProperty')
+      begin
+             ALTER TABLE tblInventoryTypeProperty ADD [Unique] int NOT NULL Default(0)                                              
+      end
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.27'
 
