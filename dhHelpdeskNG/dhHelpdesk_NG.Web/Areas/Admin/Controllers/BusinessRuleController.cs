@@ -21,6 +21,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private readonly IMailTemplateService _mailTemplateService;
         private readonly IEmailGroupService _emailGroupService;
         private readonly IWorkingGroupService _workingGroupService;
+        private readonly IBusinessRuleService _businessRuleService;
 
         public BusinessRuleController(IMasterDataService masterDataService,
                                       ICustomerService customerService,
@@ -30,7 +31,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                                       IStateSecondaryService subStatusService,
                                       IMailTemplateService mailTemplateService,
                                       IEmailGroupService emailGroupService,
-                                      IWorkingGroupService workingGroupService
+                                      IWorkingGroupService workingGroupService,
+                                      IBusinessRuleService businessRuleService
 
                                      )
             : base(masterDataService)
@@ -43,6 +45,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             _mailTemplateService = mailTemplateService;
             _emailGroupService = emailGroupService;
             _workingGroupService = workingGroupService;
+            _businessRuleService = businessRuleService;
         }
 
         #region Public Methods 
@@ -174,12 +177,35 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-
         [HttpGet]
         public JsonResult SaveRule(BusinessRuleJSModel data)
         {
-            var t = data.MapToRuleData();
-            return Json("OK", JsonRequestBehavior.AllowGet);
+            var ruleModel = data.MapToRuleData();
+
+            if (ruleModel.Id == 0)
+            {
+                ruleModel.CreatedTime = DateTime.UtcNow;
+                ruleModel.ChangedTime = DateTime.UtcNow;
+                ruleModel.CreatedByUserId = SessionFacade.CurrentUser.Id;
+                ruleModel.ChangedByUserId = SessionFacade.CurrentUser.Id;
+            }
+            else
+            {
+                ruleModel.ChangedTime = DateTime.UtcNow;                
+                ruleModel.ChangedByUserId = SessionFacade.CurrentUser.Id;
+            }
+
+            ruleModel.EventId = 1;
+            if (ruleModel.Recipients == null)
+                ruleModel.Recipients = new List<string>().ToArray();
+
+
+            var res = _businessRuleService.SaveBusinessRule(ruleModel);
+
+            if (res == string.Empty)
+                return Json("OK", JsonRequestBehavior.AllowGet);
+            else
+                return Json(res, JsonRequestBehavior.AllowGet);
         }
 
         #endregion

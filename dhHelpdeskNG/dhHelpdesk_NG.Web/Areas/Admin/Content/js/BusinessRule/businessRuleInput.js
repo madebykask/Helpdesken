@@ -3,6 +3,7 @@
 
         window.Params = window.Params || {};
         var saveRuleUrl = window.Params.saveRuleUrl;
+        var overviewRuleUrl = window.Params.overviewRuleUrl;
 
        
         var elBtnSaveRule = "#btnSaveRule";
@@ -134,7 +135,10 @@
                     curTime: new Date().getTime()
                 },
                 function (result) {
-                    //Do reirection
+                    if (result =="OK")
+                        window.location.href = overviewRuleUrl
+                    else
+                        ShowToastMessage(result, 'error');
                 }
             );
         };

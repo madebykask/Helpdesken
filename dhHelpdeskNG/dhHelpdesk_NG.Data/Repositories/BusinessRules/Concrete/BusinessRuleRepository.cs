@@ -48,7 +48,7 @@
                     };
 
                     this.DbContext.BRRules.Add(ruleEntity);
-                    this.InitializeAfterCommit(businessRule, ruleEntity);
+                    this.InitializeAfterCommit(businessRule, ruleEntity);                    
                 }
                 else
                 {
@@ -63,6 +63,7 @@
                     ruleEntity.ChangedByUser_Id = businessRule.ChangedByUserId;
                     ruleEntity.Status = businessRule.RuleActive.ToInt();                                                
                 }
+                this.Commit();
             }
             catch (Exception ex)
             {
@@ -76,7 +77,7 @@
             var actResult = SaveBRActions(businessRule, isNew);
             if (actResult != "")
                 return actResult;
-
+            
             return string.Empty;
         }
 
@@ -162,6 +163,8 @@
 
                     #endregion
                 }
+
+                this.Commit();
             }
             catch (Exception ex)
             {
@@ -184,7 +187,7 @@
                         ActionType_Id = BRActionType.SendEmail,
                         Sequence = 1
                     };
-                    this.DbContext.BRActions.Add(actionEntity1);                                       
+                    this.DbContext.BRActions.Add(actionEntity1);                             
                 }
                 else
                 {
@@ -203,12 +206,13 @@
                         };
                         this.DbContext.BRActions.Add(actionEntity1);  
                     }                             
-                    #endregion
-
-                    var resultActionParam = SaveBRActionParams(businessRule, isNew);
-                    if (resultActionParam != "")
-                        return resultActionParam;
+                    #endregion                                        
                 }
+                this.Commit();
+
+                var resultActionParam = SaveBRActionParams(businessRule, isNew);
+                if (resultActionParam != "")
+                    return resultActionParam;
             }
             catch (Exception ex)
             {
@@ -344,7 +348,7 @@
                         actionParamEntity4.ParamValue = businessRule.Administrators.GetSelectedStr();
                     }
 
-                    var actionParamEntity5 = this.DbContext.BRActionParams.Where(a => a.RuleAction_Id == action.Id && a.ParamType_Id == BRActionParamType.Administrator)
+                    var actionParamEntity5 = this.DbContext.BRActionParams.Where(a => a.RuleAction_Id == action.Id && a.ParamType_Id == BRActionParamType.Recipients)
                                                                        .FirstOrDefault();
                     if (actionParamEntity5 == null)
                     {
@@ -362,6 +366,7 @@
                         actionParamEntity5.ParamValue = string.Join(",", businessRule.Recipients);
                     }
                 }
+                this.Commit();
             }
             catch (Exception ex)
             {
@@ -370,8 +375,18 @@
 
             return string.Empty;
         }
-        
-        public BusinessRuleModel GetRuleData(int ruleId)
+
+        public IList<BusinessRuleModel> GetRules(int customerId)
+        {
+            var ret = new List<BusinessRuleModel>();
+            var ruleEntities = this.DbContext.BRRules.Where(r => r.Customer_Id == customerId).ToList();
+            foreach (var ruleEntity in ruleEntities)
+                ret.Add(GetRule(ruleEntity.Id));
+
+            return ret;
+        }
+
+        public BusinessRuleModel GetRule(int ruleId)
         {
             var ret = new BusinessRuleModel();
 
@@ -408,20 +423,44 @@
                 #endregion
 
                 #region actions
-                //var actionEntity1 = this.DbContext.BRActions.Where(c => c.Rule_Id == ruleId && c.ActionType_Id == BRActionType.SendEmail).FirstOrDefault();
-                //if (conditionEntity1 != null)
-                //{
-                //    ret.ProcessFrom = conditionEntity1.FromValue;
-                //    ret.ProcessTo = conditionEntity1.ToValue;
-                //}
+                char[] _SEPARATOR = {','};
 
-                //var conditionEntity2 = this.DbContext.BRConditions.Where(c => c.Rule_Id == ruleId && c.Field_Id == BRFieldType.SubStatus).FirstOrDefault();
-                //if (conditionEntity2 != null)
-                //{
-                //    ret.SubStatusFrom = conditionEntity2.FromValue;
-                //    ret.SubStatusTo = conditionEntity2.ToValue;
-                //}
+                var actionEntity = this.DbContext.BRActions.Where(a => a.Rule_Id == ruleId && a.ActionType_Id == BRActionType.SendEmail).FirstOrDefault();
+                if (actionEntity != null)
+                {
+                    var actionParams = this.DbContext.BRActionParams.Where(p => p.RuleAction_Id == actionEntity.Id).ToList();
+                    foreach(var param in actionParams)
+                    {
+                        switch (param.ParamType_Id)
+                        {
+                            case BRActionParamType.EMailTemplate:
+                                var val = -1;
+                                int.TryParse(param.ParamValue, out val);
+                                ret.EmailTemplate = val;
+                                break;
+
+                            case BRActionParamType.EmailGroup:
+                                ret.EmailGroups.AddItems(param.ParamValue, false);
+                                break;
+
+                            case BRActionParamType.WorkingGroup:
+                                ret.WorkingGroups.AddItems(param.ParamValue, false);
+                                break;
+
+                            case BRActionParamType.Administrator:
+                                ret.Administrators.AddItems(param.ParamValue, false);
+                                break;
+
+                            case BRActionParamType.Recipients:
+                                ret.Recipients = param.ParamValue.Split(_SEPARATOR, StringSplitOptions.RemoveEmptyEntries);
+                                break;
+
+                        }                    
+                    }
+                }
                 #endregion
+
+                return ret;
             }
             
             return null;       

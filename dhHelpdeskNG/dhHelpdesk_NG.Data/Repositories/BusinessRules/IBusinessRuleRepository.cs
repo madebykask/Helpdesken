@@ -8,6 +8,8 @@
     {        
         string SaveBusinessRule(BusinessRuleModel businessRule);
 
-        BusinessRuleModel GetRuleData(int ruleId);
+        BusinessRuleModel GetRule(int ruleId);
+
+        IList<BusinessRuleModel> GetRules(int customerId);
     }
 }
