@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.BusinessData.Models.BusinessRules;
+    using DH.Helpdesk.Common.Enums.BusinessRule;
 
     public interface IBusinessRuleRepository: INewRepository
     {        
@@ -11,5 +12,7 @@
         BusinessRuleModel GetRule(int ruleId);
 
         IList<BusinessRuleModel> GetRules(int customerId);
+
+        IList<BusinessRuleModel> GetRules(int customerId, BREventType ccurredEvent);
     }
 }

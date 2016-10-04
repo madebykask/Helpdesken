@@ -1,5 +1,6 @@
 ﻿using DH.Helpdesk.BusinessData.Models.Shared;
 using DH.Helpdesk.BusinessData.Models.Shared.Input;
+using DH.Helpdesk.Common.Enums.BusinessRule;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,5 +63,46 @@ namespace DH.Helpdesk.BusinessData.Models.BusinessRules
 
         public string[] Recipients { get; set; }        
     }
-    
+
+    public class BusinessRuleActionModel
+    {
+        public BusinessRuleActionModel(int ruleId, int actionType)
+        {
+            RuleId = ruleId;
+            ActionType = actionType;
+            ActionParams = new List<BusinessRuleActionParamModel>();
+        }
+
+        public BusinessRuleActionModel(int ruleId, int actionType, List<BusinessRuleActionParamModel> actionParams)
+        {
+            RuleId = ruleId;
+            ActionType = actionType;
+            ActionParams = new List<BusinessRuleActionParamModel>();
+        }
+
+        public void AddActionParam(BusinessRuleActionParamModel actionParam)
+        {
+            this.ActionParams.Add(actionParam);
+        }
+
+        public int RuleId { get; private set; }
+
+        public int ActionType { get; private set; }
+
+        public List<BusinessRuleActionParamModel> ActionParams { get; private set; }
+    }
+
+    public class BusinessRuleActionParamModel
+    {
+        public BusinessRuleActionParamModel(int paramType, string paramValue)
+        {            
+            ParamType = paramType;
+            ParamValue = paramValue;
+        }
+        
+        public int ParamType { get; private set; }
+        
+        public string ParamValue { get; private set; }
+
+    }
 }

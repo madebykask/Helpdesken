@@ -423,7 +423,7 @@
                 #endregion
 
                 #region actions
-                char[] _SEPARATOR = {','};
+                char[] _SEPARATOR = {';'};
 
                 var actionEntity = this.DbContext.BRActions.Where(a => a.Rule_Id == ruleId && a.ActionType_Id == BRActionType.SendEmail).FirstOrDefault();
                 if (actionEntity != null)
@@ -465,6 +465,16 @@
             
             return null;       
         }
-   
+
+        public IList<BusinessRuleModel> GetRules(int customerId, BREventType occurredEvent)
+        {
+            var ret = new List<BusinessRuleModel>();
+            var ruleEntities = this.DbContext.BRRules.Where(r => r.Customer_Id == customerId && r.Event_Id == (int)occurredEvent).ToList();
+            foreach (var ruleEntity in ruleEntities)
+                ret.Add(GetRule(ruleEntity.Id));
+
+            return ret;
+        }
+       
     }
 }

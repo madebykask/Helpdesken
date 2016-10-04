@@ -7,6 +7,7 @@ using System.Linq;
 namespace DH.Helpdesk.Services.Services
 {
 
+    using DH.Helpdesk.BusinessData.Models.BusinessRules;
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.Case.ChidCase;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
@@ -15,7 +16,9 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.BusinessData.Models.User.Input;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+    using DH.Helpdesk.Common.Constants;
     using DH.Helpdesk.Common.Enums;
+    using DH.Helpdesk.Common.Enums.BusinessRule;
     using DH.Helpdesk.Common.Extensions.Boolean;
     using DH.Helpdesk.Dal.DbContext;
     using DH.Helpdesk.Dal.Enums;
@@ -91,6 +94,9 @@ namespace DH.Helpdesk.Services.Services
 
         void SendCaseEmail(int caseId, CaseMailSetting cms, int caseHistoryId, string basePath, TimeZoneInfo userTimeZone,                            
                            Case oldCase = null, CaseLog log = null, List<CaseFileDto> logFiles = null);
+
+        void RunBusinessActions(Case currentCase, TimeZoneInfo userTimeZone, BREventType ccurredEvent, Case oldCase = null);
+
         void UpdateFollowUpDate(int caseId, DateTime? time);
         void MarkAsUnread(int caseId);
         void MarkAsRead(int caseId);
@@ -172,6 +178,8 @@ namespace DH.Helpdesk.Services.Services
 
         private readonly IMail2TicketRepository _mail2TicketRepository;
 
+        private readonly IBusinessRuleService _businessRuleService;
+
         public CaseService(
             ICaseRepository caseRepository,
             ICaseFileRepository caseFileRepository,
@@ -201,7 +209,9 @@ namespace DH.Helpdesk.Services.Services
             ICaseLockService caseLockService, 
             CaseStatisticService caseStatService,
             ICaseFilterFavoriteRepository caseFilterFavoriteRepository,
-            IMail2TicketRepository mail2TicketRepository)
+            IMail2TicketRepository mail2TicketRepository,
+            IBusinessRuleService businessRuleService
+            )
         {
             this._unitOfWork = unitOfWork;
             this._caseRepository = caseRepository;
@@ -233,6 +243,7 @@ namespace DH.Helpdesk.Services.Services
             this._caseStatService = caseStatService;
             this._caseFilterFavoriteRepository = caseFilterFavoriteRepository;
             this._mail2TicketRepository = mail2TicketRepository;
+            this._businessRuleService = businessRuleService;
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
@@ -1727,6 +1738,102 @@ namespace DH.Helpdesk.Services.Services
                                         newCase,
                                         helpdeskMailFromAdress,
                                         files, cms.AbsoluterUrl, cms.CustomeMailFromAddress);
+        }
+
+        public void RunBusinessActions(Case currentCase, TimeZoneInfo userTimeZone, BREventType occurredEvent, Case oldCase = null)
+        {
+            if (currentCase.Id == 0)  
+                return;
+
+            var customerId = currentCase.Customer_Id;
+            var rules = _businessRuleService.GetRules(customerId, occurredEvent);
+            if (rules.Any())
+            {
+                var allActionsToDo = CheckBusinessRules(rules, currentCase, oldCase);
+
+            }
+
+        }
+
+        private List<BusinessRuleActionModel> CheckBusinessRules(IList<BusinessRuleModel> rules, Case currentCase, Case oldCase = null)
+        {            
+            var ret = new List<BusinessRuleActionModel>();
+            foreach (var rule in rules)
+            {
+                ret.AddRange(GetNeededActionsToRun(rule, currentCase, oldCase));
+            }         
+
+            return ret;
+        }
+
+        private List<BusinessRuleActionModel> GetNeededActionsToRun(BusinessRuleModel rule, Case currentCase, Case oldCase = null)
+        {
+            var ret = new List<BusinessRuleActionModel>();
+
+            #region Check Process field
+
+            var oldProcessId = oldCase != null ? (oldCase.ProductArea_Id.HasValue ? oldCase.ProductArea_Id.Value : BRConstItem.NULL) : BRConstItem.NULL;
+            var newProcessId = currentCase.ProductArea_Id.HasValue ? currentCase.ProductArea_Id.Value : BRConstItem.NULL;
+
+            var processCondition = false;
+            if (rule.ProcessFrom.Contains(BRConstItem.ANY) || rule.ProcessFrom.Contains(oldProcessId))
+                if (rule.ProcessTo.Contains(BRConstItem.ANY) || rule.ProcessTo.Contains(newProcessId))
+                {
+                    processCondition = true;
+                }
+
+            #endregion
+
+            #region Check SubStatus field
+
+            var oldSubStatusId = oldCase != null ? (oldCase.StateSecondary_Id.HasValue ? oldCase.StateSecondary_Id.Value : BRConstItem.NULL) : BRConstItem.NULL;
+            var newSubStatusId = currentCase.StateSecondary_Id.HasValue ? currentCase.StateSecondary_Id.Value : BRConstItem.NULL;
+
+            var subStatusCondition = false;
+            if (rule.SubStatusFrom.Contains(BRConstItem.ANY) || rule.SubStatusFrom.Contains(oldSubStatusId))
+                if (rule.SubStatusTo.Contains(BRConstItem.ANY) || rule.SubStatusTo.Contains(newSubStatusId))
+                {
+                    subStatusCondition = true;
+                }
+
+            #endregion
+
+            if (processCondition && subStatusCondition){
+                // TODO: we have only send mail action, in the future it must accept dynamic actions 
+                var newAction = new BusinessRuleActionModel(rule.Id, BRActionType.SendEmail);
+                
+                var param = new BusinessRuleActionParamModel(BRActionParamType.EMailTemplate, rule.EmailTemplate.ToString());
+                newAction.AddActionParam(param);
+
+                if (rule.WorkingGroups.Contains(BRConstItem.CURRENT_VALUE))
+                {
+                    rule.WorkingGroups.Remove(BRConstItem.CURRENT_VALUE);
+                    if (currentCase.WorkingGroup_Id.HasValue && !rule.WorkingGroups.Contains(currentCase.WorkingGroup_Id.Value))
+                        rule.WorkingGroups.Add(currentCase.WorkingGroup_Id.Value);
+                }
+                param = new BusinessRuleActionParamModel(BRActionParamType.WorkingGroup, rule.WorkingGroups.GetSelectedStr());
+                newAction.AddActionParam(param);
+
+                
+                param = new BusinessRuleActionParamModel(BRActionParamType.EmailGroup, rule.EmailGroups.GetSelectedStr());
+                newAction.AddActionParam(param);
+
+                if (rule.Administrators.Contains(BRConstItem.CURRENT_VALUE))
+                {
+                    rule.Administrators.Remove(BRConstItem.CURRENT_VALUE);
+                    if (currentCase.Performer_User_Id.HasValue && !rule.Administrators.Contains(currentCase.Performer_User_Id.Value))
+                        rule.Administrators.Add(currentCase.Performer_User_Id.Value);
+                }
+                param = new BusinessRuleActionParamModel(BRActionParamType.Administrator, rule.Administrators.GetSelectedStr());
+                newAction.AddActionParam(param);
+
+                param = new BusinessRuleActionParamModel(BRActionParamType.Recipients, rule.Recipients != null && rule.Recipients.Any() ?
+                                                         string.Join(BRConstItem.Email_Seprator, rule.Recipients) : string.Empty);
+                newAction.AddActionParam(param);
+
+                ret.Add(newAction);
+            }
+            return ret;
         }
 
         private void SendTemplateEmail(

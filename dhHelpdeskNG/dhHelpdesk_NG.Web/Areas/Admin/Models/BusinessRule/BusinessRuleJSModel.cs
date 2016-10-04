@@ -65,15 +65,15 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
             ret.ContinueOnError = bool.Parse(it.ContinueOnError);
             ret.RuleActive = bool.Parse(it.RuleActive);
 
-            ret.ProcessFrom.AddItems(it.ProcessFrom);
-            ret.ProcessTo.AddItems(it.ProcessTo);
-            ret.SubStatusFrom.AddItems(it.SubStatusFrom);
-            ret.SubStatusTo.AddItems(it.SubStatusTo);
+            ret.ProcessFrom.AddItems(it.ProcessFrom, false);
+            ret.ProcessTo.AddItems(it.ProcessTo, false);
+            ret.SubStatusFrom.AddItems(it.SubStatusFrom, false);
+            ret.SubStatusTo.AddItems(it.SubStatusTo, false);
 
             ret.EmailTemplate = int.Parse(it.EmailTemplate);
-            ret.EmailGroups.AddItems(it.EmailGroups);
-            ret.WorkingGroups.AddItems(it.WorkingGroups);
-            ret.Administrators.AddItems(it.Administrators);
+            ret.EmailGroups.AddItems(it.EmailGroups, false);
+            ret.WorkingGroups.AddItems(it.WorkingGroups, false);
+            ret.Administrators.AddItems(it.Administrators, false);
             
             if (!string.IsNullOrEmpty(it.Recipients))                
                 ret.Recipients = it.Recipients.Split(_SEPARATOR, StringSplitOptions.RemoveEmptyEntries);

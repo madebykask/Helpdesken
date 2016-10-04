@@ -1,10 +1,11 @@
 ﻿namespace DH.Helpdesk.Services.Services
 {
     using DH.Helpdesk.BusinessData.Models.BusinessRules;
-using DH.Helpdesk.Dal.Repositories;
-using DH.Helpdesk.Dal.Repositories.BusinessRules;
-using DH.Helpdesk.Domain;
-using System.Collections.Generic;
+    using DH.Helpdesk.Common.Enums.BusinessRule;
+    using DH.Helpdesk.Dal.Repositories;
+    using DH.Helpdesk.Dal.Repositories.BusinessRules;
+    using DH.Helpdesk.Domain;
+    using System.Collections.Generic;
     
 
     public interface IBusinessRuleService
@@ -14,6 +15,8 @@ using System.Collections.Generic;
         BusinessRuleModel GetRule(int ruleId);
 
         IList<BusinessRuleModel> GetRules(int customerId);
+
+        IList<BusinessRuleModel> GetRules(int customerId, BREventType occurredEvent);
     }
 
     public class BusinessRuleService : IBusinessRuleService
@@ -40,6 +43,11 @@ using System.Collections.Generic;
         public IList<BusinessRuleModel> GetRules(int customerId)
         {
             return _businessRuleRepository.GetRules(customerId);
+        }
+
+        public IList<BusinessRuleModel> GetRules(int customerId, BREventType occurredEvent)
+        {
+            return _businessRuleRepository.GetRules(customerId, occurredEvent);
         }        
     }
 }

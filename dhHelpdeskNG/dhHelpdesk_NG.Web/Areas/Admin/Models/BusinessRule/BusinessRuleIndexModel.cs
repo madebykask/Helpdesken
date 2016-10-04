@@ -13,30 +13,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
         {
         }
 
-        public Customer Customer { get; set; }
-
-        public BRModuleModel Module { get; set; }
+        public Customer Customer { get; set; }        
     }
-
-    public sealed class BRModuleModel
-    {
-        public BRModuleModel(int id)
-        {
-            Id = id;
-            
-            switch (id)
-            {
-                case BRModule.CASE:
-                    Caption = "Ärende";
-                    break;
-                default:
-                    Caption = string.Empty;
-                    break;
-            }            
-        }
-
-        public int Id { get; private set; }
-
-        public string Caption { get; private set; }
-    }
+    
 }

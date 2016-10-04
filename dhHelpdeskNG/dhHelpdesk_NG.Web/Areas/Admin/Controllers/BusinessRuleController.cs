@@ -8,6 +8,8 @@ using DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 using DH.Helpdesk.Web.Infrastructure;
+using DH.Helpdesk.Common.Constants;
+using DH.Helpdesk.Common.Enums.BusinessRule;
 
 namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
@@ -66,16 +68,18 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             model.CustomerId = customerId;
             model.RuleName = string.Empty;
             model.Events = new List<BREvent>();
-            model.Events.Add(new BREvent(1, "On Save Case", true));
+            model.Events.Add(new BREvent((int)BREventType.OnSaveCase, "On Save Case", true));
             model.ContinueOnSuccess = true;
             model.ContinueOnError = true;
             model.IsActive = true;
 
-            var fieldItems = new List<SelectListItem>();
+            var currentValue = new List<SelectListItem>();
+            currentValue.Add(new SelectListItem() { Value = BRConstItem.CURRENT_VALUE.ToString(), Text = "[CurrentValue]", Selected = false });
 
-            fieldItems.Add(new SelectListItem(){ Value= "-1", Text = "", Selected = true});
-            fieldItems.Add(new SelectListItem(){ Value= "0", Text = "[Null]", Selected = false});
-            fieldItems.Add(new SelectListItem(){ Value= int.MaxValue.ToString(), Text = "[Any]", Selected = false});
+            var fieldItems = new List<SelectListItem>();            
+            //fieldItems.Add(new SelectListItem(){ Value= "-1", Text = "", Selected = true});
+            fieldItems.Add(new SelectListItem(){ Value= BRConstItem.NULL.ToString(), Text = "[Null]", Selected = false});
+            fieldItems.Add(new SelectListItem() { Value = BRConstItem.ANY.ToString(), Text = "[Any]", Selected = false });
             
             var productAreas = _productAreaService.GetAll(customerId);
             var lastLevels = new List<ProductArea>();
@@ -87,21 +91,21 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     p.Name = p.ResolveFullName();
                     lastLevels.Add(p);
                 }
-            }  
+            }
 
-            var processList = lastLevels.Select(l=> new SelectListItem()
+            var processList = fieldItems.Union(lastLevels.Select(l => new SelectListItem()
                                                 { 
                                                     Value= l.Id.ToString(), 
                                                     Text = l.Name, 
                                                     Selected = false
-                                                }).ToList();
+                                                })).ToList();
 
-            var subStatusList = _subStatusService.GetActiveStateSecondaries(customerId).Select(s => new SelectListItem()
+            var subStatusList = fieldItems.Union(_subStatusService.GetActiveStateSecondaries(customerId).Select(s => new SelectListItem()
             {
                 Value = s.Id.ToString(),
                 Text = s.Name,
                 Selected = false
-            }).ToList();
+            })).ToList();
 
             model.Condition = new BRConditionModel()
             {
@@ -156,9 +160,14 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                                                         }).ToList();
     
             var customerSetting = _settingService.GetCustomerSetting(customerId);
-            var performers = this._userService.GetAvailablePerformersOrUserId(customerId);            
-            performers.Insert(0, ObjectExtensions.notAssignedPerformer());
+            var performers = this._userService.GetAvailablePerformersOrUserId(customerId);                        
             var adminList = performers.MapToCustomSelectList(string.Empty, customerSetting);
+            var allAdmins = currentValue.Union(adminList.Items.Select(i => new SelectListItem
+                                                        {
+                                                            Value = i.Id,
+                                                            Text = i.Id,
+                                                            Selected = false
+                                                        }).ToList());
 
             model.Action = new BRActionModel()
             {
@@ -168,8 +177,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 ActionTypeId = 1,
                 EMailTemplates = emailTemplateList,
                 EMailGroups = emailGroupList,
-                WorkingGroups = wgs,
-                Administrators = adminList,
+                WorkingGroups = currentValue.Union(wgs).ToList(),
+                Administrators = allAdmins.ToList(),
                 Recipients = string.Empty,
                 Sequence = 1
             };

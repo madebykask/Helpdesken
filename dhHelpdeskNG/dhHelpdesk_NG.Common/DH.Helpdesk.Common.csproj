@@ -57,9 +57,10 @@
     </Compile>
     <Compile Include="Collections\INamedObject.cs" />
     <Compile Include="Collections\NamedObjectCollection.cs" />
+    <Compile Include="Constants\BRConstItem.cs" />
     <Compile Include="Constraints\NotifierConstraint.cs" />
     <Compile Include="Enums\AppSettingsKey.cs" />
-    <Compile Include="Enums\BusinessRules\BRModule.cs" />
+    <Compile Include="Enums\BusinessRules\BREventType.cs" />
     <Compile Include="Enums\BusinessRules\BRFieldType.cs" />
     <Compile Include="Enums\BusinessRules\BRActionType.cs" />
     <Compile Include="Enums\BusinessRules\BRActionParamType.cs" />

@@ -101,7 +101,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
 
         public List<SelectListItem> WorkingGroups { get; set; }
 
-        public CustomSelectList Administrators { get; set; }
+        public List<SelectListItem> Administrators { get; set; }
 
         public string Recipients { get; set; }
 
