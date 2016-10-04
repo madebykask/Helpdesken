@@ -102,34 +102,60 @@
         public IList<OrderType> GetChildrenInRow(IList<OrderType> orderTypes, bool isTakeOnlyActive = false)
         {
             var childOrderTypes = new List<OrderType>();
-            var parentOrderTypes = orderTypes.Where(ot => !ot.Parent_OrderType_Id.HasValue && (isTakeOnlyActive ? ot.IsActive == 1 : true)).ToList();
-            foreach (var p in parentOrderTypes)
+            var parentOrderTypes = orderTypes.Where(ot => !ot.Parent_OrderType_Id.HasValue && (isTakeOnlyActive ? ot.IsActive == 1 : true) && ot.SubOrderTypes.Count == 0).ToList();
+            
+            //var parentOrderTypes = orderTypes.Where(ot => !ot.Parent_OrderType_Id.HasValue && (isTakeOnlyActive ? ot.IsActive == 1 : true)).ToList();
+            var parentOrderTypesWithChild = orderTypes.Where(ot => !ot.Parent_OrderType_Id.HasValue && (isTakeOnlyActive ? ot.IsActive == 1 : true)).ToList();
+
+            foreach (var p in parentOrderTypesWithChild)
             {
-                childOrderTypes.AddRange(GetChilds(p.Name, p.IsActive, p.SubOrderTypes.ToList(), isTakeOnlyActive));
+                childOrderTypes.AddRange(GetChilds(p.Name, p.IsActive, p.SubOrderTypes.ToList(), isTakeOnlyActive, p.Id));
             }
 
             return parentOrderTypes.Union(childOrderTypes).OrderBy(c => c.Name).ToList();
         }
 
-        private IList<OrderType> GetChilds(string parentName, int parentState, IList<OrderType> subOrderTypes, bool isTakeOnlyActive = false)
+        private IList<OrderType> GetChilds(string parentName, int parentState, IList<OrderType> subOrderTypes, bool isTakeOnlyActive = false, int Parent_OrderType_Id = 0)
         {
             var ret = new List<OrderType>();
             var newSubOrderTypes = subOrderTypes.Where(ct => (isTakeOnlyActive ? ct.IsActive == 1 : true)).ToList();
+            var newInactiveSubOrderTypes = subOrderTypes.Where(ct => (isTakeOnlyActive ? ct.IsActive == 0 : true)).ToList();
+
             foreach (var s in newSubOrderTypes)
             {
                 var newParentName = string.Format("{0} - {1}", parentName, s.Name);
                 var newCT = new OrderType()
                 {
-                    Id = s.Id,
+                    Id = Parent_OrderType_Id,
                     Name = newParentName,
                     IsActive = parentState,
-                    Parent_OrderType_Id = s.Parent_OrderType_Id
+                    Parent_OrderType_Id = s.Id
                 };
-                ret.Add(newCT);
+
+                if (!s.SubOrderTypes.Any())
+                    ret.Add(newCT);
 
                 if (s.SubOrderTypes.Any())
-                    ret.AddRange(GetChilds(newParentName, parentState, s.SubOrderTypes.ToList(), isTakeOnlyActive));
+                    ret.AddRange(GetChilds(newParentName, parentState, s.SubOrderTypes.ToList(), isTakeOnlyActive, Parent_OrderType_Id));
+
+                //ret.Add(newCT);
             }
+
+
+            if (newInactiveSubOrderTypes.Any())
+            {
+                var newParentName = string.Format("{0}", parentName);
+                var newCT = new OrderType()
+                {
+                    Id = Parent_OrderType_Id,
+                    Name = parentName,
+                    IsActive = parentState,
+                    Parent_OrderType_Id = null
+                };
+
+                ret.Add(newCT);
+            }
+
 
             return ret;
         }
