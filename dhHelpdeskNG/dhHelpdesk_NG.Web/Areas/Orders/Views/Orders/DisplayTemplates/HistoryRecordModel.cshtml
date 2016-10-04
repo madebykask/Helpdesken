@@ -16,18 +16,21 @@
         }
     </td>
     <td class="tdpointer">
+        <table class="tableintable">
         @foreach (var fieldDifferences in Model.FieldsDifferences)
         {
+            
             if (fieldDifferences.OldValue == null && fieldDifferences.NewValue != null)
             {
-                @fieldDifferences.FieldName@: → @fieldDifferences.NewValue
+                <tr><th>@fieldDifferences.FieldName</th> <td>→ @fieldDifferences.NewValue</td></tr>
             }
             else
             {
-                @fieldDifferences.FieldName@: @fieldDifferences.OldValue → @fieldDifferences.NewValue
+                <tr><th>@fieldDifferences.FieldName @fieldDifferences.OldValue</th> <td> → @fieldDifferences.NewValue</td></tr>
             }
-            <br/>
+            
         }
+        </table>
     </td>
     <td class="tdpointer">
         @foreach (var email in Model.Emails)
