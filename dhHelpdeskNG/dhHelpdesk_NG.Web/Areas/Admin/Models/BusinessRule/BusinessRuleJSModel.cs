@@ -57,8 +57,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
         {
             var ret = new BusinessRuleModel();
 
-            ret.CustomerId = int.Parse(it.CustomerId);
             ret.Id = int.Parse(it.RuleId);
+            ret.CustomerId = int.Parse(it.CustomerId);            
             ret.RuleName = it.RuleName;
             ret.RuleSequence = int.Parse(it.RuleSequence);
             ret.ContinueOnSuccess = bool.Parse(it.ContinueOnSuccess);

@@ -65,6 +65,7 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Services.Services.Reports;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.Common.Enums.CaseSolution;
+    using DH.Helpdesk.Common.Enums.BusinessRule;
 
     public class CasesController : BaseController
     {        
@@ -2843,6 +2844,10 @@ namespace DH.Helpdesk.Web.Controllers
             // send emails
             this._caseService.SendCaseEmail(case_.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase, caseLog, newLogFiles);
 
+            var actions = this._caseService.CheckBusinessRules(BREventType.OnSaveCase, case_, oldCase);
+            if (actions.Any())
+                this._caseService.ExecuteBusinessActions(actions, case_, caseLog, userTimeZone, caseHistoryId, basePath, SessionFacade.CurrentLanguageId,
+                                                          caseMailSetting, newLogFiles);
             //Unlock Case            
             if (m.caseLock != null && !string.IsNullOrEmpty(m.caseLock.LockGUID))
                 this._caseLockService.UnlockCaseByGUID(new Guid(m.caseLock.LockGUID));

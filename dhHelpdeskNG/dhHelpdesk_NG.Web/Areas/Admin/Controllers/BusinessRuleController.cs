@@ -132,7 +132,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var emailTemplateList = new List<SelectListItem>();
             foreach (var mailtemplate in activeMailTemplates)
             {
-                var templateId = mailtemplate.MailTemplateId;
+                var templateId = mailtemplate.MailId;
                 var templateName = string.Empty;
                 var activeLanguages = mailtemplate.TemplateLanguages.Where(l => !string.IsNullOrEmpty(l.Subject) && !string.IsNullOrEmpty(l.Body)).ToList();
                 if (activeLanguages.Select(l => l.LanguageId).Contains(SessionFacade.CurrentLanguageId))
@@ -165,16 +165,15 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var allAdmins = currentValue.Union(adminList.Items.Select(i => new SelectListItem
                                                         {
                                                             Value = i.Id,
-                                                            Text = i.Id,
+                                                            Text = i.Value,
                                                             Selected = false
                                                         }).ToList());
 
             model.Action = new BRActionModel()
             {
                 Id = 0,
-                RuleId = 0,
-                //Send Email
-                ActionTypeId = 1,
+                RuleId = 0,                
+                ActionTypeId = BRActionType.SendEmail,
                 EMailTemplates = emailTemplateList,
                 EMailGroups = emailGroupList,
                 WorkingGroups = currentValue.Union(wgs).ToList(),
@@ -204,7 +203,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 ruleModel.ChangedByUserId = SessionFacade.CurrentUser.Id;
             }
 
-            ruleModel.EventId = 1;
+            ruleModel.EventId = (int)BREventType.OnSaveCase;
             if (ruleModel.Recipients == null)
                 ruleModel.Recipients = new List<string>().ToArray();
 
