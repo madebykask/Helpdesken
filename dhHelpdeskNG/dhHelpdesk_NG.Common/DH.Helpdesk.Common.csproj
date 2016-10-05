@@ -76,6 +76,7 @@
     <Compile Include="Enums\CalculationFields.cs" />
     <Compile Include="Enums\BooleanString.cs" />
     <Compile Include="Enums\CaseSolution\IndexEnums.cs" />
+    <Compile Include="Enums\ContractFieldSettings.cs" />
     <Compile Include="Enums\CreatedByApplications.cs" />
     <Compile Include="Enums\ReportDataLineType.cs" />
     <Compile Include="Enums\UserGroups.cs" />

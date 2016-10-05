@@ -1,24 +1,37 @@
 ﻿@using System.Web.Optimization
+@using System.Web.Script.Serialization
 @model DH.Helpdesk.Web.Models.Contract.ContractIndexViewModel
 
 @Scripts.Render("~/bundles/contract")
+
+@{
+    var jsSerializer = new JavaScriptSerializer();    
+}
 <script type="text/javascript">
     window.Params = {
         ShowSearchResult: '@Url.Action("_ContractsIndexRows", "Contracts", "")',
-    };
+        SaveContractFieldsSettings: '@Url.Action("SaveContractFieldsSetting", "Contracts", "")',
+        IndexUrl: '@Url.Action("index", "Contracts", null)'
+    };  
+
+
 </script>
 <div class="secnavs fixed">
     <div class="pull-left">
         @*<ul class="secnav">
             <li>@Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation), "new", new { customerId = Model.Customer.Id }, new { @class = "btn" })</li>
-        </ul>*@
-    </div>    
+        </ul>*@                                      
+        </div>   
 </div>
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
-            <li class="active"><a href="#fragment-1">@Translation.Get("Avtal")</a></li>            
+            <li class="active" id="overview_Tab"><a href="#fragment-1">@Translation.Get("Avtal")</a></li> 
+             <li id="settings_tab">
+                    <a href="#fragment-2">@Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</a>
+             </li>           
         </ul>
+       
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment-1">
               <div>
@@ -57,7 +70,10 @@
                   </table>  
               </div>
               @Html.Partial("_ContractsIndexRows", Model.Rows)
-            </div>            
+            </div>
+            <div class="tab-pane tab-pane-border" id="fragment-2">
+              @Html.Partial("_Settings", Model.Setting)                                                                     
+            </div>
         </div>        
     </div>
 </div>

@@ -54,8 +54,58 @@ namespace DH.Helpdesk.Web.Controllers
 
             model.ContractCategories = contractcategories.OrderBy(a => a.Name).ToList();
             model.Suppliers = suppliers.OrderBy(s => s.Name).ToList();
+            model.Setting = GetSettingsModel(customer.Id);
            
             return this.View(model);
+        }
+
+        [HttpPost]
+        public JsonResult SaveContractFieldsSetting(JSContractsSettingRowViewModel[] contractSettings)
+        {
+            int currentCustomerId;
+            if (SessionFacade.CurrentCustomer == null)
+                return Json(new { state = false, message = "Session Timeout. Please refresh the page!" }, JsonRequestBehavior.AllowGet);
+            else
+                currentCustomerId = SessionFacade.CurrentCustomer.Id;
+
+            var allFieldsSettingRows = _contractService.GetContractsSettingRows(currentCustomerId);
+            
+            try
+            {
+                var contractSettingModels = new List<ContractsSettingRowModel>();
+                var now = DateTime.Now;
+                
+                for (int i = 0; i < contractSettings.Length; i++)
+                {
+                    var oldRow = allFieldsSettingRows.Where(s => s.ContractField.ToLower() == contractSettings[i].ContractField).FirstOrDefault();
+                    var createdDate = oldRow == null ? now : oldRow.CreatedDate;
+                    var id = oldRow == null ? 0 : oldRow.Id;
+                    var contractSettingModel = new ContractsSettingRowModel
+                    (
+                        id,
+                        currentCustomerId,
+                        contractSettings[i].ContractField,
+                        Convert.ToBoolean(contractSettings[i].Show),
+                        Convert.ToBoolean(contractSettings[i].ShowInList),
+                        contractSettings[i].Caption_Sv != null ? contractSettings[i].Caption_Sv : string.Empty,
+                        contractSettings[i].Caption_Eng != null ? contractSettings[i].Caption_Eng : string.Empty,
+                        Convert.ToBoolean(contractSettings[i].Required),
+                        createdDate,
+                        now
+                   );
+
+                    contractSettingModels.Add(contractSettingModel);
+                }
+
+                this._contractService.SaveContractSettings(contractSettingModels);
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new {state = false, message=ex.Message}, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new { state = true, message = Translation.GetCoreTextTranslation("Saved success!") }, JsonRequestBehavior.AllowGet);
         }
 
         private ContractsIndexRowsModel GetIndexRowModel(int customerId, ContractSelectedFilter selectedFilter)
@@ -96,6 +146,34 @@ namespace DH.Helpdesk.Web.Controllers
             return model;
         }
 
+        private ContractsSettingViewModel GetSettingsModel(int customerId)
+        {
+            var model = new ContractsSettingViewModel();
+            model.customer_id = customerId;
+            model.language_id = SessionFacade.CurrentLanguageId;
+
+            model.Languages.Add(new SelectListItem() { Selected = true, Text = "SV", Value = "1" });
+            model.Languages.Add(new SelectListItem() { Selected = false, Text = "EN", Value = "2" });
+
+            var settingsRows = new List<ContractsSettingRowViewModel>();
+            var allFieldsSettingRows = _contractService.GetContractsSettingRows(customerId);
+            settingsRows = allFieldsSettingRows.Select(s => new ContractsSettingRowViewModel
+            {
+                Id = s.Id,
+                ContractField = s.ContractField.ToLower(),
+                ContractFieldLable = s.ContractFieldLable,
+                ContractFieldLable_Eng = s.ContractFieldLable_Eng,
+                Show = s.show,
+                ShowInList = s.showInList,                
+                Required = s.reguired              
+            }).ToList();
+            //settingsRows.Add(
+            model.SettingRows = settingsRows;
+            return model;
+
+
+        }
+        
         //
         // GET: /Contract/Details/5
 

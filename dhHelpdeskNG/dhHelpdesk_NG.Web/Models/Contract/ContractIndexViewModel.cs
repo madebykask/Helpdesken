@@ -22,6 +22,7 @@ namespace DH.Helpdesk.Web.Models.Contract
         public List<ContractCategory> ContractCategories { get; set; }
         public List<Supplier> Suppliers { get; set; }
         public ContractsIndexRowsModel Rows { get; set; }
+        public ContractsSettingViewModel Setting { get; set; }
     }
 
     public sealed class ContractsIndexRowModel
