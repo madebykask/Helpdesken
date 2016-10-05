@@ -8,6 +8,8 @@
 
         public static int CURRENT_VALUE = int.MinValue;
 
-        public static string Email_Seprator = ";"; 
+        public static string Email_Separator = ";";
+
+        public static char[] Value_Separator = {','}; 
     }
 }
