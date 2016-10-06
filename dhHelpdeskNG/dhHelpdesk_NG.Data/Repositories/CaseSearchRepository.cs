@@ -935,7 +935,11 @@
                     }
 
                     sort = ", OrderNum";
-                    orderBy.Add(sort);                    
+                    orderBy.Add(sort);
+                    if (s != null && !s.Ascending)
+                    {
+                        orderBy.Add("desc");
+                    }
                 }
                 else
                 {
