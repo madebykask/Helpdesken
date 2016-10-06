@@ -27,8 +27,22 @@
                     <td></td>
                     <td>@row.ContractCategory.Name</td>
                     <td>@row.Supplier.Name</td>
-                    <td>@row.Department.DepartmentName</td>
-                    <td>@row.ResponsibleUser.SurName @row.ResponsibleUser.FirstName</td>
+                    
+                     @if (row.Department != null)
+                    {
+                        <td>@row.Department.DepartmentName</td>
+                    }else
+                    {
+                        <td></td>
+                    }
+                    
+                    @if (row.ResponsibleUser != null)
+                    {
+                        <td>@row.ResponsibleUser.SurName @row.ResponsibleUser.FirstName</td>
+                    }else
+                    {
+                        <td></td>
+                    }
                     @if (row.ContractStartDate.HasValue)
                     {
                         <td>@row.ContractStartDate.Value.ToShortDateString()</td>
