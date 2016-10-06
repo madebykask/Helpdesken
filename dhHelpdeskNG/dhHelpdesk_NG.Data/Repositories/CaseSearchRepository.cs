@@ -470,7 +470,7 @@
                 }
 
                 return structToSort.OrderByDescending(it => it.val).ThenBy(it => it.dVal).Select(it => csr[it.index]).ToList();
-            }
+            }            
 
             return csr;
         }
@@ -803,6 +803,8 @@
 
             columns.Add("tblCase.Priority_Id");
             columns.Add("tblPriority.PriorityName");
+            columns.Add("tblPriority.Priority");
+            columns.Add("tblPriority.OrderNum");
             columns.Add("coalesce(tblPriority.SolutionTime, 0) as SolutionTime");
             columns.Add("tblCase.WatchDate");
             columns.Add("tblCaseType.RequireApproving");
@@ -914,18 +916,35 @@
             }
 
             // ORDER BY ...
-           var orderBy = new List<string> { "order by" };
+            var orderBy = new List<string> { "order by" };
             string sort = (s != null && !string.IsNullOrEmpty(s.SortBy)) ? s.SortBy.Replace("_temporary_.", string.Empty) : string.Empty;
+
             if (string.IsNullOrEmpty(sort))
             {
                 orderBy.Add(" CaseNumber desc");
             }
             else
             {
-                orderBy.Add(sort);
-                if (s != null && !s.Ascending)
+                if (string.Compare(sort, "Priority_Id", false, CultureInfo.InvariantCulture) == 0)
                 {
-                    orderBy.Add("desc");
+                    sort = "[Priority]";
+                    orderBy.Add(sort);
+                    if (s != null && !s.Ascending)
+                    {
+                        orderBy.Add("desc");
+                    }
+
+                    sort = ", OrderNum";
+                    orderBy.Add(sort);                    
+                }
+                else
+                {
+
+                    orderBy.Add(sort);
+                    if (s != null && !s.Ascending)
+                    {
+                        orderBy.Add("desc");
+                    }
                 }
 
                 if (sort.ToLower() != "casenumber")
