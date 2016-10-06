@@ -1362,11 +1362,11 @@
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_CellPhone]", text));
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Place]", text));
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Caption]", text));                    
-                    sb.AppendFormat(" OR [tblCase].[Description] LIKE '%{0}%'", safeText);
+                    sb.AppendFormat(" OR [tblCase].[Description] LIKE N'%{0}%'", safeText);
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Miscellaneous]", text));
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblDepartment].[Department]", text));
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblDepartment].[DepartmentId]", text));
-                    sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblLog] WHERE [tblLog].[Text_Internal] LIKE '%{0}%' OR [tblLog].[Text_External] LIKE '%{0}%'))", safeText);
+                    sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblLog] WHERE [tblLog].[Text_Internal] LIKE N'%{0}%' OR [tblLog].[Text_External] LIKE N'%{0}%'))", safeText);
                     sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblFormFieldValue] WHERE {0}))", this.GetSqlLike("FormFieldValue", text));
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[ReferenceNumber]", text));
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[InvoiceNumber]", text));
@@ -1392,7 +1392,7 @@
             {
                 var text = f.CaptionSearch;
                 sb.Append(" AND (");
-                sb.AppendFormat("LOWER({0}) LIKE '%{1}%'", "[tblCase].[Caption]", text);
+                sb.AppendFormat("LOWER({0}) LIKE N'%{1}%'", "[tblCase].[Caption]", text);
                 sb.Append(") ");
             }
 
@@ -1458,7 +1458,7 @@
 
                 for (var i = 0; i < words.Length; i++)
                 {
-                    sb.AppendFormat("(LOWER({0}) LIKE '%{1}%')", field, words[i].Trim());
+                    sb.AppendFormat("(LOWER({0}) LIKE N'%{1}%')", field, words[i].Trim());
                     if (words.Length > 1 && i < words.Length - 1)
                     {
                         sb.Append(string.Format(" {0} ", combinator));
