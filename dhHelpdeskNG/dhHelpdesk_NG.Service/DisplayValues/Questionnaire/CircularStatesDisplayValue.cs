@@ -25,8 +25,8 @@
                     return Translator.Translate("Ready to send");
                 case CircularStates.Sent:
                     return Translator.Translate("Sent");
-                default: 
-                    return string.Empty;
+                default:
+                    return Translator.Translate("Under bearbetning");
             }
         }
     }

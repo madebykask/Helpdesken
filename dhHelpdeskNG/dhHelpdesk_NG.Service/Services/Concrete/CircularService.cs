@@ -97,11 +97,12 @@
 
                 Map(businessModel, entity);
                 entity.Id = businessModel.Id;
+                entity.ChangedDate = businessModel.CreatedDate;
+                entity.CircularName = businessModel.CircularName;
+
                 entity.Questionnaire_Id = businessModel.QuestionnaireId;
                 entity.Status = businessModel.Status;
-                entity.ChangedDate = businessModel.CreatedDate;
                 entity.CreatedDate = businessModel.CreatedDate;
-                entity.CircularName = businessModel.CircularName;
 
                 foreach (var id in businessModel.RelatedCaseIds)
                 {
@@ -110,7 +111,7 @@
                 }
 
                 circularRepository.Add(entity);
-
+                
                 uof.Save();
             }
         }
@@ -126,12 +127,26 @@
                 Map(businessModel, entity);
                 entity.Id = businessModel.Id;
                 entity.ChangedDate = businessModel.ChangedDate;
+                entity.CircularName = businessModel.CircularName;
+
+                var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
+
+                var current = circularPartRepository.GetAll().Where(x => x.QuestionnaireCircular_Id == businessModel.Id).ToList();
+
+                foreach (var toDel in current.Where(x => !businessModel.RelatedCaseIds.Exists(y => y == x.Case_Id)).ToList())
+                {
+                    circularPartRepository.Delete(toDel);
+                }
+                foreach (var toIns in businessModel.RelatedCaseIds.Where(x => !current.Exists(y => y.Case_Id == x)).ToList())
+                {
+                    circularPartRepository.Add(new QuestionnaireCircularPartEntity { QuestionnaireCircular_Id = businessModel.Id, CreatedDate = businessModel.ChangedDate, Case_Id = toIns });
+                }
 
                 circularRepository.Update(
-                    entity,
-                    x => x.CreatedDate,
-                    x => x.Questionnaire_Id,
-                    x => x.Status);
+                entity,
+                x => x.CreatedDate,
+                x => x.Questionnaire_Id,
+                x => x.Status);
 
                 uof.Save();
             }

@@ -1,45 +1,45 @@
 ﻿@using DH.Helpdesk.Common.Enums
-@model DH.Helpdesk.Web.Models.Questionnaire.Input.EditCircularModel
+@model DH.Helpdesk.Web.Models.Questionnaire.Input.CircularModel
 @{
-    ViewBag.Title = "EditCircular";
+    ViewBag.Title = "Circular";
 }
-
-<script>
-    $(function () {
-        $("#save_button").click(function() {
-            $("#circular_edit_form").submit();
-        });
-    })
-</script>
 
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
             <li>
-                <button value="@Translation.Get("Spara")" class="btn" id="save_button">@Translation.Get("Spara")</button>
+                <button value="@Translation.Get("Spara")" class="btn" id="subbut">@Translation.Get("Spara")</button>
             </li>
             <li>
-                @if (Model.State.Value != CircularStates.Sent)
+                <button value="@Translation.Get("Skapa urval")" class="btn" id="async_subbut">@Translation.Get("Skapa urval")</button>
+            </li>
+            <li>
+                <a href="@Url.Action("CircularOverview", new { questionnaireId = Model.QuestionnaireId, state = 0 })" class="btn">
+                    @Translation.Get("Avbryt")
+                </a>
+            </li>
+            @if (Model.Id != 0)
+            {
+                <li>
+                @if (Model.State.Value != CircularStates.Sent && Model.State.Value != CircularStates.None)
                 {
                     @Html.ActionLink(Translation.Get("Ta bort"), "DeleteCircular", new { questionnaireId = Model.QuestionnaireId, stateId = Model.State, circularId = Model.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) + "?" })
                 }
-            </li>
-            <li>
-                @Html.ActionLink(Translation.Get("Avbryt"), "CircularOverview", new { questionnaireId = Model.QuestionnaireId}, new { @class = "btn" })
-            </li>
-            <li>
-                @{
+                </li>
+                <li>
+                    @{
                     switch (Model.State.Value)
                     {
                         case CircularStates.ReadyToSend:
-                            @Html.ActionLink(Translation.Get("Skicka enkät"), "Send", new { circularId = Model.Id }, new { @class = "btn" })
+                                @Html.ActionLink(Translation.Get("Skicka enkät"), "Send", new { circularId = Model.Id }, new { @class = "btn" })
                             break;
                         case CircularStates.Sent:
-                            @Html.ActionLink(Translation.Get("Skicka påminnelse"), "Remind", new { circularId = Model.Id }, new { @class = "btn" })
+                                @Html.ActionLink(Translation.Get("Skicka påminnelse"), "Remind", new { circularId = Model.Id }, new { @class = "btn" })
                             break;
                     }
-                }
-            </li>
+                    }
+                </li>
+            }
         </ul>
     </div>
 </div>
@@ -48,7 +48,7 @@
     <div class="container">
         <ul class="nav nav-tabs">
             <li class="active">
-                <a href="#fragment-1">@Translation.Get("utskick")</a>
+                <a href="#fragment-1">@Translation.Get("Utskick")</a>
             </li>
         </ul>
         <div class="tab-content">
@@ -57,21 +57,20 @@
                     <h4>@Translation.Get("Urval")</h4>
                     <div class="row">
                         <div class="span12">
-                            @using (Html.BeginForm("EditCircular", "Questionnaire", FormMethod.Post, new { id = "circular_edit_form" }))
+                            @using (Html.BeginForm("EditCircular", "Questionnaire", FormMethod.Post, new { id = "circular_new_form" }))
                             {
+                                @Html.HiddenFor(m => m.Id)
+                                @Html.HiddenFor(m => m.QuestionnaireId)
+                                @Html.HiddenFor(m => m.State)
+
                                 <table class="tableform">
                                     <tr>
                                         <td class="span3">
-
-                                            @Html.HiddenFor(m => m.Id)
-                                            @Html.HiddenFor(m => m.QuestionnaireId)
-                                            @Html.HiddenFor(m => m.State)
-
                                             @Translation.Get("Namn")
-                                      
                                         </td>
                                         <td class="span9">
-                                            @Html.EditorFor(model => model.CircularName)
+                                            @Html.TextBoxFor(model => model.CircularName)
+                                            @Html.ValidationMessageFor(model => model.CircularName)
                                         </td>
                                     </tr>
                                     <tr>
@@ -84,14 +83,181 @@
                                     </tr>
                                 </table>
                             }
+                            @using (Ajax.BeginForm("CaseRowGrid", null, new AjaxOptions { UpdateTargetId = "case_grid_container" }, new { id = "circular_case_filter_form" }))
+                            {
+                                @Html.HiddenFor(m => m.QuestionnaireId)
+
+                                <div>
+                                    @Html.CheckBoxFor(x => x.IsUniqueEmail)
+                                    @Translation.Get("Endast unika e-postadresser")
+
+                                    <table class="tableform">
+                                        <tr>
+                                            <td class="span3">
+                                                @Translation.Get("Avslutsdatum")
+                                            </td>
+                                            <td class="span9">
+                                                @Html.EditorFor(model => model.FinishingDateFrom, "DatePicker", new { id = "finishing_date_from_datepicker" })
+                                                &nbsp; - &nbsp;
+                                                @Html.EditorFor(model => model.FinishingDateTo, "DatePicker", new { id = "finishing_date_to_datepicker" })
+                                            </td>
+                                        </tr>
+
+                                    </table>
+
+                                   <table>
+                                        <tr>
+                                            <td class="span3">
+                                                @Translation.Get("Avdelning")
+                                            </td>
+                                            <td class="span9">
+                                                @Html.DropDownListFor(model => model.SelectedDepartments, Model.AvailableDepartments, new { multiple = "multiple", @class = "chosen-select" })
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                    <table>
+                                        <tr>
+                                            <td class="span3">
+                                                @Translation.Get("Ärendetyp")
+                                            </td>
+                                            <td class="span9">
+                                                @Html.DropDownListFor(model => model.SelectedCaseTypes, Model.AvailableCaseTypes, new { multiple = "multiple", @class = "chosen-select" })
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                    <table>
+                                        <tr>
+                                            <td class="span3">
+                                                @Translation.Get("Produktområde")
+                                            </td>
+                                            <td class="span9">
+                                                @Html.DropDownListFor(model => model.SelectedProductArea, Model.AvailableProductArea, new { multiple = "multiple", @class = "chosen-select" })
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                    <table>
+                                        <tr>
+                                            <td class="span3">
+                                                @Translation.Get("Driftgrupp")
+                                            </td>
+                                            <td class="span9">
+                                                @Html.DropDownListFor(model => model.SelectedWorkingGroups, Model.AvailableWorkingGroups, new { multiple = "multiple", @class = "chosen-select" })
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                    <table class="tableform">
+                                        <tr>
+                                            <td class="span2">
+                                                @Translation.Get("Urval")
+                                            </td>
+                                            <td class="span6">
+                                               @Translation.Get("Selektera ut") @Html.DropDownList("procent", Model.Procent, new { style = "width: 60px" }) @Translation.Get("procent av tillgängliga ärenden")
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            }
+
                         </div>
                     </div>
                 </div>
-                <div id="case_grid_container">
-                    @Html.Partial("_CircularPartOverviewWithDelete", Model.ConnectedCases, new ViewDataDictionary { { "QuestionnaireId", Model.QuestionnaireId } })
-                </div>
+                @using (Html.BeginForm("EditCircular", "Questionnaire", FormMethod.Post, new { id = "circular_case_grid_form" }))
+                {
+                    <div id="case_grid_container">
+                        @Html.Partial("_CircularPartOverviewWithDelete", Model.ConnectedCases, new ViewDataDictionary { { "QuestionnaireId", Model.QuestionnaireId } })
+                    </div>
+                }
             </div>
         </div>
     </div>
 </div>
 
+<script type="text/javascript">
+
+    $(function () {
+        $("#subbut").click(function () {
+
+            if (!$("#circular_new_form").valid()) {
+                return;
+            }
+
+            $.each($('#circular_case_grid_form input').serializeArray(), function (i, obj) {
+                $('<input type="hidden">').prop(obj).appendTo($('#circular_new_form'));
+            });
+
+            $("#circular_new_form").submit();
+        });
+
+        $("#async_subbut").click(function () {
+            $("#circular_case_filter_form").submit();
+        });
+    });
+
+    //function submitForm() {
+    //    $("#SelectedDepartments option").attr("selected", "selected");
+    //    $("#SelectedCaseTypes option").attr("selected", "selected");
+    //    $("#SelectedProductArea option").attr("selected", "selected");
+    //    $("#SelectedWorkingGroups option").attr("selected", "selected");
+    //    alert("Hiii");
+    //    document.getElementById('ModelMode').value = 1;
+    //    $("#circular_new_form").submit();
+    //}
+
+    $("#addDPs").click(function () {
+        $("#DPsAvailable option:selected").remove().appendTo("#SelectedDepartments");
+        $("#DPsAvailable").get(0).selectedIndex = -1;
+        $("#SelectedDepartments").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#removeDPs").click(function () {
+        $("#SelectedDepartments option:selected").remove().appendTo("#DPsAvailable");
+        $("#DPsAvailable").get(0).selectedIndex = -1;
+        return false;
+    });
+
+
+    $("#addCTs").click(function () {
+        $("#CTsAvailable option:selected").remove().appendTo("#SelectedCaseTypes");
+        $("#CTsAvailable").get(0).selectedIndex = -1;
+        $("#SelectedCaseTypes").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#removeCTs").click(function () {
+        $("#SelectedCaseTypes option:selected").remove().appendTo("#CTsAvailable");
+        $("#CTsAvailable").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#addPAs").click(function () {
+        $("#PAsAvailable option:selected").remove().appendTo("#SelectedProductArea");
+        $("#PAsAvailable").get(0).selectedIndex = -1;
+        $("#SelectedProductArea").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#removePAs").click(function () {
+        $("#SelectedProductArea option:selected").remove().appendTo("#PAsAvailable");
+        $("#PAsAvailable").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#addWGs").click(function () {
+        $("#WGsAvailable option:selected").remove().appendTo("#SelectedWorkingGroups");
+        $("#WGsAvailable").get(0).selectedIndex = -1;
+        $("#SelectedWorkingGroups").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#removeWGs").click(function () {
+        $("#SelectedWorkingGroups option:selected").remove().appendTo("#WGsAvailable");
+        $("#WGsAvailable").get(0).selectedIndex = -1;
+        return false;
+    });
+
+</script>
