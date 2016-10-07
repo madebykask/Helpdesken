@@ -634,6 +634,7 @@
                 detailed.Questionnaire.Name,
                 detailed.Questionnaire.Description,
                 detailed.CaseId,
+                detailed.Caption,
                 questionnarieQuestionsModel);
 
             var questionnarieViewModel = new QuestionnaireViewModel(questionnarieModel, false, guid);
