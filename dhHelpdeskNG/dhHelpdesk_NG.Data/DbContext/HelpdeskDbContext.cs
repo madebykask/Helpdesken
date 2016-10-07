@@ -49,6 +49,7 @@
     using OperatingSystemConfiguration = DH.Helpdesk.Dal.EntityConfigurations.OperatingSystemConfiguration;
     using DH.Helpdesk.Domain.BusinessRules;
     using DH.Helpdesk.Dal.EntityConfigurations.BusinessRule;
+    using DH.Helpdesk.Domain.Orders;
     
 
     public class HelpdeskDbContext : DbContext, IDbContext
@@ -357,6 +358,8 @@
         public DbSet<OperationLogEMailLog> OperationLogEMailLogs { get; set; }
 
         public DbSet<OrderEMailLog> OrderEMailLogs { get; set; }
+
+        public DbSet<OrderHistoryEntity> OrderHistories { get; set; }
 
         public DbSet<OrderFieldSettings> OrderFieldSettings { get; set; }
 

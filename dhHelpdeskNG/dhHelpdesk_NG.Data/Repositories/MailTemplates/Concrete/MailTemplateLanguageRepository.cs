@@ -38,7 +38,7 @@ namespace DH.Helpdesk.Dal.Repositories.MailTemplates.Concrete
                 select l).FirstOrDefault();
         }
 
-        public MailTemplateLanguageEntity GetMailTemplateLanguageForCustomer(int Id, int customerId, int languageId, int orderTypeId)
+        public MailTemplateLanguageEntity GetMailTemplateLanguageForCustomer(int Id, int customerId, int languageId, int? orderTypeId)
         {
             return (from m in this.DataContext.MailTemplates
                     join l in this.DataContext.MailTemplateLanguages on m.Id equals l.MailTemplate_Id
