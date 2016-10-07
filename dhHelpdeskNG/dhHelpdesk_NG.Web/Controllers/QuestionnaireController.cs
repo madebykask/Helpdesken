@@ -778,7 +778,8 @@
                         c.Date,
                         c.State,
                         c.TotalParticipants,
-                        c.SentParticipants)).ToList();
+                        c.SentParticipants,
+                        c.AnsweredParticipants)).ToList();
             return circularOverviews;
         }
 

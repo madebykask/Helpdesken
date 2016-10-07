@@ -23,12 +23,13 @@
                             date = c.ChangedDate,
                             state = c.Status,
                             total = c.QuestionnaireCircularPartEntities.Count,
-                            sent = c.QuestionnaireCircularPartEntities.Count(x => x.SendDate != null)
+                            sent = c.QuestionnaireCircularPartEntities.Count(x => x.SendDate != null),
+                            answered = (int?)c.QuestionnaireCircularPartEntities.Sum(x => x.QuestionnaireResultEntities.Count)
                         }).ToList();
 
             List<CircularOverview> overviews =
                 anonymus.Select(
-                    q => new CircularOverview(q.Id, q.circularName, q.date, (CircularStates)q.state, q.total, q.sent))
+                    q => new CircularOverview(q.Id, q.circularName, q.date, (CircularStates)q.state, q.total, q.sent, q.answered ?? 0))
                     .ToList();
             return overviews;
         }

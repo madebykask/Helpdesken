@@ -81,6 +81,8 @@
                     query = query.GetByState(state);
                 }
 
+
+
                 List<CircularOverview> overviews = query.MapToOverviews();
 
                 return overviews;

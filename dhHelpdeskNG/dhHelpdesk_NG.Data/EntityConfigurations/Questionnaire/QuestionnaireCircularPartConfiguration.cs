@@ -20,6 +20,10 @@
                 .HasForeignKey(c => c.QuestionnaireCircular_Id)
                 .WillCascadeOnDelete(false);
 
+            this.HasMany(s => s.QuestionnaireResultEntities)
+                .WithRequired(s => s.QuestionnaireCircularPart)
+                .HasForeignKey(s => s.QuestionnaireCircularPartic_Id);
+
             this.Property(c => c.Case_Id).IsOptional();
             
             this.HasRequired(c => c.Case)
