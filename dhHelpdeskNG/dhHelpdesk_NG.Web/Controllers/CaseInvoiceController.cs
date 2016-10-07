@@ -225,9 +225,11 @@
         {
             try
             {
+
                 if (string.IsNullOrEmpty(caseInvoiceArticle))
                     return Json(new { result = "Error", data = "Invalid Invoice to save!" });
 
+                caseInvoiceArticle = caseInvoiceArticle.Replace("%3C", "<");
                 if (SessionFacade.CurrentUser == null)
                     return Json(new { result = "Error", data = "Invoice is not available, refresh the page and try it again." });
 

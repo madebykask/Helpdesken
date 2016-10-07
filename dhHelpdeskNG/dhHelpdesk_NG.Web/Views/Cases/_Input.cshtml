@@ -216,6 +216,7 @@
                         @Html.Hidden("LastProductAreaId", Model.case_.ProductArea_Id)
                         @Html.Hidden("LastProjectId", Model.case_.Project_Id)
                         @Html.Hidden("CaseHasInvoiceOrder", "")
+                        @Html.Hidden("IsAnyFileAdded", "0")
 
                         @Html.HiddenFor(model => Model.CaseLock.LockGUID)
                         @*<input type="button" id="sla_test" value="SLA Test" onclick="CalcSLA();" />*@

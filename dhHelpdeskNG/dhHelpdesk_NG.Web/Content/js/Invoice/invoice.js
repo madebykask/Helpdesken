@@ -663,7 +663,17 @@ $(function () {
 
         IsProjectChanged: function () {
             var lastProjectId = $('#LastProjectId').val();
-            if (this.ProjectElement.val() != lastProjectId)
+            var curProjectId = this.ProjectElement.val();
+            curProjectId = curProjectId == undefined ? "" : curProjectId;
+            if (curProjectId != lastProjectId)
+                return true;
+            else
+                return false;
+        },
+
+        IsAnyFileAdded: function () {
+            var isFileAdded = $('#IsAnyFileAdded').val();
+            if (isFileAdded == "1")
                 return true;
             else
                 return false;
@@ -827,8 +837,10 @@ $(function () {
 
 
             var res = "";
+            var caseArticleData = this.GetSavedInvoices();
+            caseArticleData = caseArticleData.replace(/\</g, "%3C");
             $.post('/CaseInvoice/SaveCaseInvoice/', {
-                'caseInvoiceArticle': this.GetSavedInvoices(),
+                'caseInvoiceArticle': caseArticleData,
                 'customerId': this.CustomerId,
                 'caseId': this.CaseId,
                 'caseKey': this.CaseKey,
@@ -1886,7 +1898,7 @@ $(function () {
                     var article = articles[i];
                     var artDesc = article.Description != null ? article.Description : "";
 
-                    var text = article.GetFullName();
+                    var text = article.GetFullName(); 
                     if (artDesc != "")
                         text = artDesc + articleDescriptionDelimiter + text;
 
@@ -2010,7 +2022,7 @@ $(function () {
                 .addClass("btn");
 
             button.click(function () {
-                if (th.IsNewCase() || th.IsProductAreaChanged() || th.IsProjectChanged()) {
+                if (th.IsNewCase() || th.IsProductAreaChanged() || th.IsProjectChanged() || th.IsAnyFileAdded()) {
                     dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("Var vänlig spara ärendet och försök igen!"));
                     return;
                 }
@@ -3892,7 +3904,7 @@ $(function () {
             var that = {};
             my = my || {};
 
-            var maxFileSizeMb = spec.maxFileSizeMb || 30;
+            var maxFileSizeMb = spec.maxFileSizeMb || 10;
             var allowedFileTypes = spec.allowedFileTypes || ["application/pdf"];
             var caseId = spec.caseId || '';
             var files = spec.files || [];
@@ -3913,7 +3925,7 @@ $(function () {
                 return files;
             };
 
-            var getFile = function (fileName) { //this has a problem if there is a weird filename, example "Ä(4).pdf" todo: fix this
+            var getFile = function (fileName) { 
                 var fs = getFiles();
                 for (var i = 0; i < fs.length; i++) {
                     var f = fs[i];
