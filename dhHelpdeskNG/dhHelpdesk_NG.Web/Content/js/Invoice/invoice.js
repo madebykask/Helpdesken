@@ -611,6 +611,22 @@ $(function () {
 
         invoiceButtonPureCaption: "",
 
+        OtherReferenceRequired: null,
+
+        OtherReferenceMandatoryFields: function () {            
+            this.ReportedBy = false;
+            this.Persons_Name = false;
+            this.Persons_Email = false;
+            this.Persons_Phone = false;
+            this.Persons_CellPhone = false;
+            this.Region_Id = false;
+            this.Department_Id = false;
+            this.OU_Id = false;
+            this.Place = false;
+            this.UserCode = false;
+            this.CostCentre = false;
+        },
+
         ResetAddArticlePlace: function () {
             var articleEl = this._container.find(".chosen-select.articles-params-article");
             articleEl.find('option:selected').prop('selected', false);
@@ -2906,49 +2922,51 @@ $(function () {
                 model.IsCredited = this.CreditForOrder_Id != null;
                 model.InvoicedByTitle = dhHelpdesk.Common.Translate("Skickat av");
                 ////////initiator field
+
                 model.ReportedBy = this.ReportedBy != null ? this.ReportedBy : "";
                 model.ShowReportedBy = dhHelpdesk.CaseArticles.ShowCaseField('ReportedBy')
-                model.RequiredReportedBy = dhHelpdesk.CaseArticles.RequiredCaseField('ReportedBy')
+                model.RequiredReportedBy = dhHelpdesk.CaseArticles.OtherReferenceRequired.ReportedBy;
 
                 model.Persons_Name = this.Persons_Name != null ? this.Persons_Name : "";
                 model.ShowPersons_Name = dhHelpdesk.CaseArticles.ShowCaseField('Persons_Name');
-                model.RequiredPersons_Name = dhHelpdesk.CaseArticles.RequiredCaseField('Persons_Name')
+                model.RequiredPersons_Name = dhHelpdesk.CaseArticles.OtherReferenceRequired.Persons_Name;
 
                 model.Persons_Email = this.Persons_Email != null ? this.Persons_Email : "";
                 model.ShowPersons_Email = dhHelpdesk.CaseArticles.ShowCaseField('Persons_Email');
-                model.RequiredPersons_Email = dhHelpdesk.CaseArticles.RequiredCaseField('Persons_Email')
+                model.RequiredPersons_Email = dhHelpdesk.CaseArticles.OtherReferenceRequired.Persons_Email;
 
                 model.Persons_Phone = this.Persons_Phone != null ? this.Persons_Phone : "";
                 model.ShowPersons_Phone = dhHelpdesk.CaseArticles.ShowCaseField('Persons_Phone');
-                model.RequiredPersons_Phone = dhHelpdesk.CaseArticles.RequiredCaseField('Persons_Phone')
+                model.RequiredPersons_Phone = dhHelpdesk.CaseArticles.OtherReferenceRequired.Persons_Phone;
 
                 model.Persons_CellPhone = this.Persons_CellPhone != null ? this.Persons_CellPhone : "";
                 model.ShowPersons_CellPhone = dhHelpdesk.CaseArticles.ShowCaseField('Persons_CellPhone');
-                model.RequiredPersons_CellPhone = dhHelpdesk.CaseArticles.RequiredCaseField('Persons_CellPhone')
+                model.RequiredPersons_CellPhone = dhHelpdesk.CaseArticles.OtherReferenceRequired.Persons_CellPhone;
 
                 model.Region_Id = this.Region_Id != null ? this.Region_Id : "";
                 model.ShowRegion_Id = dhHelpdesk.CaseArticles.ShowCaseField('Region_Id');
-                model.RequiredRegion_Id = dhHelpdesk.CaseArticles.RequiredCaseField('Region_Id')
+                model.RequiredRegion_Id = dhHelpdesk.CaseArticles.OtherReferenceRequired.Region_Id
 
                 model.Department_Id = this.Department_Id != null ? this.Department_Id : "";
                 model.ShowDepartment_Id = dhHelpdesk.CaseArticles.ShowCaseField('Department_Id');
-                model.RequiredDepartment_Id = dhHelpdesk.CaseArticles.RequiredCaseField('Department_Id')
+                model.RequiredDepartment_Id = dhHelpdesk.CaseArticles.OtherReferenceRequired.Department_Id;
 
                 model.OU_Id = this.OU_Id != null ? this.OU_Id : "";
                 model.ShowOU_Id = dhHelpdesk.CaseArticles.ShowCaseField('OU_Id');
-                model.RequiredOU_Id = dhHelpdesk.CaseArticles.RequiredCaseField('OU_Id')
+                model.RequiredOU_Id = dhHelpdesk.CaseArticles.OtherReferenceRequired.OU_Id;
 
                 model.Place = this.Place != null ? this.Place : "";
                 model.ShowPlace = dhHelpdesk.CaseArticles.ShowCaseField('Place');
-                model.RequiredPlace = dhHelpdesk.CaseArticles.RequiredCaseField('Place')
+                model.RequiredPlace = dhHelpdesk.CaseArticles.OtherReferenceRequired.Place;
 
                 model.UserCode = this.UserCode != null ? this.UserCode : "";
                 model.ShowUserCode = dhHelpdesk.CaseArticles.ShowCaseField('UserCode');
-                model.RequiredUserCode = dhHelpdesk.CaseArticles.RequiredCaseField('UserCode')
+                model.RequiredUserCode = dhHelpdesk.CaseArticles.OtherReferenceRequired.UserCode;
 
+                
                 model.CostCentre = this.CostCentre != null ? this.CostCentre : "";
                 model.ShowCostCentre = dhHelpdesk.CaseArticles.ShowCaseField('CostCentre');
-                model.RequiredCostCentre = dhHelpdesk.CaseArticles.RequiredCaseField('CostCentre')
+                model.RequiredCostCentre = dhHelpdesk.CaseArticles.OtherReferenceRequired.CostCentre;
 
                 model.TitleCaption = this.Caption;
 
@@ -3148,13 +3166,69 @@ $(function () {
 
             this.InvoiceValidate = function () {
                 var isValid = true;
-                var errorMessage = '';
+                var errorMessage = '';               
 
-                if (this._articles != null && this._articles.length > 0 && dhHelpdesk.Common.IsNullOrEmpty(this.CostCentre)) {
-                    errorMessage = dhHelpdesk.Common.TranslateCaseFields("CostCentre") + " " + dhHelpdesk.Common.Translate("saknas!") + " - " + this.Caption + " <br/> ";
+                if (this.IsInvoiced)
+                    return true;
+                
+                var requireds = dhHelpdesk.CaseArticles.OtherReferenceRequired;
+
+                if (this._articles != null && this._articles.length > 0 && dhHelpdesk.Common.IsNullOrEmpty(this.ReportedBy) && requireds.ReportedBy) {
+                    errorMessage += dhHelpdesk.Common.TranslateCaseFields("ReportedBy") + " " + dhHelpdesk.Common.Translate("saknas!") + " - " + this.Caption + " <br/> ";
                     isValid = false;
                 }
+
+                if (this._articles != null && this._articles.length > 0 && dhHelpdesk.Common.IsNullOrEmpty(this.Persons_Name) && requireds.Persons_Name) {
+                    errorMessage += dhHelpdesk.Common.TranslateCaseFields("Persons_Name") + " " + dhHelpdesk.Common.Translate("saknas!") + " - " + this.Caption + " <br/> ";
+                    isValid = false;
+                }
+
+                if (this._articles != null && this._articles.length > 0 && dhHelpdesk.Common.IsNullOrEmpty(this.Persons_Email) && requireds.Persons_Email) {
+                    errorMessage += dhHelpdesk.Common.TranslateCaseFields("Persons_Email") + " " + dhHelpdesk.Common.Translate("saknas!") + " - " + this.Caption + " <br/> ";
+                    isValid = false;
+                }
+
+                if (this._articles != null && this._articles.length > 0 && dhHelpdesk.Common.IsNullOrEmpty(this.Persons_Phone) && requireds.Persons_Phone) {
+                    errorMessage += dhHelpdesk.Common.TranslateCaseFields("Persons_Phone") + " " + dhHelpdesk.Common.Translate("saknas!") + " - " + this.Caption + " <br/> ";
+                    isValid = false;
+                }
+
+                if (this._articles != null && this._articles.length > 0 && dhHelpdesk.Common.IsNullOrEmpty(this.Persons_CellPhone) && requireds.Persons_CellPhone) {
+                    errorMessage += dhHelpdesk.Common.TranslateCaseFields("Persons_CellPhone") + " " + dhHelpdesk.Common.Translate("saknas!") + " - " + this.Caption + " <br/> ";
+                    isValid = false;
+                }
+
+                if (this._articles != null && this._articles.length > 0 && this.Region_Id <= 0 && requireds.Region_Id) {
+                    errorMessage += dhHelpdesk.Common.TranslateCaseFields("Region_Id") + " " + dhHelpdesk.Common.Translate("saknas!") + " - " + this.Caption + " <br/> ";
+                    isValid = false;
+                }
+
+                if (this._articles != null && this._articles.length > 0 && this.Department_Id <= 0  && requireds.Department_Id) {
+                    errorMessage += dhHelpdesk.Common.TranslateCaseFields("Department_Id") + " " + dhHelpdesk.Common.Translate("saknas!") + " - " + this.Caption + " <br/> ";
+                    isValid = false;
+                }                
                 
+                if (this._articles != null && this._articles.length > 0 && this.OU_Id <= 0 && requireds.OU_Id) {
+                    errorMessage += dhHelpdesk.Common.TranslateCaseFields("OU_Id") + " " + dhHelpdesk.Common.Translate("saknas!") + " - " + this.Caption + " <br/> ";
+                    isValid = false;
+                }
+
+                if (this._articles != null && this._articles.length > 0 && dhHelpdesk.Common.IsNullOrEmpty(this.CostCentre) && requireds.CostCentre) {
+                    errorMessage += dhHelpdesk.Common.TranslateCaseFields("CostCentre") + " " + dhHelpdesk.Common.Translate("saknas!") + " - " + this.Caption + " <br/> ";
+                    isValid = false;
+                }
+
+                if (this._articles != null && this._articles.length > 0 && dhHelpdesk.Common.IsNullOrEmpty(this.Place) && requireds.Place) {
+                    errorMessage += dhHelpdesk.Common.TranslateCaseFields("Place") + " " + dhHelpdesk.Common.Translate("saknas!") + " - " + this.Caption + " <br/> ";
+                    isValid = false;
+                }
+
+                if (this._articles != null && this._articles.length > 0 && dhHelpdesk.Common.IsNullOrEmpty(this.UserCode) && requireds.UserCode) {
+                    errorMessage += dhHelpdesk.Common.TranslateCaseFields("UserCode") + " " + dhHelpdesk.Common.Translate("saknas!") + " - " + this.Caption + " <br/> ";
+                    isValid = false;
+                }
+
+               
                 if (!isValid)
                     dhHelpdesk.Common.ShowErrorMessage(errorMessage);
 
@@ -3644,37 +3718,37 @@ $(function () {
             
             var extraCaption = "";
 
-            extraCaption = dhHelpdesk.CaseArticles.RequiredCaseField('ReportedBy') ? " *" : "";
+            extraCaption = dhHelpdesk.CaseArticles.OtherReferenceRequired.ReportedBy ? " *" : "";
             this.ReportedByTitle = dhHelpdesk.Common.TranslateCaseFields("ReportedBy") + extraCaption;
 
-            extraCaption = dhHelpdesk.CaseArticles.RequiredCaseField('Persons_Name') ? " *" : "";
+            extraCaption = dhHelpdesk.CaseArticles.OtherReferenceRequired.Persons_Name ? " *" : "";
             this.Persons_NameTitle = dhHelpdesk.Common.TranslateCaseFields("Persons_Name") + extraCaption;
 
-            extraCaption = dhHelpdesk.CaseArticles.RequiredCaseField('Persons_Email') ? " *" : "";
+            extraCaption = dhHelpdesk.CaseArticles.OtherReferenceRequired.Persons_Email ? " *" : "";
             this.Persons_EmailTitle = dhHelpdesk.Common.TranslateCaseFields("Persons_Email") + extraCaption;
 
-            extraCaption = dhHelpdesk.CaseArticles.RequiredCaseField('Persons_Phone') ? " *" : "";
+            extraCaption = dhHelpdesk.CaseArticles.OtherReferenceRequired.Persons_Phone ? " *" : "";
             this.Persons_PhoneTitle = dhHelpdesk.Common.TranslateCaseFields("Persons_Phone") + extraCaption;
 
-            extraCaption = dhHelpdesk.CaseArticles.RequiredCaseField('Persons_CellPhone') ? " *" : "";
+            extraCaption = dhHelpdesk.CaseArticles.OtherReferenceRequired.Persons_CellPhone ? " *" : "";
             this.Persons_CellPhoneTitle = dhHelpdesk.Common.TranslateCaseFields("Persons_CellPhone") + extraCaption;
 
-            extraCaption = dhHelpdesk.CaseArticles.RequiredCaseField('Region_Id') ? " *" : "";
+            extraCaption = dhHelpdesk.CaseArticles.OtherReferenceRequired.Region_Id? " *" : "";
             this.Region_IdTitle = dhHelpdesk.Common.TranslateCaseFields("Region_Id") + extraCaption;
 
-            extraCaption = dhHelpdesk.CaseArticles.RequiredCaseField('Department_Id') ? " *" : "";
+            extraCaption = dhHelpdesk.CaseArticles.OtherReferenceRequired.Department_Id ? " *" : "";
             this.Department_IdTitle = dhHelpdesk.Common.TranslateCaseFields("Department_Id") + extraCaption;
 
-            extraCaption = dhHelpdesk.CaseArticles.RequiredCaseField('OU_Id') ? " *" : "";
+            extraCaption = dhHelpdesk.CaseArticles.OtherReferenceRequired.OU_Id ? " *" : "";
             this.OU_IdTitle = dhHelpdesk.Common.TranslateCaseFields("OU_Id") + extraCaption;
 
-            extraCaption = dhHelpdesk.CaseArticles.RequiredCaseField('Place') ? " *" : "";
+            extraCaption = dhHelpdesk.CaseArticles.OtherReferenceRequired.Place ? " *" : "";
             this.PlaceTitle = dhHelpdesk.Common.TranslateCaseFields("Place") + extraCaption;
 
-            extraCaption = dhHelpdesk.CaseArticles.RequiredCaseField('UserCode') ? " *" : "";
+            extraCaption = dhHelpdesk.CaseArticles.OtherReferenceRequired.UserCode ? " *" : "";
             this.UserCodeTitle = dhHelpdesk.Common.TranslateCaseFields("UserCode") + extraCaption;
-
-            extraCaption = dhHelpdesk.CaseArticles.RequiredCaseField('CostCentre') ? " *" : "";
+            
+            extraCaption = dhHelpdesk.CaseArticles.OtherReferenceRequired.CostCentre ? " *" : "";
             this.CostCentreTitle = dhHelpdesk.Common.TranslateCaseFields("CostCentre") + extraCaption;
 
             this.Total = null;
@@ -4199,6 +4273,61 @@ $(function () {
     var loadCaseFieldSettings = function () {
         return $.getJSON("/Cases/GetCaseFields", function (data) {
             CaseFieldSettings = data;
+            
+            var caseFieldSettings = new dhHelpdesk.CaseArticles.OtherReferenceMandatoryFields();            
+            if (CaseFieldSettings.Result != null){
+                for (var i = 0; i < CaseFieldSettings.Result.length; i++) {
+                    switch (CaseFieldSettings.Result[i].Name.toLowerCase()) {
+                        case 'reportedby':
+                            caseFieldSettings.ReportedBy = CaseFieldSettings.Result[i].Required != 0;
+                            break;
+
+                        case 'persons_name':
+                            caseFieldSettings.Persons_Name = CaseFieldSettings.Result[i].Required != 0;
+                            break;
+
+                        case 'persons_email':
+                            caseFieldSettings.Persons_Email = CaseFieldSettings.Result[i].Required != 0;
+                            break;
+
+                        case 'persons_phone':
+                            caseFieldSettings.Persons_Phone = CaseFieldSettings.Result[i].Required != 0;
+                            break;
+
+                        case 'persons_cellphone':
+                            caseFieldSettings.Persons_CellPhone = CaseFieldSettings.Result[i].Required != 0;
+                            break;
+
+                        case 'region_id':
+                            caseFieldSettings.Region_Id = CaseFieldSettings.Result[i].Required != 0;
+                            break;
+
+                        case 'department_id':
+                            caseFieldSettings.Department_Id = CaseFieldSettings.Result[i].Required != 0;
+                            break;
+
+                        case 'ou_id':
+                            caseFieldSettings.OU_Id = CaseFieldSettings.Result[i].Required != 0;
+                            break;
+
+                        case 'place':
+                            caseFieldSettings.Place = CaseFieldSettings.Result[i].Required != 0;
+                            break;
+
+                        case 'usercode':
+                            caseFieldSettings.UserCode = CaseFieldSettings.Result[i].Required != 0;
+                            break;
+
+                        case 'costcentre':
+                            // Always required
+                            caseFieldSettings.CostCentre = true;
+                            break;
+
+                    }                    
+                }
+
+                dhHelpdesk.CaseArticles.OtherReferenceRequired = caseFieldSettings;
+            }
         });
     };
 
