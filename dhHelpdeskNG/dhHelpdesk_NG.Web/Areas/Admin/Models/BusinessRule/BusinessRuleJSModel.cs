@@ -1,6 +1,7 @@
 ﻿using DH.Helpdesk.BusinessData.Models.BusinessRules;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -17,6 +18,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
 
         public string RuleId { get; set; }        
 
+        [Required]
         public string RuleName { get; set; }
 
         public string EventId { get; set; }
@@ -46,13 +48,18 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
         public string Administrators { get; set; }
 
         public string Recipients { get; set; }
-        
+
+        public string CaseCreator { get; set; }
+
+        public string Initiator { get; set; }
+
+        public string CaseIsAbout { get; set; }
     }
 
    
     public static class BusinessRuleJSMapper
     {
-        private static char[] _SEPARATOR = {','};
+        public static char[] _SEPARATOR = {','};
         public static BusinessRuleModel MapToRuleData(this BusinessRuleJSModel it)
         {
             var ret = new BusinessRuleModel();
@@ -77,6 +84,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
             
             if (!string.IsNullOrEmpty(it.Recipients))                
                 ret.Recipients = it.Recipients.Split(_SEPARATOR, StringSplitOptions.RemoveEmptyEntries);
+
+            ret.CaseCreator = bool.Parse(it.CaseCreator);
+            ret.Initiator = bool.Parse(it.Initiator);
+            ret.CaseIsAbout = bool.Parse(it.CaseIsAbout);
             
             return ret;
         }

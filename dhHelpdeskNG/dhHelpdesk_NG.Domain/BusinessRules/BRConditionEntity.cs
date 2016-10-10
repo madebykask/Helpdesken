@@ -8,6 +8,8 @@
         public string Field_Id { get; set; }
         public string FromValue { get; set; }
         public string ToValue { get; set; }
-        public int Sequence { get; set; }        
+        public int Sequence { get; set; }
+
+        public virtual BRRuleEntity BrRule { get; set; }
     }
 }

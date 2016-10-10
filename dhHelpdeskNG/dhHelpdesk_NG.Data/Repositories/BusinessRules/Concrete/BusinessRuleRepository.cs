@@ -1,4 +1,8 @@
-﻿namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
+﻿using DH.Helpdesk.Common.Types;
+using DH.Helpdesk.Dal.NewInfrastructure;
+using System.Data.Entity;
+
+namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -274,7 +278,34 @@
                         ParamType_Id = BRActionParamType.Recipients,
                         ParamValue = string.Join(",", businessRule.Recipients)
                     };
-                    this.DbContext.BRActionParams.Add(actionParamEntity5);  
+                    this.DbContext.BRActionParams.Add(actionParamEntity5);
+
+                    var actionParamEntity6 = new BRActionParamEntity()
+                    {
+                        Id = 0,
+                        RuleAction_Id = action.Id,
+                        ParamType_Id = BRActionParamType.CaseCreator,
+                        ParamValue = businessRule.CaseCreator.ToInt().ToString()
+                    };
+                    this.DbContext.BRActionParams.Add(actionParamEntity6);
+
+                    var actionParamEntity7 = new BRActionParamEntity()
+                    {
+                        Id = 0,
+                        RuleAction_Id = action.Id,
+                        ParamType_Id = BRActionParamType.Initiator,
+                        ParamValue = businessRule.Initiator.ToInt().ToString()
+                    };
+                    this.DbContext.BRActionParams.Add(actionParamEntity7);
+
+                    var actionParamEntity8 = new BRActionParamEntity()
+                    {
+                        Id = 0,
+                        RuleAction_Id = action.Id,
+                        ParamType_Id = BRActionParamType.CaseIsAbout,
+                        ParamValue = businessRule.CaseIsAbout.ToInt().ToString()
+                    };
+                    this.DbContext.BRActionParams.Add(actionParamEntity8); 
                 }
                 else
                 {                    
@@ -365,6 +396,60 @@
                     {
                         actionParamEntity5.ParamValue = string.Join(",", businessRule.Recipients);
                     }
+
+                    var actionParamEntity6 = this.DbContext.BRActionParams.Where(a => a.RuleAction_Id == action.Id && a.ParamType_Id == BRActionParamType.CaseCreator)
+                                                                       .FirstOrDefault();
+                    if (actionParamEntity6 == null)
+                    {
+                        actionParamEntity6 = new BRActionParamEntity()
+                        {
+                            Id = 0,
+                            RuleAction_Id = action.Id,
+                            ParamType_Id = BRActionParamType.CaseCreator,
+                            ParamValue = businessRule.CaseCreator.ToInt().ToString()
+                        };
+                        this.DbContext.BRActionParams.Add(actionParamEntity6);
+                    }
+                    else
+                    {
+                        actionParamEntity6.ParamValue = businessRule.CaseCreator.ToInt().ToString();
+                    }
+
+                    var actionParamEntity7 = this.DbContext.BRActionParams.Where(a => a.RuleAction_Id == action.Id && a.ParamType_Id == BRActionParamType.Initiator)
+                                                                       .FirstOrDefault();
+                    if (actionParamEntity7 == null)
+                    {
+                        actionParamEntity7 = new BRActionParamEntity()
+                        {
+                            Id = 0,
+                            RuleAction_Id = action.Id,
+                            ParamType_Id = BRActionParamType.Initiator,
+                            ParamValue = businessRule.Initiator.ToInt().ToString()
+                        };
+                        this.DbContext.BRActionParams.Add(actionParamEntity7);
+                    }
+                    else
+                    {
+                        actionParamEntity7.ParamValue = businessRule.Initiator.ToInt().ToString();
+                    }
+
+                    var actionParamEntity8 = this.DbContext.BRActionParams.Where(a => a.RuleAction_Id == action.Id && a.ParamType_Id == BRActionParamType.CaseIsAbout)
+                                                                       .FirstOrDefault();
+                    if (actionParamEntity8 == null)
+                    {
+                        actionParamEntity8 = new BRActionParamEntity()
+                        {
+                            Id = 0,
+                            RuleAction_Id = action.Id,
+                            ParamType_Id = BRActionParamType.CaseIsAbout,
+                            ParamValue = businessRule.CaseIsAbout.ToInt().ToString()
+                        };
+                        this.DbContext.BRActionParams.Add(actionParamEntity8);
+                    }
+                    else
+                    {
+                        actionParamEntity8.ParamValue = businessRule.CaseIsAbout.ToInt().ToString();
+                    }
                 }
                 this.Commit();
             }
@@ -454,7 +539,15 @@
                             case BRActionParamType.Recipients:
                                 ret.Recipients = param.ParamValue.Split(_SEPARATOR, StringSplitOptions.RemoveEmptyEntries);
                                 break;
-
+                            case BRActionParamType.CaseCreator:
+                                ret.CaseCreator = Int32.Parse(param.ParamValue).ToBool();
+                                break;
+                            case BRActionParamType.Initiator:
+                                ret.Initiator = Int32.Parse(param.ParamValue).ToBool();
+                                break;
+                            case BRActionParamType.CaseIsAbout:
+                                ret.CaseIsAbout = Int32.Parse(param.ParamValue).ToBool();
+                                break;
                         }                    
                     }
                 }
@@ -475,6 +568,17 @@
 
             return ret;
         }
-       
+
+        public IList<BRRuleEntity> GetRuleReadList(int customerId)
+        {
+            return DbContext.BRRules
+                .Include(x => x.BrActions)
+                .Include(x => x.BrActions.Select(y => y.BrActionParams))
+                .Include(x => x.BrConditions)
+                .Include(x => x.ChangedByUser)
+                .Include(x => x.CreatedByUser)
+                .Where(r => r.Customer_Id == customerId)
+                .OrderBy(x => x.Name).ToList();
+        }
     }
 }

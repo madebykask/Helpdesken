@@ -29,6 +29,9 @@
         var elWorkingGroupsDropDown = "#lstWorkingGroups";
         var elAdministratorsDropDown = "#lstAdministrators";
         var elRecipients = "#recipients";
+        var elCaseCreator = "#caseCreator";
+        var elInitiator = "#initiator";
+        var elCaseIsAbout = "#caseIsAbout";
 
         window.dhHelpdesk = window.dhHelpdesk || {};
         window.dhHelpdesk.businessRule = window.dhHelpdesk.businessRule || {};
@@ -54,7 +57,10 @@
                 emailGroups: "",
                 workingGroups: "",
                 administrators: "",
-                recipients: ""
+                recipients: "",
+                caseCreator: true,
+                initiator: true,
+                caseIsAbout: true
             };
 
             data.customerId = $(elCustomerId).val();
@@ -102,13 +108,16 @@
             });
 
             data.recipients = $(elRecipients).val();
+            data.caseCreator = $(elCaseCreator).bootstrapSwitch('state');
+            data.initiator = $(elInitiator).bootstrapSwitch('state');
+            data.caseIsAbout = $(elCaseIsAbout).bootstrapSwitch('state');
 
             return data;
         };       
       
         dhHelpdesk.businessRule.saveRule = function () {
-            //if (!dhHelpdesk.businessRule.doValidation())
-            //    return;
+            if (!dhHelpdesk.businessRule.doValidation())
+                return;
 
             
             var data = getData();
@@ -132,6 +141,9 @@
                     'data.WorkingGroups': data.workingGroups,
                     'data.Administrators': data.administrators,
                     'data.Recipients': data.recipients,
+                    'data.CaseCreator': data.caseCreator,
+                    'data.Initiator': data.initiator,
+                    'data.CaseIsAbout': data.caseIsAbout,
                     curTime: new Date().getTime()
                 },
                 function (result) {
@@ -144,25 +156,11 @@
         };
 
         dhHelpdesk.businessRule.doValidation = function () {
+            "use strict";
+            var self = this;
 
-            $('#ReportFilter_CaseCreationDate_FromDate').removeClass("error");
-            $('#ReportFilter_CaseCreationDate_ToDate').removeClass("error");
-
-            if ($('#ReportFilter_CaseCreationDate_FromDate').val() == "") {
-                var msg = window.Params.DateIsEmptyMessage;
-                $('#ReportFilter_CaseCreationDate_FromDate').addClass("error");
-                ShowToastMessage(msg, "warning");
-                return false;
-            }
-
-            if ($('#ReportFilter_CaseCreationDate_ToDate').val() == "") {
-                var msg = window.Params.DateIsEmptyMessage;
-                $('#ReportFilter_CaseCreationDate_ToDate').addClass("error");
-                ShowToastMessage(msg, "warning");
-                return false;
-            }
-
-            return true;
+            var $form = $("#newRule");
+            return $form.validate().form();
         }          
 
         dhHelpdesk.businessRule.init = function () {

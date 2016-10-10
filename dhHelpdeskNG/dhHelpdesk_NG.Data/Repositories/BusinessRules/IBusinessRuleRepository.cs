@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Dal.Repositories.BusinessRules
+﻿using DH.Helpdesk.Domain.BusinessRules;
+
+namespace DH.Helpdesk.Dal.Repositories.BusinessRules
 {
     using System.Collections.Generic;
     using DH.Helpdesk.Dal.Dal;
@@ -14,5 +16,7 @@
         IList<BusinessRuleModel> GetRules(int customerId);
 
         IList<BusinessRuleModel> GetRules(int customerId, BREventType ccurredEvent);
+
+        IList<BRRuleEntity> GetRuleReadList(int customerId);
     }
 }

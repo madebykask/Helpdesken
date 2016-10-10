@@ -3,6 +3,7 @@ using DH.Helpdesk.Common.Enums.BusinessRule;
 using DH.Helpdesk.Domain;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -19,6 +20,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
 
         public int CustomerId { get; set; }
 
+        [Required]
         public string RuleName { get; set; }
 
         public List<BREvent> Events { get; set; }
@@ -104,6 +106,12 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
         public List<SelectListItem> Administrators { get; set; }
 
         public string Recipients { get; set; }
+
+        public bool CaseCreator { get; set; }
+
+        public bool Initiator { get; set; }
+
+        public bool CaseIsAbout { get; set; }
 
     }
 }

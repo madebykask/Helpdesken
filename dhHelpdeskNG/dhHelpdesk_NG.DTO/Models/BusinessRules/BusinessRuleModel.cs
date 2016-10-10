@@ -61,7 +61,13 @@ namespace DH.Helpdesk.BusinessData.Models.BusinessRules
 
         public SelectedItems Administrators { get; set; }        
 
-        public string[] Recipients { get; set; }        
+        public string[] Recipients { get; set; }
+
+        public bool CaseCreator { get; set; }
+
+        public bool Initiator { get; set; }
+
+        public bool CaseIsAbout { get; set; }
     }
 
     public class BusinessRuleActionModel

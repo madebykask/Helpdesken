@@ -17,6 +17,11 @@
             this.Property(c => c.Field_Id).IsRequired().HasMaxLength(50);
             this.Property(c => c.FromValue).IsRequired().HasMaxLength(4000);
             this.Property(c => c.ToValue).IsRequired().HasMaxLength(4000);
+
+            this.HasRequired(x => x.BrRule)
+                .WithMany()
+                .HasForeignKey(x => x.Rule_Id)
+                .WillCascadeOnDelete(false);
             
             this.ToTable("tblBR_RuleConditions");
         }

@@ -15,6 +15,11 @@
             this.Property(a => a.RuleAction_Id).IsRequired();
             this.Property(a => a.ParamType_Id).IsRequired();            
             this.Property(a => a.ParamValue).IsRequired().HasMaxLength(4000);
+
+            this.HasRequired(x => x.BrAction)
+                .WithMany()
+                .HasForeignKey(x => x.RuleAction_Id)
+                .WillCascadeOnDelete(false);
             
             this.ToTable("tblBR_ActionParams");
         }

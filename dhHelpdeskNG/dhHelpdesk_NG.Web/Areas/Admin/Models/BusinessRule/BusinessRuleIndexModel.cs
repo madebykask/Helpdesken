@@ -13,7 +13,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
         {
         }
 
-        public Customer Customer { get; set; }        
+        public Customer Customer { get; set; }
+
+        public List<BusinessRuleListItemModel> Rules { get; set; }
     }
     
 }

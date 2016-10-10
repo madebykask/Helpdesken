@@ -75,7 +75,31 @@
             <td>
                 @Html.TextBoxFor(m => Model.Recipients, new { id="recipients", @class="BR-text"})
             </td>
-        </tr> 
+        </tr>
+        <tr>
+            <td class="span2">
+                @Translation.Get("Skapad av", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Html.CheckBoxFor(m => Model.CaseCreator, new {@class = "switchcheckbox", id = "caseCreator"})
+            </td>
+        </tr>
+        <tr>
+            <td class="span2">
+                @Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Html.CheckBoxFor(m => Model.Initiator, new {@class = "switchcheckbox", id = "initiator"})
+            </td>
+        </tr>
+        <tr>
+            <td class="span2">
+                @Translation.Get("Angående", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Html.CheckBoxFor(m => Model.CaseIsAbout, new { @class = "switchcheckbox", id = "caseIsAbout"})
+            </td>
+        </tr>
     </tbody>    
 </table>
 

@@ -24,6 +24,14 @@
             this.Property(r => r.CreatedTime).IsRequired();
             this.Property(r => r.ChangedByUser_Id).IsRequired();
 
+            this.HasMany(s => s.BrActions)
+                .WithRequired(s => s.BrRule)
+                .HasForeignKey(s => s.Rule_Id);
+
+            this.HasMany(s => s.BrConditions)
+                .WithRequired(s => s.BrRule)
+                .HasForeignKey(s => s.Rule_Id);
+
             this.HasRequired(x => x.CreatedByUser)
                 .WithMany()
                 .HasForeignKey(x => x.CreatedByUser_Id)

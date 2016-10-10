@@ -6,6 +6,8 @@
     {        
         public int RuleAction_Id { get; set; }
         public int ParamType_Id { get; set; }
-        public string ParamValue { get; set; }        
+        public string ParamValue { get; set; }  
+      
+        public virtual BRActionEntity BrAction { get; set; }
     }
 }

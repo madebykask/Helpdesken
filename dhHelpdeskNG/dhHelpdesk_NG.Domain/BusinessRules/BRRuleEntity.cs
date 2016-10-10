@@ -1,9 +1,16 @@
-﻿namespace DH.Helpdesk.Domain.BusinessRules
+﻿using System.Collections.Generic;
+
+namespace DH.Helpdesk.Domain.BusinessRules
 {
     using global::System;
 
     public class BRRuleEntity : Entity
     {
+        public BRRuleEntity()
+        {
+            BrActions = new List<BRActionEntity>();
+            BrConditions = new List<BRConditionEntity>();
+        }
 
         public int Customer_Id { get; set; }
         public string Name { get; set; }
@@ -21,5 +28,8 @@
 
         public virtual User CreatedByUser { get; set; }
         public virtual User ChangedByUser { get; set; }
+
+        public virtual ICollection<BRActionEntity> BrActions { get; set; }
+        public virtual ICollection<BRConditionEntity> BrConditions { get; set; }
     }
 }

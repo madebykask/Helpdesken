@@ -305,6 +305,7 @@
     <Compile Include="Areas\Admin\Models\BusinessRule\BusinessRuleIndexModel.cs" />
     <Compile Include="Areas\Admin\Models\BusinessRule\BusinessRuleInputModel.cs" />
     <Compile Include="Areas\Admin\Models\BusinessRule\BusinessRuleJSModel.cs" />
+    <Compile Include="Areas\Admin\Models\BusinessRule\BusinessRuleListItemModel.cs" />
     <Compile Include="Areas\Admin\Models\CaseTypeInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\CategoryViewModels.cs" />
     <Compile Include="Areas\Admin\Models\CausingPart\CausingPartsViewModel.cs" />

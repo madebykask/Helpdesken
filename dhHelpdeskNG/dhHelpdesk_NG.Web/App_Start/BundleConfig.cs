@@ -382,7 +382,8 @@
 
             bundles.Add(new ScriptBundle("~/bundles/businessrule/businessRules").Include(
                 "~/Content/js/jsrender.min.js",
-                "~/Areas/Admin/Content/js/BusinessRule/businessRuleInput.js"));
+                "~/Areas/Admin/Content/js/BusinessRule/businessRuleInput.js",
+                "~/Content/js/jquery.validate.unobtrusive.min.js"));
 
             #endregion
         }

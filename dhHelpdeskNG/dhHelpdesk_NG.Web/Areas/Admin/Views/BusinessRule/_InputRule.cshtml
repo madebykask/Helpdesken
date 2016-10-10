@@ -21,6 +21,7 @@
                         </td>
                         <td>
                             @Html.TextBoxFor(m => Model.RuleName, new { @class="BR-text"})
+                            @Html.ValidationMessageFor(x => x.RuleName)
                         </td>
                     </tr>
                     <tr>
