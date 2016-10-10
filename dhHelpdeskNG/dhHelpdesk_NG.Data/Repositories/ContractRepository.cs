@@ -1,12 +1,17 @@
 namespace DH.Helpdesk.Dal.Repositories
 {
-    using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.BusinessData.Models.Contract;
+using DH.Helpdesk.Dal.Infrastructure;
+using DH.Helpdesk.Domain;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
     #region CONTRACT
 
     public interface IContractRepository : IRepository<Contract>
     {
+        IList<Contract> GetContracts(int customerId);
     }
 
     public class ContractRepository : RepositoryBase<Contract>, IContractRepository
@@ -15,6 +20,13 @@ namespace DH.Helpdesk.Dal.Repositories
             : base(databaseFactory)
         {
         }
+
+        public IList<Contract> GetContracts(int customerId)
+        {
+            var query = this.DataContext.Contracts.Where(c => c.Finished == 0 && c.ContractCategory.Customer_Id == customerId);            
+            return query.ToList();
+        }
+
     }
 
     #endregion
@@ -39,7 +51,9 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public interface IContractFieldSettingsRepository : IRepository<ContractFieldSettings>
     {
+        IList<ContractsSettingRowModel> GetContractsSettingRows(int customerId);        
     }
+
 
     public class ContractFieldSettingsRepository : RepositoryBase<ContractFieldSettings>, IContractFieldSettingsRepository
     {
@@ -47,6 +61,26 @@ namespace DH.Helpdesk.Dal.Repositories
             : base(databaseFactory)
         {
         }
+
+        public IList<ContractsSettingRowModel> GetContractsSettingRows(int customerId)
+        {
+            var query = this.DataContext.ContractFieldSettings.Where(c => c.Customer_Id == customerId);
+            var ret = query.Select(c => new ContractsSettingRowModel {
+                Id = c.Id,
+                CustomerId = c.Customer_Id,
+                ContractField = c.ContractField,
+                ContractFieldLable = c.Label,
+                ContractFieldLable_Eng = c.Label_ENG,
+                FieldHelp = c.FieldHelp,
+                show = c.Show != 0,
+                showInList = c.ShowInList != 0,
+                ShowExternal = c.ShowExternal != 0,
+                reguired = c.Required != 0,
+                CreatedDate = c.CreatedDate,
+                ChangedDate = c.ChangedDate                                               
+            }).ToList();
+            return ret;
+        }      
     }
 
     #endregion

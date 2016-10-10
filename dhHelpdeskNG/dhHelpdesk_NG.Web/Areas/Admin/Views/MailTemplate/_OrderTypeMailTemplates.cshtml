@@ -39,8 +39,116 @@
                         }
                     </td>
                 </tr>
+                if (item.SubOrderTypes != null)
+                {
+                    if (item.SubOrderTypes.Count > 0)
+                    {
+                        foreach (var sub in item.SubOrderTypes)
+                        {
+                            if (sub.SubOrderTypes.Count > 0)
+                            {
+                                foreach (var subsub in sub.SubOrderTypes)
+                                {
+                                    if (subsub.SubOrderTypes.Count > 0)
+                                    {
+                                        foreach (var subsubsub in subsub.SubOrderTypes)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <a href="@Url.Action("edit", "mailtemplate", 
+                                                                            new { area = "admin", 
+                                                                                  id = 40, 
+                                                                                  customerId = Model.Customer.Id, 
+                                                                                  languageId = SessionFacade.CurrentLanguageId, 
+                                                                                  ordertypeId = item.Id })">
+                                                        <strong>@Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation):</strong> 
+                                                        @Html.DisplayFor(modelItem => sub.ParentOrderType.Name) - @Html.DisplayFor(modelItem => subsub.ParentOrderType.Name) - @Html.DisplayFor(modelItem => subsubsub.ParentOrderType.Name) - @Html.DisplayFor(modelItem => subsubsub.Name)
+                                                    </a>
+                                                </td>
+                                                <td style="width:60%">
+                                                    @if (!string.IsNullOrEmpty(activeLangNames))
+                                                    {
+                                                        <a href="@Url.Action("edit", "mailtemplate", 
+                                                                             new { area = "admin", 
+                                                                                   id = 40, 
+                                                                                   customerId = Model.Customer.Id, 
+                                                                                   languageId = SessionFacade.CurrentLanguageId, 
+                                                                                   ordertypeId = item.Id })">
+                                                            @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation):                     
+                                                            @Html.DisplayFor(m=> activeLangNames)
+                                                        </a>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                    else 
+                                    {
+                                        <tr>
+                                            <td>
+                                                <a href="@Url.Action("edit", "mailtemplate", 
+                                                                        new { area = "admin", 
+                                                                              id = 40, 
+                                                                              customerId = Model.Customer.Id, 
+                                                                              languageId = SessionFacade.CurrentLanguageId, 
+                                                                              ordertypeId = item.Id })">
+                                                    <strong>@Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation):</strong> 
+                                                    @Html.DisplayFor(modelItem => sub.ParentOrderType.Name) - @Html.DisplayFor(modelItem => subsub.ParentOrderType.Name) - @Html.DisplayFor(modelItem => subsub.Name)
+                                                </a>
+                                            </td>
+                                            <td style="width:60%">
+                                                @if (!string.IsNullOrEmpty(activeLangNames))
+                                                {
+                                                    <a href="@Url.Action("edit", "mailtemplate", 
+                                                                         new { area = "admin", 
+                                                                               id = 40, 
+                                                                               customerId = Model.Customer.Id, 
+                                                                               languageId = SessionFacade.CurrentLanguageId, 
+                                                                               ordertypeId = item.Id })">
+                                                        @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation):                     
+                                                        @Html.DisplayFor(m=> activeLangNames)
+                                                    </a>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td>
+                                        <a href="@Url.Action("edit", "mailtemplate", 
+                                                                new { area = "admin", 
+                                                                      id = 40, 
+                                                                      customerId = Model.Customer.Id, 
+                                                                      languageId = SessionFacade.CurrentLanguageId, 
+                                                                      ordertypeId = item.Id })">
+                                            <strong>@Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation):</strong> 
+                                            @Html.DisplayFor(modelItem => sub.ParentOrderType.Name) - @Html.DisplayFor(modelItem => sub.Name)
+                                        </a>
+                                    </td>
+                                    <td style="width:60%">
+                                        @if (!string.IsNullOrEmpty(activeLangNames))
+                                        {
+                                            <a href="@Url.Action("edit", "mailtemplate", 
+                                                                 new { area = "admin", 
+                                                                       id = 40, 
+                                                                       customerId = Model.Customer.Id, 
+                                                                       languageId = SessionFacade.CurrentLanguageId, 
+                                                                       ordertypeId = item.Id })">
+                                                @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation):                     
+                                                @Html.DisplayFor(m=> activeLangNames)
+                                            </a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    }
+                }
             }
-            else if (item.ParentOrderType.Parent_OrderType_Id != null)
+            @*else if (item.ParentOrderType.Parent_OrderType_Id != null)
             {
                 <tr>
                     <td>
@@ -69,7 +177,7 @@
                         }
                     </td>
                 </tr>
-            }
+            }*@
         }
     }
     else

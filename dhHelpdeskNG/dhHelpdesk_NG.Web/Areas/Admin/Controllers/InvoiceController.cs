@@ -78,7 +78,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var filter = new InvoiceArticleProductAreaSelectedFilter();
             model.Rows = GetIndexRowModel(customerId, filter, allInvoiceArticles);
             
-            model.InvoiceArticles = allInvoiceArticles.OrderBy(a => a.Name).ToList();
+            model.InvoiceArticles = allInvoiceArticles.OrderBy(a => a.Number).ToList();
             model.ProductAreas = lastLevels.OrderBy(l=> l.Name).ToList();
             return this.View(model);
         }
@@ -134,7 +134,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
         private InvoiceArticleProductAreaInputViewModel CreateInputViewModel(Customer customer)
         {
-            var allInvoiceArticles = invoiceArticleService.GetArticles(customer.Id).OrderBy(a => a.Name);
+            var allInvoiceArticles = invoiceArticleService.GetArticles(customer.Id).OrderBy(a => a.Number);
             var productAreas = productAreaService.GetAll(customer.Id);
             var lastLevels = new List<ProductArea>();
 

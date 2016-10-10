@@ -264,7 +264,8 @@
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[4].FieldHelp" value="0" />
                             </td>
                         </tr>
-                        <tr>
+                        @*HD case : #55175 This field used in HD 4 but no usage in HD 5.*@
+                        @*<tr>
                             <td><i class="dh-icon-select" rel="tooltip" title="@Translation.Get("Vallista - dropdown", Enums.TranslationSource.TextTranslation)"></i>
                             </td>
                             <td>
@@ -297,9 +298,29 @@
                                 <input type="text" name="CaseFieldSettingWithLangauges[5].FieldHelp" value="@Model.CaseFieldSettingWithLangauges.getFieldHelp(GlobalEnums.TranslationCaseFields.Customer_Id.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[5].FieldHelp" value="0" />
                             </td>
-                        </tr>
+                        </tr>*@
+
                         <tr>
-                            <td><i class="dh-icon-select" rel="tooltip" title="@Translation.Get("Vallista - dropdown", Enums.TranslationSource.TextTranslation)"></i>
+
+                            <td>
+                                <input type="hidden" name="CaseFieldSettings[5].ShowOnStartPage" value="0"/>
+                                <input type="hidden" name="CaseFieldSettings[5].ShowOnStartPage" value="0" />
+                                <input type="hidden" name="CaseFieldSettings[5].Customer_Id" value="@Model.Customer.Id" />
+                                <input type="hidden" name="CaseFieldSettings[5].Name" value="Customer_Id" />
+                                <input type="hidden" name="CaseFieldSettings[5].Id" value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Customer_Id.ToString())" />
+                                <input type="hidden" name="CaseFieldSettings[5].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.Customer_Id.ToString())" />
+                                
+                                <input type="hidden" name="CaseFieldSettings[5].ShowExternal" value="0"/>
+                                <input type="hidden" name="CaseFieldSettings[5].ShowExternal" value="0" />
+                                <input type="hidden" name="CaseFieldSettings[5].Locked" value="0" />
+
+                                <input type="hidden" name="CaseFieldSettingWithLangauges[5].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.Customer_Id.ToString())"/>
+                                <input type="hidden" name="CaseFieldSettingWithLangauges[5].Name" value="Customer_Id" />
+
+                                <input type="hidden" name="CaseFieldSettings[5].Required" value="1" />
+                                <input type="hidden" name="CaseFieldSettingWithLangauges[5].FieldHelp" value="0" />
+
+                                <i class="dh-icon-select" rel="tooltip" title="@Translation.Get("Vallista - dropdown", Enums.TranslationSource.TextTranslation)"></i>
                             </td>
                             <td>
                                 @Translation.Get("Område", Enums.TranslationSource.TextTranslation)
@@ -2180,7 +2201,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td><i class="dh-icon-select" rel="tooltip" title="@Translation.Get("Vallista - dropdown", Enums.TranslationSource.TextTranslation)"></i>
+                            <td><i class="dh-icon-textfield" rel="tooltip" title="@Translation.Get("Textfält", Enums.TranslationSource.TextTranslation)"></i>
                             </td>
                             <td>
                                 @Translation.Get("Lösningsgrad", Enums.TranslationSource.TextTranslation)
@@ -2214,7 +2235,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td><i class="dh-icon-textfield" rel="tooltip" title="@Translation.Get("Textfält", Enums.TranslationSource.TextTranslation)"></i>
+                            <td><i class="dh-icon-select" rel="tooltip" title="@Translation.Get("Vallista - dropdown", Enums.TranslationSource.TextTranslation)"></i>
                             </td>
                             <td>
                                 @Translation.Get("Rotorsak", Enums.TranslationSource.TextTranslation)

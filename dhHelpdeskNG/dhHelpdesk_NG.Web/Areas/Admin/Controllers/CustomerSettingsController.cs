@@ -118,6 +118,7 @@
             vmodel.Setting.DefaultEmailLogDestination = setting.DefaultEmailLogDestination;
             vmodel.Setting.TimeZone_offset = setting.TimeZone_offset;
             vmodel.Setting.CalcSolvedInTimeByLatestSLADate = setting.CalcSolvedInTimeByLatestSLADate;
+            vmodel.Setting.SetUserToAdministrator = setting.SetUserToAdministrator;
 
             if (customerToSave == null)
                 throw new Exception("No customer found...");

@@ -140,6 +140,9 @@
             bundles.Add(new ScriptBundle("~/bundles/advancedsearch/specialfilter").Include(
                         "~/Content/js/AdvancedSearch/index.specialfilter.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/contract").Include(
+                           "~/Content/js/contract/contractIndex.js"));
+
             #region Case editing
             bundles.Add(new StyleBundle("~/cases/dynamic-cases").Include(
                          "~/Content/css/custom/dynamic-cases.css"));
@@ -377,8 +380,10 @@
             bundles.Add(new ScriptBundle("~/bundles/cases/caseByIds").Include(
                             "~/Content/js/Cases/caseByIds.logic.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/businessrules/businessRules").Include(
-                "~/Areas/Admin/Content/js/BusinessRules/businessRules.list.js"));
+            bundles.Add(new ScriptBundle("~/bundles/businessrule/businessRules").Include(
+                "~/Content/js/jsrender.min.js",
+                "~/Areas/Admin/Content/js/BusinessRule/businessRuleInput.js",
+                "~/Content/js/jquery.validate.unobtrusive.min.js"));
 
             #endregion
         }

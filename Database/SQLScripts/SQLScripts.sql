@@ -1,159 +1,210 @@
--- update DB from 5.3.25 to 5.3.26 version
+-- update DB from 5.3.26 to 5.3.27 version
 
-
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LatestSLACountDate' and sysobjects.name = N'tblCase')
-	ALTER TABLE tblCase ADD LatestSLACountDate DateTime NULL 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ActionLeadTime' and sysobjects.name = N'tblCaseHistory')
+	ALTER TABLE tblCaseHistory ADD ActionLeadTime Int not NULL Default(0)
 Go
 
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LatestSLACountDate' and sysobjects.name = N'tblCaseHistory')
-	ALTER TABLE tblCaseHistory ADD LatestSLACountDate DateTime NULL 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ActionExternalTime' and sysobjects.name = N'tblCaseHistory')
+	ALTER TABLE tblCaseHistory ADD ActionExternalTime Int not NULL Default(0)
 Go
 
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ShowOnCaseOverview' and sysobjects.name = N'tblCaseSolution')
-	ALTER TABLE tblCaseSolution ADD ShowOnCaseOverview int NOT NULL Default(1)
-Go
-
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ConnectedButton' and sysobjects.name = N'tblCaseSolution')
-	ALTER TABLE tblCaseSolution ADD ConnectedButton int NULL 
-Go
-
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ShowInsideCase' and sysobjects.name = N'tblCaseSolution')
-	ALTER TABLE tblCaseSolution ADD ShowInsideCase int NOT NULL Default(1)
-Go
-
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'SetCurrentUserAsPerformer' and sysobjects.name = N'tblCaseSolution')
-	ALTER TABLE tblCaseSolution ADD SetCurrentUserAsPerformer int NULL
-Go
-
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'OverWritePopUp' and sysobjects.name = N'tblCaseSolution')
-	ALTER TABLE tblCaseSolution ADD OverWritePopUp int NOT NULL Default(0)
-Go
-
-
-
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CreatedDate' and sysobjects.name = N'tblInvoiceArticle_tblProductArea')
-	ALTER TABLE tblInvoiceArticle_tblProductArea ADD CreatedDate DateTime NOT NULL Default getdate()
-Go
-
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CreatedBy_UserId' and sysobjects.name = N'tblInvoiceArticle_tblProductArea')
-	begin
-		ALTER TABLE tblInvoiceArticle_tblProductArea ADD CreatedBy_UserId int NULL 
-
-		ALTER TABLE [dbo].tblInvoiceArticle_tblProductArea ADD 
-			CONSTRAINT [FK_tblInvoiceArticle_tblProductArea_tblUsers] FOREIGN KEY 
-			(
-				[CreatedBy_UserId]
-			) REFERENCES [dbo].tblUsers (
-				[Id]
-			)	
-	end
+-- tblSettings 
+ALTER TABLE tblSettings ALTER COLUMN LDAPFilter nvarchar(150)
 GO
 
-if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CalcSolvedInTimeByFinishingDate' and sysobjects.name = N'tblSettings')
+
+-- New field in tblInventoryTypeProperty
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Unique' and sysobjects.name = N'tblInventoryTypeProperty')
+      begin
+             ALTER TABLE tblInventoryTypeProperty ADD [Unique] int NOT NULL Default(0)                                              
+      end
+GO
+
+if not exists(select * from sysobjects WHERE Name = N'tblBR_Rules')
 begin
-	DECLARE @sql NVARCHAR(MAX)
-	WHILE 1=1
-	BEGIN
-		SELECT TOP 1 @sql = N'alter table tblSettings drop constraint ['+dc.NAME+N']'
-		from sys.default_constraints dc
-		JOIN sys.columns c
-			ON c.default_object_id = dc.object_id
-		WHERE 
-			dc.parent_object_id = OBJECT_ID('tblSettings')
-		AND c.name = N'CalcSolvedInTimeByFinishingDate'
-		IF @@ROWCOUNT = 0 BREAK
-		EXEC (@sql)
-	END
-	
-	ALTER TABLE tblSettings drop column CalcSolvedInTimeByFinishingDate
+CREATE TABLE [dbo].[tblBR_Rules](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Customer_Id] [int] NOT NULL,
+	[Name] [nvarchar](100) NOT NULL,
+	[Event_Id] [int] NOT NULL,
+	[Sequence] [int] NOT NULL,
+	[Status] [int] NOT NULL,
+	[ContinueOnSuccess] [bit] NOT NULL,
+	[ContinueOnError] [bit] NOT NULL,
+	[CreatedTime] [datetime] NOT NULL,
+	[CreatedByUser_Id] [int] NOT NULL,
+	[ChangedTime] [datetime] NOT NULL,
+	[ChangedByUser_Id] [int] NOT NULL,
+ CONSTRAINT [PK_tblBR_Rules] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+
+
+ALTER TABLE [dbo].[tblBR_Rules]  WITH CHECK ADD  CONSTRAINT [FK_tblBR_Rules_tblUsers] FOREIGN KEY([CreatedByUser_Id])
+REFERENCES [dbo].[tblUsers] ([Id])
+
+
+ALTER TABLE [dbo].[tblBR_Rules] CHECK CONSTRAINT [FK_tblBR_Rules_tblUsers]
+
+
+ALTER TABLE [dbo].[tblBR_Rules]  WITH CHECK ADD  CONSTRAINT [FK_tblBR_Rules_tblUsers1] FOREIGN KEY([ChangedByUser_Id])
+REFERENCES [dbo].[tblUsers] ([Id])
+
+
+ALTER TABLE [dbo].[tblBR_Rules] CHECK CONSTRAINT [FK_tblBR_Rules_tblUsers1]
+
 end
-GO
-
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CalcSolvedInTimeByLatestSLADate' and sysobjects.name = N'tblSettings')
-	ALTER TABLE tblSettings ADD CalcSolvedInTimeByLatestSLADate int NOT NULL Default(0)
-GO
-
-
-
-if COL_LENGTH('tblCaseFilterFavorite','RegionFilter') != 400
-BEGIN	
-	alter table tblCaseFilterFavorite alter column RegionFilter nvarchar(200)  null 
-END
 Go
 
+if not exists(select * from sysobjects WHERE Name = N'tblBR_RuleConditions')
+begin
+	CREATE TABLE [dbo].[tblBR_RuleConditions](
+		[Id] [int] IDENTITY(1,1) NOT NULL,
+		[Rule_Id] [int] NOT NULL,
+		[Field_Id] [nvarchar](50) NOT NULL,
+		[FromValue] [nvarchar](4000) NOT NULL,
+		[ToValue] [nvarchar](4000) NOT NULL,
+		[Sequence] [int] NOT NULL,
+	 CONSTRAINT [PK_tblBR_RuleConditions] PRIMARY KEY CLUSTERED 
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
 
-if COL_LENGTH('tblCaseFilterFavorite','DepartmentFilter') != 400
-BEGIN	
-	alter table tblCaseFilterFavorite alter column DepartmentFilter nvarchar(200)  null 
-END
-Go
+	
+
+	ALTER TABLE [dbo].[tblBR_RuleConditions]  WITH CHECK ADD  CONSTRAINT [FK_tblBR_RuleConditions_tblBR_Rules] FOREIGN KEY([Rule_Id])
+	REFERENCES [dbo].[tblBR_Rules] ([Id])
+	ON DELETE CASCADE
+	
+
+	ALTER TABLE [dbo].[tblBR_RuleConditions] CHECK CONSTRAINT [FK_tblBR_RuleConditions_tblBR_Rules]
+	
+
+end
+go
+
+if not exists(select * from sysobjects WHERE Name = N'tblBR_RuleActions')
+begin
+	CREATE TABLE [dbo].[tblBR_RuleActions](
+		[Id] [int] IDENTITY(1,1) NOT NULL,
+		[Rule_Id] [int] NOT NULL,
+		[ActionType_Id] [int] NOT NULL,
+		[Sequence] [int] NOT NULL,
+	 CONSTRAINT [PK_tblBR_RuleActions] PRIMARY KEY CLUSTERED 
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
+
+	
+
+	ALTER TABLE [dbo].[tblBR_RuleActions]  WITH CHECK ADD  CONSTRAINT [FK_tblBR_RuleActions_tblBR_Rules] FOREIGN KEY([Rule_Id])
+	REFERENCES [dbo].[tblBR_Rules] ([Id])
+	ON DELETE CASCADE
+	
+
+	ALTER TABLE [dbo].[tblBR_RuleActions] CHECK CONSTRAINT [FK_tblBR_RuleActions_tblBR_Rules]	
+end
+go
+
+if not exists(select * from sysobjects WHERE Name = N'tblBR_ActionParams')
+begin
+	CREATE TABLE [dbo].[tblBR_ActionParams](
+		[Id] [int] IDENTITY(1,1) NOT NULL,
+		[RuleAction_Id] [int] NOT NULL,
+		[ParamType_Id] [int] NOT NULL,
+		[ParamValue] [nvarchar](4000) NOT NULL,
+	 CONSTRAINT [PK_tblBR_ActionParams] PRIMARY KEY CLUSTERED 
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
+
+	
+
+	ALTER TABLE [dbo].[tblBR_ActionParams]  WITH CHECK ADD  CONSTRAINT [FK_tblBR_ActionParams_tblBR_ActionParams] FOREIGN KEY([RuleAction_Id])
+	REFERENCES [dbo].[tblBR_RuleActions] ([Id])
+	ON DELETE CASCADE
+	
+
+	ALTER TABLE [dbo].[tblBR_ActionParams] CHECK CONSTRAINT [FK_tblBR_ActionParams_tblBR_ActionParams]
+end
+go
+
+-- Add Created By to Invoice Order
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CreatedByUser_Id' and 
+				sysobjects.name = N'tblCaseInvoiceOrder')
+begin
+   ALTER TABLE tblCaseInvoiceOrder ADD [CreatedByUser_Id] int NULL
+end  
+go
+
+if (exists(select * from tblCaseInvoiceOrder where CreatedByUser_Id is null))
+begin 
+   Update tblCaseInvoiceOrder set CreatedByUser_Id = (Select top 1 id from tblUsers)
+   Where CreatedByUser_Id is null
+
+   ALTER TABLE tblCaseInvoiceOrder Alter Column [CreatedByUser_Id] int Not NULL
+end
+go
+
+-- Add Created Time to Invoice Order
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CreatedTime' and 
+				sysobjects.name = N'tblCaseInvoiceOrder')
+begin
+   ALTER TABLE tblCaseInvoiceOrder ADD [CreatedTime] datetime NULL
+end  
+go
+
+if (exists(select * from tblCaseInvoiceOrder where [CreatedTime] is null))
+begin 
+   Update tblCaseInvoiceOrder set [CreatedTime] = GETDATE()
+   Where [CreatedTime] is null
+
+   ALTER TABLE tblCaseInvoiceOrder Alter Column [CreatedTime] datetime Not NULL
+end
+go
 
 
-if COL_LENGTH('tblCaseFilterFavorite','RegisteredByFilter') != 400
-BEGIN	
-	alter table tblCaseFilterFavorite alter column RegisteredByFilter nvarchar(200)  null 
-END
-Go
+-- Add Changed By to Invoice Order
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ChangedByUser_Id' and 
+				sysobjects.name = N'tblCaseInvoiceOrder')
+begin
+   ALTER TABLE tblCaseInvoiceOrder ADD [ChangedByUser_Id] int NULL
+end  
+go
 
-if COL_LENGTH('tblCaseFilterFavorite','CaseTypeFilter') != 400
-BEGIN	
-	alter table tblCaseFilterFavorite alter column CaseTypeFilter nvarchar(200)  null 
-END
-Go
+if (exists(select * from tblCaseInvoiceOrder where ChangedByUser_Id is null))
+begin 
+   Update tblCaseInvoiceOrder set ChangedByUser_Id = (Select top 1 id from tblUsers)
+   Where ChangedByUser_Id is null
 
-if COL_LENGTH('tblCaseFilterFavorite','ProductAreaFilter') != 400
-BEGIN	
-	alter table tblCaseFilterFavorite alter column ProductAreaFilter nvarchar(200)  null 
-END
-Go
+   ALTER TABLE tblCaseInvoiceOrder Alter Column [ChangedByUser_Id] int Not NULL
+end
+go
 
-if COL_LENGTH('tblCaseFilterFavorite','WorkingGroupFilter') != 400
-BEGIN	
-	alter table tblCaseFilterFavorite alter column WorkingGroupFilter nvarchar(200)  null 
-END
+-- Add Changed Time to Invoice Order
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ChangedTime' and 
+				sysobjects.name = N'tblCaseInvoiceOrder')
+begin
+   ALTER TABLE tblCaseInvoiceOrder ADD [ChangedTime] datetime NULL
+end  
+go
 
+if (exists(select * from tblCaseInvoiceOrder where [ChangedTime] is null))
+begin 
+   Update tblCaseInvoiceOrder set [ChangedTime] = GETDATE()
+   Where [ChangedTime] is null
 
-if COL_LENGTH('tblCaseFilterFavorite','ResponsibleFilter') != 400
-BEGIN	
-	alter table tblCaseFilterFavorite alter column ResponsibleFilter nvarchar(200)  null 
-END
-
-if COL_LENGTH('tblCaseFilterFavorite','AdministratorFilter') != 400
-BEGIN	
-	alter table tblCaseFilterFavorite alter column AdministratorFilter nvarchar(200)  null 
-END
-Go
-
-if COL_LENGTH('tblCaseFilterFavorite','PriorityFilter') != 400
-BEGIN	
-	alter table tblCaseFilterFavorite alter column PriorityFilter nvarchar(200)  null 
-END
-
-if COL_LENGTH('tblCaseFilterFavorite','StatusFilter') != 400
-BEGIN	
-	alter table tblCaseFilterFavorite alter column StatusFilter nvarchar(200)  null 
-END
-Go
-
-if COL_LENGTH('tblCaseFilterFavorite','SubStatusFilter') != 400
-BEGIN	
-	alter table tblCaseFilterFavorite alter column SubStatusFilter nvarchar(200)  null 
-END
-Go
-
-if COL_LENGTH('tblCaseFilterFavorite','RemainingTimeFilter') != 400
-BEGIN	
-	alter table tblCaseFilterFavorite alter column RemainingTimeFilter nvarchar(200)  null 
-END
-Go
-
-if COL_LENGTH('tblCaseFilterFavorite','ClosingReasonFilter') != 400
-BEGIN	
-	alter table tblCaseFilterFavorite alter column ClosingReasonFilter nvarchar(200)  null 
-END
-Go
+   ALTER TABLE tblCaseInvoiceOrder Alter Column [ChangedTime] datetime Not NULL
+end
+go
 
 
 -- Last Line to update database version
-UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.26'
+UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.27'
 

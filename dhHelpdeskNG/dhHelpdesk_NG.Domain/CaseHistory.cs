@@ -92,6 +92,8 @@
         public int? IsAbout_Department_Id { get; set; }
         public string CreatedByApp { get; set; }
         public DateTime? LatestSLACountDate { get; set; }
+        public int ActionLeadTime { get; set; }
+        public int ActionExternalTime { get; set; }
 
 //        /// <summary>
 //        /// Number of parent case (if any)

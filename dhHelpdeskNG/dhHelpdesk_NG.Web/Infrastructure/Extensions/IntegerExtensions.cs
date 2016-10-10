@@ -101,8 +101,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 case LanguageIds.Swedish:
                     ret = "Swedish.png";
                     break;
-                default:
+                case LanguageIds.English:
                     ret = "English.png";
+                    break;
+                default:
+                    ret = "";
                     break;                
             }
             return ret;

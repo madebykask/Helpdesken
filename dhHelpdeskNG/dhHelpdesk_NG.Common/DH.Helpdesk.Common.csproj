@@ -57,8 +57,13 @@
     </Compile>
     <Compile Include="Collections\INamedObject.cs" />
     <Compile Include="Collections\NamedObjectCollection.cs" />
+    <Compile Include="Constants\BRConstItem.cs" />
     <Compile Include="Constraints\NotifierConstraint.cs" />
     <Compile Include="Enums\AppSettingsKey.cs" />
+    <Compile Include="Enums\BusinessRules\BREventType.cs" />
+    <Compile Include="Enums\BusinessRules\BRFieldType.cs" />
+    <Compile Include="Enums\BusinessRules\BRActionType.cs" />
+    <Compile Include="Enums\BusinessRules\BRActionParamType.cs" />
     <Compile Include="Enums\CaseSolution\CaseSolutionLocationShow.cs" />
     <Compile Include="Enums\Cases\CaseListTypes.cs" />
     <Compile Include="Enums\Cases\FieldTypes.cs" />
@@ -71,6 +76,7 @@
     <Compile Include="Enums\CalculationFields.cs" />
     <Compile Include="Enums\BooleanString.cs" />
     <Compile Include="Enums\CaseSolution\IndexEnums.cs" />
+    <Compile Include="Enums\ContractFieldSettings.cs" />
     <Compile Include="Enums\CreatedByApplications.cs" />
     <Compile Include="Enums\ReportDataLineType.cs" />
     <Compile Include="Enums\UserGroups.cs" />

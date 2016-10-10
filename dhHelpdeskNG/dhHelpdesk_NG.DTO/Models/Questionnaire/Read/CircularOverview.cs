@@ -19,7 +19,8 @@
             DateTime date,
             CircularStates state,
             int totalParticipants,
-            int sentParticipants)
+            int sentParticipants,
+            int answeredParticipants)
         {
             this.Id = id;
             this.CircularName = circularName;
@@ -27,6 +28,7 @@
             this.State = state;
             this.TotalParticipants = totalParticipants;
             this.SentParticipants = sentParticipants;
+            AnsweredParticipants = answeredParticipants;
         }
 
         [IsId]
@@ -41,6 +43,8 @@
         public int TotalParticipants { get; private set; }
 
         public int SentParticipants { get; private set; }
+
+        public int AnsweredParticipants { get; private set; }
 
         #endregion
     }

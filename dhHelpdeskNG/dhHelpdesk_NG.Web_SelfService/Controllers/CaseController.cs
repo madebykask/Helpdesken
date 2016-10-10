@@ -816,7 +816,7 @@
             caseMailSetting.CustomeMailFromAddress = mailSenders;
 
             var basePath = this._masterDataService.GetFilePath(newCase.Customer_Id);
-            var ei = new CaseExtraInfo() { CreatedByApp = CreatedByApplications.SelfService5, LeadTimeForNow = 0};
+            var ei = new CaseExtraInfo() { CreatedByApp = CreatedByApplications.SelfService5, LeadTimeForNow = 0, ActionLeadTime = 0, ActionExternalTime = 0};
             int caseHistoryId = this._caseService.SaveCase(newCase, null, caseMailSetting, 0, SessionFacade.CurrentUserIdentity.UserId, ei, out errors);
             
             // save case files            

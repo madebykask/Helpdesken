@@ -65,6 +65,7 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Services.Services.Reports;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.Common.Enums.CaseSolution;
+    using DH.Helpdesk.Common.Enums.BusinessRule;
 
     public class CasesController : BaseController
     {        
@@ -1600,7 +1601,8 @@ namespace DH.Helpdesk.Web.Controllers
 
             return this.Json(new { Result = CaseFields.Select(x => new {
                 Name = x.Name,
-                Show = x.ShowOnStartPage
+                Show = x.ShowOnStartPage,
+                Required = x.Required
             }) }, JsonRequestBehavior.AllowGet);
         }
 
@@ -2526,6 +2528,12 @@ namespace DH.Helpdesk.Web.Controllers
                 throw new ArgumentException("Case customer has an invalid value");
             }
 
+            var customerSetting = _settingService.GetCustomerSetting(curCustomer.Id);
+            
+            // offset in Minute
+            var customerTimeOffset = customerSetting.TimeZone_offset;                        
+            var actionExternalTime = 0;
+            
             DHDomain.Case oldCase = new DHDomain.Case();
             if (edit)
             {                
@@ -2548,7 +2556,7 @@ namespace DH.Helpdesk.Web.Controllers
                         case_.UserCode = oldCase.UserCode;
                     }                    
                 }
-
+                
                 if (oldCase.StateSecondary_Id.HasValue)
                 {
                     var caseSubState = this._stateSecondaryService.GetStateSecondary(oldCase.StateSecondary_Id.Value);
@@ -2573,6 +2581,27 @@ namespace DH.Helpdesk.Web.Controllers
                             oldCase.ChangeTime,
                             utcNow,
                             oldCase.Department_Id) + oldCase.ExternalTime;
+
+                        
+                        workTimeCalcFactory =
+                        new WorkTimeCalculatorFactory(
+                            ManualDependencyResolver.Get<IHolidayService>(),
+                            curCustomer.WorkingDayStart,
+                            curCustomer.WorkingDayEnd,
+                            TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
+
+                        deptIds = null;
+                        if (case_.Department_Id.HasValue)
+                        {
+                            deptIds = new int[] { case_.Department_Id.Value };
+                        }                            
+                            
+                        workTimeCalc = workTimeCalcFactory.Build(oldCase.ChangeTime, utcNow, deptIds, customerTimeOffset);
+                        actionExternalTime = workTimeCalc.CalculateWorkTime(
+                            oldCase.ChangeTime,
+                            utcNow,
+                            oldCase.Department_Id, customerTimeOffset);
+                        
                     }
                 }
 
@@ -2590,7 +2619,9 @@ namespace DH.Helpdesk.Web.Controllers
 
             case_.LatestSLACountDate = CalculateLatestSLACountDate(oldCase.StateSecondary_Id, case_.StateSecondary_Id, oldCase.LatestSLACountDate);
             
-            var leadTime = 0; 
+            var leadTime = 0;
+            var actionLeadTime = 0;            
+            
             if (caseLog != null && caseLog.FinishingType > 0)
             {
                 if (caseLog.FinishingDate == null)
@@ -2630,6 +2661,27 @@ namespace DH.Helpdesk.Web.Controllers
                     case_.Department_Id) - case_.ExternalTime;
 
                 case_.LeadTime = leadTime;
+
+                // ActionLeadTime Calc
+                if (oldCase != null && oldCase.Id > 0)
+                {
+                    workTimeCalcFactory = new WorkTimeCalculatorFactory(
+                        ManualDependencyResolver.Get<IHolidayService>(),
+                        curCustomer.WorkingDayStart,
+                        curCustomer.WorkingDayEnd,
+                        TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
+                    deptIds = null;
+                    if (oldCase.Department_Id.HasValue)
+                    {
+                        deptIds = new int[] { oldCase.Department_Id.Value };
+                    }
+
+                    workTimeCalc = workTimeCalcFactory.Build(oldCase.ChangeTime, case_.FinishingDate.Value, deptIds, customerTimeOffset);
+                    actionLeadTime = workTimeCalc.CalculateWorkTime(
+                        oldCase.ChangeTime,
+                        case_.FinishingDate.Value.ToUniversalTime(),
+                        oldCase.Department_Id, customerTimeOffset) - actionExternalTime;
+                }                                
             }
             else
             {                
@@ -2649,11 +2701,39 @@ namespace DH.Helpdesk.Web.Controllers
                     case_.RegTime,
                     utcNow.ToUniversalTime(),
                     case_.Department_Id) - case_.ExternalTime;
+
+
+                 // ActionLeadTime Calc                
+                if (oldCase != null && oldCase.Id > 0)
+                {
+                    workTimeCalcFactory = new WorkTimeCalculatorFactory(
+                        ManualDependencyResolver.Get<IHolidayService>(),
+                        curCustomer.WorkingDayStart,
+                        curCustomer.WorkingDayEnd,
+                        TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
+                    deptIds = null;
+                    if (oldCase.Department_Id.HasValue)
+                    {
+                        deptIds = new int[] { oldCase.Department_Id.Value };
+                    }
+
+                    workTimeCalc = workTimeCalcFactory.Build(oldCase.ChangeTime, utcNow, deptIds, customerTimeOffset);
+                    actionLeadTime = workTimeCalc.CalculateWorkTime(
+                        oldCase.ChangeTime,
+                        utcNow.ToUniversalTime(),
+                        oldCase.Department_Id, customerTimeOffset) - actionExternalTime;
+                }
             }
 
             var childCasesIds = this._caseService.GetChildCasesFor(case_.Id).Where(it => !it.ClosingDate.HasValue).Select(it => it.Id).ToArray();
 
-            var ei = new CaseExtraInfo() { CreatedByApp = CreatedByApplications.Helpdesk5, LeadTimeForNow = leadTime };
+            var ei = new CaseExtraInfo() { 
+                        CreatedByApp = CreatedByApplications.Helpdesk5, 
+                        LeadTimeForNow = leadTime,
+                        ActionLeadTime = actionLeadTime,
+                        ActionExternalTime = actionExternalTime
+            };
+
             // save case and case history
             int caseHistoryId = this._caseService.SaveCase(
                         case_,
@@ -2765,6 +2845,10 @@ namespace DH.Helpdesk.Web.Controllers
             // send emails
             this._caseService.SendCaseEmail(case_.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase, caseLog, newLogFiles);
 
+            var actions = this._caseService.CheckBusinessRules(BREventType.OnSaveCase, case_, oldCase);
+            if (actions.Any())
+                this._caseService.ExecuteBusinessActions(actions, case_, caseLog, userTimeZone, caseHistoryId, basePath, SessionFacade.CurrentLanguageId,
+                                                          caseMailSetting, newLogFiles);
             //Unlock Case            
             if (m.caseLock != null && !string.IsNullOrEmpty(m.caseLock.LockGUID))
                 this._caseLockService.UnlockCaseByGUID(new Guid(m.caseLock.LockGUID));
@@ -2833,7 +2917,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var c = this._caseService.GetCaseById(caseLog.CaseId);
                 // save case and case history
                 c.FinishingDescription = @case.FinishingDescription;
-                var ei = new CaseExtraInfo() {CreatedByApp = CreatedByApplications.Helpdesk5, LeadTimeForNow = 0};
+                var ei = new CaseExtraInfo() {CreatedByApp = CreatedByApplications.Helpdesk5, LeadTimeForNow = 0, ActionLeadTime = 0, ActionExternalTime = 0 };
                 int caseHistoryId = this._caseService.SaveCase(c, caseLog, null, SessionFacade.CurrentUser.Id, this.User.Identity.Name, ei, out errors);
                 caseLog.CaseHistoryId = caseHistoryId;
             }
@@ -3605,6 +3689,7 @@ namespace DH.Helpdesk.Web.Controllers
                 defaultFileName = fileName.Replace("%", "");
                 defaultFileName = defaultFileName.Replace("?", "");
             }
+
             return defaultFileName;
         }
 

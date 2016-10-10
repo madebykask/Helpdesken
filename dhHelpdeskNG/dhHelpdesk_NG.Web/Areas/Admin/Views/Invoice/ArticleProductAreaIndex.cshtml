@@ -30,7 +30,7 @@
                               <select id="lstInvoiceArticles" name="lstInvoiceArticles" data-field="region" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                      @foreach (var a in Model.InvoiceArticles)
                                      {             
-                                        <option value="@a.Id">@a.Name - @a.NameEng</option>
+                                        <option value="@a.Id">@a.Number - @a.Name - @a.NameEng</option>
                                      }
                                  </select>
                           </td>

@@ -11,23 +11,34 @@
         @Translation.Get("No Uploaded Files")
         return;
     }
-    <table>
+    <table class="table table-striped">
         @foreach (var file in Model.Files)
         {
             if (string.IsNullOrEmpty(file))
             {
                 continue;
             }
+            <thead>
+            <tr>
+                <th>
+                    @Translation.Get("Filnamn")
+                </th>
+               
+                <th></th>
+            </tr>    
+        </thead>
+        <tbody>
             <tr>
                 <td>
                     @Html.ActionLink(file, "DownloadFile", new { entityId = Model.OrderId, fileName = file })
                 </td>
                 <td>
-                    <a onclick="deleteFile('@Model.Area', '@file', '@filesContainerId')" class="btn">
-                        @Translation.Get("Ta bort")
+                    <a onclick="deleteFile('@Model.Area', '@file', '@filesContainerId')" class="btn" title="@Translation.Get("Ta bort")">
+                        <i class="icon-remove"></i>
                     </a>
                 </td>
             </tr>
+        </tbody>
         }
     </table>
 </div>

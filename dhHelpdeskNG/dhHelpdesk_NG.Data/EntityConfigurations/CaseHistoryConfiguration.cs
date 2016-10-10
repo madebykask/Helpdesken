@@ -137,6 +137,9 @@
             this.Property(x => x.IsAbout_Department_Id).IsOptional();
             this.Property(x => x.CreatedByApp).IsOptional();
             this.Property(x => x.LatestSLACountDate).IsOptional();
+            this.Property(x => x.LeadTime).IsRequired();
+            this.Property(x => x.ActionLeadTime).IsRequired();
+            this.Property(x => x.ActionExternalTime).IsRequired();
             
             this.ToTable("tblcasehistory");
         }

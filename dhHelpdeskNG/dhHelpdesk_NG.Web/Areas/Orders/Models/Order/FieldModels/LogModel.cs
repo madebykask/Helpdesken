@@ -27,7 +27,7 @@
         public DateTime DateAndTime { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Registrerad")]
+        [LocalizedDisplay("Anmälare")]
         public UserName RegisteredBy { get; set; }
 
         [NotNullAndEmpty]

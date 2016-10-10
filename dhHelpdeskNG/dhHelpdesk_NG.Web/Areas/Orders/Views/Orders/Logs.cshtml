@@ -2,7 +2,7 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @model DH.Helpdesk.Web.Areas.Orders.Models.Order.FieldModels.LogsModel
 
-<table class="table table-striped table-bordered table-hover">
+<table class="table table-striped table-bordered table-hover tableintableform">
     <thead>
         <tr>
             <th>
@@ -14,7 +14,7 @@
             <th>
                 @Html.LabelFor(m => m.Logs.FirstOrDefault().Text)
             </th>
-            <th></th>
+            @*<th></th>*@
         </tr>
     </thead>
     <tbody>
@@ -31,11 +31,11 @@
                 <td>
                     @log.Text.ForHtmlView()
                 </td>
-                <td>
+                @*<td>
                     <a onclick="deleteLog('@Model.Area', @log.Id, '@Model.Area.ToString().ToLower()_logs_container')" class="btn">
                         @Translation.Get("Ta bort")
                     </a>
-                </td>
+                </td>*@
             </tr>
         }
     </tbody>

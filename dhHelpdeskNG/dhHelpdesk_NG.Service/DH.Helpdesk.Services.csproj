@@ -276,6 +276,8 @@
     <Compile Include="Services\Concrete\OrganizationJsonService.cs" />
     <Compile Include="Services\Concrete\Reports\ReportService.cs" />
     <Compile Include="Services\Concrete\Users\UsersPasswordHistoryService.cs" />
+    <Compile Include="Services\ContractService.cs" />
+    <Compile Include="Services\BusinessRuleService.cs" />
     <Compile Include="Services\OperationLogEmailLogService.cs" />
     <Compile Include="Services\Reports\IReportServiceService.cs" />
     <Compile Include="Services\ICaseLockService.cs" />

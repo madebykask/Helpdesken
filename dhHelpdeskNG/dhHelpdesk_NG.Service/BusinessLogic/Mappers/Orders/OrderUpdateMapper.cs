@@ -50,11 +50,14 @@
 
         private static void MapLogFields(Order entity, LogEditFields businessModel)
         {
-            entity.Logs = businessModel.Logs.Select(l => new OrderLog
-                                                             {
-                                                                 Id = l.Id,
-                                                                 LogNote = l.Text
-                                                             }).ToList();
+            if (businessModel.Logs.Any())
+            {
+                entity.Logs = businessModel.Logs.Select(l => new OrderLog
+                                                                 {
+                                                                     Id = l.Id,
+                                                                     LogNote = l.Text
+                                                                 }).ToList();
+            }
         } 
 
         private static void MapOrdererFields(Order entity, OrdererEditFields businessModel)

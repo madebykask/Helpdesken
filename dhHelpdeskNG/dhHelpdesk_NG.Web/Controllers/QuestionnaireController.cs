@@ -38,6 +38,8 @@
 
         private readonly IWorkingGroupService _workingGroupService;
 
+        private readonly IInfoService _infoService;
+
         #endregion
 
         #region Constructors and Destructors
@@ -51,7 +53,8 @@
             ICaseTypeService caseTypeService,
             IProductAreaService productAreaService,
             IWorkingGroupService workingGroupService,
-            IMasterDataService masterDataService)
+            IMasterDataService masterDataService,
+            IInfoService infoService)
             : base(masterDataService)
         {
             _questionnaireService = questionnaireService;
@@ -62,6 +65,7 @@
             _caseTypeService = caseTypeService;
             _productAreaService = productAreaService;
             _workingGroupService = workingGroupService;
+            _infoService = infoService;
         }
 
         #endregion
@@ -479,6 +483,220 @@
         [HttpGet]
         public ViewResult NewCircular(int questionnaireId)
         {
+            var model = GetCircularModel(
+                0,
+                questionnaireId,
+                "",
+                null,
+                CircularStates.None, 
+                new List<ConnectedToCircularOverview>());
+
+            return View("EditCircular", model);
+        }
+
+        [HttpGet]
+        public ViewResult EditCircular(int circularId)
+        {
+            CircularForEdit circular = this._circularService.GetById(circularId);
+
+            List<ConnectedCase> connectedCases = this._circularService.GetConnectedCases(circularId);
+            List<ConnectedToCircularOverview> connecteCasesOverviews =
+                connectedCases.Select(
+                    x =>
+                    new ConnectedToCircularOverview(
+                        circularId,
+                        x.CaseId,
+                        x.CaseNumber,
+                        x.Caption,
+                        x.Email,
+                        x.Guid,
+                        x.IsSent)).ToList();
+
+            var model = GetCircularModel(
+                circular.Id,
+                circular.QuestionnaireId,
+                circular.CircularName,
+                circular.ChangedDate,
+                circular.Status,
+                connecteCasesOverviews);
+
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public RedirectToRouteResult DeleteCircular(int questionnaireId, int stateId, int circularId)
+        {
+            this._circularService.DeleteById(circularId);
+
+            return this.RedirectToAction("CircularOverview", new { questionnaireId, state = stateId });
+        }
+
+        [HttpPost]
+        public ActionResult EditCircular(CircularModel newCircular, int[] connectedCases)
+        {
+            var cases = connectedCases == null || connectedCases.Count() == 0
+                            ? new List<int>()
+                            : connectedCases.ToList();
+
+            if (newCircular.Id == 0)
+            {
+                var circular = new CircularForInsert(newCircular.CircularName, newCircular.QuestionnaireId,
+                    CircularStateId.ReadyToSend, DateTime.Now, cases);
+
+                this._circularService.AddCircular(circular);
+            }
+            else
+            {
+                var circular = new CircularForUpdate(newCircular.Id, newCircular.CircularName, DateTime.Now, cases);
+                this._circularService.UpdateCircular(circular);
+            }
+
+            return this.RedirectToAction(
+                "CircularOverview",
+                new { questionnaireId = newCircular.QuestionnaireId, state = CircularStateId.All });
+        }
+
+        [HttpPost]
+        public PartialViewResult CaseRowGrid(
+            int questionnaireId,
+            int[] selectedDepartments,
+            int[] selectedCaseTypes,
+            int[] selectedProductArea,
+            int[] selectedWorkingGroups,
+            int procent,
+            DateTime? finishingDateFrom,
+            DateTime? finishingDateTo,
+            bool isUniqueEmail)
+        {
+            List<AvailableCase> cases = this._circularService.GetAvailableCases(
+                SessionFacade.CurrentCustomer.Id,
+                questionnaireId,
+                selectedDepartments,
+                selectedCaseTypes,
+                selectedProductArea,
+                selectedWorkingGroups,
+                procent,
+                finishingDateFrom,
+                finishingDateTo,
+                isUniqueEmail);
+
+            List<ConnectedToCircularOverview> models =
+                cases.Select(c => new ConnectedToCircularOverview(0, c.CaseId, c.CaseNumber, c.Caption, c.Email, Guid.Empty, c.IsSent))
+                    .ToList();
+
+            ViewData["QuestionnaireId"] = questionnaireId;
+            return this.PartialView("_CircularPartOverviewWithDelete", models);
+        }
+
+        [HttpGet]
+        public RedirectToRouteResult Send(int circularId)
+        {
+            string actionUrl = this.CreateQuestionnarieUrl();
+            this._circularService.SendQuestionnaire(actionUrl, circularId, this.OperationContext);
+
+            return this.RedirectToAction("EditCircular", new { circularId });
+        }
+
+        [HttpGet]
+        public RedirectToRouteResult Remind(int circularId)
+        {
+            string actionUrl = this.CreateQuestionnarieUrl();
+            this._circularService.Remind(actionUrl, circularId, this.OperationContext);
+
+            return this.RedirectToAction("EditCircular", new { circularId });
+        }
+
+        [HttpGet]
+        public ViewResult Questionnaire(Guid guid)
+        {
+            var detailed = this._circularService.GetQuestionnaire(guid, this.OperationContext);
+
+            List<QuestionnaireQuestionModel> questionnarieQuestionsModel = (from question in detailed.Questionnaire.Questions
+                                                                            let options =
+                                                                                question.Options.Select(
+                                                                                    option =>
+                                                                                    new QuestionnaireQuestionOptionModel
+                                                                                        (
+                                                                                        option.Id,
+                                                                                        option.Option,
+                                                                                        option.Position)).ToList()
+                                                                            select
+                                                                                new QuestionnaireQuestionModel(
+                                                                                question.Id,
+                                                                                question.Question,
+                                                                                question.Number,
+                                                                                question.IsShowNote,
+                                                                                question.NoteText,
+                                                                                options)).ToList();
+
+            var questionnarieModel = new QuestionnaireModel(
+                detailed.Questionnaire.Id,
+                detailed.Questionnaire.Name,
+                detailed.Questionnaire.Description,
+                detailed.CaseId,
+                detailed.Caption,
+                questionnarieQuestionsModel);
+
+            var questionnarieViewModel = new QuestionnaireViewModel(questionnarieModel, false, guid);
+
+            return this.View("Quiestionnaire", questionnarieViewModel);
+        }
+
+        [HttpPost]
+        public RedirectToRouteResult Questionnaire(AnswersViewModel model)
+        {
+            List<Answer> ids =
+                model.Questions.Where(x => x.SelectedOptionId != null)
+                    .Select(x => new Answer(x.NoteText, (int)x.SelectedOptionId))
+                    .ToList();
+
+            var participant = new ParticipantForInsert(model.Guid, model.IsAnonym, OperationContext.DateAndTime, ids);
+
+            this._circularService.SaveAnswers(participant);
+
+            return this.RedirectToAction("QuestionnaireCompleted", "Questionnaire");
+        }
+
+        [HttpGet]
+        public ViewResult QuestionnaireCompleted()
+        {
+            var html = _infoService.GetInfoText(4, OperationContext.CustomerId, OperationContext.LanguageId).Name;
+            return View("QuestionnaireCompleted", model: html);
+        }
+
+        [HttpGet]
+        public ViewResult Statistics(int questionnaireId, int circularId)
+        {
+            QuestionnaireOverview questionnaire = this._circularService.GetQuestionnaire(
+                questionnaireId,
+                OperationContext);
+            List<OptionResult> results = this._circularService.GetResult(circularId);
+
+            var viewModel = new StatisticsViewModel(questionnaireId, questionnaire, results);
+
+            return this.View("Statistics", viewModel);
+        }
+
+        [HttpPost]
+        public PartialViewResult Statistics(int questionnaireId, ReportFilter reportFilter)
+        {
+            QuestionnaireOverview questionnaire = this._circularService.GetQuestionnaire(
+                questionnaireId,
+                OperationContext);
+            List<OptionResult> results = this._circularService.GetResults(
+                reportFilter.ConnectedCirculars,
+                reportFilter.CircularCreatedDate.DateFrom,
+                reportFilter.CircularCreatedDate.DateTo);
+
+            var viewModel = new StatisticsViewModel(questionnaireId, questionnaire, results);
+
+            return this.PartialView("StatisticsGrid", viewModel);
+        }
+
+        #region PRIVATE
+
+        private CircularModel GetCircularModel(int circularId, int questionnaireId, string name, DateTime? changedDate, CircularStates status, List<ConnectedToCircularOverview> connectedCases)
+        {
             var departmentsOrginal = _departmentService.GetDepartments(SessionFacade.CurrentCustomer.Id);
             var availableDp =
                 departmentsOrginal.Select(x => new SelectListItem { Text = x.DepartmentName, Value = x.Id.ToString() })
@@ -513,9 +731,8 @@
             var selectedWgOrginal = new List<SelectListItem>();
             var selectedWg = selectedWgOrginal.ToList();
 
-            var circularParts = new List<CircularPartOverview>();
-
-            var model = new NewCircularModel(
+            var model = new CircularModel(
+                circularId,
                 questionnaireId,
                 availableDp,
                 selectedDp,
@@ -525,8 +742,11 @@
                 selectedPa,
                 availableWg,
                 selectedWg,
-                circularParts,
-                false);
+                false,
+                name,
+                changedDate,
+                status,
+                connectedCases);
 
             var lst = new List<SelectListItem>();
             lst.Add(new SelectListItem { Text = "5", Value = "5" });
@@ -542,213 +762,8 @@
             model.FinishingDateFrom = null;
             model.FinishingDateTo = null;
 
-            return View(model);
+            return model;
         }
-
-        [HttpGet]
-        public ViewResult EditCircular(int circularId)
-        {
-            CircularForEdit circular = this._circularService.GetById(circularId);
-
-            List<ConnectedCase> connectedCases = this._circularService.GetConnectedCases(circularId);
-            List<ConnectedToCircularOverview> connecteCasesOverviews =
-                connectedCases.Select(
-                    x =>
-                    new ConnectedToCircularOverview(
-                        circularId,
-                        x.CaseId,
-                        x.CaseNumber,
-                        x.Caption,
-                        x.Email,
-                        x.Guid,
-                        x.IsSent)).ToList();
-
-            var model = new EditCircularModel(
-                circular.Id,
-                circular.QuestionnaireId,
-                circular.CircularName,
-                circular.ChangedDate,
-                connecteCasesOverviews,
-                circular.Status);
-
-            return this.View(model);
-        }
-
-        [HttpPost]
-        public RedirectToRouteResult EditCircular(EditCircularModel editedCircular)
-        {
-            var circular = new CircularForUpdate(editedCircular.Id, editedCircular.CircularName, DateTime.Now);
-
-            this._circularService.UpdateCircular(circular);
-
-            return this.RedirectToAction("CircularOverview", new { questionnaireId = editedCircular.QuestionnaireId });
-        }
-
-        [HttpPost]
-        public RedirectToRouteResult DeleteCircular(int questionnaireId, int stateId, int circularId)
-        {
-            this._circularService.DeleteById(circularId);
-
-            return this.RedirectToAction("CircularOverview", new { questionnaireId, state = stateId });
-        }
-
-        [HttpPost]
-        public ActionResult NewCircular(NewCircularModel newCircular, int[] connectedCases)
-        {
-            var cases = connectedCases == null || connectedCases.Count() == 0
-                            ? new List<int>()
-                            : connectedCases.ToList();
-
-            var circular = new CircularForInsert(
-                newCircular.CircularName,
-                newCircular.QuestionnaireId,
-                CircularStateId.ReadyToSend,
-                DateTime.Now,
-                cases);
-
-            this._circularService.AddCircular(circular);
-
-            return this.RedirectToAction(
-                "CircularOverview",
-                new { questionnaireId = newCircular.QuestionnaireId, state = CircularStateId.All });
-        }
-
-        [HttpPost]
-        public PartialViewResult CaseRowGrid(
-            int questionnaireId,
-            int[] selectedDepartments,
-            int[] selectedCaseTypes,
-            int[] selectedProductArea,
-            int[] selectedWorkingGroups,
-            int procent,
-            DateTime? finishingDateFrom,
-            DateTime? finishingDateTo,
-            bool isUniqueEmail)
-        {
-            List<AvailableCase> cases = this._circularService.GetAvailableCases(
-                SessionFacade.CurrentCustomer.Id,
-                questionnaireId,
-                selectedDepartments,
-                selectedCaseTypes,
-                selectedProductArea,
-                selectedWorkingGroups,
-                procent,
-                finishingDateFrom,
-                finishingDateTo,
-                isUniqueEmail);
-
-            List<CircularPartOverview> models =
-                cases.Select(c => new CircularPartOverview(c.CaseId, c.CaseNumber, c.Caption, c.Email, c.IsSent))
-                    .ToList();
-
-            return this.PartialView("_CircularPartOverview", models);
-        }
-
-        [HttpGet]
-        public RedirectToRouteResult DeleteConnectedCase(int questionnaireId, int caseId, int circularId)
-        {
-            this._circularService.DeleteConnectedCase(circularId, caseId);
-
-            return this.RedirectToAction("EditCircular", new { circularId });
-        }
-
-        [HttpGet]
-        public RedirectToRouteResult Send(int circularId)
-        {
-            string actionUrl = this.CreateQuestionnarieUrl();
-            this._circularService.SendQuestionnaire(actionUrl, circularId, this.OperationContext);
-
-            return this.RedirectToAction("EditCircular", new { circularId });
-        }
-
-        [HttpGet]
-        public RedirectToRouteResult Remind(int circularId)
-        {
-            string actionUrl = this.CreateQuestionnarieUrl();
-            this._circularService.Remind(actionUrl, circularId, this.OperationContext);
-
-            return this.RedirectToAction("EditCircular", new { circularId });
-        }
-
-        [HttpGet]
-        public ViewResult Questionnaire(Guid guid)
-        {
-            QuestionnaireOverview questionnarie = this._circularService.GetQuestionnaire(guid, this.OperationContext);
-
-            List<QuestionnaireQuestionModel> questionnarieQuestionsModel = (from question in questionnarie.Questions
-                                                                            let options =
-                                                                                question.Options.Select(
-                                                                                    option =>
-                                                                                    new QuestionnaireQuestionOptionModel
-                                                                                        (
-                                                                                        option.Id,
-                                                                                        option.Option,
-                                                                                        option.Position)).ToList()
-                                                                            select
-                                                                                new QuestionnaireQuestionModel(
-                                                                                question.Id,
-                                                                                question.Question,
-                                                                                question.Number,
-                                                                                question.IsShowNote,
-                                                                                question.NoteText,
-                                                                                options)).ToList();
-
-            var questionnarieModel = new QuestionnaireModel(
-                questionnarie.Id,
-                questionnarie.Name,
-                questionnarie.Description,
-                questionnarieQuestionsModel);
-
-            var questionnarieViewModel = new QuestionnaireViewModel(questionnarieModel, false, guid);
-
-            return this.View("Quiestionnaire", questionnarieViewModel);
-        }
-
-        [HttpPost]
-        public RedirectToRouteResult Questionnaire(AnswersViewModel model)
-        {
-            List<Answer> ids =
-                model.Questions.Where(x => x.SelectedOptionId != null)
-                    .Select(x => new Answer(x.NoteText, (int)x.SelectedOptionId))
-                    .ToList();
-
-            var participant = new ParticipantForInsert(model.Guid, model.IsAnonym, OperationContext.DateAndTime, ids);
-
-            this._circularService.SaveAnswers(participant);
-
-            return this.RedirectToAction("Index", "Home");
-        }
-
-        [HttpGet]
-        public ViewResult Statistics(int questionnaireId, int circularId)
-        {
-            QuestionnaireOverview questionnaire = this._circularService.GetQuestionnaire(
-                questionnaireId,
-                OperationContext);
-            List<OptionResult> results = this._circularService.GetResult(circularId);
-
-            var viewModel = new StatisticsViewModel(questionnaireId, questionnaire, results);
-
-            return this.View("Statistics", viewModel);
-        }
-
-        [HttpPost]
-        public PartialViewResult Statistics(int questionnaireId, ReportFilter reportFilter)
-        {
-            QuestionnaireOverview questionnaire = this._circularService.GetQuestionnaire(
-                questionnaireId,
-                OperationContext);
-            List<OptionResult> results = this._circularService.GetResults(
-                reportFilter.ConnectedCirculars,
-                reportFilter.CircularCreatedDate.DateFrom,
-                reportFilter.CircularCreatedDate.DateTo);
-
-            var viewModel = new StatisticsViewModel(questionnaireId, questionnaire, results);
-
-            return this.PartialView("StatisticsGrid", viewModel);
-        }
-
-        #region PRIVATE
 
         private List<CircularOverviewModel> CreateCircularOverviewModels(int questionnaireId, int state)
         {
@@ -763,7 +778,8 @@
                         c.Date,
                         c.State,
                         c.TotalParticipants,
-                        c.SentParticipants)).ToList();
+                        c.SentParticipants,
+                        c.AnsweredParticipants)).ToList();
             return circularOverviews;
         }
 

@@ -12,23 +12,23 @@
         <div class="span100">
             <table id="tblCircular" class="table table-striped table-bordered table-hover">
                 <thead>
-                    <tr>
-                        <th>
-                            @Translation.Get("Ärende")
-                        </th>
-                        <th>
-                            @Translation.Get("Rubrik")
-                        </th>
-                        <th>
-                            @Translation.Get("E-post")
-                        </th>
-                        <th>
-                            @Translation.Get("Status")
-                        </th>
-                        <th>
-                            @Translation.Get("Ta bort")
-                        </th>
-                    </tr>
+                <tr>
+                    <th>
+                        @Translation.Get("Ärende")
+                    </th>
+                    <th>
+                        @Translation.Get("Rubrik")
+                    </th>
+                    <th>
+                        @Translation.Get("E-post")
+                    </th>
+                    <th>
+                        @Translation.Get("Status")
+                    </th>
+                    <th>
+                        @Translation.Get("Ta bort")
+                    </th>
+                </tr>
                 </thead>
                 @{
                     var cases = Model;
@@ -37,6 +37,7 @@
                         <tr>
                             <td>
                                 @Html.DisplayFor(modelItem => @connectedCase.CaseNumber)
+                                @Html.HiddenFor(m => @connectedCase.CaseId, new {Name = "ConnectedCases"})
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => @connectedCase.Caption)
@@ -48,7 +49,8 @@
                                 @connectedCase.IsSent.GetDisplayValue()
                             </td>
                             <td>
-                                @Html.ActionLink(Translation.Get("Ta bort"), "DeleteConnectedCase", new { questionnaireId, caseId = @connectedCase.CaseId, circularId = @connectedCase.CircularId }, new { @class = "btn" })
+                                @*@Html.ActionLink(Translation.Get("Ta bort"), "DeleteConnectedCase", new {questionnaireId, caseId = @connectedCase.CaseId, circularId = @connectedCase.CircularId}, new {@class = "btn"})*@
+                                <input type="button" value="@Translation.Get("Ta bort")" class="btn" id="btnDeleteCase" onclick="removeCase.call(this);"/>
                             </td>
                         </tr>
                     }
@@ -57,3 +59,9 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    function removeCase() {
+        $(this).closest('tr').remove();
+    };
+</script>

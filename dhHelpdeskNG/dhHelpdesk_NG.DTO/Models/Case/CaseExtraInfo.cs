@@ -9,5 +9,9 @@
         public string CreatedByApp  { get; set; }
 
         public int LeadTimeForNow { get; set; }
+
+        public int ActionLeadTime { get; set; }
+
+        public int ActionExternalTime { get; set; }
     }
 }

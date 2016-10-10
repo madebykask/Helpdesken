@@ -1109,7 +1109,7 @@ function CaseInitForm() {
                     $(".plupload_buttons").css("display", "inline");
                     $(".plupload_upload_status").css("display", "inline");
                     up.refresh();
-
+                    $("#IsAnyFileAdded").val("1");
                     // Raise event about uploaded file
                     //$(document).trigger("OnUploadCaseFile", [up, file]);
                 }
@@ -1185,7 +1185,7 @@ function CaseInitForm() {
                     $(".plupload_buttons").css("display", "inline");
                     $(".plupload_upload_status").css("display", "inline");
                     up.refresh();
-
+                    $("#IsAnyFileAdded").val("1");
                     //$(document).trigger("OnUploadLogFile", [up, file]);
                 }
             },

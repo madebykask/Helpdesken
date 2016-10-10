@@ -663,7 +663,17 @@ $(function () {
 
         IsProjectChanged: function () {
             var lastProjectId = $('#LastProjectId').val();
-            if (this.ProjectElement.val() != lastProjectId)
+            var curProjectId = this.ProjectElement.val();
+            curProjectId = curProjectId == undefined ? "" : curProjectId;
+            if (curProjectId != lastProjectId)
+                return true;
+            else
+                return false;
+        },
+
+        IsAnyFileAdded: function () {
+            var isFileAdded = $('#IsAnyFileAdded').val();
+            if (isFileAdded == "1")
                 return true;
             else
                 return false;
@@ -827,8 +837,10 @@ $(function () {
 
 
             var res = "";
+            var caseArticleData = this.GetSavedInvoices();
+            caseArticleData = caseArticleData.replace(/\</g, "%3C");
             $.post('/CaseInvoice/SaveCaseInvoice/', {
-                'caseInvoiceArticle': this.GetSavedInvoices(),
+                'caseInvoiceArticle': caseArticleData,
                 'customerId': this.CustomerId,
                 'caseId': this.CaseId,
                 'caseKey': this.CaseKey,
@@ -1337,9 +1349,7 @@ $(function () {
             }
             return OrderIsInvoiced;
         },
-
        
-
         GetUserSearchOptions: function () {
             var options = {
                 items: 20,
@@ -1888,7 +1898,7 @@ $(function () {
                     var article = articles[i];
                     var artDesc = article.Description != null ? article.Description : "";
 
-                    var text = article.GetFullName();
+                    var text = article.GetFullName(); 
                     if (artDesc != "")
                         text = artDesc + articleDescriptionDelimiter + text;
 
@@ -2012,7 +2022,7 @@ $(function () {
                 .addClass("btn");
 
             button.click(function () {
-                if (th.IsNewCase() || th.IsProductAreaChanged() || th.IsProjectChanged()) {
+                if (th.IsNewCase() || th.IsProductAreaChanged() || th.IsProjectChanged() || th.IsAnyFileAdded()) {
                     dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("Var vänlig spara ärendet och försök igen!"));
                     return;
                 }
@@ -2898,36 +2908,47 @@ $(function () {
                 ////////initiator field
                 model.ReportedBy = this.ReportedBy != null ? this.ReportedBy : "";
                 model.ShowReportedBy = dhHelpdesk.CaseArticles.ShowCaseField('ReportedBy')
+                model.RequiredReportedBy = dhHelpdesk.CaseArticles.RequiredCaseField('ReportedBy')
 
                 model.Persons_Name = this.Persons_Name != null ? this.Persons_Name : "";
                 model.ShowPersons_Name = dhHelpdesk.CaseArticles.ShowCaseField('Persons_Name');
+                model.RequiredPersons_Name = dhHelpdesk.CaseArticles.RequiredCaseField('Persons_Name')
 
                 model.Persons_Email = this.Persons_Email != null ? this.Persons_Email : "";
                 model.ShowPersons_Email = dhHelpdesk.CaseArticles.ShowCaseField('Persons_Email');
+                model.RequiredPersons_Email = dhHelpdesk.CaseArticles.RequiredCaseField('Persons_Email')
 
                 model.Persons_Phone = this.Persons_Phone != null ? this.Persons_Phone : "";
                 model.ShowPersons_Phone = dhHelpdesk.CaseArticles.ShowCaseField('Persons_Phone');
+                model.RequiredPersons_Phone = dhHelpdesk.CaseArticles.RequiredCaseField('Persons_Phone')
 
                 model.Persons_CellPhone = this.Persons_CellPhone != null ? this.Persons_CellPhone : "";
                 model.ShowPersons_CellPhone = dhHelpdesk.CaseArticles.ShowCaseField('Persons_CellPhone');
+                model.RequiredPersons_CellPhone = dhHelpdesk.CaseArticles.RequiredCaseField('Persons_CellPhone')
 
                 model.Region_Id = this.Region_Id != null ? this.Region_Id : "";
                 model.ShowRegion_Id = dhHelpdesk.CaseArticles.ShowCaseField('Region_Id');
+                model.RequiredRegion_Id = dhHelpdesk.CaseArticles.RequiredCaseField('Region_Id')
 
                 model.Department_Id = this.Department_Id != null ? this.Department_Id : "";
                 model.ShowDepartment_Id = dhHelpdesk.CaseArticles.ShowCaseField('Department_Id');
+                model.RequiredDepartment_Id = dhHelpdesk.CaseArticles.RequiredCaseField('Department_Id')
 
                 model.OU_Id = this.OU_Id != null ? this.OU_Id : "";
                 model.ShowOU_Id = dhHelpdesk.CaseArticles.ShowCaseField('OU_Id');
+                model.RequiredOU_Id = dhHelpdesk.CaseArticles.RequiredCaseField('OU_Id')
 
                 model.Place = this.Place != null ? this.Place : "";
                 model.ShowPlace = dhHelpdesk.CaseArticles.ShowCaseField('Place');
+                model.RequiredPlace = dhHelpdesk.CaseArticles.RequiredCaseField('Place')
 
                 model.UserCode = this.UserCode != null ? this.UserCode : "";
                 model.ShowUserCode = dhHelpdesk.CaseArticles.ShowCaseField('UserCode');
+                model.RequiredUserCode = dhHelpdesk.CaseArticles.RequiredCaseField('UserCode')
 
                 model.CostCentre = this.CostCentre != null ? this.CostCentre : "";
                 model.ShowCostCentre = dhHelpdesk.CaseArticles.ShowCaseField('CostCentre');
+                model.RequiredCostCentre = dhHelpdesk.CaseArticles.RequiredCaseField('CostCentre')
 
                 model.TitleCaption = this.Caption;
 
@@ -3127,10 +3148,16 @@ $(function () {
 
             this.InvoiceValidate = function () {
                 var isValid = true;
+                var errorMessage = '';
+
                 if (this._articles != null && this._articles.length > 0 && dhHelpdesk.Common.IsNullOrEmpty(this.CostCentre)) {
-                    dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.TranslateCaseFields("CostCentre") + " " + dhHelpdesk.Common.Translate("saknas!") + " - " + this.Caption);
+                    errorMessage = dhHelpdesk.Common.TranslateCaseFields("CostCentre") + " " + dhHelpdesk.Common.Translate("saknas!") + " - " + this.Caption + " <br/> ";
                     isValid = false;
                 }
+                
+                if (!isValid)
+                    dhHelpdesk.Common.ShowErrorMessage(errorMessage);
+
                 return isValid;
             },
 
@@ -3217,7 +3244,22 @@ $(function () {
             var CaseFieldSettingsLength = CaseFieldSettings.Result.length;
             for (var i = 0; i < CaseFieldSettingsLength; i++) {
                 if (CaseFieldSettings.Result[i].Name.toLowerCase() === CaseFieldName.toLowerCase()) {
-                    if (CaseFieldSettings.Result[i].Show == 1) {
+                    if (CaseFieldSettings.Result[i].Show != 0) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+            }
+            return false;
+        },
+
+        RequiredCaseField: function (caseFieldName) {
+            var CaseFieldSettingsLength = CaseFieldSettings.Result.length;
+            for (var i = 0; i < CaseFieldSettingsLength; i++) {
+                if (CaseFieldSettings.Result[i].Name.toLowerCase() === caseFieldName.toLowerCase()) {
+                    if (CaseFieldSettings.Result[i].Required != 0) {
                         return true;
                     }
                     else {
@@ -3599,17 +3641,41 @@ $(function () {
             this.InvoicedByTitle = dhHelpdesk.Common.Translate("Skickat av");
 
             //LABELS FOR initiator data
-            this.ReportedByTitle = dhHelpdesk.Common.TranslateCaseFields("ReportedBy");
-            this.Persons_NameTitle = dhHelpdesk.Common.TranslateCaseFields("Persons_Name");
-            this.Persons_EmailTitle = dhHelpdesk.Common.TranslateCaseFields("Persons_Email");
-            this.Persons_PhoneTitle = dhHelpdesk.Common.TranslateCaseFields("Persons_Phone");
-            this.Persons_CellPhoneTitle = dhHelpdesk.Common.TranslateCaseFields("Persons_CellPhone");
-            this.Region_IdTitle = dhHelpdesk.Common.TranslateCaseFields("Region_Id");
-            this.Department_IdTitle = dhHelpdesk.Common.TranslateCaseFields("Department_Id");
-            this.OU_IdTitle = dhHelpdesk.Common.TranslateCaseFields("OU_Id");
-            this.PlaceTitle = dhHelpdesk.Common.TranslateCaseFields("Place");
-            this.UserCodeTitle = dhHelpdesk.Common.TranslateCaseFields("UserCode");
-            this.CostCentreTitle = dhHelpdesk.Common.TranslateCaseFields("CostCentre");
+            
+            var extraCaption = "";
+
+            extraCaption = dhHelpdesk.CaseArticles.RequiredCaseField('ReportedBy') ? " *" : "";
+            this.ReportedByTitle = dhHelpdesk.Common.TranslateCaseFields("ReportedBy") + extraCaption;
+
+            extraCaption = dhHelpdesk.CaseArticles.RequiredCaseField('Persons_Name') ? " *" : "";
+            this.Persons_NameTitle = dhHelpdesk.Common.TranslateCaseFields("Persons_Name") + extraCaption;
+
+            extraCaption = dhHelpdesk.CaseArticles.RequiredCaseField('Persons_Email') ? " *" : "";
+            this.Persons_EmailTitle = dhHelpdesk.Common.TranslateCaseFields("Persons_Email") + extraCaption;
+
+            extraCaption = dhHelpdesk.CaseArticles.RequiredCaseField('Persons_Phone') ? " *" : "";
+            this.Persons_PhoneTitle = dhHelpdesk.Common.TranslateCaseFields("Persons_Phone") + extraCaption;
+
+            extraCaption = dhHelpdesk.CaseArticles.RequiredCaseField('Persons_CellPhone') ? " *" : "";
+            this.Persons_CellPhoneTitle = dhHelpdesk.Common.TranslateCaseFields("Persons_CellPhone") + extraCaption;
+
+            extraCaption = dhHelpdesk.CaseArticles.RequiredCaseField('Region_Id') ? " *" : "";
+            this.Region_IdTitle = dhHelpdesk.Common.TranslateCaseFields("Region_Id") + extraCaption;
+
+            extraCaption = dhHelpdesk.CaseArticles.RequiredCaseField('Department_Id') ? " *" : "";
+            this.Department_IdTitle = dhHelpdesk.Common.TranslateCaseFields("Department_Id") + extraCaption;
+
+            extraCaption = dhHelpdesk.CaseArticles.RequiredCaseField('OU_Id') ? " *" : "";
+            this.OU_IdTitle = dhHelpdesk.Common.TranslateCaseFields("OU_Id") + extraCaption;
+
+            extraCaption = dhHelpdesk.CaseArticles.RequiredCaseField('Place') ? " *" : "";
+            this.PlaceTitle = dhHelpdesk.Common.TranslateCaseFields("Place") + extraCaption;
+
+            extraCaption = dhHelpdesk.CaseArticles.RequiredCaseField('UserCode') ? " *" : "";
+            this.UserCodeTitle = dhHelpdesk.Common.TranslateCaseFields("UserCode") + extraCaption;
+
+            extraCaption = dhHelpdesk.CaseArticles.RequiredCaseField('CostCentre') ? " *" : "";
+            this.CostCentreTitle = dhHelpdesk.Common.TranslateCaseFields("CostCentre") + extraCaption;
 
             this.Total = null;
             this.Articles = [];
@@ -3621,41 +3687,52 @@ $(function () {
             this.IsCredited = false;
             this.TitleCaption = "";
 
+            this.RequiredReportedBy = false;
             this.ShowReportedBy = false;
             this.ReportedBy = "";
 
             this.Persons_Name = "";
             this.ShowPersons_Name = false;
+            this.RequiredPerson_Name = false;
 
             this.Persons_Email = "";
             this.ShowPersons_Email = false;
+            this.RequiredPersons_Email = false;
 
             this.Persons_Phone = "";
             this.ShowPersons_phone = false;
+            this.RequiredPersons_Phone = false;
 
             this.Persons_CellPhone = "";
             this.ShowPersons_CellPhone = false;
+            this.RequiredPersons_CellPhone = false;
 
             this.Region_Id = "";
             this.ShowRegion_Id = false;
+            this.RequiredRegion_Id = false;
 
             this.Department_Id = "";
             this.ShowDepartment_Id = false;
+            this.RequiredDepartment_Id = false;
 
             this.OU_Id = "";
             this.ShowOU_Id = false;
+            this.RequiredOU_Id = false;
 
             this.Place = "";
             this.ShowPlace = false;
+            this.RequiredPlace = false;
 
             this.UserCode = "";
             this.ShowUserCode = false;
+            this.RequiredUserCode = false;
 
             this.CostCentre = "";
             this.ShowCostCentre = false;
+            this.RequiredCostCentre = false;
 
             this.CreditForOrder_Id = null;
-            this.Project_Id = null;
+            this.Project_Id = null;            
 
             this.OrderState = 0;
 
@@ -3894,7 +3971,7 @@ $(function () {
             var that = {};
             my = my || {};
 
-            var maxFileSizeMb = spec.maxFileSizeMb || 30;
+            var maxFileSizeMb = spec.maxFileSizeMb || 10;
             var allowedFileTypes = spec.allowedFileTypes || ["application/pdf"];
             var caseId = spec.caseId || '';
             var files = spec.files || [];
@@ -3915,7 +3992,7 @@ $(function () {
                 return files;
             };
 
-            var getFile = function (fileName) { //this has a problem if there is a weird filename, example "Ä(4).pdf" todo: fix this
+            var getFile = function (fileName) { 
                 var fs = getFiles();
                 for (var i = 0; i < fs.length; i++) {
                     var f = fs[i];

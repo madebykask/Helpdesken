@@ -27,6 +27,17 @@
         @Html.EditorFor(m => m.OrderRow8, "Fields/Text")           
         @Html.EditorFor(m => m.Configuration, "Fields/Text")           
         @Html.EditorFor(m => m.OrderInfo, "Fields/WideText")           
-        @Html.EditorFor(m => m.OrderInfo2, "Fields/Number")           
+        @*@Html.EditorFor(m => m.OrderInfo2, "Fields/Number")  *@
+         @if (Model.OrderInfo2.Show)
+        {
+            <tr>
+                <td class="span3">
+                    @Html.FieldCaption(Model.OrderInfo2)
+                </td>
+                <td  class="span9">
+                    <input type="checkbox" name="casetype.OrderInfo2" @(Model.OrderInfo2.Value == 1 ? "checked=checked" : "") value="1"/> 
+                </td>
+            </tr> 
+         }  
     </tbody>
 </table>

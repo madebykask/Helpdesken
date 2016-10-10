@@ -4,6 +4,6 @@
 
     public interface IWorkTimeCalculatorFactory
     {
-        WorkTimeCalculator Build(DateTime rangeBeginUTC, DateTime rangeEndUTC, int[] departmentsIds);
+        WorkTimeCalculator Build(DateTime rangeBeginUTC, DateTime rangeEndUTC, int[] departmentsIds, int timeDiff = 0);
     }
 }

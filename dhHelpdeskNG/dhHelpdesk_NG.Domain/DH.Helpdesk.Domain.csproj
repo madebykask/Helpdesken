@@ -71,6 +71,10 @@
     <Compile Include="Building.cs" />
     <Compile Include="BulletinBoard.cs" />
     <Compile Include="BulletinBoardSearch.cs" />
+    <Compile Include="BusinessRules\BRRuleEntity.cs" />
+    <Compile Include="BusinessRules\BRConditionEntity.cs" />
+    <Compile Include="BusinessRules\BRActionEntity.cs" />
+    <Compile Include="BusinessRules\BRActionParamEntity.cs" />
     <Compile Include="CalendarSearch.cs" />
     <Compile Include="CaseSettings.cs" />
     <Compile Include="CaseSolution.cs" />

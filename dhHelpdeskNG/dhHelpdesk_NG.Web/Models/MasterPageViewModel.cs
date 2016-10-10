@@ -148,6 +148,11 @@
             return this.CustomerSetting.ModuleComputerUser.ToBool() && this.IsAdministrator();
         }
 
+        public bool IsContractVisible()
+        {
+            return this.CustomerSetting.ModuleContract.ToBool();
+        }
+
         public bool IsSettingsModulesVisible()
         {
             return                 

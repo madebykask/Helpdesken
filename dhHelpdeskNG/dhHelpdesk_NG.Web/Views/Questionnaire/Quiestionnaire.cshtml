@@ -7,7 +7,10 @@
         <div class="pull-left">
             <ul class="secnav">
                 <li>
-                    <input type="submit" value="@Translation.Get("Spara")" class="btn"/>
+                    <input type="submit" value="@Translation.Get("Spara och stäng")" class="btn"/>
+                    <a href="@Url.Action("Questionnaire", "Questionnaire", new { guid = Model.Guid })" class="btn">
+                        @Translation.Get("Rensa")
+                    </a>
                 </li>
                 <li>
                     @Html.CheckBoxFor(x => x.IsAnonym)
@@ -29,6 +32,16 @@
                         <div class="row">
                             <div class="span12">
                                 @Model.QuestionnaireModel.Description
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="span12">
+                                @Translation.Get("Ärende"): @Model.QuestionnaireModel.CaseId
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="span12">
+                                @Translation.Get("Rubrik"): @Model.QuestionnaireModel.Caption
                             </div>
                         </div>
                     </div>
@@ -77,7 +90,7 @@
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    @Html.Label(question.NoteText)
+                                                    @Html.Label(question.NoteTextLabel)
                                                     @Html.TextAreaFor(x => questions[index].NoteText, new { maxlength = "2000", style = "height:80px;" })
                                                 </td>
                                             </tr>

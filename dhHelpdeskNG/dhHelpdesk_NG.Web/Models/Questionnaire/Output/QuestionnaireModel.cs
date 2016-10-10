@@ -10,12 +10,16 @@
             int id,
             string name,
             string description,
+            int caseId,
+            string caption,
             List<QuestionnaireQuestionModel> questions)
         {
             this.Id = id;
             this.Name = name;
             this.Description = description;
             this.Questions = questions;
+            CaseId = caseId;
+            Caption = caption;
         }
 
         [IsId]
@@ -28,5 +32,9 @@
 
         [NotNull]
         public List<QuestionnaireQuestionModel> Questions { get; private set; }
+
+        public int CaseId { get; private set; }
+
+        public string Caption { get; set; }
     }
 }

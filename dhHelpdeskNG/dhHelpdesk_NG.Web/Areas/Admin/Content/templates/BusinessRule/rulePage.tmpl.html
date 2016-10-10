@@ -1,0 +1,26 @@
+﻿<div class="rule-container">
+    <div class="content">
+        <div class="container">
+            <ul class="nav nav-tabs" id="myTab">
+                <li class="active"><a href="#fragment-1">New Rule2</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div class="tab-pane tab-pane-border active" id="fragment-1">                    
+                    <div id="ruleSec">
+                       {{for RuleSection tmpl="ruleSecTemp" /}} 
+                    </div>
+
+                    <div id="conditionSec">
+                        {{for ConditionSection tmpl="conditionSecTemp" /}} 
+                    </div>
+
+                   <!-- <div id="actionSecArea">
+                        {{for ActionSection tmpl="actionSec" /}}                     
+                    </div>-->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

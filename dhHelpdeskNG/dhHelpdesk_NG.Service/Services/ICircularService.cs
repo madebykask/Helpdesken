@@ -22,7 +22,7 @@
 
         void DeleteConnectedCase(int cirularId, int caseId);
 
-        QuestionnaireOverview GetQuestionnaire(Guid guid, OperationContext operationContext);
+        QuestionnaireDetailedOverview GetQuestionnaire(Guid guid, OperationContext operationContext);
 
         QuestionnaireOverview GetQuestionnaire(int id, OperationContext operationContext);
 

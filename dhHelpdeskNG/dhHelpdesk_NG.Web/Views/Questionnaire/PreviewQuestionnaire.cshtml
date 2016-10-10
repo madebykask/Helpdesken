@@ -6,11 +6,14 @@
 }
 
 
-<div class="secnavs">
+<div class="secnavs fixed">
     <div class="pull-left">
-        <ul class="secnav">                            
-            <li>
-                <img src="@Url.Content("~/Content/img/" + @Model.LanguageId.GetLanguageIconFileName() )" style="width: 27px;height: 27px"  />
+        <ul class="secnav">
+            <li style="width: 27px;">
+                @if (!String.IsNullOrWhiteSpace(Model.LanguageId.GetLanguageIconFileName()))
+                {
+                    <img src="@Url.Content("~/Content/img/" + @Model.LanguageId.GetLanguageIconFileName())" style="width: 27px; height: 27px"/>
+                }
             </li>               
             <li>
                 @Html.DropDownListFor(model => model.LanguageId, Model.Languages,new {id = "languageList", style="width: 150px"}) 

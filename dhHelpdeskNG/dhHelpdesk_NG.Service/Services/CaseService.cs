@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-    using System.Reflection;
+using System.Reflection;
 
 namespace DH.Helpdesk.Services.Services
 {
 
+    using DH.Helpdesk.BusinessData.Models.BusinessRules;
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.Case.ChidCase;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
@@ -15,7 +16,9 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.BusinessData.Models.User.Input;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+    using DH.Helpdesk.Common.Constants;
     using DH.Helpdesk.Common.Enums;
+    using DH.Helpdesk.Common.Enums.BusinessRule;
     using DH.Helpdesk.Common.Extensions.Boolean;
     using DH.Helpdesk.Dal.DbContext;
     using DH.Helpdesk.Dal.Enums;
@@ -91,6 +94,14 @@ namespace DH.Helpdesk.Services.Services
 
         void SendCaseEmail(int caseId, CaseMailSetting cms, int caseHistoryId, string basePath, TimeZoneInfo userTimeZone,                            
                            Case oldCase = null, CaseLog log = null, List<CaseFileDto> logFiles = null);
+
+        List<BusinessRuleActionModel> CheckBusinessRules(BREventType occurredEvent, Case currentCase, Case oldCase = null);
+
+        void ExecuteBusinessActions(List<BusinessRuleActionModel> actions, Case currentCase, CaseLog log, TimeZoneInfo userTimeZone,
+                                    int caseHistoryId, string basePath, int currentLanguageId, CaseMailSetting caseMailSetting,
+                                    List<CaseFileDto> logFiles = null
+                                    );
+
         void UpdateFollowUpDate(int caseId, DateTime? time);
         void MarkAsUnread(int caseId);
         void MarkAsRead(int caseId);
@@ -157,7 +168,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly ILogService _logService;
         private readonly ILogFileRepository _logFileRepository;
         private readonly IFormFieldValueRepository _formFieldValueRepository;
-
+        
         private readonly ICaseMailer caseMailer;
 
         private readonly IInvoiceArticleService invoiceArticleService;
@@ -171,6 +182,10 @@ namespace DH.Helpdesk.Services.Services
         private readonly ICaseFilterFavoriteRepository _caseFilterFavoriteRepository;
 
         private readonly IMail2TicketRepository _mail2TicketRepository;
+
+        private readonly IBusinessRuleService _businessRuleService;
+        private readonly IEmailGroupService _emailGroupService;
+        private readonly IUserService _userService;
 
         public CaseService(
             ICaseRepository caseRepository,
@@ -201,7 +216,11 @@ namespace DH.Helpdesk.Services.Services
             ICaseLockService caseLockService, 
             CaseStatisticService caseStatService,
             ICaseFilterFavoriteRepository caseFilterFavoriteRepository,
-            IMail2TicketRepository mail2TicketRepository)
+            IMail2TicketRepository mail2TicketRepository,
+            IBusinessRuleService businessRuleService,
+            IEmailGroupService emailGroupService,
+            IUserService userService
+            )
         {
             this._unitOfWork = unitOfWork;
             this._caseRepository = caseRepository;
@@ -233,6 +252,9 @@ namespace DH.Helpdesk.Services.Services
             this._caseStatService = caseStatService;
             this._caseFilterFavoriteRepository = caseFilterFavoriteRepository;
             this._mail2TicketRepository = mail2TicketRepository;
+            this._businessRuleService = businessRuleService;
+            this._emailGroupService = emailGroupService;
+            this._userService = userService;
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
@@ -349,7 +371,7 @@ namespace DH.Helpdesk.Services.Services
                     this._emailLogRepository.Delete(l);
                 }
                 this._emailLogRepository.Commit(); 
-            }            
+            }
 
             // delete caseHistory
             var caseHistories = this._caseHistoryRepository.GetCaseHistoryByCaseId(id);
@@ -1010,6 +1032,8 @@ namespace DH.Helpdesk.Services.Services
             }
 
             extraFields.LeadTime = caseExtraInfo.LeadTimeForNow;
+            extraFields.ActionLeadTime = caseExtraInfo.ActionLeadTime;
+            extraFields.ActionExternalTime = caseExtraInfo.ActionExternalTime;
 
             ret = userId == 0 ? 
                 this.SaveCaseHistory(c, userId, adUser, caseExtraInfo.CreatedByApp, out errors, adUser, extraFields) :
@@ -1727,6 +1751,201 @@ namespace DH.Helpdesk.Services.Services
                                         files, cms.AbsoluterUrl, cms.CustomeMailFromAddress);
         }
 
+        public List<BusinessRuleActionModel> CheckBusinessRules(BREventType occurredEvent, Case currentCase, Case oldCase = null)
+        {
+            var ret = new List<BusinessRuleActionModel>();
+
+            if (currentCase.Id == 0)  
+                return ret;
+
+            var customerId = currentCase.Customer_Id;
+            var rules = _businessRuleService.GetRules(customerId, occurredEvent);
+            if (rules.Any())
+            {
+                ret = GetAllNeededAction(rules, currentCase, oldCase);                
+            }
+
+            return ret;
+        }
+
+        public void ExecuteBusinessActions(List<BusinessRuleActionModel> actions, Case currentCase, CaseLog log, TimeZoneInfo userTimeZone,
+                                           int caseHistoryId, string basePath, int currentLanguageId, CaseMailSetting caseMailSetting,
+                                           List<CaseFileDto> logFiles = null)
+        {
+            foreach (var action in actions)
+            {
+                switch (action.ActionType)
+                {
+                    case BRActionType.SendEmail:
+                        DoAction_SendEmail(action, currentCase, log, userTimeZone, caseHistoryId, basePath, currentLanguageId, caseMailSetting, logFiles);
+                        break;                    
+                }
+            }
+        }
+
+        private void DoAction_SendEmail(BusinessRuleActionModel action, Case currentCase, CaseLog log, TimeZoneInfo userTimeZone,
+                                        int caseHistoryId, string basePath, int currentLanguageId, CaseMailSetting caseMailSetting,
+                                        List<CaseFileDto> logFiles = null)
+        {
+            var customerId = currentCase.Customer_Id;
+            var mailTemplate = new MailTemplateLanguageEntity();
+            var sep = new char[] { ';' };
+
+            var emailList = new List<string>();
+            foreach (var param in action.ActionParams)
+            {
+                var dataList = !string.IsNullOrEmpty(param.ParamValue)? param.ParamValue.Split(BRConstItem.Value_Separator, StringSplitOptions.RemoveEmptyEntries):null;
+                switch (param.ParamType)
+                {
+                    case BRActionParamType.EMailTemplate:
+                        if (!string.IsNullOrEmpty(param.ParamValue))
+                        {
+                            int templateId = 0;
+                            int.TryParse(param.ParamValue, out templateId);
+                            mailTemplate = _mailTemplateService.GetMailTemplateLanguageForCustomer(templateId, customerId, currentCase.RegLanguage_Id);
+                        }
+                        break;
+
+                    case BRActionParamType.EmailGroup:                        
+                        if (dataList != null && dataList.Any())
+                        {
+                            var groups = _emailGroupService.GetEmailGroups(customerId).Where(e => dataList.Contains(e.Id.ToString())).ToList();
+                            if (groups.Any())
+                            {
+                                var lineSep = new string[] { Environment.NewLine };
+                                foreach (var group in groups)
+                                {
+                                    var groupEmails = group.Members.Split(lineSep, StringSplitOptions.RemoveEmptyEntries);
+                                    emailList.AddRange(groupEmails);
+                                }
+                            }
+                        }
+                        break;
+
+                    case BRActionParamType.WorkingGroup:
+                        if (dataList != null && dataList.Any())
+                        {
+                            var wgs = _workingGroupService.GetAllWorkingGroupsForCustomer(customerId).Where(e => dataList.Contains(e.Id.ToString())).ToList();
+                            if (wgs.Any())
+                            {
+                                foreach (var wg in wgs)
+                                {
+                                    if (wg.IsActive != 0 && wg.UserWorkingGroups != null && wg.UserWorkingGroups.Any())
+                                    {
+                                        var usEmails = wg.UserWorkingGroups.Where(w => w.User != null && w.User.IsActive != 0)
+                                                                     .Select(w => w.User.Email)
+                                                                     .ToList();
+                                        emailList.AddRange(usEmails);
+                                    }
+                                }
+                            }
+                        }
+                        break;
+
+                    case BRActionParamType.Administrator:
+                        if (dataList != null && dataList.Any())
+                        {
+                            var admins = _userService.GetAvailablePerformersOrUserId(customerId).Where(e => dataList.Contains(e.Id.ToString())).ToList();
+                            if (admins.Any())
+                            {
+                                foreach (var admin in admins)
+                                {
+                                    if (admin.IsActive != 0)
+                                    {                                        
+                                        emailList.Add(admin.Email);
+                                    }
+                                }
+                            }
+                        }
+                        break;
+
+                    case BRActionParamType.Recipients:
+                        if (!string.IsNullOrEmpty(param.ParamValue))
+                        {                            
+                            var emails = param.ParamValue.Split(sep, StringSplitOptions.RemoveEmptyEntries);
+                            emailList.AddRange(emails);
+                        }
+                        break;
+
+                    case BRActionParamType.CaseCreator:
+                        if (!string.IsNullOrEmpty(param.ParamValue))
+                        {
+                            var emails = param.ParamValue.Split(sep, StringSplitOptions.RemoveEmptyEntries);
+                            emailList.AddRange(emails);
+                        }
+                        break;
+
+                    case BRActionParamType.Initiator:
+                        if (!string.IsNullOrEmpty(param.ParamValue))
+                        {                            
+                            var emails = param.ParamValue.Split(sep, StringSplitOptions.RemoveEmptyEntries);
+                            emailList.AddRange(emails);
+                        }
+                        break;
+
+                    case BRActionParamType.CaseIsAbout:
+                        if (!string.IsNullOrEmpty(param.ParamValue))
+                        {                            
+                            var emails = param.ParamValue.Split(sep, StringSplitOptions.RemoveEmptyEntries);
+                            emailList.AddRange(emails);
+                        }
+                        break; 
+
+                }
+            }
+
+            if (mailTemplate != null && !string.IsNullOrEmpty(mailTemplate.Body) && 
+                !string.IsNullOrEmpty(mailTemplate.Subject) && emailList.Any())
+            {
+                var distinctedEmails = emailList.Select(x => x.Trim().ToLower()).Distinct().ToList();
+                SendEmail(distinctedEmails, mailTemplate, currentCase, log, userTimeZone, caseHistoryId, basePath,
+                          currentLanguageId, caseMailSetting, logFiles);
+            }
+
+        }
+
+
+        private void SendEmail(List<string> receivers, MailTemplateLanguageEntity mailTemplate, Case currentCase, 
+                               CaseLog log, TimeZoneInfo userTimeZone, int caseHistoryId, string basePath, 
+                               int currentLanguageId, CaseMailSetting caseMailSetting, 
+                               List<CaseFileDto> logFiles = null)
+        {
+
+            if (!string.IsNullOrEmpty(caseMailSetting.HelpdeskMailFromAdress))
+                caseMailSetting.HelpdeskMailFromAdress = caseMailSetting.HelpdeskMailFromAdress.Trim();
+            else
+                return;
+
+
+            List<string> files = null;
+            if (logFiles != null && log != null)
+                if (logFiles.Count > 0)
+                    files = logFiles.Select(f => _filesStorage.ComposeFilePath(ModuleName.Log, log.Id, basePath, f.FileName)).ToList();
+
+            foreach (var receiver in receivers)
+            {
+                var curMail = receiver.Trim();
+                if (!string.IsNullOrWhiteSpace(curMail) && _emailService.IsValidEmail(curMail))
+                {
+                    var emailLog = new EmailLog(caseHistoryId, mailTemplate.MailTemplate_Id, curMail, _emailService.GetMailMessageId(caseMailSetting.HelpdeskMailFromAdress));
+                    var fields = GetCaseFieldsForEmail(currentCase, log, caseMailSetting, emailLog.EmailLogGUID.ToString(), 1, userTimeZone);
+                    var siteSelfService = ConfigurationManager.AppSettings[AppSettingsKey.SelfServiceAddress].ToString() + emailLog.EmailLogGUID.ToString();
+                    var siteHelpdesk = caseMailSetting.AbsoluterUrl + "Cases/edit/" + currentCase.Id.ToString();
+                    var sendResult = _emailService.SendEmail(caseMailSetting.HelpdeskMailFromAdress, emailLog.EmailAddress,
+                                                             mailTemplate.Subject, mailTemplate.Body, fields, 
+                                                             EmailResponse.GetEmptyEmailResponse(), 
+                                                             emailLog.MessageId, false, files, siteSelfService, siteHelpdesk);
+                    emailLog.SetResponse(sendResult.SendTime, sendResult.ResponseMessage);
+                    var now = DateTime.Now;
+                    emailLog.CreatedDate = now;
+                    emailLog.ChangedDate = now;
+                    _emailLogRepository.Add(emailLog);                                        
+                }
+            }
+            _emailLogRepository.Commit();
+        }
+
+
         private void SendTemplateEmail(
             GlobalEnums.MailTemplates mailTemplateEnum, 
             Case case_,
@@ -1884,6 +2103,8 @@ namespace DH.Helpdesk.Services.Services
             h.Description = c.Description;
             h.ExternalTime = c.ExternalTime;
             h.LeadTime = c.LeadTime;
+            h.ActionLeadTime = 0;
+            h.ActionExternalTime = 0;
             h.FinishingDate = c.FinishingDate;
             h.FinishingDescription = c.FinishingDescription;
             h.FollowUpDate = c.FollowUpDate;
@@ -1956,12 +2177,12 @@ namespace DH.Helpdesk.Services.Services
                 h.CaseLog  = extraField.CaseLog;
                 h.ClosingReason = extraField.ClosingReason;
                 h.LeadTime = extraField.LeadTime;
+                h.ActionLeadTime = extraField.ActionLeadTime;
+                h.ActionExternalTime = extraField.ActionExternalTime;
             }
             
             return h;
-        }
-
-        
+        }        
 
         private List<Field> GetCaseFieldsForEmail(Case c, CaseLog l, CaseMailSetting cms, string emailLogGuid,int stateHelper, TimeZoneInfo userTimeZone)
         {
@@ -2074,5 +2295,122 @@ namespace DH.Helpdesk.Services.Services
             }
             return ret;
         }
+
+        private List<BusinessRuleActionModel> GetAllNeededAction(IList<BusinessRuleModel> rules, Case currentCase, Case oldCase = null)
+        {
+            var ret = new List<BusinessRuleActionModel>();
+            foreach (var rule in rules)
+            {
+                if (rule.RuleActive)
+                    ret.AddRange(GetNeededActionsToRun(rule, currentCase, oldCase));
+            }
+
+            return ret;
+        }
+
+        private List<BusinessRuleActionModel> GetNeededActionsToRun(BusinessRuleModel rule, Case currentCase, Case oldCase = null)
+        {
+            var ret = new List<BusinessRuleActionModel>();
+
+            #region Check Process field
+
+            var oldProcessId = oldCase != null ? (oldCase.ProductArea_Id.HasValue ? oldCase.ProductArea_Id.Value : BRConstItem.NULL) : BRConstItem.NULL;
+            var newProcessId = currentCase.ProductArea_Id.HasValue ? currentCase.ProductArea_Id.Value : BRConstItem.NULL;
+
+            var processCondition = false;
+            if (!rule.ProcessFrom.Any() && !rule.ProcessTo.Any())
+                processCondition = true;
+            else
+            {
+                if (rule.ProcessFrom.Contains(BRConstItem.ANY) || rule.ProcessFrom.Contains(oldProcessId))
+                    if (rule.ProcessTo.Contains(BRConstItem.ANY) || rule.ProcessTo.Contains(newProcessId))
+                    {
+                        processCondition = true;
+                    }
+            }
+
+            #endregion
+
+            #region Check SubStatus field
+
+            var oldSubStatusId = oldCase != null ? (oldCase.StateSecondary_Id.HasValue ? oldCase.StateSecondary_Id.Value : BRConstItem.NULL) : BRConstItem.NULL;
+            var newSubStatusId = currentCase.StateSecondary_Id.HasValue ? currentCase.StateSecondary_Id.Value : BRConstItem.NULL;
+
+            var subStatusCondition = false;
+
+            if (!rule.SubStatusFrom.Any() && !rule.SubStatusTo.Any())
+                subStatusCondition = true;
+            else
+            {
+                if (rule.SubStatusFrom.Contains(BRConstItem.ANY) || rule.SubStatusFrom.Contains(oldSubStatusId))
+                    if (rule.SubStatusTo.Contains(BRConstItem.ANY) || rule.SubStatusTo.Contains(newSubStatusId))
+                    {
+                        subStatusCondition = true;
+                    }
+             }
+            #endregion
+
+            if (processCondition && subStatusCondition)
+            {
+                // TODO: we only have send mail action, in the future it must accept dynamic actions 
+                var newAction = new BusinessRuleActionModel(rule.Id, BRActionType.SendEmail);
+
+                var param = new BusinessRuleActionParamModel(BRActionParamType.EMailTemplate, rule.EmailTemplate.ToString());
+                newAction.AddActionParam(param);
+
+                if (rule.WorkingGroups.Contains(BRConstItem.CURRENT_VALUE))
+                {
+                    rule.WorkingGroups.Remove(BRConstItem.CURRENT_VALUE);
+                    if (currentCase.WorkingGroup_Id.HasValue && !rule.WorkingGroups.Contains(currentCase.WorkingGroup_Id.Value))
+                        rule.WorkingGroups.Add(currentCase.WorkingGroup_Id.Value);
+                }
+                param = new BusinessRuleActionParamModel(BRActionParamType.WorkingGroup, rule.WorkingGroups.GetSelectedStr());
+                newAction.AddActionParam(param);
+
+
+                param = new BusinessRuleActionParamModel(BRActionParamType.EmailGroup, rule.EmailGroups.GetSelectedStr());
+                newAction.AddActionParam(param);
+
+                if (rule.Administrators.Contains(BRConstItem.CURRENT_VALUE))
+                {
+                    rule.Administrators.Remove(BRConstItem.CURRENT_VALUE);
+                    if (currentCase.Performer_User_Id.HasValue && !rule.Administrators.Contains(currentCase.Performer_User_Id.Value))
+                        rule.Administrators.Add(currentCase.Performer_User_Id.Value);
+                }
+                param = new BusinessRuleActionParamModel(BRActionParamType.Administrator, rule.Administrators.GetSelectedStr());
+                newAction.AddActionParam(param);
+
+                param = new BusinessRuleActionParamModel(BRActionParamType.Recipients, rule.Recipients != null && rule.Recipients.Any() ?
+                                                         string.Join(BRConstItem.Email_Separator, rule.Recipients) : string.Empty);
+                newAction.AddActionParam(param);
+
+
+                if (rule.CaseCreator && currentCase.User_Id != null)
+                {
+                    var creatorUser = _userService.GetUser(currentCase.User_Id.Value);
+                    if (creatorUser != null && creatorUser.IsActive != 0 && !string.IsNullOrEmpty(creatorUser.Email))
+                    {
+                        param = new BusinessRuleActionParamModel(BRActionParamType.CaseCreator, creatorUser.Email);
+                        newAction.AddActionParam(param);
+                    }
+                }
+
+                if (rule.Initiator && !string.IsNullOrEmpty(currentCase.PersonsEmail))
+                {
+                    param = new BusinessRuleActionParamModel(BRActionParamType.Initiator, currentCase.PersonsEmail);
+                    newAction.AddActionParam(param);
+                }
+
+                if (rule.CaseIsAbout && currentCase.IsAbout != null && !string.IsNullOrEmpty(currentCase.IsAbout.Person_Email))
+                {
+                    param = new BusinessRuleActionParamModel(BRActionParamType.CaseIsAbout, currentCase.IsAbout.Person_Email);
+                    newAction.AddActionParam(param);
+                }
+
+                ret.Add(newAction);
+            }
+            return ret;
+        }
+    
     }
 }

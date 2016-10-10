@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Web.Models.Questionnaire.Input
+﻿using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Services.DisplayValues.Questionnaire;
+
+namespace DH.Helpdesk.Web.Models.Questionnaire.Input
 {
     using System;
     using System.Collections.Generic;
@@ -8,13 +11,14 @@
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
-    public class NewCircularModel
+    public class CircularModel
     {
-        public NewCircularModel()
+        public CircularModel()
         {
         }
 
-        public NewCircularModel(
+        public CircularModel(
+            int id,
             int questionnaireId,
             IList<SelectListItem> availableDepartments,
             IList<SelectListItem> selectedDepartments,
@@ -24,9 +28,13 @@
                                 IList<SelectListItem> selectedProductArea,
                                 IList<SelectListItem> availableWorkingGroups,
                                 IList<SelectListItem> selectedWorkingGroups,
-                                List<CircularPartOverview> circularParts,
-            bool isUniqueEmail)
+            bool isUniqueEmail,
+            string circularName,
+            DateTime? changedDate,
+            CircularStates circularState,
+            List<ConnectedToCircularOverview> connectedCases)
         {
+            Id = id;
             this.QuestionnaireId = questionnaireId;
             this.AvailableDepartments = availableDepartments;
             this.SelectedDepartments = selectedDepartments;
@@ -36,11 +44,14 @@
             this.SelectedProductArea = selectedProductArea;
             this.AvailableWorkingGroups = availableWorkingGroups;
             this.SelectedWorkingGroups = selectedWorkingGroups;
-            this.CircularParts = circularParts;
             this.IsUniqueEmail = isUniqueEmail;
+            CircularName = circularName;
+            ChangedDate = changedDate;
+            State = (CircularStatesDisplayValue) circularState;
+            ConnectedCases = connectedCases;
         }
 
-        [IsId]
+        //[IsId]
         public int Id { get; set; }
 
         [LocalizedDisplay("QuestionnaireId")]
@@ -54,11 +65,17 @@
         [LocalizedDisplay("Status")]
         public string Status { get; set; }
 
+        [LocalizedDisplay("State")]
+        public CircularStatesDisplayValue State { get; set; }
+
         [LocalizedDisplay("ModelMode")]
         public int ModelMode { get; set; }
 
         [LocalizedDisplay("CreateDate")]
         public DateTime CreateDate { get; set; }
+
+        [LocalizedDisplay("ChangedDate")]
+        public DateTime? ChangedDate { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime? FinishingDateFrom { get; set; }
@@ -86,6 +103,7 @@
 
         public IList<SelectListItem> Procent { get; set; }
 
-        public List<CircularPartOverview> CircularParts { get; set; }
+        [NotNull]
+        public List<ConnectedToCircularOverview> ConnectedCases { get; set; }
     }
 }

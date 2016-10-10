@@ -3,6 +3,8 @@
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.ADFS;
     using DH.Helpdesk.Dal.Repositories.ADFS.Concrete;
+    using DH.Helpdesk.Dal.Repositories.BusinessRules;
+    using DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete;
     using DH.Helpdesk.Dal.Repositories.Cases;
     using DH.Helpdesk.Dal.Repositories.Cases.Concrete;
     using DH.Helpdesk.Dal.Repositories.Changes;
@@ -270,6 +272,7 @@
             this.Bind<ICaseFilterFavoriteRepository>().To<CaseFilterFavoriteRepository>();
             this.Bind<IReportFavoriteRepository>().To<ReportFavoriteRepository>();
             this.Bind<IMail2TicketRepository>().To<Mail2TicketRepository>();
+            this.Bind<IBusinessRuleRepository>().To<BusinessRuleRepository>();
         }
 
         #endregion

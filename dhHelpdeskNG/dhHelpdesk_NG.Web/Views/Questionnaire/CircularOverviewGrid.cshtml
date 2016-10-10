@@ -42,7 +42,7 @@
             </td>
             <td onclick=" window.location.href = '@Url.Action("EditCircular", "Questionnaire", new { circularId = item.Id })' " class="tdpointer">
                 @Html.DisplayFor(modelItem => item.TotalParticipants)
-                (@Html.DisplayFor(modelItem => item.SentParticipants))
+                (@Html.DisplayFor(modelItem => item.AnsweredParticipants))
             </td>
             <td>
                 <a class="btn" href="@Url.Action("Statistics", "Questionnaire", new { questionnaireId = questionnaireId, circularId = item.Id })" rel="tooltip" title="@Translation.Get("Statistik")">

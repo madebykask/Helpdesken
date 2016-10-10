@@ -1,0 +1,168 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule.BusinessRuleIndexModel
+@{
+    ViewBag.Title = @Translation.Get("Affärsregler", Enums.TranslationSource.TextTranslation);
+}
+
+
+    <div class="secnavs fixed">
+        <div class="secnavs fixed">
+            <div class="pull-left">
+                <ul class="secnav">
+                    <li>@Html.ActionLink(Translation.Get("New Rule", Enums.TranslationSource.TextTranslation), "NewRule", 
+                                         new { customerId = Model.Customer.Id}, new { @class = "btn"})</li>
+                </ul>
+            </div>
+            @Html.Partial("_MasterDataPanel", Model.Customer)
+        </div>
+    </div>
+    <input type="hidden" id="customerId" value="1" />
+    
+    <div class="content">
+        <div class="container">
+            <ul class="nav nav-tabs" id="myTab">
+                <li class="active">
+                    <a href="#fragment-1">                   
+                        @Translation.Get("Business Rule", Enums.TranslationSource.TextTranslation)
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane tab-pane-border active" id="fragment-1">                    
+                    <div class="formContainer">
+                        @*<table class="tableform">
+                            <tr>
+                                <td class="span2">
+                                    @Translation.Get("Event filter", Enums.TranslationSource.TextTranslation)
+                                </td>
+                                <td>
+                                    <select>
+                                        <option>
+                                            On Save Case
+                                        </option>
+                                        <option>
+                                            On Delete Case
+                                        </option>
+                                        <option>
+                                            On Finish Case
+                                        </option>
+                                        <option>
+                                            On Open Case
+                                        </option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="span2">
+                                    @Translation.Get("Condition filter", Enums.TranslationSource.TextTranslation)
+                                </td>
+                                <td class="span2">
+                                    <select>
+                                        <option>
+                                            Process
+                                        </option>
+                                        <option>
+                                            SubState
+                                        </option>                                        
+                                    </select>
+                                </td>
+                                <td>
+                                    <select>
+                                        <option>
+                                            
+                                        </option>
+                                        <option>
+                                            Item1
+                                        </option>
+                                        <option>
+                                            Item2
+                                        </option>
+                                        <option>
+                                            Item3
+                                        </option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="span2">
+                                    @Translation.Get("Action filter", Enums.TranslationSource.TextTranslation)
+                                </td>
+                                <td>
+                                    <select>
+                                        <option>
+                                            
+                                        </option>
+                                        <option>
+                                            Send Email
+                                        </option>
+                                        <option>
+                                            Show Alert
+                                        </option>
+                                        <option>
+                                            Refresh a list
+                                        </option>
+                                        <option>
+                                            Set other field
+                                        </option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>*@
+                        <table  class="table table-striped table-bordered table-hover table-cases" >
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                    <th>
+                                        @Translation.Get("Event", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                    <th>
+                                        @Translation.Get("Ändrad av", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                    <th>
+                                        @Translation.Get("Uppdaterad", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                     <th>
+                                        @Translation.Get("Active", Enums.TranslationSource.TextTranslation)  
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var rule in Model.Rules)
+                                {
+                                    <tr class="@(rule.IsActive ? "" : "inactive")">
+                                        <td>
+                                            <a href="@Url.Action("EditRule", "BusinessRule", new { id = rule.RuleId})">
+                                                @Html.DisplayFor(x => rule.RuleName)
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("EditRule", "BusinessRule", new { id = rule.RuleId})">
+                                                @Html.DisplayFor(x => rule.Event)
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("EditRule", "BusinessRule", new { id = rule.RuleId})">
+                                                @Html.DisplayFor(x => rule.ChangedBy)
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("EditRule", "BusinessRule", new { id = rule.RuleId})">
+                                                @Html.DisplayFor(x => rule.ChangedOn, "DateAndTime")
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("EditRule", "BusinessRule", new { id = rule.RuleId})">
+                                                @rule.IsActive.BoolToYesNo()
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>                            
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

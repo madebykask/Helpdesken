@@ -44,6 +44,14 @@
 
         public int OrderState { get; set; }
 
+        public int CreatedByUser_Id { get; set; }
+
+        public DateTime CreatedTime { get; set; }
+
+        public int ChangedByUser_Id { get; set; }
+
+        public DateTime ChangedTime { get; set; }
+
         public virtual CaseInvoiceEntity Invoice { get; set; }
 
         public virtual ICollection<CaseInvoiceArticleEntity> Articles { get; set; } 

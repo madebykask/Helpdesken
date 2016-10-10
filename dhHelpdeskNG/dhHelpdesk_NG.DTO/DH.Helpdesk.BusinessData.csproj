@@ -156,10 +156,12 @@
     <Compile Include="Models\Accounts\Read\Edit\UserForEdit.cs" />
     <Compile Include="Models\Accounts\Write\AccountForWrite.cs" />
     <Compile Include="Models\ADFS\Input\ADFSSetting.cs" />
-    <Compile Include="Models\BusinessRules\RuleAction.cs" />
-    <Compile Include="Models\BusinessRules\RuleActionParam.cs" />
-    <Compile Include="Models\BusinessRules\RuleCondition.cs" />
-    <Compile Include="Models\BusinessRules\Rule.cs" />
+    <Compile Include="Models\BusinessRules-Depricated\RuleAction.cs" />
+    <Compile Include="Models\BusinessRules-Depricated\RuleActionParam.cs" />
+    <Compile Include="Models\BusinessRules-Depricated\RuleCondition.cs" />
+    <Compile Include="Models\BusinessRules-Depricated\Rule.cs" />
+    <Compile Include="Models\BusinessRules\BusinessRuleModel.cs" />
+    <Compile Include="Models\BusinessRules\BusinessRuleReadModel.cs" />
     <Compile Include="Models\CaseType\CaseTypeItem.cs" />
     <Compile Include="Models\Case\CaseLock\LockedCaseOverview.cs" />
     <Compile Include="Models\Case\CaseOverview\CaseInfoOverview.cs" />
@@ -201,6 +203,8 @@
     <Compile Include="Models\Accounts\AccountSettings\Read\Edit\ProgramFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Edit\UserFieldSettings.cs" />
     <Compile Include="Models\CaseOverviewGridColumnSetting.cs" />
+    <Compile Include="Models\Contract\ContractSelectedFilter.cs" />
+    <Compile Include="Models\Contract\ContractsSettingRowModel.cs" />
     <Compile Include="Models\DailyReport\Input\DailyReportUpdate.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\ModelEdit\AccountFieldsSettingsForModelEdit.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\ModelEdit\AccountInformationFieldSettings.cs" />
@@ -393,6 +397,7 @@
     <Compile Include="Models\Questionnaire\Participant.cs" />
     <Compile Include="Models\Questionnaire\Read\CircularOverview.cs" />
     <Compile Include="Models\Questionnaire\Read\ConnectedCase.cs" />
+    <Compile Include="Models\Questionnaire\Read\QuestionnaireDetailedOverview.cs" />
     <Compile Include="Models\Questionnaire\Read\QuestionnaireOverview.cs" />
     <Compile Include="Models\Questionnaire\Read\QuestionnaireQuestionOptionOverview.cs" />
     <Compile Include="Models\Questionnaire\Read\QuestionnaireQuestionOverview.cs" />

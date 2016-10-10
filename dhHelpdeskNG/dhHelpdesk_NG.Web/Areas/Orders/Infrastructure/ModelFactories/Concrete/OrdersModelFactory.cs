@@ -44,15 +44,15 @@
         {
             var headers = new List<GridColumnHeaderModel>();
 
-            CreateDeliveryHeaders(response.OverviewSettings.Delivery, headers);
             CreateGeneralHeaders(response.OverviewSettings.General, headers);
             CreateLogHeaders(response.OverviewSettings.Log, headers);
             CreateOrdererHeaders(response.OverviewSettings.Orderer, headers);
             CreateOrderHeaders(response.OverviewSettings.Order, headers);
-            CreateOtherHeaders(response.OverviewSettings.Other, headers);
-            CreateProgramHeaders(response.OverviewSettings.Program, headers);
             CreateReceiverHeaders(response.OverviewSettings.Receiver, headers);
             CreateSupplierHeaders(response.OverviewSettings.Supplier, headers);
+            CreateDeliveryHeaders(response.OverviewSettings.Delivery, headers);
+            CreateOtherHeaders(response.OverviewSettings.Other, headers);
+            CreateProgramHeaders(response.OverviewSettings.Program, headers);
             CreateUserHeaders(response.OverviewSettings.User, headers);
 
             var orderOverviews =
@@ -174,15 +174,15 @@
         {
             var values = new List<NewGridRowCellValueModel>();
 
-            CreateDeliveryValues(settings.Delivery, order.Delivery, values);
             CreateGeneralValues(settings.General, order.General, values);
             CreateLogValues(settings.Log, order.Log, values);
             CreateOrdererValues(settings.Orderer, order.Orderer, values);
             CreateOrderValues(settings.Order, order.Order, values);
-            CreateOtherValues(settings.Other, order.Other, values);
-            CreateProgramValues(settings.Program, order.Program, values);
             CreateReceiverValues(settings.Receiver, order.Receiver, values);
             CreateSupplierValues(settings.Supplier, order.Supplier, values);
+            CreateDeliveryValues(settings.Delivery, order.Delivery, values);
+            CreateOtherValues(settings.Other, order.Other, values);
+            CreateProgramValues(settings.Program, order.Program, values);
             CreateUserValues(settings.User, order.User, values);
 
             return new OrderOverviewModel(order.Id, values);

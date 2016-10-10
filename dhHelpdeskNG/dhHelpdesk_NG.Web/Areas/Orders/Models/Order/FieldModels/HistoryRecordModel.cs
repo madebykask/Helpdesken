@@ -23,17 +23,17 @@
             this.Emails = emails;
         }
 
-        [LocalizedDisplay("Date and Time")]
+        [LocalizedDisplay("Datum")]
         public DateTime DateAndTime { get; set; }
 
-        [LocalizedDisplay("Registered By")]
+        [LocalizedDisplay("Anmälare")]
         public UserName RegisteredBy { get; set; }
 
-        [LocalizedDisplay("Log")]
+        [LocalizedDisplay("Logg")]
         public List<string> Log { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("History")]
+        [LocalizedDisplay("Historik")]
         public List<FieldDifferencesModel> FieldsDifferences { get; set; }
 
         [NotNull]

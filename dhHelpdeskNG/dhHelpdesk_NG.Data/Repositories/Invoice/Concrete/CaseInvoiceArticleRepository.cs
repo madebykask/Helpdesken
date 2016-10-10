@@ -9,6 +9,7 @@
     using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Domain.Invoice;
     using DH.Helpdesk.Common.Enums;
+    using System;
 
     public class CaseInvoiceArticleRepository : Repository, ICaseInvoiceArticleRepository
     {
@@ -147,7 +148,7 @@
             }                                          
         }
 
-        public int SaveCaseInvoices(IEnumerable<CaseInvoice> invoices, int caseId)
+        public int SaveCaseInvoices(IEnumerable<CaseInvoice> invoices, int caseId, int userId)
         {
             var newOrderId = 0;
             foreach (var invoice in invoices)
@@ -169,6 +170,7 @@
             
                 var hasInfoToSave = true;
                 var isNewOrder = false;
+                var now = DateTime.UtcNow;
                 foreach (var order in invoice.Orders)
                 {
                     hasInfoToSave = true;
@@ -194,6 +196,8 @@
                                     order.OrderState = (int)InvoiceOrderStates.Deleted;
 
                                 this.orderMapper.Map(order, orderEntity);
+                                orderEntity.ChangedByUser_Id = userId;
+                                orderEntity.ChangedTime = now;
                             }
                         }
                         else
@@ -209,6 +213,10 @@
                                 order.OrderState = (int)InvoiceOrderStates.Saved;
                             this.orderMapper.Map(order, orderEntity);
                             orderEntity.InvoiceId = entity.Id;
+                            orderEntity.CreatedByUser_Id = userId;
+                            orderEntity.CreatedTime = now;
+                            orderEntity.ChangedByUser_Id = userId;
+                            orderEntity.ChangedTime = now;
                             this.DbContext.CaseInvoiceOrders.Add(orderEntity);                            
                             isNewOrder = true;
                         }

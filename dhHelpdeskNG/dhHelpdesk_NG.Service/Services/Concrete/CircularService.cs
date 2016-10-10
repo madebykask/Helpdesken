@@ -81,6 +81,8 @@
                     query = query.GetByState(state);
                 }
 
+
+
                 List<CircularOverview> overviews = query.MapToOverviews();
 
                 return overviews;
@@ -97,11 +99,12 @@
 
                 Map(businessModel, entity);
                 entity.Id = businessModel.Id;
+                entity.ChangedDate = businessModel.CreatedDate;
+                entity.CircularName = businessModel.CircularName;
+
                 entity.Questionnaire_Id = businessModel.QuestionnaireId;
                 entity.Status = businessModel.Status;
-                entity.ChangedDate = businessModel.CreatedDate;
                 entity.CreatedDate = businessModel.CreatedDate;
-                entity.CircularName = businessModel.CircularName;
 
                 foreach (var id in businessModel.RelatedCaseIds)
                 {
@@ -110,7 +113,7 @@
                 }
 
                 circularRepository.Add(entity);
-
+                
                 uof.Save();
             }
         }
@@ -126,12 +129,26 @@
                 Map(businessModel, entity);
                 entity.Id = businessModel.Id;
                 entity.ChangedDate = businessModel.ChangedDate;
+                entity.CircularName = businessModel.CircularName;
+
+                var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
+
+                var current = circularPartRepository.GetAll().Where(x => x.QuestionnaireCircular_Id == businessModel.Id).ToList();
+
+                foreach (var toDel in current.Where(x => !businessModel.RelatedCaseIds.Exists(y => y == x.Case_Id)).ToList())
+                {
+                    circularPartRepository.Delete(toDel);
+                }
+                foreach (var toIns in businessModel.RelatedCaseIds.Where(x => !current.Exists(y => y.Case_Id == x)).ToList())
+                {
+                    circularPartRepository.Add(new QuestionnaireCircularPartEntity { QuestionnaireCircular_Id = businessModel.Id, CreatedDate = businessModel.ChangedDate, Case_Id = toIns });
+                }
 
                 circularRepository.Update(
-                    entity,
-                    x => x.CreatedDate,
-                    x => x.Questionnaire_Id,
-                    x => x.Status);
+                entity,
+                x => x.CreatedDate,
+                x => x.Questionnaire_Id,
+                x => x.Status);
 
                 uof.Save();
             }
@@ -263,23 +280,31 @@
             this.SendMails(mails, operationContext.DateAndTime);
         }
 
-        public QuestionnaireOverview GetQuestionnaire(Guid guid, OperationContext operationContext)
+        public QuestionnaireDetailedOverview GetQuestionnaire(Guid guid, OperationContext operationContext)
         {
-            int id;
+            var id = 0;
+            var caseId = 0;
+            var caption = "";
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
                 var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
 
                 // todo ef include with join doesn't work
-                id =
+                var circular =
                     circularPartRepository.GetAll()
                         .GetByGuid(guid)
-                        .Select(x => x.QuestionnaireCircular.Questionnaire_Id)
+                        .Select(x => new { id = x.QuestionnaireCircular.Questionnaire_Id, caseId = x.Case_Id, caption = x.Case.Caption })
                         .SingleOrDefault();
+                if (circular != null)
+                {
+                    id = circular.id;
+                    caseId = circular.caseId;
+                    caption = circular.caption;
+                }
             }
 
             QuestionnaireOverview overview = this.GetQuestionnaireEntity(id, operationContext);
-            return overview;
+            return new QuestionnaireDetailedOverview{ Questionnaire = overview, CaseId = caseId, Caption = caption};
         }
 
         public QuestionnaireOverview GetQuestionnaire(int id, OperationContext operationContext)

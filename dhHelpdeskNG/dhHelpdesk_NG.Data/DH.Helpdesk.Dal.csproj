@@ -83,6 +83,12 @@
     <Compile Include="EntityConfigurations\Accounts\EmploymentTypeConfiguration.cs" />
     <Compile Include="EntityConfigurations\ActionSetting\ActionSettingConfiguration.cs" />
     <Compile Include="EntityConfigurations\ADFS\ADFSSettingConfiguration.cs" />
+    <Compile Include="EntityConfigurations\BusinessRules\BRRuleConfiguration.cs" />
+    <Compile Include="EntityConfigurations\BusinessRules\BRConditionConfiguration.cs" />
+    <Compile Include="EntityConfigurations\BusinessRules\BRActionConfiguration.cs" />
+    <Compile Include="EntityConfigurations\BusinessRules\BRActionParamsConfiguration.cs" />
+    <Compile Include="EntityConfigurations\ContractConfiguration.cs" />
+    <Compile Include="EntityConfigurations\ContractFieldSettingConfiguration.cs" />
     <Compile Include="EntityConfigurations\Invoice\InvoiceArticleProductAreaConfiguration.cs" />
     <Compile Include="EntityConfigurations\LogProgramConfiguration.cs" />
     <Compile Include="EntityConfigurations\Mail2TicketConfiguration.cs" />
@@ -351,6 +357,8 @@
     <Compile Include="Repositories\ActionSetting\IActionSettingRepository.cs" />
     <Compile Include="Repositories\ADFS\Concrete\ADFSRepository.cs" />
     <Compile Include="Repositories\ADFS\IADFSRepository.cs" />
+    <Compile Include="Repositories\BusinessRules\Concrete\BusinessRuleRepository.cs" />
+    <Compile Include="Repositories\BusinessRules\IBusinessRuleRepository.cs" />
     <Compile Include="Repositories\CaseHistoryRepository.cs" />
     <Compile Include="Repositories\Cases\CaseFileRepository.cs" />
     <Compile Include="Repositories\Cases\CaseInvoiceRowRepository.cs" />
@@ -420,6 +428,8 @@
     <Compile Include="Repositories\Changes\IChangeGroupRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeLogRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeFileRepository.cs" />
+    <Compile Include="Repositories\IOrderEmailLogRepository.cs" />
+    <Compile Include="Repositories\OrderEmailLogRepository.cs" />
     <Compile Include="Repositories\Mail2TicketRepository.cs" />
     <Compile Include="Repositories\DataLog\DataLogRepository.cs" />
     <Compile Include="Repositories\EmailLogRepository.cs" />

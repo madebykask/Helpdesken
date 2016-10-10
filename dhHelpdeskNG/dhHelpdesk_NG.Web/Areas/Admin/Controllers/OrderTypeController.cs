@@ -138,6 +138,9 @@
 
         private OrderTypeInputViewModel CreateInputViewModel(OrderType orderType, Customer customer)
         {
+            var caseTypes = this._caseTypeService.GetCaseTypes(SessionFacade.CurrentCustomer.Id, true);
+            var caseTypesInRow = this._caseTypeService.GetChildrenInRow(caseTypes).ToList();
+
             var model = new OrderTypeInputViewModel
             {
                 OrderType = orderType,
@@ -147,7 +150,7 @@
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                CaseTypes = this._caseTypeService.GetCaseTypes(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                CaseTypes = caseTypesInRow.Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()

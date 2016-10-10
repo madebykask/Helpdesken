@@ -86,6 +86,27 @@
                                         @Translation.Get("Ärendetyp", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td class="span9">
+                                @*        <select id="lstCasetypes" name="lstCasetypes" data-field="region">
+                                             @foreach (var c in Model.CaseTypes)
+                                             {
+                                                 if (c.IsActive == 1)
+                                                 {
+                                                    <option value="@c.Id">
+                                                        @c.Name
+                                                    </option>
+                                                 }
+                                                 else
+                                                 {
+                                                    <option value="@c.Id" class="DisabledChosen" >
+                                                        @c.Name
+                                                    </option>
+                                                 }
+
+                                             }
+                                         </select>*@
+
+
+
                                         @Html.DropDownListFor(model => model.OrderType.CreateCase_CaseType_Id, Model.CaseTypes, "")
                                     </td>
                                 </tr>

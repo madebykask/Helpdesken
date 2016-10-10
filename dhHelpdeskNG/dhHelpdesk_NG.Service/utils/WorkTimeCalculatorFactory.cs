@@ -127,12 +127,19 @@
         public WorkTimeCalculator Build(
             DateTime rangeBeginUTC,
             DateTime rangeEndUTC,
-            int[] departmentsIds)
+            int[] departmentsIds,
+            int timeDiff = 0 )
         {
             var res = new WorkTimeCalculator(this.companyTimeZone);
             /// @TODO: Can throw exception when UTC inside daylight saving hour. Fix it
             var rangeBegin = TimeZoneInfo.ConvertTimeFromUtc(rangeBeginUTC, this.companyTimeZone);
             var rangeEnd = TimeZoneInfo.ConvertTimeFromUtc(rangeEndUTC, this.companyTimeZone);
+
+            if (timeDiff != 0)
+            {
+                rangeBegin = rangeBeginUTC.AddMinutes(timeDiff);
+                rangeEnd = rangeEndUTC.AddMinutes(timeDiff);
+            }
             /////////////////////
             /// holidays
             var departmentsHolidays = this.holidayService.GetHolidayBetweenDatesForDepartments(

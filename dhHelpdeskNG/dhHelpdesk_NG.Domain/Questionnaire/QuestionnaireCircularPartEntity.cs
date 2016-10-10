@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Domain.Questionnaire
+﻿using System.Collections.Generic;
+
+namespace DH.Helpdesk.Domain.Questionnaire
 {
     using DH.Helpdesk.Domain.Interfaces;
 
@@ -23,6 +25,8 @@
         public int QuestionnaireCircular_Id { get; set; }
 
         public DateTime? SendDate { get; set; }
+
+        public virtual ICollection<QuestionnaireResultEntity> QuestionnaireResultEntities { get; set; }
 
         #endregion
     }
