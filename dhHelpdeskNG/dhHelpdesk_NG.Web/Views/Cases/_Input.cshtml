@@ -541,8 +541,11 @@
                                                 } &nbsp;
                                                 @if (Model.case_.IsAbout != null && Model.case_.IsAbout.OU_Id != null)
                                                 {
-                                                    var curOu = Model.isaboutous.Where(w => w.Id == Model.case_.IsAbout.OU_Id).SingleOrDefault();
-                                                    @curOu.Name 
+                                                    if (Model.isaboutous != null)
+                                                    {
+                                                        var curOu = Model.isaboutous.Where(w => w.Id == Model.case_.IsAbout.OU_Id).SingleOrDefault();
+                                                        @curOu.Name 
+                                                    }
                                                 }
                                 </h4>
                                 <div class="row">
