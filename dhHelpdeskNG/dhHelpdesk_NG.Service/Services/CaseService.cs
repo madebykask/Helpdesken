@@ -1789,6 +1789,7 @@ namespace DH.Helpdesk.Services.Services
         {
             var customerId = currentCase.Customer_Id;
             var mailTemplate = new MailTemplateLanguageEntity();
+            var sep = new char[] { ';' };
 
             var emailList = new List<string>();
             foreach (var param in action.ActionParams)
@@ -1811,10 +1812,10 @@ namespace DH.Helpdesk.Services.Services
                             var groups = _emailGroupService.GetEmailGroups(customerId).Where(e => dataList.Contains(e.Id.ToString())).ToList();
                             if (groups.Any())
                             {
-                                var sep = new string[] { Environment.NewLine };
+                                var lineSep = new string[] { Environment.NewLine };
                                 foreach (var group in groups)
                                 {
-                                    var groupEmails = group.Members.Split(sep, StringSplitOptions.RemoveEmptyEntries);
+                                    var groupEmails = group.Members.Split(lineSep, StringSplitOptions.RemoveEmptyEntries);
                                     emailList.AddRange(groupEmails);
                                 }
                             }
@@ -1860,12 +1861,36 @@ namespace DH.Helpdesk.Services.Services
 
                     case BRActionParamType.Recipients:
                         if (!string.IsNullOrEmpty(param.ParamValue))
-                        {
-                            var sep = new char[] {';'};
+                        {                            
                             var emails = param.ParamValue.Split(sep, StringSplitOptions.RemoveEmptyEntries);
                             emailList.AddRange(emails);
                         }
-                        break;                                        
+                        break;
+
+                    case BRActionParamType.CaseCreator:
+                        if (!string.IsNullOrEmpty(param.ParamValue))
+                        {
+                            var emails = param.ParamValue.Split(sep, StringSplitOptions.RemoveEmptyEntries);
+                            emailList.AddRange(emails);
+                        }
+                        break;
+
+                    case BRActionParamType.Initiator:
+                        if (!string.IsNullOrEmpty(param.ParamValue))
+                        {                            
+                            var emails = param.ParamValue.Split(sep, StringSplitOptions.RemoveEmptyEntries);
+                            emailList.AddRange(emails);
+                        }
+                        break;
+
+                    case BRActionParamType.CaseIsAbout:
+                        if (!string.IsNullOrEmpty(param.ParamValue))
+                        {                            
+                            var emails = param.ParamValue.Split(sep, StringSplitOptions.RemoveEmptyEntries);
+                            emailList.AddRange(emails);
+                        }
+                        break; 
+
                 }
             }
 
@@ -2358,6 +2383,29 @@ namespace DH.Helpdesk.Services.Services
                 param = new BusinessRuleActionParamModel(BRActionParamType.Recipients, rule.Recipients != null && rule.Recipients.Any() ?
                                                          string.Join(BRConstItem.Email_Separator, rule.Recipients) : string.Empty);
                 newAction.AddActionParam(param);
+
+
+                if (rule.CaseCreator && currentCase.User_Id != null)
+                {
+                    var creatorUser = _userService.GetUser(currentCase.User_Id.Value);
+                    if (creatorUser != null && creatorUser.IsActive != 0 && !string.IsNullOrEmpty(creatorUser.Email))
+                    {
+                        param = new BusinessRuleActionParamModel(BRActionParamType.CaseCreator, creatorUser.Email);
+                        newAction.AddActionParam(param);
+                    }
+                }
+
+                if (rule.Initiator && !string.IsNullOrEmpty(currentCase.PersonsEmail))
+                {
+                    param = new BusinessRuleActionParamModel(BRActionParamType.Initiator, currentCase.PersonsEmail);
+                    newAction.AddActionParam(param);
+                }
+
+                if (rule.CaseIsAbout && currentCase.IsAbout != null && !string.IsNullOrEmpty(currentCase.IsAbout.Person_Email))
+                {
+                    param = new BusinessRuleActionParamModel(BRActionParamType.CaseIsAbout, currentCase.IsAbout.Person_Email);
+                    newAction.AddActionParam(param);
+                }
 
                 ret.Add(newAction);
             }

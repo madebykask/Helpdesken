@@ -16,6 +16,7 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
     using DH.Helpdesk.Common.Extensions.Integer;
     using System;
     using DH.Helpdesk.Common.Enums.BusinessRule;
+    using DH.Helpdesk.Common.Constants;
 
     public sealed class BusinessRuleRepository: Repository, IBusinessRuleRepository
     {
@@ -172,7 +173,7 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
             }
             catch (Exception ex)
             {
-                return ex.Message + " " + ex.InnerException != null? ex.InnerException.Message: "";
+                return ex.Message + " " + (ex.InnerException != null? ex.InnerException.Message: "");
             }
             
             return string.Empty;
@@ -220,7 +221,7 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
             }
             catch (Exception ex)
             {
-                return ex.Message + " " + ex.InnerException != null ? ex.InnerException.Message : "";
+                return ex.Message + " " + (ex.InnerException != null ? ex.InnerException.Message : "");
             }
 
             return string.Empty;
@@ -276,7 +277,7 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                         Id = 0,
                         RuleAction_Id = action.Id,
                         ParamType_Id = BRActionParamType.Recipients,
-                        ParamValue = string.Join(",", businessRule.Recipients)
+                        ParamValue = string.Join(BRConstItem.Email_Separator, businessRule.Recipients)
                     };
                     this.DbContext.BRActionParams.Add(actionParamEntity5);
 
@@ -388,17 +389,17 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                             Id = 0,
                             RuleAction_Id = action.Id,
                             ParamType_Id = BRActionParamType.Recipients,
-                            ParamValue = string.Join(",", businessRule.Recipients)
+                            ParamValue = string.Join(BRConstItem.Email_Separator, businessRule.Recipients)
                         };
                         this.DbContext.BRActionParams.Add(actionParamEntity5);
                     }
                     else
                     {
-                        actionParamEntity5.ParamValue = string.Join(",", businessRule.Recipients);
+                        actionParamEntity5.ParamValue = string.Join(BRConstItem.Email_Separator, businessRule.Recipients);
                     }
 
                     var actionParamEntity6 = this.DbContext.BRActionParams.Where(a => a.RuleAction_Id == action.Id && a.ParamType_Id == BRActionParamType.CaseCreator)
-                                                                       .FirstOrDefault();
+                                                                          .FirstOrDefault();
                     if (actionParamEntity6 == null)
                     {
                         actionParamEntity6 = new BRActionParamEntity()
@@ -455,7 +456,7 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
             }
             catch (Exception ex)
             {
-                return ex.Message + " " + ex.InnerException != null ? ex.InnerException.Message : "";
+                return ex.Message + " " + (ex.InnerException != null ? ex.InnerException.Message : "");
             }
 
             return string.Empty;

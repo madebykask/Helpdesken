@@ -323,7 +323,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     .Select(x => new SelectListItem { Value = x.Value, Selected = rule.WorkingGroups.Contains(Int32.Parse(x.Value)), Text = x.Text }).ToList(),
                 Administrators = allAdmins.ToList()
                     .Select(x => new SelectListItem { Value = x.Value, Selected = rule.Administrators.Contains(Int32.Parse(x.Value)), Text = x.Text }).ToList(),
-                Recipients = String.Join(BusinessRuleJSMapper._SEPARATOR[0].ToString(), rule.Recipients),
+                Recipients = String.Join(BRConstItem.Email_Separator, rule.Recipients),
                 CaseCreator = rule.CaseCreator,
                 Initiator = rule.Initiator,
                 CaseIsAbout = rule.CaseIsAbout,
