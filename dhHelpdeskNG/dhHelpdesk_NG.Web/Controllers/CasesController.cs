@@ -1601,7 +1601,8 @@ namespace DH.Helpdesk.Web.Controllers
 
             return this.Json(new { Result = CaseFields.Select(x => new {
                 Name = x.Name,
-                Show = x.ShowOnStartPage
+                Show = x.ShowOnStartPage,
+                Required = x.Required
             }) }, JsonRequestBehavior.AllowGet);
         }
 
