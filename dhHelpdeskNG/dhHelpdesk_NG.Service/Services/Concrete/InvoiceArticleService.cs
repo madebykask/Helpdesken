@@ -170,9 +170,9 @@
             return CaseInvoices;
         }
 
-        public int SaveCaseInvoices(IEnumerable<CaseInvoice> invoices, int caseId)
+        public int SaveCaseInvoices(IEnumerable<CaseInvoice> invoices, int caseId, int userId)
         {
-            return this.caseInvoiceArticleRepository.SaveCaseInvoices(invoices, caseId);
+            return this.caseInvoiceArticleRepository.SaveCaseInvoices(invoices, caseId, userId);
         }
 
         public void DeleteCaseInvoices(int caseId)
@@ -233,10 +233,10 @@
             return new DataValidationResult();
         }
 
-        public ProcessResult DoInvoiceWork(CaseInvoice[] caseInvoiceData, int caseId, decimal caseNumber, int customerId, int? orderIdToXML)
+        public ProcessResult DoInvoiceWork(CaseInvoice[] caseInvoiceData, int caseId, decimal caseNumber, int customerId, int userId, int? orderIdToXML)
         {            
 
-            var newOrderId = this.SaveCaseInvoices(caseInvoiceData, caseId);
+            var newOrderId = this.SaveCaseInvoices(caseInvoiceData, caseId, userId);
             
             if (orderIdToXML.HasValue)
             {   

@@ -135,6 +135,76 @@ begin
 end
 go
 
+-- Add Created By to Invoice Order
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CreatedByUser_Id' and 
+				sysobjects.name = N'tblCaseInvoiceOrder')
+begin
+   ALTER TABLE tblCaseInvoiceOrder ADD [CreatedByUser_Id] int NULL
+end  
+go
+
+if (exists(select * from tblCaseInvoiceOrder where CreatedByUser_Id is null))
+begin 
+   Update tblCaseInvoiceOrder set CreatedByUser_Id = (Select top 1 id from tblUsers)
+   Where CreatedByUser_Id is null
+
+   ALTER TABLE tblCaseInvoiceOrder Alter Column [CreatedByUser_Id] int Not NULL
+end
+go
+
+-- Add Created Time to Invoice Order
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CreatedTime' and 
+				sysobjects.name = N'tblCaseInvoiceOrder')
+begin
+   ALTER TABLE tblCaseInvoiceOrder ADD [CreatedTime] datetime NULL
+end  
+go
+
+if (exists(select * from tblCaseInvoiceOrder where [CreatedTime] is null))
+begin 
+   Update tblCaseInvoiceOrder set [CreatedTime] = GETDATE()
+   Where [CreatedTime] is null
+
+   ALTER TABLE tblCaseInvoiceOrder Alter Column [CreatedTime] datetime Not NULL
+end
+go
+
+
+-- Add Changed By to Invoice Order
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ChangedByUser_Id' and 
+				sysobjects.name = N'tblCaseInvoiceOrder')
+begin
+   ALTER TABLE tblCaseInvoiceOrder ADD [ChangedByUser_Id] int NULL
+end  
+go
+
+if (exists(select * from tblCaseInvoiceOrder where ChangedByUser_Id is null))
+begin 
+   Update tblCaseInvoiceOrder set ChangedByUser_Id = (Select top 1 id from tblUsers)
+   Where ChangedByUser_Id is null
+
+   ALTER TABLE tblCaseInvoiceOrder Alter Column [ChangedByUser_Id] int Not NULL
+end
+go
+
+-- Add Changed Time to Invoice Order
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ChangedTime' and 
+				sysobjects.name = N'tblCaseInvoiceOrder')
+begin
+   ALTER TABLE tblCaseInvoiceOrder ADD [ChangedTime] datetime NULL
+end  
+go
+
+if (exists(select * from tblCaseInvoiceOrder where [ChangedTime] is null))
+begin 
+   Update tblCaseInvoiceOrder set [ChangedTime] = GETDATE()
+   Where [ChangedTime] is null
+
+   ALTER TABLE tblCaseInvoiceOrder Alter Column [ChangedTime] datetime Not NULL
+end
+go
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.27'
 

@@ -42,6 +42,11 @@
             this.Property(o => o.Project_Id).IsOptional();
             this.Property(o => o.OrderState).IsRequired();
 
+            this.Property(o => o.CreatedByUser_Id).IsRequired();
+            this.Property(o => o.CreatedTime).IsRequired();
+            this.Property(o => o.ChangedByUser_Id).IsRequired();
+            this.Property(o => o.ChangedTime).IsRequired();
+
             this.ToTable("tblCaseInvoiceOrder");   
         }
     }

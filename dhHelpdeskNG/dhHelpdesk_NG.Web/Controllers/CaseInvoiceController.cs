@@ -233,7 +233,7 @@
                 if (SessionFacade.CurrentUser == null)
                     return Json(new { result = "Error", data = "Invoice is not available, refresh the page and try it again." });
 
-                var saveRes = DoInvoiceWork(caseInvoiceArticle, caseId, customerId, orderIdToXML);
+                var saveRes = DoInvoiceWork(caseInvoiceArticle, caseId, customerId,SessionFacade.CurrentUser.Id, orderIdToXML);
 
                 if (saveRes.IsSuccess)
                 {
@@ -289,12 +289,12 @@
             return new UnicodeFileContentResult(fileContent, fileName);
         }
 
-        private ProcessResult DoInvoiceWork(string caseInvoiceData, int caseId, int customerId, int? orderIdToXML)
+        private ProcessResult DoInvoiceWork(string caseInvoiceData, int caseId, int customerId,int userId, int? orderIdToXML)
         {
             var caseOverview = this.caseService.GetCaseOverview(caseId);
             var articles = this.invoiceArticleService.GetArticles(customerId);
             var Invoices = this.invoiceHelper.ToCaseInvoices(caseInvoiceData, caseOverview, articles, SessionFacade.CurrentUser.Id, orderIdToXML); //there will only be one?
-            return this.invoiceArticleService.DoInvoiceWork(Invoices, caseId, caseOverview.CaseNumber, customerId, orderIdToXML);
+            return this.invoiceArticleService.DoInvoiceWork(Invoices, caseId, caseOverview.CaseNumber, customerId, userId, orderIdToXML);
         }
     
     }
