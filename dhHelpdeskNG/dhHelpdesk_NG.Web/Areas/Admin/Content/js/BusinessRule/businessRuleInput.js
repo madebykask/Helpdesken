@@ -67,8 +67,8 @@
             data.ruleId = $(elRuleId).val();
             data.ruleName = $(elRuleName).val();
             data.ruleSequence = $(elRuleSequence).val();
-            data.continueOnSuccess = $(elContinueOnSuccess).bootstrapSwitch('state');
-            data.continueOnError = $(elContinueOnError).bootstrapSwitch('state');
+            //data.continueOnSuccess = $(elContinueOnSuccess).bootstrapSwitch('state');
+            //data.continueOnError = $(elContinueOnError).bootstrapSwitch('state');
             data.ruleActive = $(elIsRuleActive).bootstrapSwitch('state');
 
             $(elEventsDropDown + " option:selected").each(function () {
