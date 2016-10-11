@@ -1911,6 +1911,9 @@ namespace DH.Helpdesk.Services.Services
                                List<CaseFileDto> logFiles = null)
         {
 
+            if (mailTemplate.MailTemplate == null)
+                return;
+
             if (!string.IsNullOrEmpty(caseMailSetting.HelpdeskMailFromAdress))
                 caseMailSetting.HelpdeskMailFromAdress = caseMailSetting.HelpdeskMailFromAdress.Trim();
             else
@@ -1927,7 +1930,7 @@ namespace DH.Helpdesk.Services.Services
                 var curMail = receiver.Trim();
                 if (!string.IsNullOrWhiteSpace(curMail) && _emailService.IsValidEmail(curMail))
                 {
-                    var emailLog = new EmailLog(caseHistoryId, mailTemplate.MailTemplate_Id, curMail, _emailService.GetMailMessageId(caseMailSetting.HelpdeskMailFromAdress));
+                    var emailLog = new EmailLog(caseHistoryId, mailTemplate.MailTemplate.MailID, curMail, _emailService.GetMailMessageId(caseMailSetting.HelpdeskMailFromAdress));
                     var fields = GetCaseFieldsForEmail(currentCase, log, caseMailSetting, emailLog.EmailLogGUID.ToString(), 1, userTimeZone);
                     var siteSelfService = ConfigurationManager.AppSettings[AppSettingsKey.SelfServiceAddress].ToString() + emailLog.EmailLogGUID.ToString();
                     var siteHelpdesk = caseMailSetting.AbsoluterUrl + "Cases/edit/" + currentCase.Id.ToString();
