@@ -88,51 +88,53 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             model.ContinueOnError = true;
             model.IsActive = true;
 
-            var currentValue = new List<SelectListItem>();
-            currentValue.Add(new SelectListItem() { Value = BRConstItem.CURRENT_VALUE.ToString(), Text = "[CurrentValue]", Selected = false });
+            var currentValue = new List<DdlModel>();
+            currentValue.Add(new DdlModel() { Value = BRConstItem.CURRENT_VALUE.ToString(), Text = "[CurrentValue]", Selected = false });
 
-            var fieldItems = new List<SelectListItem>();            
+            var fieldItems = new List<DdlModel>();            
             //fieldItems.Add(new SelectListItem(){ Value= "-1", Text = "", Selected = true});
-            fieldItems.Add(new SelectListItem(){ Value= BRConstItem.NULL.ToString(), Text = "[Null]", Selected = false});
-            fieldItems.Add(new SelectListItem() { Value = BRConstItem.ANY.ToString(), Text = "[Any]", Selected = false });
+            fieldItems.Add(new DdlModel() { Value = BRConstItem.NULL.ToString(), Text = "[Null]", Selected = false });
+            fieldItems.Add(new DdlModel() { Value = BRConstItem.ANY.ToString(), Text = "[Any]", Selected = false });
             
             var productAreas = _productAreaService.GetAll(customerId);
             var lastLevels = new List<ProductArea>();
 
             foreach (var p in productAreas)
             {
-                if (p.SubProductAreas.Count == 0 && p.IsActive != 0)
+                if (p.SubProductAreas.Count == 0)
                 {
                     p.Name = p.ResolveFullName();
                     lastLevels.Add(p);
                 }
             }
 
-            var processList = fieldItems.Union(lastLevels.Select(l => new SelectListItem()
+            var processList = fieldItems.Union(lastLevels.Select(l => new DdlModel()
                                                 { 
                                                     Value= l.Id.ToString(), 
                                                     Text = l.Name, 
-                                                    Selected = false
-                                                })).ToList();
+                                                    Selected = false,
+                                                    Disabled = l.IsActive != 1
+                                                }).OrderBy(x => x.Text)).ToList();
 
-            var subStatusList = fieldItems.Union(_subStatusService.GetActiveStateSecondaries(customerId).Select(s => new SelectListItem()
+            var subStatusList = fieldItems.Union(_subStatusService.GetActiveStateSecondaries(customerId).Select(s => new DdlModel()
             {
                 Value = s.Id.ToString(),
                 Text = s.Name,
-                Selected = false
-            })).ToList();
+                Selected = false,
+                Disabled = s.IsActive != 1
+            }).OrderBy(x => x.Text)).ToList();
 
             model.Condition = new BRConditionModel()
             {
                 Id = 0,
                 RuleId = 0,
                 Process = processList,
-                ProcessFromValue = new List<SelectListItem>(),
-                ProcessToValue = new List<SelectListItem>(),
+                ProcessFromValue = new List<DdlModel>(),
+                ProcessToValue = new List<DdlModel>(),
 
                 SubStatus = subStatusList,
-                SubStatusFromValue = new List<SelectListItem>(),
-                SubStatusToValue = new List<SelectListItem>(),                
+                SubStatusFromValue = new List<DdlModel>(),
+                SubStatusToValue = new List<DdlModel>(),                
 
                 Sequence = 1                
             };
@@ -159,30 +161,33 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             }
 
             var emailGroupList = _emailGroupService.GetEmailGroups(customerId)
-                                                   .Select(mg => new SelectListItem
+                                                   .Select(mg => new DdlModel()
                                                         {
                                                             Value = mg.Id.ToString(),
                                                             Text = mg.Name,
-                                                            Selected = false
-                                                        }).ToList();
+                                                            Selected = false,
+                                                            Disabled = mg.IsActive != 1
+                                                        }).OrderBy(x => x.Text).ToList();
 
             var wgs = _workingGroupService.GetAllWorkingGroupsForCustomer(customerId)
-                                          .Select(wg => new SelectListItem
+                                          .Select(wg => new DdlModel
                                                         {
                                                             Value = wg.Id.ToString(),
                                                             Text = wg.WorkingGroupName,
-                                                            Selected = false
-                                                        }).ToList();
+                                                            Selected = false,
+                                                            Disabled = wg.IsActive != 1
+                                                        }).OrderBy(x => x.Text).ToList();
     
             var customerSetting = _settingService.GetCustomerSetting(customerId);
             var performers = this._userService.GetAvailablePerformersOrUserId(customerId);                        
             var adminList = performers.MapToCustomSelectList(string.Empty, customerSetting);
-            var allAdmins = currentValue.Union(adminList.Items.Select(i => new SelectListItem
+            var allAdmins = currentValue.Union(adminList.Items.Select(i => new DdlModel
                                                         {
                                                             Value = i.Id,
                                                             Text = i.Value,
-                                                            Selected = false
-                                                        }).ToList());
+                                                            Selected = false,
+                                                            Disabled = !i.IsActive
+                                                        }).OrderBy(x => x.Text).ToList());
 
             model.Action = new BRActionModel()
             {
@@ -216,51 +221,53 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             model.IsActive = rule.RuleActive;
             model.Sequence = rule.RuleSequence;
 
-            var currentValue = new List<SelectListItem>();
-            currentValue.Add(new SelectListItem() { Value = BRConstItem.CURRENT_VALUE.ToString(), Text = "[CurrentValue]", Selected = false });
+            var currentValue = new List<DdlModel>();
+            currentValue.Add(new DdlModel() { Value = BRConstItem.CURRENT_VALUE.ToString(), Text = "[CurrentValue]", Selected = false });
 
-            var fieldItems = new List<SelectListItem>();
+            var fieldItems = new List<DdlModel>();            
             //fieldItems.Add(new SelectListItem(){ Value= "-1", Text = "", Selected = true});
-            fieldItems.Add(new SelectListItem() { Value = BRConstItem.NULL.ToString(), Text = "[Null]", Selected = false });
-            fieldItems.Add(new SelectListItem() { Value = BRConstItem.ANY.ToString(), Text = "[Any]", Selected = false });
-
+            fieldItems.Add(new DdlModel() { Value = BRConstItem.NULL.ToString(), Text = "[Null]", Selected = false });
+            fieldItems.Add(new DdlModel() { Value = BRConstItem.ANY.ToString(), Text = "[Any]", Selected = false });
+            
             var productAreas = _productAreaService.GetAll(rule.CustomerId);
             var lastLevels = new List<ProductArea>();
 
             foreach (var p in productAreas)
             {
-                if (p.SubProductAreas.Count == 0 && p.IsActive != 0)
+                if (p.SubProductAreas.Count == 0)
                 {
                     p.Name = p.ResolveFullName();
                     lastLevels.Add(p);
                 }
             }
 
-            var processList = fieldItems.Union(lastLevels.Select(l => new SelectListItem()
-            {
-                Value = l.Id.ToString(),
-                Text = l.Name,
-                Selected = false
-            })).ToList();
+            var processList = fieldItems.Union(lastLevels.Select(l => new DdlModel()
+                                                { 
+                                                    Value= l.Id.ToString(), 
+                                                    Text = l.Name, 
+                                                    Selected = false,
+                                                    Disabled = l.IsActive != 1
+                                                }).OrderBy(x => x.Text)).ToList();
 
-            var subStatusList = fieldItems.Union(_subStatusService.GetActiveStateSecondaries(rule.CustomerId).Select(s => new SelectListItem()
+            var subStatusList = fieldItems.Union(_subStatusService.GetActiveStateSecondaries(rule.CustomerId).Select(s => new DdlModel()
             {
                 Value = s.Id.ToString(),
                 Text = s.Name,
-                Selected = false
-            })).ToList();
+                Selected = false,
+                Disabled = s.IsActive != 1
+            }).OrderBy(x => x.Text)).ToList();
 
             model.Condition = new BRConditionModel()
             {
                 Id = 0,
                 RuleId = rule.Id,
                 Process = processList,
-                ProcessFromValue = processList.Where(x => rule.ProcessFrom.Contains(Int32.Parse(x.Value))).Select(x => new SelectListItem {Value = x.Value, Selected = true}).ToList(),
-                ProcessToValue = processList.Where(x => rule.ProcessTo.Contains(Int32.Parse(x.Value))).Select(x => new SelectListItem {Value = x.Value, Selected = true}).ToList(),
+                ProcessFromValue = processList.Where(x => rule.ProcessFrom.Contains(Int32.Parse(x.Value))).Select(x => new DdlModel { Value = x.Value, Selected = true }).ToList(),
+                ProcessToValue = processList.Where(x => rule.ProcessTo.Contains(Int32.Parse(x.Value))).Select(x => new DdlModel { Value = x.Value, Selected = true }).ToList(),
 
                 SubStatus = subStatusList,
-                SubStatusFromValue = subStatusList.Where(x => rule.SubStatusFrom.Contains(Int32.Parse(x.Value))).Select(x => new SelectListItem {Value = x.Value, Selected = true}).ToList(),
-                SubStatusToValue = subStatusList.Where(x => rule.SubStatusTo.Contains(Int32.Parse(x.Value))).Select(x => new SelectListItem {Value = x.Value, Selected = true}).ToList(),
+                SubStatusFromValue = subStatusList.Where(x => rule.SubStatusFrom.Contains(Int32.Parse(x.Value))).Select(x => new DdlModel { Value = x.Value, Selected = true }).ToList(),
+                SubStatusToValue = subStatusList.Where(x => rule.SubStatusTo.Contains(Int32.Parse(x.Value))).Select(x => new DdlModel { Value = x.Value, Selected = true }).ToList(),
 
                 Sequence = 1
             };
@@ -287,30 +294,33 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             }
 
             var emailGroupList = _emailGroupService.GetEmailGroups(rule.CustomerId)
-                                                   .Select(mg => new SelectListItem
+                                                   .Select(mg => new DdlModel()
                                                    {
                                                        Value = mg.Id.ToString(),
                                                        Text = mg.Name,
-                                                       Selected = false
-                                                   }).ToList();
+                                                       Selected = false,
+                                                       Disabled = mg.IsActive != 1
+                                                   }).OrderBy(x => x.Text).ToList();
 
             var wgs = _workingGroupService.GetAllWorkingGroupsForCustomer(rule.CustomerId)
-                                          .Select(wg => new SelectListItem
+                                          .Select(wg => new DdlModel
                                           {
                                               Value = wg.Id.ToString(),
                                               Text = wg.WorkingGroupName,
-                                              Selected = false
-                                          }).ToList();
+                                              Selected = false,
+                                              Disabled = wg.IsActive != 1
+                                          }).OrderBy(x => x.Text).ToList();
 
             var customerSetting = _settingService.GetCustomerSetting(rule.CustomerId);
             var performers = this._userService.GetAvailablePerformersOrUserId(rule.CustomerId);
             var adminList = performers.MapToCustomSelectList(string.Empty, customerSetting);
-            var allAdmins = currentValue.Union(adminList.Items.Select(i => new SelectListItem
+            var allAdmins = currentValue.Union(adminList.Items.Select(i => new DdlModel
             {
                 Value = i.Id,
                 Text = i.Value,
-                Selected = false
-            }).ToList());
+                Selected = false,
+                Disabled = !i.IsActive
+            }).OrderBy(x => x.Text).ToList());
 
             model.Action = new BRActionModel()
             {
@@ -318,11 +328,11 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 RuleId = rule.Id,
                 ActionTypeId = BRActionType.SendEmail,
                 EMailTemplates = emailTemplateList.Select(x => new SelectListItem { Value = x.Value, Selected = rule.EmailTemplate == (Int32.Parse(x.Value)), Text = x.Text }).OrderBy(x => x.Text).ToList(),
-                EMailGroups = emailGroupList.Select(x => new SelectListItem { Value = x.Value, Selected = rule.EmailGroups.Contains(Int32.Parse(x.Value)), Text = x.Text }).ToList(),
+                EMailGroups = emailGroupList.Select(x => new DdlModel { Value = x.Value, Selected = rule.EmailGroups.Contains(Int32.Parse(x.Value)), Text = x.Text, Disabled = x.Disabled}).ToList(),
                 WorkingGroups = currentValue.Union(wgs).ToList()
-                    .Select(x => new SelectListItem { Value = x.Value, Selected = rule.WorkingGroups.Contains(Int32.Parse(x.Value)), Text = x.Text }).ToList(),
+                    .Select(x => new DdlModel { Value = x.Value, Selected = rule.WorkingGroups.Contains(Int32.Parse(x.Value)), Text = x.Text, Disabled = x.Disabled }).ToList(),
                 Administrators = allAdmins.ToList()
-                    .Select(x => new SelectListItem { Value = x.Value, Selected = rule.Administrators.Contains(Int32.Parse(x.Value)), Text = x.Text }).ToList(),
+                    .Select(x => new DdlModel { Value = x.Value, Selected = rule.Administrators.Contains(Int32.Parse(x.Value)), Text = x.Text, Disabled = x.Disabled }).ToList(),
                 Recipients = String.Join(BRConstItem.Email_Separator, rule.Recipients),
                 CaseCreator = rule.CaseCreator,
                 Initiator = rule.Initiator,

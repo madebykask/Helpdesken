@@ -10,6 +10,11 @@ using System.Web.Mvc;
 
 namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
 {
+    public class DdlModel : SelectListItem //TODO: URGENT FIX, REMOVE ASAP - rework view to do not use selectlist items for both option list and selectd list, use ordinal viewmodels instead so active field will be accessible in a view
+    {
+        public bool Disabled { get; set; }
+    }
+
     public class BusinessRuleInputModel
     {
         public BusinessRuleInputModel()
@@ -67,17 +72,17 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
 
         public int RuleId { get; set; }
 
-        public List<SelectListItem> Process { get; set; }
+        public List<DdlModel> Process { get; set; }
 
-        public List<SelectListItem> ProcessFromValue { get; set; }
+        public List<DdlModel> ProcessFromValue { get; set; }
 
-        public List<SelectListItem> ProcessToValue { get; set; }
+        public List<DdlModel> ProcessToValue { get; set; }
 
-        public List<SelectListItem> SubStatus { get; set; }
+        public List<DdlModel> SubStatus { get; set; }
 
-        public List<SelectListItem> SubStatusFromValue { get; set; }
+        public List<DdlModel> SubStatusFromValue { get; set; }
 
-        public List<SelectListItem> SubStatusToValue { get; set; }
+        public List<DdlModel> SubStatusToValue { get; set; }
         
         public int Sequence { get; set; }        
     }
@@ -102,11 +107,11 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
         [Required]
         public int? EmailTemplateId { get; set; }
 
-        public List<SelectListItem> EMailGroups { get; set; }
+        public List<DdlModel> EMailGroups { get; set; }
 
-        public List<SelectListItem> WorkingGroups { get; set; }
+        public List<DdlModel> WorkingGroups { get; set; }
 
-        public List<SelectListItem> Administrators { get; set; }
+        public List<DdlModel> Administrators { get; set; }
 
         public string Recipients { get; set; }
 
