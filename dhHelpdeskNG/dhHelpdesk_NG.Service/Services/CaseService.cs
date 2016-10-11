@@ -2325,7 +2325,13 @@ namespace DH.Helpdesk.Services.Services
                 if (rule.ProcessFrom.Contains(BRConstItem.ANY) || rule.ProcessFrom.Contains(oldProcessId))
                     if (rule.ProcessTo.Contains(BRConstItem.ANY) || rule.ProcessTo.Contains(newProcessId))
                     {
-                        processCondition = true;
+                        if (rule.ProcessFrom.Contains(BRConstItem.ANY) && rule.ProcessTo.Contains(BRConstItem.ANY))
+                        {
+                            if (oldProcessId != newProcessId)
+                                processCondition = true;
+                        }
+                        else
+                            processCondition = true;
                     }
             }
 
@@ -2345,7 +2351,13 @@ namespace DH.Helpdesk.Services.Services
                 if (rule.SubStatusFrom.Contains(BRConstItem.ANY) || rule.SubStatusFrom.Contains(oldSubStatusId))
                     if (rule.SubStatusTo.Contains(BRConstItem.ANY) || rule.SubStatusTo.Contains(newSubStatusId))
                     {
-                        subStatusCondition = true;
+                        if (rule.SubStatusFrom.Contains(BRConstItem.ANY) && rule.SubStatusTo.Contains(BRConstItem.ANY))
+                        {
+                            if (oldSubStatusId != newSubStatusId)
+                                subStatusCondition = true;
+                        }
+                        else
+                            subStatusCondition = true;
                     }
              }
             #endregion
