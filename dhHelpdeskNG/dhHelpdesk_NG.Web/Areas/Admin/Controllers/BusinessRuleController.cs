@@ -189,7 +189,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 Id = 0,
                 RuleId = 0,                
                 ActionTypeId = BRActionType.SendEmail,
-                EMailTemplates = emailTemplateList,
+                EMailTemplates = emailTemplateList.OrderBy(x => x.Text).ToList(),
                 EMailGroups = emailGroupList,
                 WorkingGroups = currentValue.Union(wgs).ToList(),
                 Administrators = allAdmins.ToList(),
@@ -317,7 +317,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 Id = 0,
                 RuleId = rule.Id,
                 ActionTypeId = BRActionType.SendEmail,
-                EMailTemplates = emailTemplateList.Select(x => new SelectListItem { Value = x.Value, Selected = rule.EmailTemplate == (Int32.Parse(x.Value)), Text = x.Text }).ToList(),
+                EMailTemplates = emailTemplateList.Select(x => new SelectListItem { Value = x.Value, Selected = rule.EmailTemplate == (Int32.Parse(x.Value)), Text = x.Text }).OrderBy(x => x.Text).ToList(),
                 EMailGroups = emailGroupList.Select(x => new SelectListItem { Value = x.Value, Selected = rule.EmailGroups.Contains(Int32.Parse(x.Value)), Text = x.Text }).ToList(),
                 WorkingGroups = currentValue.Union(wgs).ToList()
                     .Select(x => new SelectListItem { Value = x.Value, Selected = rule.WorkingGroups.Contains(Int32.Parse(x.Value)), Text = x.Text }).ToList(),

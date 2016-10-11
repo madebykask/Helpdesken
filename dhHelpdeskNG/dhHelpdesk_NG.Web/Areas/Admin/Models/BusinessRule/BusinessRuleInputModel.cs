@@ -99,6 +99,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
 
         public List<SelectListItem> EMailTemplates { get; set; }
 
+        [Required]
+        public int? EmailTemplateId { get; set; }
+
         public List<SelectListItem> EMailGroups { get; set; }
 
         public List<SelectListItem> WorkingGroups { get; set; }

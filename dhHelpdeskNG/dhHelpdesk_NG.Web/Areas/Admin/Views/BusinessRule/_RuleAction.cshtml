@@ -12,12 +12,8 @@
         <tr>
             <td class="span2"> @Translation.Get("Mail Template") </td>
             <td>
-                <select id="lstEmailTemplates" name="lstEmailTemplates" class="BR-chosen-single-select">                    
-                    @foreach (var template in Model.EMailTemplates)
-                    {
-                        <option value="@template.Value"  @(template.Selected? "Selected":"")> @template.Text </option>                                
-                    }                     
-                </select>
+                @Html.DropDownListFor(x => x.EmailTemplateId, Model.EMailTemplates, "", new { @id = "lstEmailTemplates", name = "lstEmailTemplates", @class = "BR-chosen-single-select"})
+                @Html.ValidationMessageFor(x => x.EmailTemplateId)
             </td>            
         </tr>
         <tr>      

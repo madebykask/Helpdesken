@@ -160,7 +160,10 @@
             var self = this;
 
             var $form = $("#newRule");
-            return $form.validate().form();
+            var validator = $form.data('validator');
+            validator.settings.ignore = ":hidden:not(.BR-chosen-single-select)";
+
+            return $form.validate({ ignore: ":hidden:not(.BR-chosen-single-select)" }).form();
         }          
 
         dhHelpdesk.businessRule.init = function () {
