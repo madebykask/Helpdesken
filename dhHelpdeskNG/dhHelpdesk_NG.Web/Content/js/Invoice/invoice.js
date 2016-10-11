@@ -3464,7 +3464,7 @@ $(function () {
                 var model = new dhHelpdesk.CaseArticles.CaseArticleViewModel();
                 this.HasPpu = (this.Article != null && this.Article.Ppu != null && this.Article.Ppu > 0);
                 model.IsBlank = this.IsBlank();
-                model.Name = this.Name != null ? this.Name : "";
+                model.Name = this.Name != null ? this.Name.replace(/\</g, "&lt;") : "";
                 model.NameEng = this.Article != null && this.Article.NameEng != null ? this.Article.NameEng : "";
                 model.Description = this.Article != null && this.Article.Description != null ? this.Article.Description : "";
                 model.Id = this.Id;

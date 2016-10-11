@@ -255,6 +255,7 @@
                         {
                             /* First save articles/texts have saved before */ 
                             foreach (var article in order.Articles.Where(a=> (a.Id > 0 && !a.TextForArticle_Id.HasValue) || 
+                                                                             (a.Id > 0 && a.TextForArticle_Id.HasValue && a.TextForArticle_Id.Value > 0) ||
                                                                              (a.Id < 0 && a.TextForArticle_Id.HasValue && a.TextForArticle_Id.Value > 0)).ToList())
                             {
 
