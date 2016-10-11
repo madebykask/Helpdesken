@@ -33,7 +33,7 @@
                 <select id="lstProcessFrom" name="lstProcessFrom" class="BR-chosen-select" multiple="multiple">  
                     @foreach(var process in Model.Process)
                     {
-                        <option value="@process.Value" @process.Value.ValueIsSelected(procFromSelected )>
+                        <option value="@process.Value" @process.Value.ValueIsSelected(procFromSelected ) class="@(process.Disabled ? "DisabledChosen" : "")">
                             @process.Text
                         </option>
                     }
@@ -44,7 +44,7 @@
                 <select id="lstProcessTo" name="lstProcessTo" class="BR-chosen-select" multiple="multiple">  
                     @foreach(var process in Model.Process)
                     {
-                        <option value="@process.Value" @process.Value.ValueIsSelected(procToSelected)>
+                        <option value="@process.Value" @process.Value.ValueIsSelected(procToSelected) class="@(process.Disabled ? "DisabledChosen" : "")">
                             @process.Text
                         </option>
                     }
@@ -62,7 +62,7 @@
                 <select id="lstSubStatusFrom" name="lstSubStatusFrom" class="BR-chosen-select" multiple="multiple">  
                     @foreach (var subStatus in Model.SubStatus)
                     {
-                        <option value="@subStatus.Value" @subStatus.Value.ValueIsSelected(SubStatusFromSelected) >
+                        <option value="@subStatus.Value" @subStatus.Value.ValueIsSelected(SubStatusFromSelected) class="@(subStatus.Disabled ? "DisabledChosen" : "")">
                             @subStatus.Text
                         </option>
                     }
@@ -73,7 +73,7 @@
                 <select id="lstSubStatusTo" name="lstSubStatusTo" class="BR-chosen-select" multiple="multiple">  
                     @foreach (var subStatus in Model.SubStatus)
                     {
-                        <option value="@subStatus.Value" @subStatus.Value.ValueIsSelected(SubStatusToSelected)>
+                        <option value="@subStatus.Value" @subStatus.Value.ValueIsSelected(SubStatusToSelected) class="@(subStatus.Disabled ? "DisabledChosen" : "")">
                             @subStatus.Text
                         </option>
                     }

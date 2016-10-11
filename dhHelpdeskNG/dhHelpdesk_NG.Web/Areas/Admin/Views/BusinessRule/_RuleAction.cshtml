@@ -25,7 +25,7 @@
                 <select id="lstEmailGroups" name="lstEmailGroups" class="BR-chosen-select" multiple="multiple">  
                     @foreach (var emailGroup in Model.EMailGroups)
                     {
-                        <option value="@emailGroup.Value" @emailGroup.Value.ValueIsSelected(mailGroupSelected)>
+                        <option value="@emailGroup.Value" @emailGroup.Value.ValueIsSelected(mailGroupSelected) class="@(emailGroup.Disabled ? "DisabledChosen" : "")">
                             @emailGroup.Text
                         </option>
                     }
@@ -41,7 +41,7 @@
                 <select id="lstWorkingGroups" name="lstWorkingGroups" class="BR-chosen-select" multiple="multiple">  
                     @foreach (var workingGroup in Model.WorkingGroups)
                     {
-                        <option value="@workingGroup.Value" @workingGroup.Value.ValueIsSelected(workingGroupSelected)>
+                        <option value="@workingGroup.Value" @workingGroup.Value.ValueIsSelected(workingGroupSelected) class="@(workingGroup.Disabled ? "DisabledChosen" : "")">
                             @workingGroup.Text
                         </option>
                     }
@@ -57,7 +57,7 @@
                 <select id="lstAdministrators" name="lstAdministrators" class="BR-chosen-select" multiple="multiple">  
                     @foreach (var administrator in Model.Administrators)
                     {
-                        <option value="@administrator.Value" @administrator.Value.ValueIsSelected(selectedItems)>
+                        <option value="@administrator.Value" @administrator.Value.ValueIsSelected(selectedItems) class="@(administrator.Disabled ? "DisabledChosen" : "")">
                             @administrator.Text
                         </option>
                     }
