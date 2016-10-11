@@ -1,6 +1,9 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel 
 @using DH.Helpdesk.BusinessData.OldComponents
+@using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+@using DH.Helpdesk.Common.Enums
+@using DH.Helpdesk.Common.Enums.Settings
 
 @if (Model != null && Model.Logs != null)
 {
@@ -13,7 +16,10 @@
                     <tr>
                         <th>@Translation.Get("Datum",SessionFacade.CurrentCaseLanguageId, Enums.TranslationSource.TextTranslation)</th>
                         <th>@Translation.Get("Registrerad av",SessionFacade.CurrentCaseLanguageId, Enums.TranslationSource.TextTranslation)</th>
-                        <th>@Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(),SessionFacade.CurrentCaseLanguageId, Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) </th>
+                        @if (Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Text_External, CaseSolutionFields.ExternalLogNote).ToString() == String.Empty)
+                        {
+                            <th>@Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(),SessionFacade.CurrentCaseLanguageId, Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) </th>
+                        }
                         <th>@Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(),SessionFacade.CurrentCaseLanguageId, Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) </th>
                         <th>@Translation.Get("E-post",SessionFacade.CurrentCaseLanguageId, Enums.TranslationSource.TextTranslation)</th>
                         <th>@Translation.Get("Filer",SessionFacade.CurrentCaseLanguageId, Enums.TranslationSource.TextTranslation)</th>
@@ -40,12 +46,23 @@
                         <td style="max-width:110px" class="wordbreak">
                             <a href="@GetLogLink(r)">@(r.User == null ? r.RegUser : Html.FormatUserName(r.User, Model.Setting))</a>
                         </td>
-                        <td class="wordbreak" style="width:25%; max-width:300px">
-                            <a href="@GetLogLink(r)"> @Html.AttributeEncode(r.TextExternal).ForHtmlView()</a>
-                        </td>                         
-                        <td class="wordbreak" style="width:25%; max-width:300px">
-                            <a href="@GetLogLink(r)"> @Html.AttributeEncode(r.TextInternal).ForHtmlView()</a>
-                        </td>               
+                         @if (Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Text_External, CaseSolutionFields.ExternalLogNote).ToString() == String.Empty)
+                        {
+                            <td class="wordbreak" style="width:25%; max-width:300px">
+                                <a href="@GetLogLink(r)"> @Html.AttributeEncode(r.TextExternal).ForHtmlView()</a>
+                            </td> 
+                         }  
+                        @if (Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Text_External, CaseSolutionFields.ExternalLogNote).ToString() == String.Empty)
+                        {                      
+                            <td class="wordbreak" style="width:25%; max-width:300px">
+                                <a href="@GetLogLink(r)"> @Html.AttributeEncode(r.TextInternal).ForHtmlView()</a>
+                            </td>  
+                        }else
+                        {
+                            <td class="wordbreak" style="width:40%; max-width:300px">
+                                <a href="@GetLogLink(r)"> @Html.AttributeEncode(r.TextInternal).ForHtmlView()</a>
+                            </td>  
+                        }             
                         <td class="wordbreak" style="max-width:150px">                          
                             @{ var curLogMail2Tickets = Model.case_.Mail2Tickets.Where(m => m.Log_Id == r.Id).ToList();  }  
 
