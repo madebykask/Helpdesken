@@ -73,6 +73,7 @@
 
             return new FullOrderOverview(
                                     entity.Id,
+                                    entity.OrderType,
                                     delivery,
                                     general,
                                     log,

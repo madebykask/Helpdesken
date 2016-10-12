@@ -8,15 +8,19 @@
     public sealed class OrderOverviewModel
     {
         public OrderOverviewModel(
-                int id, 
+                int id,
+                string orderType,
                 List<NewGridRowCellValueModel> fieldValues)
         {
             this.FieldValues = fieldValues;
             this.Id = id;
+            OrderType = orderType;
         }
 
         [IsId]
         public int Id { get; private set; }
+
+        public string OrderType { get; private set; }
 
         [NotNull]
         public List<NewGridRowCellValueModel> FieldValues { get; private set; }

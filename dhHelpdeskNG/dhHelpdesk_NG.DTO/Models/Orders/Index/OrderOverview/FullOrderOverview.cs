@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Orders.Index.OrderOverview
+﻿using DH.Helpdesk.Domain;
+
+namespace DH.Helpdesk.BusinessData.Models.Orders.Index.OrderOverview
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
@@ -6,6 +8,7 @@
     {
         public FullOrderOverview(
                 int id, 
+                OrderType orderType,
                 DeliveryOverview delivery, 
                 GeneralOverview general, 
                 LogOverview log, 
@@ -28,10 +31,13 @@
             this.General = general;
             this.Delivery = delivery;
             this.Id = id;
+            OrderType = orderType.Name;
         }
 
         [IsId]
         public int Id { get; private set; }
+
+        public string OrderType { get; private set; }
 
         [NotNull]
         public DeliveryOverview Delivery { get; private set; }

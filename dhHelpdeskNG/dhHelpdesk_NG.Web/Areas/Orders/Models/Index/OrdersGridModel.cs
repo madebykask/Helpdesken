@@ -12,12 +12,14 @@
                 List<GridColumnHeaderModel> headers, 
                 List<OrderOverviewModel> orders,
                 int ordersFound, 
-                SortField sortField)
+                SortField sortField,
+                bool showType)
         {
             this.SortField = sortField;
             this.OrdersFound = ordersFound;
             this.Orders = orders;
             this.Headers = headers;
+            ShowType = showType;
         }
 
         [NotNull]
@@ -30,5 +32,7 @@
         public int OrdersFound { get; private set; }
 
         public SortField SortField { get; private set; }
+
+        public bool ShowType { get; private set; }
     }
 }

@@ -126,7 +126,7 @@
                                     filters.SortField);
 
             var response = this.ordersService.Search(parameters);
-            var ordersModel = this.ordersModelFactory.Create(response, filters.SortField);
+            var ordersModel = this.ordersModelFactory.Create(response, filters.SortField, filters.OrderTypeId == null);
 
             return this.PartialView(ordersModel);
         }

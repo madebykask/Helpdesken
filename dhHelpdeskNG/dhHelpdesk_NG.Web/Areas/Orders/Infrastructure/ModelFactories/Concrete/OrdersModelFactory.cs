@@ -40,7 +40,7 @@
                                     orderTypesForCreateOrder);
         }
 
-        public OrdersGridModel Create(SearchResponse response, SortField sortField)
+        public OrdersGridModel Create(SearchResponse response, SortField sortField, bool showType)
         {
             var headers = new List<GridColumnHeaderModel>();
 
@@ -58,7 +58,7 @@
             var orderOverviews =
                 response.SearchResult.Orders.Select(o => CreateFullValues(response.OverviewSettings, o)).ToList();
 
-            return new OrdersGridModel(headers, orderOverviews, response.SearchResult.OrdersFound, sortField);
+            return new OrdersGridModel(headers, orderOverviews, response.SearchResult.OrdersFound, sortField, showType);
         }
        
         #region Create headers
@@ -185,7 +185,7 @@
             CreateProgramValues(settings.Program, order.Program, values);
             CreateUserValues(settings.User, order.User, values);
 
-            return new OrderOverviewModel(order.Id, values);
+            return new OrderOverviewModel(order.Id, order.OrderType, values);
         }
 
         private static void CreateDeliveryValues(

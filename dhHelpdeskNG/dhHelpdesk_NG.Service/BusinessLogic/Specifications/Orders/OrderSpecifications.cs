@@ -197,9 +197,11 @@
 
         public static IQueryable<Order> Sort(this IQueryable<Order> query, SortField sort)
         {
+            var querySortedByType = query.OrderBy(x => x.OrderType.Name);
+
             if (sort == null)
             {
-                return query;
+                return querySortedByType;
             }
 
             switch (sort.SortBy)
@@ -208,273 +210,273 @@
                     // Delivery
                     if (sort.Name == DeliveryFieldNames.DeliveryDate)
                     {
-                        query = query.OrderBy(o => o.Deliverydate);
+                        query = (querySortedByType).ThenBy(o => o.Deliverydate);
                     }
                     else if (sort.Name == DeliveryFieldNames.InstallDate)
                     {
-                        query = query.OrderBy(o => o.InstallDate);
+                        query = querySortedByType.ThenBy(o => o.InstallDate);
                     }
                     else if (sort.Name == DeliveryFieldNames.DeliveryDepartment)
                     {
-                        query = query.OrderBy(o => o.DeliveryDepartment.DepartmentName);
+                        query = querySortedByType.ThenBy(o => o.DeliveryDepartment.DepartmentName);
                     }
                     else if (sort.Name == DeliveryFieldNames.DeliveryOu)
                     {
-                        query = query.OrderBy(o => o.DeliveryOu);
+                        query = querySortedByType.ThenBy(o => o.DeliveryOu);
                     }
                     else if (sort.Name == DeliveryFieldNames.DeliveryAddress)
                     {
-                        query = query.OrderBy(o => o.DeliveryAddress);
+                        query = querySortedByType.ThenBy(o => o.DeliveryAddress);
                     }
                     else if (sort.Name == DeliveryFieldNames.DeliveryPostalCode)
                     {
-                        query = query.OrderBy(o => o.DeliveryPostalCode);
+                        query = querySortedByType.ThenBy(o => o.DeliveryPostalCode);
                     }
                     else if (sort.Name == DeliveryFieldNames.DeliveryPostalAddress)
                     {
-                        query = query.OrderBy(o => o.DeliveryPostalAddress);
+                        query = querySortedByType.ThenBy(o => o.DeliveryPostalAddress);
                     }
                     else if (sort.Name == DeliveryFieldNames.DeliveryLocation)
                     {
-                        query = query.OrderBy(o => o.DeliveryLocation);
+                        query = querySortedByType.ThenBy(o => o.DeliveryLocation);
                     }
                     else if (sort.Name == DeliveryFieldNames.DeliveryInfo1)
                     {
-                        query = query.OrderBy(o => o.DeliveryInfo);
+                        query = querySortedByType.ThenBy(o => o.DeliveryInfo);
                     }
                     else if (sort.Name == DeliveryFieldNames.DeliveryInfo2)
                     {
-                        query = query.OrderBy(o => o.DeliveryInfo2);
+                        query = querySortedByType.ThenBy(o => o.DeliveryInfo2);
                     }
                     else if (sort.Name == DeliveryFieldNames.DeliveryInfo3)
                     {
-                        query = query.OrderBy(o => o.DeliveryInfo3);
+                        query = querySortedByType.ThenBy(o => o.DeliveryInfo3);
                     }
                     else if (sort.Name == DeliveryFieldNames.DeliveryOuId)
                     {
-                        query = query.OrderBy(o => o.DeliveryOuEntity.Name);
+                        query = querySortedByType.ThenBy(o => o.DeliveryOuEntity.Name);
                     }
 
                     // General
                     else if (sort.Name == GeneralFieldNames.OrderNumber)
                     {
-                        query = query.OrderBy(o => o.Id);
+                        query = querySortedByType.ThenBy(o => o.Id);
                     }
                     else if (sort.Name == GeneralFieldNames.Customer)
                     {
-                        query = query.OrderBy(o => o.Customer.Name);
+                        query = querySortedByType.ThenBy(o => o.Customer.Name);
                     }
                     else if (sort.Name == GeneralFieldNames.Administrator)
                     {
-                        query = query.OrderBy(o => o.User_Id);
+                        query = querySortedByType.ThenBy(o => o.User_Id);
                     }
                     else if (sort.Name == GeneralFieldNames.Domain)
                     {
-                        query = query.OrderBy(o => o.Domain.Name);
+                        query = querySortedByType.ThenBy(o => o.Domain.Name);
                     }
                     else if (sort.Name == GeneralFieldNames.OrderDate)
                     {
-                        query = query.OrderBy(o => o.OrderDate);
+                        query = querySortedByType.ThenBy(o => o.OrderDate);
                     }
 
                     // Log
                     else if (sort.Name == LogFieldNames.Log)
                     {
-                        query = query.OrderBy(l => l.Logs.Count);
+                        query = querySortedByType.ThenBy(l => l.Logs.Count);
                     }
 
                     // Orderer
                     else if (sort.Name == OrdererFieldNames.OrdererId)
                     {
-                        query = query.OrderBy(o => o.OrdererID);
+                        query = querySortedByType.ThenBy(o => o.OrdererID);
                     }
                     else if (sort.Name == OrdererFieldNames.OrdererName)
                     {
-                        query = query.OrderBy(o => o.Orderer);
+                        query = querySortedByType.ThenBy(o => o.Orderer);
                     }
                     else if (sort.Name == OrdererFieldNames.OrdererLocation)
                     {
-                        query = query.OrderBy(o => o.OrdererLocation);
+                        query = querySortedByType.ThenBy(o => o.OrdererLocation);
                     }
                     else if (sort.Name == OrdererFieldNames.OrdererEmail)
                     {
-                        query = query.OrderBy(o => o.OrdererEMail);
+                        query = querySortedByType.ThenBy(o => o.OrdererEMail);
                     }
                     else if (sort.Name == OrdererFieldNames.OrdererPhone)
                     {
-                        query = query.OrderBy(o => o.OrdererPhone);
+                        query = querySortedByType.ThenBy(o => o.OrdererPhone);
                     }
                     else if (sort.Name == OrdererFieldNames.OrdererCode)
                     {
-                        query = query.OrderBy(o => o.OrdererCode);
+                        query = querySortedByType.ThenBy(o => o.OrdererCode);
                     }
                     else if (sort.Name == OrdererFieldNames.Department)
                     {
-                        query = query.OrderBy(o => o.Department_Id);
+                        query = querySortedByType.ThenBy(o => o.Department_Id);
                     }
                     else if (sort.Name == OrdererFieldNames.Unit)
                     {
-                        query = query.OrderBy(o => o.Ou.Name);
+                        query = querySortedByType.ThenBy(o => o.Ou.Name);
                     }
                     else if (sort.Name == OrdererFieldNames.OrdererAddress)
                     {
-                        query = query.OrderBy(o => o.OrdererAddress);
+                        query = querySortedByType.ThenBy(o => o.OrdererAddress);
                     }
                     else if (sort.Name == OrdererFieldNames.OrdererInvoiceAddress)
                     {
-                        query = query.OrderBy(o => o.OrdererInvoiceAddress);
+                        query = querySortedByType.ThenBy(o => o.OrdererInvoiceAddress);
                     }
                     else if (sort.Name == OrdererFieldNames.OrdererReferenceNumber)
                     {
-                        query = query.OrderBy(o => o.OrdererReferenceNumber);
+                        query = querySortedByType.ThenBy(o => o.OrdererReferenceNumber);
                     }
                     else if (sort.Name == OrdererFieldNames.AccountingDimension1)
                     {
-                        query = query.OrderBy(o => o.AccountingDimension1);
+                        query = querySortedByType.ThenBy(o => o.AccountingDimension1);
                     }
                     else if (sort.Name == OrdererFieldNames.AccountingDimension2)
                     {
-                        query = query.OrderBy(o => o.AccountingDimension2);
+                        query = querySortedByType.ThenBy(o => o.AccountingDimension2);
                     }
                     else if (sort.Name == OrdererFieldNames.AccountingDimension3)
                     {
-                        query = query.OrderBy(o => o.AccountingDimension3);
+                        query = querySortedByType.ThenBy(o => o.AccountingDimension3);
                     }
                     else if (sort.Name == OrdererFieldNames.AccountingDimension4)
                     {
-                        query = query.OrderBy(o => o.AccountingDimension4);
+                        query = querySortedByType.ThenBy(o => o.AccountingDimension4);
                     }
                     else if (sort.Name == OrdererFieldNames.AccountingDimension5)
                     {
-                        query = query.OrderBy(o => o.AccountingDimension5);
+                        query = querySortedByType.ThenBy(o => o.AccountingDimension5);
                     }
 
                     // Order
                     else if (sort.Name == OrderFieldNames.Property)
                     {
-                        query = query.OrderBy(o => o.OrderProperty.OrderProperty);
+                        query = querySortedByType.ThenBy(o => o.OrderProperty.OrderProperty);
                     }
                     else if (sort.Name == OrderFieldNames.OrderRow1)
                     {
-                        query = query.OrderBy(o => o.OrderRow);
+                        query = querySortedByType.ThenBy(o => o.OrderRow);
                     }
                     else if (sort.Name == OrderFieldNames.OrderRow2)
                     {
-                        query = query.OrderBy(o => o.OrderRow2);
+                        query = querySortedByType.ThenBy(o => o.OrderRow2);
                     }
                     else if (sort.Name == OrderFieldNames.OrderRow3)
                     {
-                        query = query.OrderBy(o => o.OrderRow3);
+                        query = querySortedByType.ThenBy(o => o.OrderRow3);
                     }
                     else if (sort.Name == OrderFieldNames.OrderRow4)
                     {
-                        query = query.OrderBy(o => o.OrderRow4);
+                        query = querySortedByType.ThenBy(o => o.OrderRow4);
                     }
                     else if (sort.Name == OrderFieldNames.OrderRow5)
                     {
-                        query = query.OrderBy(o => o.OrderRow5);
+                        query = querySortedByType.ThenBy(o => o.OrderRow5);
                     }
                     else if (sort.Name == OrderFieldNames.OrderRow6)
                     {
-                        query = query.OrderBy(o => o.OrderRow6);
+                        query = querySortedByType.ThenBy(o => o.OrderRow6);
                     }
                     else if (sort.Name == OrderFieldNames.OrderRow7)
                     {
-                        query = query.OrderBy(o => o.OrderRow7);
+                        query = querySortedByType.ThenBy(o => o.OrderRow7);
                     }
                     else if (sort.Name == OrderFieldNames.OrderRow8)
                     {
-                        query = query.OrderBy(o => o.OrderRow8);
+                        query = querySortedByType.ThenBy(o => o.OrderRow8);
                     }
                     else if (sort.Name == OrderFieldNames.Configuration)
                     {
-                        query = query.OrderBy(o => o.Configuration);
+                        query = querySortedByType.ThenBy(o => o.Configuration);
                     }
                     else if (sort.Name == OrderFieldNames.OrderInfo)
                     {
-                        query = query.OrderBy(o => o.OrderInfo);
+                        query = querySortedByType.ThenBy(o => o.OrderInfo);
                     }
                     else if (sort.Name == OrderFieldNames.OrderInfo2)
                     {
-                        query = query.OrderBy(o => o.OrderInfo2);
+                        query = querySortedByType.ThenBy(o => o.OrderInfo2);
                     }
 
                     // Other
                     else if (sort.Name == OtherFieldNames.FileName)
                     {
-                        query = query.OrderBy(o => o.Filename);
+                        query = querySortedByType.ThenBy(o => o.Filename);
                     }
                     else if (sort.Name == OtherFieldNames.CaseNumber)
                     {
-                        query = query.OrderBy(o => o.CaseNumber);
+                        query = querySortedByType.ThenBy(o => o.CaseNumber);
                     }
                     else if (sort.Name == OtherFieldNames.Info)
                     {
-                        query = query.OrderBy(o => o.Info);
+                        query = querySortedByType.ThenBy(o => o.Info);
                     }
                     else if (sort.Name == OtherFieldNames.Status)
                     {
-                        query = query.OrderBy(o => o.OrderState.Name);
+                        query = querySortedByType.ThenBy(o => o.OrderState.Name);
                     }
 
                     // Program
                     else if (sort.Name == ProgramFieldNames.Program)
                     {
-                        query = query.OrderBy(o => o.Programs.Count);
+                        query = querySortedByType.ThenBy(o => o.Programs.Count);
                     }
 
                     // Receiver
                     else if (sort.Name == ReceiverFieldNames.ReceiverId)
                     {
-                        query = query.OrderBy(o => o.ReceiverId);
+                        query = querySortedByType.ThenBy(o => o.ReceiverId);
                     }
                     else if (sort.Name == ReceiverFieldNames.ReceiverName)
                     {
-                        query = query.OrderBy(o => o.ReceiverName);
+                        query = querySortedByType.ThenBy(o => o.ReceiverName);
                     }
                     else if (sort.Name == ReceiverFieldNames.ReceiverEmail)
                     {
-                        query = query.OrderBy(o => o.ReceiverEMail);
+                        query = querySortedByType.ThenBy(o => o.ReceiverEMail);
                     }
                     else if (sort.Name == ReceiverFieldNames.ReceiverPhone)
                     {
-                        query = query.OrderBy(o => o.ReceiverPhone);
+                        query = querySortedByType.ThenBy(o => o.ReceiverPhone);
                     }
                     else if (sort.Name == ReceiverFieldNames.ReceiverLocation)
                     {
-                        query = query.OrderBy(o => o.ReceiverLocation);
+                        query = querySortedByType.ThenBy(o => o.ReceiverLocation);
                     }
                     else if (sort.Name == ReceiverFieldNames.MarkOfGoods)
                     {
-                        query = query.OrderBy(o => o.MarkOfGoods);
+                        query = querySortedByType.ThenBy(o => o.MarkOfGoods);
                     }
 
                     // Supplier
                     else if (sort.Name == SupplierFieldNames.SupplierOrderNumber)
                     {
-                        query = query.OrderBy(o => o.SupplierOrderNumber);
+                        query = querySortedByType.ThenBy(o => o.SupplierOrderNumber);
                     }
                     else if (sort.Name == SupplierFieldNames.SupplierOrderDate)
                     {
-                        query = query.OrderBy(o => o.SupplierOrderDate);
+                        query = querySortedByType.ThenBy(o => o.SupplierOrderDate);
                     }
                     else if (sort.Name == SupplierFieldNames.SupplierOrderInfo)
                     {
-                        query = query.OrderBy(o => o.SupplierOrderInfo);
+                        query = querySortedByType.ThenBy(o => o.SupplierOrderInfo);
                     }
 
                     // User
                     else if (sort.Name == UserFieldNames.UserId)
                     {
-                        query = query.OrderBy(o => o.UserId);
+                        query = querySortedByType.ThenBy(o => o.UserId);
                     }
                     else if (sort.Name == UserFieldNames.UserFirstName)
                     {
-                        query = query.OrderBy(o => o.UserFirstName);
+                        query = querySortedByType.ThenBy(o => o.UserFirstName);
                     }
                     else if (sort.Name == UserFieldNames.UserLastName)
                     {
-                        query = query.OrderBy(o => o.UserLastName);
+                        query = querySortedByType.ThenBy(o => o.UserLastName);
                     }
 
                     break;
@@ -483,273 +485,273 @@
                     // Delivery
                     if (sort.Name == DeliveryFieldNames.DeliveryDate)
                     {
-                        query = query.OrderByDescending(o => o.Deliverydate);
+                        query = querySortedByType.ThenByDescending(o => o.Deliverydate);
                     }
                     else if (sort.Name == DeliveryFieldNames.InstallDate)
                     {
-                        query = query.OrderByDescending(o => o.InstallDate);
+                        query = querySortedByType.ThenByDescending(o => o.InstallDate);
                     }
                     else if (sort.Name == DeliveryFieldNames.DeliveryDepartment)
                     {
-                        query = query.OrderByDescending(o => o.DeliveryDepartment.DepartmentName);
+                        query = querySortedByType.ThenByDescending(o => o.DeliveryDepartment.DepartmentName);
                     }
                     else if (sort.Name == DeliveryFieldNames.DeliveryOu)
                     {
-                        query = query.OrderByDescending(o => o.DeliveryOu);
+                        query = querySortedByType.ThenByDescending(o => o.DeliveryOu);
                     }
                     else if (sort.Name == DeliveryFieldNames.DeliveryAddress)
                     {
-                        query = query.OrderByDescending(o => o.DeliveryAddress);
+                        query = querySortedByType.ThenByDescending(o => o.DeliveryAddress);
                     }
                     else if (sort.Name == DeliveryFieldNames.DeliveryPostalCode)
                     {
-                        query = query.OrderByDescending(o => o.DeliveryPostalCode);
+                        query = querySortedByType.ThenByDescending(o => o.DeliveryPostalCode);
                     }
                     else if (sort.Name == DeliveryFieldNames.DeliveryPostalAddress)
                     {
-                        query = query.OrderByDescending(o => o.DeliveryPostalAddress);
+                        query = querySortedByType.ThenByDescending(o => o.DeliveryPostalAddress);
                     }
                     else if (sort.Name == DeliveryFieldNames.DeliveryLocation)
                     {
-                        query = query.OrderByDescending(o => o.DeliveryLocation);
+                        query = querySortedByType.ThenByDescending(o => o.DeliveryLocation);
                     }
                     else if (sort.Name == DeliveryFieldNames.DeliveryInfo1)
                     {
-                        query = query.OrderByDescending(o => o.DeliveryInfo);
+                        query = querySortedByType.ThenByDescending(o => o.DeliveryInfo);
                     }
                     else if (sort.Name == DeliveryFieldNames.DeliveryInfo2)
                     {
-                        query = query.OrderByDescending(o => o.DeliveryInfo2);
+                        query = querySortedByType.ThenByDescending(o => o.DeliveryInfo2);
                     }
                     else if (sort.Name == DeliveryFieldNames.DeliveryInfo3)
                     {
-                        query = query.OrderByDescending(o => o.DeliveryInfo3);
+                        query = querySortedByType.ThenByDescending(o => o.DeliveryInfo3);
                     }
                     else if (sort.Name == DeliveryFieldNames.DeliveryOuId)
                     {
-                        query = query.OrderByDescending(o => o.DeliveryOuEntity.Name);
+                        query = querySortedByType.ThenByDescending(o => o.DeliveryOuEntity.Name);
                     }
 
                     // General
                     else if (sort.Name == GeneralFieldNames.OrderNumber)
                     {
-                        query = query.OrderByDescending(o => o.Id);
+                        query = querySortedByType.ThenByDescending(o => o.Id);
                     }
                     else if (sort.Name == GeneralFieldNames.Customer)
                     {
-                        query = query.OrderByDescending(o => o.Customer.Name);
+                        query = querySortedByType.ThenByDescending(o => o.Customer.Name);
                     }
                     else if (sort.Name == GeneralFieldNames.Administrator)
                     {
-                        query = query.OrderByDescending(o => o.User_Id);
+                        query = querySortedByType.ThenByDescending(o => o.User_Id);
                     }
                     else if (sort.Name == GeneralFieldNames.Domain)
                     {
-                        query = query.OrderByDescending(o => o.Domain.Name);
+                        query = querySortedByType.ThenByDescending(o => o.Domain.Name);
                     }
                     else if (sort.Name == GeneralFieldNames.OrderDate)
                     {
-                        query = query.OrderByDescending(o => o.OrderDate);
+                        query = querySortedByType.ThenByDescending(o => o.OrderDate);
                     }
 
                     // Log
                     else if (sort.Name == LogFieldNames.Log)
                     {
-                        query = query.OrderByDescending(l => l.Logs.Count);
+                        query = querySortedByType.ThenByDescending(l => l.Logs.Count);
                     }
 
                     // Orderer
                     else if (sort.Name == OrdererFieldNames.OrdererId)
                     {
-                        query = query.OrderByDescending(o => o.OrdererID);
+                        query = querySortedByType.ThenByDescending(o => o.OrdererID);
                     }
                     else if (sort.Name == OrdererFieldNames.OrdererName)
                     {
-                        query = query.OrderByDescending(o => o.Orderer);
+                        query = querySortedByType.ThenByDescending(o => o.Orderer);
                     }
                     else if (sort.Name == OrdererFieldNames.OrdererLocation)
                     {
-                        query = query.OrderByDescending(o => o.OrdererLocation);
+                        query = querySortedByType.ThenByDescending(o => o.OrdererLocation);
                     }
                     else if (sort.Name == OrdererFieldNames.OrdererEmail)
                     {
-                        query = query.OrderByDescending(o => o.OrdererEMail);
+                        query = querySortedByType.ThenByDescending(o => o.OrdererEMail);
                     }
                     else if (sort.Name == OrdererFieldNames.OrdererPhone)
                     {
-                        query = query.OrderByDescending(o => o.OrdererPhone);
+                        query = querySortedByType.ThenByDescending(o => o.OrdererPhone);
                     }
                     else if (sort.Name == OrdererFieldNames.OrdererCode)
                     {
-                        query = query.OrderByDescending(o => o.OrdererCode);
+                        query = querySortedByType.ThenByDescending(o => o.OrdererCode);
                     }
                     else if (sort.Name == OrdererFieldNames.Department)
                     {
-                        query = query.OrderByDescending(o => o.Department_Id);
+                        query = querySortedByType.ThenByDescending(o => o.Department_Id);
                     }
                     else if (sort.Name == OrdererFieldNames.Unit)
                     {
-                        query = query.OrderByDescending(o => o.Ou.Name);
+                        query = querySortedByType.ThenByDescending(o => o.Ou.Name);
                     }
                     else if (sort.Name == OrdererFieldNames.OrdererAddress)
                     {
-                        query = query.OrderByDescending(o => o.OrdererAddress);
+                        query = querySortedByType.ThenByDescending(o => o.OrdererAddress);
                     }
                     else if (sort.Name == OrdererFieldNames.OrdererInvoiceAddress)
                     {
-                        query = query.OrderByDescending(o => o.OrdererInvoiceAddress);
+                        query = querySortedByType.ThenByDescending(o => o.OrdererInvoiceAddress);
                     }
                     else if (sort.Name == OrdererFieldNames.OrdererReferenceNumber)
                     {
-                        query = query.OrderByDescending(o => o.OrdererReferenceNumber);
+                        query = querySortedByType.ThenByDescending(o => o.OrdererReferenceNumber);
                     }
                     else if (sort.Name == OrdererFieldNames.AccountingDimension1)
                     {
-                        query = query.OrderByDescending(o => o.AccountingDimension1);
+                        query = querySortedByType.ThenByDescending(o => o.AccountingDimension1);
                     }
                     else if (sort.Name == OrdererFieldNames.AccountingDimension2)
                     {
-                        query = query.OrderByDescending(o => o.AccountingDimension2);
+                        query = querySortedByType.ThenByDescending(o => o.AccountingDimension2);
                     }
                     else if (sort.Name == OrdererFieldNames.AccountingDimension3)
                     {
-                        query = query.OrderByDescending(o => o.AccountingDimension3);
+                        query = querySortedByType.ThenByDescending(o => o.AccountingDimension3);
                     }
                     else if (sort.Name == OrdererFieldNames.AccountingDimension4)
                     {
-                        query = query.OrderByDescending(o => o.AccountingDimension4);
+                        query = querySortedByType.ThenByDescending(o => o.AccountingDimension4);
                     }
                     else if (sort.Name == OrdererFieldNames.AccountingDimension5)
                     {
-                        query = query.OrderByDescending(o => o.AccountingDimension5);
+                        query = querySortedByType.ThenByDescending(o => o.AccountingDimension5);
                     }
 
                     // Order
                     else if (sort.Name == OrderFieldNames.Property)
                     {
-                        query = query.OrderByDescending(o => o.OrderProperty.OrderProperty);
+                        query = querySortedByType.ThenByDescending(o => o.OrderProperty.OrderProperty);
                     }
                     else if (sort.Name == OrderFieldNames.OrderRow1)
                     {
-                        query = query.OrderByDescending(o => o.OrderRow);
+                        query = querySortedByType.ThenByDescending(o => o.OrderRow);
                     }
                     else if (sort.Name == OrderFieldNames.OrderRow2)
                     {
-                        query = query.OrderByDescending(o => o.OrderRow2);
+                        query = querySortedByType.ThenByDescending(o => o.OrderRow2);
                     }
                     else if (sort.Name == OrderFieldNames.OrderRow3)
                     {
-                        query = query.OrderByDescending(o => o.OrderRow3);
+                        query = querySortedByType.ThenByDescending(o => o.OrderRow3);
                     }
                     else if (sort.Name == OrderFieldNames.OrderRow4)
                     {
-                        query = query.OrderByDescending(o => o.OrderRow4);
+                        query = querySortedByType.ThenByDescending(o => o.OrderRow4);
                     }
                     else if (sort.Name == OrderFieldNames.OrderRow5)
                     {
-                        query = query.OrderByDescending(o => o.OrderRow5);
+                        query = querySortedByType.ThenByDescending(o => o.OrderRow5);
                     }
                     else if (sort.Name == OrderFieldNames.OrderRow6)
                     {
-                        query = query.OrderByDescending(o => o.OrderRow6);
+                        query = querySortedByType.ThenByDescending(o => o.OrderRow6);
                     }
                     else if (sort.Name == OrderFieldNames.OrderRow7)
                     {
-                        query = query.OrderByDescending(o => o.OrderRow7);
+                        query = querySortedByType.ThenByDescending(o => o.OrderRow7);
                     }
                     else if (sort.Name == OrderFieldNames.OrderRow8)
                     {
-                        query = query.OrderByDescending(o => o.OrderRow8);
+                        query = querySortedByType.ThenByDescending(o => o.OrderRow8);
                     }
                     else if (sort.Name == OrderFieldNames.Configuration)
                     {
-                        query = query.OrderByDescending(o => o.Configuration);
+                        query = querySortedByType.ThenByDescending(o => o.Configuration);
                     }
                     else if (sort.Name == OrderFieldNames.OrderInfo)
                     {
-                        query = query.OrderByDescending(o => o.OrderInfo);
+                        query = querySortedByType.ThenByDescending(o => o.OrderInfo);
                     }
                     else if (sort.Name == OrderFieldNames.OrderInfo2)
                     {
-                        query = query.OrderByDescending(o => o.OrderInfo2);
+                        query = querySortedByType.ThenByDescending(o => o.OrderInfo2);
                     }
 
                     // Other
                     else if (sort.Name == OtherFieldNames.FileName)
                     {
-                        query = query.OrderByDescending(o => o.Filename);
+                        query = querySortedByType.ThenByDescending(o => o.Filename);
                     }
                     else if (sort.Name == OtherFieldNames.CaseNumber)
                     {
-                        query = query.OrderByDescending(o => o.CaseNumber);
+                        query = querySortedByType.ThenByDescending(o => o.CaseNumber);
                     }
                     else if (sort.Name == OtherFieldNames.Info)
                     {
-                        query = query.OrderByDescending(o => o.Info);
+                        query = querySortedByType.ThenByDescending(o => o.Info);
                     }
                     else if (sort.Name == OtherFieldNames.Status)
                     {
-                        query = query.OrderByDescending(o => o.OrderState.Name);
+                        query = querySortedByType.ThenByDescending(o => o.OrderState.Name);
                     }
 
                     // Program
                     else if (sort.Name == ProgramFieldNames.Program)
                     {
-                        query = query.OrderByDescending(o => o.Programs.Count);
+                        query = querySortedByType.ThenByDescending(o => o.Programs.Count);
                     }
 
                     // Receiver
                     else if (sort.Name == ReceiverFieldNames.ReceiverId)
                     {
-                        query = query.OrderByDescending(o => o.ReceiverId);
+                        query = querySortedByType.ThenByDescending(o => o.ReceiverId);
                     }
                     else if (sort.Name == ReceiverFieldNames.ReceiverName)
                     {
-                        query = query.OrderByDescending(o => o.ReceiverName);
+                        query = querySortedByType.ThenByDescending(o => o.ReceiverName);
                     }
                     else if (sort.Name == ReceiverFieldNames.ReceiverEmail)
                     {
-                        query = query.OrderByDescending(o => o.ReceiverEMail);
+                        query = querySortedByType.ThenByDescending(o => o.ReceiverEMail);
                     }
                     else if (sort.Name == ReceiverFieldNames.ReceiverPhone)
                     {
-                        query = query.OrderByDescending(o => o.ReceiverPhone);
+                        query = querySortedByType.ThenByDescending(o => o.ReceiverPhone);
                     }
                     else if (sort.Name == ReceiverFieldNames.ReceiverLocation)
                     {
-                        query = query.OrderByDescending(o => o.ReceiverLocation);
+                        query = querySortedByType.ThenByDescending(o => o.ReceiverLocation);
                     }
                     else if (sort.Name == ReceiverFieldNames.MarkOfGoods)
                     {
-                        query = query.OrderByDescending(o => o.MarkOfGoods);
+                        query = querySortedByType.ThenByDescending(o => o.MarkOfGoods);
                     }
 
                     // Supplier
                     else if (sort.Name == SupplierFieldNames.SupplierOrderNumber)
                     {
-                        query = query.OrderByDescending(o => o.SupplierOrderNumber);
+                        query = querySortedByType.ThenByDescending(o => o.SupplierOrderNumber);
                     }
                     else if (sort.Name == SupplierFieldNames.SupplierOrderDate)
                     {
-                        query = query.OrderByDescending(o => o.SupplierOrderDate);
+                        query = querySortedByType.ThenByDescending(o => o.SupplierOrderDate);
                     }
                     else if (sort.Name == SupplierFieldNames.SupplierOrderInfo)
                     {
-                        query = query.OrderByDescending(o => o.SupplierOrderInfo);
+                        query = querySortedByType.ThenByDescending(o => o.SupplierOrderInfo);
                     }
 
                     // User
                     else if (sort.Name == UserFieldNames.UserId)
                     {
-                        query = query.OrderByDescending(o => o.UserId);
+                        query = querySortedByType.ThenByDescending(o => o.UserId);
                     }
                     else if (sort.Name == UserFieldNames.UserFirstName)
                     {
-                        query = query.OrderByDescending(o => o.UserFirstName);
+                        query = querySortedByType.ThenByDescending(o => o.UserFirstName);
                     }
                     else if (sort.Name == UserFieldNames.UserLastName)
                     {
-                        query = query.OrderByDescending(o => o.UserLastName);
+                        query = querySortedByType.ThenByDescending(o => o.UserLastName);
                     }
 
                     break;
