@@ -11,7 +11,7 @@
 
         SearchResponse Search(SearchParameters parameters);
 
-        NewOrderEditData GetNewOrderEditData(int customerId, int orderTypeId);
+        NewOrderEditData GetNewOrderEditData(int customerId, int orderTypeId, int? lowestchildordertypeid);
 
         FindOrderResponse FindOrder(int orderId, int customerId);
 

@@ -53,6 +53,8 @@
 
         private readonly IUserPermissionsChecker _userPermissionsChecker;
 
+        private readonly IOrderTypeService _orderTypeService;
+
         public OrdersController(
                 IMasterDataService masterDataService, 
                 IOrdersService ordersService, 
@@ -66,7 +68,8 @@
                 IUpdateOrderModelFactory updateOrderModelFactory, 
                 ILogsModelFactory logsModelFactory, 
                 IEmailService emailService,
-                IUserPermissionsChecker userPermissionsChecker)
+                IUserPermissionsChecker userPermissionsChecker,
+                IOrderTypeService orderTypeService)
             : base(masterDataService)
         {
             this.ordersService = ordersService;
@@ -79,6 +82,7 @@
             this.logsModelFactory = logsModelFactory;
             this.emailService = emailService;
             this._userPermissionsChecker = userPermissionsChecker;
+            this._orderTypeService = orderTypeService;
 
             this.filesStateStore = editorStateCacheFactory.CreateForModule(ModuleName.Orders);
             this.filesStore = temporaryFilesCacheFactory.CreateForModule(ModuleName.Orders);
@@ -131,14 +135,49 @@
         [BadRequestOnNotValid]
         public ViewResult CreateOrder(int orderTypeForCteateOrderId)
         {
-            var data = this.ordersService.GetNewOrderEditData(this.workContext.Customer.CustomerId, orderTypeForCteateOrderId);
+            var lowestchildordertypeid = orderTypeForCteateOrderId;
+            //check if ordertype has a parent
+            var orderType = this._orderTypeService.GetOrderType(orderTypeForCteateOrderId);
+            if (orderType.Parent_OrderType_Id.HasValue)
+            {
+                if (orderType.ParentOrderType.Parent_OrderType_Id.HasValue)
+                {
+                    if (orderType.ParentOrderType.ParentOrderType.Parent_OrderType_Id.HasValue)
+                    {
+                        if (orderType.ParentOrderType.ParentOrderType.ParentOrderType.Parent_OrderType_Id.HasValue)
+                        {
+                            orderTypeForCteateOrderId = orderType.ParentOrderType.ParentOrderType.ParentOrderType.Parent_OrderType_Id.Value;
+                        }
+                        else
+                        {
+                            orderTypeForCteateOrderId = orderType.ParentOrderType.ParentOrderType.Parent_OrderType_Id.Value;
+                        }
+                    }
+                    else
+                    {
+                        orderTypeForCteateOrderId = orderType.ParentOrderType.Parent_OrderType_Id.Value;
+                    }
+                }
+                else
+                {
+                    orderTypeForCteateOrderId = orderType.Parent_OrderType_Id.Value;
+                }
+            }
+            else
+            {
+                orderTypeForCteateOrderId = orderType.Id;
+            }
+
+            var data = this.ordersService.GetNewOrderEditData(this.workContext.Customer.CustomerId, orderTypeForCteateOrderId, lowestchildordertypeid);
             var temporaryId = this.temporaryIdProvider.ProvideTemporaryId();
 
             var model = this.newOrderModelFactory.Create(
-                                                temporaryId, 
+                                                temporaryId,
                                                 data,
                                                 this.workContext,
                                                 orderTypeForCteateOrderId);
+
+            model.OrderTypeId = lowestchildordertypeid;
 
             return this.View("New", model);
         }
@@ -152,6 +191,27 @@
             model.NewFiles = this.filesStore.FindFiles(model.Id, Subtopic.FileName.ToString());
             model.DeletedFiles = this.filesStateStore.FindDeletedFileNames(intId, Subtopic.FileName.ToString());
 
+            //check if ordertype has parent
+            //var ordertype = this._orderTypeService.GetOrderType(model.OrderTypeId.Value);
+            //if (ordertype.Parent_OrderType_Id.HasValue)
+            //{
+            //    if (ordertype.ParentOrderType.Parent_OrderType_Id.HasValue)
+            //    {
+            //        if (ordertype.ParentOrderType.ParentOrderType.Parent_OrderType_Id.HasValue)
+            //        {
+            //            model.OrderTypeId = ordertype.ParentOrderType.ParentOrderType.Parent_OrderType_Id.Value;
+            //        }
+            //        else
+            //        {
+            //            model.OrderTypeId = ordertype.ParentOrderType.Parent_OrderType_Id.Value;
+            //        }
+            //    }
+            //    else
+            //    {
+            //        model.OrderTypeId = ordertype.Parent_OrderType_Id.Value;
+            //    }
+            //}
+           
             var request = this.updateOrderModelFactory.Create(
                                                 model, 
                                                 this.workContext.Customer.CustomerId, 

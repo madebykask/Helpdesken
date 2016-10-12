@@ -60,6 +60,8 @@
 
         private readonly ICustomerRepository _customerRepository;
 
+        private readonly IOrderTypeRepository _orderTypeRepository;
+
         public OrdersService(
                 IUnitOfWorkFactory unitOfWorkFactory, 
                 IOrderFieldSettingsService orderFieldSettingsService, 
@@ -75,7 +77,8 @@
                 IMailTemplateService mailTemplateService,
                 IEmailService emailService,
                 IOrderEMailLogRepository orderEMailLogRepository,
-                ICustomerRepository customerRepository)
+                ICustomerRepository customerRepository,
+                IOrderTypeRepository orderTypeRepository)
         {
             this.unitOfWorkFactory = unitOfWorkFactory;
             this.orderFieldSettingsService = orderFieldSettingsService;
@@ -91,7 +94,8 @@
             this.mailTemplateService = mailTemplateService;
             this.emailService = emailService;
             this._orderEMailLogRepsoitory = orderEMailLogRepository;
-            this._customerRepository = customerRepository; ;
+            this._customerRepository = customerRepository;
+            this._orderTypeRepository = orderTypeRepository;
         }
 
         public OrdersFilterData GetOrdersFilterData(int customerId)
@@ -147,7 +151,7 @@
                 var newParentName = string.Format("{0} - {1}", parentName, s.Name);
                 var newCT = new OrderType()
                 {
-                    Id = Parent_OrderType_Id,
+                    Id = s.Id,
                     Name = newParentName,
                     IsActive = parentState,
                     Parent_OrderType_Id = s.Id
@@ -205,12 +209,12 @@
             }
         }
 
-        public NewOrderEditData GetNewOrderEditData(int customerId, int orderTypeId)
+        public NewOrderEditData GetNewOrderEditData(int customerId, int orderTypeId, int? lowestchildordertypeid)
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var settings = this.orderFieldSettingsService.GetOrderEditSettings(customerId, orderTypeId, uow);
-                var options = this.GetEditOptions(customerId, orderTypeId, settings, uow);
+                var options = this.GetEditOptions(customerId, orderTypeId, settings, uow, lowestchildordertypeid);
 
                 return new NewOrderEditData(settings, options);
             }
@@ -229,8 +233,38 @@
                                 .GetById(orderId)
                                 .MapToFullOrderEditFields();
 
-                var settings = this.orderFieldSettingsService.GetOrderEditSettings(customerId, order.OrderTypeId, uow);
-                var options = this.GetEditOptions(customerId, order.OrderTypeId, settings, uow);
+                
+
+               // check if ordertype has parent
+                var ordertype = this._orderTypeRepository.GetById(order.OrderTypeId.Value);
+                var firstLevelParentId = 0;
+                if (ordertype.Parent_OrderType_Id.HasValue)
+                {
+                    if (ordertype.ParentOrderType.Parent_OrderType_Id.HasValue)
+                    {
+                        if (ordertype.ParentOrderType.ParentOrderType.Parent_OrderType_Id.HasValue)
+                        {
+                            firstLevelParentId = ordertype.ParentOrderType.ParentOrderType.Parent_OrderType_Id.Value;
+                        }
+                        else
+                        {
+                            firstLevelParentId = ordertype.ParentOrderType.Parent_OrderType_Id.Value;
+                        }
+                    }
+                    else
+                    {
+                        firstLevelParentId = ordertype.Parent_OrderType_Id.Value;
+                    }
+                }
+                else
+                {
+                    firstLevelParentId = order.OrderTypeId.Value;
+                }
+
+                var settings = this.orderFieldSettingsService.GetOrderEditSettings(customerId, firstLevelParentId, uow);
+                var options = this.GetEditOptions(customerId, firstLevelParentId, settings, uow, order.OrderTypeId);
+
+                //var options = this.GetEditOptions(customerId, order.OrderTypeId, settings, uow, firstLevelParentId);
 
                 var histories = orderHistoryRep.GetAll()
                                 .GetByOrder(orderId)
@@ -273,7 +307,34 @@
                     entity = ordersRep.GetById(request.Order.Id);
 
                     existingOrder = OrderEditMapper.MapToFullOrderEditFields(entity);
-                    var settings = this.orderFieldSettingsService.GetOrderEditSettings(request.CustomerId, entity.OrderType_Id, uow);
+                    // check if ordertype has parent
+                    var ordertype = this._orderTypeRepository.GetById(request.Order.OrderTypeId.Value);
+
+                    var firstLevelParentId = 0;
+                    if (ordertype.Parent_OrderType_Id.HasValue)
+                    {
+                        if (ordertype.ParentOrderType.Parent_OrderType_Id.HasValue)
+                        {
+                            if (ordertype.ParentOrderType.ParentOrderType.Parent_OrderType_Id.HasValue)
+                            {
+                                firstLevelParentId = ordertype.ParentOrderType.ParentOrderType.Parent_OrderType_Id.Value;
+                            }
+                            else
+                            {
+                                firstLevelParentId = ordertype.ParentOrderType.Parent_OrderType_Id.Value;
+                            }
+                        }
+                        else
+                        {
+                            firstLevelParentId = ordertype.Parent_OrderType_Id.Value;
+                        }
+                    }
+                    else
+                    {
+                        firstLevelParentId = entity.OrderType_Id.Value;
+                    }
+
+                    var settings = this.orderFieldSettingsService.GetOrderEditSettings(request.CustomerId, firstLevelParentId, uow);
                     this.orderRestorer.Restore(request.Order, existingOrder, settings);
                     this.updateOrderRequestValidator.Validate(request.Order, existingOrder, settings);
 
@@ -405,7 +466,8 @@
                                 int customerId, 
                                 int? orderTypeId,
                                 FullOrderEditSettings settings,
-                                IUnitOfWork uow)
+                                IUnitOfWork uow,
+                                int? lowestchildordertypeid)
         {
             var statusesRep = uow.GetRepository<OrderState>();
             var administratorsRep = uow.GetRepository<User>();
@@ -425,6 +487,39 @@
             var deliveryOuIds = ousRep.GetAll();
             var administratorsWithEmails = administratorsRep.GetAll().GetAdministratorsWithEmails(customerId);
             var orderType = orderTypeId.HasValue ? orderTypeRep.GetAll().GetById(orderTypeId.Value).MapToName() : null;
+
+            // get parentordertypename
+            if (orderTypeId != lowestchildordertypeid.Value)
+            {
+                if (lowestchildordertypeid.HasValue)
+                {
+                    var level2Name = "";
+                    var level3Name = "";
+                    var level4Name = "";
+
+                    //get
+                    var lowestchild = this._orderTypeRepository.GetById(lowestchildordertypeid.Value);
+
+                    if (lowestchild.Parent_OrderType_Id.HasValue)
+                    {
+                        if (lowestchild.ParentOrderType.Parent_OrderType_Id.HasValue)
+                        {
+                            level2Name = lowestchild.ParentOrderType.Parent_OrderType_Id.HasValue ? orderTypeRep.GetAll().GetById(lowestchild.ParentOrderType.Parent_OrderType_Id.Value).MapToName() : null;
+                            orderType = orderType + " - " + level2Name;
+                        }
+
+                        if (orderTypeId != lowestchild.Parent_OrderType_Id.Value)
+                        {
+                            level3Name = lowestchild.Parent_OrderType_Id.HasValue ? orderTypeRep.GetAll().GetById(lowestchild.Parent_OrderType_Id.Value).MapToName() : null;
+                            orderType = orderType + " - " + level3Name;
+                        }
+                    }
+
+                    level4Name = lowestchildordertypeid.HasValue ? orderTypeRep.GetAll().GetById(lowestchildordertypeid.Value).MapToName() : null;
+
+                    orderType = orderType + " - " + level4Name;
+                }
+            }
 
             var workingGroupsWithEmails = new List<GroupWithEmails>();
             var emailGroupsWithEmails = new List<GroupWithEmails>();
