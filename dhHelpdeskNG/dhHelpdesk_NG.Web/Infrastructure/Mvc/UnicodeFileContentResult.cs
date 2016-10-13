@@ -34,11 +34,15 @@
             var response = context.HttpContext.Response;
 
             response.Clear();
-            if (!this.IsInline)
+
+            if (request.Browser.Browser.ToUpper() == "IE")
             {
-                response.AddHeader(
-                    "Content-Disposition",
-                    string.Format("attachment; filename={0}", request.Browser.Browser.ToUpper() == "IE" ? HttpUtility.UrlEncode(this.FileName, encoding) : this.FileName));                
+                if (!this.IsInline)
+                {
+                    response.AddHeader(
+                        "Content-Disposition",
+                        string.Format("attachment; filename=\"{0}\"", request.Browser.Browser.ToUpper() == "IE" ? HttpUtility.UrlEncode(this.FileName, encoding) : this.FileName));
+                }
             }
 
             response.ContentType = MimeHelper.GetMimeType(this.FileName);

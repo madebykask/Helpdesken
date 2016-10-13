@@ -1914,7 +1914,7 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             var defaultFileName = GetDefaultFileName(fileName);
-            Response.AddHeader("Content-Disposition", string.Format("attachment; filename={0}", defaultFileName));
+            Response.AddHeader("Content-Disposition", string.Format("attachment; filename=\"{0}\"", defaultFileName));
 
             return new UnicodeFileContentResult(fileContent, fileName);
         }
@@ -1940,7 +1940,7 @@ namespace DH.Helpdesk.Web.Controllers
                 fileContent = this._logFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
             }
             var defaultFileName = GetDefaultFileName(fileName);
-            Response.AddHeader("Content-Disposition", string.Format("attachment; filename={0}", defaultFileName));
+            Response.AddHeader("Content-Disposition", string.Format("attachment; filename=\"{0}\"", defaultFileName));
 
             return new UnicodeFileContentResult(fileContent, fileName);
         }
