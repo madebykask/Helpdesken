@@ -309,7 +309,13 @@ var GRID_STATE = {
         } else {
             me.showMsg(NODATA_MSG_TYPE);
         }
-        me.setGridState(window.GRID_STATE.IDLE);        
+        me.setGridState(window.GRID_STATE.IDLE);
+
+        //var tbl = {
+        //    CustomerName: currentCustomerName,
+        //    TableData: currentCustomerTable
+        //}
+        //return tbl;
     };         
 
     Page.prototype.resetSearch = function () {
@@ -340,6 +346,8 @@ var GRID_STATE = {
 
         if (selectedCustomer.length <= 0)
             selectedCustomer = me.$availableCustomer;
+
+        var customers = [];
         
         if (selectedCustomer.length > 0) {
             me.showMsg(LOADING_MSG_TYPE);
@@ -349,8 +357,11 @@ var GRID_STATE = {
             $.each(selectedCustomer,function (idx, value) {
                 curCustomerId = value.customerId;
                 curCustomerName = value.customerName;
-                me.fetchData([{ 'name': 'currentCustomerId', 'value': curCustomerId }]);
+                //me.fetchData([{ 'name': 'currentCustomerId', 'value': curCustomerId }]);
+                customers.push(curCustomerId);
             });
+
+            me.fetchData([{ 'name': 'currentCustomerId', 'value': customers }]);
         }
                 
     };    
@@ -359,8 +370,19 @@ var GRID_STATE = {
         var me = this;
 
         if (response && response.result === 'success' && response.data) {
-            if(response.data.length > 0)
-                me.loadData(response.data, response.gridSettings);            
+            for (var i = 0; i < response.data.length; i++) {
+                if (response.data[i].data.length > 0) {
+                    currentCustomerTable = '';
+                    currentCustomerName = '';
+                    me.loadData(response.data[i].data, response.data[i].gridSettings);
+                    var newTable = {
+                        CustomerName: currentCustomerName,
+                        TableId: i,
+                        TableData: currentCustomerTable
+                    }
+                    customerTableRepository.push(newTable);
+                }
+            }
         } else {
             me.showMsg(ERROR_MSG_TYPE);
             me.setGridState(window.GRID_STATE.IDLE);
@@ -400,26 +422,26 @@ var GRID_STATE = {
             data: fetchParams,
             success: function () {
                 me.onGetData.apply(me, arguments);
-                
             },
             error: function () {
                 me.showMsg(ERROR_MSG_TYPE);
                 me.setGridState(window.GRID_STATE.IDLE);
             }
         }).done(function () {
-            var newTable = {
-                CustomerName : currentCustomerName,
-                TableId: customerTableId,
-                TableData: currentCustomerTable
-            }
-            customerTableRepository.push(newTable);                                           
-            globalCounter += 1;
-            currentCustomerTable = '';
-            currentCustomerName = '';
-            if (globalCounter >= showableCustomerCount) {                
-                me.DrawTables(sortCallback);
-            }
-            customerTableId += 1;
+            //var newTable = {
+            //    CustomerName : currentCustomerName,
+            //    TableId: customerTableId,
+            //    TableData: currentCustomerTable
+            //}
+            //customerTableRepository.push(newTable);                                           
+            //globalCounter += 1;
+            //currentCustomerTable = '';
+            //currentCustomerName = '';
+            //if (globalCounter >= showableCustomerCount) {                
+            //    me.DrawTables(sortCallback);
+            //}
+            //customerTableId += 1;
+            me.DrawTables(sortCallback);
             $("#btnSearch").focus();
         });
     };
