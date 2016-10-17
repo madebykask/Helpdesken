@@ -407,7 +407,47 @@
 
                 }
 
+                if (request.InformReceiver == true)
+                {
+                    var currentUser = this.userRepository.GetById(request.UserId);
+                    var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(currentUser.TimeZoneId);
+                    // get list of fields to replace [#1] tags in the subjcet and body texts
+                    List<Field> fields = GetOrderFieldsForEmail(request, string.Empty, userTimeZone);
+                    var customer = this._customerRepository.GetById(request.CustomerId);
 
+                    var customEmailSender1 = customer.HelpdeskEmail;
+                    MailTemplateLanguageEntity m = this.mailTemplateService.GetMailTemplateLanguageForCustomer(40, request.CustomerId, request.LanguageId, request.Order.OrderTypeId);
+                    if (m != null)
+                    {
+                        if (!String.IsNullOrEmpty(m.Body) && !String.IsNullOrEmpty(m.Subject))
+                        {
+                            var to = request.Order.Receiver.ReceiverEmail;
+
+                            var curMail = to.ToString();
+                            if (!string.IsNullOrWhiteSpace(curMail) && emailService.IsValidEmail(curMail))
+                            {
+
+                                var el = new OrderEMailLog(orderId, historyEntity.Id, 40, curMail, customEmailSender1);
+                                fields = GetOrderFieldsForEmail(request, el.OrderEMailLogGUID.ToString(), userTimeZone);
+                                string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.OrderEMailLogGUID.ToString();
+
+                                //var AbsoluteUrl = RequestExtension.GetAbsoluteUrl();
+                                var AbsoluteUrl = "";
+
+                                var siteHelpdesk = AbsoluteUrl + "Areas/Orders/edit/" + request.Order.Id.ToString();
+                                var e_res = this.emailService.SendEmail(customEmailSender1, el.EMailAddress, m.Subject, m.Body, null, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, null, siteSelfService, siteHelpdesk);
+
+                                //el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                                var now = DateTime.Now;
+                                el.CreatedDate = now;
+                                this._orderEMailLogRepsoitory.Add(el);
+                                this._orderEMailLogRepsoitory.Commit();
+                            }
+                        }
+
+                    }
+
+                }
                 this.orderAuditors.ForEach(a => a.Audit(request, new OrderAuditData(historyEntity.Id, existingOrder)));
 
                 return entity.Id;

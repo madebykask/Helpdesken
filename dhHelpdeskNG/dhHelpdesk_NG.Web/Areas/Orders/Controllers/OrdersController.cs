@@ -191,27 +191,6 @@
             model.NewFiles = this.filesStore.FindFiles(model.Id, Subtopic.FileName.ToString());
             model.DeletedFiles = this.filesStateStore.FindDeletedFileNames(intId, Subtopic.FileName.ToString());
 
-            //check if ordertype has parent
-            //var ordertype = this._orderTypeService.GetOrderType(model.OrderTypeId.Value);
-            //if (ordertype.Parent_OrderType_Id.HasValue)
-            //{
-            //    if (ordertype.ParentOrderType.Parent_OrderType_Id.HasValue)
-            //    {
-            //        if (ordertype.ParentOrderType.ParentOrderType.Parent_OrderType_Id.HasValue)
-            //        {
-            //            model.OrderTypeId = ordertype.ParentOrderType.ParentOrderType.Parent_OrderType_Id.Value;
-            //        }
-            //        else
-            //        {
-            //            model.OrderTypeId = ordertype.ParentOrderType.Parent_OrderType_Id.Value;
-            //        }
-            //    }
-            //    else
-            //    {
-            //        model.OrderTypeId = ordertype.Parent_OrderType_Id.Value;
-            //    }
-            //}
-           
             var request = this.updateOrderModelFactory.Create(
                                                 model, 
                                                 this.workContext.Customer.CustomerId, 
