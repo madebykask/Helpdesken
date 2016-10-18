@@ -7,6 +7,8 @@
 
     public class OrderTypeInputViewModel
     {
+        public bool CanAddSubOrderType { get; set; }
+
         public OrderType OrderType { get; set; }
         public Customer Customer { get; set; }
 
