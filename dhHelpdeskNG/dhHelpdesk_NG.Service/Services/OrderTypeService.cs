@@ -105,6 +105,11 @@
             else
                 this._orderTypeRepository.Update(orderType);
 
+            if (orderType.IsDefault == 1)
+            {
+                this._orderTypeRepository.ResetDefault(orderType.Id, orderType.Customer_Id);
+            }
+
             if (errors.Count == 0)
                 this.Commit();
         }

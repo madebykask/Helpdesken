@@ -116,7 +116,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public interface IOrderTypeRepository : IRepository<OrderType>
     {
-        void ResetDefault(int exclude);
+        void ResetDefault(int exclude, int customerId);
     }
 
     public class OrderTypeRepository : RepositoryBase<OrderType>, IOrderTypeRepository
@@ -126,7 +126,7 @@ namespace DH.Helpdesk.Dal.Repositories
         {
         }
 
-        public void ResetDefault(int exclude)
+        public void ResetDefault(int exclude, int customerId)
         {
             foreach (OrderType obj in this.GetMany(s => s.IsDefault == 1 && s.Id != exclude))
             {
