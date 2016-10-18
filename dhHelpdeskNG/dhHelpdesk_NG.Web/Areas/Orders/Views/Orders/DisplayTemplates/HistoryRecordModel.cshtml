@@ -22,11 +22,11 @@
             
             if (fieldDifferences.OldValue == null && fieldDifferences.NewValue != null)
             {
-                <tr><th>@fieldDifferences.FieldName</th> <td>→ @fieldDifferences.NewValue</td></tr>
+                <tr><th style="width:40%;">@fieldDifferences.FieldName</th> <td style="width:60%;">→ @fieldDifferences.NewValue</td></tr>
             }
             else
             {
-                <tr><th>@fieldDifferences.FieldName </th> <td> @fieldDifferences.OldValue → @fieldDifferences.NewValue</td></tr>
+                <tr><th style="width:40%;">@fieldDifferences.FieldName </th> <td style="width:60%;"> @fieldDifferences.OldValue → @fieldDifferences.NewValue</td></tr>
             }
             
         }
