@@ -230,7 +230,7 @@
             {
                 var ordersRep = uow.GetRepository<Order>();
                 var orderHistoryRep = uow.GetRepository<OrderHistoryEntity>();
-                var orderLogRep = uow.GetRepository<OrderLog>();
+                //var orderLogRep = uow.GetRepository<OrderLog>();
                 var orderEmailLogRep = uow.GetRepository<OrderEMailLog>();
 
                 var order = ordersRep.GetAll()
@@ -273,13 +273,13 @@
                                 .GetByOrder(orderId)
                                 .MapToOverviews();
                 var historyIds = histories.Select(i => i.Id).ToArray();
-                var logOverviews = orderLogRep.GetAll()
-                                .GetByHistoryIds(historyIds)
-                                .MapToOverviews();
+                //var logOverviews = orderLogRep.GetAll()
+                //                .GetByHistoryIds(historyIds)
+                //                .MapToOverviews();
                 var emailLogs = orderEmailLogRep.GetAll()
                                 .GetByHistoryIds(historyIds)
                                 .MapToOverviews();
-                var historyDifferences = this.ordersLogic.AnalyzeHistoriesDifferences(histories, logOverviews, emailLogs, settings);
+                var historyDifferences = this.ordersLogic.AnalyzeHistoriesDifferences(histories, emailLogs, settings);
 
                 var data = new OrderEditData(order, historyDifferences);
 

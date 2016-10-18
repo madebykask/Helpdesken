@@ -9,7 +9,7 @@
     {
         List<HistoriesDifference> AnalyzeHistoriesDifferences(
                             List<HistoryOverview> histories, 
-                            List<LogOverview> logs, 
+                            //List<LogOverview> logs, 
                             List<EmailLogOverview> emailLogs,
                             FullOrderEditSettings settings);
     }

@@ -20,7 +20,7 @@
                 var historyModel = new HistoryRecordModel(
                     history.DateAndTime,
                     history.RegisteredBy,
-                    history.Log,
+                    //history.Log,
                     differences,
                     history.Emails);
 

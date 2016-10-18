@@ -9,12 +9,12 @@
         @Html.DisplayFor(m => m.RegisteredBy.FirstName)
         @Html.DisplayFor(m => m.RegisteredBy.LastName)
     </td>
-    <td class="tdpointer">
+    @*<td class="tdpointer">
         @foreach (var log in Model.Log)
         {
             <div>@log</div>
         }
-    </td>
+    </td>*@
     <td class="tdpointer">
         <table class="tableintable">
         @foreach (var fieldDifferences in Model.FieldsDifferences)
@@ -26,7 +26,7 @@
             }
             else
             {
-                <tr><th>@fieldDifferences.FieldName @fieldDifferences.OldValue</th> <td> → @fieldDifferences.NewValue</td></tr>
+                <tr><th>@fieldDifferences.FieldName </th> <td> @fieldDifferences.OldValue → @fieldDifferences.NewValue</td></tr>
             }
             
         }
