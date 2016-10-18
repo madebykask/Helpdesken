@@ -3934,11 +3934,23 @@ namespace DH.Helpdesk.Web.Controllers
                         m.case_.Description = caseTemplate.Description;
                         m.case_.Miscellaneous = caseTemplate.Miscellaneous;
 
-                        if (caseTemplate.CaseWorkingGroup_Id != null)
+                        if (caseTemplate.SetCurrentUsersWorkingGroup == 1 && SessionFacade.CurrentUser != null)
+                        {
+                            var userDefaultWGId = this._userService.GetUserDefaultWorkingGroupId(SessionFacade.CurrentUser.Id, customer.Id);
+                            if (userDefaultWGId.HasValue)
+                            {
+                                m.case_.WorkingGroup_Id = userDefaultWGId.Value;
+                            }
+                            else
+                            {
+                                m.case_.WorkingGroup_Id = null;
+                            }
+                        }
+                        else if (caseTemplate.CaseWorkingGroup_Id != null)
                         {
                             m.case_.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id;
                         }
-
+                        
                         m.case_.Priority_Id = caseTemplate.Priority_Id;
                         m.case_.Project_Id = caseTemplate.Project_Id;
                         m.CaseLog.TextExternal = caseTemplate.Text_External;
