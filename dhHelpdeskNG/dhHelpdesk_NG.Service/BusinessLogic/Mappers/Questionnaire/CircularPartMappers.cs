@@ -58,6 +58,7 @@
                 anonymus.ToList()
                     .Select(
                         c => new AvailableCase(c.Id, (int)c.CaseNumber, c.Caption, c.PersonsEmail, c.SendDate != null))
+                    .OrderBy(x => x.CaseNumber)
                     .ToList();
 
             return businessModels;
