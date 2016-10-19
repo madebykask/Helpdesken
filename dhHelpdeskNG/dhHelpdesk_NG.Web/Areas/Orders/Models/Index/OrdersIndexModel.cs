@@ -11,6 +11,7 @@
     public sealed class OrdersIndexModel : BaseIndexModel
     {
         public OrdersIndexModel(
+                SelectList orderTypesSearch,
                 SelectList orderTypes, 
                 MultiSelectList administrators,
                 DateTime? startDate,
@@ -30,6 +31,7 @@
             this.Text = text;
             this.RecordsOnPage = recordsOnPage;
             this.SortField = sortField;
+            this.OrderTypesSearch = orderTypesSearch;
         }
 
         public OrdersIndexModel()
@@ -54,6 +56,9 @@
 
         [NotNull]
         public SelectList OrderTypes { get; private set; }
+
+        [NotNull]
+        public SelectList OrderTypesSearch { get; private set; }
 
         [LocalizedDisplay("Typ")]
         public int? OrderTypeId { get; set; }

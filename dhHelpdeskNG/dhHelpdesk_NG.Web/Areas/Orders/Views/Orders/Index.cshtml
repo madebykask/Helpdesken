@@ -37,7 +37,7 @@
     <table class="tableform">
         <tr>
             <td class="span3">@Translation.Get("Typ")</td>
-            <td>@Html.DropDownListFor(m => m.OrderTypeId, Model.OrderTypes, new { id = "ordertypes_dropdown", @style = "width:300px", data_placeholder = Translation.Get("Välj en eller flera") })</td>
+            <td>@Html.DropDownListFor(m => m.OrderTypeId, Model.OrderTypesSearch, new { id = "ordertypes_dropdown", @style = "width:300px", data_placeholder = Translation.Get("Välj en eller flera") })</td>
         </tr>                
         <tr>
             <td class="span3">@Translation.Get("Handläggare")</td>

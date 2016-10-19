@@ -11,11 +11,20 @@
     public static class OrderMapper
     {
         public static OrdersFilterData MapToFilterData(
+                                        IList<OrderType> orderTypesSearch,
                                         IList<OrderType> orderTypes,
                                         IQueryable<User> administrators,
                                         IQueryable<OrderState> statuses)
         {
             var orderTypesEntities = orderTypes.Select(t => new
+                                                            {
+                                                                t.Id,
+                                                                t.Name
+                                                            })
+                                                            .OrderBy(t => t.Name)
+                                                            .ToArray();
+
+            var orderTypesSearchEntities = orderTypesSearch.Select(t => new
                                                             {
                                                                 t.Id,
                                                                 t.Name
@@ -40,6 +49,7 @@
 
 
             return new OrdersFilterData(
+                            orderTypesSearchEntities.Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
                             orderTypesEntities.Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
                             overviews.Where(o => o.Type == "Administrator").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
                             statusesEntities.Where(o => o.Type == "Status").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray());

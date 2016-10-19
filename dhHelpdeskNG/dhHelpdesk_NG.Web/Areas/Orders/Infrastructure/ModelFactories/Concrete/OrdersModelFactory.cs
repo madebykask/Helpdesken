@@ -16,6 +16,7 @@
     {
         public OrdersIndexModel GetIndexModel(OrdersFilterData data, OrdersFilterModel filter)
         {
+            var orderTypesSearch = WebMvcHelper.CreateListField(data.OrderTypesSearch, filter.OrderTypeId, true);
             var orderTypes = WebMvcHelper.CreateListField(data.OrderTypes, filter.OrderTypeId, true);
             var administrators = WebMvcHelper.CreateMultiSelectField(data.Administrators, filter.AdministratiorIds);
             var statuses = WebMvcHelper.CreateMultiSelectField(data.OrderStatuses, filter.StatusIds);
@@ -29,6 +30,7 @@
             }
 
             return new OrdersIndexModel(
+                                    orderTypesSearch,
                                     orderTypes, 
                                     administrators, 
                                     filter.StartDate,

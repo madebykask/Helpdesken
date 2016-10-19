@@ -113,7 +113,7 @@
                 var orderTypes = orderTypeRep.GetAll()
                                     .GetOrderTypes(customerId).ToList();
 
-                //var orderTypesInRow = this.GetChildrenInRow(orderTypes, true).ToList();
+                var orderTypesInRow = this.GetChildrenInRow(orderTypes, true).ToList();
 
 
 
@@ -123,7 +123,7 @@
                 var statuses = statusRep.GetAll()
                                     .GetOrderStatuses(customerId);
 
-                return OrderMapper.MapToFilterData(orderTypes, administrators, statuses);
+                return OrderMapper.MapToFilterData(orderTypes, orderTypesInRow, administrators, statuses);
             }
         }
 
