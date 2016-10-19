@@ -12,13 +12,15 @@
             int questionnaireId,
             int status,
             DateTime createdDate,
-            List<int> relatedCaseIds)
+            List<int> relatedCaseIds,
+            CircularCaseFilter caseFilter)
             : base(circularName)
         {
             this.QuestionnaireId = questionnaireId;
             this.Status = status;
             this.CreatedDate = createdDate;
             this.RelatedCaseIds = relatedCaseIds;
+            CaseFilter = caseFilter;
         }
 
         public int QuestionnaireId { get; private set; }
@@ -29,5 +31,7 @@
 
         [NotNull]
         public List<int> RelatedCaseIds { get; private set; }
+
+        public CircularCaseFilter CaseFilter { get; set; }
     }
 }

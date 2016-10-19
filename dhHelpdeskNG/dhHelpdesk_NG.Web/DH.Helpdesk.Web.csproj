@@ -1363,6 +1363,7 @@
     <Compile Include="Models\Invoice\CaseInvoiceArticlesModel.cs" />
     <Compile Include="Models\Profile\UserCustomersSettingsViewModel.cs" />
     <Compile Include="Models\Projects\ProjectOverviewSorting.cs" />
+    <Compile Include="Models\Questionnaire\Input\CircularCaseFilter.cs" />
     <Compile Include="Models\Questionnaire\Input\ConnectedToCircularOverview.cs" />
     <Compile Include="Models\Questionnaire\Output\CircularOverviewViewModel.cs" />
     <Compile Include="Models\Questionnaire\Output\QuestionInputModel.cs" />

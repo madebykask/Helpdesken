@@ -12,7 +12,8 @@
             int questionnaireId,
             CircularStates status,
             DateTime createdDate,
-            DateTime changedDate)
+            DateTime changedDate,
+            CircularCaseFilter caseFilter)
             : base(circularName)
         {
             this.Id = id;
@@ -20,6 +21,7 @@
             this.Status = status;
             this.CreatedDate = createdDate;
             this.ChangedDate = changedDate;
+            CaseFilter = caseFilter;
         }
 
         public int QuestionnaireId { get; private set; }
@@ -29,5 +31,7 @@
         public DateTime CreatedDate { get; private set; }
 
         public DateTime ChangedDate { get; private set; }
+
+        public CircularCaseFilter CaseFilter { get; set; }
     }
 }

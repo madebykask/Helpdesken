@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Questionnaire
+﻿using DH.Helpdesk.BusinessData.Models.Questionnaire;
+using DH.Helpdesk.Dal.NewInfrastructure;
+
+namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Questionnaire
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -48,28 +51,28 @@
 
             var anonymus =
                 query.GetById(id)
-                    .Select(
-                        c =>
-                        new
-                            {
-                                c.Id,
-                                circularName = c.CircularName,
-                                c.Questionnaire_Id,
-                                c.ChangedDate,
-                                c.CreatedDate,
-                                state = c.Status
-                            })
                     .SingleOrDefault();
 
             if (anonymus != null)
             {
                 businessModel = new CircularForEdit(
                     anonymus.Id,
-                    anonymus.circularName,
+                    anonymus.CircularName,
                     anonymus.Questionnaire_Id,
-                    (CircularStates)anonymus.state,
+                    (CircularStates)anonymus.Status,
                     anonymus.CreatedDate,
-                    anonymus.ChangedDate);
+                    anonymus.ChangedDate,
+                    new CircularCaseFilter
+                    {
+                        IsUniqueEmail = anonymus.IsUniqueEmail,
+                        FinishingDateFrom = anonymus.FinishingDateFrom,
+                        FinishingDateTo = anonymus.FinishingDateTo,
+                        SelectedProcent = anonymus.SelectedProcent,
+                        SelectedDepartments = anonymus.QuestionnaireCircularDepartmentEntities.Select(x => x.DepartmentId).ToList(),
+                        SelectedCaseTypes = anonymus.QuestionnaireCircularCaseTypeEntities.Select(x => x.CaseTypeId).ToList(),
+                        SelectedProductAreas = anonymus.QuestionnaireCircularProductAreaEntities.Select(x => x.ProductAreaId).ToList(),
+                        SelectedWorkingGroups = anonymus.QuestionnaireCircularWorkingGroupEntities.Select(x => x.WorkingGroupId).ToList()
+                    });
             }
 
             return businessModel;

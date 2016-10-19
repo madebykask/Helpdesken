@@ -395,6 +395,7 @@
     <Compile Include="Models\ProductArea\IProductAreaNameResolver.cs" />
     <Compile Include="Models\ProductArea\ProductAreaItem.cs" />
     <Compile Include="Models\Projects\Output\ProjectOverviewSorting.cs" />
+    <Compile Include="Models\Questionnaire\CircularCaseFilter.cs" />
     <Compile Include="Models\Questionnaire\Participant.cs" />
     <Compile Include="Models\Questionnaire\Read\CircularOverview.cs" />
     <Compile Include="Models\Questionnaire\Read\ConnectedCase.cs" />

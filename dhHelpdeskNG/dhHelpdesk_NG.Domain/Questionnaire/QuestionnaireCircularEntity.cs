@@ -8,6 +8,10 @@
         public QuestionnaireCircularEntity()
         {
             this.QuestionnaireCircularPartEntities = new List<QuestionnaireCircularPartEntity>();
+            QuestionnaireCircularDepartmentEntities = new List<QuestionnaireCircularDepartmentEntity>();
+            QuestionnaireCircularCaseTypeEntities = new List<QuestionnaireCircularCaseTypeEntity>();
+            QuestionnaireCircularProductAreaEntities = new List<QuestionnaireCircularProductAreaEntity>();
+            QuestionnaireCircularWorkingGroupEntities = new List<QuestionnaireCircularWorkingGroupEntity>();
         }
 
         #region Public Properties
@@ -22,9 +26,25 @@
 
         public int Status { get; set; }
 
+        public bool IsUniqueEmail { get; set; }
+        
+        public DateTime? FinishingDateFrom { get; set; }
+
+        public DateTime? FinishingDateTo { get; set; }
+
+        public int SelectedProcent { get; set; }
+
         public virtual QuestionnaireEntity Questionnaire { get; set; }
 
-        public virtual ICollection<QuestionnaireCircularPartEntity> QuestionnaireCircularPartEntities { get; set; } 
+        public virtual ICollection<QuestionnaireCircularPartEntity> QuestionnaireCircularPartEntities { get; set; }
+
+        public virtual ICollection<QuestionnaireCircularDepartmentEntity> QuestionnaireCircularDepartmentEntities { get; set; }
+
+        public virtual ICollection<QuestionnaireCircularCaseTypeEntity> QuestionnaireCircularCaseTypeEntities { get; set; }
+
+        public virtual ICollection<QuestionnaireCircularProductAreaEntity> QuestionnaireCircularProductAreaEntities { get; set; }
+
+        public virtual ICollection<QuestionnaireCircularWorkingGroupEntity> QuestionnaireCircularWorkingGroupEntities { get; set; }
 
         #endregion
     }

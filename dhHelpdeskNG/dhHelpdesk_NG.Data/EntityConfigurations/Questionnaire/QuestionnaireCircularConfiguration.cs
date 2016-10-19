@@ -22,12 +22,30 @@
                 .WithRequired(s => s.QuestionnaireCircular)
                 .HasForeignKey(s => s.QuestionnaireCircular_Id);
 
+            this.HasMany(s => s.QuestionnaireCircularDepartmentEntities)
+                .WithRequired(s => s.QuestionnaireCircular)
+                .HasForeignKey(s => s.QuestionnaireCircularId);
+
+            this.HasMany(s => s.QuestionnaireCircularCaseTypeEntities)
+                .WithRequired(s => s.QuestionnaireCircular)
+                .HasForeignKey(s => s.QuestionnaireCircularId);
+
+            this.HasMany(s => s.QuestionnaireCircularProductAreaEntities)
+                .WithRequired(s => s.QuestionnaireCircular)
+                .HasForeignKey(s => s.QuestionnaireCircularId);
+
+            this.HasMany(s => s.QuestionnaireCircularWorkingGroupEntities)
+                .WithRequired(s => s.QuestionnaireCircular)
+                .HasForeignKey(s => s.QuestionnaireCircularId);
+
             this.Property(c => c.CircularName).IsRequired().HasMaxLength(50);
             this.Property(c => c.Status).IsRequired();
 
             // this.Property(c => c.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.CreatedDate).IsRequired();
             this.Property(x => x.ChangedDate).IsRequired();
+            this.Property(x => x.SelectedProcent).IsRequired();
+            this.Property(x => x.IsUniqueEmail).IsRequired();
 
             this.ToTable("tblQuestionnaireCircular");
         }
