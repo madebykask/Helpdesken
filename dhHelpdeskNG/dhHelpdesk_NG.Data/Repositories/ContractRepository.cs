@@ -1,20 +1,24 @@
 namespace DH.Helpdesk.Dal.Repositories
 {
     using DH.Helpdesk.BusinessData.Models.Contract;
-using DH.Helpdesk.Dal.Infrastructure;
-using DH.Helpdesk.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+    using DH.Helpdesk.Dal.Dal;
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Domain;
+    using System;
+    using System.Collections.Generic;
+    using System.Data.Entity;
+    using System.Linq;
 
     #region CONTRACT
 
-    public interface IContractRepository : IRepository<Contract>
+    public interface IContractRepository : INewRepository
     {
         IList<Contract> GetContracts(int customerId);
+        Contract GetContract(int contractId);
+        void SaveContract(ContractInputModel contractModel);
     }
 
-    public class ContractRepository : RepositoryBase<Contract>, IContractRepository
+    public class ContractRepository : Repository, IContractRepository
     {
         public ContractRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
@@ -23,8 +27,69 @@ using System.Linq;
 
         public IList<Contract> GetContracts(int customerId)
         {
-            var query = this.DataContext.Contracts.Where(c => c.Finished == 0 && c.ContractCategory.Customer_Id == customerId);            
+            var query = this.DbContext.Contracts.Where(c => c.Finished == 0 && c.ContractCategory.Customer_Id == customerId);            
             return query.ToList();
+        }
+
+        public Contract GetContract(int contractId)
+        {
+            var query = this.DbContext.Contracts.Where(c => c.Id == contractId).FirstOrDefault();
+            return query;
+        }
+
+        public void SaveContract(ContractInputModel contractModel)
+        {            
+
+            if (contractModel.Id == 0)
+            {
+                var contractEntity = new Contract()
+                {
+                    Id = contractModel.Id,
+                    ChangedByUser_Id = contractModel.ChangedByUser_Id,
+                    ContractCategory_Id = contractModel.CategoryId,
+                    Department_Id = contractModel.DepartmentId,
+                    Finished = contractModel.Finished ? 1 : 0,
+                    FollowUpInterval = contractModel.FollowUpInterval,
+                    FollowUpResponsibleUser_Id = contractModel.FollowUpResponsibleUserId,
+                    ResponsibleUser_Id = contractModel.ResponsibleUserId,
+                    Running = contractModel.Running ? 1 : 0,
+                    Supplier_Id = contractModel.SupplierId,
+                    NoticeTime = contractModel.NoticeTime,
+                    ContractNumber = contractModel.ContractNumber,
+                    Info = contractModel.Other,
+                    ContractStartDate = contractModel.ContractStartDate,
+                    ContractEndDate = contractModel.ContractEndDate,
+                    NoticeDate = contractModel.NoticeDate,
+                    CreatedDate = contractModel.CreatedDate,
+                    ChangedDate = contractModel.ChangedDate,
+                    ContractGUID = contractModel.ContractGUID
+                };
+
+                this.DbContext.Contracts.Add(contractEntity);
+                this.InitializeAfterCommit(contractModel, contractEntity);
+            }
+            else
+            {
+                var contractEntity = this.DbContext.Contracts.Find(contractModel.Id);
+
+                contractEntity.ChangedByUser_Id = contractModel.ChangedByUser_Id;
+                contractEntity.ContractCategory_Id = contractModel.CategoryId;
+                contractEntity.Department_Id = contractModel.DepartmentId;
+                contractEntity.Finished = contractModel.Finished ? 1 : 0;
+                contractEntity.FollowUpInterval = contractModel.FollowUpInterval;
+                contractEntity.FollowUpResponsibleUser_Id = contractModel.FollowUpResponsibleUserId;
+                contractEntity.ResponsibleUser_Id = contractModel.ResponsibleUserId;
+                contractEntity.Running = contractModel.Running ? 1 : 0;
+                contractEntity.Supplier_Id = contractModel.SupplierId;
+                contractEntity.NoticeTime = contractModel.NoticeTime;
+                contractEntity.ContractNumber = contractModel.ContractNumber;
+                contractEntity.Info = contractModel.Other;
+                contractEntity.ContractStartDate = contractModel.ContractStartDate;
+                contractEntity.ContractEndDate = contractModel.ContractEndDate;
+                contractEntity.NoticeDate = contractModel.NoticeDate;                
+                contractEntity.ChangedDate = contractModel.ChangedDate;
+                
+            }           
         }
 
     }

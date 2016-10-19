@@ -26,8 +26,10 @@
                     <td>@row.ContractNumber</td>
                     <td></td>
                     <td>@row.ContractCategory.Name</td>
+                    @if (row.Supplier != null)
+                    {
                     <td>@row.Supplier.Name</td>
-                    
+                    }
                      @if (row.Department != null)
                     {
                         <td>@row.Department.DepartmentName</td>

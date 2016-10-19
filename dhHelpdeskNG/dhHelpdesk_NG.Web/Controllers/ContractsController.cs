@@ -19,6 +19,8 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ICustomerService _customerService;
         private readonly IContractService _contractService;
         private readonly ISupplierService _supplierService;
+        private readonly IDepartmentService _departmentService;
+
        
         public ContractsController(
             IUserService userService,
@@ -26,6 +28,7 @@ namespace DH.Helpdesk.Web.Controllers
             ICustomerService customerService,
             IContractService contractService,
             ISupplierService supplierService,
+            IDepartmentService departmentService,
             IMasterDataService masterDataService)
             : base(masterDataService)
         {            
@@ -34,6 +37,7 @@ namespace DH.Helpdesk.Web.Controllers
             this._contractService = contractService;
             this._customerService = customerService;
             this._supplierService = supplierService;
+            this._departmentService = departmentService;
         }
 
 
@@ -48,6 +52,7 @@ namespace DH.Helpdesk.Web.Controllers
             var contractcategories = _contractCategoryService.GetContractCategories(customer.Id);
             var suppliers = _supplierService.GetActiveSuppliers(customer.Id);
 
+
             var filter = new ContractSelectedFilter();
 
             model.Rows = GetIndexRowModel(customer.Id, filter);
@@ -59,6 +64,150 @@ namespace DH.Helpdesk.Web.Controllers
             return this.View(model);
         }
 
+
+        public ActionResult New(int customerId)
+        {
+            var customer = this._customerService.GetCustomer(customerId);
+            //var accountAcctivity = new AccountActivity { Customer_Id = customer.Id };
+            var model = this.CreateInputViewModel(customerId);
+
+            return this.View(model);
+        }
+
+        private ContractViewInputModel CreateInputViewModel(int customerId)
+        {
+            var customer = _customerService.GetCustomer(customerId);
+            var model = new ContractViewInputModel();
+            var contractFields = this.GetSettingsModel(customerId);
+            var contractcategories = _contractCategoryService.GetContractCategories(customerId).OrderBy(a => a.Name).ToList();
+            var suppliers = _supplierService.GetActiveSuppliers(customerId);
+            var departments = _departmentService.GetDepartments(customerId);
+            var users = _userService.GetCustomerActiveUsers(customerId);
+
+            var emptyChoice = new SelectListItem() { Selected = true, Text = "", Value = string.Empty };
+
+            //if (contractFields != null)
+            //{          
+                //model.NoticeTime.Insert(0, emptyChoice);
+                model.NoticeTimes.Add(new SelectListItem() { Selected = false, Text = "1 månad", Value = "1" });
+
+                for (int i = 2; i <= 12; i++)
+                {
+                    model.NoticeTimes.Add(new SelectListItem() { Selected = false, Text = i.ToString() + " månader", Value = i.ToString() });
+                }
+                                       
+                model.SettingsModel = contractFields.SettingRows.Select(conf => new ContractsSettingRowViewModel
+                    {
+                        Id = conf.Id,
+                        ContractField = conf.ContractField.ToLower(),
+                        ContractFieldLable = conf.ContractFieldLable,
+                        ContractFieldLable_Eng = conf.ContractFieldLable_Eng,
+                        Show = conf.Show,
+                        ShowInList = conf.ShowInList,
+                        Required = conf.Required
+                    }).ToList();
+
+                model.ContractCategories = contractcategories.Select(x => new SelectListItem
+                {
+                    Selected = (x.Id == model.CategoryId ? true : false),
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList();
+                model.ContractCategories.Insert(0, emptyChoice);
+
+                model.Suppliers = suppliers.Select(x => new SelectListItem
+                {
+                    Selected = (x.Id == model.SupplierId ? true : false),
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList();
+                model.Suppliers.Insert(0, emptyChoice);
+
+                model.Departments = departments.Select(x => new SelectListItem
+                {
+                    Selected = (x.Id == model.DepartmentId ? true : false),
+                    Text = x.DepartmentName,
+                    Value = x.Id.ToString()
+                }).ToList();
+                model.Departments.Insert(0, emptyChoice);
+
+
+                model.ResponsibleUsers = users.Select(x => new SelectListItem
+                {
+                    Selected = (x.Id == model.ResponsibleUserId ? true : false),
+                    Text = x.SurName + " " + x.FirstName,
+                    Value = x.Id.ToString()
+                }).ToList();
+                model.ResponsibleUsers.Insert(0, emptyChoice);
+
+                model.FollowUpIntervals.Insert(0, emptyChoice);
+                model.FollowUpIntervals.Add(new SelectListItem() { Selected = false, Text = "månadsvis", Value = "1" });
+                model.FollowUpIntervals.Add(new SelectListItem() { Selected = false, Text = "kvartalsvis", Value = "3" });
+                model.FollowUpIntervals.Add(new SelectListItem() { Selected = false, Text = "tertialvis", Value = "4" });
+                model.FollowUpIntervals.Add(new SelectListItem() { Selected = false, Text = "halvårsvis", Value = "6" });
+                model.FollowUpIntervals.Add(new SelectListItem() { Selected = false, Text = "årsvis", Value = "12" });
+
+
+
+                model.FollowUpResponsibleUsers = users.Select(x => new SelectListItem
+                {
+                    Selected = (x.Id == model.FollowUpResponsibleUserId ? true : false),
+                    Text = x.SurName + " " + x.FirstName,
+                    Value = x.Id.ToString()
+                }).ToList();
+                model.FollowUpResponsibleUsers.Insert(0, emptyChoice);
+
+            //}
+
+
+            return model;
+        }
+
+        [HttpPost]
+        public ActionResult Save(ContractViewInputModel contractInput, string actiontype)
+        {
+              if (contractInput != null)
+                {
+                    var contractInputToSave = new ContractInputModel
+                        (
+                         contractInput.ContractId,
+                         SessionFacade.CurrentCustomer.Id,
+                         SessionFacade.CurrentUser.Id,
+                         contractInput.CategoryId,
+                         contractInput.SupplierId,
+                         contractInput.DepartmentId,
+                         contractInput.ResponsibleUserId,
+                         contractInput.FollowUpResponsibleUserId,
+                         contractInput.ContractNumber,
+                         contractInput.ContractStartDate,
+                         contractInput.ContractEndDate,
+                         contractInput.NoticeTimeId,
+                         contractInput.Finished,
+                         contractInput.Running,
+                         contractInput.FollowUpIntervalId,
+                         contractInput.Other,
+                         contractInput.NoticeDate,
+                         DateTime.Now,
+                         DateTime.Now,
+                         Guid.Empty
+                        );
+
+                    var cId = this._contractService.SaveContract(contractInputToSave);
+                    if (actiontype != "Spara och stäng")
+                    {
+             
+                    return this.RedirectToAction("Edit", "Contracts", new { id = cId });
+                    }
+
+                    else
+                        return RedirectToAction("index", "Contracts");
+                }
+            
+            
+
+                return RedirectToAction("index", "Contracts");
+            
+        }
         [HttpPost]
         public JsonResult SaveContractFieldsSetting(JSContractsSettingRowViewModel[] contractSettings)
         {
@@ -111,16 +260,14 @@ namespace DH.Helpdesk.Web.Controllers
         private ContractsIndexRowsModel GetIndexRowModel(int customerId, ContractSelectedFilter selectedFilter)
         {
             var customer = _customerService.GetCustomer(customerId);
-            var model = new ContractsIndexRowsModel(customer);
+            var model = new ContractsIndexRowsModel(customer);           
             var allContracts = _contractService.GetContracts(customerId);
             var selectedContracts = new List<Contract>();
 
             if (selectedFilter.SelectedContractCategories.Any())
             {
                
-            }
-
-            
+            }        
 
             foreach (var con in allContracts)
             {
@@ -188,7 +335,7 @@ namespace DH.Helpdesk.Web.Controllers
         public ActionResult Create()
         {
             return View();
-        } 
+        }
 
         //
         // POST: /Contract/Create
@@ -200,7 +347,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 // TODO: Add insert logic here
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Index");                
             }
             catch
             {
@@ -210,27 +357,80 @@ namespace DH.Helpdesk.Web.Controllers
         
         //
         // GET: /Contract/Edit/5
- 
+
         public ActionResult Edit(int id)
         {
-            return View();
+            var contractFields = this.GetSettingsModel(SessionFacade.CurrentCustomer.Id);
+            var contract = this._contractService.GetContract(id);
+
+            if (contract == null)
+                return new HttpNotFoundResult("No contract found...");
+
+            // Convert contract entity to input model
+
+            var contractEditInput = CreateInputViewModel(SessionFacade.CurrentCustomer.Id);
+
+                contractEditInput.ContractId = contract.Id;
+                contractEditInput.CategoryId = contract.ContractCategory_Id;
+                contractEditInput.SupplierId = Convert.ToInt32(contract.Supplier_Id);
+                contractEditInput.DepartmentId = Convert.ToInt32(contract.Department_Id);
+                contractEditInput.ResponsibleUserId = Convert.ToInt32(contract.ResponsibleUser_Id);
+                contractEditInput.FollowUpIntervalId = contract.FollowUpInterval;
+                contractEditInput.FollowUpResponsibleUserId = Convert.ToInt32(contract.FollowUpResponsibleUser_Id);
+                contractEditInput.ContractNumber = contract.ContractNumber;
+                contractEditInput.ContractStartDate = contract.ContractStartDate;
+                contractEditInput.ContractEndDate = contract.ContractEndDate;
+                contractEditInput.NoticeTimeId = contract.NoticeTime;
+                contractEditInput.Finished = Convert.ToBoolean(contract.Finished);
+                contractEditInput.Running = Convert.ToBoolean(contract.Running);                
+                contractEditInput.Other = contract.Info;
+                contractEditInput.NoticeDate = contract.NoticeDate;
+
+                return this.View(contractEditInput);
         }
+
 
         //
         // POST: /Contract/Edit/5
 
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(int id, ContractViewInputModel contractInput)
         {
             try
             {
+                var existingContract = this._contractService.GetContract(id);
                 // TODO: Add update logic here
  
-                return RedirectToAction("Index");
+                var contractInputToSave = new ContractInputModel
+                   (
+                    contractInput.ContractId,
+                    SessionFacade.CurrentCustomer.Id,
+                    SessionFacade.CurrentUser.Id,
+                    contractInput.CategoryId,
+                    contractInput.SupplierId,
+                    contractInput.DepartmentId,
+                    contractInput.ResponsibleUserId,
+                    contractInput.FollowUpResponsibleUserId,
+                    contractInput.ContractNumber,
+                    contractInput.ContractStartDate,
+                    contractInput.ContractEndDate,
+                    contractInput.NoticeTimeId,
+                    contractInput.Finished,
+                    contractInput.Running,
+                    contractInput.FollowUpIntervalId,
+                    contractInput.Other,
+                    contractInput.NoticeDate,
+                    DateTime.Now,
+                    DateTime.Now,
+                    existingContract.ContractGUID
+                   );
+                var cId = this._contractService.SaveContract(contractInputToSave);
+
+                return this.RedirectToAction("Edit", "Contracts", new { id = cId });
             }
             catch
             {
-                return View();
+                return this.RedirectToAction("Edit", "Contracts", new { id = id });
             }
         }
 

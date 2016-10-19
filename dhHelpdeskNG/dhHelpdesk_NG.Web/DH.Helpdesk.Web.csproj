@@ -1349,6 +1349,7 @@
     <Compile Include="Models\CheckLists\WorkingGroupMapperModel.cs" />
     <Compile Include="Models\Contract\ContractIndexViewModel.cs" />
     <Compile Include="Models\Contract\ContractsSettingViewModel.cs" />
+    <Compile Include="Models\Contract\ContractViewInputModel.cs" />
     <Compile Include="Models\DailyReports\DailyReportHistoryModel.cs" />
     <Compile Include="Models\DailyReports\DailyReportInputModel.cs" />
     <Compile Include="Models\Documents\DocumentsFilterModel.cs" />
@@ -2382,6 +2383,9 @@
     <Content Include="Views\Contracts\_ContractsIndexRows.cshtml" />
     <Content Include="Views\Contracts\_Settings.cshtml" />
     <Content Include="Views\Contracts\_ContractsFieldsSettings.cshtml" />
+    <Content Include="Views\Contracts\New.cshtml" />
+    <Content Include="Views\Contracts\_Input.cshtml" />
+    <Content Include="Views\Contracts\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
