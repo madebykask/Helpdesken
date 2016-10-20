@@ -15,7 +15,14 @@ var isAbout_OUControlId = '#CaseSolution.IsAbout_OU_Id';
 var changeRegion = '/CaseSolution/ChangeRegion';
 var changeDepartment = '/CaseSolution/ChangeDepartment/';
 
+var _params = window.params;
+var saveDropDownCaption = _params.saveDropDownCaption;
+
 $(function () {
+    
+    function init() {
+        
+    }
 
     $(regionControlName).change(function () {
         refreshDepartments($(this).val());
@@ -152,7 +159,7 @@ $(function () {
         $("#divBreadcrumbs_FinishingCause").text(getBreadcrumbs(this));
         $("#CaseSolution_FinishingCause_Id").val(val);
     });
-
+    
     $('#divCaseType ul.dropdown-menu li a').click(function (e) {
         e.preventDefault();
         var val = $(this).attr('value');
@@ -217,9 +224,33 @@ $(function () {
     $("#Casesolution_ShowInsideCase").click(function () {
         if ($('#Casesolution_ShowInsideCase').is(':checked')) {
             $("#CaseSolution_ConnectedButton").prop("disabled", false);
+            $("#savaAndClose").prop("disabled", false);
+            removeOptionByValue('savaAndClose', '-2'); // remove temporary option
         }else{
             $("#CaseSolution_ConnectedButton").prop("disabled", true);
+
+            // Add temporary option 
+            var opt = document.createElement("option");
+            opt.value = "-2";
+            opt.text = saveDropDownCaption;
+            var elm = document.getElementById("savaAndClose");
+            elm.options.add(opt);
+            $("#savaAndClose").val("-2");
+            $("#savaAndClose").prop("disabled", true);
             $("#CaseSolution_ConnectedButton").val("");
         }
     });
+
+    function removeOptionByValue(id, value) {
+        var select = document.getElementById(id);
+        for (var i = 0, length = select.options.length; i < length; i++) {
+
+            if (select.options[i] && select.options[i].value === value) {
+                select.options[i] = null;
+            }
+        }
+    }
+
+    
+    init();
 });

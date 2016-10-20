@@ -1,9 +1,17 @@
 -- update DB from 5.3.27 to 5.3.28 version
 
 
-
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'SetCurrentUserAsPerformer' and sysobjects.name = N'tblCaseSolution')
 	ALTER TABLE tblCaseSolution ADD SetCurrentUserAsPerformer int NULL
+Go
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'SetCurrentUsersWorkingGroup' and sysobjects.name = N'tblCaseSolution')
+	ALTER TABLE tblCaseSolution ADD SetCurrentUsersWorkingGroup int NULL
+Go
+
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'SaveAndClose' and sysobjects.name = N'tblCaseSolution')
+	ALTER TABLE tblCaseSolution ADD SaveAndClose int NULL
 Go
 
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'IsUniqueEmail' and sysobjects.name = N'tblQuestionnaireCircular')

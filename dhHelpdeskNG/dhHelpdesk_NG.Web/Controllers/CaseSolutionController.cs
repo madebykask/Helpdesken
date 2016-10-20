@@ -244,6 +244,9 @@ namespace DH.Helpdesk.Web.Controllers
                 caseSolutionInputViewModel.CaseSolution.SetCurrentUsersWorkingGroup = null;
             }
 
+            if (caseSolutionInputViewModel.CaseSolution.ShowInsideCase != 1 || caseSolutionInputViewModel.CaseSolution.SaveAndClose < 0)
+                caseSolutionInputViewModel.CaseSolution.SaveAndClose = null;
+
             this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);
 
             CaseSettingsSolutionAggregate settingsSolutionAggregate = this.CreateCaseSettingsSolutionAggregate(caseSolutionInputViewModel.CaseSolution.Id, caseSolutionSettingModels);
@@ -411,7 +414,8 @@ namespace DH.Helpdesk.Web.Controllers
                     PlanDate = caseSolution.PlanDate.HasValue ? caseSolution.PlanDate.Value.ToShortDateString() : string.Empty,
                     VerifiedDescription = caseSolution.VerifiedDescription,
                     SolutionRate = caseSolution.SolutionRate,
-                    caseSolution.OverWritePopUp
+                    caseSolution.OverWritePopUp,
+                    caseSolution.SaveAndClose
                 },
                     JsonRequestBehavior.AllowGet);
         }
@@ -457,6 +461,9 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 caseSolutionInputViewModel.CaseSolution.SetCurrentUsersWorkingGroup = null;
             }
+            
+            if (caseSolutionInputViewModel.CaseSolution.ShowInsideCase != 1 || caseSolutionInputViewModel.CaseSolution.SaveAndClose < 0 )
+                caseSolutionInputViewModel.CaseSolution.SaveAndClose = null;
 
             this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);
 
@@ -785,6 +792,21 @@ namespace DH.Helpdesk.Web.Controllers
                 }
             }
 
+            var actionList = new List<SelectListItem>();
+            actionList.Add(new SelectListItem() { Value = "-1", Text = "", Selected = !caseSolution.SaveAndClose.HasValue });
+            actionList.Add(new SelectListItem() { 
+                                                  Value = "0", 
+                                                  Text = Translation.GetCoreTextTranslation("Spara"), 
+                                                  Selected = caseSolution.SaveAndClose.HasValue && caseSolution.SaveAndClose.Value == 0 
+                                                });
+
+            actionList.Add(new SelectListItem() { 
+                                                  Value = "1", 
+                                                  Text = Translation.GetCoreTextTranslation("Spara och stäng"), 
+                                                  Selected = caseSolution.SaveAndClose.HasValue && caseSolution.SaveAndClose.Value != 0 
+                                                });
+
+            
             var model = new CaseSolutionInputViewModel
             {
                 CaseSolution = caseSolution,
@@ -881,7 +903,9 @@ namespace DH.Helpdesk.Web.Controllers
                     Value = x.Id.ToString()
                 }).ToList(),
 
-                ButtonList = buttonList
+                ButtonList = buttonList,
+
+                ActionList = actionList
             };
 
             if (model.CaseSolution.Id == 0)
