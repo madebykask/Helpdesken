@@ -16,6 +16,7 @@ namespace DH.Helpdesk.Dal.Repositories
         IList<Contract> GetContracts(int customerId);
         Contract GetContract(int contractId);
         void SaveContract(ContractInputModel contractModel);
+        void DeleteContract(Contract contract);
     }
 
     public class ContractRepository : Repository, IContractRepository
@@ -91,7 +92,10 @@ namespace DH.Helpdesk.Dal.Repositories
                 
             }           
         }
-
+        public void DeleteContract(Contract contract)
+        {
+            this.DbContext.Contracts.Remove(contract);
+        }
     }
 
     #endregion

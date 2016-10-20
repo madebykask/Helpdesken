@@ -17,6 +17,7 @@
         List<ContractsSettingRowModel> GetContractsSettingRows(int customerId);
         void SaveContractSettings(List<ContractsSettingRowModel> ContractSettings);
         int SaveContract(ContractInputModel contract);
+        void DeleteContract(Contract contract);
 
 
         //ContractCategory GetContractCategory(int id);
@@ -122,6 +123,12 @@
             this._contractRepository.Commit();
 
             return contract.Id;
+        }
+
+        public void DeleteContract(Contract contract)
+        {
+            this._contractRepository.DeleteContract(contract);
+            this._contractRepository.Commit();
         }
        
     }

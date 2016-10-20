@@ -16,10 +16,9 @@
         <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", null, new { @class = "btn"})</li>
      </ul>                                      
    </div>   
-  </div>@*
-    <div class="contentContent">*@
+  </div>
+    
         @Html.Partial("_Input", Model)
         @Html.HiddenFor(i => i.ContractId)
-
-    @*</div>*@
+   
 }

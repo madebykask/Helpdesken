@@ -64,5 +64,11 @@ namespace DH.Helpdesk.Web.Models.Contract
 
         public List<SelectListItem> FollowUpResponsibleUsers { get; set; }
 
+        public string ChangedByUser { get; set; }
+
+        public string CreatedDate { get; set; }
+
+        public string ChangedDate { get; set; }
+
     }
 }

@@ -362,6 +362,7 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var contractFields = this.GetSettingsModel(SessionFacade.CurrentCustomer.Id);
             var contract = this._contractService.GetContract(id);
+            var changedbyUser = this._userService.GetUser(contract.ChangedByUser_Id);
 
             if (contract == null)
                 return new HttpNotFoundResult("No contract found...");
@@ -385,6 +386,9 @@ namespace DH.Helpdesk.Web.Controllers
                 contractEditInput.Running = Convert.ToBoolean(contract.Running);                
                 contractEditInput.Other = contract.Info;
                 contractEditInput.NoticeDate = contract.NoticeDate;
+                contractEditInput.ChangedByUser = changedbyUser.SurName + " " + changedbyUser.FirstName;
+                contractEditInput.CreatedDate = contract.CreatedDate.ToShortDateString();
+                contractEditInput.ChangedDate = contract.ChangedDate.ToShortDateString();
 
                 return this.View(contractEditInput);
         }
@@ -420,7 +424,7 @@ namespace DH.Helpdesk.Web.Controllers
                     contractInput.FollowUpIntervalId,
                     contractInput.Other,
                     contractInput.NoticeDate,
-                    DateTime.Now,
+                    existingContract.CreatedDate,
                     DateTime.Now,
                     existingContract.ContractGUID
                    );
@@ -430,7 +434,7 @@ namespace DH.Helpdesk.Web.Controllers
             }
             catch
             {
-                return this.RedirectToAction("Edit", "Contracts", new { id = id });
+                return this.RedirectToAction("index", "Contracts", new { id = id });
             }
         }
 
@@ -438,8 +442,9 @@ namespace DH.Helpdesk.Web.Controllers
         // GET: /Contract/Delete/5
  
         public ActionResult Delete(int id)
-        {
-            return View();
+        {          
+            return this.RedirectToAction("index", "Contracts");
+            //return View();
         }
 
         //
@@ -451,7 +456,11 @@ namespace DH.Helpdesk.Web.Controllers
             try
             {
                 // TODO: Add delete logic here
- 
+
+                var contract = this._contractService.GetContract(id);
+
+                this._contractService.DeleteContract(contract);
+
                 return RedirectToAction("Index");
             }
             catch
