@@ -1372,14 +1372,17 @@
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[InvoiceNumber]", text));
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[InventoryNumber]", text));                                            
                     
-                    // Get CaseNumbers from Indexing Service
+                    // Get CaseNumbers/Log Ids from Indexing Service
                     if (f.SearchThruFiles)
                     {
                         if (!string.IsNullOrEmpty(customerSetting.FileIndexingServerName) && !string.IsNullOrEmpty(customerSetting.FileIndexingCatalogName))
                         {
-                            var caseNumbers = GetCasesContainsText(customerSetting.FileIndexingServerName, customerSetting.FileIndexingCatalogName, safeText);
-                            if (!string.IsNullOrEmpty(caseNumbers))
-                                sb.AppendFormat(" OR [tblCase].[CaseNumber] In ({0}) ", caseNumbers);
+                            var caseNumber_caseLogId = GetCasesContainsText(customerSetting.FileIndexingServerName, customerSetting.FileIndexingCatalogName, safeText);
+                            if (!string.IsNullOrEmpty(caseNumber_caseLogId.Item1))
+                                sb.AppendFormat(" OR [tblCase].[CaseNumber] In ({0}) ", caseNumber_caseLogId.Item1);
+
+                            if (!string.IsNullOrEmpty(caseNumber_caseLogId.Item2))
+                                sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblLog] WHERE [tblLog].[Id] In ({0}))) ", caseNumber_caseLogId.Item2);
                         }
                     }
 
@@ -1429,19 +1432,26 @@
             return sb.ToString();
         }
 
-        private string GetCasesContainsText(string indexingServerName, string catalogName, string searchText)
+        private Tuple<string, string> GetCasesContainsText(string indexingServerName, string catalogName, string searchText)
         {
-            var res = string.Empty;
+            var caseNumbers = string.Empty;
+            var logIds = string.Empty;
+
             if (string.IsNullOrEmpty(indexingServerName) ||
                 string.IsNullOrEmpty(catalogName) || string.IsNullOrEmpty(searchText))
-                return string.Empty;
+                return new Tuple<string, string>(caseNumbers, logIds);
             else
-            {                
-                var caseNumbers = FileIndexingRepository.GetCaseNumbersBy(indexingServerName, catalogName, searchText);                
-                if (caseNumbers.Any())
-                    res = string.Join(",", caseNumbers.ToArray());
-            }                        
-            return res;
+            {
+                var caseNumeralInfo = FileIndexingRepository.GetCaseNumeralInfoBy(indexingServerName, catalogName, searchText);
+
+                if (caseNumeralInfo.Item1.Any())
+                    caseNumbers = string.Join(",", caseNumeralInfo.Item1.ToArray());
+
+                if (caseNumeralInfo.Item2.Any())
+                    logIds = string.Join(",", caseNumeralInfo.Item2.ToArray());
+            }
+
+            return new Tuple<string, string>(caseNumbers, logIds);            
         }
 
         private string GetSqlLike(string field, string text, string combinator = Combinator_OR)
