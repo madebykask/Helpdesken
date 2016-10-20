@@ -286,10 +286,10 @@
                     query = query.GetUserCases(userIds);
                 }
 
-                int count = caseRepository.GetAll().GetAvaliableCustomerCases(customerId).Count();
+                var count = query.Count();
                 int percentageOfCases = (count * procent) / 100;
 
-                query = query.Take(percentageOfCases);
+                query = query.OrderBy(x => x.CaseGUID).Take(percentageOfCases);
 
                 IQueryable<QuestionnaireCircularPartEntity> questionnaireCirculars =
                     circularPartRepository.GetAll().GetQuestionnaireCases(questionnaireId);
