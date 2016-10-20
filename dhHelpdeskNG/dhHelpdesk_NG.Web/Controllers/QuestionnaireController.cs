@@ -555,8 +555,8 @@ namespace DH.Helpdesk.Web.Controllers
             var caseFilter = new BusinessData.Models.Questionnaire.CircularCaseFilter
             {
                 IsUniqueEmail = newCircular.CaseFilter.IsUniqueEmail,
-                FinishingDateTo = newCircular.CaseFilter.FinishingDateFrom,
-                FinishingDateFrom = newCircular.CaseFilter.FinishingDateTo,
+                FinishingDateFrom = newCircular.CaseFilter.FinishingDateFrom,
+                FinishingDateTo = newCircular.CaseFilter.FinishingDateTo,
                 SelectedDepartments = newCircular.CaseFilter.SelectedDepartments,
                 SelectedCaseTypes = newCircular.CaseFilter.SelectedCaseTypes,
                 SelectedProductAreas = newCircular.CaseFilter.SelectedProductAreas,

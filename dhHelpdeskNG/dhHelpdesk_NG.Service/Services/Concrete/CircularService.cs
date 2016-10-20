@@ -165,6 +165,11 @@
                 entity.ChangedDate = businessModel.ChangedDate;
                 entity.CircularName = businessModel.CircularName;
 
+                entity.IsUniqueEmail = businessModel.CaseFilter.IsUniqueEmail;
+                entity.FinishingDateFrom = businessModel.CaseFilter.FinishingDateFrom;
+                entity.FinishingDateTo = businessModel.CaseFilter.FinishingDateTo;
+                entity.SelectedProcent = businessModel.CaseFilter.SelectedProcent;
+
                 var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
                 var current = circularPartRepository.GetAll().Where(x => x.QuestionnaireCircular_Id == businessModel.Id).ToList();
                 foreach (var toDel in current.Where(x => !businessModel.RelatedCaseIds.Exists(y => y == x.Case_Id)).ToList())
