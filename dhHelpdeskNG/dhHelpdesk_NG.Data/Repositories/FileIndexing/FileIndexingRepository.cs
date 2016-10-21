@@ -16,14 +16,15 @@
     public class FileIndexingRepository
     {
         const string _FROM_CLAUSE = "@FROM";        
-		const string _DATA_SOURCE_CONNECTION_STRING = " Data Source=\"{0}\";";        
+		const string _DATA_SOURCE_CONNECTION_STRING = " Data Source=\"{0}\";";
+        private static string[] _ACCEPTED_SUB_DIRECTORIES = new string[] { "html" };
 
         public FileIndexingRepository()
         {
 
         }
 
-        public static List<int> GetCaseNumbersBy(string serverName, string catalogName, string searchText)
+        public static Tuple<List<int>, List<int>> GetCaseNumeralInfoBy(string serverName, string catalogName, string searchText)
         {
             var _INDEXING_SERVICE_PROVIDER_CONNECTION_STRING = string.Empty;
 
@@ -31,7 +32,8 @@
                 if (!string.IsNullOrEmpty(ConfigurationManager.ConnectionStrings["HelpdeskIndexingService"].ConnectionString))
                     _INDEXING_SERVICE_PROVIDER_CONNECTION_STRING = ConfigurationManager.ConnectionStrings["HelpdeskIndexingService"].ConnectionString;
 
-            var ret = new List<int>();
+            var caseNumbers = new List<int>();
+            var logIds   = new List<int>();
             
             var query = string.Format("SELECT path, filename{0}scope() " +
                                       "WHERE FREETEXT(Contents,'%{1}%')",
@@ -52,21 +54,18 @@
                         if (dr != null)
                         {                            
                             while (dr.Read())
-                            {                                    
-                                int caseNumber = -1;
-
+                            {                                                                    
                                 var fullPath = dr["path"].ToString();
-                                var lastDirectoryName = new DirectoryInfo(fullPath).Parent.Name.ToLower();
-                                if (lastDirectoryName.Contains(ModuleName.Log.ToLower()))
-                                    lastDirectoryName = lastDirectoryName.Replace(ModuleName.Log.ToLower(), string.Empty);
+                                bool isLog  = false;
+                                int number = -1; 
 
-                                int tempCaseNumber;
-                                if (int.TryParse(lastDirectoryName, out tempCaseNumber))
-                                    caseNumber = tempCaseNumber;
-
-                                if (caseNumber != -1)
-                                    ret.Add(caseNumber);
-                            }                            
+                                RetrieveNumber(fullPath, out number, out isLog);
+                                if (number != -1)                                
+                                    if (isLog)
+                                        logIds.Add(number);
+                                    else
+                                        caseNumbers.Add(number);                                                                
+                            }
                         }
                         dr.Close();
                     }
@@ -81,9 +80,33 @@
                 }
             }
 
+            var ret = new Tuple<List<int>, List<int>>(caseNumbers, logIds);
             return ret;
         }
 
+        private static void RetrieveNumber(string fullPath, out int number, out bool isLog)
+        {
+            number = -1;
+            isLog = false;
+
+            var lastDirectoryName = new DirectoryInfo(fullPath).Parent.Name.ToLower();            
+            if (_ACCEPTED_SUB_DIRECTORIES.Contains(lastDirectoryName))
+            {
+                fullPath = fullPath.Replace(string.Format("{0}\\", lastDirectoryName), string.Empty);
+                lastDirectoryName = new DirectoryInfo(fullPath).Parent.Name.ToLower();
+            }
+            
+            if (lastDirectoryName.Contains(ModuleName.Log.ToLower()))
+            {
+                lastDirectoryName = lastDirectoryName.Replace(ModuleName.Log.ToLower(), string.Empty);
+                isLog = true;                
+            }
+
+            int tempCaseNumber;
+            if (int.TryParse(lastDirectoryName, out tempCaseNumber))
+                number = tempCaseNumber;            
+        }
+                           
         private static string GetIndexQueryText(string serverName, string catalogName, string query)
         {            
             if (string.IsNullOrEmpty(serverName) || string.IsNullOrEmpty(catalogName) || 
