@@ -14,7 +14,7 @@
                 <button value="@Translation.Get("Skapa urval")" class="btn" id="async_subbut">@Translation.Get("Skapa urval")</button>
             </li>
             <li>
-                <a href="@Url.Action("CircularOverview", new { questionnaireId = Model.QuestionnaireId, state = 0 })" class="btn">
+                <a href="@Url.Action("CircularOverview", new { questionnaireId = Model.QuestionnaireId})" class="btn">
                     @Translation.Get("Avbryt")
                 </a>
             </li>
@@ -23,7 +23,7 @@
                 <li>
                 @if (Model.State.Value != CircularStates.Sent && Model.State.Value != CircularStates.None)
                 {
-                    @Html.ActionLink(Translation.Get("Ta bort"), "DeleteCircular", new { questionnaireId = Model.QuestionnaireId, stateId = Model.State, circularId = Model.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) + "?" })
+                    @Html.ActionLink(Translation.Get("Ta bort"), "DeleteCircular", new { questionnaireId = Model.QuestionnaireId, circularId = Model.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) + "?" })
                 }
                 </li>
                 <li>

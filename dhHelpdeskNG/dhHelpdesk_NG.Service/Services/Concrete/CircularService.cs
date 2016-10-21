@@ -233,8 +233,16 @@
             {
                 var circularRepository = uof.GetRepository<QuestionnaireCircularEntity>();
                 var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
+                var circularDepartmentRepository = uof.GetRepository<QuestionnaireCircularDepartmentEntity>();
+                var circularCaseTypeRepository = uof.GetRepository<QuestionnaireCircularCaseTypeEntity>();
+                var circularProductAreaRepository = uof.GetRepository<QuestionnaireCircularProductAreaEntity>();
+                var circularWorkingGroupRepository = uof.GetRepository<QuestionnaireCircularWorkingGroupEntity>();
 
                 circularPartRepository.DeleteWhere(x => x.QuestionnaireCircular_Id == id);
+                circularDepartmentRepository.DeleteWhere(x => x.QuestionnaireCircularId == id);
+                circularCaseTypeRepository.DeleteWhere(x => x.QuestionnaireCircularId == id);
+                circularProductAreaRepository.DeleteWhere(x => x.QuestionnaireCircularId == id);
+                circularWorkingGroupRepository.DeleteWhere(x => x.QuestionnaireCircularId == id);
                 circularRepository.DeleteById(id);
 
                 uof.Save();

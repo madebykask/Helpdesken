@@ -458,11 +458,11 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpGet]
-        public ViewResult CircularOverview(int questionnaireId)
+        public ViewResult CircularOverview(int questionnaireId, int? statusId)
         {
             List<CircularOverviewModel> circularOverviews = this.CreateCircularOverviewModels(
                 questionnaireId,
-                CircularStateId.All);
+                statusId ?? CircularStateId.All);
 
             var viewModel = new CircularOverviewViewModel(
                 questionnaireId,
@@ -538,7 +538,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
-        public RedirectToRouteResult DeleteCircular(int questionnaireId, int stateId, int circularId)
+        public RedirectToRouteResult DeleteCircular(int questionnaireId, int? stateId, int circularId)
         {
             this._circularService.DeleteById(circularId);
 
