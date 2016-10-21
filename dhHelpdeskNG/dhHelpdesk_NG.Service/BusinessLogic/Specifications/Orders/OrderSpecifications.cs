@@ -178,10 +178,18 @@
             return query;
         }
 
-        public static IQueryable<OrderType> GetOrderTypes(this IQueryable<OrderType> query, int customerId)
+        public static IQueryable<OrderType> GetRootOrderTypes(this IQueryable<OrderType> query, int customerId)
         {
             query = query.GetByCustomer(customerId)
                     .Where(t => t.IsActive == 1 && t.Parent_OrderType_Id == null);
+
+            return query;
+        }
+
+        public static IQueryable<OrderType> GetOrderTypes(this IQueryable<OrderType> query, int customerId)
+        {
+            query = query.GetByCustomer(customerId)
+                    .Where(t => t.IsActive == 1);
 
             return query;
         }

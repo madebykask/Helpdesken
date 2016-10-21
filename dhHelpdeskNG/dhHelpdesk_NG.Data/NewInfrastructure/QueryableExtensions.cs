@@ -176,9 +176,15 @@ namespace DH.Helpdesk.Dal.NewInfrastructure
                     {
                         typeDetected = unary.Operand.Type;
                     }
+                    else
+                    {
+                        typeDetected = typeof(object);
+                    }
                 }
-
-                typeDetected = includeExpession.Body.Type;
+                else//TODO added esle to handle type correctly but still doesn't work with primitive types because of boxing/unboxing
+                {
+                    typeDetected = includeExpession.Body.Type;
+                }
 
                 // Save into List
                 dynamicFields.Add(

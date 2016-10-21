@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Orders.Models.Index
+﻿using DH.Helpdesk.Common.Enums;
+
+namespace DH.Helpdesk.Web.Areas.Orders.Models.Index
 {
     using System;
 
@@ -55,7 +57,7 @@
 
         public static OrdersFilterModel CreateDefault()
         {
-            return new OrdersFilterModel { RecordsOnPage = 100 };
+            return new OrdersFilterModel { RecordsOnPage = 100, SortField = new SortField(BusinessData.Enums.Orders.FieldNames.GeneralFieldNames.OrderDate, SortBy.Descending) };
         }
     }
 }

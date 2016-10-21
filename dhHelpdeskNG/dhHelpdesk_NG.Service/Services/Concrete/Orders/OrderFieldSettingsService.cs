@@ -42,7 +42,7 @@
                 var orderTypeRep = uow.GetRepository<OrderType>();
 
                 var orderTypes = orderTypeRep.GetAll()
-                                    .GetOrderTypes(customerId);
+                                    .GetRootOrderTypes(customerId);
 
                 return OrderFieldSettingsMapper.MapToFilterData(orderTypes);
             }

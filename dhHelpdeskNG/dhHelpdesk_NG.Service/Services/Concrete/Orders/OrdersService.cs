@@ -111,7 +111,7 @@
                 var statusRep = uow.GetRepository<OrderState>();
 
                 var orderTypes = orderTypeRep.GetAll()
-                                    .GetOrderTypes(customerId).ToList();
+                                    .GetRootOrderTypes(customerId).ToList();
 
                 var orderTypesInRow = this.GetChildrenInRow(orderTypes, true).ToList();
 
@@ -194,8 +194,12 @@
             var settings = this.orderFieldSettingsService.GetOrdersFieldSettingsOverview(parameters.CustomerId, parameters.OrderTypeId);
             using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
             {
-                var orderRep = uow.GetRepository<Order>();
+                var orderTypeRep = uow.GetRepository<OrderType>();
+                var orderTypes = orderTypeRep.GetAll()
+                                    .GetOrderTypes(parameters.CustomerId).ToList();
 
+                var orderRep = uow.GetRepository<Order>();
+                
                 var overviews = orderRep.GetAll().Search(
                                     parameters.CustomerId,
                                     parameters.OrderTypeId,
@@ -206,7 +210,7 @@
                                     parameters.Phrase,
                                     parameters.SortField,
                                     parameters.SelectCount)
-                                    .MapToFullOverviews();
+                                    .MapToFullOverviews(orderTypes);
 
                 var searchResult = new SearchResult(overviews.Count(), overviews);
                 return new SearchResponse(settings, searchResult);                
