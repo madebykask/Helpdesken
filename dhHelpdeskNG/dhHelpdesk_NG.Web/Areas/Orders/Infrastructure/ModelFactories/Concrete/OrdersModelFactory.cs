@@ -134,9 +134,10 @@
         private static void CreateOtherHeaders(OtherFieldSettingsOverview settings, List<GridColumnHeaderModel> headers)
         {
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.FileName, OtherFieldNames.FileName, headers);
-            FieldSettingsHelper.CreateHeaderIfNeeded(settings.CaseNumber, OtherFieldNames.CaseNumber, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.CaseNumber, OtherFieldNames.CaseNumber, headers);            
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.Info, OtherFieldNames.Info, headers);
-            FieldSettingsHelper.CreateHeaderIfNeeded(settings.Status, OtherFieldNames.Status, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.Status, OtherFieldNames.Status, headers);            
+            FieldSettingsHelper.ForceCreateHeader(OtherFieldNames.CaseIsFinished, headers);
         }
 
         private static void CreateProgramHeaders(ProgramFieldSettingsOverview settings, List<GridColumnHeaderModel> headers)
@@ -280,6 +281,11 @@
             FieldSettingsHelper.CreateValueIfNeeded(settings.CaseNumber, OtherFieldNames.CaseNumber, fields.CaseNumber, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.Info, OtherFieldNames.Info, fields.Info, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.Status, OtherFieldNames.Status, fields.Status, values);
+
+            if (fields.CaseInfo != null && fields.CaseInfo.FinishingDate.HasValue)
+                FieldSettingsHelper.ForceCreateValue(OtherFieldNames.CaseIsFinished, bool.TrueString, values);
+            else
+                FieldSettingsHelper.ForceCreateValue(OtherFieldNames.CaseIsFinished, bool.FalseString, values);
         }
 
         private static void CreateProgramValues(

@@ -37,8 +37,7 @@
             return entities.Select(
                 o =>
                 {
-                    var order = (Order)o.sourceObject;
-
+                        var order = (Order)o.sourceObject;
                     order.Customer = new Customer { Name = o.f0 };
                     order.Domain = new Domain { Name = o.f1 };
                     order.Ou = new OU { Name = o.f2 };
@@ -51,21 +50,22 @@
                     order.Programs = ((List<string>)o.f9).Select(p => new Program { Name = p }).ToArray();
                     order.User = new User { FirstName = o.f10, SurName = o.f11 };
                     order.Department = new Department { DepartmentName = o.f12 };
-
+                        return CreateFullOverview(order, caseEntities);
                     return CreateFullOverview(order);
                 }).ToArray();
         }
 
         #region Create fields
 
-        private static FullOrderOverview CreateFullOverview(Order entity)
+        private static FullOrderOverview CreateFullOverview(Order entity, IList<Case> caseEntities)
         {
             var delivery = CreateDeliveryOverview(entity);
             var general = CreateGeneralOverview(entity);
             var log = CreateLogOverview(entity);
             var orderer = CreateOrdererOverview(entity);
             var order = CreateOrderOverview(entity);
-            var other = CreateOtherOverview(entity);
+            var curCase = caseEntities.Where(c=>  c.CaseNumber == entity.CaseNumber).SingleOrDefault();             
+            var other = curCase == null ? CreateOtherOverview(entity) : CreateOtherOverview(entity, curCase);
             var program = CreateProgramOverview(entity);
             var receiver = CreateReceiverOverview(entity);
             var supplier = CreateSupplierOverview(entity);
@@ -156,11 +156,12 @@
                                     entity.OrderInfo2.ToString(CultureInfo.InvariantCulture));
         }
 
-        private static OtherOverview CreateOtherOverview(Order entity)
+        private static OtherOverview CreateOtherOverview(Order entity, Case curCase = null)
         {
             return new OtherOverview(
                                     entity.Filename,
                                     entity.CaseNumber,
+                                    curCase,
                                     entity.Info,
                                     entity.OrderState != null ? entity.OrderState.Name : string.Empty);
         }

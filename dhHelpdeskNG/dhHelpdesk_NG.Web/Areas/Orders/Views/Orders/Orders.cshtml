@@ -1,6 +1,7 @@
 ﻿@using DH.Helpdesk.Common.Enums
 @using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Infrastructure.Extensions
+@using DH.Helpdesk.BusinessData.Enums.Orders.FieldNames
 @model DH.Helpdesk.Web.Areas.Orders.Models.Index.OrdersGridModel
 
 @Translation.Get("Poster i sökresultat"):
@@ -46,7 +47,30 @@
                 }
                 @foreach (var value in order.FieldValues)
                 {
-                    <td class="tdpointer">@value.Value.GetDisplayValue().ForHtmlView()</td>
+                    if (value.FieldName == OtherFieldNames.CaseNumber)
+                    
+	                {
+		                if (value.Value.GetDisplayValue() != null)
+		                {
+                            var isFinished = order.FieldValues.Where(v => v.FieldName == OtherFieldNames.CaseIsFinished).SingleOrDefault();
+                            if (isFinished != null && isFinished.Value.GetDisplayValue() == bool.TrueString)
+                            {
+                                <td class="tdpointer"><img title="Ärende" alt="Ärende" src="/Content/icons/case_close.png">@value.Value.GetDisplayValue().ForHtmlView()</td>
+                            }                                
+                            else
+                            {
+			                    <td class="tdpointer"><img title="Ärende" alt="Ärende" src="/Content/icons/case.png">@value.Value.GetDisplayValue().ForHtmlView()</td>
+                            }
+                        }
+		                else
+                        {
+			                <td class="tdpointer">@value.Value.GetDisplayValue().ForHtmlView()</td>
+		                }
+	                }
+	                else
+	                {
+		                <td class="tdpointer">@value.Value.GetDisplayValue().ForHtmlView()</td>
+	                 }
                 }
             </tr>
         }
