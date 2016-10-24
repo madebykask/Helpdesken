@@ -13,7 +13,7 @@
 
     public static class OrderOverviewMapper
     {
-        public static FullOrderOverview[] MapToFullOverviews(this IQueryable<Order> query, IList<OrderType> orderTypes)
+        public static FullOrderOverview[] MapToFullOverviews(this IQueryable<Order> query, IList<OrderType> orderTypes, IList<Case> caseEntities)
         {
             var entities = query
                             .SelectIncluding(new List<Expression<Func<Order, object>>>
@@ -50,8 +50,7 @@
                     order.Programs = ((List<string>)o.f9).Select(p => new Program { Name = p }).ToArray();
                     order.User = new User { FirstName = o.f10, SurName = o.f11 };
                     order.Department = new Department { DepartmentName = o.f12 };
-                        return CreateFullOverview(order, caseEntities);
-                    return CreateFullOverview(order);
+                    return CreateFullOverview(order, caseEntities);                    
                 }).ToArray();
         }
 

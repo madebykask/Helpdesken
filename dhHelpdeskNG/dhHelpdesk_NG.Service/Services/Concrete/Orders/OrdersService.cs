@@ -209,11 +209,16 @@
                                     parameters.StatusIds,
                                     parameters.Phrase,
                                     parameters.SortField,
-                                    parameters.SelectCount)
-                                    .MapToFullOverviews(orderTypes);
+                                    parameters.SelectCount);
 
-                var searchResult = new SearchResult(overviews.Count(), overviews);
-                return new SearchResponse(settings, searchResult);                
+                var caseNumbers = overviews.Where(o => o.CaseNumber.HasValue).Select(o => o.CaseNumber).ToList();
+                var caseRep = uow.GetRepository<Case>();
+                var caseEntities = caseRep.GetAll().Where(c => caseNumbers.Contains(c.CaseNumber)).ToList();
+
+                var orderData = overviews.MapToFullOverviews(orderTypes, caseEntities);
+
+                var searchResult = new SearchResult(orderData.Count(), orderData);
+                return new SearchResponse(settings, searchResult);                                
             }
         }
 
