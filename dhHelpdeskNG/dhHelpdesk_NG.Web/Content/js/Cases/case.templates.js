@@ -315,6 +315,14 @@ var overwriteWarning = {
     }
 };
 
+var finalActionId;
+
+var caseButtons = $('.btn.save, .btn.save-close, .btn.save-new, .btn.caseDeleteDialog, ' +
+                    '#case-action-close, #divActionMenu, #btnActionMenu, #divCaseTemplate, #btnCaseTemplateTree, .btn.print-case,' +
+                    '.btn.show-inventory, .btn.previous-case, .btn.next-case, .btn.templateQuickButton');
+
+var templateQuickButtonIndicator = '#TemplateQuickButtonIndicator';
+
 var ApplyTemplate = function (data, doOverwrite) {
     var cfg = { doOverwrite: doOverwrite };
     var dateFormat = data["dateFormat"];
@@ -657,7 +665,12 @@ var ApplyTemplate = function (data, doOverwrite) {
     //TODO: As there are fragmented functiond to execute the Case rules (some here and some are in others .js file) 
     //      we call the FinalAction function after 3 seconds. 
     //      After refactoring CaseTemplate this fuction should be call Sync.
-    setTimeout(runFinalAction, 3000, false);
+
+    if (finalActionId != null) {
+        changeCaseButtonsState(false);
+        setTimeout(runFinalAction, 3000, false);
+    }
+    
 }
 
 function IsValueApplicableFor(templateFieldId, val) {
@@ -904,8 +917,6 @@ function LoadTemplate(id) {
     
 }
 
-var finalActionId;
-
 function GetTemplateData(id) {
     
     $.get('/CaseSolution/GetTemplate',
@@ -927,7 +938,7 @@ function GetTemplateData(id) {
             
             var overwriteDirectly = caseTemplate["OverWritePopUp"];            
             if (overwriteDirectly != undefined && overwriteDirectly != null && overwriteDirectly != 0)
-                window.ApplyTemplate(caseTemplate, true).then(runFinalAction);
+                window.ApplyTemplate(caseTemplate, true);
             else {
                 if (showOverwriteWarning) {
                     window.overwriteWarning.show(caseTemplate);
@@ -955,12 +966,28 @@ function runFinalAction(forceRun) {
             setTimeout(runFinalAction, 500, true);
             return;
         }
+
+        changeCaseButtonsState(true);
         if (finalActionId == null) {
             // do nothing
-        }
+        }        
         else if (finalActionId == 0)
             $("#case-action-save").trigger('click');
         else if (finalActionId == 1)
             $("#case-action-save-and-close").trigger('click');
+
     }    
+}
+
+function changeCaseButtonsState(state) {
+    if (state) {
+        caseButtons.removeClass('disabled');
+        caseButtons.css("pointer-events", "");
+        $(templateQuickButtonIndicator).css("display", "none");
+    }
+    else {
+        caseButtons.addClass("disabled");
+        caseButtons.css("pointer-events", "none");
+        $(templateQuickButtonIndicator).css("display", "block");
+    }
 }

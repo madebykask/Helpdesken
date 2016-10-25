@@ -293,11 +293,15 @@ EditPage.prototype.setCaseStatus = function (status) {
         case me.CASE_IN_IDLE:
             me._inSaving = false;
             me.$buttonsToDisable.removeClass('disabled');
+            caseButtons.css("pointer-events", "");
+            $(templateQuickButtonIndicator).css("display", "none");
             return true;
     
         case me.CASE_IN_SAVING:
             me._inSaving = true;        
             me.$buttonsToDisable.addClass('disabled');
+            caseButtons.css("pointer-events", "none");
+            $(templateQuickButtonIndicator).css("display", "block");
             return true;
 
         default:
@@ -544,8 +548,11 @@ EditPage.prototype.init = function (p) {
     me.$SLASelect = $('#case__Priority_Id');
     me.$SLAInput = $('input.sla-value');
     me.$watchDateEdit = $('#case__WatchDate');
-    me.$watchDate = $('#divCase__WatchDate');   
-    me.$buttonsToDisable = $('.btn.save, .btn.save-close, .btn.save-new');
+    me.$watchDate = $('#divCase__WatchDate');      
+    me.$buttonsToDisable = $('.btn.save, .btn.save-close, .btn.save-new, .btn.caseDeleteDialog, ' +
+                             '#case-action-close, #divActionMenu, #btnActionMenu, #divCaseTemplate, #btnCaseTemplateTree, .btn.print-case,' +
+                             '.btn.show-inventory, .btn.previous-case, .btn.next-case, .btn.templateQuickButton');
+
     me.$productAreaObj = $('#divProductArea');
     me.$productAreaChildObj = $('#ProductAreaHasChild');
     me.productAreaErrorMessage = me.p.productAreaErrorMessage;
