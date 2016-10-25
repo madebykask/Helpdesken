@@ -52,6 +52,8 @@ namespace DH.Helpdesk.SelfService
     using DH.Helpdesk.SelfService.WebServices;
     using DH.Helpdesk.Dal.Repositories.Cases;
     using DH.Helpdesk.Dal.Repositories.Cases.Concrete;
+    using DH.Helpdesk.Dal.Repositories.BusinessRules;
+    using DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete;
     
     public static class NinjectWebCommon 
     {
@@ -196,6 +198,9 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IProjectScheduleRepository>().To<ProjectScheduleRepository>();
             kernel.Bind<IReportFavoriteRepository>().To<ReportFavoriteRepository>();
             kernel.Bind<IMail2TicketRepository>().To<Mail2TicketRepository>();
+            kernel.Bind<IBusinessRuleRepository>().To<BusinessRuleRepository>();
+            kernel.Bind<IEmailGroupRepository>().To<EmailGroupRepository>();
+            kernel.Bind<IEmailGroupEmailRepository>().To<EmailGroupEmailRepository>();
 
             // Service             
             kernel.Bind<IMasterDataService>().To<MasterDataService>();            
@@ -246,7 +251,9 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<ILinkService>().To<LinkService>();
             kernel.Bind<ICaseLockService>().To<CaseLockService>();
             kernel.Bind<ICaseInvoiceSettingsService>().To<CaseInvoiceSettingsService>();
-            
+            kernel.Bind<IBusinessRuleService>().To<BusinessRuleService>();
+            kernel.Bind<IEmailGroupService>().To<EmailGroupService>();
+
             // Cache
             kernel.Bind<ICacheProvider>().To<CacheProvider>();
 

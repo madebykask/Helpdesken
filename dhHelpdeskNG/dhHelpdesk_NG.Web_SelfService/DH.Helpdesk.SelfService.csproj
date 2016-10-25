@@ -340,6 +340,7 @@
     <Content Include="Content\css\bootstrap.min.css" />
     <Content Include="Content\css\dhplus.css" />
     <Content Include="Content\css\jquery.toastmessage.css" />
+    <Content Include="Content\img\ajax-loader.GIF" />
     <Content Include="Content\img\backgrounds.gif" />
     <Content Include="Content\img\buttons-disabled.png" />
     <Content Include="Content\img\buttons.png" />
@@ -1237,7 +1238,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>53865</DevelopmentServerPort>
+          <DevelopmentServerPort>58118</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:59809/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

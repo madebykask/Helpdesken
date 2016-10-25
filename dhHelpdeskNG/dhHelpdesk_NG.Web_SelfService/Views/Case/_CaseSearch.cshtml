@@ -8,13 +8,22 @@
         <div class="col-md-3 dh-col">
             <div class="container form-horizontal">
                 <div class="form-group row">
-                    <label class="col-md-2">
-                        @Translation.Get("Search Phrase", Enums.TranslationSource.TextTranslation):
-                    </label>
-                    <div class="col-md-10">
-                        @Html.TextBoxFor(s => Model.PharasSearch)
-                        <button id="btnSearch" name="btnSearch" class="btn btn-default">@Translation.Get("Search", Enums.TranslationSource.TextTranslation)</button>
-                    </div>
+                    <table>
+                        <tr>
+                            <td class="span12">
+                                &nbsp; &nbsp;  @Translation.Get("Search Phrase", Enums.TranslationSource.TextTranslation) &nbsp;&nbsp;                    
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(s => Model.PharasSearch)
+                                <button id="btnSearch" name="btnSearch" class="btn btn-default">@Translation.Get("Search", Enums.TranslationSource.TextTranslation)</button>
+                                <i id="searchIndicator" class="gif-loader">&nbsp;</i>
+                            </td>
+                        </tr>
+                    </table>
+                        
+                    @*<div class="col-md-10">
+                        
+                    </div>*@
                 </div>                              
             </div>
         </div>
@@ -22,15 +31,18 @@
 </form>
 
 <script type="text/javascript">
+    $("#searchIndicator").hide();
+
     $('#btnSearch').click(function (e) {
         e.preventDefault();
         search();
     });
 
-    function search() {        
+    function search() {
+        $("#searchIndicator").show();
         $.post('@Url.Action("SearchUserCase", "Case")', $("#frmUserCases").serialize(), function (result) {
             $('#search_result').html(result);           
-        });
+        }).done(function () { $("#searchIndicator").hide(); });
     }
 
 

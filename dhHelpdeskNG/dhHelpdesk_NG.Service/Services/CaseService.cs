@@ -2054,10 +2054,10 @@ namespace DH.Helpdesk.Services.Services
             ret.Available = string.IsNullOrWhiteSpace(c.Available) ? string.Empty : c.Available;
             ret.IpAddress = string.IsNullOrWhiteSpace(c.IpAddress) ? string.Empty : c.IpAddress;
 
-            if (caseLog.TextExternal != null && caseLog.TextExternal.Length > 3000)
+            if (caseLog != null && caseLog.TextExternal != null && caseLog.TextExternal.Length > 3000)
                 caseLog.TextExternal = caseLog.TextExternal.Substring(0, 3000);
 
-            if (caseLog.TextInternal != null && caseLog.TextInternal.Length > 3000)
+            if (caseLog != null && caseLog.TextInternal != null && caseLog.TextInternal.Length > 3000)
                 caseLog.TextInternal = caseLog.TextInternal.Substring(0, 3000);
 
             return ret;
