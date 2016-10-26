@@ -149,7 +149,7 @@
             public static string SafeForSqlInject(this string valueToCheck)
             {
                 if (!string.IsNullOrWhiteSpace(valueToCheck))
-                    return valueToCheck.Replace("'", string.Empty);
+                    return valueToCheck.Replace("'", "''");
                 else
                     return string.Empty;
             }
