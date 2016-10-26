@@ -5,6 +5,7 @@
     {
         throw new ArgumentNullException("QuestionnaireId", "QuestionnaireId must be specified.");
     }
+    var backStatusId = ViewData["StatusId"];
 }
 
 <table id="tblCircular" class="table table-striped table-bordered table-hover">
@@ -30,17 +31,17 @@
     @foreach (var item in Model)
     {
         <tr>
-            <td onclick=" window.location.href = '@Url.Action("EditCircular", "Questionnaire", new { circularId = item.Id })' " class="tdpointer">
+            <td onclick=" window.location.href = '@Url.Action("EditCircular", "Questionnaire", new { circularId = item.Id, backStatusId = backStatusId })' " class="tdpointer">
                 
                 @Html.DisplayFor(modelItem => item.CircularName)
             </td>
-            <td onclick=" window.location.href = '@Url.Action("EditCircular", "Questionnaire", new { circularId = item.Id })' " class="tdpointer">
+            <td onclick=" window.location.href = '@Url.Action("EditCircular", "Questionnaire", new { circularId = item.Id, backStatusId = backStatusId })' " class="tdpointer">
                 @Html.DisplayFor(modelItem => item.Date)
             </td>
-            <td onclick=" window.location.href = '@Url.Action("EditCircular", "Questionnaire", new { circularId = item.Id })' " class="tdpointer">
+            <td onclick=" window.location.href = '@Url.Action("EditCircular", "Questionnaire", new { circularId = item.Id, backStatusId = backStatusId })' " class="tdpointer">
                 @item.State.GetDisplayValue()
             </td>
-            <td onclick=" window.location.href = '@Url.Action("EditCircular", "Questionnaire", new { circularId = item.Id })' " class="tdpointer">
+            <td onclick=" window.location.href = '@Url.Action("EditCircular", "Questionnaire", new { circularId = item.Id, backStatusId = backStatusId })' " class="tdpointer">
                 @Html.DisplayFor(modelItem => item.TotalParticipants)
                 (@Html.DisplayFor(modelItem => item.AnsweredParticipants))
             </td>
