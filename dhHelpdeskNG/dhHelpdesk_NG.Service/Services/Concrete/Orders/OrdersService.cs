@@ -463,20 +463,7 @@
 
                 //if (request.CreateCase == true)
                 //{
-                //    var caseTypeId = "";
-                //    var departmentId = "";
-                //    var case_ = new CaseEditInput();
-
-                //    // save case and case history
-                //    int caseHistoryId = this._caseService.SaveCase(
-                //                case_,
-                //                caseLog,
-                //                caseMailSetting,
-                //                SessionFacade.CurrentUser.Id,
-                //                this.User.Identity.Name,
-                //                ei,
-                //                out errors,
-                //                parentCase);    
+                //    entity.
                 //}
                 this.orderAuditors.ForEach(a => a.Audit(request, new OrderAuditData(historyEntity.Id, existingOrder)));
 
