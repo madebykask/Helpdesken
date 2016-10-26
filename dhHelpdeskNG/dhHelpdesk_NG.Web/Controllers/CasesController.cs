@@ -4021,7 +4021,7 @@ namespace DH.Helpdesk.Web.Controllers
                                 var dept = this._departmentService.GetDepartment(m.case_.Department_Id.Value);
                                 var priority =
                                     m.priorities.Where(it => it.Id == m.case_.Priority_Id && it.IsActive == 1).FirstOrDefault();
-                                if (dept != null && priority != null && priority.SolutionTime == 0)
+                                if (dept != null && dept.WatchDateCalendar_Id.HasValue && priority != null && priority.SolutionTime == 0)
                                 {
                                     m.case_.WatchDate =
                                     this.watchDateCalendarServcie.GetClosestDateTo(
