@@ -1,10 +1,26 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
+﻿
+@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+@using System.Web.Optimization
+@using System.Linq;
+@using DH.Helpdesk.BusinessData.OldComponents
+@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.ReceiverEditModel
 
 <h4>@Translation.Get("Mottagare")</h4>
 <table class="tableform">
     <tbody>
-        @Html.EditorFor(m => m.ReceiverId, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_ReceiverId" } }})           
+        @if (Model.ReceiverId.Show)
+        {
+            <tr>
+                <td class="span3">
+                    @Html.FieldCaption(Model.ReceiverId)
+                </td>
+                <td class="span9">
+                    @Html.TextBoxFor(model => model.ReceiverId.Value, new { maxlength = "40", autocomplete = "Off", data_field = "userId" })
+                </td>
+            </tr>             
+        }
+        @*@Html.EditorFor(m => m.ReceiverId, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_ReceiverId" } }}) *@          
         @Html.EditorFor(m => m.ReceiverName, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_ReceiverName" } }})           
         @Html.EditorFor(m => m.ReceiverEmail, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_ReceiverEmail" } }})           
         @Html.EditorFor(m => m.ReceiverPhone, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_ReceiverPhone" } }})           

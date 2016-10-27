@@ -26,6 +26,8 @@
     using DH.Helpdesk.Domain.MailTemplates;
     using DH.Helpdesk.BusinessData.Models.Email;
     using System.Configuration;
+    using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.Common.Enums;
     
 
     public class OrdersService : IOrdersService
@@ -63,6 +65,7 @@
         private readonly IOrderTypeRepository _orderTypeRepository;
 
         private readonly ICaseService _caseService;
+
 
         public OrdersService(
                 IUnitOfWorkFactory unitOfWorkFactory, 
@@ -296,7 +299,7 @@
             }
         }
 
-        public int AddOrUpdate(UpdateOrderRequest request)
+        public int AddOrUpdate(UpdateOrderRequest request, string userId, CaseMailSetting caseMailSetting, int languageId)
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
@@ -461,10 +464,40 @@
 
                 }
 
-                //if (request.CreateCase == true)
-                //{
-                //    entity.
-                //}
+                if (request.CreateCase == true)
+                {
+                    IDictionary<string, string> errors;
+
+                    //get createcasetype by ordertype
+                    var orderType = this._orderTypeRepository.GetById(entity.OrderType_Id.Value);
+
+                    var newCase = new Case();
+
+                    newCase.Customer_Id = entity.Customer_Id;
+                    newCase.Department_Id = entity.Department_Id;
+                    if (orderType.CreateCase_CaseType_Id.HasValue)
+                    {
+                        newCase.CaseType_Id = orderType.CreateCase_CaseType_Id.Value;
+                    }
+                    else
+                    {
+                        newCase.CaseType_Id = 2;                    //get another id
+                    }
+
+                    newCase.Priority_Id = entity.OrderPropertyId;
+                    newCase.User_Id = entity.User_Id;
+                    newCase.ReportedBy = entity.Orderer;
+                    newCase.PersonsName = entity.UserFirstName + " " + entity.UserLastName;
+                    newCase.PersonsPhone = "";
+                    newCase.Caption = entity.OrderType.Name;
+                    newCase.Description = entity.OrderRow;
+                    newCase.RegLanguage_Id = languageId;
+
+                    var ei = new CaseExtraInfo() { CreatedByApp = CreatedByApplications.Helpdesk5, LeadTimeForNow = 0, ActionLeadTime = 0, ActionExternalTime = 0 };
+
+                    this._caseService.SaveCase(newCase, null, caseMailSetting, 0, userId, ei, out errors);
+                }
+
                 this.orderAuditors.ForEach(a => a.Audit(request, new OrderAuditData(historyEntity.Id, existingOrder)));
 
                 return entity.Id;

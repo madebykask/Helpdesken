@@ -2,10 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Configuration;
     using System.Linq;
     using System.Net;
     using System.Web;
     using System.Web.Mvc;
+    using System.Web.WebPages;
 
     using DH.Helpdesk.BusinessData.Enums.Orders;
     using DH.Helpdesk.BusinessData.Models.Orders.Index;
@@ -26,6 +28,9 @@
     using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Users;
     using DH.Helpdesk.BusinessData.Enums.Admin.Users;
+    using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.Common.Enums;
+    using DH.Helpdesk.Web.Infrastructure.Extensions;
 
     public class OrdersController : BaseController
     {
@@ -55,6 +60,10 @@
 
         private readonly IOrderTypeService _orderTypeService;
 
+        private readonly ICustomerService _customerService;
+
+        private readonly ISettingService _settingService;
+
         public OrdersController(
                 IMasterDataService masterDataService, 
                 IOrdersService ordersService, 
@@ -69,7 +78,9 @@
                 ILogsModelFactory logsModelFactory, 
                 IEmailService emailService,
                 IUserPermissionsChecker userPermissionsChecker,
-                IOrderTypeService orderTypeService)
+                IOrderTypeService orderTypeService,
+                ICustomerService customerService,
+                ISettingService settingService)
             : base(masterDataService)
         {
             this.ordersService = ordersService;
@@ -83,6 +94,8 @@
             this.emailService = emailService;
             this._userPermissionsChecker = userPermissionsChecker;
             this._orderTypeService = orderTypeService;
+            this._customerService = customerService;
+            this._settingService = settingService;
 
             this.filesStateStore = editorStateCacheFactory.CreateForModule(ModuleName.Orders);
             this.filesStore = temporaryFilesCacheFactory.CreateForModule(ModuleName.Orders);
@@ -187,6 +200,9 @@
         [BadRequestOnNotValid]
         public RedirectToRouteResult New(FullOrderEditModel model)
         {
+            var currentCustomer = this._customerService.GetCustomer(model.CustomerId);
+            var cs = this._settingService.GetCustomerSetting(currentCustomer.Id);
+
             int intId;
             int.TryParse(model.Id, out intId);
             model.NewFiles = this.filesStore.FindFiles(model.Id, Subtopic.FileName.ToString());
@@ -199,7 +215,14 @@
                                                 this.emailService,
                                                 this.workContext.User.UserId,
                                                 SessionFacade.CurrentLanguageId);
-            var id = this.ordersService.AddOrUpdate(request);
+
+            var caseMailSetting = new CaseMailSetting(
+                                                         currentCustomer.NewCaseEmailList,
+                                                         currentCustomer.HelpdeskEmail,
+                                                         RequestExtension.GetAbsoluteUrl(),
+                                                         cs.DontConnectUserToWorkingGroup
+                                                       );
+            var id = this.ordersService.AddOrUpdate(request, SessionFacade.CurrentUser.UserId, caseMailSetting, SessionFacade.CurrentLanguageId);
 
             foreach (var newFile in model.NewFiles)
             {
@@ -248,6 +271,9 @@
         [BadRequestOnNotValid]
         public RedirectToRouteResult Edit(FullOrderEditModel model)
         {
+            var currentCustomer = this._customerService.GetCustomer(model.CustomerId);
+            var cs = this._settingService.GetCustomerSetting(currentCustomer.Id);
+
             var id = int.Parse(model.Id);
             var filesInDb = model.Other != null && model.Other.FileName != null && model.Other.FileName.Value != null ? model.Other.FileName.Value.Files : new List<string>();
             model.NewFiles = this.filesStore.FindFiles(model.Id, Subtopic.FileName.ToString()).Where(f => !filesInDb.Contains(f.Name)).ToList();
@@ -262,7 +288,15 @@
                                                 this.emailService,
                                                 this.workContext.User.UserId,
                                                 SessionFacade.CurrentLanguageId);
-            this.ordersService.AddOrUpdate(request);
+
+            var caseMailSetting = new CaseMailSetting(
+                                                        currentCustomer.NewCaseEmailList,
+                                                        currentCustomer.HelpdeskEmail,
+                                                        RequestExtension.GetAbsoluteUrl(),
+                                                        cs.DontConnectUserToWorkingGroup
+                                                    );
+
+            this.ordersService.AddOrUpdate(request, SessionFacade.CurrentUser.UserId, caseMailSetting, SessionFacade.CurrentLanguageId);
 
             foreach (var deletedFile in model.DeletedFiles)
             {
