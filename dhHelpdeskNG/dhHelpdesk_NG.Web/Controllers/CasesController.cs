@@ -2285,9 +2285,9 @@ namespace DH.Helpdesk.Web.Controllers
             var case_ = m.case_;
             var caseLog = m.caseLog;
             var caseMailSetting = m.caseMailSetting;
-            var updateNotifierInformation = m.updateNotifierInformation;            
-            case_.Performer_User_Id = m.Performer_Id;
-            case_.CaseResponsibleUser_Id = m.ResponsibleUser_Id;            
+            var updateNotifierInformation = m.updateNotifierInformation;
+            case_.Performer_User_Id = m.Performer_Id.HasValue && m.Performer_Id == 0 ? null : m.Performer_Id;
+            case_.CaseResponsibleUser_Id = m.ResponsibleUser_Id.HasValue && m.ResponsibleUser_Id == 0 ? null : m.ResponsibleUser_Id; 
             case_.RegistrationSourceCustomer_Id = m.customerRegistrationSourceId;
             case_.Ou = null;
             case_.Department = null;
