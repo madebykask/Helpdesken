@@ -664,11 +664,18 @@ function CaseInitForm() {
                         $workingGroup.val(data.WorkingGroup_Id).trigger('change');                                        
 
                     exists = $('#case__Priority_Id option[value=' + data.Priority_Id + ']').length;
-                    if (exists > 0 && data.Priority_Id > 0 && !alreadySetByCaseTemplate) {
-                        $("#case__Priority_Id").val(data.Priority_Id);                        
-                        $("#case__Priority_Id").change();
-                        
+
+                    if (exists > 0 || $('#priority_Name') != undefined){
+                        if (data.Priority_Id > 0 && !alreadySetByCaseTemplate) {
+                            $("#case__Priority_Id").val(data.Priority_Id);
+                            $("#case__Priority_Id").attr('data-sla', data.SLA);
+                            $("#case__Priority_Id").change();
+
+                            if ($('#priority_Name') != undefined && data.PriorityName != null)
+                                $('#priority_Name').val(data.PriorityName);
+                        }                        
                     }
+                
                     if (data.Priority_Id > 0)
                         $(".sla-value").eq(0).val(data.Priority_Id);
                     $("#ProductAreaHasChild").val(data.HasChild);

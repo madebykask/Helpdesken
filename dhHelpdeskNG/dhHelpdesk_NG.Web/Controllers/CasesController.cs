@@ -1465,6 +1465,9 @@ namespace DH.Helpdesk.Web.Controllers
             int workinggroupId = 0;
             int priorityId = 0;
             int hasChild = 0;
+            string priorityName = string.Empty;
+            int sla = 0;
+
             if (id.HasValue)
             {
                 var e = _productAreaService.GetProductArea(id.Value);
@@ -1474,9 +1477,16 @@ namespace DH.Helpdesk.Web.Controllers
                     priorityId = e.Priority_Id.HasValue ? e.Priority_Id.Value : 0;
                     if (e.SubProductAreas != null && e.SubProductAreas.Where(s => s.IsActive != 0).ToList().Count > 0)
                         hasChild = 1;
+                    if (priorityId > 0)
+                    {
+                        var prio = _priorityService.GetPriority(priorityId);
+                        priorityName = prio != null ? prio.Name : string.Empty;
+                        sla = prio.SolutionTime;
+                    }
                 }
             }
-            return Json(new { WorkingGroup_Id = workinggroupId, Priority_Id = priorityId, HasChild = hasChild });
+            return Json(new { WorkingGroup_Id = workinggroupId, Priority_Id = priorityId, 
+                              SLA = sla, PriorityName = priorityName, HasChild = hasChild });
         }
 
         public JsonResult ChangeStatus(int? id)
@@ -3933,6 +3943,9 @@ namespace DH.Helpdesk.Web.Controllers
                         m.case_.Department_Id = caseTemplate.Department_Id;
                         m.CaseMailSetting.DontSendMailToNotifier = caseTemplate.NoMailToNotifier.ToBool();
                         m.case_.ProductArea_Id = caseTemplate.ProductArea_Id;
+                        if (caseTemplate.ProductArea_Id.HasValue)
+                            m.case_.ProductArea = _productAreaService.GetProductArea(caseTemplate.ProductArea_Id.Value);
+
                         m.case_.Caption = caseTemplate.Caption;
                         m.case_.Description = caseTemplate.Description;
                         m.case_.Miscellaneous = caseTemplate.Miscellaneous;
@@ -3953,8 +3966,16 @@ namespace DH.Helpdesk.Web.Controllers
                         {
                             m.case_.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id;
                         }
-                        
-                        m.case_.Priority_Id = caseTemplate.Priority_Id;
+
+                        // m.case_.Priority_Id = caseTemplate.Priority_Id;
+                        //if (caseTemplate.Priority_Id.HasValue)
+                        //    m.case_.Priority_Id = caseTemplate.Priority_Id;
+                        //else
+                        //{
+                        //    if (m.case_.ProductArea_Id.HasValue && m.case_.ProductArea != null)
+                        //        m.case_.Priority_Id = m.case_.ProductArea.Priority_Id;
+                        //}
+
                         m.case_.Project_Id = caseTemplate.Project_Id;
                         m.CaseLog.TextExternal = caseTemplate.Text_External;
                         m.CaseLog.TextInternal = caseTemplate.Text_Internal;

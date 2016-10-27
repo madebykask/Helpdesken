@@ -41,7 +41,7 @@
          
         caseRegDate: '@Model.case_.RegTime', 
         isCaseFileMandatory: '@Model.caseFieldSettings.getRequired(GlobalEnums.TranslationCaseFields.Filename.ToString())',
-        caseFileCaption: '@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Filename.ToString(), 
+        caseFileCaption: '@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Filename.ToString(),
                                                 Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)',
                                 
         caseFieldNames:{
@@ -1660,12 +1660,13 @@
                                                 var priority = Model.case_.Priority_Id.HasValue ? Model.priorities.SingleOrDefault(x => x.Id == Model.case_.Priority_Id) : null;
                                                 if (priority == null)
                                                 {
-                                                @Html.TextBoxFor(m => m.case_.Priority_Id, new { @readonly = true })
+                                                      <input type="text" value="" readonly id="priority_Name" />                                                        
+                                                      @Html.HiddenFor(m => Model.case_.Priority_Id,  new { @class = "sla-value", data_sla = 0 })
                                                 }
                                                 else
                                                 {
-                                                        @Html.TextBoxFor(m => priority.Name, new { @readonly = true })
-                                                        @Html.HiddenFor(x => x.case_.Priority_Id, new { @class = "sla-value", data_sla = priority.SolutionTime })
+                                                      @Html.TextBoxFor(m => priority.Name, new { @readonly = true })
+                                                      @Html.HiddenFor(x => x.case_.Priority_Id, new { @class = "sla-value", data_sla = priority.SolutionTime })
                                                 }
                                             }
                                         </td>
@@ -1968,7 +1969,7 @@
                                                 }
                                                 else
                                                 {                                            
-                                                    @Html.EditorFor(m => m.case_.WatchDate, "DateReadOnly", new { id = "divCase__WatchDate", @class = "readonlyWatchdate"})                                                 
+                                                    @Html.EditorFor(m => m.case_.WatchDate, "DateReadOnly", new { id = "divCase__WatchDate", @class = "readonlyWatchdate" })                                                 
                                                 }
 
                                             }

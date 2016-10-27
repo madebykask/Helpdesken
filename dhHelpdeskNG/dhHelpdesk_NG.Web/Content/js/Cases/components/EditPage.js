@@ -29,7 +29,7 @@ EditPage.prototype.fetchWatchDateByDept = function (deptId) {
 
     $.getJSON(
         '/cases/GetWatchDateByDepartment',
-        { 'departmentId': deptId },
+        { 'departmentId': deptId, 'myTime' : Date.now },
         function (response) {
             if (response.result === 'success') {
                 if (response.data != null) {
@@ -546,7 +546,7 @@ EditPage.prototype.init = function (p) {
     me.$watchDateChangers = $('.departments-list, #case__Priority_Id, #case__StateSecondary_Id');
     me.$department = $('.departments-list');
     me.$SLASelect = $('#case__Priority_Id');
-    me.$SLAInput = $('input.sla-value');
+    me.$SLAText = $('#case__Priority_Id');    
     me.$watchDateEdit = $('#case__WatchDate');
     me.$watchDate = $('#divCase__WatchDate');      
     me.$buttonsToDisable = $('.btn.save, .btn.save-close, .btn.save-new, .btn.caseDeleteDialog, ' +
@@ -580,11 +580,11 @@ EditPage.prototype.init = function (p) {
     var invoiceElm = $('#CustomerSettings_ModuleCaseInvoice').val();
     me.invoiceIsActive = invoiceElm != undefined && invoiceElm != null && invoiceElm.toString().toLowerCase() == 'true';
 
-    me.$watchDateChangers.on('change', function () {
+    me.$watchDateChangers.on('change', function () {        
         var deptId = parseInt(me.$department.val(), 10);
         var SLA = parseInt(me.$SLASelect.find('option:selected').attr('data-sla'), 10);
-        if (isNaN(SLA)) {
-            SLA = parseInt(me.$SLAInput.attr('data-sla'), 10);
+        if (isNaN(SLA)) {            
+            SLA = parseInt(me.$SLAText.attr('data-sla'), 10);
         }
         if (this.id == "case__StateSecondary_Id") {
             $.post('/Cases/ChangeStateSecondary', { 'id': $(this).val() }, function (data) {
