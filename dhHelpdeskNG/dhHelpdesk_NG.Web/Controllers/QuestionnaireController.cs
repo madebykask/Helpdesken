@@ -460,15 +460,18 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpGet]
         public ViewResult CircularOverview(int questionnaireId, int? statusId)
         {
+            var ensuredStatusId = statusId ?? CircularStateId.All;
             List<CircularOverviewModel> circularOverviews = this.CreateCircularOverviewModels(
                 questionnaireId,
-                statusId ?? CircularStateId.All);
+                ensuredStatusId);
 
             var viewModel = new CircularOverviewViewModel(
                 questionnaireId,
                 circularOverviews,
-                CircularStateId.ReadyToSend,
+                ensuredStatusId,
                 new ReportFilter(new List<int>()));
+
+            ViewData["StatusId"] = ensuredStatusId;
 
             return this.View(viewModel);
         }
@@ -478,13 +481,15 @@ namespace DH.Helpdesk.Web.Controllers
         {
             List<CircularOverviewModel> circularOverviews = this.CreateCircularOverviewModels(questionnaireId, show);
             ViewBag.QuestionnaireId = questionnaireId; // todo
+            ViewData["StatusId"] = show;
 
             return this.PartialView("CircularOverviewGrid", circularOverviews);
         }
 
         [HttpGet]
-        public ViewResult NewCircular(int questionnaireId)
+        public ViewResult NewCircular(int questionnaireId, int? backStatusId)
         {
+            ViewBag.BackStatusId = backStatusId;
             var model = GetCircularModel(
                 0,
                 questionnaireId,
@@ -497,8 +502,9 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpGet]
-        public ViewResult EditCircular(int circularId)
+        public ViewResult EditCircular(int circularId, int? backStatusId)
         {
+            ViewBag.BackStatusId = backStatusId;
             CircularForEdit circular = this._circularService.GetById(circularId);
 
             List<ConnectedCase> connectedCases = this._circularService.GetConnectedCases(circularId);
@@ -538,15 +544,15 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
-        public RedirectToRouteResult DeleteCircular(int questionnaireId, int? stateId, int circularId)
+        public RedirectToRouteResult DeleteCircular(int questionnaireId, int circularId, int? backStatusId)
         {
             this._circularService.DeleteById(circularId);
 
-            return this.RedirectToAction("CircularOverview", new { questionnaireId, state = stateId });
+            return this.RedirectToAction("CircularOverview", new { questionnaireId, statusId = backStatusId });
         }
 
         [HttpPost]
-        public ActionResult EditCircular(CircularModel newCircular, int[] connectedCases)
+        public ActionResult EditCircular(CircularModel newCircular, int[] connectedCases, int? backStatusId)
         {
             var cases = connectedCases == null || connectedCases.Count() == 0
                             ? new List<int>()
@@ -579,7 +585,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             return this.RedirectToAction(
                 "CircularOverview",
-                new { questionnaireId = newCircular.QuestionnaireId, state = CircularStateId.All });
+                new { questionnaireId = newCircular.QuestionnaireId, statusId = backStatusId });
         }
 
         [HttpPost]
@@ -608,21 +614,21 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpGet]
-        public RedirectToRouteResult Send(int circularId)
+        public RedirectToRouteResult Send(int circularId, int? backStatusId)
         {
             string actionUrl = this.CreateQuestionnarieUrl();
             this._circularService.SendQuestionnaire(actionUrl, circularId, this.OperationContext);
 
-            return this.RedirectToAction("EditCircular", new { circularId });
+            return this.RedirectToAction("EditCircular", new { circularId, backStatusId });
         }
 
         [HttpGet]
-        public RedirectToRouteResult Remind(int circularId)
+        public RedirectToRouteResult Remind(int circularId, int? backStatusId)
         {
             string actionUrl = this.CreateQuestionnarieUrl();
             this._circularService.Remind(actionUrl, circularId, this.OperationContext);
 
-            return this.RedirectToAction("EditCircular", new { circularId });
+            return this.RedirectToAction("EditCircular", new { circularId, backStatusId });
         }
 
         [HttpGet]

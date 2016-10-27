@@ -401,13 +401,15 @@ namespace DH.Helpdesk.Web.Controllers
             int? customerId,
             bool? clearFilters = false,
             CasesCustomFilter customFilter = CasesCustomFilter.None,
-            bool? useMyCases = false)
+            bool? useMyCases = false,
+            bool? keepAdvancedSearch = false)
         {
             if (customerId.HasValue && (SessionFacade.CurrentCustomer == null || customerId.Value != SessionFacade.CurrentCustomer.Id))
             {
                 SessionFacade.CurrentCustomer = this._customerService.GetCustomer(customerId.Value);
                 SessionFacade.CaseOverviewGridSettings = null;
-                SessionFacade.CurrentAdvancedSearch = null;
+                if (!keepAdvancedSearch.HasValue || !keepAdvancedSearch.Value)
+                    SessionFacade.CurrentAdvancedSearch = null;
             }
             else
             {
@@ -415,7 +417,8 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     SessionFacade.CurrentCustomer = this._customerService.GetCustomer(SessionFacade.CurrentUser.CustomerId);
                     SessionFacade.CaseOverviewGridSettings = null;
-                    SessionFacade.CurrentAdvancedSearch = null;
+                    if (!keepAdvancedSearch.HasValue || !keepAdvancedSearch.Value)
+                        SessionFacade.CurrentAdvancedSearch = null;
                 }
             }
 
@@ -1094,7 +1097,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var currentCustomerId = SessionFacade.CurrentCustomer.Id;
                 var currentCase = this._caseService.GetCaseById(id);
                 if (currentCustomerId != currentCase.Customer_Id)
-                    this.InitFilter(currentCase.Customer_Id, false, CasesCustomFilter.None, false);
+                    this.InitFilter(currentCase.Customer_Id, false, CasesCustomFilter.None, false, true);
                     
                 // User has not access to case
                 if (m.EditMode == Enums.AccessMode.NoAccess)

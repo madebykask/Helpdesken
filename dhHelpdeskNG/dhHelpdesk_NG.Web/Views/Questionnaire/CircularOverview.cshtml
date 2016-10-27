@@ -8,9 +8,7 @@
     <div class="pull-left">
         <ul class="secnav">
             <li id="menu1">
-                @Html.ActionLink(Translation.Get("Nytt utskick"), "NewCircular", "Questionnaire",
-                        new { questionnaireId = Model.QuestionnaireId },
-                        new { @class = "btn" })
+                <button class="btn" id="newCircular">@Translation.Get("Nytt utskick")</button>
             </li>
             <li id="menu2">
                 @Html.ActionLink(Translation.Get("Avbryt"), "Index", "Questionnaire", new { @class = "btn" })
@@ -45,15 +43,15 @@
                                 
                                             <label class="radio inline">@Translation.Get("Status"):</label>
                                             <label class="radio inline">
-                                            @Html.RadioButtonFor(x => x.CircularStateId, CircularStateId.ReadyToSend, new { @checked = Model.CircularStateId == CircularStateId.ReadyToSend, Name = "Show" })
+                                            @Html.RadioButtonFor(x => x.CircularStateId, CircularStateId.ReadyToSend, new { Name = "Show" })
                                             @Translation.Get("Klar att skicka")
                                             </label>
                                             <label class="radio inline">
-                                            @Html.RadioButtonFor(x => x.CircularStateId, CircularStateId.Sent, new { @checked = Model.CircularStateId == CircularStateId.Sent, Name = "Show" })
+                                            @Html.RadioButtonFor(x => x.CircularStateId, CircularStateId.Sent, new { Name = "Show" })
                                             @Translation.Get("Skickad")
                                             </label>
                                             <label class="radio inline">
-                                            @Html.RadioButtonFor(x => x.CircularStateId, CircularStateId.All, new { @checked = Model.CircularStateId == CircularStateId.All, Name = "Show" })
+                                            @Html.RadioButtonFor(x => x.CircularStateId, CircularStateId.All, new { Name = "Show" })
                                             @Translation.Get("Alla")
                                             </label>
                                         
@@ -62,7 +60,7 @@
                     </div>
 
                     <div id="circulars_grid">
-                        @Html.Partial("CircularOverviewGrid", Model.CircularOverviewModels, new ViewDataDictionary { { "QuestionnaireId", @Model.QuestionnaireId } })
+                        @Html.Partial("CircularOverviewGrid", Model.CircularOverviewModels, new ViewDataDictionary { { "QuestionnaireId", @Model.QuestionnaireId }, { "StatusId", ViewData["StatusId"] } })
                     </div>
                 </div>
             </div>
@@ -106,6 +104,9 @@
     $(function () {
         $('input[name="Show"]').click(function () {
             $('#search_form').submit();
+        });
+        $('button[id="newCircular"]').click(function () {
+            window.location.href = '@Url.Action("NewCircular", "Questionnaire", new { questionnaireId = Model.QuestionnaireId, backStatusId = "-0-"})'.replace('-0-', $('input[name=Show]:checked', '#search_form').val());
         });
     });
 
