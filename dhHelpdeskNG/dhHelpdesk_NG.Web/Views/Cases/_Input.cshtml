@@ -1584,13 +1584,14 @@
                                             {
                                                 if (!Model.case_.WorkingGroup_Id.HasValue)
                                                 {
-                                                @Html.TextBoxFor(m => m.case_.WorkingGroup_Id, new { @readonly = true })
+                                                    <input type="text" value="" readonly="true" id="workingGroup_Name" />                                                     
                                                 }
                                                 else
                                                 {
-                                                @Html.TextBoxFor(m => m.workingGroups.SingleOrDefault(x => x.Id == Model.case_.WorkingGroup_Id).WorkingGroupName, new { @readonly = true })
-                                                @Html.HiddenFor(x => x.case_.WorkingGroup_Id)
+                                                    @Html.TextBoxFor(m => m.workingGroups.SingleOrDefault(x => x.Id == Model.case_.WorkingGroup_Id).WorkingGroupName, new { @readonly = true, id = "workingGroup_Name" })                                                    
                                                 }
+                                                
+                                                @Html.HiddenFor(m => m.case_.WorkingGroup_Id)
                                             }
                                         </td>
                                     </tr>
@@ -1660,8 +1661,8 @@
                                                 var priority = Model.case_.Priority_Id.HasValue ? Model.priorities.SingleOrDefault(x => x.Id == Model.case_.Priority_Id) : null;
                                                 if (priority == null)
                                                 {
-                                                      <input type="text" value="" readonly id="priority_Name" />                                                        
-                                                      @Html.HiddenFor(m => Model.case_.Priority_Id,  new { @class = "sla-value", data_sla = 0 })
+                                                      <input type="text" value="" readonly="true" id="priority_Name" />                                                        
+                                                      @Html.HiddenFor(m => Model.case_.Priority_Id, new { @class = "sla-value", data_sla = 0 })
                                                 }
                                                 else
                                                 {

@@ -652,16 +652,26 @@ function CaseInitForm() {
     });
 
     $('#case__ProductArea_Id').change(function () {
-        var $workingGroup = $("#case__WorkingGroup_Id");
+        var $workingGroup = $("#case__WorkingGroup_Id");       
+
         $("#ProductAreaHasChild").val(0);        
         document.getElementById("divProductArea").classList.remove("error");
         if ($(this).val() > 0 ) {
             $.post('/Cases/ChangeProductArea/', { 'id': $(this).val() }, 'json').done(function (data) {
                 if (data != undefined) {
+
                     var alreadySetByCaseTemplate = ($('#CaseTemplate_WorkingGroup_Id').val() != "");
+
                     var exists = $workingGroup.find('option[value=' + data.WorkingGroup_Id + ']').length;
-                    if (exists > 0 && data.WorkingGroup_Id > 0 && !alreadySetByCaseTemplate)
-                        $workingGroup.val(data.WorkingGroup_Id).trigger('change');                                        
+
+                    if (exists > 0 || $('#workingGroup_Name') != undefined)
+                        if (data.WorkingGroup_Id > 0 && !alreadySetByCaseTemplate) {                            
+                            $workingGroup.val(data.WorkingGroup_Id);                           
+                            $workingGroup.change();
+
+                            if ($('#workingGroup_Name') != undefined && data.WorkingGroup_Name != null)
+                                $('#workingGroup_Name').val(data.WorkingGroup_Name);
+                        }
 
                     exists = $('#case__Priority_Id option[value=' + data.Priority_Id + ']').length;
 

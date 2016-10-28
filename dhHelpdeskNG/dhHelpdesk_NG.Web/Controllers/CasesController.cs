@@ -1463,6 +1463,7 @@ namespace DH.Helpdesk.Web.Controllers
         public JsonResult ChangeProductArea(int? id)
         {
             int workinggroupId = 0;
+            string workinggroupName = string.Empty;
             int priorityId = 0;
             int hasChild = 0;
             string priorityName = string.Empty;
@@ -1474,19 +1475,30 @@ namespace DH.Helpdesk.Web.Controllers
                 if (e != null)
                 {
                     workinggroupId = e.WorkingGroup_Id.HasValue ? e.WorkingGroup_Id.Value : 0;
-                    priorityId = e.Priority_Id.HasValue ? e.Priority_Id.Value : 0;
-                    if (e.SubProductAreas != null && e.SubProductAreas.Where(s => s.IsActive != 0).ToList().Count > 0)
-                        hasChild = 1;
+                    if (workinggroupId > 0)
+                    {
+                        var wg = _workingGroupService.GetWorkingGroup(workinggroupId);
+                        workinggroupName = wg != null ? wg.WorkingGroupName : string.Empty;                        
+                    }
+
+                    priorityId = e.Priority_Id.HasValue ? e.Priority_Id.Value : 0;                   
                     if (priorityId > 0)
                     {
                         var prio = _priorityService.GetPriority(priorityId);
                         priorityName = prio != null ? prio.Name : string.Empty;
                         sla = prio.SolutionTime;
                     }
+
+                    if (e.SubProductAreas != null && e.SubProductAreas.Where(s => s.IsActive != 0).Any())
+                        hasChild = 1;
                 }
             }
-            return Json(new { WorkingGroup_Id = workinggroupId, Priority_Id = priorityId, 
-                              SLA = sla, PriorityName = priorityName, HasChild = hasChild });
+
+            return Json(new { 
+                              WorkingGroup_Id = workinggroupId, WorkingGroup_Name = workinggroupName, 
+                              Priority_Id = priorityId, PriorityName = priorityName, SLA = sla,
+                              HasChild = hasChild 
+                            });
         }
 
         public JsonResult ChangeStatus(int? id)
@@ -3967,6 +3979,7 @@ namespace DH.Helpdesk.Web.Controllers
                             m.case_.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id;
                         }
 
+                        /*Disabled maybe we need this in the future*/
                         // m.case_.Priority_Id = caseTemplate.Priority_Id;
                         //if (caseTemplate.Priority_Id.HasValue)
                         //    m.case_.Priority_Id = caseTemplate.Priority_Id;
