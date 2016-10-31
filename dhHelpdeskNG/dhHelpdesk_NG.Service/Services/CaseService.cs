@@ -315,6 +315,9 @@ namespace DH.Helpdesk.Services.Services
 
             this.DeleteChildCasesFor(id);
 
+            //delete CaseIsAbout
+            this.DeleteCaseIsAboutFor(id);
+
             // delete form field values
             var ffv = this._formFieldValueRepository.GetFormFieldValuesByCaseId(id);
             if (ffv != null)
@@ -411,6 +414,8 @@ namespace DH.Helpdesk.Services.Services
             this._caseRepository.Delete(c);
             this._caseRepository.Commit();
 
+            
+
             return ret;
         }
 
@@ -463,6 +468,14 @@ namespace DH.Helpdesk.Services.Services
             }
         }
 
+        private void DeleteCaseIsAboutFor(int caseId)
+        {
+            using (var uow = unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            {
+                uow.GetRepository<CaseIsAboutEntity>().DeleteWhere(isa => isa.Case.Id == caseId);
+                uow.Save();
+            }
+        }
         /// <summary>
         /// The get case overview.
         /// </summary>
