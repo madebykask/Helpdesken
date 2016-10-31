@@ -66,6 +66,8 @@
 
         private readonly ICaseService _caseService;
 
+        private readonly ICaseTypeRepository _caseTypeRepository;
+
 
         public OrdersService(
                 IUnitOfWorkFactory unitOfWorkFactory, 
@@ -84,7 +86,8 @@
                 IOrderEMailLogRepository orderEMailLogRepository,
                 ICustomerRepository customerRepository,
                 IOrderTypeRepository orderTypeRepository,
-                ICaseService caseService)
+                ICaseService caseService,
+                ICaseTypeRepository caseTypeRepository)
         {
             this.unitOfWorkFactory = unitOfWorkFactory;
             this.orderFieldSettingsService = orderFieldSettingsService;
@@ -103,6 +106,7 @@
             this._customerRepository = customerRepository;
             this._orderTypeRepository = orderTypeRepository;
             this._caseService = caseService;
+            this._caseTypeRepository = caseTypeRepository;
         }
 
         public OrdersFilterData GetOrdersFilterData(int customerId)
@@ -481,21 +485,35 @@
                     }
                     else
                     {
-                        newCase.CaseType_Id = 2;                    //get another id
+                        //get customer casetype
+                        var casetype = this._caseTypeRepository.GetAll().Where(x => x.Customer_Id == entity.Customer_Id && x.IsActive == 1).FirstOrDefault();
+                        newCase.CaseType_Id = casetype.Id;                    //get another id
                     }
 
                     newCase.Priority_Id = entity.OrderPropertyId;
                     newCase.User_Id = entity.User_Id;
-                    newCase.ReportedBy = entity.Orderer;
-                    newCase.PersonsName = entity.UserFirstName + " " + entity.UserLastName;
-                    newCase.PersonsPhone = "";
-                    newCase.Caption = entity.OrderType.Name;
+                    newCase.ReportedBy = entity.OrdererID;
+                    newCase.PersonsName = entity.Orderer;
+                    newCase.PersonsPhone = entity.OrdererPhone;
+                    newCase.Caption = orderType.Name;
                     newCase.Description = entity.OrderRow;
                     newCase.RegLanguage_Id = languageId;
+                    newCase.PersonsEmail = entity.OrdererEMail;
+                    newCase.StateSecondary_Id = null;
+                    newCase.Performer_User_Id = null;
+                    newCase.CaseGUID = Guid.NewGuid();
 
                     var ei = new CaseExtraInfo() { CreatedByApp = CreatedByApplications.Helpdesk5, LeadTimeForNow = 0, ActionLeadTime = 0, ActionExternalTime = 0 };
 
                     this._caseService.SaveCase(newCase, null, caseMailSetting, 0, userId, ei, out errors);
+
+                    //get casenumber
+                    var newcase = this._caseService.GetCaseById(newCase.Id);
+
+                    entity.CaseNumber = newcase.CaseNumber;
+
+                    ordersRep.Update(entity);
+                    uow.Save();
                 }
 
                 this.orderAuditors.ForEach(a => a.Audit(request, new OrderAuditData(historyEntity.Id, existingOrder)));
