@@ -248,4 +248,3 @@ namespace DH.Helpdesk.Dal.NewInfrastructure
         }
     }
 }
-                              
