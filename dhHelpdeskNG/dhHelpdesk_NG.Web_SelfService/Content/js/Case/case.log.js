@@ -20,9 +20,7 @@ $(function () {
         selfService.caseLog.init = function () {
             this.changeState(false);
         };
-        
-        //bindDeleteNewCaseFileBehaviorToDeleteButtons();
-
+                
         selfService.caseLog.reloadLogFiles = function () {     
             $.get(getLogFilesUrl, { id: logFileKey, myTime: Date.now() }, function (files) {
                 selfService.caseLog.refreshLogFilesTable(files);
