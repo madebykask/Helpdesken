@@ -7,112 +7,30 @@
     var jsSerializer = new JavaScriptSerializer();
 }
 
-@Scripts.Render("~/Content/js/Case/edit")
+
 
 <script type="text/javascript">
-    window.appOptions = @Html.Raw(jsSerializer.Serialize(Model.JsApplicationOptions));
-    $(function() {
-        window.alreadyExistFileIds = [];
-        bindDeleteNewCaseFileBehaviorToDeleteButtons();       
+    window.appOptions = '@Html.Raw(jsSerializer.Serialize(Model.JsApplicationOptions))';
 
-        $('#NewCasefile_uploader').pluploadQueue({
-            url: '@this.Url.Action("NewCaseUploadFile")',
-            multipart_params: { Id: '@this.Model.CaseFileKey', curTime:Date.now() },
-            max_file_size: '10mb',
-
-            init: {
-                FileUploaded: function() {
-
-                    $.get('@this.Url.Action("NewCaseFiles")', { id: '@this.Model.CaseFileKey', curTime:Date.now()   }, function(files) {
-                        refreshNewCaseFilesTable(files);
-                    });
-                },
-
-                UploadComplete: function(up, file) {
-                    //plupload_add
-                    $(".plupload_buttons").css("display", "inline");
-                    $(".plupload_upload_status").css("display", "inline");
-                    up.refresh();
-                },
-
-                Error: function(uploader, e) {
-                    if (e.status != 409) {
-                        return;
-                    }
-
-                    window.alreadyExistFileIds.push(e.file.id);
-                },
-
-                StateChanged: function(uploader) {
-                    if (uploader.state != plupload.STOPPED) {
-                        return;
-                    }
-
-                    for (var i = 0; i < window.alreadyExistFileIds.length; i++) {
-                        var fileId = window.alreadyExistFileIds[i];
-                        $('#NewCasefile_uploader ul[class="plupload_filelist"] li[id="' + fileId + '"] div[class="plupload_file_action"] a').prop('title', '@Translation.Get("File already exists", Enums.TranslationSource.TextTranslation)');
-                    }
-
-                    window.alreadyExistFileIds.length = 0;
-                    uploader.refresh();
-                }
-
-            }
-        });
-
-        $('#NewCase_upload_files_popup').on('hidden.bs.modal', function () {
-            if ($('#NewCasefile_uploader') != undefined) {
-                if ($('#NewCasefile_uploader').pluploadQueue().files.length > 0) {
-                    if ($('#NewCasefile_uploader').pluploadQueue().state == plupload.UPLOADING)
-                        $('#NewCasefile_uploader').pluploadQueue().stop();
-
-                    while ($('#NewCasefile_uploader').pluploadQueue().files.length > 0) {
-                        $('#NewCasefile_uploader').pluploadQueue().removeFile($('#NewCasefile_uploader').pluploadQueue().files[0]);
-                    }
-                    $('#NewCasefile_uploader').pluploadQueue().refresh();
-                }
-            }
-        });        
-    });
-
-    function refreshNewCaseFilesTable(files) {
-        $('#NewCasefiles_table > tbody > tr').remove();
-
-        var fileMarkup;        
-
-        for (var i = 0; i < files.length; i++) {
-            var file = files[i];
-
-            fileMarkup =
-                $('<tr>' +
-                    '<td>' +
-                        '<i class="glyphicon glyphicon-file">&nbsp;</i><a style="color:blue" href="@this.Url.Action("DownloadNewCaseFile")?@(!string.IsNullOrEmpty(this.Model.CaseFileKey) ? "id=" + this.Model.CaseFileKey + "&" : string.Empty)' + 'fileName=' + file + '">' + file + '</a>' +
-                    '</td>' +
-                    '<td>' +
-                        '<a id="delete_file_button_' + i + '" class="btn btn-default btn-sm" ><span class="glyphicon glyphicon-remove"></span> </a>' +
-                    '</td>' +
-                    '</tr>');
-            
-                $('#NewCasefiles_table > tbody').append(fileMarkup);
-            }
-
-            bindDeleteNewCaseFileBehaviorToDeleteButtons();
-        }
-
-        function bindDeleteNewCaseFileBehaviorToDeleteButtons() {
-            $('#NewCasefiles_table a[id^="delete_file_button_"]').click(function () {
-                var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
-                var pressedDeleteFileButton = this;
-
-                $.post('@this.Url.Action("DeleteNewCaseFile")', { id: '@this.Model.CaseFileKey', fileName: fileName, curTime:Date.now() }, function () {
-                    $(pressedDeleteFileButton).parents('tr:first').remove();
-                });
-            });
-        }
-
-    
-
+    window.appParameters = {        
+        uploadCaseFileUrl: '@Url.Action("NewCaseUploadFile")',
+        caseFileKey: '@Model.CaseFileKey',
+        newCaseFilesUrl: '@Url.Action("NewCaseFiles")',
+        fileAlreadyExistsMsg: '@Html.Raw(Translation.Get("File already exists", Enums.TranslationSource.TextTranslation))',
+        downloadCaseFileUrl: '@Url.Action("DownloadNewCaseFile")',
+        downloadCaseFileParamUrl: '@(!string.IsNullOrEmpty(Model.CaseFileKey) ? "id=" + Model.CaseFileKey + "&" : string.Empty)',
+        deleteCaseFileUrl: '@Url.Action("DeleteNewCaseFile")',
+        searchUserUrl: '@Url.Content("~/Case/SearchUser")',
+        seachComputerUrl: '@Url.Content("~/Case/SearchComputer")',
+        saveNewCaseUrl: '@Url.Content("~/Case/NewCase")',
+        fetchDepartmentsUrl: '@Url.Content("~/Case/GetDepartmentsByRegion")',
+        fetchOUUrl: '@Url.Content("~/Case/GetOrgUnitsByDepartments")'
+    };
+       
 </script>
+
+@Scripts.Render("~/Content/js/Case/edit")
+
 <div class="jumbotron greybar">
         <div class="container-fluid">
             <ul class="secnav">                
@@ -728,7 +646,7 @@
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.Filename.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                                                
                                             </label>
                                             <div class="col-md-4">                                                
-                                                <a href="#NewCase_upload_files_popup" role="button" class="btn btn-default" data-toggle="modal">@Translation.Get("Add", Enums.TranslationSource.TextTranslation)</a>
+                                                <a href="#NewCase_upload_files_popup" role="button" class="btn btn-default" data-toggle="modal">@Translation.Get("Add", Enums.TranslationSource.TextTranslation)</a>                                                
                                                 <div id="NewCase_upload_files_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabel" aria-hidden="true">                                                    
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">                                                
@@ -745,6 +663,35 @@
                                                         </div>
                                                     </div>
                                                 </div>
+
+                                                <a href="#upload_clipboard_file_popup" role="button" class="btn btn-default" data-src="case">@Translation.Get("Add from clipboard", Enums.TranslationSource.TextTranslation)</a>
+                                                <div id="upload_clipboard_file_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabelCase" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                                <h3>&nbsp;</h3>
+                                                            </div>
+                                                            <div class="modal-body" style="max-height: 600px; text-align:center;">
+                                                                <form onsubmit="return false;">
+                                                                    <div class="form-group">
+                                                                        <label>@Translation.Get("File name", Enums.TranslationSource.TextTranslation): </label>
+                                                                        <input class="" type="text" id="imgFilename" required />
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label>@(Translation.Get("Preview") + " (" + Translation.Get("Copy image data into clipboard and press Ctrl+V", Enums.TranslationSource.TextTranslation) + ")"): </label>
+                                                                        <div id="previewPnl"></div>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" id="btnSave" class="btn btn-ok btn-default" style="display: none">@Translation.Get("Save", Enums.TranslationSource.TextTranslation)</button>
+                                                                <button type="button" id="btnCancel" class="btn btn-cancel btn-default" data-dismiss="modal">@Translation.Get("Cancel", Enums.TranslationSource.TextTranslation)</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>                                                    
+                                                </div>
+
                                                 <table id="NewCasefiles_table" class="table table-striped">
                                                     <tbody>
                                                         @if (this.Model.NewCase.CaseFiles == null)
@@ -773,247 +720,15 @@
     </div>
 </div>
 
-<script type="text/javascript">
-
-    $(document).ready(function () {
-        NewCaseInitForm();
-    });
-
-    var lastInitiatorSearchKey = ''
-
-    function NewCaseInitForm() {
-
-        $('#NewCase_ReportedBy').typeahead(_GetComputerUserSearchOptions());
-        $('#NewCase_InventoryNumber').typeahead(_GetComputerSearchOptions());
-    }
-
-    function generateRandomKey() {
-        function s4() {
-            return Math.floor((1 + Math.random()) * 0x10000)
-              .toString(16)
-              .substring(1);
-        }
-        return s4() + '-' + s4() + '-' + s4();
-    }
-
-    function _GetComputerUserSearchOptions() {
-
-        var options = {
-            items: 20,
-            minLength: 2,
-
-            source: function (query, process) {
-                lastInitiatorSearchKey = generateRandomKey();
-                return $.ajax({
-                    url: '@Url.Content("~/Case/SearchUser")',
-                    type: 'post',
-                    data: { query: query, customerId: $('#NewCase_Customer_Id').val(), searchKey: lastInitiatorSearchKey },
-                    dataType: 'json',
-                    success: function (result) {
-                        if (result.searchKey != lastInitiatorSearchKey)
-                            return;                        
-
-                        var resultList = jQuery.map(result.result, function (item) {
-                            var aItem = {
-                                id: item.Id
-                                , num: item.UserId                                   
-                                , name: item.FirstName + ' ' + item.SurName
-                                , email: item.Email
-                                , place: item.Location
-                                , phone: item.Phone
-                                , usercode: item.UserCode
-                                , cellphone: item.CellPhone
-                                , regionid: item.Region_Id
-                                , regionname: item.RegionName
-                                , departmentid: item.Department_Id
-                                , departmentname: item.DepartmentName
-                                , ouid: item.OU_Id
-                                , ouname: item.OUName
-                                , name_family: item.SurName + ' ' + item.FirstName
-                                , customername: item.CustomerName
-                                , costcentre: item.CostCentre
-                                
-                            };
-                            return JSON.stringify(aItem);
-                        
-                        });
-
-                        return process(resultList);
-                    }
-                });
-            },          
-
-            matcher: function (obj) {            
-                var item = JSON.parse(obj);                
-                return ~item.name.toLowerCase().indexOf(this.query.toLowerCase())
-                    || ~item.name_family.toLowerCase().indexOf(this.query.toLowerCase())
-                    || ~item.num.toLowerCase().indexOf(this.query.toLowerCase())
-                    || ~item.phone.toLowerCase().indexOf(this.query.toLowerCase())
-                    || ~item.email.toLowerCase().indexOf(this.query.toLowerCase())
-                    || ~item.usercode.toLowerCase().indexOf(this.query.toLowerCase());                
-            },
-
-            sorter: function (items) {
-                var beginswith = [], caseSensitive = [], caseInsensitive = [], item;
-                while (aItem = items.shift()) {
-                    var item = JSON.parse(aItem);
-                    if (!item.num.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
-                    else if (~item.num.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
-                    else caseInsensitive.push(JSON.stringify(item));
-                }
-
-                return beginswith.concat(caseSensitive, caseInsensitive);
-            },
-          
-
-            highlighter: function (obj) {
-                var item = JSON.parse(obj);
-                var orgQuery = this.query;
-                if (item.departmentname == null)
-                    item.departmentname = ""
-                var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
-                var result = item.name + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email + ' - ' + item.departmentname + ' - ' + item.usercode;
-                var resultBy_NameFamily = item.name_family + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email + ' - ' + item.departmentname + ' - ' + item.usercode;
-                     
-                if (result.toLowerCase().indexOf(orgQuery.toLowerCase()) > -1)               
-                    return result.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
-                        return '<strong>' + match + '</strong>';
-                    });
-                else
-                    return resultBy_NameFamily.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
-                        return '<strong>' + match + '</strong>';
-                    });
-           
-            },
-
-            updater: function (obj) {
-
-                var item = JSON.parse(obj);
-                //console.log(JSON.stringify(item));
-                $('#NewCase_ReportedBy').val(item.num);
-                $('#NewCase_PersonsName').val(item.name);
-                $('#NewCase_PersonsEmail').val(item.email);
-                $('#NewCase_PersonsPhone').val(item.phone);
-                $('#NewCase_PersonsCellphone').val(item.cellphone);
-                $('#NewCase_Place').val(item.place);
-                $('#NewCase_UserCode').val(item.usercode);
-                $('#NewCase_Region_Id').val(item.regionid);
-                window.app.setOrganizationData(item.regionid, item.departmentid, item.ouid);
-
-                return item.num;
-            }
-        };
-
-        return options;
-    }
-
-    function _GetComputerSearchOptions() {
-
-        var options = {
-            items: 20,
-            minLength: 2,
-
-            source: function (query, process) {
-                return $.ajax({
-                    url: '@Url.Content("~/Case/SearchComputer")',
-                    type: 'post',
-                    data: { query: query, customerId: $('#NewCase_Customer_Id').val() },
-                    dataType: 'json',
-                    success: function (result) {
-                        var resultList = jQuery.map(result, function (item) {
-                            var aItem = {
-                                id: item.Id
-                                , num: item.ComputerName
-                                , location: item.Location
-                                , computertype: item.ComputerTypeDescription
-                            };
-                            return JSON.stringify(aItem);
-                        });
-
-                        return process(resultList);
-                    }
-                });
-            },
-
-            matcher: function (obj) {
-                var item = JSON.parse(obj);                
-                return ~item.num.toLowerCase().indexOf(this.query.toLowerCase())
-                    || ~item.computertype.toLowerCase().indexOf(this.query.toLowerCase())
-                    || ~item.location.toLowerCase().indexOf(this.query.toLowerCase());
-            },
-
-            sorter: function (items) {
-                var beginswith = [], caseSensitive = [], caseInsensitive = [], item;
-                while (aItem = items.shift()) {
-                    var item = JSON.parse(aItem);
-                    if (!item.num.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
-                    else if (~item.num.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
-                    else caseInsensitive.push(JSON.stringify(item));
-                }
-
-                return beginswith.concat(caseSensitive, caseInsensitive);
-            },
-
-            highlighter: function (obj) {
-                var item = JSON.parse(obj);
-                var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
-                var result = item.num + ' - ' + item.location + ' - ' + (item.computertype == null ? ' ' : item.computertype);
-
-                return result.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
-                    return '<strong>' + match + '</strong>';
-                });
-            },
-
-            updater: function (obj) {
-                var item = JSON.parse(obj);                         
-                $('#NewCase_InventoryNumber').val(item.num);
-                $('#NewCase_InventoryType').val(item.computertype);
-                $('#NewCase_InventoryLocation').val(item.location);
-
-                return item.num;
-            }
-        };
-
-        return options;
-    }
+<script type="text/javascript">     
+        
+   
 
     function NewCase() {
         $("#NewCaseForm").attr("action", '@Url.Content("~/Case/NewCase")');
         $("#NewCaseForm").submit();
     }
-    
-    $('#divProductArea ul.dropdown-menu li a').click(function (e) {
-        e.preventDefault();
-        var val = $(this).attr('value');
-        $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(this));       
-        var ee = document.getElementById("NewCase_ProductArea_Id");
-        ee.setAttribute('value', val);
-    });
-
-    $('#divCaseType ul.dropdown-menu li a').click(function (e) {
-        e.preventDefault();       
-        var val = $(this).attr('value');
-        $("#divBreadcrumbs_CaseType").text(getBreadcrumbs(this));        
-        var ee = document.getElementById("NewCase.CaseType_Id");        
-        ee.setAttribute('value', val);
-    });
-
-    $('#divCaseTypeSetting ul.dropdown-menu li a').click(function (e) {
-        e.preventDefault();
-        var val = $(this).attr('value');
-        $("#divBreadcrumbs_CaseTypeSetting").text(getBreadcrumbs(this));        
-        var ee = document.getElementById("NewCase_CaseType_Id");
-        ee.setAttribute('value', val);        
-    });
-
-    $('#divProductAreaSetting ul.dropdown-menu li a').click(function (e) {
-        e.preventDefault();
-        var val = $(this).attr('value');
-        $("#divBreadcrumbs_ProductAreaSetting").text(getBreadcrumbs(this));
-        var ee = document.getElementById("NewCase_ProductArea_Id");
-        ee.setAttribute('value', val);
-    });
-
+       
     var validator = $("#NewCaseForm").validate({
         ignore: "",
         rules: {
@@ -1245,7 +960,3 @@
         return ret;
     }
 </script>
-
-@*<script 
-    src="../content/js/case/edit.js">
-</script>*@

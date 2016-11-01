@@ -1,166 +1,46 @@
-﻿//function Application() { }
-
+﻿
 $(function () {
     (function ($) {
 
-        window.Application = window.Application || {};
-        window.Application.prototype = window.Application.prototype || {};
+        window.selfService = window.selfService || {};
+        window.selfService.caseLog = window.selfService.caseLog || {};
 
-        var uploadCaseFileUrl = window.appParameters.uploadCaseFileUrl;
-        var caseFileKey = window.appParameters.caseFileKey;
-        var newCaseFilesUrl = window.appParameters.newCaseFilesUrl;
+        var uploadLogFileUrl = window.appParameters.uploadLogFileUrl;
+        var logFileKey = window.appParameters.logFileKey;
+        var getLogFilesUrl = window.appParameters.getLogFilesUrl; 
         var fileAlreadyExistsMsg = window.appParameters.fileAlreadyExistsMsg;
-        var downloadCaseFileUrl = window.appParameters.downloadCaseFileUrl;
-        var downloadCaseFileParamUrl = window.appParameters.downloadCaseFileParamUrl;
-        var deleteCaseFileUrl = window.appParameters.deleteCaseFileUrl;
-        var searchUserUrl = window.appParameters.searchUserUrl;
-        var seachComputerUrl = window.appParameters.seachComputerUrl;
-        var saveNewCaseUrl = window.appParameters.saveNewCaseUrl;
-        var departmentsUrl = window.appParameters.fetchDepartmentsUrl;
-        var OUsUrl = window.appParameters.fetchOUUrl;
+        var deleteLogFileUrl = window.appParameters.deleteLogFileUrl; 
+        var downloadLogFileUrl = window.appParameters.downloadLogFileUrl;
+        var downloadLogFileParamUrl = window.appParameters.downloadLogFileParamUrl;        
+        var saveLogMessageUrl = window.appParameters.saveLogMessageUrl; 
+        var casePreviewId = window.appParameters.casePreviewId;       
 
-        var customerId;
         var alreadyExistFileIds = [];
 
-        Application.prototype.init = function () {
-            var me = this;
-            //me.opt = opt || {};
+        selfService.caseLog.init = function () {
+            this.changeState(false);
+        };
+        
+        //bindDeleteNewCaseFileBehaviorToDeleteButtons();
 
-            customerId = $('#NewCase_Customer_Id').val();
-            me.$regionControl = $('#NewCase_Region_Id');
-            me.$departmentControl = $('#NewCase_Department_Id');
-            me.$orgUnitControl = $('#NewCase_Ou_Id');
-
-            $('#NewCase_ReportedBy').typeahead(Application.prototype._GetComputerUserSearchOptions());
-            $('#NewCase_InventoryNumber').typeahead(Application.prototype._GetComputerSearchOptions());
-
-            // Remove after implementing http://redmine.fastdev.se/issues/10995
-            me.$regionControl.on('change', function () {
-                me.refreshDepartment.call(me, $(this).val());
-            });
-
-            me.$departmentControl.on('change', function () {
-                // Remove after implementing http://redmine.fastdev.se/issues/10995        
-                var departmentId = $(this).val();
-                me.refreshOrganizationUnit(departmentId);
+        selfService.caseLog.reloadLogFiles = function () {     
+            $.get(getLogFilesUrl, { id: logFileKey, myTime: Date.now() }, function (files) {
+                selfService.caseLog.refreshLogFilesTable(files);
             });
         };
 
-        /**
-        * @public
-        * @param { number } regionId
-        * @param { number } departmentId
-        * @param { number } selectedOrgUnitId
-        */
-        Application.prototype.setOrganizationData = function (regionId, departmentId, selectedOrgUnitId) {
-            var me = this;
-
-            me.$departmentControl.children().remove();
-            me.$orgUnitControl.children().remove();
-            //if (me.isIdExistsInSelect(me.$regionControl, regionId)) {
-            me.refreshDepartment(regionId, departmentId, selectedOrgUnitId);
-            //}
-        };
-
-        /**
-        * @private
-        * @param { jQueryElement } $select
-        * @param { optionId } int
-        */
-        Application.prototype.isIdExistsInSelect = function ($select, optionId) {
-            var keyToFind = 'option[value=' + optionId + ']';
-            var opt = $select.find(keyToFind);
-            return opt != null && opt.length > 0;
-        }
-
-        /**
-        * @private
-        * @param { number } regionId
-        * @param { number } selectedId = null
-        * @param { number } selectedOrgUnitId = null
-        */
-        Application.prototype.refreshDepartment = function (regionId, selectedId, selectedOrgUnitId) {
-            var me = this;
-            me.$departmentControl.val('').find('option').remove();
-            me.$departmentControl.append('<option value="">&nbsp;</option>');
-
-            $.get(departmentsUrl, {
-                'id': regionId,
-                'customerId': customerId,
-                'departmentFilterFormat': 0
-            }, function (resp) {
-                if (resp != null && resp.success) {
-                    me.$departmentControl.append(me.makeOptionsFromIdName(resp.data));
-                    if (selectedId != null && me.isIdExistsInSelect(me.$departmentControl, selectedId)) {
-                        me.$departmentControl.val(selectedId);
-                    }
-                }
-            }, 'json').always(function () {
-                me.$departmentControl.prop('disabled', false);
-                me.refreshOrganizationUnit(me.$departmentControl.val(), selectedOrgUnitId);
-            });
-        };
-
-        /**
-        * @private
-        * @param { number } selectedRegionId
-        * @param { number } filterFormat department filter format
-        * @param { number } selectedId = null
-        */
-        Application.prototype.refreshOrganizationUnit = function (departmentId, selectedId) {
-            var me = this;
-            me.$orgUnitControl.val('').find('option').remove();
-            me.$orgUnitControl.append('<option value="">&nbsp;</option>');
-            $.get(OUsUrl, {
-                'id': departmentId,
-                'customerId': customerId,
-                'departmentFilterFormat': 0
-            }, function (resp) {
-                if (resp != null && resp.success) {
-                    me.$orgUnitControl.append(me.makeOptionsFromIdName(resp.data));
-                    if (selectedId != null && me.isIdExistsInSelect(me.$orgUnitControl, selectedId)) {
-                        me.$orgUnitControl.val(selectedId);
-                    }
-                }
-            }, 'json').always(function () {
-                me.$orgUnitControl.prop('disabled', false);
-            });
-        };
-
-        /**
-        * @private
-        * @param { { number: id, string: name}[] } data
-        * @returns string
-        */
-        Application.prototype.makeOptionsFromIdName = function (data) {
-            var content = [];
-            for (var i = 0; i < data.length; i++) {
-                var item = data[i];
-                content.push("<option value='" + item.id + "'>" + item.name + "</option>");
-            }
-            return content.join('');
-        }
-
-
-
-        //Application.prototype.bindDeleteNewCaseFileBehaviorToDeleteButtons();
-        var lastInitiatorSearchKey = ''
-
-        $('#NewCasefile_uploader').pluploadQueue({
-            url: uploadCaseFileUrl,
-            multipart_params: { Id: caseFileKey, curTime: Date.now() },
+        $('#Log_uploader').pluploadQueue({
+            runtimes: 'html5,html4',
+            url: uploadLogFileUrl,
+            multipart_params: { Id: logFileKey, myTime: Date.now() },
             max_file_size: '10mb',
 
             init: {
                 FileUploaded: function () {
-
-                    $.get(newCaseFilesUrl, { id: caseFileKey, curTime: Date.now() }, function (files) {
-                        Application.prototype.refreshNewCaseFilesTable(files);
-                    });
+                    selfService.caseLog.reloadLogFiles();
                 },
 
                 UploadComplete: function (up, file) {
-                    //plupload_add
                     $(".plupload_buttons").css("display", "inline");
                     $(".plupload_upload_status").css("display", "inline");
                     up.refresh();
@@ -168,9 +48,9 @@ $(function () {
 
                 Error: function (uploader, e) {
                     if (e.status != 409) {
+                        console.error(e);
                         return;
                     }
-
                     alreadyExistFileIds.push(e.file.id);
                 },
 
@@ -181,7 +61,7 @@ $(function () {
 
                     for (var i = 0; i < alreadyExistFileIds.length; i++) {
                         var fileId = alreadyExistFileIds[i];
-                        $('#NewCasefile_uploader ul[class="plupload_filelist"] li[id="' + fileId + '"] div[class="plupload_file_action"] a').prop('title', fileAlreadyExistsMsg);
+                        $('#Log_uploader ul[class="plupload_filelist"] li[id="' + fileId + '"] div[class="plupload_file_action"] a').prop('title', fileAlreadyExistsMsg);
                     }
 
                     alreadyExistFileIds = [];
@@ -190,283 +70,53 @@ $(function () {
             }
         });
 
-        $('#NewCase_upload_files_popup').on('hidden.bs.modal', function () {
-            if ($('#NewCasefile_uploader') != undefined) {
-                if ($('#NewCasefile_uploader').pluploadQueue().files.length > 0) {
-                    if ($('#NewCasefile_uploader').pluploadQueue().state == plupload.UPLOADING)
-                        $('#NewCasefile_uploader').pluploadQueue().stop();
+        $('#Log_upload_files_popup').on('hidden.bs.modal', function () {
+            if ($('#Log_uploader') != undefined) {
+                if ($('#Log_uploader').pluploadQueue().files.length > 0) {
+                    if ($('#Log_uploader').pluploadQueue().state == plupload.UPLOADING)
+                        $('#Log_uploader').pluploadQueue().stop();
 
-                    while ($('#NewCasefile_uploader').pluploadQueue().files.length > 0) {
-                        $('#NewCasefile_uploader').pluploadQueue().removeFile($('#NewCasefile_uploader').pluploadQueue().files[0]);
+                    while ($('#Log_uploader').pluploadQueue().files.length > 0) {
+                        $('#Log_uploader').pluploadQueue().removeFile($('#Log_uploader').pluploadQueue().files[0]);
                     }
-                    $('#NewCasefile_uploader').pluploadQueue().refresh();
+                    $('#Log_uploader').pluploadQueue().refresh();
                 }
             }
         });
 
-        Application.prototype.refreshNewCaseFilesTable = function (files) {
-            $('#NewCasefiles_table > tbody > tr').remove();
-
+        selfService.caseLog.refreshLogFilesTable = function (files) {
+            $('#LogFile_table > tbody > tr').remove();
             var fileMarkup;
-
             for (var i = 0; i < files.length; i++) {
                 var file = files[i];
-
                 fileMarkup =
                     $('<tr>' +
                         '<td>' +
-                            '<i class="glyphicon glyphicon-file">&nbsp;</i><a style="color:blue" href=' + downloadCaseFileUrl + '?' + downloadCaseFileParamUrl + 'fileName=' + file + '>' + file + '</a>' +
+                            '<i class="glyphicon glyphicon-file">&nbsp;</i><a style="color:blue" href=' + downloadLogFileUrl + '?' + downloadLogFileParamUrl + 'fileName=' + file + '">' + file + '</a>' +
                         '</td>' +
                         '<td>' +
                             '<a id="delete_file_button_' + i + '" class="btn btn-default btn-sm" ><span class="glyphicon glyphicon-remove"></span> </a>' +
                         '</td>' +
-                        '</tr>');
+                      '</tr>');
 
-                $('#NewCasefiles_table > tbody').append(fileMarkup);
+                $('#LogFile_table > tbody').append(fileMarkup);
             }
 
-            Application.prototype.bindDeleteNewCaseFileBehaviorToDeleteButtons();
+            this.bindDeleteLogFileToDeleteButtons();
         }
 
-        Application.prototype.bindDeleteNewCaseFileBehaviorToDeleteButtons = function () {
-            $('#NewCasefiles_table a[id^="delete_file_button_"]').click(function () {
+        selfService.caseLog.bindDeleteLogFileToDeleteButtons = function () {
+            $('#LogFile_table a[id^="delete_file_button_"]').click(function () {
                 var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
                 var pressedDeleteFileButton = this;
 
-                $.post(deleteCaseFileUrl, { id: caseFileKey, fileName: fileName, curTime: Date.now() }, function () {
+                $.post(deleteLogFileUrl, { id: logFileKey, fileName: fileName, myTime: Date.now() }, function () {
                     $(pressedDeleteFileButton).parents('tr:first').remove();
                 });
             });
-        }
+        }        
 
-        Application.prototype.generateRandomKey = function () {
-            function s4() {
-                return Math.floor((1 + Math.random()) * 0x10000)
-                  .toString(16)
-                  .substring(1);
-            }
-            return s4() + '-' + s4() + '-' + s4();
-        }
-
-        Application.prototype._GetComputerUserSearchOptions = function () {
-            var me = this;
-
-            var options = {
-                items: 20,
-                minLength: 2,
-
-                source: function (query, process) {
-                    lastInitiatorSearchKey = Application.prototype.generateRandomKey();
-
-                    return $.ajax({
-                        url: searchUserUrl,
-                        type: 'post',
-                        data: { query: query, customerId: $('#NewCase_Customer_Id').val(), searchKey: lastInitiatorSearchKey },
-                        dataType: 'json',
-                        success: function (result) {
-                            if (result.searchKey != lastInitiatorSearchKey)
-                                return;
-
-                            var resultList = jQuery.map(result.result, function (item) {
-                                var aItem = {
-                                    id: item.Id
-                                    , num: item.UserId
-                                    , name: item.FirstName + ' ' + item.SurName
-                                    , email: item.Email
-                                    , place: item.Location
-                                    , phone: item.Phone
-                                    , usercode: item.UserCode
-                                    , cellphone: item.CellPhone
-                                    , regionid: item.Region_Id
-                                    , regionname: item.RegionName
-                                    , departmentid: item.Department_Id
-                                    , departmentname: item.DepartmentName
-                                    , ouid: item.OU_Id
-                                    , ouname: item.OUName
-                                    , name_family: item.SurName + ' ' + item.FirstName
-                                    , customername: item.CustomerName
-                                    , costcentre: item.CostCentre
-
-                                };
-                                return JSON.stringify(aItem);
-
-                            });
-
-                            return process(resultList);
-                        }
-                    });
-                },
-
-                matcher: function (obj) {
-                    var item = JSON.parse(obj);
-                    return ~item.name.toLowerCase().indexOf(this.query.toLowerCase())
-                        || ~item.name_family.toLowerCase().indexOf(this.query.toLowerCase())
-                        || ~item.num.toLowerCase().indexOf(this.query.toLowerCase())
-                        || ~item.phone.toLowerCase().indexOf(this.query.toLowerCase())
-                        || ~item.email.toLowerCase().indexOf(this.query.toLowerCase())
-                        || ~item.usercode.toLowerCase().indexOf(this.query.toLowerCase());
-                },
-
-                sorter: function (items) {
-                    var beginswith = [], caseSensitive = [], caseInsensitive = [], item;
-                    while (aItem = items.shift()) {
-                        var item = JSON.parse(aItem);
-                        if (!item.num.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
-                        else if (~item.num.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
-                        else caseInsensitive.push(JSON.stringify(item));
-                    }
-
-                    return beginswith.concat(caseSensitive, caseInsensitive);
-                },
-
-                highlighter: function (obj) {
-                    var item = JSON.parse(obj);
-                    var orgQuery = this.query;
-                    if (item.departmentname == null)
-                        item.departmentname = ""
-                    var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
-                    var result = item.name + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email + ' - ' + item.departmentname + ' - ' + item.usercode;
-                    var resultBy_NameFamily = item.name_family + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email + ' - ' + item.departmentname + ' - ' + item.usercode;
-
-                    if (result.toLowerCase().indexOf(orgQuery.toLowerCase()) > -1)
-                        return result.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
-                            return '<strong>' + match + '</strong>';
-                        });
-                    else
-                        return resultBy_NameFamily.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
-                            return '<strong>' + match + '</strong>';
-                        });
-
-                },
-
-                updater: function (obj) {
-
-                    var item = JSON.parse(obj);
-                    //console.log(JSON.stringify(item));
-                    $('#NewCase_ReportedBy').val(item.num);
-                    $('#NewCase_PersonsName').val(item.name);
-                    $('#NewCase_PersonsEmail').val(item.email);
-                    $('#NewCase_PersonsPhone').val(item.phone);
-                    $('#NewCase_PersonsCellphone').val(item.cellphone);
-                    $('#NewCase_Place').val(item.place);
-                    $('#NewCase_UserCode').val(item.usercode);
-                    $('#NewCase_Region_Id').val(item.regionid);
-                    me.setOrganizationData(item.regionid, item.departmentid, item.ouid);
-
-                    return item.num;
-                }
-            };
-
-            return options;
-        }
-
-        Application.prototype._GetComputerSearchOptions = function () {
-
-            var options = {
-                items: 20,
-                minLength: 2,
-
-                source: function (query, process) {
-                    return $.ajax({
-                        url: seachComputerUrl,
-                        type: 'post',
-                        data: { query: query, customerId: $('#NewCase_Customer_Id').val() },
-                        dataType: 'json',
-                        success: function (result) {
-                            var resultList = jQuery.map(result, function (item) {
-                                var aItem = {
-                                    id: item.Id
-                                    , num: item.ComputerName
-                                    , location: item.Location
-                                    , computertype: item.ComputerTypeDescription
-                                };
-                                return JSON.stringify(aItem);
-                            });
-
-                            return process(resultList);
-                        }
-                    });
-                },
-
-                matcher: function (obj) {
-                    var item = JSON.parse(obj);
-                    return ~item.num.toLowerCase().indexOf(this.query.toLowerCase())
-                        || ~item.computertype.toLowerCase().indexOf(this.query.toLowerCase())
-                        || ~item.location.toLowerCase().indexOf(this.query.toLowerCase());
-                },
-
-                sorter: function (items) {
-                    var beginswith = [], caseSensitive = [], caseInsensitive = [], item;
-                    while (aItem = items.shift()) {
-                        var item = JSON.parse(aItem);
-                        if (!item.num.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
-                        else if (~item.num.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
-                        else caseInsensitive.push(JSON.stringify(item));
-                    }
-
-                    return beginswith.concat(caseSensitive, caseInsensitive);
-                },
-
-                highlighter: function (obj) {
-                    var item = JSON.parse(obj);
-                    var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
-                    var result = item.num + ' - ' + item.location + ' - ' + (item.computertype == null ? ' ' : item.computertype);
-
-                    return result.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
-                        return '<strong>' + match + '</strong>';
-                    });
-                },
-
-                updater: function (obj) {
-                    var item = JSON.parse(obj);
-                    $('#NewCase_InventoryNumber').val(item.num);
-                    $('#NewCase_InventoryType').val(item.computertype);
-                    $('#NewCase_InventoryLocation').val(item.location);
-
-                    return item.num;
-                }
-            };
-
-            return options;
-        }
-
-        //Application.prototype.NewCase = function () {
-        //    $("#NewCaseForm").attr("action", saveNewCaseUrl);
-        //    $("#NewCaseForm").submit();
-        //}
-
-        $('#divProductArea ul.dropdown-menu li a').click(function (e) {
-            e.preventDefault();
-            var val = $(this).attr('value');
-            $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(this));
-            var ee = document.getElementById("NewCase_ProductArea_Id");
-            ee.setAttribute('value', val);
-        });
-
-        $('#divCaseType ul.dropdown-menu li a').click(function (e) {
-            e.preventDefault();
-            var val = $(this).attr('value');
-            $("#divBreadcrumbs_CaseType").text(getBreadcrumbs(this));
-            var ee = document.getElementById("NewCase.CaseType_Id");
-            ee.setAttribute('value', val);
-        });
-
-        $('#divCaseTypeSetting ul.dropdown-menu li a').click(function (e) {
-            e.preventDefault();
-            var val = $(this).attr('value');
-            $("#divBreadcrumbs_CaseTypeSetting").text(getBreadcrumbs(this));
-            var ee = document.getElementById("NewCase_CaseType_Id");
-            ee.setAttribute('value', val);
-        });
-
-        $('#divProductAreaSetting ul.dropdown-menu li a').click(function (e) {
-            e.preventDefault();
-            var val = $(this).attr('value');
-            $("#divBreadcrumbs_ProductAreaSetting").text(getBreadcrumbs(this));
-            var ee = document.getElementById("NewCase_ProductArea_Id");
-            ee.setAttribute('value', val);
-        });
-
+        /*********** Paste image from clipboard************/        
         var curFileName;
         var globalClipboard;
 
@@ -637,26 +287,18 @@ $(function () {
                 var imgFilenameCtrl = uploadModal.find("#imgFilename");
                 var key;
                 var submitUrl;
-                var refredhCallback;
+                var refreshdhCallback;
                 var imgFilename = imgFilenameCtrl.val();
 
-                if (source == 'case') {
-                    key = caseFileKey;
-                    submitUrl = uploadCaseFileUrl;
-                    refredhCallback = function () {
-                        $.get(newCaseFilesUrl, { id: caseFileKey, curTime: Date.now() }, function (files) {
-                            Application.prototype.refreshNewCaseFilesTable(files);
-                        });
+                if (source == 'log') {
+                    key = logFileKey;
+                    submitUrl = uploadLogFileUrl;
+                    refreshdhCallback = function () {
+                        selfService.caseLog.reloadLogFiles();
                     }
                 }
-                /*else {
-                    key = '@Model.CaseFileKey';
-                    submitUrl = '/Case/UploadLogFile';
-                    refredhCallback = getLogFiles;
-                }*/
-
-                
-                imgFilename = 'image_' + Application.prototype.generateRandomKey();
+                              
+                imgFilename = 'image_' + selfService.caseLog.generateRandomKey();
                 
                 if (imgFilename.indexOf('.') === -1) {
                     imgFilename = imgFilename + '.' + extension;
@@ -678,7 +320,7 @@ $(function () {
                             contentType: false
                         }).done(function (data) {
                             //console.log(data);
-                            refredhCallback();
+                            refreshdhCallback();
                             uploadModal.modal("hide");
                         });
                     }
@@ -686,22 +328,9 @@ $(function () {
                 $btnSave.show();
             }
         }
-
-        //$('#upload_clipboard_file_popup').on('hide', function () {
-
-        //    $("#previewPnl").empty();
-        //    var $uploadModal = $('#upload_clipboard_file_popup');
-        //    var $btnSave = $uploadModal.find('#btnSave');
-        //    $btnSave.hide();
-        //    $btnSave.off('click');
-        //    $uploadModal.find("input").val('');
-
-        //    var clipboard = new ClipboardClass();
-        //    clipboard.reset();
-        //});
-
+     
         function clearScene() {
-            curFileName = 'image_' + Application.prototype.generateRandomKey();
+            curFileName = 'image_' + selfService.caseLog.generateRandomKey();
             $("#previewPnl").empty();
             var $uploadModal = $('#upload_clipboard_file_popup');
             var $btnSave = $uploadModal.find('#btnSave');
@@ -716,18 +345,56 @@ $(function () {
         }
 
         $("a[href='#upload_clipboard_file_popup']").on('click', function (e) {
-
             var $src = $(this);
             var $target = $('#upload_clipboard_file_popup');
             $target.attr('data-src', $src.attr('data-src'));
-
             globalClipboard = new ClipboardClass();
             resetClipboard();
             $target.modal('show');            
             globalClipboard.init.call(globalClipboard, $(e.target).attr('data-src'));
         });
+
+        
+
+        selfService.caseLog.saveLogMessage = function() {            
+            var note = $('#logNote').val();
+            if (note == "") {
+                ShowToastMessage('Comment text is empty!', "warning", false);
+            } else {
+                this.changeState(true);
+                $.get(saveLogMessageUrl, { caseId: casePreviewId, note: note, logFileGuid: logFileKey }, function (_CaseLogNoteMarkup) {
+                    $('#Receipt_CaseLogPartial').html(_CaseLogNoteMarkup);
+                    $('#logNote').val('');
+                    selfService.caseLog.reloadLogFiles();
+                    selfService.caseLog.changeState(false);
+                });
+            }
+        }
+
+        var buttonsToLock = $('#btnSendLog, #btnLoadFromClipboard, #btnUploadFile');
+
+        selfService.caseLog.changeState = function (locked) {
+            if (locked) {
+                buttonsToLock.addClass("disabled");
+                buttonsToLock.css("pointer-events", "none");
+                $("#sendLogIndicator").css("display", "inline-block");
+            } else {
+                buttonsToLock.removeClass('disabled');
+                buttonsToLock.css("pointer-events", "");
+                $("#sendLogIndicator").css("display", "none");
+            }
+        }
        
     })($);
     
-    Application.prototype.init();
+    selfService.caseLog.generateRandomKey = function () {
+        function s4() {
+            return Math.floor((1 + Math.random()) * 0x10000)
+              .toString(16)
+              .substring(1);
+        }
+        return s4() + '-' + s4() + '-' + s4();
+    }
+
+    selfService.caseLog.init();
 });
