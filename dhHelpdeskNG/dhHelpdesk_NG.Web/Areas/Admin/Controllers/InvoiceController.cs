@@ -75,9 +75,18 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var allInvoiceArticles = invoiceArticleService.GetArticles(customerId);
 
             // TODO: need to get latest filter from session 
-            var filter = new InvoiceArticleProductAreaSelectedFilter();
-            model.Rows = GetIndexRowModel(customerId, filter, allInvoiceArticles);
+            InvoiceArticleProductAreaSelectedFilter CS = new InvoiceArticleProductAreaSelectedFilter();
+            if (SessionFacade.CurrentInvoiceArticleProductAreaSearch != null)
+            {
+                CS = SessionFacade.CurrentInvoiceArticleProductAreaSearch;
+                
+            }
+
+            var filter = CS;
             
+            //var filter = new InvoiceArticleProductAreaSelectedFilter();
+            model.Rows = GetIndexRowModel(customerId, filter, allInvoiceArticles);
+            model.IAPSearch_Filter = CS;
             model.InvoiceArticles = allInvoiceArticles.OrderBy(a => a.Number).ToList();
             model.ProductAreas = lastLevels.OrderBy(l=> l.Name).ToList();
             return this.View(model);
@@ -161,6 +170,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         public PartialViewResult _ArticleProductAreaIndexRows(InvoiceArticleProductAreaFilterJSModel filter)
         {
             var selectedSearch = filter.MapToSelectedFilter();
+
+            SessionFacade.CurrentInvoiceArticleProductAreaSearch = selectedSearch;
             var model = GetIndexRowModel(selectedSearch.CustomerId, selectedSearch, null);
             return PartialView(model);            
         }
