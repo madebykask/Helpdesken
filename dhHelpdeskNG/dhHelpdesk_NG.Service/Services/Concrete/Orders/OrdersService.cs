@@ -198,36 +198,38 @@
 
         public SearchResponse Search(SearchParameters parameters)
         {
-            var settings = this.orderFieldSettingsService.GetOrdersFieldSettingsOverview(parameters.CustomerId, parameters.OrderTypeId);
-            using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
-            {
-                var orderTypeRep = uow.GetRepository<OrderType>();
-                var orderTypes = orderTypeRep.GetAll()
-                                    .GetOrderTypes(parameters.CustomerId).ToList();
+			var settings = this.orderFieldSettingsService.GetOrdersFieldSettingsOverview(parameters.CustomerId, parameters.OrderTypeId);
+			using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
+			{
+				var orderTypeRep = uow.GetRepository<OrderType>();
+				var orderTypes = orderTypeRep.GetAll()
+									.GetOrderTypes(parameters.CustomerId).ToList();
+				var rootOrderType = orderTypes.Where(ot => ot.Id == parameters.OrderTypeId).ToList();
+				var orderTypeDescendants = GetChildrenInRow(rootOrderType, true).ToList();
+				orderTypeDescendants.AddRange(rootOrderType);
+				var orderRep = uow.GetRepository<Order>();
 
-                var orderRep = uow.GetRepository<Order>();
-                
-                var overviews = orderRep.GetAll().Search(
-                                    parameters.CustomerId,
-                                    parameters.OrderTypeId,
-                                    parameters.AdministratorIds,
-                                    parameters.StartDate,
-                                    parameters.EndDate,
-                                    parameters.StatusIds,
-                                    parameters.Phrase,
-                                    parameters.SortField,
-                                    parameters.SelectCount);
+				var overviews = orderRep.GetAll().Search(
+									parameters.CustomerId,
+									orderTypeDescendants.Select(ot => ot.Id).ToArray(),
+									parameters.AdministratorIds,
+									parameters.StartDate,
+									parameters.EndDate,
+									parameters.StatusIds,
+									parameters.Phrase,
+									parameters.SortField,
+									parameters.SelectCount);
 
-                var caseNumbers = overviews.Where(o => o.CaseNumber.HasValue).Select(o => o.CaseNumber).ToList();
-                var caseRep = uow.GetRepository<Case>();
-                var caseEntities = caseRep.GetAll().Where(c => caseNumbers.Contains(c.CaseNumber)).ToList();
+				var caseNumbers = overviews.Where(o => o.CaseNumber.HasValue).Select(o => o.CaseNumber).ToList();
+				var caseRep = uow.GetRepository<Case>();
+				var caseEntities = caseRep.GetAll().Where(c => caseNumbers.Contains(c.CaseNumber)).ToList();
 
-                var orderData = overviews.MapToFullOverviews(orderTypes, caseEntities);
+				var orderData = overviews.MapToFullOverviews(orderTypes, caseEntities);
 
-                var searchResult = new SearchResult(orderData.Count(), orderData);
-                return new SearchResponse(settings, searchResult);                                
-            }
-        }
+				var searchResult = new SearchResult(orderData.Count(), orderData);
+				return new SearchResponse(settings, searchResult);
+			}
+		}
 
         public NewOrderEditData GetNewOrderEditData(int customerId, int orderTypeId, int? lowestchildordertypeid)
         {
