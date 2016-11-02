@@ -411,7 +411,7 @@
                                 //var AbsoluteUrl = RequestExtension.GetAbsoluteUrl();
                                 var AbsoluteUrl = "";
 
-                                var siteHelpdesk = AbsoluteUrl + "Areas/Orders/edit/" + request.Order.Id.ToString();
+                                var siteHelpdesk = AbsoluteUrl + "Areas/Orders/edit/" + orderId;
                                 var e_res = this.emailService.SendEmail(customEmailSender1, el.EMailAddress, m.Subject, m.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, null, siteSelfService, siteHelpdesk);
 
                                 //el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
@@ -453,8 +453,8 @@
                                 //var AbsoluteUrl = RequestExtension.GetAbsoluteUrl();
                                 var AbsoluteUrl = "";
 
-                                var siteHelpdesk = AbsoluteUrl + "Areas/Orders/edit/" + request.Order.Id.ToString();
-                                var e_res = this.emailService.SendEmail(customEmailSender1, el.EMailAddress, m.Subject, m.Body, null, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, null, siteSelfService, siteHelpdesk);
+                                var siteHelpdesk = AbsoluteUrl + "Areas/Orders/edit/" + orderId;
+                                var e_res = this.emailService.SendEmail(customEmailSender1, el.EMailAddress, m.Subject, m.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, null, siteSelfService, siteHelpdesk);
 
                                 //el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                                 var now = DateTime.Now;
