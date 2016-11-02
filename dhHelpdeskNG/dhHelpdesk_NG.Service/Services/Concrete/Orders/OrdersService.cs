@@ -389,7 +389,7 @@
                     var currentUser = this.userRepository.GetById(request.UserId);
                     var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(currentUser.TimeZoneId);
                     // get list of fields to replace [#1] tags in the subjcet and body texts
-                    List<Field> fields = GetOrderFieldsForEmail(request, string.Empty, userTimeZone);
+                    List<Field> fields = GetOrderFieldsForEmail(entity, string.Empty, userTimeZone);
                     var customer = this._customerRepository.GetById(request.CustomerId);
 
                     var customEmailSender1 = customer.HelpdeskEmail;
@@ -405,14 +405,14 @@
                             {
 
                                 var el = new OrderEMailLog(orderId, historyEntity.Id, 40, curMail, customEmailSender1);
-                                fields = GetOrderFieldsForEmail(request, el.OrderEMailLogGUID.ToString(), userTimeZone);
+                                fields = GetOrderFieldsForEmail(entity, el.OrderEMailLogGUID.ToString(), userTimeZone);
                                 string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.OrderEMailLogGUID.ToString();
 
                                 //var AbsoluteUrl = RequestExtension.GetAbsoluteUrl();
                                 var AbsoluteUrl = "";
 
                                 var siteHelpdesk = AbsoluteUrl + "Areas/Orders/edit/" + request.Order.Id.ToString();
-                                var e_res = this.emailService.SendEmail(customEmailSender1, el.EMailAddress, m.Subject, m.Body, null, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, null, siteSelfService, siteHelpdesk);
+                                var e_res = this.emailService.SendEmail(customEmailSender1, el.EMailAddress, m.Subject, m.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, null, siteSelfService, siteHelpdesk);
 
                                 //el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                                 var now = DateTime.Now;
@@ -431,7 +431,7 @@
                     var currentUser = this.userRepository.GetById(request.UserId);
                     var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(currentUser.TimeZoneId);
                     // get list of fields to replace [#1] tags in the subjcet and body texts
-                    List<Field> fields = GetOrderFieldsForEmail(request, string.Empty, userTimeZone);
+                    List<Field> fields = GetOrderFieldsForEmail(entity, string.Empty, userTimeZone);
                     var customer = this._customerRepository.GetById(request.CustomerId);
 
                     var customEmailSender1 = customer.HelpdeskEmail;
@@ -447,7 +447,7 @@
                             {
 
                                 var el = new OrderEMailLog(orderId, historyEntity.Id, 40, curMail, customEmailSender1);
-                                fields = GetOrderFieldsForEmail(request, el.OrderEMailLogGUID.ToString(), userTimeZone);
+                                fields = GetOrderFieldsForEmail(entity, el.OrderEMailLogGUID.ToString(), userTimeZone);
                                 string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.OrderEMailLogGUID.ToString();
 
                                 //var AbsoluteUrl = RequestExtension.GetAbsoluteUrl();
@@ -522,13 +522,13 @@
             }
         }
 
-        private List<Field> GetOrderFieldsForEmail(UpdateOrderRequest o, string emailLogGuid, TimeZoneInfo userTimeZone)
+        private List<Field> GetOrderFieldsForEmail(Order o, string emailLogGuid, TimeZoneInfo userTimeZone)
         {
             List<Field> ret = new List<Field>();
 
             //var userLocal_RegTime = TimeZoneInfo.ConvertTimeFromUtc(o.DateAndTime, userTimeZone);
 
-            ret.Add(new Field { Key = "[#61]", StringValue = o.Order.Id.ToString() });
+            ret.Add(new Field { Key = "[#61]", StringValue = o.Id.ToString() });
             //ret.Add(new Field { Key = "[#16]", StringValue = userLocal_RegTime.ToString() });
 
             return ret;
