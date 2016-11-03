@@ -1,5 +1,6 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
-@model DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule.BRActionModel
+﻿@using DH.Helpdesk.Web.AppCode.Html
+@using DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
+@model BRActionModel
 @{
     ViewBag.Title = "Rule Actions";
 }
@@ -7,69 +8,45 @@
 
 <h4>@Translation.Get("Actions")</h4>
 
-<table >          
-    <tbody>       
+<table>
+    <tbody>
         <tr>
             <td class="span2"> @Translation.Get("Mail Template") </td>
             <td>
-                @Html.DropDownListFor(x => x.EmailTemplateId, Model.EMailTemplates, "", new { @id = "lstEmailTemplates", name = "lstEmailTemplates", @class = "BR-chosen-single-select"})
+                @Html.DropDownListFor(x => x.EmailTemplateId, (List<SelectListItem>)@ViewBag.EMailTemplates, "", new { @id = "lstEmailTemplates", name = "lstEmailTemplates", @class = "BR-chosen-single-select" })
                 @Html.ValidationMessageFor(x => x.EmailTemplateId)
-            </td>            
+            </td>
         </tr>
-        <tr>      
+        <tr>
             <td>
                 @Translation.Get("Email Group")
-            </td>           
+            </td>
             <td>
-                @{var mailGroupSelected = string.Join(",", Model.EMailGroups.Where(p => p.Selected).Select(p => p.Value));}
-                <select id="lstEmailGroups" name="lstEmailGroups" class="BR-chosen-select" multiple="multiple">  
-                    @foreach (var emailGroup in Model.EMailGroups)
-                    {
-                        <option value="@emailGroup.Value" @emailGroup.Value.ValueIsSelected(mailGroupSelected) class="@(emailGroup.Disabled ? "DisabledChosen" : "")">
-                            @emailGroup.Text
-                        </option>
-                    }
-                </select>
-            </td>                              
-        </tr>        
-        <tr>      
+                @Html.ListBoxExtendedOptionsFor(x => x.EMailGroupIds, (List<DdlModel>)@ViewBag.EMailGroups, new { @id = "lstEmailGroups", @name = "lstEmailGroups", @class = "BR-chosen-select", @multiple = "" }, x => ((DdlModel)x).Disabled ? "DisabledChosen" : "")
+            </td>
+        </tr>
+        <tr>
             <td>
                 @Translation.Get("Working Group")
-            </td>           
+            </td>
             <td>
-                @{var workingGroupSelected = string.Join(",", Model.WorkingGroups.Where(p => p.Selected).Select(p => p.Value));}
-                <select id="lstWorkingGroups" name="lstWorkingGroups" class="BR-chosen-select" multiple="multiple">  
-                    @foreach (var workingGroup in Model.WorkingGroups)
-                    {
-                        <option value="@workingGroup.Value" @workingGroup.Value.ValueIsSelected(workingGroupSelected) class="@(workingGroup.Disabled ? "DisabledChosen" : "")">
-                            @workingGroup.Text
-                        </option>
-                    }
-                </select>
-            </td>                              
-        </tr> 
-        <tr>      
+                @Html.ListBoxExtendedOptionsFor(x => x.WorkingGroupIds, (List<DdlModel>)@ViewBag.WorkingGroups, new { @id = "lstWorkingGroups", @name = "lstWorkingGroups", @class = "BR-chosen-select", @multiple = "" }, x => ((DdlModel)x).Disabled ? "DisabledChosen" : "")
+            </td>
+        </tr>
+        <tr>
             <td>
                 @Translation.Get("Administrator")
-            </td>           
+            </td>
             <td>
-                @{var selectedItems = string.Join(",", Model.Administrators.Where(p => p.Selected).Select(p => p.Value));}
-                <select id="lstAdministrators" name="lstAdministrators" class="BR-chosen-select" multiple="multiple">  
-                    @foreach (var administrator in Model.Administrators)
-                    {
-                        <option value="@administrator.Value" @administrator.Value.ValueIsSelected(selectedItems) class="@(administrator.Disabled ? "DisabledChosen" : "")">
-                            @administrator.Text
-                        </option>
-                    }
-                </select>              
-            </td>                              
-        </tr>              
+                @Html.ListBoxExtendedOptionsFor(x => x.AdministratorIds, (List<DdlModel>)@ViewBag.Administrators, new { @id = "lstAdministrators", @name = "lstAdministrators", @class = "BR-chosen-select", @multiple = "" }, x => ((DdlModel)x).Disabled ? "DisabledChosen" : "")
+            </td>
+        </tr>
         <tr>
             <td class="span2">
                 @Translation.Get("Recipients", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
-                @Html.TextBoxFor(m => Model.Recipients, new { id="recipients", @class="BR-text"})
+                @Html.TextBoxFor(m => Model.Recipients, new { id = "recipients", @class = "BR-text" })
             </td>
         </tr>
         <tr>
@@ -77,7 +54,7 @@
                 @Translation.Get("Skapad av", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
-                @Html.CheckBoxFor(m => Model.CaseCreator, new {@class = "switchcheckbox", id = "caseCreator"})
+                @Html.CheckBoxFor(m => Model.CaseCreator, new { @class = "switchcheckbox", id = "caseCreator" })
             </td>
         </tr>
         <tr>
@@ -85,7 +62,7 @@
                 @Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
-                @Html.CheckBoxFor(m => Model.Initiator, new {@class = "switchcheckbox", id = "initiator"})
+                @Html.CheckBoxFor(m => Model.Initiator, new { @class = "switchcheckbox", id = "initiator" })
             </td>
         </tr>
         <tr>
@@ -93,10 +70,8 @@
                 @Translation.Get("Angående", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
-                @Html.CheckBoxFor(m => Model.CaseIsAbout, new { @class = "switchcheckbox", id = "caseIsAbout"})
+                @Html.CheckBoxFor(m => Model.CaseIsAbout, new { @class = "switchcheckbox", id = "caseIsAbout" })
             </td>
         </tr>
-    </tbody>    
+    </tbody>
 </table>
-
-
