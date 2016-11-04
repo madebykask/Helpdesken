@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
+using DH.Helpdesk.Web.AppCode.Attributes;
+using DH.Helpdesk.Web.AppCode.Constants;
 
 namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
 {
@@ -73,12 +75,16 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
 
 		public int RuleId { get; set; }
 
+		[RequiredIfNotEmpty("lstProcessTo", ErrorMessage = ErrorMessages.IsRequired)]
 		public ICollection<string> ProcessesFromValue { get; set; }
 
+		[RequiredIfNotEmpty("lstProcessFrom", ErrorMessage = ErrorMessages.IsRequired)]
 		public ICollection<string> ProcessesToValue { get; set; }
 
+		[RequiredIfNotEmpty("lstSubStatusTo", ErrorMessage = ErrorMessages.IsRequired)]
 		public ICollection<string> SubStatusesFromValue { get; set; }
 
+		[RequiredIfNotEmpty("lstSubStatusFrom", ErrorMessage = ErrorMessages.IsRequired)]
 		public ICollection<string> SubStatusesToValue { get; set; }
 
 		public int Sequence { get; set; }

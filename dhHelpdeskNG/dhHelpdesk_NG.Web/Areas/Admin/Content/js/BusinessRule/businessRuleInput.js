@@ -43,10 +43,11 @@
             var validator = $form.data("validator");
 
             $.extend(validator.settings, {
-                ignore: ":hidden:not(.BR-chosen-single-select)",
+                ignore: ":hidden:not(.BR-chosen-single-select, .BR-chosen-select)",
                 highlight: function (element, errorClass, validClass) {
                     var $element = $(element);
-                    if ($element.hasClass("BR-chosen-single-select")) {
+                    if ($element.hasClass("BR-chosen-single-select")
+                        || $element.hasClass("BR-chosen-select")) {
                         var chosenSelectInput = $element.next().find(".chosen-choices");
                         if (chosenSelectInput.length > 0) {
                             element = chosenSelectInput[0];
@@ -59,7 +60,8 @@
                 },
                 unhighlight: function (element, errorClass, validClass) {
                     var $element = $(element);
-                    if ($element.hasClass("BR-chosen-single-select")) {
+                    if ($element.hasClass("BR-chosen-single-select")
+                        || $element.hasClass("BR-chosen-select")) {
                         var chosenSelectInput = $element.next().find(".chosen-choices");
                         if (chosenSelectInput.length > 0) {
                             element = chosenSelectInput[0];
