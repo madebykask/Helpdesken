@@ -1106,6 +1106,7 @@ namespace DH.Helpdesk.Web.Controllers
                 // move case to another customer
                 if (moveToCustomerId.HasValue)
                 {
+                    m.MovedFromCustomerId = m.case_.Customer_Id;
                     m.case_.Customer_Id = moveToCustomerId.Value;
                     m.case_.CaseType_Id = 0;
                     m.case_.ProductArea_Id = null;
@@ -2292,8 +2293,9 @@ namespace DH.Helpdesk.Web.Controllers
         /// <param name="m"></param>
         /// <returns></returns>
         private int Save(CaseEditInput m)
-        {
+        {            
             var utcNow = DateTime.UtcNow;
+            var movedFromCustomerId = m.MovedFromCustomerId;
             var case_ = m.case_;
             var caseLog = m.caseLog;
             var caseMailSetting = m.caseMailSetting;
@@ -2671,6 +2673,16 @@ namespace DH.Helpdesk.Web.Controllers
             // save log files
             var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseLog.Id, this.workContext.User.UserId)).ToList();
             this._logFileService.AddFiles(newLogFiles);
+
+            if (movedFromCustomerId.HasValue)
+            {
+                var fromBasePath = _masterDataService.GetFilePath(movedFromCustomerId.Value);
+                if (!fromBasePath.Equals(basePath, StringComparison.CurrentCultureIgnoreCase))
+                {
+                    this._caseFileService.MoveCaseFiles(case_.CaseNumber.ToString(), fromBasePath, basePath);
+                    this._logFileService.MoveLogFiles(case_.Id, fromBasePath, basePath);
+                }
+            }
 
             caseMailSetting.CustomeMailFromAddress = mailSenders;
             // send emails

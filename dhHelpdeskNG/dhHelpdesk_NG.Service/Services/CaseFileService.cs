@@ -16,6 +16,7 @@
         List<string> FindFileNamesByCaseId(int caseId);
         void AddFile(CaseFileDto caseFileDto);
         void AddFiles(List<CaseFileDto> caseFileDtos);
+        void MoveCaseFiles(string caseNumber, string fromBasePath, string toBasePath);
         bool FileExists(int caseId, string fileName);
         void DeleteByCaseIdAndFileName(int caseId, string basePath, string fileName);
 
@@ -67,6 +68,11 @@
 
             int caseNo = this._caseFileRepository.GetCaseNumberForUploadedFile(caseFileDto.ReferenceId);
             this._filesStorage.SaveFile(caseFileDto.Content, caseFileDto.BasePath, caseFileDto.FileName, ModuleName.Cases, caseNo);
+        }
+
+        public void MoveCaseFiles(string caseNumber, string fromBasePath, string toBasePath)
+        {
+            this._caseFileRepository.MoveCaseFiles(caseNumber, fromBasePath, toBasePath); 
         }
 
         public void DeleteByCaseIdAndFileName(int caseId, string basePath, string fileName)

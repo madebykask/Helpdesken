@@ -16,6 +16,7 @@ using System;
         byte[] GetFileContentByIdAndFileName(int caseId, string basePath, string fileName);
         bool FileExists(int caseId, string fileName);
         void DeleteByCaseIdAndFileName(int caseId, string basePath, string fileName);
+        void MoveCaseFiles(string caseNumber, string fromBasePath, string toBasePath);
         int GetCaseNumberForUploadedFile(int caseId);
         CaseFileModel[] GetCaseFiles(int caseId, bool canDelete);
         List<CaseFile> GetCaseFilesByDate(DateTime? fromDate, DateTime? toDate);
@@ -53,6 +54,11 @@ using System;
             }
             int id = GetCaseNumberForUploadedFile(caseId);
             this._filesStorage.DeleteFile(ModuleName.Cases, id, basePath, fileName);
+        }
+
+        public void MoveCaseFiles(string caseNumber, string fromBasePath, string toBasePath)
+        {
+            _filesStorage.MoveDirectory(ModuleName.Cases, caseNumber, fromBasePath, toBasePath);
         }
 
         public List<string> FindFileNamesByCaseId(int caseId)

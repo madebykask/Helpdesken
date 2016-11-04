@@ -203,7 +203,7 @@
                         @Html.HiddenFor(model => model.case_.Unread)
                         @Html.HiddenFor(model => model.ProductAreaHasChild)
                         @Html.HiddenFor(model => model.CustomerSettings.ModuleCaseInvoice) 
-                        
+                        @Html.HiddenFor(model => model.MovedFromCustomerId) 
                         
                         @Html.Hidden("WriteTextToExternalNote", Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()))
                         @Html.Hidden("Today", DateTime.Now.ToShortDateString())
@@ -538,14 +538,14 @@
                                                 @if (Model.case_.IsAbout != null && Model.case_.IsAbout.Department_Id != null)
                                                 {
                                                     var curDep = Model.departments.Where(d => d.Id == Model.case_.IsAbout.Department_Id).SingleOrDefault();
-                                                    @curDep.DepartmentName 
+                                                    @(curDep != null ? curDep.DepartmentName : "")
                                                 } &nbsp;
                                                 @if (Model.case_.IsAbout != null && Model.case_.IsAbout.OU_Id != null)
                                                 {
                                                     if (Model.isaboutous != null)
                                                     {
                                                         var curOu = Model.isaboutous.Where(w => w.Id == Model.case_.IsAbout.OU_Id).SingleOrDefault();
-                                                        @curOu.Name 
+                                                        @(curOu != null ? curOu.Name : "")                                                        
                                                     }
                                                 }
                                 </h4>
