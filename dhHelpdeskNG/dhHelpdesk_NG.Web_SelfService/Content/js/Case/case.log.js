@@ -170,11 +170,7 @@ $(function () {
                     if (pasteCatcher.children.length === 1) {
                         if (pasteCatcher.firstElementChild.src != undefined) {
                             //image
-                            clearScene();
-                            setTimeout(function () {
-                                pasteCatcher.innerHTML = '';
-                            }, 50);
-
+                            clearScene();                           
                             self.paste_createImage(pasteCatcher.firstElementChild.src);
                             var blob = self.dataURItoBlob(pasteCatcher.firstElementChild.src);
                             self.allowSave(blob);
@@ -212,6 +208,7 @@ $(function () {
                             }
                         }
                         if (blob !== null) {
+                            clearScene();
                             var URLObj = window.URL || window.webkitURL;
                             var source = URLObj.createObjectURL(blob);
                             this.paste_createImage(source);
@@ -351,9 +348,7 @@ $(function () {
             $target.modal('show');            
             globalClipboard.init.call(globalClipboard, $(e.target).attr('data-src'));
         });
-
         
-
         selfService.caseLog.saveLogMessage = function() {            
             var note = $('#logNote').val();
             if (note == "") {

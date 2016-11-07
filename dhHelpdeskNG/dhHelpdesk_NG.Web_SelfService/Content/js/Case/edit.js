@@ -1,6 +1,7 @@
 ﻿//function Application() { }
 
-$(function () {
+$(function () {    
+
     (function ($) {
 
         window.Application = window.Application || {};
@@ -428,12 +429,7 @@ $(function () {
             };
 
             return options;
-        }
-
-        //Application.prototype.NewCase = function () {
-        //    $("#NewCaseForm").attr("action", saveNewCaseUrl);
-        //    $("#NewCaseForm").submit();
-        //}
+        } 
 
         $('#divProductArea ul.dropdown-menu li a').click(function (e) {
             e.preventDefault();
@@ -522,11 +518,7 @@ $(function () {
                     if (pasteCatcher.children.length === 1) {
                         if (pasteCatcher.firstElementChild.src != undefined) {
                             //image
-                            clearScene();
-                            setTimeout(function () {
-                                pasteCatcher.innerHTML = '';
-                            }, 50);
-
+                            clearScene();                            
                             self.paste_createImage(pasteCatcher.firstElementChild.src);
                             var blob = self.dataURItoBlob(pasteCatcher.firstElementChild.src);
                             self.allowSave(blob);
@@ -564,10 +556,11 @@ $(function () {
                             }
                         }
                         if (blob !== null) {
+                            clearScene();
                             var URLObj = window.URL || window.webkitURL;
                             var source = URLObj.createObjectURL(blob);
                             this.paste_createImage(source);
-                            this.allowSave(blob);
+                            this.allowSave(blob);                            
                         }
                         e.preventDefault();
                     }
@@ -649,12 +642,7 @@ $(function () {
                         });
                     }
                 }
-                /*else {
-                    key = '@Model.CaseFileKey';
-                    submitUrl = '/Case/UploadLogFile';
-                    refredhCallback = getLogFiles;
-                }*/
-
+                
                 
                 imgFilename = 'image_' + Application.prototype.generateRandomKey();
                 
@@ -664,12 +652,15 @@ $(function () {
 
                 imgFilenameCtrl.val(imgFilename);
                 $btnSave.on('click', function () {
+                    if (imgFilenameCtrl.val() == "")
+                        return;
+
                     var fd = new FormData();
                     uploadModal.find('form').submit();
                     if (imgFilenameCtrl[0].validity.valid) {
                         fd.append('name', imgFilenameCtrl.val());
                         fd.append('id', key);
-                        fd.append('file', blob);
+                        fd.append('file', blob);                        
                         $.ajax({
                             type: 'POST',
                             url: submitUrl,
@@ -685,20 +676,7 @@ $(function () {
                 });
                 $btnSave.show();
             }
-        }
-
-        //$('#upload_clipboard_file_popup').on('hide', function () {
-
-        //    $("#previewPnl").empty();
-        //    var $uploadModal = $('#upload_clipboard_file_popup');
-        //    var $btnSave = $uploadModal.find('#btnSave');
-        //    $btnSave.hide();
-        //    $btnSave.off('click');
-        //    $uploadModal.find("input").val('');
-
-        //    var clipboard = new ClipboardClass();
-        //    clipboard.reset();
-        //});
+        }       
 
         function clearScene() {
             curFileName = 'image_' + Application.prototype.generateRandomKey();

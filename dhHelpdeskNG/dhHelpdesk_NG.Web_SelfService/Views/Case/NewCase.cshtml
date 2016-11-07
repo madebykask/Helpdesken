@@ -33,14 +33,10 @@
 
 <div class="jumbotron greybar">
         <div class="container-fluid">
-            <ul class="secnav">                
-               @* <li>
-                    <a href="#" class="btn btn-default">Cancel request</a>
-                </li>*@
-                <li>                    
-                    @Html.ActionLink(Translation.Get("Save and Send", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "$('#NewCaseForm').submit();return false;", @class = "btn btn-default" })
-                </li>
-                
+            <ul class="secnav">                               
+                <li>                                        
+                    <input type="button" value='@Translation.Get("Save and Send", Enums.TranslationSource.TextTranslation)' onclick = "SaveNewCase(); return false;" class = "btn btn-default" /> 
+                </li>                
             </ul>
         </div>
     </div>
@@ -55,7 +51,7 @@
         <div id="fragment-1" class="tab-pane active">
             <div class="container-fluid dh-container">
 
-                @using (Html.BeginForm("NewCase", "case", null, FormMethod.Post, new { id = "NewCaseForm" }))
+                @using (Html.BeginForm("NewCase", "case", null, FormMethod.Post, new { id = "newCaseForm" }))
                 {
                     @Html.HiddenFor(model => model.NewCase.Id)
                     @Html.HiddenFor(model => model.NewCase.CaseGUID)
@@ -676,7 +672,7 @@
                                                                 <form onsubmit="return false;">
                                                                     <div class="form-group">
                                                                         <label>@Translation.Get("File name", Enums.TranslationSource.TextTranslation): </label>
-                                                                        <input class="" type="text" id="imgFilename" required />
+                                                                        <input class="" type="text" id="imgFilename" />
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label>@(Translation.Get("Preview") + " (" + Translation.Get("Copy image data into clipboard and press Ctrl+V", Enums.TranslationSource.TextTranslation) + ")"): </label>
@@ -721,15 +717,24 @@
 </div>
 
 <script type="text/javascript">     
-        
-   
+    
+    var $mainForm = $("#newCaseForm");
 
-    function NewCase() {
-        $("#NewCaseForm").attr("action", '@Url.Content("~/Case/NewCase")');
-        $("#NewCaseForm").submit();
+    function SaveNewCase() {
+        if (!isFormValid()) {            
+            return;
+        }
+
+        $mainForm.attr("action", '@Url.Content("~/Case/NewCase")');
+        $mainForm.submit();
     }
-       
-    var validator = $("#NewCaseForm").validate({
+     
+    function isFormValid() {        
+        var validator = $mainForm.validate();
+        return validator.form();        
+    }
+
+    var validator = $mainForm.validate({
         ignore: "",
         rules: {
                     "NewCase.ReportedBy": {
@@ -954,7 +959,7 @@
 
     function FieldIsRequired(value) {
         var ret = false;
-        if (value == '1') {
+        if (value == '1') {            
             ret = true;
         }
         return ret;
