@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Dal.Repositories
+﻿using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+
+namespace DH.Helpdesk.Dal.Repositories
 {
     using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Dal.Enums;
@@ -37,7 +39,7 @@
             
             var query = string.Format("SELECT path, filename{0}scope() " +
                                       "WHERE FREETEXT(Contents,'%{1}%')",
-                                       _FROM_CLAUSE, searchText);
+                                       _FROM_CLAUSE, searchText.SafeForSqlInject());
 
             var indexQuery = GetIndexQueryText(serverName, catalogName, query);            
             using (var con = new OleDbConnection(_INDEXING_SERVICE_PROVIDER_CONNECTION_STRING))

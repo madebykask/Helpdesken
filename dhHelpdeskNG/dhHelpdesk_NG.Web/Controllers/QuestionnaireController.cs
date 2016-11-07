@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Controllers
+﻿using DH.Helpdesk.BusinessData.Models.Questionnaire;
+
+namespace DH.Helpdesk.Web.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -456,17 +458,20 @@
         }
 
         [HttpGet]
-        public ViewResult CircularOverview(int questionnaireId)
+        public ViewResult CircularOverview(int questionnaireId, int? statusId)
         {
+            var ensuredStatusId = statusId ?? CircularStateId.All;
             List<CircularOverviewModel> circularOverviews = this.CreateCircularOverviewModels(
                 questionnaireId,
-                CircularStateId.All);
+                ensuredStatusId);
 
             var viewModel = new CircularOverviewViewModel(
                 questionnaireId,
                 circularOverviews,
-                CircularStateId.ReadyToSend,
+                ensuredStatusId,
                 new ReportFilter(new List<int>()));
+
+            ViewData["StatusId"] = ensuredStatusId;
 
             return this.View(viewModel);
         }
@@ -476,13 +481,15 @@
         {
             List<CircularOverviewModel> circularOverviews = this.CreateCircularOverviewModels(questionnaireId, show);
             ViewBag.QuestionnaireId = questionnaireId; // todo
+            ViewData["StatusId"] = show;
 
             return this.PartialView("CircularOverviewGrid", circularOverviews);
         }
 
         [HttpGet]
-        public ViewResult NewCircular(int questionnaireId)
+        public ViewResult NewCircular(int questionnaireId, int? backStatusId)
         {
+            ViewBag.BackStatusId = backStatusId;
             var model = GetCircularModel(
                 0,
                 questionnaireId,
@@ -495,8 +502,9 @@
         }
 
         [HttpGet]
-        public ViewResult EditCircular(int circularId)
+        public ViewResult EditCircular(int circularId, int? backStatusId)
         {
+            ViewBag.BackStatusId = backStatusId;
             CircularForEdit circular = this._circularService.GetById(circularId);
 
             List<ConnectedCase> connectedCases = this._circularService.GetConnectedCases(circularId);
@@ -520,65 +528,82 @@
                 circular.Status,
                 connecteCasesOverviews);
 
+            model.CaseFilter = new CircularCaseFilter
+            {
+                IsUniqueEmail = circular.CaseFilter.IsUniqueEmail,
+                FinishingDateFrom = circular.CaseFilter.FinishingDateFrom,
+                FinishingDateTo = circular.CaseFilter.FinishingDateTo,
+                SelectedProcent = circular.CaseFilter.SelectedProcent,
+                SelectedDepartments = circular.CaseFilter.SelectedDepartments,
+                SelectedCaseTypes = circular.CaseFilter.SelectedCaseTypes,
+                SelectedProductAreas = circular.CaseFilter.SelectedProductAreas,
+                SelectedWorkingGroups = circular.CaseFilter.SelectedWorkingGroups
+            };
+
             return this.View(model);
         }
 
         [HttpPost]
-        public RedirectToRouteResult DeleteCircular(int questionnaireId, int stateId, int circularId)
+        public RedirectToRouteResult DeleteCircular(int questionnaireId, int circularId, int? backStatusId)
         {
             this._circularService.DeleteById(circularId);
 
-            return this.RedirectToAction("CircularOverview", new { questionnaireId, state = stateId });
+            return this.RedirectToAction("CircularOverview", new { questionnaireId, statusId = backStatusId });
         }
 
         [HttpPost]
-        public ActionResult EditCircular(CircularModel newCircular, int[] connectedCases)
+        public ActionResult EditCircular(CircularModel newCircular, int[] connectedCases, int? backStatusId)
         {
             var cases = connectedCases == null || connectedCases.Count() == 0
                             ? new List<int>()
                             : connectedCases.ToList();
 
+            var caseFilter = new BusinessData.Models.Questionnaire.CircularCaseFilter
+            {
+                IsUniqueEmail = newCircular.CaseFilter.IsUniqueEmail,
+                FinishingDateFrom = newCircular.CaseFilter.FinishingDateFrom,
+                FinishingDateTo = newCircular.CaseFilter.FinishingDateTo,
+                SelectedDepartments = newCircular.CaseFilter.SelectedDepartments,
+                SelectedCaseTypes = newCircular.CaseFilter.SelectedCaseTypes,
+                SelectedProductAreas = newCircular.CaseFilter.SelectedProductAreas,
+                SelectedWorkingGroups = newCircular.CaseFilter.SelectedWorkingGroups,
+                SelectedProcent = newCircular.CaseFilter.SelectedProcent
+            };
+
             if (newCircular.Id == 0)
             {
                 var circular = new CircularForInsert(newCircular.CircularName, newCircular.QuestionnaireId,
-                    CircularStateId.ReadyToSend, DateTime.Now, cases);
+                    CircularStateId.ReadyToSend, DateTime.Now, cases, caseFilter);
 
                 this._circularService.AddCircular(circular);
             }
             else
             {
-                var circular = new CircularForUpdate(newCircular.Id, newCircular.CircularName, DateTime.Now, cases);
+                var circular = new CircularForUpdate(newCircular.Id, newCircular.CircularName, DateTime.Now, cases, caseFilter);
                 this._circularService.UpdateCircular(circular);
             }
 
             return this.RedirectToAction(
                 "CircularOverview",
-                new { questionnaireId = newCircular.QuestionnaireId, state = CircularStateId.All });
+                new { questionnaireId = newCircular.QuestionnaireId, statusId = backStatusId });
         }
 
         [HttpPost]
         public PartialViewResult CaseRowGrid(
             int questionnaireId,
-            int[] selectedDepartments,
-            int[] selectedCaseTypes,
-            int[] selectedProductArea,
-            int[] selectedWorkingGroups,
-            int procent,
-            DateTime? finishingDateFrom,
-            DateTime? finishingDateTo,
-            bool isUniqueEmail)
+            CircularCaseFilter caseFilter)
         {
             List<AvailableCase> cases = this._circularService.GetAvailableCases(
                 SessionFacade.CurrentCustomer.Id,
                 questionnaireId,
-                selectedDepartments,
-                selectedCaseTypes,
-                selectedProductArea,
-                selectedWorkingGroups,
-                procent,
-                finishingDateFrom,
-                finishingDateTo,
-                isUniqueEmail);
+                caseFilter.SelectedDepartments,
+                caseFilter.SelectedCaseTypes,
+                caseFilter.SelectedProductAreas,
+                caseFilter.SelectedWorkingGroups,
+                caseFilter.SelectedProcent,
+                caseFilter.FinishingDateFrom,
+                caseFilter.FinishingDateTo,
+                caseFilter.IsUniqueEmail);
 
             List<ConnectedToCircularOverview> models =
                 cases.Select(c => new ConnectedToCircularOverview(0, c.CaseId, c.CaseNumber, c.Caption, c.Email, Guid.Empty, c.IsSent))
@@ -589,21 +614,21 @@
         }
 
         [HttpGet]
-        public RedirectToRouteResult Send(int circularId)
+        public RedirectToRouteResult Send(int circularId, int? backStatusId)
         {
             string actionUrl = this.CreateQuestionnarieUrl();
             this._circularService.SendQuestionnaire(actionUrl, circularId, this.OperationContext);
 
-            return this.RedirectToAction("EditCircular", new { circularId });
+            return this.RedirectToAction("EditCircular", new { circularId, backStatusId });
         }
 
         [HttpGet]
-        public RedirectToRouteResult Remind(int circularId)
+        public RedirectToRouteResult Remind(int circularId, int? backStatusId)
         {
             string actionUrl = this.CreateQuestionnarieUrl();
             this._circularService.Remind(actionUrl, circularId, this.OperationContext);
 
-            return this.RedirectToAction("EditCircular", new { circularId });
+            return this.RedirectToAction("EditCircular", new { circularId, backStatusId });
         }
 
         [HttpGet]
@@ -702,15 +727,13 @@
                 departmentsOrginal.Select(x => new SelectListItem { Text = x.DepartmentName, Value = x.Id.ToString() })
                     .ToList();
 
-            var selectedDpOrginal = new List<SelectListItem>();
-            var selectedDp = selectedDpOrginal.ToList();
+            var selectedDp = new List<int>();
 
             var caseTypesOrginal = _caseTypeService.GetCaseTypes(SessionFacade.CurrentCustomer.Id);
             var availableCt =
                 caseTypesOrginal.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() }).ToList();
 
-            var selectedCtOrginal = new List<SelectListItem>();
-            var selectedCt = selectedCtOrginal.ToList();
+            var selectedCt = new List<int>();
 
 
             var productAreaOrginal = this._productAreaService.GetTopProductAreasForUser(
@@ -719,8 +742,7 @@
             var availablePa =
                 productAreaOrginal.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() }).ToList();
 
-            var selectedPaOrginal = new List<SelectListItem>();
-            var selectedPa = selectedPaOrginal.ToList();
+            var selectedPa = new List<int>();
 
 
             var workingGroupsOrginal = _workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id);
@@ -728,8 +750,7 @@
                 workingGroupsOrginal.Select(
                     x => new SelectListItem { Text = x.WorkingGroupName, Value = x.Id.ToString() }).ToList();
 
-            var selectedWgOrginal = new List<SelectListItem>();
-            var selectedWg = selectedWgOrginal.ToList();
+            var selectedWg = new List<int>();
 
             var model = new CircularModel(
                 circularId,
@@ -759,8 +780,8 @@
 
             model.ModelMode = 0;
 
-            model.FinishingDateFrom = null;
-            model.FinishingDateTo = null;
+            model.CaseFilter.FinishingDateFrom = null;
+            model.CaseFilter.FinishingDateTo = null;
 
             return model;
         }

@@ -29,6 +29,8 @@
 
         public int? customerRegistrationSourceId { get; set; }
 
+        public int? MovedFromCustomerId { get; set; }
+        
         public CaseLockModel caseLock { get; set; }
 
         public int? ParentId { get; set; }

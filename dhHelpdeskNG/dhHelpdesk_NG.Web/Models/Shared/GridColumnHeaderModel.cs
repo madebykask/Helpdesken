@@ -14,7 +14,6 @@
         [NotNullAndEmpty]
         public string FieldName { get; private set; }
 
-        [NotNullAndEmpty]
         public string Caption { get; private set; }
     }
 }

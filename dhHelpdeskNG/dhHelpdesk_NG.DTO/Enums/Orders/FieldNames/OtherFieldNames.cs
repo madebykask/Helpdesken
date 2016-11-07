@@ -9,5 +9,8 @@
         public const string Info = "Other.Info";
 
         public const string Status = "Other.Status";
+
+        public const string CaseIsFinished = "Other.CaseIsFinished";
+
     }
 }

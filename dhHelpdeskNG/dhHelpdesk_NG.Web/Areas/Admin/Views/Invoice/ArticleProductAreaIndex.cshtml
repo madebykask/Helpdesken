@@ -28,9 +28,16 @@
                           <td>@Translation.Get("Artikel", Enums.TranslationSource.TextTranslation)</td>
                           <td>
                               <select id="lstInvoiceArticles" name="lstInvoiceArticles" data-field="region" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
-                                     @foreach (var a in Model.InvoiceArticles)
-                                     {             
-                                        <option value="@a.Id">@a.Number - @a.Name - @a.NameEng</option>
+                                     @{
+                                         string s = "";
+                                         if (Model.IAPSearch_Filter.SelectedInvoiceArticles != null)
+                                         {
+                                             s = string.Join(",", Model.IAPSearch_Filter.SelectedInvoiceArticles);
+                                         } 
+                                         foreach (var a in Model.InvoiceArticles)
+                                         {             
+                                            <option value="@a.Id" @a.Id.IdIsSelected(s)>@a.Number - @a.Name - @a.NameEng</option>
+                                         }
                                      }
                                  </select>
                           </td>
@@ -39,22 +46,30 @@
                           <td style="width:120px">@Translation.Get("Produktområde", Enums.TranslationSource.TextTranslation)</td>
                           <td style="width:120px">
                               <select id="lstProductAreas" name="lstProductAreas" data-field="region" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
-                                     @foreach (var p in Model.ProductAreas)
-                                     {
-                                         if (p.IsActive == 1)
+                                  @{
+                                         string m = "";
+                                         if (Model.IAPSearch_Filter.SelectedProductAreas != null)
                                          {
-                                            <option value="@p.Id">
-                                                @p.Name
-                                            </option>
-                                         }
-                                         else
+                                             m = string.Join(",", Model.IAPSearch_Filter.SelectedProductAreas);
+                                         } 
+                                         foreach (var p in Model.ProductAreas)
                                          {
-                                            <option value="@p.Id" class="DisabledChosen" >
-                                                @p.Name
-                                            </option>
-                                         }
+                                             if (p.IsActive == 1)
+                                             {
+                                                <option value="@p.Id" @p.Id.IdIsSelected(m)>
+                                                    @p.Name
+                                                </option>
+                                             }
+                                             else
+                                             {
+                                                <option value="@p.Id" @p.Id.IdIsSelected(m)class="DisabledChosen" >
+                                                    @p.Name
+                                                </option>
+                                             }
 
-                                     }
+                                        }
+                                     }   
+                                
                                  </select>
                           </td>
                           <td>

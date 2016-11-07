@@ -64,7 +64,12 @@
             {
                 var circularRepository = uof.GetRepository<QuestionnaireCircularEntity>();
 
-                CircularForEdit entity = circularRepository.GetAll().MapToEditModelById(circularId);
+                CircularForEdit entity = circularRepository.GetAll(
+                        x => x.QuestionnaireCircularDepartmentEntities
+                        , x => x.QuestionnaireCircularCaseTypeEntities
+                        , x => x.QuestionnaireCircularProductAreaEntities
+                        , x => x.QuestionnaireCircularWorkingGroupEntities
+                    ).MapToEditModelById(circularId);
                 return entity;
             }
         }
@@ -106,10 +111,39 @@
                 entity.Status = businessModel.Status;
                 entity.CreatedDate = businessModel.CreatedDate;
 
+                entity.IsUniqueEmail = businessModel.CaseFilter.IsUniqueEmail;
+                entity.FinishingDateFrom = businessModel.CaseFilter.FinishingDateFrom;
+                entity.FinishingDateTo = businessModel.CaseFilter.FinishingDateTo;
+                entity.SelectedProcent = businessModel.CaseFilter.SelectedProcent;
+
                 foreach (var id in businessModel.RelatedCaseIds)
                 {
                     entity.QuestionnaireCircularPartEntities.Add(
                         new QuestionnaireCircularPartEntity { CreatedDate = businessModel.CreatedDate, Case_Id = id });
+                }
+
+                foreach (var id in businessModel.CaseFilter.SelectedDepartments)
+                {
+                    entity.QuestionnaireCircularDepartmentEntities.Add(
+                        new QuestionnaireCircularDepartmentEntity { DepartmentId = id });
+                }
+
+                foreach (var id in businessModel.CaseFilter.SelectedCaseTypes)
+                {
+                    entity.QuestionnaireCircularCaseTypeEntities.Add(
+                        new QuestionnaireCircularCaseTypeEntity { CaseTypeId = id });
+                }
+
+                foreach (var id in businessModel.CaseFilter.SelectedProductAreas)
+                {
+                    entity.QuestionnaireCircularProductAreaEntities.Add(
+                        new QuestionnaireCircularProductAreaEntity { ProductAreaId = id });
+                }
+
+                foreach (var id in businessModel.CaseFilter.SelectedWorkingGroups)
+                {
+                    entity.QuestionnaireCircularWorkingGroupEntities.Add(
+                        new QuestionnaireCircularWorkingGroupEntity { WorkingGroupId = id });
                 }
 
                 circularRepository.Add(entity);
@@ -131,10 +165,13 @@
                 entity.ChangedDate = businessModel.ChangedDate;
                 entity.CircularName = businessModel.CircularName;
 
+                entity.IsUniqueEmail = businessModel.CaseFilter.IsUniqueEmail;
+                entity.FinishingDateFrom = businessModel.CaseFilter.FinishingDateFrom;
+                entity.FinishingDateTo = businessModel.CaseFilter.FinishingDateTo;
+                entity.SelectedProcent = businessModel.CaseFilter.SelectedProcent;
+
                 var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
-
                 var current = circularPartRepository.GetAll().Where(x => x.QuestionnaireCircular_Id == businessModel.Id).ToList();
-
                 foreach (var toDel in current.Where(x => !businessModel.RelatedCaseIds.Exists(y => y == x.Case_Id)).ToList())
                 {
                     circularPartRepository.Delete(toDel);
@@ -143,6 +180,42 @@
                 {
                     circularPartRepository.Add(new QuestionnaireCircularPartEntity { QuestionnaireCircular_Id = businessModel.Id, CreatedDate = businessModel.ChangedDate, Case_Id = toIns });
                 }
+
+                var circularDepartmentRepository = uof.GetRepository<QuestionnaireCircularDepartmentEntity>();
+                circularDepartmentRepository.MergeList(x => x.QuestionnaireCircularId == businessModel.Id
+                    , businessModel.CaseFilter.SelectedDepartments.Select(y => new QuestionnaireCircularDepartmentEntity
+                    {
+                        DepartmentId = y, 
+                        QuestionnaireCircularId = businessModel.Id
+                    }).ToList()
+                    , (a, b) => a.DepartmentId == b.DepartmentId);
+
+                var circularCaseTypeRepository = uof.GetRepository<QuestionnaireCircularCaseTypeEntity>();
+                circularCaseTypeRepository.MergeList(x => x.QuestionnaireCircularId == businessModel.Id
+                    , businessModel.CaseFilter.SelectedCaseTypes.Select(y => new QuestionnaireCircularCaseTypeEntity
+                    {
+                        CaseTypeId = y,
+                        QuestionnaireCircularId = businessModel.Id
+                    }).ToList()
+                    , (a, b) => a.CaseTypeId == b.CaseTypeId);
+
+                var circularProductAreaRepository = uof.GetRepository<QuestionnaireCircularProductAreaEntity>();
+                circularProductAreaRepository.MergeList(x => x.QuestionnaireCircularId == businessModel.Id
+                    , businessModel.CaseFilter.SelectedProductAreas.Select(y => new QuestionnaireCircularProductAreaEntity
+                    {
+                        ProductAreaId = y,
+                        QuestionnaireCircularId = businessModel.Id
+                    }).ToList()
+                    , (a, b) => a.ProductAreaId == b.ProductAreaId);
+
+                var circularWorkingGroupRepository = uof.GetRepository<QuestionnaireCircularWorkingGroupEntity>();
+                circularWorkingGroupRepository.MergeList(x => x.QuestionnaireCircularId == businessModel.Id
+                    , businessModel.CaseFilter.SelectedWorkingGroups.Select(y => new QuestionnaireCircularWorkingGroupEntity
+                    {
+                        WorkingGroupId = y,
+                        QuestionnaireCircularId = businessModel.Id
+                    }).ToList()
+                    , (a, b) => a.WorkingGroupId == b.WorkingGroupId);
 
                 circularRepository.Update(
                 entity,
@@ -160,8 +233,16 @@
             {
                 var circularRepository = uof.GetRepository<QuestionnaireCircularEntity>();
                 var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
+                var circularDepartmentRepository = uof.GetRepository<QuestionnaireCircularDepartmentEntity>();
+                var circularCaseTypeRepository = uof.GetRepository<QuestionnaireCircularCaseTypeEntity>();
+                var circularProductAreaRepository = uof.GetRepository<QuestionnaireCircularProductAreaEntity>();
+                var circularWorkingGroupRepository = uof.GetRepository<QuestionnaireCircularWorkingGroupEntity>();
 
                 circularPartRepository.DeleteWhere(x => x.QuestionnaireCircular_Id == id);
+                circularDepartmentRepository.DeleteWhere(x => x.QuestionnaireCircularId == id);
+                circularCaseTypeRepository.DeleteWhere(x => x.QuestionnaireCircularId == id);
+                circularProductAreaRepository.DeleteWhere(x => x.QuestionnaireCircularId == id);
+                circularWorkingGroupRepository.DeleteWhere(x => x.QuestionnaireCircularId == id);
                 circularRepository.DeleteById(id);
 
                 uof.Save();
@@ -183,10 +264,10 @@
         public List<AvailableCase> GetAvailableCases(
             int customerId,
             int questionnaireId,
-            int[] selectedDepartments,
-            int[] selectedCaseTypes,
-            int[] selectedProductArea,
-            int[] selectedWorkingGroups,
+            IList<int> selectedDepartments,
+            IList<int> selectedCaseTypes,
+            IList<int> selectedProductArea,
+            IList<int> selectedWorkingGroups,
             int procent,
             DateTime? finishingDateFrom,
             DateTime? finishingDateTo,
@@ -201,9 +282,9 @@
                 IQueryable<Case> query =
                     caseRepository.GetAll()
                         .GetAvaliableCustomerCases(customerId)
-                        .GetDepartmentsCases(selectedDepartments)
-                        .GetCaseTypesCases(selectedCaseTypes)
-                        .GetProductAreasCases(selectedProductArea)
+                        .GetDepartmentsCases(selectedDepartments.ToArray())
+                        .GetCaseTypesCases(selectedCaseTypes.ToArray())
+                        .GetProductAreasCases(selectedProductArea.ToArray())
                         .GetCasesFromFinishingDate(finishingDateFrom)
                         .GetCasesToFinishingDate(finishingDateTo);
 
@@ -212,16 +293,16 @@
                     IQueryable<int> userIds =
                         userRepository.GetAll()
                             .GetByCustomer(customerId)
-                            .GetWorkingGroupsUsers(selectedWorkingGroups)
+                            .GetWorkingGroupsUsers(selectedWorkingGroups.ToArray())
                             .Select(u => u.Id);
 
                     query = query.GetUserCases(userIds);
                 }
 
-                int count = caseRepository.GetAll().GetAvaliableCustomerCases(customerId).Count();
+                var count = query.Count();
                 int percentageOfCases = (count * procent) / 100;
 
-                query = query.Take(percentageOfCases);
+                query = query.OrderBy(x => x.CaseGUID).Take(percentageOfCases);
 
                 IQueryable<QuestionnaireCircularPartEntity> questionnaireCirculars =
                     circularPartRepository.GetAll().GetQuestionnaireCases(questionnaireId);

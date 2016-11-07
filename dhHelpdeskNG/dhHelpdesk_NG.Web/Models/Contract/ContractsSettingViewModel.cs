@@ -51,7 +51,18 @@ namespace DH.Helpdesk.Web.Models.Contract
             ret.ContractFieldLable_Eng = "";
 
             return ret;
+        }       
+    }
+
+    public sealed class ContractFieldsViewModel
+    {
+        public ContractFieldsViewModel(Customer customer)
+        {
+            Data = new List<ContractsSettingRowViewModel>();
+            Customer = customer;
         }
+        public Customer Customer { get; private set; }
+        public List<ContractsSettingRowViewModel> Data { get; set; }
     }
 
     public sealed class JSContractsSettingRowViewModel

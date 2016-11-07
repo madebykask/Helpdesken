@@ -8,6 +8,6 @@
     {
         OrdersIndexModel GetIndexModel(OrdersFilterData data, OrdersFilterModel filter);
 
-        OrdersGridModel Create(SearchResponse response, SortField sortField);
+        OrdersGridModel Create(SearchResponse response, SortField sortField, bool showType);
     }
 }

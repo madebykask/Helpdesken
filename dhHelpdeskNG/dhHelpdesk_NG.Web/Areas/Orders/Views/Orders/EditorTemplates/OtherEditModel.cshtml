@@ -34,7 +34,17 @@
                 </td>
             </tr>
         }
-        @Html.EditorFor(m => m.CaseNumber, "Fields/NullableDecimal")                
+        @if (Model.CaseNumber.Show)
+        {
+            <tr>
+                <td>
+                    @Html.FieldCaption(Model.CaseNumber)
+                </td>
+                <td  class="span9">
+                    @Model.CaseNumber.Value
+                </td>
+            </tr>
+        }         
         @Html.EditorFor(m => m.Info, "Fields/WideText")                
     </tbody>
 </table>

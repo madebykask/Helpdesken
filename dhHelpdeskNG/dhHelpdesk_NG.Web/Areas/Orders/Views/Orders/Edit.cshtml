@@ -37,13 +37,17 @@
             <li>
                 @Html.LabelFor(m => m.InformReceiver, Translation.Get("Informera mottagare"))
             </li>
-            <li class="secspace"></li>      
-            <li>
-                @Html.CheckBoxFor(m => m.CreateCase, new { id = "CreateCase_action"})
-            </li>
-            <li>
-                @Html.LabelFor(m => m.CreateCase, Translation.Get("Skapa ärende"))
-            </li>
+            <li class="secspace"></li> 
+            if (Model.Other.CaseNumber.Value == null || Model.Other.CaseNumber.Value == 0)
+            {
+                <li>
+                    @Html.CheckBoxFor(m => m.CreateCase, new { id = "CreateCase_action"})
+                </li>
+                <li>
+                    @Html.LabelFor(m => m.CreateCase, Translation.Get("Skapa ärende"))
+                </li>
+            }     
+            
          }
     </ul>        
 }

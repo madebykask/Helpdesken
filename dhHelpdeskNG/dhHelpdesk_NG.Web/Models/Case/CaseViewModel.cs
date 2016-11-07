@@ -203,6 +203,8 @@
 
         public ReportModel CasePrintView { get; set; }
 
+        public int? MovedFromCustomerId { get; set; }
+
         public bool IsItChildCase()
         {
             return this.ParentCaseInfo != null && ParentCaseInfo.ParentId != 0;

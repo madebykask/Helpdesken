@@ -8,12 +8,17 @@
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.BusinessData.Models.Contract;
+    using DH.Helpdesk.Dal.DbContext;
 
     public interface IContractService
     {
         List<Contract> GetContracts(int customerId);
+        Contract GetContract(int contractId);
         List<ContractsSettingRowModel> GetContractsSettingRows(int customerId);
         void SaveContractSettings(List<ContractsSettingRowModel> ContractSettings);
+        int SaveContract(ContractInputModel contract);
+        void DeleteContract(Contract contract);
+
 
         //ContractCategory GetContractCategory(int id);
 
@@ -44,14 +49,19 @@
             return this._contractRepository.GetContracts(customerId).OrderBy(c => c.ContractNumber).ToList();
         }
 
+        public Contract GetContract(int contractId)
+        {
+            return this._contractRepository.GetContract(contractId);
+        }
+
         public List<ContractsSettingRowModel> GetContractsSettingRows(int customerId)
         {
             return this._contractFieldSettingsRepository.GetContractsSettingRows(customerId).ToList();
         }
 
-        public void Commit()
+        public void Commit()        
         {
-            this._unitOfwork.Commit();
+            this._unitOfwork.Commit();            
         }
 
         public void SaveContractSettings(List<ContractsSettingRowModel> contractsettings)
@@ -86,5 +96,40 @@
 
             this.Commit();
         }
+
+        public int SaveContract(ContractInputModel contract)
+        {
+
+            if (contract == null)
+                throw new ArgumentNullException("Contract");
+
+            if (contract.ContractNumber == null)
+                contract.ContractNumber = string.Empty;
+
+            if (contract.SupplierId == 0)
+                contract.SupplierId = null;
+
+            if (contract.DepartmentId == 0)
+                contract.DepartmentId = null;
+
+            if (contract.ResponsibleUserId == 0)
+                contract.ResponsibleUserId = null;
+           
+            if (contract.Id == 0)            
+                contract.ContractGUID = Guid.NewGuid();
+
+            this._contractRepository.SaveContract(contract);
+
+            this._contractRepository.Commit();
+
+            return contract.Id;
+        }
+
+        public void DeleteContract(Contract contract)
+        {
+            this._contractRepository.DeleteContract(contract);
+            this._contractRepository.Commit();
+        }
+       
     }
 }

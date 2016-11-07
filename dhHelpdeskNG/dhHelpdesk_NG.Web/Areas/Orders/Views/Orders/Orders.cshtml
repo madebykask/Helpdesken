@@ -1,6 +1,7 @@
 ﻿@using DH.Helpdesk.Common.Enums
 @using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Infrastructure.Extensions
+@using DH.Helpdesk.BusinessData.Enums.Orders.FieldNames
 @model DH.Helpdesk.Web.Areas.Orders.Models.Index.OrdersGridModel
 
 @Translation.Get("Poster i sökresultat"):
@@ -8,35 +9,68 @@
 
 <table id="Orders_Table" class="table table-striped table-bordered table-hover table-cases">
     <thead>
-        <tr>
-            @foreach (var header in Model.Headers)
-            {
-                <th onclick=" sortGrid('@header.FieldName') " class="thpointer">@Translation.Get(header.Caption)
-                    @if (Model.SortField != null && header.FieldName == Model.SortField.Name)
+    <tr>
+        @if (Model.ShowType)
+        {
+            <th>
+                @Translation.Get("Beställningstyp")
+            </th>
+        }
+        @foreach (var header in Model.Headers)
+        {
+            <th onclick=" sortGrid('@header.FieldName') " class="thpointer">@Translation.Get(header.Caption)
+                @if (Model.SortField != null && header.FieldName == Model.SortField.Name)
+                {
+                    switch (Model.SortField.SortBy)
                     {
-                        switch (Model.SortField.SortBy)
-                        {
-                            case SortBy.Ascending:
-                                <i class="icon-chevron-up"></i>
-                                break;
-                            case SortBy.Descending:
-                                <i class="icon-chevron-down"></i>
-                                break;
-                            default:
-                                throw new ArgumentOutOfRangeException();
-                        }
+                        case SortBy.Ascending:
+                            <i class="icon-chevron-up"></i>
+                            break;
+                        case SortBy.Descending:
+                            <i class="icon-chevron-down"></i>
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
                     }
-                </th>
-            }
-        </tr>
+                }
+            </th>
+        }
+    </tr>
     </thead>
     <tbody>
         @foreach (var order in Model.Orders)
         {
             <tr onclick=" window.location.href = '@Url.Action("Edit", new RouteValueDictionary { { "id", order.Id } })' ">
-                @foreach(var value in order.FieldValues)
+                @if (Model.ShowType)
                 {
-                    <td class="tdpointer">@value.Value.GetDisplayValue().ForHtmlView()</td>
+                    <td class="tdpointer">@(order.OrderType ?? "")</td>
+                }
+                @foreach (var value in order.FieldValues)
+                {
+                    if (value.FieldName == OtherFieldNames.CaseNumber)
+                    
+	                {
+		                if (value.Value.GetDisplayValue() != null)
+		                {
+                            var isFinished = order.FieldValues.Where(v => v.FieldName == OtherFieldNames.CaseIsFinished).SingleOrDefault();
+                            if (isFinished != null && isFinished.Value.GetDisplayValue() == bool.TrueString)
+                            {
+                                <td class="tdpointer"><img title="Ärende" alt="Ärende" src="/Content/icons/case_close.png">@value.Value.GetDisplayValue().ForHtmlView()</td>
+                            }                                
+                            else
+                            {
+			                    <td class="tdpointer"><img title="Ärende" alt="Ärende" src="/Content/icons/case.png">@value.Value.GetDisplayValue().ForHtmlView()</td>
+                            }
+                        }
+		                else
+                        {
+			                <td class="tdpointer">@value.Value.GetDisplayValue().ForHtmlView()</td>
+		                }
+	                }
+	                else
+	                {
+		                <td class="tdpointer">@value.Value.GetDisplayValue().ForHtmlView()</td>
+	                 }
                 }
             </tr>
         }

@@ -5,12 +5,16 @@
     using System.IO;
 
     using DH.Helpdesk.Common.Enums;
+    using System.Collections.Generic;
 
     public sealed class FilesStorage : IFilesStorage
-    {        
+    {
+
+        private readonly List<string> FilteredFiles = new List<string>();
 
         public FilesStorage()
         {            
+            FilteredFiles.Add("thumbs.db");
         }
 
         public byte[] GetFileContent(string topic, int entityId, string basePath, string fileName)
@@ -41,6 +45,43 @@
             }
         }
 
+        public void MoveDirectory(string topic, string entityId, string sourceBasePath, string targetBasePath)
+        {
+            var fromDirPath = this.ComposeFilePath(topic, entityId, sourceBasePath, string.Empty);
+            var targetDirPath = this.ComposeFilePath(topic, entityId, targetBasePath, string.Empty);
+
+            if (Directory.Exists(fromDirPath))
+            {
+                if (!Directory.Exists(targetDirPath))
+                    Directory.CreateDirectory(targetDirPath);
+                
+
+                if (Directory.Exists(targetDirPath))
+                {
+                    var files = Directory.GetFiles(fromDirPath);
+                    foreach (var file in files)
+                        if (!FilteredFiles.Contains(Path.GetFileName(file.ToLower())))
+                            File.Move(file, file.Replace(sourceBasePath, targetBasePath));
+
+                    var subDir1 = Path.Combine(fromDirPath, "html");
+                    if (Directory.Exists(subDir1))
+                    {
+                        var targetSubDir1 = subDir1.Replace(sourceBasePath, targetBasePath);
+                        if (!Directory.Exists(targetSubDir1))                        
+                            Directory.CreateDirectory(targetSubDir1);                        
+
+                        if (Directory.Exists(targetSubDir1))
+                        {
+                            var subFiles = Directory.GetFiles(subDir1);
+                            foreach (var file in subFiles)
+                                if (!FilteredFiles.Contains(Path.GetFileName(file.ToLower())))
+                                    File.Move(file, file.Replace(sourceBasePath, targetBasePath));
+                        }
+                    }
+                }
+            }
+        }
+
         public string ComposeFilePath(string topic, int entityId, string basePath, string fileName)
         {
             var directoryPath = this.ComposeDirectoryPath(basePath, topic, entityId);
@@ -50,6 +91,17 @@
         private string ComposeDirectoryPath(string basePath, string topic, int entityId)
         {            
             return Path.Combine(basePath, topic + entityId.ToString(CultureInfo.InvariantCulture));
+        }
+
+        public string ComposeFilePath(string topic, string entityId, string basePath, string fileName)
+        {
+            var directoryPath = this.ComposeDirectoryPath(basePath, topic, entityId);
+            return Path.Combine(directoryPath, fileName.Trim());
+        }
+
+        private string ComposeDirectoryPath(string basePath, string topic, string entityId)
+        {
+            return Path.Combine(basePath, topic + entityId);
         }
     }
 }

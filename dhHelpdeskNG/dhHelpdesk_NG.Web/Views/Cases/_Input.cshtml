@@ -41,7 +41,7 @@
          
         caseRegDate: '@Model.case_.RegTime', 
         isCaseFileMandatory: '@Model.caseFieldSettings.getRequired(GlobalEnums.TranslationCaseFields.Filename.ToString())',
-        caseFileCaption: '@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Filename.ToString(), 
+        caseFileCaption: '@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Filename.ToString(),
                                                 Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)',
                                 
         caseFieldNames:{
@@ -109,6 +109,7 @@
         <div class="container">
             <ul class="nav nav-tabs" id="myTab">
                 <li class="active">
+                    
                     @if (Model.CaseTemplateName != null)
                     {
                         <a id="case-tab" href="#case" class="case">@Model.CaseTemplateName</a>
@@ -202,7 +203,7 @@
                         @Html.HiddenFor(model => model.case_.Unread)
                         @Html.HiddenFor(model => model.ProductAreaHasChild)
                         @Html.HiddenFor(model => model.CustomerSettings.ModuleCaseInvoice) 
-                        
+                        @Html.HiddenFor(model => model.MovedFromCustomerId) 
                         
                         @Html.Hidden("WriteTextToExternalNote", Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()))
                         @Html.Hidden("Today", DateTime.Now.ToShortDateString())
@@ -537,14 +538,14 @@
                                                 @if (Model.case_.IsAbout != null && Model.case_.IsAbout.Department_Id != null)
                                                 {
                                                     var curDep = Model.departments.Where(d => d.Id == Model.case_.IsAbout.Department_Id).SingleOrDefault();
-                                                    @curDep.DepartmentName 
+                                                    @(curDep != null ? curDep.DepartmentName : "")
                                                 } &nbsp;
                                                 @if (Model.case_.IsAbout != null && Model.case_.IsAbout.OU_Id != null)
                                                 {
                                                     if (Model.isaboutous != null)
                                                     {
                                                         var curOu = Model.isaboutous.Where(w => w.Id == Model.case_.IsAbout.OU_Id).SingleOrDefault();
-                                                        @curOu.Name 
+                                                        @(curOu != null ? curOu.Name : "")                                                        
                                                     }
                                                 }
                                 </h4>
@@ -1516,7 +1517,7 @@
                                             @if (Model.EditMode == Enums.AccessMode.FullAccess)
                                             {                                                
                                                 <a id="btnAddCaseFile" href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>                                                    
-                                                <a href="#upload_clipboard_file_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till från Urklipp", SessionFacade.CurrentLanguageId)</a>
+                                                <a href="#upload_clipboard_file_popup" role="button" class="btn" data-src="case">@Translation.Get("Lägg till från Urklipp", SessionFacade.CurrentLanguageId)</a>
                                                 
                                             }
                                             <div id="divCaseFiles">                                                
@@ -1583,13 +1584,14 @@
                                             {
                                                 if (!Model.case_.WorkingGroup_Id.HasValue)
                                                 {
-                                                @Html.TextBoxFor(m => m.case_.WorkingGroup_Id, new { @readonly = true })
+                                                    <input type="text" value="" readonly="true" id="workingGroup_Name" />                                                     
                                                 }
                                                 else
                                                 {
-                                                @Html.TextBoxFor(m => m.workingGroups.SingleOrDefault(x => x.Id == Model.case_.WorkingGroup_Id).WorkingGroupName, new { @readonly = true })
-                                                @Html.HiddenFor(x => x.case_.WorkingGroup_Id)
+                                                    @Html.TextBoxFor(m => m.workingGroups.SingleOrDefault(x => x.Id == Model.case_.WorkingGroup_Id).WorkingGroupName, new { @readonly = true, id = "workingGroup_Name" })                                                    
                                                 }
+                                                
+                                                @Html.HiddenFor(m => m.case_.WorkingGroup_Id)
                                             }
                                         </td>
                                     </tr>
@@ -1659,12 +1661,13 @@
                                                 var priority = Model.case_.Priority_Id.HasValue ? Model.priorities.SingleOrDefault(x => x.Id == Model.case_.Priority_Id) : null;
                                                 if (priority == null)
                                                 {
-                                                @Html.TextBoxFor(m => m.case_.Priority_Id, new { @readonly = true })
+                                                      <input type="text" value="" readonly="true" id="priority_Name" />                                                        
+                                                      @Html.HiddenFor(m => Model.case_.Priority_Id, new { @class = "sla-value", data_sla = 0 })
                                                 }
                                                 else
                                                 {
-                                                        @Html.TextBoxFor(m => priority.Name, new { @readonly = true })
-                                                        @Html.HiddenFor(x => x.case_.Priority_Id, new { @class = "sla-value", data_sla = priority.SolutionTime })
+                                                      @Html.TextBoxFor(m => priority.Name, new { @readonly = true })
+                                                      @Html.HiddenFor(x => x.case_.Priority_Id, new { @class = "sla-value", data_sla = priority.SolutionTime })
                                                 }
                                             }
                                         </td>
@@ -1967,7 +1970,7 @@
                                                 }
                                                 else
                                                 {                                            
-                                                    @Html.EditorFor(m => m.case_.WatchDate, "DateReadOnly", new { id = "divCase__WatchDate", @class = "readonlyWatchdate"})                                                 
+                                                    @Html.EditorFor(m => m.case_.WatchDate, "DateReadOnly", new { id = "divCase__WatchDate", @class = "readonlyWatchdate" })                                                 
                                                 }
 
                                             }
@@ -2602,6 +2605,7 @@
     $('#divCase__WatchDate').datepicker({
         format: 'yyyy-mm-dd',
         todayHighlight: true,
+        clearBtn : true,
         autoclose:true
     });
 

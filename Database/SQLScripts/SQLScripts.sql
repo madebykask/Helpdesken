@@ -1,210 +1,100 @@
--- update DB from 5.3.26 to 5.3.27 version
+-- update DB from 5.3.27 to 5.3.28 version
 
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ActionLeadTime' and sysobjects.name = N'tblCaseHistory')
-	ALTER TABLE tblCaseHistory ADD ActionLeadTime Int not NULL Default(0)
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'SetCurrentUserAsPerformer' and sysobjects.name = N'tblCaseSolution')
+	ALTER TABLE tblCaseSolution ADD SetCurrentUserAsPerformer int NULL
 Go
 
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ActionExternalTime' and sysobjects.name = N'tblCaseHistory')
-	ALTER TABLE tblCaseHistory ADD ActionExternalTime Int not NULL Default(0)
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'SetCurrentUsersWorkingGroup' and sysobjects.name = N'tblCaseSolution')
+	ALTER TABLE tblCaseSolution ADD SetCurrentUsersWorkingGroup int NULL
 Go
 
--- tblSettings 
-ALTER TABLE tblSettings ALTER COLUMN LDAPFilter nvarchar(150)
-GO
 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'SaveAndClose' and sysobjects.name = N'tblCaseSolution')
+	ALTER TABLE tblCaseSolution ADD SaveAndClose int NULL
+Go
 
--- New field in tblInventoryTypeProperty
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Unique' and sysobjects.name = N'tblInventoryTypeProperty')
-      begin
-             ALTER TABLE tblInventoryTypeProperty ADD [Unique] int NOT NULL Default(0)                                              
-      end
-GO
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'IsUniqueEmail' and sysobjects.name = N'tblQuestionnaireCircular')
+	ALTER TABLE tblQuestionnaireCircular ADD IsUniqueEmail Bit not NULL Default(0)
+Go
 
-if not exists(select * from sysobjects WHERE Name = N'tblBR_Rules')
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'FinishingDateFrom' and sysobjects.name = N'tblQuestionnaireCircular')
+	ALTER TABLE tblQuestionnaireCircular ADD FinishingDateFrom Datetime NULL Default(0)
+Go
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'FinishingDateTo' and sysobjects.name = N'tblQuestionnaireCircular')
+	ALTER TABLE tblQuestionnaireCircular ADD FinishingDateTo Datetime NULL Default(0)
+Go
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'SelectedProcent' and sysobjects.name = N'tblQuestionnaireCircular')
+	ALTER TABLE tblQuestionnaireCircular ADD SelectedProcent Int not NULL Default(5)
+Go
+
+if not exists(select * from sysobjects WHERE Name = N'tblQuestionnaireCircularDepartments')
 begin
-CREATE TABLE [dbo].[tblBR_Rules](
-	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[Customer_Id] [int] NOT NULL,
-	[Name] [nvarchar](100) NOT NULL,
-	[Event_Id] [int] NOT NULL,
-	[Sequence] [int] NOT NULL,
-	[Status] [int] NOT NULL,
-	[ContinueOnSuccess] [bit] NOT NULL,
-	[ContinueOnError] [bit] NOT NULL,
-	[CreatedTime] [datetime] NOT NULL,
-	[CreatedByUser_Id] [int] NOT NULL,
-	[ChangedTime] [datetime] NOT NULL,
-	[ChangedByUser_Id] [int] NOT NULL,
- CONSTRAINT [PK_tblBR_Rules] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-
-
-
-ALTER TABLE [dbo].[tblBR_Rules]  WITH CHECK ADD  CONSTRAINT [FK_tblBR_Rules_tblUsers] FOREIGN KEY([CreatedByUser_Id])
-REFERENCES [dbo].[tblUsers] ([Id])
-
-
-ALTER TABLE [dbo].[tblBR_Rules] CHECK CONSTRAINT [FK_tblBR_Rules_tblUsers]
-
-
-ALTER TABLE [dbo].[tblBR_Rules]  WITH CHECK ADD  CONSTRAINT [FK_tblBR_Rules_tblUsers1] FOREIGN KEY([ChangedByUser_Id])
-REFERENCES [dbo].[tblUsers] ([Id])
-
-
-ALTER TABLE [dbo].[tblBR_Rules] CHECK CONSTRAINT [FK_tblBR_Rules_tblUsers1]
-
+	CREATE TABLE [dbo].[tblQuestionnaireCircularDepartments](
+		[Id] [int] IDENTITY(1,1) NOT NULL,
+		[QuestionnaireCircularId] [int] NOT NULL,
+		[DepartmentId] [int] NOT NULL,
+		CONSTRAINT [PK_tblQuestionnaireCircularDepartments] PRIMARY KEY CLUSTERED 
+		(
+			[Id] ASC
+		)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+		CONSTRAINT [FK_tblQuestionnaireCircularDepartments_tblQuestionnaireCircular] FOREIGN KEY ([QuestionnaireCircularId]) REFERENCES [dbo].[tblQuestionnaireCircular] ([Id]),
+		CONSTRAINT [FK_tblQuestionnaireCircularDepartments_tblDepartment] FOREIGN KEY ([DepartmentId]) REFERENCES [dbo].[tblDepartment] ([Id])
+	);
 end
 Go
 
-if not exists(select * from sysobjects WHERE Name = N'tblBR_RuleConditions')
+if not exists(select * from sysobjects WHERE Name = N'tblQuestionnaireCircularCaseTypes')
 begin
-	CREATE TABLE [dbo].[tblBR_RuleConditions](
+	CREATE TABLE [dbo].[tblQuestionnaireCircularCaseTypes](
 		[Id] [int] IDENTITY(1,1) NOT NULL,
-		[Rule_Id] [int] NOT NULL,
-		[Field_Id] [nvarchar](50) NOT NULL,
-		[FromValue] [nvarchar](4000) NOT NULL,
-		[ToValue] [nvarchar](4000) NOT NULL,
-		[Sequence] [int] NOT NULL,
-	 CONSTRAINT [PK_tblBR_RuleConditions] PRIMARY KEY CLUSTERED 
-	(
-		[Id] ASC
-	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-	) ON [PRIMARY]
-
-	
-
-	ALTER TABLE [dbo].[tblBR_RuleConditions]  WITH CHECK ADD  CONSTRAINT [FK_tblBR_RuleConditions_tblBR_Rules] FOREIGN KEY([Rule_Id])
-	REFERENCES [dbo].[tblBR_Rules] ([Id])
-	ON DELETE CASCADE
-	
-
-	ALTER TABLE [dbo].[tblBR_RuleConditions] CHECK CONSTRAINT [FK_tblBR_RuleConditions_tblBR_Rules]
-	
-
+		[QuestionnaireCircularId] [int] NOT NULL,
+		[CaseTypeId] [int] NOT NULL,
+		CONSTRAINT [PK_tblQuestionnaireCircularCaseTypes] PRIMARY KEY CLUSTERED 
+		(
+			[Id] ASC
+		)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+		CONSTRAINT [FK_tblQuestionnaireCircularCaseTypes_tblQuestionnaireCircular] FOREIGN KEY ([QuestionnaireCircularId]) REFERENCES [dbo].[tblQuestionnaireCircular] ([Id]),
+		CONSTRAINT [FK_tblQuestionnaireCircularCaseTypes_tblCaseType] FOREIGN KEY ([CaseTypeId]) REFERENCES [dbo].[tblCaseType] ([Id])
+	);
 end
-go
+Go
 
-if not exists(select * from sysobjects WHERE Name = N'tblBR_RuleActions')
+if not exists(select * from sysobjects WHERE Name = N'tblQuestionnaireCircularProductAreas')
 begin
-	CREATE TABLE [dbo].[tblBR_RuleActions](
+	CREATE TABLE [dbo].[tblQuestionnaireCircularProductAreas](
 		[Id] [int] IDENTITY(1,1) NOT NULL,
-		[Rule_Id] [int] NOT NULL,
-		[ActionType_Id] [int] NOT NULL,
-		[Sequence] [int] NOT NULL,
-	 CONSTRAINT [PK_tblBR_RuleActions] PRIMARY KEY CLUSTERED 
-	(
-		[Id] ASC
-	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-	) ON [PRIMARY]
-
-	
-
-	ALTER TABLE [dbo].[tblBR_RuleActions]  WITH CHECK ADD  CONSTRAINT [FK_tblBR_RuleActions_tblBR_Rules] FOREIGN KEY([Rule_Id])
-	REFERENCES [dbo].[tblBR_Rules] ([Id])
-	ON DELETE CASCADE
-	
-
-	ALTER TABLE [dbo].[tblBR_RuleActions] CHECK CONSTRAINT [FK_tblBR_RuleActions_tblBR_Rules]	
+		[QuestionnaireCircularId] [int] NOT NULL,
+		[ProductAreaId] [int] NOT NULL,
+		CONSTRAINT [PK_tblQuestionnaireCircularProductAreas] PRIMARY KEY CLUSTERED 
+		(
+			[Id] ASC
+		)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+		CONSTRAINT [FK_tblQuestionnaireCircularProductAreas_tblQuestionnaireCircular] FOREIGN KEY ([QuestionnaireCircularId]) REFERENCES [dbo].[tblQuestionnaireCircular] ([Id]),
+		CONSTRAINT [FK_tblQuestionnaireCircularProductAreas_tblProductArea] FOREIGN KEY ([ProductAreaId]) REFERENCES [dbo].[tblProductArea] ([Id])
+	);
 end
-go
+Go
 
-if not exists(select * from sysobjects WHERE Name = N'tblBR_ActionParams')
+if not exists(select * from sysobjects WHERE Name = N'tblQuestionnaireCircularWorkingGroups')
 begin
-	CREATE TABLE [dbo].[tblBR_ActionParams](
+	CREATE TABLE [dbo].[tblQuestionnaireCircularWorkingGroups](
 		[Id] [int] IDENTITY(1,1) NOT NULL,
-		[RuleAction_Id] [int] NOT NULL,
-		[ParamType_Id] [int] NOT NULL,
-		[ParamValue] [nvarchar](4000) NOT NULL,
-	 CONSTRAINT [PK_tblBR_ActionParams] PRIMARY KEY CLUSTERED 
-	(
-		[Id] ASC
-	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-	) ON [PRIMARY]
-
-	
-
-	ALTER TABLE [dbo].[tblBR_ActionParams]  WITH CHECK ADD  CONSTRAINT [FK_tblBR_ActionParams_tblBR_ActionParams] FOREIGN KEY([RuleAction_Id])
-	REFERENCES [dbo].[tblBR_RuleActions] ([Id])
-	ON DELETE CASCADE
-	
-
-	ALTER TABLE [dbo].[tblBR_ActionParams] CHECK CONSTRAINT [FK_tblBR_ActionParams_tblBR_ActionParams]
+		[QuestionnaireCircularId] [int] NOT NULL,
+		[WorkingGroupId] [int] NOT NULL,
+		CONSTRAINT [PK_tblQuestionnaireCircularWorkingGroups] PRIMARY KEY CLUSTERED 
+		(
+			[Id] ASC
+		)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+		CONSTRAINT [FK_tblQuestionnaireCircularWorkingGroups_tblQuestionnaireCircular] FOREIGN KEY ([QuestionnaireCircularId]) REFERENCES [dbo].[tblQuestionnaireCircular] ([Id]),
+		CONSTRAINT [FK_tblQuestionnaireCircularWorkingGroups_tblWorkingGroup] FOREIGN KEY ([WorkingGroupId]) REFERENCES [dbo].[tblWorkingGroup] ([Id])
+	);
 end
-go
-
--- Add Created By to Invoice Order
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CreatedByUser_Id' and 
-				sysobjects.name = N'tblCaseInvoiceOrder')
-begin
-   ALTER TABLE tblCaseInvoiceOrder ADD [CreatedByUser_Id] int NULL
-end  
-go
-
-if (exists(select * from tblCaseInvoiceOrder where CreatedByUser_Id is null))
-begin 
-   Update tblCaseInvoiceOrder set CreatedByUser_Id = (Select top 1 id from tblUsers)
-   Where CreatedByUser_Id is null
-
-   ALTER TABLE tblCaseInvoiceOrder Alter Column [CreatedByUser_Id] int Not NULL
-end
-go
-
--- Add Created Time to Invoice Order
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CreatedTime' and 
-				sysobjects.name = N'tblCaseInvoiceOrder')
-begin
-   ALTER TABLE tblCaseInvoiceOrder ADD [CreatedTime] datetime NULL
-end  
-go
-
-if (exists(select * from tblCaseInvoiceOrder where [CreatedTime] is null))
-begin 
-   Update tblCaseInvoiceOrder set [CreatedTime] = GETDATE()
-   Where [CreatedTime] is null
-
-   ALTER TABLE tblCaseInvoiceOrder Alter Column [CreatedTime] datetime Not NULL
-end
-go
-
-
--- Add Changed By to Invoice Order
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ChangedByUser_Id' and 
-				sysobjects.name = N'tblCaseInvoiceOrder')
-begin
-   ALTER TABLE tblCaseInvoiceOrder ADD [ChangedByUser_Id] int NULL
-end  
-go
-
-if (exists(select * from tblCaseInvoiceOrder where ChangedByUser_Id is null))
-begin 
-   Update tblCaseInvoiceOrder set ChangedByUser_Id = (Select top 1 id from tblUsers)
-   Where ChangedByUser_Id is null
-
-   ALTER TABLE tblCaseInvoiceOrder Alter Column [ChangedByUser_Id] int Not NULL
-end
-go
-
--- Add Changed Time to Invoice Order
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ChangedTime' and 
-				sysobjects.name = N'tblCaseInvoiceOrder')
-begin
-   ALTER TABLE tblCaseInvoiceOrder ADD [ChangedTime] datetime NULL
-end  
-go
-
-if (exists(select * from tblCaseInvoiceOrder where [ChangedTime] is null))
-begin 
-   Update tblCaseInvoiceOrder set [ChangedTime] = GETDATE()
-   Where [ChangedTime] is null
-
-   ALTER TABLE tblCaseInvoiceOrder Alter Column [ChangedTime] datetime Not NULL
-end
-go
+Go
 
 
 -- Last Line to update database version
-UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.27'
+UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.28'
 

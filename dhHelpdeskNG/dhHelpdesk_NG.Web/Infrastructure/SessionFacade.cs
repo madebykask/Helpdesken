@@ -16,6 +16,8 @@
     using DH.Helpdesk.Web.Models;
     using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Web.Areas.Reports.Models.ReportService;
+    using DH.Helpdesk.Web.Areas.Admin.Models.Invoice;
+    using DH.Helpdesk.BusinessData.Models.Invoice;
 
     public static class SessionFacade
     {
@@ -48,6 +50,8 @@
         private const string _CURRENT_LANGUAGE_CODE = "CURRENT_LANGUAGE_CODE";
 
         private const string _CURRENT_OPERATIONLOG_SEARCH = "CURRENT_OPERATIONLOG_SEARCH";
+
+        private const string _CURRENT_INVOICE_ARTICLE_PRODUCTAREA_SEARCH = "CURRENT_INVOICE_ARTICLE_PRODUCTAREA_SEARCH";
 
         private const string _CURRENT_USER = "CURRENT_USER";
 
@@ -444,6 +448,29 @@
                 else
                 {
                     HttpContext.Current.Session[_CURRENT_OPERATIONLOG_SEARCH] = value;
+                }
+            }
+        }
+
+        public static InvoiceArticleProductAreaSelectedFilter CurrentInvoiceArticleProductAreaSearch
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_CURRENT_INVOICE_ARTICLE_PRODUCTAREA_SEARCH] == null)
+                {
+                    return null;
+                }
+                return (InvoiceArticleProductAreaSelectedFilter)HttpContext.Current.Session[_CURRENT_INVOICE_ARTICLE_PRODUCTAREA_SEARCH];
+            }
+            set
+            {
+                if (HttpContext.Current.Session[_CURRENT_INVOICE_ARTICLE_PRODUCTAREA_SEARCH] == null)
+                {
+                    HttpContext.Current.Session.Add(_CURRENT_INVOICE_ARTICLE_PRODUCTAREA_SEARCH, value);
+                }
+                else
+                {
+                    HttpContext.Current.Session[_CURRENT_INVOICE_ARTICLE_PRODUCTAREA_SEARCH] = value;
                 }
             }
         }

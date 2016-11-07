@@ -709,10 +709,10 @@
         }
 
         [HttpPost]
-        public ActionResult SearchUser(string query, int customerId)
+        public ActionResult SearchUser(string query, int customerId, string searchKey)
         {
-            var result = this._computerService.SearchComputerUsers(customerId, query);
-            return this.Json(result);
+            var result = this._computerService.SearchComputerUsers(customerId, query);            
+            return Json(new { searchKey = searchKey, result = result });              
         }
 
         [HttpPost]
@@ -796,6 +796,7 @@
                 this._userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, ModuleName.Log);            
         }
 
+        
         private int Save(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey)
         {
             IDictionary<string, string> errors;
@@ -816,6 +817,7 @@
             caseMailSetting.CustomeMailFromAddress = mailSenders;
 
             var basePath = this._masterDataService.GetFilePath(newCase.Customer_Id);
+            newCase.LatestSLACountDate = CalculateLatestSLACountDate(newCase.StateSecondary_Id);
             var ei = new CaseExtraInfo() { CreatedByApp = CreatedByApplications.SelfService5, LeadTimeForNow = 0, ActionLeadTime = 0, ActionExternalTime = 0};
             int caseHistoryId = this._caseService.SaveCase(newCase, null, caseMailSetting, 0, SessionFacade.CurrentUserIdentity.UserId, ei, out errors);
             
@@ -832,6 +834,28 @@
             this._caseService.SendCaseEmail(newCase.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase);
 
             return newCase.Id;
+        }
+
+        private DateTime? CalculateLatestSLACountDate(int? newSubStateId)
+        {
+            DateTime? ret = null;
+            /* -1: Blank | 0: Non-Counting | 1: Counting */
+            var oldSubStateMode = -1;
+            var newSubStateMode = -1;            
+
+            if (newSubStateId.HasValue)
+            {
+                var newSubStatus = _stateSecondaryService.GetStateSecondary(newSubStateId.Value);
+                if (newSubStatus != null)
+                    newSubStateMode = newSubStatus.IncludeInCaseStatistics == 0 ? 0 : 1;
+            }
+
+            if (newSubStateMode == 0)
+                ret = DateTime.UtcNow;
+            else
+                ret = null;
+            
+            return ret;
         }
 
         private CaseOverviewModel GetCaseReceiptModel(Case currentCase, int languageId)

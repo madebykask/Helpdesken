@@ -16,6 +16,7 @@
         void DeleteByLogIdAndFileName(int logId, string basePath, string fileName);
         void AddFile(CaseFileDto fileDto);
         void AddFiles(List<CaseFileDto> fileDtos);
+        void MoveLogFiles(int caseId, string fromBasePath, string toBasePath);
     }
 
     public class LogFileService : ILogFileService
@@ -60,6 +61,11 @@
             {
                 this.AddFile(f);
             }
+        }
+
+        public void MoveLogFiles(int caseId, string fromBasePath, string toBasePath)
+        {
+            _logFileRepository.MoveLogFiles(caseId, fromBasePath, toBasePath);
         }
 
         public void AddFile(CaseFileDto fileDto)

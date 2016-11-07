@@ -33,7 +33,7 @@
                 case ContractStatuses.Leasing:
                     return Translator.Translate(ContractStatuses.Leasing.ToString());
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    return null;
             }
         }
     }

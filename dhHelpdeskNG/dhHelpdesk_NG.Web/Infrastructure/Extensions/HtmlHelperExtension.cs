@@ -1203,7 +1203,8 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
 
                 if (orderType.SubOrderTypes != null)
                     if (orderType.SubOrderTypes.Count > 0)
-                        htmlOutput += BuildOrderTypeTreeRow(orderType.SubOrderTypes.ToList(), iteration + 20);
+                        htmlOutput += BuildOrderTypeTreeRow(orderType.SubOrderTypes.OrderBy(x => x.Name).ToList(), iteration + 20);
+
             }
 
             return new MvcHtmlString(htmlOutput);

@@ -53,7 +53,7 @@
                     <div class="checkbox">
                         @if (Model.EditMode == Enums.AccessMode.ReadOnly)
                         {
-                            @Html.CheckBoxFor(model => model.CaseLog.HighPriority, new { @disabled = true})
+                            @Html.CheckBoxFor(model => model.CaseLog.HighPriority, new { @disabled = true })
                         }
                         else
                         {
@@ -110,7 +110,7 @@
                 <td>
                     @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_External, CaseSolutionFields.ExternalLogNote) && !readonlyMode)
                     {
-                        @Html.TextAreaFor(model => Model.CaseLog.TextExternal, new { style = "height:105px;", maxlength="3000" })
+                        @Html.TextAreaFor(model => Model.CaseLog.TextExternal, new { style = "height:105px;", maxlength = "3000" })
                     }
                     else
                     {
@@ -196,6 +196,7 @@
                             else
                             {
                                 <a href="#upload_logfiles_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentCaseLanguageId)</a>
+                                <a href="#upload_clipboard_file_popup" role="button" class="btn" data-src="log">@Translation.Get("Lägg till från Urklipp", SessionFacade.CurrentLanguageId)</a>
                             }
                         </td>
                     </tr>                
@@ -210,7 +211,7 @@
                     </td>
                 </tr>
                @if (SessionFacade.CurrentUser.CloseCasePermission == 1)
-                {
+               {
                 <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.FinishingDescription, CaseSolutionFields.FinishingDescription)">
                     <td>
                          @CaseFieldCaption(GlobalEnums.TranslationCaseFields.FinishingDescription, "Avslutsbeskrivning")
@@ -237,15 +238,15 @@
                     <td>
                         <div id="divFinishingType" class="btn-group">
                              @{
-                                string disabled = Model.GetDisabledString(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause);
-                                if (readonlyMode || (Model.IsItParentCase() && Model.IsAnyNotClosedChild()))
-                                {
-                                    disabled = "disabled";
-                                }
+                         string disabled = Model.GetDisabledString(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause);
+                         if (readonlyMode || (Model.IsItParentCase() && Model.IsAnyNotClosedChild()))
+                         {
+                             disabled = "disabled";
+                         }
                               }
                              <div class="btn @disabled" id="divBreadcrumbs_FinishingType">
                                 
-                                 @(string.IsNullOrEmpty(Model.FinishingCause)? Translation.Get("--") : Model.FinishingCause)
+                                 @(string.IsNullOrEmpty(Model.FinishingCause) ? Translation.Get("--") : Model.FinishingCause)
                              </div>
                              <button class="btn dropdown-toggle" data-toggle="dropdown" @disabled>
                                  <span class="caret"></span>
@@ -263,17 +264,17 @@
                         @CaseFieldCaption(GlobalEnums.TranslationCaseFields.FinishingDate, "Avslutsdatum")
                     </td>
                     <td>
-                        @if (!(Model.IsReadOnly(GlobalEnums.TranslationCaseFields.FinishingDate, CaseSolutionFields.FinishingDate) 
+                        @if (!(Model.IsReadOnly(GlobalEnums.TranslationCaseFields.FinishingDate, CaseSolutionFields.FinishingDate)
                             || readonlyMode
                             || (Model.IsItParentCase() && Model.IsAnyNotClosedChild())))
                         {
                             if (Model.Setting.DisableCaseEndDate == 0)
                             {
-                                @Html.EditorFor(m => m.CaseLog.FinishingDate, "DatePickerLocalTZ", new { id = "divCaseLog_FinishingDate"})
+                                @Html.EditorFor(m => m.CaseLog.FinishingDate, "DatePickerLocalTZ", new { id = "divCaseLog_FinishingDate" })
                             }
                             else
                             {                            
-                                @Html.EditorFor(m => m.CaseLog.FinishingDate, "DateReadOnlyLocalTz", new { id = "divCaseLog_FinishingDate"})                             
+                                @Html.EditorFor(m => m.CaseLog.FinishingDate, "DateReadOnlyLocalTz", new { id = "divCaseLog_FinishingDate" })                             
                             }
                         }
                         else
@@ -282,7 +283,7 @@
                         }
                     </td>
                 </tr>
-                }
+               }
            @* }*@
         </table>
     </div>

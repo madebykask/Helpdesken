@@ -9,5 +9,7 @@
         byte[] GetFileContent(string topic, int entityId, string basePath, string fileName);
 
         string ComposeFilePath(string topic, int entityId, string basePath, string fileName);
+
+        void MoveDirectory(string topic, string entityId, string sourceBasePath, string targetBasePath);
     }
 }

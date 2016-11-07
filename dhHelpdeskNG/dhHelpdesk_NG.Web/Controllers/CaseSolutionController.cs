@@ -60,6 +60,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         private const int MAX_QUICK_BUTTONS_COUNT = 5;
         private const string CURRENT_USER_ITEM_CAPTION = "Inloggad användare";
+        private const string CURRENT_USER_WORKINGGROUP_CAPTION = "Inloggad driftgroup användare";
 
         public CaseSolutionController(
             ICaseFieldSettingService caseFieldSettingService,
@@ -228,6 +229,23 @@ namespace DH.Helpdesk.Web.Controllers
                 caseSolutionInputViewModel.CaseSolution.PerformerUser_Id = null;
                 caseSolutionInputViewModel.CaseSolution.SetCurrentUserAsPerformer = 1;
             }
+            else
+            {
+                caseSolutionInputViewModel.CaseSolution.SetCurrentUserAsPerformer = null;
+            }
+
+            if (caseSolutionInputViewModel.CaseSolution.WorkingGroup_Id == -1)
+            {
+                caseSolutionInputViewModel.CaseSolution.WorkingGroup_Id = null;
+                caseSolutionInputViewModel.CaseSolution.SetCurrentUsersWorkingGroup = 1;
+            }
+            else
+            {
+                caseSolutionInputViewModel.CaseSolution.SetCurrentUsersWorkingGroup = null;
+            }
+
+            if (caseSolutionInputViewModel.CaseSolution.ShowInsideCase != 1 || caseSolutionInputViewModel.CaseSolution.SaveAndClose < 0)
+                caseSolutionInputViewModel.CaseSolution.SaveAndClose = null;
 
             this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);
 
@@ -317,6 +335,19 @@ namespace DH.Helpdesk.Web.Controllers
             if (SessionFacade.CurrentUser != null && caseSolution.SetCurrentUserAsPerformer == 1)            
                 caseSolution.PerformerUser_Id = SessionFacade.CurrentUser.Id;
 
+            if (SessionFacade.CurrentUser != null && SessionFacade.CurrentCustomer != null && caseSolution.SetCurrentUsersWorkingGroup == 1)
+            {
+                var userDefaultWGId = this._userService.GetUserDefaultWorkingGroupId(SessionFacade.CurrentUser.Id, SessionFacade.CurrentCustomer.Id);
+                if (userDefaultWGId.HasValue)
+                {
+                    caseSolution.CaseWorkingGroup_Id = userDefaultWGId.Value;
+                }
+                else
+                {
+                    caseSolution.WorkingGroup_Id = null;
+                }
+            }
+
             return this.Json(
                 new
                 {
@@ -383,7 +414,8 @@ namespace DH.Helpdesk.Web.Controllers
                     PlanDate = caseSolution.PlanDate.HasValue ? caseSolution.PlanDate.Value.ToShortDateString() : string.Empty,
                     VerifiedDescription = caseSolution.VerifiedDescription,
                     SolutionRate = caseSolution.SolutionRate,
-                    caseSolution.OverWritePopUp
+                    caseSolution.OverWritePopUp,
+                    caseSolution.SaveAndClose
                 },
                     JsonRequestBehavior.AllowGet);
         }
@@ -415,6 +447,23 @@ namespace DH.Helpdesk.Web.Controllers
                 caseSolutionInputViewModel.CaseSolution.PerformerUser_Id = null;
                 caseSolutionInputViewModel.CaseSolution.SetCurrentUserAsPerformer = 1;
             }
+            else
+            {
+                caseSolutionInputViewModel.CaseSolution.SetCurrentUserAsPerformer = null;
+            }
+
+            if (caseSolutionInputViewModel.CaseSolution.CaseWorkingGroup_Id == -1)
+            {
+                caseSolutionInputViewModel.CaseSolution.CaseWorkingGroup_Id = null;
+                caseSolutionInputViewModel.CaseSolution.SetCurrentUsersWorkingGroup = 1;
+            }
+            else
+            {
+                caseSolutionInputViewModel.CaseSolution.SetCurrentUsersWorkingGroup = null;
+            }
+            
+            if (caseSolutionInputViewModel.CaseSolution.ShowInsideCase != 1 || caseSolutionInputViewModel.CaseSolution.SaveAndClose < 0 )
+                caseSolutionInputViewModel.CaseSolution.SaveAndClose = null;
 
             this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);
 
@@ -696,6 +745,9 @@ namespace DH.Helpdesk.Web.Controllers
             if (caseSolution.SetCurrentUserAsPerformer == 1)
                 caseSolution.PerformerUser_Id = -1;
 
+            if (caseSolution.SetCurrentUsersWorkingGroup == 1)
+                caseSolution.CaseWorkingGroup_Id = -1;
+
             var performersList = isCreatingNew ?
                                      this._userService.GetAvailablePerformersOrUserId(curCustomerId)
                                          .MapToSelectList(cs, true, true)
@@ -704,7 +756,21 @@ namespace DH.Helpdesk.Web.Controllers
                                          caseSolution.CaseWorkingGroup_Id).MapToSelectList(cs, true, true);            
             const bool TakeOnlyActive = true;
 
-            
+
+            var workingGroupList = this._workingGroupService.GetAllWorkingGroupsForCustomer(curCustomerId).Select(x => new SelectListItem
+                {
+                    Text = x.WorkingGroupName,
+                    Value = x.Id.ToString()
+                }).ToList();
+             
+            var currentWG = new List<SelectListItem>();
+            currentWG.Add(new SelectListItem
+                {
+                    Text = string.Format("-- {0} --", Translation.GetCoreTextTranslation(CURRENT_USER_WORKINGGROUP_CAPTION)),
+                    Value = "-1"
+                });
+
+            workingGroupList = currentWG.Union(workingGroupList).ToList();
 
             var usedButtons = _caseSolutionService.GetCaseSolutions(curCustomerId)
                                                   .Where(c => c.ConnectedButton.HasValue && c.Id != caseSolution.Id)
@@ -726,6 +792,21 @@ namespace DH.Helpdesk.Web.Controllers
                 }
             }
 
+            var actionList = new List<SelectListItem>();
+            actionList.Add(new SelectListItem() { Value = "-1", Text = "", Selected = !caseSolution.SaveAndClose.HasValue });
+            actionList.Add(new SelectListItem() { 
+                                                  Value = "0", 
+                                                  Text = Translation.GetCoreTextTranslation("Spara"), 
+                                                  Selected = caseSolution.SaveAndClose.HasValue && caseSolution.SaveAndClose.Value == 0 
+                                                });
+
+            actionList.Add(new SelectListItem() { 
+                                                  Value = "1", 
+                                                  Text = Translation.GetCoreTextTranslation("Spara och stäng"), 
+                                                  Selected = caseSolution.SaveAndClose.HasValue && caseSolution.SaveAndClose.Value != 0 
+                                                });
+
+            
             var model = new CaseSolutionInputViewModel
             {
                 CaseSolution = caseSolution,
@@ -740,11 +821,7 @@ namespace DH.Helpdesk.Web.Controllers
                 
                 CaseTypes = this._caseTypeService.GetCaseTypes(curCustomerId, TakeOnlyActive),
 
-                CaseWorkingGroups = this._workingGroupService.GetAllWorkingGroupsForCustomer(curCustomerId).Select(x => new SelectListItem
-                {
-                    Text = x.WorkingGroupName,
-                    Value = x.Id.ToString()
-                }).ToList(),
+                CaseWorkingGroups = workingGroupList, 
 
                 Categories = this._categoryService.GetCategories(curCustomerId).Select(x => new SelectListItem
                 {
@@ -765,10 +842,10 @@ namespace DH.Helpdesk.Web.Controllers
                 ProductAreas = this._productAreaService.GetTopProductAreasForUser(curCustomerId, SessionFacade.CurrentUser),
 
                 WorkingGroups = this._workingGroupService.GetWorkingGroups(curCustomerId).Select(x => new SelectListItem
-                {
-                    Text = x.WorkingGroupName,
-                    Value = x.Id.ToString()
-                }).ToList(),
+                 {
+                     Text = x.WorkingGroupName,
+                     Value = x.Id.ToString()
+                 }).ToList(),
 
                 Regions = regions,
 
@@ -826,7 +903,9 @@ namespace DH.Helpdesk.Web.Controllers
                     Value = x.Id.ToString()
                 }).ToList(),
 
-                ButtonList = buttonList
+                ButtonList = buttonList,
+
+                ActionList = actionList
             };
 
             if (model.CaseSolution.Id == 0)

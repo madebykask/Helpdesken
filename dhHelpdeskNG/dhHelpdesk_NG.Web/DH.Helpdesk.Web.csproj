@@ -37,6 +37,7 @@
     <DontImportPostSharp>True</DontImportPostSharp>
     <TargetFrameworkProfile />
     <MvcProjectUpgradeChecked>true</MvcProjectUpgradeChecked>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -212,6 +213,9 @@
     <Compile Include="..\CommonAssembly\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AppCode\Attributes\RequiredIfNotEmptyAttribute.cs" />
+    <Compile Include="AppCode\Constants\ErrorMessages.cs" />
+    <Compile Include="AppCode\Html\SelectExtensions.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\NinjectModules\Common\LoggerModule.cs" />
     <Compile Include="App_Start\NinjectModules\Common\CommonModule.cs" />
@@ -1349,6 +1353,7 @@
     <Compile Include="Models\CheckLists\WorkingGroupMapperModel.cs" />
     <Compile Include="Models\Contract\ContractIndexViewModel.cs" />
     <Compile Include="Models\Contract\ContractsSettingViewModel.cs" />
+    <Compile Include="Models\Contract\ContractViewInputModel.cs" />
     <Compile Include="Models\DailyReports\DailyReportHistoryModel.cs" />
     <Compile Include="Models\DailyReports\DailyReportInputModel.cs" />
     <Compile Include="Models\Documents\DocumentsFilterModel.cs" />
@@ -1362,6 +1367,7 @@
     <Compile Include="Models\Invoice\CaseInvoiceArticlesModel.cs" />
     <Compile Include="Models\Profile\UserCustomersSettingsViewModel.cs" />
     <Compile Include="Models\Projects\ProjectOverviewSorting.cs" />
+    <Compile Include="Models\Questionnaire\Input\CircularCaseFilter.cs" />
     <Compile Include="Models\Questionnaire\Input\ConnectedToCircularOverview.cs" />
     <Compile Include="Models\Questionnaire\Output\CircularOverviewViewModel.cs" />
     <Compile Include="Models\Questionnaire\Output\QuestionInputModel.cs" />
@@ -1792,6 +1798,7 @@
     <Content Include="Areas\Admin\Views\BusinessRule\_RuleAction.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx" />
+    <Content Include="Content\js\Validation\dh.helpdesk.validations.extensions.js" />
     <Content Include="Scripts\jquery-1.8.3.js" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />
     <Content Include="Scripts\jquery-ui-1.9.2.js" />
@@ -2382,9 +2389,14 @@
     <Content Include="Views\Contracts\_ContractsIndexRows.cshtml" />
     <Content Include="Views\Contracts\_Settings.cshtml" />
     <Content Include="Views\Contracts\_ContractsFieldsSettings.cshtml" />
+    <Content Include="Views\Contracts\New.cshtml" />
+    <Content Include="Views\Contracts\_Input.cshtml" />
+    <Content Include="Views\Contracts\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\Admin\Views\Web.config" />
+    <Content Include="Areas\Admin\Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">

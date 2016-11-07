@@ -187,6 +187,7 @@ using Log = DH.Helpdesk.Domain.Log;
         List<LogFile> GetLogFilesByCaseId(int caseId);
         List<LogFile> GetLogFilesByLogId(int logId);
         void DeleteByLogIdAndFileName(int logId, string basePath, string fileName);
+        void MoveLogFiles(int caseId, string fromBasePath, string toBasePath);
     }
 
     public class LogFileRepository : RepositoryBase<LogFile>, ILogFileRepository
@@ -243,6 +244,13 @@ using Log = DH.Helpdesk.Domain.Log;
             this.DataContext.LogFiles.Remove(lf);
             this.Commit();
             this._filesStorage.DeleteFile(ModuleName.Log, logId, basePath, fileName);
+        }
+
+        public void MoveLogFiles(int caseId, string fromBasePath, string toBasePath)
+        {
+            var logFiles = this.DataContext.LogFiles.Where(f => f.Log.Case_Id == caseId).Select(f=> f.Log_Id).Distinct().ToList();
+            foreach (var logId in logFiles)
+                _filesStorage.MoveDirectory(ModuleName.Log, logId.ToString(), fromBasePath, toBasePath);
         }
     }
 

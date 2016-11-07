@@ -36,6 +36,45 @@
         window.dhHelpdesk = window.dhHelpdesk || {};
         window.dhHelpdesk.businessRule = window.dhHelpdesk.businessRule || {};
 
+        (function ($) {
+            var originHighlight = $.validator.defaults.highlight;
+            var originUnhighlight = $.validator.defaults.unhighlight;
+            var $form = $("#newRule");
+            var validator = $form.data("validator");
+
+            $.extend(validator.settings, {
+                ignore: ":hidden:not(.BR-chosen-single-select, .BR-chosen-select)",
+                highlight: function (element, errorClass, validClass) {
+                    var $element = $(element);
+                    if ($element.hasClass("BR-chosen-single-select")
+                        || $element.hasClass("BR-chosen-select")) {
+                        var chosenSelectInput = $element.next().find(".chosen-choices");
+                        if (chosenSelectInput.length > 0) {
+                            element = chosenSelectInput[0];
+                        } else {
+                            element = $element.next()[0];
+                        }
+                    }
+
+                    originHighlight(element, errorClass, validClass);
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    var $element = $(element);
+                    if ($element.hasClass("BR-chosen-single-select")
+                        || $element.hasClass("BR-chosen-select")) {
+                        var chosenSelectInput = $element.next().find(".chosen-choices");
+                        if (chosenSelectInput.length > 0) {
+                            element = chosenSelectInput[0];
+                        } else {
+                            element = $element.next()[0];
+                        }
+                    }
+
+                    originUnhighlight(element, errorClass, validClass);
+                }
+            });
+        })(jQuery);
+
         var getData = function () {
             var data = {
                 customerId: 0,
@@ -69,7 +108,7 @@
             data.ruleSequence = $(elRuleSequence).val();
             //data.continueOnSuccess = $(elContinueOnSuccess).bootstrapSwitch('state');
             //data.continueOnError = $(elContinueOnError).bootstrapSwitch('state');
-            data.ruleActive = $(elIsRuleActive).bootstrapSwitch('state');
+            data.ruleActive = $(elIsRuleActive).bootstrapSwitch("state");
 
             $(elEventsDropDown + " option:selected").each(function () {
                 data.event = $(this).val();
@@ -108,9 +147,9 @@
             });
 
             data.recipients = $(elRecipients).val();
-            data.caseCreator = $(elCaseCreator).bootstrapSwitch('state');
-            data.initiator = $(elInitiator).bootstrapSwitch('state');
-            data.caseIsAbout = $(elCaseIsAbout).bootstrapSwitch('state');
+            data.caseCreator = $(elCaseCreator).bootstrapSwitch("state");
+            data.initiator = $(elInitiator).bootstrapSwitch("state");
+            data.caseIsAbout = $(elCaseIsAbout).bootstrapSwitch("state");
 
             return data;
         };       
@@ -147,10 +186,10 @@
                     curTime: new Date().getTime()
                 },
                 function (result) {
-                    if (result =="OK")
-                        window.location.href = overviewRuleUrl
+                    if (result === "OK")
+                        window.location.href = overviewRuleUrl;
                     else
-                        ShowToastMessage(result, 'error');
+                        ShowToastMessage(result, "error");
                 }
             );
         };
@@ -158,12 +197,9 @@
         dhHelpdesk.businessRule.doValidation = function () {
             "use strict";
             var self = this;
-
             var $form = $("#newRule");
-            var validator = $form.data('validator');
-            validator.settings.ignore = ":hidden:not(.BR-chosen-single-select)";
 
-            return $form.validate({ ignore: ":hidden:not(.BR-chosen-single-select)" }).form();
+            return $form.validate().form();
         }          
 
         dhHelpdesk.businessRule.init = function () {
@@ -178,16 +214,20 @@
                 width: "350px",
                 'placeholder_text_multiple': placeholder_text_multiple,
                 'no_results_text': no_results_text
+            }).change(function (evt, params) {
+                $(evt.target).trigger("focusout");
             });
 
             $(".BR-chosen-single-select").chosen({
                 width: "350px",
                 'placeholder_text_multiple': placeholder_text_multiple,
                 'no_results_text': no_results_text
+            }).change(function (evt, params) {
+                $(evt.target).trigger("focusout");
             });
 
             $(".BR-text").css("width","335px");
-                
+           
         }
 
     })($);

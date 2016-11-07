@@ -90,9 +90,11 @@ namespace DH.Helpdesk.Domain
         public int ShowOnCaseOverview { get; set; }
         public int ShowInsideCase { get; set; }
         public int? SetCurrentUserAsPerformer { get; set; }
+        public int? SetCurrentUsersWorkingGroup { get; set; }
         public int OverWritePopUp { get; set; }
         
         public int? ConnectedButton { get; set; }
+        public int? SaveAndClose { get; set; }
     
         public virtual CaseSolutionCategory CaseSolutionCategory { get; set; }
         public virtual CaseSolutionSchedule CaseSolutionSchedule { get; set; }

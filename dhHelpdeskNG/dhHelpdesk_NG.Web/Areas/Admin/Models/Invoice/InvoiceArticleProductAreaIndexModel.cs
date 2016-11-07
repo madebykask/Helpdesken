@@ -45,7 +45,9 @@
             Customer = customer;
             Rows = new InvoiceArticleProductAreaIndexRowsModel(customer);
         }
-        
+
+        public InvoiceArticleProductAreaSelectedFilter IAPSearch_Filter { get; set; }
+
         public Customer Customer { get; private set; }
 
         public List<InvoiceArticle> InvoiceArticles { get; set; }

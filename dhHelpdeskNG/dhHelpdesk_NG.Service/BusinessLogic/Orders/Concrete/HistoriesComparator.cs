@@ -9,24 +9,25 @@
     using DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditSettings;
     using DH.Helpdesk.Common.Extensions.String;
     using DH.Helpdesk.Common.Types;
+    using System.Threading;
 
     public sealed class HistoriesComparator : IHistoriesComparator
     {
         public HistoriesDifference Compare(
             HistoryOverview previousHistory,
             HistoryOverview currentHistory,
-            List<LogOverview> currentHistoryLog,
+            //List<LogOverview> currentHistoryLog,
             List<EmailLogOverview> currentHistoryEmailLogs,
             FullOrderEditSettings settings)
         {
             return previousHistory == null
-                ? CreateDifferenceForFirstHistory(currentHistory, currentHistoryLog, currentHistoryEmailLogs, settings)
-                : CompareHistories(previousHistory, currentHistory, currentHistoryLog, currentHistoryEmailLogs, settings);
+                ? CreateDifferenceForFirstHistory(currentHistory, currentHistoryEmailLogs, settings)
+                : CompareHistories(previousHistory, currentHistory, currentHistoryEmailLogs, settings);
         }
 
         private static HistoriesDifference CreateDifferenceForFirstHistory(
             HistoryOverview firstHistory,
-            List<LogOverview> log,
+            //List<LogOverview> log,
             List<EmailLogOverview> emailLogs,
             FullOrderEditSettings settings)
         {
@@ -100,12 +101,11 @@
             AddFirstDifference(history, settings.User.UserLastName, firstHistory.Order.User.UserLastName);            
 
             var emails = emailLogs.Select(l => l.Email).ToList();
-            var logs = log.Select(l => l.Text).ToList();
+            //var logs = log.Select(l => l.Text).ToList();
 
             return new HistoriesDifference(
                 firstHistory.DateAndTime,
                 firstHistory.RegisteredBy,
-                logs,
                 history,
                 emails);
         }
@@ -113,7 +113,7 @@
         private static HistoriesDifference CompareHistories(
             HistoryOverview previousHistory,
             HistoryOverview currentHistory,
-            List<LogOverview> currentHistoryLog,
+            //List<LogOverview> currentHistoryLog,
             List<EmailLogOverview> currentHistoryEmailLogs,
             FullOrderEditSettings settings)
         {
@@ -203,14 +203,14 @@
             AddDifference(history, settings.User.UserLastName, previousHistory.Order.User.UserLastName, currentHistory.Order.User.UserLastName);            
 
             var emails = currentHistoryEmailLogs.Select(l => l.Email).ToList();
-            var logs = currentHistoryLog.Select(l => l.Text).ToList();
+            //var logs = currentHistoryLog.Select(l => l.Text).ToList();
 
-            if (logs.Any() || history.Any() || emails.Any())
+            if (history.Any() || emails.Any())
             {
                 return new HistoriesDifference(
                 currentHistory.DateAndTime,
                 currentHistory.RegisteredBy,
-                logs,
+                //logs,
                 history,
                 emails);
             }
@@ -249,7 +249,7 @@
         {
             if (firstValue.HasValue)
             {
-                var difference = new FieldDifference(settings.Caption, null, firstValue.Value.ToString(CultureInfo.InvariantCulture));
+                var difference = new FieldDifference(settings.Caption, null, firstValue.Value.ToString("yyyy-MM-dd", Thread.CurrentThread.CurrentUICulture));
                 differencies.Add(difference);
             }
         }
@@ -303,9 +303,9 @@
             if (oldValue != newValue)
             {
                 var difference = new FieldDifference(                            
-                            settings.Caption, 
-                            oldValue.HasValue ? oldValue.Value.ToString(CultureInfo.InvariantCulture) : string.Empty,
-                            newValue.HasValue ? newValue.Value.ToString(CultureInfo.InvariantCulture) : string.Empty);
+                            settings.Caption,
+                            oldValue.HasValue ? oldValue.Value.ToString("yyyy-MM-dd", Thread.CurrentThread.CurrentUICulture) : string.Empty,
+                            newValue.HasValue ? newValue.Value.ToString("yyyy-MM-dd", Thread.CurrentThread.CurrentUICulture) : string.Empty);
                 differencies.Add(difference);
             }
         }

@@ -7,122 +7,36 @@
     var jsSerializer = new JavaScriptSerializer();
 }
 
-@Scripts.Render("~/Content/js/Case/edit")
+
 
 <script type="text/javascript">
-    window.appOptions = @Html.Raw(jsSerializer.Serialize(Model.JsApplicationOptions));
-    $(function() {
-        window.alreadyExistFileIds = [];
-        bindDeleteNewCaseFileBehaviorToDeleteButtons();       
+    window.appOptions = '@Html.Raw(jsSerializer.Serialize(Model.JsApplicationOptions))';
 
-        $('#NewCasefile_uploader').pluploadQueue({
-            url: '@this.Url.Action("NewCaseUploadFile")',
-            multipart_params: { Id: '@this.Model.CaseFileKey', curTime:Date.now() },
-            max_file_size: '10mb',
-
-            init: {
-                FileUploaded: function() {
-
-                    $.get('@this.Url.Action("NewCaseFiles")', { id: '@this.Model.CaseFileKey', curTime:Date.now()   }, function(files) {
-                        refreshNewCaseFilesTable(files);
-                    });
-                },
-
-                UploadComplete: function(up, file) {
-                    //plupload_add
-                    $(".plupload_buttons").css("display", "inline");
-                    $(".plupload_upload_status").css("display", "inline");
-                    up.refresh();
-                },
-
-                Error: function(uploader, e) {
-                    if (e.status != 409) {
-                        return;
-                    }
-
-                    window.alreadyExistFileIds.push(e.file.id);
-                },
-
-                StateChanged: function(uploader) {
-                    if (uploader.state != plupload.STOPPED) {
-                        return;
-                    }
-
-                    for (var i = 0; i < window.alreadyExistFileIds.length; i++) {
-                        var fileId = window.alreadyExistFileIds[i];
-                        $('#NewCasefile_uploader ul[class="plupload_filelist"] li[id="' + fileId + '"] div[class="plupload_file_action"] a').prop('title', '@Translation.Get("File already exists", Enums.TranslationSource.TextTranslation)');
-                    }
-
-                    window.alreadyExistFileIds.length = 0;
-                    uploader.refresh();
-                }
-
-            }
-        });
-
-        $('#NewCase_upload_files_popup').on('hidden.bs.modal', function () {
-            if ($('#NewCasefile_uploader') != undefined) {
-                if ($('#NewCasefile_uploader').pluploadQueue().files.length > 0) {
-                    if ($('#NewCasefile_uploader').pluploadQueue().state == plupload.UPLOADING)
-                        $('#NewCasefile_uploader').pluploadQueue().stop();
-
-                    while ($('#NewCasefile_uploader').pluploadQueue().files.length > 0) {
-                        $('#NewCasefile_uploader').pluploadQueue().removeFile($('#NewCasefile_uploader').pluploadQueue().files[0]);
-                    }
-                    $('#NewCasefile_uploader').pluploadQueue().refresh();
-                }
-            }
-        });        
-    });
-
-    function refreshNewCaseFilesTable(files) {
-        $('#NewCasefiles_table > tbody > tr').remove();
-
-        var fileMarkup;        
-
-        for (var i = 0; i < files.length; i++) {
-            var file = files[i];
-
-            fileMarkup =
-                $('<tr>' +
-                    '<td>' +
-                        '<i class="glyphicon glyphicon-file">&nbsp;</i><a style="color:blue" href="@this.Url.Action("DownloadNewCaseFile")?@(!string.IsNullOrEmpty(this.Model.CaseFileKey) ? "id=" + this.Model.CaseFileKey + "&" : string.Empty)' + 'fileName=' + file + '">' + file + '</a>' +
-                    '</td>' +
-                    '<td>' +
-                        '<a id="delete_file_button_' + i + '" class="btn btn-default btn-sm" ><span class="glyphicon glyphicon-remove"></span> </a>' +
-                    '</td>' +
-                    '</tr>');
-            
-                $('#NewCasefiles_table > tbody').append(fileMarkup);
-            }
-
-            bindDeleteNewCaseFileBehaviorToDeleteButtons();
-        }
-
-        function bindDeleteNewCaseFileBehaviorToDeleteButtons() {
-            $('#NewCasefiles_table a[id^="delete_file_button_"]').click(function () {
-                var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
-                var pressedDeleteFileButton = this;
-
-                $.post('@this.Url.Action("DeleteNewCaseFile")', { id: '@this.Model.CaseFileKey', fileName: fileName, curTime:Date.now() }, function () {
-                    $(pressedDeleteFileButton).parents('tr:first').remove();
-                });
-            });
-        }
-
-    
-
+    window.appParameters = {        
+        uploadCaseFileUrl: '@Url.Action("NewCaseUploadFile")',
+        caseFileKey: '@Model.CaseFileKey',
+        newCaseFilesUrl: '@Url.Action("NewCaseFiles")',
+        fileAlreadyExistsMsg: '@Html.Raw(Translation.Get("File already exists", Enums.TranslationSource.TextTranslation))',
+        downloadCaseFileUrl: '@Url.Action("DownloadNewCaseFile")',
+        downloadCaseFileParamUrl: '@(!string.IsNullOrEmpty(Model.CaseFileKey) ? "id=" + Model.CaseFileKey + "&" : string.Empty)',
+        deleteCaseFileUrl: '@Url.Action("DeleteNewCaseFile")',
+        searchUserUrl: '@Url.Content("~/Case/SearchUser")',
+        seachComputerUrl: '@Url.Content("~/Case/SearchComputer")',
+        saveNewCaseUrl: '@Url.Content("~/Case/NewCase")',
+        fetchDepartmentsUrl: '@Url.Content("~/Case/GetDepartmentsByRegion")',
+        fetchOUUrl: '@Url.Content("~/Case/GetOrgUnitsByDepartments")'
+    };
+       
 </script>
+
+@Scripts.Render("~/Content/js/Case/edit")
+
 <div class="jumbotron greybar">
         <div class="container-fluid">
-            <ul class="secnav">                
-               @* <li>
-                    <a href="#" class="btn btn-default">Cancel request</a>
-                </li>*@
-                <li>                    
-                    @Html.ActionLink(Translation.Get("Save and Send", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "$('#NewCaseForm').submit();return false;", @class = "btn btn-default" })
-                </li>
-                
+            <ul class="secnav">                               
+                <li>                                        
+                    <input type="button" value='@Translation.Get("Save and Send", Enums.TranslationSource.TextTranslation)' onclick = "SaveNewCase(); return false;" class = "btn btn-default" /> 
+                </li>                
             </ul>
         </div>
     </div>
@@ -137,7 +51,7 @@
         <div id="fragment-1" class="tab-pane active">
             <div class="container-fluid dh-container">
 
-                @using (Html.BeginForm("NewCase", "case", null, FormMethod.Post, new { id = "NewCaseForm" }))
+                @using (Html.BeginForm("NewCase", "case", null, FormMethod.Post, new { id = "newCaseForm" }))
                 {
                     @Html.HiddenFor(model => model.NewCase.Id)
                     @Html.HiddenFor(model => model.NewCase.CaseGUID)
@@ -728,7 +642,7 @@
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.Filename.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                                                
                                             </label>
                                             <div class="col-md-4">                                                
-                                                <a href="#NewCase_upload_files_popup" role="button" class="btn btn-default" data-toggle="modal">@Translation.Get("Add", Enums.TranslationSource.TextTranslation)</a>
+                                                <a href="#NewCase_upload_files_popup" role="button" class="btn btn-default" data-toggle="modal">@Translation.Get("Add", Enums.TranslationSource.TextTranslation)</a>                                                
                                                 <div id="NewCase_upload_files_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabel" aria-hidden="true">                                                    
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">                                                
@@ -745,6 +659,36 @@
                                                         </div>
                                                     </div>
                                                 </div>
+
+                                                <a href="#upload_clipboard_file_popup" role="button" class="btn btn-default" data-src="case">@Translation.Get("Add from clipboard", Enums.TranslationSource.TextTranslation)</a>
+                                                <div id="upload_clipboard_file_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabelCase" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                                <h3>&nbsp;</h3>
+                                                            </div>
+                                                            <div class="modal-body" style="max-height: 600px; text-align:center;">
+                                                                <form onsubmit="return false;">
+                                                                    <div class="form-group">
+                                                                        <label>@Translation.Get("File name", Enums.TranslationSource.TextTranslation) </label>
+                                                                        <input class="" type="text" id="imgFilename" autocomplete = "Off" />
+                                                                        <span id="imageNameRequired" style="color:red"> @Translation.Get("must be specified", Enums.TranslationSource.TextTranslation) </span>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label>@(Translation.Get("Preview") + " (" + Translation.Get("Copy image data into clipboard and press Ctrl+V", Enums.TranslationSource.TextTranslation) + ")") </label>
+                                                                        <div id="previewPnl"></div>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" id="btnSave" class="btn btn-ok btn-default" style="display: none">@Translation.Get("Save", Enums.TranslationSource.TextTranslation)</button>
+                                                                <button type="button" id="btnCancel" class="btn btn-cancel btn-default" data-dismiss="modal">@Translation.Get("Cancel", Enums.TranslationSource.TextTranslation)</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>                                                    
+                                                </div>
+
                                                 <table id="NewCasefiles_table" class="table table-striped">
                                                     <tbody>
                                                         @if (this.Model.NewCase.CaseFiles == null)
@@ -773,213 +717,26 @@
     </div>
 </div>
 
-<script type="text/javascript">
-
-    $(document).ready(function () {
-        NewCaseInitForm();
-    });
-
-    function NewCaseInitForm() {
-
-        $('#NewCase_ReportedBy').typeahead(_GetComputerUserSearchOptions());
-        $('#NewCase_InventoryNumber').typeahead(_GetComputerSearchOptions());
-    }
-
-    function _GetComputerUserSearchOptions() {
-
-        var options = {
-            items: 20,
-            minLength: 2,
-
-            source: function (query, process) {
-                return $.ajax({
-                    url: '@Url.Content("~/Case/SearchUser")',
-                    type: 'post',
-                    data: { query: query, customerId: $('#NewCase_Customer_Id').val() },
-                    dataType: 'json',
-                    success: function (result) {
-                        var resultList = jQuery.map(result, function (item) {
-                            var aItem = {
-                                id: item.Id
-                                , num: item.UserId
-                                , name: item.SurName + ' ' + item.FirstName
-                                , email: item.Email
-                                , place: item.Location
-                                , phone: item.Phone
-                                , usercode: item.UserCode
-                                , cellphone: item.CellPhone
-                                , regionid: item.Region_Id
-                                , departmentid: item.Department_Id
-                                , ouid: item.OU_Id
-                            };
-                            return JSON.stringify(aItem);
-                        });
-
-                        return process(resultList);
-                    }
-                });
-            },
-
-            matcher: function (obj) {
-                var item = JSON.parse(obj);
-                //console.log(JSON.stringify(item));
-                return ~item.name.toLowerCase().indexOf(this.query.toLowerCase())
-                    || ~item.num.toLowerCase().indexOf(this.query.toLowerCase())
-                    || ~item.phone.toLowerCase().indexOf(this.query.toLowerCase())
-                    || ~item.email.toLowerCase().indexOf(this.query.toLowerCase());
-            },
-
-            sorter: function (items) {
-                var beginswith = [], caseSensitive = [], caseInsensitive = [], item;
-                while (aItem = items.shift()) {
-                    var item = JSON.parse(aItem);
-                    if (!item.num.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
-                    else if (~item.num.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
-                    else caseInsensitive.push(JSON.stringify(item));
-                }
-
-                return beginswith.concat(caseSensitive, caseInsensitive);
-            },
-
-            highlighter: function (obj) {
-                var item = JSON.parse(obj);
-                var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
-                var result = item.name + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email;
-
-                return result.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
-                    return '<strong>' + match + '</strong>';
-                });
-            },
-
-            updater: function (obj) {
-
-                var item = JSON.parse(obj);
-                //console.log(JSON.stringify(item));
-                $('#NewCase_ReportedBy').val(item.num);
-                $('#NewCase_PersonsName').val(item.name);
-                $('#NewCase_PersonsEmail').val(item.email);
-                $('#NewCase_PersonsPhone').val(item.phone);
-                $('#NewCase_PersonsCellphone').val(item.cellphone);
-                $('#NewCase_Place').val(item.place);
-                $('#NewCase_UserCode').val(item.usercode);
-                $('#NewCase_Region_Id').val(item.regionid);
-                window.app.setOrganizationData(item.regionid, item.departmentid, item.ouid);
-
-                return item.num;
-            }
-        };
-
-        return options;
-    }
-
-    function _GetComputerSearchOptions() {
-
-        var options = {
-            items: 20,
-            minLength: 2,
-
-            source: function (query, process) {
-                return $.ajax({
-                    url: '@Url.Content("~/Case/SearchComputer")',
-                    type: 'post',
-                    data: { query: query, customerId: $('#NewCase_Customer_Id').val() },
-                    dataType: 'json',
-                    success: function (result) {
-                        var resultList = jQuery.map(result, function (item) {
-                            var aItem = {
-                                id: item.Id
-                                , num: item.ComputerName
-                                , location: item.Location
-                                , computertype: item.ComputerTypeDescription
-                            };
-                            return JSON.stringify(aItem);
-                        });
-
-                        return process(resultList);
-                    }
-                });
-            },
-
-            matcher: function (obj) {
-                var item = JSON.parse(obj);                
-                return ~item.num.toLowerCase().indexOf(this.query.toLowerCase())
-                    || ~item.computertype.toLowerCase().indexOf(this.query.toLowerCase())
-                    || ~item.location.toLowerCase().indexOf(this.query.toLowerCase());
-            },
-
-            sorter: function (items) {
-                var beginswith = [], caseSensitive = [], caseInsensitive = [], item;
-                while (aItem = items.shift()) {
-                    var item = JSON.parse(aItem);
-                    if (!item.num.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
-                    else if (~item.num.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
-                    else caseInsensitive.push(JSON.stringify(item));
-                }
-
-                return beginswith.concat(caseSensitive, caseInsensitive);
-            },
-
-            highlighter: function (obj) {
-                var item = JSON.parse(obj);
-                var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
-                var result = item.num + ' - ' + item.location + ' - ' + (item.computertype == null ? ' ' : item.computertype);
-
-                return result.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
-                    return '<strong>' + match + '</strong>';
-                });
-            },
-
-            updater: function (obj) {
-                var item = JSON.parse(obj);                         
-                $('#NewCase_InventoryNumber').val(item.num);
-                $('#NewCase_InventoryType').val(item.computertype);
-                $('#NewCase_InventoryLocation').val(item.location);
-
-                return item.num;
-            }
-        };
-
-        return options;
-    }
-
-    function NewCase() {
-        $("#NewCaseForm").attr("action", '@Url.Content("~/Case/NewCase")');
-        $("#NewCaseForm").submit();
-    }
+<script type="text/javascript">     
     
-    $('#divProductArea ul.dropdown-menu li a').click(function (e) {
-        e.preventDefault();
-        var val = $(this).attr('value');
-        $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(this));       
-        var ee = document.getElementById("NewCase_ProductArea_Id");
-        ee.setAttribute('value', val);
-    });
+    var $mainForm = $("#newCaseForm");
+    var requiredText = '@Translation.Get("must be specified", Enums.TranslationSource.TextTranslation)';
 
-    $('#divCaseType ul.dropdown-menu li a').click(function (e) {
-        e.preventDefault();       
-        var val = $(this).attr('value');
-        $("#divBreadcrumbs_CaseType").text(getBreadcrumbs(this));        
-        var ee = document.getElementById("NewCase.CaseType_Id");        
-        ee.setAttribute('value', val);
-    });
+    function SaveNewCase() {
+        if (!isFormValid()) {            
+            return;
+        }
 
-    $('#divCaseTypeSetting ul.dropdown-menu li a').click(function (e) {
-        e.preventDefault();
-        var val = $(this).attr('value');
-        $("#divBreadcrumbs_CaseTypeSetting").text(getBreadcrumbs(this));        
-        var ee = document.getElementById("NewCase_CaseType_Id");
-        ee.setAttribute('value', val);        
-    });
+        $mainForm.attr("action", '@Url.Content("~/Case/NewCase")');
+        $mainForm.submit();
+    }
+     
+    function isFormValid() {        
+        var validator = $mainForm.validate();
+        return validator.form();        
+    }
 
-    $('#divProductAreaSetting ul.dropdown-menu li a').click(function (e) {
-        e.preventDefault();
-        var val = $(this).attr('value');
-        $("#divBreadcrumbs_ProductAreaSetting").text(getBreadcrumbs(this));
-        var ee = document.getElementById("NewCase_ProductArea_Id");
-        ee.setAttribute('value', val);
-    });
-
-    var validator = $("#NewCaseForm").validate({
+    var validator = $mainForm.validate({
         ignore: "",
         rules: {
                     "NewCase.ReportedBy": {
@@ -1091,109 +848,109 @@
 
             messages: {
                 "NewCase.ReportedBy": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.PersonsName": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.PersonsEmail": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.PersonsCellPhone": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.PersonsPhone": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.Region_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.Department_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.OU_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.Place": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Place.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Place.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.UserCode": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.UserCode.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.UserCode.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.InventoryNumber": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.InventoryLocation": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.InventoryType": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.ProductArea_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.CaseType_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.System_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.System_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.System_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.Urgency_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.Impact_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Impact_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Impact_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.Category_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.Supplier_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.InvoiceNumber": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.ReferenceNumber": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.Caption": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Caption.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Caption.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.Description": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.Miscellaneous": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.AgreedDate": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.AgreedDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.AgreedDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.Available": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Available.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Available.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.WorkingGroup_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.Performer_User_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.CaseResponsible_User_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.Priority_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.Status_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.StateSecondary_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.PlanDate": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.PlanDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.PlanDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.WatchDate": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
             },
 
@@ -1204,13 +961,9 @@
 
     function FieldIsRequired(value) {
         var ret = false;
-        if (value == '1') {
+        if (value == '1') {            
             ret = true;
         }
         return ret;
     }
 </script>
-
-@*<script 
-    src="../content/js/case/edit.js">
-</script>*@

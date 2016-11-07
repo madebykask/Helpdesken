@@ -65,13 +65,15 @@
                     {
                         <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation), null, null, new { @class = "btn save-new", id = "case-action-save-and-new" })</li>
                     }
+
+                    <li><i id="TemplateQuickButtonIndicator" class="gif-loader" style="display:none">&nbsp;</i></li>
                     <li class="secspace"></li>
                     
-                    <li><a class="btn close-page">@Translation.GetCoreTextTranslation("Stäng")</a></li>
+                    <li><a id="case-action-close" class="btn close-page">@Translation.GetCoreTextTranslation("Stäng")</a></li>
 
                     <li>
                         <div id="divActionMenu" class="btn-group">
-                            <button class="btn dropdown-toggle" data-toggle="dropdown">
+                            <button class="btn dropdown-toggle" data-toggle="dropdown" id="btnActionMenu">
                                 @Translation.Get("Åtgärder", Enums.TranslationSource.TextTranslation)
                                 <span class="caret">&nbsp;</span>
                             </button>
@@ -121,11 +123,12 @@
                  @if (Model.templateistrue != 1)
                  {
                     <ul class="secnav">
+                        
                         @if (Model.CaseTemplateButtons != null && Model.CaseTemplateButtons.Any())
                         {
                             foreach (var button in Model.CaseTemplateButtons)
                             {
-                                <li><a href="#" onclick='LoadTemplate("@button.CaseTemplateId.ToString()")' title="@button.CaseTemplateName" class="btn" rel="tooltip" data-placement="bottom" data-original-title="@button.CaseTemplateName"> @button.ButtonNumber </a></li>
+                                <li><a href="#" onclick='LoadTemplate("@button.CaseTemplateId.ToString()")' title="@button.CaseTemplateName" class="btn templateQuickButton" rel="tooltip" data-placement="bottom" data-original-title="@button.CaseTemplateName"> @button.ButtonNumber </a></li>
                             }
                         }
                     </ul>

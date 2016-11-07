@@ -15,6 +15,7 @@
         private readonly IDocumentService _documentService;
         private readonly IOrderTypeService _orderTypeService;
         private readonly ICustomerService _customerService;
+        private const int MaxOrderTypeLevels = 4;
 
         public OrderTypeController(
             ICaseTypeService caseTypeService,
@@ -138,11 +139,14 @@
 
         private OrderTypeInputViewModel CreateInputViewModel(OrderType orderType, Customer customer)
         {
+            var parentCount = GetOrderTypeParentsCount(orderType);
+
             var caseTypes = this._caseTypeService.GetCaseTypes(SessionFacade.CurrentCustomer.Id, true);
             var caseTypesInRow = this._caseTypeService.GetChildrenInRow(caseTypes).ToList();
 
             var model = new OrderTypeInputViewModel
             {
+                CanAddSubOrderType = (parentCount < MaxOrderTypeLevels),
                 OrderType = orderType,
                 Customer = customer,
                 Documents = this._documentService.GetDocuments(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
@@ -163,6 +167,14 @@
             };
 
             return model;
+        }
+
+        private int GetOrderTypeParentsCount(OrderType orderType)
+        {
+            if (orderType.ParentOrderType == null)
+                return 1;
+            else
+                return GetOrderTypeParentsCount(orderType.ParentOrderType) + 1;
         }
     }
 }

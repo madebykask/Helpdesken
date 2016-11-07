@@ -464,12 +464,48 @@ GO
 If not exists (select * from tbltext where id = 1578)
 	insert into tbltext (id, TextString, TextType) VALUES (1578, 'Select for: Hiring a new co-worker, Re-hiring a co-worker returning to IKEA, IKEA Co-workers moving between countries, IKEA Co-workers changing Business Unit.', 300)
 GO
-If not exists (select * from tblTextTranslation where text_id = 1578 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1578, 2, 'Select for: Hiring a new co-worker, Re-hiring a co-worker returning to IKEA, IKEA Co-workers moving between countries, IKEA Co-workers changing Business Unit.')
+If not exists (select * from tblTextTranslation where text_id = 1578 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1578, 1, 'Select for: Hiring a new co-worker, Re-hiring a co-worker returning to IKEA, IKEA Co-workers moving between countries, IKEA Co-workers changing Business Unit.')
 GO
 
 If not exists (select * from tbltext where id = 1579)
 	insert into tbltext (id, TextString, TextType) VALUES (1579, 'Select for: Changes to Function, Team, Job, Cost Centre or Basic Pay/Salary changes.', 300)
 GO
-If not exists (select * from tblTextTranslation where text_id = 1579 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1579, 2, 'Select for: Changes to Function, Team, Job, Cost Centre or Basic Pay/Salary changes.')
+If not exists (select * from tblTextTranslation where text_id = 1579 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1579, 1, 'Select for: Changes to Function, Team, Job, Cost Centre or Basic Pay/Salary changes.')
+
+If not exists (select * from tbltext where id = 1693)
+	insert into tbltext (id, TextString, TextType) VALUES (1693, 'Add from clipboard', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1693 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1693, 1, 'Lägg till från Urklipp')
+
+If not exists (select * from tbltext where id = 1694)
+	insert into tbltext (id, TextString, TextType) VALUES (1694, 'Copy image data into clipboard and press Ctrl+V', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1694 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1694, 1, 'Kopiera bilddata till Urklipp och tryck Ctrl + V')
+
+If not exists (select * from tbltext where id = 1695)
+	insert into tbltext (id, TextString, TextType) VALUES (1695, 'Preview', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1695 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1695, 1, 'Förhandsgranska')
+
+If not exists (select * from tbltext where id = 1696)
+	insert into tbltext (id, TextString, TextType) VALUES (1696, 'Save', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1696 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1696, 1, 'Spara')
+
+If not exists (select * from tbltext where id = 1697)
+	insert into tbltext (id, TextString, TextType) VALUES (1697, 'Cancel', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1697 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1697, 1, 'Avbryt')
+
+
+
+
+
+

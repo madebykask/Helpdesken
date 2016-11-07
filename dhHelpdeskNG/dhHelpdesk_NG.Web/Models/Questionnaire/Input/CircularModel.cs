@@ -21,30 +21,31 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
             int id,
             int questionnaireId,
             IList<SelectListItem> availableDepartments,
-            IList<SelectListItem> selectedDepartments,
+            IList<int> selectedDepartments,
                                 IList<SelectListItem> availableCaseTypes,
-                                IList<SelectListItem> selectedCaseTypes,
+                                IList<int> selectedCaseTypes,
                                 IList<SelectListItem> availableProductArea,
-                                IList<SelectListItem> selectedProductArea,
+                                IList<int> selectedProductAreas,
                                 IList<SelectListItem> availableWorkingGroups,
-                                IList<SelectListItem> selectedWorkingGroups,
+                                IList<int> selectedWorkingGroups,
             bool isUniqueEmail,
             string circularName,
             DateTime? changedDate,
             CircularStates circularState,
             List<ConnectedToCircularOverview> connectedCases)
         {
+            CaseFilter = new CircularCaseFilter();
             Id = id;
             this.QuestionnaireId = questionnaireId;
             this.AvailableDepartments = availableDepartments;
-            this.SelectedDepartments = selectedDepartments;
+            CaseFilter.SelectedDepartments = selectedDepartments;
             this.AvailableCaseTypes = availableCaseTypes;
-            this.SelectedCaseTypes = selectedCaseTypes;
+            CaseFilter.SelectedCaseTypes = selectedCaseTypes;
             this.AvailableProductArea = availableProductArea;
-            this.SelectedProductArea = selectedProductArea;
+            CaseFilter.SelectedProductAreas = selectedProductAreas;
             this.AvailableWorkingGroups = availableWorkingGroups;
-            this.SelectedWorkingGroups = selectedWorkingGroups;
-            this.IsUniqueEmail = isUniqueEmail;
+            CaseFilter.SelectedWorkingGroups = selectedWorkingGroups;
+            CaseFilter.IsUniqueEmail = isUniqueEmail;
             CircularName = circularName;
             ChangedDate = changedDate;
             State = (CircularStatesDisplayValue) circularState;
@@ -77,33 +78,19 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
         [LocalizedDisplay("ChangedDate")]
         public DateTime? ChangedDate { get; set; }
 
-        [DataType(DataType.Date)]
-        public DateTime? FinishingDateFrom { get; set; }
-
-        [DataType(DataType.Date)]
-        public DateTime? FinishingDateTo { get; set; }
-
-        public bool IsUniqueEmail { get; set; }
-
         public IList<SelectListItem> AvailableDepartments { get; set; }
-
-        public IList<SelectListItem> SelectedDepartments { get; set; }
 
         public IList<SelectListItem> AvailableCaseTypes { get; set; }
 
-        public IList<SelectListItem> SelectedCaseTypes { get; set; }
-
         public IList<SelectListItem> AvailableProductArea { get; set; }
 
-        public IList<SelectListItem> SelectedProductArea { get; set; }
-
         public IList<SelectListItem> AvailableWorkingGroups { get; set; }
-
-        public IList<SelectListItem> SelectedWorkingGroups { get; set; }
 
         public IList<SelectListItem> Procent { get; set; }
 
         [NotNull]
         public List<ConnectedToCircularOverview> ConnectedCases { get; set; }
+
+        public CircularCaseFilter CaseFilter { get; set; }
     }
 }

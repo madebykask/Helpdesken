@@ -11,13 +11,13 @@
         public HistoriesDifference(
             DateTime dateAndTime,
             UserName registeredBy,
-            List<string> log,
+            //List<string> log,
             List<FieldDifference> history,
             List<string> emails)
         {
             this.DateAndTime = dateAndTime;
             this.RegisteredBy = registeredBy;
-            this.Log = log;
+            //this.Log = log;
             this.History = history;
             this.Emails = emails;
         }
@@ -27,7 +27,7 @@
         [NotNull]
         public UserName RegisteredBy { get; private set; }
 
-        public List<string> Log { get; private set; }
+        //public List<string> Log { get; private set; }
 
         [NotNull]
         public List<FieldDifference> History { get; private set; }

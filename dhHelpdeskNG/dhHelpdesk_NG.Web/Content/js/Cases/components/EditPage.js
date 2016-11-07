@@ -29,7 +29,7 @@ EditPage.prototype.fetchWatchDateByDept = function (deptId) {
 
     $.getJSON(
         '/cases/GetWatchDateByDepartment',
-        { 'departmentId': deptId },
+        { 'departmentId': deptId, 'myTime' : Date.now },
         function (response) {
             if (response.result === 'success') {
                 if (response.data != null) {
@@ -293,11 +293,15 @@ EditPage.prototype.setCaseStatus = function (status) {
         case me.CASE_IN_IDLE:
             me._inSaving = false;
             me.$buttonsToDisable.removeClass('disabled');
+            caseButtons.css("pointer-events", "");
+            $(templateQuickButtonIndicator).css("display", "none");
             return true;
     
         case me.CASE_IN_SAVING:
             me._inSaving = true;        
             me.$buttonsToDisable.addClass('disabled');
+            caseButtons.css("pointer-events", "none");
+            $(templateQuickButtonIndicator).css("display", "block");
             return true;
 
         default:
@@ -542,10 +546,13 @@ EditPage.prototype.init = function (p) {
     me.$watchDateChangers = $('.departments-list, #case__Priority_Id, #case__StateSecondary_Id');
     me.$department = $('.departments-list');
     me.$SLASelect = $('#case__Priority_Id');
-    me.$SLAInput = $('input.sla-value');
+    me.$SLAText = $('#case__Priority_Id');    
     me.$watchDateEdit = $('#case__WatchDate');
-    me.$watchDate = $('#divCase__WatchDate');   
-    me.$buttonsToDisable = $('.btn.save, .btn.save-close, .btn.save-new');
+    me.$watchDate = $('#divCase__WatchDate');      
+    me.$buttonsToDisable = $('.btn.save, .btn.save-close, .btn.save-new, .btn.caseDeleteDialog, ' +
+                             '#case-action-close, #divActionMenu, #btnActionMenu, #divCaseTemplate, #btnCaseTemplateTree, .btn.print-case,' +
+                             '.btn.show-inventory, .btn.previous-case, .btn.next-case, .btn.templateQuickButton');
+
     me.$productAreaObj = $('#divProductArea');
     me.$productAreaChildObj = $('#ProductAreaHasChild');
     me.productAreaErrorMessage = me.p.productAreaErrorMessage;
@@ -573,11 +580,11 @@ EditPage.prototype.init = function (p) {
     var invoiceElm = $('#CustomerSettings_ModuleCaseInvoice').val();
     me.invoiceIsActive = invoiceElm != undefined && invoiceElm != null && invoiceElm.toString().toLowerCase() == 'true';
 
-    me.$watchDateChangers.on('change', function () {
+    me.$watchDateChangers.on('change', function () {        
         var deptId = parseInt(me.$department.val(), 10);
         var SLA = parseInt(me.$SLASelect.find('option:selected').attr('data-sla'), 10);
-        if (isNaN(SLA)) {
-            SLA = parseInt(me.$SLAInput.attr('data-sla'), 10);
+        if (isNaN(SLA)) {            
+            SLA = parseInt(me.$SLAText.attr('data-sla'), 10);
         }
         if (this.id == "case__StateSecondary_Id") {
             $.post('/Cases/ChangeStateSecondary', { 'id': $(this).val() }, function (data) {

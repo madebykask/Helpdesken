@@ -27,6 +27,15 @@
             headers.Add(header);
         }
 
+        public static void ForceCreateHeader(            
+            string fieldName,
+            List<GridColumnHeaderModel> headers)
+        {       
+            
+            var header = new GridColumnHeaderModel(fieldName, string.Empty);
+            headers.Add(header);
+        }
+
         public static void CreateValueIfNeeded(
             FieldOverviewSetting setting,
             string fieldName,
@@ -75,6 +84,15 @@
         {
             var displayValue = new HtmlStringsDisplayValue(value);
             CreateValueIfNeeded(setting, fieldName, displayValue, values);
+        }
+
+        public static void ForceCreateValue(            
+            string fieldName,
+            string value,
+            List<NewGridRowCellValueModel> values)
+        {           
+            var fieldValue = new NewGridRowCellValueModel(fieldName,  new StringDisplayValue(value));
+            values.Add(fieldValue);
         }
 
         public static void CreateValueIfNeeded(

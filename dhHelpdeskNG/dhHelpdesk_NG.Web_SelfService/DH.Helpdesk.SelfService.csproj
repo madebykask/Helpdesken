@@ -340,6 +340,7 @@
     <Content Include="Content\css\bootstrap.min.css" />
     <Content Include="Content\css\dhplus.css" />
     <Content Include="Content\css\jquery.toastmessage.css" />
+    <Content Include="Content\img\ajax-loader.GIF" />
     <Content Include="Content\img\backgrounds.gif" />
     <Content Include="Content\img\buttons-disabled.png" />
     <Content Include="Content\img\buttons.png" />
@@ -355,6 +356,7 @@
     <Content Include="Content\img\glyphicons-halflings.png" />
     <Content Include="Content\img\throbber.gif" />
     <Content Include="Content\img\transp50.png" />
+    <Content Include="Content\js\Case\case.log.js" />
     <Content Include="Content\js\Case\edit.js" />
     <Content Include="Content\js\Shared\app.layout.js" />
     <Content Include="Content\js\typeahead.js" />
@@ -1237,7 +1239,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>63002</DevelopmentServerPort>
+          <DevelopmentServerPort>64087</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:59809/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

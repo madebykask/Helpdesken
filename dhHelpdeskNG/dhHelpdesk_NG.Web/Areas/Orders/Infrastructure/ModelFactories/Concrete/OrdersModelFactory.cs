@@ -16,6 +16,7 @@
     {
         public OrdersIndexModel GetIndexModel(OrdersFilterData data, OrdersFilterModel filter)
         {
+            var orderTypesSearch = WebMvcHelper.CreateListField(data.OrderTypesSearch, filter.OrderTypeId, true);
             var orderTypes = WebMvcHelper.CreateListField(data.OrderTypes, filter.OrderTypeId, true);
             var administrators = WebMvcHelper.CreateMultiSelectField(data.Administrators, filter.AdministratiorIds);
             var statuses = WebMvcHelper.CreateMultiSelectField(data.OrderStatuses, filter.StatusIds);
@@ -29,6 +30,7 @@
             }
 
             return new OrdersIndexModel(
+                                    orderTypesSearch,
                                     orderTypes, 
                                     administrators, 
                                     filter.StartDate,
@@ -40,7 +42,7 @@
                                     orderTypesForCreateOrder);
         }
 
-        public OrdersGridModel Create(SearchResponse response, SortField sortField)
+        public OrdersGridModel Create(SearchResponse response, SortField sortField, bool showType)
         {
             var headers = new List<GridColumnHeaderModel>();
 
@@ -58,7 +60,7 @@
             var orderOverviews =
                 response.SearchResult.Orders.Select(o => CreateFullValues(response.OverviewSettings, o)).ToList();
 
-            return new OrdersGridModel(headers, orderOverviews, response.SearchResult.OrdersFound, sortField);
+            return new OrdersGridModel(headers, orderOverviews, response.SearchResult.OrdersFound, sortField, showType);
         }
        
         #region Create headers
@@ -132,9 +134,10 @@
         private static void CreateOtherHeaders(OtherFieldSettingsOverview settings, List<GridColumnHeaderModel> headers)
         {
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.FileName, OtherFieldNames.FileName, headers);
-            FieldSettingsHelper.CreateHeaderIfNeeded(settings.CaseNumber, OtherFieldNames.CaseNumber, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.CaseNumber, OtherFieldNames.CaseNumber, headers);            
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.Info, OtherFieldNames.Info, headers);
-            FieldSettingsHelper.CreateHeaderIfNeeded(settings.Status, OtherFieldNames.Status, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.Status, OtherFieldNames.Status, headers);            
+            FieldSettingsHelper.ForceCreateHeader(OtherFieldNames.CaseIsFinished, headers);
         }
 
         private static void CreateProgramHeaders(ProgramFieldSettingsOverview settings, List<GridColumnHeaderModel> headers)
@@ -185,7 +188,7 @@
             CreateProgramValues(settings.Program, order.Program, values);
             CreateUserValues(settings.User, order.User, values);
 
-            return new OrderOverviewModel(order.Id, values);
+            return new OrderOverviewModel(order.Id, order.OrderType, values);
         }
 
         private static void CreateDeliveryValues(
@@ -278,6 +281,11 @@
             FieldSettingsHelper.CreateValueIfNeeded(settings.CaseNumber, OtherFieldNames.CaseNumber, fields.CaseNumber, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.Info, OtherFieldNames.Info, fields.Info, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.Status, OtherFieldNames.Status, fields.Status, values);
+
+            if (fields.CaseInfo != null && fields.CaseInfo.FinishingDate.HasValue)
+                FieldSettingsHelper.ForceCreateValue(OtherFieldNames.CaseIsFinished, bool.TrueString, values);
+            else
+                FieldSettingsHelper.ForceCreateValue(OtherFieldNames.CaseIsFinished, bool.FalseString, values);
         }
 
         private static void CreateProgramValues(

@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Dal.NewInfrastructure
+﻿using System.Collections.Generic;
+
+namespace DH.Helpdesk.Dal.NewInfrastructure
 {
     using System;
     using System.Linq;
@@ -32,5 +34,8 @@
         IQueryable<TEntity> Find(
             Expression<Func<TEntity, bool>> predicate,
             params Expression<Func<TEntity, object>>[] includeProperties);
+
+        void MergeList(Expression<Func<TEntity, bool>> currentPredicate, IList<TEntity> newList,
+            Func<TEntity, TEntity, bool> comparePredicate);
     }
 }

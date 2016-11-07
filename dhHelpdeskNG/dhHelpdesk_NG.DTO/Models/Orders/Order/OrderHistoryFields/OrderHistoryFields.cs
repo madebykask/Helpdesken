@@ -56,6 +56,7 @@
         
         public string OrderInfo { get; private set; }
 
-        public int OrderInfo2 { get; private set; }      
+        public int OrderInfo2 { get; private set; }  
+    
     }
 }

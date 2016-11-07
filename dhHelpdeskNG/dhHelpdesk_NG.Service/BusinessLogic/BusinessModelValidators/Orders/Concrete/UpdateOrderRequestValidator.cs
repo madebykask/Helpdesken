@@ -113,7 +113,7 @@
             OtherEditSettings settings)
         {
             this.elementaryRulesValidator.ValidateStringField(updatedFields.FileName, existingFields.FileName, OtherFields.FileName, new ElementaryValidationRule(!settings.FileName.Show, settings.FileName.Required));                        
-            this.elementaryRulesValidator.ValidateDecimalField(updatedFields.CaseNumber, existingFields.CaseNumber, OtherFields.CaseNumber, new ElementaryValidationRule(!settings.CaseNumber.Show, settings.CaseNumber.Required));                        
+            //this.elementaryRulesValidator.ValidateDecimalField(updatedFields.CaseNumber, existingFields.CaseNumber, OtherFields.CaseNumber, new ElementaryValidationRule(!settings.CaseNumber.Show, settings.CaseNumber.Required));                        
             this.elementaryRulesValidator.ValidateStringField(updatedFields.Info, existingFields.Info, OtherFields.Info, new ElementaryValidationRule(!settings.Info.Show, settings.Info.Required));
         }
 

@@ -17,7 +17,7 @@
 
         public List<HistoriesDifference> AnalyzeHistoriesDifferences(
                     List<HistoryOverview> histories, 
-                    List<LogOverview> logs, 
+                    //List<LogOverview> logs, 
                     List<EmailLogOverview> emailLogs,
                     FullOrderEditSettings settings)
         {
@@ -27,13 +27,13 @@
 
             foreach (var history in histories)
             {
-                var historyLogs = logs.Where(l => l.HistoryId == history.Id).ToList();
+                //var historyLogs = logs.Where(l => l.HistoryId == history.Id).ToList();
                 var historyEmailLogs = emailLogs.Where(l => l.HistoryId == history.Id).ToList();
 
                 var difference = this.historiesComparator.Compare(
                     previousHistory,
                     history,
-                    historyLogs,
+                    //historyLogs,
                     historyEmailLogs,
                     settings);
 

@@ -10,7 +10,7 @@
         HistoriesDifference Compare(
            HistoryOverview previousHistory,
            HistoryOverview currentHistory,
-           List<LogOverview> currentHistoryLog,
+           //List<LogOverview> currentHistoryLog,
            List<EmailLogOverview> currentHistoryEmailLogs,
            FullOrderEditSettings settings);
     }

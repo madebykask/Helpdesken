@@ -13,11 +13,12 @@
     </tr>               
     <tr>
         @{row = Model.Where(r => r.ContractField == ContractFieldSettings.Number).FirstOrDefault();
-          if (row == null){
-              row = ContractsSettingRowViewModel.CreateEmpty(ContractFieldSettings.Number);}
+            if (row == null){
+              row = ContractsSettingRowViewModel.CreateEmpty(ContractFieldSettings.Number);
               row.ContractFieldLable = Translation.Get("Nummer", Enums.TranslationSource.TextTranslation);
               row.ContractFieldLable_Eng = "Number";
-              }
+             }             
+          }
         <td>@Translation.Get("Nummer", Enums.TranslationSource.TextTranslation)</td>
         <td>@Html.CheckBoxFor(m=> row.Show, new { @class= ContractFieldSettings.Number + " switchcheckbox", id="fieldShow" , dataId=@row.Id})</td>
         <td>@Html.TextBoxFor(m=> row.ContractFieldLable, new {@class=ContractFieldSettings.Number, id="fieldCaption", dataId=@row.Id , englishLable=row.ContractFieldLable_Eng, swedishLable=row.ContractFieldLable})</td>

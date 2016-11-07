@@ -423,6 +423,14 @@
 
         public DbSet<QuestionnaireCircularEntity> QuestionnaireCirculars { get; set; }
 
+        public DbSet<QuestionnaireCircularDepartmentEntity> QuestionnaireCircularDepartments { get; set; }
+
+        public DbSet<QuestionnaireCircularCaseTypeEntity> QuestionnaireCircularCaseTypes { get; set; }
+
+        public DbSet<QuestionnaireCircularProductAreaEntity> QuestionnaireCircularProductAreas { get; set; }
+
+        public DbSet<QuestionnaireCircularWorkingGroupEntity> QuestionnaireCircularWorkingGroups { get; set; }
+
         public DbSet<QuestionnaireLanguageEntity> QuestionnaireLanguages { get; set; }
 
         public DbSet<QuestionnaireQuesLangEntity> QuestionnaireQuestionLanguage { get; set; }
@@ -766,6 +774,10 @@
             modelBuilder.Configurations.Add(new QuestionnaireLanguageConfiguration());
             modelBuilder.Configurations.Add(new QuestionnaireCircularConfiguration());
             modelBuilder.Configurations.Add(new QuestionnaireCircularPartConfiguration());
+            modelBuilder.Configurations.Add(new QuestionnaireCircularDepartmentConfiguration());
+            modelBuilder.Configurations.Add(new QuestionnaireCircularCaseTypeConfiguration());
+            modelBuilder.Configurations.Add(new QuestionnaireCircularProductAreaConfiguration());
+            modelBuilder.Configurations.Add(new QuestionnaireCircularWorkingGroupConfiguration());
             modelBuilder.Configurations.Add(new QuestionnaireQuesOpLangConfiguration());
             modelBuilder.Configurations.Add(new QuestionnaireQuestionOptionConfiguration());
             modelBuilder.Configurations.Add(new QuestionnaireResultConfiguration());

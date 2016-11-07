@@ -12,13 +12,13 @@
         public HistoryRecordModel(
             DateTime dateAndTime,
             UserName registeredBy,
-            List<string> log,
+            //List<string> log,
             List<FieldDifferencesModel> fieldsDifferences,
             List<string> emails)
         {
             this.DateAndTime = dateAndTime;
             this.RegisteredBy = registeredBy;
-            this.Log = log;
+            //this.Log = log;
             this.FieldsDifferences = fieldsDifferences;
             this.Emails = emails;
         }
@@ -29,8 +29,8 @@
         [LocalizedDisplay("Anmälare")]
         public UserName RegisteredBy { get; set; }
 
-        [LocalizedDisplay("Logg")]
-        public List<string> Log { get; set; }
+        //[LocalizedDisplay("Logg")]
+        //public List<string> Log { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Historik")]

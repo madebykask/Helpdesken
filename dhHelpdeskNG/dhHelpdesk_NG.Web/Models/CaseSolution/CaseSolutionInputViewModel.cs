@@ -75,6 +75,8 @@
         public IList<SelectListItem> IsAbout_OUs { get; set; }
 
         public IList<SelectListItem> ButtonList { get; set; }
+
+        public IList<SelectListItem> ActionList { get; set; }
         
     }
 }

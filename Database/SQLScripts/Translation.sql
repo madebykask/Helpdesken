@@ -5097,5 +5097,19 @@ GO
 If not exists (select * from tblTextTranslation where Text_Id = 1692 and Language_Id=2)
             insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1692, 'Notice date', 2)
 GO
+
+
+/* 1692 - 1697 reserved for SelfService */
+
+If not exists (select * from tblText where Id = 1698)
+            insert into tblText (Id, Textstring) VALUES (1698, 'Förhandsgranska')																
+																
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1698 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1698, 'Preview', 2)
+GO
+
+
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

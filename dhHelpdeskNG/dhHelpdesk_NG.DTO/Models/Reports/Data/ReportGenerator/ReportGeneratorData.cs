@@ -151,7 +151,11 @@ using DH.Helpdesk.BusinessData.Enums.Case.Fields;
         //--
 
         public Log LogData { get; set; }
-                
+
+        public List<string> AllInternalText { get; set; }
+
+        public List<string> AllExtenalText { get; set; }
+
     }
 
     public sealed class ReportGeneratorData

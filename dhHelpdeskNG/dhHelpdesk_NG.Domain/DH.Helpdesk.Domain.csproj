@@ -133,6 +133,10 @@
     <Compile Include="FileViewLogEntity.cs" />
     <Compile Include="Grid\GridSettingsEntity.cs" />
     <Compile Include="ParentChildCaseRelation.cs" />
+    <Compile Include="Questionnaire\QuestionnaireCircularCaseTypeEntity.cs" />
+    <Compile Include="Questionnaire\QuestionnaireCircularDepartmentEntity.cs" />
+    <Compile Include="Questionnaire\QuestionnaireCircularProductAreaEntity.cs" />
+    <Compile Include="Questionnaire\QuestionnaireCircularWorkingGroupEntity.cs" />
     <Compile Include="RegistrationSourceCustomer.cs" />
     <Compile Include="ReportFavorite.cs" />
     <Compile Include="TranslationSearch.cs" />

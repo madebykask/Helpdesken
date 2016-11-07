@@ -205,6 +205,7 @@
     <Compile Include="Models\CaseOverviewGridColumnSetting.cs" />
     <Compile Include="Models\Contract\ContractSelectedFilter.cs" />
     <Compile Include="Models\Contract\ContractsSettingRowModel.cs" />
+    <Compile Include="Models\Contract\ContractInputModel.cs" />
     <Compile Include="Models\DailyReport\Input\DailyReportUpdate.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\ModelEdit\AccountFieldsSettingsForModelEdit.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\ModelEdit\AccountInformationFieldSettings.cs" />
@@ -394,6 +395,7 @@
     <Compile Include="Models\ProductArea\IProductAreaNameResolver.cs" />
     <Compile Include="Models\ProductArea\ProductAreaItem.cs" />
     <Compile Include="Models\Projects\Output\ProjectOverviewSorting.cs" />
+    <Compile Include="Models\Questionnaire\CircularCaseFilter.cs" />
     <Compile Include="Models\Questionnaire\Participant.cs" />
     <Compile Include="Models\Questionnaire\Read\CircularOverview.cs" />
     <Compile Include="Models\Questionnaire\Read\ConnectedCase.cs" />

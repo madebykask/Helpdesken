@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Dal.NewInfrastructure.Concrete
+﻿using System.Collections.Generic;
+
+namespace DH.Helpdesk.Dal.NewInfrastructure.Concrete
 {
     using System;
     using System.Data.Entity;
@@ -99,6 +101,27 @@
         public TEntity GetById(long id)
         {
             return this.dbset.Find(id);
+        }
+
+        /// <summary>
+        /// Applies new musltiselect list selection to an existing selection from repository - removes what needs to be removed, add what needs to be added
+        /// </summary>
+        /// <param name="currentPredicate">Predicate for existing repository to select a set of entries to be updated</param>
+        /// <param name="newList">New selection, list of entries to what a repository needs to be updated to</param>
+        /// /// <param name="comparePredicate">Comparer expression used to compare old and new entries</param>
+        /// <returns></returns>
+        public void MergeList(Expression<Func<TEntity, bool>> currentPredicate, IList<TEntity> newList, Func<TEntity, TEntity, bool> comparePredicate)
+        {
+            var current = GetAll().Where(currentPredicate).ToList();
+
+            foreach (var toDel in current.Where(x => !newList.Any(y => comparePredicate(x, y))).ToList())
+            {
+                Delete(toDel);
+            }
+            foreach (var toIns in newList.Where(x => !current.Any(y => comparePredicate(x, y))).ToList())
+            {
+                Add(toIns);
+            }
         }
     }
 }

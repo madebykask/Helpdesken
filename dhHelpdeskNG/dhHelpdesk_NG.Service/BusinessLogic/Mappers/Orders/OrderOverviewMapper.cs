@@ -13,7 +13,7 @@
 
     public static class OrderOverviewMapper
     {
-        public static FullOrderOverview[] MapToFullOverviews(this IQueryable<Order> query)
+        public static FullOrderOverview[] MapToFullOverviews(this IQueryable<Order> query, IList<OrderType> orderTypes, IList<Case> caseEntities)
         {
             var entities = query
                             .SelectIncluding(new List<Expression<Func<Order, object>>>
@@ -36,36 +36,35 @@
 
             return entities.Select(
                 o =>
-                    {
+                {
                         var order = (Order)o.sourceObject;
-
-                        order.Customer = new Customer { Name = o.f0 };
-                        order.Domain = new Domain { Name = o.f1 };
-                        order.Ou = new OU { Name = o.f2 };
-                        order.OrderProperty = new OrderPropertyEntity { OrderProperty = o.f3 };
-                        order.OrderState = new OrderState { Name = o.f4 };
-                        order.OrderType = new OrderType { Name = o.f5 };
-                        order.DeliveryDepartment = new Department { DepartmentName = o.f6 };
-                        order.DeliveryOuEntity = new OU { Name = o.f7 };
-                        order.Logs = ((List<string>)o.f8).Select(l => new OrderLog { LogNote = l }).ToArray();
-                        order.Programs = ((List<string>)o.f9).Select(p => new Program { Name = p }).ToArray();
-                        order.User = new User { FirstName = o.f10, SurName = o.f11 };
-                        order.Department = new Department { DepartmentName = o.f12 };
-
-                        return CreateFullOverview(order);
-                    }).ToArray();
+                    order.Customer = new Customer { Name = o.f0 };
+                    order.Domain = new Domain { Name = o.f1 };
+                    order.Ou = new OU { Name = o.f2 };
+                    order.OrderProperty = new OrderPropertyEntity { OrderProperty = o.f3 };
+                    order.OrderState = new OrderState { Name = o.f4 };
+                    order.OrderType = new OrderType { Name = GetRootOrderTypeName(orderTypes, order.OrderType_Id) };
+                    order.DeliveryDepartment = new Department { DepartmentName = o.f6 };
+                    order.DeliveryOuEntity = new OU { Name = o.f7 };
+                    order.Logs = ((List<string>)o.f8).Select(l => new OrderLog { LogNote = l }).ToArray();
+                    order.Programs = ((List<string>)o.f9).Select(p => new Program { Name = p }).ToArray();
+                    order.User = new User { FirstName = o.f10, SurName = o.f11 };
+                    order.Department = new Department { DepartmentName = o.f12 };
+                    return CreateFullOverview(order, caseEntities);                    
+                }).ToArray();
         }
 
         #region Create fields
 
-        private static FullOrderOverview CreateFullOverview(Order entity)
+        private static FullOrderOverview CreateFullOverview(Order entity, IList<Case> caseEntities)
         {
             var delivery = CreateDeliveryOverview(entity);
             var general = CreateGeneralOverview(entity);
             var log = CreateLogOverview(entity);
             var orderer = CreateOrdererOverview(entity);
             var order = CreateOrderOverview(entity);
-            var other = CreateOtherOverview(entity);
+            var curCase = caseEntities.Where(c=>  c.CaseNumber == entity.CaseNumber).SingleOrDefault();             
+            var other = curCase == null ? CreateOtherOverview(entity) : CreateOtherOverview(entity, curCase);
             var program = CreateProgramOverview(entity);
             var receiver = CreateReceiverOverview(entity);
             var supplier = CreateSupplierOverview(entity);
@@ -73,6 +72,7 @@
 
             return new FullOrderOverview(
                                     entity.Id,
+                                    entity.OrderType,
                                     delivery,
                                     general,
                                     log,
@@ -155,11 +155,12 @@
                                     entity.OrderInfo2.ToString(CultureInfo.InvariantCulture));
         }
 
-        private static OtherOverview CreateOtherOverview(Order entity)
+        private static OtherOverview CreateOtherOverview(Order entity, Case curCase = null)
         {
             return new OtherOverview(
                                     entity.Filename,
                                     entity.CaseNumber,
+                                    curCase,
                                     entity.Info,
                                     entity.OrderState != null ? entity.OrderState.Name : string.Empty);
         }
@@ -197,5 +198,23 @@
         }
 
         #endregion
+
+        private static string GetRootOrderTypeName(IList<OrderType> orderTypes, int? id)
+        {
+            if (!id.HasValue)
+                return "";
+
+            for (var i = 0; i < 1000000; i++) //max 1M depth - to avoid infinite recursive call/loop in case of db incorrect data
+            {
+                var current = orderTypes.SingleOrDefault(x => x.Id == id);
+                if (current == null)
+                    return "";
+                if (!current.Parent_OrderType_Id.HasValue)
+                    return current.Name;
+                id = current.Parent_OrderType_Id.Value;
+            }
+
+            return "";
+        }
     }
 }

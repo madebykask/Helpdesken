@@ -1,12 +1,13 @@
 ﻿"use strict";
 
+
 function SetValueIfElVisible(el, val, opt, forceApply) {
     opt = opt || { doOverwrite: false, doNotTriggerEvent: false };
 
     if (el && ($(el).is(':visible') || (forceApply && val != null && val != ''))) {
         if (el.val() == "" || opt.doOverwrite) {
             $(el).val(val);
-            if (!opt.doNotTriggerEvent) {
+            if (!opt.doNotTriggerEvent) {                
                 $(el).trigger('change');
             }
             if (el.selector == "#case__WorkingGroup_Id") {
@@ -313,6 +314,14 @@ var overwriteWarning = {
         });
     }
 };
+
+var finalActionId;
+
+var caseButtons = $('.btn.save, .btn.save-close, .btn.save-new, .btn.caseDeleteDialog, ' +
+                    '#case-action-close, #divActionMenu, #btnActionMenu, #divCaseTemplate, #btnCaseTemplateTree, .btn.print-case,' +
+                    '.btn.show-inventory, .btn.previous-case, .btn.next-case, .btn.templateQuickButton');
+
+var templateQuickButtonIndicator = '#TemplateQuickButtonIndicator';
 
 var ApplyTemplate = function (data, doOverwrite) {
     var cfg = { doOverwrite: doOverwrite };
@@ -652,6 +661,16 @@ var ApplyTemplate = function (data, doOverwrite) {
             }
         }
     }
+
+    //TODO: As there are fragmented functiond to execute the Case rules (some here and some are in others .js file) 
+    //      we call the FinalAction function after 3 seconds. 
+    //      After refactoring CaseTemplate this fuction should be call Sync.
+
+    if (finalActionId != null) {
+        changeCaseButtonsState(false);
+        setTimeout(runFinalAction, 3000, false);
+    }
+    
 }
 
 function IsValueApplicableFor(templateFieldId, val) {
@@ -880,7 +899,7 @@ function LoadTemplate(id) {
     var curCaseId = $('#case__Id').val();
     if ($('#CustomerSettings_ModuleCaseInvoice') != undefined)
         caseInvoiceIsActive = $('#CustomerSettings_ModuleCaseInvoice').val().toLowerCase() == 'true';
-
+    
     if (caseInvoiceIsActive) {
         $.get('/CaseInvoice/IsThereNotSentOrder/', { caseId: curCaseId, myTime: Date.now }, function (res) {
             if (res != null && res) {
@@ -888,33 +907,36 @@ function LoadTemplate(id) {
                 ShowToastMessage(mes, 'warning', false);                
             }
             else {
-                GetTemplateData(id)
+                GetTemplateData(id);
             }
         });
     }
     else {
-        GetTemplateData(id)
+         GetTemplateData(id);
     }
+    
 }
 
 function GetTemplateData(id) {
+    
     $.get('/CaseSolution/GetTemplate',
         { 'id': id, myTime: Date.now },
         function (caseTemplate) {
 
+            finalActionId = caseTemplate["SaveAndClose"];
             var showOverwriteWarning = false;
             if (!caseTemplate) {
                 return;
             }
 
-            for (var field in caseTemplate) {
+            for (var field in caseTemplate) {                
                 if (window.IsValueApplicableFor(field, caseTemplate[field]) && window.IsWillBeOverwritten(field, caseTemplate[field])) {
-                    showOverwriteWarning = true;
+                    showOverwriteWarning = true;                    
                     break;
                 }
             }
-
-            var overwriteDirectly = caseTemplate["OverWritePopUp"];
+            
+            var overwriteDirectly = caseTemplate["OverWritePopUp"];            
             if (overwriteDirectly != undefined && overwriteDirectly != null && overwriteDirectly != 0)
                 window.ApplyTemplate(caseTemplate, true);
             else {
@@ -924,6 +946,48 @@ function GetTemplateData(id) {
                     window.ApplyTemplate(caseTemplate);
                 }
             }
+
+                       
         }
     );
+}
+
+function runFinalAction(forceRun) {    
+    /*TODO: Start to run just after Invoices is loaded to Case. After refactoring to run Sync, 
+            we should just run the fuction without any timer */
+
+    var indicator = $("#invoiceButtonIndicator");   
+
+    if (!forceRun && indicator != null && indicator != undefined && indicator.is(':visible')) {        
+        setTimeout(runFinalAction, 1500, false);        
+        return;
+    } else {
+        if (!forceRun) {
+            setTimeout(runFinalAction, 500, true);
+            return;
+        }
+
+        changeCaseButtonsState(true);
+        if (finalActionId == null) {
+            // do nothing
+        }        
+        else if (finalActionId == 0)
+            $("#case-action-save").trigger('click');
+        else if (finalActionId == 1)
+            $("#case-action-save-and-close").trigger('click');
+
+    }    
+}
+
+function changeCaseButtonsState(state) {
+    if (state) {
+        caseButtons.removeClass('disabled');
+        caseButtons.css("pointer-events", "");
+        $(templateQuickButtonIndicator).css("display", "none");
+    }
+    else {
+        caseButtons.addClass("disabled");
+        caseButtons.css("pointer-events", "none");
+        $(templateQuickButtonIndicator).css("display", "block");
+    }
 }
