@@ -256,14 +256,14 @@ namespace DH.Helpdesk.Web.Areas.Reports.Infrastructure.ModelFactories.Concrete
             //var finishingDescription = fields.Logs.Select(l => l.FinishingDescription).ToArray();
             //var finishingDate = fields.Logs.Select(l => l.FinishingDate.HasValue ? l.FinishingDate.Value.ToShortDateString() : string.Empty).ToArray();
             //var finishingCause = fields.Logs.Select(l => l.FinishingCause).ToArray();
-
-            //FieldSettingsHelper.CreateValueIfNeeded(settings.InternalLogNote, LogFields.InternalLogNote, internalLogNotes, values);
-            //FieldSettingsHelper.CreateValueIfNeeded(settings.ExternalLogNote, LogFields.ExternalLogNote, externalLogNotes, values);
+            
             //FieldSettingsHelper.CreateValueIfNeeded(settings.Debiting, LogFields.Debiting, debiting, values);
             //FieldSettingsHelper.CreateValueIfNeeded(settings.AttachedFile, LogFields.AttachedFile, attachedFiles, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.FinishingDescription, LogFields.FinishingDescription, fields.FinishingDescription, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.FinishingDate, LogFields.FinishingDate, fields.ClosingDate, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.FinishingCause, LogFields.FinishingCause, fields.FinishingCause, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.InternalLogNote, LogFields.InternalLogNote, fields.IntenalLogNote, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.ExternalLogNote, LogFields.ExternalLogNote, fields.ExternalLogNote, values);
         }
 
         #endregion

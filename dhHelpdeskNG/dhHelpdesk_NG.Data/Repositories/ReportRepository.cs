@@ -225,91 +225,91 @@ namespace DH.Helpdesk.Dal.Repositories
             }
 
             var query = from c in this.DataContext.Cases
-                join cu in this.DataContext.Customers on c.Customer_Id equals cu.Id
+                        join cu in this.DataContext.Customers on c.Customer_Id equals cu.Id
 
-                join isAbout in this.DataContext.CaseIsAbout on c.Id equals (int?) isAbout.Id into isabouts
-                from _isAbout in isabouts.DefaultIfEmpty()
+                        join isAbout in this.DataContext.CaseIsAbout on c.Id equals (int?)isAbout.Id into isabouts
+                        from _isAbout in isabouts.DefaultIfEmpty()
 
-                join r in this.DataContext.Regions on c.Region_Id equals (int?) r.Id into rs
-                from _r in rs.DefaultIfEmpty()
+                        join r in this.DataContext.Regions on c.Region_Id equals (int?)r.Id into rs
+                        from _r in rs.DefaultIfEmpty()
 
-                join d in this.DataContext.Departments on c.Department_Id equals (int?) d.Id into ds
-                from _d in ds.DefaultIfEmpty()
+                        join d in this.DataContext.Departments on c.Department_Id equals (int?)d.Id into ds
+                        from _d in ds.DefaultIfEmpty()
 
-                join u1 in this.DataContext.Users on c.User_Id equals (int?) u1.Id into u1s
-                from _u1 in u1s.DefaultIfEmpty()
+                        join u1 in this.DataContext.Users on c.User_Id equals (int?)u1.Id into u1s
+                        from _u1 in u1s.DefaultIfEmpty()
 
-                join s in this.DataContext.Systems on c.System_Id equals (int?) s.Id into ss
-                from _s in ss.DefaultIfEmpty()
+                        join s in this.DataContext.Systems on c.System_Id equals (int?)s.Id into ss
+                        from _s in ss.DefaultIfEmpty()
 
-                join p in this.DataContext.Priorities on c.Priority_Id equals (int?) p.Id into ps
-                from _p in ps.DefaultIfEmpty()
+                        join p in this.DataContext.Priorities on c.Priority_Id equals (int?)p.Id into ps
+                        from _p in ps.DefaultIfEmpty()
 
-                join im in this.DataContext.Impacts on c.Impact_Id equals (int?) im.Id into ims
-                from _im in ims.DefaultIfEmpty()
+                        join im in this.DataContext.Impacts on c.Impact_Id equals (int?)im.Id into ims
+                        from _im in ims.DefaultIfEmpty()
 
-                join cat in this.DataContext.Categories on c.Category_Id equals (int?) cat.Id into cats
-                from _cat in cats.DefaultIfEmpty()
+                        join cat in this.DataContext.Categories on c.Category_Id equals (int?)cat.Id into cats
+                        from _cat in cats.DefaultIfEmpty()
 
-                join sup in this.DataContext.Suppliers on c.Supplier_Id equals (int?) sup.Id into sups
-                from _sup in sups.DefaultIfEmpty()
+                        join sup in this.DataContext.Suppliers on c.Supplier_Id equals (int?)sup.Id into sups
+                        from _sup in sups.DefaultIfEmpty()
 
-                join regsource in this.DataContext.RegistrationSourceCustomer on c.RegistrationSourceCustomer_Id equals
-                    (int?) regsource.Id into regsources
-                from _regsource in regsources.DefaultIfEmpty()
+                        join regsource in this.DataContext.RegistrationSourceCustomer on c.RegistrationSourceCustomer_Id equals
+                            (int?)regsource.Id into regsources
+                        from _regsource in regsources.DefaultIfEmpty()
 
-                join caseStatis in this.DataContext.CaseStatistics on c.Id equals caseStatis.CaseId into casestatiss
-                from _caseStatis in casestatiss.DefaultIfEmpty()
+                        join caseStatis in this.DataContext.CaseStatistics on c.Id equals caseStatis.CaseId into casestatiss
+                        from _caseStatis in casestatiss.DefaultIfEmpty()
 
-                join wg in this.DataContext.WorkingGroups on c.WorkingGroup_Id equals (int?) wg.Id into wgs
-                from _wg in wgs.DefaultIfEmpty()
+                        join wg in this.DataContext.WorkingGroups on c.WorkingGroup_Id equals (int?)wg.Id into wgs
+                        from _wg in wgs.DefaultIfEmpty()
 
-                join u2 in this.DataContext.Users on c.CaseResponsibleUser_Id equals (int?) u2.Id into u2s
-                from _u2 in u2s.DefaultIfEmpty()
+                        join u2 in this.DataContext.Users on c.CaseResponsibleUser_Id equals (int?)u2.Id into u2s
+                        from _u2 in u2s.DefaultIfEmpty()
 
-                join st in this.DataContext.Statuses on c.Status_Id equals (int?) st.Id into sts
-                from _st in sts.DefaultIfEmpty()
+                        join st in this.DataContext.Statuses on c.Status_Id equals (int?)st.Id into sts
+                        from _st in sts.DefaultIfEmpty()
 
-                join sst in this.DataContext.StateSecondaries on c.StateSecondary_Id equals (int?) sst.Id into ssts
-                from _sst in ssts.DefaultIfEmpty()
+                        join sst in this.DataContext.StateSecondaries on c.StateSecondary_Id equals (int?)sst.Id into ssts
+                        from _sst in ssts.DefaultIfEmpty()
 
-                join cp in this.DataContext.CausingParts on c.CausingPartId equals (int?) cp.Id into cps
-                from _cp in cps.DefaultIfEmpty()
+                        join cp in this.DataContext.CausingParts on c.CausingPartId equals (int?)cp.Id into cps
+                        from _cp in cps.DefaultIfEmpty()
 
-                join ur in this.DataContext.Urgencies on c.Urgency_Id equals (int?) ur.Id into urs
-                from _ur in urs.DefaultIfEmpty()
+                        join ur in this.DataContext.Urgencies on c.Urgency_Id equals (int?)ur.Id into urs
+                        from _ur in urs.DefaultIfEmpty()
 
-                join user3 in this.DataContext.Users on c.Performer_User_Id equals (int?) user3.Id into user3s
-                from _user3 in user3s.DefaultIfEmpty()
-           
-                where
-                    c.Customer_Id == customerId && c.Deleted != 1 &&
-                    (DbFunctions.TruncateTime(c.RegTime) >= DbFunctions.TruncateTime(periodFrom) && DbFunctions.TruncateTime(c.RegTime) <= DbFunctions.TruncateTime(periodUntil))
-                    && (caseTypeId.Any() ? caseTypeId.Contains(c.CaseType_Id) : true)
-                    &&
-                    (workingGroupIds.Any()
-                        ? (workingGroupIds.Contains(0) ? !c.WorkingGroup_Id.HasValue || 
-                                                         c.WorkingGroup_Id.HasValue && workingGroupIds.Contains(c.WorkingGroup_Id.Value) 
-                                                       : c.WorkingGroup_Id.HasValue && workingGroupIds.Contains(c.WorkingGroup_Id.Value))
-                        : false)
-                    &&               
+                        join user3 in this.DataContext.Users on c.Performer_User_Id equals (int?)user3.Id into user3s
+                        from _user3 in user3s.DefaultIfEmpty()
 
-                    (departmentIds.Any()
-                        ? (ouIds.Any()? (c.Department_Id.HasValue && departmentIds.Contains(c.Department_Id.Value)) || 
-                                         c.OU_Id.HasValue && ouIds.Contains(c.OU_Id.Value):
-                                         c.Department_Id.HasValue && departmentIds.Contains(c.Department_Id.Value)
-                                         )
-                        : (ouIds.Any()? c.OU_Id.HasValue && ouIds.Contains(c.OU_Id.Value) : true))
-                    &&
-                    (productAreaIds.Any()
-                        ? c.ProductArea_Id.HasValue && productAreaIds.Contains(c.ProductArea_Id.Value)
-                        : true)
-                    &&
-                    (administratorIds.Any()
-                        ? c.Performer_User_Id.HasValue && administratorIds.Contains(c.Performer_User_Id.Value)
-                        : true)
-                  
-                    orderby c.Id
+                        where
+                            c.Customer_Id == customerId && c.Deleted != 1 &&
+                            (DbFunctions.TruncateTime(c.RegTime) >= DbFunctions.TruncateTime(periodFrom) && DbFunctions.TruncateTime(c.RegTime) <= DbFunctions.TruncateTime(periodUntil))
+                            && (caseTypeId.Any() ? caseTypeId.Contains(c.CaseType_Id) : true)
+                            &&
+                            (workingGroupIds.Any()
+                                ? (workingGroupIds.Contains(0) ? !c.WorkingGroup_Id.HasValue ||
+                                                                 c.WorkingGroup_Id.HasValue && workingGroupIds.Contains(c.WorkingGroup_Id.Value)
+                                                               : c.WorkingGroup_Id.HasValue && workingGroupIds.Contains(c.WorkingGroup_Id.Value))
+                                : false)
+                            &&
+
+                            (departmentIds.Any()
+                                ? (ouIds.Any() ? (c.Department_Id.HasValue && departmentIds.Contains(c.Department_Id.Value)) ||
+                                                 c.OU_Id.HasValue && ouIds.Contains(c.OU_Id.Value) :
+                                                 c.Department_Id.HasValue && departmentIds.Contains(c.Department_Id.Value)
+                                                 )
+                                : (ouIds.Any() ? c.OU_Id.HasValue && ouIds.Contains(c.OU_Id.Value) : true))
+                            &&
+                            (productAreaIds.Any()
+                                ? c.ProductArea_Id.HasValue && productAreaIds.Contains(c.ProductArea_Id.Value)
+                                : true)
+                            &&
+                            (administratorIds.Any()
+                                ? c.Performer_User_Id.HasValue && administratorIds.Contains(c.Performer_User_Id.Value)
+                                : true)
+
+                        orderby c.Id
 
                         select new ReportGeneratorFields
                         {
@@ -386,8 +386,17 @@ namespace DH.Helpdesk.Dal.Repositories
                             LogData = (from r in this.DataContext.Logs
                                        where (r.Case_Id == c.Id)
                                        orderby r.LogDate descending
-                                       select r).FirstOrDefault()
+                                       select r).FirstOrDefault(),
 
+                            AllInternalText = (from r2 in this.DataContext.Logs
+                                               where (r2.Case_Id == c.Id && r2.Text_Internal != null && r2.Text_Internal != "")
+                                               orderby r2.LogDate descending
+                                               select r2.Text_Internal).ToList(),
+
+                            AllExtenalText = (from r2 in this.DataContext.Logs
+                                              where (r2.Case_Id == c.Id && r2.Text_External != null && r2.Text_External != "")
+                                              orderby r2.LogDate descending
+                                              select r2.Text_External).ToList()
                         };
             
             if (caseStatusIds.Any())

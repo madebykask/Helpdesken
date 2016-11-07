@@ -159,7 +159,7 @@
                                                    q.SolutionRate, q.CausingPart),
 
                                 q.LogData != null ? new LogsOverview((q.LogData.FinishingType.HasValue && q.FinishingDate.HasValue? closingReasonFullNames[q.LogData.FinishingType.ToString()] : string.Empty), 
-                                                                      q.FinishingDate, q.FinishingDescription) : new LogsOverview(string.Empty, null, string.Empty)
+                                                                      q.FinishingDate, q.FinishingDescription, q.AllInternalText, q.AllExtenalText) : new LogsOverview(string.Empty, null, string.Empty, null, null)
 
                                 )).ToList();
            
@@ -291,8 +291,8 @@
                                                 lastLog.FinishingTypeEntity != null? lastLog.FinishingTypeEntity.Name : string.Empty);
                 logs.Add(lastLogOverview);
             }
-                                
-            return new LogsOverview("", null, "");
+
+            return new LogsOverview(string.Empty, null, string.Empty, null, null);
         }
 
         private static LogsOverview GetLogOverview(string finishingCause, DateTime? closingDate)
@@ -307,7 +307,7 @@
                                             closingDate,                                            
                                             finishingCause);
             logs.Add(logOverview);           
-            return new LogsOverview("", null, "");
+            return new LogsOverview("", null, "", null, null);
         }
     }
 }

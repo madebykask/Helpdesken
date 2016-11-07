@@ -91,10 +91,7 @@
         /// </summary>
         public static readonly HashSet<string> NotAvailableField = new HashSet<string>
                                                                        {
-                                                                           CaseInfoFields.AttachedFile, 
-                                                                           "text_internal", 
-                                                                           LogFields.ExternalLogNote, 
-                                                                           LogFields.InternalLogNote, 
+                                                                           CaseInfoFields.AttachedFile,                                                                           
                                                                            LogFields.Debiting, 
                                                                            LogFields.AttachedFile, 
                                                                            "FinishingCause_Id",
