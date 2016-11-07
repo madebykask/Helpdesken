@@ -671,11 +671,12 @@
                                                             <div class="modal-body" style="max-height: 600px; text-align:center;">
                                                                 <form onsubmit="return false;">
                                                                     <div class="form-group">
-                                                                        <label>@Translation.Get("File name", Enums.TranslationSource.TextTranslation): </label>
-                                                                        <input class="" type="text" id="imgFilename" />
+                                                                        <label>@Translation.Get("File name", Enums.TranslationSource.TextTranslation) </label>
+                                                                        <input class="" type="text" id="imgFilename" autocomplete = "Off" />
+                                                                        <span id="imageNameRequired" style="color:red"> @Translation.Get("must be specified", Enums.TranslationSource.TextTranslation) </span>
                                                                     </div>
                                                                     <div class="form-group">
-                                                                        <label>@(Translation.Get("Preview") + " (" + Translation.Get("Copy image data into clipboard and press Ctrl+V", Enums.TranslationSource.TextTranslation) + ")"): </label>
+                                                                        <label>@(Translation.Get("Preview") + " (" + Translation.Get("Copy image data into clipboard and press Ctrl+V", Enums.TranslationSource.TextTranslation) + ")") </label>
                                                                         <div id="previewPnl"></div>
                                                                     </div>
                                                                 </form>
@@ -719,6 +720,7 @@
 <script type="text/javascript">     
     
     var $mainForm = $("#newCaseForm");
+    var requiredText = '@Translation.Get("must be specified", Enums.TranslationSource.TextTranslation)';
 
     function SaveNewCase() {
         if (!isFormValid()) {            
@@ -846,109 +848,109 @@
 
             messages: {
                 "NewCase.ReportedBy": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.PersonsName": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.PersonsEmail": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.PersonsCellPhone": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.PersonsPhone": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.Region_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.Department_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.OU_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.Place": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Place.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Place.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.UserCode": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.UserCode.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.UserCode.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.InventoryNumber": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.InventoryLocation": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.InventoryType": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.ProductArea_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.CaseType_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.System_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.System_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.System_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.Urgency_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.Impact_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Impact_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Impact_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.Category_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.Supplier_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.InvoiceNumber": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.ReferenceNumber": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.Caption": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Caption.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Caption.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.Description": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.Miscellaneous": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.AgreedDate": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.AgreedDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.AgreedDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.Available": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Available.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Available.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.WorkingGroup_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.Performer_User_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.CaseResponsible_User_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.Priority_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.Status_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.StateSecondary_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.PlanDate": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.PlanDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.PlanDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
                 "NewCase.WatchDate": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " + requiredText
                 },
             },
 

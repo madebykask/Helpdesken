@@ -301,6 +301,9 @@ $(function () {
 
                 imgFilenameCtrl.val(imgFilename);
                 $btnSave.on('click', function () {
+                    if (imgFilenameCtrl.val() == "")
+                        return;
+
                     var fd = new FormData();
                     uploadModal.find('form').submit();
                     if (imgFilenameCtrl[0].validity.valid) {
@@ -331,13 +334,21 @@ $(function () {
             var $btnSave = $uploadModal.find('#btnSave');
             $btnSave.hide();
             $btnSave.off('click');
-            $uploadModal.find("input").val('');            
+            $uploadModal.find("input").val('');
+            $('#imageNameRequired').hide();
         }
 
         function resetClipboard() {
             clearScene();
             globalClipboard.reset();
         }
+
+        $("#imgFilename").on('change', function () {
+            if ($("#imgFilename").val() == "")
+                $('#imageNameRequired').show();
+            else
+                $('#imageNameRequired').hide();
+        });
 
         $("a[href='#upload_clipboard_file_popup']").on('click', function (e) {
             var $src = $(this);

@@ -549,11 +549,12 @@
                                                         <div class="modal-body" style="max-height: 600px; text-align:center;">
                                                             <form onsubmit="return false;">
                                                                 <div class="form-group">
-                                                                    <label>@Translation.Get("File name", Enums.TranslationSource.TextTranslation): </label>
-                                                                    <input class="" type="text" id="imgFilename" required />
+                                                                    <label>@Translation.Get("File name", Enums.TranslationSource.TextTranslation) </label>
+                                                                    <input class="" type="text" id="imgFilename" autocomplete = "Off" />
+                                                                    <span id="imageNameRequired" style="color:red"> @Translation.Get("must be specified", Enums.TranslationSource.TextTranslation) </span>
                                                                 </div>
                                                                 <div class="form-group">
-                                                                    <label>@(Translation.Get("Preview") + " (" + Translation.Get("Copy image data into clipboard and press Ctrl+V", Enums.TranslationSource.TextTranslation) + ")"): </label>
+                                                                    <label>@(Translation.Get("Preview") + " (" + Translation.Get("Copy image data into clipboard and press Ctrl+V", Enums.TranslationSource.TextTranslation) + ")") </label>
                                                                     <div id="previewPnl"></div>
                                                                 </div>
                                                             </form>
