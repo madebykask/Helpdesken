@@ -226,29 +226,33 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 		[HttpGet]
 		public JsonResult SaveRule(BusinessRuleJSModel data)
 		{
-			var ruleModel = data.MapToRuleData();
-
-			if (ruleModel.Id == 0)
+			if (ModelState.IsValid)
 			{
-				ruleModel.CreatedTime = DateTime.UtcNow;
-				ruleModel.ChangedTime = DateTime.UtcNow;
-				ruleModel.CreatedByUserId = SessionFacade.CurrentUser.Id;
-				ruleModel.ChangedByUserId = SessionFacade.CurrentUser.Id;
+				var ruleModel = data.MapToRuleData();
+
+				if (ruleModel.Id == 0)
+				{
+					ruleModel.CreatedTime = DateTime.UtcNow;
+					ruleModel.ChangedTime = DateTime.UtcNow;
+					ruleModel.CreatedByUserId = SessionFacade.CurrentUser.Id;
+					ruleModel.ChangedByUserId = SessionFacade.CurrentUser.Id;
+				}
+				else
+				{
+					ruleModel.ChangedTime = DateTime.UtcNow;
+					ruleModel.ChangedByUserId = SessionFacade.CurrentUser.Id;
+				}
+
+				ruleModel.EventId = (int) BREventType.OnSaveCase;
+				if (ruleModel.Recipients == null)
+					ruleModel.Recipients = new List<string>().ToArray();
+
+
+				var res = _businessRuleService.SaveBusinessRule(ruleModel);
+
+				return Json(res == string.Empty ? "OK" : res, JsonRequestBehavior.AllowGet);
 			}
-			else
-			{
-				ruleModel.ChangedTime = DateTime.UtcNow;
-				ruleModel.ChangedByUserId = SessionFacade.CurrentUser.Id;
-			}
-
-			ruleModel.EventId = (int)BREventType.OnSaveCase;
-			if (ruleModel.Recipients == null)
-				ruleModel.Recipients = new List<string>().ToArray();
-
-
-			var res = _businessRuleService.SaveBusinessRule(ruleModel);
-
-			return Json(res == string.Empty ? "OK" : res, JsonRequestBehavior.AllowGet);
+			return Json("false", JsonRequestBehavior.AllowGet);
 		}
 
 		#endregion
