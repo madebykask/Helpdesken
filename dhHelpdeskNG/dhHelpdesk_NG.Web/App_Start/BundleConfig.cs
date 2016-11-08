@@ -7,7 +7,7 @@
         public struct ScriptNames
         {
             public const string DynamicCase = "~/bundles/dynamic-case";
-			public const string JQueryValidation = "~/bundles/jqueryval";
+			public const string AttributesValidation = "~/bundles/jqueryattrval";
 		}
 
         public static void RegisterBundles(BundleCollection bundles)
@@ -34,8 +34,8 @@
             bundles.Add(new ScriptBundle(ScriptNames.DynamicCase).Include(
                             "~/Content/js/DynamicCase/iframeResizer.js",
                             "~/Content/js/DynamicCase/container.js"));
-			bundles.Add(new ScriptBundle(ScriptNames.JQueryValidation).Include(
-				"~/Content/js/Validation/dh.helpdesk.validations.extensions.js"));
+			bundles.Add(new ScriptBundle(ScriptNames.AttributesValidation).Include(
+				"~/Content/js/Shared/custom.validation.reuiredifnotempty.js"));
 			bundles.Add(new ScriptBundle("~/bundles/common").Include(
                             "~/Content/js/Shared/errors.js",
 #if DEBUG
@@ -69,6 +69,7 @@
                             "~/Content/js/Shared/custom.validation.maxlengthfrom.notrequired.js",
                             "~/Content/js/Shared/custom.validation.requiredfrom.js",
                             "~/Content/js/Shared/custom.validation.maxlengthfrom.js",
+							"~/Content/js/Shared/custom.validation.reuiredifnotempty.js",
                             "~/Content/js/Shared/sortby.js",
                             "~/Content/js/jquery.toastmessage.js",
                             "~/Content/js/bootstrap-switch.min.js",

@@ -4,9 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using DH.Helpdesk.Web.Infrastructure;
 
 namespace DH.Helpdesk.Web.AppCode.Attributes
 {
+	[AttributeUsage(AttributeTargets.Property)]
 	public class RequiredIfNotEmptyAttribute : ValidationAttribute, IClientValidatable
 	{
 		private string DependentProperty { get; set; }
@@ -25,7 +27,7 @@ namespace DH.Helpdesk.Web.AppCode.Attributes
 		{
 			var rule = new ModelClientValidationRule
 			{
-				ErrorMessage = FormatErrorMessage(metadata.GetDisplayName()),
+				ErrorMessage = Translation.GetCoreTextTranslation(ErrorMessage),
 				ValidationType = "requiredifnotempty",
 			};
 

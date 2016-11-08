@@ -5109,6 +5109,14 @@ If not exists (select * from tblTextTranslation where Text_Id = 1698 and Languag
             insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1698, 'Preview', 2)
 GO
 
+If not exists (select * from tblText where Id = 1699)
+            insert into tblText (Id, Textstring) VALUES (1699, 'Fältet krävs')																
+																
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1699 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1699, 'The field is required', 2)
+GO
+
 
 
 -- *** Run this last when put translation script above this line **--

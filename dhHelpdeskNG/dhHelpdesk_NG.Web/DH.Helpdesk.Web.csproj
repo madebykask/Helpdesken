@@ -214,7 +214,6 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AppCode\Attributes\RequiredIfNotEmptyAttribute.cs" />
-    <Compile Include="AppCode\Constants\ErrorMessages.cs" />
     <Compile Include="AppCode\Html\SelectExtensions.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\NinjectModules\Common\LoggerModule.cs" />
@@ -1798,7 +1797,7 @@
     <Content Include="Areas\Admin\Views\BusinessRule\_RuleAction.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx" />
-    <Content Include="Content\js\Validation\dh.helpdesk.validations.extensions.js" />
+    <Content Include="Content\js\Shared\custom.validation.reuiredifnotempty.js" />
     <Content Include="Scripts\jquery-1.8.3.js" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />
     <Content Include="Scripts\jquery-ui-1.9.2.js" />

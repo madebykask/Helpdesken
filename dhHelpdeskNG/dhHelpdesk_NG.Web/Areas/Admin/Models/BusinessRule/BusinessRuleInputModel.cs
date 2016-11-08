@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 using DH.Helpdesk.Web.AppCode.Attributes;
-using DH.Helpdesk.Web.AppCode.Constants;
+using DH.Helpdesk.Web.Infrastructure;
 
 namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
 {
@@ -75,16 +75,16 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
 
 		public int RuleId { get; set; }
 
-		[RequiredIfNotEmpty("lstProcessTo", ErrorMessage = ErrorMessages.IsRequired)]
+		[RequiredIfNotEmpty("lstProcessTo", ErrorMessage = "Fältet krävs")]
 		public ICollection<string> ProcessesFromValue { get; set; }
 
-		[RequiredIfNotEmpty("lstProcessFrom", ErrorMessage = ErrorMessages.IsRequired)]
+		[RequiredIfNotEmpty("lstProcessFrom", ErrorMessage = "Fältet krävs")]
 		public ICollection<string> ProcessesToValue { get; set; }
 
-		[RequiredIfNotEmpty("lstSubStatusTo", ErrorMessage = ErrorMessages.IsRequired)]
+		[RequiredIfNotEmpty("lstSubStatusTo", ErrorMessage = "Fältet krävs")]
 		public ICollection<string> SubStatusesFromValue { get; set; }
 
-		[RequiredIfNotEmpty("lstSubStatusFrom", ErrorMessage = ErrorMessages.IsRequired)]
+		[RequiredIfNotEmpty("lstSubStatusFrom", ErrorMessage = "Fältet krävs")]
 		public ICollection<string> SubStatusesToValue { get; set; }
 
 		public int Sequence { get; set; }
