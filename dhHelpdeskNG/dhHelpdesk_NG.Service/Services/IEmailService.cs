@@ -15,26 +15,26 @@
 
         bool IsValidEmail(string inputEmail);
 
-        EmailResponse SendEmail(MailAddress from, List<MailAddress> recipients, Mail mail, EmailResponse emailResponse);
+        EmailResponse SendEmail(MailAddress from, List<MailAddress> recipients, Mail mail, EmailSettings emailsettings);
 
-        EmailResponse SendEmail(MailAddress from, MailAddress recipient, Mail mailint, EmailResponse emailResponse);
+        EmailResponse SendEmail(MailAddress from, MailAddress recipient, Mail mailint, EmailSettings emailsettings);
 
-        EmailResponse SendEmail(MailItem mailItem, EmailResponse emailResponse);
+        EmailResponse SendEmail(MailItem mailItem, EmailSettings emailsettings);
 
         EmailResponse SendEmail(
             string from,
             string to,
             string subject,
             string body,
-            List<Field> fields,            
-            EmailResponse emailResponse,
+            List<Field> fields,
+            EmailSettings emailsettings,
             string mailMessageId = "",
             bool highPriority = false,
             List<string> files = null,
             string siteSelfService = "",
             string siteHelpdesk = "");
 
-        EmailResponse SendEmail(EmailItem item, EmailResponse emailResponse, string siteSelfService = "", string siteHelpdesk = "");
+        EmailResponse SendEmail(EmailItem item, EmailSettings emailsettings, string siteSelfService = "", string siteHelpdesk = "");
 
         #endregion
     }

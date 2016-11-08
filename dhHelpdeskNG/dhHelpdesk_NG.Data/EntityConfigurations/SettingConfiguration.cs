@@ -132,6 +132,11 @@
             this.Property(x => x.CalcSolvedInTimeByLatestSLADate).IsRequired();
             this.Property(x => x.TimeZone_offset).IsRequired();
             this.Property(x => x.SetUserToAdministrator).IsRequired();
+            this.Property(x => x.SMTPServer).IsOptional();
+            this.Property(x => x.SMTPPort).IsRequired();
+            this.Property(x => x.SMTPUserName).IsOptional();
+            this.Property(x => x.SMTPPassWord).IsOptional();
+            this.Property(x => x.IsSMTPSecured).IsRequired();
 
             this.ToTable("tblsettings");
         }

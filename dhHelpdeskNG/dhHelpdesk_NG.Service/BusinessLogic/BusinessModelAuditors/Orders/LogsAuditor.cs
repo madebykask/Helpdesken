@@ -16,6 +16,7 @@
 
     using EmailLog = DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditFields.EmailLog;
     using DH.Helpdesk.BusinessData.Models.Email;
+    using Infrastructure;
 
     public sealed class LogsAuditor : IBusinessModelAuditor<UpdateOrderRequest, OrderAuditData>
     {
@@ -29,18 +30,26 @@
 
         private readonly IMailUniqueIdentifierProvider mailUniqueIdentifierProvider;
 
+        private readonly ISettingService settingService;
+
+        private readonly IEmailSendingSettingsProvider _emailSendingSettingsProvider;
+
         public LogsAuditor(
                 IUnitOfWorkFactory unitOfWorkFactory, 
                 IMailTemplateServiceNew mailTemplateService, 
                 IEmailService emailService, 
                 IMailTemplateFormatter<UpdateOrderRequest> mailTemplateFormatter, 
-                IMailUniqueIdentifierProvider mailUniqueIdentifierProvider)
+                IMailUniqueIdentifierProvider mailUniqueIdentifierProvider,
+                ISettingService settingService,
+                IEmailSendingSettingsProvider emailSendingSettingsProvider)
         {
             this.unitOfWorkFactory = unitOfWorkFactory;
             this.mailTemplateService = mailTemplateService;
             this.emailService = emailService;
             this.mailTemplateFormatter = mailTemplateFormatter;
             this.mailUniqueIdentifierProvider = mailUniqueIdentifierProvider;
+            this.settingService = settingService;
+            _emailSendingSettingsProvider = emailSendingSettingsProvider;
         }
 
         public void Audit(UpdateOrderRequest businessModel, OrderAuditData optionalData)
@@ -55,6 +64,15 @@
                 var customerRep = uow.GetRepository<Customer>();
                 var orderEmailLogsRep = uow.GetRepository<OrderEMailLog>();
 
+                var customerSetting = settingService.GetCustomerSetting(businessModel.CustomerId);
+                var smtpInfo = new MailSMTPSetting(customerSetting.SMTPServer, customerSetting.SMTPPort, customerSetting.SMTPUserName, customerSetting.SMTPPassWord, customerSetting.IsSMTPSecured);
+
+                if (string.IsNullOrEmpty(smtpInfo.Server) || smtpInfo.Port <= 0)
+                {
+                    var info = _emailSendingSettingsProvider.GetSettings();
+                    smtpInfo = new MailSMTPSetting(info.SmtpServer, info.SmtpPort);
+                }
+                
                 foreach (var log in businessModel.NewLogs)
                 {
                     if (!log.Emails.Any())
@@ -92,8 +110,10 @@
                     }
 
                     var from = new MailAddress(customerEmail);
+                    var mailResponse = EmailResponse.GetEmptyEmailResponse();
+                    var mailSetting = new EmailSettings(mailResponse, smtpInfo);
 
-                    this.emailService.SendEmail(from, log.Emails, mail, EmailResponse.GetEmptyEmailResponse());
+                    this.emailService.SendEmail(from, log.Emails, mail, mailSetting);
 
                     var mailUniqueIdentifier = this.mailUniqueIdentifierProvider.Provide(
                                                                 businessModel.DateAndTime,
