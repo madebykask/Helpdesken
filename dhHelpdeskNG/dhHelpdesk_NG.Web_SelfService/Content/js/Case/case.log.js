@@ -90,7 +90,7 @@ $(function () {
                 fileMarkup =
                     $('<tr>' +
                         '<td>' +
-                            '<i class="glyphicon glyphicon-file">&nbsp;</i><a style="color:blue" href=' + downloadLogFileUrl + '?' + downloadLogFileParamUrl + 'fileName=' + file + '">' + file + '</a>' +
+                            '<i class="glyphicon glyphicon-file">&nbsp;</i><a style="color:blue" href=' + downloadLogFileUrl + '?' + downloadLogFileParamUrl + 'fileName=' + file + '>' + file + '</a>' +
                         '</td>' +
                         '<td>' +
                             '<a id="delete_file_button_' + i + '" class="btn btn-default btn-sm" ><span class="glyphicon glyphicon-remove"></span> </a>' +
