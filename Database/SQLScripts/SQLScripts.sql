@@ -94,6 +94,26 @@ begin
 end
 Go
 
+-- New fields tblSettings for SMTP settings
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'SMTPServer' and sysobjects.name = N'tblSettings')
+	ALTER TABLE tblSettings ADD SMTPServer nvarchar(50) NULL
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'SMTPPort' and sysobjects.name = N'tblSettings')
+	ALTER TABLE tblSettings ADD SMTPPort int not NULL Default(0)
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'SMTPUserName' and sysobjects.name = N'tblSettings')
+	ALTER TABLE tblSettings ADD SMTPUserName nvarchar(50) NULL
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'SMTPPassword' and sysobjects.name = N'tblSettings')
+	ALTER TABLE tblSettings ADD SMTPPassword nvarchar(50) NULL
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'IsSMTPSecured' and sysobjects.name = N'tblSettings')
+	ALTER TABLE tblSettings ADD IsSMTPSecured Bit not NULL Default(0)
+Go
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.28'
