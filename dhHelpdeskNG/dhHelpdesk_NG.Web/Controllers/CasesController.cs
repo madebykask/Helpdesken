@@ -3991,8 +3991,10 @@ namespace DH.Helpdesk.Web.Controllers
                             m.case_.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id;
                         }
 
+                        m.case_.Priority_Id = caseTemplate.Priority_Id;
+
                         /*Disabled maybe we need this in the future*/
-                        // m.case_.Priority_Id = caseTemplate.Priority_Id;
+                        // 
                         //if (caseTemplate.Priority_Id.HasValue)
                         //    m.case_.Priority_Id = caseTemplate.Priority_Id;
                         //else
