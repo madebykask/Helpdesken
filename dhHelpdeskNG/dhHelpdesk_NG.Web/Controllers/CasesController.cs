@@ -1,13 +1,13 @@
-﻿using System;
+﻿using DH.Helpdesk.BusinessData.Models.Paging;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Diagnostics;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using System.Data;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -295,68 +295,69 @@ namespace DH.Helpdesk.Web.Controllers
             this.invoiceArticlesModelFactory = invoiceArticlesModelFactory;
         }
 
-        #endregion
+		#endregion
 
-        #region ***Public Methods***
+		#region ***Public Methods***
 
-        #region --Advanced Search--
-        public ActionResult AdvancedSearch(bool? clearFilters = false, bool doSearchAtBegining = false)
-        {
-            if (SessionFacade.CurrentUser == null)
-            {
-                return new RedirectResult("~/Error/Unathorized");
-            }
+		#region --Advanced Search--
+		public ActionResult AdvancedSearch(bool? clearFilters = false, bool doSearchAtBegining = false)
+		{
+			if (SessionFacade.CurrentUser == null)
+			{
+				return new RedirectResult("~/Error/Unathorized");
+			}
 
-            ApplicationFacade.UpdateLoggedInUser(Session.SessionID, string.Empty);
+			ApplicationFacade.UpdateLoggedInUser(Session.SessionID, string.Empty);
 
-            if (SessionFacade.CurrentCustomer == null)
-            {
-                return new RedirectResult("~/Error/Unathorized");
-            }
+			if (SessionFacade.CurrentCustomer == null)
+			{
+				return new RedirectResult("~/Error/Unathorized");
+			}
 
-            var currentCustomerId = SessionFacade.CurrentCustomer.Id;
-            var currentUserId = SessionFacade.CurrentUser.Id;
+			var currentCustomerId = SessionFacade.CurrentCustomer.Id;
+			var currentUserId = SessionFacade.CurrentUser.Id;
 
-            var customers = this._userService.GetUserProfileCustomersSettings(SessionFacade.CurrentUser.Id);
-            var m = new AdvancedSearchIndexViewModel();
-            var availableCustomers = customers.Select(c => new ItemOverview(c.CustomerName, c.CustomerId.ToString())).OrderBy(c => c.Name).ToList();
+			var customers = this._userService.GetUserProfileCustomersSettings(SessionFacade.CurrentUser.Id);
+			var m = new AdvancedSearchIndexViewModel();
+			var availableCustomers = customers.Select(c => new ItemOverview(c.CustomerName, c.CustomerId.ToString())).OrderBy(c => c.Name).ToList();
 
-            m.SelectedCustomers = availableCustomers;
+			m.SelectedCustomers = availableCustomers;
 
-            CaseSearchModel advancedSearchModel;
-            if ((clearFilters != null && clearFilters.Value) 
-                || SessionFacade.CurrentAdvancedSearch == null)
-            {
-                SessionFacade.CurrentAdvancedSearch = null;
-                advancedSearchModel = this.InitAdvancedSearchModel(currentCustomerId, currentUserId);
-                SessionFacade.CurrentAdvancedSearch = advancedSearchModel;
-            }
-            else
-                advancedSearchModel = SessionFacade.CurrentAdvancedSearch;
+			CaseSearchModel advancedSearchModel;
+			if ((clearFilters != null && clearFilters.Value)
+				|| SessionFacade.CurrentAdvancedSearch == null)
+			{
+				SessionFacade.CurrentAdvancedSearch = null;
+				advancedSearchModel = this.InitAdvancedSearchModel(currentCustomerId, currentUserId);
+				SessionFacade.CurrentAdvancedSearch = advancedSearchModel;
+			}
+			else
+				advancedSearchModel = SessionFacade.CurrentAdvancedSearch;
 
-            m.CaseSearchFilterData = this.CreateAdvancedSearchFilterData(
-                                                        currentCustomerId,
-                                                        currentUserId,
-                                                        advancedSearchModel,
-                                                        availableCustomers);
+			m.CaseSearchFilterData = CreateAdvancedSearchFilterData(
+														currentCustomerId,
+														currentUserId,
+														advancedSearchModel,
+														availableCustomers);
 
-            m.SpecificSearchFilterData = CreateAdvancedSearchSpecificFilterData(currentUserId);
+			m.SpecificSearchFilterData = CreateAdvancedSearchSpecificFilterData(currentUserId);
 
-            m.CaseSetting = this.GetCaseSettingModel(currentCustomerId, currentUserId);
-            m.GridSettings = JsonGridSettingsMapper.GetAdvancedSearchGridSettingsModel(currentCustomerId);
+			m.CaseSetting = GetCaseSettingModel(currentCustomerId, currentUserId);
+			m.GridSettings = JsonGridSettingsMapper.GetAdvancedSearchGridSettingsModel(currentCustomerId);
 
-            if (advancedSearchModel.Search != null)
-                m.GridSettings.sortOptions = new GridSortOptions()
-                    {
-                        sortBy = advancedSearchModel.Search.SortBy,
-                        sortDir = (advancedSearchModel.Search.Ascending) ? SortingDirection.Asc : SortingDirection.Desc
-                    };
+			if (advancedSearchModel.Search != null)
+				m.GridSettings.sortOptions = new GridSortOptions
+				{
+					sortBy = advancedSearchModel.Search.SortBy,
+					sortDir = advancedSearchModel.Search.Ascending ? SortingDirection.Asc : SortingDirection.Desc
+				};
 
-            m.DoSearchAtBegining = doSearchAtBegining;
-            return this.View("AdvancedSearch/Index", m);
-        }
+			m.DoSearchAtBegining = doSearchAtBegining;
+			return this.View("AdvancedSearch/Index", m);
+		}
 
-        [HttpGet]
+
+		[HttpGet]
         public PartialViewResult GetCustomerSpecificFilter(int selectedCustomerId, bool resetFilter = false)
         {
             if (SessionFacade.CurrentUser == null || SessionFacade.CurrentCustomer == null)
@@ -373,31 +374,32 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [ValidateInput(false)]
-        public ActionResult DoAdvancedSearch(FormCollection frm)
-        {
-            if (SessionFacade.CurrentUser == null || SessionFacade.CurrentCustomer == null)
-            {
-                return new RedirectResult("~/Error/Unathorized");
-            }
+		public ActionResult DoAdvancedSearch(FormCollection frm)
+		{
+			if (SessionFacade.CurrentUser == null || SessionFacade.CurrentCustomer == null)
+			{
+				return new RedirectResult("~/Error/Unathorized");
+			}
 
-            var customers = frm.ReturnFormValue("currentCustomerId").Split(',').Select(x => Int32.Parse(x)).ToList();
+			var customers = frm.ReturnFormValue("currentCustomerId").Split(',').Select(x => Int32.Parse(x)).ToList();
 
-            var res = new List<Tuple<List<Dictionary<string, object>>, GridSettingsModel>>();
+			var res = new List<Tuple<List<Dictionary<string, object>>, GridSettingsModel>>();
 
-            foreach (var customer in customers)
-            {
-                res.Add(AdvancedSearchForCustomer(frm, customer));
-            }
+			foreach (var customer in customers)
+			{
+				res.Add(AdvancedSearchForCustomer(frm, customer));
+			}
 
-            var ret = res.Select(x => new {data = x.Item1, gridSettings = x.Item2}).ToList();
+			var ret = res.Select(x => new { data = x.Item1, gridSettings = x.Item2 }).ToList();
 
-            return this.Json(new { result = "success", data = ret });
-        }
-        #endregion
+			return this.Json(new { result = "success", data = ret });
+		}
 
-        #region --Case Overview--
+		#endregion
 
-        public ActionResult InitFilter(
+		#region --Case Overview--
+
+		public ActionResult InitFilter(
             int? customerId,
             bool? clearFilters = false,
             CasesCustomFilter customFilter = CasesCustomFilter.None,
@@ -519,261 +521,285 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [ValidateInput(false)]
-        public ActionResult SearchAjax(FormCollection frm)
-        {
-            if (SessionFacade.CurrentUser == null || SessionFacade.CurrentCustomer == null)
-            {
-                return new RedirectResult("~/Error/Unathorized");
-            }
+		public ActionResult SearchAjax(FormCollection frm)
+		{
+			if (SessionFacade.CurrentUser == null || SessionFacade.CurrentCustomer == null)
+			{
+				return new RedirectResult("~/Error/Unathorized");
+			}
 
-            #region Code from old method. TODO: code review wanted
-            var f = new CaseSearchFilter();
-            var m = new CaseSearchResultModel
-            {
-                GridSettings =
-                    this.caseOverviewSettingsService.GetSettings(
-                        SessionFacade.CurrentCustomer.Id,
-                        SessionFacade.CurrentUser.UserGroupId,
-                        SessionFacade.CurrentUser.Id)
-            };
-            f.CustomerId = SessionFacade.CurrentCustomer.Id;
-            f.UserId = SessionFacade.CurrentUser.Id;
-            f.Initiator = frm.ReturnFormValue(CaseFilterFields.InitiatorNameAttribute);
-            f.CaseType = frm.ReturnFormValue(CaseFilterFields.CaseTypeIdNameAttribute).convertStringToInt();
-            f.ProductArea = frm.ReturnFormValue(CaseFilterFields.ProductAreaIdNameAttribute).ReturnCustomerUserValue();
-            f.Region = frm.ReturnFormValue(CaseFilterFields.RegionNameAttribute);
-            f.User = frm.ReturnFormValue(CaseFilterFields.RegisteredByNameAttribute);
-            f.Category = frm.ReturnFormValue(CaseFilterFields.CategoryNameAttribute);
-            f.WorkingGroup = frm.ReturnFormValue(CaseFilterFields.WorkingGroupNameAttribute);
-            f.UserResponsible = frm.ReturnFormValue(CaseFilterFields.ResponsibleNameAttribute);
-            f.UserPerformer = frm.ReturnFormValue(CaseFilterFields.PerformerNameAttribute);
+			#region Code from old method. TODO: code review wanted
+			var f = new CaseSearchFilter();
+			var m = new CaseSearchResultModel
+			{
+				GridSettings =
+					caseOverviewSettingsService.GetSettings(
+						SessionFacade.CurrentCustomer.Id,
+						SessionFacade.CurrentUser.UserGroupId,
+						SessionFacade.CurrentUser.Id)
+			};
+			f.CustomerId = SessionFacade.CurrentCustomer.Id;
+			f.UserId = SessionFacade.CurrentUser.Id;
+			f.Initiator = frm.ReturnFormValue(CaseFilterFields.InitiatorNameAttribute);
+			f.CaseType = frm.ReturnFormValue(CaseFilterFields.CaseTypeIdNameAttribute).convertStringToInt();
+			f.ProductArea = frm.ReturnFormValue(CaseFilterFields.ProductAreaIdNameAttribute).ReturnCustomerUserValue();
+			f.Region = frm.ReturnFormValue(CaseFilterFields.RegionNameAttribute);
+			f.User = frm.ReturnFormValue(CaseFilterFields.RegisteredByNameAttribute);
+			f.Category = frm.ReturnFormValue(CaseFilterFields.CategoryNameAttribute);
+			f.WorkingGroup = frm.ReturnFormValue(CaseFilterFields.WorkingGroupNameAttribute);
+			f.UserResponsible = frm.ReturnFormValue(CaseFilterFields.ResponsibleNameAttribute);
+			f.UserPerformer = frm.ReturnFormValue(CaseFilterFields.PerformerNameAttribute);
 
-            f.Priority = frm.ReturnFormValue(CaseFilterFields.PriorityNameAttribute);
-            f.Status = frm.ReturnFormValue(CaseFilterFields.StatusNameAttribute);
-            f.StateSecondary = frm.ReturnFormValue(CaseFilterFields.StateSecondaryNameAttribute);
+			f.Priority = frm.ReturnFormValue(CaseFilterFields.PriorityNameAttribute);
+			f.Status = frm.ReturnFormValue(CaseFilterFields.StatusNameAttribute);
+			f.StateSecondary = frm.ReturnFormValue(CaseFilterFields.StateSecondaryNameAttribute);
 
-            f.CaseRegistrationDateStartFilter = frm.GetDate(CaseFilterFields.CaseRegistrationDateStartFilterNameAttribute);
-            f.CaseRegistrationDateEndFilter = frm.GetDate(CaseFilterFields.CaseRegistrationDateEndFilterFilterNameAttribute);
+			f.CaseRegistrationDateStartFilter = frm.GetDate(CaseFilterFields.CaseRegistrationDateStartFilterNameAttribute);
+			f.CaseRegistrationDateEndFilter = frm.GetDate(CaseFilterFields.CaseRegistrationDateEndFilterFilterNameAttribute);
 
-            f.CaseWatchDateStartFilter = frm.GetDate(CaseFilterFields.CaseWatchDateStartFilterNameAttribute);
-            f.CaseWatchDateEndFilter = frm.GetDate(CaseFilterFields.CaseWatchDateEndFilterNameAttribute);
-            f.CaseClosingDateStartFilter = frm.GetDate(CaseFilterFields.CaseClosingDateStartFilterNameAttribute);
-            f.CaseClosingDateEndFilter = frm.GetDate(CaseFilterFields.CaseClosingDateEndFilterNameAttribute);
-            f.CaseClosingReasonFilter = frm.ReturnFormValue(CaseFilterFields.ClosingReasonNameAttribute).ReturnCustomerUserValue();
-            f.SearchInMyCasesOnly = frm.IsFormValueTrue("SearchInMyCasesOnly");
+			f.CaseWatchDateStartFilter = frm.GetDate(CaseFilterFields.CaseWatchDateStartFilterNameAttribute);
+			f.CaseWatchDateEndFilter = frm.GetDate(CaseFilterFields.CaseWatchDateEndFilterNameAttribute);
+			f.CaseClosingDateStartFilter = frm.GetDate(CaseFilterFields.CaseClosingDateStartFilterNameAttribute);
+			f.CaseClosingDateEndFilter = frm.GetDate(CaseFilterFields.CaseClosingDateEndFilterNameAttribute);
+			f.CaseClosingReasonFilter = frm.ReturnFormValue(CaseFilterFields.ClosingReasonNameAttribute).ReturnCustomerUserValue();
+			f.SearchInMyCasesOnly = frm.IsFormValueTrue("SearchInMyCasesOnly");
 
-            f.CaseProgress = frm.ReturnFormValue(CaseFilterFields.FilterCaseProgressNameAttribute);
-            f.CaseFilterFavorite = frm.ReturnFormValue(CaseFilterFields.CaseFilterFavoriteNameAttribute);
-            f.FreeTextSearch = frm.ReturnFormValue(CaseFilterFields.FreeTextSearchNameAttribute);
-            var departments_OrganizationUnits = frm.ReturnFormValue(CaseFilterFields.DepartmentNameAttribute);
+			f.CaseProgress = frm.ReturnFormValue(CaseFilterFields.FilterCaseProgressNameAttribute);
+			f.CaseFilterFavorite = frm.ReturnFormValue(CaseFilterFields.CaseFilterFavoriteNameAttribute);
+			f.FreeTextSearch = frm.ReturnFormValue(CaseFilterFields.FreeTextSearchNameAttribute);
 
-            f.Department = GetDepartmentsFrom(departments_OrganizationUnits);
-            f.OrganizationUnit = GetOrganizationUnitsFrom(departments_OrganizationUnits);
+			var departments_OrganizationUnits = frm.ReturnFormValue(CaseFilterFields.DepartmentNameAttribute);
 
-            f.CaseRemainingTime = frm.ReturnFormValue(CaseFilterFields.CaseRemainingTimeAttribute);
-            
-            if (!string.IsNullOrEmpty(f.CaseRemainingTime))
-            {
-                int remainingTimeId;
-                if (int.TryParse(f.CaseRemainingTime, out remainingTimeId))
-                {
-                    var timeTable = GetRemainigTimeById((RemainingTimes) remainingTimeId);
-                    if (timeTable != null)
-                    {
-                        f.CaseRemainingTimeFilter = timeTable.RemaningTime;
-                        f.CaseRemainingTimeUntilFilter = timeTable.RemaningTimeUntil;
-                        f.CaseRemainingTimeMaxFilter = timeTable.MaxRemaningTime;
-                        f.CaseRemainingTimeHoursFilter = timeTable.IsHour;
-                    }
-                }
-            }
+			f.Department = GetDepartmentsFrom(departments_OrganizationUnits);
+			f.OrganizationUnit = GetOrganizationUnitsFrom(departments_OrganizationUnits);
 
-            int caseRemainingTimeFilter;
-            if (int.TryParse(frm.ReturnFormValue("CaseRemainingTime"), out caseRemainingTimeFilter))
-            {
-                f.CaseRemainingTimeFilter = caseRemainingTimeFilter;
-            }
+			f.CaseRemainingTime = frm.ReturnFormValue(CaseFilterFields.CaseRemainingTimeAttribute);
 
-            int caseRemainingTimeUntilFilter;
-            if (int.TryParse(frm.ReturnFormValue("CaseRemainingTimeUntil"), out caseRemainingTimeUntilFilter))
-            {
-                f.CaseRemainingTimeUntilFilter = caseRemainingTimeUntilFilter;
-            }
+			if (!string.IsNullOrEmpty(f.CaseRemainingTime))
+			{
+				int remainingTimeId;
+				if (int.TryParse(f.CaseRemainingTime, out remainingTimeId))
+				{
+					var timeTable = GetRemainigTimeById((RemainingTimes)remainingTimeId);
+					if (timeTable != null)
+					{
+						f.CaseRemainingTimeFilter = timeTable.RemaningTime;
+						f.CaseRemainingTimeUntilFilter = timeTable.RemaningTimeUntil;
+						f.CaseRemainingTimeMaxFilter = timeTable.MaxRemaningTime;
+						f.CaseRemainingTimeHoursFilter = timeTable.IsHour;
+					}
+				}
+			}
 
-            int caseRemainingTimeMaxFilter;
-            if (int.TryParse(frm.ReturnFormValue("CaseRemainingTimeMax"), out caseRemainingTimeMaxFilter))
-            {
-                f.CaseRemainingTimeMaxFilter = caseRemainingTimeMaxFilter;
-            }
+			int caseRemainingTimeFilter;
+			if (int.TryParse(frm.ReturnFormValue("CaseRemainingTime"), out caseRemainingTimeFilter))
+			{
+				f.CaseRemainingTimeFilter = caseRemainingTimeFilter;
+			}
 
-            bool caseRemainingTimeHoursFilter;
-            if (bool.TryParse(frm.ReturnFormValue("CaseRemainingTimeHours"), out caseRemainingTimeHoursFilter))
-            {
-                f.CaseRemainingTimeHoursFilter = caseRemainingTimeHoursFilter;
-            }
+			int caseRemainingTimeUntilFilter;
+			if (int.TryParse(frm.ReturnFormValue("CaseRemainingTimeUntil"), out caseRemainingTimeUntilFilter))
+			{
+				f.CaseRemainingTimeUntilFilter = caseRemainingTimeUntilFilter;
+			}
 
-            CaseSearchModel sm;
-            if (SessionFacade.CurrentCaseSearch == null
-                || SessionFacade.CurrentCaseSearch.caseSearchFilter.CustomerId != f.CustomerId)
-            {
-                sm = this.InitCaseSearchModel(f.CustomerId, f.UserId);
-            }
-            else
-            {
-                sm = SessionFacade.CurrentCaseSearch;
-                f.CustomFilter = sm.caseSearchFilter.CustomFilter;
-            }
+			int caseRemainingTimeMaxFilter;
+			if (int.TryParse(frm.ReturnFormValue("CaseRemainingTimeMax"), out caseRemainingTimeMaxFilter))
+			{
+				f.CaseRemainingTimeMaxFilter = caseRemainingTimeMaxFilter;
+			}
 
-            this.ResolveParentPathesForFilter(f);
-            sm.caseSearchFilter = f;
-            if (SessionFacade.CaseOverviewGridSettings == null)
-            {
-                SessionFacade.CaseOverviewGridSettings =
-                    this.gridSettingsService.GetForCustomerUserGrid(
-                        SessionFacade.CurrentCustomer.Id,
-                        SessionFacade.CurrentUser.UserGroupId,
-                        SessionFacade.CurrentUser.Id,
-                        GridSettingsService.CASE_OVERVIEW_GRID_ID);
-            }
-            else
-            {
-                //////////////////////////////////////////////////////////////////////////
-                //// @TODO (alexander.semenischev): put validation for sortOpt.sortBy
-                var sortBy = frm.ReturnFormValue("sortBy");
-                var sortDirInt = 0;
-                var sortDir = (!string.IsNullOrEmpty(frm.ReturnFormValue("sortDir"))
-                                   && int.TryParse(frm.ReturnFormValue("sortDir"), out sortDirInt)
-                                   && sortDirInt == (int)SortingDirection.Asc) ? SortingDirection.Asc : SortingDirection.Desc;
-                if (sortBy != SessionFacade.CaseOverviewGridSettings.sortOptions.sortBy
-                    || sortDir != SessionFacade.CaseOverviewGridSettings.sortOptions.sortDir)
-                {
-                    SessionFacade.CaseOverviewGridSettings.sortOptions.sortBy = sortBy;
-                    SessionFacade.CaseOverviewGridSettings.sortOptions.sortDir = sortDir;
-                    this.gridSettingsService.SaveCaseoviewSettings(
-                        SessionFacade.CaseOverviewGridSettings,
-                        SessionFacade.CurrentCustomer.Id,
-                        SessionFacade.CurrentUser.Id,
-                        SessionFacade.CurrentUser.UserGroupId);
-                }
-            }
+			bool caseRemainingTimeHoursFilter;
+			if (bool.TryParse(frm.ReturnFormValue("CaseRemainingTimeHours"), out caseRemainingTimeHoursFilter))
+			{
+				f.CaseRemainingTimeHoursFilter = caseRemainingTimeHoursFilter;
+			}
 
-            var gridSettings = SessionFacade.CaseOverviewGridSettings;
-            sm.Search.SortBy = gridSettings.sortOptions.sortBy;
-            sm.Search.Ascending = gridSettings.sortOptions.sortDir == SortingDirection.Asc;
-            m.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(f.CustomerId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
-            var caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(f.CustomerId).ToArray();
-            var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
-            CaseRemainingTimeData remainingTimeData;
-            CaseAggregateData aggregateData;
-            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
-            f.MaxTextCharacters = MaxTextCharCount;
-            m.cases = this._caseSearchService.Search(
-                f,
-                m.caseSettings,
-                caseFieldSettings,
-                SessionFacade.CurrentUser.Id,
-                SessionFacade.CurrentUser.UserId,
-                SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups,
-                SessionFacade.CurrentUser.UserGroupId,
-                SessionFacade.CurrentUser.RestrictedCasePermission,
-                sm.Search,
-                this.workContext.Customer.WorkingDayStart,
-                this.workContext.Customer.WorkingDayEnd,
-                userTimeZone,
-                ApplicationTypes.Helpdesk,
-                showRemainingTime,
-                out remainingTimeData,
-                out aggregateData);
+			CaseSearchModel sm;
+			if (SessionFacade.CurrentCaseSearch == null
+				|| SessionFacade.CurrentCaseSearch.caseSearchFilter.CustomerId != f.CustomerId)
+			{
+				sm = InitCaseSearchModel(f.CustomerId, f.UserId);
+			}
+			else
+			{
+				sm = SessionFacade.CurrentCaseSearch;
+				f.CustomFilter = sm.caseSearchFilter.CustomFilter;
+			}
 
-            m.cases = this.TreeTranslate(m.cases, f.CustomerId);
-            sm.Search.IdsForLastSearch = this.GetIdsFromSearchResult(m.cases);                            
-            
-            var ouIds = f.OrganizationUnit.Split(',');
-            if (ouIds.Any())
-            {
-                foreach (var id in ouIds)
-                    if (!string.IsNullOrEmpty(id))
-                    {
-                        if (string.IsNullOrEmpty(sm.caseSearchFilter.Department))
-                            sm.caseSearchFilter.Department += string.Format("-{0}", id);
-                        else
-                            sm.caseSearchFilter.Department += string.Format(",-{0}", id);
-                    }
-            }
+			ResolveParentPathesForFilter(f);
+			sm.caseSearchFilter = f;
+			if (SessionFacade.CaseOverviewGridSettings == null)
+			{
+				SessionFacade.CaseOverviewGridSettings =
+					gridSettingsService.GetForCustomerUserGrid(
+						SessionFacade.CurrentCustomer.Id,
+						SessionFacade.CurrentUser.UserGroupId,
+						SessionFacade.CurrentUser.Id,
+						GridSettingsService.CASE_OVERVIEW_GRID_ID);
+			}
+			else
+			{
 
-            SessionFacade.CurrentCaseSearch = sm;
-            #endregion
+				// TODO: (alexander.semenischev): put validation for sortOpt.sortBy
+				var sortBy = frm.ReturnFormValue(CaseFilterFields.OrderColumnNum);
+				var sort = frm.ReturnFormValue(CaseFilterFields.OrderColumnDir);
+				var sortDir = !string.IsNullOrEmpty(sort) ? GridSortOptions.SortDirectionFromString(sort) : SortingDirection.Asc;
 
-            var customerSettings = this._settingService.GetCustomerSetting(f.CustomerId);            
 
-            var outputFormatter = new OutputFormatter(customerSettings.IsUserFirstLastNameRepresentation == 1, userTimeZone);
-            var data = new List<Dictionary<string, object>>();
-            foreach (var searchRow in m.cases)
-            {                
-                var jsRow = new Dictionary<string, object>
-                                {
-                                    { "case_id", searchRow.Id },
-                                    { "caseIconTitle", searchRow.CaseIcon.CaseIconTitle() },
-                                    {
-                                        "caseIconUrl",
-                                        string.Format(
-                                            "/Content/icons/{0}",
-                                            searchRow.CaseIcon.CaseIconSrc())
-                                    },
-                                    { "isUnread", searchRow.IsUnread },
-                                    { "isUrgent", searchRow.IsUrgent },
-                                };
-                foreach (var col in gridSettings.columnDefs)
-                {
-                    var searchCol = searchRow.Columns.FirstOrDefault(it => it.Key == col.name);
-                    if (searchCol != null)
-                    {
-                        jsRow.Add(col.name, outputFormatter.FormatField(searchCol));
-                    }
-                    else
-                    {
-                        jsRow.Add(col.name, string.Empty);
-                    }
-                }
+				if (sortBy != SessionFacade.CaseOverviewGridSettings.sortOptions.sortBy
+					|| sortDir != SessionFacade.CaseOverviewGridSettings.sortOptions.sortDir)
+				{
+					SessionFacade.CaseOverviewGridSettings.sortOptions.sortBy = sortBy;
+					SessionFacade.CaseOverviewGridSettings.sortOptions.sortDir = sortDir;
+					gridSettingsService.SaveCaseoviewSettings(
+						SessionFacade.CaseOverviewGridSettings,
+						SessionFacade.CurrentCustomer.Id,
+						SessionFacade.CurrentUser.Id,
+						SessionFacade.CurrentUser.UserGroupId);
+				}
+			}
 
-                data.Add(jsRow);
-            }
+			var gridSettings = SessionFacade.CaseOverviewGridSettings;
+			sm.Search.SortBy = gridSettings.sortOptions.sortBy;
+			sm.Search.Ascending = gridSettings.sortOptions.sortDir == SortingDirection.Asc;
+			m.caseSettings = _caseSettingService.GetCaseSettingsWithUser(f.CustomerId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
+			var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(f.CustomerId).ToArray();
+			var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
+			CaseRemainingTimeData remainingTimeData;
+			CaseAggregateData aggregateData;
+			var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
+			f.MaxTextCharacters = MaxTextCharCount;
 
-            var remainingView = string.Empty;
-            if (SessionFacade.CurrentUser.ShowSolutionTime)
-            {
-                remainingView = this.RenderPartialViewToString(
-                    "CaseRemainingTime",
-                    this.caseModelFactory.GetCaseRemainingTimeModel(remainingTimeData, this.workContext));
-            }
+			int recPerPage;
+			int pageStart;
+			if (int.TryParse(frm.ReturnFormValue(CaseFilterFields.PageSize), out recPerPage) && int.TryParse(frm.ReturnFormValue(CaseFilterFields.PageStart), out pageStart))
+			{
+				f.PageInfo = new PageInfo
+				{
+					PageSize = recPerPage,
+					PageNumber = recPerPage != 0 ? pageStart / recPerPage : 0
+				};
+			}
 
-            string statisticsView = null;
-            
-            var statisticsFields = m.GridSettings.CaseFieldSettings.Where(cf=>  cf.ShowOnStartPage != 0 &&
-                                                                               (cf.Name == GlobalEnums.TranslationCaseFields.Status_Id.ToString() ||
-                                                                                cf.Name == GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()))
-                                                                   .Select(cf => cf.Name)
-                                                                   .ToList();            
-            var showCaseStatistics = SessionFacade.CurrentUser.ShowCaseStatistics && statisticsFields.Any();            
-            if (showCaseStatistics)
-            {                
-                var expandedGroup = frm.ReturnFormValue("expandedGroup");
-                if (string.IsNullOrEmpty(expandedGroup))
-                    expandedGroup = SessionFacade.CaseOverviewGridSettings.ExpandedStatistics;
+			var searchResult = _caseSearchService.Search(
+				f,
+				m.caseSettings,
+				caseFieldSettings,
+				SessionFacade.CurrentUser.Id,
+				SessionFacade.CurrentUser.UserId,
+				SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups,
+				SessionFacade.CurrentUser.UserGroupId,
+				SessionFacade.CurrentUser.RestrictedCasePermission,
+				sm.Search,
+				workContext.Customer.WorkingDayStart,
+				workContext.Customer.WorkingDayEnd,
+				userTimeZone,
+				ApplicationTypes.Helpdesk,
+				showRemainingTime,
+				out remainingTimeData,
+				out aggregateData);
 
-                statisticsView = this.RenderPartialViewToString(
-                    "_Statistics",
-                    GetCaseStatisticsModel(aggregateData, m.cases.Count(), expandedGroup, statisticsFields));    
-            }
+			m.cases = searchResult.Items;
 
-            return this.Json(new { result = "success", data = data, remainingView = remainingView, statisticsView = statisticsView });
-        }
+			m.cases = TreeTranslate(m.cases, f.CustomerId);
+			sm.Search.IdsForLastSearch = GetIdsFromSearchResult(m.cases);
 
-        #endregion
+			var ouIds = f.OrganizationUnit.Split(',');
+			if (ouIds.Any())
+			{
+				foreach (var id in ouIds)
+					if (!string.IsNullOrEmpty(id))
+					{
+						if (string.IsNullOrEmpty(sm.caseSearchFilter.Department))
+							sm.caseSearchFilter.Department += string.Format("-{0}", id);
+						else
+							sm.caseSearchFilter.Department += string.Format(",-{0}", id);
+					}
+			}
 
-        #region --Favorite--
+			SessionFacade.CurrentCaseSearch = sm;
+			#endregion
 
-        [HttpPost]
+			var customerSettings = _settingService.GetCustomerSetting(f.CustomerId);
+
+			var outputFormatter = new OutputFormatter(customerSettings.IsUserFirstLastNameRepresentation == 1, userTimeZone);
+			var data = new List<Dictionary<string, object>>();
+			foreach (var searchRow in m.cases)
+			{
+				var jsRow = new Dictionary<string, object>
+								{
+									{ "case_id", searchRow.Id },
+									{ "caseIconTitle", searchRow.CaseIcon.CaseIconTitle() },
+									{
+										"caseIconUrl",
+										string.Format(
+											"/Content/icons/{0}",
+											searchRow.CaseIcon.CaseIconSrc())
+									},
+									{ "isUnread", searchRow.IsUnread },
+									{ "isUrgent", searchRow.IsUrgent },
+								};
+				foreach (var col in gridSettings.columnDefs)
+				{
+					var searchCol = searchRow.Columns.FirstOrDefault(it => it.Key == col.name);
+					jsRow.Add(col.name, searchCol != null ? outputFormatter.FormatField(searchCol) : string.Empty);
+
+
+
+
+
+
+
+				}
+
+				data.Add(jsRow);
+			}
+
+			var remainingView = string.Empty;
+			if (SessionFacade.CurrentUser.ShowSolutionTime)
+			{
+				remainingView = RenderPartialViewToString(
+					"CaseRemainingTime",
+					this.caseModelFactory.GetCaseRemainingTimeModel(remainingTimeData, this.workContext));
+			}
+
+			string statisticsView = null;
+
+			var statisticsFields = m.GridSettings.CaseFieldSettings.Where(cf => cf.ShowOnStartPage != 0 &&
+																			   (cf.Name == GlobalEnums.TranslationCaseFields.Status_Id.ToString() ||
+																				cf.Name == GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()))
+																   .Select(cf => cf.Name)
+																   .ToList();
+			var showCaseStatistics = SessionFacade.CurrentUser.ShowCaseStatistics && statisticsFields.Any();
+			if (showCaseStatistics)
+			{
+				var expandedGroup = frm.ReturnFormValue("expandedGroup");
+				if (string.IsNullOrEmpty(expandedGroup))
+					expandedGroup = SessionFacade.CaseOverviewGridSettings.ExpandedStatistics;
+
+				statisticsView = this.RenderPartialViewToString(
+					"_Statistics",
+					GetCaseStatisticsModel(aggregateData, m.cases.Count, expandedGroup, statisticsFields));
+			}
+
+			return Json(new
+			{
+				result = "success",
+				data = data,
+				remainingView = remainingView,
+				statisticsView = statisticsView,
+				recordsTotal = searchResult.Count,
+				recordsFiltered = searchResult.Count
+			});
+		}
+
+
+		#endregion
+
+		#region --Favorite--
+
+		[HttpPost]
         public JsonResult SaveFavorite(int favoriteId, string favoriteName, MyFavoriteFilterJSFields favoriteFilter)
         {
             if (SessionFacade.CurrentCustomer == null || SessionFacade.CurrentUser == null)
@@ -4278,7 +4304,7 @@ namespace DH.Helpdesk.Web.Controllers
             CaseRemainingTimeData remainingTime;
             CaseAggregateData aggregateData;
             var caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id).ToArray();
-            searchResult.cases = this._caseSearchService.Search(
+            searchResult.cases = _caseSearchService.Search(
                 search.caseSearchFilter,
                 searchResult.caseSettings,
                 caseFieldSettings,
@@ -4288,8 +4314,8 @@ namespace DH.Helpdesk.Web.Controllers
                 SessionFacade.CurrentUser.UserGroupId,
                 SessionFacade.CurrentUser.RestrictedCasePermission,
                 search.Search,
-                this.workContext.Customer.WorkingDayStart,
-                this.workContext.Customer.WorkingDayEnd,
+                workContext.Customer.WorkingDayStart,
+                workContext.Customer.WorkingDayEnd,
                 TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId),
                 ApplicationTypes.Helpdesk,
                 showRemainingTime,
@@ -4297,7 +4323,7 @@ namespace DH.Helpdesk.Web.Controllers
                 out aggregateData,
                 relatedCasesCaseId,
                 relatedCasesUserId,
-                caseIds);
+                caseIds).Items;
 
             searchResult.cases = this.TreeTranslate(searchResult.cases, SessionFacade.CurrentCustomer.Id);
             search.Search.IdsForLastSearch = this.GetIdsFromSearchResult(searchResult.cases);
@@ -5273,7 +5299,7 @@ namespace DH.Helpdesk.Web.Controllers
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
             var caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(f.CustomerId).ToArray();
             f.MaxTextCharacters = 0;
-            m.cases = this._caseSearchService.Search(
+            m.cases = _caseSearchService.Search(
                 f,
                 m.caseSettings,
                 caseFieldSettings,
@@ -5287,7 +5313,7 @@ namespace DH.Helpdesk.Web.Controllers
                 0,
                 userTimeZone,
                 ApplicationTypes.Helpdesk
-                ).Take(maxRecords).ToList();
+                ).Items.Take(maxRecords).ToList();
 
             m.cases = this.TreeTranslate(m.cases, currentCustomerId);
             sm.Search.IdsForLastSearch = this.GetIdsFromSearchResult(m.cases);

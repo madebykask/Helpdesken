@@ -1,4 +1,4 @@
-﻿"use strsict";
+﻿"use strict";
 
 var GRID_STATE = {
     IDLE: 0,
@@ -10,7 +10,7 @@ var GRID_STATE = {
 var statisticsExpandHiddenElm = '#hidExpandedGroup';
 var groupStatisticsCaptionPrefix = '#Caption_';
 
-function saveExpanded (id) {
+function saveExpanded(id) {
     var curExpanded = $(statisticsExpandHiddenElm).val();
     switch (curExpanded) {
         case "":
@@ -48,7 +48,7 @@ function getCollapseCaption(cap) {
     return cap.replace("- ", "+ ");
 }
 
-(function($) {
+(function ($) {
     /// message types
     var ERROR_MSG_TYPE = 0;
     var LOADING_MSG_TYPE = 1;
@@ -56,210 +56,285 @@ function getCollapseCaption(cap) {
     var BADCONFIG_MSG_TYPE = 3;
     var NO_COL_SELECTED_MSG_TYPE = 4;
 
-    var SORT_ASC = 0;
-    var SORT_DESC = 1;
-
-    
-
-
-    function getClsForSortDir(sortDir) {
-        if (sortDir === SORT_ASC) {
-            return "icon-chevron-up";
-        }
-        if (sortDir === SORT_DESC) {
-            return "icon-chevron-down";
-        }
-        return '';
-    }
-    
-
-    function Page() {};
+    function Page() { };
 
     /**
     * Initialization method. Called when page ready
     * @param { object } appSettings
     */
-    Page.prototype.init = function(appSettings) {
-        var me = this;
-        me.hXHR = null;
-        me.msgs = appSettings.messages || {};
-        me.settings = {
+    Page.prototype.init = function (appSettings) {
+        "use strict";
+        var self = this;
+
+        self.msgs = appSettings.messages || {};
+
+        self.settings = {
             filterSettings: appSettings.searchFilter.data,
             refreshContent: appSettings.refreshContent
         };
-        if (me.settings.refreshContent > 0) {
-            setInterval(function() {
-                me.autoReloadCheck.call(me);
+        if (self.settings.refreshContent > 0) {
+            setInterval(function () {
+                self.autoReloadCheck.call(self);
             }, 500);
         }
-        //// Bind elements
-        me.$table = $('.table-cases');
-        me.$tableHeader = $('table.table-cases thead');
-        me.$tableBody = $('.table-cases tbody');
-        me.$tableLoaderMsg = ' div.loading-msg';
-        me.$tableNoDataMsg = ' div.no-data-msg';
-        me.$tableErrorMsg = ' div.error-msg';
-        me.$noFieldsMsg = $('#search_result div.nofields-msg');
-        me.$noAvailableFieldsMsg = $('#search_result div.noavailablefields-msg');
-        me.$buttonsToDisableWhenGridLoads = $('ul.secnav a.btn, ul.secnav div.btn-group button, ul.secnav input[type=button], .submit, #btnClearFilter');
-        me.$buttonsToDisableWhenNoColumns = $('#btnNewCase a.btn, #btnCaseTemplate a.btn, .submit, #btnClearFilter');
-        me.$caseRecordCount = $('[data-field="TotalAmountCases"]');
-        me.$statisticsViewPlace = $('[data-field="caseStatisticsPlace"]');
-        me.$hidExpandedGroup = $('#hidExpandedGroup');
 
-        me.filterForm = new FilterForm();
-        me.filterForm.init({
-            $el: $('#frmCaseSearch'),
+        //// Bind elements
+        self.$table = $("#caseResults");
+        //self.$tableHeader = $('table.table-cases thead');
+        self.$tableBody = $('.table-cases tbody');
+        self.$tableLoaderMsg = ' div.loading-msg';
+        self.$tableNoDataMsg = ' div.no-data-msg';
+        self.$tableErrorMsg = ' div.error-msg';
+        self.$noFieldsMsg = $('#search_result div.nofields-msg');
+        self.$noAvailableFieldsMsg = $('#search_result div.noavailablefields-msg');
+        self.$buttonsToDisableWhenGridLoads = $('ul.secnav a.btn, ul.secnav div.btn-group button, ul.secnav input[type=button], .submit, #btnClearFilter');
+        self.$buttonsToDisableWhenNoColumns = $('#btnNewCase a.btn, #btnCaseTemplate a.btn, .submit, #btnClearFilter');
+        self.$caseRecordCount = $('[data-field="TotalAmountCases"]');
+        self.$statisticsViewPlace = $('[data-field="caseStatisticsPlace"]');
+        self.$hidExpandedGroup = $('#hidExpandedGroup');
+
+        self.filterForm = new FilterForm();
+        self.filterForm.init({
+            $el: $("#frmCaseSearch"),
             filter: appSettings.searchFilter.data,
-            favorites: appSettings.userFilterFavorites,            
-            onBeforeSearch: callAsMe(me.canMakeSearch, me),
-            onSearch: Utils.applyAsMe(me.fetchData, me, [{ isSearchInitByUser: true }])
+            favorites: appSettings.userFilterFavorites,
+            onBeforeSearch: callAsMe(self.canMakeSearch, self),
+            onSearch: Utils.applyAsMe(function () { self.table.ajax.reload.call(self); }, self, [{ isSearchInitByUser: true }])
         });
-        
-        me.$remainingView = $('[data-field="caseRemainingTimeHidePlace"]');
-        
+
+        self.$remainingView = $('[data-field="caseRemainingTimeHidePlace"]');
+
+        if (appSettings.gridSettings.availableColumns === 0) {
+            self.showMsg(BADCONFIG_MSG_TYPE);
+            self.setGridState(GRID_STATE.BAD_CONFIG);
+            return;
+        }
+
+        if (appSettings.gridSettings.columnDefs.length === 0) {
+            self.showMsg(NO_COL_SELECTED_MSG_TYPE);
+            self.setGridState(GRID_STATE.NO_COL_SELECTED);
+            return;
+        }
+
+        self.gridSettings = appSettings.gridSettings;
+
+        self.$table.addClass(appSettings.gridSettings.cls);
+
+        var columns = self.getColumnSettings(appSettings.gridSettings);
+
+        self.table = InitDataTable("caseResults", appSettings.perPageText, appSettings.perShowingText,
+            {
+                processing: true,
+                serverSide: true,
+                ordering: true,
+                ajax: {
+                    url: "/Cases/SearchAjax",
+                    type: "POST",
+                    data: function (data) {
+                        var params = $.extend({}, data, self.getFetchParams(appSettings.gridSettings));
+                        delete params.search;
+                        return params;
+                    },
+                    dataSrc: "data"
+                },
+                createdRow: function (row, data, dataIndex) {
+                    $(row).addClass(self.getClsRow(data) + " caseid=" + data.case_id);
+                    row.cells[0].innerHTML = strJoin('<a href="/Cases/Edit/', data.case_id, '"><img title="', data.caseIconTitle, '" alt="', data.caseIconTitle, '" src="', data.caseIconUrl, '" /></a>');
+                },
+                columns: columns,
+                order: []
+            });
+
+        self.table.on("error.dt", function (e, settings, techNote, message) {
+            console.log("An error has been reported by DataTable: ", message);
+            var textStatus = arguments[1];
+            if (textStatus !== "abort") {
+                self.showMsg(ERROR_MSG_TYPE);
+                self.setGridState(window.GRID_STATE.IDLE);
+            }
+        })
+            .on("init.dt", function () {
+
+                $(document).trigger("OnCasesLoaded");
+            })
+            .on("preXhr.dt", function (e, settings, data) {
+
+                if (data.order && data.order.length > 0) {
+                    data.order[0].column = data.columns[data.order[0].column].data;
+                }
+                
+                delete data.columns;
+            })
+            .on("xhr.dt", function (e, settings, json) {
+
+                self._gridUpdated = (new Date()).getTime();
+
+                if (json && json.result === 'success' && json.data) {
+
+                    if (json.remainingView) {
+                        self.loadRemainingView(json.remainingView);
+                    }
+                    if (json.statisticsView) {
+                        self.loadStatisticsView(json.statisticsView);
+                    }
+                } else {
+                    self.showMsg(ERROR_MSG_TYPE);
+                    self.setGridState(window.GRID_STATE.IDLE);
+                }
+
+                if (json && json.data.length > 0) {
+                    self.$caseRecordCount.text(json.recordsTotal);
+                } else {
+                    self.showMsg(NODATA_MSG_TYPE);
+                }
+                $(document).trigger("OnCasesLoaded");
+                self.filterForm.saveSeacrhCaseTypeValue.call(self.filterForm);
+            })
+            .on("processing.dt", function (e, settings, processing) {
+                if (processing) {
+                    self.setGridState(window.GRID_STATE.LOADING);
+                    self.showMsg(LOADING_MSG_TYPE);
+                } else {
+                    self.hideMessage();
+                    self.setGridState(window.GRID_STATE.IDLE);
+                }
+            })
+            .on("order.dt", function (a, b, c) {
+
+            });
+
         //// Bind events
-        $('a.refresh-grid').on('click', function(ev) {
+        $("a.refresh-grid").on('click', function (ev) {
             ev.preventDefault();
-            if (me._gridState !== window.GRID_STATE.IDLE) {
+            if (self._gridState !== window.GRID_STATE.IDLE) {
                 return false;
             }
-            me.fetchData.call(me, { isSearchInitByUser: true });
+            self.table.ajax.reload.call(self, { isSearchInitByUser: true });
             return false;
         });
-                       
-        $('#btnNewCase a, #divCaseTemplate a:not(.category)').click(function() {
-            me.abortAjaxReq();
+
+        $("#btnNewCase a, #divCaseTemplate a:not(.category)").click(function () {
+            //self.abortAjaxReq();
             return true;
-        });       
-        
-        me.setGridState(window.GRID_STATE.IDLE);
-        me.setGridSettings(appSettings.gridSettings);
+        });
+
     };
 
-    Page.prototype.autoReloadCheck = function() {
-        var me = this;
-        if (me.getGridUpdatedAgo() >= me.settings.refreshContent && me.getGridState() == window.GRID_STATE.IDLE) {
-            me.fetchData();
+    Page.prototype.getFetchParams = function () {
+        "use strict";
+        var self = this;
+        var fetchParams;
+        var expandedGroup = $(self.$hidExpandedGroup).val();
+        var baseParams = self.filterForm.getFilterToSend();
+        var p = params || {};
+        baseParams.push({ name: "expandedGroup", value: expandedGroup });
+
+        if (self.appendFetch != null && self.appendFetch.length > 0) {
+            fetchParams = baseParams.concat(self.appendFetch);
+            delete self.appendFetch;
+        } else {
+            fetchParams = baseParams;
+        }
+        var obj = fetchParams.reduce(function (o, v, i) {
+            o[v.name] = v.value;
+            return o;
+        }, {});
+        return obj;
+    };
+
+    Page.prototype.autoReloadCheck = function () {
+        var self = this;
+        if (self.getGridUpdatedAgo() >= self.settings.refreshContent && self.getGridState() === window.GRID_STATE.IDLE) {
+            self.table.ajax.reload();
         }
     };
 
-    Page.prototype.getGridUpdatedAgo = function() {
-        var me = this;
-        if (me._gridUpdated == null) {
+    Page.prototype.getGridUpdatedAgo = function () {
+        var self = this;
+        if (self._gridUpdated == null) {
             return Number.MAX_VALUE;
         }
-        return ((new Date()).getTime() - me._gridUpdated) / 1000;
+        return ((new Date()).getTime() - self._gridUpdated) / 1000;
     };
 
     /**
     * @private
     * @returns bool
     */
-    Page.prototype.canMakeSearch = function() {
-        var me = this;
-        if (me._gridState == GRID_STATE.IDLE) {
+    Page.prototype.canMakeSearch = function () {
+        var self = this;
+        if (self._gridState === GRID_STATE.IDLE) {
             return true;
         };
-        if (me._gridState == GRID_STATE.LOADING) {
-            me.abortAjaxReq();
+        if (self._gridState === GRID_STATE.LOADING) {
+            //self.abortAjaxReq();
             return true;
         }
         return false;
     };
 
-    Page.prototype.setGridState = function(newGridState) {
-        var me = this;
+    Page.prototype.setGridState = function (newGridState) {
+        "use strict";
+        var self = this;
         switch (newGridState) {
             case window.GRID_STATE.IDLE:
-                me.$buttonsToDisableWhenGridLoads.removeClass('disabled');
+                self.$buttonsToDisableWhenGridLoads.removeClass("disabled");
                 break;
             case window.GRID_STATE.NO_COL_SELECTED:
-                me.$buttonsToDisableWhenNoColumns.addClass('disabled');
+                self.$buttonsToDisableWhenNoColumns.addClass("disabled");
                 break;
             case window.GRID_STATE.LOADING:
-                if (me._gridState != window.GRID_STATE.IDLE) {
-                    me.$buttonsToDisableWhenGridLoads.addClass('disabled');
+                if (self._gridState !== window.GRID_STATE.IDLE) {
+                    self.$buttonsToDisableWhenGridLoads.addClass("disabled");
                 }
                 break;
             default:
-                me.$buttonsToDisableWhenGridLoads.addClass('disabled');
+                self.$buttonsToDisableWhenGridLoads.addClass("disabled");
         }
-        me._gridState = newGridState;
+        self._gridState = newGridState;
     };
 
-    Page.prototype.getGridState = function() {
+    Page.prototype.getGridState = function () {
         return this._gridState;
     };
 
-    /**
-    * @param { {String: id, String: displayName } gridSettings
-    */
-    Page.prototype.setGridSettings = function(gridSettings) {
-        var me = this;
-        var hasColSpecialClass = '';
-        var out = ['<tr><th style="width:18px;"></th>'];
-        var sortCallback = function () {
-            me.setSortField.call(me, $(this).attr('fieldname'), $(this));
-        };
-        me.gridSettings = gridSettings;
-        if (me.gridSettings.availableColumns == 0) {
-            me.showMsg(BADCONFIG_MSG_TYPE);
-            me.setGridState(GRID_STATE.BAD_CONFIG);
-            return;
-        }
+    Page.prototype.getColumnSettings = function (gridSettings) {
+        "use strict";
+        var self = this;
 
-        if (me.gridSettings.columnDefs.length == 0) {
-            me.showMsg(NO_COL_SELECTED_MSG_TYPE);
-            me.setGridState(GRID_STATE.NO_COL_SELECTED);
-            return;
-        }
-        me.visibleFieldsCount = 1; //// we have at least one column with icon
-        $.each(me.gridSettings.columnDefs, function (idx, fieldSetting) {
-            var sortCls = '';
-            if (!fieldSetting.isHidden) {
-                me.visibleFieldsCount += 1;
-                if (me.gridSettings.sortOptions != null && fieldSetting.field === me.gridSettings.sortOptions.sortBy) {
-                    sortCls = getClsForSortDir(me.gridSettings.sortOptions.sortDir);
+        //var out = ['<tr><th style="width:18px;"></th>'];
+        //var sortCallback = function () {
+        //    me.setSortField.call(me, $(this).attr('fieldname'), $(this));
+        //};
+        var columns = [];
+        columns.push({ data: null, width: "18px", orderable: false, defaultContent: "&nbsp;" });
+        $.each(gridSettings.columnDefs, function (idx, fieldSetting) {
+
+            columns.push({
+                data: fieldSetting.field,
+                title: fieldSetting.displayName,
+                className: "thpointer " + fieldSetting.field + " " + fieldSetting.cls,
+                visible: !fieldSetting.isHidden,
+                width: fieldSetting.width,
+                defaultContent: "&nbsp;",
+                createdCell: function (td, cellData, rowData, row, col) {
+                    if (!fieldSetting.isHidden) {
+                        if (cellData === null || cellData === undefined) {
+                            td.innerHTML = self.formatCell(rowData.case_id, '');
+                            if (Page.isDebug)
+                                console.warn('could not find field "' + fieldSetting.field + '" in record');
+                        } else {
+                            td.innerHTML = self.formatCell(rowData.case_id, cellData);
+                        }
+                    }
                 }
-                out.push(strJoin('<th class="thpointer ', fieldSetting.field, ' ', fieldSetting.cls, '" fieldname="', fieldSetting.field, '">', fieldSetting.displayName, '<i class="', sortCls, '"></i>'));
-            }
+            });
         });
-        out.push('</tr>');
-        me.$table.addClass([me.gridSettings.cls, hasColSpecialClass].join(' '));
-        me.$tableHeader.html(out.join(JOINER));
-        me.$tableHeader.find('th.thpointer').on('click', sortCallback);
 
-        me.fetchData({ isSearchInitByUser: true });
+        return columns;
     };
 
-    Page.prototype.setSortField = function(fieldName, $el) {
-        var me = this;
-        var oldEl;
-        var sortOpt = me.gridSettings.sortOptions;
-        var oldCls = getClsForSortDir(sortOpt.sortDir);
-        if (window.app.getGridState() !== window.GRID_STATE.IDLE) {
-            return;
-        }
-        if (sortOpt.sortBy === fieldName) {
-            sortOpt.sortDir = (sortOpt.sortDir == SORT_ASC) ? SORT_DESC : SORT_ASC;
-            oldEl = $el;
-        } else {
-            oldEl = $(me.$table).find('thead [fieldname="' + sortOpt.sortBy + '"]');
-            sortOpt.sortBy = fieldName;
-            sortOpt.sortDir = SORT_DESC;
-        }
-        if (oldEl.length > 0) {
-            $(oldEl).find('i').removeClass(oldCls);
-        }
-        $($el).find('i').addClass(getClsForSortDir(sortOpt.sortDir));
-
-        // I did not put isSearchInitByUser: true due to it shows irritating message 
-        //  when more than 500 rows fetchied
-        me.fetchData();        
-    };
-
-    Page.prototype.showMsg = function(msgType) {
+    Page.prototype.showMsg = function (msgType) {
         var me = this;
         me.hideMessage();
         if (msgType === LOADING_MSG_TYPE) {
@@ -281,7 +356,7 @@ function getCollapseCaption(cap) {
             me.$noFieldsMsg.show();
             return;
         }
-        if (msgType == BADCONFIG_MSG_TYPE) {
+        if (msgType === BADCONFIG_MSG_TYPE) {
             me.$table.hide();
             me.$noAvailableFieldsMsg.show();
             return;
@@ -296,7 +371,7 @@ function getCollapseCaption(cap) {
         $(me.$tableNoDataMsg).hide();
     };
 
-    Page.prototype.getClsRow = function(record) {
+    Page.prototype.getClsRow = function (record) {
         var res = [];
         if (record.isUnread) {
             res.push('textbold');
@@ -308,164 +383,50 @@ function getCollapseCaption(cap) {
     };
 
     Page.prototype.formatCell = function (caseId, cellValue) {
-        var out = [strJoin('<td><a href="/Cases/Edit/', caseId, '">', cellValue == null ? '&nbsp;' : cellValue.replace(/<[^>]+>/ig,""), '</a></td>')];
+        var out = [strJoin('<a href="/Cases/Edit/', caseId, '">', cellValue == null ? '&nbsp;' : cellValue.replace(/<[^>]+>/ig, ""), '</a>')];
         return out.join(JOINER);
     };
 
-    Page.prototype.loadData = function(data, opt) {
-        var me = this;
-        var out = [];
-        if (data)
-        {
-            var totalCaseAmount = data.length;
-            me.$caseRecordCount.text(totalCaseAmount);
-        }
-
-        var RECORDS_TRUNCATED_IDX = 499;
-        var CASE_TYPE_ALL = -1;
-        var CASE_TYPE_CLOSED = 1;
-        var isRecordsLimitReached = false;
-        opt = opt || {};
-        
-        if (data && data.length > 0) {
-            me.hideMessage();
-            $.each(data, function (idx, record) {
-                var firstCell = strJoin('<td><a href="/Cases/Edit/', record.case_id, '"><img title="', record.caseIconTitle, '" alt="', record.caseIconTitle, '" src="', record.caseIconUrl, '" /></a></td>');
-                var rowOut = [strJoin('<tr class="', me.getClsRow(record), '" caseid="', record.case_id, '">'), firstCell];
-                $.each(me.gridSettings.columnDefs, function (idx, columnSettings) {
-                    if (!columnSettings.isHidden) {
-                        if (record[columnSettings.field] == null) {
-                            rowOut.push(me.formatCell(record.case_id, ''));
-                            if (Page.isDebug) 
-                                console.warn('could not find field "' + columnSettings.field + '" in record');
-                        } else {
-                            rowOut.push(me.formatCell(record.case_id, record[columnSettings.field]));
-                        }
-                    }
-                });
-                rowOut.push('</tr>');
-                out.push(rowOut.join(JOINER));
-                if (idx === RECORDS_TRUNCATED_IDX) {
-                    isRecordsLimitReached = true;
-                }
-            });
-            me.$tableBody.html(out.join(JOINER));
-            var oldCaseType = me.filterForm.getSavedSeacrhCaseTypeValue();
-            var newCaseType = me.filterForm.getSearchCaseType();
-
-            if (isRecordsLimitReached && opt.isSearchInitByUser
-                && newCaseType !== oldCaseType &&  (newCaseType === CASE_TYPE_ALL || newCaseType === CASE_TYPE_CLOSED)) {
-                ShowToastMessage(me.msgs.information + '<br/>' + me.msgs.records_limited_msg, 'notice');
-            }
-        } else {
-            me.showMsg(NODATA_MSG_TYPE);
-        }
-        me.setGridState(window.GRID_STATE.IDLE);
-        $(document).trigger("OnCasesLoaded");
-        
+    Page.prototype.onRemainingViewClick = function (aElement) {
+        var self = this;
+        self.appendFetch = [
+            { 'name': "CaseRemainingTime", 'value': $(aElement).attr("data-remaining-time") },
+            { 'name': "CaseRemainingTimeUntil", 'value': $(aElement).attr("data-remaining-time-until") },
+            { 'name': "CaseRemainingTimeMax", 'value': $(aElement).attr("data-remaining-time-max") },
+            { 'name': "CaseRemainingTimeHours", 'value': $(aElement).attr("data-remaining-time-hours") }
+        ];
+        self.table.ajax.reload();
     };
 
-    Page.prototype.onRemainingViewClick = function(aElement) {
-        var me = this;
-        me.fetchData( {
-            isSearchInitByUser: true, 
-            appendFetch: [
-                { 'name': 'CaseRemainingTime', 'value': $(aElement).attr('data-remaining-time') },
-                { 'name': 'CaseRemainingTimeUntil', 'value': $(aElement).attr('data-remaining-time-until') },
-                { 'name': 'CaseRemainingTimeMax', 'value': $(aElement).attr('data-remaining-time-max') },
-                { 'name': 'CaseRemainingTimeHours', 'value': $(aElement).attr('data-remaining-time-hours') }]
-        });
-    };
-
-    Page.prototype.loadRemainingView = function(htmlContent) {
-        var me = this;
-        me.$remainingView.html(htmlContent);
-        me.$remainingView.find('a').on('click', function (ev) {
+    Page.prototype.loadRemainingView = function (htmlContent) {
+        var self = this;
+        self.$remainingView.html(htmlContent);
+        self.$remainingView.find('a').on('click', function (ev) {
             ev.preventDefault();
-            me.onRemainingViewClick.call(me, this);
+            self.onRemainingViewClick.call(self, this);
             return false;
         });
     };
 
     Page.prototype.loadStatisticsView = function (statisticsData) {
-        var me = this;
-        me.$statisticsViewPlace.html(statisticsData);
+        var self = this;
+        self.$statisticsViewPlace.html(statisticsData);
     };
 
-
-    Page.prototype.onGetData = function (response, opt) {
-        var me = this;
-        if (response && response.result === 'success' && response.data) {
-            me.loadData(response.data, opt);
-            if (response.remainingView) {
-                me.loadRemainingView(response.remainingView);
-            }
-            if (response.statisticsView) {
-                me.loadStatisticsView(response.statisticsView);
-            }
-        } else {
-            me.showMsg(ERROR_MSG_TYPE);
-            me.setGridState(window.GRID_STATE.IDLE);
-        }
+    Page.prototype.abortAjaxReq = function () {
+        var self = this;
+        //TODO: customize data table behaviour
+        //if (self.table.ajax != null && self.table.ajax.status == null) {
+        //    self.table.ajax.abort();
+        //}
     };
 
-    Page.prototype.abortAjaxReq = function() {
-        var me = this;
-        if (me.hXHR != null && me.hXHR.status == null) {
-            me.hXHR.abort();
-        }
-    };
-    
-
-    Page.prototype.fetchData = function(params) {
-        var me = this;
-        var fetchParams;
-        var expandedGroup = $(me.$hidExpandedGroup).val();
-        var baseParams = me.filterForm.getFilterToSend();
-        var p = params || {};
-        baseParams.push(
-            { name: 'sortBy', value: me.gridSettings.sortOptions.sortBy },
-            { name: 'sortDir', value: me.gridSettings.sortOptions.sortDir },
-            { name: 'pageIndex', value: me.gridSettings.pageOptions.pageIndex },
-            { name: 'recPerPage', value: me.gridSettings.pageOptions.recPerPage },
-            { name: 'expandedGroup', value: expandedGroup });
-
-        if (p.appendFetch != null && p.appendFetch.length > 0) {
-            fetchParams = baseParams.concat(p.appendFetch);
-        } else {
-            fetchParams = baseParams;
-        }
-        me.setGridState(window.GRID_STATE.LOADING);
-        me.showMsg(LOADING_MSG_TYPE);
-        me.hXHR = $.ajax('/Cases/SearchAjax', {
-                type: 'POST',
-                dataType: 'json',
-                data: fetchParams
-            })
-            .always(function() {
-                me._gridUpdated = (new Date()).getTime();
-            })
-            .fail(function() {
-                var textStatus = arguments[1];
-                if (textStatus !== 'abort') {
-                    me.showMsg(ERROR_MSG_TYPE);
-                    me.setGridState(window.GRID_STATE.IDLE);
-                }
-            })
-            .done(function() {
-                me.onGetData.call(me, arguments[0], { isSearchInitByUser: p.isSearchInitByUser });
-            })
-            .always(function() {
-                me.filterForm.saveSeacrhCaseTypeValue.call(me.filterForm);
-            });
-    };
-   
     window.app = new Page();
-    $(document).ready(function() {
+
+    $(document).ready(function () {
         app.init.call(window.app, window.pageSettings);
     });
 })($);
-
 
 
 $('#SettingTab').click(function (e) {
@@ -483,7 +444,6 @@ $('#CasesTab').click(function (e) {
 });
 
 
-    
 /**
 * @param { string } message
 * @param { string } msgType one of 'notice', 'warning', 'error', 'success'
@@ -532,19 +492,19 @@ $(function () {
         var showCaseFilters = $('#btnMore');
         var searchForm = $('#frmCaseSearch');
 
-        var moveCaseRemainingTimeIntoHidePlace = function() {
+        var moveCaseRemainingTimeIntoHidePlace = function () {
             caseRemainingTime.detach().appendTo(caseRemainingTimeHidePlace);
         }
 
-        var moveCaseRemainingTimeIntoShowPlace = function() {
+        var moveCaseRemainingTimeIntoShowPlace = function () {
             caseRemainingTime.detach().appendTo(caseRemainingTimeShowPlace);
         }
 
-        var isCaseFilterHided = function() {
+        var isCaseFilterHided = function () {
             return $("#icoPlus").hasClass('icon-minus-sign');
         }
 
-        var moveCaseRemainingTime = function() {
+        var moveCaseRemainingTime = function () {
             if (isCaseFilterHided()) {
                 moveCaseRemainingTimeIntoShowPlace();
             } else {
@@ -559,7 +519,7 @@ $(function () {
 
         var loader = $('<img src="/Content/icons/ajax-loader.gif" />');
 
-        var bindCaseRemainingTime = function() {
+        var bindCaseRemainingTime = function () {
             $('[data-remaining-time]').each(function () {
                 $(this).click(function () {
                     var $this = $(this);
@@ -587,7 +547,7 @@ $(function () {
         }
         bindCaseRemainingTime();
 
-        dhHelpdesk.casesList.utils.onEvent("OnCasesLoaded", function() {
+        dhHelpdesk.casesList.utils.onEvent("OnCasesLoaded", function () {
             caseRemainingTime.remove();
             caseRemainingTime = $('[data-field="caseRemainingTime"]');
             if (isCaseFilterHided()) {
@@ -596,7 +556,7 @@ $(function () {
                 moveCaseRemainingTimeIntoHidePlace();
             }
 
-            bindCaseRemainingTime();            
+            bindCaseRemainingTime();
         });
 
         return that;

@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Dal.Repositories
+﻿using DH.Helpdesk.BusinessData.Models.Shared.Output;
+
+namespace DH.Helpdesk.Dal.Repositories
 {
     using System;
     using System.Collections.Generic;
@@ -32,7 +34,7 @@
     /// </summary>
     public interface ICaseSearchRepository
     {
-        IList<CaseSearchResult> Search(CaseSearchContext context, out CaseRemainingTimeData remainingTime, out CaseAggregateData aggregateData);
+        SearchResult<CaseSearchResult> Search(CaseSearchContext context, out CaseRemainingTimeData remainingTime, out CaseAggregateData aggregateData);
     }
 
     public class CaseSearchRepository : ICaseSearchRepository
@@ -64,7 +66,7 @@
             this.logRepository = logRepository;            
         }    
 
-        public IList<CaseSearchResult> Search(CaseSearchContext context, out CaseRemainingTimeData remainingTime, out CaseAggregateData aggregateData)
+        public SearchResult<CaseSearchResult> Search(CaseSearchContext context, out CaseRemainingTimeData remainingTime, out CaseAggregateData aggregateData)
         {
             var now = DateTime.UtcNow;
             var dsn = ConfigurationManager.ConnectionStrings["HelpdeskOleDbContext"].ConnectionString;
@@ -80,8 +82,8 @@
             var s = context.s;
 
             var customerUserSetting = this._customerUserRepository.GetCustomerSettings(f.CustomerId, userId);
-            IList<ProductAreaEntity> pal = this._productAreaRepository.GetMany(x => x.Customer_Id == f.CustomerId).OrderBy(x => x.Name).ToList(); 
-            IList<CaseSearchResult> ret = new List<CaseSearchResult>();
+            IList<ProductAreaEntity> pal = this._productAreaRepository.GetMany(x => x.Customer_Id == f.CustomerId).OrderBy(x => x.Name).ToList();
+            SearchResult<CaseSearchResult> ret = new SearchResult<CaseSearchResult>();
             var caseTypes = this.caseTypeRepository.GetCaseTypeOverviews(f.CustomerId).ToArray();
             var displayLeftTime = userCaseSettings.Any(it => it.Name == TimeLeftColumn);
             remainingTime = new CaseRemainingTimeData();
@@ -104,9 +106,56 @@
                                         context.caseIds,
                                         context.userCaseSettings);
 
+            var sqlCount = ReturnCaseSearchSqlCount(
+                context.f,
+                context.customerSetting,
+                customerUserSetting,
+                context.isFieldResponsibleVisible,
+                context.userId,
+                context.userUserId,
+                context.showNotAssignedWorkingGroups,
+                context.userGroupId,
+                context.gs,
+                context.s,
+                context.applicationType,
+                context.relatedCasesCaseId,
+                context.relatedCasesUserId,
+                context.caseIds,
+                context.userCaseSettings);
+
             if (string.IsNullOrEmpty(sql))
             {
                 return ret;
+            }
+
+            using (var con = new OleDbConnection(dsn))
+            {
+                using (var cmd = new OleDbCommand())
+                {
+                    try
+                    {
+                        con.Open();
+                        cmd.Connection = con;
+                        cmd.CommandType = CommandType.Text;
+                        cmd.CommandText = sqlCount;
+                        cmd.CommandTimeout = 300;
+                        var dr = cmd.ExecuteReader();
+                        if (dr != null && dr.HasRows)
+                        {
+                            while (dr.Read())
+                            {
+                                var total = dr.SafeGetInteger("Total");
+                                ret.Count = total;
+                            }
+                        }
+
+                        dr.Close();
+                    }
+                    finally
+                    {
+                        con.Close();
+                    }
+                }
             }
 
             var workTimeCalculator = this.InitCalcFromSQL(dsn, sql, workTimeCalcFactory, now);
@@ -325,7 +374,7 @@
                                 row.IsUnread = dr.SafeGetInteger("Status") == 1;
                                 row.IsUrgent = timeLeft.HasValue && timeLeft < 0;                                
                                 if (!row.Ignored)
-                                    ret.Add(row); 
+                                    ret.Items.Add(row); 
                             }
                         }
 
@@ -344,14 +393,14 @@
                 if (int.TryParse(f.CaseClosingReasonFilter, out closingReason))
                 {
                     var closingReasons = new List<int> { closingReason };
-                    var filtered = new List<CaseSearchResult>();
-                    foreach (var foundedCase in ret)
+                    var filtered = new SearchResult<CaseSearchResult>();
+                    foreach (var foundedCase in ret.Items)
                     {
                         var log = this.logRepository.GetLastLog(foundedCase.Id);
                         if (log != null && log.FinishingType.HasValue
                             && closingReasons.Contains(log.FinishingType.Value))
                         {
-                            filtered.Add(foundedCase);
+                            filtered.Items.Add(foundedCase);
                         }
                     }
 
@@ -439,22 +488,24 @@
             return calculatorFactory.Build(fetchRangeBegin, fetchRangeEnd, deptIds.ToArray());
         }
 
-        private IList<CaseSearchResult> SortSearchResult(IList<CaseSearchResult> csr, ISearch s)
+        private SearchResult<CaseSearchResult> SortSearchResult(SearchResult<CaseSearchResult> csr, ISearch s)
         {
             //tid kvar samt produktområde kan inte sorteras i databasen
             if (string.Compare(s.SortBy, "ProductArea_Id", true, CultureInfo.InvariantCulture) == 0)
             {
                 if (s.Ascending)
                 {
-                    return csr.OrderBy(x => x.SortOrder).ToList();
+                    csr.Items = csr.Items.OrderBy(x => x.SortOrder).ToList();
+                    return csr;
                 }
-                return csr.OrderByDescending(x => x.SortOrder).ToList();
+                csr.Items = csr.Items.OrderByDescending(x => x.SortOrder).ToList();
+                return csr;
             }
             else if (string.Compare(s.SortBy, TimeLeftColumn, true, CultureInfo.InvariantCulture) == 0)
             {
                 /// we have to sort this field on "integer" manner
                 var indx = 0;
-                var structToSort = csr.Select(
+                var structToSort = csr.Items.Select(
                     it =>
                         {
                             int intVal;
@@ -466,10 +517,11 @@
                         });
                 if (s.Ascending)
                 {
-                    return structToSort.OrderBy(it => it.val).ThenBy(it=> it.dVal).Select(it => csr[it.index]).ToList();
+                    csr.Items = structToSort.OrderBy(it => it.val).ThenBy(it => it.dVal).Select(it => csr.Items[it.index]).ToList();
+                    return csr;
                 }
-
-                return structToSort.OrderByDescending(it => it.val).ThenBy(it => it.dVal).Select(it => csr[it.index]).ToList();
+                csr.Items = structToSort.OrderByDescending(it => it.val).ThenBy(it => it.dVal).Select(it => csr.Items[it.index]).ToList();
+                return csr;
             }            
 
             return csr;
@@ -688,6 +740,111 @@
             return ret; 
         }
 
+        private string ReturnCaseSearchSqlCount(
+                    CaseSearchFilter f,
+                    Setting customerSetting,
+                    CustomerUser customerUserSetting,
+                    bool isFieldResponsibleVisible,
+                    int userId,
+                    string userUserId,
+                    int showNotAssignedWorkingGroups,
+                    int userGroupId,
+                    GlobalSetting gs,
+                    ISearch s,
+                    string applicationType,
+                    int? relatedCasesCaseId,
+                    string relatedCasesUserId,
+                    int[] caseIds,
+                    IList<CaseSettings> userCaseSettings)
+        {
+            var sql = new List<string>();
+            var validateUserCaseSettings = new List<CaseSettings>();
+            foreach (var us in userCaseSettings)
+                if (!validateUserCaseSettings.Select(v => v.Name).Contains(us.Name))
+                    validateUserCaseSettings.Add(us);
+
+            var caseSettings = validateUserCaseSettings.ToDictionary(it => it.Name, it => it);
+
+            sql.Add("select Count(*) as Total");
+
+            // tables and joins
+            sql.Add(GetTablesAndJoins(customerSetting, caseSettings, userId));
+
+            // WHERE ..
+            if (applicationType.ToLower() == ApplicationTypes.LineManager || applicationType.ToLower() == ApplicationTypes.SelfService)
+            {
+                sql.Add(this.ReturnCustomCaseSearchWhere(f, userUserId));
+            }
+            else
+            {
+                sql.Add(this.ReturnCaseSearchWhere(
+                    f,
+                    customerSetting,
+                    customerUserSetting,
+                    isFieldResponsibleVisible,
+                    userId,
+                    userUserId,
+                    showNotAssignedWorkingGroups,
+                    userGroupId,
+                    gs,
+                    relatedCasesCaseId,
+                    caseSettings,
+                    relatedCasesUserId,
+                    caseIds));
+            }
+
+            return string.Join(" ", sql);
+        }
+
+        private string GetTablesAndJoins(Setting customerSetting, IDictionary<string, CaseSettings> caseSettings, int userId)
+        {
+            var tables = new List<string>();
+            #region adding tables into FROM section
+            tables.Add("from tblCase WITH (NOLOCK) ");
+            tables.Add("inner join tblCustomer on tblCase.Customer_Id = tblCustomer.Id ");
+            tables.Add("inner join tblCustomerUser on tblCase.Customer_Id = tblCustomerUser.Customer_Id ");
+            tables.Add("left outer join tblDepartment on tblDepartment.Id = tblCase.Department_Id ");
+            tables.Add("left outer join tblRegion on tblCase.Region_Id = tblRegion.Id ");
+            tables.Add("left outer join tblOU on tblCase.OU_Id=tblOU.Id ");
+            tables.Add("left outer join tblSupplier on tblCase.Supplier_Id=tblSupplier.Id ");
+            tables.Add("left outer join tblSystem on tblCase.System_Id = tblSystem.Id ");
+            tables.Add("left outer join tblUrgency on tblCase.Urgency_Id = tblUrgency.Id ");
+            tables.Add("left outer join tblImpact on tblCase.Impact_Id = tblImpact.Id ");
+            tables.Add("left outer join tblRegistrationSourceCustomer on tblCase.RegistrationSourceCustomer_Id = tblRegistrationSourceCustomer.Id ");
+            tables.Add("left outer join tblUsers on tblUsers.Id = tblCase.Performer_User_Id ");
+            tables.Add("left outer join tblCaseIsAbout on tblCaseIsAbout.Case_Id = tblCase.Id ");
+
+            if (customerSetting != null)
+            {
+                const int SHOW_IF_DEFAULT_USER_GROUP = 0;
+                if (customerSetting.CaseWorkingGroupSource == SHOW_IF_DEFAULT_USER_GROUP)
+                {
+                    tables.Add(string.Format("left join tblUserWorkingGroup as defGroup on defGroup.User_Id = {0} and defGroup.IsDefault = 1 and defGroup.WorkingGroup_Id = tblCase.WorkingGroup_Id", userId));
+                    tables.Add("left join tblWorkingGroup on tblWorkingGroup.id = defgroup.WorkingGroup_Id");
+                }
+                else
+                {
+                    tables.Add("left outer join tblWorkingGroup on tblCase.WorkingGroup_Id = tblWorkingGroup.Id ");
+                }
+            }
+
+            tables.Add("left outer join tblStatus on tblCase.Status_Id = tblStatus.Id ");
+            tables.Add("left outer join tblCategory on tblCase.category_Id = tblCategory.Id ");
+            tables.Add("left outer join tblStateSecondary on tblCase.StateSecondary_Id = tblStateSecondary.Id ");
+            tables.Add("left outer join tblPriority on tblCase.Priority_Id = tblPriority.Id ");
+            tables.Add("inner join tblCaseType on tblCase.CaseType_Id = tblCaseType.Id ");
+            tables.Add("left outer join tblUsers as tblUsers2 on tblCase.[User_Id] = tblUsers2.Id ");
+            tables.Add("left outer join tblUsers as tblUsers3 on tblCase.CaseResponsibleUser_Id = tblUsers3.Id ");
+            tables.Add("left outer join tblProblem on tblCase.Problem_Id = tblProblem.Id ");
+            tables.Add("left outer join tblUsers as tblUsers4 on tblProblem.ResponsibleUser_Id = tblUsers4.Id ");
+            if (caseSettings.ContainsKey(GlobalEnums.TranslationCaseFields.CausingPart.ToString()))
+            {
+                tables.Add("left outer join tblCausingPart on (tblCase.CausingPartId = tblCausingPart.Id)");
+            }
+            #endregion
+            return string.Join(" ", tables);
+        }
+
         private string ReturnCaseSearchSql(
                     CaseSearchFilter f, 
                     Setting customerSetting, 
@@ -712,15 +869,15 @@
                     validateUserCaseSettings.Add(us);
 
             var caseSettings = validateUserCaseSettings.ToDictionary(it => it.Name, it => it);
+
             // fields
             sql.Add("select distinct");
 
             // vid avslutade ärenden visas bara första 500
-            if (f != null && (f.CaseProgress == CaseProgressFilter.ClosedCases || f.CaseProgress == CaseProgressFilter.None))
-            {
-                sql.Add("top 500");
-            }
-
+            //if (f != null && (f.CaseProgress == CaseProgressFilter.ClosedCases || f.CaseProgress == CaseProgressFilter.None))
+            //{
+            //    sql.Add("top 500");
+            //}
             
             var columns = new List<string>();
             #region adding columns in SELECT
@@ -846,51 +1003,7 @@
             sql.Add(string.Join(",", columns));
 
             /// tables and joins
-            var tables = new List<string>();
-            #region adding tables into FROM section
-            tables.Add("from tblCase WITH (NOLOCK) ");
-            tables.Add("inner join tblCustomer on tblCase.Customer_Id = tblCustomer.Id "); 
-            tables.Add("inner join tblCustomerUser on tblCase.Customer_Id = tblCustomerUser.Customer_Id ");  
-            tables.Add("left outer join tblDepartment on tblDepartment.Id = tblCase.Department_Id ");  
-            tables.Add("left outer join tblRegion on tblCase.Region_Id = tblRegion.Id ");  
-            tables.Add("left outer join tblOU on tblCase.OU_Id=tblOU.Id ");            
-            tables.Add("left outer join tblSupplier on tblCase.Supplier_Id=tblSupplier.Id "); 
-            tables.Add("left outer join tblSystem on tblCase.System_Id = tblSystem.Id ");  
-            tables.Add("left outer join tblUrgency on tblCase.Urgency_Id = tblUrgency.Id ");  
-            tables.Add("left outer join tblImpact on tblCase.Impact_Id = tblImpact.Id ");
-            tables.Add("left outer join tblRegistrationSourceCustomer on tblCase.RegistrationSourceCustomer_Id = tblRegistrationSourceCustomer.Id ");
-            tables.Add("left outer join tblUsers on tblUsers.Id = tblCase.Performer_User_Id ");
-            tables.Add("left outer join tblCaseIsAbout on tblCaseIsAbout.Case_Id = tblCase.Id ");
-            
-            if (customerSetting != null)
-            {
-                const int SHOW_IF_DEFAULT_USER_GROUP = 0;
-                if (customerSetting.CaseWorkingGroupSource == SHOW_IF_DEFAULT_USER_GROUP)
-                {
-                    tables.Add(string.Format("left join tblUserWorkingGroup as defGroup on defGroup.User_Id = {0} and defGroup.IsDefault = 1 and defGroup.WorkingGroup_Id = tblCase.WorkingGroup_Id", userId));
-                    tables.Add("left join tblWorkingGroup on tblWorkingGroup.id = defgroup.WorkingGroup_Id");
-                }
-                else
-                {
-                    tables.Add("left outer join tblWorkingGroup on tblCase.WorkingGroup_Id = tblWorkingGroup.Id ");
-                }
-            }
-
-            tables.Add("left outer join tblStatus on tblCase.Status_Id = tblStatus.Id ");  
-            tables.Add("left outer join tblCategory on tblCase.category_Id = tblCategory.Id ");  
-            tables.Add("left outer join tblStateSecondary on tblCase.StateSecondary_Id = tblStateSecondary.Id ");  
-            tables.Add("left outer join tblPriority on tblCase.Priority_Id = tblPriority.Id ");  
-            tables.Add("inner join tblCaseType on tblCase.CaseType_Id = tblCaseType.Id ");  
-            tables.Add("left outer join tblUsers as tblUsers2 on tblCase.[User_Id] = tblUsers2.Id ");
-            tables.Add("left outer join tblUsers as tblUsers3 on tblCase.CaseResponsibleUser_Id = tblUsers3.Id "); 
-            tables.Add("left outer join tblProblem on tblCase.Problem_Id = tblProblem.Id ");
-            tables.Add("left outer join tblUsers as tblUsers4 on tblProblem.ResponsibleUser_Id = tblUsers4.Id ");
-            if (caseSettings.ContainsKey(GlobalEnums.TranslationCaseFields.CausingPart.ToString()))
-            {
-                tables.Add("left outer join tblCausingPart on (tblCase.CausingPartId = tblCausingPart.Id)");
-            }
-            #endregion
-            sql.Add(string.Join(" ", tables));
+            sql.Add(GetTablesAndJoins(customerSetting, caseSettings, userId));
 
             /// WHERE ..
             if (applicationType.ToLower() == ApplicationTypes.LineManager || applicationType.ToLower() == ApplicationTypes.SelfService)
@@ -956,6 +1069,9 @@
             }
 
             sql.Add(string.Join(" ", orderBy));
+
+            if (f.PageInfo != null)
+                sql.Add(string.Format("OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY", ((f.PageInfo.PageNumber) * f.PageInfo.PageSize), f.PageInfo.PageSize));
 
             return string.Join(" ", sql);
         }

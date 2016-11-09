@@ -16,7 +16,7 @@ $(".nav-tabs-actions a").unbind("click");
 $(".content input:text:not(.chosen-container input:text), .content textarea").eq(0).focus();
 
 
-$('#case__RegLanguage_Id').change(function () {   
+$('#case__RegLanguage_Id').change(function () {
     ChangeCaseLanguageTo($("#case__RegLanguage_Id").val());
 });
 
@@ -36,7 +36,7 @@ function ChangeCaseLanguageTo(newLanguageId, updateDropDown) {
     $("#case_.RegLanguage_Id").val(newLanguageId);
 }
 
-function ShowToastMessage(message, msgType, isSticky) {    
+function ShowToastMessage(message, msgType, isSticky) {
     var _Sticky = false;
     if (isSticky)
         _Sticky = true;
@@ -103,7 +103,7 @@ function SelectValueInOtherDropdownOnChange(id, postTo, ctl, readonlyElement) {
             var exists = $(ctlOption + '[value=' + data + ']').length;
             if (exists > 0) {
                 $(ctl).val(data);
-                if (readonlyElement != undefined && readonlyElement!= null)
+                if (readonlyElement != undefined && readonlyElement != null)
                     $(readonlyElement).val(data);
             }
         }
@@ -152,7 +152,7 @@ function FAQInitForm() {
                     _plupload.pluploadQueue().refresh();
                 }
             }
-        }        
+        }
     });
 
     PluploadTranslation($('#CurLanguageId').val());
@@ -168,7 +168,7 @@ function FAQInitForm() {
             },
             buttons: { browse: true, start: true, stop: true, cancel: true },
             preinit: {
-                Init: function (up, info) {                    
+                Init: function (up, info) {
                 },
 
                 UploadFile: function (up, file) {
@@ -200,7 +200,7 @@ function FAQInitForm() {
                     $('#FAQFileNames').val(strFiles + "|" + file.name);
                 },
 
-                UploadComplete: function (up, file) {                   
+                UploadComplete: function (up, file) {
                     //plupload_add
                     $(".plupload_buttons").css("display", "inline");
                     $(".plupload_upload_status").css("display", "inline");
@@ -227,14 +227,14 @@ function FAQInitForm() {
             }
         });
     });
-    
+
     bindDeleteFAQFileBehaviorToDeleteButtons();
 }
 
 function productAreaHasChild(productAreaId) {
     $.get('/Cases/ProductAreaHasChild', { pId: productAreaId, now: Date.now() }, function (data) {
         return data;
-    });    
+    });
 }
 
 function SendToDialogCaseCallback(email) {
@@ -288,8 +288,7 @@ $('.multiselect').multiselect({
 });
 
 function PluploadTranslation(languageId) {
-    if (languageId == 1)
-    {        
+    if (languageId == 1) {
         plupload.addI18n({
             'Select files': 'Välj filer',
             'Add files to the upload queue and click the start button.': 'Lägg till filer till kön och tryck på start.',
@@ -298,26 +297,25 @@ function PluploadTranslation(languageId) {
             'Size': 'Storlek',
             'Add files': 'Lägg till filer',
             'Add files.': 'nnnnn',
-            'Start upload': 'ssss',            
+            'Start upload': 'ssss',
             'Stop current upload': 'Stoppa uppladdningen',
             'Start uploading queue': 'Starta uppladdningen',
             'Drag files here.': 'Dra filer hit'
-            });
+        });
     }
 
-    if (languageId == 2)
-    {
-            plupload.addI18n({
-                'Select files': 'Select files',
-                'Add files to the upload queue and click the start button.': 'Add files to the upload queue and click the start button.',
-                'Filename': 'Filename',
-                'Status': 'Status',
-                'Size': 'Size',
-                'Add files': 'Add files',
-                'Stop current upload': 'Stop current upload',
-                'Start uploading queue': 'Start uploading queue',
-                'Drag files here.': 'Drag files here.'
-            });     
+    if (languageId == 2) {
+        plupload.addI18n({
+            'Select files': 'Select files',
+            'Add files to the upload queue and click the start button.': 'Add files to the upload queue and click the start button.',
+            'Filename': 'Filename',
+            'Status': 'Status',
+            'Size': 'Size',
+            'Add files': 'Add files',
+            'Stop current upload': 'Stop current upload',
+            'Start uploading queue': 'Start uploading queue',
+            'Drag files here.': 'Drag files here.'
+        });
     }
 
 }
@@ -342,9 +340,9 @@ function bindDeleteCaseFileBehaviorToDeleteButtons() {
         var pressedDeleteFileButton = this;
         $.post("/Cases/DeleteCaseFile", { id: key, fileName: fileName }, function () {
             $(pressedDeleteFileButton).parents('tr:first').remove();
-            var fileNames = $('#CaseFileNames').val();            
+            var fileNames = $('#CaseFileNames').val();
             fileNames = fileNames.replace("|" + fileName.trim(), "");
-            fileNames = fileNames.replace(fileName.trim() + "|", "");            
+            fileNames = fileNames.replace(fileName.trim() + "|", "");
             $('#CaseFileNames').val(fileNames);
 
             // Raise event about deleted file
@@ -404,11 +402,11 @@ function NewNotifierEvent(id) {
             $('#case__UserCode').val(data.usercode);
             $('#case__CostCentre').val(data.costcentre);
 
-            $('#case__Region_Id').val(data.regionid);            
+            $('#case__Region_Id').val(data.regionid);
             $('#RegionName').val(data.regionname);
 
             $(_departmentControlName).val(data.departmentid);
-            refreshDepartment(data.regionid, departmentFilterFormat, data.departmentid, data.ouid);           
+            refreshDepartment(data.regionid, departmentFilterFormat, data.departmentid, data.ouid);
 
         }
     }, 'json');
@@ -423,14 +421,14 @@ function moveCase(id) {
 }
 
 function copyCase(id, customerId) {
-   
-        var url = '/cases/copy/' + id + '?customerId=' + customerId;
-        window.location.href = url;
-    
+
+    var url = '/cases/copy/' + id + '?customerId=' + customerId;
+    window.location.href = url;
+
 }
 
 // calculate utc time
-$(function(){
+$(function () {
     $('[data-datetimeutc]', 'body').each(function () {
         // the date construct will automatically convert to local time
         var localDate = new Date(parseInt($(this).attr('data-datetimeutc')));
@@ -448,7 +446,7 @@ $.validator.methods.number = function (value, element) {
 };
 
 
- //TABLE PAGING
+//TABLE PAGING
 $.extend($.fn.dataTable.defaults, {
     "searching": false,
     "ordering": false
@@ -599,26 +597,26 @@ function DestroyDataTable(tableUniqId) {
     oTable.destroy();
 };
 
-function InitDataTable(tableUniqId, perText, showingText) {
-    $('#' + tableUniqId).dataTable({
+function InitDataTable(tableUniqId, perText, showingText, options) {
+    return $('#' + tableUniqId).DataTable($.extend({}, {
         'sError': 'throw',
         "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
         "sPaginationType": "bootstrap",
         "oLanguage": {
-            "sLengthMenu": "_MENU_ " + perText ,
+            "sLengthMenu": "_MENU_ " + perText,
             "sInfo": showingText + " _PAGE_ / _PAGES_",
             "oPaginate": {
                 "sFirst": "First",
                 "sLast": "Last",
                 "sNext": "",
-                "sPrevious":""
+                "sPrevious": ""
             }
         }
-    });
+    }, options || {}));
 }
 // TABLE PAGING END
 
- 
+
 
 // YES and NO SWITCH FOR CHECKBOXES
 $('.switchcheckbox').bootstrapSwitch('onText', trans_yes);

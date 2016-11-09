@@ -1000,7 +1000,7 @@
                 CaseRemainingTimeData remainingTimeData;
                 CaseAggregateData aggregateData;
                 var caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(cusId).ToArray();
-                srm.Cases = this._caseSearchService.Search(
+                srm.Cases = _caseSearchService.Search(
                     sm.caseSearchFilter,
                     srm.CaseSettings,
                     caseFieldSettings,
@@ -1016,7 +1016,7 @@
                     currentApplicationType,
                     showRemainingTime,
                     out remainingTimeData,
-                    out aggregateData).ToList(); // Take(maxRecords)
+                    out aggregateData).Items.ToList(); // Take(maxRecords)
 
                 if (currentApplicationType == ApplicationTypes.LineManager)
                 {
