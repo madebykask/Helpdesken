@@ -40,6 +40,7 @@
     <MvcProjectUpgradeChecked>true</MvcProjectUpgradeChecked>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -225,6 +226,7 @@
     <Compile Include="Controllers\CaseSearchController.cs" />
     <Compile Include="Controllers\CoWorkersController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
+    <Compile Include="Controllers\FAQController.cs" />
     <Compile Include="Controllers\DocumentsController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -303,6 +305,7 @@
     <Compile Include="Models\Common\GridColumnHeaderModel.cs" />
     <Compile Include="Models\Common\GridRowCellValueModel.cs" />
     <Compile Include="Models\Common\SortFieldModel.cs" />
+    <Compile Include="Models\FAQ\FAQIndexViewModel.cs" />
     <Compile Include="Models\Help\AboutModel.cs" />
     <Compile Include="Models\CoWorkers\CoWorkersModel.cs" />
     <Compile Include="Models\Documents\DocumentsModel.cs" />
@@ -910,6 +913,7 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\FAQ\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">

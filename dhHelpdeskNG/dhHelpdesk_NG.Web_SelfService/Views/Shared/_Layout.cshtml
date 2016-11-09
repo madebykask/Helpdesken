@@ -410,6 +410,35 @@
                         }
                     }
 
+                    @if (!pHasError && SessionFacade.CurrentCustomer != null && SessionFacade.CurrentCustomer.ShowFAQOnExternalPage != 0)
+                    {
+                        if (!hideMenu)
+                        {
+                            var faq = pActionSettings.SingleOrDefault(a => a.ObjectId == ActionObject.FAQ);
+                            if (faq != null)
+                            {
+                                if (faq.Visibled)
+                                {
+                                    <li class="blue">
+                                        <a href="@Url.Action("Index", "FAQ", new { customerId = pCustomerId, area = "" })">
+                                            <div class="@(string.IsNullOrEmpty(faq.ObjectClass) ? "ico-documents" : faq.ObjectClass)"></div>
+                                            @Translation.Get(faq.ObjectValue, Enums.TranslationSource.TextTranslation)
+                                        </a>
+                                    </li>
+                                }
+                            }
+                            else
+                            {
+                                <li class="blue">
+                                    <a href="@Url.Action("Index", "FAQ", new { customerId = pCustomerId, area = "" })">
+                                        <div class="ico-documents"></div>                                        
+                                            @Translation.Get("FAQ", Enums.TranslationSource.TextTranslation)                                       
+                                    </a>
+                                </li>
+                            }
+                        }
+                    }
+
                     @if (!pHasError && SessionFacade.CurrentCustomer != null && SessionFacade.CurrentCustomer.ShowCoWorkersOnExternalPage != 0)
                     {
                         if (!hideMenu)
