@@ -5110,11 +5110,43 @@ If not exists (select * from tblTextTranslation where Text_Id = 1698 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1699)
-            insert into tblText (Id, Textstring) VALUES (1699, 'Fältet krävs')																
+            insert into tblText (Id, Textstring) VALUES (1699, 'Fältet {0} krävs')																
 																
 GO
 If not exists (select * from tblTextTranslation where Text_Id = 1699 and Language_Id=2)
-            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1699, 'The field is required', 2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1699, 'The field {0} is required', 2)
+GO
+
+If not exists (select * from tblText where Id = 1700)
+            insert into tblText (Id, Textstring) VALUES (1700, 'Processen från')																
+																
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1700 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1700, 'Process from', 2)
+GO
+
+If not exists (select * from tblText where Id = 1701)
+            insert into tblText (Id, Textstring) VALUES (1701, 'Processen till')																
+																
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1701 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1701, 'Process to', 2)
+GO
+
+If not exists (select * from tblText where Id = 1702)
+            insert into tblText (Id, Textstring) VALUES (1702, 'Sub status från')																
+																
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1702 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1702, 'Sub status from', 2)
+GO
+
+If not exists (select * from tblText where Id = 1703)
+            insert into tblText (Id, Textstring) VALUES (1703, 'Sub status till')																
+																
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1703 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1703, 'Sub status to', 2)
 GO
 
 

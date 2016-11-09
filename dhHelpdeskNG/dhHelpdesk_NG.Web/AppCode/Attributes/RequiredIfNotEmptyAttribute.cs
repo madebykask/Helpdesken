@@ -12,18 +12,21 @@ namespace DH.Helpdesk.Web.AppCode.Attributes
 	[AttributeUsage(AttributeTargets.Property)]
 	public class RequiredIfNotEmptyAttribute : ValidationAttribute, IClientValidatable
 	{
-		private string DependentProperty { get; set; }
-		private const string DefaultErrorMessage = "Fältet {0} krävs";
+		private string DependentServerProperty { get; set; }
+		private string DependentClientProperty { get; set; }
 
-		public RequiredIfNotEmptyAttribute(string dependentProperty)
+		private const string DefaultErrorMessage = "Fältet {0} krävs"; //The field {0} is required
+
+		public RequiredIfNotEmptyAttribute(string dependentServerProperty, string dependentClientProperty = null)
 		{
-			DependentProperty = dependentProperty;
+			DependentServerProperty = dependentServerProperty;
+			DependentClientProperty = dependentClientProperty;
 		}
 
 		protected override ValidationResult IsValid(object value, ValidationContext validationContext)
 		{
 			var containerType = validationContext.ObjectInstance.GetType();
-			var dependField = containerType.GetProperty(DependentProperty);
+			var dependField = containerType.GetProperty(DependentServerProperty);
 
 			if (value != null)
 			{
@@ -55,8 +58,9 @@ namespace DH.Helpdesk.Web.AppCode.Attributes
 				ErrorMessage = errorMessage,
 				ValidationType = "requiredifnotempty",
 			};
-
-			rule.ValidationParameters.Add("dependentproperty", DependentProperty);
+			if (DependentClientProperty == null)
+				DependentClientProperty = DependentServerProperty;
+			rule.ValidationParameters.Add("dependentproperty", DependentClientProperty);
 
 			yield return rule;
 		}
