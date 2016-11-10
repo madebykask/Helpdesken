@@ -124,6 +124,13 @@ namespace DH.Helpdesk.Domain
         public int DefaultEmailLogDestination { get; set; }
         public int CalcSolvedInTimeByLatestSLADate { get; set; }                   
         public int TimeZone_offset { get; set; }
+        public string SMTPServer { get; set; }
+        public int SMTPPort { get; set; }
+        public string SMTPUserName { get; set; }
+        public string SMTPPassWord { get; set; }
+        public bool IsSMTPSecured { get; set; }
+
+
 
 
         public virtual OrderState CloseOrderState { get; set; }

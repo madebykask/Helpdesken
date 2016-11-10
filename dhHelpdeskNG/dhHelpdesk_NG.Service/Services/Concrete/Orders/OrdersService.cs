@@ -28,7 +28,7 @@
     using System.Configuration;
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.Common.Enums;
-    
+    using Infrastructure;
 
     public class OrdersService : IOrdersService
     {
@@ -68,6 +68,10 @@
 
         private readonly ICaseTypeRepository _caseTypeRepository;
 
+        private readonly ISettingService settingService;
+
+        private readonly IEmailSendingSettingsProvider _emailSendingSettingsProvider;
+
 
         public OrdersService(
                 IUnitOfWorkFactory unitOfWorkFactory, 
@@ -87,7 +91,9 @@
                 ICustomerRepository customerRepository,
                 IOrderTypeRepository orderTypeRepository,
                 ICaseService caseService,
-                ICaseTypeRepository caseTypeRepository)
+                ICaseTypeRepository caseTypeRepository,
+                ISettingService settingService,
+                IEmailSendingSettingsProvider emailSendingSettingsProvider)
         {
             this.unitOfWorkFactory = unitOfWorkFactory;
             this.orderFieldSettingsService = orderFieldSettingsService;
@@ -107,6 +113,8 @@
             this._orderTypeRepository = orderTypeRepository;
             this._caseService = caseService;
             this._caseTypeRepository = caseTypeRepository;
+            this.settingService = settingService;
+            _emailSendingSettingsProvider = emailSendingSettingsProvider;
         }
 
         public OrdersFilterData GetOrdersFilterData(int customerId)
@@ -312,7 +320,16 @@
                 var ordersRep = uow.GetRepository<Order>();
                 var orderLogsRep = uow.GetRepository<OrderLog>();
                 var orderHistoryRep = uow.GetRepository<OrderHistoryEntity>();
-                
+
+                var customerSetting = settingService.GetCustomerSetting(request.CustomerId);
+                var smtpInfo = new MailSMTPSetting(customerSetting.SMTPServer, customerSetting.SMTPPort, customerSetting.SMTPUserName, customerSetting.SMTPPassWord, customerSetting.IsSMTPSecured);
+
+                if (string.IsNullOrEmpty(smtpInfo.Server) || smtpInfo.Port <= 0)
+                {
+                    var info = _emailSendingSettingsProvider.GetSettings();
+                    smtpInfo = new MailSMTPSetting(info.SmtpServer, info.SmtpPort);
+                }
+
                 Order entity;
                 FullOrderEditFields existingOrder = null;
                 if (request.Order.IsNew())
@@ -412,9 +429,10 @@
 
                                 //var AbsoluteUrl = RequestExtension.GetAbsoluteUrl();
                                 var AbsoluteUrl = "";
-
+                                var mailResponse = EmailResponse.GetEmptyEmailResponse();
+                                var mailSetting = new EmailSettings(mailResponse, smtpInfo);
                                 var siteHelpdesk = AbsoluteUrl + "Areas/Orders/edit/" + orderId;
-                                var e_res = this.emailService.SendEmail(customEmailSender1, el.EMailAddress, m.Subject, m.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, null, siteSelfService, siteHelpdesk);
+                                var e_res = this.emailService.SendEmail(customEmailSender1, el.EMailAddress, m.Subject, m.Body, fields, mailSetting, el.MessageId, false, null, siteSelfService, siteHelpdesk);
 
                                 //el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                                 var now = DateTime.Now;
@@ -454,9 +472,10 @@
 
                                 //var AbsoluteUrl = RequestExtension.GetAbsoluteUrl();
                                 var AbsoluteUrl = "";
-
+                                var mailResponse = EmailResponse.GetEmptyEmailResponse();
+                                var mailSetting = new EmailSettings(mailResponse, smtpInfo);
                                 var siteHelpdesk = AbsoluteUrl + "Areas/Orders/edit/" + orderId;
-                                var e_res = this.emailService.SendEmail(customEmailSender1, el.EMailAddress, m.Subject, m.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, null, siteSelfService, siteHelpdesk);
+                                var e_res = this.emailService.SendEmail(customEmailSender1, el.EMailAddress, m.Subject, m.Body, fields, mailSetting, el.MessageId, false, null, siteSelfService, siteHelpdesk);
 
                                 //el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                                 var now = DateTime.Now;

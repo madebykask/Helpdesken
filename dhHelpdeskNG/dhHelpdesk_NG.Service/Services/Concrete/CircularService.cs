@@ -25,6 +25,7 @@
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Questionnaire;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.User;
     using DH.Helpdesk.Services.Response.Questionnaire;
+    using Infrastructure;
 
     public class CircularService : ICircularService
     {
@@ -38,6 +39,10 @@
 
         private readonly IMailTemplateServiceNew mailTemplateService;
 
+        private readonly ISettingService settingService;
+
+        private readonly IEmailSendingSettingsProvider _emailSendingSettingsProvider;
+
         #endregion
 
         #region Constructors and Destructors
@@ -46,12 +51,16 @@
             IUnitOfWorkFactory unitOfWorkFactory,
             IMailTemplateFormatterNew mailTemplateFormatter,
             IEmailService emailService,
-            IMailTemplateServiceNew mailTemplateService)
+            IMailTemplateServiceNew mailTemplateService,
+            ISettingService settingService,
+            IEmailSendingSettingsProvider emailSendingSettingsProvider)
         {
             this.unitOfWorkFactory = unitOfWorkFactory;
             this.mailTemplateFormatter = mailTemplateFormatter;
             this.emailService = emailService;
             this.mailTemplateService = mailTemplateService;
+            this.settingService = settingService;
+            _emailSendingSettingsProvider = emailSendingSettingsProvider;
         }
 
         #endregion
@@ -341,7 +350,7 @@
                 participants,
                 operationContext.CustomerId);
 
-            this.SendMails(mails, operationContext.DateAndTime);
+            this.SendMails(mails, operationContext.DateAndTime, operationContext.CustomerId);
         }
 
         public void Remind(string actionAbsolutePath, int circularId, OperationContext operationContext)
@@ -358,7 +367,7 @@
                 participants,
                 operationContext.CustomerId);
 
-            this.SendMails(mails, operationContext.DateAndTime);
+            this.SendMails(mails, operationContext.DateAndTime, operationContext.CustomerId);
         }
 
         public QuestionnaireDetailedOverview GetQuestionnaire(Guid guid, OperationContext operationContext)
@@ -669,17 +678,28 @@
             }
         }
 
-        private void SendMails(List<QuestionnaireMailItem> mailItems, DateTime operationDate)
+        private void SendMails(List<QuestionnaireMailItem> mailItems, DateTime operationDate, int customerId)
         {
             foreach (QuestionnaireMailItem mailItem in mailItems)
             {
-                this.SendMail(mailItem, operationDate);
+                this.SendMail(mailItem, operationDate, customerId);
             }
         }
 
-        private void SendMail(QuestionnaireMailItem mailItem, DateTime operationDate)
+        private void SendMail(QuestionnaireMailItem mailItem, DateTime operationDate, int customerId)
         {
-            this.emailService.SendEmail(mailItem.MailItem, EmailResponse.GetEmptyEmailResponse());
+            var customerSetting = settingService.GetCustomerSetting(customerId);
+            var smtpInfo = new MailSMTPSetting(customerSetting.SMTPServer, customerSetting.SMTPPort, customerSetting.SMTPUserName, customerSetting.SMTPPassWord, customerSetting.IsSMTPSecured);
+
+            if (string.IsNullOrEmpty(smtpInfo.Server) || smtpInfo.Port <= 0)
+            {
+                var info = _emailSendingSettingsProvider.GetSettings();
+                smtpInfo = new MailSMTPSetting(info.SmtpServer, info.SmtpPort);
+            }
+            var mailResponse = EmailResponse.GetEmptyEmailResponse();
+            var mailSetting = new EmailSettings(mailResponse, smtpInfo);
+
+            this.emailService.SendEmail(mailItem.MailItem, mailSetting);
 
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {

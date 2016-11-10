@@ -21,6 +21,7 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.BusinessData.OldComponents;
     using System.Configuration;
     using DH.Helpdesk.BusinessData.Models.Email;
+    using DH.Helpdesk.Services.Infrastructure;
 
     public interface IOperationLogService
     {
@@ -67,6 +68,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly IEmailService _emailService;
         private readonly IOperationLogEMailLogRepository _operationLogEmailLogRepository;
         private readonly ISettingService _settingService;
+        private readonly IEmailSendingSettingsProvider _emailSendingSettingsProvider;
 
         public OperationLogService(
             IOperationLogRepository operationLogRepository,
@@ -77,7 +79,8 @@ namespace DH.Helpdesk.Services.Services
             IEmailService emailService,
             IOperationLogEMailLogRepository operationLogEmailLogRepository,
             ISettingService settingService,
-            IWorkContext workContext)
+            IWorkContext workContext,
+            IEmailSendingSettingsProvider emailSendingSettingsProvider)
         {
             this._operationLogRepository = operationLogRepository;
             this._unitOfWork = unitOfWork;
@@ -88,6 +91,7 @@ namespace DH.Helpdesk.Services.Services
             this._emailService = emailService;
             this._operationLogEmailLogRepository = operationLogEmailLogRepository;
             this._settingService = settingService;
+            _emailSendingSettingsProvider = emailSendingSettingsProvider;
         }
 
         public IList<OperationLog> GetOperationLogs(int customerId)
@@ -287,6 +291,14 @@ namespace DH.Helpdesk.Services.Services
                 return;
             }
 
+            var customerSetting = _settingService.GetCustomerSetting(customer.Id);
+            var smtpInfo = new MailSMTPSetting(customerSetting.SMTPServer, customerSetting.SMTPPort, customerSetting.SMTPUserName, customerSetting.SMTPPassWord, customerSetting.IsSMTPSecured);
+
+            if (string.IsNullOrEmpty(smtpInfo.Server) || smtpInfo.Port <= 0)
+            {
+                var info = _emailSendingSettingsProvider.GetSettings();
+                smtpInfo = new MailSMTPSetting(info.SmtpServer, info.SmtpPort);
+            }
             if (!String.IsNullOrEmpty(template.Body) && !String.IsNullOrEmpty(template.Subject))
             {
                 var to = operationLogList.EmailRecepientsOperationLog
@@ -305,7 +317,9 @@ namespace DH.Helpdesk.Services.Services
                         {
                             var el = new OperationLogEMailLog(operationLog.Id, string.Empty, t);
                             fields = GetFieldsForEmail(operationLogList);
-                            var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.Recipients, template.Subject, template.Body, fields, EmailResponse.GetEmptyEmailResponse(), null, false, null);
+                            var mailResponse = EmailResponse.GetEmptyEmailResponse();
+                            var mailSetting = new EmailSettings(mailResponse, smtpInfo);
+                            var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.Recipients, template.Subject, template.Body, fields, mailSetting, null, false, null);
 
                             //el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                             var now = DateTime.Now;
@@ -349,6 +363,15 @@ namespace DH.Helpdesk.Services.Services
             if (smsEMailDomainPassword != "")
                 smsSubject = smsSubject + " " + smsEMailDomainPassword;
 
+            var customerSetting = _settingService.GetCustomerSetting(customer.Id);
+            var smtpInfo = new MailSMTPSetting(customerSetting.SMTPServer, customerSetting.SMTPPort, customerSetting.SMTPUserName, customerSetting.SMTPPassWord, customerSetting.IsSMTPSecured);
+
+            if (string.IsNullOrEmpty(smtpInfo.Server) || smtpInfo.Port <= 0)
+            {
+                var info = _emailSendingSettingsProvider.GetSettings();
+                smtpInfo = new MailSMTPSetting(info.SmtpServer, info.SmtpPort);
+            }
+
             if (smsEMailDomainUserId != "")
             {
                 var to = SMSRecipients
@@ -365,8 +388,9 @@ namespace DH.Helpdesk.Services.Services
                         if (!string.IsNullOrWhiteSpace(curMail) && _emailService.IsValidEmail(curMail))
                         {
                             var el = new OperationLogEMailLog(operationLog.Id, txtSMS, t);
-              
-                            var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.Recipients, smsSubject, el.SMSText, null, EmailResponse.GetEmptyEmailResponse(), null, false, null);
+                            var mailResponse = EmailResponse.GetEmptyEmailResponse();
+                            var mailSetting = new EmailSettings(mailResponse, smtpInfo);
+                            var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.Recipients, smsSubject, el.SMSText, null, mailSetting, null, false, null);
 
                             var now = DateTime.Now;
                             el.CreatedDate = now;

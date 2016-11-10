@@ -1,17 +1,17 @@
 ﻿namespace DH.Helpdesk.Services.Services.Concrete
 {
     using System;
-    using System.Collections.Generic;  
+    using System.Collections.Generic;
     using System.Configuration;
     using System.Net.Mail;
     using System.Text.RegularExpressions;
-
     using DH.Helpdesk.BusinessData.Models.Email;
     using DH.Helpdesk.BusinessData.Models.MailTemplates;
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Services.Infrastructure;
     using System.Threading;
     using System.Globalization;
+    using System.Net;
 
     public sealed class EmailService : IEmailService
     {
@@ -24,34 +24,41 @@
             this.emailSendingSettingsProvider = emailSendingSettingsProvider;
         }
 
-        public EmailResponse SendEmail(MailAddress from, List<MailAddress> recipients, Mail mail, EmailResponse emailResponse)
+        public EmailResponse SendEmail(MailAddress from, List<MailAddress> recipients, Mail mail, EmailSettings emailsettings)
         {
-            EmailResponse res = emailResponse;
+            EmailResponse res = emailsettings.Response;
             var sendTime = DateTime.Now;
 
             foreach (var recipient in recipients)
             {
-                res = this.SendEmail(from, recipient, mail, emailResponse);
+                res = SendEmail(from, recipient, mail, emailsettings);
             }
 
             res.SendTime = sendTime;
             return res;
         }
 
-        public EmailResponse SendEmail(MailItem mailItem, EmailResponse emailResponse)
+        public EmailResponse SendEmail(MailItem mailItem, EmailSettings emailSettings)
         {
-            return this.SendEmail(new MailAddress(mailItem.From), new MailAddress(mailItem.To), mailItem.Mail, emailResponse);
+            return this.SendEmail(new MailAddress(mailItem.From), new MailAddress(mailItem.To), mailItem.Mail, emailSettings);
         }
 
-        public EmailResponse SendEmail(MailAddress from, MailAddress recipient, Mail mail, EmailResponse emailResponse)
+        public EmailResponse SendEmail(MailAddress from, MailAddress recipient, Mail mail, EmailSettings emailsettings)
         {
-            EmailResponse res = emailResponse;
+            EmailResponse res = emailsettings.Response;
             var sendTime = DateTime.Now;
 
             var mailSendingSettings = this.emailSendingSettingsProvider.GetSettings();
            
             using (var smtpClient = new SmtpClient(mailSendingSettings.SmtpServer, mailSendingSettings.SmtpPort))
             {
+                if (!string.IsNullOrEmpty(emailsettings.SmtpSettings.UserName) && !string.IsNullOrEmpty(emailsettings.SmtpSettings.Pass))
+                {
+                    smtpClient.Credentials = new NetworkCredential(emailsettings.SmtpSettings.UserName, emailsettings.SmtpSettings.Pass);                    
+                }
+
+                smtpClient.EnableSsl = emailsettings.SmtpSettings.IsSecured;
+
                 CultureInfo oldCI = Thread.CurrentThread.CurrentCulture;  
                 Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
                 Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
@@ -64,7 +71,7 @@
                                               IsBodyHtml = true
                                           };
                     smtpClient.Send(mailMessage);
-                    res = new EmailResponse(sendTime, emailResponse.ResponseMessage + " | " + _EMAIL_SEND_MESSAGE, emailResponse.NumberOfTry);
+                    res = new EmailResponse(sendTime, emailsettings.Response.ResponseMessage + " | " + _EMAIL_SEND_MESSAGE, emailsettings.Response.NumberOfTry);
                 }
                 catch (Exception ex)
                 {
@@ -74,8 +81,8 @@
                     else
                         msg = string.Format("{0}", ex.Message);
 
-                    var tryCount = emailResponse.NumberOfTry + 1;
-                    res = new EmailResponse(sendTime, emailResponse.ResponseMessage + " | " + msg, tryCount);
+                    var tryCount = emailsettings.Response.NumberOfTry + 1;
+                    res = new EmailResponse(sendTime, emailsettings.Response.ResponseMessage + " | " + msg, tryCount);
                 }
                 finally
                 {
@@ -85,13 +92,13 @@
 
             }
 
-            if (res.NumberOfTry != emailResponse.NumberOfTry && res.NumberOfTry <= _MAX_NUMBER_SENDING_EMAIL)                            
-                res = this.SendEmail(from, recipient, mail, res);            
+            if (res.NumberOfTry != emailsettings.Response.NumberOfTry && res.NumberOfTry <= _MAX_NUMBER_SENDING_EMAIL)                            
+                res = this.SendEmail(from, recipient, mail, emailsettings);            
 
             return res;
         }
 
-        public EmailResponse SendEmail(EmailItem item, EmailResponse emailResponse, string siteSelfService = "", string siteHelpdesk = "")
+        public EmailResponse SendEmail(EmailItem item, EmailSettings emailsettings, string siteSelfService = "", string siteHelpdesk = "")
         {
             return this.SendEmail(
                                 item.From,
@@ -99,7 +106,7 @@
                                 item.Subject,
                                 item.Body,
                                 item.Fields,
-                                emailResponse,
+                                emailsettings,
                                 item.MailMessageId,
                                 item.IsHighPriority,
                                 item.Files,
@@ -111,39 +118,45 @@
             string to, 
             string subject, 
             string body, 
-            List<DH.Helpdesk.Domain.Field> fields,            
-            EmailResponse emailResponse,
+            List<DH.Helpdesk.Domain.Field> fields,
+            EmailSettings emailsettings,
             string mailMessageId = "", 
             bool highPriority = false,
             List<string> files = null,
             string siteSelfService = "",
             string siteHelpdesk = "")
         {
-            EmailResponse res = emailResponse;
+            EmailResponse res = emailsettings.Response;
             var sendTime = DateTime.Now;
             string urlSelfService;
             var urlHelpdesk = "";
 
             SmtpClient _smtpClient;
-            CultureInfo oldCI = Thread.CurrentThread.CurrentCulture;            
+            CultureInfo oldCI = Thread.CurrentThread.CurrentCulture;
 
             Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
             Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
 
             try
             {                
-                string smtpServer = ConfigurationManager.AppSettings["SmtpServer"].ToString();
-                string smtpPort = ConfigurationManager.AppSettings["SmtpPort"].ToString();
+                string smtpServer = emailsettings.SmtpSettings.Server;
+                var smtpPort = emailsettings.SmtpSettings.Port;
 
                 if (!string.IsNullOrWhiteSpace(smtpServer) && !string.IsNullOrWhiteSpace(from) && !string.IsNullOrWhiteSpace(to))
                 {
                     if (IsValidEmail(from))
-                    {
-                        int port;
-                        if (int.TryParse(smtpPort, out port))
-                            _smtpClient = new SmtpClient(smtpServer, port);
+                    {                        
+                        if (smtpPort != 0)
+                            _smtpClient = new SmtpClient(smtpServer, smtpPort);
                         else
                             _smtpClient = new SmtpClient(smtpServer);
+
+                        if (!string.IsNullOrEmpty(emailsettings.SmtpSettings.UserName) && !string.IsNullOrEmpty(emailsettings.SmtpSettings.Pass))
+                        {
+                            _smtpClient.Credentials = new NetworkCredential(emailsettings.SmtpSettings.UserName, emailsettings.SmtpSettings.Pass);
+                        }
+
+                        _smtpClient.EnableSsl = emailsettings.SmtpSettings.IsSecured;
 
                         MailMessage msg = new MailMessage();
 
@@ -277,7 +290,7 @@
                         if (msg.To.Count > 0 || msg.Bcc.Count > 0 || msg.CC.Count > 0)
                         {
                             _smtpClient.Send(msg);
-                            res = new EmailResponse(sendTime, emailResponse.ResponseMessage + " | " + _EMAIL_SEND_MESSAGE, emailResponse.NumberOfTry);                            
+                            res = new EmailResponse(sendTime, res.ResponseMessage + " | " + _EMAIL_SEND_MESSAGE, res.NumberOfTry);                            
                         }
                     }
                 }                
@@ -290,8 +303,8 @@
                 else
                     msg = string.Format("{0}", ex.Message);
 
-                var tryCount = emailResponse.NumberOfTry + 1;
-                res = new EmailResponse(sendTime, emailResponse.ResponseMessage + " | " + msg, tryCount);
+                var tryCount = res.NumberOfTry + 1;
+                res = new EmailResponse(sendTime, res.ResponseMessage + " | " + msg, tryCount);
             }
             finally
             {
@@ -300,8 +313,8 @@
                 Thread.CurrentThread.CurrentUICulture = oldCI;
             }
 
-            if (res.NumberOfTry != emailResponse.NumberOfTry && res.NumberOfTry <= _MAX_NUMBER_SENDING_EMAIL)                            
-                res = this.SendEmail(from, to, subject, body, fields, res, mailMessageId, highPriority, files);                            
+            if (res.NumberOfTry != res.NumberOfTry && res.NumberOfTry <= _MAX_NUMBER_SENDING_EMAIL)                            
+                res = this.SendEmail(from, to, subject, body, fields, emailsettings, mailMessageId, highPriority, files);                            
             
             return res;
            

@@ -13,6 +13,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
     using DH.Helpdesk.Services.Requests.Changes;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.BusinessData.Models.Email;
+    using Infrastructure;
 
     public sealed class StatusChangedAuditor : IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditData>
     {
@@ -34,6 +35,10 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
 
         private readonly IChangeEmailLogRepository changeEmailLogRepository;
 
+        private readonly ISettingService settingService;
+
+        private readonly IEmailSendingSettingsProvider _emailSendingSettingsProvider;
+
         #endregion
 
         #region Constructors and Destructors
@@ -46,7 +51,9 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
             ICustomerRepository customerRepository,
             IEmailService emailService, 
             IMailUniqueIdentifierProvider mailUniqueIdentifierProvider, 
-            IChangeEmailLogRepository changeEmailLogRepository)
+            IChangeEmailLogRepository changeEmailLogRepository,
+            ISettingService settingService,
+            IEmailSendingSettingsProvider emailSendingSettingsProvider)
         {
             this.userEmailRepository = userEmailRepository;
             this.mailTemplateRepository = mailTemplateRepository;
@@ -56,6 +63,8 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
             this.emailService = emailService;
             this.mailUniqueIdentifierProvider = mailUniqueIdentifierProvider;
             this.changeEmailLogRepository = changeEmailLogRepository;
+            this.settingService = settingService;
+            _emailSendingSettingsProvider = emailSendingSettingsProvider;
         }
 
         #endregion
@@ -111,7 +120,17 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
                 return;
             }
 
-            this.emailService.SendEmail(from, ownerEmails, mail, EmailResponse.GetEmptyEmailResponse());
+            var customerSetting = settingService.GetCustomerSetting(businessModel.Context.CustomerId);
+            var smtpInfo = new MailSMTPSetting(customerSetting.SMTPServer, customerSetting.SMTPPort, customerSetting.SMTPUserName, customerSetting.SMTPPassWord, customerSetting.IsSMTPSecured);
+
+            if (string.IsNullOrEmpty(smtpInfo.Server) || smtpInfo.Port <= 0)
+            {
+                var info = _emailSendingSettingsProvider.GetSettings();
+                smtpInfo = new MailSMTPSetting(info.SmtpServer, info.SmtpPort);
+            }
+            var mailResponse = EmailResponse.GetEmptyEmailResponse();
+            var mailSetting = new EmailSettings(mailResponse, smtpInfo);
+            this.emailService.SendEmail(from, ownerEmails, mail, mailSetting);
 
             var mailUniqueIdentifier = this.mailUniqueIdentifierProvider.Provide(
                 businessModel.Context.DateAndTime,
