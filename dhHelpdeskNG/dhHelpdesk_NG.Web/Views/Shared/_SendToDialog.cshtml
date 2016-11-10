@@ -66,10 +66,10 @@
                     {
                         text: '@Translation.GetForJS("OK", Enums.TranslationSource.TextTranslation)',
                         click: function () {
-                            var items = $("#log_send_to_dialog_recipient_emails_listbox option");
+                            var items = $("#@recipientEmailsListboxId option");
                             if (items == undefined || items.index(0) == -1) {                                
                                 ShowToastMessage('@Translation.GetForJS("Ingen mottagare är angiven.", Enums.TranslationSource.TextTranslation)', "warning", false);
-                                $("#log_send_to_dialog_add_emails_button").focus();
+                                $("#@addEmailsButtonId").focus();
                                 return;
                             }
                             else {
