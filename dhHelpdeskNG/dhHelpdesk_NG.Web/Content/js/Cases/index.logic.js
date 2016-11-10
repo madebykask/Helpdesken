@@ -147,7 +147,8 @@ function getCollapseCaption(cap) {
                     }
                 },
                 columns: columns,
-                order: []
+                order: [],
+                "bAutoWidth": false
             }, function (e, settings, techNote, message) {
                 console.log("An error has been reported by DataTable: ", message);
                 var textStatus = arguments[1];
