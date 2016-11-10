@@ -133,43 +133,48 @@ function getCollapseCaption(cap) {
                     data: function (data) {
                         var params = $.extend({}, data, self.getFetchParams(appSettings.gridSettings));
                         delete params.search;
+                        if (data.order && data.order.length > 0)
+                            data.order[0].column = data.columns[data.order[0].column].data;
+                        delete data.columns;
                         return params;
                     },
                     dataSrc: "data"
                 },
                 createdRow: function (row, data, dataIndex) {
-                    $(row).addClass(self.getClsRow(data) + " caseid=" + data.case_id);
-                    row.cells[0].innerHTML = strJoin('<a href="/Cases/Edit/', data.case_id, '"><img title="', data.caseIconTitle, '" alt="', data.caseIconTitle, '" src="', data.caseIconUrl, '" /></a>');
+                    if (data) {
+                        $(row).addClass(self.getClsRow(data) + " caseid=" + data.case_id);
+                        row.cells[0].innerHTML = strJoin('<a href="/Cases/Edit/', data.case_id, '"><img title="', data.caseIconTitle, '" alt="', data.caseIconTitle, '" src="', data.caseIconUrl, '" /></a>');
+                    }
                 },
                 columns: columns,
                 order: []
+            }, function (e, settings, techNote, message) {
+                console.log("An error has been reported by DataTable: ", message);
+                var textStatus = arguments[1];
+                if (textStatus !== "abort") {
+                    self.showMsg(ERROR_MSG_TYPE);
+                    self.setGridState(window.GRID_STATE.IDLE);
+                }
             });
 
-        self.table.on("error.dt", function (e, settings, techNote, message) {
-            console.log("An error has been reported by DataTable: ", message);
-            var textStatus = arguments[1];
-            if (textStatus !== "abort") {
-                self.showMsg(ERROR_MSG_TYPE);
-                self.setGridState(window.GRID_STATE.IDLE);
-            }
-        })
-            .on("init.dt", function () {
+        self.table
+            //.on("init.dt", function () {
+            //    //$(document).trigger("OnCasesLoaded");
+            //})
+            //.on("preXhr.dt", function (e, settings, data) {
 
-                $(document).trigger("OnCasesLoaded");
-            })
-            .on("preXhr.dt", function (e, settings, data) {
-
-                if (data.order && data.order.length > 0) {
-                    data.order[0].column = data.columns[data.order[0].column].data;
-                }
-                
-                delete data.columns;
-            })
+            //})
             .on("xhr.dt", function (e, settings, json) {
 
                 self._gridUpdated = (new Date()).getTime();
 
-                if (json && json.result === 'success' && json.data) {
+                if (json && json.result === "success") {
+
+                    if (json.data && json.data.length > 0) {
+                        self.$caseRecordCount.text(json.recordsTotal);
+                    } else {
+                        self.showMsg(NODATA_MSG_TYPE);
+                    }
 
                     if (json.remainingView) {
                         self.loadRemainingView(json.remainingView);
@@ -182,11 +187,6 @@ function getCollapseCaption(cap) {
                     self.setGridState(window.GRID_STATE.IDLE);
                 }
 
-                if (json && json.data.length > 0) {
-                    self.$caseRecordCount.text(json.recordsTotal);
-                } else {
-                    self.showMsg(NODATA_MSG_TYPE);
-                }
                 $(document).trigger("OnCasesLoaded");
                 self.filterForm.saveSeacrhCaseTypeValue.call(self.filterForm);
             })
