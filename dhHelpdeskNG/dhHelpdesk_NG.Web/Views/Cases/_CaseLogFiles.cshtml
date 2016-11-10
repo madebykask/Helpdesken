@@ -28,11 +28,11 @@
                         <td>
                             @if (Model.VirtualDirectory)
                             {
-                                <a target="_blank" href="@this.Html.Action("LogFileLinkVD","Files", new RouteValueDictionary { { "id", Model.Id }, { "fileName", filename } })"><i class="icon-file"></i> @filename</a>
+                                <a target="_blank" href="@Html.Action("LogFileLinkVD","Files", new RouteValueDictionary { { "id", Model.Id }, { "fileName", filename } })"><i class="icon-file"></i> @filename</a>
                             }
                             else
                             {
-                                <a href="@this.Url.Action("DownloadLogFile", new RouteValueDictionary { { "id", Model.Id }, { "fileName", filename } })"><i class="icon-file"></i> @filename</a>
+                                <a href="@Url.Action("DownloadLogFile", new RouteValueDictionary { { "id", Model.Id }, { "fileName", filename } })"><i class="icon-file"></i> @filename</a>
                             }
                         </td>
                         <td>

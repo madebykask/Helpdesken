@@ -97,7 +97,7 @@
     @RenderSection("Dialogs", false)
     @Scripts.Render("~/bundles/dhhelpdesk")
     @RenderSection("Scripts", false)
-    <input type="hidden" value="@this.Request.RawUrl" id="rawUrl" />
+    <input type="hidden" value="@Request.RawUrl" id="rawUrl" />
     @Html.Partial("_Translations", null)
     }
 }

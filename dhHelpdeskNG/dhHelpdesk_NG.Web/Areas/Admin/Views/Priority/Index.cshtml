@@ -104,7 +104,7 @@
                         var item = elements[i];              
                         newOrder += item.id.toString() + "|" ;                        
                     }               
-                    $.post('@this.Url.Action("SortCaseSettingColumn")',
+                    $.post('@Url.Action("SortCaseSettingColumn")',
                         {
                             customerId: '@Model.Customer.Id',                            
                             sortIds: newOrder

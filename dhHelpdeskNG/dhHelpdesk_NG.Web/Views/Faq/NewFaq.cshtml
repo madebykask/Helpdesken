@@ -35,11 +35,11 @@
                     <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "new", null, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
                     <!-- <li><input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn" /></li>-->                    
                 }
-                <li><a href="@this.Url.Action("Index")" class="btn">@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)</a></li>
+                <li><a href="@Url.Action("Index")" class="btn">@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)</a></li>
             </ul>
         </div>
     </div>
-    @this.Html.Partial("FaqEditing", new EditingFaqModel(this.Model.TemporaryId, this.Model.Categories, string.Empty, string.Empty, string.Empty, new List<string>(0), string.Empty, string.Empty, this.Model.WorkingGroups, false, false))
+    @Html.Partial("FaqEditing", new EditingFaqModel(this.Model.TemporaryId, this.Model.Categories, string.Empty, string.Empty, string.Empty, new List<string>(0), string.Empty, string.Empty, this.Model.WorkingGroups, false, false))
 }
 
 @*<script type="text/javascript" src="~/Content/js/dhHelpdesk.js">*@

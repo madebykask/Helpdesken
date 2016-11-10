@@ -34,11 +34,11 @@
                     <div class="tab-pane tab-pane-border active" id="fragment-1">
                         @using (Html.BeginForm("Save", "DailyReport", FormMethod.Post, new { id = "dailyReport" }))
                         {
-                        @this.Html.Partial("_DailyReportInput", Model.InputModels)                                                       
+                        @Html.Partial("_DailyReportInput", Model.InputModels)                                                       
                         }
                     </div>                                                
                     <div class="tab-pane tab-pane-border" id="fragment-2">
-                      @this.Html.Partial("_HistoryOverview", Model.HistoryModel)                                   
+                      @Html.Partial("_HistoryOverview", Model.HistoryModel)                                   
                         @Html.HiddenFor(x => Model.HistoryModel)
                     </div>                             
             </div>

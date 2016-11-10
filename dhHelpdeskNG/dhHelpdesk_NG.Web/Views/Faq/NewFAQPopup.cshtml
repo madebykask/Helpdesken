@@ -164,7 +164,7 @@
         
         if (string.IsNullOrEmpty(err))
         {
-           @this.Html.Partial("FaqEditing", new EditingFaqModel(this.Model.TemporaryId, this.Model.Categories, string.Empty, string.Empty, string.Empty, new List<string>(0), string.Empty, string.Empty, this.Model.WorkingGroups, false, false))
+           @Html.Partial("FaqEditing", new EditingFaqModel(this.Model.TemporaryId, this.Model.Categories, string.Empty, string.Empty, string.Empty, new List<string>(0), string.Empty, string.Empty, this.Model.WorkingGroups, false, false))
         }
         else
         {            

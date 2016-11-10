@@ -22,7 +22,7 @@
             {
                 <tr>
                     <td>                       
-                        <a href="@this.Url.Action("DownloadFile", new RouteValueDictionary { { "faqId", this.Model.FAQId }, { "fileName", file } })">@file</a>
+                        <a href="@Url.Action("DownloadFile", new RouteValueDictionary { { "faqId", this.Model.FAQId }, { "fileName", file } })">@file</a>
                     </td>
                     
                     <td>

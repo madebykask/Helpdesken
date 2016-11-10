@@ -19,8 +19,8 @@
                                         @Translation.Get("Namn", Enums.TranslationSource.TextTranslation) <span class="mandatorystar">*</span>
                                     </td>
                                     <td class="span9">
-                                        @this.Html.TextBoxFor(m => m.Name)
-                                        @this.Html.ValidationMessageFor(m => m.Name)
+                                        @Html.TextBoxFor(m => m.Name)
+                                        @Html.ValidationMessageFor(m => m.Name)
                                     </td>
                                 </tr>
                             </table>

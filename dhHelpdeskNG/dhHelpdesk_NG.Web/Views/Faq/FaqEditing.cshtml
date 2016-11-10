@@ -4,7 +4,7 @@
            
 
 
-<input type="hidden" name="Id" value="@this.Model.Id" />
+<input type="hidden" name="Id" value="@Model.Id" />
  @Html.Hidden("CurLanguageId", SessionFacade.CurrentLanguageId)
 
 <div class="content">
@@ -17,7 +17,7 @@
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment-1">
                 <div class="container">
-                     <input type="hidden" id ="FAQKey" name="FAQKey" value="@this.Model.Id" />
+                     <input type="hidden" id ="FAQKey" name="FAQKey" value="@Model.Id" />
                      <input type="hidden" id = "FAQFileNames" name="FAQFileNames" value="@ViewData["FN"]" />
 
                     <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
@@ -29,7 +29,7 @@
                                         @Translation.Get("Kategori", Enums.TranslationSource.TextTranslation) <span class="mandatorystar">*</span>
                                     </td>
                                     <td class="span9" style="">                                        
-                                        @this.Html.DropDownWithSubmenus("category_dropdown", "CategoryId", false, Model.Category)
+                                        @Html.DropDownWithSubmenus("category_dropdown", "CategoryId", false, Model.Category)
                                         
                                     </td>
                                 </tr>
@@ -39,8 +39,8 @@
                                         <span class="mandatorystar">*</span>
                                     </td>
                                     <td>
-                                        @this.Html.TextBoxFor(m => m.Question)
-                                        @this.Html.ValidationMessageFor(m => m.Question)
+                                        @Html.TextBoxFor(m => m.Question)
+                                        @Html.ValidationMessageFor(m => m.Question)
                                     </td>
                                 </tr>                                
                                 <tr>
@@ -49,8 +49,8 @@
                                         <span class="mandatorystar">*</span>
                                     </td>
                                     <td>
-                                        @this.Html.TextAreaFor(m => m.Answer, new { style = "height: 250px;" })
-                                        @this.Html.ValidationMessageFor(m => m.Answer)
+                                        @Html.TextAreaFor(m => m.Answer, new { style = "height: 250px;" })
+                                        @Html.ValidationMessageFor(m => m.Answer)
                                     </td>
                                 </tr>
                                 <tr>
@@ -58,8 +58,8 @@
                                         @Translation.Get("Internt svar", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @this.Html.TextAreaFor(m => m.InternalAnswer, new { style = "height: 250px;" })
-                                        @this.Html.ValidationMessageFor(m => m.InternalAnswer)
+                                        @Html.TextAreaFor(m => m.InternalAnswer, new { style = "height: 250px;" })
+                                        @Html.ValidationMessageFor(m => m.InternalAnswer)
                                     </td>
                                 </tr>
                                 <tr>
@@ -83,7 +83,7 @@
 
                                                         <tr>
                                                             <td>
-                                                                <a href="@this.Url.Action("DownloadFile", new RouteValueDictionary { { "faqId", this.Model.Id }, { "fileName", file } })">@file</a>
+                                                                <a href="@Url.Action("DownloadFile", new RouteValueDictionary { { "faqId", this.Model.Id }, { "fileName", file } })">@file</a>
                                                             </td>
                                                             <td>
                                                                 <a id="@string.Format("delete_file_button_{0}", i)" class="btn">@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</a>
@@ -123,8 +123,8 @@
                                         @Translation.Get("URL", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @this.Html.TextBoxFor(m => m.UrlOne)
-                                        @this.Html.ValidationMessageFor(m => m.UrlOne)
+                                        @Html.TextBoxFor(m => m.UrlOne)
+                                        @Html.ValidationMessageFor(m => m.UrlOne)
                                     </td>
                                 </tr>
                                 <tr>
@@ -132,8 +132,8 @@
                                         @Translation.Get("URL", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @this.Html.TextBoxFor(m => m.UrlTwo)
-                                        @this.Html.ValidationMessageFor(m => m.UrlTwo)
+                                        @Html.TextBoxFor(m => m.UrlTwo)
+                                        @Html.ValidationMessageFor(m => m.UrlTwo)
                                     </td>
                                 </tr>
                             </table>
@@ -151,7 +151,7 @@
                                         @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @this.Html.DropDown("working_groups_dropdown", "WorkingGroupId", true, this.Model.WorkingGroup)
+                                        @Html.DropDown("working_groups_dropdown", "WorkingGroupId", true, this.Model.WorkingGroup)
                                     </td>
                                 </tr>
                             </table>
@@ -168,7 +168,7 @@
                                         @Translation.Get("Uppgifterna är tillgängliga för anmälare", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @this.Html.CheckBox("InformationIsAvailableForNotifiers", this.Model.InformationIsAvailableForNotifiers, new { @class = "switchcheckbox" })
+                                        @Html.CheckBox("InformationIsAvailableForNotifiers", this.Model.InformationIsAvailableForNotifiers, new { @class = "switchcheckbox" })
                                     </td>
                                 </tr>
                                 <tr>
@@ -176,7 +176,7 @@
                                         @Translation.Get("Visa på startsidan", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @this.Html.CheckBox("ShowOnStartPage", this.Model.ShowOnStartPage, new { @class = "switchcheckbox" })
+                                        @Html.CheckBox("ShowOnStartPage", this.Model.ShowOnStartPage, new { @class = "switchcheckbox" })
                                     </td>
                                 </tr>
                             </table>

@@ -64,7 +64,7 @@
                                             @Translation.Get("Bifogad fil", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td>
-                                            <a href="@this.Url.Action("DownloadFile", new RouteValueDictionary { { "PriorityId", Model.Priority.Id }, { "fileName", Model.Priority.FileName } })">@Model.Priority.FileName</a>
+                                            <a href="@Url.Action("DownloadFile", new RouteValueDictionary { { "PriorityId", Model.Priority.Id }, { "fileName", Model.Priority.FileName } })">@Model.Priority.FileName</a>
                                        
                                             <a id="deleteFileButton" onclick="deleteFile(@Model.Priority.Id)" class="btn">@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</a>
                                         </td>

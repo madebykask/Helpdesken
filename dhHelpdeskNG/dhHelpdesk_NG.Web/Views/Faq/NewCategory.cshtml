@@ -9,7 +9,7 @@
 
 @using (this.Html.BeginForm("NewCategory", "Faq", FormMethod.Post, new { id = "target" }))
 {
-    <input type="hidden" name="ParentCategoryId" value="@this.Model.ParentCategoryId" />
+    <input type="hidden" name="ParentCategoryId" value="@Model.ParentCategoryId" />
     <div class="secnavs fixed">
         <div class="pull-left">
             <ul class="secnav">
@@ -18,9 +18,9 @@
                     <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "new", null, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
                     @*<li><input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn"/></li>*@                    
                 }
-                <li><a href="@this.Url.Action("Index")" class="btn">@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)</a></li>
+                <li><a href="@Url.Action("Index")" class="btn">@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)</a></li>
             </ul>
         </div>
     </div>
-    @this.Html.Partial("CategoryEditing", new EditingCategoryModel(string.Empty))
+    @Html.Partial("CategoryEditing", new EditingCategoryModel(string.Empty))
 }

@@ -64,7 +64,7 @@
         <tbody> 
              @using (Html.BeginForm("SaveContractFieldsSetting", "Contracts", FormMethod.Post, new { id = "contractSettingRows" }))
                         {
-                         @this.Html.Partial("_ContractsFieldsSettings", Model.SettingRows)                                                    
+                         @Html.Partial("_ContractsFieldsSettings", Model.SettingRows)                                                    
                         }         
         </tbody>
     </table>

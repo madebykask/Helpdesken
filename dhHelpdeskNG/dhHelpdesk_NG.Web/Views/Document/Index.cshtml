@@ -85,7 +85,7 @@
                                     <tbody>
                                         <tr>
                                             <td>
-                                                @this.Html.CustomDocumentTree("categories_tree", true, this.Model.DocumentTree,@Model.CurrentItemName)
+                                                @Html.CustomDocumentTree("categories_tree", true, this.Model.DocumentTree,@Model.CurrentItemName)
                                             </td>
                                         </tr>
                                     </tbody>
@@ -93,7 +93,7 @@
                             </div>
                             
                             <div class="span9">
-                                @this.Html.Partial("_DocumentListOverview", Model)
+                                @Html.Partial("_DocumentListOverview", Model)
                             </div>
                         </div>
                     </div>
@@ -129,7 +129,7 @@
 
     function SortCol(colName) {               
 
-        $.get('@this.Url.Action("SortDocList")',
+        $.get('@Url.Action("SortDocList")',
                {
                    docType: $('#SelectedListType').val(),
                    Id: $('#SelectedCategory').val(),
