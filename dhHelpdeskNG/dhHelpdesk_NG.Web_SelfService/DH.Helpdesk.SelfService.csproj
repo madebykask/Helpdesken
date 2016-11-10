@@ -342,7 +342,10 @@
     <Content Include="Content\css\bootstrap.css" />
     <Content Include="Content\css\bootstrap.min.css" />
     <Content Include="Content\css\dhplus.css" />
+    <Content Include="Content\css\font-awesome.css" />
+    <Content Include="Content\css\font-awesome.min.css" />
     <Content Include="Content\css\jquery.toastmessage.css" />
+    <Content Include="Content\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\img\ajax-loader.GIF" />
     <Content Include="Content\img\backgrounds.gif" />
     <Content Include="Content\img\buttons-disabled.png" />
@@ -895,6 +898,11 @@
     <Content Include="FormLibContent\Xmls\UnitedKingdom\Templates\VoluntaryDeductionsState.xml" />
     <Content Include="FormLibContent\Xmls\UnitedKingdom\VoluntaryDeductions.xml" />
     <Content Include="Global.asax" />
+    <Content Include="Content\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\fonts\FontAwesome.otf" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="img-profile\SelfService-StartPage.jpg" />
     <Content Include="Scripts\jquery-1.8.3.js" />
