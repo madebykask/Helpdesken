@@ -362,8 +362,9 @@
     <Content Include="Content\img\glyphicons-halflings.png" />
     <Content Include="Content\img\throbber.gif" />
     <Content Include="Content\img\transp50.png" />
-    <Content Include="Content\js\Case\case.log.js" />
+    <Content Include="Content\js\Faq\faq.js" />
     <Content Include="Content\js\Case\edit.js" />
+    <Content Include="Content\js\Case\case.log.js" />
     <Content Include="Content\js\Shared\app.layout.js" />
     <Content Include="Content\js\typeahead.js" />
     <Content Include="img-profile\profile.css" />

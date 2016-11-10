@@ -70,22 +70,47 @@ namespace DH.Helpdesk.SelfService.Models.FAQ
 
     public static class HtmlGenerator
     {
-        public static MvcHtmlString ConvertToHtml(this IList<FAQCategoryViewModel> faqCategories)
+        public static string ConvertToHtml(this IList<FAQCategoryViewModel> faqCategories)
         {
             var html = new StringBuilder();
             foreach (var cat in faqCategories)
             {
-                html.Append(string.Format("<ul> <li> "));
-                html.Append(string.Format("<div id={0}>", cat.Id));
-                html.Append(string.Format("<img alt = '' class='expand' src='Images/Minus.png' />"));
-                html.Append(string.Format("<img alt = '' class='collapse' src='Images/Plus.png' />"));
-                html.Append(string.Format("{0} </div>", cat.Name));
-                if (cat.SubCategories != null && cat.SubCategories.Any())
+                var hasChild = cat.SubCategories != null && cat.SubCategories.Any();
+
+                html.Append(string.Format("<ul class='faq-unstyled'><li>"));
+                
+                html.Append(string.Format("<div>"));
+
+                if (hasChild)
+                {
+                    html.Append(string.Format("<a class='faq-expand' >"));
+                    html.Append(string.Format("<i class='fa fa-plus' aria-hidden='true'></i>"));
+                    html.Append(string.Format("&nbsp;&nbsp;{0}</a>", cat.Name));
+
+                    html.Append(string.Format("<a class='faq-collapse' style='display:none'>"));
+                    html.Append(string.Format("<i class='fa fa-minus' aria-hidden='true' ></i>"));
+                    html.Append(string.Format("&nbsp;&nbsp;{0}</a>", cat.Name));
+                }
+                else
+                {
+                    html.Append(string.Format("<a class='faq-node' >"));
+                    html.Append(string.Format("<i class='fa fa-server' aria-hidden='true'></i>"));
+                    html.Append(string.Format("&nbsp;&nbsp;{0}</a>", cat.Name));
+                }
+
+                html.Append(string.Format("</div>"));
+
+                if (hasChild)
+                {
+                    html.Append(string.Format("<div style='display:none'>"));
                     html.Append(ConvertToHtml(cat.SubCategories));
+                    html.Append(string.Format("</div>"));
+                }
+
                 html.Append(string.Format("</li> </ul>"));
             }
 
-            return new MvcHtmlString(html.ToString());
+            return html.ToString();
         }
     }
 }

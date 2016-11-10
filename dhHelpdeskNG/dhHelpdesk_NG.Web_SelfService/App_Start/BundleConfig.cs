@@ -66,6 +66,8 @@
             bundles.Add(new ScriptBundle("~/Content/js/Case/log").Include(
                           "~/Content/js/Case/case.log.js"));
 
+            bundles.Add(new ScriptBundle("~/Content/js/Faq/index").Include(
+                         "~/Content/js/Faq/faq.js"));
             #endregion
         }
     }

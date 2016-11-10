@@ -1,10 +1,14 @@
 ﻿@using DH.Helpdesk.SelfService.Models.FAQ
-@using System.Text
+@using System.Web.Optimization
 @model FAQIndexViewModel
 
 @{
     ViewBag.Title = "FAQ";
+    var treeViewStr = Model.FAQCategories.ConvertToHtml();
+    var faqCategoriesTreeView = new MvcHtmlString(treeViewStr);
 }
+
+@Scripts.Render("~/Content/js/Faq/index")
 
 <div class="container-fluid dh-container">
     <ul class="nav nav-tabs">
@@ -20,10 +24,17 @@
             <div class="container-fluid dh-container">
                 <div class="row">                    
                     <div class="col-md-4">
-                        <table border="1">
+                        <table class="table table-striped table-bordered ">
                             <tr>
                                 <td>
-                                    @Model.FAQCategories.ConvertToHtml()
+                                    @Translation.Get("Categories", Enums.TranslationSource.TextTranslation)
+                                </td>
+                            </tr>
+                            <tr>                                
+                                <td>
+                                   <div>
+                                        @faqCategoriesTreeView
+                                   </div>
                                 </td>
                             </tr>
                         </table>
@@ -42,30 +53,3 @@
         </div>
     </div>
 </div>
-
-<script type="text/javascript">
-    $(".expand").click(function () {
-        $(this).toggle();
-        $(this).next().toggle();
-        $(this).parent().parent().children().last().toggle();
-    });
-
-    $(".collapse").click(function () {
-        $(this).toggle();
-        $(this).prev().toggle();
-        $(this).parent().parent().children().last().toggle();
-    });
-
-    $("input[type='checkbox']").click(function () {
-        if ($(this).attr("checked") == false) {
-            $(this).parent().parent().find("input[type='checkbox']").each(function () {
-                $(this).removeAttr("checked");
-            });
-        }
-        else {
-            $(this).parent().parent().find("input[type='checkbox']").each(function () {
-                $(this).attr("checked", "checked");
-            });
-        }
-    });
-</script>

@@ -43,7 +43,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         private FAQIndexViewModel GetIndexViewModel(int customerId)
         {
             var ret = new FAQIndexViewModel();
-            var allFaqCats = _faqService.GetFaqCategories(customerId);            
+            var allFaqCats = _faqService.GetFaqCategories(customerId).OrderBy(c=> c.Name).ToList();
             var allFaqs = _faqService.GetFaqs(customerId);
 
             var parentsCategories = allFaqCats.Where(c => !c.Parent_Id.HasValue).ToList();
