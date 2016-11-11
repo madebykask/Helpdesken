@@ -291,6 +291,26 @@ h5 {
     padding:0;
 }
 
+.faq-unstyled {  
+  list-style: none;
+}
+
+.faq-expand, .faq-collapse, .faq-expand:hover, .faq-collapse:hover{
+    cursor: pointer;
+    color: #333;
+    text-decoration:none;
+}
+
+.faq-node, .faq-node:hover{
+    cursor: pointer;
+    color: #333;
+    text-decoration:none;
+}
+
+.font-bold {
+    font-weight: bolder;
+}
+
 .ico-coworkers {
     background: url(../img/ico-coworkers.png);
     background-repeat: no-repeat;

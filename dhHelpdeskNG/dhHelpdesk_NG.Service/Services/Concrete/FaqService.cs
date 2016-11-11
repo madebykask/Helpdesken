@@ -11,6 +11,7 @@
     using DH.Helpdesk.Domain.Faq;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Faqs;
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
+    using System;
 
     public sealed class FaqService : IFaqService
     {
@@ -280,5 +281,46 @@
                         || f.Answer_Internal.ToLower().Contains(pharseInLowerCase)).ToList();                    
             }
         }       
+
+        public IList<FaqCategory> GetFaqCategories(int customerId)
+        {
+           var ret= faqCategoryRepository.GetMany(c => c.Customer_Id.HasValue && c.Customer_Id.Value == customerId)
+                                         .Select(c=> 
+                                               new FaqCategory {
+                                                    Id = c.Id,
+                                                    Name = c.Name, 
+                                                    CustomerId = c.Customer_Id.Value,
+                                                    Parent_Id = c.Parent_FAQCategory_Id, 
+                                                    PublicCatId = c.PublicFAQCategory,
+                                                    CreatedDate = c.CreatedDate, 
+                                                    ChangedDate = c.ChangedDate
+                                               })
+                                         .ToList();
+            return ret;
+        }
+
+        public IList<Faq> GetFaqs(int customerId)
+        {
+            var ret = faqRepository.GetMany(f=> f.Customer_Id.HasValue && f.Customer_Id.Value == customerId)
+                                   .Select(f =>
+                                               new Faq
+                                               {
+                                                   Id = f.Id,
+                                                   Question = f.FAQQuery,
+                                                   Answer = f.Answer,
+                                                   FaqCategoryId = f.FAQCategory_Id,
+                                                   InternalAnswer = f.Answer_Internal,
+                                                   UrlOne = f.URL1,
+                                                   UrlTwo = f.URL2,
+                                                   WorkingGroupId = f.WorkingGroup_Id,
+                                                   InformationIsAvailableForNotifiers = Convert.ToBoolean(f.InformationIsAvailableForNotifiers),
+                                                   CustomerId = f.Customer_Id.Value,
+                                                   ShowOnStartPage = Convert.ToBoolean(f.ShowOnStartPage),
+                                                   CreatedDate = f.CreatedDate,
+                                                   ChangedDate = f.ChangedDate                                                                                                      
+                                               })
+                                   .ToList();
+            return ret;
+        }
     }
 }

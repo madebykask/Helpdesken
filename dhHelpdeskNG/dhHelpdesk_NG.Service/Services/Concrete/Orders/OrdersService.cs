@@ -117,7 +117,7 @@
             _emailSendingSettingsProvider = emailSendingSettingsProvider;
         }
 
-        public OrdersFilterData GetOrdersFilterData(int customerId)
+        public OrdersFilterData GetOrdersFilterData(int customerId, out int[] selectedStatuses)
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
@@ -137,7 +137,7 @@
 
                 var statuses = statusRep.GetAll()
                                     .GetOrderStatuses(customerId);
-
+	            selectedStatuses = statuses.Where(x => x.SelectedInSearchCondition == 1).Select(x => x.Id).ToArray();
                 return OrderMapper.MapToFilterData(orderTypes, orderTypesInRow, administrators, statuses);
             }
         }

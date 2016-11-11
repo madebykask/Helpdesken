@@ -385,7 +385,9 @@
                                 {
                                 <li class="blue">
                                     <a href="@Url.Action("Index", "Documents", new { customerId = pCustomerId, area = "" })">
-                                        <div class="@(string.IsNullOrEmpty(document.ObjectClass) ? "ico-documents" : document.ObjectClass)"></div>
+                                        <div class="@(string.IsNullOrEmpty(document.ObjectClass) ? "ico-documents" : document.ObjectClass)">
+                                            <i class="fa fa-camera-retro fa-lg"></i>
+                                        </div>
                                         @Translation.Get(document.ObjectValue, Enums.TranslationSource.TextTranslation)
                                     </a>
                                 </li>
@@ -395,7 +397,9 @@
                             {                            
                                 <li class="blue">
                                     <a href="@Url.Action("Index", "Documents", new { customerId = pCustomerId, area = "" })">
-                                        <div class="ico-documents"></div>
+                                        <div class="ico-documents">
+                                            <i class="fa fa-camera-retro fa-lg"></i>
+                                        </div>
                                         @if (appType == ApplicationTypes.LineManager)
                                         {
                                             @Translation.Get("HR Documents", Enums.TranslationSource.TextTranslation)
@@ -404,6 +408,39 @@
                                         {
                                             @Translation.Get("Documents", Enums.TranslationSource.TextTranslation)
                                         }                                    
+                                    </a>
+                                </li>
+                            }
+                        }
+                    }
+
+                    @if (!pHasError && SessionFacade.CurrentCustomer != null && SessionFacade.CurrentCustomer.ShowFAQOnExternalPage != 0)
+                    {
+                        if (!hideMenu)
+                        {
+                            var faq = pActionSettings.SingleOrDefault(a => a.ObjectId == ActionObject.FAQ);
+                            if (faq != null)
+                            {
+                                if (faq.Visibled)
+                                {
+                                    <li class="blue">
+                                        <a href="@Url.Action("Index", "FAQ", new { customerId = pCustomerId, area = "" })">
+                                            <div class="@(string.IsNullOrEmpty(faq.ObjectClass) ? "ico-documents" : faq.ObjectClass)">                                                
+                                                <i class="fa fa-camera-retro fa-lg"></i>
+                                            </div>                                            
+                                            @Translation.Get(faq.ObjectValue, Enums.TranslationSource.TextTranslation)
+                                        </a>
+                                    </li>
+                                }
+                            }
+                            else
+                            {
+                                <li class="blue">
+                                    <a href="@Url.Action("Index", "FAQ", new { customerId = pCustomerId, area = "" })">
+                                        <div class="ico-documents">
+                                            <i class="fa fa-camera-retro fa-lg"></i>
+                                        </div>                                                                                
+                                        @Translation.Get("FAQ", Enums.TranslationSource.TextTranslation)                                       
                                     </a>
                                 </li>
                             }

@@ -54,7 +54,9 @@ namespace DH.Helpdesk.SelfService
     using DH.Helpdesk.Dal.Repositories.Cases.Concrete;
     using DH.Helpdesk.Dal.Repositories.BusinessRules;
     using DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete;
-    
+    using Dal.Repositories.Faq;
+    using Dal.Repositories.Faq.Concrete;
+
     public static class NinjectWebCommon 
     {
         private static readonly Bootstrapper bootstrapper = new Bootstrapper();
@@ -201,6 +203,11 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IBusinessRuleRepository>().To<BusinessRuleRepository>();
             kernel.Bind<IEmailGroupRepository>().To<EmailGroupRepository>();
             kernel.Bind<IEmailGroupEmailRepository>().To<EmailGroupEmailRepository>();
+            kernel.Bind<IFaqRepository>().To<FaqRepository>();
+            kernel.Bind<IFaqFileRepository>().To<FaqFileRepository>();
+            kernel.Bind<IFaqCategoryRepository>().To<FaqCategoryRepository>();
+            kernel.Bind<IFaqCategoryLanguageRepository>().To<FaqCategoryLanguageRepository>();
+
 
             // Service             
             kernel.Bind<IMasterDataService>().To<MasterDataService>();            
@@ -253,6 +260,7 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<ICaseInvoiceSettingsService>().To<CaseInvoiceSettingsService>();
             kernel.Bind<IBusinessRuleService>().To<BusinessRuleService>();
             kernel.Bind<IEmailGroupService>().To<EmailGroupService>();
+            kernel.Bind<IFaqService>().To<FaqService>();
 
             // Cache
             kernel.Bind<ICacheProvider>().To<CacheProvider>();

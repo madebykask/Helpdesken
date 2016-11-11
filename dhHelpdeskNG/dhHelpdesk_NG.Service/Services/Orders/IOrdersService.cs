@@ -8,7 +8,7 @@ using DH.Helpdesk.BusinessData.Models.Case;
 
     public interface IOrdersService
     {
-        OrdersFilterData GetOrdersFilterData(int customerId);
+        OrdersFilterData GetOrdersFilterData(int customerId, out int[] filters);
 
         SearchResponse Search(SearchParameters parameters);
 
