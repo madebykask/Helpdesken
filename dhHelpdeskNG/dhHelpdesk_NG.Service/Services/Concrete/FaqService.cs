@@ -15,15 +15,15 @@
 
     public sealed class FaqService : IFaqService
     {
-        #region Fields
-
-        private readonly IFaqFileRepository faqFileRepository;
-
-        private readonly IFaqRepository faqRepository;
+        #region Fields                
+                
+        private readonly IFaqCategoryRepository faqCategoryRepository;
 
         private readonly IFaqCategoryLanguageRepository faqCategoryLanguageRepository;
 
-        private readonly IFaqCategoryRepository faqCategoryRepository;
+        private readonly IFaqRepository faqRepository;
+
+        private readonly IFaqFileRepository faqFileRepository;
 
         private readonly IWorkContext workContext;
 
@@ -36,7 +36,7 @@
         public FaqService(
             IFaqFileRepository faqFileRepository,
             IFaqRepository faqRepository,
-            IFaqCategoryRepository faqCategoryRepository,
+            IFaqCategoryRepository faqCategoryRepository,            
             IFaqCategoryLanguageRepository faqCategoryLanguageRepository, 
             IWorkContext workContext, 
             IUnitOfWorkFactory unitOfWorkFactory)
@@ -301,7 +301,9 @@
 
         public IList<Faq> GetFaqs(int customerId)
         {
-            var ret = faqRepository.GetMany(f=> f.Customer_Id.HasValue && f.Customer_Id.Value == customerId)
+            var faqFiles = faqFileRepository.GetMany(f => f.FAQ != null && f.FAQ.Customer_Id == customerId).ToList();
+
+            var ret = faqRepository.GetMany(f => f.Customer_Id.HasValue && f.Customer_Id.Value == customerId)
                                    .Select(f =>
                                                new Faq
                                                {
@@ -317,10 +319,25 @@
                                                    CustomerId = f.Customer_Id.Value,
                                                    ShowOnStartPage = Convert.ToBoolean(f.ShowOnStartPage),
                                                    CreatedDate = f.CreatedDate,
-                                                   ChangedDate = f.ChangedDate                                                                                                      
+                                                   ChangedDate = f.ChangedDate,
+                                                   Files = faqFiles.Where(fi => fi.FAQ_Id == f.Id)
+                                                                   .Select(ff => new FaqFile
+                                                                   {
+                                                                       Id = ff.Id,
+                                                                       Faq_Id = f.Id,
+                                                                       FileName = ff.FileName,
+                                                                       CreatedDate = ff.CreatedDate
+                                                                   })
+                                                                   .ToArray()
                                                })
                                    .ToList();
             return ret;
+        }
+
+
+        public byte[] GetFileContentByFaqIdAndFileName(int faqId, string basePath, string fileName)
+        {
+            return faqFileRepository.GetFileContentByFaqIdAndFileName(faqId, basePath, fileName);
         }
     }
 }
