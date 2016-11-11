@@ -232,6 +232,7 @@
     <Compile Include="AppCode\Html\SelectExtensions.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\JsonFormatConfig.cs" />
     <Compile Include="App_Start\NinjectModules\Common\LoggerModule.cs" />
     <Compile Include="App_Start\NinjectModules\Common\CommonModule.cs" />
     <Compile Include="App_Start\NinjectModules\Common\ConfigurationModule.cs" />
@@ -1050,6 +1051,7 @@
     <Compile Include="Infrastructure\Attributes\SessionRequiredAttribute.cs" />
     <Compile Include="Infrastructure\Attributes\UserCasePermissionsAttribute.cs" />
     <Compile Include="Infrastructure\Attributes\UserPermissionsAttribute.cs" />
+    <Compile Include="Infrastructure\BaseApiController.cs" />
     <Compile Include="Infrastructure\Binders\BinderHelper.cs" />
     <Compile Include="Infrastructure\Binders\DateTimeBinder.cs" />
     <Compile Include="Infrastructure\Binders\NullableDateTimeBinder.cs" />
