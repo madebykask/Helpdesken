@@ -1,24 +1,45 @@
-﻿namespace DH.Helpdesk.Web.Areas.Admin
+﻿using System.Web.Http;
+
+namespace DH.Helpdesk.Web.Areas.Admin
 {
-    using System.Web.Mvc;
+	using System.Web.Mvc;
 
-    public class AdminAreaRegistration : AreaRegistration
-    {
-        public override string AreaName
-        {
-            get
-            {
-                return "admin";
-            }
-        }
+	public class AdminAreaRegistration : AreaRegistration
+	{
+		public override string AreaName
+		{
+			get
+			{
+				return "admin";
+			}
+		}
 
-        public override void RegisterArea(AreaRegistrationContext context)
-        {
-            context.MapRoute(
-                "Admin_default",
-                "admin/{controller}/{action}/{id}",
-                new { action = "Index", id = UrlParameter.Optional }
-            );
-        }
-    }
+		public override void RegisterArea(AreaRegistrationContext context)
+		{
+			ConfigApiRoutes(context);
+
+			ConfigMvcRoutes(context);
+		}
+
+		private void ConfigApiRoutes(AreaRegistrationContext context)
+		{
+			context.Routes.MapHttpRoute(
+				name: "AdminApiAction",
+				routeTemplate: AreaName +"/api/{controller}/{action}"
+				);
+
+			context.Routes.MapHttpRoute(
+				name: "AdminApi",
+				routeTemplate: AreaName +"/api/{controller}"
+				);
+		}
+
+		private void ConfigMvcRoutes(AreaRegistrationContext context)
+		{
+			context.MapRoute(
+				"Admin_default",
+				AreaName + "/{controller}/{action}/{id}",
+				new { area = AreaName, action = "Index", id = UrlParameter.Optional });
+		}
+	}
 }

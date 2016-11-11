@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Reports
+﻿using System.Web.Http;
+
+namespace DH.Helpdesk.Web.Areas.Reports
 {
     using System.Web.Mvc;
 
@@ -12,12 +14,34 @@
             }
         }
 
-        public override void RegisterArea(AreaRegistrationContext context)
-        {
-            context.MapRoute(
-                "Reports_default",
-                "Reports/{controller}/{action}/{id}",
-                new { area = this.AreaName, action = "Index", id = UrlParameter.Optional });
-        }
+		public override void RegisterArea(AreaRegistrationContext context)
+		{
+			ConfigApiRoutes(context);
+
+			ConfigMvcRoutes(context);
+		}
+
+		private void ConfigApiRoutes(AreaRegistrationContext context)
+		{
+			context.Routes.MapHttpRoute(
+				name: "ReportsApiAction",
+				routeTemplate: AreaName + "/api/{controller}/{action}"
+				);
+
+			context.Routes.MapHttpRoute(
+				name: "ReportsApi",
+				routeTemplate: AreaName + "/api/{controller}"
+				);
+		}
+
+		private void ConfigMvcRoutes(AreaRegistrationContext context)
+		{
+			context.MapRoute(
+				"Reports_default",
+				 AreaName + "/{controller}/{action}/{id}",
+				new { area = AreaName, action = "Index", id = UrlParameter.Optional }
+			);
+		}
+
     }
 }

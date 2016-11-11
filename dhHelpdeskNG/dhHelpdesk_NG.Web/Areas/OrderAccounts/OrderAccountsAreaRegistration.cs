@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Web.Http;
+using System.Web.Mvc;
 
 namespace DH.Helpdesk.Web.Areas.OrderAccounts
 {
@@ -12,13 +13,34 @@ namespace DH.Helpdesk.Web.Areas.OrderAccounts
             }
         }
 
-        public override void RegisterArea(AreaRegistrationContext context)
-        {
-            context.MapRoute(
-                "OrderAccounts_default",
-                "OrderAccounts/{controller}/{action}/{id}",
-                new { action = "Index", id = UrlParameter.Optional }
-            );
-        }
+		public override void RegisterArea(AreaRegistrationContext context)
+		{
+			ConfigApiRoutes(context);
+
+			ConfigMvcRoutes(context);
+		}
+
+		private void ConfigApiRoutes(AreaRegistrationContext context)
+		{
+			context.Routes.MapHttpRoute(
+				name: "OrderAccountsApiAction",
+				routeTemplate: AreaName + "/api/{controller}/{action}"
+				);
+
+			context.Routes.MapHttpRoute(
+				name: "OrderAccountsApi",
+				routeTemplate: AreaName + "/api/{controller}"
+				);
+		}
+
+		private void ConfigMvcRoutes(AreaRegistrationContext context)
+		{
+			context.MapRoute(
+				"OrderAccounts_default",
+				 AreaName + "/{controller}/{action}/{id}",
+				new { area = AreaName, action = "Index", id = UrlParameter.Optional }
+			);
+		}
+
     }
 }
