@@ -1,7 +1,6 @@
 ﻿
 $(function () {
     (function ($) {
-
         window.selfService = window.selfService || {};
         window.selfService.faq = window.selfService.faq || {};
         var params  = window.params;
@@ -33,10 +32,7 @@ $(function () {
                 defaultCategoryId = hierarchyData[0].Id;
 
             if (defaultCategoryId > 0)
-                this.selectNode($('#node-' + defaultCategoryId));
-
-            $('#accordion').on('hidden.bs.collapse', selfService.faq.toggleChevron);
-            $('#accordion').on('shown.bs.collapse', selfService.faq.toggleChevron);
+                this.selectNode($('#node-' + defaultCategoryId));            
         };
            
         $faqSearchButton.click(function () {
@@ -136,7 +132,6 @@ $(function () {
             }
             return ret;
         }
-
 
         var loadFaqList = function (categoryId) {
             if (hierarchyData == undefined || hierarchyData == null)
@@ -246,14 +241,7 @@ $(function () {
             }
             return value;
          }
-
-         selfService.faq.toggleChevron = function (e) {
-             $(e.target)
-                 .prev('.panel-heading')
-                 .find("i.indicator")
-                 .toggleClass('glyphicon-chevron-down glyphicon-chevron-up');
-         }
-         
+                     
     })($);
        
     selfService.faq.init();
