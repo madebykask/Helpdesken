@@ -45,6 +45,12 @@ $(function () {
                 selfService.faq.searchFor(phrase.toLowerCase());
         });
 
+        $faqSearchText.keypress(function (e) {
+            if (e.which == 13) {
+                $faqSearchButton.click();
+            }
+        });
+
         $normalTreeNode.click(function () {            
             selfService.faq.selectNode($(this));
         });

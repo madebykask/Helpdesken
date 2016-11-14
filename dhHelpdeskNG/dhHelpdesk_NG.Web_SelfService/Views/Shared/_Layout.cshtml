@@ -386,7 +386,7 @@
                                 <li class="blue">
                                     <a href="@Url.Action("Index", "Documents", new { customerId = pCustomerId, area = "" })">
                                         <div class="@(string.IsNullOrEmpty(document.ObjectClass) ? "ico-documents" : document.ObjectClass)">
-                                            <i class="fa fa-camera-retro fa-lg"></i>
+                                            
                                         </div>
                                         @Translation.Get(document.ObjectValue, Enums.TranslationSource.TextTranslation)
                                     </a>
@@ -397,8 +397,7 @@
                             {                            
                                 <li class="blue">
                                     <a href="@Url.Action("Index", "Documents", new { customerId = pCustomerId, area = "" })">
-                                        <div class="ico-documents">
-                                            <i class="fa fa-camera-retro fa-lg"></i>
+                                        <div class="ico-documents">                                           
                                         </div>
                                         @if (appType == ApplicationTypes.LineManager)
                                         {
