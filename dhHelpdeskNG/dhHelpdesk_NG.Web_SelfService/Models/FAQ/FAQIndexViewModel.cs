@@ -13,6 +13,8 @@ namespace DH.Helpdesk.SelfService.Models.FAQ
             FAQCategories = new List<FAQCategoryViewModel>();
         }
 
+        public string BaseFilePath { get; set; }
+
         public IList<FAQCategoryViewModel> FAQCategories { get; set; }
     }
 
@@ -63,9 +65,11 @@ namespace DH.Helpdesk.SelfService.Models.FAQ
     {
         public int Id { get; set; }
 
+        public int Faq_Id { get; set; }
+
         public string FileName { get; set; }
 
-        public DateTime CreatedTime { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 
     public static class HtmlGenerator
@@ -83,17 +87,17 @@ namespace DH.Helpdesk.SelfService.Models.FAQ
 
                 if (hasChild)
                 {
-                    html.Append(string.Format("<a class='faq-expand' >"));
+                    html.Append(string.Format("<a id='node-{0}' class='faq-expand'  >", cat.Id));
                     html.Append(string.Format("<i class='fa fa-plus' aria-hidden='true'></i>"));
                     html.Append(string.Format("&nbsp;&nbsp;{0}</a>", cat.Name));
 
-                    html.Append(string.Format("<a class='faq-collapse' style='display:none'>"));
+                    html.Append(string.Format("<a id='node-{0}' class='faq-collapse' style='display:none'>", cat.Id));
                     html.Append(string.Format("<i class='fa fa-minus' aria-hidden='true' ></i>"));
                     html.Append(string.Format("&nbsp;&nbsp;{0}</a>", cat.Name));
                 }
                 else
                 {
-                    html.Append(string.Format("<a class='faq-node' >"));
+                    html.Append(string.Format("<a id='node-{0}' class='faq-node' >", cat.Id));
                     html.Append(string.Format("<i class='fa fa-server' aria-hidden='true'></i>"));
                     html.Append(string.Format("&nbsp;&nbsp;{0}</a>", cat.Name));
                 }

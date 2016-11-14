@@ -324,6 +324,8 @@ var caseButtons = $('.btn.save, .btn.save-close, .btn.save-new, .btn.caseDeleteD
 var templateQuickButtonIndicator = '#TemplateQuickButtonIndicator';
 
 var ApplyTemplate = function (data, doOverwrite) {
+    changeCaseButtonsState(false);
+
     var cfg = { doOverwrite: doOverwrite };
     var dateFormat = data["dateFormat"];
     for (var fieldId in data) {
@@ -669,7 +671,9 @@ var ApplyTemplate = function (data, doOverwrite) {
     if (finalActionId != null) {
         changeCaseButtonsState(false);
         setTimeout(runFinalAction, 3000, false);
-    }
+    } else {
+        setTimeout(runFinalAction, 500, false);
+    }    
     
 }
 
@@ -975,7 +979,6 @@ function runFinalAction(forceRun) {
             $("#case-action-save").trigger('click');
         else if (finalActionId == 1)
             $("#case-action-save-and-close").trigger('click');
-
     }    
 }
 

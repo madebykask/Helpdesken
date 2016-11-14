@@ -5150,6 +5150,10 @@ If not exists (select * from tblTextTranslation where Text_Id = 1703 and Languag
 GO
 
 
+/* Notice:  1704 , 1405 ,  1706  reserved for SelfService */
+
+
+
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

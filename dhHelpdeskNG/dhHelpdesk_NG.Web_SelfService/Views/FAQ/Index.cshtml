@@ -1,12 +1,23 @@
 ﻿@using DH.Helpdesk.SelfService.Models.FAQ
+@using System.Web.Script.Serialization
 @using System.Web.Optimization
 @model FAQIndexViewModel
 
 @{
     ViewBag.Title = "FAQ";
     var treeViewStr = Model.FAQCategories.ConvertToHtml();
-    var faqCategoriesTreeView = new MvcHtmlString(treeViewStr);
+    var faqCategoriesTreeView = new MvcHtmlString(treeViewStr);    
+    var jsSerializer = new JavaScriptSerializer();
+    
 }
+<script type="text/javascript" >
+    window.params = {
+        hierarchyData : @Html.Raw(jsSerializer.Serialize(Model.FAQCategories)),
+        answerCaption : '@Translation.Get("Answer", Enums.TranslationSource.TextTranslation)',
+        internalAnswerCaption : '@Translation.Get("Internal response", Enums.TranslationSource.TextTranslation)',
+        downloadFileUrl: '@Url.Action("DownloadFile","Faq")'        
+    };
+</script>
 
 @Scripts.Render("~/Content/js/Faq/index")
 
@@ -22,6 +33,14 @@
     <div class="content">
         <div class="tab-pane active" id="home">
             <div class="container-fluid dh-container">
+                <div class="row"> 
+                    <div class="col-md-4">
+                    </div>
+                    <div class="col-md-8" style="padding-bottom:5px">
+                            @Translation.Get("Search Phrase", Enums.TranslationSource.TextTranslation) &nbsp; <input type="text" id="faq-Search" value="" /> &nbsp;
+                            <input type="button" id="btn-faq-Search" class="btn btn-default" value="@Translation.Get("Search", Enums.TranslationSource.TextTranslation)" />                            
+                    </div>                   
+                </div>
                 <div class="row">                    
                     <div class="col-md-4">
                         <table class="table table-striped table-bordered ">
@@ -39,15 +58,12 @@
                             </tr>
                         </table>
                     </div>
-                    <div class="col-md-8">
-                        <table border="1" >
-                            <tr>
-                                <td>
-                                    test2
-                                </td>
-                            </tr>
-                        </table>
-                    </div>                    
+                    <div class="col-md-8">    
+                                           
+                        <div  class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                            @* Place to add FAQs*@
+                        </div>    
+                     </div>          
                 </div>
             </div>
         </div>

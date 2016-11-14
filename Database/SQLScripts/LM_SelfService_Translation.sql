@@ -505,7 +505,27 @@ If not exists (select * from tblTextTranslation where text_id = 1697 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1697, 1, 'Avbryt')
 
 
+If not exists (select * from tbltext where id = 1704)
+	insert into tbltext (id, TextString, TextType) VALUES (1704, 'Categories', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1704 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1704, 1, 'Kategorier')
+
+
+If not exists (select * from tbltext where id = 1705)
+	insert into tbltext (id, TextString, TextType) VALUES (1705, 'Answer', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1705 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1705, 1, 'Svar')
+
+
+If not exists (select * from tbltext where id = 1706)
+	insert into tbltext (id, TextString, TextType) VALUES (1706, 'Internal response', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1706 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1706, 1, 'Internt svar')
 
 
 
 
+	

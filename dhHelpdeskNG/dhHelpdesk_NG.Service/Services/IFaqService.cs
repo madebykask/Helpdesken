@@ -36,5 +36,7 @@
         IList<FaqCategory> GetFaqCategories(int customerId);
 
         IList<Faq> GetFaqs(int customerId);
+
+        byte[] GetFileContentByFaqIdAndFileName(int faqId, string basePath, string fileName);
     }
 }

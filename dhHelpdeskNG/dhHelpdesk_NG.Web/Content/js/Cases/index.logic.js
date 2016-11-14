@@ -1,4 +1,4 @@
-﻿"use strsict";
+﻿"use strict";
 
 var GRID_STATE = {
     IDLE: 0,

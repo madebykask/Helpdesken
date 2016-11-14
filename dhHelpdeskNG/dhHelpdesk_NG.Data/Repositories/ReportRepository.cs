@@ -390,12 +390,12 @@ namespace DH.Helpdesk.Dal.Repositories
 
                             AllInternalText = (from r2 in this.DataContext.Logs
                                                where (r2.Case_Id == c.Id && r2.Text_Internal != null && r2.Text_Internal != "")
-                                               orderby r2.LogDate descending
+                                               orderby r2.LogDate
                                                select r2.Text_Internal).ToList(),
 
                             AllExtenalText = (from r2 in this.DataContext.Logs
                                               where (r2.Case_Id == c.Id && r2.Text_External != null && r2.Text_External != "")
-                                              orderby r2.LogDate descending
+                                              orderby r2.LogDate
                                               select r2.Text_External).ToList()
                         };
             
