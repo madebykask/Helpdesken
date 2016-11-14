@@ -60,7 +60,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         private const int MAX_QUICK_BUTTONS_COUNT = 5;
         private const string CURRENT_USER_ITEM_CAPTION = "Inloggad användare";
-        private const string CURRENT_USER_WORKINGGROUP_CAPTION = "Inloggad driftgroup användare";
+        private const string CURRENT_USER_WORKINGGROUP_CAPTION = "Inloggad användares driftgrupp";
 
         public CaseSolutionController(
             ICaseFieldSettingService caseFieldSettingService,

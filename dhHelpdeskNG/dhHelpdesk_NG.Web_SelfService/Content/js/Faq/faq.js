@@ -1,7 +1,6 @@
 ﻿
 $(function () {
     (function ($) {
-
         window.selfService = window.selfService || {};
         window.selfService.faq = window.selfService.faq || {};
         var params  = window.params;
@@ -33,10 +32,7 @@ $(function () {
                 defaultCategoryId = hierarchyData[0].Id;
 
             if (defaultCategoryId > 0)
-                this.selectNode($('#node-' + defaultCategoryId));
-
-            $('#accordion').on('hidden.bs.collapse', selfService.faq.toggleChevron);
-            $('#accordion').on('shown.bs.collapse', selfService.faq.toggleChevron);
+                this.selectNode($('#node-' + defaultCategoryId));            
         };
            
         $faqSearchButton.click(function () {
@@ -137,7 +133,6 @@ $(function () {
             return ret;
         }
 
-
         var loadFaqList = function (categoryId) {
             if (hierarchyData == undefined || hierarchyData == null)
                 return;
@@ -204,7 +199,7 @@ $(function () {
 
                     var row = '';
                     row += '<div class="panel panel-default">';
-                    row += '<div class="panel-heading" role="tab" id="heading-"' + faq.Id + '>';
+                    row += '<div class="panel-heading faqph" role="tab" id="heading-"' + faq.Id + '>';
                     row += '<h5 class="panel-title">';
                     row += '<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-'+ faq.Id + '" aria-expanded="true" aria-controls="collapseOne">';
                     row += faqQuestion;
@@ -246,14 +241,7 @@ $(function () {
             }
             return value;
          }
-
-         selfService.faq.toggleChevron = function (e) {
-             $(e.target)
-                 .prev('.panel-heading')
-                 .find("i.indicator")
-                 .toggleClass('glyphicon-chevron-down glyphicon-chevron-up');
-         }
-         
+                     
     })($);
        
     selfService.faq.init();

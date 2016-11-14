@@ -5152,7 +5152,13 @@ GO
 
 /* Notice:  1704 , 1405 ,  1706  reserved for SelfService */
 
-
+If not exists (select * from tblText where Id = 1707)
+            insert into tblText (Id, Textstring) VALUES (1707, 'Inloggad användares driftgrupp')																
+																
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1707 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1707, 'Logged on user working group', 2)
+GO
 
 
 -- *** Run this last when put translation script above this line **--

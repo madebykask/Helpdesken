@@ -199,7 +199,8 @@
                             {
                             <li class="blue">
                                 <a href="@Url.Action("Index", "Start", new { customerId = pCustomerId, area = "" })">
-                                    <div class="@(string.IsNullOrEmpty(start.ObjectClass) ? "ico-home" : start.ObjectClass)"></div>
+                                    <i class="@(string.IsNullOrEmpty(start.ObjectClass) ? "fa fa-home mnu-fa" : start.ObjectClass)"></i><br />
+                                    @*<div class="@(string.IsNullOrEmpty(start.ObjectClass) ? "ico-home" : start.ObjectClass)"></div>*@
                                     @Translation.Get(start.ObjectValue, Enums.TranslationSource.TextTranslation) 
                                 </a>
                             </li>
@@ -209,7 +210,8 @@
                         {
                             <li class="blue">
                                 <a href="@Url.Action("Index", "Start", new { customerId = pCustomerId, area = "" })">
-                                    <div class="ico-home"></div>
+                                    <i class="fa fa-home mnu-fa"></i><br />
+                                    @*<div class="ico-home"></div>*@
                                    @Translation.Get("Start", Enums.TranslationSource.TextTranslation) 
                                 </a>
                             </li>
@@ -225,7 +227,8 @@
                             {
                             <li class="dropdown blue">
                                 <a href="#" class="dropdown-toggle blue" data-toggle="dropdown">
-                                    <div class="@(string.IsNullOrEmpty(serviceRequest.ObjectClass) ? "ico-new" : serviceRequest.ObjectClass)"></div>
+                                    <i class="@(string.IsNullOrEmpty(serviceRequest.ObjectClass) ? "fa fa-edit mnu-fa" : serviceRequest.ObjectClass)"></i><br />
+                                    @*<div class="@(string.IsNullOrEmpty(serviceRequest.ObjectClass) ? "ico-new" : serviceRequest.ObjectClass)"></div>*@
                                     @Translation.Get(serviceRequest.ObjectValue, Enums.TranslationSource.TextTranslation)
                                 </a>
 
@@ -265,7 +268,7 @@
                         {
                             <li class="dropdown blue">
                                 <a href="#" class="dropdown-toggle blue" data-toggle="dropdown">
-                                    <div class="ico-new"></div>
+                                    <i class="fa fa-edit mnu-fa"></i><br />
                                     @if (appType == ApplicationTypes.LineManager)
                                     {
                                        @Translation.Get("Order New Service Request", Enums.TranslationSource.TextTranslation)
@@ -317,7 +320,8 @@
                             {
                             <li class="blue">
                                 <a href="@Url.Action("UserCases", "case", new { customerId = pCustomerId, progressId = CaseProgressFilter.CasesInProgress, area = "" })">
-                                    <div class="@(string.IsNullOrEmpty(ongoingService.ObjectClass) ? "ico-ongoing" : ongoingService.ObjectClass)"></div>
+                                    <i class="@(string.IsNullOrEmpty(ongoingService.ObjectClass) ? "fa fa-clock-o mnu-fa" : ongoingService.ObjectClass)"></i><br />
+                                    @*<div class="@(string.IsNullOrEmpty(ongoingService.ObjectClass) ? "ico-ongoing" : ongoingService.ObjectClass)"></div>*@
                                     @Translation.Get(ongoingService.ObjectValue, Enums.TranslationSource.TextTranslation)
                                 </a>
                             </li>
@@ -327,7 +331,8 @@
                         {
                             <li class="blue">
                                 <a href="@Url.Action("UserCases", "case", new { customerId = pCustomerId, progressId = CaseProgressFilter.CasesInProgress, area = "" })">
-                                    <div class="ico-ongoing"></div>
+                                    <i class="fa fa-clock-o mnu-fa"></i><br />
+                                    @*<div class="ico-ongoing"></div>*@
                                     @if (appType == ApplicationTypes.LineManager)
                                     {
                                       @Translation.Get("Ongoing Service Requests", Enums.TranslationSource.TextTranslation)
@@ -350,7 +355,8 @@
                             {
                             <li class="blue">
                                 <a href="@Url.Action("UserCases", "case", new { customerId = pCustomerId, progressId = CaseProgressFilter.ClosedCases, area = "" })">
-                                    <div class="@(string.IsNullOrEmpty(finishedService.ObjectClass) ? "ico-finished" : finishedService.ObjectClass)"></div>
+                                    <i class="@(string.IsNullOrEmpty(finishedService.ObjectClass) ? "fa fa-thumbs-o-up mnu-fa" : finishedService.ObjectClass)"></i><br />
+                                    @*<div class="@(string.IsNullOrEmpty(finishedService.ObjectClass) ? "ico-finished" : finishedService.ObjectClass)"></div>*@
                                     @Translation.Get(finishedService.ObjectValue, Enums.TranslationSource.TextTranslation)
                                 </a>
                             </li>
@@ -360,7 +366,8 @@
                         {
                             <li class="blue">
                                 <a href="@Url.Action("UserCases", "case", new { customerId = pCustomerId, progressId = CaseProgressFilter.ClosedCases, area = "" })">
-                                    <div class="ico-finished"></div>
+                                    <i class="fa fa-thumbs-o-up mnu-fa"></i><br />
+                                    @*<div class="ico-finished"></div>*@
                                     @if (appType == ApplicationTypes.LineManager)
                                     {
                                       @Translation.Get("Finished Service Requests", Enums.TranslationSource.TextTranslation)
@@ -385,9 +392,8 @@
                                 {
                                 <li class="blue">
                                     <a href="@Url.Action("Index", "Documents", new { customerId = pCustomerId, area = "" })">
-                                        <div class="@(string.IsNullOrEmpty(document.ObjectClass) ? "ico-documents" : document.ObjectClass)">
-                                            
-                                        </div>
+                                        <i class="@(string.IsNullOrEmpty(document.ObjectClass) ? "fa fa-file-text-o mnu-fa" : document.ObjectClass)"></i><br />
+                                        @*<div class="@(string.IsNullOrEmpty(document.ObjectClass) ? "ico-documents" : document.ObjectClass)"></div>*@
                                         @Translation.Get(document.ObjectValue, Enums.TranslationSource.TextTranslation)
                                     </a>
                                 </li>
@@ -397,8 +403,8 @@
                             {                            
                                 <li class="blue">
                                     <a href="@Url.Action("Index", "Documents", new { customerId = pCustomerId, area = "" })">
-                                        <div class="ico-documents">                                           
-                                        </div>
+                                        <i class="fa fa-file-text-o mnu-fa"></i><br />
+                                        @*<div class="ico-documents"></div>*@
                                         @if (appType == ApplicationTypes.LineManager)
                                         {
                                             @Translation.Get("HR Documents", Enums.TranslationSource.TextTranslation)
@@ -424,9 +430,9 @@
                                 {
                                     <li class="blue">
                                         <a href="@Url.Action("Index", "FAQ", new { customerId = pCustomerId, area = "" })">
-                                            <div class="@(string.IsNullOrEmpty(faq.ObjectClass) ? "ico-documents" : faq.ObjectClass)">                                                
-                                                <i class="fa fa-camera-retro fa-lg"></i>
-                                            </div>                                            
+                                            <i class="@(string.IsNullOrEmpty(faq.ObjectClass) ? "fa fa-question-circle mnu-fa" : faq.ObjectClass)"></i><br />
+                                            @*<div class="@(string.IsNullOrEmpty(faq.ObjectClass) ? "ico-documents" : faq.ObjectClass)">
+                                            </div>*@                                            
                                             @Translation.Get(faq.ObjectValue, Enums.TranslationSource.TextTranslation)
                                         </a>
                                     </li>
@@ -436,9 +442,8 @@
                             {
                                 <li class="blue">
                                     <a href="@Url.Action("Index", "FAQ", new { customerId = pCustomerId, area = "" })">
-                                        <div class="ico-documents">
-                                            <i class="fa fa-camera-retro fa-lg"></i>
-                                        </div>                                                                                
+                                        <i class="fa fa-question-circle mnu-fa"></i><br />
+                                        @*<div class="ico-documents"></div>*@                                                                                
                                         @Translation.Get("FAQ", Enums.TranslationSource.TextTranslation)                                       
                                     </a>
                                 </li>
@@ -457,7 +462,8 @@
                                 {
                                     <li class="blue">
                                         <a href="@Url.Action("Index", "CoWorkers", new { customerId = pCustomerId, area = "" })">
-                                            <div class="@(string.IsNullOrEmpty(coWorker.ObjectClass) ? "ico-coworkers" : coWorker.ObjectClass)"></div>
+                                            <i class="@(string.IsNullOrEmpty(coWorker.ObjectClass) ? "fa fa-user mnu-fa" : coWorker.ObjectClass)"></i><br />
+                                            @*<div class="@(string.IsNullOrEmpty(coWorker.ObjectClass) ? "ico-coworkers" : coWorker.ObjectClass)"></div>*@
                                             @Translation.Get(coWorker.ObjectValue, Enums.TranslationSource.TextTranslation)
                                         </a>
                                     </li>
@@ -467,7 +473,8 @@
                             {                            
                                 <li class="blue">
                                     <a href="@Url.Action("Index", "CoWorkers", new { customerId = pCustomerId, area = "" })">
-                                        <div class="ico-coworkers"></div>
+                                        <i class="fa fa-user mnu-fa"></i><br />
+                                        @*<div class="ico-coworkers"></div>*@
                                         @Translation.Get("My Co-Workers", Enums.TranslationSource.TextTranslation)
                                     </a>
                                 </li>
@@ -486,7 +493,8 @@
                                 {
                                     <li class="dropdown blue">
                                         <a href="#" class="dropdown-toggle blue" data-toggle="dropdown">
-                                            <div class="@(string.IsNullOrEmpty(help.ObjectClass) ? "ico-help" : help.ObjectClass)"></div>
+                                            <i class="@(string.IsNullOrEmpty(help.ObjectClass) ? "fa fa-info-circle mnu-fa" : help.ObjectClass)"></i><br />
+                                            @*<div class="@(string.IsNullOrEmpty(help.ObjectClass) ? "ico-help" : help.ObjectClass)"></div>*@
                                             @Translation.Get(help.ObjectValue, Enums.TranslationSource.TextTranslation)
                                         </a>
                                         <ul class="dropdown-menu">                                            
@@ -500,7 +508,8 @@
                             {
                                 <li class="dropdown blue">
                                 <a href="#" class="dropdown-toggle blue" data-toggle="dropdown">
-                                    <div class="ico-help"></div>                                
+                                    <i class="fa fa-info-circle mnu-fa"></i><br />
+                                    @*<div class="ico-help"></div>*@                                
                                     @Translation.Get("Need Help?", Enums.TranslationSource.TextTranslation)                                                                                                
                                 </a>                               
                                 <ul class="dropdown-menu">                                    
