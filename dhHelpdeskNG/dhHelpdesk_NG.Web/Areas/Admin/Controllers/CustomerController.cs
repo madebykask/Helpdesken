@@ -1120,6 +1120,7 @@
                 newCustomerStateSecondaries.IncludeInCaseStatistics = ss.IncludeInCaseStatistics;
                 newCustomerStateSecondaries.NoMailToNotifier = ss.NoMailToNotifier;
                 newCustomerStateSecondaries.ResetOnExternalUpdate = ss.ResetOnExternalUpdate;
+                newCustomerStateSecondaries.IsActive = ss.IsActive;
 
                 this._stateSecondaryService.SaveStateSecondary(newCustomerStateSecondaries, out errors);
             }
