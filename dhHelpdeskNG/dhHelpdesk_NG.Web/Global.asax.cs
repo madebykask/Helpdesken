@@ -59,11 +59,18 @@ namespace DH.Helpdesk.Web
 			ViewEngines.Engines.Add(new RazorViewEngine());
 		}
 
+		protected void Application_PostAuthorizeRequest()
+		{
+			if (IsWebApiRequest())
+			{
+				HttpContext.Current.SetSessionStateBehavior(System.Web.SessionState.SessionStateBehavior.Required);
+			}
+		}
 
-		protected void Application_BeginRequest(object sender, EventArgs e)
-        {
-            Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture = this.configuration.Application.DefaultCulture;
-        }
+		private bool IsWebApiRequest()
+		{
+			return HttpContext.Current.Request.AppRelativeCurrentExecutionFilePath.Contains(@"/" + WebApiConfig.UrlPrefixRelative + @"/");
+		}
 
 #if !DEBUG
         protected void Application_Error(object sender, EventArgs e)
@@ -138,10 +145,10 @@ namespace DH.Helpdesk.Web
         }
 #endif
 
-        /// <summary>
-        /// The register binders.
-        /// </summary>
-        private static void RegisterBinders()
+		/// <summary>
+		/// The register binders.
+		/// </summary>
+		private static void RegisterBinders()
         {
             ModelBinders.Binders.Add(typeof(DateTime), new DateTimeBinder());
             ModelBinders.Binders.Add(typeof(DateTime?), new NullableDateTimeBinder());

@@ -24,12 +24,12 @@ namespace DH.Helpdesk.Web.Areas.Orders
 		{
 			context.Routes.MapHttpRoute(
 				name: "OrdersApiAction",
-				routeTemplate: AreaName + "/api/{controller}/{action}"
+				routeTemplate: AreaName + "/" + WebApiConfig.UrlPrefixRelative + "/{controller}/{action}"
 				);
 
 			context.Routes.MapHttpRoute(
 				name: "OrdersApi",
-				routeTemplate: AreaName + "/api/{controller}"
+				routeTemplate: AreaName + "/" + WebApiConfig.UrlPrefixRelative + "/{controller}"
 				);
 		}
 

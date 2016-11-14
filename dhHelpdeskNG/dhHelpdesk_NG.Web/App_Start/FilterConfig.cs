@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Http.Filters;
 using System.Web.Mvc;
+using DH.Helpdesk.Web.Infrastructure.Attributes;
+using DH.Helpdesk.Web.Infrastructure.Attributes.Api;
 
 namespace DH.Helpdesk.Web
 {
@@ -18,10 +20,11 @@ namespace DH.Helpdesk.Web
 
 		public static void RegisterWebApiGlobalFilters(HttpFilterCollection filters)
 		{
-			//filters.Add(new MdPortalWebApiErrorFilter());
-			//filters.Add(new ValidationActionFilter());
-			//filters.Add(new WebApiAuthorizeAttribute());
-			//filters.Add(new Web.Common.Attributes.WebApi.ValidateAntiForgeryTokenAttribute());
+			filters.Add(new CustomApiErrorFilter());
+			filters.Add(new ValidationApiActionFilter());
+			filters.Add(new WebApiAuthorizeAttribute());
+			filters.Add(new SessionApiRequiredAttribute());
+			filters.Add(new ValidateApiAntiForgeryTokenAttribute());
 		}
 
 

@@ -44,9 +44,13 @@
             res.AppendLine(this.ErrorId.ToString());
             res.AppendLine();
             res.AppendLine();
-            res.AppendLine(String.Format("[{0}]{1}", this.HttpContext.Request.HttpMethod, this.HttpContext.Request.Url.AbsoluteUri));
-            res.AppendLine();
-            res.AppendLine(this.Exception.ToString());
+	        if (this.HttpContext != null)
+	        {
+		        res.AppendLine(String.Format("[{0}]{1}", this.HttpContext.Request.HttpMethod,
+			        this.HttpContext.Request.Url.AbsoluteUri));
+		        res.AppendLine();
+	        }
+	        res.AppendLine(this.Exception.ToString());
             res.AppendLine(LineSeparator);
             res.AppendLine(string.Format("Controller: {0}", this.Controller));
             res.AppendLine(string.Format("Action: {0}", this.Action));

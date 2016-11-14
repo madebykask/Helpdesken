@@ -8,6 +8,7 @@ namespace DH.Helpdesk.Web
 {
 	public class WebApiConfig
 	{
+		public const string UrlPrefixRelative = "api";
 		public static void Register(HttpConfiguration config)
 		{
 			// Web API configuration and services
@@ -20,7 +21,7 @@ namespace DH.Helpdesk.Web
 
 			config.Routes.MapHttpRoute(
 				name: "DefaultApi",
-				routeTemplate: "api/{controller}/{id}",
+				routeTemplate: UrlPrefixRelative +"/{controller}/{id}",
 				defaults: new { id = RouteParameter.Optional }
 			);
 

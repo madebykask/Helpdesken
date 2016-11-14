@@ -25,12 +25,12 @@ namespace DH.Helpdesk.Web.Areas.Admin
 		{
 			context.Routes.MapHttpRoute(
 				name: "AdminApiAction",
-				routeTemplate: AreaName +"/api/{controller}/{action}"
+				routeTemplate: AreaName + "/" + WebApiConfig.UrlPrefixRelative + "/{controller}/{action}"
 				);
 
 			context.Routes.MapHttpRoute(
 				name: "AdminApi",
-				routeTemplate: AreaName +"/api/{controller}"
+				routeTemplate: AreaName + "/" + WebApiConfig.UrlPrefixRelative + "/{controller}"
 				);
 		}
 

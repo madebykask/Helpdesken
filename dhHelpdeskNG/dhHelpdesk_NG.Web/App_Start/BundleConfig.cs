@@ -38,12 +38,13 @@
 				"~/Content/js/Shared/custom.validation.reuiredifnotempty.js"));
 			bundles.Add(new ScriptBundle("~/bundles/common").Include(
                             "~/Content/js/Shared/errors.js",
+							"~/Content/js/Shared/jquery.customAjax.js",
 #if DEBUG
                             "~/Scripts/jquery-1.8.3.js",
                             "~/Content/js/jquery.unobtrusive-ajax.min.js",
                             "~/Content/js/jquery.validate.js",
 #else
-                            "~/Scripts/jquery-1.8.3.min.js",
+							"~/Scripts/jquery-1.8.3.min.js",
                             "~/Content/js/jquery.unobtrusive-ajax.min.js",
                             "~/Content/js/jquery.validate.min.js",
 #endif
@@ -89,7 +90,9 @@
                             "~/Content/js/bootstrap.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/common/popup").Include(
-                            "~/Scripts/jquery-1.8.3.min.js",
+							"~/Content/js/Shared/errors.js",
+							"~/Content/js/Shared/jquery.customAjax.js",
+							"~/Scripts/jquery-1.8.3.min.js",
                             "~/Content/js/jquery.unobtrusive-ajax.min.js",
                             "~/Content/js/jquery.validate.min.js",
                             "~/Content/js/jquery.validate.unobtrusive.min.js",
@@ -258,7 +261,9 @@
                            "~/Areas/admin/Content/js/invoice/invoicearticleproductareaInput.js"));
             
             bundles.Add(new ScriptBundle("~/bundles/common/admin").Include(
-                           "~/Scripts/jquery-1.8.3.min.js",
+						   "~/Content/js/Shared/errors.js",
+     					   "~/Content/js/Shared/jquery.customAjax.js",
+						   "~/Scripts/jquery-1.8.3.min.js",
                            "~/Scripts/jquery-ui-1.9.2.min.js",
                            "~/Content/js/bootstrap.js",
                            "~/Content/js/chosen.jquery.min.js",

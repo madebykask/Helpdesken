@@ -25,12 +25,12 @@ namespace DH.Helpdesk.Web.Areas.Reports
 		{
 			context.Routes.MapHttpRoute(
 				name: "ReportsApiAction",
-				routeTemplate: AreaName + "/api/{controller}/{action}"
+				routeTemplate: AreaName + "/" + WebApiConfig.UrlPrefixRelative + "/{controller}/{action}"
 				);
 
 			context.Routes.MapHttpRoute(
 				name: "ReportsApi",
-				routeTemplate: AreaName + "/api/{controller}"
+				routeTemplate: AreaName + "/" + WebApiConfig.UrlPrefixRelative + "/{controller}"
 				);
 		}
 
