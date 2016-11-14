@@ -204,7 +204,7 @@ $(function () {
 
                     var row = '';
                     row += '<div class="panel panel-default">';
-                    row += '<div class="panel-heading" role="tab" id="heading-"' + faq.Id + '>';
+                    row += '<div class="panel-heading faqph" role="tab" id="heading-"' + faq.Id + '>';
                     row += '<h5 class="panel-title">';
                     row += '<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-'+ faq.Id + '" aria-expanded="true" aria-controls="collapseOne">';
                     row += faqQuestion;
