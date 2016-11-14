@@ -187,6 +187,7 @@
     <Compile Include="BusinessLogic\Mappers\Reports\Data\ReportOptions.cs" />
     <Compile Include="BusinessLogic\Mappers\Reports\ReportsMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Reports\ReportsOptionsMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Shared\Data\UnionItemDependentOverview.cs" />
     <Compile Include="BusinessLogic\Mappers\Shared\Data\UnionItemOverview.cs" />
     <Compile Include="BusinessLogic\Mappers\Shared\GlobalMappers.cs" />
     <Compile Include="BusinessLogic\Mappers\Users\UsersMapper.cs" />
