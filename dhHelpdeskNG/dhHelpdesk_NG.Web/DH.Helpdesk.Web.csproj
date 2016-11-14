@@ -15,7 +15,7 @@
     <AssemblyName>DH.Helpdesk.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <SccProjectName>
     </SccProjectName>
     <SccLocalPath>
@@ -1047,6 +1047,7 @@
     </Compile>
     <Compile Include="Infrastructure\ApplicationFacade.cs" />
     <Compile Include="Infrastructure\Attributes\Api\CustomApiErrorFilter.cs" />
+    <Compile Include="Infrastructure\Attributes\Api\PermissionsApiAttribute.cs" />
     <Compile Include="Infrastructure\Attributes\Api\SessionApiRequiredAttribute.cs" />
     <Compile Include="Infrastructure\Attributes\Api\ValidateApiAntiForgeryTokenAttribute.cs" />
     <Compile Include="Infrastructure\Attributes\Api\ValidationApiActionFilter.cs" />
