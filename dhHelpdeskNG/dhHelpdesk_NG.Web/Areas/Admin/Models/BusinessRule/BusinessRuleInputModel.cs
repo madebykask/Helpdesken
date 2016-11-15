@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
-using DH.Helpdesk.Web.AppCode.Attributes;
+using DH.Helpdesk.Web.Infrastructure.Attributes;
 using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
 namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
