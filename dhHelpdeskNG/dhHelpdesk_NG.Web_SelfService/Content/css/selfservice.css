@@ -307,8 +307,12 @@ h5 {
     text-decoration:none;
 }
 
+.faq-font-bold {
+    font-weight: bold;
+}
+
 .font-bold {
-    font-weight: bolder;
+    font-weight: bold;
 }
 
 .ico-coworkers {
@@ -404,9 +408,13 @@ h5 {
   font-size:14px;
   margin:0;
   color:#333;
-  font-weight:bold;
-
+  /*font-weight:bold;*/
 }
+
+table th.thpointer {
+    cursor: pointer;
+}
+
 /***TABS**************/
 .tab-pane
 {
@@ -853,6 +861,11 @@ label {
     height: 40px;
     margin:0 auto;
     padding:4px 0;
+}
+
+/****TABEL A COLOR*****/
+.linkcolor a{
+    color:#333;
 }
 
 

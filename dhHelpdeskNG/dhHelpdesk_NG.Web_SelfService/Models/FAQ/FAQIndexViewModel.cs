@@ -98,7 +98,7 @@ namespace DH.Helpdesk.SelfService.Models.FAQ
                 else
                 {
                     html.Append(string.Format("<a id='node-{0}' class='faq-node' >", cat.Id));
-                    html.Append(string.Format("<i class='fa fa-server' aria-hidden='true'></i>"));
+                    html.Append(string.Format("<i class='fa fa-minus' aria-hidden='true'></i>"));
                     html.Append(string.Format("&nbsp;&nbsp;{0}</a>", cat.Name));
                 }
 

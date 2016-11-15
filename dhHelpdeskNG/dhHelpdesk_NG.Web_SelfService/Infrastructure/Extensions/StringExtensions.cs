@@ -205,7 +205,7 @@
             if (SessionFacade.CurrentCaseSearch != null)
                 if (SessionFacade.CurrentCaseSearch.Search != null)
                     if (SessionFacade.CurrentCaseSearch.Search.SortBy == value)
-                        ret = SessionFacade.CurrentCaseSearch.Search.Ascending ? "icon-chevron-down" : "icon-chevron-up";
+                        ret = SessionFacade.CurrentCaseSearch.Search.Ascending ? "fa fa-chevron-down" : "fa fa-chevron-up";
 
             return ret;
         }
