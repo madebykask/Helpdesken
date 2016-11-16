@@ -1023,7 +1023,7 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                     if (hasChild)
                     {
                         sb.Append("<ul class='dropdown-menu'>");
-                        sb.Append(BuildFinishingCauseDropdownButton(f.SubFinishingCauses.ToList(), isTakeOnlyActive));
+                        sb.Append(BuildFinishingCauseDropdownButton(f.SubFinishingCauses.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList(), isTakeOnlyActive));
                         sb.Append("</ul>");
                     }
                     sb.Append("</li>");
