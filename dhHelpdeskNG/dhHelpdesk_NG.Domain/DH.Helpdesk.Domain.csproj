@@ -81,6 +81,7 @@
     <Compile Include="CaseSolutionCategory.cs" />
     <Compile Include="CaseSolutionSchedule.cs" />
     <Compile Include="CaseSolutionSearch.cs" />
+    <Compile Include="Cases\CaseFollowUp.cs" />
     <Compile Include="Cases\CaseSolutionSetting.cs" />
     <Compile Include="Cases\CaseLockEntity.cs" />
     <Compile Include="Cases\CaseStatistic.cs" />

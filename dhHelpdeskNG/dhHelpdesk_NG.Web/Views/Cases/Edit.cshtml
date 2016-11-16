@@ -306,7 +306,7 @@
 
                                 @if (SessionFacade.CurrentUser.FollowUpPermission == 1)
                                 {
-                                    if (Model.case_.FollowUpDate.HasValue)
+                                    if (Model.IsFollowUp)
                                     {
                                     <li><a href="/cases/followupRemove/@Model.case_.Id" >@Translation.Get("Ta bort uppföljning", Enums.TranslationSource.TextTranslation)</a></li>
                                     }

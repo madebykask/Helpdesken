@@ -869,6 +869,7 @@
             tables.Add("left outer join tblRegistrationSourceCustomer on tblCase.RegistrationSourceCustomer_Id = tblRegistrationSourceCustomer.Id ");
             tables.Add("left outer join tblUsers on tblUsers.Id = tblCase.Performer_User_Id ");
             tables.Add("left outer join tblCaseIsAbout on tblCaseIsAbout.Case_Id = tblCase.Id ");
+            tables.Add("left outer join tblCaseFollowUps on tblCaseFollowUps.CaseId = tblCase.Id ");
             
             if (customerSetting != null)
             {
@@ -903,7 +904,7 @@
             /// WHERE ..
             if (applicationType.ToLower() == ApplicationTypes.LineManager || applicationType.ToLower() == ApplicationTypes.SelfService)
             {
-                sql.Add(this.ReturnCustomCaseSearchWhere(f, userUserId));
+                sql.Add(this.ReturnCustomCaseSearchWhere(f, userUserId, userId));
             }
             else
             {
@@ -969,7 +970,7 @@
         }
 
         //Used for LineManager & SelfService
-        private string ReturnCustomCaseSearchWhere(CaseSearchFilter f, string userUserId)
+        private string ReturnCustomCaseSearchWhere(CaseSearchFilter f, string userUserId, int userId)
         {
             if (f == null)
             {
@@ -1046,7 +1047,8 @@
                     sb.Append(" and (tblCase.FinishingDate is null and tblCase.WatchDate is not null)");
                     break;
                 case CaseProgressFilter.FollowUp:
-                    sb.Append(" and (tblCase.FollowUpdate is not null)");
+                    //                    sb.Append(" and (tblCase.FollowUpdate is not null)");
+                    sb.Append(" and (tblCaseFollowUps.UserId = " + userId + " and tblCaseFollowUps.IsActive = 1)");
                     break;                
                 default:
                     sb.Append(" and (tblCase.FinishingDate is null)");
@@ -1181,7 +1183,8 @@
                     sb.Append(" and (tblCase.FinishingDate is null and tblCase.WatchDate is not null)");
                     break;
                 case CaseProgressFilter.FollowUp:
-                    sb.Append(" and (tblCase.FollowUpdate is not null)");
+//                    sb.Append(" and (tblCase.FollowUpdate is not null)");
+                    sb.Append(" and (tblCaseFollowUps.UserId = "+ userId + " and tblCaseFollowUps.IsActive = 1)");
                     break;
                 default:
                     sb.Append(" and (tblCase.FinishingDate is null)");

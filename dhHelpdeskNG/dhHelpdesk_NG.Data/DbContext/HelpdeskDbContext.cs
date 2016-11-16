@@ -545,11 +545,13 @@
 
         public DbSet<ReportFavorite> ReportFavorites { get; set; }
 
-        #endregion
+		public DbSet<CaseFollowUp> CaseFollowUps { get; set; }
 
-        #region Public Methods and Operators
+		#endregion
 
-        public virtual void Commit()
+		#region Public Methods and Operators
+
+		public virtual void Commit()
         {
             try
             {
@@ -614,6 +616,7 @@
             modelBuilder.Configurations.Add(new CaseHistoryConfiguration());
             modelBuilder.Configurations.Add(new CaseLockConfiguration());
             modelBuilder.Configurations.Add(new CaseStatisticConfiguration());
+            modelBuilder.Configurations.Add(new CaseFollowUpConfiguration());
 
             modelBuilder.Configurations.Add(new CaseInvoiceRowConfiguration());
             modelBuilder.Configurations.Add(new CaseIsAboutConfiguration());
