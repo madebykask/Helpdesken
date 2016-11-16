@@ -316,5 +316,20 @@ namespace DH.Helpdesk.Common.Extensions.String
             var nonNumericValue = string.Concat(value.Where(c => !char.IsDigit(c)));
             return nonNumericValue;
         }
+
+        public static string RecoverStrFromJson(this string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return string.Empty;
+
+            var ret = value;
+            ret = ret.Replace("%3C", "<");            
+            return ret;
+        }
+
+        public static string QautationFix(this string value)
+        {
+            return value.Replace("″", "\"");
+        }
     }
 }
