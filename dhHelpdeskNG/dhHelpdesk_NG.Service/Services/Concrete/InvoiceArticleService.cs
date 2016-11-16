@@ -335,8 +335,8 @@
             salesHeader.SellToCustomerNo = GetSellToCustomerNo(order.Department_Id);
             salesHeader.Date = order.InvoiceDate.HasValue ? order.InvoiceDate.Value.ToShortDateString() : string.Empty;
             salesHeader.DueDate = order.InvoiceDate.HasValue ? order.InvoiceDate.Value.ToShortDateString() : string.Empty;
-            salesHeader.OurReference = settings.OurReference;
-            salesHeader.YourReference2 = YourReferenceRow(order.CostCentre, order.Persons_Name);
+            salesHeader.OurReference = settings.OurReference.QautationFix();
+            salesHeader.YourReference2 = YourReferenceRow(order.CostCentre, order.Persons_Name.QautationFix());
             salesHeader.OrderNo = OrderNoRow(caseNumber, settings.OrderNoPrefix, curOrderSeq, originalOrderSeq);
             salesHeader.CurrencyCode = settings.Currency;
             salesHeader.JobNo = order.Project_Id.HasValue? GetJobNo(order.Project_Id.Value) : string.Empty;
@@ -378,7 +378,7 @@
                         LineNo = lineNo.ToString(),
                         LineType = InvoiceXMLLineType.Description,
                         Number = string.Empty,
-                        Description = article.Name,
+                        Description = article.Name.QautationFix(),
                         Quantity = string.Empty,
                         UnitOfMeasureCode = string.Empty,
                         UnitPrice = string.Empty
@@ -417,7 +417,7 @@
         private string DetectDecimalSeparator(string value)
         {
             return string.IsNullOrEmpty(value)? string.Empty : value.GetNonNumeric();
-        }
+        }        
 
         private int GetSequenceNumber(int caseId, CaseInvoiceOrder order)
         {

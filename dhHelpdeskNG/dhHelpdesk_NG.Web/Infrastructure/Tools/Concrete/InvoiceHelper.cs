@@ -11,6 +11,7 @@
     using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.BusinessData.Models.Invoice;
     using DH.Helpdesk.Common.Enums;
+    using Common.Extensions.String;
 
     public sealed class InvoiceHelper : IInvoiceHelper
     {
@@ -41,17 +42,17 @@
                                     (orderIdToXML.HasValue && (o.Id == orderIdToXML.Value || o.Id == 0 && orderIdToXML.Value < 0) ? now : o.InvoiceDate),
                                     (orderIdToXML.HasValue && (o.Id == orderIdToXML.Value || o.Id == 0 && orderIdToXML.Value < 0) ? curUserId : o.InvoicedByUserId),
                                     now,
-                                    o.ReportedBy,
-                                    o.Persons_Name,
-                                    o.Persons_Email,
-                                    o.Persons_Phone,
-                                    o.Persons_Cellphone,
+                                    o.ReportedBy.RecoverStrFromJson(),
+                                    o.Persons_Name.RecoverStrFromJson(),
+                                    o.Persons_Email.RecoverStrFromJson(),
+                                    o.Persons_Phone.RecoverStrFromJson(),
+                                    o.Persons_Cellphone.RecoverStrFromJson(),
                                     o.Region_Id,
                                     o.Department_Id,
                                     o.OU_Id,
-                                    o.Place,
-                                    o.UserCode,
-                                    o.CostCentre,
+                                    o.Place.RecoverStrFromJson(),
+                                    o.UserCode.RecoverStrFromJson(),
+                                    o.CostCentre.RecoverStrFromJson(),
                                     o.CreditForOrder_Id,
                                     o.Project_Id,
                                     (orderIdToXML.HasValue && (o.Id == orderIdToXML.Value || o.Id == 0 && orderIdToXML.Value < 0) ? (int)InvoiceOrderStates.Sent : o.OrderState),                                    
@@ -62,7 +63,7 @@
                                             null,
                                             a.ArticleId,
                                             articles != null ? articles.FirstOrDefault(ar => ar.Id == a.ArticleId) : null,
-                                            a.Name,
+                                            a.Name.RecoverStrFromJson(),
                                             a.Amount,
                                             a.Ppu,
                                             a.Position,

@@ -27,11 +27,13 @@
             <p>
                 @if (SessionFacade.CurrentCustomer.UseInternalLogNoteOnExternalPage == (int)Enums.LogNote.UseExternalLogNote)
                 {
-                    @Html.Raw(logItem.Text_External.Replace("\n", "<br />"))                    
+                    var ext = logItem.Text_External.AddCharacterInParts(70, Environment.NewLine, Environment.NewLine);
+                    @Html.Raw(ext.Replace("<", "").Replace("\n", "<br />"))
                 }
                 else
                 {
-                    @Html.Raw(logItem.Text_Internal.Replace("\n", "<br />"))                    
+                    var intern = logItem.Text_Internal.AddCharacterInParts(70, Environment.NewLine, Environment.NewLine);
+                    @Html.Raw(intern.Replace("<", "").Replace("\n", "<br />"))
                 }                                                    
             </p>
             <p>

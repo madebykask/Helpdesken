@@ -21,7 +21,7 @@ $(function () {
         var hierarchyData = [];
 
         selfService.faq.init = function () {      
-            fontBoldClass = 'font-bold';                        
+            fontBoldClass = 'faq-font-bold';                        
             hierarchyData = params.hierarchyData || [];
             answerCaption = params.answerCaption ||'';
             internalAnswerCaption = params.internalAnswerCaption || '';
@@ -178,22 +178,23 @@ $(function () {
                 var faq = faqs[i];                
 
                 if (faq.Question != '' || faq.Answer != '') {
-                    var faqDetails = dateToDisplayDate(faq.CreatedDate) + '</br></br>' +
-                                    '<b>' + answerCaption + '</b></br>' + faq.Answer.replace(/\</g, "").replace(/\>/g, "") + '</br></br>' +
-                                    '<b>' + internalAnswerCaption + '</b></br>' + faq.InternalAnswer.replace(/\</g, "").replace(/\</g, "") + '</br>';
-                    
+                    var faqDetails = dateToDisplayDate(faq.CreatedDate) + '<br /><br />' +
+                                    '<b>' + answerCaption + '</b><br />' + faq.Answer.replace(/\</g, "").replace(/\>/g, "") + '<br /><br />' +
+                                    '<b>' + internalAnswerCaption + '</b><br/>' + faq.InternalAnswer.replace(/\</g, "").replace(/\</g, "") + '<br />';
+
+                    faqDetails = faqDetails.replace(/(?:\r\n|\r|\n)/g, '<br />');
+
                     var faqQuestion = faq.Question != '' ? faq.Question : "-";
                     faqQuestion = faqQuestion.replace(/\</g, "").replace(/\</g, "");
 
                     var faqFiles = '';
                     if (faq.Files != null && faq.Files.length > 0) {
                         for (var j = 0; j < faq.Files.length; j++) {
-                            var file = faq.Files[j];
-                            //var downloadLink = downloadFileUrl + '?faqId=' + faq.Id + '&basePath=' + baseFilePath + '&fileName=' + file.FileName;
+                            var file = faq.Files[j];                            
                             var downloadLink = downloadFileUrl + '?faqId=' + faq.Id + '&fileName=' + file.FileName;
                             faqFiles += '<a href=' + downloadLink + ' style="cursor: pointer;">' +
                                         '<span class="glyphicon glyphicon-file"></span>&nbsp;' + file.FileName + '</a>';
-                            faqFiles += '</br>';
+                            faqFiles += '<br />';
                         }
                     }
 

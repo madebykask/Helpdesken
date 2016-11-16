@@ -3794,7 +3794,7 @@ namespace DH.Helpdesk.Web.Controllers
                 m.productAreas = this._productAreaService.GetTopProductAreasForUserOnCase(
                     customerId,
                     m.case_.ProductArea_Id,
-                    SessionFacade.CurrentUser);
+                    SessionFacade.CurrentUser).OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList();
             }
 
             if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Region_Id.ToString()).ShowOnStartPage == 1)
