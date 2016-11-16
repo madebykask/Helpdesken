@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using DH.Helpdesk.BusinessData.Models.Shared.Output;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System;
     using System.Collections.Generic;
@@ -15,7 +17,7 @@
 
     public interface ICaseSearchService
     {
-        IList<CaseSearchResult> Search(
+        SearchResult<CaseSearchResult> Search(
             CaseSearchFilter f,
             IList<CaseSettings> csl,
             CaseFieldSetting[] customerCaseFieldsSettings,
@@ -30,7 +32,7 @@
             TimeZoneInfo userTimeZone,
             string applicationType);
 
-        IList<CaseSearchResult> Search(
+        SearchResult<CaseSearchResult> Search(
             CaseSearchFilter f,
             IList<CaseSettings> csl,
             CaseFieldSetting[] customerCaseFieldsSettings,
@@ -75,7 +77,7 @@
             this.productAreaService = productAreaService;
         }
 
-        public IList<CaseSearchResult> Search(
+        public SearchResult<CaseSearchResult> Search(
             CaseSearchFilter f,
             IList<CaseSettings> csl,
             CaseFieldSetting[] customerCaseFieldsSettings,
@@ -112,7 +114,7 @@
                         out aggregateData);
         }
 
-        public IList<CaseSearchResult> Search(
+        public SearchResult<CaseSearchResult> Search(
                                 CaseSearchFilter f, 
                                 IList<CaseSettings> csl, 
                                 CaseFieldSetting[] customerCaseFieldsSettings,
@@ -192,7 +194,7 @@
                     filteredCaseRemainigTimes = remainingTime.CaseRemainingTimes.Where(t => t.RemainingTime.IsHoursEqualDays(f.CaseRemainingTimeFilter.Value - 1, workingHours));
                 }
 
-                result = result.Where(c => filteredCaseRemainigTimes.Select(t => t.CaseId).Contains(c.Id)).ToList();
+                result.Items = result.Items.Where(c => filteredCaseRemainigTimes.Select(t => t.CaseId).Contains(c.Id)).ToList();
             }
 
             return result;

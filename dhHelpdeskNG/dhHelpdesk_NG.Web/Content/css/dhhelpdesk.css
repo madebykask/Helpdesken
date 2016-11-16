@@ -1779,10 +1779,6 @@ table th.thpointer {
         margin-left: 0px;
     }
 
-    .case-overview.page .table.table-cases {
-        margin-bottom: 0px;
-    }
-
     .loading-msg,
     .no-data-msg,
     .error-msg
