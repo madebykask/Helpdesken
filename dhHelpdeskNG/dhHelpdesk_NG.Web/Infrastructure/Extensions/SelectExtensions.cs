@@ -9,7 +9,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
-namespace DH.Helpdesk.Web.AppCode.Html
+namespace DH.Helpdesk.Web.Infrastructure.Extensions
 {
 	public static class SelectExtensions
 	{

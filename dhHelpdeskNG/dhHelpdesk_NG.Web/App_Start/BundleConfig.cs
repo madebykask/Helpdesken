@@ -8,6 +8,7 @@
         {
             public const string DynamicCase = "~/bundles/dynamic-case";
 			public const string AttributesValidation = "~/bundles/jqueryattrval";
+			public const string EditOrder = ("~/bundles/orders/orderedit");
 		}
 
         public static void RegisterBundles(BundleCollection bundles)
@@ -34,8 +35,6 @@
             bundles.Add(new ScriptBundle(ScriptNames.DynamicCase).Include(
                             "~/Content/js/DynamicCase/iframeResizer.js",
                             "~/Content/js/DynamicCase/container.js"));
-			bundles.Add(new ScriptBundle(ScriptNames.AttributesValidation).Include(
-				"~/Content/js/Shared/custom.validation.reuiredifnotempty.js"));
 			bundles.Add(new ScriptBundle("~/bundles/common").Include(
                             "~/Content/js/Shared/errors.js",
 							"~/Content/js/Shared/jquery.customAjax.js",
@@ -395,7 +394,12 @@
                 "~/Areas/Admin/Content/js/BusinessRule/businessRuleInput.js",
                 "~/Content/js/jquery.validate.unobtrusive.min.js"));
 
-            #endregion
-        }
+			bundles.Add(new ScriptBundle(ScriptNames.AttributesValidation).Include(
+				"~/Content/js/Shared/custom.validation.reuiredifnotempty.js"));
+			bundles.Add(new ScriptBundle(ScriptNames.EditOrder).Include(
+				"~/Content/js/Orders/order.edit.js"));
+
+			#endregion
+		}
     }
 }

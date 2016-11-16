@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Shared
 {
-    public sealed class ItemOverview
+    public class ItemOverview
     {
         public ItemOverview(string name, string value)
         {

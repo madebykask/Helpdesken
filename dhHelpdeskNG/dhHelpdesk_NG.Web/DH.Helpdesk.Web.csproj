@@ -228,8 +228,8 @@
     <Compile Include="..\CommonAssembly\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AppCode\Attributes\RequiredIfNotEmptyAttribute.cs" />
-    <Compile Include="AppCode\Html\SelectExtensions.cs" />
+    <Compile Include="Infrastructure\Attributes\RequiredIfNotEmptyAttribute.cs" />
+    <Compile Include="Infrastructure\Extensions\SelectExtensions.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\JsonFormatConfig.cs" />
@@ -1117,6 +1117,7 @@
     <Compile Include="Infrastructure\BusinessModelFactories\Changes\Concrete\UpdatedSettingsFactory.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Notifiers\Concrete\UpdatedSettingsFactory.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Notifiers\IUpdatedSettingsFactory.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\JavaScriptConvertExtention.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\UserFormatterExtension.cs" />
     <Compile Include="Infrastructure\SelectListMapper.cs" />
     <Compile Include="Infrastructure\Enums.cs" />
@@ -1824,6 +1825,7 @@
     <Content Include="Areas\Admin\Views\BusinessRule\_InputRule.cshtml" />
     <Content Include="Areas\Admin\Views\BusinessRule\_RuleCondition.cshtml" />
     <Content Include="Areas\Admin\Views\BusinessRule\_RuleAction.cshtml" />
+    <Content Include="Content\js\Orders\order.edit.js" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="img\glyphicons-halflings-white.png" />
     <Content Include="img\glyphicons-halflings.png" />
