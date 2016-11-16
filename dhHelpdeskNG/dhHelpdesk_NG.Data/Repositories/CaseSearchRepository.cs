@@ -781,7 +781,7 @@ namespace DH.Helpdesk.Dal.Repositories
 			// WHERE ..
 			if (applicationType.ToLower() == ApplicationTypes.LineManager || applicationType.ToLower() == ApplicationTypes.SelfService)
 			{
-				sql.Add(this.ReturnCustomCaseSearchWhere(f, userUserId));
+				sql.Add(this.ReturnCustomCaseSearchWhere(f, userUserId, userId));
 			}
 			else
 			{
@@ -821,6 +821,7 @@ namespace DH.Helpdesk.Dal.Repositories
 			tables.Add("left outer join tblRegistrationSourceCustomer on tblCase.RegistrationSourceCustomer_Id = tblRegistrationSourceCustomer.Id ");
 			tables.Add("left outer join tblUsers on tblUsers.Id = tblCase.Performer_User_Id ");
 			tables.Add("left outer join tblCaseIsAbout on tblCaseIsAbout.Case_Id = tblCase.Id ");
+			tables.Add("left outer join tblCaseFollowUps on tblCaseFollowUps.CaseId = tblCase.Id ");
 
 			if (customerSetting != null)
 			{
@@ -1058,7 +1059,7 @@ namespace DH.Helpdesk.Dal.Repositories
 			string whereStatement;
 			if (applicationType.ToLower() == ApplicationTypes.LineManager || applicationType.ToLower() == ApplicationTypes.SelfService)
 			{
-				whereStatement = ReturnCustomCaseSearchWhere(f, userUserId);
+				whereStatement = ReturnCustomCaseSearchWhere(f, userUserId, userId);
 			}
 			else
 			{
@@ -1094,7 +1095,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
 
 		//Used for LineManager & SelfService
-		private string ReturnCustomCaseSearchWhere(CaseSearchFilter f, string userUserId)
+		private string ReturnCustomCaseSearchWhere(CaseSearchFilter f, string userUserId, int userId)
 		{
 			if (f == null)
 			{
@@ -1171,7 +1172,8 @@ namespace DH.Helpdesk.Dal.Repositories
 					sb.Append(" and (tblCase.FinishingDate is null and tblCase.WatchDate is not null)");
 					break;
 				case CaseProgressFilter.FollowUp:
-					sb.Append(" and (tblCase.FollowUpdate is not null)");
+					//sb.Append(" and (tblCase.FollowUpdate is not null)");
+					sb.Append(" and (tblCaseFollowUps.UserId = " + userId + " and tblCaseFollowUps.IsActive = 1)");
 					break;
 				default:
 					sb.Append(" and (tblCase.FinishingDate is null)");
@@ -1306,7 +1308,8 @@ namespace DH.Helpdesk.Dal.Repositories
 					sb.Append(" and (tblCase.FinishingDate is null and tblCase.WatchDate is not null)");
 					break;
 				case CaseProgressFilter.FollowUp:
-					sb.Append(" and (tblCase.FollowUpdate is not null)");
+					//sb.Append(" and (tblCase.FollowUpdate is not null)");
+					sb.Append(" and (tblCaseFollowUps.UserId = " + userId + " and tblCaseFollowUps.IsActive = 1)");
 					break;
 				default:
 					sb.Append(" and (tblCase.FinishingDate is null)");

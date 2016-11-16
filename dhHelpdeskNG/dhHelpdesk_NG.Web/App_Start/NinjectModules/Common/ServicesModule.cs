@@ -50,6 +50,7 @@
             this.Bind<ICaseSolutionService>().To<CaseSolutionService>();
             this.Bind<ICaseFileService>().To<CaseFileService>();
             this.Bind<ICaseTypeService>().To<CaseTypeService>();
+            this.Bind<ICaseFollowUpService>().To<CaseFollowUpService>();
             this.Bind<ICaseSearchService>().To<CaseSearchService>();
             this.Bind<ICategoryService>().To<CategoryService>();
             this.Bind<IChecklistActionService>().To<ChecklistActionService>();

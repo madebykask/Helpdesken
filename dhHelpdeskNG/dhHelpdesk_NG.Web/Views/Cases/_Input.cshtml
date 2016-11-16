@@ -83,7 +83,7 @@
 
 </script>
 
-@Scripts.Render("~/bundles/invoices")
+
 @Scripts.Render("~/bundles/cases/_input")
 
 <script type="text/javascript">
@@ -993,7 +993,8 @@
                                                 @Html.HiddenFor(model => model.case_.ProductArea_Id, new { @class = "product-area-id" })
                                             </div>
                                             @if (Model.CustomerSettings.ModuleCaseInvoice && Model.InvoiceModel != null)
-                                            {                                                
+                                            {                   
+                                                @Scripts.Render("~/bundles/invoices")
                                                 @Html.Partial("_Invoice", Model.InvoiceModel)
                                             }
                                         </td>

@@ -82,6 +82,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ICaseFileService _caseFileService;
         private readonly ICaseSettingsService _caseSettingService;
         private readonly ICaseTypeService _caseTypeService;
+        private readonly ICaseFollowUpService _caseFollowUpService;
         private readonly ICategoryService _categoryService;
         private readonly IComputerService _computerService;
         private readonly ICountryService _countryService;
@@ -174,6 +175,7 @@ namespace DH.Helpdesk.Web.Controllers
             ICaseFileService caseFileService,
             ICaseSettingsService caseSettingService,
             ICaseTypeService caseTypeService,
+			ICaseFollowUpService caseFollowUpService,
             ICategoryService categoryService,
             IComputerService computerService,
             ICountryService countryService,
@@ -237,6 +239,7 @@ namespace DH.Helpdesk.Web.Controllers
             this._caseFileService = caseFileService;
             this._caseSettingService = caseSettingService;
             this._caseTypeService = caseTypeService;
+            _caseFollowUpService = caseFollowUpService;
             this._categoryService = categoryService;
             this._computerService = computerService;
             this._countryService = countryService;
@@ -1848,13 +1851,23 @@ namespace DH.Helpdesk.Web.Controllers
 
         public RedirectToRouteResult FollowUpRemove(int id)
         {
-            this._caseService.UpdateFollowUpDate(id, null);
+            if (SessionFacade.CurrentUser != null)
+            {
+                var userId = SessionFacade.CurrentUser.Id;
+                _caseFollowUpService.RemoveFollowUp(userId, id);
+            }
+//            this._caseService.UpdateFollowUpDate(id, null);
             return this.RedirectToAction("edit", "cases", new { id = id, redirectFrom = "save" });
         }
 
         public RedirectToRouteResult FollowUp(int id)
         {
-            this._caseService.UpdateFollowUpDate(id, DateTime.UtcNow);
+            if (SessionFacade.CurrentUser != null)
+            {
+                var userId = SessionFacade.CurrentUser.Id;
+                _caseFollowUpService.AddUpdateFollowUp(userId, id);
+            }
+//            this._caseService.UpdateFollowUpDate(id, DateTime.UtcNow);
             return this.RedirectToAction("edit", "cases", new { id = id, redirectFrom = "save" });
         }
 
@@ -3633,6 +3646,8 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 var markCaseAsRead = string.IsNullOrWhiteSpace(redirectFrom);
                 m.case_ = this._caseService.GetCaseById(caseId);
+                var isFlwup = _caseFollowUpService.IsCaseFollowUp(SessionFacade.CurrentUser.Id, caseId);
+                m.IsFollowUp = isFlwup;
 
                 var editMode = this.EditMode(m, ModuleName.Cases, deps, acccessToGroups);
                 if (m.case_.Unread != 0 && updateState && editMode == Enums.AccessMode.FullAccess)

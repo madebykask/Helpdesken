@@ -234,6 +234,8 @@
         public OutputFormatter OutFormatter { get; set; }
 
         public List<CaseTemplateButton> CaseTemplateButtons { get; set; }
+
+        public bool IsFollowUp { get; set; }
     }
 
     public class CaseIndexViewModel
