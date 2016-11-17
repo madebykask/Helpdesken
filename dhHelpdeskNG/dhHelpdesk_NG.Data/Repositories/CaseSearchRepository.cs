@@ -39,8 +39,8 @@ namespace DH.Helpdesk.Dal.Repositories
 
 	public class CaseSearchRepository : ICaseSearchRepository
 	{
-		private const string TimeLeftColumn = "_temporary_.LeadTime";
-		private const string TimeLeftColumnLower = "_temporary_.leadtime";
+		private const string TimeLeftColumn = "_temporary_LeadTime";
+		private const string TimeLeftColumnLower = "_temporary_leadtime";
 
 		private const string Combinator_OR = "OR";
 
@@ -114,57 +114,58 @@ namespace DH.Helpdesk.Dal.Repositories
 										context.caseIds,
 										context.userCaseSettings);
 
-			var sqlCount = ReturnCaseSearchSqlCount(
-				context.f,
-				context.customerSetting,
-				customerUserSetting,
-				context.isFieldResponsibleVisible,
-				context.userId,
-				context.userUserId,
-				context.showNotAssignedWorkingGroups,
-				context.userGroupId,
-				context.gs,
-				context.s,
-				context.applicationType,
-				context.relatedCasesCaseId,
-				context.relatedCasesUserId,
-				context.caseIds,
-				context.userCaseSettings);
-
 			if (string.IsNullOrEmpty(sql))
 			{
 				return ret;
 			}
 
-			using (var con = new OleDbConnection(dsn))
-			{
-				using (var cmd = new OleDbCommand())
-				{
-					try
-					{
-						con.Open();
-						cmd.Connection = con;
-						cmd.CommandType = CommandType.Text;
-						cmd.CommandText = sqlCount;
-						cmd.CommandTimeout = 300;
-						var dr = cmd.ExecuteReader();
-						if (dr != null && dr.HasRows)
-						{
-							while (dr.Read())
-							{
-								var total = dr.SafeGetInteger("Total");
-								ret.Count = total;
-							}
-						}
+			//TODO: use when true server paging will be implemented
+			//var sqlCount = ReturnCaseSearchSqlCount(
+			//	context.f,
+			//	context.customerSetting,
+			//	customerUserSetting,
+			//	context.isFieldResponsibleVisible,
+			//	context.userId,
+			//	context.userUserId,
+			//	context.showNotAssignedWorkingGroups,
+			//	context.userGroupId,
+			//	context.gs,
+			//	context.s,
+			//	context.applicationType,
+			//	context.relatedCasesCaseId,
+			//	context.relatedCasesUserId,
+			//	context.caseIds,
+			//	context.userCaseSettings);
 
-						dr.Close();
-					}
-					finally
-					{
-						con.Close();
-					}
-				}
-			}
+			//using (var con = new OleDbConnection(dsn))
+			//{
+			//	using (var cmd = new OleDbCommand())
+			//	{
+			//		try
+			//		{
+			//			con.Open();
+			//			cmd.Connection = con;
+			//			cmd.CommandType = CommandType.Text;
+			//			cmd.CommandText = sqlCount;
+			//			cmd.CommandTimeout = 300;
+			//			var dr = cmd.ExecuteReader();
+			//			if (dr != null && dr.HasRows)
+			//			{
+			//				while (dr.Read())
+			//				{
+			//					var total = dr.SafeGetInteger("Total");
+			//					ret.Count = total;
+			//				}
+			//			}
+
+			//			dr.Close();
+			//		}
+			//		finally
+			//		{
+			//			con.Close();
+			//		}
+			//	}
+			//}
 
 			var workTimeCalculator = this.InitCalcFromSQL(dsn, sql, workTimeCalcFactory, now);
 
@@ -185,6 +186,7 @@ namespace DH.Helpdesk.Dal.Repositories
 						var dr = cmd.ExecuteReader();
 						if (dr != null && dr.HasRows)
 						{
+
 							while (dr.Read())
 							{
 								var doCalcTimeLeft = displayLeftTime || calculateRemainingTime;
@@ -395,6 +397,8 @@ namespace DH.Helpdesk.Dal.Repositories
 				}
 			}
 
+			var result = ret;
+
 			if (!string.IsNullOrEmpty(f.CaseClosingReasonFilter))
 			{
 				int closingReason;
@@ -412,11 +416,20 @@ namespace DH.Helpdesk.Dal.Repositories
 						}
 					}
 
-					return this.SortSearchResult(filtered, s);
+					result = filtered;
 				}
 			}
 
-			return this.SortSearchResult(ret, s);
+			result = SortSearchResult(result, s);
+
+			//TODO: refactor when true server paging will be implemented
+			result.Count = result.Items.Count;
+			if (f.PageInfo != null)
+			{
+				result.Items = result.Items.Skip(f.PageInfo.PageNumber * f.PageInfo.PageSize).Take(f.PageInfo.PageSize).ToList();
+			}
+
+			return result;
 		}
 
 		/// <summary>
@@ -887,7 +900,7 @@ namespace DH.Helpdesk.Dal.Repositories
 			
 			// ORDER BY ...
 			var orderBy = new List<string>();
-			var sort = s != null && !string.IsNullOrEmpty(s.SortBy) ? s.SortBy.Replace("_temporary_.", string.Empty) : string.Empty;
+			var sort = s != null && !string.IsNullOrEmpty(s.SortBy) ? s.SortBy.Replace("_temporary_", string.Empty) : string.Empty;
 
 			if (string.IsNullOrEmpty(sort))
 			{
@@ -1082,10 +1095,10 @@ namespace DH.Helpdesk.Dal.Repositories
 
 			sql.Add(string.Format("SELECT * FROM ( SELECT DISTINCT *, ROW_NUMBER() OVER ( ORDER BY {0} ) AS RowNum FROM ( SELECT {1} ) as tbl) as RowConstrainedResult", string.Join(" ", orderBy), string.Join(" ", subsql)));
 
-			if (f.PageInfo != null)
-			{
-				sql.Add(string.Format(" WHERE RowNum > {0} AND RowNum <= {1}", f.PageInfo.PageNumber * f.PageInfo.PageSize, f.PageInfo.PageNumber * f.PageInfo.PageSize + f.PageInfo.PageSize));
-			}
+			//if (f.PageInfo != null)
+			//{
+			//	sql.Add(string.Format(" WHERE RowNum > {0} AND RowNum <= {1}", f.PageInfo.PageNumber * f.PageInfo.PageSize, f.PageInfo.PageNumber * f.PageInfo.PageSize + f.PageInfo.PageSize));
+			//}
 
 			sql.Add(" ORDER BY RowNum");
 
