@@ -511,7 +511,8 @@ namespace DH.Helpdesk.Web.Controllers
                                          JsonGridSettingsMapper.ToJsonGridSettingsModel(
                                              SessionFacade.CaseOverviewGridSettings,
                                              SessionFacade.CurrentCustomer.Id,
-                                             m.CaseSetting.ColumnSettingModel.AvailableColumns.Count()),
+                                             m.CaseSetting.ColumnSettingModel.AvailableColumns.Count(),
+											 CaseColumnsSettingsModel.PageSizes.Select(x => x.Value).ToArray()),
                                      refreshContent = user.RefreshContent,
                                      messages = new Dictionary<string, string>()
                                                     {

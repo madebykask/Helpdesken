@@ -56,6 +56,7 @@
                                       {
                                           CustomerId = customerId,
                                           SelectedFontStyle = gridSettings.cls,
+										  SelectedPageSize = gridSettings.pageOptions.recPerPage,
                                           UserId = userId,
                                           AvailableColumns =
                                               this.caseSettingService

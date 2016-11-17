@@ -9,13 +9,14 @@
 
     public class JsonGridSettingsMapper
     {
-        public static JsonGridSettingsModel ToJsonGridSettingsModel(GridSettingsModel srcModel, int customerId, int availableColCount)
+        public static JsonGridSettingsModel ToJsonGridSettingsModel(GridSettingsModel srcModel, int customerId, int availableColCount, string[] pageSizeList)
         {
             return new JsonGridSettingsModel
             {
                 cls = srcModel.cls,
                 pageOptions = srcModel.pageOptions,
-                sortOptions = srcModel.sortOptions,
+				pageSizeList = pageSizeList,
+				sortOptions = srcModel.sortOptions,
                 HasAvailableColumns = availableColCount > 0,
                 columnDefs = srcModel.columnDefs.Select(it => new JsonGridColumnDef() 
                                     { cls = it.cls, 

@@ -150,8 +150,8 @@ function getCollapseCaption(cap) {
                 columns: columns,
                 order: [],
                 "bAutoWidth": false,
-                "lengthMenu": [[50, 250, 500], [50, 250, 500]],
-                "iDisplayLength": 50
+                "lengthMenu": [appSettings.gridSettings.pageSizeList, appSettings.gridSettings.pageSizeList],
+                "iDisplayLength": appSettings.gridSettings.pageOptions.recPerPage
             }, function (e, settings, techNote, message) {
                 console.log("An error has been reported by DataTable: ", message);
                 var textStatus = arguments[1];
