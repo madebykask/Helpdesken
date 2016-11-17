@@ -48,9 +48,7 @@
             EmailResponse res = emailsettings.Response;
             var sendTime = DateTime.Now;
 
-            var mailSendingSettings = this.emailSendingSettingsProvider.GetSettings();
-           
-            using (var smtpClient = new SmtpClient(mailSendingSettings.SmtpServer, mailSendingSettings.SmtpPort))
+            using (var smtpClient = new SmtpClient(emailsettings.SmtpSettings.Server, emailsettings.SmtpSettings.Port))
             {
                 if (!string.IsNullOrEmpty(emailsettings.SmtpSettings.UserName) && !string.IsNullOrEmpty(emailsettings.SmtpSettings.Pass))
                 {
