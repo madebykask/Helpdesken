@@ -427,6 +427,55 @@
                                         </div>
                                     }
 
+                                    @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()))
+                                    {
+                                        <div class="form-group row">
+                                            <label class="col-md-3">
+                                                @Translation.Get(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
+                                                @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
+                                                {
+                                                    <span class="mandatorystar">*</span>
+                                                }
+                                            </label>
+                                            <div class="col-md-9">
+                                                <select id="NewCase_Urgency_Id" name="NewCase.Urgency_Id">
+                                                    <option value="">&nbsp;</option>
+                                                    @if (Model.Urgencies != null)
+                                                    {
+                                                        foreach (var e in Model.Urgencies)
+                                                        {
+                                                            <option value="@e.Id">@e.Name</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Impact_Id.ToString()))
+                                    {
+                                        <div class="form-group row">
+                                            <label class="col-md-3">
+                                                @Translation.Get(GlobalEnums.TranslationCaseFields.Impact_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
+                                                @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Impact_Id.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
+                                                {
+                                                    <span class="mandatorystar">*</span>
+                                                }
+                                            </label>
+                                            <div class="col-md-9">
+                                                <select id="NewCase_Impact_Id" name="NewCase.Impact_Id">
+                                                    <option value="">&nbsp;</option>
+                                                    @if (Model.Impacts != null)
+                                                    {
+                                                        foreach (var e in Model.Impacts)
+                                                        {
+                                                            <option value="@e.Id">@e.Name</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                    }
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Category_Id.ToString()))
                                     {
                                         <div class="form-group row">
@@ -691,7 +740,7 @@
 
                                                 <table id="NewCasefiles_table" class="table table-striped">
                                                     <tbody>
-                                                        @if (this.Model.NewCase.CaseFiles == null)
+                                                        @if (Model.NewCase.CaseFiles == null)
                                                         {
                                                             <div id="no_uploaded_files_label">
                                                             </div>

@@ -11,7 +11,7 @@
 
  @{        
         int pCustomerId = -1;
-        var appType = System.Configuration.ConfigurationManager.AppSettings[AppSettingsKey.CurrentApplicationType].ToString().ToLower();
+        var appType = ConfigurationManager.AppSettings[AppSettingsKey.CurrentApplicationType].ToString().ToLower();
         
         if(SessionFacade.CurrentCustomer != null)
         {
@@ -207,8 +207,7 @@
                         {
                             <li class="blue">
                                 <a href="@Url.Action("Index", "Start", new { customerId = pCustomerId, area = "" })">
-                                    <i class="fa fa-home mnu-fa"></i><br />
-                                    @*<div class="ico-home"></div>*@
+                                    <i class="fa fa-home mnu-fa"></i><br />                                    
                                     @Translation.Get("Start", Enums.TranslationSource.TextTranslation)
                                 </a>
                             </li>
@@ -510,8 +509,7 @@
     </div>
    
     @RenderBody()
-    @RenderSection("Dialogs", false)
-    @*<script type="text/javascript" src="@Url.Content("~/Content/js/dhHelpdesk.js")"></script>*@    
+    @RenderSection("Dialogs", false)    
     @Scripts.Render("~/Content/js/helpdesk")
     @RenderSection("Scripts", false)
     <input type="hidden" value="@Request.RawUrl" id="rawUrl" />
