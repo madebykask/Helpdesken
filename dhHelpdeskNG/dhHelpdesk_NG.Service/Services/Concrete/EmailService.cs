@@ -92,8 +92,11 @@
 
             }
 
-            if (res.NumberOfTry != emailsettings.Response.NumberOfTry && res.NumberOfTry <= _MAX_NUMBER_SENDING_EMAIL)                            
-                res = this.SendEmail(from, recipient, mail, emailsettings);            
+            if (res.NumberOfTry != emailsettings.Response.NumberOfTry && res.NumberOfTry <= _MAX_NUMBER_SENDING_EMAIL)
+            {
+                emailsettings.Response.NumberOfTry = res.NumberOfTry;
+                res = this.SendEmail(from, recipient, mail, emailsettings);
+            }
 
             return res;
         }
