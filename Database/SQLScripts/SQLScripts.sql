@@ -18,6 +18,10 @@ begin
 end
 Go
 
+UPDATE [dbo].[tblCaseSettings]
+  SET [tblCaseName] = '_temporary_LeadTime'
+  WHERE [tblCaseName] = '_temporary_.LeadTime'
+Go
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.29'

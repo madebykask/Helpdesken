@@ -84,7 +84,7 @@
          /// <summary>
         /// List of fields that we use in case overview tabel but they does not exists in case
         /// </summary>
-        public static readonly HashSet<string> VirtualColumns = new HashSet<string> { "_temporary_.LeadTime", "tblProblem.ResponsibleUser_Id" };
+        public static readonly HashSet<string> VirtualColumns = new HashSet<string> { "_temporary_LeadTime", "tblProblem.ResponsibleUser_Id" };
 
         /// <summary>
         /// List of case names that we can not use in case overview grid

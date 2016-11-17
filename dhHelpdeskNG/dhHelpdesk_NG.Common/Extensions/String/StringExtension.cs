@@ -153,7 +153,7 @@ namespace DH.Helpdesk.Common.Extensions.String
                     case "workinggroup_id": str = "Driftgrupp"; break;
                     case "causingpart": str = "Rotorsak"; break;
                     case "closingreason": str = "Avslutsorsak"; break;
-                    case "_temporary_.leadtime": str = "Tid kvar"; break;
+                    case "_temporary_leadtime": str = "Tid kvar"; break;
                     case "tblproblem.responsibleuser_id": str = "Problem"; break;
                     case "change": str = "Ändringshantering"; break;
                     case "project": str = "Projekt"; break;
@@ -238,7 +238,7 @@ namespace DH.Helpdesk.Common.Extensions.String
                     case "workinggroup_id": str = "Working Group"; break;
                     case "causingpart": str = "Causing part"; break;
                     case "closingreason": str = "Closing reason"; break;
-                    case "_temporary_.leadtime": str = "Time left"; break;
+                    case "_temporary_leadtime": str = "Time left"; break;
                     case "tblproblem.responsibleuser_id": str = "Problem"; break;
                     case "change": str = "Change"; break;
                     case "project": str = "Project"; break;
