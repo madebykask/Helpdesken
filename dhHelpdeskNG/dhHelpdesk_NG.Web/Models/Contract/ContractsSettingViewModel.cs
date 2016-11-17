@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.Domain;
+﻿using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,8 @@ namespace DH.Helpdesk.Web.Models.Contract
 
     public class ContractsSettingViewModel
     {
+        private Customer customer;
+
 
         public ContractsSettingViewModel()
         {
@@ -39,6 +42,8 @@ namespace DH.Helpdesk.Web.Models.Contract
 
         public bool Required { get; set; }
 
+        public int VirtualOrder { get; set; }
+
         public static ContractsSettingRowViewModel CreateEmpty(string contractFieldId)
         {
             var ret = new ContractsSettingRowViewModel();
@@ -51,18 +56,88 @@ namespace DH.Helpdesk.Web.Models.Contract
             ret.ContractFieldLable_Eng = "";
 
             return ret;
-        }       
+        }
+
+        public void SetOrder()
+        {
+            switch (ContractField)
+            {
+                case EnumContractFieldSettings.Number:
+                    VirtualOrder = 1;                        
+                    break;
+
+                case EnumContractFieldSettings.CaseNumber:
+                    VirtualOrder = 2;
+                    break;
+
+                case EnumContractFieldSettings.Category:
+                    VirtualOrder = 3;
+                    break;
+
+                case EnumContractFieldSettings.Supplier:
+                    VirtualOrder = 4;
+                    break;
+
+                case EnumContractFieldSettings.Department:
+                    VirtualOrder = 5;
+                    break;
+
+                case EnumContractFieldSettings.ResponsibleUser:
+                    VirtualOrder = 6;
+                    break;
+
+                case EnumContractFieldSettings.StartDate:
+                    VirtualOrder = 7;
+                    break;
+
+                case EnumContractFieldSettings.EndDate:
+                    VirtualOrder = 8;
+                    break;
+
+                case EnumContractFieldSettings.NoticeDate:
+                    VirtualOrder = 9;
+                    break;
+
+                case EnumContractFieldSettings.Filename:
+                    VirtualOrder = 10;
+                    break;
+
+                case EnumContractFieldSettings.Other:
+                    VirtualOrder = 11;
+                    break;
+
+                case EnumContractFieldSettings.Running:
+                    VirtualOrder = 12;
+                    break;
+
+                case EnumContractFieldSettings.Finished:
+                    VirtualOrder = 13;
+                    break;
+
+                case EnumContractFieldSettings.FollowUpField:
+                    VirtualOrder = 14;
+                    break;
+
+                case EnumContractFieldSettings.ResponsibleFollowUpField:
+                    VirtualOrder = 15;
+                    break;
+
+                default:
+                    VirtualOrder = 0;
+                    break;
+            }
+        }
     }
 
-    public sealed class ContractFieldsViewModel
+    public sealed class ContractsIndexColumnsModel
     {
-        public ContractFieldsViewModel(Customer customer)
-        {
-            Data = new List<ContractsSettingRowViewModel>();
+        public ContractsIndexColumnsModel(Customer customer)
+        {           
             Customer = customer;
+            Columns = new List<ContractsSettingRowViewModel>();
         }
         public Customer Customer { get; private set; }
-        public List<ContractsSettingRowViewModel> Data { get; set; }
+        public List<ContractsSettingRowViewModel> Columns { get; set; }
     }
 
     public sealed class JSContractsSettingRowViewModel
@@ -86,4 +161,5 @@ namespace DH.Helpdesk.Web.Models.Contract
 
         public string LanguageId { get; set; }
     }
+
 }
