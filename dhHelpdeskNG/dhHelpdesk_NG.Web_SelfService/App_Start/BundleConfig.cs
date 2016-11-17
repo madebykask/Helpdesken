@@ -68,6 +68,9 @@
 
             bundles.Add(new ScriptBundle("~/Content/js/Faq/index").Include(
                          "~/Content/js/Faq/faq.js"));
+
+            bundles.Add(new ScriptBundle("~/Content/js/helpdesk").Include(
+                         "~/Content/js/dhHelpdesk.js"));
             #endregion
         }
     }
