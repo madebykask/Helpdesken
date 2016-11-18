@@ -49,29 +49,31 @@
         {
             var customerId = -1;
             TempData["ShowLanguageSelect"] = true;
-            SessionFacade.LastError = null;                        
-            if(filterContext.ActionParameters.Keys.Contains("customerId"))
-            {                
-                var customerIdPassed = filterContext.ActionParameters["customerId"];
-                if(customerIdPassed.ToString() != "")
-                    customerId = int.Parse(customerIdPassed.ToString());             
-            }
+            SessionFacade.LastError = null;
+            customerId = RetrieveCustomer(filterContext);
 
-            if (filterContext.ActionParameters.Keys.Contains("id"))
-            {                
-                var _guid = filterContext.ActionParameters["id"];                
-                if (_guid!= null && _guid.ToString() != string.Empty && GuidHelper.IsGuid(_guid.ToString()))
-                {                    
-                    var guid = new Guid(_guid.ToString());
-                    int? tempCustomerId = _masterDataService.GetCustomerIdByEMailGUID(guid);
-                    if (tempCustomerId != null && tempCustomerId > 0)
-                        customerId = tempCustomerId.Value;                 
-                } 
-            }
+            //if(filterContext.ActionParameters.Keys.Contains("customerId", StringComparer.OrdinalIgnoreCase))
+            //{                
+            //    var customerIdPassed = filterContext.ActionParameters["customerId"];
+            //    if(customerIdPassed.ToString() != "")
+            //        customerId = int.Parse(customerIdPassed.ToString());             
+            //}
+
+            //if (filterContext.ActionParameters.Keys.Contains("id"))
+            //{                
+            //    var _guid = filterContext.ActionParameters["id"];                
+            //    if (_guid!= null && _guid.ToString() != string.Empty && GuidHelper.IsGuid(_guid.ToString()))
+            //    {                    
+            //        var guid = new Guid(_guid.ToString());
+            //        int? tempCustomerId = _masterDataService.GetCustomerIdByEMailGUID(guid);
+            //        if (tempCustomerId != null && tempCustomerId > 0)
+            //            customerId = tempCustomerId.Value;                 
+            //    } 
+            //}
 
             if(SessionFacade.CurrentCustomer == null && customerId == -1)
             {             
-                ErrorGenerator.MakeError("Customer Id is empty!", 101);
+                ErrorGenerator.MakeError("Customer Id can''t be empty!", 101);
                 filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));             
                 return;
             }
@@ -82,7 +84,7 @@
             {                
                 var newCustomer = this._masterDataService.GetCustomer(customerId);
                 SessionFacade.CurrentCustomer = newCustomer;                
-                // Customer changed > clear sessions
+                // Customer changed then clear sessions
                 SessionFacade.CurrentCoWorkers = null;
             }
 
@@ -107,17 +109,17 @@
             if(filterContext.ActionParameters.Keys.Contains("languageId"))
             {
                 var languageIdPassed = filterContext.ActionParameters["languageId"];
-                if(languageIdPassed.ToString() != "")
+                if(!string.IsNullOrEmpty(languageIdPassed.ToString()))
                     SessionFacade.CurrentLanguageId = int.Parse(languageIdPassed.ToString());
             }
             else
             {
-                if(SessionFacade.CurrentCustomer != null &
-                   (SessionFacade.CurrentLanguageId == null || (SessionFacade.CurrentLanguageId != null && SessionFacade.CurrentLanguageId == 0)))
+                if(SessionFacade.CurrentCustomer != null & SessionFacade.CurrentLanguageId == 0)
                     SessionFacade.CurrentLanguageId = SessionFacade.CurrentCustomer.Language_Id;
             }
 
-            if (ConfigurationManager.AppSettings[AppSettingsKey.LoginMode].ToString().CleanSpaceAndLowStr() == LoginMode.SSO)
+            var loginMode = ConfigurationManager.AppSettings[AppSettingsKey.LoginMode].ToString().CleanSpaceAndLowStr();
+            if (loginMode == LoginMode.SSO)
             {
                 ClaimsPrincipal principal = User as ClaimsPrincipal;
 
@@ -181,7 +183,7 @@
                     if(string.IsNullOrEmpty(userIdentity.UserId))
                     {
                         SessionFacade.UserHasAccess = false;
-                        ErrorGenerator.MakeError("You don't have access to the portal. (User Id is not specified)", 101);
+                        ErrorGenerator.MakeError("You don't have access to the portal. (User Id is not specified)", 107);
                         filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
                         return;
                     }
@@ -247,7 +249,7 @@
                 }
             } // SSO Login
             else
-                if(ConfigurationManager.AppSettings[AppSettingsKey.LoginMode].ToString().ToLower() == LoginMode.Windows)
+                if(loginMode == LoginMode.Windows)
                 {                    
                     var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
                     SessionFacade.UserHasAccess = true;
@@ -266,7 +268,7 @@
                     SessionFacade.CurrentUserIdentity = ui;
                 }
                 else
-                    if (ConfigurationManager.AppSettings[AppSettingsKey.LoginMode].ToString().ToLower() == LoginMode.Anonymous)
+                    if (loginMode == LoginMode.Anonymous)
                     {
                         var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
                         SessionFacade.UserHasAccess = true;
@@ -288,7 +290,47 @@
             
             this.SetTextTranslation(filterContext);
         }
-        
+
+        private int RetrieveCustomer(ActionExecutingContext filterContext)
+        {
+            var ret = -1;
+
+            if (filterContext.ActionParameters.Keys.Contains("customerId", StringComparer.OrdinalIgnoreCase))
+            {
+                var customerIdPassed = filterContext.ActionParameters["customerId"];
+                if (!string.IsNullOrEmpty(customerIdPassed.ToString()))
+                {
+                    int tempId = 0;
+                    if (int.TryParse(customerIdPassed.ToString(), out tempId))
+                        ret = tempId;
+                    else
+                    {
+                        ErrorGenerator.MakeError("Customer Id not valid!", 105);
+                        filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
+                        return -1;
+                    }
+                }
+            }
+
+            if (filterContext.ActionParameters.Keys.Contains("id", StringComparer.OrdinalIgnoreCase))
+            {
+                var _id = filterContext.ActionParameters["id"];
+                if (_id != null)
+                {
+                    var _strId = _id.ToString();
+                    if (!string.IsNullOrEmpty(_strId) && GuidHelper.IsGuid(_strId))
+                    {
+                        var guid = new Guid(_strId);
+                        int? tempCustomerId = _masterDataService.GetCustomerIdByEMailGUID(guid);
+                        if (tempCustomerId != null && tempCustomerId > 0)
+                            ret = tempCustomerId.Value;
+                    }
+                }
+            }
+
+            return ret;
+        }
+
         public ActionResult ChangeLanguage(string language, string currentUrl, string lastParams)
         {
             if(SessionFacade.AllLanguages != null)
@@ -308,7 +350,7 @@
             }
 
             return Redirect(currentUrl);
-        }
+        }       
 
         private List<LanguageOverview> GetActiveLanguages()
         {
@@ -397,26 +439,26 @@
         }
     }
 
-    public class CustomAuthorize : AuthorizeAttribute
-    {
-        protected override bool AuthorizeCore(HttpContextBase httpContext)
-        {
-            if(httpContext == null)
-                throw new ArgumentNullException("httpContext");
+    //public class CustomAuthorize : AuthorizeAttribute
+    //{
+    //    protected override bool AuthorizeCore(HttpContextBase httpContext)
+    //    {
+    //        if(httpContext == null)
+    //            throw new ArgumentNullException("httpContext");
 
-            if(!httpContext.User.Identity.IsAuthenticated)
-                return false;
+    //        if(!httpContext.User.Identity.IsAuthenticated)
+    //            return false;
 
-            if(this.Roles.ToString() == string.Empty)
-                return true;
+    //        if(this.Roles.ToString() == string.Empty)
+    //            return true;
 
-            foreach(string userRole in this.Roles.ToString().Split(','))
-            {
-                if(GeneralExtensions.UserHasRole(SessionFacade.CurrentUser, userRole) == true)
-                    return true;
-            }
+    //        foreach(string userRole in this.Roles.ToString().Split(','))
+    //        {
+    //            if(GeneralExtensions.UserHasRole(SessionFacade.CurrentUser, userRole) == true)
+    //                return true;
+    //        }
 
-            return false;
-        }
-    }
+    //        return false;
+    //    }
+    //}
 }
