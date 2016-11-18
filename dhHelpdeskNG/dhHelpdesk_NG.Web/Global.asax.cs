@@ -72,6 +72,11 @@ namespace DH.Helpdesk.Web
 			return HttpContext.Current.Request.AppRelativeCurrentExecutionFilePath.Contains(@"/" + WebApiConfig.UrlPrefixRelative + @"/");
 		}
 
+		protected void Application_BeginRequest(object sender, EventArgs e)
+		{
+			Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture = this.configuration.Application.DefaultCulture;
+		}
+
 #if !DEBUG
         protected void Application_Error(object sender, EventArgs e)
         {
