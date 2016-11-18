@@ -109,6 +109,7 @@ using Log = DH.Helpdesk.Domain.Log;
                             TextInternal = l.Text_Internal,
                             UserId = l.User_Id,
                             WorkingTime = l.WorkingTime,
+							OverTime = l.OverTime,
                             CaseHistory = l.CaseHistory,
                             LogFiles = l.LogFiles,
                             User = l.User

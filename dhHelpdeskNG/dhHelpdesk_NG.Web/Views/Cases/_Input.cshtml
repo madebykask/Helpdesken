@@ -2109,8 +2109,37 @@
                             if (Model.CaseLock == null || (Model.CaseLock != null && !Model.CaseLock.IsLocked))
                             {
                                 @Html.Partial("_CaseLogInput", Model)
-                            }
-                        }
+							}
+							<div id="divExternalInvoice" style="@Model.ShowInvoiceFields.displayHtml()">
+								<h4>
+									@Translation.Get("Fakturor")
+								</h4>
+								<div class="row">
+									<div class="span12">
+										<table class="tableform">
+											<thead>
+												<tr>
+													<th class="span3">@Translation.Get("Fakturanummer", SessionFacade.CurrentCaseLanguageId)</th>
+													<th class="span4">@Translation.Get("Fakturapris", SessionFacade.CurrentCaseLanguageId)</th>
+													<th class="span5"></th>
+												</tr>
+											</thead>
+											<tr>
+												<td>
+													<input type="text" class="">
+												</td>
+												<td>
+													<input type="text" class="inputw100">
+													<a id="btnDeleteExternalInvoice0" class="btn bt-small" data-rowid="1111" title="Delete"><i class="icon-remove"></i></a>
+													<a id="btnAddExternalInvoice" class="btn bt-small" title="Add"><i class="icon-plus"></i></a>
+												</td>
+												<td></td>
+											</tr>
+										</table>
+									</div>
+								</div>
+							</div>
+						}
                     </div>
                 </div>
                 @if (Model.DynamicCase != null && Model.DynamicCase.ViewMode == 0)

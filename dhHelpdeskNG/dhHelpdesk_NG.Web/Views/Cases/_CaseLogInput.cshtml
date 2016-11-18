@@ -302,27 +302,48 @@
                         <th class="span5"></th>
                     </tr>
                 </thead>
-                <tr>
-                    <td>
-                        @Translation.Get("Tidsåtgång", SessionFacade.CurrentCaseLanguageId)
-                    </td>
-                    <td>
-                        <select id="CaseLog_WorkingTimeHour" name="CaseLog.WorkingTimeHour" class="inputw100">
-                            @for (var i = 0; i < 100; i++)
-                            {
-                                <option value="@i.ToString()" @i.IdIsSelected(Model.CaseLog.WorkingTimeHour.ToString()) >@i.ToString()</option>
-                            }
-                        </select>&nbsp;@Translation.Get("Tim")&nbsp; 
+	            <tr>
+		            <td>
+			            @Translation.Get("Tidsåtgång", SessionFacade.CurrentCaseLanguageId)
+		            </td>
+		            <td>
+			            <select id="CaseLog_WorkingTimeHour" name="CaseLog.WorkingTimeHour" class="inputw100">
+				            @for (var i = 0; i < 100; i++)
+				            {
+					            <option value="@i.ToString()" @i.IdIsSelected(Model.CaseLog.WorkingTimeHour.ToString())>@i.ToString()</option>
+				            }
+			            </select>&nbsp;@Translation.Get("Tim")&nbsp;
 
-                        <select id="CaseLog_WorkingTimeMinute" name="CaseLog.WorkingTimeMinute" class="inputw100">
-                            @for (var i = 0; i < 59; i = i + Model.MinWorkingTime)
-                            {
-                                <option value="@i.ToString()" @i.IdIsSelected(Model.CaseLog.WorkingTimeMinute.ToString()) >@i.ToString()</option>
-                            }
-                        </select>&nbsp;@Translation.Get("Min", SessionFacade.CurrentCaseLanguageId)
-                    </td>
-                    <td></td>
-                </tr>
+			            <select id="CaseLog_WorkingTimeMinute" name="CaseLog.WorkingTimeMinute" class="inputw100">
+				            @for (var i = 0; i < 59; i = i + Model.MinWorkingTime)
+				            {
+					            <option value="@i.ToString()" @i.IdIsSelected(Model.CaseLog.WorkingTimeMinute.ToString())>@i.ToString()</option>
+				            }
+			            </select>&nbsp;@Translation.Get("Min", SessionFacade.CurrentCaseLanguageId)
+		            </td>
+		            <td></td>
+	            </tr>
+				<tr>
+					<td>
+						@Translation.Get("Övertid", SessionFacade.CurrentCaseLanguageId)
+					</td>
+					<td>
+						<select id="CaseLog_OvertimeHour" name="CaseLog.OvertimeHour" class="inputw100">
+							@for (var i = 0; i < 100; i++)
+							{
+								<option value="@i.ToString()" @i.IdIsSelected(Model.CaseLog.OvertimeHour.ToString())>@i.ToString()</option>
+							}
+						</select>&nbsp;@Translation.Get("Tim")&nbsp;
+
+						<select id="CaseLog_OvertimeMinute" name="CaseLog.OvertimeMinute" class="inputw100">
+							@for (var i = 0; i < 59; i = i + Model.MinWorkingTime)
+							{
+								<option value="@i.ToString()" @i.IdIsSelected(Model.CaseLog.OvertimeMinute.ToString())>@i.ToString()</option>
+							}
+						</select>&nbsp;@Translation.Get("Min", SessionFacade.CurrentCaseLanguageId)
+					</td>
+					<td></td>
+				</tr>
                 <tr>
                     <td>
                         @Translation.Get("Material", SessionFacade.CurrentCaseLanguageId)

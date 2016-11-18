@@ -169,7 +169,8 @@
                     "~/Content/js/Cases/_input.js",
                     "~/Content/js/snippets/dropdown_fix.js",
                     "~/Content/js/Cases/case.templates.js",
-                    "~/Content/js/jsrender.min.js"));
+                    "~/Content/js/jsrender.min.js",
+					"~/Content/js/Cases/externalInvoice.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/cases/_caseLogFiles").Include("~/Content/js/Cases/_caseLogFiles.js"));
             bundles.Add(

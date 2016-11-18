@@ -247,7 +247,9 @@
                 || caseLog.Price != 0
                 || caseLog.WorkingTimeHour != 0
                 || caseLog.WorkingTimeMinute != 0
-                || caseLog.Id != 0
+				|| caseLog.OvertimeHour != 0
+				|| caseLog.OvertimeMinute != 0
+				|| caseLog.Id != 0
                 || noOfAttachedFiles > 0)
             {
                 var log = this.GetLogFromCaseLog(caseLog);
@@ -446,8 +448,9 @@
             log.Text_Internal = string.IsNullOrWhiteSpace(caseLog.TextInternal) ? string.Empty : caseLog.TextInternal;
             log.CaseHistory_Id = caseLog.CaseHistoryId; 
             log.WorkingTime = (caseLog.WorkingTimeHour * 60) + caseLog.WorkingTimeMinute;
+			log.OverTime = (caseLog.OvertimeHour * 60) + caseLog.OvertimeMinute;
 
-            return log;
+			return log;
         }
 
         private CaseLog GetCaseLogFromLog(Log l)
@@ -479,9 +482,11 @@
             log.TextInternal = string.IsNullOrWhiteSpace(l.Text_Internal) ? string.Empty : l.Text_Internal;
             log.CaseHistoryId = l.CaseHistory_Id;
             log.WorkingTimeHour = CalculateWorkingTimeHour(l.WorkingTime);
-            log.WorkingTimeMinute = CalculateWorkingTimeMinute(l.WorkingTime);  
+            log.WorkingTimeMinute = CalculateWorkingTimeMinute(l.WorkingTime);
+			log.OvertimeHour = CalculateWorkingTimeHour(l.OverTime);
+			log.OvertimeMinute = CalculateWorkingTimeMinute(l.OverTime);
 
-            return log;
+			return log;
         }
 
          

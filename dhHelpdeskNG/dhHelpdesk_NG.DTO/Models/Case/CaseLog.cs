@@ -41,7 +41,9 @@
         public string UserName { get; set; }
         public int WorkingTimeHour { get; set; }
         public int WorkingTimeMinute { get; set; }
-        public bool HighPriority { get; set; }
+		public int OvertimeHour { get; set; }
+		public int OvertimeMinute { get; set; }
+		public bool HighPriority { get; set; }
 
         /// <summary>
         /// checkbox value indicates send log to parent/child cases
