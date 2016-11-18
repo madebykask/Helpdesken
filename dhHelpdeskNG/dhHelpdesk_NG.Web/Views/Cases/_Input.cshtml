@@ -83,7 +83,7 @@
 
 </script>
 
-@Scripts.Render("~/bundles/invoices")
+
 @Scripts.Render("~/bundles/cases/_input")
 
 <script type="text/javascript">
@@ -993,8 +993,13 @@
                                                 @Html.HiddenFor(model => model.case_.ProductArea_Id, new { @class = "product-area-id" })
                                             </div>
                                             @if (Model.CustomerSettings.ModuleCaseInvoice && Model.InvoiceModel != null)
-                                            {                                                
-                                                @Html.Partial("_Invoice", Model.InvoiceModel)
+                                            {
+                                                if (Model.UserHasInvoicePermission)
+                                                {
+                                                     @Scripts.Render("~/bundles/invoices")
+                                                    @Html.Partial("_Invoice", Model.InvoiceModel)
+
+                                                }
                                             }
                                         </td>
                                     </tr>
@@ -1008,12 +1013,12 @@
                                                         <select id="case__System_Id" name="case_.System_Id">
                                                             <option value="">&nbsp;</option>
                                                             @if (Model.systems != null)
+                                                        {
+                                                            foreach (var e in Model.systems)
                                                             {
-                                                                foreach (var e in Model.systems)
-                                                                {
                                                                 <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.System_Id.ToString()) >@e.SystemName</option>
                                                                 }
-                                                            }
+                                                        }
                                                         </select>
                                              }
                                              else
@@ -1040,12 +1045,12 @@
                                                 <select id="case__Urgency_Id" name="case_.Urgency_Id">
                                                     <option value="">&nbsp;</option>
                                                     @if (Model.urgencies != null)
+                                                {
+                                                    foreach (var e in Model.urgencies)
                                                     {
-                                                        foreach (var e in Model.urgencies)
-                                                        {
                                                         <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Urgency_Id.ToString()) >@e.Name</option>
                                                         }
-                                                    }
+                                                }
                                                 </select>
                                              }
                                              else
@@ -1072,12 +1077,12 @@
                                                 <select id="case__Impact_Id" name="case_.Impact_Id">
                                                     <option value="">&nbsp;</option>
                                                     @if (Model.impacts != null)
+                                                {
+                                                    foreach (var e in Model.impacts)
                                                     {
-                                                        foreach (var e in Model.impacts)
-                                                        {
                                                         <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Impact_Id.ToString()) >@e.Name</option>
                                                         }
-                                                    }
+                                                }
                                                 </select>
                                             }
                                             else
@@ -1105,12 +1110,12 @@
                                                 <select id="case__Category_Id" name="case_.Category_Id">
                                                     <option value="">&nbsp;</option>
                                                     @if (Model.categories != null)
+                                                {
+                                                    foreach (var e in Model.categories.Where(e => e.IsActive == 1 || Model.case_.Category_Id == e.Id))
                                                     {
-                                                        foreach (var e in Model.categories.Where(e => e.IsActive == 1 || Model.case_.Category_Id == e.Id))
-                                                        {
                                                         <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Category_Id.ToString()) >@Translation.GetMasterDataTranslation(e.Name)</option>
                                                         }
-                                                    }
+                                                }
                                                 </select>
                                             }
                                             else
@@ -1122,7 +1127,7 @@
                                                     if (Model.case_.Category != null)
                                                     {
                                                         var transName = Translation.GetMasterDataTranslation(Model.case_.Category.Name);
-                                                        @Html.TextBoxFor(m => transName, new { @readonly = true })
+                                                @Html.TextBoxFor(m => transName, new { @readonly = true })
                                                        
                                                     }
                                                     else
@@ -1134,7 +1139,7 @@
                                                 else
                                                 {
                                                     var transName = Translation.GetMasterDataTranslation(category.Name);
-                                                     @Html.TextBoxFor(m => transName, new { @readonly = true })
+                                                @Html.TextBoxFor(m => transName, new { @readonly = true })
                                                      @Html.HiddenFor(x => x.case_.Category_Id)
                                                 }
                                             }
@@ -1143,13 +1148,13 @@
                                     <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Supplier_Id, CaseSolutionFields.Supplier)">
                                         <td>
                                             @if (Model.countries != null)
-                                            {
-                                                @Translation.Get("Land")<span>/</span>
+                                                {
+                                                    @Translation.Get("Land")<span>/</span>
                                             }
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Supplier_Id, "Leverantör")
                                         </td>
                                         @if (Model.countries != null)
-                                        {
+                                                {
                                             <td>
                                                 <select id="CountryId" name="CountryId" @(Model.EditMode == Enums.AccessMode.ReadOnly ? "disabled=true" : string.Empty)>
                                                     <option value="">&nbsp;</option>
@@ -1166,32 +1171,32 @@
                                                 <select id="case__Supplier_Id" name="case_.Supplier_Id">
                                                     <option value="">&nbsp;</option>
                                                    @if (Model.suppliers != null)
-                                                   {
-                                                       if (Model.CountryId != null)
-                                                       {
-                                                           if (Model.CountryId > 0)
-                                                           {
-                                                               foreach (var e in Model.suppliers.Where(e => e.IsActive == 1 || Model.case_.Supplier_Id == e.Id).Where(e => Model.CountryId.IntHasValue() && (e.Country_Id == Model.CountryId && e.Country_Id.HasValue)))
-                                                               {
+                                                {
+                                                    if (Model.CountryId != null)
+                                                    {
+                                                        if (Model.CountryId > 0)
+                                                        {
+                                                            foreach (var e in Model.suppliers.Where(e => e.IsActive == 1 || Model.case_.Supplier_Id == e.Id).Where(e => Model.CountryId.IntHasValue() && (e.Country_Id == Model.CountryId && e.Country_Id.HasValue)))
+                                                            {
                                                                     <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Supplier_Id.ToString()) >@e.Name</option>
                                                                }
-                                                           }
-                                                           else
-                                                           {
-                                                               foreach (var e in Model.suppliers.Where(e => e.IsActive == 1 || Model.case_.Supplier_Id == e.Id))
-                                                               {
+                                                        }
+                                                        else
+                                                        {
+                                                            foreach (var e in Model.suppliers.Where(e => e.IsActive == 1 || Model.case_.Supplier_Id == e.Id))
+                                                            {
                                                                     <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Supplier_Id.ToString()) >@e.Name</option>
                                                                }
-                                                           }
-                                                       }
-                                                       else
-                                                       {
-                                                           foreach (var e in Model.suppliers.Where(e => e.IsActive == 1 || Model.case_.Supplier_Id == e.Id))
-                                                           {
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        foreach (var e in Model.suppliers.Where(e => e.IsActive == 1 || Model.case_.Supplier_Id == e.Id))
+                                                        {
                                                                 <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Supplier_Id.ToString()) >@e.Name</option>
                                                            }
-                                                       }
-                                                   }
+                                                    }
+                                                }
                                                    
                                                 </select>
                                             }
@@ -1258,43 +1263,43 @@
                                         <td>
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Description, "Beskrivning")
                                             @if (Model.case_.RegistrationSource == 3)
-                                            {
-                                                var countTO = 0;
-                                                var countCC = 0;
-                                                var mailTO = "";
-                                                var mailCC = "";
-                                                var boldTO = false;
-                                                var boldCC = false;
-                                                if (Model.case_.Mail2Tickets.Any())
                                                 {
-                                                    foreach (var mail in Model.case_.Mail2Tickets)
+                                                    var countTO = 0;
+                                                    var countCC = 0;
+                                                    var mailTO = "";
+                                                    var mailCC = "";
+                                                    var boldTO = false;
+                                                    var boldCC = false;
+                                                    if (Model.case_.Mail2Tickets.Any())
                                                     {
-                                                        if (mail.Log_Id == null)
+                                                        foreach (var mail in Model.case_.Mail2Tickets)
                                                         {
-                                                            if (mail.Type == "to")
+                                                            if (mail.Log_Id == null)
                                                             {
-                                                                countTO = countTO + 1;
-                                                                mailTO = mailTO + mail.EMailAddress + "; ";
-
-                                                                if (mail.EMailAddress == Model.case_.Customer.HelpdeskEmail)
+                                                                if (mail.Type == "to")
                                                                 {
-                                                                    boldTO = true;
+                                                                    countTO = countTO + 1;
+                                                                    mailTO = mailTO + mail.EMailAddress + "; ";
+
+                                                                    if (mail.EMailAddress == Model.case_.Customer.HelpdeskEmail)
+                                                                    {
+                                                                        boldTO = true;
+                                                                    }
                                                                 }
-                                                            }
 
-                                                            if (mail.Type == "cc")
-                                                            {
-                                                                countCC = countCC + 1;
-                                                                mailCC = mailCC + mail.EMailAddress + "; ";
-
-                                                                if (mail.EMailAddress == Model.case_.Customer.HelpdeskEmail)
+                                                                if (mail.Type == "cc")
                                                                 {
-                                                                    boldCC = true;
+                                                                    countCC = countCC + 1;
+                                                                    mailCC = mailCC + mail.EMailAddress + "; ";
+
+                                                                    if (mail.EMailAddress == Model.case_.Customer.HelpdeskEmail)
+                                                                    {
+                                                                        boldCC = true;
+                                                                    }
                                                                 }
                                                             }
                                                         }
                                                     }
-                                                }
                                                 <div>
                                                     <table>
                                                         <tr>
@@ -1319,7 +1324,7 @@
                                                         </tr>
                                                         <tr>
                                                             @if (boldCC == true)
-                                                            {
+                                                {
                                                                 <td>
                                                                     <b>CC[@countCC]</b>&nbsp;&nbsp;&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@mailCC" data-expand-element="mailcc"></span>
                                                                 </td>
@@ -1359,7 +1364,7 @@
                                             {
                                                 @Html.TextAreaFor(model => model.case_.Description, new { rows = descriptionSize, @class = "case-description width90", @readonly = true })
                                             }
-                                            <span id="caseDescriptionPreview" 
+                                            <span id="caseDescriptionPreview"
                                                   rel="tooltip" 
                                                   class="icon-circle-arrow-up cursor-pointer" 
                                                   title="@Translation.Get("Förhandsgranska")"
@@ -1475,12 +1480,12 @@
                                                             <select id="case__Currency" name="case_.Currency" class="inputw100">
                                                                 <option value="">&nbsp;</option>
                                                                 @if (Model.currencies != null)
-                                                                {
-                                                                    foreach (var e in Model.currencies)
-                                                                    {
+                                                {
+                                                    foreach (var e in Model.currencies)
+                                                    {
                                                                     <option value="@e.Code" @e.Code.ValueIsSelected(Model.case_.Currency) >@e.Code</option>
                                                                     }
-                                                                }
+                                                }
                                                             </select>
                                                         </td>
                                                     }
@@ -2597,9 +2602,10 @@
 
     $('#divCase__WatchDate').datepicker({
         format: 'yyyy-mm-dd',
+        weekStart: 1,
         todayHighlight: true,
         clearBtn : true,
-        autoclose:true
+        autoclose:true,        
     });
 
 </script>

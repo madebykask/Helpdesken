@@ -10,7 +10,7 @@
         var supplierList = "#lstSuppliers";
         
         var rowIds = ['contractnumber', 'casenumber', 'contractcategory_id', 'supplier_id', 'department_id',
-                          'responsibleusername', 'contractstartdate', 'contractenddate', 'noticedate', 'info',
+                          'responsibleuser_id', 'contractstartdate', 'contractenddate', 'noticedate', 'info',
                           'running', 'finished', 'followupinterval', 'followupresponsibleuser_id', 'filename'];
 
         var getFilters = function () {

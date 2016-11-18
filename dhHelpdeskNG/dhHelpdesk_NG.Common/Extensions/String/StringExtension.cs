@@ -153,7 +153,7 @@ namespace DH.Helpdesk.Common.Extensions.String
                     case "workinggroup_id": str = "Driftgrupp"; break;
                     case "causingpart": str = "Rotorsak"; break;
                     case "closingreason": str = "Avslutsorsak"; break;
-                    case "_temporary_.leadtime": str = "Tid kvar"; break;
+                    case "_temporary_leadtime": str = "Tid kvar"; break;
                     case "tblproblem.responsibleuser_id": str = "Problem"; break;
                     case "change": str = "Ändringshantering"; break;
                     case "project": str = "Projekt"; break;
@@ -238,7 +238,7 @@ namespace DH.Helpdesk.Common.Extensions.String
                     case "workinggroup_id": str = "Working Group"; break;
                     case "causingpart": str = "Causing part"; break;
                     case "closingreason": str = "Closing reason"; break;
-                    case "_temporary_.leadtime": str = "Time left"; break;
+                    case "_temporary_leadtime": str = "Time left"; break;
                     case "tblproblem.responsibleuser_id": str = "Problem"; break;
                     case "change": str = "Change"; break;
                     case "project": str = "Project"; break;
@@ -315,6 +315,21 @@ namespace DH.Helpdesk.Common.Extensions.String
         {
             var nonNumericValue = string.Concat(value.Where(c => !char.IsDigit(c)));
             return nonNumericValue;
+        }
+
+        public static string RecoverStrFromJson(this string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return string.Empty;
+
+            var ret = value;
+            ret = ret.Replace("%3C", "<");            
+            return ret;
+        }
+
+        public static string QautationFix(this string value)
+        {
+            return value.Replace("″", "\"");
         }
     }
 }

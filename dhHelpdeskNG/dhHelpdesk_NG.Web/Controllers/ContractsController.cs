@@ -9,6 +9,7 @@ using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 using DH.Helpdesk.BusinessData.Models.Contract;
 using DH.Helpdesk.Domain;
+using DH.Helpdesk.Common.Enums;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -55,7 +56,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var filter = new ContractSelectedFilter();
 
-            model.Rows = GetIndexRowModel(customer.Id, filter);
+            model.Rows = GetIndexRowModel(customer.Id, filter, new ColSortModel(EnumContractFieldSettings.Number, true));
 
             model.ContractCategories = contractcategories.OrderBy(a => a.Name).ToList();
             model.Suppliers = suppliers.OrderBy(s => s.Name).ToList();
@@ -63,8 +64,7 @@ namespace DH.Helpdesk.Web.Controllers
            
             return this.View(model);
         }
-
-
+         
         public ActionResult New(int customerId)
         {
             var customer = this._customerService.GetCustomer(customerId);
@@ -257,17 +257,32 @@ namespace DH.Helpdesk.Web.Controllers
             return Json(new { state = true, message = Translation.GetCoreTextTranslation("Saved success!") }, JsonRequestBehavior.AllowGet);
         }
 
-        private ContractsIndexRowsModel GetIndexRowModel(int customerId, ContractSelectedFilter selectedFilter)
+        public ActionResult SortBy(int customerId, string colName, bool isAsc)
+        {
+            var model = GetIndexRowModel(customerId, null, new ColSortModel(colName, isAsc));
+            return PartialView("_ContractsIndexRows", model);
+        }
+
+        private ContractsIndexRowsModel GetIndexRowModel(int customerId, ContractSelectedFilter selectedFilter, ColSortModel sort)
         {
             var customer = _customerService.GetCustomer(customerId);
             var model = new ContractsIndexRowsModel(customer);           
             var allContracts = _contractService.GetContracts(customerId);
+            var settings = GetSettingsModel(customer.Id);
             var selectedContracts = new List<Contract>();
 
-            if (selectedFilter.SelectedContractCategories.Any())
+            if (selectedFilter != null && selectedFilter.SelectedContractCategories.Any())
             {
                
-            }        
+            }
+
+            model.Columns = settings.SettingRows.Where(s => s.ShowInList == true)
+                                                .ToList();
+
+            foreach (var col in model.Columns)
+                col.SetOrder();
+
+            model.Columns = model.Columns.OrderBy(s => s.VirtualOrder).ToList();
 
             foreach (var con in allContracts)
             {
@@ -290,7 +305,73 @@ namespace DH.Helpdesk.Web.Controllers
                 });
             }
 
+            model.Data = SortData(model.Data, sort);
+            model.SortBy = sort;
+                 
             return model;
+        }
+
+        private List<ContractsIndexRowModel> SortData(List<ContractsIndexRowModel> data, ColSortModel sort)
+        {
+            switch (sort.ColumnName)
+            {
+                case EnumContractFieldSettings.Number:
+                    return sort.IsAsc ? data.OrderBy(d => d.ContractNumber).ToList() : data.OrderByDescending(d => d.ContractNumber).ToList();
+
+                case EnumContractFieldSettings.CaseNumber:
+                    return sort.IsAsc ? data.OrderBy(d => d.CaseNumber).ToList() : data.OrderByDescending(d => d.CaseNumber).ToList();
+
+                case EnumContractFieldSettings.Category:
+                    return sort.IsAsc ? data.OrderBy(d => d.ContractCategory.Name).ToList() : data.OrderByDescending(d => d.ContractCategory.Name).ToList();
+
+                case EnumContractFieldSettings.Supplier:                   
+                    return sort.IsAsc ? data.OrderBy(t => t.Supplier != null && t.Supplier.Name != null
+                                         ? t.Supplier.Name : string.Empty).ToList() :
+                                        data.OrderByDescending(t => t.Supplier != null && t.Supplier.Name != null
+                                         ? t.Supplier.Name : string.Empty).ToList();
+
+                case EnumContractFieldSettings.Department:
+                    return sort.IsAsc ? data.OrderBy(d => d.Department.DepartmentName).ToList() : data.OrderByDescending(d => d.Department.DepartmentName).ToList();
+
+                case EnumContractFieldSettings.ResponsibleUser:
+                    return sort.IsAsc ? data.OrderBy(t => t.ResponsibleUser != null && t.ResponsibleUser.SurName != null
+                                         ? t.ResponsibleUser.SurName : string.Empty).ToList() : 
+                                        data.OrderByDescending(t => t.ResponsibleUser != null && t.ResponsibleUser.SurName != null
+                                         ? t.ResponsibleUser.SurName : string.Empty).ToList();
+
+                case EnumContractFieldSettings.StartDate:
+                    return sort.IsAsc ? data.OrderBy(d => d.ContractStartDate).ToList() : data.OrderByDescending(d => d.ContractStartDate).ToList();
+
+                case EnumContractFieldSettings.EndDate:
+                    return sort.IsAsc ? data.OrderBy(d => d.ContractEndDate).ToList() : data.OrderByDescending(d => d.ContractEndDate).ToList();
+
+                case EnumContractFieldSettings.NoticeDate:
+                    return sort.IsAsc ? data.OrderBy(d => d.NoticeDate).ToList() : data.OrderByDescending(d => d.NoticeDate).ToList();
+
+                //case EnumContractFieldSettings.Filename:
+                //    return sort.IsAsc ? data.OrderBy(d => d.).ToList() : data.OrderByDescending(d => d.).ToList();
+
+                case EnumContractFieldSettings.Other:
+                    return sort.IsAsc ? data.OrderBy(d => d.Info).ToList() : data.OrderByDescending(d => d.Info).ToList();
+
+                case EnumContractFieldSettings.Running:
+                    return sort.IsAsc ? data.OrderBy(d => d.Running).ToList() : data.OrderByDescending(d => d.Running).ToList();
+
+                case EnumContractFieldSettings.Finished:
+                    return sort.IsAsc ? data.OrderBy(d => d.Finished).ToList() : data.OrderByDescending(d => d.Finished).ToList();
+
+                case EnumContractFieldSettings.FollowUpField:
+                    return sort.IsAsc ? data.OrderBy(d => d.FollowUpInterval).ToList() : data.OrderByDescending(d => d.FollowUpInterval).ToList();
+
+                case EnumContractFieldSettings.ResponsibleFollowUpField:
+                    //return sort.IsAsc ? data.OrderBy(d => d.FollowUpResponsibleUser).ToList() : data.OrderByDescending(d => d.FollowUpResponsibleUser).ToList();
+                    return sort.IsAsc ? data.OrderBy(t => t.FollowUpResponsibleUser != null && t.FollowUpResponsibleUser.SurName != null
+                                        ? t.FollowUpResponsibleUser.SurName : string.Empty).ToList() :
+                                        data.OrderByDescending(t => t.FollowUpResponsibleUser != null && t.FollowUpResponsibleUser.SurName != null
+                                        ? t.FollowUpResponsibleUser.SurName : string.Empty).ToList();
+            }
+
+            return data;
         }
 
         private ContractsSettingViewModel GetSettingsModel(int customerId)

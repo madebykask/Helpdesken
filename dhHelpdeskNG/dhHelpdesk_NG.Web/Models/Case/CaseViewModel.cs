@@ -97,9 +97,10 @@
         public IList<Helpdesk.Domain.System> systems { get; set; }
         public IList<Urgency> urgencies { get; set; }        
         //public IEnumerable<CausingPartOverview> causingParts { get; set; }        
-        public List<SelectListItem> causingParts { get; set; }        
-        
-        
+        public List<SelectListItem> causingParts { get; set; }
+
+        public bool UserHasInvoicePermission { get; set; }
+
         /// <summary>
         /// user id for "Administrator" field
         /// </summary>
@@ -234,6 +235,8 @@
         public OutputFormatter OutFormatter { get; set; }
 
         public List<CaseTemplateButton> CaseTemplateButtons { get; set; }
+
+        public bool IsFollowUp { get; set; }
     }
 
     public class CaseIndexViewModel

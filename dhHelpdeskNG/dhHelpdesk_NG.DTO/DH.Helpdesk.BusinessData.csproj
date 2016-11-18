@@ -393,6 +393,7 @@
     <Compile Include="Models\Orders\Order\OrderHistoryFields\SupplierHistoryFields.cs" />
     <Compile Include="Models\Orders\Order\OrderHistoryFields\UserHistoryFields.cs" />
     <Compile Include="Models\Orders\Order\UpdateOrderRequest.cs" />
+    <Compile Include="Models\Paging\PageInfo.cs" />
     <Compile Include="Models\ProductArea\IProductAreaNameResolver.cs" />
     <Compile Include="Models\ProductArea\ProductAreaItem.cs" />
     <Compile Include="Models\Projects\Output\ProjectOverviewSorting.cs" />
@@ -451,6 +452,7 @@
     <Compile Include="Models\Shared\CustomSelectList.cs" />
     <Compile Include="Models\Shared\DateToDate.cs" />
     <Compile Include="Models\ReportService\ReportSelectedFilter.cs" />
+    <Compile Include="Models\Shared\Output\SearchResult.cs" />
     <Compile Include="Models\Shared\ItemDependentOverview.cs" />
     <Compile Include="Models\TextList.cs" />
     <Compile Include="Models\Interfaces\IHierarchyItem.cs" />

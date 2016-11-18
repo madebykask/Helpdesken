@@ -22,6 +22,7 @@
         CreateSubCasePermission,
         DocumentPermission,
         BulletinBoardPermission,
-        InventoryPermission
+        InventoryPermission,
+        InvoicePermission
     }
 }

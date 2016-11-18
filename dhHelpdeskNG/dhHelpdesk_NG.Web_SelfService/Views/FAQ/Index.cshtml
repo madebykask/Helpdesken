@@ -7,9 +7,9 @@
     ViewBag.Title = "FAQ";
     var treeViewStr = Model.FAQCategories.ConvertToHtml();
     var faqCategoriesTreeView = new MvcHtmlString(treeViewStr);    
-    var jsSerializer = new JavaScriptSerializer();
-    
+    var jsSerializer = new JavaScriptSerializer();    
 }
+
 <script type="text/javascript" >
     window.params = {
         hierarchyData : @Html.Raw(jsSerializer.Serialize(Model.FAQCategories)),
@@ -58,10 +58,9 @@
                             </tr>
                         </table>
                     </div>
-                    <div class="col-md-8">    
-                                           
+                    <div class="col-md-8">                                               
                         <div  class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                            @* Place to add FAQs*@
+                            @* Place to add FAQs *@
                         </div>    
                      </div>          
                 </div>

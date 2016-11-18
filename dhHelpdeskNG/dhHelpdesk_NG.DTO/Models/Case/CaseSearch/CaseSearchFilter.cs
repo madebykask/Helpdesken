@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Case
+﻿using DH.Helpdesk.BusinessData.Models.Paging;
+
+namespace DH.Helpdesk.BusinessData.Models.Case
 {
     using System;
 
@@ -88,6 +90,8 @@
 
         public int MaxTextCharacters { get; set; }
 
+        public PageInfo PageInfo { get; set; }
+
         public CaseSearchFilter Copy(CaseSearchFilter o)
         {
             var r = new CaseSearchFilter();
@@ -136,6 +140,7 @@
             r.SearchThruFiles = o.SearchThruFiles;
             r.CaseFilterFavorite = o.CaseFilterFavorite;
             r.MaxTextCharacters = o.MaxTextCharacters;
+            r.PageInfo = o.PageInfo;
 
             return r;
         }

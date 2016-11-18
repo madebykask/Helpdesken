@@ -317,7 +317,10 @@
                             @Translation.Get(GlobalEnums.TranslationCaseFields.Impact_Id.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
                         </label>
                         <div class="col-md-9">
-                            @Model.CasePreview.Impact_Id
+                            @if (Model.CasePreview.Impact != null)
+                            {
+                                @Model.CasePreview.Impact.Name
+                            }
                         </div>
                     </div>
                 }

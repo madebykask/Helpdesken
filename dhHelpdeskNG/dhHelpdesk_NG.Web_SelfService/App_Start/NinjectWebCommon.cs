@@ -207,6 +207,7 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IFaqFileRepository>().To<FaqFileRepository>();
             kernel.Bind<IFaqCategoryRepository>().To<FaqCategoryRepository>();
             kernel.Bind<IFaqCategoryLanguageRepository>().To<FaqCategoryLanguageRepository>();
+            kernel.Bind<IUrgencyRepository>().To<UrgencyRepository>();            
 
 
             // Service             
@@ -261,6 +262,7 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IBusinessRuleService>().To<BusinessRuleService>();
             kernel.Bind<IEmailGroupService>().To<EmailGroupService>();
             kernel.Bind<IFaqService>().To<FaqService>();
+            kernel.Bind<IUrgencyService>().To<UrgencyService>();            
 
             // Cache
             kernel.Bind<ICacheProvider>().To<CacheProvider>();

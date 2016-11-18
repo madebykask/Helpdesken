@@ -16,6 +16,7 @@ namespace DH.Helpdesk.Web.Models.Contract
         {
             Customer = customer;
             Rows = new ContractsIndexRowsModel(customer);
+            Columns = new ContractsIndexColumnsModel(customer);
         }
 
         public Customer Customer { get; private set; }
@@ -23,6 +24,9 @@ namespace DH.Helpdesk.Web.Models.Contract
         public List<Supplier> Suppliers { get; set; }
         public ContractsIndexRowsModel Rows { get; set; }
         public ContractsSettingViewModel Setting { get; set; }
+        public ContractsIndexColumnsModel Columns { get; set; }
+
+
     }
 
     public sealed class ContractsIndexRowModel
@@ -32,7 +36,10 @@ namespace DH.Helpdesk.Web.Models.Contract
         {
 
         }
+
         public int ContractId { get; set; }
+
+        public int CaseNumber { get; set; }
 
         public string ContractNumber { get; set; }
 
@@ -67,8 +74,27 @@ namespace DH.Helpdesk.Web.Models.Contract
         {
             Data = new List<ContractsIndexRowModel>();
             Customer = customer;
+            Columns = new List<ContractsSettingRowViewModel>();
         }
+        
         public Customer Customer { get; private set; }
         public List<ContractsIndexRowModel> Data { get; set; }
+        public List<ContractsSettingRowViewModel> Columns { get; set; }
+        public ColSortModel SortBy { get; set; } 
+
+    }
+
+    public sealed class ColSortModel
+    {
+        public ColSortModel(string columnName, bool isAsc)
+        {
+            ColumnName = columnName;
+            IsAsc = isAsc; 
+        }
+
+        public string ColumnName { get; private set; }
+        
+        public bool IsAsc { get; private set; }
+
     }
 }
