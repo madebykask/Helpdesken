@@ -66,6 +66,9 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.Common.Enums.CaseSolution;
     using DH.Helpdesk.Common.Enums.BusinessRule;
+    using Services.BusinessLogic.Admin.Users;
+    using Services.BusinessLogic.Mappers.Users;
+    using BusinessData.Enums.Admin.Users;
 
     public class CasesController : BaseController
     {        
@@ -162,8 +165,10 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ICaseInvoiceSettingsService caseInvoiceSettingsService;
 
         private readonly IReportServiceService _ReportServiceService;
-        
-         
+
+        private readonly IUserPermissionsChecker _userPermissionsChecker;
+
+
         #endregion
 
         #region ***Constructor***
@@ -229,7 +234,8 @@ namespace DH.Helpdesk.Web.Controllers
             ICaseInvoiceSettingsService CaseInvoiceSettingsService,
             ICausingPartService causingPartService,
             IInvoiceArticlesModelFactory invoiceArticlesModelFactory,
-            IReportServiceService reportServiceService)
+            IReportServiceService reportServiceService,
+            IUserPermissionsChecker userPermissionsChecker)
             : base(masterDataService)
         {
             this._masterDataService = masterDataService;
@@ -296,6 +302,7 @@ namespace DH.Helpdesk.Web.Controllers
             this._causingPartService = causingPartService;
             this._ReportServiceService = reportServiceService;
             this.invoiceArticlesModelFactory = invoiceArticlesModelFactory;
+            this._userPermissionsChecker = userPermissionsChecker;
         }
 
 		#endregion
@@ -3643,6 +3650,8 @@ namespace DH.Helpdesk.Web.Controllers
             m.MailTemplates = this._mailTemplateService.GetCustomMailTemplates(customerId).ToList();
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
 
+            var userHasInvoicePermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InvoicePermission);
+
             if (!isCreateNewCase)
             {
                 var markCaseAsRead = string.IsNullOrWhiteSpace(redirectFrom);
@@ -4294,7 +4303,8 @@ namespace DH.Helpdesk.Web.Controllers
             m.CaseTemplateTreeButton = this.GetCaseTemplateTreeModel(customerId, userId, CaseSolutionLocationShow.InsideTheCase);
 
             m.CasePrintView = new ReportModel(false);
-           
+
+            m.UserHasInvoicePermission = userHasInvoicePermission;
             return m;
         }
 

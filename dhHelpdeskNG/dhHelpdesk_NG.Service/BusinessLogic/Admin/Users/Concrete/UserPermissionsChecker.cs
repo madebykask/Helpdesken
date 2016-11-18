@@ -137,6 +137,11 @@
                 permissions.Add(UserPermission.InventoryPermission);
             }
 
+            if (user.InvoicePermission.ToBool())
+            {
+                permissions.Add(UserPermission.InvoicePermission);
+            }
+
             return permissions;
         }
 
