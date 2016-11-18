@@ -7,9 +7,10 @@
         public struct ScriptNames
         {
             public const string DynamicCase = "~/bundles/dynamic-case";
-			public const string AttributesValidation = "~/bundles/jqueryattrval";
-			public const string EditOrder = ("~/bundles/orders/orderedit");
-		}
+            public const string AttributesValidation = "~/bundles/jqueryattrval";
+            public const string EditOrder = ("~/bundles/orders/orderedit");
+            public const string InventoryUserSearch = ("~/bundles/inventory/inventorysearch");
+        }
 
         public static void RegisterBundles(BundleCollection bundles)
         {
@@ -172,7 +173,8 @@
                     "~/Content/js/Cases/_input.js",
                     "~/Content/js/snippets/dropdown_fix.js",
                     "~/Content/js/Cases/case.templates.js",
-                    "~/Content/js/jsrender.min.js"));
+                    "~/Content/js/jsrender.min.js",
+					"~/Content/js/Cases/externalInvoice.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/cases/_caseLogFiles").Include("~/Content/js/Cases/_caseLogFiles.js"));
             bundles.Add(
@@ -394,12 +396,15 @@
                 "~/Areas/Admin/Content/js/BusinessRule/businessRuleInput.js",
                 "~/Content/js/jquery.validate.unobtrusive.min.js"));
 
-			bundles.Add(new ScriptBundle(ScriptNames.AttributesValidation).Include(
-				"~/Content/js/Shared/custom.validation.reuiredifnotempty.js"));
-			bundles.Add(new ScriptBundle(ScriptNames.EditOrder).Include(
-				"~/Content/js/Orders/order.edit.js"));
+            #endregion
 
-			#endregion
-		}
+            bundles.Add(new ScriptBundle(ScriptNames.AttributesValidation).Include(
+                "~/Content/js/Shared/custom.validation.reuiredifnotempty.js"));
+            bundles.Add(new ScriptBundle(ScriptNames.EditOrder).Include(
+                "~/Content/js/Orders/order.edit.js"));
+            bundles.Add(new ScriptBundle(ScriptNames.InventoryUserSearch).Include(
+                "~/Content/js/Inventory/inventory.search.js"));
+
+        }
     }
 }

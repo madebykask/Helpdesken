@@ -333,14 +333,15 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             return file;
         }
 
-        [HttpGet]
-        public PartialViewResult SearchComputerUsers(string selected)
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult SearchComputerUsers(string query, string searchKey)
         {
             List<ComputerUserOverview> models = this.inventoryService.GetComputerUsers(
                 OperationContext.CustomerId,
-                selected);
+                query);
 
-            return this.PartialView("UserSelectDialog", models);
+            return Json(new { searchKey = searchKey, result = models });
         }
 
         [HttpGet]

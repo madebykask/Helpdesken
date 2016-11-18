@@ -857,6 +857,7 @@
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\UserEditModel.cs" />
     <Compile Include="Areas\Orders\OrdersAreaRegistration.cs" />
     <Content Include="Content\js\Contract\contractIndex.js" />
+    <Content Include="Content\js\Inventory\inventory.search.js" />
     <Content Include="Content\js\Shared\errors.js" />
     <Content Include="Content\js\Shared\jquery.customAjax.js" />
     <Content Include="Content\js\snippets\clickmultimenu_dropdown.js" />

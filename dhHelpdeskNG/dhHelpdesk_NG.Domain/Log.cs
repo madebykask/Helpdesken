@@ -16,7 +16,8 @@
         public int LogType { get; set; }
         public int? User_Id { get; set; }
         public int WorkingTime { get; set; }
-        public string RegUser { get; set; }
+		public int OverTime { get; set; }
+		public string RegUser { get; set; }
         public string Text_External { get; set; }
         public string Text_Internal { get; set; }
         public DateTime ChangeTime { get; set; }

@@ -46,7 +46,8 @@
             this.Property(l => l.InformCustomer).IsRequired();
             this.Property(l => l.FinishingDate).IsOptional();
             this.Property(l => l.WorkingTime).IsRequired();
-            this.Property(l => l.EquipmentPrice).IsRequired();
+			this.Property(l => l.OverTime).IsRequired();
+			this.Property(l => l.EquipmentPrice).IsRequired();
             this.Property(l => l.Price).IsRequired();
             this.Property(l => l.Charge).IsRequired();
             this.Property(l => l.Export).IsRequired();
