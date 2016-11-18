@@ -257,35 +257,6 @@ namespace DH.Helpdesk.Web.Controllers
             return Json(new { state = true, message = Translation.GetCoreTextTranslation("Saved success!") }, JsonRequestBehavior.AllowGet);
         }
 
-        //[HttpGet]
-        //public JsonResult Sort(int docType, int Id, string sortedColumn)
-        //{
-        //    //DocumentSearch ds = new DocumentSearch();
-            //if (SessionFacade.CurrentDocumentSearch == null)
-            //{
-            //    ds.Ascending = true;
-            //    ds.SortBy = "Name";
-            //}
-            //else
-            //{
-            //    ds = SessionFacade.CurrentDocumentSearch;
-            //    if (ds.SortBy == sortedColumn)
-            //        ds.Ascending = !ds.Ascending;
-            //    else
-            //        ds.SortBy = sortedColumn;
-            //}
-
-            //SessionFacade.CurrentDocumentSearch = ds;
-            //var documents = GetDocumentOverview(docType, Id);
-            //TreeContent treeView = (TreeContent)HttpContext.Application["TreeView"];
-            //HttpContext.Application["TreeView"] = treeView;
-
-            //ViewBag.SelectedCategory = Id;
-            //ViewBag.SelectedListType = docType;
-
-            //return this.Json(documents, JsonRequestBehavior.AllowGet);
-        //}
-
         public ActionResult SortBy(int customerId, string colName, bool isAsc)
         {
             var model = GetIndexRowModel(customerId, null, new ColSortModel(colName, isAsc));
@@ -304,7 +275,6 @@ namespace DH.Helpdesk.Web.Controllers
             {
                
             }
-
 
             model.Columns = settings.SettingRows.Where(s => s.ShowInList == true)
                                                 .ToList();
