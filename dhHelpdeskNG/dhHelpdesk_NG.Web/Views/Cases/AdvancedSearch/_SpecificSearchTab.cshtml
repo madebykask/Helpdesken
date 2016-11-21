@@ -166,24 +166,7 @@
                 }*@
 
                 @if (Model.ProductAreaList != null)
-                {
-                    <tr>
-                        <td>
-                            [Product Area List]
-                        </td>
-                        <td>
-                            <select id="productArea" name="productArea" class='chosen-single-select'>    
-                                <option> &nbsp; </option>
-                                @if (Model.NewProductAreaList != null)
-                                {
-                                    foreach (var productArea in Model.NewProductAreaList)
-                                    {                                                                                                           
-                                        <option value="@productArea.Value" @(productArea.Selected ? "Selected" : "")> @productArea.Text </option>
-                                    }
-                                }
-                            </select>
-                        </td>
-                    </tr>
+                {                    
                     <tr>
                         <td>
                             @Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)
