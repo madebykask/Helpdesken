@@ -479,6 +479,55 @@
             this.Update(notifierEntity);
         }
 
+        public Notifier GetInitiatorByUserId(string userId, int customerId)
+        {
+            var notifier = DataContext.ComputerUsers
+                                      .Where(cu => cu.Customer_Id == customerId &&
+                                                   cu.LogonName.ToLower() == userId.ToLower() &&
+                                                   cu.Status != 0).FirstOrDefault();
+            
+             
+            if (notifier == null)
+            {
+                notifier = DataContext.ComputerUsers
+                                      .Where(cu => cu.Customer_Id == customerId &&
+                                                   cu.UserId.ToLower() == userId.ToLower() &&
+                                                   cu.Status != 0).FirstOrDefault();
+            }
+
+            if (notifier != null)
+                return Notifier.CreateNew(
+                    customerId,
+                    notifier.UserId,
+                    notifier.Domain_Id,
+                    notifier.LogonName,
+                    notifier.FirstName,
+                    notifier.Initials,
+                    notifier.SurName,
+                    notifier.DisplayName,
+                    notifier.Location,
+                    notifier.Phone,
+                    notifier.Cellphone,
+                    notifier.Email,
+                    notifier.UserCode,
+                    notifier.PostalAddress,
+                    notifier.Postalcode,
+                    notifier.City,
+                    notifier.Title,
+                    notifier.Department_Id,
+                    string.Empty,
+                    notifier.OU_Id,
+                    notifier.CostCentre,
+                    notifier.Division_Id,
+                    notifier.ManagerComputerUser_Id,
+                    notifier.ComputerUserGroup_Id,
+                    string.Empty,
+                    false,
+                    true,
+                    notifier.RegTime);
+
+            return null;
+        }
         #endregion
 
         #region Methods

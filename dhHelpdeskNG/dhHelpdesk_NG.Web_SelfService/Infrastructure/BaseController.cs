@@ -256,6 +256,9 @@
                     SessionFacade.CurrentCoWorkers = null;
                     string fullName = identity.Name;
                     string userId = fullName.GetUserFromAdPath();
+                    if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings[AppSettingsKey.DefaultUserId]))
+                        userId = ConfigurationManager.AppSettings[AppSettingsKey.DefaultUserId].ToString();
+
                     string userDomain = fullName.GetDomainFromAdPath();                 
                     SessionFacade.CurrentSystemUser = userId;
                     var ui = new UserIdentity()
@@ -275,6 +278,8 @@
                         SessionFacade.CurrentCoWorkers = null;
                         string fullName = identity.Name;
                         string userId = fullName.GetUserFromAdPath();
+                        if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings[AppSettingsKey.DefaultUserId]))
+                            userId = ConfigurationManager.AppSettings[AppSettingsKey.DefaultUserId].ToString();
                         string userDomain = fullName.GetDomainFromAdPath();
 
                         SessionFacade.CurrentSystemUser = userId;
