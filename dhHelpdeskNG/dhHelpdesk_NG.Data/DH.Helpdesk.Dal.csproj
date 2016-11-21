@@ -40,10 +40,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DH.Helpdesk.Dal, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\DH.Helpdesk.Dal.dll</HintPath>
-    </Reference>
     <Reference Include="DH.Helpdesk.Services">
       <HintPath>..\dhHelpdesk_NG.Web_SelfService\Bin\DH.Helpdesk.Services.dll</HintPath>
     </Reference>
