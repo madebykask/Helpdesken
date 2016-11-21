@@ -28,6 +28,7 @@
     };
        
 </script>
+@*<script  src="~/Content/js/Case/edit.js"></script>*@
 
 @Scripts.Render("~/Content/js/Case/edit")
 
@@ -193,9 +194,9 @@
                                                     <option value="">&nbsp;</option>
                                                     @if (Model.Regions != null)
                                                     {
-                                                        foreach (var e in Model.Regions.Where(e => e.IsActive == 1))
+                                                        foreach (var e in Model.Regions.Where(e => e.IsActive != 0))
                                                         {
-                                                            <option value="@e.Id">@e.Name</option>
+                                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.NewCase.Region_Id.ToString())> @e.Name </option>
                                                         }
                                                     }
                                                 </select>
@@ -217,9 +218,9 @@
                                                     <option value="">&nbsp;</option>
                                                     @if (Model.Departments != null)
                                                     {
-                                                        foreach (var e in Model.Departments.Where(e => e.IsActive == 1))
+                                                        foreach (var e in Model.Departments.Where(e => e.IsActive != 0))
                                                         {
-                                                            <option value="@e.Id">@e.DepartmentName </option>
+                                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.NewCase.Department_Id.ToString()) >@e.DepartmentName </option>
                                                         }
                                                     }
                                                 </select>
@@ -242,9 +243,9 @@
                                                     <option value="">&nbsp;</option>
                                                     @if (Model.OrganizationUnits != null)
                                                     {
-                                                        foreach (var e in Model.OrganizationUnits.Where(e => e.IsActive == 1))
+                                                        foreach (var e in Model.OrganizationUnits.Where(e => e.IsActive != 0))
                                                         {
-                                                            <option value="@e.Id">@e.Name </option>
+                                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.NewCase.OU_Id.ToString())> @e.Name </option>
                                                         }
                                                     }
                                                 </select>

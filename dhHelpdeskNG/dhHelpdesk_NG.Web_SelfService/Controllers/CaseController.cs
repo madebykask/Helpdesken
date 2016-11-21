@@ -306,10 +306,10 @@
             model.ExLogFileGuid = Guid.NewGuid().ToString();
 
 
-            if(SessionFacade.CurrentUserIdentity != null)
-            {
-                var cs = _settingService.GetCustomerSetting(currentCustomer.Id);
+            var cs = _settingService.GetCustomerSetting(currentCustomer.Id);
 
+            if (SessionFacade.CurrentUserIdentity != null)
+            {                
                 model.NewCase = _caseService.InitCase(
                     currentCustomer.Id,
                     0,
@@ -356,8 +356,23 @@
                         model.NewCase.Performer_User_Id = caseTemplate.PerformerUser_Id.Value;
                     }
 
-                    model.NewCase.ReportedBy = caseTemplate.ReportedBy;
-                    model.NewCase.Department_Id = caseTemplate.Department_Id;
+                    var notifier = _computerService.GetInitiatorByUserId(SessionFacade.CurrentUserIdentity.UserId, customerId);
+
+                    model.NewCase.ReportedBy = string.IsNullOrEmpty(caseTemplate.ReportedBy)? notifier?.UserId : caseTemplate.ReportedBy;
+                    model.NewCase.PersonsName = string.IsNullOrEmpty(caseTemplate.PersonsName) ? 
+                                                    (cs.IsUserFirstLastNameRepresentation != 0 ? string.Format("{0} {1}", notifier?.FirstName, notifier?.LastName) :
+                                                                                                 string.Format("{0} {1}", notifier?.LastName, notifier?.FirstName))  :
+                                                    caseTemplate.PersonsName;
+
+                    model.NewCase.PersonsEmail = string.IsNullOrEmpty(caseTemplate.PersonsEmail) ? notifier?.Email: caseTemplate.PersonsEmail;
+                    model.NewCase.PersonsPhone = string.IsNullOrEmpty(caseTemplate.PersonsPhone) ? notifier?.Phone : caseTemplate.PersonsPhone;
+                    model.NewCase.PersonsCellphone = string.IsNullOrEmpty(caseTemplate.PersonsCellPhone) ? notifier?.CellPhone : caseTemplate.PersonsCellPhone;
+                    model.NewCase.Region_Id = caseTemplate.Region_Id;
+                    model.NewCase.Department_Id = caseTemplate.Department_Id.HasValue ? caseTemplate.Department_Id.Value : notifier?.DepartmentId;
+                    model.NewCase.OU_Id = caseTemplate.OU_Id.HasValue ? caseTemplate.OU_Id.Value : notifier?.OrganizationUnitId;
+                    model.NewCase.Place = string.IsNullOrEmpty(caseTemplate.Place) ? notifier?.Place : caseTemplate.Place;
+                    model.NewCase.UserCode = string.IsNullOrEmpty(caseTemplate.UserCode) ? notifier?.Code : caseTemplate.UserCode;
+                    
                     model.NewCase.ProductArea_Id = caseTemplate.ProductArea_Id;
                     model.NewCase.Caption = caseTemplate.Caption;
                     model.NewCase.Description = caseTemplate.Description;
@@ -385,6 +400,38 @@
                         model.CaseTypeParantPath = c.getCaseTypeParentPath();
                     }
                 }
+
+                if (model.NewCase.Department_Id.HasValue)
+                {
+                    if (!model.NewCase.Region_Id.HasValue)
+                    {
+                        var reg = _departmentService.GetDepartment(model.NewCase.Department_Id.Value);
+                        if (reg != null)
+                        {
+                            model.NewCase.Region_Id = reg.Region_Id;
+                            if (model.NewCase.Region_Id.HasValue)
+                                model.Departments = model.Departments.Where(d => d.Region_Id.HasValue && d.Region_Id == model.NewCase.Region_Id.Value).ToList();
+                        }
+                            
+                        var ous = _orgService.GetOUs(model.NewCase.Department_Id);
+                        model.OrganizationUnits = ous;
+                    }
+                    else
+                    {
+                        model.Departments = model.Departments.Where(d => d.Region_Id.HasValue && d.Region_Id == model.NewCase.Region_Id.Value).ToList();
+                        if (model.Departments.Select(d=> d.Id).Contains(model.NewCase.Department_Id.Value))
+                        {
+                            var ous = _orgService.GetOUs(model.NewCase.Department_Id.Value);
+                            model.OrganizationUnits = ous;
+                        }
+                    }
+                }
+                else
+                {
+                    if (model.NewCase.Region_Id.HasValue)                    
+                        model.Departments = model.Departments.Where(d => d.Region_Id.HasValue && d.Region_Id == model.NewCase.Region_Id.Value).ToList();                                        
+                }
+
             } // Load Case Template
 
             return View("NewCase", model);

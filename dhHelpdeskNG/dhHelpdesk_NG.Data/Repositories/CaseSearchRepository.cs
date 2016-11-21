@@ -1093,7 +1093,7 @@ namespace DH.Helpdesk.Dal.Repositories
 			}
 			subsql.Add(whereStatement);
 
-			sql.Add(string.Format("SELECT * FROM ( SELECT DISTINCT *, ROW_NUMBER() OVER ( ORDER BY {0} ) AS RowNum FROM ( SELECT {1} ) as tbl) as RowConstrainedResult", string.Join(" ", orderBy), string.Join(" ", subsql)));
+			sql.Add(string.Format("SELECT * FROM ( SELECT *, ROW_NUMBER() OVER ( ORDER BY {0} ) AS RowNum FROM ( SELECT DISTINCT {1} ) as tbl) as RowConstrainedResult", string.Join(" ", orderBy), string.Join(" ", subsql)));
 
 			//if (f.PageInfo != null)
 			//{
