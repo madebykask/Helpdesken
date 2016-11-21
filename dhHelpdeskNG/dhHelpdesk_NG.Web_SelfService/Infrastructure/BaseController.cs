@@ -50,30 +50,11 @@
             var customerId = -1;
             TempData["ShowLanguageSelect"] = true;
             SessionFacade.LastError = null;
-            customerId = RetrieveCustomer(filterContext);
-
-            //if(filterContext.ActionParameters.Keys.Contains("customerId", StringComparer.OrdinalIgnoreCase))
-            //{                
-            //    var customerIdPassed = filterContext.ActionParameters["customerId"];
-            //    if(customerIdPassed.ToString() != "")
-            //        customerId = int.Parse(customerIdPassed.ToString());             
-            //}
-
-            //if (filterContext.ActionParameters.Keys.Contains("id"))
-            //{                
-            //    var _guid = filterContext.ActionParameters["id"];                
-            //    if (_guid!= null && _guid.ToString() != string.Empty && GuidHelper.IsGuid(_guid.ToString()))
-            //    {                    
-            //        var guid = new Guid(_guid.ToString());
-            //        int? tempCustomerId = _masterDataService.GetCustomerIdByEMailGUID(guid);
-            //        if (tempCustomerId != null && tempCustomerId > 0)
-            //            customerId = tempCustomerId.Value;                 
-            //    } 
-            //}
+            customerId = RetrieveCustomer(filterContext);            
 
             if(SessionFacade.CurrentCustomer == null && customerId == -1)
             {             
-                ErrorGenerator.MakeError("Customer Id can''t be empty!", 101);
+                ErrorGenerator.MakeError("Customer Id can't be empty!", 101);
                 filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));             
                 return;
             }
@@ -118,7 +99,9 @@
                     SessionFacade.CurrentLanguageId = SessionFacade.CurrentCustomer.Language_Id;
             }
 
+            var appType = ConfigurationManager.AppSettings[AppSettingsKey.CurrentApplicationType].ToString().CleanSpaceAndLowStr();
             var loginMode = ConfigurationManager.AppSettings[AppSettingsKey.LoginMode].ToString().CleanSpaceAndLowStr();
+
             if (loginMode == LoginMode.SSO)
             {
                 ClaimsPrincipal principal = User as ClaimsPrincipal;
@@ -198,50 +181,53 @@
                         SessionFacade.CurrentUserIdentity = userIdentity;
                         SessionFacade.UserHasAccess = true;
 
-                        if(SessionFacade.CurrentCustomer != null && !string.IsNullOrEmpty(userIdentity.EmployeeNumber))
+                        if (appType == ApplicationTypes.LineManager)
                         {
-                            var config = (ECT.FormLib.Configurable.AccessManagment)System.Configuration.ConfigurationManager.GetSection("formLibConfigurable/accessManagment");
-                            var country = config.Countries.Where(x => x.HelpdeskCustomerId == SessionFacade.CurrentCustomer.Id.ToString()).FirstOrDefault();
-
-                            if (country == null || (country != null && !userIdentity.EmployeeNumber.StartsWith(country.EmployeePrefix)))
+                            if (SessionFacade.CurrentCustomer != null && !string.IsNullOrEmpty(userIdentity.EmployeeNumber))
                             {
-                                SessionFacade.UserHasAccess = false;
-                                SessionFacade.CurrentCoWorkers = new List<SubordinateResponseItem>();
+                                var config = (ECT.FormLib.Configurable.AccessManagment)System.Configuration.ConfigurationManager.GetSection("formLibConfigurable/accessManagment");
+                                var country = config.Countries.Where(x => x.HelpdeskCustomerId == SessionFacade.CurrentCustomer.Id.ToString()).FirstOrDefault();
 
-                                ErrorGenerator.MakeError("You don't have access to the portal. (User is not manager for country)", 103);
-                                filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
-                                return;
-                            }
-                        }
-
-                        if(SessionFacade.CurrentCoWorkers == null || (SessionFacade.CurrentCoWorkers != null && SessionFacade.CurrentCoWorkers.Count == 0))
-                        {
-                            if(string.IsNullOrEmpty(userIdentity.EmployeeNumber))
-                            {
-                                SessionFacade.UserHasAccess = false;
-
-                                ErrorGenerator.MakeError("You don't have access to the portal. (Employee Number is not specified)", 104);
-                                filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
-                                return;
-                            }
-                            else
-                            {
-                                var _amAPIService = new AMAPIService();
-                                var employee = AsyncHelpers.RunSync<APIEmployee>(() => _amAPIService.GetEmployeeFor(userIdentity.EmployeeNumber));
-
-
-                                if(employee.IsManager)
-                                {
-                                    SessionFacade.CurrentCoWorkers = employee.Subordinates;
-                                }
-                                else
+                                if (country == null || (country != null && !userIdentity.EmployeeNumber.StartsWith(country.EmployeePrefix)))
                                 {
                                     SessionFacade.UserHasAccess = false;
                                     SessionFacade.CurrentCoWorkers = new List<SubordinateResponseItem>();
 
-                                    ErrorGenerator.MakeError("You don't have access to the portal. (User is not manager)", 102);
+                                    ErrorGenerator.MakeError("You don't have access to the portal. (User is not manager for country)", 103);
                                     filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
                                     return;
+                                }
+                            }
+
+                            if (SessionFacade.CurrentCoWorkers == null || (SessionFacade.CurrentCoWorkers != null && SessionFacade.CurrentCoWorkers.Count == 0))
+                            {
+                                if (string.IsNullOrEmpty(userIdentity.EmployeeNumber))
+                                {
+                                    SessionFacade.UserHasAccess = false;
+
+                                    ErrorGenerator.MakeError("You don't have access to the portal. (Employee Number is not specified)", 104);
+                                    filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
+                                    return;
+                                }
+                                else
+                                {
+                                    var _amAPIService = new AMAPIService();
+                                    var employee = AsyncHelpers.RunSync<APIEmployee>(() => _amAPIService.GetEmployeeFor(userIdentity.EmployeeNumber));
+
+
+                                    if (employee.IsManager)
+                                    {
+                                        SessionFacade.CurrentCoWorkers = employee.Subordinates;
+                                    }
+                                    else
+                                    {
+                                        SessionFacade.UserHasAccess = false;
+                                        SessionFacade.CurrentCoWorkers = new List<SubordinateResponseItem>();
+
+                                        ErrorGenerator.MakeError("You don't have access to the portal. (User is not manager)", 102);
+                                        filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
+                                        return;
+                                    }
                                 }
                             }
                         }
