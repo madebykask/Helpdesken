@@ -87,6 +87,30 @@ namespace DH.Helpdesk.Dal.Repositories
 			{
 				context.f.FreeTextSearch = String.Empty;
 				context.f.CaseProgress = "2";
+                context.f.Department = String.Empty;
+                context.f.CaseType = 0;
+                context.f.Category = String.Empty;
+                context.f.Initiator = String.Empty;
+                context.f.OrganizationUnit = String.Empty;
+                context.f.Priority = String.Empty;
+                context.f.ProductArea = String.Empty;
+                context.f.Region = String.Empty;
+                context.f.WorkingGroup = String.Empty;
+                context.f.UserResponsible = String.Empty;
+                context.f.UserPerformer = String.Empty;
+                context.f.Status = String.Empty;
+                context.f.StateSecondary = String.Empty;
+                context.f.ReportedBy = String.Empty;
+                context.f.RegUserId = String.Empty;
+                context.f.User = String.Empty;
+                context.f.CaseRegistrationDateStartFilter = null;
+                context.f.CaseRegistrationDateEndFilter = null;
+                context.f.CaseWatchDateStartFilter = null;
+                context.f.CaseWatchDateEndFilter = null;
+                context.f.CaseClosingDateStartFilter = null;
+                context.f.CaseClosingDateEndFilter = null;
+                context.f.CaseClosingReasonFilter = String.Empty;
+                context.f.CaseRemainingTime = String.Empty;
 			}
 
 			var customerUserSetting = this._customerUserRepository.GetCustomerSettings(f.CustomerId, userId);

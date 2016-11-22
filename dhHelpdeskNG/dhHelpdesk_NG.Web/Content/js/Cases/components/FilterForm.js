@@ -543,19 +543,19 @@ FilterForm.prototype.onSearchClick = function () {
     var searchStr = me.$searchField.val();
     var caseFilterType = me.$caseFilterType.val();
     if (me.opt.onBeforeSearch()) {
-        if (searchStr.length > 0 && searchStr[0] === '#') {
+        if (searchStr.length > 1 && searchStr[0] === '#') {
             /// if looking by case number - set case state filter to "All"
             me.$caseFilterType.val(-1);
             /// and reset search filter
             me.$searchOnlyInMyCases.bootstrapSwitch('state', false);
             me.clear();
         }
-        if (searchStr.length == 1 && searchStr[0] === '#') {
+        if (searchStr.length <= 1 && searchStr[0] === '#') {
             /// - set case state filter to latest choice
             me.$caseFilterType.val(caseFilterType);
             /// and reset search filter
             me.$searchOnlyInMyCases.bootstrapSwitch('state', false);
-            me.clear();
+            //me.clear();
         }
         if (me.isFilterEmpty()) {
             $('#icoFilter').hide();
