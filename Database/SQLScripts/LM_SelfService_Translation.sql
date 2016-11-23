@@ -526,6 +526,10 @@ If not exists (select * from tblTextTranslation where text_id = 1706 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1706, 1, 'Internt svar')
 
 
-
+If not exists (select * from tbltext where id = 1709)
+	insert into tbltext (id, TextString, TextType) VALUES (1709, 'One or more mandatory fields were not filled in, please check the case.', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1709 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1709, 1, 'Ett eller flera obligatoriska fält! Var vänlig kontrollera i ärendet.')
 
 	

@@ -368,7 +368,7 @@
                                                         <span class="caret"></span>
                                                     </button>
                                                     <ul class="dropdown-menu">
-                                                        <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
+                                                        <li><a href="#" value="">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
                                                         @Html.CaseTypeDropdownButtonString(Model.CaseTypes)
                                                     </ul>
                                                     <input type="hidden" id="NewCase.CaseType_Id" name="NewCase.CaseType_Id" value="@Model.NewCase.CaseType_Id.supressZero()" />                                                
@@ -394,7 +394,7 @@
                                                         <span class="caret"></span>
                                                     </button>
                                                     <ul class="dropdown-menu">
-                                                        <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
+                                                        <li><a href="#" value="">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
                                                         @Html.ProductAreaDropdownButtonString(Model.ProductAreas)
                                                     </ul>
                                                     @Html.HiddenFor(model => model.NewCase.ProductArea_Id)
@@ -770,10 +770,11 @@
 <script type="text/javascript">     
     
     var $mainForm = $("#newCaseForm");
-    var requiredText = '@Translation.Get("must be specified", Enums.TranslationSource.TextTranslation)';
+    var requiredText = '@Translation.GetForJS("must be specified", Enums.TranslationSource.TextTranslation)';
 
     function SaveNewCase() {
-        if (!isFormValid()) {            
+        if (!isFormValid()) {  
+            ShowToastMessage('@Translation.GetForJS("One or more mandatory fields were not filled in, please check the case.", Enums.TranslationSource.TextTranslation)', "warning", false);
             return;
         }
 

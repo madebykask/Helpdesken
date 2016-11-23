@@ -2,29 +2,23 @@
 {
     using System;
     using System.IO;
-    using System.Web;
     using System.Web.Mvc;
     using System.Linq;
 
-    using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.SelfService.Infrastructure.Extensions;
     using DH.Helpdesk.SelfService.Models;
     using DH.Helpdesk.Common.Types;
     using System.Security.Claims;
     using DH.Helpdesk.BusinessData.Models.ADFS.Input;
-    using System.Configuration;
-    using DH.Helpdesk.Services.Services.Concrete;
+    using System.Configuration;    
     using DH.Helpdesk.SelfService.WebServices;
-
-    using System.Threading.Tasks;
     using DH.Helpdesk.SelfService.WebServices.Common;
     using System.Collections.Generic;
     using DH.Helpdesk.Common.Classes.ServiceAPI.AMAPI.Output;
     using DH.Helpdesk.BusinessData.Models.Language.Output;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
     using DH.Helpdesk.Common.Enums;
-    using DH.Helpdesk.BusinessData.Models.Error;
     using DH.Helpdesk.SelfService.Infrastructure.Common.Concrete;
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Common.Extensions.String;
@@ -288,8 +282,8 @@
 
             if (filterContext.ActionParameters.Keys.Contains("customerId", StringComparer.OrdinalIgnoreCase))
             {
-                var customerIdPassed = filterContext.ActionParameters["customerId"];
-                if (!string.IsNullOrEmpty(customerIdPassed.ToString()))
+                var customerIdPassed = filterContext.ActionParameters["customerId"];                
+                if (customerIdPassed != null && !string.IsNullOrEmpty(customerIdPassed.ToString()))
                 {
                     int tempId = 0;
                     if (int.TryParse(customerIdPassed.ToString(), out tempId))
@@ -429,27 +423,5 @@
             }
         }
     }
-
-    //public class CustomAuthorize : AuthorizeAttribute
-    //{
-    //    protected override bool AuthorizeCore(HttpContextBase httpContext)
-    //    {
-    //        if(httpContext == null)
-    //            throw new ArgumentNullException("httpContext");
-
-    //        if(!httpContext.User.Identity.IsAuthenticated)
-    //            return false;
-
-    //        if(this.Roles.ToString() == string.Empty)
-    //            return true;
-
-    //        foreach(string userRole in this.Roles.ToString().Split(','))
-    //        {
-    //            if(GeneralExtensions.UserHasRole(SessionFacade.CurrentUser, userRole) == true)
-    //                return true;
-    //        }
-
-    //        return false;
-    //    }
-    //}
+    
 }

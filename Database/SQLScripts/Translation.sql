@@ -5168,5 +5168,8 @@ If not exists (select * from tblTextTranslation where Text_Id = 1708 and Languag
             insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1708, '(You can only choose the size wide for a maximum of 3 columns).', 2)
 GO
 
+/* Notice:  1709 reserved for SelfService */
+
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
