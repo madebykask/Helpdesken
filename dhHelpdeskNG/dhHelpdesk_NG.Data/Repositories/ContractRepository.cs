@@ -66,7 +66,7 @@ namespace DH.Helpdesk.Dal.Repositories
                     ContractGUID = contractModel.ContractGUID
                 };
 
-                this.DbContext.Contracts.Add(contractEntity);
+                this.DbContext.Contracts.Add(contractEntity);                
                 this.InitializeAfterCommit(contractModel, contractEntity);
             }
             else
@@ -90,11 +90,11 @@ namespace DH.Helpdesk.Dal.Repositories
                 contractEntity.NoticeDate = contractModel.NoticeDate;                
                 contractEntity.ChangedDate = contractModel.ChangedDate;
                 
-            }           
+            }
         }
         public void DeleteContract(Contract contract)
         {
-            this.DbContext.Contracts.Remove(contract);
+            this.DbContext.Contracts.Remove(contract);           
         }
     }
 
@@ -172,15 +172,53 @@ namespace DH.Helpdesk.Dal.Repositories
 
     #region CONTRACTHISTORY
 
-    public interface IContractHistoryRepository : IRepository<ContractHistory>
+    public interface IContractHistoryRepository : INewRepository
     {
+        void SaveContractHistory(ContractInputModel contract);
+        void DeleteContractHistory(Contract contract);
     }
 
-    public class ContractHistoryRepository : RepositoryBase<ContractHistory>, IContractHistoryRepository
+    public class ContractHistoryRepository : Repository, IContractHistoryRepository
     {
         public ContractHistoryRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
+        }
+
+        public void SaveContractHistory(ContractInputModel contract)
+        {           
+            var contractHistoryEntity = new ContractHistory()
+            {
+                Contract_Id = contract.Id,
+                ContractNumber = contract.ContractNumber,
+                ContractCategory_Id = contract.CategoryId,
+                ResponsibleUser_Id = contract.ResponsibleUserId,
+                Supplier_Id = contract.SupplierId,
+                Department_Id = contract.DepartmentId,
+                ContractStartDate = contract.ContractStartDate,
+                ContractEndDate = contract.ContractEndDate,
+                NoticeDate = contract.NoticeDate,
+                NoticeTime = contract.NoticeTime,
+                Finished = contract.Finished ? 1 : 0,
+                FollowUpInterval = contract.FollowUpInterval,
+                FollowUpResponsibleUser_Id = contract.FollowUpResponsibleUserId,
+                Running = contract.Running ? 1 : 0,
+                Info = contract.Other,
+                CreatedDate = DateTime.UtcNow,
+                CreatedByUser_Id = contract.ChangedByUser_Id
+            };
+            
+            this.DbContext.ContractHistories.Add(contractHistoryEntity);
+            this.InitializeAfterCommit(contract, contractHistoryEntity);
+        }
+
+        public void DeleteContractHistory(Contract contract)
+        {            
+            var contractHistories = this.DbContext.ContractHistories.Where(c => c.Contract_Id == contract.Id).ToList();
+            foreach (var contractHistory in contractHistories)
+            {
+                this.DbContext.ContractHistories.Remove(contractHistory);
+            }
         }
     }
 

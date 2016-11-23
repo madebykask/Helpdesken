@@ -1,8 +1,6 @@
 ﻿
 @using System.Web.Optimization
 @model DH.Helpdesk.Web.Models.Contract.ContractsSettingViewModel
-
-@*@Scripts.Render("~/bundles/notifiers/settings")**@
            
 <script type="text/javascript">
     var settingsViewParameters = { settingsUrl: '@Url.Action("Settings")' };
@@ -16,18 +14,7 @@
         $('.switchcheckbox').bootstrapSwitch('onColor', 'success');
     });
 
-    //$(function() {
-    //    applySettingsViewBehavior(settingsViewParameters);
-    //});
-
 </script>
-
-@*<div id="settings_container">
-    @using (Ajax.BeginForm("Settings", null, new AjaxOptions { UpdateTargetId = "fragment-1" }, new { id = "settings_form" }))
-    {
-        @Html.EditorFor(m => m)
-    }
-</div>*@
 
 <div class="secnavs fixed">
     <div class="pull-left">                

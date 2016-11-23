@@ -17,6 +17,7 @@
         List<ContractsSettingRowModel> GetContractsSettingRows(int customerId);
         void SaveContractSettings(List<ContractsSettingRowModel> ContractSettings);
         int SaveContract(ContractInputModel contract);
+        void SaveContractHistory(ContractInputModel contract);
         void DeleteContract(Contract contract);
 
 
@@ -31,15 +32,18 @@
     public class ContractService : IContractService
     {
         private readonly IContractRepository _contractRepository;
+        private readonly IContractHistoryRepository _contractHistoryRepository;
         private readonly IContractFieldSettingsRepository _contractFieldSettingsRepository;
         private readonly IUnitOfWork _unitOfwork;
 
         public ContractService(
             IContractRepository contractRepository,
+            IContractHistoryRepository contractHistoryRepository,
             IContractFieldSettingsRepository contractFieldSettingsRepository,
             IUnitOfWork unitOfWork)
         {
             this._contractRepository = contractRepository;
+            this._contractHistoryRepository = contractHistoryRepository;
             this._contractFieldSettingsRepository = contractFieldSettingsRepository;
             this._unitOfwork = unitOfWork;
         }
@@ -114,19 +118,49 @@
 
             if (contract.ResponsibleUserId == 0)
                 contract.ResponsibleUserId = null;
-           
+
+            if (contract.FollowUpResponsibleUserId == 0)
+                contract.FollowUpResponsibleUserId = null;
+
             if (contract.Id == 0)            
                 contract.ContractGUID = Guid.NewGuid();
 
             this._contractRepository.SaveContract(contract);
-
-            this._contractRepository.Commit();
+            this._contractRepository.Commit();           
 
             return contract.Id;
         }
 
+        public void SaveContractHistory(ContractInputModel contract)
+        {
+            if (contract == null)
+                throw new ArgumentNullException("Contract");
+
+            if (contract.ContractNumber == null)
+                contract.ContractNumber = string.Empty;
+
+            if (contract.SupplierId == 0)
+                contract.SupplierId = null;
+
+            if (contract.DepartmentId == 0)
+                contract.DepartmentId = null;
+
+            if (contract.ResponsibleUserId == 0)
+                contract.ResponsibleUserId = null;
+
+            if (contract.FollowUpResponsibleUserId == 0)
+                contract.FollowUpResponsibleUserId = null;
+
+            this._contractHistoryRepository.SaveContractHistory(contract);
+            this._contractHistoryRepository.Commit();
+        }
+
+
         public void DeleteContract(Contract contract)
         {
+            this._contractHistoryRepository.DeleteContractHistory(contract);
+            this._contractHistoryRepository.Commit();
+
             this._contractRepository.DeleteContract(contract);
             this._contractRepository.Commit();
         }

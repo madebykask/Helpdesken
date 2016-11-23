@@ -166,48 +166,16 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]
         public ActionResult Save(ContractViewInputModel contractInput, string actiontype)
         {
-              if (contractInput != null)
-                {
-                    var contractInputToSave = new ContractInputModel
-                        (
-                         contractInput.ContractId,
-                         SessionFacade.CurrentCustomer.Id,
-                         SessionFacade.CurrentUser.Id,
-                         contractInput.CategoryId,
-                         contractInput.SupplierId,
-                         contractInput.DepartmentId,
-                         contractInput.ResponsibleUserId,
-                         contractInput.FollowUpResponsibleUserId,
-                         contractInput.ContractNumber,
-                         contractInput.ContractStartDate,
-                         contractInput.ContractEndDate,
-                         contractInput.NoticeTimeId,
-                         contractInput.Finished,
-                         contractInput.Running,
-                         contractInput.FollowUpIntervalId,
-                         contractInput.Other,
-                         contractInput.NoticeDate,
-                         DateTime.Now,
-                         DateTime.Now,
-                         Guid.Empty
-                        );
+            var cId = this.Save(contractInput);
 
-                    var cId = this._contractService.SaveContract(contractInputToSave);
-                    if (actiontype != "Spara och stäng")
-                    {
-             
-                    return this.RedirectToAction("Edit", "Contracts", new { id = cId });
-                    }
+                if (actiontype != "Spara och stäng")
+                    {             
+                     return this.RedirectToAction("Edit", "Contracts", new { id = cId });
+                    }                        
 
-                    else
-                        return RedirectToAction("index", "Contracts");
-                }
-            
-            
-
-                return RedirectToAction("index", "Contracts");
-            
+                return RedirectToAction("index", "Contracts");            
         }
+
         [HttpPost]
         public JsonResult SaveContractFieldsSetting(JSContractsSettingRowViewModel[] contractSettings)
         {
@@ -401,7 +369,46 @@ namespace DH.Helpdesk.Web.Controllers
 
 
         }
-        
+
+
+
+
+        private int Save(ContractViewInputModel contractInput)
+        {
+            var cId = 0;
+            if (contractInput != null)
+            {
+                var contractInputToSave = new ContractInputModel
+                    (
+                     contractInput.ContractId,
+                     SessionFacade.CurrentCustomer.Id,
+                     SessionFacade.CurrentUser.Id,
+                     contractInput.CategoryId,
+                     contractInput.SupplierId,
+                     contractInput.DepartmentId,
+                     contractInput.ResponsibleUserId,
+                     contractInput.FollowUpResponsibleUserId,
+                     contractInput.ContractNumber,
+                     contractInput.ContractStartDate,
+                     contractInput.ContractEndDate,
+                     contractInput.NoticeTimeId,
+                     contractInput.Finished,
+                     contractInput.Running,
+                     contractInput.FollowUpIntervalId,
+                     contractInput.Other,
+                     contractInput.NoticeDate,
+                     DateTime.Now,
+                     DateTime.Now,
+                     Guid.Empty
+                    );
+
+                cId = this._contractService.SaveContract(contractInputToSave);
+            }
+
+            return cId;
+        }
+
+
         //
         // GET: /Contract/Details/5
 
@@ -443,14 +450,15 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var contractFields = this.GetSettingsModel(SessionFacade.CurrentCustomer.Id);
             var contract = this._contractService.GetContract(id);
-            var changedbyUser = this._userService.GetUser(contract.ChangedByUser_Id);
+            
 
             if (contract == null)
                 return new HttpNotFoundResult("No contract found...");
+            else {
+                var changedbyUser = this._userService.GetUser(contract.ChangedByUser_Id);
+                // Convert contract entity to input model
 
-            // Convert contract entity to input model
-
-            var contractEditInput = CreateInputViewModel(SessionFacade.CurrentCustomer.Id);
+                var contractEditInput = CreateInputViewModel(SessionFacade.CurrentCustomer.Id);
 
                 contractEditInput.ContractId = contract.Id;
                 contractEditInput.CategoryId = contract.ContractCategory_Id;
@@ -472,6 +480,7 @@ namespace DH.Helpdesk.Web.Controllers
                 contractEditInput.ChangedDate = contract.ChangedDate.ToShortDateString();
 
                 return this.View(contractEditInput);
+            }
         }
 
 
@@ -479,43 +488,22 @@ namespace DH.Helpdesk.Web.Controllers
         // POST: /Contract/Edit/5
 
         [HttpPost]
-        public ActionResult Edit(int id, ContractViewInputModel contractInput)
+        public ActionResult Edit(int id, ContractViewInputModel contractInput , string actiontype)
         {
             try
-            {
-                var existingContract = this._contractService.GetContract(id);
-                // TODO: Add update logic here
- 
-                var contractInputToSave = new ContractInputModel
-                   (
-                    contractInput.ContractId,
-                    SessionFacade.CurrentCustomer.Id,
-                    SessionFacade.CurrentUser.Id,
-                    contractInput.CategoryId,
-                    contractInput.SupplierId,
-                    contractInput.DepartmentId,
-                    contractInput.ResponsibleUserId,
-                    contractInput.FollowUpResponsibleUserId,
-                    contractInput.ContractNumber,
-                    contractInput.ContractStartDate,
-                    contractInput.ContractEndDate,
-                    contractInput.NoticeTimeId,
-                    contractInput.Finished,
-                    contractInput.Running,
-                    contractInput.FollowUpIntervalId,
-                    contractInput.Other,
-                    contractInput.NoticeDate,
-                    existingContract.CreatedDate,
-                    DateTime.Now,
-                    existingContract.ContractGUID
-                   );
-                var cId = this._contractService.SaveContract(contractInputToSave);
+            {                
+                var cId = Save(contractInput);
 
-                return this.RedirectToAction("Edit", "Contracts", new { id = cId });
+                if (actiontype != "Spara och stäng")
+                {
+                    return this.RedirectToAction("Edit", "Contracts", new { id = cId });
+                }
+                else
+                    return this.RedirectToAction("index", "Contracts");
             }
-            catch
+            catch (Exception ex)
             {
-                return this.RedirectToAction("index", "Contracts", new { id = id });
+                return this.RedirectToAction("index", "Contracts");
             }
         }
 

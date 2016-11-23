@@ -652,8 +652,9 @@
             modelBuilder.Configurations.Add(new ComputerTypeConfiguration());
             modelBuilder.Configurations.Add(new ContractCategoryConfiguration());
             modelBuilder.Configurations.Add(new ContractConfiguration());
+            modelBuilder.Configurations.Add(new ContractHistoryConfiguration());
             modelBuilder.Configurations.Add(new ContractFieldSettingConfiguration());
-            modelBuilder.Configurations.Add(new CountryConfiguration());
+            modelBuilder.Configurations.Add(new CountryConfiguration());            
             modelBuilder.Configurations.Add(new CurrencyConfiguration());
             modelBuilder.Configurations.Add(new CustomerConfiguration());
             modelBuilder.Configurations.Add(new CustomerUserConfiguration());

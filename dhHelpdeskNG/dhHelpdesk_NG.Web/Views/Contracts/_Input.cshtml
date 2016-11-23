@@ -6,15 +6,6 @@
 
 @{ var row = new ContractsSettingRowViewModel(); }
 
-
-
-@*<div class="secnavs fixed">
-    <div class="pull-left">
-        <ul class="secnav">
-            <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "new", new { @class = "btn" })</li>
-        </ul>                                      
-        </div>   
-</div>*@
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
@@ -182,10 +173,10 @@
                             }
                         </tr>
                         <tr>
-                          @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.Responsible).FirstOrDefault();
+                          @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.ResponsibleUser).FirstOrDefault();
                                 if (row == null)
                                 {
-                                    row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.Responsible);
+                                    row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.ResponsibleUser);
                                     row.ContractFieldLable = Translation.Get("Ansvarig", Enums.TranslationSource.TextTranslation);
                                     row.ContractFieldLable_Eng = "Responsible";
                                 }
