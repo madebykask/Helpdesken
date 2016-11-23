@@ -9,6 +9,7 @@ img
 	max-width: 100%;
 }
 
+
 h4 {
     /*background: #f2f7fe;*/
     padding:5px;
@@ -496,6 +497,31 @@ input[type=text], select, textarea {
 label {
     font-weight: normal !important;
 }
+
+label.error
+{
+    color: #ff0000;
+    margin-left: 10px;
+}
+
+input[type=text].error, select.error, textarea.error, .btn-group.error  .btn
+{
+    border: 1px solid #ff0000;
+    background-color: #ffeeee;
+}
+
+a.error, input[type=¨button].error .btn
+{
+    border: 1px solid #ff0000;
+    background-color: #ffeeee;
+    color:#333333;
+}
+
+.error
+{
+    color: #ff0000;
+}
+
 .form-group {
     margin-bottom: 5px;
 }

@@ -105,5 +105,21 @@
         public JsApplicationOptions JsApplicationOptions { get; set; }
 
         public List<FieldSettingJSModel> JsFieldSettings { get; set; }
+
+        public List<ProductAreaChild> ProductAreaChildren { get; set; }
+    }
+
+
+    public sealed class ProductAreaChild
+    {
+        public ProductAreaChild(int productAreaId, bool hasChildren)
+        {
+            ProductAreaId = productAreaId;
+            HasChildren = hasChildren;
+        }
+
+        public int ProductAreaId { get; private set; }
+
+        public bool HasChildren { get; private set; }
     }
 }

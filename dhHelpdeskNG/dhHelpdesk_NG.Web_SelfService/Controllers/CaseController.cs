@@ -398,17 +398,25 @@
                     var p = _productAreaService.GetProductArea(model.NewCase.ProductArea_Id.GetValueOrDefault());
                     if(p != null)
                     {
-                        model.ProductAreaParantPath = string.Join(" - ", _productAreaService.GetParentPath(p.Id, currentCustomer.Id));
+                        var pathTexts = _productAreaService.GetParentPath(p.Id, currentCustomer.Id).ToList();
+                        var translatedText = pathTexts;
+                        if (pathTexts.Any())
+                        {
+                            translatedText = new List<string>();
+                            foreach (var pathText in pathTexts.ToList())
+                                translatedText.Add(Translation.Get(pathText, Enums.TranslationSource.TextTranslation));
+                        }
+                        model.ProductAreaParantPath = string.Join(" - ", translatedText);
                     }
                 }
 
                 if(model.NewCase.CaseType_Id > 0)
                 {
-                    var c = _caseTypeService.GetCaseType(model.NewCase.CaseType_Id);
-                    if(c != null)
-                    {
-                        model.CaseTypeParantPath = c.getCaseTypeParentPath();
-                    }
+                    var ct = _caseTypeService.GetCaseType(model.NewCase.CaseType_Id);
+                    var tempCTs = new List<CaseType>();
+                    tempCTs.Add(ct);
+                    tempCTs = CaseTypeTreeTranslation(tempCTs).ToList();
+                    model.CaseTypeParantPath = tempCTs[0].getCaseTypeParentPath();                   
                 }
 
                 if (model.NewCase.Department_Id.HasValue)
@@ -940,10 +948,25 @@
             var suppliers = _supplierService.GetSuppliers(currentCase.Customer_Id);
             var systems = _systemService.GetSystems(currentCase.Customer_Id);
             if (currentCase.CaseType != null)
-                currentCase.CaseType.Name = _caseTypeService.GetCaseTypeFullName(currentCase.CaseType_Id);
+            {
+                var tempCTs = new List<CaseType>();
+                tempCTs.Add(currentCase.CaseType);
+                tempCTs = CaseTypeTreeTranslation(tempCTs).ToList();
+                currentCase.CaseType.Name = tempCTs[0].getCaseTypeParentPath();                
+            }
 
             if (currentCase.ProductArea_Id.HasValue && currentCase.ProductArea != null)
-                currentCase.ProductArea.Name = string.Join(" - ",  _productAreaService.GetParentPath(currentCase.ProductArea_Id.Value, currentCase.Customer_Id));
+            {
+                var pathTexts = _productAreaService.GetParentPath(currentCase.ProductArea_Id.Value, currentCase.Customer_Id).ToList();
+                var translatedText = pathTexts;
+                if (pathTexts.Any())
+                {
+                    translatedText = new List<string>();
+                    foreach (var pathText in pathTexts.ToList())
+                        translatedText.Add(Translation.Get(pathText, Enums.TranslationSource.TextTranslation));
+                }
+                currentCase.ProductArea.Name = string.Join(" - ", translatedText);                
+            }
 
             var newLogFile = new FilesModel();
 
@@ -1093,7 +1116,7 @@
                 }
 
             }
-            
+            srm.Cases = CaseSearchTranslate(srm.Cases, cusId);
             model.CaseSearchResult = srm;
             SessionFacade.CurrentCaseSearch = sm;
 
@@ -1118,9 +1141,12 @@
 
             //Case Type tree            
             var caseTypes = _caseTypeService.GetCaseTypes(customerId).Where(c=> c.ShowOnExternalPage != 0).ToList();
+            caseTypes = CaseTypeTreeTranslation(caseTypes).ToList();
 
             //Product Area tree            
             var productAreas = _productAreaService.GetTopProductAreas(customerId).Where(p=> p.ShowOnExternalPage != 0).ToList();
+            var traversedData = ProductAreaTreeTranslation(productAreas);
+            productAreas = traversedData.Item1.ToList();
 
             //System list            
             var systems = _systemService.GetSystems(customerId);
@@ -1173,6 +1199,7 @@
             model.CaseTypeParantPath = "--";
             model.ProductAreaParantPath = "--";
             model.CaseFileKey = Guid.NewGuid().ToString();
+            model.ProductAreaChildren = traversedData.Item2.ToList();
 
             return model;
         }       
@@ -1291,5 +1318,71 @@
 
             return ret;
         }        
+
+        private Tuple<IList<ProductArea>, IList<ProductAreaChild>> ProductAreaTreeTranslation(IList<ProductArea> productAreas)
+        {
+            var paChildren = new List<ProductAreaChild>();
+
+            foreach (var pa in productAreas)
+            {
+                pa.Name = Translation.Get(pa.Name, Enums.TranslationSource.TextTranslation);
+                if (pa.SubProductAreas.Any())
+                {
+                    paChildren.Add(new ProductAreaChild(pa.Id, true));
+                    var newList = ProductAreaTreeTranslation(pa.SubProductAreas.ToList());
+                    pa.SubProductAreas = newList.Item1;                    
+                    if (newList.Item2.Any())
+                        paChildren.AddRange(newList.Item2);
+                }
+                else                
+                    paChildren.Add(new ProductAreaChild(pa.Id, false));                
+            }
+
+            var item1 = productAreas.OrderBy(p => p.Name).ToList();
+            return new Tuple<IList<ProductArea>, IList<ProductAreaChild>>(item1, paChildren);
+        }
+
+        private IList<CaseType> CaseTypeTreeTranslation(IList<CaseType> caseTypes)
+        {
+            foreach (var ct in caseTypes)
+            {
+                ct.Name = Translation.Get(ct.Name, Enums.TranslationSource.TextTranslation);
+                if (ct.SubCaseTypes.Any())
+                {
+                    ct.SubCaseTypes = CaseTypeTreeTranslation(ct.SubCaseTypes.ToList());
+                }
+            }
+
+            return caseTypes.OrderBy(p => p.Name).ToList();
+        }
+
+        private IList<CaseSearchResult> CaseSearchTranslate(IList<CaseSearchResult> cases, int customerId)
+        {
+            var ret = cases;
+            var productareaCache = _productAreaService.GetProductAreasForCustomer(customerId).ToDictionary(it => it.Id, it => true);
+            foreach (CaseSearchResult r in ret)
+            {
+                foreach (var c in r.Columns)
+                {
+                    if (c.TreeTranslation)
+                    {
+                        switch (c.Key.ToLower())
+                        {
+                            case "productarea_id":
+                                if (productareaCache.ContainsKey(c.Id))
+                                {
+                                    var names = _productAreaService.GetParentPath(c.Id, customerId).Select(name => Translation.Get(name,Enums.TranslationSource.TextTranslation));
+                                    c.StringValue = string.Join(" - ", names);
+                                }
+
+                                break;
+                        }
+                    }
+                }
+            }
+
+            return ret;
+        }
+
     }
 }

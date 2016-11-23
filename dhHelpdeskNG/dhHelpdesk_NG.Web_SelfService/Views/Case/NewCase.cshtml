@@ -12,6 +12,7 @@
 <script type="text/javascript">
     window.appOptions = '@Html.Raw(jsSerializer.Serialize(Model.JsApplicationOptions))';
     window.fieldSettings = @Html.Raw(jsSerializer.Serialize(Model.JsFieldSettings));
+    window.productAreaChildren = @Html.Raw(jsSerializer.Serialize(Model.ProductAreaChildren));
 
     window.appParameters = {
         uploadCaseFileUrl: '@Url.Action("NewCaseUploadFile")',
@@ -767,25 +768,55 @@
     </div>
 </div>
 
-<script type="text/javascript">     
-    
-    var $mainForm = $("#newCaseForm");
-    var requiredText = '@Translation.GetForJS("must be specified", Enums.TranslationSource.TextTranslation)';
+<script type="text/javascript">
 
+    var $mainForm = $("#newCaseForm");
+    var $elmProductArea = $("#NewCase_ProductArea_Id");
+    var requiredText = '@Translation.GetForJS("must be specified", Enums.TranslationSource.TextTranslation)';
+    var productAreaErrMessage = '@Html.Raw(Translation.GetForJS("The case could not be saved because the lowest possible level on the field") + " [" +
+                                           Translation.GetForJS(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID) + "] " +
+                                           Translation.GetForJS("has not been selected. Please check the case."))';
     function SaveNewCase() {
-        if (!isFormValid()) {  
-            ShowToastMessage('@Translation.GetForJS("One or more mandatory fields were not filled in, please check the case.", Enums.TranslationSource.TextTranslation)', "warning", false);
-            return;
+        var productAreaValidation = isProductAreaValid();
+        var formValidation = isFormValid();
+
+        if (!productAreaValidation || !formValidation){
+            if (!productAreaValidation) {
+                document.getElementById('divProductArea').classList.add("error");
+                ShowToastMessage(productAreaErrMessage, "error", false);                
+            }else{
+                ShowToastMessage('@Translation.GetForJS("One or more mandatory fields were not filled in, please check the case.", Enums.TranslationSource.TextTranslation)', "error", false);               
+            }
+            return false;
         }
 
         $mainForm.attr("action", '@Url.Content("~/Case/NewCase")');
         $('.disabled').removeAttr('disabled');
         $mainForm.submit();
     }
-     
-    function isFormValid() {        
+
+    function isFormValid() {
         var validator = $mainForm.validate();
-        return validator.form();        
+        return validator.form();
+    }
+
+    function isProductAreaValid(){
+        var ret = true;
+        if ($elmProductArea == undefined)
+            return true;
+
+        var selectedPa = $elmProductArea.val();
+
+        var paList = window.productAreaChildren;
+        if (paList != null && paList != undefined && paList.length > 0){
+            for (var pa=0; pa < paList.length; pa++){
+                if (paList[pa].ProductAreaId == selectedPa)
+                {
+                    return !paList[pa].HasChildren;
+                }
+            }
+        }
+        return ret;
     }
 
     var validator = $mainForm.validate({
@@ -1013,7 +1044,7 @@
 
     function FieldIsRequired(value) {
         var ret = false;
-        if (value == '1') {            
+        if (value == '1') {
             ret = true;
         }
         return ret;
