@@ -1,11 +1,11 @@
-﻿//function Application() { }
-
-$(function () {    
+﻿$(function () {    
 
     (function ($) {
 
         window.Application = window.Application || {};
         window.Application.prototype = window.Application.prototype || {};
+
+        var fieldSettings = window.fieldSettings || {};
 
         var uploadCaseFileUrl = window.appParameters.uploadCaseFileUrl;
         var caseFileKey = window.appParameters.caseFileKey;
@@ -22,30 +22,90 @@ $(function () {
 
         var customerId;
         var alreadyExistFileIds = [];
+        var attrApplyClass = "hasAttribute";
+        var attrFieldNameHolder = "standardName";
 
         Application.prototype.init = function () {
-            var me = this;
-            //me.opt = opt || {};
-
+            var self = this;       
             customerId = $('#NewCase_Customer_Id').val();
-            me.$regionControl = $('#NewCase_Region_Id');
-            me.$departmentControl = $('#NewCase_Department_Id');
-            me.$orgUnitControl = $('#NewCase_Ou_Id');
+            self.$regionControl = $('#NewCase_Region_Id');
+            self.$departmentControl = $('#NewCase_Department_Id');
+            self.$orgUnitControl = $('#NewCase_Ou_Id');
 
             $('#NewCase_ReportedBy').typeahead(Application.prototype._GetComputerUserSearchOptions());
             $('#NewCase_InventoryNumber').typeahead(Application.prototype._GetComputerSearchOptions());
 
             // Remove after implementing http://redmine.fastdev.se/issues/10995
-            me.$regionControl.on('change', function () {
-                me.refreshDepartment.call(me, $(this).val());
+            self.$regionControl.on('change', function () {
+                self.refreshDepartment.call(self, $(this).val());
             });
 
-            me.$departmentControl.on('change', function () {
+            self.$departmentControl.on('change', function () {
                 // Remove after implementing http://redmine.fastdev.se/issues/10995        
                 var departmentId = $(this).val();
-                me.refreshOrganizationUnit(departmentId);
+                self.refreshOrganizationUnit(departmentId);
             });
+
+            self.applyFieldAttributes();
         };
+
+        Application.prototype.applyFieldAttributes = function () {
+            if (fieldSettings == undefined || fieldSettings == null || fieldSettings.length <= 0)
+                return;
+
+            var needToApplyAttrs = document.getElementsByClassName(attrApplyClass);
+            for (var i = 0; i < needToApplyAttrs.length; i++) {
+                var fieldStandardName = $(needToApplyAttrs[i]).attr(attrFieldNameHolder);                
+                var fs = getFieldSetting(fieldStandardName);
+                if (fs != null) {
+                    applySettingOnElement($(needToApplyAttrs[i]), fs)
+                }
+            }
+        }
+
+        Application.prototype.isElementReadonly = function ($element) {
+            if ($element == undefined || $element == null)
+                return;
+
+            var fieldStandardName = $($element).attr(attrFieldNameHolder);
+            var fs = getFieldSetting(fieldStandardName);
+            if (fs != null && fs.IsReadonly)
+                return true;
+
+            return false;
+        }
+
+        var getFieldSetting = function (fieldName) {
+            if (fieldSettings == undefined || fieldSettings == null || fieldSettings.length <= 0 || fieldName == undefined || fieldName == null)
+                return null;
+
+            fieldName = fieldName.toLowerCase();
+            for (var fn = 0; fn < fieldSettings.length; fn++) {
+                if (fieldSettings[fn].FieldName.toLowerCase() == fieldName)
+                    return fieldSettings[fn];
+            }
+
+            return null;
+        }
+
+        var applySettingOnElement = function ($element, settings) {
+            if (fieldSettings == undefined || fieldSettings == null || fieldSettings.length <= 0)
+                return null;
+
+            if (settings.IsReadonly) {                
+                disableElement($element);
+            }
+        }
+
+        var disableElement = function($element){
+            if ($element.is("input")) {
+                $element.attr("disabled", "disabled");
+            } else {
+                $element.attr("disabled", "disabled");
+                $element.css("pointer-events", "none");
+            };
+            $element.addClass("disabled");            
+        }
 
         /**
         * @public
@@ -57,10 +117,8 @@ $(function () {
             var me = this;
 
             me.$departmentControl.children().remove();
-            me.$orgUnitControl.children().remove();
-            //if (me.isIdExistsInSelect(me.$regionControl, regionId)) {
-            me.refreshDepartment(regionId, departmentId, selectedOrgUnitId);
-            //}
+            me.$orgUnitControl.children().remove();            
+            me.refreshDepartment(regionId, departmentId, selectedOrgUnitId);            
         };
 
         /**
@@ -84,6 +142,12 @@ $(function () {
             var me = this;
             me.$departmentControl.val('').find('option').remove();
             me.$departmentControl.append('<option value="">&nbsp;</option>');
+            
+            if (me.isElementReadonly(me.$departmentControl)) {
+                me.$orgUnitControl.val('').find('option').remove();
+                me.$orgUnitControl.append('<option value="">&nbsp;</option>');
+                return;
+            }
 
             $.get(departmentsUrl, {
                 'id': regionId,
@@ -112,6 +176,11 @@ $(function () {
             var me = this;
             me.$orgUnitControl.val('').find('option').remove();
             me.$orgUnitControl.append('<option value="">&nbsp;</option>');
+
+            if (me.isElementReadonly(me.$orgUnitControl)) {
+                return;
+            }
+
             $.get(OUsUrl, {
                 'id': departmentId,
                 'customerId': customerId,
@@ -142,9 +211,7 @@ $(function () {
             return content.join('');
         }
 
-
-
-        //Application.prototype.bindDeleteNewCaseFileBehaviorToDeleteButtons();
+        
         var lastInitiatorSearchKey = ''
 
         $('#NewCasefile_uploader').pluploadQueue({
@@ -706,6 +773,8 @@ $(function () {
         $("a[href='#upload_clipboard_file_popup']").on('click', function (e) {
             var $src = $(this);
             var $target = $('#upload_clipboard_file_popup');
+            e.preventDefault();            
+
             $target.attr('data-src', $src.attr('data-src'));
 
             globalClipboard = new ClipboardClass();

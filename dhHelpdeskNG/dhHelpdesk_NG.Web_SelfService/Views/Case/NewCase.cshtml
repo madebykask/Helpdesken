@@ -11,8 +11,9 @@
 
 <script type="text/javascript">
     window.appOptions = '@Html.Raw(jsSerializer.Serialize(Model.JsApplicationOptions))';
+    window.fieldSettings = @Html.Raw(jsSerializer.Serialize(Model.JsFieldSettings));
 
-    window.appParameters = {        
+    window.appParameters = {
         uploadCaseFileUrl: '@Url.Action("NewCaseUploadFile")',
         caseFileKey: '@Model.CaseFileKey',
         newCaseFilesUrl: '@Url.Action("NewCaseFiles")',
@@ -26,11 +27,11 @@
         fetchDepartmentsUrl: '@Url.Content("~/Case/GetDepartmentsByRegion")',
         fetchOUUrl: '@Url.Content("~/Case/GetOrgUnitsByDepartments")'
     };
-       
-</script>
-@*<script  src="~/Content/js/Case/edit.js"></script>*@
 
-@Scripts.Render("~/Content/js/Case/edit")
+</script>
+<script  src="~/Content/js/Case/edit.js"></script>
+
+@*@Scripts.Render("~/Content/js/Case/edit")*@
 
 <div class="jumbotron greybar">
         <div class="container-fluid">
@@ -115,7 +116,7 @@
                                                   }
                                             </label>
                                             <div class="col-md-9">                                                
-                                                @Html.TextBoxFor(model => model.NewCase.ReportedBy, new { maxlength = "40", autocomplete = "Off" })
+                                                @Html.TextBoxFor(model => model.NewCase.ReportedBy, new { maxlength = "40", autocomplete = "Off", @class="hasAttribute", standardName = GlobalEnums.TranslationCaseFields.ReportedBy.ToString() })
                                             </div>
                                         </div>
                                     }
@@ -130,7 +131,7 @@
                                                 }
                                             </label>
                                             <div class="col-md-9">                                                                                                
-                                                @Html.TextBoxFor(p => Model.NewCase.PersonsName)
+                                                @Html.TextBoxFor(p => Model.NewCase.PersonsName, new { @class = "hasAttribute", standardName= GlobalEnums.TranslationCaseFields.Persons_Name.ToString() })
                                             </div>
                                         </div>
                                     }
@@ -145,7 +146,7 @@
                                                 }
                                             </label>
                                             <div class="col-md-9">
-                                                @Html.TextBoxFor(p => Model.NewCase.PersonsEmail)
+                                                @Html.TextBoxFor(p => Model.NewCase.PersonsEmail, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Persons_EMail.ToString() })
                                             </div>
                                         </div>
                                     }
@@ -160,7 +161,7 @@
                                                 }
                                             </label>
                                             <div class="col-md-9">                                      
-                                                @Html.TextBoxFor(p => Model.NewCase.PersonsPhone)
+                                                @Html.TextBoxFor(p => Model.NewCase.PersonsPhone, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Persons_Phone.ToString() })
                                             </div>
                                         </div>
                                     }
@@ -175,7 +176,7 @@
                                                 }
                                             </label>
                                             <div class="col-md-9">
-                                                @Html.TextBoxFor(c => Model.NewCase.PersonsCellphone)
+                                                @Html.TextBoxFor(c => Model.NewCase.PersonsCellphone, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString() })
                                             </div>
                                         </div>
                                     }
@@ -190,7 +191,7 @@
                                                 }
                                             </label>
                                             <div class="col-md-9">
-                                                <select id="NewCase_Region_Id" name="NewCase.Region_Id">
+                                                <select id="NewCase_Region_Id" name="NewCase.Region_Id" class="hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.Region_Id.ToString()" >
                                                     <option value="">&nbsp;</option>
                                                     @if (Model.Regions != null)
                                                     {
@@ -214,7 +215,7 @@
                                                 }
                                             </label>
                                             <div class="col-md-9">                                                                                                
-                                                <select id="NewCase_Department_Id" name="NewCase.Department_Id">
+                                                <select id="NewCase_Department_Id" name="NewCase.Department_Id" class="hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.Department_Id.ToString()">
                                                     <option value="">&nbsp;</option>
                                                     @if (Model.Departments != null)
                                                     {
@@ -239,7 +240,7 @@
                                                 }
                                             </label>
                                             <div class="col-md-9">                                                                                                
-                                                <select id="NewCase_Ou_Id" name="NewCase.OU_Id">
+                                                <select id="NewCase_Ou_Id" name="NewCase.OU_Id" class="hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.OU_Id.ToString()">
                                                     <option value="">&nbsp;</option>
                                                     @if (Model.OrganizationUnits != null)
                                                     {
@@ -264,7 +265,7 @@
                                                 }
                                             </label>
                                             <div class="col-md-9">                                                
-                                                @Html.TextBoxFor(p => Model.NewCase.Place)
+                                                @Html.TextBoxFor(p => Model.NewCase.Place, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Place.ToString() })
                                             </div>
                                         </div>
                                     }
@@ -279,7 +280,7 @@
                                                 }
                                             </label>
                                             <div class="col-md-9">                                                                                             
-                                                @Html.TextBoxFor(u => Model.NewCase.UserCode)
+                                                @Html.TextBoxFor(u => Model.NewCase.UserCode, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.UserCode.ToString() })
                                             </div>
                                         </div>
                                     }
@@ -306,7 +307,7 @@
                                                 }
                                             </label>
                                             <div class="col-md-9">
-                                                @Html.TextBoxFor(i => Model.NewCase.InventoryNumber)
+                                                @Html.TextBoxFor(i => Model.NewCase.InventoryNumber, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.InventoryNumber.ToString() })
                                             </div>
                                         </div>
                                     }
@@ -321,7 +322,7 @@
                                                 }
                                             </label>
                                             <div class="col-md-9">
-                                                @Html.TextBoxFor(i => Model.NewCase.InventoryType)
+                                                @Html.TextBoxFor(i => Model.NewCase.InventoryType, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString() })
                                             </div>
                                         </div>
                                     }
@@ -336,7 +337,7 @@
                                                 }
                                             </label>
                                             <div class="col-md-9">                                                
-                                                @Html.TextBoxFor(i => Model.NewCase.InventoryLocation)
+                                                @Html.TextBoxFor(i => Model.NewCase.InventoryLocation, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.InventoryLocation.ToString() })
                                             </div>
                                         </div>
                                     }
@@ -362,16 +363,15 @@
                                         </label>
                                         <div class="col-md-9">                                                
                                             <div id="divCaseType" class="btn-group">
-                                                <div class="btn btn-default" id="divBreadcrumbs_CaseType">@Model.CaseTypeParantPath</div>
-                                                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                                    <span class="caret"></span>
-                                                </button>
-                                                <ul class="dropdown-menu">
-                                                    <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
-                                                    @Html.CaseTypeDropdownButtonString(Model.CaseTypes)
-                                                </ul>
-                                                <input type="hidden" id="NewCase.CaseType_Id" name="NewCase.CaseType_Id" value="@Model.NewCase.CaseType_Id.supressZero()" />
-
+                                                    <div class="btn btn-default hasAttribute" id="divBreadcrumbs_CaseType" standardName="@GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()">@Model.CaseTypeParantPath</div>
+                                                    <button class="btn btn-default dropdown-toggle hasAttribute" data-toggle="dropdown" standardName="@GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()">
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
+                                                        @Html.CaseTypeDropdownButtonString(Model.CaseTypes)
+                                                    </ul>
+                                                    <input type="hidden" id="NewCase.CaseType_Id" name="NewCase.CaseType_Id" value="@Model.NewCase.CaseType_Id.supressZero()" />                                                
                                             </div>
                                         </div>
                                     </div>
@@ -389,8 +389,8 @@
                                             </label>
                                             <div class="col-md-9">
                                                 <div id="divProductArea" class="btn-group">
-                                                    <div class="btn btn-default" id="divBreadcrumbs_ProductArea">@Model.ProductAreaParantPath</div>
-                                                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                                    <div class="btn btn-default hasAttribute" id="divBreadcrumbs_ProductArea" standardName="@GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()">@Model.ProductAreaParantPath</div>
+                                                    <button class="btn btn-default dropdown-toggle hasAttribute" data-toggle="dropdown" standardName="@GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()">
                                                         <span class="caret"></span>
                                                     </button>
                                                     <ul class="dropdown-menu">
@@ -414,7 +414,7 @@
                                                 }
                                             </label>
                                             <div class="col-md-9">                                                                                                
-                                                <select id="NewCase_System_Id" name="NewCase.System_Id">
+                                                <select id="NewCase_System_Id" name="NewCase.System_Id" class="hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.System_Id.ToString()">
                                                     <option value="">&nbsp;</option>
                                                     @if (Model.Systems != null)
                                                     {
@@ -439,7 +439,7 @@
                                                 }
                                             </label>
                                             <div class="col-md-9">
-                                                <select id="NewCase_Urgency_Id" name="NewCase.Urgency_Id">
+                                                <select id="NewCase_Urgency_Id" name="NewCase.Urgency_Id" class="hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()">
                                                     <option value="">&nbsp;</option>
                                                     @if (Model.Urgencies != null)
                                                     {
@@ -464,7 +464,7 @@
                                                 }
                                             </label>
                                             <div class="col-md-9">
-                                                <select id="NewCase_Impact_Id" name="NewCase.Impact_Id">
+                                                <select id="NewCase_Impact_Id" name="NewCase.Impact_Id" class="hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.Impact_Id.ToString()">
                                                     <option value="">&nbsp;</option>
                                                     @if (Model.Impacts != null)
                                                     {
@@ -488,7 +488,7 @@
                                                 }
                                             </label>
                                             <div class="col-md-9">                                                
-                                                <select id="NewCase_Category_Id" name="NewCase.Category_Id">
+                                                <select id="NewCase_Category_Id" name="NewCase.Category_Id" class="hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()">
                                                     <option value="">&nbsp;</option>
                                                     @if (Model.Categories != null)
                                                     {
@@ -515,7 +515,7 @@
                                             @if (Model.Suppliers != null)
                                             {
                                                 <div class="col-md-9">                                                   
-                                                    <select id="NewCase_Supplier_Id" name="NewCase.Supplier_Id">
+                                                    <select id="NewCase_Supplier_Id" name="NewCase.Supplier_Id" class="hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.Supplier_Id.ToString()">
                                                         <option value="">&nbsp;</option>
                                                         @foreach (var e in Model.Suppliers.Where(e => e.IsActive == 1))
                                                         {
@@ -538,7 +538,7 @@
                                                 }
                                             </label>
                                             <div class="col-md-9">                                                
-                                                @Html.TextBoxFor(i => Model.NewCase.InvoiceNumber)
+                                                @Html.TextBoxFor(i => Model.NewCase.InvoiceNumber, new { @class="hasAttribute", standardName=GlobalEnums.TranslationCaseFields.InventoryNumber.ToString() })
                                             </div>
                                         </div>
                                     }
@@ -554,7 +554,7 @@
                                                 }
                                             </label>
                                             <div class="col-md-9">
-                                                @Html.TextBoxFor(r => Model.NewCase.ReferenceNumber)
+                                                @Html.TextBoxFor(r => Model.NewCase.ReferenceNumber, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString() })
                                             </div>
                                         </div>
                                     }
@@ -570,7 +570,7 @@
                                                 }
                                             </label>
                                             <div class="col-md-9">                                                
-                                                @Html.TextBoxFor(c => Model.NewCase.Caption)
+                                                @Html.TextBoxFor(c => Model.NewCase.Caption, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Caption.ToString() })
                                             </div>
                                         </div>
                                     }
@@ -586,7 +586,7 @@
                                                 }
                                             </label>
                                             <div class="col-md-9">                                                
-                                                @Html.TextAreaFor(d => Model.NewCase.Description)
+                                                @Html.TextAreaFor(d => Model.NewCase.Description, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Description.ToString() })
                                             </div>
                                         </div>
                                     }
@@ -602,7 +602,7 @@
                                                 }
                                             </label>
                                             <div class="col-md-9">                                                
-                                                @Html.TextAreaFor(m => Model.NewCase.Miscellaneous)
+                                                @Html.TextAreaFor(m => Model.NewCase.Miscellaneous, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Miscellaneous.ToString() })
                                             </div>
                                         </div>
                                     }
@@ -614,7 +614,7 @@
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)                                                
                                             </label>
                                             <div class="col-md-9">
-                                                <input type="checkbox" name="NewCase.ContactBeforeAction" @(Model.NewCase.ContactBeforeAction == 1 ? "checked=checked" : "") value="1"/>
+                                                <input type="checkbox" name="NewCase.ContactBeforeAction" @(Model.NewCase.ContactBeforeAction == 1 ? "checked=checked" : "") value="1" class="hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString()" }/>
                                                 @Translation.Get("Should the initiator be contacted before action?", Enums.TranslationSource.TextTranslation)
                                                 <input type="hidden" name="NewCase.ContactBeforeAction" value="0" />
                                             </div>
@@ -628,7 +628,7 @@
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.SMS.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)                                               
                                             </label>
                                             <div class="col-md-9">
-                                                <input type="checkbox" name="NewCase.SMS" @(Model.NewCase.SMS == 1 ? "checked=checked" : "") value="1"/>
+                                                <input type="checkbox" name="NewCase.SMS" @(Model.NewCase.SMS == 1 ? "checked=checked" : "") value="1" class="hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.SMS.ToString()" }/>
                                                 @Translation.Get("Send SMS when case is closed", Enums.TranslationSource.TextTranslation)
                                                 <input type="hidden" name="NewCase.SMS" value="0" />
                                             </div>
@@ -646,7 +646,7 @@
                                                 }
                                             </label>
                                             <div class="col-md-9">                                                                                                
-                                                @Html.TextBoxFor(m => Model.NewCase.Available)
+                                                @Html.TextBoxFor(m => Model.NewCase.Available, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Available.ToString() })
                                                 @*@Translation.Get("Initiator is available during the following times", Enums.TranslationSource.TextTranslation)*@                                                                                                                 
                                             </div>
                                         </div>
@@ -662,13 +662,13 @@
                                                 <table>
                                                     <tr>
                                                         <td>@Translation.Get("Item Cost", Enums.TranslationSource.TextTranslation)<br />
-                                                            @Html.TextBoxFor(model => model.NewCase.Cost, new { maxlength = "7", Class = "inputw50" })
+                                                            @Html.TextBoxFor(model => model.NewCase.Cost, new { maxlength = "7", @class = "inputw50 hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Cost.ToString() })
                                                         </td>
                                                         <td>@Translation.Get("Additional Cost", Enums.TranslationSource.TextTranslation)<br />
-                                                            @Html.TextBoxFor(model => model.NewCase.OtherCost, new { maxlength = "7", Class = "inputw50" })
+                                                            @Html.TextBoxFor(model => model.NewCase.OtherCost, new { maxlength = "7", @class = "inputw50 hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Cost.ToString() })
                                                         </td>
                                                         <td>@Translation.Get("Currency", Enums.TranslationSource.TextTranslation)<br />
-                                                            <select id="NewCase_Currency" name="NewCase.Currency" class="inputw100">
+                                                            <select id="NewCase_Currency" name="NewCase.Currency" class="inputw100 hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.Cost.ToString()" >
                                                                 <option value="">&nbsp;</option>
                                                                 @if (Model.Currencies != null)
                                                                 {
@@ -692,7 +692,7 @@
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.Filename.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)                                                
                                             </label>
                                             <div class="col-md-4">                                                
-                                                <a href="#NewCase_upload_files_popup" role="button" class="btn btn-default" data-toggle="modal">@Translation.Get("Add", Enums.TranslationSource.TextTranslation)</a>                                                
+                                                <a href="#NewCase_upload_files_popup" role="button" class="btn btn-default hasAttribute" data-toggle="modal" standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add", Enums.TranslationSource.TextTranslation)</a>
                                                 <div id="NewCase_upload_files_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabel" aria-hidden="true">                                                    
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">                                                
@@ -710,7 +710,7 @@
                                                     </div>
                                                 </div>
 
-                                                <a href="#upload_clipboard_file_popup" role="button" class="btn btn-default" data-src="case">@Translation.Get("Add from clipboard", Enums.TranslationSource.TextTranslation)</a>
+                                                <a href="#upload_clipboard_file_popup" role="button" class="btn btn-default hasAttribute" data-src="case"  standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add from clipboard", Enums.TranslationSource.TextTranslation)</a>
                                                 <div id="upload_clipboard_file_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabelCase" aria-hidden="true">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
@@ -778,6 +778,7 @@
         }
 
         $mainForm.attr("action", '@Url.Content("~/Case/NewCase")');
+        $('.disabled').removeAttr('disabled');
         $mainForm.submit();
     }
      

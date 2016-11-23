@@ -76,6 +76,10 @@ h5 {
     float:left;
 }
 
+.disabled {
+    background-color: #ddd !important;
+}
+
 .gif-loader {
         width:25px !important;
         height:25px !important;

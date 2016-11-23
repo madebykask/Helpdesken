@@ -103,5 +103,7 @@
         public IList<CaseFieldSetting> CaseFieldSettings { get; set; }
 
         public JsApplicationOptions JsApplicationOptions { get; set; }
+
+        public List<FieldSettingJSModel> JsFieldSettings { get; set; }
     }
 }

@@ -10,6 +10,8 @@ namespace DH.Helpdesk.Services.Services.Concrete
     using DH.Helpdesk.Dal.Repositories.Cases;
     using DH.Helpdesk.Services.Requests.Cases;
 
+    /*TODO: this service should be marged with CaseSolutionService*/
+
     public class CaseSolutionSettingService : ICaseSolutionSettingService
     {
         private readonly CaseSolutionSettingRepository caseSolutionSettingRepository;

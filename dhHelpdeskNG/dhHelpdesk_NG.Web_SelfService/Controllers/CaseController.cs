@@ -60,6 +60,7 @@
         private readonly IWorkingGroupService _workingGroupService;
         private readonly IStateSecondaryService _stateSecondaryService;
         private readonly ICaseSolutionService _caseSolutionService;
+        private readonly ICaseSolutionSettingService _caseSolutionSettingService;
         private readonly IWorkContext workContext;
         private readonly IEmailService _emailService;        
         private readonly IMasterDataService _masterDataService;
@@ -101,7 +102,8 @@
             ILogFileService logFileService,
             ICaseSolutionService caseSolutionService,
             IOrganizationService orgService,            
-            OrganizationJsonService orgJsonService,            
+            OrganizationJsonService orgJsonService,
+            ICaseSolutionSettingService caseSolutionSettingService,
             IEmailService emailService)
             : base(masterDataService, caseSolutionService)
         {
@@ -137,7 +139,7 @@
             _emailService = emailService;
             _urgencyService = urgencyService;
             _impactService = impactService;
-                  
+            _caseSolutionSettingService = caseSolutionSettingService;      
         }
 
 
@@ -302,9 +304,13 @@
             }
             var languageId = SessionFacade.CurrentLanguageId;
 
-            var model = GetNewCaseModel(currentCustomer.Id, languageId);
-            model.ExLogFileGuid = Guid.NewGuid().ToString();
+            var caseFieldSetting = _caseFieldSettingService.ListToShowOnCasePage(customerId, languageId)
+                                                          .Where(c => c.ShowExternal == 1)
+                                                          .ToList();
 
+
+            var model = GetNewCaseModel(currentCustomer.Id, languageId, caseFieldSetting);
+            model.ExLogFileGuid = Guid.NewGuid().ToString();
 
             var cs = _settingService.GetCustomerSetting(currentCustomer.Id);
 
@@ -337,6 +343,10 @@
             if(caseTemplateId != null && caseTemplateId.Value > 0)
             {
                 var caseTemplate = _caseSolutionService.GetCaseSolution(caseTemplateId.Value);
+                var caseTemplateSettings = _caseSolutionSettingService.GetCaseSolutionSettingOverviews(caseTemplateId.Value).ToList();
+
+                var jsFieldSettings = GetFieldSettingsModel(caseFieldSetting, caseTemplateSettings);
+                model.JsFieldSettings = jsFieldSettings;
 
                 if (caseTemplate.Status == 0 || !caseTemplate.ShowInSelfService)
                 {
@@ -922,7 +932,7 @@
                                                                        c.Name == GlobalEnums.TranslationCaseFields.CaseNumber.ToString() ||
                                                                        c.Name == GlobalEnums.TranslationCaseFields.RegTime.ToString())
                                                            .ToList();
-
+            
             var caseFieldGroups = GetVisibleFieldGroups(caseFieldSetting);            
             var infoText = _infoService.GetInfoText((int) InfoTextType.SelfServiceInformation, currentCase.Customer_Id, languageId);
 
@@ -1090,12 +1100,8 @@
             return model;
         }
 
-        private NewCaseModel GetNewCaseModel(int customerId, int languageId)
-        {
-            var caseFieldSetting = _caseFieldSettingService.ListToShowOnCasePage(customerId, languageId)
-                                                           .Where(c => c.ShowExternal == 1)
-                                                           .ToList();
-
+        private NewCaseModel GetNewCaseModel(int customerId, int languageId, List<CaseListToCase> caseFieldSetting)
+        {           
             var caseFieldGroups = GetVisibleFieldGroups(caseFieldSetting);
 
             var newCase = new Case { Customer_Id = customerId };
@@ -1239,8 +1245,9 @@
                             GlobalEnums.TranslationCaseFields.FinishingDate.ToString(),
                         };
 
+            
             foreach(var field in fieldList)
-            {
+            {                
                 if(userInformationGroup.Contains(field.Name))
                     ret.Add(Enums.CaseFieldGroups.UserInformation);
 
@@ -1259,6 +1266,30 @@
 
             return ret;
         }
+       
+        private List<FieldSettingJSModel> GetFieldSettingsModel(List<CaseListToCase> customerFieldSettings, List<CaseSolutionSettingOverview> templateSettings)
+        {
+            var ret = new List<FieldSettingJSModel>();
+            foreach (var field in customerFieldSettings)
+            {
+                var isVisible = field.ShowExternal.convertIntToBool();
+                var isRequired = field.Required.convertIntToBool();
+                var isReadonly = false;                
+                
+                if (templateSettings != null && templateSettings.Any())
+                {
+                    var curFieldName = field.Name.ToLower();
+                    var templateField = templateSettings.Where(t => t.CaseSolutionField.MapToCaseField().ToString().ToLower() == curFieldName).SingleOrDefault(); 
+                    if (templateField != null)
+                    {
+                        isReadonly = templateField.CaseSolutionMode == Common.Enums.Settings.CaseSolutionModes.ReadOnly;
+                    }
+                }
 
+                ret.Add(new FieldSettingJSModel(field.Name, isVisible, isReadonly, isRequired));
+            }
+
+            return ret;
+        }        
     }
 }

@@ -29,7 +29,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
-    <IISExpressSSLPort>44300</IISExpressSSLPort>
+    <IISExpressSSLPort>44340</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
     <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
@@ -298,6 +298,7 @@
     <Compile Include="Infrastructure\Translation.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\UserContext.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\WorkContext.cs" />
+    <Compile Include="Models\Case\CaseFieldSettingJSModel.cs" />
     <Compile Include="Models\Case\CaseOverviewModel.cs" />
     <Compile Include="Models\Case\CaseLogModel.cs" />
     <Compile Include="Models\Case\NewCaseModel.cs" />
