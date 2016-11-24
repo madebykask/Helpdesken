@@ -146,13 +146,6 @@
                     x.Customer_Id == customerId && x.Parent_ProductArea_Id == null
                     && ((isOnlyActive && x.IsActive != 0) || !isOnlyActive));
 
-            if (user.UserGroupId < (int)UserGroup.CustomerAdministrator)
-            {
-                var groupsMap = user.UserWorkingGroups.Where(it => it.UserRole == WorkingGroupUserPermission.ADMINSTRATOR).ToDictionary(it => it.WorkingGroup_Id, it => true);
-                res = res.Where(
-                    it => it.WorkingGroups.Count == 0 || it.WorkingGroups.Any(productAreaWorkingGroup => groupsMap.ContainsKey(productAreaWorkingGroup.Id)));
-            }
-
             return res.OrderBy(x => x.Name).ToList();
         }
 
@@ -177,7 +170,7 @@
 
             return null;
         }
-        
+
         public IList<ProductAreaEntity> GetTopProductAreasForUserOnCase(int customerId, int? productAreaIdToInclude, UserOverview user)
         {
             var res =
@@ -186,8 +179,8 @@
                     x.Customer_Id == customerId && x.Parent_ProductArea_Id == null
                     && x.IsActive != 0);
 
-            if (user.UserGroupId < (int)UserGroup.CustomerAdministrator)
-            {
+            if (productAreaIdToInclude == null)
+            { 
                 var groupsMap = user.UserWorkingGroups.Where(it => it.UserRole == WorkingGroupUserPermission.ADMINSTRATOR).ToDictionary(it => it.WorkingGroup_Id, it => true);
                 res = res.Where(
                     it => it.WorkingGroups.Count == 0 || it.WorkingGroups.Any(productAreaWorkingGroup => groupsMap.ContainsKey(productAreaWorkingGroup.Id)));
@@ -206,7 +199,7 @@
 
                 return resultMap.Values.OrderBy(x => x.Name).ToList();
             }
-
+          
             return res.OrderBy(x => x.Name).ToList();
         }
 
