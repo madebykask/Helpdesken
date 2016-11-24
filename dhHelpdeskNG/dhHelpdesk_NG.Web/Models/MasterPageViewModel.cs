@@ -158,7 +158,9 @@
             return                 
                 this.IsCheckListVisuble() ||
                 this.IsInventoryVisible() ||
-                this.IsLicenseVisible();
+                this.IsLicenseVisible() ||
+                this.IsAccountVisible() ||
+                this.IsContractVisible();
 
             /*this.IsOrderVisible() ||
             this.IsAccountVisible() ||
