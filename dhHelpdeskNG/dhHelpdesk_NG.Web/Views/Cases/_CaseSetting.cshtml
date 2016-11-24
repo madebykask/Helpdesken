@@ -306,8 +306,8 @@
                                         @Html.CheckBoxFor(m => m.CaseRegistrationDateFilterShow, new { @class = "switchcheckbox" })
                                     </td>
                                     <td>
-                                        @Html.EditorFor(m => m.CaseRegistrationDateStartFilter, "DatePickerNoJs")
-                                        @Html.EditorFor(m => m.CaseRegistrationDateEndFilter, "DatePickerNoJs")
+                                        @Html.EditorFor(m => m.CaseRegistrationDateStartFilter, "DatePicker", new { id = "CaseSetting_CaseRegistrationDateStartFilter" })
+                                        @Html.EditorFor(m => m.CaseRegistrationDateEndFilter, "DatePicker", new { id = "CaseSetting_CaseRegistrationDateEndFilter" })
                                     </td>
                                 </tr>  
                             }
@@ -325,8 +325,8 @@
                                         @Html.CheckBoxFor(m => m.CaseWatchDateFilterShow, new { @class = "switchcheckbox" })
                                     </td>
                                     <td>
-                                        @Html.EditorFor(m => m.CaseWatchDateStartFilter, "DatePickerNoJS")
-                                        @Html.EditorFor(m => m.CaseWatchDateEndFilter, "DatePickerNoJS")
+                                        @Html.EditorFor(m => m.CaseWatchDateStartFilter, "DatePicker", new { id = "CaseSetting_CaseWatchDateStartFilter" })
+                                        @Html.EditorFor(m => m.CaseWatchDateEndFilter, "DatePicker", new { id = "CaseSetting_CaseWatchDateEndFilter" })
                                     </td>
                                 </tr>  
                             }
@@ -344,8 +344,8 @@
                                         @Html.CheckBoxFor(m => m.CaseClosingDateFilterShow, new { @class = "switchcheckbox" })
                                     </td>
                                     <td>
-                                        @Html.EditorFor(m => m.CaseClosingDateStartFilter, "DatePickerNoJS")
-                                        @Html.EditorFor(m => m.CaseClosingDateEndFilter, "DatePickerNoJS")
+                                        @Html.EditorFor(m => m.CaseClosingDateStartFilter, "DatePicker", new { id = "CaseSetting_CaseClosingDateStartFilter" })
+                                        @Html.EditorFor(m => m.CaseClosingDateEndFilter, "DatePicker", new { id = "CaseSetting_CaseClosingDateEndFilter" })
                                     </td>
                                 </tr>  
                             }

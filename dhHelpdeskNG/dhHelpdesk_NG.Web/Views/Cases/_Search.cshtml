@@ -306,8 +306,8 @@
                                  @Translation.Get(GlobalEnums.TranslationCaseFields.RegTime.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId)                                    
                              </td>
                              <td>
-                                 @Html.EditorFor(m => m.CaseRegistrationDateStartFilter, "DatePickerNoJs")
-                                 @Html.EditorFor(m => m.CaseRegistrationDateEndFilter, "DatePickerNoJs")
+                                 @Html.EditorFor(m => m.CaseRegistrationDateStartFilter, "DatePicker", new { id = "divSearch_RegTimeStart" })
+                                 @Html.EditorFor(m => m.CaseRegistrationDateEndFilter, "DatePicker", new { id = "divSearch_RegTimeEnd" })
                              </td>
                          </tr>                
                      }
@@ -318,8 +318,8 @@
                                  @Translation.Get(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId)                                 
                              </td>
                              <td>
-                                 @Html.EditorFor(m => Model.CaseWatchDateStartFilter, "DatePickerNoJs")
-                                 @Html.EditorFor(m => Model.CaseWatchDateEndFilter, "DatePickerNoJs")
+                                 @Html.EditorFor(m => Model.CaseWatchDateStartFilter, "DatePicker", new { id = "divSearch_WatchDateStart" })
+                                 @Html.EditorFor(m => Model.CaseWatchDateEndFilter, "DatePicker", new { id = "divSearch_WatchDateEnd" })
                              </td>
                          </tr>                
                      }
@@ -330,8 +330,8 @@
                                  @Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId)                                   
                              </td>
                              <td>
-                                 @Html.EditorFor(m => m.CaseClosingDateStartFilter, "DatePickerNoJs")
-                                 @Html.EditorFor(m => m.CaseClosingDateEndFilter, "DatePickerNoJs")
+                                 @Html.EditorFor(m => m.CaseClosingDateStartFilter, "DatePicker", new { id = "divSearch_ClosingDateStart" })
+                                 @Html.EditorFor(m => m.CaseClosingDateEndFilter, "DatePicker", new { id = "divSearch_ClosingDateEndFilter" })
                              </td>
                          </tr>                
                      }
