@@ -9,6 +9,8 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.BusinessData.Models.ADFS.Input;
     using DH.Helpdesk.Dal.Repositories.ADFS;
     using System;
+    using BusinessData.Models.Notifiers;
+    using Dal.Repositories.Notifiers;
 
     public interface IMasterDataService
     {
@@ -30,7 +32,7 @@ namespace DH.Helpdesk.Services.Services
         int? GetCustomerIdByEMailGUID(Guid GUID);
         string GetFilePath(int customerId);
         string GetVirtualDirectoryPath(int customerId);
-        
+        Notifier GetInitiatorByUserId(string userId, int customerId);
     }
 
     public class MasterDataService : IMasterDataService
@@ -44,6 +46,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly ICacheProvider _cache;
         private readonly IADFSRepository _adfsRepository;
         private readonly IGlobalSettingRepository _globalSettingRepository;
+        private readonly INotifierRepository _computerUserRepository;
 
         public MasterDataService(
             ICustomerRepository customerRepository,
@@ -54,7 +57,8 @@ namespace DH.Helpdesk.Services.Services
             ICaseFieldSettingLanguageRepository caseFieldSettingLanguageRepository,
             ICacheProvider cache,
             IGlobalSettingRepository globalSettingRepository,
-            IADFSRepository adfsRepository)
+            IADFSRepository adfsRepository,
+            INotifierRepository computerUserRepository)
         {
             this._customerRepository = customerRepository;
             this._languageRepository = languageRepository;
@@ -65,6 +69,7 @@ namespace DH.Helpdesk.Services.Services
             this._cache = cache;
             this._adfsRepository = adfsRepository;
             this._globalSettingRepository = globalSettingRepository;
+            _computerUserRepository = computerUserRepository;
         }
 
         public IList<Customer> GetCustomers(int userId)
@@ -110,6 +115,11 @@ namespace DH.Helpdesk.Services.Services
             }
 
             return languages;
+        }
+
+        public Notifier GetInitiatorByUserId(string userId, int customerId)
+        {
+            return _computerUserRepository.GetInitiatorByUserId(userId, customerId);
         }
 
         public IList<Text> GetTranslationTexts()
