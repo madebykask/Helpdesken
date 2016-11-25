@@ -614,7 +614,7 @@
             var properties = propertiesRep.GetAll().GetByOrderType(orderTypeId);
             var deliveryDepartments = departmentsRep.GetAll().GetByCustomer(customerId);
             var deliveryOuIds = ousRep.GetAll();
-            var administratorsWithEmails = administratorsRep.GetAll().GetAdministratorsWithEmails(customerId);
+            var administratorsWithEmails = administratorsRep.GetAll().GetActiveUsers(customerId).Where(x => x.Performer == 1 && x.Email != string.Empty);
             var orderType = orderTypeId.HasValue ? orderTypeRep.GetAll().GetById(orderTypeId.Value).MapToName() : null;
 
             // get parentordertypename
