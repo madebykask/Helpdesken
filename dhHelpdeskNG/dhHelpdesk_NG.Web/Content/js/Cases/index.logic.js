@@ -62,10 +62,13 @@ function getCollapseCaption(cap) {
     * Initialization method. Called when page ready
     * @param { object } appSettings
     */
+
+    var globalTimerStartTime = 0;
     Page.prototype.init = function (appSettings) {
         "use strict";
         var self = this;
-
+        
+        globalTimerStartTime = performance.now();
         self.msgs = appSettings.messages || {};
 
         self.settings = {
@@ -99,7 +102,7 @@ function getCollapseCaption(cap) {
             filter: appSettings.searchFilter.data,
             favorites: appSettings.userFilterFavorites,
             onBeforeSearch: callAsMe(self.canMakeSearch, self),
-            onSearch: Utils.applyAsMe(function () { self.table.ajax.reload.call(self); }, self, [{ isSearchInitByUser: true }])
+            onSearch: Utils.applyAsMe(function () { globalTimerStartTime = performance.now();  self.table.ajax.reload.call(self); }, self, [{ isSearchInitByUser: true }])
         });
 
         self.$remainingView = $('[data-field="caseRemainingTimeHidePlace"]');
@@ -157,7 +160,7 @@ function getCollapseCaption(cap) {
                 var textStatus = arguments[1];
                 if (textStatus !== "abort") {
                     self.showMsg(ERROR_MSG_TYPE);
-                    self.setGridState(window.GRID_STATE.IDLE);
+                    self.setGridState(window.GRID_STATE.IDLE);                   
                 }
             });
 
@@ -173,7 +176,7 @@ function getCollapseCaption(cap) {
                 self._gridUpdated = (new Date()).getTime();
 
                 if (json && json.result === "success") {
-
+                    
                     if (json.data && json.data.length > 0) {
                         self.$caseRecordCount.text(json.recordsTotal);
                     } else {
@@ -186,6 +189,13 @@ function getCollapseCaption(cap) {
                     if (json.statisticsView) {
                         self.loadStatisticsView(json.statisticsView);
                     }
+
+                    var endTime = performance.now();
+                    var processDuration = json.processDuration;
+                    $('#performanceData').html('');
+                    $('#performanceData').append("Server side duration: " + processDuration + " milliseconds. <br/>")
+                    $('#performanceData').append("Total duration: " + Math.round(endTime - globalTimerStartTime) + " milliseconds.")
+
                 } else {
                     self.showMsg(ERROR_MSG_TYPE);
                     self.setGridState(window.GRID_STATE.IDLE);
@@ -208,7 +218,7 @@ function getCollapseCaption(cap) {
             });
 
         //// Bind events
-        $("a.refresh-grid").on('click', function (ev) {
+        $("a.refresh-grid").on('click', function (ev) {            
             ev.preventDefault();
             if (self._gridState !== window.GRID_STATE.IDLE) {
                 return false;

@@ -69,6 +69,7 @@ namespace DH.Helpdesk.Web.Controllers
     using Services.BusinessLogic.Admin.Users;
     using Services.BusinessLogic.Mappers.Users;
     using BusinessData.Enums.Admin.Users;
+    using System.Diagnostics;
 
     public class CasesController : BaseController
     {        
@@ -534,6 +535,9 @@ namespace DH.Helpdesk.Web.Controllers
         [ValidateInput(false)]
 		public ActionResult SearchAjax(FormCollection frm)
 		{
+            var sw = new Stopwatch();
+            sw.Start();
+
 			if (SessionFacade.CurrentUser == null || SessionFacade.CurrentCustomer == null)
 			{
 				return new RedirectResult("~/Error/Unathorized");
@@ -794,15 +798,18 @@ namespace DH.Helpdesk.Web.Controllers
 					GetCaseStatisticsModel(aggregateData, m.cases.Count, expandedGroup, statisticsFields));
 			}
 
-			return Json(new
+            sw.Stop();
+            var duration = sw.ElapsedMilliseconds;
+            return Json(new
 			{
 				result = "success",
 				data = data,
 				remainingView = remainingView,
 				statisticsView = statisticsView,
 				recordsTotal = searchResult.Count,
-				recordsFiltered = searchResult.Count
-			});
+				recordsFiltered = searchResult.Count,
+                processDuration = duration
+            });
 		}
 
 
