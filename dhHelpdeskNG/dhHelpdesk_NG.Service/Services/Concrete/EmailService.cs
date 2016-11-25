@@ -99,7 +99,7 @@
             return res;
         }
 
-        public EmailResponse SendEmail(EmailItem item, EmailSettings emailsettings, string siteSelfService = "", string siteHelpdesk = "")
+        public EmailResponse SendEmail(EmailItem item, EmailSettings emailsettings, string siteSelfService = "", string siteHelpdesk = "", bool isCcMail = false)
         {
             return this.SendEmail(
                                 item.From,
@@ -111,7 +111,8 @@
                                 item.MailMessageId,
                                 item.IsHighPriority,
                                 item.Files,
-                                siteSelfService, siteHelpdesk);
+                                siteSelfService, siteHelpdesk,
+                                isCcMail);
         }
 
         public EmailResponse SendEmail(
@@ -125,7 +126,8 @@
             bool highPriority = false,
             List<string> files = null,
             string siteSelfService = "",
-            string siteHelpdesk = "")
+            string siteHelpdesk = "",
+            bool isCcMail = false)
         {
             EmailResponse res = emailsettings.Response;
             var sendTime = DateTime.Now;
@@ -164,34 +166,42 @@
                         if (!string.IsNullOrWhiteSpace(mailMessageId))
                             msg.Headers.Add("Message-ID", mailMessageId);
                         if (highPriority)
-                            msg.Priority = MailPriority.High;  
+                            msg.Priority = MailPriority.High;
 
-                        string[] strTo = to.Replace(" ", string.Empty).Replace(Environment.NewLine, string.Empty).Split(new Char[] { ';' });
-                        for (int i = 0; i < strTo.Length; i++)
+                        if (isCcMail)
                         {
-                            if (strTo[i].Length > 2)
+                            if (IsValidEmail(to))
+                                msg.CC.Add(new MailAddress(to));
+                        }
+                        else
+                        {
+                            string[] strTo = to.Replace(" ", string.Empty).Replace(Environment.NewLine, string.Empty).Split(new Char[] {';'});
+                            for (int i = 0; i < strTo.Length; i++)
                             {
-                                switch (strTo[i].Substring(0, 3))
+                                if (strTo[i].Length > 2)
                                 {
-                                    case "cc:":
-                                        string cc = strTo[i].Substring(3);
-                                        if (IsValidEmail(cc))
-                                            msg.CC.Add(new MailAddress(cc));
-                                        break;
-                                    case "bcc":
-                                        string bcc = strTo[i].Substring(4);
-                                        if (IsValidEmail(bcc))
-                                            msg.Bcc.Add(new MailAddress(bcc));
-                                        break;
-                                    case "to:":
-                                        string to_ = strTo[i].Substring(3);
-                                        if (IsValidEmail(to_))
-                                            msg.To.Add(new MailAddress(to_));
-                                        break;
-                                    default: 
-                                        if (IsValidEmail(strTo[i]))
-                                            msg.To.Add(new MailAddress(strTo[i]));
-                                        break;
+                                    switch (strTo[i].Substring(0, 3))
+                                    {
+                                        case "cc:":
+                                            string cc = strTo[i].Substring(3);
+                                            if (IsValidEmail(cc))
+                                                msg.CC.Add(new MailAddress(cc));
+                                            break;
+                                        case "bcc":
+                                            string bcc = strTo[i].Substring(4);
+                                            if (IsValidEmail(bcc))
+                                                msg.Bcc.Add(new MailAddress(bcc));
+                                            break;
+                                        case "to:":
+                                            string to_ = strTo[i].Substring(3);
+                                            if (IsValidEmail(to_))
+                                                msg.To.Add(new MailAddress(to_));
+                                            break;
+                                        default:
+                                            if (IsValidEmail(strTo[i]))
+                                                msg.To.Add(new MailAddress(strTo[i]));
+                                            break;
+                                    }
                                 }
                             }
                         }

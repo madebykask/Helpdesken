@@ -8,6 +8,7 @@ using DH.Helpdesk.Dal.Repositories;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Services.Services;
 using System.Configuration;
+using System.Linq;
 using DH.Helpdesk.BusinessData.Models.Email;
 
 namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
@@ -243,8 +244,8 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
             MailSenders mailSenders)
         {
             if (log == null || log.Id <= 0 ||
-                !log.SendMailAboutLog ||
-                string.IsNullOrWhiteSpace(log.EmailRecepientsInternalLog))
+                (string.IsNullOrWhiteSpace(log.EmailRecepientsInternalLogTo) &&
+                string.IsNullOrWhiteSpace(log.EmailRecepientsInternalLogCc)))
             {
                 return;
             }
@@ -276,36 +277,55 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                 if (string.IsNullOrWhiteSpace(customEmailSender4))
                     customEmailSender4 = mailSenders.SystemEmail;
 
-                var to = log.EmailRecepientsInternalLog
-                                    .Replace(" ", "")
-                                    .Replace(Environment.NewLine, "|")
-                                    .Split('|', ';', ',');
-               
-                foreach (var t in to)
+                var to = !string.IsNullOrEmpty(log.EmailRecepientsInternalLogTo)
+                    ? log.EmailRecepientsInternalLogTo
+                        .Replace(" ", "")
+                        .Replace(Environment.NewLine, "|")
+                        .Split(new[] {'|', ';', ','}, StringSplitOptions.RemoveEmptyEntries)
+                    : new string[0];
+                var cc = !string.IsNullOrEmpty(log.EmailRecepientsInternalLogCc)
+                    ? log.EmailRecepientsInternalLogCc
+                        .Replace(" ", "")
+                        .Replace(Environment.NewLine, "|")
+                        .Split(new[] {'|', ';', ','}, StringSplitOptions.RemoveEmptyEntries)
+                    : new string[0];
+
+                var allEmails = to.Select(x => new
                 {
-                    if (!string.IsNullOrWhiteSpace(t) && this.emailService.IsValidEmail(t))
+                    EmailAdress = x,
+                    IsCc = false
+                }).ToList();
+                var emailsCc = cc.Select(x => new
+                {
+                    EmailAdress = x,
+                    IsCc = true
+                }).ToList();
+                allEmails.AddRange(emailsCc);
+
+                foreach (var item in allEmails)
+                {
+                    if (!string.IsNullOrWhiteSpace(item.EmailAdress) && this.emailService.IsValidEmail(item.EmailAdress))
                     {
                         var internalEmailLog = this.emailFactory.CreatEmailLog(
                                                         caseHistoryId,
                                                         (int)GlobalEnums.MailTemplates.InternalLogNote,
-                                                        t,
+                                                        item.EmailAdress,
                                                         this.emailService.GetMailMessageId(helpdeskMailFromAdress));
                         string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + internalEmailLog.EmailLogGUID.ToString();
-                        //var siteHelpdesk = AbsoluterUrl;
                         var siteHelpdesk = AbsoluterUrl + "Cases/edit/" + newCase.Id.ToString();
                         var mailResponse = EmailResponse.GetEmptyEmailResponse();
                         var mailSetting = new EmailSettings(mailResponse, smtpInfo);
                         var internalEmail = this.emailFactory.CreateEmailItem(
-                                                        customEmailSender4,
-                                                        internalEmailLog.EmailAddress,
-                                                        template.Subject,
-                                                        template.Body,
-                                                        fields,
-                                                        internalEmailLog.MessageId,
-                                                        log.HighPriority,
-                                                        files);
-                        var e_res = this.emailService.SendEmail(internalEmail, mailSetting, siteSelfService, siteHelpdesk);
-                        internalEmailLog.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                            customEmailSender4,
+                            internalEmailLog.EmailAddress,
+                            template.Subject,
+                            template.Body,
+                            fields,
+                            internalEmailLog.MessageId,
+                            log.HighPriority,
+                            files);
+                        mailResponse = this.emailService.SendEmail(internalEmail, mailSetting, siteSelfService, siteHelpdesk, item.IsCc);
+                        internalEmailLog.SetResponse(mailResponse.SendTime, mailResponse.ResponseMessage);
                         var now = DateTime.Now;
                         internalEmailLog.CreatedDate = now;
                         internalEmailLog.ChangedDate = now;

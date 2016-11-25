@@ -32,9 +32,10 @@
             bool highPriority = false,
             List<string> files = null,
             string siteSelfService = "",
-            string siteHelpdesk = "");
+            string siteHelpdesk = "",
+            bool isCcMail = false);
 
-        EmailResponse SendEmail(EmailItem item, EmailSettings emailsettings, string siteSelfService = "", string siteHelpdesk = "");
+        EmailResponse SendEmail(EmailItem item, EmailSettings emailsettings, string siteSelfService = "", string siteHelpdesk = "", bool isCcMail = false);
 
         #endregion
     }

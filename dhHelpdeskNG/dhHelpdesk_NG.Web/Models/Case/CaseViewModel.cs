@@ -63,7 +63,6 @@
 
         public CaseLog CaseLog { get; set; }
 
-        public SendToDialogModel SendToDialogModel { get; set; }
         public CaseMailSetting CaseMailSetting { get; set; }
         public User RegByUser { get; set; }
         public CustomerUser customerUserSetting { get; set; }

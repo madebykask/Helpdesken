@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.BusinessData.Models.Shared.Output;
+﻿using DH.Helpdesk.BusinessData.Models.Case.CaseIntLog;
+using DH.Helpdesk.BusinessData.Models.Shared.Output;
 
 namespace DH.Helpdesk.Services.Services
 {
@@ -52,11 +53,14 @@ namespace DH.Helpdesk.Services.Services
             int? relatedCasesCaseId = null,
             string relatedCasesUserId = null,
             int[] caseIds = null);
+
+        List<CaseEmailSendOverview> GetIntLogEmailsForSend(int customerId, string query, bool isWgChecked, bool isInitChecked, bool isAdmChecked, bool isEgChecked);
     }
 
     public class CaseSearchService : ICaseSearchService
     {
         private readonly ICaseSearchRepository caseSearchRepository;
+        private readonly IUserEmailRepository _userEmailRepository;
         private readonly IProductAreaService productAreaService;
         private readonly IGlobalSettingService globalSettingService;
         private readonly ISettingService settingService;
@@ -64,13 +68,15 @@ namespace DH.Helpdesk.Services.Services
         private readonly IHolidayService holidayService;
 
         public CaseSearchService(
-            ICaseSearchRepository caseSearchRepository, 
+            ICaseSearchRepository caseSearchRepository,
+            IUserEmailRepository userEmailRepository, 
             IProductAreaService productAreaService, 
             IGlobalSettingService globalSettingService, 
             ISettingService settingService,
             IHolidayService holidayService)
         {
             this.caseSearchRepository = caseSearchRepository;
+            this._userEmailRepository = userEmailRepository;
             this.globalSettingService = globalSettingService;
             this.settingService = settingService;
             this.holidayService = holidayService;
@@ -198,6 +204,11 @@ namespace DH.Helpdesk.Services.Services
             }
 
             return result;
+        }
+
+        public List<CaseEmailSendOverview> GetIntLogEmailsForSend(int customerId, string query, bool isWgChecked, bool isInitChecked, bool isAdmChecked, bool isEgChecked)
+        {
+            return _userEmailRepository.GetEmailsListForIntLogSend(customerId, query, isWgChecked, isInitChecked, isAdmChecked, isEgChecked);
         }
 
         private CaseSearchFilter DoFilterValidation(CaseSearchFilter filter)

@@ -13,6 +13,9 @@
     {
         readonlyMode = Convert.ToBoolean(ViewData["readonlyLog"]);
     }
+
+    var translation = Translation.GetForJS("Till");
+    var btnToLabel = translation.First().ToString().ToUpper() + translation.Substring(1);
 }
  
 <h4 style="@Model.displayLogInfoHtml()">    
@@ -94,7 +97,7 @@
                 var msg = (string)TempData["PreventError"];
                 <div class="alert alert-error">
                     @msg
-                </div>   
+                </div>
             }
             <thead>
                 <tr>
@@ -142,43 +145,37 @@
                         @Html.TextAreaFor(model => model.CaseLog.TextInternal, new { style = "height:105px;", @readonly = true })
                     }
                 </td>
-                
-                    <td>
-                        <div class="checkbox">
-                            @*@if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote))
+
+                <td>
+                    <div class="checkbox">
+                        <div>
+                            <input type="button" class="btn" value="@btnToLabel" id="caseLogSendToMailAboutLogTo" style="display: inline-block; width: 50px;" />
+                            @Html.TextBoxFor(model => model.CaseLog.EmailRecepientsInternalLogTo, new { @readonly = "true", @style = "max-width: 250px;" })
+                        </div>
+                        <div>
+                            <input type="button" class="btn" value="@Translation.GetForJS("Kopia")" id="caseLogSendCcMailAboutLogCc" style="display: inline-block; width: 50px;"/>
+                            @Html.TextBoxFor(model => model.CaseLog.EmailRecepientsInternalLogCc, new {@readonly = "true", @style = "max-width: 250px;"})
+                        </div>
+                        @if (Model.templateistrue != 1 && !readonlyMode)
+                        {
+                            if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote))
                             {
-                                @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutLog, new { @disabled = true})
-                            }
-                            else
-                            {
-                                @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutLog)
-                            }*@
-                            @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutLog)
-                            <span class="lbl">@Translation.Get("Skicka intern loggpost till", SessionFacade.CurrentCaseLanguageId)</span>
-                            @if (Model.templateistrue != 1 && !readonlyMode)
-                            {
-                                if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote))
+                                if (Model.IsItParentCase() || Model.IsItChildCase())
                                 {
-                                    if (Model.IsItParentCase() || Model.IsItChildCase())
+                                    <br/>@Html.CheckBox("CaseLog.SendLogToParentChildLog")
+                                    if (Model.IsItParentCase())
                                     {
-                                        <br/>@Html.CheckBox("CaseLog.SendLogToParentChildLog")
-                                        if (Model.IsItParentCase())
-                                        {
-                                            <span class="lbl">@Translation.Get("Skicka intern loggpost till underärenden", SessionFacade.CurrentCaseLanguageId)</span>
-                                        }
-                                        else
-                                        {
-                                            <span class="lbl">@Translation.Get("Skicka intern loggpost till huvudärende", SessionFacade.CurrentCaseLanguageId)</span>
-                                        }
+                                        <span class="lbl">@Translation.Get("Skicka intern loggpost till underärenden", SessionFacade.CurrentCaseLanguageId)</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="lbl">@Translation.Get("Skicka intern loggpost till huvudärende", SessionFacade.CurrentCaseLanguageId)</span>
                                     }
                                 }
                             }
-                        </div>
-                        <div id="divEmailRecepientsInternalLog" style="display: none">
-                            @Html.TextAreaFor(model => model.CaseLog.EmailRecepientsInternalLog, new { @readonly = "readonly" })
-                        </div>
-                    </td>
-             
+                        }
+                    </div>
+                </td>
             </tr>
             @*@if (Model.templateistrue != 1)
             {*@
@@ -382,7 +379,7 @@
     </div>
 </div>
 
-@Html.Partial("_SendToDialog", Model.SendToDialogModel)
+@Html.Partial("_SendIntLogToDiallog")
 @*<div id="divNewFAQ" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true" >
     @Html.Partial("_NewFAQ", Model.EditFaqModel)
 </div>*@

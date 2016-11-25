@@ -1237,7 +1237,6 @@ namespace DH.Helpdesk.Web.Controllers
                     var customerSettings = this._settingService.GetCustomerSetting(customerId);
                     m.OutFormatter = new OutputFormatter(customerSettings.IsUserFirstLastNameRepresentation == 1, userTimeZone);
                     m.ResponsibleUsersAvailable = responsibleUsersAvailable.MapToSelectList(customerSettings, isAddEmpty);
-                    m.SendToDialogModel = this.CreateNewSendToDialogModel(customerId, responsibleUsersAvailable.ToList(), cs);
                     m.CaseLog.SendMailAboutCaseToNotifier = false;
                     m.MinWorkingTime = cs.MinRegWorkingTime != 0 ? cs.MinRegWorkingTime : 30;                    
                     // check department info
@@ -1306,6 +1305,16 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             return Json(new { searchKey = searchKey, result = result });            
+        }
+
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult SearchCaseIntLogEmails(string query, string searchKey, bool isWgChecked, bool isInitChecked, bool isAdmChecked, bool isEgChecked)
+        {
+            var models =
+                _caseSearchService.GetIntLogEmailsForSend(SessionFacade.CurrentCustomer.Id, query, isWgChecked, isInitChecked, isAdmChecked, isEgChecked);
+
+            return Json(new { searchKey = searchKey, result = models });
         }
 
         [HttpPost]
@@ -3625,7 +3634,7 @@ namespace DH.Helpdesk.Web.Controllers
             while (parent != null);
 
             return string.Join(" - ", list.Select(c => c.Name).Reverse());
-        }        
+        }
         #endregion
 
         #region --Get Models--
@@ -3950,7 +3959,6 @@ namespace DH.Helpdesk.Web.Controllers
 
             m.standardTexts = this._standardTextService.GetStandardTexts(customerId);
             m.Languages = this._languageService.GetActiveLanguages();
-            m.SendToDialogModel = this.CreateNewSendToDialogModel(customerId, responsibleUsersList.ToList(), customerSetting);
             m.CaseLog = this._logService.InitCaseLog(SessionFacade.CurrentUser.Id, string.Empty);
             m.CaseKey = m.case_.Id == 0 ? m.case_.CaseGUID.ToString() : m.case_.Id.ToString(global::System.Globalization.CultureInfo.InvariantCulture);
             m.LogKey = m.CaseLog.LogGuid.ToString();

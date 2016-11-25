@@ -73,6 +73,7 @@
     <Compile Include="Enums\BusinessRules\BusinessRuleEnums.cs" />
     <Compile Include="Enums\Case\CaseProgressFilter.cs" />
     <Compile Include="Enums\Case\CasesCustomFilter.cs" />
+    <Compile Include="Enums\Case\CaseSearchGroup.cs" />
     <Compile Include="Enums\Case\Fields\CaseInfoFields.cs" />
     <Compile Include="Enums\Case\Fields\ComputerFields.cs" />
     <Compile Include="Enums\Case\Fields\LogFields.cs" />
@@ -163,6 +164,7 @@
     <Compile Include="Models\BusinessRules\BusinessRuleModel.cs" />
     <Compile Include="Models\BusinessRules\BusinessRuleReadModel.cs" />
     <Compile Include="Models\CaseType\CaseTypeItem.cs" />
+    <Compile Include="Models\Case\CaseIntLog\CaseEmailSendOverview.cs" />
     <Compile Include="Models\Case\CaseLock\LockedCaseOverview.cs" />
     <Compile Include="Models\Case\CaseOverview\CaseInfoOverview.cs" />
     <Compile Include="Models\Case\CaseOverview\ComputerOverview.cs" />

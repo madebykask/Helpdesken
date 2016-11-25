@@ -10,6 +10,7 @@
             public const string AttributesValidation = "~/bundles/jqueryattrval";
             public const string EditOrder = ("~/bundles/orders/orderedit");
             public const string InventoryUserSearch = ("~/bundles/inventory/inventorysearch");
+            public const string CaseIntLogEmailSearch = ("~/bundles/inventory/caseintlogemailsearch");
         }
 
         public static void RegisterBundles(BundleCollection bundles)
@@ -404,6 +405,8 @@
                 "~/Content/js/Orders/order.edit.js"));
             bundles.Add(new ScriptBundle(ScriptNames.InventoryUserSearch).Include(
                 "~/Content/js/Inventory/inventory.search.js"));
+            bundles.Add(new ScriptBundle(ScriptNames.CaseIntLogEmailSearch).Include(
+                "~/Content/js/Cases/_caseIntLogSearch.js"));
 
         }
     }

@@ -35,7 +35,8 @@
         [StringLength(3000)]
         public string TextInternal { get; set; }
         
-        public string EmailRecepientsInternalLog { get; set; }
+        public string EmailRecepientsInternalLogTo { get; set; }
+        public string EmailRecepientsInternalLogCc { get; set; }
         public string EmailRecepientsExternalLog { get; set; }
         public int? UserId { get; set; }
         public string UserName { get; set; }

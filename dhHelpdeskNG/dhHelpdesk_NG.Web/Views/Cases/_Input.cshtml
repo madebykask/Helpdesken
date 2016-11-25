@@ -23,29 +23,35 @@
         userCaseLocker: '@Model.CaseLock.UserId',
         extendValue: '@Model.CaseLock.ExtendValue',
         timerInterval: '@Model.CaseLock.TimerInterval',
-        invoicePreventsToCloseCaseMessage: '@Translation.GetForJS("Du kan inte avsluta ärendet eftersom det finns öppna order.")',        
+        invoicePreventsToCloseCaseMessage: '@Translation.GetForJS("Du kan inte avsluta ärendet eftersom det finns öppna order.")',
         caseLockChecker: '@Url.Content("~/Cases/IsCaseAvailable/")',
         caseLockExtender: '@Url.Content("~/Cases/ReExtendCaseLock/")',
         caseActiveDataChecker: '@Url.Content("~/Cases/CheckCaseForActiveData/")',
         preventToSaveCaseWithInactiveValue: '@Model.Setting.PreventToSaveCaseWithInactiveValue',
         saveLockedCaseMessage: '@Translation.GetForJS("Ärendet har blivit sparat eller upplåst efter att du öppnade det. Stäng ärendet och försök igen.")',
         deleteLockedCaseMessage: '@Translation.GetForJS("Ärendet har blivit sparat eller upplåst efter att du öppnade det. Stäng ärendet och försök igen.")',
-        moveLockedCaseMessage: '@Translation.GetForJS("Ärendet har blivit sparat eller upplåst efter att du öppnade det. Stäng ärendet och försök igen.")',        
+        moveLockedCaseMessage: '@Translation.GetForJS("Ärendet har blivit sparat eller upplåst efter att du öppnade det. Stäng ärendet och försök igen.")',
         lostChangesConfirmation: '@Html.Raw(Translation.GetForJS("Dina ändringar har inte sparats. Fortsätt?"))',
         finishingDateMessage: '@Html.Raw(Translation.GetForJS(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) + " " + Translation.Get("kan inte vara tidigare än registreringsdatum."))',
         checkInactiveDataErrorMessage: '@Html.Raw(Translation.GetForJS("Problem med kommunikation med servern."))',
         productAreaChangeMessage: '@Translation.GetForJS(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(),
-                                                    Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)' + " " + 
-                                  '@Translation.GetForJS("kan inte ändra eftersom det finns order som inte är skickade.")',        
-        caseTemplateChangeMessage: '@Translation.GetForJS("Du kan inte använda ärendemall eftersom det finns order som inte är skickade.")', 
-         
-        caseRegDate: '@Model.case_.RegTime', 
+                                                    Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)' + " " +
+                                  '@Translation.GetForJS("kan inte ändra eftersom det finns order som inte är skickade.")',
+        caseTemplateChangeMessage: '@Translation.GetForJS("Du kan inte använda ärendemall eftersom det finns order som inte är skickade.")',
+
+        caseRegDate: '@Model.case_.RegTime',
         isCaseFileMandatory: '@Model.caseFieldSettings.getRequired(GlobalEnums.TranslationCaseFields.Filename.ToString())',
         caseFileCaption: '@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Filename.ToString(),
                                                 Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)',
-                                
+        emailNotValid: '@Translation.GetForJS("E-postadress är inte giltig.")',
+        emailAlreadyAdded: '@Translation.GetForJS("Samma e-post redan lagts i Att.")',
+        adminGroup: '@Translation.GetForJS("Handläggare")',
+        emailGroup: '@Translation.GetForJS("E-postgrupp")',
+        initGroup: '@Translation.GetForJS("Anmälare")',
+        wgGroup: '@Translation.GetForJS("Driftgrupp")',
+
         caseFieldNames:{
-            CustomerId: "case__Customer_Id",
+                        CustomerId: "case__Customer_Id",
             RegionId: "case__Region_Id",
             DepartmentId: "case__Department_Id",
             OUId: "case__Ou_Id",
@@ -65,21 +71,21 @@
             FinishingDate: "CaseLog_FinishingDate"
         },
         casesScopeInitParameters: {
-            requiredFieldsMessage: '@Translation.GetForJS("Ärendet kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ärendet.")',
+                        requiredFieldsMessage: '@Translation.GetForJS("Ärendet kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ärendet.")',
             getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax")',
             getDepartmentUsersUrl: '@Url.Action("GetDepartmentUsers", "Ajax")',
             relatedCasesUrl: '@Url.Action("RelatedCasesFull", "Cases")',
             relatedCasesCountUrl: '@Url.Action("RelatedCasesCount", "Cases")',
             getDepartmentOusUrl: '@Url.Action("ChangeDepartment", "Cases")',
-            deleteCaseFileConfirmMessage: '@Translation.GetForJS("Är du säker på att du vill ta bort bifogad fil")' + '?',            
+            deleteCaseFileConfirmMessage: '@Translation.GetForJS("Är du säker på att du vill ta bort bifogad fil")' + '?',
             okText: '@Translation.GetForJS("OK")',
             cancelText: '@Translation.GetForJS("Avbryt")',
             yesText: '@Translation.GetForJS("Ja")',
             noText: '@Translation.GetForJS("Nej")',
             validationMessages:  ['@Html.Raw(Translation.GetForJS("måste anges"))'],
-            mandatoryFieldsText: '@Translation.GetForJS("Obligatoriska fält")',            
+            mandatoryFieldsText: '@Translation.GetForJS("Obligatoriska fält")',
         }
-    };  
+                };
 
 </script>
 
@@ -88,31 +94,31 @@
 
 <script type="text/javascript">
     function CalcSLA()
-    {        
+                {        
         $.post('@Url.Content("~/Cases/CalculateSLA/")', {caseId:'@Model.case_.Id', userId:'@SessionFacade.CurrentUser.Id', simulateTime:'@Model.case_.ChangeTime.AddSeconds(5)'},
             function(data) {
-                alert(data);
-            });
-    }
+                        alert(data);
+                    });
+                }
 </script>
 
 @if (Model.case_ != null)
-{
+                {
     <div class="content onemenu editcase" id="mm1">
         <div class="container">
             <ul class="nav nav-tabs" id="myTab">
                 <li class="active">
-                    
+
                     @if (Model.CaseTemplateName != null)
-                    {
+                {
                         <a id="case-tab" href="#case" class="case">@Model.CaseTemplateName</a>
-                    }
+            }
                     else
                     {
                         <a id="case-tab" href="#case" class="case">@Translation.Get("Ärende")
                             @if (Model.case_.Id != 0)
-                            {
-                                @Model.case_.CaseNumber 
+            {
+                @Model.case_.CaseNumber
                             }                            
                         </a>
                     }
@@ -125,9 +131,9 @@
                 }
 
                 @if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
-                {
-                    if (Model.DynamicCase.ViewMode == 0)
-                    {
+        {
+            if (Model.DynamicCase.ViewMode == 0)
+            {
                     <li>
                         <a href="#dh-form-area" id="loadContainer" class="eform">@(Translation.Get(Model.DynamicCase.FormName))</a>
                     </li>
@@ -141,9 +147,9 @@
                 }
 
                 @if (Model.CaseLock != null && Model.CaseLock.IsLocked && Model.CaseLock.User != null)
-                {
-                    if (Model.CaseLock.UserId == SessionFacade.CurrentUser.Id)
-                    {
+        {
+            if (Model.CaseLock.UserId == SessionFacade.CurrentUser.Id)
+            {
                         <li class="notice">
                             <a>@Translation.Get("OBS! Du har redan öppnat detta ärende i en annan session.")</a>
                         </li>

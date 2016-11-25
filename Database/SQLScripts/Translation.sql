@@ -5170,7 +5170,21 @@ GO
 
 /* Notice:  1709, 1710, 1711  reserved for SelfService */
 
+If not exists (select * from tblText where Id = 1712)
+            insert into tblText (Id, Textstring) VALUES (1712, 'Samma e-post redan lagts i Till.')																
+																
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1712 and Language_Id=2)
+    insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1712, 'Same email already added in To.', 2)
+GO
 
+If not exists (select * from tblText where Id = 1713)
+            insert into tblText (Id, Textstring) VALUES (1713, 'Kopia')																
+																
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1713 and Language_Id=2)
+    insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1713, 'Cc', 2)
+GO
 
 
 -- *** Run this last when put translation script above this line **--
