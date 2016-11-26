@@ -152,9 +152,10 @@
 
             this.Bind<ILogProgramService>().To<LogProgramService>();
 
-            this.Bind<IBusinessRuleService>().To<BusinessRuleService>();            
+            this.Bind<IBusinessRuleService>().To<BusinessRuleService>();
 
-        }
+			Bind<IExternalInvoiceService>().To<ExternalInvoiceService>();
+		}
 
         #endregion
     }

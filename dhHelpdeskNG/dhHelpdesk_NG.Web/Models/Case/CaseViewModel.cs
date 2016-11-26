@@ -42,6 +42,7 @@
                                                                Value = string.Empty
                                                            }
                                                    };
+			ExternalInvoices = new List<ExternalInvoiceModel>();
         }
 
         public string CaseKey { get; set; }
@@ -236,7 +237,9 @@
         public List<CaseTemplateButton> CaseTemplateButtons { get; set; }
 
         public bool IsFollowUp { get; set; }
-    }
+
+		public List<ExternalInvoiceModel> ExternalInvoices { get; set; }
+	}
 
     public class CaseIndexViewModel
     {

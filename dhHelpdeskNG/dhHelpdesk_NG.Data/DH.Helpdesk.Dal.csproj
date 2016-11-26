@@ -215,6 +215,8 @@
     <Compile Include="Mappers\Customer\EntityToBusinessModel\CustomerSettingsToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Customer\EntityToBusinessModel\CustomerToBusinessModel.cs" />
     <Compile Include="Mappers\Documents\EntityToBusinessModel\DocumentToBusinessModelMapper.cs" />
+    <Compile Include="Mappers\ExternalInvoice\BusinessModelToEntity\ExternalInvoiceToEntityMapper.cs" />
+    <Compile Include="Mappers\ExternalInvoice\EntityToBusinessModel\CaseInvoiceRowToBusinessModel.cs" />
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Computer\ComputerFieldSettingsToFieldSettingsMapper.cs" />
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Computer\ComputerFieldSettingsToShortInfoSettingsMapper.cs" />
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Computer\ComputerFieldSettingsToComputerProcessingSettingsMapper.cs" />

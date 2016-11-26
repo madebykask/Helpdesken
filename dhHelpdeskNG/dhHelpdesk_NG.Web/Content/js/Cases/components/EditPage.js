@@ -716,4 +716,9 @@ EditPage.prototype.init = function (p) {
     }
 
     me.formOnBootValues = me.$form.serialize();
+
+    me.ExternalInvoice = new ExternalInvoice({
+        requiredMessage: p.casesScopeInitParameters.mandatoryFieldsText,
+        mustBeNumberMessage: p.casesScopeInitParameters.formatFieldsText + ": #.##"
+    });
 };

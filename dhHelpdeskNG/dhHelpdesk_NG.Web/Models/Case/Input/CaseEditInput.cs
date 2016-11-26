@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Models.Case.Input
+﻿using System.Collections.Generic;
+
+namespace DH.Helpdesk.Web.Models.Case.Input
 {
     using System;
 
@@ -39,5 +41,8 @@
         {
             return ParentId.HasValue && ParentId != 0;
         }
-    }
+
+		public List<ExternalInvoiceModel> ExternalInvoices { get; set; }
+
+	}
 }

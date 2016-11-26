@@ -7,6 +7,10 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using DH.Helpdesk.BusinessData.Models.ExternalInvoice;
+using DH.Helpdesk.Dal.Mappers.ExternalInvoice.BusinessModelToEntity;
+using DH.Helpdesk.Dal.Mappers.ExternalInvoice.EntityToBusinessModel;
+
 namespace DH.Helpdesk.Web.NinjectModules.Common
 {
     using DH.Helpdesk.BusinessData.Models.Calendar.Output;
@@ -81,7 +85,15 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
                 .To<CustomerToBusinessModel>()
                 .InSingletonScope();
 
-            this.Bind<IModulesInfoFactory>().To<ModulesInfoFactory>().InSingletonScope();
+			this.Bind<IBusinessModelToEntityMapper<ExternalInvoice, CaseInvoiceRow>>()
+				.To<ExternalInvoiceToEntityMapper>()
+				.InSingletonScope();
+
+			this.Bind<IEntityToBusinessModelMapper<CaseInvoiceRow, ExternalInvoice>>()
+				.To<CaseInvoiceRowToBusinessModel>()
+				.InSingletonScope();
+
+			this.Bind<IModulesInfoFactory>().To<ModulesInfoFactory>().InSingletonScope();
         }
     }
 }

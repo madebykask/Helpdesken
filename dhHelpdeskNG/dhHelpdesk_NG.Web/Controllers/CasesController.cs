@@ -8,6 +8,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using DH.Helpdesk.BusinessData.Models.ExternalInvoice;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -169,12 +170,14 @@ namespace DH.Helpdesk.Web.Controllers
 
         private readonly IUserPermissionsChecker _userPermissionsChecker;
 
+		private readonly IExternalInvoiceService _externalInvoiceService;
 
-        #endregion
 
-        #region ***Constructor***
+		#endregion
 
-        public CasesController(
+		#region ***Constructor***
+
+		public CasesController(
             ICaseService caseService,
             ICaseSearchService caseSearchService,
             ICaseFieldSettingService caseFieldSettingService,
@@ -236,7 +239,8 @@ namespace DH.Helpdesk.Web.Controllers
             ICausingPartService causingPartService,
             IInvoiceArticlesModelFactory invoiceArticlesModelFactory,
             IReportServiceService reportServiceService,
-            IUserPermissionsChecker userPermissionsChecker)
+            IUserPermissionsChecker userPermissionsChecker,
+			IExternalInvoiceService externalInvoiceService)
             : base(masterDataService)
         {
             this._masterDataService = masterDataService;
@@ -304,6 +308,7 @@ namespace DH.Helpdesk.Web.Controllers
             this._ReportServiceService = reportServiceService;
             this.invoiceArticlesModelFactory = invoiceArticlesModelFactory;
             this._userPermissionsChecker = userPermissionsChecker;
+			_externalInvoiceService = externalInvoiceService;
         }
 
 		#endregion
@@ -2747,6 +2752,16 @@ namespace DH.Helpdesk.Web.Controllers
                 }
             }
 
+			//save external invoices
+			_externalInvoiceService.SaveExternalInvoices(case_.Id, m.ExternalInvoices.Where(x => !String.IsNullOrWhiteSpace(x.Name)).Select(x => new ExternalInvoice
+			{
+				Id = x.Id,
+				InvoiceNumber = x.Name,
+				InvoicePrice = x.Value,
+				CreatedDate = DateTime.UtcNow,
+				CreatedByUserId = workContext.User.UserId
+			}).ToList());
+
             caseMailSetting.CustomeMailFromAddress = mailSenders;
             // send emails
             this._caseService.SendCaseEmail(case_.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase, caseLog, newLogFiles);
@@ -3684,6 +3699,12 @@ namespace DH.Helpdesk.Web.Controllers
                 
                 var userLocal_ChangeTime = TimeZoneInfo.ConvertTimeFromUtc(m.case_.ChangeTime, userTimeZone);
                 m.ChangeTime = userLocal_ChangeTime;
+	            m.ExternalInvoices = _externalInvoiceService.GetExternalInvoices(caseId).Select(x => new ExternalInvoiceModel
+	            {
+		            Id = x.Id,
+					Name = x.InvoiceNumber,
+					Value = x.InvoicePrice
+	            }).ToList();
             }
 
             var customerUserSetting = this._customerUserService.GetCustomerSettings(customerId, userId);
