@@ -135,11 +135,11 @@ function getCollapseCaption(cap) {
                     url: "/Cases/SearchAjax",
                     type: "POST",
                     data: function (data) {
-                        var params = $.extend({}, data, self.getFetchParams(appSettings.gridSettings));
-                        delete params.search;
-                        if (data.order && data.order.length > 0)
-                            data.order[0].column = data.columns[data.order[0].column].data;
-                        delete data.columns;
+                        var params = self.getFetchParams(appSettings.gridSettings);
+                        params.push({ name: "start", value: data.start });
+                        params.push({ name: "length", value: data.length });
+                        params.push({ name: "order", value: data.order.length === 1 ? data.columns[data.order[0].column].data : "" });
+                        params.push({ name: "dir", value: data.order.length === 1 ? data.order[0].dir : "" });
                         return params;
                     },
                     dataSrc: "data"
@@ -249,11 +249,7 @@ function getCollapseCaption(cap) {
         } else {
             fetchParams = baseParams;
         }
-        var obj = fetchParams.reduce(function (o, v, i) {
-            o[v.name] = v.value;
-            return o;
-        }, {});
-        return obj;
+        return fetchParams;
     };
 
     Page.prototype.autoReloadCheck = function () {

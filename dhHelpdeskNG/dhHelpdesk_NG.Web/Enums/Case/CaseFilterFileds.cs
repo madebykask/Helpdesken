@@ -33,8 +33,8 @@
         public const string ClosingReasonNameAttribute = "hidFilterClosingReasonId";
         public const string ProductAreaIdNameAttribute = "hidFilterProductAreaId";
 
-		public const string OrderColumnNum = "order[0][column]";
-		public const string OrderColumnDir = "order[0][dir]";
+		public const string OrderColumnNum = "order";
+		public const string OrderColumnDir = "dir";
 		public const string PageStart = "start";
 		public const string PageSize = "length";
 
