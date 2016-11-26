@@ -516,7 +516,11 @@ namespace DH.Helpdesk.Web.Controllers
             m.CaseSetting = this.GetCaseSettingModel(customerId, userId);
             var user = this._userService.GetUser(userId);
 
-            m.PageSettings = new PageSettingsModel()
+	        SessionFacade.CaseOverviewGridSettings.pageOptions.pageIndex =
+		        SessionFacade.CurrentCaseSearch.caseSearchFilter.PageInfo.PageNumber;
+
+
+			m.PageSettings = new PageSettingsModel()
                                  {
                                      searchFilter = JsonCaseSearchFilterData.MapFrom(m.CaseSetting),
                                      userFilterFavorites = GetMyFavorites(customerId, userId),
@@ -4442,6 +4446,7 @@ namespace DH.Helpdesk.Web.Controllers
             f.CaseClosingDateEndFilter = cu.CaseClosingDateEndFilter;
             f.CaseClosingReasonFilter = cu.CaseClosingReasonFilter.ReturnCustomerUserValue();
             f.CaseRemainingTime = cu.CaseRemainingTimeFilter.ReturnCustomerUserValue();
+			f.PageInfo = new PageInfo();
             this.ResolveParentPathesForFilter(f);
 
             s.SortBy = "CaseNumber";

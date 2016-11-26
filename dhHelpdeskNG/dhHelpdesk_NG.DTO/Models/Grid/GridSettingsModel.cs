@@ -20,6 +20,8 @@
 
         public SortingDirection sortDir;
 
+		public string sortDirString {get { return SortDirectionAsString(sortDir); } }
+
         public static string SortDirectionAsString(SortingDirection sortDir)
         {
             return sortDir == SortingDirection.Asc ? AscStr : DescStr;

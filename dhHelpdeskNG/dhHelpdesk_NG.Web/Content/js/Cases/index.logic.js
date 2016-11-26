@@ -125,6 +125,14 @@ function getCollapseCaption(cap) {
 
         var columns = self.getColumnSettings(appSettings.gridSettings);
 
+        var sortIndex = null;
+        for (var i = 0; i < columns.length; i++) {
+            if (columns[i].data === appSettings.gridSettings.sortOptions.sortBy) {
+                sortIndex = i;
+                break;
+            }
+        }
+
         self.table = InitDataTable("caseResults", appSettings.perPageText, appSettings.perShowingText,
             {
                 "sDom": "<'row-fluid'<'span6'l><'span6'p>r>t<'row-fluid'<'span6'i><'span6'p>>",
@@ -151,10 +159,11 @@ function getCollapseCaption(cap) {
                     }
                 },
                 columns: columns,
-                order: [],
+                order: sortIndex != null ? [[sortIndex, appSettings.gridSettings.sortOptions.sortDirString]] : [],
                 "bAutoWidth": false,
                 "lengthMenu": [appSettings.gridSettings.pageSizeList, appSettings.gridSettings.pageSizeList],
-                "iDisplayLength": appSettings.gridSettings.pageOptions.recPerPage
+                "iDisplayLength": appSettings.gridSettings.pageOptions.recPerPage,
+                "displayStart": appSettings.gridSettings.pageOptions.recPerPage * appSettings.gridSettings.pageOptions.pageIndex
             }, function (e, settings, techNote, message) {
                 console.log("An error has been reported by DataTable: ", message);
                 var textStatus = arguments[1];
