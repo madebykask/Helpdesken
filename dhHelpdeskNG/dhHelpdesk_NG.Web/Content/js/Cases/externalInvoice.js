@@ -102,6 +102,9 @@ ExternalInvoice.prototype = {
         "use strict";
         var self = this;
 
+        if (!row.length)
+            return;
+
         var txtName = $("td:nth-child(1) input[type=\"text\"]", row);
         var txtValue = $("td:nth-child(2) input[type=\"text\"]", row);
         if (setRequired) {
