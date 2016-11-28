@@ -149,12 +149,14 @@
                 <td>
                     <div class="checkbox">
                         <div>
-                            <input type="button" class="btn" value="@btnToLabel" id="caseLogSendToMailAboutLogTo" style="display: inline-block; width: 50px;" />
-                            @Html.TextBoxFor(model => model.CaseLog.EmailRecepientsInternalLogTo, new { @readonly = "true", @style = "max-width: 250px;" })
+                            <input type="button" class="btn width20" value="@btnToLabel" id="caseLogSendToMailAboutLogTo" />
+                            @Html.HiddenFor(model => model.CaseLog.EmailRecepientsInternalLogTo, new { @readonly = "true" })
+                            @Html.TextBoxFor(model => model.CaseLog.EmailRecepientsInternalLogTo, new { id= "Fake_CaseLog_EmailRecepientsInternalLogTo", @readonly = "true", @class= "width70" })
                         </div>
-                        <div>
-                            <input type="button" class="btn" value="@Translation.GetForJS("Kopia")" id="caseLogSendCcMailAboutLogCc" style="display: inline-block; width: 50px;"/>
-                            @Html.TextBoxFor(model => model.CaseLog.EmailRecepientsInternalLogCc, new {@readonly = "true", @style = "max-width: 250px;"})
+                        <div >
+                            <input type="button" class="btn width20" value="@Translation.GetForJS("Kopia")" id="caseLogSendCcMailAboutLogCc"/>
+                            @Html.HiddenFor(model => model.CaseLog.EmailRecepientsInternalLogCc, new {@readonly = "true" })
+                            @Html.TextBoxFor(model => model.CaseLog.EmailRecepientsInternalLogCc, new { id = "Fake_CaseLog_EmailRecepientsInternalLogCc", @readonly = "true", @class = "width70" })
                         </div>
                         @if (Model.templateistrue != 1 && !readonlyMode)
                         {

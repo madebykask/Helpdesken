@@ -5,7 +5,7 @@
 @Scripts.Render(BundleConfig.ScriptNames.CaseIntLogEmailSearch)
 
 <script type="text/javascript">
-    $(function() {
+    $(function () {
 
         var toType = 1;
         var ccType = 2;
@@ -20,8 +20,8 @@
                 dialogType: toType,
                 buttons: [
                     {
-                        text: '@Translation.GetForJS("Avbryt", Enums.TranslationSource.TextTranslation)',
-                        click: function() {
+                        text: '@Translation.GetForJS("Stäng", Enums.TranslationSource.TextTranslation)',
+                        click: function () {
                             $(this).dialog("close");
                             $("#casesIntLogSendInput").val("");
                         },
@@ -29,8 +29,11 @@
                     }
                 ],
 
-                open: function() {
+                open: function () {
                     InitCaseIntLogSendSearch();
+                },
+                close: function () {
+                    OnCloseCaseInternalLogSendDialog();
                 }
             });
     });
@@ -56,6 +59,5 @@
         <input id="searchIntSendToCheckboxEg" checked="checked" name="EmailGroup" type="checkbox" value="true"> @Translation.GetCoreTextTranslation("E-postgrupp")
     </label>
     <br/>
-@*    <input id="casesIntLogSendInput"/>*@
     <textarea cols="20" id="casesIntLogSendInput" ></textarea>
 </div>

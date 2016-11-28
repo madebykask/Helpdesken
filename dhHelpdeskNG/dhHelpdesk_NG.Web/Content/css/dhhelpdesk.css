@@ -3148,6 +3148,12 @@ body.login {
 .width90 {
     width: 90%!important;
 }
+.width70 {
+    width: 70%!important;
+}
+.width20 {
+    width: 20%!important;
+}
 .error-title {
     text-align: center;
 }

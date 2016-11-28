@@ -1,37 +1,65 @@
-﻿function InitCaseIntLogSendSearch() {
+﻿function OnCloseCaseInternalLogSendDialog() {
 
-    $("#casesIntLogSendInput").typeahead(getCasesIntLogEmailSearchOptions());
+    $.fn.textWidth = function (text, font) {
+        if (!$.fn.textWidth.fakeEl) $.fn.textWidth.fakeEl = $('<span>').hide().appendTo(document.body);
+        $.fn.textWidth.fakeEl.text(text || this.val() || this.text()).css('font', font || this.css('font'));
+        return $.fn.textWidth.fakeEl.width();
+    };
 
-    $("#casesIntLogSendInput").keyup(function(e) {
+    var dialogType = $("#SendIntLogCase").data("uiDialog").options.dialogType;
+    var fakeInput = $("#Fake_CaseLog_EmailRecepientsInternalLogTo");
+    if (dialogType === 2)
+        fakeInput = $("#Fake_CaseLog_EmailRecepientsInternalLogCc");
+    var valueInput = $("#casesIntLogSendInput");
+    var text = valueInput.val();
+    var elementWidht = fakeInput.width();
+    if (valueInput.textWidth() > elementWidht) {
+        for (var i = 35; i > 20; i--) {
+            fakeInput.val(text.substring(0, i) + "..+");
+            if (fakeInput.textWidth() <= elementWidht)
+                return;
+        }
+    } else {
+        fakeInput.val(text);
+    }
+}
+
+function InitCaseIntLogSendSearch() {
+
+    var textBoxEmailsTo = $("#CaseLog_EmailRecepientsInternalLogTo");
+    var textBoxEmailsCc = $("#CaseLog_EmailRecepientsInternalLogCc");
+    var emailInput = $("#casesIntLogSendInput");
+    var dialogWindow = $("#SendIntLogCase");
+
+    emailInput.typeahead(getCasesIntLogEmailSearchOptions());
+
+    emailInput.keyup(function (e) {
             if (e.keyCode === 13) {
                 e.preventDefault();
                 e.stopImmediatePropagation();
-                var emails = $("#casesIntLogSendInput").val();
+                var emails = $(this).val();
                 var arr = emails.split(';');
                 var newEmail = arr[arr.length - 1].replace("\n", "");
                 if (newEmail.trim() !== "" && checkAndAddEmailsTo(newEmail)) {
-                    $("#casesIntLogSendInput").val(emails.replace("\n", "") + ";");
+                    emailInput.val(emails.replace("\n", "") + ";");
                 }
             }
         });
 
-    $("#casesIntLogSendInput").keydown(function (e) {
+    emailInput.keydown(function (e) {
         if (e.keyCode === 8) {
             e.stopImmediatePropagation();
-            var emails = $("#casesIntLogSendInput");
-            if (emails.val().substr(emails.val().length - 1) === ";") {
+            if (emailInput.val().substr(emailInput.val().length - 1) === ";") {
                 e.preventDefault();
-                var arr = emails.val().split(';').filter(v => v !== "");
+                var arr = emailInput.val().split(';').filter(v => v !== "");
                 var lastEmail = arr[arr.length - 1] + ";";
-                emails.val(emails.val().replace(lastEmail, ""));
-                var dialogType = $("#SendIntLogCase").data("uiDialog").options.dialogType;
+                emailInput.val(emailInput.val().replace(lastEmail, ""));
+                var dialogType = dialogWindow.data("uiDialog").options.dialogType;
                 if (dialogType === 1) {
-                    var textBoxEmailsTo = $("#CaseLog_EmailRecepientsInternalLogTo");
-                    textBoxEmailsTo.val(emails.val());
+                    textBoxEmailsTo.val(emailInput.val());
                 }
                 if (dialogType === 2) {
-                    var textBoxEmailsCc = $("#CaseLog_EmailRecepientsInternalLogCc");
-                    textBoxEmailsCc.val(emails.val());
+                    textBoxEmailsCc.val(emailInput.val());
                 }
             }
         }
@@ -128,9 +156,7 @@
 
     function checkAndAddEmailsTo(value) {
         if (isValidEmailAddress(value)) {
-            var textBoxEmailsTo = $("#CaseLog_EmailRecepientsInternalLogTo");
-            var textBoxEmailsCc = $("#CaseLog_EmailRecepientsInternalLogCc");
-            var dialogType = $("#SendIntLogCase").data("uiDialog").options.dialogType;
+            var dialogType = dialogWindow.data("uiDialog").options.dialogType;
 
             var newToEmail = value + ";";
             if (dialogType === 1) {
@@ -144,7 +170,7 @@
             }
             if (dialogType === 2)
                 if (textBoxEmailsTo.val().indexOf(newToEmail) >= 0) {
-                    ShowToastMessage(window.parameters.emailAlreadyAdded, 'warning');
+                    ShowToastMessage(value + " : " + window.parameters.emailAlreadyAdded, 'warning');
                     return false;
                 }
                 else {
@@ -156,7 +182,7 @@
                 }
             return true;
         } else {
-            ShowToastMessage(window.parameters.emailNotValid, 'error');
+            ShowToastMessage(value + " : " + window.parameters.emailNotValid, 'error');
             return false;
         }
     }
