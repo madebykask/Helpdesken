@@ -160,14 +160,8 @@
                 this.IsInventoryVisible() ||
                 this.IsLicenseVisible() ||
                 this.IsAccountVisible() ||
-                this.IsContractVisible();
-
-            /*this.IsOrderVisible() ||
-            this.IsAccountVisible() ||
-                            
-            this.IsPlanningVisible() ||                
-            this.IsQuestionVisible() ||                                                
-            this.IsComputerUserVisible();*/
+                this.IsContractVisible() ||
+                this.IsOrderVisible();
         }
 
         public bool IsModulesVisible()
