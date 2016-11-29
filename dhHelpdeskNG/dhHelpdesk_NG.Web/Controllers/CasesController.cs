@@ -3180,7 +3180,7 @@ namespace DH.Helpdesk.Web.Controllers
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseCaseTypeFilter))
             {
                 const bool IsTakeOnlyActive = true;
-                fd.filterCaseType = this._caseTypeService.GetCaseTypes(cusId, IsTakeOnlyActive);
+                fd.filterCaseType = this._caseTypeService.GetCaseTypes(cusId, IsTakeOnlyActive).OrderBy(c => Translation.GetMasterDataTranslation(c.Name)).ToList();
             }
 
             //working group
@@ -3212,7 +3212,7 @@ namespace DH.Helpdesk.Web.Controllers
                 fd.filterProductArea = this._productAreaService.GetTopProductAreasForUser(
                     cusId,
                     SessionFacade.CurrentUser,
-                    isTakeOnlyActive);
+                    isTakeOnlyActive).OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList();
             }
 
             //kategori                        
@@ -3848,7 +3848,7 @@ namespace DH.Helpdesk.Web.Controllers
             if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()).ShowOnStartPage == 1)
             {
                 const bool TAKE_ONLY_ACTIVE = true;
-                m.caseTypes = this._caseTypeService.GetCaseTypes(customerId, TAKE_ONLY_ACTIVE);
+                m.caseTypes = this._caseTypeService.GetCaseTypes(customerId, TAKE_ONLY_ACTIVE).OrderBy(c => Translation.GetMasterDataTranslation(c.Name)).ToList();
             }
 
             if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Category_Id.ToString()).ShowOnStartPage == 1)
@@ -4842,7 +4842,7 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             ret.CaseTypeCheck = userCaseSettings.CaseType != string.Empty;
-            ret.CaseTypes = this._caseTypeService.GetCaseTypes(customerId, IsTakeOnlyActive);
+            ret.CaseTypes = this._caseTypeService.GetCaseTypes(customerId, IsTakeOnlyActive).OrderBy(c => Translation.GetMasterDataTranslation(c.Name)).ToList();
             ret.CaseTypePath = "--";
             int caseType;
             int.TryParse(userCaseSettings.CaseType, out caseType);
@@ -4859,7 +4859,7 @@ namespace DH.Helpdesk.Web.Controllers
             ret.ProductAreas = this._productAreaService.GetTopProductAreasForUser(
                     customerId,
                     SessionFacade.CurrentUser,
-                    true);
+                    true).OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList();
             ret.ProductAreaPath = "--";
 
             int pa;
