@@ -186,11 +186,11 @@ function getCollapseCaption(cap) {
 
                 if (json && json.result === "success") {
                     
-                    if (json.data && json.data.length > 0) {
-                        self.$caseRecordCount.text(json.recordsTotal);
-                    } else {
+                    if (!json.data || json.data.length < 1) {
                         self.showMsg(NODATA_MSG_TYPE);
                     }
+
+                    self.$caseRecordCount.text(json.recordsTotal);
 
                     if (json.remainingView) {
                         self.loadRemainingView(json.remainingView);
