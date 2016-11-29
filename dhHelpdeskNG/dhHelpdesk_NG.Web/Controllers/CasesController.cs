@@ -804,7 +804,7 @@ namespace DH.Helpdesk.Web.Controllers
 
 				statisticsView = this.RenderPartialViewToString(
 					"_Statistics",
-					GetCaseStatisticsModel(aggregateData, m.cases.Count, expandedGroup, statisticsFields));
+					GetCaseStatisticsModel(aggregateData, searchResult.Count, expandedGroup, statisticsFields));
 			}
 
             sw.Stop();
