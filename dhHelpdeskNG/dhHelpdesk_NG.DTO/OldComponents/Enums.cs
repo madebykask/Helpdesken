@@ -110,7 +110,8 @@ namespace DH.Helpdesk.BusinessData.OldComponents
             IsAbout_OU_Id = 71,
             IsAbout_CostCentre = 72,
             IsAbout_Place = 73,
-            IsAbout_UserCode = 74
+            IsAbout_UserCode = 74,
+            MailToNotifier = 75
         }
     }
 
@@ -160,8 +161,8 @@ namespace DH.Helpdesk.BusinessData.OldComponents
                 case CaseSolutionFields.Description:
                     return TranslationCaseFields.Description;
 
-                //case CaseSolutionFields.Email:
-                //    return TranslationCaseFields;
+                case CaseSolutionFields.Email:
+                    return TranslationCaseFields.MailToNotifier;
 
                 case CaseSolutionFields.ExternalLogNote:
                     return TranslationCaseFields.tblLog_Text_External;

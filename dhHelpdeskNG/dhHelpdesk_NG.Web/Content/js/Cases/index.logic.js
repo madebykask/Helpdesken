@@ -201,9 +201,11 @@ function getCollapseCaption(cap) {
 
                     var endTime = performance.now();
                     var processDuration = json.processDuration;
-                    $('#performanceData').html('');
-                    $('#performanceData').append("Server side duration: " + processDuration + " milliseconds. <br/>")
-                    $('#performanceData').append("Total duration: " + Math.round(endTime - globalTimerStartTime) + " milliseconds.")
+                    if (appSettings.curUserId == "admin") {
+                        $('#performanceData').html('');
+                        $('#performanceData').append("Server side duration: " + processDuration + " milliseconds. <br/>")
+                        $('#performanceData').append("Total duration: " + Math.round(endTime - globalTimerStartTime) + " milliseconds.")
+                    }
 
                 } else {
                     self.showMsg(ERROR_MSG_TYPE);

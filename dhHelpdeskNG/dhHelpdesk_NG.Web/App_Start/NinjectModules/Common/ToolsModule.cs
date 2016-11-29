@@ -20,7 +20,7 @@
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common.Concrete;
     using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Web.Infrastructure.Tools.Concrete;
-
+    using Infrastructure.ModelFactories.Case.Concrete;
     using Ninject.Modules;
     using Ninject.Web.Common;
 
@@ -52,6 +52,7 @@
 
             this.Bind<IMailTemplateFormatterNew>().To<MailTemplateFormatterNew>().InRequestScope();
             this.Bind<IRouteResolver>().To<RouteResolver>().InSingletonScope();
+            this.Bind<ICaseRuleFactory>().To<CaseRuleFactory>().InSingletonScope();
         }
 
         #endregion

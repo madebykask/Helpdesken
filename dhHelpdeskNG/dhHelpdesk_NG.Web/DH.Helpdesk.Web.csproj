@@ -526,6 +526,7 @@
     <Content Include="Content\js\Cases\index.logic.js" />
     <Content Include="Content\js\Cases\relatedCases.logic.js" />
     <Content Include="Content\js\Cases\caseInitForm.js" />
+    <Content Include="Content\js\CaseRules\case.rule.logics.js" />
     <Content Include="Content\js\CaseTemplates\index.logic.js" />
     <Content Include="Content\js\CaseTemplates\edit.logic.js" />
     <Content Include="Content\js\Changes\inventoryDialog.js" />
@@ -1122,6 +1123,7 @@
     <Compile Include="Infrastructure\BusinessModelFactories\Notifiers\IUpdatedSettingsFactory.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\JavaScriptConvertExtention.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\UserFormatterExtension.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Case\Concrete\CaseRuleFactory.cs" />
     <Compile Include="Infrastructure\SelectListMapper.cs" />
     <Compile Include="Infrastructure\Enums.cs" />
     <Compile Include="Infrastructure\Extensions\BooleanExtansions.cs" />
