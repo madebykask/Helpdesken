@@ -356,7 +356,7 @@
                 CsSelected = CsSelected.Where(availableCustomersHash.ContainsKey).ToArray();
             }
 
-            this._userService.SaveNewUser(user, AAsSelected, CsSelected, OTsSelected, null, null, out errors);
+            this._userService.SaveNewUser(user, AAsSelected, CsSelected, OTsSelected, null, null, out errors, ConfirmPassword);
             if (errors.Count == 0)
             {
                 return this.RedirectToAction("edit", "users", new { id = user.Id });
@@ -568,7 +568,15 @@
                 copy.UserRoles.Add(userRight);
             }
 
-            this._userService.SaveNewUser(copy, AAsSelected, CsSelected, OTsSelected, UserWorkingGroups, Departments, out errors);
+            
+            this._userService.SaveNewUser(copy, AAsSelected, CsSelected, OTsSelected, UserWorkingGroups, Departments, out errors, ConfirmPassword);
+
+            if (errors.Count > 0)
+            {
+                copy.Id = -1;
+                 var cmodel = this.CreateInputViewModel(copy);
+            }
+              
 
             var customerUsers = this._userService.GetCustomerUserForUser(copy.Id).ToList();
 
@@ -1048,7 +1056,7 @@
 
             #region SetInts           
 
-            if (model.User.Id != 0)
+            if (model.User.Id != 0 && model.User.Id != -1)
             {
                 if (model.User.UserRoles.Any())
                     model.UserRights = model.User.UserRoles.FirstOrDefault().Id;
