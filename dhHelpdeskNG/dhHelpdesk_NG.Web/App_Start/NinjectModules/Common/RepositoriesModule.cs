@@ -274,6 +274,7 @@
             this.Bind<IMail2TicketRepository>().To<Mail2TicketRepository>();
             this.Bind<IBusinessRuleRepository>().To<BusinessRuleRepository>();
             this.Bind<ICaseFollowUpRepository>().To<CaseFollowUpRepository>();
+            this.Bind<ICaseExtraFollowersRepository>().To<CaseExtraFollowersRepository>();
         }
 
         #endregion

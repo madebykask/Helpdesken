@@ -545,9 +545,11 @@
 
         public DbSet<ReportFavorite> ReportFavorites { get; set; }
 
-		public DbSet<CaseFollowUp> CaseFollowUps { get; set; }
+        public DbSet<CaseFollowUp> CaseFollowUps { get; set; }
 
-		#endregion
+        public DbSet<CaseExtraFollower> CaseExtraFollowers { get; set; }
+
+        #endregion
 
 		#region Public Methods and Operators
 
@@ -617,6 +619,7 @@
             modelBuilder.Configurations.Add(new CaseLockConfiguration());
             modelBuilder.Configurations.Add(new CaseStatisticConfiguration());
             modelBuilder.Configurations.Add(new CaseFollowUpConfiguration());
+            modelBuilder.Configurations.Add(new CaseExtraFollowerConfiguration());
 
             modelBuilder.Configurations.Add(new CaseInvoiceRowConfiguration());
             modelBuilder.Configurations.Add(new CaseIsAboutConfiguration());

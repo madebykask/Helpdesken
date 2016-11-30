@@ -49,6 +49,7 @@
         emailGroup: '@Translation.GetForJS("E-postgrupp")',
         initGroup: '@Translation.GetForJS("Anmälare")',
         wgGroup: '@Translation.GetForJS("Driftgrupp")',
+        closeBtn: '@Translation.GetForJS("Stäng")',
 
         caseFieldNames:{
                         CustomerId: "case__Customer_Id",
@@ -95,13 +96,15 @@
 
 <script type="text/javascript">
     function CalcSLA()
-                {        
+                {
         $.post('@Url.Content("~/Cases/CalculateSLA/")', {caseId:'@Model.case_.Id', userId:'@SessionFacade.CurrentUser.Id', simulateTime:'@Model.case_.ChangeTime.AddSeconds(5)'},
             function(data) {
-                        alert(data);
-                    });
-                }
+                alert(data);
+            });
+    }
 </script>
+
+@Html.Partial("ModalDialogs/_CaseAddFollowers")
 
 @if (Model.case_ != null)
                 {
@@ -281,13 +284,20 @@
                                                 <td>
                                                     @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Persons_Name, CaseSolutionFields.PersonsName))
                                                     {
-                                                        @Html.TextBoxFor(model => model.case_.PersonsName, new { maxlength = "50" })
+                                                        @Html.TextBoxFor(model => model.case_.PersonsName, new {maxlength = "50"})
                                                     }
                                                     else
                                                     {
-                                                        @Html.TextBoxFor(model => model.case_.PersonsName, new { maxlength = "50", @readonly = "readonly" })
+                                                        @Html.TextBoxFor(model => model.case_.PersonsName, new {maxlength = "50", @readonly = "readonly"})
                                                     }
-                                                    
+                                                </td>
+                                                <td>
+                                                    @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Persons_Name, CaseSolutionFields.PersonsName))
+                                                    {
+                                                        <input type="button" class="btn" value="Add followers" id="caseAddExtraFollowersBtn"/>
+                                                    }
+                                                    @Html.HiddenFor(model => model.FollowerUsers, new {@readonly = "true", id = "caseFollowerUsers"})
+                                                    @Html.TextBoxFor(model => model.FollowerUsers, new {id = "FakeCaseFollowerUsers", @readonly = "true", @class = "width60"})
                                                 </td>
 
                                             </tr>

@@ -507,7 +507,8 @@
     <Content Include="Content\js\bootstrap-tagsinput.min.js" />
     <Content Include="Content\js\Cases\case.templates.js" />
     <Content Include="Content\js\Cases\caseByIds.logic.js" />
-    <Content Include="Content\js\Cases\_caseIntLogSearch.js" />
+    <Content Include="Content\js\Cases\Dialogs\_caseAddFollowersSearch.js" />
+    <Content Include="Content\js\Cases\Dialogs\_caseIntLogSearch.js" />
     <Content Include="Content\js\Cases\externalInvoice.js" />
     <Content Include="Content\js\Cases\_caseLogInput.js" />
     <Content Include="Content\js\Cases\components\BaseField.js" />
@@ -2429,7 +2430,8 @@
     <Content Include="Views\Contracts\New.cshtml" />
     <Content Include="Views\Contracts\_Input.cshtml" />
     <Content Include="Views\Contracts\Edit.cshtml" />
-    <Content Include="Views\Cases\_SendIntLogToDiallog.cshtml" />
+    <Content Include="Views\Cases\ModalDialogs\_SendIntLogToDiallog.cshtml" />
+    <Content Include="Views\Cases\ModalDialogs\_CaseAddFollowers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">

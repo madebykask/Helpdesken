@@ -1255,4 +1255,13 @@ function CaseInitForm() {
 
     bindDeleteCaseFileBehaviorToDeleteButtons();
     SetFocusToReportedByOnCase();
+
+    $("#caseAddExtraFollowersBtn").click(function () {
+        $("#caseAddFollowersDialog").dialog("option", "width", 350);
+        $("#caseAddFollowersDialog").dialog("option", "height", 350);
+        $("#caseAddFollowersDialog").dialog("open");
+        var existEmails = $("#caseFollowerUsers").val();
+        $("#caseAddFollowersSendInput").val(existEmails);
+        $("#caseAddFollowersSendInput").focus();
+    });
 }

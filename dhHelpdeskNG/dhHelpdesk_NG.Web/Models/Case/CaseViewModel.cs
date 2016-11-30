@@ -239,6 +239,8 @@
         public bool IsFollowUp { get; set; }
 
 		public List<ExternalInvoiceModel> ExternalInvoices { get; set; }
+
+        public string FollowerUsers { get; set; }
 	}
 
     public class CaseIndexViewModel

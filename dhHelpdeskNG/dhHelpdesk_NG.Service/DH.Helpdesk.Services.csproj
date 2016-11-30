@@ -270,6 +270,7 @@
     <Compile Include="Infrastructure\Email\Concrete\CaseMailer.cs" />
     <Compile Include="Infrastructure\Email\ICaseMailer.cs" />
     <Compile Include="Infrastructure\TimeZoneResolver\TimeZoneResolver.cs" />
+    <Compile Include="Services\CaseExtraFollowersService.cs" />
     <Compile Include="Services\CaseFollowUpService.cs" />
     <Compile Include="Services\CaseStatistic\CaseStatisticService.cs" />
     <Compile Include="Services\Concrete\CaseLockService.cs" />

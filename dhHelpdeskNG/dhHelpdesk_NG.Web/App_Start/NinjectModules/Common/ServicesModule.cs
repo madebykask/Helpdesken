@@ -155,6 +155,7 @@
             this.Bind<IBusinessRuleService>().To<BusinessRuleService>();
 
 			Bind<IExternalInvoiceService>().To<ExternalInvoiceService>();
+			Bind<ICaseExtraFollowersService>().To<CaseExtraFollowersService>();
 		}
 
         #endregion

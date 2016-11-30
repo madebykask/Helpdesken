@@ -1,0 +1,28 @@
+﻿
+@using System.Web.Optimization
+@using DH.Helpdesk.Web
+
+@Scripts.Render(BundleConfig.ScriptNames.CaseAddFollowersSearch)
+
+<script type="text/javascript">
+    $(function () {
+        InitializeAddFollowersDialog();
+    });
+</script>
+
+<div id="caseAddFollowersDialog" title="@Translation.GetCoreTextTranslation("E-post")" class="overflow-visible">
+    <label>
+        <input id="searchAddFollowersCheckboxWg" checked="checked" name="WorkingGroup" type="checkbox" value="true"> @Translation.GetCoreTextTranslation("Driftgrupp")
+    </label>
+    <label>
+        <input id="searchAddFollowersCheckboxInit" checked="checked" name="Initiator" type="checkbox" value="true"> @Translation.GetCoreTextTranslation("Anmälare")
+    </label>
+    <label>
+        <input id="searchAddFollowersCheckboxAdm" checked="checked" name="Administrator" type="checkbox" value="true"> @Translation.GetCoreTextTranslation("Handläggare")
+    </label>
+    <label>
+        <input id="searchAddFollowersCheckboxEg" checked="checked" name="EmailGroup" type="checkbox" value="true"> @Translation.GetCoreTextTranslation("E-postgrupp")
+    </label>
+    <br />
+    <textarea cols="20" id="caseAddFollowersSendInput"></textarea>
+</div>

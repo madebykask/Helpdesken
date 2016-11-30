@@ -7,6 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.ExternalInvoice;
 using DH.Helpdesk.Dal.Mappers.ExternalInvoice.BusinessModelToEntity;
 using DH.Helpdesk.Dal.Mappers.ExternalInvoice.EntityToBusinessModel;
@@ -93,7 +94,11 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
 				.To<CaseInvoiceRowToBusinessModel>()
 				.InSingletonScope();
 
-			this.Bind<IModulesInfoFactory>().To<ModulesInfoFactory>().InSingletonScope();
+            this.Bind<IEntityToBusinessModelMapper<CaseExtraFollower, ExtraFollower>>()
+                .To<CaseExtraFollowersToBusinessModelMapper>()
+                .InSingletonScope();
+
+            this.Bind<IModulesInfoFactory>().To<ModulesInfoFactory>().InSingletonScope();
         }
     }
 }

@@ -172,6 +172,8 @@ namespace DH.Helpdesk.Web.Controllers
 
 		private readonly IExternalInvoiceService _externalInvoiceService;
 
+		private readonly ICaseExtraFollowersService _caseExtraFollowersService;
+
 
 		#endregion
 
@@ -240,7 +242,8 @@ namespace DH.Helpdesk.Web.Controllers
             IInvoiceArticlesModelFactory invoiceArticlesModelFactory,
             IReportServiceService reportServiceService,
             IUserPermissionsChecker userPermissionsChecker,
-			IExternalInvoiceService externalInvoiceService)
+			IExternalInvoiceService externalInvoiceService,
+            ICaseExtraFollowersService caseExtraFollowersService)
             : base(masterDataService)
         {
             this._masterDataService = masterDataService;
@@ -309,6 +312,7 @@ namespace DH.Helpdesk.Web.Controllers
             this.invoiceArticlesModelFactory = invoiceArticlesModelFactory;
             this._userPermissionsChecker = userPermissionsChecker;
 			_externalInvoiceService = externalInvoiceService;
+			_caseExtraFollowersService = caseExtraFollowersService;
         }
 
 		#endregion
@@ -2766,6 +2770,12 @@ namespace DH.Helpdesk.Web.Controllers
 				CreatedByUserId = workContext.User.UserId
 			}).ToList());
 
+            if (!string.IsNullOrEmpty(m.FollowerUsers))
+            {
+                var followerUsers = m.FollowerUsers.Split(';').Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
+                _caseExtraFollowersService.SaveExtraFollowers(case_.Id, followerUsers, workContext.User.UserId);
+            }
+
             caseMailSetting.CustomeMailFromAddress = mailSenders;
             // send emails
             this._caseService.SendCaseEmail(case_.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase, caseLog, newLogFiles);
@@ -3709,6 +3719,9 @@ namespace DH.Helpdesk.Web.Controllers
 					Name = x.InvoiceNumber,
 					Value = x.InvoicePrice
 	            }).ToList();
+                var caseFolowerUsers = _caseExtraFollowersService.GetCaseExtraFollowers(caseId).Select(x => x.Follower).ToArray();
+                var followerUsers = string.Join(";", caseFolowerUsers) + ";";
+                m.FollowerUsers = followerUsers;
             }
 
             var customerUserSetting = this._customerUserService.GetCustomerSettings(customerId, userId);
@@ -3716,8 +3729,6 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 throw new ArgumentException(string.Format("No customer settings for this customer '{0}' and user '{1}'", customerId, userId));
             }
-
-            
 
             var case_ = m.case_;
             var customer = this._customerService.GetCustomer(customerId);

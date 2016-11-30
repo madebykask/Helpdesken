@@ -44,5 +44,7 @@ namespace DH.Helpdesk.Web.Models.Case.Input
 
 		public List<ExternalInvoiceModel> ExternalInvoices { get; set; }
 
+        public string FollowerUsers { get; set; }
+
 	}
 }

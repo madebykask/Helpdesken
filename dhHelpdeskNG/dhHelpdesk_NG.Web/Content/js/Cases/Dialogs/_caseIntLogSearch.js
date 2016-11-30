@@ -1,4 +1,37 @@
-﻿function OnCloseCaseInternalLogSendDialog() {
+﻿function InitializeInternalLogSendDialog() {
+    var toType = 1;
+    var ccType = 2;
+
+    $('#SendIntLogCase')
+        .dialog({
+            autoOpen: false,
+            modal: false,
+            resizable: false,
+            heigth: 200,
+            width: 350,
+            dialogType: toType,
+            dialogClass: 'overflow-visible',
+            buttons: [
+                {
+                    text: window.parameters.closeBtn,
+                    click: function () {
+                        $(this).dialog("close");
+                        $("#casesIntLogSendInput").val("");
+                    },
+                    'class': 'btn'
+                }
+            ],
+
+            open: function () {
+                InitCaseIntLogSendSearch();
+            },
+            close: function () {
+                OnCloseCaseInternalLogSendDialog();
+            }
+        });
+}
+
+function OnCloseCaseInternalLogSendDialog() {
 
     $.fn.textWidth = function (text, font) {
         if (!$.fn.textWidth.fakeEl) $.fn.textWidth.fakeEl = $('<span>').hide().appendTo(document.body);
@@ -46,13 +79,32 @@ function InitCaseIntLogSendSearch() {
             }
         });
 
+//    emailInput.keydown(function (e) {
+//        if (e.keyCode === 8) {
+//            e.stopImmediatePropagation();
+//            if (emailInput.val().substr(emailInput.val().length - 1) === ";") {
+//                e.preventDefault();
+//                var arr = emailInput.val().split(';').filter(v => v !== "");
+//                var lastEmail = arr[arr.length - 1] + ";";
+//                emailInput.val(emailInput.val().replace(lastEmail, ""));
+//                var dialogType = dialogWindow.data("uiDialog").options.dialogType;
+//                if (dialogType === 1) {
+//                    textBoxEmailsTo.val(emailInput.val());
+//                }
+//                if (dialogType === 2) {
+//                    textBoxEmailsCc.val(emailInput.val());
+//                }
+//            }
+//        }
+//    });
+
     emailInput.keydown(function (e) {
         if (e.keyCode === 8) {
+            e.preventDefault();
             e.stopImmediatePropagation();
-            if (emailInput.val().substr(emailInput.val().length - 1) === ";") {
-                e.preventDefault();
-                var arr = emailInput.val().split(';').filter(v => v !== "");
-                var lastEmail = arr[arr.length - 1] + ";";
+            var caretPos = emailInput[0].selectionStart;
+            var lastEmail = returnEmailBeforeCaret(emailInput.val(), caretPos);
+            if (lastEmail !== "") {
                 emailInput.val(emailInput.val().replace(lastEmail, ""));
                 var dialogType = dialogWindow.data("uiDialog").options.dialogType;
                 if (dialogType === 1) {
@@ -64,6 +116,19 @@ function InitCaseIntLogSendSearch() {
             }
         }
     });
+
+    function returnEmailBeforeCaret(text, caretPos) {
+        var preText = text.substring(0, caretPos);
+        if (preText.indexOf(";") > 0) {
+            var words = preText.split(";");
+            if (words[words.length - 1] === "")
+                return words[words.length - 2] + ";"; //return last email
+        }
+        else {
+            return "";
+        }
+        return "";
+    }
 
     function extractor(query) {
         var result = /([^;]+)$/.exec(query);

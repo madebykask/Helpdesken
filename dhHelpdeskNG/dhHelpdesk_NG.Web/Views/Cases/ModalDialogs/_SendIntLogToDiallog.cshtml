@@ -6,44 +6,9 @@
 
 <script type="text/javascript">
     $(function () {
-
-        var toType = 1;
-        var ccType = 2;
-
-        $('#SendIntLogCase')
-            .dialog({
-                autoOpen: false,
-                modal: false,
-                resizable: false,
-                heigth: 200,
-                width: 350,
-                dialogType: toType,
-                buttons: [
-                    {
-                        text: '@Translation.GetForJS("Stäng", Enums.TranslationSource.TextTranslation)',
-                        click: function () {
-                            $(this).dialog("close");
-                            $("#casesIntLogSendInput").val("");
-                        },
-                        'class': 'btn'
-                    }
-                ],
-
-                open: function () {
-                    InitCaseIntLogSendSearch();
-                },
-                close: function () {
-                    OnCloseCaseInternalLogSendDialog();
-                }
-            });
+        InitializeInternalLogSendDialog();
     });
 </script>
-
-<style type="text/css">
-    .ui-dialog {
-        overflow: visible !important;
-    }
-</style>
 
 <div id="SendIntLogCase" title="@Translation.GetCoreTextTranslation("E-post")" class="overflow-visible">
     <label>
