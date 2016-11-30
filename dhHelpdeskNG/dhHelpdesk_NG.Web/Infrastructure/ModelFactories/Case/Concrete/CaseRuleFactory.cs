@@ -1,5 +1,4 @@
 ﻿using DH.Helpdesk.Domain;
-using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Web.Models.CaseRules;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +21,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
 
         public CaseRuleFactory()
         {            
-        }
+        }        
 
         public CaseRuleModel GetCaseRuleModel(int customerId, CaseRuleType ruleType,
                                               IList<CaseFieldSetting> caseFieldSettings,
@@ -267,7 +266,16 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 IsAvailableOnSelfService = caseFieldSettings.getShowExternal(curField).ToBool(),
                 IsMandatory = caseFieldSettings.getRequired(curField).ToBool(),
                 StatusType = basicInformation.Regions.StatusType,
-                Items = basicInformation.Regions.Items
+                Items = basicInformation.Regions.Items,
+                Relations = new List<FieldRelation> {
+                    new FieldRelation() {
+                        SequenceNo = 0,
+                        RelationType = RelationType.OneToMany.ToInt(),
+                        ActionType = RelationActionType.ListPopulator.ToInt(),
+                        FieldId = TranslationCaseFields.Department_Id.ToString(),
+                        ForeignKeyNumber = 1                                                                       
+                    }
+                }
             };
             ret.Add(attrRegion);
 
@@ -288,7 +296,16 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 IsAvailableOnSelfService = caseFieldSettings.getShowExternal(curField).ToBool(),
                 IsMandatory = caseFieldSettings.getRequired(curField).ToBool(),
                 StatusType = basicInformation.Departments.StatusType,
-                Items = basicInformation.Departments.Items,
+                Items = basicInformation.Departments.Items,                
+                Relations = new List<FieldRelation> {
+                    new FieldRelation() {
+                        SequenceNo = 0,
+                        RelationType = RelationType.OneToMany.ToInt(),
+                        ActionType = RelationActionType.ListPopulator.ToInt(),
+                        FieldId = TranslationCaseFields.OU_Id.ToString(),
+                        ForeignKeyNumber = 1
+                    }
+                }
             };
             ret.Add(attrDepartment);
 
@@ -495,7 +512,16 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 IsAvailableOnSelfService = caseFieldSettings.getShowExternal(curField).ToBool(),
                 IsMandatory = caseFieldSettings.getRequired(curField).ToBool(),
                 StatusType = basicInformation.IsAbout_Regions.StatusType,
-                Items = basicInformation.IsAbout_Regions.Items
+                Items = basicInformation.IsAbout_Regions.Items,
+                Relations = new List<FieldRelation> {
+                    new FieldRelation() {
+                        SequenceNo = 0,
+                        RelationType = RelationType.OneToMany.ToInt(),
+                        ActionType = RelationActionType.ListPopulator.ToInt(),
+                        FieldId = TranslationCaseFields.IsAbout_Department_Id.ToString(),
+                        ForeignKeyNumber = 1
+                    }
+                }
             };
             ret.Add(attrIsAbout_Region);
 
@@ -516,7 +542,16 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 IsAvailableOnSelfService = caseFieldSettings.getShowExternal(curField).ToBool(),
                 IsMandatory = caseFieldSettings.getRequired(curField).ToBool(),
                 StatusType = basicInformation.IsAbout_Departments.StatusType,
-                Items = basicInformation.IsAbout_Departments.Items
+                Items = basicInformation.IsAbout_Departments.Items,
+                Relations = new List<FieldRelation> {
+                    new FieldRelation() {
+                        SequenceNo = 0,
+                        RelationType = RelationType.OneToMany.ToInt(),
+                        ActionType = RelationActionType.ListPopulator.ToInt(),
+                        FieldId = TranslationCaseFields.IsAbout_OU_Id.ToString(),
+                        ForeignKeyNumber = 1
+                    }
+                }
             };
             ret.Add(attrIsAbout_Department);
 
@@ -649,7 +684,17 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 IsAvailableOnSelfService = caseFieldSettings.getShowExternal(curField).ToBool(),
                 IsMandatory = caseFieldSettings.getRequired(curField).ToBool(),
                 StatusType = basicInformation.CaseTypes.StatusType,
-                Items = basicInformation.CaseTypes.Items
+                Items = basicInformation.CaseTypes.Items,
+                Relations = new List<FieldRelation> {
+                    new FieldRelation() {
+                        SequenceNo = 0,
+                        RelationType = RelationType.OneToOne.ToInt(),
+                        ActionType = RelationActionType.ValueSetter.ToInt(),
+                        FieldId = TranslationCaseFields.Performer_User_Id.ToString(),
+                        ForeignKeyNumber = 1
+                    }
+                }
+
             };
             ret.Add(attrCaseType);
 
@@ -670,7 +715,23 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 IsAvailableOnSelfService = caseFieldSettings.getShowExternal(curField).ToBool(),
                 IsMandatory = caseFieldSettings.getRequired(curField).ToBool(),
                 StatusType = basicInformation.ProductAreas.StatusType,
-                Items = basicInformation.ProductAreas.Items
+                Items = basicInformation.ProductAreas.Items,
+                Relations = new List<FieldRelation> {
+                    new FieldRelation() {
+                        SequenceNo = 0,
+                        RelationType = RelationType.OneToOne.ToInt(),
+                        ActionType = RelationActionType.ValueSetter.ToInt(),
+                        FieldId = TranslationCaseFields.WorkingGroup_Id.ToString(),
+                        ForeignKeyNumber = 1
+                    },
+                    new FieldRelation() {
+                        SequenceNo = 1,
+                        RelationType = RelationType.OneToOne.ToInt(),
+                        ActionType = RelationActionType.ValueSetter.ToInt(),
+                        FieldId = TranslationCaseFields.Priority_Id.ToString(),
+                        ForeignKeyNumber = 2
+                    }
+                }
             };
             ret.Add(attrProductArea);
 
@@ -691,7 +752,16 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 IsAvailableOnSelfService = caseFieldSettings.getShowExternal(curField).ToBool(),
                 IsMandatory = caseFieldSettings.getRequired(curField).ToBool(),
                 StatusType = basicInformation.Systems.StatusType,
-                Items = basicInformation.Systems.Items
+                Items = basicInformation.Systems.Items,
+                Relations = new List<FieldRelation> {
+                    new FieldRelation() {
+                        SequenceNo = 0,
+                        RelationType = RelationType.OneToOne.ToInt(),
+                        ActionType = RelationActionType.ValueSetter.ToInt(),
+                        FieldId = TranslationCaseFields.Urgency_Id.ToString(),
+                        ForeignKeyNumber = 1
+                    }
+                }
             };
             ret.Add(attrSystem);
 
@@ -1032,7 +1102,23 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 IsAvailableOnSelfService = caseFieldSettings.getShowExternal(curField).ToBool(),
                 IsMandatory = caseFieldSettings.getRequired(curField).ToBool(),
                 StatusType = basicInformation.WorkingGroups.StatusType,
-                Items = basicInformation.WorkingGroups.Items
+                Items = basicInformation.WorkingGroups.Items,
+                Relations = new List<FieldRelation> {
+                    new FieldRelation() {
+                        SequenceNo = 0,
+                        RelationType = RelationType.ManyToMany.ToInt(),
+                        ActionType = RelationActionType.ListPopulator.ToInt(),
+                        FieldId = TranslationCaseFields.Performer_User_Id.ToString(),
+                        ForeignKeyNumber = 1
+                    },
+                    new FieldRelation() {
+                        SequenceNo = 1,
+                        RelationType = RelationType.OneToOne.ToInt(),
+                        ActionType = RelationActionType.ValueSetter.ToInt(),
+                        FieldId = TranslationCaseFields.StateSecondary_Id.ToString(),
+                        ForeignKeyNumber = 2
+                    }
+                }
             };
             ret.Add(attrWorkingGroup);
 
@@ -1095,7 +1181,23 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 IsAvailableOnSelfService = caseFieldSettings.getShowExternal(curField).ToBool(),
                 IsMandatory = caseFieldSettings.getRequired(curField).ToBool(),
                 StatusType = basicInformation.Status.StatusType,
-                Items = basicInformation.Status.Items
+                Items = basicInformation.Status.Items,
+                Relations = new List<FieldRelation> {
+                    new FieldRelation() {
+                        SequenceNo = 0,
+                        RelationType = RelationType.OneToOne.ToInt(),
+                        ActionType = RelationActionType.ValueSetter.ToInt(),
+                        FieldId = TranslationCaseFields.WorkingGroup_Id.ToString(),
+                        ForeignKeyNumber = 1
+                    },
+                    new FieldRelation() {
+                        SequenceNo = 1,
+                        RelationType = RelationType.OneToOne.ToInt(),
+                        ActionType = RelationActionType.ValueSetter.ToInt(),
+                        FieldId = TranslationCaseFields.StateSecondary_Id.ToString(),
+                        ForeignKeyNumber = 2
+                    }
+                }
             };
             ret.Add(attrStatus);
 
@@ -1116,7 +1218,23 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 IsAvailableOnSelfService = caseFieldSettings.getShowExternal(curField).ToBool(),
                 IsMandatory = caseFieldSettings.getRequired(curField).ToBool(),
                 StatusType = basicInformation.SubStatus.StatusType,
-                Items = basicInformation.SubStatus.Items
+                Items = basicInformation.SubStatus.Items,
+                Relations = new List<FieldRelation> {
+                    new FieldRelation() {
+                        SequenceNo = 0,
+                        RelationType = RelationType.OneToOne.ToInt(),
+                        ActionType = RelationActionType.ValueSetter.ToInt(),
+                        FieldId = TranslationCaseFields.WorkingGroup_Id.ToString(),
+                        ForeignKeyNumber = 1
+                    },
+                    new FieldRelation() {
+                        SequenceNo = 1,
+                        RelationType = RelationType.OneToOne.ToInt(),
+                        ActionType = RelationActionType.ValueSetter.ToInt(),
+                        FieldId = TranslationCaseFields.MailToNotifier.ToString(),
+                        ForeignKeyNumber = 2
+                    }
+                }
             };
             ret.Add(attrStateSecondary);
 

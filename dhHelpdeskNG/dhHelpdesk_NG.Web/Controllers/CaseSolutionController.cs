@@ -671,14 +671,16 @@ namespace DH.Helpdesk.Web.Controllers
                 DefaultItem = defaultRegion != null? new FieldItem(defaultRegion.Id.ToString(), defaultRegion.Name) : FieldItem.CreateEmpty(),
                 Items = regions.Select(r=> new FieldItem(r.Id.ToString(), r.Name, r.IsActive != 0)).OrderBy(r => r.ItemText).ToList()                
             };
-
+            
             var departments = _departmentService.GetDepartments(customerId);            
             caseBasicInfo.Departments = new BasicMultiItemField()
             {
                 Selected = new FieldItem(templateModel.Department_Id?.ToString(), string.Empty),
                 StatusType = GetFieldStatusType(CaseSolutionFields.Department, templateSettingModel.ToList()),
                 DefaultItem = FieldItem.CreateEmpty(),
-                Items = departments.Select(d => new FieldItem(d.Id.ToString(), d.DepartmentName, d.IsActive != 0)).OrderBy(d => d.ItemText).ToList()
+                Items = departments.Select(d => new FieldItem(d.Id.ToString(), d.DepartmentName, d.IsActive != 0)
+                                                              { ForeignKeyValue1 = d.Region_Id?.ToString() })
+                                   .OrderBy(d => d.ItemText).ToList()
             };
 
             var ous = _ouService.GetOUs(customerId);
@@ -687,7 +689,9 @@ namespace DH.Helpdesk.Web.Controllers
                 Selected = new FieldItem(templateModel.OU_Id?.ToString(), string.Empty),
                 StatusType = GetFieldStatusType(CaseSolutionFields.OU, templateSettingModel.ToList()),
                 DefaultItem = FieldItem.CreateEmpty(),
-                Items = ous.Select(o => new FieldItem(o.Id.ToString(), (o.Parent == null? o.Name : string.Format("{0} - {1}", o.Parent.Name, o.Name)), o.IsActive != 0)).OrderBy(o=> o.ItemText).ToList()
+                Items = ous.Select(o => new FieldItem(o.Id.ToString(), (o.Parent == null? o.Name : string.Format("{0} - {1}", o.Parent.Name, o.Name)), o.IsActive != 0)
+                                                      { ForeignKeyValue1 = o.Department_Id?.ToString() })
+                           .OrderBy(o=> o.ItemText).ToList()
             };
 
             #endregion
@@ -755,7 +759,9 @@ namespace DH.Helpdesk.Web.Controllers
                 Selected = new FieldItem(templateModel.IsAbout_Department_Id?.ToString(), string.Empty),
                 StatusType = GetFieldStatusType(CaseSolutionFields.IsAbout_Department_Id, templateSettingModel.ToList()),
                 DefaultItem = FieldItem.CreateEmpty(),
-                Items = departments.Select(d => new FieldItem(d.Id.ToString(), d.DepartmentName, d.IsActive != 0)).OrderBy(d => d.ItemText).ToList()
+                Items = departments.Select(d => new FieldItem(d.Id.ToString(), d.DepartmentName, d.IsActive != 0)
+                                                              { ForeignKeyValue1 = d.Region_Id?.ToString() })
+                                   .OrderBy(d => d.ItemText).ToList()
             };
 
             caseBasicInfo.IsAbout_OUs = new BasicMultiItemField()
@@ -763,7 +769,9 @@ namespace DH.Helpdesk.Web.Controllers
                 Selected = new FieldItem(templateModel.IsAbout_OU_Id?.ToString(), string.Empty),
                 StatusType = GetFieldStatusType(CaseSolutionFields.IsAbout_OU_Id, templateSettingModel.ToList()),
                 DefaultItem = FieldItem.CreateEmpty(),
-                Items = ous.Select(o => new FieldItem(o.Id.ToString(), (o.Parent == null ? o.Name : string.Format("{0} - {1}", o.Parent.Name, o.Name)), o.IsActive != 0)).OrderBy(o => o.ItemText).ToList()
+                Items = ous.Select(o => new FieldItem(o.Id.ToString(), (o.Parent == null ? o.Name : string.Format("{0} - {1}", o.Parent.Name, o.Name)), o.IsActive != 0)
+                                                      { ForeignKeyValue1 = o.Department_Id?.ToString() })
+                           .OrderBy(o => o.ItemText).ToList()
             };
 
             #endregion
@@ -808,7 +816,8 @@ namespace DH.Helpdesk.Web.Controllers
                 Selected = new FieldItem(templateModel.CaseType_Id?.ToString(), string.Empty),
                 StatusType = GetFieldStatusType(CaseSolutionFields.CaseType, templateSettingModel.ToList()),
                 DefaultItem = defaultCaseType != null ? new FieldItem(defaultCaseType.Id.ToString(), defaultCaseType.Name) : FieldItem.CreateEmpty(),
-                Items = caseTypes.Select(c => new FieldItem(c.Id.ToString(), c.Name, c.IsActive != 0)).OrderBy(i => i.ItemText).ToList()
+                Items = caseTypes.Select(c => new FieldItem(c.Id.ToString(), c.Name, c.IsActive != 0) { ForeignKeyValue1 = c.User_Id?.ToString() })
+                                 .OrderBy(i => i.ItemText).ToList()
             };
 
             var prodAreas = _productAreaService.GetAll(customerId);
@@ -817,7 +826,12 @@ namespace DH.Helpdesk.Web.Controllers
                 Selected = new FieldItem(templateModel.ProductArea_Id?.ToString(), string.Empty),
                 StatusType = GetFieldStatusType(CaseSolutionFields.ProductArea, templateSettingModel.ToList()),
                 DefaultItem = FieldItem.CreateEmpty(),
-                Items = prodAreas.Select(p => new FieldItem(p.Id.ToString(), p.Name, p.IsActive != 0)).OrderBy(i => i.ItemText).ToList()
+                Items = prodAreas.Select(p => new FieldItem(p.Id.ToString(), p.Name, p.IsActive != 0)
+                                                            {
+                                                                ForeignKeyValue1 = p.WorkingGroup_Id?.ToString(),
+                                                                ForeignKeyValue2 = p.Priority_Id?.ToString()
+                                                            }
+                                        ).OrderBy(i => i.ItemText).ToList()
             };
 
             var systems = _systemService.GetSystems(customerId);
@@ -826,7 +840,8 @@ namespace DH.Helpdesk.Web.Controllers
                 Selected = new FieldItem(templateModel.System_Id?.ToString(), string.Empty),
                 StatusType = GetFieldStatusType(CaseSolutionFields.System, templateSettingModel.ToList()),
                 DefaultItem = FieldItem.CreateEmpty(),
-                Items = systems.Select(s => new FieldItem(s.Id.ToString(), s.SystemName, true)).OrderBy(i => i.ItemText).ToList()
+                Items = systems.Select(s => new FieldItem(s.Id.ToString(), s.SystemName, true) { ForeignKeyValue1 = s.Urgency_Id?.ToString() })
+                               .OrderBy(i => i.ItemText).ToList()
             };
 
             var urgencies = _urgencyService.GetUrgencies(customerId);
@@ -948,9 +963,14 @@ namespace DH.Helpdesk.Web.Controllers
                 Selected = new FieldItem(templateModel.WorkingGroup_Id?.ToString(), string.Empty),
                 StatusType = GetFieldStatusType(CaseSolutionFields.WorkingGroup, templateSettingModel.ToList()),
                 DefaultItem = defaultWG != null ? new FieldItem(defaultWG.Id.ToString(), defaultWG.WorkingGroupName) : FieldItem.CreateEmpty(),
-                Items = workinGroups.Select(w => new FieldItem(w.Id.ToString(), w.WorkingGroupName, w.IsActive != 0)).OrderBy(r => r.ItemText).ToList()
+                Items = workinGroups.Select(w => new FieldItem(w.Id.ToString(), w.WorkingGroupName, w.IsActive != 0)
+                                                               { ForeignKeyValue2 = w.StateSecondary_Id?.ToString() }
+                                           ).OrderBy(r => r.ItemText).ToList()
             };
 
+            var currentWG = new FieldItem("-1", string.Format("-- {0} --", Translation.GetCoreTextTranslation(CURRENT_USER_WORKINGGROUP_CAPTION)));
+            caseBasicInfo.WorkingGroups.Items.Insert(0, currentWG);
+          
             var admins = _userService.GetAvailablePerformersOrUserId(customerId);            
             caseBasicInfo.Administrators = new BasicMultiItemField()
             {
@@ -960,7 +980,13 @@ namespace DH.Helpdesk.Web.Controllers
                 Items = admins.Select(a => new FieldItem(a.Id.ToString(), 
                                                          (customerSettings.IsUserFirstLastNameRepresentation == 1 ?
                                                                 string.Format("{0} {1}", a.FirstName, a.SurName) : string.Format("{0} {1}", a.SurName, a.FirstName)),
-                                                         a.IsActive != 0)).OrderBy(i => i.ItemText).ToList()
+                                                         a.IsActive != 0)
+                                               {
+                                                    ForeignKeyValue1 = string.Join(",", a.UserWorkingGroups.Where(w=> w.UserRole == 2)
+                                                                                                           .Select(w=> w.WorkingGroup_Id).ToArray())
+                                               }
+                                     )
+                              .OrderBy(i => i.ItemText).ToList()
             };
 
             var currentUser = new FieldItem("-1", string.Format("-- {0} --", Translation.GetCoreTextTranslation(CURRENT_USER_ITEM_CAPTION)));
@@ -984,7 +1010,12 @@ namespace DH.Helpdesk.Web.Controllers
                 Selected = new FieldItem(templateModel.Status_Id?.ToString(), string.Empty),
                 StatusType = GetFieldStatusType(CaseSolutionFields.Status, templateSettingModel.ToList()),
                 DefaultItem = defaultStatus != null ? new FieldItem(defaultStatus.Id.ToString(), defaultStatus.Name) : FieldItem.CreateEmpty(),
-                Items = statuses.Select(s => new FieldItem(s.Id.ToString(), s.Name, s.IsActive != 0)).OrderBy(i => i.ItemText).ToList()
+                Items = statuses.Select(s => new FieldItem(s.Id.ToString(), s.Name, s.IsActive != 0)
+                                                            {
+                                                                ForeignKeyValue1 = s.WorkingGroup_Id?.ToString(),
+                                                                ForeignKeyValue2 = s.StateSecondary_Id?.ToString(),
+                                                            }
+                                       ).OrderBy(i => i.ItemText).ToList()
             };
 
             var subStatuses = _stateSecondaryService.GetStateSecondaries(customerId);
@@ -994,7 +1025,12 @@ namespace DH.Helpdesk.Web.Controllers
                 Selected = new FieldItem(templateModel.StateSecondary_Id?.ToString(), string.Empty),
                 StatusType = GetFieldStatusType(CaseSolutionFields.StateSecondary, templateSettingModel.ToList()),
                 DefaultItem = defaultSubStatus != null ? new FieldItem(defaultSubStatus.Id.ToString(), defaultSubStatus.Name) : FieldItem.CreateEmpty(),
-                Items = subStatuses.Select(s => new FieldItem(s.Id.ToString(), s.Name, s.IsActive != 0)).OrderBy(i => i.ItemText).ToList()
+                Items = subStatuses.Select(s => new FieldItem(s.Id.ToString(), s.Name, s.IsActive != 0)
+                                                                {
+                                                                    ForeignKeyValue1 = s.WorkingGroup_Id?.ToString(),
+                                                                    ForeignKeyValue2 = (!s.NoMailToNotifier.ToBool()).ToString(),
+                                                                }
+                                          ).OrderBy(i => i.ItemText).ToList()
             };
 
             var projects = _projectService.GetCustomerProjects(customerId);            

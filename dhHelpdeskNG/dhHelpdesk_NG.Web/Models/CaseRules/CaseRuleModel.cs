@@ -11,6 +11,13 @@ namespace DH.Helpdesk.Web.Models.CaseRules
         SelfService = 3
     }
 
+    public enum RelationType
+    {
+        OneToOne = 1,
+        OneToMany = 2,
+        ManyToMany = 3
+    }
+
     public enum RelationActionType
     {
         ValueSetter = 1,
@@ -117,7 +124,7 @@ namespace DH.Helpdesk.Web.Models.CaseRules
         {
             ItemValue = itemValue;
             ItemText = itemText;
-            IsActive = isActive;
+            IsActive = isActive;           
         }
 
         public string ItemValue { get; private set; }
@@ -126,32 +133,35 @@ namespace DH.Helpdesk.Web.Models.CaseRules
 
         public bool IsActive { get; private set; }
 
-        public string RelatedFieldValue { get; set; }
+        public string ForeignKeyValue1 { get; set; }
+
+        public string ForeignKeyValue2 { get; set; }
+
+        public string ForeignKeyValue3 { get; set; }        
 
         public static FieldItem CreateEmpty()
         {
             return new FieldItem(string.Empty, string.Empty);
         }
-    }
 
+    }
+   
     public sealed class FieldRelation
     {
         public FieldRelation()
         {
-
+           
         }
 
         public int SequenceNo { get; set; }
 
         public string FieldId { get; set; }
 
-        public string FieldName { get; set; }
+        public int RelationType { get; set; }
 
-        public string FieldCaption { get; set; }
+        public int ActionType { get; set; }          
 
-        public int ActionType { get; set; }
-
-        public FieldItem ValueToSet { get; set; }
+        public int? ForeignKeyNumber { get; set; }
 
     }
 
