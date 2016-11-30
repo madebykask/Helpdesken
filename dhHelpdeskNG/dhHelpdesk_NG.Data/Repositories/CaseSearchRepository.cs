@@ -891,12 +891,6 @@ namespace DH.Helpdesk.Dal.Repositories
 
 			var caseSettings = validateUserCaseSettings.ToDictionary(it => it.Name, it => it);
 
-			// vid avslutade ärenden visas bara första 500
-			//if (f != null && (f.CaseProgress == CaseProgressFilter.ClosedCases || f.CaseProgress == CaseProgressFilter.None))
-			//{
-			//    sql.Add("top 500");
-			//}
-			
 			// ORDER BY ...
 			var orderBy = new List<string>();
 			var sort = s != null && !string.IsNullOrEmpty(s.SortBy) ? s.SortBy.Replace("_temporary_", string.Empty) : string.Empty;
@@ -1092,7 +1086,11 @@ namespace DH.Helpdesk.Dal.Repositories
 			}
 			subsql.Add(whereStatement);
 
-			sql.Add(string.Format("SELECT * FROM ( SELECT *, ROW_NUMBER() OVER ( ORDER BY {0} ) AS RowNum FROM ( SELECT DISTINCT {1} ) as tbl) as RowConstrainedResult", string.Join(" ", orderBy), string.Join(" ", subsql)));
+			//TODO: remove top 500 limit when true sql side paging is implemented
+			//vid avslutade ärenden visas bara första 500
+			var sqlTop500 = (f.CaseProgress == CaseProgressFilter.ClosedCases || f.CaseProgress == CaseProgressFilter.None) ? "top 500" : "";
+
+			sql.Add(string.Format("SELECT * FROM ( SELECT {2} *, ROW_NUMBER() OVER ( ORDER BY {0} ) AS RowNum FROM ( SELECT DISTINCT {1} ) as tbl) as RowConstrainedResult", string.Join(" ", orderBy), string.Join(" ", subsql), sqlTop500));
 
 			//if (f.PageInfo != null)
 			//{
