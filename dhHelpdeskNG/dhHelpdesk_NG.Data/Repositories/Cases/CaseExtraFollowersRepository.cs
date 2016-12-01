@@ -37,6 +37,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
                             a.Follower = b.Follower;
                         }
                     });
+            Commit();
         }
     }
 

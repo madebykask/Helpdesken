@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Dal.Repositories.Cases;
 using DH.Helpdesk.Domain.Cases;
@@ -33,27 +34,30 @@ namespace DH.Helpdesk.Services.Services
             var allFollowers = new List<CaseExtraFollower>();
             foreach (var extraFollower in extraFollowers)
             {
-                var existFollower = existFollowers.SingleOrDefault(x => x.Follower.Equals(extraFollower));
-                if (existFollower != null)
+                if (EmailHelper.IsValid(extraFollower))
                 {
-                    allFollowers.Add(new CaseExtraFollower
+                    var existFollower = existFollowers.SingleOrDefault(x => x.Follower.Equals(extraFollower));
+                    if (existFollower != null)
                     {
-                        Id = existFollower.Id,
-                        Follower = existFollower.Follower,
-                        CaseId = existFollower.CaseId,
-                        CreatedDate = existFollower.CreatedDate,
-                        CreatedByUser_Id = existFollower.CreatedByUser_Id
-                    });
-                }
-                else
-                {
-                    allFollowers.Add(new CaseExtraFollower
+                        allFollowers.Add(new CaseExtraFollower
+                        {
+                            Id = existFollower.Id,
+                            Follower = existFollower.Follower,
+                            CaseId = existFollower.CaseId,
+                            CreatedDate = existFollower.CreatedDate,
+                            CreatedByUser_Id = existFollower.CreatedByUser_Id
+                        });
+                    }
+                    else
                     {
-                        Follower = extraFollower,
-                        CaseId = caseId,
-                        CreatedDate = DateTime.UtcNow,
-                        CreatedByUser_Id = userId
-                    });
+                        allFollowers.Add(new CaseExtraFollower
+                        {
+                            Follower = extraFollower,
+                            CaseId = caseId,
+                            CreatedDate = DateTime.UtcNow,
+                            CreatedByUser_Id = userId
+                        });
+                    }
                 }
             }
             _caseExtraFollowersRepository.SaveCaseExtraFollowers(caseId, allFollowers);

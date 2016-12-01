@@ -73,12 +73,12 @@ function InitCaseAddFollowersSearch() {
 
     emailInput.keydown(function (e) {
         if (e.keyCode === 8) {
-            e.preventDefault();
             e.stopImmediatePropagation();
-            var caretPos = $("#caseAddFollowersSendInput")[0].selectionStart;
+            var caretPos = emailInput[0].selectionStart;
             var lastEmail = returnEmailBeforeCaret(emailInput.val(), caretPos);
-            if (lastEmail !== "") {
-                emailInput.val(emailInput.val().replace(lastEmail, ""));
+            if (lastEmail !== "" && isValidEmailAddress(lastEmail)) {
+                e.preventDefault();
+                emailInput.val(emailInput.val().replace(lastEmail + ";", ""));
                 textBoxEmails.val(emailInput.val());
             }
         }
@@ -89,7 +89,7 @@ function InitCaseAddFollowersSearch() {
         if (preText.indexOf(";") > 0) {
             var words = preText.split(";");
             if (words[words.length - 1] === "")
-            return words[words.length - 2] + ";"; //return last email
+            return words[words.length - 2]; //return last email
         }
         else {
             return "";

@@ -2779,6 +2779,7 @@ namespace DH.Helpdesk.Web.Controllers
 				CreatedByUserId = workContext.User.UserId
 			}).ToList());
 
+            //save extra followers
             if (!string.IsNullOrEmpty(m.FollowerUsers))
             {
                 var followerUsers = m.FollowerUsers.Split(';').Where(s => !string.IsNullOrWhiteSpace(s)).ToList();

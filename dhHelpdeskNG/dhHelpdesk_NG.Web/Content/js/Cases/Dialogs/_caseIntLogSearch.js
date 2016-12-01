@@ -79,33 +79,14 @@ function InitCaseIntLogSendSearch() {
             }
         });
 
-//    emailInput.keydown(function (e) {
-//        if (e.keyCode === 8) {
-//            e.stopImmediatePropagation();
-//            if (emailInput.val().substr(emailInput.val().length - 1) === ";") {
-//                e.preventDefault();
-//                var arr = emailInput.val().split(';').filter(v => v !== "");
-//                var lastEmail = arr[arr.length - 1] + ";";
-//                emailInput.val(emailInput.val().replace(lastEmail, ""));
-//                var dialogType = dialogWindow.data("uiDialog").options.dialogType;
-//                if (dialogType === 1) {
-//                    textBoxEmailsTo.val(emailInput.val());
-//                }
-//                if (dialogType === 2) {
-//                    textBoxEmailsCc.val(emailInput.val());
-//                }
-//            }
-//        }
-//    });
-
     emailInput.keydown(function (e) {
         if (e.keyCode === 8) {
-            e.preventDefault();
             e.stopImmediatePropagation();
             var caretPos = emailInput[0].selectionStart;
             var lastEmail = returnEmailBeforeCaret(emailInput.val(), caretPos);
-            if (lastEmail !== "") {
-                emailInput.val(emailInput.val().replace(lastEmail, ""));
+            if (lastEmail !== "" && isValidEmailAddress(lastEmail)) {
+                e.preventDefault();
+                emailInput.val(emailInput.val().replace(lastEmail + ";", ""));
                 var dialogType = dialogWindow.data("uiDialog").options.dialogType;
                 if (dialogType === 1) {
                     textBoxEmailsTo.val(emailInput.val());
@@ -122,7 +103,7 @@ function InitCaseIntLogSendSearch() {
         if (preText.indexOf(";") > 0) {
             var words = preText.split(";");
             if (words[words.length - 1] === "")
-                return words[words.length - 2] + ";"; //return last email
+                return words[words.length - 2]; //return last email
         }
         else {
             return "";

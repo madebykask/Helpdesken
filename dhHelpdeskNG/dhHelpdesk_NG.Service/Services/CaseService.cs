@@ -188,6 +188,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly IEmailGroupService _emailGroupService;
         private readonly IUserService _userService;
         private readonly IEmailSendingSettingsProvider _emailSendingSettingsProvider;
+        private readonly ICaseExtraFollowersService _caseExtraFollowersService;
 
         public CaseService(
             ICaseRepository caseRepository,
@@ -222,7 +223,8 @@ namespace DH.Helpdesk.Services.Services
             IBusinessRuleService businessRuleService,
             IEmailGroupService emailGroupService,
             IUserService userService,
-            IEmailSendingSettingsProvider emailSendingSettingsProvider
+            IEmailSendingSettingsProvider emailSendingSettingsProvider,
+            ICaseExtraFollowersService caseExtraFollowersService
             )
         {
             this._unitOfWork = unitOfWork;
@@ -259,6 +261,7 @@ namespace DH.Helpdesk.Services.Services
             this._emailGroupService = emailGroupService;
             this._userService = userService;
             this._emailSendingSettingsProvider = emailSendingSettingsProvider;
+            _caseExtraFollowersService = caseExtraFollowersService;
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
@@ -920,7 +923,9 @@ namespace DH.Helpdesk.Services.Services
                 {
                     if (log.SendMailAboutCaseToNotifier && newCase.FinishingDate == null)
                     {
-                        var to = newCase.PersonsEmail.Split(';', ',');
+                        var to = newCase.PersonsEmail.Split(';', ',').ToList();
+                        var extraFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(newCase.Id).Select(x => x.Follower).ToList();
+                        to.AddRange(extraFollowers);
                         foreach (var t in to)
                         {
                             var curMail = t.Trim();
@@ -1256,7 +1261,7 @@ namespace DH.Helpdesk.Services.Services
             }
 
             // get new case information
-            var newCase = _caseRepository.GetDetachedCaseById(caseId);            
+            var newCase = _caseRepository.GetDetachedCaseById(caseId);
 
             var customerSetting = _settingService.GetCustomerSetting(newCase.Customer_Id);
             bool dontSendMailToNotfier = false;
@@ -1309,7 +1314,9 @@ namespace DH.Helpdesk.Services.Services
                     {
                         if (!cms.DontSendMailToNotifier && !dontSendMailToNotfier && !string.IsNullOrEmpty(newCase.PersonsEmail))
                         {
-                            var to = newCase.PersonsEmail.Split(';', ',');
+                            var to = newCase.PersonsEmail.Split(';', ',').ToList();
+                            var extraFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(newCase.Id).Select(x => x.Follower).ToList();
+                            to.AddRange(extraFollowers);
                             foreach (var t in to)
                             {
                                 var curMail = t.Trim();
@@ -1376,7 +1383,9 @@ namespace DH.Helpdesk.Services.Services
                             {
                                 if (!cms.DontSendMailToNotifier && !dontSendMailToNotfier && !string.IsNullOrEmpty(newCase.PersonsEmail))
                                 {
-                                    var to = newCase.PersonsEmail.Split(';', ',');
+                                    var to = newCase.PersonsEmail.Split(';', ',').ToList();
+                                    var extraFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(newCase.Id).Select(x => x.Follower).ToList();
+                                    to.AddRange(extraFollowers);
                                     foreach (var t in to)
                                     {
                                         var curMail = t.Trim();
@@ -1441,7 +1450,9 @@ namespace DH.Helpdesk.Services.Services
                             {
                                 if (!cms.DontSendMailToNotifier && !dontSendMailToNotfier && !string.IsNullOrEmpty(newCase.PersonsEmail))
                                 {
-                                    var to = newCase.PersonsEmail.Split(';', ',');
+                                    var to = newCase.PersonsEmail.Split(';', ',').ToList();
+                                    var extraFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(newCase.Id).Select(x => x.Follower).ToList();
+                                    to.AddRange(extraFollowers);
                                     foreach (var t in to)
                                     {
                                         var curMail = t.Trim();
@@ -1615,8 +1626,10 @@ namespace DH.Helpdesk.Services.Services
                 && newCase.ProductArea.MailTemplate.MailID > 0 
                 && !string.IsNullOrEmpty(newCase.PersonsEmail))
                 {
-                    var to = newCase.PersonsEmail.Split(';', ',');
-                    foreach (var t in to)
+                    var to = newCase.PersonsEmail.Split(';', ',').ToList();
+                    var extraFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(newCase.Id).Select(x => x.Follower).ToList();
+                    to.AddRange(extraFollowers);
+                foreach (var t in to)
                     {
                         var curMail = t.Trim();
                         if (!string.IsNullOrWhiteSpace(curMail) && _emailService.IsValidEmail(curMail))
@@ -1695,7 +1708,9 @@ namespace DH.Helpdesk.Services.Services
 
                         if (!cms.DontSendMailToNotifier && !dontSendMailToNotfier)
                         {                                
-                            var to = newCase.PersonsEmail.Split(';', ',');
+                            var to = newCase.PersonsEmail.Split(';', ',').ToList();
+                            var extraFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(newCase.Id).Select(x => x.Follower).ToList();
+                            to.AddRange(extraFollowers);
                             foreach (var t in to)
                             {
                                 var curMail = t.Trim();

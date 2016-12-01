@@ -31,6 +31,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
         private readonly ISettingService settingService;
 
         private readonly IEmailSendingSettingsProvider _emailSendingSettingsProvider;
+        private readonly ICaseExtraFollowersService _caseExtraFollowersService;
 
         public CaseMailer(
             IEmailLogRepository emailLogRepository, 
@@ -40,7 +41,8 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
             IUserService userService, 
             IWorkingGroupService workingGroupService,
             ISettingService settingService,
-            IEmailSendingSettingsProvider emailSendingSettingsProvider)
+            IEmailSendingSettingsProvider emailSendingSettingsProvider,
+            ICaseExtraFollowersService caseExtraFollowersService)
         {
             this.emailLogRepository = emailLogRepository;
             this.emailService = emailService;
@@ -50,6 +52,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
             this.workingGroupService = workingGroupService;
             this.settingService = settingService;
             this._emailSendingSettingsProvider = emailSendingSettingsProvider;
+            _caseExtraFollowersService = caseExtraFollowersService;
         }
 
         public void InformNotifierIfNeeded(
@@ -96,7 +99,9 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
 
             if (!String.IsNullOrEmpty(template.Body) && !String.IsNullOrEmpty(template.Subject))
                 {
-                    var to = newCase.PersonsEmail.Split(';', ',');
+                    var to = newCase.PersonsEmail.Split(';', ',').ToList();
+                    var extraFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(newCase.Id).Select(x => x.Follower).ToList();
+                    to.AddRange(extraFollowers);
                     foreach (var t in to)
                     {
                         var curMail = t.Trim();
