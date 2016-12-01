@@ -28,7 +28,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Attributes
 
 			if (value != null)
 			{
-				var dependentValue = dependField?.GetValue(validationContext.ObjectInstance, null);
+				var dependentValue = dependField != null ? dependField.GetValue(validationContext.ObjectInstance, null) : null;
 				if (dependentValue != null)
 				{
 					return ValidationResult.Success;

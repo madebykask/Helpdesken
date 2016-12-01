@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Questionnaire.Input
+﻿using DH.Helpdesk.Domain.Questionnaire;
+
+namespace DH.Helpdesk.BusinessData.Models.Questionnaire.Input
 {
     using System;
 
@@ -15,9 +17,19 @@
             this.Description = description;
             this.CustomerId = customerId;
             this.CreatedDate = createDate;
+			Type = QuestionnaireType.Questionnaire;
         }
 
-        #endregion
+	    public NewQuestionnaire(DateTime createdDate, int customerId, string description, QuestionnaireType type, string name)
+	    {
+		    CreatedDate = createdDate;
+		    CustomerId = customerId;
+		    Description = description;
+		    Type = type;
+		    Name = name;
+	    }
+
+	    #endregion
 
         #region Public Properties
 
@@ -27,7 +39,11 @@
 
         public string Description { get; private set; }
 
-        [IsId]
+		public string Identifier { get; set; }
+
+		public QuestionnaireType Type { get; set; }
+
+		[IsId]
         public int Id { get; set; }
 
         [NotNullAndEmpty]

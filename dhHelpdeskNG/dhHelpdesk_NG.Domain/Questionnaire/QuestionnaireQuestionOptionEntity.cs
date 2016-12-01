@@ -19,7 +19,9 @@
 
         public int OptionValue { get; set; }
 
-        public virtual QuestionnaireQuestionEntity QuestionnaireQuestion { get; set; }
+		public string IconId { get; set; }
+
+		public virtual QuestionnaireQuestionEntity QuestionnaireQuestion { get; set; }
 
         public int QuestionnaireQuestion_Id { get; set; }
 

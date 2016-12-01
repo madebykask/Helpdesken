@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services.Concrete
+﻿using DH.Helpdesk.Services.Services.Feedback;
+
+namespace DH.Helpdesk.Services.Services.Concrete
 {
     using System;
     using System.Collections.Generic;
@@ -15,14 +17,8 @@
 
     public sealed class EmailService : IEmailService
     {
-        private readonly IEmailSendingSettingsProvider emailSendingSettingsProvider;
         private readonly string _EMAIL_SEND_MESSAGE = "Email has been sent!";
         private readonly int _MAX_NUMBER_SENDING_EMAIL = 3;
-
-        public EmailService(IEmailSendingSettingsProvider emailSendingSettingsProvider)
-        {
-            this.emailSendingSettingsProvider = emailSendingSettingsProvider;
-        }
 
         public EmailResponse SendEmail(MailAddress from, List<MailAddress> recipients, Mail mail, EmailSettings emailsettings)
         {
@@ -281,7 +277,7 @@
                                     field.StringValue = urlHelpdesk;
                         }
 
-                        msg.Subject = AddInformationToMailBodyAndSubject(subject, fields);
+						msg.Subject = AddInformationToMailBodyAndSubject(subject, fields);
                         msg.From = new MailAddress(from);
                         msg.IsBodyHtml = true;
                         msg.BodyEncoding = System.Text.Encoding.UTF8;

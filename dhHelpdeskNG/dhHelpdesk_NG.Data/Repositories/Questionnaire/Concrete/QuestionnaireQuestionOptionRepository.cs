@@ -31,6 +31,7 @@ namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
                 QuestionnaireQuestionOptionPos = newOption.OptionPos,
                 QuestionnaireQuestionOption = newOption.Option,
                 OptionValue = newOption.OptionValue,
+				IconId = newOption.IconId,
                 CreatedDate = newOption.ChangedDate,                
                 ChangedDate = newOption.ChangedDate
             };
@@ -46,8 +47,9 @@ namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
             questionnaireQuestionOptionEntity.QuestionnaireQuestion_Id = option.QuestionId;
             questionnaireQuestionOptionEntity.QuestionnaireQuestionOptionPos = option.OptionPos;
             questionnaireQuestionOptionEntity.QuestionnaireQuestionOption = option.Option;
-            questionnaireQuestionOptionEntity.OptionValue = option.OptionValue;            
-            questionnaireQuestionOptionEntity.ChangedDate = option.ChangedDate;
+            questionnaireQuestionOptionEntity.OptionValue = option.OptionValue;
+			questionnaireQuestionOptionEntity.IconId = option.IconId;
+			questionnaireQuestionOptionEntity.ChangedDate = option.ChangedDate;
         }
 
         public void UpdateQuestionOption(QuestionnaireQuesOption option, int languageId)
@@ -105,7 +107,7 @@ namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
                 this.DbContext.QuestionnaireQuestionOptions.Where(q => q.QuestionnaireQuestion_Id == questionId)
                     .Select(
                         q => new { Id = q.Id, OptionPos = q.QuestionnaireQuestionOptionPos, Option = q.QuestionnaireQuestionOption, 
-                                   OptionValue = q.OptionValue, LanguageId = defualtLanguageId, ChangedDate = q.ChangedDate })
+                                   OptionValue = q.OptionValue, LanguageId = defualtLanguageId, ChangedDate = q.ChangedDate, IconId = q.IconId })
                     .ToList();
 
             // All Questionnaire Question Options Language
@@ -115,7 +117,7 @@ namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
                    .Select(
                        q => new { Id = q.QuestionnaireQuestionOption_Id, OptionPos = q.QuestionnaireQuestionOptions.QuestionnaireQuestionOptionPos ,
                                   Option = q.QuestionnaireQuestionOption, OptionValue = q.QuestionnaireQuestionOptions.OptionValue,
-                                  LanguageId = q.Language_Id , ChangedDate = q.ChangedDate })
+                                  LanguageId = q.Language_Id , ChangedDate = q.ChangedDate, IconId = ""})
                    .ToList();
 
             // Only Needed Language Question Options 
@@ -136,8 +138,17 @@ namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
                         
             var fullQuestionOptions = pureLanguageQuestionOptions.Union(exceptList);
 
-            return fullQuestionOptions.Select(q => new QuestionnaireQuesOption(q.Id, questionId, q.OptionPos, q.Option, q.OptionValue, q.LanguageId, q.ChangedDate)).ToList();            
-            
+            return fullQuestionOptions.Select(q => new QuestionnaireQuesOption
+            {
+	            Id = q.Id,
+				IconId = q.IconId,
+				Option = q.Option,
+				QuestionId = questionId,
+				LanguageId = q.LanguageId,
+				ChangedDate = q.ChangedDate,
+				OptionPos = q.OptionPos,
+				OptionValue = q.OptionValue
+			} ).ToList();
         }
 
       

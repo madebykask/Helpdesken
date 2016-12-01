@@ -83,7 +83,24 @@
             }
         }
 
-        public List<CircularOverview> GetCircularOverviews(int questionnaireId, int state)
+	    public CircularForEdit GetSingleOrDefaultByQuestionnaireId(int id)
+	    {
+			using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+			{
+				var circularRepository = uof.GetRepository<QuestionnaireCircularEntity>();
+
+				CircularForEdit entity = circularRepository.GetAll(
+					x => x.QuestionnaireCircularDepartmentEntities
+					, x => x.QuestionnaireCircularCaseTypeEntities
+					, x => x.QuestionnaireCircularProductAreaEntities
+					, x => x.QuestionnaireCircularWorkingGroupEntities
+					).MapToEditModelByQuestionnaireId(id);
+				return entity;
+			}
+
+		}
+
+		public List<CircularOverview> GetCircularOverviews(int questionnaireId, int state)
         {
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
@@ -485,11 +502,31 @@
             }
         }
 
-        #endregion
+		public List<BusinessLogic.MapperData.Participant> GetNotAnsweredParticipants(int circularId)
+		{
+			List<BusinessLogic.MapperData.Participant> connectedCases;
 
-        #region PRIVATE STATIC
+			using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+			{
+				var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
+				var questionnaireResultRepository = uof.GetRepository<QuestionnaireResultEntity>();
 
-        private static void Map(Circular businessModel, QuestionnaireCircularEntity entity)
+				connectedCases = (from circularPart in circularPartRepository.GetAll().GetCircularCases(circularId)
+								  join participant in questionnaireResultRepository.GetAll() on circularPart.Id equals
+									  participant.QuestionnaireCircularPartic_Id into group1
+								  from g1 in group1.DefaultIfEmpty()
+								  where g1 == null
+								  select circularPart).MapToParticipants();
+			}
+
+			return connectedCases;
+		}
+
+		#endregion
+
+		#region PRIVATE STATIC
+
+		private static void Map(Circular businessModel, QuestionnaireCircularEntity entity)
         {
             entity.CircularName = businessModel.CircularName;
         }
@@ -610,26 +647,6 @@
                 var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
 
                 connectedCases = circularPartRepository.GetAll().GetCircularCases(circularId).MapToParticipants();
-            }
-
-            return connectedCases;
-        }
-
-        private List<BusinessLogic.MapperData.Participant> GetNotAnsweredParticipants(int circularId)
-        {
-            List<BusinessLogic.MapperData.Participant> connectedCases;
-
-            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
-            {
-                var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
-                var questionnaireResultRepository = uof.GetRepository<QuestionnaireResultEntity>();
-
-                connectedCases = (from circularPart in circularPartRepository.GetAll().GetCircularCases(circularId)
-                                  join participant in questionnaireResultRepository.GetAll() on circularPart.Id equals
-                                      participant.QuestionnaireCircularPartic_Id into group1
-                                  from g1 in group1.DefaultIfEmpty()
-                                  where g1 == null
-                                  select circularPart).MapToParticipants();
             }
 
             return connectedCases;

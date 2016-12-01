@@ -7,45 +7,46 @@ using System.Reflection;
 namespace DH.Helpdesk.Services.Services
 {
 
-    using DH.Helpdesk.BusinessData.Models.BusinessRules;
-    using DH.Helpdesk.BusinessData.Models.Case;
-    using DH.Helpdesk.BusinessData.Models.Case.ChidCase;
-    using DH.Helpdesk.BusinessData.Models.Case.Output;
-    using DH.Helpdesk.BusinessData.Models.Email;
-    using DH.Helpdesk.BusinessData.Models.Invoice;
-    using DH.Helpdesk.BusinessData.Models.User.Input;
-    using DH.Helpdesk.BusinessData.OldComponents;
-    using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
-    using DH.Helpdesk.Common.Constants;
-    using DH.Helpdesk.Common.Enums;
-    using DH.Helpdesk.Common.Enums.BusinessRule;
-    using DH.Helpdesk.Common.Extensions.Boolean;
-    using DH.Helpdesk.Dal.DbContext;
-    using DH.Helpdesk.Dal.Enums;
-    using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Dal.NewInfrastructure;
-    using DH.Helpdesk.Dal.Repositories;
-    using DH.Helpdesk.Dal.Repositories.Cases;
-    using DH.Helpdesk.Dal.Repositories.Cases.Concrete;
-    using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Domain.Cases;
-    using DH.Helpdesk.Domain.MailTemplates;
-    using DH.Helpdesk.Domain.Problems;
-    using DH.Helpdesk.Services.BusinessLogic.MailTools.TemplateFormatters;
-    using DH.Helpdesk.Services.BusinessLogic.Mappers.Cases;
-    using DH.Helpdesk.Services.BusinessLogic.Mappers.Customers;
-    using DH.Helpdesk.Services.BusinessLogic.Specifications;
-    using DH.Helpdesk.Services.BusinessLogic.Specifications.Case;
-    using DH.Helpdesk.Services.BusinessLogic.Specifications.Customers;
-    using DH.Helpdesk.Services.Infrastructure.Email;
-    using DH.Helpdesk.Services.Localization;
-    using DH.Helpdesk.Services.Services.CaseStatistic;
-    using DH.Helpdesk.Services.utils;
-    using System.Text.RegularExpressions;
-    using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
-    using DH.Helpdesk.Services.Infrastructure;
+	using DH.Helpdesk.BusinessData.Models.BusinessRules;
+	using DH.Helpdesk.BusinessData.Models.Case;
+	using DH.Helpdesk.BusinessData.Models.Case.ChidCase;
+	using DH.Helpdesk.BusinessData.Models.Case.Output;
+	using DH.Helpdesk.BusinessData.Models.Email;
+	using DH.Helpdesk.BusinessData.Models.Invoice;
+	using DH.Helpdesk.BusinessData.Models.User.Input;
+	using DH.Helpdesk.BusinessData.OldComponents;
+	using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+	using DH.Helpdesk.Common.Constants;
+	using DH.Helpdesk.Common.Enums;
+	using DH.Helpdesk.Common.Enums.BusinessRule;
+	using DH.Helpdesk.Common.Extensions.Boolean;
+	using DH.Helpdesk.Dal.DbContext;
+	using DH.Helpdesk.Dal.Enums;
+	using DH.Helpdesk.Dal.Infrastructure;
+	using DH.Helpdesk.Dal.NewInfrastructure;
+	using DH.Helpdesk.Dal.Repositories;
+	using DH.Helpdesk.Dal.Repositories.Cases;
+	using DH.Helpdesk.Dal.Repositories.Cases.Concrete;
+	using DH.Helpdesk.Domain;
+	using DH.Helpdesk.Domain.Cases;
+	using DH.Helpdesk.Domain.MailTemplates;
+	using DH.Helpdesk.Domain.Problems;
+	using DH.Helpdesk.Services.BusinessLogic.MailTools.TemplateFormatters;
+	using DH.Helpdesk.Services.BusinessLogic.Mappers.Cases;
+	using DH.Helpdesk.Services.BusinessLogic.Mappers.Customers;
+	using DH.Helpdesk.Services.BusinessLogic.Specifications;
+	using DH.Helpdesk.Services.BusinessLogic.Specifications.Case;
+	using DH.Helpdesk.Services.BusinessLogic.Specifications.Customers;
+	using DH.Helpdesk.Services.Infrastructure.Email;
+	using DH.Helpdesk.Services.Localization;
+	using DH.Helpdesk.Services.Services.CaseStatistic;
+	using DH.Helpdesk.Services.utils;
+	using System.Text.RegularExpressions;
+	using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
+	using DH.Helpdesk.Services.Infrastructure;
+	using Feedback;
 
-    public interface ICaseService
+	public interface ICaseService
     {
         IList<Case> GetCases();
 
@@ -159,7 +160,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly IPriorityService _priorityService;
         private readonly IStatusService _statusService;
         private readonly IWorkingGroupService _workingGroupService;
-        private readonly UserRepository userRepository;
+        private readonly UserRepository _userRepository;
         private readonly IMailTemplateService _mailTemplateService;
         private readonly IEmailLogRepository _emailLogRepository;
         private readonly IEmailService _emailService;
@@ -169,8 +170,10 @@ namespace DH.Helpdesk.Services.Services
         private readonly ILogService _logService;
         private readonly ILogFileRepository _logFileRepository;
         private readonly IFormFieldValueRepository _formFieldValueRepository;
-        
-        private readonly ICaseMailer caseMailer;
+		private readonly IFeedbackTemplateService _feedbackTemplateService;
+
+
+		private readonly ICaseMailer caseMailer;
 
         private readonly IInvoiceArticleService invoiceArticleService;
 
@@ -224,8 +227,10 @@ namespace DH.Helpdesk.Services.Services
             IEmailGroupService emailGroupService,
             IUserService userService,
             IEmailSendingSettingsProvider emailSendingSettingsProvider,
-            ICaseExtraFollowersService caseExtraFollowersService
-            )
+            ICaseExtraFollowersService caseExtraFollowersService,
+			IFeedbackTemplateService feedbackTemplateService
+			)
+
         {
             this._unitOfWork = unitOfWork;
             this._caseRepository = caseRepository;
@@ -236,7 +241,7 @@ namespace DH.Helpdesk.Services.Services
             this._priorityService = priorityService;
             this._statusService = statusService;
             this._workingGroupService = workingGroupService;
-            this.userRepository = userRepository;
+            this._userRepository = userRepository;
             this.caseMailer = caseMailer;
             this.invoiceArticleService = invoiceArticleService;
             this.unitOfWorkFactory = unitOfWorkFactory;
@@ -262,6 +267,7 @@ namespace DH.Helpdesk.Services.Services
             this._userService = userService;
             this._emailSendingSettingsProvider = emailSendingSettingsProvider;
             _caseExtraFollowersService = caseExtraFollowersService;
+	        _feedbackTemplateService = feedbackTemplateService;
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
@@ -833,7 +839,7 @@ namespace DH.Helpdesk.Services.Services
                             Supplier_Id = this._supplierServicee.GetDefaultId(customerId),
                             Priority_Id = this._priorityService.GetDefaultId(customerId),
                             Status_Id = this._statusService.GetDefaultId(customerId),
-                            WorkingGroup_Id = this.userRepository.GetUserDefaultWorkingGroupId(userId, customerId),
+                            WorkingGroup_Id = this._userRepository.GetUserDefaultWorkingGroupId(userId, customerId),
                             RegUserId = adUser.GetUserFromAdPath(),
                             RegUserDomain = adUser.GetDomainFromAdPath()
                         };
@@ -1678,7 +1684,8 @@ namespace DH.Helpdesk.Services.Services
                 MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                 if (m != null)
                 {
-                    if (!String.IsNullOrEmpty(m.Body) && !String.IsNullOrEmpty(m.Subject))
+
+					if (!String.IsNullOrEmpty(m.Body) && !String.IsNullOrEmpty(m.Subject))
                     {
                         if (!string.IsNullOrWhiteSpace(newCase.Customer.CloseCaseEmailList))
                         {
@@ -1689,13 +1696,17 @@ namespace DH.Helpdesk.Services.Services
                                 {
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(customEmailSender2));                                    
                                     fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 8, userTimeZone);
+	                                var identifiers = _feedbackTemplateService.FindIdentifiers(m.Body);
+									var templateFields = _feedbackTemplateService.GetCustomerTemplates(identifiers,
+										newCase.Customer_Id, newCase.RegLanguage_Id, newCase.Id, cms.AbsoluterUrl);
+									fields.AddRange(templateFields);
 
-                                    string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
+	                                string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
                                     var mailResponse = EmailResponse.GetEmptyEmailResponse();
                                     var mailSetting = new EmailSettings(mailResponse, smtpInfo);
                                     var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
 
-                                    var e_res = _emailService.SendEmail(customEmailSender2, el.EmailAddress, m.Subject, m.Body, fields, mailSetting, el.MessageId, false, files, siteSelfService, siteHelpdesk);
+                                    var e_res = _emailService.SendEmail(customEmailSender2, el.EmailAddress, m.Subject, m.Body, fields, mailSetting, el.MessageId, false, files, siteSelfService, siteHelpdesk, false);
                                     el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                                     var now = DateTime.Now;
                                     el.CreatedDate = now;
@@ -1719,13 +1730,17 @@ namespace DH.Helpdesk.Services.Services
 
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(customEmailSender2));                                    
                                     fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 9, userTimeZone);
+									var identifiers = _feedbackTemplateService.FindIdentifiers(m.Body);
+									var templateFields = _feedbackTemplateService.GetCustomerTemplates(identifiers,
+										newCase.Customer_Id, newCase.RegLanguage_Id, newCase.Id, cms.AbsoluterUrl);
+									fields.AddRange(templateFields);
 
-                                    string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
+									string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
 
                                     var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
                                     var mailResponse = EmailResponse.GetEmptyEmailResponse();
                                     var mailSetting = new EmailSettings(mailResponse, smtpInfo);
-                                    var e_res = _emailService.SendEmail(customEmailSender2, el.EmailAddress, m.Subject, m.Body, fields, mailSetting, el.MessageId, false, files, siteSelfService, siteHelpdesk);
+                                    var e_res = _emailService.SendEmail(customEmailSender2, el.EmailAddress, m.Subject, m.Body, fields, mailSetting, el.MessageId, false, files, siteSelfService, siteHelpdesk, false);
                                     el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                                     var now = DateTime.Now;
                                     el.CreatedDate = now;
@@ -1749,13 +1764,17 @@ namespace DH.Helpdesk.Services.Services
                                     var smsTo = GetSmsRecipient(customerSetting, newCase.PersonsCellphone);
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, smsTo, _emailService.GetMailMessageId(helpdeskMailFromAdress));                                    
                                     fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 10, userTimeZone);
+									var identifiers = _feedbackTemplateService.FindIdentifiers(m.Body);
+									var templateFields = _feedbackTemplateService.GetCustomerTemplates(identifiers,
+										newCase.Customer_Id, newCase.RegLanguage_Id, newCase.Id, cms.AbsoluterUrl);
+									fields.AddRange(templateFields);
 
-                                    string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
+									string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
    
                                     var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
                                     var mailResponse = EmailResponse.GetEmptyEmailResponse();
                                     var mailSetting = new EmailSettings(mailResponse, smtpInfo);
-                                    var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, GetSmsSubject(customerSetting), mt.Body, fields, mailSetting, el.MessageId, false, files, siteSelfService, siteHelpdesk);
+                                    var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, GetSmsSubject(customerSetting), mt.Body, fields, mailSetting, el.MessageId, false, files, siteSelfService, siteHelpdesk, false);
                                     el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                                     var now = DateTime.Now;
                                     el.CreatedDate = now;
@@ -2158,7 +2177,7 @@ namespace DH.Helpdesk.Services.Services
             ExtraFieldCaseHistory extraField = null)
         {
             var h = new CaseHistory();
-            var user = this.userRepository.GetUser(userId);
+            var user = this._userRepository.GetUser(userId);
             h.AgreedDate = c.AgreedDate;
             h.ApprovedDate = c.AgreedDate;
             h.ApprovedBy_User_Id = c.ApprovedBy_User_Id; 
@@ -2324,10 +2343,10 @@ namespace DH.Helpdesk.Services.Services
                 string site = cms.AbsoluterUrl + "Cases/edit/" + c.Id.ToString();
                 string url = "<br><a href='" + site +  "'>" + site + "</a>";
                 ret.Add(new Field { Key = "[#99]", StringValue = url });
-            }
+			}
 
-            // Survey template
-            if (cms != null)
+			// Survey template
+			if (cms != null)
             {
                 /// if case is closed and was no vote in survey - add HTML inormation about survey
                 if (c.IsClosed() && (this.surveyService.GetByCaseId(c.Id) == null))

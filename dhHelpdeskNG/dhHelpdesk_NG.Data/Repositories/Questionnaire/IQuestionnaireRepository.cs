@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Dal.Repositories.Questionnaire
+﻿using DH.Helpdesk.Domain.Questionnaire;
+
+namespace DH.Helpdesk.Dal.Repositories.Questionnaire
 {
     using System.Collections.Generic;
 
@@ -15,13 +17,15 @@
         void DeleteQuestionnaireById(int questionnaireId);
 
         List<QuestionnaireOverview> FindQuestionnaireOverviews(int customerId);
+		List<QuestionnaireEntity> FindFeedbackOverviews(int customerId);
 
-        EditQuestionnaire GetQuestionnaireById(int id, int languageId);
+		EditQuestionnaire GetQuestionnaireById(int id, int languageId);
 
         void UpdateOtherLanguageQuestionnaire(EditQuestionnaire questionnaire);
 
         void UpdateSwedishQuestionnaire(EditQuestionnaire questionnaire);
+		List<QuestionnaireEntity> GetFeedbackFullItems(int customerId, IEnumerable<string> identifiers = null);
 
-        #endregion
-    }
+		#endregion
+	}
 }

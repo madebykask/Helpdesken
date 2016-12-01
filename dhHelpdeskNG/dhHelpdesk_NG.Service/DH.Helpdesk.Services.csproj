@@ -282,6 +282,8 @@
     <Compile Include="Services\ContractService.cs" />
     <Compile Include="Services\BusinessRuleService.cs" />
     <Compile Include="Services\ExternalInvoiceService.cs" />
+    <Compile Include="Services\FeedbackService.cs" />
+    <Compile Include="Services\Feedback\FeedbackTemplateService.cs" />
     <Compile Include="Services\OperationLogEmailLogService.cs" />
     <Compile Include="Services\Reports\IReportServiceService.cs" />
     <Compile Include="Services\ICaseLockService.cs" />

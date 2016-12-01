@@ -25,7 +25,9 @@
         public string Description { get; private set; }
         
         public int LanguageId { get; private set; }
+		public string Identifier { get; set; }
 
-        public DateTime ChangedDate { get; private set; }
+
+		public DateTime ChangedDate { get; private set; }
     }
 }

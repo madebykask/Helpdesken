@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using DH.Helpdesk.Domain.Questionnaire;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System.Collections.Generic;
 
@@ -11,7 +13,7 @@
     {
         List<QuestionnaireOverview> FindQuestionnaireOverviews(int customerId);
 
-        void AddQuestionnaire(NewQuestionnaire newQuestionnaire);
+		void AddQuestionnaire(NewQuestionnaire newQuestionnaire);
 
         void UpdateQuestionnaire(EditQuestionnaire editedQuestionnaire);
 

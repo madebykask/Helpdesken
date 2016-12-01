@@ -139,6 +139,7 @@
     <Compile Include="Questionnaire\QuestionnaireCircularDepartmentEntity.cs" />
     <Compile Include="Questionnaire\QuestionnaireCircularProductAreaEntity.cs" />
     <Compile Include="Questionnaire\QuestionnaireCircularWorkingGroupEntity.cs" />
+    <Compile Include="Questionnaire\QuestionnaireType.cs" />
     <Compile Include="RegistrationSourceCustomer.cs" />
     <Compile Include="ReportFavorite.cs" />
     <Compile Include="TranslationSearch.cs" />

@@ -1,0 +1,226 @@
+﻿@using System.Globalization
+@using DH.Helpdesk.Common.Enums
+@using DH.Helpdesk.Web
+@model DH.Helpdesk.Web.Models.Feedback.EditFeedbackModel
+@{
+    ViewBag.Title = "EditFeedback";
+}
+
+@using (Html.BeginForm(MvcUrlName.Feedback.Edit, MvcUrlName.Feedback.Controller, FormMethod.Post, new { id = "feedback_edit_form" }))
+{
+    @Html.HiddenFor(m => m.QuestionId)
+    @Html.HiddenFor(m => m.QuestionnaireId)
+    @Html.HiddenFor(m => m.CircularId)
+
+    <div class="secnavs fixed">
+        <div class="pull-left">
+            <ul class="secnav">
+                <li>
+                    <input type="submit" value="@Translation.GetCoreTextTranslation("Spara")" class="btn"/>
+                </li>
+                @if (!Model.IsNew)
+                {
+                    <li>
+                        @Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), MvcUrlName.Feedback.Delete, MvcUrlName.Feedback.Controller,
+                            new
+                            {
+                                feedbackId = Model.QuestionnaireId,
+                                languageId = Model.LanguageId,
+                                questionId = Model.QuestionId,
+                                circularId = Model.CircularId
+                            },
+                            new
+                            {
+                                @class = "btn deleteDialog",
+                                deleteDialogText = Translation.GetCoreTextTranslation("Är du säker på att du vill ta bort aktuell post") + "?"
+                            })
+                    </li>
+                }
+                <li>
+                    <a href="@Url.Action(MvcUrlName.Questionnaire.Index, MvcUrlName.Questionnaire.Controller, new { tab = "feedback"})" class="btn">
+                        @Translation.GetCoreTextTranslation("Avbryt")
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="container">
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a href="#fragment-1">@Translation.GetCoreTextTranslation("Fråga")</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane tab-pane-border active" id="fragment-1">
+                    <div class="container">
+                        <h4>@Translation.GetCoreTextTranslation("Allmänt")</h4>
+                        <div class="row">
+                            <div class="span12">
+                                <table class="tableform">
+                                    <tr>
+                                        <td class="span3">
+                                            @Translation.GetCoreTextTranslation("Språk")
+                                        </td>
+                                        <td class="span9">
+                                            @{ var languages = (SelectList) ViewBag.Languages; }
+                                            @if (Model.IsNew)
+                                            {
+                                                @Html.DropDownListFor(model => model.LanguageId, languages, new {id = "languageList", disabled = ""})
+                                                @Html.HiddenFor(m => m.LanguageId)
+                                            }
+                                            else
+                                            {
+                                                @Html.DropDownListFor(model => model.LanguageId, languages, new {id = "languageList"})
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="span3">
+                                            @Translation.GetCoreTextTranslation("Namn")
+                                        </td>
+                                        <td class="span9">
+                                            @Html.EditorFor(model => model.Name)
+                                            @Html.ValidationMessageFor(model => model.Name)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="span3">
+                                            @Translation.GetCoreTextTranslation("Beskrivning")
+                                        </td>
+                                        <td class="span9">
+                                            @Html.TextAreaFor(model => model.Description, new {maxlength = "2000", style = "height:100px;"})
+                                            @Html.ValidationMessageFor(model => model.Description)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="span3">
+                                            @Translation.GetCoreTextTranslation("Identifierare")
+                                        </td>
+                                        <td class="span9">
+                                            @Html.EditorFor(model => model.Identifier)
+                                            @Html.ValidationMessageFor(model => model.Identifier)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="span3">
+                                            @Translation.GetCoreTextTranslation("Fråga")
+                                        </td>
+                                        <td class="span9">
+                                            @Html.TextAreaFor(model => model.Question, new { maxlength = "1000", style = "height:100px;" })
+                                            @Html.ValidationMessageFor(model => model.Question)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="span3">
+                                            @Translation.GetCoreTextTranslation("Visa kommentar")
+                                        </td>
+                                        <td class="checkbox" style="padding-left: 20px">
+                                            <input type="checkbox" name="ShowNote" @(Model.ShowNote == 1 ? "checked=checked" : "") @(Model.LanguageId != LanguageIds.Swedish ? "disabled" : "") value="1" />
+                                            <input type="hidden" name="ShowNote" value="0" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="span3">
+                                            @Translation.GetCoreTextTranslation("Text kommentar")
+                                        </td>
+                                        <td class="span9">
+                                            @Html.TextAreaFor(model => model.NoteText, new {maxlength = "1000", style = "height:100px;"})
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="span2">
+                                            @Translation.GetCoreTextTranslation("Urval")
+                                        </td>
+                                        <td class="span6">
+                                            @Translation.GetCoreTextTranslation("Selektera ut")
+                                            @{    var percents = (List<SelectListItem>)ViewBag.Percents;
+                                            }
+                                            @Html.DropDownListFor(model => model.SelectedPercent, percents, new { style = "width: 60px" })
+                                            @Translation.GetCoreTextTranslation("procent av tillgängliga ärenden")
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @if (Model.Options != null && !Model.IsNew)
+            {
+                @Html.Partial("_FeedbackQuestionOptions", Model);
+            }
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render(BundleConfig.ScriptNames.Select2)
+    <script type="text/javascript">
+        $(function() {
+            $("#languageList").on("change", function() {
+                var selectedItem = $(this).val();
+                window.location.href = "@Url.Action(MvcUrlName.Feedback.Edit, MvcUrlName.Feedback.Controller)" +
+                    "?feedbackId=" + @Model.QuestionnaireId.ToString(CultureInfo.InvariantCulture) +
+                    "&languageId=" + selectedItem;
+            });
+
+            $("#Addbtn").on("click", function() {
+                var optionPos = $("#optionPos").val();
+                var optionText = $("#optionText").val();
+                var optionValue = $("#optionValue").val();
+                var optionIcon = $("#optionIcon").val();
+
+                if (optionPos < 0 || optionPos === "") {
+                    alert("Invalid Position !!! ");
+                    return;
+                }
+
+                if (optionText === "") {
+                    alert("Invalid Alternative !!! ");
+                    return;
+                }
+
+                if (optionValue < 0 || optionValue === "") {
+                    alert("Invalid Value !!!");
+                    return;
+                }
+
+                window.location.href = '@Url.Action(MvcUrlName.Feedback.AddQuestionOption, MvcUrlName.Feedback.Controller)' +
+                    '?feedbackId=' + @Model.QuestionnaireId +
+                    '&questionId=' + @Model.QuestionId +
+                    '&languageId=' + @Model.LanguageId +
+                    '&optionPos=' + optionPos +
+                    '&optionText=' + optionText +
+                    '&optionValue=' + optionValue +
+                    '&optionIcon =' + optionIcon;
+            });
+
+            function formatIcon(icon) {
+                if (!icon.id) { return icon.text; }
+                var $icon = $(
+                  '<span><img src="@Url.Content("~/Content/img/")' + icon.element.value.toLowerCase() + '" class="" /> </span>'
+                );
+                return $icon;
+            };
+            
+            function formatSelectedIcon(data) {
+                return $(
+                  '<span><img src="@Url.Content("~/Content/img/")' + data.element.value.toLowerCase() + '" class="" /> </span>'
+                );
+            }
+
+            $(".question_icons").select2({
+                templateResult: formatIcon,
+                templateSelection: formatSelectedIcon,
+                width: '85%',
+                minimumResultsForSearch: Infinity // hides search box
+            });
+        });
+    </script>
+}
+
+
+

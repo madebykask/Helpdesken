@@ -4,7 +4,12 @@
 
     public static class BundleConfig
     {
-        public struct ScriptNames
+	    public struct StylesNames
+	    {
+			
+		}
+
+		public struct ScriptNames
         {
             public const string DynamicCase = "~/bundles/dynamic-case";
             public const string AttributesValidation = "~/bundles/jqueryattrval";
@@ -12,7 +17,9 @@
             public const string InventoryUserSearch = ("~/bundles/inventory/inventorysearch");
             public const string CaseIntLogEmailSearch = ("~/bundles/case/caseintlogemailsearch");
             public const string CaseAddFollowersSearch = ("~/bundles/case/caseaddfollowerssearch");
-        }
+			public const string Select2 = "~/bundles/select2";
+		}
+
 
         public static void RegisterBundles(BundleCollection bundles)
         {
@@ -127,7 +134,10 @@
             bundles.Add(new ScriptBundle("~/bundles/modules").Include(
                             "~/Content/js/Users/modules.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/invoices").Include(                                                      
+			bundles.Add(new ScriptBundle(ScriptNames.Select2).Include(
+							"~/Scripts/select2.js"));
+
+			bundles.Add(new ScriptBundle("~/bundles/invoices").Include(                                                      
                             "~/Content/js/bootstrap-multiselect.js",
                             "~/Content/js/chosen.jquery.min.js",           
                             "~/Content/js/Invoice/invoice.js"));
@@ -415,5 +425,6 @@
                 "~/Content/js/Cases/Dialogs/_caseAddFollowersSearch.js"));
 
         }
-    }
+
+	}
 }

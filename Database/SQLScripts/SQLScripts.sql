@@ -41,6 +41,28 @@ UPDATE [dbo].[tblCaseSettings]
   WHERE [tblCaseName] = '_temporary_.LeadTime'
 Go
 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Type' and sysobjects.name = N'tblQuestionnaire')
+	ALTER TABLE [tblQuestionnaire] ADD [Type] int not NULL Default(0)
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Identifier' and sysobjects.name = N'tblQuestionnaire')
+	ALTER TABLE [tblQuestionnaire] ADD [Identifier] nvarchar(100) NULL
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'IconId' and sysobjects.name = N'tblQuestionnaireQuestionOption')
+	ALTER TABLE [tblQuestionnaireQuestionOption] ADD [IconId] nvarchar(200) NULL
+GO
+
+ALTER TABLE [dbo].[tblQuestionnaire] ALTER COLUMN [QuestionnaireDescription] ntext NULL
+
+ALTER TABLE [dbo].[tblQuestionnaire_tblLanguage] ALTER COLUMN [QuestionnaireDescription] ntext NULL
+
+ALTER TABLE [dbo].[tblQuestionnaireQuestion] ALTER COLUMN [NoteText] nvarchar(1000) NULL
+
+ALTER TABLE [dbo].[tblQuestionnaireQues_tblLang] ALTER COLUMN [NoteText] nvarchar(1000) NULL
+
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.29'
 

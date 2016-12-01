@@ -47,6 +47,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>default</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -228,7 +229,9 @@
     <Compile Include="..\CommonAssembly\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Infrastructure\Attributes\RequiredIfNotEmptyAttribute.cs" />
+    <Compile Include="Infrastructure\Extensions\ProperyExtensions.cs" />
     <Compile Include="Infrastructure\Extensions\SelectExtensions.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -262,7 +265,6 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\AccountActivityController.cs" />
-    <Compile Include="Areas\Admin\Controllers\Api\FeedbackApiController.cs" />
     <Compile Include="Areas\Admin\Controllers\BaseAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\BuildingController.cs" />
     <Compile Include="Areas\Admin\Controllers\BusinessRulesController-Depricated.cs" />
@@ -449,6 +451,7 @@
     <Content Include="Content\css\images\sort_both.png" />
     <Content Include="Content\css\images\sort_desc.png" />
     <Content Include="Content\css\print.css" />
+    <Content Include="Content\css\select2.css" />
     <Content Include="Content\icons\advanced_search.png" />
     <Content Include="Content\icons\ajax-loader.gif" />
     <Content Include="Content\icons\deal.png" />
@@ -466,6 +469,14 @@
     <Content Include="Content\img\clickmultimenu-6.png" />
     <Content Include="Content\img\dh_solutions_version.png" />
     <Content Include="Content\img\glyphicons-dh.png" />
+    <Content Include="Content\img\ic_sentiment_dissatisfied_black_24dp_1x.png" />
+    <Content Include="Content\img\ic_sentiment_dissatisfied_black_24dp_2x.png" />
+    <Content Include="Content\img\ic_sentiment_neutral_black_24dp_1x.png" />
+    <Content Include="Content\img\ic_sentiment_neutral_black_24dp_2x.png" />
+    <Content Include="Content\img\ic_sentiment_satisfied_black_24dp_1x.png" />
+    <Content Include="Content\img\ic_sentiment_satisfied_black_24dp_2x.png" />
+    <Content Include="Content\img\ic_sentiment_very_satisfied_black_24dp_1x.png" />
+    <Content Include="Content\img\ic_sentiment_very_satisfied_black_24dp_2x.png" />
     <Content Include="Content\js\Account\order.js" />
     <Content Include="Areas\Admin\Content\js\Users\_input.js" />
     <Content Include="Content\js\AdvancedSearch\index.specialfilter.js" />
@@ -1216,6 +1227,11 @@
     <Compile Include="Infrastructure\Tools\MimeHelper.cs" />
     <Compile Include="Infrastructure\Tools\WebMvcHelper.cs" />
     <Compile Include="Infrastructure\Translate\Translator.cs" />
+    <Compile Include="Infrastructure\UrlHelpers\MvcUrlNameBase.cs" />
+    <Compile Include="Infrastructure\UrlHelpers\Mvc\MvcUrlName.cs" />
+    <Compile Include="Infrastructure\UrlHelpers\Mvc\MvcUrlName.Feedback.cs" />
+    <Compile Include="Infrastructure\UrlHelpers\Mvc\MvcUrlName.Questionnaire.cs" />
+    <Compile Include="Infrastructure\UrlHelpers\WebApiUrlNameBase.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\CacheContext.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\CustomerContext.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\UserContext.cs" />
@@ -1397,6 +1413,10 @@
     <Compile Include="Models\DailyReports\DailyReportModel.cs" />
     <Compile Include="Models\Error\HandleErrorInfoGuid.cs" />
     <Compile Include="Models\Faq\Output\FAQFileModelModel.cs" />
+    <Compile Include="Models\Feedback\AddQuestionOptionParams.cs" />
+    <Compile Include="Models\Feedback\DeleteQuestionOptionParams.cs" />
+    <Compile Include="Models\Feedback\FeedbackAnswerModel.cs" />
+    <Compile Include="Models\Feedback\FeedbackAnswerParams.cs" />
     <Compile Include="Models\IConfigurableFieldModel.cs" />
     <Compile Include="Areas\Inventory\Models\EditModel\Computer\AccesoriesEditViewModel.cs" />
     <Compile Include="Areas\Admin\Models\Invoice\ArticlesImportModel.cs" />
@@ -1406,12 +1426,17 @@
     <Compile Include="Models\Projects\ProjectOverviewSorting.cs" />
     <Compile Include="Models\Questionnaire\Input\CircularCaseFilter.cs" />
     <Compile Include="Models\Questionnaire\Input\ConnectedToCircularOverview.cs" />
+    <Compile Include="Models\Questionnaire\Input\DeleteFeedbackParams.cs" />
+    <Compile Include="Models\Feedback\EditFeedbackModel.cs" />
+    <Compile Include="Models\Feedback\EditFeedbackParams.cs" />
     <Compile Include="Models\Questionnaire\Output\CircularOverviewViewModel.cs" />
+    <Compile Include="Models\Questionnaire\Output\FeedbackOverviewModel.cs" />
     <Compile Include="Models\Questionnaire\Output\QuestionInputModel.cs" />
     <Compile Include="Models\Questionnaire\Output\QuestionnaireModel.cs" />
     <Compile Include="Models\Questionnaire\Output\QuestionnaireQuestionOptionModel.cs" />
     <Compile Include="Models\Questionnaire\Output\QuestionnaireQuestionModel.cs" />
     <Compile Include="Models\Questionnaire\Output\QuestionnaireViewModel.cs" />
+    <Compile Include="Models\Questionnaire\Output\QuestionnaireListsModel.cs" />
     <Compile Include="Models\Questionnaire\Output\QuestionViewModel.cs" />
     <Compile Include="Models\Questionnaire\Output\ReportFilter.cs" />
     <Compile Include="Models\Questionnaire\Output\StatisticsViewModel.cs" />
@@ -1837,6 +1862,53 @@
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx" />
     <Content Include="Content\js\Shared\custom.validation.reuiredifnotempty.js" />
+    <Content Include="Scripts\i18n\ar.js" />
+    <Content Include="Scripts\i18n\az.js" />
+    <Content Include="Scripts\i18n\bg.js" />
+    <Content Include="Scripts\i18n\ca.js" />
+    <Content Include="Scripts\i18n\cs.js" />
+    <Content Include="Scripts\i18n\da.js" />
+    <Content Include="Scripts\i18n\de.js" />
+    <Content Include="Scripts\i18n\el.js" />
+    <Content Include="Scripts\i18n\en.js" />
+    <Content Include="Scripts\i18n\es.js" />
+    <Content Include="Scripts\i18n\et.js" />
+    <Content Include="Scripts\i18n\eu.js" />
+    <Content Include="Scripts\i18n\fa.js" />
+    <Content Include="Scripts\i18n\fi.js" />
+    <Content Include="Scripts\i18n\fr.js" />
+    <Content Include="Scripts\i18n\gl.js" />
+    <Content Include="Scripts\i18n\he.js" />
+    <Content Include="Scripts\i18n\hi.js" />
+    <Content Include="Scripts\i18n\hr.js" />
+    <Content Include="Scripts\i18n\hu.js" />
+    <Content Include="Scripts\i18n\id.js" />
+    <Content Include="Scripts\i18n\is.js" />
+    <Content Include="Scripts\i18n\it.js" />
+    <Content Include="Scripts\i18n\ja.js" />
+    <Content Include="Scripts\i18n\km.js" />
+    <Content Include="Scripts\i18n\ko.js" />
+    <Content Include="Scripts\i18n\lt.js" />
+    <Content Include="Scripts\i18n\lv.js" />
+    <Content Include="Scripts\i18n\mk.js" />
+    <Content Include="Scripts\i18n\ms.js" />
+    <Content Include="Scripts\i18n\nb.js" />
+    <Content Include="Scripts\i18n\nl.js" />
+    <Content Include="Scripts\i18n\pl.js" />
+    <Content Include="Scripts\i18n\pt-BR.js" />
+    <Content Include="Scripts\i18n\pt.js" />
+    <Content Include="Scripts\i18n\ro.js" />
+    <Content Include="Scripts\i18n\ru.js" />
+    <Content Include="Scripts\i18n\sk.js" />
+    <Content Include="Scripts\i18n\sr-Cyrl.js" />
+    <Content Include="Scripts\i18n\sr.js" />
+    <Content Include="Scripts\i18n\sv.js" />
+    <Content Include="Scripts\i18n\th.js" />
+    <Content Include="Scripts\i18n\tr.js" />
+    <Content Include="Scripts\i18n\uk.js" />
+    <Content Include="Scripts\i18n\vi.js" />
+    <Content Include="Scripts\i18n\zh-CN.js" />
+    <Content Include="Scripts\i18n\zh-TW.js" />
     <Content Include="Scripts\jquery-1.8.3.js" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />
     <Content Include="Scripts\jquery-ui-1.9.2.js" />
@@ -1844,6 +1916,8 @@
     <Content Include="Scripts\jquery.cookie.js" />
     <Content Include="Scripts\knockout-3.4.0.debug.js" />
     <Content Include="Scripts\knockout-3.4.0.js" />
+    <Content Include="Scripts\select2.js" />
+    <Content Include="Scripts\select2.min.js" />
     <Content Include="Views\DailyReport\Index.cshtml" />
     <Content Include="Areas\Orders\Views\OrderFieldSettings\Index.cshtml" />
     <Content Include="Areas\Orders\Views\OrderFieldSettings\EditorTemplates\FullFieldSettingsModel.cshtml" />
@@ -2432,6 +2506,10 @@
     <Content Include="Views\Contracts\Edit.cshtml" />
     <Content Include="Views\Cases\ModalDialogs\_SendIntLogToDiallog.cshtml" />
     <Content Include="Views\Cases\ModalDialogs\_CaseAddFollowers.cshtml" />
+    <Content Include="Views\Feedback\EditFeedback.cshtml" />
+    <Content Include="Views\Feedback\_FeedbackQuestionOptions.cshtml" />
+    <Content Include="Views\Feedback\Answer.cshtml" />
+    <Content Include="Views\Feedback\ThankYou.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">
@@ -3148,8 +3226,10 @@
     <Content Include="Areas\Admin\Views\Users\_Appearance.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Areas\Admin\Controllers\Api\" />
     <Folder Include="Areas\Inventory\Infrastucture\" />
     <Folder Include="Infrastructure\ModelFactories\Problems\Concrete\" />
+    <Folder Include="Infrastructure\UrlHelpers\Api\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Login\Login.cshtml" />

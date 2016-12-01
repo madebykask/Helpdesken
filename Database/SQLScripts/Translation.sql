@@ -5168,6 +5168,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1708 and Languag
             insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1708, '(You can only choose the size wide for a maximum of 3 columns).', 2)
 GO
 
+
 /* Notice:  1709, 1710, 1711  reserved for SelfService */
 
 If not exists (select * from tblText where Id = 1712)
@@ -5184,7 +5185,33 @@ If not exists (select * from tblText where Id = 1713)
 GO
 If not exists (select * from tblTextTranslation where Text_Id = 1713 and Language_Id=2)
     insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1713, 'Cc', 2)
+
+
+If not exists (select * from tblText where Id = 1714)
+      insert into tblText (Id, Textstring) VALUES (1714, 'Återkoppling')
 GO
+
+If not exists (select * from tblTextTranslation where Text_Id = 1714 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1714, 'Feedback', 2)
+
+GO
+
+If not exists (select * from tblText where Id = 1715)
+      insert into tblText (Id, Textstring) VALUES (1715, 'Unik identifierare krävs')
+GO
+
+If not exists (select * from tblTextTranslation where Text_Id = 1715 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1715, 'Unique Identifier is required', 2)
+GO
+
+If not exists (select * from tblText where Id = 1716)
+      insert into tblText (Id, Textstring) VALUES (1716, 'Tack för återkopplings')
+GO
+
+If not exists (select * from tblTextTranslation where Text_Id = 1716 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1716, 'Thank you for your feedback', 2)
+GO
+
 
 
 -- *** Run this last when put translation script above this line **--

@@ -25,8 +25,9 @@ namespace DH.Helpdesk.Web.Controllers
         #region Fields
 
         private readonly IQestionnaireService _questionnaireService;
+		private readonly IFeedbackService _feedbackService;
 
-        private readonly IQestionnaireQuestionService _questionnaireQuestionService;
+		private readonly IQestionnaireQuestionService _questionnaireQuestionService;
 
         private readonly IQestionnaireQuestionOptionService _questionnaireQuestionOptionService;
 
@@ -48,7 +49,8 @@ namespace DH.Helpdesk.Web.Controllers
 
         public QuestionnaireController(
             IQestionnaireService questionnaireService,
-            IQestionnaireQuestionService questionnaireQuestionService,
+			IFeedbackService feedbackService,
+			IQestionnaireQuestionService questionnaireQuestionService,
             IQestionnaireQuestionOptionService questionnaireQuestionOptionService,
             ICircularService circularService,
             IDepartmentService departmentService,
@@ -60,7 +62,8 @@ namespace DH.Helpdesk.Web.Controllers
             : base(masterDataService)
         {
             _questionnaireService = questionnaireService;
-            _questionnaireQuestionService = questionnaireQuestionService;
+			_feedbackService = feedbackService;
+			_questionnaireQuestionService = questionnaireQuestionService;
             _questionnaireQuestionOptionService = questionnaireQuestionOptionService;
             _circularService = circularService;
             _departmentService = departmentService;
@@ -144,8 +147,16 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpGet]
         public ViewResult Index()
         {
+			var model = new QuestionnaireListsModel();
+
             var questionnaires = _questionnaireService.FindQuestionnaireOverviews(SessionFacade.CurrentCustomer.Id);
-            var model = questionnaires.Select(q => new QuestionnaireOverviewModel(q.Id, q.Name, q.Description)).OrderBy(x => x.Name).ToList();
+			var feedbacks = _feedbackService.FindFeedbackOverviews(SessionFacade.CurrentCustomer.Id);
+			if (questionnaires.Any())
+	        {
+		        model.Questionnaires = questionnaires.Select(q => new QuestionnaireOverviewModel(q.Id, q.Name, q.Description)).OrderBy(x => x.Name).ToList();
+		        model.Feedbacks = feedbacks.Select(q => new FeedbackOverviewModel(q.Id, q.Name, q.Description)).OrderBy(x => x.Name).ToList();
+			}
+
             return View(model);
         }
 

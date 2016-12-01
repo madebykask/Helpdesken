@@ -1,4 +1,5 @@
 using DH.Helpdesk.SelfService;
+using DH.Helpdesk.Services.Services.Feedback;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
 [assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(NinjectWebCommon), "Stop")]
@@ -226,7 +227,8 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IProductAreaService>().To<ProductAreaService>();   
             kernel.Bind<IMailTemplateService>().To<MailTemplateService>();
             kernel.Bind<IEmailService>().To<EmailService>();
-            kernel.Bind<ICaseSettingsService>().To<CaseSettingsService>();
+			kernel.Bind<IFeedbackTemplateService>().To<FeedbackTemplateService>();
+			kernel.Bind<ICaseSettingsService>().To<CaseSettingsService>();
             kernel.Bind<IInfoService>().To<InfoService>();
             kernel.Bind<ICaseFileService>().To<CaseFileService>();
             kernel.Bind<ILogFileService>().To<LogFileService>();

@@ -119,6 +119,7 @@
     <Compile Include="Enums\Inventory\Fields\Shared\ProcessorFields.cs" />
     <Compile Include="Enums\LanguageTextId.cs" />
     <Compile Include="Enums\Changes\StepStatus.cs" />
+    <Compile Include="Enums\MailTemplates\FeedbackTemplate.cs" />
     <Compile Include="Enums\MailTemplates\QuestionnaireTemplates.cs" />
     <Compile Include="Enums\Notifiers\AddressField.cs" />
     <Compile Include="Enums\Notifiers\GeneralField.cs" />
@@ -243,6 +244,9 @@
     <Compile Include="Models\Error\ErrorModel.cs" />
     <Compile Include="Models\ExternalInvoice\ExternalInvoice.cs" />
     <Compile Include="Models\Faq\Input\FaqCategory.cs" />
+    <Compile Include="Models\Feedback\FeedbackFullItem.cs" />
+    <Compile Include="Models\Feedback\FeedbackQuestionOption.cs" />
+    <Compile Include="Models\Feedback\FeedbackQuestionOverview.cs" />
     <Compile Include="Models\FinishingCause\FinishingCauseItem.cs" />
     <Compile Include="Models\Grid\CaseOverviewColumnDefinition.cs" />
     <Compile Include="Models\Grid\GridColumnDefinition.cs" />
@@ -402,6 +406,7 @@
     <Compile Include="Models\ProductArea\ProductAreaItem.cs" />
     <Compile Include="Models\Projects\Output\ProjectOverviewSorting.cs" />
     <Compile Include="Models\Questionnaire\CircularCaseFilter.cs" />
+    <Compile Include="Models\Feedback\FeedbackOverview.cs" />
     <Compile Include="Models\Questionnaire\Participant.cs" />
     <Compile Include="Models\Questionnaire\Read\CircularOverview.cs" />
     <Compile Include="Models\Questionnaire\Read\ConnectedCase.cs" />

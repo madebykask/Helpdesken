@@ -47,35 +47,52 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Questionnaire
 
         public static CircularForEdit MapToEditModelById(this IQueryable<QuestionnaireCircularEntity> query, int id)
         {
-            CircularForEdit businessModel = null;
-
             var anonymus =
                 query.GetById(id)
                     .SingleOrDefault();
 
             if (anonymus != null)
             {
-                businessModel = new CircularForEdit(
-                    anonymus.Id,
-                    anonymus.CircularName,
-                    anonymus.Questionnaire_Id,
-                    (CircularStates)anonymus.Status,
-                    anonymus.CreatedDate,
-                    anonymus.ChangedDate,
-                    new CircularCaseFilter
-                    {
-                        IsUniqueEmail = anonymus.IsUniqueEmail,
-                        FinishingDateFrom = anonymus.FinishingDateFrom,
-                        FinishingDateTo = anonymus.FinishingDateTo,
-                        SelectedProcent = anonymus.SelectedProcent,
-                        SelectedDepartments = anonymus.QuestionnaireCircularDepartmentEntities.Select(x => x.DepartmentId).ToList(),
-                        SelectedCaseTypes = anonymus.QuestionnaireCircularCaseTypeEntities.Select(x => x.CaseTypeId).ToList(),
-                        SelectedProductAreas = anonymus.QuestionnaireCircularProductAreaEntities.Select(x => x.ProductAreaId).ToList(),
-                        SelectedWorkingGroups = anonymus.QuestionnaireCircularWorkingGroupEntities.Select(x => x.WorkingGroupId).ToList()
-                    });
-            }
+				return MapToCircularForEdit(anonymus);
+			}
 
-            return businessModel;
+            return null;
         }
+
+		public static CircularForEdit MapToEditModelByQuestionnaireId(this IQueryable<QuestionnaireCircularEntity> query, int id)
+		{
+			var anonymus =
+				query.SingleOrDefault(x => x.Questionnaire_Id == id);
+
+			if (anonymus != null)
+			{
+				return MapToCircularForEdit(anonymus);
+			}
+
+			return null;
+		}
+
+	    private static CircularForEdit MapToCircularForEdit( QuestionnaireCircularEntity anonymus)
+	    {
+		    var businessModel = new CircularForEdit(
+			    anonymus.Id,
+			    anonymus.CircularName,
+			    anonymus.Questionnaire_Id,
+			    (CircularStates) anonymus.Status,
+			    anonymus.CreatedDate,
+			    anonymus.ChangedDate,
+			    new CircularCaseFilter
+			    {
+				    IsUniqueEmail = anonymus.IsUniqueEmail,
+				    FinishingDateFrom = anonymus.FinishingDateFrom,
+				    FinishingDateTo = anonymus.FinishingDateTo,
+				    SelectedProcent = anonymus.SelectedProcent,
+				    SelectedDepartments = anonymus.QuestionnaireCircularDepartmentEntities.Select(x => x.DepartmentId).ToList(),
+				    SelectedCaseTypes = anonymus.QuestionnaireCircularCaseTypeEntities.Select(x => x.CaseTypeId).ToList(),
+				    SelectedProductAreas = anonymus.QuestionnaireCircularProductAreaEntities.Select(x => x.ProductAreaId).ToList(),
+				    SelectedWorkingGroups = anonymus.QuestionnaireCircularWorkingGroupEntities.Select(x => x.WorkingGroupId).ToList()
+			    });
+		    return businessModel;
+	    }
     }
 }

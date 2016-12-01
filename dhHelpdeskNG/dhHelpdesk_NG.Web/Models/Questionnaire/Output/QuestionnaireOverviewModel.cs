@@ -5,12 +5,16 @@
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
-    public sealed class QuestionnaireOverviewModel
+    public class QuestionnaireOverviewModel
     {
 
         #region Constructors and Destructors
 
-        public QuestionnaireOverviewModel(int id, string name, string description)
+	    public QuestionnaireOverviewModel()
+	    {
+	    }
+
+	    public QuestionnaireOverviewModel(int id, string name, string description)
         {
             this.Id = id;
             this.Name = name;

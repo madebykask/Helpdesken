@@ -48,8 +48,11 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
         
         [LocalizedDisplay("LanguageId")]        
         public int LanguageId { get; set; }
-        
-        [LocalizedDisplay("ChangedDate")]
+
+		[LocalizedDisplay("IconId")]
+		public string IconId { get; set; }
+
+		[LocalizedDisplay("ChangedDate")]
         public DateTime ChangedDate { get; set; }
        
     }
