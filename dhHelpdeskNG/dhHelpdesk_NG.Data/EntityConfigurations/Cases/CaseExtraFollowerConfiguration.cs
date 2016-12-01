@@ -23,7 +23,7 @@ namespace DH.Helpdesk.Dal.EntityConfigurations.Cases
 
             this.HasRequired(x => x.Case)
                 .WithMany()
-                .HasForeignKey(x => x.CaseId)
+                .HasForeignKey(x => x.Case_Id)
                 .WillCascadeOnDelete(false);
 
             this.ToTable("tblCaseExtraFollowers");

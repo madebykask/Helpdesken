@@ -833,7 +833,7 @@ namespace DH.Helpdesk.Dal.Repositories
 			tables.Add("left outer join tblRegistrationSourceCustomer on tblCase.RegistrationSourceCustomer_Id = tblRegistrationSourceCustomer.Id ");
 			tables.Add("left outer join tblUsers on tblUsers.Id = tblCase.Performer_User_Id ");
 			tables.Add("left outer join tblCaseIsAbout on tblCaseIsAbout.Case_Id = tblCase.Id ");
-			tables.Add("left outer join tblCaseFollowUps on tblCaseFollowUps.CaseId = tblCase.Id ");
+			tables.Add("left outer join tblCaseFollowUps on tblCaseFollowUps.Case_Id = tblCase.Id ");
 
 			if (customerSetting != null)
 			{
@@ -1183,7 +1183,7 @@ namespace DH.Helpdesk.Dal.Repositories
 					break;
 				case CaseProgressFilter.FollowUp:
 					//sb.Append(" and (tblCase.FollowUpdate is not null)");
-					sb.Append(" and (tblCaseFollowUps.UserId = " + userId + " and tblCaseFollowUps.IsActive = 1)");
+					sb.Append(" and (tblCaseFollowUps.User_Id = " + userId + " and tblCaseFollowUps.IsActive = 1)");
 					break;
 				default:
 					sb.Append(" and (tblCase.FinishingDate is null)");
@@ -1319,7 +1319,7 @@ namespace DH.Helpdesk.Dal.Repositories
 					break;
 				case CaseProgressFilter.FollowUp:
 					//sb.Append(" and (tblCase.FollowUpdate is not null)");
-					sb.Append(" and (tblCaseFollowUps.UserId = " + userId + " and tblCaseFollowUps.IsActive = 1)");
+					sb.Append(" and (tblCaseFollowUps.User_Id = " + userId + " and tblCaseFollowUps.IsActive = 1)");
 					break;
 				default:
 					sb.Append(" and (tblCase.FinishingDate is null)");

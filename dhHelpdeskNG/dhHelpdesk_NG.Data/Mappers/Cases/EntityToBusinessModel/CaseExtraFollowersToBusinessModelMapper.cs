@@ -15,7 +15,7 @@ namespace DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel
             {
                 Id = entity.Id,
                 Follower = entity.Follower,
-                CaseId = entity.CaseId,
+                CaseId = entity.Case_Id,
                 CreatedByUserId = entity.CreatedByUser_Id,
                 CreatedDate = entity.CreatedDate
             };

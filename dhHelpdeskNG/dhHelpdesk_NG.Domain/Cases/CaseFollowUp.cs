@@ -7,8 +7,8 @@ namespace DH.Helpdesk.Domain.Cases
 {
 	public class CaseFollowUp : Entity
 	{
-		public int UserId { get; set; }
-		public int CaseId { get; set; }
+		public int User_Id { get; set; }
+		public int Case_Id { get; set; }
 		public DateTime FollowUpDate { get; set; }
 
 		public bool IsActive { get; set; }

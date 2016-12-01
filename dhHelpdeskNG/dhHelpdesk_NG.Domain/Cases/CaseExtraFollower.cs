@@ -8,7 +8,7 @@ namespace DH.Helpdesk.Domain.Cases
     public class CaseExtraFollower : Entity
     {
         public string Follower { get; set; }
-        public int CaseId { get; set; }
+        public int Case_Id { get; set; }
         public int CreatedByUser_Id { get; set; }
         public DateTime CreatedDate { get; set; }
 

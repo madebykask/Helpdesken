@@ -4,16 +4,16 @@ if not exists(select * from sysobjects WHERE Name = N'tblCaseFollowUps')
 begin
 	CREATE TABLE [dbo].[tblCaseFollowUps](
 		[Id] [int] IDENTITY(1,1) NOT NULL,
-		[UserId] [int] NOT NULL,
-		[CaseId] [int] NOT NULL,
+		[User_Id] [int] NOT NULL,
+		[Case_Id] [int] NOT NULL,
 		[FollowUpDate] [datetime] NOT NULL,
 		[IsActive] [bit] NOT NULL,
 		CONSTRAINT [PK_tblCaseFollowUps] PRIMARY KEY CLUSTERED 
 		(
 			[Id] ASC
 		)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
-		CONSTRAINT [FK_tblCaseFollowUps_tblUsers] FOREIGN KEY ([UserId]) REFERENCES [dbo].[tblUsers] ([Id]),
-		CONSTRAINT [FK_tblCaseFollowUps_tblCases] FOREIGN KEY ([CaseId]) REFERENCES [dbo].[tblCase] ([Id])
+		CONSTRAINT [FK_tblCaseFollowUps_tblUsers] FOREIGN KEY ([User_Id]) REFERENCES [dbo].[tblUsers] ([Id]),
+		CONSTRAINT [FK_tblCaseFollowUps_tblCases] FOREIGN KEY ([Case_Id]) REFERENCES [dbo].[tblCase] ([Id])
 	);
 end
 Go
@@ -23,14 +23,14 @@ begin
 	CREATE TABLE [dbo].[tblCaseExtraFollowers](
 		[Id] [int] IDENTITY(1,1) NOT NULL,
 		[Follower] nvarchar(MAX) NOT NULL,
-		[CaseId] [int] NOT NULL,
+		[Case_Id] [int] NOT NULL,
 		[CreatedByUser_Id] [int] NOT NULL,
 		[CreatedDate] [datetime] NOT NULL,
 		CONSTRAINT [PK_tblCaseExtraFollowers] PRIMARY KEY CLUSTERED 
 		(
 			[Id] ASC
 		)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
-		CONSTRAINT [FK_tblCaseExtraFollowers_tblCases] FOREIGN KEY ([CaseId]) REFERENCES [dbo].[tblCase] ([Id]),
+		CONSTRAINT [FK_tblCaseExtraFollowers_tblCases] FOREIGN KEY ([Case_Id]) REFERENCES [dbo].[tblCase] ([Id]),
 		CONSTRAINT [FK_tblCaseExtraFollowers_tblUsers] FOREIGN KEY ([CreatedByUser_Id]) REFERENCES [dbo].[tblUsers] ([Id])
 	);
 end

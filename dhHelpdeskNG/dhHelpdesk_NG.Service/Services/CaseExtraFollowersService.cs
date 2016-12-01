@@ -43,7 +43,7 @@ namespace DH.Helpdesk.Services.Services
                         {
                             Id = existFollower.Id,
                             Follower = existFollower.Follower,
-                            CaseId = existFollower.CaseId,
+                            Case_Id = existFollower.Case_Id,
                             CreatedDate = existFollower.CreatedDate,
                             CreatedByUser_Id = existFollower.CreatedByUser_Id
                         });
@@ -53,7 +53,7 @@ namespace DH.Helpdesk.Services.Services
                         allFollowers.Add(new CaseExtraFollower
                         {
                             Follower = extraFollower,
-                            CaseId = caseId,
+                            Case_Id = caseId,
                             CreatedDate = DateTime.UtcNow,
                             CreatedByUser_Id = userId
                         });

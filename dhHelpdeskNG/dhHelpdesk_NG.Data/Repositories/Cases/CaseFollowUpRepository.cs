@@ -29,7 +29,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
 
 		public CaseFollowUp GetCaseFollowUp(int userId, int caseId)
 		{
-			return DataContext.CaseFollowUps.SingleOrDefault(x => x.UserId == userId && x.CaseId == caseId);
+			return DataContext.CaseFollowUps.SingleOrDefault(x => x.User_Id == userId && x.Case_Id == caseId);
 		}
 
 		public void UpdateCaseFollowUp(CaseFollowUp existCase)

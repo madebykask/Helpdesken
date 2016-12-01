@@ -24,9 +24,9 @@ namespace DH.Helpdesk.Services.Services
             {
                 var newCaseFollowUp = new CaseFollowUp
                 {
-                    CaseId = caseId,
+                    Case_Id = caseId,
                     FollowUpDate = DateTime.UtcNow,
-                    UserId = userId,
+                    User_Id = userId,
                     IsActive = true
                 };
                 _caseFollowUpRepository.AddCaseFollowUp(newCaseFollowUp);
