@@ -6,9 +6,9 @@ namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
     using System.Collections.Generic;
     using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Models.Questionnaire.Input;    
+    using DH.Helpdesk.BusinessData.Models.Questionnaire.Input;
     using DH.Helpdesk.Dal.Dal;
-    using DH.Helpdesk.Dal.Infrastructure;    
+    using DH.Helpdesk.Dal.Infrastructure;
 
     public sealed class QuestionnaireQuestionOptionRepository : Repository, IQuestionnaireQuestionOptionRepository
     {
@@ -31,8 +31,8 @@ namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
                 QuestionnaireQuestionOptionPos = newOption.OptionPos,
                 QuestionnaireQuestionOption = newOption.Option,
                 OptionValue = newOption.OptionValue,
-				IconId = newOption.IconId,
-                CreatedDate = newOption.ChangedDate,                
+                IconId = newOption.IconId,
+                CreatedDate = newOption.ChangedDate,
                 ChangedDate = newOption.ChangedDate
             };
 
@@ -48,21 +48,21 @@ namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
             questionnaireQuestionOptionEntity.QuestionnaireQuestionOptionPos = option.OptionPos;
             questionnaireQuestionOptionEntity.QuestionnaireQuestionOption = option.Option;
             questionnaireQuestionOptionEntity.OptionValue = option.OptionValue;
-			questionnaireQuestionOptionEntity.IconId = option.IconId;
-			questionnaireQuestionOptionEntity.ChangedDate = option.ChangedDate;
+            questionnaireQuestionOptionEntity.IconId = option.IconId;
+            questionnaireQuestionOptionEntity.ChangedDate = option.ChangedDate;
         }
 
         public void UpdateQuestionOption(QuestionnaireQuesOption option, int languageId)
         {
-            var questionnaireQuestionOptionLangEntity = this.DbContext.QuestionnaireQuestionOptionLanguage.Find(option.Id,languageId);
+            var questionnaireQuestionOptionLangEntity = this.DbContext.QuestionnaireQuestionOptionLanguage.Find(option.Id, languageId);
             if (questionnaireQuestionOptionLangEntity == null)
             {
                 AddLanguageQuestionnaireQuestionOption(option);
             }
             else
             {
-                questionnaireQuestionOptionLangEntity.QuestionnaireQuestionOption = option.Option;                
-                questionnaireQuestionOptionLangEntity.ChangedDate = option.ChangedDate;                
+                questionnaireQuestionOptionLangEntity.QuestionnaireQuestionOption = option.Option;
+                questionnaireQuestionOptionLangEntity.ChangedDate = option.ChangedDate;
             }
         }
 
@@ -72,12 +72,12 @@ namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
             {
                 QuestionnaireQuestionOption_Id = newOption.Id,
                 Language_Id = newOption.LanguageId,
-                QuestionnaireQuestionOption = newOption.Option,                
+                QuestionnaireQuestionOption = newOption.Option,
                 CreatedDate = newOption.ChangedDate,
                 ChangedDate = newOption.ChangedDate
             };
 
-            this.DbContext.QuestionnaireQuestionOptionLanguage.Add(questionnaireQuesOpLangEntity);            
+            this.DbContext.QuestionnaireQuestionOptionLanguage.Add(questionnaireQuesOpLangEntity);
         }
 
 
@@ -85,29 +85,37 @@ namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
         {
             var questionOptionLanguages = this.DbContext.QuestionnaireQuestionOptionLanguage.Where(ol => ol.QuestionnaireQuestionOption_Id == optionId);
 
-            foreach(var optionLanguage in questionOptionLanguages)
-                this.DbContext.QuestionnaireQuestionOptionLanguage.Remove(optionLanguage);                
+            foreach (var optionLanguage in questionOptionLanguages)
+                this.DbContext.QuestionnaireQuestionOptionLanguage.Remove(optionLanguage);
 
             var questionOption = this.DbContext.QuestionnaireQuestionOptions.Find(optionId);
             this.DbContext.QuestionnaireQuestionOptions.Remove(questionOption);
         }
-        
+
         public void DeleteQuestionOptionById(int optionId, int languageId)
         {
-            var questionOption = 
+            var questionOption =
                 this.DbContext.QuestionnaireQuestionOptionLanguage
-                     .Find(optionId,languageId);
+                     .Find(optionId, languageId);
             this.DbContext.QuestionnaireQuestionOptionLanguage.Remove(questionOption);
         }
-        
+
         public List<QuestionnaireQuesOption> FindQuestionnaireQuestionOptions(int questionId, int languageId, int defualtLanguageId)
         {
             // All Questionnaire Question Options (Id,OptionPos,Option,OptionValue,LanguageId,ChangeedDate)
             var allSwedishQuestionOptions =
                 this.DbContext.QuestionnaireQuestionOptions.Where(q => q.QuestionnaireQuestion_Id == questionId)
                     .Select(
-                        q => new { Id = q.Id, OptionPos = q.QuestionnaireQuestionOptionPos, Option = q.QuestionnaireQuestionOption, 
-                                   OptionValue = q.OptionValue, LanguageId = defualtLanguageId, ChangedDate = q.ChangedDate, IconId = q.IconId })
+                        q => new
+                        {
+                            Id = q.Id,
+                            OptionPos = q.QuestionnaireQuestionOptionPos,
+                            Option = q.QuestionnaireQuestionOption,
+                            OptionValue = q.OptionValue,
+                            LanguageId = defualtLanguageId,
+                            ChangedDate = q.ChangedDate,
+                            IconId = q.IconId
+                        })
                     .ToList();
 
             // All Questionnaire Question Options Language
@@ -115,9 +123,16 @@ namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
                this.DbContext.QuestionnaireQuestionOptionLanguage
                    .Where(q => q.Language_Id == languageId)
                    .Select(
-                       q => new { Id = q.QuestionnaireQuestionOption_Id, OptionPos = q.QuestionnaireQuestionOptions.QuestionnaireQuestionOptionPos ,
-                                  Option = q.QuestionnaireQuestionOption, OptionValue = q.QuestionnaireQuestionOptions.OptionValue,
-                                  LanguageId = q.Language_Id , ChangedDate = q.ChangedDate, IconId = ""})
+                       q => new
+                       {
+                           Id = q.QuestionnaireQuestionOption_Id,
+                           OptionPos = q.QuestionnaireQuestionOptions.QuestionnaireQuestionOptionPos,
+                           Option = q.QuestionnaireQuestionOption,
+                           OptionValue = q.QuestionnaireQuestionOptions.OptionValue,
+                           LanguageId = q.Language_Id,
+                           ChangedDate = q.ChangedDate,
+                           IconId = ""
+                       })
                    .ToList();
 
             // Only Needed Language Question Options 
@@ -127,7 +142,7 @@ namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
                                                      .Contains(ql.Id))
                     .ToList();
 
-            
+
             var tempList =
                 allSwedishQuestionOptions.Where(
                     sq => pureLanguageQuestionOptions.Select(lq => lq.Id)
@@ -135,23 +150,23 @@ namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
             // Swedish QuestionOptions which there was not in QuestionOption Languags 
             var exceptList = allSwedishQuestionOptions.Except(tempList);
 
-                        
+
             var fullQuestionOptions = pureLanguageQuestionOptions.Union(exceptList);
 
             return fullQuestionOptions.Select(q => new QuestionnaireQuesOption
             {
-	            Id = q.Id,
-				IconId = q.IconId,
-				Option = q.Option,
-				QuestionId = questionId,
-				LanguageId = q.LanguageId,
-				ChangedDate = q.ChangedDate,
-				OptionPos = q.OptionPos,
-				OptionValue = q.OptionValue
-			} ).ToList();
+                Id = q.Id,
+                IconId = allSwedishQuestionOptions.Single(s => s.Id == q.Id).IconId,
+                Option = q.Option,
+                QuestionId = questionId,
+                LanguageId = q.LanguageId,
+                ChangedDate = q.ChangedDate,
+                OptionPos = q.OptionPos,
+                OptionValue = q.OptionValue
+            }).ToList();
         }
 
-      
+
         #endregion
     }
 }

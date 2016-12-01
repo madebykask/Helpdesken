@@ -3,6 +3,9 @@
 
 @model DH.Helpdesk.Web.Models.Feedback.EditFeedbackModel
 
+@{
+    var icons = (List<SelectListItem>) ViewBag.IconsList;
+}
 <div class="tab-content">
     <div class="tab-pane tab-pane-border active" id="fragment-1">
         <div class="container">
@@ -43,7 +46,7 @@
                                         @Html.TextBox("optionValue", "0", new {id = "optionValue", style = "width: 85%;background-color:beige"})
                                     </td>
                                     <td>
-                                        @Html.DropDownList("optionIcon", (List<SelectListItem>) ViewBag.Icons, new { @class = "question_icons"  })
+                                        @Html.DropDownList("optionIcon", icons, new { @class = "question_icons"  })
                                     </td>
                                     <td style="text-align: center;">
                                         <a id="Addbtn" style="width: 60%" class="btn">
@@ -79,7 +82,7 @@
                                     <td>
                                         @if (Model.LanguageId == LanguageIds.Swedish)
                                         {
-                                            @Html.DropDownListFor(m => m.Options[i].IconId, (List<SelectListItem>)ViewBag.Icons, new { @class = "question_icons" })}
+                                            @Html.DropDownListFor(m => m.Options[i].IconId, new SelectList(icons, "Value", "Text", Model.Options[i].IconId), new { @class = "question_icons" })}
                                         else
                                         {
                                             if (!string.IsNullOrEmpty(Model.Options[i].IconId))

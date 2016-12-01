@@ -414,7 +414,7 @@ namespace DH.Helpdesk.Web.Controllers
 			var languages = GetLocalizedLanguages();
 			ViewBag.Languages = new SelectList(languages, "Value", "Name");
 			ViewBag.Percents = GetPercents();
-			ViewBag.Icons = GetIcons();
+			ViewBag.IconsList = GetIcons();
 		}
 		#endregion
 	}
