@@ -23,8 +23,9 @@
 		void DeleteById(int id);
 
         void DeleteConnectedCase(int cirularId, int caseId);
+	    List<int> GetAllCircularCasesIds(int circularId);
 
-        QuestionnaireDetailedOverview GetQuestionnaire(Guid guid, OperationContext operationContext);
+		QuestionnaireDetailedOverview GetQuestionnaire(Guid guid, OperationContext operationContext);
 
         QuestionnaireOverview GetQuestionnaire(int id, OperationContext operationContext);
 

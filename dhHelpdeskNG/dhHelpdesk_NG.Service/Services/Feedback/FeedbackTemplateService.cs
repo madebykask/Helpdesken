@@ -112,8 +112,9 @@ namespace DH.Helpdesk.Services.Services.Feedback
 			var isSuccess = RollDices(dbCircular.CaseFilter.SelectedProcent);
 			if (!isSuccess) return field;
 
-			var relatedCasesIds = new List<int> { caseId };
-			var circular = new CircularForUpdate(dbCircular.Id, dbCircular.CircularName, DateTime.Now, relatedCasesIds, dbCircular.CaseFilter);
+			var casesIds = _circularService.GetAllCircularCasesIds(dbCircular.Id);
+			casesIds.Add(caseId);
+			var circular = new CircularForUpdate(dbCircular.Id, dbCircular.CircularName, DateTime.Now, casesIds, dbCircular.CaseFilter);
 			_circularService.UpdateCircular(circular);
 
 			var participant = _circularService.GetNotAnsweredParticipants(dbCircular.Id).SingleOrDefault();//should be only 1 part for feedback
