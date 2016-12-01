@@ -179,7 +179,8 @@
         public string SelectedPriority { get; set; }
 
         public bool StateCheck { get; set; }
-
+        public IList<Status> States { get; set; }
+        public string SelectedState { get; set; }
         public bool SubStateCheck { get; set; }
         public IList<StateSecondary> SubStates { get; set; }        
         public string SelectedSubState { get; set; }

@@ -18,7 +18,7 @@
                     bool responsible,
                     string administrators, 
                     string priority, 
-                    bool state, 
+                    string state, 
                     string subState, 
                     DateTime? caseRegistrationDateStartFilter, 
                     DateTime? caseRegistrationDateEndFilter, 
@@ -83,7 +83,7 @@
 
         public string Priority { get; private set; }
 
-        public bool State { get; private set; }
+        public string State { get; private set; }
 
         public string SubState { get; private set; }
 

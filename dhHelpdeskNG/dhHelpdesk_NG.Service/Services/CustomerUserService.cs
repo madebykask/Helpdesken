@@ -78,7 +78,7 @@
                   userSetting.CaseResponsibleFilter != null,
                   (userSetting.CasePerformerFilter != null) ? userSetting.CasePerformerFilter.Replace(" ", string.Empty) : string.Empty,
                   (userSetting.CasePriorityFilter != null) ? userSetting.CasePriorityFilter.Replace(" ", string.Empty) : string.Empty,
-                  userSetting.CaseStatusFilter != null,
+                  (userSetting.CaseStatusFilter != null) ? userSetting.CaseStatusFilter.Replace(" ", string.Empty) : string.Empty,
                   (userSetting.CaseStateSecondaryFilter != null) ? userSetting.CaseStateSecondaryFilter.Replace(" ", string.Empty) : string.Empty,
                   userSetting.CaseRegistrationDateStartFilter,
                   userSetting.CaseRegistrationDateEndFilter,

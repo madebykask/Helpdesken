@@ -203,7 +203,7 @@
                                     <td>
                                         @Html.CheckBoxFor(m => Model.ResponsibleCheck, new { @class = "switchcheckbox" })
                                     </td>
-                                    <td></td>
+                                    <td colspan="2"></td>
                                 </tr>
                             }
 
@@ -263,7 +263,18 @@
                                     <td>
                                         @Html.CheckBoxFor(m => Model.StateCheck, new { @class = "switchcheckbox" })
                                     </td>
-                                    <td></td>
+                                    <td colspan="2">
+                                        <select id="lstStatus" name="lstStatus" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                            @foreach (var e in Model.States)
+                                            {
+                                                if (e.IsActive != 0)
+                                                {
+                                                    <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedState)>@Translation.Get(e.Name, Enums.TranslationSource.TextTranslation) </option>
+                                                }
+                                            }
+                                        </select>
+                                    </td>
+
                                 </tr>
                             }
 
@@ -305,7 +316,7 @@
                                     <td>
                                         @Html.CheckBoxFor(m => m.CaseRegistrationDateFilterShow, new { @class = "switchcheckbox" })
                                     </td>
-                                    <td>
+                                    <td colspan="2">
                                         @Html.EditorFor(m => m.CaseRegistrationDateStartFilter, "DatePicker", new { id = "CaseSetting_CaseRegistrationDateStartFilter" })
                                         @Html.EditorFor(m => m.CaseRegistrationDateEndFilter, "DatePicker", new { id = "CaseSetting_CaseRegistrationDateEndFilter" })
                                     </td>
@@ -324,7 +335,7 @@
                                     <td>
                                         @Html.CheckBoxFor(m => m.CaseWatchDateFilterShow, new { @class = "switchcheckbox" })
                                     </td>
-                                    <td>
+                                    <td colspan="2">
                                         @Html.EditorFor(m => m.CaseWatchDateStartFilter, "DatePicker", new { id = "CaseSetting_CaseWatchDateStartFilter" })
                                         @Html.EditorFor(m => m.CaseWatchDateEndFilter, "DatePicker", new { id = "CaseSetting_CaseWatchDateEndFilter" })
                                     </td>
@@ -343,7 +354,7 @@
                                     <td>
                                         @Html.CheckBoxFor(m => m.CaseClosingDateFilterShow, new { @class = "switchcheckbox" })
                                     </td>
-                                    <td>
+                                    <td colspan="2">
                                         @Html.EditorFor(m => m.CaseClosingDateStartFilter, "DatePicker", new { id = "CaseSetting_CaseClosingDateStartFilter" })
                                         @Html.EditorFor(m => m.CaseClosingDateEndFilter, "DatePicker", new { id = "CaseSetting_CaseClosingDateEndFilter" })
                                     </td>

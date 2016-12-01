@@ -1973,6 +1973,9 @@ namespace DH.Helpdesk.Web.Controllers
                 : string.Empty;
 
             var stateCheck = frm.IsFormValueTrue("StateCheck");
+            var state = (stateCheck)
+                ? ((frm.ReturnFormValue("lstStatus") == string.Empty) ? "0" : frm.ReturnFormValue("lstStatus"))
+                : string.Empty;
 
             bool subStateCheck = frm.IsFormValueTrue("SubStateCheck");
             var subState = (subStateCheck)
@@ -2005,7 +2008,7 @@ namespace DH.Helpdesk.Web.Controllers
                             responsibleCheck,
                             administrator,
                             priority,
-                            stateCheck,
+                            state,
                             subState,
                             (caseRegistrationDateCheck ? frm.GetDate("CaseRegistrationDateStartFilter") : null),
                             (caseRegistrationDateCheck ? frm.GetDate("CaseRegistrationDateEndFilter") : null),
@@ -4924,7 +4927,10 @@ namespace DH.Helpdesk.Web.Controllers
             ret.Priorities = priorities;
             ret.SelectedPriority = userCaseSettings.Priority;
 
-            ret.StateCheck = userCaseSettings.State;
+            var states = _statusService.GetStatuses(customerId).OrderBy(s => s.Name).ToList();
+            ret.StateCheck = (userCaseSettings.State != string.Empty);
+            ret.States = states;
+            ret.SelectedState = userCaseSettings.State;
 
             var subStates = _stateSecondaryService.GetStateSecondaries(customerId).OrderBy(s => s.Name).ToList();
             ret.SubStateCheck = (userCaseSettings.SubState != string.Empty);
