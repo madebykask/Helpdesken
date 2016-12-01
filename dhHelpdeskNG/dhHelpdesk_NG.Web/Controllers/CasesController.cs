@@ -2555,6 +2555,12 @@ namespace DH.Helpdesk.Web.Controllers
 
                 case_.FinishingDate = DatesHelper.Max(case_.RegTime, caseLog.FinishingDate.Value);
 
+                //if (case_.FinishingDate.HasValue && oldCase != null && oldCase.Logs.Any())
+                //{
+                //    var lastLogDate = oldCase.Logs.OrderByDescending(l => l.LogDate).Select(l=> l.LogDate).FirstOrDefault();
+                //    case_.FinishingDate = DatesHelper.Max(lastLogDate.AddMinutes(1), case_.FinishingDate.Value);
+                //}
+
                 var workTimeCalcFactory = new WorkTimeCalculatorFactory(
                     ManualDependencyResolver.Get<IHolidayService>(),
                     curCustomer.WorkingDayStart,

@@ -120,14 +120,16 @@ namespace DH.Helpdesk.Web.Models.CaseRules
 
     public sealed class FieldItem
     {
-        public FieldItem(string itemValue, string itemText, bool isActive = true)
+        public FieldItem(string itemValue, string itemText, bool isActive = true, string parentItemValue = "")
         {
             ItemValue = itemValue;
             ItemText = itemText;
-            IsActive = isActive;           
+            IsActive = isActive;
+            ParentItemValue = parentItemValue;
         }
 
         public string ItemValue { get; private set; }
+        
 
         public string ItemText { get; private set; }
 
@@ -137,7 +139,9 @@ namespace DH.Helpdesk.Web.Models.CaseRules
 
         public string ForeignKeyValue2 { get; set; }
 
-        public string ForeignKeyValue3 { get; set; }        
+        public string ForeignKeyValue3 { get; set; }
+
+        public string ParentItemValue { get; set; }
 
         public static FieldItem CreateEmpty()
         {

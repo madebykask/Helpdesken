@@ -19,6 +19,7 @@
         saveDropDownCaption: '@saveDropDownText',
         ruleModel : @Html.Raw(jsSerializer.Serialize(Model.RuleModel)),
     };
+
 </script>
 
 @Scripts.Render("~/bundles/casetemplates/edit")
@@ -344,7 +345,7 @@
                                         </td>
                                         <td class="span4">
                                             <input type="checkbox" name="CaseSolution.UpdateNotifierInformation" @(Model.CaseSolution.UpdateNotifierInformation == 1 ? "checked=checked" : "") value="1" class="switchcheckbox acceptRules" standardId='@GlobalEnums.TranslationCaseFields.UpdateNotifierInformation.ToString()'/>
-                                                <input type="hidden" name="CaseSolution.UpdateNotifierInformation" value="0" />
+                                            <input type="hidden" name="CaseSolution.UpdateNotifierInformation" value="0" />
                                         </td>
                                         <td class="span9">
                                                 @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.UpdateNotifierInformation, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.UpdateNotifierInformation)
@@ -596,7 +597,7 @@
                                         </td>
                                         <td>
                                             <div id="divCaseType" class="btn-group">
-                                                <div class="btn acceptRules" id="divBreadcrumbs_CaseType" standardId='@GlobalEnums.TranslationCaseFields.UserCode.ToString()'>@Model.ParantPath_CaseType</div>
+                                                <div class="btn" id="divBreadcrumbs_CaseType">@Model.ParantPath_CaseType</div>
                                                 <button class="btn dropdown-toggle" data-toggle="dropdown">
                                                     <span class="caret"></span>
                                                 </button>
@@ -604,7 +605,7 @@
                                                     <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
                                                     @Html.CaseTypeDropdownButtonString(Model.CaseTypes)
                                                 </ul>
-                                                @Html.HiddenFor(model => model.CaseSolution.CaseType_Id)
+                                                @Html.HiddenFor(model => model.CaseSolution.CaseType_Id, new { @class = "acceptRules", standardId = GlobalEnums.TranslationCaseFields.CaseType_Id.ToString() })
 
                                             </div>
                                         </td>
@@ -621,7 +622,7 @@
                                         </td>
                                         <td>
                                             <div id="divProductArea" class="btn-group">
-                                                <div class="btn acceptRules" id="divBreadcrumbs_ProductArea" standardId='@GlobalEnums.TranslationCaseFields.UserCode.ToString()'>@Model.ParantPath_ProductArea</div>
+                                                <div class="btn" id="divBreadcrumbs_ProductArea" >@Model.ParantPath_ProductArea</div>
                                                 <button class="btn dropdown-toggle" data-toggle="dropdown">
                                                     <span class="caret"></span>
                                                 </button>
@@ -629,7 +630,7 @@
                                                     <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
                                                     @Html.ProductAreaDropdownButtonString(Model.ProductAreas)
                                                 </ul>
-                                                @Html.HiddenFor(model => model.CaseSolution.ProductArea_Id)
+                                                @Html.HiddenFor(model => model.CaseSolution.ProductArea_Id, new { @class = "acceptRules", standardId = GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString() })
                                             </div>
                                         </td>
                                         <td class="span9">

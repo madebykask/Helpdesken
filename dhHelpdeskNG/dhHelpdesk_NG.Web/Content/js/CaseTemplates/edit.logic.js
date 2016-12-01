@@ -157,21 +157,21 @@ $(function () {
         e.preventDefault();
         var val = $(this).attr('value');
         $("#divBreadcrumbs_FinishingCause").text(getBreadcrumbs(this));
-        $("#CaseSolution_FinishingCause_Id").val(val);
+        $("#CaseSolution_FinishingCause_Id").val(val).trigger('change');
     });
     
     $('#divCaseType ul.dropdown-menu li a').click(function (e) {
         e.preventDefault();
         var val = $(this).attr('value');
         $("#divBreadcrumbs_CaseType").text(getBreadcrumbs(this));
-        $("#CaseSolution_CaseType_Id").val(val);
+        $("#CaseSolution_CaseType_Id").val(val).trigger('change');
     });
 
     $('#divProductArea ul.dropdown-menu li a').click(function (e) {
         e.preventDefault();
         var val = $(this).attr('value');
         $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(this));
-        $("#CaseSolution_ProductArea_Id").val(val);
+        $("#CaseSolution_ProductArea_Id").val(val).trigger('change');
     });
     
     /// enable/disable correct choices in schedule  

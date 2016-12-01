@@ -809,14 +809,14 @@ namespace DH.Helpdesk.Web.Controllers
                 Items = registationSources.Select(r => new FieldItem(r.Id.ToString(), r.SourceName, r.IsActive != 0)).OrderBy(r => r.ItemText).ToList()
             };
 
-            var caseTypes = _caseTypeService.GetCaseTypes(customerId);
+            var caseTypes = _caseTypeService.GetAllCaseTypes(customerId);
             var defaultCaseType = caseTypes.Where(c => c.IsDefault != 0 && c.IsActive != 0).FirstOrDefault();
             caseBasicInfo.CaseTypes = new BasicMultiItemField()
             {
                 Selected = new FieldItem(templateModel.CaseType_Id?.ToString(), string.Empty),
                 StatusType = GetFieldStatusType(CaseSolutionFields.CaseType, templateSettingModel.ToList()),
                 DefaultItem = defaultCaseType != null ? new FieldItem(defaultCaseType.Id.ToString(), defaultCaseType.Name) : FieldItem.CreateEmpty(),
-                Items = caseTypes.Select(c => new FieldItem(c.Id.ToString(), c.Name, c.IsActive != 0) { ForeignKeyValue1 = c.User_Id?.ToString() })
+                Items = caseTypes.Select(c => new FieldItem(c.Id.ToString(), Translation.GetCoreTextTranslation(c.Name), c.IsActive != 0, c.Parent_CaseType_Id?.ToString()) { ForeignKeyValue1 = c.User_Id?.ToString() })
                                  .OrderBy(i => i.ItemText).ToList()
             };
 
@@ -826,7 +826,7 @@ namespace DH.Helpdesk.Web.Controllers
                 Selected = new FieldItem(templateModel.ProductArea_Id?.ToString(), string.Empty),
                 StatusType = GetFieldStatusType(CaseSolutionFields.ProductArea, templateSettingModel.ToList()),
                 DefaultItem = FieldItem.CreateEmpty(),
-                Items = prodAreas.Select(p => new FieldItem(p.Id.ToString(), p.Name, p.IsActive != 0)
+                Items = prodAreas.Select(p => new FieldItem(p.Id.ToString(), Translation.GetCoreTextTranslation(p.Name), p.IsActive != 0, p.Parent_ProductArea_Id?.ToString())
                                                             {
                                                                 ForeignKeyValue1 = p.WorkingGroup_Id?.ToString(),
                                                                 ForeignKeyValue2 = p.Priority_Id?.ToString()

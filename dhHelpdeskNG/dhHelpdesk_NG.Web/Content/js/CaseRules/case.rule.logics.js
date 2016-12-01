@@ -1,4 +1,9 @@
-﻿$(function () {
+﻿
+
+$(function () {
+    
+    
+
     (function ($) {
         window.helpdesk = window.helpdesk || {};
         window.helpdesk.caseRule = window.helpdesk.caseRule || {};
@@ -6,9 +11,48 @@
 
         var ruleModel = null;
         var $elementsHaveRule = $('.acceptRules');
-        var STANDARD_ID = 'standardId';
-          
-        helpdesk.common = {
+        var STANDARD_ID = 'standardid';
+        
+        /***** Enums *****/
+        var _RULE_TYPE = {
+            Original: 0,
+            NewMode : 1,
+            InheritMode : 2,
+            SelfService : 3
+        };
+
+        var _RELATION_TYPE = {
+            OneToOne:1,
+            OneToMany:2,
+            ManyToMany:3
+        };
+
+        var _ACTION_TYPE = {
+            ValueSetter: 1,
+            ListCleaner: 2,
+            ListPopulator: 3
+        };
+
+        var _FIELD_TYPE = {
+            TextField: 1,
+            SingleSelectField: 2,
+            MultiSelectField: 3,
+            TreeButtonSelect: 4,
+            TextArea: 5,
+            CheckBox: 6,
+            DateField: 7,
+            ElementsGroup: 8,
+            ButtonField: 9
+        };
+
+        var _FIELD_STATUS_TYPE ={
+            Editable:1,
+            Readonly: 2,
+            Hidden: 3
+        }                   
+
+
+        helpdesk.common = {       
             data: function(){
                 this.isNullOrUndefined = function(value){
                     if (value == null || value == undefined)
@@ -16,19 +60,76 @@
                     
                     return false;
                 }
-            }            
+
+                this.isNullOrEmpty = function (value) {
+                    if (value == null || value == undefined || value == "")
+                        return true;
+
+                    return false;
+                }
+            },
+
+            convertor: function () {
+                this.toBoolStr = function (value) {
+                    if (value == null || value == undefined )
+                        return "False";
+                    
+                    if (value == 0 || !value || value == "0" || value == "")
+                        return "False";
+
+                    return "True";
+                }
+            }
+
+
+        }
+
+        helpdesk.caseRuleModels = {
+            /* Models */
+            FieldItem: function(){
+                this.ItemValue = ""; 
+
+                this.ItemText = "";
+
+                this.IsActive = true;
+
+                this.ForeignKeyValue1 = null;
+
+                this.ForeignKeyValue2 = null;
+
+                this.ForeignKeyValue3 = null;
+
+                this.ParentItemValue = "";
+            }
         }
 
         helpdesk.caseRule = {
+          
+            
+
+            /* Class helper */ 
             dataHelper: null,
+            convertor: null,
 
             init:function() {
                 ruleModel = params.ruleModel;
                 dataHelper = new helpdesk.common.data();
-                $elementsHaveRule.change(function () {
-                    var $self = $(this);
-                    helpdesk.caseRule.checkRules($self);
+                convertor = new helpdesk.common.convertor();
+               
+                $elementsHaveRule.on('switchChange.bootstrapSwitch', function () {
+                    /* Used for bootstrap checkbox */
+                    helpdesk.caseRule.elementValueChanged(this);
                 });
+
+                $elementsHaveRule.change(function () {
+                    helpdesk.caseRule.elementValueChanged(this);
+                });
+            },
+
+            elementValueChanged: function(element){
+                var $self = $(element);
+                helpdesk.caseRule.updateFieldValue($self);
+                //helpdesk.caseRule.checkRules($self);
             },
 
             getFieldById: function(fieldId){
@@ -57,6 +158,67 @@
                     return null;
 
                 return this.getFieldById(fieldId);                
+            },
+
+            updateFieldValue: function($element){
+                var field = this.getFieldByElement($element);
+                if (dataHelper.isNullOrUndefined(field))
+                    return;
+                
+                switch (field.FieldType) {
+
+                    case _FIELD_TYPE.TextField:
+                        var curVal = $element.val();
+                        field.Selected.ItemValue = curVal;
+                        break;
+
+                    case _FIELD_TYPE.CheckBox:
+                        var curVal = $element.prop('checked');
+                        field.Selected.ItemValue = convertor.toBoolStr(curVal);
+                        break;
+
+                    case _FIELD_TYPE.SingleSelectField:
+                        var curVal = $element.val();
+                        field.Selected = helpdesk.caseRule.getItemByValue(field, curVal);
+                        break;
+
+                    case _FIELD_TYPE.TreeButtonSelect:
+                        var curVal = $element.val();
+                        field.Selected = helpdesk.caseRule.getItemByValue(field, curVal);
+                        if (!dataHelper.isNullOrEmpty(curVal))
+                            field.Selected.ItemText = helpdesk.caseRule.resolveTreeName(field, curVal);
+                        break;
+                }
+
+            },
+
+            getItemByValue: function (field, itemValue) {
+                if (field == null && field.Items == null && field.Items.length <= 0)
+                    return new helpdesk.caseRuleModels.FieldItem();
+
+                for (var fiv = 0; fiv < field.Items.length; fiv++)
+                {
+                    if (field.Items[fiv].ItemValue == itemValue)
+                        return field.Items[fiv];
+                }
+
+                return new helpdesk.caseRuleModels.FieldItem();
+            },
+
+            resolveTreeName: function (field, itemValue) {
+                if (field == null && field.Items == null && field.Items.length <= 0)
+                    return "";
+
+                for (var fit = 0; fit < field.Items.length; fit++) {
+                    if (field.Items[fit].ItemValue == itemValue) {
+                        if (dataHelper.isNullOrEmpty(field.Items[fit].ParentItemValue))
+                            return field.Items[fit].ItemText;
+                        else
+                            return this.resolveTreeName(field, field.Items[fit].ParentItemValue) + " - " + field.Items[fit].ItemText;
+                    }
+                }
+
+                return "";
             },
 
             checkRules: function ($element) {
