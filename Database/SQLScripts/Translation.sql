@@ -5215,17 +5215,16 @@ GO
 If not exists (select * from tblText where Id = 1717)
       insert into tblText (Id, Textstring) VALUES (1717, 'Lägga följare')
 GO
-
 If not exists (select * from tblTextTranslation where Text_Id = 1717 and Language_Id=2)
             insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1717, 'Add followers', 2)
 GO
 
 
-If not exists (select * from tbltext where id = 1717)
-	insert into tbltext (id, TextString) VALUES (1717, 'kan inte vara tidigare än ändringsdatum.')
+If not exists (select * from tbltext where id = 1718)
+	insert into tbltext (id, TextString) VALUES (1718, 'kan inte vara tidigare än ändringsdatum.')
 GO
-If not exists (select * from tblTextTranslation where text_id = 1717 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1717, 2, 'can not be earlier than changed date.')
+If not exists (select * from tblTextTranslation where text_id = 1718 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1718, 2, 'can not be earlier than changed date.')
 GO
 
 
