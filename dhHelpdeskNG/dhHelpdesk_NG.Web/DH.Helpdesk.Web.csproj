@@ -2512,6 +2512,8 @@
     <Content Include="Views\Feedback\_FeedbackQuestionOptions.cshtml" />
     <Content Include="Views\Feedback\Answer.cshtml" />
     <Content Include="Views\Feedback\ThankYou.cshtml" />
+    <Content Include="Views\Cases\ModalDialogs\_CaseAddFollowers.cshtml" />
+    <Content Include="Views\Cases\ModalDialogs\_SendIntLogToDiallog.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">
