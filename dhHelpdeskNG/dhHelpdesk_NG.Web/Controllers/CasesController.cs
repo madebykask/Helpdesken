@@ -1143,10 +1143,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var caseLockViewModel = GetCaseLockModel(id, userId);
                 int customerId = moveToCustomerId.HasValue ? moveToCustomerId.Value : _caseService.GetCaseById(id).Customer_Id;
 
-                if (moveToCustomerId != null)
-                    moveToCustomerId = moveToCustomerId.Value;
-
-                m = this.GetCaseInputViewModel(userId, customerId, id, caseLockViewModel, redirectFrom, backUrl, null, null, updateState, moveToCustomerId);
+                m = this.GetCaseInputViewModel(userId, customerId, id, caseLockViewModel, redirectFrom, backUrl, null, null, updateState);
                 if (uni.HasValue)
                 {
                     m.UpdateNotifierInformation = uni.Value;                    
