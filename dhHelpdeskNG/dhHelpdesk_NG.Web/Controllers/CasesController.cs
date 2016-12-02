@@ -1142,12 +1142,20 @@ namespace DH.Helpdesk.Web.Controllers
 
                 var caseLockViewModel = GetCaseLockModel(id, userId);
                 int customerId = moveToCustomerId.HasValue ? moveToCustomerId.Value : _caseService.GetCaseById(id).Customer_Id;
-                m = this.GetCaseInputViewModel(userId, customerId, id, caseLockViewModel, redirectFrom, backUrl, null, null, updateState);
+
+                if (moveToCustomerId != null)
+                    moveToCustomerId = moveToCustomerId.Value;
+
+                m = this.GetCaseInputViewModel(userId, customerId, id, caseLockViewModel, redirectFrom, backUrl, null, null, updateState, moveToCustomerId);
                 if (uni.HasValue)
                 {
                     m.UpdateNotifierInformation = uni.Value;                    
                 }
-                
+
+                //if move case always fullaccess
+                if (moveToCustomerId.HasValue)
+                    m.EditMode = Enums.AccessMode.FullAccess;
+
                 ApplicationFacade.UpdateLoggedInUser(Session.SessionID, string.Empty);
 
                 // If user logged in from link in email
@@ -2935,7 +2943,7 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             // In new case shouldn't check
-            if (accessToWorkinggroups != null && m.case_.Id != 0)
+            if (accessToWorkinggroups != null && m.case_.Id != 0 )
             {
                 if (SessionFacade.CurrentUser.UserGroupId < 3)
                 {
@@ -3712,7 +3720,7 @@ namespace DH.Helpdesk.Web.Controllers
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
 
             var userHasInvoicePermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InvoicePermission);
-
+            
             if (!isCreateNewCase)
             {
                 var markCaseAsRead = string.IsNullOrWhiteSpace(redirectFrom);
