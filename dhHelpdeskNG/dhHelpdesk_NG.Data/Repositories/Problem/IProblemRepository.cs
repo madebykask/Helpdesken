@@ -20,7 +20,7 @@ namespace DH.Helpdesk.Dal.Repositories.Problem
 
         ProblemOverview FindById(int problemId);
 
-        List<ProblemOverview> FindByCustomerId(int customerId);
+        List<ProblemOverview> FindByCustomerId(int customerId, bool checkCaseRelation = true);
 
         List<ProblemOverview> FindByCustomerIdAndStatus(int customerId, EntityStatus entityStatus);
     }

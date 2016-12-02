@@ -1635,6 +1635,15 @@ namespace DH.Helpdesk.Web.Controllers
             return Json(res);
         }
 
+        [HttpGet]
+        public JsonResult IsFinishingDateValid(DateTime changedTime, DateTime finishingTime)
+        {            
+            if (changedTime > finishingTime)
+                return Json(false, JsonRequestBehavior.AllowGet);
+
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
         #endregion
 
         #region --Files--
@@ -2555,12 +2564,6 @@ namespace DH.Helpdesk.Web.Controllers
 
                 case_.FinishingDate = DatesHelper.Max(case_.RegTime, caseLog.FinishingDate.Value);
 
-                //if (case_.FinishingDate.HasValue && oldCase != null && oldCase.Logs.Any())
-                //{
-                //    var lastLogDate = oldCase.Logs.OrderByDescending(l => l.LogDate).Select(l=> l.LogDate).FirstOrDefault();
-                //    case_.FinishingDate = DatesHelper.Max(lastLogDate.AddMinutes(1), case_.FinishingDate.Value);
-                //}
-
                 var workTimeCalcFactory = new WorkTimeCalculatorFactory(
                     ManualDependencyResolver.Get<IHolidayService>(),
                     curCustomer.WorkingDayStart,
@@ -3379,7 +3382,7 @@ namespace DH.Helpdesk.Web.Controllers
             specificFilter.FilteredClosingReasonText = ParentPathDefaultValue;
 
             
-            specificFilter.NewProductAreaList = GetProductAreasModel(customerId, null);
+            specificFilter.NewProductAreaList = GetProductAreasModel(customerId, null).OrderBy(p=> p.Text).ToList();
 
             var customerfieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customerId);
 
@@ -3994,7 +3997,7 @@ namespace DH.Helpdesk.Web.Controllers
             }
             
             m.finishingCauses = this._finishingCauseService.GetFinishingCauses(customerId);
-            m.problems = this._problemService.GetCustomerProblems(customerId);
+            m.problems = this._problemService.GetCustomerProblems(customerId, false);
             m.currencies = this._currencyService.GetCurrencies();
             var responsibleUsersList = this._userService.GetAvailablePerformersOrUserId(customerId, m.case_.CaseResponsibleUser_Id);
             m.projects = this._projectService.GetCustomerProjects(customerId);
@@ -5108,7 +5111,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         private List<SelectListItem> GetProductAreasModel(int customerId, int? curProductAreaId)
         {
-            var allActiveProductAreas = this._productAreaService.GetTopProductAreasForUser(customerId, SessionFacade.CurrentUser, false);
+            var allProductAreas = this._productAreaService.GetTopProductAreasForUser(customerId, SessionFacade.CurrentUser, false);
             var ret = new List<SelectListItem>();
 
             var parentRet = new List<SelectListItem>();
@@ -5116,18 +5119,23 @@ namespace DH.Helpdesk.Web.Controllers
 
             var curName = string.Empty;
 
-            foreach (var productArea in allActiveProductAreas)
+            foreach (var productArea in allProductAreas)
             {                
                 curName = productArea.ResolveFullName();
-                parentRet.Add(new SelectListItem() { Value = productArea.Id.ToString(), Text = curName, Selected = (productArea.Id == curProductAreaId) });
-                parentRet.AddRange(GetProductAreaChild(productArea, curProductAreaId));
+                parentRet.Add(new SelectListItem() {
+                                                     Value = productArea.Id.ToString(),
+                                                     Text = curName,
+                                                     Selected = (productArea.Id == curProductAreaId),
+                                                     Disabled = productArea.IsActive == 0
+                                                    });
+                parentRet.AddRange(GetProductAreaChild(productArea, curProductAreaId, productArea.IsActive == 0));
             }
 
             ret = parentRet.OrderBy(p => p.Text).ToList();
             return ret;
 
         }
-        private List<SelectListItem> GetProductAreaChild(ProductArea productArea, int? curProductAreaId)
+        private List<SelectListItem> GetProductAreaChild(ProductArea productArea, int? curProductAreaId, bool parentIsDisabled)
         {
             var ret = new List<SelectListItem>();
             if (productArea.SubProductAreas.Any())
@@ -5136,8 +5144,13 @@ namespace DH.Helpdesk.Web.Controllers
                 foreach (var child in productArea.SubProductAreas)
                 {
                     curName = child.ResolveFullName();
-                    ret.Add(new SelectListItem() { Value = child.Id.ToString(), Text = curName, Selected = (child.Id == curProductAreaId) });
-                    ret.AddRange(GetProductAreaChild(child, curProductAreaId));
+                    ret.Add(new SelectListItem() {
+                                                    Value = child.Id.ToString(),
+                                                    Text = curName,
+                                                    Selected = (child.Id == curProductAreaId),
+                                                    Disabled = (parentIsDisabled || child.IsActive == 0)
+                                                 });
+                    ret.AddRange(GetProductAreaChild(child, curProductAreaId, child.IsActive == 0));
                 }
             }
             

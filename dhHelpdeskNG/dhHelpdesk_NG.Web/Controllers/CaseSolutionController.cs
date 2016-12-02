@@ -1537,7 +1537,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (cs.ModuleProblem == 1)
             {
-                model.problems = this._problemService.GetCustomerProblems(curCustomerId).Select(x => new SelectListItem
+                model.problems = this._problemService.GetCustomerProblems(curCustomerId, false).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()

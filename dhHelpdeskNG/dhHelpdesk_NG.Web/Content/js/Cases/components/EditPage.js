@@ -160,22 +160,39 @@ EditPage.prototype.isFormValid = function() {
 EditPage.prototype.primaryValidation = function (submitUrl) {
     var me = this;
 
+    /* Check FinishigTime */
+    if (me.CaseWillFinish()) {
+        var finishDate =  $('#CaseLog_FinishingDate').val();
+        $.get('/CaseInvoice/IsFinishingDateValid/', { changedTime: me.p.changedTime, finishingTime: finishDate, myTime: Date.now }, function (res) {
+            if (res != null && res) {
+                me.startSaveProcess(me);
+                
+            }
+            else {
+                dhHelpdesk.cases.utils.showError(me.p.finishingDateMessage);
+            }
+        });
+    }
+    
+}
+
+EditPage.prototype.startSaveProcess = function (sender) {
     //Check if there is Order which is not invoiced yet
+    var me = sender;
+
     if (me.invoiceIsActive && me.CaseWillFinish()) {
         $.get('/CaseInvoice/IsThereNotSentOrder/', { caseId: me.p.currentCaseId, myTime: Date.now }, function (res) {
-            if (res != null && res)
+            if (res != null && res) {
                 dhHelpdesk.cases.utils.showError(me.p.invoicePreventsToCloseCaseMessage);
-            else
+            }
+            else {
                 me.checkAndSave(submitUrl);
+            }
         });
     }
     else {
         me.checkAndSave(submitUrl);
     }
-}
-
-EditPage.prototype.hasNotInvoicedOrder = function (id, callBack) {
-    
 }
 
 EditPage.prototype.checkAndSave = function (submitUrl) {
