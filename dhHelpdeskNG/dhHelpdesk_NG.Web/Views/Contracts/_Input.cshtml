@@ -1,10 +1,24 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Common.Enums
 @using DH.Helpdesk.Web.Models.Contract
-@*@model List<DH.Helpdesk.Web.Models.Contract.ContractsSettingRowViewModel>*@
+@using System.Web.Optimization
 @model DH.Helpdesk.Web.Models.Contract.ContractViewInputModel
 
 @{ var row = new ContractsSettingRowViewModel(); }
+
+<script type="text/javascript">
+    window.appParameters = {
+        uploadContractFileUrl: '@Url.Action("UploadContractFile", "Contracts")',
+        ContractFileKey: '@Model.ContractFileKey',
+        contractId : '@Model.ContractId',
+        ContractFilesUrl: '@Url.Action("GetAllFiles", "Contracts")',        
+        fileAlreadyExistsMsg: '@Html.Raw(Translation.GetForJS("File already exists", Enums.TranslationSource.TextTranslation))',
+        downloadContractFileUrl: '@Url.Action("DownloadContractFile")',
+        downloadContractFileParamUrl: '@(!string.IsNullOrEmpty(Model.ContractFileKey) ? "id=" + Model.ContractFileKey + "&" : string.Empty)',
+        deleteContractFileUrl: '@Url.Action("DeleteContractFile")'
+    };
+</script>
+
 
 <div class="content">
     <div class="container">
@@ -20,49 +34,50 @@
        
         <div class="tab-content">            
             <div class="tab-pane tab-pane-border active" id="fragment-1">
-              <div class="container">             
-                  <table class="tableform">
-                        <thead>
-                            <tr>
-                                <th class="span3"></th>
-                                <th class="span3"></th>
-                                <th class="span3"></th>
-                            </tr>
-                        </thead>
-                        <tr>
-                            <td colspan="3">
-                                <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
-                            </td>                    
-                        </tr>
-                        <tr>
-                          @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.Number).FirstOrDefault();
+              <div class="container">
+                  <div>
+                      <table class="tableform">
+                          <thead>
+                              <tr>
+                                  <th class="span3"></th>
+                                  <th class="span3"></th>
+                                  <th class="span3"></th>
+                              </tr>
+                          </thead>
+                          <tr>
+                              <td colspan="3">
+                                  
+                              </td>
+                          </tr>
+                          <tr>
+                              @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.Number).FirstOrDefault();
                             if (row == null)
                             {
                                 row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.Number);
                                 row.ContractFieldLable = Translation.Get("Nummer", Enums.TranslationSource.TextTranslation);
                                 row.ContractFieldLable_Eng = "Number";
                             }
-                            }
-                            @if (row.Show == true)
-                            {                                
-                                <td>
-                                    @if (SessionFacade.CurrentLanguageId == 2)
+                              }
+                              @if (row.Show == true)
+                            {
+                                  <td>
+                                      @if (SessionFacade.CurrentLanguageId == 2)
                                     {
-                                        @Html.DisplayFor(m => row.ContractFieldLable_Eng)
+                                          @Html.DisplayFor(m => row.ContractFieldLable_Eng)
                                     }
                                     else
                                     {
-                                    @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
+                                          @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
                                     }
-                                    @if (row.Required == true)
+                                      @if (row.Required == true)
                                     {
-                                        <span class="mandatorystar">*</span>}
-                                </td>                    
-                                <td>@Html.TextBoxFor(m => Model.ContractNumber)</td>                    
-                            }                    
-                        </tr>
-                        <tr>
-                           @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.CaseNumber).FirstOrDefault();
+                                          <span class="mandatorystar">*</span>}
+                                  </td>
+                                  <td>@Html.TextBoxFor(m => Model.ContractNumber)</td>
+                            }
+                          </tr>
+                          <tr>
+                              @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.CaseNumber).FirstOrDefault();
                                  if (row == null)
                                  {
                                      row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.CaseNumber);
@@ -72,166 +87,168 @@
                                      row.Required = false;
                                      row.ShowInList = false;
                                  }
-                            }
-                            @if (row.Show == true)
+                              }
+                              @if (row.Show == true)
                             {
-                                <td>
-                                     @if (SessionFacade.CurrentLanguageId == 2)
+                                  <td>
+                                      @if (SessionFacade.CurrentLanguageId == 2)
                                      {
-                                        @Html.DisplayFor(m => row.ContractFieldLable_Eng)
+                                          @Html.DisplayFor(m => row.ContractFieldLable_Eng)
                                      }
                                      else
                                      {
-                                    @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
+                                          @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
                                      }
-                                     @if (row.Required == true)
+                                      @if (row.Required == true)
                                      {
-                                        <span class="mandatorystar">*</span>}
-                                </td>                    
-                                <td>@Html.TextBoxFor(m => row.ContractFieldLable, new { @class = EnumContractFieldSettings.CaseNumber, id = "fieldCaption", dataId = @row.Id, englishLable = row.ContractFieldLable_Eng, swedishLable = row.ContractFieldLable })</td>                    
+                                          <span class="mandatorystar">*</span>}
+                                  </td>
+                                  <td>@Html.TextBoxFor(m => row.ContractFieldLable, new { @class = EnumContractFieldSettings.CaseNumber, id = "fieldCaption", dataId = @row.Id, englishLable = row.ContractFieldLable_Eng, swedishLable = row.ContractFieldLable })</td>
                             }
-                        </tr>
-                        <tr>
-                           @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.Category).FirstOrDefault();
+                          </tr>
+                          <tr>
+                              @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.Category).FirstOrDefault();
                                  if (row == null)
                                  {
                                      row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.Category);
                                      row.ContractFieldLable = Translation.Get("Kategori", Enums.TranslationSource.TextTranslation);
                                      row.ContractFieldLable_Eng = "Category";
                                  }
-                            }
-                            @if (row.Show == true)
+                              }
+                              @if (row.Show == true)
                             {
-                                <td>
-                                     @if (SessionFacade.CurrentLanguageId == 2)
+                                  <td>
+                                      @if (SessionFacade.CurrentLanguageId == 2)
                                      {
-                                        @Html.DisplayFor(m => row.ContractFieldLable_Eng)
+                                          @Html.DisplayFor(m => row.ContractFieldLable_Eng)
                                      }
                                      else
                                      {
-                                    @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
+                                          @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
                                      }
-                                     @if (row.Required == true)
+                                      @if (row.Required == true)
                                      {
-                                        <span class="mandatorystar">*</span>}
-                                </td>                    
-                                <td>@Html.DropDownListFor(t => Model.CategoryId, Model.ContractCategories)</td>                                        
+                                          <span class="mandatorystar">*</span>}
+                                  </td>
+                                  <td>@Html.DropDownListFor(t => Model.CategoryId, Model.ContractCategories)</td>
                             }
-                        </tr> 
-                        <tr>
-                           @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.Supplier).FirstOrDefault();
+                          </tr>
+                          <tr>
+                              @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.Supplier).FirstOrDefault();
                                  if (row == null)
                                  {
                                      row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.Supplier);
                                      row.ContractFieldLable = Translation.Get("Leverantör", Enums.TranslationSource.TextTranslation);
                                      row.ContractFieldLable_Eng = "Supplier";
                                  }
-                             }
-                             @if (row.Show == true)
+                              }
+                              @if (row.Show == true)
                              {
-                                <td>
-                                     @if (SessionFacade.CurrentLanguageId == 2)
+                                  <td>
+                                      @if (SessionFacade.CurrentLanguageId == 2)
                                      {
-                                        @Html.DisplayFor(m => row.ContractFieldLable_Eng)
+                                          @Html.DisplayFor(m => row.ContractFieldLable_Eng)
                                      }
                                      else
                                      {
-                                    @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
+                                          @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
                                      }
-                                     @if (row.Required == true)
+                                      @if (row.Required == true)
                                      {
-                                        <span class="mandatorystar">*</span>}
-                                </td>                   
-                                <td>@Html.DropDownListFor(t => Model.SupplierId, Model.Suppliers)</td>                                      
+                                          <span class="mandatorystar">*</span>}
+                                  </td>
+                                  <td>@Html.DropDownListFor(t => Model.SupplierId, Model.Suppliers)</td>
                              }
-                        </tr>
-                        <tr>
-                           @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.Department).FirstOrDefault();
+                          </tr>
+                          <tr>
+                              @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.Department).FirstOrDefault();
                                  if (row == null)
                                  {
                                      row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.Department);
                                      row.ContractFieldLable = Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation);
                                      row.ContractFieldLable_Eng = "Department";
                                  }
-                            }
-                            @if (row.Show == true)
+                              }
+                              @if (row.Show == true)
                             {
-                                <td>
-                                     @if (SessionFacade.CurrentLanguageId == 2)
+                                  <td>
+                                      @if (SessionFacade.CurrentLanguageId == 2)
                                      {
-                                        @Html.DisplayFor(m => row.ContractFieldLable_Eng)
+                                          @Html.DisplayFor(m => row.ContractFieldLable_Eng)
                                      }
                                      else
                                      {
-                                    @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
+                                          @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
                                      }
-                                    @if (row.Required == true)
+                                      @if (row.Required == true)
                                     {
-                                        <span class="mandatorystar">*</span>}
-                                </td>                    
-                                <td>@Html.DropDownListFor(t => Model.DepartmentId, Model.Departments)</td>                                      
+                                          <span class="mandatorystar">*</span>}
+                                  </td>
+                                  <td>@Html.DropDownListFor(t => Model.DepartmentId, Model.Departments)</td>
                             }
-                        </tr>
-                        <tr>
-                          @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.ResponsibleUser).FirstOrDefault();
+                          </tr>
+                          <tr>
+                              @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.ResponsibleUser).FirstOrDefault();
                                 if (row == null)
                                 {
                                     row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.ResponsibleUser);
                                     row.ContractFieldLable = Translation.Get("Ansvarig", Enums.TranslationSource.TextTranslation);
                                     row.ContractFieldLable_Eng = "Responsible";
                                 }
-                           }
-                            @if (row.Show == true)
+                              }
+                              @if (row.Show == true)
                             {
-                                <td>
-                                    @if (SessionFacade.CurrentLanguageId == 2)
+                                  <td>
+                                      @if (SessionFacade.CurrentLanguageId == 2)
                                     {
-                                        @Html.DisplayFor(m => row.ContractFieldLable_Eng)
+                                          @Html.DisplayFor(m => row.ContractFieldLable_Eng)
                                     }
                                     else
                                     {
-                                     @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
+                                          @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
                                     }
-                                    @if (row.Required == true)
+                                      @if (row.Required == true)
                                     {
-                                        <span class="mandatorystar">*</span>}
-                                </td>                    
-                                <td>
-                                    @Html.DropDownListFor(t => Model.ResponsibleUserId, Model.ResponsibleUsers)                               
-                                </td>
-                            }                    
-                        </tr>                
-                        <tr style="margin-bottom:10px;">
-                          @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.Filename).FirstOrDefault();
+                                          <span class="mandatorystar">*</span>}
+                                  </td>
+                                  <td>
+                                      @Html.DropDownListFor(t => Model.ResponsibleUserId, Model.ResponsibleUsers)
+                                  </td>
+                            }
+                          </tr>
+                          <tr style="margin-bottom:10px;">
+                              @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.Filename).FirstOrDefault();
                                 if (row == null)
                                 {
                                     row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.Filename);
                                     row.ContractFieldLable = Translation.Get("Bifogad fil", Enums.TranslationSource.TextTranslation);
                                     row.ContractFieldLable_Eng = "Attached File";
                                 }
-                            }
-                            @if (row.Show == true)
+                              }
+                              @if (row.Show == true)
                             {
-                                <td> 
-                                    @if (SessionFacade.CurrentLanguageId == 2)
+                                  <td>
+                                      @if (SessionFacade.CurrentLanguageId == 2)
                                     {
-                                        @Html.DisplayFor(m => row.ContractFieldLable_Eng)
+                                          @Html.DisplayFor(m => row.ContractFieldLable_Eng)
                                     }
                                     else
                                     {
-                                    @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
+                                          @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
                                     }
-                                    @if (row.Required == true)
+                                      @if (row.Required == true)
                                     {
-                                        <span class="mandatorystar">*</span>}
-                                </td>                    
-                                <td>                              
-                                    <a id="btnAddContractFile" href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>                                                                                    
-                                </td>
+                                          <span class="mandatorystar">*</span>}
+                                  </td>
+                                  <td>
+                                      <div id="divContractFiles">
+                                          @Html.Partial("_ContractFiles", Model.ContractFiles)
+                                      </div>
+                                  </td>
                             }
-                        </tr>
-                        <tr>
-                           @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.Other).FirstOrDefault();
+                          </tr>
+                          <tr>
+                              @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.Other).FirstOrDefault();
                                  if (row == null)
                                  {
                                      row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.Other);
@@ -240,258 +257,259 @@
                                      row.Required = false;
                                      row.ShowInList = false;
                                  }
-                            }
-                            @if (row.Show == true)
+                              }
+                              @if (row.Show == true)
                             {
-                                <td> 
-                                    @if (SessionFacade.CurrentLanguageId == 2)
+                                  <td>
+                                      @if (SessionFacade.CurrentLanguageId == 2)
                                     {
-                                        @Html.DisplayFor(m => row.ContractFieldLable_Eng)
+                                          @Html.DisplayFor(m => row.ContractFieldLable_Eng)
                                     }
                                     else
                                     {
-                                    @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
+                                          @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
                                     }
-                                    @if (row.Required == true)
+                                      @if (row.Required == true)
                                     {
-                                        <span class="mandatorystar">*</span>}
-                                </td>                    
-                                <td>
-                                    @Html.TextAreaFor(m => m.Other)
-                                </td>
+                                          <span class="mandatorystar">*</span>}
+                                  </td>
+                                  <td>
+                                      @Html.TextAreaFor(m => m.Other)
+                                  </td>
                             }
-                        </tr>
-                        <tr>
-                           @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.StartDate).FirstOrDefault();
+                          </tr>
+                          <tr>
+                              @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.StartDate).FirstOrDefault();
                                  if (row == null)
                                  {
                                      row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.StartDate);
                                      row.ContractFieldLable = Translation.Get("Startdatum", Enums.TranslationSource.TextTranslation);
                                      row.ContractFieldLable_Eng = "Start Date";
                                  }
-                            }
-                            @if (row.Show == true)
+                              }
+                              @if (row.Show == true)
                             {
-                                <td> 
-                                    @if (SessionFacade.CurrentLanguageId == 2)
+                                  <td>
+                                      @if (SessionFacade.CurrentLanguageId == 2)
                                     {
-                                        @Html.DisplayFor(m => row.ContractFieldLable_Eng)
+                                          @Html.DisplayFor(m => row.ContractFieldLable_Eng)
                                     }
                                     else
                                     {
-                                    @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
+                                          @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
                                     }
-                                    @if (row.Required == true)
+                                      @if (row.Required == true)
                                     {
-                                        <span class="mandatorystar">*</span>}
-                                </td>                    
-                                <td>
-                                    @Html.EditorFor(m => m.ContractStartDate, "DatePicker", new { id = "divContract__StartDate" })
-                                </td>
+                                          <span class="mandatorystar">*</span>}
+                                  </td>
+                                  <td>
+                                      @Html.EditorFor(m => m.ContractStartDate, "DatePicker", new { id = "divContract__StartDate" })
+                                  </td>
                             }
-                        </tr>
-                        <tr>
-                           @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.EndDate).FirstOrDefault();
+                          </tr>
+                          <tr>
+                              @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.EndDate).FirstOrDefault();
                                  if (row == null)
                                  {
                                      row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.EndDate);
                                      row.ContractFieldLable = Translation.Get("Slutdatum", Enums.TranslationSource.TextTranslation);
                                      row.ContractFieldLable_Eng = "End Date";
                                  }
-                            }
-                            @if (row.Show == true)
+                              }
+                              @if (row.Show == true)
                             {
-                                <td> 
-                                    @if (SessionFacade.CurrentLanguageId == 2)
+                                  <td>
+                                      @if (SessionFacade.CurrentLanguageId == 2)
                                     {
-                                        @Html.DisplayFor(m => row.ContractFieldLable_Eng)
+                                          @Html.DisplayFor(m => row.ContractFieldLable_Eng)
                                     }
                                     else
                                     {
-                                    @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
+                                          @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
                                     }
-                                    @if (row.Required == true)
+                                      @if (row.Required == true)
                                     {
-                                        <span class="mandatorystar">*</span>}
-                                </td>                    
-                                <td>
-                                    @Html.EditorFor(m => m.ContractEndDate, "DatePicker", new { id = "divContract__EndDate" })
-                                 </td>                    
+                                          <span class="mandatorystar">*</span>}
+                                  </td>
+                                  <td>
+                                      @Html.EditorFor(m => m.ContractEndDate, "DatePicker", new { id = "divContract__EndDate" })
+                                  </td>
                             }
-                        </tr>
-                        <tr>
-                           @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.NoticeDate).FirstOrDefault();
+                          </tr>
+                          <tr>
+                              @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.NoticeDate).FirstOrDefault();
                                  if (row == null)
                                  {
                                      row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.NoticeDate);
                                      row.ContractFieldLable = Translation.Get("Uppsägningsdatum", Enums.TranslationSource.TextTranslation);
                                      row.ContractFieldLable_Eng = "Notice Date";
                                  }
-                            }
-                            @if (row.Show == true)
+                              }
+                              @if (row.Show == true)
                             {
-                                <td> 
-                                    @if (SessionFacade.CurrentLanguageId == 2)
+                                  <td>
+                                      @if (SessionFacade.CurrentLanguageId == 2)
                                     {
-                                        @Html.DisplayFor(m => row.ContractFieldLable_Eng)
+                                          @Html.DisplayFor(m => row.ContractFieldLable_Eng)
                                     }
                                     else
                                     {
-                                    @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
+                                          @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
                                     }
-                                    @if (row.Required == true)
+                                      @if (row.Required == true)
                                     {
-                                        <span class="mandatorystar">*</span>}
-                                </td>                                        
-                                <td>
-                                    @Html.EditorFor(m => m.NoticeDate, "DatePicker", new { id = "divContract__NoticeDate" })
-                                    @Translation.Get("Skapa", Enums.TranslationSource.TextTranslation) @Translation.Get("ärende", Enums.TranslationSource.TextTranslation) 
-                                    @Html.DropDownListFor(t => Model.NoticeTimeId, Model.NoticeTimes, new { style = "width: auto;" }) @Translation.Get("före uppsägningsdatum", Enums.TranslationSource.TextTranslation)
-                                </td>                                    
+                                          <span class="mandatorystar">*</span>}
+                                  </td>
+                                  <td>
+                                      @Html.EditorFor(m => m.NoticeDate, "DatePicker", new { id = "divContract__NoticeDate" })
+                                      @Translation.Get("Skapa", Enums.TranslationSource.TextTranslation) @Translation.Get("ärende", Enums.TranslationSource.TextTranslation)
+                                      @Html.DropDownListFor(t => Model.NoticeTimeId, Model.NoticeTimes, new { style = "width: auto;" }) @Translation.Get("före uppsägningsdatum", Enums.TranslationSource.TextTranslation)
+                                  </td>
                             }
-                        </tr>
-                        <tr>
-                          @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.Running).FirstOrDefault();
+                          </tr>
+                          <tr>
+                              @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.Running).FirstOrDefault();
                                 if (row == null)
                                 {
                                     row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.Running);
                                     row.ContractFieldLable = Translation.Get("Löpande", Enums.TranslationSource.TextTranslation);
                                     row.ContractFieldLable_Eng = "Running";
                                 }
-                           }
-                            @if (row.Show == true)
+                              }
+                              @if (row.Show == true)
                             {
-                                <td> 
-                                    @if (SessionFacade.CurrentLanguageId == 2)
+                                  <td>
+                                      @if (SessionFacade.CurrentLanguageId == 2)
                                     {
-                                        @Html.DisplayFor(m => row.ContractFieldLable_Eng)
+                                          @Html.DisplayFor(m => row.ContractFieldLable_Eng)
                                     }
                                     else
                                     {
-                                    @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
+                                          @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
                                     }
-                                    @if (row.Required == true)
+                                      @if (row.Required == true)
                                     {
-                                        <span class="mandatorystar">*</span>}
-                                </td>                    
-                                <td>
-                                    @Html.CheckBoxFor(m => m.Running)
-                                </td>
+                                          <span class="mandatorystar">*</span>}
+                                  </td>
+                                  <td>
+                                      @Html.CheckBoxFor(m => m.Running)
+                                  </td>
                             }
-                        </tr>
-                        <tr>
-                           @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.Finished).FirstOrDefault();
+                          </tr>
+                          <tr>
+                              @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.Finished).FirstOrDefault();
                                  if (row == null)
                                  {
                                      row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.Finished);
                                      row.ContractFieldLable = Translation.Get("Avslutad", Enums.TranslationSource.TextTranslation);
                                      row.ContractFieldLable_Eng = "Finished";
                                  }
-                            }
-                            @if (row.Show == true)
+                              }
+                              @if (row.Show == true)
                             {
-                                <td>
-                                     @if (SessionFacade.CurrentLanguageId == 2)
+                                  <td>
+                                      @if (SessionFacade.CurrentLanguageId == 2)
                                     {
-                                        @Html.DisplayFor(m => row.ContractFieldLable_Eng)
+                                          @Html.DisplayFor(m => row.ContractFieldLable_Eng)
                                     }
                                     else
                                     {
-                                    @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
+                                          @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
                                     }
-                                    @if (row.Required == true)
+                                      @if (row.Required == true)
                                     {
-                                        <span class="mandatorystar">*</span>}
-                                </td>                    
-                                <td>
-                                    @Html.CheckBoxFor(m => m.Finished)
-                                </td>
+                                          <span class="mandatorystar">*</span>}
+                                  </td>
+                                  <td>
+                                      @Html.CheckBoxFor(m => m.Finished)
+                                  </td>
                             }
-                        </tr>
-                        <tr>
-                            <th colspan="3"><h4>@Translation.Get("Uppföljning", Enums.TranslationSource.TextTranslation)</h4></th>
-                        </tr>               
-                        <tr>
-                          @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.FollowUpField).FirstOrDefault();
+                          </tr>
+                          <tr>
+                              <th colspan="3"><h4>@Translation.Get("Uppföljning", Enums.TranslationSource.TextTranslation)</h4></th>
+                          </tr>
+                          <tr>
+                              @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.FollowUpField).FirstOrDefault();
                                 if (row == null)
                                 {
                                     row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.FollowUpField);
                                     row.ContractFieldLable = Translation.Get("Uppföljningsintervall", Enums.TranslationSource.TextTranslation);
                                     row.ContractFieldLable_Eng = "Follow Up Interval";
                                 }
-                             }
-                            @if (row.Show == true)
+                              }
+                              @if (row.Show == true)
                             {
-                                <td> 
-                                    @if (SessionFacade.CurrentLanguageId == 2)
+                                  <td>
+                                      @if (SessionFacade.CurrentLanguageId == 2)
                                     {
-                                        @Html.DisplayFor(m => row.ContractFieldLable_Eng)
+                                          @Html.DisplayFor(m => row.ContractFieldLable_Eng)
                                     }
                                     else
                                     {
-                                    @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
+                                          @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
                                     }
-                                    @if (row.Required == true)
+                                      @if (row.Required == true)
                                     {
-                                        <span class="mandatorystar">*</span>}
-                                </td>                    
-                                <td>@Html.DropDownListFor(f => Model.FollowUpIntervalId, Model.FollowUpIntervals)</td>                    
+                                          <span class="mandatorystar">*</span>}
+                                  </td>
+                                  <td>@Html.DropDownListFor(f => Model.FollowUpIntervalId, Model.FollowUpIntervals)</td>
                             }
-                        </tr>
-                        <tr>
-                           @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.ResponsibleFollowUpField).FirstOrDefault();
+                          </tr>
+                          <tr>
+                              @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.ResponsibleFollowUpField).FirstOrDefault();
                                  if (row == null)
                                  {
                                      row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.ResponsibleFollowUpField);
                                      row.ContractFieldLable = Translation.Get("Ansvarig uppföljning", Enums.TranslationSource.TextTranslation);
                                      row.ContractFieldLable_Eng = "Responsible Follow Up";
                                  }
-                            }
-                            @if (row.Show == true)
+                              }
+                              @if (row.Show == true)
                             {
-                                <td> 
-                                    @if (SessionFacade.CurrentLanguageId == 2)
+                                  <td>
+                                      @if (SessionFacade.CurrentLanguageId == 2)
                                     {
-                                        @Html.DisplayFor(m => row.ContractFieldLable_Eng)
+                                          @Html.DisplayFor(m => row.ContractFieldLable_Eng)
                                     }
                                     else
                                     {
-                                        @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
+                                          @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
                                     }
-                                    @if (row.Required == true)
+                                      @if (row.Required == true)
                                     {
-                                        <span class="mandatorystar">*</span>}
-                                </td>                    
-                                <td>
-                                    @Html.DropDownListFor(t => Model.FollowUpResponsibleUserId, Model.FollowUpResponsibleUsers)
-                                </td> 
+                                          <span class="mandatorystar">*</span>}
+                                  </td>
+                                  <td>
+                                      @Html.DropDownListFor(t => Model.FollowUpResponsibleUserId, Model.FollowUpResponsibleUsers)
+                                  </td>
                             }
-                        </tr>  
-                        @if (Model.ContractId != 0)
+                          </tr>
+                          @if (Model.ContractId != 0)
                         {
-                            <tr>
-                                <th colspan="3">
-                                    <h4>@Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)</h4>
-                                </th>
-                            </tr>
-                            <tr>
-                                <td>                                   
-                                   @Translation.Get("Skapad datum", Enums.TranslationSource.TextTranslation)                                                                       
-                                </td>
-                                <td>
-                                   @Html.DisplayFor(t => Model.CreatedDate)
-                                </td>
-                            </tr>  
-                            <tr>
-                                <td>                                   
-                                   @Translation.Get("Senast ändrad datum", Enums.TranslationSource.TextTranslation)                                                                       
-                                </td>
-                                <td>
-                                   @Html.DisplayFor(t => Model.ChangedDate)  @Translation.Get("av", Enums.TranslationSource.TextTranslation)  @Html.DisplayFor(t => Model.ChangedByUser)
-                                </td>
-                            </tr>  
-                        }             
-                 </table>
+                              <tr>
+                                  <th colspan="3">
+                                      <h4>@Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)</h4>
+                                  </th>
+                              </tr>
+                              <tr>
+                                  <td>
+                                      @Translation.Get("Skapad datum", Enums.TranslationSource.TextTranslation)
+                                  </td>
+                                  <td>
+                                      @Html.DisplayFor(t => Model.CreatedDate)
+                                  </td>
+                              </tr>
+                              <tr>
+                                  <td>
+                                      @Translation.Get("Senast ändrad datum", Enums.TranslationSource.TextTranslation)
+                                  </td>
+                                  <td>
+                                      @Html.DisplayFor(t => Model.ChangedDate)  @Translation.Get("av", Enums.TranslationSource.TextTranslation)  @Html.DisplayFor(t => Model.ChangedByUser)
+                                  </td>
+                              </tr>
+                        }
+                      </table>
+                  </div>  
               </div>             
             </div>            
             <div class="tab-pane tab-pane-border" id="fragment-2">
@@ -500,6 +518,8 @@
         </div>        
     </div>
 </div>
+
+@Scripts.Render("~/bundles/contracts/edit")
 
 <script type="text/javascript">
 

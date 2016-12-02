@@ -3,12 +3,12 @@
        @{
     ViewBag.Title = "New";
 }
-@using (Html.BeginForm("save", "Contracts", FormMethod.Post, new { id = "target" }))
+@using (Html.BeginForm("New", "Contracts", FormMethod.Post, new { id = "target" }))
 {
   <div class="secnavs fixed">
     <div class="pull-left">
        <ul class="secnav">
-        <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "save", null, new { @class = "btn", onclick = "$('#target').submit();return false;", id=Model.ContractId})</li>       
+        <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "New", null, new { @class = "btn", onclick = "$('#target').submit();return false;", id=Model.ContractId , contractKey = Model.ContractFileKey})</li>       
              @Html.HiddenFor(x => Model.SettingsModel)
          <li>
             <input name="actiontype" type="submit" value="@Translation.Get("Spara och stäng")" class="btn"/>
@@ -20,6 +20,8 @@
   </div>
         @Html.Partial("_Input", Model)
     @Html.HiddenFor(i => i.ContractId)
+    @Html.HiddenFor(i => i.ContractFileKey)
+
 }
 <script type="text/javascript">
 

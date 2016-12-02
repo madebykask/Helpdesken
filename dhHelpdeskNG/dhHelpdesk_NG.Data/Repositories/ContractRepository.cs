@@ -156,16 +156,45 @@ namespace DH.Helpdesk.Dal.Repositories
 
     #region CONTRACTFILE
 
-    public interface IContractFileRepository : IRepository<ContractFile>
+    public interface IContractFileRepository : INewRepository
     {
+        void SaveContracFile(ContractFileModel file);
+        List<ContractFile> GetContractFile(int contractId);
     }
 
-    public class ContractFileRepository : RepositoryBase<ContractFile>, IContractFileRepository
+    public class ContractFileRepository : Repository, IContractFileRepository
     {
         public ContractFileRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
         }
+
+        public void SaveContracFile(ContractFileModel file)
+        {
+            var contractFileEntity = new ContractFile()
+            {
+                Id = 0,
+                Contract_Id = file.Contract_Id,
+                File = file.Content,
+                ContentType = file.ContentType,
+                ArchivedContractFile_Id = file.ArchivedContractFile_Id,
+                FileName = file.FileName,         
+                ArchivedDate = file.ArchivedDate,
+                CreatedDate = file.CreatedDate,
+                ContractFileGUID = file.ContractFileGuid
+            };
+
+            this.DbContext.ContractFiles.Add(contractFileEntity);
+            this.InitializeAfterCommit(file, contractFileEntity);
+
+        }
+
+        public List<ContractFile> GetContractFile(int contractId)
+        {           
+            var query = this.DbContext.ContractFiles.Where(c => c.Contract_Id == contractId);
+            return query.ToList();
+        }
+
     }
 
     #endregion

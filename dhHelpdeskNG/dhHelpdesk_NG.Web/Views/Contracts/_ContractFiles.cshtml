@@ -1,0 +1,67 @@
+﻿@model List<DH.Helpdesk.Web.Models.Contract.ContractFileViewModel>
+
+<a id="btnUploadFile" href="#Contract_upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Add", Enums.TranslationSource.TextTranslation)</a>
+<div id="Contract_upload_files_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h5 class="modal-title">&nbsp;</h5>
+            </div>
+            <div class="modal-body">
+                <div id="Contract_uploader"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">@Translation.Get("Close", Enums.TranslationSource.TextTranslation)</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<a id="btnLoadFromClipboard" href="#upload_clipboard_file_popup" role="button" class="btn" data-src="contract">@Translation.Get("Add from clipboard", Enums.TranslationSource.TextTranslation)</a>
+<div id="upload_clipboard_file_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabelCase" aria-hidden="true" style="display:none">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3>&nbsp;</h3>
+            </div>
+            <div class="modal-body" style="max-height: 600px; text-align:center;">
+                <form onsubmit="return false;">
+                    <div class="form-group">
+                        <label>@Translation.Get("File name", Enums.TranslationSource.TextTranslation) </label>
+                        <input class="" type="text" id="imgFilename" autocomplete="Off" />
+                        <span id="imageNameRequired" style="color:red"> @Translation.Get("must be specified", Enums.TranslationSource.TextTranslation) </span>
+                    </div>
+                    <div class="form-group">
+                        <label>@(Translation.Get("Preview") + " (" + Translation.Get("Copy image data into clipboard and press Ctrl+V", Enums.TranslationSource.TextTranslation) + ")") </label>
+                        <div id="previewPnl"></div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnSave" class="btn btn-ok btn-default" style="display: none">@Translation.Get("Save", Enums.TranslationSource.TextTranslation)</button>
+                <button type="button" id="btnCancel" class="btn btn-cancel btn-default" data-dismiss="modal">@Translation.Get("Cancel", Enums.TranslationSource.TextTranslation)</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<table id="ContractFile_table" class="table table-striped" style="margin-top: 10px">
+    @if (Model != null && Model.Any())
+    {
+        <tbody id="oldFiles">
+         @foreach (var f in Model)
+         {
+             <tr>                 
+                 <td><a href = "@Url.Action("DownloadFile", new RouteValueDictionary { { "id", f.Id }, { "fileName", f.FileName }, { "contractId", f.Contract_Id } })" ><i class="icon-file"></i>@f.FileName</a></td>
+                 <td><a data-id="@f.Id" class="btn bt-small deleteContractFile" data-fileName="@f.FileName"  title="@Translation.Get("Ta bort")"><i class="icon-remove"></i></a></td>
+             </tr>
+         }
+
+        </tbody>
+    }
+    <tbody id="newFiles">
+        
+    </tbody>
+</table>

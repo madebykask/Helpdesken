@@ -657,6 +657,7 @@
             modelBuilder.Configurations.Add(new ContractConfiguration());
             modelBuilder.Configurations.Add(new ContractHistoryConfiguration());
             modelBuilder.Configurations.Add(new ContractFieldSettingConfiguration());
+            modelBuilder.Configurations.Add(new ContractFileConfiguration());
             modelBuilder.Configurations.Add(new CountryConfiguration());            
             modelBuilder.Configurations.Add(new CurrencyConfiguration());
             modelBuilder.Configurations.Add(new CustomerConfiguration());

@@ -18,6 +18,8 @@
         void SaveContractSettings(List<ContractsSettingRowModel> ContractSettings);
         int SaveContract(ContractInputModel contract);
         void SaveContractHistory(ContractInputModel contract);
+        void SaveContracFile(ContractFileModel contractFile);
+        List<ContractFileModel> GetContractFiles(int contractId);
         void DeleteContract(Contract contract);
 
 
@@ -34,17 +36,20 @@
         private readonly IContractRepository _contractRepository;
         private readonly IContractHistoryRepository _contractHistoryRepository;
         private readonly IContractFieldSettingsRepository _contractFieldSettingsRepository;
+        private readonly IContractFileRepository _contractFileRepository;
         private readonly IUnitOfWork _unitOfwork;
 
         public ContractService(
             IContractRepository contractRepository,
             IContractHistoryRepository contractHistoryRepository,
             IContractFieldSettingsRepository contractFieldSettingsRepository,
+            IContractFileRepository contractFileRepository,
             IUnitOfWork unitOfWork)
         {
             this._contractRepository = contractRepository;
             this._contractHistoryRepository = contractHistoryRepository;
             this._contractFieldSettingsRepository = contractFieldSettingsRepository;
+            this._contractFileRepository = contractFileRepository;
             this._unitOfwork = unitOfWork;
         }
 
@@ -155,6 +160,33 @@
             this._contractHistoryRepository.Commit();
         }
 
+        public void SaveContracFile(ContractFileModel contractFile)
+        {
+            if (contractFile == null)
+                throw new ArgumentNullException("Contract");
+
+            this._contractFileRepository.SaveContracFile(contractFile);
+            this._contractFileRepository.Commit();
+        }
+
+        public List<ContractFileModel> GetContractFiles(int contractId)
+        {
+            var contractFileEntities = this._contractFileRepository.GetContractFile(contractId);
+     
+            var contractFileModules = contractFileEntities.Select(conf => new ContractFileModel()
+            {
+                Id = conf.Id,
+                Contract_Id = conf.Contract_Id,
+                ArchivedContractFile_Id = conf.ArchivedContractFile_Id,
+                FileName = conf.FileName,
+                ArchivedDate = conf.ArchivedDate,
+                Content = conf.File,
+                ContentType = conf.ContentType,
+                ContractFileGuid = conf.ContractFileGUID,
+                CreatedDate = conf.CreatedDate
+            }).ToList();
+            return contractFileModules;
+        }
 
         public void DeleteContract(Contract contract)
         {

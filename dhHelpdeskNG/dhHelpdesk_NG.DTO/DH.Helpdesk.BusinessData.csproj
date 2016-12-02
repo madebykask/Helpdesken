@@ -207,6 +207,7 @@
     <Compile Include="Models\Accounts\AccountSettings\Read\Edit\ProgramFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Edit\UserFieldSettings.cs" />
     <Compile Include="Models\CaseOverviewGridColumnSetting.cs" />
+    <Compile Include="Models\Contract\ContractFileModel.cs" />
     <Compile Include="Models\Contract\ContractSelectedFilter.cs" />
     <Compile Include="Models\Contract\ContractsSettingRowModel.cs" />
     <Compile Include="Models\Contract\ContractInputModel.cs" />

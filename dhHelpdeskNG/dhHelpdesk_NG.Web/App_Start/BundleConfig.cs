@@ -258,6 +258,9 @@
             bundles.Add(new ScriptBundle("~/bundles/orderaccounts/order").Include(
                 "~/Content/js/Account/order.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/contracts/edit").Include(
+               "~/Content/js/Contract/edit.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
 #if DEBUG
                 "~/Scripts/knockout-3.4.0.debug.js"

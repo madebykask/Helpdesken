@@ -872,6 +872,7 @@
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\UserEditModel.cs" />
     <Compile Include="Areas\Orders\OrdersAreaRegistration.cs" />
     <Content Include="Content\js\Contract\contractIndex.js" />
+    <Content Include="Content\js\Contract\edit.js" />
     <Content Include="Content\js\Inventory\inventory.search.js" />
     <Content Include="Content\js\Shared\errors.js" />
     <Content Include="Content\js\Shared\jquery.customAjax.js" />
@@ -1404,6 +1405,7 @@
     <Compile Include="Models\CheckLists\CheckListActionsInputModel.cs" />
     <Compile Include="Models\CheckLists\CheckListsModel.cs" />
     <Compile Include="Models\CheckLists\WorkingGroupMapperModel.cs" />
+    <Compile Include="Models\Contract\ContractFileViewModel.cs" />
     <Compile Include="Models\Contract\ContractIndexViewModel.cs" />
     <Compile Include="Models\Contract\ContractsSettingViewModel.cs" />
     <Compile Include="Models\Contract\ContractViewInputModel.cs" />
@@ -2504,8 +2506,8 @@
     <Content Include="Views\Contracts\New.cshtml" />
     <Content Include="Views\Contracts\_Input.cshtml" />
     <Content Include="Views\Contracts\Edit.cshtml" />
-    <Content Include="Views\Cases\ModalDialogs\_SendIntLogToDiallog.cshtml" />
-    <Content Include="Views\Cases\ModalDialogs\_CaseAddFollowers.cshtml" />
+    <Content Include="Views\Contracts\_ContractFiles.cshtml" />
+    <Content Include="Views\Contracts\_ContractFilesTable.cshtml" />
     <Content Include="Views\Feedback\EditFeedback.cshtml" />
     <Content Include="Views\Feedback\_FeedbackQuestionOptions.cshtml" />
     <Content Include="Views\Feedback\Answer.cshtml" />
