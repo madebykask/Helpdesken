@@ -163,20 +163,21 @@ EditPage.prototype.primaryValidation = function (submitUrl) {
     /* Check FinishigTime */
     if (me.CaseWillFinish()) {
         var finishDate =  $('#CaseLog_FinishingDate').val();
-        $.get('/CaseInvoice/IsFinishingDateValid/', { changedTime: me.p.changedTime, finishingTime: finishDate, myTime: Date.now }, function (res) {
+        $.get('/Cases/IsFinishingDateValid/', { changedTime: me.p.caseChangedTime, finishingTime: finishDate, myTime: Date.now }, function (res) {
             if (res != null && res) {
-                me.startSaveProcess(me);
-                
+                me.startSaveProcess(me, submitUrl);
             }
             else {
-                dhHelpdesk.cases.utils.showError(me.p.finishingDateMessage);
+                dhHelpdesk.cases.utils.showError(me.p.finishingDateMessage2);
             }
         });
+    } else {
+        me.startSaveProcess(me, submitUrl);
     }
     
 }
 
-EditPage.prototype.startSaveProcess = function (sender) {
+EditPage.prototype.startSaveProcess = function (sender, submitUrl) {
     //Check if there is Order which is not invoiced yet
     var me = sender;
 

@@ -1637,7 +1637,10 @@ namespace DH.Helpdesk.Web.Controllers
 
         [HttpGet]
         public JsonResult IsFinishingDateValid(DateTime changedTime, DateTime finishingTime)
-        {            
+        {
+            if (finishingTime.ToShortDateString() == DateTime.Today.ToShortDateString())
+                return Json(true, JsonRequestBehavior.AllowGet);
+
             if (changedTime > finishingTime)
                 return Json(false, JsonRequestBehavior.AllowGet);
 
