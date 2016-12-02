@@ -49,7 +49,7 @@
         emailGroup: '@Translation.GetForJS("E-postgrupp")',
         initGroup: '@Translation.GetForJS("Anmälare")',
         wgGroup: '@Translation.GetForJS("Driftgrupp")',
-        closeBtn: '@Translation.GetForJS("Stäng")',
+        closeBtn: '@Html.Raw(Translation.GetForJS("Stäng"))',
 
         caseFieldNames:{
                         CustomerId: "case__Customer_Id",
@@ -294,7 +294,7 @@
                                                 <td>
                                                     @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Persons_Name, CaseSolutionFields.PersonsName))
                                                     {
-                                                        <input type="button" class="btn" value="Add followers" id="caseAddExtraFollowersBtn"/>
+                                                        <input type="button" class="btn" value="@Translation.GetCoreTextTranslation("Lägga följare")" id="caseAddExtraFollowersBtn"/>
                                                     }
                                                     @Html.HiddenFor(model => model.FollowerUsers, new {@readonly = "true", id = "caseFollowerUsers"})
                                                     @Html.TextBoxFor(model => model.FollowerUsers, new {id = "FakeCaseFollowerUsers", @readonly = "true", @class = "width60"})

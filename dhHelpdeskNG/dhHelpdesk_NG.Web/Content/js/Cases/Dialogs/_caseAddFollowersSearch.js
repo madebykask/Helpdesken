@@ -12,7 +12,6 @@
                     text: window.parameters.closeBtn,
                     click: function () {
                         $(this).dialog("close");
-                        $("#casesIntLogSendInput").val("");
                     },
                     'class': 'btn'
                 }

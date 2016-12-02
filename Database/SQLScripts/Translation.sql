@@ -5212,6 +5212,14 @@ If not exists (select * from tblTextTranslation where Text_Id = 1716 and Languag
             insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1716, 'Thank you for your feedback', 2)
 GO
 
+If not exists (select * from tblText where Id = 1717)
+      insert into tblText (Id, Textstring) VALUES (1717, 'Lägga följare')
+GO
+
+If not exists (select * from tblTextTranslation where Text_Id = 1717 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1717, 'Add followers', 2)
+GO
+
 
 
 -- *** Run this last when put translation script above this line **--
