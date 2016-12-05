@@ -343,6 +343,12 @@ $(function () {
                         if (place == _FORIEGN_DATA_NUMBER.Place1){
                             return helpdesk.caseRule.getItemByValue(relatedField, parentSelectedItem.ForeignKeyValue1)                            
                         }
+                        else if (place == _FORIEGN_DATA_NUMBER.Place2) {
+                            return helpdesk.caseRule.getItemByValue(relatedField, parentSelectedItem.ForeignKeyValue2)
+                        }
+                        else if (place == _FORIEGN_DATA_NUMBER.Place3) {
+                            return helpdesk.caseRule.getItemByValue(relatedField, parentSelectedItem.ForeignKeyValue3)
+                        }
                         break;
 
                     case _RELATION_TYPE.OneToMany:
