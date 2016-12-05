@@ -193,7 +193,7 @@ function getCollapseCaption(cap) {
                     self.$caseRecordCount.text(json.recordsTotal);
 
                     var newCaseType = self.filterForm.getSearchCaseType();
-                    $("#caseLimitInfo").toggle((newCaseType === -1 || newCaseType === 1));
+                    $("#caseLimitInfo").toggle((newCaseType === -1 || newCaseType === 1) && json.recordsTotal === 500);
 
                     if (json.remainingView) {
                         self.loadRemainingView(json.remainingView);
