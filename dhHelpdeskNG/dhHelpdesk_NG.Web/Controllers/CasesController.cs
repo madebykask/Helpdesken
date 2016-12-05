@@ -1643,7 +1643,8 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpGet]
         public JsonResult IsFinishingDateValid(DateTime changedTime, DateTime finishingTime)
         {
-            if (finishingTime.ToShortDateString() == DateTime.Today.ToShortDateString())
+            if (finishingTime.ToShortDateString() == DateTime.Today.ToShortDateString() ||
+                finishingTime.ToShortDateString() == changedTime.ToShortDateString())
                 return Json(true, JsonRequestBehavior.AllowGet);
 
             if (changedTime > finishingTime)
@@ -2563,6 +2564,11 @@ namespace DH.Helpdesk.Web.Controllers
                     if (caseLog.FinishingDate.Value.ToShortDateString() == DateTime.Today.ToShortDateString())
                     {
                         caseLog.FinishingDate = utcNow;
+                    }
+                    else if (oldCase != null && oldCase.ChangeTime.ToShortDateString() == caseLog.FinishingDate.Value.ToShortDateString())
+                    {                        
+                        var lastChangedTime = new DateTime(oldCase.ChangeTime.Year, oldCase.ChangeTime.Month, oldCase.ChangeTime.Day, 22, 59, 59);
+                        caseLog.FinishingDate = lastChangedTime;
                     }
                     else
                     {
