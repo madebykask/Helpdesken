@@ -34,7 +34,7 @@ namespace DH.Helpdesk.Dal.Repositories
 	/// </summary>
 	public interface ICaseSearchRepository
 	{
-		SearchResult<CaseSearchResult> Search(CaseSearchContext context, out CaseRemainingTimeData remainingTime, out CaseAggregateData aggregateData);
+		SearchResult<CaseSearchResult> Search(CaseSearchContext context, int workingHours, out CaseRemainingTimeData remainingTime, out CaseAggregateData aggregateData);
 	}
 
 	public class CaseSearchRepository : ICaseSearchRepository
@@ -66,7 +66,7 @@ namespace DH.Helpdesk.Dal.Repositories
 			this.logRepository = logRepository;
 		}
 
-		public SearchResult<CaseSearchResult> Search(CaseSearchContext context, out CaseRemainingTimeData remainingTime, out CaseAggregateData aggregateData)
+		public SearchResult<CaseSearchResult> Search(CaseSearchContext context, int workingHours, out CaseRemainingTimeData remainingTime, out CaseAggregateData aggregateData)
 		{
 			var now = DateTime.UtcNow;
 			var dsn = ConfigurationManager.ConnectionStrings["HelpdeskOleDbContext"].ConnectionString;
@@ -291,18 +291,20 @@ namespace DH.Helpdesk.Dal.Repositories
 										if (timeLeft <= 0 && floatingPoint < 0)
 											timeLeft--;
 									}
+								}
 
+								if (!CheckRemainingTimeFilter(timeLeft, workingHours, f))
+									continue;
 
-
-									if (timeLeft.HasValue)
+								if (timeLeft.HasValue)
+								{
+									int caseId;
+									if (int.TryParse(dr["Id"].ToString(), out caseId))
 									{
-										int caseId;
-										if (int.TryParse(dr["Id"].ToString(), out caseId))
-										{
-											remainingTime.AddRemainingTime(caseId, timeLeft.Value);
-										}
+										remainingTime.AddRemainingTime(caseId, timeLeft.Value);
 									}
 								}
+
 								var isExternalEnv = (context.applicationType.ToLower() == ApplicationTypes.LineManager || context.applicationType.ToLower() == ApplicationTypes.SelfService);
 								row.Ignored = false;
 								foreach (var c in userCaseSettings)
@@ -429,6 +431,44 @@ namespace DH.Helpdesk.Dal.Repositories
 			}
 
 			return result;
+		}
+
+		private bool CheckRemainingTimeFilter(int? timeLeft, int workingHours, CaseSearchFilter f)
+		{
+			if (!f.CaseRemainingTimeFilter.HasValue)
+				return true;
+
+			if (!timeLeft.HasValue)
+				return false;
+
+			if (f.CaseRemainingTimeFilter < 0)
+			{
+				//filteredCaseRemainigTimes = remainingTime.CaseRemainingTimes.Where(t => t.RemainingTime < 0);
+				return timeLeft < 0;
+			}
+			else if (f.CaseRemainingTimeHoursFilter)
+			{
+				if (f.CaseRemainingTimeUntilFilter.HasValue)
+				{
+					//filteredCaseRemainigTimes = remainingTime.CaseRemainingTimes.Where(t => t.RemainingTime >= f.CaseRemainingTimeFilter.Value && t.RemainingTime < f.CaseRemainingTimeUntilFilter);
+					return timeLeft >= f.CaseRemainingTimeFilter.Value && timeLeft < f.CaseRemainingTimeUntilFilter;
+				}
+				else
+				{
+					//filteredCaseRemainigTimes = remainingTime.CaseRemainingTimes.Where(t => t.RemainingTime == f.CaseRemainingTimeFilter.Value - 1);
+					return timeLeft == f.CaseRemainingTimeFilter.Value - 1;
+				}
+			}
+			else if (f.CaseRemainingTimeFilter == int.MaxValue && f.CaseRemainingTimeMaxFilter.HasValue)
+			{
+				//filteredCaseRemainigTimes = remainingTime.CaseRemainingTimes.Where(t => t.RemainingTime.IsHoursGreaterEqualDays(f.CaseRemainingTimeMaxFilter.Value, workingHours));
+				return timeLeft.Value.IsHoursGreaterEqualDays(f.CaseRemainingTimeMaxFilter.Value, workingHours);
+			}
+			else
+			{
+				//filteredCaseRemainigTimes = remainingTime.CaseRemainingTimes.Where(t => t.RemainingTime.IsHoursEqualDays(f.CaseRemainingTimeFilter.Value - 1, workingHours));
+				return timeLeft.Value.IsHoursEqualDays(f.CaseRemainingTimeFilter.Value - 1, workingHours);
+			}
 		}
 
 		/// <summary>

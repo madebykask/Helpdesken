@@ -170,38 +170,9 @@ namespace DH.Helpdesk.Services.Services
                                     relatedCasesUserId = relatedCasesUserId,
                                     caseIds = caseIds
                               };
-            var result = this.caseSearchRepository.Search(context, out remainingTime, out aggregateData);
 
-            var workingHours = workingDayEnd - workingDayStart;
-            if (f.CaseRemainingTimeFilter.HasValue)
-            {
-                IEnumerable<CaseRemainingTime> filteredCaseRemainigTimes;
-                if (f.CaseRemainingTimeFilter < 0)
-                {
-                    filteredCaseRemainigTimes = remainingTime.CaseRemainingTimes.Where(t => t.RemainingTime < 0);
-                }
-                else if (f.CaseRemainingTimeHoursFilter)
-                {
-                    if (f.CaseRemainingTimeUntilFilter.HasValue)
-                    {
-                        filteredCaseRemainigTimes = remainingTime.CaseRemainingTimes.Where(t => t.RemainingTime >= f.CaseRemainingTimeFilter.Value && t.RemainingTime < f.CaseRemainingTimeUntilFilter);
-                    }
-                    else
-                    {
-                        filteredCaseRemainigTimes = remainingTime.CaseRemainingTimes.Where(t => t.RemainingTime == f.CaseRemainingTimeFilter.Value - 1);
-                    }
-                }
-                else if (f.CaseRemainingTimeFilter == int.MaxValue && f.CaseRemainingTimeMaxFilter.HasValue)
-                {
-                    filteredCaseRemainigTimes = remainingTime.CaseRemainingTimes.Where(t => t.RemainingTime.IsHoursGreaterEqualDays(f.CaseRemainingTimeMaxFilter.Value, workingHours));
-                }
-                else 
-                {
-                    filteredCaseRemainigTimes = remainingTime.CaseRemainingTimes.Where(t => t.RemainingTime.IsHoursEqualDays(f.CaseRemainingTimeFilter.Value - 1, workingHours));
-                }
-
-                result.Items = result.Items.Where(c => filteredCaseRemainigTimes.Select(t => t.CaseId).Contains(c.Id)).ToList();
-            }
+			var workingHours = workingDayEnd - workingDayStart;
+			var result = this.caseSearchRepository.Search(context, workingHours, out remainingTime, out aggregateData);
 
             return result;
         }
