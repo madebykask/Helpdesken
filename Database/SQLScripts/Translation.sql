@@ -5180,20 +5180,17 @@ If not exists (select * from tblTextTranslation where Text_Id = 1712 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1713)
-            insert into tblText (Id, Textstring) VALUES (1713, 'Kopia')																
-																
+            insert into tblText (Id, Textstring) VALUES (1713, 'Kopia')																																
 GO
 If not exists (select * from tblTextTranslation where Text_Id = 1713 and Language_Id=2)
     insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1713, 'Cc', 2)
-
+GO
 
 If not exists (select * from tblText where Id = 1714)
       insert into tblText (Id, Textstring) VALUES (1714, 'Återkoppling')
 GO
-
 If not exists (select * from tblTextTranslation where Text_Id = 1714 and Language_Id=2)
             insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1714, 'Feedback', 2)
-
 GO
 
 If not exists (select * from tblText where Id = 1715)

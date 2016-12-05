@@ -135,7 +135,7 @@
                             "~/Content/js/Users/modules.js"));
 
 			bundles.Add(new ScriptBundle(ScriptNames.Select2).Include(
-							"~/Scripts/select2.js"));
+                            "~/Content/js/select2.js"));
 
 			bundles.Add(new ScriptBundle("~/bundles/invoices").Include(                                                      
                             "~/Content/js/bootstrap-multiselect.js",
