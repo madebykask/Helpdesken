@@ -10,6 +10,7 @@
     using DH.Helpdesk.SelfService.Infrastructure.Tools.Concrete;
     using Ninject.Modules;
     using Ninject.Web.Common;
+    using Services.BusinessLogic.MailTools.TemplateFormatters;
 
     public sealed class ToolsModule : NinjectModule
     {
@@ -22,6 +23,7 @@
 
             this.Bind<ISessionFactory>().To<HelpdeskSessionFactory>().InRequestScope();
             this.Bind<IUnitOfWorkFactory>().To<UnitOfWorkFactory>().InRequestScope();
+            this.Bind<IMailTemplateFormatterNew>().To<MailTemplateFormatterNew>().InRequestScope();
         }
     }
 }
