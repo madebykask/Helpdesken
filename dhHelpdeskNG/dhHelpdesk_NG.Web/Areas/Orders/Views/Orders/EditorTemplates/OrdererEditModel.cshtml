@@ -61,13 +61,15 @@
     </tbody>
 </table>
 
-@Scripts.Render(BundleConfig.ScriptNames.EditOrder)
-
-<script type="text/javascript">
+@if (Model.Unit.Show && Model.Unit.Value != null)
+{
+    @Scripts.Render(BundleConfig.ScriptNames.EditOrder)
+    <script type="text/javascript">
         $(function() {
             var parameters = {
                 Units: @Html.SerializeObjectToJson(Model.Unit.Value.Items)
             };
-            new OrderEdit(parameters);
+            OrderEdit(parameters);
         });
-</script>
+    </script>
+}

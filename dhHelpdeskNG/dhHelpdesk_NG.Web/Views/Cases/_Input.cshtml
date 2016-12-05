@@ -105,7 +105,7 @@
     }
 </script>
 
-@Html.Partial("ModalDialogs/_CaseAddFollowers")
+@*@Html.Partial("ModalDialogs/_CaseAddFollowers")*@
 
 @if (Model.case_ != null)
                 {
@@ -292,14 +292,14 @@
                                                         @Html.TextBoxFor(model => model.case_.PersonsName, new {maxlength = "50", @readonly = "readonly"})
                                                     }
                                                 </td>
-                                                <td>
-                                                    @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Persons_Name, CaseSolutionFields.PersonsName))
-                                                    {
-                                                        <input type="button" class="btn" value="@Translation.GetCoreTextTranslation("Lägga följare")" id="caseAddExtraFollowersBtn"/>
-                                                    }
-                                                    @Html.HiddenFor(model => model.FollowerUsers, new {@readonly = "true", id = "caseFollowerUsers"})
-                                                    @Html.TextBoxFor(model => model.FollowerUsers, new {id = "FakeCaseFollowerUsers", @readonly = "true", @class = "width60"})
-                                                </td>
+@*                                                <td>*@
+@*                                                    @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Persons_Name, CaseSolutionFields.PersonsName))*@
+@*                                                    {*@
+@*                                                        <input type="button" class="btn" value="@Translation.GetCoreTextTranslation("Lägga följare")" id="caseAddExtraFollowersBtn"/>*@
+@*                                                    }*@
+@*                                                    @Html.HiddenFor(model => model.FollowerUsers, new {@readonly = "true", id = "caseFollowerUsers"})*@
+@*                                                    @Html.TextBoxFor(model => model.FollowerUsers, new {id = "FakeCaseFollowerUsers", @readonly = "true", @class = "width60"})*@
+@*                                                </td>*@
 
                                             </tr>
                                             <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Persons_EMail, CaseSolutionFields.PersonsEmail)">

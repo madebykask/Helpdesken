@@ -27,25 +27,37 @@ function LogInitForm() {
         }
     });
 
-    $("#caseLogSendToMailAboutLogTo").click(function () {
-        $("#SendIntLogCase").dialog("option", "width", 350);
-        $("#SendIntLogCase").dialog("option", "height", 350);
-        $("#SendIntLogCase").dialog("option", "dialogType", 1);
-        $("#SendIntLogCase").dialog("open");
-        var existEmails = $("#CaseLog_EmailRecepientsInternalLogTo").val();
-        $("#casesIntLogSendInput").val(existEmails);
-        $("#casesIntLogSendInput").focus();
+    $("#CaseLog_SendMailAboutLog").change(function () {
+        if ($(this).attr('readonly') != null) {
+            return false;
+        }
+        $('#divEmailRecepientsInternalLog').hide();
+        if (this.checked) {
+            $("#divSendToDialogCase").dialog("option", "width", 450);
+            $("#divSendToDialogCase").dialog("option", "height", 550);
+            $("#divSendToDialogCase").dialog("open");
+        }
     });
-
-    $("#caseLogSendCcMailAboutLogCc").click(function () {
-        $("#SendIntLogCase").dialog("option", "width", 350);
-        $("#SendIntLogCase").dialog("option", "height", 350);
-        $("#SendIntLogCase").dialog("option", "dialogType", 2);
-        $("#SendIntLogCase").dialog("open");
-        var existEmails = $("#CaseLog_EmailRecepientsInternalLogCc").val();
-        $("#casesIntLogSendInput").val(existEmails);
-        $("#casesIntLogSendInput").focus();
-    });
+//
+//    $("#caseLogSendToMailAboutLogTo").click(function () {
+//        $("#SendIntLogCase").dialog("option", "width", 350);
+//        $("#SendIntLogCase").dialog("option", "height", 350);
+//        $("#SendIntLogCase").dialog("option", "dialogType", 1);
+//        $("#SendIntLogCase").dialog("open");
+//        var existEmails = $("#CaseLog_EmailRecepientsInternalLogTo").val();
+//        $("#casesIntLogSendInput").val(existEmails);
+//        $("#casesIntLogSendInput").focus();
+//    });
+//
+//    $("#caseLogSendCcMailAboutLogCc").click(function () {
+//        $("#SendIntLogCase").dialog("option", "width", 350);
+//        $("#SendIntLogCase").dialog("option", "height", 350);
+//        $("#SendIntLogCase").dialog("option", "dialogType", 2);
+//        $("#SendIntLogCase").dialog("open");
+//        var existEmails = $("#CaseLog_EmailRecepientsInternalLogCc").val();
+//        $("#casesIntLogSendInput").val(existEmails);
+//        $("#casesIntLogSendInput").focus();
+//    });
 
     $('#CaseLog_TextExternal').bind('input propertychange', function () {
         var informNotifier = $('#CaseLog_SendMailAboutCaseToNotifier');

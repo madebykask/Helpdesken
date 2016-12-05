@@ -63,6 +63,7 @@
         public Case case_  { get; set; }
 
         public CaseLog CaseLog { get; set; }
+        public SendToDialogModel SendToDialogModel { get; set; } //ToDo: remove after release
 
         public CaseMailSetting CaseMailSetting { get; set; }
         public User RegByUser { get; set; }
