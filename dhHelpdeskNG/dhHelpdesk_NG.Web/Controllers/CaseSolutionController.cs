@@ -882,31 +882,31 @@ namespace DH.Helpdesk.Web.Controllers
 
             caseBasicInfo.InvoiceNumber = new BasicSingleItemField()
             {
-                Selected = new FieldItem(templateModel.InvoiceNumber.ToString(), string.Empty),
+                Selected = new FieldItem(templateModel.InvoiceNumber, string.Empty),
                 StatusType = GetFieldStatusType(CaseSolutionFields.InvoiceNumber, templateSettingModel.ToList()),                
             };
 
             caseBasicInfo.ReferenceNumber = new BasicSingleItemField()
             {
-                Selected = new FieldItem(templateModel.ReferenceNumber.ToString(), string.Empty),
+                Selected = new FieldItem(templateModel.ReferenceNumber, string.Empty),
                 StatusType = GetFieldStatusType(CaseSolutionFields.ReferenceNumber, templateSettingModel.ToList()),
             };
 
             caseBasicInfo.Caption = new BasicSingleItemField()
             {
-                Selected = new FieldItem(templateModel.Caption.ToString(), string.Empty),
+                Selected = new FieldItem(templateModel.Caption, string.Empty),
                 StatusType = GetFieldStatusType(CaseSolutionFields.Caption, templateSettingModel.ToList()),
             };
 
             caseBasicInfo.Description = new BasicSingleItemField()
             {
-                Selected = new FieldItem(templateModel.Description.ToString(), string.Empty),
+                Selected = new FieldItem(templateModel.Description, string.Empty),
                 StatusType = GetFieldStatusType(CaseSolutionFields.Description, templateSettingModel.ToList()),
             };
 
             caseBasicInfo.Miscellaneous = new BasicSingleItemField()
             {
-                Selected = new FieldItem(templateModel.Miscellaneous.ToString(), string.Empty),
+                Selected = new FieldItem(templateModel.Miscellaneous, string.Empty),
                 StatusType = GetFieldStatusType(CaseSolutionFields.Miscellaneous, templateSettingModel.ToList()),
             };
 
@@ -924,7 +924,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             caseBasicInfo.Available = new BasicSingleItemField()
             {
-                Selected = new FieldItem(templateModel.Available.ToString(), string.Empty),
+                Selected = new FieldItem(templateModel.Available, string.Empty),
                 StatusType = GetFieldStatusType(CaseSolutionFields.Available, templateSettingModel.ToList()),
             };
 
@@ -942,7 +942,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             caseBasicInfo.Currency = new BasicSingleItemField()
             {
-                Selected = new FieldItem(templateModel.Currency.ToString(), string.Empty),
+                Selected = new FieldItem(templateModel.Currency, string.Empty),
                 StatusType = GetFieldStatusType(CaseSolutionFields.Cost, templateSettingModel.ToList()),
             };
 
@@ -1154,7 +1154,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             #endregion
 
-            var model  = _caseRuleFactory.GetCaseRuleModel(customerId, CaseRuleType.OriginalRule, caseFieldSettings, caseBasicInfo);
+            var model  = _caseRuleFactory.GetCaseRuleModel(customerId, CaseRuleType.OriginalRule, caseFieldSettings, caseBasicInfo, customerSettings);
             model.CustomerSettings.ConnectUserToWorkingGroup = customerSettings.DontConnectUserToWorkingGroup == 0;
 
             return model;

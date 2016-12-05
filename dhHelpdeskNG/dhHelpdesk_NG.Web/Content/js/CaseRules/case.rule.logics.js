@@ -149,7 +149,16 @@
 
             onElementValueChanged: function (element) {
                 var $self = $(element);                
-                helpdesk.caseRule.updateElementValue($self);                
+                helpdesk.caseRule.updateElementValue($self);
+                var elmField = helpdesk.caseRule.getFieldByElement($self);
+                if (!dataHelper.isNullOrUndefined(elmField)) {
+                    var parentRelatedFields = helpdesk.caseRule.getFieldsHaveRelationTo(elmField.FieldId);
+                    if (dataHelper.isNullOrUndefined(parentRelatedFields) || parentRelatedFields.length <= 0)
+                        return;
+                    for (var pr = 0; pr < parentRelatedFields.length; pr++) {
+                        helpdesk.caseRule.refreshStateIcons(parentRelatedFields[pr]);
+                    }
+                }
             },
 
             onStateChanged: function (element) {
@@ -177,20 +186,7 @@
 
                 helpdesk.caseRule.refreshStateIcons(field);
             },
-
-            refreshStateIcons: function (field) {
-                var $elementToApply = $(STATE_ICON_PLACE_PREFIX + field.FieldId);
-                if (!dataHelper.isNullOrUndefined($elementToApply)) {
-                    var iconModel = helpdesk.caseRule.createStateIconModel(field);                    
-                    $elementToApply.html(iconModel);
-
-                    $('body').tooltip({
-                        selector: '.tooltipType'                        
-                    });
-                   
-                }
-            },
-
+            
             getFieldById: function(fieldId){
                 if (dataHelper.isNullOrUndefined(ruleModel) || 
                     dataHelper.isNullOrUndefined(ruleModel.FieldAttributes) ||
@@ -225,6 +221,22 @@
                     return elms[0];
                 else
                     return null;
+            },
+
+            getFieldsHaveRelationTo: function(fieldId){
+                var ret = [];
+                for (var hv = 0; hv < ruleModel.FieldAttributes.length; hv++) {
+                    var field = ruleModel.FieldAttributes[hv];
+                    if (field.FieldId != fieldId && field.Relations.length > 0) {
+                        for (var fr = 0; fr < field.Relations.length; fr++) {
+                            if (field.Relations[fr].FieldId == fieldId)
+                            {
+                                ret.push(field);
+                            }
+                        }
+                    }                    
+                }
+                return ret;
             },
 
             updateElementValue: function($element){
@@ -304,62 +316,26 @@
 
                 helpdesk.caseRule.refreshStateIcons(field);
             },
+                        
+            refreshStateIcons: function (field) {
+                var $elementToApply = $(STATE_ICON_PLACE_PREFIX + field.FieldId);
+                if (!dataHelper.isNullOrUndefined($elementToApply)) {
+                    var iconModel = helpdesk.caseRule.createStateIconModel(field);
+                    $elementToApply.html(iconModel);
 
-            getItemByValue: function (field, itemValue) {
-                var ret = new helpdesk.caseRuleModels.FieldItem();
+                    $('body').tooltip({
+                        selector: '.tooltipType'
+                    });
 
-                if (field.FieldType == _FIELD_TYPE.TextField || 
-                    field.FieldType == _FIELD_TYPE.TextArea  ||
-                    field.FieldType == _FIELD_TYPE.DateField ||
-                    field.FieldType == _FIELD_TYPE.ButtonField){
-                    ret.ItemValue = itemValue;
-                    ret.ItemText = itemValue;
-                    return ret;
                 }
-
-                if (field.FieldType == _FIELD_TYPE.CheckBox){
-                    ret.ItemValue = itemValue.toBoolStr();
-                    ret.ItemText = itemValue;
-                    return ret;
-                }
-
-                if (field == null || field.Items == null || field.Items.length <= 0)
-                    return new helpdesk.caseRuleModels.FieldItem();
-
-                for (var fiv = 0; fiv < field.Items.length; fiv++)
-                {
-                    if (field.Items[fiv].ItemValue == itemValue)
-                        return field.Items[fiv];
-                }            
-
-                return ret;
             },
 
-            resolveTreeName: function (field, itemValue) {
-                if (field == null && field.Items == null && field.Items.length <= 0)
-                    return "";
-
-                for (var fit = 0; fit < field.Items.length; fit++) {
-                    if (field.Items[fit].ItemValue == itemValue) {
-                        if (dataHelper.isNullOrEmpty(field.Items[fit].ParentItemValue))
-                            return field.Items[fit].ItemText;
-                        else
-                            return this.resolveTreeName(field, field.Items[fit].ParentItemValue) + " - " + field.Items[fit].ItemText;
-                    }
-                }
-
-                return "";
-            },
-            
             createStateIconModel: function (field) {
                 if (dataHelper.isNullOrUndefined(field))
                     return "";
 
                 var fieldInfoClass = "";                
-                var fieldInfoHint = "";
-                //if (field.FieldId === "ProductArea_Id") {
-                //    var m = 1;
-                //}
+                var fieldInfoHint = "";               
 
                 var cuFielInfo = helpdesk.caseRule.checkRules(field);
                 if (!dataHelper.isNullOrEmpty(cuFielInfo)) {
@@ -421,8 +397,10 @@
                                 
 
                     case _RELATION_TYPE.ManyToMany:
-                        return "";
-                        break;
+                        if (!dataHelper.isNullOrEmpty(selectedItem.ItemText))
+                            return "<div align='left'> [" + relatedField.FieldCaption + "]: will show items connected to => ( " + selectedItem.ItemText + " ) </div> <br />";
+                        else
+                            return "";                        
                 }                                
             },
 
@@ -448,10 +426,56 @@
 
                 }
                 return null;
+            },
+
+            getItemByValue: function (field, itemValue) {
+                var ret = new helpdesk.caseRuleModels.FieldItem();
+
+                if (field.FieldType == _FIELD_TYPE.TextField ||
+                    field.FieldType == _FIELD_TYPE.TextArea ||
+                    field.FieldType == _FIELD_TYPE.DateField ||
+                    field.FieldType == _FIELD_TYPE.ButtonField) {
+                    ret.ItemValue = itemValue;
+                    ret.ItemText = itemValue;
+                    return ret;
+                }
+
+                if (field.FieldType == _FIELD_TYPE.CheckBox) {
+                    ret.ItemValue = itemValue.toBoolStr();
+                    ret.ItemText = itemValue;
+                    return ret;
+                }
+
+                if (field == null || field.Items == null || field.Items.length <= 0)
+                    return new helpdesk.caseRuleModels.FieldItem();
+
+                for (var fiv = 0; fiv < field.Items.length; fiv++) {
+                    if (field.Items[fiv].ItemValue == itemValue)
+                        return field.Items[fiv];
+                }
+
+                return ret;
+            },
+
+            resolveTreeName: function (field, itemValue) {
+                if (field == null && field.Items == null && field.Items.length <= 0)
+                    return "";
+
+                for (var fit = 0; fit < field.Items.length; fit++) {
+                    if (field.Items[fit].ItemValue == itemValue) {
+                        if (dataHelper.isNullOrEmpty(field.Items[fit].ParentItemValue))
+                            return field.Items[fit].ItemText;
+                        else
+                            return this.resolveTreeName(field, field.Items[fit].ParentItemValue) + " - " + field.Items[fit].ItemText;
+                    }
+                }
+
+                return "";
             }
+
         }
                       
     })($);
        
-    //helpdesk.caseRule.init();    
+    helpdesk.caseRule.init();    
 });

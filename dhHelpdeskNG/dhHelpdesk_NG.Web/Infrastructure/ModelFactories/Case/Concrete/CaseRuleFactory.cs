@@ -12,7 +12,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
     {
         CaseRuleModel GetCaseRuleModel(int customerId, CaseRuleType ruleType, 
                                        IList<CaseFieldSetting> caseFieldSettings,
-                                       BasicCaseInformation basicInformation);
+                                       BasicCaseInformation basicInformation,
+                                       Setting customerSettings );
     }
 
 
@@ -25,7 +26,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
 
         public CaseRuleModel GetCaseRuleModel(int customerId, CaseRuleType ruleType,
                                               IList<CaseFieldSetting> caseFieldSettings,
-                                              BasicCaseInformation basicInformation)
+                                              BasicCaseInformation basicInformation,
+                                              Setting customerSettings)
         {                        
             var ret = new CaseRuleModel();
             ret.RuleType = ruleType;      
@@ -33,7 +35,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
             switch (ruleType)
             {
                 case CaseRuleType.OriginalRule:
-                    ret.FieldAttributes = GetOriginalRules(customerId, caseFieldSettings.ToList(), basicInformation);
+                    ret.FieldAttributes = GetOriginalRules(customerId, caseFieldSettings.ToList(), basicInformation, customerSettings);
                     break;
 
             }
@@ -44,7 +46,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
 
         private List<FieldAttributeModel> GetOriginalRules(int customerId,
                                                            List<CaseFieldSetting> caseFieldSettings,
-                                                           BasicCaseInformation basicInformation)
+                                                           BasicCaseInformation basicInformation,
+                                                           Setting customerSettings)
         {
             var ret = new List<FieldAttributeModel>();
 
@@ -1103,14 +1106,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 IsMandatory = caseFieldSettings.getRequired(curField).ToBool(),
                 StatusType = basicInformation.WorkingGroups.StatusType,
                 Items = basicInformation.WorkingGroups.Items,
-                Relations = new List<FieldRelation> {
-                    new FieldRelation() {
-                        SequenceNo = 0,
-                        RelationType = RelationType.ManyToMany.ToInt(),
-                        ActionType = RelationActionType.ListPopulator.ToInt(),
-                        FieldId = TranslationCaseFields.Performer_User_Id.ToString(),
-                        ForeignKeyNumber = 1
-                    },
+                Relations = new List<FieldRelation> {                    
                     new FieldRelation() {
                         SequenceNo = 1,
                         RelationType = RelationType.OneToOne.ToInt(),
@@ -1120,6 +1116,20 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                     }
                 }
             };
+
+            if (customerSettings != null && customerSettings.DontConnectUserToWorkingGroup == 0)
+            {
+                attrWorkingGroup.Relations.Add(
+                                                new FieldRelation()
+                                                {
+                                                    SequenceNo = 0,
+                                                    RelationType = RelationType.ManyToMany.ToInt(),
+                                                    ActionType = RelationActionType.ListPopulator.ToInt(),
+                                                    FieldId = TranslationCaseFields.Performer_User_Id.ToString(),
+                                                    ForeignKeyNumber = 1
+                                                });
+            }            
+
             ret.Add(attrWorkingGroup);
 
             #endregion
