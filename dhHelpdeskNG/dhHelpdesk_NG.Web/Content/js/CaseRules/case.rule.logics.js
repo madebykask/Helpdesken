@@ -1,6 +1,4 @@
-﻿
-
-$(function () {
+﻿$(function () {
         
     (function ($) {
         window.helpdesk = window.helpdesk || {};
@@ -12,11 +10,7 @@ $(function () {
         var $fieldStateChanger = $('.fieldStateChanger');
         var STANDARD_ID = 'standardid';
         var STATE_ICON_PLACE_PREFIX = '#stateIconPlace_';
-        
-        //<td style="width:80px;text-align:center"><i class="icon-info-sign"></i> &nbsp; &nbsp;</td>
-        //<td style="width:80px;text-align:center"><i class=""></i> &nbsp; &nbsp;</td>
-        //<td style="width:80px;text-align:center"><i class="icon-share"></i> &nbsp; &nbsp;</td>
-
+              
         /***** Enums *****/
         var _RULE_TYPE = {
             Original: 0,
@@ -146,14 +140,16 @@ $(function () {
                     ruleModel.FieldAttributes.length <= 0)
                     return null;
                 
-                for (var fi = 0; fi < ruleModel.FieldAttributes.length; fi++) {
-                    helpdesk.caseRule.refreshStateIcons(ruleModel.FieldAttributes[fi]);
+                for (var _fi = 0; _fi < ruleModel.FieldAttributes.length; _fi++) {
+                    var field = ruleModel.FieldAttributes[_fi];
+                    helpdesk.caseRule.updateFieldValue(field, field.Selected.ItemValue);
+                    helpdesk.caseRule.refreshStateIcons(field);
                 }
             },
 
             onElementValueChanged: function (element) {
-                var $self = $(element);
-                helpdesk.caseRule.updateFieldValue($self);                
+                var $self = $(element);                
+                helpdesk.caseRule.updateElementValue($self);                
             },
 
             onStateChanged: function (element) {
@@ -189,8 +185,9 @@ $(function () {
                     $elementToApply.html(iconModel);
 
                     $('body').tooltip({
-                        selector: '.tooltipType'
+                        selector: '.tooltipType'                        
                     });
+                   
                 }
             },
 
@@ -222,51 +219,120 @@ $(function () {
                 return this.getFieldById(fieldId);                
             },
 
-            updateFieldValue: function($element){
+            getElementByFieldId: function (fieldId) {
+                var elms = $(document).find("[" + STANDARD_ID + "='" + fieldId + "']");
+                if (elms != undefined && elms.length > 0)
+                    return elms[0];
+                else
+                    return null;
+            },
+
+            updateElementValue: function($element){
                 var field = this.getFieldByElement($element);
+                var curValue = null;
+                switch (field.FieldType) {
+
+                    case _FIELD_TYPE.TextField:
+                        curVal = $element.val();                        
+                        break;
+
+                    case _FIELD_TYPE.CheckBox:
+                        curVal = $element.prop('checked');                        
+                        break;
+
+                    case _FIELD_TYPE.SingleSelectField:
+                        curVal = $element.val();                        
+                        break;
+
+                    case _FIELD_TYPE.TreeButtonSelect:
+                        curVal = $element.val();                        
+                        break;
+
+                    case _FIELD_TYPE.TextArea:
+                        curVal = $element.val();
+                        break;
+
+                    case _FIELD_TYPE.DateField:                        
+                        curVal = $element.val();
+                        break;
+                }
+
+                helpdesk.caseRule.updateFieldValue(field, curVal);
+                if (field.Relations != null && field.Relations.length > 0) {
+                    for (var ri = 0; ri < field.Relations.length; ri++) {
+                        var relation = field.Relations[ri];
+                        var elm = helpdesk.caseRule.getElementByFieldId(relation.FieldId);
+                        if (elm != null) {
+                            helpdesk.caseRule.updateElementValue($(elm));
+                        }
+                    }
+                }
+            },
+
+            updateFieldValue: function (field, curVal) {
                 if (dataHelper.isNullOrUndefined(field))
                     return;
                 
                 switch (field.FieldType) {
 
-                    case _FIELD_TYPE.TextField:
-                        var curVal = $element.val();
+                    case _FIELD_TYPE.TextField:                        
                         field.Selected.ItemValue = curVal;
                         break;
 
-                    case _FIELD_TYPE.CheckBox:
-                        var curVal = $element.prop('checked');
+                    case _FIELD_TYPE.CheckBox:                        
                         field.Selected.ItemValue = convertor.toBoolStr(curVal);
                         break;
 
-                    case _FIELD_TYPE.SingleSelectField:
-                        var curVal = $element.val();
+                    case _FIELD_TYPE.SingleSelectField:                        
                         field.Selected = helpdesk.caseRule.getItemByValue(field, curVal);
                         break;
 
-                    case _FIELD_TYPE.TreeButtonSelect:
-                        var curVal = $element.val();
+                    case _FIELD_TYPE.TreeButtonSelect:                        
                         field.Selected = helpdesk.caseRule.getItemByValue(field, curVal);
                         if (!dataHelper.isNullOrEmpty(curVal))
                             field.Selected.ItemText = helpdesk.caseRule.resolveTreeName(field, curVal);
                         break;
+
+                    case _FIELD_TYPE.TextArea:
+                        field.Selected.ItemValue = curVal;
+                        break;
+
+                    case _FIELD_TYPE.DateField:
+                        field.Selected.ItemValue = curVal;
+                        break;
                 }
 
                 helpdesk.caseRule.refreshStateIcons(field);
-
             },
 
             getItemByValue: function (field, itemValue) {
-                if (field == null && field.Items == null && field.Items.length <= 0)
+                var ret = new helpdesk.caseRuleModels.FieldItem();
+
+                if (field.FieldType == _FIELD_TYPE.TextField || 
+                    field.FieldType == _FIELD_TYPE.TextArea  ||
+                    field.FieldType == _FIELD_TYPE.DateField ||
+                    field.FieldType == _FIELD_TYPE.ButtonField){
+                    ret.ItemValue = itemValue;
+                    ret.ItemText = itemValue;
+                    return ret;
+                }
+
+                if (field.FieldType == _FIELD_TYPE.CheckBox){
+                    ret.ItemValue = itemValue.toBoolStr();
+                    ret.ItemText = itemValue;
+                    return ret;
+                }
+
+                if (field == null || field.Items == null || field.Items.length <= 0)
                     return new helpdesk.caseRuleModels.FieldItem();
 
                 for (var fiv = 0; fiv < field.Items.length; fiv++)
                 {
                     if (field.Items[fiv].ItemValue == itemValue)
                         return field.Items[fiv];
-                }
+                }            
 
-                return new helpdesk.caseRuleModels.FieldItem();
+                return ret;
             },
 
             resolveTreeName: function (field, itemValue) {
@@ -291,6 +357,10 @@ $(function () {
 
                 var fieldInfoClass = "";                
                 var fieldInfoHint = "";
+                //if (field.FieldId === "ProductArea_Id") {
+                //    var m = 1;
+                //}
+
                 var cuFielInfo = helpdesk.caseRule.checkRules(field);
                 if (!dataHelper.isNullOrEmpty(cuFielInfo)) {
                     fieldInfoClass = "icon-info-sign tooltipType";
@@ -298,43 +368,62 @@ $(function () {
                 }
 
                 var mandatoryClass = field.IsMandatory ? "icon-asterisk tooltipType" : "";
-                var mandatoryHint = "";
+                var mandatoryHint = "Manatory";
 
                 var selfSeviceClass = field.IsAvailableOnSelfService ? "icon-share tooltipType" : "";
-                var selfSeviceHint = "";
+                var selfSeviceHint = "Show On SelfService";
 
                 var ret =
-                    '<td style="width:70px;text-align:center"><span title="" class="' + fieldInfoClass + '" data-original-title="' + fieldInfoHint + '" rel="tooltip"></span></td>' + 
-                    '<td style="width:70px;text-align:center"><span title="" class="' + mandatoryClass + '" data-original-title="' + mandatoryHint + '" rel="tooltip"></span></td>' +
-                    '<td style="width:70px;text-align:center"><span title="" class="' + selfSeviceClass + '" data-original-title="' + selfSeviceHint + '" rel="tooltip"></span></td>';
+                    '<td style="width:70px;text-align:center"><span title="" class="' + fieldInfoClass + '" data-original-title="' + fieldInfoHint + '" data-html="true" rel="tooltip"></span></td>' +
+                    '<td style="width:70px;text-align:center"><span title="" class="' + mandatoryClass + '" data-original-title="' + mandatoryHint + '" data-html="true" rel="tooltip"></span></td>' +
+                    '<td style="width:70px;text-align:center"><span title="" class="' + selfSeviceClass + '" data-original-title="' + selfSeviceHint + '" data-html="true" rel="tooltip"></span></td>';
 
                 return ret;
             },
 
             checkRules: function (field) {
-                if (field.StatusType == _FIELD_STATUS_TYPE.Hidden)
-                    return "";
-                else {
-                    var ret = "";
-                    if (field.Relations.length > 0) {
-                        for (var r = 0; r < field.Relations.length; r++) {
-                            var curRelation = field.Relations[r];                            
-                            ret += helpdesk.caseRule.predictAction(field, curRelation);
-                        }
-                        return ret;
+                //if (field.StatusType == _FIELD_STATUS_TYPE.Hidden)
+                //    return "";
+                
+                var ret = "";
+                if (field.Relations.length > 0) {
+                    for (var r = 0; r < field.Relations.length; r++) {
+                        var curRelation = field.Relations[r];                            
+                        ret += helpdesk.caseRule.predictAction(field, curRelation);
                     }
+                    return ret;
                 }
+                
                 return "";
             },
 
             predictAction: function (field, relation) {
                 var selectedItem = field.Selected;
                 var relatedField = helpdesk.caseRule.getFieldById(relation.FieldId);
-                var fData = helpdesk.caseRule.getForiegnData(relation.RelationType, selectedItem, relation.ForeignKeyNumber, relatedField);
-                if (fData != null && !dataHelper.isNullOrEmpty(fData.ItemText))
-                    return "Will set " + relatedField.FieldCaption + " to: " + fData.ItemText;
-                else
+
+                if (!dataHelper.isNullOrEmpty(relatedField.Selected.ItemValue))
                     return "";
+                                
+                switch (relation.RelationType) {
+                    case _RELATION_TYPE.OneToOne:
+                        var fData = helpdesk.caseRule.getForiegnData(relation.RelationType, selectedItem, relation.ForeignKeyNumber, relatedField);
+                        if (fData != null && !dataHelper.isNullOrEmpty(fData.ItemText)) {
+                            return "<div align='left'> [" + relatedField.FieldCaption + "]: will be set to => (" + fData.ItemText + ") </div> <br />";
+                        }
+                        else
+                            return "";
+
+                    case _RELATION_TYPE.OneToMany:
+                        if (!dataHelper.isNullOrEmpty(selectedItem.ItemText))
+                            return "<div align='left'> [" + relatedField.FieldCaption + "]: will show items connected to => ( " + selectedItem.ItemText + " ) </div> <br />";                                
+                        else
+                            return "";
+                                
+
+                    case _RELATION_TYPE.ManyToMany:
+                        return "";
+                        break;
+                }                                
             },
 
             getForiegnData: function (relationType, parentSelectedItem, place, relatedField){

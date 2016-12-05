@@ -1000,7 +1000,11 @@ namespace DH.Helpdesk.Web.Controllers
                 Selected = new FieldItem(templateModel.Priority_Id?.ToString(), string.Empty),
                 StatusType = GetFieldStatusType(CaseSolutionFields.Priority, templateSettingModel.ToList()),
                 DefaultItem = defaultPrio != null ? new FieldItem(defaultPrio.Id.ToString(), defaultPrio.Name) : FieldItem.CreateEmpty(),
-                Items = priorities.Select(p => new FieldItem(p.Id.ToString(), p.Name, p.IsActive != 0)).OrderBy(i => i.ItemText).ToList()
+                Items = priorities.Select(p => new FieldItem(p.Id.ToString(), p.Name, p.IsActive != 0)
+                                                                {
+                                                                    ForeignKeyValue1 = p.LogText
+                                                                })
+                                  .OrderBy(i => i.ItemText).ToList()
             };
 
             var statuses = _statusService.GetStatuses(customerId);

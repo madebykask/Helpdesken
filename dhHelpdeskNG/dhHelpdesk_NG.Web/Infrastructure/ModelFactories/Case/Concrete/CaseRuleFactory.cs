@@ -1160,7 +1160,16 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 IsAvailableOnSelfService = caseFieldSettings.getShowExternal(curField).ToBool(),
                 IsMandatory = caseFieldSettings.getRequired(curField).ToBool(),
                 StatusType = basicInformation.Priorities.StatusType,
-                Items = basicInformation.Priorities.Items
+                Items = basicInformation.Priorities.Items,
+                Relations = new List<FieldRelation> {
+                    new FieldRelation() {
+                            SequenceNo = 1,
+                            RelationType = RelationType.OneToOne.ToInt(),
+                            ActionType = RelationActionType.ValueSetter.ToInt(),
+                            FieldId = TranslationCaseFields.tblLog_Text_External.ToString(),
+                            ForeignKeyNumber = 1
+                        }
+                    }
             };
             ret.Add(attrPriority);
 
@@ -1220,13 +1229,16 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 StatusType = basicInformation.SubStatus.StatusType,
                 Items = basicInformation.SubStatus.Items,
                 Relations = new List<FieldRelation> {
-                    new FieldRelation() {
-                        SequenceNo = 0,
-                        RelationType = RelationType.OneToOne.ToInt(),
-                        ActionType = RelationActionType.ValueSetter.ToInt(),
-                        FieldId = TranslationCaseFields.WorkingGroup_Id.ToString(),
-                        ForeignKeyNumber = 1
-                    },
+
+                    /* Disabled because it makes cycle */
+                    //new FieldRelation() {
+                    //    SequenceNo = 0,
+                    //    RelationType = RelationType.OneToOne.ToInt(),
+                    //    ActionType = RelationActionType.ValueSetter.ToInt(),
+                    //    FieldId = TranslationCaseFields.WorkingGroup_Id.ToString(),
+                    //    ForeignKeyNumber = 1
+                    //},
+
                     new FieldRelation() {
                         SequenceNo = 1,
                         RelationType = RelationType.OneToOne.ToInt(),
