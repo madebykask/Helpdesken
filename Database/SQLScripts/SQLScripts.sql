@@ -16,6 +16,23 @@ begin
 		CONSTRAINT [FK_tblCaseFollowUps_tblCases] FOREIGN KEY ([Case_Id]) REFERENCES [dbo].[tblCase] ([Id])
 	);
 end
+Else 
+begin
+IF EXISTS(
+    SELECT *
+    FROM sys.columns 
+    WHERE Name      = N'CaseId'
+      AND Object_ID = Object_ID(N'tblCaseFollowUps'))
+    EXEC sp_rename N'tblCaseFollowUps.CaseId', N'Case_Id', N'COLUMN';
+
+IF EXISTS(
+    SELECT *
+    FROM sys.columns 
+    WHERE Name      = N'UserId'
+      AND Object_ID = Object_ID(N'tblCaseFollowUps'))
+	EXEC sp_rename N'tblCaseFollowUps.UserId', N'User_Id', N'COLUMN';
+	
+end
 Go
 
 if not exists(select * from sysobjects WHERE Name = N'tblCaseExtraFollowers')
@@ -33,6 +50,15 @@ begin
 		CONSTRAINT [FK_tblCaseExtraFollowers_tblCases] FOREIGN KEY ([Case_Id]) REFERENCES [dbo].[tblCase] ([Id]),
 		CONSTRAINT [FK_tblCaseExtraFollowers_tblUsers] FOREIGN KEY ([CreatedByUser_Id]) REFERENCES [dbo].[tblUsers] ([Id])
 	);
+end
+Else 
+begin
+IF EXISTS(
+    SELECT *
+    FROM sys.columns 
+    WHERE Name      = N'CaseId'
+      AND Object_ID = Object_ID(N'tblCaseExtraFollowers'))
+    EXEC sp_rename N'tblCaseExtraFollowers.CaseId', N'Case_Id', N'COLUMN';
 end
 Go
 
