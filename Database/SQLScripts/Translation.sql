@@ -5227,7 +5227,19 @@ If not exists (select * from tblTextTranslation where text_id = 1718 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1718, 2, 'can not be earlier than changed date.')
 GO
 
+If not exists (select * from tbltext where id = 1719)
+	insert into tbltext (id, TextString) VALUES (1719, 'Fakturering tid')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1719 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1719, 2, 'Invoice time')
+GO
 
+If not exists (select * from tbltext where id = 1720)
+	insert into tbltext (id, TextString) VALUES (1720, 'Fakturering artikel')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1720 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1720, 2, 'Invoice article')
+GO
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

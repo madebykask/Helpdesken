@@ -287,100 +287,102 @@
         </table>
     </div>
 </div>
-<div id="divInvoice" style="@Model.ShowInvoiceFields.displayHtml()">
-    <h4>
-        @Translation.Get("Fakturering")
-    </h4>
-    <div class="row">
-        <div class="span12">
-            <table class="tableform">
-                <thead>
+@if (Model.CustomerSettings.ModuleInvoice == true)
+{ 
+    <div id="divInvoice" style="@Model.ShowInvoiceFields.displayHtml()">
+        <h4>
+            @Translation.Get("Fakturering")
+        </h4>
+        <div class="row">
+            <div class="span12">
+                <table class="tableform">
+                    <thead>
+                        <tr>
+                            <th class="span3"></th>
+                            <th class="span4"></th>
+                            <th class="span5"></th>
+                        </tr>
+                    </thead>
+	                <tr>
+		                <td>
+			                @Translation.Get("Tidsåtgång", SessionFacade.CurrentCaseLanguageId)
+		                </td>
+		                <td>
+			                <select id="CaseLog_WorkingTimeHour" name="CaseLog.WorkingTimeHour" class="inputw100">
+				                @for (var i = 0; i < 100; i++)
+				                {
+					                <option value="@i.ToString()" @i.IdIsSelected(Model.CaseLog.WorkingTimeHour.ToString())>@i.ToString()</option>
+				                }
+			                </select>&nbsp;@Translation.Get("Tim")&nbsp;
+
+			                <select id="CaseLog_WorkingTimeMinute" name="CaseLog.WorkingTimeMinute" class="inputw100">
+				                @for (var i = 0; i < 59; i = i + Model.MinWorkingTime)
+				                {
+					                <option value="@i.ToString()" @i.IdIsSelected(Model.CaseLog.WorkingTimeMinute.ToString())>@i.ToString()</option>
+				                }
+			                </select>&nbsp;@Translation.Get("Min", SessionFacade.CurrentCaseLanguageId)
+		                </td>
+		                <td></td>
+	                </tr>
+				    <tr>
+					    <td>
+						    @Translation.Get("Övertid", SessionFacade.CurrentCaseLanguageId)
+					    </td>
+					    <td>
+						    <select id="CaseLog_OvertimeHour" name="CaseLog.OvertimeHour" class="inputw100">
+							    @for (var i = 0; i < 100; i++)
+							    {
+								    <option value="@i.ToString()" @i.IdIsSelected(Model.CaseLog.OvertimeHour.ToString())>@i.ToString()</option>
+							    }
+						    </select>&nbsp;@Translation.Get("Tim")&nbsp;
+
+						    <select id="CaseLog_OvertimeMinute" name="CaseLog.OvertimeMinute" class="inputw100">
+							    @for (var i = 0; i < 59; i = i + Model.MinWorkingTime)
+							    {
+								    <option value="@i.ToString()" @i.IdIsSelected(Model.CaseLog.OvertimeMinute.ToString())>@i.ToString()</option>
+							    }
+						    </select>&nbsp;@Translation.Get("Min", SessionFacade.CurrentCaseLanguageId)
+					    </td>
+					    <td></td>
+				    </tr>
                     <tr>
-                        <th class="span3"></th>
-                        <th class="span4"></th>
-                        <th class="span5"></th>
+                        <td>
+                            @Translation.Get("Material", SessionFacade.CurrentCaseLanguageId)
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(model => model.CaseLog.EquipmentPrice, new { maxlength = "12" })
+                        </td>
+                        <td></td>
                     </tr>
-                </thead>
-	            <tr>
-		            <td>
-			            @Translation.Get("Tidsåtgång", SessionFacade.CurrentCaseLanguageId)
-		            </td>
-		            <td>
-			            <select id="CaseLog_WorkingTimeHour" name="CaseLog.WorkingTimeHour" class="inputw100">
-				            @for (var i = 0; i < 100; i++)
-				            {
-					            <option value="@i.ToString()" @i.IdIsSelected(Model.CaseLog.WorkingTimeHour.ToString())>@i.ToString()</option>
-				            }
-			            </select>&nbsp;@Translation.Get("Tim")&nbsp;
-
-			            <select id="CaseLog_WorkingTimeMinute" name="CaseLog.WorkingTimeMinute" class="inputw100">
-				            @for (var i = 0; i < 59; i = i + Model.MinWorkingTime)
-				            {
-					            <option value="@i.ToString()" @i.IdIsSelected(Model.CaseLog.WorkingTimeMinute.ToString())>@i.ToString()</option>
-				            }
-			            </select>&nbsp;@Translation.Get("Min", SessionFacade.CurrentCaseLanguageId)
-		            </td>
-		            <td></td>
-	            </tr>
-				<tr>
-					<td>
-						@Translation.Get("Övertid", SessionFacade.CurrentCaseLanguageId)
-					</td>
-					<td>
-						<select id="CaseLog_OvertimeHour" name="CaseLog.OvertimeHour" class="inputw100">
-							@for (var i = 0; i < 100; i++)
-							{
-								<option value="@i.ToString()" @i.IdIsSelected(Model.CaseLog.OvertimeHour.ToString())>@i.ToString()</option>
-							}
-						</select>&nbsp;@Translation.Get("Tim")&nbsp;
-
-						<select id="CaseLog_OvertimeMinute" name="CaseLog.OvertimeMinute" class="inputw100">
-							@for (var i = 0; i < 59; i = i + Model.MinWorkingTime)
-							{
-								<option value="@i.ToString()" @i.IdIsSelected(Model.CaseLog.OvertimeMinute.ToString())>@i.ToString()</option>
-							}
-						</select>&nbsp;@Translation.Get("Min", SessionFacade.CurrentCaseLanguageId)
-					</td>
-					<td></td>
-				</tr>
-                <tr>
-                    <td>
-                        @Translation.Get("Material", SessionFacade.CurrentCaseLanguageId)
-                    </td>
-                    <td>
-                        @Html.TextBoxFor(model => model.CaseLog.EquipmentPrice, new { maxlength = "12" })
-                    </td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>
-                        @Translation.Get("Pris", SessionFacade.CurrentCaseLanguageId)
-                    </td>
-                    <td>
-                        @Html.TextBoxFor(model => model.CaseLog.Price, new { maxlength = "8" })
-                    </td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>
-                        @Translation.Get("Debitering", SessionFacade.CurrentCaseLanguageId)
-                    </td>
-                    <td>
-                        <div class="checkbox">
-                            <label>
-                                <input name="form-field-checkbox" type="checkbox" />
-                                @Html.CheckBoxFor(model => Model.CaseLog.Charge)
-                                <span class="lbl">@Translation.Get("Debitera kunden för genomförd åtgärd", SessionFacade.CurrentCaseLanguageId)</span>
-                            </label>
-                        </div>
-                    </td>
-                    <td></td>
-                </tr>
-            </table>
+                    <tr>
+                        <td>
+                            @Translation.Get("Pris", SessionFacade.CurrentCaseLanguageId)
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(model => model.CaseLog.Price, new { maxlength = "8" })
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Translation.Get("Debitering", SessionFacade.CurrentCaseLanguageId)
+                        </td>
+                        <td>
+                            <div class="checkbox">
+                                <label>
+                                    <input name="form-field-checkbox" type="checkbox" />
+                                    @Html.CheckBoxFor(model => Model.CaseLog.Charge)
+                                    <span class="lbl">@Translation.Get("Debitera kunden för genomförd åtgärd", SessionFacade.CurrentCaseLanguageId)</span>
+                                </label>
+                            </div>
+                        </td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
-</div>
-
+}
 @Html.Partial("ModalDialogs/_SendIntLogToDiallog")
 @*<div id="divNewFAQ" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true" >
     @Html.Partial("_NewFAQ", Model.EditFaqModel)

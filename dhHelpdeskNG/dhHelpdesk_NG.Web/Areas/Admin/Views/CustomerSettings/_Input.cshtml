@@ -216,12 +216,12 @@
                                         &nbsp;@Translation.Get("Enkät", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
-                                    @*<td><label class="checkbox">
+                                    <td><label class="checkbox">
                                         <input type="checkbox" name="setting.ModuleInvoice" @(Model.Setting.ModuleInvoice == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="setting.ModuleInvoice" value="0" />
-                                        &nbsp;@Translation.Get("Fakturering", Enums.TranslationSource.TextTranslation)
+                                        &nbsp;@Translation.Get("Fakturering tid", Enums.TranslationSource.TextTranslation)
                                         </label>
-                                    </td>*@
+                                    </td>
                                     <td><label class="checkbox">
                                         <input type="checkbox" name="setting.ModuleFAQ" @(Model.Setting.ModuleFAQ == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="setting.ModuleFAQ" value="0" />
@@ -267,7 +267,7 @@
                                     <td><label class="checkbox">
                                         <input type="checkbox" name="setting.ModuleCaseInvoice" @(Model.Setting.ModuleCaseInvoice == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="setting.ModuleCaseInvoice" value="0" />
-                                        &nbsp;@Translation.Get("Fakturering")
+                                        &nbsp;@Translation.Get("Fakturering artikel")
                                         </label>
                                     </td>
                                 </tr>

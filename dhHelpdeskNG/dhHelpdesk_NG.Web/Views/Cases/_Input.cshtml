@@ -2127,8 +2127,10 @@
                             if (Model.CaseLock == null || (Model.CaseLock != null && !Model.CaseLock.IsLocked))
                             {
                                 @Html.Partial("_CaseLogInput", Model)
-							}
-							<div id="divExternalInvoice" style="@Model.ShowInvoiceFields.displayHtml()">
+                            }
+                            if (Model.CustomerSettings.ModuleInvoice == true)
+                            { 
+							    <div id="divExternalInvoice" style="@Model.ShowInvoiceFields.displayHtml()">
 								<h4>
 									@Translation.Get("Fakturor")
 								</h4>
@@ -2175,7 +2177,8 @@
 									</div>
 								</div>
 							</div>
-						}
+                            }
+                        }
                     </div>
                 </div>
                 @if (Model.DynamicCase != null && Model.DynamicCase.ViewMode == 0)
