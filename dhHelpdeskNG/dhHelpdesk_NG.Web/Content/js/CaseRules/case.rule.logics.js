@@ -1,9 +1,7 @@
 ﻿
 
 $(function () {
-    
-    
-
+        
     (function ($) {
         window.helpdesk = window.helpdesk || {};
         window.helpdesk.caseRule = window.helpdesk.caseRule || {};
@@ -11,8 +9,14 @@ $(function () {
 
         var ruleModel = null;
         var $elementsHaveRule = $('.acceptRules');
+        var $fieldStateChanger = $('.fieldStateChanger');
         var STANDARD_ID = 'standardid';
+        var STATE_ICON_PLACE_PREFIX = '#stateIconPlace_';
         
+        //<td style="width:80px;text-align:center"><i class="icon-info-sign"></i> &nbsp; &nbsp;</td>
+        //<td style="width:80px;text-align:center"><i class=""></i> &nbsp; &nbsp;</td>
+        //<td style="width:80px;text-align:center"><i class="icon-share"></i> &nbsp; &nbsp;</td>
+
         /***** Enums *****/
         var _RULE_TYPE = {
             Original: 0,
@@ -49,6 +53,12 @@ $(function () {
             Editable:1,
             Readonly: 2,
             Hidden: 3
+        };
+
+        var _FORIEGN_DATA_NUMBER ={
+            Place1: 1,
+            Place2: 2,
+            Place3: 3
         }                   
 
 
@@ -104,10 +114,8 @@ $(function () {
         }
 
         helpdesk.caseRule = {
-          
-            
-
-            /* Class helper */ 
+                      
+            /* helpers */ 
             dataHelper: null,
             convertor: null,
 
@@ -122,14 +130,68 @@ $(function () {
                 });
 
                 $elementsHaveRule.change(function () {
-                    helpdesk.caseRule.elementValueChanged(this);
+                    helpdesk.caseRule.onElementValueChanged(this);
                 });
+
+                $fieldStateChanger.change(function () {
+                    helpdesk.caseRule.onStateChanged(this);
+                });
+
+                helpdesk.caseRule.initiateFiedStateIcons();
             },
 
-            elementValueChanged: function(element){
+            initiateFiedStateIcons: function(){
+                if (dataHelper.isNullOrUndefined(ruleModel) ||
+                    dataHelper.isNullOrUndefined(ruleModel.FieldAttributes) ||
+                    ruleModel.FieldAttributes.length <= 0)
+                    return null;
+                
+                for (var fi = 0; fi < ruleModel.FieldAttributes.length; fi++) {
+                    helpdesk.caseRule.refreshStateIcons(ruleModel.FieldAttributes[fi]);
+                }
+            },
+
+            onElementValueChanged: function (element) {
                 var $self = $(element);
-                helpdesk.caseRule.updateFieldValue($self);
-                //helpdesk.caseRule.checkRules($self);
+                helpdesk.caseRule.updateFieldValue($self);                
+            },
+
+            onStateChanged: function (element) {
+                var $self = $(element);
+                var newState = $self.val();
+                var field = this.getFieldByElement($self);
+                if (!dataHelper.isNullOrUndefined(field)) {
+                    switch (newState) {
+                        case "1":
+                            field.StatusType = _FIELD_STATUS_TYPE.Editable;
+                            break;
+
+                        case "2":
+                            field.StatusType = _FIELD_STATUS_TYPE.Readonly;
+                            break;
+
+                        case "3":
+                            field.StatusType = _FIELD_STATUS_TYPE.Hidden;
+                            break;
+
+                        default:
+                            field.StatusType = _FIELD_STATUS_TYPE.Editable;
+                    }                    
+                }
+
+                helpdesk.caseRule.refreshStateIcons(field);
+            },
+
+            refreshStateIcons: function (field) {
+                var $elementToApply = $(STATE_ICON_PLACE_PREFIX + field.FieldId);
+                if (!dataHelper.isNullOrUndefined($elementToApply)) {
+                    var iconModel = helpdesk.caseRule.createStateIconModel(field);                    
+                    $elementToApply.html(iconModel);
+
+                    $('body').tooltip({
+                        selector: '.tooltipType'
+                    });
+                }
             },
 
             getFieldById: function(fieldId){
@@ -190,6 +252,8 @@ $(function () {
                         break;
                 }
 
+                helpdesk.caseRule.refreshStateIcons(field);
+
             },
 
             getItemByValue: function (field, itemValue) {
@@ -220,33 +284,79 @@ $(function () {
 
                 return "";
             },
-
-            checkRules: function ($element) {
-                var field = this.getFieldByElement($element);
+            
+            createStateIconModel: function (field) {
                 if (dataHelper.isNullOrUndefined(field))
-                    return;
+                    return "";
 
-                //alert(field.FieldName);
+                var fieldInfoClass = "";                
+                var fieldInfoHint = "";
+                var cuFielInfo = helpdesk.caseRule.checkRules(field);
+                if (!dataHelper.isNullOrEmpty(cuFielInfo)) {
+                    fieldInfoClass = "icon-info-sign tooltipType";
+                    fieldInfoHint = cuFielInfo;
+                }
+
+                var mandatoryClass = field.IsMandatory ? "icon-asterisk tooltipType" : "";
+                var mandatoryHint = "";
+
+                var selfSeviceClass = field.IsAvailableOnSelfService ? "icon-share tooltipType" : "";
+                var selfSeviceHint = "";
+
+                var ret =
+                    '<td style="width:70px;text-align:center"><span title="" class="' + fieldInfoClass + '" data-original-title="' + fieldInfoHint + '" rel="tooltip"></span></td>' + 
+                    '<td style="width:70px;text-align:center"><span title="" class="' + mandatoryClass + '" data-original-title="' + mandatoryHint + '" rel="tooltip"></span></td>' +
+                    '<td style="width:70px;text-align:center"><span title="" class="' + selfSeviceClass + '" data-original-title="' + selfSeviceHint + '" rel="tooltip"></span></td>';
+
+                return ret;
+            },
+
+            checkRules: function (field) {
+                if (field.StatusType == _FIELD_STATUS_TYPE.Hidden)
+                    return "";
+                else {
+                    var ret = "";
+                    if (field.Relations.length > 0) {
+                        for (var r = 0; r < field.Relations.length; r++) {
+                            var curRelation = field.Relations[r];                            
+                            ret += helpdesk.caseRule.predictAction(field, curRelation);
+                        }
+                        return ret;
+                    }
+                }
+                return "";
+            },
+
+            predictAction: function (field, relation) {
+                var selectedItem = field.Selected;
+                var relatedField = helpdesk.caseRule.getFieldById(relation.FieldId);
+                var fData = helpdesk.caseRule.getForiegnData(relation.RelationType, selectedItem, relation.ForeignKeyNumber, relatedField);
+                if (fData != null && !dataHelper.isNullOrEmpty(fData.ItemText))
+                    return "Will set " + relatedField.FieldCaption + " to: " + fData.ItemText;
+                else
+                    return "";
+            },
+
+            getForiegnData: function (relationType, parentSelectedItem, place, relatedField){
+                switch (relationType) {
+                    case _RELATION_TYPE.OneToOne:
+                        if (place == _FORIEGN_DATA_NUMBER.Place1){
+                            return helpdesk.caseRule.getItemByValue(relatedField, parentSelectedItem.ForeignKeyValue1)                            
+                        }
+                        break;
+
+                    case _RELATION_TYPE.OneToMany:
+                        break;
+
+                    case _RELATION_TYPE.ManyToMany:
+                        break;
+
+                }
+                return null;
             }
         }
-                
-        var func1 = function () {
-            //return $.get("/Translation/GetCaseFieldsForTranslation", {
-            //    curTime: Date.now
-            //}, function (data) {
-                
-            //});
-        };
-        
-
-        var testFunc = function () {
-            func1()            
-            .then(function () {
-                
-            });
-        }
-
+                      
     })($);
        
-    helpdesk.caseRule.init();    
+    //helpdesk.caseRule.init();    
 });
