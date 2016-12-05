@@ -440,6 +440,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             //return View(model);
             var view = "~/areas/admin/views/MailTemplate/_Input.cshtml";
+            if (model.MailTemplateLanguage.MailTemplate.MailID == (int)GlobalEnums.MailTemplates.ClosedCase)
+            {
+                SetFeedbacks();
+            }
             return this.RenderRazorViewToString(view, model);
         }
 
