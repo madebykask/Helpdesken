@@ -2507,7 +2507,6 @@
     <Content Include="Views\Contracts\_Input.cshtml" />
     <Content Include="Views\Contracts\Edit.cshtml" />
     <Content Include="Views\Contracts\_ContractFiles.cshtml" />
-    <Content Include="Views\Contracts\_ContractFilesTable.cshtml" />
     <Content Include="Views\Feedback\EditFeedback.cshtml" />
     <Content Include="Views\Feedback\_FeedbackQuestionOptions.cshtml" />
     <Content Include="Views\Feedback\Answer.cshtml" />
