@@ -5255,8 +5255,9 @@ GO
 If not exists (select * from tbltext where id = 1723)
 	insert into tbltext (id, TextString) VALUES (1723, 'visar värden relaterade till')
 GO
+
 If not exists (select * from tblTextTranslation where text_id = 1723 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1723, 2, 'visar värden relaterade till')
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1723, 2, 'will show items related to')
 GO
 
 

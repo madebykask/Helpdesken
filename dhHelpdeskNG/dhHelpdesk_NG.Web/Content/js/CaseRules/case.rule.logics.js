@@ -143,8 +143,12 @@
                 
                 for (var _fi = 0; _fi < ruleModel.FieldAttributes.length; _fi++) {
                     var field = ruleModel.FieldAttributes[_fi];
-                    helpdesk.caseRule.updateFieldValue(field, field.Selected.ItemValue);
-                    helpdesk.caseRule.refreshStateIcons(field, false);
+                    var element = helpdesk.caseRule.getElementByFieldId(field.FieldId);
+                    if (!dataHelper.isNullOrUndefined($(element))) {
+                        helpdesk.caseRule.updateElementValue($(element));
+                    }
+                    //helpdesk.caseRule.updateFieldValue(field, field.Selected.ItemValue);
+                    //helpdesk.caseRule.refreshStateIcons(field, false);
                 }
             },
 
@@ -157,7 +161,9 @@
                     if (dataHelper.isNullOrUndefined(parentRelatedFields) || parentRelatedFields.length <= 0)
                         return;
                     for (var pr = 0; pr < parentRelatedFields.length; pr++) {
-                        helpdesk.caseRule.refreshStateIcons(parentRelatedFields[pr], false);
+                        var relatedElm = helpdesk.caseRule.getElementByFieldId(parentRelatedFields[pr].FieldId);
+                        if (!dataHelper.isNullOrUndefined(relatedElm))
+                            helpdesk.caseRule.updateElementValue($(relatedElm));
                     }
                 }
             },
