@@ -419,14 +419,14 @@
 
                     case _RELATION_TYPE.OneToMany:
                         if (!dataHelper.isNullOrEmpty(selectedItem.ItemText))
-                            return "<div align='left'> <b>" + relatedField.FieldCaption + "</b>: " + params.willSetToText + " <b>" + selectedItem.ItemText + "</b> </div> <br />";
+                            return "<div align='left'> <b>" + relatedField.FieldCaption + "</b>: " + params.willShowRelatedItemsText + " <b>" + selectedItem.ItemText + "</b> </div> <br />";
                         else
                             return "";
                                 
 
                     case _RELATION_TYPE.ManyToMany:
                         if (!dataHelper.isNullOrEmpty(selectedItem.ItemText))
-                            return "<div align='left'> <b>" + relatedField.FieldCaption + "</b>: " + params.willShowRelatedItemsText + "<b>" + selectedItem.ItemText + "</b> </div> <br />";
+                            return "<div align='left'> <b>" + relatedField.FieldCaption + "</b>: " + params.willShowRelatedItemsText + " <b>" + selectedItem.ItemText + "</b> </div> <br />";
                         else
                             return "";                        
                 }                                
@@ -508,12 +508,11 @@
                 var urgentField = helpdesk.caseRule.getFieldById('Urgency_Id');
                 var priorityField = helpdesk.caseRule.getFieldById('Priority_Id');
 
-                if (!dataHelper.isNullOrUndefined(impactField) && !dataHelper.isNullOrUndefined(urgentField)) {
+                if (!dataHelper.isNullOrUndefined(impactField) && !dataHelper.isNullOrUndefined(urgentField) && !dataHelper.isNullOrUndefined(priorityField)) {
                     if (!dataHelper.isNullOrEmpty(impactField.Selected.ItemValue) && 
                         !dataHelper.isNullOrEmpty(urgentField.Selected.ItemValue) &&
-                        !dataHelper.isNullOrEmpty(priorityField.Selected.ItemValue)) {
-
-                        return params.migthSetText + " " + priorityField.ItemText;
+                        !dataHelper.isNullOrEmpty(priorityField.FieldCaption)) {
+                        return "<div align='left'> " + params.migthSetText + " <b>" + priorityField.FieldCaption + "</b> </div> <br />";                       
                     }
                 }
 
