@@ -18,7 +18,7 @@
                 <li>
                     <input type="submit" value="@Translation.GetCoreTextTranslation("Spara")" class="btn"/>
                 </li>
-                @if (!Model.IsNew)
+                @if (!Model.IsNew && !Model.IsSent)
                 {
                     <li>
                         @Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), MvcUrlName.Feedback.Delete, MvcUrlName.Feedback.Controller,

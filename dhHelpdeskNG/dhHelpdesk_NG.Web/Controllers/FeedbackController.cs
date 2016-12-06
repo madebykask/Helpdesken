@@ -113,6 +113,7 @@ namespace DH.Helpdesk.Web.Controllers
 					{
 						model.CircularId = dbCircular.Id;
 						model.SelectedPercent = dbCircular.CaseFilter.SelectedProcent;
+					    model.IsSent = dbCircular.Status == CircularStates.Sent;
 					}
 				}
 			}
