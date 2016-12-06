@@ -83,11 +83,14 @@ namespace DH.Helpdesk.Dal.Repositories
 
 			//check if freetext is searchable
 			var freetext = context.f.FreeTextSearch;
-			if (freetext.Contains("#") && freetext.Length == 1)
-			{
-				context.f.FreeTextSearch = String.Empty;
-			}
-
+            if (freetext != null)
+            {
+                if (freetext.Contains("#") && freetext.Length == 1)
+                {
+                    context.f.FreeTextSearch = String.Empty;
+                }
+            }
+			
 			var customerUserSetting = this._customerUserRepository.GetCustomerSettings(f.CustomerId, userId);
 			IList<ProductAreaEntity> pal = this._productAreaRepository.GetMany(x => x.Customer_Id == f.CustomerId).OrderBy(x => x.Name).ToList();
 			SearchResult<CaseSearchResult> ret = new SearchResult<CaseSearchResult>();
