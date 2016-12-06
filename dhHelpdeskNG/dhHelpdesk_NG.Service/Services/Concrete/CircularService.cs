@@ -547,6 +547,37 @@
             return connectedCases;
         }
 
+        public void SetStatus(int circularId, CircularStates circularState)
+        {
+            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            {
+                var circularRepository = uof.GetRepository<QuestionnaireCircularEntity>();
+
+                QuestionnaireCircularEntity circular = circularRepository.GetById(circularId);
+                circular.Status = (int)circularState;
+
+                uof.Save();
+            }
+        }
+
+        public void UpdateParticipantSendDate(Guid participantGuid, DateTime operationDate)
+        {
+            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            {
+                var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
+
+                QuestionnaireCircularPartEntity circularPart =
+                    circularPartRepository.GetAll().GetByGuid(participantGuid).SingleOrDefault();
+
+                if (circularPart != null)
+                {
+                    circularPart.SendDate = operationDate;
+                }
+
+                uof.Save();
+            }
+        }
+
         #endregion
 
         #region PRIVATE STATIC
@@ -707,19 +738,6 @@
             return mails;
         }
 
-        private void SetStatus(int circularId, CircularStates circularState)
-        {
-            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
-            {
-                var circularRepository = uof.GetRepository<QuestionnaireCircularEntity>();
-
-                QuestionnaireCircularEntity circular = circularRepository.GetById(circularId);
-                circular.Status = (int)circularState;
-
-                uof.Save();
-            }
-        }
-
         private void SendMails(List<QuestionnaireMailItem> mailItems, DateTime operationDate, int customerId)
         {
             foreach (QuestionnaireMailItem mailItem in mailItems)
@@ -743,20 +761,7 @@
 
             this.emailService.SendEmail(mailItem.MailItem, mailSetting);
 
-            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
-            {
-                var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
-
-                QuestionnaireCircularPartEntity circularPart =
-                    circularPartRepository.GetAll().GetByGuid(mailItem.Guid).SingleOrDefault();
-
-                if (circularPart != null)
-                {
-                    circularPart.SendDate = operationDate;
-                }
-
-                uof.Save();
-            }
+            UpdateParticipantSendDate(mailItem.Guid, operationDate);
         }
 
         #endregion

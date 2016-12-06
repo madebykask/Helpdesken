@@ -24,11 +24,11 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType> 
+    <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport> 
+    <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -245,6 +245,7 @@
     <Compile Include="Models\Error\ErrorModel.cs" />
     <Compile Include="Models\ExternalInvoice\ExternalInvoice.cs" />
     <Compile Include="Models\Faq\Input\FaqCategory.cs" />
+    <Compile Include="Models\Feedback\FeedbackField.cs" />
     <Compile Include="Models\Feedback\FeedbackFullItem.cs" />
     <Compile Include="Models\Feedback\FeedbackQuestionOption.cs" />
     <Compile Include="Models\Feedback\FeedbackQuestionOverview.cs" />

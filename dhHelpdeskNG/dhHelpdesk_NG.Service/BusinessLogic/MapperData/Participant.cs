@@ -7,6 +7,7 @@
         public Guid Guid { get; set; }
 
         public Decimal CaseNumber { get; set; }
+        public int CaseId { get; set; }
 
         public string CaseDescription { get; set; }
 

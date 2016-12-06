@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using DH.Helpdesk.Common.Enums;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System;
     using System.Collections.Generic;
@@ -55,5 +57,7 @@
 
 	    List<BusinessLogic.MapperData.Participant> GetNotAnsweredParticipants(int circularId);
 
+        void SetStatus(int circularId, CircularStates circularState);
+        void UpdateParticipantSendDate(Guid participantGuid, DateTime operationDate);
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Reflection;
+using DH.Helpdesk.Services.BusinessLogic.Mappers.Feedback;
 
 namespace DH.Helpdesk.Services.Services
 {
@@ -1700,9 +1701,9 @@ namespace DH.Helpdesk.Services.Services
 	                                var identifiers = _feedbackTemplateService.FindIdentifiers(m.Body);
 									var templateFields = _feedbackTemplateService.GetCustomerTemplates(identifiers,
 										newCase.Customer_Id, newCase.RegLanguage_Id, newCase.Id, cms.AbsoluterUrl);
-									fields.AddRange(templateFields);
+                                    fields.AddRange(templateFields.Select(tf => tf.MapToFields()));
 
-	                                string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
+                                    string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
                                     var mailResponse = EmailResponse.GetEmptyEmailResponse();
                                     var mailSetting = new EmailSettings(mailResponse, smtpInfo);
                                     var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
@@ -1714,6 +1715,9 @@ namespace DH.Helpdesk.Services.Services
                                     el.ChangedDate = now;
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
+
+                                    foreach (var field in templateFields.Where(f => !string.IsNullOrEmpty(f.StringValue)))
+                                        _feedbackTemplateService.UpdateFeedbackStatus(field);
                                 }
                             }
                         }
@@ -1734,9 +1738,9 @@ namespace DH.Helpdesk.Services.Services
 									var identifiers = _feedbackTemplateService.FindIdentifiers(m.Body);
 									var templateFields = _feedbackTemplateService.GetCustomerTemplates(identifiers,
 										newCase.Customer_Id, newCase.RegLanguage_Id, newCase.Id, cms.AbsoluterUrl);
-									fields.AddRange(templateFields);
+                                    fields.AddRange(templateFields.Select(tf => tf.MapToFields()));
 
-									string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
+                                    string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
 
                                     var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
                                     var mailResponse = EmailResponse.GetEmptyEmailResponse();
@@ -1748,6 +1752,9 @@ namespace DH.Helpdesk.Services.Services
                                     el.ChangedDate = now;
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
+
+                                    foreach (var field in templateFields.Where(f => !string.IsNullOrEmpty(f.StringValue)))
+                                        _feedbackTemplateService.UpdateFeedbackStatus(field);
                                 }
                             }
                                 
@@ -1768,9 +1775,9 @@ namespace DH.Helpdesk.Services.Services
 									var identifiers = _feedbackTemplateService.FindIdentifiers(m.Body);
 									var templateFields = _feedbackTemplateService.GetCustomerTemplates(identifiers,
 										newCase.Customer_Id, newCase.RegLanguage_Id, newCase.Id, cms.AbsoluterUrl);
-									fields.AddRange(templateFields);
+                                    fields.AddRange(templateFields.Select(tf => tf.MapToFields()));
 
-									string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
+                                    string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
    
                                     var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
                                     var mailResponse = EmailResponse.GetEmptyEmailResponse();
@@ -1782,6 +1789,10 @@ namespace DH.Helpdesk.Services.Services
                                     el.ChangedDate = now;
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
+
+                                    foreach (var field in templateFields.Where(f => !string.IsNullOrEmpty(f.StringValue)))
+                                        _feedbackTemplateService.UpdateFeedbackStatus(field);
+
                                 }
                             }
                         }
