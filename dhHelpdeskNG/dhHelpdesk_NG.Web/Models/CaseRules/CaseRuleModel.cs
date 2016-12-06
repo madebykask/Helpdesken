@@ -22,7 +22,8 @@ namespace DH.Helpdesk.Web.Models.CaseRules
     {
         ValueSetter = 1,
         ListCleaner = 2,
-        ListPopulator = 3
+        ListPopulator = 3,
+        StaticRuntimeAction = 9
     }
 
     public enum CaseFieldType
@@ -166,6 +167,8 @@ namespace DH.Helpdesk.Web.Models.CaseRules
         public int ActionType { get; set; }          
 
         public int? ForeignKeyNumber { get; set; }
+
+        public int? StaticActionId { get; set; }
 
     }
 

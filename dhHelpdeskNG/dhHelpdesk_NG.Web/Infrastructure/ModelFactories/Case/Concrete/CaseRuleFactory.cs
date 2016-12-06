@@ -763,6 +763,13 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                         ActionType = RelationActionType.ValueSetter.ToInt(),
                         FieldId = TranslationCaseFields.Urgency_Id.ToString(),
                         ForeignKeyNumber = 1
+                    },
+
+                    new FieldRelation() {
+                        SequenceNo = 1,
+                        RelationType = RelationType.OneToOne.ToInt(),
+                        ActionType = RelationActionType.StaticRuntimeAction.ToInt(),
+                        StaticActionId = 1
                     }
                 }
             };
@@ -785,7 +792,15 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 IsAvailableOnSelfService = caseFieldSettings.getShowExternal(curField).ToBool(),
                 IsMandatory = caseFieldSettings.getRequired(curField).ToBool(),
                 StatusType = basicInformation.Urgencies.StatusType,
-                Items = basicInformation.Urgencies.Items
+                Items = basicInformation.Urgencies.Items,
+                Relations = new List<FieldRelation> {                    
+                    new FieldRelation() {
+                        SequenceNo = 0,
+                        RelationType = RelationType.OneToOne.ToInt(),
+                        ActionType = RelationActionType.StaticRuntimeAction.ToInt(),
+                        StaticActionId = 1
+                    }
+                }
             };
             ret.Add(attrUrgency);
 
@@ -806,7 +821,15 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 IsAvailableOnSelfService = caseFieldSettings.getShowExternal(curField).ToBool(),
                 IsMandatory = caseFieldSettings.getRequired(curField).ToBool(),
                 StatusType = basicInformation.Impacts.StatusType,
-                Items = basicInformation.Impacts.Items
+                Items = basicInformation.Impacts.Items,
+                Relations = new List<FieldRelation> {
+                    new FieldRelation() {
+                        SequenceNo = 0,
+                        RelationType = RelationType.OneToOne.ToInt(),
+                        ActionType = RelationActionType.StaticRuntimeAction.ToInt(),
+                        StaticActionId = 1
+                    }
+                }
             };
             ret.Add(attrImpact);
 
