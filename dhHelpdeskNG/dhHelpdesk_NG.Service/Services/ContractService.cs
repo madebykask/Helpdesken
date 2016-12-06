@@ -20,7 +20,9 @@
         void SaveContractHistory(ContractInputModel contract);
         void SaveContracFile(ContractFileModel contractFile);
         List<ContractFileModel> GetContractFiles(int contractId);
+        ContractFileModel GetContractFile(int fileId);
         void DeleteContract(Contract contract);
+        void DeleteContractFile(int fileId);
 
 
         //ContractCategory GetContractCategory(int id);
@@ -171,7 +173,7 @@
 
         public List<ContractFileModel> GetContractFiles(int contractId)
         {
-            var contractFileEntities = this._contractFileRepository.GetContractFile(contractId);
+            var contractFileEntities = this._contractFileRepository.GetContractFiles(contractId);
      
             var contractFileModules = contractFileEntities.Select(conf => new ContractFileModel()
             {
@@ -188,14 +190,47 @@
             return contractFileModules;
         }
 
+        public ContractFileModel GetContractFile(int fileId)
+        {
+            var contractFileEntity = this._contractFileRepository.GetContractFile(fileId);
+
+            var contractFileModule = new ContractFileModel()
+            {
+                Id = contractFileEntity.Id,
+                Contract_Id = contractFileEntity.Contract_Id,
+                ArchivedContractFile_Id = contractFileEntity.ArchivedContractFile_Id,
+                FileName = contractFileEntity.FileName,
+                ArchivedDate = contractFileEntity.ArchivedDate,
+                Content = contractFileEntity.File,
+                ContentType = contractFileEntity.ContentType,
+                ContractFileGuid = contractFileEntity.ContractFileGUID,
+                CreatedDate = contractFileEntity.CreatedDate
+            };
+            return contractFileModule;
+        }
+
         public void DeleteContract(Contract contract)
         {
             this._contractHistoryRepository.DeleteContractHistory(contract);
             this._contractHistoryRepository.Commit();
 
+            this.DeleteAllContractFiles(contract.Id);
+
             this._contractRepository.DeleteContract(contract);
             this._contractRepository.Commit();
         }
-       
+
+        public void DeleteAllContractFiles(int contractId)
+        {
+            this._contractFileRepository.DeleteAllContractFiles(contractId);
+            this._contractFileRepository.Commit();
+        }
+
+        public void DeleteContractFile(int fileId)
+        {
+            this._contractFileRepository.DeleteContractFile(fileId);
+            this._contractFileRepository.Commit();
+        }
+
     }
 }

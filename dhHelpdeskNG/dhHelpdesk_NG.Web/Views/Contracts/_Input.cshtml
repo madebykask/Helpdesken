@@ -13,7 +13,7 @@
         contractId : '@Model.ContractId',
         ContractFilesUrl: '@Url.Action("GetAllFiles", "Contracts")',        
         fileAlreadyExistsMsg: '@Html.Raw(Translation.GetForJS("File already exists", Enums.TranslationSource.TextTranslation))',
-        downloadContractFileUrl: '@Url.Action("DownloadContractFile")',
+        downloadContractFileUrl: '@Url.Action("DownloadFile")',
         downloadContractFileParamUrl: '@(!string.IsNullOrEmpty(Model.ContractFileKey) ? "id=" + Model.ContractFileKey + "&" : string.Empty)',
         deleteContractFileUrl: '@Url.Action("DeleteContractFile")'
     };
@@ -597,7 +597,7 @@
             required: "@Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation) @Translation.Get("måste anges")"
         },
         "ResponsibleUserId": {
-            required: "@Translation.Get("Ansvarg", Enums.TranslationSource.TextTranslation) @Translation.Get("måste anges")"
+            required: "@Translation.Get("Ansvarig", Enums.TranslationSource.TextTranslation) @Translation.Get("måste anges")"
         },
         "btnAddContractFile": {
             required: "@Translation.Get("Bifogad fil", Enums.TranslationSource.TextTranslation) @Translation.Get("måste anges")"

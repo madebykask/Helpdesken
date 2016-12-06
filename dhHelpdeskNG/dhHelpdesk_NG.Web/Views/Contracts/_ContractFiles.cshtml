@@ -40,8 +40,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" id="btnSave" class="btn btn-ok btn-default" style="display: none">@Translation.Get("Save", Enums.TranslationSource.TextTranslation)</button>
-                <button type="button" id="btnCancel" class="btn btn-cancel btn-default" data-dismiss="modal">@Translation.Get("Cancel", Enums.TranslationSource.TextTranslation)</button>
+                <button type="button" id="btnSave" class="btn btn-ok" style="display: none">@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)</button>
+                <button type="button" id="btnCancel" class="btn btn-cancel" data-dismiss="modal">@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)</button>
             </div>
         </div>
     </div>
@@ -52,9 +52,9 @@
     {
         <tbody id="oldFiles">
          @foreach (var f in Model)
-         {
+         {             
              <tr>                 
-                 <td><a href = "@Url.Action("DownloadFile", new RouteValueDictionary { { "id", f.Id }, { "fileName", f.FileName }, { "contractId", f.Contract_Id } })" ><i class="icon-file"></i>@f.FileName</a></td>
+                 <td><a href = "@Url.Action("DownloadFile", new RouteValueDictionary { { "id", f.Id }, { "fileName", f.FileName }, { "contractId", f.Contract_Id } , { "filePlace", f.ContractFileKey} })" ><i class="icon-file"></i>@f.FileName</a></td>
                  <td><a data-id="@f.Id" class="btn bt-small deleteContractFile" data-fileName="@f.FileName"  title="@Translation.Get("Ta bort")"><i class="icon-remove"></i></a></td>
              </tr>
          }
