@@ -16,13 +16,16 @@
     {
         public string SelectedFontStyle { get; set; }
 
-        public ICollection<ColumnSettings> FieldStyle { get; set; }
+		public int SelectedPageSize { get; set; }
+
+		public ICollection<ColumnSettings> FieldStyle { get; set; }
 
         internal GridSettingsModel MapToGridSettingsModel()
         {
             var res = new GridSettingsModel
                           {
                               cls = this.SelectedFontStyle,
+							  pageOptions = new GridPageOptions { recPerPage = SelectedPageSize},
                               columnDefs =
                                   this.FieldStyle.Select(
                                       it =>

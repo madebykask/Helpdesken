@@ -505,7 +505,44 @@ If not exists (select * from tblTextTranslation where text_id = 1697 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1697, 1, 'Avbryt')
 
 
+If not exists (select * from tbltext where id = 1704)
+	insert into tbltext (id, TextString, TextType) VALUES (1704, 'Categories', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1704 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1704, 1, 'Kategorier')
 
 
+If not exists (select * from tbltext where id = 1705)
+	insert into tbltext (id, TextString, TextType) VALUES (1705, 'Answer', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1705 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1705, 1, 'Svar')
 
 
+If not exists (select * from tbltext where id = 1706)
+	insert into tbltext (id, TextString, TextType) VALUES (1706, 'Internal response', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1706 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1706, 1, 'Internt svar')
+
+
+If not exists (select * from tbltext where id = 1709)
+	insert into tbltext (id, TextString, TextType) VALUES (1709, 'One or more mandatory fields were not filled in, please check the case.', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1709 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1709, 1, 'Ett eller flera obligatoriska fält! Var vänlig kontrollera i ärendet.')
+
+	
+If not exists (select * from tbltext where id = 1710)
+	insert into tbltext (id, TextString, TextType) VALUES (1710, 'The case could not be saved because the lowest possible level on the field', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1710 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1710, 1, 'Ärendet kunde inte sparas då den lägsta möjliga nivån på fält')
+
+	
+If not exists (select * from tbltext where id = 1711)
+	insert into tbltext (id, TextString, TextType) VALUES (1711, 'has not been selected. Please check the case.', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1711 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1711, 1, 'inte har valts. Vänligen kontrollera ärendet.')
+	

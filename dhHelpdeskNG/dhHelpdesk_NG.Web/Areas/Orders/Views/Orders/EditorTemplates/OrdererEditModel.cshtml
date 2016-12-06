@@ -3,59 +3,73 @@
 @using System.Web.Optimization
 @using System.Linq;
 @using DH.Helpdesk.BusinessData.OldComponents
+@using DH.Helpdesk.Web
 @model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.OrdererEditModel
 
 <h4>@Translation.Get("Beställare")</h4>
 <table class="tableform">
     <tbody>
-        @if (Model.OrdererId.Show)
-        {
-            <tr>
-                <td class="span3">
-                    @Html.FieldCaption(Model.OrdererId)
-                </td>
-                <td class="span9">
-                    @Html.TextBoxFor(model => model.OrdererId.Value, new { maxlength = "40", autocomplete = "Off", data_field = "userId" })
-                </td>
-            </tr>             
-        }
-        @*@Html.EditorFor(m => m.OrdererId, "Fields/Text", new { maxlength = "40", autocomplete = "Off", data_field = "order_OrdererId" })*@                
-        @Html.EditorFor(m => m.OrdererName, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererName" } }})                
-        @Html.EditorFor(m => m.OrdererLocation, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererLocation" } }})                
-        @Html.EditorFor(m => m.OrdererEmail, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererEmail" } }})                
-        @Html.EditorFor(m => m.OrdererPhone, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererPhone" } }})                
-        @Html.EditorFor(m => m.OrdererCode, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererCode" } }})  
-        @if (Model.Department.Show)
-        {
-            <tr>
-                <td class="span3">
-                    @Html.FieldCaption(Model.Department)
-                </td>
-                <td class="span9">
-                    @Html.DropDownListFor(m => m.DepartmentId, Model.Department.Value, new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererDepartment" }} })
-                    @Html.ValidationMessageFor(m => m.DepartmentId)
-                </td>
-            </tr>             
-        }
-        @if (Model.Unit.Show)
-        {
-            <tr>
-                <td class="span3">
-                    @Html.FieldCaption(Model.Unit)
-                </td>
-                <td class="span9">
-                    @Html.DropDownListFor(m => m.UnitId, Model.Unit.Value)
-                    @Html.ValidationMessageFor(m => m.UnitId)
-                </td>
-            </tr>             
-        }
-        @Html.EditorFor(m => m.OrdererAddress, "Fields/Text")               
-        @Html.EditorFor(m => m.OrdererInvoiceAddress, "Fields/Text")               
-        @Html.EditorFor(m => m.OrdererReferenceNumber, "Fields/Text")               
-        @Html.EditorFor(m => m.AccountingDimension1, "Fields/Text")               
-        @Html.EditorFor(m => m.AccountingDimension2, "Fields/Text")               
-        @Html.EditorFor(m => m.AccountingDimension3, "Fields/Text")               
-        @Html.EditorFor(m => m.AccountingDimension4, "Fields/Text")               
-        @Html.EditorFor(m => m.AccountingDimension5, "Fields/Text")               
+    @if (Model.OrdererId.Show)
+    {
+        <tr>
+            <td class="span3">
+                @Html.FieldCaption(Model.OrdererId)
+            </td>
+            <td class="span9">
+                @Html.TextBoxFor(model => model.OrdererId.Value, new { maxlength = "40", autocomplete = "Off", data_field = "userId" })
+            </td>
+        </tr>
+    }
+    @*@Html.EditorFor(m => m.OrdererId, "Fields/Text", new { maxlength = "40", autocomplete = "Off", data_field = "order_OrdererId" })*@
+    @Html.EditorFor(m => m.OrdererName, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererName" } }})
+    @Html.EditorFor(m => m.OrdererLocation, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererLocation" } }})
+    @Html.EditorFor(m => m.OrdererEmail, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererEmail" } }})
+    @Html.EditorFor(m => m.OrdererPhone, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererPhone" } }})
+    @Html.EditorFor(m => m.OrdererCode, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererCode" } }})
+    @if (Model.Department.Show)
+    {
+        <tr>
+            <td class="span3">
+                @Html.FieldCaption(Model.Department)
+            </td>
+            <td class="span9">
+                @Html.DropDownListFor(m => m.DepartmentId, Model.Department.Value, new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererDepartment" }} })
+                @Html.ValidationMessageFor(m => m.DepartmentId)
+            </td>
+        </tr>
+    }
+    @if (Model.Unit.Show)
+    {
+        <tr>
+            <td class="span3">
+                @Html.FieldCaption(Model.Unit)
+            </td>
+            <td class="span9">
+                @Html.DropDownListFor(m => m.UnitId, Model.Unit.Value, new {Id = "orderer_unit_select"})
+                @Html.ValidationMessageFor(m => m.UnitId)
+            </td>
+        </tr>
+    }
+    @Html.EditorFor(m => m.OrdererAddress, "Fields/Text")
+    @Html.EditorFor(m => m.OrdererInvoiceAddress, "Fields/Text")
+    @Html.EditorFor(m => m.OrdererReferenceNumber, "Fields/Text")
+    @Html.EditorFor(m => m.AccountingDimension1, "Fields/Text")
+    @Html.EditorFor(m => m.AccountingDimension2, "Fields/Text")
+    @Html.EditorFor(m => m.AccountingDimension3, "Fields/Text")
+    @Html.EditorFor(m => m.AccountingDimension4, "Fields/Text")
+    @Html.EditorFor(m => m.AccountingDimension5, "Fields/Text")
     </tbody>
 </table>
+
+@if (Model.Unit.Show && Model.Unit.Value != null)
+{
+    @Scripts.Render(BundleConfig.ScriptNames.EditOrder)
+    <script type="text/javascript">
+        $(function() {
+            var parameters = {
+                Units: @Html.SerializeObjectToJson(Model.Unit.Value.Items)
+            };
+            OrderEdit(parameters);
+        });
+    </script>
+}

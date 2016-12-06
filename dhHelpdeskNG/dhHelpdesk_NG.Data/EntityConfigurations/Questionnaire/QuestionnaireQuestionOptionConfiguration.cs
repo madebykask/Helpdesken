@@ -31,8 +31,9 @@
             this.Property(o => o.QuestionnaireQuestionOptionPos).IsRequired();
             this.Property(o => o.QuestionnaireQuestionOption).IsRequired().HasMaxLength(100);
             this.Property(o => o.OptionValue).IsRequired();
+			this.Property(o => o.IconId).HasMaxLength(200);
 
-            this.Property(o => o.CreatedDate);
+			this.Property(o => o.CreatedDate);
             this.Property(o => o.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
 
             this.ToTable("tblQuestionnaireQuestionOption");

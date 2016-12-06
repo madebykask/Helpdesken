@@ -19,33 +19,41 @@
                                            Translation.GetForJS(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) + "] " +
                                            Translation.GetForJS("inte har valts. Vänligen kontrollera ärendet."))',
         caseLockGuid: '@Model.CaseLock.LockGUID',
-        caseChangedTime: '@Model.case_.ChangeTime',
+        caseChangedTime: '@Model.case_.ChangeTime',        
         userCaseLocker: '@Model.CaseLock.UserId',
         extendValue: '@Model.CaseLock.ExtendValue',
         timerInterval: '@Model.CaseLock.TimerInterval',
-        invoicePreventsToCloseCaseMessage: '@Translation.GetForJS("Du kan inte avsluta ärendet eftersom det finns öppna order.")',        
+        invoicePreventsToCloseCaseMessage: '@Translation.GetForJS("Du kan inte avsluta ärendet eftersom det finns öppna order.")',
         caseLockChecker: '@Url.Content("~/Cases/IsCaseAvailable/")',
         caseLockExtender: '@Url.Content("~/Cases/ReExtendCaseLock/")',
         caseActiveDataChecker: '@Url.Content("~/Cases/CheckCaseForActiveData/")',
         preventToSaveCaseWithInactiveValue: '@Model.Setting.PreventToSaveCaseWithInactiveValue',
         saveLockedCaseMessage: '@Translation.GetForJS("Ärendet har blivit sparat eller upplåst efter att du öppnade det. Stäng ärendet och försök igen.")',
         deleteLockedCaseMessage: '@Translation.GetForJS("Ärendet har blivit sparat eller upplåst efter att du öppnade det. Stäng ärendet och försök igen.")',
-        moveLockedCaseMessage: '@Translation.GetForJS("Ärendet har blivit sparat eller upplåst efter att du öppnade det. Stäng ärendet och försök igen.")',        
+        moveLockedCaseMessage: '@Translation.GetForJS("Ärendet har blivit sparat eller upplåst efter att du öppnade det. Stäng ärendet och försök igen.")',
         lostChangesConfirmation: '@Html.Raw(Translation.GetForJS("Dina ändringar har inte sparats. Fortsätt?"))',
         finishingDateMessage: '@Html.Raw(Translation.GetForJS(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) + " " + Translation.Get("kan inte vara tidigare än registreringsdatum."))',
+        finishingDateMessage2: '@Html.Raw(Translation.GetForJS(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) + " " + Translation.Get("kan inte vara tidigare än ändringsdatum."))',
         checkInactiveDataErrorMessage: '@Html.Raw(Translation.GetForJS("Problem med kommunikation med servern."))',
         productAreaChangeMessage: '@Translation.GetForJS(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(),
-                                                    Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)' + " " + 
-                                  '@Translation.GetForJS("kan inte ändra eftersom det finns order som inte är skickade.")',        
-        caseTemplateChangeMessage: '@Translation.GetForJS("Du kan inte använda ärendemall eftersom det finns order som inte är skickade.")', 
-         
-        caseRegDate: '@Model.case_.RegTime', 
+                                                    Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)' + " " +
+                                  '@Translation.GetForJS("kan inte ändra eftersom det finns order som inte är skickade.")',
+        caseTemplateChangeMessage: '@Translation.GetForJS("Du kan inte använda ärendemall eftersom det finns order som inte är skickade.")',
+
+        caseRegDate: '@Model.case_.RegTime',
         isCaseFileMandatory: '@Model.caseFieldSettings.getRequired(GlobalEnums.TranslationCaseFields.Filename.ToString())',
         caseFileCaption: '@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Filename.ToString(),
                                                 Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)',
-                                
+        emailNotValid: '@Translation.GetForJS("E-postadress är inte giltig.")',
+        emailAlreadyAdded: '@Translation.GetForJS("Samma e-post redan lagts i Att.")',
+        adminGroup: '@Translation.GetForJS("Handläggare")',
+        emailGroup: '@Translation.GetForJS("E-postgrupp")',
+        initGroup: '@Translation.GetForJS("Anmälare")',
+        wgGroup: '@Translation.GetForJS("Driftgrupp")',
+        closeBtn: '@Html.Raw(Translation.GetForJS("Stäng"))',
+
         caseFieldNames:{
-            CustomerId: "case__Customer_Id",
+                        CustomerId: "case__Customer_Id",
             RegionId: "case__Region_Id",
             DepartmentId: "case__Department_Id",
             OUId: "case__Ou_Id",
@@ -65,37 +73,31 @@
             FinishingDate: "CaseLog_FinishingDate"
         },
         casesScopeInitParameters: {
-            requiredFieldsMessage: '@Translation.GetForJS("Ärendet kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ärendet.")',
+                        requiredFieldsMessage: '@Translation.GetForJS("Ärendet kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ärendet.")',
             getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax")',
             getDepartmentUsersUrl: '@Url.Action("GetDepartmentUsers", "Ajax")',
             relatedCasesUrl: '@Url.Action("RelatedCasesFull", "Cases")',
             relatedCasesCountUrl: '@Url.Action("RelatedCasesCount", "Cases")',
             getDepartmentOusUrl: '@Url.Action("ChangeDepartment", "Cases")',
-            deleteCaseFileConfirmMessage: '@Translation.GetForJS("Är du säker på att du vill ta bort bifogad fil")' + '?',            
+            deleteCaseFileConfirmMessage: '@Translation.GetForJS("Är du säker på att du vill ta bort bifogad fil")' + '?',
             okText: '@Translation.GetForJS("OK")',
             cancelText: '@Translation.GetForJS("Avbryt")',
             yesText: '@Translation.GetForJS("Ja")',
             noText: '@Translation.GetForJS("Nej")',
             validationMessages:  ['@Html.Raw(Translation.GetForJS("måste anges"))'],
-            mandatoryFieldsText: '@Translation.GetForJS("Obligatoriska fält")',            
+        	mandatoryFieldsText: '@Translation.GetForJS("Obligatoriska fält")',
+        	formatFieldsText: '@Translation.GetForJS("Giltiga Format är")'
         }
-    };  
+                };
 
 </script>
 
-@Scripts.Render("~/bundles/invoices")
+
 @Scripts.Render("~/bundles/cases/_input")
-@{  
-    var pDepartmentVisible = false;
-    if (Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Department_Id, CaseSolutionFields.Department) == string.Empty)
-    {
-        pDepartmentVisible = true;
-    }
- }
 
 <script type="text/javascript">
     function CalcSLA()
-    {        
+                {
         $.post('@Url.Content("~/Cases/CalculateSLA/")', {caseId:'@Model.case_.Id', userId:'@SessionFacade.CurrentUser.Id', simulateTime:'@Model.case_.ChangeTime.AddSeconds(5)'},
             function(data) {
                 alert(data);
@@ -103,23 +105,25 @@
     }
 </script>
 
+@*@Html.Partial("ModalDialogs/_CaseAddFollowers")*@
+
 @if (Model.case_ != null)
-{
+                {
     <div class="content onemenu editcase" id="mm1">
         <div class="container">
             <ul class="nav nav-tabs" id="myTab">
                 <li class="active">
-                    
+
                     @if (Model.CaseTemplateName != null)
-                    {
+                {
                         <a id="case-tab" href="#case" class="case">@Model.CaseTemplateName</a>
-                    }
+            }
                     else
                     {
                         <a id="case-tab" href="#case" class="case">@Translation.Get("Ärende")
                             @if (Model.case_.Id != 0)
-                            {
-                                @Model.case_.CaseNumber 
+            {
+                @Model.case_.CaseNumber
                             }                            
                         </a>
                     }
@@ -132,9 +136,9 @@
                 }
 
                 @if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
-                {
-                    if (Model.DynamicCase.ViewMode == 0)
-                    {
+        {
+            if (Model.DynamicCase.ViewMode == 0)
+            {
                     <li>
                         <a href="#dh-form-area" id="loadContainer" class="eform">@(Translation.Get(Model.DynamicCase.FormName))</a>
                     </li>
@@ -148,9 +152,9 @@
                 }
 
                 @if (Model.CaseLock != null && Model.CaseLock.IsLocked && Model.CaseLock.User != null)
-                {
-                    if (Model.CaseLock.UserId == SessionFacade.CurrentUser.Id)
-                    {
+        {
+            if (Model.CaseLock.UserId == SessionFacade.CurrentUser.Id)
+            {
                         <li class="notice">
                             <a>@Translation.Get("OBS! Du har redan öppnat detta ärende i en annan session.")</a>
                         </li>
@@ -281,14 +285,21 @@
                                                 <td>
                                                     @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Persons_Name, CaseSolutionFields.PersonsName))
                                                     {
-                                                        @Html.TextBoxFor(model => model.case_.PersonsName, new { maxlength = "50" })
+                                                        @Html.TextBoxFor(model => model.case_.PersonsName, new {maxlength = "50"})
                                                     }
                                                     else
                                                     {
-                                                        @Html.TextBoxFor(model => model.case_.PersonsName, new { maxlength = "50", @readonly = "readonly" })
+                                                        @Html.TextBoxFor(model => model.case_.PersonsName, new {maxlength = "50", @readonly = "readonly"})
                                                     }
-                                                    
                                                 </td>
+@*                                                <td>*@
+@*                                                    @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Persons_Name, CaseSolutionFields.PersonsName))*@
+@*                                                    {*@
+@*                                                        <input type="button" class="btn" value="@Translation.GetCoreTextTranslation("Lägga följare")" id="caseAddExtraFollowersBtn"/>*@
+@*                                                    }*@
+@*                                                    @Html.HiddenFor(model => model.FollowerUsers, new {@readonly = "true", id = "caseFollowerUsers"})*@
+@*                                                    @Html.TextBoxFor(model => model.FollowerUsers, new {id = "FakeCaseFollowerUsers", @readonly = "true", @class = "width60"})*@
+@*                                                </td>*@
 
                                             </tr>
                                             <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Persons_EMail, CaseSolutionFields.PersonsEmail)">
@@ -1000,8 +1011,13 @@
                                                 @Html.HiddenFor(model => model.case_.ProductArea_Id, new { @class = "product-area-id" })
                                             </div>
                                             @if (Model.CustomerSettings.ModuleCaseInvoice && Model.InvoiceModel != null)
-                                            {                                                
-                                                @Html.Partial("_Invoice", Model.InvoiceModel)
+                                            {
+                                                if (Model.UserHasInvoicePermission)
+                                                {
+                                                     @Scripts.Render("~/bundles/invoices")
+                                                    @Html.Partial("_Invoice", Model.InvoiceModel)
+
+                                                }
                                             }
                                         </td>
                                     </tr>
@@ -1015,12 +1031,12 @@
                                                         <select id="case__System_Id" name="case_.System_Id">
                                                             <option value="">&nbsp;</option>
                                                             @if (Model.systems != null)
+                                                        {
+                                                            foreach (var e in Model.systems)
                                                             {
-                                                                foreach (var e in Model.systems)
-                                                                {
                                                                 <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.System_Id.ToString()) >@e.SystemName</option>
                                                                 }
-                                                            }
+                                                        }
                                                         </select>
                                              }
                                              else
@@ -1047,12 +1063,12 @@
                                                 <select id="case__Urgency_Id" name="case_.Urgency_Id">
                                                     <option value="">&nbsp;</option>
                                                     @if (Model.urgencies != null)
+                                                {
+                                                    foreach (var e in Model.urgencies)
                                                     {
-                                                        foreach (var e in Model.urgencies)
-                                                        {
                                                         <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Urgency_Id.ToString()) >@e.Name</option>
                                                         }
-                                                    }
+                                                }
                                                 </select>
                                              }
                                              else
@@ -1079,12 +1095,12 @@
                                                 <select id="case__Impact_Id" name="case_.Impact_Id">
                                                     <option value="">&nbsp;</option>
                                                     @if (Model.impacts != null)
+                                                {
+                                                    foreach (var e in Model.impacts)
                                                     {
-                                                        foreach (var e in Model.impacts)
-                                                        {
                                                         <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Impact_Id.ToString()) >@e.Name</option>
                                                         }
-                                                    }
+                                                }
                                                 </select>
                                             }
                                             else
@@ -1112,12 +1128,12 @@
                                                 <select id="case__Category_Id" name="case_.Category_Id">
                                                     <option value="">&nbsp;</option>
                                                     @if (Model.categories != null)
+                                                {
+                                                    foreach (var e in Model.categories.Where(e => e.IsActive == 1 || Model.case_.Category_Id == e.Id))
                                                     {
-                                                        foreach (var e in Model.categories.Where(e => e.IsActive == 1 || Model.case_.Category_Id == e.Id))
-                                                        {
                                                         <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Category_Id.ToString()) >@Translation.GetMasterDataTranslation(e.Name)</option>
                                                         }
-                                                    }
+                                                }
                                                 </select>
                                             }
                                             else
@@ -1129,7 +1145,7 @@
                                                     if (Model.case_.Category != null)
                                                     {
                                                         var transName = Translation.GetMasterDataTranslation(Model.case_.Category.Name);
-                                                        @Html.TextBoxFor(m => transName, new { @readonly = true })
+                                                @Html.TextBoxFor(m => transName, new { @readonly = true })
                                                        
                                                     }
                                                     else
@@ -1141,7 +1157,7 @@
                                                 else
                                                 {
                                                     var transName = Translation.GetMasterDataTranslation(category.Name);
-                                                     @Html.TextBoxFor(m => transName, new { @readonly = true })
+                                                @Html.TextBoxFor(m => transName, new { @readonly = true })
                                                      @Html.HiddenFor(x => x.case_.Category_Id)
                                                 }
                                             }
@@ -1150,13 +1166,13 @@
                                     <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Supplier_Id, CaseSolutionFields.Supplier)">
                                         <td>
                                             @if (Model.countries != null)
-                                            {
-                                                @Translation.Get("Land")<span>/</span>
+                                                {
+                                                    @Translation.Get("Land")<span>/</span>
                                             }
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Supplier_Id, "Leverantör")
                                         </td>
                                         @if (Model.countries != null)
-                                        {
+                                                {
                                             <td>
                                                 <select id="CountryId" name="CountryId" @(Model.EditMode == Enums.AccessMode.ReadOnly ? "disabled=true" : string.Empty)>
                                                     <option value="">&nbsp;</option>
@@ -1173,32 +1189,32 @@
                                                 <select id="case__Supplier_Id" name="case_.Supplier_Id">
                                                     <option value="">&nbsp;</option>
                                                    @if (Model.suppliers != null)
-                                                   {
-                                                       if (Model.CountryId != null)
-                                                       {
-                                                           if (Model.CountryId > 0)
-                                                           {
-                                                               foreach (var e in Model.suppliers.Where(e => e.IsActive == 1 || Model.case_.Supplier_Id == e.Id).Where(e => Model.CountryId.IntHasValue() && (e.Country_Id == Model.CountryId && e.Country_Id.HasValue)))
-                                                               {
+                                                {
+                                                    if (Model.CountryId != null)
+                                                    {
+                                                        if (Model.CountryId > 0)
+                                                        {
+                                                            foreach (var e in Model.suppliers.Where(e => e.IsActive == 1 || Model.case_.Supplier_Id == e.Id).Where(e => Model.CountryId.IntHasValue() && (e.Country_Id == Model.CountryId && e.Country_Id.HasValue)))
+                                                            {
                                                                     <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Supplier_Id.ToString()) >@e.Name</option>
                                                                }
-                                                           }
-                                                           else
-                                                           {
-                                                               foreach (var e in Model.suppliers.Where(e => e.IsActive == 1 || Model.case_.Supplier_Id == e.Id))
-                                                               {
+                                                        }
+                                                        else
+                                                        {
+                                                            foreach (var e in Model.suppliers.Where(e => e.IsActive == 1 || Model.case_.Supplier_Id == e.Id))
+                                                            {
                                                                     <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Supplier_Id.ToString()) >@e.Name</option>
                                                                }
-                                                           }
-                                                       }
-                                                       else
-                                                       {
-                                                           foreach (var e in Model.suppliers.Where(e => e.IsActive == 1 || Model.case_.Supplier_Id == e.Id))
-                                                           {
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        foreach (var e in Model.suppliers.Where(e => e.IsActive == 1 || Model.case_.Supplier_Id == e.Id))
+                                                        {
                                                                 <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Supplier_Id.ToString()) >@e.Name</option>
                                                            }
-                                                       }
-                                                   }
+                                                    }
+                                                }
                                                    
                                                 </select>
                                             }
@@ -1265,43 +1281,43 @@
                                         <td>
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Description, "Beskrivning")
                                             @if (Model.case_.RegistrationSource == 3)
-                                            {
-                                                var countTO = 0;
-                                                var countCC = 0;
-                                                var mailTO = "";
-                                                var mailCC = "";
-                                                var boldTO = false;
-                                                var boldCC = false;
-                                                if (Model.case_.Mail2Tickets.Any())
                                                 {
-                                                    foreach (var mail in Model.case_.Mail2Tickets)
+                                                    var countTO = 0;
+                                                    var countCC = 0;
+                                                    var mailTO = "";
+                                                    var mailCC = "";
+                                                    var boldTO = false;
+                                                    var boldCC = false;
+                                                    if (Model.case_.Mail2Tickets.Any())
                                                     {
-                                                        if (mail.Log_Id == null)
+                                                        foreach (var mail in Model.case_.Mail2Tickets)
                                                         {
-                                                            if (mail.Type == "to")
+                                                            if (mail.Log_Id == null)
                                                             {
-                                                                countTO = countTO + 1;
-                                                                mailTO = mailTO + mail.EMailAddress + "; ";
-
-                                                                if (mail.EMailAddress == Model.case_.Customer.HelpdeskEmail)
+                                                                if (mail.Type == "to")
                                                                 {
-                                                                    boldTO = true;
+                                                                    countTO = countTO + 1;
+                                                                    mailTO = mailTO + mail.EMailAddress + "; ";
+
+                                                                    if (mail.EMailAddress == Model.case_.Customer.HelpdeskEmail)
+                                                                    {
+                                                                        boldTO = true;
+                                                                    }
                                                                 }
-                                                            }
 
-                                                            if (mail.Type == "cc")
-                                                            {
-                                                                countCC = countCC + 1;
-                                                                mailCC = mailCC + mail.EMailAddress + "; ";
-
-                                                                if (mail.EMailAddress == Model.case_.Customer.HelpdeskEmail)
+                                                                if (mail.Type == "cc")
                                                                 {
-                                                                    boldCC = true;
+                                                                    countCC = countCC + 1;
+                                                                    mailCC = mailCC + mail.EMailAddress + "; ";
+
+                                                                    if (mail.EMailAddress == Model.case_.Customer.HelpdeskEmail)
+                                                                    {
+                                                                        boldCC = true;
+                                                                    }
                                                                 }
                                                             }
                                                         }
                                                     }
-                                                }
                                                 <div>
                                                     <table>
                                                         <tr>
@@ -1326,7 +1342,7 @@
                                                         </tr>
                                                         <tr>
                                                             @if (boldCC == true)
-                                                            {
+                                                {
                                                                 <td>
                                                                     <b>CC[@countCC]</b>&nbsp;&nbsp;&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@mailCC" data-expand-element="mailcc"></span>
                                                                 </td>
@@ -1366,7 +1382,7 @@
                                             {
                                                 @Html.TextAreaFor(model => model.case_.Description, new { rows = descriptionSize, @class = "case-description width90", @readonly = true })
                                             }
-                                            <span id="caseDescriptionPreview" 
+                                            <span id="caseDescriptionPreview"
                                                   rel="tooltip" 
                                                   class="icon-circle-arrow-up cursor-pointer" 
                                                   title="@Translation.Get("Förhandsgranska")"
@@ -1482,12 +1498,12 @@
                                                             <select id="case__Currency" name="case_.Currency" class="inputw100">
                                                                 <option value="">&nbsp;</option>
                                                                 @if (Model.currencies != null)
-                                                                {
-                                                                    foreach (var e in Model.currencies)
-                                                                    {
+                                                {
+                                                    foreach (var e in Model.currencies)
+                                                    {
                                                                     <option value="@e.Code" @e.Code.ValueIsSelected(Model.case_.Currency) >@e.Code</option>
                                                                     }
-                                                                }
+                                                }
                                                             </select>
                                                         </td>
                                                     }
@@ -2112,6 +2128,56 @@
                             {
                                 @Html.Partial("_CaseLogInput", Model)
                             }
+                            if (Model.CustomerSettings.ModuleInvoice == true)
+                            { 
+							    <div id="divExternalInvoice" style="@Model.ShowInvoiceFields.displayHtml()">
+								<h4>
+									@Translation.Get("Fakturor")
+								</h4>
+								<div class="row">
+									<div class="span12">
+										<table class="tableform" id="externalInvoices">
+											<thead>
+											<tr>
+												<th class="span3">@Translation.Get("Fakturanummer", SessionFacade.CurrentCaseLanguageId)</th>
+												<th class="span1">@Translation.Get("Fakturapris", SessionFacade.CurrentCaseLanguageId)</th>
+												<th class="span8"></th>
+											</tr>
+											</thead>
+											@for (var i = 0; i < Model.ExternalInvoices.Count; i++)
+											{
+												<tr>
+													<td>
+														<input type="text" id="ExternalInvoices[@i].Name" name="ExternalInvoices[@i].Name" value="@Model.ExternalInvoices[i].Name">
+													</td>
+													<td>
+														<input type="text" class="inputw100" id="ExternalInvoices[@i].Value" name="ExternalInvoices[@i].Value" value="@Model.ExternalInvoices[i].Value.ToString("#.##")" placeholder="0.00">
+														<input type="hidden" id="ExternalInvoices[@i].Id" name="ExternalInvoices[@i].Id" value="@Model.ExternalInvoices[i].Id">
+														
+													</td>
+													<td>
+														<a id="btnDeleteExternalInvoice0" class="btn bt-small" title="Delete" data-rowid="@i"><i class="icon-remove"></i></a>
+													</td>
+												</tr>
+											}
+											<tr>
+												<td>
+													<input type="text" id="ExternalInvoices[@Model.ExternalInvoices.Count].Name" name="ExternalInvoices[@Model.ExternalInvoices.Count].Name">
+												</td>
+												<td>
+													<input type="text" class="inputw100" id="ExternalInvoices[@Model.ExternalInvoices.Count].Value" name="ExternalInvoices[@Model.ExternalInvoices.Count].Value" placeholder="0.00">
+													<input type="hidden" id="ExternalInvoices[@Model.ExternalInvoices.Count].Id" name="ExternalInvoices[@Model.ExternalInvoices.Count].Id" value="0">
+												</td>
+												<td>
+													<a id="@("btnDeleteExternalInvoice" + Model.ExternalInvoices.Count)" class="btn bt-small" title="Delete" data-rowid="@Model.ExternalInvoices.Count"><i class="icon-remove"></i></a>
+													<a id="btnAddExternalInvoice" class="btn bt-small" title="Add"><i class="icon-plus"></i></a>
+												</td>
+											</tr>
+										</table>
+									</div>
+								</div>
+							</div>
+                            }
                         }
                     </div>
                 </div>
@@ -2602,12 +2668,12 @@
         var scope = dhHelpdesk.cases.scope(window.parameters.casesScopeInitParameters);
     });
 
-    $('#divCase__WatchDate').datepicker({
-        format: 'yyyy-mm-dd',
-        weekStart: 1,
-        todayHighlight: true,
-        clearBtn : true,
-        autoclose:true,        
-    });
+    //$('#divCase__WatchDate').datepicker({
+    //    format: 'yyyy-mm-dd',
+    //    weekStart: 1,
+    //    todayHighlight: true,
+    //    clearBtn : true,
+    //    autoclose:true,        
+    //});
 
 </script>

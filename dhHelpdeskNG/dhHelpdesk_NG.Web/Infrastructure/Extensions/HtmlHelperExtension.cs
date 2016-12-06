@@ -470,6 +470,27 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                     sb.Append("</tr>");
                 }
             }
+            // Category
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Category_Id.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.Category_Id != o.Category_Id)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append(tdOpenMarkup);
+                    if (o.Category != null)
+                        sb.Append(Translation.Get(o.Category.Name, Enums.TranslationSource.TextTranslation, customerId));
+                    else
+                        sb.Append(ey);
+                    sb.Append(from);
+                    if (cur.Category != null)
+                        sb.Append(Translation.Get(cur.Category.Name, Enums.TranslationSource.TextTranslation, customerId));
+                    else
+                        sb.Append(ey);
+                    sb.Append(tdCloseMarkup);
+                    sb.Append("</tr>");
+                }
+            }
             // ReferenceNumber
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString()).ShowOnStartPage == 1)
             {
@@ -1023,7 +1044,7 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                     if (hasChild)
                     {
                         sb.Append("<ul class='dropdown-menu'>");
-                        sb.Append(BuildFinishingCauseDropdownButton(f.SubFinishingCauses.ToList(), isTakeOnlyActive));
+                        sb.Append(BuildFinishingCauseDropdownButton(f.SubFinishingCauses.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList(), isTakeOnlyActive));
                         sb.Append("</ul>");
                     }
                     sb.Append("</li>");

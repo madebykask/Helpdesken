@@ -2,7 +2,7 @@
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class QuestionnaireOverview
+    public class QuestionnaireOverview
     {
         #region Constructors and Destructors
 
@@ -13,16 +13,20 @@
             this.Description = description;
         }
 
-        #endregion
+	    public QuestionnaireOverview()
+	    {
+	    }
+
+	    #endregion
 
         #region Properties
 
         [IsId]
-        public int Id { get; private set; }
+        public int Id { get; set; }
 
-        public string Name { get; private set; }
+        public string Name { get; set; }
 
-        public string Description { get; private set; }
+        public string Description { get; set; }
 
         #endregion
     }

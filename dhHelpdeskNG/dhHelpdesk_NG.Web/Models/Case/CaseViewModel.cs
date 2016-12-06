@@ -42,6 +42,7 @@
                                                                Value = string.Empty
                                                            }
                                                    };
+			ExternalInvoices = new List<ExternalInvoiceModel>();
         }
 
         public string CaseKey { get; set; }
@@ -62,8 +63,8 @@
         public Case case_  { get; set; }
 
         public CaseLog CaseLog { get; set; }
+        public SendToDialogModel SendToDialogModel { get; set; } //ToDo: remove after release
 
-        public SendToDialogModel SendToDialogModel { get; set; }
         public CaseMailSetting CaseMailSetting { get; set; }
         public User RegByUser { get; set; }
         public CustomerUser customerUserSetting { get; set; }
@@ -97,9 +98,10 @@
         public IList<Helpdesk.Domain.System> systems { get; set; }
         public IList<Urgency> urgencies { get; set; }        
         //public IEnumerable<CausingPartOverview> causingParts { get; set; }        
-        public List<SelectListItem> causingParts { get; set; }        
-        
-        
+        public List<SelectListItem> causingParts { get; set; }
+
+        public bool UserHasInvoicePermission { get; set; }
+
         /// <summary>
         /// user id for "Administrator" field
         /// </summary>
@@ -234,7 +236,13 @@
         public OutputFormatter OutFormatter { get; set; }
 
         public List<CaseTemplateButton> CaseTemplateButtons { get; set; }
-    }
+
+        public bool IsFollowUp { get; set; }
+
+		public List<ExternalInvoiceModel> ExternalInvoices { get; set; }
+
+        public string FollowerUsers { get; set; }
+	}
 
     public class CaseIndexViewModel
     {

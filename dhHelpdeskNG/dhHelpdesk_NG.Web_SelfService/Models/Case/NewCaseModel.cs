@@ -27,8 +27,10 @@
             IList<CaseType> caseTypes,
             IList<ProductArea> productAreas,
             IList<System> systems,
+            IList<Urgency> urgencies,
+            IList<Impact> impacts,
             IList<Category> categories,
-            IList<Currency> currencies, 
+            IList<Currency> currencies,            
             IList<Supplier> suppliers,
             List<string> caseFieldGroups, 
             List<CaseListToCase> fieldSettings, 
@@ -36,21 +38,23 @@
             IList<CaseFieldSetting> caseFieldSettings,
             JsApplicationOptions jsApplicationOptions)
         {
-            this.NewCase = newCase;
-            this.Regions = regions;
-            this.Departments = departments;
-            this.OrganizationUnits = organizationUnits;
-            this.CaseTypes = caseTypes;
-            this.ProductAreas = productAreas;
-            this.Systems = systems;
-            this.Categories = categories;
-            this.Currencies = currencies;
-            this.Suppliers = suppliers;
-            this.CaseFieldGroups = caseFieldGroups;
-            this.FieldSettings = fieldSettings;
-            this.CaseFilesModel = caseFiles;
-            this.CaseFieldSettings = caseFieldSettings;
-            this.JsApplicationOptions = jsApplicationOptions;
+            NewCase = newCase;
+            Regions = regions;
+            Departments = departments;
+            OrganizationUnits = organizationUnits;
+            CaseTypes = caseTypes;
+            ProductAreas = productAreas;
+            Systems = systems;
+            Urgencies = urgencies;
+            Impacts = impacts;
+            Categories = categories;
+            Currencies = currencies;
+            Suppliers = suppliers;
+            CaseFieldGroups = caseFieldGroups;
+            FieldSettings = fieldSettings;
+            CaseFilesModel = caseFiles;
+            CaseFieldSettings = caseFieldSettings;
+            JsApplicationOptions = jsApplicationOptions;
         }
 
 
@@ -78,6 +82,10 @@
 
         public IList<System> Systems { get; set; }
 
+        public IList<Urgency> Urgencies { get; set; }
+
+        public IList<Impact> Impacts { get; set; }
+
         public IList<Category> Categories { get; set; }
 
         public IList<Currency> Currencies { get; set; }
@@ -95,5 +103,23 @@
         public IList<CaseFieldSetting> CaseFieldSettings { get; set; }
 
         public JsApplicationOptions JsApplicationOptions { get; set; }
+
+        public List<FieldSettingJSModel> JsFieldSettings { get; set; }
+
+        public List<ProductAreaChild> ProductAreaChildren { get; set; }
+    }
+
+
+    public sealed class ProductAreaChild
+    {
+        public ProductAreaChild(int productAreaId, bool hasChildren)
+        {
+            ProductAreaId = productAreaId;
+            HasChildren = hasChildren;
+        }
+
+        public int ProductAreaId { get; private set; }
+
+        public bool HasChildren { get; private set; }
     }
 }

@@ -26,19 +26,22 @@ namespace DH.Helpdesk.BusinessData.Models.Questionnaire.Input
         [IsId]
         public int Id { get; set; }
         
-        public int QuestionId { get;private set; }
+        public int QuestionId { get; set; }
 
         [MinValue(0)]
-        public int OptionPos { get; private set; }
+        public int OptionPos { get;  set; }
 
         [NotNullAndEmpty]
-        public string Option { get; private set; }
+        public string Option { get;  set; }
 
         [MinValue(0)]
-        public int OptionValue { get; private set; }
+        public int OptionValue { get;  set; }
        
-        public int LanguageId { get; private set; }
+        public int LanguageId { get;  set; }
 
-        public DateTime ChangedDate { get; private set; }
+		[MaxLength(200)]
+		public string IconId { get; set; }
+
+        public DateTime ChangedDate { get;  set; }
     }
 }

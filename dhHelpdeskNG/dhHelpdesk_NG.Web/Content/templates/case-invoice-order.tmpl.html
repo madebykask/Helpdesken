@@ -59,7 +59,7 @@
                         <td>{{:ReportedByTitle}}
                         </td>
                         <td>
-                            <input type="text" id="ReportedBy_{{:Id}}" maxlength="40" autocomplete="Off" class="InitiatorFields_{{:Id}} reportedby" value="{{:ReportedBy}}" data-orderid="{{:Id}}"/>
+                            <input type="text" id="ReportedBy_{{:Id}}" maxlength="40" autocomplete="Off" class="InitiatorFields_{{:Id}} reportedby characterMapping" value="{{:ReportedBy}}" data-orderid="{{:Id}}"/>
                         </td>
                     </tr>
                     {{else}}
@@ -74,7 +74,7 @@
                         <td>{{:Persons_NameTitle}}
                         </td>
                         <td>
-                            <input type="text" id="Persons_Name_{{:Id}}" class="InitiatorFields_{{:Id}} name" maxlength="40" autocomplete="Off" value="{{:Persons_Name}}" data-orderid="{{:Id}}"/>
+                            <input type="text" id="Persons_Name_{{:Id}}" class="InitiatorFields_{{:Id}} name characterMapping" maxlength="40" autocomplete="Off" value="{{:Persons_Name}}" data-orderid="{{:Id}}"/>
                         </td>
                     </tr>
                     {{else}}
@@ -89,7 +89,7 @@
                         <td>{{:Persons_EmailTitle}}
                         </td>
                         <td>
-                            <input type="text" id="Persons_Email_{{:Id}}" class="InitiatorFields_{{:Id}} email"  maxlength="40" autocomplete="Off" value="{{:Persons_Email}}" data-orderid="{{:Id}}"/>
+                            <input type="text" id="Persons_Email_{{:Id}}" class="InitiatorFields_{{:Id}} email characterMapping"  maxlength="40" autocomplete="Off" value="{{:Persons_Email}}" data-orderid="{{:Id}}"/>
                         </td>
                     </tr>
                     {{else}}
@@ -104,7 +104,7 @@
                         <td>{{:Persons_PhoneTitle}}
                         </td>
                         <td>
-                            <input type="text" id="Persons_Phone_{{:Id}}" class="InitiatorFields_{{:Id}} phone" maxlength="40" autocomplete="Off" value="{{:Persons_Phone}}" data-orderid="{{:Id}}"/>
+                            <input type="text" id="Persons_Phone_{{:Id}}" class="InitiatorFields_{{:Id}} phone characterMapping" maxlength="40" autocomplete="Off" value="{{:Persons_Phone}}" data-orderid="{{:Id}}"/>
                         </td>
                     </tr>
                     {{else}}
@@ -119,7 +119,7 @@
                         <td>{{:Persons_CellPhoneTitle}}
                         </td>
                         <td>
-                            <input type="text" id="Persons_CellPhone_{{:Id}}" class="InitiatorFields_{{:Id}} cellphone"  maxlength="40" autocomplete="Off" value="{{:Persons_CellPhone}}" data-orderid="{{:Id}}"/>
+                            <input type="text" id="Persons_CellPhone_{{:Id}}" class="InitiatorFields_{{:Id}} cellphone characterMapping"  maxlength="40" autocomplete="Off" value="{{:Persons_CellPhone}}" data-orderid="{{:Id}}"/>
                         </td>
                     </tr>
                     {{else}}
@@ -204,7 +204,7 @@
                         <td>{{:PlaceTitle}}
                         </td>
                         <td>
-                            <input type="text" id="Place_{{:Id}}" class="InitiatorFields_{{:Id}} place" maxlength="40" autocomplete="Off" value="{{:Place}}" />
+                            <input type="text" id="Place_{{:Id}}" class="InitiatorFields_{{:Id}} place characterMapping" maxlength="40" autocomplete="Off" value="{{:Place}}" />
                         </td>
                     </tr>
                     {{else}}
@@ -219,7 +219,7 @@
                             <td>{{:UserCodeTitle}}
                             </td>
                             <td>
-                                <input type="text" id="UserCodeId_{{:Id}}" class="InitiatorFields_{{:Id}} usercode" maxlength="40" autocomplete="Off" value="{{:UserCode}}" />
+                                <input type="text" id="UserCodeId_{{:Id}}" class="InitiatorFields_{{:Id}} usercode characterMapping" maxlength="40" autocomplete="Off" value="{{:UserCode}}" />
                             </td>
                         </tr>
                     {{else}}

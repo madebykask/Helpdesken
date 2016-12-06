@@ -2,7 +2,7 @@
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    internal sealed class UnionItemOverview
+    internal class UnionItemOverview
     {
         public int Id { get; set; }
         
@@ -10,5 +10,5 @@
 
         [NotNullAndEmpty]
         public string Type { get; set; }
-    }
+	}
 }

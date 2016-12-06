@@ -194,7 +194,10 @@ namespace DH.Helpdesk.SelfService.NinjectModules.Modules
             this.Bind<IEntityToBusinessModelMapper<ProjectSchedule, ProjectScheduleOverview>>()
                 .To<ProjectScheduleEntityToProjectScheduleOverviewMapper>()
                 .InSingletonScope();
-            
+
+            this.Bind<IEntityToBusinessModelMapper<CaseExtraFollower, ExtraFollower>>()
+                .To<CaseExtraFollowersToBusinessModelMapper>()
+                .InSingletonScope();
         }
     }
 }

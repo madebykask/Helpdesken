@@ -10,14 +10,14 @@
 <script type="text/javascript">
     $(function() {
         $('#delete_button').click(function() {
-            $.post('@this.Url.Action("DeleteCategory")', { id: '@this.Model.Id' }, function() { window.location.href = '@this.Url.Action("Index")'; });
+            $.post('@Url.Action("DeleteCategory")', { id: '@Model.Id' }, function() { window.location.href = '@Url.Action("Index")'; });
         });
     });
 </script>
 
 @using (this.Html.BeginForm("EditCategory", "Faq", FormMethod.Post, new { id = "target" }))
 {
-    <input type="hidden" name="Id" value="@this.Model.Id" />
+    <input type="hidden" name="Id" value="@Model.Id" />
     <div class="secnavs fixed">
         <div class="pull-left">
             <ul class="secnav">
@@ -40,14 +40,14 @@
                         </li>
                     }
                 }                
-                <li><a href="@this.Url.Action("Index")" class="btn">@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)</a></li>
+                <li><a href="@Url.Action("Index")" class="btn">@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)</a></li>
                 
                 @if (Model.UserHasFaqAdminPermission)
                 {
-                    <li><a href="@this.Url.Action("NewCategory", new RouteValueDictionary { { "parentCategoryId", this.Model.Id } })" class="btn">@Translation.Get("Ny kategori", Enums.TranslationSource.TextTranslation)</a></li>                    
+                    <li><a href="@Url.Action("NewCategory", new RouteValueDictionary { { "parentCategoryId", this.Model.Id } })" class="btn">@Translation.Get("Ny kategori", Enums.TranslationSource.TextTranslation)</a></li>                    
                 }
             </ul>
         </div>
     </div>
-    @this.Html.Partial("CategoryEditing", new EditingCategoryModel(this.Model.Name))
+    @Html.Partial("CategoryEditing", new EditingCategoryModel(this.Model.Name))
 }

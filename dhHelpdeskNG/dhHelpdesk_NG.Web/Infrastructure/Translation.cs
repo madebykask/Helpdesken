@@ -66,7 +66,7 @@
         {
             switch (word.ToLower())
             {
-                case "_temporary_.leadtime":
+                case "_temporary_leadtime":
                     return "Tid kvar";
 
                 case "ledtid":

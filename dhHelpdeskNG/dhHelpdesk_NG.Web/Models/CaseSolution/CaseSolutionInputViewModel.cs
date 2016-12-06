@@ -5,6 +5,7 @@
 
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Web.Models.Case;
+    using CaseRules;
 
     public class CaseSolutionInputViewModel
     {
@@ -77,6 +78,7 @@
         public IList<SelectListItem> ButtonList { get; set; }
 
         public IList<SelectListItem> ActionList { get; set; }
-        
+     
+        public CaseRuleModel RuleModel { get; set; }    
     }
 }

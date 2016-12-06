@@ -289,5 +289,37 @@ namespace DH.Helpdesk.Dal.Infrastructure
             var initializeAfterCommit = new Action(() => businessModel.Id = entity.Id);
             this.initializeAfterCommitActions.Add(initializeAfterCommit);
         }
-    }
+
+		/// <summary>
+		/// Applies new musltiselect list selection to an existing selection from repository - removes what needs to be removed, add what needs to be added
+		/// </summary>
+		/// <param name="currentPredicate">Predicate for existing repository to select a set of entries to be updated</param>
+		/// <param name="newList">New selection, list of entries to what a repository needs to be updated to</param>
+		/// <param name="comparePredicate">Comparer expression used to compare old and new entries</param>
+		/// <param name="updater">Function to update if existing matching records from new list</param>
+		/// <returns></returns>
+		public void MergeList(Expression<Func<T, bool>> currentPredicate, IList<T> newList, Func<T, T, bool> comparePredicate, Action<T, T> updater = null)
+		{
+			var current = Table.Where(currentPredicate).ToList();
+
+			foreach (var toDel in current.Where(x => !newList.Any(y => comparePredicate(x, y))).ToList())
+			{
+				Delete(toDel);
+			}
+			foreach (var toIns in newList.Where(x => !current.Any(y => comparePredicate(x, y))).ToList())
+			{
+				Add(toIns);
+			}
+
+			if (updater != null)
+			{
+				for (var i = 0; i < current.ToList().Count; i++)
+				{
+					var newRow = newList.FirstOrDefault(x => comparePredicate(current[i], x));
+					if (newRow != null)
+						updater(current[i], newRow);
+				}
+			}
+		}
+	}
 } 

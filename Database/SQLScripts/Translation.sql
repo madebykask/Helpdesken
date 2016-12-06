@@ -5109,7 +5109,134 @@ If not exists (select * from tblTextTranslation where Text_Id = 1698 and Languag
             insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1698, 'Preview', 2)
 GO
 
+If not exists (select * from tblText where Id = 1699)
+            insert into tblText (Id, Textstring) VALUES (1699, 'Fältet {0} krävs')																
+																
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1699 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1699, 'The field {0} is required', 2)
+GO
 
+If not exists (select * from tblText where Id = 1700)
+            insert into tblText (Id, Textstring) VALUES (1700, 'Processen från')																
+																
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1700 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1700, 'Process from', 2)
+GO
+
+If not exists (select * from tblText where Id = 1701)
+            insert into tblText (Id, Textstring) VALUES (1701, 'Processen till')																
+																
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1701 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1701, 'Process to', 2)
+GO
+
+If not exists (select * from tblText where Id = 1702)
+            insert into tblText (Id, Textstring) VALUES (1702, 'Sub status från')																
+																
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1702 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1702, 'Sub status from', 2)
+GO
+
+If not exists (select * from tblText where Id = 1703)
+            insert into tblText (Id, Textstring) VALUES (1703, 'Sub status till')																
+																
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1703 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1703, 'Sub status to', 2)
+GO
+
+
+/* Notice:  1704 , 1405 ,  1706  reserved for SelfService */
+
+If not exists (select * from tblText where Id = 1707)
+            insert into tblText (Id, Textstring) VALUES (1707, 'Inloggad användares driftgrupp')																
+																
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1707 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1707, 'Logged on user working group', 2)
+GO
+
+If not exists (select * from tblText where Id = 1708)
+            insert into tblText (Id, Textstring) VALUES (1708, '(Du kan endast välja storleken bred på högst 3 kolumner).')																
+																
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1708 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1708, '(You can only choose the size wide for a maximum of 3 columns).', 2)
+GO
+
+
+/* Notice:  1709, 1710, 1711  reserved for SelfService */
+
+If not exists (select * from tblText where Id = 1712)
+            insert into tblText (Id, Textstring) VALUES (1712, 'Samma e-post redan lagts i Till.')																
+																
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1712 and Language_Id=2)
+    insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1712, 'Same email already added in To.', 2)
+GO
+
+If not exists (select * from tblText where Id = 1713)
+            insert into tblText (Id, Textstring) VALUES (1713, 'Kopia')																																
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1713 and Language_Id=2)
+    insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1713, 'Cc', 2)
+GO
+
+If not exists (select * from tblText where Id = 1714)
+      insert into tblText (Id, Textstring) VALUES (1714, 'Återkoppling')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1714 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1714, 'Feedback', 2)
+GO
+
+If not exists (select * from tblText where Id = 1715)
+      insert into tblText (Id, Textstring) VALUES (1715, 'Unik identifierare krävs')
+GO
+
+If not exists (select * from tblTextTranslation where Text_Id = 1715 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1715, 'Unique Identifier is required', 2)
+GO
+
+If not exists (select * from tblText where Id = 1716)
+      insert into tblText (Id, Textstring) VALUES (1716, 'Tack för återkopplings')
+GO
+
+If not exists (select * from tblTextTranslation where Text_Id = 1716 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1716, 'Thank you for your feedback', 2)
+GO
+
+If not exists (select * from tblText where Id = 1717)
+      insert into tblText (Id, Textstring) VALUES (1717, 'Lägga följare')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1717 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1717, 'Add followers', 2)
+GO
+
+
+If not exists (select * from tbltext where id = 1718)
+	insert into tbltext (id, TextString) VALUES (1718, 'kan inte vara tidigare än ändringsdatum.')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1718 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1718, 2, 'can not be earlier than changed date.')
+GO
+
+If not exists (select * from tbltext where id = 1719)
+	insert into tbltext (id, TextString) VALUES (1719, 'Fakturering tid')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1719 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1719, 2, 'Invoice time')
+GO
+
+If not exists (select * from tbltext where id = 1720)
+	insert into tbltext (id, TextString) VALUES (1720, 'Fakturering artikel')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1720 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1720, 2, 'Invoice article')
+GO
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

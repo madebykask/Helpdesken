@@ -24,7 +24,7 @@
                         })
                 </li>
                 <li>
-                    @Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "Index", "Questionnaire", new { @class = "btn" })
+                    @Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "Index", "Questionnaire", null, new { @class = "btn" })
                 </li>
                 <li class="secspace"></li>
                 <li>
@@ -89,7 +89,7 @@
             <!-- Questionnaire -->
             @if (Model.Questions != null)
             {
-                @this.Html.Partial("_QuestionnaireQuestionsOverview", Model);
+                @Html.Partial("_QuestionnaireQuestionsOverview", Model);
             }
 
         </div>

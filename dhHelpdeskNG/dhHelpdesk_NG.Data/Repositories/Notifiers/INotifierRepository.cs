@@ -31,5 +31,7 @@
         SearchResult Search(SearchParameters parameters);
 
         void UpdateCaseNotifier(CaseNotifier caseNotifier);
+
+        Notifier GetInitiatorByUserId(string userId, int customerId);
     }
 }

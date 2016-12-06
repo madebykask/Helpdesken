@@ -21,7 +21,7 @@
                 .WillCascadeOnDelete(false);
 
             this.Property(q => q.QuestionnaireQuestion).IsRequired().HasMaxLength(1000);
-            this.Property(q => q.NoteText).IsRequired().HasMaxLength(1000);
+            this.Property(q => q.NoteText).HasMaxLength(1000);
             this.Property(q => q.CreatedDate);
             this.Property(q => q.ChangedDate);//.HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             

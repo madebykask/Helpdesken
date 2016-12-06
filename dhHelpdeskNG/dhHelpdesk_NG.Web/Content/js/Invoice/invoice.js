@@ -49,7 +49,7 @@ $(function () {
             return;
         }
         lastProjectSelected = $("#case__Project_Id option:selected");
-    });
+    });   
 
     /* Extenstions */
     if (typeof String.prototype.RemoveNonNumerics !== "function") {
@@ -168,7 +168,48 @@ $(function () {
 
     },
 
+    
+
     dhHelpdesk.Common = {
+
+        EncodeStrToJson: function (value) {
+            if (value == undefined)
+                return "";
+
+            var data = value.toString();
+            data = data.replace(/\</g, '%3C');
+            data = data.replace(/\"/g, '″');
+            return data;
+        },
+
+        DecodeJsonToStr: function (value) {
+            if (value == undefined)
+                return "";
+
+            var data = value.toString();
+            data = data.replace(/\%3C/g, '<');            
+            return data;
+        },                   
+
+        QuotationUpdate: function (value) {
+            if (value == undefined || value == null)
+                return "";
+
+            var data = value.toString();
+            data = data.replace(/\″/g, '\"');
+            return data;
+        },
+
+
+        HtmlQuotationUpdate: function (value) {            
+            if (value == undefined || value == null)
+                return "";
+
+            var data = value.toString();
+            data = data.replace(/\″/g, '&quot;');
+            data = data.replace(/\</g, "&lt;")
+            return data;
+        },
 
         GenerateId: function () {
             return -dhHelpdesk.Math.GetRandomInt(1, 10000);
@@ -853,8 +894,8 @@ $(function () {
 
 
             var res = "";
-            var caseArticleData = this.GetSavedInvoices();
-            caseArticleData = caseArticleData.replace(/\</g, "%3C");
+            var caseArticleData = this.GetSavedInvoices();            
+            
             $.post('/CaseInvoice/SaveCaseInvoice/', {
                 'caseInvoiceArticle': caseArticleData,
                 'customerId': this.CustomerId,
@@ -1128,10 +1169,17 @@ $(function () {
 
         UpdateOtherReferenceTitle: function (orderId) {
             var publicClassName = ".InitiatorFields_" + orderId;
+
+            var allTextFields = $(document).find(".characterMapping");
+            $.each(allTextFields, function () {
+                var tempText =  $(this).val();                                    
+                $(this).val(dhHelpdesk.Common.QuotationUpdate(tempText));                
+            });
+
             var _reportedBy = $("#ReportedBy_" + orderId).val();
             var _personName = $("#Persons_Name_" + orderId).val();
             var _costCentre = $("#CostCentre_" + orderId).val();
-
+                      
             _reportedBy = dhHelpdesk.Common.IsNullOrEmpty(_reportedBy) ? "" : " " + _reportedBy;
             _personName = dhHelpdesk.Common.IsNullOrEmpty(_personName) ? "" : " (" + _personName + ")";
             _costCentre = dhHelpdesk.Common.IsNullOrEmpty(_costCentre) ? "" : " - " + _costCentre;
@@ -2588,7 +2636,7 @@ $(function () {
             this._articles = [];
             this.Container = null;
             this.CreditedFrom = null;
-            this.files = dhHelpdesk.CaseArticles.OrderFilesCollection({});
+            this.files = dhHelpdesk.CaseArticles.OrderFilesCollection({});            
 
             this.GetArticles = function () {
                 return this._articles;
@@ -2731,7 +2779,7 @@ $(function () {
 
             this.GetSortedArticles = function () {
                 return this._articles.sort(function (a1, a2) { return a1.Position - a2.Position; });
-            },
+            },            
 
             this.ToJson = function () {
                 var articlesResult = "";
@@ -2755,23 +2803,23 @@ $(function () {
                 return '{' +
                         '"Id":"' + (this.Id >= 0 ? this.Id : 0) + '", ' +
                         '"InvoiceId":"' + (this.Invoice.Id > 0 ? this.Invoice.Id : 0) + '", ' +
-                        '"Number":"' + this.Number + '", ' +
+                        '"Number":"' + dhHelpdesk.Common.EncodeStrToJson(this.Number) + '", ' +
                         '"InvoiceDate":"' + dhHelpdesk.Common.DateToJSONDateTime(this.InvoiceDate) + '", ' +
-                        '"InvoicedByUser":"' + (this.InvoicedByUser != null ? this.InvoicedByUser : '') + '", ' +
-                        '"InvoicedByUserId":"' + (this.InvoicedByUserId != null ? this.InvoicedByUserId : '') + '", ' +
-                        '"ReportedBy":"' + (this.ReportedBy != null ? this.ReportedBy : '') + '", ' +
-                        '"Persons_Name":"' + (this.Persons_Name != null ? this.Persons_Name : '') + '", ' +
-                        '"Persons_Email":"' + (this.Persons_Email != null ? this.Persons_Email : '') + '", ' +
-                        '"Persons_Phone":"' + (this.Persons_Phone != null ? this.Persons_Phone : '') + '", ' +
-                        '"Persons_CellPhone":"' + (this.Persons_CellPhone != null ? this.Persons_CellPhone : '') + '", ' +
+                        '"InvoicedByUser":"' + (this.InvoicedByUser != null ? dhHelpdesk.Common.EncodeStrToJson(this.InvoicedByUser) : '') + '", ' +
+                        '"InvoicedByUserId":"' + (this.InvoicedByUserId != null ? dhHelpdesk.Common.EncodeStrToJson(this.InvoicedByUserId) : '') + '", ' +
+                        '"ReportedBy":"' + (this.ReportedBy != null ? dhHelpdesk.Common.EncodeStrToJson(this.ReportedBy) : '') + '", ' +
+                        '"Persons_Name":"' + (this.Persons_Name != null ? dhHelpdesk.Common.EncodeStrToJson(this.Persons_Name) : '') + '", ' +
+                        '"Persons_Email":"' + (this.Persons_Email != null ? dhHelpdesk.Common.EncodeStrToJson(this.Persons_Email) : '') + '", ' +
+                        '"Persons_Phone":"' + (this.Persons_Phone != null ? dhHelpdesk.Common.EncodeStrToJson(this.Persons_Phone) : '') + '", ' +
+                        '"Persons_CellPhone":"' + (this.Persons_CellPhone != null ? dhHelpdesk.Common.EncodeStrToJson(this.Persons_CellPhone) : '') + '", ' +
                         '"Region_Id":"' + (this.Region_Id != null ? this.Region_Id : '') + '", ' +
                         '"Department_Id":"' + (this.Department_Id != null ? this.Department_Id : '') + '", ' +
                         '"OU_Id":"' + (this.OU_Id != null ? this.OU_Id : '') + '", ' +
-                        '"CostCentre":"' + (this.CostCentre != null ? this.CostCentre : '') + '", ' +
-                        '"Place":"' + (this.Place != null ? this.Place : '') + '", ' +
-                        '"UserCode":"' + (this.UserCode != null ? this.UserCode : '') + '", ' +
+                        '"CostCentre":"' + (this.CostCentre != null ? dhHelpdesk.Common.EncodeStrToJson(this.CostCentre) : '') + '", ' +
+                        '"Place":"' + (this.Place != null ? dhHelpdesk.Common.EncodeStrToJson(this.Place) : '') + '", ' +
+                        '"UserCode":"' + (this.UserCode != null ? dhHelpdesk.Common.EncodeStrToJson(this.UserCode) : '') + '", ' +
                         '"CreditForOrder_Id":"' + (this.CreditForOrder_Id != null ? this.CreditForOrder_Id : '') + '", ' +
-                        '"Project_Id":"' + (this.Project_Id != null ? this.Project_Id : '') + '", ' +
+                        '"Project_Id":"' + (this.Project_Id != null ? dhHelpdesk.Common.EncodeStrToJson(this.Project_Id) : '') + '", ' +
                         '"OrderState":"' + (this.OrderState != null ? this.OrderState : '0') + '", ' +
                         '"Articles": [' + articlesResult + '],' +
                         '"Files": [' + filesResult + ']' +
@@ -2923,23 +2971,23 @@ $(function () {
                 model.InvoicedByTitle = dhHelpdesk.Common.Translate("Skickat av");
                 ////////initiator field
 
-                model.ReportedBy = this.ReportedBy != null ? this.ReportedBy : "";
+                model.ReportedBy = this.ReportedBy != null ? dhHelpdesk.Common.HtmlQuotationUpdate(this.ReportedBy) : "";
                 model.ShowReportedBy = dhHelpdesk.CaseArticles.ShowCaseField('ReportedBy')
                 model.RequiredReportedBy = dhHelpdesk.CaseArticles.OtherReferenceRequired.ReportedBy;
 
-                model.Persons_Name = this.Persons_Name != null ? this.Persons_Name : "";
+                model.Persons_Name = this.Persons_Name != null ? dhHelpdesk.Common.HtmlQuotationUpdate(this.Persons_Name) : "";
                 model.ShowPersons_Name = dhHelpdesk.CaseArticles.ShowCaseField('Persons_Name');
                 model.RequiredPersons_Name = dhHelpdesk.CaseArticles.OtherReferenceRequired.Persons_Name;
 
-                model.Persons_Email = this.Persons_Email != null ? this.Persons_Email : "";
+                model.Persons_Email = this.Persons_Email != null ? dhHelpdesk.Common.HtmlQuotationUpdate(this.Persons_Email) : "";
                 model.ShowPersons_Email = dhHelpdesk.CaseArticles.ShowCaseField('Persons_Email');
                 model.RequiredPersons_Email = dhHelpdesk.CaseArticles.OtherReferenceRequired.Persons_Email;
 
-                model.Persons_Phone = this.Persons_Phone != null ? this.Persons_Phone : "";
+                model.Persons_Phone = this.Persons_Phone != null ? dhHelpdesk.Common.HtmlQuotationUpdate(this.Persons_Phone) : "";
                 model.ShowPersons_Phone = dhHelpdesk.CaseArticles.ShowCaseField('Persons_Phone');
                 model.RequiredPersons_Phone = dhHelpdesk.CaseArticles.OtherReferenceRequired.Persons_Phone;
 
-                model.Persons_CellPhone = this.Persons_CellPhone != null ? this.Persons_CellPhone : "";
+                model.Persons_CellPhone = this.Persons_CellPhone != null ? dhHelpdesk.Common.HtmlQuotationUpdate(this.Persons_CellPhone) : "";
                 model.ShowPersons_CellPhone = dhHelpdesk.CaseArticles.ShowCaseField('Persons_CellPhone');
                 model.RequiredPersons_CellPhone = dhHelpdesk.CaseArticles.OtherReferenceRequired.Persons_CellPhone;
 
@@ -2955,11 +3003,11 @@ $(function () {
                 model.ShowOU_Id = dhHelpdesk.CaseArticles.ShowCaseField('OU_Id');
                 model.RequiredOU_Id = dhHelpdesk.CaseArticles.OtherReferenceRequired.OU_Id;
 
-                model.Place = this.Place != null ? this.Place : "";
+                model.Place = this.Place != null ? dhHelpdesk.Common.HtmlQuotationUpdate(this.Place) : "";
                 model.ShowPlace = dhHelpdesk.CaseArticles.ShowCaseField('Place');
                 model.RequiredPlace = dhHelpdesk.CaseArticles.OtherReferenceRequired.Place;
 
-                model.UserCode = this.UserCode != null ? this.UserCode : "";
+                model.UserCode = this.UserCode != null ? dhHelpdesk.Common.HtmlQuotationUpdate(this.UserCode) : "";
                 model.ShowUserCode = dhHelpdesk.CaseArticles.ShowCaseField('UserCode');
                 model.RequiredUserCode = dhHelpdesk.CaseArticles.OtherReferenceRequired.UserCode;
 
@@ -3364,7 +3412,7 @@ $(function () {
                         '"OrderId":"' + (this.Order.Id > 0 ? this.Order.Id : 0) + '", ' +
                         '"ArticleId":"' + (this.Article != null && this.Article.Id > 0 ? this.Article.Id : '') + '", ' +
                         '"Number":"' + this.GetNumber() + '", ' +
-                        '"Name":"' + (this.Name != null ? this.Name : '') + '", ' +
+                        '"Name":"' + (this.Name != null ? dhHelpdesk.Common.EncodeStrToJson(this.Name) : '') + '", ' +
                         '"Amount":"' + (this.Amount != null && this.Amount != undefined && !this.IsBlank() ? dhHelpdesk.Math.ConvertStrToDouble(this.Amount) : '') + '", ' +
                         '"Ppu":"' + (this.Ppu != null && this.Ppu != undefined ? dhHelpdesk.Math.ConvertStrToDouble(this.Ppu) : '') + '", ' +
                         '"Position":"' + this.Position + '", ' +
@@ -3464,7 +3512,7 @@ $(function () {
                 var model = new dhHelpdesk.CaseArticles.CaseArticleViewModel();
                 this.HasPpu = (this.Article != null && this.Article.Ppu != null && this.Article.Ppu > 0);
                 model.IsBlank = this.IsBlank();
-                model.Name = this.Name != null ? this.Name.replace(/\</g, "&lt;") : "";
+                model.Name = this.Name != null ? dhHelpdesk.Common.HtmlQuotationUpdate(this.Name.replace(/\</g, "&lt;")) : "";
                 model.NameEng = this.Article != null && this.Article.NameEng != null ? this.Article.NameEng : "";
                 model.Description = this.Article != null && this.Article.Description != null ? this.Article.Description : "";
                 model.Id = this.Id;
@@ -4478,18 +4526,18 @@ $(function () {
 
                             /////////////////////////
                             ///////Initiator labels
-                            order.ReportedBy = ord.ReportedBy;
-                            order.Persons_Name = ord.Persons_Name;
-                            order.Persons_Email = ord.Persons_Email;
-                            order.Persons_Phone = ord.Persons_Phone;
-                            order.Persons_CellPhone = ord.Persons_Cellphone;
+                            order.ReportedBy = dhHelpdesk.Common.DecodeJsonToStr(ord.ReportedBy);
+                            order.Persons_Name = dhHelpdesk.Common.DecodeJsonToStr(ord.Persons_Name);
+                            order.Persons_Email = dhHelpdesk.Common.DecodeJsonToStr(ord.Persons_Email);
+                            order.Persons_Phone = dhHelpdesk.Common.DecodeJsonToStr(ord.Persons_Phone);
+                            order.Persons_CellPhone = dhHelpdesk.Common.DecodeJsonToStr(ord.Persons_Cellphone);
                             order.Region_Id = ord.Region_Id;
                             order.Department_Id = ord.Department_Id;
                             order.OU_Id = ord.OU_Id;
-                            order.Place = ord.Place;
-                            order.UserCode = ord.UserCode;
+                            order.Place = dhHelpdesk.Common.DecodeJsonToStr(ord.Place);
+                            order.UserCode = dhHelpdesk.Common.DecodeJsonToStr(ord.UserCode);
                             if (ord.CostCentre != null)
-                                order.CostCentre = ord.CostCentre.RemoveNonNumerics();
+                                order.CostCentre = dhHelpdesk.Common.DecodeJsonToStr(ord.CostCentre.RemoveNonNumerics());
                             else
                                 order.CostCentre = "";
                             order.CreditForOrder_Id = ord.CreditForOrder_Id;
@@ -4531,7 +4579,7 @@ $(function () {
                                         caseArticle.Article.ProductAreaId = article.Article.ProductAreaId;
                                         caseArticle.Article.CustomerId = article.Article.CustomerId;
                                     }
-                                    caseArticle.Name = article.Name;
+                                    caseArticle.Name = dhHelpdesk.Common.DecodeJsonToStr(article.Name);
                                     caseArticle.Amount = article.Amount;
                                     caseArticle.Ppu = article.Ppu;
                                     caseArticle.UnitId = article.UnitId;

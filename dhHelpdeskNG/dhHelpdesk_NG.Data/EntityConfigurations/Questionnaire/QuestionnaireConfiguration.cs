@@ -13,7 +13,8 @@
         {
             this.HasKey(q => q.Id);
             this.Property(q => q.QuestionnaireName).IsRequired().HasMaxLength(100);
-            this.Property(q => q.QuestionnaireDescription).IsRequired();
+            this.Property(q => q.QuestionnaireDescription);
+	        this.Property(q => q.Identifier).HasMaxLength(100);
             this.Property(q => q.Customer_Id).IsOptional();
 
             this.HasRequired(q => q.Customer)

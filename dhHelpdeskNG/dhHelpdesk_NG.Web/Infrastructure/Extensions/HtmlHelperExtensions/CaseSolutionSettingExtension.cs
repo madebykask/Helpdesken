@@ -90,7 +90,13 @@
                     //        false);
                     //}
 
-                    MvcHtmlString dropDown = htmlHelper.DropDownList(dropDownName, selectList, new { ElementClass = "OptionDropDown", ElementName = model.CaseSolutionField });
+                    MvcHtmlString dropDown = htmlHelper.DropDownList(dropDownName, selectList, new
+                                                        {
+                                                            @class = "fieldStateChanger",
+                                                            standardId = caseFields,
+                                                            ElementClass = "OptionDropDown",
+                                                            ElementName = model.CaseSolutionField
+                                                        });
 
                     MvcHtmlString hiddenForFieldName = htmlHelper.Hidden(hiddenFieldName, model.CaseSolutionField);
 

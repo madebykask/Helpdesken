@@ -320,7 +320,14 @@
             {
                 foreach(var caseFieldSetting in caseFieldSettings)
                 {
-                    //caseFieldSetting.NameOrigin = "";
+                    
+                    if (caseFieldSetting.Name.ToLower() == "casetype_id")
+                    {
+                        caseFieldSetting.ShowExternal = 1;
+                        caseFieldSetting.ShowOnStartPage = 1;
+                        caseFieldSetting.Required = 1;
+                    }
+
                     caseFieldSetting.ChangedDate = DateTime.UtcNow;
                     if(caseFieldSetting.Id == 0)
                         _caseFieldSettingRepository.Add(caseFieldSetting);

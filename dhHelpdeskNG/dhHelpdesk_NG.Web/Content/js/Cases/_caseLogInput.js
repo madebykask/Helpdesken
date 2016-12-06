@@ -38,6 +38,26 @@ function LogInitForm() {
             $("#divSendToDialogCase").dialog("open");
         }
     });
+//
+//    $("#caseLogSendToMailAboutLogTo").click(function () {
+//        $("#SendIntLogCase").dialog("option", "width", 350);
+//        $("#SendIntLogCase").dialog("option", "height", 350);
+//        $("#SendIntLogCase").dialog("option", "dialogType", 1);
+//        $("#SendIntLogCase").dialog("open");
+//        var existEmails = $("#CaseLog_EmailRecepientsInternalLogTo").val();
+//        $("#casesIntLogSendInput").val(existEmails);
+//        $("#casesIntLogSendInput").focus();
+//    });
+//
+//    $("#caseLogSendCcMailAboutLogCc").click(function () {
+//        $("#SendIntLogCase").dialog("option", "width", 350);
+//        $("#SendIntLogCase").dialog("option", "height", 350);
+//        $("#SendIntLogCase").dialog("option", "dialogType", 2);
+//        $("#SendIntLogCase").dialog("open");
+//        var existEmails = $("#CaseLog_EmailRecepientsInternalLogCc").val();
+//        $("#casesIntLogSendInput").val(existEmails);
+//        $("#casesIntLogSendInput").focus();
+//    });
 
     $('#CaseLog_TextExternal').bind('input propertychange', function () {
         var informNotifier = $('#CaseLog_SendMailAboutCaseToNotifier');

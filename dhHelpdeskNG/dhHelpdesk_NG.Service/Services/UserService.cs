@@ -92,7 +92,7 @@
             List<UserWorkingGroup> userWorkingGroups,
             out IDictionary<string, string> errors);
         
-        void SaveNewUser(User user, int[] aas, int[] cs, int[] ots, List<UserWorkingGroup> UserWorkingGroups, int[] departments, out IDictionary<string, string> errors);
+        void SaveNewUser(User user, int[] aas, int[] cs, int[] ots, List<UserWorkingGroup> UserWorkingGroups, int[] departments, out IDictionary<string, string> errors, string confirmpassword = "");
         void SaveProfileUser(User user, out IDictionary<string, string> errors);
         void Commit();
 
@@ -707,7 +707,7 @@
                 this.Commit();
         }
         
-        public void SaveNewUser(User user, int[] aas, int[] cs, int[] ots, List<UserWorkingGroup> UserWorkingGroups, int[] departments, out IDictionary<string, string> errors)
+        public void SaveNewUser(User user, int[] aas, int[] cs, int[] ots, List<UserWorkingGroup> UserWorkingGroups, int[] departments, out IDictionary<string, string> errors, string confirmpassword = "")
         {
             if (user == null)
             {
@@ -727,6 +727,12 @@
             {
                 errors.Add("User.UserID", "Det här användarnamnet är upptaget. Var vänlig använd något annat.");
             }
+
+            if (user.Password == confirmpassword)
+            {
+                user.Password = user.Password;
+            }else
+                errors.Add("User.Password", "Det nya lösenordet bekräftades inte korrekt. Kontrollera att nytt lösenord och bekräftat lösenord stämmer överens");
 
             var userEMail = "";
             if (user.Email != null)
@@ -810,13 +816,16 @@
 
             if (!string.IsNullOrEmpty(user.Password))
             {
-                if (customerSetting.ComplexPassword != 0)
-                {
-                    if (!PasswordHelper.IsValid(user.Password))
-                        errors.Add("NewPassWord", "Lösenord är inte giltigt. Minst 8 tecken, varav en stor bokstav, en liten bokstav, en siffra och ett special tecken (!@#=$&?*).");
+                if (customerSetting != null)
+                { 
+                    if (customerSetting.ComplexPassword != 0)
+                    {
+                        if (!PasswordHelper.IsValid(user.Password))
+                            errors.Add("NewPassWord", "Lösenord är inte giltigt. Minst 8 tecken, varav en stor bokstav, en liten bokstav, en siffra och ett special tecken (!@#=$&?*).");
+                    }
+                    else if (user.Password.Length < MinPasswordLength)
+                        errors.Add("NewPassWord", "Lösenord är inte giltigt. Minst antal tecken är: " + MinPasswordLength);
                 }
-                else if (user.Password.Length < MinPasswordLength)
-                    errors.Add("NewPassWord", "Lösenord är inte giltigt. Minst antal tecken är: " + MinPasswordLength);
             }
 
             if (user.UserWorkingGroups != null)

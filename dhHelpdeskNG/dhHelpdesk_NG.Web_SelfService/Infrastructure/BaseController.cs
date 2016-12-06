@@ -2,29 +2,23 @@
 {
     using System;
     using System.IO;
-    using System.Web;
     using System.Web.Mvc;
     using System.Linq;
 
-    using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.SelfService.Infrastructure.Extensions;
     using DH.Helpdesk.SelfService.Models;
     using DH.Helpdesk.Common.Types;
     using System.Security.Claims;
     using DH.Helpdesk.BusinessData.Models.ADFS.Input;
-    using System.Configuration;
-    using DH.Helpdesk.Services.Services.Concrete;
+    using System.Configuration;    
     using DH.Helpdesk.SelfService.WebServices;
-
-    using System.Threading.Tasks;
     using DH.Helpdesk.SelfService.WebServices.Common;
     using System.Collections.Generic;
     using DH.Helpdesk.Common.Classes.ServiceAPI.AMAPI.Output;
     using DH.Helpdesk.BusinessData.Models.Language.Output;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
     using DH.Helpdesk.Common.Enums;
-    using DH.Helpdesk.BusinessData.Models.Error;
     using DH.Helpdesk.SelfService.Infrastructure.Common.Concrete;
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Common.Extensions.String;
@@ -49,29 +43,12 @@
         {
             var customerId = -1;
             TempData["ShowLanguageSelect"] = true;
-            SessionFacade.LastError = null;                        
-            if(filterContext.ActionParameters.Keys.Contains("customerId"))
-            {                
-                var customerIdPassed = filterContext.ActionParameters["customerId"];
-                if(customerIdPassed.ToString() != "")
-                    customerId = int.Parse(customerIdPassed.ToString());             
-            }
-
-            if (filterContext.ActionParameters.Keys.Contains("id"))
-            {                
-                var _guid = filterContext.ActionParameters["id"];                
-                if (_guid!= null && _guid.ToString() != string.Empty && GuidHelper.IsGuid(_guid.ToString()))
-                {                    
-                    var guid = new Guid(_guid.ToString());
-                    int? tempCustomerId = _masterDataService.GetCustomerIdByEMailGUID(guid);
-                    if (tempCustomerId != null && tempCustomerId > 0)
-                        customerId = tempCustomerId.Value;                 
-                } 
-            }
+            SessionFacade.LastError = null;
+            customerId = RetrieveCustomer(filterContext);            
 
             if(SessionFacade.CurrentCustomer == null && customerId == -1)
             {             
-                ErrorGenerator.MakeError("Customer Id is empty!", 101);
+                ErrorGenerator.MakeError("Customer Id can't be empty!", 101);
                 filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));             
                 return;
             }
@@ -82,7 +59,7 @@
             {                
                 var newCustomer = this._masterDataService.GetCustomer(customerId);
                 SessionFacade.CurrentCustomer = newCustomer;                
-                // Customer changed > clear sessions
+                // Customer changed then clear sessions
                 SessionFacade.CurrentCoWorkers = null;
             }
 
@@ -107,188 +84,263 @@
             if(filterContext.ActionParameters.Keys.Contains("languageId"))
             {
                 var languageIdPassed = filterContext.ActionParameters["languageId"];
-                if(languageIdPassed.ToString() != "")
+                if(!string.IsNullOrEmpty(languageIdPassed.ToString()))
                     SessionFacade.CurrentLanguageId = int.Parse(languageIdPassed.ToString());
             }
             else
             {
-                if(SessionFacade.CurrentCustomer != null &
-                   (SessionFacade.CurrentLanguageId == null || (SessionFacade.CurrentLanguageId != null && SessionFacade.CurrentLanguageId == 0)))
+                if(SessionFacade.CurrentCustomer != null & SessionFacade.CurrentLanguageId == 0)
                     SessionFacade.CurrentLanguageId = SessionFacade.CurrentCustomer.Language_Id;
             }
 
-            if (ConfigurationManager.AppSettings[AppSettingsKey.LoginMode].ToString().CleanSpaceAndLowStr() == LoginMode.SSO)
+            var appType = ConfigurationManager.AppSettings[AppSettingsKey.CurrentApplicationType].ToString().CleanSpaceAndLowStr();
+            var loginMode = ConfigurationManager.AppSettings[AppSettingsKey.LoginMode].ToString().CleanSpaceAndLowStr();
+
+            if (SessionFacade.CurrentUserIdentity == null)
             {
-                ClaimsPrincipal principal = User as ClaimsPrincipal;
-
-                if(principal != null)
+                if (loginMode == LoginMode.SSO)
                 {
-                    string claimData = "";
-                    bool isFirst = true;
-                    var userIdentity = new UserIdentity();
+                    ClaimsPrincipal principal = User as ClaimsPrincipal;
 
-                    foreach(Claim claim in principal.Claims)
+                    if (principal != null)
                     {
-                        var claimTypeArray = claim.Type.Split('/');
-                        var pureType = claimTypeArray.LastOrDefault();
-                        var value = claim.Value;
+                        string claimData = "";
+                        bool isFirst = true;
+                        var userIdentity = new UserIdentity();
 
-                        if(isFirst)
-                            claimData = "[" + ((pureType != null) ? pureType.ToString() : "Undefined") + ": " + value.ToString() + "]";
-                        else
-                            claimData = claimData + " , [" + ((pureType != null) ? pureType.ToString() : "Undefined") + ": " + value.ToString() + "]";
-
-                        isFirst = false;
-
-                        if(pureType != null)
+                        foreach (Claim claim in principal.Claims)
                         {
-                            if (pureType.CleanSpaceAndLowStr() == ConfigurationManager.AppSettings[Enums.FederationServiceKeys.ClaimDomain].ToString().CleanSpaceAndLowStr())
-                                userIdentity.Domain = value;
+                            var claimTypeArray = claim.Type.Split('/');
+                            var pureType = claimTypeArray.LastOrDefault();
+                            var value = claim.Value;
 
-                            if(pureType.CleanSpaceAndLowStr() == ConfigurationManager.AppSettings[Enums.FederationServiceKeys.ClaimUserId].ToString().CleanSpaceAndLowStr())
-                                userIdentity.UserId = value;
-
-                            if (pureType.CleanSpaceAndLowStr() == ConfigurationManager.AppSettings[Enums.FederationServiceKeys.ClaimEmployeeNumber].ToString().CleanSpaceAndLowStr())
-                                userIdentity.EmployeeNumber = value;
-
-                            if (pureType.CleanSpaceAndLowStr() == ConfigurationManager.AppSettings[Enums.FederationServiceKeys.ClaimFirstName].ToString().CleanSpaceAndLowStr())
-                                userIdentity.FirstName = value;
-
-                            if (pureType.CleanSpaceAndLowStr() == ConfigurationManager.AppSettings[Enums.FederationServiceKeys.ClaimLastName].ToString().CleanSpaceAndLowStr())
-                                userIdentity.LastName = value;
-
-                            if (pureType.CleanSpaceAndLowStr() == ConfigurationManager.AppSettings[Enums.FederationServiceKeys.ClaimEmail].ToString().CleanSpaceAndLowStr())
-                                userIdentity.Email = value;
-                        }
-                    }
-
-                    if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings[AppSettingsKey.DefaultUserId]))
-                        userIdentity.UserId = ConfigurationManager.AppSettings[AppSettingsKey.DefaultUserId].ToString();
-
-                    var netId = principal.Identity.Name;
-                    var ssoLog = new NewSSOLog()
-                    {
-                        ApplicationId = ConfigurationManager.AppSettings[AppSettingsKey.ApplicationId].ToString(),
-                        NetworkId = netId,
-                        ClaimData = claimData,
-                        CreatedDate = DateTime.Now
-                    };
-
-                    if (ConfigurationManager.AppSettings[AppSettingsKey.SSOLog].ToString().CleanSpaceAndLowStr() == BooleanString.TRUE &&
-                        string.IsNullOrEmpty(SessionFacade.CurrentSystemUser))
-                        _masterDataService.SaveSSOLog(ssoLog);
-
-                    if(string.IsNullOrEmpty(userIdentity.UserId))
-                    {
-                        SessionFacade.UserHasAccess = false;
-                        ErrorGenerator.MakeError("You don't have access to the portal. (User Id is not specified)", 101);
-                        filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
-                        return;
-                    }
-                    else
-                    {
-                        SessionFacade.CurrentSystemUser = userIdentity.UserId;                        
-
-                        var defaultEmployeeNumber = ConfigurationManager.AppSettings[AppSettingsKey.DefaultEmployeeNumber].ToString();
-                        if(!string.IsNullOrEmpty(defaultEmployeeNumber))
-                            userIdentity.EmployeeNumber = defaultEmployeeNumber;
-
-                        SessionFacade.CurrentUserIdentity = userIdentity;
-                        SessionFacade.UserHasAccess = true;
-
-                        if(SessionFacade.CurrentCustomer != null && !string.IsNullOrEmpty(userIdentity.EmployeeNumber))
-                        {
-                            var config = (ECT.FormLib.Configurable.AccessManagment)System.Configuration.ConfigurationManager.GetSection("formLibConfigurable/accessManagment");
-                            var country = config.Countries.Where(x => x.HelpdeskCustomerId == SessionFacade.CurrentCustomer.Id.ToString()).FirstOrDefault();
-
-                            if (country == null || (country != null && !userIdentity.EmployeeNumber.StartsWith(country.EmployeePrefix)))
-                            {
-                                SessionFacade.UserHasAccess = false;
-                                SessionFacade.CurrentCoWorkers = new List<SubordinateResponseItem>();
-
-                                ErrorGenerator.MakeError("You don't have access to the portal. (User is not manager for country)", 103);
-                                filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
-                                return;
-                            }
-                        }
-
-                        if(SessionFacade.CurrentCoWorkers == null || (SessionFacade.CurrentCoWorkers != null && SessionFacade.CurrentCoWorkers.Count == 0))
-                        {
-                            if(string.IsNullOrEmpty(userIdentity.EmployeeNumber))
-                            {
-                                SessionFacade.UserHasAccess = false;
-
-                                ErrorGenerator.MakeError("You don't have access to the portal. (Employee Number is not specified)", 104);
-                                filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
-                                return;
-                            }
+                            if (isFirst)
+                                claimData = "[" + ((pureType != null) ? pureType.ToString() : "Undefined") + ": " + value.ToString() + "]";
                             else
+                                claimData = claimData + " , [" + ((pureType != null) ? pureType.ToString() : "Undefined") + ": " + value.ToString() + "]";
+
+                            isFirst = false;
+
+                            if (pureType != null)
                             {
-                                var _amAPIService = new AMAPIService();
-                                var employee = AsyncHelpers.RunSync<APIEmployee>(() => _amAPIService.GetEmployeeFor(userIdentity.EmployeeNumber));
+                                if (pureType.CleanSpaceAndLowStr() == ConfigurationManager.AppSettings[Enums.FederationServiceKeys.ClaimDomain].ToString().CleanSpaceAndLowStr())
+                                    userIdentity.Domain = value;
 
+                                if (pureType.CleanSpaceAndLowStr() == ConfigurationManager.AppSettings[Enums.FederationServiceKeys.ClaimUserId].ToString().CleanSpaceAndLowStr())
+                                    userIdentity.UserId = value;
 
-                                if(employee.IsManager)
+                                if (pureType.CleanSpaceAndLowStr() == ConfigurationManager.AppSettings[Enums.FederationServiceKeys.ClaimEmployeeNumber].ToString().CleanSpaceAndLowStr())
+                                    userIdentity.EmployeeNumber = value;
+
+                                if (pureType.CleanSpaceAndLowStr() == ConfigurationManager.AppSettings[Enums.FederationServiceKeys.ClaimFirstName].ToString().CleanSpaceAndLowStr())
+                                    userIdentity.FirstName = value;
+
+                                if (pureType.CleanSpaceAndLowStr() == ConfigurationManager.AppSettings[Enums.FederationServiceKeys.ClaimLastName].ToString().CleanSpaceAndLowStr())
+                                    userIdentity.LastName = value;
+
+                                if (pureType.CleanSpaceAndLowStr() == ConfigurationManager.AppSettings[Enums.FederationServiceKeys.ClaimEmail].ToString().CleanSpaceAndLowStr())
+                                    userIdentity.Email = value;
+                            }
+                        }
+
+                        if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings[AppSettingsKey.DefaultUserId]))
+                            userIdentity.UserId = ConfigurationManager.AppSettings[AppSettingsKey.DefaultUserId].ToString();
+
+                        var netId = principal.Identity.Name;
+                        var ssoLog = new NewSSOLog()
+                        {
+                            ApplicationId = ConfigurationManager.AppSettings[AppSettingsKey.ApplicationId].ToString(),
+                            NetworkId = netId,
+                            ClaimData = claimData,
+                            CreatedDate = DateTime.Now
+                        };
+
+                        if (ConfigurationManager.AppSettings[AppSettingsKey.SSOLog].ToString().CleanSpaceAndLowStr() == BooleanString.TRUE &&
+                            string.IsNullOrEmpty(SessionFacade.CurrentSystemUser))
+                            _masterDataService.SaveSSOLog(ssoLog);
+
+                        if (string.IsNullOrEmpty(userIdentity.UserId))
+                        {
+                            SessionFacade.UserHasAccess = false;
+                            ErrorGenerator.MakeError("You don't have access to the portal. (User Id is not specified)", 107);
+                            filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
+                            return;
+                        }
+                        else
+                        {
+                            SessionFacade.CurrentSystemUser = userIdentity.UserId;
+
+                            var defaultEmployeeNumber = ConfigurationManager.AppSettings[AppSettingsKey.DefaultEmployeeNumber].ToString();
+                            if (!string.IsNullOrEmpty(defaultEmployeeNumber))
+                                userIdentity.EmployeeNumber = defaultEmployeeNumber;
+
+                            SessionFacade.CurrentUserIdentity = userIdentity;
+                            SessionFacade.UserHasAccess = true;
+
+                            if (appType == ApplicationTypes.LineManager)
+                            {
+                                if (SessionFacade.CurrentCustomer != null && !string.IsNullOrEmpty(userIdentity.EmployeeNumber))
                                 {
-                                    SessionFacade.CurrentCoWorkers = employee.Subordinates;
+                                    var config = (ECT.FormLib.Configurable.AccessManagment)System.Configuration.ConfigurationManager.GetSection("formLibConfigurable/accessManagment");
+                                    var country = config.Countries.Where(x => x.HelpdeskCustomerId == SessionFacade.CurrentCustomer.Id.ToString()).FirstOrDefault();
+
+                                    if (country == null || (country != null && !userIdentity.EmployeeNumber.StartsWith(country.EmployeePrefix)))
+                                    {
+                                        SessionFacade.UserHasAccess = false;
+                                        SessionFacade.CurrentCoWorkers = new List<SubordinateResponseItem>();
+
+                                        ErrorGenerator.MakeError("You don't have access to the portal. (User is not manager for country)", 103);
+                                        filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
+                                        return;
+                                    }
                                 }
-                                else
-                                {
-                                    SessionFacade.UserHasAccess = false;
-                                    SessionFacade.CurrentCoWorkers = new List<SubordinateResponseItem>();
 
-                                    ErrorGenerator.MakeError("You don't have access to the portal. (User is not manager)", 102);
-                                    filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
-                                    return;
+                                if (SessionFacade.CurrentCoWorkers == null || (SessionFacade.CurrentCoWorkers != null && SessionFacade.CurrentCoWorkers.Count == 0))
+                                {
+                                    if (string.IsNullOrEmpty(userIdentity.EmployeeNumber))
+                                    {
+                                        SessionFacade.UserHasAccess = false;
+
+                                        ErrorGenerator.MakeError("You don't have access to the portal. (Employee Number is not specified)", 104);
+                                        filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
+                                        return;
+                                    }
+                                    else
+                                    {
+                                        var _amAPIService = new AMAPIService();
+                                        var employee = AsyncHelpers.RunSync<APIEmployee>(() => _amAPIService.GetEmployeeFor(userIdentity.EmployeeNumber));
+
+
+                                        if (employee.IsManager)
+                                        {
+                                            SessionFacade.CurrentCoWorkers = employee.Subordinates;
+                                        }
+                                        else
+                                        {
+                                            SessionFacade.UserHasAccess = false;
+                                            SessionFacade.CurrentCoWorkers = new List<SubordinateResponseItem>();
+
+                                            ErrorGenerator.MakeError("You don't have access to the portal. (User is not manager)", 102);
+                                            filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
+                                            return;
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
-                }
-            } // SSO Login
-            else
-                if(ConfigurationManager.AppSettings[AppSettingsKey.LoginMode].ToString().ToLower() == LoginMode.Windows)
-                {                    
+                } // SSO Login
+                else
+                    if (loginMode == LoginMode.Windows)
+                {
                     var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
                     SessionFacade.UserHasAccess = true;
                     SessionFacade.CurrentCoWorkers = null;
                     string fullName = identity.Name;
                     string userId = fullName.GetUserFromAdPath();
-                    string userDomain = fullName.GetDomainFromAdPath();                 
+                    if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings[AppSettingsKey.DefaultUserId]))
+                        userId = ConfigurationManager.AppSettings[AppSettingsKey.DefaultUserId].ToString();
+
+                    string userDomain = fullName.GetDomainFromAdPath();
                     SessionFacade.CurrentSystemUser = userId;
                     var ui = new UserIdentity()
                     {
                         UserId = userId,
                         Domain = userDomain,
-                        FirstName = userId
+                        FirstName = string.Empty
                     };
 
                     SessionFacade.CurrentUserIdentity = ui;
                 }
                 else
-                    if (ConfigurationManager.AppSettings[AppSettingsKey.LoginMode].ToString().ToLower() == LoginMode.Anonymous)
+                        if (loginMode == LoginMode.Anonymous)
+                {
+                    var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+                    SessionFacade.UserHasAccess = true;
+                    SessionFacade.CurrentCoWorkers = null;
+                    string fullName = identity.Name;
+                    string userId = fullName.GetUserFromAdPath();
+                    if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings[AppSettingsKey.DefaultUserId]))
+                        userId = ConfigurationManager.AppSettings[AppSettingsKey.DefaultUserId].ToString();
+                    string userDomain = fullName.GetDomainFromAdPath();
+
+                    SessionFacade.CurrentSystemUser = userId;
+                    var ui = new UserIdentity()
                     {
-                        var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
-                        SessionFacade.UserHasAccess = true;
-                        SessionFacade.CurrentCoWorkers = null;
-                        string fullName = identity.Name;
-                        string userId = fullName.GetUserFromAdPath();
-                        string userDomain = fullName.GetDomainFromAdPath();
+                        UserId = userId,
+                        Domain = userDomain,
+                        FirstName = string.Empty
+                    };
 
-                        SessionFacade.CurrentSystemUser = userId;
-                        var ui = new UserIdentity()
-                        {
-                            UserId = "",
-                            Domain = userDomain,
-                            FirstName = "Anonymous"
-                        };
+                    SessionFacade.CurrentUserIdentity = ui;
+                }
 
-                        SessionFacade.CurrentUserIdentity = ui;
-                    }
-            
+                // load user info according database info (tblComputerUser)
+                LoadUserInfo();
+
+            } //User Idendity is null
+
             this.SetTextTranslation(filterContext);
         }
-        
+
+        private void LoadUserInfo()
+        {
+            if (SessionFacade.CurrentCustomer != null &&
+                SessionFacade.CurrentUserIdentity != null && 
+                string.IsNullOrEmpty(SessionFacade.CurrentUserIdentity.FirstName) &&
+                string.IsNullOrEmpty(SessionFacade.CurrentUserIdentity.LastName) &&
+                string.IsNullOrEmpty(SessionFacade.CurrentUserIdentity.Email))
+            {
+                var dbInitiator = _masterDataService.GetInitiatorByUserId(SessionFacade.CurrentUserIdentity.UserId, SessionFacade.CurrentCustomer.Id);
+                if (dbInitiator != null)
+                {
+                    SessionFacade.CurrentUserIdentity.FirstName = dbInitiator.FirstName;
+                    SessionFacade.CurrentUserIdentity.LastName = dbInitiator.LastName;
+                    SessionFacade.CurrentUserIdentity.Email = dbInitiator.Email;
+                }
+            }
+        }
+
+        private int RetrieveCustomer(ActionExecutingContext filterContext)
+        {
+            var ret = -1;
+
+            if (filterContext.ActionParameters.Keys.Contains("customerId", StringComparer.OrdinalIgnoreCase))
+            {
+                var customerIdPassed = filterContext.ActionParameters["customerId"];                
+                if (customerIdPassed != null && !string.IsNullOrEmpty(customerIdPassed.ToString()))
+                {
+                    int tempId = 0;
+                    if (int.TryParse(customerIdPassed.ToString(), out tempId))
+                        ret = tempId;
+                    else
+                    {
+                        ErrorGenerator.MakeError("Customer Id not valid!", 105);
+                        filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
+                        return -1;
+                    }
+                }
+            }
+
+            if (filterContext.ActionParameters.Keys.Contains("id", StringComparer.OrdinalIgnoreCase))
+            {
+                var _id = filterContext.ActionParameters["id"];
+                if (_id != null)
+                {
+                    var _strId = _id.ToString();
+                    if (!string.IsNullOrEmpty(_strId) && GuidHelper.IsGuid(_strId))
+                    {
+                        var guid = new Guid(_strId);
+                        int? tempCustomerId = _masterDataService.GetCustomerIdByEMailGUID(guid);
+                        if (tempCustomerId != null && tempCustomerId > 0)
+                            ret = tempCustomerId.Value;
+                    }
+                }
+            }
+
+            return ret;
+        }
+
         public ActionResult ChangeLanguage(string language, string currentUrl, string lastParams)
         {
             if(SessionFacade.AllLanguages != null)
@@ -308,7 +360,7 @@
             }
 
             return Redirect(currentUrl);
-        }
+        }       
 
         private List<LanguageOverview> GetActiveLanguages()
         {
@@ -396,27 +448,5 @@
             }
         }
     }
-
-    public class CustomAuthorize : AuthorizeAttribute
-    {
-        protected override bool AuthorizeCore(HttpContextBase httpContext)
-        {
-            if(httpContext == null)
-                throw new ArgumentNullException("httpContext");
-
-            if(!httpContext.User.Identity.IsAuthenticated)
-                return false;
-
-            if(this.Roles.ToString() == string.Empty)
-                return true;
-
-            foreach(string userRole in this.Roles.ToString().Split(','))
-            {
-                if(GeneralExtensions.UserHasRole(SessionFacade.CurrentUser, userRole) == true)
-                    return true;
-            }
-
-            return false;
-        }
-    }
+    
 }

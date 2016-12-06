@@ -160,22 +160,40 @@ EditPage.prototype.isFormValid = function() {
 EditPage.prototype.primaryValidation = function (submitUrl) {
     var me = this;
 
+    /* Check FinishigTime */
+    if (me.CaseWillFinish()) {
+        var finishDate =  $('#CaseLog_FinishingDate').val();
+        $.get('/Cases/IsFinishingDateValid/', { changedTime: me.p.caseChangedTime, finishingTime: finishDate, myTime: Date.now }, function (res) {
+            if (res != null && res) {
+                me.startSaveProcess(me, submitUrl);
+            }
+            else {
+                dhHelpdesk.cases.utils.showError(me.p.finishingDateMessage2);
+            }
+        });
+    } else {
+        me.startSaveProcess(me, submitUrl);
+    }
+    
+}
+
+EditPage.prototype.startSaveProcess = function (sender, submitUrl) {
     //Check if there is Order which is not invoiced yet
+    var me = sender;
+
     if (me.invoiceIsActive && me.CaseWillFinish()) {
         $.get('/CaseInvoice/IsThereNotSentOrder/', { caseId: me.p.currentCaseId, myTime: Date.now }, function (res) {
-            if (res != null && res)
+            if (res != null && res) {
                 dhHelpdesk.cases.utils.showError(me.p.invoicePreventsToCloseCaseMessage);
-            else
+            }
+            else {
                 me.checkAndSave(submitUrl);
+            }
         });
     }
     else {
         me.checkAndSave(submitUrl);
     }
-}
-
-EditPage.prototype.hasNotInvoicedOrder = function (id, callBack) {
-    
 }
 
 EditPage.prototype.checkAndSave = function (submitUrl) {
@@ -716,4 +734,9 @@ EditPage.prototype.init = function (p) {
     }
 
     me.formOnBootValues = me.$form.serialize();
+
+    me.ExternalInvoice = new ExternalInvoice({
+        requiredMessage: p.casesScopeInitParameters.mandatoryFieldsText,
+        mustBeNumberMessage: p.casesScopeInitParameters.formatFieldsText + ": #.##"
+    });
 };

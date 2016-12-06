@@ -81,6 +81,8 @@
     <Compile Include="CaseSolutionCategory.cs" />
     <Compile Include="CaseSolutionSchedule.cs" />
     <Compile Include="CaseSolutionSearch.cs" />
+    <Compile Include="Cases\CaseExtraFollower.cs" />
+    <Compile Include="Cases\CaseFollowUp.cs" />
     <Compile Include="Cases\CaseSolutionSetting.cs" />
     <Compile Include="Cases\CaseLockEntity.cs" />
     <Compile Include="Cases\CaseStatistic.cs" />
@@ -137,6 +139,7 @@
     <Compile Include="Questionnaire\QuestionnaireCircularDepartmentEntity.cs" />
     <Compile Include="Questionnaire\QuestionnaireCircularProductAreaEntity.cs" />
     <Compile Include="Questionnaire\QuestionnaireCircularWorkingGroupEntity.cs" />
+    <Compile Include="Questionnaire\QuestionnaireType.cs" />
     <Compile Include="RegistrationSourceCustomer.cs" />
     <Compile Include="ReportFavorite.cs" />
     <Compile Include="TranslationSearch.cs" />

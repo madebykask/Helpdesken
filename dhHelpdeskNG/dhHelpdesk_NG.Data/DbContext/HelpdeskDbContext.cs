@@ -545,11 +545,15 @@
 
         public DbSet<ReportFavorite> ReportFavorites { get; set; }
 
+        public DbSet<CaseFollowUp> CaseFollowUps { get; set; }
+
+        public DbSet<CaseExtraFollower> CaseExtraFollowers { get; set; }
+
         #endregion
 
-        #region Public Methods and Operators
+		#region Public Methods and Operators
 
-        public virtual void Commit()
+		public virtual void Commit()
         {
             try
             {
@@ -614,6 +618,8 @@
             modelBuilder.Configurations.Add(new CaseHistoryConfiguration());
             modelBuilder.Configurations.Add(new CaseLockConfiguration());
             modelBuilder.Configurations.Add(new CaseStatisticConfiguration());
+            modelBuilder.Configurations.Add(new CaseFollowUpConfiguration());
+            modelBuilder.Configurations.Add(new CaseExtraFollowerConfiguration());
 
             modelBuilder.Configurations.Add(new CaseInvoiceRowConfiguration());
             modelBuilder.Configurations.Add(new CaseIsAboutConfiguration());
@@ -649,8 +655,10 @@
             modelBuilder.Configurations.Add(new ComputerTypeConfiguration());
             modelBuilder.Configurations.Add(new ContractCategoryConfiguration());
             modelBuilder.Configurations.Add(new ContractConfiguration());
+            modelBuilder.Configurations.Add(new ContractHistoryConfiguration());
             modelBuilder.Configurations.Add(new ContractFieldSettingConfiguration());
-            modelBuilder.Configurations.Add(new CountryConfiguration());
+            modelBuilder.Configurations.Add(new ContractFileConfiguration());
+            modelBuilder.Configurations.Add(new CountryConfiguration());            
             modelBuilder.Configurations.Add(new CurrencyConfiguration());
             modelBuilder.Configurations.Add(new CustomerConfiguration());
             modelBuilder.Configurations.Add(new CustomerUserConfiguration());

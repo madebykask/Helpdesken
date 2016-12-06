@@ -12,7 +12,7 @@
                 {
                     <tr>
                         <td>
-                            <a href="@this.Url.Action("DownloadFile", new RouteValueDictionary { { "id", Model.Id }, { "fileName", filename } })">@filename</a>
+                            <a href="@Url.Action("DownloadFile", new RouteValueDictionary { { "id", Model.Id }, { "fileName", filename } })">@filename</a>
                         </td>
                         <td>
                             <a id="@string.Format("delete_casefile_button_{0}", i)" class="btn">@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</a>

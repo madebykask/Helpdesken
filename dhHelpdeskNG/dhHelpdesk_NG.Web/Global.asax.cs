@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web
+﻿using System.Web.Http;
+
+namespace DH.Helpdesk.Web
 {
     using System;
     using System.Threading;
@@ -25,46 +27,55 @@
     {
         private readonly IConfiguration configuration = ManualDependencyResolver.Get<IConfiguration>();
 
-        public static void RegisterGlobalFilters(GlobalFilterCollection filters)
-        {
-#if !DEBUG
-            filters.Add(new CustomHandleErrorAttribute());
-#endif
-        }
-
-        public static void RegisterRoutes(RouteCollection routes)
-        {
-            routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-            routes.IgnoreRoute("{*favicon}", new { favicon = @"(.*/)?favicon.ico(/.*)?" });
-
-            routes.MapRoute(
-                "Default",
-                "{controller}/{action}/{id}",
-                new { controller = "Home", action = "Index", id = UrlParameter.Optional });
-        }
-
         protected void Application_Start()
         {           
             AreaRegistration.RegisterAllAreas();
+			GlobalConfiguration.Configure(WebApiConfig.Register);
 
-            // No need to load all view engines
-            ViewEngines.Engines.Clear();
-            ViewEngines.Engines.Add(new RazorViewEngine());
+	        ViewEngineInit();
 
-            RegisterLocalizedAttributes();
-            RegisterGlobalFilters(GlobalFilters.Filters);
-            RegisterRoutes(RouteTable.Routes);
+			RegisterLocalizedAttributes();
+			FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+			FilterConfig.RegisterWebApiGlobalFilters(GlobalConfiguration.Configuration.Filters);
+			RouteConfig.RegisterRoutes(RouteTable.Routes);
             RegisterBinders();
             ProcessStartupTasks();
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            // ECT.FormLib.FormLibSetup.Setup(); todo
-        }
+			JsonFormatConfig.ConfigWebApi();
+			JsonFormatConfig.ConfigMVC();
 
-        protected void Application_BeginRequest(object sender, EventArgs e)
-        {
-            Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture = this.configuration.Application.DefaultCulture;
-        }
+			MvcHandler.DisableMvcResponseHeader = true;
+			//System.Web.Helpers.AntiForgeryConfig.SuppressXFrameOptionsHeader = true;//uncomment this if XFrameOptions is added in web.config headers
+
+			// ECT.FormLib.FormLibSetup.Setup(); todo
+		}
+
+		private void ViewEngineInit()
+		{
+			// Clear all registered view engines
+			ViewEngines.Engines.Clear();
+			// Add back in just the Razor view engine
+			ViewEngines.Engines.Add(new RazorViewEngine());
+		}
+
+		protected void Application_PostAuthorizeRequest()
+		{
+			if (IsWebApiRequest())
+			{
+				HttpContext.Current.SetSessionStateBehavior(System.Web.SessionState.SessionStateBehavior.Required);
+			}
+		}
+
+		private bool IsWebApiRequest()
+		{
+			return HttpContext.Current.Request.AppRelativeCurrentExecutionFilePath.Contains(@"/" + WebApiConfig.UrlPrefixRelative + @"/");
+		}
+
+		protected void Application_BeginRequest(object sender, EventArgs e)
+		{
+			Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture = this.configuration.Application.DefaultCulture;
+		}
 
 #if !DEBUG
         protected void Application_Error(object sender, EventArgs e)
@@ -139,10 +150,10 @@
         }
 #endif
 
-        /// <summary>
-        /// The register binders.
-        /// </summary>
-        private static void RegisterBinders()
+		/// <summary>
+		/// The register binders.
+		/// </summary>
+		private static void RegisterBinders()
         {
             ModelBinders.Binders.Add(typeof(DateTime), new DateTimeBinder());
             ModelBinders.Binders.Add(typeof(DateTime?), new NullableDateTimeBinder());

@@ -1,4 +1,8 @@
-﻿namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
+﻿using System.Data.Entity;
+using System.Runtime.Remoting.Messaging;
+using DH.Helpdesk.Dal.Enums;
+
+namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -27,10 +31,12 @@
         {
             var questionnaireEntity = new QuestionnaireEntity
             {
+				Type = questionnaire.Type,
                 QuestionnaireName = questionnaire.Name,
                 QuestionnaireDescription = questionnaire.Description ?? string.Empty,
                 Customer_Id = questionnaire.CustomerId,
-                CreatedDate = questionnaire.CreatedDate
+                CreatedDate = questionnaire.CreatedDate,
+				Identifier = questionnaire.Identifier
             };
             this.DbContext.Questionnaires.Add(questionnaireEntity);
             this.InitializeAfterCommit(questionnaire, questionnaireEntity);
@@ -54,7 +60,7 @@
 
             if (languageId != LanguageIds.Swedish)
             {
-               var questionnaires =
+               var questionnaireLng =
                     this.DbContext.QuestionnaireLanguages.Where(l => l.Questionnaire_Id == id && l.Language_Id == languageId).Select(
                             l =>
                             new
@@ -62,62 +68,106 @@
                                 l.Questionnaire_Id,
                                 Name = l.QuestionnaireName,
                                 Description = l.QuestionnaireDescription,
-                                languageId = l.Language_Id,
+								languageId = l.Language_Id,
                                 CreateDate = l.CreatedDate
                             }).FirstOrDefault();
-                if (questionnaires != null)
-                    ret = new EditQuestionnaire(questionnaires.Questionnaire_Id, questionnaires.Name, questionnaires.Description, questionnaires.languageId, questionnaires.CreateDate);
+	            if (questionnaireLng != null)
+	            {
+		            ret = new EditQuestionnaire(questionnaireLng.Questionnaire_Id, questionnaireLng.Name,
+						questionnaireLng.Description, questionnaireLng.languageId, questionnaireLng.CreateDate);
+	            }
             }
 
-            // If Language = Swedish or there is no Questionnaire for this language_Id
-            if (ret == null) 
-            {
-                var questionnaires =
-                    this.DbContext.Questionnaires.Where(q => q.Id == id)
-                        .Select(
-                            q =>
-                            new
-                            {
-                                q.Id,
-                                Name = q.QuestionnaireName,
-                                Description = q.QuestionnaireDescription,
-                                languageId = LanguageIds.Swedish,
-                                CreateDate = q.CreatedDate
-                            }).FirstOrDefault();
-                if (questionnaires != null)
-                  ret = new EditQuestionnaire(questionnaires.Id, questionnaires.Name, questionnaires.Description, questionnaires.languageId, questionnaires.CreateDate);
-            }
+            var questionnaire =
+                this.DbContext.Questionnaires.Where(q => q.Id == id)
+                    .Select(
+                        q =>
+                        new
+                        {
+                            q.Id,
+                            Name = q.QuestionnaireName,
+                            Description = q.QuestionnaireDescription,
+							Identifier = q.Identifier,
+                            languageId = LanguageIds.Swedish,
+                            CreateDate = q.CreatedDate
+                        }).FirstOrDefault();
+			// If Language = Swedish or there is no Questionnaire for this language_Id
+	        if (questionnaire != null)
+	        {
+		        if (ret == null)
+		        {
+			        ret = new EditQuestionnaire(questionnaire.Id, questionnaire.Name, questionnaire.Description,
+				        questionnaire.languageId, questionnaire.CreateDate);
+		        }
+		        ret.Identifier = questionnaire.Identifier;
+	        }
 
-            return ret;
+	        return ret;
         }
 
         public List<QuestionnaireOverview> FindQuestionnaireOverviews(int customerId)
         {
             var questionnaires =
-                this.DbContext.Questionnaires.Where(q => q.Customer_Id == customerId)
-                    .Select(
-                        q => new { Id = q.Id, Name = q.QuestionnaireName, Description = q.QuestionnaireDescription })
+                this.DbContext.Questionnaires
+					.Where(q => q.Customer_Id == customerId && q.Type == QuestionnaireType.Questionnaire)
+                    .Select(q => new { Id = q.Id, Name = q.QuestionnaireName, Description = q.QuestionnaireDescription })
                     .ToList();
 
             return questionnaires.Select(q => new QuestionnaireOverview(q.Id, q.Name, q.Description)).ToList();
         }
 
-        public void UpdateSwedishQuestionnaire(EditQuestionnaire questionnaire)
+		public List<QuestionnaireEntity> FindFeedbackOverviews(int customerId)
+		{
+			return DbContext.Questionnaires
+				.Where(q => q.Customer_Id == customerId && q.Type == QuestionnaireType.Feedback)
+				.ToList();
+		}
+
+	    public List<QuestionnaireEntity> GetFeedbackFullItems(int customerId, IEnumerable<string> identifiers = null)
+	    {
+		    var query = DbContext.Questionnaires
+			    .Where(q => q.Customer_Id == customerId && q.Type == QuestionnaireType.Feedback)
+			    .Include(q => q.QuestionnaireQuestionEntities)
+			    .Include(q => q.QuestionnaireQuestionEntities.Select(qe => qe.QuestionnaireQuesLangEntities))
+			    .Include(q => q.QuestionnaireQuestionEntities.Select(qe => qe.QuestionnaireQuestionOptionEntities))
+			    .Include(
+				    q =>
+					    q.QuestionnaireQuestionEntities.Select(
+						    qe => qe.QuestionnaireQuestionOptionEntities.Select(qeo => qeo.QuestionnaireQuesOpLangEntities)))
+			    .Include(q => q.QuestionnaireLanguageEntities);
+
+		    if (identifiers != null)
+			    query = query.Where(q => identifiers.Contains(q.Identifier));
+
+			return query.ToList();
+		}
+
+		public void UpdateSwedishQuestionnaire(EditQuestionnaire questionnaire)
         {
             var questionnaireEntity = this.DbContext.Questionnaires.Find(questionnaire.Id);
 
             questionnaireEntity.QuestionnaireName = questionnaire.Name;
-            questionnaireEntity.QuestionnaireDescription = questionnaire.Description ?? string.Empty;
+			questionnaireEntity.Identifier = questionnaire.Identifier;
+			questionnaireEntity.QuestionnaireDescription = questionnaire.Description ?? string.Empty;
             questionnaireEntity.ChangedDate = questionnaire.ChangedDate;
         }
 
         public void UpdateOtherLanguageQuestionnaire(EditQuestionnaire questionnaire)
         {
-            var questionnaireLanguageEntity =
+			var questionnaireEntity =
+				DbContext.Questionnaires.SingleOrDefault(
+					l => l.Id == questionnaire.Id);
+
+			if (questionnaireEntity != null)
+			{
+				questionnaireEntity.Identifier = questionnaire.Identifier;
+			}
+
+			var questionnaireLanguageEntity =
                 this.DbContext.QuestionnaireLanguages.SingleOrDefault(
                     l => l.Questionnaire_Id == questionnaire.Id && l.Language_Id == questionnaire.LanguageId);
 
-            if (questionnaireLanguageEntity != null)
+			if (questionnaireLanguageEntity != null)
             {
                 questionnaireLanguageEntity.QuestionnaireName = questionnaire.Name;
                 questionnaireLanguageEntity.QuestionnaireDescription = questionnaire.Description;

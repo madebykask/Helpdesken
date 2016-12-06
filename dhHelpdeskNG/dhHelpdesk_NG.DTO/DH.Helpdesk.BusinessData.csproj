@@ -24,11 +24,11 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
+    <DebugType>full</DebugType> 
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
+    <ErrorReport>prompt</ErrorReport> 
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -73,6 +73,7 @@
     <Compile Include="Enums\BusinessRules\BusinessRuleEnums.cs" />
     <Compile Include="Enums\Case\CaseProgressFilter.cs" />
     <Compile Include="Enums\Case\CasesCustomFilter.cs" />
+    <Compile Include="Enums\Case\CaseSearchGroup.cs" />
     <Compile Include="Enums\Case\Fields\CaseInfoFields.cs" />
     <Compile Include="Enums\Case\Fields\ComputerFields.cs" />
     <Compile Include="Enums\Case\Fields\LogFields.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="Enums\Inventory\Fields\Shared\ProcessorFields.cs" />
     <Compile Include="Enums\LanguageTextId.cs" />
     <Compile Include="Enums\Changes\StepStatus.cs" />
+    <Compile Include="Enums\MailTemplates\FeedbackTemplate.cs" />
     <Compile Include="Enums\MailTemplates\QuestionnaireTemplates.cs" />
     <Compile Include="Enums\Notifiers\AddressField.cs" />
     <Compile Include="Enums\Notifiers\GeneralField.cs" />
@@ -163,6 +165,8 @@
     <Compile Include="Models\BusinessRules\BusinessRuleModel.cs" />
     <Compile Include="Models\BusinessRules\BusinessRuleReadModel.cs" />
     <Compile Include="Models\CaseType\CaseTypeItem.cs" />
+    <Compile Include="Models\Case\ExtraFollower.cs" />
+    <Compile Include="Models\Case\CaseIntLog\CaseEmailSendOverview.cs" />
     <Compile Include="Models\Case\CaseLock\LockedCaseOverview.cs" />
     <Compile Include="Models\Case\CaseOverview\CaseInfoOverview.cs" />
     <Compile Include="Models\Case\CaseOverview\ComputerOverview.cs" />
@@ -203,6 +207,7 @@
     <Compile Include="Models\Accounts\AccountSettings\Read\Edit\ProgramFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Edit\UserFieldSettings.cs" />
     <Compile Include="Models\CaseOverviewGridColumnSetting.cs" />
+    <Compile Include="Models\Contract\ContractFileModel.cs" />
     <Compile Include="Models\Contract\ContractSelectedFilter.cs" />
     <Compile Include="Models\Contract\ContractsSettingRowModel.cs" />
     <Compile Include="Models\Contract\ContractInputModel.cs" />
@@ -238,6 +243,11 @@
     <Compile Include="Models\Department\DepartmentOverview.cs" />
     <Compile Include="Models\Email\EmailResponse.cs" />
     <Compile Include="Models\Error\ErrorModel.cs" />
+    <Compile Include="Models\ExternalInvoice\ExternalInvoice.cs" />
+    <Compile Include="Models\Faq\Input\FaqCategory.cs" />
+    <Compile Include="Models\Feedback\FeedbackFullItem.cs" />
+    <Compile Include="Models\Feedback\FeedbackQuestionOption.cs" />
+    <Compile Include="Models\Feedback\FeedbackQuestionOverview.cs" />
     <Compile Include="Models\FinishingCause\FinishingCauseItem.cs" />
     <Compile Include="Models\Grid\CaseOverviewColumnDefinition.cs" />
     <Compile Include="Models\Grid\GridColumnDefinition.cs" />
@@ -392,10 +402,12 @@
     <Compile Include="Models\Orders\Order\OrderHistoryFields\SupplierHistoryFields.cs" />
     <Compile Include="Models\Orders\Order\OrderHistoryFields\UserHistoryFields.cs" />
     <Compile Include="Models\Orders\Order\UpdateOrderRequest.cs" />
+    <Compile Include="Models\Paging\PageInfo.cs" />
     <Compile Include="Models\ProductArea\IProductAreaNameResolver.cs" />
     <Compile Include="Models\ProductArea\ProductAreaItem.cs" />
     <Compile Include="Models\Projects\Output\ProjectOverviewSorting.cs" />
     <Compile Include="Models\Questionnaire\CircularCaseFilter.cs" />
+    <Compile Include="Models\Feedback\FeedbackOverview.cs" />
     <Compile Include="Models\Questionnaire\Participant.cs" />
     <Compile Include="Models\Questionnaire\Read\CircularOverview.cs" />
     <Compile Include="Models\Questionnaire\Read\ConnectedCase.cs" />
@@ -450,6 +462,8 @@
     <Compile Include="Models\Shared\CustomSelectList.cs" />
     <Compile Include="Models\Shared\DateToDate.cs" />
     <Compile Include="Models\ReportService\ReportSelectedFilter.cs" />
+    <Compile Include="Models\Shared\Output\SearchResult.cs" />
+    <Compile Include="Models\Shared\ItemDependentOverview.cs" />
     <Compile Include="Models\TextList.cs" />
     <Compile Include="Models\Interfaces\IHierarchyItem.cs" />
     <Compile Include="Models\ActionSetting\ActionSetting.cs" />

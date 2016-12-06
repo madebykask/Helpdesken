@@ -18,11 +18,14 @@
 
         CircularForEdit GetById(int id);
 
-        void DeleteById(int id);
+	    CircularForEdit GetSingleOrDefaultByQuestionnaireId(int id);
+
+		void DeleteById(int id);
 
         void DeleteConnectedCase(int cirularId, int caseId);
+	    List<int> GetAllCircularCasesIds(int circularId);
 
-        QuestionnaireDetailedOverview GetQuestionnaire(Guid guid, OperationContext operationContext);
+		QuestionnaireDetailedOverview GetQuestionnaire(Guid guid, OperationContext operationContext);
 
         QuestionnaireOverview GetQuestionnaire(int id, OperationContext operationContext);
 
@@ -49,5 +52,8 @@
         void Remind(string actionAbsolutePath, int circularId, OperationContext operationContext);
 
         void SaveAnswers(ParticipantForInsert businessModel);
+
+	    List<BusinessLogic.MapperData.Participant> GetNotAnsweredParticipants(int circularId);
+
     }
 }

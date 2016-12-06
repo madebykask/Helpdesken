@@ -35,13 +35,19 @@
         [StringLength(3000)]
         public string TextInternal { get; set; }
         
-        public string EmailRecepientsInternalLog { get; set; }
+        public string EmailRecepientsInternalLogTo { get; set; }
+        public string EmailRecepientsInternalLogCc { get; set; }
+
+        public string EmailRecepientsInternalLog { get; set; } //ToDo: remove after release
+
         public string EmailRecepientsExternalLog { get; set; }
         public int? UserId { get; set; }
         public string UserName { get; set; }
         public int WorkingTimeHour { get; set; }
         public int WorkingTimeMinute { get; set; }
-        public bool HighPriority { get; set; }
+		public int OvertimeHour { get; set; }
+		public int OvertimeMinute { get; set; }
+		public bool HighPriority { get; set; }
 
         /// <summary>
         /// checkbox value indicates send log to parent/child cases

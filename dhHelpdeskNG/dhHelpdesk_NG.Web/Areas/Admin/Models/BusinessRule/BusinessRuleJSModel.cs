@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using DH.Helpdesk.Web.Infrastructure.Attributes;
+using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
 namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
 {
@@ -31,13 +33,21 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
 
         public string RuleActive { get; set; }
 
-        public string ProcessFrom { get; set; }
+		[LocalizedDisplay("Processen från")]
+		[RequiredIfNotEmpty("ProcessTo")]
+		public string ProcessFrom { get; set; }
 
-        public string ProcessTo { get; set; }
+		[LocalizedDisplay("Processen till")]
+		[RequiredIfNotEmpty("ProcessFrom")]
+		public string ProcessTo { get; set; }
 
-        public string SubStatusFrom { get; set; }
+		[LocalizedDisplay("Sub status från")]
+		[RequiredIfNotEmpty("SubStatusTo")]
+		public string SubStatusFrom { get; set; }
 
-        public string SubStatusTo { get; set; }
+		[LocalizedDisplay("Sub status till")]
+		[RequiredIfNotEmpty("SubStatusFrom")]
+		public string SubStatusTo { get; set; }
 
         public string EmailTemplate { get; set; }
 

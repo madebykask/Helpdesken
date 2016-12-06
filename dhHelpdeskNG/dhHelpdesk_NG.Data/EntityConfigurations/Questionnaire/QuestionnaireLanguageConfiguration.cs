@@ -25,7 +25,7 @@
                 .WithMany()
                 .HasForeignKey(l => l.Language_Id).WillCascadeOnDelete(false);
 
-            this.Property(l => l.QuestionnaireDescription).IsRequired();
+            this.Property(l => l.QuestionnaireDescription);
             this.Property(l => l.QuestionnaireName).IsRequired().HasMaxLength(100);
             this.Property(l => l.CreatedDate);
             this.Property(l => l.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);

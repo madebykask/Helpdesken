@@ -1,120 +1,94 @@
--- update DB from 5.3.27 to 5.3.28 version
+-- update DB from 5.3.28 to 5.3.29 version
 
-
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'SetCurrentUserAsPerformer' and sysobjects.name = N'tblCaseSolution')
-	ALTER TABLE tblCaseSolution ADD SetCurrentUserAsPerformer int NULL
-Go
-
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'SetCurrentUsersWorkingGroup' and sysobjects.name = N'tblCaseSolution')
-	ALTER TABLE tblCaseSolution ADD SetCurrentUsersWorkingGroup int NULL
-Go
-
-
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'SaveAndClose' and sysobjects.name = N'tblCaseSolution')
-	ALTER TABLE tblCaseSolution ADD SaveAndClose int NULL
-Go
-
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'IsUniqueEmail' and sysobjects.name = N'tblQuestionnaireCircular')
-	ALTER TABLE tblQuestionnaireCircular ADD IsUniqueEmail Bit not NULL Default(0)
-Go
-
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'FinishingDateFrom' and sysobjects.name = N'tblQuestionnaireCircular')
-	ALTER TABLE tblQuestionnaireCircular ADD FinishingDateFrom Datetime NULL Default(0)
-Go
-
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'FinishingDateTo' and sysobjects.name = N'tblQuestionnaireCircular')
-	ALTER TABLE tblQuestionnaireCircular ADD FinishingDateTo Datetime NULL Default(0)
-Go
-
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'SelectedProcent' and sysobjects.name = N'tblQuestionnaireCircular')
-	ALTER TABLE tblQuestionnaireCircular ADD SelectedProcent Int not NULL Default(5)
-Go
-
-if not exists(select * from sysobjects WHERE Name = N'tblQuestionnaireCircularDepartments')
+if not exists(select * from sysobjects WHERE Name = N'tblCaseFollowUps')
 begin
-	CREATE TABLE [dbo].[tblQuestionnaireCircularDepartments](
+	CREATE TABLE [dbo].[tblCaseFollowUps](
 		[Id] [int] IDENTITY(1,1) NOT NULL,
-		[QuestionnaireCircularId] [int] NOT NULL,
-		[DepartmentId] [int] NOT NULL,
-		CONSTRAINT [PK_tblQuestionnaireCircularDepartments] PRIMARY KEY CLUSTERED 
+		[User_Id] [int] NOT NULL,
+		[Case_Id] [int] NOT NULL,
+		[FollowUpDate] [datetime] NOT NULL,
+		[IsActive] [bit] NOT NULL,
+		CONSTRAINT [PK_tblCaseFollowUps] PRIMARY KEY CLUSTERED 
 		(
 			[Id] ASC
 		)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
-		CONSTRAINT [FK_tblQuestionnaireCircularDepartments_tblQuestionnaireCircular] FOREIGN KEY ([QuestionnaireCircularId]) REFERENCES [dbo].[tblQuestionnaireCircular] ([Id]),
-		CONSTRAINT [FK_tblQuestionnaireCircularDepartments_tblDepartment] FOREIGN KEY ([DepartmentId]) REFERENCES [dbo].[tblDepartment] ([Id])
+		CONSTRAINT [FK_tblCaseFollowUps_tblUsers] FOREIGN KEY ([User_Id]) REFERENCES [dbo].[tblUsers] ([Id]),
+		CONSTRAINT [FK_tblCaseFollowUps_tblCases] FOREIGN KEY ([Case_Id]) REFERENCES [dbo].[tblCase] ([Id])
 	);
+end
+Else 
+begin
+IF EXISTS(
+    SELECT *
+    FROM sys.columns 
+    WHERE Name      = N'CaseId'
+      AND Object_ID = Object_ID(N'tblCaseFollowUps'))
+    EXEC sp_rename N'tblCaseFollowUps.CaseId', N'Case_Id', N'COLUMN';
+
+IF EXISTS(
+    SELECT *
+    FROM sys.columns 
+    WHERE Name      = N'UserId'
+      AND Object_ID = Object_ID(N'tblCaseFollowUps'))
+	EXEC sp_rename N'tblCaseFollowUps.UserId', N'User_Id', N'COLUMN';
+	
 end
 Go
 
-if not exists(select * from sysobjects WHERE Name = N'tblQuestionnaireCircularCaseTypes')
+if not exists(select * from sysobjects WHERE Name = N'tblCaseExtraFollowers')
 begin
-	CREATE TABLE [dbo].[tblQuestionnaireCircularCaseTypes](
+	CREATE TABLE [dbo].[tblCaseExtraFollowers](
 		[Id] [int] IDENTITY(1,1) NOT NULL,
-		[QuestionnaireCircularId] [int] NOT NULL,
-		[CaseTypeId] [int] NOT NULL,
-		CONSTRAINT [PK_tblQuestionnaireCircularCaseTypes] PRIMARY KEY CLUSTERED 
+		[Follower] nvarchar(MAX) NOT NULL,
+		[Case_Id] [int] NOT NULL,
+		[CreatedByUser_Id] [int] NOT NULL,
+		[CreatedDate] [datetime] NOT NULL,
+		CONSTRAINT [PK_tblCaseExtraFollowers] PRIMARY KEY CLUSTERED 
 		(
 			[Id] ASC
 		)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
-		CONSTRAINT [FK_tblQuestionnaireCircularCaseTypes_tblQuestionnaireCircular] FOREIGN KEY ([QuestionnaireCircularId]) REFERENCES [dbo].[tblQuestionnaireCircular] ([Id]),
-		CONSTRAINT [FK_tblQuestionnaireCircularCaseTypes_tblCaseType] FOREIGN KEY ([CaseTypeId]) REFERENCES [dbo].[tblCaseType] ([Id])
+		CONSTRAINT [FK_tblCaseExtraFollowers_tblCases] FOREIGN KEY ([Case_Id]) REFERENCES [dbo].[tblCase] ([Id]),
+		CONSTRAINT [FK_tblCaseExtraFollowers_tblUsers] FOREIGN KEY ([CreatedByUser_Id]) REFERENCES [dbo].[tblUsers] ([Id])
 	);
 end
-Go
-
-if not exists(select * from sysobjects WHERE Name = N'tblQuestionnaireCircularProductAreas')
+Else 
 begin
-	CREATE TABLE [dbo].[tblQuestionnaireCircularProductAreas](
-		[Id] [int] IDENTITY(1,1) NOT NULL,
-		[QuestionnaireCircularId] [int] NOT NULL,
-		[ProductAreaId] [int] NOT NULL,
-		CONSTRAINT [PK_tblQuestionnaireCircularProductAreas] PRIMARY KEY CLUSTERED 
-		(
-			[Id] ASC
-		)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
-		CONSTRAINT [FK_tblQuestionnaireCircularProductAreas_tblQuestionnaireCircular] FOREIGN KEY ([QuestionnaireCircularId]) REFERENCES [dbo].[tblQuestionnaireCircular] ([Id]),
-		CONSTRAINT [FK_tblQuestionnaireCircularProductAreas_tblProductArea] FOREIGN KEY ([ProductAreaId]) REFERENCES [dbo].[tblProductArea] ([Id])
-	);
+IF EXISTS(
+    SELECT *
+    FROM sys.columns 
+    WHERE Name      = N'CaseId'
+      AND Object_ID = Object_ID(N'tblCaseExtraFollowers'))
+    EXEC sp_rename N'tblCaseExtraFollowers.CaseId', N'Case_Id', N'COLUMN';
 end
 Go
 
-if not exists(select * from sysobjects WHERE Name = N'tblQuestionnaireCircularWorkingGroups')
-begin
-	CREATE TABLE [dbo].[tblQuestionnaireCircularWorkingGroups](
-		[Id] [int] IDENTITY(1,1) NOT NULL,
-		[QuestionnaireCircularId] [int] NOT NULL,
-		[WorkingGroupId] [int] NOT NULL,
-		CONSTRAINT [PK_tblQuestionnaireCircularWorkingGroups] PRIMARY KEY CLUSTERED 
-		(
-			[Id] ASC
-		)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
-		CONSTRAINT [FK_tblQuestionnaireCircularWorkingGroups_tblQuestionnaireCircular] FOREIGN KEY ([QuestionnaireCircularId]) REFERENCES [dbo].[tblQuestionnaireCircular] ([Id]),
-		CONSTRAINT [FK_tblQuestionnaireCircularWorkingGroups_tblWorkingGroup] FOREIGN KEY ([WorkingGroupId]) REFERENCES [dbo].[tblWorkingGroup] ([Id])
-	);
-end
+UPDATE [dbo].[tblCaseSettings]
+  SET [tblCaseName] = '_temporary_LeadTime'
+  WHERE [tblCaseName] = '_temporary_.LeadTime'
 Go
 
--- New fields tblSettings for SMTP settings
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'SMTPServer' and sysobjects.name = N'tblSettings')
-	ALTER TABLE tblSettings ADD SMTPServer nvarchar(50) NULL
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Type' and sysobjects.name = N'tblQuestionnaire')
+	ALTER TABLE [tblQuestionnaire] ADD [Type] int not NULL Default(0)
 GO
 
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'SMTPPort' and sysobjects.name = N'tblSettings')
-	ALTER TABLE tblSettings ADD SMTPPort int not NULL Default(0)
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Identifier' and sysobjects.name = N'tblQuestionnaire')
+	ALTER TABLE [tblQuestionnaire] ADD [Identifier] nvarchar(100) NULL
 GO
 
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'SMTPUserName' and sysobjects.name = N'tblSettings')
-	ALTER TABLE tblSettings ADD SMTPUserName nvarchar(50) NULL
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'IconId' and sysobjects.name = N'tblQuestionnaireQuestionOption')
+	ALTER TABLE [tblQuestionnaireQuestionOption] ADD [IconId] nvarchar(200) NULL
 GO
 
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'SMTPPassword' and sysobjects.name = N'tblSettings')
-	ALTER TABLE tblSettings ADD SMTPPassword nvarchar(50) NULL
-GO
+ALTER TABLE [dbo].[tblQuestionnaire] ALTER COLUMN [QuestionnaireDescription] ntext NULL
 
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'IsSMTPSecured' and sysobjects.name = N'tblSettings')
-	ALTER TABLE tblSettings ADD IsSMTPSecured Bit not NULL Default(0)
-Go
+ALTER TABLE [dbo].[tblQuestionnaire_tblLanguage] ALTER COLUMN [QuestionnaireDescription] ntext NULL
+
+ALTER TABLE [dbo].[tblQuestionnaireQuestion] ALTER COLUMN [NoteText] nvarchar(1000) NULL
+
+ALTER TABLE [dbo].[tblQuestionnaireQues_tblLang] ALTER COLUMN [NoteText] nvarchar(1000) NULL
+
+
 
 -- Last Line to update database version
-UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.28'
+UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.29'
 

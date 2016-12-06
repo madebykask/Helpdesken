@@ -9,6 +9,7 @@ img
 	max-width: 100%;
 }
 
+
 h4 {
     /*background: #f2f7fe;*/
     padding:5px;
@@ -74,6 +75,10 @@ h5 {
 
 .toplogout .dropdown {
     float:left;
+}
+
+.disabled {
+    background-color: #ddd !important;
 }
 
 .gif-loader {
@@ -291,6 +296,30 @@ h5 {
     padding:0;
 }
 
+.faq-unstyled {  
+  list-style: none;
+}
+
+.faq-expand, .faq-collapse, .faq-expand:hover, .faq-collapse:hover{
+    cursor: pointer;
+    color: #333;
+    text-decoration:none;
+}
+
+.faq-node, .faq-node:hover{
+    cursor: pointer;
+    color: #333;
+    text-decoration:none;
+}
+
+.faq-font-bold {
+    font-weight: bold;
+}
+
+.font-bold {
+    font-weight: bold;
+}
+
 .ico-coworkers {
     background: url(../img/ico-coworkers.png);
     background-repeat: no-repeat;
@@ -368,6 +397,27 @@ h5 {
   line-height:normal;
   font-size:18px;
   margin:0;
+
+}
+
+/**FAQ***/
+.panel-default > .panel-heading.faqph {
+  color: #333;
+  background-color: #f9f9f9;
+  border-color: #ddd;
+  font-weight:bold;
+}
+
+.panel-default > .panel-heading.faqph h5 {
+  line-height:normal;
+  font-size:14px;
+  margin:0;
+  color:#333;
+  /*font-weight:bold;*/
+}
+
+table th.thpointer {
+    cursor: pointer;
 }
 
 /***TABS**************/
@@ -447,6 +497,31 @@ input[type=text], select, textarea {
 label {
     font-weight: normal !important;
 }
+
+label.error
+{
+    color: #ff0000;
+    margin-left: 10px;
+}
+
+input[type=text].error, select.error, textarea.error, .btn-group.error  .btn
+{
+    border: 1px solid #ff0000;
+    background-color: #ffeeee;
+}
+
+a.error, input[type=¨button].error .btn
+{
+    border: 1px solid #ff0000;
+    background-color: #ffeeee;
+    color:#333333;
+}
+
+.error
+{
+    color: #ff0000;
+}
+
 .form-group {
     margin-bottom: 5px;
 }
@@ -808,6 +883,20 @@ label {
     background: #008283;
 }
 
+/******FONT AWSOME***********/
+.mnu-fa{
+    font-size:32px;
+    clear:both;
+    width: 51px;
+    height: 40px;
+    margin:0 auto;
+    padding:4px 0;
+}
+
+/****TABEL A COLOR*****/
+.linkcolor a{
+    color:#333;
+}
 
 
 

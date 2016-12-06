@@ -158,14 +158,10 @@
             return                 
                 this.IsCheckListVisuble() ||
                 this.IsInventoryVisible() ||
-                this.IsLicenseVisible();
-
-            /*this.IsOrderVisible() ||
-            this.IsAccountVisible() ||
-                            
-            this.IsPlanningVisible() ||                
-            this.IsQuestionVisible() ||                                                
-            this.IsComputerUserVisible();*/
+                this.IsLicenseVisible() ||
+                this.IsAccountVisible() ||
+                this.IsContractVisible() ||
+                this.IsOrderVisible();
         }
 
         public bool IsModulesVisible()

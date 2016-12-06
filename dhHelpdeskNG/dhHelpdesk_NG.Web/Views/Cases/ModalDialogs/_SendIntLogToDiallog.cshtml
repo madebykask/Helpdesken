@@ -1,0 +1,28 @@
+﻿
+@using System.Web.Optimization
+@using DH.Helpdesk.Web
+
+@Scripts.Render(BundleConfig.ScriptNames.CaseIntLogEmailSearch)
+
+<script type="text/javascript">
+    $(function () {
+        InitializeInternalLogSendDialog();
+    });
+</script>
+
+<div id="SendIntLogCase" title="@Translation.GetCoreTextTranslation("E-post")" class="overflow-visible">
+    <label>
+        <input id="searchIntSendToCheckboxWg" checked="checked" name="WorkingGroup" type="checkbox" value="true"> @Translation.GetCoreTextTranslation("Driftgrupp")
+    </label>
+    <label>
+        <input id="searchIntSendToCheckboxInit" checked="checked" name="Initiator" type="checkbox" value="true"> @Translation.GetCoreTextTranslation("Anmälare")
+    </label>
+    <label>
+        <input id="searchIntSendToCheckboxAdm" checked="checked" name="Administrator" type="checkbox" value="true"> @Translation.GetCoreTextTranslation("Handläggare")
+    </label>
+    <label>
+        <input id="searchIntSendToCheckboxEg" checked="checked" name="EmailGroup" type="checkbox" value="true"> @Translation.GetCoreTextTranslation("E-postgrupp")
+    </label>
+    <br/>
+    <textarea cols="20" id="casesIntLogSendInput" ></textarea>
+</div>

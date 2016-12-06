@@ -1779,10 +1779,6 @@ table th.thpointer {
         margin-left: 0px;
     }
 
-    .case-overview.page .table.table-cases {
-        margin-bottom: 0px;
-    }
-
     .loading-msg,
     .no-data-msg,
     .error-msg
@@ -3151,6 +3147,15 @@ body.login {
 }
 .width90 {
     width: 90%!important;
+}
+.width70 {
+    width: 70%!important;
+}
+.width60 {
+    width: 60%!important;
+}
+.width20 {
+    width: 20%!important;
 }
 .error-title {
     text-align: center;

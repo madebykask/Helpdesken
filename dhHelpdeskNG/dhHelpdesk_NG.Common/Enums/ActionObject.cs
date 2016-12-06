@@ -16,5 +16,7 @@
 
         public const int Help = 7;
 
+        public const int FAQ = 8;
+
     }
 }

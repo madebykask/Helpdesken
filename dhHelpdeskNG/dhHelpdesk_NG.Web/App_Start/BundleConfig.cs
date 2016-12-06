@@ -4,11 +4,22 @@
 
     public static class BundleConfig
     {
-        public struct ScriptNames
+	    public struct StylesNames
+	    {
+			
+		}
+
+		public struct ScriptNames
         {
             public const string DynamicCase = "~/bundles/dynamic-case";
-			public const string JQueryValidation = "~/bundles/jqueryval";
+            public const string AttributesValidation = "~/bundles/jqueryattrval";
+            public const string EditOrder = ("~/bundles/orders/orderedit");
+            public const string InventoryUserSearch = ("~/bundles/inventory/inventorysearch");
+            public const string CaseIntLogEmailSearch = ("~/bundles/case/caseintlogemailsearch");
+            public const string CaseAddFollowersSearch = ("~/bundles/case/caseaddfollowerssearch");
+			public const string Select2 = "~/bundles/select2";
 		}
+
 
         public static void RegisterBundles(BundleCollection bundles)
         {
@@ -34,16 +45,15 @@
             bundles.Add(new ScriptBundle(ScriptNames.DynamicCase).Include(
                             "~/Content/js/DynamicCase/iframeResizer.js",
                             "~/Content/js/DynamicCase/container.js"));
-			bundles.Add(new ScriptBundle(ScriptNames.JQueryValidation).Include(
-				"~/Content/js/Validation/dh.helpdesk.validations.extensions.js"));
 			bundles.Add(new ScriptBundle("~/bundles/common").Include(
                             "~/Content/js/Shared/errors.js",
+							"~/Content/js/Shared/jquery.customAjax.js",
 #if DEBUG
                             "~/Scripts/jquery-1.8.3.js",
                             "~/Content/js/jquery.unobtrusive-ajax.min.js",
                             "~/Content/js/jquery.validate.js",
 #else
-                            "~/Scripts/jquery-1.8.3.min.js",
+							"~/Scripts/jquery-1.8.3.min.js",
                             "~/Content/js/jquery.unobtrusive-ajax.min.js",
                             "~/Content/js/jquery.validate.min.js",
 #endif
@@ -69,6 +79,7 @@
                             "~/Content/js/Shared/custom.validation.maxlengthfrom.notrequired.js",
                             "~/Content/js/Shared/custom.validation.requiredfrom.js",
                             "~/Content/js/Shared/custom.validation.maxlengthfrom.js",
+							"~/Content/js/Shared/custom.validation.reuiredifnotempty.js",
                             "~/Content/js/Shared/sortby.js",
                             "~/Content/js/jquery.toastmessage.js",
                             "~/Content/js/bootstrap-switch.min.js",
@@ -88,7 +99,9 @@
                             "~/Content/js/bootstrap.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/common/popup").Include(
-                            "~/Scripts/jquery-1.8.3.min.js",
+							"~/Content/js/Shared/errors.js",
+							"~/Content/js/Shared/jquery.customAjax.js",
+							"~/Scripts/jquery-1.8.3.min.js",
                             "~/Content/js/jquery.unobtrusive-ajax.min.js",
                             "~/Content/js/jquery.validate.min.js",
                             "~/Content/js/jquery.validate.unobtrusive.min.js",
@@ -121,7 +134,10 @@
             bundles.Add(new ScriptBundle("~/bundles/modules").Include(
                             "~/Content/js/Users/modules.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/invoices").Include(                                                      
+			bundles.Add(new ScriptBundle(ScriptNames.Select2).Include(
+                            "~/Content/js/select2.js"));
+
+			bundles.Add(new ScriptBundle("~/bundles/invoices").Include(                                                      
                             "~/Content/js/bootstrap-multiselect.js",
                             "~/Content/js/chosen.jquery.min.js",           
                             "~/Content/js/Invoice/invoice.js"));
@@ -169,7 +185,8 @@
                     "~/Content/js/Cases/_input.js",
                     "~/Content/js/snippets/dropdown_fix.js",
                     "~/Content/js/Cases/case.templates.js",
-                    "~/Content/js/jsrender.min.js"));
+                    "~/Content/js/jsrender.min.js",
+					"~/Content/js/Cases/externalInvoice.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/cases/_caseLogFiles").Include("~/Content/js/Cases/_caseLogFiles.js"));
             bundles.Add(
@@ -185,6 +202,9 @@
 
             bundles.Add(new ScriptBundle("~/bundles/casetemplates/index").Include(
                 "~/Content/js/CaseTemplates/index.logic.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/caserules/logic").Include(
+                "~/Content/js/CaseRules/case.rule.logics.js"));
 
 
             bundles.Add(new ScriptBundle("~/bundles/changes/change").Include(
@@ -238,6 +258,9 @@
             bundles.Add(new ScriptBundle("~/bundles/orderaccounts/order").Include(
                 "~/Content/js/Account/order.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/contracts/edit").Include(
+               "~/Content/js/Contract/edit.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
 #if DEBUG
                 "~/Scripts/knockout-3.4.0.debug.js"
@@ -257,7 +280,9 @@
                            "~/Areas/admin/Content/js/invoice/invoicearticleproductareaInput.js"));
             
             bundles.Add(new ScriptBundle("~/bundles/common/admin").Include(
-                           "~/Scripts/jquery-1.8.3.min.js",
+						   "~/Content/js/Shared/errors.js",
+     					   "~/Content/js/Shared/jquery.customAjax.js",
+						   "~/Scripts/jquery-1.8.3.min.js",
                            "~/Scripts/jquery-ui-1.9.2.min.js",
                            "~/Content/js/bootstrap.js",
                            "~/Content/js/chosen.jquery.min.js",
@@ -390,6 +415,19 @@
                 "~/Content/js/jquery.validate.unobtrusive.min.js"));
 
             #endregion
+
+            bundles.Add(new ScriptBundle(ScriptNames.AttributesValidation).Include(
+                "~/Content/js/Shared/custom.validation.reuiredifnotempty.js"));
+            bundles.Add(new ScriptBundle(ScriptNames.EditOrder).Include(
+                "~/Content/js/Orders/order.edit.js"));
+            bundles.Add(new ScriptBundle(ScriptNames.InventoryUserSearch).Include(
+                "~/Content/js/Inventory/inventory.search.js"));
+            bundles.Add(new ScriptBundle(ScriptNames.CaseIntLogEmailSearch).Include(
+                "~/Content/js/Cases/Dialogs/_caseIntLogSearch.js"));
+            bundles.Add(new ScriptBundle(ScriptNames.CaseAddFollowersSearch).Include(
+                "~/Content/js/Cases/Dialogs/_caseAddFollowersSearch.js"));
+
         }
-    }
+
+	}
 }

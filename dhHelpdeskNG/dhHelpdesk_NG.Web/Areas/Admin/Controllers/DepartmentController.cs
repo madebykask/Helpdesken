@@ -18,6 +18,7 @@
         private readonly IHolidayService _holidayService;
         private readonly ICustomerService _customerService;
         private readonly IWatchDateCalendarService _watchDateCalendarService;
+        private readonly ISettingService _settingService;
 
         public DepartmentController(
             ICountryService countryService,
@@ -26,7 +27,8 @@
             IHolidayService holidayService,
             IWatchDateCalendarService watchDateCalendarService,
             ICustomerService customerService,
-            IMasterDataService masterDataService)
+            IMasterDataService masterDataService,
+            ISettingService settingService)
             : base(masterDataService)
         {
             this._countryService = countryService;
@@ -35,6 +37,7 @@
             this._holidayService = holidayService;
             this._watchDateCalendarService = watchDateCalendarService;
             this._customerService = customerService;
+            this._settingService = settingService;
         }
 
         public JsonResult SetShowOnlyActiveDepartmentInAdmin(bool value)
@@ -128,6 +131,7 @@
             {
                 Department = department,
                 Customer = customer,
+                CustomerSettings = this._settingService.GetCustomerSettings(customer.Id),
                 Regions = this._regionService.GetRegions(customer.Id).Where(x => x.IsActive == 1).Select(x => new SelectListItem
                 {
                     Text = x.Name,

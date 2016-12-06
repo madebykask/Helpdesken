@@ -15,7 +15,7 @@
     $(function () {
         @if (Model.Categories != null && this.Model.Categories.Items.Any())
         {
-            @:window.selectedCategoryId = @this.Model.Categories.Items.First().Value
+            @:window.selectedCategoryId = @Model.Categories.Items.First().Value
         }
 
         $('#tab_1').click(function () {
@@ -44,11 +44,11 @@
                 return;
             }            
             if ($(this).is(':checked')) {
-                $.get('@this.Url.Action("FaqsDetailed")', { categoryId: window.selectedCategoryId, now: Date.now() }, function (faqsWithDescription) {
+                $.get('@Url.Action("FaqsDetailed")', { categoryId: window.selectedCategoryId, now: Date.now() }, function (faqsWithDescription) {
                     refreshFaqTableWithDescription(faqsWithDescription);
                 });
             } else {
-                $.get('@this.Url.Action("Faqs")', { categoryId: window.selectedCategoryId, now: Date.now() }, function (faqs) {
+                $.get('@Url.Action("Faqs")', { categoryId: window.selectedCategoryId, now: Date.now() }, function (faqs) {
                     refreshFaqTable(faqs);
                 });
             }
@@ -61,11 +61,11 @@
             ChangeCat(selectedCategoryId);
 
             if ($('#show_all_answers_within_category').is(':checked')) {                
-                $.get('@this.Url.Action("FaqsDetailed")', { categoryId: window.selectedCategoryId, now: Date.now() }, function (faqsWithDescription) {
+                $.get('@Url.Action("FaqsDetailed")', { categoryId: window.selectedCategoryId, now: Date.now() }, function (faqsWithDescription) {
                     refreshFaqTableWithDescription(faqsWithDescription);
                 });
             } else {                
-                $.get('@this.Url.Action("Faqs")', { categoryId: selectedCategoryId, now: Date.now() } , function (faqs) {
+                $.get('@Url.Action("Faqs")', { categoryId: selectedCategoryId, now: Date.now() } , function (faqs) {
                     refreshFaqTable(faqs);
                 });
             }
@@ -74,7 +74,7 @@
         $('#add_faq_button').click(function () {
             if ($(this).find('.btn').hasClass('disabled'))
                 return;
-            window.location.href = '@this.Url.Action("NewFaq")?categoryId=' + window.selectedCategoryId;
+            window.location.href = '@Url.Action("NewFaq")?categoryId=' + window.selectedCategoryId;
         });
 
         
@@ -87,11 +87,11 @@
                 }
 
                 if ($('#show_all_answers_within_category_search_checkbox').is(':checked')) {
-                    $.get('@this.Url.Action("SearchDetailed")', { pharse: $elem.val() }, function (faqsWithDescription) {
+                    $.get('@Url.Action("SearchDetailed")', { pharse: $elem.val() }, function (faqsWithDescription) {
                         refreshSearchTableWithDescription(faqsWithDescription);
                     });
                 } else {
-                    $.get('@this.Url.Action("Search")', { pharse: $elem.val() }, function (faqs) {
+                    $.get('@Url.Action("Search")', { pharse: $elem.val() }, function (faqs) {
                         refreshSearchResultsTable(faqs);
                     });
                 }
@@ -105,11 +105,11 @@
             }
 
             if ($(this).is(':checked')) {
-                $.get('@this.Url.Action("SearchDetailed")', { pharse: $('#search_field').val(), now: Date.now() }, function (faqsWithDescription) {
+                $.get('@Url.Action("SearchDetailed")', { pharse: $('#search_field').val(), now: Date.now() }, function (faqsWithDescription) {
                     refreshSearchTableWithDescription(faqsWithDescription);
                 });
             } else {
-                $.get('@this.Url.Action("Search")', { pharse: $('#search_field').val(), now: Date.now() }, function (faqs) {
+                $.get('@Url.Action("Search")', { pharse: $('#search_field').val(), now: Date.now() }, function (faqs) {
                     refreshSearchResultsTable(faqs);
                 });
             }
@@ -119,7 +119,7 @@
 
         $('#categories_editing_tree').find('a.tree-node, a.tree-selected-node').click(function () {
             var selectedCategoryId = $(this).siblings('input').val();
-            window.location.href = '@this.Url.Action("EditCategory")?id=' + selectedCategoryId;
+            window.location.href = '@Url.Action("EditCategory")?id=' + selectedCategoryId;
         });
     });
 
@@ -138,11 +138,11 @@
         }
 
         if ($('#show_all_answers_within_category_search_checkbox').is(':checked')) {
-            $.get('@this.Url.Action("SearchDetailed")', { pharse: txt }, function (faqsWithDescription) {
+            $.get('@Url.Action("SearchDetailed")', { pharse: txt }, function (faqsWithDescription) {
                 refreshSearchTableWithDescription(faqsWithDescription);
             });
         } else {
-            $.get('@this.Url.Action("Search")', { pharse: txt }, function (faqs) {
+            $.get('@Url.Action("Search")', { pharse: txt }, function (faqs) {
                 refreshSearchResultsTable(faqs);
             });
         }
@@ -158,10 +158,10 @@
             var faqMarkup = $(
                 '<tr>' +
                     '<td>' +
-                    '<a href="@this.Url.Action("EditFaq")?id=' + faq.Id + '">' + faq.CreatedDateText + '</a>' +
+                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '">' + faq.CreatedDateText + '</a>' +
                     '</td>' +
                     '<td>' +
-                    '<a href="@this.Url.Action("EditFaq")?id=' + faq.Id + '">' + faq.Text + '</a>' +
+                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '">' + faq.Text + '</a>' +
                     '</td>' +
                     '</tr>');
 
@@ -179,10 +179,10 @@
             var faqMarkup =
                 '<tr>' +
                     '<td>' +
-                    '<a href="@this.Url.Action("EditFaq")?id=' + faq.Id + '">' + faq.CreatedDateText + '</a>' +
+                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '">' + faq.CreatedDateText + '</a>' +
                     '</td>' +
                     '<td>' +
-                    '<a href="@this.Url.Action("EditFaq")?id=' + faq.Id + '">' + faq.Text + '</a>' +
+                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '">' + faq.Text + '</a>' +
                     '<table>' +
                     '<tr>' +
                     '<td>' +
@@ -215,7 +215,7 @@
                             '<i class="icon-file"></i>' +
                             '</td>' +
                             '<td>' +
-                            '<a href="@this.Url.Action("DownloadFile")?faqId=' + faq.Id + '&fileName=' + fileName + '">' + fileName + '</a>' +
+                            '<a href="@Url.Action("DownloadFile")?faqId=' + faq.Id + '&fileName=' + fileName + '">' + fileName + '</a>' +
                             '</td>' +
                             '</tr>';
                 }
@@ -264,10 +264,10 @@
             var faqMarkup = $(
                 '<tr>' +
                     '<td>' +
-                    '<a href="@this.Url.Action("EditFaq")?id=' + faq.Id + '">' + faq.CreatedDateText + '</a>' +
+                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '">' + faq.CreatedDateText + '</a>' +
                     '</td>' +
                     '<td>' +
-                    '<a href="@this.Url.Action("EditFaq")?id=' + faq.Id + '">' + faq.Text + '</a>' +
+                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '">' + faq.Text + '</a>' +
                     '</td>' +
                     '</tr>');
 
@@ -285,10 +285,10 @@
             var faqMarkup =
                 '<tr>' +
                     '<td>' +
-                    '<a href="@this.Url.Action("EditFaq")?id=' + faq.Id + '">' + faq.CreatedDateText + '</a>' +
+                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '">' + faq.CreatedDateText + '</a>' +
                     '</td>' +
                     '<td>' +
-                    '<a href="@this.Url.Action("EditFaq")?id=' + faq.Id + '">' + faq.Text + '</a>' +
+                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '">' + faq.Text + '</a>' +
                     '<table>' +
                     '<tr>' +
                     '<td>' +
@@ -321,7 +321,7 @@
                             '<i class="icon-file"></i>' +
                             '</td>' +
                             '<td>' +
-                            '<a href="@this.Url.Action("DownloadFile")?faqId=' + faq.Id + '&fileName=' + fileName + '">' + fileName + '</a>' +
+                            '<a href="@Url.Action("DownloadFile")?faqId=' + faq.Id + '&fileName=' + fileName + '">' + fileName + '</a>' +
                             '</td>' +
                             '</tr>';
                 }
@@ -375,7 +375,7 @@
             @if (Model.UserHasFaqAdminPermission)
             {
                 <li id="add_faq_button" style="@(this.Model.Categories.Items.Any() ? "" : "display: none")"><a class="btn">@Translation.Get("Ny FAQ", Enums.TranslationSource.TextTranslation)</a></li>    
-                <li id="add_category_button" style="@(this.Model.Categories.Items.Any() ? "display: none" : "")"><a class="btn" href="@this.Url.Action("NewCategory")">@Translation.Get("Ny kategori", Enums.TranslationSource.TextTranslation)</a></li>                
+                <li id="add_category_button" style="@(this.Model.Categories.Items.Any() ? "display: none" : "")"><a class="btn" href="@Url.Action("NewCategory")">@Translation.Get("Ny kategori", Enums.TranslationSource.TextTranslation)</a></li>                
             }
         </ul>
     </div>
@@ -421,7 +421,7 @@
                                 <tbody>
                                     <tr>
                                         <td>
-                                            @this.Html.Tree("categories_tree", false, this.Model.Categories, SessionFacade.TemporaryValue)
+                                            @Html.Tree("categories_tree", false, this.Model.Categories, SessionFacade.TemporaryValue)
                                         </td>
                                     </tr>
                                 </tbody>
@@ -444,10 +444,10 @@
                                     {
                                         <tr>
                                             <td style="width:10%">
-                                                <a href="@this.Url.Action("EditFaq", "faq", new { id = faq.Id })">@faq.CreatedDate.ToFormattedDate()</a>
+                                                <a href="@Url.Action("EditFaq", "faq", new { id = faq.Id })">@faq.CreatedDate.ToFormattedDate()</a>
                                             </td>
                                             <td style="width:90%">
-                                                <a href="@this.Url.Action("EditFaq", "faq", new { id = faq.Id })">@faq.Text</a>
+                                                <a href="@Url.Action("EditFaq", "faq", new { id = faq.Id })">@faq.Text</a>
                                             </td>
                                         </tr>
                                     }
@@ -507,7 +507,7 @@
                     {
                         <table>
                             <tbody>
-                                @this.Html.Tree("categories_editing_tree", true, this.Model.Categories)
+                                @Html.Tree("categories_editing_tree", true, this.Model.Categories)
                             </tbody>
                         </table>
                     }

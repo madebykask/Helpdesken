@@ -10,6 +10,12 @@
 
     public static class EnumExtensions
     {
+
+        public static int ToInt(this Enum enumeration)
+        {            
+            return Convert.ToInt32(enumeration);
+        }
+
         public static SelectList ToSelectList(this Enum enumeration)
         {
             var list = (from Enum d in Enum.GetValues(enumeration.GetType())

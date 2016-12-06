@@ -68,13 +68,39 @@ namespace DH.Helpdesk.Dal.Repositories.Problem.Concrete
             return problemOverview;
         }
 
-        public List<ProblemOverview> FindByCustomerId(int customerId)
+        public List<ProblemOverview> FindByCustomerId(int customerId, bool checkCaseRelation = true)
         {
-            var propblemOverviews = this.DbContext.Problems.Where(x => x.Customer_Id == customerId)
-                                                           .OrderBy(x => x.Name)
-                                                           .Select(this.overviewMapper.Map)
-                                                           .ToList();
-            return propblemOverviews;
+            var ret = new List<ProblemOverview>();
+            if (checkCaseRelation)
+                ret = DbContext.Problems.Where(x => x.Customer_Id == customerId)
+                                        .OrderBy(x => x.Name)
+                                        .Select(this.overviewMapper.Map)
+                                        .ToList();
+            else
+            {
+                var entities = DbContext.Problems.Where(x => x.Customer_Id == customerId)
+                                        .OrderBy(x => x.Name)                
+                                        .ToList();
+
+                foreach (var entity in entities)
+                {
+                    ret.Add(new ProblemOverview
+                    {
+                        Id = entity.Id,
+                        Name = entity.Name,
+                        Description = entity.Description,
+                        ProblemNumber = entity.ProblemNumber,
+                        ResponsibleUserId = entity.ResponsibleUser == null ? null : (int?)entity.ResponsibleUser.Id,
+                        ResponsibleUserName = entity.ResponsibleUser == null ? null : entity.ResponsibleUser.FirstName,
+                        ResponsibleUserSurName = entity.ResponsibleUser == null ? null : entity.ResponsibleUser.SurName,
+                        InventoryNumber = entity.InventoryNumber,
+                        ShowOnStartPage = entity.ShowOnStartPage != 0,
+                        FinishingDate = entity.FinishingDate
+                    });
+                }
+            }
+
+            return ret;
         }
 
         public void UpdateFinishedDate(int problemId, DateTime? time)

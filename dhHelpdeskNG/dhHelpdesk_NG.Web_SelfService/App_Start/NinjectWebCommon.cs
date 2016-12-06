@@ -1,4 +1,5 @@
 using DH.Helpdesk.SelfService;
+using DH.Helpdesk.Services.Services.Feedback;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
 [assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(NinjectWebCommon), "Stop")]
@@ -54,7 +55,11 @@ namespace DH.Helpdesk.SelfService
     using DH.Helpdesk.Dal.Repositories.Cases.Concrete;
     using DH.Helpdesk.Dal.Repositories.BusinessRules;
     using DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete;
-    
+    using Dal.Repositories.Faq;
+    using Dal.Repositories.Faq.Concrete;
+    using Dal.Repositories.Questionnaire;
+    using Dal.Repositories.Questionnaire.Concrete;
+
     public static class NinjectWebCommon 
     {
         private static readonly Bootstrapper bootstrapper = new Bootstrapper();
@@ -107,6 +112,11 @@ namespace DH.Helpdesk.SelfService
 
 
             // Repositories
+            kernel.Bind<ICircularRepository>().To<CircularRepository>();
+            kernel.Bind<IQuestionnaireQuestionOptionRepository>().To<QuestionnaireQuestionOptionRepository>();
+            kernel.Bind<IQuestionnaireQuestionRepository>().To<QuestionnaireQuestionRepository>();
+            kernel.Bind<IQuestionnaireRepository>().To<QuestionnaireRepository>();
+
             kernel.Bind<ICustomerRepository>().To<CustomerRepository>();
             kernel.Bind<ITextRepository>().To<TextRepository>();
             kernel.Bind<ILanguageRepository>().To<LanguageRepository>();
@@ -201,6 +211,14 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IBusinessRuleRepository>().To<BusinessRuleRepository>();
             kernel.Bind<IEmailGroupRepository>().To<EmailGroupRepository>();
             kernel.Bind<IEmailGroupEmailRepository>().To<EmailGroupEmailRepository>();
+            kernel.Bind<IFaqRepository>().To<FaqRepository>();
+            kernel.Bind<IFaqFileRepository>().To<FaqFileRepository>();
+            kernel.Bind<IQuestionRepository>().To<QuestionRepository>();
+            kernel.Bind<IFaqCategoryRepository>().To<FaqCategoryRepository>();
+            kernel.Bind<IFaqCategoryLanguageRepository>().To<FaqCategoryLanguageRepository>();
+            kernel.Bind<IUrgencyRepository>().To<UrgencyRepository>();
+            kernel.Bind<ICaseExtraFollowersRepository>().To<CaseExtraFollowersRepository>();
+            kernel.Bind<IUserEmailRepository>().To<UserEmailRepository>();
 
             // Service             
             kernel.Bind<IMasterDataService>().To<MasterDataService>();            
@@ -218,7 +236,8 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IProductAreaService>().To<ProductAreaService>();   
             kernel.Bind<IMailTemplateService>().To<MailTemplateService>();
             kernel.Bind<IEmailService>().To<EmailService>();
-            kernel.Bind<ICaseSettingsService>().To<CaseSettingsService>();
+			kernel.Bind<IFeedbackTemplateService>().To<FeedbackTemplateService>();
+			kernel.Bind<ICaseSettingsService>().To<CaseSettingsService>();
             kernel.Bind<IInfoService>().To<InfoService>();
             kernel.Bind<ICaseFileService>().To<CaseFileService>();
             kernel.Bind<ILogFileService>().To<LogFileService>();
@@ -253,6 +272,12 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<ICaseInvoiceSettingsService>().To<CaseInvoiceSettingsService>();
             kernel.Bind<IBusinessRuleService>().To<BusinessRuleService>();
             kernel.Bind<IEmailGroupService>().To<EmailGroupService>();
+            kernel.Bind<IFaqService>().To<FaqService>();
+            kernel.Bind<IUrgencyService>().To<UrgencyService>();
+            kernel.Bind<ICaseExtraFollowersService>().To<CaseExtraFollowersService>();
+            kernel.Bind<IFeedbackService>().To<FeedbackService>();
+            kernel.Bind<ICircularService>().To<CircularService>();
+            kernel.Bind<IMailTemplateServiceNew>().To<MailTemplateServiceNew>();
 
             // Cache
             kernel.Bind<ICacheProvider>().To<CacheProvider>();

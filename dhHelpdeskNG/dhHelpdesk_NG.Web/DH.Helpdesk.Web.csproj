@@ -8,7 +8,7 @@
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{FFCFD298-57C0-46A4-8554-CB2163A49B25}</ProjectGuid>
-    <ProjectTypeGuids>{E53F8FEA-EAE0-44A6-8774-FFD645390401};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DH.Helpdesk.Web</RootNamespace>
@@ -33,7 +33,6 @@
     <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
     <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
-    <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
     <DontImportPostSharp>True</DontImportPostSharp>
     <TargetFrameworkProfile />
     <MvcProjectUpgradeChecked>true</MvcProjectUpgradeChecked>
@@ -48,6 +47,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>default</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -59,65 +59,77 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Antlr3.Runtime">
+    <Reference Include="Antlr3.Runtime, Version=3.4.1.9004, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="CommonServiceLocator.NinjectAdapter.Unofficial">
+    <Reference Include="CommonServiceLocator.NinjectAdapter.Unofficial, Version=3.2.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.NinjectAdapter.Unofficial.3.2.2.0\lib\Net40\CommonServiceLocator.NinjectAdapter.Unofficial.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="DataAnnotationsExtensions">
-      <HintPath>..\packages\DataAnnotationsExtensions.1.1.0.0\lib\NETFramework40\DataAnnotationsExtensions.dll</HintPath>
+    <Reference Include="DataAnnotationsExtensions, Version=5.0.1.16, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DataAnnotationsExtensions.5.0.1.16\lib\NETFramework40\DataAnnotationsExtensions.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="DataAnnotationsExtensions.ClientValidation">
-      <HintPath>..\packages\DataAnnotationsExtensions.MVC3.1.1.0.0\lib\NETFramework40\DataAnnotationsExtensions.ClientValidation.dll</HintPath>
+    <Reference Include="DataAnnotationsExtensions.ClientValidation, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DataAnnotationsExtensions.MVC.5.0.0.0\lib\net45\DataAnnotationsExtensions.ClientValidation.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.6.1.0\lib\net40\EntityFramework.dll</HintPath>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="EntityFramework.SqlServer">
-      <HintPath>..\packages\EntityFramework.6.1.0\lib\net40\EntityFramework.SqlServer.dll</HintPath>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="EPPlus, Version=4.0.2.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EPPlus.4.0.2\lib\net20\EPPlus.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="itextsharp">
       <HintPath>..\packages\iTextSharp.4.1.2\lib\itextsharp.dll</HintPath>
     </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Practices.ServiceLocation">
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\MicosoftReportViewerWebForms_v11.1.0.1\lib\Microsoft.ReportViewer.WebForms.DLL</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.5.0.4\lib\net40\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Ninject.3.2.2.0\lib\net40\Ninject.dll</HintPath>
+      <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Ninject.Web.Common, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Ninject.Web.Common.3.2.0.0\lib\net40-full\Ninject.Web.Common.dll</HintPath>
+      <HintPath>..\packages\Ninject.Web.Common.3.2.3.0\lib\net45-full\Ninject.Web.Common.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Ninject.Web.Mvc">
-      <HintPath>..\packages\Ninject.MVC3.3.2.0.0\lib\net40-full\Ninject.Web.Mvc.dll</HintPath>
+    <Reference Include="Ninject.Web.Mvc, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.MVC5.3.2.1.0\lib\net45-full\Ninject.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="PostSharp, Version=4.0.36.0, Culture=neutral, PublicKeyToken=b13fd38b8f9c99d7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\PostSharp.4.0.36\lib\net35-client\PostSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="RazorPDF">
-      <HintPath>..\packages\RazorPDF.1.0.0\lib\net40\RazorPDF.dll</HintPath>
+    <Reference Include="RazorPDF, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RazorPDF.1.0.0\lib\net45\RazorPDF.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="ReportViewerForMvc">
       <HintPath>..\packages\ReportViewerForMvc.1.0.1\lib\net45\ReportViewerForMvc.dll</HintPath>
@@ -131,8 +143,9 @@
     <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.dll</HintPath>
     </Reference>
-    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.4.0.20710.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.WebRequest, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.WebRequest.dll</HintPath>
@@ -142,27 +155,13 @@
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Web.Helpers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
       <Private>True</Private>
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.1.0.20105.408\lib\net40\System.Web.Helpers.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.4.0.20710.0\lib\net40\System.Web.Http.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Http.WebHost, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.4.0.20710.0\lib\net40\System.Web.Http.WebHost.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Mvc, Version=3.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
       <Private>True</Private>
-      <HintPath>..\packages\Microsoft.AspNet.Mvc.3.0.50813.1\lib\net40\System.Web.Mvc.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Razor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\Microsoft.AspNet.Razor.1.0.20105.408\lib\net40\System.Web.Razor.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp">
       <Private>True</Private>
@@ -173,18 +172,26 @@
     <Reference Include="System.ComponentModel.DataAnnotations">
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Web.WebPages, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.1.0.20105.408\lib\net40\System.Web.WebPages.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.WebPages.Deployment, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.1.0.20105.408\lib\net40\System.Web.WebPages.Deployment.dll</HintPath>
-    </Reference>
     <Reference Include="System.Web">
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.Abstractions">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.Routing">
@@ -193,7 +200,16 @@
     <Reference Include="System.Configuration">
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Web.WebPages.Razor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.XML">
@@ -201,22 +217,25 @@
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\WebActivatorEx.2.0.5\lib\net40\WebActivatorEx.dll</HintPath>
+      <HintPath>..\packages\WebActivatorEx.2.2.0\lib\net40\WebActivatorEx.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="WebGrease, Version=1.5.2.14234, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\CommonAssembly\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AppCode\Attributes\RequiredIfNotEmptyAttribute.cs" />
-    <Compile Include="AppCode\Constants\ErrorMessages.cs" />
-    <Compile Include="AppCode\Html\SelectExtensions.cs" />
+    <Compile Include="Controllers\FeedbackController.cs" />
+    <Compile Include="Infrastructure\Attributes\RequiredIfNotEmptyAttribute.cs" />
+    <Compile Include="Infrastructure\Extensions\ProperyExtensions.cs" />
+    <Compile Include="Infrastructure\Extensions\SelectExtensions.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\JsonFormatConfig.cs" />
     <Compile Include="App_Start\NinjectModules\Common\LoggerModule.cs" />
     <Compile Include="App_Start\NinjectModules\Common\CommonModule.cs" />
     <Compile Include="App_Start\NinjectModules\Common\ConfigurationModule.cs" />
@@ -242,6 +261,8 @@
     <Compile Include="App_Start\NinjectModules\Modules\ReportsModule.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RegisterClientValidationExtensions.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\AccountActivityController.cs" />
     <Compile Include="Areas\Admin\Controllers\BaseAdminController.cs" />
@@ -430,6 +451,7 @@
     <Content Include="Content\css\images\sort_both.png" />
     <Content Include="Content\css\images\sort_desc.png" />
     <Content Include="Content\css\print.css" />
+    <Content Include="Content\css\select2.css" />
     <Content Include="Content\icons\advanced_search.png" />
     <Content Include="Content\icons\ajax-loader.gif" />
     <Content Include="Content\icons\deal.png" />
@@ -447,6 +469,14 @@
     <Content Include="Content\img\clickmultimenu-6.png" />
     <Content Include="Content\img\dh_solutions_version.png" />
     <Content Include="Content\img\glyphicons-dh.png" />
+    <Content Include="Content\img\ic_sentiment_dissatisfied_black_24dp_1x.png" />
+    <Content Include="Content\img\ic_sentiment_dissatisfied_black_24dp_2x.png" />
+    <Content Include="Content\img\ic_sentiment_neutral_black_24dp_1x.png" />
+    <Content Include="Content\img\ic_sentiment_neutral_black_24dp_2x.png" />
+    <Content Include="Content\img\ic_sentiment_satisfied_black_24dp_1x.png" />
+    <Content Include="Content\img\ic_sentiment_satisfied_black_24dp_2x.png" />
+    <Content Include="Content\img\ic_sentiment_very_satisfied_black_24dp_1x.png" />
+    <Content Include="Content\img\ic_sentiment_very_satisfied_black_24dp_2x.png" />
     <Content Include="Content\js\Account\order.js" />
     <Content Include="Areas\Admin\Content\js\Users\_input.js" />
     <Content Include="Content\js\AdvancedSearch\index.specialfilter.js" />
@@ -488,6 +518,9 @@
     <Content Include="Content\js\bootstrap-tagsinput.min.js" />
     <Content Include="Content\js\Cases\case.templates.js" />
     <Content Include="Content\js\Cases\caseByIds.logic.js" />
+    <Content Include="Content\js\Cases\Dialogs\_caseAddFollowersSearch.js" />
+    <Content Include="Content\js\Cases\Dialogs\_caseIntLogSearch.js" />
+    <Content Include="Content\js\Cases\externalInvoice.js" />
     <Content Include="Content\js\Cases\_caseLogInput.js" />
     <Content Include="Content\js\Cases\components\BaseField.js" />
     <Content Include="Content\js\Cases\components\ConfirmationDialog.js" />
@@ -505,6 +538,7 @@
     <Content Include="Content\js\Cases\index.logic.js" />
     <Content Include="Content\js\Cases\relatedCases.logic.js" />
     <Content Include="Content\js\Cases\caseInitForm.js" />
+    <Content Include="Content\js\CaseRules\case.rule.logics.js" />
     <Content Include="Content\js\CaseTemplates\index.logic.js" />
     <Content Include="Content\js\CaseTemplates\edit.logic.js" />
     <Content Include="Content\js\Changes\inventoryDialog.js" />
@@ -838,7 +872,10 @@
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\UserEditModel.cs" />
     <Compile Include="Areas\Orders\OrdersAreaRegistration.cs" />
     <Content Include="Content\js\Contract\contractIndex.js" />
+    <Content Include="Content\js\Contract\edit.js" />
+    <Content Include="Content\js\Inventory\inventory.search.js" />
     <Content Include="Content\js\Shared\errors.js" />
+    <Content Include="Content\js\Shared\jquery.customAjax.js" />
     <Content Include="Content\js\snippets\clickmultimenu_dropdown.js" />
     <Content Include="Content\js\snippets\jQuery.inactiveValue.validator.js" />
     <Content Include="Content\js\snippets\tabSwitchByHashTag.js" />
@@ -1026,12 +1063,20 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\ApplicationFacade.cs" />
+    <Compile Include="Infrastructure\Attributes\Api\CustomApiErrorFilter.cs" />
+    <Compile Include="Infrastructure\Attributes\Api\PermissionsApiAttribute.cs" />
+    <Compile Include="Infrastructure\Attributes\Api\SessionApiRequiredAttribute.cs" />
+    <Compile Include="Infrastructure\Attributes\Api\ValidateApiAntiForgeryTokenAttribute.cs" />
+    <Compile Include="Infrastructure\Attributes\Api\ValidationApiActionFilter.cs" />
+    <Compile Include="Infrastructure\Attributes\Api\WebApiAuthorizeAttribute.cs" />
     <Compile Include="Infrastructure\Attributes\CustomHandleErrorAttribute.cs" />
     <Compile Include="Infrastructure\Attributes\CurrentTabAttribute.cs" />
+    <Compile Include="Infrastructure\Attributes\IgnoreAntiForgeryTokenAttribute.cs" />
     <Compile Include="Infrastructure\Attributes\NoCacheAttribute.cs" />
     <Compile Include="Infrastructure\Attributes\SessionRequiredAttribute.cs" />
     <Compile Include="Infrastructure\Attributes\UserCasePermissionsAttribute.cs" />
     <Compile Include="Infrastructure\Attributes\UserPermissionsAttribute.cs" />
+    <Compile Include="Infrastructure\BaseApiController.cs" />
     <Compile Include="Infrastructure\Binders\BinderHelper.cs" />
     <Compile Include="Infrastructure\Binders\DateTimeBinder.cs" />
     <Compile Include="Infrastructure\Binders\NullableDateTimeBinder.cs" />
@@ -1089,7 +1134,9 @@
     <Compile Include="Infrastructure\BusinessModelFactories\Changes\Concrete\UpdatedSettingsFactory.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Notifiers\Concrete\UpdatedSettingsFactory.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Notifiers\IUpdatedSettingsFactory.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\JavaScriptConvertExtention.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\UserFormatterExtension.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Case\Concrete\CaseRuleFactory.cs" />
     <Compile Include="Infrastructure\SelectListMapper.cs" />
     <Compile Include="Infrastructure\Enums.cs" />
     <Compile Include="Infrastructure\Extensions\BooleanExtansions.cs" />
@@ -1181,6 +1228,11 @@
     <Compile Include="Infrastructure\Tools\MimeHelper.cs" />
     <Compile Include="Infrastructure\Tools\WebMvcHelper.cs" />
     <Compile Include="Infrastructure\Translate\Translator.cs" />
+    <Compile Include="Infrastructure\UrlHelpers\MvcUrlNameBase.cs" />
+    <Compile Include="Infrastructure\UrlHelpers\Mvc\MvcUrlName.cs" />
+    <Compile Include="Infrastructure\UrlHelpers\Mvc\MvcUrlName.Feedback.cs" />
+    <Compile Include="Infrastructure\UrlHelpers\Mvc\MvcUrlName.Questionnaire.cs" />
+    <Compile Include="Infrastructure\UrlHelpers\WebApiUrlNameBase.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\CacheContext.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\CustomerContext.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\UserContext.cs" />
@@ -1282,6 +1334,7 @@
     <Compile Include="Models\BulletinBoardInputViewModel.cs" />
     <Compile Include="Models\CalendarInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\LockedCaseOverviewModel.cs" />
+    <Compile Include="Models\CaseRules\CaseRuleModel.cs" />
     <Compile Include="Models\CaseSolutionSettingModel.cs" />
     <Compile Include="Models\CaseSolution\CaseSolutionIndex.cs" />
     <Compile Include="Models\Case\CaseByIdsViewModel.cs" />
@@ -1293,6 +1346,7 @@
     <Compile Include="Models\Case\CaseRemainingTimeTable.cs" />
     <Compile Include="Models\Case\CaseStatisticsViewModel.cs" />
     <Compile Include="Models\Case\CaseInvoiceModel.cs" />
+    <Compile Include="Models\Case\ExternalInvoiceModel.cs" />
     <Compile Include="Models\Case\Input\CaseEditInput.cs" />
     <Compile Include="Models\Case\MyFavoriteFilterModel.cs" />
     <Compile Include="Models\Case\Output\CaseSeachFilterData.cs" />
@@ -1351,6 +1405,7 @@
     <Compile Include="Models\CheckLists\CheckListActionsInputModel.cs" />
     <Compile Include="Models\CheckLists\CheckListsModel.cs" />
     <Compile Include="Models\CheckLists\WorkingGroupMapperModel.cs" />
+    <Compile Include="Models\Contract\ContractFileViewModel.cs" />
     <Compile Include="Models\Contract\ContractIndexViewModel.cs" />
     <Compile Include="Models\Contract\ContractsSettingViewModel.cs" />
     <Compile Include="Models\Contract\ContractViewInputModel.cs" />
@@ -1360,6 +1415,10 @@
     <Compile Include="Models\DailyReports\DailyReportModel.cs" />
     <Compile Include="Models\Error\HandleErrorInfoGuid.cs" />
     <Compile Include="Models\Faq\Output\FAQFileModelModel.cs" />
+    <Compile Include="Models\Feedback\AddQuestionOptionParams.cs" />
+    <Compile Include="Models\Feedback\DeleteQuestionOptionParams.cs" />
+    <Compile Include="Models\Feedback\FeedbackAnswerModel.cs" />
+    <Compile Include="Models\Feedback\FeedbackAnswerParams.cs" />
     <Compile Include="Models\IConfigurableFieldModel.cs" />
     <Compile Include="Areas\Inventory\Models\EditModel\Computer\AccesoriesEditViewModel.cs" />
     <Compile Include="Areas\Admin\Models\Invoice\ArticlesImportModel.cs" />
@@ -1369,12 +1428,17 @@
     <Compile Include="Models\Projects\ProjectOverviewSorting.cs" />
     <Compile Include="Models\Questionnaire\Input\CircularCaseFilter.cs" />
     <Compile Include="Models\Questionnaire\Input\ConnectedToCircularOverview.cs" />
+    <Compile Include="Models\Questionnaire\Input\DeleteFeedbackParams.cs" />
+    <Compile Include="Models\Feedback\EditFeedbackModel.cs" />
+    <Compile Include="Models\Feedback\EditFeedbackParams.cs" />
     <Compile Include="Models\Questionnaire\Output\CircularOverviewViewModel.cs" />
+    <Compile Include="Models\Questionnaire\Output\FeedbackOverviewModel.cs" />
     <Compile Include="Models\Questionnaire\Output\QuestionInputModel.cs" />
     <Compile Include="Models\Questionnaire\Output\QuestionnaireModel.cs" />
     <Compile Include="Models\Questionnaire\Output\QuestionnaireQuestionOptionModel.cs" />
     <Compile Include="Models\Questionnaire\Output\QuestionnaireQuestionModel.cs" />
     <Compile Include="Models\Questionnaire\Output\QuestionnaireViewModel.cs" />
+    <Compile Include="Models\Questionnaire\Output\QuestionnaireListsModel.cs" />
     <Compile Include="Models\Questionnaire\Output\QuestionViewModel.cs" />
     <Compile Include="Models\Questionnaire\Output\ReportFilter.cs" />
     <Compile Include="Models\Questionnaire\Output\StatisticsViewModel.cs" />
@@ -1796,9 +1860,57 @@
     <Content Include="Areas\Admin\Views\BusinessRule\_InputRule.cshtml" />
     <Content Include="Areas\Admin\Views\BusinessRule\_RuleCondition.cshtml" />
     <Content Include="Areas\Admin\Views\BusinessRule\_RuleAction.cshtml" />
+    <Content Include="Content\js\Orders\order.edit.js" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx" />
-    <Content Include="Content\js\Validation\dh.helpdesk.validations.extensions.js" />
+    <Content Include="Content\js\Shared\custom.validation.reuiredifnotempty.js" />
+    <Content Include="Content\js\i18n\ar.js" />
+    <Content Include="Content\js\i18n\az.js" />
+    <Content Include="Content\js\i18n\bg.js" />
+    <Content Include="Content\js\i18n\ca.js" />
+    <Content Include="Content\js\i18n\cs.js" />
+    <Content Include="Content\js\i18n\da.js" />
+    <Content Include="Content\js\i18n\de.js" />
+    <Content Include="Content\js\i18n\el.js" />
+    <Content Include="Content\js\i18n\en.js" />
+    <Content Include="Content\js\i18n\es.js" />
+    <Content Include="Content\js\i18n\et.js" />
+    <Content Include="Content\js\i18n\eu.js" />
+    <Content Include="Content\js\i18n\fa.js" />
+    <Content Include="Content\js\i18n\fi.js" />
+    <Content Include="Content\js\i18n\fr.js" />
+    <Content Include="Content\js\i18n\gl.js" />
+    <Content Include="Content\js\i18n\he.js" />
+    <Content Include="Content\js\i18n\hi.js" />
+    <Content Include="Content\js\i18n\hr.js" />
+    <Content Include="Content\js\i18n\hu.js" />
+    <Content Include="Content\js\i18n\id.js" />
+    <Content Include="Content\js\i18n\is.js" />
+    <Content Include="Content\js\i18n\it.js" />
+    <Content Include="Content\js\i18n\ja.js" />
+    <Content Include="Content\js\i18n\km.js" />
+    <Content Include="Content\js\i18n\ko.js" />
+    <Content Include="Content\js\i18n\lt.js" />
+    <Content Include="Content\js\i18n\lv.js" />
+    <Content Include="Content\js\i18n\mk.js" />
+    <Content Include="Content\js\i18n\ms.js" />
+    <Content Include="Content\js\i18n\nb.js" />
+    <Content Include="Content\js\i18n\nl.js" />
+    <Content Include="Content\js\i18n\pl.js" />
+    <Content Include="Content\js\i18n\pt-BR.js" />
+    <Content Include="Content\js\i18n\pt.js" />
+    <Content Include="Content\js\i18n\ro.js" />
+    <Content Include="Content\js\i18n\ru.js" />
+    <Content Include="Content\js\i18n\sk.js" />
+    <Content Include="Content\js\i18n\sr-Cyrl.js" />
+    <Content Include="Content\js\i18n\sr.js" />
+    <Content Include="Content\js\i18n\sv.js" />
+    <Content Include="Content\js\i18n\th.js" />
+    <Content Include="Content\js\i18n\tr.js" />
+    <Content Include="Content\js\i18n\uk.js" />
+    <Content Include="Content\js\i18n\vi.js" />
+    <Content Include="Content\js\i18n\zh-CN.js" />
+    <Content Include="Content\js\i18n\zh-TW.js" />
     <Content Include="Scripts\jquery-1.8.3.js" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />
     <Content Include="Scripts\jquery-ui-1.9.2.js" />
@@ -1806,6 +1918,8 @@
     <Content Include="Scripts\jquery.cookie.js" />
     <Content Include="Scripts\knockout-3.4.0.debug.js" />
     <Content Include="Scripts\knockout-3.4.0.js" />
+    <Content Include="Content\js\select2.js" />
+    <Content Include="Content\js\select2.min.js" />
     <Content Include="Views\DailyReport\Index.cshtml" />
     <Content Include="Areas\Orders\Views\OrderFieldSettings\Index.cshtml" />
     <Content Include="Areas\Orders\Views\OrderFieldSettings\EditorTemplates\FullFieldSettingsModel.cshtml" />
@@ -2392,6 +2506,13 @@
     <Content Include="Views\Contracts\New.cshtml" />
     <Content Include="Views\Contracts\_Input.cshtml" />
     <Content Include="Views\Contracts\Edit.cshtml" />
+    <Content Include="Views\Contracts\_ContractFiles.cshtml" />
+    <Content Include="Views\Feedback\EditFeedback.cshtml" />
+    <Content Include="Views\Feedback\_FeedbackQuestionOptions.cshtml" />
+    <Content Include="Views\Feedback\Answer.cshtml" />
+    <Content Include="Views\Feedback\ThankYou.cshtml" />
+    <Content Include="Views\Cases\ModalDialogs\_CaseAddFollowers.cshtml" />
+    <Content Include="Views\Cases\ModalDialogs\_SendIntLogToDiallog.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">
@@ -3108,8 +3229,10 @@
     <Content Include="Areas\Admin\Views\Users\_Appearance.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Areas\Admin\Controllers\Api\" />
     <Folder Include="Areas\Inventory\Infrastucture\" />
     <Folder Include="Infrastructure\ModelFactories\Problems\Concrete\" />
+    <Folder Include="Infrastructure\UrlHelpers\Api\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Login\Login.cshtml" />

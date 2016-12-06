@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.NinjectModules.Common
+﻿using DH.Helpdesk.Services.Services.Feedback;
+
+namespace DH.Helpdesk.Web.NinjectModules.Common
 {
     using DH.Helpdesk.Services.BusinessLogic.Accounts;
     using DH.Helpdesk.Services.Services;
@@ -34,7 +36,8 @@
             this.Bind<IChangePriorityService>().To<ChangePriorityService>();
             this.Bind<IChangeStatusService>().To<ChangeStatusService>();
             this.Bind<IQestionnaireService>().To<QuestionnaireService>();
-            this.Bind<IQestionnaireQuestionService>().To<QuestionnaireQuestionService>();
+			this.Bind<IFeedbackService>().To<FeedbackService>();
+			this.Bind<IQestionnaireQuestionService>().To<QuestionnaireQuestionService>();
             this.Bind<IQestionnaireQuestionOptionService>().To<QuestionnaireQuestionOptionService>();
             this.Bind<ICircularService>().To<CircularService>();
             this.Bind<IInventoryService>().To<InventoryService>();
@@ -50,6 +53,7 @@
             this.Bind<ICaseSolutionService>().To<CaseSolutionService>();
             this.Bind<ICaseFileService>().To<CaseFileService>();
             this.Bind<ICaseTypeService>().To<CaseTypeService>();
+            this.Bind<ICaseFollowUpService>().To<CaseFollowUpService>();
             this.Bind<ICaseSearchService>().To<CaseSearchService>();
             this.Bind<ICategoryService>().To<CategoryService>();
             this.Bind<IChecklistActionService>().To<ChecklistActionService>();
@@ -107,8 +111,9 @@
             this.Bind<IWatchDateCalendarService>().To<WatchDateCalendarService>();
             this.Bind<IWorkingGroupService>().To<WorkingGroupService>();
             this.Bind<ICausingPartService>().To<CausingPartService>();
-            this.Bind<IEmailService>().To<EmailService>().InSingletonScope();
-            this.Bind<IComputerModulesService>().To<ComputerModulesService>();
+            this.Bind<IEmailService>().To<EmailService>();
+	        this.Bind<IFeedbackTemplateService>().To<FeedbackTemplateService>();
+			this.Bind<IComputerModulesService>().To<ComputerModulesService>();
             this.Bind<IInventorySettingsService>().To<InventorySettingsService>();
             this.Bind<IPlaceService>().To<PlaceService>();
             this.Bind<IOrganizationService>().To<OrganizationService>();
@@ -151,9 +156,11 @@
 
             this.Bind<ILogProgramService>().To<LogProgramService>();
 
-            this.Bind<IBusinessRuleService>().To<BusinessRuleService>();            
+            this.Bind<IBusinessRuleService>().To<BusinessRuleService>();
 
-        }
+			Bind<IExternalInvoiceService>().To<ExternalInvoiceService>();
+			Bind<ICaseExtraFollowersService>().To<CaseExtraFollowersService>();
+		}
 
         #endregion
     }

@@ -187,6 +187,7 @@
     <Compile Include="BusinessLogic\Mappers\Reports\Data\ReportOptions.cs" />
     <Compile Include="BusinessLogic\Mappers\Reports\ReportsMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Reports\ReportsOptionsMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Shared\Data\UnionItemDependentOverview.cs" />
     <Compile Include="BusinessLogic\Mappers\Shared\Data\UnionItemOverview.cs" />
     <Compile Include="BusinessLogic\Mappers\Shared\GlobalMappers.cs" />
     <Compile Include="BusinessLogic\Mappers\Users\UsersMapper.cs" />
@@ -269,6 +270,8 @@
     <Compile Include="Infrastructure\Email\Concrete\CaseMailer.cs" />
     <Compile Include="Infrastructure\Email\ICaseMailer.cs" />
     <Compile Include="Infrastructure\TimeZoneResolver\TimeZoneResolver.cs" />
+    <Compile Include="Services\CaseExtraFollowersService.cs" />
+    <Compile Include="Services\CaseFollowUpService.cs" />
     <Compile Include="Services\CaseStatistic\CaseStatisticService.cs" />
     <Compile Include="Services\Concrete\CaseLockService.cs" />
     <Compile Include="Services\Concrete\LogProgramService.cs" />
@@ -278,6 +281,9 @@
     <Compile Include="Services\Concrete\Users\UsersPasswordHistoryService.cs" />
     <Compile Include="Services\ContractService.cs" />
     <Compile Include="Services\BusinessRuleService.cs" />
+    <Compile Include="Services\ExternalInvoiceService.cs" />
+    <Compile Include="Services\FeedbackService.cs" />
+    <Compile Include="Services\Feedback\FeedbackTemplateService.cs" />
     <Compile Include="Services\OperationLogEmailLogService.cs" />
     <Compile Include="Services\Reports\IReportServiceService.cs" />
     <Compile Include="Services\ICaseLockService.cs" />

@@ -4,6 +4,7 @@
     using System.Web.Mvc;
 
     using DH.Helpdesk.Domain;
+    using BusinessData.Models.Customer;
 
     public class DepartmentInputViewModel
     {
@@ -14,5 +15,7 @@
         public IList<SelectListItem> Regions { get; set; }
         public IList<SelectListItem> Holidays { get; set; }
         public IList<SelectListItem> WatchDateCalendar { get; set; }
+
+        public CustomerSettings CustomerSettings { get; set; }
     }
 }

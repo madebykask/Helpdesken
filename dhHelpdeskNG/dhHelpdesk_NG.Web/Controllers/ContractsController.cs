@@ -9,6 +9,12 @@ using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 using DH.Helpdesk.BusinessData.Models.Contract;
 using DH.Helpdesk.Domain;
+using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Common.Tools;
+using DH.Helpdesk.Web.Infrastructure.Tools;
+using System.Net;
+using DH.Helpdesk.Dal.Enums;
+using System.IO;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -20,8 +26,9 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IContractService _contractService;
         private readonly ISupplierService _supplierService;
         private readonly IDepartmentService _departmentService;
+        private readonly ITemporaryFilesCache userTemporaryFilesStorage;
 
-       
+
         public ContractsController(
             IUserService userService,
             IContractCategoryService contractCategoryService,
@@ -29,6 +36,7 @@ namespace DH.Helpdesk.Web.Controllers
             IContractService contractService,
             ISupplierService supplierService,
             IDepartmentService departmentService,
+            ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory,
             IMasterDataService masterDataService)
             : base(masterDataService)
         {            
@@ -38,6 +46,7 @@ namespace DH.Helpdesk.Web.Controllers
             this._customerService = customerService;
             this._supplierService = supplierService;
             this._departmentService = departmentService;
+            this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Contracts);
         }
 
 
@@ -55,7 +64,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var filter = new ContractSelectedFilter();
 
-            model.Rows = GetIndexRowModel(customer.Id, filter);
+            model.Rows = GetIndexRowModel(customer.Id, filter, new ColSortModel(EnumContractFieldSettings.Number, true));
 
             model.ContractCategories = contractcategories.OrderBy(a => a.Name).ToList();
             model.Suppliers = suppliers.OrderBy(s => s.Name).ToList();
@@ -63,8 +72,7 @@ namespace DH.Helpdesk.Web.Controllers
            
             return this.View(model);
         }
-
-
+         
         public ActionResult New(int customerId)
         {
             var customer = this._customerService.GetCustomer(customerId);
@@ -78,7 +86,7 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var customer = _customerService.GetCustomer(customerId);
             var model = new ContractViewInputModel();
-            var contractFields = this.GetSettingsModel(customerId);
+            var contractFields = this.GetSettingsModel(customerId);            
             var contractcategories = _contractCategoryService.GetContractCategories(customerId).OrderBy(a => a.Name).ToList();
             var suppliers = _supplierService.GetActiveSuppliers(customerId);
             var departments = _departmentService.GetDepartments(customerId);
@@ -107,7 +115,10 @@ namespace DH.Helpdesk.Web.Controllers
                         Required = conf.Required
                     }).ToList();
 
-                model.ContractCategories = contractcategories.Select(x => new SelectListItem
+                model.ContractFiles = new List<ContractFileViewModel>();
+                model.ContractFileKey = Guid.NewGuid().ToString();
+
+            model.ContractCategories = contractcategories.Select(x => new SelectListItem
                 {
                     Selected = (x.Id == model.CategoryId ? true : false),
                     Text = x.Name,
@@ -164,50 +175,29 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Save(ContractViewInputModel contractInput, string actiontype)
+        public ActionResult New(ContractViewInputModel contractInput, string actiontype, string contractFileKey)
         {
-              if (contractInput != null)
-                {
-                    var contractInputToSave = new ContractInputModel
-                        (
-                         contractInput.ContractId,
-                         SessionFacade.CurrentCustomer.Id,
-                         SessionFacade.CurrentUser.Id,
-                         contractInput.CategoryId,
-                         contractInput.SupplierId,
-                         contractInput.DepartmentId,
-                         contractInput.ResponsibleUserId,
-                         contractInput.FollowUpResponsibleUserId,
-                         contractInput.ContractNumber,
-                         contractInput.ContractStartDate,
-                         contractInput.ContractEndDate,
-                         contractInput.NoticeTimeId,
-                         contractInput.Finished,
-                         contractInput.Running,
-                         contractInput.FollowUpIntervalId,
-                         contractInput.Other,
-                         contractInput.NoticeDate,
-                         DateTime.Now,
-                         DateTime.Now,
-                         Guid.Empty
-                        );
+            var cId = this.SaveContract(contractInput);
+            var temporaryFiles = userTemporaryFilesStorage.FindFiles(contractFileKey.ToString());
+            var contractFiles = temporaryFiles.Select(f => new ContractFileModel(0, cId, f.Content, null, "", f.Name, DateTime.UtcNow, DateTime.UtcNow, Guid.NewGuid())).ToList();
 
-                    var cId = this._contractService.SaveContract(contractInputToSave);
-                    if (actiontype != "Spara och stäng")
-                    {
-             
-                    return this.RedirectToAction("Edit", "Contracts", new { id = cId });
-                    }
+            foreach(var contractFile in contractFiles)
+            {
+                this._contractService.SaveContracFile(contractFile);
+                userTemporaryFilesStorage.DeleteFile(contractFile.FileName, contractInput.ContractFileKey);
+            }            
 
-                    else
-                        return RedirectToAction("index", "Contracts");
-                }
-            
-            
+            if (actiontype != "Spara och stäng")
+            {             
+                return this.RedirectToAction("Edit", "Contracts", new { id = cId });
+            }
 
-                return RedirectToAction("index", "Contracts");
+                     
+           // this.SaveContractFiles(mmm, cId);
             
+            return RedirectToAction("index", "Contracts");            
         }
+
         [HttpPost]
         public JsonResult SaveContractFieldsSetting(JSContractsSettingRowViewModel[] contractSettings)
         {
@@ -257,17 +247,32 @@ namespace DH.Helpdesk.Web.Controllers
             return Json(new { state = true, message = Translation.GetCoreTextTranslation("Saved success!") }, JsonRequestBehavior.AllowGet);
         }
 
-        private ContractsIndexRowsModel GetIndexRowModel(int customerId, ContractSelectedFilter selectedFilter)
+        public ActionResult SortBy(int customerId, string colName, bool isAsc)
+        {
+            var model = GetIndexRowModel(customerId, null, new ColSortModel(colName, isAsc));
+            return PartialView("_ContractsIndexRows", model);
+        }
+
+        private ContractsIndexRowsModel GetIndexRowModel(int customerId, ContractSelectedFilter selectedFilter, ColSortModel sort)
         {
             var customer = _customerService.GetCustomer(customerId);
             var model = new ContractsIndexRowsModel(customer);           
             var allContracts = _contractService.GetContracts(customerId);
+            var settings = GetSettingsModel(customer.Id);
             var selectedContracts = new List<Contract>();
 
-            if (selectedFilter.SelectedContractCategories.Any())
+            if (selectedFilter != null && selectedFilter.SelectedContractCategories.Any())
             {
                
-            }        
+            }
+
+            model.Columns = settings.SettingRows.Where(s => s.ShowInList == true)
+                                                .ToList();
+
+            foreach (var col in model.Columns)
+                col.SetOrder();
+
+            model.Columns = model.Columns.OrderBy(s => s.VirtualOrder).ToList();
 
             foreach (var con in allContracts)
             {
@@ -290,7 +295,73 @@ namespace DH.Helpdesk.Web.Controllers
                 });
             }
 
+            model.Data = SortData(model.Data, sort);
+            model.SortBy = sort;
+                 
             return model;
+        }
+
+        private List<ContractsIndexRowModel> SortData(List<ContractsIndexRowModel> data, ColSortModel sort)
+        {
+            switch (sort.ColumnName)
+            {
+                case EnumContractFieldSettings.Number:
+                    return sort.IsAsc ? data.OrderBy(d => d.ContractNumber).ToList() : data.OrderByDescending(d => d.ContractNumber).ToList();
+
+                case EnumContractFieldSettings.CaseNumber:
+                    return sort.IsAsc ? data.OrderBy(d => d.CaseNumber).ToList() : data.OrderByDescending(d => d.CaseNumber).ToList();
+
+                case EnumContractFieldSettings.Category:
+                    return sort.IsAsc ? data.OrderBy(d => d.ContractCategory.Name).ToList() : data.OrderByDescending(d => d.ContractCategory.Name).ToList();
+
+                case EnumContractFieldSettings.Supplier:                   
+                    return sort.IsAsc ? data.OrderBy(t => t.Supplier != null && t.Supplier.Name != null
+                                         ? t.Supplier.Name : string.Empty).ToList() :
+                                        data.OrderByDescending(t => t.Supplier != null && t.Supplier.Name != null
+                                         ? t.Supplier.Name : string.Empty).ToList();
+
+                case EnumContractFieldSettings.Department:
+                    return sort.IsAsc ? data.OrderBy(d => d.Department.DepartmentName).ToList() : data.OrderByDescending(d => d.Department.DepartmentName).ToList();
+
+                case EnumContractFieldSettings.ResponsibleUser:
+                    return sort.IsAsc ? data.OrderBy(t => t.ResponsibleUser != null && t.ResponsibleUser.SurName != null
+                                         ? t.ResponsibleUser.SurName : string.Empty).ToList() : 
+                                        data.OrderByDescending(t => t.ResponsibleUser != null && t.ResponsibleUser.SurName != null
+                                         ? t.ResponsibleUser.SurName : string.Empty).ToList();
+
+                case EnumContractFieldSettings.StartDate:
+                    return sort.IsAsc ? data.OrderBy(d => d.ContractStartDate).ToList() : data.OrderByDescending(d => d.ContractStartDate).ToList();
+
+                case EnumContractFieldSettings.EndDate:
+                    return sort.IsAsc ? data.OrderBy(d => d.ContractEndDate).ToList() : data.OrderByDescending(d => d.ContractEndDate).ToList();
+
+                case EnumContractFieldSettings.NoticeDate:
+                    return sort.IsAsc ? data.OrderBy(d => d.NoticeDate).ToList() : data.OrderByDescending(d => d.NoticeDate).ToList();
+
+                //case EnumContractFieldSettings.Filename:
+                //    return sort.IsAsc ? data.OrderBy(d => d.).ToList() : data.OrderByDescending(d => d.).ToList();
+
+                case EnumContractFieldSettings.Other:
+                    return sort.IsAsc ? data.OrderBy(d => d.Info).ToList() : data.OrderByDescending(d => d.Info).ToList();
+
+                case EnumContractFieldSettings.Running:
+                    return sort.IsAsc ? data.OrderBy(d => d.Running).ToList() : data.OrderByDescending(d => d.Running).ToList();
+
+                case EnumContractFieldSettings.Finished:
+                    return sort.IsAsc ? data.OrderBy(d => d.Finished).ToList() : data.OrderByDescending(d => d.Finished).ToList();
+
+                case EnumContractFieldSettings.FollowUpField:
+                    return sort.IsAsc ? data.OrderBy(d => d.FollowUpInterval).ToList() : data.OrderByDescending(d => d.FollowUpInterval).ToList();
+
+                case EnumContractFieldSettings.ResponsibleFollowUpField:
+                    //return sort.IsAsc ? data.OrderBy(d => d.FollowUpResponsibleUser).ToList() : data.OrderByDescending(d => d.FollowUpResponsibleUser).ToList();
+                    return sort.IsAsc ? data.OrderBy(t => t.FollowUpResponsibleUser != null && t.FollowUpResponsibleUser.SurName != null
+                                        ? t.FollowUpResponsibleUser.SurName : string.Empty).ToList() :
+                                        data.OrderByDescending(t => t.FollowUpResponsibleUser != null && t.FollowUpResponsibleUser.SurName != null
+                                        ? t.FollowUpResponsibleUser.SurName : string.Empty).ToList();
+            }
+
+            return data;
         }
 
         private ContractsSettingViewModel GetSettingsModel(int customerId)
@@ -320,7 +391,173 @@ namespace DH.Helpdesk.Web.Controllers
 
 
         }
-        
+
+
+        [HttpPost]
+        public void UploadContractFile(string id, string name)
+        {
+            var uploadedFile = this.Request.Files[0];
+            var uploadedData = new byte[uploadedFile.InputStream.Length];
+            uploadedFile.InputStream.Read(uploadedData, 0, uploadedData.Length);
+
+            if (GuidHelper.IsGuid(id))
+            {
+                if (this.userTemporaryFilesStorage.FileExists(name, id))
+                {
+                    //return;
+                    //this.userTemporaryFilesStorage.DeleteFile(name, id, ModuleName.Log); 
+                    //throw new HttpException((int)HttpStatusCode.Conflict, null); because it take a long time.
+                }
+                this.userTemporaryFilesStorage.AddFile(uploadedData, name, id);
+            }
+        }
+       
+
+        [HttpGet]
+        public FileContentResult DownloadContractFile(string id, string fileName)
+        {
+            byte[] fileContent;
+            if (GuidHelper.IsGuid(id))
+                fileContent = userTemporaryFilesStorage.GetFileContent(fileName, id, "");
+            else
+            {
+                
+                //fileContent = _caseFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
+                fileContent = null;
+            }
+            return File(fileContent, "application/octet-stream", fileName);
+        }
+
+        [HttpGet]
+        public JsonResult DeleteContractFile(string id, string fileName, string filePlace)
+        {
+            try
+            {
+                if (id == "0")
+                    userTemporaryFilesStorage.DeleteFile(fileName.Trim(), filePlace);
+                else
+                {
+
+                }
+                return Json(new { result = true, message = string.Empty }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { result = false, message = ex.Message });
+            }
+            
+        }
+
+        [HttpGet]
+        public JsonResult GetAllFiles(string id , int cId)
+        {
+            string[] fileNames = { };           
+            var tempFiles = userTemporaryFilesStorage.FindFiles(id);
+
+            if (tempFiles.Any())
+            {
+                fileNames = tempFiles.Select(f => f.Name).ToArray();
+            }
+         
+            return Json(fileNames, JsonRequestBehavior.AllowGet);
+        }
+
+        private int SaveContract(ContractViewInputModel contractInput)
+        {
+            var cId = 0;
+            if (contractInput != null)
+            {
+                var contractInputToSave = new ContractInputModel
+                    (
+                     contractInput.ContractId,
+                     SessionFacade.CurrentCustomer.Id,
+                     SessionFacade.CurrentUser.Id,
+                     contractInput.CategoryId,
+                     contractInput.SupplierId,
+                     contractInput.DepartmentId,
+                     contractInput.ResponsibleUserId,
+                     contractInput.FollowUpResponsibleUserId,
+                     contractInput.ContractNumber,
+                     contractInput.ContractStartDate,
+                     contractInput.ContractEndDate,
+                     contractInput.NoticeTimeId,
+                     contractInput.Finished,
+                     contractInput.Running,
+                     contractInput.FollowUpIntervalId,
+                     contractInput.Other,
+                     contractInput.NoticeDate,
+                     DateTime.Now,
+                     DateTime.Now,
+                     Guid.Empty
+                    );
+
+                cId = this._contractService.SaveContract(contractInputToSave);
+            }
+
+            return cId;
+        }
+        private void SaveContractFiles(List<ContractFileViewModel> contractFilesInputs, int contractId)
+        {
+            foreach (var contractFile in contractFilesInputs)
+            {
+                var contractFileInputToSave = new ContractFileModel
+                    (
+                     0,
+                     contractId,
+                     contractFile.Content,
+                     0,
+                     contractFile.ContractType,
+                     contractFile.FileName,
+                     DateTime.UtcNow,                                         
+                     DateTime.UtcNow,
+                     Guid.Empty
+                    );
+
+              this._contractService.SaveContracFile(contractFileInputToSave);
+            }           
+        }
+
+        private List<ContractFileViewModel> CreateContractFilesModel(int contractId)
+        {
+            var contractFiles = this._contractService.GetContractFiles(contractId);
+            var contractFilesInput = contractFiles.Select(conf => new ContractFileViewModel()
+            {
+                Id = conf.Id,
+                Contract_Id = conf.Contract_Id,
+                ArchivedContractFile_Id = conf.ArchivedContractFile_Id,
+                FileName = conf.FileName,
+                ArchivedDate = conf.ArchivedDate,
+                Content = conf.Content,
+                ContractType = conf.ContentType,
+                ContractFileGuid = conf.ContractFileGuid,
+                CreatedDate = conf.CreatedDate
+            }).ToList();
+            return contractFilesInput;
+        }
+
+        private List<string> ContractFilesNames(int contractId)
+        {
+            List<string> contractFilesNames = null;
+            var contractFiles = this._contractService.GetContractFiles(contractId);
+            contractFilesNames = contractFiles.Select(conf => conf.FileName).ToList();
+
+            return contractFilesNames;
+        }
+
+        private List<WebTemporaryFile> TransferContractFiles(string contractFilesKey, int contractId)
+        {
+            var filesToAdd = new List<WebTemporaryFile>();
+            var contractFiles = this._contractService.GetContractFiles(contractId);
+            if (contractFiles != null)
+            {
+                foreach (var f in contractFiles)
+                {
+                    filesToAdd.Add(new WebTemporaryFile(f.Content, f.FileName));
+                    this.userTemporaryFilesStorage.AddFile(f.Content, f.FileName, contractFilesKey);
+                }                
+            }
+            return filesToAdd;
+        }
         //
         // GET: /Contract/Details/5
 
@@ -362,14 +599,16 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var contractFields = this.GetSettingsModel(SessionFacade.CurrentCustomer.Id);
             var contract = this._contractService.GetContract(id);
-            var changedbyUser = this._userService.GetUser(contract.ChangedByUser_Id);
+
 
             if (contract == null)
                 return new HttpNotFoundResult("No contract found...");
+            else
+            {
+                var contractsExistingFiles = this._contractService.GetContractFiles(id);
+                var changedbyUser = this._userService.GetUser(contract.ChangedByUser_Id);
 
-            // Convert contract entity to input model
-
-            var contractEditInput = CreateInputViewModel(SessionFacade.CurrentCustomer.Id);
+                var contractEditInput = CreateInputViewModel(SessionFacade.CurrentCustomer.Id);
 
                 contractEditInput.ContractId = contract.Id;
                 contractEditInput.CategoryId = contract.ContractCategory_Id;
@@ -383,14 +622,16 @@ namespace DH.Helpdesk.Web.Controllers
                 contractEditInput.ContractEndDate = contract.ContractEndDate;
                 contractEditInput.NoticeTimeId = contract.NoticeTime;
                 contractEditInput.Finished = Convert.ToBoolean(contract.Finished);
-                contractEditInput.Running = Convert.ToBoolean(contract.Running);                
+                contractEditInput.Running = Convert.ToBoolean(contract.Running);
                 contractEditInput.Other = contract.Info;
                 contractEditInput.NoticeDate = contract.NoticeDate;
                 contractEditInput.ChangedByUser = changedbyUser.SurName + " " + changedbyUser.FirstName;
                 contractEditInput.CreatedDate = contract.CreatedDate.ToShortDateString();
                 contractEditInput.ChangedDate = contract.ChangedDate.ToShortDateString();
+                contractEditInput.ContractFiles = CreateContractFilesModel(contract.Id);
 
                 return this.View(contractEditInput);
+            }
         }
 
 
@@ -398,43 +639,31 @@ namespace DH.Helpdesk.Web.Controllers
         // POST: /Contract/Edit/5
 
         [HttpPost]
-        public ActionResult Edit(int id, ContractViewInputModel contractInput)
+        public ActionResult Edit(int id, ContractViewInputModel contractInput , string actiontype , string contractFileKey)
         {
             try
-            {
-                var existingContract = this._contractService.GetContract(id);
-                // TODO: Add update logic here
- 
-                var contractInputToSave = new ContractInputModel
-                   (
-                    contractInput.ContractId,
-                    SessionFacade.CurrentCustomer.Id,
-                    SessionFacade.CurrentUser.Id,
-                    contractInput.CategoryId,
-                    contractInput.SupplierId,
-                    contractInput.DepartmentId,
-                    contractInput.ResponsibleUserId,
-                    contractInput.FollowUpResponsibleUserId,
-                    contractInput.ContractNumber,
-                    contractInput.ContractStartDate,
-                    contractInput.ContractEndDate,
-                    contractInput.NoticeTimeId,
-                    contractInput.Finished,
-                    contractInput.Running,
-                    contractInput.FollowUpIntervalId,
-                    contractInput.Other,
-                    contractInput.NoticeDate,
-                    existingContract.CreatedDate,
-                    DateTime.Now,
-                    existingContract.ContractGUID
-                   );
-                var cId = this._contractService.SaveContract(contractInputToSave);
+            {                
+                var cId = SaveContract(contractInput);
+                var temporaryFiles = userTemporaryFilesStorage.FindFiles(contractFileKey);
+                var contractsExistingFiles = this._contractService.GetContractFiles(id);
+                var contractFiles = temporaryFiles.Select(f => new ContractFileModel(0, cId, f.Content, null, "", f.Name, DateTime.UtcNow, DateTime.UtcNow, Guid.NewGuid())).ToList();
 
-                return this.RedirectToAction("Edit", "Contracts", new { id = cId });
+                foreach (var contractFile in contractFiles)
+                {
+                    this._contractService.SaveContracFile(contractFile);
+                    userTemporaryFilesStorage.DeleteFile(contractFile.FileName, contractInput.ContractFileKey);
+                }
+
+                if (actiontype != "Spara och stäng")
+                {
+                    return this.RedirectToAction("Edit", "Contracts", new { id = cId });
+                }
+                else
+                    return this.RedirectToAction("index", "Contracts");
             }
-            catch
+            catch (Exception ex)
             {
-                return this.RedirectToAction("index", "Contracts", new { id = id });
+                return this.RedirectToAction("index", "Contracts");
             }
         }
 

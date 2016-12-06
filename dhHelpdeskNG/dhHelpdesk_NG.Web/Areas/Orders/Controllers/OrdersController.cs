@@ -111,9 +111,12 @@
                 SessionFacade.SavePageFilters(PageName.OrdersOrders, filters);
             }
 
-            var data = this.ordersService.GetOrdersFilterData(this.workContext.Customer.CustomerId);
+			int[] selectedStatuses;
+            var data = this.ordersService.GetOrdersFilterData(this.workContext.Customer.CustomerId, out selectedStatuses);
 
-            var model = this.ordersModelFactory.GetIndexModel(data, filters);
+	        var filledFilters = new OrdersFilterModel(filters.OrderTypeId, filters.AdministratiorIds, filters.StartDate, filters.EndDate, selectedStatuses, filters.Text, filters.RecordsOnPage, filters.SortField);
+
+            var model = this.ordersModelFactory.GetIndexModel(data, filledFilters);
             return this.View(model);
         }
 

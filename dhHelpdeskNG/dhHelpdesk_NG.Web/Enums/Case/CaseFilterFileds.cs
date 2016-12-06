@@ -32,6 +32,11 @@
         public const string CaseTypeIdNameAttribute = "hidFilterCaseTypeId";
         public const string ClosingReasonNameAttribute = "hidFilterClosingReasonId";
         public const string ProductAreaIdNameAttribute = "hidFilterProductAreaId";
-        
-    }
+
+		public const string OrderColumnNum = "order";
+		public const string OrderColumnDir = "dir";
+		public const string PageStart = "start";
+		public const string PageSize = "length";
+
+	}
 }

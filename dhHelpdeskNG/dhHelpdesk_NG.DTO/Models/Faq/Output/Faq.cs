@@ -35,5 +35,20 @@
         public bool ShowOnStartPage { get; set; }
 
         public bool InformationIsAvailableForNotifiers { get; set; }
+
+        public FaqFile[] Files { get; set; }
+
+    }
+
+    public sealed class FaqFile
+    {
+        public int Id { get; set; }
+
+        public int Faq_Id { get; set; }
+
+        public string FileName { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+
     }
 }

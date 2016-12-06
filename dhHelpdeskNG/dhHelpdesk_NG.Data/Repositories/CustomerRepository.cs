@@ -239,7 +239,10 @@ using System;
                 userSettingEntity.CasePriorityFilter = (newSetting.Priority == string.Empty)
                     ? null
                     : newSetting.Priority;
-                userSettingEntity.CaseStatusFilter = (newSetting.State) ? "0" : null;
+                //userSettingEntity.CaseStatusFilter = (newSetting.State) ? "0" : null;
+                userSettingEntity.CaseStatusFilter = (newSetting.State == string.Empty)
+                    ? null
+                    : newSetting.State;
                 userSettingEntity.CaseStateSecondaryFilter = (newSetting.SubState == string.Empty)
                     ? null
                     : newSetting.SubState;

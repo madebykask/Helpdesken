@@ -1,4 +1,4 @@
-﻿@model DH.Helpdesk.Web.Models.Case.Output.AdvancedSearchSpecificFilterData 
+﻿@model DH.Helpdesk.Web.Models.Case.Output.AdvancedSearchSpecificFilterData
 @using DH.Helpdesk.BusinessData.Models.Case
 @using DH.Helpdesk.BusinessData.OldComponents
 @using System.Web.Optimization
@@ -6,7 +6,7 @@
 
 @Scripts.Render("~/bundles/advancedsearch/specialfilter")
 
-<div id="SpecificFilterDataPartial" >
+<div id="SpecificFilterDataPartial">
     <script type="text/javascript">
         window.Params = {
             DefaultFocusObject: "#btnSearch",
@@ -17,7 +17,7 @@
     </script>
 
     @if (Model != null)
-    {                         
+    {
         <div class="span6">
             <table class="tableform">
                 @if (Model.DepartmentList != null)
@@ -38,13 +38,13 @@
                                     {
                                         <option class="DisabledChosen" value="@e.Id" @e.Id.IdIsSelected(Model.FilteredDepartment)>@e.DepartmentDescription(Model.CustomerSetting.DepartmentFilterFormat)</option>
                                     }
-                                    
+
                                 }
                             </select>
                         </td>
-                    </tr>                
+                    </tr>
                 }
-                
+
                 @*Working group control*@
                 @if (Model.WorkingGroupList != null)
                 {
@@ -64,12 +64,12 @@
                                     {
                                         <option class="DisabledChosen" value="@e.Id" @e.Id.IdIsSelected(Model.FilteredWorkingGroup)>@e.WorkingGroupName</option>
                                     }
-                                    
+
                                 }
                             </select>
                         </td>
 
-                    </tr>                
+                    </tr>
                 }
 
                 @if (Model.PriorityList != null)
@@ -93,7 +93,7 @@
                                 }
                             </select>
                         </td>
-                    </tr>                
+                    </tr>
                 }
 
                 @if (Model.StateSecondaryList != null)
@@ -114,11 +114,11 @@
                                     {
                                         <option class="DisabledChosen" value="@e.Id" @e.Id.IdIsSelected(Model.FilteredStateSecondary)>@Translation.Get(e.Name, Enums.TranslationSource.TextTranslation)</option>
                                     }
-                                    
+
                                 }
                             </select>
                         </td>
-                    </tr>                
+                    </tr>
                 }
 
                 @if (Model.CaseTypeList != null)
@@ -140,51 +140,29 @@
                                 <input type="hidden" class="hidden" value="@Model.FilteredCaseType" id="hid_CaseTypeDropDown" name="hid_CaseTypeDropDown" />
                             </div>
                         </td>
-                    </tr>                
+                    </tr>
                 }
 
-                @*@if (Model.ProductAreaList != null)
+                @if (Model.NewProductAreaList != null)
                 {
                     <tr>
                         <td>
                             @Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)
                         </td>
                         <td>
-                            <div id="ProductAreaDropDown" class="btn-group pull-left">
-                                <div class="btn breadcrumbs" id="divBreadcrumbs_ProductAreaDropDown">@Model.FilteredProductAreaText</div>
-                                <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
-                                    @Html.ProductAreaDropdownButtonString(Model.ProductAreaList, false)
-                                </ul>
-                                <input type="hidden" class="hidden" value="@Model.FilteredProductArea" id="hid_ProductAreaDropDown" name="hid_ProductAreaDropDown" />
-                            </div>
-                        </td>
-                    </tr>                
-                }*@
-
-                @if (Model.ProductAreaList != null)
-                {
-                    <tr>
-                        <td>
-                            [Product Area List]
-                        </td>
-                        <td>
-                            <select id="productArea" name="productArea" class='chosen-single-select'>    
+                            <select id="hid_ProductAreaDropDown" name="hid_ProductAreaDropDown" class='chosen-single-select'>
                                 <option> &nbsp; </option>
                                 @if (Model.NewProductAreaList != null)
                                 {
                                     foreach (var productArea in Model.NewProductAreaList)
-                                    {                                                                                                           
-                                        <option value="@productArea.Value" @(productArea.Selected ? "Selected" : "")> @productArea.Text </option>
+                                    {
+                                        <option class="@(productArea.Disabled? "DisabledChosen" : "")" value="@productArea.Value" @(productArea.Selected ? "Selected" : "")> @productArea.Text </option>
                                     }
                                 }
                             </select>
                         </td>
                     </tr>
-                    <tr>
+                    @*<tr>
                         <td>
                             @Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)
                         </td>
@@ -201,11 +179,12 @@
                                 <input type="hidden" class="hidden" value="@Model.FilteredProductArea" id="hid_ProductAreaDropDown" name="hid_ProductAreaDropDown" />
                             </div>
                         </td>
-                    </tr>                
+                    </tr>*@
                 }
 
                 @if (Model.ClosingReasonList != null)
                 {
+
                     <tr>
                         <td>
                             @Translation.Get(GlobalEnums.TranslationCaseFields.ClosingReason.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)
@@ -223,7 +202,7 @@
                                 <input type="hidden" class="hidden" value="@Model.FilteredClosingReason" id="hid_ClosingReasonDropDown" name="hid_ClosingReasonDropDown" />
                             </div>
                         </td>
-                    </tr>                
+                    </tr>
                 }
             </table>
         </div>

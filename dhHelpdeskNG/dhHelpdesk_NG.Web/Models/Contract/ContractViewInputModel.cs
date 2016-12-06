@@ -20,6 +20,10 @@ namespace DH.Helpdesk.Web.Models.Contract
 
         public List<ContractsSettingRowViewModel> SettingsModel { get; set; }
 
+        public List<ContractFileViewModel> ContractFiles { get; set; }
+
+        public string ContractFileKey { get; set; }
+
         public int CategoryId { get; set; }
 
         public int SupplierId { get; set; }

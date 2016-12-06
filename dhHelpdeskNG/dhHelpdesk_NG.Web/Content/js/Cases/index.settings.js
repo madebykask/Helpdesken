@@ -65,6 +65,7 @@ $(document).ready(function () {
             /// due to strange work with lists[] in .NET we have to send a bit different structure
             var formData = {
                 SelectedFontStyle: $("#SelectedFontStyle").val(),
+                SelectedPageSize: $("#SelectedPageSize").val(),
                 FieldStyle: $.map($('#dataTable tr.SortableRow'), function(el) {
                     var colName = $(el).find('[name="column_name"]').val();
                     var colStyle = $(el).find('[name="column_style"]').val();

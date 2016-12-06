@@ -35,5 +35,7 @@
         public bool HasAvailableColumns;        
 
         public string cls;
+
+	    public string[] pageSizeList;
     }
 }

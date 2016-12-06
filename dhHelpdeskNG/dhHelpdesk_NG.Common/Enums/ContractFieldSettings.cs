@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.Common.Enums
 {
-    public static class ContractFieldSettings
+    public static class EnumContractFieldSettings
     {
         public const string Number = "contractnumber";
  

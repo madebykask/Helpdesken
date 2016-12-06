@@ -1,4 +1,8 @@
-﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
+﻿using DH.Helpdesk.BusinessData.Enums.MailTemplates;
+using DH.Helpdesk.BusinessData.OldComponents;
+using DH.Helpdesk.Web.Models.Questionnaire.Output;
+
+namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -24,8 +28,9 @@
         private readonly IAccountFieldSettingsService _accountFieldSettingsService;
         private readonly IOrderService _orderService;
         private readonly ISettingService _settingService;
+		private readonly IFeedbackService _feedbackService;
 
-        public MailTemplateController(
+		public MailTemplateController(
             IAccountActivityService accountActivityService,
             IMailTemplateService mailTemplateService,
             IOrderTypeService orderTypeService,
@@ -35,18 +40,20 @@
             IAccountFieldSettingsService accountFieldSettingsService,
             IOrderService orderService,
             ISettingService settingSetvice,
-            IMasterDataService masterDataService)
+			IFeedbackService feedbackService,
+			IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            this._accountActivityService = accountActivityService;
-            this._mailTemplateService = mailTemplateService;
-            this._orderTypeService = orderTypeService;
-            this._languageService = languageService;
-            this._customerService = customerService;
-            this._accountFieldSettingsService = accountFieldSettingsService;
-            this._caseFieldSettingService = caseFieldSettingService;
-            this._orderService = orderService;
-            this._settingService = settingSetvice;
+            _accountActivityService = accountActivityService;
+            _mailTemplateService = mailTemplateService;
+            _orderTypeService = orderTypeService;
+            _languageService = languageService;
+            _customerService = customerService;
+            _accountFieldSettingsService = accountFieldSettingsService;
+            _caseFieldSettingService = caseFieldSettingService;
+            _orderService = orderService;
+            _settingService = settingSetvice;
+			_feedbackService = feedbackService;
         }
 
         public ActionResult Index(int customerId)
@@ -195,15 +202,20 @@
 
             var model = this.CreateInputViewModel(mailTemplateLanguage, customer, languageId, ordertypeId, accountactivityId);
 
-            // 1 to 99  System case template
-            if (id <= 99)
+			if (model.MailTemplateLanguage.MailTemplate.MailID == (int)GlobalEnums.MailTemplates.ClosedCase)
+			{
+				SetFeedbacks();
+			}
+
+			// 1 to 99  System case template
+			if (id <= 99)
                 model.IsStandardTemplate = true;
             return this.View(model);
 
 
         }
 
-        [HttpPost]
+	    [HttpPost]
         [ValidateInput(false)]
         public ActionResult Edit(int id, MailTemplateLanguageEntity mailTemplateLanguage, int customerId, int? ordertypeId)
         {
@@ -274,8 +286,12 @@
                 return this.RedirectToAction("index", "mailtemplate", new { customerId = customerId });
 
 
-            var model = this.MailTemplateIndexViewModel(customer, customersettings);
-            return this.View(model);
+            var model = this.MailTemplateIndexViewModel(customer, customersettings);//TODO: should be CreateInputViewModel instead of MailTemplateIndexViewModel
+			//if (model.MailTemplateLanguage.MailTemplate.MailID == (int)GlobalEnums.MailTemplates.ClosedCase)
+			//{
+			//	SetFeedbacks();
+			//}
+			return this.View(model);
 
         }
 
@@ -294,233 +310,7 @@
             return this.RedirectToAction("index", "mailtemplate", new { customerId = customerId });
         }
 
-        private MailTemplateIndexViewModel MailTemplateIndexViewModel(Customer customer, Setting customersettings)
-        {
-            #region RegularCase
-
-            List<SelectListItem> _regularCase = new List<SelectListItem>();
-
-            _regularCase.Add(new SelectListItem()
-            {
-                Text = Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation) + ")" + " (" + Translation.Get("Grunddata", Enums.TranslationSource.TextTranslation) + ")",
-                Value = "1",
-
-            });
-            _regularCase.Add(new SelectListItem()
-            {
-                Text = Translation.Get("Tilldelat ärende", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation) + ")",
-                Value = "2",
-
-            });
-            _regularCase.Add(new SelectListItem()
-            {
-                Text = Translation.Get("Tilldelat ärende", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation) + ")",
-                Value = "7",
-
-            });
-            _regularCase.Add(new SelectListItem()
-            {
-                Text = Translation.Get("Ärendet avslutat", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation) + ")" + " (" + Translation.Get("Grunddata", Enums.TranslationSource.TextTranslation) + ")",
-                Value = "3",
-
-            });
-            _regularCase.Add(new SelectListItem()
-            {
-                Text = Translation.Get("Informera anmälaren om åtgärden", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation) + ")",
-                Value = "4",
-            });
-            _regularCase.Add(new SelectListItem()
-            {
-                Text = Translation.Get("Skicka intern loggpost till", Enums.TranslationSource.TextTranslation),
-                Value = "5",
-            });
-            _regularCase.Add(new SelectListItem()
-            {
-                Text = Translation.Get("Anmälaren uppdaterat ärende", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation) + ")",
-                Value = "10",
-            });
-            _regularCase.Add(new SelectListItem()
-            {
-                Text = Translation.Get("Anmälaren aktiverat ärende", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation) + ")",
-                Value = "15",
-            });
-            _regularCase.Add(new SelectListItem()
-            {
-                Text = Translation.Get("Bevakningsdatum inträffar", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation) + ")",
-                Value = "9",
-            });
-            _regularCase.Add(new SelectListItem()
-            {
-                Text = Translation.Get("Skicka mail när planerat åtgärdsdatum inträffar", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation) + ")",
-                Value = "12",
-            });
-            _regularCase.Add(new SelectListItem()
-            {
-                Text = Translation.Get("Prioritet", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Grunddata", Enums.TranslationSource.TextTranslation) + ")",
-                Value = "13",
-            });
-
-            #endregion
-
-            #region CaseSMS
-
-            List<SelectListItem> _caseSMS = new List<SelectListItem>();
-
-            _caseSMS.Add(new SelectListItem()
-            {
-                Text = Translation.Get("Ärendet avslutat", Enums.TranslationSource.TextTranslation),
-                Value = "14",
-            });
-            _caseSMS.Add(new SelectListItem()
-            {
-                Text = Translation.Get("Tilldelat ärende", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation) + ")",
-                Value = "11",
-            });
-
-            #endregion
-
-            #region Changes
-
-            List<SelectListItem> _changes = new List<SelectListItem>();
-
-            _changes.Add(new SelectListItem()
-            {
-                Text = Translation.Get("Tilldelad ändring", Enums.TranslationSource.TextTranslation),
-                Value = "50",
-            });
-            _changes.Add(new SelectListItem()
-            {
-                Text = Translation.Get("Skicka loggpost till", Enums.TranslationSource.TextTranslation),
-                Value = "51",
-            });
-            _changes.Add(new SelectListItem()
-            {
-                Text = Translation.Get("CAB", Enums.TranslationSource.TextTranslation),
-                Value = "52",
-            });
-            _changes.Add(new SelectListItem()
-            {
-                Text = Translation.Get("PIR", Enums.TranslationSource.TextTranslation),
-                Value = "53",
-            });
-            _changes.Add(new SelectListItem()
-            {
-                Text = Translation.Get("Statusändring", Enums.TranslationSource.TextTranslation),
-                Value = "54",
-            });
-            _changes.Add(new SelectListItem()
-            {
-                Text = Translation.Get("Ändring", Enums.TranslationSource.TextTranslation),
-                Value = "55",
-            });
-
-            #endregion
-
-            #region OperationLogs
-
-            List<SelectListItem> _operationLogs = new List<SelectListItem>();
-
-            _operationLogs.Add(new SelectListItem()
-            {
-                Text = Translation.Get("Driftlogg", Enums.TranslationSource.TextTranslation),
-                Value = "60",
-            });
-
-            #endregion
-
-            #region Survey
-
-            List<SelectListItem> _survey = new List<SelectListItem>();
-
-            _survey.Add(new SelectListItem()
-            {
-                Text = Translation.Get("Enkät", Enums.TranslationSource.TextTranslation),
-                Value = "6",
-            });
-            _survey.Add(new SelectListItem()
-            {
-                Text = Translation.Get("Påminnelse", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Enkät", Enums.TranslationSource.TextTranslation),
-                Value = "16",
-            });
-            #endregion
-
-            var mailTemplates = new List<MailTemplateList>();
-            var languages = _languageService.GetActiveLanguages();
-            foreach (var lang in languages)
-            {
-                mailTemplates.AddRange(this._mailTemplateService
-                                           .GetMailTemplates(customer.Id, lang.Id)
-                                           .Where(x => !mailTemplates.Select(m => m.MailID)
-                                                                    .Contains(x.MailID))
-                                           .ToList());
-            }
-
-            
-            var customMailTemplates = _mailTemplateService.GetCustomMailTemplates(customer.Id);
-
-            var activeMailTemplateLanguages = new List<ActiveMailTemplateLanguage>();
-            foreach (var customMailTemplate in customMailTemplates)
-            {
-                var languageNames = customMailTemplate.TemplateLanguages
-                                                      .Where(l=> !string.IsNullOrEmpty(l.Subject) && !string.IsNullOrEmpty(l.Body))
-                                                      .Select(l=> Translation.Get(l.Language.Name))
-                                                      .ToList();
-
-                var activeMailTemplateLanguage = 
-                    new ActiveMailTemplateLanguage()
-                    {
-                        Id = customMailTemplate.MailId,
-                        LanguageNames = string.Join(", ", languageNames)
-                    };
-
-                activeMailTemplateLanguages.Add(activeMailTemplateLanguage);                
-            }
-
-            var activeOrderMailTemplateLanguages = new List<ActiveMailTemplateLanguage>();
-            foreach (var customMailTemplate in customMailTemplates.Where(x=> x.OrderTypeId != null))
-            {
-                var languageNames = customMailTemplate.TemplateLanguages
-                                                      .Where(l => !string.IsNullOrEmpty(l.Subject) && !string.IsNullOrEmpty(l.Body))
-                                                      .Select(l => Translation.Get(l.Language.Name))
-                                                      .ToList();
-
-                var activeOrderMailTemplateLanguage =
-                    new ActiveMailTemplateLanguage()
-                    {
-                        Id = customMailTemplate.OrderTypeId.Value,
-                        LanguageNames = string.Join(", ", languageNames)
-                    };
-
-                activeOrderMailTemplateLanguages.Add(activeOrderMailTemplateLanguage);
-            }
-
-            // *TODO: ViewModel should be change. shouldn't pass Entity to the view
-            var model = new MailTemplateIndexViewModel
-            {
-                Customer = customer,
-                AccountActivities = this._accountActivityService.GetAccountActivities(customer.Id),
-                MailTemplates = mailTemplates,
-                OrderTypes = this._orderTypeService.GetOrderTypesForMailTemplate(customer.Id),
-                Settings = customersettings,
-                ParentOrderTypes = this._orderTypeService.GetParentOrderTypesForMailTemplateIndexPage(customer.Id).Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString()
-                }).ToList(),
-
-                CaseSMSs = _caseSMS,
-                Changes = _changes,
-                OperationLogs = _operationLogs,
-                RegularCases = _regularCase,
-                Surveys = _survey,
-                ActiveMailTemplateLanguages = activeMailTemplateLanguages,
-                ActiveOrderMailTemplateLanguages = activeOrderMailTemplateLanguages
-            };
-
-            return model;
-        }
-
-        public MvcHtmlString MailTemplateFieldIdentifierRow(int customerId, string mailTemplateRowName, string ExtraLabel, string EMailIdentifier)
+		public MvcHtmlString MailTemplateFieldIdentifierRow(int customerId, string mailTemplateRowName, string ExtraLabel, string EMailIdentifier)
         {
             //Super quick fix TODO: FIX... Im sorry
             if (mailTemplateRowName == "tblLog_Text_External")
@@ -586,31 +376,11 @@
             }
         }
 
-        private MailTemplateInputViewModel CreateInputViewModel(MailTemplateLanguageEntity mailTemplateLanguage, Customer customer, int languageId, int? ordertypeId, int? accountactivityId)
-        {
-            var model = new MailTemplateInputViewModel
-            {
-                IsStandardTemplate = false,
-                MailTemplateLanguage = mailTemplateLanguage,
-                Customer = customer,
-                CaseFieldSettingWithLangauges = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customer.Id, SessionFacade.CurrentLanguageId),
-                AccountFieldSettings = this._accountFieldSettingsService.GetAccountFieldSettings(customer.Id, accountactivityId),
-                OrderFieldSettings = this._orderService.GetOrderFieldSettingsForMailTemplate(customer.Id, ordertypeId),
-                Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
-                {
-                    Text = Translation.Get(x.Name, Enums.TranslationSource.TextTranslation),
-                    Value = x.Id.ToString(),
-                    Selected = (x.Id == languageId)
-                }).ToList()
 
-            };
 
-            return model;
-        }
-
-        //commented out because: redmine case #10053
-        //[OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")]
-        public string UpdateLanguageList(int id, int customerId, int mailTemplateLanguageId, int mailTemplateId, int? accountactivityId, int? ordertypeId, int mailId, string mailTemplateName)
+		//commented out because: redmine case #10053
+		//[OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")]
+		public string UpdateLanguageList(int id, int customerId, int mailTemplateLanguageId, int mailTemplateId, int? accountactivityId, int? ordertypeId, int mailId, string mailTemplateName)
         {
             var customer = this._customerService.GetCustomer(customerId);
             var mailTemplate = new MailTemplateEntity();
@@ -670,7 +440,275 @@
 
             //return View(model);
             var view = "~/areas/admin/views/MailTemplate/_Input.cshtml";
+            if (model.MailTemplateLanguage.MailTemplate.MailID == (int)GlobalEnums.MailTemplates.ClosedCase)
+            {
+                SetFeedbacks();
+            }
             return this.RenderRazorViewToString(view, model);
         }
-    }
+
+		#region Private 
+		private MailTemplateIndexViewModel MailTemplateIndexViewModel(Customer customer, Setting customersettings)
+		{
+			#region RegularCase
+
+			List<SelectListItem> _regularCase = new List<SelectListItem>();
+
+			_regularCase.Add(new SelectListItem()
+			{
+				Text = Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation) + ")" + " (" + Translation.Get("Grunddata", Enums.TranslationSource.TextTranslation) + ")",
+				Value = "1",
+
+			});
+			_regularCase.Add(new SelectListItem()
+			{
+				Text = Translation.Get("Tilldelat ärende", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation) + ")",
+				Value = "2",
+
+			});
+			_regularCase.Add(new SelectListItem()
+			{
+				Text = Translation.Get("Tilldelat ärende", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation) + ")",
+				Value = "7",
+
+			});
+			_regularCase.Add(new SelectListItem()
+			{
+				Text = Translation.Get("Ärendet avslutat", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation) + ")" + " (" + Translation.Get("Grunddata", Enums.TranslationSource.TextTranslation) + ")",
+				Value = "3",
+
+			});
+			_regularCase.Add(new SelectListItem()
+			{
+				Text = Translation.Get("Informera anmälaren om åtgärden", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation) + ")",
+				Value = "4",
+			});
+			_regularCase.Add(new SelectListItem()
+			{
+				Text = Translation.Get("Skicka intern loggpost till", Enums.TranslationSource.TextTranslation),
+				Value = "5",
+			});
+			_regularCase.Add(new SelectListItem()
+			{
+				Text = Translation.Get("Anmälaren uppdaterat ärende", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation) + ")",
+				Value = "10",
+			});
+			_regularCase.Add(new SelectListItem()
+			{
+				Text = Translation.Get("Anmälaren aktiverat ärende", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation) + ")",
+				Value = "15",
+			});
+			_regularCase.Add(new SelectListItem()
+			{
+				Text = Translation.Get("Bevakningsdatum inträffar", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation) + ")",
+				Value = "9",
+			});
+			_regularCase.Add(new SelectListItem()
+			{
+				Text = Translation.Get("Skicka mail när planerat åtgärdsdatum inträffar", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation) + ")",
+				Value = "12",
+			});
+			_regularCase.Add(new SelectListItem()
+			{
+				Text = Translation.Get("Prioritet", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Grunddata", Enums.TranslationSource.TextTranslation) + ")",
+				Value = "13",
+			});
+
+			#endregion
+
+			#region CaseSMS
+
+			List<SelectListItem> _caseSMS = new List<SelectListItem>();
+
+			_caseSMS.Add(new SelectListItem()
+			{
+				Text = Translation.Get("Ärendet avslutat", Enums.TranslationSource.TextTranslation),
+				Value = "14",
+			});
+			_caseSMS.Add(new SelectListItem()
+			{
+				Text = Translation.Get("Tilldelat ärende", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation) + ")",
+				Value = "11",
+			});
+
+			#endregion
+
+			#region Changes
+
+			List<SelectListItem> _changes = new List<SelectListItem>();
+
+			_changes.Add(new SelectListItem()
+			{
+				Text = Translation.Get("Tilldelad ändring", Enums.TranslationSource.TextTranslation),
+				Value = "50",
+			});
+			_changes.Add(new SelectListItem()
+			{
+				Text = Translation.Get("Skicka loggpost till", Enums.TranslationSource.TextTranslation),
+				Value = "51",
+			});
+			_changes.Add(new SelectListItem()
+			{
+				Text = Translation.Get("CAB", Enums.TranslationSource.TextTranslation),
+				Value = "52",
+			});
+			_changes.Add(new SelectListItem()
+			{
+				Text = Translation.Get("PIR", Enums.TranslationSource.TextTranslation),
+				Value = "53",
+			});
+			_changes.Add(new SelectListItem()
+			{
+				Text = Translation.Get("Statusändring", Enums.TranslationSource.TextTranslation),
+				Value = "54",
+			});
+			_changes.Add(new SelectListItem()
+			{
+				Text = Translation.Get("Ändring", Enums.TranslationSource.TextTranslation),
+				Value = "55",
+			});
+
+			#endregion
+
+			#region OperationLogs
+
+			List<SelectListItem> _operationLogs = new List<SelectListItem>();
+
+			_operationLogs.Add(new SelectListItem()
+			{
+				Text = Translation.Get("Driftlogg", Enums.TranslationSource.TextTranslation),
+				Value = "60",
+			});
+
+			#endregion
+
+			#region Survey
+
+			List<SelectListItem> _survey = new List<SelectListItem>();
+
+			_survey.Add(new SelectListItem()
+			{
+				Text = Translation.Get("Enkät", Enums.TranslationSource.TextTranslation),
+				Value = "6",
+			});
+			_survey.Add(new SelectListItem()
+			{
+				Text = Translation.Get("Påminnelse", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Enkät", Enums.TranslationSource.TextTranslation),
+				Value = "16",
+			});
+			#endregion
+
+			var mailTemplates = new List<MailTemplateList>();
+			var languages = _languageService.GetActiveLanguages();
+			foreach (var lang in languages)
+			{
+				mailTemplates.AddRange(this._mailTemplateService
+										   .GetMailTemplates(customer.Id, lang.Id)
+										   .Where(x => !mailTemplates.Select(m => m.MailID)
+																	.Contains(x.MailID))
+										   .ToList());
+			}
+
+
+			var customMailTemplates = _mailTemplateService.GetCustomMailTemplates(customer.Id);
+
+			var activeMailTemplateLanguages = new List<ActiveMailTemplateLanguage>();
+			foreach (var customMailTemplate in customMailTemplates)
+			{
+				var languageNames = customMailTemplate.TemplateLanguages
+													  .Where(l => !string.IsNullOrEmpty(l.Subject) && !string.IsNullOrEmpty(l.Body))
+													  .Select(l => Translation.Get(l.Language.Name))
+													  .ToList();
+
+				var activeMailTemplateLanguage =
+					new ActiveMailTemplateLanguage()
+					{
+						Id = customMailTemplate.MailId,
+						LanguageNames = string.Join(", ", languageNames)
+					};
+
+				activeMailTemplateLanguages.Add(activeMailTemplateLanguage);
+			}
+
+			var activeOrderMailTemplateLanguages = new List<ActiveMailTemplateLanguage>();
+			foreach (var customMailTemplate in customMailTemplates.Where(x => x.OrderTypeId != null))
+			{
+				var languageNames = customMailTemplate.TemplateLanguages
+													  .Where(l => !string.IsNullOrEmpty(l.Subject) && !string.IsNullOrEmpty(l.Body))
+													  .Select(l => Translation.Get(l.Language.Name))
+													  .ToList();
+
+				var activeOrderMailTemplateLanguage =
+					new ActiveMailTemplateLanguage()
+					{
+						Id = customMailTemplate.OrderTypeId.Value,
+						LanguageNames = string.Join(", ", languageNames)
+					};
+
+				activeOrderMailTemplateLanguages.Add(activeOrderMailTemplateLanguage);
+			}
+
+			// *TODO: ViewModel should be change. shouldn't pass Entity to the view
+			var model = new MailTemplateIndexViewModel
+			{
+				Customer = customer,
+				AccountActivities = this._accountActivityService.GetAccountActivities(customer.Id),
+				MailTemplates = mailTemplates,
+				OrderTypes = this._orderTypeService.GetOrderTypesForMailTemplate(customer.Id),
+				Settings = customersettings,
+				ParentOrderTypes = this._orderTypeService.GetParentOrderTypesForMailTemplateIndexPage(customer.Id).Select(x => new SelectListItem
+				{
+					Text = x.Name,
+					Value = x.Id.ToString()
+				}).ToList(),
+
+				CaseSMSs = _caseSMS,
+				Changes = _changes,
+				OperationLogs = _operationLogs,
+				RegularCases = _regularCase,
+				Surveys = _survey,
+				ActiveMailTemplateLanguages = activeMailTemplateLanguages,
+				ActiveOrderMailTemplateLanguages = activeOrderMailTemplateLanguages
+			};
+
+			return model;
+		}
+
+		private MailTemplateInputViewModel CreateInputViewModel(MailTemplateLanguageEntity mailTemplateLanguage, Customer customer, int languageId, int? ordertypeId, int? accountactivityId)
+		{
+			var model = new MailTemplateInputViewModel
+			{
+				IsStandardTemplate = false,
+				MailTemplateLanguage = mailTemplateLanguage,
+				Customer = customer,
+				CaseFieldSettingWithLangauges = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customer.Id, SessionFacade.CurrentLanguageId),
+				AccountFieldSettings = this._accountFieldSettingsService.GetAccountFieldSettings(customer.Id, accountactivityId),
+				OrderFieldSettings = this._orderService.GetOrderFieldSettingsForMailTemplate(customer.Id, ordertypeId),
+				Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
+				{
+					Text = Translation.Get(x.Name, Enums.TranslationSource.TextTranslation),
+					Value = x.Id.ToString(),
+					Selected = (x.Id == languageId)
+				}).ToList()
+
+			};
+
+			return model;
+		}
+
+		private void SetFeedbacks()
+		{
+			var feedbacks = _feedbackService.FindFeedbackOverviews(SessionFacade.CurrentCustomer.Id);
+			ViewBag.Feedbacks = feedbacks.Any()
+				? feedbacks.Select(f => new FeedbackOverviewModel
+				{
+					Id = f.Id,
+					Name = f.Name,
+					Identifier = FeedbackTemplate.FeedbackIdentifierPredicate + f.Identifier,
+					Description = f.Description
+				}).ToList()
+				: new List<FeedbackOverviewModel>();
+		}
+		#endregion
+	}
 }

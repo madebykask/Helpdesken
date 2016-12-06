@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services.Concrete
+﻿using DH.Helpdesk.Services.Services.Feedback;
+
+namespace DH.Helpdesk.Services.Services.Concrete
 {
     using System;
     using System.Collections.Generic;
@@ -15,14 +17,8 @@
 
     public sealed class EmailService : IEmailService
     {
-        private readonly IEmailSendingSettingsProvider emailSendingSettingsProvider;
         private readonly string _EMAIL_SEND_MESSAGE = "Email has been sent!";
         private readonly int _MAX_NUMBER_SENDING_EMAIL = 3;
-
-        public EmailService(IEmailSendingSettingsProvider emailSendingSettingsProvider)
-        {
-            this.emailSendingSettingsProvider = emailSendingSettingsProvider;
-        }
 
         public EmailResponse SendEmail(MailAddress from, List<MailAddress> recipients, Mail mail, EmailSettings emailsettings)
         {
@@ -48,9 +44,7 @@
             EmailResponse res = emailsettings.Response;
             var sendTime = DateTime.Now;
 
-            var mailSendingSettings = this.emailSendingSettingsProvider.GetSettings();
-           
-            using (var smtpClient = new SmtpClient(mailSendingSettings.SmtpServer, mailSendingSettings.SmtpPort))
+            using (var smtpClient = new SmtpClient(emailsettings.SmtpSettings.Server, emailsettings.SmtpSettings.Port))
             {
                 if (!string.IsNullOrEmpty(emailsettings.SmtpSettings.UserName) && !string.IsNullOrEmpty(emailsettings.SmtpSettings.Pass))
                 {
@@ -92,13 +86,16 @@
 
             }
 
-            if (res.NumberOfTry != emailsettings.Response.NumberOfTry && res.NumberOfTry <= _MAX_NUMBER_SENDING_EMAIL)                            
-                res = this.SendEmail(from, recipient, mail, emailsettings);            
+            if (res.NumberOfTry != emailsettings.Response.NumberOfTry && res.NumberOfTry <= _MAX_NUMBER_SENDING_EMAIL)
+            {
+                emailsettings.Response.NumberOfTry = res.NumberOfTry;
+                res = this.SendEmail(from, recipient, mail, emailsettings);
+            }
 
             return res;
         }
 
-        public EmailResponse SendEmail(EmailItem item, EmailSettings emailsettings, string siteSelfService = "", string siteHelpdesk = "")
+        public EmailResponse SendEmail(EmailItem item, EmailSettings emailsettings, string siteSelfService = "", string siteHelpdesk = "", bool isCcMail = false)
         {
             return this.SendEmail(
                                 item.From,
@@ -110,7 +107,8 @@
                                 item.MailMessageId,
                                 item.IsHighPriority,
                                 item.Files,
-                                siteSelfService, siteHelpdesk);
+                                siteSelfService, siteHelpdesk,
+                                isCcMail);
         }
 
         public EmailResponse SendEmail(
@@ -124,7 +122,8 @@
             bool highPriority = false,
             List<string> files = null,
             string siteSelfService = "",
-            string siteHelpdesk = "")
+            string siteHelpdesk = "",
+            bool isCcMail = false)
         {
             EmailResponse res = emailsettings.Response;
             var sendTime = DateTime.Now;
@@ -163,34 +162,42 @@
                         if (!string.IsNullOrWhiteSpace(mailMessageId))
                             msg.Headers.Add("Message-ID", mailMessageId);
                         if (highPriority)
-                            msg.Priority = MailPriority.High;  
+                            msg.Priority = MailPriority.High;
 
-                        string[] strTo = to.Replace(" ", string.Empty).Replace(Environment.NewLine, string.Empty).Split(new Char[] { ';' });
-                        for (int i = 0; i < strTo.Length; i++)
+                        if (isCcMail)
                         {
-                            if (strTo[i].Length > 2)
+                            if (IsValidEmail(to))
+                                msg.CC.Add(new MailAddress(to));
+                        }
+                        else
+                        {
+                            string[] strTo = to.Replace(" ", string.Empty).Replace(Environment.NewLine, string.Empty).Split(new Char[] {';'});
+                            for (int i = 0; i < strTo.Length; i++)
                             {
-                                switch (strTo[i].Substring(0, 3))
+                                if (strTo[i].Length > 2)
                                 {
-                                    case "cc:":
-                                        string cc = strTo[i].Substring(3);
-                                        if (IsValidEmail(cc))
-                                            msg.CC.Add(new MailAddress(cc));
-                                        break;
-                                    case "bcc":
-                                        string bcc = strTo[i].Substring(4);
-                                        if (IsValidEmail(bcc))
-                                            msg.Bcc.Add(new MailAddress(bcc));
-                                        break;
-                                    case "to:":
-                                        string to_ = strTo[i].Substring(3);
-                                        if (IsValidEmail(to_))
-                                            msg.To.Add(new MailAddress(to_));
-                                        break;
-                                    default: 
-                                        if (IsValidEmail(strTo[i]))
-                                            msg.To.Add(new MailAddress(strTo[i]));
-                                        break;
+                                    switch (strTo[i].Substring(0, 3))
+                                    {
+                                        case "cc:":
+                                            string cc = strTo[i].Substring(3);
+                                            if (IsValidEmail(cc))
+                                                msg.CC.Add(new MailAddress(cc));
+                                            break;
+                                        case "bcc":
+                                            string bcc = strTo[i].Substring(4);
+                                            if (IsValidEmail(bcc))
+                                                msg.Bcc.Add(new MailAddress(bcc));
+                                            break;
+                                        case "to:":
+                                            string to_ = strTo[i].Substring(3);
+                                            if (IsValidEmail(to_))
+                                                msg.To.Add(new MailAddress(to_));
+                                            break;
+                                        default:
+                                            if (IsValidEmail(strTo[i]))
+                                                msg.To.Add(new MailAddress(strTo[i]));
+                                            break;
+                                    }
                                 }
                             }
                         }
@@ -270,7 +277,7 @@
                                     field.StringValue = urlHelpdesk;
                         }
 
-                        msg.Subject = AddInformationToMailBodyAndSubject(subject, fields);
+						msg.Subject = AddInformationToMailBodyAndSubject(subject, fields);
                         msg.From = new MailAddress(from);
                         msg.IsBodyHtml = true;
                         msg.BodyEncoding = System.Text.Encoding.UTF8;

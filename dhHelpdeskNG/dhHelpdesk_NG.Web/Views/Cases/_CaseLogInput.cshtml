@@ -13,6 +13,9 @@
     {
         readonlyMode = Convert.ToBoolean(ViewData["readonlyLog"]);
     }
+
+    var translation = Translation.GetForJS("Till");
+    var btnToLabel = translation.First().ToString().ToUpper() + translation.Substring(1);
 }
  
 <h4 style="@Model.displayLogInfoHtml()">    
@@ -94,7 +97,7 @@
                 var msg = (string)TempData["PreventError"];
                 <div class="alert alert-error">
                     @msg
-                </div>   
+                </div>
             }
             <thead>
                 <tr>
@@ -142,43 +145,46 @@
                         @Html.TextAreaFor(model => model.CaseLog.TextInternal, new { style = "height:105px;", @readonly = true })
                     }
                 </td>
-                
-                    <td>
-                        <div class="checkbox">
-                            @*@if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote))
+
+                <td>
+                    <div class="checkbox">
+                        @*                        <div>*@
+                        @*                            <input type="button" class="btn width20" value="@btnToLabel" id="caseLogSendToMailAboutLogTo" />*@
+                        @*                            @Html.HiddenFor(model => model.CaseLog.EmailRecepientsInternalLogTo, new { @readonly = "true" })*@
+                        @*                            @Html.TextBoxFor(model => model.CaseLog.EmailRecepientsInternalLogTo, new { id= "Fake_CaseLog_EmailRecepientsInternalLogTo", @readonly = "true", @class= "width70" })*@
+                        @*                        </div>*@
+                        @*                        <div >*@
+                        @*                            <input type="button" class="btn width20" value="@Translation.GetForJS("Kopia")" id="caseLogSendCcMailAboutLogCc"/>*@
+                        @*                            @Html.HiddenFor(model => model.CaseLog.EmailRecepientsInternalLogCc, new {@readonly = "true" })*@
+                        @*                            @Html.TextBoxFor(model => model.CaseLog.EmailRecepientsInternalLogCc, new { id = "Fake_CaseLog_EmailRecepientsInternalLogCc", @readonly = "true", @class = "width70" })*@
+                        @*                        </div>*@
+
+                        @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutLog)
+                        <span class="lbl">@Translation.Get("Skicka intern loggpost till", SessionFacade.CurrentCaseLanguageId)</span>
+
+                        @if (Model.templateistrue != 1 && !readonlyMode)
+                        {
+                            if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote))
                             {
-                                @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutLog, new { @disabled = true})
-                            }
-                            else
-                            {
-                                @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutLog)
-                            }*@
-                            @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutLog)
-                            <span class="lbl">@Translation.Get("Skicka intern loggpost till", SessionFacade.CurrentCaseLanguageId)</span>
-                            @if (Model.templateistrue != 1 && !readonlyMode)
-                            {
-                                if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote))
+                                if (Model.IsItParentCase() || Model.IsItChildCase())
                                 {
-                                    if (Model.IsItParentCase() || Model.IsItChildCase())
+                                    <br/>@Html.CheckBox("CaseLog.SendLogToParentChildLog")
+                                    if (Model.IsItParentCase())
                                     {
-                                        <br/>@Html.CheckBox("CaseLog.SendLogToParentChildLog")
-                                        if (Model.IsItParentCase())
-                                        {
-                                            <span class="lbl">@Translation.Get("Skicka intern loggpost till underärenden", SessionFacade.CurrentCaseLanguageId)</span>
-                                        }
-                                        else
-                                        {
-                                            <span class="lbl">@Translation.Get("Skicka intern loggpost till huvudärende", SessionFacade.CurrentCaseLanguageId)</span>
-                                        }
+                                        <span class="lbl">@Translation.Get("Skicka intern loggpost till underärenden", SessionFacade.CurrentCaseLanguageId)</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="lbl">@Translation.Get("Skicka intern loggpost till huvudärende", SessionFacade.CurrentCaseLanguageId)</span>
                                     }
                                 }
                             }
-                        </div>
-                        <div id="divEmailRecepientsInternalLog" style="display: none">
-                            @Html.TextAreaFor(model => model.CaseLog.EmailRecepientsInternalLog, new { @readonly = "readonly" })
-                        </div>
-                    </td>
-             
+                        }
+                    </div>
+                    <div id="divEmailRecepientsInternalLog" style="display: none">
+                        @Html.TextAreaFor(model => model.CaseLog.EmailRecepientsInternalLog, new { @readonly = "readonly" })
+                    </div>
+                </td>
             </tr>
             @*@if (Model.templateistrue != 1)
             {*@
@@ -270,7 +276,7 @@
                         {
                             if (Model.Setting.DisableCaseEndDate == 0)
                             {
-                                @Html.EditorFor(m => m.CaseLog.FinishingDate, "DatePickerLocalTZ", new { id = "divCaseLog_FinishingDate" })
+                                @Html.EditorFor(m => m.CaseLog.FinishingDate, "DatePicker", new { id = "divCaseLog_FinishingDate" })
                             }
                             else
                             {                            
@@ -288,6 +294,8 @@
         </table>
     </div>
 </div>
+@if (Model.CustomerSettings.ModuleInvoice == true)
+{ 
 <div id="divInvoice" style="@Model.ShowInvoiceFields.displayHtml()">
     <h4>
         @Translation.Get("Fakturering")
@@ -302,27 +310,48 @@
                         <th class="span5"></th>
                     </tr>
                 </thead>
-                <tr>
-                    <td>
-                        @Translation.Get("Tidsåtgång", SessionFacade.CurrentCaseLanguageId)
-                    </td>
-                    <td>
-                        <select id="CaseLog_WorkingTimeHour" name="CaseLog.WorkingTimeHour" class="inputw100">
-                            @for (var i = 0; i < 100; i++)
-                            {
-                                <option value="@i.ToString()" @i.IdIsSelected(Model.CaseLog.WorkingTimeHour.ToString()) >@i.ToString()</option>
-                            }
-                        </select>&nbsp;@Translation.Get("Tim")&nbsp; 
+	            <tr>
+		            <td>
+			            @Translation.Get("Tidsåtgång", SessionFacade.CurrentCaseLanguageId)
+		            </td>
+		            <td>
+			            <select id="CaseLog_WorkingTimeHour" name="CaseLog.WorkingTimeHour" class="inputw100">
+				            @for (var i = 0; i < 100; i++)
+				            {
+					            <option value="@i.ToString()" @i.IdIsSelected(Model.CaseLog.WorkingTimeHour.ToString())>@i.ToString()</option>
+				            }
+			            </select>&nbsp;@Translation.Get("Tim")&nbsp;
 
-                        <select id="CaseLog_WorkingTimeMinute" name="CaseLog.WorkingTimeMinute" class="inputw100">
-                            @for (var i = 0; i < 59; i = i + Model.MinWorkingTime)
-                            {
-                                <option value="@i.ToString()" @i.IdIsSelected(Model.CaseLog.WorkingTimeMinute.ToString()) >@i.ToString()</option>
-                            }
-                        </select>&nbsp;@Translation.Get("Min", SessionFacade.CurrentCaseLanguageId)
-                    </td>
-                    <td></td>
-                </tr>
+			            <select id="CaseLog_WorkingTimeMinute" name="CaseLog.WorkingTimeMinute" class="inputw100">
+				            @for (var i = 0; i < 59; i = i + Model.MinWorkingTime)
+				            {
+					            <option value="@i.ToString()" @i.IdIsSelected(Model.CaseLog.WorkingTimeMinute.ToString())>@i.ToString()</option>
+				            }
+			            </select>&nbsp;@Translation.Get("Min", SessionFacade.CurrentCaseLanguageId)
+		            </td>
+		            <td></td>
+	            </tr>
+				<tr>
+					<td>
+						@Translation.Get("Övertid", SessionFacade.CurrentCaseLanguageId)
+					</td>
+					<td>
+						<select id="CaseLog_OvertimeHour" name="CaseLog.OvertimeHour" class="inputw100">
+							@for (var i = 0; i < 100; i++)
+							{
+								<option value="@i.ToString()" @i.IdIsSelected(Model.CaseLog.OvertimeHour.ToString())>@i.ToString()</option>
+							}
+						</select>&nbsp;@Translation.Get("Tim")&nbsp;
+
+						<select id="CaseLog_OvertimeMinute" name="CaseLog.OvertimeMinute" class="inputw100">
+							@for (var i = 0; i < 59; i = i + Model.MinWorkingTime)
+							{
+								<option value="@i.ToString()" @i.IdIsSelected(Model.CaseLog.OvertimeMinute.ToString())>@i.ToString()</option>
+							}
+						</select>&nbsp;@Translation.Get("Min", SessionFacade.CurrentCaseLanguageId)
+					</td>
+					<td></td>
+				</tr>
                 <tr>
                     <td>
                         @Translation.Get("Material", SessionFacade.CurrentCaseLanguageId)
@@ -360,7 +389,8 @@
         </div>
     </div>
 </div>
-
+}
+@*@Html.Partial("ModalDialogs/_SendIntLogToDiallog")*@
 @Html.Partial("_SendToDialog", Model.SendToDialogModel)
 @*<div id="divNewFAQ" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true" >
     @Html.Partial("_NewFAQ", Model.EditFaqModel)

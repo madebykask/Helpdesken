@@ -40,10 +40,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DH.Helpdesk.Dal, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\DH.Helpdesk.Dal.dll</HintPath>
-    </Reference>
     <Reference Include="DH.Helpdesk.Services">
       <HintPath>..\dhHelpdesk_NG.Web_SelfService\Bin\DH.Helpdesk.Services.dll</HintPath>
     </Reference>
@@ -87,6 +83,10 @@
     <Compile Include="EntityConfigurations\BusinessRules\BRConditionConfiguration.cs" />
     <Compile Include="EntityConfigurations\BusinessRules\BRActionConfiguration.cs" />
     <Compile Include="EntityConfigurations\BusinessRules\BRActionParamsConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Cases\CaseExtraFollowerConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Cases\CaseFollowUpConfiguration.cs" />
+    <Compile Include="EntityConfigurations\ContractFileConfiguration.cs" />
+    <Compile Include="EntityConfigurations\ContractHistoryConfiguration.cs" />
     <Compile Include="EntityConfigurations\ContractConfiguration.cs" />
     <Compile Include="EntityConfigurations\ContractFieldSettingConfiguration.cs" />
     <Compile Include="EntityConfigurations\Invoice\InvoiceArticleProductAreaConfiguration.cs" />
@@ -202,6 +202,7 @@
     <Compile Include="Mappers\Cases\BusinessModelToEntity\CausingPartToEntityMapper.cs" />
     <Compile Include="Mappers\Cases\BusinessModelToEntity\CaseLockToEntityMapper.cs" />
     <Compile Include="Mappers\Cases\BusinessModelToEntity\CaseFilterFavoriteToEntityMapper.cs" />
+    <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseExtraFollowersToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseLockToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseToCaseOverviewMapper.cs" />
@@ -217,6 +218,8 @@
     <Compile Include="Mappers\Customer\EntityToBusinessModel\CustomerSettingsToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Customer\EntityToBusinessModel\CustomerToBusinessModel.cs" />
     <Compile Include="Mappers\Documents\EntityToBusinessModel\DocumentToBusinessModelMapper.cs" />
+    <Compile Include="Mappers\ExternalInvoice\BusinessModelToEntity\ExternalInvoiceToEntityMapper.cs" />
+    <Compile Include="Mappers\ExternalInvoice\EntityToBusinessModel\CaseInvoiceRowToBusinessModel.cs" />
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Computer\ComputerFieldSettingsToFieldSettingsMapper.cs" />
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Computer\ComputerFieldSettingsToShortInfoSettingsMapper.cs" />
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Computer\ComputerFieldSettingsToComputerProcessingSettingsMapper.cs" />
@@ -364,7 +367,9 @@
     <Compile Include="Repositories\BusinessRules\Concrete\BusinessRuleRepository.cs" />
     <Compile Include="Repositories\BusinessRules\IBusinessRuleRepository.cs" />
     <Compile Include="Repositories\CaseHistoryRepository.cs" />
+    <Compile Include="Repositories\Cases\CaseExtraFollowersRepository.cs" />
     <Compile Include="Repositories\Cases\CaseFileRepository.cs" />
+    <Compile Include="Repositories\Cases\CaseFollowUpRepository.cs" />
     <Compile Include="Repositories\Cases\CaseInvoiceRowRepository.cs" />
     <Compile Include="Repositories\Cases\CaseQuestionCategoryRepository.cs" />
     <Compile Include="Repositories\Cases\CaseQuestionHeaderRepository.cs" />

@@ -84,9 +84,22 @@
             }
         }
 
-        #endregion
+		public static IEnumerable<SelectListItem> PageSizes
+		{
+			get
+			{
+				return new[]
+						   {
+							   new SelectListItem { Value = "50", Text = "50" },
+							   new SelectListItem { Value = "250", Text = "250" },
+							   new SelectListItem { Value = "500", Text = "500" },
+						   };
+			}
+		}
 
-        public int CustomerId { get; set; }
+		#endregion
+
+		public int CustomerId { get; set; }
 
         public int UserId { get; set; }
 
@@ -100,7 +113,9 @@
 
         public string SelectedFontStyle { get; set; }
 
-        public static IList<SelectListItem> GetColStyles(string selectedStyle)
+		public int SelectedPageSize { get; set; }
+
+		public static IList<SelectListItem> GetColStyles(string selectedStyle)
         {
             var selectedVal = string.IsNullOrEmpty(selectedStyle) ? string.Empty : selectedStyle.ToLower();
             return FieldStyles.Select(fieldStyle => new SelectListItem() { Value = fieldStyle.Value, Selected = selectedVal == fieldStyle.Value.ToLower(), Text = fieldStyle.Text }).ToList();
@@ -164,7 +179,8 @@
         public string SelectedPriority { get; set; }
 
         public bool StateCheck { get; set; }
-
+        public IList<Status> States { get; set; }
+        public string SelectedState { get; set; }
         public bool SubStateCheck { get; set; }
         public IList<StateSecondary> SubStates { get; set; }        
         public string SelectedSubState { get; set; }

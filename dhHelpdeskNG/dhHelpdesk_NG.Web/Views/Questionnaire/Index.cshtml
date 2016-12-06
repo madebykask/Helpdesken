@@ -1,4 +1,4 @@
-﻿@model List<DH.Helpdesk.Web.Models.Questionnaire.Output.QuestionnaireOverviewModel>
+﻿@model DH.Helpdesk.Web.Models.Questionnaire.Output.QuestionnaireListsModel
 @using DH.Helpdesk.Common.Enums;
 
 @{
@@ -8,8 +8,15 @@
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
-            <li>@Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + 
-                                 Translation.Get("Enkät", Enums.TranslationSource.TextTranslation), "NewQuestionnaire", null, new { @class = "btn" })</li>
+            <li data-tablnk="questionnaire">
+                @Html.ActionLink(Translation.GetCoreTextTranslation("Lägg till") + " " +
+                                 Translation.GetCoreTextTranslation("Enkät"), "NewQuestionnaire", null, new { @class = "btn" })
+            </li>
+            <li data-tablnk="feedback" style="display: none">
+                @Html.ActionLink(Translation.GetCoreTextTranslation("Lägg till") + " " +
+                                 Translation.GetCoreTextTranslation("Återkoppling"), MvcUrlName.Feedback.New, MvcUrlName.Feedback.Controller,
+                                 new { languageId = LanguageIds.Swedish }, new { @class = "btn" })
+            </li>
         </ul>
     </div>
 </div>
@@ -17,66 +24,139 @@
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
-            <li class="active"><a href="#fragment-1">@Translation.Get("Enkät", Enums.TranslationSource.TextTranslation)</a></li>
+            <li class="active"><a href="#questionnaire">@Translation.GetCoreTextTranslation("Enkät")</a></li>
+            @*<li><a href="#feedback">@Translation.GetCoreTextTranslation("Återkoppling")</a></li>*@
         </ul>
         <div class="tab-content">
-            <div class="tab-pane tab-pane-border active" id="fragment-1">
-                @using (Html.BeginForm("index", "Questionnaire", FormMethod.Post, new { id = "search_form" }))
-                {
-                    <div class="container">
-                        <table>
+            <div class="tab-pane tab-pane-border active" id="questionnaire">
+                <div class="container">
+                    <table>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="container">
+                    <table id="tblQuestionnaire" class="table table-striped table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th style="cursor: pointer; cursor: hand; width: 15%">
+                                @Translation.GetCoreTextTranslation("Namn")
+                            </th>
+                            <th style="cursor: pointer; cursor: hand; width: 60%">
+                                @Translation.GetCoreTextTranslation("Text")
+                            </th>
+                            <th style="cursor: pointer; cursor: hand; width: 25%">
+                                @Translation.GetCoreTextTranslation("Utskick")
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var item in Model.Questionnaires)
+                        {
                             <tr>
                                 <td>
-                                    @*@Html.TextBoxFor(model => model.SearchBbs, new { maxlength = "50" })*@
+                                    <a href="@Url.Action("EditQuestionnaire", "Questionnaire", new {questionnaireId = item.Id, languageId = LanguageIds.Swedish})">
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </a>
                                 </td>
                                 <td>
-                                    @*<input type="button" id="searchQueryBtn" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" class="btn" onclick="submit();" />*@
-                                </td>                                
+                                    <a href="@Url.Action("EditQuestionnaire", "Questionnaire", new {questionnaireId = item.Id, languageId = LanguageIds.Swedish})">
+                                        @item.Description.ForHtmlView()
+                                    </a>
+                                </td>
+                                <td>
+                                    <a class="btn" href="@Url.Action("CircularOverview", "Questionnaire", new {questionnaireId = item.Id, state = CircularStateId.All})" rel="tooltip" title="@Translation.GetCoreTextTranslation("Circular")">
+                                        <i class="icon-list-alt"></i>
+                                    </a>
+                                </td>
                             </tr>
-                        </table>
-                    </div>
-                    
-                    <div class="container">
-                        <table id="tblQuestionnaire" class="table table-striped table-bordered table-hover">
-                            <thead>
-                                <tr>
-                                    <th style="cursor: pointer; cursor: hand;width: 15%" >
-                                        @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)
-                                    </th>
-                                    <th style="cursor: pointer; cursor: hand;width: 60%">
-                                        @Translation.Get("Text", Enums.TranslationSource.TextTranslation)
-                                    </th>
-                                    <th style="cursor: pointer; cursor: hand;width: 25%">
-                                        @Translation.Get("Utskick", Enums.TranslationSource.TextTranslation)
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model)
-                                {                               
-                                    <tr>
-                                        <td>
-                                            <a href="@Url.Action("EditQuestionnaire", "Questionnaire", new { questionnaireId = item.Id, languageId = LanguageIds.Swedish })">
-                                                @Html.DisplayFor(modelItem => item.Name)
-                                            </a>                                                                                                                                                                                       
-                                        </td>
-                                        <td>
-                                            <a href="@Url.Action("EditQuestionnaire", "Questionnaire", new { questionnaireId = item.Id, languageId = LanguageIds.Swedish})">
-                                                @item.Description.ForHtmlView()
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <a class="btn" href="@Url.Action("CircularOverview", "Questionnaire", new { questionnaireId = item.Id, state = CircularStateId.All})" rel="tooltip" title="@Translation.Get("Circular", Enums.TranslationSource.TextTranslation)">
-                                                <i class="icon-list-alt"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div> <!-- Container-->
-                } <!-- Begin Form -->
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane tab-pane-border" id="feedback">
+                <div class="container">
+                    <table>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="container">
+                    <table id="tblQuestionnaire" class="table table-striped table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th style="cursor: pointer; cursor: hand; width: 25%">
+                                @Translation.GetCoreTextTranslation("Namn")
+                            </th>
+                            <th style="cursor: pointer; cursor: hand; width: 75%">
+                                @Translation.GetCoreTextTranslation("Text")
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var item in Model.Feedbacks)
+                        {
+                            <tr>
+                                <td>
+                                    <a href="@Url.Action("EditFeedback", "Feedback", new {feedbackId = item.Id, languageId = LanguageIds.Swedish})">
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("EditFeedback", "Feedback", new {feedbackId = item.Id, languageId = LanguageIds.Swedish})">
+                                        @item.Description.ForHtmlView()
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+@section scripts {
+    <script type="text/javascript">
+        $(function() {
+            $("#myTab a").on("shown", function(e) {
+                var href = $(e.target).attr("href").substring(1);
+                $("li[data-tablnk='" + href + "']").show();
+                $("li[data-tablnk]").not("li[data-tablnk='" + href + "']").hide();
+            });
+
+            var getTabParam = function(paramName) {
+                "use strict";
+                var result = {};
+
+                if (location.href.indexOf("?") === -1)
+                    return result;
+
+                var params = location.href.split("?")[1].split("&");
+                var pairs = [];
+                params.forEach(function (pair) {
+                    pair = pair.split("=");
+                    var name = decodeURI(pair[0]);
+                    var value = decodeURIComponent(pair[1].replace(/\+/g, '%20'));
+
+                    pairs[name] = value;
+                });
+                return pairs[paramName];
+            };
+
+            var tabValue = getTabParam("tab");
+            if (typeof tabValue === "string") {
+                $("#myTab a[href='#" + tabValue + "']").tab("show");
+            }
+
+        });
+    </script>
+}

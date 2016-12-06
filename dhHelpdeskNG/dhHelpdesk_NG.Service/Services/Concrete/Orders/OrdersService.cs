@@ -117,7 +117,7 @@
             _emailSendingSettingsProvider = emailSendingSettingsProvider;
         }
 
-        public OrdersFilterData GetOrdersFilterData(int customerId)
+        public OrdersFilterData GetOrdersFilterData(int customerId, out int[] selectedStatuses)
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
@@ -137,7 +137,7 @@
 
                 var statuses = statusRep.GetAll()
                                     .GetOrderStatuses(customerId);
-
+	            selectedStatuses = statuses.Where(x => x.SelectedInSearchCondition == 1).Select(x => x.Id).ToArray();
                 return OrderMapper.MapToFilterData(orderTypes, orderTypesInRow, administrators, statuses);
             }
         }
@@ -614,7 +614,7 @@
             var properties = propertiesRep.GetAll().GetByOrderType(orderTypeId);
             var deliveryDepartments = departmentsRep.GetAll().GetByCustomer(customerId);
             var deliveryOuIds = ousRep.GetAll();
-            var administratorsWithEmails = administratorsRep.GetAll().GetAdministratorsWithEmails(customerId);
+            var administratorsWithEmails = administratorsRep.GetAll().GetActiveUsers(customerId).Where(x => x.Performer == 1 && x.Email != string.Empty);
             var orderType = orderTypeId.HasValue ? orderTypeRep.GetAll().GetById(orderTypeId.Value).MapToName() : null;
 
             // get parentordertypename

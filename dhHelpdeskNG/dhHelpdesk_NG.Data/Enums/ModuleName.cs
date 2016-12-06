@@ -3,6 +3,9 @@
     // ToDo: Move to Common.
     public static class ModuleName
     {
+
+        public static readonly string Contracts = "Contracts";
+
         public static readonly string Changes = "Changes";
 
         public static readonly string Faq = "FAQ";

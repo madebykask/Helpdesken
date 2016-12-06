@@ -22,7 +22,7 @@
 
         ProblemOverview GetProblem(int id);
 
-        IList<ProblemOverview> GetCustomerProblems(int customerId);
+        IList<ProblemOverview> GetCustomerProblems(int customerId, bool checkCaseRelation = true);
 
         IList<ProblemOverview> GetCustomerProblems(int customerId, EntityStatus show);
 

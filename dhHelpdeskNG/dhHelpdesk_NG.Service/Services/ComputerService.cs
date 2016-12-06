@@ -11,6 +11,7 @@
     using DH.Helpdesk.Dal.Repositories.Notifiers;
     using DHDomain = DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Computers;
+    using BusinessData.Models.Notifiers;
 
     public interface IComputerService
     {
@@ -44,6 +45,8 @@
         void SaveComputerUserFieldSettingLangForCustomerCopy(ComputerUserFieldSettingsLanguage computerUserFieldSettingLanguage, out IDictionary<string, string> errors);
         void SaveComputerUserGroup(ComputerUserGroup computerUserGroup, int[] ous, out IDictionary<string, string> errors);
         void UpdateComputerUsersBlackList(ComputerUsersBlackList computerUsersBlackList);
+
+        Notifier GetInitiatorByUserId(string userId, int customerId);
         void Commit();
 
     }
@@ -436,6 +439,11 @@
         {
             computerUsersBlackList.ChangedDate = DateTime.UtcNow;
             this._computerUsersBlackListRepository.Update(computerUsersBlackList);
+        }
+
+        public Notifier GetInitiatorByUserId(string userId, int customerId)
+        {
+            return _computerUserRepository.GetInitiatorByUserId(userId, customerId);
         }
 
         public void Commit()

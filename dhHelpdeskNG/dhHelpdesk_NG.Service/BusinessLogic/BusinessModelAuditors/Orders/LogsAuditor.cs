@@ -63,8 +63,9 @@
             {
                 var customerRep = uow.GetRepository<Customer>();
                 var orderEmailLogsRep = uow.GetRepository<OrderEMailLog>();
+                var customerSettingsRep = uow.GetRepository<Setting>();
 
-                var customerSetting = settingService.GetCustomerSetting(businessModel.CustomerId);
+                var customerSetting = customerSettingsRep.GetById(businessModel.CustomerId);
                 var smtpInfo = new MailSMTPSetting(customerSetting.SMTPServer, customerSetting.SMTPPort, customerSetting.SMTPUserName, customerSetting.SMTPPassWord, customerSetting.IsSMTPSecured);
 
                 if (string.IsNullOrEmpty(smtpInfo.Server) || smtpInfo.Port <= 0)

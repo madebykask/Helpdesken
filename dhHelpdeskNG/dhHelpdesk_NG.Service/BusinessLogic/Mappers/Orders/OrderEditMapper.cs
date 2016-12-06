@@ -17,107 +17,111 @@
 
     public static class OrderEditMapper
     {
-        public static OrderEditOptions MapToOrderEditOptions(
-                                        string orderTypeName,
-                                        IQueryable<OrderState> statuses,
-                                        IQueryable<User> administrators,
-                                        IQueryable<Domain> domains,
-                                        IQueryable<Department> departments,
-                                        IQueryable<OU> units,
-                                        IQueryable<OrderPropertyEntity> properties,
-                                        IQueryable<Department> deliveryDepartments,
-                                        IQueryable<OU> deliveryOuIds,
-                                        List<GroupWithEmails> emailGroups,
-                                        List<GroupWithEmails> workingGroupsWithEmails, 
-                                        IQueryable<User> administratorsWithEmails,
-                                        FullOrderEditSettings settings)
-        {
-            IQueryable<UnionItemOverview> query = null;
+	    public static OrderEditOptions MapToOrderEditOptions(
+		    string orderTypeName,
+		    IQueryable<OrderState> statuses,
+		    IQueryable<User> administrators,
+		    IQueryable<Domain> domains,
+		    IQueryable<Department> departments,
+		    IQueryable<OU> units,
+		    IQueryable<OrderPropertyEntity> properties,
+		    IQueryable<Department> deliveryDepartments,
+		    IQueryable<OU> deliveryOuIds,
+		    List<GroupWithEmails> emailGroups,
+		    List<GroupWithEmails> workingGroupsWithEmails,
+		    IQueryable<User> administratorsWithEmails,
+		    FullOrderEditSettings settings)
+	    {
+		    IQueryable<UnionItemDependentOverview> query = null;
 
-            if (settings.General.Status.Show)
-            {
-                query = statuses.Select(s => new UnionItemOverview { Id = s.Id, Name = s.Name, Type = "statuses" });
-            }
+		    if (settings.General.Status.Show)
+		    {
+			    query =
+				    statuses.Select(
+					    s => new UnionItemDependentOverview {Id = s.Id, Name = s.Name, Type = "statuses", DependentId = null});
+		    }
 
-            if (settings.General.Administrator.Show)
-            {
-                var union = administrators.Select(a => new UnionItemOverview { Id = a.Id, Name = a.FirstName + " " + a.SurName, Type = "administrators" });
-                query = query == null ? union : query.Union(union);
-            }
+		    if (settings.General.Administrator.Show)
+		    {
+			    var union = administrators.Select(a => new UnionItemDependentOverview{Id = a.Id, Name = a.FirstName + " " + a.SurName, Type = "administrators", DependentId = null});
+			    query = query == null ? union : query.Union(union);
+		    }
 
-            if (settings.General.Domain.Show)
-            {
-                var union = domains.Select(d => new UnionItemOverview { Id = d.Id, Name = d.Name, Type = "domains" });
-                query = query == null ? union : query.Union(union);
-            }
+		    if (settings.General.Domain.Show)
+		    {
+			    var union = domains.Select(d => new UnionItemDependentOverview {Id = d.Id, Name = d.Name, Type = "domains", DependentId = null});
+			    query = query == null ? union : query.Union(union);
+		    }
 
-            if (settings.Orderer.Department.Show)
-            {
-                var union = departments.Select(d => new UnionItemOverview { Id = d.Id, Name = d.DepartmentName, Type = "departments" });
-                query = query == null ? union : query.Union(union);
-            }
+		    if (settings.Orderer.Department.Show)
+		    {
+			    var union = departments.Select(d => new UnionItemDependentOverview {Id = d.Id, Name = d.DepartmentName, Type = "departments", DependentId = null});
+			    query = query == null ? union : query.Union(union);
+		    }
 
-            if (settings.Orderer.Unit.Show)
-            {
-                var union = units.Select(u => new UnionItemOverview { Id = u.Id, Name = u.Name, Type = "units" });
-                query = query == null ? union : query.Union(union);
-            }
+		    if (settings.Orderer.Unit.Show)
+		    {
+			    var union = units.Select(u => new UnionItemDependentOverview {Id = u.Id, Name = u.Name, Type = "units", DependentId = u.Department_Id});
+			    query = query == null ? union : query.Union(union);
+		    }
 
-            var propertiesOverviews = new ItemOverview[0];
-            if (settings.Order.Property.Show)
-            {
-                propertiesOverviews = properties.MapToItemOverviews();
-            }
+		    var propertiesOverviews = new ItemOverview[0];
+		    if (settings.Order.Property.Show)
+		    {
+			    propertiesOverviews = properties.MapToItemOverviews();
+		    }
 
-            if (settings.Delivery.DeliveryDepartment.Show)
-            {
-                var union = deliveryDepartments.Select(d => new UnionItemOverview { Id = d.Id, Name = d.DepartmentName, Type = "deliveryDepartments" });
-                query = query == null ? union : query.Union(union);
-            }
+		    if (settings.Delivery.DeliveryDepartment.Show)
+		    {
+			    var union = deliveryDepartments.Select(d => new UnionItemDependentOverview {Id = d.Id, Name = d.DepartmentName, Type = "deliveryDepartments", DependentId = null});
+			    query = query == null ? union : query.Union(union);
+		    }
 
-            if (settings.Delivery.DeliveryOuId.Show)
-            {
-                var union = deliveryOuIds.Select(u => new UnionItemOverview { Id = u.Id, Name = u.Name, Type = "deliveryOuIds" });
-                query = query == null ? union : query.Union(union);
-            }
+		    if (settings.Delivery.DeliveryOuId.Show)
+		    {
+			    var union = deliveryOuIds.Select(u => new UnionItemDependentOverview {Id = u.Id, Name = u.Name, Type = "deliveryOuIds", DependentId = null});
+			    query = query == null ? union : query.Union(union);
+		    }
 
-            var separator = Guid.NewGuid().ToString();
+		    var separator = Guid.NewGuid().ToString();
 
-            if (settings.Log.Log.Show)
-            {
-                var union = administratorsWithEmails.Select(a => new UnionItemOverview { Id = a.Id, Name = a.FirstName + " " + a.SurName + separator + a.Email, Type = "administratorsWithEmails" });
-                query = query == null ? union : query.Union(union);
-            }
+		    if (settings.Log.Log.Show)
+		    {
+			    var union = administratorsWithEmails.Select(a => new UnionItemDependentOverview {Id = a.Id, Name = a.FirstName + " " + a.SurName + separator + a.Email, Type = "administratorsWithEmails", DependentId = null});
+			    query = query == null ? union : query.Union(union);
+		    }
 
-            var overviews = new UnionItemOverview[0];
+		    var overviews = new UnionItemDependentOverview[0];
 
-            if (query != null)
-            {
-                overviews = query
-                    .OrderBy(u => u.Type)
-                    .ThenBy(u => u.Name)
-                    .ToArray();
-            }
+		    if (query != null)
+		    {
+			    overviews = query
+				    .OrderBy(u => u.Type)
+				    .ThenBy(u => u.Name)
+				    .ToArray();
+		    }
 
-            return new OrderEditOptions(
-                orderTypeName,
-                overviews.Where(o => o.Type == "statuses").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
-                overviews.Where(o => o.Type == "administrators").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
-                overviews.Where(o => o.Type == "domains").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
-                overviews.Where(o => o.Type == "departments").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
-                overviews.Where(o => o.Type == "units").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
-                propertiesOverviews,
-                overviews.Where(o => o.Type == "deliveryDepartments").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
-                overviews.Where(o => o.Type == "deliveryOuIds").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
-                emailGroups,
-                workingGroupsWithEmails,
-                overviews.Where(o => o.Type == "administratorsWithEmails").Select(a => { 
-                            var values = a.Name.Split(new[] { separator }, StringSplitOptions.RemoveEmptyEntries);
-                            return new ItemOverview(values[0], values.Length > 1 ? values[1].Split(';').First() : string.Empty);
-                        }).ToList());
-        }
+		    return new OrderEditOptions(
+			    orderTypeName,
+			    overviews.Where(o => o.Type == "statuses").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
+			    overviews.Where(o => o.Type == "administrators").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
+			    overviews.Where(o => o.Type == "domains").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
+			    overviews.Where(o => o.Type == "departments").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
+			    overviews.Where(o => o.Type == "units").Select(o => new ItemDependentOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture),
+								o.DependentId.HasValue ? o.DependentId.Value.ToString(CultureInfo.InvariantCulture) : string.Empty)).ToArray(),
+			    propertiesOverviews,
+			    overviews.Where(o => o.Type == "deliveryDepartments").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
+			    overviews.Where(o => o.Type == "deliveryOuIds").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
+			    emailGroups,
+			    workingGroupsWithEmails,
+			    overviews.Where(o => o.Type == "administratorsWithEmails").Select(a =>
+			    {
+				    var values = a.Name.Split(new[] {separator}, StringSplitOptions.RemoveEmptyEntries);
+				    return new ItemOverview(values[0], values.Length > 1 ? values[1].Split(';').First() : string.Empty);
+			    }).ToList());
+	    }
 
-        public static FullOrderEditFields MapToFullOrderEditFields(this IQueryable<Order> query)
+	    public static FullOrderEditFields MapToFullOrderEditFields(this IQueryable<Order> query)
         {
             var entity = query.Single();
 

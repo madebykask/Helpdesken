@@ -353,6 +353,7 @@ $(function () {
         $("a[href='#upload_clipboard_file_popup']").on('click', function (e) {
             var $src = $(this);
             var $target = $('#upload_clipboard_file_popup');
+            e.preventDefault();
             $target.attr('data-src', $src.attr('data-src'));
             globalClipboard = new ClipboardClass();
             resetClipboard();

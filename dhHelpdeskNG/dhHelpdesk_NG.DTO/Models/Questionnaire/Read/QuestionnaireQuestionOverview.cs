@@ -6,7 +6,7 @@
 
     public class QuestionnaireQuestionOverview
     {
-        public QuestionnaireQuestionOverview(
+	    public QuestionnaireQuestionOverview(
             int id,
             string question,
             string number,
@@ -35,6 +35,6 @@
         public string NoteText { get; private set; }
 
         [NotNull]
-        public List<QuestionnaireQuestionOptionOverview> Options { get; private set; }
+        public List<QuestionnaireQuestionOptionOverview> Options { get; set; }
     }
 }

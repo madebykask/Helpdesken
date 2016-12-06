@@ -32,5 +32,11 @@
         List<FaqDetailedOverview> SearchDetailedOverviewsByPharse(string pharse, int customerId);
 
         Faq FindById(int faqId);
+
+        IList<FaqCategory> GetFaqCategories(int customerId);
+
+        IList<Faq> GetFaqs(int customerId);
+
+        byte[] GetFileContentByFaqIdAndFileName(int faqId, string basePath, string fileName);
     }
 }

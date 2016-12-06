@@ -17,8 +17,12 @@
                                <div class="span100">                    
                                    @Translation.Get("Teckensnittsstorlek i tabell (ju mindre desto mer information kan visas på skärmen).", Enums.TranslationSource.TextTranslation)<br />
                                    @Html.DropDownListFor(x => x.SelectedFontStyle, CaseColumnsSettingsModel.FontStyles)
-                               </div>             
-                               <div class="span100">
+	                           </div>
+						   		<div class="span100">
+						   			@Translation.Get("poster per sida")<br />
+									@Html.DropDownListFor(x => x.SelectedPageSize, CaseColumnsSettingsModel.PageSizes)
+							   </div> 
+	                           <div class="span100">
                                    @Translation.Get("Välj den mest lämpliga bredden för de kolumner som du vill visa på ärendeöversikten (beroende på mängden information i varje kolumn).", Enums.TranslationSource.TextTranslation)
                                    <br />
                                    @Translation.Get("(Du kan endast välja storleken bred på högst 3 kolumner).", Enums.TranslationSource.TextTranslation)                    
