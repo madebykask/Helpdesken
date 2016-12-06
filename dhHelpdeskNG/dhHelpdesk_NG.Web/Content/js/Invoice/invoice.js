@@ -2576,6 +2576,11 @@ $(function () {
 
                     dhHelpdesk.CaseArticles.UpdateOtherReferenceTitle(currentOrder.Id);
                     dhHelpdesk.CaseArticles.UpdateFileAttachment(currentOrder);
+                    var caseIsLocked = window.parameters.isCaseLocked;
+                    if (caseIsLocked.toLowerCase() == 'true') {
+                        $(invoiceActionButtons).addClass("disabled");
+                        $(invoiceActionButtons).css("pointer-events", "none");
+                    }
                 });
             },
 
