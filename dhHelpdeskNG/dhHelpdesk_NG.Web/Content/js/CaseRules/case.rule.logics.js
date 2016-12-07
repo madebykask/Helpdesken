@@ -104,6 +104,8 @@
 
                 this.ForeignKeyValue3 = null;
 
+                this.ResultKeyValue = null;
+
                 this.ParentItemValue = "";
             }
         }

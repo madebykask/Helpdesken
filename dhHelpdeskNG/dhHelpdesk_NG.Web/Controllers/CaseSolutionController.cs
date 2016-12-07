@@ -1155,6 +1155,24 @@ namespace DH.Helpdesk.Web.Controllers
 
             #endregion
 
+            #region Virtual Data Store
+
+            var prio_Impact_Urgent = _urgencyService.GetPriorityImpactUrgencies(customerId);
+            caseBasicInfo.Priority_Impact_Urgent = new BasicVirtualDataField()
+            {
+                Items = prio_Impact_Urgent.Where(p=> p.Impact_Id.HasValue && p.Urgency_Id.HasValue)
+                                          .Select(p => new FieldItem(string.Empty, string.Empty)
+                                                    {
+                                                        ForeignKeyValue1 = p.Impact_Id.ToString(),
+                                                        ForeignKeyValue2 = p.Urgency_Id.ToString(),
+                                                        ResultKeyValue = p.Priority_Id.ToString()
+                                                    }
+                                          ).OrderBy(r => r.ItemText).ToList()
+            };
+
+            #endregion
+
+
             var model  = _caseRuleFactory.GetCaseRuleModel(customerId, CaseRuleType.OriginalRule, caseFieldSettings, caseBasicInfo, customerSettings);
             model.CustomerSettings.ConnectUserToWorkingGroup = customerSettings.DontConnectUserToWorkingGroup == 0;
 

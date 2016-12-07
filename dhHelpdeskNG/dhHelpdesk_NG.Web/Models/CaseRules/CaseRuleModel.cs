@@ -15,7 +15,8 @@ namespace DH.Helpdesk.Web.Models.CaseRules
     {
         OneToOne = 1,
         OneToMany = 2,
-        ManyToMany = 3
+        ManyToMany = 3,
+        Virtual = 4
     }
 
     public enum RelationActionType
@@ -142,6 +143,8 @@ namespace DH.Helpdesk.Web.Models.CaseRules
 
         public string ForeignKeyValue3 { get; set; }
 
+        public string ResultKeyValue { get; set; }
+
         public string ParentItemValue { get; set; }
 
         public static FieldItem CreateEmpty()
@@ -167,6 +170,12 @@ namespace DH.Helpdesk.Web.Models.CaseRules
         public int ActionType { get; set; }          
 
         public int? ForeignKeyNumber { get; set; }
+
+        public string DataStore1 { get; set; }
+
+        public string DataStore2 { get; set; }
+
+        public string DataStore3 { get; set; }
 
         public int? StaticActionId { get; set; }
 
@@ -198,6 +207,17 @@ namespace DH.Helpdesk.Web.Models.CaseRules
         public FieldItem DefaultItem { get; set; }
 
         public FieldItem Selected { get; set; }
+
+        public List<FieldItem> Items { get; set; }
+
+    }
+
+    public sealed class BasicVirtualDataField
+    {
+        public BasicVirtualDataField()
+        {
+            Items = new List<FieldItem>();
+        }      
 
         public List<FieldItem> Items { get; set; }
 
@@ -363,5 +383,10 @@ namespace DH.Helpdesk.Web.Models.CaseRules
 
         #endregion
 
+        #region Virtual Fields
+
+        public BasicVirtualDataField Priority_Impact_Urgent { get; set; }
+
+        #endregion
     }
 }
