@@ -1002,7 +1002,8 @@ namespace DH.Helpdesk.Web.Controllers
                 DefaultItem = defaultPrio != null ? new FieldItem(defaultPrio.Id.ToString(), defaultPrio.Name) : FieldItem.CreateEmpty(),
                 Items = priorities.Select(p => new FieldItem(p.Id.ToString(), p.Name, p.IsActive != 0)
                                                                 {
-                                                                    ForeignKeyValue1 = p.LogText
+                                                                    ForeignKeyValue1 = p.LogText,
+                                                                    ForeignKeyValue2 = p.SLA.ToString()
                                                                 })
                                   .OrderBy(i => i.ItemText).ToList()
             };

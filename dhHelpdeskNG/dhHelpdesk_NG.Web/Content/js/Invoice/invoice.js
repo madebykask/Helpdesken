@@ -30,6 +30,8 @@ $(function () {
 
     var invoiceButtons = '.btn.close-invoice, .btn.save-invoice, .btn.save-close-invoice';
 
+    var invoiceActionButtons = '.btn.orderButtons, .btn.save-invoice, .btn.save-close-invoice, .btn.invoiceFileUploader, .articles-params-add.btn';
+
     var saveInvoiceIndicator = '.loading-msg.save-invoice';
 
     var invoiceButtonIndicator = $("#invoiceButtonIndicator");
@@ -939,6 +941,12 @@ $(function () {
                 default:
                     dhHelpdesk.Common.ShowErrorMessage("State is not implemented!");
             }
+
+            var caseIsLocked = window.parameters.isCaseLocked;            
+            if (caseIsLocked.toLowerCase() == 'true') {                
+                $(invoiceActionButtons).addClass("disabled");
+                $(invoiceActionButtons).css("pointer-events", "none");
+            }
         },
 
         Restore: function () {
@@ -1746,6 +1754,12 @@ $(function () {
                 open: function (event, ui) {
                     //loadCaseFiles();
                     
+                    var caseIsLocked = window.parameters.isCaseLocked;                    
+                    if (caseIsLocked.toLowerCase() == 'true') {                        
+                        $(invoiceActionButtons).addClass("disabled");
+                        $(invoiceActionButtons).css("pointer-events", "none");
+                    }
+
                     $(".ui-dialog-titlebar-close", ui.dialog | ui).hide();
                     dhHelpdesk.CaseArticles.CleanUpAllOrders();
                     dhHelpdesk.System.RaiseEvent("OnChangeOrder", [th.GetCurrentOrder()]);
@@ -2562,6 +2576,11 @@ $(function () {
 
                     dhHelpdesk.CaseArticles.UpdateOtherReferenceTitle(currentOrder.Id);
                     dhHelpdesk.CaseArticles.UpdateFileAttachment(currentOrder);
+                    var caseIsLocked = window.parameters.isCaseLocked;
+                    if (caseIsLocked.toLowerCase() == 'true') {
+                        $(invoiceActionButtons).addClass("disabled");
+                        $(invoiceActionButtons).css("pointer-events", "none");
+                    }
                 });
             },
 
@@ -4441,9 +4460,10 @@ $(function () {
             .then(loadCaseInvoiceCaseFilesTemplate)
             .then(loadCaseInvoiceOrderFilesTemplate)
             .then(loadCaseFiles)
-            .then(function () {
+            .then(function () {                
+
                 $("[data-invoice]").each(function () {
-                    var $this = $(this);
+                    var $this = $(this);                                        
                     var data = $.parseJSON($this.attr("data-invoice-case-articles"));
                     $('#CaseHasInvoiceOrder').val('');
                     var emptyOrders = false;

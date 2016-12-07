@@ -28,7 +28,8 @@
         var _ACTION_TYPE = {
             ValueSetter: 1,
             ListCleaner: 2,
-            ListPopulator: 3
+            ListPopulator: 3,
+            StaticRuntimeAction: 9
         };
 
         var _FIELD_TYPE = {
@@ -142,8 +143,12 @@
                 
                 for (var _fi = 0; _fi < ruleModel.FieldAttributes.length; _fi++) {
                     var field = ruleModel.FieldAttributes[_fi];
-                    helpdesk.caseRule.updateFieldValue(field, field.Selected.ItemValue);
-                    helpdesk.caseRule.refreshStateIcons(field);
+                    var element = helpdesk.caseRule.getElementByFieldId(field.FieldId);
+                    if (!dataHelper.isNullOrUndefined($(element))) {
+                        helpdesk.caseRule.updateElementValue($(element));
+                    }
+                    //helpdesk.caseRule.updateFieldValue(field, field.Selected.ItemValue);
+                    //helpdesk.caseRule.refreshStateIcons(field, false);
                 }
             },
 
@@ -156,7 +161,9 @@
                     if (dataHelper.isNullOrUndefined(parentRelatedFields) || parentRelatedFields.length <= 0)
                         return;
                     for (var pr = 0; pr < parentRelatedFields.length; pr++) {
-                        helpdesk.caseRule.refreshStateIcons(parentRelatedFields[pr]);
+                        var relatedElm = helpdesk.caseRule.getElementByFieldId(parentRelatedFields[pr].FieldId);
+                        if (!dataHelper.isNullOrUndefined(relatedElm))
+                            helpdesk.caseRule.updateElementValue($(relatedElm));
                     }
                 }
             },
@@ -314,13 +321,13 @@
                         break;
                 }
 
-                helpdesk.caseRule.refreshStateIcons(field);
+                helpdesk.caseRule.refreshStateIcons(field, false);
             },
                         
-            refreshStateIcons: function (field) {
+            refreshStateIcons: function (field, preventCycle) {
                 var $elementToApply = $(STATE_ICON_PLACE_PREFIX + field.FieldId);
                 if (!dataHelper.isNullOrUndefined($elementToApply)) {
-                    var iconModel = helpdesk.caseRule.createStateIconModel(field);
+                    var iconModel = helpdesk.caseRule.createStateIconModel(field, preventCycle);
                     $elementToApply.html(iconModel);
 
                     $('body').tooltip({
@@ -330,34 +337,34 @@
                 }
             },
 
-            createStateIconModel: function (field) {
+            createStateIconModel: function (field, preventCycle) {
                 if (dataHelper.isNullOrUndefined(field))
                     return "";
 
                 var fieldInfoClass = "";                
                 var fieldInfoHint = "";               
 
-                var cuFielInfo = helpdesk.caseRule.checkRules(field);
+                var cuFielInfo = helpdesk.caseRule.checkRules(field, preventCycle);
                 if (!dataHelper.isNullOrEmpty(cuFielInfo)) {
                     fieldInfoClass = "icon-info-sign tooltipType";
                     fieldInfoHint = cuFielInfo;
                 }
 
                 var mandatoryClass = field.IsMandatory ? "icon-asterisk tooltipType" : "";
-                var mandatoryHint = "Manatory";
+                var mandatoryHint = params.mandatoryText;
 
                 var selfSeviceClass = field.IsAvailableOnSelfService ? "icon-share tooltipType" : "";
-                var selfSeviceHint = "Show On SelfService";
+                var selfSeviceHint = params.showOnSelfSeviceText;
 
                 var ret =
-                    '<td style="width:70px;text-align:center"><span title="" class="' + fieldInfoClass + '" data-original-title="' + fieldInfoHint + '" data-html="true" rel="tooltip"></span></td>' +
-                    '<td style="width:70px;text-align:center"><span title="" class="' + mandatoryClass + '" data-original-title="' + mandatoryHint + '" data-html="true" rel="tooltip"></span></td>' +
-                    '<td style="width:70px;text-align:center"><span title="" class="' + selfSeviceClass + '" data-original-title="' + selfSeviceHint + '" data-html="true" rel="tooltip"></span></td>';
+                    '<td style="width:80px;text-align:center"><span title="" class="' + fieldInfoClass + '" data-original-title="' + fieldInfoHint + '" data-html="true" rel="tooltip"></span></td>' +
+                    '<td style="width:80px;text-align:center"><span title="" class="' + mandatoryClass + '" data-original-title="' + mandatoryHint + '" data-html="true" rel="tooltip"></span></td>' +
+                    '<td style="width:80px;text-align:center"><span title="" class="' + selfSeviceClass + '" data-original-title="' + selfSeviceHint + '" data-html="true" rel="tooltip"></span></td>';
 
                 return ret;
             },
 
-            checkRules: function (field) {
+            checkRules: function (field, preventCycle) {
                 //if (field.StatusType == _FIELD_STATUS_TYPE.Hidden)
                 //    return "";
                 
@@ -365,7 +372,7 @@
                 if (field.Relations.length > 0) {
                     for (var r = 0; r < field.Relations.length; r++) {
                         var curRelation = field.Relations[r];                            
-                        ret += helpdesk.caseRule.predictAction(field, curRelation);
+                        ret += helpdesk.caseRule.predictAction(field, curRelation, preventCycle);
                     }
                     return ret;
                 }
@@ -373,9 +380,36 @@
                 return "";
             },
 
-            predictAction: function (field, relation) {
+            predictAction: function (field, relation, preventCycle) {
+                if (relation.StaticActionId != null) {
+                    switch (relation.StaticActionId) {
+                        case 1:
+                            if (preventCycle) {                                
+                                return helpdesk.caseRule.staticRuleAction1();
+                            } else {
+                                switch (field.FieldId) {
+                                    case "Impact_Id":
+                                        helpdesk.caseRule.refreshStateIcons(helpdesk.caseRule.getFieldById("Urgency_Id"), true);
+                                        helpdesk.caseRule.refreshStateIcons(helpdesk.caseRule.getFieldById("System_Id"), true);
+                                        return helpdesk.caseRule.staticRuleAction1();
+                                        break;
+                                    case "Urgency_Id":
+                                        helpdesk.caseRule.refreshStateIcons(helpdesk.caseRule.getFieldById("Impact_Id"), true);
+                                        helpdesk.caseRule.refreshStateIcons(helpdesk.caseRule.getFieldById("System_Id"), true);
+                                        return helpdesk.caseRule.staticRuleAction1();
+                                        break;
+                                    case "System_Id":
+                                        helpdesk.caseRule.refreshStateIcons(helpdesk.caseRule.getFieldById("Impact_Id"), true);
+                                        helpdesk.caseRule.refreshStateIcons(helpdesk.caseRule.getFieldById("Urgency_Id"), true);
+                                        return helpdesk.caseRule.staticRuleAction1();
+                                        break;
+                                }
+                            }                            
+                    }
+                }
+
                 var selectedItem = field.Selected;
-                var relatedField = helpdesk.caseRule.getFieldById(relation.FieldId);
+                var relatedField = helpdesk.caseRule.getFieldById(relation.FieldId);                
 
                 if (!dataHelper.isNullOrEmpty(relatedField.Selected.ItemValue))
                     return "";
@@ -383,22 +417,22 @@
                 switch (relation.RelationType) {
                     case _RELATION_TYPE.OneToOne:
                         var fData = helpdesk.caseRule.getForiegnData(relation.RelationType, selectedItem, relation.ForeignKeyNumber, relatedField);
-                        if (fData != null && !dataHelper.isNullOrEmpty(fData.ItemText)) {
-                            return "<div align='left'> [" + relatedField.FieldCaption + "]: will be set to => (" + fData.ItemText + ") </div> <br />";
+                        if (fData != null && !dataHelper.isNullOrEmpty(fData.ItemText)) {                            
+                            return "<div align='left'> <b>" + relatedField.FieldCaption + "</b>: " + params.willSetToText + " <b>" + fData.ItemText + "</b> </div> <br />";
                         }
                         else
                             return "";
 
                     case _RELATION_TYPE.OneToMany:
                         if (!dataHelper.isNullOrEmpty(selectedItem.ItemText))
-                            return "<div align='left'> [" + relatedField.FieldCaption + "]: will show items connected to => ( " + selectedItem.ItemText + " ) </div> <br />";                                
+                            return "<div align='left'> <b>" + relatedField.FieldCaption + "</b>: " + params.willShowRelatedItemsText + " <b>" + selectedItem.ItemText + "</b> </div> <br />";
                         else
                             return "";
                                 
 
                     case _RELATION_TYPE.ManyToMany:
                         if (!dataHelper.isNullOrEmpty(selectedItem.ItemText))
-                            return "<div align='left'> [" + relatedField.FieldCaption + "]: will show items connected to => ( " + selectedItem.ItemText + " ) </div> <br />";
+                            return "<div align='left'> <b>" + relatedField.FieldCaption + "</b>: " + params.willShowRelatedItemsText + " <b>" + selectedItem.ItemText + "</b> </div> <br />";
                         else
                             return "";                        
                 }                                
@@ -473,6 +507,23 @@
                 return "";
             }
 
+            ,
+            /* Static Rule Actions */
+            staticRuleAction1: function(){
+                var impactField = helpdesk.caseRule.getFieldById('Impact_Id');
+                var urgentField = helpdesk.caseRule.getFieldById('Urgency_Id');
+                var priorityField = helpdesk.caseRule.getFieldById('Priority_Id');
+
+                if (!dataHelper.isNullOrUndefined(impactField) && !dataHelper.isNullOrUndefined(urgentField) && !dataHelper.isNullOrUndefined(priorityField)) {
+                    if (!dataHelper.isNullOrEmpty(impactField.Selected.ItemValue) && 
+                        !dataHelper.isNullOrEmpty(urgentField.Selected.ItemValue) &&
+                        !dataHelper.isNullOrEmpty(priorityField.FieldCaption)) {
+                        return "<div align='left'> " + params.migthSetText + " <b>" + priorityField.FieldCaption + "</b> </div> <br />";                       
+                    }
+                }
+
+                return "";
+            }
         }
                       
     })($);

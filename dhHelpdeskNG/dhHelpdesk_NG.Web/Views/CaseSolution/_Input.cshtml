@@ -18,6 +18,12 @@
     window.params = {
         saveDropDownCaption: '@saveDropDownText',
         ruleModel : @Html.Raw(jsSerializer.Serialize(Model.RuleModel)),
+        mandatoryText: '@Translation.GetForJS("Obligatorisk")',
+        showOnSelfSeviceText: '@Translation.GetForJS("Visa på självservice")',
+        willSetToText: '@Translation.GetForJS("sätts till")',
+        migthSetText: '@Translation.GetForJS("kan styra")',
+        willShowRelatedItemsText: '@Translation.GetForJS("visar värden relaterade till")'
+
     };
 
 </script>
@@ -142,9 +148,9 @@
                                     <td class="span5">
                                         <table>
                                             <tr>
-                                                <td style="min-width:70px;text-align:center"> Info </td>
-                                                <td style="min-width:70px;text-align:center"> Mandatory </td>
-                                                <td style="min-width:70px;text-align:center"> SelfService</td>
+                                                <td style="min-width:80px;text-align:center"> @Translation.GetCoreTextTranslation("Info") </td>
+                                                <td style="min-width:80px;text-align:center"> @Translation.GetCoreTextTranslation("Obligatorisk") </td>
+                                                <td style="min-width:80px;text-align:center"> @Translation.GetCoreTextTranslation("Självservice") </td>
                                             </tr>
                                         </table>
                                     </td>

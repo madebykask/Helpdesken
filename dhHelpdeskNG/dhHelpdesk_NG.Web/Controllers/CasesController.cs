@@ -2794,16 +2794,20 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
 			//save external invoices
-			_externalInvoiceService.SaveExternalInvoices(case_.Id, m.ExternalInvoices.Where(x => !String.IsNullOrWhiteSpace(x.Name)).Select(x => new ExternalInvoice
-			{
-				Id = x.Id,
-				InvoiceNumber = x.Name,
-				InvoicePrice = x.Value,
-				CreatedDate = DateTime.UtcNow,
-				CreatedByUserId = workContext.User.UserId
-			}).ToList());
+	        if (m.ExternalInvoices != null)
+	        {
+		        _externalInvoiceService.SaveExternalInvoices(case_.Id,
+			        m.ExternalInvoices.Where(x => !String.IsNullOrWhiteSpace(x.Name)).Select(x => new ExternalInvoice
+			        {
+				        Id = x.Id,
+				        InvoiceNumber = x.Name,
+				        InvoicePrice = x.Value,
+				        CreatedDate = DateTime.UtcNow,
+				        CreatedByUserId = workContext.User.UserId
+			        }).ToList());
+	        }
 
-            //save extra followers
+	        //save extra followers
             if (!string.IsNullOrEmpty(m.FollowerUsers))
             {
                 var followerUsers = m.FollowerUsers.Split(';').Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
