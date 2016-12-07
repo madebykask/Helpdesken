@@ -5260,6 +5260,14 @@ If not exists (select * from tblTextTranslation where text_id = 1723 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1723, 2, 'will show items related to')
 GO
 
+If not exists (select * from tbltext where id = 1724)
+	insert into tbltext (id, TextString) VALUES (1724, 'Användaren har rättighet till fakturering artikel')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1724 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1724, 2, 'User has permission to invocie article')
+GO
+
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

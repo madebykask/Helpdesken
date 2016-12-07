@@ -313,12 +313,12 @@
         </tr>
         <tr>
             <td>
-                @Translation.Get("Fakturering", Enums.TranslationSource.TextTranslation)
+                @Translation.Get("Fakturering artikel", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
                 <input data-field="invoicePermission" type="checkbox" name="User.InvoicePermission" @(Model.User.InvoicePermission == 1 ? "checked=checked" : "") value="1"/>
                 <input type="hidden" name="User.InvoicePermission" value="0" />
-                &nbsp; &nbsp;@Translation.Get("Användaren har rättighet till fakturering", Enums.TranslationSource.TextTranslation)
+                &nbsp; &nbsp;@Translation.Get("Användaren har rättighet till fakturering artikel", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
         <tr>
