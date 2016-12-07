@@ -1991,6 +1991,11 @@ namespace DH.Helpdesk.Web.Controllers
                 ? ((frm.ReturnFormValue("lstPriority") == string.Empty) ? "0" : frm.ReturnFormValue("lstPriority"))
                 : string.Empty;
 
+            bool categoryCheck = frm.IsFormValueTrue("CategoryCheck");
+            var category = (categoryCheck)
+                ? ((frm.ReturnFormValue("lstCategory") == string.Empty) ? "0" : frm.ReturnFormValue("lstCategory"))
+                : string.Empty;
+
             var stateCheck = frm.IsFormValueTrue("StateCheck");
             var state = (stateCheck)
                 ? ((frm.ReturnFormValue("lstStatus") == string.Empty) ? "0" : frm.ReturnFormValue("lstStatus"))
@@ -2029,6 +2034,7 @@ namespace DH.Helpdesk.Web.Controllers
                             priority,
                             state,
                             subState,
+                            category,
                             (caseRegistrationDateCheck ? frm.GetDate("CaseRegistrationDateStartFilter") : null),
                             (caseRegistrationDateCheck ? frm.GetDate("CaseRegistrationDateEndFilter") : null),
                             (caseWatchDateCheck ? frm.GetDate("CaseWatchDateStartFilter") : null),
@@ -4952,6 +4958,11 @@ namespace DH.Helpdesk.Web.Controllers
             ret.PriorityCheck = (userCaseSettings.Priority != string.Empty);
             ret.Priorities = priorities;
             ret.SelectedPriority = userCaseSettings.Priority;
+
+            var categories = _categoryService.GetActiveCategories(customerId).OrderBy(c => c.Name).ToList();
+            ret.CategoryCheck = (userCaseSettings.Category != string.Empty);
+            ret.Categories = categories;
+            ret.SelectedCategory = userCaseSettings.Category;
 
             var states = _statusService.GetStatuses(customerId).OrderBy(s => s.Name).ToList();
             ret.StateCheck = (userCaseSettings.State != string.Empty);

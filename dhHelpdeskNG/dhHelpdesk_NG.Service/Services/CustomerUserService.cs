@@ -80,6 +80,7 @@
                   (userSetting.CasePriorityFilter != null) ? userSetting.CasePriorityFilter.Replace(" ", string.Empty) : string.Empty,
                   (userSetting.CaseStatusFilter != null) ? userSetting.CaseStatusFilter.Replace(" ", string.Empty) : string.Empty,
                   (userSetting.CaseStateSecondaryFilter != null) ? userSetting.CaseStateSecondaryFilter.Replace(" ", string.Empty) : string.Empty,
+                  (userSetting.CaseCategoryFilter != null) ? userSetting.CaseCategoryFilter.Replace(" ", string.Empty) : string.Empty,
                   userSetting.CaseRegistrationDateStartFilter,
                   userSetting.CaseRegistrationDateEndFilter,
                   userSetting.CaseWatchDateStartFilter,

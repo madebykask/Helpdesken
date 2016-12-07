@@ -20,6 +20,7 @@
                     string priority, 
                     string state, 
                     string subState, 
+                    string category,
                     DateTime? caseRegistrationDateStartFilter, 
                     DateTime? caseRegistrationDateEndFilter, 
                     DateTime? caseWatchDateStartFilter, 
@@ -58,6 +59,7 @@
             this.SubState = subState;
             this.CaseInitiatorFilterShow = caseInitiatorFilterShow;
             this.CaseRemainingTime = caseRemainingTime;
+            this.Category = category;
 
         }
 
@@ -82,7 +84,7 @@
         public string Administrators { get; private set; }
 
         public string Priority { get; private set; }
-
+        public string Category { get; private set; }
         public string State { get; private set; }
 
         public string SubState { get; private set; }
