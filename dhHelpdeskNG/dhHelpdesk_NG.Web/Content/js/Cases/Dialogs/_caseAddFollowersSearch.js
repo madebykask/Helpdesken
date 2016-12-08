@@ -16,7 +16,8 @@
         changeFakeInputValueForView();
         dropdownDeselectAll();
     });
-    $("#case_add_followers_popup").on("show", function () {
+
+    $("#case_add_followers_popup").on("shown", function () {
         $("#caseAddFollowersModalInput").focus();
     });
 
@@ -89,27 +90,13 @@
 
     mainFakeFollowersInput.keyup(function (e) {
         if (e.keyCode === 13) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            var emails = $(this).val();
-            var arr = emails.split(';');
-            var newEmail = arr[arr.length - 1].replace("\n", "");
-            if (newEmail.trim() !== "" && checkAndAddEmailsTo(newEmail)) {
-                mainFakeFollowersInput.val(emails.replace("\n", "") + ";");
-            }
+            onEnterKeyUp(e, mainFakeFollowersInput);
         }
     });
 
     mainFakeFollowersInput.keydown(function (e) {
         if (e.keyCode === 8) {
-            e.stopImmediatePropagation();
-            var caretPos = mainFakeFollowersInput[0].selectionStart;
-            var lastEmail = returnEmailBeforeCaret(mainFakeFollowersInput.val(), caretPos);
-            if (lastEmail !== "" && isValidEmailAddress(lastEmail)) {
-                e.preventDefault();
-                mainFakeFollowersInput.val(mainFakeFollowersInput.val().replace(lastEmail + ";", ""));
-                mainFollowersInput.val(mainFakeFollowersInput.val());
-            }
+            onBackspaceKeyDown(e, mainFakeFollowersInput, mainFollowersInput);
         }
     });
 
@@ -117,63 +104,38 @@
 
     popupFollowersInput.keyup(function (e) {
         if (e.keyCode === 13) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            var emails = $(this).val();
-            var arr = emails.split(';');
-            var newEmail = arr[arr.length - 1].replace("\n", "");
-            if (newEmail.trim() !== "" && checkAndAddEmailsTo(newEmail)) {
-                popupFollowersInput.val(emails.replace("\n", "") + ";");
-            }
+            onEnterKeyUp(e, popupFollowersInput);
         }
     });
 
     popupFollowersInput.keydown(function (e) {
         if (e.keyCode === 8) {
-            e.stopImmediatePropagation();
-            var caretPos = popupFollowersInput[0].selectionStart;
-            var lastEmail = returnEmailBeforeCaret(popupFollowersInput.val(), caretPos);
-            if (lastEmail !== "" && isValidEmailAddress(lastEmail)) {
-                e.preventDefault();
-                popupFollowersInput.val(popupFollowersInput.val().replace(lastEmail + ";", ""));
-                mainFollowersInput.val(popupFollowersInput.val());
-            }
+            onBackspaceKeyDown(e, popupFollowersInput, mainFollowersInput);
         }
     });
 
-    function changeFakeInputValueForView() {
-        var fakeInput = $("#fakeCaseFollowerUsersInput");
-        var text = mainFollowersInput.val();
-        fakeInput.val(text);
-    }
-
-    function returnEmailBeforeCaret(text, caretPos) {
-        var preText = text.substring(0, caretPos);
-        if (preText.indexOf(";") > 0) {
-            var words = preText.split(";");
-            if (words[words.length - 1] === "")
-            return words[words.length - 2]; //return last email
+    function onEnterKeyUp(e, fakeInput) {
+        if (e.keyCode === 13) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            var emails = $(e.target).val();
+            var arr = emails.split(";");
+            var newEmail = arr[arr.length - 1].replace("\n", "");
+            if (newEmail.trim() !== "" && checkAndAddEmailsTo(newEmail)) {
+                fakeInput.val(emails.replace("\n", "") + ";");
+            }
         }
-        else {
-            return "";
+    }
+
+    function onBackspaceKeyDown(e, fakeInput, mainInput) {
+        e.stopImmediatePropagation();
+        var caretPos = fakeInput[0].selectionStart;
+        var lastEmail = returnEmailBeforeCaret(fakeInput.val(), caretPos);
+        if (lastEmail !== "" && isValidEmailAddress(lastEmail)) {
+            e.preventDefault();
+            fakeInput.val(fakeInput.val().replace(lastEmail + ";", ""));
+            mainInput.val(fakeInput.val());
         }
-        return "";
-    }
-
-    function dropdownDeselectAll() {
-        $(".case-usersearch-multiselect").each(function () {
-            var select = $(this);
-            $("option", select).each(function () {
-                select.multiselect("deselect", $(this).val());
-            });
-        });
-    }
-
-    function extractor(query) {
-        var result = /([^;]+)$/.exec(query);
-        if (result && result[1])
-            return result[1].trim();
-        return '';
     }
 
     function getCasesAddFollowersSearchOptions() {
@@ -181,14 +143,14 @@
             items: 20,
             minLength: 2,
             source: function (query, process) {
-                var arr = query.split(';');
+                var arr = query.split(";");
                 var searchText = arr[arr.length - 1];
                 var lastInitiatorSearchKey = generateRandomKey();
                 return $.ajax({
-                    url: '/cases/SearchCaseIntLogEmails',
-                    type: 'post',
-                    data: { query: searchText, searchKey: lastInitiatorSearchKey},
-                    dataType: 'json',
+                    url: "/cases/CaseSearchUserEmails",
+                    type: "POST",
+                    data: { query: searchText, searchKey: lastInitiatorSearchKey },
+                    dataType:"json",
                     success: function (result) {
                         if (result.searchKey !== lastInitiatorSearchKey)
                             return;
@@ -210,7 +172,7 @@
             },
 
             matcher: function (item) {
-                var arr = this.query.split(';');
+                var arr = this.query.split(";");
                 var searchText = arr[arr.length - 1];
                 var tquery = extractor(searchText);
                 if (!tquery) return false;
@@ -284,6 +246,41 @@
             ShowToastMessage(value + " : " + window.parameters.emailNotValid, "error");
             return false;
         }
+    }
+
+    function changeFakeInputValueForView() {
+        var fakeInput = $("#fakeCaseFollowerUsersInput");
+        var text = mainFollowersInput.val();
+        fakeInput.val(text);
+    }
+
+    function returnEmailBeforeCaret(text, caretPos) {
+        var preText = text.substring(0, caretPos);
+        if (preText.indexOf(";") > 0) {
+            var words = preText.split(";");
+            if (words[words.length - 1] === "")
+                return words[words.length - 2]; //return last email
+        }
+        else {
+            return "";
+        }
+        return "";
+    }
+
+    function dropdownDeselectAll() {
+        $(".case-usersearch-multiselect").each(function () {
+            var select = $(this);
+            $("option", select).each(function () {
+                select.multiselect("deselect", $(this).val());
+            });
+        });
+    }
+
+    function extractor(query) {
+        var result = /([^;]+)$/.exec(query);
+        if (result && result[1])
+            return result[1].trim();
+        return '';
     }
 
     function generateRandomKey() {

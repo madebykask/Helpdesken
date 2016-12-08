@@ -3747,7 +3747,6 @@ div.modal-body.max-height-600 {
 
 .case-dropdown-area {
     display: inline-flex;
-    max-width: 600px;
     text-align: left;
 }
 
@@ -3757,14 +3756,22 @@ div.modal-body.max-height-600 {
 
 .case-div-span12 {
     float: left;
-    min-height: 1px;
     margin-left: 20px;
 }
 
 .case-usersearch-textarea {
     height: 1.6em;
     min-height: 1em;
-    width: 90%;
+    width: 88%;
+}
+
+.case-usersearch-btn {
+    margin-bottom: 0.4em;
+    min-width: 40px;
+}
+
+.case-td-width90em {
+    width: 90em;
 }
 
 div.case-dropdown-div > span.btn-group.open > ul > div.options-holder li {

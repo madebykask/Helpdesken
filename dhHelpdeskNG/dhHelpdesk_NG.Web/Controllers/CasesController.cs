@@ -1328,11 +1328,9 @@ namespace DH.Helpdesk.Web.Controllers
 
         [ValidateInput(false)]
         [HttpPost]
-        public ActionResult SearchCaseIntLogEmails(string query, string searchKey)
+        public ActionResult CaseSearchUserEmails(string query, string searchKey)
         {
-            var models =
-                _caseSearchService.GetIntLogEmailsForSend(SessionFacade.CurrentCustomer.Id, query, true, true, true, true);
-
+            var models = _caseSearchService.GetUserEmailsForCaseSend(SessionFacade.CurrentCustomer.Id, query, true, true, true, true);
             return Json(new { searchKey = searchKey, result = models });
         }
 

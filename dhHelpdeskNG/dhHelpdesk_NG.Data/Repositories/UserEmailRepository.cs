@@ -36,12 +36,11 @@ namespace DH.Helpdesk.Dal.Repositories
                 .ToList();
         }
 
-        public List<CaseEmailSendOverview> GetEmailsListForIntLogSend(int customerId, string searchText, bool isWgChecked, bool isInitChecked,
-            bool isAdmChecked, bool isEgChecked)
+        public List<CaseEmailSendOverview> GetUserEmailsListForCaseSend(int customerId, string searchText, bool searchInWorkingGrs, bool searchInInitiators, bool searchInAdmins, bool searchInEmailGrs)
         {
             var result = new List<CaseEmailSendOverview>();
 
-            if (isWgChecked)
+            if (searchInWorkingGrs)
             {
                 var wgs = DbContext.WorkingGroups
                     .Include(x => x.UserWorkingGroups.Select(u => u.User))
@@ -54,7 +53,7 @@ namespace DH.Helpdesk.Dal.Repositories
                 }).ToList();
                 result.AddRange(newList);
             }
-            if (isInitChecked)
+            if (searchInInitiators)
             {
                 var inits = DbContext.Users
                     .Where(x => x.IsActive == 1 && x.Customer_Id == customerId)
@@ -65,7 +64,7 @@ namespace DH.Helpdesk.Dal.Repositories
                     var newItem = new CaseEmailSendOverview
                     {
                         UserId = user.UserID,
-                        Name = user.SurName + " " + user.FirstName,
+                        Name = string.Format("{0} {1}", user.SurName, user.FirstName),
                         Emails = new List<string>(),
                         GroupType = CaseUserSearchGroup.Initiator
                     };
@@ -74,7 +73,7 @@ namespace DH.Helpdesk.Dal.Repositories
                 }
             }
 
-            if (isAdmChecked)
+            if (searchInAdmins)
             {
                 var admins = DbContext.Users
                     .Where(x => x.Performer == 1)
@@ -86,7 +85,7 @@ namespace DH.Helpdesk.Dal.Repositories
                     var newItem = new CaseEmailSendOverview
                     {
                         UserId = user.UserID,
-                        Name = user.SurName + " " + user.FirstName,
+                        Name = string.Format("{0} {1}", user.SurName, user.FirstName),
                         Emails = new List<string>(),
                         GroupType = CaseUserSearchGroup.Administaror
                     };
@@ -94,7 +93,7 @@ namespace DH.Helpdesk.Dal.Repositories
                     result.Add(newItem);
                 }
             }
-            if (isEgChecked)
+            if (searchInEmailGrs)
             {
                 var emailGroups = DbContext.EMailGroups
                     .Where(x => x.IsActive == 1 && x.Customer_Id == customerId && (x.Members.Contains(searchText) || x.Name.Contains(searchText))).ToList();

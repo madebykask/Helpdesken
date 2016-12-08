@@ -293,17 +293,17 @@
                                                     }
                                                 </td>
 
-                                                <td style="width: 77%">
+                                                <td class="case-td-width90em">
                                                     @Html.HiddenFor(model => model.FollowerUsers, new { @readonly = "true", id = "caseFollowerUsersInput" })
                                                     @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Persons_Name, CaseSolutionFields.PersonsName))
                                                     {
                                                         @Html.Partial("ModalDialogs/_CaseAddFollowers", Model.SendToDialogModel)
-                                                        <a href="#case_add_followers_btn" role="button" class="btn" data-src="case" data-toggle="modal">@Translation.GetCoreTextTranslation("Lägga följare")</a>
+                                                        <a href="#case_add_followers_btn" role="button" class="btn case-usersearch-btn" data-src="case" data-toggle="modal">@Translation.GetCoreTextTranslation("Lägga följare")</a>
                                                         @Html.TextAreaFor(model => model.FollowerUsers, new {id = "fakeCaseFollowerUsersInput", @class = "case-usersearch-textarea" })
                                                     }
                                                     else
                                                     {
-                                                        <a href="#case_add_followers_btn" role="button" class="btn disabled" disabled="true" data-toggle="modal">@Translation.GetCoreTextTranslation("Lägga följare")</a>
+                                                        <a href="#case_add_followers_btn" role="button" class="btn case-usersearch-btn disabled" disabled="true" data-toggle="modal">@Translation.GetCoreTextTranslation("Lägga följare")</a>
                                                         @Html.TextAreaFor(model => model.FollowerUsers, new {id = "fakeCaseFollowerUsersInput", @readonly = "true", @class = "case-usersearch-textarea" })
                                                     }
                                                 </td>

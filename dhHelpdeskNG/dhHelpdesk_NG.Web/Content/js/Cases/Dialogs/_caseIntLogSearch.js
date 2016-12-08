@@ -31,16 +31,17 @@
         changeFakeInputValueForView();
         dropdownDeselectAll();
     });
-    $("#case_internal_log_popup").on("show", function () {
-        $("#caseAddFollowersModalInput").focus();
+
+    $("#case_internal_log_popup").on("shown", function () {
+        $("#caseInternalLogModalInput").focus();
     });
 
     $(".case-usersearch-multiselect")
         .multiselect({
             enableFiltering: true,
-            filterPlaceholder: '',
+            filterPlaceholder: "",
             maxHeight: 250,
-            buttonClass: 'btn',
+            buttonClass: "btn",
             buttonContainer: '<span class="btn-group" />',
             buttonText: function(options) {
                 if (options.length === 0) {
@@ -48,9 +49,9 @@
                 } else if (options.length > 1) {
                     return options.length + " " + window.parameters.selectedLabel + '  <i class="caret"></i>';
                 } else if (options.length > 0) {
-                    var selected = '';
+                    var selected = "";
                     options.each(function() {
-                        selected += $(this).text() + ', ';
+                        selected += $(this).text() + ", ";
                     });
                     return selected.substr(0, selected.length - 2) + ' <i class="caret"></i>';
                 }
@@ -116,14 +117,7 @@
 
     popupIntLogInput.keyup(function (e) {
         if (e.keyCode === 13) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            var emails = $(this).val();
-            var arr = emails.split(';');
-            var newEmail = arr[arr.length - 1].replace("\n", "");
-            if (newEmail.trim() !== "" && checkAndAddEmailsTo(newEmail)) {
-                popupIntLogInput.val(emails.replace("\n", "") + ";");
-            }
+            onEnterKeyUp(e, popupIntLogInput);
         }
     });
 
@@ -149,28 +143,14 @@
 
     fakeInputTo.keyup(function (e) {
         if (e.keyCode === 13) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            var emails = $(this).val();
-            var arr = emails.split(';');
-            var newEmail = arr[arr.length - 1].replace("\n", "");
-            if (newEmail.trim() !== "" && checkAndAddEmailsTo(newEmail)) {
-                fakeInputTo.val(emails.replace("\n", "") + ";");
-            }
+            onEnterKeyUp(e, fakeInputTo);
         }
     });
 
     fakeInputTo.keydown(function (e) {
         dialogType = toType;
         if (e.keyCode === 8) {
-            e.stopImmediatePropagation();
-            var caretPos = fakeInputTo[0].selectionStart;
-            var lastEmail = returnEmailBeforeCaret(fakeInputTo.val(), caretPos);
-            if (lastEmail !== "" && isValidEmailAddress(lastEmail)) {
-                e.preventDefault();
-                fakeInputTo.val(fakeInputTo.val().replace(lastEmail + ";", ""));
-                mainIntLogInputTo.val(fakeInputTo.val());
-            }
+            onBackspaceKeyDown(e, fakeInputTo, mainIntLogInputTo);
         }
     });
 
@@ -178,44 +158,52 @@
 
     fakeInputCc.keyup(function (e) {
         if (e.keyCode === 13) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            var emails = $(this).val();
-            var arr = emails.split(';');
-            var newEmail = arr[arr.length - 1].replace("\n", "");
-            if (newEmail.trim() !== "" && checkAndAddEmailsTo(newEmail)) {
-                fakeInputCc.val(emails.replace("\n", "") + ";");
-            }
+            onEnterKeyUp(e, fakeInputCc);
         }
     });
 
     fakeInputCc.keydown(function (e) {
         dialogType = ccType;
         if (e.keyCode === 8) {
-            e.stopImmediatePropagation();
-            var caretPos = fakeInputCc[0].selectionStart;
-            var lastEmail = returnEmailBeforeCaret(fakeInputCc.val(), caretPos);
-            if (lastEmail !== "" && isValidEmailAddress(lastEmail)) {
-                e.preventDefault();
-                fakeInputCc.val(fakeInputCc.val().replace(lastEmail + ";", ""));
-                mainIntLogInputCc.val(fakeInputCc.val());
-            }
+            onBackspaceKeyDown(e, fakeInputCc, mainIntLogInputCc);
         }
     });
+
+    function onEnterKeyUp(e, fakeInput) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        var emails = $(e.target).val();
+        var arr = emails.split(';');
+        var newEmail = arr[arr.length - 1].replace("\n", "");
+        if (newEmail.trim() !== "" && checkAndAddEmailsTo(newEmail)) {
+            fakeInput.val(emails.replace("\n", "") + ";");
+        }
+    }
+
+    function onBackspaceKeyDown(e, fakeInput, mainInput) {
+        e.stopImmediatePropagation();
+        var caretPos = fakeInput[0].selectionStart;
+        var lastEmail = returnEmailBeforeCaret(fakeInput.val(), caretPos);
+        if (lastEmail !== "" && isValidEmailAddress(lastEmail)) {
+            e.preventDefault();
+            fakeInput.val(fakeInput.val().replace(lastEmail + ";", ""));
+            mainInput.val(fakeInput.val());
+        }
+    }
 
     function getCasesIntLogEmailSearchOptions() {
         var options = {
             items: 20,
             minLength: 2,
             source: function (query, process) {
-                var arr = query.split(';');
+                var arr = query.split(";");
                 var searchText = arr[arr.length - 1];
                 var lastInitiatorSearchKey = generateRandomKey();
                 return $.ajax({
-                    url: '/cases/SearchCaseIntLogEmails',
-                    type: 'post',
+                    url: "/cases/CaseSearchUserEmails",
+                    type: "post",
                     data: { query: searchText, searchKey: lastInitiatorSearchKey },
-                    dataType: 'json',
+                    dataType: "json",
                     success: function (result) {
                         if (result.searchKey !== lastInitiatorSearchKey)
                             return;
@@ -283,7 +271,7 @@
     function checkAndAddEmailsTo(value) {
         if (isValidEmailAddress(value)) {
             var newToEmail = value + ";";
-            if (dialogType === 1) {
+            if (dialogType === toType) {
                 if (mainIntLogInputCc.val().indexOf(newToEmail) >= 0)
                     mainIntLogInputCc.val(mainIntLogInputCc.val().replace(newToEmail, "")); //remove if exist in cc
                 if (mainIntLogInputTo.val().indexOf(newToEmail) < 0)
@@ -292,9 +280,9 @@
                     return false;
                 }
             }
-            if (dialogType === 2)
+            if (dialogType === ccType)
                 if (mainIntLogInputTo.val().indexOf(newToEmail) >= 0) {
-                    ShowToastMessage(value + " : " + window.parameters.emailAlreadyAdded, 'warning');
+                    ShowToastMessage(value + " : " + window.parameters.emailAlreadyAdded, "warning");
                     return false;
                 }
                 else {
@@ -328,7 +316,7 @@
             }
             if (dialogType === ccType)
                 if (mainIntLogInputTo.val().indexOf(newToEmail) >= 0) {
-                    ShowToastMessage(value + " : " + window.parameters.emailAlreadyAdded, 'warning');
+                    ShowToastMessage(value + " : " + window.parameters.emailAlreadyAdded, "warning");
                     return false;
                 }
                 else {
