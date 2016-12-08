@@ -46,12 +46,13 @@
         caseFileCaption: '@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Filename.ToString(),
                                                 Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)',
         emailNotValid: '@Translation.GetForJS("E-postadress är inte giltig.")',
-        emailAlreadyAdded: '@Translation.GetForJS("Samma e-post redan lagts i Att.")',
+        emailAlreadyAdded: '@Translation.GetForJS("Samma e-post redan lagts.")',
         adminGroup: '@Translation.GetForJS("Handläggare")',
         emailGroup: '@Translation.GetForJS("E-postgrupp")',
         initGroup: '@Translation.GetForJS("Anmälare")',
         wgGroup: '@Translation.GetForJS("Driftgrupp")',
         closeBtn: '@Html.Raw(Translation.GetForJS("Stäng"))',
+        selectedLabel: '@Translation.GetForJS("vald")',
 
         caseFieldNames:{
                         CustomerId: "case__Customer_Id",
@@ -105,8 +106,6 @@
             });
     }
 </script>
-
-@*@Html.Partial("ModalDialogs/_CaseAddFollowers")*@
 
 @if (Model.case_ != null)
                 {
@@ -244,7 +243,7 @@
                             <div style="@Model.displayUserInfoHtml()"  class="notifier-block hideshow">
                                 <h4><a href="#" class="showbtn"><i class="icon-plus-sign"></i></a><a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a> @Translation.Get("Anmälare")</h4>
                                 <div class="row">
-                                    <div class="span12">
+                                    <div class="case-div-span12">
                                         <table class="tableform">
                                             <thead>
                                                 <tr>
@@ -293,14 +292,21 @@
                                                         @Html.TextBoxFor(model => model.case_.PersonsName, new {maxlength = "50", @readonly = "readonly"})
                                                     }
                                                 </td>
-@*                                                <td>*@
-@*                                                    @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Persons_Name, CaseSolutionFields.PersonsName))*@
-@*                                                    {*@
-@*                                                        <input type="button" class="btn" value="@Translation.GetCoreTextTranslation("Lägga följare")" id="caseAddExtraFollowersBtn"/>*@
-@*                                                    }*@
-@*                                                    @Html.HiddenFor(model => model.FollowerUsers, new {@readonly = "true", id = "caseFollowerUsers"})*@
-@*                                                    @Html.TextBoxFor(model => model.FollowerUsers, new {id = "FakeCaseFollowerUsers", @readonly = "true", @class = "width60"})*@
-@*                                                </td>*@
+
+                                                <td style="width: 77%">
+                                                    @Html.HiddenFor(model => model.FollowerUsers, new { @readonly = "true", id = "caseFollowerUsersInput" })
+                                                    @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Persons_Name, CaseSolutionFields.PersonsName))
+                                                    {
+                                                        @Html.Partial("ModalDialogs/_CaseAddFollowers", Model.SendToDialogModel)
+                                                        <a href="#case_add_followers_btn" role="button" class="btn" data-src="case" data-toggle="modal">@Translation.GetCoreTextTranslation("Lägga följare")</a>
+                                                        @Html.TextAreaFor(model => model.FollowerUsers, new {id = "fakeCaseFollowerUsersInput", @class = "case-usersearch-textarea" })
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href="#case_add_followers_btn" role="button" class="btn disabled" disabled="true" data-toggle="modal">@Translation.GetCoreTextTranslation("Lägga följare")</a>
+                                                        @Html.TextAreaFor(model => model.FollowerUsers, new {id = "fakeCaseFollowerUsersInput", @readonly = "true", @class = "case-usersearch-textarea" })
+                                                    }
+                                                </td>
 
                                             </tr>
                                             <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Persons_EMail, CaseSolutionFields.PersonsEmail)">

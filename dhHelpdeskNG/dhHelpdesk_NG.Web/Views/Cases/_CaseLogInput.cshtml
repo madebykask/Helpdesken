@@ -90,7 +90,7 @@
     </div>
 }
 <div class="row">
-    <div class="span12">
+    <div class="case-div-span12">
         <table class="tableform">
             @if (TempData["PreventError"] != null)
             {
@@ -146,21 +146,18 @@
                     }
                 </td>
 
-                <td>
+                <td style="width: 77%">
                     <div class="checkbox">
-                        @*                        <div>*@
-                        @*                            <input type="button" class="btn width20" value="@btnToLabel" id="caseLogSendToMailAboutLogTo" />*@
-                        @*                            @Html.HiddenFor(model => model.CaseLog.EmailRecepientsInternalLogTo, new { @readonly = "true" })*@
-                        @*                            @Html.TextBoxFor(model => model.CaseLog.EmailRecepientsInternalLogTo, new { id= "Fake_CaseLog_EmailRecepientsInternalLogTo", @readonly = "true", @class= "width70" })*@
-                        @*                        </div>*@
-                        @*                        <div >*@
-                        @*                            <input type="button" class="btn width20" value="@Translation.GetForJS("Kopia")" id="caseLogSendCcMailAboutLogCc"/>*@
-                        @*                            @Html.HiddenFor(model => model.CaseLog.EmailRecepientsInternalLogCc, new {@readonly = "true" })*@
-                        @*                            @Html.TextBoxFor(model => model.CaseLog.EmailRecepientsInternalLogCc, new { id = "Fake_CaseLog_EmailRecepientsInternalLogCc", @readonly = "true", @class = "width70" })*@
-                        @*                        </div>*@
-
-                        @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutLog)
-                        <span class="lbl">@Translation.Get("Skicka intern loggpost till", SessionFacade.CurrentCaseLanguageId)</span>
+                        <div>
+                            <a href="#case_internal_log_to_btn" role="button" class="btn" data-src="case" data-toggle="modal">@btnToLabel</a>
+                            @Html.HiddenFor(model => model.CaseLog.EmailRecepientsInternalLogTo, new { id = "caseLog_EmailRecepientsInternalLogTo", @readonly = "true"})
+                            @Html.TextAreaFor(model => model.CaseLog.EmailRecepientsInternalLogTo, new {id = "fake_CaseLog_EmailRecepientsInternalLogTo", @class = "case-usersearch-textarea" })
+                        </div>
+                        <div >
+                            <a href="#case_internal_log_cc_btn" role="button" class="btn" data-src="case" data-toggle="modal">@Translation.GetForJS("Kopia")</a>
+                            @Html.HiddenFor(model => model.CaseLog.EmailRecepientsInternalLogCc, new { id = "caseLog_EmailRecepientsInternalLogCc", @readonly = "true"})
+                            @Html.TextAreaFor(model => model.CaseLog.EmailRecepientsInternalLogCc, new {id = "fake_CaseLog_EmailRecepientsInternalLogCc", @class = "case-usersearch-textarea" })
+                        </div>
 
                         @if (Model.templateistrue != 1 && !readonlyMode)
                         {
@@ -180,9 +177,6 @@
                                 }
                             }
                         }
-                    </div>
-                    <div id="divEmailRecepientsInternalLog" style="display: none">
-                        @Html.TextAreaFor(model => model.CaseLog.EmailRecepientsInternalLog, new { @readonly = "readonly" })
                     </div>
                 </td>
             </tr>
@@ -390,8 +384,7 @@
     </div>
 </div>
 }
-@*@Html.Partial("ModalDialogs/_SendIntLogToDiallog")*@
-@Html.Partial("_SendToDialog", Model.SendToDialogModel)
+@Html.Partial("ModalDialogs/_SendIntLogToDiallog", Model.SendToDialogModel)
 @*<div id="divNewFAQ" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true" >
     @Html.Partial("_NewFAQ", Model.EditFaqModel)
 </div>*@

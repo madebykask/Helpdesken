@@ -1,63 +1,93 @@
-﻿function InitializeAddFollowersDialog() {
-    $('#caseAddFollowersDialog')
-        .dialog({
-            autoOpen: false,
-            modal: false,
-            resizable: false,
-            heigth: 200,
-            width: 350,
-            dialogClass: 'overflow-visible',
-            buttons: [
-                {
-                    text: window.parameters.closeBtn,
-                    click: function () {
-                        $(this).dialog("close");
-                    },
-                    'class': 'btn'
-                }
-            ],
+﻿function InitCaseAddFollowersSearch(admins, emailGroups, workingGroups) {
 
-            open: function () {
-                InitCaseAddFollowersSearch();
-            },
-            close: function () {
-                ChangeFakeInputValueForView();
+    var mainFollowersInput = $("#caseFollowerUsersInput");
+    var mainFakeFollowersInput = $("#fakeCaseFollowerUsersInput");
+    var popupFollowersInput = $("#caseAddFollowersModalInput");
+
+    $("a[href='#case_add_followers_btn']").on("click", function () {
+        var $src = $(this);
+        var $target = $("#case_add_followers_popup");
+        popupFollowersInput.val(mainFollowersInput.val());
+        $target.attr("data-src", $src.attr("data-src"));
+        $target.modal("show");
+    });
+
+    $("#case_add_followers_popup").on("hide", function () {
+        changeFakeInputValueForView();
+        dropdownDeselectAll();
+    });
+    $("#case_add_followers_popup").on("show", function () {
+        $("#caseAddFollowersModalInput").focus();
+    });
+
+    $(".case-usersearch-multiselect").multiselect({
+        enableFiltering: true,
+        filterPlaceholder: "",
+        maxHeight: 250,
+        buttonClass: "btn",
+        buttonContainer: '<span class="btn-group" />',
+        buttonText: function(options) {
+            if (options.length === 0) {
+                return '-- <i class="caret"></i>';
+            } else if (options.length > 1) {
+                return options.length + " " + window.parameters.selectedLabel + '  <i class="caret"></i>';
+            } else if (options.length > 0) {
+                var selected = '';
+                options.each(function() {
+                    selected += $(this).text() + ', ';
+                });
+                return selected.substr(0, selected.length - 2) + ' <i class="caret"></i>';
             }
-        });
-    ChangeFakeInputValueForView();
-}
-
-function ChangeFakeInputValueForView() {
-
-    $.fn.textWidth = function (text, font) {
-        if (!$.fn.textWidth.fakeEl) $.fn.textWidth.fakeEl = $('<span>').hide().appendTo(document.body);
-        $.fn.textWidth.fakeEl.text(text || this.val() || this.text()).css('font', font || this.css('font'));
-        return $.fn.textWidth.fakeEl.width();
-    };
-
-    var fakeInput = $("#FakeCaseFollowerUsers");
-    var valueInput = $("#caseFollowerUsers");
-    var text = valueInput.val();
-    var elementWidht = fakeInput.width();
-    if (valueInput.textWidth() > elementWidht) {
-        for (var i = 35; i > 20; i--) {
-            fakeInput.val(text.substring(0, i) + "..+");
-            if (fakeInput.textWidth() <= elementWidht)
-                return;
+            return '-- <i class="caret"></i>';
         }
-    } else {
-        fakeInput.val(text);
+    });
+
+    $("#caseFollowers_emailGroupsDiv").change(function () {
+        appendGroupEmails();
+    });
+    $("#caseFollowers_workingGroupsDiv").change(function () {
+        appendWorkingGroupEmails();
+    });
+    $("#caseFollowers_adminsDiv").change(function () {
+        appendAdminEmails();
+    });
+
+    function appendGroupEmails() {
+        var selectedGroupIds = $("#caseFollowersEmailGroupsDropdown").val() || [];
+        for (var i = 0; i < selectedGroupIds.length; i++) {
+            var arr = jQuery.grep(emailGroups,
+                function(a) {
+                    return a.Id == selectedGroupIds[i];
+                });
+            for (var j = 0; j < arr[0].Emails.length; j++) {
+                checkAndAddEmailsFromDropdown(arr[0].Emails[j]);
+            }
+        }
     }
-}
 
-function InitCaseAddFollowersSearch() {
+    function appendWorkingGroupEmails() {
+        var selectedGroupIds = $("#caseFollowersWorkingGroupsDropdown").val() || [];
+        for (var i = 0; i < selectedGroupIds.length; i++) {
+            var arr = jQuery.grep(workingGroups,
+                function (a) {
+                    return a.Id == selectedGroupIds[i];
+                });
+            for (var j = 0; j < arr[0].Emails.length; j++) {
+                checkAndAddEmailsFromDropdown(arr[0].Emails[j]);
+            }
+        }
+    }
 
-    var textBoxEmails = $("#caseFollowerUsers");
-    var emailInput = $("#caseAddFollowersSendInput");
+    function appendAdminEmails() {
+        var selectedAdministratorEmails = $("#caseFollowersAdministratorsDropdown").val() || [];
+        for (var i = 0; i < selectedAdministratorEmails.length; i++) {
+            checkAndAddEmailsFromDropdown(selectedAdministratorEmails[i]);
+        }
+    }
 
-    emailInput.typeahead(getCasesAddFollowersSearchOptions());
+    mainFakeFollowersInput.typeahead(getCasesAddFollowersSearchOptions());
 
-    emailInput.keyup(function (e) {
+    mainFakeFollowersInput.keyup(function (e) {
         if (e.keyCode === 13) {
             e.preventDefault();
             e.stopImmediatePropagation();
@@ -65,23 +95,57 @@ function InitCaseAddFollowersSearch() {
             var arr = emails.split(';');
             var newEmail = arr[arr.length - 1].replace("\n", "");
             if (newEmail.trim() !== "" && checkAndAddEmailsTo(newEmail)) {
-                emailInput.val(emails.replace("\n", "") + ";");
+                mainFakeFollowersInput.val(emails.replace("\n", "") + ";");
             }
         }
     });
 
-    emailInput.keydown(function (e) {
+    mainFakeFollowersInput.keydown(function (e) {
         if (e.keyCode === 8) {
             e.stopImmediatePropagation();
-            var caretPos = emailInput[0].selectionStart;
-            var lastEmail = returnEmailBeforeCaret(emailInput.val(), caretPos);
+            var caretPos = mainFakeFollowersInput[0].selectionStart;
+            var lastEmail = returnEmailBeforeCaret(mainFakeFollowersInput.val(), caretPos);
             if (lastEmail !== "" && isValidEmailAddress(lastEmail)) {
                 e.preventDefault();
-                emailInput.val(emailInput.val().replace(lastEmail + ";", ""));
-                textBoxEmails.val(emailInput.val());
+                mainFakeFollowersInput.val(mainFakeFollowersInput.val().replace(lastEmail + ";", ""));
+                mainFollowersInput.val(mainFakeFollowersInput.val());
             }
         }
     });
+
+    popupFollowersInput.typeahead(getCasesAddFollowersSearchOptions());
+
+    popupFollowersInput.keyup(function (e) {
+        if (e.keyCode === 13) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            var emails = $(this).val();
+            var arr = emails.split(';');
+            var newEmail = arr[arr.length - 1].replace("\n", "");
+            if (newEmail.trim() !== "" && checkAndAddEmailsTo(newEmail)) {
+                popupFollowersInput.val(emails.replace("\n", "") + ";");
+            }
+        }
+    });
+
+    popupFollowersInput.keydown(function (e) {
+        if (e.keyCode === 8) {
+            e.stopImmediatePropagation();
+            var caretPos = popupFollowersInput[0].selectionStart;
+            var lastEmail = returnEmailBeforeCaret(popupFollowersInput.val(), caretPos);
+            if (lastEmail !== "" && isValidEmailAddress(lastEmail)) {
+                e.preventDefault();
+                popupFollowersInput.val(popupFollowersInput.val().replace(lastEmail + ";", ""));
+                mainFollowersInput.val(popupFollowersInput.val());
+            }
+        }
+    });
+
+    function changeFakeInputValueForView() {
+        var fakeInput = $("#fakeCaseFollowerUsersInput");
+        var text = mainFollowersInput.val();
+        fakeInput.val(text);
+    }
 
     function returnEmailBeforeCaret(text, caretPos) {
         var preText = text.substring(0, caretPos);
@@ -94,6 +158,15 @@ function InitCaseAddFollowersSearch() {
             return "";
         }
         return "";
+    }
+
+    function dropdownDeselectAll() {
+        $(".case-usersearch-multiselect").each(function () {
+            var select = $(this);
+            $("option", select).each(function () {
+                select.multiselect("deselect", $(this).val());
+            });
+        });
     }
 
     function extractor(query) {
@@ -111,14 +184,10 @@ function InitCaseAddFollowersSearch() {
                 var arr = query.split(';');
                 var searchText = arr[arr.length - 1];
                 var lastInitiatorSearchKey = generateRandomKey();
-                var isWgChecked = $('#searchAddFollowersCheckboxWg').prop("checked");
-                var isInitChecked = $('#searchAddFollowersCheckboxInit').prop("checked");
-                var isAdmChecked = $('#searchAddFollowersCheckboxAdm').prop("checked");
-                var isEgChecked = $('#searchAddFollowersCheckboxEg').prop("checked");
                 return $.ajax({
                     url: '/cases/SearchCaseIntLogEmails',
                     type: 'post',
-                    data: { query: searchText, searchKey: lastInitiatorSearchKey, isWgChecked: isWgChecked, isInitChecked: isInitChecked, isAdmChecked: isAdmChecked, isEgChecked: isEgChecked },
+                    data: { query: searchText, searchKey: lastInitiatorSearchKey},
                     dataType: 'json',
                     success: function (result) {
                         if (result.searchKey !== lastInitiatorSearchKey)
@@ -177,8 +246,8 @@ function InitCaseAddFollowersSearch() {
                         emailsToAdd.push(value);
                 });
                 if (emailsToAdd.length > 0)
-                    return this.$element.val().replace(/[^;]*$/, '') + emailsToAdd.join(";") + ';';
-                return this.$element.val().replace(/[^;]*$/, '');
+                    return this.$element.val().replace(/[^;]*$/, "") + emailsToAdd.join(";") + ";";
+                return this.$element.val().replace(/[^;]*$/, "");
             }
         };
 
@@ -187,16 +256,32 @@ function InitCaseAddFollowersSearch() {
 
     function checkAndAddEmailsTo(value) {
         if (isValidEmailAddress(value)) {
-
             var newToEmail = value + ";";
-                if (textBoxEmails.val().indexOf(newToEmail) < 0)
-                    textBoxEmails.val(textBoxEmails.val() + newToEmail);
+                if (mainFollowersInput.val().indexOf(newToEmail) < 0)
+                    mainFollowersInput.val(mainFollowersInput.val() + newToEmail);
                 else {
+                    ShowToastMessage(value + " : " + window.parameters.emailAlreadyAdded, "warning");
                     return false;
                 }
             return true;
         } else {
-            ShowToastMessage(value + " : " + window.parameters.emailNotValid, 'error');
+            ShowToastMessage(value + " : " + window.parameters.emailNotValid, "error");
+            return false;
+        }
+    }
+
+    function checkAndAddEmailsFromDropdown(value) {
+        if (isValidEmailAddress(value)) {
+            var newToEmail = value + ";";
+            if (mainFollowersInput.val().indexOf(newToEmail) < 0) {
+                mainFollowersInput.val(mainFollowersInput.val() + newToEmail);
+                popupFollowersInput.val(popupFollowersInput.val() + newToEmail);
+            } else {
+                return false;
+            }
+            return true;
+        } else {
+            ShowToastMessage(value + " : " + window.parameters.emailNotValid, "error");
             return false;
         }
     }

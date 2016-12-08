@@ -38,8 +38,6 @@
         public string EmailRecepientsInternalLogTo { get; set; }
         public string EmailRecepientsInternalLogCc { get; set; }
 
-        public string EmailRecepientsInternalLog { get; set; } //ToDo: remove after release
-
         public string EmailRecepientsExternalLog { get; set; }
         public int? UserId { get; set; }
         public string UserName { get; set; }

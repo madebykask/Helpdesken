@@ -681,6 +681,10 @@ input[type="text"] {
           border-radius: 0px !important;
 }
 
+ul.typeahead.dropdown-menu {
+    text-align: left;
+}
+
 .dropup { bottom:100% !important; top:auto !important; }
 
 
@@ -1972,6 +1976,11 @@ input[type="checkbox"],
 	max-width:300px;
 	min-width:300px;
 	text-align:left;
+}
+
+button.multiselect.dropdown-toggle.btn {
+    max-width:190px;
+	min-width:190px;
 }
 
 .multiselect-search {
@@ -3736,5 +3745,28 @@ div.modal-body.max-height-600 {
     max-height: 600px
 }
 
+.case-dropdown-area {
+    display: inline-flex;
+    max-width: 600px;
+    text-align: left;
+}
 
+.case-dropdown-div {
+    padding-left: 20px;
+}
 
+.case-div-span12 {
+    float: left;
+    min-height: 1px;
+    margin-left: 20px;
+}
+
+.case-usersearch-textarea {
+    height: 1.6em;
+    min-height: 1em;
+    width: 90%;
+}
+
+div.case-dropdown-div > span.btn-group.open > ul > div.options-holder li {
+    display: flex;
+}

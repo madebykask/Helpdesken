@@ -5173,11 +5173,12 @@ GO
 
 If not exists (select * from tblText where Id = 1712)
             insert into tblText (Id, Textstring) VALUES (1712, 'Samma e-post redan lagts i Till.')																
-																
 GO
 If not exists (select * from tblTextTranslation where Text_Id = 1712 and Language_Id=2)
     insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1712, 'Same email already added in To.', 2)
 GO
+UPDATE tblText Set TextString = 'Samma e-post redan lagts.' WHERE Id=1712;
+UPDATE tblTextTranslation Set TextTranslation = 'Same email already added.' WHERE Text_Id=1712;
 
 If not exists (select * from tblText where Id = 1713)
             insert into tblText (Id, Textstring) VALUES (1713, 'Kopia')																																
@@ -5268,6 +5269,26 @@ If not exists (select * from tblTextTranslation where text_id = 1724 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1724, 2, 'User has permission to invocie article')
 GO
 
+If not exists (select * from tbltext where id = 1725)
+	insert into tbltext (id, TextString) VALUES (1725, 'Välj E-post')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1725 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1725, 2, 'Select E-mail')
+GO
+
+If not exists (select * from tbltext where id = 1726)
+	insert into tbltext (id, TextString) VALUES (1726, 'vald')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1726 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1726, 2, 'selected')
+GO
+
+If not exists (select * from tbltext where id = 1727)
+	insert into tbltext (id, TextString) VALUES (1727, 'Klar')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1727 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1727, 2, 'Done')
+GO
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

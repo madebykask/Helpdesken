@@ -1,28 +1,77 @@
-﻿
-@using System.Web.Optimization
-@using DH.Helpdesk.Web
+﻿@using DH.Helpdesk.Web
+@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+@model DH.Helpdesk.Web.Models.Shared.SendToDialogModel
 
 @Scripts.Render(BundleConfig.ScriptNames.CaseIntLogEmailSearch)
 
 <script type="text/javascript">
-    $(function () {
-        InitializeInternalLogSendDialog();
+    $(function() {
+        var admins = @Html.SerializeObjectToJson(Model.Administrators.Items);
+        var emailGroups = @Html.SerializeObjectToJson(Model.EmailGroups.Items);
+        var workingGroups = @Html.SerializeObjectToJson(Model.WorkingGroups.Items);
+        InitializeInternalLogSendDialog(admins, emailGroups, workingGroups);
     });
 </script>
 
-<div id="SendIntLogCase" title="@Translation.GetCoreTextTranslation("E-post")" class="overflow-visible">
-    <label>
-        <input id="searchIntSendToCheckboxWg" checked="checked" name="WorkingGroup" type="checkbox" value="true"> @Translation.GetCoreTextTranslation("Driftgrupp")
-    </label>
-    <label>
-        <input id="searchIntSendToCheckboxInit" checked="checked" name="Initiator" type="checkbox" value="true"> @Translation.GetCoreTextTranslation("Anmälare")
-    </label>
-    <label>
-        <input id="searchIntSendToCheckboxAdm" checked="checked" name="Administrator" type="checkbox" value="true"> @Translation.GetCoreTextTranslation("Handläggare")
-    </label>
-    <label>
-        <input id="searchIntSendToCheckboxEg" checked="checked" name="EmailGroup" type="checkbox" value="true"> @Translation.GetCoreTextTranslation("E-postgrupp")
-    </label>
-    <br/>
-    <textarea cols="20" id="casesIntLogSendInput" ></textarea>
+<div id="case_internal_log_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabelCase" aria-hidden="true" style="display: none">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h5>@Translation.GetCoreTextTranslation("Välj E-post")</h5>
+            </div>
+            <div class="modal-body overflow-visible case-dropdown-area">
+                <div id="caseInternalLog_emailGroupsDiv" class="case-dropdown-div">
+                    @Translation.GetCoreTextTranslation("E-postgrupp")<br />
+                    <select id="caseInternalLogEmailGroupsDropdown" class="case-usersearch-multiselect multiselect-search" multiple="multiple">
+                        @foreach (var emailGroup in Model.EmailGroups)
+                        {
+                            <option value="@emailGroup.Value">@emailGroup.Text</option>
+                        }
+                    </select>
+                </div>
+                <div id="caseInternalLog_workingGroupsDiv" class="case-dropdown-div">
+                    @Translation.GetCoreTextTranslation("Driftgrupp")<br />
+                    <select id="caseInternalLogWorkingGroupsDropdown" class="case-usersearch-multiselect multiselect-search" multiple="multiple">
+                        @foreach (var workingGroup in Model.WorkingGroups)
+                        {
+                            <option value="@workingGroup.Value">@workingGroup.Text</option>
+                        }
+                    </select>
+                </div>
+                <div id="caseInternalLog_adminsDiv" class="case-dropdown-div">
+                    @Translation.GetCoreTextTranslation("Handläggare")<br />
+                    <select id="caseInternalLogAdministratorsDropdown" class="case-usersearch-multiselect multiselect-search" multiple="multiple">
+                        @foreach (var administrator in Model.Administrators)
+                        {
+                            <option value="@administrator.Value">@administrator.Text</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="modal-body overflow-visible">
+                <textarea cols="20" id="caseInternalLogModalInput" class="width90"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnCancel" class="btn btn-cancel btn-default" data-dismiss="modal">@Translation.GetCoreTextTranslation("Klar")</button>
+            </div>
+        </div>
+    </div>
 </div>
+
+@*<div id="SendIntLogCase" title="@Translation.GetCoreTextTranslation("E-post")" class="overflow-visible">*@
+@*    <label>*@
+@*        <input id="searchIntSendToCheckboxWg" checked="checked" name="WorkingGroup" type="checkbox" value="true"> @Translation.GetCoreTextTranslation("Driftgrupp")*@
+@*    </label>*@
+@*    <label>*@
+@*        <input id="searchIntSendToCheckboxInit" checked="checked" name="Initiator" type="checkbox" value="true"> @Translation.GetCoreTextTranslation("Anmälare")*@
+@*    </label>*@
+@*    <label>*@
+@*        <input id="searchIntSendToCheckboxAdm" checked="checked" name="Administrator" type="checkbox" value="true"> @Translation.GetCoreTextTranslation("Handläggare")*@
+@*    </label>*@
+@*    <label>*@
+@*        <input id="searchIntSendToCheckboxEg" checked="checked" name="EmailGroup" type="checkbox" value="true"> @Translation.GetCoreTextTranslation("E-postgrupp")*@
+@*    </label>*@
+@*    <br/>*@
+@*    <textarea cols="20" id="casesIntLogSendInput" ></textarea>*@
+@*</div>*@
