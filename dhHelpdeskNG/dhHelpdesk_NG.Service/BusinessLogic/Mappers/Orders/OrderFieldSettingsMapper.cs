@@ -211,7 +211,9 @@
             return new UserFieldSettings(
                     CreateTextFieldSetting(fieldSettings.FindByName(UserFields.UserId)),
                     CreateTextFieldSetting(fieldSettings.FindByName(UserFields.UserFirstName)),
-                    CreateTextFieldSetting(fieldSettings.FindByName(UserFields.UserLastName)));
+                    CreateTextFieldSetting(fieldSettings.FindByName(UserFields.UserLastName)),
+                    CreateTextFieldSetting(fieldSettings.FindByName(UserFields.UserPhone)),
+                    CreateTextFieldSetting(fieldSettings.FindByName(UserFields.UserEMail)));
         }
 
         private static FieldSettings CreateFieldSetting(OrdersFieldSettingsMapData data)
@@ -373,6 +375,8 @@
             MapTextFieldSettings(updatedSettings.UserId, existingSettings.FindByName(UserFields.UserId), changedDate);
             MapTextFieldSettings(updatedSettings.UserFirstName, existingSettings.FindByName(UserFields.UserFirstName), changedDate);
             MapTextFieldSettings(updatedSettings.UserLastName, existingSettings.FindByName(UserFields.UserLastName), changedDate);
+            MapTextFieldSettings(updatedSettings.UserPhone, existingSettings.FindByName(UserFields.UserPhone), changedDate);
+            MapTextFieldSettings(updatedSettings.UserEMail, existingSettings.FindByName(UserFields.UserEMail), changedDate);
         }
 
         private static void MapFieldSettings(

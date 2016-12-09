@@ -4,14 +4,18 @@
 
     public sealed class UserFieldSettings
     {
-        public UserFieldSettings(
-                TextFieldSettings userId, 
-                TextFieldSettings userFirstName, 
-                TextFieldSettings userLastName)
+
+        public UserFieldSettings(TextFieldSettings userId,
+            TextFieldSettings userFirstName,
+            TextFieldSettings userLastName,
+            TextFieldSettings userPhone,
+            TextFieldSettings userEMail)
         {
-            this.UserLastName = userLastName;
-            this.UserFirstName = userFirstName;
-            this.UserId = userId;
+            UserId = userId;
+            UserFirstName = userFirstName;
+            UserLastName = userLastName;
+            UserPhone = userPhone;
+            UserEMail = userEMail;
         }
 
         [NotNull]
@@ -21,6 +25,12 @@
         public TextFieldSettings UserFirstName { get; private set; }
          
         [NotNull]
-        public TextFieldSettings UserLastName { get; private set; }                  
+        public TextFieldSettings UserLastName { get; private set; }
+        [NotNull]
+        public TextFieldSettings UserPhone { get; private set; }
+
+        [NotNull]
+        public TextFieldSettings UserEMail { get; private set; }
+
     }
 }

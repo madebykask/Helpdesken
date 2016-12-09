@@ -168,7 +168,9 @@
             return new UserFieldSettingsModel(
                         CreateTextFieldSettingModel(settings.UserId),
                         CreateTextFieldSettingModel(settings.UserFirstName),
-                        CreateTextFieldSettingModel(settings.UserLastName));
+                        CreateTextFieldSettingModel(settings.UserLastName),
+                        CreateTextFieldSettingModel(settings.UserPhone),
+                        CreateTextFieldSettingModel(settings.UserEMail));
         }
 
         private static FieldSettingsModel CreateFieldSettingModel(FieldSettings settings)
@@ -308,7 +310,9 @@
             return new UserFieldSettings(
                         CreateTextFieldSettingForUpdate(settings.UserId),
                         CreateTextFieldSettingForUpdate(settings.UserFirstName),
-                        CreateTextFieldSettingForUpdate(settings.UserLastName));
+                        CreateTextFieldSettingForUpdate(settings.UserLastName),
+                        CreateTextFieldSettingForUpdate(settings.UserPhone),
+                        CreateTextFieldSettingForUpdate(settings.UserEMail));
         }
 
         private static FieldSettings CreateFieldSettingForUpdate(FieldSettingsModel settings)

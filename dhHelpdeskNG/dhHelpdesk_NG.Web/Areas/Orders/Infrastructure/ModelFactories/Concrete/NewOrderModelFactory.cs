@@ -235,11 +235,15 @@
             var userId = this.configurableFieldModelFactory.CreateStringField(settings.UserId, workContext.User.Login);
             var userFirstName = this.configurableFieldModelFactory.CreateStringField(settings.UserFirstName, workContext.User.FirstName);
             var userLastName = this.configurableFieldModelFactory.CreateStringField(settings.UserLastName, workContext.User.LastName);
+            var userPhone = this.configurableFieldModelFactory.CreateStringField(settings.UserPhone, workContext.User.Phone);
+            var userEmail = this.configurableFieldModelFactory.CreateStringField(settings.UserEMail, workContext.User.Email);
 
             return new UserEditModel(
                             userId,
                             userFirstName,
-                            userLastName);
+                            userLastName,
+                            userPhone,
+                            userEmail);
         }
     }
 }

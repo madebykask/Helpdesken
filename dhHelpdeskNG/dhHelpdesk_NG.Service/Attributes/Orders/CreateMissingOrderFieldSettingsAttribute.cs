@@ -173,6 +173,8 @@
             CollectMissingField(UserFields.UserId, existing, missingFields);
             CollectMissingField(UserFields.UserFirstName, existing, missingFields);
             CollectMissingField(UserFields.UserLastName, existing, missingFields);
+            CollectMissingField(UserFields.UserPhone, existing, missingFields);
+            CollectMissingField(UserFields.UserEMail, existing, missingFields);
         }
 
         private static void CollectMissingField(

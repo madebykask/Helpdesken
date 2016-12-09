@@ -7,5 +7,7 @@
         public const string UserFirstName = "UserFirstName";
 
         public const string UserLastName = "UserLastName";
+        public const string UserPhone = "UserPhone";
+        public const string UserEMail = "UserEMail";
     }
 }

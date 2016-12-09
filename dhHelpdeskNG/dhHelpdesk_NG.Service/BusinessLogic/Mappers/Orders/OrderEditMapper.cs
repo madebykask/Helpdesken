@@ -255,7 +255,9 @@
             return new UserEditFields(
                     entity.UserId,
                     entity.UserFirstName,
-                    entity.UserLastName);
+                    entity.UserLastName,
+                    entity.UserPhone,
+                    entity.UserEMail);
         }
     }
 }

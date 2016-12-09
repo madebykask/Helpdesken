@@ -116,6 +116,32 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
             }
         }
 
+        public string Phone
+        {
+            get
+            {
+                if (this.User != null)
+                {
+                    return this.User.Phone;
+                }
+
+                return string.Empty;
+            }
+        }
+
+        public string Email
+        {
+            get
+            {
+                if (this.User != null)
+                {
+                    return this.User.Email;
+                }
+
+                return string.Empty;
+            }
+        }
+
         /// <summary>
         /// Gets the user working groups.
         /// </summary>

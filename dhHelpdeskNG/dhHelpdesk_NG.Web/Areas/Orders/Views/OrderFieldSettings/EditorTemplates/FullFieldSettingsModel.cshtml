@@ -47,7 +47,13 @@
         </tr>               
         <tr>
             @Html.EditorFor(m => m.User.UserLastName)
-        </tr>               
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.User.UserPhone)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.User.UserEMail)
+        </tr>
         <tr>
             <td colspan="8" class="header">@Translation.Get("Beställare")</td>
         </tr>    

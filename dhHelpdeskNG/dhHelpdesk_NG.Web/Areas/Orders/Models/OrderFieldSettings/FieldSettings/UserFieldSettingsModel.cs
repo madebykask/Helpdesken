@@ -9,14 +9,18 @@
         {            
         }
 
-        public UserFieldSettingsModel(
-                TextFieldSettingsModel userId, 
-                TextFieldSettingsModel userFirstName, 
-                TextFieldSettingsModel userLastName)
+
+        public UserFieldSettingsModel(TextFieldSettingsModel userId,
+            TextFieldSettingsModel userFirstName,
+            TextFieldSettingsModel userLastName,
+            TextFieldSettingsModel userPhone,
+            TextFieldSettingsModel userEMail)
         {
-            this.UserLastName = userLastName;
-            this.UserFirstName = userFirstName;
-            this.UserId = userId;
+            UserId = userId;
+            UserFirstName = userFirstName;
+            UserLastName = userLastName;
+            UserPhone = userPhone;
+            UserEMail = userEMail;
         }
 
         [NotNull]
@@ -29,6 +33,14 @@
          
         [NotNull]
         [LocalizedDisplay("Efternamn")]
-        public TextFieldSettingsModel UserLastName { get; set; }   
+        public TextFieldSettingsModel UserLastName { get; set; }
+
+        [NotNull]
+        [LocalizedDisplay("Telefon")]
+        public TextFieldSettingsModel UserPhone { get; set; }
+        
+        [NotNull]
+        [LocalizedDisplay("E-post")]
+        public TextFieldSettingsModel UserEMail { get; set; }
     }
 }

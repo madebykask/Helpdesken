@@ -134,6 +134,10 @@
 
         public string UserLastName { get; set; }
 
+        public string UserPhone { get; set; }
+
+        public string UserEMail { get; set; }
+
         public DateTime ChangedDate { get; set; }
 
         public DateTime CreatedDate { get; set; }

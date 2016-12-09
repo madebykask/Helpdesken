@@ -133,6 +133,8 @@
             entity.UserId = businessModel.UserId;
             entity.UserFirstName = businessModel.UserFirstName;
             entity.UserLastName = businessModel.UserLastName;
-        } 
+            entity.UserPhone = businessModel.UserPhone;
+            entity.UserEMail = businessModel.UserEMail;
+        }
     }
 }

@@ -278,7 +278,7 @@
             var cs = this._settingService.GetCustomerSetting(currentCustomer.Id);
 
             var id = int.Parse(model.Id);
-            var filesInDb = model.Other != null && model.Other.FileName != null && model.Other.FileName.Value != null ? model.Other.FileName.Value.Files : new List<string>();
+            var filesInDb = model.Other?.FileName?.Value != null ? model.Other.FileName.Value.Files : new List<string>();
             model.NewFiles = this.filesStore.FindFiles(model.Id, Subtopic.FileName.ToString()).Where(f => !filesInDb.Contains(f.Name)).ToList();
             model.DeletedFiles = this.filesStateStore.FindDeletedFileNames(id, Subtopic.FileName.ToString());
 

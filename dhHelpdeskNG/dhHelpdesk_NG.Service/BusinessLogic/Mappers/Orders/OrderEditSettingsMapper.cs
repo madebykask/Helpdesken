@@ -158,7 +158,9 @@
             return new UserEditSettings(
                     CreateTextFieldSetting(editSettings.FindByName(UserFields.UserId)),
                     CreateTextFieldSetting(editSettings.FindByName(UserFields.UserFirstName)),
-                    CreateTextFieldSetting(editSettings.FindByName(UserFields.UserLastName)));
+                    CreateTextFieldSetting(editSettings.FindByName(UserFields.UserLastName)),
+                    CreateTextFieldSetting(editSettings.FindByName(UserFields.UserPhone)),
+                    CreateTextFieldSetting(editSettings.FindByName(UserFields.UserEMail)));
         }
 
         private static FieldEditSettings CreateFieldSetting(OrdersEditSettingsMapData data)

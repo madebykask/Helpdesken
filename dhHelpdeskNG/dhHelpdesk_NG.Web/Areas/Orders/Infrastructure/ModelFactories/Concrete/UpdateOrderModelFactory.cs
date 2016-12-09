@@ -222,7 +222,9 @@
             return new UserEditFields(
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.UserId),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.UserFirstName),
-                    ConfigurableFieldModel<string>.GetValueOrDefault(model.UserLastName));
+                    ConfigurableFieldModel<string>.GetValueOrDefault(model.UserLastName),
+                    ConfigurableFieldModel<string>.GetValueOrDefault(model.UserPhone),
+                    ConfigurableFieldModel<string>.GetValueOrDefault(model.UserEMail));
         }
 
         private static List<ManualLog> CreateNewLogCollection(FullOrderEditModel model, IEmailService emailService)

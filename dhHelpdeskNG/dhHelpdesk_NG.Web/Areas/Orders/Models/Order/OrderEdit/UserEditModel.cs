@@ -12,11 +12,15 @@
         public UserEditModel(
             ConfigurableFieldModel<string> userId,
             ConfigurableFieldModel<string> userFirstName,
-            ConfigurableFieldModel<string> userLastName)
+            ConfigurableFieldModel<string> userLastName,
+            ConfigurableFieldModel<string> userPhone,
+            ConfigurableFieldModel<string> userEmail)
         {
-            this.UserId = userId;
-            this.UserFirstName = userFirstName;
-            this.UserLastName = userLastName;
+            UserId = userId;
+            UserFirstName = userFirstName;
+            UserLastName = userLastName;
+            UserPhone = userPhone;
+            UserEMail = userEmail;
         }
 
         [NotNull]
@@ -28,9 +32,17 @@
         [NotNull]
         public ConfigurableFieldModel<string> UserLastName { get; set; }
 
+        [NotNull]
+        public ConfigurableFieldModel<string> UserPhone { get; set; }
+
+        [NotNull]
+        public ConfigurableFieldModel<string> UserEMail { get; set; }
+
         public static UserEditModel CreateEmpty()
         {
             return new UserEditModel(
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
                 ConfigurableFieldModel<string>.CreateUnshowable(),
                 ConfigurableFieldModel<string>.CreateUnshowable(),
                 ConfigurableFieldModel<string>.CreateUnshowable());
@@ -38,9 +50,11 @@
 
         public bool HasShowableFields()
         {
-            return this.UserId.Show ||
-                this.UserFirstName.Show ||
-                this.UserLastName.Show;
+            return UserId.Show ||
+                UserFirstName.Show ||
+                UserLastName.Show ||
+                UserPhone.Show ||
+                UserEMail.Show;
         }
     }
 }
