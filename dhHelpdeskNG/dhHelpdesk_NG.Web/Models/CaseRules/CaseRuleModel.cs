@@ -1,8 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DH.Helpdesk.Web.Models.CaseRules
 {
+    public enum VirtualFields
+    {
+        Priority_Impact_Urgent = 1
+    }
+
     public enum CaseRuleType
     {
         OriginalRule = 0,
@@ -23,8 +27,7 @@ namespace DH.Helpdesk.Web.Models.CaseRules
     {
         ValueSetter = 1,
         ListCleaner = 2,
-        ListPopulator = 3,
-        StaticRuntimeAction = 9
+        ListPopulator = 3       
     }
 
     public enum CaseFieldType
@@ -131,7 +134,7 @@ namespace DH.Helpdesk.Web.Models.CaseRules
         }
 
         public string ItemValue { get; private set; }
-        
+
 
         public string ItemText { get; private set; }
 
@@ -153,12 +156,12 @@ namespace DH.Helpdesk.Web.Models.CaseRules
         }
 
     }
-   
+
     public sealed class FieldRelation
     {
         public FieldRelation()
         {
-           
+
         }
 
         public int SequenceNo { get; set; }
@@ -167,7 +170,7 @@ namespace DH.Helpdesk.Web.Models.CaseRules
 
         public int RelationType { get; set; }
 
-        public int ActionType { get; set; }          
+        public int ActionType { get; set; }
 
         public int? ForeignKeyNumber { get; set; }
 
@@ -176,6 +179,8 @@ namespace DH.Helpdesk.Web.Models.CaseRules
         public string DataStore2 { get; set; }
 
         public string DataStore3 { get; set; }
+
+        public string ResultDataKey { get; set; }
 
         public int? StaticActionId { get; set; }
 
@@ -186,12 +191,12 @@ namespace DH.Helpdesk.Web.Models.CaseRules
     {
         public BasicSingleItemField()
         {
-            
-        }
-        
-        public CaseFieldStatusType StatusType { get; set; }        
 
-        public FieldItem Selected { get; set; }        
+        }
+
+        public CaseFieldStatusType StatusType { get; set; }
+
+        public FieldItem Selected { get; set; }
 
     }
 
@@ -217,7 +222,7 @@ namespace DH.Helpdesk.Web.Models.CaseRules
         public BasicVirtualDataField()
         {
             Items = new List<FieldItem>();
-        }      
+        }
 
         public List<FieldItem> Items { get; set; }
 
@@ -261,7 +266,7 @@ namespace DH.Helpdesk.Web.Models.CaseRules
 
         public BasicSingleItemField IsAbout_PersonsName { get; set; }
 
-        public BasicSingleItemField IsAbout_PersonsEmail { get; set; }        
+        public BasicSingleItemField IsAbout_PersonsEmail { get; set; }
 
         public BasicSingleItemField IsAbout_PersonsPhone { get; set; }
 
@@ -272,7 +277,7 @@ namespace DH.Helpdesk.Web.Models.CaseRules
         public BasicSingleItemField IsAbout_Place { get; set; }
 
         public BasicSingleItemField IsAbout_UserCode { get; set; }
-        
+
         public BasicMultiItemField IsAbout_Regions { get; set; }
 
         public BasicMultiItemField IsAbout_Departments { get; set; }
@@ -376,9 +381,9 @@ namespace DH.Helpdesk.Web.Models.CaseRules
         public BasicSingleItemField FinishingDescription { get; set; }
 
         public BasicSingleItemField LogFile { get; set; }
-      
+
         public BasicSingleItemField FinishingDate { get; set; }
-     
+
         public BasicMultiItemField ClosingReason { get; set; }
 
         #endregion
@@ -388,5 +393,20 @@ namespace DH.Helpdesk.Web.Models.CaseRules
         public BasicVirtualDataField Priority_Impact_Urgent { get; set; }
 
         #endregion
+    }
+
+
+    public static class CaseRuleExtenstions
+    {
+        public static string ToString(this VirtualFields it)
+        {
+            switch (it)
+            {
+                case VirtualFields.Priority_Impact_Urgent:
+                    return "Priority_Impact_Urgent";
+            }
+
+            return string.Empty;
+        }
     }
 }

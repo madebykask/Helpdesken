@@ -41,8 +41,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
             }
             return ret;
         }
-        
-        #region Original Rules
+                
 
         private List<FieldAttributeModel> GetOriginalRules(int customerId,
                                                            List<CaseFieldSetting> caseFieldSettings,
@@ -763,14 +762,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                         ActionType = RelationActionType.ValueSetter.ToInt(),
                         FieldId = TranslationCaseFields.Urgency_Id.ToString(),
                         ForeignKeyNumber = 1
-                    },
-
-                    new FieldRelation() {
-                        SequenceNo = 1,
-                        RelationType = RelationType.OneToOne.ToInt(),
-                        ActionType = RelationActionType.StaticRuntimeAction.ToInt(),
-                        StaticActionId = 1
-                    }
+                    }                 
                 }
             };
             ret.Add(attrSystem);
@@ -793,12 +785,15 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 IsMandatory = caseFieldSettings.getRequired(curField).ToBool(),
                 StatusType = basicInformation.Urgencies.StatusType,
                 Items = basicInformation.Urgencies.Items,
-                Relations = new List<FieldRelation> {                    
+                Relations = new List<FieldRelation> {                                      
                     new FieldRelation() {
                         SequenceNo = 0,
-                        RelationType = RelationType.OneToOne.ToInt(),
-                        ActionType = RelationActionType.StaticRuntimeAction.ToInt(),
-                        StaticActionId = 1
+                        RelationType = RelationType.Virtual.ToInt(),
+                        ActionType = RelationActionType.ValueSetter.ToInt(),
+                        FieldId = VirtualFields.Priority_Impact_Urgent.ToString(),
+                        DataStore1 = TranslationCaseFields.Impact_Id.ToString(),
+                        DataStore2 = TranslationCaseFields.Urgency_Id.ToString(),
+                        ResultDataKey = TranslationCaseFields.Priority_Id.ToString()
                     }
                 }
             };
@@ -822,12 +817,15 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 IsMandatory = caseFieldSettings.getRequired(curField).ToBool(),
                 StatusType = basicInformation.Impacts.StatusType,
                 Items = basicInformation.Impacts.Items,
-                Relations = new List<FieldRelation> {
+                Relations = new List<FieldRelation> {                   
                     new FieldRelation() {
                         SequenceNo = 0,
-                        RelationType = RelationType.OneToOne.ToInt(),
-                        ActionType = RelationActionType.StaticRuntimeAction.ToInt(),
-                        StaticActionId = 1
+                        RelationType = RelationType.Virtual.ToInt(),
+                        ActionType = RelationActionType.ValueSetter.ToInt(),
+                        FieldId = VirtualFields.Priority_Impact_Urgent.ToString(),
+                        DataStore1 = TranslationCaseFields.Impact_Id.ToString(),
+                        DataStore2 = TranslationCaseFields.Urgency_Id.ToString(),
+                        ResultDataKey = TranslationCaseFields.Priority_Id.ToString()
                     }
                 }
             };
@@ -1598,11 +1596,36 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
 
             #endregion
 
+            // *** Virtual Data ***
+            #region Virtual Data
+
+            #region Priority_Impact_Urgent
+
+            curField = VirtualFields.Priority_Impact_Urgent.ToString();
+            var resultField = TranslationCaseFields.Priority_Id.ToString(); 
+
+            var attrVirtual1 = new FieldAttributeModel()
+            {
+                FieldId = curField,
+                FieldName = curField,
+                FieldCaption = Translation.Get(resultField, Enums.TranslationSource.CaseTranslation, customerId),
+                FieldType = CaseFieldType.SingleSelectField,
+                DefaultItem = new FieldItem(string.Empty, string.Empty, true),
+                Selected = new FieldItem(string.Empty, string.Empty, true),
+                IsAvailableOnHelpdesk = true,
+                IsAvailableOnSelfService = true,
+                IsMandatory = false,
+                Items = basicInformation.Priority_Impact_Urgent.Items,
+                StatusType = CaseFieldStatusType.Readonly
+            };
+            ret.Add(attrVirtual1);
+
+            #endregion
+
+            #endregion
+
             return ret;
 
-        }
-
-        
-        #endregion
+        }        
     }
 }
