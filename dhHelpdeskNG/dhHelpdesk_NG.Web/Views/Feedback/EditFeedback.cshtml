@@ -159,33 +159,48 @@
 @section Scripts {
     @Scripts.Render(BundleConfig.ScriptNames.Select2)
     <script type="text/javascript">
-        $(function() {
-            $("#languageList").on("change", function() {
+        $(function () { //TODO: Move to separate file
+            var translations = {
+                OptionUnique: "@Translation.GetCoreTextTranslation("Värdet måste vara unikt")"
+            };
+
+            $("#languageList").on("change", function () {
                 var selectedItem = $(this).val();
                 window.location.href = "@Url.Action(MvcUrlName.Feedback.Edit, MvcUrlName.Feedback.Controller)" +
                     "?feedbackId=" + @Model.QuestionnaireId.ToString(CultureInfo.InvariantCulture) +
                     "&languageId=" + selectedItem;
             });
 
-            $("#Addbtn").on("click", function() {
+            $("#Addbtn").on("click", function (event) {
                 var optionPos = $("#optionPos").val();
                 var optionText = $("#optionText").val();
                 var optionValue = $("#optionValue").val();
                 var optionIcon = $("#optionIcon").val();
 
                 if (optionPos < 0 || optionPos === "") {
-                    alert("Invalid Position !!! ");
+                    ShowToastMessage("Invalid Position !!! ", "error");
                     return;
                 }
 
                 if (optionText === "") {
-                    alert("Invalid Alternative !!! ");
+                    ShowToastMessage("Invalid Alternative !!! ", "error");
                     return;
                 }
 
                 if (optionValue < 0 || optionValue === "") {
-                    alert("Invalid Value !!!");
+                    ShowToastMessage("Invalid Value !!!", "error");
                     return;
+                }
+
+                var qOptions = $(".question_option");
+                if (qOptions.length > 0) {
+                    for (var i = 0; i < qOptions.length; i++) {
+                        if ($(qOptions[i]).val().trim() === optionValue.trim()) {
+                            ShowToastMessage(translations.OptionUnique, "error");
+                            event.preventDefault();
+                            return;
+                        }
+                    }
                 }
 
                 window.location.href = '@Url.Action(MvcUrlName.Feedback.AddQuestionOption, MvcUrlName.Feedback.Controller)' +
@@ -199,18 +214,48 @@
             });
 
             function formatIcon(icon) {
-                if (!icon.id) { return icon.text; }
+                if (!icon.id) {
+                    return icon.text;
+                }
                 var $icon = $(
-                  '<span><img src="@Url.Content("~/Content/img/")' + icon.element.value.toLowerCase() + '" class="" /> </span>'
+                    '<span><img src="@Url.Content("~/Content/img/")' + icon.element.value.toLowerCase() + '" class="" /> </span>'
                 );
                 return $icon;
             };
-            
+
             function formatSelectedIcon(data) {
                 return $(
-                  '<span><img src="@Url.Content("~/Content/img/")' + data.element.value.toLowerCase() + '" class="" /> </span>'
+                    '<span><img src="@Url.Content("~/Content/img/")' + data.element.value.toLowerCase() + '" class="" /> </span>'
                 );
             }
+
+            $("#feedback_edit_form").on("submit", function (event) {
+                function unique(array) {
+                    var resArray = [];
+                    $.each(array, function (i, item) {
+                        if ($.inArray(item, resArray) === -1) {
+                            resArray.push(item);
+                        }
+                    });
+                    return resArray;
+                }
+
+                var qOptions = $(".question_option");
+                if (qOptions.length > 0) {
+                    var initialLength = qOptions.length;
+                    var qOptionsVal = qOptions.map(function() {
+                        return $(this).val();
+                    });
+                    var uniqueLength = unique(qOptionsVal).length;
+                    if (uniqueLength !== initialLength) {
+                        event.preventDefault();
+                        event.stopImmediatePropagation();
+                        ShowToastMessage(translations.OptionUnique, "error");
+                        return false;
+                    }
+                }
+                return true;
+            });
 
             $(".question_icons").select2({
                 templateResult: formatIcon,

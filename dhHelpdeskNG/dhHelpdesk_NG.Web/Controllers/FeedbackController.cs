@@ -290,7 +290,7 @@ namespace DH.Helpdesk.Web.Controllers
 		public ActionResult Answer(FeedbackAnswerParams parameters)
 		{
 			var detailed = _circularService.GetQuestionnaire(parameters.Guid, OperationContext);
-			var question = detailed.Questionnaire.Questions.Single();
+			var question = detailed.Questionnaire.Questions.First();
 
 			var model = new FeedbackAnswerModel
 			{
@@ -301,7 +301,7 @@ namespace DH.Helpdesk.Web.Controllers
 				NoteTextLabel = question.NoteText
 			};
 
-			var options = question.Options.Single(o => o.Value == parameters.OptionValue);
+			var options = question.Options.First(o => o.Value == parameters.OptionValue);
 			model.OptionId = options.Id;
 			var ids = new List<Answer> { new Answer("", options.Id) };
 			var participant = new ParticipantForInsert(model.Guid, model.IsAnonym, OperationContext.DateAndTime, ids);

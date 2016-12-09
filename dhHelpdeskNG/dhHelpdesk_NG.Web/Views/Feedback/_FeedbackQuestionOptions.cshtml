@@ -73,7 +73,7 @@
                                     </td>
                                          <td>
                                              @if (Model.LanguageId == LanguageIds.Swedish)
-                                             {@Html.TextBoxFor(o => o.Options[i].OptionValue, new {style = "width: 85%;"})
+                                             {@Html.TextBoxFor(o => o.Options[i].OptionValue, new {style = "width: 85%;", @class="question_option"})
                                              }
                                              else
                                              {@Html.TextBoxFor(o => o.Options[i].OptionValue, new {style = "width: 85%;", @readonly = ""})
