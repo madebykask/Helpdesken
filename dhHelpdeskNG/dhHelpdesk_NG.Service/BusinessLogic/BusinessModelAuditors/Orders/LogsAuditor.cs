@@ -121,19 +121,19 @@
                                                                 from);
 
                     var emailLog = EmailLog.CreateNew(
-                                            businessModel.Order.Id,
-                                            optionalData.HistoryId,
-                                            log.Emails,
-                                            (int)OrderEmailTemplate.Logs,
-                                            mailUniqueIdentifier,
-                                            businessModel.DateAndTime);
+                        optionalData.ExistingOrder.Id,
+                        optionalData.HistoryId,
+                        log.Emails,
+                        (int) OrderEmailTemplate.Logs,
+                        mailUniqueIdentifier,
+                        businessModel.DateAndTime);
 
                     var emailLogEntity = OrderEmailLogMapper.MapToEntity(emailLog);
                     orderEmailLogsRep.Add(emailLogEntity);
                     uow.Save();
 
                     log.OrderEmailLogId = emailLogEntity.Id;
-                }                
+                }
             }
         }
     }

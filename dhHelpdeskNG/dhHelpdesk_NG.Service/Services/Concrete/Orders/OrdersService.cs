@@ -71,6 +71,7 @@
         private readonly ISettingService settingService;
 
         private readonly IEmailSendingSettingsProvider _emailSendingSettingsProvider;
+        private readonly IOrderRepository _orderRepository;
 
 
         public OrdersService(
@@ -93,6 +94,7 @@
                 ICaseService caseService,
                 ICaseTypeRepository caseTypeRepository,
                 ISettingService settingService,
+                IOrderRepository orderRepository,
                 IEmailSendingSettingsProvider emailSendingSettingsProvider)
         {
             this.unitOfWorkFactory = unitOfWorkFactory;
@@ -115,6 +117,7 @@
             this._caseTypeRepository = caseTypeRepository;
             this.settingService = settingService;
             _emailSendingSettingsProvider = emailSendingSettingsProvider;
+            _orderRepository = orderRepository;
         }
 
         public OrdersFilterData GetOrdersFilterData(int customerId, out int[] selectedStatuses)
@@ -338,7 +341,7 @@
                     OrderUpdateMapper.MapToEntity(entity, request.Order, request.CustomerId);
                     entity.CreatedDate = request.DateAndTime;
                     entity.ChangedDate = request.DateAndTime;
-                    ordersRep.Add(entity);                    
+                    ordersRep.Add(entity);
                 }
                 else
                 {
@@ -537,6 +540,8 @@
                     uow.Save();
                 }
 
+                entity = _orderRepository.GetById(entity.Id);
+                existingOrder = OrderEditMapper.MapToFullOrderEditFields(entity);
                 this.orderAuditors.ForEach(a => a.Audit(request, new OrderAuditData(historyEntity.Id, existingOrder)));
 
                 return entity.Id;
