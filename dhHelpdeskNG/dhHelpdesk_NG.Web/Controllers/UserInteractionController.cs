@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Controllers
+﻿using System.Web.Mvc;
+
+namespace DH.Helpdesk.Web.Controllers
 {
     using System;
 
@@ -10,7 +12,7 @@
     {
         #region Fields
 
-        private readonly OperationContext operationContext;
+        private OperationContext _operationContext;
 
         #endregion
 
@@ -19,13 +21,14 @@
         protected UserInteractionController(IMasterDataService masterDataService)
             : base(masterDataService)
         {
+            //Moved code to OnActionExecuting - left this part for legacy support
             if (SessionFacade.CurrentCustomer == null ||
                 SessionFacade.CurrentUser == null)
             {
                 return;
             }
 
-            this.operationContext = new OperationContext
+            _operationContext = new OperationContext
                                     {
                                         CustomerId = SessionFacade.CurrentCustomer.Id,
                                         DateAndTime = DateTime.Now,
@@ -36,14 +39,34 @@
 
         #endregion
 
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            base.OnActionExecuting(filterContext);
+            if (SessionFacade.CurrentCustomer == null ||
+                        SessionFacade.CurrentUser == null)
+            {
+                return;
+            }
+
+            _operationContext = new OperationContext
+            {
+                CustomerId = SessionFacade.CurrentCustomer.Id,
+                DateAndTime = DateTime.Now,
+                LanguageId = SessionFacade.CurrentLanguageId,
+                UserId = SessionFacade.CurrentUser.Id
+            };
+
+        }
+
         #region Properties
 
         protected OperationContext OperationContext
         {
             get
             {
-                return this.operationContext;
+                return _operationContext;
             }
+            private set { _operationContext = value; }
         }
 
         #endregion
