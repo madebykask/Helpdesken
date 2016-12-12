@@ -88,6 +88,12 @@ ALTER TABLE [dbo].[tblQuestionnaireQuestion] ALTER COLUMN [NoteText] nvarchar(10
 ALTER TABLE [dbo].[tblQuestionnaireQues_tblLang] ALTER COLUMN [NoteText] nvarchar(1000) NULL
 
 
+if not exists(select * from tblDate where DateKey = '20170101')
+begin
+ exec [dbo].[sp_PopulateTblDate] '2017-01-01', '2017-12-31'
+end
+GO	
+
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.29'
