@@ -1150,7 +1150,9 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                                                     RelationType = RelationType.ManyToMany.ToInt(),
                                                     ActionType = RelationActionType.ListPopulator.ToInt(),
                                                     FieldId = TranslationCaseFields.Performer_User_Id.ToString(),
-                                                    ForeignKeyNumber = 1
+                                                    ForeignKeyNumber = 1,
+                                                    Applicable = ruleType == CaseRuleMode.TemplateMode,
+                                                    ShowRunTimeCurrentValue = ruleType == CaseRuleMode.TemplateMode
                                                 });
             }            
 

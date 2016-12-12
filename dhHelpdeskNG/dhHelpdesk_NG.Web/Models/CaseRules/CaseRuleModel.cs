@@ -162,7 +162,12 @@ namespace DH.Helpdesk.Web.Models.CaseRules
         public FieldRelation()
         {
             Applicable = false;
+
+            // Used for Region & Department when Region is null all department can be shown
             ShowAllIfKeyIsNull = false;
+
+            // Used for WokingGroup & Adminstrator when both have Current RunTime value item in CaseTemplate.  (Inloggad användare, Inloggad användares driftgrupp)
+            ShowRunTimeCurrentValue = false;
         }
 
         public int SequenceNo { get; set; }
@@ -186,6 +191,9 @@ namespace DH.Helpdesk.Web.Models.CaseRules
         public bool Applicable { get; set; }
 
         public bool ShowAllIfKeyIsNull { get; set; }
+
+        public bool ShowRunTimeCurrentValue { get; set; }
+
     }
 
 

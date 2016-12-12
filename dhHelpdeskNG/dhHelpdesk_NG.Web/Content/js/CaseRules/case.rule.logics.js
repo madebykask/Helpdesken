@@ -10,7 +10,11 @@
         var $fieldStateChanger = $('.fieldStateChanger');
         var STANDARD_ID = 'standardid';
         var STATE_ICON_PLACE_PREFIX = '#stateIconPlace_';
-              
+         
+        /***** Consts ****/
+        var _CURRENT_RUN_TIME_ITEM_ID = "-1";
+        var _ARRAY_SEPARATOR_CHARACTER = ",";
+
         /***** Enums *****/
         var _RULE_TYPE = {
             Original: 0,
@@ -79,6 +83,13 @@
                         return true;
 
                     return false;
+                }
+
+                this.strArrayContains = function (strArray, value) {
+                    if (strArray == null || strArray.length <= 0)
+                        return false;
+
+                    return $.inArray(value, strArray) > -1;
                 }
             },
 
@@ -381,19 +392,13 @@
                 var selectedItem = field.Selected;
                 var relatedField = helpdesk.caseRule.getFieldById(relation.FieldId);
 
-                //var fItem = helpdesk.caseRule.getForiegnData(relation, selectedItem, relation.ForeignKeyNumber, relatedField);
-                //if (fItem == null || dataHelper.isNullOrEmpty(fItem.ItemText))
-                //    return "";
-
                 switch (relation.ActionType) {
-                    case _ACTION_TYPE.ValueSetter:
-                        //if (relation.Applicable)
-                        //this.applySetterAction(relatedField, selectedItem.ItemValue, relation.ForeignKeyNumber);
+                    case _ACTION_TYPE.ValueSetter:                        
                         break;
 
                     case _ACTION_TYPE.ListPopulator:
                         if (relation.Applicable)
-                            this.applyListPopulatorAction(relatedField, selectedItem.ItemValue, relation.ForeignKeyNumber, relation.ShowAllIfKeyIsNull);
+                            this.applyListPopulatorAction(relatedField, selectedItem.ItemValue, relation);                                                                                                                
                         break;
 
                     case _ACTION_TYPE.ListCleaner:
@@ -445,9 +450,10 @@
                 }
             },
             
-            applyListPopulatorAction: function (field, primaryKeyValue, foreignKeyPlace, canShowAllIfKeyIsNull) {
+            applyListPopulatorAction: function (field, primaryKeyValue, relation) {
+
                 if (dataHelper.isNullOrUndefined(field) ||                     
-                    dataHelper.isNullOrUndefined(foreignKeyPlace))
+                    dataHelper.isNullOrUndefined(relation.ForeignKeyNumber))
                     return;
 
                 var element = this.getElementByFieldId(field.FieldId);
@@ -480,21 +486,33 @@
                             canAdd = false;
                             var curItem = field.Items[i];
 
-                            if (canShowAllIfKeyIsNull && dataHelper.isNullOrEmpty(primaryKeyValue)) {
+                            if ((relation.ShowAllIfKeyIsNull && dataHelper.isNullOrEmpty(primaryKeyValue)) ||
+                                (relation.ShowRunTimeCurrentValue && curItem.ItemValue == _CURRENT_RUN_TIME_ITEM_ID)) {
                                 canAdd = true;
                             }
                             else {                                
-                                if (foreignKeyPlace == _FORIEGN_DATA_NUMBER.Place1)
+                                if (relation.ForeignKeyNumber == _FORIEGN_DATA_NUMBER.Place1)
                                     itemToCheck = curItem.ForeignKeyValue1;
 
-                                if (foreignKeyPlace == _FORIEGN_DATA_NUMBER.Place2)
+                                if (relation.ForeignKeyNumber == _FORIEGN_DATA_NUMBER.Place2)
                                     itemToCheck = curItem.ForeignKeyValue2;
 
-                                if (foreignKeyPlace == _FORIEGN_DATA_NUMBER.Place3)
+                                if (relation.ForeignKeyNumber == _FORIEGN_DATA_NUMBER.Place3)
                                     itemToCheck = curItem.ForeignKeyValue3;
 
-                                if (itemToCheck == primaryKeyValue) {
-                                    canAdd = true;
+                                if (relation.RelationType == _RELATION_TYPE.ManyToMany) {
+                                    // Check array of keys
+                                    var aryItemToCheck = [];
+                                    if (!dataHelper.isNullOrEmpty(itemToCheck))
+                                        aryItemToCheck = itemToCheck.split(_ARRAY_SEPARATOR_CHARACTER);
+
+                                    if (dataHelper.strArrayContains(aryItemToCheck, primaryKeyValue)) {
+                                        canAdd = true;
+                                    }
+                                } else {
+                                    if (itemToCheck == primaryKeyValue) {
+                                        canAdd = true;
+                                    }
                                 }
                             }
                             
