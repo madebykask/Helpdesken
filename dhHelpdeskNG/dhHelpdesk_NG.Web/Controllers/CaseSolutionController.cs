@@ -592,7 +592,7 @@ namespace DH.Helpdesk.Web.Controllers
                     });
         }
 
-        private CaseRuleModel GetCaseRuleModel(int customerId, CaseRuleType ruleType,
+        private CaseRuleModel GetCaseRuleModel(int customerId, CaseRuleMode ruleType,
                                                CaseSolution templateModel,
                                                List<CaseSolutionSettingModel> templateSettingModel,
                                                Setting customerSettings,
@@ -669,7 +669,8 @@ namespace DH.Helpdesk.Web.Controllers
                 Selected = new FieldItem(templateModel.Region_Id?.ToString(), string.Empty),
                 StatusType = GetFieldStatusType(CaseSolutionFields.Region, templateSettingModel.ToList()),
                 DefaultItem = defaultRegion != null? new FieldItem(defaultRegion.Id.ToString(), defaultRegion.Name) : FieldItem.CreateEmpty(),
-                Items = regions.Select(r=> new FieldItem(r.Id.ToString(), r.Name, r.IsActive != 0)).OrderBy(r => r.ItemText).ToList()                
+                Items = regions.Where(r=> r.IsActive != 0 || (templateModel.Region_Id.HasValue && templateModel.Region_Id.Value == r.Id))
+                               .Select(r=> new FieldItem(r.Id.ToString(), r.Name, r.IsActive != 0)).OrderBy(r => r.ItemText).ToList()                
             };
             
             var departments = _departmentService.GetDepartments(customerId);            
@@ -678,18 +679,21 @@ namespace DH.Helpdesk.Web.Controllers
                 Selected = new FieldItem(templateModel.Department_Id?.ToString(), string.Empty),
                 StatusType = GetFieldStatusType(CaseSolutionFields.Department, templateSettingModel.ToList()),
                 DefaultItem = FieldItem.CreateEmpty(),
-                Items = departments.Select(d => new FieldItem(d.Id.ToString(), d.DepartmentName, d.IsActive != 0)
+                Items = departments.Where(d => d.IsActive != 0 || (templateModel.Department_Id.HasValue && templateModel.Department_Id.Value == d.Id))
+                                   .Select(d => new FieldItem(d.Id.ToString(), d.DepartmentName, d.IsActive != 0)
                                                               { ForeignKeyValue1 = d.Region_Id?.ToString() })
                                    .OrderBy(d => d.ItemText).ToList()
             };
 
-            var ous = _ouService.GetOUs(customerId);
+            var ous = _ouService.GetThemAllOUs(customerId);
             caseBasicInfo.OUs = new BasicMultiItemField()
             {
                 Selected = new FieldItem(templateModel.OU_Id?.ToString(), string.Empty),
                 StatusType = GetFieldStatusType(CaseSolutionFields.OU, templateSettingModel.ToList()),
                 DefaultItem = FieldItem.CreateEmpty(),
-                Items = ous.Select(o => new FieldItem(o.Id.ToString(), (o.Parent == null? o.Name : string.Format("{0} - {1}", o.Parent.Name, o.Name)), o.IsActive != 0)
+                Items = ous.Where(o => o.Id != o.Parent_OU_Id && (o.IsActive != 0 || (templateModel.OU_Id.HasValue && templateModel.OU_Id.Value == o.Id)) && 
+                                       (o.Parent == null || (o.Parent != null && o.Parent.Parent == null))) // Max deep 2 levels
+                           .Select(o => new FieldItem(o.Id.ToString(), (o.Parent == null? o.Name : string.Format("{0} - {1}", o.Parent.Name, o.Name)), o.IsActive != 0)
                                                       { ForeignKeyValue1 = o.Department_Id?.ToString() })
                            .OrderBy(o=> o.ItemText).ToList()
             };
@@ -751,7 +755,8 @@ namespace DH.Helpdesk.Web.Controllers
                 Selected = new FieldItem(templateModel.IsAbout_Region_Id?.ToString(), string.Empty),
                 StatusType = GetFieldStatusType(CaseSolutionFields.IsAbout_Region_Id, templateSettingModel.ToList()),
                 DefaultItem = defaultRegion != null ? new FieldItem(defaultRegion.Id.ToString(), defaultRegion.Name) : FieldItem.CreateEmpty(),
-                Items = regions.Select(r => new FieldItem(r.Id.ToString(), r.Name, r.IsActive != 0)).OrderBy(r => r.ItemText).ToList()
+                Items = regions.Where(r => r.IsActive != 0 || (templateModel.IsAbout_Region_Id.HasValue && templateModel.IsAbout_Region_Id.Value == r.Id))
+                               .Select(r => new FieldItem(r.Id.ToString(), r.Name, r.IsActive != 0)).OrderBy(r => r.ItemText).ToList()
             };
 
             caseBasicInfo.IsAbout_Departments = new BasicMultiItemField()
@@ -759,18 +764,21 @@ namespace DH.Helpdesk.Web.Controllers
                 Selected = new FieldItem(templateModel.IsAbout_Department_Id?.ToString(), string.Empty),
                 StatusType = GetFieldStatusType(CaseSolutionFields.IsAbout_Department_Id, templateSettingModel.ToList()),
                 DefaultItem = FieldItem.CreateEmpty(),
-                Items = departments.Select(d => new FieldItem(d.Id.ToString(), d.DepartmentName, d.IsActive != 0)
+                Items = departments.Where(d => d.IsActive != 0 || (templateModel.IsAbout_Department_Id.HasValue && templateModel.IsAbout_Department_Id.Value == d.Id))
+                                   .Select(d => new FieldItem(d.Id.ToString(), d.DepartmentName, d.IsActive != 0)
                                                               { ForeignKeyValue1 = d.Region_Id?.ToString() })
                                    .OrderBy(d => d.ItemText).ToList()
-            };
+            };            
 
             caseBasicInfo.IsAbout_OUs = new BasicMultiItemField()
             {
                 Selected = new FieldItem(templateModel.IsAbout_OU_Id?.ToString(), string.Empty),
                 StatusType = GetFieldStatusType(CaseSolutionFields.IsAbout_OU_Id, templateSettingModel.ToList()),
                 DefaultItem = FieldItem.CreateEmpty(),
-                Items = ous.Select(o => new FieldItem(o.Id.ToString(), (o.Parent == null ? o.Name : string.Format("{0} - {1}", o.Parent.Name, o.Name)), o.IsActive != 0)
-                                                      { ForeignKeyValue1 = o.Department_Id?.ToString() })
+                Items = ous.Where(o => o.Id != o.Parent_OU_Id && (o.IsActive != 0 || (templateModel.IsAbout_OU_Id.HasValue && templateModel.IsAbout_OU_Id.Value == o.Id)) &&
+                                       (o.Parent == null || (o.Parent != null && o.Parent.Parent == null))) // Max deep 2 levels
+                           .Select(o => new FieldItem(o.Id.ToString(), (o.Parent == null ? o.Name : string.Format("{0} - {1}", o.Parent.Name, o.Name)), o.IsActive != 0)
+                                                        { ForeignKeyValue1 = o.Department_Id?.ToString() })
                            .OrderBy(o => o.ItemText).ToList()
             };
 
@@ -1173,7 +1181,7 @@ namespace DH.Helpdesk.Web.Controllers
             #endregion
 
 
-            var model  = _caseRuleFactory.GetCaseRuleModel(customerId, CaseRuleType.OriginalRule, caseFieldSettings, caseBasicInfo, customerSettings);
+            var model  = _caseRuleFactory.GetCaseRuleModel(customerId, CaseRuleMode.TemplateMode, caseFieldSettings, caseBasicInfo, customerSettings);
             model.CustomerSettings.ConnectUserToWorkingGroup = customerSettings.DontConnectUserToWorkingGroup == 0;
 
             return model;
@@ -1308,45 +1316,56 @@ namespace DH.Helpdesk.Web.Controllers
             List<SelectListItem> departments = null;
             List<SelectListItem> organizationUnits = null;
 
-            regions = this._regionService.GetActiveRegions(curCustomerId)
-                                         .Select(x => new SelectListItem
+            var regionList = this._regionService.GetActiveRegions(curCustomerId);
+            regions = regionList.Select(x => new SelectListItem
                                          {
                                              Text = x.Name,
-                                             Value = x.Id.ToString()
+                                             Value = x.Id.ToString(),
+                                             Selected = x.Id == caseSolution.Region_Id
                                          }).ToList();
 
             departments = this._departmentService.GetActiveDepartmentsBy(curCustomerId, caseSolution.Region_Id)
                                          .Select(x => new SelectListItem
                                          {
                                              Text = x.DepartmentName,
-                                             Value = x.Id.ToString()
+                                             Value = x.Id.ToString(),
+                                             Selected = x.Id == caseSolution.Department_Id
                                          }).ToList();
 
             organizationUnits = this._organizationService.GetOrganizationUnits(caseSolution.Department_Id)
                                          .Select(x => new SelectListItem
                                          {
                                              Text = x.Name,
-                                             Value = x.Value
+                                             Value = x.Value,
+                                             Selected = x.Value == caseSolution.OU_Id?.ToString()
                                          }).ToList();
 
             List<SelectListItem> isAbout_Regions = null;
             List<SelectListItem> isAbout_Departments = null;
             List<SelectListItem> isAbout_OrganizationUnits = null;
+            
+            isAbout_Regions = regionList.Select(x => new SelectListItem
+            {
+                Text = x.Name,
+                Value = x.Id.ToString(),
+                Selected = x.Id == caseSolution.IsAbout_Region_Id
+            }).ToList();
 
-            isAbout_Regions = regions;
 
             isAbout_Departments = this._departmentService.GetActiveDepartmentsBy(curCustomerId, caseSolution.IsAbout_Region_Id)
                                          .Select(x => new SelectListItem
                                          {
                                              Text = x.DepartmentName,
-                                             Value = x.Id.ToString()
+                                             Value = x.Id.ToString(),
+                                             Selected = x.Id == caseSolution.IsAbout_Department_Id
                                          }).ToList();
 
             isAbout_OrganizationUnits = this._organizationService.GetOrganizationUnits(caseSolution.IsAbout_Department_Id)
                                          .Select(x => new SelectListItem
                                          {
                                              Text = x.Name,
-                                             Value = x.Value
+                                             Value = x.Value,
+                                             Selected = x.Value == caseSolution.IsAbout_OU_Id?.ToString()
                                          }).ToList();
 
             var isCreatingNew = caseSolution.Id == 0;
@@ -1628,7 +1647,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             model.CaseFilesModel = new CaseFilesModel();
 
-            var caseRuleModel = GetCaseRuleModel(curCustomerId, CaseRuleType.OriginalRule, caseSolution, 
+            var caseRuleModel = GetCaseRuleModel(curCustomerId, CaseRuleMode.TemplateMode, caseSolution, 
                                                  model.CaseSolutionSettingModels.ToList(), cs, 
                                                  model.CaseFieldSettings.ToList());
 

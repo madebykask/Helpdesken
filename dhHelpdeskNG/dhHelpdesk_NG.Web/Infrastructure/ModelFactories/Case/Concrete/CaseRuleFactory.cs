@@ -10,7 +10,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
 {
     public interface ICaseRuleFactory
     {
-        CaseRuleModel GetCaseRuleModel(int customerId, CaseRuleType ruleType, 
+        CaseRuleModel GetCaseRuleModel(int customerId, CaseRuleMode ruleType, 
                                        IList<CaseFieldSetting> caseFieldSettings,
                                        BasicCaseInformation basicInformation,
                                        Setting customerSettings );
@@ -24,21 +24,17 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
         {            
         }        
 
-        public CaseRuleModel GetCaseRuleModel(int customerId, CaseRuleType ruleType,
+        public CaseRuleModel GetCaseRuleModel(int customerId, CaseRuleMode ruleType,
                                               IList<CaseFieldSetting> caseFieldSettings,
                                               BasicCaseInformation basicInformation,
                                               Setting customerSettings)
         {                        
             var ret = new CaseRuleModel();
-            ret.RuleType = ruleType;      
-                
-            switch (ruleType)
-            {
-                case CaseRuleType.OriginalRule:
-                    ret.FieldAttributes = GetOriginalRules(customerId, caseFieldSettings.ToList(), basicInformation, customerSettings);
-                    break;
+            ret.RuleType = ruleType;
 
-            }
+            ret.FieldAttributes = GetOriginalRules(customerId, caseFieldSettings.ToList(),
+                                                           basicInformation, customerSettings,
+                                                           ruleType);           
             return ret;
         }
                 
@@ -46,7 +42,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
         private List<FieldAttributeModel> GetOriginalRules(int customerId,
                                                            List<CaseFieldSetting> caseFieldSettings,
                                                            BasicCaseInformation basicInformation,
-                                                           Setting customerSettings)
+                                                           Setting customerSettings,
+                                                           CaseRuleMode ruleType)
         {
             var ret = new List<FieldAttributeModel>();
 
@@ -275,7 +272,9 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                         RelationType = RelationType.OneToMany.ToInt(),
                         ActionType = RelationActionType.ListPopulator.ToInt(),
                         FieldId = TranslationCaseFields.Department_Id.ToString(),
-                        ForeignKeyNumber = 1                                                                       
+                        ForeignKeyNumber = 1,
+                        Applicable = ruleType == CaseRuleMode.TemplateMode,
+                        ShowAllIfKeyIsNull = true
                     }
                 }
             };
@@ -305,7 +304,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                         RelationType = RelationType.OneToMany.ToInt(),
                         ActionType = RelationActionType.ListPopulator.ToInt(),
                         FieldId = TranslationCaseFields.OU_Id.ToString(),
-                        ForeignKeyNumber = 1
+                        ForeignKeyNumber = 1,                        
+                        Applicable = ruleType == CaseRuleMode.TemplateMode
                     }
                 }
             };
@@ -521,7 +521,9 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                         RelationType = RelationType.OneToMany.ToInt(),
                         ActionType = RelationActionType.ListPopulator.ToInt(),
                         FieldId = TranslationCaseFields.IsAbout_Department_Id.ToString(),
-                        ForeignKeyNumber = 1
+                        ForeignKeyNumber = 1,
+                        Applicable = ruleType == CaseRuleMode.TemplateMode,
+                        ShowAllIfKeyIsNull = true
                     }
                 }
             };
@@ -551,7 +553,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                         RelationType = RelationType.OneToMany.ToInt(),
                         ActionType = RelationActionType.ListPopulator.ToInt(),
                         FieldId = TranslationCaseFields.IsAbout_OU_Id.ToString(),
-                        ForeignKeyNumber = 1
+                        ForeignKeyNumber = 1,
+                        Applicable = ruleType == CaseRuleMode.TemplateMode
                     }
                 }
             };

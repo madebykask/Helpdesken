@@ -7,12 +7,12 @@ namespace DH.Helpdesk.Web.Models.CaseRules
         Priority_Impact_Urgent = 1
     }
 
-    public enum CaseRuleType
+    public enum CaseRuleMode
     {
-        OriginalRule = 0,
-        NewMode = 1,
-        InheritMode = 2,
-        SelfService = 3
+        TemplateMode     = 0,
+        CaseNewMode      = 1,
+        CaseInheritMode  = 2,
+        SelfService      = 3
     }
 
     public enum RelationType
@@ -58,7 +58,7 @@ namespace DH.Helpdesk.Web.Models.CaseRules
             CustomerSettings = new CaseCustomerSettings();
         }
 
-        public CaseRuleType RuleType { get; set; }
+        public CaseRuleMode RuleType { get; set; }
 
         public List<FieldAttributeModel> FieldAttributes { get; set; }
 
@@ -161,7 +161,8 @@ namespace DH.Helpdesk.Web.Models.CaseRules
     {
         public FieldRelation()
         {
-
+            Applicable = false;
+            ShowAllIfKeyIsNull = false;
         }
 
         public int SequenceNo { get; set; }
@@ -180,10 +181,11 @@ namespace DH.Helpdesk.Web.Models.CaseRules
 
         public string DataStore3 { get; set; }
 
-        public string ResultDataKey { get; set; }
+        public string ResultDataKey { get; set; }        
 
-        public int? StaticActionId { get; set; }
+        public bool Applicable { get; set; }
 
+        public bool ShowAllIfKeyIsNull { get; set; }
     }
 
 

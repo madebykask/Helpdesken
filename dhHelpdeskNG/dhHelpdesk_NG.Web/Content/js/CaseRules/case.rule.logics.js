@@ -91,6 +91,16 @@
                         return "False";
 
                     return "True";
+                },
+
+                this.toBool = function (value) {
+                    if (value == null || value == undefined)
+                        return false;
+
+                    if (value == 0 || !value || value == "0" || value == "")
+                        return false;
+
+                    return true;
                 }
             }
 
@@ -142,6 +152,7 @@
                 });
 
                 helpdesk.caseRule.updateAllFields();
+                helpdesk.caseRule.refreshAllStateIcons();
             },
 
             updateAllFields: function () {
@@ -157,17 +168,25 @@
                     if (!dataHelper.isNullOrUndefined($(element))) {
                         helpdesk.caseRule.updateFieldByElementValue($(element));
                     }
-                }
-
+                }                                
+            },
+           
+            refreshAllStateIcons: function () {
                 // Refresh icon states
                 for (var _fi = 0; _fi < ruleModel.FieldAttributes.length; _fi++) {
                     var field = ruleModel.FieldAttributes[_fi];
                     helpdesk.caseRule.refreshStateIcons(field);
                 }
             },
-           
+
             onElementValueChanged: function (element) {
-                this.updateAllFields();               
+                this.updateAllFields();
+
+                var field = this.getFieldByElement($(element));
+                if (!dataHelper.isNullOrUndefined(field))
+                    helpdesk.caseRule.applyRules(field);
+                
+                this.refreshAllStateIcons();
             },
 
             onStateChanged: function (element) {
@@ -227,16 +246,7 @@
                         break;
                 }
 
-                helpdesk.caseRule.updateFieldValue(field, curVal);
-                //if (field.Relations != null && field.Relations.length > 0) {
-                //    for (var ri = 0; ri < field.Relations.length; ri++) {
-                //        var relation = field.Relations[ri];
-                //        var elm = helpdesk.caseRule.getElementByFieldId(relation.FieldId);
-                //        if (elm != null) {
-                //            helpdesk.caseRule.updateElementValue($(elm));
-                //        }
-                //    }
-                //}
+                helpdesk.caseRule.updateFieldValue(field, curVal);               
             },
 
             updateFieldValue: function (field, curVal) {
@@ -310,25 +320,25 @@
                     '<td style="width:80px;text-align:center"><span title="" class="' + selfSeviceClass + '" data-original-title="' + selfSeviceHint + '" data-html="true" rel="tooltip"></span></td>';
 
                 return ret;
-            },
+            },            
 
             checkRules: function (field) {
                 //if (field.StatusType == _FIELD_STATUS_TYPE.Hidden)
                 //    return "";
-                
+
                 var ret = "";
                 if (field.Relations.length > 0) {
                     for (var r = 0; r < field.Relations.length; r++) {
-                        var curRelation = field.Relations[r];                            
+                        var curRelation = field.Relations[r];
                         ret += helpdesk.caseRule.predictAction(field, curRelation);
                     }
                     return ret;
                 }
-                
+
                 return "";
             },
-
-            /* Return predicted text message*/
+           
+            /* Return predicted action text */
             predictAction: function (field, relation) {
                 
                 var selectedItem = field.Selected;
@@ -352,7 +362,164 @@
                         return "<div align='left'> <b>" + relatedField.FieldCaption + "</b>: will be clear </div> <br />";                                            
                 }
             },
+
+            applyRules: function (field) {
+                var ret = "";
+                if (field.Relations.length > 0) {
+                    for (var r = 0; r < field.Relations.length; r++) {
+                        var curRelation = field.Relations[r];
+                        ret += helpdesk.caseRule.runAction(field, curRelation);
+                    }
+                    return ret;
+                }
+
+                return "";
+            },
+
+            runAction: function (field, relation) {
+
+                var selectedItem = field.Selected;
+                var relatedField = helpdesk.caseRule.getFieldById(relation.FieldId);
+
+                //var fItem = helpdesk.caseRule.getForiegnData(relation, selectedItem, relation.ForeignKeyNumber, relatedField);
+                //if (fItem == null || dataHelper.isNullOrEmpty(fItem.ItemText))
+                //    return "";
+
+                switch (relation.ActionType) {
+                    case _ACTION_TYPE.ValueSetter:
+                        //if (relation.Applicable)
+                        //this.applySetterAction(relatedField, selectedItem.ItemValue, relation.ForeignKeyNumber);
+                        break;
+
+                    case _ACTION_TYPE.ListPopulator:
+                        if (relation.Applicable)
+                            this.applyListPopulatorAction(relatedField, selectedItem.ItemValue, relation.ForeignKeyNumber, relation.ShowAllIfKeyIsNull);
+                        break;
+
+                    case _ACTION_TYPE.ListCleaner:
+                        break;
+                }
+            },
+
+            applySetterAction: function (field, item) {
+                if (dataHelper.isNullOrUndefined(field))
+                    return;
+
+                var element = this.getElementByFieldId(field.FieldId);
+                if (dataHelper.isNullOrUndefined(element))
+                    return;
+
+                var $element = $(element);
+                if (dataHelper.isNullOrUndefined($element))
+                    return;
+
+                field.Selected = item;
+
+                switch (field.FieldType) {
+
+                    case _FIELD_TYPE.TextField:
+                        $element.val(field.itemValue);//.change();
+                        break;
+
+                    case _FIELD_TYPE.CheckBox:
+                        $element.prop('checked', convertor.toBool(field.itemValue));//.change();
+                        break;
+
+                    case _FIELD_TYPE.SingleSelectField:
+                        $element.val(field.itemValue);//.change();
+                        break;
+
+                    case _FIELD_TYPE.TreeButtonSelect:
+                        // TODO: Need to check again
+                        $element.val(field.itemValue);//.change();
+                        break;
+
+                    case _FIELD_TYPE.TextArea:
+                        $element.val(field.itemValue);//.change();
+                        break;
+
+                    case _FIELD_TYPE.DateField:
+                        // TODO: Need to check again
+                        $element.val(field.itemValue);//.change();
+                        break;
+                }
+            },
             
+            applyListPopulatorAction: function (field, primaryKeyValue, foreignKeyPlace, canShowAllIfKeyIsNull) {
+                if (dataHelper.isNullOrUndefined(field) ||                     
+                    dataHelper.isNullOrUndefined(foreignKeyPlace))
+                    return;
+
+                var element = this.getElementByFieldId(field.FieldId);
+                if (dataHelper.isNullOrUndefined(element))
+                    return;
+
+                var $element = $(element);
+                if (dataHelper.isNullOrUndefined($element))
+                    return;                
+
+                switch (field.FieldType) {
+
+                    case _FIELD_TYPE.TextField:                        
+                        break;
+
+                    case _FIELD_TYPE.CheckBox:                        
+                        break;
+
+                    case _FIELD_TYPE.SingleSelectField:
+                        $element.val('');
+                        $element.empty();
+
+                        var newOption = $("<option value></option>");
+                        $element.append(newOption);
+
+                        var itemToCheck = null;
+                        var canAdd = false;
+
+                        for (var i = 0; i < field.Items.length; i++) {
+                            canAdd = false;
+                            var curItem = field.Items[i];
+
+                            if (canShowAllIfKeyIsNull && dataHelper.isNullOrEmpty(primaryKeyValue)) {
+                                canAdd = true;
+                            }
+                            else {                                
+                                if (foreignKeyPlace == _FORIEGN_DATA_NUMBER.Place1)
+                                    itemToCheck = curItem.ForeignKeyValue1;
+
+                                if (foreignKeyPlace == _FORIEGN_DATA_NUMBER.Place2)
+                                    itemToCheck = curItem.ForeignKeyValue2;
+
+                                if (foreignKeyPlace == _FORIEGN_DATA_NUMBER.Place3)
+                                    itemToCheck = curItem.ForeignKeyValue3;
+
+                                if (itemToCheck == primaryKeyValue) {
+                                    canAdd = true;
+                                }
+                            }
+                            
+                            if (canAdd){
+                                newOption = $("<option value='" + curItem.ItemValue + "'>" + curItem.ItemText + "</option>");
+                                $element.append(newOption);
+                            }
+                        }
+
+                        $element.change();
+                        break;
+
+                    case _FIELD_TYPE.TreeButtonSelect:
+                        // TODO: Need to check again
+                        //$element.val(field.itemValue).change();
+                        break;
+
+                    case _FIELD_TYPE.TextArea:                        
+                        break;
+
+                    case _FIELD_TYPE.DateField:                        
+                        break;
+                }
+            },
+
             /****************  Get models **************/
             getFieldById: function (fieldId) {
                 if (dataHelper.isNullOrUndefined(ruleModel) ||
@@ -403,7 +570,7 @@
                 }
 
                 if (field.FieldType == _FIELD_TYPE.CheckBox) {
-                    ret.ItemValue = itemValue.toBoolStr();
+                    ret.ItemValue = convertor.toBoolStr(itemValue);
                     ret.ItemText = itemValue;
                     return ret;
                 }
