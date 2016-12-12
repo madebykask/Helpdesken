@@ -410,10 +410,12 @@ namespace DH.Helpdesk.Web.Controllers
 				res.Add(AdvancedSearchForCustomer(frm, customer));
 			}
 
-			var ret = res.Select(x => new { data = x.Item1, gridSettings = x.Item2 }).ToList();
+            var totalCount = res.Sum(x => x.Item1.Count);
+			var data = res.Select(x => new { data = x.Item1, gridSettings = x.Item2 }).ToList();
+            var ret = new {Items = data, TotalCount = totalCount};
 
-			return this.Json(new { result = "success", data = ret });
-		}
+            return this.Json(new { result = "success", data = ret });
+        }
 
 		#endregion
 
