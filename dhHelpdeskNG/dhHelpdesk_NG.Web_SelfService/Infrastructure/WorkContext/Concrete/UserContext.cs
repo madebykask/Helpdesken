@@ -48,6 +48,23 @@ namespace DH.Helpdesk.SelfService.Infrastructure.WorkContext.Concrete
             }
         }
 
+        public string Phone
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public string Email
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+
         public ICollection<UserWorkingGroup> UserWorkingGroups
         {
             //get { return SessionFacade.CurrentUser.UserWorkingGroups; }
