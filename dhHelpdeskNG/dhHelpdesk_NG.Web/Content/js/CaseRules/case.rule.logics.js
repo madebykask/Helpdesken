@@ -188,15 +188,16 @@
 
                         default:
                             field.StatusType = _FIELD_STATUS_TYPE.Editable;
-                    }                    
-                }
+                    }
 
-                helpdesk.caseRule.refreshStateIcons(field);
+                    helpdesk.caseRule.refreshStateIcons(field);
+                }                
             },
             
             getFieldById: function(fieldId){
                 if (dataHelper.isNullOrUndefined(ruleModel) || 
                     dataHelper.isNullOrUndefined(ruleModel.FieldAttributes) ||
+                    dataHelper.isNullOrEmpty(fieldId) ||
                     ruleModel.FieldAttributes.length <= 0)
                     return null;
 
@@ -224,7 +225,7 @@
 
             getElementByFieldId: function (fieldId) {
                 var elms = $(document).find("[" + STANDARD_ID + "='" + fieldId + "']");
-                if (elms != undefined && elms.length > 0)
+                if (!dataHelper.isNullOrUndefined(elms) && elms.length > 0)
                     return elms[0];
                 else
                     return null;
@@ -234,20 +235,24 @@
                 var ret = [];
                 for (var hv = 0; hv < ruleModel.FieldAttributes.length; hv++) {
                     var field = ruleModel.FieldAttributes[hv];
-                    if (field.FieldId != fieldId && field.Relations.length > 0) {
-                        for (var fr = 0; fr < field.Relations.length; fr++) {
-                            if (field.Relations[fr].FieldId == fieldId)
-                            {
-                                ret.push(field);
+                    if (!dataHelper.isNullOrEmpty(field)) {
+                        if (field.FieldId != fieldId && field.Relations.length > 0) {
+                            for (var fr = 0; fr < field.Relations.length; fr++) {
+                                if (field.Relations[fr].FieldId == fieldId) {
+                                    ret.push(field);
+                                }
                             }
                         }
-                    }                    
+                    }
                 }
                 return ret;
             },
 
-            updateElementValue: function($element){
+            updateElementValue: function ($element) {                
                 var field = this.getFieldByElement($element);
+                if (dataHelper.isNullOrEmpty(field))
+                    return;
+
                 var curValue = null;
                 switch (field.FieldType) {
 
@@ -289,7 +294,7 @@
             },
 
             updateFieldValue: function (field, curVal) {
-                if (dataHelper.isNullOrUndefined(field))
+                if (dataHelper.isNullOrUndefined(field) || curVal == undefined)
                     return;
                 
                 switch (field.FieldType) {
@@ -464,6 +469,8 @@
 
             getItemByValue: function (field, itemValue) {
                 var ret = new helpdesk.caseRuleModels.FieldItem();
+                if (dataHelper.isNullOrUndefined(field))
+                    return ret;
 
                 if (field.FieldType == _FIELD_TYPE.TextField ||
                     field.FieldType == _FIELD_TYPE.TextArea ||
@@ -492,7 +499,7 @@
             },
 
             resolveTreeName: function (field, itemValue) {
-                if (field == null && field.Items == null && field.Items.length <= 0)
+                if (dataHelper.isNullOrEmpty(field) && field.Items == null && field.Items.length <= 0)
                     return "";
 
                 for (var fit = 0; fit < field.Items.length; fit++) {

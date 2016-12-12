@@ -160,9 +160,10 @@ EditPage.prototype.isFormValid = function() {
 EditPage.prototype.primaryValidation = function (submitUrl) {
     var me = this;
 
+    var finishDate = $('#CaseLog_FinishingDate').val();
+
     /* Check FinishigTime */
-    if (me.CaseWillFinish()) {
-        var finishDate =  $('#CaseLog_FinishingDate').val();
+    if (me.CaseWillFinish() && finishDate != null && finishDate != undefined) {        
         $.get('/Cases/IsFinishingDateValid/', { changedTime: me.p.caseChangedTime, finishingTime: finishDate, myTime: Date.now }, function (res) {
             if (res != null && res) {
                 me.startSaveProcess(me, submitUrl);
