@@ -55,7 +55,7 @@
             Hidden: 3
         };
 
-        var _FORIEGN_DATA_NUMBER = {
+        var _FOREIGN_DATA_NUMBER = {
             Place0: 0, // This is Field.Selected.ItemValue
             Place1: 1,
             Place2: 2,
@@ -563,13 +563,13 @@
                                 canAdd = true;
                             }
                             else {                                
-                                if (relation.ForeignKeyNumber == _FORIEGN_DATA_NUMBER.Place1)
+                                if (relation.ForeignKeyNumber == _FOREIGN_DATA_NUMBER.Place1)
                                     itemToCheck = curItem.ForeignKeyValue1;
 
-                                if (relation.ForeignKeyNumber == _FORIEGN_DATA_NUMBER.Place2)
+                                if (relation.ForeignKeyNumber == _FOREIGN_DATA_NUMBER.Place2)
                                     itemToCheck = curItem.ForeignKeyValue2;
 
-                                if (relation.ForeignKeyNumber == _FORIEGN_DATA_NUMBER.Place3)
+                                if (relation.ForeignKeyNumber == _FOREIGN_DATA_NUMBER.Place3)
                                     itemToCheck = curItem.ForeignKeyValue3;
 
                                 if (relation.RelationType == _RELATION_TYPE.ManyToMany) {
@@ -737,13 +737,13 @@
             getForeignData: function (relation, parentSelectedItem, place, relatedField) {
                 switch (relation.RelationType) {
                     case _RELATION_TYPE.OneToOne:
-                        if (place == _FORIEGN_DATA_NUMBER.Place1) {
+                        if (place == _FOREIGN_DATA_NUMBER.Place1) {
                             return helpdesk.caseRule.getItemByValue(relatedField, parentSelectedItem.ForeignKeyValue1)
                         }
-                        else if (place == _FORIEGN_DATA_NUMBER.Place2) {
+                        else if (place == _FOREIGN_DATA_NUMBER.Place2) {
                             return helpdesk.caseRule.getItemByValue(relatedField, parentSelectedItem.ForeignKeyValue2)
                         }
-                        else if (place == _FORIEGN_DATA_NUMBER.Place3) {
+                        else if (place == _FOREIGN_DATA_NUMBER.Place3) {
                             return helpdesk.caseRule.getItemByValue(relatedField, parentSelectedItem.ForeignKeyValue3)
                         }
                         return null;
@@ -800,19 +800,19 @@
                     return null;
 
                 switch (place) {
-                    case _FORIEGN_DATA_NUMBER.Place0:                        
+                    case _FOREIGN_DATA_NUMBER.Place0:
                         ret = expectedItem.ItemValue;
                         break;
 
-                    case _FORIEGN_DATA_NUMBER.Place1:
+                    case _FOREIGN_DATA_NUMBER.Place1:
                         ret = expectedItem.ForeignKeyValue1;
                         break;
 
-                    case _FORIEGN_DATA_NUMBER.Place2:
+                    case _FOREIGN_DATA_NUMBER.Place2:
                         ret = expectedItem.ForeignKeyValue2;
                         break;
 
-                    case _FORIEGN_DATA_NUMBER.Place3:
+                    case _FOREIGN_DATA_NUMBER.Place3:
                         ret = expectedItem.ForeignKeyValue3;
                         break;
                 }
