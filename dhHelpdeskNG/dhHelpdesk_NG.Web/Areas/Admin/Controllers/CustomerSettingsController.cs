@@ -118,7 +118,6 @@
             vmodel.Setting.DefaultEmailLogDestination = setting.DefaultEmailLogDestination;
             vmodel.Setting.TimeZone_offset = setting.TimeZone_offset;
             vmodel.Setting.CalcSolvedInTimeByLatestSLADate = setting.CalcSolvedInTimeByLatestSLADate;
-            vmodel.Setting.SetUserToAdministrator = setting.SetUserToAdministrator;
             vmodel.Setting.SMTPPassWord = setting.SMTPPassWord;
             vmodel.Setting.SMTPPort = setting.SMTPPort;
             vmodel.Setting.SMTPServer = setting.SMTPServer;
