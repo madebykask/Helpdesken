@@ -10,9 +10,12 @@
     <td class="span3">
         @Html.FieldCaption(Model)
     </td>
-    <td class="span9">
-        @Html.EditorFor(m => m.Value, "DatePicker", new { id = ViewData["Id"], inputAttributes = new Dictionary<string, object> { { "data-dh-is-required", Model.IsRequired } } })
+    <td class="span6">
+        @Html.EditorFor(m => m.Value, "DatePicker", new {id = ViewData["Id"], inputAttributes = new Dictionary<string, object> {{"data-dh-is-required", Model.IsRequired}}})
         @Html.HiddenFor(m => m.IsRequired)
         @Html.ValidationMessageFor(m => m.Value)
+    </td>
+    <td class="span3">
+        @Model.Help
     </td>
 </tr>

@@ -11,9 +11,12 @@
     <td class="span3">
         @Html.FieldCaption(Model)
     </td>
-    <td class="span9">
-        @Html.TextAreaFor(m => m.Value, new { data_dh_is_required = Model.IsRequired, @class = "inputw500 inputmh100" })
+    <td class="span6">
+        @Html.TextAreaFor(m => m.Value, new {data_dh_is_required = Model.IsRequired, @class = "inputw500 inputmh100"})
         @Html.HiddenFor(m => m.IsRequired)
         @Html.ValidationMessageFor(m => m.Value)
+    </td>
+    <td class="span3">
+        @Model.Help
     </td>
 </tr>

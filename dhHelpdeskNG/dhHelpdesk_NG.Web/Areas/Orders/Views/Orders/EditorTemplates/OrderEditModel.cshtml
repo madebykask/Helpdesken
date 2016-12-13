@@ -11,9 +11,12 @@
                 <td class="span3">
                     @Html.FieldCaption(Model.Property)
                 </td>
-                <td class="span9">
+                <td class="span6">
                     @Html.DropDownListFor(m => m.PropertyId, Model.Property.Value)
                     @Html.ValidationMessageFor(m => m.PropertyId)
+                </td>
+                <td class="span3">
+                    @Model.Property.Help
                 </td>
             </tr>             
         }
@@ -34,8 +37,11 @@
                 <td class="span3">
                     @Html.FieldCaption(Model.OrderInfo2)
                 </td>
-                <td  class="span9">
-                    <input type="checkbox" name="casetype.OrderInfo2" @(Model.OrderInfo2.Value == 1 ? "checked=checked" : "") value="1"/> 
+                <td class="span6">
+                    <input type="checkbox" name="casetype.OrderInfo2" @(Model.OrderInfo2.Value == 1 ? "checked=checked" : "") value="1"/>
+                </td>
+                <td class="span3">
+                    @Model.OrderInfo2.Help
                 </td>
             </tr> 
          }  

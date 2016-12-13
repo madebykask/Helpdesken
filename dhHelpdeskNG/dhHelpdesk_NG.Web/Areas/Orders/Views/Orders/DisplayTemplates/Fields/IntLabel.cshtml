@@ -10,8 +10,11 @@
     <td class="span3">
         @Html.FieldCaption(Model)
     </td>
-    <td class="span9">
+    <td class="span6">
         @Html.HiddenFor(m => m.Value)
         @Html.DisplayFor(m => m.Value)
+    </td>
+    <td class="span3">
+        @Model.Help
     </td>
 </tr>

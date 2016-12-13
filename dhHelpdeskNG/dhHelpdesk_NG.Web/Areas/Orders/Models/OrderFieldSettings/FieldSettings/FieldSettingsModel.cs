@@ -41,6 +41,7 @@
 
         public string EmailIdentifier { get; set; }
 
+        [LocalizedStringLength(200)]
         public string Help { get; set; }
     }
 }

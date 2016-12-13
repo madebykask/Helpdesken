@@ -31,7 +31,7 @@
                 return ConfigurableFieldModel<SelectList>.CreateUnshowable();
             }
 
-            return new ConfigurableFieldModel<SelectList>(setting.Caption, value, setting.Required);
+            return new ConfigurableFieldModel<SelectList>(setting.Caption, value, setting.Required, setting.Help);
         }
 
         public ConfigurableFieldModel<AttachedFilesModel> CreateAttachedFiles(
@@ -46,28 +46,28 @@
             }
 
             var attachedFilesModel = new AttachedFilesModel(orderId, area, files);
-            return new ConfigurableFieldModel<AttachedFilesModel>(setting.Caption, attachedFilesModel, setting.Required);
+            return new ConfigurableFieldModel<AttachedFilesModel>(setting.Caption, attachedFilesModel, setting.Required, setting.Help);
         }
 
         public ConfigurableFieldModel<bool> CreateBooleanField(FieldEditSettings setting, bool value)
         {
             return !setting.Show
                 ? ConfigurableFieldModel<bool>.CreateUnshowable()
-                : new ConfigurableFieldModel<bool>(setting.Caption, value, setting.Required);
+                : new ConfigurableFieldModel<bool>(setting.Caption, value, setting.Required, setting.Help);
         }
 
         public ConfigurableFieldModel<int> CreateIntegerField(FieldEditSettings setting, int value)
         {
             return !setting.Show
                 ? ConfigurableFieldModel<int>.CreateUnshowable()
-                : new ConfigurableFieldModel<int>(setting.Caption, value, setting.Required);
+                : new ConfigurableFieldModel<int>(setting.Caption, value, setting.Required, setting.Help);
         }
 
         public ConfigurableFieldModel<decimal?> CreateNullableDecimalField(FieldEditSettings setting, decimal? value)
         {
             return !setting.Show
                 ? ConfigurableFieldModel<decimal?>.CreateUnshowable()
-                : new ConfigurableFieldModel<decimal?>(setting.Caption, value, setting.Required);
+                : new ConfigurableFieldModel<decimal?>(setting.Caption, value, setting.Required, setting.Help);
         }
 
         public ConfigurableFieldModel<LogsModel> CreateLogs(
@@ -88,7 +88,7 @@
             var sendToDialog = this.sendToDialogModelFactory.Create(emailGroups, workingGroups, administrators);
             var logsModel = new LogsModel(orderId, area, logModels, sendToDialog);
 
-            return new ConfigurableFieldModel<LogsModel>(setting.Caption, logsModel, setting.Required);
+            return new ConfigurableFieldModel<LogsModel>(setting.Caption, logsModel, setting.Required, setting.Help);
         }
 
         public ConfigurableFieldModel<LogsModel> CreateLogs(
@@ -104,7 +104,7 @@
 
             var sendToDialog = this.sendToDialogModelFactory.Create(emailGroups, workingGroups, administrators);
             var logsModel = new LogsModel(sendToDialog);
-            return new ConfigurableFieldModel<LogsModel>(setting.Caption, logsModel, setting.Required);
+            return new ConfigurableFieldModel<LogsModel>(setting.Caption, logsModel, setting.Required, setting.Help);
         }
 
         public ConfigurableFieldModel<MultiSelectList> CreateMultiSelectListField(
@@ -118,14 +118,14 @@
             }
 
             var list = new MultiSelectList(items, "Value", "Name", selectedValues);
-            return new ConfigurableFieldModel<MultiSelectList>(setting.Caption, list, setting.Required);
+            return new ConfigurableFieldModel<MultiSelectList>(setting.Caption, list, setting.Required, setting.Help);
         }
 
         public ConfigurableFieldModel<DateTime?> CreateNullableDateTimeField(FieldEditSettings setting, DateTime? value)
         {
             return !setting.Show
                 ? ConfigurableFieldModel<DateTime?>.CreateUnshowable()
-                : new ConfigurableFieldModel<DateTime?>(setting.Caption, value, setting.Required);
+                : new ConfigurableFieldModel<DateTime?>(setting.Caption, value, setting.Required, setting.Help);
         }
 
         public ConfigurableFieldModel<SelectList> CreateSelectListField(
@@ -148,14 +148,14 @@
             var list = selectedValue.HasValue ? 
                     new SelectList(itemsList, "Value", "Name", selectedValue) :
                     new SelectList(itemsList, "Value", "Name");
-            return new ConfigurableFieldModel<SelectList>(setting.Caption, list, setting.Required);
+            return new ConfigurableFieldModel<SelectList>(setting.Caption, list, setting.Required, setting.Help);
         }
 
         public ConfigurableFieldModel<string> CreateStringField(FieldEditSettings setting, string value)
         {
             return !setting.Show
                 ? ConfigurableFieldModel<string>.CreateUnshowable()
-                : new ConfigurableFieldModel<string>(setting.Caption, value, setting.Required);
+                : new ConfigurableFieldModel<string>(setting.Caption, value, setting.Required, setting.Help);
         }
 
         public ConfigurableFieldModel<ProgramsModel> CreatePrograms(FieldEditSettings setting, List<ProgramModel> programs)
@@ -166,7 +166,7 @@
             }
 
             var programsModel = new ProgramsModel(0, programs);
-            return new ConfigurableFieldModel<ProgramsModel>(setting.Caption, programsModel, setting.Required);
+            return new ConfigurableFieldModel<ProgramsModel>(setting.Caption, programsModel, setting.Required, setting.Help);
         }
 
         public ConfigurableFieldModel<ProgramsModel> CreatePrograms(FieldEditSettings setting, int orderId, List<ProgramModel> programs)
@@ -177,7 +177,7 @@
             }
 
             var programsModel = new ProgramsModel(orderId, programs);
-            return new ConfigurableFieldModel<ProgramsModel>(setting.Caption, programsModel, setting.Required);
+            return new ConfigurableFieldModel<ProgramsModel>(setting.Caption, programsModel, setting.Required, setting.Help);
         }
 
         #endregion

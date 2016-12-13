@@ -15,8 +15,11 @@
             <td class="span3">
                 @Html.FieldCaption(Model.OrdererId)
             </td>
-            <td class="span9">
-                @Html.TextBoxFor(model => model.OrdererId.Value, new { maxlength = "40", autocomplete = "Off", data_field = "userId" })
+            <td class="span6">
+                @Html.TextBoxFor(model => model.OrdererId.Value, new {maxlength = "40", autocomplete = "Off", data_field = "userId"})
+            </td>
+            <td class="span3">
+                @Model.OrdererId.Help
             </td>
         </tr>
     }
@@ -32,9 +35,12 @@
             <td class="span3">
                 @Html.FieldCaption(Model.Department)
             </td>
-            <td class="span9">
-                @Html.DropDownListFor(m => m.DepartmentId, Model.Department.Value, new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererDepartment" }} })
+            <td class="span6">
+                @Html.DropDownListFor(m => m.DepartmentId, Model.Department.Value, new {inputAttributes = new Dictionary<string, object> {{"id", "order_OrdererDepartment"}}})
                 @Html.ValidationMessageFor(m => m.DepartmentId)
+            </td>
+            <td class="span3">
+                @Model.Department.Help
             </td>
         </tr>
     }
@@ -44,9 +50,12 @@
             <td class="span3">
                 @Html.FieldCaption(Model.Unit)
             </td>
-            <td class="span9">
+            <td class="span6">
                 @Html.DropDownListFor(m => m.UnitId, Model.Unit.Value, new {Id = "orderer_unit_select"})
                 @Html.ValidationMessageFor(m => m.UnitId)
+            </td>
+            <td class="span3">
+                @Model.Unit.Help
             </td>
         </tr>
     }

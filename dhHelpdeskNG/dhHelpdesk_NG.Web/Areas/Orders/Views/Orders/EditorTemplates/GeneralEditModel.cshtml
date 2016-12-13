@@ -13,8 +13,11 @@
             <td class="span3">
                 @Translation.Get("Typ")
             </td>
-            <td class="span9">
-                @Html.DisplayFor(m => m.OrderTypeName)    
+            <td class="span6">
+                @Html.DisplayFor(m => m.OrderTypeName)
+            </td>
+            <td class="span3">
+                
             </td>
         </tr>
         @if (Model.Status.Show)
@@ -23,9 +26,12 @@
                 <td class="span3">
                     @Html.FieldCaption(Model.Status)
                 </td>
-                <td class="span9">
+                <td class="span6">
                     @Html.DropDownListFor(m => m.StatusId, Model.Status.Value)
                     @Html.ValidationMessageFor(m => m.StatusId)
+                </td>
+                <td class="span3">
+                    @Model.Status.Help
                 </td>
             </tr>             
         }          
@@ -35,9 +41,12 @@
                 <td class="span3">
                     @Html.FieldCaption(Model.Administrator)
                 </td>
-                <td class="span9">
+                <td class="span6">
                     @Html.DropDownListFor(m => m.AdministratorId, Model.Administrator.Value)
                     @Html.ValidationMessageFor(m => m.AdministratorId)
+                </td>
+                <td class="span3">
+                    @Model.Administrator.Help
                 </td>
             </tr>             
         }
@@ -47,9 +56,12 @@
                 <td class="span3">
                     @Html.FieldCaption(Model.Domain)
                 </td>
-                <td class="span9">
+                <td class="span6">
                     @Html.DropDownListFor(m => m.DomainId, Model.Domain.Value)
                     @Html.ValidationMessageFor(m => m.DomainId)
+                </td>
+                <td class="span3">
+                    @Model.Domain.Help
                 </td>
             </tr>             
         }

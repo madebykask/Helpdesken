@@ -10,8 +10,8 @@
             <tr>
                 <td class="span3">
                     @Html.FieldCaption(Model.FileName)
-                </td>    
-                <td class="span9">
+                </td>
+                <td class="span6">
                     <a href="#fileName_files_uploader_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Upload")</a>
                     <div id="fileName_files_uploader_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
                         <div class="modal-header">
@@ -25,13 +25,17 @@
                             <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Close")</button>
                         </div>
                     </div>
-                </td>    
+                </td>
+                <td class="span3">
+                    @Model.FileName.Help
+                </td>
             </tr>
             <tr>
                 <td></td>
-                <td>
+                <td >
                     @Html.Partial("AttachedFiles", Model.FileName.Value)
                 </td>
+                <td></td>
             </tr>
         }
         @if (Model.CaseNumber.Show)
@@ -40,8 +44,11 @@
                 <td>
                     @Html.FieldCaption(Model.CaseNumber)
                 </td>
-                <td  class="span9">
+                <td class="span6">
                     @Model.CaseNumber.Value
+                </td>
+                <td class="span3">
+                    @Model.CaseNumber.Help
                 </td>
             </tr>
         }         

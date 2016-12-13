@@ -12,12 +12,13 @@
         {
         }
 
-        public ConfigurableFieldModel(string caption, TValue value, bool required)
+        public ConfigurableFieldModel(string caption, TValue value, bool required, string help)
         {
-            this.Show = true;
-            this.Caption = caption;
-            this.Value = value;
-            this.IsRequired = required;
+            Show = true;
+            Caption = caption;
+            Value = value;
+            IsRequired = required;
+            Help = help;
         }
 
         #endregion
@@ -33,6 +34,8 @@
 
         [LocalizedRequiredFrom("IsRequired")]
         public TValue Value { get; set; }
+
+        public string Help { get; set; }
 
         #endregion
 

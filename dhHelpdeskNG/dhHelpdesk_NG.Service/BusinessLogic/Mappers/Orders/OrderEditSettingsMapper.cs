@@ -170,7 +170,8 @@
                         data.Show.ToBool(),
                         data.Label,
                         data.Required.ToBool(),
-                        data.EmailIdentifier);
+                        data.EmailIdentifier,
+                        data.FieldHelp);
         }
 
         private static TextFieldEditSettings CreateTextFieldSetting(OrdersEditSettingsMapData data)
@@ -180,7 +181,8 @@
                         data.Label,
                         data.Required.ToBool(),
                         data.EmailIdentifier,
-                        data.DefaultValue);
+                        data.DefaultValue,
+                        data.FieldHelp);
         }
     }
 }
