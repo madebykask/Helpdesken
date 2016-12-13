@@ -28,6 +28,8 @@
 
         public string OrderField { get; set; }
 
+        public string FieldHelp { get; set; }
+
         public DateTime ChangedDate { get; set; }
 
         public DateTime CreatedDate { get; set; }

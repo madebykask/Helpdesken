@@ -217,7 +217,8 @@
                            Show = visibleByDefault,
                            ShowExternal = 0,
                            ShowInList = visibleByDefault,
-                           DefaultValue = string.Empty
+                           DefaultValue = string.Empty,
+                           FieldHelp = string.Empty
                        };
         }
     }

@@ -18,7 +18,8 @@
                                                FieldName = f.OrderField,
                                                Caption = f.Label,
                                                Show = f.Show,
-                                               ShowInList = f.ShowInList
+                                               ShowInList = f.ShowInList,
+                                               FieldHelp = f.FieldHelp
                                             })                                            
                                             .ToList();
 
@@ -231,11 +232,15 @@
             var userId = CreateFieldSetting(fieldSettings.FindByName(UserFields.UserId));
             var userFirstName = CreateFieldSetting(fieldSettings.FindByName(UserFields.UserFirstName));
             var userLastName = CreateFieldSetting(fieldSettings.FindByName(UserFields.UserLastName));
+            var userPhone = CreateFieldSetting(fieldSettings.FindByName(UserFields.UserPhone));
+            var userEMail = CreateFieldSetting(fieldSettings.FindByName(UserFields.UserEMail));
 
             return new UserFieldSettingsOverview(
                                                 userId,
                                                 userFirstName,
-                                                userLastName);
+                                                userLastName,
+                                                userPhone,
+                                                userEMail);
         }
 
         private static FieldOverviewSetting CreateFieldSetting(OrdersFieldSettingsOverviewMapData fieldSetting)

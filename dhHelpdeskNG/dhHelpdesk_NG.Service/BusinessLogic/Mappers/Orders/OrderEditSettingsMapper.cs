@@ -20,7 +20,8 @@
                                                      Label = f.Label,
                                                      Required = f.Required,
                                                      EmailIdentifier = f.EMailIdentifier,
-                                                     DefaultValue = f.DefaultValue
+                                                     DefaultValue = f.DefaultValue,
+                                                     FieldHelp = f.FieldHelp
                                                  }).ToList();
 
             var fieldSettings = new NamedObjectCollection<OrdersEditSettingsMapData>(entities);

@@ -13,6 +13,8 @@
 
         public string Caption { get; set; }
 
+        public string FieldHelp { get; set; }
+
         public string GetName()
         {
             return this.FieldName;

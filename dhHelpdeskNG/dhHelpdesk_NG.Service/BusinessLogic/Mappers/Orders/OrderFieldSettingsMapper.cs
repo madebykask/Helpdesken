@@ -48,7 +48,8 @@
                                                      Label = f.Label,
                                                      Required = f.Required,
                                                      EmailIdentifier = f.EMailIdentifier,
-                                                     DefaultValue = f.DefaultValue
+                                                     DefaultValue = f.DefaultValue,
+                                                     FieldHelp = f.FieldHelp
                                                  }).ToList();
 
             var fieldSettings = new NamedObjectCollection<OrdersFieldSettingsMapData>(entities);
@@ -225,7 +226,8 @@
                         data.ShowExternal.ToBool(),
                         data.Label,
                         data.Required.ToBool(),
-                        data.EmailIdentifier);
+                        data.EmailIdentifier,
+                        data.FieldHelp);
         }
 
         private static TextFieldSettings CreateTextFieldSetting(OrdersFieldSettingsMapData data)
@@ -238,7 +240,8 @@
                         data.Label,
                         data.Required.ToBool(),
                         data.EmailIdentifier,
-                        data.DefaultValue);
+                        data.DefaultValue,
+                        data.FieldHelp);
         }
 
         #endregion
@@ -271,6 +274,7 @@
         {
             MapFieldSettings(updatedSettings.OrderNumber, existingSettings.FindByName(GeneralFields.OrderNumber), changedDate);
             MapFieldSettings(updatedSettings.Customer, existingSettings.FindByName(GeneralFields.Customer), changedDate);
+            MapTextFieldSettings(updatedSettings.Status, existingSettings.FindByName(GeneralFields.Status), changedDate);
             MapTextFieldSettings(updatedSettings.Administrator, existingSettings.FindByName(GeneralFields.Administrator), changedDate);
             MapTextFieldSettings(updatedSettings.Domain, existingSettings.FindByName(GeneralFields.Domain), changedDate);
             MapTextFieldSettings(updatedSettings.OrderDate, existingSettings.FindByName(GeneralFields.OrderDate), changedDate);
@@ -391,6 +395,7 @@
             fieldSettings.EMailIdentifier = updatedSettings.EmailIdentifier;
             fieldSettings.Label = updatedSettings.Label;
             fieldSettings.ChangedDate = changedDate;
+            fieldSettings.FieldHelp = updatedSettings.FieldHelp;
         }
 
         private static void MapTextFieldSettings(
@@ -406,6 +411,7 @@
             fieldSettings.Label = updatedSettings.Label;
             fieldSettings.ChangedDate = changedDate;
             fieldSettings.DefaultValue = updatedSettings.DefaultValue;
+            fieldSettings.FieldHelp = updatedSettings.FieldHelp;
         }
 
         #endregion

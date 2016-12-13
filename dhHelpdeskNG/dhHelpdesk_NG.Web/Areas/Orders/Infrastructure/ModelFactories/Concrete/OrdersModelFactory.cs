@@ -167,6 +167,8 @@
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.UserId, UserFieldNames.UserId, headers);
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.UserFirstName, UserFieldNames.UserFirstName, headers);
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.UserLastName, UserFieldNames.UserLastName, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.UserPhone, UserFieldNames.UserPhone, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.UserEMail, UserFieldNames.UserEMail, headers);
         }        
 
         #endregion
@@ -327,6 +329,8 @@
             FieldSettingsHelper.CreateValueIfNeeded(settings.UserId, UserFieldNames.UserId, fields.UserId, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.UserFirstName, UserFieldNames.UserFirstName, fields.UserFirstName, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.UserLastName, UserFieldNames.UserLastName, fields.UserLastName, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.UserPhone, UserFieldNames.UserPhone, fields.UserPhone, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.UserEMail, UserFieldNames.UserEMail, fields.UserEMail, values);
         }
 
         #endregion

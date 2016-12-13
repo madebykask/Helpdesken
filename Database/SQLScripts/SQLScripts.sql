@@ -41,6 +41,10 @@ INSERT INTO [dbo].[tblOrderFieldSettings]
 				and ((iofs.OrderType_Id is not null and ofs.OrderType_Id is not null and iofs.OrderType_Id = ofs.OrderType_Id) or (iofs.OrderType_Id is null and ofs.OrderType_Id is null))) 
 GO
 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'FieldHelp' and sysobjects.name = N'tblOrderFieldSettings')
+	ALTER TABLE [dbo].[tblOrderFieldSettings] ADD [FieldHelp] [nvarchar](200) NULL
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.30'
 

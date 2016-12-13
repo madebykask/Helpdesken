@@ -6,8 +6,8 @@
     {
         public FieldOverviewSetting(bool show, string caption)
         {
-            this.Show = show;
-            this.Caption = caption;
+            Show = show;
+            Caption = caption;
         }
 
         public bool Show { get; private set; }

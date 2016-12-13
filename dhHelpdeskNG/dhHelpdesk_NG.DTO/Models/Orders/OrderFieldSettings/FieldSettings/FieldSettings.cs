@@ -24,13 +24,16 @@
 
         public string EmailIdentifier { get; protected set; }
 
+        public string FieldHelp { get; protected set; }
+
         public static FieldSettings CreateUpdated(
                 bool show,
                 bool showInList,
                 bool showExternal,
                 string label,
                 bool required,
-                string emailIdentifier)
+                string emailIdentifier,
+                string help)
         {
             return new FieldSettings
                        {
@@ -39,7 +42,8 @@
                            ShowExternal = showExternal,
                            Label = label,
                            Required = required,
-                           EmailIdentifier = emailIdentifier
+                           EmailIdentifier = emailIdentifier,
+                           FieldHelp = help
                        };
         }
 
@@ -50,7 +54,8 @@
                 bool showExternal,
                 string label,
                 bool required,
-                string emailIdentifier)
+                string emailIdentifier,
+                string help)
         {
             return new FieldSettings
                        {
@@ -60,8 +65,9 @@
                            ShowExternal = showExternal,
                            Label = label,
                            Required = required,
-                           EmailIdentifier = emailIdentifier
-                       };
+                           EmailIdentifier = emailIdentifier,
+                           FieldHelp = help
+            };
         }
     }
 }

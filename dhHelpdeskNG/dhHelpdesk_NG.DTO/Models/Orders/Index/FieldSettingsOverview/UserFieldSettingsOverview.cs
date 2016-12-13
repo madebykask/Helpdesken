@@ -5,14 +5,13 @@
 
     public sealed class UserFieldSettingsOverview
     {
-        public UserFieldSettingsOverview(
-                FieldOverviewSetting userId, 
-                FieldOverviewSetting userFirstName, 
-                FieldOverviewSetting userLastName)
+        public UserFieldSettingsOverview(FieldOverviewSetting userId, FieldOverviewSetting userFirstName, FieldOverviewSetting userLastName, FieldOverviewSetting userPhone, FieldOverviewSetting userEMail)
         {
-            this.UserLastName = userLastName;
-            this.UserFirstName = userFirstName;
-            this.UserId = userId;
+            UserId = userId;
+            UserFirstName = userFirstName;
+            UserLastName = userLastName;
+            UserPhone = userPhone;
+            UserEMail = userEMail;
         }
 
         [NotNull]
@@ -22,6 +21,14 @@
         public FieldOverviewSetting UserFirstName { get; private set; }
 
         [NotNull]
-        public FieldOverviewSetting UserLastName { get; private set; }         
+        public FieldOverviewSetting UserLastName { get; private set; }
+
+        [NotNull]
+        public FieldOverviewSetting UserPhone { get; private set; }
+
+        [NotNull]
+        public FieldOverviewSetting UserEMail { get; private set; }
+
+
     }
 }

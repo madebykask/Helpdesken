@@ -181,7 +181,8 @@
                         settings.ShowExternal,
                         settings.Label,
                         settings.Required,
-                        settings.EmailIdentifier);
+                        settings.EmailIdentifier,
+                        settings.FieldHelp);
         }
 
         private static TextFieldSettingsModel CreateTextFieldSettingModel(TextFieldSettings settings)
@@ -193,7 +194,8 @@
                         settings.Label,
                         settings.Required,
                         settings.EmailIdentifier,
-                        settings.DefaultValue);
+                        settings.DefaultValue,
+                        settings.FieldHelp);
         }
 
         #endregion
@@ -323,7 +325,8 @@
                         settings.ShowExternal,
                         settings.Label,
                         settings.Required,
-                        settings.EmailIdentifier);
+                        settings.EmailIdentifier,
+                        settings.Help);
         }
 
         private static TextFieldSettings CreateTextFieldSettingForUpdate(TextFieldSettingsModel settings)
@@ -335,7 +338,8 @@
                         settings.Label,
                         settings.Required,
                         settings.EmailIdentifier,
-                        settings.DefaultValue);
+                        settings.DefaultValue,
+                        settings.Help);
         }
 
         #endregion
