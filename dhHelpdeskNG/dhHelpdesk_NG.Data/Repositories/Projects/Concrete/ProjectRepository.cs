@@ -82,7 +82,7 @@ namespace DH.Helpdesk.Dal.Repositories.Projects.Concrete
             string toLowerProjectNameLike = projectNameLike == null ? string.Empty : projectNameLike.ToLower();
             IQueryable<Project> projects =
                 this.DbContext.Projects.Where(
-                    x => x.Customer_Id == customerId && x.Name.ToLower().Contains(toLowerProjectNameLike)).OrderByDescending(x => x.Id);
+                    x => x.Customer_Id == customerId && x.Name.ToLower().Contains(toLowerProjectNameLike)).OrderBy(x => x.Id);
 
             if (projectManagerId.HasValue)
             {
