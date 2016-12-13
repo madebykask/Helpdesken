@@ -338,8 +338,8 @@
                                     <td>
                                         @Translation.Get("Tillåt endast komplexa lösenord", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="setting.ComplexPassword" id="setting_ComplexPassword" @(Model.Setting.ComplexPassword == 1 ? "checked=checked" : "") value="1" onclick="disablePasswordLength($(this))"/>
+                                    <td ><label class="checkbox" style="width:50px">
+                                        <input type="checkbox" name="setting.ComplexPassword" id="setting_ComplexPassword" @(Model.Setting.ComplexPassword == 1 ? "checked=checked" : "") value="1" onclick="disablePasswordLength()" />
                                         <input type="hidden" name="setting.ComplexPassword" value="0" />
                                         </label>
                                     </td>
@@ -474,7 +474,7 @@
     </div>
 </div>
 <script type="text/javascript">
-
+    disablePasswordLength();
     function ChangePassword() {
      
         var mod = $('#divPasswordDialog').modal('show');
@@ -522,20 +522,14 @@
         });
     }
 
-    function disablePasswordLength(t) {
-  
-        if (t.is(':checked')) {
+    function disablePasswordLength() {
+        
+        if ($('#setting_ComplexPassword').is(':checked')) {            
             $("#Setting_MinPasswordLength").val("0");
             $("#Setting_MinPasswordLength").prop("disabled", true);
-        } else {
+        } else {            
             $("#Setting_MinPasswordLength").prop("disabled", false);
             $("#Setting_MinPasswordLength").val("0");
         }
-    }
-
-    if ($("#setting_ComplexPassword").getAttribute('checked') == "'checked'") {
-        $("#Setting_MinPasswordLength").prop("disabled", false);
-    } else {
-        $("#Setting_MinPasswordLength").prop("disabled", true);
     }
 </script>

@@ -1,4 +1,5 @@
-﻿
+﻿var lastCustomerId = 0;
+
 function SaveArticleProduct() {
     window.Params = window.Params || {};
     var save = window.Params.Save;
@@ -28,7 +29,7 @@ function SaveArticleProduct() {
     var customerId = $('#currentCustomerId').val();
     var article = "";
     var productarea = "";
-
+    lastCustomerId = customerId;
 
     $(articleList + " option:selected").each(function () {
         article += $(this).val() + ",";
@@ -49,7 +50,8 @@ function SaveArticleProduct() {
         function (result) {            
             if (result != null) {
                 if (result.res == "sucess") {                    
-                    window.location.href = result.data;
+                    //window.location.href = result.data;
+                    window.location.href = '/admin/invoice/ArticleProductAreaIndex?customerId=' + lastCustomerId;
                     return;
                 }
                 else {

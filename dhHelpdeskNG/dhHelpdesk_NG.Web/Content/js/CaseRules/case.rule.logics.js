@@ -577,6 +577,8 @@
 
             getItemByValue: function (field, itemValue) {
                 var ret = new helpdesk.caseRuleModels.FieldItem();
+                if (dataHelper.isNullOrUndefined(field))
+                    return ret;
 
                 if (field.FieldType == _FIELD_TYPE.TextField ||
                     field.FieldType == _FIELD_TYPE.TextArea ||
@@ -645,7 +647,7 @@
             },
 
             resolveTreeName: function (field, itemValue) {
-                if (field == null && field.Items == null && field.Items.length <= 0)
+                if (dataHelper.isNullOrEmpty(field) && field.Items == null && field.Items.length <= 0)
                     return "";
 
                 for (var fit = 0; fit < field.Items.length; fit++) {

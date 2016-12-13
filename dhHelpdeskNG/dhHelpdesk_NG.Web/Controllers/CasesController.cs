@@ -4536,7 +4536,8 @@ namespace DH.Helpdesk.Web.Controllers
             f.CaseClosingDateStartFilter = null;
             f.CaseClosingDateEndFilter = null;
             f.CaseClosingReasonFilter = null;
-            this.ResolveParentPathesForFilter(f);
+			f.PageInfo = new PageInfo();
+			this.ResolveParentPathesForFilter(f);
 
             s.SortBy = "CaseNumber";
             s.Ascending = true;
