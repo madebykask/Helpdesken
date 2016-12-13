@@ -202,8 +202,12 @@
 
             onStateChanged: function (element) {
                 var $self = $(element);
+                if (dataHelper.isNullOrUndefined($self))
+                    return;
+
                 var newState = $self.val();
                 var field = this.getFieldByElement($self);
+
                 if (!dataHelper.isNullOrUndefined(field)) {
                     switch (newState) {
                         case "1":
@@ -295,6 +299,9 @@
             },
                         
             refreshStateIcons: function (field) {
+                if (dataHelper.isNullOrUndefined(field))
+                    return;
+
                 var $elementToApply = $(STATE_ICON_PLACE_PREFIX + field.FieldId);
                 if (!dataHelper.isNullOrUndefined($elementToApply)) {
                     var iconModel = helpdesk.caseRule.createStateIconModel(field);
@@ -336,8 +343,11 @@
             checkRules: function (field) {
                 //if (field.StatusType == _FIELD_STATUS_TYPE.Hidden)
                 //    return "";
-
                 var ret = "";
+
+                if (dataHelper.isNullOrUndefined(field))
+                    return ret;
+
                 if (field.Relations.length > 0) {
                     for (var r = 0; r < field.Relations.length; r++) {
                         var curRelation = field.Relations[r];
@@ -352,6 +362,9 @@
             /* Return predicted action text */
             predictAction: function (field, relation) {
                 
+                if (dataHelper.isNullOrUndefined(field))
+                    return "";
+
                 var selectedItem = field.Selected;
                 var relatedField = helpdesk.caseRule.getFieldById(relation.FieldId);
 
@@ -376,6 +389,10 @@
 
             applyRules: function (field) {
                 var ret = "";
+
+                if (dataHelper.isNullOrUndefined(field))
+                    return ret;
+                
                 if (field.Relations.length > 0) {
                     for (var r = 0; r < field.Relations.length; r++) {
                         var curRelation = field.Relations[r];
@@ -388,6 +405,8 @@
             },
 
             runAction: function (field, relation) {
+                if (dataHelper.isNullOrUndefined(field))
+                    return;
 
                 var selectedItem = field.Selected;
                 var relatedField = helpdesk.caseRule.getFieldById(relation.FieldId);
