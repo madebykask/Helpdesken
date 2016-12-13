@@ -272,7 +272,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                         RelationType = RelationType.OneToMany.ToInt(),
                         ActionType = RelationActionType.ListPopulator.ToInt(),
                         FieldId = TranslationCaseFields.Department_Id.ToString(),
-                        ForeignKeyNumber = 1,
+                        ForeignKeyNumber = ForeignKeyNum.FKeyNum1.ToInt(),
                         Applicable = ruleType == CaseRuleMode.TemplateMode,
                         ShowAllIfKeyIsNull = true
                     }
@@ -304,7 +304,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                         RelationType = RelationType.OneToMany.ToInt(),
                         ActionType = RelationActionType.ListPopulator.ToInt(),
                         FieldId = TranslationCaseFields.OU_Id.ToString(),
-                        ForeignKeyNumber = 1,                        
+                        ForeignKeyNumber = ForeignKeyNum.FKeyNum1.ToInt(),
                         Applicable = ruleType == CaseRuleMode.TemplateMode
                     }
                 }
@@ -521,7 +521,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                         RelationType = RelationType.OneToMany.ToInt(),
                         ActionType = RelationActionType.ListPopulator.ToInt(),
                         FieldId = TranslationCaseFields.IsAbout_Department_Id.ToString(),
-                        ForeignKeyNumber = 1,
+                        ForeignKeyNumber = ForeignKeyNum.FKeyNum1.ToInt(),
                         Applicable = ruleType == CaseRuleMode.TemplateMode,
                         ShowAllIfKeyIsNull = true
                     }
@@ -553,7 +553,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                         RelationType = RelationType.OneToMany.ToInt(),
                         ActionType = RelationActionType.ListPopulator.ToInt(),
                         FieldId = TranslationCaseFields.IsAbout_OU_Id.ToString(),
-                        ForeignKeyNumber = 1,
+                        ForeignKeyNumber = ForeignKeyNum.FKeyNum1.ToInt(),
                         Applicable = ruleType == CaseRuleMode.TemplateMode
                     }
                 }
@@ -696,7 +696,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                         RelationType = RelationType.OneToOne.ToInt(),
                         ActionType = RelationActionType.ValueSetter.ToInt(),
                         FieldId = TranslationCaseFields.Performer_User_Id.ToString(),
-                        ForeignKeyNumber = 1
+                        ForeignKeyNumber = ForeignKeyNum.FKeyNum1.ToInt()
                     }
                 }
 
@@ -727,14 +727,14 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                         RelationType = RelationType.OneToOne.ToInt(),
                         ActionType = RelationActionType.ValueSetter.ToInt(),
                         FieldId = TranslationCaseFields.WorkingGroup_Id.ToString(),
-                        ForeignKeyNumber = 1
+                        ForeignKeyNumber = ForeignKeyNum.FKeyNum1.ToInt()
                     },
                     new FieldRelation() {
                         SequenceNo = 1,
                         RelationType = RelationType.OneToOne.ToInt(),
                         ActionType = RelationActionType.ValueSetter.ToInt(),
                         FieldId = TranslationCaseFields.Priority_Id.ToString(),
-                        ForeignKeyNumber = 2
+                        ForeignKeyNumber = ForeignKeyNum.FKeyNum2.ToInt()
                     }
                 }
             };
@@ -764,7 +764,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                         RelationType = RelationType.OneToOne.ToInt(),
                         ActionType = RelationActionType.ValueSetter.ToInt(),
                         FieldId = TranslationCaseFields.Urgency_Id.ToString(),
-                        ForeignKeyNumber = 1
+                        ForeignKeyNumber = ForeignKeyNum.FKeyNum1.ToInt()
                     }                 
                 }
             };
@@ -1136,7 +1136,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                         RelationType = RelationType.OneToOne.ToInt(),
                         ActionType = RelationActionType.ValueSetter.ToInt(),
                         FieldId = TranslationCaseFields.StateSecondary_Id.ToString(),
-                        ForeignKeyNumber = 2
+                        ForeignKeyNumber = ForeignKeyNum.FKeyNum2.ToInt()
                     }
                 }
             };
@@ -1150,7 +1150,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                                                     RelationType = RelationType.ManyToMany.ToInt(),
                                                     ActionType = RelationActionType.ListPopulator.ToInt(),
                                                     FieldId = TranslationCaseFields.Performer_User_Id.ToString(),
-                                                    ForeignKeyNumber = 1,
+                                                    ForeignKeyNumber = ForeignKeyNum.FKeyNum1.ToInt(),
                                                     Applicable = ruleType == CaseRuleMode.TemplateMode,
                                                     ShowRunTimeCurrentValue = ruleType == CaseRuleMode.TemplateMode
                                                 });
@@ -1203,7 +1203,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                             RelationType = RelationType.OneToOne.ToInt(),
                             ActionType = RelationActionType.ValueSetter.ToInt(),
                             FieldId = TranslationCaseFields.tblLog_Text_External.ToString(),
-                            ForeignKeyNumber = 1
+                            ForeignKeyNumber = ForeignKeyNum.FKeyNum1.ToInt()
                         }
                     }
             };
@@ -1233,14 +1233,14 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                         RelationType = RelationType.OneToOne.ToInt(),
                         ActionType = RelationActionType.ValueSetter.ToInt(),
                         FieldId = TranslationCaseFields.WorkingGroup_Id.ToString(),
-                        ForeignKeyNumber = 1
+                        ForeignKeyNumber = ForeignKeyNum.FKeyNum1.ToInt()
                     },
                     new FieldRelation() {
                         SequenceNo = 1,
                         RelationType = RelationType.OneToOne.ToInt(),
                         ActionType = RelationActionType.ValueSetter.ToInt(),
                         FieldId = TranslationCaseFields.StateSecondary_Id.ToString(),
-                        ForeignKeyNumber = 2
+                        ForeignKeyNumber = ForeignKeyNum.FKeyNum2.ToInt()
                     }
                 }
             };
@@ -1272,7 +1272,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                     //    RelationType = RelationType.OneToOne.ToInt(),
                     //    ActionType = RelationActionType.ValueSetter.ToInt(),
                     //    FieldId = TranslationCaseFields.WorkingGroup_Id.ToString(),
-                    //    ForeignKeyNumber = 1
+                    //    ForeignKeyNumber = ForeignKeyNum.FKeyNum1.ToInt()
                     //},
 
                     new FieldRelation() {
@@ -1280,8 +1280,32 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                         RelationType = RelationType.OneToOne.ToInt(),
                         ActionType = RelationActionType.ValueSetter.ToInt(),
                         FieldId = TranslationCaseFields.MailToNotifier.ToString(),
-                        ForeignKeyNumber = 2
+                        ForeignKeyNumber = ForeignKeyNum.FKeyNum2.ToInt(),
+                    },
+
+                    new FieldRelation() {
+                        SequenceNo = 0,
+                        RelationType = RelationType.Virtual.ToInt(),
+                        ActionType = RelationActionType.ValueSetter.ToInt(),
+                        FieldId = VirtualFields.Department_WatchDate.ToString(),
+                        DataStore1 = TranslationCaseFields.Department_Id.ToString(),                        
+                        ResultDataKey = TranslationCaseFields.WatchDate.ToString(),
+                        Conditions =  new List<FieldRelationCondition> {
+                            new FieldRelationCondition(TranslationCaseFields.StateSecondary_Id.ToString(), ForeignKeyNum.FKeyNum2, ConditionOperator.NotEqual, "0"),
+                            new FieldRelationCondition(TranslationCaseFields.Department_Id.ToString(), ForeignKeyNum.FKeyNum0, ConditionOperator.HasValue, string.Empty),
+                            new FieldRelationCondition(TranslationCaseFields.Priority_Id.ToString(), ForeignKeyNum.FKeyNum2, ConditionOperator.Equal, "0")
+                        }
                     }
+
+                    // TODO: Remove
+                    //new FieldRelation() {
+                    //    SequenceNo = 2,
+                    //    RelationType = RelationType.OneToOne.ToInt(),
+                    //    ActionType = RelationActionType.ValueSetter.ToInt(),
+                    //    FieldId = TranslationCaseFields.Department_Id.ToString(),
+                    //    ForeignKeyNumber = ForeignKeyNum.FKeyNum2.ToInt(),
+                        
+                    //},
                 }
             };
             ret.Add(attrStateSecondary);
@@ -1624,6 +1648,29 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 StatusType = CaseFieldStatusType.Readonly
             };
             ret.Add(attrVirtual1);
+
+            #endregion
+
+            #region Department_WatchDate
+
+            curField = VirtualFields.Department_WatchDate.ToString();
+            var resultField_WD = TranslationCaseFields.WatchDate.ToString();
+
+            var attrVirtual2 = new FieldAttributeModel()
+            {
+                FieldId = curField,
+                FieldName = curField,
+                FieldCaption = Translation.Get(resultField_WD, Enums.TranslationSource.CaseTranslation, customerId),
+                FieldType = CaseFieldType.DateField,
+                DefaultItem = new FieldItem(string.Empty, string.Empty, true),
+                Selected = new FieldItem(string.Empty, string.Empty, true),
+                IsAvailableOnHelpdesk = true,
+                IsAvailableOnSelfService = true,
+                IsMandatory = false,
+                Items = basicInformation.Department_WatchDate.Items,
+                StatusType = CaseFieldStatusType.Readonly
+            };
+            ret.Add(attrVirtual2);
 
             #endregion
 

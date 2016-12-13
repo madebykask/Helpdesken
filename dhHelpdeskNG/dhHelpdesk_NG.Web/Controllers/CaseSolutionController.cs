@@ -24,6 +24,7 @@ namespace DH.Helpdesk.Web.Controllers
     using Models.CaseRules;
     using Infrastructure.ModelFactories.Case.Concrete;
     using Common.Enums.Settings;
+    using System;
 
     public class CaseSolutionController : UserInteractionController
     {
@@ -57,6 +58,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IRegistrationSourceCustomerService _registrationSourceCustomerService;        
         private readonly ICaseSolutionSettingService caseSolutionSettingService;
         private readonly ICaseRuleFactory _caseRuleFactory;
+        private readonly IWatchDateCalendarService _watchDateCalendarService;
 
         private const int MAX_QUICK_BUTTONS_COUNT = 5;
         private const string CURRENT_USER_ITEM_CAPTION = "Inloggad användare";
@@ -93,7 +95,8 @@ namespace DH.Helpdesk.Web.Controllers
             ICausingPartService causingPartService,
             IOrganizationService organizationService,
             IRegistrationSourceCustomerService registrationSourceCustomerService,
-            ICaseRuleFactory caseRuleFactory)
+            ICaseRuleFactory caseRuleFactory,
+            IWatchDateCalendarService watchDateCalendarService)
             : base(masterDataService)
         {
             this._caseFieldSettingService = caseFieldSettingService;
@@ -126,6 +129,7 @@ namespace DH.Helpdesk.Web.Controllers
             this._organizationService = organizationService;
             this._registrationSourceCustomerService = registrationSourceCustomerService;
             this._caseRuleFactory = caseRuleFactory;
+            _watchDateCalendarService = watchDateCalendarService;
         }        
 
         #region Template 
@@ -673,7 +677,7 @@ namespace DH.Helpdesk.Web.Controllers
                                .Select(r=> new FieldItem(r.Id.ToString(), r.Name, r.IsActive != 0)).OrderBy(r => r.ItemText).ToList()                
             };
             
-            var departments = _departmentService.GetDepartments(customerId);            
+            var departments = _departmentService.GetDepartments(customerId);                        
             caseBasicInfo.Departments = new BasicMultiItemField()
             {
                 Selected = new FieldItem(templateModel.Department_Id?.ToString(), string.Empty),
@@ -1042,6 +1046,7 @@ namespace DH.Helpdesk.Web.Controllers
                                                                 {
                                                                     ForeignKeyValue1 = s.WorkingGroup_Id?.ToString(),
                                                                     ForeignKeyValue2 = (!s.NoMailToNotifier.ToBool()).ToString(),
+                                                                    ForeignKeyValue3 = s.RecalculateWatchDate.ToString()
                                                                 }
                                           ).OrderBy(i => i.ItemText).ToList()
             };
@@ -1174,8 +1179,22 @@ namespace DH.Helpdesk.Web.Controllers
                                                         ForeignKeyValue1 = p.Impact_Id.ToString(),
                                                         ForeignKeyValue2 = p.Urgency_Id.ToString(),
                                                         ResultKeyValue = p.Priority_Id.ToString()
-                                                    }
-                                          ).OrderBy(r => r.ItemText).ToList()
+                                                    })
+                                          .OrderBy(r => r.ItemText).ToList()
+            };
+
+            var allWatchDates = _watchDateCalendarService.GetAllClosestDateTo(DateTime.UtcNow);
+            var department_WatchDate = departments.Where(d => (d.IsActive != 0 || (templateModel.Department_Id.HasValue && templateModel.Department_Id.Value == d.Id)) &&
+                                                              d.WatchDateCalendar_Id.HasValue)
+                                                  .Select(d => new Tuple<int, string>(d.Id, allWatchDates.FirstOrDefault(w => w.WatchDateCalendar_Id == d.WatchDateCalendar_Id.Value)?.WatchDate.ToShortDateString())).ToList();
+
+            caseBasicInfo.Department_WatchDate = new BasicVirtualDataField()
+            {
+                Items = department_WatchDate.Select(dw => new FieldItem(string.Empty, string.Empty)
+                                                                {
+                                                                    ForeignKeyValue1 = dw.Item1.ToString(),
+                                                                    ResultKeyValue = dw.Item2                                              
+                                                                }).ToList()
             };
 
             #endregion

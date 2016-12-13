@@ -1,12 +1,15 @@
 ﻿using System.Collections.Generic;
+using DH.Helpdesk.Web.Infrastructure.Extensions;
 
 namespace DH.Helpdesk.Web.Models.CaseRules
 {
     public enum VirtualFields
     {
-        Priority_Impact_Urgent = 1
+        Priority_Impact_Urgent = 1,
+        Department_WatchDate = 2
     }
 
+    #region Enums
     public enum CaseRuleMode
     {
         TemplateMode     = 0,
@@ -49,6 +52,24 @@ namespace DH.Helpdesk.Web.Models.CaseRules
         Readonly = 2,
         Hidden = 3
     }
+
+    public enum ConditionOperator
+    {                
+        HasValue = 1,
+        HasNotValue = 2,
+        Equal = 3,
+        NotEqual = 4
+    }
+
+    public enum ForeignKeyNum
+    {
+        FKeyNum0 = 0, // 0 is Field Current Value
+        FKeyNum1 = 1,
+        FKeyNum2 = 2,
+        FKeyNum3 = 3,
+    }
+
+    #endregion
 
     public class CaseRuleModel
     {
@@ -168,6 +189,8 @@ namespace DH.Helpdesk.Web.Models.CaseRules
 
             // Used for WokingGroup & Adminstrator when both have Current RunTime value item in CaseTemplate.  (Inloggad användare, Inloggad användares driftgrupp)
             ShowRunTimeCurrentValue = false;
+
+            Conditions = new List<FieldRelationCondition>();
         }
 
         public int SequenceNo { get; set; }
@@ -194,8 +217,29 @@ namespace DH.Helpdesk.Web.Models.CaseRules
 
         public bool ShowRunTimeCurrentValue { get; set; }
 
+        public List<FieldRelationCondition> Conditions { get; set; }
+
     }
 
+    public sealed class FieldRelationCondition
+    {
+        public FieldRelationCondition(string fieldId, ForeignKeyNum foreignKeyNum, ConditionOperator conOperator, string otherSideValue)
+        {
+            FieldId = fieldId;
+            ForeignKeyNum = foreignKeyNum.ToInt();
+            ConditionOperator = conOperator.ToInt();
+            OtherSideValue = otherSideValue;
+        }
+
+        public string FieldId { get; private set; }
+
+        public int ForeignKeyNum { get; private set; }
+
+        public int ConditionOperator { get; private set; }
+
+        public string OtherSideValue { get; private set; }
+
+    }
 
     public sealed class BasicSingleItemField
     {
@@ -402,6 +446,8 @@ namespace DH.Helpdesk.Web.Models.CaseRules
 
         public BasicVirtualDataField Priority_Impact_Urgent { get; set; }
 
+        public BasicVirtualDataField Department_WatchDate { get; set; }
+
         #endregion
     }
 
@@ -414,6 +460,9 @@ namespace DH.Helpdesk.Web.Models.CaseRules
             {
                 case VirtualFields.Priority_Impact_Urgent:
                     return "Priority_Impact_Urgent";
+
+                case VirtualFields.Department_WatchDate:
+                    return "Department_WatchDate";
             }
 
             return string.Empty;

@@ -11,9 +11,10 @@
         var STANDARD_ID = 'standardid';
         var STATE_ICON_PLACE_PREFIX = '#stateIconPlace_';
          
-        /***** Consts ****/
+        /***** Const ****/
         var _CURRENT_RUN_TIME_ITEM_ID = "-1";
         var _ARRAY_SEPARATOR_CHARACTER = ",";
+        var _NULL_STR = "null";
 
         /***** Enums *****/
         var _RULE_TYPE = {
@@ -54,7 +55,8 @@
             Hidden: 3
         };
 
-        var _FORIEGN_DATA_NUMBER ={
+        var _FORIEGN_DATA_NUMBER = {
+            Place0: 0, // This is Field.Selected.ItemValue
             Place1: 1,
             Place2: 2,
             Place3: 3
@@ -66,6 +68,12 @@
             Store3: 3
         } 
 
+        var _CONDITION_OPERATOR = {
+            HasValue    : 1,
+            HasNotValue : 2,
+            Equal       : 3,
+            NotEqual    : 4,            
+        }
 
 
         helpdesk.common = {
@@ -83,7 +91,7 @@
                         return true;
 
                     return false;
-                }
+                }                
 
                 this.strArrayContains = function (strArray, value) {
                     if (strArray == null || strArray.length <= 0)
@@ -351,7 +359,9 @@
                 if (field.Relations.length > 0) {
                     for (var r = 0; r < field.Relations.length; r++) {
                         var curRelation = field.Relations[r];
-                        ret += helpdesk.caseRule.predictAction(field, curRelation);
+                        if (this.checkCondition(curRelation.Conditions)) {
+                            ret += helpdesk.caseRule.predictAction(field, curRelation);
+                        }
                     }
                     return ret;
                 }
@@ -371,7 +381,7 @@
                 if (!dataHelper.isNullOrEmpty(relatedField.Selected.ItemValue))
                     return "";                                        
 
-                var fItem = helpdesk.caseRule.getForiegnData(relation, selectedItem, relation.ForeignKeyNumber, relatedField);
+                var fItem = helpdesk.caseRule.getForeignData(relation, selectedItem, relation.ForeignKeyNumber, relatedField);
                 if (fItem == null || dataHelper.isNullOrEmpty(fItem.ItemText))
                     return "";
                 
@@ -396,12 +406,55 @@
                 if (field.Relations.length > 0) {
                     for (var r = 0; r < field.Relations.length; r++) {
                         var curRelation = field.Relations[r];
-                        ret += helpdesk.caseRule.runAction(field, curRelation);
+                        if (this.checkCondition(curRelation.Conditions)) {
+                            ret += helpdesk.caseRule.runAction(field, curRelation);
+                        }
                     }
                     return ret;
                 }
 
                 return "";
+            },
+
+            checkConditions: function(conditions){
+                if (dataHelper.isNullOrEmpty(conditions) || conditions.length <= 0)
+                    return true;
+
+                for (var ci = 0; ci < conditions.length; ci++) {
+                    var res = this.checkCondition(conditions[ci]);
+                    if (!res)
+                        return false;
+                }
+
+                return true;
+            },
+
+            checkCondition: function(condition){
+                var conField = this.getFieldById(condition.FieldId);
+                if (dataHelper.isNullOrEmpty(conField))
+                    return false;
+
+                var curFieldValue = this.getForeignValue(conField, condition.ForeignKeyNum);                
+
+                switch (condition.ConditionOperator) {
+                    case _CONDITION_OPERATOR.HasValue:
+                        if (!dataHelper.isNullOrEmpty(curFieldValue) && curFieldValue != _NULL_STR)
+                            return true;
+
+                    case _CONDITION_OPERATOR.HasNotValue:
+                        if (dataHelper.isNullOrEmpty(curFieldValue) || curFieldValue == _NULL_STR)
+                            return true;
+
+                    case _CONDITION_OPERATOR.Equal:
+                        if (curFieldValue == otherSideValue)
+                            return true;
+
+                    case _CONDITION_OPERATOR.NotEqual:
+                        if (curFieldValue != otherSideValue)
+                            return true;
+                }
+
+                return false;
             },
 
             runAction: function (field, relation) {
@@ -681,7 +734,7 @@
                 return "";
             },
 
-            getForiegnData: function (relation, parentSelectedItem, place, relatedField) {
+            getForeignData: function (relation, parentSelectedItem, place, relatedField) {
                 switch (relation.RelationType) {
                     case _RELATION_TYPE.OneToOne:
                         if (place == _FORIEGN_DATA_NUMBER.Place1) {
@@ -724,6 +777,48 @@
                 return null;
             },
            
+            getForeignValue: function (field, place, primaryKey) {
+                var ret = null;
+
+                if (dataHelper.isNullOrUndefined(field)) 
+                    return ret;
+
+                var expectedItem = null;
+                if (!dataHelper.isNullOrEmpty(primaryKey) && !dataHelper.isNullOrUndefined(field.Items)) {
+                    for (var fiv = 0; fiv < field.Items.length; fiv++) {
+                        if (field.Items[fiv].ItemValue == primaryKey)
+                            expectedItem = field.Items[fiv];
+                        break;
+                    }
+                } else if (!dataHelper.isNullOrEmpty(primaryKey) && dataHelper.isNullOrUndefined(field.Items)) {
+                    return null;
+                } else if (!dataHelper.isNullOrUndefined(field.Selected)) {
+                    expectedItem = field.Selected;
+                }
+
+                if (expectedItem == null)
+                    return null;
+
+                switch (place) {
+                    case _FORIEGN_DATA_NUMBER.Place0:                        
+                        ret = expectedItem.ItemValue;
+                        break;
+
+                    case _FORIEGN_DATA_NUMBER.Place1:
+                        ret = expectedItem.ForeignKeyValue1;
+                        break;
+
+                    case _FORIEGN_DATA_NUMBER.Place2:
+                        ret = expectedItem.ForeignKeyValue2;
+                        break;
+
+                    case _FORIEGN_DATA_NUMBER.Place3:
+                        ret = expectedItem.ForeignKeyValue3;
+                        break;
+                }
+               
+                return ret;
+            }
         }
                       
     })($);
