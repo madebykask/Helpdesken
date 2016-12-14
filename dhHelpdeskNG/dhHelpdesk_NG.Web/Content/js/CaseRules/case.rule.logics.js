@@ -359,7 +359,7 @@
                 if (field.Relations.length > 0) {
                     for (var r = 0; r < field.Relations.length; r++) {
                         var curRelation = field.Relations[r];
-                        if (this.checkCondition(curRelation.Conditions)) {
+                        if (this.checkConditions(curRelation.Conditions)) {
                             ret += helpdesk.caseRule.predictAction(field, curRelation);
                         }
                     }
@@ -406,7 +406,7 @@
                 if (field.Relations.length > 0) {
                     for (var r = 0; r < field.Relations.length; r++) {
                         var curRelation = field.Relations[r];
-                        if (this.checkCondition(curRelation.Conditions)) {
+                        if (this.checkConditions(curRelation.Conditions)) {
                             ret += helpdesk.caseRule.runAction(field, curRelation);
                         }
                     }
@@ -434,24 +434,33 @@
                 if (dataHelper.isNullOrEmpty(conField))
                     return false;
 
-                var curFieldValue = this.getForeignValue(conField, condition.ForeignKeyNum);                
+                if (condition.ForeignKeyNum != _FOREIGN_DATA_NUMBER.Place0 && (conField.Selected == null || conField.Selected.ItemValue == "")) {
+                    return false;
+                }
+
+                var curFieldValue = this.getForeignValue(conField, condition.ForeignKeyNum);
+                var otherSideValue = condition.OtherSideValue;
 
                 switch (condition.ConditionOperator) {
                     case _CONDITION_OPERATOR.HasValue:
                         if (!dataHelper.isNullOrEmpty(curFieldValue) && curFieldValue != _NULL_STR)
                             return true;
+                        break;
 
                     case _CONDITION_OPERATOR.HasNotValue:
                         if (dataHelper.isNullOrEmpty(curFieldValue) || curFieldValue == _NULL_STR)
                             return true;
+                        break;
 
                     case _CONDITION_OPERATOR.Equal:
                         if (curFieldValue == otherSideValue)
                             return true;
+                        break;
 
                     case _CONDITION_OPERATOR.NotEqual:
                         if (curFieldValue != otherSideValue)
                             return true;
+                        break;
                 }
 
                 return false;

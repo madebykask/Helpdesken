@@ -1015,7 +1015,7 @@ namespace DH.Helpdesk.Web.Controllers
                 Items = priorities.Select(p => new FieldItem(p.Id.ToString(), p.Name, p.IsActive != 0)
                                                                 {
                                                                     ForeignKeyValue1 = p.LogText,
-                                                                    ForeignKeyValue2 = p.SLA.ToString()
+                                                                    ForeignKeyValue2 = p.SolutionTime.ToString()
                                                                 })
                                   .OrderBy(i => i.ItemText).ToList()
             };
@@ -1192,8 +1192,8 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 Items = department_WatchDate.Select(dw => new FieldItem(string.Empty, string.Empty)
                                                                 {
-                                                                    ForeignKeyValue1 = dw.Item1.ToString(),
-                                                                    ResultKeyValue = dw.Item2                                              
+                                                                    ForeignKeyValue1 = dw.Item1.ToString(), // Depatment Id 
+                                                                    ResultKeyValue = dw.Item2  // WatchDate                
                                                                 }).ToList()
             };
 

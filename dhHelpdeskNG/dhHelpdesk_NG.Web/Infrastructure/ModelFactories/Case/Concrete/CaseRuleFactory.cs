@@ -306,6 +306,18 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                         FieldId = TranslationCaseFields.OU_Id.ToString(),
                         ForeignKeyNumber = ForeignKeyNum.FKeyNum1.ToInt(),
                         Applicable = ruleType == CaseRuleMode.TemplateMode
+                    },
+                    new FieldRelation() {
+                        SequenceNo = 1,
+                        RelationType = RelationType.Virtual.ToInt(),
+                        ActionType = RelationActionType.ValueSetter.ToInt(),
+                        FieldId = VirtualFields.Department_WatchDate.ToString(),
+                        DataStore1 = TranslationCaseFields.Department_Id.ToString(),
+                        ResultDataKey = TranslationCaseFields.WatchDate.ToString(),
+                        Conditions =  new List<FieldRelationCondition> {                            
+                            new FieldRelationCondition(TranslationCaseFields.Department_Id.ToString(), ForeignKeyNum.FKeyNum0, ConditionOperator.HasValue, string.Empty),
+                            new FieldRelationCondition(TranslationCaseFields.Priority_Id.ToString(), ForeignKeyNum.FKeyNum2, ConditionOperator.Equal, "0")
+                        }
                     }
                 }
             };
@@ -1204,8 +1216,21 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                             ActionType = RelationActionType.ValueSetter.ToInt(),
                             FieldId = TranslationCaseFields.tblLog_Text_External.ToString(),
                             ForeignKeyNumber = ForeignKeyNum.FKeyNum1.ToInt()
+                    },
+
+                    new FieldRelation() {
+                        SequenceNo = 1,
+                        RelationType = RelationType.Virtual.ToInt(),
+                        ActionType = RelationActionType.ValueSetter.ToInt(),
+                        FieldId = VirtualFields.Department_WatchDate.ToString(),
+                        DataStore1 = TranslationCaseFields.Department_Id.ToString(),
+                        ResultDataKey = TranslationCaseFields.WatchDate.ToString(),
+                        Conditions =  new List<FieldRelationCondition> {                            
+                            new FieldRelationCondition(TranslationCaseFields.Department_Id.ToString(), ForeignKeyNum.FKeyNum0, ConditionOperator.HasValue, string.Empty),
+                            new FieldRelationCondition(TranslationCaseFields.Priority_Id.ToString(), ForeignKeyNum.FKeyNum2, ConditionOperator.Equal, "0")
                         }
                     }
+                }
             };
             ret.Add(attrPriority);
 
@@ -1291,7 +1316,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                         DataStore1 = TranslationCaseFields.Department_Id.ToString(),                        
                         ResultDataKey = TranslationCaseFields.WatchDate.ToString(),
                         Conditions =  new List<FieldRelationCondition> {
-                            new FieldRelationCondition(TranslationCaseFields.StateSecondary_Id.ToString(), ForeignKeyNum.FKeyNum2, ConditionOperator.NotEqual, "0"),
+                            new FieldRelationCondition(TranslationCaseFields.StateSecondary_Id.ToString(), ForeignKeyNum.FKeyNum3, ConditionOperator.NotEqual, "0"),
                             new FieldRelationCondition(TranslationCaseFields.Department_Id.ToString(), ForeignKeyNum.FKeyNum0, ConditionOperator.HasValue, string.Empty),
                             new FieldRelationCondition(TranslationCaseFields.Priority_Id.ToString(), ForeignKeyNum.FKeyNum2, ConditionOperator.Equal, "0")
                         }
