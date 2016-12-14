@@ -33,8 +33,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
             ret.RuleType = ruleType;
 
             ret.FieldAttributes = GetOriginalRules(customerId, caseFieldSettings.ToList(),
-                                                           basicInformation, customerSettings,
-                                                           ruleType);           
+                                                   basicInformation, customerSettings,
+                                                   ruleType);           
             return ret;
         }
                 
@@ -1301,36 +1301,26 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                     //},
 
                     new FieldRelation() {
-                        SequenceNo = 1,
-                        RelationType = RelationType.OneToOne.ToInt(),
-                        ActionType = RelationActionType.ValueSetter.ToInt(),
-                        FieldId = TranslationCaseFields.MailToNotifier.ToString(),
-                        ForeignKeyNumber = ForeignKeyNum.FKeyNum2.ToInt(),
-                    },
-
-                    new FieldRelation() {
                         SequenceNo = 0,
                         RelationType = RelationType.Virtual.ToInt(),
                         ActionType = RelationActionType.ValueSetter.ToInt(),
                         FieldId = VirtualFields.Department_WatchDate.ToString(),
-                        DataStore1 = TranslationCaseFields.Department_Id.ToString(),                        
+                        DataStore1 = TranslationCaseFields.Department_Id.ToString(),
                         ResultDataKey = TranslationCaseFields.WatchDate.ToString(),
                         Conditions =  new List<FieldRelationCondition> {
                             new FieldRelationCondition(TranslationCaseFields.StateSecondary_Id.ToString(), ForeignKeyNum.FKeyNum3, ConditionOperator.NotEqual, "0"),
                             new FieldRelationCondition(TranslationCaseFields.Department_Id.ToString(), ForeignKeyNum.FKeyNum0, ConditionOperator.HasValue, string.Empty),
                             new FieldRelationCondition(TranslationCaseFields.Priority_Id.ToString(), ForeignKeyNum.FKeyNum2, ConditionOperator.Equal, "0")
                         }
-                    }
+                    },
 
-                    // TODO: Remove
-                    //new FieldRelation() {
-                    //    SequenceNo = 2,
-                    //    RelationType = RelationType.OneToOne.ToInt(),
-                    //    ActionType = RelationActionType.ValueSetter.ToInt(),
-                    //    FieldId = TranslationCaseFields.Department_Id.ToString(),
-                    //    ForeignKeyNumber = ForeignKeyNum.FKeyNum2.ToInt(),
-                        
-                    //},
+                    new FieldRelation() {
+                        SequenceNo = 1,
+                        RelationType = RelationType.OneToOne.ToInt(),
+                        ActionType = RelationActionType.ValueSetter.ToInt(),
+                        FieldId = TranslationCaseFields.MailToNotifier.ToString(),
+                        ForeignKeyNumber = ForeignKeyNum.FKeyNum2.ToInt(),
+                    }                    
                 }
             };
             ret.Add(attrStateSecondary);

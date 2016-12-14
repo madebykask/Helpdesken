@@ -349,8 +349,6 @@
             },            
 
             checkRules: function (field) {
-                //if (field.StatusType == _FIELD_STATUS_TYPE.Hidden)
-                //    return "";
                 var ret = "";
 
                 if (dataHelper.isNullOrUndefined(field))
@@ -378,7 +376,7 @@
                 var selectedItem = field.Selected;
                 var relatedField = helpdesk.caseRule.getFieldById(relation.FieldId);
 
-                if (!dataHelper.isNullOrEmpty(relatedField.Selected.ItemValue))
+                if (!dataHelper.isNullOrEmpty(relatedField.Selected.ItemValue) && relatedField.FieldType != _FIELD_TYPE.CheckBox)
                     return "";                                        
 
                 var fItem = helpdesk.caseRule.getForeignData(relation, selectedItem, relation.ForeignKeyNumber, relatedField);
