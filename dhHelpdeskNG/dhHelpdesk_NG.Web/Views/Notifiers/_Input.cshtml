@@ -70,12 +70,22 @@
 <script type="text/javascript">
 
     var validationTrans = "@Translation.GetForJS("måste anges")";
+    var userIdNotUnique = "@Translation.GetForJS("inte unikt")";
     
     var validator = $("#target").validate({
         ignore: "",
         rules: {
             "UserId.Value": {
-                required: getBoolean("@Model.UserId.Required")
+                required: getBoolean("@Model.UserId.Required"),
+                remote: {
+                    url: "CheckUniqueUserId",
+                    type: "GET",
+                    data: {
+                        userId: function() {
+                            return $("#@Html.IdFor(m => m.UserId.Value)").val();
+                        }
+                    }
+                }
             },
 
             "DomainId": {
@@ -172,7 +182,8 @@
         },
         messages: {
             "UserId.Value": {
-                required: "@Model.UserId.Caption" + " " + validationTrans
+                required: "@Model.UserId.Caption" + " " + validationTrans,
+                remote: "@Model.UserId.Caption" + " " + userIdNotUnique
             },            
 
             "DomainId": {
@@ -279,12 +290,12 @@
 
             case "false":
             case "0":
-                ret = false
+                ret = false;
                 break;
 
             case 'true':
                 ret = true;
-                break;            
+                break;
         }
 
         return ret;

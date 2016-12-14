@@ -782,6 +782,13 @@ namespace DH.Helpdesk.Web.Controllers
             return this.RedirectToAction("Notifiers");
         }
 
+        [HttpGet]
+        public JsonResult CheckUniqueUserId(string userId)
+        {
+            var user = notifierRepository.GetInitiatorByUserId(userId, SessionFacade.CurrentCustomer.Id);
+            return Json(user == null, JsonRequestBehavior.AllowGet);
+        }
+
         private KeyValuePair<string, string> GetSplitedName(string fullName)
         {
             var firstName = string.Empty;
