@@ -83,7 +83,7 @@
                 {
                     var redirectTo = string.Empty;
                     if (!string.IsNullOrEmpty(returnUrl) 
-                        && Url.IsLocalUrl(returnUrl)
+                        && HttpContext.Request.IsAbsoluteUrlLocalToHost(returnUrl)
                         && this.routeResolver.AbsolutePathToRelative(returnUrl) != Root)
                     {
                         redirectTo = Server.UrlDecode(returnUrl);
