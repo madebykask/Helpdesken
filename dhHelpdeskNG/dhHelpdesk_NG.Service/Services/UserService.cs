@@ -72,7 +72,7 @@
         IList<UserWorkingGroup> GetUserWorkingGroups();
         IList<User> GetUsersForWorkingGroup(int customerId, int workingGroupId);
         IList<User> GetUsersForWorkingGroup(int workingGroupId);
-        bool UserHasCase(int customerId, int userId, List<int> workingGroups);
+        bool UserHasActiveCase(int customerId, int userId, List<int> workingGroups);
 
         User GetUser(int id);
         UserRole GetUserRoleById(int id);
@@ -249,9 +249,9 @@
         }
 
 
-        public bool UserHasCase(int customerId, int userId, List<int> workingGroups)
+        public bool UserHasActiveCase(int customerId, int userId, List<int> workingGroups)
         {
-            return this._userRepository.UserHasCase(customerId, userId, workingGroups);
+            return this._userRepository.UserHasActiveCase(customerId, userId, workingGroups);
         }
 
         public IEnumerable<CustomerUser> GetCustomerUserForUser(int userId)

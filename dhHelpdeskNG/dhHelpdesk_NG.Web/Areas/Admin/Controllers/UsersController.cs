@@ -447,7 +447,7 @@
                     var emptyWG = new List<int>();
                     foreach (var c in allCustomers)
                     {                        
-                        if (_userService.UserHasCase(c.Id, userToSave.Id, emptyWG))
+                        if (_userService.UserHasActiveCase(c.Id, userToSave.Id, emptyWG))
                              customersAlert.Add(c.Name);
                     }                                       
                 }
@@ -699,7 +699,7 @@
             var emptyWG = new List<int>();
             foreach (var c in allCustomers)
             {
-                if (_userService.UserHasCase(c.Id, id, emptyWG))
+                if (_userService.UserHasActiveCase(c.Id, id, emptyWG))
                     customersAlert.Add(c.Name);
             }
                         
