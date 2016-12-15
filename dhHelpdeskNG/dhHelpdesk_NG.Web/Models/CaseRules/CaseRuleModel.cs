@@ -224,7 +224,7 @@ namespace DH.Helpdesk.Web.Models.CaseRules
 
     public sealed class FieldRelationCondition
     {
-        public FieldRelationCondition(string fieldId, ForeignKeyNum foreignKeyNum, ConditionOperator conOperator, string otherSideValue)
+        public FieldRelationCondition(string fieldId, ForeignKeyNum foreignKeyNum, ConditionOperator conOperator, string otherSideValue = "")
         {
             FieldId = fieldId;
             ForeignKeyNum = foreignKeyNum.ToInt();
