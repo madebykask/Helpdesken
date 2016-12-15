@@ -24,17 +24,16 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
         {            
         }        
 
-        public CaseRuleModel GetCaseRuleModel(int customerId, CaseRuleMode ruleType,
+        public CaseRuleModel GetCaseRuleModel(int customerId, CaseRuleMode mode,
                                               IList<CaseFieldSetting> caseFieldSettings,
                                               BasicCaseInformation basicInformation,
                                               Setting customerSettings)
         {                        
             var ret = new CaseRuleModel();
-            ret.RuleType = ruleType;
+            ret.RuleType = mode;
 
             ret.FieldAttributes = GetOriginalRules(customerId, caseFieldSettings.ToList(),
-                                                   basicInformation, customerSettings,
-                                                   ruleType);           
+                                                   basicInformation, customerSettings, mode);           
             return ret;
         }
                 

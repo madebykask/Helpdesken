@@ -56,7 +56,7 @@
         };
 
         var _FOREIGN_DATA_NUMBER = {
-            Place0: 0, // This is Field.Selected.ItemValue
+            Place0: 0, // It refers to Field.Selected.ItemValue
             Place1: 1,
             Place2: 2,
             Place3: 3

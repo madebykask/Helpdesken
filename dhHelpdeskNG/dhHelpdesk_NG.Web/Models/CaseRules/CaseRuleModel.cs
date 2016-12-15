@@ -12,10 +12,11 @@ namespace DH.Helpdesk.Web.Models.CaseRules
     #region Enums
     public enum CaseRuleMode
     {
-        TemplateMode     = 0,
-        CaseNewMode      = 1,
-        CaseInheritMode  = 2,
-        SelfService      = 3
+        TemplateMode             = 0,
+        CaseNewMode              = 1,
+        CaseInheritTemplateMode  = 2,
+        CaseNewTemplateMode      = 3,
+        SelfService              = 4
     }
 
     public enum RelationType
