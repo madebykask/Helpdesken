@@ -5305,12 +5305,11 @@ If not exists (select * from tblTextTranslation where text_id = 1729 and Languag
 GO
 
 If not exists (select * from tbltext where id = 1730)
-	insert into tbltext (id, TextString) VALUES (1730, 'inte unikt')
+	insert into tbltext (id, TextString) VALUES (1730, 'Denna produktarea kan inte aktiveras, eftersom huvudnivån är inaktiv')
 GO
 If not exists (select * from tblTextTranslation where text_id = 1730 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1730, 2, 'not unique')
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1730, 2, 'This product area can not be activated, because the main level is inactive')
 GO
-
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

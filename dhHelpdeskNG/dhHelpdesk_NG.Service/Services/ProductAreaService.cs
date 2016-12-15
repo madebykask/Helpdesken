@@ -37,7 +37,7 @@
         ProductAreaEntity GetProductArea(int id);
 
         string GetProductAreaWithChildren(int id, string separator, string valueToReturn);
-
+        string GetProductAreaChildren(int id, string separator, string valueToReturn);
         DeleteMessage DeleteProductArea(int id);
 
         IList<ProductArea> GetChildrenInRow(IList<ProductArea> productAreas, bool isTakeOnlyActive = false);
@@ -238,6 +238,32 @@
             return ret;
         }
 
+        public string GetProductAreaChildren(int id, string separator, string valueToReturn)
+        {
+            string ret = string.Empty;
+
+            if (id != 0)
+            {
+                string children = string.Empty;
+                ProductAreaEntity pa = this.productAreaRepository.GetById(id);
+                ret = pa.getObjectValue(valueToReturn);
+
+                if (pa.SubProductAreas != null)
+                    if (pa.SubProductAreas.Count > 0)
+                        children = this.loopProdcuctAreas(pa.SubProductAreas.ToList(), separator, valueToReturn);
+
+                if (!string.IsNullOrWhiteSpace(children))
+                {
+                    ret = children;
+                }
+                else {
+                    ret = string.Empty;
+                }
+                    
+            }
+            return ret;
+        }
+
         public DeleteMessage DeleteProductArea(int id)
         {
             var productArea = this.productAreaRepository.GetById(id);
@@ -342,6 +368,39 @@
             if (string.IsNullOrEmpty(productArea.Name))
                 errors.Add("ProductArea.Name", "Du måste ange ett ämnesområde");
 
+            if (productArea.IsActive == 1)
+            {
+                //Check if productarea has parents, if they are inactive the child can't be active
+                if (productArea.Parent_ProductArea_Id.HasValue)
+                {
+                    var parent = GetProductArea(productArea.Parent_ProductArea_Id.Value);
+
+                    if (parent.IsActive == 0)
+                        errors.Add("ProductArea.IsActive", "Denna produktarea kan inte aktiveras, eftersom huvudnivån är inaktiv");
+                }
+
+            }
+
+            if (productArea.IsActive == 0)
+            {
+                //Check if productarea has childs and inactivate the child 
+                var children = GetProductAreaChildren(productArea.Id, ",", "Id");
+                if (!string.IsNullOrEmpty(children))
+                {
+                    List<string> listOfChilds = new List<string>(children.Split(',')).ToList();
+                    List<int> listOfChildsId = listOfChilds.Select(s => int.Parse(s)).ToList();
+
+                    foreach (var child in listOfChildsId)
+                    {
+                        var childProductArea = GetProductArea(child);
+                        if (childProductArea.IsActive == 1)
+                            childProductArea.IsActive = 0;
+
+                        SaveProductArea(childProductArea, null, out errors);
+                    }
+                }
+
+            }
             if (productArea.WorkingGroups != null)
                 foreach (var delete in productArea.WorkingGroups.ToList())
                     productArea.WorkingGroups.Remove(delete);

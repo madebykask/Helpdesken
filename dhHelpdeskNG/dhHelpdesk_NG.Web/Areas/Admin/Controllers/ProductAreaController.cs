@@ -113,12 +113,18 @@
             IDictionary<string, string> errors = new Dictionary<string, string>();
             this._productAreaService.SaveProductArea(productAreaToSave, wgSelected, out errors);
 
+            
+ 
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "productarea", new { customerid = productAreaToSave.Customer_Id });
 
             var customer = this._customerService.GetCustomer(productArea.Customer_Id);
             var model = this.CreateInputViewModel(productAreaToSave, customer);
-
+            foreach (var error in errors)
+            {
+                ModelState.AddModelError(error.Key, Translation.Get(error.Value));
+            }
+            model.ProductArea.IsActive = 0;
             return this.View(model);
         }
 
