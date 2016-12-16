@@ -5,6 +5,7 @@ using System.Linq;
 using static DH.Helpdesk.BusinessData.OldComponents.GlobalEnums;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 using DH.Helpdesk.Common.Extensions.Integer;
+using System.Threading;
 
 namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
 {
@@ -31,6 +32,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
         {                        
             var ret = new CaseRuleModel();
             ret.RuleType = mode;
+            ret.DateFormat = Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern;
 
             ret.FieldAttributes = GetOriginalRules(customerId, caseFieldSettings.ToList(),
                                                    basicInformation, customerSettings, mode);           
@@ -313,6 +315,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                         FieldId = VirtualFields.Department_WatchDate.ToString(),
                         DataStore1 = TranslationCaseFields.Department_Id.ToString(),
                         ResultDataKey = TranslationCaseFields.WatchDate.ToString(),
+                        Applicable = true,
                         Conditions =  new List<FieldRelationCondition> {                            
                             new FieldRelationCondition(TranslationCaseFields.Department_Id.ToString(), ForeignKeyNum.FKeyNum0, ConditionOperator.HasValue),
                             new FieldRelationCondition(TranslationCaseFields.Priority_Id.ToString(), ForeignKeyNum.FKeyNum2, ConditionOperator.Equal, "0")

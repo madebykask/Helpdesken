@@ -78,6 +78,7 @@ namespace DH.Helpdesk.Web.Models.CaseRules
         {
             FieldAttributes = new List<FieldAttributeModel>();
             CustomerSettings = new CaseCustomerSettings();
+            
         }
 
         public CaseRuleMode RuleType { get; set; }
@@ -85,6 +86,8 @@ namespace DH.Helpdesk.Web.Models.CaseRules
         public List<FieldAttributeModel> FieldAttributes { get; set; }
 
         public CaseCustomerSettings CustomerSettings { get; set; }
+
+        public string DateFormat { get; set; }
     }
 
     public class CaseCustomerSettings

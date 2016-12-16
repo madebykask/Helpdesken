@@ -151,12 +151,14 @@
             /* helpers */ 
             dataHelper: null,
             convertor: null,
+            _DATE_FORMAT: '',
 
             init:function() {
                 ruleModel = params.ruleModel;
                 dataHelper = new helpdesk.common.data();
                 convertor = new helpdesk.common.convertor();
-               
+                this._DATE_FORMAT = ruleModel.DateFormat;
+
                 $elementsHaveRule.on('switchChange.bootstrapSwitch', function () {
                     /* Used for bootstrap checkbox */
                     helpdesk.caseRule.elementValueChanged(this);
@@ -241,7 +243,7 @@
                 if (dataHelper.isNullOrEmpty(field))
                     return;
 
-                var curValue = null;
+                var curVal = null;
                 switch (field.FieldType) {
 
                     case _FIELD_TYPE.TextField:
@@ -374,12 +376,25 @@
                     return "";
 
                 var selectedItem = field.Selected;
-                var relatedField = helpdesk.caseRule.getFieldById(relation.FieldId);
+                var relatedField = this.getFieldById(relation.FieldId);
+
+                if (relation.RelationType == _RELATION_TYPE.Virtual)
+                {
+                    if (!dataHelper.isNullOrEmpty(relation.ResultDataKey)) {
+                        var resultField = this.getFieldById(relation.ResultDataKey);
+                        if (!dataHelper.isNullOrEmpty(resultField) &&
+                            !dataHelper.isNullOrEmpty(resultField.Selected.ItemValue) &&
+                            resultField.FieldType != _FIELD_TYPE.CheckBox) {
+                            return "";
+                        }
+
+                    }
+                }
 
                 if (!dataHelper.isNullOrEmpty(relatedField.Selected.ItemValue) && relatedField.FieldType != _FIELD_TYPE.CheckBox)
                     return "";                                        
 
-                var fItem = helpdesk.caseRule.getForeignData(relation, selectedItem, relation.ForeignKeyNumber, relatedField);
+                var fItem = this.getForeignData(relation, selectedItem, relation.ForeignKeyNumber, relatedField);
                 if (fItem == null || dataHelper.isNullOrEmpty(fItem.ItemText))
                     return "";
                 
@@ -472,7 +487,17 @@
                 var relatedField = helpdesk.caseRule.getFieldById(relation.FieldId);
 
                 switch (relation.ActionType) {
-                    case _ACTION_TYPE.ValueSetter:                        
+                    case _ACTION_TYPE.ValueSetter:
+                        var fItem = this.getForeignData(relation, selectedItem, relation.ForeignKeyNumber, relatedField);
+                        if (fItem != null) {
+                            var fieldToSet = relatedField;
+                            if (relation.RelationType == _RELATION_TYPE.Virtual) {
+                                fieldToSet = this.getFieldById(relation.ResultDataKey);
+                            }
+
+                            if (!dataHelper.isNullOrEmpty(fieldToSet))
+                                this.applySetterAction(fieldToSet, fItem);
+                        }
                         break;
 
                     case _ACTION_TYPE.ListPopulator:
@@ -502,29 +527,33 @@
                 switch (field.FieldType) {
 
                     case _FIELD_TYPE.TextField:
-                        $element.val(field.itemValue);//.change();
+                        $element.val(field.Selected.ItemValue);//.change();
                         break;
 
                     case _FIELD_TYPE.CheckBox:
-                        $element.prop('checked', convertor.toBool(field.itemValue));//.change();
+                        $element.prop('checked', convertor.toBool(field.Selected.ItemValue));//.change();
                         break;
 
                     case _FIELD_TYPE.SingleSelectField:
-                        $element.val(field.itemValue);//.change();
+                        $element.val(field.Selected.ItemValue);//.change();
                         break;
 
                     case _FIELD_TYPE.TreeButtonSelect:
                         // TODO: Need to check again
-                        $element.val(field.itemValue);//.change();
+                        $element.val(field.Selected.ItemValue);//.change();
                         break;
 
                     case _FIELD_TYPE.TextArea:
-                        $element.val(field.itemValue);//.change();
+                        $element.val(field.Selected.ItemValue);//.change();
                         break;
 
                     case _FIELD_TYPE.DateField:
-                        // TODO: Need to check again
-                        $element.val(field.itemValue);//.change();
+                        // TODO: Need to check again Date format
+                        $($element).datepicker({
+                            format: this._DATE_FORMAT.toLowerCase(),
+                            autoclose: true
+                        }).datepicker('setDate', field.Selected.ItemValue);                        
+                        $element.change();
                         break;
                 }
             },

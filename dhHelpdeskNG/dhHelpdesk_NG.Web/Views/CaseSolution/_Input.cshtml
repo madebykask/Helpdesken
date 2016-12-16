@@ -1,5 +1,6 @@
 ﻿@model DH.Helpdesk.Web.Models.CaseSolution.CaseSolutionInputViewModel
 @using System.Web.Optimization
+@using System.Collections.Generic
 @using DH.Helpdesk.BusinessData.OldComponents
 @using DH.Helpdesk.Common.Enums.Settings
 @using DH.Helpdesk.Common.Extensions.Integer
@@ -1429,7 +1430,7 @@
                                         @Translation.Get(GlobalEnums.TranslationCaseFields.PlanDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                     </td>
                                     <td>
-                                        @Html.EditorFor(model => Model.CaseSolution.PlanDate, "DatePicker", new { id = "PlanDate", @class = "acceptRules", standardId = GlobalEnums.TranslationCaseFields.PlanDate.ToString() })
+                                        @Html.EditorFor(model => Model.CaseSolution.PlanDate, "DatePicker", new { id = "PlanDate", inputAttributes = new Dictionary<string, object> { { "class", "acceptRules" }, { "standardId", GlobalEnums.TranslationCaseFields.PlanDate.ToString() } } })
                                     </td>
                                     <td>
                                         <table>
@@ -1447,7 +1448,7 @@
                                         @Translation.Get(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                     </td>
                                     <td>
-                                        @Html.EditorFor(model => Model.CaseSolution.WatchDate, "DatePicker", new { id = "WatchDate", @class = "acceptRules", standardId = GlobalEnums.TranslationCaseFields.WatchDate.ToString() })
+                                        @Html.EditorFor(model => Model.CaseSolution.WatchDate, "DatePicker",  new { id = "WatchDate", inputAttributes = new Dictionary<string, object> { { "class", "acceptRules" }, { "standardId" , GlobalEnums.TranslationCaseFields.WatchDate.ToString() } } })
                                     </td>
                                     <td>
                                         <table>
@@ -1613,7 +1614,7 @@
                                         @Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                     </td>
                                     <td>
-                                        @Html.EditorFor(model => Model.CaseSolution.FinishingDate, "DatePicker", new { id = "FinishingDate", @class = "acceptRules", standardId = GlobalEnums.TranslationCaseFields.FinishingDate.ToString() })
+                                        @Html.EditorFor(model => Model.CaseSolution.FinishingDate, "DatePicker", new { id = "FinishingDate", inputAttributes = new Dictionary<string, object> { { "class", "acceptRules" }, { "standardId", GlobalEnums.TranslationCaseFields.FinishingDate.ToString() } } })
                                     </td>
                                     <td>
                                         <table>
