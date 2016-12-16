@@ -394,7 +394,7 @@
                 if (!dataHelper.isNullOrEmpty(relatedField.Selected.ItemValue) && relatedField.FieldType != _FIELD_TYPE.CheckBox)
                     return "";                                        
 
-                var fItem = this.getForeignData(relation, selectedItem, relation.ForeignKeyNumber, relatedField);
+                var fItem = this.getForeignItem(relation, selectedItem, relation.ForeignKeyNumber, relatedField);
                 if (fItem == null || dataHelper.isNullOrEmpty(fItem.ItemText))
                     return "";
                 
@@ -488,7 +488,7 @@
 
                 switch (relation.ActionType) {
                     case _ACTION_TYPE.ValueSetter:
-                        var fItem = this.getForeignData(relation, selectedItem, relation.ForeignKeyNumber, relatedField);
+                        var fItem = this.getForeignItem(relation, selectedItem, relation.ForeignKeyNumber, relatedField);
                         if (fItem != null) {
                             var fieldToSet = relatedField;
                             if (relation.RelationType == _RELATION_TYPE.Virtual) {
@@ -770,7 +770,7 @@
                 return "";
             },
 
-            getForeignData: function (relation, parentSelectedItem, place, relatedField) {
+            getForeignItem: function (relation, parentSelectedItem, place, relatedField) {
                 switch (relation.RelationType) {
                     case _RELATION_TYPE.OneToOne:
                         if (place == _FOREIGN_DATA_NUMBER.Place1) {
