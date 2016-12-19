@@ -12,8 +12,8 @@ namespace DH.Helpdesk.Web.Models.CaseRules
     #region Enums
     public enum CaseRuleMode
     {
-        TemplateMode             = 0,
-        CaseNewMode              = 1,
+        TemplateUserChangeMode   = 0,
+        CaseUserChangeMode       = 1,
         CaseInheritTemplateMode  = 2,
         CaseNewTemplateMode      = 3,
         SelfService              = 4
@@ -81,7 +81,7 @@ namespace DH.Helpdesk.Web.Models.CaseRules
             
         }
 
-        public CaseRuleMode RuleType { get; set; }
+        public CaseRuleMode RuleMode { get; set; }
 
         public List<FieldAttributeModel> FieldAttributes { get; set; }
 
@@ -184,15 +184,23 @@ namespace DH.Helpdesk.Web.Models.CaseRules
 
     public sealed class FieldRelation
     {
-        public FieldRelation()
+        public FieldRelation(params CaseRuleMode[] applicableIns)
         {
-            Applicable = false;
+
+            ApplicableIn = new List<int>();
+            
+            foreach (var applicableIn in applicableIns)
+            {
+                ApplicableIn.Add(applicableIn.ToInt());
+            }
 
             // Used for Region & Department when Region is null all department can be shown
             ShowAllIfKeyIsNull = false;
 
             // Used for WokingGroup & Adminstrator when both have Current RunTime value item in CaseTemplate.  (Inloggad användare, Inloggad användares driftgrupp)
             ShowRunTimeCurrentValue = false;
+            ShowGeneralInformation = false;
+            ShowDetailsInformation = false;
 
             Conditions = new List<FieldRelationCondition>();
         }
@@ -215,14 +223,18 @@ namespace DH.Helpdesk.Web.Models.CaseRules
 
         public string ResultDataKey { get; set; }        
 
-        public bool Applicable { get; set; }
+        public List<int> ApplicableIn { get; private set; }        
 
         public bool ShowAllIfKeyIsNull { get; set; }
 
         public bool ShowRunTimeCurrentValue { get; set; }
 
-        public List<FieldRelationCondition> Conditions { get; set; }
+        public bool ShowGeneralInformation { get; set; }
 
+        public bool ShowDetailsInformation { get; set; }
+
+        public List<FieldRelationCondition> Conditions { get; set; }
+        
     }
 
     public sealed class FieldRelationCondition

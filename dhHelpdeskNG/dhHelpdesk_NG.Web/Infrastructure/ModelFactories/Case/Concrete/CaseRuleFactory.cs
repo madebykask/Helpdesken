@@ -31,7 +31,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                                               Setting customerSettings)
         {                        
             var ret = new CaseRuleModel();
-            ret.RuleType = mode;
+            ret.RuleMode = mode;
             ret.DateFormat = Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern;
 
             ret.FieldAttributes = GetOriginalRules(customerId, caseFieldSettings.ToList(),
@@ -44,7 +44,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                                                            List<CaseFieldSetting> caseFieldSettings,
                                                            BasicCaseInformation basicInformation,
                                                            Setting customerSettings,
-                                                           CaseRuleMode ruleType)
+                                                           CaseRuleMode ruleMode)
         {
             var ret = new List<FieldAttributeModel>();
 
@@ -268,14 +268,15 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 StatusType = basicInformation.Regions.StatusType,
                 Items = basicInformation.Regions.Items,
                 Relations = new List<FieldRelation> {
-                    new FieldRelation() {
+                    new FieldRelation(CaseRuleMode.CaseUserChangeMode, CaseRuleMode.TemplateUserChangeMode, 
+                                      CaseRuleMode.CaseNewTemplateMode, CaseRuleMode.CaseInheritTemplateMode) {
                         SequenceNo = 0,
                         RelationType = RelationType.OneToMany.ToInt(),
                         ActionType = RelationActionType.ListPopulator.ToInt(),
                         FieldId = TranslationCaseFields.Department_Id.ToString(),
-                        ForeignKeyNumber = ForeignKeyNum.FKeyNum1.ToInt(),
-                        Applicable = ruleType == CaseRuleMode.TemplateMode,
-                        ShowAllIfKeyIsNull = true
+                        ForeignKeyNumber = ForeignKeyNum.FKeyNum1.ToInt(),                        
+                        ShowAllIfKeyIsNull = true,
+                        ShowGeneralInformation = ruleMode == CaseRuleMode.TemplateUserChangeMode
                     }
                 }
             };
@@ -300,22 +301,24 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 StatusType = basicInformation.Departments.StatusType,
                 Items = basicInformation.Departments.Items,                
                 Relations = new List<FieldRelation> {
-                    new FieldRelation() {
+                    new FieldRelation(CaseRuleMode.CaseUserChangeMode, CaseRuleMode.TemplateUserChangeMode,
+                                      CaseRuleMode.CaseNewTemplateMode, CaseRuleMode.CaseInheritTemplateMode) {
                         SequenceNo = 0,
                         RelationType = RelationType.OneToMany.ToInt(),
                         ActionType = RelationActionType.ListPopulator.ToInt(),
                         FieldId = TranslationCaseFields.OU_Id.ToString(),
                         ForeignKeyNumber = ForeignKeyNum.FKeyNum1.ToInt(),
-                        Applicable = ruleType == CaseRuleMode.TemplateMode
+                        ShowGeneralInformation = ruleMode == CaseRuleMode.TemplateUserChangeMode
                     },
-                    new FieldRelation() {
+
+                    new FieldRelation(CaseRuleMode.CaseUserChangeMode) {
                         SequenceNo = 1,
                         RelationType = RelationType.Virtual.ToInt(),
                         ActionType = RelationActionType.ValueSetter.ToInt(),
                         FieldId = VirtualFields.Department_WatchDate.ToString(),
                         DataStore1 = TranslationCaseFields.Department_Id.ToString(),
                         ResultDataKey = TranslationCaseFields.WatchDate.ToString(),
-                        Applicable = true,
+                        ShowGeneralInformation = ruleMode == CaseRuleMode.TemplateUserChangeMode,                        
                         Conditions =  new List<FieldRelationCondition> {                            
                             new FieldRelationCondition(TranslationCaseFields.Department_Id.ToString(), ForeignKeyNum.FKeyNum0, ConditionOperator.HasValue),
                             new FieldRelationCondition(TranslationCaseFields.Priority_Id.ToString(), ForeignKeyNum.FKeyNum2, ConditionOperator.Equal, "0")
@@ -530,14 +533,15 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 StatusType = basicInformation.IsAbout_Regions.StatusType,
                 Items = basicInformation.IsAbout_Regions.Items,
                 Relations = new List<FieldRelation> {
-                    new FieldRelation() {
+                    new FieldRelation(CaseRuleMode.CaseUserChangeMode, CaseRuleMode.TemplateUserChangeMode,
+                                      CaseRuleMode.CaseNewTemplateMode, CaseRuleMode.CaseInheritTemplateMode) {
                         SequenceNo = 0,
                         RelationType = RelationType.OneToMany.ToInt(),
                         ActionType = RelationActionType.ListPopulator.ToInt(),
                         FieldId = TranslationCaseFields.IsAbout_Department_Id.ToString(),
-                        ForeignKeyNumber = ForeignKeyNum.FKeyNum1.ToInt(),
-                        Applicable = ruleType == CaseRuleMode.TemplateMode,
-                        ShowAllIfKeyIsNull = true
+                        ForeignKeyNumber = ForeignKeyNum.FKeyNum1.ToInt(),                        
+                        ShowAllIfKeyIsNull = true,
+                        ShowGeneralInformation = ruleMode == CaseRuleMode.TemplateUserChangeMode
                     }
                 }
             };
@@ -562,13 +566,14 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 StatusType = basicInformation.IsAbout_Departments.StatusType,
                 Items = basicInformation.IsAbout_Departments.Items,
                 Relations = new List<FieldRelation> {
-                    new FieldRelation() {
+                    new FieldRelation(CaseRuleMode.CaseUserChangeMode, CaseRuleMode.TemplateUserChangeMode,
+                                      CaseRuleMode.CaseNewTemplateMode, CaseRuleMode.CaseInheritTemplateMode) {
                         SequenceNo = 0,
                         RelationType = RelationType.OneToMany.ToInt(),
                         ActionType = RelationActionType.ListPopulator.ToInt(),
                         FieldId = TranslationCaseFields.IsAbout_OU_Id.ToString(),
                         ForeignKeyNumber = ForeignKeyNum.FKeyNum1.ToInt(),
-                        Applicable = ruleType == CaseRuleMode.TemplateMode
+                        ShowGeneralInformation = ruleMode == CaseRuleMode.TemplateUserChangeMode
                     }
                 }
             };
@@ -705,12 +710,13 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 StatusType = basicInformation.CaseTypes.StatusType,
                 Items = basicInformation.CaseTypes.Items,
                 Relations = new List<FieldRelation> {
-                    new FieldRelation() {
+                    new FieldRelation(CaseRuleMode.CaseUserChangeMode) {
                         SequenceNo = 0,
                         RelationType = RelationType.OneToOne.ToInt(),
                         ActionType = RelationActionType.ValueSetter.ToInt(),
                         FieldId = TranslationCaseFields.Performer_User_Id.ToString(),
-                        ForeignKeyNumber = ForeignKeyNum.FKeyNum1.ToInt()
+                        ForeignKeyNumber = ForeignKeyNum.FKeyNum1.ToInt(),
+                        ShowGeneralInformation = ruleMode == CaseRuleMode.TemplateUserChangeMode
                     }
                 }
 
@@ -736,19 +742,22 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 StatusType = basicInformation.ProductAreas.StatusType,
                 Items = basicInformation.ProductAreas.Items,
                 Relations = new List<FieldRelation> {
-                    new FieldRelation() {
+                    new FieldRelation(CaseRuleMode.CaseUserChangeMode) {
                         SequenceNo = 0,
                         RelationType = RelationType.OneToOne.ToInt(),
                         ActionType = RelationActionType.ValueSetter.ToInt(),
                         FieldId = TranslationCaseFields.WorkingGroup_Id.ToString(),
-                        ForeignKeyNumber = ForeignKeyNum.FKeyNum1.ToInt()
+                        ForeignKeyNumber = ForeignKeyNum.FKeyNum1.ToInt(),
+                        ShowGeneralInformation = ruleMode == CaseRuleMode.TemplateUserChangeMode
                     },
-                    new FieldRelation() {
+
+                    new FieldRelation(CaseRuleMode.CaseUserChangeMode) {
                         SequenceNo = 1,
                         RelationType = RelationType.OneToOne.ToInt(),
                         ActionType = RelationActionType.ValueSetter.ToInt(),
                         FieldId = TranslationCaseFields.Priority_Id.ToString(),
-                        ForeignKeyNumber = ForeignKeyNum.FKeyNum2.ToInt()
+                        ForeignKeyNumber = ForeignKeyNum.FKeyNum2.ToInt(),
+                        ShowGeneralInformation = ruleMode == CaseRuleMode.TemplateUserChangeMode
                     }
                 }
             };
@@ -773,12 +782,13 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 StatusType = basicInformation.Systems.StatusType,
                 Items = basicInformation.Systems.Items,
                 Relations = new List<FieldRelation> {
-                    new FieldRelation() {
+                    new FieldRelation(CaseRuleMode.CaseUserChangeMode) {
                         SequenceNo = 0,
                         RelationType = RelationType.OneToOne.ToInt(),
                         ActionType = RelationActionType.ValueSetter.ToInt(),
                         FieldId = TranslationCaseFields.Urgency_Id.ToString(),
-                        ForeignKeyNumber = ForeignKeyNum.FKeyNum1.ToInt()
+                        ForeignKeyNumber = ForeignKeyNum.FKeyNum1.ToInt(),
+                        ShowGeneralInformation = ruleMode == CaseRuleMode.TemplateUserChangeMode
                     }                 
                 }
             };
@@ -803,14 +813,15 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 StatusType = basicInformation.Urgencies.StatusType,
                 Items = basicInformation.Urgencies.Items,
                 Relations = new List<FieldRelation> {                                      
-                    new FieldRelation() {
+                    new FieldRelation(CaseRuleMode.CaseUserChangeMode) {
                         SequenceNo = 0,
                         RelationType = RelationType.Virtual.ToInt(),
                         ActionType = RelationActionType.ValueSetter.ToInt(),
                         FieldId = VirtualFields.Priority_Impact_Urgent.ToString(),
                         DataStore1 = TranslationCaseFields.Impact_Id.ToString(),
                         DataStore2 = TranslationCaseFields.Urgency_Id.ToString(),
-                        ResultDataKey = TranslationCaseFields.Priority_Id.ToString()
+                        ResultDataKey = TranslationCaseFields.Priority_Id.ToString(),
+                        ShowGeneralInformation = ruleMode == CaseRuleMode.TemplateUserChangeMode
                     }
                 }
             };
@@ -835,14 +846,15 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 StatusType = basicInformation.Impacts.StatusType,
                 Items = basicInformation.Impacts.Items,
                 Relations = new List<FieldRelation> {                   
-                    new FieldRelation() {
+                    new FieldRelation(CaseRuleMode.CaseUserChangeMode) {
                         SequenceNo = 0,
                         RelationType = RelationType.Virtual.ToInt(),
                         ActionType = RelationActionType.ValueSetter.ToInt(),
                         FieldId = VirtualFields.Priority_Impact_Urgent.ToString(),
                         DataStore1 = TranslationCaseFields.Impact_Id.ToString(),
                         DataStore2 = TranslationCaseFields.Urgency_Id.ToString(),
-                        ResultDataKey = TranslationCaseFields.Priority_Id.ToString()
+                        ResultDataKey = TranslationCaseFields.Priority_Id.ToString(),
+                        ShowGeneralInformation = ruleMode == CaseRuleMode.TemplateUserChangeMode
                     }
                 }
             };
@@ -1145,12 +1157,13 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 StatusType = basicInformation.WorkingGroups.StatusType,
                 Items = basicInformation.WorkingGroups.Items,
                 Relations = new List<FieldRelation> {                    
-                    new FieldRelation() {
-                        SequenceNo = 1,
+                    new FieldRelation(CaseRuleMode.CaseUserChangeMode) {
+                        SequenceNo = 0,
                         RelationType = RelationType.OneToOne.ToInt(),
                         ActionType = RelationActionType.ValueSetter.ToInt(),
                         FieldId = TranslationCaseFields.StateSecondary_Id.ToString(),
-                        ForeignKeyNumber = ForeignKeyNum.FKeyNum2.ToInt()
+                        ForeignKeyNumber = ForeignKeyNum.FKeyNum2.ToInt(),
+                        ShowGeneralInformation = ruleMode == CaseRuleMode.TemplateUserChangeMode
                     }
                 }
             };
@@ -1158,15 +1171,16 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
             if (customerSettings != null && customerSettings.DontConnectUserToWorkingGroup == 0)
             {
                 attrWorkingGroup.Relations.Add(
-                                                new FieldRelation()
+                                                new FieldRelation(CaseRuleMode.CaseUserChangeMode, CaseRuleMode.TemplateUserChangeMode,
+                                                                  CaseRuleMode.CaseNewTemplateMode, CaseRuleMode.CaseInheritTemplateMode)
                                                 {
                                                     SequenceNo = 0,
                                                     RelationType = RelationType.ManyToMany.ToInt(),
                                                     ActionType = RelationActionType.ListPopulator.ToInt(),
                                                     FieldId = TranslationCaseFields.Performer_User_Id.ToString(),
                                                     ForeignKeyNumber = ForeignKeyNum.FKeyNum1.ToInt(),
-                                                    Applicable = ruleType == CaseRuleMode.TemplateMode,
-                                                    ShowRunTimeCurrentValue = ruleType == CaseRuleMode.TemplateMode
+                                                    ShowRunTimeCurrentValue = ruleMode == CaseRuleMode.TemplateUserChangeMode,
+                                                    ShowGeneralInformation = ruleMode == CaseRuleMode.TemplateUserChangeMode
                                                 });
             }            
 
@@ -1212,21 +1226,24 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 StatusType = basicInformation.Priorities.StatusType,
                 Items = basicInformation.Priorities.Items,
                 Relations = new List<FieldRelation> {
-                    new FieldRelation() {
-                            SequenceNo = 1,
+                    new FieldRelation(CaseRuleMode.CaseUserChangeMode) {
+                            SequenceNo = 0,
                             RelationType = RelationType.OneToOne.ToInt(),
                             ActionType = RelationActionType.ValueSetter.ToInt(),
                             FieldId = TranslationCaseFields.tblLog_Text_External.ToString(),
-                            ForeignKeyNumber = ForeignKeyNum.FKeyNum1.ToInt()
+                            ForeignKeyNumber = ForeignKeyNum.FKeyNum1.ToInt(),
+                            ShowGeneralInformation = ruleMode == CaseRuleMode.TemplateUserChangeMode
                     },
 
-                    new FieldRelation() {
+                    new FieldRelation(CaseRuleMode.CaseUserChangeMode,
+                                      CaseRuleMode.CaseNewTemplateMode, CaseRuleMode.CaseInheritTemplateMode) {
                         SequenceNo = 1,
                         RelationType = RelationType.Virtual.ToInt(),
                         ActionType = RelationActionType.ValueSetter.ToInt(),
                         FieldId = VirtualFields.Department_WatchDate.ToString(),
                         DataStore1 = TranslationCaseFields.Department_Id.ToString(),
                         ResultDataKey = TranslationCaseFields.WatchDate.ToString(),
+                        ShowGeneralInformation = ruleMode == CaseRuleMode.TemplateUserChangeMode,
                         Conditions =  new List<FieldRelationCondition> {                            
                             new FieldRelationCondition(TranslationCaseFields.Department_Id.ToString(), ForeignKeyNum.FKeyNum0, ConditionOperator.HasValue),
                             new FieldRelationCondition(TranslationCaseFields.Priority_Id.ToString(), ForeignKeyNum.FKeyNum2, ConditionOperator.Equal, "0")
@@ -1255,19 +1272,22 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 StatusType = basicInformation.Status.StatusType,
                 Items = basicInformation.Status.Items,
                 Relations = new List<FieldRelation> {
-                    new FieldRelation() {
+                    new FieldRelation(CaseRuleMode.CaseUserChangeMode) {
                         SequenceNo = 0,
                         RelationType = RelationType.OneToOne.ToInt(),
                         ActionType = RelationActionType.ValueSetter.ToInt(),
                         FieldId = TranslationCaseFields.WorkingGroup_Id.ToString(),
-                        ForeignKeyNumber = ForeignKeyNum.FKeyNum1.ToInt()
+                        ForeignKeyNumber = ForeignKeyNum.FKeyNum1.ToInt(),
+                        ShowGeneralInformation = ruleMode == CaseRuleMode.TemplateUserChangeMode
                     },
-                    new FieldRelation() {
+
+                    new FieldRelation(CaseRuleMode.CaseUserChangeMode) {
                         SequenceNo = 1,
                         RelationType = RelationType.OneToOne.ToInt(),
                         ActionType = RelationActionType.ValueSetter.ToInt(),
                         FieldId = TranslationCaseFields.StateSecondary_Id.ToString(),
-                        ForeignKeyNumber = ForeignKeyNum.FKeyNum2.ToInt()
+                        ForeignKeyNumber = ForeignKeyNum.FKeyNum2.ToInt(),
+                        ShowGeneralInformation = ruleMode == CaseRuleMode.TemplateUserChangeMode
                     }
                 }
             };
@@ -1299,16 +1319,19 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                     //    RelationType = RelationType.OneToOne.ToInt(),
                     //    ActionType = RelationActionType.ValueSetter.ToInt(),
                     //    FieldId = TranslationCaseFields.WorkingGroup_Id.ToString(),
-                    //    ForeignKeyNumber = ForeignKeyNum.FKeyNum1.ToInt()
+                    //    ForeignKeyNumber = ForeignKeyNum.FKeyNum1.ToInt(),
+                    //    ShowGeneralInformation = ruleMode == CaseRuleMode.TemplateUserChangeMode
                     //},
 
-                    new FieldRelation() {
+                    new FieldRelation(CaseRuleMode.CaseUserChangeMode,
+                                      CaseRuleMode.CaseNewTemplateMode, CaseRuleMode.CaseInheritTemplateMode) {
                         SequenceNo = 0,
                         RelationType = RelationType.Virtual.ToInt(),
                         ActionType = RelationActionType.ValueSetter.ToInt(),
                         FieldId = VirtualFields.Department_WatchDate.ToString(),
                         DataStore1 = TranslationCaseFields.Department_Id.ToString(),
                         ResultDataKey = TranslationCaseFields.WatchDate.ToString(),
+                        ShowGeneralInformation = ruleMode == CaseRuleMode.TemplateUserChangeMode,
                         Conditions =  new List<FieldRelationCondition> {
                             new FieldRelationCondition(TranslationCaseFields.StateSecondary_Id.ToString(), ForeignKeyNum.FKeyNum3, ConditionOperator.NotEqual, "0"),
                             new FieldRelationCondition(TranslationCaseFields.Department_Id.ToString(), ForeignKeyNum.FKeyNum0, ConditionOperator.HasValue),
@@ -1316,12 +1339,13 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                         }
                     },
 
-                    new FieldRelation() {
+                    new FieldRelation(CaseRuleMode.CaseUserChangeMode) {
                         SequenceNo = 1,
                         RelationType = RelationType.OneToOne.ToInt(),
                         ActionType = RelationActionType.ValueSetter.ToInt(),
                         FieldId = TranslationCaseFields.MailToNotifier.ToString(),
                         ForeignKeyNumber = ForeignKeyNum.FKeyNum2.ToInt(),
+                        ShowGeneralInformation = ruleMode == CaseRuleMode.TemplateUserChangeMode
                     }                    
                 }
             };

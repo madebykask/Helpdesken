@@ -1200,7 +1200,7 @@ namespace DH.Helpdesk.Web.Controllers
             #endregion
 
 
-            var model  = _caseRuleFactory.GetCaseRuleModel(customerId, CaseRuleMode.TemplateMode, caseFieldSettings, caseBasicInfo, customerSettings);
+            var model  = _caseRuleFactory.GetCaseRuleModel(customerId, CaseRuleMode.TemplateUserChangeMode, caseFieldSettings, caseBasicInfo, customerSettings);
             model.CustomerSettings.ConnectUserToWorkingGroup = customerSettings.DontConnectUserToWorkingGroup == 0;
 
             return model;
@@ -1666,7 +1666,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             model.CaseFilesModel = new CaseFilesModel();
 
-            var caseRuleModel = GetCaseRuleModel(curCustomerId, CaseRuleMode.TemplateMode, caseSolution, 
+            var caseRuleModel = GetCaseRuleModel(curCustomerId, CaseRuleMode.TemplateUserChangeMode, caseSolution, 
                                                  model.CaseSolutionSettingModels.ToList(), cs, 
                                                  model.CaseFieldSettings.ToList());
 

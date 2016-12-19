@@ -17,11 +17,12 @@
         var _NULL_STR = "null";
 
         /***** Enums *****/
-        var _RULE_TYPE = {
-            Original: 0,
-            NewMode : 1,
-            InheritMode : 2,
-            SelfService : 3
+        var _RULE_MODE = {
+            TemplateUserChangeMode   : 0,
+            CaseUserChangeMode       : 1,
+            CaseInheritTemplateMode  : 2,
+            CaseNewTemplateMode      : 3,
+            SelfService              : 4
         };
 
         var _RELATION_TYPE = {
@@ -93,7 +94,7 @@
                     return false;
                 }                
 
-                this.strArrayContains = function (strArray, value) {
+                this.arrayContains = function (strArray, value) {
                     if (strArray == null || strArray.length <= 0)
                         return false;
 
@@ -148,13 +149,16 @@
 
         helpdesk.caseRule = {
                       
-            /* helpers */ 
+            /* helpers */
+
+            _GLOBAL_RULE_STATE_MODE: -1,
             dataHelper: null,
             convertor: null,
             _DATE_FORMAT: '',
 
             init:function() {
                 ruleModel = params.ruleModel;
+                this._GLOBAL_RULE_STATE_MODE = ruleModel.RuleMode;
                 dataHelper = new helpdesk.common.data();
                 convertor = new helpdesk.common.convertor();
                 this._DATE_FORMAT = ruleModel.DateFormat;
@@ -350,6 +354,14 @@
                 return ret;
             },            
 
+            isActionApplicableForCurrentMode: function(relation){
+                var acceptModes = relation.ApplicableIn;
+                if (dataHelper.arrayContains(acceptModes, this._GLOBAL_RULE_STATE_MODE)) {
+                    return true;
+                }
+                return false;
+            },
+
             checkRules: function (field) {
                 var ret = "";
 
@@ -375,6 +387,10 @@
                 if (dataHelper.isNullOrUndefined(field))
                     return "";
 
+                // No information to show
+                if (!relation.ShowGeneralInformation && !relation.ShowDetailsInformation)
+                    return "";
+
                 var selectedItem = field.Selected;
                 var relatedField = this.getFieldById(relation.FieldId);
 
@@ -398,14 +414,17 @@
                 if (fItem == null || dataHelper.isNullOrEmpty(fItem.ItemText))
                     return "";
                 
+                var ret = "";
                 switch (relation.ActionType) {
-                    case _ACTION_TYPE.ValueSetter:                       
+                    case _ACTION_TYPE.ValueSetter:
+                        //ret =  "<div align='left'> <b>" + relatedField.FieldCaption + "</b>: " + params.willSetToText + " <b>" + fItem.ItemText + "</b> </div> <br />";
                         return "<div align='left'> <b>" + relatedField.FieldCaption + "</b>: " + params.willSetToText + " <b>" + fItem.ItemText + "</b> </div> <br />";
 
                     case _ACTION_TYPE.ListPopulator:                        
                         return "<div align='left'> <b>" + relatedField.FieldCaption + "</b>: " + params.willShowRelatedItemsText + " <b>" + fItem.ItemText + "</b> </div> <br />";
 
-                    case _ACTION_TYPE.ListCleaner:                        
+                    case _ACTION_TYPE.ListCleaner:
+
                         return "<div align='left'> <b>" + relatedField.FieldCaption + "</b>: will be clear </div> <br />";                                            
                 }
             },
@@ -419,8 +438,10 @@
                 if (field.Relations.length > 0) {
                     for (var r = 0; r < field.Relations.length; r++) {
                         var curRelation = field.Relations[r];
-                        if (this.checkConditions(curRelation.Conditions)) {
-                            ret += helpdesk.caseRule.runAction(field, curRelation);
+                        if (this.isActionApplicableForCurrentMode(curRelation)){
+                            if (this.checkConditions(curRelation.Conditions)) {
+                                ret += helpdesk.caseRule.runAction(field, curRelation);
+                            }
                         }
                     }
                     return ret;
@@ -500,9 +521,8 @@
                         }
                         break;
 
-                    case _ACTION_TYPE.ListPopulator:
-                        if (relation.Applicable)
-                            this.applyListPopulatorAction(relatedField, selectedItem.ItemValue, relation);                                                                                                                
+                    case _ACTION_TYPE.ListPopulator:                        
+                        this.applyListPopulatorAction(relatedField, selectedItem.ItemValue, relation);                                                                                                                
                         break;
 
                     case _ACTION_TYPE.ListCleaner:
@@ -614,7 +634,7 @@
                                     if (!dataHelper.isNullOrEmpty(itemToCheck))
                                         aryItemToCheck = itemToCheck.split(_ARRAY_SEPARATOR_CHARACTER);
 
-                                    if (dataHelper.strArrayContains(aryItemToCheck, primaryKeyValue)) {
+                                    if (dataHelper.arrayContains(aryItemToCheck, primaryKeyValue)) {
                                         canAdd = true;
                                     }
                                 } else {
