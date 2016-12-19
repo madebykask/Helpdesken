@@ -1334,6 +1334,7 @@
     <Compile Include="Models\BulletinBoardInputViewModel.cs" />
     <Compile Include="Models\CalendarInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\LockedCaseOverviewModel.cs" />
+    <Compile Include="Models\CaseRules\CaseCurrentDataModel.cs" />
     <Compile Include="Models\CaseRules\CaseRuleModel.cs" />
     <Compile Include="Models\CaseSolutionSettingModel.cs" />
     <Compile Include="Models\CaseSolution\CaseSolutionIndex.cs" />

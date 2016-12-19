@@ -600,6 +600,7 @@
                     case _FIELD_TYPE.CheckBox:                        
                         break;
 
+                    // TODO: Capablility to keep selected value
                     case _FIELD_TYPE.SingleSelectField:
                         $element.val('');
                         $element.empty();
