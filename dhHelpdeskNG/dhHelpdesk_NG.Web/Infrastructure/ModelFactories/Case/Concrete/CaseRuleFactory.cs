@@ -34,13 +34,13 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
             ret.RuleMode = mode;
             ret.DateFormat = Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern;
 
-            ret.FieldAttributes = GetOriginalRules(customerId, caseFieldSettings.ToList(),
+            ret.FieldAttributes = GetGlobalRules(customerId, caseFieldSettings.ToList(),
                                                    basicInformation, customerSettings, mode);           
             return ret;
         }
                 
 
-        private List<FieldAttributeModel> GetOriginalRules(int customerId,
+        private List<FieldAttributeModel> GetGlobalRules(int customerId,
                                                            List<CaseFieldSetting> caseFieldSettings,
                                                            BasicCaseInformation basicInformation,
                                                            Setting customerSettings,

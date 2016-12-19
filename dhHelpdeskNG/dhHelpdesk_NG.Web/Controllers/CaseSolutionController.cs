@@ -1117,8 +1117,8 @@ namespace DH.Helpdesk.Web.Controllers
 
             caseBasicInfo.SolutionRate = new BasicMultiItemField()
             {
-                Selected = new FieldItem(templateModel.VerifiedDescription, string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.VerifiedDescription, templateSettingModel.ToList()),
+                Selected = new FieldItem(templateModel.SolutionRate, string.Empty),
+                StatusType = GetFieldStatusType(CaseSolutionFields.SolutionRate, templateSettingModel.ToList()),
                 DefaultItem = FieldItem.CreateEmpty(),
                 Items = solutionRateItems
             };
