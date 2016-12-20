@@ -120,6 +120,17 @@
         {
             this.invoiceArticleRepository.DeleteArticleProductArea(articleid, productareaid);
         }
+
+        public void DeactivateArticlesBySyncDate(int customerId, DateTime lastSyncDate)
+        {
+            invoiceArticleRepository.DeactivateArticlesBySyncDate(customerId, lastSyncDate);
+        }
+
+        public void SaveArticles(List<InvoiceArticle> articles)
+        {
+            invoiceArticleRepository.SaveArticles(articles);
+        }
+
         /// <summary>
         /// Will convert order.invoicedate to date with timezone (from utc)
         /// </summary>

@@ -1,6 +1,9 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+
 namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
     using DH.Helpdesk.BusinessData.Models.Invoice;
@@ -296,19 +299,46 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         [HttpPost]
         [BadRequestOnNotValid]
         [ValidateAntiForgeryToken]
-        public string ArticlesImport(CaseInvoiceSettingsModel model)
+        public JsonResult ArticlesImport(CaseInvoiceSettingsModel model)
         {
             if (model.ArticlesImport == null ||
                 model.ArticlesImport.File == null || 
                 model.ArticlesImport.File.ContentLength == 0)
             {
-                return "File is empty!";
+                var answer = new
+                {
+                    Success = false,
+                    Status = Translation.GetCoreTextTranslation("Filen är tom")
+                };
+                return Json(answer, JsonRequestBehavior.AllowGet);
             }
-
+            var lastSyncDate = DateTime.UtcNow;
             var importer = this.caseInvoiceFactory.GetImporter(this.productAreaService, this.invoiceArticleService);
-            var result = importer.ImportArticles(model.ArticlesImport.File.InputStream);
-            importer.SaveImportedArticles(result, model.ArticlesImport.CustomerId);
-            return "Import completed successfully!";
+            var result = importer.ImportArticles(model.ArticlesImport.File.InputStream, lastSyncDate);
+            if (result.Errors.Any())
+            {
+                var error = new StringBuilder();
+                foreach (var resError in result.Errors)
+                {
+                    error.AppendLine(Translation.GetCoreTextTranslation(resError));
+                }
+                var answer = new
+                {
+                    Success = false,
+                    Status = error.ToString()
+                };
+                return Json(answer, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                importer.SaveImportedArticles(result, model.ArticlesImport.CustomerId, lastSyncDate);
+                var answer = new
+                {
+                    Success = true,
+                    Status = Translation.GetCoreTextTranslation("Import slutförts")
+                };
+                return Json(answer, JsonRequestBehavior.AllowGet);
+            }
         }
 
         [HttpPost]

@@ -3252,6 +3252,10 @@ body.login {
     text-align: right!important;
 }
 
+.min-width-300 {
+    min-width: 300px;
+}
+
 .min-width-500 {
     min-width: 500px!important;
 }
@@ -3776,4 +3780,11 @@ div.modal-body.max-height-600 {
 
 div.case-dropdown-div > span.btn-group.open > ul > div.options-holder li {
     display: flex;
+}
+
+.article-import-div {
+    border: 1px solid #f1f1f1;
+    float: left;
+    min-height: 50px;
+    padding: 10px;
 }

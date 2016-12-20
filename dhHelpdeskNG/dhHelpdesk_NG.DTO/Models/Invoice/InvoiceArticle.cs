@@ -27,7 +27,9 @@
                     int customerId, 
                     bool textDemand,
                     bool blocked,
-                    CustomerOverview customer)
+                    CustomerOverview customer,
+                    DateTime lastSyncDate,
+                    int isActive)
         {
             this.Description = description;
             this.NameEng = nameEng;
@@ -44,26 +46,30 @@
             this.TextDemand = textDemand;
             this.Blocked = blocked;
             this.Id = id;
+            this.LastSyncDate = lastSyncDate;
+            this.IsActive = isActive;
         }
 
         public InvoiceArticle(
-                    InvoiceArticle parent, 
-                    string number, 
-                    string name, 
+                    string number,
+                    string name,
                     string nameEng,
                     string description,
-                    List<Domain.ProductArea> productAreas,
                     InvoiceArticleUnit unit,
-                    decimal? ppu)
+                    decimal? ppu,
+                    bool textDemand,
+                    bool blocked,
+                    DateTime lastSyncDate)
         {
-            this.Parent = parent;
-            this.Number = number;
-            this.Name = name;
-            this.NameEng = nameEng;
-            this.Description = description;
-            this.ProductAreas = productAreas;
-            this.Unit = unit;
-            this.Ppu = ppu;
+            Description = description;
+            NameEng = nameEng;
+            Ppu = ppu;
+            Unit = unit;
+            Name = name;
+            Number = number;
+            TextDemand = textDemand;
+            Blocked = blocked;
+            LastSyncDate = lastSyncDate;
         }
 
         public InvoiceArticle(
@@ -112,5 +118,8 @@
 
         [NotNull]
         public CustomerOverview Customer { get; private set; }
+
+        public DateTime LastSyncDate { get; set; }
+        public int IsActive { get; set; }
     }
 }

@@ -44,6 +44,12 @@ GO
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'FieldHelp' and sysobjects.name = N'tblOrderFieldSettings')
 	ALTER TABLE [dbo].[tblOrderFieldSettings] ADD [FieldHelp] [nvarchar](200) NULL
 GO
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LastSyncedDate' and sysobjects.name = N'tblInvoiceArticle')
+	ALTER TABLE [dbo].tblInvoiceArticle ADD [LastSyncedDate] [datetime] NOT NULL DEFAULT(GETDATE())
+GO
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Status' and sysobjects.name = N'tblInvoiceArticle')
+	ALTER TABLE [dbo].tblInvoiceArticle ADD [Status] [int] NOT NULL DEFAULT(1)
+GO
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.30'

@@ -5317,5 +5317,47 @@ GO
 If not exists (select * from tblTextTranslation where text_id = 1731 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1731, 2, 'not unique')
 GO
+
+If not exists (select * from tbltext where id = 1732)
+	insert into tbltext (id, TextString) VALUES (1732, 'Ogiltig XML. Line, ställning')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1732 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1732, 2, 'Invalid xml. Line, position')
+GO
+
+If not exists (select * from tbltext where id = 1733)
+	insert into tbltext (id, TextString) VALUES (1733, 'Ogiltigt artikelnamn')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1733 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1733, 2, 'Invalid article name')
+GO
+
+If not exists (select * from tbltext where id = 1734)
+	insert into tbltext (id, TextString) VALUES (1734, 'Ogiltigt artikelnummer')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1734 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1734, 2, 'Invalid article number')
+GO
+
+If not exists (select * from tbltext where id = 1735)
+	insert into tbltext (id, TextString) VALUES (1735, 'Import slutförts')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1735 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1735, 2, 'Import completed successfully')
+GO
+
+If not exists (select * from tbltext where id = 1736)
+	insert into tbltext (id, TextString) VALUES (1736, 'Filen är tom')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1736 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1736, 2, 'File is empty')
+GO
+
+If not exists (select * from tbltext where id = 1737)
+	insert into tbltext (id, TextString) VALUES (1737, 'Välj FIL')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1737 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1737, 2, 'Choose file')
+GO
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

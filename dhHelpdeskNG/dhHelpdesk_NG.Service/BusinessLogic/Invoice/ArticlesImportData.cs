@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.BusinessLogic.Invoice
+﻿using System.Collections.Generic;
+
+namespace DH.Helpdesk.Services.BusinessLogic.Invoice
 {
     using DH.Helpdesk.BusinessData.Models.Invoice;
     using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
@@ -6,19 +8,18 @@
     public sealed class ArticlesImportData
     {
         public ArticlesImportData(
-            ProductAreaOverview[] productAreas, 
-            InvoiceArticle[] articles, 
-            InvoiceArticleUnit[] units)
+            List<InvoiceArticle> articles,
+            List<InvoiceArticleUnit> units)
         {
-            this.Units = units;
-            this.Articles = articles;
-            this.ProductAreas = productAreas;
+            Units = units;
+            Articles = articles;
+            Errors = new List<string>();
         }
 
-        public ProductAreaOverview[] ProductAreas { get; private set; }
+        public List<InvoiceArticle> Articles { get; private set; }
 
-        public InvoiceArticle[] Articles { get; private set; }
+        public List<InvoiceArticleUnit> Units { get; private set; }
 
-        public InvoiceArticleUnit[] Units { get; private set; }
+        public List<string> Errors { get; set; }
     }
 }

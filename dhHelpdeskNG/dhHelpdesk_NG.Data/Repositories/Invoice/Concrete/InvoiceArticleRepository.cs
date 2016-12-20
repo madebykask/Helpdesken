@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Dal.Repositories.Invoice.Concrete
+﻿using System;
+
+namespace DH.Helpdesk.Dal.Repositories.Invoice.Concrete
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -123,6 +125,34 @@
                 foreach (var prod in productAreaEntities)
                 {
                     art.ProductAreas.Remove(prod);
+                }
+            }
+
+            this.Commit();
+        }
+
+        public void DeactivateArticlesBySyncDate(int customerId, DateTime lastSyncDate)
+        {
+            var articleEntities = DbContext.InvoiceArticles.Where(i => i.CustomerId == customerId && i.LastSyncedDate < lastSyncDate).ToList();
+            articleEntities.ForEach(x => x.IsActive = 0);
+
+            this.Commit();
+        }
+
+        public void SaveArticles(List<InvoiceArticle> articles)
+        {
+            foreach (var article in articles)
+            {
+                if (article.Id > 0)
+                {
+                    var entity = this.DbContext.InvoiceArticles.Find(article.Id);
+                    this.toEntityMapper.Map(article, entity);
+                }
+                else
+                {
+                    var entity = new InvoiceArticleEntity();
+                    this.toEntityMapper.Map(article, entity);
+                    this.DbContext.InvoiceArticles.Add(entity);
                 }
             }
 

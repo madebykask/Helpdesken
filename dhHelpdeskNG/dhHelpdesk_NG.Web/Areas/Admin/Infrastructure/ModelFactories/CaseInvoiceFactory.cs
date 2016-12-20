@@ -29,7 +29,7 @@
                 IProductAreaService productAreaService,
                 IInvoiceArticleService invoiceArticleService)
         {
-            return new IkeaExcelImporter(productAreaService, invoiceArticleService);
+            return new XmlImporter(productAreaService, invoiceArticleService);
         }
     }
 }

@@ -66,6 +66,7 @@
     <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\CommonAssembly\SharedAssemblyInfo.cs">
@@ -203,7 +204,7 @@
     <Compile Include="BusinessLogic\Specifications\Case\CaseSpecifications.cs" />
     <Compile Include="BusinessLogic\Invoice\ArticlesImportData.cs" />
     <Compile Include="BusinessLogic\Invoice\IInvoiceImporter.cs" />
-    <Compile Include="BusinessLogic\Invoice\IkeaExcelImporter.cs" />
+    <Compile Include="BusinessLogic\Invoice\XmlImporter.cs" />
     <Compile Include="BusinessLogic\MailTools\EmailMarkValues.cs" />
     <Compile Include="BusinessLogic\OtherTools\ITemporaryIdProvider.cs" />
     <Compile Include="BusinessLogic\Specifications\Common\UserSpecifications.cs" />
