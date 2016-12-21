@@ -72,6 +72,7 @@
             MapReceiverSettings(settings.Receiver, fieldSettings, settings.ChangedDate);
             MapSupplierSettings(settings.Supplier, fieldSettings, settings.ChangedDate);
             MapUserSettings(settings.User, fieldSettings, settings.ChangedDate);
+            MapAccountSettings(settings.AccountInfo, fieldSettings, settings.ChangedDate);
         }
 
         #region Map settings for edit
@@ -89,7 +90,8 @@
                     CreateProgramFieldSettings(fieldSettings),
                     CreateReceiverFieldSettings(fieldSettings),
                     CreateSupplierFieldSettings(fieldSettings),
-                    CreateUserFieldSettings(fieldSettings));
+                    CreateUserFieldSettings(fieldSettings),
+                    CreateAccountInfoFieldSettings(fieldSettings));
         }
 
         private static DeliveryFieldSettings CreateDeliveryFieldSettings(
@@ -231,6 +233,20 @@
                     CreateTextFieldSetting(fieldSettings.FindByName(UserFields.Activity)),
                     CreateTextFieldSetting(fieldSettings.FindByName(UserFields.Manager)),
                     CreateTextFieldSetting(fieldSettings.FindByName(UserFields.ReferenceNumber)));
+        }
+
+        private static AccountInfoFieldSettings CreateAccountInfoFieldSettings(
+            NamedObjectCollection<OrdersFieldSettingsMapData> fieldSettings)
+        {
+            return new AccountInfoFieldSettings(
+                    CreateTextFieldSetting(fieldSettings.FindByName(AccountInfoFields.StartedDate)),
+                    CreateTextFieldSetting(fieldSettings.FindByName(AccountInfoFields.FinishDate)),
+                    CreateTextFieldSetting(fieldSettings.FindByName(AccountInfoFields.EMailTypeId)),
+                    CreateTextFieldSetting(fieldSettings.FindByName(AccountInfoFields.HomeDirectory)),
+                    CreateTextFieldSetting(fieldSettings.FindByName(AccountInfoFields.Profile)),
+                    CreateTextFieldSetting(fieldSettings.FindByName(AccountInfoFields.InventoryNumber)),
+                    CreateTextFieldSetting(fieldSettings.FindByName(AccountInfoFields.Info))
+                );
         }
 
         private static FieldSettings CreateFieldSetting(OrdersFieldSettingsMapData data)
@@ -413,6 +429,20 @@
             MapTextFieldSettings(updatedSettings.RoomNumber, existingSettings.FindByName(UserFields.UserRoomNumber), changedDate);
             MapTextFieldSettings(updatedSettings.Title, existingSettings.FindByName(UserFields.UserTitle), changedDate);
             MapTextFieldSettings(updatedSettings.UnitId, existingSettings.FindByName(UserFields.UserOU_Id), changedDate);
+        }
+
+        private static void MapAccountSettings(
+            AccountInfoFieldSettings updatedSettings,
+            NamedObjectCollection<OrderFieldSettings> existingSettings,
+            DateTime changedDate)
+        {
+            MapTextFieldSettings(updatedSettings.StartedDate, existingSettings.FindByName(AccountInfoFields.StartedDate), changedDate);
+            MapTextFieldSettings(updatedSettings.FinishDate, existingSettings.FindByName(AccountInfoFields.FinishDate), changedDate);
+            MapTextFieldSettings(updatedSettings.EMailTypeId, existingSettings.FindByName(AccountInfoFields.EMailTypeId), changedDate);
+            MapTextFieldSettings(updatedSettings.HomeDirectory, existingSettings.FindByName(AccountInfoFields.HomeDirectory), changedDate);
+            MapTextFieldSettings(updatedSettings.Profile, existingSettings.FindByName(AccountInfoFields.Profile), changedDate);
+            MapTextFieldSettings(updatedSettings.InventoryNumber, existingSettings.FindByName(AccountInfoFields.InventoryNumber), changedDate);
+            MapTextFieldSettings(updatedSettings.Info, existingSettings.FindByName(AccountInfoFields.Info), changedDate);
         }
 
         private static void MapFieldSettings(

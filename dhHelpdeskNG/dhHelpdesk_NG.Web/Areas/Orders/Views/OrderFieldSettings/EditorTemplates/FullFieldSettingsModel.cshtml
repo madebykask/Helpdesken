@@ -107,6 +107,45 @@
             @Html.EditorFor(m => m.User.ReferenceNumber)
         </tr>
         <tr>
+            <td colspan="8" class="header">@Translation.Get("Kontoinformation")</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.AccountInfo.StartedDate)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.AccountInfo.FinishDate)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.AccountInfo.EMailTypeId)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.AccountInfo.HomeDirectory)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.AccountInfo.Profile)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.AccountInfo.InventoryNumber)
+        </tr>
+        @*<tr>
+            @Html.EditorFor(m => m.AccountInfo.AccountTypeId)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.AccountInfo.AccountType2)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.AccountInfo.AccountType3)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.AccountInfo.AccountType4)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.AccountInfo.AccountType5)
+        </tr>*@
+        <tr>
+            @Html.EditorFor(m => m.AccountInfo.Info)
+        </tr>
+        <tr>
             <td colspan="8" class="header">@Translation.Get("Beställare")</td>
         </tr>    
         <tr>

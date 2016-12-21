@@ -67,6 +67,22 @@
             this.Property(o => o.AccountingDimension3).IsOptional().HasMaxLength(20);
             this.Property(o => o.AccountingDimension4).IsOptional().HasMaxLength(20);
             this.Property(o => o.AccountingDimension5).IsOptional().HasMaxLength(20);
+            this.Property(x => x.AccountStartDate).IsOptional();
+            this.Property(x => x.AccountEndDate).IsOptional();
+            this.Property(x => x.EMailType).IsRequired();
+            this.Property(x => x.HomeDirectory).IsRequired();
+            this.Property(x => x.Profile).IsRequired();
+            this.Property(x => x.InventoryNumber).IsOptional().HasMaxLength(20);
+            this.Property(x => x.AccountInfo).IsOptional().HasMaxLength(500);
+            //this.Property(x => x.AccountType_Id).IsOptional();
+            //this.HasOptional(x => x.AccountType)
+            //    .WithMany()
+            //    .HasForeignKey(x => x.AccountType_Id)
+            //    .WillCascadeOnDelete(false);
+            //this.Property(x => x.AccountType2).IsOptional().HasMaxLength(50);
+            //this.Property(x => x.AccountType3).IsOptional();
+            //this.Property(x => x.AccountType4).IsOptional();
+            //this.Property(x => x.AccountType5).IsOptional();
             this.Property(o => o.Department_Id).IsOptional();
             this.HasOptional(o => o.Ou)
                 .WithMany(o => o.Orders)

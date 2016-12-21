@@ -241,10 +241,10 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 BEGIN
 	ALTER TABLE [dbo].[tblOrder] ADD [UserDepartment_Id2] [int] NULL
 
-	ALTER TABLE [dbo].[tblOrder]  WITH NOCHECK ADD  CONSTRAINT [FK_tblOrder_tblDepartment2] FOREIGN KEY([UserDepartment_Id2])
+	ALTER TABLE [dbo].[tblOrder]  WITH NOCHECK ADD  CONSTRAINT [FK_tblOrder_tblDepartment3] FOREIGN KEY([UserDepartment_Id2])
 	REFERENCES [dbo].[tblDepartment] ([Id])
 	
-	ALTER TABLE [dbo].[tblOrder] CHECK CONSTRAINT [FK_tblOrder_tblDepartment2]
+	ALTER TABLE [dbo].[tblOrder] CHECK CONSTRAINT [FK_tblOrder_tblDepartment3]
 END 
 
 Declare @OrderFieldValue nvarchar(50)
@@ -388,6 +388,173 @@ INSERT INTO [dbo].[tblOrderFieldSettings]
 				where iofs.OrderField = @OrderFieldValue and iofs.Customer_Id = ofs.Customer_Id 
 				and ((iofs.OrderType_Id is not null and ofs.OrderType_Id is not null and iofs.OrderType_Id = ofs.OrderType_Id) or (iofs.OrderType_Id is null and ofs.OrderType_Id is null))) 
 GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'AccountStartDate' and sysobjects.name = N'tblOrder')
+	ALTER TABLE [dbo].[tblOrder] ADD [AccountStartDate] [datetime] NULL
+GO
+
+Declare @OrderFieldValue nvarchar(50)
+Set @OrderFieldValue = 'AccountStartDate'
+Declare @OrderFieldLabel nvarchar(50)
+Set @OrderFieldLabel = 'Startdatum'
+
+INSERT INTO [dbo].[tblOrderFieldSettings]
+           ([OrderType_Id],[Customer_Id],[OrderField],[Show],[ShowInList],[ShowExternal]
+           ,[Label],[Required],[DefaultValue],[EMailIdentifier],[CreatedDate],[ChangedDate])
+	 SELECT distinct ofs.[OrderType_Id], ofs.[Customer_Id], @OrderFieldValue, 0, 0, 0,
+		   @OrderFieldLabel, 0, '', NULL, GETDATE(), GETDATE()
+		   from [dbo].[tblOrderFieldSettings] as ofs
+		   where Not Exists (Select iofs.Id from [dbo].[tblOrderFieldSettings] as iofs
+				where iofs.OrderField = @OrderFieldValue and iofs.Customer_Id = ofs.Customer_Id 
+				and ((iofs.OrderType_Id is not null and ofs.OrderType_Id is not null and iofs.OrderType_Id = ofs.OrderType_Id) or (iofs.OrderType_Id is null and ofs.OrderType_Id is null))) 
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'AccountEndDate' and sysobjects.name = N'tblOrder')
+	ALTER TABLE [dbo].[tblOrder] ADD [AccountEndDate] [datetime] NULL
+GO
+
+Declare @OrderFieldValue nvarchar(50)
+Set @OrderFieldValue = 'AccountEndDate'
+Declare @OrderFieldLabel nvarchar(50)
+Set @OrderFieldLabel = 'Slutdatum'
+
+INSERT INTO [dbo].[tblOrderFieldSettings]
+           ([OrderType_Id],[Customer_Id],[OrderField],[Show],[ShowInList],[ShowExternal]
+           ,[Label],[Required],[DefaultValue],[EMailIdentifier],[CreatedDate],[ChangedDate])
+	 SELECT distinct ofs.[OrderType_Id], ofs.[Customer_Id], @OrderFieldValue, 0, 0, 0,
+		   @OrderFieldLabel, 0, '', NULL, GETDATE(), GETDATE()
+		   from [dbo].[tblOrderFieldSettings] as ofs
+		   where Not Exists (Select iofs.Id from [dbo].[tblOrderFieldSettings] as iofs
+				where iofs.OrderField = @OrderFieldValue and iofs.Customer_Id = ofs.Customer_Id 
+				and ((iofs.OrderType_Id is not null and ofs.OrderType_Id is not null and iofs.OrderType_Id = ofs.OrderType_Id) or (iofs.OrderType_Id is null and ofs.OrderType_Id is null))) 
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'EMailType' and sysobjects.name = N'tblOrder')
+	ALTER TABLE [dbo].[tblOrder] ADD [EMailType] int NOT NULL CONSTRAINT [DF_tblOrder_EMailType] DEFAULT ((0))
+GO
+
+Declare @OrderFieldValue nvarchar(50)
+Set @OrderFieldValue = 'EMailType'
+Declare @OrderFieldLabel nvarchar(50)
+Set @OrderFieldLabel = 'E-posttyp'
+
+INSERT INTO [dbo].[tblOrderFieldSettings]
+           ([OrderType_Id],[Customer_Id],[OrderField],[Show],[ShowInList],[ShowExternal]
+           ,[Label],[Required],[DefaultValue],[EMailIdentifier],[CreatedDate],[ChangedDate])
+	 SELECT distinct ofs.[OrderType_Id], ofs.[Customer_Id], @OrderFieldValue, 0, 0, 0,
+		   @OrderFieldLabel, 0, '', NULL, GETDATE(), GETDATE()
+		   from [dbo].[tblOrderFieldSettings] as ofs
+		   where Not Exists (Select iofs.Id from [dbo].[tblOrderFieldSettings] as iofs
+				where iofs.OrderField = @OrderFieldValue and iofs.Customer_Id = ofs.Customer_Id 
+				and ((iofs.OrderType_Id is not null and ofs.OrderType_Id is not null and iofs.OrderType_Id = ofs.OrderType_Id) or (iofs.OrderType_Id is null and ofs.OrderType_Id is null))) 
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'HomeDirectory' and sysobjects.name = N'tblOrder')
+	ALTER TABLE [dbo].[tblOrder] ADD [HomeDirectory] [int] NOT NULL CONSTRAINT [DF_tblOrder_HomeDirectory]  DEFAULT ((0))
+GO
+
+Declare @OrderFieldValue nvarchar(50)
+Set @OrderFieldValue = 'HomeDirectory'
+Declare @OrderFieldLabel nvarchar(50)
+Set @OrderFieldLabel = 'Hemkatalog'
+
+INSERT INTO [dbo].[tblOrderFieldSettings]
+           ([OrderType_Id],[Customer_Id],[OrderField],[Show],[ShowInList],[ShowExternal]
+           ,[Label],[Required],[DefaultValue],[EMailIdentifier],[CreatedDate],[ChangedDate])
+	 SELECT distinct ofs.[OrderType_Id], ofs.[Customer_Id], @OrderFieldValue, 0, 0, 0,
+		   @OrderFieldLabel, 0, '', NULL, GETDATE(), GETDATE()
+		   from [dbo].[tblOrderFieldSettings] as ofs
+		   where Not Exists (Select iofs.Id from [dbo].[tblOrderFieldSettings] as iofs
+				where iofs.OrderField = @OrderFieldValue and iofs.Customer_Id = ofs.Customer_Id 
+				and ((iofs.OrderType_Id is not null and ofs.OrderType_Id is not null and iofs.OrderType_Id = ofs.OrderType_Id) or (iofs.OrderType_Id is null and ofs.OrderType_Id is null))) 
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Profile' and sysobjects.name = N'tblOrder')
+	ALTER TABLE [dbo].[tblOrder] ADD [Profile] [int] NOT NULL CONSTRAINT [DF_tblOrder_Profile]  DEFAULT ((0))
+GO
+
+Declare @OrderFieldValue nvarchar(50)
+Set @OrderFieldValue = 'Profile'
+Declare @OrderFieldLabel nvarchar(50)
+Set @OrderFieldLabel = 'Profil'
+
+INSERT INTO [dbo].[tblOrderFieldSettings]
+           ([OrderType_Id],[Customer_Id],[OrderField],[Show],[ShowInList],[ShowExternal]
+           ,[Label],[Required],[DefaultValue],[EMailIdentifier],[CreatedDate],[ChangedDate])
+	 SELECT distinct ofs.[OrderType_Id], ofs.[Customer_Id], @OrderFieldValue, 0, 0, 0,
+		   @OrderFieldLabel, 0, '', NULL, GETDATE(), GETDATE()
+		   from [dbo].[tblOrderFieldSettings] as ofs
+		   where Not Exists (Select iofs.Id from [dbo].[tblOrderFieldSettings] as iofs
+				where iofs.OrderField = @OrderFieldValue and iofs.Customer_Id = ofs.Customer_Id 
+				and ((iofs.OrderType_Id is not null and ofs.OrderType_Id is not null and iofs.OrderType_Id = ofs.OrderType_Id) or (iofs.OrderType_Id is null and ofs.OrderType_Id is null))) 
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'InventoryNumber' and sysobjects.name = N'tblOrder')
+	ALTER TABLE [dbo].[tblOrder] ADD [InventoryNumber] [nvarchar](20) NULL
+GO
+
+Declare @OrderFieldValue nvarchar(50)
+Set @OrderFieldValue = 'InventoryNumber'
+Declare @OrderFieldLabel nvarchar(50)
+Set @OrderFieldLabel = 'Inventarienummer'
+
+INSERT INTO [dbo].[tblOrderFieldSettings]
+           ([OrderType_Id],[Customer_Id],[OrderField],[Show],[ShowInList],[ShowExternal]
+           ,[Label],[Required],[DefaultValue],[EMailIdentifier],[CreatedDate],[ChangedDate])
+	 SELECT distinct ofs.[OrderType_Id], ofs.[Customer_Id], @OrderFieldValue, 0, 0, 0,
+		   @OrderFieldLabel, 0, '', NULL, GETDATE(), GETDATE()
+		   from [dbo].[tblOrderFieldSettings] as ofs
+		   where Not Exists (Select iofs.Id from [dbo].[tblOrderFieldSettings] as iofs
+				where iofs.OrderField = @OrderFieldValue and iofs.Customer_Id = ofs.Customer_Id 
+				and ((iofs.OrderType_Id is not null and ofs.OrderType_Id is not null and iofs.OrderType_Id = ofs.OrderType_Id) or (iofs.OrderType_Id is null and ofs.OrderType_Id is null))) 
+GO
+
+--if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'AccountType_Id' and sysobjects.name = N'tblOrder')
+--BEGIN
+--	ALTER TABLE [dbo].[tblOrder] ADD [AccountType_Id] [int] NULL NULL
+
+--	ALTER TABLE [dbo].[tblOrder]  WITH NOCHECK ADD  CONSTRAINT [FK_tblAccount_tblAccountType] FOREIGN KEY([AccountType_Id])
+--	REFERENCES [dbo].[tblAccountType] ([Id])
+
+--	ALTER TABLE [dbo].[tblAccount] CHECK CONSTRAINT [FK_tblAccount_tblAccountType]
+--END 
+
+--Declare @OrderFieldValue nvarchar(50)
+--Set @OrderFieldValue = 'AccountType_Id'
+--Declare @OrderFieldLabel nvarchar(50)
+--Set @OrderFieldLabel = 'Vallista 1'
+
+--INSERT INTO [dbo].[tblOrderFieldSettings]
+--           ([OrderType_Id],[Customer_Id],[OrderField],[Show],[ShowInList],[ShowExternal]
+--           ,[Label],[Required],[DefaultValue],[EMailIdentifier],[CreatedDate],[ChangedDate])
+--	 SELECT distinct ofs.[OrderType_Id], ofs.[Customer_Id], @OrderFieldValue, 0, 0, 0,
+--		   @OrderFieldLabel, 0, '', NULL, GETDATE(), GETDATE()
+--		   from [dbo].[tblOrderFieldSettings] as ofs
+--		   where Not Exists (Select iofs.Id from [dbo].[tblOrderFieldSettings] as iofs
+--				where iofs.OrderField = @OrderFieldValue and iofs.Customer_Id = ofs.Customer_Id 
+--				and ((iofs.OrderType_Id is not null and ofs.OrderType_Id is not null and iofs.OrderType_Id = ofs.OrderType_Id) or (iofs.OrderType_Id is null and ofs.OrderType_Id is null))) 
+--GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'AccountInfo' and sysobjects.name = N'tblOrder')
+	ALTER TABLE [dbo].[tblOrder] ADD [AccountInfo] [nvarchar](500) NULL
+GO
+
+Declare @OrderFieldValue nvarchar(50)
+Set @OrderFieldValue = 'AccountInfo'
+Declare @OrderFieldLabel nvarchar(50)
+Set @OrderFieldLabel = 'Övrigt'
+
+INSERT INTO [dbo].[tblOrderFieldSettings]
+           ([OrderType_Id],[Customer_Id],[OrderField],[Show],[ShowInList],[ShowExternal]
+           ,[Label],[Required],[DefaultValue],[EMailIdentifier],[CreatedDate],[ChangedDate])
+	 SELECT distinct ofs.[OrderType_Id], ofs.[Customer_Id], @OrderFieldValue, 0, 0, 0,
+		   @OrderFieldLabel, 0, '', NULL, GETDATE(), GETDATE()
+		   from [dbo].[tblOrderFieldSettings] as ofs
+		   where Not Exists (Select iofs.Id from [dbo].[tblOrderFieldSettings] as iofs
+				where iofs.OrderField = @OrderFieldValue and iofs.Customer_Id = ofs.Customer_Id 
+				and ((iofs.OrderType_Id is not null and ofs.OrderType_Id is not null and iofs.OrderType_Id = ofs.OrderType_Id) or (iofs.OrderType_Id is null and ofs.OrderType_Id is null))) 
+GO
+
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.30'

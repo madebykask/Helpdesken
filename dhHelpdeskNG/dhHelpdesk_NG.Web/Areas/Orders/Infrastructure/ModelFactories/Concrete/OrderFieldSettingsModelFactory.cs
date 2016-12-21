@@ -31,7 +31,8 @@
                         CreateProgramSettings(response.Settings.Program),
                         CreateReceiverSettings(response.Settings.Receiver),
                         CreateSupplierSettings(response.Settings.Supplier),
-                        CreateUserSettings(response.Settings.User));
+                        CreateUserSettings(response.Settings.User),
+                        CreateAccountInfoSettings(response.Settings.AccountInfo));
         }
 
         public FullFieldSettings CreateForUpdate(
@@ -53,6 +54,7 @@
                         CreateReceiverForUpdate(model.Receiver),
                         CreateSupplierForUpdate(model.Supplier),
                         CreateUserForUpdate(model.User),
+                        CreateAccountInfoForUpdate(model.AccountInfo),
                         changedDate);
         }
 
@@ -187,6 +189,19 @@
                         CreateTextFieldSettingModel(settings.Activity),
                         CreateTextFieldSettingModel(settings.Manager),
                         CreateTextFieldSettingModel(settings.ReferenceNumber));
+        }
+
+        private static AccountInfoFieldSettingsModel CreateAccountInfoSettings(AccountInfoFieldSettings settings)
+        {
+            return new AccountInfoFieldSettingsModel(
+                    CreateTextFieldSettingModel(settings.StartedDate),
+                    CreateTextFieldSettingModel(settings.FinishDate),
+                    CreateTextFieldSettingModel(settings.EMailTypeId),
+                    CreateTextFieldSettingModel(settings.HomeDirectory),
+                    CreateTextFieldSettingModel(settings.Profile),
+                    CreateTextFieldSettingModel(settings.InventoryNumber),
+                    CreateTextFieldSettingModel(settings.Info)
+                );
         }
 
         private static FieldSettingsModel CreateFieldSettingModel(FieldSettings settings)
@@ -347,6 +362,19 @@
                         CreateTextFieldSettingForUpdate(settings.Activity),
                         CreateTextFieldSettingForUpdate(settings.Manager),
                         CreateTextFieldSettingForUpdate(settings.ReferenceNumber));
+        }
+
+        private static AccountInfoFieldSettings CreateAccountInfoForUpdate(AccountInfoFieldSettingsModel settings)
+        {
+            return new AccountInfoFieldSettings(
+                    CreateTextFieldSettingForUpdate(settings.StartedDate),
+                    CreateTextFieldSettingForUpdate(settings.FinishDate),
+                    CreateTextFieldSettingForUpdate(settings.EMailTypeId),
+                    CreateTextFieldSettingForUpdate(settings.HomeDirectory),
+                    CreateTextFieldSettingForUpdate(settings.Profile),
+                    CreateTextFieldSettingForUpdate(settings.InventoryNumber),
+                    CreateTextFieldSettingForUpdate(settings.Info)
+                );
         }
 
         private static FieldSettings CreateFieldSettingForUpdate(FieldSettingsModel settings)

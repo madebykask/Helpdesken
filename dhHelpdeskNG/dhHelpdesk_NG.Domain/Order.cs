@@ -182,6 +182,20 @@
 
         public DateTime? SupplierOrderDate { get; set; }
 
+        public DateTime? AccountEndDate { get; set; }
+
+        public DateTime? AccountStartDate { get; set; }
+
+        public int EMailType { get; set; }
+
+        public int HomeDirectory { get; set; }
+
+        public int Profile { get; set; }
+
+        public string InventoryNumber { get; set; }
+
+        public string AccountInfo { get; set; }
+
         public int? DeliveryOuId { get; set; } 
 
         public virtual Customer Customer { get; set; }

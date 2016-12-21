@@ -59,6 +59,7 @@
                 CollectReceiverMissingFields(existing, missing);
                 CollectSupplierMissingFields(existing, missing);
                 CollectUserMissingFields(existing, missing);
+                CollectAccountInfoMissingFields(existing, missing);
 
                 foreach (var fieldName in missing)
                 {
@@ -193,12 +194,23 @@
             CollectMissingField(UserFields.UserOU_Id, existing, missingFields);
         }
 
+        private static void CollectAccountInfoMissingFields(string[] existing, List<string> missingFields)
+        {
+            CollectMissingField(AccountInfoFields.StartedDate, existing, missingFields);
+            CollectMissingField(AccountInfoFields.FinishDate, existing, missingFields);
+            CollectMissingField(AccountInfoFields.EMailTypeId, existing, missingFields);
+            CollectMissingField(AccountInfoFields.HomeDirectory, existing, missingFields);
+            CollectMissingField(AccountInfoFields.Profile, existing, missingFields);
+            CollectMissingField(AccountInfoFields.InventoryNumber, existing, missingFields);
+            CollectMissingField(AccountInfoFields.Info, existing, missingFields);
+        }
+
         private static void CollectMissingField(
                         string fieldName,
                         string[] existing,
                         List<string> missingFields)
         {
-            if (!existing.Any(f => f.ToLower() == fieldName.ToLower()))
+            if (!existing.Any(f => string.Equals(f, fieldName, (StringComparison) StringComparison.CurrentCultureIgnoreCase)))
             {
                 missingFields.Add(fieldName);
             }

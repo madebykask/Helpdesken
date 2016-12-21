@@ -239,6 +239,7 @@
     </Compile>
     <Compile Include="App_Start\BundleConfig.Orders.cs" />
     <Compile Include="Areas\Orders\Controllers\WebApi\OrdersApiController.cs" />
+    <Compile Include="Areas\Orders\Models\OrderFieldSettings\FieldSettings\AccountInfoFieldSettingsModel.cs" />
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\UserInfoEditModel.cs" />
     <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Infrastructure\Attributes\RequiredIfNotEmptyAttribute.cs" />
