@@ -180,6 +180,14 @@
             return new ConfigurableFieldModel<ProgramsModel>(setting.Caption, programsModel, setting.Required, setting.Help);
         }
 
+        public ConfigurableFieldModel<int?> CreateNullableIntegerField(FieldEditSettings setting, int? value)
+        {
+            return !setting.Show
+                       ? ConfigurableFieldModel<int?>.CreateUnshowable()
+                       : new ConfigurableFieldModel<int?>(setting.Caption, value, setting.Required, setting.Help);
+        }
+
+
         #endregion
     }
 }

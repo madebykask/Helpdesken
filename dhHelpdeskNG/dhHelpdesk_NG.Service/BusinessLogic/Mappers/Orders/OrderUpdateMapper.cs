@@ -135,6 +135,22 @@
             entity.UserLastName = businessModel.UserLastName;
             entity.UserPhone = businessModel.UserPhone;
             entity.UserEMail = businessModel.UserEMail;
+            entity.UserInitials = businessModel.UserInitials;
+            entity.InfoUser = businessModel.InfoUser;
+            entity.Activity = businessModel.Activity;
+            entity.UserDepartment_Id = businessModel.UserDepartment_Id1;
+            entity.UserDepartment_Id2 = businessModel.UserDepartment_Id2;
+            entity.EmploymentType = businessModel.EmploymentType;
+            entity.UserExtension = businessModel.UserExtension;
+            entity.UserLocation = businessModel.UserLocation;
+            entity.Manager = businessModel.Manager;
+            entity.UserPersonalIdentityNumber = businessModel.UserPersonalIdentityNumber;
+            entity.UserPostalAddress = businessModel.UserPostalAddress;
+            entity.ReferenceNumber = businessModel.ReferenceNumber;
+            entity.Responsibility = businessModel.Responsibility;
+            entity.UserRoomNumber = businessModel.UserRoomNumber;
+            entity.UserTitle = businessModel.UserTitle;
+            entity.UserOU_Id = businessModel.UserOU_Id;
         }
     }
 }

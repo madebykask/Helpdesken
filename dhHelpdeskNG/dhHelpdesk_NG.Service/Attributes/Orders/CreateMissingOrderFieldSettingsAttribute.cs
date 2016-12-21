@@ -175,6 +175,22 @@
             CollectMissingField(UserFields.UserLastName, existing, missingFields);
             CollectMissingField(UserFields.UserPhone, existing, missingFields);
             CollectMissingField(UserFields.UserEMail, existing, missingFields);
+            CollectMissingField(UserFields.UserInitials, existing, missingFields);
+            CollectMissingField(UserFields.InfoUser, existing, missingFields);
+            CollectMissingField(UserFields.Activity, existing, missingFields);
+            CollectMissingField(UserFields.UserDepartment_Id1, existing, missingFields);
+            CollectMissingField(UserFields.UserDepartment_Id2, existing, missingFields);
+            CollectMissingField(UserFields.EmploymentType, existing, missingFields);
+            CollectMissingField(UserFields.UserExtension, existing, missingFields);
+            CollectMissingField(UserFields.UserLocation, existing, missingFields);
+            CollectMissingField(UserFields.Manager, existing, missingFields);
+            CollectMissingField(UserFields.UserPersonalIdentityNumber, existing, missingFields);
+            CollectMissingField(UserFields.UserPostalAddress, existing, missingFields);
+            CollectMissingField(UserFields.ReferenceNumber, existing, missingFields);
+            CollectMissingField(UserFields.Responsibility, existing, missingFields);
+            CollectMissingField(UserFields.UserRoomNumber, existing, missingFields);
+            CollectMissingField(UserFields.UserTitle, existing, missingFields);
+            CollectMissingField(UserFields.UserOU_Id, existing, missingFields);
         }
 
         private static void CollectMissingField(

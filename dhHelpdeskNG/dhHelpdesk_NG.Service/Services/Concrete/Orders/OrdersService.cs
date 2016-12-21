@@ -32,31 +32,31 @@
 
     public class OrdersService : IOrdersService
     {
-        private readonly IUnitOfWorkFactory unitOfWorkFactory;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
-        private readonly IOrderFieldSettingsService orderFieldSettingsService;
+        private readonly IOrderFieldSettingsService _orderFieldSettingsService;
 
-        private readonly IUserRepository userRepository;
+        private readonly IUserRepository _userRepository;
 
-        private readonly IUserWorkingGroupRepository userWorkingGroupRepository;
+        private readonly IUserWorkingGroupRepository _userWorkingGroupRepository;
 
-        private readonly IWorkingGroupRepository workingGroupRepository;
+        private readonly IWorkingGroupRepository _workingGroupRepository;
 
-        private readonly IEmailGroupEmailRepository emailGroupEmailRepository;
+        private readonly IEmailGroupEmailRepository _emailGroupEmailRepository;
 
-        private readonly IEmailGroupRepository emailGroupRepository;
+        private readonly IEmailGroupRepository _emailGroupRepository;
 
-        private readonly IOrderRestorer orderRestorer;
+        private readonly IOrderRestorer _orderRestorer;
 
-        private readonly IUpdateOrderRequestValidator updateOrderRequestValidator;
+        private readonly IUpdateOrderRequestValidator _updateOrderRequestValidator;
 
-        private readonly List<IBusinessModelAuditor<UpdateOrderRequest, OrderAuditData>> orderAuditors;
+        private readonly List<IBusinessModelAuditor<UpdateOrderRequest, OrderAuditData>> _orderAuditors;
 
-        private readonly IOrdersLogic ordersLogic;
+        private readonly IOrdersLogic _ordersLogic;
 
-        private readonly IMailTemplateService mailTemplateService;
+        private readonly IMailTemplateService _mailTemplateService;
 
-        private readonly IEmailService emailService;
+        private readonly IEmailService _emailService;
 
         private readonly IOrderEMailLogRepository _orderEMailLogRepsoitory;
 
@@ -68,9 +68,10 @@
 
         private readonly ICaseTypeRepository _caseTypeRepository;
 
-        private readonly ISettingService settingService;
+        private readonly ISettingService _settingService;
 
         private readonly IEmailSendingSettingsProvider _emailSendingSettingsProvider;
+
         private readonly IOrderRepository _orderRepository;
 
 
@@ -97,32 +98,32 @@
                 IOrderRepository orderRepository,
                 IEmailSendingSettingsProvider emailSendingSettingsProvider)
         {
-            this.unitOfWorkFactory = unitOfWorkFactory;
-            this.orderFieldSettingsService = orderFieldSettingsService;
-            this.workingGroupRepository = workingGroupRepository;
-            this.userRepository = userRepository;
-            this.userWorkingGroupRepository = userWorkingGroupRepository;
-            this.emailGroupEmailRepository = emailGroupEmailRepository;
-            this.emailGroupRepository = emailGroupRepository;
-            this.orderRestorer = orderRestorer;
-            this.updateOrderRequestValidator = updateOrderRequestValidator;
-            this.orderAuditors = orderAuditors;
-            this.ordersLogic = ordersLogic;
-            this.mailTemplateService = mailTemplateService;
-            this.emailService = emailService;
-            this._orderEMailLogRepsoitory = orderEMailLogRepository;
-            this._customerRepository = customerRepository;
-            this._orderTypeRepository = orderTypeRepository;
-            this._caseService = caseService;
-            this._caseTypeRepository = caseTypeRepository;
-            this.settingService = settingService;
+            _unitOfWorkFactory = unitOfWorkFactory;
+            _orderFieldSettingsService = orderFieldSettingsService;
+            _workingGroupRepository = workingGroupRepository;
+            _userRepository = userRepository;
+            _userWorkingGroupRepository = userWorkingGroupRepository;
+            _emailGroupEmailRepository = emailGroupEmailRepository;
+            _emailGroupRepository = emailGroupRepository;
+            _orderRestorer = orderRestorer;
+            _updateOrderRequestValidator = updateOrderRequestValidator;
+            _orderAuditors = orderAuditors;
+            _ordersLogic = ordersLogic;
+            _mailTemplateService = mailTemplateService;
+            _emailService = emailService;
+            _orderEMailLogRepsoitory = orderEMailLogRepository;
+            _customerRepository = customerRepository;
+            _orderTypeRepository = orderTypeRepository;
+            _caseService = caseService;
+            _caseTypeRepository = caseTypeRepository;
+            _settingService = settingService;
             _emailSendingSettingsProvider = emailSendingSettingsProvider;
             _orderRepository = orderRepository;
         }
 
         public OrdersFilterData GetOrdersFilterData(int customerId, out int[] selectedStatuses)
         {
-            using (var uow = this.unitOfWorkFactory.Create())
+            using (var uow = this._unitOfWorkFactory.Create())
             {
                 var orderTypeRep = uow.GetRepository<OrderType>();
                 var administratorRep = uow.GetRepository<User>();
@@ -209,8 +210,8 @@
 
         public SearchResponse Search(SearchParameters parameters)
         {
-			var settings = this.orderFieldSettingsService.GetOrdersFieldSettingsOverview(parameters.CustomerId, parameters.OrderTypeId);
-			using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
+			var settings = this._orderFieldSettingsService.GetOrdersFieldSettingsOverview(parameters.CustomerId, parameters.OrderTypeId);
+			using (var uow = this._unitOfWorkFactory.CreateWithDisabledLazyLoading())
 			{
 				var orderTypeRep = uow.GetRepository<OrderType>();
 				var orderTypes = orderTypeRep.GetAll()
@@ -244,9 +245,9 @@
 
         public NewOrderEditData GetNewOrderEditData(int customerId, int orderTypeId, int? lowestchildordertypeid)
         {
-            using (var uow = this.unitOfWorkFactory.Create())
+            using (var uow = this._unitOfWorkFactory.Create())
             {
-                var settings = this.orderFieldSettingsService.GetOrderEditSettings(customerId, orderTypeId, uow);
+                var settings = this._orderFieldSettingsService.GetOrderEditSettings(customerId, orderTypeId, uow);
                 var options = this.GetEditOptions(customerId, orderTypeId, settings, uow, lowestchildordertypeid);
 
                 return new NewOrderEditData(settings, options);
@@ -255,7 +256,7 @@
 
         public FindOrderResponse FindOrder(int orderId, int customerId)
         {
-            using (var uow = this.unitOfWorkFactory.Create())
+            using (var uow = this._unitOfWorkFactory.Create())
             {
                 var ordersRep = uow.GetRepository<Order>();
                 var orderHistoryRep = uow.GetRepository<OrderHistoryEntity>();
@@ -294,7 +295,7 @@
                     firstLevelParentId = order.OrderTypeId.Value;
                 }
 
-                var settings = this.orderFieldSettingsService.GetOrderEditSettings(customerId, firstLevelParentId, uow);
+                var settings = this._orderFieldSettingsService.GetOrderEditSettings(customerId, firstLevelParentId, uow);
                 var options = this.GetEditOptions(customerId, firstLevelParentId, settings, uow, order.OrderTypeId);
                 //var options = this.GetEditOptions(customerId, order.OrderTypeId, settings, uow, firstLevelParentId);
 
@@ -308,7 +309,7 @@
                 var emailLogs = orderEmailLogRep.GetAll()
                                 .GetByHistoryIds(historyIds)
                                 .MapToOverviews();
-                var historyDifferences = this.ordersLogic.AnalyzeHistoriesDifferences(histories, emailLogs, settings);
+                var historyDifferences = this._ordersLogic.AnalyzeHistoriesDifferences(histories, emailLogs, settings);
 
                 var data = new OrderEditData(order, historyDifferences);
 
@@ -318,13 +319,13 @@
 
         public int AddOrUpdate(UpdateOrderRequest request, string userId, CaseMailSetting caseMailSetting, int languageId)
         {
-            using (var uow = this.unitOfWorkFactory.Create())
+            using (var uow = this._unitOfWorkFactory.Create())
             {
                 var ordersRep = uow.GetRepository<Order>();
                 var orderLogsRep = uow.GetRepository<OrderLog>();
                 var orderHistoryRep = uow.GetRepository<OrderHistoryEntity>();
 
-                var customerSetting = settingService.GetCustomerSetting(request.CustomerId);
+                var customerSetting = _settingService.GetCustomerSetting(request.CustomerId);
                 var smtpInfo = new MailSMTPSetting(customerSetting.SMTPServer, customerSetting.SMTPPort, customerSetting.SMTPUserName, customerSetting.SMTPPassWord, customerSetting.IsSMTPSecured);
 
                 if (string.IsNullOrEmpty(smtpInfo.Server) || smtpInfo.Port <= 0)
@@ -375,9 +376,9 @@
                         firstLevelParentId = entity.OrderType_Id.Value;
                     }
 
-                    var settings = this.orderFieldSettingsService.GetOrderEditSettings(request.CustomerId, firstLevelParentId, uow);
-                    this.orderRestorer.Restore(request.Order, existingOrder, settings);
-                    this.updateOrderRequestValidator.Validate(request.Order, existingOrder, settings);
+                    var settings = this._orderFieldSettingsService.GetOrderEditSettings(request.CustomerId, firstLevelParentId, uow);
+                    this._orderRestorer.Restore(request.Order, existingOrder, settings);
+                    this._updateOrderRequestValidator.Validate(request.Order, existingOrder, settings);
 
                     OrderUpdateMapper.MapToEntity(entity, request.Order, request.CustomerId);
                     entity.ChangedDate = request.DateAndTime;
@@ -408,14 +409,14 @@
 
                 if (request.InformOrderer == true)
                 {
-                    var currentUser = this.userRepository.GetById(request.UserId);
+                    var currentUser = this._userRepository.GetById(request.UserId);
                     var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(currentUser.TimeZoneId);
                     // get list of fields to replace [#1] tags in the subjcet and body texts
                     List<Field> fields = GetOrderFieldsForEmail(entity, string.Empty, userTimeZone);
                     var customer = this._customerRepository.GetById(request.CustomerId);
 
                     var customEmailSender1 = customer.HelpdeskEmail;
-                    MailTemplateLanguageEntity m = this.mailTemplateService.GetMailTemplateLanguageForCustomer(40, request.CustomerId, request.LanguageId, request.Order.OrderTypeId);
+                    MailTemplateLanguageEntity m = this._mailTemplateService.GetMailTemplateLanguageForCustomer(40, request.CustomerId, request.LanguageId, request.Order.OrderTypeId);
                     if (m != null)
                     {
                         if (!String.IsNullOrEmpty(m.Body) && !String.IsNullOrEmpty(m.Subject))
@@ -423,7 +424,7 @@
                             var to = request.Order.Orderer.OrdererEmail;
 
                             var curMail = to.ToString();
-                            if (!string.IsNullOrWhiteSpace(curMail) && emailService.IsValidEmail(curMail))
+                            if (!string.IsNullOrWhiteSpace(curMail) && _emailService.IsValidEmail(curMail))
                             {
 
                                 var el = new OrderEMailLog(orderId, historyEntity.Id, 40, curMail, customEmailSender1);
@@ -435,7 +436,7 @@
                                 var mailResponse = EmailResponse.GetEmptyEmailResponse();
                                 var mailSetting = new EmailSettings(mailResponse, smtpInfo);
                                 var siteHelpdesk = AbsoluteUrl + "Areas/Orders/edit/" + orderId;
-                                var e_res = this.emailService.SendEmail(customEmailSender1, el.EMailAddress, m.Subject, m.Body, fields, mailSetting, el.MessageId, false, null, siteSelfService, siteHelpdesk);
+                                var e_res = this._emailService.SendEmail(customEmailSender1, el.EMailAddress, m.Subject, m.Body, fields, mailSetting, el.MessageId, false, null, siteSelfService, siteHelpdesk);
 
                                 //el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                                 var now = DateTime.Now;
@@ -451,14 +452,14 @@
 
                 if (request.InformReceiver == true)
                 {
-                    var currentUser = this.userRepository.GetById(request.UserId);
+                    var currentUser = this._userRepository.GetById(request.UserId);
                     var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(currentUser.TimeZoneId);
                     // get list of fields to replace [#1] tags in the subjcet and body texts
                     List<Field> fields = GetOrderFieldsForEmail(entity, string.Empty, userTimeZone);
                     var customer = this._customerRepository.GetById(request.CustomerId);
 
                     var customEmailSender1 = customer.HelpdeskEmail;
-                    MailTemplateLanguageEntity m = this.mailTemplateService.GetMailTemplateLanguageForCustomer(40, request.CustomerId, request.LanguageId, request.Order.OrderTypeId);
+                    MailTemplateLanguageEntity m = this._mailTemplateService.GetMailTemplateLanguageForCustomer(40, request.CustomerId, request.LanguageId, request.Order.OrderTypeId);
                     if (m != null)
                     {
                         if (!String.IsNullOrEmpty(m.Body) && !String.IsNullOrEmpty(m.Subject))
@@ -466,7 +467,7 @@
                             var to = request.Order.Receiver.ReceiverEmail;
 
                             var curMail = to.ToString();
-                            if (!string.IsNullOrWhiteSpace(curMail) && emailService.IsValidEmail(curMail))
+                            if (!string.IsNullOrWhiteSpace(curMail) && _emailService.IsValidEmail(curMail))
                             {
 
                                 var el = new OrderEMailLog(orderId, historyEntity.Id, 40, curMail, customEmailSender1);
@@ -478,7 +479,7 @@
                                 var mailResponse = EmailResponse.GetEmptyEmailResponse();
                                 var mailSetting = new EmailSettings(mailResponse, smtpInfo);
                                 var siteHelpdesk = AbsoluteUrl + "Areas/Orders/edit/" + orderId;
-                                var e_res = this.emailService.SendEmail(customEmailSender1, el.EMailAddress, m.Subject, m.Body, fields, mailSetting, el.MessageId, false, null, siteSelfService, siteHelpdesk);
+                                var e_res = this._emailService.SendEmail(customEmailSender1, el.EMailAddress, m.Subject, m.Body, fields, mailSetting, el.MessageId, false, null, siteSelfService, siteHelpdesk);
 
                                 //el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                                 var now = DateTime.Now;
@@ -542,7 +543,7 @@
 
                 entity = _orderRepository.GetById(entity.Id);
                 existingOrder = OrderEditMapper.MapToFullOrderEditFields(entity);
-                this.orderAuditors.ForEach(a => a.Audit(request, new OrderAuditData(historyEntity.Id, existingOrder)));
+                this._orderAuditors.ForEach(a => a.Audit(request, new OrderAuditData(historyEntity.Id, existingOrder)));
 
                 return entity.Id;
             }
@@ -562,7 +563,7 @@
 
         public void Delete(int id)
         {
-            using (var uow = this.unitOfWorkFactory.Create())
+            using (var uow = this._unitOfWorkFactory.Create())
             {
                 var ordersRep = uow.GetRepository<Order>();
                 var orderLogsRep = uow.GetRepository<OrderLog>();
@@ -585,7 +586,7 @@
 
         public List<BusinessData.Models.Orders.Order.OrderEditFields.Log> FindLogsExcludeSpecified(int orderId, List<int> excludeLogIds)
         {
-            using (var uow = this.unitOfWorkFactory.Create())
+            using (var uow = this._unitOfWorkFactory.Create())
             {
                 var logsRep = uow.GetRepository<OrderLog>();
                 var usersRep = uow.GetRepository<User>();
@@ -610,17 +611,21 @@
             var ousRep = uow.GetRepository<OU>();
             var propertiesRep = uow.GetRepository<OrderPropertyEntity>();
             var orderTypeRep = uow.GetRepository<OrderType>();
+            var employmentTypeRep = uow.GetRepository<EmploymentType>();
+            var regionsRep = uow.GetRepository<Region>();
 
             var statuses = statusesRep.GetAll().GetByCustomer(customerId).OrderBy(x => x.SortOrder);
             var administrators = administratorsRep.GetAll().GetByCustomer(customerId).GetActiveUsers(customerId);
             var domains = domainsRep.GetAll().GetByCustomer(customerId);
-            var departments = departmentsRep.GetAll().GetByCustomer(customerId);
+            var departments = departmentsRep.GetAll().GetActiveByCustomer(customerId);
             var units = ousRep.GetAll();
             var properties = propertiesRep.GetAll().GetByOrderType(orderTypeId);
-            var deliveryDepartments = departmentsRep.GetAll().GetByCustomer(customerId);
+            var deliveryDepartments = departmentsRep.GetAll().GetActiveByCustomer(customerId);
             var deliveryOuIds = ousRep.GetAll();
             var administratorsWithEmails = administratorsRep.GetAll().GetActiveUsers(customerId).Where(x => x.Performer == 1 && x.Email != string.Empty);
             var orderType = orderTypeId.HasValue ? orderTypeRep.GetAll().GetById(orderTypeId.Value).MapToName() : null;
+            var employmentTypes = employmentTypeRep.GetAll();
+            var regions = regionsRep.GetAll().GetByCustomer(customerId);
 
             // get parentordertypename
             if (orderTypeId != lowestchildordertypeid.Value)
@@ -659,11 +664,11 @@
             var emailGroupsWithEmails = new List<GroupWithEmails>();
             if (settings.Log.Log.Show)
             {
-                var workingGroupOverviews = this.workingGroupRepository.FindActiveIdAndNameOverviews(customerId);
+                var workingGroupOverviews = this._workingGroupRepository.FindActiveIdAndNameOverviews(customerId);
                 var workingGroupIds = workingGroupOverviews.Select(g => g.Id).ToList();
-                var workingGroupsUserIds = this.userWorkingGroupRepository.FindWorkingGroupsUserIds(workingGroupIds);
+                var workingGroupsUserIds = this._userWorkingGroupRepository.FindWorkingGroupsUserIds(workingGroupIds);
                 var userIds = workingGroupsUserIds.SelectMany(g => g.UserIds).ToList();
-                var userIdsWithEmails = this.userRepository.FindUsersEmails(userIds);
+                var userIdsWithEmails = this._userRepository.FindUsersEmails(userIds);
 
                 workingGroupsWithEmails = new List<GroupWithEmails>(workingGroupOverviews.Count);
 
@@ -685,9 +690,9 @@
                     workingGroupsWithEmails.Add(groupWithEmails);
                 }
 
-                var emailGroups = this.emailGroupRepository.FindActiveIdAndNameOverviews(customerId);
+                var emailGroups = this._emailGroupRepository.FindActiveIdAndNameOverviews(customerId);
                 var emailGroupIds = emailGroups.Select(g => g.Id).ToList();
-                var emailGroupsEmails = this.emailGroupEmailRepository.FindEmailGroupsEmails(emailGroupIds);
+                var emailGroupsEmails = this._emailGroupEmailRepository.FindEmailGroupsEmails(emailGroupIds);
 
                 emailGroupsWithEmails = new List<GroupWithEmails>(emailGroups.Count);
 
@@ -713,7 +718,9 @@
                                     emailGroupsWithEmails,
                                     workingGroupsWithEmails,
                                     administratorsWithEmails,
-                                    settings);            
+                                    settings,
+                                    employmentTypes,
+                                    regions);            
         }        
     }
 }

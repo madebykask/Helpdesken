@@ -161,7 +161,23 @@
                     CreateTextFieldSetting(editSettings.FindByName(UserFields.UserFirstName)),
                     CreateTextFieldSetting(editSettings.FindByName(UserFields.UserLastName)),
                     CreateTextFieldSetting(editSettings.FindByName(UserFields.UserPhone)),
-                    CreateTextFieldSetting(editSettings.FindByName(UserFields.UserEMail)));
+                    CreateTextFieldSetting(editSettings.FindByName(UserFields.UserEMail)),
+                    CreateTextFieldSetting(editSettings.FindByName(UserFields.UserInitials)),
+                    CreateTextFieldSetting(editSettings.FindByName(UserFields.UserPersonalIdentityNumber)),
+                    CreateTextFieldSetting(editSettings.FindByName(UserFields.UserExtension)),
+                    CreateTextFieldSetting(editSettings.FindByName(UserFields.UserTitle)),
+                    CreateTextFieldSetting(editSettings.FindByName(UserFields.UserLocation)),
+                    CreateTextFieldSetting(editSettings.FindByName(UserFields.UserRoomNumber)),
+                    CreateTextFieldSetting(editSettings.FindByName(UserFields.UserPostalAddress)),
+                    CreateTextFieldSetting(editSettings.FindByName(UserFields.EmploymentType)),
+                    CreateTextFieldSetting(editSettings.FindByName(UserFields.UserDepartment_Id1)),
+                    CreateTextFieldSetting(editSettings.FindByName(UserFields.UserOU_Id)),
+                    CreateTextFieldSetting(editSettings.FindByName(UserFields.UserDepartment_Id2)),
+                    CreateTextFieldSetting(editSettings.FindByName(UserFields.InfoUser)),
+                    CreateTextFieldSetting(editSettings.FindByName(UserFields.Responsibility)),
+                    CreateTextFieldSetting(editSettings.FindByName(UserFields.Activity)),
+                    CreateTextFieldSetting(editSettings.FindByName(UserFields.Manager)),
+                    CreateTextFieldSetting(editSettings.FindByName(UserFields.ReferenceNumber)));
         }
 
         private static FieldEditSettings CreateFieldSetting(OrdersEditSettingsMapData data)

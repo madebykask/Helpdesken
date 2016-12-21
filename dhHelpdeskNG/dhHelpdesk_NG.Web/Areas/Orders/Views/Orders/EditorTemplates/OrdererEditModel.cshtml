@@ -4,6 +4,7 @@
 @using System.Linq;
 @using DH.Helpdesk.BusinessData.OldComponents
 @using DH.Helpdesk.Web
+@using DH.Helpdesk.Web.Infrastructure.Extensions
 @model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.OrdererEditModel
 
 <h4>@Translation.Get("Beställare")</h4>
@@ -29,6 +30,7 @@
     @Html.EditorFor(m => m.OrdererEmail, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererEmail" } }})
     @Html.EditorFor(m => m.OrdererPhone, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererPhone" } }})
     @Html.EditorFor(m => m.OrdererCode, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererCode" } }})
+    @*@Html.EditorFor(m => m.Department, "Fields/List", new { Source = Model.Department.Value, Id = "Orderer_DepartmentId" })*@
     @if (Model.Department.Show)
     {
         <tr>
@@ -36,7 +38,7 @@
                 @Html.FieldCaption(Model.Department)
             </td>
             <td class="span6">
-                @Html.DropDownListFor(m => m.DepartmentId, Model.Department.Value, new {inputAttributes = new Dictionary<string, object> {{"id", "order_OrdererDepartment"}}})
+                @Html.DropDownListFor(m => m.DepartmentId, Model.Department.Value, new {Id = "Orderer_DepartmentId", data_dh_is_required = Model.Department.IsRequired.ToJavaScriptBool() })
                 @Html.ValidationMessageFor(m => m.DepartmentId)
             </td>
             <td class="span3">
@@ -69,16 +71,3 @@
     @Html.EditorFor(m => m.AccountingDimension5, "Fields/Text")
     </tbody>
 </table>
-
-@if (Model.Unit.Show && Model.Unit.Value != null)
-{
-    @Scripts.Render(BundleConfig.ScriptNames.EditOrder)
-    <script type="text/javascript">
-        $(function() {
-            var parameters = {
-                Units: @Html.SerializeObjectToJson(Model.Unit.Value.Items)
-            };
-            OrderEdit(parameters);
-        });
-    </script>
-}

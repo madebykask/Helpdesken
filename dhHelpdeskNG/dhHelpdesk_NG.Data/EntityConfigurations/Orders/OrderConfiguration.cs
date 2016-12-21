@@ -17,12 +17,42 @@
             this.HasOptional(o => o.Domain)
                 .WithMany()
                 .HasForeignKey(o => o.Domain_Id);
+            this.HasOptional(x => x.Department)
+                .WithMany()
+                .HasForeignKey(x => x.Department_Id)
+                .WillCascadeOnDelete(false);
+            this.HasOptional(x => x.UserDepartment1)
+                .WithMany()
+                .HasForeignKey(x => x.UserDepartment_Id)
+                .WillCascadeOnDelete(false);
+            this.HasOptional(x => x.UserDepartment2)
+                .WithMany()
+                .HasForeignKey(x => x.UserDepartment_Id2)
+                .WillCascadeOnDelete(false);
+            this.HasOptional(x => x.UserOU)
+                .WithMany()
+                .HasForeignKey(x => x.UserOU_Id)
+                .WillCascadeOnDelete(false);
+
+            this.Property(x => x.EmploymentType).IsRequired();
             this.Property(o => o.OrderDate).IsOptional();
             this.Property(o => o.UserId).IsOptional().HasMaxLength(20);
             this.Property(o => o.UserFirstName).IsOptional().HasMaxLength(20);
             this.Property(o => o.UserLastName).IsOptional().HasMaxLength(50);
             this.Property(x => x.UserPhone).IsOptional().HasMaxLength(20);
             this.Property(x => x.UserEMail).IsOptional().HasMaxLength(50);
+            this.Property(x => x.UserInitials).IsOptional().HasMaxLength(10);
+            this.Property(x => x.UserPersonalIdentityNumber).IsOptional().HasMaxLength(200);
+            this.Property(x => x.UserExtension).IsOptional().HasMaxLength(20);
+            this.Property(x => x.UserTitle).IsOptional().HasMaxLength(50);
+            this.Property(x => x.UserLocation).IsOptional().HasMaxLength(50);
+            this.Property(x => x.UserRoomNumber).IsOptional().HasMaxLength(20);
+            this.Property(x => x.UserPostalAddress).IsOptional().HasMaxLength(50);
+            this.Property(x => x.Responsibility).IsOptional().HasMaxLength(50);
+            this.Property(x => x.Activity).IsOptional().HasMaxLength(50);
+            this.Property(x => x.Manager).IsOptional().HasMaxLength(50);
+            this.Property(x => x.ReferenceNumber).IsOptional().HasMaxLength(200);
+            this.Property(x => x.InfoUser).IsOptional().HasMaxLength(20);
             this.Property(o => o.OrdererID).IsRequired().HasMaxLength(40);
             this.Property(o => o.Orderer).IsRequired().HasMaxLength(50);
             this.Property(o => o.OrdererAddress).IsRequired().HasMaxLength(50);

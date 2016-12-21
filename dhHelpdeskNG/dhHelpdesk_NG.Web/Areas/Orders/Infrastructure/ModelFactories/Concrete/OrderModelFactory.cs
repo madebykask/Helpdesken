@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
+﻿using System.Web.Mvc;
+using DH.Helpdesk.BusinessData.Models.Shared;
+
+namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
 {
     using System.Collections.Generic;
     using System.Globalization;
@@ -29,19 +32,26 @@
         {
             var orderId = response.EditData.Order.Id;
             var textOrderId = orderId.ToString(CultureInfo.InvariantCulture);
-            var history = this.historyModelFactory.Create(response);
+            var history = historyModelFactory.Create(response);
 
             return new FullOrderEditModel(
-                this.CreateDeliveryEditModel(response.EditSettings.Delivery, response.EditData.Order.Delivery, response.EditOptions),
-                this.CreateGeneralEditModel(response.EditSettings.General, response.EditData.Order.General, response.EditOptions),
-                this.CreateLogEditModel(response.EditSettings.Log, response.EditData.Order.Log, response.EditOptions, orderId),
-                this.CreateOrdererEditModel(response.EditSettings.Orderer, response.EditData.Order.Orderer, response.EditOptions),
-                this.CreateOrderEditModel(response.EditSettings.Order, response.EditData.Order.Order, response.EditOptions),
-                this.CreateOtherEditModel(response.EditSettings.Other, response.EditData.Order.Other, response.EditOptions, textOrderId),
-                this.CreateProgramEditModel(response.EditSettings.Program, response.EditData.Order.Program),
-                this.CreateReceiverEditModel(response.EditSettings.Receiver, response.EditData.Order.Receiver),
-                this.CreateSupplierEditModel(response.EditSettings.Supplier, response.EditData.Order.Supplier),
-                this.CreateUserEditModel(response.EditSettings.User, response.EditData.Order.User),
+                CreateDeliveryEditModel(response.EditSettings.Delivery, response.EditData.Order.Delivery,
+                    response.EditOptions),
+                CreateGeneralEditModel(response.EditSettings.General, response.EditData.Order.General,
+                    response.EditOptions),
+                CreateLogEditModel(response.EditSettings.Log, response.EditData.Order.Log, response.EditOptions,
+                    orderId),
+                CreateOrdererEditModel(response.EditSettings.Orderer, response.EditData.Order.Orderer,
+                    response.EditOptions),
+                CreateOrderEditModel(response.EditSettings.Order, response.EditData.Order.Order,
+                    response.EditOptions),
+                CreateOtherEditModel(response.EditSettings.Other, response.EditData.Order.Other,
+                    response.EditOptions, textOrderId),
+                CreateProgramEditModel(response.EditSettings.Program, response.EditData.Order.Program),
+                CreateReceiverEditModel(response.EditSettings.Receiver, response.EditData.Order.Receiver),
+                CreateSupplierEditModel(response.EditSettings.Supplier, response.EditData.Order.Supplier),
+                CreateUserEditModel(response.EditSettings.User, response.EditData.Order.User),
+                CreateUserInfoEditModel(response.EditSettings.User, response.EditData.Order.User, response.EditOptions),
                 textOrderId,
                 customerId,
                 response.EditData.Order.OrderTypeId,
@@ -261,11 +271,11 @@
                                 UserEditSettings settings,
                                 UserEditFields fields)
         {
-            var userId = this.configurableFieldModelFactory.CreateStringField(settings.UserId, fields.UserId);
-            var userFirstName = this.configurableFieldModelFactory.CreateStringField(settings.UserFirstName, fields.UserFirstName);
-            var userLastName = this.configurableFieldModelFactory.CreateStringField(settings.UserLastName, fields.UserLastName);
-            var userPhone = this.configurableFieldModelFactory.CreateStringField(settings.UserPhone, fields.UserPhone);
-            var userEmail = this.configurableFieldModelFactory.CreateStringField(settings.UserEMail, fields.UserEMail);
+            var userId = configurableFieldModelFactory.CreateStringField(settings.UserId, fields.UserId);
+            var userFirstName = configurableFieldModelFactory.CreateStringField(settings.UserFirstName, fields.UserFirstName);
+            var userLastName = configurableFieldModelFactory.CreateStringField(settings.UserLastName, fields.UserLastName);
+            var userPhone = configurableFieldModelFactory.CreateStringField(settings.UserPhone, fields.UserPhone);
+            var userEmail = configurableFieldModelFactory.CreateStringField(settings.UserEMail, fields.UserEMail);
 
             return new UserEditModel(
                             userId,
@@ -273,6 +283,56 @@
                             userLastName,
                             userPhone,
                             userEmail);
+        }
+
+        private UserInfoEditModel CreateUserInfoEditModel(
+                        UserEditSettings settings,
+                        UserEditFields fields,
+                        OrderEditOptions options)
+        {
+            var model = new UserInfoEditModel(
+                            configurableFieldModelFactory.CreateStringField(settings.PersonalIdentityNumber, fields.UserPersonalIdentityNumber),
+                            configurableFieldModelFactory.CreateStringField(settings.Initials, fields.UserInitials),
+                            configurableFieldModelFactory.CreateStringField(settings.Extension, fields.UserExtension),
+                            configurableFieldModelFactory.CreateStringField(settings.Title, fields.UserTitle),
+                            configurableFieldModelFactory.CreateStringField(settings.Location, fields.UserLocation),
+                            configurableFieldModelFactory.CreateStringField(settings.RoomNumber, fields.UserRoomNumber),
+                            configurableFieldModelFactory.CreateStringField(settings.PostalAddress, fields.UserPostalAddress),
+                            configurableFieldModelFactory.CreateNullableIntegerField(settings.EmploymentType, fields.EmploymentType),
+                            configurableFieldModelFactory.CreateNullableIntegerField(settings.DepartmentId1, fields.UserDepartment_Id1),
+                            configurableFieldModelFactory.CreateNullableIntegerField(settings.UnitId, fields.UserOU_Id),
+                            configurableFieldModelFactory.CreateNullableIntegerField(settings.DepartmentId2, fields.UserDepartment_Id2),
+                            configurableFieldModelFactory.CreateStringField(settings.Info, fields.InfoUser),
+                            configurableFieldModelFactory.CreateStringField(settings.Responsibility, fields.Responsibility),
+                            configurableFieldModelFactory.CreateStringField(settings.Activity, fields.Activity),
+                            configurableFieldModelFactory.CreateStringField(settings.Manager, fields.Manager),
+                            configurableFieldModelFactory.CreateStringField(settings.ReferenceNumber, fields.ReferenceNumber));
+            model.EmploymentTypes = CreateSelectListField(settings.EmploymentType,
+                options.EmploymentTypes, fields.EmploymentType.ToString(CultureInfo.InvariantCulture));
+            model.Departments = CreateSelectListField(settings.DepartmentId1,
+                options.Departments, fields.UserDepartment_Id1.ToString());
+            model.Departments2 = CreateSelectListField(settings.DepartmentId2,
+                options.Departments, fields.UserDepartment_Id2.ToString());
+            model.Units = CreateSelectListField(settings.UnitId,
+                options.Units, fields.UserOU_Id.ToString());
+            model.Regions = CreateSelectListField(settings.DepartmentId1,
+                options.Regions, fields.RegionId.ToString());
+
+            return model;
+        }
+
+        private static SelectList CreateSelectListField(
+        FieldEditSettings setting,
+        ItemOverview[] items,
+        string selectedValue)
+        {
+            if (!setting.Show)
+            {
+                return new SelectList(Enumerable.Empty<SelectListItem>());
+            }
+
+            var list = new SelectList(items, "Value", "Name", selectedValue);
+            return list;
         }
     }
 }

@@ -1,0 +1,40 @@
+﻿
+@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.UserInfoEditModel
+
+<h4>@Translation.Get("Användarinformation")</h4>
+<table class="tableform">
+    <tbody>
+        @Html.EditorFor(m => m.Initials, "Fields/Text")
+        @Html.EditorFor(m => m.PersonalIdentityNumber, "Fields/Text")
+        @Html.EditorFor(m => m.Extension, "Fields/Text")
+        @Html.EditorFor(m => m.Title, "Fields/Text")
+        @Html.EditorFor(m => m.Location, "Fields/Text")
+        @Html.EditorFor(m => m.RoomNumber, "Fields/Text")
+        @Html.EditorFor(m => m.PostalAddress, "Fields/Text")
+        @Html.EditorFor(m => m.EmploymentType, "Fields/List", new { Source = Model.EmploymentTypes })
+
+        @if (Model.DepartmentId1.Show)
+        {
+            <tr>
+                <td class="span3">
+                    <label>@Translation.Get("Område")</label>
+                </td>
+                <td class="span6">
+                    @Html.DropDownListFor(m => m.RegionId, Model.Regions, string.Empty, new {id = "region_dropdown"})
+                </td>
+                <td class="span3">
+                </td>
+            </tr>
+        }
+
+        @Html.EditorFor(m => m.DepartmentId1, "Fields/List", new { Source = Model.Departments, Id = "department_dropdown" })
+        @Html.EditorFor(m => m.DepartmentId2, "Fields/List", new { Source = Model.Departments2 })
+        @Html.EditorFor(m => m.UnitId, "Fields/List", new { Source = Model.Units })
+        @Html.EditorFor(m => m.Info, "Fields/Text")
+        @Html.EditorFor(m => m.Responsibility, "Fields/Text")
+        @Html.EditorFor(m => m.Activity, "Fields/Text")
+        @Html.EditorFor(m => m.Manager, "Fields/Text")
+        @Html.EditorFor(m => m.ReferenceNumber, "Fields/Text")
+    </tbody>
+</table>

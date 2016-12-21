@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
+﻿using System.Web.Mvc;
+
+namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
 {
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Areas.Orders.Models.Order.FieldModels;
@@ -9,18 +11,13 @@
         {            
         }
 
-        public UserEditModel(
-            ConfigurableFieldModel<string> userId,
-            ConfigurableFieldModel<string> userFirstName,
-            ConfigurableFieldModel<string> userLastName,
-            ConfigurableFieldModel<string> userPhone,
-            ConfigurableFieldModel<string> userEmail)
+        public UserEditModel(ConfigurableFieldModel<string> userId, ConfigurableFieldModel<string> userFirstName, ConfigurableFieldModel<string> userLastName, ConfigurableFieldModel<string> userPhone, ConfigurableFieldModel<string> userEMail)
         {
             UserId = userId;
             UserFirstName = userFirstName;
             UserLastName = userLastName;
             UserPhone = userPhone;
-            UserEMail = userEmail;
+            UserEMail = userEMail;
         }
 
         [NotNull]
@@ -37,6 +34,7 @@
 
         [NotNull]
         public ConfigurableFieldModel<string> UserEMail { get; set; }
+        
 
         public static UserEditModel CreateEmpty()
         {
@@ -54,7 +52,7 @@
                 UserFirstName.Show ||
                 UserLastName.Show ||
                 UserPhone.Show ||
-                UserEMail.Show;
+                UserEMail.Show ;
         }
     }
 }

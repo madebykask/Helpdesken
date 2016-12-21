@@ -1,4 +1,8 @@
-﻿namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
+﻿using System.Linq;
+using System.Web.Mvc;
+using DH.Helpdesk.BusinessData.Models.Shared;
+
+namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
 {
     using System.Collections.Generic;
 
@@ -21,16 +25,17 @@
         public FullOrderEditModel Create(string temporatyId, NewOrderEditData data, IWorkContext workContext, int? orderTypeId)
         {
             return new FullOrderEditModel(
-                this.CreateDeliveryEditModel(data.EditSettings.Delivery, data.EditOptions),
-                this.CreateGeneralEditModel(data.EditSettings.General, data.EditOptions),
-                this.CreateLogEditModel(data.EditSettings.Log, data.EditOptions),
-                this.CreateOrdererEditModel(data.EditSettings.Orderer, data.EditOptions),
-                this.CreateOrderEditModel(data.EditSettings.Order, data.EditOptions),
-                this.CreateOtherEditModel(data.EditSettings.Other, data.EditOptions, temporatyId),
-                this.CreateProgramEditModel(data.EditSettings.Program),
-                this.CreateReceiverEditModel(data.EditSettings.Receiver),
-                this.CreateSupplierEditModel(data.EditSettings.Supplier),
-                this.CreateUserEditModel(data.EditSettings.User, workContext),
+                CreateDeliveryEditModel(data.EditSettings.Delivery, data.EditOptions),
+                CreateGeneralEditModel(data.EditSettings.General, data.EditOptions),
+                CreateLogEditModel(data.EditSettings.Log, data.EditOptions),
+                CreateOrdererEditModel(data.EditSettings.Orderer, data.EditOptions),
+                CreateOrderEditModel(data.EditSettings.Order, data.EditOptions),
+                CreateOtherEditModel(data.EditSettings.Other, data.EditOptions, temporatyId),
+                CreateProgramEditModel(data.EditSettings.Program),
+                CreateReceiverEditModel(data.EditSettings.Receiver),
+                CreateSupplierEditModel(data.EditSettings.Supplier),
+                CreateUserEditModel(data.EditSettings.User, workContext),
+                CreateUserInfoEditModel(data.EditSettings.User, data.EditOptions,  workContext),
                 temporatyId,
                 workContext.Customer.CustomerId,
                 orderTypeId,
@@ -232,11 +237,11 @@
                         UserEditSettings settings,
                         IWorkContext workContext)
         {
-            var userId = this.configurableFieldModelFactory.CreateStringField(settings.UserId, workContext.User.Login);
-            var userFirstName = this.configurableFieldModelFactory.CreateStringField(settings.UserFirstName, workContext.User.FirstName);
-            var userLastName = this.configurableFieldModelFactory.CreateStringField(settings.UserLastName, workContext.User.LastName);
-            var userPhone = this.configurableFieldModelFactory.CreateStringField(settings.UserPhone, workContext.User.Phone);
-            var userEmail = this.configurableFieldModelFactory.CreateStringField(settings.UserEMail, workContext.User.Email);
+            var userId = configurableFieldModelFactory.CreateStringField(settings.UserId, workContext.User.Login);
+            var userFirstName = configurableFieldModelFactory.CreateStringField(settings.UserFirstName, workContext.User.FirstName);
+            var userLastName = configurableFieldModelFactory.CreateStringField(settings.UserLastName, workContext.User.LastName);
+            var userPhone = configurableFieldModelFactory.CreateStringField(settings.UserPhone, workContext.User.Phone);
+            var userEmail = configurableFieldModelFactory.CreateStringField(settings.UserEMail, workContext.User.Email);
 
             return new UserEditModel(
                             userId,
@@ -244,6 +249,56 @@
                             userLastName,
                             userPhone,
                             userEmail);
+        }
+
+        private UserInfoEditModel CreateUserInfoEditModel(
+                UserEditSettings settings,
+                OrderEditOptions options,
+                IWorkContext workContext)
+        {
+            var model = new UserInfoEditModel(
+                            configurableFieldModelFactory.CreateStringField(settings.PersonalIdentityNumber, null),
+                            configurableFieldModelFactory.CreateStringField(settings.Initials, null),
+                            configurableFieldModelFactory.CreateStringField(settings.Extension, null),
+                            configurableFieldModelFactory.CreateStringField(settings.Title, null),
+                            configurableFieldModelFactory.CreateStringField(settings.Location, null),
+                            configurableFieldModelFactory.CreateStringField(settings.RoomNumber, null),
+                            configurableFieldModelFactory.CreateStringField(settings.PostalAddress, null),
+                            configurableFieldModelFactory.CreateNullableIntegerField(settings.EmploymentType, null),
+                            configurableFieldModelFactory.CreateNullableIntegerField(settings.DepartmentId1, null),
+                            configurableFieldModelFactory.CreateNullableIntegerField(settings.UnitId, null),
+                            configurableFieldModelFactory.CreateNullableIntegerField(settings.DepartmentId2, null),
+                            configurableFieldModelFactory.CreateStringField(settings.Info, null),
+                            configurableFieldModelFactory.CreateStringField(settings.Responsibility, null),
+                            configurableFieldModelFactory.CreateStringField(settings.Activity, null),
+                            configurableFieldModelFactory.CreateStringField(settings.Manager, null),
+                            configurableFieldModelFactory.CreateStringField(settings.ReferenceNumber, null));
+            model.EmploymentTypes = CreateSelectListField(settings.EmploymentType,
+                options.EmploymentTypes, null);
+            model.Departments = CreateSelectListField(settings.DepartmentId1,
+                options.Departments, null);
+            model.Departments2 = CreateSelectListField(settings.DepartmentId2,
+                options.Departments, null);
+            model.Units = CreateSelectListField(settings.UnitId,
+                options.Units, null);
+            model.Regions = CreateSelectListField(settings.DepartmentId1,
+                options.Regions, null);
+
+            return model;
+        }
+
+        private static SelectList CreateSelectListField(
+                FieldEditSettings setting,
+                ItemOverview[] items,
+                string selectedValue)
+       {
+            if (!setting.Show)
+            {
+                return new SelectList(Enumerable.Empty<SelectListItem>());
+            }
+
+            var list = new SelectList(items, "Value", "Name", selectedValue);
+            return list;
         }
     }
 }

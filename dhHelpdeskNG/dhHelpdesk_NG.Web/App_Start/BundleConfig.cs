@@ -1,19 +1,21 @@
-﻿namespace DH.Helpdesk.Web
+﻿using DH.Helpdesk.Web.Infrastructure.UrlHelpers.Mvc;
+using DH.Helpdesk.Web.Infrastructure.UrlHelpers.Mvc.Orders;
+
+namespace DH.Helpdesk.Web
 {
     using System.Web.Optimization;
 
-    public static class BundleConfig
+    public partial class BundleConfig
     {
 	    public struct StylesNames
 	    {
 			
 		}
 
-		public struct ScriptNames
+		public partial struct ScriptNames
         {
             public const string DynamicCase = "~/bundles/dynamic-case";
             public const string AttributesValidation = "~/bundles/jqueryattrval";
-            public const string EditOrder = ("~/bundles/orders/orderedit");
             public const string InventoryUserSearch = ("~/bundles/inventory/inventorysearch");
             public const string CaseIntLogEmailSearch = ("~/bundles/case/caseintlogemailsearch");
             public const string CaseAddFollowersSearch = ("~/bundles/case/caseaddfollowerssearch");
@@ -23,6 +25,8 @@
 
         public static void RegisterBundles(BundleCollection bundles)
         {
+            bundles.IgnoreList.Clear();
+
             bundles.Add(new StyleBundle("~/img-profile/css").Include(
                             "~/img-profile/profile.css"));
 
@@ -418,8 +422,6 @@
 
             bundles.Add(new ScriptBundle(ScriptNames.AttributesValidation).Include(
                 "~/Content/js/Shared/custom.validation.reuiredifnotempty.js"));
-            bundles.Add(new ScriptBundle(ScriptNames.EditOrder).Include(
-                "~/Content/js/Orders/order.edit.js"));
             bundles.Add(new ScriptBundle(ScriptNames.InventoryUserSearch).Include(
                 "~/Content/js/Inventory/inventory.search.js"));
             bundles.Add(new ScriptBundle(ScriptNames.CaseIntLogEmailSearch).Include(
@@ -427,7 +429,9 @@
             bundles.Add(new ScriptBundle(ScriptNames.CaseAddFollowersSearch).Include(
                 "~/Content/js/Cases/Dialogs/_caseAddFollowersSearch.js"));
 
+            RegisterOrdersAreaBundles(bundles);
+
         }
 
-	}
+    }
 }

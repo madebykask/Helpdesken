@@ -1,4 +1,8 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
+﻿@using System.Web.Optimization
+@using DH.Helpdesk.Web
+@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Infrastructure.Extensions
+@using DH.Helpdesk.Web.Infrastructure.UrlHelpers.Api.Orders
 @model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.FullOrderEditModel
 @{
     Layout = "~/Areas/Orders/Views/Shared/_OrderLayout.cshtml";
@@ -58,18 +62,25 @@
     {
         @Html.EditorFor(m => m)
     }
-    
+}
+
+@section Scripts {
+    @Scripts.Render(BundleConfig.ScriptNames.Orders.EditOrder)
+
     <script type="text/javascript">
-        $(function() {
-            $("#btnSave").click(function () {
+        $(function () {
 
-                $("#InformOrderer").val($("#InformOrderer_action").prop("checked"));
-                $("#InformReceiver").val($("#InformReceiver_action").prop("checked"));
-                $("#CreateCase").val($("#CreateCase_action").prop("checked"));
-
-                $("#edit_form").submit();
-                return false;
-            });
-        });
-    </script>      
+            var pageObject = new EditOrder(
+                {
+                    isOrdererUnitVisible: @((Model.Orderer.Unit.Show && Model.Orderer.Unit.Value != null).ToJavaScriptBool()),
+                    isUserDepartmentVisible: @((Model.UserInfo.DepartmentId1.Show).ToJavaScriptBool()),
+                    units: @if (Model.Orderer.Unit.Value != null)
+                           {
+                               @Html.SerializeObjectToJson(Model.Orderer.Unit.Value.Items)
+                           },
+                    searchDepartmentsByRegionIdUrl: "@Url.ApiOrdersAction(WebApiOrdersUrlName.Orders.SearchDepartmentsByRegionId, WebApiOrdersUrlName.Orders.Controller)"
+                });
+            pageObject.init();
+         });
+    </script>
 }

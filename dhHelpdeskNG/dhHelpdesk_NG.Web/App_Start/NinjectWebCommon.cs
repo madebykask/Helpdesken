@@ -1,4 +1,6 @@
+using System.Web.Http;
 using DH.Helpdesk.Web;
+using Ninject.Web.WebApi;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
 [assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(NinjectWebCommon), "Stop")]
@@ -79,6 +81,7 @@ namespace DH.Helpdesk.Web
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
 
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(kernel));
+
             return kernel;
         }
 

@@ -122,6 +122,14 @@
       <HintPath>..\packages\Ninject.MVC5.3.2.1.0\lib\net45-full\Ninject.Web.Mvc.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Ninject.Web.WebApi, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.Web.WebApi.3.2.4.0\lib\net45-full\Ninject.Web.WebApi.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ninject.Web.WebApi.WebHost, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.Web.WebApi.WebHost.3.2.4.0\lib\net45-full\Ninject.Web.WebApi.WebHost.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="PostSharp, Version=4.0.36.0, Culture=neutral, PublicKeyToken=b13fd38b8f9c99d7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\PostSharp.4.0.36\lib\net35-client\PostSharp.dll</HintPath>
@@ -229,6 +237,9 @@
     <Compile Include="..\CommonAssembly\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="App_Start\BundleConfig.Orders.cs" />
+    <Compile Include="Areas\Orders\Controllers\WebApi\OrdersApiController.cs" />
+    <Compile Include="Areas\Orders\Models\Order\OrderEdit\UserInfoEditModel.cs" />
     <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Infrastructure\Attributes\RequiredIfNotEmptyAttribute.cs" />
     <Compile Include="Infrastructure\Extensions\ProperyExtensions.cs" />
@@ -441,6 +452,7 @@
     <Content Include="Areas\Admin\Content\templates\BusinessRule\rule.tmpl.html" />
     <Content Include="Areas\Admin\Content\templates\BusinessRule\condition.tmpl.html" />
     <Content Include="Areas\Admin\Content\templates\BusinessRule\condition-rows.tmpl.html" />
+    <Content Include="Areas\Orders\Content\js\Order\order.edit.js" />
     <Content Include="Areas\Reports\Content\js\reportViewer.logic.js" />
     <Content Include="Areas\Reports\Content\js\reports.js" />
     <Content Include="Content\bootstrap-tagsinput.css" />
@@ -1137,6 +1149,7 @@
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\JavaScriptConvertExtention.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\UserFormatterExtension.cs" />
     <Compile Include="Infrastructure\ModelFactories\Case\Concrete\CaseRuleFactory.cs" />
+    <Compile Include="Infrastructure\RouteValueDictionaryHelper.cs" />
     <Compile Include="Infrastructure\SelectListMapper.cs" />
     <Compile Include="Infrastructure\Enums.cs" />
     <Compile Include="Infrastructure\Extensions\BooleanExtansions.cs" />
@@ -1228,11 +1241,15 @@
     <Compile Include="Infrastructure\Tools\MimeHelper.cs" />
     <Compile Include="Infrastructure\Tools\WebMvcHelper.cs" />
     <Compile Include="Infrastructure\Translate\Translator.cs" />
+    <Compile Include="Infrastructure\UrlHelpers\Api\Orders\WebApiOrdersUrlName.Orders.cs" />
+    <Compile Include="Infrastructure\UrlHelpers\Api\WebApiUrlName.cs" />
     <Compile Include="Infrastructure\UrlHelpers\MvcUrlNameBase.cs" />
     <Compile Include="Infrastructure\UrlHelpers\Mvc\MvcUrlName.cs" />
     <Compile Include="Infrastructure\UrlHelpers\Mvc\MvcUrlName.Feedback.cs" />
     <Compile Include="Infrastructure\UrlHelpers\Mvc\MvcUrlName.Questionnaire.cs" />
+    <Compile Include="Infrastructure\UrlHelpers\Mvc\Orders\MvcOrdersUrlName.Orders.cs" />
     <Compile Include="Infrastructure\UrlHelpers\WebApiUrlNameBase.cs" />
+    <Compile Include="Infrastructure\Utilities\PropertyHelper.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\CacheContext.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\CustomerContext.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\UserContext.cs" />
@@ -1406,6 +1423,7 @@
     <Compile Include="Models\CheckLists\CheckListActionsInputModel.cs" />
     <Compile Include="Models\CheckLists\CheckListsModel.cs" />
     <Compile Include="Models\CheckLists\WorkingGroupMapperModel.cs" />
+    <Compile Include="Models\Common\NullableIdParams.cs" />
     <Compile Include="Models\Contract\ContractFileViewModel.cs" />
     <Compile Include="Models\Contract\ContractIndexViewModel.cs" />
     <Compile Include="Models\Contract\ContractsSettingViewModel.cs" />
@@ -1861,8 +1879,9 @@
     <Content Include="Areas\Admin\Views\BusinessRule\_InputRule.cshtml" />
     <Content Include="Areas\Admin\Views\BusinessRule\_RuleCondition.cshtml" />
     <Content Include="Areas\Admin\Views\BusinessRule\_RuleAction.cshtml" />
-    <Content Include="Content\js\Orders\order.edit.js" />
     <Content Include="log4net.config" />
+    <Content Include="Areas\Orders\Views\Orders\EditorTemplates\UserInfoEditModel.cshtml" />
+    <Content Include="Areas\Orders\Views\Orders\EditorTemplates\Fields\List.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx" />
     <Content Include="Content\js\Shared\custom.validation.reuiredifnotempty.js" />
@@ -3234,7 +3253,6 @@
     <Folder Include="Areas\Admin\Controllers\Api\" />
     <Folder Include="Areas\Inventory\Infrastucture\" />
     <Folder Include="Infrastructure\ModelFactories\Problems\Concrete\" />
-    <Folder Include="Infrastructure\UrlHelpers\Api\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Login\Login.cshtml" />

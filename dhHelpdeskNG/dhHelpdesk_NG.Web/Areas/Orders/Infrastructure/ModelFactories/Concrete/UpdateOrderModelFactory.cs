@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
+﻿using System.Web.Mvc;
+
+namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
 {
     using System;
     using System.Collections.Generic;
@@ -39,7 +41,7 @@
                 CreateProgramFields(model.Program),
                 CreateReceiverFields(model.Receiver),
                 CreateSupplierFields(model.Supplier),
-                CreateUserFields(model.User));
+                CreateUserFields(model.User, model.UserInfo));
 
             var newLogs = CreateNewLogCollection(model, emailService);
 
@@ -212,7 +214,7 @@
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.SupplierOrderInfo));
         }
 
-        private static UserEditFields CreateUserFields(UserEditModel model)
+        private static UserEditFields CreateUserFields(UserEditModel model, UserInfoEditModel infoModel)
         {
             if (model == null)
             {
@@ -220,11 +222,28 @@
             }
 
             return new UserEditFields(
-                    ConfigurableFieldModel<string>.GetValueOrDefault(model.UserId),
-                    ConfigurableFieldModel<string>.GetValueOrDefault(model.UserFirstName),
-                    ConfigurableFieldModel<string>.GetValueOrDefault(model.UserLastName),
-                    ConfigurableFieldModel<string>.GetValueOrDefault(model.UserPhone),
-                    ConfigurableFieldModel<string>.GetValueOrDefault(model.UserEMail));
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.UserId),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.UserFirstName),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.UserLastName),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.UserPhone),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.UserEMail),
+                ConfigurableFieldModel<string>.GetValueOrDefault(infoModel.Initials),
+                ConfigurableFieldModel<string>.GetValueOrDefault(infoModel.PersonalIdentityNumber),
+                ConfigurableFieldModel<string>.GetValueOrDefault(infoModel.Extension),
+                ConfigurableFieldModel<string>.GetValueOrDefault(infoModel.Title),
+                ConfigurableFieldModel<string>.GetValueOrDefault(infoModel.Location),
+                ConfigurableFieldModel<string>.GetValueOrDefault(infoModel.RoomNumber),
+                ConfigurableFieldModel<string>.GetValueOrDefault(infoModel.PostalAddress),
+                ConfigurableFieldModel<string>.GetValueOrDefault(infoModel.Responsibility),
+                ConfigurableFieldModel<string>.GetValueOrDefault(infoModel.Activity),
+                ConfigurableFieldModel<string>.GetValueOrDefault(infoModel.Manager),
+                ConfigurableFieldModel<string>.GetValueOrDefault(infoModel.ReferenceNumber),
+                ConfigurableFieldModel<string>.GetValueOrDefault(infoModel.Info),
+                ConfigurableFieldModel<int?>.GetValueOrDefault(infoModel.UnitId),
+                infoModel.EmploymentType.Value ?? 0,
+                ConfigurableFieldModel<int?>.GetValueOrDefault(infoModel.DepartmentId1),
+                ConfigurableFieldModel<int?>.GetValueOrDefault(infoModel.DepartmentId2),
+                infoModel.RegionId);
         }
 
         private static List<ManualLog> CreateNewLogCollection(FullOrderEditModel model, IEmailService emailService)

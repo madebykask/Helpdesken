@@ -30,7 +30,9 @@
 		    List<GroupWithEmails> emailGroups,
 		    List<GroupWithEmails> workingGroupsWithEmails,
 		    IQueryable<User> administratorsWithEmails,
-		    FullOrderEditSettings settings)
+		    FullOrderEditSettings settings,
+            IQueryable<EmploymentType> employmentTypes,
+            IQueryable<Region> regions)
 	    {
 		    IQueryable<UnionItemDependentOverview> query = null;
 
@@ -44,25 +46,38 @@
 		    if (settings.General.Administrator.Show)
 		    {
 			    var union = administrators.Select(a => new UnionItemDependentOverview{Id = a.Id, Name = a.FirstName + " " + a.SurName, Type = "administrators", DependentId = null});
-			    query = query == null ? union : query.Union(union);
+			    query = query?.Union(union) ?? union;
 		    }
 
 		    if (settings.General.Domain.Show)
 		    {
 			    var union = domains.Select(d => new UnionItemDependentOverview {Id = d.Id, Name = d.Name, Type = "domains", DependentId = null});
-			    query = query == null ? union : query.Union(union);
+			    query = query?.Union(union) ?? union;
 		    }
 
-		    if (settings.Orderer.Department.Show)
-		    {
+            if (settings.User.EmploymentType.Show)
+            {
+                var union = employmentTypes.Select(d => new UnionItemDependentOverview { Id = d.Id, Name = d.Name, Type = "employmentTypes", DependentId = null });
+                query = query?.Union(union) ?? union;
+            }
+
+            if (settings.Orderer.Department.Show ||
+                settings.User.DepartmentId1.Show ||
+                settings.User.DepartmentId2.Show)
+            {
 			    var union = departments.Select(d => new UnionItemDependentOverview {Id = d.Id, Name = d.DepartmentName, Type = "departments", DependentId = null});
-			    query = query == null ? union : query.Union(union);
-		    }
+			    query = query?.Union(union) ?? union;
 
-		    if (settings.Orderer.Unit.Show)
+                var regionsUnion = regions.Select(d => new UnionItemDependentOverview { Id = d.Id, Name = d.Name, Type = "regions", DependentId = null });
+                query = query.Union(regionsUnion);
+
+            }
+
+            if (settings.Orderer.Unit.Show ||
+                settings.User.UnitId.Show)
 		    {
 			    var union = units.Select(u => new UnionItemDependentOverview {Id = u.Id, Name = u.Name, Type = "units", DependentId = u.Department_Id});
-			    query = query == null ? union : query.Union(union);
+			    query = query?.Union(union) ?? union;
 		    }
 
 		    var propertiesOverviews = new ItemOverview[0];
@@ -74,13 +89,13 @@
 		    if (settings.Delivery.DeliveryDepartment.Show)
 		    {
 			    var union = deliveryDepartments.Select(d => new UnionItemDependentOverview {Id = d.Id, Name = d.DepartmentName, Type = "deliveryDepartments", DependentId = null});
-			    query = query == null ? union : query.Union(union);
+			    query = query?.Union(union) ?? union;
 		    }
 
 		    if (settings.Delivery.DeliveryOuId.Show)
 		    {
 			    var union = deliveryOuIds.Select(u => new UnionItemDependentOverview {Id = u.Id, Name = u.Name, Type = "deliveryOuIds", DependentId = null});
-			    query = query == null ? union : query.Union(union);
+			    query = query?.Union(union) ?? union;
 		    }
 
 		    var separator = Guid.NewGuid().ToString();
@@ -88,7 +103,7 @@
 		    if (settings.Log.Log.Show)
 		    {
 			    var union = administratorsWithEmails.Select(a => new UnionItemDependentOverview {Id = a.Id, Name = a.FirstName + " " + a.SurName + separator + a.Email, Type = "administratorsWithEmails", DependentId = null});
-			    query = query == null ? union : query.Union(union);
+			    query = query?.Union(union) ?? union;
 		    }
 
 		    var overviews = new UnionItemDependentOverview[0];
@@ -108,7 +123,7 @@
 			    overviews.Where(o => o.Type == "domains").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
 			    overviews.Where(o => o.Type == "departments").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
 			    overviews.Where(o => o.Type == "units").Select(o => new ItemDependentOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture),
-								o.DependentId.HasValue ? o.DependentId.Value.ToString(CultureInfo.InvariantCulture) : string.Empty)).ToArray(),
+								o.DependentId?.ToString(CultureInfo.InvariantCulture) ?? string.Empty)).ToArray(),
 			    propertiesOverviews,
 			    overviews.Where(o => o.Type == "deliveryDepartments").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
 			    overviews.Where(o => o.Type == "deliveryOuIds").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
@@ -118,7 +133,9 @@
 			    {
 				    var values = a.Name.Split(new[] {separator}, StringSplitOptions.RemoveEmptyEntries);
 				    return new ItemOverview(values[0], values.Length > 1 ? values[1].Split(';').First() : string.Empty);
-			    }).ToList());
+			    }).ToList(),
+                overviews.Where(o => o.Type == "employmentTypes").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
+                overviews.Where(o => o.Type == "regions").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray());
 	    }
 
 	    public static FullOrderEditFields MapToFullOrderEditFields(this IQueryable<Order> query)
@@ -257,7 +274,24 @@
                     entity.UserFirstName,
                     entity.UserLastName,
                     entity.UserPhone,
-                    entity.UserEMail);
+                    entity.UserEMail,
+                    entity.UserInitials,
+                    entity.UserPersonalIdentityNumber,
+                    entity.UserExtension,
+                    entity.UserTitle,
+                    entity.UserLocation,
+                    entity.UserRoomNumber,
+                    entity.UserPostalAddress,
+                    entity.Responsibility,
+                    entity.Activity,
+                    entity.Manager,
+                    entity.ReferenceNumber,
+                    entity.InfoUser,
+                    entity.UserOU_Id,
+                    entity.EmploymentType,
+                    entity.UserDepartment_Id,
+                    entity.UserDepartment_Id2,
+                    entity.UserDepartment1?.Region_Id);
         }
     }
 }

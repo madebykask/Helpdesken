@@ -170,7 +170,23 @@
                         CreateTextFieldSettingModel(settings.UserFirstName),
                         CreateTextFieldSettingModel(settings.UserLastName),
                         CreateTextFieldSettingModel(settings.UserPhone),
-                        CreateTextFieldSettingModel(settings.UserEMail));
+                        CreateTextFieldSettingModel(settings.UserEMail),
+                        CreateTextFieldSettingModel(settings.PersonalIdentityNumber),
+                        CreateTextFieldSettingModel(settings.Initials),
+                        CreateTextFieldSettingModel(settings.Extension),
+                        CreateTextFieldSettingModel(settings.Title),
+                        CreateTextFieldSettingModel(settings.Location),
+                        CreateTextFieldSettingModel(settings.RoomNumber),
+                        CreateTextFieldSettingModel(settings.PostalAddress),
+                        CreateTextFieldSettingModel(settings.EmploymentType),
+                        CreateTextFieldSettingModel(settings.DepartmentId1),
+                        CreateTextFieldSettingModel(settings.UnitId),
+                        CreateTextFieldSettingModel(settings.DepartmentId2),
+                        CreateTextFieldSettingModel(settings.Info),
+                        CreateTextFieldSettingModel(settings.Responsibility),
+                        CreateTextFieldSettingModel(settings.Activity),
+                        CreateTextFieldSettingModel(settings.Manager),
+                        CreateTextFieldSettingModel(settings.ReferenceNumber));
         }
 
         private static FieldSettingsModel CreateFieldSettingModel(FieldSettings settings)
@@ -314,7 +330,23 @@
                         CreateTextFieldSettingForUpdate(settings.UserFirstName),
                         CreateTextFieldSettingForUpdate(settings.UserLastName),
                         CreateTextFieldSettingForUpdate(settings.UserPhone),
-                        CreateTextFieldSettingForUpdate(settings.UserEMail));
+                        CreateTextFieldSettingForUpdate(settings.UserEMail),
+                        CreateTextFieldSettingForUpdate(settings.Initials),
+                        CreateTextFieldSettingForUpdate(settings.PersonalIdentityNumber),
+                        CreateTextFieldSettingForUpdate(settings.Extension),
+                        CreateTextFieldSettingForUpdate(settings.Title),
+                        CreateTextFieldSettingForUpdate(settings.Location),
+                        CreateTextFieldSettingForUpdate(settings.RoomNumber),
+                        CreateTextFieldSettingForUpdate(settings.PostalAddress),
+                        CreateTextFieldSettingForUpdate(settings.EmploymentType),
+                        CreateTextFieldSettingForUpdate(settings.DepartmentId1),
+                        CreateTextFieldSettingForUpdate(settings.UnitId),
+                        CreateTextFieldSettingForUpdate(settings.DepartmentId2),
+                        CreateTextFieldSettingForUpdate(settings.Info),
+                        CreateTextFieldSettingForUpdate(settings.Responsibility),
+                        CreateTextFieldSettingForUpdate(settings.Activity),
+                        CreateTextFieldSettingForUpdate(settings.Manager),
+                        CreateTextFieldSettingForUpdate(settings.ReferenceNumber));
         }
 
         private static FieldSettings CreateFieldSettingForUpdate(FieldSettingsModel settings)

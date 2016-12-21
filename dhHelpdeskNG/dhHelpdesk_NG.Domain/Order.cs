@@ -28,6 +28,10 @@
 
         public int? Department_Id { get; set; }
 
+        public int? UserDepartment_Id { get; set; }
+
+        public int? UserDepartment_Id2 { get; set; }
+
         public int? Domain_Id { get; set; }
 
         public int OrderInfo2 { get; set; }
@@ -49,6 +53,10 @@
         public string DeliveryLocation { get; set; }
 
         public int? OU_Id { get; set; }
+
+        public int? UserOU_Id { get; set; }
+
+        public int EmploymentType { get; set; }
 
         public int? OrderPropertyId { get; set; }
 
@@ -138,6 +146,30 @@
 
         public string UserEMail { get; set; }
 
+        public string UserInitials { get; set; }
+
+        public string UserPersonalIdentityNumber { get; set; }
+
+        public string UserExtension { get; set; }
+
+        public string UserTitle { get; set; }
+
+        public string UserLocation { get; set; }
+
+        public string UserRoomNumber { get; set; }
+
+        public string UserPostalAddress { get; set; }
+
+        public string Responsibility { get; set; }
+
+        public string Activity { get; set; }
+
+        public string Manager { get; set; }
+
+        public string ReferenceNumber { get; set; }
+
+        public string InfoUser { get; set; }
+
         public DateTime ChangedDate { get; set; }
 
         public DateTime CreatedDate { get; set; }
@@ -175,6 +207,12 @@
         public virtual User User { get; set; }
 
         public virtual Department Department { get; set; }
+
+        public virtual Department UserDepartment1 { get; set; }
+
+        public virtual Department UserDepartment2 { get; set; }
+
+        public virtual OU UserOU { get; set; }
 
         public virtual ICollection<OrderHistoryEntity> Histories { get; set; } 
     }

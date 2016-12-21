@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
+using DH.Helpdesk.Web.Infrastructure.UrlHelpers.Api;
 
 namespace DH.Helpdesk.Web
 {
@@ -19,14 +20,20 @@ namespace DH.Helpdesk.Web
 			// Web API routes
 			config.MapHttpAttributeRoutes();
 
-			config.Routes.MapHttpRoute(
-				name: "DefaultApi",
-				routeTemplate: UrlPrefixRelative +"/{controller}/{id}",
-				defaults: new { id = RouteParameter.Optional }
-			);
+			//config.Routes.MapHttpRoute(
+			//	name: WebApiUrlName.DefaultRouteName,
+			//	routeTemplate: UrlPrefixRelative +"/{controller}/{id}",
+			//	defaults: new { id = RouteParameter.Optional }
+			//);
 
-			//remove xml support, only json needed.
-			config.Formatters.Remove(config.Formatters.XmlFormatter);
+            config.Routes.MapHttpRoute(
+                name: WebApiUrlName.ActionApiRouteName,
+                routeTemplate: "api/{controller}/{action}/{id}",
+                defaults: new { id = RouteParameter.Optional }
+            );
+
+            //remove xml support, only json needed.
+            config.Formatters.Remove(config.Formatters.XmlFormatter);
 		}
 	}
 }

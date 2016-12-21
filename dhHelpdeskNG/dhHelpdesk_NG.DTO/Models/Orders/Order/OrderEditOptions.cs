@@ -14,26 +14,30 @@
                 ItemOverview[] administrators, 
                 ItemOverview[] domains, 
                 ItemOverview[] departments, 
-                ItemOverview[] units, 
+                ItemDependentOverview[] units, 
                 ItemOverview[] properties, 
                 ItemOverview[] deliveryDepartment, 
                 ItemOverview[] deliveryOuId, 
                 List<GroupWithEmails> emailGroups, 
                 List<GroupWithEmails> workingGroupsWithEmails, 
-                List<ItemOverview> administratorsWithEmails)
+                List<ItemOverview> administratorsWithEmails,
+                ItemOverview[] employmentTypes,
+                ItemOverview[] regions)
         {
-            this.OrderTypeName = orderTypeName;
-            this.AdministratorsWithEmails = administratorsWithEmails;
-            this.WorkingGroupsWithEmails = workingGroupsWithEmails;
-            this.EmailGroups = emailGroups;
-            this.DeliveryOuId = deliveryOuId;
-            this.DeliveryDepartment = deliveryDepartment;
-            this.Properties = properties;
-            this.Units = units;
-            this.Departments = departments;
-            this.Domains = domains;
-            this.Administrators = administrators;
-            this.Statuses = statuses;
+            OrderTypeName = orderTypeName;
+            AdministratorsWithEmails = administratorsWithEmails;
+            WorkingGroupsWithEmails = workingGroupsWithEmails;
+            EmailGroups = emailGroups;
+            DeliveryOuId = deliveryOuId;
+            DeliveryDepartment = deliveryDepartment;
+            Properties = properties;
+            Units = units;
+            Departments = departments;
+            Domains = domains;
+            Administrators = administrators;
+            Statuses = statuses;
+            EmploymentTypes = employmentTypes;
+            Regions = regions;
         }
 
         public string OrderTypeName { get; private set; }
@@ -51,7 +55,7 @@
         public ItemOverview[] Departments { get; private set; } 
         
         [NotNull]
-        public ItemOverview[] Units { get; private set; } 
+        public ItemDependentOverview[] Units { get; private set; } 
         
         [NotNull]
         public ItemOverview[] Properties { get; private set; } 
@@ -70,5 +74,11 @@
 
         [NotNull]
         public List<ItemOverview> AdministratorsWithEmails { get; private set; }
+
+        [NotNull]
+        public ItemOverview[] EmploymentTypes { get; private set; }
+        
+        [NotNull]
+        public ItemOverview[] Regions { get; private set; }
     }
 }

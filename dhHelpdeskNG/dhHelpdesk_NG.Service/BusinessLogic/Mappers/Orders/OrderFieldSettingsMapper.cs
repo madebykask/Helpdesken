@@ -214,7 +214,23 @@
                     CreateTextFieldSetting(fieldSettings.FindByName(UserFields.UserFirstName)),
                     CreateTextFieldSetting(fieldSettings.FindByName(UserFields.UserLastName)),
                     CreateTextFieldSetting(fieldSettings.FindByName(UserFields.UserPhone)),
-                    CreateTextFieldSetting(fieldSettings.FindByName(UserFields.UserEMail)));
+                    CreateTextFieldSetting(fieldSettings.FindByName(UserFields.UserEMail)),
+                    CreateTextFieldSetting(fieldSettings.FindByName(UserFields.UserInitials)),
+                    CreateTextFieldSetting(fieldSettings.FindByName(UserFields.UserPersonalIdentityNumber)),
+                    CreateTextFieldSetting(fieldSettings.FindByName(UserFields.UserExtension)),
+                    CreateTextFieldSetting(fieldSettings.FindByName(UserFields.UserTitle)),
+                    CreateTextFieldSetting(fieldSettings.FindByName(UserFields.UserLocation)),
+                    CreateTextFieldSetting(fieldSettings.FindByName(UserFields.UserRoomNumber)),
+                    CreateTextFieldSetting(fieldSettings.FindByName(UserFields.UserPostalAddress)),
+                    CreateTextFieldSetting(fieldSettings.FindByName(UserFields.EmploymentType)),
+                    CreateTextFieldSetting(fieldSettings.FindByName(UserFields.UserDepartment_Id1)),
+                    CreateTextFieldSetting(fieldSettings.FindByName(UserFields.UserOU_Id)),
+                    CreateTextFieldSetting(fieldSettings.FindByName(UserFields.UserDepartment_Id2)),
+                    CreateTextFieldSetting(fieldSettings.FindByName(UserFields.InfoUser)),
+                    CreateTextFieldSetting(fieldSettings.FindByName(UserFields.Responsibility)),
+                    CreateTextFieldSetting(fieldSettings.FindByName(UserFields.Activity)),
+                    CreateTextFieldSetting(fieldSettings.FindByName(UserFields.Manager)),
+                    CreateTextFieldSetting(fieldSettings.FindByName(UserFields.ReferenceNumber)));
         }
 
         private static FieldSettings CreateFieldSetting(OrdersFieldSettingsMapData data)
@@ -381,6 +397,22 @@
             MapTextFieldSettings(updatedSettings.UserLastName, existingSettings.FindByName(UserFields.UserLastName), changedDate);
             MapTextFieldSettings(updatedSettings.UserPhone, existingSettings.FindByName(UserFields.UserPhone), changedDate);
             MapTextFieldSettings(updatedSettings.UserEMail, existingSettings.FindByName(UserFields.UserEMail), changedDate);
+            MapTextFieldSettings(updatedSettings.Initials, existingSettings.FindByName(UserFields.UserInitials), changedDate);
+            MapTextFieldSettings(updatedSettings.Info, existingSettings.FindByName(UserFields.InfoUser), changedDate);
+            MapTextFieldSettings(updatedSettings.Activity, existingSettings.FindByName(UserFields.Activity), changedDate);
+            MapTextFieldSettings(updatedSettings.DepartmentId1, existingSettings.FindByName(UserFields.UserDepartment_Id1), changedDate);
+            MapTextFieldSettings(updatedSettings.DepartmentId2, existingSettings.FindByName(UserFields.UserDepartment_Id2), changedDate);
+            MapTextFieldSettings(updatedSettings.EmploymentType, existingSettings.FindByName(UserFields.EmploymentType), changedDate);
+            MapTextFieldSettings(updatedSettings.Extension, existingSettings.FindByName(UserFields.UserExtension), changedDate);
+            MapTextFieldSettings(updatedSettings.Location, existingSettings.FindByName(UserFields.UserLocation), changedDate);
+            MapTextFieldSettings(updatedSettings.Manager, existingSettings.FindByName(UserFields.Manager), changedDate);
+            MapTextFieldSettings(updatedSettings.PersonalIdentityNumber, existingSettings.FindByName(UserFields.UserPersonalIdentityNumber), changedDate);
+            MapTextFieldSettings(updatedSettings.PostalAddress, existingSettings.FindByName(UserFields.UserPostalAddress), changedDate);
+            MapTextFieldSettings(updatedSettings.ReferenceNumber, existingSettings.FindByName(UserFields.ReferenceNumber), changedDate);
+            MapTextFieldSettings(updatedSettings.Responsibility, existingSettings.FindByName(UserFields.Responsibility), changedDate);
+            MapTextFieldSettings(updatedSettings.RoomNumber, existingSettings.FindByName(UserFields.UserRoomNumber), changedDate);
+            MapTextFieldSettings(updatedSettings.Title, existingSettings.FindByName(UserFields.UserTitle), changedDate);
+            MapTextFieldSettings(updatedSettings.UnitId, existingSettings.FindByName(UserFields.UserOU_Id), changedDate);
         }
 
         private static void MapFieldSettings(
