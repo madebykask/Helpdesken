@@ -550,25 +550,26 @@
                                 <a href="#" class="showbtn"><i class="icon-plus-sign"></i></a>
                                 <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
                                 @Translation.Get("Angående") -&nbsp;  @if (Model.case_.IsAbout != null && @Model.case_.IsAbout.ReportedBy != null)
-                                                                              { @Model.case_.IsAbout.ReportedBy }&nbsp;
+                                { @Model.case_.IsAbout.ReportedBy }&nbsp;
                                 @if (Model.case_.IsAbout != null && Model.case_.IsAbout.Person_Name != null)
-                                                {
-                            @Model.case_.IsAbout.Person_Name
-                                                } &nbsp;
+                                {
+                                    @Model.case_.IsAbout.Person_Name
+                                } &nbsp;
                                 @if (Model.case_.IsAbout != null && Model.case_.IsAbout.Department_Id != null)
-                                                {
-                                                    var curDep = Model.departments.Where(d => d.Id == Model.case_.IsAbout.Department_Id).SingleOrDefault();
-                            @(curDep != null ? curDep.DepartmentName : "")
-                                                } &nbsp;
+                                {
+                                    var curDep = Model.departments.Where(d => d.Id == Model.case_.IsAbout.Department_Id).SingleOrDefault();
+                                    @(curDep != null ? curDep.DepartmentName : "")
+                                } &nbsp;
                                 @if (Model.case_.IsAbout != null && Model.case_.IsAbout.OU_Id != null)
-                                                {
-                                                    if (Model.isaboutous != null)
-                                                    {
-                                                        var curOu = Model.isaboutous.Where(w => w.Id == Model.case_.IsAbout.OU_Id).SingleOrDefault();
-                            @(curOu != null ? curOu.Name : "")
-                                                    }
-                                                }
+                                {
+                                    if (Model.isaboutous != null)
+                                    {
+                                        var curOu = Model.isaboutous.Where(w => w.Id == Model.case_.IsAbout.OU_Id).SingleOrDefault();
+                                        @(curOu != null ? curOu.Name : "")
+                                    }
+                                }
                             </h4>
+
                             <div class="row">
                                 <div class="span12">
                                     <table class="tableform">
@@ -584,7 +585,9 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy, "Användar ID")
                                             </td>
                                             <td>
-                                                @Html.Hidden("ShowReportedBy", Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString()).ShowOnStartPage)
+                                                @*This line can be only used for Initiator-ReportedBy*@ 
+                                                @*@Html.Hidden("ShowReportedBy", Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString()).ShowOnStartPage)*@
+
                                                 @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy))
                                                     {
                                                     @Html.TextBoxFor(model => model.case_.IsAbout.ReportedBy, new { maxlength = "40", autocomplete = "Off", data_field = "userId" })
