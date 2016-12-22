@@ -1,4 +1,4 @@
-﻿namespace ECT.Core
+﻿namespace DH.Helpdesk.EForm.Core
 {
     public class Constants
     {

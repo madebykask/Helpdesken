@@ -14,8 +14,8 @@ namespace FormLibTest
     {
         protected void Application_Start()
         {
-            ECT.FormLib.FormLibSetup.Setup();
-            ECT.FormLib.FormLibSetup.SetupRoutes(RouteTable.Routes);
+            DH.Helpdesk.EForm.FormLib.FormLibSetup.Setup();
+            DH.Helpdesk.EForm.FormLib.FormLibSetup.SetupRoutes(RouteTable.Routes);
 
             AreaRegistration.RegisterAllAreas();
 

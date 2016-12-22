@@ -32,6 +32,7 @@
     </SccProvider>
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
     <TargetFrameworkProfile />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -189,21 +190,21 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Core\Core.csproj">
+    <ProjectReference Include="..\Core\DH.Helpdesk.EForm.Core.csproj">
       <Project>{e2080f1d-1a86-4846-9cea-620f99c5678d}</Project>
-      <Name>Core</Name>
+      <Name>DH.Helpdesk.EForm.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\FormLib\FormLib.csproj">
+    <ProjectReference Include="..\FormLib\DH.Helpdesk.EForm.FormLib.csproj">
       <Project>{4723b7a1-b0bd-4421-8670-a6f6fb9975b2}</Project>
-      <Name>FormLib</Name>
+      <Name>DH.Helpdesk.EForm.FormLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Model\Model.csproj">
+    <ProjectReference Include="..\Model\DH.Helpdesk.EForm.Model.csproj">
       <Project>{4826d35d-823c-4e12-9905-771261721661}</Project>
-      <Name>Model</Name>
+      <Name>DH.Helpdesk.EForm.Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Service\Service.csproj">
+    <ProjectReference Include="..\Service\DH.Helpdesk.EForm.Service.csproj">
       <Project>{c5500586-9bf2-4381-9e26-bde146879e1e}</Project>
-      <Name>Service</Name>
+      <Name>DH.Helpdesk.EForm.Service</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

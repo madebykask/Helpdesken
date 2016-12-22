@@ -4,16 +4,16 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using ECT.Core.Service;
-using ECT.FormLib.Models;
-using ECT.FormLib.Pdfs;
-using ECT.Model.Abstract;
-using ECT.Model.Entities;
+using DH.Helpdesk.EForm.Core.Service;
+using DH.Helpdesk.EForm.FormLib.Models;
+using DH.Helpdesk.EForm.FormLib.Pdfs;
+using DH.Helpdesk.EForm.Model.Abstract;
+using DH.Helpdesk.EForm.Model.Entities;
 using iTextSharp.text;
 using iTextSharp.text.html;
 using iTextSharp.text.pdf;
 
-namespace ECT.FormLib.Areas.Ireland.Controllers
+namespace DH.Helpdesk.EForm.FormLib.Areas.Ireland.Controllers
 {
     public class TerminationCompleteController : FormLib.Controllers.FormLibBaseController
     {

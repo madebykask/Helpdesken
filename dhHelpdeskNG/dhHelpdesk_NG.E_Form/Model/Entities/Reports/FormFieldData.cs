@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ECT.Model.Entities.Reports
+namespace DH.Helpdesk.EForm.Model.Entities.Reports
 {
     public class FormFieldData
     {

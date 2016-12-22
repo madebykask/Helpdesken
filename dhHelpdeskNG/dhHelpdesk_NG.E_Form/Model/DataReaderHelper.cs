@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data;
 
-namespace ECT.Model
+namespace DH.Helpdesk.EForm.Model
 {
     public static class DataReaderHelper
     {

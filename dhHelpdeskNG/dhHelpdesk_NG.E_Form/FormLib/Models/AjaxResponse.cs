@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace ECT.FormLib.Models
+namespace DH.Helpdesk.EForm.FormLib.Models
 {
     public class AjaxResponse
     {

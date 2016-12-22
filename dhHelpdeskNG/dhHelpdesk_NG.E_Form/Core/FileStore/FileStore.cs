@@ -3,7 +3,7 @@ using System.IO;
 using System.Web;
 using Microsoft.Win32;
 
-namespace ECT.Core.FileStore
+namespace DH.Helpdesk.EForm.Core.FileStore
 {
     public static class FileStore
     {

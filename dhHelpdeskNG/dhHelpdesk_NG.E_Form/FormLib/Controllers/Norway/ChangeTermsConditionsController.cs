@@ -1,22 +1,22 @@
 ﻿using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using ECT.Core.Service;
-using ECT.FormLib.Controllers;
-using ECT.FormLib.Models;
-using ECT.Model.Abstract;
-using ECT.Model.Entities;
+using DH.Helpdesk.EForm.Core.Service;
+using DH.Helpdesk.EForm.FormLib.Controllers;
+using DH.Helpdesk.EForm.FormLib.Models;
+using DH.Helpdesk.EForm.Model.Abstract;
+using DH.Helpdesk.EForm.Model.Entities;
 using System;
-using ECT.FormLib.Pdfs;
+using DH.Helpdesk.EForm.FormLib.Pdfs;
 using System.IO;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using iTextSharp.text.html;
 using System.Collections.Generic;
 
-namespace ECT.FormLib.Areas.Norway.Controllers
+namespace DH.Helpdesk.EForm.FormLib.Areas.Norway.Controllers
 {
-    public class ChangeTermsConditionsController : ECT.FormLib.Areas.Norway.Controllers.NorwayBaseController
+    public class ChangeTermsConditionsController : DH.Helpdesk.EForm.FormLib.Areas.Norway.Controllers.NorwayBaseController
     {
         //public const string xmlPath = "netherlands/changetermsconditions.xml";
 

@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Runtime.Caching;
 
-namespace ECT.Core.Cache
+namespace DH.Helpdesk.EForm.Core.Cache
 {
     public class CacheProvider
     {

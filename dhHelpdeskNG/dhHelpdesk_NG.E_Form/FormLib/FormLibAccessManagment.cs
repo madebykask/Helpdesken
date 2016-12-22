@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
-namespace ECT.FormLib
+namespace DH.Helpdesk.EForm.FormLib
 {
     public class FormLibAccessManagement
     {
@@ -18,7 +18,7 @@ namespace ECT.FormLib
             if(string.IsNullOrEmpty(country))
                 throw new ArgumentNullException("country");
 
-            var config = ECT.FormLib.Configurable.AccessManagment.GetConfiguration();
+            var config = DH.Helpdesk.EForm.FormLib.Configurable.AccessManagment.GetConfiguration();
 
             var managers = new List<string>();
 

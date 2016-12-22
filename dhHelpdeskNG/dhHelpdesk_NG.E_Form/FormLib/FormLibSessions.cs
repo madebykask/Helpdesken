@@ -4,9 +4,9 @@ using System.Linq;
 using System.Web;
 using DH.Helpdesk.Common.Classes.ServiceAPI.AMAPI.Output;
 using DH.Helpdesk.Common.Types;
-using ECT.Model.Entities;
+using DH.Helpdesk.EForm.Model.Entities;
 
-namespace ECT.FormLib
+namespace DH.Helpdesk.EForm.FormLib
 {
     public static class FormLibSessions
     {

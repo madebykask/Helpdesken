@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Web;
-using ECT.Model.Entities;
+using DH.Helpdesk.EForm.Model.Entities;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 
-namespace ECT.FormLib.Pdfs
+namespace DH.Helpdesk.EForm.FormLib.Pdfs
 {
     public class PolandPdfPage : CustomPdfPage
     {

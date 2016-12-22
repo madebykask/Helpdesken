@@ -1,20 +1,20 @@
 ﻿using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using ECT.Core.Service;
-using ECT.FormLib.Controllers;
-using ECT.FormLib.Models;
-using ECT.Model.Abstract;
-using ECT.Model.Entities;
+using DH.Helpdesk.EForm.Core.Service;
+using DH.Helpdesk.EForm.FormLib.Controllers;
+using DH.Helpdesk.EForm.FormLib.Models;
+using DH.Helpdesk.EForm.Model.Abstract;
+using DH.Helpdesk.EForm.Model.Entities;
 using System;
-using ECT.FormLib.Pdfs;
+using DH.Helpdesk.EForm.FormLib.Pdfs;
 using System.IO;
 using iTextSharp.text;
 using iTextSharp.text.html;
 using iTextSharp.text.pdf;
 using System.Collections.Generic;
 
-namespace ECT.FormLib.Areas.SouthKorea.Controllers
+namespace DH.Helpdesk.EForm.FormLib.Areas.SouthKorea.Controllers
 {
     public class AbsencesController : FormLibBaseController
     {

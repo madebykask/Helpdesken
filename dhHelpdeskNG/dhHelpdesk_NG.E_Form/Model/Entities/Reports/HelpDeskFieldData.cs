@@ -1,4 +1,4 @@
-﻿namespace ECT.Model.Entities.Reports
+﻿namespace DH.Helpdesk.EForm.Model.Entities.Reports
 {
     using System;
 

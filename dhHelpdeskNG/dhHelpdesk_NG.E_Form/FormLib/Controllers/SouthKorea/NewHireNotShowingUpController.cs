@@ -1,7 +1,7 @@
-﻿using ECT.Core.Service;
-using ECT.Model.Abstract;
+﻿using DH.Helpdesk.EForm.Core.Service;
+using DH.Helpdesk.EForm.Model.Abstract;
 
-namespace ECT.FormLib.Areas.SouthKorea.Controllers
+namespace DH.Helpdesk.EForm.FormLib.Areas.SouthKorea.Controllers
 {
     public class NewHireNotShowingUpController : FormLib.Controllers.FormLibBaseController
     {

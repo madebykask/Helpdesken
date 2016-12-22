@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web;
 using Newtonsoft.Json;
 
-namespace ECT.FormLib
+namespace DH.Helpdesk.EForm.FormLib
 {
     // Work in progress....
     public class FormLibConfigurationUtil

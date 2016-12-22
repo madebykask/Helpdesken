@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ECT.Core.Service
+namespace DH.Helpdesk.EForm.Core.Service
 {
     public interface IFileService
     {

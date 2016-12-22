@@ -1,4 +1,4 @@
-﻿namespace ECT.Model.Entities
+﻿namespace DH.Helpdesk.EForm.Model.Entities
 {
     public class StateSecondary
     {

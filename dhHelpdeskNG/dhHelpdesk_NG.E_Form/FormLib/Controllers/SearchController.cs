@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using ECT.Model.Abstract;
-using ECT.Model.Entities;
-using ECT.FormLib.Models;
+using DH.Helpdesk.EForm.Model.Abstract;
+using DH.Helpdesk.EForm.Model.Entities;
+using DH.Helpdesk.EForm.FormLib.Models;
 
-namespace ECT.FormLib.Controllers
+namespace DH.Helpdesk.EForm.FormLib.Controllers
 {
     public class SearchController : FormLibBaseController
     {

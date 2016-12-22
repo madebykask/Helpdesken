@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace ECT.FormLib.Areas.Global
+namespace DH.Helpdesk.EForm.FormLib.Areas.Global
 {
     public class GlobalAreaRegistration : AreaRegistration
     {
@@ -18,7 +18,7 @@ namespace ECT.FormLib.Areas.Global
                 "Global_default",
                 "Global/{controller}/{action}/{id}",
                 new { action = "New", id = UrlParameter.Optional },
-                new[] { "ECT.FormLib.Areas.Global.Controllers" }
+                new[] { "DH.Helpdesk.EForm.FormLib.Areas.Global.Controllers" }
             );
         }
     }

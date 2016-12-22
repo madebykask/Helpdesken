@@ -1,11 +1,11 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
-using ECT.Core.Service;
-using ECT.FormLib.Controllers;
-using ECT.FormLib.Models;
-using ECT.Model.Abstract;
+using DH.Helpdesk.EForm.Core.Service;
+using DH.Helpdesk.EForm.FormLib.Controllers;
+using DH.Helpdesk.EForm.FormLib.Models;
+using DH.Helpdesk.EForm.Model.Abstract;
 
-namespace ECT.FormLib.Areas.Ireland.Controllers
+namespace DH.Helpdesk.EForm.FormLib.Areas.Ireland.Controllers
 {
     public class PersonalInformationController : FormLibBaseController
     {

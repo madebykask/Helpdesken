@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ECT.Model.Abstract;
+using DH.Helpdesk.EForm.Model.Abstract;
 using System.Data;
 using System.Data.SqlClient;
-using ECT.Model.Entities;
+using DH.Helpdesk.EForm.Model.Entities;
 using System.Globalization;
-using ECT.Model.Entities.Reports;
+using DH.Helpdesk.EForm.Model.Entities.Reports;
 using System.Configuration;
 
-namespace ECT.Model.Contrete
+namespace DH.Helpdesk.EForm.Model.Contrete
 {
     public class GlobalViewRepository : IGlobalViewRepository
     {

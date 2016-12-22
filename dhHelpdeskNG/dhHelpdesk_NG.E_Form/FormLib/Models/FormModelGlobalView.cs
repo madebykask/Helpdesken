@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using ECT.Model.Entities;
+using DH.Helpdesk.EForm.Model.Entities;
 
-namespace ECT.FormLib.Models
+namespace DH.Helpdesk.EForm.FormLib.Models
 {
     public class FormModelGlobalView
     {

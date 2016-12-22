@@ -1,7 +1,7 @@
-﻿using ECT.Core.Service;
-using ECT.Model.Abstract;
+﻿using DH.Helpdesk.EForm.Core.Service;
+using DH.Helpdesk.EForm.Model.Abstract;
 
-namespace ECT.FormLib.Areas.UnitedKingdom.Controllers
+namespace DH.Helpdesk.EForm.FormLib.Areas.UnitedKingdom.Controllers
 {
     public class VoluntaryDeductionsController : FormLib.Controllers.FormLibBaseController
     {

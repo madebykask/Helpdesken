@@ -2,7 +2,7 @@
 using System.Web.Optimization;
 using System.Web.Routing;
 
-namespace ECT.FormLib
+namespace DH.Helpdesk.EForm.FormLib
 {
     public class FormLibSetup
     {
@@ -26,7 +26,7 @@ namespace ECT.FormLib
 
         private static void SetupControllers()
         {
-            ControllerBuilder.Current.DefaultNamespaces.Add("ECT.FormLib.Controllers");
+            ControllerBuilder.Current.DefaultNamespaces.Add("DH.Helpdesk.EForm.FormLib.Controllers");
         }
 
         private static void SetupBundles()

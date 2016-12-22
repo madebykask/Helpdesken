@@ -7,13 +7,13 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using ECT.Core.Cache;
-using ECT.Core.Service;
-using ECT.FormLib.Models;
-using ECT.Model.Entities;
-using ECT.Model.Abstract;
+using DH.Helpdesk.EForm.Core.Cache;
+using DH.Helpdesk.EForm.Core.Service;
+using DH.Helpdesk.EForm.FormLib.Models;
+using DH.Helpdesk.EForm.Model.Entities;
+using DH.Helpdesk.EForm.Model.Abstract;
 
-namespace ECT.FormLib.Controllers
+namespace DH.Helpdesk.EForm.FormLib.Controllers
 {
     public class FormLibBaseController : Controller
     {
@@ -601,7 +601,7 @@ namespace ECT.FormLib.Controllers
                 // this is set from selfservice...
                 if(FormLibSessions.CustomerId > 0)
                 {
-                    var config = (ECT.FormLib.Configurable.AccessManagment)System.Configuration.ConfigurationManager.GetSection("formLibConfigurable/accessManagment");
+                    var config = (DH.Helpdesk.EForm.FormLib.Configurable.AccessManagment)System.Configuration.ConfigurationManager.GetSection("formLibConfigurable/accessManagment");
 
                     var country = config.Countries.Where(x => x.HelpdeskCustomerId == FormLibSessions.CustomerId.ToString()).FirstOrDefault();
 

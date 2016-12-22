@@ -8,8 +8,8 @@
     <ProjectGuid>{4826D35D-823C-4E12-9905-771261721661}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ECT.Model</RootNamespace>
-    <AssemblyName>ECT.Model</AssemblyName>
+    <RootNamespace>DH.Helpdesk.EForm.Model</RootNamespace>
+    <AssemblyName>DH.Helpdesk.EForm.Model</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>
@@ -95,9 +95,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Core\Core.csproj">
+    <ProjectReference Include="..\Core\DH.Helpdesk.EForm.Core.csproj">
       <Project>{E2080F1D-1A86-4846-9CEA-620F99C5678D}</Project>
-      <Name>Core</Name>
+      <Name>DH.Helpdesk.EForm.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

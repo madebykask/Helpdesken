@@ -1,14 +1,14 @@
 ﻿using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using ECT.Core.Service;
-using ECT.FormLib.Models;
-using ECT.Model.Abstract;
-using ECT.Model.Entities;
+using DH.Helpdesk.EForm.Core.Service;
+using DH.Helpdesk.EForm.FormLib.Models;
+using DH.Helpdesk.EForm.Model.Abstract;
+using DH.Helpdesk.EForm.Model.Entities;
 using System;
 using System.Collections.Generic;
 
-namespace ECT.FormLib.Areas.Global.Controllers
+namespace DH.Helpdesk.EForm.FormLib.Areas.Global.Controllers
 {
     public class TerminationCompleteController : FormLib.Controllers.FormLibBaseController
     {

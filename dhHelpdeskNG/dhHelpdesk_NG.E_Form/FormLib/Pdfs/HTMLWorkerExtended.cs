@@ -2,7 +2,7 @@
 using iTextSharp.text;
 using iTextSharp.text.html.simpleparser;
 
-namespace ECT.FormLib.Pdfs
+namespace DH.Helpdesk.EForm.FormLib.Pdfs
 {
     public class HTMLWorkerExtended : HTMLWorker
     {

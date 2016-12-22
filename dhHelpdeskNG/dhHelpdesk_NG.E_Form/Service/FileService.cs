@@ -1,12 +1,12 @@
 ﻿using System.Configuration;
 using System.IO;
-using ECT.Core;
-using ECT.Core.FileStore;
-using ECT.Core.Service;
-using ECT.Model.Abstract;
-using ECT.Model.Entities;
+using DH.Helpdesk.EForm.Core;
+using DH.Helpdesk.EForm.Core.FileStore;
+using DH.Helpdesk.EForm.Core.Service;
+using DH.Helpdesk.EForm.Model.Abstract;
+using DH.Helpdesk.EForm.Model.Entities;
 
-namespace ECT.Service
+namespace DH.Helpdesk.EForm.Service
 {
     public class FileService : IFileService
     {

@@ -6,12 +6,12 @@ using System.Linq;
 using System.Web.Hosting;
 using System.Xml;
 using System.Xml.Linq;
-using ECT.Core.Cache;
-using ECT.Model.Abstract;
-using ECT.Model.Contrete;
-using ECT.Model.Entities;
+using DH.Helpdesk.EForm.Core.Cache;
+using DH.Helpdesk.EForm.Model.Abstract;
+using DH.Helpdesk.EForm.Model.Contrete;
+using DH.Helpdesk.EForm.Model.Entities;
 
-namespace ECT.FormLib
+namespace DH.Helpdesk.EForm.FormLib
 {
     public interface IFormLibI18N
     {

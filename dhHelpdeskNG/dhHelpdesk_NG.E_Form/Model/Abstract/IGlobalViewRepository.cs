@@ -1,11 +1,11 @@
-﻿using ECT.Model.Entities;
-using ECT.Model.Entities.Reports;
+﻿using DH.Helpdesk.EForm.Model.Entities;
+using DH.Helpdesk.EForm.Model.Entities.Reports;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ECT.Model.Abstract
+namespace DH.Helpdesk.EForm.Model.Abstract
 {
     public interface IGlobalViewRepository
     {

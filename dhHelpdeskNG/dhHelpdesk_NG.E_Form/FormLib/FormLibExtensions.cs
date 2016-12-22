@@ -8,10 +8,10 @@ using System.Web;
 using System.Web.Mvc;
 using System.Xml;
 using System.Xml.Linq;
-using ECT.FormLib.Models;
-using ECT.Model.Entities;
+using DH.Helpdesk.EForm.FormLib.Models;
+using DH.Helpdesk.EForm.Model.Entities;
 
-namespace ECT.FormLib
+namespace DH.Helpdesk.EForm.FormLib
 {
     public static class DocumentExtensions
     {

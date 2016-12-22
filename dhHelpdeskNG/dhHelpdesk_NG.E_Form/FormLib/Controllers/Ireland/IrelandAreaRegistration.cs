@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace ECT.FormLib.Areas.Ireland
+namespace DH.Helpdesk.EForm.FormLib.Areas.Ireland
 {
     public class IrelandAreaRegistration : AreaRegistration
     {
@@ -18,7 +18,7 @@ namespace ECT.FormLib.Areas.Ireland
                 "Ireland_default",
                 "Ireland/{controller}/{action}/{id}",
                 new { action = "New", id = UrlParameter.Optional },
-                new[] { "ECT.FormLib.Areas.Ireland.Controllers" }
+                new[] { "DH.Helpdesk.EForm.FormLib.Areas.Ireland.Controllers" }
             );
         }
     }

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using ECT.Model.Abstract;
+using DH.Helpdesk.EForm.Model.Abstract;
 
-namespace ECT.Service
+namespace DH.Helpdesk.EForm.Service
 {
     // Lägga FormModel här istället, yes indeed?
 

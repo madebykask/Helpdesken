@@ -6,11 +6,11 @@ namespace FormLibTest.App_Start
     using System;
     using System.Configuration;
     using System.Web;
-    using ECT.Core.Service;
-    using ECT.FormLib;
-    using ECT.Model.Abstract;
-    using ECT.Model.Contrete;
-    using ECT.Service;
+    using DH.Helpdesk.EForm.Core.Service;
+    using DH.Helpdesk.EForm.FormLib;
+    using DH.Helpdesk.EForm.Model.Abstract;
+    using DH.Helpdesk.EForm.Model.Contrete;
+    using DH.Helpdesk.EForm.Service;
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
     using Ninject;
     using Ninject.Web.Common;

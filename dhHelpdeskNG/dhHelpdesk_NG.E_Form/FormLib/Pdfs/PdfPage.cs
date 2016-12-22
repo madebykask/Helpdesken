@@ -1,5 +1,5 @@
-﻿using ECT.FormLib.Controllers;
-using ECT.FormLib.Models;
+﻿using DH.Helpdesk.EForm.FormLib.Controllers;
+using DH.Helpdesk.EForm.FormLib.Models;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -8,7 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using Winnovative;
 
-namespace ECT.FormLib.Pdfs
+namespace DH.Helpdesk.EForm.FormLib.Pdfs
 {  
 
     public class GlobalContractsConfiguration
@@ -117,7 +117,7 @@ namespace ECT.FormLib.Pdfs
                     if (model.Contract.StateSecondaryId >= cc.DraftShowOnMinStateSecondaryId && model.Contract.StateSecondaryId <= cc.DraftShowOnMaxStateSecondaryId)
                     {
 
-                        //     if (ECT.FormLib.Pdfs.CustomPdfPage.ShowDraft(model.Contract.StateSecondaryId) && cc.DraftTextUse == true)
+                        //     if (DH.Helpdesk.EForm.FormLib.Pdfs.CustomPdfPage.ShowDraft(model.Contract.StateSecondaryId) && cc.DraftTextUse == true)
                         //                {
                         // Get the stamp width and height
                         float stampWidth = pdfDocument.Pages[0].ClientRectangle.Width; // float.Parse("600");

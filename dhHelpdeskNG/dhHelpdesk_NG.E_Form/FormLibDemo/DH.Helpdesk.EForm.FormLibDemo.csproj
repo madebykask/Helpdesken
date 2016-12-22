@@ -29,6 +29,7 @@
     </SccAuxPath>
     <SccProvider>
     </SccProvider>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -168,9 +169,9 @@
     <Folder Include="Scripts\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Service\Service.csproj">
+    <ProjectReference Include="..\Service\DH.Helpdesk.EForm.Service.csproj">
       <Project>{c5500586-9bf2-4381-9e26-bde146879e1e}</Project>
-      <Name>Service</Name>
+      <Name>DH.Helpdesk.EForm.Service</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

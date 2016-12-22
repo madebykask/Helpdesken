@@ -1,20 +1,20 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
-using ECT.Core.Service;
-using ECT.FormLib.Controllers;
-using ECT.FormLib.Models;
-using ECT.Model.Abstract;
+using DH.Helpdesk.EForm.Core.Service;
+using DH.Helpdesk.EForm.FormLib.Controllers;
+using DH.Helpdesk.EForm.FormLib.Models;
+using DH.Helpdesk.EForm.Model.Abstract;
 using System;
 using System.Web;
 using System.Collections.Generic;
-using ECT.Model.Entities;
+using DH.Helpdesk.EForm.Model.Entities;
 using System.IO;
 using iTextSharp.text.pdf;
 using iTextSharp.text;
-using ECT.FormLib.Pdfs;
+using DH.Helpdesk.EForm.FormLib.Pdfs;
 using iTextSharp.text.html;
 
-namespace ECT.FormLib.Areas.Ireland.Controllers
+namespace DH.Helpdesk.EForm.FormLib.Areas.Ireland.Controllers
 {
     public class ChangeTermsConditionsController : FormLibBaseController
     {

@@ -1,5 +1,5 @@
 ﻿
-namespace ECT.Core.Cache
+namespace DH.Helpdesk.EForm.Core.Cache
 {
     public interface ICacheProvider
     {

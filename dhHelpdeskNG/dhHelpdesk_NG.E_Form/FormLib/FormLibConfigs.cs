@@ -4,7 +4,7 @@ using System.Configuration;
 using System.Linq;
 using System.Web;
 
-namespace ECT.FormLib.Configurable
+namespace DH.Helpdesk.EForm.FormLib.Configurable
 {
     public class AccessManagment : ConfigurationSection
     {

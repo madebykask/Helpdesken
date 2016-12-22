@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Data;
 using System.Data.SqlClient;
-using ECT.Model.Abstract;
-using ECT.Model.Entities;
+using DH.Helpdesk.EForm.Model.Abstract;
+using DH.Helpdesk.EForm.Model.Entities;
 
-namespace ECT.Model.Contrete
+namespace DH.Helpdesk.EForm.Model.Contrete
 {
     public class UserRepository : IUserRepository
     {

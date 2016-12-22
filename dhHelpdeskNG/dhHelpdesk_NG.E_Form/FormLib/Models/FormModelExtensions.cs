@@ -3,10 +3,10 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Xml.Linq;
-using ECT.Model.Entities;
+using DH.Helpdesk.EForm.Model.Entities;
 
 
-namespace ECT.FormLib.Models
+namespace DH.Helpdesk.EForm.FormLib.Models
 {
     public static class FormModelExtensions
     {
@@ -284,7 +284,7 @@ namespace ECT.FormLib.Models
         public static string GetDocumentText(this FormModel model, string textType, string value1, string operator1, string value2, string operator2, string replaceValue1, int? customerId, Guid? formGuid)
         {
             //Quick fix! /TAN
-            ECT.Model.Contrete.DocumentTextRepository documentTextRepository = new ECT.Model.Contrete.DocumentTextRepository(System.Configuration.ConfigurationManager.ConnectionStrings["DSN"].ConnectionString);
+            DH.Helpdesk.EForm.Model.Contrete.DocumentTextRepository documentTextRepository = new DH.Helpdesk.EForm.Model.Contrete.DocumentTextRepository(System.Configuration.ConfigurationManager.ConnectionStrings["DSN"].ConnectionString);
 
             return documentTextRepository.GetText(textType, value1, operator1, value2, operator2, replaceValue1, customerId, formGuid);
         }

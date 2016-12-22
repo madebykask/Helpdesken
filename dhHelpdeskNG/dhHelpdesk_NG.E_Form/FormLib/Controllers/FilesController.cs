@@ -7,12 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
-using ECT.Core;
-using ECT.Core.FileStore;
-using ECT.Core.Service;
-using ECT.Model.Abstract;
+using DH.Helpdesk.EForm.Core;
+using DH.Helpdesk.EForm.Core.FileStore;
+using DH.Helpdesk.EForm.Core.Service;
+using DH.Helpdesk.EForm.Model.Abstract;
 
-namespace ECT.FormLib.Controllers
+namespace DH.Helpdesk.EForm.FormLib.Controllers
 {
     public class FilesController : FormLibBaseController
     {

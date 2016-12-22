@@ -18,8 +18,8 @@
     <ProjectTypeGuids>{E3E379DF-F4C6-4180-9B81-6769533ABE47};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ECT.FormLib</RootNamespace>
-    <AssemblyName>ECT.FormLib</AssemblyName>
+    <RootNamespace>DH.Helpdesk.EForm.FormLib</RootNamespace>
+    <AssemblyName>DH.Helpdesk.EForm.FormLib</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
@@ -1788,17 +1788,17 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\Core\Core.csproj">
+    <ProjectReference Include="..\Core\DH.Helpdesk.EForm.Core.csproj">
       <Project>{e2080f1d-1a86-4846-9cea-620f99c5678d}</Project>
-      <Name>Core</Name>
+      <Name>DH.Helpdesk.EForm.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Model\Model.csproj">
+    <ProjectReference Include="..\Model\DH.Helpdesk.EForm.Model.csproj">
       <Project>{4826d35d-823c-4e12-9905-771261721661}</Project>
-      <Name>Model</Name>
+      <Name>DH.Helpdesk.EForm.Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Service\Service.csproj">
+    <ProjectReference Include="..\Service\DH.Helpdesk.EForm.Service.csproj">
       <Project>{c5500586-9bf2-4381-9e26-bde146879e1e}</Project>
-      <Name>Service</Name>
+      <Name>DH.Helpdesk.EForm.Service</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

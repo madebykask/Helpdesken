@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace ECT.FormLib.Areas.UnitedKingdom
+namespace DH.Helpdesk.EForm.FormLib.Areas.UnitedKingdom
 {
     public class UnitedKingdomAreaRegistration : AreaRegistration
     {
@@ -18,7 +18,7 @@ namespace ECT.FormLib.Areas.UnitedKingdom
                 "UnitedKingdom_default",
                 "UnitedKingdom/{controller}/{action}/{id}",
                 new { action = "New", id = UrlParameter.Optional },
-                new[] { "ECT.FormLib.Areas.UnitedKingdom.Controllers" }
+                new[] { "DH.Helpdesk.EForm.FormLib.Areas.UnitedKingdom.Controllers" }
             );
         }
     }

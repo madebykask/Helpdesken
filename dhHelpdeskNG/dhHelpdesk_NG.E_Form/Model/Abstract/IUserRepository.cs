@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using ECT.Model.Entities;
+using DH.Helpdesk.EForm.Model.Entities;
 
-namespace ECT.Model.Abstract
+namespace DH.Helpdesk.EForm.Model.Abstract
 {
     public interface IUserRepository
     {

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ECT.Model.Entities;
+using DH.Helpdesk.EForm.Model.Entities;
 
-namespace ECT.Model.Abstract
+namespace DH.Helpdesk.EForm.Model.Abstract
 {
     public interface ITextRepository
     {

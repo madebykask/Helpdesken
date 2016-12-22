@@ -12,7 +12,7 @@ using iTextSharp.text.html;
 using iTextSharp.text.html.simpleparser;
 using iTextSharp.text.pdf;
 
-namespace ECT.FormLib
+namespace DH.Helpdesk.EForm.FormLib
 {
     public class FormLibPdfContentResult: FileContentResult
     {

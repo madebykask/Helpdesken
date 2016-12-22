@@ -24,17 +24,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CommonAssembly", "CommonAss
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DH.Helpdesk.SelfService", "dhHelpdesk_NG.Web_SelfService\DH.Helpdesk.SelfService.csproj", "{9DBE7D20-DEE8-427C-9A68-FC338B1108FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "dhHelpdesk_NG.E_Form\Core\Core.csproj", "{E2080F1D-1A86-4846-9CEA-620F99C5678D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DH.Helpdesk.EForm.Core", "dhHelpdesk_NG.E_Form\Core\DH.Helpdesk.EForm.Core.csproj", "{E2080F1D-1A86-4846-9CEA-620F99C5678D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "dhHelpdesk_NG.E_Form\Model\Model.csproj", "{4826D35D-823C-4E12-9905-771261721661}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DH.Helpdesk.EForm.Model", "dhHelpdesk_NG.E_Form\Model\DH.Helpdesk.EForm.Model.csproj", "{4826D35D-823C-4E12-9905-771261721661}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "dhHelpdesk_NG.E_Form\Service\Service.csproj", "{C5500586-9BF2-4381-9E26-BDE146879E1E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DH.Helpdesk.EForm.Service", "dhHelpdesk_NG.E_Form\Service\DH.Helpdesk.EForm.Service.csproj", "{C5500586-9BF2-4381-9E26-BDE146879E1E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FormLib", "dhHelpdesk_NG.E_Form\FormLib\FormLib.csproj", "{4723B7A1-B0BD-4421-8670-A6F6FB9975B2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DH.Helpdesk.EForm.FormLib", "dhHelpdesk_NG.E_Form\FormLib\DH.Helpdesk.EForm.FormLib.csproj", "{4723B7A1-B0BD-4421-8670-A6F6FB9975B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FormLibDemo", "dhHelpdesk_NG.E_Form\FormLibDemo\FormLibDemo.csproj", "{B3B320D5-360F-41A8-8881-A7F108CDAF17}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DH.Helpdesk.EForm.FormLibDemo", "dhHelpdesk_NG.E_Form\FormLibDemo\DH.Helpdesk.EForm.FormLibDemo.csproj", "{B3B320D5-360F-41A8-8881-A7F108CDAF17}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FormLibTest", "dhHelpdesk_NG.E_Form\FormLibTest\FormLibTest.csproj", "{65125F9C-4350-420E-9681-D1EB493E3288}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DH.Helpdesk.EForm.FormLibTest", "dhHelpdesk_NG.E_Form\FormLibTest\DH.Helpdesk.EForm.FormLibTest.csproj", "{65125F9C-4350-420E-9681-D1EB493E3288}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{ABA15EA9-29A8-495E-826E-C96CCCADCC06}"
 	ProjectSection(SolutionItems) = preProject
@@ -207,8 +207,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{C5500586-9BF2-4381-9E26-BDE146879E1E} = {398E5BA2-4379-4071-B6E2-F842E141E8F8}
 	EndGlobalSection
 EndGlobal

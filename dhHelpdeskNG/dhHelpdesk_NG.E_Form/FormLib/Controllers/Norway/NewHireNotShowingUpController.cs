@@ -1,9 +1,9 @@
-﻿using ECT.Core.Service;
-using ECT.Model.Abstract;
+﻿using DH.Helpdesk.EForm.Core.Service;
+using DH.Helpdesk.EForm.Model.Abstract;
 
-namespace ECT.FormLib.Areas.Norway.Controllers
+namespace DH.Helpdesk.EForm.FormLib.Areas.Norway.Controllers
 {
-    public class NewHireNotShowingUpController : ECT.FormLib.Areas.Norway.Controllers.NorwayBaseController
+    public class NewHireNotShowingUpController : DH.Helpdesk.EForm.FormLib.Areas.Norway.Controllers.NorwayBaseController
     {
         public NewHireNotShowingUpController(IContractRepository contractRepository, IUserRepository userRepository, IFileService fileService)
             : base(userRepository, contractRepository, fileService)

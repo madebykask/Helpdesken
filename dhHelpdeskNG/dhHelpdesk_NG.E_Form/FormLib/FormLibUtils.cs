@@ -5,7 +5,7 @@ using System.Web;
 using System.Configuration;
 using System.Reflection;
 
-namespace ECT.FormLib
+namespace DH.Helpdesk.EForm.FormLib
 {
     public class FormLibUtils
     {

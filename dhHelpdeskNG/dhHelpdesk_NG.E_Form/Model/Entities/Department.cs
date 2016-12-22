@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 
-namespace ECT.Model.Entities
+namespace DH.Helpdesk.EForm.Model.Entities
 {
     public class Department
     {

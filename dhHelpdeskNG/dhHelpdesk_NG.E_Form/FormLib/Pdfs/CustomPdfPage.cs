@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using ECT.Model.Entities;
+using DH.Helpdesk.EForm.Model.Entities;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System.Globalization;
-using ECT.FormLib.Models;
+using DH.Helpdesk.EForm.FormLib.Models;
 using System.Text;
-using ECT.Model.Abstract;
-using ECT.Model.Contrete;
+using DH.Helpdesk.EForm.Model.Abstract;
+using DH.Helpdesk.EForm.Model.Contrete;
 
-namespace ECT.FormLib.Pdfs
+namespace DH.Helpdesk.EForm.FormLib.Pdfs
 {
     public class CustomPdfPage : iTextSharp.text.pdf.PdfPageEventHelper
     {

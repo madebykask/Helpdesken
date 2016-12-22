@@ -4,15 +4,15 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Net.Mail;
-using ECT.Core;
-using ECT.Core.Cache;
-using ECT.Model.Abstract;
-using ECT.Model.Entities;
+using DH.Helpdesk.EForm.Core;
+using DH.Helpdesk.EForm.Core.Cache;
+using DH.Helpdesk.EForm.Model.Abstract;
+using DH.Helpdesk.EForm.Model.Entities;
 using System.Web;
 using System.Reflection;
 using System.IO;
 
-namespace ECT.Model.Contrete
+namespace DH.Helpdesk.EForm.Model.Contrete
 {
     public class ContractRepository : IContractRepository
     {
