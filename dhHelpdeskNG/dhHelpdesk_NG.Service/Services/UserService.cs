@@ -60,7 +60,7 @@
         /// <param name="userId"></param>
         /// <returns></returns>
         IList<User> GetAvailablePerformersOrUserId(int customerId, int? userId = null);
-
+        IList<User> GetPerformersOrUserId(int customerId, int? userId = null);
         IList<User> GetAllPerformers(int customerId);
 
         IList<User> GetAvailablePerformersForWorkingGroup(int customerId, int? workingGroup = null);
@@ -340,6 +340,14 @@
             return
                 this._userRepository.GetUsers(customerId)
                     .Where(e => e.IsActive == 1 && (e.Performer == 1 || (userId.HasValue && e.Id == userId))).OrderBy(e => e.SurName)
+                    .ToList();
+        }
+
+        public IList<User> GetPerformersOrUserId(int customerId, int? userId = null)
+        {
+            return
+                this._userRepository.GetUsers(customerId)
+                    .Where(e => e.Performer == 1 || (userId.HasValue && e.Id == userId)).OrderBy(e => e.SurName)
                     .ToList();
         }
 
