@@ -425,9 +425,11 @@ namespace DH.Helpdesk.Web
             bundles.Add(new ScriptBundle(ScriptNames.InventoryUserSearch).Include(
                 "~/Content/js/Inventory/inventory.search.js"));
             bundles.Add(new ScriptBundle(ScriptNames.CaseIntLogEmailSearch).Include(
-                "~/Content/js/Cases/Dialogs/_caseIntLogSearch.js"));
+                "~/Content/js/Cases/Dialogs/_caseIntLogSearch.js",
+                "~/Content/js/Cases/Dialogs/_caseUserSearchCommon.js"));
             bundles.Add(new ScriptBundle(ScriptNames.CaseAddFollowersSearch).Include(
-                "~/Content/js/Cases/Dialogs/_caseAddFollowersSearch.js"));
+                "~/Content/js/Cases/Dialogs/_caseAddFollowersSearch.js",
+                "~/Content/js/Cases/Dialogs/_caseUserSearchCommon.js"));
 
             RegisterOrdersAreaBundles(bundles);
 

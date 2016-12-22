@@ -1978,11 +1978,6 @@ input[type="checkbox"],
 	text-align:left;
 }
 
-button.multiselect.dropdown-toggle.btn {
-    max-width:190px;
-	min-width:190px;
-}
-
 .multiselect-search {
 	width:120px;
 }
@@ -3755,7 +3750,7 @@ div.modal-body.max-height-600 {
 }
 
 .case-dropdown-div {
-    padding-left: 20px;
+    padding-left: 10px;
 }
 
 .case-div-span12 {
@@ -3778,6 +3773,16 @@ div.modal-body.max-height-600 {
     width: 90em;
 }
 
+.case-followers-button-done {
+    padding-top: 1.8em;
+    padding-left: 30px;
+}
+
+.case-intlog-button-done {
+    padding-top: 1.4em;
+    padding-left: 30px;
+}
+
 div.case-dropdown-div > span.btn-group.open > ul > div.options-holder li {
     display: flex;
 }
@@ -3787,4 +3792,9 @@ div.case-dropdown-div > span.btn-group.open > ul > div.options-holder li {
     float: left;
     min-height: 50px;
     padding: 10px;
+}
+
+div.case-dropdown-div > span.btn-group > button.multiselect.dropdown-toggle.btn {
+    max-width:175px;
+	min-width:175px;
 }
