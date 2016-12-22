@@ -1,0 +1,13 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@{
+    Layout = null;
+}
+<!DOCTYPE html><html>
+<head>
+    @Model.GetStyleAnswer("GetStyleLink")
+    @Html.Partial("../Shared/Pdfs/_Styles", Model)
+    @Model.GetStyleAnswer("GetStyles")
+</head>
+<body class="draft"><br /><br /><br /><br /><br /><br /><p style="color:#ccc; font-size:150px; font-family:Verdana;">DRAFT</p></body></html>

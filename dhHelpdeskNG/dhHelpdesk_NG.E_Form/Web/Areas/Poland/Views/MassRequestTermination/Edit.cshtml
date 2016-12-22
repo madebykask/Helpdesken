@@ -1,0 +1,22 @@
+﻿@model FormModel
+
+@{
+    ViewBag.Title = Model.Translate("Poland") + " - " + Model.Translate("Mass request - Termination");
+}
+
+@section Script {
+    <script>
+        
+        validate.run();
+
+        $(document).on('change', '#actionState', function (e) {
+            var val = $(this).val();
+            validate.run(val);
+        });
+
+    </script>
+
+    @Html.Partial("_Validate", Model)
+}
+
+@Html.Partial("_Edit", Model)

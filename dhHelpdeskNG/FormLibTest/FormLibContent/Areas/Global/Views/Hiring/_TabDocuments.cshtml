@@ -1,0 +1,25 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<div class="tab-pane" id="documents">
+    <div class="span12">
+        <table class="table-striped">
+            <thead>
+                <tr>
+                    <th>@Model.Translate("Document")
+                    </th>
+                    <th>@Model.Translate("Type")
+                    </th>
+                    <th>&nbsp;
+                    </th>
+                    <th>&nbsp;
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @Html.Partial("_Documents", Model)
+            </tbody>
+        </table>
+    </div>
+</div>

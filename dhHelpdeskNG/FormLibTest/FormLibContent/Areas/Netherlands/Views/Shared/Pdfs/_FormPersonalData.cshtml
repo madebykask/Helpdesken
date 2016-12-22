@@ -1,0 +1,167 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@{
+    Layout = null;
+    int contractedHours = 0;
+
+    try
+    {
+        contractedHours = int.Parse(Model.GetDocumentAnswer("ContractedHours"));
+    }
+    catch (Exception)
+    {
+    }
+}
+<!DOCTYPE html>
+<html>
+<head>
+    @*<link href="@Model.Contract.BaseUrl/FormLibContent/assets/css/documents.css" rel="stylesheet" type="text/css" />*@
+    @Model.GetStyleAnswer("GetStyleLink")
+    @Html.Partial("../Shared/Pdfs/_Styles", Model)
+    @Model.GetStyleAnswer("GetStyles")
+</head>
+<body>
+    <div class="form-personal-data-page">
+        <table class="table table-bordered form-personal-data">
+            <tr>
+                <td style="border-right: 0px !important;">
+                    <img style="max-width: 250px; margin-left: 10px; margin-top: 10px;" src="@Model.Contract.BaseUrl/FormLibContent/Assets/img/IKEA_logo_BW.png" />
+                </td>
+                <td style="vertical-align: bottom !important; border-left: 0px !important;">
+                    <strong>FORMULIER PERSOONSGEGEVENS</strong>
+                </td>
+            </tr>
+            <tr>
+                <td class="td-bold td-align-middle">Naam
+                </td>
+                <td>
+                    @Model.GetDocumentAnswer("FirstName", true)@if (!string.IsNullOrEmpty(Model.GetAnswer("Prefixes")))
+                                                               {<text>&nbsp;</text>@Model.GetAnswer("Prefixes")} @Model.GetDocumentAnswer("LastName", true)
+
+                </td>
+            </tr>
+            <tr>
+                <td class="td-bold td-align-middle">IBAN rekeningnummer
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="td-bold td-align-middle">Telefoonnummer
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="td-bold td-align-middle">Mobiel nummer
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="td-bold td-align-middle">E-mail adres
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="td-bold td-align-middle">Burgerlijke staat</td>
+                <td>
+                    <ul class="circle_ul">
+                        <li>Ongehuwd</li>
+                        <li>Gehuwd, sinds … / … / …</li>
+                        <li>Samenwonend</li>
+                        <li>Geregistreerd partnerschap, sinds … / … / …</li>
+                        <li>Samenlevingscontract, sinds … / … / …</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td class="td-bold td-align-middle">Tenaamstelling</td>
+                <td>Indien gehuwd of een geregistreerd partnerschap, je keuze voor tenaamstelling:
+                  <ul class="circle_ul">
+                      <li>Alleen geboortenaam</li>
+                      <li>Geboortenaam – partnernaam</li>
+                      <li>Partnernaam – geboortenaam</li>
+                      <li>Partnernaam</li>
+                  </ul>
+                </td>
+            </tr>
+            @*  OLIKA för Store_CCCN, SO och Apprentice*@
+
+            @if (Model.GetAnswer("EmploymentCategory").ToLower() != "Apprentice".ToLower())
+            {
+                <tr>
+                    <td class="td-bold">Naam partner</td>
+                    <td>Achternaam:</td>
+                </tr>
+
+                //Delete whole table row if   PM.CS.16 Type of benefit= "Company Car"
+                bool CompanyCar = false;
+
+                for (int i = 1; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
+                {
+
+                    string MultipleNr = i.ToString();
+                    if (i == 1)
+                    {
+                        MultipleNr = "";
+                    }
+
+                    if (Model.GetDocumentAnswer("TypeOfBenefit" + MultipleNr).ToLower() == "Company Car".ToLower())
+                    {
+                        CompanyCar = true;
+                        break;
+                    }
+                }
+
+                //  @if (Model.GetDocumentAnswer("TypeOfBenefit") != "Company Car")
+                if (CompanyCar == false)
+                {
+                <tr>
+                    <td class="td-bold td-align-middle">Reiskosten</td>
+                    <td>
+                        <ul class="circle_ul">
+                            <li>Ik wil gebruik maken van ‘groen naar het werk’. Ik print het aanmeldformulier dat op ico-worker.com/nl staat en stuur dit ingevuld binnen een week op.</li>
+                            <li>Ik wil gebruik maken van de vergoeding voor woon-/ werkverkeer zoals omschreven in CAO artikel 29B.</li>
+                        </ul>
+                    </td>
+                </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td class="td-align-middle">
+                        <strong>Partnergegevens</strong><br />
+                        (indien van toepassing)
+                    </td>
+                    <td class="td-align-middle">Achternaam:<br />
+                        Voorletters:<br />
+                        Geslacht:<br />
+                        Geboortedatum:<br />
+                        <br />
+                    </td>
+                </tr>
+
+               
+            }
+        </table>
+
+        <p style="width: 100%; padding-top: 50px;">
+            @Html.Partial("../Shared/Pdfs/_BarCode", Model)
+        </p>
+
+
+
+    </div>
+
+    @*ONLY FOR STORE CCCN CONRACTS*@
+    @if (Model.DocumentData.Id.ToLower() == "Store_cccn".ToLower())
+    {
+        if (Model.GetDocumentAnswer("BusinessUnit").ToLower() == "Store Amsterdam 088".ToLower() || (Model.GetDocumentAnswer("BusinessUnit").ToLower() == "Store Breda 403".ToLower() && contractedHours < 17))
+        {
+        @Html.Partial("../Shared/Pdfs/Appendix2", Model)
+        }
+
+    }
+
+</body>
+</html>

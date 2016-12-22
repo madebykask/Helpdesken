@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE form [
+  <!ENTITY languages SYSTEM "Templates/Languages.xml">
+  <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
+  <!ENTITY state SYSTEM "Templates/VoluntaryDeductionsState.xml">
+]>
+
+<form id="53" guid="C847F7EE-A538-4A0D-BD82-89CA93649E18" customerId="28">
+  &languages;
+  &regexs;
+  &state;
+
+  <fields>
+
+    <!--Tab ServiceRequestDetails-->
+    <tab name="#ServiceRequestDetails" label="Service Request Details">
+      <element name="Co-WorkerGlobalviewID" type="text" label="Co-Worker Globalview ID" mandatory="1"></element>
+      <element name="FirstName" type="text" label="Co-Worker First Name" mandatory="1"></element>
+      <element name="LastName" type="text" label="Co-Worker Last Name" mandatory="1"></element>
+      <element name="IKEAEmailAddress" type="text" label="IKEA Email Address" mandatory="1"></element>
+      <element name="IKEANetworkID" type="text" label="IKEA Network ID" mandatory="1"></element>
+      <element name="Company" type="text" label="Company"></element>
+      <element name="BusinessUnit" type="text" label="Business Unit"></element>
+      <element name="ServiceArea" type="text" label="Function"></element>
+      <element name="Department" type="text" label="Department"></element>
+      <!--<element name="ChangeValidFrom" type="date" label="Change Valid from:" mandatory="1" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="ChangeValidTo" type="date" label="Change Valid to:" mandatory="1" default="31.12.9999" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>-->
+      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard">
+        <options>
+          <option value=""></option>
+          <option value="Urgent">Urgent</option>
+          <option value="Standard">Standard</option>
+        </options>
+      </element>
+      <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
+    </tab>
+
+    <tab name="#Payment" label="Payment Information">
+      <element type="hidden" name="Deductions" default="1"></element>
+      <element type="select" name="DeductionsType" label="Deduction Type" mandatory="1">
+        <options>
+          <option value=""></option>
+          <option value="Deductions Type 1">Deductions Type 1</option>
+          <option value="Deductions Type 2">Deductions Type 2</option>
+          <option value="Deductions Type 3">Deductions Type 3</option>
+        </options>
+      </element>
+      <element type="text" name="DeductionsAmountUnits" label="Amount/Units" mandatory="1"></element>
+      <!--<element type="text" name="DeductionsNetGross" label="Net/Gross" ></element>-->
+      <element type="date" name="DeductionsValidFrom" label="Valid from:" format="dd.MM.yyyy" mandatory="1">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="DeductionsValidTo" label="Valid to:" default="31.12.9999" format="dd.MM.yyyy" mandatory="1">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+
+      <element type="select" name="DeductionsType2" label="Deduction Type" >
+        <options>
+          <option value=""></option>
+          <option value="Deductions Type 1">Deductions Type 1</option>
+          <option value="Deductions Type 2">Deductions Type 2</option>
+          <option value="Deductions Type 3">Deductions Type 3</option>
+        </options>
+      </element>
+      <element type="text" name="DeductionsAmountUnits2" label="Amount/Units" >
+        <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
+      </element>
+      <!--<element type="text" name="DeductionsNetGross2" label="Net/Gross" ></element>-->
+      <element type="date" name="DeductionsValidFrom2" label="Valid from:"  format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+        <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
+      </element>
+      <element type="date" name="DeductionsValidTo2" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+        <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
+      </element>
+
+      <element type="select" name="DeductionsType3" label="Deduction Type" >
+        <options>
+          <option value=""></option>
+          <option value="Deductions Type 1">Deductions Type 1</option>
+          <option value="Deductions Type 2">Deductions Type 2</option>
+          <option value="Deductions Type 3">Deductions Type 3</option>
+        </options>
+      </element>
+      <element type="text" name="DeductionsAmountUnits3" label="Amount/Units" >
+        <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
+      </element>
+      <!--<element type="text" name="DeductionsNetGross3" label="Net/Gross" ></element>-->
+      <element type="date" name="DeductionsValidFrom3" label="Valid from:"  format="dd.MM.yyyy">
+        <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="DeductionsValidTo3" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="select" name="DeductionsType4" label="Deduction Type" >
+        <options>
+          <option value=""></option>
+          <option value="Deductions Type 1">Deductions Type 1</option>
+          <option value="Deductions Type 2">Deductions Type 2</option>
+          <option value="Deductions Type 3">Deductions Type 3</option>
+        </options>
+      </element>
+      <element type="text" name="DeductionsAmountUnits4" label="Amount/Units" >
+        <mandatoryIfNotEmpty name="DeductionsType4"></mandatoryIfNotEmpty>
+      </element>
+      <!--<element type="text" name="DeductionsNetGross3" label="Net/Gross" ></element>-->
+      <element type="date" name="DeductionsValidFrom4" label="Valid from:"  format="dd.MM.yyyy">
+        <mandatoryIfNotEmpty name="DeductionsType4"></mandatoryIfNotEmpty>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="DeductionsValidTo4" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <mandatoryIfNotEmpty name="DeductionsType4"></mandatoryIfNotEmpty>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+    
+
+
+    <element type="select" name="DeductionsType5" label="Deduction Type" >
+      <options>
+        <option value=""></option>
+        <option value="Deductions Type 1">Deductions Type 1</option>
+        <option value="Deductions Type 2">Deductions Type 2</option>
+        <option value="Deductions Type 3">Deductions Type 3</option>
+      </options>
+    </element>
+    <element type="text" name="DeductionsAmountUnits5" label="Amount/Units" >
+      <mandatoryIfNotEmpty name="DeductionsType5"></mandatoryIfNotEmpty>
+    </element>
+    <!--<element type="text" name="DeductionsNetGross3" label="Net/Gross" ></element>-->
+    <element type="date" name="DeductionsValidFrom5" label="Valid from:"  format="dd.MM.yyyy">
+      <mandatoryIfNotEmpty name="DeductionsType5"></mandatoryIfNotEmpty>
+      <regex inherit="date" pattern="" message=""></regex>
+    </element>
+    <element type="date" name="DeductionsValidTo5" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+      <mandatoryIfNotEmpty name="DeductionsType5"></mandatoryIfNotEmpty>
+      <regex inherit="date" pattern="" message=""></regex>
+    </element>
+  </tab>
+  </fields>
+</form>

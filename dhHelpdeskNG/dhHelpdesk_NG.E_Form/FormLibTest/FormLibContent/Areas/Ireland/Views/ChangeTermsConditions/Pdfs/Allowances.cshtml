@@ -1,0 +1,74 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@using ECT.FormLib.Pdfs;
+@using System.Globalization;
+@using ECT.Model.Entities;
+@{
+    Layout = null;
+    Model.Language = "en";
+
+    
+}
+<!DOCTYPE html>
+<html>
+<body>
+    <div>
+       <table style="@IrelandPdfPage.StyleValue() width: 100%;" border="0">
+            <tr style="text-align: right;">
+                <td>@string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:d MMMMMM yyyy}", DateTime.Now)</td>
+            </tr>
+        </table>
+
+         <p style="@IrelandPdfPage.StyleValue()"><strong>Private & Confidential</strong><br />
+        @Model.GetDocumentAnswer("FirstName",true) @Model.GetDocumentAnswer("LastName",true)<br />
+        @Model.GetDocumentAnswer("AddressLine1",true)
+        @if (!string.IsNullOrEmpty(Model.GetDocumentAnswer("AddressLine2")))
+         {
+        <br />
+        @Model.GetDocumentAnswer("AddressLine2")
+         }
+        <br />
+        @Model.GetDocumentAnswer("City",true)
+        <br />
+        @Model.GetDocumentAnswer("PostalCode",true)
+        <br />
+        <br />
+        Dear @Model.GetDocumentAnswer("FirstName",true),<br /><br /> 
+        @if ((Model.GetDocumentAnswer("AllowancesType" + Model.MultiNr)).ToLower() == "Fork Lift Truck".ToLower() | (Model.GetDocumentAnswer("AllowancesType" + Model.MultiNr)).ToLower() == "100F Salary FLT Skills".ToLower())
+        {
+            <text>Congratulations on successfully completing your IKEA forklift truck (FLT) test. The forklift truck allowance is designed to reward the use of an additional skill. The allowance will only be paid if you are working as a forklift truck driver and in accordance with the FLT Policy. Please find the FLT Policy enclosed for your information.</text>
+            <br />
+            <text>We are pleased to confirm that while you are working as a forklift truck driver you will receive the forklift truck allowance of &euro;@Model.GetDocumentAnswer("AllowancesAmountUnits" + Model.MultiNr) per month.</text>
+            <br />
+            <text>This will be paid in addition to your hourly rate of pay.</text>
+            <br />
+            <text>This will be effective from @Model.GetDocumentAnswer("ChangeValidFrom" + Model.MultiNr).</text>
+        }
+
+        @if ((Model.GetDocumentAnswer("AllowancesType" + Model.MultiNr)).ToLower() == "Power Stacker".ToLower())
+        {
+            <text>Congratulations on successfully completing your IKEA Power Stacker test.  The Power Stacker allowance is designed to reward the use of an additional skill.  The allowance will only be paid if you are working with a Power Stacker within your main role.</text>
+            <br />
+            <text>We are pleased to confirm that while you are working with a power Stacker you will receive the Power Stacker allowance of &euro;@Model.GetDocumentAnswer("AllowancesAmountUnits" + Model.MultiNr) per hour.</text>
+            <br />
+            <text>This will be paid in addition to your hourly rate of pay.</text>
+            <br />
+            <text>This will be effective from @Model.GetDocumentAnswer("ChangeValidFrom" + Model.MultiNr).</text>
+        }
+        
+        
+        <br />
+        <br />
+        All other Terms and Conditions remain the same. IKEA reserves the right to vary terms and conditions of employment subject to consultation and reasonable notice.
+        <br />
+        <br />
+        <br />
+            
+       
+        </p>
+
+        <endpage />
+    </div>
+</body>
+</html>

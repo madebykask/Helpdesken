@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<options>
+  <option value=""></option>
+  <option value="Permanent">Permanent</option>
+  <option value="Temporary">Temporary</option>
+  <option value="Replacement">Replacement</option>
+  <option value="Casual">Casual</option>
+  <option value="Trainee">Trainee</option>
+  <option value="Seasonal co-worker">Seasonal co-worker</option>
+  <option value="Transferred Employee">Transferred Employee</option>
+</options>

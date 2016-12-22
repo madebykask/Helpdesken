@@ -1,0 +1,34 @@
+﻿@model FormModel
+
+@{
+     ViewBag.Title = Model.Translate("Poland") + " - " + Model.Translate("Error notification");
+}
+
+@section Script {
+    <script type="text/javascript">
+
+        $(function () {
+            validate.run(11);
+        });
+
+    </script>
+
+     @Html.Partial("_Validate", Model)
+}
+
+@using(Html.BeginForm("new", "errornotificationspecial", FormMethod.Post, new { area = "poland" }))
+{
+    @Html.Partial("_Navigation", Model)
+    <div class="container containeralignright">
+        @Html.Partial("_CurrentUser")
+        @Html.Partial("_ErrorMessage", Model)
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#errornotification">@Model.Translate("Error Notification")</a></li>
+        </ul>
+        <div class="content">
+            <div class="tab-content">
+                @Html.Partial("_TabErrorNotification", Model)
+            </div>
+        </div>
+    </div>
+}

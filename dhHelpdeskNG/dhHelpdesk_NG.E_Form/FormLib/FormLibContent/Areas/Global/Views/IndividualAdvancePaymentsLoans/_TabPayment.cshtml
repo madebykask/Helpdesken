@@ -1,0 +1,114 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<div class="tab-pane" id="Payment">
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Advance Payment / Loan Details")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PaymentType")</td>
+                    <td>
+                        @Model.Element("PaymentType")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PaymentAmount")</td>
+                    <td>
+                        @Model.Element("PaymentAmount")
+                    </td>
+                </tr>
+@*                <tr>
+                    <td class="tdstrong">@Model.Label("PaymentCurrency")</td>
+                    <td>
+                        @Model.Element("PaymentCurrency")
+                    </td>
+                </tr>*@
+
+                <tr>
+                    <td class="tdstrong">@Model.Label("PaymentMethod")</td>
+                    <td>
+                        @Model.Element("PaymentMethod")
+                    </td>
+                </tr>
+                                <tr>
+                    <td class="tdstrong">@Model.Label("PaymentDate")</td>
+                    <td>
+                        @Model.Element("PaymentDate")
+                    </td>
+                </tr>
+             
+
+            </tbody>
+        </table>
+    </div>
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Loan Re-Payment")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Re-PaymentType")</td>
+                    <td>
+                        @Model.Element("Re-PaymentType")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Re-PaymentAmountUnits")</td>
+                    <td>
+                        @Model.Element("Re-PaymentAmountUnits")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("1stPayment")</td>
+                    <td>
+                        @Model.Element("1stPayment")
+                    </td>
+                </tr>
+                
+                </tbody>
+        </table>
+    </div>
+</div>
+
+<script>           
+    var lockedbyUserGroup = document.getElementById('LockedByUserGroup').getAttribute('status');
+    if ("@Model.ReadOnlyTab("#Payment")" == 'False' && lockedbyUserGroup == 'False') {
+        $(function () {
+
+            function setPaymentDateBehavior(value) {
+                if (value == 'Payroll') {
+                    $('#date_PaymentDate').datepicker("destroy");
+                    $('#date_PaymentDate').addClass("disabled");
+                    $('#PaymentDate').prop('disabled', true);
+                    $('#PaymentDate').val("");
+                }
+                else {
+                    $('#date_PaymentDate').datepicker();
+                    $('#PaymentDate').prop('disabled', false);
+                    $("#PaymentDate").removeClass("disabled");
+                }
+            }
+
+            if ($('#PaymentMethod').val() == 'Payroll') {
+                $('#date_PaymentDate').datepicker("destroy");
+                $('#date_PaymentDate').addClass("disabled");
+                $('#PaymentDate').prop('disabled', true);
+                $('#PaymentDate').val("");
+            }
+
+
+            $('#PaymentMethod').change(function () {
+                setPaymentDateBehavior($(this).val());
+            });
+        });
+    }    
+</script>

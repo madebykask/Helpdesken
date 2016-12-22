@@ -1,0 +1,158 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@using ECT.FormLib.Pdfs;
+@using System.Globalization;
+@using ECT.Model.Entities;
+@{
+    Layout = null;
+    Model.Language = "en";
+
+    var paragraphNo = 6;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    <div>
+        <table style="font-family: Verdana; font-size: 11px; width: 100%;" border="0">
+            <tr style="text-align: right;">
+                <td>@string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:d MMMMMM yyyy}", DateTime.Now)</td>
+            </tr>
+        </table>
+        <p style="text-align: left; font-family: Verdana; font-size: 11px;">
+            <strong>Private & Confidential</strong><br />
+            @Model.GetDocumentAnswer(FormLibConstants.FormField.FirstName, true) @Model.GetDocumentAnswer(FormLibConstants.FormField.LastName, true)<br />
+            @Model.GetDocumentAnswer(FormLibConstants.FormField.PermanentAddressLine1, true)
+            @if (!string.IsNullOrEmpty(Model.GetDocumentAnswer(FormLibConstants.FormField.PermanentAddressLine2)))
+            {
+                <br />
+                @Model.GetDocumentAnswer(FormLibConstants.FormField.PermanentAddressLine2)
+            }
+            <br />
+            @Model.GetDocumentAnswer(FormLibConstants.FormField.PermanentCity, true)
+            <br />
+            @Model.GetDocumentAnswer(FormLibConstants.FormField.PermanentPostalCode, true)
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            Dear @Model.GetDocumentAnswer(FormLibConstants.FormField.FirstName, true),<br />
+            <br />
+            I am very pleased to be able to confirm to you our offer of the position of @Model.GetDocumentAnswer(FormLibConstants.FormField.JobTitle, true) in the 
+            @if (Model.GetDocumentAnswer(FormLibConstants.FormField.NewDepartment, true) != "")
+            {
+                <text> @Model.GetDocumentAnswer(FormLibConstants.FormField.NewDepartment, true) </text>
+            }
+            else
+            {
+                <text> @Model.GetDocumentAnswer(FormLibConstants.FormField.Department, true) </text>
+            }
+            Department at IKEA Store, reporting to the 
+            @if (Model.GetDocumentAnswer(FormLibConstants.FormField.ReportsToLineManager).ToLower() == "Shopkeeper".ToLower())
+            {
+                <text> @Model.GetDocumentAnswer(FormLibConstants.FormField.ReportsToLineManager, true) 
+                @if (Model.GetDocumentAnswer(FormLibConstants.FormField.NewDepartment, true) != "")
+                {
+                    <text> @Model.GetDocumentAnswer(FormLibConstants.FormField.NewDepartment, true)</text>
+                }
+                else
+                {
+                    <text> @Model.GetDocumentAnswer(FormLibConstants.FormField.Department, true)</text>
+                }.</text>
+            }
+            else
+            {
+                <text> @Model.GetDocumentAnswer(FormLibConstants.FormField.ReportsToLineManager, true).</text>
+            }
+            <br />
+            <br />
+            The principal Terms and Conditions of your employment will be as follows:
+            <br />
+            <br />
+            1.	Your start date in this role will be @Model.GetDocumentAnswer(FormLibConstants.FormField.ChangeValidFrom, true).
+            <br />
+            <br />
+            2.  The 
+            @if (Model.GetDocumentAnswer(FormLibConstants.FormField.NewDepartment, true) != "")
+            {
+                <text> @Model.GetDocumentAnswer(FormLibConstants.FormField.NewDepartment, true) </text>
+            }
+            else
+            {
+                <text> @Model.GetDocumentAnswer(FormLibConstants.FormField.Department, true) </text>
+            } 
+            department is your primary area of work.  You will on occasions be expected to work in other areas within the Store/Unit to support the business need.
+            <br />
+            <br />
+            3.	Your hours of work will be @Model.GetDocumentAnswer(FormLibConstants.FormField.ContractedHours, true) hours per week over @Model.GetDocumentAnswer(FormLibConstants.FormField.DaysPerWeek, true) days, Sunday – Saturday. 
+            <br />
+            <br />
+            4.	Your salary will be £@Model.GetDocumentAnswer(FormLibConstants.FormField.BasicPayAmount, true) per annum calculated on pro rata basis payable monthly in arrears on the last Friday of each month by direct transfer into your Bank or Building Society account.  Next review date will be 1 September @Model.GetDocumentAnswer(FormLibConstants.FormField.DateOfNextSalaryReview, true).
+            <br />
+            <br />
+            5.	You will be entitled to Private Medical Health (Cigna) for yourself and where applicable your partner and children paid for by IKEA.  You will also receive Dental Insurance cover paid for by IKEA for yourself and your partner.
+            <br />
+            <br />
+            @if (Model.GetDocumentAnswer(FormLibConstants.FormField.BenefitLevel, true).ToLower() == "Level 2".ToLower())
+            {
+                <text>@(paragraphNo.ToString()).	After  two years service you will be eligible to have a full medical bi-annually, paid for by IKEA.  This is through the Nuffield Hospital Health Screening Programme.</text>
+                paragraphNo++;
+                <br />
+                <br />
+            }
+            @(paragraphNo.ToString()).	You have the benefit of up to 
+            @{ paragraphNo++;}
+            @if (Model.GetDocumentAnswer(FormLibConstants.FormField.BenefitLevel, true).ToLower() == "Level 1".ToLower())
+            {
+                <text> 13 </text>
+            }
+            else
+            {
+                <text> 26 </text> 
+            }
+            weeks paid sick leave in any rolling year.
+            <br />
+            <br />
+            @(paragraphNo.ToString()).	Your annual holiday entitlement (inclusive of 8 days annual public holidays) per holiday year is @Model.GetDocumentAnswer(FormLibConstants.FormField.HolidayFull, true).  Holiday entitlement runs from 1st September – 31st August and is calculated on a pro rata basis. 
+            @{ paragraphNo++;}
+            <br />
+            <br />
+            You must save holiday hours for days of store closure when you would normally be scheduled to work.  The store will be closed on Easter Sunday and Christmas Day.
+            <br />
+            <br />
+            Untaken basic holiday entitlement can only be carried forward with prior permission from the Unit Manager.  See the Co-worker handbook for details of when holiday can be taken.
+            <br />
+            <br />
+            @if (Model.GetDocumentAnswer(FormLibConstants.FormField.BenefitLevel, true).ToLower() == "Level 2".ToLower())
+            {
+                <text>@(paragraphNo.ToString()).	If you intend to resign from your employment you will be required to give the company 12 weeks notice in writing.</text>
+                paragraphNo++;
+                <br />
+                <br />
+            }
+            @(paragraphNo.ToString()).	It is a condition of your employment that you advise us of a relationship that exists, or begins, with a fellow Co-worker in your store/unit.  This is in order that you will be excluded from any investigation/disciplinary/grievance/appeal or successor meetings relating to that individual in order to avoid conflict of interest and ensure that our standard of impartiality and fairness is maintained.
+            @{ paragraphNo++;}
+            <br />
+            <br />
+            @(paragraphNo.ToString()).	IKEA reserves the right to vary terms and conditions of employment subject to consultation and reasonable notice
+            @{ paragraphNo++;}
+            <br />
+            <br />
+            All other terms and conditions will remain the same. IKEA reserves the right to vary terms and conditions of employment subject to consultation and reasonable notice.
+            <br />
+            <br />
+            I would be grateful if you could sign the enclosed copy of this letter as acceptance of the offer and hand this in to the HR Department.
+            <br />
+            <br />
+            
+        </p>
+
+        <endpage />
+    </div>
+</body>
+</html>

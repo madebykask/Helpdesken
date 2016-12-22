@@ -1,0 +1,88 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@using ECT.Model.Entities;
+@{
+    ViewBag.Title = Model.Translate("Netherlands") + " - " + Model.Translate("Service Request Details");
+    var url = Url.CurrentController() + "typeahead";    
+}
+
+@section Script {
+    <script type="text/javascript">
+
+        validate.run($('#actionState').val());
+
+        $(document).on('change', '#actionState', function (e) {
+            var val = $(this).val();
+            validate.run(val);
+        });
+    </script>
+
+    @Html.Partial("_Validate", Model)
+}
+@using(Html.BeginForm("new", "ChangeTermsConditions", FormMethod.Post, new { area = "Netherlands", novalidate = "novalidate", id = "NewForm" }))
+{
+    
+    <span style="display: none;" id="narrowDownInit" url="@url"></span>
+    @Html.Partial("_GlobalNavRev", Model)
+    <div class="container containeralignright">
+        @Html.Partial("_CurrentUser")
+        @Html.Partial("_ErrorMessage", Model)
+        <ul class="nav nav-tabs">
+            @if(Model.VisibleTab("#ServiceRequestDetails"))
+            {
+                <li class="active @(Model.TabHasError("#ServiceRequestDetails") ? "error" : "")">
+                    <a href="#ServiceRequestDetails">@Model.Translate("Service Request Details")</a></li>
+            }
+            @if(Model.VisibleTab("#OrganisationalAssignment"))
+            {
+                <li class="@(Model.TabHasError("#OrganisationalAssignment") ? "error" : "")">
+                    <a href="#OrganisationalAssignment">@Model.Translate("Organisational Assignment")</a></li>
+            }
+            @if(Model.VisibleTab("#Payment"))
+            {
+                <li class="@(Model.TabHasError("#Payment") ? "error" : "")">
+                    <a href="#Payment">@Model.Translate("Payment Information")</a></li>
+            }
+            @if(Model.VisibleTab("#attachments"))
+            {
+                <li class="pull-right">
+                    <a href="#attachments"><i class="icon-file icon-white"></i>&nbsp;@Model.Translate("Attachments")&nbsp;(<b id="attachmentCounter">0</b>)</a>
+                </li>
+            }
+        </ul>
+        <div class="content">
+            <div class="row-fluid">
+                <div class="tab-content">
+                    @if(Model.VisibleTab("#ServiceRequestDetails"))
+                    {
+                        @Html.Partial("_TabServiceRequestDetails", Model)
+                    }
+                    @if(Model.VisibleTab("#OrganisationalAssignment"))
+                    {
+                        @Html.Partial("_TabOrganisationalAssignment", Model)
+                    }
+                    @if(Model.VisibleTab("#Payment"))
+                    {
+                        @Html.Partial("_TabPayment", Model)
+                    }
+                    @if(Model.VisibleTab("#attachments"))
+                    {
+                        @Html.Partial("_GlobalAttachments", Model)
+                    }
+
+                    @Html.Partial("_TabCTCJS", Model)
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="activeTab" name="activeTab" value="@Model.ActiveTab" />    
+}
+
+<script>
+    function changeBusinessUnitCallback() {
+        GetXML('Predefined_BusinessUnit_LineManager.xml', narrowDownBusinessUnitLineManager);
+        GetXML('Predefined_BusinessUnit_LocalJobTitle.xml', narrowDownBusinessUnitLocalJobTitle);
+    }
+</script>

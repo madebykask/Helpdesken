@@ -1,0 +1,66 @@
+﻿@model FormModel
+
+<div class="tab-pane active" id="ServiceRequestDetails"> 
+    <div class="span12">
+        <table class="table">       
+            <tr>
+                <td class="tdstrong">@Model.Label("Co-WorkerGlobalviewID")</td>
+                <td>
+                    @Model.Element("Co-WorkerGlobalviewID")
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("FirstName")</td>
+                <td>
+                    @Model.Element("FirstName")
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("LastName")</td>
+                <td>
+                    @Model.Element("LastName")</td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("IKEAEmailAddress")</td>
+                <td>
+                    @Model.Element("IKEAEmailAddress")
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("IKEANetworkID")</td>
+                <td>
+                    @Model.Element("IKEANetworkID")
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("BusinessUnit")</td>
+                <td>
+                    @Model.Element("BusinessUnit")
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("Department")</td>
+                <td>
+                    @Model.Element("Department")</td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("TECoWorker")</td>
+                <td>
+                    @Model.Element("TECoWorker")</td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("ServiceRequestPriority")</td>
+                <td>
+                    @Model.Element("ServiceRequestPriority")</td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("ProcessBeforeDate")</td>
+                <td>
+                    @Model.Element("ProcessBeforeDate")</td>
+            </tr>         
+        </table>
+    </div>
+
+    <input type="hidden" id="CustomerId" value="@Model.CustomerId" />
+
+</div>

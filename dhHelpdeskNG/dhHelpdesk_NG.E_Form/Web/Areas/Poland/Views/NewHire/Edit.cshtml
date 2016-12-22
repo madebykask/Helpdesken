@@ -1,0 +1,43 @@
+﻿@model Web.Areas.Poland.Models.NewHire
+
+@{
+    ViewBag.Title = Model.Translate("Poland") + " - " + Model.Translate("New hire");
+}
+
+@section Script {
+    <script>
+
+        $(document).on('click', '.print', function (e) {
+            e.preventDefault();
+
+            var url = $(this).attr('href');
+
+            $.ajax({
+                type: "POST",
+                url: url
+            })
+                .done(function (data) {
+                    if (data.Exception)
+                        location.reload();
+                    else {
+                        $('#documents').replaceWith(data.Result);
+                        $('#documents').addClass('active');
+                        url = url.replace('print', 'contract');
+                        window.open(url);
+                    }
+                });
+        });
+
+        validate.run();
+
+        $(document).on('change', '#actionState', function (e) {
+            var val = $(this).val();
+            validate.run(val);
+        });
+
+    </script>
+
+    @Html.Partial("_Validate", Model)
+}
+
+@Html.Partial("_Edit", Model)

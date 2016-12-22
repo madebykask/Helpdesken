@@ -1,0 +1,65 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@using ECT.FormLib.Pdfs;
+@using System.Globalization;
+@using ECT.Model.Entities;
+@{
+    Layout = null;
+    Model.Language = "en";
+
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    <div>
+        <table style="@IrelandPdfPage.StyleValue() width: 100%;" border="0">
+            <tr style="text-align: right;">
+                <td>@string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:d MMMMMM yyyy}", DateTime.Now)</td>
+            </tr>
+        </table>
+        <p style="@IrelandPdfPage.StyleValue()">
+            <strong>Private & Confidential</strong><br />
+            @Model.GetDocumentAnswer(FormLibConstants.FormField.FirstName, true) @Model.GetDocumentAnswer(FormLibConstants.FormField.LastName, true)<br />
+            @Model.GetDocumentAnswer(FormLibConstants.FormField.PermanentAddressLine1, true)
+            @if (!string.IsNullOrEmpty(Model.GetDocumentAnswer(FormLibConstants.FormField.PermanentAddressLine2)))
+            {
+                <br />
+                @Model.GetDocumentAnswer(FormLibConstants.FormField.PermanentAddressLine2)
+            }
+            <br />
+            @Model.GetDocumentAnswer(FormLibConstants.FormField.PermanentCity, true)
+            <br />
+            @Model.GetDocumentAnswer(FormLibConstants.FormField.PermanentPostalCode, true)
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            Dear @Model.GetDocumentAnswer(FormLibConstants.FormField.FirstName, true),<br />
+            <br />
+            <br />
+            <br />
+            I am writing to confirm that as of @Model.GetDocumentAnswer(FormLibConstants.FormField.ChangeValidFrom, true), your fixed term position of @Model.GetDocumentAnswer(FormLibConstants.FormField.JobTitle, true) in the @Model.GetDocumentAnswer(FormLibConstants.FormField.Department, true) will be extended to @Model.GetDocumentAnswer(FormLibConstants.FormField.ChangeValidTo, true).
+            <br />
+            <br />
+            Your holiday entitlement for the contracted period is @Model.GetDocumentAnswer(FormLibConstants.FormField.HolidayFull, true) hours on pro rata basis.
+            <br />
+            <br />
+            All other terms and conditions will remain the same.
+            <br />
+            <br />
+            Please retain this letter for your records.
+            <br />
+            <br />
+
+        </p>
+
+        <endpage />
+    </div>
+</body>
+</html>

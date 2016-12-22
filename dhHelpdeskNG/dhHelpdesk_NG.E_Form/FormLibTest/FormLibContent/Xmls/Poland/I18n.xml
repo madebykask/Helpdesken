@@ -1,0 +1,1650 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<lang name="pl">
+    <data name="Hiring">
+        <value>Zatrudnienie</value>
+    </data>
+    <data name="Initiator">
+        <value>Inicjator</value>
+    </data>
+    <data name="Employee ID">
+        <value>Numer Pracownika</value>
+    </data>
+    <data name="Type of Hiring">
+        <value>Rodzaj zatrudnienia</value>
+    </data>
+    <data name="Reason for Hiring">
+        <value>Powód zatrudnienia</value>
+    </data>
+    <data name="Company">
+        <value>Firma</value>
+    </data>
+    <data name="Store/Unit">
+        <value>Jednostka organizacyjna</value>
+    </data>
+    <data name="Additional Place of work">
+        <value>Dodatkowe miejsce pracy</value>
+    </data>
+    <data name="Department">
+        <value>Dział</value>
+    </data>
+    <data name="English Job Title">
+        <value>Stanowisko ang.</value>
+    </data>
+    <data name="Polish Job Title">
+        <value>Stanowisko pol.</value>
+    </data>
+    <data name="Title">
+        <value>Zwrot grzecznościowy</value>
+    </data>
+    <data name="Employee First Name">
+        <value>Imię pracownika</value>
+    </data>
+    <data name="Employee Last Name">
+        <value>Nazwisko pracownika</value>
+    </data>
+    <data name="Date of birth">
+        <value>Data urodzenia</value>
+    </data>
+    <data name="Country">
+        <value>Kraj</value>
+    </data>
+    <data name="Street">
+        <value>Ulica</value>
+    </data>
+    <data name="Street Number">
+        <value>Numer domu</value>
+    </data>
+    <data name="Apartment">
+        <value>Numer mieszkania</value>
+    </data>
+    <data name="House Number">
+        <value>Numer mieszkania</value>
+    </data>
+    <data name="City">
+        <value>Miejscowość</value>
+    </data>
+    <data name="Post code">
+        <value>Kod pocztowy</value>
+    </data>
+    <data name="Region">
+        <value>Województwo</value>
+    </data>
+    <data name="District">
+        <value>Powiat</value>
+    </data>
+    <data name="Community">
+        <value>Gmina</value>
+    </data>
+    <data name="Internal Log Note">
+        <value>Wiadomość wewnętrzna</value>
+    </data>
+    <data name="Internal log note">
+        <value>Wiadomość wewnętrzna</value>
+    </data>
+    <data name="Internal/External">
+        <value>Pracownik wewnętrzny/zewnętrzny</value>
+    </data>
+    <data name="Contract Type">
+        <value>Rodzaj kontraktu</value>
+    </data>
+    <data name="Person replaced">
+        <value>Pracownik zastępowany</value>
+    </data>
+    <data name="Poland">
+        <value>Polska</value>
+    </data>
+    <data name="Two-week notice period">
+        <value>Dwutygodniowy okres wypowiedzenia</value>
+    </data>
+    <data name="Hiring Date">
+        <value>Data zatrudnienia</value>
+    </data>
+    <data name="End Date">
+        <value>Data końcowa</value>
+    </data>
+    <data name="First day at work">
+        <value>Pierwszy dzień pracy</value>
+    </data>
+    <data name="Effective date">
+        <value>Data początkowa</value>
+    </data>
+    <data name="Working hours">
+        <value>Wymiar czasu pracy</value>
+    </data>
+    <data name="Workload Percentage">
+        <value>Wymiar etatu</value>
+    </data>
+    <data name="Basic pay">
+        <value>Wynagrodzenie podstawowe</value>
+    </data>
+    <data name="Basic pay in words (PL)">
+        <value>Wynagr. podstawowe słownie (PL)</value>
+    </data>
+    <data name="Basic pay in words (EN)">
+        <value>Wynagr. podstawowe słownie (EN)</value>
+    </data>
+    <data name="monthly/hourly">
+        <value>Według stawki mies/godz</value>
+    </data>
+    <data name="ECM compensation program">
+        <value>Rodzaj taryfikatora</value>
+    </data>
+    <data name="PS area">
+        <value>Obszar taryfikatora</value>
+    </data>
+    <data name="PS group">
+        <value>Kategoria taryfikatora</value>
+    </data>
+    <data name="Collective scale salary">
+        <value>Poziom kompetencji</value>
+    </data>
+    <data name="One IKEA Bonus type">
+        <value>Rodzaj bonusa</value>
+    </data>
+    <data name="Allowance">
+        <value>Dodatek</value>
+    </data>
+    <data name="Allowances">
+        <value>Dodatki</value>
+    </data>
+    <data name="amount">
+        <value>Kwota</value>
+    </data>
+    <data name="gross/ nett">
+        <value>netto/brutto</value>
+    </data>
+    <data name="Home Cost center">
+        <value>MPK główne</value>
+    </data>
+    <data name="Additional Cost center">
+        <value>MPK dodatkowe</value>
+    </data>
+    <data name="Second Cost center">
+        <value>drugie MPK</value>
+    </data>
+    <data name="Cost allocation %">
+        <value>Alokacja kosztow %</value>
+    </data>
+    <data name="Health insurance location">
+        <value>Nazwa oddziału NFZ</value>
+    </data>
+    <data name="Pensioner status">
+        <value>Prawo do renty/emerytury</value>
+    </data>
+    <data name="PESEL">
+        <value>PESEL</value>
+    </data>
+    <data name="Mobility Status">
+        <value>Status Mobility</value>
+    </data>
+    <data name="Maiden name">
+        <value>Nazwisko panieńskie</value>
+    </data>
+    <data name="Middle name">
+        <value>Drugie imię</value>
+    </data>
+    <data name="Father's first name">
+        <value>Imię ojca</value>
+    </data>
+    <data name="Mother's first name">
+        <value>Imię matki</value>
+    </data>
+    <data name="Mother's maiden name">
+        <value>Nazwisko panieńskie matki</value>
+    </data>
+    <data name="Place of birth">
+        <value>Miejsce urodzenia</value>
+    </data>
+    <data name="Nationality">
+        <value>Narodowość</value>
+    </data>
+    <data name="Communication language">
+        <value>Język komunikacji</value>
+    </data>
+    <data name="Gender">
+        <value>Płeć</value>
+    </data>
+    <data name="NIP">
+        <value>NIP</value>
+    </data>
+    <data name="Phone">
+        <value>Nr telefonu</value>
+    </data>
+    <data name="E-mail">
+        <value>E-mail</value>
+    </data>
+    <data name="Tax Office Name and Location">
+        <value>Nazwa oddziału US</value>
+    </data>
+    <data name="Name and Location">
+        <value>Nazwa i lokalizacja oddziału US</value>
+    </data>
+    <data name="Waiting period">
+        <value>Okres wyczekiwania</value>
+    </data>
+    <data name="Relationship">
+        <value>Stopień pokrewieństwa</value>
+    </data>
+    <data name="First Name">
+        <value>Imię</value>
+    </data>
+    <data name="Last Name">
+        <value>Nazwisko</value>
+    </data>
+    <data name="Reason for Last name Change">
+        <value>Powód zmiany nazwiska</value>
+    </data>
+    <data name="New Last Name">
+        <value>Nowe nazwisko</value>
+    </data>
+    <data name="New First Name">
+        <value>Nowe imię</value>
+    </data>
+    <data name="Health insurance">
+        <value>Ubezpieczenie zdrowotne</value>
+    </data>
+    <data name="Joined household">
+        <value>Wspólne gospodarstwo</value>
+    </data>
+    <data name="Exclusively dependent">
+        <value>Wyłączne utrzymanie</value>
+    </data>
+    <data name="Exclusively dependant">
+        <value>Wyłączne utrzymanie</value>
+    </data>
+    <data name="Identity document">
+        <value>Rodzaj dokumentu tożsamości</value>
+    </data>
+    <data name="ID or Passport number">
+        <value>Numer dokumentu tożsamości</value>
+    </data>
+    <data name="ID or Passport no.">
+        <value>Numer dokumentu tożsamości</value>
+    </data>
+    <data name="Identity card no">
+        <value>Numer dowodu osobistego</value>
+    </data>
+    <data name="Passport number">
+        <value>Numer paszportu</value>
+    </data>
+    <data name="Issue Authority">
+        <value>Organ wydający</value>
+    </data>
+    <data name="Issue date">
+        <value>Wydany dnia</value>
+    </data>
+    <data name="Residence permit no">
+        <value>Nr zezwolenia na pobyt</value>
+    </data>
+    <data name="Recidence permit no">
+        <value>Nr zezwolenia na pobyt</value>
+    </data>
+    <data name="Work permit no">
+        <value>Nr zezwolenia na pracę</value>
+    </data>
+    <data name="No of work permit">
+        <value>Nr zezwolenia na pracę</value>
+    </data>
+    <data name="Account no">
+        <value>Numer konta</value>
+    </data>
+    <data name="Account holder">
+        <value>Właściciel konta</value>
+    </data>
+    <data name="Name of bank">
+        <value>Nazwa banku</value>
+    </data>
+    <data name="Amount to be transferred">
+        <value>Kwota do przelewu</value>
+    </data>
+    <data name="Save">
+        <value>Zapisz</value>
+    </data>
+    <data name="Basic Data">
+        <value>Dane Podstawowe</value>
+    </data>
+    <data name="Conditions of Employment">
+        <value>Warunki zatrudnienia</value>
+    </data>
+    <data name="Payment Information">
+        <value>Dane dotyczące płacy</value>
+    </data>
+    <data name="Personal Information">
+        <value>DANE PERSONALNE</value>
+    </data>
+    <data name="Documents">
+        <value>Dokumenty</value>
+    </data>
+    <data name="Payment information">
+        <value>Dane dotyczące płacy</value>
+    </data>
+    <data name="Recurring payments and deductions">
+        <value>Okresowe płatności i potrącenia</value>
+    </data>
+    <data name="Recuring payments and deducations">
+        <value>Okresowe płatności i potrącenia</value>
+    </data>
+    <data name="Payments and allowances">
+        <value>Płatności i dodatki</value>
+    </data>
+    <data name="Additional payments">
+        <value>Dodatkowe płatności</value>
+    </data>
+    <data name="Additional payment">
+        <value>Dodatkowa płatność</value>
+    </data>
+    <data name="Cost center">
+        <value>Miejsce powstawania kosztów</value>
+    </data>
+    <data name="Additional information">
+        <value>Dodatkowe informacje</value>
+    </data>
+    <data name="Document">
+        <value>Dokument</value>
+    </data>
+    <data name="Document">
+        <value>Dokument</value>
+    </data>
+    <data name="English Contract">
+        <value>Kontrakt (EN)</value>
+    </data>
+    <data name="Polish Contract">
+        <value>Kontrakt (PL)</value>
+    </data>
+    <data name="Type">
+        <value>Format</value>
+    </data>
+    <data name="Printed by">
+        <value>Wydrukowany przez</value>
+    </data>
+    <data name="Print">
+        <value>Drukuj</value>
+    </data>
+    <data name="Employee no">
+        <value>Numer Pracownika</value>
+    </data>
+    <data name="External body contacted">
+        <value>Informacje przekazane do instytucji zewnętrznych</value>
+    </data>
+    <data name="Label">
+        <value>Pole</value>
+    </data>
+    <data name="Value">
+        <value>Wartość</value>
+    </data>
+    <data name="Personal Data 1">
+        <value>Dane Personalne 1</value>
+    </data>
+    <data name="Additional Payment Data 1">
+        <value>Dodatkowe dane dot. płatności 1</value>
+    </data>
+    <data name="Additional Contract Information">
+        <value>Dodatkowe dane dot. kontraktu</value>
+    </data>
+    <data name="Bank Account Details">
+        <value>Dane dot. konta bankowego</value>
+    </data>
+    <data name="Bank account">
+        <value>Konto bankowe</value>
+    </data>
+    <data name="Additional bank account details">
+        <value>Dane dot. dodatkowego konta bankowego</value>
+    </data>
+    <data name="Tax Data">
+        <value>Dane dot. US</value>
+    </data>
+    <data name="Additional Payment Data 2">
+        <value>Dodatkowe dane dot. płatności 2</value>
+    </data>
+    <data name="Personal Data 2">
+        <value>Dane Personalne 2</value>
+    </data>
+    <data name="Permanent address">
+        <value>Adres zameldowania</value>
+    </data>
+    <data name="Permanent Address">
+        <value>Adres zameldowania</value>
+    </data>
+    <data name="Home Address">
+        <value>Adres zamieszkania</value>
+    </data>
+    <data name="Home address">
+        <value>Adres zamieszkania</value>
+    </data>
+    <data name="Mailing Address">
+        <value>Adres korespondencyjny</value>
+    </data>
+    <data name="Mailing address">
+        <value>Adres korespondencyjny</value>
+    </data>
+    <data name="Emergency Address">
+        <value>Adres w nagłych wypadkach</value>
+    </data>
+    <data name="Emergency address">
+        <value>Adres w nagłych wypadkach</value>
+    </data>
+    <data name="Tax Address">
+        <value>Adres na deklaracji PIT</value>
+    </data>
+    <data name="Tax address">
+        <value>Adres na deklaracji PIT</value>
+    </data>
+    <data name="Select action">
+        <value>Wybierz akcję</value>
+    </data>
+    <data name="00. Start Service Request">
+        <value>00. Załóż nową sprawę</value>
+    </data>
+    <data name="10. Draft Service Request">
+        <value>10. Wersja robocza</value>
+    </data>
+    <data name="20. Awaiting basic Service Request Approval">
+        <value>20. Oczekuje na częściowe zatwierdzenie</value>
+    </data>
+    <data name="30. Awaiting basic GV Update">
+        <value>30. Oczekuje na częściową aktualizację GV</value>
+    </data>
+    <data name="35. Basic Quality Check Needed">
+        <value>35. Wymagana częściowa kontrola jakości</value>
+    </data>
+    <data name="40. In Progress HRU">
+        <value>40. Sprawa w toku HRU</value>
+    </data>
+    <data name="50. Awaiting full Service Request Approval">
+        <value>50. Oczekuje na pełne zatwierdzenie</value>
+    </data>
+    <data name="60. Awaiting full GV update">
+        <value>60. Oczekuje na pełną aktualizację GV</value>
+    </data>
+    <data name="65. Full Quality Check needed">
+        <value>65. Wymagana pełna kontrola jakości</value>
+    </data>
+    <data name="70. Waiting for closing the request">
+        <value>70. Oczekuje na zamknięcie</value>
+    </data>
+    <data name="90. Service Request closed and archived">
+        <value>90. Sprawa zamknięta</value>
+    </data>
+    <data name="99. Service Request Cancelled">
+        <value>99. Sprawa anulowna</value>
+    </data>
+    <data name="Initiate service request">
+        <value>Załóż nową sprawę</value>
+    </data>
+    <data name="Basic service request">
+        <value>Dane podstawowe</value>
+    </data>
+    <data name="Full service request">
+        <value>Pełne dane</value>
+    </data>
+    <data name="Cancel service request">
+        <value>Anuluj sprawę</value>
+    </data>
+    <data name="Go">
+        <value>Wyślij</value>
+    </data>
+    <data name="Approve">
+        <value>Zatwierdź</value>
+    </data>
+    <data name="Reject">
+        <value>Odrzuć</value>
+    </data>
+    <data name="GV updated">
+        <value>GV zaktualizowne</value>
+    </data>
+    <data name="Quality ok">
+        <value>Zatwierdzone</value>
+    </data>
+    <data name="Quality not ok">
+        <value>Odrzucone</value>
+    </data>
+    <data name="Quality not ok">
+        <value>Odrzucone</value>
+    </data>
+    <data name="Submit for full service request">
+        <value>Pełne dane</value>
+    </data>
+    <data name="Close service request">
+        <value>Zamknij sprawę</value>
+    </data>
+    <data name="New hire">
+        <value>Nowe zatrudnienie</value>
+    </data>
+    <data name="Re-hire">
+        <value>Ponowne zatrudnienie</value>
+    </data>
+    <data name="Fill new position">
+        <value>Nowe stanowisko</value>
+    </data>
+    <data name="Fill existing position">
+        <value>Istniejące stanowisko</value>
+    </data>
+    <data name="Change function">
+        <value>Zmiana firmy w IKEA</value>
+    </data>
+    <data name="Temporary replacement">
+        <value>Zastepstwo czasowe</value>
+    </data>
+    <data name="Local foreign employee">
+        <value>Obcokrajowiec na warunkach lokalnych</value>
+    </data>
+    <data name="Mr">
+        <value>Pan</value>
+    </data>
+    <data name="Ms">
+        <value>Pani</value>
+    </data>
+    <data name="Janki Store">
+        <value>Sklep IKEA Janki</value>
+    </data>
+    <data name="Gdańsk Store">
+        <value>Sklep IKEA Gdańsk</value>
+    </data>
+    <data name="Kraków Store">
+        <value>Sklep IKEA Kraków</value>
+    </data>
+    <data name="Poznań Store">
+        <value>Sklep IKEA Poznań</value>
+    </data>
+    <data name="Wrocław Store">
+        <value>Sklep IKEA Wrocław</value>
+    </data>
+    <data name="Katowice Store">
+        <value>Sklep IKEA Katowice</value>
+    </data>
+    <data name="Warszawa-Targówek Store">
+        <value>Sklep IKEA Warszawa-Targówek</value>
+    </data>
+    <data name="Łódź Store">
+        <value>Sklep IKEA Łódź</value>
+    </data>
+    <data name="dolnoslaskie">
+        <value>dolnoslaskie</value>
+    </data>
+    <data name="kujawsko-pomorskie">
+        <value>kujawsko-pomorskie</value>
+    </data>
+    <data name="lubelskie">
+        <value>lubelskie</value>
+    </data>
+    <data name="lubuskie">
+        <value>lubuskie</value>
+    </data>
+    <data name="lódzkie">
+        <value>lódzkie</value>
+    </data>
+    <data name="małopolskie">
+        <value>małopolskie</value>
+    </data>
+    <data name="mazowieckie">
+        <value>mazowieckie</value>
+    </data>
+    <data name="opolskie">
+        <value>opolskie</value>
+    </data>
+    <data name="podkarpackie">
+        <value>podkarpackie</value>
+    </data>
+    <data name="podlaskie">
+        <value>podlaskie</value>
+    </data>
+    <data name="pomorskie">
+        <value>pomorskie</value>
+    </data>
+    <data name="slaskie">
+        <value>ślśskie</value>
+    </data>
+    <data name="swietokrzyskie">
+        <value>świętokrzyskie</value>
+    </data>
+    <data name="warmininsko-Mazurski">
+        <value>warmininsko-mazurski</value>
+    </data>
+    <data name="wielkopolskie">
+        <value>wielkopolskie</value>
+    </data>
+    <data name="zachodniopomorskie">
+        <value>zachodniopomorskie</value>
+    </data>
+    <data name="Internal">
+        <value>Wewnętrzny</value>
+    </data>
+    <data name="External">
+        <value>Zewnętrzny</value>
+    </data>
+    <data name="Trial period">
+        <value>okres próbny</value>
+    </data>
+    <data name="Limited period">
+        <value>czas określony</value>
+    </data>
+    <data name="Replacement contract">
+        <value>umowa na zastępstwo</value>
+    </data>
+    <data name="Permanent period">
+        <value>czas nieokreślony</value>
+    </data>
+    <data name="Full time">
+        <value>pełny etat</value>
+    </data>
+    <data name="Part time">
+        <value>niepełny etat</value>
+    </data>
+    <data name="monthly">
+        <value>miesięcznej </value>
+    </data>
+    <data name="hourly">
+        <value>godzinowej</value>
+    </data>
+    <data name="01 - ECM Retail &amp; Property">
+        <value>01 - ECM Retail &amp; Property</value>
+    </data>
+    <data name="02 - ECM DS">
+        <value>02 - ECM DS</value>
+    </data>
+    <data name="03 - ECM Purchasing">
+        <value>03 - ECM Purchasing</value>
+    </data>
+    <data name="04 - ECM IICP">
+        <value>04 - ECM IICP</value>
+    </data>
+    <data name="01- Level 1">
+        <value>01- Level 1</value>
+    </data>
+    <data name="02- Level 2">
+        <value>02- Level 2</value>
+    </data>
+    <data name="03- Level 3">
+        <value>03- Level 3</value>
+    </data>
+    <data name="04- Level 4">
+        <value>04- Level 4</value>
+    </data>
+    <data name="05- Level 5">
+        <value>05- Level 5</value>
+    </data>
+    <data name="06- Level 6">
+        <value>06- Level 6</value>
+    </data>
+    <data name="07- Level 7">
+        <value>07- Level 7</value>
+    </data>
+    <data name="08- Level 8">
+        <value>08- Level 8</value>
+    </data>
+    <data name="09- Level 9">
+        <value>09- Level 9</value>
+    </data>
+    <data name="3A- Level 3A">
+        <value>3A- Level 3A</value>
+    </data>
+    <data name="3B- Level 3B">
+        <value>3B- Level 3B</value>
+    </data>
+    <data name="1 - Aspirant">
+        <value>1 - Aspirant</value>
+    </data>
+    <data name="2 - In the role">
+        <value>2 - In the role</value>
+    </data>
+    <data name="3 - Senior">
+        <value>3 - Senior</value>
+    </data>
+    <data name="3660 - Washing allowance">
+        <value>3660- Dodatek za pranie</value>
+    </data>
+    <data name="1035 - PPOŻ supplement">
+        <value>1035-Dodatek PPOZ</value>
+    </data>
+    <data name="1040 - Environmental protection supplement">
+        <value>1040-Dodatek ochrona srodow</value>
+    </data>
+    <data name="1045 - Functional supplement">
+        <value>1045-Dodatek funkcyjny</value>
+    </data>
+    <data name="1050 - Functional supplement reduced">
+        <value>1050-Dodatek funkc pomniejsz</value>
+    </data>
+    <data name="1060 - Commuting supplement">
+        <value>1060-Dodatek za dojazdy</value>
+    </data>
+    <data name="1065 - Standby lump sum">
+        <value>1065-Standby ryczalt</value>
+    </data>
+    <data name="1066 - Standby">
+        <value>1066 - Standby stała</value>
+    </data>
+    <data name="1071 - Grossed-up housing supplement">
+        <value>1071- dodatek mieszkaniowy brutto</value>
+    </data>
+    <data name="1071 - Grossed-up housing supple">
+        <value>1071- dodatek mieszkaniowy brutto</value>
+    </data>
+    <data name="1055 - Housing supplement">
+        <value>1055 - Dodatek mieszkaniowy</value>
+    </data>
+    <data name="Supervisory Board">
+        <value>Rada nadzorcza</value>
+    </data>
+    <data name="Company car-private usage">
+        <value>Samoch służ. do celów pryw.</value>
+    </data>
+    <data name="Comp. car-prv usage Board">
+        <value>Samoch służ. zarzad</value>
+    </data>
+    <data name="Washing allowance">
+        <value>Dodatek za pranie</value>
+    </data>
+    <data name="Internet allowance">
+        <value>Dodatek internet netto</value>
+    </data>
+    <data name="Deduction-retainer">
+        <value>Potrącenie zaliczki</value>
+    </data>
+    <data name="Sport">
+        <value>Sport</value>
+    </data>
+    <data name="Other deduction">
+        <value>Potrącenia inne</value>
+    </data>
+    <data name="Rate - constant deduction">
+        <value>Spłata raty potrąc. stałe</value>
+    </data>
+    <data name="Interest Rate - con. ded.">
+        <value>Spłata rat ods. potr. stałe</value>
+    </data>
+    <data name="Money penalty">
+        <value>Kara</value>
+    </data>
+    <data name="Telephone deduction">
+        <value>Potrącenie za telefon</value>
+    </data>
+    <data name="Increase of tax rate">
+        <value>Zwiększenie stawki podatk.</value>
+    </data>
+    <data name="Increase tx rate off-cycl">
+        <value>Zwięk. stawki podat l.dod.</value>
+    </data>
+    <data name="Exclude from tax calculat">
+        <value>Nienaliczanie US</value>
+    </data>
+    <data name="Url.wych. podst.skł.społ.">
+        <value>Url.wych. podst.skł.społ.</value>
+    </data>
+    <data name="Grossed-up housing supple">
+        <value>Dodatek mieszkaniowy</value>
+    </data>
+    <data name="Payment for leave correc.">
+        <value>Wynagrodz. urlop korekta</value>
+    </data>
+    <data name="Net nonlocal trias">
+        <value>Jazdy nielokalne netto</value>
+    </data>
+    <data name="Grossed-up nonlocal trias">
+        <value>Jazdy nielokalne ubruttaw.</value>
+    </data>
+    <data name="Net anniversary reward">
+        <value>Nagroda jubileusz netto</value>
+    </data>
+    <data name="Net discr. reward">
+        <value>Nagroda uznaniowa netto</value>
+    </data>
+    <data name="Grossed-up discr. reward">
+        <value>Nagroda uznaniowa ubrutto</value>
+    </data>
+    <data name="Grossed-up anniversary re">
+        <value>Nagroda jubileusz ubrutto</value>
+    </data>
+    <data name="Net reloc allowance">
+        <value>Dodatek na zagospoda. net</value>
+    </data>
+    <data name="Grossed up reloc allowanc">
+        <value>Dodatek na zagospodarowan.</value>
+    </data>
+    <data name="Net internet allowance">
+        <value>Dodatek Internet netto</value>
+    </data>
+    <data name="Grossed up Internet allow">
+        <value>Dodatek Internet ubr.</value>
+    </data>
+    <data name="Hardship allowance">
+        <value>Zfss losowa ZFŚS</value>
+    </data>
+    <data name="Hardship allowance &gt; lim.">
+        <value>Zfss losowa ZFŚS &gt; lim</value>
+    </data>
+    <data name="Hardship all. &gt; lim. gross">
+        <value>Zfss los. ZFŚS &gt; lim brutto</value>
+    </data>
+    <data name="Zfss &lt; lim brutto Em.Ren.">
+        <value>Zfss &lt; lim brutto Em.Ren.</value>
+    </data>
+    <data name="Soc. fund- situation">
+        <value>Zfss sytuacja życiowa</value>
+    </data>
+    <data name="Soc. fund- situation &gt; lim">
+        <value>Zfss sytuacja życiowa &gt; lim</value>
+    </data>
+    <data name="Soc. fund- sit &gt; lim gross">
+        <value>Zfss syt. życiowa &gt; lim bru.</value>
+    </data>
+    <data name="Social fund-house">
+        <value>Zfss sytuacja mieszk.</value>
+    </data>
+    <data name="Social fund-house &gt; lim">
+        <value>Zfss sytuacja mieszk &gt; lim.</value>
+    </data>
+    <data name="Social fund-house &gt; lim gro">
+        <value>Zfss syt. mieszk &gt; lim bru.</value>
+    </data>
+    <data name="Social fund Sport">
+        <value>Zfss sport-rekr, kult-ośw.</value>
+    </data>
+    <data name="Social fund Sport &gt; lim">
+        <value>Zfss sport-rekr &gt; lim</value>
+    </data>
+    <data name="Social f. Sport &gt; lim gros">
+        <value>Zfss sport &gt; lim bru</value>
+    </data>
+    <data name="School aid">
+        <value>Pomoce szkolne</value>
+    </data>
+    <data name="School aid &gt; lim">
+        <value>Pomoce szkolne &gt; lim</value>
+    </data>
+    <data name="School aid &gt; lim gross">
+        <value>Zfss sport &gt; lim bru</value>
+    </data>
+    <data name="Dot.-kids recreation &lt; 18">
+        <value>Dofinans wypoczyn do 18 l.</value>
+    </data>
+    <data name="Recreation &lt; lim">
+        <value>Dofin. wypoczynku &lt; lim</value>
+    </data>
+    <data name="Recreation &gt; lim">
+        <value>Dofin. wypoczynku &gt; lim</value>
+    </data>
+    <data name="Yearly bonus ZUS">
+        <value>Premia roczna ZUS</value>
+    </data>
+    <data name="Local Incentive ZUS">
+        <value>Local Incentive ZUS</value>
+    </data>
+    <data name="Yearly bonus without ZUS">
+        <value>Premia roczna bez ZUS</value>
+    </data>
+    <data name="Local Incentive w/o ZUS">
+        <value>Local Incentive bez ZUS</value>
+    </data>
+    <data name="Discretionary bonus">
+        <value>Nagroda uznaniowa</value>
+    </data>
+    <data name="Local Travel">
+        <value>Jazdy lokalne</value>
+    </data>
+    <data name="Other net allowance">
+        <value>Inne dodatki netto</value>
+    </data>
+    <data name="Glasses refund">
+        <value>Zwrot za okulary</value>
+    </data>
+    <data name="Zwrot - dojazd na badania">
+        <value>Zwrot - dojazd na badania</value>
+    </data>
+    <data name="Grossed-up Standby allo.">
+        <value>Standby ubruttowiony</value>
+    </data>
+    <data name="Standby allo. gros">
+        <value>Standby brutto</value>
+    </data>
+    <data name="Benefit - tax">
+        <value>Świadczenia opodatkowane</value>
+    </data>
+    <data name="Service in kind ZFŚS">
+        <value>Świadczenie rzeczowe</value>
+    </data>
+    <data name="Service in kind &gt; lim">
+        <value>Świadczenie rzeczowe &gt; lim</value>
+    </data>
+    <data name="Service in kind pens.">
+        <value>Świadczenie rzecz Em.Ren.</value>
+    </data>
+    <data name="Service in kind pens. &gt; lim">
+        <value>Świadcz rzecz Em.Ren. &gt; lim</value>
+    </data>
+    <data name="Non monetary benefit">
+        <value>Narzuty</value>
+    </data>
+    <data name="Vacation quota compensati">
+        <value>Ekwiwalent za urlop</value>
+    </data>
+    <data name="Retirement Compensation">
+        <value>Odprawa emerytalna</value>
+    </data>
+    <data name="Disability compensation">
+        <value>Odprawa rentowa</value>
+    </data>
+    <data name="Severance pay- EE death">
+        <value>Odprawa pośmiertna</value>
+    </data>
+    <data name="Severance pay">
+        <value>Odszk. z tyt. rozw umowy</value>
+    </data>
+    <data name="Severance pay  &gt; limit">
+        <value>Odszk. &gt; lim</value>
+    </data>
+    <data name="Compensation - short quit">
+        <value>Odszk. skróc okres wypow</value>
+    </data>
+    <data name="Damages - competition ban">
+        <value>Odszk.-konkurencja</value>
+    </data>
+    <data name="Interest - court order">
+        <value>Odsetki – wyrok sądowy</value>
+    </data>
+    <data name="Damages- Cort order">
+        <value>Odszk– wyrok sądowy</value>
+    </data>
+    <data name="Com. for reinst. employee">
+        <value>Wynagr. przywr do pracy</value>
+    </data>
+    <data name="Comp. acc.rehab. ben. TK">
+        <value>Wyrówn.świadcz.Reh.Pow.TK</value>
+    </data>
+    <data name="Com.-entitled person">
+        <value>Wynagr. osoby uprawn.</value>
+    </data>
+    <data name="Compensation for a heir">
+        <value>Wynagr. spadkobiercy</value>
+    </data>
+    <data name="KUP 50% in year prev. EMP">
+        <value>KUP 50% w roku inny prac.</value>
+    </data>
+    <data name="PIT40: cost counting">
+        <value>PIT40-koszty uzyskania</value>
+    </data>
+    <data name="PIT40 – overpaid">
+        <value>PIT40-nadpłata</value>
+    </data>
+    <data name="PIT40: to be paid – 03">
+        <value>PIT40-do zapłaty 03</value>
+    </data>
+    <data name="PIT40: to be paid – 04">
+        <value>PIT40-do zapłaty 04</value>
+    </data>
+    <data name="PIT11/40 - dostos.przych.">
+        <value>PIT11/40 - dostos.przych.</value>
+    </data>
+    <data name="ZUS contribution return">
+        <value>Kwota zwrotu składek ZUS</value>
+    </data>
+    <data name="Niedopłata ZUS">
+        <value>Niedopłata ZUS</value>
+    </data>
+    <data name="Return ZUS – Health contr">
+        <value>Zdr.od zwrZUS A=zdr,N=775</value>
+    </data>
+    <data name="Zdr.od nieZUS A=zdr,N=775">
+        <value>Zdr.od nieZUS A=zdr,N=775</value>
+    </data>
+    <data name="Employees payment in cash">
+        <value>Wpłata do kasy</value>
+    </data>
+    <data name="Gross compensation">
+        <value>Wyrównanie brutto</value>
+    </data>
+    <data name="Intr. comp.sickness TK">
+        <value>Odsetki wyrów wyn.chor.TK</value>
+    </data>
+    <data name="Int. comp. Płatnik TK">
+        <value>Odsetki wyrów zas.płat.TK</value>
+    </data>
+    <data name="Int. comp. benef. ZUS TK">
+        <value>Odsetki wyrów zas.ZUS TK</value>
+    </data>
+    <data name="Interest from earnings">
+        <value>Odsetki od wynagrodzeń</value>
+    </data>
+    <data name="Comp.sickness ben. TK">
+        <value>Wyrównanie zas.chorob TK</value>
+    </data>
+    <data name="Comp. Accident ben. TK">
+        <value>Wyrównanie zas.wypadk.TK</value>
+    </data>
+    <data name="Comp. rehab. ben. TK">
+        <value>Wyrówn. świadcz. Reh. TK</value>
+    </data>
+    <data name="Comp. care bene. TK">
+        <value>Wyrównanie zas.opiekuń.TK</value>
+    </data>
+    <data name="Comp. maternity bene. TK">
+        <value>Wyrównanie zas.macierz.TK</value>
+    </data>
+    <data name="Compensation of basic pay">
+        <value>Wyr. Płacy zasadniczej</value>
+    </data>
+    <data name="Comp. of sickness payment">
+        <value>Wyr.wynag.chorobowe</value>
+    </data>
+    <data name="Comp. of benefit ZUS">
+        <value>Wyrówn.zasiłek ZUS</value>
+    </data>
+    <data name="Comp. maternity benefit">
+        <value>Wyrówn.zasiłek macierz.</value>
+    </data>
+    <data name="Comp. paternity benefit">
+        <value>Wyrówn.zasiłek opiek.ojca</value>
+    </data>
+    <data name="Comp. care benefit">
+        <value>Wyrówn.zasiłek opiekuńczy</value>
+    </data>
+    <data name="Comp. rehab. benefit">
+        <value>Wyrówn.zasiłek rehabilit.</value>
+    </data>
+    <data name="Deduction-retainer">
+        <value>Potrącenie zaliczki</value>
+    </data>
+    <data name="Other deduction">
+        <value>Potrącenia inne</value>
+    </data>
+    <data name="Quota up to 30 times ZUS">
+        <value>Kwota do 30 krotności ZUS</value>
+    </data>
+    <data name="Tax income previous emp.">
+        <value>Dochód z przeniesienia</value>
+    </data>
+    <data name="Korekta wyn. zas">
+        <value>Korekta wyn. zas</value>
+    </data>
+    <data name="Korekta dod.urlop.">
+        <value>Korekta dod.urlop.</value>
+    </data>
+    <data name="Korekta wyn. chor.">
+        <value>Korekta wyn. chor.</value>
+    </data>
+    <data name="Korekta zas. chor.">
+        <value>Korekta zas. chor.</value>
+    </data>
+    <data name="Korekta zas. chor. wyp.">
+        <value>Korekta zas. chor. wyp.</value>
+    </data>
+    <data name="Korekta zas. macierzyński">
+        <value>Korekta zas. macierzyński</value>
+    </data>
+    <data name="Korekta zas. opiekuńczy">
+        <value>Korekta zas. opiekuńczy</value>
+    </data>
+    <data name="Korekta św. rehab.">
+        <value>Korekta św. rehab.</value>
+    </data>
+    <data name="Korekta nadliczbowe">
+        <value>Korekta nadliczbowe</value>
+    </data>
+    <data name="Korekta nocne">
+        <value>Korekta nocne</value>
+    </data>
+    <data name="If Cost centre changes, please tick the Cost centre checkbox?">
+        <value>Jeśli zmienia się MPK, zaznacz właściwą opcję.</value>
+    </data>
+    <data name="If Cost centre changes, please tick the Cost centre checkbox.">
+        <value>Jeśli zmienia się MPK, zaznacz właściwą opcję.</value>
+    </data>
+    <data name="If Salary changes, please tick the relevant checkbox.">
+        <value>Jeśli zmienia się Wynagrodzenie, zaznacz właściwą opcję.</value>
+    </data>
+    <data name="If Salary changes, please tick Salary checkbox.">
+        <value>Jeśli zmienia się Wynagrodzenie, zaznacz właściwą opcję.</value>
+    </data>
+    <data name="If ID card/Passport changes, please tick the relevant checkbox.">
+        <value>Jeśli zmieniają się dane w Dowodzie/Paszporcie, zaznacz właściwą opcję.</value>
+    </data>
+    <data name="ID Card, Passport">
+        <value>Jeśli zmieniają się dane w Dowodzie/Paszporcie, zaznacz właściwą opcję.</value>
+    </data>
+    <data name="If Tax address changes, please tick the relevant checkbox.">
+        <value>Jeśli zmienia się Adres na deklaracji PIT, zaznacz właściwą opcję.</value>
+    </data>
+    <data name="Please select a valid employee no.">
+        <value>Proszę wybrać poprawny numer Pracownika.</value>
+    </data>
+    <data name="An earlier case (#) was found for this employee no.">
+        <value>Dla tego pracownika istnieje otwarta sprawa z numerem (#).</value>
+    </data>
+    <data name="This field is required.">
+        <value>To pole jest wymagane.</value>
+    </data>
+    <data name="This field is required if {0} has value {1}.">
+        <value>To pole jest wymagane jeśli w polu {0} została wybrana wartość {1}.</value>
+    </data>
+    <data name="This field must be later than or equal to {0}.">
+        <value>Data nie może być wcześniejsza niż {0}</value>
+    </data>
+    <data name="This field must be less than or equal to {0}.">
+        <value>Data nie może być późniejsza niż {0}</value>
+    </data>
+    <data name="{0} can't be longer than {1} months.">
+        <value>{0} nie może być dłuższy niż {1} miesiące</value>
+    </data>
+    <data name="Wrong format (dd.mm.yyyy).">
+        <value>Zły format (dd.mm.rrrr).</value>
+    </data>
+    <data name="Wrong format (NNN).">
+        <value>Wartość musi być równa 100</value>
+    </data>
+    <data name="Value must equal 100.">
+        <value>Wartość musi być równa 100.</value>
+    </data>
+    <data name="Cost allocation % (in all the fields) must always equal 100.">
+        <value>Alokacja kosztów we wszystkich MPK musi być równa 100</value>
+    </data>
+    <data name="Enter maximum two-digit value">
+        <value>Wpisz wartość maks. dwucyfrową.</value>
+    </data>
+    <data name="Wrong format (NN).">
+        <value>Wpisz wartość maks. dwucyfrową.</value>
+    </data>
+    <data name="Wrong format (NNNNNNNNNNN).">
+        <value>Wpisz wartość jedenastocyfrową.</value>
+    </data>
+    <data name="Enter maximum eleven-digit value.">
+        <value>Wpisz wartość jedenastocyfrową.</value>
+    </data>
+    <data name="Wrong format (NN-NNN).">
+        <value>Wpisz wartość liczbową w formacie NN-NNN.</value>
+    </data>
+    <data name="Wrong format (46NNNNNN).">
+        <value>Zły format (46NNNNNN).</value>
+    </data>
+    <data name="Wrong format (NNNN).">
+        <value>Wpisz wartość maks. czterocyfrową.</value>
+    </data>
+    <data name="Enter maximum four-digit value">
+        <value>Wpisz wartość maksymalnie czterocyfrową</value>
+    </data>
+    <data name="Enter maximum four-digit value.">
+        <value>Wpisz wartość maksymalnie czterocyfrową</value>
+    </data>
+    <data name="Only numbers allowed.">
+        <value>Wpisz wartość liczbową</value>
+    </data>
+    <data name="Wrong format (NNN-NNN-NN-NN).">
+        <value>Wpisz wartość liczbową w formacie NNN-NNN-NN-NN</value>
+    </data>
+    <data name="Complete mandatory fields and correct errors">
+        <value>Uzupełnij brakujące informacje i popraw błędy</value>
+    </data>
+    <data name="The date you've entered is in the past. Are you sure you want to backdate Hiring date?">
+        <value>Podana data jest datą przeszłą. Upewnij się czy chcesz użyć wstecznej daty zatrudnienia.</value>
+    </data>
+    <data name="Wrong format (NNN-NNN-NN-NN).">
+        <value>Wpisz wartość liczbową w formacie NNN-NNN-NN-NN</value>
+    </data>
+    <data name="Copy from basic data">
+        <value>Skopiuj z zakładki "Dane podstawowe"</value>
+    </data>
+    <data name="Add another family member">
+        <value>Dodaj dane kolejnego członka rodziny</value>
+    </data>
+    <data name="At least one of the fields has to be completed.">
+        <value>Przynajmniej jedna ze zmian musi zostać wprowadzona.</value>
+    </data>
+    <data name="WORKING CONDITIONS">
+        <value>WARUNKI ZATRUDNIENIA</value>
+    </data>
+    <data name="PERSONAL INFORMATION">
+        <value>DANE PERSONALNE</value>
+    </data>
+    <data name="First and last name">
+        <value>Imię lub nazwisko</value>
+    </data>
+    <data name="Identification and document details">
+        <value>Dane identyfikacyjne lub dokumenty</value>
+    </data>
+    <data name="Contact details">
+        <value>Dane kontaktowe</value>
+    </data>
+    <data name="Bank details">
+        <value>Dane dot. konta bankowego</value>
+    </data>
+    <data name="Family member">
+        <value>Członek rodziny</value>
+    </data>
+    <data name="Family members">
+        <value>Członkowie rodziny</value>
+    </data>
+    <data name="Family data">
+        <value>Informacje o członkach rodziny</value>
+    </data>
+    <data name="US &amp; NFZ info">
+        <value>Informacje o US i NFZ</value>
+    </data>
+    <data name="Location">
+        <value>Lokalizacja</value>
+    </data>
+    <data name="Change selection">
+        <value>Rodzaj zmiany</value>
+    </data>
+    <data name="Data change selection">
+        <value>Wybór rodzajów zmian</value>
+    </data>
+    <data name="Data change">
+        <value>Zmiana danych</value>
+    </data>
+    <data name="Select">
+        <value>Zaznacz</value>
+    </data>
+    <data name="Contract type">
+        <value>Rodzaj kontraktu</value>
+    </data>
+    <data name="Dep/Line manager">
+        <value>Dep/Line manager</value>
+    </data>
+    <data name="Dep/Line manager">
+        <value>Dep/Line manager</value>
+    </data>
+    <data name="Position">
+        <value>Stanowisko</value>
+    </data>
+    <data name="Salary">
+        <value>Wynagrodzenie</value>
+    </data>
+    <data name="Allowances, payments, deductions">
+        <value>Dodatki, płatności, potrącenia</value>
+    </data>
+    <data name="New first and last name">
+        <value>Nowe imię i nazwisko</value>
+    </data>
+    <data name="Identification details">
+        <value>Dane identyfikacyjne</value>
+    </data>
+    <data name="ID card">
+        <value>Dowód osobisty</value>
+    </data>
+    <data name="Residence permit">
+        <value>Zezwolenie na pobyt</value>
+    </data>
+    <data name="Work permit">
+        <value>Zezwolenie na pracę</value>
+    </data>
+    <data name="Working permit">
+        <value>Zezwolenie na pracę</value>
+    </data>
+    <data name="Address for Annual Tax Statement">
+        <value>Adres na deklaracji PIT</value>
+    </data>
+    <data name="Tax address">
+        <value>Adres na deklaracji PIT</value>
+    </data>
+    <data name="Tax declaration address">
+        <value>Adres na deklaracji PIT</value>
+    </data>
+    <data name="Tax Data">
+        <value>Dane US</value>
+    </data>
+    <data name="Tax office">
+        <value>Informacje o US</value>
+    </data>
+    <data name="Cost allocation">
+        <value>Alokacja kosztow %</value>
+    </data>
+    <data name="Additional cost allocation">
+        <value>Alokacja kosztow %</value>
+    </data>
+    <data name="Gross/nett">
+        <value>netto/brutto</value>
+    </data>
+    <data name="Reason for name Change">
+        <value>Powód zmiany nazwiska</value>
+    </data>
+    <data name="Last day at work">
+        <value>Ostatni dzień w pracy</value>
+    </data>
+    <data name="Last day of employment">
+        <value>Ostatni dzień zatrudnienia</value>
+    </data>
+    <data name="Termination initiated by">
+        <value>Rozwiązanie umowy po stronie</value>
+    </data>
+    <data name="Termination">
+        <value>Rozwiązanie stosunku pracy</value>
+    </data>
+    <data name="Reason for termination">
+        <value>Powód rozwiązania umowy</value>
+    </data>
+    <data name="Medicover continuation">
+        <value>Medicover -kontynuacja</value>
+    </data>
+    <data name="Remaining overtime">
+        <value>Pozostałe nadgodziny</value>
+    </data>
+    <data name="Remaining vacation">
+        <value>Pozostałe dni urlopu</value>
+    </data>
+    <data name="Open deduction">
+        <value>Otwarte potrącenia</value>
+    </data>
+    <data name="Remaining amount">
+        <value>Pozostała kwota</value>
+    </data>
+    <data name="Leaving documents to be sent to">
+        <value>Dokumenty związane z odejściem odesłać na adres</value>
+    </data>
+    <data name="Mailing address in GV">
+        <value>Adres z GV</value>
+    </data>
+    <data name="Agreed Start Date">
+        <value>Planowana data zatrudnienia</value>
+    </data>
+    <data name="Create annual income statement">
+        <value>Proszę o wydrukowanie oświadczenia o podstawie ZUS i PDOF na dany rok</value>
+    </data>
+    <data name="Create RP-7 statement">
+        <value>Proszę o wydanie zaświadczenia RP-7 za okres zatrudnienia</value>
+    </data>
+    <data name="Create statement RP-7 for employment period">
+        <value>Proszę o wydanie zaświadczenia RP-7 za okres zatrudnienia</value>
+    </data>
+    <data name="Employee">
+        <value>Pracownik</value>
+    </data>
+    <data name="IKEA">
+        <value>IKEA</value>
+    </data>
+    <data name="Mutual agreement">
+        <value>Porozumienie stron</value>
+    </data>
+    <data name="Other">
+        <value>Inne</value>
+    </data>
+    <data name="Employee's resignation with notice">
+        <value>Rezygnacja pracownika z zachowaniem okresu wypowiedzenia</value>
+    </data>
+    <data name="Employee's resignation without notice">
+        <value>Rezygnacja pracownika bez zachow. okresu  wypowiedz.</value>
+    </data>
+    <data name="Retirement">
+        <value>Emerytura</value>
+    </data>
+    <data name="Expire of contract, death">
+        <value>Wygaśnięcie kontraktu, śmierć</value>
+    </data>
+    <data name="Expire of contract, arrest">
+        <value>Wygaśnięcie kontraktu, areszt</value>
+    </data>
+    <data name="Disability">
+        <value>Rozwiązanie kontraktu, ustalenie stopnia niepełnosprawności</value>
+    </data>
+    <data name="Expiry of contract">
+        <value>Rozwiązanie umowy z upływem czasu</value>
+    </data>
+    <data name="Dismissal with notice">
+        <value>Zwolnienie z zachowaniem okresu wypowiedzenia</value>
+    </data>
+    <data name="Dismissal without notice">
+        <value>Zwolnienie dyscyplinarne</value>
+    </data>
+    <data name="Dismissal based on Legal Act">
+        <value>Wypowiedzenie pracodawcy (likwidacja stanowiska)</value>
+    </data>
+    <data name="Redundancy without notice">
+        <value>Zwolnienie bez zachowania okr. wypowiedz.</value>
+    </data>
+    <data name="Redundancy due to illness over 3 months, employment below 6 months">
+        <value>Zwolnienie wskutek choroby trwającej ponad 3 m-ce, zatrudn. poniżej  6 m-cy</value>
+    </data>
+    <data name="Who made a mistake?">
+        <value>Strona odpowiedzialna za błąd</value>
+    </data>
+    <data name="Country">
+        <value>Kraj</value>
+    </data>
+    <data name="SSC">
+        <value>SSC</value>
+    </data>
+    <data name="System">
+        <value>System</value>
+    </data>
+    <data name="Error Type">
+        <value>Typ błędu</value>
+    </data>
+    <data name="Error Notification">
+        <value>Powiadomienie o błędzie</value>
+    </data>
+    <data name="Payroll Related">
+        <value>Dotyczący wynagrodzenia</value>
+    </data>
+    <data name="Non-Payroll Related">
+        <value>Niedotyczący wynagrodzenia</value>
+    </data>
+    <data name="The error/complaint concerns">
+        <value>Błąd/Reklamacja dotyczy</value>
+    </data>
+    <data name="Personal data">
+        <value>Dane osobowe</value>
+    </data>
+    <data name="Payslip">
+        <value>Pasek wynagrodzeń</value>
+    </data>
+    <data name="Absence">
+        <value>Absencja</value>
+    </data>
+    <data name="Contract">
+        <value>Umowa o pracę</value>
+    </data>
+    <data name="Legal statement">
+        <value>Zaświadczenie</value>
+    </data>
+    <data name="Documents">
+        <value>Dokumenty</value>
+    </data>
+    <data name="Benefits">
+        <value>Benefity</value>
+    </data>
+    <data name="Other">
+        <value>Inne</value>
+    </data>
+    <data name="Number of records">
+        <value>Ilość wpisów</value>
+    </data>
+    <data name="The error/complaint concerns">
+        <value>Błąd/Reklamacja dotyczy</value>
+    </data>
+    <data name="Correction on co-worker's request">
+        <value>Korekta na wniosek pracownika</value>
+    </data>
+    <data name="How can we contact you?">
+        <value>Jak możemy się z Tobą skontaktować?</value>
+    </data>
+    <data name="Contract concluded on">
+        <value>Data zawarcia kontraktu</value>
+    </data>
+    <data name="Gross">
+        <value>Brutto</value>
+    </data>
+    <data name="Net">
+        <value>Netto</value>
+    </data>
+    <data name="?Dolnoslaski Oddzial Wojewódzki NFZ">
+        <value>?Dolnoslaski Oddzial Wojewódzki NFZ</value>
+    </data>
+    <data name="Kujawsko-Pomorski Oddzial Wojewódzki NFZ">
+        <value>Kujawsko-Pomorski Oddzial Wojewódzki NFZ</value>
+    </data>
+    <data name="Lubelski Oddzial Wojewódzki NFZ">
+        <value>Lubelski Oddzial Wojewódzki NFZ</value>
+    </data>
+    <data name="Lubuski Oddzial Wojewódzki NFZ">
+        <value>Lubuski Oddzial Wojewódzki NFZ</value>
+    </data>
+    <data name="Lódzki Oddzial Wojewódzki NFZ">
+        <value>Lódzki Oddzial Wojewódzki NFZ</value>
+    </data>
+    <data name="Malopolski Oddzial Wojewódzki NFZ">
+        <value>Malopolski Oddzial Wojewódzki NFZ</value>
+    </data>
+    <data name="Mazowiecki Oddzial Wojewódzki NFZ">
+        <value>Mazowiecki Oddzial Wojewódzki NFZ</value>
+    </data>
+    <data name="Opolski Oddzial Wojewódzki NFZ">
+        <value>Opolski Oddzial Wojewódzki NFZ</value>
+    </data>
+    <data name="Podkarpacki Oddzial Wojewódzki NFZ">
+        <value>Podkarpacki Oddzial Wojewódzki NFZ</value>
+    </data>
+    <data name="Podlaski Oddzial Wojewódzki NFZ">
+        <value>Podlaski Oddzial Wojewódzki NFZ</value>
+    </data>
+    <data name="Pomorski Oddzial Wojewódzki NFZ">
+        <value>Pomorski Oddzial Wojewódzki NFZ</value>
+    </data>
+    <data name="Slaski Oddzial Wojewódzki NFZ">
+        <value>Slaski Oddzial Wojewódzki NFZ</value>
+    </data>
+    <data name="Swietokrzyski Oddzial Wojewódzki NFZ">
+        <value>Swietokrzyski Oddzial Wojewódzki NFZ</value>
+    </data>
+    <data name="Warminsko-Mazurski Oddzial Wojewódzki NFZ">
+        <value>Warminsko-Mazurski Oddzial Wojewódzki NFZ</value>
+    </data>
+    <data name="Wielkopolski Oddzial Wojewódzki NFZ">
+        <value>Wielkopolski Oddzial Wojewódzki NFZ</value>
+    </data>
+    <data name="Zachodniopomorski Oddzial Wojewódzki NFZ">
+        <value>Zachodniopomorski Oddzial Wojewódzki NFZ</value>
+    </data>
+    <data name="Yes">
+        <value>Tak</value>
+    </data>
+    <data name="No">
+        <value>Nie</value>
+    </data>
+    <data name="Spouse">
+        <value>Współmałżonek</value>
+    </data>
+    <data name="Child">
+        <value>Dziecko</value>
+    </data>
+    <data name="Father">
+        <value>Ojciec</value>
+    </data>
+    <data name="Mother">
+        <value>Matka</value>
+    </data>
+    <data name="Father-in-law">
+        <value>Teść</value>
+    </data>
+    <data name="Mother-in-law">
+        <value>Teściowa</value>
+    </data>
+    <data name="Domestic Partner/de facto">
+        <value>Partner</value>
+    </data>
+    <data name="Related Persons">
+        <value>Osoba spokrewniona</value>
+    </data>
+    <data name="Disability Scale">
+        <value>Stopień Niepełnosporawności</value>
+    </data>
+    <data name="Disability level">
+        <value>Stopień Niepełnosporawności</value>
+    </data>
+    <data name="0 - No statement of disability">
+        <value>0 - Brak orzeczenia o niepełnosprawności</value>
+    </data>
+    <data name="0 - Na statement of disability">
+        <value>0 - Brak orzeczenia o niepełnosprawności</value>
+    </data>
+    <data name="1 - Mild disability">
+        <value>1 - Lekki st. Niepełnosprawności</value>
+    </data>
+    <data name="2 - Moderate disability">
+        <value>2 - Umiarkowany st. Niepełnosprawności</value>
+    </data>
+    <data name="3 - Severe disability">
+        <value>3 - Znaczny st. Niepełnosprawności</value>
+    </data>
+    <data name="4 - Disability, under age 16">
+        <value>4 - Niepełnosprawność, do lat 16</value>
+    </data>
+    <data name="Identity Document">
+        <value>Rodzaj dokumentu tożsamości</value>
+    </data>
+    <data name="ID">
+        <value>Dowód osobisty</value>
+    </data>
+    <data name="Passport">
+        <value>Paszport</value>
+    </data>
+    <data name="Level 1">
+        <value>Poziom 1</value>
+    </data>
+    <data name="Level 2">
+        <value>Poziom 2</value>
+    </data>
+    <data name="Level 3">
+        <value>Poziom 3</value>
+    </data>
+    <data name="Male">
+        <value>Mężczyzna</value>
+    </data>
+    <data name="Female">
+        <value>Kobieta</value>
+    </data>
+    <data name="Date and Employee signature">
+        <value>Data i podpis Pracownika</value>
+    </data>
+    <data name="Signature of a person representing the Employer">
+        <value>Podpis Kierownika Zakładu Pracy lub osoby upoważnionej</value>
+    </data>
+    <data name="Attach files">
+        <value>Dołączanie plików</value>
+    </data>
+    <data name="Select files">
+        <value>Wybierz pliki</value>
+    </data>
+    <data name="No show">
+        <value>Niestawienie się do pracy</value>
+    </data>
+    <data name="Appendix">
+        <value>Załącznik angielski</value>
+    </data>
+    <data name="Appendix Polish">
+        <value>Załącznik polski</value>
+    </data>
+    <data name="Leave and absence">
+        <value>Wniosek urlopowy</value>
+    </data>
+    <data name="Garnishments">
+        <value>Zobowiązanie komornicze</value>
+    </data>
+    <data name="Mandatory agreements">
+        <value>Umowy Cywilno-Prawne</value>
+    </data>
+    <data name="basic">
+        <value>podstawowy</value>
+    </data>
+    <data name="equivalent">
+        <value>równoważny</value>
+    </data>
+    <data name="task-based">
+        <value>zadaniowy</value>
+    </data>
+    <data name="pertaining to equipment monitoring, or standby for work.">
+        <value>przy dozorze urządzeń lub przy pracach polegających na częściowym pozostawaniu w pogotowiu do pracy.</value>
+    </data>
+    <data name="Working time system">
+        <value>System czasu pracy</value>
+    </data>
+    <data name="Are you sure you want to cancel the request?">
+        <value>Czy na pewno chcesz anulować sprawę?</value>
+    </data>
+    <data name="I want to add another Allowance">
+        <value>Dodaj płatność lub dodatek</value>
+    </data>
+    <data name="Marriage">
+        <value>Małżeństwo</value>
+    </data>
+    <data name="Divorce">
+        <value>Rozwód</value>
+    </data>
+</lang>

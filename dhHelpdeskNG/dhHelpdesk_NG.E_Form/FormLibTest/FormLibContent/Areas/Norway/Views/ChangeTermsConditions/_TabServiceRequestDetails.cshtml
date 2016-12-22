@@ -1,0 +1,159 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+@{
+    var fillOldVal = TempData["oldValues"];
+    var newfill = (List<KeyValuePair<string, string>>)fillOldVal;        
+}
+
+<div class="tab-pane active" id="ServiceRequestDetails">
+    <div class="span12">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Details")</h4>
+                    </td>
+                    <td class="tdstrong current-record-th">
+                        <h4>@Model.Translate("Current record")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Co-WorkerGlobalviewID")</td>
+                    <td>
+                        @Model.Element("Co-WorkerGlobalviewID", false)
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("FirstName")</td>
+                    <td>@Model.Element("FirstName", false)</td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_FirstName" name="OLD_FirstName" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_FirstName").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_FirstName">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_FirstName").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("LastName")</td>
+                    <td>@Model.Element("LastName", false)</td>
+                    <td>
+                        <input class="oldValue" type="hidden" id="OLD_LastName" name="OLD_LastName" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_LastName").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_LastName">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_LastName").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>     
+                <tr>
+                    <td class="tdstrong">@Model.Label("IKEAEmailAddress")</td>
+                    <td>@Model.Element("IKEAEmailAddress", false)</td>
+                    <td>
+                        <input type="hidden" class="oldValue" id="OLD_IKEAEmailAddress" name="OLD_IKEAEmailAddress" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_IKEAEmailAddress").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_IKEAEmailAddress">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_IKEAEmailAddress").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("IKEANetworkID")</td>
+                    <td>@Model.Element("IKEANetworkID", false)</td>
+                    <td>
+                        <input type="hidden" class="oldValue" id="OLD_IKEANetworkID" name="OLD_IKEANetworkID" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_IKEANetworkID").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_IKEANetworkID">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_IKEANetworkID").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Company")</td>
+                    <td>@Model.Element("Company")</td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_Company" name="OLD_Company" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_Company").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_Company">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_Company").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("BusinessUnit")</td>
+                    <td>@Model.Element("BusinessUnit")</td>
+                    <td>
+                        <input type="hidden" class="oldValue" id="OLD_BusinessUnit" name="OLD_BusinessUnit" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_BusinessUnit").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_BusinessUnit">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_BusinessUnit").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ServiceArea")</td>
+                    <td>@Model.Element("ServiceArea")</td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_ServiceArea" name="OLD_ServiceArea" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_ServiceArea").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_ServiceArea">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_ServiceArea").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Department")</td>
+                    <td>@Model.Element("Department")</td>
+                    <td>
+                        <input type="hidden" class="oldValue" id="OLD_Department" name="OLD_Department" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_Department").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_Department">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_Department").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TypeOfChange")</td>
+                    <td>
+                        @Model.Element("TypeOfChange")
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ChangeValidFrom")</td>
+                    <td>
+                        @Model.Element("ChangeValidFrom")
+                        <div id="notice_OldDate" style="display: none;" class="notice">
+                            @Model.Translate("Are you sure you want to backdate Change Valid from: date?")
+                        </div>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ChangeValidTo")</td>
+                    <td>
+                        @Model.Element("ChangeValidTo")</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ServiceRequestPriority")</td>
+                    <td>
+                        @Model.Element("ServiceRequestPriority")</td>
+                    <td></td>
+                </tr>
+                @if(!FormLibUtils.IsSelfService())
+                {
+                    <tr>
+                        <td class="tdstrong">@Model.Translate("SLA")</td>
+                        <td>
+                            @if(Model.Contract.CaseNumber != null)
+                            {
+                                @Model.Translate(Model.Contract.PriorityName);
+                            }
+                            else
+                            {
+                                if(Model.Form != null)
+                                {
+                                    @Model.Translate(Model.Form.PriorityName);
+                                }
+                            }
+                        </td>
+                        <td></td>
+                    </tr>         
+                }
+                <tr>
+                    <td class="tdstrong">@Model.Label("DateOfBirth")</td>
+                    <td>
+                        @Model.Element("DateOfBirth")</td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_DateOfBirth" name="OLD_DateOfBirth" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_DateOfBirth").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_DateOfBirth">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_DateOfBirth").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>              
+                @Html.Partial("_InternalLogNoteV2", Model)
+            </tbody>
+        </table>
+    </div>
+    <input type="hidden" id="CustomerId" value="@Model.Form.CustomerId" />
+    <input type="hidden" id="formGuid" value="@Model.FormGuid" />
+</div>
+
+@*Scripts Moved to TabCTCJS*@

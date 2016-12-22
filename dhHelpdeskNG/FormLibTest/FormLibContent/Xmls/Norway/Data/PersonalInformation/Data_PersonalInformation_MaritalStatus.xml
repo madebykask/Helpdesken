@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<options>
+  <option value=""></option>
+  <option value="Single">Single</option>
+  <option value="Civil Partnership">Civil Partnership</option>
+  <option value="Married">Married</option>
+  <option value="Unknown">Unknown</option>
+</options>

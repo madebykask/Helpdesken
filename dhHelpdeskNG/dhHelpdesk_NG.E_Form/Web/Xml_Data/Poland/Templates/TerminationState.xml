@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+    <state status="0">
+        <status value="0">
+            <visibleTabs>#termination</visibleTabs>
+            <readOnlyTabs></readOnlyTabs>
+            <readOnlyFields></readOnlyFields>
+            <actions>
+                <action status="10" text="">
+                    <validateFields>EmployeeNumber,EmployeeFirstName,EmployeeLastName,Company,Unit</validateFields>
+                    <validateTabs></validateTabs>
+                </action>
+            </actions>
+        </status>
+        <status value="10">
+            <visibleTabs>#termination</visibleTabs>
+            <readOnlyTabs></readOnlyTabs>
+            <readOnlyFields>EmployeeNumber,EmployeeFirstName,EmployeeLastName,Company,Unit</readOnlyFields>
+            <actions>
+                <action status="50" text="Full service request"> 
+                <validateTabs>#termination</validateTabs>
+                <validateFields></validateFields>
+                </action>
+                <action status="99" text="Cancel service request"></action>
+             </actions>
+        </status>
+        <status value="50">
+              <visibleTabs>#termination</visibleTabs>
+              <readOnlyTabs>#termination</readOnlyTabs>
+              <readOnlyFields></readOnlyFields>
+              <actions>
+                  <action status="60" text="Approve"></action>
+                  <action status="10" text="Reject"></action>
+                  <action status="99" text="Cancel service request"></action>
+              </actions>
+        </status>
+        <status value="60">
+            <visibleTabs>#termination,#globalview</visibleTabs>
+            <readOnlyTabs>#termination</readOnlyTabs>
+            <readOnlyFields></readOnlyFields>
+            <actions>
+                <action status="65" text="GV Updated">
+                <validateTabs></validateTabs>
+                <validateFields></validateFields>
+                </action>
+                <action status="99" text="Cancel service request"></action>
+            </actions>
+        </status>
+        <status value="65">
+          <visibleTabs>#termination,#globalview</visibleTabs>
+          <readOnlyTabs>#termination</readOnlyTabs>
+          <readOnlyFields></readOnlyFields>
+          <actions>
+              <action status="70" text="Quality ok"></action>
+              <action status="60" text="Quality not ok"></action>
+              <action status="99" text="Cancel service request"></action>
+          </actions>
+        </status>
+        <status value="70">
+            <visibleTabs>#termination,#globalview</visibleTabs>
+            <readOnlyTabs>#termination</readOnlyTabs>
+            <readOnlyFields></readOnlyFields>
+            <actions>
+                <action status="90" text="Close service request">
+                    <validateTabs>#termination,#globalview</validateTabs>
+                </action>
+                <action status="99" text="Cancel service request"></action>
+            </actions>
+        </status>
+        <status value="90">
+            <visibleTabs>#termination,#globalview</visibleTabs>
+            <readOnlyTabs>#termination,#globalview</readOnlyTabs>
+            <readOnlyFields></readOnlyFields>
+        </status>
+        <status value="99">
+            <visibleTabs>#termination,#globalview</visibleTabs>
+            <readOnlyTabs>#termination,#globalview</readOnlyTabs>
+            <readOnlyFields></readOnlyFields>
+        </status>
+    </state>

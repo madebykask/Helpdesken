@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+  <options>
+    <option value=""></option>
+    <option value="Lineal ascendant of spouse">Lineal ascendant of earner</option>
+    <option value="Lineal ascendant of spouse">Lineal ascendant of spouse</option>
+    <option value="Spouse">Spouse</option>
+    <option value="Lineal descendant: Child">Lineal descendant: Child</option>
+    <option value="Lineal descendant: Other">Lineal descendant: Other</option>
+    <option value="Brothers and sisters">Brothers and sisters</option>
+    <option value="Others - Basic living">Others - Basic living</option>
+    <option value="Others - Foster child">Others - Foster child</option>
+  </options> 

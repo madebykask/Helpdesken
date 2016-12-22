@@ -1,0 +1,118 @@
+﻿@model FormModel
+
+<div class="tab-pane active" id="ServiceRequestDetails">
+    <div class="span5">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Details")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Co-WorkerGlobalviewID")</td>
+                    <td>
+                        @Model.Element("Co-WorkerGlobalviewID")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("FirstName")</td>
+                    <td>
+                        @Model.Element("FirstName")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("LastName")</td>
+                    <td>
+                        @Model.Element("LastName")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("IKEAEMailAddress")</td>
+                    <td>
+                        @Model.Element("IKEAEMailAddress")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("IKEANetworkID")</td>
+                    <td>
+                        @Model.Element("IKEANetworkID")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("OldBusinessUnit")</td>
+                    <td>
+                        @Model.Element("OldBusinessUnit")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("OldDepartment")</td>
+                    <td>
+                        @Model.Element("OldDepartment")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ChangeType")</td>
+                    <td>
+                        @Model.Element("ChangeType")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ChangeValidFrom")</td>
+                    <td>
+                        @Model.Element("ChangeValidFrom")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ChangeValidTo")</td>
+                    <td>
+                        @Model.Element("ChangeValidTo")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ServiceRequestPriority")</td>
+                    <td>
+                        @Model.Element("ServiceRequestPriority")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ProcessBeforeDate")</td>
+                    <td>
+                        @Model.Element("ProcessBeforeDate")</td>
+                </tr>         
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Permanent Address")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentAddressLine1")</td>
+                    <td>@Model.Element("PermanentAddressLine1")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentAddressLine2")</td>
+                    <td>@Model.Element("PermanentAddressLine2")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentAddressLine3")</td>
+                    <td>@Model.Element("PermanentAddressLine3")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentPostalCode")</td>
+                    <td>@Model.Element("PermanentPostalCode")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentCity")</td>
+                    <td>@Model.Element("PermanentCity")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentCountry")</td>
+                    <td>@Model.Element("PermanentCountry")</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

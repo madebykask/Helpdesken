@@ -1,0 +1,210 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+@{
+    
+    //Layout = null;
+    //Model.Language = "nl";
+    var fillOldVal = TempData["oldValues"];
+    var newfill = (List<KeyValuePair<string, string>>)fillOldVal;
+                            //const string EmployeeCategory = "Permanent";
+}
+
+<div class="tab-pane" id="OrganisationalAssignment">
+    <div class="span12">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Organisation")</h4>
+                    </td>
+                    <td class="tdstrong current-record-th">
+                        <h4>@Model.Translate("Current record")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("OrganisationCountry")</td>
+                    <td>@Model.Translate("Norway")</td>
+                    <td>                  
+                        <input type="hidden" class="oldValue"  id="OLD_OrganisationCountry" name="OLD_OrganisationCountry" value="Norway"/>
+                        <em class="muted" id="emOLD_OrganisationCountry">@Model.Translate("Norway")</em>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("NewCompany")</td>
+                    <td>@Model.Element("NewCompany")</td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_NewCompany" name="OLD_NewCompany" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_NewCompany").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_NewCompany">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_NewCompany").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("NewBusinessUnit")</td>
+                    <td>@Model.Element("NewBusinessUnit")</td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_NewBusinessUnit" name="OLD_NewBusinessUnit" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_NewBusinessUnit").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_NewBusinessUnit">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_NewBusinessUnit").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("NewServiceArea")</td>
+                    <td>@Model.Element("NewServiceArea")</td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_NewServiceArea" name="OLD_NewServiceArea" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_NewServiceArea").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_NewServiceArea">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_NewServiceArea").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("NewDepartment")</td>
+                    <td>@Model.Element("NewDepartment")</td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_NewDepartment" name="OLD_NewDepartment" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_NewDepartment").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_NewDepartment">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_NewDepartment").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("CostCentre")</td>
+                    <td>@Model.Element("CostCentre")</td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_CostCentre" name="OLD_CostCentre" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_CostCentre").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_CostCentre">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_CostCentre").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>               
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Job")</h4>
+                    </td>
+                    <td class="tdstrong current-record-th">
+                        <h4>@Model.Translate("Current record")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PositionTitle")</td>
+                    <td>@Model.Element("PositionTitle")</td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_PositionTitle" name="OLD_PositionTitle" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PositionTitle").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_PositionTitle">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PositionTitle").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("JobTitle")</td>
+                    <td>@Model.Element("JobTitle")</td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_JobTitle" name="OLD_JobTitle" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_JobTitle").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_JobTitle">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_JobTitle").Select(x => x.Value).FirstOrDefault() : "")</em>
+                        <input type="hidden" id="employeeSearch_JobTitle" value="" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("IsManager")</td>
+                    <td>@Model.Element("IsManager")</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("NewPosition")</td>
+                    <td>@Model.Element("NewPosition")</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ReportsToLineManager")</td>
+                    <td>@Model.Element("ReportsToLineManager")</td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_ReportsToLineManager" name="OLD_ReportsToLineManager" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_ReportsToLineManager").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_ReportsToLineManager">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_ReportsToLineManager").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>   
+                <tr>
+                    <td class="tdstrong">@Model.Label("LineManagersJobTitle")</td>
+                    <td>@Model.Element("LineManagersJobTitle")
+                    </td>
+                </tr>                    
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Employment Conditions")</h4>
+                    </td>
+                    <td class="tdstrong current-record-th">
+                        <h4>@Model.Translate("Current record")</h4>
+                    </td>
+                </tr>
+                 <tr>
+                    <td class="tdstrong">@Model.Label("ContractType")</td>
+                    <td>@Model.Element("ContractType")</td>
+                     <td></td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmploymentPercentage")</td>
+                    <td>@Model.Element("EmploymentPercentage")</td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_EmploymentPercentage" name="OLD_EmploymentPercentage" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_EmploymentPercentage").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_EmploymentPercentage">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_EmploymentPercentage").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MidlertidigKarakter")</td>
+                    <td>@Model.Element("MidlertidigKarakter")</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PersonReplaced")</td>
+                    <td>@Model.Element("PersonReplaced")</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ProjectName")</td>
+                    <td>@Model.Element("ProjectName")</td>
+                    <td></td>
+                </tr>                 
+                <tr>
+                    <td class="tdstrong">@Model.Label("ContractEndDate")</td>
+                    <td>@Model.Element("ContractEndDate")</td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_ContractEndDate" name="OLD_ContractEndDate" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_ContractEndDate").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_ContractEndDate">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_ContractEndDate").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ProbationPeriod")</td>
+                    <td>@Model.Element("ProbationPeriod")</td>
+                    <td></td>
+                </tr>              
+                <tr>
+                    <td class="tdstrong">@Model.Label("ProbationLength")</td>
+                    <td>@Model.Element("ProbationLength")</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("NoticePeriod")</td>
+                    <td>@Model.Element("NoticePeriod")</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("CDS")</h4>
+                    </td>
+                    <td class="tdstrong current-record-th">
+                        <h4>@Model.Translate("Current record")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PrimarySite")</td>
+                    <td>@Model.Element("PrimarySite")</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TECApprover")</td>
+                    <td>@Model.Element("TECApprover")</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("HelpDesk")</td>
+                    <td>@Model.Translate("ICC3 HBG Retail")</td>
+                    <td></td>
+                </tr>               
+            </tbody>
+        </table>
+    </div>
+    <input type="hidden" id="state" name="state" value="@Model.Contract.StateSecondaryId" />
+</div>
+
+@*Scripts Moved to TabCTCJS*@

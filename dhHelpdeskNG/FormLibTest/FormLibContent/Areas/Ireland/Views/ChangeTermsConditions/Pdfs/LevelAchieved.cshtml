@@ -1,0 +1,53 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@using ECT.FormLib.Pdfs;
+@using System.Globalization;
+@using ECT.Model.Entities;
+
+@{
+    Layout = null;
+    Model.Language = "en";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    <div>
+        <table style="@IrelandPdfPage.StyleValue() width: 100%;" border="0">
+            <tr style="text-align: right;">
+                <td>@string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:d MMMMMM yyyy}", DateTime.Now)</td>
+            </tr>
+        </table>
+        <p style="@IrelandPdfPage.StyleValue()">
+            <strong>Private & Confidential</strong><br />
+            @Model.GetDocumentAnswer(FormLibConstants.FormField.FirstName, true) @Model.GetDocumentAnswer(FormLibConstants.FormField.LastName, true)<br />
+            @Model.GetDocumentAnswer(FormLibConstants.FormField.PermanentAddressLine1, true)
+            @if (!string.IsNullOrEmpty(Model.GetDocumentAnswer(FormLibConstants.FormField.PermanentAddressLine2)))
+            {
+                <br />
+                @Model.GetDocumentAnswer(FormLibConstants.FormField.PermanentAddressLine2)
+            }
+            <br />
+            @Model.GetDocumentAnswer(FormLibConstants.FormField.PermanentCity, true)
+            <br />
+            @Model.GetDocumentAnswer(FormLibConstants.FormField.PermanentPostalCode, true)
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            Dear @Model.GetDocumentAnswer(FormLibConstants.FormField.FirstName, true),<br />
+            <br />
+            Congratulations on achieving Foundation Level, this will be effective from @Model.GetDocumentAnswer(FormLibConstants.FormField.ChangeValidFrom, true)
+            <br /><br />
+            All other Terms and Conditions remain the same.  IKEA reserves the right to vary terms and conditions of employment subject to consultation and reasonable notice. Please retain this letter for your records.
+        </p>
+
+        <endpage />
+    </div>
+</body>
+</html>

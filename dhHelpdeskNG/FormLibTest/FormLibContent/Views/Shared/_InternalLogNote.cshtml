@@ -1,0 +1,50 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+@helper RenderLogNote()
+{
+    if(Model.GetErrorMessages().Any())
+    {
+        @Model.Element("InternalLogNote", "span12")
+    }
+    else
+    {
+        <textarea name="InternalLogNote" class="span12" rows="7"></textarea>
+    }
+}
+
+@if(Model.Contract.StateSecondaryId < 90)
+{
+    <tr>
+        <td class="tdstrong" colspan="2">
+            <h4>@Model.Label("InternalLogNote")</h4>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">@RenderLogNote()</td>
+    </tr>
+}
+
+@*@if(Model.Contract.StateSecondaryId <= 10 && (Model.Contract.CaseHistory == null || !Model.Contract.CaseHistory.Where(x => x.StateSecondaryId > 10).Any()))
+{
+    <tr>
+        <td class="tdstrong" colspan="2">
+            <h4>@Model.Label("InternalLogNote")</h4>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">@RenderLogNote()</td>
+    </tr>
+}
+else if(Model.Contract.StateSecondaryId < 90)
+{
+    <tr>
+        <td class="tdstrong" colspan="2">
+            <h4>@Model.Label("InternalLogNote")</h4>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">@RenderLogNote()</td>
+    </tr>
+}*@

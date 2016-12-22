@@ -1,0 +1,121 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<div class="tab-pane active" id="contract">
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong">@Model.Translate("Initiator")</td>
+                    <td>
+                        <input type="text" value="@Model.Contract.Initiator" readonly="readonly"/></td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmployeeNumberOld")</td>
+                    <td>@Model.Element("EmployeeNumberOld")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TypeOfHiring")</td>
+                    <td>@Model.Element("TypeOfHiring")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ReasonForHiring")</td>
+                    <td>@Model.Element("ReasonForHiring")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Company")</td>
+                    <td>@Model.Element("Company")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Unit")</td>
+                    <td>@Model.Element("Unit")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AdditionalPlaceOfWork")</td>
+                    <td>@Model.Element("AdditionalPlaceOfWork")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("LineManager")</td>
+                    <td>@Model.Element("LineManager")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Function")</td>
+                    <td>@Model.Element("Function")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Department")</td>
+                    <td>@Model.Element("Department")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("JobTitle")</td>
+                    <td>@Model.Element("JobTitle")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PolishJobTitle")</td>
+                    <td>@Model.Element("PolishJobTitle")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Prefix")</td>
+                    <td>@Model.Element("Prefix")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmployeeFirstName")</td>
+                    <td>@Model.Element("EmployeeFirstName")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmployeeLastName")</td>
+                    <td>@Model.Element("EmployeeLastName")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("DateOfBirth")</td>
+                    <td>@Model.Element("DateOfBirth")</td>
+                </tr>
+                @Html.Partial("_Attachments", Model)
+                @Html.Partial("_InternalLogNote", Model)
+            </tbody>
+        </table>
+    </div>
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong">@Model.Label("CountryCode")</td>
+                    <td>@Model.Element("CountryCode")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Street")</td>
+                    <td>@Model.Element("Street")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("StreetNumber")</td>
+                    <td>@Model.Element("StreetNumber")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("HouseNumber")</td>
+                    <td>@Model.Element("HouseNumber")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("City")</td>
+                    <td>@Model.Element("City")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PostCode")</td>
+                    <td>@Model.Element("PostCode")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Region")</td>
+                    <td>@Model.Element("Region")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("District")</td>
+                    <td>@Model.Element("District")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Community")</td>
+                    <td>@Model.Element("Community")</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

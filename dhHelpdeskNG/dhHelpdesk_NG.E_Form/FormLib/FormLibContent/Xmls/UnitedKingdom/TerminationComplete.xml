@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE form [
+    <!ENTITY languages SYSTEM "Templates/Languages.xml">
+    <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
+    <!ENTITY state SYSTEM "Templates/TerminationCompleteState.xml">
+  <!ENTITY pre_termination_reason SYSTEM "Templates/Predefined_TerminationReason.xml">
+  <!ENTITY pre_country SYSTEM "Templates/Data_Country.xml">
+]>
+
+<form id="163" guid="F268F31A-858C-4FE3-BDFA-6425A0D5BF4A" customerId="30">
+    &languages;
+    &regexs;
+    &state;
+    <fields>
+        <tab name="#ServiceRequestDetails" label="Service Request Details">
+            <element name="Co-WorkerGlobalviewID" type="text" label="Co-Worker Globalview ID" mandatory="1">
+                <regex inherit="employeeno" message="" pattern=""></regex>
+            </element>
+            <element name="FirstName" type="text" label="Co-Worker First Name" mandatory="1"></element>
+            <element name="LastName" type="text" label="Co-Worker Last name" mandatory="1"></element>
+            <element name="IKEAEmailAddress" type="text" label="IKEA Email Address">
+                <regex inherit="email" message="" pattern=""></regex>
+            </element>
+            <element name="IKEANetworkID" type="text"  label="IKEA Network ID" mandatory="1">
+                
+            </element>
+          <element name="Company" type="text" label="Company"></element>
+            <element name="BusinessUnit" type="text" label="Business Unit" mandatory="1"></element>
+          <element name="ServiceArea" type="text" label="Function"></element>
+            <element name="Department" type="text" label="Department"></element>
+            <element name="TECoWorker" type="select" label="Is Co-Worker a TE?" mandatory="1">
+                <options>
+                  <option value ="No">No</option>
+                  <option value ="Yes">Yes</option>
+                </options>
+            </element>
+            <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard">
+                <options>
+                    <option value=""></option>
+                    <option value ="Urgent">Urgent</option>
+                    <option value ="Standard">Standard</option>
+                </options>
+            </element>
+          <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
+        </tab>
+        <!--Basic Termination Details-->
+        <tab name="#Basic" label="Basic">
+            <element name="BasicTerminationType" type="select" label="Termination Type" mandatory="1">
+                
+                <options>
+                    <option value=""></option>
+                    <option value ="Expiry of Contract">Expiry of Contract</option>
+                    <option value ="Dismissal">Dismissal</option>
+                    <option value ="Retirement">Retirement</option>
+                    <option value ="Resignation">Resignation</option>
+                    <option value ="Redundancy">Redundancy</option>
+                    <option value ="Other">Other</option>
+                </options>
+            </element>
+            <element name="LastDayOfEmployment" type="date" format="dd.MM.yyyy" mandatory="1" label="Last Day of Employment">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+          <element name="LastDayWorked" type="date" format="dd.MM.yyyy" mandatory="1" label="Last Day Worked">
+            <regex inherit="date" pattern="" message=""></regex>
+          </element>
+            <!--CDS Section Header-->
+            <element name="LockCDSAccountFrom" type="date" format="dd.MM.yyyy" mandatory="1" label="Lock CDS Account from:">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+        </tab>
+        <tab name="#Complete" label="Complete">
+            <element name="CompleteTerminationType" type="select" label="Termination Type" mandatory="1">
+              &pre_termination_reason;
+              <options>
+                    <option value=""></option>
+                    <option value ="Expiry of Contract">Expiry of Contract</option>
+                    <option value ="Dismissal">Dismissal</option>
+                    <option value ="Retirement">Retirement</option>
+                    <option value ="Resignation">Resignation</option>
+                    <option value ="Redundancy">Redundancy</option>
+                    <option value ="Other">Other</option>
+                </options>
+                
+            </element>
+            <element name="TerminationReason" type="select" label="Termination Reason" mandatory="1">
+                <options>
+                    <option value=""></option>
+                  <option value="﻿Expiry of Contract">﻿Expiry of Contract</option>
+                  <option value="International transfer begins">International transfer begins</option>
+                  <option value="International transfer ends">International transfer ends</option>
+                  <option value="End of Backpacker Assignment">End of Backpacker Assinnment</option>
+                  <option value="Dismissal With Notice">Dismissal With Notice</option>
+                  <option value="Dismissal Without Notice">Dismissal Without Notice</option>
+                  <option value="Retirement">Retirement</option>
+                  <option value="Resignation">Resignation</option>
+                  <option value="Redundancy">Redundancy</option>
+                  <option value="Lack of opportunities">Lack of opportunities</option>
+                  <option value="Salary">Salary</option>
+                  <option value="Unhappy with management">Unhappy with management</option>
+                  <option value="Domestic">Domestic</option>
+                  <option value="Hours of work">Hours of work</option>
+                  <option value="Days of work">Days of work</option>
+                  <option value="Health">Health</option>
+                  <option value="Maternity rights">Maternity rights</option>
+                  <option value="Moving away">Moving away</option>
+                  <option value="Returning to FT education">Returning to FT education</option>
+                  <option value="Exams pending">Exams pending</option>
+                  <option value="Leaving IKEA/New job">Leaving IKEA/New job</option>
+                  <option value="Other">Other</option>
+                  <option value="Invalidity">Invalidity</option>
+                  <option value="Death">Death</option>
+                  <option value="AWOL">AWOL</option>
+                  <option value="Unsuccesful probation">Unsuccesful probation</option>
+                  <option value="Mutual agreement">Mutual agreement</option>
+
+                </options>
+            </element>
+          <element name="HomeCountry" type="search-select" source="1" label="Home Country">
+            <mandatoryIf name="TECoWorker">Yes</mandatoryIf>
+            <mandatoryIf name="TerminationReason">International transfer ends</mandatoryIf>
+            &pre_country;
+          </element>
+            <element name="TerminationPaymentMethod" type="select" label="Termination Payment Method" mandatory="1" default="By Payroll">
+                <options>
+                    <option value=""></option>
+                    <option value ="By Payroll">By Payroll</option>
+                    
+                    <!--<option value ="By Manual Payment">By Manual Payment</option>-->
+                </options>
+            </element>
+
+          <element name="TerminationPayments" type="hidden" default="1"></element>
+          <element name="TerminationPaymentType" type="select" label="Payment Type">
+            <mandatoryIfNotEmpty name="TerminationAmountUnits"></mandatoryIfNotEmpty>
+            <options>
+              <option value=""></option>
+              <option value="PILON (Pay in Lieu Notice)">PILON (Pay in Lieu Notice)</option>
+              <option disabled="1" value="Redundancy Payment">Redundancy Payment</option>
+              <option disabled="1" value="One IKEA Bonus Due">One IKEA Bonus Due</option>
+            </options>
+          </element>
+          <element name="TerminationAmountUnits" type="text" label="Amount/Units">
+            <mandatoryIfNotEmpty name="TerminationPaymentType"></mandatoryIfNotEmpty>
+          </element>
+          <!--<element name="OneIKEABonusDue" type="text" label="One IKEA Bonus Due">
+            <mandatoryIfNotEmpty name="TerminationPaymentType"></mandatoryIfNotEmpty>
+            <regex inherit="unsignednum" pattern="" message=""></regex>
+          </element>-->
+          <element name="TerminationPaymentDate" type="date" format="dd.MM.yyyy" label="Payment Date:">
+            <regex inherit="date" pattern="" message=""></regex>
+            <mandatoryIfNotEmpty name="TerminationPaymentType"></mandatoryIfNotEmpty>
+          </element>
+
+          <element name="TerminationPaymentType2" type="select" label="Payment Type">
+            <mandatoryIfNotEmpty name="TerminationAmountUnits2"></mandatoryIfNotEmpty>
+            <options>
+              <option value=""></option>
+              <option value="PILON (Pay in Lieu Notice)">PILON (Pay in Lieu Notice)</option>
+              <option disabled="1" value="Redundancy Payment">Redundancy Payment</option>
+              <option value="One IKEA Bonus Due">One IKEA Bonus Due</option>
+            </options>
+          </element>
+          <element name="TerminationAmountUnits2" type="text" label="Amount/Units">
+            <mandatoryIfNotEmpty name="TerminationPaymentType2"></mandatoryIfNotEmpty>
+          </element>
+          <element name="TerminationPaymentType3" type="select" label="Payment Type">
+            <mandatoryIfNotEmpty name="TerminationAmountUnits3"></mandatoryIfNotEmpty>
+            <options>
+              <option value=""></option>
+              <option value="PILON (Pay in Lieu Notice)">PILON (Pay in Lieu Notice)</option>
+              <option disabled="1" value="Redundancy Payment">Redundancy Payment</option>
+              <option value="One IKEA Bonus Due">One IKEA Bonus Due</option>
+            </options>
+          </element>
+          <element name="TerminationAmountUnits3" type="text" label="Amount/Units">            
+            <mandatoryIfNotEmpty name="TerminationPaymentType3"></mandatoryIfNotEmpty>
+          </element>
+
+          <element name="TerminationPaymentType4" type="select" label="Payment Type">
+            <mandatoryIfNotEmpty name="TerminationAmountUnits4"></mandatoryIfNotEmpty>
+            <options>
+              <option value=""></option>
+              <option value="PILON (Pay in Lieu Notice)">PILON (Pay in Lieu Notice)</option>
+              <option disabled="1" value="Redundancy Payment">Redundancy Payment</option>
+              <option value="One IKEA Bonus Due">One IKEA Bonus Due</option>
+            </options>
+          </element>
+          <element name="TerminationAmountUnits4" type="text" label="Amount/Units">
+            <mandatoryIfNotEmpty name="TerminationPaymentType4"></mandatoryIfNotEmpty>
+          </element>
+
+          <element name="TerminationPaymentType5" type="select" label="Payment Type">
+            <mandatoryIfNotEmpty name="TerminationAmountUnits5"></mandatoryIfNotEmpty>
+            <options>
+              <option value=""></option>
+              <option value="PILON (Pay in Lieu Notice)">PILON (Pay in Lieu Notice)</option>
+              <option disabled="1" value="Redundancy Payment">Redundancy Payment</option>
+              <option value="One IKEA Bonus Due">One IKEA Bonus Due</option>
+            </options>
+          </element>
+          <element name="TerminationAmountUnits5" type="text" label="Amount/Units">            
+            <mandatoryIfNotEmpty name="TerminationPaymentType5"></mandatoryIfNotEmpty>
+          </element>
+
+          <!--<element name="OneIKEABonusDue3" type="text" label="One IKEA Bonus Due">
+            <regex inherit="unsignednum" pattern="" message=""></regex>
+            <mandatoryIfNotEmpty name="TerminationPaymentType3"></mandatoryIfNotEmpty>
+          </element>
+          <element name="TerminationPaymentDate3" type="date" format="dd.MM.yyyy" label="Payment Date:">
+            <regex inherit="date" pattern="" message=""></regex>
+            <mandatoryIfNotEmpty name="TerminationPaymentType3"></mandatoryIfNotEmpty>
+          </element>-->
+
+          <element name="Deductions" type="hidden" default="1"></element>
+          <element name="DeductionType" type="select" label="Deduction Type">
+            <options>
+              <option value=""></option>
+              <option value="Education cost">Education cost</option>
+              <option value="Relocation/Rental deposit">Relocation/Rental deposit</option>
+              <option value="Interest free loan">Interest free loan</option>
+              <option value="TEC deduction">TEC deduction</option>
+              
+            </options>
+          </element>
+          <!--<element name="OtherDeduction" type="text" label="Other deduction">
+            <mandatoryIf name="DeductionType">Other</mandatoryIf>
+          </element>-->
+          <element name="DeductionAmountUnits" type="text" label="Amount/Units">
+            <mandatoryIfNotEmpty name="DeductionType"></mandatoryIfNotEmpty>
+            
+          </element>
+
+          <element name="DeductionDate" type="date" format="dd.MM.yyyy" label="Deduction date:">
+            <regex inherit="date" pattern="" message=""></regex>
+            <mandatoryIfNotEmpty name="DeductionType"></mandatoryIfNotEmpty>
+          </element>
+
+          <element name="DeductionType2" type="select" label="Deduction Type">
+            <options>
+              <option value=""></option>
+              <option value="Education cost">Education cost</option>
+              <option value="Relocation/Rental deposit">Relocation/Rental deposit</option>
+              <option value="Interest free loan">Interest free loan</option>
+              <option value="TEC deduction">TEC deduction</option>
+              
+            </options>
+          </element>
+          <!--<element name="OtherDeduction2" type="text" label="Other deduction">
+            <mandatoryIfNotEmpty name="DeductionType2"></mandatoryIfNotEmpty>
+          </element>-->
+          <element name="DeductionAmountUnits2" type="text" label="Amount/Units">
+            <mandatoryIfNotEmpty name="DeductionType2"></mandatoryIfNotEmpty>
+            
+          </element>
+
+          <element name="DeductionDate2" type="date" format="dd.MM.yyyy" label="Deduction date:">
+            <regex inherit="date" pattern="" message=""></regex>
+            <mandatoryIfNotEmpty name="DeductionType2"></mandatoryIfNotEmpty>
+          </element>
+
+          <element name="DeductionType3" type="select" label="Deduction Type">
+            <options>
+              <option value=""></option>
+              <option value="Education cost">Education cost</option>
+              <option value="Relocation/Rental deposit">Relocation/Rental deposit</option>
+              <option value="Interest free loan">Interest free loan</option>
+              <option value="TEC deduction">TEC deduction</option>
+              
+            </options>
+          </element>
+          <!--<element name="OtherDeduction3" type="text" label="Other deduction">
+            <mandatoryIfNotEmpty name="DeductionType3"></mandatoryIfNotEmpty>
+            
+          </element>-->
+          <element name="DeductionAmountUnits3" type="text" label="Amount/Units">
+            <mandatoryIfNotEmpty name="DeductionType3"></mandatoryIfNotEmpty>
+            
+          </element>
+
+          <element name="DeductionDate3" type="date" format="dd.MM.yyyy" label="Deduction date:">
+            <regex inherit="date" pattern="" message=""></regex>
+            <mandatoryIfNotEmpty name="DeductionType3"></mandatoryIfNotEmpty>
+          </element>
+
+
+
+
+
+
+
+          <element name="DeductionType4" type="select" label="Deduction Type">
+            <options>
+              <option value=""></option>
+              <option value="Education cost">Education cost</option>
+              <option value="Relocation/Rental deposit">Relocation/Rental deposit</option>
+              <option value="Interest free loan">Interest free loan</option>
+              <option value="TEC deduction">TEC deduction</option>
+
+            </options>
+          </element>
+          <!--<element name="OtherDeduction3" type="text" label="Other deduction">
+            <mandatoryIfNotEmpty name="DeductionType3"></mandatoryIfNotEmpty>
+            
+          </element>-->
+          <element name="DeductionAmountUnits4" type="text" label="Amount/Units">
+            <mandatoryIfNotEmpty name="DeductionType4"></mandatoryIfNotEmpty>
+            
+          </element>
+
+          <element name="DeductionDate4" type="date" format="dd.MM.yyyy" label="Deduction date:">
+            <regex inherit="date" pattern="" message=""></regex>
+            <mandatoryIfNotEmpty name="DeductionType4"></mandatoryIfNotEmpty>
+          </element>
+
+
+
+
+          <element name="DeductionType5" type="select" label="Deduction Type">
+            <options>
+              <option value=""></option>
+              <option value="Education cost">Education cost</option>
+              <option value="Relocation/Rental deposit">Relocation/Rental deposit</option>
+              <option value="Interest free loan">Interest free loan</option>
+              <option value="TEC deduction">TEC deduction</option>
+
+            </options>
+          </element>
+          <!--<element name="OtherDeduction3" type="text" label="Other deduction">
+            <mandatoryIfNotEmpty name="DeductionType3"></mandatoryIfNotEmpty>
+            
+          </element>-->
+          <element name="DeductionAmountUnits5" type="text" label="Amount/Units">
+            <mandatoryIfNotEmpty name="DeductionType5"></mandatoryIfNotEmpty>
+            
+          </element>
+
+          <element name="DeductionDate5" type="date" format="dd.MM.yyyy" label="Deduction date:">
+            <regex inherit="date" pattern="" message=""></regex>
+            <mandatoryIfNotEmpty name="DeductionType5"></mandatoryIfNotEmpty>
+          </element>
+          
+          
+          <element type="hidden" default="1" name="UnreturnedItemsMulti"></element>
+          <element type="select" name="UnreturnedItems" label="Unreturned items">
+            <options>
+              <option value=""></option>
+              <option value="ID Card/Uniform">ID Card/Uniform</option>
+              <option value="Mobile Phone">Mobile Phone</option>
+              <option value="Laptop">Laptop</option>
+              <option value="Company Credit Card">Company Credit Card</option>
+              <option value="Company Car">Company Car</option>
+              <option value="Other (Swipe card, etc)">Other (Swipe card, etc)</option>
+            </options>
+          </element>
+
+          <element type="select" name="UnreturnedItems2" label="Unreturned items">
+            <options>
+              <option value=""></option>
+              <option value="ID Card/Uniform">ID Card/Uniform</option>
+              <option value="Mobile Phone">Mobile Phone</option>
+              <option value="Laptop">Laptop</option>
+              <option value="Company Credit Card">Company Credit Card</option>
+              <option value="Company Car">Company Car</option>
+              <option value="Other (Swipe card, etc)">Other (Swipe card, etc)</option>
+            </options>
+          </element>
+
+
+          <element type="select" name="UnreturnedItems3" label="Unreturned items">
+            <options>
+              <option value=""></option>
+              <option value="ID Card/Uniform">ID Card/Uniform</option>
+              <option value="Mobile Phone">Mobile Phone</option>
+              <option value="Laptop">Laptop</option>
+              <option value="Company Credit Card">Company Credit Card</option>
+              <option value="Company Car">Company Car</option>
+              <option value="Other (Swipe card, etc)">Other (Swipe card, etc)</option>
+            </options>
+          </element>
+
+          <element type="select" name="UnreturnedItems4" label="Unreturned items">
+            <options>
+              <option value=""></option>
+              <option value="ID Card/Uniform">ID Card/Uniform</option>
+              <option value="Mobile Phone">Mobile Phone</option>
+              <option value="Laptop">Laptop</option>
+              <option value="Company Credit Card">Company Credit Card</option>
+              <option value="Company Car">Company Car</option>
+              <option value="Other (Swipe card, etc)">Other (Swipe card, etc)</option>
+            </options>
+          </element>
+
+          <element type="select" name="UnreturnedItems5" label="Unreturned items">
+            <options>
+              <option value=""></option>
+              <option value="ID Card/Uniform">ID Card/Uniform</option>
+              <option value="Mobile Phone">Mobile Phone</option>
+              <option value="Laptop">Laptop</option>
+              <option value="Company Credit Card">Company Credit Card</option>
+              <option value="Company Car">Company Car</option>
+              <option value="Other (Swipe card, etc)">Other (Swipe card, etc)</option>
+            </options>
+          </element>
+          
+          <element name="PositionRemovedOMStructure" type="select" label="Delimit position from OM?" default="Yes">
+            <options>
+              <option value=""></option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </options>
+          </element>
+          <!--<element name="PensionMember" type="select" label="Pension member?" mandatory="1">
+            <options>
+              <option value=""></option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </options>
+          </element>-->
+        </tab>
+    </fields>
+</form>
+

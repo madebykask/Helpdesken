@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<dependencies>
+    <element value="1">EmployeeUnit,AdditionalPlaceOfWork,WorkingTimeSchedule,ContractType</element>
+    <element value="2">LineManager,Department</element>
+    <element value="3">
+        Department,
+        HomeCostCenter,HomeCostCenterAllocation,AdditionalCostCenter,AdditionalCostCenterAllocation,AdditionalCostCenter2,AdditionalCostCenterAllocation2</element>
+    <element value="4">
+        Department,
+        JobTitle,PolishJobTitle,WorkingTimeSchedule,ContractType</element>
+    <element value="5">Extent,Workload,ContractType</element>
+    <element value="6">
+        ContractType,JobTitle,PolishJobTitle,PersonReplaced,TwoWeekNotice,AdditionalPlaceOfWork,
+        Street,StreetNumber,HouseNumber,City,PostCode,Region,District,Community,FirstDayAtWork,
+        Extent,Workload,WorkingTimeSchedule,BasicPay,BasicPayInWordsPolish,BasicPayInWords,MonthlyHourly
+    </element>
+    <element value="7">BasicPay,BasicPayInWordsPolish,BasicPayInWords,MonthlyHourly,ContractType,ECMCompensationProgram,PSArea,PSGroup,CollectiveScaleSalary</element>
+    <element value="8">
+      OneIKEABonusType,FunctionAllowance,FunctionAllowanceAmount,BasicPayInWordsPolish1,BasicPayInWordsEnglish1,FunctionAllowanceGrossNett,ContractType,
+      #Allowance,
+      FunctionAllowance2,FunctionAllowanceAmount2,BasicPayInWordsPolish2,BasicPayInWordsEnglish2,FunctionAllowanceGrossNett2,
+      #Allowance,
+      FunctionAllowance3,FunctionAllowanceAmount3,BasicPayInWordsPolish3,BasicPayInWordsEnglish3,FunctionAllowanceGrossNett3,
+      #Recuring payments and deducations,
+      RecurringPaymentsAndDeductions,RecurringPaymentsAndDeductionsAmount,RecurringPaymentsAndDeductionsGrossNett,
+      #Recuring payments and deducations,
+      RecurringPaymentsAndDeductions2,RecurringPaymentsAndDeductionsAmount2,RecurringPaymentsAndDeductionsGrossNett2,
+      #Recuring payments and deducations,
+      RecurringPaymentsAndDeductions3,RecurringPaymentsAndDeductionsAmount3,RecurringPaymentsAndDeductionsGrossNett3,
+      #Additional payments,
+      AdditionalPayment,AdditionalPaymentAmount,AdditionalPaymentGrossNett,
+      #Additional payments,
+      AdditionalPayment2,AdditionalPaymentAmount2,AdditionalPaymentGrossNett2,
+      #Additional payments,
+      AdditionalPayment3,AdditionalPaymentAmount3,AdditionalPaymentGrossNett3,
+      #,
+      PensionerStatus
+    </element>
+    <element value="9">ReasonForNameChange,NewLastName,NewFirstName</element>
+    <element value="10">CommunicationLanguage,Nationality,Gender,PESEL,NIP</element>
+    <element value="11">IdentityCardNo,IdentityCardIssueAuthority,IdentityCardIssueDate</element>
+    <element value="12">PassportNo,PassportNoIssueDate</element>
+    <element value="13">RecidencePermitNo,RecidencePermitIssueDate</element>
+    <element value="14">NoOfWorkPermit,NoOfWorkIssueDate</element>
+    <element value="15">CountryCode,Street,StreetNumber,HouseNumber,City,PostCode,Region,District,Community</element>
+    <element value="16">HomeCountryCode,HomeStreet,HomeStreetNumber,HomeHouseNumber,HomeCity,HomePostCode,HomeRegion,HomeDistrict,HomeCommunity</element>
+    <element value="17">MailingCountryCode,MailingStreet,MailingStreetNumber,MailingHouseNumber,MailingCity,MailingPostCode,MailingRegion,MailingDistrict,MailingCommunity</element>
+    <element value="18">
+        EmergencyFirstName,EmergencyLastName,EmergencyCountryCode,EmergencyStreet,EmergencyStreetNumber,EmergencyHouseNumber,EmergencyCity,
+        EmergencyPostCode,EmergencyRegion,EmergencyDistrict,EmergencyCommunity,EmergencyPhone
+    </element>
+    <element value="19">TaxCountryCode,TaxStreet,TaxStreetNumber,TaxHouseNumber,TaxCity,TaxPostCode,TaxRegion,TaxDistrict,TaxCommunity</element>
+    <element value="20">Phone,Email</element>
+    <element value="21">
+        AccountNo,AccountHolder,NameOfBank,AmountToBeTransferred,
+        #Additional bank account details,
+        AccountNo2,AccountHolder2,NameOfBank2,AmountToBeTransferred2,
+        #Additional bank account details,
+        AccountNo3,AccountHolder3,NameOfBank3,AmountToBeTransferred3
+    </element>
+    <element value="22">
+        FamilyMemberRelationship,FamilyMemberFirstName,FamilyMemberLastName,FamilyMemberDateOfBirth,FamilyMemberPESEL,FamilyMemberDisabilityScale,
+        FamilyMemberHealthInsurance,FamilyMemberJoinedHousehold,FamilyMemberExclusivelyDependent,
+
+        #Family member,
+        FamilyMemberRelationship2,FamilyMemberFirstName2,FamilyMemberLastName2,FamilyMemberDateOfBirth2,FamilyMemberPESEL2,FamilyMemberDisabilityScale2,
+        FamilyMemberHealthInsurance2,FamilyMemberJoinedHousehold2,FamilyMemberExclusivelyDependent2,
+
+        #Family member,
+        FamilyMemberRelationship3,FamilyMemberFirstName3,FamilyMemberLastName3,FamilyMemberDateOfBirth3,FamilyMemberPESEL3,FamilyMemberDisabilityScale3,
+        FamilyMemberHealthInsurance3,FamilyMemberJoinedHousehold3,FamilyMemberExclusivelyDependent3,
+
+        #Family member,
+        FamilyMemberRelationship4,FamilyMemberFirstName4,FamilyMemberLastName4,FamilyMemberDateOfBirth4,FamilyMemberPESEL4,FamilyMemberDisabilityScale4,
+        FamilyMemberHealthInsurance4,FamilyMemberJoinedHousehold4,FamilyMemberExclusivelyDependent4,
+
+        #Family member,
+        FamilyMemberRelationship5,FamilyMemberFirstName5,FamilyMemberLastName5,FamilyMemberDateOfBirth5,FamilyMemberPESEL5,FamilyMemberDisabilityScale5,
+        FamilyMemberHealthInsurance5,FamilyMemberJoinedHousehold5,FamilyMemberExclusivelyDependent5,
+
+    </element>
+    <element value="23">TaxOfficeLocation</element>
+    <element value="24">HealthInsuranceLocation,PensionerStatus,DisabilityScale</element>
+    <element value="25">Function</element>
+
+</dependencies>

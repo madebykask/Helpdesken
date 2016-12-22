@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<options>
+  <option value=""></option>
+  <option value="Step Child">Step Child</option>
+  <option value="Child">Child</option>
+  <option value="Spouse">Spouse</option>
+  <option value="Mother">Mother</option>
+  <option value="Father">Father</option>
+  <option value="Cohabitant">Cohabitant</option>
+</options>

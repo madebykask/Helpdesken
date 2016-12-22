@@ -1,0 +1,32 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@using ECT.FormLib.Pdfs;
+@{
+    Layout = null;
+}
+
+<br />
+<br />
+<table style="padding: 5px !important; border: 2px solid black; page-break-inside: avoid; clear: both;">
+    <tr>
+        <td style="padding: 5px !important;">Jouw manager is:</td>
+    </tr>
+    <tr>
+        <td style="padding: 5px !important;">
+
+            @Model.GetDocumentAnswer("ReportsToLineManager", true)
+            <br />
+        </td>
+    </tr>
+    <tr>
+        <td style="padding: 5px !important;">Telefoonnummer van je vestiging is:</td>
+    </tr>
+    <tr>
+        <td style="padding: 5px !important;">
+
+            @Model.Department.TelNbr
+            <br />
+        </td>
+    </tr>
+</table>

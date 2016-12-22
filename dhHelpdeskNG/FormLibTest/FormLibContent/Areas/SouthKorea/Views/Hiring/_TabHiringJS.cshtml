@@ -1,0 +1,530 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+
+@{
+    const string IsTeWorker = "International Transfer";
+    const string DefaultCountry = "South Korea";
+}
+
+<script>
+
+    // Fix: Prevent to change saved JobTitle by SetDefJobTitle method S.G
+    // ToDo: Should do SetDefJobTitle only after "Selectize.OnClick()"
+    var maxLocalJobTitleDefCount = 2;
+    var SetDefCount;
+
+    var lockedbyUserGroup = document.getElementById('LockedByUserGroup').getAttribute('status');
+
+    if (("@Model.ReadOnlyTab("#OrganisationalAssignment")" == 'False' && "@Model.ReadOnlyTab("#ServiceRequestDetails")" == 'False') && lockedbyUserGroup == 'False') {
+
+
+        $("#Department").change(function () {
+            GetXML('default_costcentre.xml', SetDefaultCostCentre);
+        });
+
+        $("#PositionTitle").change(function () {
+            GetXML('default_jobtitle.xml', SetDefaultJobTitle);
+        });
+
+        var BlockCoWorkerID = function () {
+            var val = $("#NewToIKEA").val();
+            if (val == "New-Hire") {
+                $('#Co-WorkerID').attr("disabled", true);
+                $('#GlobalHRID').attr("disabled", true);
+            }
+            else {
+                $('#Co-WorkerID').attr("disabled", false);
+                $('#GlobalHRID').attr("disabled", false);
+            }
+        }
+
+
+        $(function () {
+
+            if ($('#PositionTitle').val() != '')
+                SetDefCount = 0;
+            else
+                SetDefCount = maxLocalJobTitleDefCount;
+
+            setTimeout(function () { SetDefaultCompany(); }, 10);
+
+            BlockCoWorkerID();
+
+            lockContractEndDate();
+
+            SetDefaultPayee();
+
+            DisableAdoptionFosterDate();
+
+
+            $("#BusinessUnit").change(function () {
+                setDefaultPrimarySite();
+                setTimeout(function () { GetXML('Predefined_BusinessUnit_PositionTitle.xml', narrowDownPositionTitle); }, 1);
+            });
+
+        })
+    }
+
+    var DisableAdoptionFosterDate = function ()
+    {
+        for (var i = 0; i < 5; i++) {
+            DisableAdoptionFosterDateHandler(i);
+        }
+    }
+
+    var DisableAdoptionFosterDateHandler = function (i)
+    {
+
+        if (i == 0)
+        {
+            i = '';
+        }
+        else if (i > 0)
+        {
+            i++;
+        }
+
+        var dependancytax = 'input[name="DependancyTax' + i + '"][value="Fostered Child"]';
+
+        if (!$(dependancytax).prop('checked')) {
+            
+            $('#adoptionfosterdate' + i).attr("disabled", true);
+
+            $('#date_adoptionfosterdate' + i).addClass("disabled");
+            $('#date_adoptionfosterdate' + i).datepicker("destroy");
+
+        }
+        else {
+            $('#adoptionfosterdate' + i).attr("disabled", false);
+            $('#date_adoptionfosterdate' + i).removeClass("disabled");
+            $('#date_adoptionfosterdate' + i).datepicker();
+        }
+    }
+
+    $('[name^="DependancyTax"]').change(function () {
+        DisableAdoptionFosterDate();
+    });
+
+    $('#NewToIKEA').change(function () {
+        setGlobalMobilityBehavior($(this).val());
+    });
+
+    if ($('#NewToIKEA').val() == '@IsTeWorker') {
+        $(".globalmobility-first").show();
+    }
+    else {
+        $(".globalmobility-first").hide();
+    }
+
+    function setGlobalMobilityBehavior(value) {
+        if (!(value == '@IsTeWorker')) {
+
+            jQuery(".globalmobility-first").hide();
+            jQuery("[class*=globalmobility]").hide();
+            $("[class*=globalmobility] input:not(input[type=hidden])").val("");
+            jQuery("[class*=globalmobility-first]").hide();
+            jQuery("[class*=globalmobility] input[type=text][name*='Country']").val('@DefaultCountry');
+            jQuery("[class*=globalmobility] input[type=text][name*='PaymentCurrency']").val('KRW');
+            jQuery("[class*=globalmobility] select option:not([value])").prop('selected', true);
+        } else if (value == '@IsTeWorker') {
+            jQuery(".globalmobility-first").show();
+        }
+
+        $("[class*=globalmobility-first] input[type=hidden]").val("1");
+
+    };
+
+    var setDefaultPrimarySite = function () {
+
+        var bu = $("#BusinessUnit option:selected").text();
+
+        $('#Primarysite').val(bu)
+    }
+
+    function narrowDownPositionTitle(xml) {
+        //////////
+        //narrowDownJobTitle:
+        //Adds Jobtitles on selected Function
+        //////////
+
+        var show = ''
+        var bus = '';
+
+
+        if (document.getElementById('BusinessUnit')) {
+            bus = $("#BusinessUnit option:selected").text();
+        }
+
+        var jobtitle_value;
+        jobtitle_value = $('#PositionTitle').val();
+
+        $('#PositionTitle').val("");
+
+        var selectize_tags = $("#PositionTitle")[0].selectize
+        selectize_tags.clearOptions();
+
+        $(xml).find('dependent').each(function () {
+
+
+            var $sel = $(this);
+            show = '';
+
+            var businessunit = $sel.find('selected').text();
+
+            show = $sel.find('show').text();
+
+            if (businessunit == bus) {
+
+                if (show != '') {
+
+                    show = ' ,' + show;
+
+                    //temp, replace spaces that occours in the beginning of comma separation.
+                    show = show.replace(/\, /g, ",");
+
+                    var optionsarray = show.split(',');
+                    optionsarray.unshift('');
+
+                    //TEMP for Steering Group_Doncaster, Sales (problem with commas in the name) so we use  #
+                    if (show.indexOf("#") > -1) {
+                        $.each(optionsarray, function (i) {
+                            optionsarray[i] = optionsarray[i].replace(/\#/g, ",");
+                        });
+                    }
+
+                    var items = optionsarray.map(function (x) { return { text: x, value: x }; });
+
+                    selectize_tags.addOption(items);
+
+
+                    if (jobtitle_value != '') {
+                        selectize_tags.setValue(jobtitle_value);
+
+                    }
+                    else
+                        selectize_tags.setValue('');
+                    return;
+                }
+            }
+        });
+    }
+
+
+    function narrowDownJobTitle(xml) {
+        //////////
+        //narrowDownJobTitle:
+        //Adds Jobtitles on selected Function
+        //////////
+
+        var show = ''
+        var bus = '';
+
+
+        if (document.getElementById('BusinessUnit')) {
+            bus = $("#BusinessUnit option:selected").text();
+        }
+
+
+        var jobtitle_value;
+        jobtitle_value = $('#JobTitle').val();
+
+        $('#JobTitle').val("");
+
+        var selectize_tags = $("#JobTitle")[0].selectize
+        selectize_tags.clearOptions();
+
+
+
+        $(xml).find('dependent').each(function () {
+
+
+            var $sel = $(this);
+            show = '';
+
+            var businessunit = $sel.find('selected').text();
+
+            show = $sel.find('show').text();
+
+            if (businessunit == bus) {
+
+                if (show != '') {
+
+                    show = ' ,' + show;
+
+                    //temp, replace spaces that occours in the beginning of comma separation.
+                    show = show.replace(/\, /g, ",");
+
+                    var optionsarray = show.split(',');
+                    optionsarray.unshift('');
+
+                    //TEMP for Steering Group_Doncaster, Sales (problem with commas in the name) so we use  #
+                    if (show.indexOf("#") > -1) {
+                        $.each(optionsarray, function (i) {
+                            optionsarray[i] = optionsarray[i].replace(/\#/g, ",");
+                        });
+                    }
+
+                    var items = optionsarray.map(function (x) { return { text: x, value: x }; });
+                    selectize_tags.addOption(items);
+
+
+                    if (jobtitle_value != '') {
+                        selectize_tags.setValue(jobtitle_value);
+
+                    }
+                    else
+                        selectize_tags.setValue('');
+                    return;
+                }
+            }
+        });
+    }
+
+    $("#FirstnameinKR").change(function () {
+        SetDefaultPayee();
+    });
+    $("#LastnameinKR").change(function () {
+        SetDefaultPayee();
+    });
+
+    var SetDefaultPayee = function () {
+        var PayeeName;
+        PayeeName = $('#FirstnameinKR').val() + " " + $('#LastnameinKR').val()
+
+        $('#Payee').val(PayeeName)
+        $('#Payee2').val(PayeeName)
+    }
+
+    $("#Contractedhours").change(function () {
+        SetContractType();
+    });
+    var SetContractType = function () {
+        if ($('#Contractedhours').val() < 40) {
+            $('#Contracttype').val('Part time')
+        }
+        else {
+            $('#Contracttype').val('Full Time')
+        }
+    }
+
+
+    $(function () {
+        if ($('#Contractstartdate').val() !== "") {
+
+            setValidFrom();
+        }
+    });
+
+    $('#date_Contractstartdate').on('changeDate', function (ev) {
+
+        setValidFrom();
+
+    }).data('datepicker');
+
+
+    $('#Contractstartdate').change(function () {
+
+        setValidFrom();
+    });
+
+    var setValidFrom = function () {
+        //Clear calendar history
+        $('#date_AllowanceValidfrom,#date_AllowanceValidfrom2,#date_AllowanceValidfrom3,#date_AllowanceValidfrom4,#date_AllowanceValidfrom5,' +
+        '#date_DeductionValidfrom,#date_DeductionValidfrom2,#date_DeductionValidfrom3,#date_DeductionValidfrom4,#date_DeductionValidfrom5,#date_JoinKRIKEAdate,#date_JoinIKEAGlobal,#date_Calculationstartdate').not(".disabled").datepicker('destroy');
+
+        //Set 'valid from' to contract start date
+        $('#AllowanceValidfrom,#AllowanceValidfrom2,#AllowanceValidfrom3,#AllowanceValidfrom4,#AllowanceValidfrom5,' +
+        '#DeductionValidfrom,#DeductionValidfrom2,#DeductionValidfrom3,#DeductionValidfrom4,#DeductionValidfrom5,#JoinKRIKEAdate,#JoinIKEAGlobal,#Calculationstartdate').val($('#Contractstartdate').val());
+    }
+
+    //#52776 Removed by popular demand
+    //$("#Reportstolinemanager").change(function () {
+    //    SetDefaultTECApprover();
+    //});
+
+    $("#Employmentcategory").change(function () {
+        lockContractEndDate();
+    });
+
+    $("#NewToIKEA").change(function () {
+        BlockCoWorkerID();
+    })
+
+    var SetDefaultTECApprover = function () {
+        var LineManager;
+        LineManager = $('#Reportstolinemanager').val();
+
+        if ($('#TECapprover')[0].selectize) {
+            $('#TECapprover')[0].selectize.setValue(LineManager);
+        }
+        else {
+            $('#TECapprover').val(LineManager);
+        }
+    }
+
+    var lockContractEndDate = function () {
+        var val = $("#Employmentcategory").val()
+
+        if (val == 'Permanent') {
+            $('#Contractenddate').attr('disabled', true);
+            $('#Contractenddate').addClass("disabled");
+            $('#date_Contractenddate').addClass("disabled");
+            $('#Contractenddate').datepicker("destroy");
+            $('#date_Contractenddate').datepicker("destroy");
+            
+
+        }
+        else {
+            $('#Contractenddate').attr('disabled', false);
+            $('#Contractenddate').removeClass("disabled");
+            $('#date_Contractenddate').removeClass("disabled");
+            $('#date_Contractenddate').datepicker();
+        }
+    }
+
+    var SetDefaultCompany = function () {
+        if ($("#Company").val() == '') {
+            if ($("#Company option").length == 2) {
+                $("#Company option").eq(1).attr('selected', true);
+                $("#Company").change();
+            }
+        }
+    }
+
+    var SetDefaultCostCentre = function (xml) {
+        var functiondepartment;
+        functiondepartment = $("#ServiceArea option:selected").text() + "_" + $("#Department option:selected").text();
+        $(xml).find('dependent').each(function () {
+            var $sel = $(this);
+            show = '';
+
+            var department = $sel.find('selected').text();
+
+            show = $sel.find('show').text();
+
+            if (department == functiondepartment) {
+
+                if (show != '') {
+                    var n = show.indexOf("#");
+
+                    if (n == -1) {
+                        if ($('#CostCentre')[0].selectize) {
+                            $('#CostCentre')[0].selectize.setValue(show);
+                        }
+                        else {
+                            $('#CostCentre').val(show);
+                        }
+                    }
+                    else {
+                        var res = show.substring(0, n);
+                        if ($('#CostCentre')[0].selectize) {
+                            $('#CostCentre')[0].selectize.setValue(res);
+                        }
+                        else {
+                            $('#CostCentre').val(show);
+                        }
+                    }
+                    return;
+                }
+            }
+        })
+    }
+
+    var SetDefaultJobTitle = function (xml) {
+
+        SetDefCount += 1;
+        if (SetDefCount <= maxLocalJobTitleDefCount)
+            return;
+
+        var positiontitle;
+        positiontitle = $("#PositionTitle").val();
+
+        $(xml).find('dependent').each(function () {
+            var $sel = $(this);
+            show = '';
+
+            var jobtitle = $sel.find('selected').text();
+
+            show = $sel.find('show').text();
+
+            if (jobtitle == positiontitle) {
+                if (show != '') {
+                    var n = show.indexOf("#");
+
+                    if (n == -1) {
+
+                        $('#JobTitle')[0].selectize.setValue(show);
+                    }
+                    else {
+                        var res = show.substring(0, n);
+
+                        $('#JobTitle')[0].selectize.setValue(res);
+                    }
+                    return;
+                }
+            }
+        })
+    }
+
+    $('#date_Contractstartdate').not(".disabled").datepicker().on('changeDate', function (ev) {
+        SetAllowanceValidFrom($('#Contractstartdate').val());
+        SetDeductionValidFrom($('#Contractstartdate').val());
+    });
+
+    var SetAllowanceValidFrom = function (startdate) {
+        $('#AllowanceValidfrom').val(startdate);
+    };
+
+    var SetDeductionValidFrom = function (startdate) {
+        $('#DeductionValidfrom').val(startdate);
+    }
+
+
+    $('#Contractstartdate').not(".disabled").change(function () {
+        SetAllowanceValidFrom($('#Contractstartdate').val());
+        SetDeductionValidFrom($('#Contractstartdate').val());
+    });
+
+    $('#Payrollcategory').change(function () {
+        SetDefaultPaidPer();
+    });
+
+    var SetDefaultPaidPer = function () {
+        var pay = $('#Payrollcategory').val();
+
+        if (pay == 'Salaried - Monthly' || pay == 'Flex - Monthly') {
+            $('#Paidper').val('month');
+        }
+        else if (pay == 'Salaried - Hourly' || pay == 'Flex - Hourly') {
+            $('#Paidper').val('hour');
+        }
+    }
+
+
+    function GetXML(xmlFile, url) {
+        //////////
+        //Gets XML File
+        //////////
+
+        var path = window.location.protocol + '//';
+        path = path + window.location.host + '/';
+
+        path = site.baseUrl + '/FormLibContent/Xmls/SouthKorea/Defaults/' + xmlFile
+
+        $.ajax({
+            type: "GET",
+            url: path,
+            dataType: "xml",
+            success: url,
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseText);
+                alert(textStatus);
+                alert(errorThrown);
+            }
+
+        });
+    }
+
+</script>

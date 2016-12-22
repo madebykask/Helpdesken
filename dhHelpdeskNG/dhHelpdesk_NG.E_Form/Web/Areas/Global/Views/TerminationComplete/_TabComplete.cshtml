@@ -1,0 +1,158 @@
+﻿@model FormModel
+
+
+
+
+<div class="tab-pane" id="Complete">
+    <div class="span12">
+        <table class="table">       
+            <tr>
+                <td class="tdstrong">@Model.Label("CompleteTerminationType")</td>
+                <td>
+                    @Model.Element("CompleteTerminationType")
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("TerminationReason")</td>
+                <td>
+                    @Model.Element("TerminationReason")
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("TerminationPaymentMethod")</td>
+                <td>
+                    @Model.Element("TerminationPaymentMethod")</td>
+            </tr>
+            <tr>
+                <td class="tdstrong" colspan="2">
+                    <h4>@Model.Translate("Termination Payments")</h4>
+                </td>                
+            </tr>  
+            <tr>
+                <td class="tdstrong">@Model.Label("PaymentType")</td>
+                <td>
+                    @Model.Element("PaymentType")
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("Amount")</td>
+                <td>
+                    @Model.Element("Amount")
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("Net_Gross")</td>
+                <td>
+                    @Model.Element("Net_Gross")
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("PaymentDate")</td>
+                <td>
+                    @Model.Element("PaymentDate")</td>
+            </tr>
+
+             @for (int i = 2; i <= 3; i++)
+             {
+                    <tr class="terminationpayments@(i.ToString())" id="allowance@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h4>@Model.Translate("Termination Payments") @(i.ToString())</h4>
+                        </td>
+                    </tr>
+                    <tr class="terminationpayments@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("PaymentType" + i.ToString())</td>
+                        <td>
+                            @Model.Element("PaymentType" + i.ToString())</td>
+                    </tr>
+                    <tr class="terminationpayments@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("Amount" + i.ToString())</td>
+                        <td>
+                            @Model.Element("Amount" + i.ToString())</td>
+                    </tr>
+                    <tr class="terminationpayments@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("Net_Gross" + i.ToString())</td>
+                        <td>
+                            @Model.Element("Net_Gross" + i.ToString())</td>
+                    </tr>
+                    <tr class="terminationpayments@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("PaymentDate" + i.ToString())</td>
+                        <td>
+                            @Model.Element("PaymentDate" + i.ToString())</td>
+                    </tr>                   
+                }
+                <tr id="addTerminationPaymentsTr">
+                    <td colspan="2">
+                        @Model.Element("TerminationPayments")
+                        <a id="addTerminationPayments" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another payment")</a></td>
+                </tr>                                                      
+
+             <tr>
+                <td class="tdstrong" colspan="2">
+                    <h4>@Model.Translate("Deductions from Termination Payment")</h4>
+                </td>                
+            </tr>  
+            <tr>
+                <td class="tdstrong">@Model.Label("DeductionType")</td>
+                <td>
+                    @Model.Element("DeductionType")</td>
+            </tr>           
+            <tr>
+                <td class="tdstrong">@Model.Label("DeductionAmount")</td>
+                <td>
+                    @Model.Element("DeductionAmount")</td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("DeductionNet_Gross")</td>
+                <td>
+                    @Model.Element("DeductionNet_Gross")</td>
+            </tr>         
+             <tr>
+                <td class="tdstrong">@Model.Label("DeductionDate")</td>
+                <td>
+                    @Model.Element("DeductionDate")</td>
+            </tr>   
+
+             @for (int i = 2; i <= 3; i++)
+             {
+                    <tr class="deduction@(i.ToString())" id="deduction@(i.ToString())">
+                         <td class="tdstrong" colspan="2">
+                            <h4>@Model.Translate("Deductions from Termination Payment") @(i.ToString())</h4>
+                         </td> 
+                    </tr>
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionType" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionType" + i.ToString())</td>
+                    </tr>
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionAmount" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionAmount" + i.ToString())</td>
+                    </tr>
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionNet_Gross" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionNet_Gross" + i.ToString())</td>
+                    </tr>
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionDate" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionDate" + i.ToString())</td>
+                    </tr>                   
+                }
+                <tr id="addDeductionTr">
+                    <td colspan="2">
+                        @Model.Element("Deductions")
+                        <a id="addDeduction" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Deduction")</a></td>
+                </tr>
+        </table>
+    </div>
+</div>
+
+<script>
+    //document.getElementById('PaymentDate').value = document.getElementById('LastDayOfEmployment').value;
+    //document.getElementById('DeductionDate').value = document.getElementById('LastDayOfEmployment').value;
+
+    
+    
+</script>

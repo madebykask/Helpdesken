@@ -1,0 +1,72 @@
+﻿@model Web.Areas.Poland.Models.NewHire
+
+<div class="tab-pane" id="employment">
+    <div class="span5">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmployeeSource")</td>
+                    <td>
+                        @Model.Element("EmployeeSource")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ContractType")</td>
+                    <td>
+                        @Model.Element("ContractType")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("From")</td>
+                    <td>
+                        @Model.Element("From")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("To")</td>
+                    <td>
+                        @Model.Element("To")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("FirstDayAtWork")</td>
+                    <td>
+                        @Model.Element("FirstDayAtWork")</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="span5">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Extent")</td>
+                    <td>
+                        @Model.Element("Extent")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Workload")</td>
+                    <td>
+                        @Model.Element("Workload")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("BasicPay")</td>
+                    <td>
+                        @Model.Element("BasicPay")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MonthlyHourly")</td>
+                    <td>
+                        @Model.Element("MonthlyHourly")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("SpecialRemark")</td>
+                    <td>
+                        @Model.Element("SpecialRemark")</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

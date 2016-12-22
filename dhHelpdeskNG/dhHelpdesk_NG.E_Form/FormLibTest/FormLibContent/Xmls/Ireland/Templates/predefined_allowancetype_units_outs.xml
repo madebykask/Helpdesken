@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<predefined>
+  <name>AllowanceTypeUnit</name>
+  <dependent>
+    <selected>High Performer 11</selected>
+    <show1>0.15</show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>High Performer 12</selected>
+    <show1>0.15</show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>High Performer 13</selected>
+    <show1>0.15</show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>High Performer 14</selected>
+    <show1>0.15</show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>Power Stacker</selected>
+    <show1>1</show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>150C - Fork Lift Truck</selected>
+    <show1>2</show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>Night Shift Hrly</selected>
+    <show1>2.5</show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>340T - Stand By Allowance</selected>
+    <show1></show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>360A - Bonus</selected>
+    <show1></show1>
+    <show2></show2>
+  </dependent>
+  <dependent>
+    <selected>500A - Redundancy</selected>
+    <show1></show1>
+    <show2></show2>
+  </dependent>
+  <dependent>
+    <selected>300N - NTG Double Housing</selected>
+    <show1></show1>
+    <show2>Net</show2>
+  </dependent>
+  <dependent>
+    <selected>300M - NTG Rent Allowance</selected>
+    <show1></show1>
+    <show2>Net</show2>
+  </dependent>
+  <dependent>
+    <selected>300E - Housing Allowance</selected>
+    <show1></show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>300F - Mortgage Subsidy</selected>
+    <show1></show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>4805 - NTG Housing Costs</selected>
+    <show1></show1>
+    <show2>Net</show2>
+  </dependent>
+  <dependent>
+    <selected>300I - Rent Allowance</selected>
+    <show1></show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>300A - Car Allowance</selected>
+    <show1></show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>350R - Adj-Rent Allowance</selected>
+    <show1></show1>
+    <show2>Net</show2>
+  </dependent>
+  <dependent>
+    <selected>350C - Adj-Responsibility Allow</selected>
+    <show1></show1>
+    <show2>Net</show2>
+  </dependent>
+  <dependent>
+    <selected>4806 - NTG Relocation Allow</selected>
+    <show1></show1>
+    <show2>Net</show2>
+  </dependent>
+  <dependent>
+    <selected>340O - Relocation Allowance</selected>
+    <show1></show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>360B - Commission</selected>
+    <show1></show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>340C - Cash Adjustment</selected>
+    <show1></show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>340T - Stand By Allowance</selected>
+    <show1></show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>AWEM - SMP AWE Correction</selected>
+    <show1></show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>AWEP - SPP AWE Correction</selected>
+    <show1></show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>AWES - SSP AWE Correction</selected>
+    <show1></show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>300B - Competance Pay</selected>
+    <show1></show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>340T - Stand By Allowance</selected>
+    <show1></show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>350A - Adj-Monthly Salary</selected>
+    <show1></show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>360A - Bonus</selected>
+    <show1></show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>100F - Salary FLT Skills</selected>
+    <show1></show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>100G - Salary Kitchen Skills</selected>
+    <show1></show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>100H - Salary Work IKEA1 Skills</selected>
+    <show1></show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>100I - Salary Work IKEA2 Skills</selected>
+    <show1></show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>300N - NTG Double Housing</selected>
+    <show1></show1>
+    <show2>Net</show2>
+  </dependent>
+  <dependent>
+    <selected>300M - NTG Rent Allowance</selected>
+    <show1></show1>
+    <show2>Net</show2>
+  </dependent>
+  <dependent>
+    <selected>300E - Housing Allowance</selected>
+    <show1></show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>300F - Mortgage Subsidy</selected>
+    <show1></show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>4805 - NTG Housing Costs</selected>
+    <show1></show1>
+    <show2>Net</show2>
+  </dependent>
+  <dependent>
+    <selected>300I - Rent Allowance</selected>
+    <show1></show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>300A - Car Allowance</selected>
+    <show1></show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>350R - Adj-Rent Allowance</selected>
+    <show1></show1>
+    <show2>Net</show2>
+  </dependent>
+  <dependent>
+    <selected>350C - Adj-Responsibility Allow</selected>
+    <show1></show1>
+    <show2>Net</show2>
+  </dependent>
+  <dependent>
+    <selected>4806 - NTG Relocation Allow</selected>
+    <show1></show1>
+    <show2>Net</show2>
+  </dependent>
+  <dependent>
+    <selected>340O - Relocation Allowance</selected>
+    <show1></show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>300G - Night Shift</selected>
+    <show1></show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>350F - Adj-Salary FLT Skills</selected>
+    <show1></show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>350M - Adj-Housing Allowance</selected>
+    <show1></show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>100C - Responsibility Allow</selected>
+    <show1></show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>100J - Secondment</selected>
+    <show1></show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>AWEM - SMP AWE Correction</selected>
+    <show1></show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>AWEP - SPP AWE Correction</selected>
+    <show1></show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>AWES - SSP AWE Correction</selected>
+    <show1></show1>
+    <show2>Gross</show2>
+  </dependent>
+  <dependent>
+    <selected>300B - Competance Pay</selected>
+    <show1></show1>
+    <show2>Gross</show2>
+  </dependent>
+</predefined>

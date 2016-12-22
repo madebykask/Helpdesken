@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "Poland";
+}
+@section Script {}
+<div class="container-fluid" style="margin-top:60px;">
+    <div class="row-fluid" style="text-align: center;">
+        <div class="span12">
+            <a href="@Url.Action("new")" class="btn btn-large btn-success"><i class="icon-user icon-white"></i><i class="icon-plus icon-white"></i>
+                <br />
+                @Web.I18n.Translate("New Hire", "en")</a>
+            <a href="@Url.Action("change")" class="btn btn-large btn-warning"><i class="icon-user icon-white"></i>
+                <br />
+                @Web.I18n.Translate("Data Change", "en")</a>
+        </div>
+    </div>
+</div>

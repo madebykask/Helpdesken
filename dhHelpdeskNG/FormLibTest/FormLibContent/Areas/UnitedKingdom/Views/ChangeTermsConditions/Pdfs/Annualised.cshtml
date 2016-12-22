@@ -1,0 +1,163 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@using ECT.FormLib.Pdfs;
+@using System.Globalization;
+@using ECT.Model.Entities;
+@{
+    Layout = null;
+    Model.Language = "en";
+
+    //set fields that are mandatory in the contract here. This can be done in a better way... /TA
+    Model.SetDocumentMandatoryField("ServiceArea");
+    Model.SetDocumentMandatoryField("ContractStartDate");
+    Model.SetDocumentMandatoryField("DateOfNextSalaryReview");
+    Model.SetDocumentMandatoryField("ContractReviewDate");
+    
+}
+<!DOCTYPE html>
+<html>
+<body>
+    <div>
+       <table style="font-family: Verdana; font-size: 11px; width: 100%;" border="0">
+            <tr style="text-align: right;">
+                <td>@string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:d MMMMMM yyyy}", DateTime.Now)</td>
+            </tr>
+        </table>
+
+         <p style="text-align: left; font-family: Verdana; font-size: 11px;"><strong>Private & confidential</strong><br />
+        @Model.GetDocumentAnswer("FirstName",true) @Model.GetDocumentAnswer("LastName",true)<br />
+        @Model.GetDocumentAnswer("PermanentAddressLine1",true)
+        @if (!string.IsNullOrEmpty(Model.GetDocumentAnswer("PermanentAddressLine2")))
+         {
+        <br />
+        @Model.GetDocumentAnswer("PermanentAddressLine2")
+         }
+        <br />
+        @Model.GetDocumentAnswer("PermanentCity",true)
+        <br />
+        @Model.GetDocumentAnswer("PermanentPostalCode",true)
+        <br />
+        <br />
+        Dear @Model.GetDocumentAnswer("FirstName",true),<br /><br />
+
+        I am very pleased to be able to confirm to you our offer of an annualised contract in the position of @Model.GetDocumentAnswer("JobTitle",true) at IKEA @CustomPdfPage.IsEmpty(Model.Department.Unit, "Unit"), reporting to the 
+
+         @if (Model.GetDocumentAnswer("ManagerJobTitle").ToLower() == "Shopkeeper".ToLower())
+        {
+            <text> @Model.GetDocumentAnswer("ManagerJobTitle", true) @Model.GetDocumentAnswer("Department", true)</text><text>.</text>
+        }
+        else
+        {
+            <text> @Model.GetDocumentAnswer("ManagerJobTitle", true)</text><text>.</text>
+        }
+
+         <br />
+        <br />
+        The principal Terms and Conditions of your employment will be as follows:
+
+
+             </p>
+
+         @{
+              var list = new List<PdfListItem>();
+              var pdfList = new List<PdfListItem>();
+
+              var brText = "<br /><br />";
+              
+              //1
+              string text1 = "Your contract of employment with IKEA " + CustomPdfPage.IsEmpty(Model.Department.Unit, "Unit") + " will start on " + CustomPdfPage.GetDateInWords("ChangeValidFrom", Model) + ". This counts as part of your continuous service with IKEA which began on ";
+
+              if (!string.IsNullOrEmpty(Model.GetAnswer("PreviousContractStartDate")))
+              {
+                  text1 += " " + CustomPdfPage.GetDateInWords("PreviousContractStartDate", Model) + ".";
+              }
+              else
+              {
+                  text1 += " " + CustomPdfPage.GetDateInWords("ContractStartDate", Model) + ".";
+              }
+              list.Add(new PdfListItem { Text = text1 });
+              
+              //2
+              
+              string text2 = "Your annualised contract will be reviewed annually and may not be renewed as an annualised contract but will revert back to a standard contract, where your new hours and shifts will be agreed with your line manager. The new contract will supersede any previous terms and conditions, and instead you will be placed on IKEA’s newest terms and conditions which are outlined in the enclosed appendix. Your next review date will be on " + CustomPdfPage.GetDateInWords("ContractReviewDate", Model) + ".";
+              list.Add(new PdfListItem { Text = text2 });
+
+              //3
+              string text3 = "The " + UnitedKingdomPdfPage.GetServiceAreaText("ServiceArea", Model)+ " is your primary place of work. You will on occasions be expected to work in other areas within the Store/Unit to support the business need.";
+              list.Add(new PdfListItem { Text = text3 });
+
+              //4
+              string text4 = "Your hours of work will be over " + Model.GetDocumentAnswer("DaysPerWeek").ToLower() + " days, Sunday - Saturday. Your hours under the Company's annualised hours system are based on a " + Model.GetDocumentAnswer("ContractedHours").ToLower() + "-hour week over a 52.14 year, making a total " + Model.GetDocumentAnswer("HoursPerYear").ToLower() + " hours per year.";
+              list.Add(new PdfListItem { Text = text4 });
+
+              //5
+              string text5 = "Under the annualised hours option your annual salary will be paid in arrears in 12 equal monthly installments at the rate of " + Model.GetDocumentAnswer("MonthlySalaryRate").ToLower() + " per month regardless of the number of hours worked during the relevant period." + brText + "Your starting salary will be £" + Model.GetDocumentAnswer("BasicPayAmount") + " per hour ";
+
+              // **** If 150B Hourly Location Allow selected under Allowances
+              if (Model.GetDocumentAnswer("AllowancesType").ToLower() == "150B - Hourly Location Allow".ToLower())
+              {
+
+                  text5 += "(plus £ " + Model.GetDocumentAnswer("AllowancesAmountUnits").ToLower() + " location allowance)"; 
+
+              }
+              text5 += " payable monthly in arrears on the last Friday of each month by direct transfer into your Bank or Building Society account. Next review date will be " + Model.GetDocumentAnswer("DateOfNextSalaryReview") + ".";
+              list.Add(new PdfListItem { Text = text5 });
+
+              //6
+              string text6 = "You are contracted for " + Model.GetDocumentAnswer("HoursPerYear").ToLower() + " hours per annum, and a proposed weekly hours usage plan for the " + Model.GetDocumentAnswer("HolidayYear").ToLower() + " will be provided in advance (4 weeks minimum)." + brText + "The Company reserves the right to vary the ratio of scheduled hours in accordance with its business requirements, and to require you to work additional hours to your schedule in order to meet the needs of the business." + brText + "Although the Company's annualised hours option relies to a large extent on this system of mutual trust, IKEA's disciplinary process which is outlined in the co worker hand book is in place in the event that individuals regularly refuse to work proposed worked hours.";
+              list.Add(new PdfListItem { Text = text6 });
+              
+              //7
+              string text7 = "Under the annualised hours contract no payment of overtime will be made until you have completed your full complement of " + Model.GetDocumentAnswer("HoursPerYear").ToLower() + " hours as specified by the contract. Hours worked in excess off " + Model.GetDocumentAnswer("HoursPerYear").ToLower() + " in the annualised hours year will be paid at single time.";
+              list.Add(new PdfListItem { Text = text7 });
+              
+              //8
+              string text8 = "Your holiday entitlement for this contract period is " + Model.GetDocumentAnswer("HolidayFull").ToLower() + " statutory allowance (Holiday entitlement runs from 1 September - 31 August, inclusive of 8 days annual public holidays) and calculated on a pra rata basis dependent on number of hours worked." + brText + "You must save holiday hours for days of store closure when you would normally be scheduled to work. The store will be closed on Easter Sunday and Christmas Day." + brText + "Upon termination of your employment, you will normally be entitled to annual holiday with pay, or pay in lieu thereof, proportional to your length of service. If you have taken more holiday entitlement than you have accrued during the holiday year, the balance will be deducted from any outstanding pay. Payment for holidays in these circumstances will be made on a pro rata basis to your service in the current holiday year and compensatory days, as specified, are excluded from this calculation.";
+              list.Add(new PdfListItem { Text = text8 });
+              
+              //9
+              string text9 = "The notice period during your annualised contract is 4 weeks from yourself, or a minimum of 4 weeks notice from IKEA. Thereafter co-workers are entitled to receive one additional weeks notice for each year of continuous employment (up to a maximum of 12 weeks notice)." + brText + " In the event that you leave the Company part way through the annualised hours year IKEA will assess the total worked hours, and pay you the hours owed or recover any hours over paid. This will be calculated using your normal hourly rate.";
+              list.Add(new PdfListItem { Text = text9 });
+              
+              //10 
+              string text10 = "IKEA reserves the right to vary terms and conditions of employment subject to consultation and reasonable notice.";
+              list.Add(new PdfListItem { Text = text10 });
+              
+              //11
+              string text11 = "This letter, together with the Terms and Conditions Appendix and forms the basis of your contract.";
+              list.Add(new PdfListItem { Text = text11 });
+              
+         }
+
+         @if (list.Count > 1)
+        {
+            for (int i = 0; i < list.Count; i++)
+            { 
+            <br />                                        
+            <p style="text-align: left; font-family: Verdana; font-size: 11px; padding-right: 50px;">@(i + 1). @Html.Raw(list[i].Text)</p>
+                if (list[i].SubList != null && list[i].SubList.Count > 0)
+                {
+                    foreach (var item in list[i].SubList)
+                    {
+            @*<br />*@
+            <p style="text-align: left; font-family: Verdana; font-size: 11px; padding-left: 20px; padding-right: 50px;">&bull; @Html.Raw(item.Text) </p>
+                    }
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i == list.Count - 1; i++)
+            {
+            <p style="font-family: Verdana; font-size: 11px;">@Html.Raw(list[i])</p>
+            }
+        }
+
+        @*<p style="text-align: left; font-family: Verdana; font-size: 11px;">
+        <text><br />This letter, together with the Terms and Conditions Appendix forms the basis of your contract.</text>
+            </p>*@
+        <endpage />
+    </div>
+</body>
+</html>

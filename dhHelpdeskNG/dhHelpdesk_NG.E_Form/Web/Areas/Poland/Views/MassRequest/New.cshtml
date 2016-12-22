@@ -1,0 +1,98 @@
+﻿@model Web.Areas.Poland.Models.MassRequest
+@{
+    ViewBag.Title = Model.Translate("Poland") + " - " + Model.Translate("Mass request");
+}
+@section Script {
+    <script type="text/javascript">
+
+        var options = {
+            items: 10,
+
+            minLength: 3,
+
+            source: function (query, process) {
+                return $.ajax({
+                    url: '/poland/MassRequest/search',
+                    type: 'post',
+                    data: { query: query },
+                    dataType: 'json',
+                    success: function (result) {
+                        var resultList = jQuery.map(result, function (item) {
+                            var aItem = { id: item.Id, num: item.EmployeeNumber, name: item.Name + ' ' + item.Surname, firstname: item.Name, lastname: item.Surname };
+                            return JSON.stringify(aItem);
+                        });
+
+                        return process(resultList);
+                    }
+                });
+            },
+
+            matcher: function (obj) {
+                var item = JSON.parse(obj);
+                return ~item.num.toLowerCase().indexOf(this.query.toLowerCase())
+                    || ~item.name.toLowerCase().indexOf(this.query.toLowerCase());
+            },
+
+            sorter: function (items) {
+                var beginswith = [], caseSensitive = [], caseInsensitive = [], item;
+                while (aItem = items.shift()) {
+                    var item = JSON.parse(aItem);
+                    if (!item.num.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
+                    else if (~item.num.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
+                    else caseInsensitive.push(JSON.stringify(item));
+                }
+
+                return beginswith.concat(caseSensitive, caseInsensitive);
+            },
+
+            highlighter: function (obj) {
+                var item = JSON.parse(obj);
+                var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
+
+                var result = item.num + ' - ' + item.name;
+
+                return result.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+                    return '<strong>' + match + '</strong>';
+                });
+            },
+
+            updater: function (obj) {
+                var item = JSON.parse(obj);
+                
+                $('input[name="EmployeeFirstName"]').val(item.firstname);
+                $('input[name="EmployeeLastName"]').val(item.lastname);
+                return item.num;
+            }
+        };
+
+        $('.typeahead').typeahead(options);
+    </script>
+}
+@using (Html.BeginForm("new", "MassRequest", FormMethod.Post, new { area = "poland", enctype = "multipart/form-data" }))
+{
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner navbarbgcolor">
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    <li>
+                        <button type="submit" class="btn btnmarginleft">
+                            <i class="icon-ok"></i>&nbsp;@Model.Translate("Initiate service request")
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container containeralignright">
+        @Html.Partial("_CurrentUser")
+        @Html.Partial("_ErrorMessage", Model)
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#MassRequest">@Model.Translate("Mass request")</a></li>
+        </ul>
+        <div class="content">
+            <div class="tab-content">
+                @Html.Partial("_TabMassRequest", Model)
+            </div>
+        </div>
+    </div>
+}

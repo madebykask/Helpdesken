@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE form [
+  <!ENTITY languages SYSTEM "Templates/Languages.xml">
+  <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
+  <!ENTITY state SYSTEM "Templates/IndividualAdvancePaymentsLoansState.xml">
+]>
+
+<form id="233" guid="8C4E94E0-295E-46A5-AB1B-9F2D541B521D" customerId="32">
+  &languages;
+  &regexs;
+  &state;
+
+  <fields>
+
+    <!--Tab ServiceRequestDetails-->
+    <tab name="#ServiceRequestDetails" label="Service Request Details">
+      <element name="Co-WorkerGlobalviewID" type="text" label="Co-Worker Globalview ID" mandatory="1">
+        <regex inherit="employeeno" pattern="" message=""></regex>
+      </element>
+      <element name="FirstName" type="text" label="Co-Worker First Name" mandatory="1"></element>
+      <element name="LastName" type="text" label="Co-Worker Last Name" mandatory="1"></element>
+      <element name="IKEAEmailAddress" type="text" label="IKEA Email Address">
+        <regex inherit="email" pattern="" message=""></regex>
+      </element>
+      <element name="IKEANetworkID" type="text" label="IKEA Network ID" mandatory="1">      </element>
+      <element name="Company" type="text" label="Company"></element>
+      <element name="BusinessUnit" type="text" label="Business Unit"></element>
+      <element name="ServiceArea" type="text" label="Function"></element>
+      <element name="Department" type="text" label="Department"></element>
+      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard">
+        <options>
+          <option value=""></option>
+          <option value="Urgent">Urgent</option>
+          <option value="Standard">Standard</option>
+        </options>
+      </element>
+      <element type="textarea" name="InternalLogNote" label="Comment"></element>
+    </tab>
+    <tab name="#Payment" label="Payment Information">
+      <element type="select" name="PaymentType" label="Payment Type" mandatory="1">
+        <options>
+          <option value=""></option>
+          <option value="Advance Payment">Advance Payment</option>
+          <option value="Loan">Loan</option>
+          <option value="Deduct TE’s foreign currency payment">Deduct TE’s foreign currency payment</option>
+        </options>
+      </element>
+      <element type="text" name="Amount" label="Amount" mandatory="1">
+        <regex inherit="amount3" pattern="" message=""></regex>
+      </element>
+      <element type="select" name="PaymentMethod" label="Payment Method" mandatory="1">
+        <options>
+          <option value=""></option>
+          <option value="By Payroll">By Payroll</option>
+          <option value="By Off cycle">By Off cycle</option>
+          <option value="By Manual Payment">By Manual Payment</option>
+          <option value="By Voucher">By Voucher</option>
+          <option value="By Gift Card">By Gift Card</option>
+        </options>
+      </element>
+      <element type="date" format="dd.MM.yyyy" name="Paymentdate" label="Payment date" mandatory="1">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="select" name="LoanRepaymentType" label="Loan Re-payment Type">
+        <options>
+          <option value=""></option>
+          <option value="Recurring">Recurring</option>
+          <option value="One Time">One Time</option>
+          <option value="Intervals in periods">Intervals in periods</option>
+          <option value="Intervals in units">Intervals in units</option>
+        </options>
+        <mandatoryIf name="PaymentType">Loan</mandatoryIf>
+      </element>
+      <element type="text" name="LoanRepaymentAmountUnits" label="Loan Re-payment Amount/Units">
+        <regex inherit="amount3" pattern="" message=""></regex>
+        <mandatoryIf name="PaymentType">Loan</mandatoryIf>
+      </element>
+      <element type="text" name="Numberofinstalments" label="Number of instalments">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+        <mandatoryIf name="PaymentType">Loan</mandatoryIf>
+      </element>
+      <element type="date" format="dd.MM.yyyy" label="Loan re-payments start date" name="Loanrepaymentsstartdate">
+        <regex inherit="date" pattern="" message=""></regex>
+        <mandatoryIf name="PaymentType">Loan</mandatoryIf>
+      </element>
+    </tab>
+  </fields>
+</form>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE form [
+  <!ENTITY languages SYSTEM "Templates/Languages.xml">
+  <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
+  <!ENTITY state SYSTEM "Templates/TerminationCompleteState.xml">
+  <!ENTITY dat_DeductionType SYSTEM "Data/Termination/Data_Termination_DeductionType.xml">
+  <!ENTITY dat_PaymentType SYSTEM "Data/Termination/Data_Termination_PaymentType.xml">
+  <!ENTITY dat_TerminationReason SYSTEM "Data/Termination/Data_Termination_TerminationReason.xml">
+  <!ENTITY dat_NoYes SYSTEM "Data/Data_Common_NoYes.xml">
+  <!ENTITY dat_ServiceRequestPriority SYSTEM "Data/Data_Common_ServiceRequestPriority.xml">
+]>
+
+<form id="0" guid="EDB3E365-B80F-43FC-85B2-2C8B9850031B" customerId="0">
+  &languages;
+  &regexs;
+  &state;
+  <fields>
+    <tab name="#ServiceRequestDetails" label="Service Request Details">
+      <element name="Co-WorkerGlobalviewID" casefield="reportedby" type="text" label="Co-worker Globalview ID" mandatory="1" HCMData="1">
+        <regex inherit="employeeno" message="" pattern=""></regex>
+      </element>
+      <element name="FirstName" type="text" casefield="persons_name" label="Co-worker First Name" mandatory="1" HCMData="1"></element>
+      <element name="LastName" type="text" casefield="persons_phone" label="Co-worker Last name" mandatory="1" HCMData="1"></element>
+      <element name="IKEAEmailAddress" type="text" label="IKEA Email Address" mandatory="1" >
+        <regex inherit="email" message="" pattern=""></regex>
+      </element>
+      <element name="IKEANetworkID" type="text"  label="IKEA Network ID" mandatory="1" ></element>
+      <element name="Company" type="text" casefield="region_id" label="Company" mandatory="1" HCMData="1"></element>
+      <element name="BusinessUnit" type="text" casefield="department_id" label="Business Unit" mandatory="1" HCMData="1"></element>
+      <element name="ServiceArea" type="text" label="Function" HCMData="1" mandatory="1" ></element>
+      <element name="Department" type="text" casefield="ou_id"  label="Department" HCMData="1" mandatory="1" ></element>
+      <element name="TECoWorker" type="select" label="Is Co-worker a TE?" mandatory="1" default="No" HCMData="1">
+        &dat_NoYes;
+      </element>
+      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard">
+        &dat_ServiceRequestPriority;
+      </element>
+      <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
+    </tab>
+    <!--Basic Termination Details-->
+    <tab name="#Basic" label="Basic">
+      <element name="TerminationReason" type="select" label="Termination Reason" mandatory="1" HCMData="1" ParentGVFields="0">
+        &dat_TerminationReason;
+      </element>
+      <element name="LastDayOfEmployment" type="date" format="dd.MM.yyyy" mandatory="1" label="Last Day of Employment" HCMData="1" ParentGVFields="0">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <!--CDS Section Header-->
+      <element name="LockCDSAccountFrom" type="date" format="dd.MM.yyyy" mandatory="1" label="Lock CDS Account from:">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+    </tab>
+    <tab name="#Complete" label="Complete">
+      <!--Termination payments-->
+      <element name="TerminationPayments" type="hidden" default="1"></element>
+      <element name="PaymentType" type="select" label="Payment Type" default="Final Payment with holiday money" HCMData="1" ParentGVFields="1">
+        &dat_PaymentType;
+      </element>
+      <element name="AmountUnits" type="text" label="Amount/Units" HCMData="1" ParentGVFields="1">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="PaymentType2" type="select" label="Payment Type" HCMData="1" ParentGVFields="1">
+        &dat_PaymentType;
+      </element>
+      <element name="AmountUnits2" type="text" label="Amount/Units" HCMData="1" ParentGVFields="1">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="PaymentType3" type="select" label="Payment Type" HCMData="1" ParentGVFields="1">
+        &dat_PaymentType;
+      </element>
+      <element name="AmountUnits3" type="text" label="Amount/Units" HCMData="1" ParentGVFields="1">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="PaymentType4" type="select" label="Payment Type" HCMData="1" ParentGVFields="1">
+        &dat_PaymentType;
+      </element>
+      <element name="AmountUnits4" type="text" label="Amount/Units" HCMData="1" ParentGVFields="1">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="PaymentType5" type="select" label="Payment Type" HCMData="1" ParentGVFields="1">
+        &dat_PaymentType;
+      </element>
+      <element name="AmountUnits5" type="text" label="Amount/Units" HCMData="1" ParentGVFields="1">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+
+      <!--deductions term payment-->
+      <element name="Deductions" type="hidden" default="1"></element>
+      <element name="DeductionType" label="Deduction Type" type="select" HCMData="1" ParentGVFields="1">
+        &dat_DeductionType;
+      </element>
+      <element name="DeductionAmountUnits" label="Amount/Units" type="text" HCMData="1" ParentGVFields="1">
+        <mandatoryIfNotEmpty name="DeductionType"></mandatoryIfNotEmpty>
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="DeductionType2" label="Deduction Type" type="select" HCMData="1" ParentGVFields="1">
+        &dat_DeductionType;
+      </element>
+      <element name="DeductionAmountUnits2" label="Amount/Units" type="text" HCMData="1" ParentGVFields="1">
+        <mandatoryIfNotEmpty name="DeductionType2"></mandatoryIfNotEmpty>
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="DeductionType3" label="Deduction Type" type="select" HCMData="1" ParentGVFields="1">
+        &dat_DeductionType;
+      </element>
+      <element name="DeductionAmountUnits3" label="Amount/Units" type="text" HCMData="1" ParentGVFields="1">
+        <mandatoryIfNotEmpty name="DeductionType3"></mandatoryIfNotEmpty>
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="DeductionType4" label="Deduction Type" type="select" HCMData="1" ParentGVFields="1">
+        &dat_DeductionType;
+      </element>
+      <element name="DeductionAmountUnits4" label="Amount/Units" type="text" HCMData="1" ParentGVFields="1">
+        <mandatoryIfNotEmpty name="DeductionType4"></mandatoryIfNotEmpty>
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="DeductionType5" label="Deduction Type" type="select" HCMData="1" ParentGVFields="1">
+        &dat_DeductionType;
+      </element>
+      <element name="DeductionAmountUnits5" label="Amount/Units" type="text" HCMData="1" ParentGVFields="1">
+        <mandatoryIfNotEmpty name="DeductionType5"></mandatoryIfNotEmpty>
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+    </tab>
+  </fields>
+</form>
+

@@ -1,0 +1,104 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    @*<link href="@Model.Contract.BaseUrl/FormLibContent/assets/css/documents.css" rel="stylesheet" type="text/css" />*@
+    @Model.GetStyleAnswer("GetStyleLink")
+    @Html.Partial("../Shared/Pdfs/_Styles", Model)
+    @Model.GetStyleAnswer("GetStyles")
+    <style>
+        table, p {
+            font-size: 9pt !important; /*9pt*/
+            line-height: normal !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="default-page">
+        <img style="border: none; max-width: 609px;" src="@Model.Contract.BaseUrl/FormLibContent/Assets/img/icocoworker.png" />
+
+        @Html.Partial("../Shared/Pdfs/_CityDate", Model)
+
+        <h2>Altijd toegang tot jouw IKEA</h2>
+
+        <p>Beste @Model.GetDocumentAnswer("FirstName", true),</p>
+
+        <p>Bij IKEA kan je via een website altijd en overal toegang krijgen tot HR gerelateerde informatie. Je kan de website bereiken op het werk of thuis, als je maar internet hebt. Wil je weten wat je rooster is? Wil je verlof aanvragen of je salarisstrook inzien? Of informatie lezen over pensioenen, groen reizen, ouderschapsverlof, bedrijfskleding, de IKEA cultuur of duurzaamheid?</p>
+
+        <p>Ga op je eerste werkdag op een computer bij IKEA naar <strong>ico-worker.com/nl</strong> en log in met je IKEA Netwerk ID en wachtwoord die je van je manager krijgt. De eerste keer inloggen op de site moet op een IKEA computer plaatsvinden. Daarna kan je ook thuis inloggen.</p>
+
+        <p>Wil je voor je eerste werkdag al de CAO en Code of Conduct doorlezen, dan vind je die op de voorpagina van ico-worker. Je hoeft voor deze pagina niet in te loggen. <strong>Ico-worker.com/nl</strong> is je link naar de Employee Self-Service tool (ESS) en de planningsmodule. Ook vind je hier links naar sites zoals die van het pensioenfonds (STIP) of de bedrijfskleding. Omdat deze gelinkte sites jouw persoonlijke gegevens bevatten, zijn ze apart beveiligd en heb je wachtwoorden nodig om toegang te krijgen.</p>
+        <p>
+            <strong style="text-decoration: underline;">Employee Self Service (ESS)</strong><br />
+            Op <strong>ico-worker.com/nl</strong> vind je een link naar Employee Self Service (ESS). In dit systeem kan je je persoonlijke gegevens zoals naam, adres en bankgegevens bekijken en wijzigen en je kan je salarisstrook bekijken en printen.
+        </p>
+
+        <table class="table-full-width">
+            <tr>
+                <td style="width:30%;"><strong>Gebruiker-ID:</strong></td>
+                <td>@Model.GetDocumentAnswer("Co-WorkerID", true)</td>
+            </tr>
+            <tr>
+                <td><strong>password:</strong></td>
+                <td>ontvang je per e-mail</td>
+            </tr>
+        </table>
+
+        <p>Zodra je je e-mailadres aan ons hebt doorgegeven via het bijgesloten “formulier persoonsgegevens” en wij het in het HR-systeem hebben gezet, ontvang je je password automatisch per e-mail.</p>
+
+        <p>Omdat je de salarisstrook digitaal kan raadplegen, krijg je die normaal gesproken niet via de post verstuurd. Als je de papieren versie wel wilt ontvangen, stuur dan een e-mail naar het Shared Service Centre: ASKSSC.HR.NL@IKEA.COM, vermeld hierin het onderwerp, je naam en je personeelsnummer.</p>
+
+
+        <p>
+            <strong style="text-decoration: underline;">Planningsmodule</strong>
+            <br />
+            Om je rooster te bekijken, tijdregistratie te zien of verlof aan te vragen ga je naar de planningsmodule op <strong>ico-worker.com/nl</strong>.
+        </p>
+
+        <table class="table-full-width">
+            <tr>
+                <td style="width:30%;"><strong>Gebruikersnaam:</strong></td>
+                <td>@Model.GetDocumentAnswer("Co-WorkerID", true)</td>
+            </tr>
+            <tr>
+                <td><strong>Wachtwoord:</strong></td>
+                <td>ikea123!</td>
+            </tr>
+        </table>
+
+        @if (Model.GetDocumentAnswer("ServiceArea").ToLower() != "IKEA Food".ToLower() && Model.GetDocumentAnswer("BusinessUnit").ToLower() != "CSC".ToLower())
+        {
+          
+            <p>
+                <strong style="text-decoration: underline;">Bedrijfskleding bestellen</strong><br />
+                Bedrijfskleding wordt bij IKEA centraal uitgegeven. Jij kan de kleding via de IKEA webshop bestellen, ga daarvoor naar <strong>mijnbedrijfskleding.com.</strong>
+            </p>
+         
+            <table class="table-full-width">
+            <tr>
+                <td style="width:25%;"><strong>Gebruikersnaam:</strong></td>
+                    <td>Je voorletter(s) en achternaam, zonder spaties (bijvoorbeeld <i>bcdevries</i>)</td>
+                </tr>
+                <tr>
+                    <td><strong>Wachtwoord:</strong></td>
+                    <td>@Model.GetDocumentAnswer("Co-WorkerID", true)</td>
+                </tr>
+            </table>
+         
+        }
+
+
+        <p>
+            <strong style="text-decoration: underline;">Hulp nodig?</strong><br />
+            Als je hulp nodig hebt bij het inloggen kan je op <strong>ico-worker.com/nl</strong> uitleg vinden en de antwoorden op de meest gestelde vragen of je kan terecht bij je manager.
+        </p>
+
+    </div>
+
+</body>
+</html>

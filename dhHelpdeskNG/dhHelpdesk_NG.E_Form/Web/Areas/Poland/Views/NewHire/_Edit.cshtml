@@ -1,0 +1,119 @@
+﻿@model Web.Areas.Poland.Models.NewHire
+@{
+    var freezeAction = "";
+    var freeze = "";
+
+    if(SessionFacade.User.WorkingGroups.FirstOrDefault(x => x.Id == Model.Contract.WorkingGroupId) == null)
+    {
+        freezeAction = "disabled";
+    }
+
+    if(Model.IsLooked)
+    {
+        freezeAction = "disabled";
+        freeze = "disabled";
+    }
+}
+@using(Html.BeginForm("edit", "newhire", FormMethod.Post, new { area = "poland", novalidate = "novalidate" }))
+{   
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner navbarbgcolor">
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    <li>
+                        <button type="submit" class="btn btnmarginleft" @freeze>
+                            <i class="icon-save"></i>&nbsp;@Model.Translate("Save")
+                        </button>
+                    </li>
+                    <li style="width: 315px;">
+                        <div class="input-append input-append-top margintopleft">
+                            <select name="actionState" id="actionState" class="ieselect" @freezeAction>
+                                <option value="">-- @Model.Translate("Select action") --</option>
+                                @foreach(var pair in Model.GetStatusActions())
+                                {
+                                    <option value="@pair.Key">@Model.Translate(pair.Value)</option>
+                                }
+                            </select>
+                            <button class="btn" name="actionStateChange" id="actionStateChange" type="submit" @freezeAction>@Model.Translate("Go") <i class="icon-chevron-right"></i></button>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="margintopleft" style="padding: 5px;">
+                            @Model.Contract.StateSecondary
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container containeralignright">
+        @Html.Partial("_CurrentUser")
+        @Html.Partial("_ErrorMessage", Model)
+        <ul class="nav nav-tabs">
+            @if(Model.VisibleTab("#contract"))
+            {
+                <li class="active @(Model.TabHasError("#contract") ? "error" : "")">
+                    <a href="#contract">@Model.Translate("Basic Data")</a></li>
+            }
+            @if(Model.VisibleTab("#employment"))
+            {
+                <li class="@(Model.TabHasError("#employment") ? "error" : "")">
+                    <a href="#employment">@Model.Translate("Conditions of Employment")</a></li>
+            }
+            @if(Model.VisibleTab("#payment"))
+            {
+                <li class="@(Model.TabHasError("#payment") ? "error" : "")">
+                    <a href="#payment">@Model.Translate("Payment Information")</a></li>
+            }
+            @if(Model.VisibleTab("#personal"))
+            {
+                <li class="@(Model.TabHasError("#personal") ? "error" : "")">
+                    <a href="#personal">@Model.Translate("Personal Information")</a></li>
+            }
+            @if(Model.VisibleTab("#documents"))
+            {
+                <li class="@(Model.TabHasError("#documents") ? "error" : "")">
+                    <a href="#documents">@Model.Translate("Documents")</a></li>
+            }
+            @if(Model.VisibleTab("#globalview"))
+            {
+                <li class="@(Model.TabHasError("#globalview") ? "error" : "")">
+                    <a href="#globalview">@Model.Translate("Global View")</a></li>
+            }
+        </ul>
+        <div class="content">
+            <div class="row-fluid">
+                <div class="tab-content">
+                    @if(Model.VisibleTab("#contract"))
+                    {
+                        @Html.Partial("_TabContract", Model)
+                    }
+                    @if(Model.VisibleTab("#employment"))
+                    {
+                        @Html.Partial("_TabEmployment", Model)
+                    }
+                    @if(Model.VisibleTab("#payment"))
+                    {
+                        @Html.Partial("_TabPayment", Model)
+                    }
+                    <!-- Personal Information -->
+                    @if(Model.VisibleTab("#personal"))
+                    {
+                        @Html.Partial("_TabPersonal", Model)
+                    }
+                    @if(Model.VisibleTab("#documents"))
+                    {
+                        @Html.Partial("_TabDocuments", Model)
+                    }
+                    @if(Model.VisibleTab("#globalview"))
+                    {
+                        @Html.Partial("_TabGlobalView", Model)
+                    }
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <input type="hidden" id="activeTab" name="activeTab" value="@Model.ActiveTab" />
+    <input type="hidden" id="caseId" value="@Model.Contract.Id" />
+}

@@ -1,0 +1,150 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@using ECT.FormLib.Pdfs;
+@using System.Globalization;
+@using ECT.Model.Entities;
+@{
+    Layout = null;
+    Model.Language = "en";
+}
+<!DOCTYPE html>
+<html>
+<body>
+    <div>
+        @*<table style="font-family: Verdana; font-size: 11px; width: 100%;" border="0">
+            <tr style="text-align: right;">
+                <td>@string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:d MMMMMM yyyy}", DateTime.Now)</td>
+            </tr>
+        </table>
+        <p style="text-align: left; font-family: Verdana; font-size: 11px;">
+            <strong>Private & Confidential</strong><br />
+            @Html.Partial("_HeaderAddress", Model)*@
+        <p style="@UnitedKingdomPdfPage.StyleValue()">
+            Dear @Model.GetDocumentAnswer("FirstName", true),<br />
+            <br />
+            @if ((Model.GetDocumentAnswer("AllowancesType" + Model.MultiNr)).ToLower() == "First Aid Allowance - Salaried".ToLower() || (Model.GetDocumentAnswer("AllowancesType" + Model.MultiNr)).ToLower() == "First Aid Allowance".ToLower())
+            {
+                <text>Congratulations on completing your First Aid Training.</text>
+                <br />
+                <br />
+                <text>We are pleased to confirm that you will now have the First Aid Rate of &pound;@Model.GetDocumentAnswer("AllowancesAmountUnits" + Model.MultiNr, true) per month.</text>
+                <br />
+                <br />
+                <text>This will be paid in addition to your salary.</text>
+                <br />
+                <br />
+                <text>This will be effective from @Model.GetDocumentAnswer("AllowancesValidFrom" + Model.MultiNr, true).</text>
+                <br />
+                <br />
+            }
+
+            @if ((Model.GetDocumentAnswer("AllowancesType" + Model.MultiNr)).ToLower() == "First Aid Allowance - Hourly".ToLower())
+            {
+                <text>Congratulations on completing your First Aid Training.</text>
+                <br />
+                <br />
+                <text>We are pleased to confirm that you will now have the First Aid Rate of &pound;@Model.GetDocumentAnswer("AllowancesAmountUnits" + Model.MultiNr, true) per hour.</text>
+                <br />
+                <br />
+                <text>This will be paid in addition to your hourly rate of pay.</text>
+                <br />
+                <br />
+                <text>This will be effective from @Model.GetDocumentAnswer("AllowancesValidFrom" + Model.MultiNr, true).</text>
+                <br />
+                <br />
+            }
+
+            @if ((Model.GetDocumentAnswer("AllowancesType" + Model.MultiNr)).ToLower() == "Fork Lift Truck Allowance".ToLower())
+            {
+                <text>Congratulations on successfully completing your IKEA forklift truck (FLT) test. The forklift truck allowance is designed to reward the use of an additional skill. The allowance will only be paid if you are working as a forklift truck driver and in accordance with the FLT Policy. Please find the FLT Policy enclosed for your information.</text>
+                <br />
+                <br />
+                <text>We are pleased to confirm that while you are working as a forklift truck driver you will receive the forklift truck allowance of &pound;@Model.GetDocumentAnswer("AllowancesAmountUnits" + Model.MultiNr, true) per hour.</text>
+                <br />
+                <br />
+                <text>This will be paid in addition to your hourly rate of pay.</text>
+                <br />
+                <br />
+                <text>This will be effective from @Model.GetDocumentAnswer("AllowancesValidFrom" + Model.MultiNr, true).</text>
+                <br />
+                <br />
+            }
+
+            @if ((Model.GetDocumentAnswer("AllowancesType" + Model.MultiNr)).ToLower() == "Kitchen Skills - Hourly".ToLower())
+            {
+                <text>We are pleased to confirm that you will receive a Kitchen Skills Allowance of &pound;@Model.GetDocumentAnswer("AllowancesAmountUnits" + Model.MultiNr, true) per hour.</text>
+                <br />
+                <br />
+                <text>The Kitchen Skills Allowance is paid provided that you continue to perform at this level, if this is not maintained then the allowance may be removed.</text>
+                <br />
+                <br />
+                <text>This will be paid in addition to your hourly rate of pay.</text>
+                <br />
+                <br />
+                <text>This will be effective from @Model.GetDocumentAnswer("AllowancesValidFrom" + Model.MultiNr, true).</text>
+                <br />
+                <br />
+            }
+
+            @if ((Model.GetDocumentAnswer("AllowancesType" + Model.MultiNr)).ToLower() == "Kitchen Skills - Salaried".ToLower())
+            {
+                <text>We are pleased to confirm that you will receive a Kitchen Skills Allowance of &pound;@Model.GetDocumentAnswer("AllowancesAmountUnits" + Model.MultiNr, true) per month.</text>
+                <br />
+                <br />
+                <text>The Kitchen Skills Allowance is paid provided that you continue to perform at this level, if this is not maintained then the allowance may be removed.</text>
+                <br />
+                <br />
+                <text> This will be paid in addition to your salary.</text>
+                <br />
+                <br />
+                <text>This will be effective from @Model.GetDocumentAnswer("AllowancesValidFrom" + Model.MultiNr, true).</text>
+                <br />
+                <br />
+            }
+
+            @if ((Model.GetDocumentAnswer("AllowancesType" + Model.MultiNr)).ToLower() == "Responsibility Allowance - Hourly".ToLower()  && Model.GetAnswer("AllowancesAmountUnits" + Model.MultiNr) != "0")
+            {
+                <text>We are pleased to confirm that you will receive a Responsibility allowance of &pound;@Model.GetDocumentAnswer("AllowancesAmountUnits" + Model.MultiNr, true) per hour.</text>
+                <br />
+                <br />
+                <text>This will be paid in addition to your hourly rate of pay.</text>
+                <br />
+                <br />
+                <text>This will be effective from @Model.GetDocumentAnswer("AllowancesValidFrom" + Model.MultiNr, true).</text>
+                <br />
+                <br />
+            }
+
+            @if ((Model.GetDocumentAnswer("AllowancesType" + Model.MultiNr)).ToLower() == "Responsibility Allowance - Salaried".ToLower() || (Model.GetDocumentAnswer("AllowancesType" + Model.MultiNr)).ToLower() == "Responsibility Allowance".ToLower() && Model.GetAnswer("AllowancesAmountUnits" + Model.MultiNr) != "0")
+            {
+                <text>We are pleased to confirm that you will receive a Responsibility allowance of &pound;@Model.GetDocumentAnswer("AllowancesAmountUnits" + Model.MultiNr, true) per month.</text>
+                <br />
+                <br />
+                <text>This will be paid in addition to your salary.</text>
+                <br />
+                <br />
+                <text>This will be effective from @Model.GetDocumentAnswer("AllowancesValidFrom" + Model.MultiNr, true).</text>
+                <br />
+                <br />
+            }
+
+@*//TEMP kör en startswith här, väntar på svar från Ikea /Tan *@
+@*Applicable only if PM1 - Allowances type is: Responsibility Allowance, and the PM2/Amount/Units field equals 0*@
+            @if ((Model.GetDocumentAnswer("AllowancesType" + Model.MultiNr)).ToLower().StartsWith("Responsibility Allowance".ToLower()) && Model.GetAnswer("AllowancesAmountUnits" + Model.MultiNr) == "0")
+            {
+                <text>We are writing to confirm that you will no longer receive a @Model.GetDocumentAnswer("AllowancesType" + Model.MultiNr).</text>
+                <br />
+                <br />
+                <text>This allowance will cease from @Model.GetDocumentAnswer("AllowancesValidFrom" + Model.MultiNr, true).</text>
+                <br />
+                <br />
+            }
+
+            All other Terms and Conditions remain the same. IKEA reserves the right to vary terms and conditions of employment subject to consultation and reasonable notice.
+        </p>
+
+        <endpage />
+    </div>
+</body>
+</html>

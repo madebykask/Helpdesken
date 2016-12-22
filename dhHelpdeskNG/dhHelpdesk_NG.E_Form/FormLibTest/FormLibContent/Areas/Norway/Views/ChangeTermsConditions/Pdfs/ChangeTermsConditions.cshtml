@@ -1,0 +1,297 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@using ECT.FormLib.Pdfs;
+@using ECT.Model.Entities;
+@{
+    Layout = null;
+    Model.Language = "no";
+
+    bool pageBreak = true;
+    
+    }
+@functions{     
+    
+// Return the current record value if the field value is null or empty
+    public string GetCurrentRecordValue(string formFieldName)
+    {
+        var fillOldVal = TempData["oldValues"];
+        var newfill = (List<KeyValuePair<string, string>>)fillOldVal;
+        string answer = Model.GetAnswer(formFieldName).Trim();
+        
+        string curValue = newfill.Where(x => x.Key == "OLD_" + formFieldName).Select(x => x.Value).FirstOrDefault();
+        
+        //If the answer is null then check if the current record is null or not
+        if (answer == "" || answer== null)
+        {            
+            if (curValue == null)
+            {                                
+                answer = Model.GetDocumentAnswer(formFieldName, false);
+            }
+        
+            else{
+
+                // Special Just for Cost centre because we need the option text only for this field
+                if (formFieldName == "CostCentre")
+                    answer = Model.GetOptionText("CostCentre", curValue);
+         
+
+                else
+             
+                    answer = curValue;
+            }
+        }// END If answer NULL
+        
+        else
+        {
+            if (formFieldName == "CostCentre")
+                answer = Model.GetOptionText("CostCentre", Model.GetAnswer("CostCentre"));
+            
+            
+            else
+
+            answer = Model.GetDocumentAnswer(formFieldName, false);
+
+        }// END Else
+
+        return answer;
+    }
+
+
+
+    public string CurrencySignIfApplicable(string Answer)
+    {
+        string currencySign = ",- ";
+                        
+        if (Answer == null || Answer == "" || Answer.Contains(",") || Answer.Contains(",00"))
+        {
+            currencySign = string.Empty;
+        }
+        return currencySign;
+    }
+    
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    @Model.GetStyleAnswer("GetStyleLink")
+    @Html.Partial("../Shared/Pdfs/_Styles", Model)
+    @Model.GetStyleAnswer("GetStyles")
+</head>
+
+<body>
+    <div class="default-page">
+        <br />
+        <h8 style="text-align:left; padding-left:15px; padding-bottom:5px; padding-top:10px;">Endring av kontraktsdetaljer</h8>
+        <table class="table" border="1" style="margin-top:10px">
+            <tr>
+                <td style= "padding-left:10px" width="40%">@Model.Translate("Co-worker Globalview ID")</td>
+                <td style= "padding-left:10px" width="60%">@Model.GetDocumentAnswer("Co-WorkerGlobalviewID",false)</td>
+            </tr>
+            <tr>
+                <td style= "padding-left:10px" width="40%">@Model.Translate("Co-worker First Name")</td>
+                <td style= "padding-left:10px" width="60%">@Model.GetDocumentAnswer("FirstName",false)</td>    
+            </tr>
+            <tr>
+                <td style= "padding-left:10px" width="40%">@Model.Translate("Co-worker Last Name")</td>
+                <td style= "padding-left:10px" width="60%">@Model.GetDocumentAnswer("LastName",false)</td>    
+            </tr>
+            <tr>
+                @*(if no new value available, use the value from the “current data” section)*@
+                <td style= "padding-left:10px" width="40%">@Model.Translate("Date of Birth")</td>
+                <td style= "padding-left:10px" width="60%">@GetCurrentRecordValue("DateOfBirth")</td>    
+            </tr>
+            <tr>
+                <td style= "padding-left:10px" width="40%">@Model.Translate("Change Valid from:")</td>
+                <td style= "padding-left:10px" width="60%">@Model.GetDocumentAnswer("ChangeValidFrom",false)</td>    
+            </tr>
+            <tr>
+                <td style= "padding-left:10px" width="40%">@Model.Translate("Change Valid to:")</td>
+                <td style= "padding-left:10px" width="60%">@Model.GetDocumentAnswer("ChangeValidTo",false)</td>    
+            </tr>
+        </table>
+        <br />
+
+        @*organisation table*@
+        <h6 style="text-align:left; padding-left:15px !important;">Organisasjon</h6>
+        <table class="table" border="1">
+            @* for all(if no new value available, use the value from the “current data” section)*@
+            <tr>
+                <td style= "padding-left:10px" width="40%" >@Model.Translate("Company")</td>
+                <td style= "padding-left:10px" width="60%" >@GetCurrentRecordValue("NewCompany")</td>
+            </tr>
+            <tr>
+                <td style= "padding-left:10px" width="40%" >@Model.Translate("Business Unit")</td>
+                <td style= "padding-left:10px" width="60%" >@GetCurrentRecordValue("NewBusinessUnit")</td>    
+            </tr>
+            <tr>
+                <td style= "padding-left:10px" width="40%" >@Model.Translate("Function")</td>
+                <td style= "padding-left:10px" width="60%" >@GetCurrentRecordValue("NewServiceArea")</td>    
+            </tr>
+            <tr>             
+                <td style= "padding-left:10px" width="40%" >@Model.Translate("Department")</td>
+                <td style= "padding-left:10px" width="60%" >@GetCurrentRecordValue("NewDepartment")</td>    
+            </tr>
+            <tr>
+                <td style= "padding-left:10px" width="40%" >@Model.Translate("Cost Centre")</td>
+                <td style= "padding-left:10px" width="60%" >@GetCurrentRecordValue("CostCentre")</td>    
+            </tr>      
+        </table>
+        <br />
+        
+
+        @*Stilling table*@
+        <h6 style="text-align:left; padding-left:15px !important;">Stilling</h6>
+        <table class="table" border="1">
+            @* for all(if no new value available, use the value from the “current data” section)*@
+            <tr>
+                <td style= "padding-left:10px" width="40%" >@Model.Translate("Position Title (Local Job Name)")</td>
+                <td style= "padding-left:10px" width="60%" >@GetCurrentRecordValue("PositionTitle")</td>
+            </tr>
+            <tr>
+                <td style= "padding-left:10px" width="40%" >@Model.Translate("Reports to line manager")</td>
+                <td style= "padding-left:10px" width="60%" >@GetCurrentRecordValue("ReportsToLineManager")</td>    
+            </tr>             
+        </table>
+        <br />
+
+         @*Ansettelsesvilkår  table*@
+        <h6 style="text-align:left; padding-left:15px !important;">Ansettelsesvilkår</h6>
+        <table class="table" border="1">
+            @* for all(if no new value available, use the value from the “current data” section)*@
+            <tr>
+                <td style= "padding-left:10px" width="40%" >@Model.Translate("Employment percentage (%)")</td>
+                <td style= "padding-left:10px" width="60%" >@GetCurrentRecordValue("EmploymentPercentage")</td>
+            </tr>                  
+        </table>
+        <br />
+
+
+        @*Lønn table*@
+        <h6 style="text-align:left; padding-left:15px !important;">Lønn</h6>
+        <table class="table" border="1">
+            @* for all(if no new value available, use the value from the “current data” section)*@
+            <tr>
+                <td style= "padding-left:10px" width="40%" >@Model.Translate("PS Group")</td>
+                <td style= "padding-left:10px" width="60%" >@Model.Translate(Model.GetDocumentAnswer("PSGroup",false))</td>
+            </tr>
+            <tr>
+                <td style= "padding-left:10px" width="40%" >@Model.Translate("Level")</td> 
+                <td style= "padding-left:10px" width="60%" >@Model.Translate(Model.GetDocumentAnswer("Level",false))</td>    
+            </tr>
+            <tr>
+                <td style= "padding-left:10px" width="40%" >@Model.Translate("Basic pay amount (in kr)")</td>
+                <td style= "padding-left:10px" width="60%" >@Model.GetDocumentAnswer("BasicPayAmount",false)@CurrencySignIfApplicable(Model.GetAnswer("BasicPayAmount"))</td>    
+            </tr>
+            <tr>             
+                <td style= "padding-left:10px" width="40%" >@Model.Translate("Paid per")</td>
+                <td style= "padding-left:10px" width="60%" >@Model.Translate(Model.GetDocumentAnswer("PaidPer",false))</td>    
+            </tr>                
+        </table>
+        <br />
+          
+        @*Tillegg  table*@
+        <h6 style="text-align:left; padding-left:15px !important;">Tillegg</h6>
+        <table class="table" border="1">     
+            <tr>
+                <td style= "padding-left:10px" width="40%" >@Model.Translate("Change Type")</td>
+                <td style= "padding-left:10px" width="60%" >@Model.Translate(Model.GetDocumentAnswer("AllowancesChangeType",false))</td>
+            </tr>
+            <tr>
+                <td style= "padding-left:10px" width="40%" >@Model.Translate("Allowance Type")</td>                
+                <td style= "padding-left:10px" width="60%" >@Model.Translate(Model.GetDocumentAnswer("AllowancesType",false))</td>    
+            </tr>
+            <tr>
+                <td style= "padding-left:10px" width="40%" >@Model.Translate("Amount/Units (in kr)")</td>
+                <td style= "padding-left:10px" width="60%" >@Model.GetDocumentAnswer("AllowancesAmountUnits",false)@CurrencySignIfApplicable(Model.GetAnswer("AllowancesAmountUnits"))</td>    
+            </tr>
+            <tr>             
+                <td style= "padding-left:10px" width="40%" >@Model.Translate("Paid per:")</td>
+                <td style= "padding-left:10px" width="60%" >@Model.Translate(Model.GetDocumentAnswer("AllowancesPaidPer",false))</td>                    
+            </tr>                
+            <tr>             
+                <td style= "padding-left:10px" width="40%" >@Model.Translate("Allowance valid from:")</td>            
+                <td style= "padding-left:10px" width="60%" >@Model.GetDocumentAnswer("AllowancesValidFrom",false)</td>    
+            </tr>   
+            <tr>             
+                <td style= "padding-left:10px" width="40%" >@Model.Translate("Allowance valid to:")</td>            
+                <td style= "padding-left:10px" width="60%" >@Model.GetDocumentAnswer("AllowancesValidTo",false)</td>
+            </tr> 
+        </table>
+        <br />
+
+        @for (int i = 2; i <= int.Parse(Model.GetAnswer("Allowances")); i++)
+            {
+
+              if (Model.GetAnswer("AllowancesType" + i.ToString()) != "" || Model.GetAnswer("AllowancesPaymentType" + i.ToString()) != "" || Model.GetAnswer("AllowancesAmountUnits" + i.ToString()) != "")
+              {
+                  if (pageBreak)
+                    {
+                        <div style="page-break-before:always; padding-top:30px !important;">
+                             <br /> 
+                        </div>
+                    }
+                  pageBreak = false;
+                  <h6 style="text-align:left; padding-left:15px !important;">Tillegg</h6>
+                    <table class="table" border="1">
+                        <tr>
+                            <td style= "padding-left:10px" width="40%" >@Model.Translate("Change Type")</td>
+                            <td style= "padding-left:10px" width="60%" >@Model.Translate(Model.GetDocumentAnswer("AllowancesChangeType"+ i.ToString(),false))</td>    
+                        </tr>
+                        <tr>
+                            <td style= "padding-left:10px" width="40%" >@Model.Translate("Allowance Type")</td>
+                            <td style= "padding-left:10px" width="60%" >@Model.Translate(Model.GetDocumentAnswer("AllowancesType"+ i.ToString(),false))</td>
+                        </tr>
+                        <tr>
+                            <td style= "padding-left:10px" width="40%" >@Model.Translate("Amount/Units (in kr)")</td>
+                            <td style= "padding-left:10px" width="60%" >@Model.GetDocumentAnswer("AllowancesAmountUnits"+ i.ToString(),false)@CurrencySignIfApplicable(Model.GetAnswer("AllowancesAmountUnits" + i.ToString()))</td>    
+                        </tr>
+                        <tr>
+                            <td style= "padding-left:10px" width="40%" >@Model.Translate("Paid per:")</td>
+                            <td style= "padding-left:10px" width="60%" >@Model.Translate(Model.GetDocumentAnswer("AllowancesPaidPer" + i.ToString(),false))</td>    
+                        </tr>
+                        <tr>             
+                            <td style= "padding-left:10px" width="40%" >@Model.Translate("Allowance valid from:")</td>
+                            <td style= "padding-left:10px" width="60%" >@Model.GetDocumentAnswer("AllowancesValidFrom" + i.ToString(),false)</td>    
+                        </tr>   
+                        <tr>             
+                            <td style= "padding-left:10px" width="40%" >@Model.Translate("Allowance valid to:")</td>
+                            <td style= "padding-left:10px" width="60%" >@Model.GetDocumentAnswer("AllowancesValidTo" + i.ToString(),false)</td>    
+                        </tr>              
+                    </table>
+                    <br />   
+
+              }
+            }
+
+         <br />
+         <table>
+            <tr style="page-break-inside: avoid">
+                <td>
+                    <table>
+                        <tr>
+                            <td colspan="2">
+                                Skjemaet er gyldig som vedlegg til opprinnelig arbeidskontrakt. Øvrige betingelser fremgår i kontrakten.
+                                <br />
+                                <br />
+                                Jeg er inneforstått med mine ansettelsesvilkår.  
+                                <br />  
+                                @Html.Partial("../Shared/Pdfs/_CityDate", Model)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <br /><br />
+                                @Html.Partial("../Shared/Pdfs/_Signature", Model)
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        
+    </div>
+</body>
+</html>
+

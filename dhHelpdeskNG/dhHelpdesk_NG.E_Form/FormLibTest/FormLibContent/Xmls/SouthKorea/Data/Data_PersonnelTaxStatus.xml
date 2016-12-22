@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+  <options>
+    <option value="Non-resident">Non-resident</option>
+    <option value="Handycapped Employee">Handycapped Employee</option>
+    <option value="Non-taxable Overseas Income">Non-taxable Overseas Income</option>
+    <option value="Matriarch or Dual Income">Matriarch or Dual Income</option>
+    <option value="Single Parent">Single Parent</option>
+    <option value="Production Worker">Production Worker</option>
+    <option value="Young/Aged/Handicapped EE in SMEs">Young/Aged/Handicapped EE in SMEs</option>
+    <option value="Foreigner">Foreigner</option>
+  </options> 

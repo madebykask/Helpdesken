@@ -1,0 +1,36 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+@{
+    ViewBag.Title = Model.Translate("Poland") + " - " + Model.Translate("No show");
+}
+
+@section Script {
+    <script type="text/javascript">
+
+        $(function () {
+            validate.run(10);
+        });
+
+    </script>
+
+     @Html.Partial("_Validate", Model)
+}
+
+@using(Html.BeginForm("new", "noshow", FormMethod.Post, new { area = "poland" }))
+{
+    @Html.Partial("_Navigation", Model)
+    <div class="container containeralignright">
+        @Html.Partial("_CurrentUser")
+        @Html.Partial("_ErrorMessage", Model)
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#noshow">@Model.Translate("No show")</a></li>
+        </ul>
+        <div class="content">
+            <div class="tab-content">
+                @Html.Partial("_TabNoShow", Model)
+            </div>
+        </div>
+    </div>
+}

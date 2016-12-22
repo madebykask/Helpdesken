@@ -1,0 +1,123 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@using ECT.FormLib.Pdfs;
+@using System.Globalization;
+@using ECT.Model.Entities;
+
+@{
+    Layout = null;
+    Model.Language = "en";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    <div>
+        @*<table style="@IrelandPdfPage.StyleValue() width: 100%;" border="0">
+            <tr style="text-align: right;">
+                <td>@string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:d MMMMMM yyyy}", DateTime.Now)</td>
+            </tr>
+        </table>*@
+        <p style="@IrelandPdfPage.StyleValue()">
+          @*  <strong>Private & Confidential</strong><br />
+            @Html.Partial("_HeaderAddress", Model)
+            <br />
+            <br />
+            <br />*@
+            Dear @Model.GetDocumentAnswer("FirstName", true),<br />
+            <br />
+            Thank you for giving me your notification of pregnancy form and your medical certificate confirming you are pregnant.  I am now in a position to confirm your entitlement to maternity pay and maternity leave.
+            <br />
+            <br />
+            You are entitled to 26 weeks Ordinary Maternity Leave and 16 weeks Additional Leave giving a total of 42 weeks leave.
+            <br />
+            <br />
+            It is for you to choose when you want to stop work and return to work however the latest you may choose to start your maternity leave is:  2 weeks before the end of the expected week of childbirth and the earliest you can return is 4 weeks after the end of the expected week of childbirth.
+            <br />
+            <br />
+            In your letter you stated that you wish to start your Ordinary Maternity Leave on @Model.GetDocumentAnswer("AbsenceStartFrom" + Model.MultiNr, true).  You may change this date but would need to give us 28 days notice of the original date or the new date, whichever is earlier.
+            <br />
+            <br />
+            Taking the @Model.GetDocumentAnswer("AbsenceStartFrom" + Model.MultiNr, true) which is when you want Ordinary Maternity Leave to begin this will mean you will be due to return to work on @Model.GetDocumentAnswer("AbsenceEndsOn" + Model.MultiNr, true). If you wish to return earlier than this date then you must give 4 weeks written notice. <strong>(There will be no further correspondence from us regarding your return date)</strong>.
+            <br />
+            <br />
+            <strong>Maternity Pay</strong><br />
+                
+            @if (Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "Under 26 weeks".ToLower() | Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "26 weeks - 1 year".ToLower())    
+            {
+                <text>As you have less than one year’s service at your 4<span style="font-size: 8px"><sup>th</sup></span> week before your expected week of childbirth you are not entitled to any payment from IKEA however, you may be entitled to Social Welfare.</text>
+                <text><br />
+                <br /></text>
+                <text> If you have any questions please do not hesitate to contact your HR Department or HRSC.</text>
+                <text><br />
+                <br /></text>
+            }
+
+            @if (Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "1 - 2 years".ToLower())
+            {
+                <text>As you have more than one year’s service at your 4<span style="font-size: 8px"><sup>th</sup></span> week before your expected week of childbirth.</text>
+                <text><br />
+                <br /></text>
+            }
+
+            @if (Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "Over 2 years".ToLower())
+            {
+                <text>As you have more than two year’s service at your 4<span style="font-size: 8px"><sup>th</sup></span> week before your expected week of childbirth.</text>
+            }
+
+
+            @if (Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "1 - 2 years".ToLower())
+            {
+                <text>You will receive 100% of your average earnings for 13 weeks. This is subject to you providing a refund to IKEA of any Social Welfare benefit received.  Please advise your HR department of how much your Social Welfare entitlement is by returning your MB35 form.</text>
+                <text><br />
+                <br /></text>
+            }
+
+            @if (Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "Over 2 years".ToLower())
+            {
+                <text>You will receive 100% of your average earnings for 18 weeks.  This is subject to you providing a refund to IKEA of any Social Welfare benefit received.  Please advise your HR department of how much your Social Welfare entitlement is by returning your MB35 form.</text>
+                <text><br />
+                <br /></text>
+            }
+
+            @if (Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "1 - 2 years".ToLower() | Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "Over 2 years".ToLower())
+            {
+                <text>Maternity Pay will be paid direct into your bank account and confirmation of payment will be sent to you by the Human Resource Service Centre.</text>
+                <text><br />
+                <br /></text>
+                
+                <text>
+                In addition you are entitled to enhanced return to work benefit:<br />
+                <br />
+                1. Return to work on 50% of your contractual hours and be paid on the basis of your full contractual hours for 12 weeks.
+                <br />
+                <br />
+                Or
+                <br />
+                <br />
+                2. Receive 6 weeks half pay based on your contractual hours during your additional Maternity Leave.  This will be regarded as Company Maternity Pay.  On your return to work you can work 50% of your contractual hours for the first 6 weeks and be paid on the basis of your full contractual hours.
+            <br />
+                <br />
+                </text>
+            }
+
+            During your Maternity Leave your terms and conditions of employment except pay will continue as if you were not absent.  This includes holiday entitlement, using your discount card and receiving an end of year present.  To have continuous service in the pension scheme (Your required co-worker contributions will be set out).
+             <br />
+            <br />
+            As part of our risk assessment procedures, IKEA keeps under review and health and safety risks to pregnant co-workers; you are also responsible for your own health and safety and should take care to avoid any undue risks.  If you have any immediate concerns please discuss these with your manager.
+            <br />
+            <br />
+            On a more personal note, I hope everything goes well with the preparations for the new arrival and I am sorry I have to make this letter so formal.  We have agreed that the HR department will keep in contact with you during your leave ensuring you are kept up to date with the store news and tertials/nights out.
+            <br />
+            <br />
+            We look forward to hearing news of the birth and seeing you and your baby once you are able to visit.  If for any reason you want to contact me for further advice then please do not hesitate to do so.
+        </p>
+
+        <endpage />
+    </div>
+</body>
+</html>

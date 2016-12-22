@@ -1,0 +1,31 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@{
+    //var lastValidation = "";
+    //var firstEventVal = "";
+    //if (TempData["FirstEventVal"] != null)
+    //{
+    //    firstEventVal = TempData["FirstEventVal"].ToString();
+    //}
+    //if (TempData["LastValidation"] != null)
+    //{
+    //    lastValidation = TempData["LastValidation"].ToString();
+    //}
+}
+@foreach(var pair in Model.GetStatusActions())
+{
+    //if (firstEventVal != "")
+    //{
+    //   <input type="hidden" id="validate_@pair.Key" value="@Model.ClientValidate(int.Parse(pair.Key),firstEventVal)" />
+    //}
+    //if (lastValidation == "")
+    //{
+       <input type="hidden" id="validate_@pair.Key" value="@Model.ClientValidate(int.Parse(pair.Key))" />@*
+    }
+    else
+    {   
+       <input type="hidden" id="validate_@pair.Key" value="@lastValidation" />
+    }*@ 
+        
+}

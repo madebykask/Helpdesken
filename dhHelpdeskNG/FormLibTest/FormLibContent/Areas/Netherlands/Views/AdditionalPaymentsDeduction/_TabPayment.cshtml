@@ -1,0 +1,857 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<div class="tab-pane" id="Payment">
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Allowances")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AllowancesType")</td>
+                    <td>
+                        @Model.Element("AllowancesType")
+                         <div id="notice_AllowancesType" style="display: none;" class="notice">
+                            @Model.Translate("The Comp.Serv.Allowance is calculated according to CLA article 28")
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AllowancesPaymentType")</td>
+                    <td>
+                        @Model.Element("AllowancesPaymentType")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AllowancesAmountUnits")</td>
+                    <td>
+                        @Model.Element("AllowancesAmountUnits")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AllowancesNetGross")</td>
+                    <td>
+                        @Model.Element("AllowancesNetGross")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AllowancesValidFrom")</td>
+                    <td>
+                        @Model.Element("AllowancesValidFrom")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AllowancesValidTo")</td>
+                    <td>
+                        @Model.Element("AllowancesValidTo")
+                    </td>
+                </tr>
+
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
+                {
+                    <tr class="allowance@(i.ToString())" id="allowance@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h4>@Model.Translate("Allowances") @(i.ToString())</h4>
+                        </td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AllowancesType" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AllowancesType" + i.ToString())
+                             <div id="notice_AllowancesType@(i.ToString())" style="display: none;" class="notice">
+                                @Model.Translate("The Comp.Serv.Allowance is calculated according to CLA article 28")
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AllowancesPaymentType" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AllowancesPaymentType" + i.ToString())</td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AllowancesAmountUnits" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AllowancesAmountUnits" + i.ToString())</td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AllowancesNetGross" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AllowancesNetGross" + i.ToString())</td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AllowancesValidFrom" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AllowancesValidFrom" + i.ToString())</td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AllowancesValidTo" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AllowancesValidTo" + i.ToString())</td>
+                    </tr>
+                }
+                <tr id="addAllowanceTrr">
+                    <td colspan="2">
+                        @Model.Element("Allowances")
+                        <a id="addAllowance" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Allowance")</a></td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Deductions")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionsType")</td>
+                    <td>
+                        @Model.Element("DeductionsType")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionsPaymentType")</td>
+                    <td>
+                        @Model.Element("DeductionsPaymentType")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionsAmountUnits")</td>
+                    <td>
+                        @Model.Element("DeductionsAmountUnits")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionsNetGross")</td>
+                    <td>
+                        @Model.Element("DeductionsNetGross")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionsValidFrom")</td>
+                    <td>
+                        @Model.Element("DeductionsValidFrom")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionsValidTo")</td>
+                    <td>
+                        @Model.Element("DeductionsValidTo")
+                    </td>
+                </tr>
+
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
+                {
+                    <tr class="deduction@(i.ToString())" id="deduction@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h4>@Model.Translate("Deductions") @(i.ToString())</h4>
+                        </td>
+                    </tr>
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionsType" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionsType" + i.ToString())</td>
+                    </tr>
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionsPaymentType" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionsPaymentType" + i.ToString())</td>
+                    </tr>
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionsAmountUnits" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionsAmountUnits" + i.ToString())</td>
+                    </tr>
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionsNetGross" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionsNetGross" + i.ToString())</td>
+                    </tr>
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionsValidFrom" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionsValidFrom" + i.ToString())</td>
+                    </tr>
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionsValidTo" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionsValidTo" + i.ToString())</td>
+                    </tr>
+                }
+                <tr id="addDeductionTrr">
+                    <td colspan="2">
+                        @Model.Element("Deductions")
+                        <a id="addDeduction" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Deduction")</a></td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <input type="hidden" id="MultipleEntrySectionsNr" value="@FormLibConstants.FormField.MultipleEntrySectionsNr" />
+</div>
+
+
+<script>
+    var lockedbyUserGroup = document.getElementById('LockedByUserGroup').getAttribute('status');
+    if ("@Model.ReadOnlyTab("#Payment")" == "False" && lockedbyUserGroup == 'False') {
+        function setPaymentDatePickersBehavior() {
+            var startDate = $('#ChangeValidFrom').val();
+            var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+            var dStart = APIGlobal.DateTime.parseDate(startDate, format);
+            var forcePicker = new Date(dStart.getFullYear(), dStart.getMonth(), dStart.getDate(), 0, 0, 0, 0);
+            $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,#date_AllowancesValidFrom4,#date_AllowancesValidFrom5,' +
+                '#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3,#date_DeductionsValidFrom4,#date_DeductionsValidFrom5').not(".disabled").datepicker(
+            {
+                onRender: function (ev) {
+                    return ev.valueOf() < forcePicker.valueOf() ? 'disabled' : '';
+                },
+            });
+        }
+
+        setPaymentDatePickersBehavior();
+
+
+        $('#date_ChangeValidFrom').on('changeDate', function (ev) {
+
+            $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,#date_AllowancesValidFrom4,#date_AllowancesValidFrom5,' +
+            '#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3,#date_DeductionsValidFrom4,#date_DeductionsValidFrom5').not(".disabled").datepicker('destroy');
+
+            setPaymentDatePickersBehavior();
+
+            $('#AllowancesValidFrom,#AllowancesValidFrom2,#AllowancesValidFrom3,#AllowancesValidFrom4,#AllowancesValidFrom5,' +
+            '#DeductionsValidFrom,#DeductionsValidFrom2,#DeductionsValidFrom3,#DeductionsValidFrom4,#DeductionsValidFrom5').val($('#ChangeValidFrom').val());
+        }).data('datepicker');
+
+        $('#date_ChangeValidFrom').on('change', function (ev) {
+
+            $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,#date_AllowancesValidFrom4,#date_AllowancesValidFrom5,' +
+            '#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3,#date_DeductionsValidFrom4,#date_DeductionsValidFrom5').not(".disabled").datepicker('destroy');
+
+            setPaymentDatePickersBehavior();
+
+            $('#AllowancesValidFrom,#AllowancesValidFrom2,#AllowancesValidFrom3,#AllowancesValidFrom4,#AllowancesValidFrom5,' +
+            '#DeductionsValidFrom,#DeductionsValidFrom2,#DeductionsValidFrom3,#DeductionsValidFrom4,#DeductionsValidFrom5').val($('#ChangeValidFrom').val());
+        }).data('datepicker');
+
+
+        // Show notice if allowancestype comp.serv.allowance
+        function selectIndexChangeAllowancesType() {
+            if (this.options[this.selectedIndex].value == 'Comp.Serv.Allowance') {
+
+                document.getElementById('notice_AllowancesType').style.display = "block";
+            } else {
+                document.getElementById('notice_AllowancesType').style.display = "none";
+            }
+        }
+        document.getElementById('AllowancesType').onchange = selectIndexChangeAllowancesType;
+
+        // Show notice if allowancestype comp.serv.allowance
+        function selectIndexChangeAllowancesType2() {
+            if (this.options[this.selectedIndex].value == 'Comp.Serv.Allowance') {
+
+                document.getElementById('notice_AllowancesType2').style.display = "block";
+            } else {
+                document.getElementById('notice_AllowancesType2').style.display = "none";
+            }
+        }
+        document.getElementById('AllowancesType2').onchange = selectIndexChangeAllowancesType2;
+
+        // Show notice if allowancestype comp.serv.allowance
+        function selectIndexChangeAllowancesType3() {
+            if (this.options[this.selectedIndex].value == 'Comp.Serv.Allowance') {
+
+                document.getElementById('notice_AllowancesType3').style.display = "block";
+            } else {
+                document.getElementById('notice_AllowancesType3').style.display = "none";
+            }
+        }
+        document.getElementById('AllowancesType3').onchange = selectIndexChangeAllowancesType3;
+
+        // Show notice if allowancestype comp.serv.allowance
+        function selectIndexChangeAllowancesType4() {
+            if (this.options[this.selectedIndex].value == 'Comp.Serv.Allowance') {
+
+                document.getElementById('notice_AllowancesType4').style.display = "block";
+            } else {
+                document.getElementById('notice_AllowancesType4').style.display = "none";
+            }
+        }
+        document.getElementById('AllowancesType4').onchange = selectIndexChangeAllowancesType4;
+
+        // Show notice if allowancestype comp.serv.allowance
+        function selectIndexChangeAllowancesType5() {
+            if (this.options[this.selectedIndex].value == 'Comp.Serv.Allowance') {
+
+                document.getElementById('notice_AllowancesType5').style.display = "block";
+            } else {
+                document.getElementById('notice_AllowancesType5').style.display = "none";
+            }
+        }
+        document.getElementById('AllowancesType5').onchange = selectIndexChangeAllowancesType5;
+
+        var sEnd = document.getElementById('ChangeValidTo');
+        function setValidTo(id, choos) {
+
+            if ($('#paymentTabReadOnly').length == 0) {
+                var allowancesValidTo = document.getElementById(id);
+                var input = $('#' + id);
+                if (choos != '' && choos == 'One Time') {
+                    allowancesValidTo.value = "";
+                    document.getElementById(id).disabled = true;
+                    document.getElementById('date_' + id).disabled = true;
+                }
+                else {
+                    document.getElementById(id).disabled = false;
+                    document.getElementById('date_' + id).disabled = false;
+
+                    if (choos != "" && choos == 'Recurring')
+                        allowancesValidTo.value = sEnd.value;
+                }              
+            }
+        };
+
+        $('#AllowancesPaymentType').change(function () {
+            setValidTo('AllowancesValidTo', $(this).val());
+        });
+        $('#AllowancesPaymentType').change();
+
+        $('#AllowancesPaymentType2').change(function () {
+            setValidTo('AllowancesValidTo2', $(this).val());
+        });
+        $('#AllowancesPaymentType2').change();
+
+        $('#AllowancesPaymentType3').change(function () {
+            setValidTo('AllowancesValidTo3', $(this).val());
+        });
+        $('#AllowancesPaymentType3').change();
+
+        $('#AllowancesPaymentType4').change(function () {
+            setValidTo('AllowancesValidTo4', $(this).val());
+        });
+        $('#AllowancesPaymentType4').change();
+
+        $('#AllowancesPaymentType5').change(function () {
+            setValidTo('AllowancesValidTo5', $(this).val());
+        });
+        $('#AllowancesPaymentType5').change();
+
+
+        $('#DeductionsPaymentType').change(function () {
+            setValidTo('DeductionsValidTo', $(this).val());
+        });
+        $('#DeductionsPaymentType').change();
+
+        $('#DeductionsPaymentType2').change(function () {
+            setValidTo('DeductionsValidTo2', $(this).val());
+        });
+        $('#DeductionsPaymentType2').change();
+
+        $('#DeductionsPaymentType3').change(function () {
+            setValidTo('DeductionsValidTo3', $(this).val());
+        });
+        $('#DeductionsPaymentType3').change();
+
+        $('#DeductionsPaymentType4').change(function () {
+            setValidTo('DeductionsValidTo4', $(this).val());
+        });
+        $('#DeductionsPaymentType4').change();
+
+        $('#DeductionsPaymentType5').change(function () {
+            setValidTo('DeductionsValidTo5', $(this).val());
+        });
+        $('#DeductionsPaymentType5').change();
+
+
+      
+
+        function setAllowance5(xml) {
+            var show = ''
+
+            var dep = document.getElementById('AllowancesType5').value;
+
+            $(xml).find('dependent').each(function () {
+
+                var $book = $(this);
+                show = '';
+
+                var department = $book.find('selected').text();
+
+                show = $book.find('show').text();
+
+                if (department == dep) {
+
+
+                    if (show != '') {
+                        var n = show.indexOf(",");
+
+                        if (n == -1) {
+
+                            document.getElementById('AllowancesNetGross5').value = show;
+
+                        }
+                        else {
+                            var res = show.substring(0, n);
+                            document.getElementById('AllowancesNetGross5').value = res;
+
+
+                        }
+                        return;
+                    }
+                    else {
+                        document.getElementById('AllowancesNetGross5').value = '';
+                    }
+                }
+            });
+        }
+
+
+        function setAllowance4(xml) {
+            var show = ''
+
+            var dep = document.getElementById('AllowancesType4').value;
+
+            $(xml).find('dependent').each(function () {
+
+                var $book = $(this);
+                show = '';
+
+                var department = $book.find('selected').text();
+
+                show = $book.find('show').text();
+
+                if (department == dep) {
+
+
+                    if (show != '') {
+                        var n = show.indexOf(",");
+
+                        if (n == -1) {
+
+                            document.getElementById('AllowancesNetGross4').value = show;
+
+                        }
+                        else {
+                            var res = show.substring(0, n);
+                            document.getElementById('AllowancesNetGross4').value = res;
+
+
+                        }
+                        return;
+                    }
+                    else {
+                        document.getElementById('AllowancesNetGross4').value = '';
+                    }
+                }
+            });
+        }
+
+        function setAllowance3(xml) {
+            var show = ''
+
+            var dep = document.getElementById('AllowancesType3').value;
+
+            $(xml).find('dependent').each(function () {
+
+                var $book = $(this);
+                show = '';
+
+                var department = $book.find('selected').text();
+
+                show = $book.find('show').text();
+
+                if (department == dep) {
+
+
+                    if (show != '') {
+                        var n = show.indexOf(",");
+
+                        if (n == -1) {
+
+                            document.getElementById('AllowancesNetGross3').value = show;
+
+                        }
+                        else {
+                            var res = show.substring(0, n);
+                            document.getElementById('AllowancesNetGross3').value = res;
+
+
+                        }
+                        return;
+                    }
+                    else {
+                        document.getElementById('AllowancesNetGross3').value = '';
+                    }
+                }
+            });
+        }
+
+
+        function setAllowance2(xml) {
+            var show = ''
+
+            var dep = document.getElementById('AllowancesType2').value;
+
+            $(xml).find('dependent').each(function () {
+
+                var $book = $(this);
+                show = '';
+
+                var department = $book.find('selected').text();
+
+                show = $book.find('show').text();
+
+                if (department == dep) {
+
+
+                    if (show != '') {
+                        var n = show.indexOf(",");
+
+                        if (n == -1) {
+
+                            document.getElementById('AllowancesNetGross2').value = show;
+
+                        }
+                        else {
+                            var res = show.substring(0, n);
+                            document.getElementById('AllowancesNetGross2').value = res;
+
+
+                        }
+                        return;
+                    }
+                    else {
+                        document.getElementById('AllowancesNetGross2').value = '';
+                    }
+                }
+            });
+        }
+
+        function setAllowance(xml) {
+            var show = ''
+
+            var dep = document.getElementById('AllowancesType').value;
+
+            $(xml).find('dependent').each(function () {
+
+                var $book = $(this);
+                show = '';
+
+                var department = $book.find('selected').text();
+
+                show = $book.find('show').text();
+
+                if (department == dep) {
+
+                    if (show != '') {
+                        var n = show.indexOf(",");
+
+                        if (n == -1) {
+
+                            document.getElementById('AllowancesNetGross').value = show;
+
+                        }
+                        else {
+                            var res = show.substring(0, n);
+                            document.getElementById('AllowancesNetGross').value = res;
+
+                        }
+                        return;
+                    }
+                    else {
+                        document.getElementById('AllowancesNetGross').value = '';
+                    }
+                }
+            });
+        }
+
+        $('#AllowancesType').change(function () {
+            GetXML('Predefined_Additional_Allowances_NetGross.xml', setAllowance);
+        });
+
+        $('#AllowancesType2').change(function () {
+
+            GetXML('Predefined_Additional_Allowances_NetGross.xml', setAllowance2);
+        });
+
+        $('#AllowancesType3').change(function () {
+
+            GetXML('Predefined_Additional_Allowances_NetGross.xml', setAllowance3);
+        });
+
+        $('#AllowancesType4').change(function () {
+
+            GetXML('Predefined_Additional_Allowances_NetGross.xml', setAllowance4);
+        });
+
+        $('#AllowancesType5').change(function () {
+
+            GetXML('Predefined_Additional_Allowances_NetGross.xml', setAllowance5);
+        });
+
+
+        //****** does not exists in requirement any more *******//
+
+        //function setDeductionUnits(xml) {
+        //    var show = ''
+
+        //    var dep = document.getElementById('DeductionsType').value;
+
+        //    $(xml).find('dependent').each(function () {
+
+        //        var $book = $(this);
+        //        show = '';
+
+        //        var department = $book.find('selected').text();
+
+        //        show = $book.find('show').text();
+
+        //        if (department == dep) {
+
+
+        //            if (show != '') {
+        //                var n = show.indexOf(",");
+
+        //                if (n == -1) {
+
+        //                    document.getElementById('DeductionsNetGross').value = show;
+
+        //                }
+        //                else {
+        //                    var res = show.substring(0, n);
+        //                    document.getElementById('DeductionsNetGross').value = res;
+
+
+        //                }
+        //                return;
+        //            }
+        //            else {
+        //                document.getElementById('DeductionsNetGross ').value = '';
+        //            }
+        //        }
+        //    });
+        //}
+
+        //function setDeductionUnits2(xml) {
+        //    var show = ''
+
+        //    var dep = document.getElementById('DeductionsType2').value;
+
+        //    $(xml).find('dependent').each(function () {
+
+        //        var $book = $(this);
+        //        show = '';
+
+        //        var department = $book.find('selected').text();
+
+        //        show = $book.find('show').text();
+
+        //        if (department == dep) {
+
+
+        //            if (show != '') {
+        //                var n = show.indexOf(",");
+
+        //                if (n == -1) {
+
+        //                    document.getElementById('DeductionsNetGross2').value = show;
+
+        //                }
+        //                else {
+        //                    var res = show.substring(0, n);
+        //                    document.getElementById('DeductionsNetGross2').value = res;
+
+
+        //                }
+        //                return;
+        //            }
+        //            else {
+        //                document.getElementById('DeductionsNetGross2').value = '';
+        //            }
+        //        }
+        //    });
+        //}
+
+        //function setDeductionUnits3(xml) {
+        //    var show = ''
+
+        //    var dep = document.getElementById('DeductionsType3').value;
+
+        //    $(xml).find('dependent').each(function () {
+
+        //        var $book = $(this);
+        //        show = '';
+
+        //        var department = $book.find('selected').text();
+
+        //        show = $book.find('show').text();
+
+        //        if (department == dep) {
+
+
+        //            if (show != '') {
+        //                var n = show.indexOf(",");
+
+        //                if (n == -1) {
+
+        //                    document.getElementById('DeductionsNetGross3').value = show;
+
+        //                }
+        //                else {
+        //                    var res = show.substring(0, n);
+        //                    document.getElementById('DeductionsNetGross3').value = res;
+
+        //                }
+        //                return;
+        //            }
+        //            else {
+        //                document.getElementById('DeductionsNetGross3').value = '';
+        //            }
+        //        }
+        //    });
+        //}
+
+        //function setDeductionUnits4(xml) {
+        //    var show = ''
+
+        //    var dep = document.getElementById('DeductionsType4').value;
+
+        //    $(xml).find('dependent').each(function () {
+
+        //        var $book = $(this);
+        //        show = '';
+
+        //        var department = $book.find('selected').text();
+
+        //        show = $book.find('show').text();
+
+        //        if (department == dep) {
+
+
+        //            if (show != '') {
+        //                var n = show.indexOf(",");
+
+        //                if (n == -1) {
+
+        //                    document.getElementById('DeductionsNetGross4').value = show;
+
+        //                }
+        //                else {
+        //                    var res = show.substring(0, n);
+        //                    document.getElementById('DeductionsNetGross4').value = res;
+
+
+        //                }
+        //                return;
+        //            }
+        //            else {
+        //                document.getElementById('DeductionsNetGross4').value = '';
+        //            }
+        //        }
+        //    });
+        //}
+
+        //function setDeductionUnits5(xml) {
+        //    var show = ''
+
+        //    var dep = document.getElementById('DeductionsType5').value;
+
+        //    $(xml).find('dependent').each(function () {
+
+        //        var $book = $(this);
+        //        show = '';
+
+        //        var department = $book.find('selected').text();
+
+        //        show = $book.find('show').text();
+
+        //        if (department == dep) {
+
+
+        //            if (show != '') {
+        //                var n = show.indexOf(",");
+
+        //                if (n == -1) {
+
+        //                    document.getElementById('DeductionsNetGross5').value = show;
+
+        //                }
+        //                else {
+        //                    var res = show.substring(0, n);
+        //                    document.getElementById('DeductionsNetGross5').value = res;
+
+
+        //                }
+        //                return;
+        //            }
+        //            else {
+        //                document.getElementById('DeductionsNetGross5').value = '';
+        //            }
+        //        }
+        //    });
+        //}
+
+        //$('#DeductionsType').change(function () {
+
+        //    GetXML('Predefined_Deductions_NetGross.xml', setDeductionUnits);
+        //});
+
+        //$('#DeductionsType2').change(function () {
+
+        //    GetXML('Predefined_Deductions_NetGross.xml', setDeductionUnits2);
+        //});
+
+        //$('#DeductionsType3').change(function () {
+
+        //    GetXML('Predefined_Deductions_NetGross.xml', setDeductionUnits3);
+        //});
+
+        //$('#DeductionsType4').change(function () {
+
+        //    GetXML('Predefined_Deductions_NetGross.xml', setDeductionUnits4);
+        //});
+
+        //$('#DeductionsType5').change(function () {
+
+        //    GetXML('Predefined_Deductions_NetGross.xml', setDeductionUnits5);
+        //});
+    }
+
+    function GetXML(xmlFile, url) {
+        //////////
+        //Gets XML File
+        //////////
+
+        var path = window.location.protocol + '//';
+        path = path + window.location.host + '/';
+
+        path = site.baseUrl + '/FormLibContent/Xmls/Netherlands/Defaults/' + xmlFile
+
+        $.ajax({
+            type: "GET",
+            url: path,
+            dataType: "xml",
+            success: url,
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseText);
+                alert(textStatus);
+                alert(errorThrown);
+            }
+
+        });
+
+
+    }
+
+
+
+</script>
+
+
+

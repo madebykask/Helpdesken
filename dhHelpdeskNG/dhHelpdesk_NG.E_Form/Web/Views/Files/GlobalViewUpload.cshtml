@@ -1,0 +1,173 @@
+﻿@{
+    ViewBag.Title = "GlobalViewUpload";
+}
+
+<meta charset="utf-8">
+@section Script {
+    <script type="text/javascript">
+
+        
+        //alert('Your Files are Older than a version in the system. Please Update your Files and Try again.')
+
+        // plupload
+        var uploaderGv;
+      
+            //alert("hi");
+            uploaderGv = new plupload.Uploader({
+                runtimes: 'gears,html5,flash,silverlight,browserplus,html4',
+                browse_button: 'pickfilesGv',
+                container: 'containerGv',
+                max_file_size: '50mb',
+                url: site.baseUrl + '/files/GlobalViewUpload',
+                flash_swf_url: site.baseUrl + '/assets/plupload/plupload.flash.swf',
+                silverlight_xap_url: site.baseUrl + '/assets/plupload/plupload.silverlight.xap'
+                //,
+                //multipart: true
+            });
+
+            uploaderGv.bind('Init', function (up, params) { /*$('#filelist').html("<div>Current runtime: " + params.runtime + "</div>");*/ });
+
+            $('#uploadfilesGv').click(function (e) {
+                uploaderGv.start();
+                e.preventDefault();                
+            });
+
+            uploaderGv.init();
+
+            uploaderGv.bind('FilesAdded', function (up, files) {
+                up.files.splice();
+                $.each(files, function (i, file) {
+                    $('#filelistGv').prepend(
+                        '<div id="' + file.id + '">' +
+                       ' <a href="" class="remove btn btn-link btn-mini"><i class="icon-trash"></i></a>'+
+                        file.name + ' (' + plupload.formatSize(file.size) + ') <b></b>' +
+                        ' </div>');
+
+                    $('#' + file.id + ' a.remove').first().click(function (e) {
+                        e.preventDefault();
+                        up.removeFile(file);
+                        $('#' + file.id).remove();
+                        //if (up.files.length == 0) {
+                        //    $('#uploadfilesGv').css('display', 'none');
+                        //}
+                    });
+                });
+
+                up.refresh(); // Reposition Flash/Silverlight
+            });
+
+            uploaderGv.bind('UploadProgress', function (up, file) {
+                $('#' + file.id + " b").html('<div id= "animate">' + ' Loading...  ' + '</div>');     
+            });
+             
+            //uploaderGv.bind('UploadProgress', function (up, file) {
+            //    $('#' + file.id + " b").html(
+            //        '<br/>' +
+            //         '<div class="progress" style="width: 300px">' +
+            //            '<div class="bar" style="width:' + file.percent + '%;"></div> ' +
+            //          '</div>')               
+
+            //});
+
+            uploaderGv.bind('Error', function (up, err, test) {
+
+                $('#filelistGv').prepend("<div>Error: " + err.code +
+                    ", Message: " + err.message +
+                    (err.file ? ", File: " + err.file.name : "") +
+                    "</div>"                   
+                );
+                
+                up.refresh(); // Reposition Flash/Silverlight         
+            });
+
+            uploaderGv.bind('FileUploaded', function (up, file, response)
+            {
+                var mess = jQuery.parseJSON(response.response);
+                alert(mess.data);
+                if (mess.data != "Success") {
+                    $('#' + file.id + ' a.remove').remove();                                       
+                    $('#' + file.id).remove();
+                }
+
+                else {
+                    $('#' + file.id + ' a.remove').remove();
+                    $('#' + file.id + " b").html('100%');
+                }
+            });           
+              
+            $(window).load(function () {
+                //$('#' + file.id + " b").html('<p>Progress: <progress id="p" max=100><span>0</span>%</progress></p>');                
+                $("#animate").fadeOut();
+                $('#animate').remove();
+               
+            });
+            
+    </script>
+}
+
+
+
+<div id="monitors"></div>
+<div class="container containeralignright">
+
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#GvUpload">
+            <h4>Global View Upload</h4>
+        </a></li>
+    </ul>
+    <div class="content">
+
+    <div class="tab-content">
+
+    @using (Html.BeginForm("index", "Files", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {               
+        <div id="containerGv">
+            <a id="pickfilesGv" style="margin: 20px 0px; margin-left: 20px" class="btn" href="#"><i class="icon-file"></i>&nbsp;@I18N.Translate("Select files", SessionFacade.User.Language)</a>
+            <button id="uploadfilesGv" class="btn btnmarginleft" style="margin-left : 200px">
+                <i class="icon-ok"></i>&nbsp;@I18N.Translate("Upload files", SessionFacade.User.Language)
+            </button>
+            <div id="filelistGv">                
+            </div>                                
+        </div>                    
+    
+        if (ViewBag.tblQualityCheckReport1_a2 > 0)
+        { 
+                        <label>Error in QualityCheckReport1_a2: @ViewBag.tblQualityCheckReport1_a2</label>  
+            List<string> AllError = (List<string>)ViewBag.tblQualityCheckReport1_a2List;
+            foreach (var rec in AllError)
+            {
+                        <br />
+                        <label>@rec</label>  
+            }
+        }
+
+        if (ViewBag.tblQualityCheckReport1_b2 > 0)
+        { 
+                        <label>Error in QualityCheckReport1_b2: @ViewBag.tblQualityCheckReport1_b2</label> 
+            List<string> AllError = (List<string>)ViewBag.tblQualityCheckReport1_b2List;
+            foreach (var rec in AllError)
+            {
+                        <br />
+                        <label>@rec</label>  
+            }
+        }
+
+        if (ViewBag.tblQualityCheckReport2 > 0)
+        { 
+                        <label>Error in QualityCheckReport2_2: @ViewBag.tblQualityCheckReport2_2 </label> 
+            List<string> AllError = (List<string>)ViewBag.tblQualityCheckReport2_2List;
+            foreach (var rec in AllError)
+            {
+                        <br />
+                        <label>@rec</label>  
+                }
+            }
+
+  }
+
+        </div>
+     </div>
+
+</div>
+
+

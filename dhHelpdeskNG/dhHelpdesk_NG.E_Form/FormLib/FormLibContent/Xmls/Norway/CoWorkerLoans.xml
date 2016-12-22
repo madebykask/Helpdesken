@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE form [
+  <!ENTITY languages SYSTEM "Templates/Languages.xml">
+  <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
+  <!ENTITY state SYSTEM "Templates/CoWorkerLoansState.xml">
+  <!ENTITY dat_ServiceRequestPriority SYSTEM "Data/Data_Common_ServiceRequestPriority.xml">
+  <!ENTITY dat_ChangeType SYSTEM "Data/CoWorkerLoans/Data_CoWorkerLoans_ChangeType.xml">
+  <!ENTITY dat_paidPer SYSTEM "Data/CoWorkerLoans/Data_CoWorkerLoans_PaidPer.xml">
+]>
+
+<form id="0" guid="BF95EC4B-11FE-45AA-B68B-861697797D4A" customerId="0">
+  &languages;
+  &regexs;
+  &state;
+
+  <fields>
+
+    <!--Tab ServiceRequestDetails-->
+    <tab name="#servicerequestdetails" label="Service Request Details">
+      <element name="Co-WorkerGlobalviewID" casefield="reportedby" type="text" label="Co-worker Globalview ID" mandatory="1">
+        <regex inherit="employeeno" pattern="" message=""></regex>
+      </element>
+      <element name="FirstName" casefield="persons_name" type="text" label="Co-worker First Name" mandatory="1"></element>
+      <element name="LastName" casefield="persons_phone" type="text" label="Co-worker Last Name" mandatory="1"></element>
+      <element name="IKEAEmailAddress" type="text" label="IKEA Email Address" mandatory="1">
+        <regex inherit="email" pattern="" message=""></regex>
+      </element>
+      <element name="IKEANetworkID" type="text" label="IKEA Network ID" mandatory="1"></element>
+      <element name="Company" type="text" casefield="region_id" label="Company" mandatory="1"></element>
+      <element name="BusinessUnit" casefield="department_id" type="text" label="Business Unit" mandatory="1"></element>
+      <element name="ServiceArea" type="text" label="Function" mandatory="1"></element>
+      <element name="Department" type="text" label="Department" mandatory="1" casefield="ou_id"></element>
+      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard">
+        &dat_ServiceRequestPriority;
+      </element>
+      <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
+    </tab>
+    <tab name="#payment" label="Payment Information">
+      <element type="select" name="ChangeType" label="Change Type" mandatory="1">
+        &dat_ChangeType;
+      </element>
+      <element type="text" name="PaymentAmount" label="Total Amount" mandatory="1" helptext="Please enter the new total amount.">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="PaidPer" type="select" label="Paid per" mandatory="1" default="Recurring">
+        &dat_paidPer;
+      </element>      
+      
+      <!--loan re-payment-->
+      <element type="label" default="Amount" name="RePaymentType" label="Loan Re-payment Type" disabled="1"></element>
+      <element type="text" name="RePaymentAmount" label="Loan Re-payment Amount" mandatory="1">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="RePaymentStartDate" format="dd.MM.yyyy" label="Loan Re-payment Start Date" mandatory="1">
+        <regex inherit="firstDayOfMonth" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="ApprovalDate" format="dd.MM.yyyy" label="Approval date" mandatory="1">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+    </tab>
+  </fields>
+</form>

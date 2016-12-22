@@ -1,0 +1,72 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+<!-- Global Mobility Dependants Documents -->
+<tr class="globalmobility-first">
+    <td class="tdstrong" colspan="2">
+        <h4>@Model.Translate("Global Mobility - Dependants Documents")</h4>
+    </td>
+</tr>
+<tr class="globalmobility-first">
+    <td class="tdstrong">@Model.Label("DependantsDocumentType")</td>
+    <td>@Model.Element("DependantsDocumentType")</td>
+</tr>
+<tr class="globalmobility-first">
+    <td class="tdstrong">@Model.Label("DependantsDocumentCountry")</td>
+    <td>@Model.Element("DependantsDocumentCountry")</td>
+</tr>
+<tr class="globalmobility-first">
+    <td class="tdstrong">@Model.Label("DependantsDocumentNo")</td>
+    <td>@Model.Element("DependantsDocumentNo")</td>
+</tr>
+<tr class="globalmobility-first">
+    <td class="tdstrong">@Model.Label("DependantsDocumentIssueDate")</td>
+    <td>@Model.Element("DependantsDocumentIssueDate")</td>
+</tr>
+<tr class="globalmobility-first">
+    <td class="tdstrong">@Model.Label("DependantsDocumentIssuePlace")</td>
+    <td>@Model.Element("DependantsDocumentIssuePlace")</td>
+</tr>
+<tr class="globalmobility-first">
+    <td class="tdstrong">@Model.Label("DependantsDocumentIssuePlaceCountry")</td>
+    <td>@Model.Element("DependantsDocumentIssuePlaceCountry")</td>
+</tr>
+
+
+@for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
+{
+    <tr class="globalMobilityDependantDocument@(i.ToString()) globalmobility" id="globalMobilityDependantDocument@(i.ToString())">
+        <td class="tdstrong" colspan="2">
+            <h4>@Model.Translate("Global Mobility - Dependants Documents") @i.ToString()</h4>
+        </td>
+    </tr>
+    <tr class="globalMobilityDependantDocument@(i.ToString()) globalmobility">
+        <td class="tdstrong">@Model.Label("DependantsDocumentType" + i.ToString())</td>
+        <td>@Model.Element("DependantsDocumentType" + i.ToString())</td>
+    </tr>
+    <tr class="globalMobilityDependantDocument@(i.ToString()) globalmobility">
+        <td class="tdstrong">@Model.Label("DependantsDocumentCountry" + i.ToString())</td>
+        <td>@Model.Element("DependantsDocumentCountry" + i.ToString())</td>
+    </tr>
+    <tr class="globalMobilityDependantDocument@(i.ToString()) globalmobility">
+        <td class="tdstrong">@Model.Label("DependantsDocumentNo" + i.ToString())</td>
+        <td>@Model.Element("DependantsDocumentNo" + i.ToString())</td>
+    </tr>
+    <tr class="globalMobilityDependantDocument@(i.ToString()) globalmobility">
+        <td class="tdstrong">@Model.Label("DependantsDocumentIssueDate" + i.ToString())</td>
+        <td>@Model.Element("DependantsDocumentIssueDate" + i.ToString())</td>
+    </tr>
+    <tr class="globalMobilityDependantDocument@(i.ToString()) globalmobility">
+        <td class="tdstrong">@Model.Label("DependantsDocumentIssuePlace" + i.ToString())</td>
+        <td>@Model.Element("DependantsDocumentIssuePlace" + i.ToString())</td>
+    </tr>
+    <tr class="globalMobilityDependantDocument@(i.ToString()) globalmobility">
+        <td class="tdstrong">@Model.Label("DependantsDocumentIssuePlaceCountry" + i.ToString())</td>
+        <td>@Model.Element("DependantsDocumentIssuePlaceCountry" + i.ToString())</td>
+    </tr>
+}
+<tr class="globalmobility-first" id="addGlobalMobilityDependantDocumentTrr">
+    <td colspan="2">
+        @Model.Element("DependantsDocuments")
+        <a id="addGlobalMobilityDependantDocument" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another global mobility dependant document")</a></td>
+</tr>

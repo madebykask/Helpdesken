@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<predefined>
+    <name>HomeDistrict</name>
+    <dependent>
+        <selected>wielkopolskie</selected>
+        <show>chodzieski,czarnkowsko-trzcianecki,gnieźnieński,gostyński,grodziski,jarociński,kaliski,Kalisz,kępiński,kolski,Konin,koniński,kościański,krotoszyński,leszczyński,Leszno,międzychodzki,nowotomyski,obornicki,ostrowski,ostrzeszowski,pilski,pleszewski,Poznań,poznański,rawicki,słupecki,średzki,śremski,szamotulski,turecki,wągrowiecki,wolsztyński,wrzesiński,złotowski</show>
+    </dependent>
+    <dependent>
+        <selected>lubelskie</selected>
+        <show>Biała Podlaska,biłgorajski,Chełm,chełmski,hrubieszowski,janowski,kraśnicki,krasnostawski,łęczyński,lubartowski,lubelski,Lublin,łukowski,opolski,parczewski,puławski,radzyński,rycki,świdnicki,tomaszowski,włodawski,zamojski,Zamość</show>
+    </dependent>
+    <dependent>
+        <selected>łódzkie</selected>
+        <show>bełchatowski,brzeziński,kutnowski,łaski,łęczycki,Łódź,łódzki wschodni,łowicki,opoczyński,pabianicki,pajęczański,Piotrków Trybunalski,piotrkowski,poddębicki,radomszczański,rawski,sieradzki,Skierniewice,skierniewicki,tomaszowski,wieluński,wieruszowski,zduńskowolski,zgierski</show>
+    </dependent>
+    <dependent>
+        <selected>podkarpackie</selected>
+        <show>bieszczadzki,brzozowski,dębicki,jarosławski,jasielski,kolbuszowski,krośnieński,Krosno,łańcucki,leski,leżajski,lubaczowski,mielecki,niżański,przemyski,Przemyśl,przeworski,ropczycko-sędziszowski,Rzeszów,rzeszowski,sanocki,stalowowolski,strzyżowski,Tarnobrzeg,tarnobrzeski</show>
+    </dependent>
+    <dependent>
+        <selected>podlaskie</selected>
+        <show>augustowski,białostocki,Białystok,bielski,grajewski,hajnowski,kolneński,Łomża,łomżyński,moniecki,sejneński,siemiatycki,sokólski,Suwałki,suwalski,wysokomazowiecki,zambrowski</show>
+    </dependent>
+    <dependent>
+        <selected>mazowieckie</selected>
+        <show>białobrzeski,ciechanowski,garwoliński,gostyniński,grodziski,grójecki,kozienicki,legionowski,lipski,łosicki,makowski,miński,mławski,nowodworski,ostrołęcki,Ostrołęka,ostrowski,otwocki,piaseczyński,Płock,płocki,płoński,pruszkowski,przasnyski,przysuski,pułtuski,Radom,radomski,Siedlce,siedlecki,sierpecki,sochaczewski,sokołowski,szydłowiecki,Warszawa,warszawski zachodni,węgrowski,wołomiński,wyszkowski,żuromiński,zwoleński,żyrardowski</show>
+    </dependent>
+    <dependent>
+        <selected>warmińsko-mazurskie</selected>
+        <show>bartoszycki,braniewski,działdowski,Elbląg,elbląski,ełcki,giżycki,gołdapski,iławski,kętrzyński,lidzbarski,mrągowski,nidzicki,nowomiejski,olecki,Olsztyn,olsztyński,ostródzki,piski,szczycieński,węgorzewski,bartoszycki</show>
+    </dependent>
+    <dependent>
+        <selected>kujawsko-pomorskie</selected>
+        <show>aleksandrowski,bialski,brodnicki,bydgoski,Bydgoszcz,chełmiński,golubsko-dobrzyński,Grudziądz,grudziądzki,inowrocławski,lipnowski,mogileński,nakielski,radziejowski,rypiński,sępoleński,świecki,Toruń,toruński,tucholski,wąbrzeski,Włocławek,włocławski,żniński</show>
+    </dependent>
+    <dependent>
+        <selected>świętokrzyskie</selected>
+        <show>buski,jędrzejowski,kazimierski,Kielce,kielecki,konecki,opatowski,ostrowiecki,pińczowski,sandomierski,skarżyski,starachowicki,staszowski,włoszczowski</show>
+    </dependent>
+    <dependent>
+        <selected>pomorskie</selected>
+        <show>bytowski,chojnicki,człuchowski,Gdańsk,gdański,Gdynia,kartuski,kościerski,kwidzyński,lęborski,malborski,nowodworski,pucki,Słupsk,słupski,Sopot,starogardzki,sztumski,tczewski,wejherowski</show>
+    </dependent>
+    <dependent>
+        <selected>małopolskie</selected>
+        <show>bocheński,brzeski,chrzanowski,dąbrowski,gorlicki,Kraków,krakowski,limanowski,miechowski,myślenicki,nowosądecki,nowotarski,Nowy Sącz,olkuski,oświęcimski,proszowicki,suski,Tarnów,tarnowski,tatrzański,wadowicki,wielicki</show>
+    </dependent>
+    <dependent>
+        <selected>lubuskie</selected>
+        <show>Gorzów Wielkopolski,gorzowski,krośnieński,międzyrzecki,nowosolski,słubicki,strzelecko-drezdenecki,sulęciński,świebodziński,wschowski,żagański,żarski,Zielona Góra,zielonogórski</show>
+    </dependent>
+    <dependent>
+        <selected>zachodniopomorskie</selected>
+        <show>białogardzki,choszczeński,drawski,goleniowski,gryficki,gryfiński,kamieński,kołobrzeski,Koszalin,koszaliński,łobeski,myśliborski,policki,pyrzycki,sławieński,stargardzki,świdwiński,Świnoujście,Szczecin,szczecinecki,wałecki</show>
+    </dependent>
+    <dependent>
+        <selected>dolnośląskie</selected>
+        <show>bolesławiecki,dzierżoniowski,głogowski,górowski,jaworski,Jelenia Góra,jeleniogórski,kamiennogórski,kłodzki,Legnica,legnicki,lubański,lubiński,lwówecki,milicki,oławski,oleśnicki,polkowicki,średzki,strzeliński,świdnicki,trzebnicki,Wałbrzych,wałbrzyski,wołowski,Wrocław,wrocławski,ząbkowicki,zgorzelecki,złotoryjski</show>
+    </dependent>
+    <dependent>
+        <selected>opolskie</selected>
+        <show>brzeski,głubczycki,kędzierzyńsko-kozielski,kluczborski,krapkowicki,namysłowski,nyski,oleski,Opole,opolski,prudnicki,strzelecki</show>
+    </dependent>
+    <dependent>
+        <selected>śląskie</selected>
+        <show>będziński,bielski,Bielsko-Biała,bieruńsko-lędziński,Bytom,Chorzów,cieszyński,Częstochowa,częstochowski,Dąbrowa Górnicza,Gliwice,gliwicki,Jastrzębie-Zdrój,Jaworzno,Katowice,kłobucki,lubliniecki,mikołowski,Mysłowice,myszkowski,Piekary Śląskie,pszczyński,raciborski,Ruda Śląska,rybnicki,Rybnik,Siemianowice Śląskie,Sosnowiec,Świętochłowice,tarnogórski,Tychy,wodzisławski,Zabrze,zawierciański,Żory,żywiecki</show>
+    </dependent>
+</predefined>

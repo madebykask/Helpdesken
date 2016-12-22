@@ -1,0 +1,2454 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<predefined>
+    <name>
+        JobTitle
+    </name>
+    <dependent>
+        <selected>Account Payable BSC</selected>
+        <show>
+            Accounts Payable Service Manager BSC, Senior Account Payable Specialist BSC
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Accounting IICP</selected>
+        <show>
+            Accountant IICP, Chief Accountant IICP, Senior Accountant IICP, System Administrator IICP
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Accounting Service Office</selected>
+        <show>
+            Accountant Junior SO, Accountant Senior SO, Accountant SO, Accounting Manager SO, Ishop Administrator SO
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Acquisition IICP</selected>
+        <show>
+            Acquisition Manager IICP
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Activity / P-tag Kraków Store</selected>
+        <show>
+            Deputy Sales Manager Kraków Store, P-tag Specialist Kraków Store, Sales Co-worker Kraków Store, Shopkeeper Sales Kraków Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Activity Janki Store</selected>
+        <show>
+            Sales Co-worker II Janki Store, Sales Co-worker Janki Store, Shopkeeper Sales Janki Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Activity Katowice Store</selected>
+        <show>
+            Activity Manager Katowice Store, Activity Specialist Katowice Store, Sales Co-worker II Katowice Store, Sales Co-worker Katowice Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Activity Łódź Store</selected>
+        <show>
+            Activity Manager Łódź Store, Deputy Sales Manager Łódź Store, Sales Co-worker Łódź Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Activity Poznań Store</selected>
+        <show>
+            Sales Co-worker II Poznań Store, Sales Co-worker Poznań Store, Shopkeeper Sales Poznań Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Activity Warszawa Targówek Store</selected>
+        <show>
+            Activity Manager Targówek Store, P-tag Specialist Targówek Store, Sales Co-worker Targówek Store, Shopkeeper Sales Targówek Store, Specjalista ds. Akcji Sklepowych
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Activity Wrocław Store</selected>
+        <show>
+            Activity Manager Wrocław Store, Activity Specialist Wrocław Store, Sales Co-worker II Wrocław Store, Sales Co-worker Wrocław Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Additional Income Sales IICP</selected>
+        <show>
+            Addit.Income Sales Manager-Country IICP, Additional Income Sales Manager IICP
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Administration TACE</selected>
+        <show>
+            Administration Manager TACE PL, Car Administrator TACE PL, Internal Support TACE PL, Meeting &amp; Travel Administrator TACE PL, Receptionist TACE PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>AP BSC</selected>
+        <show>
+            Accounting Team Leader, Act.Accounts Payable Service Manager BSC, BSC Database Administrator
+        </show>
+    </dependent>
+    <dependent>
+        <selected>AP Team AT/HU/CH</selected>
+        <show>
+            Account Payable Specialist BSC, Accounting Team Leader, Junior Account Payable Specialist BSC, Senior Account Payable Specialist BSC
+        </show>
+    </dependent>
+    <dependent>
+        <selected>AP Team DE</selected>
+        <show>
+            Account Payable Specialist BSC, Accounting Team Leader, Junior Account Payable Specialist BSC, Senior Account Payable Specialist BSC
+        </show>
+    </dependent>
+    <dependent>
+        <selected>AP Team ES &amp; PT</selected>
+        <show>
+            Account Payable Specialist BSC, Junior Account Payable Specialist BSC, Senior Account Payable Specialist BSC, Team Leader
+        </show>
+    </dependent>
+    <dependent>
+        <selected>AP Team IT</selected>
+        <show>
+            Account Payable Specialist BSC, Accounting Team Leader, Junior Account Payable Specialist BSC, Senior Account Payable Specialist BSC
+        </show>
+    </dependent>
+    <dependent>
+        <selected>AP Team SE</selected>
+        <show>
+            Account Payable Specialist BSC, Accounting Team Leader, Deputy Team Leader, Junior Account Payable Specialist BSC, Junior Expense Claim Specialist BSC, Senior Account Payable Specialist BSC
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Backpacker</selected>
+        <show>
+            Backpacker
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Backpacker Project SO</selected>
+        <show>
+            Backpacker SO, Project Manager SO, Succession &amp; Recruitment Manager SO
+        </show>
+    </dependent>
+    <dependent>
+        <selected>BD BoF TACE</selected>
+        <show>
+            Business Developer TACE PL, Business Development Manager TACE PL, Project Leader Plastic TACE CZ, Project Manager TACE CZ, Purchase Development Manager IoS, Senior Supply Planner TACE PL, Senior Technician Global BoF TACE PL, Supply Developer TACE PL, Supply Planner TACE PL, Technician Global Raw Material  TACE PL, Technician TACE PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>BD Frames I TACE</selected>
+        <show>
+            Business Developer TACE PL, Business Development Manager TACE PL, Supply Developer TACE PL, Supply Planner TACE PL, Technician TACE PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>BD Frames TACE</selected>
+        <show>
+            Business Development Manager TACE PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>BD Matresses ITACE</selected>
+        <show>
+            Business Developer TACE PL, Business Developer Textile MCC TACE PL, Business Developer Trainee, Business Development Manager TACE PL, Category Leader Mattresses TACE PL, Material Specialist Foam MCC TACE PL, Senior Technician Textile MCC TACE PL, Supply Planner Textile MCC TACE PL, Technician TACE PL, Technician Textile MCC TACE PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>BD Mattresses TACE</selected>
+        <show>
+            Act.Business Development Manager TACE PL, Business Developer TACE PL, Business Development Manager TACE PL, Supply Planner TACE PL, Technician TACE PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>BD Paraffine&amp;Plastic TACE</selected>
+        <show>
+            Business Developer TACE PL, Business Development Manager TACE PL, Senior Supply Planner TACE PL, Supply Planner TACE PL, Technician TACE PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>BD Plastic TACE PL</selected>
+        <show>
+            Senior Technician TACE PL, Supply Planner TACE PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>BD Solid Wood Birch TACE</selected>
+        <show>
+            Business Developer TACE PL, Business Developer Trainee, Business Development Manager, Forestry &amp; Wood Supply Spec. TACE PL, Senior Technician TACE PL, Supply Planner TACE PL, Technician TACE PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>BD Solid Wood TACE</selected>
+        <show>
+            Business Developer, Business Developer TACE PL, Business Developer Trainee TACE PL, Business Development Manager, Supply Developer TACE PL, Supply Planner TACE PL, Technician TACE PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>BD Upholstery TACE</selected>
+        <show>
+            Business Developer TACE PL, Business Development Manager TACE PL, Senior Technician TACE PL, Supply Planner TACE PL, Technician Global Raw Material  TACE PL, Technician TACE PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>BDM Team</selected>
+        <show>
+            Business Development Team Manager
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Bistro &amp; Sweden Shop Gdańsk Store</selected>
+        <show>
+            Commercial SFM &amp; Bistro Mgr Gdańsk Store, IKEA FOOD Co-worker Gdańsk Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Bistro &amp; Sweden Shop Katowice Store</selected>
+        <show>
+            Checkout Serv. Co-worker Katowice Store, Commer. SFM &amp; Bistro Mgr. Katowice Store, IKEA FOOD Co-worker I Katowice Store, IKEA FOOD Co-worker Katowice Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Bistro &amp; Sweden Shop Kraków Store</selected>
+        <show>
+            Commercial SFM &amp; Bistro Mgr Kraków Store, IKEA FOOD Co-worker I Kraków Store, IKEA FOOD Co-worker Kraków Store, Pracownik Gastronomii
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Bistro &amp; Sweden Shop Łódź Store</selected>
+        <show>
+            Bistro Co-worker Łódź Store, Commercial SFM &amp; Bistro Mgr. Łódź Store, IF Co-worker I, IKEA FOOD Co-worker Łódź Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Bistro &amp; Sweden Shop Warszawa Targówek S</selected>
+        <show>
+            Commer. SFM &amp; Bistro Mgr. Targówek Store, IKEA FOOD Co-worker Targówek Store, IKEA FOOD Specialist Targówek Store, Pracownik Gastronomii
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Bistro &amp; Sweden Shop Wrocław Store</selected>
+        <show>
+            Commercial SFM &amp; Bistro Manager, IKEA FOOD Co-worker Janki Store, IKEA FOOD Co-worker Wrocław Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>BSC Poland</selected>
+        <show>
+            BSC EU Manager
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Business Controling IICP</selected>
+        <show>
+            Business Controller IICP, Deputy Finance Manager, Financial Controller IICP
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Business Navigation</selected>
+        <show>
+            Business Navigator SO, Project Specialist
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Business Navigation BSC</selected>
+        <show>
+            Business Navigator BSC, Finance Controller BSC, Maintenance&amp;Administration Co-worker BSC, Operational Support BSC, Receptionist BSC
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Business Navigation Gdańsk Store</selected>
+        <show>
+            Accountant Gdańsk Store, Business Navigator Gdańsk Store, Controller Gdańsk Store, Security Responsible Gdańsk Store, Staff Scheduler Gdańsk Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Business Navigation Janki Store</selected>
+        <show>
+            Accountant Janki Store, Business Navigator Janki Store, Controller Janki Store, Security Responsible Janki Store, Staff Scheduler Janki Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Business Navigation Katowice Store</selected>
+        <show>
+            Accountant Katowice Store, Business Navigator Katowice Store, Controller Katowice Store, Security Responsible Katowice Store, Staff Scheduler Wrocław Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Business Navigation Kraków Store</selected>
+        <show>
+            Accountant Kraków Store, Administration Controller Kraków Store, Business Navigator Kraków Store, HR Generalist Kraków Store, Security Responsible Kraków Store, Staff Scheduler Kraków Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Business Navigation Łódź Store</selected>
+        <show>
+            Accountant Łódź Store, Business Navigator Łódź Store, Controller, Facility Specialist Łódź Store, Security Responsible Łódź Store, Staff Scheduler Łódź Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Business Navigation Poznań Store</selected>
+        <show>
+            Accountant Poznań Store, Business Navigator Poznań Store, Controller Poznań Store, Security Responsible Poznań Store, Staff Scheduler Poznań Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Business Navigation Service Office</selected>
+        <show>
+            Business Analyst SO, Business Controller SO, Business Information Navigator, Business Navigation Manager SO, Business Navigator SO, Compliance Development Manager SO, Financial Controller SO, HR Efficiency Management Specialst SO, IMS National Purchaser SO, Junior Business Controller SO
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Business Navigation TACE</selected>
+        <show>
+            Business Navigator, Finance Assistant TACE PL, Finance Controller TACE PL, IT Responsible Trading Poland
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Business Navigation Warszawa Targówek St</selected>
+        <show>
+            Accountant Targówek Store, Business Navigator Targówek Store, Controller Targówek Store, Security Responsible Targówek Store, Staff Scheduler Targówek Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Business Navigation Wrocław Store</selected>
+        <show>
+            Business Navigator Wrocław Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Call Center Warszawa</selected>
+        <show>
+            Call Center co-worker Targówek Store, Call Center Manager, SAMS Superuser Targówek Store, Specjalista ds. zwrotów i reklamacji
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Category Leader Upholstery Frame TACE PL</selected>
+        <show>
+            Category Leader Upholstery Frame TACE PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Category leaders TACE</selected>
+        <show>
+            Category Leader Frames&amp;Parafin TACE PL, Category Leader Layer Glued TACE PL, Category Leader Pine/Spruce TACE PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Checkout Service Gdańsk Store</selected>
+        <show>
+            Checkout Serv. Co-worker I Gdańsk Store, Checkout Services Co-worker Gdańsk Store, Checkout Services Manager Gdańsk Store, Team Leader Gdańsk Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Checkout Service Janki Store</selected>
+        <show>
+            Checkout Serv. Co-worker I Janki Store, Checkout Services Co-worker Janki Store, Checkout Services Manager Janki Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Checkout Service Katowice Store</selected>
+        <show>
+            Checkout Ser. Co-worker I Katowice Store, Checkout Serv. Co-worker Katowice Store, Checkout Services Manager Katowice Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Checkout Service Kraków Store</selected>
+        <show>
+            Checkout Serv. Co-worker I Kraków Store, Checkout Services Co-worker Kraków Store, Checkout Services Manager Kraków Store, P-tag Specialist Kraków Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Checkout Service Łódź Store</selected>
+        <show>
+            Checkout Services Co-worker I Łódź Store, Checkout Services Co-worker Łódź Store, Checkout Services Manager Łódź Store, Customer Service Co-worker Łódź Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Checkout Service Poznań Store</selected>
+        <show>
+            Checkout Serv. Co-worker I Poznań Store, Checkout Services Co-worker Poznań Store, Checkout Services Manager Poznań Store, Checkout Services Team LeaderPoznańStore
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Checkout Service Warszawa Targówek Store</selected>
+        <show>
+            Checkout Ser. Co-worker I Targówek Store, Checkout Serv. Co-worker Targówek Store, Checkout Services Manager Targówek Store, Checkout Services Team Leader Targówek
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Checkout Service Wrocław Store</selected>
+        <show>
+            Checkout Serv. Co-worker I Wrocław Store, Checkout Serv. Co-worker Wrocław Store, Checkout Serv. Team Leader Wrocław Store, Checkout Services Manager Wrocław Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Chemical Specialist TACE PL</selected>
+        <show>
+            Chemical Specialist TACE PL, Product Quality Manager TACE CZ
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Com-In Project Service Office</selected>
+        <show>
+            Commercial Support Manager SO, Expansion Specialist SO, Graphic Communication Specialist SO, Interior Designer Specialist SO, Visual Merchandising Specialist SO
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Com-in Service Office</selected>
+        <show>
+            Com &amp; In Manager SO, Core Competence Developer SO, Country Graphic Communication Leader SO, Graphic Communication Specialist SO, Interior Designer Specialist SO, Project Leader, Visual Merchandising Specialist SO
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Commercial Vitality Gdańsk Store</selected>
+        <show>
+            P-tag Specialist Gdańsk Store, Sales Co-worker Gdańsk Store, Sales Co-worker II Gdańsk Store, Sales Co-worker III Gdańsk Store, Shopkeeper Sales Gdańsk Store, Team Leader Gdańsk Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Comm-in  Katowice Store</selected>
+        <show>
+            Com &amp; In Manager Katowice Store, Comm-in and Commercial Activity Leader, Deputy Com &amp; In Manager Katowice Store, Maintenance Co-worker Katowice Store, P-tag Specialist Wrocław Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Comm-in  Poznań Store</selected>
+        <show>
+            Com &amp; In Design Manager Poznan Store, Graphic Communication Leader PoznańStore
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Comm-in Gdańsk Store</selected>
+        <show>
+            Com &amp; In Manager Gdańsk Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Comm-in Janki Store</selected>
+        <show>
+            Carpenter Janki Store, Commu &amp; In.Design Mgr Janki Store, First Interior Designer Janki Store, Graphic Comm Co-worker Janki Store, Graphic Designer Janki Store, Interior Designer Janki Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Comm-In Kraków Store</selected>
+        <show>
+            Communi &amp; InteriorDesign Kraków Store, Graphic Communication Co-worKraków Store, Graphic Designer Kraków Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Comm-In Kraków Store I</selected>
+        <show>
+            DeputyCommun&amp;InterDesignManaKrakow Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Comm-in Łódź Store</selected>
+        <show>
+            Com &amp; In Manager Łódź Store, Graphic Designer Łódź Store, Interior Designer Łódź Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Comm-in Warszawa Targówek Store</selected>
+        <show>
+            Carpenter Targówek Store, Vis.Merch/Activ Co-worker Targówek Store, Vis.Merch/Activ.Co-worker Targowek Store, Vis.Merchan/Act.Co-worker Targowek Store, Visual Merchan. Co-worker Targówek Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Comm-in Wrocław Store</selected>
+        <show>
+            Com &amp; In Manager Wrocław Store, Deputy Com &amp; In Manager
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Compliance Development</selected>
+        <show>
+            Compliance Development Manager
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Components TACE</selected>
+        <show>
+            Sales Representative ICOMP TACE PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Construction IICP</selected>
+        <show>
+            Head of Construction IICP, Tender and Procurment Specialist IICP
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Construction Service Office</selected>
+        <show>
+            Construction  Manager IKEA Property, Construction Proj. Manager IKEA Property, Construction Specialist IKEA Property
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Contact Center Service Office</selected>
+        <show>
+            Call Center Manager
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Customer Relation Service Office</selected>
+        <show>
+            Customer relation co-worker, Customer Relations Manager SO
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Customer Service  Kraków Store</selected>
+        <show>
+            Customer Relations Specialist, Customer Serv.Co-worker I Kraków Store, Customer Service Co-worker Kraków Store, Customer Services Manager Kraków Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Customer Service Gdańsk Store</selected>
+        <show>
+            Checkout Services Co-worker Gdańsk Store, Customer Service Co-worker Gdańsk Store, Customer Service Co-worker I GdańskStore, Customer Services Manager Gdańsk Store, Team Leader Gdańsk mStore
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Customer Service Janki Store</selected>
+        <show>
+            Customer Service Co-worker I, Customer Service Co-worker I Janki Store, Customer Service Co-worker Janki Store, Customer Services Manager Janki Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Customer Service Katowice Store</selected>
+        <show>
+            Customer Ser. Co-worker I Katowice Store, Customer Serv. Co-worker Katowice Store, Customer Service Specialist, Customer Services Manager Katowice Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Customer Service Łódź Store</selected>
+        <show>
+            Customer Service Co-worker I Łódź Store, Customer Service Co-worker Łódź Store, Customer Services Manager Łódź Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Customer Service Poznań Store</selected>
+        <show>
+            Customer Serv. Co-worker I Pozmań Store, Customer Service Co-worker Poznań Store, Customer Services Manager Poznań Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Customer Service WarszawaTargówek Store</selected>
+        <show>
+            Customer Ser. Co-worker I Targówek Store, Customer Serv. Co-worker Targówek Store, Customer Serv.Team Leader Targówek Store, Customer Services Manager Targówek Store, Pracow. Dz. Obsł. Klienta / Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Customer Service Wrocław Store</selected>
+        <show>
+            Customer Serv. Co-worker I Wrocław Store, Customer Service Co-worker Wrocław Store, Customer Services Manager Wrocław Store, Koordynator Zesp. w Dziale Obsł. Klienta, Sales Team Leader Wrocław Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Deputy Human Resources</selected>
+        <show>
+            Deputy HR Manager SO, HR Generalist SO, Project Leader
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Deputy Retail Service Office Poland</selected>
+        <show>
+            Deputy Retail Manager SO, Project Implemantation Manager SO, Sales Manager Targówek Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Deputy Store Manager Łódź Store</selected>
+        <show>
+            Deputy Store Manager Łodź Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Development IICP</selected>
+        <show>
+            Development Manager, Kierownik Projektu, Project Manager IICP, Project Manager-Refurbishment IICP
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Expansion &amp; Property Service Office</selected>
+        <show>
+            Expansion &amp; Facilities Manager SO
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Expansion IICP</selected>
+        <show>
+            Expansion Manager IICP, Real Estate Specialist IICP
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Expansion Service Office</selected>
+        <show>
+            Construction Project Manager SO, Expansion Manager SO, Project Leader SO, Project Manager I SO
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Expense Claims BSC</selected>
+        <show>
+            Expense Claim Services Manager BSC, Expense Claim Specialist BSC, Junior Expense Claim Specialist BSC, Senior Expense Claim Specialist BSC
+        </show>
+    </dependent>
+    <dependent>
+        <selected>External Communication Service Office</selected>
+        <show>
+            External Communication Manager SO, Marketing Web Specialist SO, Specjalista ds. Komunikacji Zewnętrznej, Web Editor SO
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Facility Service Office</selected>
+        <show>
+            Facility Manager IKEA Property, Technical specialist
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Finance IICP</selected>
+        <show>
+            Accountant IICP, Finance Manager IICP, Sp. ds. zarządzania płynnością finansową
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Finance Process BSC</selected>
+        <show>
+            Transactional Process Leader Finance BSC
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Finance Service Management BSC</selected>
+        <show>
+            BSC Finance Service Manager BSC, BSC VAT Manager
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Finance Service Office</selected>
+        <show>
+            Accountant SO, Accounting Manager SO, Accounting Project Manager SO, Business Navigation Manager SO, Finance &amp; Administration Manager SO, Laws &amp; Standards Manager SO, Product Req &amp; Compliance Specialist SO
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Flat line Trading TASE</selected>
+        <show>
+            Supply Planner, Technician Trading Portugal
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Free Range TACE</selected>
+        <show>
+            Free Range Center Manager TACE PL, Free Range Technician TACE PL, Product Dev. Support Free Range TACE PL, Product Engineer TACE PL, Project Leader in Team Free Range, Senior Technician TACE PL, Technician TACE PL, TQE Manager Free Range TACE PL, Trader Free Range TACE PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Gdańsk/Poznań Shopping Centre</selected>
+        <show>
+            Acting Centre Marketing Mgr S.C. Gd/Poz, Shop. Centre Assistant S.C.Gdańsk/Poznań, Shopping Centre Manager S.C.Gdańsk/Poz.
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Global Finance BSC</selected>
+        <show>
+            Global Finance Service Manager IKEA BSC
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Goods Flow Gdańsk Store</selected>
+        <show>
+            Goods Flow Manager Gdańsk Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Goods Flow Janki Store</selected>
+        <show>
+            Goods Flow Manager Janki Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Goods Flow Katowice Store</selected>
+        <show>
+            Goods Flow Manager Katowice Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Goods Flow Kraków Store</selected>
+        <show>
+            Goods Flow Manager Kraków Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Goods Flow Łódź Store</selected>
+        <show>
+            Goods Flow Manager Łódź Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Goods Flow Poznań Store</selected>
+        <show>
+            Goods Flow Manager Poznań Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Goods Flow Warszawa Targówek Store</selected>
+        <show>
+            Goods Flow Manager Targówek Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Goods Flow Wrocław Store</selected>
+        <show>
+            Goods Flow Specialist Wrocław Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Graphic Communication Katowice Store</selected>
+        <show>
+            Communication &amp; Interior Design Manager, Graphic Comm. Co-worker Katowice Store, Graphic Communication Co-worker, Graphic Communication Leader Katowice St, Graphic Designer Katowice Store, P-tag Specialist Katowice Store, Range Presentation Manager KatowiceStore
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Graphic Communication Kraków Store</selected>
+        <show>
+            Graphic Comm. Co-worker Kraków Store, Kierownik ds. komunikacji wizualnej
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Graphic Communication Targowek Store</selected>
+        <show>
+            Graphic Commun. Co-worker Targowek Store, P-tag Specialist Targówek Store, Visual Merchan. Co-worker Targówek Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Graphic Communication Wrocław Store</selected>
+        <show>
+            Graphic Communication Co-worker Wro.St., Graphic Communication Leader Wrocław St., P-tag Specialist Wrocław Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Guest Service Łódź</selected>
+        <show>
+            Guest Service Manager S.C. Łódź
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 1 Poznań Store</selected>
+        <show>
+            Sales Co-worker II Poznań Store, Sales Co-worker Poznań Store, Shopkeeper Sales Poznań Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 10-13-16-18 Wrocław Store</selected>
+        <show>
+            Sales Co-worker II Wrocław Store, Sales Co-worker IV Wrocław Store, Sales Co-worker Wrocław Store, Shopkeeper Sales Wrocław Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 10-16-17 Gdańsk Store</selected>
+        <show>
+            Sales Co-worker Gdańsk Store, Sales Co-worker II Gdańsk Store, Shopkeeper Sales Gdańsk Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 10-18-19 Janki Store</selected>
+        <show>
+            Sales Co-worker II Janki Store, Sales Co-worker Janki Store, Shopkeeper Sales Janki Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 10-18-19 Katowice Store</selected>
+        <show>
+            Sales Co-worker II Katowice Store, Sales Co-worker IV Wrocław Store, Sales Co-worker Katowice Store, Shopkeeper Sales Katowice Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 10-18-19 Kraków Store</selected>
+        <show>
+            Sales Co-worker II Kraków Store, Sales Co-worker Kraków Store, Shopkeeper Sales Kraków Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 10-18-19 Łódź Store</selected>
+        <show>
+            Sales Co-worker II Łódź Store, Sales Co-worker Łódź Store, Shopkeeper Sales Łódź Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 10-18-19 Poznań Store</selected>
+        <show>
+            Sales Co-worker II Poznań Store, Sales Co-worker Poznań Store, Shopkeeper Sales Poznań Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 10-18-19 Warszawa Targówek Store</selected>
+        <show>
+            Sales Co-worker Targówek Store, Shopkeeper Sales Targówek Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 11-12-13 Gdańsk Store</selected>
+        <show>
+            Sales &amp; Sup.Su. Co-worker Gdańsk Store, Sales Co-worker Gdańsk Store, Sales Co-worker II Gdańsk Store, Shopkeeper Sales Gdańsk Store, Team Leader Gdańsk Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 1-2 Janki Store</selected>
+        <show>
+            Sales Co-worker II Janki Store, Sales Co-worker III Janki Store, Sales Co-worker Janki Store, Shopkeeper Sales Janki Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 1-2 Katowice Store</selected>
+        <show>
+            Sales Co-worker II Katowice Store, Sales Co-worker III Katowice Store, Sales Co-worker Katowice Store, Shopkeeper Sales Katowice Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 1-2 Warszawa Targówek Store</selected>
+        <show>
+            Sales Co-worker III Targówek Store, Sales Co-worker Targówek Store, Shopkeeper Sales Targówek Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 1-2 Wrocław Store</selected>
+        <show>
+            Sales Co-worker II Wrocław Store, Sales Co-worker III Wrocław Store, Sales Co-worker Wrocław Store, Shopkeeper Sales Wrocław Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 1-2-3 Gdańsk Store</selected>
+        <show>
+            Sales Co-worker Gdańsk St, Sales Co-worker Gdańsk Store, Sales Co-worker II Gdańsk Store, Sales Co-worker III Gdańs, Shopkeeper Sales Gdańsk Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 1-2-3 Kraków Store</selected>
+        <show>
+            Sales Co-worker II Kraków Store, Sales Co-worker III Kraków Store, Sales Co-worker Kraków Store, Shopkeeper Sales Kraków Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 1-2-3 Łódź Store</selected>
+        <show>
+            Sales Co-worker Łódź Store, Shopkeeper Sales Łódź Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 14-15 Gdańsk Store</selected>
+        <show>
+            Sales Co-worker Gdańsk Store, Sales Co-worker II Gdańsk Store, Shopkeeper Sales Gdańsk Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 14-15 Janki Store</selected>
+        <show>
+            P-tag Specialist Janki Store, Sales Co-worker II Janki Store, Sales Co-worker Janki Store, Shopkeeper Sales Janki Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 14-15 Kraków Store</selected>
+        <show>
+            Sales Co-worker II Kraków Store, Sales Co-worker Kraków Store, Shopkeeper Sales Kraków Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 14-15 Łódź Store</selected>
+        <show>
+            Sales Co-worker Łódź Store, Shopkeeper Sales Łódź Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 14-15 Poznań Store</selected>
+        <show>
+            Sales Co-worker II Poznań Store, Sales Co-worker Poznań Store, Shopkeeper Sales Poznań Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 14-15 Warszawa Targówek Store</selected>
+        <show>
+            Sales Co-worker Targówek Store, Shopkeeper Sales Targówek Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 14-15 Wrocław Store</selected>
+        <show>
+            Sales Co-worker II Wrocław Store, Sales Co-worker Wrocław Store, Shopkeeper Sales Wrocław Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 14-15-16-17-20 Katowice Store</selected>
+        <show>
+            Sales Co-worker II Katowice Store, Sales Co-worker IV Wrocław Store, Sales Co-worker Katowice Store, Shopkeeper Sales Katowice Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 16-17 Kraków Store</selected>
+        <show>
+            Sales Co-worker II Kraków Store, Sales Co-worker Kraków Store, Shopkeeper Sales Kraków Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 16-17-20 Janki Store</selected>
+        <show>
+            Sales Co-worker II Janki Store, Sales Co-worker III Janki Store, Sales Co-worker Janki Store, Shopkeeper Sales Janki Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 16-17-20 Łódź Store</selected>
+        <show>
+            Sales Co-worker II Łódź Store, Sales Co-worker Łódź Store, Shopkeeper Sales Łódź Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 16-17-20 Poznań Store</selected>
+        <show>
+            Sales Co-worker II Poznań Store, Sales Co-worker Poznań Store, Shopkeeper Sales Poznań Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 16-17-20 Warszawa Targówek Store</selected>
+        <show>
+            Sales Co-worker II Targówek Store, Sales Co-worker Targówek Store, Shopkeeper Sales Targówek Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 2-3 Poznań Store</selected>
+        <show>
+            Sales Co-worker II Poznań Store, Sales Co-worker III Poznań Store, Sales Co-worker Poznań Store, Shopkeeper Sales Poznań Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 3 &amp; IKEA Business Wrocław Store</selected>
+        <show>
+            Sales Co-worker III Wrocław Store, Sales Co-worker IV Wrocław Store, Sales Co-worker Wrocław Store, Shopkeeper Sales Wrocław Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 3 Janki Store</selected>
+        <show>
+            IKEA Business Manager, Sales Co-worker II Janki Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 3 Katowice Store</selected>
+        <show>
+            IKEA Business Manager, P-tag Specialist Katowice Store, Sales Co-worker II Katowice Store, Sales Co-worker Katowice Store, Shopkeeper Sales Katowice Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 3 Warszawa Targówek Store</selected>
+        <show>
+            Intern Targówek Store, Sales Co-worker II Targówek Store, Sales Co-worker Targówek Store, Shopkeeper Sales Targówek Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 4-5 Janki Store</selected>
+        <show>
+            Sales Co-worker II Janki Store, Sales Co-worker III Janki Store, Sales Co-worker Janki Store, Shopkeeper Sales Janki Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 4-5 Łódź Store</selected>
+        <show>
+            Sales Co-worker II Łódź Store, Sales Co-worker Łódź Store, Shopkeeper Sales Łódź Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 4-5 Poznań Store</selected>
+        <show>
+            Sales Co-worker II Poznań Store, Sales Co-worker III Poznań Store, Sales Co-worker Poznań Store, Shopkeeper Sales Poznań Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 4-5 Warszawa Targówek Store</selected>
+        <show>
+            Sales Co-worker II Targówek Store, Sales Co-worker III Targówek Store, Sales Co-worker Targówek Store, Shopkeeper Sales Targówek Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 4-5-9- Katowice Store</selected>
+        <show>
+            Sales Co-worker II Katowice Store, Sales Co-worker III Katowice Store, Sales Co-worker IV Katowice Store, Sales Co-worker Katowice Store, Shopkeeper Sales Katowice Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 4-5-9 Kraków Store</selected>
+        <show>
+            Sales Co-worker II Kraków Store, Sales Co-worker III Kraków Store, Sales Co-worker Kraków Store, Shopkeeper Sales Kraków Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 4-5-9-92 Gdańsk Store</selected>
+        <show>
+            Koord. zespołu w dz.sprzed./Team Leader, Sales Co-worker Gdańsk Store, Sales Co-worker II Gdańsk Store, Sales Co-worker III Gdańsk Store, Sales Co-worker IV Gdańsk Store, Shopkeeper Sales Gdańsk Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 4-5-9-92-19 Wrocław Store</selected>
+        <show>
+            Sales Co-worker II Wrocław Store, Sales Co-worker III Wrocław Store, Sales Co-worker Wrocław Store, Shopkeeper Sales Wrocław Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 6-11-12 Wrocław Store</selected>
+        <show>
+            Sales Co-worker II Wrocław Store, Sales Co-worker Wrocław Store, Shopkeeper Sales Wrocław Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 6-11-12-13 Janki Store</selected>
+        <show>
+            Sales Co-worker II Janki Store, Sales Co-worker Janki Store, Shopkeeper Sales Janki Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 6-11-12-13 Katowice Store</selected>
+        <show>
+            Sales Co-worker II Katowice Store, Sales Co-worker IV Wrocław Store, Sales Co-worker Katowice Store, Shopkeeper Sales Katowice Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 6-11-12-13 Kraków Store</selected>
+        <show>
+            Sales Co-worker II Kraków Store, Sales Co-worker III Kraków Store, Sales Co-worker IV Kraków Store, Sales Co-worker Kraków Store, Sales Team Leader Kraków Store, Shopkeeper Sales Kraków Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 6-11-12-13 Łódź Store</selected>
+        <show>
+            Sales Co-worker II Łódź Store, Sales Co-worker Łódź Store, Shopkeeper Sales Łódź Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 6-11-12-13 Poznań Store</selected>
+        <show>
+            Sales Co-worker II Poznań Store, Sales Co-worker Poznań Store, Shopkeeper Sales Poznań Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 6-11-12-13 Warszawa Targówek Store</selected>
+        <show>
+            Sales Co-worker II Targówek Store, Sales Co-worker Targówek Store, Shopkeeper Sales Targówek Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 6-18-19 Gdańsk Store</selected>
+        <show>
+            Sales Co-worker Gdańsk Store, Sales Co-worker II Gdańsk Store, Shopkeeper Sales Gdańsk Store, Team Leader Gdańsk Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 7-8 Gdańsk Store</selected>
+        <show>
+            Sales Co-worker Gdańsk Store, Sales Co-worker II Gdańsk Store, Sales Co-worker III Gdańsk Store, Sales Co-worker IV Gdańsk Store, Shopkeeper Sales Gdańsk Store, Team Leader Gdańsk mStore
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 7-8 Janki Store</selected>
+        <show>
+            Sales Co-worker II Janki Store, Sales Co-worker III Janki Store, Sales Co-worker Janki Store, Shopkeeper Sales Janki Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 7-8 Katowice Store</selected>
+        <show>
+            Sales Co-worker II Katowice Store, Sales Co-worker III Katowice Store, Sales Co-worker Katowice Store, Shopkeeper Sales Katowice Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 7-8 Kraków Store</selected>
+        <show>
+            Certyfikowany Sprzedawca, Sales Co-worker II Kraków Store, Sales Co-worker III Kraków Store, Sales Co-worker Kraków Store, Shopkeeper Sales Kraków Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 7-8 Łódź Store</selected>
+        <show>
+            Sales Co-worker II Łódź Store, Sales Co-worker Łódź Store, Shopkeeper Sales Łódź Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 7-8 Poznań Store</selected>
+        <show>
+            Sales Co-worker II Poznań Store, Sales Co-worker III Poznań Store, Sales Co-worker Poznań Store, Shopkeeper Sales Poznań Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 7-8 Warszawa Targówek Store</selected>
+        <show>
+            Sales Co-worker II Targówek Store, Sales Co-worker III Targówek Store, Sales Co-worker Targówek Store, Shopkeeper Sales Targówek Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 7-8 Wrocław Store</selected>
+        <show>
+            Sales Co-worker III Wrocław Store, Sales Co-worker Wrocław Store, Shopkeeper Sales Wrocław Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 9 Janki Store</selected>
+        <show>
+            Sales Co-worker II Janki Store, Sales Co-worker Janki Store, Shopkeeper Sales Janki Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 9 Łódź Store</selected>
+        <show>
+            Sales Co-worker II Łódź Store, Sales Co-worker Łódź Store, Shopkeeper Sales Łódź Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 9 Poznań Store</selected>
+        <show>
+            Sales Co-worker Poznań Store, Shopkeeper Sales Poznań Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 9-92 Warszawa Targówek Store</selected>
+        <show>
+            Sales Co-worker II Targówek Store, Sales Co-worker III Targówek Store, Sales Co-worker Targówek Store, Shopkeeper Sales Targówek Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HR BSC</selected>
+        <show>
+            BSC HR Service Manager BSC, HR Process Specialist BSC, Knowledge Management Specialist BSC
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HR Project</selected>
+        <show>
+            HRMS Project Manager SO, HRMS Testing Coordinator SO, Project Manager SO, Project Specialist SO
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HR Project Management</selected>
+        <show>
+            HR Project Manager SO
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HR System Support BSC</selected>
+        <show>
+            BSC HR Administrator, Business Systems Analyst BSC, HR System Specicalist BSC, Senior HR System  Specicalist BSC, Team Leader HR System Support BSC
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Human Resources Gdańsk Store</selected>
+        <show>
+            Deputy HR Manager Gdańsk Store, HR Administrator Gdańsk Store, HR Generalist Gdańsk Store, HR Manager Gdańsk Store, HR Site Manager Trainee Gdańsk Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Human Resources IICP</selected>
+        <show>
+            Human Resources Manager IICP, Senior HR &amp; Training Specialist IICP
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Human Resources Janki Store</selected>
+        <show>
+            HR Administrator Janki Store, HR Generalist Janki Store, HR Manager Janki Store, HR Manager Trainee Janki Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Human Resources Katowice Store</selected>
+        <show>
+            HR Generalist Katowice Store, HR Manager Katowice Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Human Resources Kraków Store</selected>
+        <show>
+            HR Generalist Kraków Store, HR Manager Kraków Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Human Resources Łódź Store</selected>
+        <show>
+            HR Generalist Łódź Store, HR Manager Łódź Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Human Resources Poznań Store</selected>
+        <show>
+            HR Administrator Poznań Store, HR Generalist Poznań Store, HR Manager Poznań Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Human Resources Service Office</selected>
+        <show>
+            Competence Development Manager SO, Country HR Manager SO, HR Manager SO, HR Specialist SO, IMMP &amp; CR Project Manager SO, Learning &amp; Development Manager SO, Project Manager, Training &amp; Development Manager SO
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Human Resources TACE</selected>
+        <show>
+            Acting Deputy HR Manager TACE PL, HR Graduate Student TACE PL, HR Manager TACE PL, HR Specialist TACE PL, Senior HR Generalist TACE PL, Tace Management Asistant TACE PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Human Resources Warszawa Targówek Store</selected>
+        <show>
+            Deputy HR Manager Targówek Store, HR Administrator Targówek Store, HR Generalist Targówek Store, HR Manager Targówek Store, Intern Targówek Store, Staff Scheduler Targówek Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Human Resources Wrocław Store</selected>
+        <show>
+            HR Administrator Wrocław Store, HR Generalist Wrocław Store, HR Manager Wrocław Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Business Gdańsk Store</selected>
+        <show>
+            IKEA Business Manager
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Business Janki Store</selected>
+        <show>
+            IKEA Business Manager, Sales Co-worker II Janki Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Business Katowice Store</selected>
+        <show>
+            IKEA Business Leader, IKEA Business Manager, Sales Co-worker IV Wrocław Store, Sales Co-worker Katowice Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Business Kraków Store</selected>
+        <show>
+            IKEA Business Manager Kraków Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Business Targówek Store</selected>
+        <show>
+            IKEA Business Manager
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Family</selected>
+        <show>
+            Sales Co-worker Kraków Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA FAMILY Service Office</selected>
+        <show>
+            Country Family  Manager SO, Family Data Base Specialist SO
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Food</selected>
+        <show>
+            Food Safety &amp; Purchasing Manager SO
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Food Gdańsk Store</selected>
+        <show>
+            Business Analyst Gdańsk Store, IKEA FOOD Administrator Gdańsk Store, IKEA FOOD Manager Gdańsk Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Food Janki Store</selected>
+        <show>
+            IF Bist.&amp;Swe. Shop Co-wor. Janki Store, IKEA FOOD Administrator Janki Store, IKEA FOOD Co-worker I Janki Store, IKEA FOOD Co-worker Janki Store, IKEA FOOD Manager Janki Store, Pracownik Gastronomii
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Food Katowice Store</selected>
+        <show>
+            IKEA FOOD Manager Katowice Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Food Kraków Store</selected>
+        <show>
+            IKEA FOOD Manager Kraków Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Food Łódź Store</selected>
+        <show>
+            IKEA FOOD Manager Łódź Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Food Poznań Store</selected>
+        <show>
+            Commercial SFM &amp; Bistro Manager Poznań S, IF Bist.&amp;Swe. Shop Co-wor. Poznań Store, IKEA FOOD Co-worker I Poznań Store, IKEA FOOD Co-worker Poznań Store, IKEA FOOD Manager Poznań Store, Kierownik ds. IKEA Food, Kitchen Production Spec. I Poznań Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Food Poznań Store I</selected>
+        <show>
+            Commercial Restaurant Mgr Poznań Store, IKEA FOOD Administrator Poznań Store, IKEA FOOD Co-worker Poznań Store, Kitchen Production Spec. Poznań Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Food Warszawa Targówek Store</selected>
+        <show>
+            IKEA FOOD Co-worker Targówek Store, IKEA FOOD Manager Targówek Store, Kitchen Product. Spec. I Targówek Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Food Warszawa Targówek Store 1</selected>
+        <show>
+            Deputy IKEA FOOD Manager Targówek Store, IKEA FOOD Co-worker I Targówek Store, IKEA FOOD Co-worker Targówek Store, Kitchen Production Spec. Targówek Store, Pracownik Gastronomii
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Food Wrocław Store</selected>
+        <show>
+            IKEA FOOD Manager Wrocław Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Inter IKEA Centre Polska S.A.</selected>
+        <show>
+            Managing Director IICP
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Interior Design  Kraków Store</selected>
+        <show>
+            Carpenter Kraków Store, First Interior Designer Kraków Store, Graphic Comm. Co-worker Kraków Store, Graphic Designer Kraków Store, Interior Design Manager, Interior Designer Kraków Store, Visual Merchan. Co-worker Kraków Store, Visual Merchandising Co-worker Kraków St
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Interior Design Gdańsk Store</selected>
+        <show>
+            Carpenter Gdańsk Store, First Interior Designer Gdańsk Store, Graphic Commun Co-worker Gdańsk Store, Graphic Commun. Co-worker Gdańsk Store, Graphic Designer Gdańsk Store, Interior Design Manager, Interior Designer Gdańsk Store, Interior Designer I Gdańsk Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Interior Design Janki Store</selected>
+        <show>
+            Interior Design Manager Janki Store, Interior Designer Janki Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Interior design Katowice Store</selected>
+        <show>
+            First Interior Designer Katowice Store, Graphic Designer Katowice Store, Interior Designer I Katowice Store, Interior Designer Katowice Store, Interior Designer Wrocław Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Interior Design Łódź Store</selected>
+        <show>
+            First Interior Designer Łódź Store, Interior Design Manager, Interior Designer Łódź Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Interior Design Poznań Store</selected>
+        <show>
+            Carpenter Poznań Store, First Interior Designer Poznań Store, Graphic Designer Poznań Store, Interior Design Manager Poznań Store, Interior Designer Poznań Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Interior Design Warszawa Targówek Store</selected>
+        <show>
+            Com &amp; In Manager Targówek Store, First Visual Merchandiser Targówek Store, Interior Design Co-worker Targówek Store, Interior Design Manager, Interior Designer Targówek Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Interior Design Wrocław Store</selected>
+        <show>
+            First Interior Designer Wrocław Store, First Visual Merchandiser Wrocław Store, Interior Design Manager Wrocław Store, Interior Designer Wrocław Store, Trainee DSAP
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Internal Communication TACE PL</selected>
+        <show>
+            Communication and Information Specialist, Information &amp; Communication Mgr TACE PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IT BSC</selected>
+        <show>
+            IT Support BSC
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IT Service Office</selected>
+        <show>
+            IT Administrator SO, IT Manager SO, IT System Specialist I SO, IT System Specialist SO
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IT/Solution Area TACE</selected>
+        <show>
+            IT Demand Manager Supplying IoS, Solution Area Manager, Solution Owner
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Leasing IICP</selected>
+        <show>
+            Head of Lease Department IICP, Kierownik Zespołu ds.Najmu, Lease Administrator IICP, Lease Manager IICP, Lease Specialist IICP
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Legal Counsel IICP</selected>
+        <show>
+            Legal Counsel IICP
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Local Marketing Katowice Store</selected>
+        <show>
+            Local Marketing Co-worker Katowice Store, Local Marketing Manager Katowice Store, Local Marketing Spec. Katowice Store, Marketing Manager Katowice Store, Sustainability Co-ordinator Katowice St.
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Łódź Shopping Centre</selected>
+        <show>
+            Shopping Centre Assistant S.C. Łódź, Shopping Centre Manager S.C. Łódź
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Logistic Gdańsk Store</selected>
+        <show>
+            In-store Logistics Manager Gdańsk Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Logistic Janki Store</selected>
+        <show>
+            In-store Logistics Manager Janki Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Logistic Katowice Store</selected>
+        <show>
+            In-store Logistics Manager Katowice Stor
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Logistic Kraków Store</selected>
+        <show>
+            In-store Logistics Manager Kraków Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Logistic Łódź Store</selected>
+        <show>
+            In-store Logistics Manager Łódź Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Logistic Poznań Store</selected>
+        <show>
+            In-store Logistics Manager Poznań Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Logistic Service Office</selected>
+        <show>
+            Customer Delivery Manager, In-Store Logistics Manager SO, Project Manager SO, Retail Logistics Manager SO
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Logistic Service Office I</selected>
+        <show>
+            Expansion Retail Logistics Manager SO, Logistics Projects Team Leader SO
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Logistic TACE</selected>
+        <show>
+            Logistics Manager TACE PL, Senior Supply Developer TACE PL, Supply Developer TACE PL, Trainee
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Logistics TACE</selected>
+        <show>
+            Deputy Logistics Manager TACE PL, Packaging Specialist TACE PL, Senior Supply Developer TACE PL, Supply Developer TACE PL, Transport Specialist TACE PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Logistic Warszawa Targówek Store</selected>
+        <show>
+            In-store Logistics Manager Targówek Stor
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Logistic Wrocław Store</selected>
+        <show>
+            Goods Flow Manager Wrocław Store, In-store Logistics Manager Wrocław Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Maintenance Gdańsk/Poznań</selected>
+        <show>
+            Maintenance Engineer S.C. Gdańsk/Poznań, Maintenance Manager S.C. Gdańsk/Poznań, Maintenance Technician S.C.Gdańsk/Poznań
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Maintenance &amp; Administration Łódź Store</selected>
+        <show>
+            Facility Manager Łódź Store, IT Co-worker Łódź Store, Maintenance Co-worker Łódź Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Maintenance &amp; Administration Warszawa Tr</selected>
+        <show>
+            Facility Specialist Targówek Store, IT Co-worker Targówek Store, Maintenance Co-worker Targówek Store, Site Facility Manager
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Maintenance Janki</selected>
+        <show>
+            Maintenance Engineer S.C. Janki/Targówek, Maintenance Technician S.C. Janki/Targ.
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Maintenance Łódź</selected>
+        <show>
+            Maintenance Engineer S.C. Łódź, Maintenance Manager S.C. Łódź, Maintenance Technician S.C. Łódź
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Maintenance Targówek</selected>
+        <show>
+            Maintenance Engineer S.C. Janki/Targóek, Maintenance Technician S.C Janki/Targ, Maintenance Technician S.C. Janki/Targ.
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Maintenance Warszawa/Janki</selected>
+        <show>
+            Maintenance Manager S.C. Janki/Targówek
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Maintenance  Wrocław Store</selected>
+        <show>
+            Facility Manager Wrocław Store, Facility Specialist Wrocław Store, IT Co-worker Wrocław Store, Maintenance Co-worker Wrocław Store, Technician Wrocław Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Maintenance &amp; Adminidtration Katowice Sto</selected>
+        <show>
+            Facility Manager Katowice Store, Facility Specialist Katowice Store, IT Co-worker Katowice Store, Maintenance Co-worker Katowice Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Maintenance &amp; Adminidtration Kraków Store</selected>
+        <show>
+            Facility Specialist Kraków Store, Facilitye Manager Kraków Store, IT Co-worker Kraków Store, Maintenance Co-worker Kraków Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Maintenance &amp; Adminidtration Poznań Store</selected>
+        <show>
+            Facility Manager Poznań Store, Facility Specialist Poznań Store, IT Co-worker Poznań Store, Maintenance Co-worker Poznań Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Maintenance &amp; Administration Gdańsk Store</selected>
+        <show>
+            Facility Manager Gdańsk Store, Facility Specialist Gdańsk Store, IT Co-worker Gdańsk Store, Maintenance Co-worker Gdańsk Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Maintenance Janki Store</selected>
+        <show>
+            Facility Manager Janki Store, Facility Specialist Janki Store, IT Co-worker Janki Store, Maintenance Co-worker Janki Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Management Group Trading Area Centr. EU</selected>
+        <show>
+            Business Analyst TACE PL, Business Controller TACE PL, Business Navigation Manager, Deputy Trading Area Manager TACE PL, Production Developer TACE PL, Project Leader  TACE PL, Senior Supply Planner TACE PL, Supply Planner TACE PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Markethall Katowice Store</selected>
+        <show>
+            Markethall Manager Katowice Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Marketing &amp; Range Presentation S306</selected>
+        <show>
+            Interior Designer Katowice Store, Marketing &amp; Range Presentation Manager
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Marketing Gdańsk Store</selected>
+        <show>
+            Family Specialist Gdańsk Store, Local Marketing Co-worker Gdańsk Store, Local Marketing Manager Gdańsk Store, Local Marketing Specialist Gdańsk Store, Marketing Manager Gdańsk Store, Sustainability Responsible Gdańsk Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Marketing IICP</selected>
+        <show>
+            Country Marketing Manager IICP, Customers Marketing Manager IICP, PR Manager IICP
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Marketing Intelligence</selected>
+        <show>
+            Catalogue Coordinator SO, Catalogue Specialist SO, Marketing Intelligence Manager So
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Marketing Janki Store</selected>
+        <show>
+            Local Marketing Manager Janki Store, Local Marketing Specialist Janki Store, Sales Co-worker III Janki Store, Sales Co-worker Janki Store, Sustainability Responsible Janki Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Marketing Kraków Store</selected>
+        <show>
+            Family Specialist Kraków Store, Local Marketing Co-worker Kraków Store, Local Marketing Manager Gdańsk Store, Sales Co-worker Kraków Store, Specjalista ds. marketingu, Sustainability Responsible Kraków Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Marketing Łódź</selected>
+        <show>
+            Centre Marketing Manager S.C. Łódź, Marketing Coordinator S.C. Łódź
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Marketing Łódź Store</selected>
+        <show>
+            Family Specialist Łódź Store, Local Marketing Manager Łódź Store, Local Marketing Specialist Łódź Store, Sales Co-worker Łódź Store, Sustainability Responsible Łódź Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Marketing Poznań Store</selected>
+        <show>
+            Family Specialist Poznań Store, Local Marketing Manager Poznań Store, Local Marketing Specialist Poznań Store, P.O. Kierownik ds. Marketingu, Sales Co-worker Poznań Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Marketing Service Office</selected>
+        <show>
+            Country Marketing Manager SO, PR Specialist SO, Sustainability Manager Retail, Web Communications Manager SO
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Marketing Warszawa Targówek Store</selected>
+        <show>
+            Family Specialist Targówek Store, Local Marketing Manager Targówek Store, Local Marketing Specialist Targ Store, Sales Co-worker II Targówek Store, Sustainability Responsib. Targówek Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Marketing Wrocław Store</selected>
+        <show>
+            Family Specialist Wrocław Store, Local Marketing Manager Wrocław Store, Local Marketing Specialist Wrocław Store, Sustainability Responsible Wrocław Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Merchandising Katowice Store</selected>
+        <show>
+            Merchandise Manager Katowice Store, Merchandiser Katowice Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Merchandising Targówek Store</selected>
+        <show>
+            Merchandise Manager, Sales Co-worker II Targówek Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Merchandising Wrocław Store</selected>
+        <show>
+            Merchandiser Wrocław Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Office&amp;Training Administrator IICP</selected>
+        <show>
+            Office Administrator IICP, Receptionist IICP
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Operation  Wrocław/Katowice</selected>
+        <show>
+            Maintenance Engineer S.C. Wro/Kat, Maintenance Technician S.C. Janki/Targ., Maintenance Technician S.C. Wrocław/Kat., Operations Manager S.C. Wrocław/Katowice
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Operation -Janki</selected>
+        <show>
+            Operations Manager S.C. Janki/Targówek
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Operation Łódź</selected>
+        <show>
+            Operations Manager S.C. Łódź
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Operations Wrocław Store</selected>
+        <show>
+            Accountant Wrocław Store, Controller Wrocław Store, Security Responsible Wrocław Store, Staff Scheduler Wrocław Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>P3 Project Service Office</selected>
+        <show>
+            Business Systems Trainer SO, Logistics Projects Team Leader SO, P-3 Roll Out Project Manager SO, SRP Organisational Readiness Country Res
+        </show>
+    </dependent>
+    <dependent>
+        <selected>PA/PY Team Austria</selected>
+        <show>
+            AT Team Leader BSC, BSC HR Administrator AT, PA/PY Specialist BSC AT
+        </show>
+    </dependent>
+    <dependent>
+        <selected>PA/PY Team Denmark/Belgium</selected>
+        <show>
+            BSC HR Administrator BE, DK/BE Team Leader BSC, PA/PY Specialist BSC BE, Senior PA/PY Specialist BSC BE, Senior PA/PY Specialist BSC DK
+        </show>
+    </dependent>
+    <dependent>
+        <selected>PA/PY Team Finland</selected>
+        <show>
+            BSC HR Administrator FI, FI Team Leader BSC, PA/PY Specialist BSC FI, Payroll Specialist BSC FI
+        </show>
+    </dependent>
+    <dependent>
+        <selected>PA/PY Team Germany</selected>
+        <show>
+            BSC HR Administrator DE, DE Team Leader BSC, Deputy Team Leader DE, PA/PY Specialist BSC DE, Senior PA/PY Specialist BSC DE, Senior Payroll Specialist BSC DE
+        </show>
+    </dependent>
+    <dependent>
+        <selected>PA/PY Team Italy</selected>
+        <show>
+            BSC HR Administrator IT, Deputy Team Leader BSC IT, IT Team Leader BSC, Junior Specialist Personnel Admin BSC IT, PA/PY Specialist BSC IT, Payroll Specialist BSC IT
+        </show>
+    </dependent>
+    <dependent>
+        <selected>PA/PY Team Netherlands</selected>
+        <show>
+            HR Administrator NL, NL Team Leader BSC
+        </show>
+    </dependent>
+    <dependent>
+        <selected>PA/PY Team Poland</selected>
+        <show>
+            BSC HR Administrator PL, Deputy Team Leader PL, PA/PY Specialist BSC PL, Senior PA/PY Specialist BSC PL, Senior Payroll  Specialist BSC PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>PA/PY Team Portugal</selected>
+        <show>
+            BSC HR Administrator PT, PT Team Leader BSC, Senior PA/PY Specialist
+        </show>
+    </dependent>
+    <dependent>
+        <selected>PA/PY Team Slovakia/Czech/Hungary</selected>
+        <show>
+            BSC HR Administrator CZ, BSC HR Administrator HU, CZ/HU/SK Team Leader BSC, Junior Specialist PA/PY BSC HU, PA/PY Specialist BSC CZ/SK, PA/PY Specialist BSC HU, Payroll Specialist BSC CZ, Payroll Specialist BSC SK, Senior PA/PY Specialist BSC HU, Senior Personnel Admin. SpecialistBSC CZ
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Payroll/Compensation Service Office</selected>
+        <show>
+            Compensation &amp; Benefits Manager SO, HR Payroll Specialist II SO, HRMS Specialist SO, HRSC Payroll Specialist II, Payroll &amp; Personnel  Specialist SO, Personnel Administrator SO, Senior Benefits Specialist SO
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Payroll/Personnel Administration BSC</selected>
+        <show>
+            Manager Payroll/PA Services, PL Team Leader BSC
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Pigment &amp; Laquer TACE PL</selected>
+        <show>
+            Business Developer TACE PL, Business Development Manager, Supply Developer Category BoF TACE PL, Supply Planner TACE PL, Technician TACE PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>PR Service Office</selected>
+        <show>
+            Internal Communication Spetialist, PR Manager  SO
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Product Quality TACE PL</selected>
+        <show>
+            Chemical &amp; Environmental Spec.TACE PL, Deputy Product Quality Manager TACE PL, Quality Auditor TACE PL, Technician TACE PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Project Development Service Office</selected>
+        <show>
+            Land Acquisition Manager IKEA Property, Project Development Manager SO, Project Development Specialist SO
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Project  I TACE</selected>
+        <show>
+            Business Development Manager TACE, Project Leader TACE PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Property Manager IICP</selected>
+        <show>
+            Project Support Manager, Property Manager
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Qstore Service Office</selected>
+        <show>
+            Recovery Manager SO
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Qstore SO</selected>
+        <show>
+            Product Quality Technician SO, Quality Department Manager SO
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Receive Payment &amp; Easy Buying Process SO</selected>
+        <show>
+            Customer Service Manager SO
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Recevables IICP</selected>
+        <show>
+            Receivables Controller IICP, Receivables Specialist IICP
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Recovery Gdańsk Store</selected>
+        <show>
+            Quality Specialist Gdańsk Store, Recovery Co-worker Gdańsk Store, Recovery Manager Gdańsk Store, Recovery Specialist Gdańsk Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Recovery Janki Store</selected>
+        <show>
+            Quality Specialist Janki Store, Recovery Co-worker Janki Store, Recovery Manager Janki Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Recovery Katowice Store</selected>
+        <show>
+            Quality Specialist Katowice Store, Recovery Co-worker Katowice Store, Recovery Manager Katowice Store, Recovery Specialist Katowice Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Recovery Kraków Store</selected>
+        <show>
+            Recovery Co-worker Kraków Store, Recovery Manager Kraków Store, Recovery Specialist Kraków Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Recovery Łódź Store</selected>
+        <show>
+            Recovery Co-worker Łódź Store, Recovery Manager Łódź Store, Recovery Specialist Łódź Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Recovery Poznań Store</selected>
+        <show>
+            Recovery Co-worker Poznań Store, Recovery Manager Poznań Store, Recovery Specialist Poznań Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Recovery Warszawa Targówek Store</selected>
+        <show>
+            Recovery Co-worker Targówek Store, Recovery Manager Targówek Store, Recovery Specialist Targówek Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Recovery Wrocław Store</selected>
+        <show>
+            Recovery Co-worker Wrocław Store, Recovery Manager Wrocław Store, Recovery Specialist Wrocław Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Refilling Gdańsk Store</selected>
+        <show>
+            Goods Flow Co-worker Gdańsk Store, Goods Flow co-worker I Gdańsk Store, Goods Flow Specialist Gdańsk Store, Refilling Co-worker Gdańsk Store, Refilling Manager Gdańsk Store, Refilling Team Leader Gdańsk Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Refilling Janki Store</selected>
+        <show>
+            Goods Flow Co-worker Janki Store, Goods Flow Specialist Janki Store, Refilling Co-worker Janki Store, Refilling Manager Janki Store, Refilling Team Leader Janki Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Refilling Katowice Store</selected>
+        <show>
+            Refilling Co-worker Katowice Store, Refilling Manager Katowice Store, Refilling Team Leader Katowice Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Refilling Kraków Store</selected>
+        <show>
+            Refilling Co-worker Kraków Store, Refilling Manager Kraków Store, Refilling Team Leader Kraków Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Refilling Łódź Store</selected>
+        <show>
+            Refilling Co-worker Łódź Store, Refilling Manager Łódź Store, Refilling Team Leader Łódź Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Refilling Poznań Store</selected>
+        <show>
+            Full Serve Manager Poznań Store, Refilling Co-worker Poznań Store, Refilling Manager Poznań Store, Refilling Team Leader Poznań Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Refilling Warszawa Targówek Store</selected>
+        <show>
+            Refilling Co-worker Targówek Store, Refilling Manager Targówek Store, Refilling Team Leader Targówek Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Refilling Wrocław Store</selected>
+        <show>
+            Refilling Co-worker Wrocław Store, Refilling Manager Wrocław Store, Refilling Team Leader Wrocław Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Restaurant Gdańsk Store</selected>
+        <show>
+            Commercial Rest. Manager Gdańsk Store, IKEA FOOD Co-worker Gdańsk Store, Kitchen Production Spec. Gdańsk Store, Kitchen Production Spec. I Gdańsk Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Restaurant Janki Store</selected>
+        <show>
+            Commercial Rest. Manager Janki Store, IKEA FOOD Co-worker I Janki Store, IKEA FOOD Co-worker Janki Store, Kitchen Production Spec. I Janki Store, Kitchen Production Spec. Janki Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Restaurant Katowice Store</selected>
+        <show>
+            Commercial Rest. Manager Katowice Store, IKEA FOOD Co-worker I Katowice Store, IKEA FOOD Co-worker Katowice Store, Kitchen Product. Spec. I Katowice Store, Kitchen Production Spec. Katowice Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Restaurant Kraków Store</selected>
+        <show>
+            Commercial Rest.Manager Kraków Store, IKEA FOOD Co-worker I Kraków Store, IKEA FOOD Co-worker Kraków Store, Kitchen Production Spec .I Kraków Store, Kitchen Production Spec. I Kraków Store, Kitchen Production Spec. Kraków Store, Pracownik Gastronomii
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Restaurant Łódź Store</selected>
+        <show>
+            Chef, Commercial Rest. Manager Łodź Store, Commercial SFM &amp; Bistro Mgr. Łódź Store, IF Co-worker I, IKEA FOOD Co-worker Łódź Store, Kitchen Production Specialist Łódź Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Restaurant Warszawa Targówek Store</selected>
+        <show>
+            Commercial Rest. Manager Targówek Store, IF Bist.&amp;Swe. Shop Co-wor. Gdańsk Store, IF Manager Trainee Targówek Store, IKEA FOOD Co-worker I Targówek Store, IKEA FOOD Co-worker Targówek Store, Kitchen Product. Spec. I Targówek Store, Kitchen Production Spec. Targówek Store, Pracownik Gastronomii
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Restaurant Wrocław Store</selected>
+        <show>
+            Commercial Restaurant Mgr. Wrocław Store, IF Bist.&amp;Swe. Shop Co-wor. Gdańsk Store, IKEA FOOD Co-worker I Wrocław Store, IKEA FOOD Co-worker Wrocław Store, Kitchen Production Spec. I Wrocław Store, Kitchen Production Spec. Wrocław Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Retail Service Office Poland</selected>
+        <show>
+            Retail Manager Assistant SO, Retail Manager SO, Store Manager
+        </show>
+    </dependent>
+    <dependent>
+        <selected>S&amp;SS Gdańsk Store</selected>
+        <show>
+            Sales &amp; Sup.Su. Co-worker Gdańsk Store, Sales &amp; Supply Supp. Spe. Gdańsk Store, Sales &amp; Supply Support Mgr Gdańsk Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>S&amp;SS Janki Store</selected>
+        <show>
+            Sales &amp; Sup.Su. Co-worker Janki Store, Sales &amp; Supply Supp. Manager Janki Store, Sales &amp; Supply Supp. Spe. Janki Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>S&amp;SS Katowice Store</selected>
+        <show>
+            Sales &amp; Sup.Su. Co-worker Katowice Store, Sales &amp; Supply Supp. Mgr Katowice Store, Sales &amp; Supply Supp. Spe. Katowice Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>S&amp;SS Kraków Store</selected>
+        <show>
+            Sales &amp; Sup.Su. Co-worker Kraków Store, Sales &amp; Supply Supp. Spe. KrakówStore, Sales &amp; Supply Support Mgr Kraków Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>S&amp;SS Łódź Store</selected>
+        <show>
+            Sales &amp; Supply Sup. Co-worker Łódź Store, Sales &amp; Supply Supp. Spe. Gdańsk Store, Sales &amp; Supply Support Mgr. Łódź Store, Sales &amp; Supply Support Spe. Łódź Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>S&amp;SS Poznań Store</selected>
+        <show>
+            Sales &amp; Supply Support Mgr. Poznań Store, Sales &amp; Supply Support Spe. Poznań Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>S&amp;SS Warszawa Targówek Store</selected>
+        <show>
+            Sales &amp; Supply Supp. Mgr. Targówek Store, Sales &amp; Supply Supp. Spe. Targówek Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>S&amp;SS Wrocław Store</selected>
+        <show>
+            Sales &amp; Sup.Su. Co-worker Wrocław Store, Sales &amp; Supply Supp. Mgr. Wrocław Store, Sales &amp; Supply Supp. Spe. Wrocław Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Safe and Security</selected>
+        <show>
+            Safety &amp; Security Manager SO
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Sales Activity Service Office</selected>
+        <show>
+            Activity Coordinator SO, Commercial Activity Leader SO, Sales Leader SO, Sales Support SO
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Sales and Service Katowice Store</selected>
+        <show>
+            Sales and Service ManagerKatowice Store, Shopkeeper Sales Katowice Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Sales Co-worker II</selected>
+        <show>
+            Sales Co-worker II Poznań Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Sales Gdańsk Store</selected>
+        <show>
+            Deputy Sales Manager, Koordynator ds.Klienta Biznesowego, P-tag Specialist Gdańsk Store, Sales Co-worker Gdańsk Store, Sales Manager Gdańsk Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Sales Janki Store</selected>
+        <show>
+            Deputy Sales Manager Janki Store, Sales Manager Janki Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Sales Kraków Store</selected>
+        <show>
+            Deputy Sales Manager Wrocław Store, Sales Manager Kraków Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Sales Łódź Store</selected>
+        <show>
+            P-tag Specialist Łódź Store, Sales Manager Łódź Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Sales Poznań Store</selected>
+        <show>
+            Deputy Sales Manager Poznań Store, P-tag Specialist Poznań Store, Sales Manager Poznań Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Sales Service Gdańsk Store</selected>
+        <show>
+            Sales Co-worker Gdańsk Store, Sales Co-worker II Gdańsk Store, Shopkeeper Sales Gdańsk Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Sales Service Office</selected>
+        <show>
+            Core Competence Developer SO, Country Sales Manager SO, Deputy Sales Manager SO, Expansion Sales Manager Service Office, Project Leader, Project Manager, Sales Leader SO, Sales Manager SO
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Sales Warszawa Targówek Store</selected>
+        <show>
+            Deputy Sales Manager Targówek Store, P-tag Specialist Targówek Store, Sales Manager Targówek Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Sales Wrocław Store</selected>
+        <show>
+            Deputy Sales Manager Wrocław Store, Sales Co-worker IV Wrocław Store, Sales Co-worker Wrocław Store, Sales Manager Wrocław Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Self Service Janki Store</selected>
+        <show>
+            Sales Co-worker II Janki Store, Sales Co-worker Janki Store, Shopkeeper Sales Janki Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Self Service Katowice Store</selected>
+        <show>
+            Sales Co-worker II Katowice Store, Sales Co-worker Katowice Store, Shopkeeper Sales Katowice Store, Shopkeeper Self Serve Katowice Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Self Service Kraków Store</selected>
+        <show>
+            Sales Co-worker Kraków Store, Shopkeeper Sales Kraków Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Self Service Łódź Store</selected>
+        <show>
+            Sales Co-worker II Łódź Store, Sales Co-worker Łódź Store, Shopkeeper Sales Łódź Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Self Service Poznań Store</selected>
+        <show>
+            Sales Co-worker II Poznań Store, Sales Co-worker Poznań Store, Self Serve Manager Poznań Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Self Service Warszawa Targówek Store</selected>
+        <show>
+            Sales Co-worker II Targówek Store, Sales Co-worker Targówek Store, Self Serve Manager Targówek Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Self Service Wrocław Store</selected>
+        <show>
+            Sales Co-worker II Wrocław Store, Sales Co-worker Wrocław Store, Shopkeeper Sales Wrocław Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Service  Kraków Store</selected>
+        <show>
+            Customer Relations Manager Kraków Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Service Gdańsk Store</selected>
+        <show>
+            Customer Relations Manager Gdańsk Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Service Janki Store</selected>
+        <show>
+            Customer Rel. Mgr Trainee Janki Store, Customer Relations Manager Janki Store, Deputy Customer Relations Manager
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Service Łódź Store</selected>
+        <show>
+            Customer Relations Manager Łódź Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Service Poznań Store</selected>
+        <show>
+            Customer Relations Manager Poznań Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Service Product Service Office</selected>
+        <show>
+            Service Product Leader
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Service Warszawa Targówek Store</selected>
+        <show>
+            Customer Relations Mgr. Targówek Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Service Wrocław Store</selected>
+        <show>
+            Customer Relation Manager Wrocław Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>SO Property Management</selected>
+        <show>
+            Property Assistant IICP, Senior Engineer IICP
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Social &amp; Environmental I TACE</selected>
+        <show>
+            Social &amp; Environment Specialist TACE PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Sound and Picture</selected>
+        <show>
+            Business Development Manager TACE PL, Supply Developer TACE PL, Technician TACE PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Store Expansion Service Office</selected>
+        <show>
+            Store Design Manager SO
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Store Gdańsk 203</selected>
+        <show>
+            Store Manager Gdańsk Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Store Janki 188</selected>
+        <show>
+            Deputy Store Manager Janki Store, Store Manager Janki Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Store Katowice 306</selected>
+        <show>
+            IKEA FOOD Manager Katowice Store, Store Manager Katowice Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Store Kraków 204</selected>
+        <show>
+            Store Manager Kraków Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Store Łódź 329</selected>
+        <show>
+            Store Manager Łódź Store, Store Manager Trainee Łódź Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Store Poznań 205</selected>
+        <show>
+            Deputy Store Manager Poznań Store, Store Manager Poznań Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Store Warszawa Targówek 307</selected>
+        <show>
+            Deputy Store Manager Targówek Store, Store Manager Targówek Store, Store Manager Trainee Targówek Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Store Wrocław 294</selected>
+        <show>
+            Deputy Store Manager Wrocław Store, Kierownik Sklepu, Sales Co-worker II Wrocław Store, Sales Co-worker IV Wrocław Store, Sales Co-worker Wrocław Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Succession &amp; Recruitment Service Office</selected>
+        <show>
+            Succession &amp; Recruitment Manager SO
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Supply Chain Integration Service Office</selected>
+        <show>
+            Country Logistic Impl. Group Leader, Retail Capacity &amp; Flow Planner SO, Retail Supply Chain Intergration Mgr SO, Sales Support Specialist SO, Supply Support Specialist SO
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Supply Developer TACE PL</selected>
+        <show>
+            Supply Developer TACE PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Sustainability Poznań Store</selected>
+        <show>
+            Sustainability Responsible Poznań Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Sustainability TACE PL</selected>
+        <show>
+            Forestry Specialist TACE PL, IWAY Auditor TACE PL, Sustainability Developer TACE PL, Sustainability Manager TACE CZ
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Tenant Coordinaton IICP</selected>
+        <show>
+            Architect IICP, Tenant Coordination Manager IICP, Tenant Coordinator IICP
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Tenant Relations  Wrocław/Katowice</selected>
+        <show>
+            Addit.Income Sales Mgr-Centre S.C.Wr/Kat, Tenant Relation. Mgr. S.C. Wrocław/Kat
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Tenant Relations Gdańsk/Poznań</selected>
+        <show>
+            Additional Income Sales Manager IICP, Tenant Relation. Manager S.C. Gdańsk/Poz
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Tenant relations Janki</selected>
+        <show>
+            Additional Income Sales Manager IICP, Tenant Relationship Manager
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Tenant relations Łódź</selected>
+        <show>
+            Addit. Income Sales Mng-Centre S.C. Łódź, Receptionist S.C. Łódź, Tenant Relationship Manager C.H. Łódź
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Trading Area Central Europe</selected>
+        <show>
+            Business Development Manager TACE PL, Deputy Trading Area Manager TACE PL, Flat Line/Forestry/Raw mat.Project Mgr, Senior Business Advisor TACE PL, Trading Area Manager TACE PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Transition BSC</selected>
+        <show>
+            HR Process Leader BSC, Transition HR Manager BSC
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Transition HR BSC</selected>
+        <show>
+            Transition HR Manager BSC, Transition HR Specialist, Transition Specialist HRSS
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Treasury Service Office</selected>
+        <show>
+            Deputy Finance Manager SO, Financial Systems&amp;Projects Specialist SO, Senior Treasurer SO, Treasurer Assistant SO, Treasurer SO, Treasury Manager SO
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Vendor Master Data BSC</selected>
+        <show>
+            BSC Database Administrator, Team Leader Vendor Master Data
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Visual Merchandising  Kraków Store</selected>
+        <show>
+            First Visual Merchandiser Kraków Store, Visual Merch/Acti Co-worker Kraków Store, Visual Merch/ActivCo-worker Kraków Store, Visual Merchan. Co-worker Kraków Store, Visual Merchan/ActCo-worker Kraków Store, Visual Merchan/Acti Co-Work Kraków Store, VisualMerchan/ActivityManag Kraków Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Visual Merchandising Gdańsk Store</selected>
+        <show>
+            First Visual Merchandiser Gdańsk Store, Interior Design Manager, Vis. Merchan/Act. Co-worker Gdańsk Store, Vis.Merchan/Act.Co-worker Gdansk Store, Visual Merch&amp;Acti Co-worker Gdańsk Store, Visual Merch/Acti Co-worker Gdańsk Store, Visual Merch/Ativ Co-worker Gdańsk Store, Visual Merchan. Co-worker Gdańsk Store, Visual Merchandising Manager GdańskStore
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Visual Merchandising Janki Store</selected>
+        <show>
+            Carpenter Janki Store, Com &amp; In Manager Janki Store, First Visual Merchandiser Janki Store, Vis. Merchan/ Act. Co-worker Janki Store, Vis. Merchan/Act. Co-worker Janki Store, Vis. Merchan/Activ.Co-worker Janki Store, Vis.Merchan./Act. Co-worker Janki Store, Vis.Merchan/Act. Co-worker Janki Store, Vis.Merchan/Act.Co-worker Janki Store, Visual Merchan. Co-worker Janki Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Visual Merchandising Katowice Store</selected>
+        <show>
+            Carpenter Co-worker Katowice Store, First Visual Merchandiser Katowice Store, Visual Merchan. Co-worker Katowice Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Visual Merchandising Łódź Store</selected>
+        <show>
+            First Visual Merchandiser Łódź Store, Visual Merchan. Co-worker Łódź Store, Visual Merchandise / Activity Manager
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Visual Merchandising Poznań Store</selected>
+        <show>
+            Com &amp; In Manager Poznań Store, First Visual Merchandiser Poznań Store, Visual Merch/Activ.Co-worker Pozn. Store, Visual Merchan. Co-worker Poznań Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Visual Merchandising Warszawa Targówek S</selected>
+        <show>
+            First Visual Merchandiser Targówek Store, Vis.Merch/Act.Co-worker Targowek Store, Vis.Merchan/Act.Co-worker Targowek Store, Visual Merchan. Co-worker Targówek Store, Visual Merchan. Manager Targówek Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Visual Merchandising Wrocław Store</selected>
+        <show>
+            Visual Merch./Activity Co-worker Wr.Stor, Visual Merchandise/Activity ManagerWr.St
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Warehouse Gdańsk Store</selected>
+        <show>
+            Full Serve Manager Gdańsk Store, Goods Flow Co-worker Gdańsk Store, Goods Flow co-worker I Gdańsk Store, Goods Flow Specialist Gdańsk Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Warehouse Janki Store</selected>
+        <show>
+            Full Serve Manager Janki Store, Goods Flow co-worker I Janki Store, Goods Flow Co-worker Janki Store, Goods Flow Specialist Janki Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Warehouse Katowice Store</selected>
+        <show>
+            Full Serve Manager Katowice Store, Goods Flow co-worker I Katowice Store, Goods Flow Co-worker Katowice Store, Goods Flow Specialist Katowice Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Warehouse Kraków Store</selected>
+        <show>
+            Full Serve Manager Kraków Store, Goods Flow co-worker I Kraków Store, Goods Flow Co-worker Kraków Store, Goods Flow Specialist Kraków Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Warehouse Łódź Store</selected>
+        <show>
+            Full Serve Manager Łódź Store, Goods Flow Co-worker Łódź Store, Goods Flow Specialist Łódź Store, Goods Flow Team Leader Łódź Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Warehouse Poznań Store</selected>
+        <show>
+            Full Serve Manager Poznań Store, Goods Flow co-worker I Poznań Store, Goods Flow Co-worker Poznań Store, Goods Flow Specialist Poznań Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Warehouse Warszawa Targówek Store</selected>
+        <show>
+            Full Serve Manager Targówek Store, Goods Flow co-worker I Targówek Store, Goods Flow Co-worker Targówek Store, Goods Flow Specialist Targówek Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Warehouse Wrocław Store</selected>
+        <show>
+            Full Serve Manager Wrocław Store, Goods Flow co-worker I Wrocław Store, Goods Flow Co-worker Wrocław Store, Goods Flow Specialist Wrocław Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Warszawa/Janki Shopping Centre</selected>
+        <show>
+            Centre Marketing Manager S.C. Jan/Targ, Shop. Centre Assistant S.C.Janki/Targ., Shopping Centre Manager S.C. Janki/Targ.
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Wrocław/Katowice Shopping Centre</selected>
+        <show>
+            Centre Marketing Manager S.C. Wro/Kat, Shopping Centre Assistant, Shopping Centre Manager S.C. Wrocław/Kat
+        </show>
+    </dependent>
+</predefined>

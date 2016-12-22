@@ -1,0 +1,75 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<div class="tab-pane" id="globalview">
+    <div class="row-fluid">
+        <div class="span12">
+            <table class="table-striped table-gv">
+                <thead>
+                    <tr>
+                        <th>@Model.Translate("Label")</th>
+                        <th>@Model.Translate("Value")</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="tdstrong globalview" colspan="3">
+                            @Model.Translate("Basic Data")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong">@Model.Label("EmployeeNumber")</td>
+                        <td class="copy-me">@Model.GetTranslatedAnswer("EmployeeNumber")</td>
+                        <td>
+                            <div class="pull-right">
+                                <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong">@Model.Label("EmployeeFirstName")</td>
+                        <td class="copy-me">@Model.GetTranslatedAnswer("EmployeeFirstName")</td>
+                        <td>
+                            <div class="pull-right">
+                                <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                            </div>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong">@Model.Label("EmployeeLastName")</td>
+                        <td class="copy-me">@Model.GetTranslatedAnswer("EmployeeLastName")</td>
+                        <td>
+                            <div class="pull-right">
+                                <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                            </div>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong">@Model.Label("Company")</td>
+                        <td class="copy-me">@Model.Contract.Company.Name</td>
+                        <td>
+                            <div class="pull-right">
+                                <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                            </div>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong">@Model.Label("Unit")</td>
+                        <td class="copy-me">@Model.Contract.Unit.Name</td>
+                        <td>
+                            <div class="pull-right">
+                                <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                            </div>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong">@Model.Label("EffectiveDate")</td>
+                        <td class="copy-me">@Model.GetTranslatedAnswer("EffectiveDate")</td>
+                        <td>
+                            <div class="pull-right">
+                                <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                            </div>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

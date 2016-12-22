@@ -1,0 +1,1434 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE form [
+    <!ENTITY languages SYSTEM "Templates/Languages.xml">
+    <!ENTITY data_language SYSTEM "Data/Data_Languages.xml">
+    <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
+    <!ENTITY state SYSTEM "Templates/HiringState.xml">
+    <!ENTITY pre_payscaletype_payscalelevel SYSTEM "Defaults/Predefined_PayScaleType_PayScaleLevel.xml">
+    <!ENTITY data_country SYSTEM "Data/Data_Country.xml">
+    <!ENTITY data_hiring_allowancestypes SYSTEM "Data/Data_Hiring_AllowancesTypes.xml">
+    <!ENTITY data_costcentre SYSTEM "Data/Data_CostCentre.xml">
+    <!ENTITY data_nationality SYSTEM "Data/Data_Nationality.xml">
+    <!ENTITY data_jobtitle SYSTEM "Data/Data_JobTitle.xml">
+    <!ENTITY data_localjobtitle SYSTEM "Data/Data_LocalJobTitle.xml">
+    <!ENTITY data_linemanager SYSTEM "Data/Data_LineManager.xml">
+    <!ENTITY data_primarysite SYSTEM "Data/Data_PrimarySite.xml">
+]>
+
+<form id="48" guid="0BCB0E6B-245E-49C5-8E0C-B3661D3A0A09" customerId="29">
+    &languages;
+    &regexs;
+    &state;
+    <fields>
+        <!--Service Request Details-->
+        <tab name="#servicerequestdetails" label="Service Request Details">
+            <element type="select" name="NewToIKEA" mandatory="1" label="New to IKEA?">
+                <options>
+                    <option value=""></option>
+                    <option value="International Transfer">International Transfer</option>
+                    <option value="New-Hire">New-Hire</option>
+                    <option value="Re-Hire">Re-Hire</option>
+                    <option value="Transfer Between Business Units">Transfer Between Business Units</option>
+                </options>
+            </element>
+            <element type="date" name="ContractStartDate" mandatory="1" label="Contract Start Date" format="dd.MM.yyyy">                
+                <regex inherit="date" pattern="" message=""></regex>
+                <checkStartDate name="EmploymentCategory" exception="Apprentice,Holiday Co-Worker" message="The date you've entered doesn't start on the 1st or the 15th of a month"></checkStartDate>
+            </element>
+            <element type="select" name="ServiceRequestPriority" mandatory="1" label="Service Request Priority" default="Standard">
+                <options>
+                    <option value=""></option>
+                    <option value="Urgent">Urgent</option>
+                    <option value="Standard">Standard</option>
+                </options>
+            </element>
+            <element type="text" name="Co-WorkerID" label="Co-Worker ID">
+                <mandatoryIf name="NewToIKEA">Transfer Between Business Units</mandatoryIf>
+                <regex inherit="employeeno" pattern="" message=""></regex>
+            </element>
+            <element type="text" name="GlobalHRID" label="Global HR ID" formfieldidentifier="E1P0709.PERSONID_EXT">
+                <mandatoryIf name="NewToIKEA">International Transfer</mandatoryIf>
+            </element>
+            <element type="select" name="Title" label="Title" mandatory="1">
+                <options>
+                    <option value=""></option>
+                    <option value="Mr">Mr</option>
+                    <option value="Ms">Ms</option>
+                </options>
+            </element>
+            <element type="text" name="FirstName" label="Name First" mandatory="1"></element>
+            <element type="text" name="Prefixes" label="Prefixes"></element>
+            <element type="text" name="LastName" label="Name Last" mandatory="1"></element>
+            <element type="text" name="Initials" label="Initials" mandatory="1"></element>
+            <!--<element type="text" name="PreferedName" label="Preferred name"></element>-->
+            <element type="date" name="DateOfBirth" label="Date of birth" mandatory="1" format="dd.MM.yyyy" formfieldidentifier="E1P0002.GBDAT">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="text" name="PermanentAddressLine1" label="Address line 1" mandatory="1" formfieldidentifier="E1P0006.STRAS:1"></element>
+            <element type="text" name="PermanentAddressLine2" label="Address line 2" formfieldidentifier="E1P0006.HSNMR:1"></element>
+            <element type="text" name="PermanentAddressLine3" label="Address line 3" formfieldidentifier="E1P0006.POSTA:1"></element>
+            <element type="text" name="PermanentPostalCode" label="Postal code" mandatory="1" formfieldidentifier="E1P0006.PSTLZ:1">
+                <regex inherit="postcode" pattern="" message=""></regex>
+                <validateIf name="PermanentCountry">Netherlands</validateIf>
+            </element>
+            <element type="text" name="PermanentCity" label="City" mandatory="1" formfieldidentifier="E1P0006.ORT01:1"></element>
+            <element type="search-select" source="1" name="PermanentCountry" label="Country" mandatory="1" default="Netherlands" formfieldidentifier="E1P0006.LAND1:1">
+                &data_country;
+            </element>
+            <element type="select" name="MaritalStatus" label="Marital Status" mandatory="1">
+                <options>
+                    <option value=""></option>
+                    <option value="Cohabiting">Cohabiting</option>
+                    <option value="Cohabiting with contract">Cohabiting with contract</option>
+                    <option value="Divorced">Divorced</option>
+                    <option value="Legal cohabitation">Legal cohabitation</option>
+                    <option value="Married">Married</option>
+                    <option value="Registered partner">Registered partner</option>
+                    <option value="Separated">Separated</option>
+                    <option value="Single">Single</option>
+                    <option value="Unknown">Unknown</option>
+                    <option value="Widowed">Widowed</option>
+                </options>
+            </element>
+            <element type="search-select" source="1" name="Nationality" label="Nationality" default="Dutch" mandatory="1">
+                &data_nationality;
+            </element>
+            <element type="text" name="BSNCSN" label="BSN/CSN" mandatory="1">
+                <!--<regex inherit="unsignednum" pattern="" message=""></regex>-->
+                <regex inherit="bsn" pattern="" message=""></regex>
+            </element>
+            <element type="text" name="Birthplace" label="Birthplace" mandatory="1"></element>
+            <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
+        </tab>
+        <tab name="#OrganisationalAssignment" label="Organisational Assignment">
+            <element type="search-select" source="1" name="OrganisationCountry" label="Country" default="Netherlands">
+                &data_country;
+            </element>
+            <element type="select" source="database" name="Company" label="Company" mandatory="1"></element>
+            <element type="select" source="database" name="BusinessUnit" label="Business Unit" mandatory="1"></element>
+            <element type="select" source="database" name="ServiceArea" label="Function" mandatory="1"></element>
+            <element type="select" source="database" name="Department" label="Department" mandatory="1"></element>
+            <element type="search-select" source="1" name="HomeCostCentre" label="Cost Centre" mandatory="1">
+                &data_costcentre;
+            </element>
+            <element type="text" name="CostAllocation" label="Cost Allocation" mandatory="1" default="100">
+                <!--<regex inherit="unsignednum" pattern="" message=""></regex>-->
+              <regex inherit="amountwithdelimiter" pattern="" message=""></regex>
+              <regex inherit="num100" pattern="" message=""></regex>
+            </element>
+            <element type="search-select" name="CrossChargeCostCentre" source="1" label="Cost Centre">
+                &data_costcentre;
+                <mandatoryIfNotEqual name="CostAllocation">100</mandatoryIfNotEqual>
+            </element>
+            <element type="search-select" name="JobTitle" label="Job Title (Global Catalogue)" mandatory="1">
+                &data_jobtitle;
+            </element>
+            <element type="search-select" name="LocalJobTitle" label="Position Title (Local Job Name)" mandatory="1">
+                &data_localjobtitle;
+            </element>
+            <element type="select" name="NewPosition" label="New Position?" mandatory="1" default="Fill Vacant Position">
+                <options>
+                    <option value=""></option>
+                    <option value="New Position">New Position</option>
+                    <option value="Fill Vacant Position">Fill Vacant Position</option>
+                    <option value="New Position for VAP store?">New Position for VAP store?</option>
+                </options>
+            </element>
+            <element type="search-select" name="ReportsToLineManager" source="1" label="Reports to Line Manager" mandatory="1">
+                &data_linemanager;
+            </element>
+            <element type="select" name="AcknowledgedManagerInCLA" label="Acknowledged as managers in terms of CLA" mandatory="1">
+                <options>
+                    <option value=""></option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </options>
+            </element>
+            <element type="select" name="EmploymentCategory" label="Employment Category" mandatory="1">
+                <options>
+                    <option value=""></option>
+                    <option value="Permanent">Permanent</option>
+                    <option value="Temporary">Temporary</option>
+                    <option value="Apprentice">Apprentice</option>
+                    <option value="Holiday Co-Worker">Holiday Co-Worker</option>
+                    <option value="Detached">Detached</option>
+                    <option value="Expat (TE)">Expat (TE)</option>
+                </options>
+            </element>
+            <element type="text" name="ContractedHours" label="Contracted Hours" mandatory="1">
+                <regex inherit="numMax40" pattern="" message=""></regex>
+            </element>
+            <element type="date" name="ContractEndDate" label="Contract End Date" format="dd.MM.yyyy">
+                <laterThanOrEqual name="ContractStartDate" message="This date cannot be earlier than Contract start date."></laterThanOrEqual>
+                <mandatoryIf name="EmploymentCategory">Temporary,Apprentice,Holiday Co-Worker,Detached,Expat (TE),Transferred Employee</mandatoryIf>
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="ContractType" label="Contract Type" mandatory="1">
+                <options>
+                    <option value=""></option>
+                    <option value="Part Time">Part Time</option>
+                    <option value="Full Time">Full Time</option>
+                </options>
+            </element>
+            <element type="select" name="ProbationPeriod" label="Probation period?" mandatory="1">
+                <options>
+                    <option value=""></option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </options>
+            </element>
+            <element type="date" name="ProbationEndDate" label="Probation End Date" format="dd.MM.yyyy">
+                <mandatoryIf name="ProbationPeriod">Yes</mandatoryIf>
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element name="PrimarySite" type="search-select" label="Primary Site" mandatory="1">
+                &data_primarysite;
+            </element>
+            <element name="TECApprover" type="search-select" label="TEC Approver" mandatory="1">
+                &data_linemanager;
+            </element>
+            <element name="HelpDesk" type="text" label="Help Desk" default="ICC3 HBG Retail" mandatory="1"></element>
+            <element type="text" name="NameOfSchool" label="Name Of School">
+                <mandatoryIf name="EmploymentCategory">Apprentice</mandatoryIf>
+            </element>
+            <element type="text" name="NameOfEducation" label="Name Of Education">
+                <mandatoryIf name="EmploymentCategory">Apprentice</mandatoryIf>
+            </element>
+            <element type="text" name="CityEducationSchool" label="City Education/School">
+                <mandatoryIf name="EmploymentCategory">Apprentice</mandatoryIf>
+            </element>
+            <element type="text" name="LevelOfEducation" label="Level Of Education">
+                <mandatoryIf name="EmploymentCategory">Apprentice</mandatoryIf>
+            </element>
+            <element type="text" name="MentorAtIKEA" label="Mentor at IKEA">
+                <mandatoryIf name="EmploymentCategory">Apprentice</mandatoryIf>
+            </element>
+        </tab>
+        <tab name="#payment" label="Payment Information">
+            <element type="select" name="PayrollCategory" label="Payroll Category" mandatory="1">
+                <options>
+                    <option value=""></option>
+                    <option value="Hourly">Hourly</option>
+                    <option value="Monthly">Monthly</option>
+                    <option value="Juvenile Hourly">Juvenile Hourly</option>
+                    <option value="Juvenile Monthly">Juvenile Monthly</option>
+                    <option value="No Salary">No Salary</option>
+                    <option value="MT/Dep/SM">MT/Dep/SM</option>
+                </options>
+            </element>
+            <element type="text" name="BasicPayAmount" label="Basic Pay Amount" mandatory="1">
+                <!--<regex inherit="unsignednum" pattern="" message=""></regex>-->
+              <regex inherit="amountwithdelimiter" pattern="" message=""></regex>
+              <!--<mandatoryIf name="PayrollCategory">Hourly,Juvenile Hourly</mandatoryIf>-->
+            </element>
+            <element type="select" name="PayScaleType" label="Pay Scale Type" default="IKEA NL CAO" mandatory="1">
+                &pre_payscaletype_payscalelevel;
+                <options>
+                    <option value=""></option>
+                    <option value="IKEA NL CAO">IKEA NL CAO</option>
+                    <option value="IKEA NL geen CAO">IKEA NL geen CAO</option>
+                    <option value="IKEA Competence">IKEA Competence</option>
+                </options>
+            </element>
+            <element type="select" name="PayScaleLevel" label="Pay Scale Level/IPE" mandatory="1">
+                <options>
+                    <option value=""></option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="44">44</option>
+                    <option value="45">45</option>
+                    <option value="46">46</option>
+                    <option value="47">47</option>
+                    <option value="48">48</option>
+                    <option value="49">49</option>
+                    <option value="50">50</option>
+                    <option value="51">51</option>
+                    <option value="52">52</option>
+                    <option value="53">53</option>
+                    <option value="54">54</option>
+                    <option value="55">55</option>
+                    <option value="56">56</option>
+                    <option value="57">57</option>
+                    <option value="58">58</option>
+                    <option value="59">59</option>
+                    <option value="60">60</option>
+                    <option value="61">61</option>
+                    <option value="62">62</option>
+                    <option value="63">63</option>
+                    <option value="64">64</option>
+                    <option value="65">65</option>
+                    <option value="66">66</option>
+                </options>
+            </element>
+            <element type="hidden" name="Allowances" default="1"></element>
+            <element type="select" name="AllowancesType" label="Allowance Type">
+                &data_hiring_allowancestypes;
+            </element>
+            <element type="select" name="AllowancesPaymentType" label="Payment Type">
+                <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="One Time">One Time</option>
+                    <option value="Recurring">Recurring</option>
+                </options>
+            </element>
+            <element type="text" name="AllowancesAmountUnits" label="Amount/Units">
+                <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>
+                <!--<regex inherit="unsignednum" pattern="" message=""></regex>-->
+                <regex inherit="amountwithdelimiter" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="AllowancesNetGross" label="Net/Gross">
+                <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Net">Net</option>
+                    <option value="Gross">Gross</option>
+                </options>
+            </element>
+            <element type="date" name="AllowancesValidFrom" label="Valid from:" format="dd.MM.yyyy">
+                <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>
+                <regex inherit="date" pattern="" message=""></regex>
+                <laterThanOrEqual name="ContractStartDate" message="This date cannot be earlier than Contract start date."></laterThanOrEqual>
+            </element>
+            <element type="date" name="AllowancesValidTo" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+                <mandatoryIf name="AllowancesPaymentType">Recurring</mandatoryIf>
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="AllowancesType2" label="Allowance Type" >
+                &data_hiring_allowancestypes;
+            </element>
+            <element type="select" name="AllowancesPaymentType2" label="Payment Type">
+                <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="One Time">One Time</option>
+                    <option value="Recurring">Recurring</option>
+                </options>
+            </element>
+            <element type="text" name="AllowancesAmountUnits2" label="Amount/Units" >
+                <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>
+                <regex inherit="amountwithdelimiter" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="AllowancesNetGross2" label="Net/Gross" >
+                <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Net">Net</option>
+                    <option value="Gross">Gross</option>
+                </options>
+            </element>
+            <element type="date" name="AllowancesValidFrom2" label="Valid from:" format="dd.MM.yyyy">
+                <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>
+                <regex inherit="date" pattern="" message=""></regex>
+                <laterThanOrEqual name="ContractStartDate" message="This date cannot be earlier than Contract start date."></laterThanOrEqual>
+            </element>
+            <element type="date" name="AllowancesValidTo2" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+                <mandatoryIf name="AllowancesPaymentType2">Recurring</mandatoryIf>
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="AllowancesType3" label="Allowance Type" >
+                &data_hiring_allowancestypes;
+            </element>
+            <element type="select" name="AllowancesPaymentType3" label="Payment Type">
+                <mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="One Time">One Time</option> 
+                    <option value="Recurring">Recurring</option>
+                </options>
+            </element>
+            <element type="text" name="AllowancesAmountUnits3" label="Amount/Units" >
+                <mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>
+              <regex inherit="amountwithdelimiter" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="AllowancesNetGross3" label="Net/Gross" >
+                <mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Net">Net</option>
+                    <option value="Gross">Gross</option>
+                </options>
+            </element>
+            <element type="date" name="AllowancesValidFrom3" label="Valid from:"  format="dd.MM.yyyy">
+                <mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>
+                <regex inherit="date" pattern="" message=""></regex>
+                <laterThanOrEqual name="ContractStartDate" message="This date cannot be earlier than Contract start date."></laterThanOrEqual>
+            </element>
+            <element type="date" name="AllowancesValidTo3" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+                <mandatoryIf name="AllowancesPaymentType3">Recurring</mandatoryIf>
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="AllowancesType4" label="Allowance Type" >
+                &data_hiring_allowancestypes;
+            </element>
+            <element type="select" name="AllowancesPaymentType4" label="Payment Type">
+                <mandatoryIfNotEmpty name="AllowancesType4"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="One Time">One Time</option>
+                    <option value="Recurring">Recurring</option>
+                </options>
+            </element>
+            <element type="text" name="AllowancesAmountUnits4" label="Amount/Units" >
+                <mandatoryIfNotEmpty name="AllowancesType4"></mandatoryIfNotEmpty>
+                <regex inherit="amountwithdelimiter" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="AllowancesNetGross4" label="Net/Gross" >
+                <mandatoryIfNotEmpty name="AllowancesType4"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Net">Net</option>
+                    <option value="Gross">Gross</option>
+                </options>
+            </element>
+            <element type="date" name="AllowancesValidFrom4" label="Valid from:"  format="dd.MM.yyyy">
+                <mandatoryIfNotEmpty name="AllowancesType4"></mandatoryIfNotEmpty>
+                <regex inherit="date" pattern="" message=""></regex>
+                <laterThanOrEqual name="ContractStartDate" message="This date cannot be earlier than Contract start date."></laterThanOrEqual>
+            </element>
+            <element type="date" name="AllowancesValidTo4" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+                <mandatoryIf name="AllowancesPaymentType4">Recurring</mandatoryIf>
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="AllowancesType5" label="Allowance Type" >
+                &data_hiring_allowancestypes;
+            </element>
+            <element type="select" name="AllowancesPaymentType5" label="Payment Type">
+                <mandatoryIfNotEmpty name="AllowancesType5"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="One Time">One Time</option>
+                    <option value="Recurring">Recurring</option>
+                </options>
+            </element>
+            <element type="text" name="AllowancesAmountUnits5" label="Amount/Units" >
+                <mandatoryIfNotEmpty name="AllowancesType5"></mandatoryIfNotEmpty>
+                <regex inherit="amountwithdelimiter" pattern="" message=""></regex>               
+            </element>
+            <element type="select" name="AllowancesNetGross5" label="Net/Gross" >
+                <mandatoryIfNotEmpty name="AllowancesType5"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Net">Net</option>
+                    <option value="Gross">Gross</option>
+                </options>
+            </element>
+            <element type="date" name="AllowancesValidFrom5" label="Valid from:"  format="dd.MM.yyyy">
+                <mandatoryIfNotEmpty name="AllowancesType5"></mandatoryIfNotEmpty>
+                <regex inherit="date" pattern="" message=""></regex>
+                <laterThanOrEqual name="ContractStartDate" message="This date cannot be earlier than Contract start date."></laterThanOrEqual>
+            </element>
+            <element type="date" name="AllowancesValidTo5" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+                <mandatoryIf name="AllowancesPaymentType5">Recurring</mandatoryIf>
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="hidden" default="1" name="Deductions"></element>
+            <!--1-->
+            <element name="DeductionsType" label="Deduction Type" type="select">
+                <mandatoryIfNotEmpty name="DeductionsAmountUnits"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Company Fitness">Company Fitness</option>
+                </options>
+            </element>
+            <element name="DeductionsPaymentType" label="Payment type" type="select">
+                <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="One Time">One Time</option>
+                    <option value="Recurring">Recurring</option>
+                </options>
+            </element>
+            <element name="DeductionsAmountUnits" label="Deduction Amount/Units" type="text" >
+                <regex inherit="amountwithdelimiter" pattern="" message=""></regex>              
+                <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
+            </element>
+            <element type="select" name="DeductionsNetGross" label="Net/Gross" >
+                <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Net">Net</option>
+                    <option value="Gross">Gross</option>
+                </options>
+            </element>
+            <element name="DeductionsValidFrom" label="Deduction Valid from" type="date" format="dd.MM.yyyy">
+                <regex inherit="date" pattern="" message=""></regex>
+                <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
+                <laterThanOrEqual name="ContractStartDate" message="This date cannot be earlier than Contract start date."></laterThanOrEqual>
+            </element>
+            <element name="DeductionsValidTo" label="Deduction Valid to" type="date"  default="31.12.9999" format="dd.MM.yyyy">
+                <regex inherit="date" pattern="" message=""></regex>
+                <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
+            </element>
+            <!--2-->
+            <element name="DeductionsType2" label="Deduction Type" type="select" >
+                <mandatoryIfNotEmpty name="DeductionAmountUnits2"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Company Fitness">Company Fitness</option>
+                </options>
+            </element>
+            <element name="DeductionsPaymentType2" label="Payment type" type="select">
+                <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="One Time">One Time</option>
+                    <option value="Recurring">Recurring</option>
+                </options>
+            </element>
+            <element name="DeductionsAmountUnits2" label="Deduction Amount/Units" type="text" >
+                <regex inherit="amountwithdelimiter" pattern="" message=""></regex>              
+                <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
+            </element>
+            <element type="select" name="DeductionsNetGross2" label="Net/Gross" >
+                <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Net">Net</option>
+                    <option value="Gross">Gross</option>
+                </options>
+            </element>
+            <element name="DeductionsValidFrom2" label="Deduction Valid from" type="date" format="dd.MM.yyyy">
+                <regex inherit="date" pattern="" message=""></regex>
+                <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
+                <laterThanOrEqual name="ContractStartDate" message="This date cannot be earlier than Contract start date."></laterThanOrEqual>
+            </element>
+            <element name="DeductionsValidTo2" label="Deduction Valid to" type="date"  default="31.12.9999" format="dd.MM.yyyy">
+                <regex inherit="date" pattern="" message=""></regex>
+                <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
+            </element>
+            <!--3-->
+            <element name="DeductionsType3" label="Deduction Type" type="select" >
+                <mandatoryIfNotEmpty name="DeductionAmountUnits3"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Company Fitness">Company Fitness</option>
+                </options>
+            </element>
+            <element name="DeductionsPaymentType3" label="Payment type" type="select">
+                <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="One Time">One Time</option>
+                    <option value="Recurring">Recurring</option>
+                </options>
+            </element>
+            <element name="DeductionsAmountUnits3" label="Deduction Amount/Units" type="text" >
+                <regex inherit="amountwithdelimiter" pattern="" message=""></regex>              
+                <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
+            </element>
+            <element type="select" name="DeductionsNetGross3" label="Net/Gross" >
+                <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Net">Net</option>
+                    <option value="Gross">Gross</option>
+                </options>
+            </element>
+            <element name="DeductionsValidFrom3" label="Deduction Valid from" type="date" format="dd.MM.yyyy">
+                <regex inherit="date" pattern="" message=""></regex>
+                <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
+                <laterThanOrEqual name="ContractStartDate" message="This date cannot be earlier than Contract start date."></laterThanOrEqual>
+            </element>
+            <element name="DeductionsValidTo3" label="Deduction Valid to" type="date"  default="31.12.9999" format="dd.MM.yyyy">
+                <regex inherit="date" pattern="" message=""></regex>
+                <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
+            </element>
+            <!--4-->
+            <element name="DeductionsType4" label="Deduction Type" type="select" >
+                <mandatoryIfNotEmpty name="DeductionAmountUnits4"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Company Fitness">Company Fitness</option>
+                </options>
+            </element>
+            <element name="DeductionsPaymentType4" label="Payment type" type="select">
+                <mandatoryIfNotEmpty name="DeductionsType4"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="One Time">One Time</option>
+                    <option value="Recurring">Recurring</option>
+                </options>
+            </element>
+            <element name="DeductionsAmountUnits4" label="Deduction Amount/Units" type="text" >
+                <regex inherit="amountwithdelimiter" pattern="" message=""></regex>              
+                <mandatoryIfNotEmpty name="DeductionsType4"></mandatoryIfNotEmpty>
+            </element>
+            <element type="select" name="DeductionsNetGross4" label="Net/Gross" >
+                <mandatoryIfNotEmpty name="DeductionsType4"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Net">Net</option>
+                    <option value="Gross">Gross</option>
+                </options>
+            </element>
+            <element name="DeductionsValidFrom4" label="Deduction Valid from" type="date" format="dd.MM.yyyy">
+                <regex inherit="date" pattern="" message=""></regex>
+                <mandatoryIfNotEmpty name="DeductionsType4"></mandatoryIfNotEmpty>
+                <laterThanOrEqual name="ContractStartDate" message="This date cannot be earlier than Contract start date."></laterThanOrEqual>
+            </element>
+            <element name="DeductionsValidTo4" label="Deduction Valid to" type="date"  default="31.12.9999" format="dd.MM.yyyy">
+                <regex inherit="date" pattern="" message=""></regex>
+                <mandatoryIfNotEmpty name="DeductionsType4"></mandatoryIfNotEmpty>
+            </element>
+            <!--5-->
+            <element name="DeductionsType5" label="Deduction Type" type="select" >
+                <mandatoryIfNotEmpty name="DeductionAmountUnits5"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Company Fitness">Company Fitness</option>
+                </options>
+            </element>
+            <element name="DeductionsPaymentType5" label="Payment type" type="select">
+                <mandatoryIfNotEmpty name="DeductionsType5"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="One Time">One Time</option>
+                    <option value="Recurring">Recurring</option>
+                </options>
+            </element>
+            <element name="DeductionsAmountUnits5" label="Deduction Amount/Units" type="text" >
+                <regex inherit="amountwithdelimiter" pattern="" message=""></regex>              
+                <mandatoryIfNotEmpty name="DeductionsType5"></mandatoryIfNotEmpty>
+            </element>
+            <element type="select" name="DeductionsNetGross5" label="Net/Gross" >
+                <mandatoryIfNotEmpty name="DeductionsType5"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Net">Net</option>
+                    <option value="Gross">Gross</option>
+                </options>
+            </element>
+            <element name="DeductionsValidFrom5" label="Deduction Valid from" type="date" format="dd.MM.yyyy">
+                <regex inherit="date" pattern="" message=""></regex>
+                <mandatoryIfNotEmpty name="DeductionsType5"></mandatoryIfNotEmpty>
+                <laterThanOrEqual name="ContractStartDate" message="This date cannot be earlier than Contract start date."></laterThanOrEqual>
+            </element>
+            <element name="DeductionsValidTo5" label="Deduction Valid to" type="date"  default="31.12.9999" format="dd.MM.yyyy">
+                <regex inherit="date" pattern="" message=""></regex>
+                <mandatoryIfNotEmpty name="DeductionsType5"></mandatoryIfNotEmpty>
+            </element>
+            <element type="select" name="OneIKEABonusLevel" label="One IKEA Bonus Level ">
+                <options>
+                    <option value=""></option>
+                    <option value="Level 1">Level 1</option>
+                    <option value="Level 2">Level 2</option>
+                    <option value="Level 3">Level 3</option>
+                </options>
+            </element>
+            <!--<element type="select" name="CLAIncrease" label="CLA increase">
+                <options>
+                    <option value=""></option>
+                    <option value="Level 1">Level 1</option>
+                    <option value="Level 2">Level 2</option>
+                </options>
+            </element>-->
+            <element type="select" name="TaxAssignment" label="Tax Assignment">
+              <mandatoryIf name="NewToIKEA">International Transfer</mandatoryIf>
+                <options>
+                    <option value=""></option>
+                    <option value="Home Country">Home Country</option>
+                    <option value="Host Country">Host Country</option>
+                </options>
+            </element>
+            <element type="select" name="SocialInsuranceAssignment" label="Social Insurance Assignment">
+              <mandatoryIf name="NewToIKEA">International Transfer</mandatoryIf>              
+                <options>
+                    <option value=""></option>
+                    <option value="Home Country">Home Country</option>
+                    <option value="Host Country">Host Country</option>
+                </options>
+            </element>
+            <element type="hidden" name="Benefits" default="1"></element>
+            <!--1-->
+            <element type="select" name="TypeOfBenefit" label="Type of benefit">
+                <options>
+                    <option value=""></option>
+                    <option value="Company Car">Company Car</option>
+                    <option value="Salary Revision">Salary Revision</option>
+                    <!--<option value="Refurnishing Allowance">Refurnishing Allowance</option>--> 
+                    <option value="Compensation Transportation costs">Compensation Transportation costs</option>
+                </options>
+            </element>
+            <element type="select" name="Category" label="Category">
+                <mandatoryIf name="TypeOfBenefit">Company Car</mandatoryIf>
+                <options>
+                    <option value=""></option>
+                    <option value="Class 1">Class 1</option>
+                    <option value="Class 2">Class 2</option>
+                </options>
+            </element>
+            <element type="select" name="TypeOfCar" label="Type of car">
+                <mandatoryIf name="TypeOfBenefit">Company Car</mandatoryIf>
+                <options>
+                    <option value=""></option>
+                    <option value="necessity car without the option to drive privately">necessity car without the option to drive privately</option>
+                    <option value="necessity car with the option to drive privately by paying € 250,- net a month">necessity car with the option to drive privately by paying € 250,- net a month</option>
+                    <option value="benefit car, for business and private use">benefit car, for business and private use</option>
+                </options>
+            </element>
+            <element type="text" name="MonthlyAmount" label="Monthly Amount">
+                <!--<mandatoryIf name="TypeOfBenefit">Refurnishing Allowance</mandatoryIf>-->
+                <!--<regex inherit="unsignednum" pattern="" message=""></regex>-->
+                <regex inherit="amountwithdelimiter" pattern="" message=""></regex>
+            </element>
+            <element type="date" name="NextRevisionDate" label="Next Revision Date" future="1" format="dd.MM.yyyy">
+                <mandatoryIf name="TypeOfBenefit">Salary Revision</mandatoryIf>
+                <regex inherit="date" message="" pattern=""></regex>
+            </element>
+            <!--2-->
+            <element type="select" name="TypeOfBenefit2" label="Type of benefit">
+                <options>
+                    <option value=""></option>
+                    <option value="Company Car">Company Car</option>
+                    <option value="Salary Revision">Salary Revision</option>
+                    <!--<option value="Refurnishing Allowance">Refurnishing Allowance</option>-->
+                    <option value="Compensation Transportation costs">Compensation Transportation costs</option>
+                </options>
+            </element>
+            <element type="select" name="Category2" label="Category">
+                <mandatoryIf name="TypeOfBenefit2">Company Car</mandatoryIf>
+                <options>
+                    <option value=""></option>
+                    <option value="Class 1">Class 1</option>
+                    <option value="Class 2">Class 2</option>
+                </options>
+            </element>
+            <element type="select" name="TypeOfCar2" label="Type of car">
+                <mandatoryIf name="TypeOfBenefit2">Company Car</mandatoryIf>
+                <options>
+                    <option value=""></option>
+                    <option value="necessity car without the option to drive privately">necessity car without the option to drive privately</option>
+                    <option value="necessity car with the option to drive privately by paying € 250,- net a month">necessity car with the option to drive privately by paying € 250,- net a month</option>
+                    <option value="benefit car, for business and private use">benefit car, for business and private use</option>
+                </options>
+            </element>
+            <element type="text" name="MonthlyAmount2" label="Monthly Amount">
+                <!--<mandatoryIf name="TypeOfBenefit2">Refurnishing Allowance</mandatoryIf>-->
+                <!--<regex inherit="unsignednum" pattern="" message=""></regex>-->
+                <regex inherit="amountwithdelimiter" pattern="" message=""></regex>                
+            </element>
+            <element type="date" name="NextRevisionDate2" label="Next Revision Date" future="1" format="dd.MM.yyyy">
+                <mandatoryIf name="TypeOfBenefit2">Salary Revision</mandatoryIf>
+                <regex inherit="date" message="" pattern=""></regex>
+            </element>
+            <!--3-->
+            <element type="select" name="TypeOfBenefit3" label="Type of benefit">
+                <options>
+                    <option value=""></option>
+                    <option value="Company Car">Company Car</option>
+                    <option value="Salary Revision">Salary Revision</option>
+                    <!--<option value="Refurnishing Allowance">Refurnishing Allowance</option>-->
+                    <option value="Compensation Transportation costs">Compensation Transportation costs</option>
+                </options>
+            </element>
+            <element type="select" name="Category3" label="Category">
+                <mandatoryIf name="TypeOfBenefit3">Company Car</mandatoryIf>
+                <options>
+                    <option value=""></option>
+                    <option value="Class 1">Class 1</option>
+                    <option value="Class 2">Class 2</option>
+                </options>
+            </element>
+            <element type="select" name="TypeOfCar3" label="Type of car">
+                <mandatoryIf name="TypeOfBenefit3">Company Car</mandatoryIf>
+                <options>
+                    <option value=""></option>
+                    <option value="necessity car without the option to drive privately">necessity car without the option to drive privately</option>
+                    <option value="necessity car with the option to drive privately by paying € 250,- net a month">necessity car with the option to drive privately by paying € 250,- net a month</option>
+                    <option value="benefit car, for business and private use">benefit car, for business and private use</option>
+                </options>
+            </element>
+            <element type="text" name="MonthlyAmount3" label="Monthly Amount">
+                <!--<mandatoryIf name="TypeOfBenefit3">Refurnishing Allowance</mandatoryIf>-->
+                <regex inherit="amountwithdelimiter" pattern="" message=""></regex>
+            </element>
+            <element type="date" name="NextRevisionDate3" label="Next Revision Date" future="1" format="dd.MM.yyyy">
+                <mandatoryIf name="TypeOfBenefit3">Salary Revision</mandatoryIf>
+                <regex inherit="date" message="" pattern=""></regex>
+            </element>
+            <!--4-->
+            <element type="select" name="TypeOfBenefit4" label="Type of benefit">
+                <options>
+                    <option value=""></option>
+                    <option value="Company Car">Company Car</option>
+                    <option value="Salary Revision">Salary Revision</option>
+                    <!--<option value="Refurnishing Allowance">Refurnishing Allowance</option>-->
+                    <option value="Compensation Transportation costs">Compensation Transportation costs</option>
+                </options>
+            </element>
+            <element type="select" name="Category4" label="Category">
+                <mandatoryIf name="TypeOfBenefit4">Company Car</mandatoryIf>
+                <options>
+                    <option value=""></option>
+                    <option value="Class 1">Class 1</option>
+                    <option value="Class 2">Class 2</option>
+                </options>
+            </element>
+            <element type="select" name="TypeOfCar4" label="Type of car">
+                <mandatoryIf name="TypeOfBenefit4">Company Car</mandatoryIf>
+                <options>
+                    <option value=""></option>
+                    <option value="necessity car without the option to drive privately">necessity car without the option to drive privately</option>
+                    <option value="necessity car with the option to drive privately by paying € 250,- net a month">necessity car with the option to drive privately by paying € 250,- net a month</option>
+                    <option value="benefit car, for business and private use">benefit car, for business and private use</option>
+                </options>
+            </element>
+            <element type="text" name="MonthlyAmount4" label="Monthly Amount">
+                <!--<mandatoryIf name="TypeOfBenefit4">Refurnishing Allowance</mandatoryIf>-->
+                <regex inherit="amountwithdelimiter" pattern="" message=""></regex>
+            </element>
+            <element type="date" name="NextRevisionDate4" label="Next Revision Date" future="1" format="dd.MM.yyyy">
+                <mandatoryIf name="TypeOfBenefit4">Salary Revision</mandatoryIf>
+                <regex inherit="date" message="" pattern=""></regex>
+            </element>
+            <!--5-->
+            <element type="select" name="TypeOfBenefit5" label="Type of benefit">
+                <options>
+                    <option value=""></option>
+                    <option value="Company Car">Company Car</option>
+                    <option value="Salary Revision">Salary Revision</option>
+                    <!--<option value="Refurnishing Allowance">Refurnishing Allowance</option>-->
+                    <option value="Compensation Transportation costs">Compensation Transportation costs</option>
+                </options>
+            </element>
+            <element type="select" name="Category5" label="Category">
+                <mandatoryIf name="TypeOfBenefit5">Company Car</mandatoryIf>
+                <options>
+                    <option value=""></option>
+                    <option value="Class 1">Class 1</option>
+                    <option value="Class 2">Class 2</option>
+                </options>
+            </element>
+            <element type="select" name="TypeOfCar5" label="Type of car">
+                <mandatoryIf name="TypeOfBenefit5">Company Car</mandatoryIf>
+                <options>
+                    <option value=""></option>
+                    <option value="necessity car without the option to drive privately">necessity car without the option to drive privately</option>
+                    <option value="necessity car with the option to drive privately by paying € 250,- net a month">necessity car with the option to drive privately by paying € 250,- net a month</option>
+                    <option value="benefit car, for business and private use">benefit car, for business and private use</option>
+                </options>
+            </element>
+            <element type="text" name="MonthlyAmount5" label="Monthly Amount">
+                <!--<mandatoryIf name="TypeOfBenefit5">Refurnishing Allowance</mandatoryIf>-->
+                <regex inherit="amountwithdelimiter" pattern="" message=""></regex>
+            </element>
+            <element type="date" name="NextRevisionDate5" label="Next Revision Date" future="1" format="dd.MM.yyyy">
+                <mandatoryIf name="TypeOfBenefit5">Salary Revision</mandatoryIf>
+                <regex inherit="date" message="" pattern=""></regex>
+            </element>
+        </tab>
+        <tab name="#personal" label="Personal Information">
+            <element type="text" name="TelephoneNumber" label="Telephone Number"></element>
+            <element type="text" name="ContactEMailAddress" label="Contact e-mail address" formfieldidentifier="E1P0105.USRID_LONG:10">
+                <regex inherit="email" pattern="" message=""></regex>
+            </element>
+            <element type="text" name="MailingAddressLine1" label="Address line 1" mandatory="1"></element>
+            <element type="text" name="MailingAddressLine2" label="Address line 2"></element>
+            <element type="text" name="MailingAddressLine3" label="Address line 3"></element>
+            <element type="text" name="MailingPostalCode" label="Postal code" mandatory="1" >
+                <regex inherit="postcode" message="" pattern=""></regex>
+                <validateIf name="MailingCountry">Netherlands</validateIf>
+                <mandatoryIfNotEmpty name="MailingAddressLine1"></mandatoryIfNotEmpty>
+            </element>
+            <element type="text" name="MailingCity" label="City" mandatory="1">
+                <mandatoryIfNotEmpty name="MailingAddressLine1"></mandatoryIfNotEmpty>
+            </element>
+            <element type="search-select" source="1" name="MailingCountry" label="Country" default="Netherlands" mandatory="1">
+                <mandatoryIfNotEmpty name="MailingAddressLine1"></mandatoryIfNotEmpty>
+                &data_country;
+            </element>
+            <element type="text" name="EmergencyAddressLine1" label="Address line 1" mandatory="1"></element>
+            <element type="text" name="EmergencyAddressLine2" label="Address line 2"></element>
+            <element type="text" name="EmergencyAddressLine3" label="Address line 3"></element>
+            <element type="text" name="EmergencyPostalCode" label="Postal code" mandatory="1">
+                <regex inherit="postcode" message="" pattern=""></regex>
+                <validateIf name="EmergencyCountry">Netherlands</validateIf>
+            </element>
+            <element type="text" name="EmergencyCity" label="City" mandatory="1"></element>
+            <element type="search-select" source="1" name="EmergencyCountry" label="Country" default="Netherlands" mandatory="1">
+                &data_country;
+            </element>
+            <element type="text" name="EmergencyContactNumber" label="Emergency contact number"></element>
+            <element type="text" name="EmergencyContactRelationship" label="Emergency contact/relationship" mandatory="1"></element>
+            <!--Family Member/Dependents-->
+            <element type="hidden" name="FamilyMembers" default="1"></element>
+            <element type="select" name="FamilyMember" label="Family Member">
+                <options>
+                    <option value=""></option>
+                    <option value="Spouse">Spouse</option>
+                    <option value="Partner (Registered)">Partner (Registered)</option>
+                    <option value="Child">Child</option>
+                    <option value="Cohabitation agreement">Cohabitation agreement</option>
+                </options>
+            </element>
+            <element type="text" name="FamilyMemberLastName" label="Last Name"></element>
+            <element type="text" name="FamilyMemberFirstName" label="First Name"></element>
+            <element type="select" name="FamilyMemberGender" label="Gender">
+                <options>
+                    <option value=""></option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </options>
+            </element>
+            <element type="date" name="FamilyMemberDateOfBirth" label="Date of Birth" format="dd.MM.yyyy">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="FamilyMember2" label="Family Member">
+                <options>
+                    <option value=""></option>
+                    <option value="Spouse">Spouse</option>
+                    <option value="Partner (Registered)">Partner (Registered)</option>
+                    <option value="Child">Child</option>
+                    <option value="Cohabitation agreement">Cohabitation agreement</option>
+                </options>
+            </element>
+            <element type="text" name="FamilyMemberLastName2" label="Last Name"></element>
+            <element type="text" name="FamilyMemberFirstName2" label="First Name"></element>
+            <element type="select" name="FamilyMemberGender2" label="Gender">
+                <options>
+                    <option value=""></option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </options>
+            </element>
+            <element type="date" name="FamilyMemberDateOfBirth2" label="Date of Birth" format="dd.MM.yyyy">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="FamilyMember3" label="Family Member">
+                <options>
+                    <option value=""></option>
+                    <option value="Spouse">Spouse</option>
+                    <option value="Partner (Registered)">Partner (Registered)</option>
+                    <option value="Child">Child</option>
+                    <option value="Cohabitation agreement">Cohabitation agreement</option>
+                </options>
+            </element>
+            <element type="text" name="FamilyMemberLastName3" label="Last Name"></element>
+            <element type="text" name="FamilyMemberFirstName3" label="First Name"></element>
+            <element type="select" name="FamilyMemberGender3" label="Gender">
+                <options>
+                    <option value=""></option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </options>
+            </element>
+            <element type="date" name="FamilyMemberDateOfBirth3" label="Date of Birth" format="dd.MM.yyyy">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="FamilyMember4" label="Family Member">
+                <options>
+                    <option value=""></option>
+                    <option value="Spouse">Spouse</option>
+                    <option value="Partner (Registered)">Partner (Registered)</option>
+                    <option value="Child">Child</option>
+                    <option value="Cohabitation agreement">Cohabitation agreement</option>
+                </options>
+            </element>
+            <element type="text" name="FamilyMemberLastName4" label="Last Name"></element>
+            <element type="text" name="FamilyMemberFirstName4" label="First Name"></element>
+            <element type="select" name="FamilyMemberGender4" label="Gender">
+                <options>
+                    <option value=""></option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </options>
+            </element>
+            <element type="date" name="FamilyMemberDateOfBirth4" label="Date of Birth" format="dd.MM.yyyy">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="FamilyMember5" label="Family Member">
+                <options>
+                    <option value=""></option>
+                    <option value="Spouse">Spouse</option>
+                    <option value="Partner (Registered)">Partner (Registered)</option>
+                    <option value="Child">Child</option>
+                    <option value="Cohabitation agreement">Cohabitation agreement</option>
+                </options>
+            </element>
+            <element type="text" name="FamilyMemberLastName5" label="Last Name"></element>
+            <element type="text" name="FamilyMemberFirstName5" label="First Name"></element>
+            <element type="select" name="FamilyMemberGender5" label="Gender">
+                <options>
+                    <option value=""></option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </options>
+            </element>
+            <element type="date" name="FamilyMemberDateOfBirth5" label="Date of Birth" format="dd.MM.yyyy">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <!--Global mobility Employee Documents-->
+            <element type="hidden" name="EmployeeDocuments"> </element>
+            <element type="select" name="EmployeeDocumentType" label="Document Type">
+                <options>
+                    <option value=""></option>
+                    <option value="Badge ID">Badge ID</option>
+                    <option value="ID/passport">ID/passport</option>
+                    <option value="Residence permit">Residence permit</option>
+                    <option value="Work Permit">Work Permit</option>
+                </options>
+            </element>
+            <element type="search-select" source="1" name="EmployeeDocumentCountry" label="Country" default="Netherlands">
+                &data_country;
+            </element>
+            <element type="text" name="EmployeeDocumentNo" label="Document No"></element>
+            <element type="date" name="EmployeeDocumentIssueDate" label="Issue Date" format="dd.MM.yyyy">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="text" name="EmployeeDocumentIssuePlace" label="Issue Place"></element>
+            <element type="search-select" source="1" name="EmployeeDocumentIssuePlaceCountry" label="Issue Place Country" default="Netherlands">
+                &data_country;
+            </element>
+            <element type="select" name="EmployeeDocumentType2" label="Document Type">
+                <options>
+                    <option value=""></option>
+                    <option value="Badge ID">Badge ID</option>
+                    <option value="ID/passport">ID/passport</option>
+                    <option value="Residence permit">Residence permit</option>
+                    <option value="Work Permit">Work Permit</option>
+                </options>
+            </element>
+            <element type="search-select" source="1" name="EmployeeDocumentCountry2" label="Country" default="Netherlands">
+                &data_country;
+            </element>
+            <element type="text" name="EmployeeDocumentNo2" label="Document No"></element>
+            <element type="date" name="EmployeeDocumentIssueDate2" label="Issue Date" format="dd.MM.yyyy">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="text" name="EmployeeDocumentIssuePlace2" label="Issue Place"></element>
+            <element type="search-select" source="1" name="EmployeeDocumentIssuePlaceCountry2" label="Issue Place Country" default="Netherlands">
+                &data_country;
+            </element>
+            <element type="select" name="EmployeeDocumentType3" label="Document Type">
+                <options>
+                    <option value=""></option>
+                    <option value="Badge ID">Badge ID</option>
+                    <option value="ID/passport">ID/passport</option>
+                    <option value="Residence permit">Residence permit</option>
+                    <option value="Work Permit">Work Permit</option>
+                </options>
+            </element>
+            <element type="search-select" source="1" name="EmployeeDocumentCountry3" label="Country" default="Netherlands">
+                &data_country;
+            </element>
+            <element type="text" name="EmployeeDocumentNo3" label="Document No"></element>
+            <element type="date" name="EmployeeDocumentIssueDate3" label="Issue Date" format="dd.MM.yyyy">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="text" name="EmployeeDocumentIssuePlace3" label="Issue Place"></element>
+            <element type="search-select" source="1" name="EmployeeDocumentIssuePlaceCountry3" label="Issue Place Country" default="Netherlands">
+                &data_country;
+            </element>
+            <element type="select" name="EmployeeDocumentType4" label="Document Type">
+                <options>
+                    <option value=""></option>
+                    <option value="Badge ID">Badge ID</option>
+                    <option value="ID/passport">ID/passport</option>
+                    <option value="Residence permit">Residence permit</option>
+                    <option value="Work Permit">Work Permit</option>
+                </options>
+            </element>
+            <element type="search-select" source="1" name="EmployeeDocumentCountry4" label="Country" default="Netherlands">
+                &data_country;
+            </element>
+            <element type="text" name="EmployeeDocumentNo4" label="Document No"></element>
+            <element type="date" name="EmployeeDocumentIssueDate4" label="Issue Date" format="dd.MM.yyyy">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="text" name="EmployeeDocumentIssuePlace4" label="Issue Place"></element>
+            <element type="search-select" source="1" name="EmployeeDocumentIssuePlaceCountry4" label="Issue Place Country" default="Netherlands">
+                &data_country;
+            </element>
+            <element type="select" name="EmployeeDocumentType5" label="Document Type">
+                <options>
+                    <option value=""></option>
+                    <option value="Badge ID">Badge ID</option>
+                    <option value="ID/passport">ID/passport</option>
+                    <option value="Residence permit">Residence permit</option>
+                    <option value="Work Permit">Work Permit</option>
+                </options>
+            </element>
+            <element type="search-select" source="1" name="EmployeeDocumentCountry5" label="Country" default="Netherlands">
+                &data_country;
+            </element>
+            <element type="text" name="EmployeeDocumentNo5" label="Document No"></element>
+            <element type="date" name="EmployeeDocumentIssueDate5" label="Issue Date" format="dd.MM.yyyy">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="text" name="EmployeeDocumentIssuePlace5" label="Issue Place"></element>
+            <element type="search-select" source="1" name="EmployeeDocumentIssuePlaceCountry5" label="Issue Place Country" default="Netherlands">
+                &data_country;
+            </element>
+            <!--Global mobility Dependants-->
+            <element type="hidden" name="DependantFamilyMembers"></element>
+            <element type="select" name="DependantFamilyMember" label="Dependant Family Member">
+                <options>
+                    <option value=""></option>
+                    <option value="Spouse">Spouse</option>
+                    <option value="Child">Child</option>
+                    <option value="Step Child">Step Child</option>
+                </options>
+            </element>
+            <element type="select" name="Accompanying" label="Accompanying">
+                <mandatoryIfNotEmpty name="DependantFamilyMember"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </options>
+            </element>
+            <element type="text" name="DependantsLastName" label="Dependants Last Name"></element>
+            <element type="text" name="DependantsFirstName" label="Dependants First Name"></element>
+            <element type="date" name="DependantsDateOfBirth" label="Dependants Date of birth" format="dd.MM.yyyy">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="DependantFamilyMember2" label="Dependant Family Member">
+                <options>
+                    <option value=""></option>
+                    <option value="Spouse">Spouse</option>
+                    <option value="Child">Child</option>
+                    <option value="Step Child">Step Child</option>
+                </options>
+            </element>
+            <element type="select" name="Accompanying2" label="Accompanying">
+                <mandatoryIfNotEmpty name="DependantFamilyMember2"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </options>
+            </element>
+            <element type="text" name="DependantsLastName2" label="Dependants Last Name"></element>
+            <element type="text" name="DependantsFirstName2" label="Dependants First Name"></element>
+            <element type="date" name="DependantsDateOfBirth2" label="Dependants Date of birth" format="dd.MM.yyyy">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="DependantFamilyMember3" label="Dependant Family Member">
+                <options>
+                    <option value=""></option>
+                    <option value="Spouse">Spouse</option>
+                    <option value="Child">Child</option>
+                    <option value="Step Child">Step Child</option>
+                </options>
+            </element>
+            <element type="select" name="Accompanying3" label="Accompanying">
+                <mandatoryIfNotEmpty name="DependantFamilyMember3"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </options>
+            </element>
+            <element type="text" name="DependantsLastName3" label="Dependants Last Name"></element>
+            <element type="text" name="DependantsFirstName3" label="Dependants First Name"></element>
+            <element type="date" name="DependantsDateOfBirth3" label="Dependants Date of birth" format="dd.MM.yyyy">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="DependantFamilyMember4" label="Dependant Family Member">
+                <options>
+                    <option value=""></option>
+                    <option value="Spouse">Spouse</option>
+                    <option value="Child">Child</option>
+                    <option value="Step Child">Step Child</option>
+                </options>
+            </element>
+            <element type="select" name="Accompanying4" label="Accompanying">
+                <mandatoryIfNotEmpty name="DependantFamilyMember4"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </options>
+            </element>
+            <element type="text" name="DependantsLastName4" label="Dependants Last Name"></element>
+            <element type="text" name="DependantsFirstName4" label="Dependants First Name"></element>
+            <element type="date" name="DependantsDateOfBirth4" label="Dependants Date of birth" format="dd.MM.yyyy">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="DependantFamilyMember5" label="Dependant Family Member">
+                <options>
+                    <option value=""></option>
+                    <option value="Spouse">Spouse</option>
+                    <option value="Child">Child</option>
+                    <option value="Step Child">Step Child</option>
+                </options>
+            </element>
+            <element type="select" name="Accompanying5" label="Accompanying">
+                <mandatoryIfNotEmpty name="DependantFamilyMember5"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </options>
+            </element>
+            <element type="text" name="DependantsLastName5" label="Dependants Last Name"></element>
+            <element type="text" name="DependantsFirstName5" label="Dependants First Name"></element>
+            <element type="date" name="DependantsDateOfBirth5" label="Dependants Date of birth" format="dd.MM.yyyy">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <!--Global Mobility Dependants Documents-->
+            <element type="hidden" name="DependantsDocuments"></element>
+            <element type="select" name="DependantsDocumentType" label="Document Type">
+                <options>
+                    <option value=""></option>
+                    <option value="ID/passport">ID/passport</option>
+                    <option value="Residence permit">Residence permit</option>
+                    <option value="Work permit">Work permit</option>
+                </options>
+            </element>
+            <element type="search-select" source="1" name="DependantsDocumentCountry" label="Country" default="Netherlands">
+                &data_country;
+            </element>
+            <element type="text" name="DependantsDocumentNo" label="Document No"></element>
+            <element type="date" name="DependantsDocumentIssueDate" label="Issue Date" format="dd.MM.yyyy">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="text" name="DependantsDocumentIssuePlace" label="Issue Place" ></element>
+            <element type="search-select" source="1" name="DependantsDocumentIssuePlaceCountry" label="Issue Place Country" default="Netherlands">
+                &data_country;
+            </element>
+            <element type="select" name="DependantsDocumentType2" label="Document Type">
+                <options>
+                    <option value=""></option>
+                    <option value="ID/passport">ID/passport</option>
+                    <option value="Residence permit">Residence permit</option>
+                    <option value="Work permit">Work permit</option>
+                </options>
+            </element>
+            <element type="search-select" source="1" name="DependantsDocumentCountry2" label="Country" default="Netherlands">
+                &data_country;
+            </element>
+            <element type="text" name="DependantsDocumentNo2" label="Document No"></element>
+            <element type="date" name="DependantsDocumentIssueDate2" label="Issue Date" format="dd.MM.yyyy">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="text" name="DependantsDocumentIssuePlace2" label="Issue Place"></element>
+            <element type="search-select" source="1" name="DependantsDocumentIssuePlaceCountry2" label="Issue Place Country" default="Netherlands">
+                &data_country;
+            </element>
+            <element type="select" name="DependantsDocumentType3" label="Document Type">
+                <options>
+                    <option value=""></option>
+                    <option value="ID/passport">ID/passport</option>
+                    <option value="Residence permit">Residence permit</option>
+                    <option value="Work permit">Work permit</option>
+                </options>
+            </element>
+            <element type="search-select" source="1" name="DependantsDocumentCountry3" label="Country" default="Netherlands">
+                &data_country;
+            </element>
+            <element type="text" name="DependantsDocumentNo3" label="Document No"></element>
+            <element type="date" name="DependantsDocumentIssueDate3" label="Issue Date" format="dd.MM.yyyy">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="text" name="DependantsDocumentIssuePlace3" label="Issue Place"></element>
+            <element type="search-select" source="1" name="DependantsDocumentIssuePlaceCountry3" label="Issue Place Country" default="Netherlands">
+                &data_country;
+            </element>
+            <element type="select" name="DependantsDocumentType4" label="Document Type">
+                <options>
+                    <option value=""></option>
+                    <option value="ID/passport">ID/passport</option>
+                    <option value="Residence permit">Residence permit</option>
+                    <option value="Work permit">Work permit</option>
+                </options>
+            </element>
+            <element type="search-select" source="1" name="DependantsDocumentCountry4" label="Country" default="Netherlands">
+                &data_country;
+            </element>
+            <element type="text" name="DependantsDocumentNo4" label="Document No"></element>
+            <element type="date" name="DependantsDocumentIssueDate4" label="Issue Date" format="dd.MM.yyyy">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="text" name="DependantsDocumentIssuePlace4" label="Issue Place"></element>
+            <element type="search-select" source="1" name="DependantsDocumentIssuePlaceCountry4" label="Issue Place Country" default="Netherlands">
+                &data_country;
+            </element>
+            <element type="select" name="DependantsDocumentType5" label="Document Type">
+                <options>
+                    <option value=""></option>
+                    <option value="ID/passport">ID/passport</option>
+                    <option value="Residence permit">Residence permit</option>
+                    <option value="Work permit">Work permit</option>
+                </options>
+            </element>
+            <element type="search-select" source="1" name="DependantsDocumentCountry5" label="Country" default="Netherlands">
+                &data_country;
+            </element>
+            <element type="text" name="DependantsDocumentNo5" label="Document No"></element>
+            <element type="date" name="DependantsDocumentIssueDate5" label="Issue Date" format="dd.MM.yyyy">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="text" name="DependantsDocumentIssuePlace5" label="Issue Place"></element>
+            <element type="search-select" source="1" name="DependantsDocumentIssuePlaceCountry5" label="Issue Place Country" default="Netherlands">
+                &data_country;
+            </element>
+            <!--Bank Account Details-->
+            <element type="hidden" name="BankAccounts" default="1"> </element>
+            <element type="text" name="Payee" label="Payee"></element>
+            <element type="text" name="IBAN" label="IBAN">
+                <regexIf inherit="iban" pattern="" message="" name="BankCountry">Netherlands</regexIf>
+              <mandatoryIfNotEqual name="PayrollCategory">No Salary</mandatoryIfNotEqual>
+            </element>
+            <element type="search-select" name="BankCountry" label="Bank Country" mandatory="1" default="Netherlands">
+                &data_country;
+            </element>
+            <element type="text" name="PaymentCurrency" label="Payment Currency" mandatory="1" default="EUR">
+                <regex inherit="currency" pattern="" message=""></regex>
+            </element>
+            <element type="text" name="Payee2" label="Payee"></element>
+            <element type="text" name="IBAN2" label="IBAN">
+                <regexIf inherit="iban" pattern="" message="" name="BankCountry2">Netherlands</regexIf>         
+            </element>
+            <element type="search-select" name="BankCountry2" label="Bank Country" default="Netherlands">
+                &data_country;
+            </element>
+            <element type="text" name="PaymentCurrency2" label="Payment Currency" default="EUR">
+                <regex inherit="currency" pattern="" message=""></regex>
+            </element>
+            <element type="text" name="OtherBankPercentageOrAmount" label="Other Bank Percentage or Amount">
+                <mandatoryIfNotEmpty  name="IBAN2"></mandatoryIfNotEmpty>
+                <regex inherit="percentagewithdelimiter" pattern="" message=""></regex>
+            </element>
+            <!--FISCAL DATA and SOCIAL INSURANCE -->
+            <element type="select" name="Taxdeduction" label="Tax deduction (IKEA)">
+                <options>
+                    <option value=""></option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </options>
+            </element>
+            <!--Nationality / Language-->
+            <element type="search-select" name="Language" label="Language" default="Dutch">
+                &data_language;
+            </element>
+          <element type="hidden" name="Documents" default="1"></element>
+          <element type="select" name="DocumentType" label="Document Type" mandatory="1" default="ID/passport">
+            <options>
+              <option value=""></option>
+              <option value="Badge ID">Badge ID</option>
+              <option value="ID/passport">ID/passport</option>
+              <option value="Residence permit">Residence permit</option>
+              <option value="Work Permit">Work Permit</option>
+            </options>
+          </element>
+          <element type="search-select" source="1" name="DocumentCountry" label="Country" mandatory="1" default="Netherlands">
+            &data_country;
+            <mandatoryIfNotEmpty name="DocumentType"></mandatoryIfNotEmpty>
+          </element>
+          <element type="text" name="DocumentNO" label="Document no." mandatory="1">
+            <mandatoryIfNotEmpty name="DocumentType"></mandatoryIfNotEmpty>
+          </element>
+          <element type="date" name="DocumentValidUntil" label="Document Valid Until" mandatory="1" future="1" format="dd.MM.yyyy">
+            <regex inherit="date" pattern="" message=""></regex>
+            <mandatoryIfNotEmpty name="DocumentType"></mandatoryIfNotEmpty>
+          </element>
+
+          <element type="select" name="DocumentType2" label="Document Type">
+            <options>
+              <option value=""></option>
+              <option value="Badge ID">Badge ID</option>
+              <option value="ID/passport">ID/passport</option>
+              <option value="Residence permit">Residence permit</option>
+              <option value="Work Permit">Work Permit</option>
+            </options>
+          </element>
+          <element type="search-select" source="1" name="DocumentCountry2" label="Country" default="Netherlands">
+            &data_country;
+            <mandatoryIfNotEmpty name="DocumentType2"></mandatoryIfNotEmpty>
+          </element>
+          <element type="text" name="DocumentNO2" label="Document no.">
+            <mandatoryIfNotEmpty name="DocumentType2"></mandatoryIfNotEmpty>
+          </element>
+          <element type="date" name="DocumentValidUntil2" label="Document Valid Until" future="1" format="dd.MM.yyyy">
+            <regex inherit="date" pattern="" message=""></regex>
+            <mandatoryIfNotEmpty name="DocumentType2"></mandatoryIfNotEmpty>
+          </element>
+
+          <element type="select" name="DocumentType3" label="Document Type">
+            <options>
+              <option value=""></option>
+              <option value="Badge ID">Badge ID</option>
+              <option value="ID/passport">ID/passport</option>
+              <option value="Residence permit">Residence permit</option>
+              <option value="Work Permit">Work Permit</option>
+            </options>
+          </element>
+          <element type="search-select" source="1" name="DocumentCountry3" label="Country" default="Netherlands">
+            &data_country;
+            <mandatoryIfNotEmpty name="DocumentType3"></mandatoryIfNotEmpty>
+          </element>
+          <element type="text" name="DocumentNO3" label="Document no.">
+            <mandatoryIfNotEmpty name="DocumentType3"></mandatoryIfNotEmpty>
+          </element>
+          <element type="date" name="DocumentValidUntil3" label="Document Valid Until" future="1" format="dd.MM.yyyy">
+            <regex inherit="date" pattern="" message=""></regex>
+            <mandatoryIfNotEmpty name="DocumentType3"></mandatoryIfNotEmpty>
+          </element>
+
+          <element type="select" name="DocumentType4" label="Document Type">
+            <options>
+              <option value=""></option>
+              <option value="Badge ID">Badge ID</option>
+              <option value="ID/passport">ID/passport</option>
+              <option value="Residence permit">Residence permit</option>
+              <option value="Work Permit">Work Permit</option>
+            </options>
+          </element>
+          <element type="search-select" source="1" name="DocumentCountry4" label="Country" default="Netherlands">
+            &data_country;
+            <mandatoryIfNotEmpty name="DocumentType4"></mandatoryIfNotEmpty>
+          </element>
+          <element type="text" name="DocumentNO4" label="Document no.">
+            <mandatoryIfNotEmpty name="DocumentType4"></mandatoryIfNotEmpty>
+          </element>
+          <element type="date" name="DocumentValidUntil4" label="Document Valid Until" future="1" format="dd.MM.yyyy">
+            <regex inherit="date" pattern="" message=""></regex>
+            <mandatoryIfNotEmpty name="DocumentType4"></mandatoryIfNotEmpty>
+          </element>
+
+          <element type="select" name="DocumentType5" label="Document Type">
+            <options>
+              <option value=""></option>
+              <option value="Badge ID">Badge ID</option>
+              <option value="ID/passport">ID/passport</option>
+              <option value="Residence permit">Residence permit</option>
+              <option value="Work Permit">Work Permit</option>
+            </options>
+          </element>
+          <element type="search-select" source="1" name="DocumentCountry5" label="Country" default="Netherlands">
+            &data_country;
+            <mandatoryIfNotEmpty name="DocumentType5"></mandatoryIfNotEmpty>
+          </element>
+          <element type="text" name="DocumentNO5" label="Document no.">
+            <mandatoryIfNotEmpty name="DocumentType5"></mandatoryIfNotEmpty>
+          </element>
+          <element type="date" name="DocumentValidUntil5" label="Document Valid Until" future="1" format="dd.MM.yyyy">
+            <regex inherit="date" pattern="" message=""></regex>
+            <mandatoryIfNotEmpty name="DocumentType5"></mandatoryIfNotEmpty>
+          </element>
+          
+          <element type="text" name="PartnerName" label="Partner Name"></element>
+        </tab>
+        <tab name="#SSCUseOnly" label="SSC use only">
+            <element type="text" name="NewCo-WorkerID" label="Co-Worker ID" mandatory="1">
+                <regex inherit="employeeno" pattern="" message=""></regex>
+                <regex inherit="unsignednum" pattern="" message=""></regex>
+            </element>
+        </tab>
+    </fields>
+</form>

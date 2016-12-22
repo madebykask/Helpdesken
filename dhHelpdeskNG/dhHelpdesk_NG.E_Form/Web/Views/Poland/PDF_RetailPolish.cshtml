@@ -1,0 +1,45 @@
+﻿@model Web.Models.Poland.NewHireModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<body>
+    <div>
+        <p style="text-align: center;"><strong>UMOWA O PRACĘ</strong></p>
+        <p style="text-align: center;">
+            Zawarta w dniu …………… pomiędzy firmą <strong>@Model.Contract.Company.Name</strong> z siedzibą w Jankach, Pl. Szwedzki 3; 05 – 090 Raszyn, reprezentowaną przez <strong>@Model.Contract.FirstName @Model.Contract.Surname</strong><br /><br />
+        </p>
+        <p style="text-align: center;">
+            a<br />
+        </p>
+        <p style="text-align: center;">
+            <strong>@Model.GetTranslatedAnswer("Prefix") @Model.GetTranslatedAnswer("FirstName") @Model.GetTranslatedAnswer("LastName")</strong><br />
+            zamieszkałym: <strong>«@Model.GetTranslatedAnswer("Street") @Model.GetTranslatedAnswer("StreetNumber") @Model.GetTranslatedAnswer("HouseNumber") / «Mieszk»<br />
+            «@Model.GetTranslatedAnswer("PostCode") @Model.GetTranslatedAnswer("City")</strong>
+            zwaną dalej <strong>Pracownikiem</strong>.<br /><br />
+        </p>
+        <p>
+            <strong>@Model.Contract.Company.Name</strong> zatrudni <strong>Pracownika</strong> na  <strong>okres próbny</strong> od dnia <strong>«Początek»</strong> do dnia <strong>«Kon_umowy»</strong> na stanowisku: <strong>«Stanowisko»</strong> Miejsce pracy: <strong>«Obszar_kadrowy»</strong>.<br /><br />
+        </p>
+        <p>
+            Wymiar czasu pracy ustala się na <strong>niepełny etat.</strong>  Wymiar etatu ustala się na <strong>50%</strong>. Pracownik obowiązany jest zgłosić się do pracy w dniu: ………………<br /><br />
+
+        </p>
+        <p>
+            W czasie trwania umowy o pracę Pracownik będzie otrzymywał wynagrodzenie zasadnicze wg stawki <strong>miesięcznej</strong> wynoszące: <strong>«Kwota» PLN brutto</strong> za godzinę (słownie: …………… złotych).<br /><br />
+        </p>
+        <p>
+            W sprawach nieuregulowanych niniejszą umową stosowane będą odpowiednie przepisy Kodeksu pracy.<br /><br />
+        </p>
+        <p>
+            Dopuszczalna liczba godzin pracy ponad określony w umowie wymiar czasu pracy, których przekroczenie uprawnia pracownika, oprócz normalnego wynagrodzenia, do dodatku do wynagrodzenia, o którym mowa w art. 1511 § 1 Kodeksu pracy wynosi <strong>39 godzin</strong><br /><br />
+        </p>
+        <p>
+            Pracownik oświadcza, że egzemplarz niniejszej umowy otrzymał i po zapoznaniu się z jej treścią przyjmuje powyższe warunki pracy i wynagradzania. Pracownik zobowiązuje się do przestrzegania porządku i dyscypliny pracy oraz Regulaminu Pracy i Wynagrodzeń.
+        </p>
+    </div>
+</body>
+</html>

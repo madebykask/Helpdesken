@@ -1,0 +1,45 @@
+﻿@model FormModel
+@{
+    ViewBag.Title = Model.Translate("Poland") + " - " + Model.Translate("Mass request - Termination");
+}
+
+@section Script {
+    <script type="text/javascript">
+
+        $(function () {
+            validate.run(10);
+        });
+
+    </script>
+
+     @Html.Partial("_Validate", Model)
+}
+
+@using (Html.BeginForm("new", "massrequesttermination", FormMethod.Post, new { area = "poland", enctype = "multipart/form-data" }))
+{
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner navbarbgcolor">
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    <li>
+                        <button type="submit" class="btn btnmarginleft">
+                            <i class="icon-ok"></i>&nbsp;@Model.Translate("Initiate service request")
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container containeralignright">
+        @Html.Partial("_CurrentUser")
+        @Html.Partial("_ErrorMessage", Model)
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#massrequesttermination">@Model.Translate("Mass request - Termination")</a></li>
+        </ul>
+        <div class="content">
+            <div class="tab-content">
+                @Html.Partial("_TabMassRequestTermination", Model)
+            </div>
+        </div>
+    </div>
+}

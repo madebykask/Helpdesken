@@ -1,0 +1,33 @@
+﻿use dh_support
+
+declare @formId int
+declare @formFieldName nvarchar(250)
+declare @formElement nvarchar(250)
+
+set @formId = 21
+
+declare ff cursor for
+select FormFieldName  from tblFormField where Form_Id = @formId
+open ff
+fetch next from ff 
+into  @formFieldName
+while @@FETCH_STATUS = 0
+begin
+		
+	set @formElement = replace(@formFieldName, 'txt', '')
+	set @formElement = replace(@formElement, 'lst', '')
+	set @formElement = replace(@formElement, 'opt', '')
+	set @formElement = replace(@formElement, 'dt', '')
+	set @formElement = replace(@formElement, 'chk', '')
+	set @formElement = rtrim(@formElement)
+	
+	print '<tr>'
+	print '	<td>@Model.Translate("' + @formElement + '"):</td>'
+	print '	<td>@Model.RenderElement("' + @formElement + '")</td>'
+    print '</tr>'
+    print ' ' 
+
+	fetch next from ff into @formFieldName
+end
+close ff
+deallocate ff

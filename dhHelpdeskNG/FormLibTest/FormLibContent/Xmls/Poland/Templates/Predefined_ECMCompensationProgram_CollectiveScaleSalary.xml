@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<predefined>
+  <name>CollectiveScaleSalary</name>
+  <dependent>
+    <selected>ECM Retail &amp; Property</selected>
+    <show>n/a</show>
+  </dependent>
+  <dependent>
+    <selected>ECM DS</selected>
+    <show>1 - Aspirant,2 - In the role,3 - Senior</show>
+  </dependent>
+  <dependent>
+    <selected>ECM Purchasing</selected>
+    <show>1 - Aspirant,2 - In the role,3 - Senior</show>
+  </dependent>
+  <dependent>
+    <selected>ECM IICP</selected>
+    <show>1 - Aspirant,2 - In the role,3 - Senior</show>
+  </dependent>
+</predefined>

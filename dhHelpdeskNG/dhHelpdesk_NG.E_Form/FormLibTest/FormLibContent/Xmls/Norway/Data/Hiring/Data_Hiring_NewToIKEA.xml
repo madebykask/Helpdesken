@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<options>
+  <option value=""></option>
+  <option value="New Hire">New Hire</option>
+  <option value="Re-Hire">Re-Hire</option>
+  <option value="International Transfer (TE)">International Transfer (TE)</option>
+  <option value="Transfer Between Business Units">Transfer Between Business Units</option>
+  <option value="International Move without Mobility">International Move without Mobility</option>
+</options>

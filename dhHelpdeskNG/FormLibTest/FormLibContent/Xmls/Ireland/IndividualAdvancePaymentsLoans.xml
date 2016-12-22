@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE form [
+  <!ENTITY languages SYSTEM "Templates/Languages.xml">
+  <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
+  <!ENTITY state SYSTEM "Templates/IndividualAdvancePaymentsLoansState.xml">
+]>
+
+<form id="165" guid="B2C5A4EA-9750-4462-AEB5-F69B834584D9" customerId="31">
+  &languages;
+  &regexs;
+  &state;
+
+  <fields>
+
+    <!--Tab ServiceRequestDetails-->
+    <tab name="#servicerequestdetails" label="Service Request Details">
+      <element name="Co-WorkerGlobalviewID" type="text" label="Co-Worker Globalview ID" mandatory="1">
+        <regex inherit="employeeno" pattern="" message=""></regex>
+      </element>
+      <element name="FirstName" type="text" label="Co-Worker First Name" mandatory="1"></element>
+      <element name="LastName" type="text" label="Co-Worker Last Name" mandatory="1"></element>
+      <element name="IKEAEmailAddress" type="text" label="IKEA Email Address">
+        <regex inherit="email" pattern="" message=""></regex>
+      </element>
+      <element name="IKEANetworkID" type="text" label="IKEA Network ID" mandatory="1">
+        
+      </element>
+      <element name="Company" type="text" label="Company"></element>
+      <element name="BusinessUnit" type="text" label="Business Unit" mandatory="1"></element>
+      <element name="ServiceArea" type="text" label="Function"></element>
+      <element name="Department" type="text" label="Department"></element>
+
+      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard">
+        <options>
+          <option value=""></option>
+          <option value="Urgent">Urgent</option>
+          <option value="Standard">Standard</option>
+        </options>
+      </element>
+      <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
+    </tab>
+
+    <tab name="#payment" label="Payment Information">
+
+      <element type="select" name="PaymentType" label="Payment Type" mandatory="1">
+        <options>
+          <option value=""></option>
+          <option value="Advance Payment">Advance Payment</option>
+          <option value="Personal Loan - IKEA Furniture">Personal Loan - IKEA Furniture</option>
+          <option value="Personal Loan - Other">Personal Loan - Other</option>
+          <option value="Season Ticket Loan">Season Ticket Loan</option>
+          <option value="Cycle to Work">Cycle to Work</option>
+          <!--<option value="Advance Payment">Advance Payment</option>
+          <option value="Loan">Loan</option>-->
+        </options>
+      </element>
+      <element type="text" name="PaymentAmount" label="Amount" mandatory="1">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element type="text" name="PaymentCurrency" label="Currency" mandatory="1" default="EUR">
+        <regex inherit="currency" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="PaymentDate" label="Payment date" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="select" name="PaymentMethod" label="Payment Method" mandatory="1" default="By Payroll">
+        <options>
+          <option value=""></option>
+          <option value="By Payroll">By Payroll</option>
+          <option value="Gift Card">Gift Card</option>
+          <!--<option value="By Payroll">By Payroll</option>
+          <option value="By Off cycle">By Off cycle</option>
+          <option value="By Manual Payment">By Manual Payment</option>
+          <option value="By Voucher">By Voucher</option>
+          <option value="By Gift Card">By Gift Card</option>-->
+        </options>
+      </element>
+      <!--<element type="select" name="DeductionsType" label="Deduction Type" >
+        <mandatoryIf name="PaymentType">Loan</mandatoryIf>
+        <options>
+          <option value=""></option>
+          <option value="Personal Loan - Other">Personal Loan - Other</option>
+          <option value="Season Ticket Loan">Season Ticket Loan</option>
+          <option value="Cycle to work">Cycle to work</option>          
+        </options>
+      </element>-->
+      <!--<element type="text" name="DeductionsAmountUnits" label="Amount/Units" >
+        <mandatoryIf name="PaymentType">Loan</mandatoryIf>
+        <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+      </element>-->
+      <!--<element type="select" name="DeductionsNetGross" label="Net/Gross" >
+        <mandatoryIf name="PaymentType">Loan</mandatoryIf>
+        <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="Net">Net</option>
+          <option value="Gross">Gross</option>
+        </options>
+      </element>-->
+      <!--<element type="select" name="RePaymentType" label="Re-payment Type">
+        <mandatoryIf name="PaymentType">Loan</mandatoryIf>
+        <options>
+          <option value=""></option>
+          <option value="Recurring">Recurring</option>
+          <option value="One Time">One Time</option>
+          <option value="Intervals in periods">Intervals in periods</option>
+          <option value="Intervals in units">Intervals in units</option>
+        </options>
+      </element>
+      <element type="date" name="1stPayment" label="1st Payment" format="dd.MM.yyyy" >
+        <mandatoryIf name="PaymentType">Loan</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>-->
+      <!--<element type="date" name="PaymentEndsOn" label="Payment ends on" format="dd.MM.yyyy" >
+        <mandatoryIf name="PaymentType">Loan</mandatoryIf>
+        --><!--<laterThanOrEqual name="1stPayment"></laterThanOrEqual>--><!--
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>-->
+
+      <element type="text" name="NumberOfInstallments" label="Number Of Installments (months)">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+        <regex inherit="maxvalue12" pattern="" message=""></regex>
+      </element>
+
+
+    </tab>
+
+  </fields>
+</form>

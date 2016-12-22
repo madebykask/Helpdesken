@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+  <options>
+    <option value=""></option>
+    <option value="Spouse">Spouse</option>
+    <option value="Domestic Partner/Defecto">Domestic Partner/Defecto</option>
+    <option value="Mother">Mother</option>
+    <option value="Father">Father</option>
+    <option value="Child of Domestic Partner">Child of Domestic Partner</option>
+    <option value="Child">Child</option>
+    <option value="Step Child">Step Child</option>
+    <option value="Emergency Contact">Emergency Contact</option>
+    <option value="Related Persons">Related Persons</option>
+    <option value="Mother-in-law">Mother-in-law</option>
+    <option value="Father-in-law">Father-in-law</option>
+  </options> 

@@ -1,0 +1,80 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+@{
+    var url =  Url.CurrentController() + "typeahead";
+}
+
+@using(Html.BeginForm("edit", "hiring", FormMethod.Post, new { area = "poland", novalidate = "novalidate" }))
+{   
+    <span style="display: none;" id="narrowDownInit" url="@url"></span>
+    @Html.Partial("_Navigation", Model)
+    <div class="container containeralignright">
+        @Html.Partial("_CurrentUser")
+        @Html.Partial("_ErrorMessage", Model)
+        <ul class="nav nav-tabs">
+            @if(Model.VisibleTab("#contract"))
+            {
+                <li class="active @(Model.TabHasError("#contract") ? "error" : "")">
+                    <a href="#contract">@Model.Translate("Basic Data")</a></li>
+            }
+            @if(Model.VisibleTab("#employment"))
+            {
+                <li class="@(Model.TabHasError("#employment") ? "error" : "")">
+                    <a href="#employment">@Model.Translate("Conditions of Employment")</a></li>
+            }
+            @if(Model.VisibleTab("#payment"))
+            {
+                <li class="@(Model.TabHasError("#payment") ? "error" : "")">
+                    <a href="#payment">@Model.Translate("Payment Information")</a></li>
+            }
+            @if(Model.VisibleTab("#personal"))
+            {
+                <li class="@(Model.TabHasError("#personal") ? "error" : "")">
+                    <a href="#personal">@Model.Translate("Personal Information")</a></li>
+            }
+            @if(Model.VisibleTab("#documents"))
+            {
+                <li class="@(Model.TabHasError("#documents") ? "error" : "")">
+                    <a href="#documents">@Model.Translate("Documents")</a></li>
+            }
+            @if(Model.VisibleTab("#globalview"))
+            {
+                <li class="@(Model.TabHasError("#globalview") ? "error" : "")">
+                    <a href="#globalview">@Model.Translate("Global View")</a></li>
+            }
+        </ul>
+        <div class="content">
+            <div class="row-fluid">
+                <div class="tab-content">
+                    @if(Model.VisibleTab("#contract"))
+                    {
+                        @Html.Partial("_TabContract", Model)
+                    }
+                    @if(Model.VisibleTab("#employment"))
+                    {
+                        @Html.Partial("_TabEmployment", Model)
+                    }
+                    @if(Model.VisibleTab("#payment"))
+                    {
+                        @Html.Partial("_TabPayment", Model)
+                    }
+                    @if(Model.VisibleTab("#personal"))
+                    {
+                        @Html.Partial("_TabPersonal", Model)
+                    }
+                    @if(Model.VisibleTab("#documents"))
+                    {
+                        @Html.Partial("_TabDocuments", Model)
+                    }
+                    @if(Model.VisibleTab("#globalview"))
+                    {
+                        @Html.Partial("_TabGlobalView", Model)
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="activeTab" name="activeTab" value="@Model.ActiveTab" />
+}

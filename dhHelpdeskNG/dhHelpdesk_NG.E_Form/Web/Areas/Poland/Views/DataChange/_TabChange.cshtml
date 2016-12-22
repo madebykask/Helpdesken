@@ -1,0 +1,73 @@
+﻿@model FormModel
+
+@{
+    var keyColl = new List<string>();
+    var workingGroups = SessionFacade.User.WorkingGroups.Select(x => x.Name).ToArray();
+}
+
+<div class="tab-pane" id="change">
+    <div class="row-fluid">
+        <div class="span12">
+            <table class="table">
+                <tr>
+                    <td class="tdstrong">@Model.Label("EffectiveDate")</td>
+                    <td>@Model.Element("EffectiveDate")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EndDate")</td>
+                    <td>@Model.Element("EndDate")</td>
+                </tr>
+                @{
+                    var splits = Model.GetAnswer("DataChangeSelection").Split(',');
+                }
+                @foreach(var value in splits)
+                {
+                    if(value == "")
+                    {
+                        continue;
+                    }
+
+                    var nodes = Model.GetDataChangeFields(value);
+                    var header = Model.GetDataChangeSectionName(value);
+                 
+                    <tr>
+                        <td class="tdstrong" colspan="2">
+                            <h4>@Model.Translate(header)</h4>
+                        </td>
+                    </tr>              
+                    foreach(var node in nodes)
+                    {
+                        if(node.StartsWith("#"))
+                        {
+                    <tr>
+                        <td class="tdstrong" colspan="2">
+                            <h5>@Model.Translate(node.Replace("#", ""))</h5>
+                        </td>
+                    </tr>
+                        }
+                        else
+                        {
+                            if(keyColl.Contains(node))
+                            {
+                                continue;
+                            }
+
+                            if((splits.Contains("6") && (value != "6" && node == "ContractType"))
+                                || (splits.Contains("6") && (value != "6" && node == "WorkingTimeSchedule")))
+                            {
+                                continue;
+                            } 
+                            
+                    <tr>
+                        <td class="tdstrong">@Model.Label(node)</td>
+                        <td>@Model.Element(node, workingGroups) </td>
+                        @*<td>@Model.ShowGVData(node)</td>*@
+                    </tr>
+                            keyColl.Add(node);
+                        }
+                    }
+                }
+            </table>
+        </div>
+    </div>
+</div>

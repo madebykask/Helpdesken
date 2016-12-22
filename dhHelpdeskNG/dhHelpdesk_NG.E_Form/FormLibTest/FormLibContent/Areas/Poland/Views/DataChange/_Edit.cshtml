@@ -1,0 +1,74 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+@{
+    var url = Url.CurrentController() + "typeahead";
+}
+
+@using(Html.BeginForm("edit", "datachange", FormMethod.Post, new { area = "poland" }))
+{
+    <span style="display: none;" id="narrowDownInit" url="@url"></span>
+    @Html.Partial("_Navigation", Model)
+    <div class="container containeralignright">
+        @Html.Partial("_CurrentUser")
+        @Html.Partial("_ErrorMessage", Model)
+        <ul class="nav nav-tabs">
+            @if(Model.VisibleTab("#selection"))
+            {
+                <li class="active @(Model.TabHasError("#selection") ? "error" : "")"><a href="#selection">@Model.Translate("Data change selection")</a></li>
+            }
+            @if(Model.VisibleTab("#change"))
+            {
+                <li class="@(Model.TabHasError("#change") ? "error" : "")"><a href="#change">@Model.Translate("Data change")</a></li>
+            }
+             @if(Model.GetAnswer("DataChangeSelection").Split(',').Contains("1")
+            || Model.GetAnswer("DataChangeSelection").Split(',').Contains("4")
+            || Model.GetAnswer("DataChangeSelection").Split(',').Contains("5")
+            || Model.GetAnswer("DataChangeSelection").Split(',').Contains("6")
+            || Model.GetAnswer("DataChangeSelection").Split(',').Contains("7")
+            || Model.GetAnswer("DataChangeSelection").Split(',').Contains("8"))
+            {
+                if(Model.VisibleTab("#documents"))
+                 {
+                <li class="@(Model.TabHasError("#documents") ? "error" : "")"><a href="#documents">@Model.Translate("Documents")</a></li>
+                }
+            }
+            @if(Model.VisibleTab("#globalview"))
+            {
+                <li class="@(Model.TabHasError("#globalview") ? "error" : "")"><a href="#globalview">@Model.Translate("Global view")</a></li>
+            }
+        </ul>
+        <div class="content">
+            <div class="row-fluid">
+                <div class="tab-content">
+                    @if(Model.VisibleTab("#selection"))
+                    {
+                        @Html.Partial("_TabSelection", Model)
+                    }
+                    @if(Model.VisibleTab("#change"))
+                    {
+                        @Html.Partial("_TabChange", Model)
+                    }
+                     @if(Model.GetAnswer("DataChangeSelection").Split(',').Contains("1")
+                      || Model.GetAnswer("DataChangeSelection").Split(',').Contains("4")
+                      || Model.GetAnswer("DataChangeSelection").Split(',').Contains("5")
+                      || Model.GetAnswer("DataChangeSelection").Split(',').Contains("6")
+                      || Model.GetAnswer("DataChangeSelection").Split(',').Contains("7")
+                      || Model.GetAnswer("DataChangeSelection").Split(',').Contains("8"))
+                    {
+                         if(Model.VisibleTab("#documents"))
+                         {
+                            @Html.Partial("_TabDocuments", Model)
+                         }
+                    }
+                    @if(Model.VisibleTab("#globalview"))
+                    {
+                         @Html.Partial("_TabGlobalView", Model)
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="activeTab" name="activeTab" value="@Model.ActiveTab" />
+}

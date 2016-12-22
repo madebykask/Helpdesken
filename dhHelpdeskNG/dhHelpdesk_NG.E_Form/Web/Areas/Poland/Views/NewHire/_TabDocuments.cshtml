@@ -1,0 +1,30 @@
+﻿@model Web.Areas.Poland.Models.NewHire
+<div class="tab-pane" id="documents">
+    <div class="span12">
+        <table class="table-striped">
+            <thead>
+                <tr>
+                    <th>@Model.Translate("Document")
+                    </th>
+                    <th>@Model.Translate("Type")
+                    </th>
+                    <th>
+                        @Model.Translate("Printed by")
+                    </th>
+                    <th>&nbsp;
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Retail</td>
+                    <td>pdf</td>
+                    <td>@Model.GetAnswer("RetailContract")</td>
+                    <td>
+                        <a href="@Url.Action("print", new { id = "RetailContract" })" class="btn pull-right print"><i class="icon-file"></i>&nbsp;@Model.Translate("Print")</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,85 @@
+﻿@model Web.Models.Poland.NewHireModel
+<div class="tab-pane" id="documents">
+    <div class="span7">
+        <div class="well">
+            @Model.Input("ContractPrinted")
+        </div>
+        <table class="table-striped">
+            <thead>
+                <tr>
+                    <th>&nbsp;
+                    </th>
+                    <th>@Model.Translate("Document")
+                    </th>
+                    <th>@Model.Translate("Type")
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @*<tr>
+                    <td><a href="@Url.Action("Pdf", new { id = "PDF_BCSEnglish" })" target="_blank"><i class="icon-file"></i></a></td>
+                    <td>BCS English</td>
+                    <td>PDF</td>
+                </tr>
+                <tr>
+                    <td><a href="@Url.Action("Pdf", new { id = "PDF_BCSPolish" })" target="_blank"><i class="icon-file"></i></a></td>
+                    <td>BCS Polish</td>
+                    <td>PDF</td>
+                </tr>*@
+                <tr>
+                    <td><a href="@Url.Action("Pdf", new { id = "PDF_RetailEnglish" })" target="_blank"><i class="icon-file"></i></a></td>
+                    <td>Retail English</td>
+                    <td>PDF</td>
+                </tr>
+                @*<tr>
+                    <td><a href="@Url.Action("Pdf", new { id = "PDF_RetailPolish" })" target="_blank"><i class="icon-file"></i></a></td>
+                    <td>Retail Polish</td>
+                    <td>PDF</td>
+                </tr>
+                <tr>
+                    <td><a href="@Url.Action("Pdf", new { id = "PDF_DistributionEnglish" })" target="_blank"><i class="icon-file"></i></a></td>
+                    <td>Distribution English</td>
+                    <td>PDF</td>
+                </tr>
+                <tr>
+                    <td><a href="@Url.Action("Pdf", new { id = "PDF_DistributionPolish" })" target="_blank"><i class="icon-file"></i></a></td>
+                    <td>Distribution Polish</td>
+                    <td>PDF</td>
+                </tr>
+                <tr>
+                    <td><a href="@Url.Action("Pdf", new { id = "PDF_InterIKEAEnglish" })" target="_blank"><i class="icon-file"></i></a></td>
+                    <td>Inter IKEA English</td>
+                    <td>PDF</td>
+                </tr>
+                <tr>
+                    <td><a href="@Url.Action("Pdf", new { id = "PDF_InterIKEAPolish" })" target="_blank"><i class="icon-file"></i></a></td>
+                    <td>Inter IKEA Polish</td>
+                    <td>PDF</td>
+                </tr>
+                <tr>
+                    <td><a href="@Url.Action("Pdf", new { id = "PDF_PropertyEnglish" })" target="_blank"><i class="icon-file"></i></a></td>
+                    <td>Property English</td>
+                    <td>PDF</td>
+                </tr>
+                <tr>
+                    <td><a href="@Url.Action("Pdf", new { id = "PDF_PropertyPolish" })" target="_blank"><i class="icon-file"></i></a></td>
+                    <td>Property Polish</td>
+                    <td>PDF</td>
+                </tr>
+                <tr>
+                    <td><a href="@Url.Action("Pdf", new { id = "PDF_TradingEnglish" })" target="_blank"><i class="icon-file"></i></a></td>
+                    <td>Trading English</td>
+                    <td>PDF</td>
+                </tr>
+                <tr>
+                    <td><a href="@Url.Action("Pdf", new { id = "PDF_TradingPolish", })" target="_blank"><i class="icon-file"></i></a></td>
+                    <td>Trading Polish</td>
+                    <td>PDF</td>
+                </tr>*@
+            </tbody>
+        </table>
+    </div>
+    <div class="row-fluid">
+        <div class="span12 alignright"></div>
+    </div>
+</div>

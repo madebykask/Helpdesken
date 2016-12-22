@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<predefined>
+  <name>AllowanceTypeUnit</name>
+  <dependent>
+    <selected>Car Allowance</selected>
+    <show></show>
+    <show2></show2>
+  </dependent>
+  <dependent>
+    <selected>Cash Adjustment</selected>
+    <show></show>
+    <show2></show2>
+  </dependent>
+  <dependent>
+    <selected>Commission</selected>
+    <show></show>
+    <show2></show2>
+  </dependent>
+  <dependent>
+    <selected>Competance Pay</selected>
+    <show></show>
+    <show2></show2>
+  </dependent>
+  <dependent>
+    <selected>Fork Lift Truck Allowance</selected>
+    <show>2.00</show>
+    <show2></show2>
+  </dependent>
+  <dependent>
+    <selected>First Aid Allowance</selected>
+    <show>20.00</show>
+    <show2></show2>
+  </dependent>
+  <dependent>
+    <selected>Housing Allowance</selected>
+    <show></show>
+    <show2></show2>
+  </dependent>
+  <dependent>
+    <selected>IKEA1 Skills</selected>
+    <show></show>
+    <show2></show2>
+  </dependent>
+  <dependent>
+    <selected>IKEA2 Skills</selected>
+    <show></show>
+    <show2></show2>
+  </dependent>
+  <dependent>
+    <selected>Kitchen Skills</selected>
+    <show></show>
+    <show2></show2>
+  </dependent>
+  <dependent>
+    <selected>Mortgage Subsidy</selected>
+    <show></show>
+    <show2></show2>
+  </dependent>
+  <dependent>
+    <selected>Night Shift</selected>
+    <show>2.50</show>
+    <show2></show2>
+  </dependent>
+  <dependent>
+    <selected>NTG Double Housing</selected>
+    <show></show>
+    <show2></show2>
+  </dependent>
+  <dependent>
+    <selected>NTG Housing Costs</selected>
+    <show></show>
+    <show2></show2>
+  </dependent>
+  <dependent>
+    <selected>NTG Relocation Allow</selected>
+    <show></show>
+    <show2></show2>
+  </dependent>
+  <dependent>
+    <selected>NTG Rent Allowance</selected>
+    <show></show>
+    <show2></show2>
+  </dependent>
+  <dependent>
+    <selected>Power Stacker</selected>
+    <show>1.00</show>
+  </dependent>
+  <dependent>
+    <selected>Redundancy</selected>
+    <show></show>
+    <show2></show2>
+  </dependent>
+  <dependent>
+    <selected>Relocation Allowance</selected>
+    <show></show>
+    <show2></show2>
+  </dependent>
+  <dependent>
+    <selected>Rent Allowance</selected>
+    <show></show>
+    <show2></show2>
+  </dependent>
+  <dependent>
+    <selected>Responsibility Allow</selected>
+    <show></show>
+    <show2></show2>
+  </dependent>
+  <dependent>
+    <selected>Secondment</selected>
+    <show></show>
+    <show2></show2>
+  </dependent>
+  <dependent>
+    <selected>Stand By Allowance</selected>
+    <show></show>
+    <show2></show2>
+  </dependent>
+</predefined>

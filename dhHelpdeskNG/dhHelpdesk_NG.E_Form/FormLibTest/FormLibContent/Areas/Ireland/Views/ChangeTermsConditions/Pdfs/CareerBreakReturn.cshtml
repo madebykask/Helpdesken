@@ -1,0 +1,99 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@using ECT.FormLib.Pdfs;
+@using System.Globalization;
+@using ECT.Model.Entities;
+@{
+    Layout = null;
+    Model.Language = "en";
+
+    var fillOldVal = TempData["oldValues"];
+    var newfill = (List<KeyValuePair<string, string>>)fillOldVal;
+    
+    string OLD_JobTitle  = newfill.Where(x => x.Key == "OLD_JobTitle").Select(x => x.Value).FirstOrDefault();
+
+    if (OLD_JobTitle == null)
+    {
+        OLD_JobTitle = "";
+    }
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    <div>
+        <table style="@IrelandPdfPage.StyleValue() width: 100%;" border="0">
+            <tr style="text-align: right;">
+                <td>@string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:d MMMMMM yyyy}", DateTime.Now)</td>
+            </tr>
+        </table>
+        <p style="@IrelandPdfPage.StyleValue()">
+            <strong>Private & Confidential</strong><br />
+            @Model.GetDocumentAnswer(FormLibConstants.FormField.FirstName, true) @Model.GetDocumentAnswer(FormLibConstants.FormField.LastName, true)<br />
+            @Model.GetDocumentAnswer(FormLibConstants.FormField.PermanentAddressLine1, true)
+            @if (!string.IsNullOrEmpty(Model.GetDocumentAnswer(FormLibConstants.FormField.PermanentAddressLine2)))
+            {
+                <br />
+                @Model.GetDocumentAnswer(FormLibConstants.FormField.PermanentAddressLine2)
+            }
+            <br />
+            @Model.GetDocumentAnswer(FormLibConstants.FormField.PermanentCity, true)
+            <br />
+            @Model.GetDocumentAnswer(FormLibConstants.FormField.PermanentPostalCode, true)
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            Dear @Model.GetDocumentAnswer(FormLibConstants.FormField.FirstName, true),<br />
+            <br />
+        </p>
+        <p style="text-align:center; font-family: Verdana; font-size: 12px;">
+            <b>Career Break</b>
+            <br />
+        </p>
+        <p style="@IrelandPdfPage.StyleValue()">
+            I am writing to confirm that arrangements are being made for you to return to work from your career break, on @Model.GetDocumentAnswer(FormLibConstants.FormField.ChangeValidFrom, true).
+            <br />
+            <br />
+            @if (OLD_JobTitle.ToLower() != Model.GetDocumentAnswer("JobTitle").ToLower())
+            {
+                  <text>As discussed, unfortunately due to the needs of the business, the role of @OLD_JobTitle that you were in prior to taking a career break has changed and as a result, you will be returning to the role of @Model.GetDocumentAnswer(FormLibConstants.FormField.JobTitle) within the New @Model.GetDocumentAnswer(FormLibConstants.FormField.Department, true) department.  This new role is based on the same salary, benefits and skills as your previous role.</text>
+            }
+            else
+            {
+                  <text>As already discussed, you will be returning to your previous role of @OLD_JobTitle within the @Model.GetDocumentAnswer(FormLibConstants.FormField.Department, true) department, on the same salary as when you went on career break.</text>
+            }
+            <br />
+            <br />
+            As a pay review has taken place during your career break, your salary will be reviewed in line with usual performance criteria, 
+            @if (Model.GetDocumentAnswer(FormLibConstants.FormField.CareerBreakReturnPayReview).ToLower() == "immediately".ToLower())
+            {
+                <text> (immediately)</text>
+            }
+            else if (Model.GetDocumentAnswer(FormLibConstants.FormField.CareerBreakReturnPayReview).ToLower() == "in six months from return".ToLower())
+            {
+                <text> (in six months from your return)</text>
+            }
+            else if (Model.GetDocumentAnswer(FormLibConstants.FormField.CareerBreakReturnPayReview).ToLower() == "timescales depend on time away".ToLower())
+            {
+                <text> (timescales depend on time away from business and how close to pay review when they went off)</text>
+            }
+            , however it will not be automatic that you receive a pay increase.
+            <br />
+            <br />
+            On your return to work, your holiday entitlement for the remainder of the holiday year will be @Model.GetDocumentAnswer(FormLibConstants.FormField.ContractedHours, true) hours.
+            <br />
+            <br />
+            On returning to work, all other terms and conditions and benefits that you were receiving, prior to your career break, will resume in accordance with the career break policy.
+            <br />
+            <br />
+        </p>
+        <endpage />
+    </div>
+</body>
+</html>

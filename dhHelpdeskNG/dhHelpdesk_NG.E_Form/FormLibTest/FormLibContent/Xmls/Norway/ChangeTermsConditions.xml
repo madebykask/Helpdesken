@@ -1,0 +1,562 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE form [
+    <!ENTITY languages SYSTEM "Templates/Languages.xml">
+    <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
+    <!ENTITY state SYSTEM "Templates/ChangeTermsConditionsState.xml">
+
+    <!ENTITY pre_psgroup_level SYSTEM "Narrowing/ND_PsGroup_Level.xml">
+
+     <!--GLOBAL DATA-->
+    <!ENTITY data_global_costcentre SYSTEM "Data/Data_Global_CostCentre.xml">
+    <!ENTITY data_global_jobtitle SYSTEM "Data/Data_Global_JobTitle.xml">
+    <!ENTITY data_global_positiontitle SYSTEM "Data/Data_Global_PositionTitle.xml">
+    <!ENTITY data_global_reportstolinemanager SYSTEM "Data/Data_Global_ReportsToLineManager.xml">
+    <!ENTITY data_global_primarysite SYSTEM "Data/Data_Global_PrimarySite.xml">
+    <!ENTITY data_global_linemanagersjobtitle SYSTEM "Data/Data_Global_LineManagersJobTitle.xml">
+
+    <!--COMMON DATA-->
+    <!ENTITY data_country SYSTEM "Data/Data_Common_Country.xml">
+    <!ENTITY data_common_servicerequestpriority SYSTEM "Data/Data_Common_ServiceRequestPriority.xml">
+    <!ENTITY data_common_noyes SYSTEM "Data/Data_Common_NoYes.xml">
+    <!ENTITY data_common_yesno SYSTEM "Data/Data_Common_YesNo.xml">
+    <!ENTITY data_common_probationlengthinmonths SYSTEM "Data/Data_Common_ProbationLengthInMonths.xml">
+    <!ENTITY data_common_tecapprover SYSTEM "Data/Data_Common_TECapprover.xml">
+    <!ENTITY data_common_payrollcategory SYSTEM "Data/Data_Common_PayrollCategory.xml">
+    <!ENTITY data_common_psgroup SYSTEM "Data/Data_Common_PSGroup.xml">
+    <!ENTITY data_common_level SYSTEM "Data/Data_Common_Level.xml">
+    <!ENTITY data_common_gender SYSTEM "Data/Data_Common_Gender.xml">
+    <!ENTITY data_common_oneikeabonus SYSTEM "Data/Data_Common_OneIKEAbonus.xml">
+
+    <!--PROCESS SPECIFIC DATA-->
+    <!ENTITY data_change_typeofchange SYSTEM "Data/Change/Data_Change_TypeOfChange.xml">
+    <!ENTITY data_change_benefits_typeofchange SYSTEM "Data/Change/Data_Change_Benefits_ChangeType.xml">
+  
+    <!ENTITY data_change_allowancestype SYSTEM "Data/Change/Data_Change_AllowancesType.xml">
+    <!ENTITY data_change_newposition SYSTEM "Data/Change/Data_Change_NewPosition.xml">
+    <!ENTITY data_change_contracttype SYSTEM "Data/Change/Data_Change_ContractType.xml">
+    <!ENTITY data_change_midlertidigKarakter SYSTEM "Data/Change/Data_Change_MidlertidigKarakter.xml">   
+    <!ENTITY data_change_noticeperiod SYSTEM "Data/Change/Data_Change_NoticePeriod.xml">
+    <!ENTITY data_change_paidperha SYSTEM "Data/Change/Data_Change_PaidPerHA.xml">
+    <!ENTITY data_change_basicpaychangereason SYSTEM "Data/Change/Data_Change_BasicPayChangeReason.xml">
+    <!ENTITY data_change_changetype SYSTEM "Data/Change/Data_Change_ChangeType.xml">
+    <!ENTITY data_change_allowancespaidper SYSTEM "Data/Change/Data_Change_AllowancesPaidPer.xml">
+    <!ENTITY data_change_deductiontype SYSTEM "Data/Change/Data_Change_DeductionType.xml">
+    <!ENTITY data_change_deductionsperhmao SYSTEM "Data/Change/Data_Change_DeductionPerHMAO.xml">  
+]>
+
+<form id="0" guid="D46A39B4-0E58-4B86-9F87-417A9253C18E" customerId="0">
+    &languages;
+    &regexs;
+    &state;
+
+    <fields>
+        <!--Tab ServiceRequestDetails-->
+        <tab name="#ServiceRequestDetails" label="Service Request Details">
+            <element name="Co-WorkerGlobalviewID" type="text" label="Co-worker Globalview ID" casefield="reportedby" mandatory="1" HCMData="1" SortOrder="1">
+                <regex inherit="employeeno" message="" pattern=""></regex>
+            </element>
+            <element name="FirstName" type="text" label="Co-worker First Name" mandatory="1" casefield="persons_name" HCMData="1" SortOrder="2"></element>
+            <element name="LastName" type="text" label="Co-worker Last name" mandatory="1" casefield="persons_phone" HCMData="1" SortOrder="3"></element>           
+            <element name="IKEAEmailAddress" type="text" label="IKEA Email Address" mandatory="1" HCMData="0" SortOrder="0">
+                <regex inherit="email" message="" pattern=""></regex>
+            </element>
+            <element name="IKEANetworkID" type="text"  label="IKEA Network ID" mandatory="1" HCMData="0" SortOrder="0"></element>
+            <element name="Company" type="text" label="Company" mandatory="1" HCMData="1" SortOrder="4"></element>
+            <element name="BusinessUnit" type="text" label="Business Unit" mandatory="1" HCMData="1" SortOrder="5"></element>
+            <element name="ServiceArea" type="text" label="Function" mandatory="1" HCMData="1" SortOrder="6"></element>
+            <element name="Department" type="text" label="Department" mandatory="1" HCMData="1" SortOrder="7"></element>
+            <element name="TypeOfChange" type="select" label="Type of Change" mandatory="1" HCMData="1" SortOrder="8">
+                &data_change_typeofchange;
+            </element>
+            <element name="ChangeValidFrom" type="date" label="Change Valid from:" mandatory="1" format="dd.MM.yyyy" HCMData="1" SortOrder="9">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element name="ChangeValidTo" type="date" label="Change Valid to:" format="dd.MM.yyyy" HCMData="1" SortOrder="10">
+                <regex inherit="date" pattern="" message=""></regex>
+                <!--<laterThanOrEqual name="ChangeValidFrom" message="This date cannot be earlier than Change valid from date."></laterThanOrEqual>-->
+            </element>
+            <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard" HCMData="0" SortOrder="0">
+              &data_common_servicerequestpriority;
+            </element>
+            <element type="date" name="DateOfBirth" label="Date of Birth" mandatory="1" format="dd.MM.yyyy" past="1" formfieldidentifier="P0002.GBDAT" HCMData="1" SortOrder="11">
+              <regex inherit="date" pattern="" message=""></regex>
+            </element>
+          <element type="textarea" name="InternalLogNote" label="Internal Log Note" HCMData="0" SortOrder="0"></element>         
+
+        </tab>
+
+        <!--Tab OrganisationalAssignment-->
+        <tab name="#OrganisationalAssignment" label="Organisational Assignment">
+            <!--Organisation Assignment-->
+            <element type="hidden" name="OrganisationCountry" label="Country" default="Norway"></element>
+            <element type="select" source="database" name="NewCompany" label="Company" formfieldidentifier="P0001.BUKRS" casefield="region_id" HCMData="1" SortOrder="12"></element>
+            <element type="select" source="database" name="NewBusinessUnit" label="Business Unit" formfieldidentifier="P0001.WERKS" casefield="department_id" HCMData="1" SortOrder="13"></element>
+            <element type="select" source="database" name="NewServiceArea" label="Function" formfieldidentifier="P0001.BTRTL"  HCMData="1" SortOrder="14"></element>
+            <element type="select" source="database" name="NewDepartment" label="Department" formfieldidentifier="P0001.ORGEH" casefield="ou_id" HCMData="1" SortOrder="15"></element>
+            <element type="search-select" name="CostCentre" source="1"  label="Cost Centre" formfieldidentifier="P0001.KOSTL" HCMData="1" SortOrder="16">               
+                &data_global_costcentre;
+            </element>
+          
+            <!--Job-->
+            <element type="search-select" name="PositionTitle" label="Position Title (Local Job Name)" formfieldidentifier="P0001.PLANS" HCMData="1" SortOrder="17">
+              &data_global_positiontitle;
+            </element>            
+            <element type="search-select" name="JobTitle" label="Job Title (Global Catalogue)" formfieldidentifier="P0001.STELL" HCMData="1" SortOrder="18">
+                &data_global_jobtitle;
+            </element>
+            <element type="select" name="IsManager" label="Is Manager?" HCMData="1" SortOrder="19">
+              &data_common_noyes;
+            </element>
+            <element type="select" name="NewPosition" label="New Position?" default="Fill Vacant Position" HCMData="1" SortOrder="20">
+              &data_change_newposition;
+            </element>         
+            <element type="search-select" name="ReportsToLineManager" translate="false" label="Reports to Line Manager" formfieldidentifier="P0001_AF.ZZMGR" HCMData="1" SortOrder="21">
+                &data_global_reportstolinemanager;
+            </element>
+            <element type="search-select" name="LineManagersJobTitle"  translate="false" source="1" label="Line Manager's job title" HCMData="0" SortOrder="0" ParentGVFields="0">
+              &data_global_linemanagersjobtitle;
+            </element>  
+          
+            <!--Employment Conditions-->
+            <element type="select" name="ContractType" label="Contract type" formfieldidentifier="P0001.PERSG" HCMData="1" SortOrder="22">
+              &data_change_contracttype;
+            </element>
+            <element name="EmploymentPercentage" type="text" label="Employment percentage (%)" mandatory="1" defaultbyformfieldidentifier="0" formfieldidentifier="P0008.BSGRD" HCMData="1" SortOrder="23">
+              <regex inherit="unsignednum" pattern="" message=""></regex>
+              <regex inherit="num100" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="MidlertidigKarakter" label="The employment is of temporary nature based on AML §14,9 letter" HCMData="0" SortOrder="0">
+              &data_change_midlertidigKarakter;
+              <mandatoryIf name="ContractType">Temporary</mandatoryIf>
+            </element>
+            <element name="PersonReplaced" type="text" label="Person replaced" HCMData="0" SortOrder="0">
+              <mandatoryIf name="ContractType">Replacement</mandatoryIf>
+            </element>
+            <element name="ProjectName" type="text" label="Project Name" HCMData="0" SortOrder="0">
+              <mandatoryIf name="MidlertidigKarakter">a</mandatoryIf>
+            </element>
+            <element type="date" name="ContractEndDate" label="Contract end date" format="dd.MM.yyyy" defaultbyformfieldidentifier="0" formfieldidentifier="P0016.CTEDT" HCMData="1" SortOrder="24">
+              <laterThanOrEqual name="ChangeValidFrom" message="This date cannot be earlier than Change valid from."></laterThanOrEqual>
+              <mandatoryIf name="ContractType">Temporary,Transferred Employee,Replacement,Trainee,Seasonal co-worker</mandatoryIf>
+              <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="ProbationPeriod" label="Probation period?" default="No" mandatory="1" HCMData="0" SortOrder="0">
+              &data_common_yesno;
+            </element>
+            <element type="select" name="ProbationLength" label="Probation length (in months)" HCMData="0" SortOrder="0">
+              &data_common_probationlengthinmonths;
+              <mandatoryIf name="ProbationPeriod">Yes</mandatoryIf>
+            </element>
+            <element type="select" name="NoticePeriod" label="Notice period (in months)" HCMData="0" SortOrder="0">
+              &data_change_noticeperiod;
+              <mandatoryIf name="ContractType">Permanent,Temporary,Replacement,Trainee,Seasonal co-worker</mandatoryIf>
+            </element>
+            <element name="PrimarySite" type="search-select" translate="false" label="Primary Site" HCMData="0" SortOrder="0">
+              &data_global_primarysite;
+            </element>
+            <element name="TECApprover" type="search-select" label="TEC Approver " HCMData="0" SortOrder="0">
+              &data_common_tecapprover;
+            </element>
+            <element name="HelpDesk" type="text" label="Help Desk" default="ICC3 HBG Retail" HCMData="0" SortOrder="0"></element>
+        </tab>
+
+        <!--Tab: Payment Information-->
+        <tab name="#Payment" label="Payment Information">
+            <element type="select" name="PayrollCategory" label="Payroll category" HCMData="1" SortOrder="25">
+               &data_common_payrollcategory;
+            </element>           
+            <element type="select" name="PSGroup" label="PS Group" formfieldidentifier="P0008.TRFGR" HCMData="1" SortOrder="26">
+              &pre_psgroup_level;
+              &data_common_psgroup;             
+            </element>
+            <element type="select" name="Level" label="Level" HCMData="1" SortOrder="27">
+              &data_common_level;                
+            </element>
+            <element type="text" name="BasicPayAmount" label="Basic pay amount (in kr)" helptext="For individual co-workers it is based on a 100% position." HCMData="1" SortOrder="28">
+              <regex inherit="amountwithdelimiter" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="PaidPer" label="Paid per:" HCMData="1" SortOrder="29">
+              &data_change_paidperha;
+            </element>
+            <element type="select" name="Overtime" label="Overtime included in the salary?" HCMData="0" SortOrder="0">
+              &data_common_yesno;
+              <mandatoryIf name="PSGroup">INDIVID</mandatoryIf>
+            </element>
+            <element type="select" name="ParticipatingInJour" label="Participating in Jour?" HCMData="0" SortOrder="0">
+              &data_common_yesno;
+              <mandatoryIf name="Overtime">Yes</mandatoryIf>
+            </element>
+            <element type="select" name="BasicPayChangeReason" label="Basic Pay Change Reason" HCMData="1" SortOrder="30">
+              &data_change_basicpaychangereason;
+              <mandatoryIfNotEmpty name="BasicPayAmount"></mandatoryIfNotEmpty>
+            </element>
+            <element type="label" cssclass="day-month" default="01.04" name="NextTariff_Day_Month"   HCMData="0" SortOrder="0" ParentGVFields="0">
+            </element>
+            <element type="date" cssclass="date-month" name="NextTariff_Year" label="Next Tariff/Salary review:" HCMData="0" SortOrder="0" ParentGVFields="0">
+              <regex inherit="year" pattern="" message=""></regex>
+            </element>
+            <element type="hidden" name="NextTariff"  default="">
+              <!--<regex inherit="date" pattern="" message=""></regex>-->
+            </element>
+            <element type="select" name="Autopunch" label="Autopunch" HCMData="1" SortOrder="92">
+              &data_common_yesno;
+              <mandatoryIf name="PSGroup">INDIVID</mandatoryIf>
+            </element>
+          <!--Allowances 1-->
+            <element type="hidden" name="Allowances" default="1"></element>
+            <element type="select" name="AllowancesChangeType" label="Change Type" HCMData="1" SortOrder="31">
+              <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>
+                &data_change_changetype;
+            </element>
+            <element type="select" name="AllowancesType" label="Allowance Type" HCMData="1" SortOrder="32">
+              <mandatoryIfNotEmpty name="AllowancesChangeType"></mandatoryIfNotEmpty>
+                &data_change_allowancestype;
+            </element>            
+            <element type="text" name="AllowancesAmountUnits" label="Amount/Units (in kr)" HCMData="1" SortOrder="33">
+              <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>              
+              <mandatoryIfNotEmpty name="AllowancesChangeType"></mandatoryIfNotEmpty>
+              <regex inherit="amountwithdelimiter" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="AllowancesPaidPer" label="Paid per:" HCMData="1" SortOrder="34">
+              <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>
+              <mandatoryIfNotEmpty name="AllowancesChangeType"></mandatoryIfNotEmpty>
+                &data_change_allowancespaidper;
+            </element>
+            <element type="date" name="AllowancesValidFrom" label="Allowance valid from:" format="dd.MM.yyyy" HCMData="1" SortOrder="35">
+              <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>
+              <mandatoryIfNotEmpty name="AllowancesChangeType"></mandatoryIfNotEmpty>
+                <regex inherit="date" pattern="" message=""></regex>
+                <!--<laterThanOrEqual name="ChangeValidFrom" message="This date cannot be earlier than Change valid from date."></laterThanOrEqual>-->
+            </element>
+            <element type="date" name="AllowancesValidTo" label="Allowance valid to:" format="dd.MM.yyyy" HCMData="1" SortOrder="36">
+              <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>
+              <mandatoryIfNotEmpty name="AllowancesChangeType"></mandatoryIfNotEmpty>  
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+
+          <!--2-->
+            <element type="select" name="AllowancesChangeType2" label="Change Type" HCMData="1" SortOrder="37">
+              <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>
+              &data_change_changetype;
+            </element>
+            <element type="select" name="AllowancesType2" label="Allowance Type" HCMData="1" SortOrder="38">
+              <mandatoryIfNotEmpty name="AllowancesChangeType2"></mandatoryIfNotEmpty>
+              &data_change_allowancestype;
+            </element>
+            <element type="text" name="AllowancesAmountUnits2" label="Amount/Units (in kr)" HCMData="1" SortOrder="39">
+              <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>
+              <mandatoryIfNotEmpty name="AllowancesChangeType2"></mandatoryIfNotEmpty>
+              <regex inherit="amountwithdelimiter" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="AllowancesPaidPer2" label="Paid per:" HCMData="1" SortOrder="40">
+              <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>              
+              <mandatoryIfNotEmpty name="AllowancesChangeType2"></mandatoryIfNotEmpty>
+              &data_change_allowancespaidper;
+            </element>
+            <element type="date" name="AllowancesValidFrom2" label="Allowance valid from:" format="dd.MM.yyyy" HCMData="1" SortOrder="41">
+              <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>
+              <mandatoryIfNotEmpty name="AllowancesChangeType2"></mandatoryIfNotEmpty>
+              <regex inherit="date" pattern="" message=""></regex>
+              <!--<laterThanOrEqual name="ChangeValidFrom" message="This date cannot be earlier than Change valid from date."></laterThanOrEqual>-->
+            </element>
+            <element type="date" name="AllowancesValidTo2" label="Allowance valid to:" format="dd.MM.yyyy" HCMData="1" SortOrder="42">
+              <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>
+              <mandatoryIfNotEmpty name="AllowancesChangeType2"></mandatoryIfNotEmpty>
+              <regex inherit="date" pattern="" message=""></regex>
+            </element>
+
+          <!--3-->
+            <element type="select" name="AllowancesChangeType3" label="Change Type" HCMData="1" SortOrder="43">
+              <mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>
+              &data_change_changetype;
+            </element>
+            <element type="select" name="AllowancesType3" label="Allowance Type" HCMData="1" SortOrder="44">
+              <mandatoryIfNotEmpty name="AllowancesChangeType3"></mandatoryIfNotEmpty>
+              &data_change_allowancestype;
+            </element>
+            <element type="text" name="AllowancesAmountUnits3" label="Amount/Units (in kr)" HCMData="1" SortOrder="45">
+              <mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>
+              <mandatoryIfNotEmpty name="AllowancesChangeType3"></mandatoryIfNotEmpty>
+              <regex inherit="amountwithdelimiter" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="AllowancesPaidPer3" label="Paid per:" HCMData="1" SortOrder="46">
+              <mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>
+              <mandatoryIfNotEmpty name="ChangeType3"></mandatoryIfNotEmpty>
+              &data_change_allowancespaidper;
+            </element>
+            <element type="date" name="AllowancesValidFrom3" label="Allowance valid from:" format="dd.MM.yyyy" HCMData="1" SortOrder="47">
+              <mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>
+              <mandatoryIfNotEmpty name="AllowancesChangeType3"></mandatoryIfNotEmpty>
+              <regex inherit="date" pattern="" message=""></regex>
+              <!--<laterThanOrEqual name="ChangeValidFrom" message="This date cannot be earlier than Change valid from date."></laterThanOrEqual>-->
+            </element>
+            <element type="date" name="AllowancesValidTo3" label="Allowance valid to:" format="dd.MM.yyyy" HCMData="1" SortOrder="48">
+              <mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>
+              <mandatoryIfNotEmpty name="AllowancesChangeType3"></mandatoryIfNotEmpty>
+              <regex inherit="date" pattern="" message=""></regex>
+            </element>
+
+          <!--4-->
+            <element type="select" name="AllowancesChangeType4" label="Change Type" HCMData="1" SortOrder="49">
+              <mandatoryIfNotEmpty name="AllowancesType4"></mandatoryIfNotEmpty>
+              &data_change_changetype;
+            </element>
+            <element type="select" name="AllowancesType4" label="Allowance Type" HCMData="1" SortOrder="50">
+              <mandatoryIfNotEmpty name="AllowancesChangeType4"></mandatoryIfNotEmpty>
+              &data_change_allowancestype;
+            </element>
+            <element type="text" name="AllowancesAmountUnits4" label="Amount/Units (in kr)" HCMData="1" SortOrder="51">
+              <mandatoryIfNotEmpty name="AllowancesType4"></mandatoryIfNotEmpty>
+              <mandatoryIfNotEmpty name="AllowancesChangeType4"></mandatoryIfNotEmpty>
+              <regex inherit="amountwithdelimiter" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="AllowancesPaidPer4" label="Paid per:" HCMData="1" SortOrder="52">
+              <mandatoryIfNotEmpty name="AllowancesType4"></mandatoryIfNotEmpty>
+              <mandatoryIfNotEmpty name="AllowancesChangeType4"></mandatoryIfNotEmpty>
+              &data_change_allowancespaidper;
+            </element>
+            <element type="date" name="AllowancesValidFrom4" label="Allowance valid from:" format="dd.MM.yyyy" HCMData="1" SortOrder="53">
+              <mandatoryIfNotEmpty name="AllowancesType4"></mandatoryIfNotEmpty>
+              <mandatoryIfNotEmpty name="AllowancesChangeType4"></mandatoryIfNotEmpty>
+              <regex inherit="date" pattern="" message=""></regex>
+              <!--<laterThanOrEqual name="ChangeValidFrom" message="This date cannot be earlier than Change valid from date."></laterThanOrEqual>-->
+            </element>
+            <element type="date" name="AllowancesValidTo4" label="Allowance valid to:" format="dd.MM.yyyy" HCMData="1" SortOrder="54">
+              <mandatoryIfNotEmpty name="AllowancesType4"></mandatoryIfNotEmpty>              
+              <mandatoryIfNotEmpty name="AllowancesChangeType4"></mandatoryIfNotEmpty>
+              <regex inherit="date" pattern="" message=""></regex>
+            </element>
+
+          <!--5-->
+            <element type="select" name="AllowancesChangeType5" label="Change Type" HCMData="1" SortOrder="55">
+              <mandatoryIfNotEmpty name="AllowancesType5"></mandatoryIfNotEmpty>
+              &data_change_changetype;
+            </element>
+            <element type="select" name="AllowancesType5" label="Allowance Type" HCMData="1" SortOrder="56">
+              <mandatoryIfNotEmpty name="AllowancesChangeType5"></mandatoryIfNotEmpty>
+              &data_change_allowancestype;
+            </element>
+            <element type="text" name="AllowancesAmountUnits5" label="Amount/Units (in kr)" HCMData="1" SortOrder="57">
+              <mandatoryIfNotEmpty name="AllowancesType5"></mandatoryIfNotEmpty>
+              <mandatoryIfNotEmpty name="AllowancesChangeType5"></mandatoryIfNotEmpty>
+              <regex inherit="amountwithdelimiter" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="AllowancesPaidPer5" label="Paid per:" HCMData="1" SortOrder="58">
+              <mandatoryIfNotEmpty name="AllowancesType5"></mandatoryIfNotEmpty>
+              <mandatoryIfNotEmpty name="AllowancesChangeType5"></mandatoryIfNotEmpty>
+              &data_change_allowancespaidper;
+            </element>
+            <element type="date" name="AllowancesValidFrom5" label="Allowance valid from:" format="dd.MM.yyyy" HCMData="1" SortOrder="59">
+              <mandatoryIfNotEmpty name="AllowancesType5"></mandatoryIfNotEmpty>
+              <mandatoryIfNotEmpty name="AllowancesChangeType5"></mandatoryIfNotEmpty>
+              <regex inherit="date" pattern="" message=""></regex>
+              <!--<laterThanOrEqual name="ChangeValidFrom" message="This date cannot be earlier than Change valid from date."></laterThanOrEqual>-->
+            </element>
+            <element type="date" name="AllowancesValidTo5" label="Allowance valid to:" format="dd.MM.yyyy" HCMData="1" SortOrder="60">
+              <mandatoryIfNotEmpty name="AllowancesType5"></mandatoryIfNotEmpty>
+              <mandatoryIfNotEmpty name="AllowancesChangeType5"></mandatoryIfNotEmpty>
+              <regex inherit="date" pattern="" message=""></regex>
+            </element>
+
+          <!--Deductions-->
+
+          <element type="hidden" default="1" name="Deductions"></element>
+          <!--1-->
+          <element type="select" name="DeductionsChangeType" label="Change Type" HCMData="1" SortOrder="61">
+            <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
+            &data_change_changetype;
+          </element>
+          <element name="DeductionsType" label="Deduction Type" type="select" HCMData="1" SortOrder="62">
+            <mandatoryIfNotEmpty name="DeductionsChangeType"></mandatoryIfNotEmpty>
+            &data_change_deductiontype;
+          </element>         
+          <element name="DeductionsAmountUnits" label="Amount/Units (in kr)" type="text" HCMData="1" SortOrder="63">  
+            <regex inherit="amountwithdelimiter" pattern="" message=""></regex>
+            <mandatoryIfNotEmpty name="DeductionsChangeType"></mandatoryIfNotEmpty>
+            <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
+          </element>
+          <element type="select" name="DeductionsPer" label="Deducted per:" default="month" HCMData="1" SortOrder="64">
+            <mandatoryIfNotEmpty name="DeductionsChangeType"></mandatoryIfNotEmpty>
+            <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
+            &data_change_deductionsperhmao;
+          </element>
+          <element name="DeductionsValidFrom" label="Valid from:" type="date" format="dd.MM.yyyy" HCMData="1" SortOrder="65">
+            <regex inherit="date" pattern="" message=""></regex>
+            <mandatoryIfNotEmpty name="DeductionsChangeType"></mandatoryIfNotEmpty>
+            <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
+          </element>
+          <element name="DeductionsValidTo" label="Valid to:" type="date" format="dd.MM.yyyy" HCMData="1" SortOrder="66">
+            <regex inherit="date" pattern="" message=""></regex>
+            <mandatoryIfNotEmpty name="DeductionsChangeType"></mandatoryIfNotEmpty>
+            <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
+          </element>
+          <!--2-->
+          <element type="select" name="DeductionsChangeType2" label="Change Type" HCMData="1" SortOrder="67">
+            <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
+            &data_change_changetype;
+          </element>
+          <element name="DeductionsType2" label="Deduction Type" type="select" HCMData="1" SortOrder="68">
+            <mandatoryIfNotEmpty name="DeductionsChangeType2"></mandatoryIfNotEmpty>
+            &data_change_deductiontype;
+          </element>
+          <element name="DeductionsAmountUnits2" label="Amount/Units (in kr)" type="text" HCMData="1" SortOrder="69">
+            <regex inherit="amountwithdelimiter" pattern="" message=""></regex>
+            <mandatoryIfNotEmpty name="DeductionsChangeType2"></mandatoryIfNotEmpty>
+            <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
+          </element>
+          <element type="select" name="DeductionsPer2" label="Deducted per:" default="month" HCMData="1" SortOrder="70">
+            <mandatoryIfNotEmpty name="DeductionsChangeType2"></mandatoryIfNotEmpty>
+            <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
+            &data_change_deductionsperhmao;
+          </element>
+          <element name="DeductionsValidFrom2" label="Valid from:" type="date" format="dd.MM.yyyy" HCMData="1" SortOrder="71">
+            <regex inherit="date" pattern="" message=""></regex>
+            <mandatoryIfNotEmpty name="DeductionsChangeType2"></mandatoryIfNotEmpty>
+            <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
+          </element>
+          <element name="DeductionsValidTo2" label="Valid to:" type="date" format="dd.MM.yyyy" HCMData="1" SortOrder="72">
+            <regex inherit="date" pattern="" message=""></regex>
+            <mandatoryIfNotEmpty name="DeductionsChangeType2"></mandatoryIfNotEmpty>
+            <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
+          </element>
+          <!--3-->
+          <element type="select" name="DeductionsChangeType3" label="Change Type" HCMData="1" SortOrder="73">
+            <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
+            &data_change_changetype;
+          </element>
+          <element name="DeductionsType3" label="Deduction Type" type="select" HCMData="1" SortOrder="74">
+            <mandatoryIfNotEmpty name="DeductionsChangeType3"></mandatoryIfNotEmpty>
+            &data_change_deductiontype;
+          </element>
+          <element name="DeductionsAmountUnits3" label="Amount/Units (in kr)" type="text" HCMData="1" SortOrder="75">
+            <regex inherit="amountwithdelimiter" pattern="" message=""></regex>
+            <mandatoryIfNotEmpty name="DeductionsChangeType3"></mandatoryIfNotEmpty>
+            <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
+          </element>
+          <element type="select" name="DeductionsPer3" label="Deducted per:" default="month" HCMData="1" SortOrder="76">
+            <mandatoryIfNotEmpty name="DeductionsChangeType3"></mandatoryIfNotEmpty>
+            <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
+            &data_change_deductionsperhmao;
+          </element>
+          <element name="DeductionsValidFrom3" label="Valid from:" type="date" format="dd.MM.yyyy" HCMData="1" SortOrder="77">
+            <regex inherit="date" pattern="" message=""></regex>
+            <mandatoryIfNotEmpty name="DeductionsChangeType3"></mandatoryIfNotEmpty>
+            <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>           
+          </element>
+          <element name="DeductionsValidTo3" label="Valid to:" type="date" format="dd.MM.yyyy" HCMData="1" SortOrder="78">
+            <regex inherit="date" pattern="" message=""></regex>
+            <mandatoryIfNotEmpty name="DeductionsChangeType3"></mandatoryIfNotEmpty>
+            <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
+          </element>
+          <!--4-->
+          <element type="select" name="DeductionsChangeType4" label="Change Type" HCMData="1" SortOrder="79">
+            <mandatoryIfNotEmpty name="DeductionsType4"></mandatoryIfNotEmpty>
+            &data_change_changetype;
+          </element>
+          <element name="DeductionsType4" label="Deduction Type" type="select" HCMData="1" SortOrder="80">
+            <mandatoryIfNotEmpty name="DeductionsType4"></mandatoryIfNotEmpty>
+            <mandatoryIfNotEmpty name="DeductionsChangeType4"></mandatoryIfNotEmpty>
+            &data_change_deductiontype;
+          </element>
+          <element name="DeductionsAmountUnits4" label="Amount/Units (in kr)" type="text" HCMData="1" SortOrder="81">
+            <regex inherit="amountwithdelimiter" pattern="" message=""></regex>
+            <mandatoryIfNotEmpty name="DeductionsChangeType4"></mandatoryIfNotEmpty>
+            <mandatoryIfNotEmpty name="DeductionsType4"></mandatoryIfNotEmpty>
+          </element>
+          <element type="select" name="DeductionsPer4" label="Deducted per:" default="month" HCMData="1" SortOrder="82">
+            <mandatoryIfNotEmpty name="DeductionsChangeType4"></mandatoryIfNotEmpty>
+            <mandatoryIfNotEmpty name="DeductionsType4"></mandatoryIfNotEmpty>
+            &data_change_deductionsperhmao;
+          </element>
+          <element name="DeductionsValidFrom4" label="Valid from:" type="date" format="dd.MM.yyyy" HCMData="1" SortOrder="83">
+            <regex inherit="date" pattern="" message=""></regex>
+            <mandatoryIfNotEmpty name="DeductionsChangeType4"></mandatoryIfNotEmpty>
+            <mandatoryIfNotEmpty name="DeductionsType4"></mandatoryIfNotEmpty>
+          </element>
+          <element name="DeductionsValidTo4" label="Valid to:" type="date" format="dd.MM.yyyy" HCMData="1" SortOrder="84">
+            <regex inherit="date" pattern="" message=""></regex>
+            <mandatoryIfNotEmpty name="DeductionsChangeType4"></mandatoryIfNotEmpty>
+            <mandatoryIfNotEmpty name="DeductionsType4"></mandatoryIfNotEmpty>
+          </element>
+          <!--5-->
+          <element type="select" name="DeductionsChangeType5" label="Change Type" HCMData="1" SortOrder="85">
+            <mandatoryIfNotEmpty name="DeductionsType5"></mandatoryIfNotEmpty>
+            &data_change_changetype;
+          </element>
+          <element name="DeductionsType5" label="Deduction Type" type="select" HCMData="1" SortOrder="86">
+            <mandatoryIfNotEmpty name="DeductionsChangeType5"></mandatoryIfNotEmpty>
+            &data_change_deductiontype;
+          </element>
+          <element name="DeductionsAmountUnits5" label="Amount/Units (in kr)" type="text" HCMData="1" SortOrder="87">
+            <regex inherit="amountwithdelimiter" pattern="" message=""></regex>
+            <mandatoryIfNotEmpty name="DeductionsChangeType5"></mandatoryIfNotEmpty>
+            <mandatoryIfNotEmpty name="DeductionsType5"></mandatoryIfNotEmpty>
+          </element>
+          <element type="select" name="DeductionsPer5" label="Deducted per:" default="month" HCMData="1" SortOrder="88">
+            <mandatoryIfNotEmpty name="DeductionsChangeType5"></mandatoryIfNotEmpty>
+            <mandatoryIfNotEmpty name="DeductionsType5"></mandatoryIfNotEmpty>
+            &data_change_deductionsperhmao;
+          </element>
+          <element name="DeductionsValidFrom5" label="Valid from:" type="date" format="dd.MM.yyyy" HCMData="1" SortOrder="89">
+            <regex inherit="date" pattern="" message=""></regex>
+            <mandatoryIfNotEmpty name="DeductionsChangeType5"></mandatoryIfNotEmpty>
+            <mandatoryIfNotEmpty name="DeductionsType5"></mandatoryIfNotEmpty>
+          </element>
+          <element name="DeductionsValidTo5" label="Valid to:" type="date" format="dd.MM.yyyy" HCMData="1" SortOrder="90">
+            <regex inherit="date" pattern="" message=""></regex>
+            <mandatoryIfNotEmpty name="DeductionsChangeType5"></mandatoryIfNotEmpty>
+            <mandatoryIfNotEmpty name="DeductionsType5"></mandatoryIfNotEmpty>
+          </element>
+          
+          <!--Section bonus Eligibility-->
+          <element type="select" name="OneIKEABonusLevel" label="One IKEA Bonus Level " HCMData="1" SortOrder="91">
+            &data_common_oneikeabonus;
+          </element>
+                            
+          <!--Benefits-->
+            <element type="hidden" name="Benefits" label="Benefits" default="1"></element>
+            <element type="select" name="BenefitChangeType" label="Change Type" HCMData="0" SortOrder="0">
+                &data_change_benefits_typeofchange;
+              <mandatoryIf name="Benefit_MobilePhone">1</mandatoryIf>
+              <mandatoryIf name="Benefit_Broadband">1</mandatoryIf>
+              <mandatoryIf name="Benefit_Computer">1</mandatoryIf>
+              <mandatoryIf name="Benefit_NewspaperSubscription">1</mandatoryIf>
+              <mandatoryIf name="Benefit_CompanyCar">1</mandatoryIf>
+              <mandatoryIf name="Benefit_CarAllowance">1</mandatoryIf>
+              <mandatoryIf name="Benefit_OneWeek">1</mandatoryIf>
+            </element>
+
+          <element name="Benefit" type="checkbox_group">
+          <mandatoryIf name="BenefitChangeType">Start,Stop,Continue</mandatoryIf>
+          <element name="Benefit_MobilePhone" cssclass="benefits" type="checkbox" label="Mobile phone" HCMData="0" SortOrder="0" ParentGVFields="0">
+            <on value="1"></on>
+            <off value="0"></off>
+          </element>
+          <element name="Benefit_Broadband" cssclass="benefits" type="checkbox" label="Broadband" HCMData="0" SortOrder="0" ParentGVFields="0">
+            <on value="1"></on>
+            <off value="0"></off>
+          </element>
+          <element name="Benefit_Computer" cssclass="benefits" type="checkbox" label="Computer" HCMData="0" SortOrder="0" ParentGVFields="0">
+            <on value="1"></on>
+            <off value="0"></off>
+          </element>
+          <element name="Benefit_NewspaperSubscription" cssclass="benefits" type="checkbox" label="Newspaper Subscription" HCMData="0" SortOrder="0" ParentGVFields="0">
+            <on value="1"></on>
+            <off value="0"></off>
+          </element>
+          <element name="Benefit_CompanyCar" cssclass="benefits" type="checkbox" label="Company Car" HCMData="0" SortOrder="0" ParentGVFields="0">
+            <on value="1"></on>
+            <off value="0"></off>
+          </element>
+          <element name="Benefit_CarAllowance" cssclass="benefits" type="checkbox" label="Car Allowance" HCMData="0" SortOrder="0" ParentGVFields="0">
+            <on value="1"></on>
+            <off value="0"></off>
+          </element>
+          <element name="Benefit_OneWeek" cssclass="benefits" type="checkbox" label="One-week extra paid leave" HCMData="0" SortOrder="0" ParentGVFields="0">
+            <on value="1"></on>
+            <off value="0"></off>
+          </element>
+          </element>
+        </tab>
+    </fields>
+</form>

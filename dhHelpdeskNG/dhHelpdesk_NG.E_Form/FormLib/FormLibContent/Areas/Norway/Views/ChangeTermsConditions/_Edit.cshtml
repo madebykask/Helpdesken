@@ -1,0 +1,143 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@using System.Collections;
+
+@{
+    var url = Url.CurrentController() + "typeahead";
+}
+
+@functions{
+    public string GetContract()
+    {
+       //IF it is not LM 
+       if (!FormLibUtils.IsSelfService()){
+        
+            // Applies to all except if PS Group = INDIVID   AND CR_DH_NO_21 Print tab (allowing to print out T&C e-form) should not appear if there is a value selected in a field: Contract Type 
+            if (Model.GetAnswer("PSGroup").ToLower() != "INDIVID".ToLower() && string.IsNullOrEmpty(Model.GetAnswer("ContractType")))             
+            {
+                return "ChangeTermsConditions";
+            }
+       }
+        return "";        
+    }
+}
+
+@using (Html.BeginForm("edit", "ChangeTermsConditions", new { id = Model.Contract.Id }, FormMethod.Post, new { area = "Norway", novalidate = "novalidate", id = "changeform" }))
+{               
+    <span style="display: none;" id="narrowDownInit" url="@url"></span>
+    @Html.Partial("_GlobalNavRev", Model)
+    <div class="container containeralignright">
+        @*@Html.Partial("_FormInfo", Model)*@
+        @Html.Partial("_CurrentUser")
+        @Html.Partial("_ErrorMessage", Model)
+        <ul class="nav nav-tabs">
+            @if(Model.VisibleTab("#ServiceRequestDetails"))
+            {
+                <li class="active @(Model.TabHasError("#ServiceRequestDetails") ? "error" : "")">
+                    <a href="#ServiceRequestDetails">@Model.Translate("Service Request Details")</a></li>
+            }
+            @if(Model.VisibleTab("#OrganisationalAssignment"))
+            {
+                <li class="@(Model.TabHasError("#OrganisationalAssignment") ? "error" : "")">
+                    <a href="#OrganisationalAssignment">@Model.Translate("Organisational Assignment")</a></li>
+            }
+            @if(Model.VisibleTab("#Payment"))
+            {
+                <li class="@(Model.TabHasError("#Payment") ? "error" : "")">
+                    <a href="#Payment">@Model.Translate("Payment Information")</a></li>
+            }
+            @if(Model.VisibleTab("#globalview"))
+            {
+                <li class="@(Model.TabHasError("#globalview") ? "error" : "")">
+                    <a href="#globalview" data-url="@Url.Action("GetGlobalViewFields", new { caseId = Model.Contract.Id, formGuid = Model.FormGuid })">@Model.Translate("Global View")</a></li>
+            }
+            
+            @if (!string.IsNullOrEmpty(GetContract()))
+            {
+                <li>
+                
+                    <a href="@Url.Action("ChangePrint", "ChangeTermsConditions", new
+                    {
+                        id = GetContract(),
+                        caseId = Model.Contract.Id,
+                        path = "",
+                        userId = FormLibSessions.User.UserId,
+                        allowanceNr = ""
+                    })" class="changeprint"><i class="icon-print icon-white"></i>&nbsp;@Model.Translate("Print")</a>
+                                   
+                 </li>
+            }@*
+            else{
+                 if(Model.VisibleTab("#documents"))
+                 {
+                 <li class="@(Model.TabHasError("#documents") ? "error" : "")">
+                    <a href="#documents"><i class="icon-print icon-white"></i>&nbsp;@Model.Translate("Print")</a></li>
+                 }
+            }*@
+
+            @if(Model.VisibleTab("#attachments"))
+            {
+                <li class="pull-right">
+                    <a href="#attachments"><i class="icon-file icon-white"></i>&nbsp;@Model.Translate("Attachments")&nbsp;(<b id="attachmentCounter">@(Model.Contract.CaseFiles != null ? Model.Contract.CaseFiles.Count() : 0)</b>)</a>
+                </li>
+            }
+        </ul>
+        <div class="content">
+            <div class="row-fluid">
+                <div class="tab-content">
+                    @if(Model.VisibleTab("#ServiceRequestDetails"))
+                    {
+                        @Html.Partial("_TabServiceRequestDetails", Model)
+                    }
+                    @if(Model.VisibleTab("#OrganisationalAssignment"))
+                    {
+                        @Html.Partial("_TabOrganisationalAssignment", Model)
+                    }
+                    @if(Model.VisibleTab("#Payment"))
+                    {
+                        @Html.Partial("_TabPayment", Model)
+                    }  
+                    @if(Model.VisibleTab("#globalview"))
+                    {
+                        @Html.Partial("_TabGlobalView", Model)
+                    }
+                    @if(Model.VisibleTab("#attachments"))
+                    {
+                        @Html.Partial("_GlobalAttachments", Model)
+                    }
+                    @Html.Partial("_TabCTCJS", Model)
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="activeTab" name="activeTab" value="@Model.ActiveTab" />
+    @Html.Partial("_Validate", Model)
+}
+
+<script>
+    validate.run($('#actionState').val());
+
+    $(document).on('change', '#actionState', function (e) {
+        var val = $(this).val();
+        validate.run(val);
+    });
+
+    //function changeBusinessUnitCallback() {
+    //    GetXML('Predefined_BusinessUnit_LineManager.xml', narrowDownBusinessUnitLineManager);
+    //    GetXML('Predefined_BusinessUnit_LocalJobTitle.xml', narrowDownBusinessUnitLocalJobTitle);
+    //}
+
+    function changeBusinessUnitCallback() {
+        narrowingWithXML('/Narrowing/ND_BusinessUnit_ReportsToLineManager.xml', '/Data/Data_Global_ReportsToLineManager.xml', $('#NewBusinessUnit'), $('#ReportsToLineManager'));
+        narrowingWithXML('/Narrowing/ND_BusinessUnit_LineManagersJobTitle.xml', '/Data/Data_Global_LineManagersJobTitle.xml', $('#NewBusinessUnit'), $('#LineManagersJobTitle'));
+    }
+
+    function changeFunctionsCallback() {
+        narrowingWithXML2Base('/Narrowing/ND_Function_PositionTitle.xml', '/Data/Data_Global_PositionTitle.xml', $('#NewBusinessUnit'), $('#NewServiceArea'), $('#PositionTitle'));
+        narrowingWithXML2Base('/Narrowing/ND_Function_JobTitle.xml', '/Data/Data_Global_JobTitle.xml', $('#NewBusinessUnit'), $('#NewServiceArea'), $('#JobTitle'));
+        narrowingWithXML('/Narrowing/ND_Function_PsGroup.xml', '/Data/Data_Common_PSGroup.xml', $('#NewServiceArea'), $('#PSGroup'));
+    }
+
+</script>
+@Html.Partial("_Scripts", Model)

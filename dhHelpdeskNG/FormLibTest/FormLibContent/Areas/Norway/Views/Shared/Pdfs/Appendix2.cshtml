@@ -1,0 +1,144 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@using ECT.FormLib.Pdfs;
+
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    @*<link href="@Model.Contract.BaseUrl/FormLibContent/assets/css/documents.css" rel="stylesheet" type="text/css" />*@
+    @Model.GetStyleAnswer("GetStyleLink")
+    @Html.Partial("../Shared/Pdfs/_Styles", Model)
+    @Model.GetStyleAnswer("GetStyles")
+
+    <style>
+        table, p {
+            font-size: 10pt !important; 
+            line-height: normal !important;
+        }
+    </style>
+
+</head>
+<body>
+    <table>
+        <tr style="page-break-before: always;">
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+    <div class="default-page">
+        <p>
+            <strong>Bijlage bij het contract betreffende Protocol 4</strong><br />
+        </p>
+        <p>
+           Aansluitend op de afspraken, zoals deze zijn vastgelegd in de CAO, kan IKEA gebruik maken van de mogelijkheid om de medewerker extra in te roosteren op inconveniënte uren. Dit is conform artikel 19C betreffende protocol 4. 
+        </p>
+        <p>Het inroosteren van de inconveniënte uren zal zoveel mogelijk in overleg met de medewerker gebeuren.</p>
+
+        <p>In onderstaande tabel wordt aangegeven binnen welke kaders afspraken kunnen worden gemaakt ten aanzien van extra in te roosteren inconveniënte uren.</p>
+        <p>Tabel 1: Aanvullende afspraken inconveniënte uren:</p>
+
+        
+            <table class="table-full-width table-bordered table-appendix">
+                <tr>
+                    <th style="border:none !important;"></th>
+                    <th style="border:none !important;" colspan="4"><strong>aantal contracturen</strong></th>
+                </tr>
+                <tr>
+                    <td style="border:none !important;width:50%;min-width:50%;"></td>
+                    <td style="width:15%;min-width:15%;"><u>&lt;</u> 12 + vulploeg</td>
+                    <td>13-21</td>
+                    <td>22-31</td>
+                    <td><u>&gt;</u> 32</td>
+                </tr>
+                <tr>
+                    <td class="td-no-border" style="height:10px; min-height:10px; font-size:1px;">&nbsp;</td>
+                    <td class="td-no-border" colspan="4" style="border-left:1px solid black !important;border-right:1px solid black !important;height:10px; min-height:10px;font-size:1px;">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td style="text-align:left !important;"><strong>maximaal aantal koopavonden<br />per 4 weken</strong></td>
+                    <td>geen maximum/<br />in overleg</td>
+                    <td>6</td>
+                    <td>7</td>
+                    <td>8</td>
+                </tr>
+                <tr>
+                    <td style="text-align:left !important;"><strong>maximaal aantal zaterdagavonden per 6 weken</strong></td>
+                    <td>geen maximum/<br />in overleg</td>
+                    <td>2</td>
+                    <td>2</td>
+                    <td>3</td>
+                </tr>
+                <tr>
+                    <td style="text-align:left !important;"><strong>maximaal aantal zaterdagen<br />per 2 weken</strong></td>
+                    <td>geen maximum/<br />in overleg</td>
+                    <td>2</td>
+                    <td>2</td>
+                    <td>2</td>
+                </tr>
+                <tr>
+                    <td style="text-align:left !important;"><strong>maximaal aantal<br />zondagen/feestdagen per jaar</strong></td>
+                    <td>geen maximum/<br />in overleg</td>
+                    <td>6*</td>
+                    <td>6*</td>
+                    <td>6*</td>
+                </tr>
+            </table>
+        
+        <br />
+        <table>
+            <tr>
+                <td>*&nbsp;&nbsp;</td>
+                <td style="font-size:9pt !important;">Vestigingen die meer dan 12 koopzondagen/feestdagen per jaar geopend zijn, kunnen in overleg met de medewerker tot een maximum van 50% van het aantal openstellingen, contractuele afspraken maken over het extra inroosteren op deze zondagen/feestdagen.</td>
+            </tr>
+        </table>
+        <br />
+        <br />
+        <br />
+         @Html.Partial("../Shared/Pdfs/_CityDate", Model)
+        <br />
+<table class="table-full-width">
+    <tr>
+        <td style="width: 50%; min-width: 50%;">Met vriendelijke groet,<br />IKEA B.V. Nederland
+           
+        </td>
+        <td style="width: 50%; min-width: 50%;vertical-align:bottom;">Handtekening medewerker
+        </td>
+    </tr>
+  
+</table>
+        @*<br />
+        <br /><br /><br />
+             @Model.GetDocumentAnswer("FirstName", true)@if (!string.IsNullOrEmpty(Model.GetAnswer("Prefixes")))
+   
+                                                        {<text>&nbsp;</text>@Model.GetAnswer("Prefixes")} @Model.GetDocumentAnswer("LastName", true)*@
+ 
+ <table class="table-full-width">
+    <tr>
+        <td style="width: 50%; min-width: 50%;">
+
+            @if (!string.IsNullOrEmpty(Model.Department.HeadOfDepartmentSignature))
+            {
+            <div><img style="max-height:80px;" src="@Model.Contract.BaseUrl@Model.Department.HeadOfDepartmentSignature" /></div>
+            }
+            else
+            {
+                
+            }
+    </td>
+        <td style="width: 50%; min-width: 50%;">
+        </td>
+    </tr>
+    <tr>
+        <td>@CustomPdfPage.IsEmpty(@Model.Department.HeadOfDepartmentName, "Name")<br />@CustomPdfPage.IsEmpty(@Model.Department.HeadOfDepartmentTitle, "Job Name")</td>
+        <td> @Model.GetDocumentAnswer("FirstName", true)@if (!string.IsNullOrEmpty(Model.GetAnswer("Prefixes")))
+                                                   {<text>&nbsp;</text>@Model.GetAnswer("Prefixes")} @Model.GetDocumentAnswer("LastName", true)
+        </td>
+    </tr>
+   
+ </table>
+ </div>
+</body>
+</html>

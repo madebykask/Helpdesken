@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE I18n [
+    <!ENTITY poland SYSTEM "Poland/I18n.xml">
+    <!ENTITY netherlands SYSTEM "Netherlands/I18n.xml">
+]>
+<I18n>
+    &poland;
+    &netherlands;
+</I18n>

@@ -1,0 +1,1502 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+<div class="tab-pane" id="Payment">
+    <div class="span6">
+        <table class="table">
+            <tbody>
+
+
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Allowances")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AllowancesChangeType")</td>
+                    <td>
+                        @Model.Element("AllowancesChangeType")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AllowancesType")</td>
+                    <td>
+                        @Model.Element("AllowancesType")
+                    </td>
+                </tr>
+@*                <tr>
+                    <td class="tdstrong">@Model.Label("AllowancesPaymentType")</td>
+                    <td>
+                        @Model.Element("AllowancesPaymentType")
+                    </td>
+                </tr>*@
+                <tr>
+                    <td class="tdstrong">@Model.Label("AllowancesAmountUnits")</td>
+                    <td>
+                        @Model.Element("AllowancesAmountUnits")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AllowancesPaidPer")</td>
+                    <td>
+                        @Model.Element("AllowancesPaidPer")
+                    </td>
+                </tr>
+@*                <tr>
+                    <td class="tdstrong">@Model.Label("AllowancesNetGross")</td>
+                    <td>
+                        @Model.Element("AllowancesNetGross")
+                    </td>
+                </tr>*@
+                <tr>
+                    <td class="tdstrong">@Model.Label("AllowancesValidFrom")</td>
+                    <td>
+                        @Model.Element("AllowancesValidFrom")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AllowancesValidTo")</td>
+                    <td>
+                        @Model.Element("AllowancesValidTo")
+                    </td>
+                </tr>
+
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
+                {
+                    <tr class="allowance@(i.ToString())" id="allowance@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h4>@Model.Translate("Allowances") @(i.ToString())</h4>
+                        </td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AllowancesChangeType" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AllowancesChangeType" + i.ToString())</td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AllowancesType" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AllowancesType" + i.ToString())</td>
+                    </tr>
+                    @*
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AllowancesPaymentType" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AllowancesPaymentType" + i.ToString())</td>
+                    </tr>*@
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AllowancesAmountUnits" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AllowancesAmountUnits" + i.ToString())</td>
+                    </tr>@*
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AllowancesNetGross" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AllowancesNetGross" + i.ToString())</td>
+                    </tr>*@
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AllowancesPaidPer" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AllowancesPaidPer" + i.ToString())</td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AllowancesValidFrom" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AllowancesValidFrom" + i.ToString())</td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AllowancesValidTo" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AllowancesValidTo" + i.ToString())</td>
+                    </tr>
+                }
+                <tr id="addAllowanceTrr">
+                    <td colspan="2">
+                        @Model.Element("Allowances")
+                        <a id="addAllowance" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Allowance")</a></td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Deductions")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionsChangeType")</td>
+                    <td>
+                        @Model.Element("DeductionsChangeType")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionsType")</td>
+                    <td>
+                        @Model.Element("DeductionsType")
+                    </td>
+                </tr>
+@*                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionsPaymentType")</td>
+                    <td>
+                        @Model.Element("DeductionsPaymentType")
+                    </td>
+                </tr>*@
+                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionsAmountUnits")</td>
+                    <td>
+                        @Model.Element("DeductionsAmountUnits")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("DeductedPer")</td>
+                    <td>
+                        @Model.Element("DeductedPer")
+                    </td>
+                </tr>
+@*                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionsNetGross")</td>
+                    <td>
+                        @Model.Element("DeductionsNetGross")
+                    </td>
+                </tr>*@
+                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionsValidFrom")</td>
+                    <td>
+                        @Model.Element("DeductionsValidFrom")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionsValidTo")</td>
+                    <td>
+                        @Model.Element("DeductionsValidTo")
+                    </td>
+                </tr>
+
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
+                {
+                    <tr class="deduction@(i.ToString())" id="deduction@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h4>@Model.Translate("Deductions") @(i.ToString())</h4>
+                        </td>
+                    </tr>
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionsChangeType" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionsChangeType" + i.ToString())</td>
+                    </tr>
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionsType" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionsType" + i.ToString())</td>
+                    </tr>
+                    @*
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionsPaymentType" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionsPaymentType" + i.ToString())</td>
+                    </tr>*@
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionsAmountUnits" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionsAmountUnits" + i.ToString())</td>
+                    </tr>
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductedPer" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductedPer" + i.ToString())</td>
+                    </tr>
+                    @*
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionsNetGross" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionsNetGross" + i.ToString())</td>
+                    </tr>*@
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionsValidFrom" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionsValidFrom" + i.ToString())</td>
+                    </tr>
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionsValidTo" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionsValidTo" + i.ToString())</td>
+                    </tr>
+                }
+                <tr id="addDeductionTrr">
+                    <td colspan="2">
+                        @Model.Element("Deductions")
+                        <a id="addDeduction" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Deduction")</a></td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <input type="hidden" id="MultipleEntrySectionsNr" value="@FormLibConstants.FormField.MultipleEntrySectionsNr" />
+
+</div>
+
+
+<script>
+
+    @*  if (document.getElementById('DeductionsValidFrom').value == ''){
+                document.getElementById('DeductionsValidFrom').value = '@Model.GetAnswer("ChangeValidFrom")';
+            for (var i = 2; i <= 3; i++) {
+            
+                var DeductionsValidFrom = "DeductionsValidFrom" + [i].toString();
+            
+                document.getElementById(DeductionsValidFrom).value = '@Model.GetAnswer("ChangeValidFrom")';
+                
+            }
+        }*@
+
+    function setPaymentDatePickersBehavior() {
+
+        $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,#date_AllowancesValidFrom4,#date_AllowancesValidFrom5,' +
+        '#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3,#date_DeductionsValidFrom4,#date_DeductionsValidFrom5').not(".disabled").datepicker('destroy');
+
+        var startDate = $('#ChangeValidFrom').val();
+        var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+        var dStart = APIGlobal.DateTime.parseDate(startDate, format);
+        var forcePicker = new Date(dStart.getFullYear(), dStart.getMonth(), dStart.getDate(), 0, 0, 0, 0);
+        $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,#date_AllowancesValidFrom4,#date_AllowancesValidFrom5,' +
+            '#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3,#date_DeductionsValidFrom4,#date_DeductionsValidFrom5').not(".disabled").datepicker(
+        {
+            onRender: function (ev) {
+                return ev.valueOf() < forcePicker.valueOf() ? 'disabled' : '';
+            },
+        });
+
+        ////set value to the datepicker
+        $('#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3,#date_DeductionsValidFrom4,#date_DeductionsValidFrom5').not(".disabled").datepicker("setValue", forcePicker);
+        $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,#date_AllowancesValidFrom4,#date_AllowancesValidFrom5').not(".disabled").datepicker("setValue", forcePicker);
+        $('#date_ChangeValidFrom').datepicker("setValue", startDate);
+
+        $('#AllowancesValidFrom,#AllowancesValidFrom2,#AllowancesValidFrom3,#AllowancesValidFrom4,#AllowancesValidFrom5,' +
+  '#DeductionsValidFrom,#DeductionsValidFrom2,#DeductionsValidFrom3,#DeductionsValidFrom4,#DeductionsValidFrom5').val(startDate);
+    }
+
+   // setPaymentDatePickersBehavior();
+
+    $('#date_ChangeValidFrom').on('changeDate', function (ev) {
+        setPaymentDatePickersBehavior();
+    }).data('datepicker');
+
+    $('#ChangeValidFrom').change(function () {
+        setPaymentDatePickersBehavior();
+    });
+
+    $('#DeductionsValidFrom,#DeductionsValidFrom2,#DeductionsValidFrom3,#DeductionsValidFrom4,#DeductionsValidFrom5').change(function () {
+
+        $('#date_' + $(this).attr("id")).datepicker("setValue", $(this).val());
+    });
+
+    $('#AllowancesValidFrom,#AllowancesValidFrom2,#AllowancesValidFrom3,#AllowancesValidFrom4,#AllowancesValidFrom5').change(function () {
+
+        $('#date_' + $(this).attr("id")).datepicker("setValue", $(this).val());
+    });
+
+    $('#AllowancesType').change(function () {
+       setAllowanceType();
+    });
+
+    $('#AllowancesType2').change(function () {
+        setAllowanceType2();
+    });
+
+    $('#AllowancesType3').change(function () {
+        setAllowanceType3();
+    });
+
+    $('#AllowancesType4').change(function () {
+        setAllowanceType4();
+    });
+
+    $('#AllowancesType5').change(function () {
+        setAllowanceType5();
+    });
+
+    function setAllowanceTypeXML3(xml) {
+        //////////
+        //Sets allowance type units from predefined_allowancetype_units_outs.XML based on Allowance type
+        //////////
+
+        var show = ''
+        var show2 = ''
+        if (document.getElementById('AllowancesAmountUnits3')) {
+            document.getElementById('AllowancesAmountUnits3').value = '';
+        }
+        if (document.getElementById('AllowancesNetGross3')) {
+            document.getElementById('AllowancesNetGross3').value = '';
+        }
+        var res = '0';
+        var bus = '';
+
+        if (document.getElementById('BusinessUnit')) {
+            //bus = $("#BusinessUnit option:selected").text();
+            bus = document.getElementById('BusinessUnit').value;
+        }
+        var dep = '';
+        if (document.getElementById('AllowancesType3')) {
+            dep = document.getElementById('AllowancesType3').value;
+        }
+        //var bus = $("#BusinessUnit option:selected").text();
+        // alert(bus);
+
+        var d = dep;
+
+        $(xml).find('dependent').each(function () {
+
+
+            var $sel = $(this);
+            show = '';
+            show2 = '';
+
+            var department = $sel.find('selected').text();
+
+            show = $sel.find('show').text();
+            //show2 = $sel.find('show2').text();
+
+
+
+            if (dep.toString().trim() == 'Location Allowance - Hourly') {
+
+                if (bus == 'IKEA Bristol') {
+
+                    if (document.getElementById('AllowancesAmountUnits3')) {
+                        document.getElementById('AllowancesAmountUnits3').value = '0.10';
+                    }
+
+                }
+                else if (bus == 'IKEA Croydon') {
+
+                    if (document.getElementById('AllowancesAmountUnits3')) {
+                        document.getElementById('AllowancesAmountUnits3').value = '1.28';
+                    }
+
+                }
+                else if (bus == 'IKEA Lakeside') {
+
+                    if (document.getElementById('AllowancesAmountUnits3')) {
+                        document.getElementById('AllowancesAmountUnits3').value = '0.77';
+                    }
+
+                }
+                else if (bus == 'IKEA Milton Keynes') {
+
+                    if (document.getElementById('AllowancesAmountUnits3')) {
+                        document.getElementById('AllowancesAmountUnits3').value = '0.35';
+                    }
+
+                }
+                else if (bus == 'IKEA Tottenham') {
+
+                    if (document.getElementById('AllowancesAmountUnits3')) {
+                        document.getElementById('AllowancesAmountUnits3').value = '1.28';
+                    }
+
+                }
+                else if (bus == 'IKEA Wembley') {
+
+                    if (document.getElementById('AllowancesAmountUnits3')) {
+                        document.getElementById('AllowancesAmountUnits3').value = '1.28';
+                    }
+
+                }
+                //else if (bus == 'IKEA Service Office') {
+
+                //    if (document.getElementById('AllowancesAmountUnits3')) {
+                //        document.getElementById('AllowancesAmountUnits3').value = '1.28';
+                //    }
+
+                //}
+            }
+            else if (dep.toString().trim() == 'Location Allowance - Salaried') {
+
+                if (bus == 'IKEA Bristol') {
+
+                    if (document.getElementById('AllowancesAmountUnits3')) {
+                        document.getElementById('AllowancesAmountUnits3').value = '203.10';
+                    }
+
+                }
+                else if (bus == 'IKEA Croydon') {
+
+                    if (document.getElementById('AllowancesAmountUnits3')) {
+                        document.getElementById('AllowancesAmountUnits3').value = '2600.00';
+                    }
+
+                }
+                else if (bus == 'IKEA Lakeside') {
+
+                    if (document.getElementById('AllowancesAmountUnits3')) {
+                        document.getElementById('AllowancesAmountUnits3').value = '1560.00';
+                    }
+
+                }
+                else if (bus == 'IKEA Milton Keynes') {
+
+                    if (document.getElementById('AllowancesAmountUnits3')) {
+                        document.getElementById('AllowancesAmountUnits3').value = '709.00';
+                    }
+
+                }
+                else if (bus == 'IKEA Tottenham') {
+
+                    if (document.getElementById('AllowancesAmountUnits3')) {
+                        document.getElementById('AllowancesAmountUnits3').value = '2600.00';
+                    }
+
+                }
+                else if (bus == 'IKEA Wembley') {
+
+                    if (document.getElementById('AllowancesAmountUnits3')) {
+                        document.getElementById('AllowancesAmountUnits3').value = '2600.00';
+                    }
+
+                }
+                //else if (bus == 'IKEA Service Office') {
+
+                //    if (document.getElementById('AllowancesAmountUnits3')) {
+                //        document.getElementById('AllowancesAmountUnits3').value = '2600.00';
+                //    }
+
+                //}
+            }
+            else {
+
+                if (department.toString().trim() == dep.toString().trim()) {
+
+                    if (show != '') {
+                        if (document.getElementById('AllowancesAmountUnits3')) {
+
+                            if (dep.toString().trim() == 'Advanced') {
+                                if (bus.toString().trim() != 'IKEA Contact Centre') {
+                                    document.getElementById('AllowancesAmountUnits3').value = show;
+                                }
+                                else {
+                                    document.getElementById('AllowancesAmountUnits3').value = '0.55';
+                                }
+                            }
+                            else if (dep.toString().trim() == 'Fork Lift Truck Allowance') {
+                                if (bus.toString().trim() != 'IKEA Milton Keynes') {
+                                    document.getElementById('AllowancesAmountUnits3').value = show;
+                                }
+                                else {
+                                    document.getElementById('AllowancesAmountUnits3').value = '1.72';
+                                }
+                            }
+                            else if (dep.toString().trim() == 'Kitchen Skills - Hourly')
+                                if (bus.toString().trim() == 'IKEA Edinburgh') {
+                                    document.getElementById('AllowancesAmountUnits3').value = '1.00';
+                                }
+
+                                else if (bus.toString().trim() == 'IKEA Tottenham' | bus == 'IKEA Wembley' | bus == 'IKEA Croydon' | bus == 'IKEA Lakeside') {
+                                    document.getElementById('AllowancesAmountUnits3').value = '0.30';
+                                }
+                                else {
+                                    document.getElementById('AllowancesAmountUnits3').value = show;
+                                }
+                            else {
+                                document.getElementById('AllowancesAmountUnits3').value = show;
+                            }
+                        }
+
+
+                    }
+
+                    res = '1';
+                }
+
+
+                if (res == 1) {
+                    return;
+                }
+            }
+
+
+            if (res == 1) {
+                return;
+            }
+
+
+        });
+    }
+
+    function setAllowanceTypeXML2(xml)
+    {
+        //////////
+        //Sets allowance type units from predefined_allowancetype_units_outs.XML based on Allowance type
+        //////////
+
+        var show = ''
+        var show2 = ''
+        if (document.getElementById('AllowancesAmountUnits2')) {
+            document.getElementById('AllowancesAmountUnits2').value = '';
+        }
+        if (document.getElementById('AllowancesNetGross2')) {
+            document.getElementById('AllowancesNetGross2').value = '';
+        }
+        var res = '0';
+        var bus = '';
+
+        if (document.getElementById('BusinessUnit')) {
+            //bus = $("#BusinessUnit option:selected").text();
+            bus = document.getElementById('BusinessUnit').value;
+        }
+        var dep = '';
+        if (document.getElementById('AllowancesType2')) {
+            dep = document.getElementById('AllowancesType2').value;
+        }
+        //var bus = $("#BusinessUnit option:selected").text();
+        // alert(bus);
+
+        var d = dep;
+
+        $(xml).find('dependent').each(function () {
+
+
+            var $sel = $(this);
+            show = '';
+            show2 = '';
+
+            var department = $sel.find('selected').text();
+
+            show = $sel.find('show').text();
+            //show2 = $sel.find('show2').text();
+
+
+
+            if (dep.toString().trim() == 'Location Allowance - Hourly') {
+
+                if (bus == 'IKEA Bristol') {
+
+                    if (document.getElementById('AllowancesAmountUnits2')) {
+                        document.getElementById('AllowancesAmountUnits2').value = '0.10';
+                    }
+
+                }
+                else if (bus == 'IKEA Croydon') {
+
+                    if (document.getElementById('AllowancesAmountUnits2')) {
+                        document.getElementById('AllowancesAmountUnits2').value = '1.28';
+                    }
+
+                }
+                else if (bus == 'IKEA Lakeside') {
+
+                    if (document.getElementById('AllowancesAmountUnits2')) {
+                        document.getElementById('AllowancesAmountUnits2').value = '0.77';
+                    }
+
+                }
+                else if (bus == 'IKEA Milton Keynes') {
+
+                    if (document.getElementById('AllowancesAmountUnits2')) {
+                        document.getElementById('AllowancesAmountUnits2').value = '0.35';
+                    }
+
+                }
+                else if (bus == 'IKEA Tottenham') {
+
+                    if (document.getElementById('AllowancesAmountUnits2')) {
+                        document.getElementById('AllowancesAmountUnits2').value = '1.28';
+                    }
+
+                }
+                else if (bus == 'IKEA Wembley') {
+
+                    if (document.getElementById('AllowancesAmountUnits2')) {
+                        document.getElementById('AllowancesAmountUnits2').value = '1.28';
+                    }
+
+                }
+                //else if (bus == 'IKEA Service Office') {
+
+                //    if (document.getElementById('AllowancesAmountUnits2')) {
+                //        document.getElementById('AllowancesAmountUnits2').value = '1.28';
+                //    }
+
+                //}
+            }
+            else if (dep.toString().trim() == 'Location Allowance - Salaried') {
+
+                if (bus == 'IKEA Bristol') {
+
+                    if (document.getElementById('AllowancesAmountUnits2')) {
+                        document.getElementById('AllowancesAmountUnits2').value = '203.10';
+                    }
+
+                }
+                else if (bus == 'IKEA Croydon') {
+
+                    if (document.getElementById('AllowancesAmountUnits2')) {
+                        document.getElementById('AllowancesAmountUnits2').value = '2600.00';
+                    }
+
+                }
+                else if (bus == 'IKEA Lakeside') {
+
+                    if (document.getElementById('AllowancesAmountUnits2')) {
+                        document.getElementById('AllowancesAmountUnits2').value = '1560.00';
+                    }
+
+                }
+                else if (bus == 'IKEA Milton Keynes') {
+
+                    if (document.getElementById('AllowancesAmountUnits2')) {
+                        document.getElementById('AllowancesAmountUnits2').value = '709.00';
+                    }
+
+                }
+                else if (bus == 'IKEA Tottenham') {
+
+                    if (document.getElementById('AllowancesAmountUnits2')) {
+                        document.getElementById('AllowancesAmountUnits2').value = '2600.00';
+                    }
+
+                }
+                else if (bus == 'IKEA Wembley') {
+
+                    if (document.getElementById('AllowancesAmountUnits2')) {
+                        document.getElementById('AllowancesAmountUnits2').value = '2600.00';
+                    }
+
+                }
+                //else if (bus == 'IKEA Service Office') {
+
+                //    if (document.getElementById('AllowancesAmountUnits2')) {
+                //        document.getElementById('AllowancesAmountUnits2').value = '2600.00';
+                //    }
+
+                //}
+            }
+            else {
+
+                if (department.toString().trim() == dep.toString().trim()) {
+
+                    if (show != '') {
+                        if (document.getElementById('AllowancesAmountUnits2')) {
+
+                            if (dep.toString().trim() == 'Advanced') {
+                                if (bus.toString().trim() != 'IKEA Contact Centre') {
+                                    document.getElementById('AllowancesAmountUnits2').value = show;
+                                }
+                                else {
+                                    document.getElementById('AllowancesAmountUnits2').value = '0.55';
+                                }
+                            }
+                            else if (dep.toString().trim() == 'Fork Lift Truck Allowance') {
+                                if (bus.toString().trim() != 'IKEA Milton Keynes') {
+                                    document.getElementById('AllowancesAmountUnits2').value = show;
+                                }
+                                else {
+                                    document.getElementById('AllowancesAmountUnits2').value = '1.72';
+                                }
+                            }
+                            else if (dep.toString().trim() == 'Kitchen Skills - Hourly')
+                                if (bus.toString().trim() == 'IKEA Edinburgh') {
+                                    document.getElementById('AllowancesAmountUnits2').value = '1.00';
+                                }
+
+                                else if (bus.toString().trim() == 'IKEA Tottenham' | bus == 'IKEA Wembley' | bus == 'IKEA Croydon' | bus == 'IKEA Lakeside') {
+                                    document.getElementById('AllowancesAmountUnits2').value = '0.30';
+                                }
+                                else {
+                                    document.getElementById('AllowancesAmountUnits2').value = show;
+                                }
+                            else {
+                                document.getElementById('AllowancesAmountUnits2').value = show;
+                            }
+                        }
+
+
+                    }
+
+                    res = '1';
+                }
+
+
+                if (res == 1) {
+                    return;
+                }
+            }
+
+
+            if (res == 1) {
+                return;
+            }
+
+
+        });
+    }
+
+    function setAllowanceTypeXML(xml)
+    {
+        //////////
+        //Sets allowance type units from predefined_allowancetype_units_outs.XML based on Allowance type
+        //////////
+
+        var show = ''
+        var show2 = ''
+        if (document.getElementById('AllowancesAmountUnits')) {
+            document.getElementById('AllowancesAmountUnits').value = '';
+        }
+        if (document.getElementById('AllowancesNetGross')) {
+            document.getElementById('AllowancesNetGross').value = '';
+        }
+        var res = '0';
+        var bus = '';
+
+        if (document.getElementById('BusinessUnit')) {
+            //bus = $("#BusinessUnit option:selected").text();
+            bus = document.getElementById('BusinessUnit').value;
+        }
+        var dep = '';
+        if (document.getElementById('AllowancesType')) {
+            dep = document.getElementById('AllowancesType').value;
+        }
+        //var bus = $("#BusinessUnit option:selected").text();
+       // alert(bus);
+        
+        var d = dep;
+
+        $(xml).find('dependent').each(function () {
+
+
+            var $sel = $(this);
+            show = '';
+            show2 = '';
+
+            var department = $sel.find('selected').text();
+
+            show = $sel.find('show').text();
+            //show2 = $sel.find('show2').text();
+
+            if (dep.toString().trim() == 'Location Allowance - Hourly') {
+             
+                if (bus == 'IKEA Bristol') {
+
+                    if (document.getElementById('AllowancesAmountUnits')) {
+                        document.getElementById('AllowancesAmountUnits').value = '0.10';
+                    }
+
+                }
+                else if (bus == 'IKEA Croydon') {
+
+                    if (document.getElementById('AllowancesAmountUnits')) {
+                        document.getElementById('AllowancesAmountUnits').value = '1.28';
+                    }
+
+                }
+                else if (bus == 'IKEA Lakeside') {
+
+                    if (document.getElementById('AllowancesAmountUnits')) {
+                        document.getElementById('AllowancesAmountUnits').value = '0.77';
+                    }
+
+                }
+                else if (bus == 'IKEA Milton Keynes') {
+
+                    if (document.getElementById('AllowancesAmountUnits')) {
+                        document.getElementById('AllowancesAmountUnits').value = '0.35';
+                    }
+
+                }
+                else if (bus == 'IKEA Tottenham') {
+
+                    if (document.getElementById('AllowancesAmountUnits')) {
+                        document.getElementById('AllowancesAmountUnits').value = '1.28';
+                    }
+
+                }
+                else if (bus == 'IKEA Wembley') {
+
+                    if (document.getElementById('AllowancesAmountUnits')) {
+                        document.getElementById('AllowancesAmountUnits').value = '1.28';
+                    }
+
+                }
+                //else if (bus == 'IKEA Service Office') {
+
+                //    if (document.getElementById('AllowancesAmountUnits')) {
+                //        document.getElementById('AllowancesAmountUnits').value = '1.28';
+                //    }
+
+                //}
+            }
+            else if (dep.toString().trim() == 'Location Allowance - Salaried') {
+
+                if (bus == 'IKEA Bristol') {
+
+                    if (document.getElementById('AllowancesAmountUnits')) {
+                        document.getElementById('AllowancesAmountUnits').value = '203.10';
+                    }
+
+                }
+                else if (bus == 'IKEA Croydon') {
+
+                    if (document.getElementById('AllowancesAmountUnits')) {
+                        document.getElementById('AllowancesAmountUnits').value = '2600.00';
+                    }
+
+                }
+                else if (bus == 'IKEA Lakeside') {
+
+                    if (document.getElementById('AllowancesAmountUnits')) {
+                        document.getElementById('AllowancesAmountUnits').value = '1560.00';
+                    }
+
+                }
+                else if (bus == 'IKEA Milton Keynes') {
+
+                    if (document.getElementById('AllowancesAmountUnits')) {
+                        document.getElementById('AllowancesAmountUnits').value = '709.00';
+                    }
+
+                }
+                else if (bus == 'IKEA Tottenham') {
+
+                    if (document.getElementById('AllowancesAmountUnits')) {
+                        document.getElementById('AllowancesAmountUnits').value = '2600.00';
+                    }
+
+                }
+                else if (bus == 'IKEA Wembley') {
+
+                    if (document.getElementById('AllowancesAmountUnits')) {
+                        document.getElementById('AllowancesAmountUnits').value = '2600.00';
+                    }
+
+                }
+                //else if (bus == 'IKEA Service Office') {
+
+                //    if (document.getElementById('AllowancesAmountUnits')) {
+                //        document.getElementById('AllowancesAmountUnits').value = '2600.00';
+                //    }
+
+                //}
+            }
+            else {
+
+                if (department.toString().trim() == dep.toString().trim()) {
+
+                    if (show != '') {
+                        if (document.getElementById('AllowancesAmountUnits')) {
+
+                            if (dep.toString().trim() == 'Advanced') {
+                                if (bus.toString().trim() != 'IKEA Contact Centre') {
+                                    document.getElementById('AllowancesAmountUnits').value = show;
+                                }
+                                else {
+                                    document.getElementById('AllowancesAmountUnits').value = '0.55';
+                                }
+                            }
+                            else if (dep.toString().trim() == 'Fork Lift Truck Allowance') {
+                                if (bus.toString().trim() != 'IKEA Milton Keynes') {
+                                    document.getElementById('AllowancesAmountUnits').value = show;
+                                }
+                                else {
+                                    document.getElementById('AllowancesAmountUnits').value = '1.72';
+                                }
+                            }
+                            else if (dep.toString().trim() == 'Kitchen Skills - Hourly')
+                                if (bus.toString().trim() == 'IKEA Edinburgh') {
+                                    document.getElementById('AllowancesAmountUnits').value = '1.00';
+                                }
+
+                                else if (bus.toString().trim() == 'IKEA Tottenham' | bus == 'IKEA Wembley' | bus == 'IKEA Croydon' | bus == 'IKEA Lakeside') {
+                                    document.getElementById('AllowancesAmountUnits').value = '0.30';
+                                }
+                                else {
+                                    document.getElementById('AllowancesAmountUnits').value = show;
+                                }
+                            else {
+                                document.getElementById('AllowancesAmountUnits').value = show;
+                            }
+                        }
+
+
+                    }
+
+                    res = '1';
+                }
+
+
+                if (res == 1) {
+                    return;
+                }
+            }
+
+
+            if (res == 1) {
+                return;
+            }
+
+
+        });
+    }
+
+    function setAllowanceTypeXML4(xml) {
+        //////////
+        //Sets allowance type units from predefined_allowancetype_units_outs.XML based on Allowance type
+        //////////
+
+        var show = ''
+        var show2 = ''
+        if (document.getElementById('AllowancesAmountUnits4')) {
+            document.getElementById('AllowancesAmountUnits4').value = '';
+        }
+        if (document.getElementById('AllowancesNetGross4')) {
+            document.getElementById('AllowancesNetGross4').value = '';
+        }
+        var res = '0';
+        var bus = '';
+
+        if (document.getElementById('BusinessUnit')) {
+            //bus = $("#BusinessUnit option:selected").text();
+            bus = document.getElementById('BusinessUnit').value;
+        }
+        var dep = '';
+        if (document.getElementById('AllowancesType4')) {
+            dep = document.getElementById('AllowancesType4').value;
+        }
+        //var bus = $("#BusinessUnit option:selected").text();
+        // alert(bus);
+
+        var d = dep;
+
+        $(xml).find('dependent').each(function () {
+
+
+            var $sel = $(this);
+            show = '';
+            show2 = '';
+
+            var department = $sel.find('selected').text();
+
+            show = $sel.find('show').text();
+            //show2 = $sel.find('show2').text();
+
+
+
+            if (dep.toString().trim() == 'Location Allowance - Hourly') {
+
+                if (bus == 'IKEA Bristol') {
+
+                    if (document.getElementById('AllowancesAmountUnits4')) {
+                        document.getElementById('AllowancesAmountUnits4').value = '0.10';
+                    }
+
+                }
+                else if (bus == 'IKEA Croydon') {
+
+                    if (document.getElementById('AllowancesAmountUnits4')) {
+                        document.getElementById('AllowancesAmountUnits4').value = '1.28';
+                    }
+
+                }
+                else if (bus == 'IKEA Lakeside') {
+
+                    if (document.getElementById('AllowancesAmountUnits4')) {
+                        document.getElementById('AllowancesAmountUnits4').value = '0.77';
+                    }
+
+                }
+                else if (bus == 'IKEA Milton Keynes') {
+
+                    if (document.getElementById('AllowancesAmountUnits4')) {
+                        document.getElementById('AllowancesAmountUnits4').value = '0.35';
+                    }
+
+                }
+                else if (bus == 'IKEA Tottenham') {
+
+                    if (document.getElementById('AllowancesAmountUnits4')) {
+                        document.getElementById('AllowancesAmountUnits4').value = '1.28';
+                    }
+
+                }
+                else if (bus == 'IKEA Wembley') {
+
+                    if (document.getElementById('AllowancesAmountUnits4')) {
+                        document.getElementById('AllowancesAmountUnits4').value = '1.28';
+                    }
+
+                }
+                //else if (bus == 'IKEA Service Office') {
+
+                //    if (document.getElementById('AllowancesAmountUnits4')) {
+                //        document.getElementById('AllowancesAmountUnits4').value = '1.28';
+                //    }
+
+                //}
+            }
+            else if (dep.toString().trim() == 'Location Allowance - Salaried') {
+
+                if (bus == 'IKEA Bristol') {
+
+                    if (document.getElementById('AllowancesAmountUnits4')) {
+                        document.getElementById('AllowancesAmountUnits4').value = '203.10';
+                    }
+
+                }
+                else if (bus == 'IKEA Croydon') {
+
+                    if (document.getElementById('AllowancesAmountUnits4')) {
+                        document.getElementById('AllowancesAmountUnits4').value = '2600.00';
+                    }
+
+                }
+                else if (bus == 'IKEA Lakeside') {
+
+                    if (document.getElementById('AllowancesAmountUnits4')) {
+                        document.getElementById('AllowancesAmountUnits4').value = '1560.00';
+                    }
+
+                }
+                else if (bus == 'IKEA Milton Keynes') {
+
+                    if (document.getElementById('AllowancesAmountUnits4')) {
+                        document.getElementById('AllowancesAmountUnits4').value = '709.00';
+                    }
+
+                }
+                else if (bus == 'IKEA Tottenham') {
+
+                    if (document.getElementById('AllowancesAmountUnits4')) {
+                        document.getElementById('AllowancesAmountUnits4').value = '2600.00';
+                    }
+
+                }
+                else if (bus == 'IKEA Wembley') {
+
+                    if (document.getElementById('AllowancesAmountUnits4')) {
+                        document.getElementById('AllowancesAmountUnits4').value = '2600.00';
+                    }
+
+                }
+                //else if (bus == 'IKEA Service Office') {
+
+                //    if (document.getElementById('AllowancesAmountUnits4')) {
+                //        document.getElementById('AllowancesAmountUnits4').value = '2600.00';
+                //    }
+
+                //}
+            }
+            else {
+
+                if (department.toString().trim() == dep.toString().trim()) {
+
+                    if (show != '') {
+                        if (document.getElementById('AllowancesAmountUnits4')) {
+
+                            if (dep.toString().trim() == 'Advanced') {
+                                if (bus.toString().trim() != 'IKEA Contact Centre') {
+                                    document.getElementById('AllowancesAmountUnits4').value = show;
+                                }
+                                else {
+                                    document.getElementById('AllowancesAmountUnits4').value = '0.55';
+                                }
+                            }
+                            else if (dep.toString().trim() == 'Fork Lift Truck Allowance') {
+                                if (bus.toString().trim() != 'IKEA Milton Keynes') {
+                                    document.getElementById('AllowancesAmountUnits4').value = show;
+                                }
+                                else {
+                                    document.getElementById('AllowancesAmountUnits4').value = '1.72';
+                                }
+                            }
+                            else if (dep.toString().trim() == 'Kitchen Skills - Hourly')
+                                if (bus.toString().trim() == 'IKEA Edinburgh') {
+                                    document.getElementById('AllowancesAmountUnits4').value = '1.00';
+                                }
+
+                                else if (bus.toString().trim() == 'IKEA Tottenham' | bus == 'IKEA Wembley' | bus == 'IKEA Croydon' | bus == 'IKEA Lakeside') {
+                                    document.getElementById('AllowancesAmountUnits4').value = '0.30';
+                                }
+                                else {
+                                    document.getElementById('AllowancesAmountUnits4').value = show;
+                                }
+                            else {
+                                document.getElementById('AllowancesAmountUnits4').value = show;
+                            }
+                        }
+
+
+                    }
+
+                    res = '1';
+                }
+
+
+                if (res == 1) {
+                    return;
+                }
+            }
+
+
+            if (res == 1) {
+                return;
+            }
+
+
+        });
+    }
+
+    function setAllowanceTypeXML5(xml) {
+        //////////
+        //Sets allowance type units from predefined_allowancetype_units_outs.XML based on Allowance type
+        //////////
+
+        var show = ''
+        var show2 = ''
+        if (document.getElementById('AllowancesAmountUnits5')) {
+            document.getElementById('AllowancesAmountUnits5').value = '';
+        }
+        if (document.getElementById('AllowancesNetGross5')) {
+            document.getElementById('AllowancesNetGross5').value = '';
+        }
+        var res = '0';
+        var bus = '';
+
+        if (document.getElementById('BusinessUnit')) {
+            //bus = $("#BusinessUnit option:selected").text();
+            bus = document.getElementById('BusinessUnit').value;
+        }
+        var dep = '';
+        if (document.getElementById('AllowancesType5')) {
+            dep = document.getElementById('AllowancesType5').value;
+        }
+        //var bus = $("#BusinessUnit option:selected").text();
+        // alert(bus);
+
+        var d = dep;
+
+        $(xml).find('dependent').each(function () {
+
+
+            var $sel = $(this);
+            show = '';
+            show2 = '';
+
+            var department = $sel.find('selected').text();
+
+            show = $sel.find('show').text();
+            //show2 = $sel.find('show2').text();
+
+
+
+            if (dep.toString().trim() == 'Location Allowance - Hourly') {
+
+                if (bus == 'IKEA Bristol') {
+
+                    if (document.getElementById('AllowancesAmountUnits5')) {
+                        document.getElementById('AllowancesAmountUnits5').value = '0.10';
+                    }
+
+                }
+                else if (bus == 'IKEA Croydon') {
+
+                    if (document.getElementById('AllowancesAmountUnits5')) {
+                        document.getElementById('AllowancesAmountUnits5').value = '1.28';
+                    }
+
+                }
+                else if (bus == 'IKEA Lakeside') {
+
+                    if (document.getElementById('AllowancesAmountUnits5')) {
+                        document.getElementById('AllowancesAmountUnits5').value = '0.77';
+                    }
+
+                }
+                else if (bus == 'IKEA Milton Keynes') {
+
+                    if (document.getElementById('AllowancesAmountUnits5')) {
+                        document.getElementById('AllowancesAmountUnits5').value = '0.35';
+                    }
+
+                }
+                else if (bus == 'IKEA Tottenham') {
+
+                    if (document.getElementById('AllowancesAmountUnits5')) {
+                        document.getElementById('AllowancesAmountUnits5').value = '1.28';
+                    }
+
+                }
+                else if (bus == 'IKEA Wembley') {
+
+                    if (document.getElementById('AllowancesAmountUnits5')) {
+                        document.getElementById('AllowancesAmountUnits5').value = '1.28';
+                    }
+
+                }
+                //else if (bus == 'IKEA Service Office') {
+
+                //    if (document.getElementById('AllowancesAmountUnits5')) {
+                //        document.getElementById('AllowancesAmountUnits5').value = '1.28';
+                //    }
+
+                //}
+            }
+            else if (dep.toString().trim() == 'Location Allowance - Salaried') {
+
+                if (bus == 'IKEA Bristol') {
+
+                    if (document.getElementById('AllowancesAmountUnits5')) {
+                        document.getElementById('AllowancesAmountUnits5').value = '203.10';
+                    }
+
+                }
+                else if (bus == 'IKEA Croydon') {
+
+                    if (document.getElementById('AllowancesAmountUnits5')) {
+                        document.getElementById('AllowancesAmountUnits5').value = '2600.00';
+                    }
+
+                }
+                else if (bus == 'IKEA Lakeside') {
+
+                    if (document.getElementById('AllowancesAmountUnits5')) {
+                        document.getElementById('AllowancesAmountUnits5').value = '1560.00';
+                    }
+
+                }
+                else if (bus == 'IKEA Milton Keynes') {
+
+                    if (document.getElementById('AllowancesAmountUnits5')) {
+                        document.getElementById('AllowancesAmountUnits5').value = '709.00';
+                    }
+
+                }
+                else if (bus == 'IKEA Tottenham') {
+
+                    if (document.getElementById('AllowancesAmountUnits5')) {
+                        document.getElementById('AllowancesAmountUnits5').value = '2600.00';
+                    }
+
+                }
+                else if (bus == 'IKEA Wembley') {
+
+                    if (document.getElementById('AllowancesAmountUnits5')) {
+                        document.getElementById('AllowancesAmountUnits5').value = '2600.00';
+                    }
+
+                }
+                //else if (bus == 'IKEA Service Office') {
+
+                //    if (document.getElementById('AllowancesAmountUnits5')) {
+                //        document.getElementById('AllowancesAmountUnits5').value = '2600.00';
+                //    }
+
+                //}
+            }
+            else {
+
+                if (department.toString().trim() == dep.toString().trim()) {
+
+                    if (show != '') {
+                        if (document.getElementById('AllowancesAmountUnits5')) {
+
+                            if (dep.toString().trim() == 'Advanced') {
+                                if (bus.toString().trim() != 'IKEA Contact Centre') {
+                                    document.getElementById('AllowancesAmountUnits5').value = show;
+                                }
+                                else {
+                                    document.getElementById('AllowancesAmountUnits5').value = '0.55';
+                                }
+                            }
+                            else if (dep.toString().trim() == 'Fork Lift Truck Allowance') {
+                                if (bus.toString().trim() != 'IKEA Milton Keynes') {
+                                    document.getElementById('AllowancesAmountUnits5').value = show;
+                                }
+                                else {
+                                    document.getElementById('AllowancesAmountUnits5').value = '1.72';
+                                }
+                            }
+                            else if (dep.toString().trim() == 'Kitchen Skills - Hourly')
+                                if (bus.toString().trim() == 'IKEA Edinburgh') {
+                                    document.getElementById('AllowancesAmountUnits5').value = '1.00';
+                                }
+
+                                else if (bus.toString().trim() == 'IKEA Tottenham' | bus == 'IKEA Wembley' | bus == 'IKEA Croydon' | bus == 'IKEA Lakeside') {
+                                    document.getElementById('AllowancesAmountUnits5').value = '0.30';
+                                }
+                                else {
+                                    document.getElementById('AllowancesAmountUnits5').value = show;
+                                }
+                            else {
+                                document.getElementById('AllowancesAmountUnits5').value = show;
+                            }
+                        }
+
+
+                    }
+
+                    res = '1';
+                }
+
+
+                if (res == 1) {
+                    return;
+                }
+            }
+
+
+            if (res == 1) {
+                return;
+            }
+
+
+        });
+    }
+
+    function setAllowanceType()
+    {
+        //////////
+        var path = window.location.protocol + '//';
+        path = path + window.location.host + '/';
+
+    
+        path = site.baseUrl + '/FormLibContent/Xmls/UnitedKingdom/Templates/predefined_allowancetype_units_outs_additional.xml'
+
+        $.ajax({
+            type: "GET",
+            url: path,
+            dataType: "xml",
+            success: setAllowanceTypeXML,
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseText);
+                alert(textStatus);
+                alert(errorThrown);
+            }
+
+        });
+    }
+
+    function setAllowanceType2() {
+        //////////
+        var path = window.location.protocol + '//';
+        path = path + window.location.host + '/';
+
+
+        path = site.baseUrl + '/FormLibContent/Xmls/UnitedKingdom/Templates/predefined_allowancetype_units_outs_additional.xml'
+
+        $.ajax({
+            type: "GET",
+            url: path,
+            dataType: "xml",
+            success: setAllowanceTypeXML2,
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseText);
+                alert(textStatus);
+                alert(errorThrown);
+            }
+
+        });
+    }
+
+    function setAllowanceType3() {
+        //////////
+        var path = window.location.protocol + '//';
+        path = path + window.location.host + '/';
+
+
+        path = site.baseUrl + '/FormLibContent/Xmls/UnitedKingdom/Templates/predefined_allowancetype_units_outs_additional.xml'
+
+        $.ajax({
+            type: "GET",
+            url: path,
+            dataType: "xml",
+            success: setAllowanceTypeXML3,
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseText);
+                alert(textStatus);
+                alert(errorThrown);
+            }
+
+        });
+    }
+
+    function setAllowanceType4() {
+            //////////
+            var path = window.location.protocol + '//';
+            path = path + window.location.host + '/';
+
+
+            path = site.baseUrl + '/FormLibContent/Xmls/UnitedKingdom/Templates/predefined_allowancetype_units_outs_additional.xml'
+
+            $.ajax({
+                type: "GET",
+                url: path,
+                dataType: "xml",
+                success: setAllowanceTypeXML4,
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseText);
+                    alert(textStatus);
+                    alert(errorThrown);
+                }
+
+            });
+    }
+
+    function setAllowanceType5() {
+        //////////
+        var path = window.location.protocol + '//';
+        path = path + window.location.host + '/';
+
+
+        path = site.baseUrl + '/FormLibContent/Xmls/UnitedKingdom/Templates/predefined_allowancetype_units_outs_additional.xml'
+
+        $.ajax({
+            type: "GET",
+            url: path,
+            dataType: "xml",
+            success: setAllowanceTypeXML5,
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseText);
+                alert(textStatus);
+                alert(errorThrown);
+            }
+
+        });
+    }
+
+
+
+    //$('#ChangeValidFrom').change(function () {
+    //    setDatePickerBehavior('AllowancesValidTo');
+    //});
+
+    //$('#AllowancesPaymentType2').change(function () {
+    //    setDatePickerBehavior('AllowancesValidTo2', $(this).val());
+    //});
+    //setDefaultDatePickerBehavior('AllowancesValidTo2', $('#AllowancesPaymentType2').val());
+
+    //$('#AllowancesPaymentType3').change(function () {
+    //    setDatePickerBehavior('AllowancesValidTo3', $(this).val());
+    //});
+    //setDefaultDatePickerBehavior('AllowancesValidTo3', $('#AllowancesPaymentType3').val());
+
+    //$('#ChangeValidFrom').change(function () {
+    //    setDatePickerBehavior('DeductionsValidTo');
+    //});
+   // setDefaultDatePickerBehavior('DeductionsValidTo');
+
+    //$('#DeductionsPaymentType2').change(function () {
+    //    setDatePickerBehavior('DeductionsValidTo2', $(this).val());
+    //});
+    //setDefaultDatePickerBehavior('DeductionsValidTo2', $('#DeductionsPaymentType2').val());
+
+    //$('#DeductionsPaymentType3').change(function () {
+    //    setDatePickerBehavior('DeductionsValidTo3', $(this).val());
+    //});
+    //setDefaultDatePickerBehavior('DeductionsValidTo3', $('#DeductionsPaymentType3').val());
+
+</script>
+
+
+

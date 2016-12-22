@@ -1,0 +1,138 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<div class="tab-pane" id="payment">
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Advance Payment / Loan Details")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PaymentType")</td>
+                    <td>
+                        @Model.Element("PaymentType")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PaymentAmount")</td>
+                    <td>
+                        @Model.Element("PaymentAmount")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PaymentCurrency")</td>
+                    <td>
+                        @Model.Element("PaymentCurrency")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PaymentDate")</td>
+                    <td>
+                        @Model.Element("PaymentDate")
+                        <div id="notice_PaymentDate" style="display:none;" class="notice">
+                            @Model.Translate("The date you've entered is in the past. Are you sure you want to continue?")
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PaymentMethod")</td>
+                    <td>
+                        @Model.Element("PaymentMethod")
+                    </td>
+                </tr>
+                                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Loan Re-Payment")</h4>
+                    </td>
+                </tr>
+@*                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionsType")</td>
+                    <td>
+                        @Model.Element("DeductionsType")
+                    </td>
+                </tr>*@
+@*                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionsAmountUnits")</td>
+                    <td>
+                        @Model.Element("DeductionsAmountUnits")
+                    </td>
+                </tr>*@
+@*                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionsNetGross")</td>
+                    <td>
+                        @Model.Element("DeductionsNetGross")
+                    </td>
+                </tr>*@
+@*                <tr>
+                    <td class="tdstrong">@Model.Label("RePaymentType")</td>
+                    <td>
+                        @Model.Element("RePaymentType")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("1stPayment")</td>
+                    <td>
+                        @Model.Element("1stPayment")
+                    </td>
+                </tr>*@
+@*                <tr>
+                    <td class="tdstrong">@Model.Label("PaymentEndsOn")</td>
+                    <td>
+                        @Model.Element("PaymentEndsOn")
+                    </td>
+                </tr>*@
+                <tr>
+                    <td class="tdstrong">@Model.Label("NumberOfInstallments")</td>
+                    <td>
+                        @Model.Element("NumberOfInstallments")
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+    </div>
+
+<script>
+    
+
+        
+        
+
+            
+    $('#date_PaymentDate').not(".disabled").datepicker().on('changeDate', function (e) {
+        paymentdatenotice();
+    });
+
+    $('#PaymentDate').change(function () {
+        paymentdatenotice();
+    });
+
+    function paymentdatenotice()
+    {
+        if (noticePaymentDate.length > 0) {
+            var noticePaymentDate = $('#notice_PaymentDate');
+            var paymentDate = $('#PaymentDate').val();
+            var startDate = new Date();
+            startDate.setHours(0, 0, 0, 0);
+
+            var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+            var dstartDate = APIGlobal.DateTime.parseDate(paymentDate, format);
+
+            if (dstartDate < startDate.valueOf())
+            {
+                noticePaymentDate.show();
+            }
+            else
+            {
+                 noticePaymentDate.hide();
+            }
+        }
+      };
+
+</script>

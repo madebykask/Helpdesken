@@ -1,0 +1,101 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<div class="tab-pane" id="payment">
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Loan Details")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ChangeType")</td>
+                    <td>
+                        @Model.Element("ChangeType")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PaymentAmount")</td>
+                    <td>
+                        @Model.Element("PaymentAmount")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PaidPer")</td>
+                    <td>
+                        @Model.Element("PaidPer")
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Loan Re-Payment")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("RePaymentType")</td>
+                    <td>
+                        @Model.Element("RePaymentType")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("RePaymentAmount")</td>
+                    <td>
+                        @Model.Element("RePaymentAmount")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("RePaymentStartDate")</td>
+                    <td>
+                        @Model.Element("RePaymentStartDate")
+                        <div id="notice_FirstDayOfMonth" style="display: none;" class="notice">
+                            @Model.Translate("Wrong format (01.mm.yyyy).")
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ApprovalDate")</td>
+                    <td>
+                        @Model.Element("ApprovalDate")
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $(function () {
+        var $repaymentSelector = $('#RePaymentStartDate');
+        $('#date_RePaymentStartDate,#RePaymentStartDate').not("disabled").on({
+            changeDate: function (ev) {
+                rePaymentNotice($repaymentSelector);
+            },
+            change: function () {
+                rePaymentNotice($repaymentSelector);
+            }
+        });
+    });
+    $('#date_RePaymentStartDate').not("disabled").datepicker({
+        onRender: function (date) {
+            var a = date;
+            if (!(date.getDate() == 1)) {
+                return 'disabled';
+            }
+            else {
+                return '';
+            }
+        }
+    });
+    var rePaymentNotice = function ($dateSelector)
+    {
+        if (validateFirstDayOfMonth($dateSelector)) {
+            selectorNotice($dateSelector, true)
+        }
+        else {
+            selectorNotice($dateSelector, false)
+        }
+    };
+</script>

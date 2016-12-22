@@ -1,0 +1,255 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+<div class="tab-pane" id="Payment">
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Deductions")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionsType")</td>
+                    <td>
+                        @Model.Element("DeductionsType")
+                    </td>
+                </tr>
+                @*                <tr>
+                    <td class="tdstrong">@Model.Label("PaymentType")</td>
+                    <td>
+                        @Model.Element("PaymentType")
+                    </td>
+                </tr>*@
+                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionsAmountUnits")</td>
+                    <td>
+                        @Model.Element("DeductionsAmountUnits")
+                    </td>
+                </tr>
+                @*                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionsNetGross")</td>
+                    <td>
+                        @Model.Element("DeductionsNetGross")
+                    </td>
+                </tr>*@
+                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionsValidFrom")</td>
+                    <td>
+                        @Model.Element("DeductionsValidFrom")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionsValidTo")</td>
+                    <td>
+                        @Model.Element("DeductionsValidTo")
+                    </td>
+                </tr>
+
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
+                {
+                    <tr class="deduction@(i.ToString())" id="deduction@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h4>@Model.Translate("Deductions") @(i.ToString())</h4>
+                        </td>
+                    </tr>
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionsType" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionsType" + i.ToString())
+                        </td>
+                    </tr>@*
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("PaymentType" + i.ToString())</td>
+                        <td>
+                            @Model.Element("PaymentType" + i.ToString())</td>
+                    </tr>*@
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionsAmountUnits" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionsAmountUnits" + i.ToString())</td>
+                    </tr>@*
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionsNetGross" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionsNetGross" + i.ToString())</td>
+                    </tr>*@
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionsValidFrom" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionsValidFrom" + i.ToString())</td>
+                    </tr>
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionsValidTo" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionsValidTo" + i.ToString())</td>
+                    </tr>
+                }
+                <tr id="addDeductionTrr">
+                    <td colspan="2">
+                        @Model.Element("Deductions")
+                        <a id="addDeduction" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Deduction")</a></td>
+                </tr>
+
+
+
+            </tbody>
+        </table>
+    </div>
+    <input type="hidden" id="MultipleEntrySectionsNr" value="@FormLibConstants.FormField.MultipleEntrySectionsNr" />
+
+</div>
+
+<script>
+
+
+   @* if (document.getElementById('DeductionsValidFrom').value == '') {
+        document.getElementById('DeductionsValidFrom').value = '@Model.GetAnswer("ChangeValidFrom")';
+        for (var i = 2; i <= @MultipleEntrySectionsNr; i++) {
+
+            var DeductionsValidFrom = "DeductionsValidFrom" + [i].toString();
+
+            if (DeductionsValidFrom) {
+                document.getElementById(DeductionsValidFrom).value = '@Model.GetAnswer("ChangeValidFrom")';
+            }
+        }
+    }*@
+
+    var notice = '<div class="notice"> @Model.Translate("Please attach the valid form") </div>'
+
+    $('#DeductionsType').change(function () {
+        $(this).parent().find('.notice').remove();
+        if ($(this).val() == 'Pension') {
+            $(this).parent().append($(notice));
+        }
+    });
+
+    $('#DeductionsType2').change(function () {
+        $(this).parent().find('.notice').remove();
+        if ($(this).val() == 'Pension') {
+            $(this).parent().append($(notice));
+        }
+    });
+
+    $('#DeductionsType3').change(function () {
+        $(this).parent().find('.notice').remove();
+        if ($(this).val() == 'Pension') {
+            $(this).parent().append($(notice));
+        }
+    });
+
+    $('#DeductionsType4').change(function () {
+        $(this).parent().find('.notice').remove();
+        if ($(this).val() == 'Pension') {
+            $(this).parent().append($(notice));
+        }
+    });
+
+    $('#DeductionsType5').change(function () {
+        $(this).parent().find('.notice').remove();
+        if ($(this).val() == 'Pension') {
+            $(this).parent().append($(notice));
+        }
+    });
+
+
+    function setPaymentDatePickersBehavior() {
+
+        $('#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3,#date_DeductionsValidFrom4,#date_DeductionsValidFrom5').not(".disabled").datepicker('destroy');
+
+        var startDate = $('#ChangeValidFrom').val();
+        var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+        var dStart = APIGlobal.DateTime.parseDate(startDate, format);
+        var forcePicker = new Date(dStart.getFullYear(), dStart.getMonth(), dStart.getDate(), 0, 0, 0, 0);
+        $('#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3,#date_DeductionsValidFrom4,#date_DeductionsValidFrom5').not(".disabled").datepicker(
+        {
+            onRender: function (ev) {
+                return ev.valueOf() < forcePicker.valueOf() ? 'disabled' : '';
+            },
+        });
+
+        //set value to the datepicker
+        $('#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3,#date_DeductionsValidFrom4,#date_DeductionsValidFrom5').not(".disabled").datepicker("setValue", forcePicker);
+        $('#date_ChangeValidFrom').datepicker("setValue", startDate);
+        $('#date_ChangeValidFrom').datepicker.getDate();
+        $('#DeductionsValidFrom,#DeductionsValidFrom2,#DeductionsValidFrom3,#DeductionsValidFrom4,#DeductionsValidFrom5').val(startDate);
+    }
+
+    $('#date_ChangeValidFrom').on('changeDate', function (ev) {
+
+        setPaymentDatePickersBehavior();
+
+    }).data('datepicker');
+
+    $('#ChangeValidFrom').change(function () {
+
+        setPaymentDatePickersBehavior();
+
+    });
+
+
+    function setDefaultDate(id) {
+        var input = $('#' + id);
+
+        if (input.val() == '') {
+            input.val('31.12.9999');
+        }
+    }
+
+    function disableDatePicker(id) {
+        var input = $('#' + id);
+        var datePicker = $('#date_' + id);
+
+        datePicker.datepicker("destroy");
+        datePicker.addClass("disabled");
+        input.val("");
+        document.getElementById(id).disabled = true;
+    }
+
+    function enableDatePicker(id) {
+        var input = $('#' + id);
+        var datePicker = $('#date_' + id);
+
+        datePicker.removeClass("disabled");
+        document.getElementById(id).disabled = false;
+        setDefaultDate(id);
+        datePicker.datepicker();
+    }
+
+    function setDatePickerBehavior(id, value) {
+        var input = $('#' + id);
+
+        //if (value == 'One Time') {
+        //    disableDatePicker(id);
+        //} else {
+        //    enableDatePicker(id);
+        //}
+    }
+
+    function setDefaultDatePickerBehavior(id) {
+        var input = $('#' + id);
+
+        //if (value == 'One Time') {
+        //    disableDatePicker(id);
+        //} else {
+        //    setDefaultDate(id);
+        //}
+    }
+
+    //$('#PaymentType').change(function () {
+    //    setDatePickerBehavior('DeductionsValidTo');
+    //});
+    //setDefaultDatePickerBehavior('DeductionsValidTo', $('#PaymentType').val());
+
+    //$('#PaymentType2').change(function () {
+    //    setDatePickerBehavior('DeductionsValidTo2', $(this).val());
+    //});
+    //setDefaultDatePickerBehavior('DeductionsValidTo2', $('#PaymentType2').val());
+
+    //$('#PaymentType3').change(function () {
+    //    setDatePickerBehavior('DeductionsValidTo3', $(this).val());
+    //});
+    //setDefaultDatePickerBehavior('DeductionsValidTo3', $('#PaymentType3').val());
+
+</script>

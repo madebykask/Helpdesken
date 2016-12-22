@@ -1,0 +1,62 @@
+﻿@model FormModel
+@{
+    var freezeAction = "";
+    var freeze = "";
+
+    if(SessionFacade.User.WorkingGroups.FirstOrDefault(x => x.Id == Model.Contract.WorkingGroupId) == null)
+    {
+        freezeAction = "disabled";
+    }
+
+    if(Model.IsLooked)
+    {
+        freezeAction = "disabled";
+        freeze = "disabled";
+    }
+}
+
+@using(Html.BeginForm("edit", "massrequestdatachange", FormMethod.Post, new { area = "poland", enctype = "multipart/form-data" }))
+{
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner navbarbgcolor">
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    <li>
+                        <button type="submit" class="btn btnmarginleft" @freeze>
+                            <i class="icon-save"></i>&nbsp;@Model.Translate("Save")
+                        </button>
+                    </li>
+                    <li style="width: 315px;">
+                        <div class="input-append input-append-top margintopleft">
+                            <select name="actionState" id="actionState" class="ieselect" @freezeAction>
+                                <option value="">-- @Model.Translate("Select action") --</option>
+                                @foreach(var pair in Model.GetStatusActions())
+                                {
+                                    <option @((pair.Key == Model.ActiveStatus ? "selected" : "")) value="@pair.Key">@Model.Translate(pair.Value)</option>
+                                }
+                            </select>
+                            <button class="btn" name="actionStateChange" id="actionStateChange" type="submit" @freezeAction>@Model.Translate("Go") <i class="icon-chevron-right"></i></button>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="margintopleft" style="padding: 5px;">
+                            @Model.Contract.StateSecondary
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container containeralignright">
+        @Html.Partial("_CurrentUser")
+        @Html.Partial("_ErrorMessage", Model)
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#massrequestdatachange">@Model.Translate("Mass request - Leave and absence")</a></li>
+        </ul>
+        <div class="content">
+            <div class="tab-content">
+                @Html.Partial("_TabMassRequestDataChange", Model)
+            </div>
+        </div>
+    </div>
+}

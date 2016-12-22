@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<predefined>
+    <name>Unit</name>
+    <dependent>
+        <selected>OS</selected>
+        <show>OS01 - BSC Poznań</show>
+    </dependent>
+    <dependent>
+        <selected>OD</selected>
+        <show>
+            OD01 - DC Jarosty,
+            OD02 - Janki DS
+        </show>
+    </dependent>
+    <dependent>
+        <selected>OR</selected>
+        <show>
+            O018 - Service Office,
+            O188 - Janki Store,
+            O203 - Gdańsk Store,
+            O204 - Kraków Store,
+            O205 - Poznań Store,
+            O294 - Wrocław Store,
+            O306 - Katowice Store,
+            O307 - Warszawa-Targówek Store,
+            O329 - Łódź Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>OT</selected>
+        <show>OT21 - Trading Poland</show>
+    </dependent>
+    <dependent>
+        <selected>OI</selected>
+        <show>
+            OI01 - Janki Head Office,
+            OI03 - Wrocław-Bielany,
+            OI07 - Warszawa-Targówek,
+            OI08 - Łódź-Port Łódź,
+            OI02 - Warszawa-Janki,
+            OI05 - Poznań-Franowo
+        </show>
+    </dependent>
+    <dependent>
+        <selected>OP</selected>
+        <show>OP01 - Janki Property</show>
+    </dependent>
+</predefined>

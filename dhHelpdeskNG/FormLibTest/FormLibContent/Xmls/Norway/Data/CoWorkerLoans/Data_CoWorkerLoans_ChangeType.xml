@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<options>
+  <option value=""></option>
+  <option value="Start">Start</option>
+  <option value="Stop">Stop</option>
+  <option value="Increase">Increase</option>
+  <option value="Decrease">Decrease</option>
+</options>

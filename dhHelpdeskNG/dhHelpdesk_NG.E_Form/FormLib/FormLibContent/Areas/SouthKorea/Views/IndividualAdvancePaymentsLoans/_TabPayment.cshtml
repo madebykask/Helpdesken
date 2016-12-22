@@ -1,0 +1,79 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<div class="tab-pane" id="Payment">
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Advance Payment / Loan Details")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PaymentType")</td>
+                    <td>
+                        @Model.Element("PaymentType")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Amount")</td>
+                    <td>
+                        @Model.Element("Amount")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PaymentMethod")</td>
+                    <td>
+                        @Model.Element("PaymentMethod")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Paymentdate")</td>
+                    <td>
+                        @Model.Element("Paymentdate")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Loan Re-Payment")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("LoanRepaymentType")</td>
+                    <td>
+                        @Model.Element("LoanRepaymentType")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("LoanRepaymentAmountUnits")</td>
+                    <td>
+                        @Model.Element("LoanRepaymentAmountUnits")
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="tdstrong">@Model.Label("Numberofinstalments")</td>
+                    <td>
+                        @Model.Element("Numberofinstalments")
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="tdstrong">@Model.Label("Loanrepaymentsstartdate")</td>
+                    <td>
+                        @Model.Element("Loanrepaymentsstartdate")
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<script>
+    
+   
+</script>

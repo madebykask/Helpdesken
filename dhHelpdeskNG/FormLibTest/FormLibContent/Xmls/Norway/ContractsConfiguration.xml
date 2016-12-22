@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Contracts textAlign="left" fontSize="10" style="text-align: left; font-family: Verdana; font-size: 10px;" dateFormat="dd.MM.yyyy" MarginTop="80" MarginBottom="49">
+  <contract process="Hiring"  id="Contract" barcodeUse="false" headerUse="true" footerUse="true" draftTextUse="true" draftShowOnMinStateSecondaryId="20" draftShowOnMaxStateSecondaryId="30">
+    <employerSignatureText><![CDATA[Nærmeste leder<br />]]></employerSignatureText>
+    <employeeSignatureText><![CDATA[Medarbeider<br />]]></employeeSignatureText>
+    <pages>
+      <page viewName="~/FormLibContent/Areas/Norway/Views/Hiring/Pdfs/Contract.cshtml" MarginTop="80" MarginBottom="49"></page>
+    </pages>
+  </contract>
+  <contract process="ChangeTermsConditions" id="ChangeTermsConditions" barcodeUse="false" headerUse="true" footerUse="true" draftTextUse="true" draftShowOnMinStateSecondaryId="20" draftShowOnMaxStateSecondaryId="30">
+      <employerSignatureText><![CDATA[Nærmeste leder<br />]]></employerSignatureText>
+      <employeeSignatureText><![CDATA[Medarbeider<br />]]></employeeSignatureText>      
+    <pages>
+      <page viewName="~/FormLibContent/Areas/Norway/Views/ChangeTermsConditions/Pdfs/ChangeTermsConditions.cshtml" MarginTop="70" MarginBottom="40"></page>
+    </pages>
+  </contract>
+
+  <contract process="Hiring" id="Debug2" barcodeUse="false" barcodeShowOnMinStateSecondaryId="0"  draftTextUse="true" draftShowOnMinStateSecondaryId="20" draftShowOnMaxStateSecondaryId="40">
+    <employerSignatureText><![CDATA[Nærmeste leder<br />]]></employerSignatureText>
+    <employeeSignatureText><![CDATA[Medarbeider<br />]]></employeeSignatureText>
+    <pages>
+      <page viewName="~/FormLibContent/Areas/Norway/Views/Hiring/Pdfs/Debug2.cshtml" MarginTop="69" MarginBottom="69"></page>
+    </pages>
+  </contract>
+
+  <contract process="Hiring" id="Debug3" barcodeUse="false" barcodeShowOnMinStateSecondaryId="0"  draftTextUse="true" draftShowOnMinStateSecondaryId="20" draftShowOnMaxStateSecondaryId="40">
+    <employerSignatureText><![CDATA[Nærmeste leder<br />]]></employerSignatureText>
+    <employeeSignatureText><![CDATA[Medarbeider<br />]]></employeeSignatureText>
+    <pages>
+      <page viewName="~/FormLibContent/Areas/Norway/Views/Hiring/Pdfs/Debug3.cshtml" MarginTop="69" MarginBottom="69"></page>
+    </pages>
+  </contract>
+  
+</Contracts>

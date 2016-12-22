@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<regexs>
+    <date message="Wrong format (dd.mm.yyyy).">^(0[1-9]|[12][0-9]|3[01])[\.](0[1-9]|1[012])[\.]\d{4}$</date>
+    <year message="Wrong format (dd.mm.yyyy).">^(\s+)?[0-9]{1,4}$</year>
+    <firstDayOfMonth message="Wrong format (01.mm.yyyy).">^(01)[\.](0[1-9]|1[012])[\.]\d{4}$</firstDayOfMonth>
+    <percentage message="Wrong format (NNN).">^-?[0-9]{0,2}(\,[0-9]{1,2})?$|^-?(100)(\,[0]{1,2})?$</percentage>
+    <percentageSign message="Please enter a numeric value">(100|\d{1,2}(\.\d\d)?)%</percentageSign>
+    <!--<num100 message="Cost allocation must always equal 100.">\b([1-9]|[0-9][1-9]|100)\b</num100>-->
+    <!--<num100 message="Cost allocation must always equal 100.">^((\d{0,1}[1-9]((\.|\,)\d{0,1}[0-9])(%)?)|(100))$</num100>-->
+    <num100 message="Must be between 0 and 100">^(100(\.[0]+|\,[0]+)?|[0-9]\d?(\.\d+|\,\d+)?([%])?)$</num100>
+    <numBelow100 message="Wrong format (NN).">^-?[0-9]{0,2}(\,[0-9]{1,2})?$|^-?(99)(\,[0]{1,2})?$</numBelow100>
+    <numBelow25 message="Only numbers allowed.">^(([0-9])|([0-1][0-9])|([0-2][0-5]))$</numBelow25>
+    <PersNO message="Wrong format (NNNNNNNNNNN)">^(\d){11}$</PersNO>
+    <postcode message="Wrong format (NNNN)">^[0-9][0-9]{3}$</postcode>
+    <!--<uppercase message="Only capital letters allowed.">^[A-Z ]+$</uppercase>-->
+    <employeeno message="Wrong format (20NNNNNN).">^20\d{6}$</employeeno>
+    <amount message="Enter maximum four-digit value.">^-?\d{0,4}(\,|.[0-9]{1,5})?$</amount>
+    <unsignednum message="Only numbers allowed.">^-?\d*(\,|.[0-9]{1,5})?$</unsignednum>
+    <minusnum message="Only numbers allowed.">^-?\d*(\-|,|.[0-9]{1,5})?$</minusnum>
+    <telNum message="Only numbers allowed.">^-?(\d\s)*(\,|.[0-9 ]{1,5})+\s*?$</telNum>
+    <alphaCharachter message="Only Charachters allowed">[^0-9]</alphaCharachter>
+    <booltrue>^1|1,0$</booltrue>
+    <nip message="Wrong format (NNN-NNN-NN-NN).">^\d{3}\-\d{3}\-\d{2}\-\d{2}$</nip>
+    <numMax40 message="Wrong format, enter minimum 1 and maximum of 40">^([1-9]|[1-3][0-9]|40)$</numMax40>
+    <email message="Must contain &quot;@&quot;">^[a-zA-Z0-9_\+-]+(\.[a-zA-Z0-9_\+-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.([a-zA-Z]{2,4})$</email>
+    <currency message="Wrong format (LLL)">^[a-zA-Z.]{3,3}$</currency>    
+    <bsn message="Wrong format (NNNNNNNNN)">^\D*(?:\d\D*){9,}$</bsn>
+    <maxfourdigit message="Wrong format (NNNN).">^[0-9]{1,4}$</maxfourdigit>
+    <amountwithdelimiter message="Only numbers allowed.">^((\d*)(\.|\,)?)*$</amountwithdelimiter>
+    <amountwithdelimiterspace message="Only numbers allowed.">^((\d *)(\.|\,)?(\s?)*)*$</amountwithdelimiterspace>
+    <percentagewithdelimiter message="Please enter a numeric value">^((\d*)(\.|\,)?)*([%])?$</percentagewithdelimiter>
+    <!--If othere charachters does not allowed then will use : ^(\d){11}$-->
+</regexs>

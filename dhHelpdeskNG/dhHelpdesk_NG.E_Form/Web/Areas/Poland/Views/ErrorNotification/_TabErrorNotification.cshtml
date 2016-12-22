@@ -1,0 +1,100 @@
+﻿@model FormModel
+
+<div class="tab-pane active" id="errornotification">
+    <div class="row-fluid">
+        <div class="span12">
+            <table class="table">
+                <tr>
+                    <td class="tdstrong">@Model.Translate("Initiator")</td>
+                    <td>
+                        <input type="text" value="@Model.Contract.Initiator" readonly="readonly"/></td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Company")</td>
+                    <td>
+                        @Model.Element("Company")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Unit")</td>
+                    <td>
+                        @Model.Element("Unit")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmployeeNumber")</td>
+                    <td>
+                        @Model.Element("EmployeeNumber")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmployeeFirstName")</td>
+                    <td>
+                        @Model.Element("EmployeeFirstName")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmployeeLastName")</td>
+                    <td>
+                        @Model.Element("EmployeeLastName")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Phone")</td>
+                    <td>
+                        @Model.Element("Phone")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Email")</td>
+                    <td>
+                        @Model.Element("Email")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("WhoMadeMistake")</td>
+                    <td>
+                        @Model.Element("WhoMadeMistake")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ErrorType")</td>
+                    <td>
+                        @Model.Element("ErrorType")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ErrorConcerns")</td>
+                    <td>
+                        @Model.Element("ErrorConcerns")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ErrorDescription")</td>
+                    <td>
+                        @Model.Element("ErrorDescription")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("CoWorkerCorrectionRequest")</td>
+                    <td>
+                        @Model.Element("CoWorkerCorrectionRequest")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("CoWorkerContactType")</td>
+                    <td>
+                        @Model.Element("CoWorkerContactType")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EffectiveDate")</td>
+                    <td>
+                        @Model.Element("EffectiveDate")
+                    </td>
+                </tr>
+                @Html.Partial("_Attachments", Model)
+                @Html.Partial("_InternalLogNote", Model)
+            </table>
+        </div>
+    </div>
+</div>

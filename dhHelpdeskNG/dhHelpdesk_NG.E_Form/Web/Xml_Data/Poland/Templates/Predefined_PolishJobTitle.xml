@@ -1,0 +1,3566 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<predefined>
+    <name>PolishJobTitle</name>
+    <dependent>
+        <selected>Account Payable BSC</selected>
+        <show>
+            Kierownik Działu Zobowiązań,
+            St. Spec. ds. Zob. i Wsp. biznesu A&amp;R
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Accounting IICP</selected>
+        <show>
+            Administrator Systemu,
+            Księgowa,
+            Główny Księgowy,
+            Starszy Księgowy,
+            Ksiegowy
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Accounting Service Office</selected>
+        <show>
+            Księgowa,
+            Administrator Systemu I-Shop,
+            Kierownik Działu Księgowości,
+            Starsza Księgowa,
+            Młodsza Księgowa
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Acquisition IICP</selected>
+        <show>
+            Kierownik ds. Nieruchomości
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Activity / P-tag Kraków Store</selected>
+        <show>
+            Sprzedawca,
+            Kierownik Działu Sprzedaży,
+            Specjalista ds. Systemu Ptag,
+            Zastępca Kierownika ds.Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Activity Janki Store</selected>
+        <show>
+            Sprzedawca,
+            Kierownik Dz. Sprzedaży Akcji Sklepowych,
+            Starszy Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Activity Katowice Store</selected>
+        <show>
+            Specjalista ds. Akcji Sklepowych,
+            Sprzedawca,
+            Kier. Działu Sprzedaży (Akcje Sklepowe),
+            Starszy Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Activity Łódź Store</selected>
+        <show>
+            Sprzedawca,
+            Zastępca Kierownika ds.Sprzedaży,
+            Kier. Dz. Sprzedaży (Akcji Sklepowych)
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Activity Poznań Store</selected>
+        <show>
+            Sprzedawca,
+            Starszy Sprzedawca,
+            Specjalista ds Sprzedaży,
+            Kierownik Działu Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Activity Warszawa Targówek Store</selected>
+        <show>
+            Shopkeeper Sales Targówek Store,
+            Sprzedawca,
+            Kier. Dz. Sprzedaży (Akcji Sklepowych),
+            Specjalista ds. Systemu Ptag,
+            Sprzedawca / Kasjer,
+            Specjalista ds. Akcji Sklepowych
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Activity Wrocław Store</selected>
+        <show>
+            P.O. Kier.Działu Sprzed.(Akcji Sklepow.),
+            Specjalista ds. Akcji Sklepowych,
+            Sprzedawca,
+            Starszy Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Additional Income Sales IICP</selected>
+        <show>
+            Kierownik ds. Przychodów Dodatkowych,
+            Kier ds. Przychodów Dodatkowych IICG PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Administration TACE</selected>
+        <show>
+            Recepcjonista,
+            Specjalista ds. Floty,
+            Kierownik Działu Administracji,
+            Specjalista ds. Podróży,
+            Recepcjonistka,
+            Asystent ds.. Administracyjnych,
+            Receptionist TACE PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>AP BSC</selected>
+        <show>
+            P.O. Kierownik Działu Zobowiązań,
+            Accounting Team Leader,
+            Mł. Specjalista ds. Admin. Bazy Danych
+        </show>
+    </dependent>
+    <dependent>
+        <selected>AP Team AT/HU/CH</selected>
+        <show>
+            Starszy Specjalista ds. Zobowiązań,
+            Młodszy Specjalista ds. Zobowiązań,
+            P.O. Accounting Team Leader,
+            Specjalista ds. Zobowiązań,
+            Młodszy Księgowy ds.. Zobowiązań
+        </show>
+    </dependent>
+    <dependent>
+        <selected>AP Team DE</selected>
+        <show>
+            Accounting Team Leader,
+            Specjalista ds. Zobowiązań,
+            Starszy Specjalista ds. Zobowiązań,
+            Młodszy Specjalista ds. Zobowiązań
+        </show>
+    </dependent>
+    <dependent>
+        <selected>AP Team ES &amp; PT</selected>
+        <show>
+            Team Leader,
+            Młodszy Specjalista ds. Zobowiązań,
+            Starszy Specjalista ds. Zobowiązań,
+            Specjalista ds. Zobowiązań
+        </show>
+    </dependent>
+    <dependent>
+        <selected>AP Team IT</selected>
+        <show>
+            Accounting Team Leader,
+            Starszy Specjalista ds. Zobowiązań,
+            Specjalista ds. Zobowiązań,
+            Młodszy Specjalista ds. Zobowiązań
+        </show>
+    </dependent>
+    <dependent>
+        <selected>AP Team SE</selected>
+        <show>
+            Zastępca Team Leader&apos;a,
+            Accounting Team Leader,
+            Starszy Specjalista ds. Zobowiązań,
+            Specjalista ds. Zobowiązań,
+            Młodszy Specjalista ds.Rozliczeń Podróży,
+            Młodszy Specjalista ds. Zobowiązań
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Backpacker</selected>
+        <show>
+            Backpacker
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Backpacker Project SO</selected>
+        <show>
+            Backpacker SO,
+            Kierownik Projektu,
+            Kierownik ds. Rekrutacji i Sukcesji
+        </show>
+    </dependent>
+    <dependent>
+        <selected>BD BoF TACE</selected>
+        <show>
+            Kierownik Działu Handlowego,
+            Handlowiec,
+            Specjalista ds. Technicznych,
+            Specjalista Ds. Logistyki,
+            Senior Technician Global BoF TACE PL,
+            Supply Planner TACE PL,
+            Młodszy Specjalista Ds. Logistyki,
+            Koordynator ds. Logistyki,
+            Project Manager TACE CZ,
+            Starszy Specjalista ds. Logistyki,
+            Specjalista Ds. Technicznych,
+            Project Leader Plastic TACE CZ,
+            Purchase Development Manager IoS
+        </show>
+    </dependent>
+    <dependent>
+        <selected>BD Frames I TACE</selected>
+        <show>
+            Supply Planner TACE PL,
+            Technician TACE PL,
+            Specjalista ds. Technicznych,
+            Kierownik Działu Handlowego,
+            Specjalista Ds. Logistyki,
+            Business Developer TACE PL,
+            Koordynator ds. Logistyki
+        </show>
+    </dependent>
+    <dependent>
+        <selected>BD Frames TACE</selected>
+        <show>
+            Business Development Manager TACE PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>BD Matresses ITACE</selected>
+        <show>
+            Zarządzający Globalnym Zakupem Materacy,
+            Senior Technician Textile MCC TACE PL,
+            Business Developer Textile MCC TACE PL,
+            Specjalista ds. Pianki Poliuretanowej,
+            Business Developer Trainee,
+            Quality Leader Category Mattresses,
+            Handlowiec,
+            Kierownik Działu Handlowego,
+            Specjalista ds. Logistyki,
+            Specjalista ds. Technicznych,
+            Młodszy Specjalista ds. Technicznych
+        </show>
+    </dependent>
+    <dependent>
+        <selected>BD Mattresses TACE</selected>
+        <show>
+            Business Developer TACE PL,
+            Technician TACE PL,
+            Specjalista ds. Logistyki,
+            Specjalista ds. Technicznych,
+            Kierownik Działu Handlowego,
+            Supply Planner TACE PL,
+            Handlowiec,
+            Starszy Handlowiec,
+            P.O. Kierownik Działu Handlowego,
+            Młodszy Specjalista ds. Technicznych,
+            Młodszy Specjalista Ds. Logistyki
+        </show>
+    </dependent>
+    <dependent>
+        <selected>BD Paraffine&amp;Plastic TACE</selected>
+        <show>
+            Business Developer TACE PL,
+            Handlowiec,
+            Specjalista ds. Technicznych,
+            Supply Planner TACE PL,
+            Specjalista Ds. Logistyki,
+            Kierownik Działu Handlowego,
+            Specjalista Ds. Logistyki
+        </show>
+    </dependent>
+    <dependent>
+        <selected>BD Plastic TACE PL</selected>
+        <show>
+            Specjalista ds. Technicznych,
+            Supply Planner TACE PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>BD Solid Wood Birch TACE</selected>
+        <show>
+            Senior Technician TACE PL,
+            Business Developer TACE PL,
+            Młodszy Specjalista Ds. Logistyki,
+            Specjalista ds. Logistyki,
+            Technician TACE PL,
+            Handlowiec,
+            Forestry &amp; Wood Supply Spec. TACE PL,
+            Supply Planner TACE PL,
+            Business Developer Trainee,
+            Specjalista ds. Technicznych,
+            Business Development Manager,
+            Młodszy Specjalista ds. Technicznych,
+            Kierownik Działu Handlowego
+        </show>
+    </dependent>
+    <dependent>
+        <selected>BD Solid Wood TACE</selected>
+        <show>
+            Specjalista ds. Technicznych,
+            Technician TACE PL,
+            Supply Planner TACE PL,
+            Business Developer,
+            Specjalista Ds. Logistyki,
+            Handlowiec,
+            Młodszy Specjalista ds. Technicznych,
+            Kierownik Działu Handlowego,
+            Business Developer Trainee TACE PL,
+            Młodszy Specjalista Ds. Logistyki,
+            Koordynator ds. Logistyki
+        </show>
+    </dependent>
+    <dependent>
+        <selected>BD Upholstery TACE</selected>
+        <show>
+            Specjalista Ds. Logistyki,
+            Technician TACE PL,
+            Specjalista ds. Technicznych,
+            Młodszy Handlowiec,
+            Młodszy Specjalista ds. Technicznych,
+            Kierownik Działu Handlowego,
+            Specjalista ds. Technicznych,
+            Business Developer TACE PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>BDM Team</selected>
+        <show>
+            Business Development Team Manager
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Bistro &amp; Sweden Shop Gdańsk Store</selected>
+        <show>
+            Pracownik Gastronomii,
+            Kierownik Bistro
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Bistro &amp; Sweden Shop Katowice Store</selected>
+        <show>
+            Kierownik Bistro,
+            Pracownik Gastronomii,
+            Pracownik Restauracji,
+            Starszy Pracownik Gastronomii,
+            Kasjer
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Bistro &amp; Sweden Shop Kraków Store</selected>
+        <show>
+            Pracownik Gastronomii,
+            Pracownik Gastronomii,
+            Kierownik Bistro,
+            Pracownik Restauracji,
+            Starszy Pracownik Gastronomii
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Bistro &amp; Sweden Shop Łódź Store</selected>
+        <show>
+            Kierownik Bistro,
+            Pracownik Gastronomii,
+            Pracownik Restauracji,
+            Starszy Pracownik Gastronomii,
+            Pracownik Bistro Łódź Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Bistro &amp; Sweden Shop Warszawa Targówek S</selected>
+        <show>
+            Pracownik Gastronomii,
+            Kierownik Bistro,
+            Pracownik Restauracji,
+            Pracownik Restauracji,
+            Pracownik Gastronomii
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Bistro &amp; Sweden Shop Wrocław Store</selected>
+        <show>
+            Pracownik Gastronomii,
+            Kierownik Bistro,
+            Pracownik Bistro
+        </show>
+    </dependent>
+    <dependent>
+        <selected>BSC Poland</selected>
+        <show>
+            Dyrektor Business Service Centre
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Business Controling IICP</selected>
+        <show>
+            Kontroler Finansowy,
+            Kontroler Biznesu,
+            Zastępca Dyrektora Finansowego
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Business Navigation</selected>
+        <show>
+            Nawigator Biznesu,
+            Spec. ds. Komunikacji i Zarz. Zmianą,
+            Spec.ds. Szkoleń w Projekcie Staf. Optim
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Business Navigation BSC</selected>
+        <show>
+            Nawigator Businessu,
+            Specjalista Operacyjny,
+            Recepcjonistka,
+            Pracownik Administracyjny BSC,
+            Kontroler Finansowy
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Business Navigation Gdańsk Store</selected>
+        <show>
+            Nawigator Businessu,
+            zastępca Nawigatora Biznesu,
+            Specjalista ds planowania czasu pracy,
+            Księgowa,
+            Specjalista ds. Bezpieczeństwa i Ochrony,
+            Kontroler Administracyjny
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Business Navigation Janki Store</selected>
+        <show>
+            Specjalista ds. Planowania Czasu Pracy,
+            Specjalista ds. Bezpieczeństwa i Ochrony,
+            Nawigator Businessu,
+            Kontroler Administracyjny,
+            Księgowa,
+            Zastępca Nawigatora Biznesu
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Business Navigation Katowice Store</selected>
+        <show>
+            Kontroler Administracyjny,
+            Nawigator Businessu,
+            Księgowa,
+            Specjalista ds. Bezpieczeństwa I Ochrony,
+            Specjalista ds. Planowania Czasu Pracy
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Business Navigation Kraków Store</selected>
+        <show>
+            Księgowa,
+            Kontroler Administracyjny,
+            Nawigator Businessu,
+            Specjalista ds. Bezpieczeństwa i Ochrony,
+            Specjalista ds. Planowania Czasu Pracy,
+            Spec. ds. ZZL/Specj. ds. Planow. Cz. Pra
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Business Navigation Łódź Store</selected>
+        <show>
+            Nawigator Businessu,
+            Księgowa,
+            Starszy Pracownik ds. Technicznych,
+            Specjalista ds. Planowania Czasu Pracy,
+            Specjalista ds. Bezpieczeństwa i Ochrony,
+            Kontroler Administracyjny
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Business Navigation Poznań Store</selected>
+        <show>
+            Nawigator Businessu,
+            Specjalista ds. Bezpieczeństwa i Ochrony,
+            Księgowa,
+            Kontroler Administracyjny,
+            Specjalista ds. Planowania Czasu Pracy
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Business Navigation Service Office</selected>
+        <show>
+            Analityk Biznesu ds. IKEA Food,
+            Kierownik ds. Nawigacji Biznesu PL,
+            Nawigator Biznesu,
+            Nawigator Biznesu ds. Komercyjnych,
+            Kontroler Finansowy,
+            Kontroler Finansowy Junior,
+            Kontroler Finansowy,
+            Business Information Navigator,
+            Kierownik ds. Wymogów Regulacyjnych,
+            Spec. ds. Zarz. Efektywn. Zas. Ludzkich,
+            Krajowy Kupiec IMS
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Business Navigation TACE</selected>
+        <show>
+            Asystent Finansowy,
+            Finance Controller TACE PL,
+            Specjalista ds. Informatyki,
+            Nawigator Biznesu,
+            Kontroler Finansowy
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Business Navigation Warszawa Targówek St</selected>
+        <show>
+            Navigator Businessu,
+            Zastępca Navigatora Businessu,
+            Kontroler Administracyjny,
+            Specjalista ds. Planowania Czasu Pracy,
+            Księgowa,
+            Specjalista ds. Bezpieczeństwa i Ochrony
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Business Navigation Wrocław Store</selected>
+        <show>
+            Nawigator Businessu
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Call Center Warszawa</selected>
+        <show>
+            Prac. Działu Telefonicznej Obsł. Klienta,
+            Specjalista ds. Programu SAMS,
+            Specjalista ds. zwrotów i reklamacji,
+            Kier. Działu Telefonicznej Obsł. Klienta
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Category Leader Upholstery Frame TACE PL</selected>
+        <show>
+            Category Leader Upholstery Frame TACE PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Category leaders TACE</selected>
+        <show>
+            Category Leader Layer Glued TACE PL,
+            Zarządz. Zakupem Mebli (Sosna I Świerk),
+            Category Leader Frames&amp;Parafin TACE PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Checkout Service Gdańsk Store</selected>
+        <show>
+            Kierownik Działu Kas,
+            Team Leader Gdańsk Store,
+            Starszy Kasjer,
+            Kasjer,
+            Kasjer / Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Checkout Service Janki Store</selected>
+        <show>
+            Kasjer,
+            Starszy Kasjer,
+            Kierownik Działu Kas,
+            Kasjer/Prac. Działu Obsł. Klienta,
+            Kasjer/Pracow. Działu Obsługi Klienta
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Checkout Service Katowice Store</selected>
+        <show>
+            Kasjer,
+            Starszy Kasjer,
+            Kierownik Działu Kas
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Checkout Service Kraków Store</selected>
+        <show>
+            Kasjer,
+            Starszy Kasjer,
+            Kierownik Działu Kas,
+            Specjalista ds. Systemu Ptag
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Checkout Service Łódź Store</selected>
+        <show>
+            Kasjer,
+            Starszy Kasjer,
+            Kierownik Działu Kas,
+            Pracownik Działu Obsługi Klienta
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Checkout Service Poznań Store</selected>
+        <show>
+            Kasjer,
+            Starszy Kasjer,
+            Kierownik Działu Kas,
+            Checkout Services Team LeaderPoznańStore
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Checkout Service Warszawa Targówek Store</selected>
+        <show>
+            Kasjer,
+            Starszy Kasjer,
+            Kierownik działu Kas,
+            Kasjer / Sprzedawca,
+            Koordynator Zespołu w Dziale Kas
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Checkout Service Wrocław Store</selected>
+        <show>
+            Starszy Kasjer,
+            Kasjer,
+            Koordynator Zespołu w Dziale Kas,
+            Kierownik Działu Kas
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Chemical Specialist TACE PL</selected>
+        <show>
+            Spec. ds. Wymagań i Zgodności Chemicznej,
+            Product Quality Manager TACE CZ
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Com-In Project Service Office</selected>
+        <show>
+            Specjalista ds. Komunikacji I Grafiki,
+            Kier ds.Planowania Powierzchni Komerc,
+            Specjalista ds. Projektowania Wnętrz,
+            Specjalista ds. Wystawiennictwa,
+            Specjalista ds. Ekspansji
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Com-in Service Office</selected>
+        <show>
+            Kier. ds. Kom. i Wystawiennictwa PL,
+            Kier.ds.Rozw. Kompet. Podst.,
+            Specjalista ds. Wystawiennictwa,
+            Specjalista ds. Komunikacji I Grafiki,
+            Specjalista ds. Projektowania Wnętrz,
+            Krajowy Kier. ds. Komunikacji Wizualnej,
+            Kier. ds. Komunikacji i Wystawiennictwa
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Commercial Vitality Gdańsk Store</selected>
+        <show>
+            Certyfikowany Sprzedawca,
+            Koordynator zespołu w dz. sprzedaży/TL,
+            Sprzedawca,
+            Kierownik Działu Sprzedaży,
+            Starszy Sprzedawca,
+            Specjalista ds. Systemu Ptag
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Comm-in  Katowice Store</selected>
+        <show>
+            Kier. Działu Wystaw. i Komunikacji,
+            Zast. Kier. Działu Wystaw. i Komunikacji,
+            Kier. ds. Wystawien. i akcji marketing.,
+            Specjalista ds. Systemu Ptag,
+            Pracownik Techniczny
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Comm-in  Poznań Store</selected>
+        <show>
+            Kier. Dz. Komunikacji i Projekt. Wnętrz,
+            Kierownik ds. Komunikacji Wizualnej
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Comm-in Gdańsk Store</selected>
+        <show>
+            Kier. Działu Komunikacji i Proj. Wnętrz,
+            Kier. Działu Wystaw. i Komunikacji
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Comm-in Janki Store</selected>
+        <show>
+            Kier Dz.Komunikacji i Projekt. Wnętrz,
+            Specjalista ds. Projektowania Wnętrz,
+            Specjalista ds. Komunikacji Wizualnej,
+            Specjalista ds. Komunikacji Wizualnej,
+            Specjalista ds. Komunikacji,
+            1 Specjalista ds. Projektowania Wnętrz,
+            Stolarz
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Comm-In Kraków Store</selected>
+        <show>
+            Kierownik dz. Komunik. i Projek. Wnętrz,
+            Specjalista ds. Komunikacji Wizualnej,
+            Specjalista ds. Komunikacji
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Comm-In Kraków Store I</selected>
+        <show>
+            Zast. Kier. Działu Komun. i Proj. Wnętrz
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Comm-in Łódź Store</selected>
+        <show>
+            Specjalista ds. Komunikacji Wizualnej,
+            Specjalista ds. Projektowania Wnętrz,
+            Kier. Działu Wystaw. i Komunikacji,
+            Kier. Działu Komun.i Proj. Wnętrz
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Comm-in Warszawa Targówek Store</selected>
+        <show>
+            Stolarz,
+            Specjalista ds. Wystawiennictwa,
+            Spec. ds. Wystaw. i Akcji Komerycyjnych,
+            Vis.Merch/Activ Co-worker Targówek Store,
+            St.Spec. ds. Wystawiennictwa i Akcji Kom
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Comm-in Wrocław Store</selected>
+        <show>
+            P.O. Kierownik Działu Wystaw. i Komunik.,
+            Kier. Działu Komun.i Proj. Wnętrz
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Compliance Development</selected>
+        <show>
+            Kierownik ds. Wymogów Regulacyjnych
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Components TACE</selected>
+        <show>
+            Sales Representative ICOMP TACE PL,
+            Spec. ds. Zarządz. Relacjami z Klientem
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Construction IICP</selected>
+        <show>
+            Dyrektor ds. Budowlanych,
+            Specjalista ds. Przetargów i Zakupów
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Construction Service Office</selected>
+        <show>
+            Kierownik ds.Budownictwa,
+            Kierownik Projektu Budowlanego,
+            Specjalista ds. Budownictwa
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Contact Center Service Office</selected>
+        <show>
+            Kier. Działu Telefonicznej Obsł. Klienta
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Customer Relation Service Office</selected>
+        <show>
+            Kierownik ds. Relacji z Klientami PL,
+            Customer relation co-worker
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Customer Service  Kraków Store</selected>
+        <show>
+            Starszy Pracownik Działu Obsługi Klienta,
+            Kierownik Działu Obsługi Klienta,
+            Pracownik Działu Obsługi Klienta,
+            Specjalista ds. Obsługi Klienta
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Customer Service Gdańsk Store</selected>
+        <show>
+            Koordynator zesp. w dz. obsł. klienta/TL,
+            Kierownik Działu Obsługi Klienta,
+            Starszy Pracownik Działu Obsługi Klienta,
+            Pracownik Działu Obsługi Klienta,
+            Pracownik Działu Obsługi Klienta/Kasjer,
+            Kasjer
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Customer Service Janki Store</selected>
+        <show>
+            Pracownik Działu Obsługi Klienta,
+            Kierownik Działu Obsługi Klienta,
+            Starszy Pracownik Obslugi Klienta,
+            Customer Service Co-worker I
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Customer Service Katowice Store</selected>
+        <show>
+            Specjalista w Dziale Obsługi Klienta,
+            Kierownik Działu Obsługi Klienta,
+            Kierownik ds. obsługi klienta,
+            Pracownik Działu Obsługi Klienta,
+            Starszy Pracownik Działu Obsługi Klienta
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Customer Service Łódź Store</selected>
+        <show>
+            Starszy Pracownik Działu Obsługi Klienta,
+            Pracownik Działu Obsługi Klienta,
+            Kierownik Działu Obsługi Klienta,
+            p.o. Kierownik Działu Obsługi Klienta
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Customer Service Poznań Store</selected>
+        <show>
+            Pracownik Działu Obsługi Klienta,
+            Starszy Pracownik Działu Obsługi Klienta,
+            Kierownik Działu Obsługi Klienta
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Customer Service WarszawaTargówek Store</selected>
+        <show>
+            Pracownik Działu Obsługi Klienta,
+            Pracow. Dz. Obsł. Klienta,
+            Starszy Pracownik Działu Obsługi Klienta,
+            Kierownik Działu Obsługi Klienta,
+            Pracow. Dz. Obsł. Klienta / Sprzedawca,
+            Koordynator Zespołu w Customer Serivce
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Customer Service Wrocław Store</selected>
+        <show>
+            Starszy Pracownik Działu Obsługi Klienta,
+            Pracownik Działu Obsługi Klienta,
+            Kierownik Działu Obsługi Klienta,
+            Koordynator Zesp. w Dziale Obsł. Klienta,
+            Koordynator Zesp. w Dziale Obsł. Klienta
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Deputy Human Resources</selected>
+        <show>
+            Z-ca Dyr. ds. Zarządz. Zasobami Ludzkimi,
+            Specjalista ds. Zarz. Zasobami Ludzkimi,
+            Project Leader
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Deputy Retail Service Office Poland</selected>
+        <show>
+            Zast. Dyr. Zarządz. IKEA Retail Sp. z o.,
+            Kier. ds. Wdrażania Projektów,
+            Kierownik ds. Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Deputy Store Manager Łódź Store</selected>
+        <show>
+            Deputy Store Manager Łodź Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Development IICP</selected>
+        <show>
+            Development Manager,
+            Manager Projektu Lublin,
+            Kierownik ds. Projektu  Modernizacje,
+            Project Manager,
+            Project Leader,
+            Kierownik Projektu
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Expansion &amp; Property Service Office</selected>
+        <show>
+            Kierownik ds. Inwestycji PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Expansion IICP</selected>
+        <show>
+            Dyrektor ds. Ekspansji,
+            Specjalista ds. Nieruchomości
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Expansion Service Office</selected>
+        <show>
+            Kierownik ds. Ekspansji,
+            Kierownik Projektu,
+            Kierownik Projektu,
+            Młodszy Kierownik Projektu
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Expense Claims BSC</selected>
+        <show>
+            Kierownik ds. rozliczania podróży,
+            Specjalista ds. Rozliczeń Podróży,
+            Starszy Spec. ds. Rozliczania Podróży,
+            Młodszy Specjalista ds.Rozliczeń Podróży,
+            Młodszy Spec ds. Rozliczania Podróży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>External Communication Service Office</selected>
+        <show>
+            Kierownik ds. Komunikacji Zewnętrznej,
+            Specjalista ds. Internetu,
+            Administrator Strony Internetowej,
+            Specjalista ds. Komunikacji Zewnętrznej
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Facility Service Office</selected>
+        <show>
+            Kierownik ds. Technicznych,
+            Specjalista ds. Technicznych
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Finance IICP</selected>
+        <show>
+            Dyrektor Finansowy,
+            Sp. ds. zarządzania płynnością finansową,
+            Sp. ds. zarządzania płynnością finansową
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Finance Process BSC</selected>
+        <show>
+            Lider ds. Procesów Finansowych
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Finance Service Management BSC</selected>
+        <show>
+            Dyrektor Finansowy BSC Polska,
+            BSC VAT Manager
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Finance Service Office</selected>
+        <show>
+            Dyrektor Finansowy,
+            Kierownik ds. Projektów Księgowych,
+            Księgowa,
+            Kierownik Działu Księgowości,
+            Specjalista ds.Produktowych,
+            Laws &amp; Standards Manager SO,
+            Kierownik ds. Nawigacji Biznesu PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Flat line Trading TASE</selected>
+        <show>
+            Supply Planner,
+            Technician Trading Portugal
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Free Range TACE</selected>
+        <show>
+            Starszy Handlowiec Free Range,
+            Product Dev. Support Free Range TACE PL,
+            Project Leader in Team Free Range,
+            Kierownik Działu Free Range,
+            Project Leader in Team Free Range,
+            Technician TACE PL,
+            Kier. Dz. Jakości i Ochrony Środowiska,
+            Free Range Technician TACE PL,
+            Starszy Specjalista ds. Technicznych,
+            Senior Technician TACE PL,
+            Techniczny Specjalista ds. Produktu,
+            Młodszy Techniczny Specj. ds. Produktu
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Gdańsk/Poznań Shopping Centre</selected>
+        <show>
+            Kierownik Centrów PH Matarnia/Franowo,
+            Asystentka Centrum Handlowego,
+            Kierownik ds. Marketingu
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Global Finance BSC</selected>
+        <show>
+            Global Finance Service Manager IKEA BSC
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Goods Flow Gdańsk Store</selected>
+        <show>
+            Kierownik Działu Przepływu Towaru
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Goods Flow Janki Store</selected>
+        <show>
+            Kierownik Działu Przepływu Towaru
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Goods Flow Katowice Store</selected>
+        <show>
+            Kierownik Działu Przepływu Towaru
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Goods Flow Kraków Store</selected>
+        <show>
+            P. O. Kierownik Działu Przepływu Towaru,
+            Kierownik Działu Przepływu Towaru
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Goods Flow Łódź Store</selected>
+        <show>
+            Kierownik Działu Przepływu Towaru,
+            p.o.Kierownika Działu Przepływu Towaru
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Goods Flow Poznań Store</selected>
+        <show>
+            Kierownik Działu Przepływu Towaru
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Goods Flow Warszawa Targówek Store</selected>
+        <show>
+            Kierownik Działu Przepływu Towaru
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Goods Flow Wrocław Store</selected>
+        <show>
+            Specjalista ds. Przepływu Towaru
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Graphic Communication Katowice Store</selected>
+        <show>
+            Kierownik ds. Komunikacji i Grafiki,
+            Pracownik ds. Komunikacji,
+            Specjalista ds. Systemu Ptag,
+            Specjalista ds. Komunikacji,
+            Specjalista ds. Komunikacji Wizualnej,
+            Kier. Działu Komunikacji i Proj. Wnętrz,
+            Kierownik ds. Prezentacji Asortymentu
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Graphic Communication Kraków Store</selected>
+        <show>
+            Kierownik ds. komunikacji wizualnej,
+            Pracownik ds. Komunikacji
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Graphic Communication Targowek Store</selected>
+        <show>
+            Specjalista ds. Wystawiennictwa,
+            Specjalista ds. Komunikacji Wizualnej,
+            Specjalista ds. Systemu Ptag
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Graphic Communication Wrocław Store</selected>
+        <show>
+            Specjalista ds. Komunikacji Wizualnej,
+            Kierownik ds. Komunikacji Wizualnej,
+            Specjalista ds. Systemu Ptag
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Guest Service Łódź</selected>
+        <show>
+            Kierownik ds. Obsługi Klienta
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 1 Poznań Store</selected>
+        <show>
+            Starszy Sprzedawca,
+            Kierownik Działu Sprzedaży,
+            Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 10-13-16-18 Wrocław Store</selected>
+        <show>
+            Starszy Sprzedawca,
+            Specjalista ds. Sprzedaży,
+            Sprzedawca,
+            Kierownik Działu Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 10-16-17 Gdańsk Store</selected>
+        <show>
+            Kierownik Działu Sprzedaży,
+            Starszy Sprzedawca,
+            Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 10-18-19 Janki Store</selected>
+        <show>
+            Sprzedawca,
+            Starszy Sprzedawca,
+            Kierownik Działu Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 10-18-19 Katowice Store</selected>
+        <show>
+            Sprzedawca,
+            Kierownik Działu Sprzedaży,
+            Starszy Sprzedawca,
+            Specjalista ds. Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 10-18-19 Kraków Store</selected>
+        <show>
+            Starszy Sprzedawca,
+            Kierownik Działu Sprzedaży,
+            Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 10-18-19 Łódź Store</selected>
+        <show>
+            Sprzedawca,
+            kierownik działu sprzedaży,
+            Starszy Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 10-18-19 Poznań Store</selected>
+        <show>
+            Sprzedawca,
+            Kierownik Działu Sprzedaży,
+            Starszy Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 10-18-19 Warszawa Targówek Store</selected>
+        <show>
+            Kierownik Działu Sprzedaży,
+            Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 11-12-13 Gdańsk Store</selected>
+        <show>
+            Koordynator zespołu w dz. sprzedaży/TL,
+            Kierownik Działu Sprzedaży,
+            Starszy Sprzedawca,
+            Sprzedawca,
+            Prac. ds. Wsp. Sprzed. i Zaop. W Sklepie
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 1-2 Janki Store</selected>
+        <show>
+            Sprzedawca,
+            Starszy Sprzedawca,
+            Kierownik Działu Sprzedaży,
+            Certyfikowany Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 1-2 Katowice Store</selected>
+        <show>
+            Sprzedawca,
+            Starszy Sprzedawca,
+            Kierownik Działu Sprzedaży,
+            Certyfikowany Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 1-2 Warszawa Targówek Store</selected>
+        <show>
+            Sprzedawca,
+            Kierownik Działu Sprzedaży,
+            Certyfikowany Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 1-2 Wrocław Store</selected>
+        <show>
+            Starszy Sprzedawca,
+            Certyfikowany Sprzedawca,
+            Sprzedawca,
+            Kierownik Działu Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 1-2-3 Gdańsk Store</selected>
+        <show>
+            Sprzedawca,
+            Starszy Sprzedawca,
+            Kierownik Działu Sprzedaży,
+            Sales Co-worker III Gdańs,
+            Sales Co-worker Gdańsk St
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 1-2-3 Kraków Store</selected>
+        <show>
+            Starszy Sprzedawca,
+            Sprzedawca,
+            Kierownik Działu Sprzedaży,
+            Certyfikowany Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 1-2-3 Łódź Store</selected>
+        <show>
+            Kierownik Działu Sprzedaży,
+            Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 14-15 Gdańsk Store</selected>
+        <show>
+            Kierownik ds. Sprzedaży,
+            Starszy Sprzedawca,
+            Kierownik Działu Sprzedaży,
+            Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 14-15 Janki Store</selected>
+        <show>
+            Sprzedawca,
+            Starszy Sprzedawca,
+            Kierownik Działu Sprzedaży,
+            Specjalista ds. systemu P-tag
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 14-15 Kraków Store</selected>
+        <show>
+            Sprzedawca,
+            Kierownik Działu Sprzedaży,
+            Starszy Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 14-15 Łódź Store</selected>
+        <show>
+            Sprzedawca/Pracownik dz. obsługi klienta,
+            Shopkeeper Sales Łódź Store,
+            Sprzedawca,
+            Kierownik Działu Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 14-15 Poznań Store</selected>
+        <show>
+            Kierownik Działu Sprzedaży,
+            Starszy Sprzedawca,
+            Sprzedawca,
+            P.O.Kierownik Działu Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 14-15 Warszawa Targówek Store</selected>
+        <show>
+            Sprzedawca,
+            Kierownik Działu Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 14-15 Wrocław Store</selected>
+        <show>
+            Starszy Sprzedawca,
+            Sprzedawca,
+            Kierownik Działu Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 14-15-16-17-20 Katowice Store</selected>
+        <show>
+            Starszy Sprzedawca,
+            Sprzedawca,
+            Shopkeeper Sales Katowice Store,
+            Specjalista ds. Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 16-17 Kraków Store</selected>
+        <show>
+            Sprzedawca,
+            Kierownik Działu Sprzedaży,
+            Starszy Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 16-17-20 Janki Store</selected>
+        <show>
+            Kierownik Działu Sprzedaży,
+            Starszy Sprzedawca,
+            Sprzedawca,
+            Sprzedawca/Pracow.Działu Uzupeł. Towaru,
+            Certyfikowany Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 16-17-20 Łódź Store</selected>
+        <show>
+            Sprzedawca,
+            Kierownik Działu Sprzedaży,
+            Starszy Sprzedawca,
+            p.o. Kierownik Działu Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 16-17-20 Poznań Store</selected>
+        <show>
+            Kierownik Działu Sprzedaży,
+            Sprzedawca,
+            Starszy Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 16-17-20 Warszawa Targówek Store</selected>
+        <show>
+            Kierownik Działu Sprzedaży,
+            Sprzedawca,
+            Starszy Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 2-3 Poznań Store</selected>
+        <show>
+            Sprzedawca,
+            Kierownik Działu Sprzedaży,
+            Starszy Sprzedawca,
+            Certyfikowany Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 3 &amp; IKEA Business Wrocław Store</selected>
+        <show>
+            Certyfikowany Sprzedawca,
+            Specjalista ds. Sprzedaży,
+            Sprzedawca,
+            Kierownik Działu Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 3 Janki Store</selected>
+        <show>
+            Kierownik ds. IKEA Business,
+            Starszy Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 3 Katowice Store</selected>
+        <show>
+            Shopkeeper Sales Katowice Store,
+            Specjalista ds. Systemu Ptag,
+            Sprzedawca,
+            Kierownik ds. IKEA Business,
+            Starszy Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 3 Warszawa Targówek Store</selected>
+        <show>
+            Shopkeeper Sales Targówek Store,
+            Starszy Sprzedawca,
+            Sprzedawca,
+            Intern Targówek Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 4-5 Janki Store</selected>
+        <show>
+            Sprzedawca,
+            Starszy Sprzedawca,
+            Kierownik Działu Sprzedaży,
+            Shopkeeper Sales Janki Store,
+            Certyfikowany Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 4-5 Łódź Store</selected>
+        <show>
+            Kierownik Działu Sprzedaży,
+            Sprzedawca,
+            Starszy Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 4-5 Poznań Store</selected>
+        <show>
+            Sprzedawca,
+            Kierownik Działu Sprzedaży,
+            Starszy Sprzedawca,
+            Certyfikowany Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 4-5 Warszawa Targówek Store</selected>
+        <show>
+            Sprzedawca,
+            Starszy Sprzedawca,
+            Certyfikowany Sprzedawca,
+            Kierownik Działu Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 4-5-9- Katowice Store</selected>
+        <show>
+            Starszy Sprzedawca,
+            Kierownik Działu Sprzedaży,
+            Sprzedawca,
+            Certyfikowany Sprzedawca,
+            Specjalista ds. Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 4-5-9 Kraków Store</selected>
+        <show>
+            Certyfikowany Sprzedawca,
+            Sprzedawca,
+            Kierownik Działu Sprzedaży,
+            Starszy Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 4-5-9-92 Gdańsk Store</selected>
+        <show>
+            Specjalista ds. sprzedaży,
+            Koord. zespołu w dz.sprzed./Team Leader,
+            Sprzedawca,
+            Kierownik Działu Sprzedaży,
+            Starszy Sprzedawca,
+            Certyfikowany Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 4-5-9-92-19 Wrocław Store</selected>
+        <show>
+            Starszy Sprzedawca,
+            Certyfikowany Sprzedawca,
+            Sprzedawca,
+            Kierownik Działu Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 6-11-12 Wrocław Store</selected>
+        <show>
+            Starszy Sprzedawca,
+            Sprzedawca,
+            Kierownik Działu Sprzedaży,
+            P.O. Kierownik Działu Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 6-11-12-13 Janki Store</selected>
+        <show>
+            Starszy Sprzedawca,
+            Sprzedawca,
+            Kierownik Działu Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 6-11-12-13 Katowice Store</selected>
+        <show>
+            Sprzedawca,
+            Starszy Sprzedawca,
+            Shopkeeper Sales Katowice Store,
+            Specjalista ds. Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 6-11-12-13 Kraków Store</selected>
+        <show>
+            Kierownik Działu Sprzedaży,
+            Sprzedawca,
+            Starszy Sprzedawca,
+            Kierownik Działu Sprzedaży,
+            Certyfikowany Sprzedawca,
+            Specjalista ds. sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 6-11-12-13 Łódź Store</selected>
+        <show>
+            Sprzedawca,
+            Kierownik Działu Sprzedaży,
+            Starszy Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 6-11-12-13 Poznań Store</selected>
+        <show>
+            Starszy Sprzedawca,
+            Kierownik Działu Sprzedaży,
+            Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 6-11-12-13 Warszawa Targówek Store</selected>
+        <show>
+            Sprzedawca,
+            Kierownik Działu Sprzedaży,
+            Starszy Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 6-18-19 Gdańsk Store</selected>
+        <show>
+            Starszy Sprzedawca,
+            Koordynator zespołu w dz. sprzedaży/TL,
+            Kierownik Działu Sprzedaży,
+            Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 7-8 Gdańsk Store</selected>
+        <show>
+            Koordynator zespołu w dz. sprzedaży/TL,
+            Sales Co-worker IV Gdańsk Store,
+            Sprzedawca/Specj. ds. planow. cz. pracy,
+            Kierownik Działu Sprzedaży,
+            P.O.Kierownika Działu Sprzedaży,
+            Starszy Sprzedawca,
+            Certyfikowany Sprzedawca,
+            Certyfikowany Sprzedawca,
+            Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 7-8 Janki Store</selected>
+        <show>
+            Sprzedawca,
+            Starszy Sprzedawca,
+            Certyfikowany Sprzedawca,
+            Kierownik Działu Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 7-8 Katowice Store</selected>
+        <show>
+            Kierownik Działu Sprzedaży,
+            Sprzedawca,
+            Certyfikowany Sprzedawca,
+            Starszy Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 7-8 Kraków Store</selected>
+        <show>
+            Sprzedawca,
+            Certyfikowany Sprzedawca,
+            Kierownik Działu Sprzedaży,
+            Starszy Sprzedawca,
+            Certyfikowany Sprzedawca,
+            Certyfikowany Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 7-8 Łódź Store</selected>
+        <show>
+            Kierownik Działu Sprzedaży,
+            Starszy Sprzedawca,
+            Sprzedawca,
+            Sprzedawca/Spec.ds.Systemu PTAG,
+            P.O. Kierownika Działu Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 7-8 Poznań Store</selected>
+        <show>
+            Sprzedawca,
+            Starszy Sprzedawca,
+            Kierownik Działu Sprzedaży,
+            Certyfikowany Sprzedawca,
+            PO Kierownik Działu Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 7-8 Warszawa Targówek Store</selected>
+        <show>
+            Starszy Sprzedawca,
+            Sprzedawca,
+            Kierownik Działu Sprzedaży,
+            Certyfikowany Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 7-8 Wrocław Store</selected>
+        <show>
+            Certyfikowany Sprzedawca,
+            Sprzedawca,
+            Kierownik Działu Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 9 Janki Store</selected>
+        <show>
+            Kierownik Działu Sprzedaży,
+            Starszy Sprzedawca,
+            Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 9 Łódź Store</selected>
+        <show>
+            Sprzedawca,
+            Starszy Sprzedawca,
+            Kierownik Działu Sprzedaży,
+            p.o. Kierownik Działu Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 9 Poznań Store</selected>
+        <show>
+            Sprzedawca,
+            Kierownik Działu Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HFB 9-92 Warszawa Targówek Store</selected>
+        <show>
+            Sprzedawca,
+            Sprzedawca,
+            Certyfikowany Sprzedawca,
+            Kierownik Działu Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HR BSC</selected>
+        <show>
+            Dyrektor ds. HR,
+            Specjalista ds. Zarządzania Wiedzą,
+            Specjalista ds. procesów HR
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HR Project</selected>
+        <show>
+            Kierownik Projektu,
+            Specjalista w Projekcie,
+            Kierownik Projektu HRMS,
+            Koordynator ds.Testów w Projekcie HRMS
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HR Project Management</selected>
+        <show>
+            Kierownik Projektu
+        </show>
+    </dependent>
+    <dependent>
+        <selected>HR System Support BSC</selected>
+        <show>
+            Team Leader,
+            Starszy Specjalista ds. Systemów HR,
+            Specjalista ds. Systemów HR,
+            Analityk Systemów Biznesowych,
+            Specjalista Administracyjny ds. HR
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Human Resources Gdańsk Store</selected>
+        <show>
+            Kier.ds. Zarz.. Zasob Ludz na Szkoleniu,
+            Kier. ds. Zarządzania Zasobami Ludzkimi,
+            Spec. ds. Zarządzania Zasobami Ludzkimi,
+            p.o. Kierownika ds. ZZL,
+            Administrator ds. HR / Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Human Resources IICP</selected>
+        <show>
+            Starszy Specjalista ds. Personalnych,
+            HR Manager
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Human Resources Janki Store</selected>
+        <show>
+            Kier. ds. Zarządzania Zasobami Ludzkimi,
+            Administrator ds. HR,
+            Kier ds. Zarządz Zasob Ludz na Szkoleniu,
+            Spec. ds. Zarządzania Zasobami Ludzkimi
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Human Resources Katowice Store</selected>
+        <show>
+            Spec. ds. Zarządzania Zasobami Ludzkimi,
+            Kier. ds. Zarządzania Zasobami Ludzkimi
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Human Resources Kraków Store</selected>
+        <show>
+            Spec. ds. Zarządzania Zasobami Ludzkimi,
+            Kier. ds. Zarządzania Zasobami Ludzkimi
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Human Resources Łódź Store</selected>
+        <show>
+            Spec. ds. Zarządzania Zasobami Ludzkimi,
+            Kier. ds. Zarządzania Zasobami Ludzkimi,
+            p.o Kier. ds. Zarządz. Zasob. Ludzkimi,
+            Spec. ds. ZZL/Kasjer
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Human Resources Poznań Store</selected>
+        <show>
+            Administrator ds.HR,
+            Spec. ds. Zarządzania Zasobami Ludzkimi,
+            Kier. ds. Zarządzania Zasobami Ludzkimi
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Human Resources Service Office</selected>
+        <show>
+            Kier. ds.  Zarządzania Zasobami Ludzkimi,
+            Specjalista ds. HR,
+            Dyr. ds. Zarządzania Zasobami Ludzkimi,
+            Kierownik ds. Rozwoju,
+            Kierownik ds. Szkoleń,
+            Kierownik Projektu,
+            Kierownik ds. Rozwoju Kompetencji,
+            Kierownik Projektu
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Human Resources TACE</selected>
+        <show>
+            Asystent Zarzadu Biura Rep Handlowej,
+            Kier. ds. Zarządzania Zasobami Ludzkimi,
+            Senior HR Generalist TACE PL,
+            Specjalista ds. Zasobów Ludzkich,
+            Z-ca Kier.ds.Zarządzania Zasob. Ludzkimi,
+            HR Graduate Student TACE PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Human Resources Warszawa Targówek Store</selected>
+        <show>
+            Intern Targówek Store,
+            Kier. ds. Zarządzania Zasobami Ludzkimi,
+            Spec. ds. Zarządzania Zasobami Ludzkimi,
+            Administrator ds.HR,
+            Z-ca Kier. ds. Zarządz. Zasob. Ludzkimi,
+            Specjalista ds. Planowania Czasu Pracy
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Human Resources Wrocław Store</selected>
+        <show>
+            Administrator ds.HR,
+            Spec. ds. Zarządzania Zasobami Ludzkimi,
+            Kier. ds. Zarządzania Zasobami Ludzkimi
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Business Gdańsk Store</selected>
+        <show>
+            Kierownik Działu Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Business Janki Store</selected>
+        <show>
+            Kierownik ds. IKEA Business,
+            Starszy Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Business Katowice Store</selected>
+        <show>
+            Kierownik ds. IKEA Business,
+            Sprzedawca,
+            Specjalista ds. Sprzedaży,
+            Koordynator ds. Klienta Biznesowego
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Business Kraków Store</selected>
+        <show>
+            Kierownik Działu Sprzedaży IKEA Business
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Business Targówek Store</selected>
+        <show>
+            IKEA Business Manager
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Family</selected>
+        <show>
+            Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA FAMILY Service Office</selected>
+        <show>
+            Kier ds. Programu Lojaln. IKEA FAMILY,
+            Specjalista ds.Marketingowej Bazy Danych,
+            PO Kier ds. Progr. u Lojaln. IKEA FAMILY
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Food</selected>
+        <show>
+            Kierownik ds. Oferty i Zakupów,
+            Krajowy Kierownik ds. IKEA FOOD
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Food Gdańsk Store</selected>
+        <show>
+            Administrator Gastronomii,
+            Kierownik ds. Gastronomii,
+            Analityk biznesu
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Food Janki Store</selected>
+        <show>
+            Starszy Pracownik Gastronomii,
+            Kierownik ds. Gastronomii,
+            Pracownik Bistro,
+            Administrator Gastronomii,
+            Specjalista ds. Bistro,
+            Starszy Pracownik Gastronomii,
+            Specjalista ds. Gastronomii,
+            Pracownik Gastronomii
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Food Katowice Store</selected>
+        <show>
+            Kierownik ds. Gastronomii
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Food Kraków Store</selected>
+        <show>
+            Kierownik ds. Gastronomii
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Food Łódź Store</selected>
+        <show>
+            Kierownik ds. Gastronomii
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Food Poznań Store</selected>
+        <show>
+            Pracownik Gastronomi,
+            Kierownik ds. IKEA Food,
+            Commercial SFM &amp; Bistro Manager Poznań S,
+            IF Bist.&amp;Swe. Shop Co-wor. Poznań Store,
+            Starszy Kucharz,
+            Kierownik ds. Gastronomii,
+            Starszy Pracownik Gastronomii
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Food Poznań Store I</selected>
+        <show>
+            Kierownik Restauracji,
+            Kucharz,
+            Administrator Gastronomii,
+            Pracownik Restauracji,
+            Pracownik Gastronomii,
+            IKEA FOOD Co-worker Poznań Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Food Warszawa Targówek Store</selected>
+        <show>
+            Kierownik ds. Gastronomii,
+            Starszy Kucharz,
+            Pracownik Gastronomii
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Food Warszawa Targówek Store 1</selected>
+        <show>
+            Kucharz,
+            Pracownik Gastronomii,
+            Starszy Pracownik Gastronomii,
+            Pracownik Restauracji,
+            Starszy Pracownik Restauracji,
+            Kierownik ds. IF,
+            Pracownik Gastronomii
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Food Wrocław Store</selected>
+        <show>
+            Kierownik ds. Gastronomii
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Inter IKEA Centre Polska S.A.</selected>
+        <show>
+            Dyrektor Zarządzający
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Interior Design  Kraków Store</selected>
+        <show>
+            Kierownik ds. Projektowania Wnętrz,
+            Specjalista ds. Projektowania Wnętrz,
+            Prac. Tech. Działu Wystaw. i Komunikacji,
+            Pierwszy Spec. ds. Projektowania Wnętrz,
+            Specjalista ds. Komunikacji,
+            Specjalista ds. Wystawiennictwa,
+            Visual Merchandising Co-worker Kraków St,
+            Pracownik ds. Komunikacji
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Interior Design Gdańsk Store</selected>
+        <show>
+            Kierownik ds. Projektowania Wnętrz,
+            Stolarz,
+            Specjalista ds. Komunikacji Wizualnej,
+            Specjalista ds. Projektowania Wnętrz,
+            Pierwszy Spec. ds. Projektowania Wnętrz,
+            Specjalista ds. Komunikacji Wizualnej,
+            Specjalista ds. Komunikacji,
+            Starszy Spec. ds. Projektowania Wnętrz
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Interior Design Janki Store</selected>
+        <show>
+            Kierownik ds. Projektowania Wnętrz,
+            Specjalista ds. Projektowania Wnętrz
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Interior design Katowice Store</selected>
+        <show>
+            Specjalista ds. Komunikacji,
+            Starszy Spec. ds. Projektowania Wnętrz,
+            Pierwszy Spec. ds. Projektowania Wnętrz,
+            Specjalista ds. Projektowania Wnętrz,
+            Specjalista ds. Projektowania Wnętrz
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Interior Design Łódź Store</selected>
+        <show>
+            Kierownik ds. Projektowania Wnętrz,
+            Pierwszy Spec. ds. Projektowania Wnętrz,
+            Specjalista ds. Projektowania Wnętrz,
+            Starszy Spec. ds. Projektowania Wnętrz,
+            Starszy Spec. ds. Projektowania Wnętrz
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Interior Design Poznań Store</selected>
+        <show>
+            Specjalista ds. Projektowania Wnętrz,
+            Pierwszy Spec. ds. Projektowania Wnętrz,
+            Specjalista ds. Komunikacji,
+            Stolarz,
+            Kierownik ds. Projektowania Wnętrz
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Interior Design Warszawa Targówek Store</selected>
+        <show>
+            Specjalista ds. Projektowania Wnętrz,
+            Pierwszy Specjalista ds. Wystawiennictwa,
+            Kier.ds. Proj. Wn./P.O. Kier.Dz. Komunik,
+            Specjalista ds. Projektowania Wnętrz,
+            Kier. Działu Wystaw. i Komunikacji
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Interior Design Wrocław Store</selected>
+        <show>
+            1 Specjalista ds. Projektowania Wnętrz,
+            Starszy Specj. ds. Wystaw. i Akcji Komer,
+            Kierownik ds. Projektowania Wnętrz,
+            Specjalista ds. Projektowania Wnętrz,
+            Trainee DSAP,
+            Starszy Specj. ds. Projektowania Wnętrz
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Internal Communication TACE PL</selected>
+        <show>
+            Kierownik  ds. Informacji i Komunikacji,
+            Specialista ds. Komunikacji Wewnętrznej
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IT BSC</selected>
+        <show>
+            Technik ds.Wsparcia IT
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IT Service Office</selected>
+        <show>
+            Kierownik ds. IT,
+            Specjalista ds. Systemow Informatycznych,
+            Starszy Spec. ds. Syst.Informatyczncyh,
+            Administrator Systemów Informatycznych,
+            Starszy Spec.ds.Syst.Informatyczncyh
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IT/Solution Area TACE</selected>
+        <show>
+            Solution Area Manager,
+            Specjalista ds. Systemów IT,
+            IT Demand Manager Supplying IoS
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Leasing IICP</selected>
+        <show>
+            Dyrektor Działu Najmu,
+            Kierownik ds. Najmu,
+            Administrator w Dziale Najmu,
+            Specjalista ds. Najmu,
+            Kierownik Zespołu ds.Najmu,
+            Dyrektor ds. Najmu
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Legal Counsel IICP</selected>
+        <show>
+            Prawnik
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Local Marketing Katowice Store</selected>
+        <show>
+            Pracownik ds. Marketingu,
+            Kierownik ds. Marketingu Lokalnego,
+            Specjalista ds. Marketingu,
+            Specjalista ds. Marketingu,
+            Kierownik ds. Marketingu,
+            Koordynator ds. Zrównoważonego Rozwoju
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Łódź Shopping Centre</selected>
+        <show>
+            Kierownik PH Łódź,
+            Asystent Kierownika Parku Handlowego
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Logistic Gdańsk Store</selected>
+        <show>
+            In-store Logistics Manager Gdańsk Store,
+            Kierownik ds. Logistyki
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Logistic Janki Store</selected>
+        <show>
+            In-store Logistics Manager Janki Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Logistic Katowice Store</selected>
+        <show>
+            Kierownik ds. Logistyki
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Logistic Kraków Store</selected>
+        <show>
+            Kierownik ds. Logistyki,
+            P.O. Kierownik ds. Logistyki
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Logistic Łódź Store</selected>
+        <show>
+            Kierownik ds. Logistyki,
+            p.o Kierownika ds. Logistyki
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Logistic Poznań Store</selected>
+        <show>
+            In-store Logistics Manager Poznań Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Logistic Service Office</selected>
+        <show>
+            Kierownik ds. Logistyki,
+            Kierownik Logistyki Sklepowej,
+            Kierownik Projektu,
+            Kierownik ds. Dostaw dla Klientów,
+            Z-ca Kierownika ds. Logistyki
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Logistic Service Office I</selected>
+        <show>
+            Kier. ds. Log. Planowania Sklepów,
+            Koordynator ds. Projektów Logistycznych
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Logistic TACE</selected>
+        <show>
+            Kierownik Działu Logistyki,
+            Koordynator ds. Logistyki,
+            Koordynator ds. Logistyki,
+            Supply Developer TACE PL,
+            Stażysta w Dziale Logistyki
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Logistics TACE</selected>
+        <show>
+            Deputy Logistics Manager TACE PL,
+            Koordynator ds. Logistyki,
+            Koordynator ds. Transportu,
+            Specjalista ds. Technicznych,
+            Koordynator ds. Logistyki
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Logistic Warszawa Targówek Store</selected>
+        <show>
+            In-store Logistics Manager Targówek Stor
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Logistic Wrocław Store</selected>
+        <show>
+            Kierownik ds. Logistyki,
+            Kierownik Działu Przepływu Towaru
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Maintenance Gdańsk/Poznań</selected>
+        <show>
+            Inżynier Eksploatacji Obiektu,
+            Kierownik Techniczny,
+            Technik Eksploatacji Obiektu
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Maintenance &amp; Administration Łódź Store</selected>
+        <show>
+            Kierownik ds. Technicznych,
+            Pracownik Techniczny,
+            Pracownik ds. IT
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Maintenance &amp; Administration Warszawa Tr</selected>
+        <show>
+            Pracownik Techniczny,
+            Pracownik ds. IT,
+            Starszy Pracownik ds. Technicznych,
+            Site Facility Manager
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Maintenance Janki</selected>
+        <show>
+            Technik Eksploatacji Obiektu,
+            Inżynier Eksploatacji Obiektu
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Maintenance Łódź</selected>
+        <show>
+            Technik Eksploatacji Obiektu,
+            Inżynier Eksploatacji Obiektu,
+            Kierownik Techniczny PH Łódź
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Maintenance Targówek</selected>
+        <show>
+            Inżynier Eksploatacji Obiektu,
+            Technik Eksploatacji Obiektu,
+            Technik Eksploatacji Obiektu
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Maintenance Warszawa/Janki</selected>
+        <show>
+            Kierownik ds. Technicznych
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Maintenance  Wrocław Store</selected>
+        <show>
+            Kierownik ds. Technicznych,
+            Starszy Pracownik ds.Technicznych,
+            Pracownik ds. IT,
+            Pracownik Techniczny,
+            Pracownik Techniczny
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Maintenance &amp; Adminidtration Katowice Sto</selected>
+        <show>
+            Pracownik ds. IT,
+            Kierownik ds. Technicznych,
+            Pracownik ds.Technicznych,
+            Starszy Pracownik ds. Technicznych
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Maintenance &amp; Adminidtration Kraków Store</selected>
+        <show>
+            Pracownik Techniczny,
+            Pracownik ds. IT,
+            Kierownik ds. Technicznych,
+            Starszy Pracownik ds.Technicznych
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Maintenance &amp; Adminidtration Poznań Store</selected>
+        <show>
+            Starszy technik,
+            Pracownik ds. IT,
+            Pracownik Techniczny,
+            Kierownik ds. Technicznych
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Maintenance &amp; Administration Gdańsk Store</selected>
+        <show>
+            Starszy Pracownik ds. Technicznych,
+            Kierownik ds. Technicznych,
+            Pracownik ds. IT,
+            Pracownik Techniczny
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Maintenance Janki Store</selected>
+        <show>
+            Pracownik Techniczny,
+            Pracownik ds. IT,
+            Kierownik ds. Technicznych,
+            Starszy Pracownik ds.Technicznych
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Management Group Trading Area Centr. EU</selected>
+        <show>
+            Specjalista ds. Analiz,
+            Zarzadzajacy Projektem,
+            Doradca ds. Efekt. i Jakości Produkcji,
+            Deputy Trading Area Manager TACE PL,
+            Analityk Biznesu,
+            Kontroler Biznesów,
+            Senior Supply Planner TACE PL,
+            Business Navigation Manager
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Markethall Katowice Store</selected>
+        <show>
+            Kierownik Hali Targowej Katowice Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Marketing &amp; Range Presentation S306</selected>
+        <show>
+            Kier.ds.marketingu i prezent.asortymentu,
+            Specjalista ds. Projektowania Wnętrz
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Marketing Gdańsk Store</selected>
+        <show>
+            Specjalista ds. Programu Lojalnościowego,
+            Pracownik ds. Marketingu,
+            Specjalista ds. Marketingu,
+            Koordynator ds. Ochrony Środowiska,
+            Kierownik ds. Marketingu Lokalnego,
+            Kierownik ds. Marketingu
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Marketing IICP</selected>
+        <show>
+            Dyrektor ds. Marketingu,
+            Kierownik ds. PR,
+            Kierownik ds. Komunikacji z Konsumentami
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Marketing Intelligence</selected>
+        <show>
+            Kierownik ds. Strategii i Badań Rynku,
+            Koordynator ds. Katalogu,
+            Specjalista ds. Katalogu i Komunikacji
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Marketing Janki Store</selected>
+        <show>
+            Spec. ds. Market./Spec. ds. IKEA Family,
+            Kierownik ds. Marketingu Lokalnego,
+            Sprzedawca,
+            Certyfikowany Sprzedawca,
+            Koord. ds.Zrówn. Roz/Spec. ds.Komun.Wew
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Marketing Kraków Store</selected>
+        <show>
+            Koordynator ds. Ochrony Środowiska,
+            Pracownik ds. Marketingu,
+            Sprzedawca,
+            Specjalista ds. marketingu,
+            Kierownik ds. Marketingu,
+            Specjalista Ds Programu Lojalnosciowego
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Marketing Łódź</selected>
+        <show>
+            Kierownik ds. Marketingu,
+            Koordynator ds. Marketingu
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Marketing Łódź Store</selected>
+        <show>
+            Specjalista ds. Programu Lojalnościowego,
+            Specjalista ds. Marketingu,
+            Koordynator ds. Ochrony Środowiska,
+            Sprzedawca,
+            Kierownik ds. Marketingu Lokalnego
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Marketing Poznań Store</selected>
+        <show>
+            Kierownik ds. Marketingu Lokalnego,
+            Specjalista ds. Marketingu,
+            Specjalista ds. Programu Lojalnościowego,
+            Sprzedawca,
+            P.O. Kierownik ds. Marketingu
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Marketing Service Office</selected>
+        <show>
+            Dyrektor ds. Marketingu,
+            Manager Serwisu Internetowego,
+            Kierownik ds. Zrównoważonego Rozwoju,
+            Specjalista ds. PR
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Marketing Warszawa Targówek Store</selected>
+        <show>
+            Koordynator ds. Ochrony Środowiska,
+            Starszy Sprzedawca,
+            Kierownik ds. Marketingu Lokalnego,
+            Specjalista ds. Marketingu,
+            Specjalista IKEA Family,
+            Specjalista ds. Programu Lojalnościowego,
+            Family Specialist Targówek Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Marketing Wrocław Store</selected>
+        <show>
+            Specjalista ds. Programu Lojalnościowego,
+            Kierownik ds. Marketingu Lokalnego,
+            Specjalista ds. Marketingu,
+            Koordynator ds. Ochrony Środowiska
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Merchandising Katowice Store</selected>
+        <show>
+            Kierownik ds. Ekspozycji Katowice Store,
+            Pracownik ds. Ekspozycji Katowice Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Merchandising Targówek Store</selected>
+        <show>
+            Merchandise Manager,
+            Starszy Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Merchandising Wrocław Store</selected>
+        <show>
+            Pracownik ds. Ekspozycji
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Office&amp;Training Administrator IICP</selected>
+        <show>
+            Administrator Biura,
+            Recepcjonistka
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Operation  Wrocław/Katowice</selected>
+        <show>
+            Inżynier Eksploatacji Obiektu,
+            Technik Eksploatacji Obiektu,
+            Kierownik Operacyjny,
+            Technik Eksploatacji Obiektu
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Operation -Janki</selected>
+        <show>
+            Kierownik Operacyjny
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Operation Łódź</selected>
+        <show>
+            Kierownik Operacyjny
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Operations Wrocław Store</selected>
+        <show>
+            Księgowa,
+            Kontroler Administracyjny,
+            P.O. Specj. ds. Bezpieczeństwa i Ochrony,
+            Specjalista ds. Planowania Czasu Pracy,
+            P.O. Kontroler Administracyjny
+        </show>
+    </dependent>
+    <dependent>
+        <selected>P3 Project Service Office</selected>
+        <show>
+            Kier. ds. Wdrożenia Projektu Informat.,
+            Trener SGF Mobile,
+            Koordynator Projektu SGF Mobile,
+            Specjalista ds. Wdrożenia Projektu SRP
+        </show>
+    </dependent>
+    <dependent>
+        <selected>PA/PY Team Austria</selected>
+        <show>
+            Team Leader,
+            Specjalista ds. płac,
+            Specjalista Administracyjny ds. HR
+        </show>
+    </dependent>
+    <dependent>
+        <selected>PA/PY Team Denmark/Belgium</selected>
+        <show>
+            DK/BE Team Leader BSC,
+            Starszy Specjalista ds. Kadr i Płac,
+            Specjalista ds. Kadr i Płac,
+            Specjalista Administracyjny ds. HR,
+            Starszy Specjalista ds. Kadr i Płac
+        </show>
+    </dependent>
+    <dependent>
+        <selected>PA/PY Team Finland</selected>
+        <show>
+            Team Leader,
+            Specjalista Administracyjny ds. HR,
+            Specjalista ds. Kadr i Płac,
+            Specjalista ds. płac
+        </show>
+    </dependent>
+    <dependent>
+        <selected>PA/PY Team Germany</selected>
+        <show>
+            Team Leader,
+            Zastępca Team Leader&apos;a,
+            Starszy Specjalista ds. Płac,
+            Starszy Specjalista ds. Kadr i Płac,
+            Specjalista ds. Kadr i Płac,
+            Specjalista Administracyjny ds. HR
+        </show>
+    </dependent>
+    <dependent>
+        <selected>PA/PY Team Italy</selected>
+        <show>
+            Team Leader,
+            Zastępca Team Leader&apos;a,
+            Młodszy Specjalista ds. Kadr i Płac,
+            Mł. Spec. ds. Administracji Personalnej,
+            Specjalista ds. Kadr i Płac,
+            Specjalista ds. Płac,
+            Specjalista Administracyjny ds. HR
+        </show>
+    </dependent>
+    <dependent>
+        <selected>PA/PY Team Netherlands</selected>
+        <show>
+            Team Leader,
+            Specjalista Administracyjny ds. HR
+        </show>
+    </dependent>
+    <dependent>
+        <selected>PA/PY Team Poland</selected>
+        <show>
+            P.O. Team Leader PL,
+            Starszy Specjalista ds. Płac,
+            Starszy Specjalista ds. Kadr i Płac,
+            Specjalista ds. Kadr i Płac,
+            Specjalista Administracyjny ds. HR
+        </show>
+    </dependent>
+    <dependent>
+        <selected>PA/PY Team Portugal</selected>
+        <show>
+            Team Leader,
+            Starszy Specjalista ds. Kadr i Płac,
+            Specjalista Administracyjny ds. HR
+        </show>
+    </dependent>
+    <dependent>
+        <selected>PA/PY Team Slovakia/Czech/Hungary</selected>
+        <show>
+            Team Leader,
+            Specjalista ds. Płac,
+            Specjalista ds. Kadr i Płac,
+            Specjalista ds. Płac,
+            Starszy Specjalista ds. Kadr i Płac,
+            Specjalista ds. Płac,
+            Starszy Specjalista ds. Kadr i Płac,
+            Specjalista ds. Kadr i Płac,
+            Specjalista Administracyjny ds. HR,
+            Specjalista Administracyjny ds. HR
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Payroll/Compensation Service Office</selected>
+        <show>
+            Specjalista ds. Płac i Kadr,
+            Administrator ds. Personalnych,
+            Specjalista ds. Personalnych,
+            Starszy Spec.ds. Wynagrodzeń i Benefitów,
+            Starszy Specjalista ds. Kadr i Płac,
+            Starszy Specjalista ds. Kadr i Płac,
+            Kier. ds. Systemów Wynagrodzeń i Płac
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Payroll/Personnel Administration BSC</selected>
+        <show>
+            Kierownik Działu Kadr i Płac,
+            Team Leader
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Pigment &amp; Laquer TACE PL</selected>
+        <show>
+            Specjalista Ds. Logistyki,
+            Handlowiec,
+            PO Kierownik Działu Handlowego,
+            Business Development Manager,
+            Business Developer TACE PL,
+            Supply Developer Category BoF TACE PL,
+            Specjalista ds. Technicznych
+        </show>
+    </dependent>
+    <dependent>
+        <selected>PR Service Office</selected>
+        <show>
+            Kierownik ds. PR Grupy IKEA PL,
+            Specjalista ds. Komunikacji Wewnętrznej
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Product Quality TACE PL</selected>
+        <show>
+            Zastępca Kierownika Działu Jakości,
+            Specjalista ds. Jakości,
+            Chemical &amp; Environmental Spec.TACE PL,
+            Quality Auditor TACE PL,
+            Specjalista ds. Technicznych
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Project Development Service Office</selected>
+        <show>
+            Kierownik ds. Projektów,
+            Specjalista ds. Projektów,
+            Kierownik ds. Pozyskiwania Gruntów
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Project  I TACE</selected>
+        <show>
+            Zarzadzajacy Projektem,
+            Business Development Manager TACE
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Property Manager IICP</selected>
+        <show>
+            Dyrektor ds. Zarządzania C.H.,
+            Project Support Manager
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Qstore Service Office</selected>
+        <show>
+            Krajowy Kier. ds. Odzyskiwania Towarów
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Qstore SO</selected>
+        <show>
+            Kierownik Działu ds. Kontroli Jakości,
+            Technik Produktu
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Receive Payment &amp; Easy Buying Process SO</selected>
+        <show>
+            Kierownik ds. Obsługi Klienta
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Recevables IICP</selected>
+        <show>
+            Kontroler Należności,
+            Specjalista ds. Należności
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Recovery Gdańsk Store</selected>
+        <show>
+            Specjalista ds. jakości,
+            Kier. Dz. Odzys. Tow. i Kontroli Jakości,
+            Pracownik Działu Odzyskiwania Towaru,
+            Spec. ds. Odzys. Towaru i Kontr. Jakości
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Recovery Janki Store</selected>
+        <show>
+            Pracownik Działu Odzyskiwania Towaru,
+            Kier. dz. Odzys. Tow. i Kontroli Jakości,
+            Spec. ds. Odzys. Towaru i Kontr. Jakości
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Recovery Katowice Store</selected>
+        <show>
+            Pracownik Działu Odzyskiwania Towaru,
+            Spec. ds. Odzys. Towaru i Kontr. Jakości,
+            Kier. Działu Odzys.Tow.i KontroliJakości,
+            Specjalista ds. Jakości
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Recovery Kraków Store</selected>
+        <show>
+            Pracownik Działu Odzyskiwania Towaru,
+            Spec. ds. Odzys. Towaru i Kontr. Jakości,
+            Kier. Dz. Odzys. Tow. i Kontroli Jakości
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Recovery Łódź Store</selected>
+        <show>
+            Pracownik Działu Odzyskiwania Towaru,
+            Kier. Dz. Odzys. Tow. i Kontroli Jakości,
+            Spec. ds. Odzys. Towaru i Kontr. Jakości
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Recovery Poznań Store</selected>
+        <show>
+            Spec. ds. Odzys. Towaru i Kontr. Jakości,
+            Pracownik Działu Odzyskiwania Towaru,
+            Kier. Dz. Odzys. Tow. i Kontroli Jakości
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Recovery Warszawa Targówek Store</selected>
+        <show>
+            Spec. ds. Odzys. Towaru i Kontr. Jakości,
+            Pracownik Działu Odzyskiwania Towaru,
+            Kier. Dz. Odzys. Tow. i Kontroli Jakości
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Recovery Wrocław Store</selected>
+        <show>
+            Pracownik Działu Odzyskiwania Towaru,
+            PO Kier. dz. Odzys.Tow. i Kontr. Jakości,
+            Spec. ds. Odzys. Towaru i Kontr. Jakości,
+            Kier. dz. Odzys.Tow. i Kontr. Jakości
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Refilling Gdańsk Store</selected>
+        <show>
+            Pracownik Działu Uzupełniania Towaru,
+            Kierownik Działu Uzupełniania Towaru,
+            Specjalista ds. Uzupełniania Towaru,
+            Starszy Pracownik Działu Przepływu Tow.,
+            Pracownik Działu Przepływu Towaru,
+            Specjalista ds. Przepływu Towaru
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Refilling Janki Store</selected>
+        <show>
+            Pracownik Działu Uzupełniania Towaru,
+            Specjalista ds. Przepływu Towaru,
+            Pracownik Działu Przepływu Towaru,
+            Specjalista ds. Uzupełniania Towaru,
+            Kierownik Działu Uzupełniania Towaru
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Refilling Katowice Store</selected>
+        <show>
+            Pracownik Działu Uzupełniania Towaru,
+            Kierownik Działu Uzupełniania Towaru,
+            Specjalista ds. Uzupełniania Towaru
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Refilling Kraków Store</selected>
+        <show>
+            Pracownik Działu Uzupełniania Towaru,
+            Kierownik Działu Uzupełniania Towaru,
+            Specjalista ds. Uzupełniania Towaru
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Refilling Łódź Store</selected>
+        <show>
+            Pracownik Działu Uzupełniania Towaru,
+            Prac.DziałuUzup.Tow./Prac.ds.Wsp.Sprzed.,
+            p.o.Kierownik Działu Uzupełniania Towaru,
+            Specjalista ds. Uzupełniania Towaru,
+            Prac.Dział.Uzup.Tow./Prac.ds.Wsp.Sprzed.,
+            Kierownik Działu Uzupełniania Towaru
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Refilling Poznań Store</selected>
+        <show>
+            Kierownik Działu Uzupełniania Towaru,
+            Pracownik Działu Uzupełniania Towaru,
+            Specjalista ds. Uzupełniania Towaru,
+            Kierownik Magazynu
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Refilling Warszawa Targówek Store</selected>
+        <show>
+            Pracownik Działu Uzupełniania Towaru,
+            Specjalista ds. Uzupełniania Towaru,
+            Kierownik Działu Uzupełniania Towaru
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Refilling Wrocław Store</selected>
+        <show>
+            Pracownik Działu Uzupełniania Towaru,
+            Kierownik Działu Uzupełniania Towaru,
+            Starszy Pracownik Działu Uzupełniania To,
+            P.O.Kierownik Działu Uzupełniania Towaru,
+            Specjalista ds. Uzupełniania Towaru
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Restaurant Gdańsk Store</selected>
+        <show>
+            Pracownik Gastronomii,
+            Pracownik Restauracji,
+            Kucharz,
+            Starszy Kucharz,
+            Kierownik Restauracji
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Restaurant Janki Store</selected>
+        <show>
+            Starszy Pracownik Gastronomii,
+            Pracownik Gastronomii,
+            Starszy Kucharz,
+            Kucharz,
+            Pracownik Restauracji,
+            Kierownik Restauracji
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Restaurant Katowice Store</selected>
+        <show>
+            Pracownik Gastronomii,
+            Kucharz,
+            Pracownik Restauracji,
+            Kierownik Restauracji,
+            Starszy Pracownik Gastronomii,
+            Starszy Kucharz
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Restaurant Kraków Store</selected>
+        <show>
+            Pracownik Restauracji,
+            Pracownik Gastronomii,
+            Kucharz,
+            Starszy Kucharz,
+            Kierownik Restauracji,
+            Starszy Kucharz,
+            Starszy Pracownik Gastronomii,
+            Pracownik Gastronomii
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Restaurant Łódź Store</selected>
+        <show>
+            Kierownik Restauracji,
+            p.o. Kierownik Restauracji,
+            Starszy kucharz,
+            Starszy Pracownik Gastronomii,
+            Kierownik Bistro,
+            Pracownik Gastronomii,
+            Kucharz,
+            Pracownik Restauracji,
+            Kucharz / Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Restaurant Warszawa Targówek Store</selected>
+        <show>
+            Kierownik Restauracji,
+            Specjalista ds. Gastronomii,
+            Pracownik Gastronomii,
+            Starszy Pracownik Gastronomii,
+            Kucharz,
+            Pracownik Restauracji,
+            Starszy Kucharz,
+            IF Manager Trainee Targówek Store,
+            Pracownik Gastronomii
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Restaurant Wrocław Store</selected>
+        <show>
+            Kierownik Restauracji,
+            Starszy Pracownik Gastronomii,
+            Pracownik Gastronomii,
+            Starszy Kucharz,
+            Kucharz,
+            Specjalista ds. Gastronomii
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Retail Service Office Poland</selected>
+        <show>
+            Dyrektor ds. Sprzedaży Detalicznej,
+            Asystentka Dyrektora ds. Sprzedaży,
+            Kierownik Sklepu
+        </show>
+    </dependent>
+    <dependent>
+        <selected>S&amp;SS Gdańsk Store</selected>
+        <show>
+            Kier. ds. Wsp. Sprzed. i Zaop. W Sklepie,
+            Prac. ds. Wsp. Sprzed. i Zaop. W Sklepie,
+            Spec. ds. Wsp. Sprzed. i Zaop. W Sklepie,
+            P.O. Kier. ds. Wsp. Sprz. i  Zaop. w skl
+        </show>
+    </dependent>
+    <dependent>
+        <selected>S&amp;SS Janki Store</selected>
+        <show>
+            Prac. ds. Wsp. Sprzed. i Zaop. W Sklepie,
+            Pr.ds.Wsp.Sprz.iZaop.wSkl./pr.dz.Uz.Tow.,
+            Kier. ds. Wsp. Sprzed. i Zaop. w Sklepie,
+            Spec. ds. Wsp. Sprzed. i Zaop. W Sklepie
+        </show>
+    </dependent>
+    <dependent>
+        <selected>S&amp;SS Katowice Store</selected>
+        <show>
+            Spec. ds. Wsp. Sprzed. i Zaop. W Sklepie,
+            Prac. ds. Wsp. Sprzed. i Zaop. W Sklepie,
+            Kier. ds. Wsp. Sprzed. i Zaop. w Sklepie,
+            P.O.Kier.ds. Wsp. Sprzed. i Zaop. w Skl.
+        </show>
+    </dependent>
+    <dependent>
+        <selected>S&amp;SS Kraków Store</selected>
+        <show>
+            Spec. ds. Wsp. Sprzed. i Zaop. W Sklepie,
+            Kier. ds. Wsp. Sprzed. i Zaop. W Sklepie,
+            Prac. ds. Wsp. Sprzed. i Zaop. W Sklepie
+        </show>
+    </dependent>
+    <dependent>
+        <selected>S&amp;SS Łódź Store</selected>
+        <show>
+            Spec. ds. Wsp. Sprzed. i Zaop. w Sklepie,
+            Prac. ds. Wsp. Sprzed. i Zaop. W Sklepie,
+            Kier. ds. Wsp. Sprzed. i Zaop. W Sklepie,
+            Spec. ds. Wsp. Sprzed. i Zaop. W Sklepie,
+            p.o. Kierownika ds.wsp.sprzed.i zaop.,
+            Kierownik ds.wsp.sprzed.i zaop.
+        </show>
+    </dependent>
+    <dependent>
+        <selected>S&amp;SS Poznań Store</selected>
+        <show>
+            Spec. ds. Wsp. Sprzed. i Zaop. W Sklepie,
+            Kier.ds. Wsp. Sprzedaży i Zaop. w Sklep.
+        </show>
+    </dependent>
+    <dependent>
+        <selected>S&amp;SS Warszawa Targówek Store</selected>
+        <show>
+            Kier. ds. Wsp. Sprzed. i Zaop. w Sklepie,
+            Spec. ds. Wsp. Sprzed. i Zaop. w Sklepie
+        </show>
+    </dependent>
+    <dependent>
+        <selected>S&amp;SS Wrocław Store</selected>
+        <show>
+            Prac. ds. Wsp. Sprzed. i Zaop. W Sklepie,
+            Kier. ds. Wsp. Sprzed. i Zaop. w Sklepie,
+            Spec. ds. Wsp. Sprzed. i Zaop. w Sklepie
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Safe and Security</selected>
+        <show>
+            Dyrektor ds. Ochrony
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Sales Activity Service Office</selected>
+        <show>
+            Krajowy Kierownik ds. Sprzedaży,
+            Krajowy Kierownik ds.Akcji Sprzedażowych,
+            PO Krajow. Kier. ds.Akcji Sprzedażowych,
+            Koordynator ds. Komunikacji Produktowej,
+            Koordynator ds. Wsparcia Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Sales and Service Katowice Store</selected>
+        <show>
+            Kier.ds.Sprzedaży i Serwisów dla Klienta,
+            Kierownik Działu Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Sales Co-worker II</selected>
+        <show>
+            Starszy Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Sales Gdańsk Store</selected>
+        <show>
+            Kierownik ds. Sprzedaży,
+            Zastępca kierownika ds. sprzedaży,
+            Pomoc Sprzedawcy,
+            Koordynator ds.Klienta Biznesowego,
+            Specjalista ds. Systemu Ptag
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Sales Janki Store</selected>
+        <show>
+            Kierownik ds. Sprzedaży,
+            Zastępca Kierownika ds.Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Sales Kraków Store</selected>
+        <show>
+            Kierownik ds. Sprzedaży,
+            Zastępca Kierownika ds. Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Sales Łódź Store</selected>
+        <show>
+            Kierownik ds. Sprzedaży,
+            p.o. Kierownika ds. Sprzedaży,
+            Specjalista ds. Systemu Ptag
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Sales Poznań Store</selected>
+        <show>
+            Zastępca Kierownika ds.Sprzedaży,
+            Specjalista ds. Systemu Ptag,
+            Kierownik ds. Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Sales Service Gdańsk Store</selected>
+        <show>
+            Kierownik Działu Sprzedaży,
+            Starszy Sprzedawca,
+            Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Sales Service Office</selected>
+        <show>
+            Kierownik ds. Sprzedaży PL,
+            Krajowy Kierownik ds. Sprzedaży,
+            Kier. ds.Rozwoju Kluczowych Kompetencji,
+            Kierownik ds. Ekspansji Sprzedaży,
+            PO Kierownika ds. Sprzedaży PL,
+            Lider ds. Sprzedaży w Projekcie,
+            Zastępca Kierownika ds. Sprzedaży Pl,
+            Młodszy Kierownik ds. Sprzedaży,
+            Kierownik Projektu,
+            Kierownik ds. Ekspansji Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Sales Warszawa Targówek Store</selected>
+        <show>
+            Specjalista ds. Systemu Ptag,
+            Kierownik ds. Sprzedaży,
+            Zastępca Kierownika ds.Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Sales Wrocław Store</selected>
+        <show>
+            Zastępca Kierownika ds. Sprzedaży,
+            Sprzedawca,
+            Kierownik Sprzedaży,
+            Specjalista ds. Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Self Service Janki Store</selected>
+        <show>
+            Sprzedawca,
+            Starszy Sprzedawca,
+            Kierownik Działu Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Self Service Katowice Store</selected>
+        <show>
+            Sprzedawca,
+            Starszy Sprzedawca,
+            Shopkeeper Sales Katowice Store,
+            Kier.działu sprzedaży/Magazyn Samoob.306
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Self Service Kraków Store</selected>
+        <show>
+            Sprzedawca,
+            Kierownik Działu Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Self Service Łódź Store</selected>
+        <show>
+            Sprzedawca,
+            Starszy Sprzedawca,
+            Kierownik Działu Sprzedaży
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Self Service Poznań Store</selected>
+        <show>
+            Starszy Sprzedawca,
+            Sprzedawca,
+            Kier. Dz. Sprzedaży (Magazyn Samoobsług)
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Self Service Warszawa Targówek Store</selected>
+        <show>
+            Sprzedawca,
+            Kierownik Działu Sprzedaży (Selfserve),
+            Starszy Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Self Service Wrocław Store</selected>
+        <show>
+            Sprzedawca,
+            Kierownik Działu Sprzedaży (Selfserve),
+            Starszy Sprzedawca
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Service  Kraków Store</selected>
+        <show>
+            Kierownik ds. Relacji z Klientami
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Service Gdańsk Store</selected>
+        <show>
+            Kierownik ds. Relacji z Klientami
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Service Janki Store</selected>
+        <show>
+            Kierownik ds. Relacji z Klientami,
+            Kier ds.Kont. z Klientami na Szkoleniu,
+            Kierownik ds. Relacji z Klientami
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Service Łódź Store</selected>
+        <show>
+            Kierownik ds. Relacji Z Klientami
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Service Poznań Store</selected>
+        <show>
+            Kierownik ds. Relacji Z Klientami
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Service Product Service Office</selected>
+        <show>
+            Kierownik ds. Sprzedaży Usług SO
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Service Warszawa Targówek Store</selected>
+        <show>
+            Kierownik ds. Relacji z Klientami
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Service Wrocław Store</selected>
+        <show>
+            Kierownik ds. Relacji z Klientami
+        </show>
+    </dependent>
+    <dependent>
+        <selected>SO Property Management</selected>
+        <show>
+            Asystentka Działu Property,
+            Główny Inżynier
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Social &amp; Environmental I TACE</selected>
+        <show>
+            Social &amp; Environment Specialist TACE PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Sound and Picture</selected>
+        <show>
+            Specjalista ds. Technicznych,
+            Kierownik Działu Handlowego,
+            Koordynator ds. Logistyki
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Store Expansion Service Office</selected>
+        <show>
+            Kierownik ds. Planowania Sklepów
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Store Gdańsk 203</selected>
+        <show>
+            Kierownik Sklepu
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Store Janki 188</selected>
+        <show>
+            Kierownik Sklepu,
+            Zastepca Kierownika Sklepu
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Store Katowice 306</selected>
+        <show>
+            Kierownik Sklepu,
+            Kierownik ds. Gastronomii
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Store Kraków 204</selected>
+        <show>
+            Kierownik Sklepu
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Store Łódź 329</selected>
+        <show>
+            Kierownik Sklepu Na Szkoleniu,
+            Kierownik Sklepu,
+            P.O. Kierownika Sklepu
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Store Poznań 205</selected>
+        <show>
+            Kierownik Sklepu,
+            Zastępca Kierownika Sklepu Poznań
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Store Warszawa Targówek 307</selected>
+        <show>
+            Kierownik Sklepu,
+            Kierownik Sklepu na Szkoleniu,
+            Zastępca Kierownika Sklepu Targówek
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Store Wrocław 294</selected>
+        <show>
+            Zastępca Kierownika Sklepu Wrocław,
+            Starszy Sprzedawca,
+            Specjalista ds. Sprzedaży,
+            Sprzedawca,
+            Store Manager Wrocław Store
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Succession &amp; Recruitment Service Office</selected>
+        <show>
+            Kierownik ds. Rekrutacji i Sukcesji
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Supply Chain Integration Service Office</selected>
+        <show>
+            Kierownik ds. Integr. z Łańcuchem Dostaw,
+            Lider ds. Wsp. Projektów Logist. w Kraju,
+            Specjalista ds. Sprzedaży i Zaopatrzenia,
+            Specjalista ds. Sprzedaży i Zaopatrzenia,
+            Spec. ds.Plan.Przepł.Tow.i Pow. Magazyn.
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Supply Developer TACE PL</selected>
+        <show>
+            Supply Developer TACE PL
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Sustainability Poznań Store</selected>
+        <show>
+            Koordynator ds. Ochrony Środowiska
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Sustainability TACE PL</selected>
+        <show>
+            Specjalista ds. Ochrony Środowiska,
+            Forestry Specialist TACE PL,
+            Spec. ds. Zrównoważonego Rozwoju,
+            Sustainability Manager TACE CZ
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Tenant Coordinaton IICP</selected>
+        <show>
+            Koordynator Najemców,
+            Kierownik ds. Koordynacji Najemców,
+            Architekt
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Tenant Relations  Wrocław/Katowice</selected>
+        <show>
+            Kierownik ds. Przychodów Dodatkowych,
+            Kierownik ds. Relacji z Najemcami
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Tenant Relations Gdańsk/Poznań</selected>
+        <show>
+            Kierownik ds. Relacji z Najemcami,
+            Kierownik ds. Przychodów Dodatkowych
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Tenant relations Janki</selected>
+        <show>
+            P.O. Kierownik ds. Relacji z Najemcami,
+            Kierownik ds. Przychodów Dodatkowych
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Tenant relations Łódź</selected>
+        <show>
+            Recepcjonista,
+            Kierownik ds. Przychodów Dodatkowych,
+            Kierownik ds. Relacji z Najemcami
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Trading Area Central Europe</selected>
+        <show>
+            Starszy Konsultant Biura Rep Handlowej,
+            Dyrektor Biura Reprezentacji Handlowej,
+            Flat Line/Forestry/Raw mat.Project Mgr,
+            Kierownik Działu Handlowego,
+            Zast. Dyr..Biura Reprezentacji Handlowej
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Transition BSC</selected>
+        <show>
+            HR Process Leader BSC,
+            Kierownik ds. Przenoszenia Procesów HR
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Transition HR BSC</selected>
+        <show>
+            Kierownik ds. Przenoszenia Procesów HR,
+            Specjalista ds. przenoszenia procesów HR,
+            Transition Specialist HRSS
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Treasury Service Office</selected>
+        <show>
+            Z-Ca Dyrektora Finansowego,
+            Spec. ds. Zarządzania Płynnością Finans.,
+            Adm. ds. Zarządzania Płynnością Finans.,
+            St. Spec. ds.Zarządz. Płynnością Finans.,
+            Kierownik ds. Zarządzania Płynnością Fin,
+            Specjalista ds. Systemów i Projektów
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Vendor Master Data BSC</selected>
+        <show>
+            Team Leader Vendor Master Data,
+            Mł. Specjalista ds. Admin. Bazy Danych
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Visual Merchandising  Kraków Store</selected>
+        <show>
+            Kier. ds. Wystawienn. i Akcji Komercyjn.,
+            Pierwszy Specjalista ds. Wystawiennictwa,
+            Spec. ds. Wystawienn. i Akcji Komercyjn.,
+            Spec. ds. Wystawienn. i Akcji Komercyjn.,
+            Spec. ds. Wystawienn. i Akcji Komercyjn.,
+            Specjalista ds. Wystawiennictwa,
+            Specj. ds. wystawienn. i akcji komercyj.,
+            Spec. ds. Wystawienn. i Akcji Komercyjn.
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Visual Merchandising Gdańsk Store</selected>
+        <show>
+            Specj. ds. wystawienn. i akcji komercyj.,
+            Spec. ds. Wystaw. i Akcji Komerycyjnych,
+            Pierwszy Specjalista ds. Wystawiennictwa,
+            Specj. ds. wystawienn. i akcji komercyj.,
+            Specjalista ds. Wystawiennictwa,
+            Spec.ds. Wystaw. i Akcji Komercyjnych,
+            Specj. ds. wystawienn. i akcji komercyj.,
+            Specjalista ds. Wystaw. i Akcji Marketin,
+            Kierownik ds. Wystawiennictwa,
+            Kierownik ds. Projektowania Wnętrz
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Visual Merchandising Janki Store</selected>
+        <show>
+            Spec. ds. Wystaw. i Akcji Komerycj,
+            Spec. ds. Wystaw. i Akcji Komerycyjnych,
+            Spec. ds. Wystaw. i Akcji Komerycj,
+            Spec. ds. Wystaw. i Akcji Komerycj,
+            Specjalista ds. Wystawiennictwa,
+            Prac. Tech. Działu Wystaw. i Komunikacji,
+            Pierwszy Specjalista ds. Wystawiennictwa,
+            St.Spec.ds. Wystaw. i Akcji Komerc,
+            Spec.ds. Wystaw. i Akcji Komercyjnych,
+            Kierownik ds. Wystaw. i Akcji Komerc.
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Visual Merchandising Katowice Store</selected>
+        <show>
+            Specjalista ds. Wystawiennictwa,
+            Starszy Specjalista ds. Wystawiennictwa,
+            Specjalista-Stolarz
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Visual Merchandising Łódź Store</selected>
+        <show>
+            Specjalista ds. Wystaw. i Akcji Komer.,
+            Specjalista ds. Wystawiennictwa,
+            Pierwszy Specjalista ds. Wystawiennictwa,
+            Kierownik ds. Wystaw. i Akcji Komercyjn.
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Visual Merchandising Poznań Store</selected>
+        <show>
+            Specjalista ds. Wystawiennictwa,
+            Pierwszy Specjalista ds. Wystawiennictwa,
+            St. Spec. ds. Wystaw. i Akcji Market.,
+            P.O. Kier. ds. Wystaw. i Akcji Market.,
+            Spec. ds. Wystaw. i Akcji Komercyjnych
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Visual Merchandising Warszawa Targówek S</selected>
+        <show>
+            Spec. ds. Wystaw. i Akcji Komerycyjnych,
+            Spec. ds. Wystaw. i Akcji Komerycyjnych,
+            Pierwszy Specjalista ds. Wystawiennictwa,
+            Specjalista ds. Wystawiennictwa,
+            Kierownik ds. Wystawiennictwa
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Visual Merchandising Wrocław Store</selected>
+        <show>
+            Kier. ds.Wystawiennictwa i Akcji Komerc.,
+            Specj. ds. Wystaw. i Akcji Komercyjnych,
+            Starszy Specj. ds. Wystaw. i Akcji Komer
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Warehouse Gdańsk Store</selected>
+        <show>
+            Pracownik Działu Przepływu Towaru,
+            Starszy Pracownik Działu Przepływu Tow.,
+            Specjalista ds. Przepływu Towaru,
+            Kierownik Magazynu
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Warehouse Janki Store</selected>
+        <show>
+            Pracownik Działu Przepływu Towaru,
+            Specjalista ds. Przepływu Towaru,
+            Starszy Pracownik Działu Przepływu Tow.,
+            Kierownik Magazynu
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Warehouse Katowice Store</selected>
+        <show>
+            Pracownik Działu Przepływu Towaru,
+            Specjalista ds. Przepływu Towaru,
+            Kierownik Magazynu,
+            Starszy Pracownik Działu Przepływu Tow.
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Warehouse Kraków Store</selected>
+        <show>
+            Pracownik Działu Przepływu Towaru,
+            Specjalista ds. Przepływu Towaru,
+            Kierownik Magazynu,
+            Starszy Pracownik Działu Przepływu Tow.
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Warehouse Łódź Store</selected>
+        <show>
+            Pracownik Działu Przepływu Towaru,
+            Specjalista ds. Przepływu Towaru,
+            Kierownik Magazynu,
+            Lider Zespołu Przepływu Towarów,
+            Starszy Pracownik Działu Przepł.Towaru
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Warehouse Poznań Store</selected>
+        <show>
+            Pracownik Działu Przepływu Towaru,
+            Kierownik Magazynu,
+            Starszy Pracownik Działu Przepływu Tow.,
+            Specjalista ds. Przepływu Towaru
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Warehouse Warszawa Targówek Store</selected>
+        <show>
+            Pracownik Działu Przepływu Towaru,
+            Specjalista ds. Przepływu Towaru,
+            Starszy Pracownik Działu Przepływu Tow.,
+            Kierownik Magazynu
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Warehouse Wrocław Store</selected>
+        <show>
+            Kierownik Magazynu,
+            Starszy Pracownik Działu Przepł.Towaru,
+            Pracownik Działu Przepływu Towaru,
+            Specjalista ds. Przepływu Towaru
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Warszawa/Janki Shopping Centre</selected>
+        <show>
+            Asystentka Centrum Handlowego,
+            Kierownik ds. Marketingu.,
+            Kierownik PH Janki/Targówek
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Wrocław/Katowice Shopping Centre</selected>
+        <show>
+            Kierownik Centrów PH Bielany/Rawa,
+            p.o. Kierownik Centrów PH Bielany/Rawa,
+            Kierownik ds. Marketingu,
+            Shopping Centre Assistant
+        </show>
+    </dependent>
+</predefined>

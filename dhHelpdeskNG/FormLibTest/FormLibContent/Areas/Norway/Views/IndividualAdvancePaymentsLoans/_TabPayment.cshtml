@@ -1,0 +1,61 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<div class="tab-pane" id="payment">
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Advance Payment / Loan Details")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PaymentType")</td>
+                    <td>
+                        @Model.Element("PaymentType")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ChangeType")</td>
+                    <td>
+                        @Model.Element("ChangeType")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PaymentAmount")</td>
+                    <td>
+                        @Model.Element("PaymentAmount")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PaidPer")</td>
+                    <td>
+                        @Model.Element("PaidPer")
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    var lockedbyUserGroup = document.getElementById('LockedByUserGroup').getAttribute('status');    
+    var isTabReadOnly = "@Model.ReadOnlyTab("#payment")";
+
+    if ("@Model.ReadOnlyTab("#payment")" == 'False' && lockedbyUserGroup == 'False') {
+        $(function () {
+            $('#PaymentType').change(function () {
+                LockChangeType();
+            });
+            LockChangeType();
+        });
+
+        var LockChangeType = function () {
+            var $BaseSelector = $('#PaymentType');
+            var $LockSelector = $('#ChangeType');
+            GetXMLandCallback("norway", "Locks/PaymentType.xml", SetLock, $BaseSelector, $LockSelector, lockedbyUserGroup, isTabReadOnly);
+        };
+    }
+</script>

@@ -1,0 +1,604 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE form [
+  <!ENTITY languages SYSTEM "Templates/Languages.xml">
+  <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
+  <!ENTITY state SYSTEM "Templates/AdditionalPaymentsDeductionState.xml">
+  <!ENTITY dat_allowance SYSTEM "Templates/Data_AllowancesTypeAddPayDed.xml">
+  <!--<!ENTITY pre_allowancestype_allowancesnetgross SYSTEM "Templates/Predefined_Allowances_NetGross.xml">
+  <!ENTITY pre_allowancestype2_allowancesnetgross2 SYSTEM "Templates/Predefined_Allowances2_NetGross2.xml">
+  <!ENTITY pre_allowancestype3_allowancesnetgross3 SYSTEM "Templates/Predefined_Allowances3_NetGross3.xml">
+  <!ENTITY pre_deductionstype_deductionsnetgross SYSTEM "Templates/Predefined_Deductions_NetGross.xml">
+  <!ENTITY pre_deductionstype2_deductionsnetgross2 SYSTEM "Templates/Predefined_Deductions2_NetGross2.xml">
+  <!ENTITY pre_deductionstype3_deductionsnetgross3 SYSTEM "Templates/Predefined_Deductions3_NetGross3.xml">-->
+]>
+
+<form id="110" guid="AA504BCD-95EA-4CCF-9C4E-5D10C3F08E34" customerId="30">
+  &languages;
+  &regexs;
+  &state;
+
+  <fields>
+
+    <!--Tab ServiceRequestDetails-->
+    <tab name="#ServiceRequestDetails" label="Service Request Details">
+      <element name="Co-WorkerGlobalviewID" type="text" label="Co-Worker Globalview ID" mandatory="1">
+        <regex inherit="employeeno" message="" pattern=""></regex>
+      </element>
+      <element name="FirstName" type="text" label="Co-Worker First Name" mandatory="1"></element>
+      <element name="LastName" type="text" label="Co-Worker Last Name" mandatory="1"></element>
+      <element name="IKEAEmailAddress" type="text" label="IKEA Email Address">
+        <regex inherit="email" message="" pattern=""></regex>
+      </element>
+      <element name="IKEANetworkID" type="text" label="IKEA Network ID" mandatory="1">
+        
+      </element>
+      <element name="Company" type="text" label="Company"></element>
+      <element name="BusinessUnit" type="text" label="Business Unit" mandatory="1"></element>
+      <element name="ServiceArea" type="text" label="Function"></element>
+      <element name="Department" type="text" label="Department"></element>
+      <element name="ChangeValidFrom" type="date" label="Change Valid from:" mandatory="1" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="ChangeValidTo" type="date" label="Change Valid to:" mandatory="1" default="31.12.9999" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard">
+        <options>
+          <option value=""></option>
+          <option value="Urgent">Urgent</option>
+          <option value="Standard">Standard</option>
+        </options>
+      </element>
+
+      <element type="hidden" name="PermanentAddressLine1" label="Address line 1" formfieldidentifier="E1P0006.STRAS:1"></element>
+      <element type="hidden" name="PermanentAddressLine2" label="Address line 2" formfieldidentifier="E1P0006.HSNMR:1"></element>
+      <element type="hidden" name="PermanentAddressLine3" label="Address line 3" formfieldidentifier="E1P0006.POSTA:1"></element>
+      <element type="hidden" name="PermanentPostalCode" label="Postal code" formfieldidentifier="E1P0006.PSTLZ:1"></element>
+      <element type="hidden" name="PermanentCity" label="City" formfieldidentifier="E1P0006.ORT01:1"></element>
+      <element type="hidden" name="PermanentCountry" label="Country" formfieldidentifier="E1P0006.LAND1:1"></element>
+      <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
+    </tab>
+
+    <tab name="#Payment" label="Payment Information">
+
+      <element type="hidden" name="Allowances" default="1"></element>
+      <element type="select" name="AllowancesChangeType" label="Change Type">
+        <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="Start">Start</option>
+          <option value="Change">Change</option>
+          <option value="Stop">Stop</option>
+        </options>
+      </element>
+      <element type="select" name="AllowancesType" label="Allowance Type">
+        &dat_allowance;
+      </element>
+      <!--<element type="select" name="AllowancesPaymentType" label="Payment Type">
+        <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="One Time">One Time</option>
+          <option value="Recurring">Recurring</option>
+        </options>
+      </element>-->
+      <element type="text" name="AllowancesAmountUnits" label="Amount/Units">
+        <mandatoryIf name="AllowancesChangeType">Start,Change</mandatoryIf>
+        <!--<mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>-->
+        <!--<regex inherit="unsignednum" pattern="" message=""></regex>-->
+        <!--check all values except for: Fork Lift Payment for Hours Worked, Keep in touch allowance-->
+        <regexIf inherit="unsignednum" pattern="" message="" name="AllowancesType">Advanced,Annualised Hours Allowance,Car Allowance,Cash Adjustment,Commission,Competance Pay,Double Day Shift Premium,Electricity Home Workers,First Aid Allowance,First Aid Allowance - Hourly,First Aid Allowance - Salaried,Fork Lift Truck Allowance,Hourly ACE,Hourly AHP,Hourly Day,Hourly Rate Deputy Team Leader,Housing Allowance,IKEA1 Skills,IKEA2 Skills,Kitchen Skills - Hourly,Kitchen Skills - SalariedLoaders,Location Allowance - Hourly,Location Allowance - Salaried,Manual Hand,MHE Trainer Allowance,MHS/H&amp;S,Mortgage Subsidy,NTG Double Housing,NTG Housing Costs,NTG Relocation Allow,NTG Rent Allowance,Pallet Resue,Relocation Allowance,Rent Allowance,Responsibility Allowance,Responsibility Allowance - Hourly,Responsibility Allowance - Salaried,Salary Day Ann Allow,Salary Day Shift,Secondment,Shunter Allow,Stand By Allowance</regexIf>
+      </element>
+      <element type="select" name="AllowancesPaidPer" label="Paid per">
+        <options>
+          <option value=""></option>
+          <option value="hour">hour</option>
+          <option value="month">month</option>
+          <option value="annum">annum</option>
+          <option value="one off">one off</option>
+        </options>
+      </element>
+      <!--<element type="select" name="AllowancesNetGross" label="Net/Gross">
+        <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="Net">Net</option>
+          <option value="Gross">Gross</option>
+        </options>
+      </element>-->
+      <element type="date" name="AllowancesValidFrom" label="Valid from:" format="dd.MM.yyyy">
+        <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>
+        <regex inherit="date" pattern="" message=""></regex>
+        <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
+      </element>
+      <element type="date" name="AllowancesValidTo" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <!--<mandatoryIf name="AllowancesPaymentType">Recurring</mandatoryIf>-->
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+
+      <element type="select" name="AllowancesChangeType2" label="Change Type">
+        <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="Start">Start</option>
+          <option value="Change">Change</option>
+          <option value="Stop">Stop</option>
+        </options>
+      </element>
+      <element type="select" name="AllowancesType2" label="Allowance Type" >
+        &dat_allowance;
+      </element>
+      <!--<element type="select" name="AllowancesPaymentType2" label="Payment Type">
+        <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="One Time">One Time</option>
+          <option value="Recurring">Recurring</option>
+        </options>
+      </element>-->
+      <element type="text" name="AllowancesAmountUnits2" label="Amount/Units" >
+        <mandatoryIf name="AllowancesChangeType2">Start,Change</mandatoryIf>
+        <!--<mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>-->
+        <!--<regex inherit="unsignednum" pattern="" message=""></regex>-->
+        <!--<regex inherit="unsignednum" pattern="" message=""></regex>-->
+        <!--check all values except for: Fork Lift Payment for Hours Worked, Keep in touch allowance-->
+        <regexIf inherit="unsignednum" pattern="" message="" name="AllowancesType2">Advanced,Annualised Hours Allowance,Car Allowance,Cash Adjustment,Commission,Competance Pay,Double Day Shift Premium,Electricity Home Workers,First Aid Allowance,First Aid Allowance - Hourly,First Aid Allowance - Salaried,Fork Lift Truck Allowance,Hourly ACE,Hourly AHP,Hourly Day,Hourly Rate Deputy Team Leader,Housing Allowance,IKEA1 Skills,IKEA2 Skills,Kitchen Skills - Hourly,Kitchen Skills - SalariedLoaders,Location Allowance - Hourly,Location Allowance - Salaried,Manual Hand,MHE Trainer Allowance,MHS/H&amp;S,Mortgage Subsidy,NTG Double Housing,NTG Housing Costs,NTG Relocation Allow,NTG Rent Allowance,Pallet Resue,Relocation Allowance,Rent Allowance,Responsibility Allowance,Responsibility Allowance - Hourly,Responsibility Allowance - Salaried,Salary Day Ann Allow,Salary Day Shift,Secondment,Shunter Allow,Stand By Allowance</regexIf>
+      </element>
+      <element type="select" name="AllowancesPaidPer2" label="Paid per">
+        <options>
+          <option value=""></option>
+          <option value="hour">hour</option>
+          <option value="month">month</option>
+          <option value="annum">annum</option>
+          <option value="one off">one off</option>
+        </options>
+      </element>
+      <!--<element type="select" name="AllowancesNetGross2" label="Net/Gross" >
+        <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="Net">Net</option>
+          <option value="Gross">Gross</option>
+        </options>
+      </element>-->
+      <element type="date" name="AllowancesValidFrom2" label="Valid from:" format="dd.MM.yyyy">
+        <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>
+        <regex inherit="date" pattern="" message=""></regex>
+        <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
+      </element>
+      <element type="date" name="AllowancesValidTo2" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <!--<mandatoryIf name="AllowancesPaymentType2">Recurring</mandatoryIf>-->
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+
+      <element type="select" name="AllowancesChangeType3" label="Change Type" >
+        <mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="Start">Start</option>
+          <option value="Change">Change</option>
+          <option value="Stop">Stop</option>
+        </options>
+      </element>
+      <element type="select" name="AllowancesType3" label="Allowance Type" >
+        &dat_allowance;
+      </element>
+      <!--<element type="select" name="AllowancesPaymentType3" label="Payment Type">
+        <mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="One Time">One Time</option>
+          <option value="Recurring">Recurring</option>
+        </options>
+      </element>-->
+      <element type="text" name="AllowancesAmountUnits3" label="Amount/Units" >
+        <mandatoryIf name="AllowancesChangeType3">Start,Change</mandatoryIf>
+        <!--<mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>-->
+        <!--<regex inherit="unsignednum" pattern="" message=""></regex>-->
+        <!--<regex inherit="unsignednum" pattern="" message=""></regex>-->
+        <!--check all values except for: Fork Lift Payment for Hours Worked, Keep in touch allowance-->
+        <regexIf inherit="unsignednum" pattern="" message="" name="AllowancesType3">Advanced,Annualised Hours Allowance,Car Allowance,Cash Adjustment,Commission,Competance Pay,Double Day Shift Premium,Electricity Home Workers,First Aid Allowance,First Aid Allowance - Hourly,First Aid Allowance - Salaried,Fork Lift Truck Allowance,Hourly ACE,Hourly AHP,Hourly Day,Hourly Rate Deputy Team Leader,Housing Allowance,IKEA1 Skills,IKEA2 Skills,Kitchen Skills - Hourly,Kitchen Skills - SalariedLoaders,Location Allowance - Hourly,Location Allowance - Salaried,Manual Hand,MHE Trainer Allowance,MHS/H&amp;S,Mortgage Subsidy,NTG Double Housing,NTG Housing Costs,NTG Relocation Allow,NTG Rent Allowance,Pallet Resue,Relocation Allowance,Rent Allowance,Responsibility Allowance,Responsibility Allowance - Hourly,Responsibility Allowance - Salaried,Salary Day Ann Allow,Salary Day Shift,Secondment,Shunter Allow,Stand By Allowance</regexIf>
+      </element>
+      <element type="select" name="AllowancesPaidPer3" label="Paid per">
+        <options>
+          <option value=""></option>
+          <option value="hour">hour</option>
+          <option value="month">month</option>
+          <option value="annum">annum</option>
+          <option value="one off">one off</option>
+        </options>
+      </element>
+      <!--<element type="select" name="AllowancesNetGross3" label="Net/Gross" >
+        <mandatoryIfNotEmpty name="AllowancesPaymentType3"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="Net">Net</option>
+          <option value="Gross">Gross</option>
+        </options>
+      </element>-->
+      <element type="date" name="AllowancesValidFrom3" label="Valid from:"  format="dd.MM.yyyy">
+        <mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>
+        <regex inherit="date" pattern="" message=""></regex>
+        <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
+      </element>
+      <element type="date" name="AllowancesValidTo3" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <!--<mandatoryIf name="AllowancesPaymentType">Recurring</mandatoryIf>-->
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+
+      <!--4-->
+      <element type="select" name="AllowancesChangeType4" label="Change Type" >
+        <mandatoryIfNotEmpty name="AllowancesType4"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="Start">Start</option>
+          <option value="Change">Change</option>
+          <option value="Stop">Stop</option>
+        </options>
+      </element>
+      <element type="select" name="AllowancesType4" label="Allowance Type" >
+        &dat_allowance;
+      </element>
+      <element type="text" name="AllowancesAmountUnits4" label="Amount/Units" >
+        <mandatoryIf name="AllowancesChangeType4">Start,Change</mandatoryIf>
+        <!--<mandatoryIfNotEmpty name="AllowancesType4"></mandatoryIfNotEmpty>-->
+        <!--<regex inherit="unsignednum" pattern="" message=""></regex>-->
+        <!--<regex inherit="unsignednum" pattern="" message=""></regex>-->
+        <!--check all values except for: Fork Lift Payment for Hours Worked, Keep in touch allowance-->
+        <regexIf inherit="unsignednum" pattern="" message="" name="AllowancesType4">Advanced,Annualised Hours Allowance,Car Allowance,Cash Adjustment,Commission,Competance Pay,Double Day Shift Premium,Electricity Home Workers,First Aid Allowance,First Aid Allowance - Hourly,First Aid Allowance - Salaried,Fork Lift Truck Allowance,Hourly ACE,Hourly AHP,Hourly Day,Hourly Rate Deputy Team Leader,Housing Allowance,IKEA1 Skills,IKEA2 Skills,Kitchen Skills - Hourly,Kitchen Skills - SalariedLoaders,Location Allowance - Hourly,Location Allowance - Salaried,Manual Hand,MHE Trainer Allowance,MHS/H&amp;S,Mortgage Subsidy,NTG Double Housing,NTG Housing Costs,NTG Relocation Allow,NTG Rent Allowance,Pallet Resue,Relocation Allowance,Rent Allowance,Responsibility Allowance,Responsibility Allowance - Hourly,Responsibility Allowance - Salaried,Salary Day Ann Allow,Salary Day Shift,Secondment,Shunter Allow,Stand By Allowance</regexIf>
+      </element>
+      <element type="select" name="AllowancesPaidPer4" label="Paid per">
+        <options>
+          <option value=""></option>
+          <option value="hour">hour</option>
+          <option value="month">month</option>
+          <option value="annum">annum</option>
+          <option value="one off">one off</option>
+        </options>
+      </element>
+      <element type="date" name="AllowancesValidFrom4" label="Valid from:"  format="dd.MM.yyyy">
+        <mandatoryIfNotEmpty name="AllowancesType4"></mandatoryIfNotEmpty>
+        <regex inherit="date" pattern="" message=""></regex>
+        <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
+      </element>
+      <element type="date" name="AllowancesValidTo4" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <!--4-->
+      
+      <!--5-->
+      <element type="select" name="AllowancesChangeType5" label="Change Type" >
+        <mandatoryIfNotEmpty name="AllowancesType5"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="Start">Start</option>
+          <option value="Change">Change</option>
+          <option value="Stop">Stop</option>
+        </options>
+      </element>
+      <element type="select" name="AllowancesType5" label="Allowance Type" >
+        &dat_allowance;
+      </element>
+      <element type="text" name="AllowancesAmountUnits5" label="Amount/Units" >
+        <mandatoryIf name="AllowancesChangeType5">Start,Change</mandatoryIf>
+        <!--<mandatoryIfNotEmpty name="AllowancesType5"></mandatoryIfNotEmpty>-->
+        <!--<regex inherit="unsignednum" pattern="" message=""></regex>-->
+        <!--<regex inherit="unsignednum" pattern="" message=""></regex>-->
+        <!--check all values except for: Fork Lift Payment for Hours Worked, Keep in touch allowance-->
+        <regexIf inherit="unsignednum" pattern="" message="" name="AllowancesType5">Advanced,Annualised Hours Allowance,Car Allowance,Cash Adjustment,Commission,Competance Pay,Double Day Shift Premium,Electricity Home Workers,First Aid Allowance,First Aid Allowance - Hourly,First Aid Allowance - Salaried,Fork Lift Truck Allowance,Hourly ACE,Hourly AHP,Hourly Day,Hourly Rate Deputy Team Leader,Housing Allowance,IKEA1 Skills,IKEA2 Skills,Kitchen Skills - Hourly,Kitchen Skills - SalariedLoaders,Location Allowance - Hourly,Location Allowance - Salaried,Manual Hand,MHE Trainer Allowance,MHS/H&amp;S,Mortgage Subsidy,NTG Double Housing,NTG Housing Costs,NTG Relocation Allow,NTG Rent Allowance,Pallet Resue,Relocation Allowance,Rent Allowance,Responsibility Allowance,Responsibility Allowance - Hourly,Responsibility Allowance - Salaried,Salary Day Ann Allow,Salary Day Shift,Secondment,Shunter Allow,Stand By Allowance</regexIf>
+      </element>
+      <element type="select" name="AllowancesPaidPer5" label="Paid per">
+        <options>
+          <option value=""></option>
+          <option value="hour">hour</option>
+          <option value="month">month</option>
+          <option value="annum">annum</option>
+          <option value="one off">one off</option>
+        </options>
+      </element>
+      <element type="date" name="AllowancesValidFrom5" label="Valid from:"  format="dd.MM.yyyy">
+        <mandatoryIfNotEmpty name="AllowancesType5"></mandatoryIfNotEmpty>
+        <regex inherit="date" pattern="" message=""></regex>
+        <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
+      </element>
+      <element type="date" name="AllowancesValidTo5" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <!--5-->
+
+
+
+      <element type="hidden" name="Deductions" default="1"></element>
+      <element type="select" name="DeductionsChangeType" label="Change Type">
+        <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="Start">Start</option>
+          <option value="Change">Change</option>
+          <option value="Stop">Stop</option>
+        </options>
+      </element>
+      <element type="select" name="DeductionsType" label="Deduction Type" >
+        <!--&pre_deductionstype_deductionsnetgross;-->
+        <options>
+          <option value=""></option>
+          <option value="Badge Charge">Badge Charge</option>
+          <option value="Company Car">Company Car</option>
+          <option value="Uniform Deduction">Uniform Deduction</option>
+          <option value="ID Card">ID Card</option>
+          <option value="TEC Expenses Deduction">TEC Expenses Deduction</option>
+          <option value="Parking Fee">Parking Fee</option>
+          <option value="Travel Allowance">Travel Allowance</option>
+          <option value="PHI-Private Health Ins">PHI-Private Health Ins</option>
+          <option value="Rent Deduction">Rent Deduction</option>
+        </options>
+      </element>
+      <!--<element type="select" name="DeductionsPaymentType" label="Payment Type" >
+        <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="One Time">One Time</option>
+          <option value="Recurring">Recurring</option>
+        </options>
+      </element>-->
+      <element type="text" name="DeductionsAmountUnits" label="Amount/Units" >
+        <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+      </element>
+      <element type="select" name="DeductedPer" label="Deducted per:">
+        <options>
+          <option value=""></option>
+          <option value="month">month</option>
+          <option value="one off">one off</option>
+        </options>
+      </element>
+      <!--<element type="select" name="DeductionsNetGross" label="Net/Gross" >
+        <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="Net">Net</option>
+          <option value="Gross">Gross</option>
+        </options>
+      </element>-->
+      <element type="date" name="DeductionsValidFrom" label="Valid from:" format="dd.MM.yyyy">
+        <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
+        <regex inherit="date" pattern="" message=""></regex>
+        <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
+      </element>
+      <element type="date" name="DeductionsValidTo" label="Valid to:" default="31.12.9999" format="dd.MM.yyyy">
+        <!--<mandatoryIf name="DeductionsPaymentType">Recurring</mandatoryIf>-->
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+
+      <element type="select" name="DeductionsChangeType2" label="Change Type">
+        <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="Start">Start</option>
+          <option value="Change">Change</option>
+          <option value="Stop">Stop</option>
+        </options>
+      </element>
+      <element type="select" name="DeductionsType2" label="Deduction Type" >
+        <!--&pre_deductionstype2_deductionsnetgross2;-->
+        <options>
+          <option value=""></option>
+          <option value="Badge Charge">Badge Charge</option>
+          <option value="Company Car">Company Car</option>
+          <option value="Uniform Deduction">Uniform Deduction</option>
+          <option value="ID Card">ID Card</option>
+          <option value="TEC Expenses Deduction">TEC Expenses Deduction</option>
+          <option value="Travel Allowance">Travel Allowance</option>
+          <option value="Parking Fee">Parking Fee</option>
+          <option value="PHI-Private Health Ins">PHI-Private Health Ins</option>
+          <option value="Rent Deduction">Rent Deduction</option>
+
+        </options>
+      </element>
+      <!--<element type="select" name="DeductionsPaymentType2" label="Payment Type" >
+        <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="One Time">One Time</option>
+          <option value="Recurring">Recurring</option>
+        </options>
+      </element>-->
+      <element type="text" name="DeductionsAmountUnits2" label="Amount/Units" >
+        <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+      </element>
+      <element type="select" name="DeductedPer2" label="Deducted per:">
+        <options>
+          <option value=""></option>
+          <option value="month">month</option>
+          <option value="one off">one off</option>
+        </options>
+      </element>
+      <!--<element type="select" name="DeductionsNetGross2" label="Net/Gross" >
+        <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="Net">Net</option>
+          <option value="Gross">Gross</option>
+        </options>
+      </element>-->
+      <element type="date" name="DeductionsValidFrom2" label="Valid from:"  format="dd.MM.yyyy">
+        <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
+        <regex inherit="date" pattern="" message=""></regex>
+        <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
+      </element>
+      <element type="date" name="DeductionsValidTo2" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <!--<mandatoryIf name="DeductionsPaymentType2">Recurring</mandatoryIf>-->
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+
+      <element type="select" name="DeductionsChangeType3" label="Change Type">
+        <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="Start">Start</option>
+          <option value="Change">Change</option>
+          <option value="Stop">Stop</option>
+        </options>
+      </element>
+      <element type="select" name="DeductionsType3" label="Deduction Type" >
+        <!--&pre_deductionstype3_deductionsnetgross3;-->
+        <options>
+          <option value=""></option>
+          <option value="Badge Charge">Badge Charge</option>
+          <option value="Company Car">Company Car</option>
+          <option value="Uniform Deduction">Uniform Deduction</option>
+          <option value="ID Card">ID Card</option>
+          <option value="TEC Expenses Deduction">TEC Expenses Deduction</option>
+          <option value="Travel Allowance">Travel Allowance</option>
+          <option value="Parking Fee">Parking Fee</option>
+          <option value="PHI-Private Health Ins">PHI-Private Health Ins</option>
+          <option value="Rent Deduction">Rent Deduction</option>
+
+        </options>
+      </element>
+      <!--<element type="select" name="DeductionsPaymentType3" label="Payment Type" >
+        <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="One Time">One Time</option>
+          <option value="Recurring">Recurring</option>
+        </options>
+      </element>-->
+      <element type="text" name="DeductionsAmountUnits3" label="Amount/Units" >
+        <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+      </element>
+      <element type="select" name="DeductedPer3" label="Deducted per:">
+        <options>
+          <option value=""></option>
+          <option value="month">month</option>
+          <option value="one off">one off</option>
+        </options>
+      </element>
+      <!--<element type="select" name="DeductionsNetGross3" label="Net/Gross" >
+        <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="Net">Net</option>
+          <option value="Gross">Gross</option>
+        </options>
+      </element>-->
+      <element type="date" name="DeductionsValidFrom3" label="Valid from:"  format="dd.MM.yyyy">
+        <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
+        <regex inherit="date" pattern="" message=""></regex>
+        <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
+      </element>
+      <element type="date" name="DeductionsValidTo3" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <!--<mandatoryIf name="DeductionsPaymentType3">Recurring</mandatoryIf>-->
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      
+      
+      <!--4-->
+      <element type="select" name="DeductionsChangeType4" label="Change Type">
+        <mandatoryIfNotEmpty name="DeductionsType4"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="Start">Start</option>
+          <option value="Change">Change</option>
+          <option value="Stop">Stop</option>
+        </options>
+      </element>
+      <element type="select" name="DeductionsType4" label="Deduction Type" >
+        <options>
+          <option value=""></option>
+          <option value="Badge Charge">Badge Charge</option>
+          <option value="Company Car">Company Car</option>
+          <option value="Uniform Deduction">Uniform Deduction</option>
+          <option value="ID Card">ID Card</option>
+          <option value="TEC Expenses Deduction">TEC Expenses Deduction</option>
+          <option value="Travel Allowance">Travel Allowance</option>
+          <option value="Parking Fee">Parking Fee</option>
+          <option value="PHI-Private Health Ins">PHI-Private Health Ins</option>
+          <option value="Rent Deduction">Rent Deduction</option>
+        </options>
+      </element>
+      <element type="text" name="DeductionsAmountUnits4" label="Amount/Units" >
+        <mandatoryIfNotEmpty name="DeductionsType4"></mandatoryIfNotEmpty>
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+      </element>
+      <element type="select" name="DeductedPer4" label="Deducted per:">
+        <options>
+          <option value=""></option>
+          <option value="month">month</option>
+          <option value="one off">one off</option>
+        </options>
+      </element>
+      <element type="date" name="DeductionsValidFrom4" label="Valid from:"  format="dd.MM.yyyy">
+        <mandatoryIfNotEmpty name="DeductionsType4"></mandatoryIfNotEmpty>
+        <regex inherit="date" pattern="" message=""></regex>
+        <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
+      </element>
+      <element type="date" name="DeductionsValidTo4" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <!--4-->
+
+      <!--5-->
+      <element type="select" name="DeductionsChangeType5" label="Change Type">
+        <mandatoryIfNotEmpty name="DeductionsType5"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="Start">Start</option>
+          <option value="Change">Change</option>
+          <option value="Stop">Stop</option>
+        </options>
+      </element>
+      <element type="select" name="DeductionsType5" label="Deduction Type" >
+        <options>
+          <option value=""></option>
+          <option value="Badge Charge">Badge Charge</option>
+          <option value="Company Car">Company Car</option>
+          <option value="Uniform Deduction">Uniform Deduction</option>
+          <option value="ID Card">ID Card</option>
+          <option value="TEC Expenses Deduction">TEC Expenses Deduction</option>
+          <option value="Travel Allowance">Travel Allowance</option>
+          <option value="Parking Fee">Parking Fee</option>
+          <option value="PHI-Private Health Ins">PHI-Private Health Ins</option>
+          <option value="Rent Deduction">Rent Deduction</option>
+        </options>
+      </element>
+      <element type="text" name="DeductionsAmountUnits5" label="Amount/Units" >
+        <mandatoryIfNotEmpty name="DeductionsType5"></mandatoryIfNotEmpty>
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+      </element>
+      <element type="select" name="DeductedPer5" label="Deducted per:">
+        <options>
+          <option value=""></option>
+          <option value="month">month</option>
+          <option value="one off">one off</option>
+        </options>
+      </element>
+      <element type="date" name="DeductionsValidFrom5" label="Valid from:"  format="dd.MM.yyyy">
+        <mandatoryIfNotEmpty name="DeductionsType5"></mandatoryIfNotEmpty>
+        <regex inherit="date" pattern="" message=""></regex>
+        <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
+      </element>
+      <element type="date" name="DeductionsValidTo5" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <!--5-->
+      
+      
+    </tab>
+    <tab name="#SSCUseOnly" label="SSC use only">
+      <element type="select" name="PayrollCategory" label="Payroll Category">
+        <options>
+          <option value=""></option>
+          <option value="Hourly">Hourly</option>
+          <option value="Annualised">Annualised</option>
+          <option value="Salaried">Salaried</option>
+          <option value="Salaried Management">Salaried Management</option>
+          <option value="Salaried Senior Management">Salaried Senior Management</option>
+        </options>
+      </element>
+
+    </tab>
+  </fields>
+</form>

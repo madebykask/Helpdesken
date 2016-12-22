@@ -1,0 +1,20 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+@{
+    ViewBag.Title = Model.Translate("Norway") + " - " + Model.Translate("Service Request Details");   
+}
+
+
+
+@section Validation {
+
+}
+
+@section Script {
+    
+}
+
+@Html.Partial("_Edit", Model)
+

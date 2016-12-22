@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<options>
+  <option value=""></option>
+  <option value="Death">Death</option>
+  <option value="Disability">Disability</option>
+  <option value="Dismissal - With Notice">Dismissal</option>
+  <option value="End of Short Term Assignment">End of Short Term Assignment</option>
+  <option value="Expiry of Contract">Expiry of Contract</option>
+  <option value="International Transfer begins">International Transfer begins</option>
+  <option value="Redundancy">Redundancy</option>
+  <option value="Resignation">Resignation</option>
+  <option value="Resignation regretted">Resignation regretted</option>
+  <option value="Retirement">Retirement</option>
+</options>

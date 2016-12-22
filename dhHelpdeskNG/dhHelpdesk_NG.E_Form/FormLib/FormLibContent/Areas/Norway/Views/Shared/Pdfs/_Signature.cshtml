@@ -1,0 +1,36 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@using ECT.FormLib.Pdfs;
+@{
+    Layout = null;
+}
+<table class="table-full-width" border="0">
+    <tr>
+        <td>
+            ____________________                       
+        </td>
+        <td>
+            ____________________ 
+        </td>
+        <td>
+            ____________________            
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <b>Nærmeste leder</b>            
+        </td>
+        <td>
+            <b>HR Manager</b>
+        </td>
+        <td>
+            <b>Medarbeider</b>
+        </td>
+
+    </tr>
+   
+</table> @{ if (Request.QueryString["debug"] == "1")
+            {
+                @Model.Contract.BaseUrl@Model.Department.HeadOfDepartmentSignature 
+            }}
