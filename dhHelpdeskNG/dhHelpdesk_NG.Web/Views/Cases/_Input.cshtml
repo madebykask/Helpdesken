@@ -34,7 +34,7 @@
         moveLockedCaseMessage: '@Translation.GetForJS("Ärendet har blivit sparat eller upplåst efter att du öppnade det. Stäng ärendet och försök igen.")',
         lostChangesConfirmation: '@Html.Raw(Translation.GetForJS("Dina ändringar har inte sparats. Fortsätt?"))',
         finishingDateMessage: '@Html.Raw(Translation.GetForJS(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) + " " + Translation.Get("kan inte vara tidigare än registreringsdatum."))',
-        finishingDateMessage2: '@Html.Raw(Translation.GetForJS(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) + " " + Translation.Get("kan inte vara tidigare än ändringsdatum."))',
+        finishingDateMessage2: '@Html.Raw(Translation.GetForJS(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) + " " + Translation.Get("kan inte vara tidigare än senast sparat datum. (Se historik fliken)"))',
         checkInactiveDataErrorMessage: '@Html.Raw(Translation.GetForJS("Problem med kommunikation med servern."))',
         productAreaChangeMessage: '@Translation.GetForJS(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(),
                                                     Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)' + " " +

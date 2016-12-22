@@ -5269,5 +5269,12 @@ If not exists (select * from tblTextTranslation where text_id = 1724 and Languag
 GO
 
 
+UPDATE tblText Set TextString = 'kan inte vara tidigare än senast sparat datum. (Se historik fliken)' WHERE Id=1718;
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'Closing date can not be earlier than last saved date. (See history tab)' WHERE Text_Id=1718 AND Language_Id=2;
+GO
+
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
