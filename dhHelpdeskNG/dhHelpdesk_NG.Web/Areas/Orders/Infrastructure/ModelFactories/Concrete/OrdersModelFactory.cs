@@ -56,6 +56,7 @@
             CreateOtherHeaders(response.OverviewSettings.Other, headers);
             CreateProgramHeaders(response.OverviewSettings.Program, headers);
             CreateUserHeaders(response.OverviewSettings.User, headers);
+            CreateAccountInfoHeaders(response.OverviewSettings.AccountInfo, headers);
 
             var orderOverviews =
                 response.SearchResult.Orders.Select(o => CreateFullValues(response.OverviewSettings, o)).ToList();
@@ -169,7 +170,28 @@
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.UserLastName, UserFieldNames.UserLastName, headers);
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.UserPhone, UserFieldNames.UserPhone, headers);
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.UserEMail, UserFieldNames.UserEMail, headers);
-        }        
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.UserInitials, UserFieldNames.UserInitials, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.UserPersonalIdentityNumber, UserFieldNames.UserPersonalIdentityNumber, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.UserExtension, UserFieldNames.UserExtension, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.UserTitle, UserFieldNames.UserTitle, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.UserLocation, UserFieldNames.UserLocation, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.UserRoomNumber, UserFieldNames.UserRoomNumber, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.UserPostalAddress, UserFieldNames.UserPostalAddress, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.Responsibility, UserFieldNames.Responsibility, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.Activity, UserFieldNames.Activity, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.Manager, UserFieldNames.Manager, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.ReferenceNumber, UserFieldNames.ReferenceNumber, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.InfoUser, UserFieldNames.InfoUser, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.UserOU_Id, UserFieldNames.UserOU_Id, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.EmploymentType, UserFieldNames.EmploymentType, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.UserDepartment_Id1, UserFieldNames.UserDepartment_Id1, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.UserDepartment_Id2, UserFieldNames.UserDepartment_Id2, headers);
+        }
+
+        private static void CreateAccountInfoHeaders(AccountInfoFieldSettingsOverview settings, List<GridColumnHeaderModel> headers)
+        {
+            //TODO
+        }
 
         #endregion
 
@@ -189,6 +211,7 @@
             CreateOtherValues(settings.Other, order.Other, values);
             CreateProgramValues(settings.Program, order.Program, values);
             CreateUserValues(settings.User, order.User, values);
+            //TODO:CreateAccountInfoValues(settings.AccountInfo, order.AccountInfo, values);
 
             return new OrderOverviewModel(order.Id, order.OrderType, values);
         }
@@ -331,6 +354,22 @@
             FieldSettingsHelper.CreateValueIfNeeded(settings.UserLastName, UserFieldNames.UserLastName, fields.UserLastName, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.UserPhone, UserFieldNames.UserPhone, fields.UserPhone, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.UserEMail, UserFieldNames.UserEMail, fields.UserEMail, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.UserInitials, UserFieldNames.UserInitials, fields.UserInitials, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.UserPersonalIdentityNumber, UserFieldNames.UserPersonalIdentityNumber, fields.UserPersonalIdentityNumber, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.UserExtension, UserFieldNames.UserExtension, fields.UserExtension, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.UserTitle, UserFieldNames.UserTitle, fields.UserTitle, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.UserLocation, UserFieldNames.UserLocation, fields.UserLocation, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.UserRoomNumber, UserFieldNames.UserRoomNumber, fields.UserRoomNumber, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.UserPostalAddress, UserFieldNames.UserPostalAddress, fields.UserPostalAddress, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.Responsibility, UserFieldNames.Responsibility, fields.Responsibility, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.Activity, UserFieldNames.Activity, fields.Activity, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.Manager, UserFieldNames.Manager, fields.Manager, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.ReferenceNumber, UserFieldNames.ReferenceNumber, fields.ReferenceNumber, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.InfoUser, UserFieldNames.InfoUser, fields.InfoUser, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.UserOU_Id, UserFieldNames.UserOU_Id, fields.UserOU_Id, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.EmploymentType, UserFieldNames.EmploymentType, fields.EmploymentType, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.UserDepartment_Id1, UserFieldNames.UserDepartment_Id1, fields.UserDepartment_Id1, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.UserDepartment_Id2, UserFieldNames.UserDepartment_Id2, fields.UserDepartment_Id2, values);
         }
 
         #endregion

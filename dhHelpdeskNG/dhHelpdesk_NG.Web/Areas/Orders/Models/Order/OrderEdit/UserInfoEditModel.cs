@@ -16,7 +16,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
 
         public UserInfoEditModel(ConfigurableFieldModel<string> personalIdentityNumber, ConfigurableFieldModel<string> initials, ConfigurableFieldModel<string> extension, ConfigurableFieldModel<string> title,
             ConfigurableFieldModel<string> location, ConfigurableFieldModel<string> roomNumber,
-            ConfigurableFieldModel<string> postalAddress, ConfigurableFieldModel<int?> employmentType,
+            ConfigurableFieldModel<string> postalAddress, ConfigurableFieldModel<int?> employmentTypeId,
             ConfigurableFieldModel<int?> departmentId1, ConfigurableFieldModel<int?> unitId,
             ConfigurableFieldModel<int?> departmentId2, ConfigurableFieldModel<string> info,
             ConfigurableFieldModel<string> responsibility, ConfigurableFieldModel<string> activity,
@@ -29,7 +29,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
             Location = location;
             RoomNumber = roomNumber;
             PostalAddress = postalAddress;
-            EmploymentType = employmentType;
+            EmploymentTypeId = employmentTypeId;
             DepartmentId1 = departmentId1;
             UnitId = unitId;
             DepartmentId2 = departmentId2;
@@ -62,7 +62,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
         public ConfigurableFieldModel<string> PostalAddress { get; set; }
 
         [NotNull]
-        public ConfigurableFieldModel<int?> EmploymentType { get; set; }
+        public ConfigurableFieldModel<int?> EmploymentTypeId { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<int?> DepartmentId1 { get; set; }
@@ -141,7 +141,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
                 Activity.Show ||
                 Manager.Show ||
                 ReferenceNumber.Show ||
-                EmploymentType.Show ||
+                EmploymentTypeId.Show ||
                 DepartmentId1.Show ||
                 UnitId.Show ||
                 DepartmentId2.Show;

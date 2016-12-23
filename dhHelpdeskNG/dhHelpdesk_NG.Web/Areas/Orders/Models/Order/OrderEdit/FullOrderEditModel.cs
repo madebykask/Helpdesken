@@ -27,6 +27,7 @@
                     SupplierEditModel supplier,
                     UserEditModel user,
                     UserInfoEditModel userInfo,
+                    AccountInfoEditModel accountInfo,
                     string id,
                     int customerId,
                     int? orderTypeId, 
@@ -44,6 +45,7 @@
             Receiver = receiver;
             Supplier = supplier;
             User = user;
+            AccountInfo = accountInfo;
             UserInfo = userInfo;
             Id = id;
             CustomerId = customerId;
@@ -89,6 +91,9 @@
 
         [NotNull]
         public UserInfoEditModel UserInfo { get; set; }
+
+        [NotNull]
+        public AccountInfoEditModel AccountInfo { get; set; }
 
         [NotNullAndEmpty]
         public string Id { get; set; }

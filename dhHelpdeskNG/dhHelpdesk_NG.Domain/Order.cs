@@ -56,7 +56,7 @@
 
         public int? UserOU_Id { get; set; }
 
-        public int EmploymentType { get; set; }
+        public int? EmploymentType_Id { get; set; }
 
         public int? OrderPropertyId { get; set; }
 
@@ -188,9 +188,9 @@
 
         public int EMailType { get; set; }
 
-        public int HomeDirectory { get; set; }
+        public bool HomeDirectory { get; set; }
 
-        public int Profile { get; set; }
+        public bool Profile { get; set; }
 
         public string InventoryNumber { get; set; }
 
@@ -225,6 +225,8 @@
         public virtual Department UserDepartment1 { get; set; }
 
         public virtual Department UserDepartment2 { get; set; }
+
+        public virtual EmploymentType EmploymentType { get; set; }
 
         public virtual OU UserOU { get; set; }
 

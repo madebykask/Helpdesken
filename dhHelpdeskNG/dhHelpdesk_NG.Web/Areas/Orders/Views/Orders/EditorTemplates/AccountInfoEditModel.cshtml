@@ -1,0 +1,15 @@
+﻿
+@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.AccountInfoEditModel
+
+<h4>@Translation.Get("Kontoinformation")</h4>
+<table class="tableform">
+    <tbody>
+        @Html.EditorFor(m => m.StartedDate, "Fields/Date", new { Id = "accInfo_started_date" })
+        @Html.EditorFor(m => m.FinishDate, "Fields/Date", new { Id = "accInfo_finish_date" })
+        @Html.EditorFor(m => m.EMailTypeId, "Fields/List", new { Source = Model.EmailTypes })
+        @Html.EditorFor(m => m.HomeDirectory, "Fields/Flag")
+        @Html.EditorFor(m => m.Profile, "Fields/Flag")
+        @Html.EditorFor(m => m.Info, "Fields/WideText")
+    </tbody>
+</table>

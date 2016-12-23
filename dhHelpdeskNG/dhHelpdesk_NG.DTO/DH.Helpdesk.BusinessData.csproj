@@ -265,6 +265,7 @@
     <Compile Include="Models\MailTemplates\CustomMailTemplateLanguage.cs" />
     <Compile Include="Models\Modules\Output\ModulesOverview.cs" />
     <Compile Include="Models\OperationLog\Output\OperationLogObjectOverview.cs" />
+    <Compile Include="Models\Orders\Index\FieldSettingsOverview\AccountInfoFieldSettingsOverview.cs" />
     <Compile Include="Models\Orders\Index\FieldSettingsOverview\DeliveryFieldSettingsOverview.cs" />
     <Compile Include="Models\Orders\Index\FieldSettingsOverview\GeneralFieldSettingsOverview.cs" />
     <Compile Include="Models\Orders\Index\FieldSettingsOverview\LogFieldSettingsOverview.cs" />
@@ -321,6 +322,7 @@
     <Compile Include="Enums\Orders\Fields\ReceiverFields.cs" />
     <Compile Include="Enums\Orders\Fields\SupplierFields.cs" />
     <Compile Include="Enums\Orders\Fields\UserFields.cs" />
+    <Compile Include="Models\Orders\Index\OrderOverview\AccountInfoOverview.cs" />
     <Compile Include="Models\Orders\Index\OrderOverview\DeliveryOverview.cs" />
     <Compile Include="Models\Orders\Index\OrderOverview\FullOrderOverview.cs" />
     <Compile Include="Models\Orders\Index\OrderOverview\GeneralOverview.cs" />
@@ -354,6 +356,7 @@
     <Compile Include="Models\Orders\Index\OrdersFilterData.cs" />
     <Compile Include="Models\Orders\OrderFieldSettings\GetSettingsResponse.cs" />
     <Compile Include="Models\Orders\Order\OrderAuditData.cs" />
+    <Compile Include="Models\Orders\Order\OrderEditFields\AccountInfoEditFields.cs" />
     <Compile Include="Models\Orders\Order\OrderEditFields\DeliveryEditFields.cs" />
     <Compile Include="Models\Orders\Order\OrderEditFields\EmailLog.cs" />
     <Compile Include="Models\Orders\Order\OrderEditFields\EmailLogOverview.cs" />
@@ -380,6 +383,7 @@
     <Compile Include="Models\Orders\Order\OrderEditFields\SupplierEditFields.cs" />
     <Compile Include="Models\Orders\Order\OrderEditFields\UserEditFields.cs" />
     <Compile Include="Models\Orders\Order\OrderEditOptions.cs" />
+    <Compile Include="Models\Orders\Order\OrderEditSettings\AccountInfoEditSettings.cs" />
     <Compile Include="Models\Orders\Order\OrderEditSettings\DeliveryEditSettings.cs" />
     <Compile Include="Models\Orders\Order\OrderEditSettings\FieldEditSettings.cs" />
     <Compile Include="Models\Orders\Order\OrderEditSettings\FullOrderEditSettings.cs" />

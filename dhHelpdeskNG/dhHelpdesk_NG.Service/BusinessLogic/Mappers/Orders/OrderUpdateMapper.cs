@@ -22,6 +22,7 @@
             MapReceiverFields(entity, businessModel.Receiver);
             MapSupplierFields(entity, businessModel.Supplier);
             MapUserFields(entity, businessModel.User);
+            MapAccountInfoFields(entity, businessModel.AccountInfo);
         }
 
         private static void MapDeliveryFields(Order entity, DeliveryEditFields businessModel)
@@ -140,7 +141,7 @@
             entity.Activity = businessModel.Activity;
             entity.UserDepartment_Id = businessModel.UserDepartment_Id1;
             entity.UserDepartment_Id2 = businessModel.UserDepartment_Id2;
-            entity.EmploymentType = businessModel.EmploymentType;
+            entity.EmploymentType_Id = businessModel.EmploymentType_Id;
             entity.UserExtension = businessModel.UserExtension;
             entity.UserLocation = businessModel.UserLocation;
             entity.Manager = businessModel.Manager;
@@ -151,6 +152,17 @@
             entity.UserRoomNumber = businessModel.UserRoomNumber;
             entity.UserTitle = businessModel.UserTitle;
             entity.UserOU_Id = businessModel.UserOU_Id;
+        }
+
+        private static void MapAccountInfoFields(Order entity, AccountInfoEditFields businessModel)
+        {
+            entity.AccountStartDate = businessModel.StartedDate;
+            entity.AccountEndDate = businessModel.FinishDate;
+            entity.EMailType = businessModel.EMailTypeId;
+            entity.HomeDirectory = businessModel.HomeDirectory;
+            entity.Profile = businessModel.Profile;
+            entity.InventoryNumber = businessModel.InventoryNumber;
+            entity.Info = businessModel.Info;
         }
     }
 }

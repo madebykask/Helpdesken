@@ -37,6 +37,7 @@
             MapReceiverFields(entity, businessModel.Order.Receiver);
             MapSupplierFields(entity, businessModel.Order.Supplier);
             MapUserFields(entity, businessModel.Order.User);
+            //TODO:MapAccountInfoFields(entity, businessModel.Order.AccountInfo);
 
             return entity;
         }
@@ -137,6 +138,7 @@
             entity.UserId = businessModel.UserId;
             entity.UserFirstName = businessModel.UserFirstName;
             entity.UserLastName = businessModel.UserLastName;
+            //TODO: Add missing fields
         } 
     }
 }

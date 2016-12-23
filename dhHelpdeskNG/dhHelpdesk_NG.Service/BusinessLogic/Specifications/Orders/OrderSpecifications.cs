@@ -527,8 +527,82 @@
 					{
 						query = querySortedByType.ThenBy(o => o.UserLastName);
 					}
+                    else if (sort.Name == UserFieldNames.UserPhone)
+                    {
+                        query = querySortedByType.ThenBy(o => o.UserPhone);
+                    }
+                    else if (sort.Name == UserFieldNames.UserEMail)
+                    {
+                        query = querySortedByType.ThenBy(o => o.UserEMail);
+                    }
+                    else if (sort.Name == UserFieldNames.UserInitials)
+                    {
+                        query = querySortedByType.ThenBy(o => o.UserInitials);
+                    }
+                    else if (sort.Name == UserFieldNames.UserPersonalIdentityNumber)
+                    {
+                        query = querySortedByType.ThenBy(o => o.UserPersonalIdentityNumber);
+                    }
+                    else if (sort.Name == UserFieldNames.UserExtension)
+                    {
+                        query = querySortedByType.ThenBy(o => o.UserExtension);
+                    }
+                    else if (sort.Name == UserFieldNames.UserTitle)
+                    {
+                        query = querySortedByType.ThenBy(o => o.UserTitle);
+                    }
+                    else if (sort.Name == UserFieldNames.UserLocation)
+                    {
+                        query = querySortedByType.ThenBy(o => o.UserLocation);
+                    }
+                    else if (sort.Name == UserFieldNames.UserRoomNumber)
+                    {
+                        query = querySortedByType.ThenBy(o => o.UserRoomNumber);
+                    }
+                    else if (sort.Name == UserFieldNames.UserPostalAddress)
+                    {
+                        query = querySortedByType.ThenBy(o => o.UserPostalAddress);
+                    }
+                    else if (sort.Name == UserFieldNames.Responsibility)
+                    {
+                        query = querySortedByType.ThenBy(o => o.Responsibility);
+                    }
+                    else if (sort.Name == UserFieldNames.Activity)
+                    {
+                        query = querySortedByType.ThenBy(o => o.Activity);
+                    }
+                    else if (sort.Name == UserFieldNames.Manager)
+                    {
+                        query = querySortedByType.ThenBy(o => o.Manager);
+                    }
+                    else if (sort.Name == UserFieldNames.ReferenceNumber)
+                    {
+                        query = querySortedByType.ThenBy(o => o.ReferenceNumber);
+                    }
+                    else if (sort.Name == UserFieldNames.InfoUser)
+                    {
+                        query = querySortedByType.ThenBy(o => o.InfoUser);
+                    }
+                    else if (sort.Name == UserFieldNames.UserOU_Id)
+                    {
+                        query = querySortedByType.ThenBy(o => o.UserOU_Id);
+                    }
+                    else if (sort.Name == UserFieldNames.EmploymentType)
+                    {
+                        query = querySortedByType.ThenBy(o => o.EmploymentType_Id);
+                    }
+                    else if (sort.Name == UserFieldNames.UserDepartment_Id1)
+                    {
+                        query = querySortedByType.ThenBy(o => o.UserDepartment_Id);
+                    }
+                    else if (sort.Name == UserFieldNames.UserDepartment_Id1)
+                    {
+                        query = querySortedByType.ThenBy(o => o.UserDepartment_Id2);
+                    }
 
-					break;
+                    //TODO: Account Information
+
+                    break;
 
 				case SortBy.Descending:
 					// Delivery
@@ -802,8 +876,82 @@
 					{
 						query = querySortedByType.ThenByDescending(o => o.UserLastName);
 					}
+                    else if (sort.Name == UserFieldNames.UserPhone)
+                    {
+                        query = querySortedByType.ThenByDescending(o => o.UserPhone);
+                    }
+                    else if (sort.Name == UserFieldNames.UserEMail)
+                    {
+                        query = querySortedByType.ThenByDescending(o => o.UserEMail);
+                    }
+                    else if (sort.Name == UserFieldNames.UserInitials)
+                    {
+                        query = querySortedByType.ThenByDescending(o => o.UserInitials);
+                    }
+                    else if (sort.Name == UserFieldNames.UserPersonalIdentityNumber)
+                    {
+                        query = querySortedByType.ThenByDescending(o => o.UserPersonalIdentityNumber);
+                    }
+                    else if (sort.Name == UserFieldNames.UserExtension)
+                    {
+                        query = querySortedByType.ThenByDescending(o => o.UserExtension);
+                    }
+                    else if (sort.Name == UserFieldNames.UserTitle)
+                    {
+                        query = querySortedByType.ThenByDescending(o => o.UserTitle);
+                    }
+                    else if (sort.Name == UserFieldNames.UserLocation)
+                    {
+                        query = querySortedByType.ThenByDescending(o => o.UserLocation);
+                    }
+                    else if (sort.Name == UserFieldNames.UserRoomNumber)
+                    {
+                        query = querySortedByType.ThenByDescending(o => o.UserRoomNumber);
+                    }
+                    else if (sort.Name == UserFieldNames.UserPostalAddress)
+                    {
+                        query = querySortedByType.ThenByDescending(o => o.UserPostalAddress);
+                    }
+                    else if (sort.Name == UserFieldNames.Responsibility)
+                    {
+                        query = querySortedByType.ThenByDescending(o => o.Responsibility);
+                    }
+                    else if (sort.Name == UserFieldNames.Activity)
+                    {
+                        query = querySortedByType.ThenByDescending(o => o.Activity);
+                    }
+                    else if (sort.Name == UserFieldNames.Manager)
+                    {
+                        query = querySortedByType.ThenByDescending(o => o.Manager);
+                    }
+                    else if (sort.Name == UserFieldNames.ReferenceNumber)
+                    {
+                        query = querySortedByType.ThenByDescending(o => o.ReferenceNumber);
+                    }
+                    else if (sort.Name == UserFieldNames.InfoUser)
+                    {
+                        query = querySortedByType.ThenByDescending(o => o.InfoUser);
+                    }
+                    else if (sort.Name == UserFieldNames.UserOU_Id)
+                    {
+                        query = querySortedByType.ThenByDescending(o => o.UserOU_Id);
+                    }
+                    else if (sort.Name == UserFieldNames.EmploymentType)
+                    {
+                        query = querySortedByType.ThenByDescending(o => o.EmploymentType_Id);
+                    }
+                    else if (sort.Name == UserFieldNames.UserDepartment_Id1)
+                    {
+                        query = querySortedByType.ThenByDescending(o => o.UserDepartment_Id);
+                    }
+                    else if (sort.Name == UserFieldNames.UserDepartment_Id1)
+                    {
+                        query = querySortedByType.ThenByDescending(o => o.UserDepartment_Id2);
+                    }
 
-					break;
+                    //TODO: Account Information
+
+                    break;
 			}
 
 			return query;

@@ -1,19 +1,12 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
-@model DH.Helpdesk.Web.Areas.Orders.Models.Order.FieldModels.ConfigurableFieldModel<int?>
-
-
+@model DH.Helpdesk.Web.Areas.Orders.Models.Order.FieldModels.ConfigurableFieldModel<bool>
 @if (!Model.Show)
 {
     return;
 }
 
-@{
-    if (!ViewData.ContainsKey("Source"))
-    {
-        throw new ArgumentNullException("Source", "\"ComputerId\" ViewData parameter must be specified.");
-    }
 
-    var source = (SelectList)ViewData["Source"];
+@{
 
     var attributes = new Dictionary<string, object>(1);
 
@@ -30,7 +23,7 @@
         @Html.FieldCaption(Model)
     </td>
     <td class="span6">
-        @Html.DropDownListFor(m => m.Value, source, string.Empty, attributes)
+        @Html.CheckBoxFor(m => m.Value, attributes)
         @Html.HiddenFor(m => m.IsRequired)
         @Html.ValidationMessageFor(m => m.Value)
     </td>

@@ -159,7 +159,8 @@
                     CreateProgramEditFields(entity),
                     CreateReceiverEditFields(entity),
                     CreateSupplierEditFields(entity),
-                    CreateUserEditFields(entity));            
+                    CreateUserEditFields(entity),
+                    CreateAccountInfoEditFields(entity));
         }
 
         private static DeliveryEditFields CreateDeliveryEditFields(Order entity)
@@ -288,10 +289,24 @@
                     entity.ReferenceNumber,
                     entity.InfoUser,
                     entity.UserOU_Id,
-                    entity.EmploymentType,
+                    entity.EmploymentType_Id,
                     entity.UserDepartment_Id,
                     entity.UserDepartment_Id2,
                     entity.UserDepartment1?.Region_Id);
         }
+
+        private static AccountInfoEditFields CreateAccountInfoEditFields(Order entity)
+        {
+            return new AccountInfoEditFields(
+                    entity.AccountStartDate,
+                    entity.AccountEndDate,
+                    entity.EMailType,
+                    entity.HomeDirectory,
+                    entity.Profile,
+                    entity.InventoryNumber,
+                    entity.Info
+                );
+        }
+        
     }
 }

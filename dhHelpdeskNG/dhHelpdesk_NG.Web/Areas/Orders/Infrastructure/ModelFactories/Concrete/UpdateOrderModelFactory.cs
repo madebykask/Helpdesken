@@ -41,7 +41,8 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                 CreateProgramFields(model.Program),
                 CreateReceiverFields(model.Receiver),
                 CreateSupplierFields(model.Supplier),
-                CreateUserFields(model.User, model.UserInfo));
+                CreateUserFields(model.User, model.UserInfo),
+                CreateAccountInfoFields(model.AccountInfo));
 
             var newLogs = CreateNewLogCollection(model, emailService);
 
@@ -216,10 +217,8 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
 
         private static UserEditFields CreateUserFields(UserEditModel model, UserInfoEditModel infoModel)
         {
-            if (model == null)
-            {
-                model = UserEditModel.CreateEmpty();
-            }
+            if (model == null) model = UserEditModel.CreateEmpty();
+            if (infoModel == null) infoModel = UserInfoEditModel.CreateEmpty();
 
             return new UserEditFields(
                 ConfigurableFieldModel<string>.GetValueOrDefault(model.UserId),
@@ -240,10 +239,24 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                 ConfigurableFieldModel<string>.GetValueOrDefault(infoModel.ReferenceNumber),
                 ConfigurableFieldModel<string>.GetValueOrDefault(infoModel.Info),
                 ConfigurableFieldModel<int?>.GetValueOrDefault(infoModel.UnitId),
-                infoModel.EmploymentType.Value ?? 0,
+                ConfigurableFieldModel<int?>.GetValueOrDefault(infoModel.EmploymentTypeId),
                 ConfigurableFieldModel<int?>.GetValueOrDefault(infoModel.DepartmentId1),
                 ConfigurableFieldModel<int?>.GetValueOrDefault(infoModel.DepartmentId2),
                 infoModel.RegionId);
+        }
+
+        private static AccountInfoEditFields CreateAccountInfoFields(AccountInfoEditModel model)
+        {
+            if (model == null) model = AccountInfoEditModel.CreateEmpty();
+
+            return new AccountInfoEditFields(
+                ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.StartedDate),
+                ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.FinishDate),
+                ConfigurableFieldModel<int?>.GetValueOrDefault(model.EMailTypeId) ?? 0,
+                ConfigurableFieldModel<bool>.GetValueOrDefault(model.HomeDirectory),
+                ConfigurableFieldModel<bool>.GetValueOrDefault(model.Profile),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.InventoryNumber),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.Info));
         }
 
         private static List<ManualLog> CreateNewLogCollection(FullOrderEditModel model, IEmailService emailService)

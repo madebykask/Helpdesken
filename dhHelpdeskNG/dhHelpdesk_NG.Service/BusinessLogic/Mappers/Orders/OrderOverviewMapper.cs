@@ -30,7 +30,11 @@
                                                     o => o.Programs.Select(p => p.Name),
                                                     o => o.User.FirstName,
                                                     o => o.User.SurName,
-                                                    o => o.Department.DepartmentName
+                                                    o => o.Department.DepartmentName,
+                                                    o => o.UserOU.Name,
+                                                    o => o.EmploymentType.Name,
+                                                    o => o.UserDepartment1.DepartmentName,
+                                                    o => o.UserDepartment2.DepartmentName
                                                 })
                                                 .ToArray();
 
@@ -50,6 +54,10 @@
                     order.Programs = ((List<string>)o.f9).Select(p => new Program { Name = p }).ToArray();
                     order.User = new User { FirstName = o.f10, SurName = o.f11 };
                     order.Department = new Department { DepartmentName = o.f12 };
+                    order.UserOU = new OU { Name = o.f13 };
+                    order.EmploymentType = new EmploymentType { Name = o.f14 };
+                    order.UserDepartment1 = new Department { DepartmentName = o.f15 };
+                    order.UserDepartment2 = new Department { DepartmentName = o.f16 };
                     return CreateFullOverview(order, caseEntities);                    
                 }).ToArray();
         }
@@ -69,6 +77,7 @@
             var receiver = CreateReceiverOverview(entity);
             var supplier = CreateSupplierOverview(entity);
             var user = CreateUserOverview(entity);
+            var accountInfo = CreateAccountInfoOverview(entity);
 
             return new FullOrderOverview(
                                     entity.Id,
@@ -82,7 +91,8 @@
                                     program,
                                     receiver,
                                     supplier,
-                                    user);
+                                    user,
+                                    accountInfo);
         }
 
         private static DeliveryOverview CreateDeliveryOverview(Order entity)
@@ -196,7 +206,28 @@
                                     entity.UserFirstName,
                                     entity.UserLastName,
                                     entity.UserPhone,
-                                    entity.UserEMail);
+                                    entity.UserEMail,
+                                    entity.UserInitials,
+                                    entity.UserPersonalIdentityNumber,
+                                    entity.UserExtension,
+                                    entity.UserTitle,
+                                    entity.UserLocation,
+                                    entity.UserRoomNumber,
+                                    entity.UserPostalAddress,
+                                    entity.Responsibility,
+                                    entity.Activity,
+                                    entity.Manager,
+                                    entity.ReferenceNumber,
+                                    entity.InfoUser,
+                                    entity.UserOU != null ? entity.UserOU.Name : string.Empty,
+                                    entity.EmploymentType != null ? entity.EmploymentType.Name : string.Empty,
+                                    entity.UserDepartment1 != null ? entity.UserDepartment1.DepartmentName : string.Empty,
+                                    entity.UserDepartment2 != null ? entity.UserDepartment2.DepartmentName : string.Empty);
+        }
+
+        private static AccountInfoOverview CreateAccountInfoOverview(Order entity)
+        {
+            return new AccountInfoOverview();
         }
 
         #endregion

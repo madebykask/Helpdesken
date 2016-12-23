@@ -8,7 +8,7 @@
             string userTitle, string userLocation, string userRoomNumber,
             string userPostalAddress, string responsibility,
             string activity, string manager, string referenceNumber,
-            string infoUser, int? userOuId, int employmentType,
+            string infoUser, int? userOuId, int? employmentTypeId,
             int? userDepartmentId1, int? userDepartmentId2, int? regionId)
         {
             UserId = userId;
@@ -29,7 +29,7 @@
             ReferenceNumber = referenceNumber;
             InfoUser = infoUser;
             UserOU_Id = userOuId;
-            EmploymentType = employmentType;
+            EmploymentType_Id = employmentTypeId;
             UserDepartment_Id1 = userDepartmentId1;
             UserDepartment_Id2 = userDepartmentId2;
             RegionId = regionId;
@@ -71,7 +71,7 @@
 
         public int? UserOU_Id { get; private set; }
 
-        public int EmploymentType { get; private set; }
+        public int? EmploymentType_Id { get; private set; }
 
         public int? UserDepartment_Id1 { get; private set; }
 

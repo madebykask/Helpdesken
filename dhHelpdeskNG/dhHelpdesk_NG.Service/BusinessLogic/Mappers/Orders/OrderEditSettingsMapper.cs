@@ -36,7 +36,8 @@
                         CreateProgramEditSettings(fieldSettings),
                         CreateReceiverEditSettings(fieldSettings),
                         CreateSupplierEditSettings(fieldSettings),
-                        CreateUserEditSettings(fieldSettings));
+                        CreateUserEditSettings(fieldSettings),
+                        CreateAccountInfoEditSettings(fieldSettings));
         }
 
         private static DeliveryEditSettings CreateDeliveryEditSettings(
@@ -178,6 +179,19 @@
                     CreateTextFieldSetting(editSettings.FindByName(UserFields.Activity)),
                     CreateTextFieldSetting(editSettings.FindByName(UserFields.Manager)),
                     CreateTextFieldSetting(editSettings.FindByName(UserFields.ReferenceNumber)));
+        }
+
+        private static AccountInfoEditSettings CreateAccountInfoEditSettings(
+            NamedObjectCollection<OrdersEditSettingsMapData> editSettings)
+        {
+            return new AccountInfoEditSettings(
+                    CreateFieldSetting(editSettings.FindByName(AccountInfoFields.StartedDate)),
+                    CreateFieldSetting(editSettings.FindByName(AccountInfoFields.FinishDate)),
+                    CreateFieldSetting(editSettings.FindByName(AccountInfoFields.EMailTypeId)),
+                    CreateFieldSetting(editSettings.FindByName(AccountInfoFields.HomeDirectory)),
+                    CreateFieldSetting(editSettings.FindByName(AccountInfoFields.Profile)),
+                    CreateTextFieldSetting(editSettings.FindByName(AccountInfoFields.InventoryNumber)),
+                    CreateTextFieldSetting(editSettings.FindByName(AccountInfoFields.Info)));
         }
 
         private static FieldEditSettings CreateFieldSetting(OrdersEditSettingsMapData data)

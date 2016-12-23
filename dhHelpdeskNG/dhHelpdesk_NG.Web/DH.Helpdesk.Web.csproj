@@ -238,6 +238,7 @@
     <Compile Include="App_Start\BundleConfig.Orders.cs" />
     <Compile Include="Areas\Orders\Controllers\WebApi\OrdersApiController.cs" />
     <Compile Include="Areas\Orders\Models\OrderFieldSettings\FieldSettings\AccountInfoFieldSettingsModel.cs" />
+    <Compile Include="Areas\Orders\Models\Order\OrderEdit\AccountInfoEditModel.cs" />
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\UserInfoEditModel.cs" />
     <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Infrastructure\Attributes\RequiredIfNotEmptyAttribute.cs" />
@@ -1882,6 +1883,8 @@
     <Content Include="log4net.config" />
     <Content Include="Areas\Orders\Views\Orders\EditorTemplates\UserInfoEditModel.cshtml" />
     <Content Include="Areas\Orders\Views\Orders\EditorTemplates\Fields\List.cshtml" />
+    <Content Include="Areas\Orders\Views\Orders\EditorTemplates\AccountInfoEditModel.cshtml" />
+    <Content Include="Areas\Orders\Views\Orders\EditorTemplates\Fields\Flag.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx" />
     <Content Include="Content\js\Shared\custom.validation.reuiredifnotempty.js" />

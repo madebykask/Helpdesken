@@ -12,7 +12,7 @@
         @Html.EditorFor(m => m.Location, "Fields/Text")
         @Html.EditorFor(m => m.RoomNumber, "Fields/Text")
         @Html.EditorFor(m => m.PostalAddress, "Fields/Text")
-        @Html.EditorFor(m => m.EmploymentType, "Fields/List", new { Source = Model.EmploymentTypes })
+        @Html.EditorFor(m => m.EmploymentTypeId, "Fields/List", new { Source = Model.EmploymentTypes })
 
         @if (Model.DepartmentId1.Show)
         {

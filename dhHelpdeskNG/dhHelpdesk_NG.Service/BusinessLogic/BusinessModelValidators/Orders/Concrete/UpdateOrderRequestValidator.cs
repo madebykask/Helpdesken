@@ -25,7 +25,8 @@
             this.ValidateProgramFields(updatedOrder.Program, existingOrder.Program, settings.Program);
             this.ValidateReceiverFields(updatedOrder.Receiver, existingOrder.Receiver, settings.Receiver);
             this.ValidateSupplierFields(updatedOrder.Supplier, existingOrder.Supplier, settings.Supplier);
-            this.ValidateUserFields(updatedOrder.User, existingOrder.User, settings.User);            
+            this.ValidateUserFields(updatedOrder.User, existingOrder.User, settings.User);
+            ValidateAccountInfoFields(updatedOrder.AccountInfo, existingOrder.AccountInfo, settings.AccountInfo);
         }
 
         private void ValidateDeliveryFields(
@@ -154,7 +155,35 @@
         {
             this.elementaryRulesValidator.ValidateStringField(updatedFields.UserId, existingFields.UserId, UserFields.UserId, new ElementaryValidationRule(!settings.UserId.Show, settings.UserId.Required));                        
             this.elementaryRulesValidator.ValidateStringField(updatedFields.UserFirstName, existingFields.UserFirstName, UserFields.UserFirstName, new ElementaryValidationRule(!settings.UserFirstName.Show, settings.UserFirstName.Required));
-            this.elementaryRulesValidator.ValidateStringField(updatedFields.UserLastName, existingFields.UserLastName, UserFields.UserLastName, new ElementaryValidationRule(!settings.UserLastName.Show, settings.UserLastName.Required));                        
+            this.elementaryRulesValidator.ValidateStringField(updatedFields.UserLastName, existingFields.UserLastName, UserFields.UserLastName, new ElementaryValidationRule(!settings.UserLastName.Show, settings.UserLastName.Required));
+            this.elementaryRulesValidator.ValidateStringField(updatedFields.UserPhone, existingFields.UserPhone, UserFields.UserPhone, new ElementaryValidationRule(!settings.UserPhone.Show, settings.UserPhone.Required));
+            this.elementaryRulesValidator.ValidateStringField(updatedFields.UserEMail, existingFields.UserEMail, UserFields.UserEMail, new ElementaryValidationRule(!settings.UserEMail.Show, settings.UserEMail.Required));
+            this.elementaryRulesValidator.ValidateStringField(updatedFields.UserExtension, existingFields.UserExtension, UserFields.UserExtension, new ElementaryValidationRule(!settings.Extension.Show, settings.Extension.Required));
+            this.elementaryRulesValidator.ValidateStringField(updatedFields.UserInitials, existingFields.UserInitials, UserFields.UserInitials, new ElementaryValidationRule(!settings.Initials.Show, settings.Initials.Required));
+            this.elementaryRulesValidator.ValidateStringField(updatedFields.UserLocation, existingFields.UserLocation, UserFields.UserLocation, new ElementaryValidationRule(!settings.Location.Show, settings.Location.Required));
+            this.elementaryRulesValidator.ValidateStringField(updatedFields.UserPersonalIdentityNumber, existingFields.UserPersonalIdentityNumber, UserFields.UserPersonalIdentityNumber, new ElementaryValidationRule(!settings.PersonalIdentityNumber.Show, settings.PersonalIdentityNumber.Required));
+            this.elementaryRulesValidator.ValidateStringField(updatedFields.UserPostalAddress, existingFields.UserPostalAddress, UserFields.UserPostalAddress, new ElementaryValidationRule(!settings.PostalAddress.Show, settings.PostalAddress.Required));
+            this.elementaryRulesValidator.ValidateStringField(updatedFields.UserRoomNumber, existingFields.UserRoomNumber, UserFields.UserRoomNumber, new ElementaryValidationRule(!settings.RoomNumber.Show, settings.RoomNumber.Required));
+            this.elementaryRulesValidator.ValidateStringField(updatedFields.UserTitle, existingFields.UserTitle, UserFields.UserTitle, new ElementaryValidationRule(!settings.Title.Show, settings.Title.Required));
+            this.elementaryRulesValidator.ValidateIntegerField(updatedFields.UserDepartment_Id1, existingFields.UserDepartment_Id1, UserFields.UserDepartment_Id1, new ElementaryValidationRule(!settings.DepartmentId1.Show, settings.DepartmentId1.Required));
+            this.elementaryRulesValidator.ValidateIntegerField(updatedFields.UserDepartment_Id2, existingFields.UserDepartment_Id2, UserFields.UserDepartment_Id2, new ElementaryValidationRule(!settings.DepartmentId2.Show, settings.DepartmentId2.Required));
+            this.elementaryRulesValidator.ValidateIntegerField(updatedFields.UserOU_Id, existingFields.UserOU_Id, UserFields.UserOU_Id, new ElementaryValidationRule(!settings.UnitId.Show, settings.UnitId.Required));
+            this.elementaryRulesValidator.ValidateStringField(updatedFields.InfoUser, existingFields.InfoUser, UserFields.InfoUser, new ElementaryValidationRule(!settings.Info.Show, settings.Info.Required));
+            this.elementaryRulesValidator.ValidateIntegerField(updatedFields.EmploymentType_Id, existingFields.EmploymentType_Id, UserFields.EmploymentType, new ElementaryValidationRule(!settings.EmploymentType.Show, settings.EmploymentType.Required));
+        }
+
+        private void ValidateAccountInfoFields(
+            AccountInfoEditFields updatedFields,
+            AccountInfoEditFields existingFields,
+            AccountInfoEditSettings settings)
+        {
+            elementaryRulesValidator.ValidateDateTimeField(updatedFields.StartedDate, existingFields.StartedDate, AccountInfoFields.StartedDate, new ElementaryValidationRule(!settings.StartedDate.Show, settings.StartedDate.Required));
+            elementaryRulesValidator.ValidateDateTimeField(updatedFields.FinishDate, existingFields.FinishDate, AccountInfoFields.FinishDate, new ElementaryValidationRule(!settings.FinishDate.Show, settings.FinishDate.Required));
+            elementaryRulesValidator.ValidateIntegerField(updatedFields.EMailTypeId, existingFields.EMailTypeId, AccountInfoFields.EMailTypeId, new ElementaryValidationRule(!settings.EMailTypeId.Show, settings.EMailTypeId.Required));
+            elementaryRulesValidator.ValidateBooleanField(updatedFields.HomeDirectory, existingFields.HomeDirectory, AccountInfoFields.HomeDirectory, new ElementaryValidationRule(!settings.HomeDirectory.Show, settings.HomeDirectory.Required));
+            elementaryRulesValidator.ValidateBooleanField(updatedFields.Profile, existingFields.Profile, AccountInfoFields.Profile, new ElementaryValidationRule(!settings.Profile.Show, settings.Profile.Required));
+            elementaryRulesValidator.ValidateStringField(updatedFields.InventoryNumber, existingFields.InventoryNumber, AccountInfoFields.InventoryNumber, new ElementaryValidationRule(!settings.InventoryNumber.Show, settings.InventoryNumber.Required));
+            elementaryRulesValidator.ValidateStringField(updatedFields.Info, existingFields.Info, AccountInfoFields.Info, new ElementaryValidationRule(!settings.Info.Show, settings.Info.Required));
         }
     }
 }

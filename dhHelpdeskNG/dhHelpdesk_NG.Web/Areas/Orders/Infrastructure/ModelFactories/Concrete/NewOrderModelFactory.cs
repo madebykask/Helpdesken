@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
+using DH.Helpdesk.BusinessData.Enums.Accounts.Fields;
 using DH.Helpdesk.BusinessData.Models.Shared;
+using DH.Helpdesk.Web.Infrastructure.Extensions;
 
 namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
 {
@@ -36,6 +38,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                 CreateSupplierEditModel(data.EditSettings.Supplier),
                 CreateUserEditModel(data.EditSettings.User, workContext),
                 CreateUserInfoEditModel(data.EditSettings.User, data.EditOptions,  workContext),
+                CreateAccountInfoEditModel(data.EditSettings.AccountInfo, data.EditOptions, workContext),
                 temporatyId,
                 workContext.Customer.CustomerId,
                 orderTypeId,
@@ -283,6 +286,26 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                 options.Units, null);
             model.Regions = CreateSelectListField(settings.DepartmentId1,
                 options.Regions, null);
+
+            return model;
+        }
+        
+        private AccountInfoEditModel CreateAccountInfoEditModel(
+            AccountInfoEditSettings settings,
+            OrderEditOptions options,
+            IWorkContext workContext)
+        {
+            var model = new AccountInfoEditModel(
+                    configurableFieldModelFactory.CreateNullableDateTimeField(settings.StartedDate, null),
+                    configurableFieldModelFactory.CreateNullableDateTimeField(settings.FinishDate, null),
+                    configurableFieldModelFactory.CreateNullableIntegerField(settings.EMailTypeId, null),
+                    configurableFieldModelFactory.CreateBooleanField(settings.HomeDirectory, false),
+                    configurableFieldModelFactory.CreateBooleanField(settings.Profile, false),
+                    configurableFieldModelFactory.CreateStringField(settings.InventoryNumber, null),
+                    configurableFieldModelFactory.CreateStringField(settings.Info, null)
+                );
+
+            model.EmailTypes = new EMailTypes().ToSelectList(null);
 
             return model;
         }

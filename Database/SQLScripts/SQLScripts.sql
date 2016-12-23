@@ -191,8 +191,15 @@ INSERT INTO [dbo].[tblOrderFieldSettings]
 				and ((iofs.OrderType_Id is not null and ofs.OrderType_Id is not null and iofs.OrderType_Id = ofs.OrderType_Id) or (iofs.OrderType_Id is null and ofs.OrderType_Id is null))) 
 GO
 
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'EmploymentType' and sysobjects.name = N'tblOrder')
-	ALTER TABLE [dbo].[tblOrder] ADD [EmploymentType] [int] NOT NULL Default 0
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'EmploymentType_Id' and sysobjects.name = N'tblOrder')	
+BEGIN
+	ALTER TABLE [dbo].[tblOrder] ADD [EmploymentType_Id] [int] NULL
+
+	ALTER TABLE [dbo].[tblOrder]  WITH NOCHECK ADD  CONSTRAINT [FK_tblOrder_tblDepartment3] FOREIGN KEY([UserDepartment_Id2])
+	REFERENCES [dbo].[tblDepartment] ([Id])
+	
+	ALTER TABLE [dbo].[tblOrder] CHECK CONSTRAINT [FK_tblOrder_tblDepartment3]
+END 
 GO
 
 Declare @OrderFieldValue nvarchar(50)
@@ -450,7 +457,7 @@ INSERT INTO [dbo].[tblOrderFieldSettings]
 GO
 
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'HomeDirectory' and sysobjects.name = N'tblOrder')
-	ALTER TABLE [dbo].[tblOrder] ADD [HomeDirectory] [int] NOT NULL CONSTRAINT [DF_tblOrder_HomeDirectory]  DEFAULT ((0))
+	ALTER TABLE [dbo].[tblOrder] ADD [HomeDirectory] [bit] NOT NULL CONSTRAINT [DF_tblOrder_HomeDirectory]  DEFAULT ((0))
 GO
 
 Declare @OrderFieldValue nvarchar(50)
@@ -470,7 +477,7 @@ INSERT INTO [dbo].[tblOrderFieldSettings]
 GO
 
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Profile' and sysobjects.name = N'tblOrder')
-	ALTER TABLE [dbo].[tblOrder] ADD [Profile] [int] NOT NULL CONSTRAINT [DF_tblOrder_Profile]  DEFAULT ((0))
+	ALTER TABLE [dbo].[tblOrder] ADD [Profile] [bit] NOT NULL CONSTRAINT [DF_tblOrder_Profile]  DEFAULT ((0))
 GO
 
 Declare @OrderFieldValue nvarchar(50)
@@ -508,32 +515,6 @@ INSERT INTO [dbo].[tblOrderFieldSettings]
 				where iofs.OrderField = @OrderFieldValue and iofs.Customer_Id = ofs.Customer_Id 
 				and ((iofs.OrderType_Id is not null and ofs.OrderType_Id is not null and iofs.OrderType_Id = ofs.OrderType_Id) or (iofs.OrderType_Id is null and ofs.OrderType_Id is null))) 
 GO
-
---if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'AccountType_Id' and sysobjects.name = N'tblOrder')
---BEGIN
---	ALTER TABLE [dbo].[tblOrder] ADD [AccountType_Id] [int] NULL NULL
-
---	ALTER TABLE [dbo].[tblOrder]  WITH NOCHECK ADD  CONSTRAINT [FK_tblAccount_tblAccountType] FOREIGN KEY([AccountType_Id])
---	REFERENCES [dbo].[tblAccountType] ([Id])
-
---	ALTER TABLE [dbo].[tblAccount] CHECK CONSTRAINT [FK_tblAccount_tblAccountType]
---END 
-
---Declare @OrderFieldValue nvarchar(50)
---Set @OrderFieldValue = 'AccountType_Id'
---Declare @OrderFieldLabel nvarchar(50)
---Set @OrderFieldLabel = 'Vallista 1'
-
---INSERT INTO [dbo].[tblOrderFieldSettings]
---           ([OrderType_Id],[Customer_Id],[OrderField],[Show],[ShowInList],[ShowExternal]
---           ,[Label],[Required],[DefaultValue],[EMailIdentifier],[CreatedDate],[ChangedDate])
---	 SELECT distinct ofs.[OrderType_Id], ofs.[Customer_Id], @OrderFieldValue, 0, 0, 0,
---		   @OrderFieldLabel, 0, '', NULL, GETDATE(), GETDATE()
---		   from [dbo].[tblOrderFieldSettings] as ofs
---		   where Not Exists (Select iofs.Id from [dbo].[tblOrderFieldSettings] as iofs
---				where iofs.OrderField = @OrderFieldValue and iofs.Customer_Id = ofs.Customer_Id 
---				and ((iofs.OrderType_Id is not null and ofs.OrderType_Id is not null and iofs.OrderType_Id = ofs.OrderType_Id) or (iofs.OrderType_Id is null and ofs.OrderType_Id is null))) 
---GO
 
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'AccountInfo' and sysobjects.name = N'tblOrder')
 	ALTER TABLE [dbo].[tblOrder] ADD [AccountInfo] [nvarchar](500) NULL

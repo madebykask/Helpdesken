@@ -74,10 +74,10 @@
                 {
                     isOrdererUnitVisible: @((Model.Orderer.Unit.Show && Model.Orderer.Unit.Value != null).ToJavaScriptBool()),
                     isUserDepartmentVisible: @((Model.UserInfo.DepartmentId1.Show).ToJavaScriptBool()),
-                    units: @if (Model.Orderer.Unit.Value != null)
-                           {
-                               @Html.SerializeObjectToJson(Model.Orderer.Unit.Value.Items)
-                           },
+                    @if (Model.Orderer.Unit.Value != null && Model.Orderer.Unit.Show)
+                        {
+                            string.Format("units: {0},", Html.SerializeObjectToJson(Model.Orderer.Unit.Value.Items));
+                        }
                     searchDepartmentsByRegionIdUrl: "@Url.ApiOrdersAction(WebApiOrdersUrlName.Orders.SearchDepartmentsByRegionId, WebApiOrdersUrlName.Orders.Controller)"
                 });
             pageObject.init();

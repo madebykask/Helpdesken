@@ -2,7 +2,7 @@
 
 namespace DH.Helpdesk.BusinessData.Models.Orders.Index.OrderOverview
 {
-    using DH.Helpdesk.Common.ValidationAttributes;
+    using Common.ValidationAttributes;
 
     public sealed class FullOrderOverview
     {
@@ -18,20 +18,22 @@ namespace DH.Helpdesk.BusinessData.Models.Orders.Index.OrderOverview
                 ProgramOverview program, 
                 ReceiverOverview receiver, 
                 SupplierOverview supplier, 
-                UserOverview user)
+                UserOverview user,
+                AccountInfoOverview accountInfo)
         {
-            this.User = user;
-            this.Supplier = supplier;
-            this.Receiver = receiver;
-            this.Program = program;
-            this.Other = other;
-            this.Order = order;
-            this.Orderer = orderer;
-            this.Log = log;
-            this.General = general;
-            this.Delivery = delivery;
-            this.Id = id;
+            User = user;
+            Supplier = supplier;
+            Receiver = receiver;
+            Program = program;
+            Other = other;
+            Order = order;
+            Orderer = orderer;
+            Log = log;
+            General = general;
+            Delivery = delivery;
+            Id = id;
             OrderType = orderType.Name;
+            AccountInfo = accountInfo;
         }
 
         [IsId]
@@ -68,5 +70,11 @@ namespace DH.Helpdesk.BusinessData.Models.Orders.Index.OrderOverview
 
         [NotNull]
         public UserOverview User { get; private set; }
+
+        [NotNull]
+        public AccountInfoOverview AccountInfo { get; private set; }
+
+
+        
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditSettings
 {
-    using DH.Helpdesk.Common.ValidationAttributes;
+    using Common.ValidationAttributes;
 
     public sealed class FullOrderEditSettings
     {
@@ -14,18 +14,20 @@
                 ProgramEditSettings program, 
                 ReceiverEditSettings receiver, 
                 SupplierEditSettings supplier, 
-                UserEditSettings user)
+                UserEditSettings user,
+                AccountInfoEditSettings accountInfo)
         {
-            this.User = user;
-            this.Supplier = supplier;
-            this.Receiver = receiver;
-            this.Program = program;
-            this.Other = other;
-            this.Order = order;
-            this.Orderer = orderer;
-            this.Log = log;
-            this.General = general;
-            this.Delivery = delivery;
+            User = user;
+            Supplier = supplier;
+            Receiver = receiver;
+            Program = program;
+            Other = other;
+            Order = order;
+            Orderer = orderer;
+            Log = log;
+            General = general;
+            Delivery = delivery;
+            AccountInfo = accountInfo;
         }
 
         [NotNull]
@@ -57,5 +59,8 @@
 
         [NotNull]
         public UserEditSettings User { get; private set; }
+
+        [NotNull]
+        public AccountInfoEditSettings AccountInfo { get; private set; }
     }
 }

@@ -29,12 +29,16 @@
                 .WithMany()
                 .HasForeignKey(x => x.UserDepartment_Id2)
                 .WillCascadeOnDelete(false);
+            this.HasOptional(x => x.EmploymentType)
+                .WithMany()
+                .HasForeignKey(x => x.EmploymentType_Id)
+                .WillCascadeOnDelete(false);
             this.HasOptional(x => x.UserOU)
                 .WithMany()
                 .HasForeignKey(x => x.UserOU_Id)
                 .WillCascadeOnDelete(false);
 
-            this.Property(x => x.EmploymentType).IsRequired();
+            this.Property(x => x.EmploymentType_Id).IsOptional();
             this.Property(o => o.OrderDate).IsOptional();
             this.Property(o => o.UserId).IsOptional().HasMaxLength(20);
             this.Property(o => o.UserFirstName).IsOptional().HasMaxLength(20);

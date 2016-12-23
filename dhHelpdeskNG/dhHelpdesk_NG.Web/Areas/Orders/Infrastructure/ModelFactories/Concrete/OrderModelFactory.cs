@@ -1,5 +1,7 @@
 ﻿using System.Web.Mvc;
+using DH.Helpdesk.BusinessData.Enums.Accounts.Fields;
 using DH.Helpdesk.BusinessData.Models.Shared;
+using DH.Helpdesk.Web.Infrastructure.Extensions;
 
 namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
 {
@@ -52,6 +54,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                 CreateSupplierEditModel(response.EditSettings.Supplier, response.EditData.Order.Supplier),
                 CreateUserEditModel(response.EditSettings.User, response.EditData.Order.User),
                 CreateUserInfoEditModel(response.EditSettings.User, response.EditData.Order.User, response.EditOptions),
+                CreateAccountInfoEditModel(response.EditSettings.AccountInfo, response.EditData.Order.AccountInfo, response.EditOptions),
                 textOrderId,
                 customerId,
                 response.EditData.Order.OrderTypeId,
@@ -298,7 +301,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                             configurableFieldModelFactory.CreateStringField(settings.Location, fields.UserLocation),
                             configurableFieldModelFactory.CreateStringField(settings.RoomNumber, fields.UserRoomNumber),
                             configurableFieldModelFactory.CreateStringField(settings.PostalAddress, fields.UserPostalAddress),
-                            configurableFieldModelFactory.CreateNullableIntegerField(settings.EmploymentType, fields.EmploymentType),
+                            configurableFieldModelFactory.CreateNullableIntegerField(settings.EmploymentType, fields.EmploymentType_Id),
                             configurableFieldModelFactory.CreateNullableIntegerField(settings.DepartmentId1, fields.UserDepartment_Id1),
                             configurableFieldModelFactory.CreateNullableIntegerField(settings.UnitId, fields.UserOU_Id),
                             configurableFieldModelFactory.CreateNullableIntegerField(settings.DepartmentId2, fields.UserDepartment_Id2),
@@ -308,7 +311,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                             configurableFieldModelFactory.CreateStringField(settings.Manager, fields.Manager),
                             configurableFieldModelFactory.CreateStringField(settings.ReferenceNumber, fields.ReferenceNumber));
             model.EmploymentTypes = CreateSelectListField(settings.EmploymentType,
-                options.EmploymentTypes, fields.EmploymentType.ToString(CultureInfo.InvariantCulture));
+                options.EmploymentTypes, fields.EmploymentType_Id.ToString());
             model.Departments = CreateSelectListField(settings.DepartmentId1,
                 options.Departments, fields.UserDepartment_Id1.ToString());
             model.Departments2 = CreateSelectListField(settings.DepartmentId2,
@@ -317,6 +320,26 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                 options.Units, fields.UserOU_Id.ToString());
             model.Regions = CreateSelectListField(settings.DepartmentId1,
                 options.Regions, fields.RegionId.ToString());
+
+            return model;
+        }
+
+        private AccountInfoEditModel CreateAccountInfoEditModel(
+            AccountInfoEditSettings settings,
+            AccountInfoEditFields fields,
+            OrderEditOptions options)
+        {
+            var model = new AccountInfoEditModel(
+                    configurableFieldModelFactory.CreateNullableDateTimeField(settings.StartedDate, fields.StartedDate),
+                    configurableFieldModelFactory.CreateNullableDateTimeField(settings.FinishDate, fields.FinishDate),
+                    configurableFieldModelFactory.CreateNullableIntegerField(settings.EMailTypeId, fields.EMailTypeId == 0 ? null : (int?)fields.EMailTypeId),
+                    configurableFieldModelFactory.CreateBooleanField(settings.HomeDirectory, fields.HomeDirectory),
+                    configurableFieldModelFactory.CreateBooleanField(settings.Profile, fields.Profile),
+                    configurableFieldModelFactory.CreateStringField(settings.InventoryNumber, fields.InventoryNumber),
+                    configurableFieldModelFactory.CreateStringField(settings.Info, fields.Info)
+                );
+
+            model.EmailTypes = new EMailTypes().ToSelectList(fields.EMailTypeId.ToString(CultureInfo.InvariantCulture));
 
             return model;
         }
