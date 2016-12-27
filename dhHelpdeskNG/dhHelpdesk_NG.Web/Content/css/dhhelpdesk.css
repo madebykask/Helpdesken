@@ -3761,7 +3761,7 @@ div.modal-body.max-height-600 {
 .case-usersearch-textarea {
     height: 1.6em;
     min-height: 1em;
-    width: 88%;
+    width: 50em;
 }
 
 .case-usersearch-btn {
