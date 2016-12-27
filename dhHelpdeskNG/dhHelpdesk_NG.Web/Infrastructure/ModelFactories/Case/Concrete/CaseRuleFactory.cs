@@ -1115,6 +1115,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 IsMandatory = caseFieldSettings.getRequired(curField).ToBool(),
                 StatusType = basicInformation.Departments.StatusType,
                 Items = basicInformation.Departments.Items,                
+                GeneralInformation = Translation.GetCoreTextTranslation("När denna avdelning används beräknas bevakningsdatum enligt kalendern"),
                 Relations = new List<FieldRelation> {
                     new FieldRelation(CaseRuleMode.CaseUserChangeMode, CaseRuleMode.TemplateUserChangeMode,
                                       CaseRuleMode.CaseNewTemplateMode, CaseRuleMode.CaseInheritTemplateMode) {
@@ -1131,8 +1132,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                         ActionType = RelationActionType.ValueSetter.ToInt(),
                         FieldId = VirtualFields.Department_WatchDate.ToString(),
                         DataStore1 = TranslationCaseFields.Department_Id.ToString(),
-                        ResultDataKey = TranslationCaseFields.WatchDate.ToString(),                        
-                        GeneralInformation = Translation.GetCoreTextTranslation("När denna avdelning används beräknas bevakningsdatum enligt kalendern"),
+                        ResultDataKey = TranslationCaseFields.WatchDate.ToString(),
                         Conditions =  new List<FieldRelationCondition> {                            
                             new FieldRelationCondition(TranslationCaseFields.Department_Id.ToString(), ForeignKeyNum.FKeyNum0, ConditionOperator.HasValue),
                             new FieldRelationCondition(TranslationCaseFields.Priority_Id.ToString(), ForeignKeyNum.FKeyNum2, ConditionOperator.Equal, "0")

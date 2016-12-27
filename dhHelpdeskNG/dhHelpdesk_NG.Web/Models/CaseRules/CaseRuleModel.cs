@@ -131,6 +131,7 @@ namespace DH.Helpdesk.Web.Models.CaseRules
 
         public List<FieldRelation> Relations { get; set; }
 
+        public string GeneralInformation { get; set; }
 
         public void AddItem(FieldItem item)
         {
@@ -197,9 +198,7 @@ namespace DH.Helpdesk.Web.Models.CaseRules
             // Used for WokingGroup & Adminstrator when both have Current RunTime value item in CaseTemplate.  (Inloggad användare, Inloggad användares driftgrupp)
             ShowRunTimeCurrentValue = false;
             ShowDetailsInformation = true;
-
-            GeneralInformation = "";
-
+          
             Conditions = new List<FieldRelationCondition>();
         }
 
@@ -225,9 +224,7 @@ namespace DH.Helpdesk.Web.Models.CaseRules
 
         public bool ShowAllIfKeyIsNull { get; set; }
 
-        public bool ShowRunTimeCurrentValue { get; set; }
-       
-        public string GeneralInformation { get; set; }
+        public bool ShowRunTimeCurrentValue { get; set; }               
 
         public bool ShowDetailsInformation { get; set; }
 

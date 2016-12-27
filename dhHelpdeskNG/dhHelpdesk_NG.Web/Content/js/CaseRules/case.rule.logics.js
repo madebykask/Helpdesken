@@ -371,10 +371,16 @@
                     return ret;
 
                 if (field.Relations.length > 0) {
+                    var ret = !dataHelper.isNullOrEmpty(field.GeneralInformation) ? "<div align='left'>" + field.GeneralInformation + "</div> <br />" : "";
+                    var isDetailTitleAdded = false;
                     for (var r = 0; r < field.Relations.length; r++) {
                         var curRelation = field.Relations[r];
                         if (this.checkConditions(curRelation.Conditions)) {
-                            ret += helpdesk.caseRule.predictAction(field, curRelation);
+                            var predict = helpdesk.caseRule.predictAction(field, curRelation);
+                            if (predict != "") {
+                                ret += isDetailTitleAdded ? predict : "<div align='left'>" + params.willSetToText + "</div> <br />" + predict;
+                                isDetailTitleAdded = true;
+                            }
                         }
                     }
                     return ret;
@@ -390,7 +396,7 @@
                     return "";
 
                 // No information to show
-                if (relation.GeneralInformation == "" && !relation.ShowDetailsInformation)
+                if (!relation.ShowDetailsInformation)
                     return "";
 
                 var selectedItem = field.Selected;
@@ -409,8 +415,8 @@
                     }
                 }
 
-                if (!dataHelper.isNullOrEmpty(relatedField.Selected.ItemValue) && relatedField.FieldType != _FIELD_TYPE.CheckBox)
-                    return "";                                        
+                //if (!dataHelper.isNullOrEmpty(relatedField.Selected.ItemValue) && relatedField.FieldType != _FIELD_TYPE.CheckBox)
+                //    return "";                                        
 
                 var fItem = this.getForeignItem(relation, selectedItem, relation.ForeignKeyNumber, relatedField);
                 if (fItem == null || dataHelper.isNullOrEmpty(fItem.ItemText))
@@ -418,15 +424,16 @@
                 
                 var ret = "";
                 switch (relation.ActionType) {
-                    case _ACTION_TYPE.ValueSetter:                        
-                        //ret =  "<div align='left'> <b>" + relatedField.FieldCaption + "</b>: " + params.willSetToText + " <b>" + fItem.ItemText + "</b> </div> <br />";
-                        return "<div align='left'> <b>" + relatedField.FieldCaption + "</b>: " + params.willSetToText + " <b>" + fItem.ItemText + "</b> </div> <br />";
+                    case _ACTION_TYPE.ValueSetter:                                                
+                        return "<div align='left'> - <b>" + relatedField.FieldCaption + "</b> "+ params.toText + " <b>" + fItem.ItemText + "</b> </div> <br />";
 
-                    case _ACTION_TYPE.ListPopulator:                        
-                        return "<div align='left'> <b>" + relatedField.FieldCaption + "</b>: " + params.willShowRelatedItemsText + " <b>" + fItem.ItemText + "</b> </div> <br />";
+                    case _ACTION_TYPE.ListPopulator:
+                        return "";
+                        //return "<div align='left'> <b>" + relatedField.FieldCaption + "</b>: " + params.willShowRelatedItemsText + " <b>" + fItem.ItemText + "</b> </div> <br />";
 
                     case _ACTION_TYPE.ListCleaner:
-                        return "<div align='left'> <b>" + relatedField.FieldCaption + "</b>: will be clear </div> <br />";                                            
+                        return "";
+                        //return "<div align='left'> <b>" + relatedField.FieldCaption + "</b>: will be clear </div> <br />";                                            
                 }
             },
 
