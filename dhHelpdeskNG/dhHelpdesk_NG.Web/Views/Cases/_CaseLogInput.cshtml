@@ -70,18 +70,26 @@
                     if (Model.standardTexts != null)
                     {
                         if (Model.standardTexts.Any())
-                        {                        
-                    <li class="secspace"></li>
-                    <li>
-                        @Translation.Get("Standardtext", SessionFacade.CurrentCaseLanguageId)&nbsp;
-                            <select id="lstStandarTexts" style="max-width: 220px;">
-                                <option>&nbsp;</option>
-                                @foreach (var e in Model.standardTexts.Where(e => e.IsActive == 1))
-                                {
-                                    <option value="@e.Id">@e.Name</option>
-                                }
-                            </select>
-                    </li>
+                        {
+                            <li class="secspace"></li>
+                            <li>
+                                <div class="btn-group" id="standardtextDropdownMenu">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                        @Translation.GetCoreTextTranslation("Standardtext")&nbsp;<span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu case-standardText-keep-open" role="menu">
+                                        <li>
+                                            <div id="standardTextAccordion" class="case-div-standardtext-accordion">
+                                                @foreach (var e in Model.standardTexts.Where(e => e.IsActive == 1))
+                                                {
+                                                    <p class="case-standardtext-space">@Html.Raw(e.Name.Split('\n').FirstOrDefault())</p>
+                                                    <div class="case-div-standardtext case-standardtext-space"><span>@Html.Raw(e.Name)</span></div>
+                                                }
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
                         }
                     }
                 }

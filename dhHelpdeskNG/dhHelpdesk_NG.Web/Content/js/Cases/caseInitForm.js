@@ -728,14 +728,14 @@ function CaseInitForm() {
         }, 'json');
     });
 
-    $('#lstStandarTexts').change(function () {
+    $("#standardtextDropdownMenu div.case-div-standardtext").click(function () {
         var regexp = /<BR>/g
-        var txt = $('#lstStandarTexts :selected').text().replace(regexp, "\n");
-        var writeTextToExternalNote = $('#WriteTextToExternalNote').val();
-        var field = '#CaseLog_TextInternal';
+        var txt = $(this).children("span").html().replace(regexp, "\n");
+        var writeTextToExternalNote = $("#WriteTextToExternalNote").val();
+        var field = "#CaseLog_TextInternal";
 
-        if (writeTextToExternalNote == '') {
-            field = '#CaseLog_TextExternal';
+        if (writeTextToExternalNote == "") {
+            field = "#CaseLog_TextExternal";
         }
 
         if (txt.length > 1) {
@@ -745,6 +745,23 @@ function CaseInitForm() {
             var input = $(field);
             input[0].selectionStart = input[0].selectionEnd = input.val().length;
         }
+        $("#standardtextDropdownMenu").click();
+    });
+
+    $("#standardtextDropdownMenu").click(function() {
+        $("#standardTextAccordion").accordion("activate", false);
+    });
+
+    $("#standardTextAccordion").accordion({
+        active: false,
+        collapsible: true,
+        heightStyle: "content",
+        icons: { "header": "ui-icon-plus", "activeHeader": "ui-icon-minus" },
+        header: "p"
+    });
+
+    $("#standardtextDropdownMenu ul.case-standardText-keep-open").on("click", function (e) {
+        e.stopPropagation();
     });
 
     $('#divCaseType ul.dropdown-menu li a').click(function (e) {

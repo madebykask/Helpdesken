@@ -3798,3 +3798,22 @@ div.case-dropdown-div > span.btn-group > button.multiselect.dropdown-toggle.btn 
     max-width:175px;
 	min-width:175px;
 }
+
+.case-div-standardtext {
+    padding: 1em !important;
+    font-size: 0.9em;
+    cursor: pointer;
+}
+
+.case-standardtext-space {
+    white-space: pre-line;
+}
+
+.case-div-standardtext-accordion {
+    max-width: 35em;
+    min-width: 35em;
+}
+
+.case-standardText-keep-open {
+    z-index: 10001;
+}
