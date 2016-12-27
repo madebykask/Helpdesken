@@ -198,9 +198,11 @@
            
             refreshAllStateIcons: function () {
                 // Refresh icon states
-                for (var _fi = 0; _fi < ruleModel.FieldAttributes.length; _fi++) {
-                    var field = ruleModel.FieldAttributes[_fi];
-                    helpdesk.caseRule.refreshStateIcons(field);
+                if (this._GLOBAL_RULE_STATE_MODE == _RULE_MODE.TemplateUserChangeMode) {
+                    for (var _fi = 0; _fi < ruleModel.FieldAttributes.length; _fi++) {
+                        var field = ruleModel.FieldAttributes[_fi];
+                        helpdesk.caseRule.refreshStateIcons(field);
+                    }
                 }
             },
 
@@ -210,7 +212,7 @@
                 var field = this.getFieldByElement($(element));
                 if (!dataHelper.isNullOrUndefined(field))
                     helpdesk.caseRule.applyRules(field);
-                
+                                
                 this.refreshAllStateIcons();
             },
 
@@ -388,7 +390,7 @@
                     return "";
 
                 // No information to show
-                if (!relation.ShowGeneralInformation && !relation.ShowDetailsInformation)
+                if (relation.GeneralInformation == "" && !relation.ShowDetailsInformation)
                     return "";
 
                 var selectedItem = field.Selected;
@@ -416,7 +418,7 @@
                 
                 var ret = "";
                 switch (relation.ActionType) {
-                    case _ACTION_TYPE.ValueSetter:
+                    case _ACTION_TYPE.ValueSetter:                        
                         //ret =  "<div align='left'> <b>" + relatedField.FieldCaption + "</b>: " + params.willSetToText + " <b>" + fItem.ItemText + "</b> </div> <br />";
                         return "<div align='left'> <b>" + relatedField.FieldCaption + "</b>: " + params.willSetToText + " <b>" + fItem.ItemText + "</b> </div> <br />";
 
@@ -424,7 +426,6 @@
                         return "<div align='left'> <b>" + relatedField.FieldCaption + "</b>: " + params.willShowRelatedItemsText + " <b>" + fItem.ItemText + "</b> </div> <br />";
 
                     case _ACTION_TYPE.ListCleaner:
-
                         return "<div align='left'> <b>" + relatedField.FieldCaption + "</b>: will be clear </div> <br />";                                            
                 }
             },

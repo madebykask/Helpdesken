@@ -596,635 +596,97 @@ namespace DH.Helpdesk.Web.Controllers
                     });
         }
 
-        private CaseRuleModel GetCaseRuleModel(int customerId, CaseRuleMode ruleType,
+        private CaseRuleModel GetCaseRuleModel(int customerId, CaseRuleMode ruleMode,
                                                CaseSolution templateModel,
                                                List<CaseSolutionSettingModel> templateSettingModel,
                                                Setting customerSettings,
                                                List<CaseFieldSetting> caseFieldSettings)
-        {
-            var caseBasicInfo = new BasicCaseInformation();
+        {           
+            var currentData = new CaseCurrentDataModel();
 
-            #region Initiator
+            #region Assign current data
 
-            caseBasicInfo.ReportedBy = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.ReportedBy, string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.UserNumber, templateSettingModel.ToList())
-            };
-
-            caseBasicInfo.PersonsName = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.PersonsName, string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.PersonsName, templateSettingModel.ToList())
-            };
-
-            caseBasicInfo.PersonsEmail = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.PersonsEmail, string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.PersonsEmail, templateSettingModel.ToList())
-            };
-
-            caseBasicInfo.MailToNotifier = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.NoMailToNotifier.ToBool().ToString(), string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.Email, templateSettingModel.ToList())
-            };
-
-            caseBasicInfo.PersonsPhone = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.PersonsPhone, string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.PersonsPhone, templateSettingModel.ToList())
-            };
-
-            caseBasicInfo.PersonsCellPhone = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.PersonsCellPhone, string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.PersonsCellPhone, templateSettingModel.ToList())
-            };
-
-            caseBasicInfo.CostCentre = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.CostCentre, string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.CostCentre, templateSettingModel.ToList())
-            };
-
-            caseBasicInfo.Place = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.Place, string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.Place, templateSettingModel.ToList())
-            };
-
-            caseBasicInfo.UserCode = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.UserCode, string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.Usercode, templateSettingModel.ToList())
-            };
-
-            caseBasicInfo.UpdateUserInfo = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.UpdateNotifierInformation.ToBool().ToString(), string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.UpdateNotifierInformation, templateSettingModel.ToList())
-            };
-
-            var regions = _regionService.GetRegions(customerId);
-            var defaultRegion = regions.Where(r => r.IsDefault != 0 && r.IsActive != 0).FirstOrDefault();
-            caseBasicInfo.Regions = new BasicMultiItemField()
-            {
-                Selected = new FieldItem(templateModel.Region_Id?.ToString(), string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.Region, templateSettingModel.ToList()),
-                DefaultItem = defaultRegion != null? new FieldItem(defaultRegion.Id.ToString(), defaultRegion.Name) : FieldItem.CreateEmpty(),
-                Items = regions.Where(r=> r.IsActive != 0 || (templateModel.Region_Id.HasValue && templateModel.Region_Id.Value == r.Id))
-                               .Select(r=> new FieldItem(r.Id.ToString(), r.Name, r.IsActive != 0)).OrderBy(r => r.ItemText).ToList()                
-            };
-            
-            var departments = _departmentService.GetDepartments(customerId);                        
-            caseBasicInfo.Departments = new BasicMultiItemField()
-            {
-                Selected = new FieldItem(templateModel.Department_Id?.ToString(), string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.Department, templateSettingModel.ToList()),
-                DefaultItem = FieldItem.CreateEmpty(),
-                Items = departments.Where(d => d.IsActive != 0 || (templateModel.Department_Id.HasValue && templateModel.Department_Id.Value == d.Id))
-                                   .Select(d => new FieldItem(d.Id.ToString(), d.DepartmentName, d.IsActive != 0)
-                                                              { ForeignKeyValue1 = d.Region_Id?.ToString() })
-                                   .OrderBy(d => d.ItemText).ToList()
-            };
-
-            var ous = _ouService.GetThemAllOUs(customerId);
-            caseBasicInfo.OUs = new BasicMultiItemField()
-            {
-                Selected = new FieldItem(templateModel.OU_Id?.ToString(), string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.OU, templateSettingModel.ToList()),
-                DefaultItem = FieldItem.CreateEmpty(),
-                Items = ous.Where(o => o.Id != o.Parent_OU_Id && (o.IsActive != 0 || (templateModel.OU_Id.HasValue && templateModel.OU_Id.Value == o.Id)) && 
-                                       (o.Parent == null || (o.Parent != null && o.Parent.Parent == null))) // Max deep 2 levels
-                           .Select(o => new FieldItem(o.Id.ToString(), (o.Parent == null? o.Name : string.Format("{0} - {1}", o.Parent.Name, o.Name)), o.IsActive != 0)
-                                                      { ForeignKeyValue1 = o.Department_Id?.ToString() })
-                           .OrderBy(o=> o.ItemText).ToList()
-            };
+            currentData.Available = templateModel.Available;
+            currentData.Caption = templateModel.Caption;
+            currentData.CaseType_Id = templateModel.CaseType_Id;
+            currentData.Category_Id = templateModel.Category_Id;
+            currentData.CausingPart_Id = templateModel.CausingPartId;
+            currentData.Change_Id = templateModel.Change_Id;
+            currentData.ContactBeforeAction = templateModel.ContactBeforeAction;
+            currentData.Cost = templateModel.Cost;
+            currentData.CostCentre = templateModel.CostCentre;
+            currentData.Currency = templateModel.Currency;
+            currentData.Customer_Id = templateModel.Customer_Id;
+            currentData.Department_Id = templateModel.Department_Id;
+            currentData.Description = templateModel.Description;
+            currentData.FinishingCause_Id = templateModel.FinishingCause_Id;
+            currentData.FinishingDate = templateModel.FinishingDate;
+            currentData.FinishingDescription = templateModel.FinishingDescription;
+            currentData.Impact_Id = templateModel.Impact_Id;
+            currentData.InventoryLocation = templateModel.InventoryLocation;
+            currentData.InventoryNumber = templateModel.InventoryNumber;
+            currentData.InventoryType = templateModel.InventoryType;
+            currentData.InvoiceNumber = templateModel.InvoiceNumber;
+            currentData.IsAbout_CostCentre = templateModel.IsAbout_CostCentre;
+            currentData.IsAbout_Department_Id = templateModel.IsAbout_Department_Id;
+            currentData.IsAbout_OU_Id = templateModel.IsAbout_OU_Id;
+            currentData.IsAbout_PersonsCellPhone = templateModel.IsAbout_PersonsCellPhone;
+            currentData.IsAbout_PersonsEmail = templateModel.IsAbout_PersonsEmail;
+            currentData.IsAbout_PersonsName = templateModel.IsAbout_PersonsName;
+            currentData.IsAbout_PersonsPhone = templateModel.IsAbout_PersonsPhone;
+            currentData.IsAbout_Place = templateModel.IsAbout_Place;
+            currentData.IsAbout_Region_Id = templateModel.IsAbout_Region_Id;
+            currentData.IsAbout_ReportedBy = templateModel.IsAbout_ReportedBy;
+            currentData.IsAbout_UserCode = templateModel.IsAbout_UserCode;
+            currentData.Miscellaneous = templateModel.Miscellaneous;
+            currentData.NoMailToNotifier = templateModel.NoMailToNotifier;
+            currentData.OtherCost = templateModel.OtherCost;
+            currentData.OU_Id = templateModel.OU_Id;
+            currentData.PerformerUser_Id = templateModel.PerformerUser_Id;
+            currentData.PersonsCellPhone = templateModel.PersonsCellPhone;
+            currentData.PersonsEmail = templateModel.PersonsEmail;
+            currentData.PersonsName = templateModel.PersonsName;
+            currentData.PersonsPhone = templateModel.PersonsPhone;
+            currentData.Place = templateModel.Place;
+            currentData.PlanDate = templateModel.PlanDate;
+            currentData.Priority_Id = templateModel.Priority_Id;
+            currentData.Problem_Id = templateModel.Problem_Id;
+            currentData.ProductArea_Id = templateModel.ProductArea_Id;
+            currentData.Project_Id = templateModel.Project_Id;
+            currentData.ReferenceNumber = templateModel.ReferenceNumber;
+            currentData.Region_Id = templateModel.Region_Id;
+            currentData.RegistrationSource = templateModel.RegistrationSource;
+            currentData.ReportedBy = templateModel.ReportedBy;
+            currentData.SMS = templateModel.SMS;
+            currentData.SolutionRate = templateModel.SolutionRate;
+            currentData.StateSecondary_Id = templateModel.StateSecondary_Id;
+            currentData.Status_Id = templateModel.Status_Id;
+            currentData.Supplier_Id = templateModel.Supplier_Id;
+            currentData.System_Id = templateModel.System_Id;
+            currentData.Text_External = templateModel.Text_External;
+            currentData.Text_Internal = templateModel.Text_Internal;
+            currentData.UpdateNotifierInformation = templateModel.UpdateNotifierInformation;
+            currentData.Urgency_Id = templateModel.Urgency_Id;
+            currentData.UserCode = templateModel.UserCode;
+            currentData.Verified = templateModel.Verified;
+            currentData.VerifiedDescription = templateModel.VerifiedDescription;
+            currentData.WatchDate = templateModel.WatchDate;
+            currentData.WorkingGroup_Id = templateModel.WorkingGroup_Id;
 
             #endregion
 
-            #region IsAbout
-
-            caseBasicInfo.IsAbout_ReportedBy = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.IsAbout_ReportedBy, string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.IsAbout_ReportedBy, templateSettingModel.ToList())
-            };
-
-            caseBasicInfo.IsAbout_PersonsName = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.IsAbout_PersonsName, string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.IsAbout_PersonsName, templateSettingModel.ToList())
-            };
-
-            caseBasicInfo.IsAbout_PersonsEmail = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.IsAbout_PersonsEmail, string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.IsAbout_PersonsEmail, templateSettingModel.ToList())
-            };            
-
-            caseBasicInfo.IsAbout_PersonsPhone = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.IsAbout_PersonsPhone, string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.IsAbout_PersonsPhone, templateSettingModel.ToList())
-            };
-
-            caseBasicInfo.IsAbout_PersonsCellPhone = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.IsAbout_PersonsCellPhone, string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.IsAbout_PersonsCellPhone, templateSettingModel.ToList())
-            };
-
-            caseBasicInfo.IsAbout_CostCentre = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.IsAbout_CostCentre, string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.IsAbout_CostCentre, templateSettingModel.ToList())
-            };
-
-            caseBasicInfo.IsAbout_Place = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.IsAbout_Place, string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.IsAbout_Place, templateSettingModel.ToList())
-            };
-
-            caseBasicInfo.IsAbout_UserCode = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.IsAbout_UserCode, string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.IsAbout_UserCode, templateSettingModel.ToList())
-            };            
-
-            caseBasicInfo.IsAbout_Regions = new BasicMultiItemField()
-            {
-                Selected = new FieldItem(templateModel.IsAbout_Region_Id?.ToString(), string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.IsAbout_Region_Id, templateSettingModel.ToList()),
-                DefaultItem = defaultRegion != null ? new FieldItem(defaultRegion.Id.ToString(), defaultRegion.Name) : FieldItem.CreateEmpty(),
-                Items = regions.Where(r => r.IsActive != 0 || (templateModel.IsAbout_Region_Id.HasValue && templateModel.IsAbout_Region_Id.Value == r.Id))
-                               .Select(r => new FieldItem(r.Id.ToString(), r.Name, r.IsActive != 0)).OrderBy(r => r.ItemText).ToList()
-            };
-
-            caseBasicInfo.IsAbout_Departments = new BasicMultiItemField()
-            {
-                Selected = new FieldItem(templateModel.IsAbout_Department_Id?.ToString(), string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.IsAbout_Department_Id, templateSettingModel.ToList()),
-                DefaultItem = FieldItem.CreateEmpty(),
-                Items = departments.Where(d => d.IsActive != 0 || (templateModel.IsAbout_Department_Id.HasValue && templateModel.IsAbout_Department_Id.Value == d.Id))
-                                   .Select(d => new FieldItem(d.Id.ToString(), d.DepartmentName, d.IsActive != 0)
-                                                              { ForeignKeyValue1 = d.Region_Id?.ToString() })
-                                   .OrderBy(d => d.ItemText).ToList()
-            };            
-
-            caseBasicInfo.IsAbout_OUs = new BasicMultiItemField()
-            {
-                Selected = new FieldItem(templateModel.IsAbout_OU_Id?.ToString(), string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.IsAbout_OU_Id, templateSettingModel.ToList()),
-                DefaultItem = FieldItem.CreateEmpty(),
-                Items = ous.Where(o => o.Id != o.Parent_OU_Id && (o.IsActive != 0 || (templateModel.IsAbout_OU_Id.HasValue && templateModel.IsAbout_OU_Id.Value == o.Id)) &&
-                                       (o.Parent == null || (o.Parent != null && o.Parent.Parent == null))) // Max deep 2 levels
-                           .Select(o => new FieldItem(o.Id.ToString(), (o.Parent == null ? o.Name : string.Format("{0} - {1}", o.Parent.Name, o.Name)), o.IsActive != 0)
-                                                        { ForeignKeyValue1 = o.Department_Id?.ToString() })
-                           .OrderBy(o => o.ItemText).ToList()
-            };
-
-            #endregion
-
-            #region Computer Info
-
-            caseBasicInfo.InventoryNumber = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.InventoryNumber, string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.InventoryNumber, templateSettingModel.ToList())
-            };
-
-            caseBasicInfo.InventoryType = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.InventoryType, string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.InventoryType, templateSettingModel.ToList())
-            };
-
-            caseBasicInfo.InventoryLocation = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.InventoryLocation, string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.InventoryLocation, templateSettingModel.ToList())
-            };
-
-            #endregion
-
-            #region Case Info           
-
-            var registationSources = _registrationSourceCustomerService.GetRegistrationSources(customerId);
-            caseBasicInfo.RegistrationSources = new BasicMultiItemField()
-            {
-                Selected = new FieldItem(templateModel.RegistrationSource?.ToString(), string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.RegistrationSourceCustomer, templateSettingModel.ToList()),
-                DefaultItem = FieldItem.CreateEmpty(),
-                Items = registationSources.Select(r => new FieldItem(r.Id.ToString(), r.SourceName, r.IsActive != 0)).OrderBy(r => r.ItemText).ToList()
-            };
-
-            var caseTypes = _caseTypeService.GetAllCaseTypes(customerId);
-            var defaultCaseType = caseTypes.Where(c => c.IsDefault != 0 && c.IsActive != 0).FirstOrDefault();
-            caseBasicInfo.CaseTypes = new BasicMultiItemField()
-            {
-                Selected = new FieldItem(templateModel.CaseType_Id?.ToString(), string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.CaseType, templateSettingModel.ToList()),
-                DefaultItem = defaultCaseType != null ? new FieldItem(defaultCaseType.Id.ToString(), defaultCaseType.Name) : FieldItem.CreateEmpty(),
-                Items = caseTypes.Select(c => new FieldItem(c.Id.ToString(), Translation.GetCoreTextTranslation(c.Name), c.IsActive != 0, c.Parent_CaseType_Id?.ToString()) { ForeignKeyValue1 = c.User_Id?.ToString() })
-                                 .OrderBy(i => i.ItemText).ToList()
-            };
-
-            var prodAreas = _productAreaService.GetAll(customerId);
-            caseBasicInfo.ProductAreas = new BasicMultiItemField()
-            {
-                Selected = new FieldItem(templateModel.ProductArea_Id?.ToString(), string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.ProductArea, templateSettingModel.ToList()),
-                DefaultItem = FieldItem.CreateEmpty(),
-                Items = prodAreas.Select(p => new FieldItem(p.Id.ToString(), Translation.GetCoreTextTranslation(p.Name), p.IsActive != 0, p.Parent_ProductArea_Id?.ToString())
-                                                            {
-                                                                ForeignKeyValue1 = p.WorkingGroup_Id?.ToString(),
-                                                                ForeignKeyValue2 = p.Priority_Id?.ToString()
-                                                            }
-                                        ).OrderBy(i => i.ItemText).ToList()
-            };
-
-            var systems = _systemService.GetSystems(customerId);
-            caseBasicInfo.Systems = new BasicMultiItemField()
-            {
-                Selected = new FieldItem(templateModel.System_Id?.ToString(), string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.System, templateSettingModel.ToList()),
-                DefaultItem = FieldItem.CreateEmpty(),
-                Items = systems.Select(s => new FieldItem(s.Id.ToString(), s.SystemName, true) { ForeignKeyValue1 = s.Urgency_Id?.ToString() })
-                               .OrderBy(i => i.ItemText).ToList()
-            };
-
-            var urgencies = _urgencyService.GetUrgencies(customerId);
-            caseBasicInfo.Urgencies = new BasicMultiItemField()
-            {
-                Selected = new FieldItem(templateModel.Urgency_Id?.ToString(), string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.Urgency, templateSettingModel.ToList()),
-                DefaultItem = FieldItem.CreateEmpty(),
-                Items = urgencies.Select(u => new FieldItem(u.Id.ToString(), u.Name, true)).OrderBy(i => i.ItemText).ToList()
-            };
-
-            var impacts = _impactService.GetImpacts(customerId);
-            caseBasicInfo.Impacts = new BasicMultiItemField()
-            {
-                Selected = new FieldItem(templateModel.Impact_Id?.ToString(), string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.Impact, templateSettingModel.ToList()),
-                DefaultItem = FieldItem.CreateEmpty(),
-                Items = impacts.Select(i => new FieldItem(i.Id.ToString(), i.Name, true)).OrderBy(i => i.ItemText).ToList()
-            };
-
-            var categories = _categoryService.GetCategories(customerId);
-            caseBasicInfo.Categories = new BasicMultiItemField()
-            {
-                Selected = new FieldItem(templateModel.Category_Id?.ToString(), string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.Category, templateSettingModel.ToList()),
-                DefaultItem = FieldItem.CreateEmpty(),
-                Items = categories.Select(c => new FieldItem(c.Id.ToString(), c.Name, c.IsActive != 0)).OrderBy(i => i.ItemText).ToList()
-            };
-
-            var supliers = _supplierService.GetSuppliers(customerId);
-            caseBasicInfo.Supliers = new BasicMultiItemField()
-            {
-                Selected = new FieldItem(templateModel.Supplier_Id?.ToString(), string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.Supplier, templateSettingModel.ToList()),
-                DefaultItem = FieldItem.CreateEmpty(),
-                Items = supliers.Select(s => new FieldItem(s.Id.ToString(), s.Name, s.IsActive != 0)).OrderBy(i => i.ItemText).ToList()
-            };
-
-            caseBasicInfo.InvoiceNumber = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.InvoiceNumber, string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.InvoiceNumber, templateSettingModel.ToList()),                
-            };
-
-            caseBasicInfo.ReferenceNumber = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.ReferenceNumber, string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.ReferenceNumber, templateSettingModel.ToList()),
-            };
-
-            caseBasicInfo.Caption = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.Caption, string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.Caption, templateSettingModel.ToList()),
-            };
-
-            caseBasicInfo.Description = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.Description, string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.Description, templateSettingModel.ToList()),
-            };
-
-            caseBasicInfo.Miscellaneous = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.Miscellaneous, string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.Miscellaneous, templateSettingModel.ToList()),
-            };
-
-            caseBasicInfo.ContactBeforeAction = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.ContactBeforeAction.ToBool().ToString(), string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.ContactBeforeAction, templateSettingModel.ToList()),
-            };
-
-            caseBasicInfo.SMS = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.SMS.ToBool().ToString(), string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.SMS, templateSettingModel.ToList()),
-            };
-
-            caseBasicInfo.Available = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.Available, string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.Available, templateSettingModel.ToList()),
-            };
-
-            caseBasicInfo.Cost = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.Cost.ToString(), string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.Cost, templateSettingModel.ToList()),
-            };
-
-            caseBasicInfo.OtherCost = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.OtherCost.ToString(), string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.Cost, templateSettingModel.ToList()),
-            };
-
-            caseBasicInfo.Currency = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.Currency, string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.Cost, templateSettingModel.ToList()),
-            };
-
-            caseBasicInfo.CaseFile = new BasicSingleItemField()
-            {
-                Selected = FieldItem.CreateEmpty(),
-                StatusType = GetFieldStatusType(CaseSolutionFields.FileName, templateSettingModel.ToList()),
-            };
-
-            #endregion
-
-            #region Other Info           
-
-            var workinGroups = _workingGroupService.GetWorkingGroups(customerId, false);
-            var defaultWG = workinGroups.Where(w => w.IsDefault != 0 && w.IsActive != 0).FirstOrDefault();
-            caseBasicInfo.WorkingGroups = new BasicMultiItemField()
-            {
-                Selected = new FieldItem(templateModel.WorkingGroup_Id?.ToString(), string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.WorkingGroup, templateSettingModel.ToList()),
-                DefaultItem = defaultWG != null ? new FieldItem(defaultWG.Id.ToString(), defaultWG.WorkingGroupName) : FieldItem.CreateEmpty(),
-                Items = workinGroups.Select(w => new FieldItem(w.Id.ToString(), w.WorkingGroupName, w.IsActive != 0)
-                                                               { ForeignKeyValue2 = w.StateSecondary_Id?.ToString() }
-                                           ).OrderBy(r => r.ItemText).ToList()
-            };
-
-            var currentWG = new FieldItem("-1", string.Format("-- {0} --", Translation.GetCoreTextTranslation(CURRENT_USER_WORKINGGROUP_CAPTION)));
-            caseBasicInfo.WorkingGroups.Items.Insert(0, currentWG);
-          
-            var admins = _userService.GetAvailablePerformersOrUserId(customerId);            
-            caseBasicInfo.Administrators = new BasicMultiItemField()
-            {
-                Selected = new FieldItem(templateModel.PerformerUser_Id?.ToString(), string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.Administrator, templateSettingModel.ToList()),
-                DefaultItem = FieldItem.CreateEmpty(),
-                Items = admins.Select(a => new FieldItem(a.Id.ToString(), 
-                                                         (customerSettings.IsUserFirstLastNameRepresentation == 1 ?
-                                                                string.Format("{0} {1}", a.FirstName, a.SurName) : string.Format("{0} {1}", a.SurName, a.FirstName)),
-                                                         a.IsActive != 0)
-                                               {
-                                                    ForeignKeyValue1 = string.Join(",", a.UserWorkingGroups.Where(w=> w.UserRole == 2)
-                                                                                                           .Select(w=> w.WorkingGroup_Id).ToArray())
-                                               }
-                                     )
-                              .OrderBy(i => i.ItemText).ToList()
-            };
-
-            var currentUser = new FieldItem("-1", string.Format("-- {0} --", Translation.GetCoreTextTranslation(CURRENT_USER_ITEM_CAPTION)));
-            caseBasicInfo.Administrators.Items.Insert(0, currentUser);
-
-
-            var priorities = _priorityService.GetPriorities(customerId);
-            var defaultPrio = priorities.Where(p => p.IsDefault != 0 && p.IsActive != 0).FirstOrDefault();
-            caseBasicInfo.Priorities = new BasicMultiItemField()
-            {
-                Selected = new FieldItem(templateModel.Priority_Id?.ToString(), string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.Priority, templateSettingModel.ToList()),
-                DefaultItem = defaultPrio != null ? new FieldItem(defaultPrio.Id.ToString(), defaultPrio.Name) : FieldItem.CreateEmpty(),
-                Items = priorities.Select(p => new FieldItem(p.Id.ToString(), p.Name, p.IsActive != 0)
-                                                                {
-                                                                    ForeignKeyValue1 = p.LogText,
-                                                                    ForeignKeyValue2 = p.SolutionTime.ToString()
-                                                                })
-                                  .OrderBy(i => i.ItemText).ToList()
-            };
-
-            var statuses = _statusService.GetStatuses(customerId);
-            var defaultStatus = statuses.Where(s => s.IsDefault != 0 && s.IsActive != 0).FirstOrDefault();
-            caseBasicInfo.Status = new BasicMultiItemField()
-            {
-                Selected = new FieldItem(templateModel.Status_Id?.ToString(), string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.Status, templateSettingModel.ToList()),
-                DefaultItem = defaultStatus != null ? new FieldItem(defaultStatus.Id.ToString(), defaultStatus.Name) : FieldItem.CreateEmpty(),
-                Items = statuses.Select(s => new FieldItem(s.Id.ToString(), s.Name, s.IsActive != 0)
-                                                            {
-                                                                ForeignKeyValue1 = s.WorkingGroup_Id?.ToString(),
-                                                                ForeignKeyValue2 = s.StateSecondary_Id?.ToString(),
-                                                            }
-                                       ).OrderBy(i => i.ItemText).ToList()
-            };
-
-            var subStatuses = _stateSecondaryService.GetStateSecondaries(customerId);
-            var defaultSubStatus = statuses.Where(s => s.IsDefault != 0 && s.IsActive != 0).FirstOrDefault();
-            caseBasicInfo.SubStatus = new BasicMultiItemField()
-            {
-                Selected = new FieldItem(templateModel.StateSecondary_Id?.ToString(), string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.StateSecondary, templateSettingModel.ToList()),
-                DefaultItem = defaultSubStatus != null ? new FieldItem(defaultSubStatus.Id.ToString(), defaultSubStatus.Name) : FieldItem.CreateEmpty(),
-                Items = subStatuses.Select(s => new FieldItem(s.Id.ToString(), s.Name, s.IsActive != 0)
-                                                                {
-                                                                    ForeignKeyValue1 = s.WorkingGroup_Id?.ToString(),
-                                                                    ForeignKeyValue2 = (!s.NoMailToNotifier.ToBool()).ToString(),
-                                                                    ForeignKeyValue3 = s.RecalculateWatchDate.ToString()
-                                                                }
-                                          ).OrderBy(i => i.ItemText).ToList()
-            };
-
-            var projects = _projectService.GetCustomerProjects(customerId);            
-            caseBasicInfo.Projects = new BasicMultiItemField()
-            {
-                Selected = new FieldItem(templateModel.Project_Id?.ToString(), string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.Project, templateSettingModel.ToList()),
-                DefaultItem = FieldItem.CreateEmpty(),
-                Items = projects.Select(p => new FieldItem(p.Id.ToString(), p.Name, p.IsActive != 0)).OrderBy(i => i.ItemText).ToList()
-            };
-
-            var problems = _problemService.GetCustomerProblems(customerId);
-            caseBasicInfo.Problems = new BasicMultiItemField()
-            {
-                Selected = new FieldItem(templateModel.Problem_Id?.ToString(), string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.Problem, templateSettingModel.ToList()),
-                DefaultItem = FieldItem.CreateEmpty(),
-                Items = problems.Select(p => new FieldItem(p.Id.ToString(), p.Name, true)).OrderBy(i => i.ItemText).ToList()
-            };
-
-            var causingParts = _causingPartService.GetCausingParts(customerId);
-            caseBasicInfo.CausingParts = new BasicMultiItemField()
-            {
-                Selected = new FieldItem(templateModel.CausingPartId?.ToString(), string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.CausingPart, templateSettingModel.ToList()),
-                DefaultItem = FieldItem.CreateEmpty(),
-                Items = causingParts.Select(c => new FieldItem(c.Id.ToString(), c.Name, c.IsActive)).OrderBy(i => i.ItemText).ToList()
-            };
-
-            var changes = _changeService.GetChanges(customerId);            
-            caseBasicInfo.Changes = new BasicMultiItemField()
-            {
-                Selected = new FieldItem(templateModel.Change_Id?.ToString(), string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.Change, templateSettingModel.ToList()),
-                DefaultItem = FieldItem.CreateEmpty(),
-                Items = changes.Select(c => new FieldItem(c.Id.ToString(), c.ChangeTitle, true)).OrderBy(i => i.ItemText).ToList()
-            };
-            
-            caseBasicInfo.PlanDate = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.PlanDate?.ToShortDateString(), string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.PlanDate, templateSettingModel.ToList())                
-            };
-
-            caseBasicInfo.WatchDate = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.WatchDate?.ToShortDateString(), string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.WatchDate, templateSettingModel.ToList())
-            };
-
-            caseBasicInfo.Verified = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.Verified.ToBool().ToString(), string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.Verified, templateSettingModel.ToList())
-            };
-
-            caseBasicInfo.VerifiedDescription = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.VerifiedDescription, string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.VerifiedDescription, templateSettingModel.ToList())
-            };
-
-            var solutionRateItems = new List<FieldItem>();
-            for (var i = 10; i < 110; i = i + 10)
-                solutionRateItems.Add(new FieldItem(i.ToString(), i.ToString()));            
-
-            caseBasicInfo.SolutionRate = new BasicMultiItemField()
-            {
-                Selected = new FieldItem(templateModel.SolutionRate, string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.SolutionRate, templateSettingModel.ToList()),
-                DefaultItem = FieldItem.CreateEmpty(),
-                Items = solutionRateItems
-            };
-
-            #endregion
-
-            #region Log Info
-
-            caseBasicInfo.ExternalLog = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.Text_External, string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.ExternalLogNote, templateSettingModel.ToList())
-            };
-
-            caseBasicInfo.InternalLog = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.Text_Internal, string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.InternalLogNote, templateSettingModel.ToList())
-            };
-
-            caseBasicInfo.FinishingDescription = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.FinishingDescription, string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.FinishingDescription, templateSettingModel.ToList())
-            };
-
-            caseBasicInfo.LogFile = new BasicSingleItemField()
-            {
-                Selected = FieldItem.CreateEmpty(),
-                StatusType = GetFieldStatusType(CaseSolutionFields.LogFileName, templateSettingModel.ToList())
-            };
-
-            caseBasicInfo.FinishingDate = new BasicSingleItemField()
-            {
-                Selected = new FieldItem(templateModel.FinishingDate?.ToShortDateString(), string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.FinishingDate, templateSettingModel.ToList())
-            };
-
-            var closingReasons = _finishingCauseService.GetFinishingCauses(customerId);
-            caseBasicInfo.ClosingReason = new BasicMultiItemField()
-            {
-                Selected = new FieldItem(templateModel.FinishingCause_Id?.ToString(), string.Empty),
-                StatusType = GetFieldStatusType(CaseSolutionFields.FinishingCause, templateSettingModel.ToList()),
-                DefaultItem = FieldItem.CreateEmpty(),
-                Items = closingReasons.Select(c => new FieldItem(c.Id.ToString(), c.Name, c.IsActive != 0)).OrderBy(r => r.ItemText).ToList()
-            };
-
-            #endregion
-
-            #region Virtual Data Store
-
-            var prio_Impact_Urgent = _urgencyService.GetPriorityImpactUrgencies(customerId);
-            caseBasicInfo.Priority_Impact_Urgent = new BasicVirtualDataField()
-            {
-                Items = prio_Impact_Urgent.Where(p=> p.Impact_Id.HasValue && p.Urgency_Id.HasValue)
-                                          .Select(p => new FieldItem(string.Empty, string.Empty)
-                                                    {
-                                                        ForeignKeyValue1 = p.Impact_Id.ToString(),
-                                                        ForeignKeyValue2 = p.Urgency_Id.ToString(),
-                                                        ResultKeyValue = p.Priority_Id.ToString()
-                                                    })
-                                          .OrderBy(r => r.ItemText).ToList()
-            };
-
-            var allWatchDates = _watchDateCalendarService.GetAllClosestDateTo(DateTime.UtcNow);
-            var department_WatchDate = departments.Where(d => (d.IsActive != 0 || (templateModel.Department_Id.HasValue && templateModel.Department_Id.Value == d.Id)) &&
-                                                              d.WatchDateCalendar_Id.HasValue)
-                                                  .Select(d => new Tuple<int, string>(d.Id, allWatchDates.FirstOrDefault(w => w.WatchDateCalendar_Id == d.WatchDateCalendar_Id.Value)?.WatchDate.ToShortDateString())).ToList();
-
-            caseBasicInfo.Department_WatchDate = new BasicVirtualDataField()
-            {
-                Items = department_WatchDate.Select(dw => new FieldItem(string.Empty, string.Empty)
-                                                                {
-                                                                    ForeignKeyValue1 = dw.Item1.ToString(), // Depatment Id 
-                                                                    ResultKeyValue = dw.Item2  // WatchDate                
-                                                                }).ToList()
-            };
-
-            #endregion
-
-
-            var model  = _caseRuleFactory.GetCaseRuleModel(customerId, CaseRuleMode.TemplateUserChangeMode, caseFieldSettings, caseBasicInfo, customerSettings);
-            model.CustomerSettings.ConnectUserToWorkingGroup = customerSettings.DontConnectUserToWorkingGroup == 0;
+            _caseRuleFactory.Initialize(_regionService, _departmentService, _ouService,
+                                       _registrationSourceCustomerService, _caseTypeService, _productAreaService,
+                                       _systemService, _urgencyService, _impactService, _categoryService,
+                                       _supplierService, _workingGroupService, _userService,
+                                       _priorityService, _statusService, _stateSecondaryService,
+                                       _projectService, _problemService, _causingPartService,
+                                       _changeService, _finishingCauseService, _watchDateCalendarService);
+
+            var model = _caseRuleFactory.GetCaseRuleModel(customerId, ruleMode, currentData, customerSettings, caseFieldSettings, templateSettingModel);            
 
             return model;
-        }
-
-        private CaseFieldStatusType GetFieldStatusType(CaseSolutionFields field, List<CaseSolutionSettingModel> settings)
-        {
-            var mode = CaseSolutionModes.DisplayField;
-            var setting = settings.Where(s => s.CaseSolutionField == field).SingleOrDefault();
-            if (setting != null)
-                mode = setting.CaseSolutionMode;
-
-            switch (mode)
-            {
-                case CaseSolutionModes.DisplayField:
-                    return CaseFieldStatusType.Editable;
-                case CaseSolutionModes.Hide:
-                    return CaseFieldStatusType.Hidden;
-                case CaseSolutionModes.ReadOnly:
-                    return CaseFieldStatusType.Readonly;
-            }
-
-            return CaseFieldStatusType.Editable;
-        }
+        }        
 
         #endregion
 

@@ -76,16 +76,12 @@ namespace DH.Helpdesk.Web.Models.CaseRules
     {
         public CaseRuleModel()
         {
-            FieldAttributes = new List<FieldAttributeModel>();
-            CustomerSettings = new CaseCustomerSettings();
-            
+            FieldAttributes = new List<FieldAttributeModel>();                        
         }
 
         public CaseRuleMode RuleMode { get; set; }
 
-        public List<FieldAttributeModel> FieldAttributes { get; set; }
-
-        public CaseCustomerSettings CustomerSettings { get; set; }
+        public List<FieldAttributeModel> FieldAttributes { get; set; }                
 
         public string DateFormat { get; set; }
     }
@@ -189,6 +185,7 @@ namespace DH.Helpdesk.Web.Models.CaseRules
 
             ApplicableIn = new List<int>();
             
+
             foreach (var applicableIn in applicableIns)
             {
                 ApplicableIn.Add(applicableIn.ToInt());
@@ -199,8 +196,9 @@ namespace DH.Helpdesk.Web.Models.CaseRules
 
             // Used for WokingGroup & Adminstrator when both have Current RunTime value item in CaseTemplate.  (Inloggad användare, Inloggad användares driftgrupp)
             ShowRunTimeCurrentValue = false;
-            ShowGeneralInformation = false;
-            ShowDetailsInformation = false;
+            ShowDetailsInformation = true;
+
+            GeneralInformation = "";
 
             Conditions = new List<FieldRelationCondition>();
         }
@@ -228,8 +226,8 @@ namespace DH.Helpdesk.Web.Models.CaseRules
         public bool ShowAllIfKeyIsNull { get; set; }
 
         public bool ShowRunTimeCurrentValue { get; set; }
-
-        public bool ShowGeneralInformation { get; set; }
+       
+        public string GeneralInformation { get; set; }
 
         public bool ShowDetailsInformation { get; set; }
 
