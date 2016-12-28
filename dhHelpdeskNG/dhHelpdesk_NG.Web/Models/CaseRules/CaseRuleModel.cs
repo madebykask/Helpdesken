@@ -228,6 +228,8 @@ namespace DH.Helpdesk.Web.Models.CaseRules
 
         public bool ShowDetailsInformation { get; set; }
 
+        public string StaticMessage { get; set; }
+
         public List<FieldRelationCondition> Conditions { get; set; }
         
     }

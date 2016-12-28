@@ -2116,7 +2116,7 @@ td.td-bottom-multiselect .btn-group {
 }
 .tooltip-inner {
   max-width: 220px;
-  max-height:100px;
+  max-height:150px;
   padding: 8px;
   color: #fff;
   overflow:hidden;

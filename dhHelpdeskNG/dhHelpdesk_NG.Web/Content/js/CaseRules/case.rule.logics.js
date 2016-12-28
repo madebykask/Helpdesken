@@ -373,16 +373,26 @@
                 if (field.Relations.length > 0) {
                     var ret = !dataHelper.isNullOrEmpty(field.GeneralInformation) ? "<div align='left'>" + field.GeneralInformation + "</div> <br />" : "";
                     var isDetailTitleAdded = false;
+                    var detailsMessage = "";
+                    var staticMessage = "";
                     for (var r = 0; r < field.Relations.length; r++) {
                         var curRelation = field.Relations[r];
                         if (this.checkConditions(curRelation.Conditions)) {
                             var predict = helpdesk.caseRule.predictAction(field, curRelation);
                             if (predict != "") {
-                                ret += isDetailTitleAdded ? predict : "<div align='left'>" + params.willSetToText + "</div> <br />" + predict;
-                                isDetailTitleAdded = true;
+                                if (dataHelper.isNullOrEmpty(curRelation.StaticMessage)) {
+                                    detailsMessage += isDetailTitleAdded ? "<div align='left'>" + params.andText + "</div> <br />" + predict :
+                                                                           "<div align='left'>" + params.willSetToText + "</div> <br />" + predict;
+                                    isDetailTitleAdded = true;
+                                } else {
+                                    staticMessage += predict;                                    
+                                }
                             }
                         }
                     }
+
+                    ret += staticMessage;                    
+                    ret += detailsMessage;
                     return ret;
                 }
 
@@ -415,6 +425,7 @@
                     }
                 }
 
+                //Enable this if you want to hide rule description if related field already have value
                 //if (!dataHelper.isNullOrEmpty(relatedField.Selected.ItemValue) && relatedField.FieldType != _FIELD_TYPE.CheckBox)
                 //    return "";                                        
 
@@ -424,8 +435,12 @@
                 
                 var ret = "";
                 switch (relation.ActionType) {
-                    case _ACTION_TYPE.ValueSetter:                                                
-                        return "<div align='left'> - <b>" + relatedField.FieldCaption + "</b> "+ params.toText + " <b>" + fItem.ItemText + "</b> </div> <br />";
+                    case _ACTION_TYPE.ValueSetter:
+                        if (dataHelper.isNullOrEmpty(relation.StaticMessage)) {
+                            return "<div align='left'> - <b>" + relatedField.FieldCaption + "</b> "+ params.toText + " <b>" + fItem.ItemText + "</b> </div> <br />";
+                        }else{
+                            return "<div align='left'> " + relation.StaticMessage + "</div> <br />";
+                        }
 
                     case _ACTION_TYPE.ListPopulator:
                         return "";

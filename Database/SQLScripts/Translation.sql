@@ -5359,5 +5359,34 @@ GO
 If not exists (select * from tblTextTranslation where text_id = 1737 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1737, 2, 'Choose file')
 GO
+
+If not exists (select * from tbltext where id = 1738)
+	insert into tbltext (id, TextString) VALUES (1738, 'När denna avdelning används beräknas')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1738 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1738, 2, 'When this department is used,')
+GO
+
+If not exists (select * from tbltext where id = 1739)
+	insert into tbltext (id, TextString) VALUES (1739, 'enligt kalendern')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1739 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1739, 2, 'will be calculated according to calendar')
+GO
+
+If not exists (select * from tbltext where id = 1740)
+	insert into tbltext (id, TextString) VALUES (1740, 'beräknas enligt kalendern')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1740 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1740, 2, 'will be calculated according to calendar')
+GO
+
+If not exists (select * from tbltext where id = 1741)
+	insert into tbltext (id, TextString) VALUES (1741, 'Utan en mall, finns standard reglering för detta fält att uppdatera:')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1741 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1741, 2, 'Without a template, default regulation for this field is to set:')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

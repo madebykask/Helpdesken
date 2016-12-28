@@ -1114,8 +1114,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 IsAvailableOnSelfService = caseFieldSettings.getShowExternal(curField).ToBool(),
                 IsMandatory = caseFieldSettings.getRequired(curField).ToBool(),
                 StatusType = basicInformation.Departments.StatusType,
-                Items = basicInformation.Departments.Items,                
-                GeneralInformation = Translation.GetCoreTextTranslation("När denna avdelning används beräknas bevakningsdatum enligt kalendern"),
+                Items = basicInformation.Departments.Items,                                
                 Relations = new List<FieldRelation> {
                     new FieldRelation(CaseRuleMode.CaseUserChangeMode, CaseRuleMode.TemplateUserChangeMode,
                                       CaseRuleMode.CaseNewTemplateMode, CaseRuleMode.CaseInheritTemplateMode) {
@@ -1133,6 +1132,9 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                         FieldId = VirtualFields.Department_WatchDate.ToString(),
                         DataStore1 = TranslationCaseFields.Department_Id.ToString(),
                         ResultDataKey = TranslationCaseFields.WatchDate.ToString(),
+                        StaticMessage = Translation.GetCoreTextTranslation("När denna avdelning används beräknas") + " <b>" + 
+                                        Translation.Get(TranslationCaseFields.WatchDate.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + "</b> " +  
+                                        Translation.GetCoreTextTranslation("enligt kalendern"),
                         Conditions =  new List<FieldRelationCondition> {                            
                             new FieldRelationCondition(TranslationCaseFields.Department_Id.ToString(), ForeignKeyNum.FKeyNum0, ConditionOperator.HasValue),
                             new FieldRelationCondition(TranslationCaseFields.Priority_Id.ToString(), ForeignKeyNum.FKeyNum2, ConditionOperator.Equal, "0")
@@ -2046,6 +2048,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                         FieldId = VirtualFields.Department_WatchDate.ToString(),
                         DataStore1 = TranslationCaseFields.Department_Id.ToString(),
                         ResultDataKey = TranslationCaseFields.WatchDate.ToString(),
+                        StaticMessage = "<b> " + Translation.Get(TranslationCaseFields.WatchDate.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + " </b> " + 
+                                        Translation.GetCoreTextTranslation("beräknas enligt kalendern"),
                         Conditions =  new List<FieldRelationCondition> {                            
                             new FieldRelationCondition(TranslationCaseFields.Department_Id.ToString(), ForeignKeyNum.FKeyNum0, ConditionOperator.HasValue),
                             new FieldRelationCondition(TranslationCaseFields.Priority_Id.ToString(), ForeignKeyNum.FKeyNum2, ConditionOperator.Equal, "0")
@@ -2129,7 +2133,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                         ActionType = RelationActionType.ValueSetter.ToInt(),
                         FieldId = VirtualFields.Department_WatchDate.ToString(),
                         DataStore1 = TranslationCaseFields.Department_Id.ToString(),
-                        ResultDataKey = TranslationCaseFields.WatchDate.ToString(),
+                        ResultDataKey = TranslationCaseFields.WatchDate.ToString(),                        
                         Conditions =  new List<FieldRelationCondition> {
                             new FieldRelationCondition(TranslationCaseFields.StateSecondary_Id.ToString(), ForeignKeyNum.FKeyNum3, ConditionOperator.NotEqual, "0"),
                             new FieldRelationCondition(TranslationCaseFields.Department_Id.ToString(), ForeignKeyNum.FKeyNum0, ConditionOperator.HasValue),
