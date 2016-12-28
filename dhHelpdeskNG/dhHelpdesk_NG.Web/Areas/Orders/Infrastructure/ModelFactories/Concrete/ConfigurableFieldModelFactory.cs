@@ -187,6 +187,12 @@
                        : new ConfigurableFieldModel<int?>(setting.Caption, value, setting.Required, setting.Help);
         }
 
+        public ConfigurableFieldModel<List<int>> CreateListIntField(FieldEditSettings setting, List<int> value)
+        {
+            return !setting.Show
+                       ? ConfigurableFieldModel<List<int>>.CreateUnshowable()
+                       : new ConfigurableFieldModel<List<int>>(setting.Caption, value, setting.Required, setting.Help);
+        }
 
         #endregion
     }

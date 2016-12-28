@@ -613,6 +613,7 @@
             var orderTypeRep = uow.GetRepository<OrderType>();
             var employmentTypeRep = uow.GetRepository<EmploymentType>();
             var regionsRep = uow.GetRepository<Region>();
+            var orderFieldTypesRep = uow.GetRepository<OrderFieldType>();
 
             var statuses = statusesRep.GetAll().GetByCustomer(customerId).OrderBy(x => x.SortOrder);
             var administrators = administratorsRep.GetAll().GetByCustomer(customerId).GetActiveUsers(customerId);
@@ -626,6 +627,7 @@
             var orderType = orderTypeId.HasValue ? orderTypeRep.GetAll().GetById(orderTypeId.Value).MapToName() : null;
             var employmentTypes = employmentTypeRep.GetAll();
             var regions = regionsRep.GetAll().GetByCustomer(customerId);
+            var accountTypes = orderFieldTypesRep.GetAll().GetByType(orderTypeId);
 
             // get parentordertypename
             if (orderTypeId != lowestchildordertypeid.Value)
@@ -720,7 +722,8 @@
                                     administratorsWithEmails,
                                     settings,
                                     employmentTypes,
-                                    regions);            
+                                    regions,
+                                    accountTypes);            
         }        
     }
 }

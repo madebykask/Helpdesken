@@ -22,7 +22,12 @@
                 List<GroupWithEmails> workingGroupsWithEmails, 
                 List<ItemOverview> administratorsWithEmails,
                 ItemOverview[] employmentTypes,
-                ItemOverview[] regions)
+                ItemOverview[] regions,
+                ItemOverview[] accountTypes,
+                ItemOverview[] accountTypes2,
+                ItemOverview[] accountTypes3,
+                ItemOverview[] accountTypes4,
+                ItemOverview[] accountTypes5)
         {
             OrderTypeName = orderTypeName;
             AdministratorsWithEmails = administratorsWithEmails;
@@ -38,6 +43,11 @@
             Statuses = statuses;
             EmploymentTypes = employmentTypes;
             Regions = regions;
+            AccountTypes = accountTypes;
+            AccountTypes2 = accountTypes2;
+            AccountTypes3 = accountTypes3;
+            AccountTypes4 = accountTypes4;
+            AccountTypes5 = accountTypes5;
         }
 
         public string OrderTypeName { get; private set; }
@@ -80,5 +90,21 @@
         
         [NotNull]
         public ItemOverview[] Regions { get; private set; }
+
+        [NotNull]
+        public ItemOverview[] AccountTypes { get; private set; }
+
+        [NotNull]
+        public ItemOverview[] AccountTypes2 { get; private set; }
+
+        [NotNull]
+        public ItemOverview[] AccountTypes3 { get; private set; }
+
+        [NotNull]
+        public ItemOverview[] AccountTypes4 { get; private set; }
+
+        [NotNull]
+        public ItemOverview[] AccountTypes5 { get; private set; }
+
     }
 }

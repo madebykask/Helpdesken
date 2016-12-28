@@ -32,7 +32,8 @@
 		    IQueryable<User> administratorsWithEmails,
 		    FullOrderEditSettings settings,
             IQueryable<EmploymentType> employmentTypes,
-            IQueryable<Region> regions)
+            IQueryable<Region> regions,
+            IQueryable<OrderFieldType> accountTypes)
 	    {
 		    IQueryable<UnionItemDependentOverview> query = null;
 
@@ -106,7 +107,43 @@
 			    query = query?.Union(union) ?? union;
 		    }
 
-		    var overviews = new UnionItemDependentOverview[0];
+            if (settings.AccountInfo.AccountTypeId.Show)
+            {
+                var union = accountTypes.Where(a => a.OrderField == OrderFieldTypes.AccountType)
+                    .Select(a => new UnionItemDependentOverview { Id = a.Id, Name = a.Name, Type = "accountTypes", DependentId = null });
+                query = query?.Union(union) ?? union;
+            }
+
+            if (settings.AccountInfo.AccountTypeId2.Show)
+            {
+                var union = accountTypes.Where(a => a.OrderField == OrderFieldTypes.AccountType2).
+                    Select(a => new UnionItemDependentOverview { Id = a.Id, Name = a.Name, Type = "accountTypes2", DependentId = null });
+                query = query?.Union(union) ?? union;
+            }
+
+            if (settings.AccountInfo.AccountTypeId3.Show)
+            {
+                var union = accountTypes.Where(a => a.OrderField == OrderFieldTypes.AccountType3).
+                    Select(a => new UnionItemDependentOverview { Id = a.Id, Name = a.Name, Type = "accountTypes3", DependentId = null });
+                query = query?.Union(union) ?? union;
+            }
+
+            if (settings.AccountInfo.AccountTypeId4.Show)
+            {
+                var union = accountTypes.Where(a => a.OrderField == OrderFieldTypes.AccountType4).
+                    Select(a => new UnionItemDependentOverview { Id = a.Id, Name = a.Name, Type = "accountTypes4", DependentId = null });
+                query = query?.Union(union) ?? union;
+            }
+
+            if (settings.AccountInfo.AccountTypeId5.Show)
+            {
+                var union = accountTypes.Where(a => a.OrderField == OrderFieldTypes.AccountType5).
+                    Select(a => new UnionItemDependentOverview { Id = a.Id, Name = a.Name, Type = "accountTypes5", DependentId = null });
+                query = query?.Union(union) ?? union;
+            }
+
+
+            var overviews = new UnionItemDependentOverview[0];
 
 		    if (query != null)
 		    {
@@ -135,7 +172,12 @@
 				    return new ItemOverview(values[0], values.Length > 1 ? values[1].Split(';').First() : string.Empty);
 			    }).ToList(),
                 overviews.Where(o => o.Type == "employmentTypes").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
-                overviews.Where(o => o.Type == "regions").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray());
+                overviews.Where(o => o.Type == "regions").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
+                overviews.Where(o => o.Type == "accountTypes").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
+                overviews.Where(o => o.Type == "accountTypes2").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
+                overviews.Where(o => o.Type == "accountTypes3").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
+                overviews.Where(o => o.Type == "accountTypes4").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
+                overviews.Where(o => o.Type == "accountTypes5").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray());
 	    }
 
 	    public static FullOrderEditFields MapToFullOrderEditFields(this IQueryable<Order> query)
@@ -304,7 +346,14 @@
                     entity.HomeDirectory,
                     entity.Profile,
                     entity.InventoryNumber,
-                    entity.Info
+                    entity.Info,
+                    entity.OrderFieldType_Id,
+                    string.IsNullOrEmpty(entity.OrderFieldType2) ?
+                        new List<int>() :
+                        entity.OrderFieldType2.Split(',').ToList().Select(int.Parse).ToList(),
+                    entity.OrderFieldType3_Id,
+                    entity.OrderFieldType4_Id,
+                    entity.OrderFieldType5_Id
                 );
         }
         

@@ -10,6 +10,11 @@
         @Html.EditorFor(m => m.EMailTypeId, "Fields/List", new { Source = Model.EmailTypes })
         @Html.EditorFor(m => m.HomeDirectory, "Fields/Flag")
         @Html.EditorFor(m => m.Profile, "Fields/Flag")
+        @Html.EditorFor(m => m.AccountTypeId, "Fields/List", new { Source = Model.AccountTypes })
+        @Html.EditorFor(m => m.AccountTypeId2, "Fields/MultiSelectList", new { Source = Model.AccountTypes2 })
+        @Html.EditorFor(m => m.AccountTypeId3, "Fields/List", new { Source = Model.AccountTypes3 })
+        @Html.EditorFor(m => m.AccountTypeId4, "Fields/List", new { Source = Model.AccountTypes4 })
+        @Html.EditorFor(m => m.AccountTypeId5, "Fields/List", new { Source = Model.AccountTypes5 })
         @Html.EditorFor(m => m.Info, "Fields/WideText")
     </tbody>
 </table>

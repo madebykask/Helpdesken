@@ -336,10 +336,25 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                     configurableFieldModelFactory.CreateBooleanField(settings.HomeDirectory, fields.HomeDirectory),
                     configurableFieldModelFactory.CreateBooleanField(settings.Profile, fields.Profile),
                     configurableFieldModelFactory.CreateStringField(settings.InventoryNumber, fields.InventoryNumber),
-                    configurableFieldModelFactory.CreateStringField(settings.Info, fields.Info)
+                    configurableFieldModelFactory.CreateStringField(settings.Info, fields.Info),
+                    configurableFieldModelFactory.CreateNullableIntegerField(settings.AccountTypeId, fields.AccountTypeId),
+                    configurableFieldModelFactory.CreateListIntField(settings.AccountTypeId2, fields.AccountTypeId2),
+                    configurableFieldModelFactory.CreateNullableIntegerField(settings.AccountTypeId3, fields.AccountTypeId3),
+                    configurableFieldModelFactory.CreateNullableIntegerField(settings.AccountTypeId4, fields.AccountTypeId4),
+                    configurableFieldModelFactory.CreateNullableIntegerField(settings.AccountTypeId5, fields.AccountTypeId5)
                 );
 
             model.EmailTypes = new EMailTypes().ToSelectList(fields.EMailTypeId.ToString(CultureInfo.InvariantCulture));
+            model.AccountTypes = CreateSelectListField(settings.AccountTypeId,
+                    options.AccountTypes, fields.AccountTypeId.ToString());
+            model.AccountTypes2 = CreateMultiSelectListField(
+                    settings.AccountTypeId2, options.AccountTypes2, fields.AccountTypeId2);
+            model.AccountTypes3 = CreateSelectListField(settings.AccountTypeId3,
+                    options.AccountTypes3, fields.AccountTypeId3.ToString());
+            model.AccountTypes4 = CreateSelectListField(settings.AccountTypeId4,
+                    options.AccountTypes4, fields.AccountTypeId4.ToString());
+            model.AccountTypes5 = CreateSelectListField(settings.AccountTypeId5,
+                    options.AccountTypes5, fields.AccountTypeId5.ToString());
 
             return model;
         }
@@ -355,6 +370,21 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
             }
 
             var list = new SelectList(items, "Value", "Name", selectedValue);
+            return list;
+        }
+
+        private static MultiSelectList CreateMultiSelectListField(
+            FieldEditSettings setting,
+            ItemOverview[] items,
+            List<int> selectedValue)
+        {
+            if (!setting.Show)
+            {
+                return new MultiSelectList(Enumerable.Empty<SelectListItem>(), Enumerable.Empty<SelectListItem>());
+            }
+
+
+            var list = new MultiSelectList(items, "Value", "Name", selectedValue);
             return list;
         }
     }

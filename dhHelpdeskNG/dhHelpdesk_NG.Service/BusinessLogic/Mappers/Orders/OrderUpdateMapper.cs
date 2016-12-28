@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
+﻿using System.Collections.Generic;
+
+namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
 {
     using System.Linq;
 
@@ -163,6 +165,11 @@
             entity.Profile = businessModel.Profile;
             entity.InventoryNumber = businessModel.InventoryNumber;
             entity.Info = businessModel.Info;
+            entity.OrderFieldType_Id = businessModel.AccountTypeId;
+            entity.OrderFieldType2 = string.Join(",", businessModel.AccountTypeId2 ?? new List<int>());
+            entity.OrderFieldType3_Id = businessModel.AccountTypeId3;
+            entity.OrderFieldType4_Id = businessModel.AccountTypeId4;
+            entity.OrderFieldType5_Id = businessModel.AccountTypeId5;
         }
     }
 }

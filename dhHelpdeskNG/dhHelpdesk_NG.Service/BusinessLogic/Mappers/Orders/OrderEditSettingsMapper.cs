@@ -191,7 +191,12 @@
                     CreateFieldSetting(editSettings.FindByName(AccountInfoFields.HomeDirectory)),
                     CreateFieldSetting(editSettings.FindByName(AccountInfoFields.Profile)),
                     CreateTextFieldSetting(editSettings.FindByName(AccountInfoFields.InventoryNumber)),
-                    CreateTextFieldSetting(editSettings.FindByName(AccountInfoFields.Info)));
+                    CreateTextFieldSetting(editSettings.FindByName(AccountInfoFields.Info)),
+                    CreateFieldSetting(editSettings.FindByName(AccountInfoFields.AccountType)),
+                    CreateFieldSetting(editSettings.FindByName(AccountInfoFields.AccountType2)),
+                    CreateFieldSetting(editSettings.FindByName(AccountInfoFields.AccountType3)),
+                    CreateFieldSetting(editSettings.FindByName(AccountInfoFields.AccountType4)),
+                    CreateFieldSetting(editSettings.FindByName(AccountInfoFields.AccountType5)));
         }
 
         private static FieldEditSettings CreateFieldSetting(OrdersEditSettingsMapData data)

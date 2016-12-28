@@ -111,7 +111,7 @@
                     var value = $("#addValue", that.$modal).val();
                     that.data.push(new OrderData(null, value));
                     that.render(true);
-                    $(e.target).val("");
+                    $("#addValue", that.$modal).val("");
                 }
             });
             that.$modal.find("addFrm").validate();
@@ -179,6 +179,10 @@
                     $idCtrl.attr("id", newIdName);
                     $idCtrl.attr("name", newIdName);
                     $idCtrl.val(orderData.id);
+
+                    if (orderData.id) {
+                        $("#deleteBtn", $template).remove();
+                    }
 
                     $template.appendTo($html);
                 });

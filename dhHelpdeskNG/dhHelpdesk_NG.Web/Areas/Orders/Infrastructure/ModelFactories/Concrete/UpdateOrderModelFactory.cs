@@ -256,7 +256,12 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                 ConfigurableFieldModel<bool>.GetValueOrDefault(model.HomeDirectory),
                 ConfigurableFieldModel<bool>.GetValueOrDefault(model.Profile),
                 ConfigurableFieldModel<string>.GetValueOrDefault(model.InventoryNumber),
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.Info));
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.Info),
+                ConfigurableFieldModel<int?>.GetValueOrDefault(model.AccountTypeId),
+                ConfigurableFieldModel<List<int>>.GetValueOrDefault(model.AccountTypeId2),
+                ConfigurableFieldModel<int?>.GetValueOrDefault(model.AccountTypeId3),
+                ConfigurableFieldModel<int?>.GetValueOrDefault(model.AccountTypeId4),
+                ConfigurableFieldModel<int?>.GetValueOrDefault(model.AccountTypeId5));
         }
 
         private static List<ManualLog> CreateNewLogCollection(FullOrderEditModel model, IEmailService emailService)

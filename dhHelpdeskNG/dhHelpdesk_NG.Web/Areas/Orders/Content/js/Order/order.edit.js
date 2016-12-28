@@ -92,6 +92,12 @@
                 });
 
             }
+
+            var validator = $("#edit_form").data("validator");
+            if (validator) {
+                validator.settings.igrnore = ":hidden:not(.chosen-select)";
+            }
+            
         }
     }
 })(jQuery);

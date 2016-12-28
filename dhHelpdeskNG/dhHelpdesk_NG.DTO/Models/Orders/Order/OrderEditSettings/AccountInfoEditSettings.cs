@@ -7,7 +7,7 @@ namespace DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditSettings
 {
     public class AccountInfoEditSettings
     {
-        public AccountInfoEditSettings(FieldEditSettings startedDate, FieldEditSettings finishDate, FieldEditSettings eMailTypeId, FieldEditSettings homeDirectory, FieldEditSettings profile, TextFieldEditSettings inventoryNumber, TextFieldEditSettings info)
+        public AccountInfoEditSettings(FieldEditSettings startedDate, FieldEditSettings finishDate, FieldEditSettings eMailTypeId, FieldEditSettings homeDirectory, FieldEditSettings profile, TextFieldEditSettings inventoryNumber, TextFieldEditSettings info, FieldEditSettings accountTypeId, FieldEditSettings accountTypeId2, FieldEditSettings accountTypeId3, FieldEditSettings accountTypeId4, FieldEditSettings accountTypeId5)
         {
             StartedDate = startedDate;
             FinishDate = finishDate;
@@ -16,6 +16,11 @@ namespace DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditSettings
             Profile = profile;
             InventoryNumber = inventoryNumber;
             Info = info;
+            AccountTypeId = accountTypeId;
+            AccountTypeId2 = accountTypeId2;
+            AccountTypeId3 = accountTypeId3;
+            AccountTypeId4 = accountTypeId4;
+            AccountTypeId5 = accountTypeId5;
         }
 
         public FieldEditSettings StartedDate { get; private set; }
@@ -30,16 +35,17 @@ namespace DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditSettings
 
         public TextFieldEditSettings InventoryNumber { get; private set; }
 
-        //public FieldSetting AccountTypeId { get; private set; }
-
-        //public FieldSetting AccountType2 { get; private set; }
-
-        //public FieldSetting AccountType3 { get; private set; }
-
-        //public FieldSetting AccountType4 { get; private set; }
-
-        //public FieldSetting AccountType5 { get; private set; }
-
         public TextFieldEditSettings Info { get; private set; }
+
+        public FieldEditSettings AccountTypeId { get; private set; }
+
+        public FieldEditSettings AccountTypeId2 { get; private set; }
+
+        public FieldEditSettings AccountTypeId3 { get; private set; }
+
+        public FieldEditSettings AccountTypeId4 { get; private set; }
+
+        public FieldEditSettings AccountTypeId5 { get; private set; }
+
     }
 }

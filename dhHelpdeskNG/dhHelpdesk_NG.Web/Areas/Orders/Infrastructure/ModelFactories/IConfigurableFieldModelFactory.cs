@@ -62,5 +62,6 @@
         ConfigurableFieldModel<ProgramsModel> CreatePrograms(FieldEditSettings setting, int orderId, List<ProgramModel> programs);
 
         ConfigurableFieldModel<int?> CreateNullableIntegerField(FieldEditSettings setting, int? value);
+        ConfigurableFieldModel<List<int>> CreateListIntField(FieldEditSettings setting, List<int> value);
     }
 }

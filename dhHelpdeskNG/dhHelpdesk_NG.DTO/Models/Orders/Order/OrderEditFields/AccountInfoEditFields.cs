@@ -7,7 +7,7 @@ namespace DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditFields
 {
     public class AccountInfoEditFields
     {
-        public AccountInfoEditFields(DateTime? startedDate, DateTime? finishDate, int eMailTypeId, bool homeDirectory, bool profile, string inventoryNumber, string info)
+        public AccountInfoEditFields(DateTime? startedDate, DateTime? finishDate, int eMailTypeId, bool homeDirectory, bool profile, string inventoryNumber, string info, int? accountTypeId, List<int> accountTypeId2, int? accountTypeId3, int? accountTypeId4, int? accountTypeId5)
         {
             StartedDate = startedDate;
             FinishDate = finishDate;
@@ -16,6 +16,11 @@ namespace DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditFields
             Profile = profile;
             InventoryNumber = inventoryNumber;
             Info = info;
+            AccountTypeId = accountTypeId;
+            AccountTypeId2 = accountTypeId2;
+            AccountTypeId3 = accountTypeId3;
+            AccountTypeId4 = accountTypeId4;
+            AccountTypeId5 = accountTypeId5;
         }
 
         public DateTime? StartedDate { get; private set; }
@@ -30,16 +35,17 @@ namespace DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditFields
 
         public string InventoryNumber { get; private set; }
 
-        //public FieldSetting AccountTypeId { get; private set; }
-
-        //public FieldSetting AccountType2 { get; private set; }
-
-        //public FieldSetting AccountType3 { get; private set; }
-
-        //public FieldSetting AccountType4 { get; private set; }
-
-        //public FieldSetting AccountType5 { get; private set; }
-
         public string Info { get; private set; }
+
+        public int? AccountTypeId { get; private set; }
+
+        public List<int> AccountTypeId2 { get; private set; }
+
+        public int? AccountTypeId3 { get; private set; }
+
+        public int? AccountTypeId4 { get; private set; }
+
+        public int? AccountTypeId5 { get; private set; }
+
     }
 }

@@ -14,13 +14,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
         {
         }
 
-        public AccountInfoEditModel(ConfigurableFieldModel<DateTime?> startedDate,
-            ConfigurableFieldModel<DateTime?> finishDate,
-            ConfigurableFieldModel<int?> eMailTypeId,
-            ConfigurableFieldModel<bool> homeDirectory,
-            ConfigurableFieldModel<bool> profile,
-            ConfigurableFieldModel<string> inventoryNumber,
-            ConfigurableFieldModel<string> info)
+        public AccountInfoEditModel(ConfigurableFieldModel<DateTime?> startedDate, ConfigurableFieldModel<DateTime?> finishDate, ConfigurableFieldModel<int?> eMailTypeId, ConfigurableFieldModel<bool> homeDirectory, ConfigurableFieldModel<bool> profile, ConfigurableFieldModel<string> inventoryNumber, ConfigurableFieldModel<string> info, ConfigurableFieldModel<int?> accountTypeId, ConfigurableFieldModel<List<int>> accountTypeId2, ConfigurableFieldModel<int?> accountTypeId3, ConfigurableFieldModel<int?> accountTypeId4, ConfigurableFieldModel<int?> accountTypeId5)
         {
             StartedDate = startedDate;
             FinishDate = finishDate;
@@ -29,6 +23,11 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
             Profile = profile;
             InventoryNumber = inventoryNumber;
             Info = info;
+            AccountTypeId = accountTypeId;
+            AccountTypeId2 = accountTypeId2;
+            AccountTypeId3 = accountTypeId3;
+            AccountTypeId4 = accountTypeId4;
+            AccountTypeId5 = accountTypeId5;
         }
 
         [NotNull]
@@ -49,36 +48,36 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
         [NotNull]
         public ConfigurableFieldModel<string> InventoryNumber { get; set; }
 
-        //public ConfigurableFieldModel<int?> AccountTypeId { get; set; }
-
-        //public ConfigurableFieldModel<List<int>> AccountType2 { get; set; }
-
-        //public ConfigurableFieldModel<int?> AccountType3 { get; set; }
-
-        //public ConfigurableFieldModel<int?> AccountType4 { get; set; }
-
-        //public ConfigurableFieldModel<int?> AccountType5 { get; set; }
-
         [NotNull]
         public ConfigurableFieldModel<string> Info { get; set; }
+
+        public ConfigurableFieldModel<int?> AccountTypeId { get; set; }
+
+        public ConfigurableFieldModel<List<int>> AccountTypeId2 { get; set; }
+
+        public ConfigurableFieldModel<int?> AccountTypeId3 { get; set; }
+
+        public ConfigurableFieldModel<int?> AccountTypeId4 { get; set; }
+
+        public ConfigurableFieldModel<int?> AccountTypeId5 { get; set; }
 
         [NotNull]
         public SelectList EmailTypes { get; set; }
 
-        //[NotNull]
-        //public SelectList AccountTypes { get; set; }
+        [NotNull]
+        public SelectList AccountTypes { get; set; }
 
-        //[NotNull]
-        //public MultiSelectList AccountTypes2 { get; set; }
+        [NotNull]
+        public MultiSelectList AccountTypes2 { get; set; }
 
-        //[NotNull]
-        //public SelectList AccountTypes3 { get; set; }
+        [NotNull]
+        public SelectList AccountTypes3 { get; set; }
 
-        //[NotNull]
-        //public SelectList AccountTypes4 { get; set; }
+        [NotNull]
+        public SelectList AccountTypes4 { get; set; }
 
-        //[NotNull]
-        //public SelectList AccountTypes5 { get; set; }
+        [NotNull]
+        public SelectList AccountTypes5 { get; set; }
 
         public static AccountInfoEditModel CreateEmpty()
         {
@@ -89,7 +88,12 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
                 ConfigurableFieldModel<bool>.CreateUnshowable(),
                 ConfigurableFieldModel<bool>.CreateUnshowable(),
                 ConfigurableFieldModel<string>.CreateUnshowable(),
-                ConfigurableFieldModel<string>.CreateUnshowable());
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<int?>.CreateUnshowable(),
+                ConfigurableFieldModel<List<int>>.CreateUnshowable(),
+                ConfigurableFieldModel<int?>.CreateUnshowable(),
+                ConfigurableFieldModel<int?>.CreateUnshowable(),
+                ConfigurableFieldModel<int?>.CreateUnshowable());
         }
 
         public bool HasShowableFields()
@@ -100,7 +104,12 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
                    HomeDirectory.Show ||
                    Profile.Show ||
                    InventoryNumber.Show ||
-                   Info.Show;
+                   Info.Show ||
+                   AccountTypeId.Show ||
+                   AccountTypeId2.Show ||
+                   AccountTypeId3.Show ||
+                   AccountTypeId4.Show ||
+                   AccountTypeId5.Show;
         }
 
     }
