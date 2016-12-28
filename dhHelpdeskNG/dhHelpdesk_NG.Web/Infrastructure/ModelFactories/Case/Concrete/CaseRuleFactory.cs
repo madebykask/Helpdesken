@@ -36,7 +36,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                     ICausingPartService causingPartService,
                     IChangeService changeService,
                     IFinishingCauseService finishingCauseService,
-                    IWatchDateCalendarService watchDateCalendarServcie);
+                    IWatchDateCalendarService watchDateCalendarService);
 
         CaseRuleModel GetCaseRuleModel(int customerId,
                                         CaseRuleMode mode,                                        
@@ -72,7 +72,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
         private ICausingPartService _causingPartService;
         private IChangeService _changeService;
         private IFinishingCauseService _finishingCauseService;
-        private IWatchDateCalendarService _watchDateCalendarServcie;
+        private IWatchDateCalendarService _watchDateCalendarService;
 
         #endregion
 
@@ -104,7 +104,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                     ICausingPartService causingPartService,
                     IChangeService changeService,
                     IFinishingCauseService finishingCauseService,
-                    IWatchDateCalendarService watchDateCalendarServcie)
+                    IWatchDateCalendarService watchDateCalendarService)
         {
             _regionService = regionService;
             _departmentService = departmentService;
@@ -127,7 +127,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
             _causingPartService = causingPartService;
             _changeService = changeService;
             _finishingCauseService = finishingCauseService;
-            _watchDateCalendarServcie = watchDateCalendarServcie;
+            _watchDateCalendarService = watchDateCalendarService;
             initiated = true;
         }        
 
@@ -752,7 +752,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                                           .OrderBy(r => r.ItemText).ToList()
             };
 
-            var allWatchDates = _watchDateCalendarServcie.GetAllClosestDateTo(DateTime.UtcNow);
+            var allWatchDates = _watchDateCalendarService.GetAllClosestDateTo(DateTime.UtcNow);
             var department_WatchDate = departments.Where(d => (d.IsActive != 0 || (currentData.Department_Id.HasValue && currentData.Department_Id.Value == d.Id)) &&
                                                                d.WatchDateCalendar_Id.HasValue)
                                                   .Select(d => new Tuple<int, string>(d.Id, allWatchDates.FirstOrDefault(w => w.WatchDateCalendar_Id == d.WatchDateCalendar_Id.Value)?.WatchDate.ToShortDateString()))
