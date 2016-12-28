@@ -1,4 +1,8 @@
-﻿namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
+﻿using System.Collections.Generic;
+using DH.Helpdesk.Domain.Orders;
+using LinqLib.Operators;
+
+namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
 {
     using System;
     using System.Globalization;
@@ -37,7 +41,7 @@
                 entities.Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray());
         }
 
-        public static GetSettingsResponse MapToFullFieldSettings(this IQueryable<OrderFieldSettings> query)
+        public static GetSettingsResponse MapToFullFieldSettings(this IQueryable<OrderFieldSettings> query, List<OrderFieldType> orderFieldTypes)
         {
             var entities = query.Select(f => new OrdersFieldSettingsMapData
                                                  {
@@ -53,7 +57,7 @@
                                                  }).ToList();
 
             var fieldSettings = new NamedObjectCollection<OrdersFieldSettingsMapData>(entities);
-            return new GetSettingsResponse(CreateFullFieldSettings(fieldSettings));
+            return new GetSettingsResponse(CreateFullFieldSettings(fieldSettings, orderFieldTypes));
         }
 
         public static void MapToEntitiesForUpdate(
@@ -78,7 +82,8 @@
         #region Map settings for edit
 
         private static FullFieldSettings CreateFullFieldSettings(
-            NamedObjectCollection<OrdersFieldSettingsMapData> fieldSettings)
+            NamedObjectCollection<OrdersFieldSettingsMapData> fieldSettings,
+            List<OrderFieldType> orderFieldTypes)
         {
             return FullFieldSettings.CreateForEdit(
                     CreateDeliveryFieldSettings(fieldSettings),
@@ -91,7 +96,7 @@
                     CreateReceiverFieldSettings(fieldSettings),
                     CreateSupplierFieldSettings(fieldSettings),
                     CreateUserFieldSettings(fieldSettings),
-                    CreateAccountInfoFieldSettings(fieldSettings));
+                    CreateAccountInfoFieldSettings(fieldSettings, orderFieldTypes));
         }
 
         private static DeliveryFieldSettings CreateDeliveryFieldSettings(
@@ -236,7 +241,8 @@
         }
 
         private static AccountInfoFieldSettings CreateAccountInfoFieldSettings(
-            NamedObjectCollection<OrdersFieldSettingsMapData> fieldSettings)
+            NamedObjectCollection<OrdersFieldSettingsMapData> fieldSettings,
+            List<OrderFieldType> orderFieldTypes)
         {
             return new AccountInfoFieldSettings(
                     CreateTextFieldSetting(fieldSettings.FindByName(AccountInfoFields.StartedDate)),
@@ -245,8 +251,30 @@
                     CreateTextFieldSetting(fieldSettings.FindByName(AccountInfoFields.HomeDirectory)),
                     CreateTextFieldSetting(fieldSettings.FindByName(AccountInfoFields.Profile)),
                     CreateTextFieldSetting(fieldSettings.FindByName(AccountInfoFields.InventoryNumber)),
-                    CreateTextFieldSetting(fieldSettings.FindByName(AccountInfoFields.Info))
+                    CreateTextFieldSetting(fieldSettings.FindByName(AccountInfoFields.Info)),
+                    CreateOrderFieldTypeSetting(fieldSettings.FindByName(AccountInfoFields.AccountType), OrderFieldTypes.AccountType, orderFieldTypes),
+                    CreateOrderFieldTypeSetting(fieldSettings.FindByName(AccountInfoFields.AccountType2), OrderFieldTypes.AccountType2, orderFieldTypes),
+                    CreateOrderFieldTypeSetting(fieldSettings.FindByName(AccountInfoFields.AccountType3), OrderFieldTypes.AccountType3, orderFieldTypes),
+                    CreateOrderFieldTypeSetting(fieldSettings.FindByName(AccountInfoFields.AccountType4), OrderFieldTypes.AccountType4, orderFieldTypes),
+                    CreateOrderFieldTypeSetting(fieldSettings.FindByName(AccountInfoFields.AccountType5), OrderFieldTypes.AccountType5, orderFieldTypes)
                 );
+        }
+
+        private static OrderFieldTypeSettings CreateOrderFieldTypeSetting(OrdersFieldSettingsMapData data, OrderFieldTypes type, List<OrderFieldType> orderFieldTypes)
+        {
+            var values = orderFieldTypes.Where(t => t.OrderField == type)
+                .Select(t => new OrderFieldTypeValueSetting(t.Id, t.Name, t.OrderField))
+                .ToList();
+            return OrderFieldTypeSettings.CreateForEdit(
+                        data.OrderField,
+                        data.Show.ToBool(),
+                        data.ShowInList.ToBool(),
+                        data.ShowExternal.ToBool(),
+                        data.Label,
+                        data.Required.ToBool(),
+                        data.EmailIdentifier,
+                        data.FieldHelp,
+                        values);
         }
 
         private static FieldSettings CreateFieldSetting(OrdersFieldSettingsMapData data)
@@ -443,6 +471,18 @@
             MapTextFieldSettings(updatedSettings.Profile, existingSettings.FindByName(AccountInfoFields.Profile), changedDate);
             MapTextFieldSettings(updatedSettings.InventoryNumber, existingSettings.FindByName(AccountInfoFields.InventoryNumber), changedDate);
             MapTextFieldSettings(updatedSettings.Info, existingSettings.FindByName(AccountInfoFields.Info), changedDate);
+            MapOrderFieldTypeSettings(updatedSettings.AccountType, existingSettings.FindByName(AccountInfoFields.AccountType), changedDate);
+            MapOrderFieldTypeSettings(updatedSettings.AccountType2, existingSettings.FindByName(AccountInfoFields.AccountType2), changedDate);
+            MapOrderFieldTypeSettings(updatedSettings.AccountType3, existingSettings.FindByName(AccountInfoFields.AccountType3), changedDate);
+            MapOrderFieldTypeSettings(updatedSettings.AccountType4, existingSettings.FindByName(AccountInfoFields.AccountType4), changedDate);
+            MapOrderFieldTypeSettings(updatedSettings.AccountType5, existingSettings.FindByName(AccountInfoFields.AccountType5), changedDate);
+        }
+
+        private static void MapOrderFieldTypeSettings(OrderFieldTypeSettings updatedSettings,
+            OrderFieldSettings fieldSettings,
+            DateTime changedDate)
+        {
+            MapFieldSettings(updatedSettings, fieldSettings, changedDate);
         }
 
         private static void MapFieldSettings(

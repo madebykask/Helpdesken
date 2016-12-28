@@ -40,6 +40,16 @@
 
         public int? OrderType_Id { get; set; }
 
+        public int? OrderFieldType_Id { get; set; }
+
+        public string OrderFieldType2 { get; set; }
+
+        public int? OrderFieldType3_Id { get; set; }
+
+        public int? OrderFieldType4_Id { get; set; }
+
+        public int? OrderFieldType5_Id { get; set; }
+
         public int? DeliveryDepartmentId { get; set; }
 
         public string DeliveryOu { get; set; }
@@ -209,6 +219,14 @@
         public virtual OrderState OrderState { get; set; }
 
         public virtual OrderType OrderType { get; set; }
+
+        public virtual OrderFieldType OrderFieldType { get; set; }
+
+        public virtual OrderFieldType OrderFieldType3 { get; set; }
+
+        public virtual OrderFieldType OrderFieldType4 { get; set; }
+
+        public virtual OrderFieldType OrderFieldType5 { get; set; }
 
         public virtual Department DeliveryDepartment { get; set; }
 

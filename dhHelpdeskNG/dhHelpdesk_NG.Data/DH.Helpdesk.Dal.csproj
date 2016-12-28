@@ -119,6 +119,7 @@
     <Compile Include="EntityConfigurations\Licenses\VendorConfiguration.cs" />
     <Compile Include="EntityConfigurations\MailTemplates\MailTemplateLanguageConfiguration.cs" />
     <Compile Include="EntityConfigurations\OperationLogEmailLogConfiguration.cs" />
+    <Compile Include="EntityConfigurations\OrderFieldType.cs" />
     <Compile Include="EntityConfigurations\Orders\OrderEMailLogConfiguration.cs" />
     <Compile Include="EntityConfigurations\Orders\OrderHistoryConfiguration.cs" />
     <Compile Include="EntityConfigurations\Orders\OrderLogConfiguration.cs" />
@@ -755,6 +756,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Enums\Orders\" />
     <Folder Include="Mappers\Inventory\BusinessModelToEntity\" />
     <Folder Include="Mappers\Inventory\EntityToBusinessModel\Inventory\" />
     <Folder Include="SearchRequestBuilders\Inventory\" />

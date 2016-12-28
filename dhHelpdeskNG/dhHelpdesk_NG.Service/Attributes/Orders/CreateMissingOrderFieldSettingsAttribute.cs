@@ -203,6 +203,11 @@
             CollectMissingField(AccountInfoFields.Profile, existing, missingFields);
             CollectMissingField(AccountInfoFields.InventoryNumber, existing, missingFields);
             CollectMissingField(AccountInfoFields.Info, existing, missingFields);
+            CollectMissingField(AccountInfoFields.AccountType, existing, missingFields);
+            CollectMissingField(AccountInfoFields.AccountType2, existing, missingFields);
+            CollectMissingField(AccountInfoFields.AccountType3, existing, missingFields);
+            CollectMissingField(AccountInfoFields.AccountType4, existing, missingFields);
+            CollectMissingField(AccountInfoFields.AccountType5, existing, missingFields);
         }
 
         private static void CollectMissingField(

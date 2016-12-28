@@ -5386,6 +5386,12 @@ If not exists (select * from tbltext where id = 1741)
 GO
 If not exists (select * from tblTextTranslation where text_id = 1741 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1741, 2, 'Without a template, default regulation for this field is to set:')
+
+	insert into tbltext (id, TextString) VALUES (1742, 'Värden')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1742 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1742, 2, 'Values')
+
 GO
 
 -- *** Run this last when put translation script above this line **--

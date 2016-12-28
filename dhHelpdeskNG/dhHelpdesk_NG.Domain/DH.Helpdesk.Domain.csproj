@@ -134,6 +134,8 @@
     <Compile Include="FormUrl.cs" />
     <Compile Include="FileViewLogEntity.cs" />
     <Compile Include="Grid\GridSettingsEntity.cs" />
+    <Compile Include="OrderFieldType.cs" />
+    <Compile Include="Orders\OrderFieldTypes.cs" />
     <Compile Include="ParentChildCaseRelation.cs" />
     <Compile Include="Questionnaire\QuestionnaireCircularCaseTypeEntity.cs" />
     <Compile Include="Questionnaire\QuestionnaireCircularDepartmentEntity.cs" />

@@ -345,6 +345,8 @@
     <Compile Include="Models\Orders\OrderFieldSettings\FieldSettings\LogFieldSettings.cs" />
     <Compile Include="Models\Orders\OrderFieldSettings\FieldSettings\OrdererFieldSettings.cs" />
     <Compile Include="Models\Orders\OrderFieldSettings\FieldSettings\OrderFieldSettings.cs" />
+    <Compile Include="Models\Orders\OrderFieldSettings\FieldSettings\OrderFieldTypeSettings.cs" />
+    <Compile Include="Models\Orders\OrderFieldSettings\FieldSettings\OrderFieldTypeValueSetting.cs" />
     <Compile Include="Models\Orders\OrderFieldSettings\FieldSettings\OtherFieldSettings.cs" />
     <Compile Include="Models\Orders\OrderFieldSettings\FieldSettings\ProgramFieldSettings.cs" />
     <Compile Include="Models\Orders\OrderFieldSettings\FieldSettings\ReceiverFieldSettings.cs" />

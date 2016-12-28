@@ -1,4 +1,8 @@
-﻿namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
+﻿using System.Collections.Generic;
+using System.Linq;
+using DH.Helpdesk.Domain.Orders;
+
+namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
 {
     using System;
 
@@ -200,8 +204,32 @@
                     CreateTextFieldSettingModel(settings.HomeDirectory),
                     CreateTextFieldSettingModel(settings.Profile),
                     CreateTextFieldSettingModel(settings.InventoryNumber),
-                    CreateTextFieldSettingModel(settings.Info)
+                    CreateTextFieldSettingModel(settings.Info),
+                    CreateOrderFieldTypeSettingModel(settings.AccountType, OrderFieldTypes.AccountType),
+                    CreateOrderFieldTypeSettingModel(settings.AccountType2, OrderFieldTypes.AccountType2),
+                    CreateOrderFieldTypeSettingModel(settings.AccountType3, OrderFieldTypes.AccountType3),
+                    CreateOrderFieldTypeSettingModel(settings.AccountType4, OrderFieldTypes.AccountType4),
+                    CreateOrderFieldTypeSettingModel(settings.AccountType5, OrderFieldTypes.AccountType5)
                 );
+        }
+
+        private static OrderFieldTypeSettingsModel CreateOrderFieldTypeSettingModel(OrderFieldTypeSettings settings, OrderFieldTypes type)
+        {
+            var values = settings.Values?.Select(v => new OrderFieldTypeValueSettingsModel
+            {
+                Id = v.Id,
+                Value = v.Value
+            }).ToList();
+            return new OrderFieldTypeSettingsModel(
+                settings.Show,
+                settings.ShowInList,
+                settings.ShowExternal,
+                settings.Label,
+                settings.Required,
+                settings.EmailIdentifier,
+                settings.FieldHelp,
+                values,
+                type);
         }
 
         private static FieldSettingsModel CreateFieldSettingModel(FieldSettings settings)
@@ -373,8 +401,27 @@
                     CreateTextFieldSettingForUpdate(settings.HomeDirectory),
                     CreateTextFieldSettingForUpdate(settings.Profile),
                     CreateTextFieldSettingForUpdate(settings.InventoryNumber),
-                    CreateTextFieldSettingForUpdate(settings.Info)
+                    CreateTextFieldSettingForUpdate(settings.Info),
+                    CreateOrderFieldTypeSetting(settings.AccountType, OrderFieldTypes.AccountType),
+                    CreateOrderFieldTypeSetting(settings.AccountType2, OrderFieldTypes.AccountType2),
+                    CreateOrderFieldTypeSetting(settings.AccountType3, OrderFieldTypes.AccountType3),
+                    CreateOrderFieldTypeSetting(settings.AccountType4, OrderFieldTypes.AccountType4),
+                    CreateOrderFieldTypeSetting(settings.AccountType5, OrderFieldTypes.AccountType5)
                 );
+        }
+
+        private static OrderFieldTypeSettings CreateOrderFieldTypeSetting(OrderFieldTypeSettingsModel settings, OrderFieldTypes type)
+        {
+            var values = settings.Values?.Select(s => new OrderFieldTypeValueSetting(s.Id, s.Value, type)).ToList();
+            return OrderFieldTypeSettings.CreateUpdated(
+                        settings.Show,
+                        settings.ShowInList,
+                        settings.ShowExternal,
+                        settings.Label,
+                        settings.Required,
+                        settings.EmailIdentifier,
+                        settings.Help,
+                        values);
         }
 
         private static FieldSettings CreateFieldSettingForUpdate(FieldSettingsModel settings)

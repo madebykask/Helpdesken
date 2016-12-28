@@ -3817,3 +3817,7 @@ div.case-dropdown-div > span.btn-group > button.multiselect.dropdown-toggle.btn 
 .case-standardText-keep-open {
     z-index: 10001;
 }
+
+table.table-add-order-field-type tr td:first-child {
+    width: 80%
+}

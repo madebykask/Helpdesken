@@ -224,6 +224,7 @@
     <Compile Include="BusinessLogic\Specifications\OperationLog\OperationLogSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Orders\OrderEmailLogSpecificatons.cs" />
     <Compile Include="BusinessLogic\Specifications\Orders\OrderFieldSettingsSpecifications.cs" />
+    <Compile Include="BusinessLogic\Specifications\Orders\OrderFieldTypesSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Orders\OrderHistorySpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Orders\OrderLogSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Orders\OrderPropertySpecifications.cs" />

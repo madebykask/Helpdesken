@@ -536,6 +536,155 @@ INSERT INTO [dbo].[tblOrderFieldSettings]
 				and ((iofs.OrderType_Id is not null and ofs.OrderType_Id is not null and iofs.OrderType_Id = ofs.OrderType_Id) or (iofs.OrderType_Id is null and ofs.OrderType_Id is null))) 
 GO
 
+if not exists(select * from sysobjects WHERE Name = N'tblOrderFieldTypes')
+BEGIN
+	CREATE TABLE [dbo].[tblOrderFieldTypes](
+		[Id] [int] IDENTITY(1,1) NOT NULL,
+		[OrderFieldType] [nvarchar](50) NOT NULL,
+		[OrderType_Id] [int] NULL,
+		[OrderField] [int] NOT NULL DEFAULT (1),
+		[CreatedDate] [datetime] NOT NULL DEFAULT (getdate()),
+		[ChangedDate] [datetime] NOT NULL DEFAULT (getdate()),
+	 CONSTRAINT [PK_tblOrderFielTypes] PRIMARY KEY CLUSTERED 
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
+
+	ALTER TABLE [dbo].[tblOrderFieldTypes]  WITH NOCHECK ADD CONSTRAINT [FK_tblOrderFieldTypes_tblOrderType] FOREIGN KEY([OrderType_Id])
+	REFERENCES [dbo].[tblOrderType] ([Id])
+
+	ALTER TABLE [dbo].[tblOrderFieldTypes] CHECK CONSTRAINT [FK_tblOrderFieldTypes_tblOrderType]
+
+END
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'OrderFieldType_Id' and sysobjects.name = N'tblOrder')
+BEGIN
+	ALTER TABLE [dbo].[tblOrder] ADD [OrderFieldType_Id] [int] NULL
+
+	ALTER TABLE [dbo].[tblOrder]  WITH NOCHECK ADD  CONSTRAINT [FK_tblOrder_tblOrderFieldTypes] FOREIGN KEY([OrderFieldType_Id])
+		REFERENCES [dbo].[tblOrderFieldTypes] ([Id])
+
+	ALTER TABLE [dbo].[tblOrder] CHECK CONSTRAINT [FK_tblOrder_tblOrderFieldTypes]
+END
+
+Declare @OrderFieldValue nvarchar(50)
+Set @OrderFieldValue = 'OrderFieldType'
+Declare @OrderFieldLabel nvarchar(50)
+Set @OrderFieldLabel = 'Vallista'
+
+INSERT INTO [dbo].[tblOrderFieldSettings]
+           ([OrderType_Id],[Customer_Id],[OrderField],[Show],[ShowInList],[ShowExternal]
+           ,[Label],[Required],[DefaultValue],[EMailIdentifier],[CreatedDate],[ChangedDate])
+	 SELECT distinct ofs.[OrderType_Id], ofs.[Customer_Id], @OrderFieldValue, 0, 0, 0,
+		   @OrderFieldLabel, 0, '', NULL, GETDATE(), GETDATE()
+		   from [dbo].[tblOrderFieldSettings] as ofs
+		   where Not Exists (Select iofs.Id from [dbo].[tblOrderFieldSettings] as iofs
+				where iofs.OrderField = @OrderFieldValue and iofs.Customer_Id = ofs.Customer_Id 
+				and ((iofs.OrderType_Id is not null and ofs.OrderType_Id is not null and iofs.OrderType_Id = ofs.OrderType_Id) or (iofs.OrderType_Id is null and ofs.OrderType_Id is null))) 
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'OrderFieldType2' and sysobjects.name = N'tblOrder')
+BEGIN
+	ALTER TABLE [dbo].[tblOrder] ADD [OrderFieldType2] [nvarchar](500) NULL
+END
+
+Declare @OrderFieldValue nvarchar(50)
+Set @OrderFieldValue = 'OrderFieldType2'
+Declare @OrderFieldLabel nvarchar(50)
+Set @OrderFieldLabel = 'Vallista 2'
+
+INSERT INTO [dbo].[tblOrderFieldSettings]
+           ([OrderType_Id],[Customer_Id],[OrderField],[Show],[ShowInList],[ShowExternal]
+           ,[Label],[Required],[DefaultValue],[EMailIdentifier],[CreatedDate],[ChangedDate])
+	 SELECT distinct ofs.[OrderType_Id], ofs.[Customer_Id], @OrderFieldValue, 0, 0, 0,
+		   @OrderFieldLabel, 0, '', NULL, GETDATE(), GETDATE()
+		   from [dbo].[tblOrderFieldSettings] as ofs
+		   where Not Exists (Select iofs.Id from [dbo].[tblOrderFieldSettings] as iofs
+				where iofs.OrderField = @OrderFieldValue and iofs.Customer_Id = ofs.Customer_Id 
+				and ((iofs.OrderType_Id is not null and ofs.OrderType_Id is not null and iofs.OrderType_Id = ofs.OrderType_Id) or (iofs.OrderType_Id is null and ofs.OrderType_Id is null))) 
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'OrderFieldType3_Id' and sysobjects.name = N'tblOrder')
+BEGIN
+	ALTER TABLE [dbo].[tblOrder] ADD [OrderFieldType3_Id] [int] NULL
+
+	ALTER TABLE [dbo].[tblOrder]  WITH NOCHECK ADD  CONSTRAINT [FK_tblOrder_tblOrderFieldTypes3] FOREIGN KEY([OrderFieldType3_Id])
+		REFERENCES [dbo].[tblOrderFieldTypes] ([Id])
+
+	ALTER TABLE [dbo].[tblOrder] CHECK CONSTRAINT [FK_tblOrder_tblOrderFieldTypes3]
+END
+
+Declare @OrderFieldValue nvarchar(50)
+Set @OrderFieldValue = 'OrderFieldType3'
+Declare @OrderFieldLabel nvarchar(50)
+Set @OrderFieldLabel = 'Vallista 3'
+
+INSERT INTO [dbo].[tblOrderFieldSettings]
+           ([OrderType_Id],[Customer_Id],[OrderField],[Show],[ShowInList],[ShowExternal]
+           ,[Label],[Required],[DefaultValue],[EMailIdentifier],[CreatedDate],[ChangedDate])
+	 SELECT distinct ofs.[OrderType_Id], ofs.[Customer_Id], @OrderFieldValue, 0, 0, 0,
+		   @OrderFieldLabel, 0, '', NULL, GETDATE(), GETDATE()
+		   from [dbo].[tblOrderFieldSettings] as ofs
+		   where Not Exists (Select iofs.Id from [dbo].[tblOrderFieldSettings] as iofs
+				where iofs.OrderField = @OrderFieldValue and iofs.Customer_Id = ofs.Customer_Id 
+				and ((iofs.OrderType_Id is not null and ofs.OrderType_Id is not null and iofs.OrderType_Id = ofs.OrderType_Id) or (iofs.OrderType_Id is null and ofs.OrderType_Id is null))) 
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'OrderFieldType4_Id' and sysobjects.name = N'tblOrder')
+BEGIN
+	ALTER TABLE [dbo].[tblOrder] ADD [OrderFieldType4_Id] [int] NULL
+
+	
+	ALTER TABLE [dbo].[tblOrder]  WITH NOCHECK ADD  CONSTRAINT [FK_tblOrder_tblOrderFieldTypes4] FOREIGN KEY([OrderFieldType4_Id])
+		REFERENCES [dbo].[tblOrderFieldTypes] ([Id])
+
+	ALTER TABLE [dbo].[tblOrder] CHECK CONSTRAINT [FK_tblOrder_tblOrderFieldTypes4]
+END
+
+Declare @OrderFieldValue nvarchar(50)
+Set @OrderFieldValue = 'OrderFieldType4'
+Declare @OrderFieldLabel nvarchar(50)
+Set @OrderFieldLabel = 'Vallista 4'
+
+INSERT INTO [dbo].[tblOrderFieldSettings]
+           ([OrderType_Id],[Customer_Id],[OrderField],[Show],[ShowInList],[ShowExternal]
+           ,[Label],[Required],[DefaultValue],[EMailIdentifier],[CreatedDate],[ChangedDate])
+	 SELECT distinct ofs.[OrderType_Id], ofs.[Customer_Id], @OrderFieldValue, 0, 0, 0,
+		   @OrderFieldLabel, 0, '', NULL, GETDATE(), GETDATE()
+		   from [dbo].[tblOrderFieldSettings] as ofs
+		   where Not Exists (Select iofs.Id from [dbo].[tblOrderFieldSettings] as iofs
+				where iofs.OrderField = @OrderFieldValue and iofs.Customer_Id = ofs.Customer_Id 
+				and ((iofs.OrderType_Id is not null and ofs.OrderType_Id is not null and iofs.OrderType_Id = ofs.OrderType_Id) or (iofs.OrderType_Id is null and ofs.OrderType_Id is null))) 
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'OrderFieldType5_Id' and sysobjects.name = N'tblOrder')
+BEGIN
+	ALTER TABLE [dbo].[tblOrder] ADD [OrderFieldType5_Id] [int] NULL
+
+	ALTER TABLE [dbo].[tblOrder]  WITH NOCHECK ADD  CONSTRAINT [FK_tblOrder_tblOrderFieldTypes5] FOREIGN KEY([OrderFieldType5_Id])
+		REFERENCES [dbo].[tblOrderFieldTypes] ([Id])
+
+	ALTER TABLE [dbo].[tblOrder] CHECK CONSTRAINT [FK_tblOrder_tblOrderFieldTypes5]
+END
+
+Declare @OrderFieldValue nvarchar(50)
+Set @OrderFieldValue = 'OrderFieldType5'
+Declare @OrderFieldLabel nvarchar(50)
+Set @OrderFieldLabel = 'Vallista 5'
+
+INSERT INTO [dbo].[tblOrderFieldSettings]
+           ([OrderType_Id],[Customer_Id],[OrderField],[Show],[ShowInList],[ShowExternal]
+           ,[Label],[Required],[DefaultValue],[EMailIdentifier],[CreatedDate],[ChangedDate])
+	 SELECT distinct ofs.[OrderType_Id], ofs.[Customer_Id], @OrderFieldValue, 0, 0, 0,
+		   @OrderFieldLabel, 0, '', NULL, GETDATE(), GETDATE()
+		   from [dbo].[tblOrderFieldSettings] as ofs
+		   where Not Exists (Select iofs.Id from [dbo].[tblOrderFieldSettings] as iofs
+				where iofs.OrderField = @OrderFieldValue and iofs.Customer_Id = ofs.Customer_Id 
+				and ((iofs.OrderType_Id is not null and ofs.OrderType_Id is not null and iofs.OrderType_Id = ofs.OrderType_Id) or (iofs.OrderType_Id is null and ofs.OrderType_Id is null))) 
+GO
+
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.30'

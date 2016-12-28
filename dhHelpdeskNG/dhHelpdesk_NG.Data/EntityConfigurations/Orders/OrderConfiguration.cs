@@ -124,6 +124,27 @@
             this.HasOptional(o => o.OrderType)
                 .WithMany()
                 .HasForeignKey(o => o.OrderType_Id);
+            this.Property(o => o.OrderFieldType_Id).IsOptional();
+            this.HasOptional(x => x.OrderFieldType)
+                .WithMany()
+                .HasForeignKey(x => x.OrderFieldType_Id)
+                .WillCascadeOnDelete(false);
+            this.Property(o => o.OrderFieldType2).IsOptional().HasMaxLength(500);
+            this.Property(o => o.OrderFieldType3_Id).IsOptional();
+            this.HasOptional(x => x.OrderFieldType3)
+                .WithMany()
+                .HasForeignKey(x => x.OrderFieldType3_Id)
+                .WillCascadeOnDelete(false);
+            this.Property(o => o.OrderFieldType4_Id).IsOptional();
+            this.HasOptional(x => x.OrderFieldType4)
+                .WithMany()
+                .HasForeignKey(x => x.OrderFieldType4_Id)
+                .WillCascadeOnDelete(false);
+            this.Property(o => o.OrderFieldType5_Id).IsOptional();
+            this.HasOptional(x => x.OrderFieldType5)
+                .WithMany()
+                .HasForeignKey(x => x.OrderFieldType5_Id)
+                .WillCascadeOnDelete(false);
             this.Property(o => o.DeliveryDepartmentId).IsOptional().HasColumnName("DeliveryDepartment_Id");
             this.HasOptional(o => o.DeliveryDepartment)
                 .WithMany()
