@@ -63,7 +63,7 @@
         private readonly ICaseSolutionSettingService _caseSolutionSettingService;
         private readonly IWorkContext workContext;
         private readonly IEmailService _emailService;        
-        private readonly IMasterDataService _masterDataService;
+        private readonly IMasterDataService _masterDataService;        
 
         private const string ParentPathDefaultValue = "--";
         private const string EnterMarkup = "<br />";
@@ -893,6 +893,17 @@
             var basePath = _masterDataService.GetFilePath(newCase.Customer_Id);
             newCase.LatestSLACountDate = CalculateLatestSLACountDate(newCase.StateSecondary_Id);
             var ei = new CaseExtraInfo() { CreatedByApp = CreatedByApplications.SelfService5, LeadTimeForNow = 0, ActionLeadTime = 0, ActionExternalTime = 0};
+
+            if (newCase.Urgency_Id.HasValue && newCase.Impact_Id.HasValue)
+            {
+                var prio_Impact_Urgent = _urgencyService.GetPriorityImpactUrgencies(newCase.Customer_Id);
+                var prioInfo = prio_Impact_Urgent.FirstOrDefault(p=> p.Impact_Id == newCase.Impact_Id && p.Urgency_Id == newCase.Urgency_Id);
+                if (prioInfo != null)
+                {
+                    newCase.Priority_Id = prioInfo.Priority_Id;
+                }
+            }            
+
             int caseHistoryId = _caseService.SaveCase(newCase, null, caseMailSetting, 0, SessionFacade.CurrentUserIdentity.UserId, ei, out errors);
             
             // save case files            
