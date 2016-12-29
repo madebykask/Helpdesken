@@ -729,8 +729,12 @@ function CaseInitForm() {
     });
 
     $("#standardtextDropdownMenu div.case-div-standardtext").click(function () {
+        addTextToLog($(this).children("span").html());
+    });
+
+    function addTextToLog(text) {
         var regexp = /<BR>/g
-        var txt = $(this).children("span").html().replace(regexp, "\n");
+        var txt = text.replace(regexp, "\n");
         var writeTextToExternalNote = $("#WriteTextToExternalNote").val();
         var field = "#CaseLog_TextInternal";
 
@@ -746,10 +750,17 @@ function CaseInitForm() {
             input[0].selectionStart = input[0].selectionEnd = input.val().length;
         }
         $("#standardtextDropdownMenu").click();
-    });
+    }
 
     $("#standardtextDropdownMenu").click(function() {
         $("#standardTextAccordion").accordion("activate", false);
+    });
+
+    $("#standardtextDropdownMenu div.standardtext-header").click(function (e) {
+        var elId = $(this).attr("id").replace("stHeader_", "stText_");
+        var text = $("#" + elId).html();
+        addTextToLog(text);
+        return false;
     });
 
     $("#standardTextAccordion").accordion({
@@ -757,7 +768,7 @@ function CaseInitForm() {
         collapsible: true,
         heightStyle: "content",
         icons: { "header": "ui-icon-plus", "activeHeader": "ui-icon-minus" },
-        header: "p"
+        header: "h3"
     });
 
     $("#standardtextDropdownMenu ul.case-standardText-keep-open").on("click", function (e) {

@@ -80,11 +80,13 @@
                                     <ul class="dropdown-menu case-standardText-keep-open" role="menu">
                                         <li>
                                             <div id="standardTextAccordion" class="case-div-standardtext-accordion">
-                                                @foreach (var e in Model.standardTexts.Where(e => e.IsActive == 1))
-                                                {
-                                                    <p class="case-standardtext-space">@Html.Raw(e.Name.Split('\n').FirstOrDefault())</p>
-                                                    <div class="case-div-standardtext case-standardtext-space"><span>@Html.Raw(e.Name)</span></div>
-                                                }
+                                                    @foreach (var e in Model.standardTexts.Where(e => e.IsActive == 1))
+                                                     {
+                                                         <h3>
+                                                             <div id="stHeader_@e.Id" class="case-standardtext-space standardtext-header">@Html.Raw(e.Name.Split('\n').FirstOrDefault())</div>
+                                                         </h3>
+                                                         <div class="case-div-standardtext case-standardtext-space"><span id="stText_@e.Id">@Html.Raw(e.Name)</span></div>
+                                                    }
                                             </div>
                                         </li>
                                     </ul>
