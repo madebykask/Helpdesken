@@ -39,7 +39,9 @@
         IEnumerable<Department> GetActiveDepartmentsBy(int customerId, int? regionId);
 
         IEnumerable<Department> GetDepartmentsByIds(int[] departmentsIds);
-    }
+
+		IList<Department> GetChargedDepartments(int customerId);
+	}
 
     public class DepartmentService : IDepartmentService
     {
@@ -270,5 +272,11 @@
         {
             return this.departmentRepository.FindActiveOverview(departmentId);
         }
-    }
+
+		public IList<Department> GetChargedDepartments(int customerId)
+		{
+			return this.departmentRepository.GetMany(x => x.Customer_Id == customerId && x.Charge == 1)
+				.OrderBy(x => x.DepartmentName).ToList();
+		}
+	}
 }

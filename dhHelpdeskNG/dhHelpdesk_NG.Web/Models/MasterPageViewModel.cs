@@ -153,7 +153,12 @@
             return this.CustomerSetting.ModuleContract.ToBool();
         }
 
-        public bool IsSettingsModulesVisible()
+		public bool IsInvoicesVisible()
+		{
+			return CustomerSetting.ModuleInvoice.ToBool() && this.IsCustomerOrSystemAdministrator();
+		}
+
+		public bool IsSettingsModulesVisible()
         {
             return                 
                 this.IsCheckListVisuble() ||

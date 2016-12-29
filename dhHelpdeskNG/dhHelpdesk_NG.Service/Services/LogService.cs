@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using DH.Helpdesk.Common.Extensions.Boolean;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System;
     using System.Collections.Generic;
@@ -33,6 +35,9 @@
         IEnumerable<Log> GetCaseLogs(DateTime? fromDate, DateTime? toDate);
 
         void SaveChildsLogs(CaseLog baseCaseLog, int[] childCasesIds, out IDictionary<string, string> errors);
+
+	    void UpdateLogInvoices(List<CaseLog> logs);
+
     }
 
     public class LogService : ILogService
@@ -245,10 +250,8 @@
                 || caseLog.FinishingDate != null
                 || caseLog.EquipmentPrice != 0
                 || caseLog.Price != 0
-                || caseLog.WorkingTimeHour != 0
-                || caseLog.WorkingTimeMinute != 0
-				|| caseLog.OvertimeHour != 0
-				|| caseLog.OvertimeMinute != 0
+                || caseLog.WorkingTime != 0
+				|| caseLog.Overtime != 0
 				|| caseLog.Id != 0
                 || noOfAttachedFiles > 0)
             {
@@ -414,6 +417,24 @@
             this._logRepository.Commit();
         }
 
+	    public void UpdateLogInvoices(List<CaseLog> logs)
+	    {
+		    foreach (var log in logs)
+		    {
+				var oldLog = _logRepository.GetById(log.Id);
+				if (oldLog != null)
+				{
+					oldLog.WorkingTime = log.WorkingTime;
+					oldLog.OverTime = log.Overtime;
+					oldLog.EquipmentPrice = log.EquipmentPrice;
+					oldLog.Price = log.Price;
+					oldLog.Charge = log.Charge.ToInt();
+				}
+			}
+
+			_logRepository.Commit();
+	    }
+
         #endregion
 
         #region Private Methods and Operators
@@ -447,8 +468,8 @@
             log.Text_External = string.IsNullOrWhiteSpace(caseLog.TextExternal) ? string.Empty : caseLog.TextExternal;
             log.Text_Internal = string.IsNullOrWhiteSpace(caseLog.TextInternal) ? string.Empty : caseLog.TextInternal;
             log.CaseHistory_Id = caseLog.CaseHistoryId; 
-            log.WorkingTime = (caseLog.WorkingTimeHour * 60) + caseLog.WorkingTimeMinute;
-			log.OverTime = (caseLog.OvertimeHour * 60) + caseLog.OvertimeMinute;
+            log.WorkingTime = caseLog.WorkingTime;
+			log.OverTime = caseLog.Overtime;
 
 			return log;
         }
@@ -481,24 +502,10 @@
             log.TextExternal = string.IsNullOrWhiteSpace(l.Text_External) ? string.Empty : l.Text_External;
             log.TextInternal = string.IsNullOrWhiteSpace(l.Text_Internal) ? string.Empty : l.Text_Internal;
             log.CaseHistoryId = l.CaseHistory_Id;
-            log.WorkingTimeHour = CalculateWorkingTimeHour(l.WorkingTime);
-            log.WorkingTimeMinute = CalculateWorkingTimeMinute(l.WorkingTime);
-			log.OvertimeHour = CalculateWorkingTimeHour(l.OverTime);
-			log.OvertimeMinute = CalculateWorkingTimeMinute(l.OverTime);
+            log.WorkingTime = l.WorkingTime;
+			log.Overtime = l.OverTime;
 
 			return log;
-        }
-
-         
-
-        private int CalculateWorkingTimeHour(int workingTime)
-        {
-            return workingTime >= 60 ? (int)Math.Round((double)(workingTime / 60), 0) : 0;
-        }
-
-        private int CalculateWorkingTimeMinute(int workingTime)
-        {
-            return workingTime >= 60 ? (int)workingTime % 60 : workingTime;
         }
 
     #endregion

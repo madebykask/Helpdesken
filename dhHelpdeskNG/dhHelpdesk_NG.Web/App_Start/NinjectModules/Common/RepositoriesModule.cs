@@ -275,7 +275,8 @@
             this.Bind<IBusinessRuleRepository>().To<BusinessRuleRepository>();
             this.Bind<ICaseFollowUpRepository>().To<CaseFollowUpRepository>();
             this.Bind<ICaseExtraFollowersRepository>().To<CaseExtraFollowersRepository>();
-        }
+			this.Bind<IInvoiceRepository>().To<InvoiceRepository>();
+		}
 
         #endregion
     }

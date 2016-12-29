@@ -685,7 +685,25 @@ INSERT INTO [dbo].[tblOrderFieldSettings]
 				and ((iofs.OrderType_Id is not null and ofs.OrderType_Id is not null and iofs.OrderType_Id = ofs.OrderType_Id) or (iofs.OrderType_Id is null and ofs.OrderType_Id is null))) 
 GO
 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'InvoiceRow_Id' and sysobjects.name = N'tblLog')
+	ALTER TABLE [dbo].[tblLog] ADD [InvoiceRow_Id] INT NULL,
+    FOREIGN KEY(InvoiceRow_Id) REFERENCES tblInvoiceRow(Id);
+GO
+
+update tblLog 
+set InvoiceRow_Id = (select Id from tblInvoiceRow ir where ir.Case_Id = l.Case_Id)
+from tblLog l
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'InvoiceRow_Id' and sysobjects.name = N'tblCaseInvoiceRow')
+	ALTER TABLE [dbo].[tblCaseInvoiceRow] ADD [InvoiceRow_Id] INT NULL,
+    FOREIGN KEY(InvoiceRow_Id) REFERENCES tblInvoiceRow(Id);
+GO
+
+update tblCaseInvoiceRow
+set InvoiceRow_Id = (select Id from tblInvoiceRow ir where ir.Case_Id = cir.Case_Id)
+from tblCaseInvoiceRow cir
+GO
+
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.30'
-

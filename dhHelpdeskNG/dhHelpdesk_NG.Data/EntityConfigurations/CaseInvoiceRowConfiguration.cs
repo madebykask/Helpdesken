@@ -28,7 +28,12 @@
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
-            this.ToTable("tblcaseinvoicerow");
+			this.HasOptional(c => c.InvoiceRow)
+				.WithMany()
+				.HasForeignKey(c => c.InvoiceRow_Id)
+				.WillCascadeOnDelete(false);
+
+			this.ToTable("tblcaseinvoicerow");
         }
     }
 }

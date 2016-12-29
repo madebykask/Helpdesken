@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Case
+﻿using DH.Helpdesk.BusinessData.Models.Invoice;
+
+namespace DH.Helpdesk.BusinessData.Models.Case
 {
     using System;
     using System.ComponentModel.DataAnnotations;
@@ -41,16 +43,50 @@
         public string EmailRecepientsExternalLog { get; set; }
         public int? UserId { get; set; }
         public string UserName { get; set; }
-        public int WorkingTimeHour { get; set; }
-        public int WorkingTimeMinute { get; set; }
-		public int OvertimeHour { get; set; }
-		public int OvertimeMinute { get; set; }
+        public int WorkingTime { get; set; }
+		public int Overtime { get; set; }
 		public bool HighPriority { get; set; }
 
-        /// <summary>
-        /// checkbox value indicates send log to parent/child cases
-        /// </summary>
-        public bool? SendLogToParentChildLog { get; set; }
-    }
+		//TODO: remove when this business model will not be used as viewmodel
+	    public int WorkingTimeHour
+	    {
+		    get { return CalculateWorkingTimeHour(WorkingTime); }
+		    set { WorkingTime = value * 60 + WorkingTimeMinute; }
+	    }
+
+	    public int WorkingTimeMinute
+	    {
+		    get { return CalculateWorkingTimeMinute(WorkingTime); }
+		    set { WorkingTime = value + WorkingTimeHour * 60; }
+		}
+
+	    public int OvertimeHour
+	    {
+		    get { return CalculateWorkingTimeHour(Overtime); }
+		    set { Overtime = value * 60 + OvertimeMinute; }
+		}
+
+	    public int OvertimeMinute
+	    {
+		    get { return CalculateWorkingTimeMinute(Overtime); }
+		    set { Overtime = value + OvertimeHour * 60; }
+		}
+
+	    private int CalculateWorkingTimeHour(int workingTime)
+		{
+			return workingTime >= 60 ? (int)Math.Round((double)(workingTime / 60), 0) : 0;
+		}
+
+		private int CalculateWorkingTimeMinute(int workingTime)
+		{
+			return workingTime >= 60 ? (int)workingTime % 60 : workingTime;
+		}
+
+		/// <summary>
+		/// checkbox value indicates send log to parent/child cases
+		/// </summary>
+		public bool? SendLogToParentChildLog { get; set; }
+		public InvoiceRow InvoiceRow { get; set; }
+	}
 }
 

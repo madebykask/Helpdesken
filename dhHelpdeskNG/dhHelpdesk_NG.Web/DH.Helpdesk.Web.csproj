@@ -237,12 +237,24 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="App_Start\BundleConfig.Orders.cs" />
+    <Compile Include="Areas\Invoices\Controllers\WebApi\InvoicesApiController.cs" />
+    <Compile Include="Areas\Invoices\Models\InvoiceActionParam.cs" />
+    <Compile Include="Areas\Invoices\Models\InvoiceActionParams.cs" />
+    <Compile Include="Areas\Invoices\Models\InvoiceOverviewFilterModel.cs" />
+    <Compile Include="Areas\Invoices\Models\InvoiceRowViewModel.cs" />
+    <Compile Include="Areas\Invoices\Models\InvoiceValuesParams.cs" />
+    <Compile Include="Areas\Invoices\Models\LogInvoiceParams.cs" />
     <Compile Include="Areas\Orders\Controllers\WebApi\OrdersApiController.cs" />
     <Compile Include="Areas\Orders\Models\OrderFieldSettings\FieldSettings\AccountInfoFieldSettingsModel.cs" />
     <Compile Include="Areas\Orders\Models\OrderFieldSettings\FieldSettings\OrderFieldTypeSettingsModel.cs" />
     <Compile Include="Areas\Orders\Models\OrderFieldSettings\FieldSettings\OrderFieldTypeValueSettingsModel.cs" />
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\AccountInfoEditModel.cs" />
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\UserInfoEditModel.cs" />
+    <Compile Include="Areas\Invoices\Controllers\OverviewController.cs" />
+    <Compile Include="Areas\Invoices\InvoicesAreaRegistration.cs" />
+    <Compile Include="Areas\Invoices\Models\ExternalInvoiceItemViewModel.cs" />
+    <Compile Include="Areas\Invoices\Models\InvoiceListItemViewModel.cs" />
+    <Compile Include="Areas\Invoices\Models\LogInvoiceItemViewModel.cs" />
     <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Infrastructure\Attributes\RequiredIfNotEmptyAttribute.cs" />
     <Compile Include="Infrastructure\Extensions\ProperyExtensions.cs" />
@@ -457,6 +469,7 @@
     <Content Include="Areas\Admin\Content\templates\BusinessRule\condition-rows.tmpl.html" />
     <Content Include="Areas\Orders\Content\js\OrderSettings\orderSettings.edit.js" />
     <Content Include="Areas\Orders\Content\js\Order\order.edit.js" />
+    <Content Include="Areas\Invoices\Scripts\Pages\invoicesOverview.js" />
     <Content Include="Areas\Reports\Content\js\reportViewer.logic.js" />
     <Content Include="Areas\Reports\Content\js\reports.js" />
     <Content Include="Content\bootstrap-tagsinput.css" />
@@ -1246,6 +1259,7 @@
     <Compile Include="Infrastructure\Tools\MimeHelper.cs" />
     <Compile Include="Infrastructure\Tools\WebMvcHelper.cs" />
     <Compile Include="Infrastructure\Translate\Translator.cs" />
+    <Compile Include="Infrastructure\UrlHelpers\Api\Invoices\WebApiInvoicesUrlName.Invoices.cs" />
     <Compile Include="Infrastructure\UrlHelpers\Api\Orders\WebApiOrdersUrlName.Orders.cs" />
     <Compile Include="Infrastructure\UrlHelpers\Api\WebApiUrlName.cs" />
     <Compile Include="Infrastructure\UrlHelpers\MvcUrlNameBase.cs" />
@@ -1892,6 +1906,10 @@
     <Content Include="Areas\Orders\Views\OrderFieldSettings\EditorTemplates\OrderFieldTypeSettingsModel.cshtml" />
     <Content Include="Areas\Orders\Views\OrderFieldSettings\Modals\OrderFieldTypeModal.cshtml" />
     <Content Include="Areas\Orders\Views\Orders\EditorTemplates\Fields\MultiSelectList.cshtml" />
+    <Content Include="Areas\Invoices\Views\web.config" />
+    <Content Include="Areas\Invoices\Views\Overview\Index.cshtml" />
+    <Content Include="Areas\Invoices\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Invoices\Views\_ViewStart.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx" />
     <Content Include="Content\js\Shared\custom.validation.reuiredifnotempty.js" />

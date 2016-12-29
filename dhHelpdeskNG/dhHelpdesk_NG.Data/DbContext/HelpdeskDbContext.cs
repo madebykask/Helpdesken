@@ -822,9 +822,12 @@
 
             modelBuilder.Configurations.Add(new ParentChildRelationConfiguration());
 
-            #endregion
+			modelBuilder.Configurations.Add(new InvoiceRowConfiguration());
+			modelBuilder.Configurations.Add(new InvoiceHeaderConfiguration());
 
-            base.OnModelCreating(modelBuilder);
+			#endregion
+
+			base.OnModelCreating(modelBuilder);
         }
 
         #endregion

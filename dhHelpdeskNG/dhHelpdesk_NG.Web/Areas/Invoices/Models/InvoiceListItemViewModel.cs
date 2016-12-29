@@ -1,0 +1,26 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace DH.Helpdesk.Web.Areas.Invoices.Models
+{
+	public class InvoiceListItemViewModel
+	{
+		public InvoiceListItemViewModel()
+		{
+			LogInvoices = new List<LogInvoiceItemViewModel>();
+			ExternalInvoices = new List<ExternalInvoiceItemViewModel>();
+		}
+
+		public int CaseId { get; set; }
+		public string CaseNumber { get; set; }
+		public string Caption { get; set; }
+		public string Category { get; set; }
+		public DateTime? FinishingDate { get; set; }
+		public string Department { get; set; }
+		
+		public List<LogInvoiceItemViewModel> LogInvoices { get; set; }
+		public List<ExternalInvoiceItemViewModel> ExternalInvoices { get; set; }
+	}
+}

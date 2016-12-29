@@ -36,12 +36,28 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
 					}
 				});
 		}
+
+	    public void UpdateExternalInvoiceValues(List<CaseInvoiceRow> rows)
+	    {
+		    foreach (var row in rows)
+		    {
+			    var oldRow = GetById(row.Id);
+			    if (oldRow != null)
+			    {
+				    oldRow.InvoicePrice = row.InvoicePrice;
+				    oldRow.Charge = row.Charge;
+			    }
+		    }
+
+			Commit();
+	    }
 	}
 
 	public interface ICaseInvoiceRowRepository : IRepository<CaseInvoiceRow>
 	{
 		List<CaseInvoiceRow> GetCaseInvoiceRows(int caseId);
 		void SaveCaseInvoiceRows(int caseId, List<CaseInvoiceRow> rows);
+		void UpdateExternalInvoiceValues(List<CaseInvoiceRow> rows);
 	}
 
 }
