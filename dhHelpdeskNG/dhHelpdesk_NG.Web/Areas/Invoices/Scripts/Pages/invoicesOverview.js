@@ -70,7 +70,7 @@ InvoicesOverview.prototype = {
                         "sortable": false,
                         "defaultContent": "<i class='icon-plus-sign'></i>"
                     },
-                    { "data": "CaseId" },
+                    { "data": "CaseNumber" },
                     { "data": "Caption" },
                     { "data": "Category" },
                     {

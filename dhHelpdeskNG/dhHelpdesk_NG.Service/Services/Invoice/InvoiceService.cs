@@ -43,7 +43,7 @@ namespace DH.Helpdesk.Services.Services.Invoice
 			foreach (var dbModel in dbModels)
 			{
 				var item = new InvoiceOverview();
-				item.CaseId = (int)dbModel.CaseNumber;
+				item.CaseId = dbModel.Id;
 				item.Caption = dbModel.Caption;
 				item.CaseNumber = dbModel.CaseNumber;
 				item.FinishingDate = dbModel.FinishingDate;
@@ -91,88 +91,7 @@ namespace DH.Helpdesk.Services.Services.Invoice
 			return res;
 		}
 
-		public string GetInvoiceOverviewExcel(int customerId, int? departmentId, DateTime? dateFrom, DateTime? dateTo, InvoiceStatus? status)
-		{
-			var sb = new StringBuilder();
-			var data = GetInvoiceOverviewList(customerId, departmentId, dateFrom, dateTo, status);
-
-			sb.AppendFormat(@"<HTML xmlns:x=""urn:schemas-microsoft-com:office:excel"">
-							<HEAD>
-								<meta http-equiv=""Content-Type"" content=""text/html; charset=UTF-8"" />
-								<style>
-									<!--table
-										@page {{
-											mso-header-data:""&dhHeldesk\000ADate\: &D\000APage &P"";
-											mso-page-orientation:landscape;
-										}}
-										br
-										{{mso-data-placement:same-cell;}}
-									-->
-								</style>
-								<!--[if gte mso 9]>
-									<xml>
-										<x:ExcelWorkbook>
-											<x:ExcelWorksheets>
-												<x:ExcelWorksheet>
-													<x:Name>dhHeldesk</x:Name>
-													<x:WorksheetOptions>
-														<x:Print>
-															<x:ValidPrinterInfo/>
-														</x:Print>
-													</x:WorksheetOptions>
-												</x:ExcelWorksheet>
-											</x:ExcelWorksheets>
-										</x:ExcelWorkbook>
-									 </xml>
-								<![endif]-->
-							</HEAD>
-							<BODY>
-							   <table Width=""100%"" Border=""1"" Cellspacing=""1"" cellpadding=""2"">
-										  <tr>
-											<td Width=""60""><b><%=getTextTranslation(""Ärende"")%></b></td>
-											<td Width=""300""><b>Text</b></td>
-											<%If StrComp(vCaseFieldSettings(2, getCaseFieldIndex(vCaseFieldSettings, ""Category_Id"")), ""1"", 1) = 0 Then%>
-											<td><b><%=vCaseFieldSettings(3, getCaseFieldIndex(vCaseFieldSettings, ""Category_Id""))%></b></td>
-											<%End If%>
-											<td><b><%=getTextTranslation(""Avslutsdatum"")%></b></td>
-											<td><b><%=vCaseFieldSettings(3, getCaseFieldIndex(vCaseFieldSettings, ""Department_Id""))%></b></td>
-											<td><b><%=getTextTranslation(""Arbete"")%>&nbsp;(<%=getTextTranslation(""minuter"")%>)</b></td>
-											<td><b><%=getTextTranslation(""Arbete"")%>&nbsp;(<%=LCase(getTextTranslation(""belopp""))%>)</b></td>
-											<td><b><%=getTextTranslation(""Material"")%></b></td>
-										</tr>");
-
-			var odd = true;
-			foreach (var caseRow in data)
-			{
-				odd = !odd;
-				sb.AppendFormat(@"
-					<tr>
-						<td valign=""top"" <%=CellColor(bSwitch)%>><%=rsDH_Support(""CaseNumber"")%></td>
-						<td valign=""top"" <%=CellColor(bSwitch)%>><%=rsDH_Support(""caption"")%></td>
-						<%If StrComp(vCaseFieldSettings(2, getCaseFieldIndex(vCaseFieldSettings, ""Category_Id"")), ""1"", 1) = 0 Then%>
-						<td valign=""top"" <%=CellColor(bSwitch)%>><%=rsDH_Support(""Category"")%></td>
-						<%End If%>
-						<td valign=""top"" <%=CellColor(bSwitch)%>><%=getdate(rsDH_Support(""FinishingDate""))%></td>
-						<td valign=""top"" <%=CellColor(bSwitch)%>><%=rsDH_Support(""Department"")%></td>
-						<td valign=""top"" <%=CellColor(bSwitch)%>><%=rsDH_Support(""WorkingTime"")%></td>
-						<td valign=""top"" <%=CellColor(bSwitch)%>>
-							<%=CDbl(CLng(rsDH_Support(""WorkingTime"")) / 60 * CDbl(rsDH_Support(""AccountancyAmount"")))%>
-							<%dblWorkingTimeAmount = CDbl(dblWorkingTimeAmount) + CLng(rsDH_Support(""WorkingTime"")) / 60 * CDbl(rsDH_Support(""AccountancyAmount""))%>
-						</td>
-						<td valign=""top"" <%=CellColor(bSwitch)%>>
-							<%=formatNumber(CDbl(rsDH_Support(""EquipmentPrice"")) + CDbl(getInvoice(rsDH_Support(""Id""))), 2)%>
-							<%dblEquipmentPrice = CDbl(dblEquipmentPrice) + CDbl(rsDH_Support(""EquipmentPrice"")) + CDbl(getInvoice(rsDH_Support(""Id"")))%>
-						</td>
-					</tr>	");
-			}
-
-			sb.AppendFormat(@"</table>
-						</BODY>
-					</HTML>");
-
-			return sb.ToString();
-		}
-
+		
 		public void SaveInvoiceActions(InvoiceHeader invoiceHeader)
 		{
 			var now = DateTime.Now;
@@ -220,8 +139,6 @@ namespace DH.Helpdesk.Services.Services.Invoice
 	{
 		List<InvoiceOverview> GetInvoiceOverviewList(int customerId, int? departmentId, DateTime? dateFrom, DateTime? dateTo, InvoiceStatus? status);
 
-		string GetInvoiceOverviewExcel(int customerId, int? departmentId, DateTime? dateFrom, DateTime? dateTo,
-			InvoiceStatus? status);
 		void SaveInvoiceActions(InvoiceHeader invoiceHeader);
 	}
 }

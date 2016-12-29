@@ -10,6 +10,14 @@
 			<li>
 				<input type="button" value="@Translation.Get("Spara")" class="btn" id="btnInvoiceAction"/>
 			</li>
+			<li>
+				@Html.ActionLink(Translation.Get("Export"), "InvoiceExport", new RouteValueDictionary {
+													  {"DepartmentId", Model.DepartmentId},
+													  {"DateFrom", Model.DateFrom},
+													  {"DateTo.CompanyName", Model.DateTo},
+													  {"Status", Model.Status},
+												  }, new { @class = "btn", target = "_blank"})
+			</li>
 		</ul>
 	}
 }
