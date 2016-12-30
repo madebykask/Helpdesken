@@ -23,6 +23,10 @@
     }
 
     attributes.Add("data-dh-is-required", Model.IsRequired);
+    attributes.Add("id", "collaborators_dropdown");
+    attributes.Add("multiple", "multiple");
+    attributes.Add("class", "chosen-select");
+    attributes.Add("data-placeholder", Translation.GetCoreTextTranslation("Välj en eller flera"));
 }
 
 <tr>
@@ -30,7 +34,7 @@
         @Html.FieldCaption(Model)
     </td>
     <td class="span6">
-        @Html.ListBoxFor(x => x.Value, source, new {id = "collaborators_dropdown", multiple = "multiple", @class = "chosen-select", data_placeholder = Translation.GetCoreTextTranslation("Välj en eller flera")})
+        @Html.ListBoxFor(x => x.Value, source, attributes)
         @Html.HiddenFor(m => m.IsRequired)
         @Html.ValidationMessageFor(m => m.Value)
     </td>
