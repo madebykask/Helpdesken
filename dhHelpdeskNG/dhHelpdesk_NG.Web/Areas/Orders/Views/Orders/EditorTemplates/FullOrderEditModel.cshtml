@@ -7,7 +7,9 @@
 
 @Html.HiddenFor(m => m.InformOrderer, new { id = "InformOrderer"})
 @Html.HiddenFor(m => m.InformReceiver, new { id = "InformReceiver"})
-@Html.HiddenFor(m => m.CreateCase, new { id = "CreateCase"})
+@if (Model.Other.CaseNumber.Value == null || Model.Other.CaseNumber.Value == 0) { 
+   @Html.HiddenFor(m => m.CreateCase, new { id = "CreateCase"})
+}
 
 <ul class="nav nav-tabs">
     <li class="active">

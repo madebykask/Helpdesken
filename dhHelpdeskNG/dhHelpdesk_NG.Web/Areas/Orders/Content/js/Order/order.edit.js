@@ -27,7 +27,8 @@
             };
 
             function applyOrdererUnitsFilter(depId) {
-                var units = that._options.units;
+                if (!that._options.units) return;
+                var units = that._options.units ;
 
                 var unitSelect = $("#orderer_unit_select");
                 unitSelect.empty();

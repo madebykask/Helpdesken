@@ -23,11 +23,5 @@
         public const string Activity = "Activity";
         public const string Manager = "Manager";
         public const string ReferenceNumber = "ReferenceNumber";
-        public const string OrderFieldType = "OrderFieldType";
-        public const string OrderFieldType2 = "OrderFieldType2";
-        public const string OrderFieldType3 = "OrderFieldType3";
-        public const string OrderFieldType4 = "OrderFieldType4";
-        public const string OrderFieldType5 = "OrderFieldType5";
-        
     }
 }
