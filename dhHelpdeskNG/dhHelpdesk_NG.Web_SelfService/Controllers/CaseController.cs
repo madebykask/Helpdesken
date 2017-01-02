@@ -1321,6 +1321,11 @@
                     {
                         isReadonly = templateField.CaseSolutionMode == Common.Enums.Settings.CaseSolutionModes.ReadOnly;
                     }
+
+                    if (templateField != null && isVisible)
+                    {
+                        isVisible = templateField.CaseSolutionMode != Common.Enums.Settings.CaseSolutionModes.Hide;
+                    }
                 }
 
                 ret.Add(new FieldSettingJSModel(field.Name, isVisible, isReadonly, isRequired));

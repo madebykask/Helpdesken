@@ -95,6 +95,11 @@
             if (settings.IsReadonly) {                
                 disableElement($element);
             }
+
+            if (!settings.IsVisible) {
+                var $elToHide = $('.form-group.row.' + settings.FieldName);
+                hideElement($elToHide);
+            }
         }
 
         var disableElement = function($element){
@@ -105,6 +110,10 @@
                 $element.css("pointer-events", "none");
             };
             $element.addClass("disabled");            
+        }
+
+        var hideElement = function ($element) {
+            $element.hide();            
         }
 
         /**
