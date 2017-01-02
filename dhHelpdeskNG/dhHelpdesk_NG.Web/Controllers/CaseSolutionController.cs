@@ -762,7 +762,7 @@ namespace DH.Helpdesk.Web.Controllers
             var _rows = caseSolutions.Select(cs=> new RowIndexViewModel
                                                         {
                                                             Id = cs.Id,
-                                                            Name = Translation.GetMasterDataTranslation(cs.Name),
+                                                            Name = cs.Name,
                                                             CategoryName = cs.CaseSolutionCategory == null? string.Empty : cs.CaseSolutionCategory.Name,
                                                             CaseCaption = cs.Caption,
                                                             PerformerUserName = cs.PerformerUser == null? 
@@ -1133,7 +1133,7 @@ namespace DH.Helpdesk.Web.Controllers
                                                  model.CaseFieldSettings.ToList());
 
             model.RuleModel = caseRuleModel;
-            model.CaseSolution.Name = Translation.GetMasterDataTranslation(model.CaseSolution.Name);
+            model.CaseSolution.Name = model.CaseSolution.Name;
             return model;
         }
 
