@@ -141,11 +141,8 @@
                     if (Model.DynamicCase.ViewMode == 0)
                     {
                         <li>
-                            <a href="#dh-form-area" id="loadContainer" class="eform">@(Translation.Get(Model.DynamicCase.FormName))</a>
-                        </li>
-                        @*<li>
-                            <a href="#e-form-area" class="eform"> Test </a>
-                        </li>*@
+                            <a href="#dh-form-area" id="loadContainer" class="eform">@(Translation.Get(Model.DynamicCase.FormName))</a>                            
+                        </li>                        
                        
                     }
                     else if (Model.DynamicCase.ViewMode == 1)
@@ -2210,7 +2207,7 @@
                 @if (Model.DynamicCase != null && Model.DynamicCase.ViewMode == 0)
                 {
                     <div id="dh-form-area" class="tab-pane tab-pane-border">
-
+                        
                     </div>
                     @*<div id="e-form-area" class="tab-pane tab-pane-border">
                         <iframe sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
