@@ -1,0 +1,328 @@
+﻿@model DH.Helpdesk.EForm.FormLib.Models.FormModel
+@using DH.Helpdesk.EForm.FormLib;
+@using DH.Helpdesk.EForm.FormLib.Models;
+
+<div class="tab-pane" id="payment">
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Payment information")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ECMCompensationProgram")</td>
+                    <td>
+                        @Model.Element("ECMCompensationProgram")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PSArea")</td>
+                    <td>
+                        @Model.Element("PSArea")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PSGroup")</td>
+                    <td>
+                        @Model.Element("PSGroup")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("CollectiveScaleSalary")</td>
+                    <td>
+                        @Model.Element("CollectiveScaleSalary")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Payments and allowances")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("OneIKEABonusType")</td>
+                    <td>@Model.Element("OneIKEABonusType")</td>
+                </tr>
+                <tr class="allowance">
+                    <td class="tdstrong">@Model.Label("FunctionAllowance")</td>
+                    <td>
+                        @Model.Element("FunctionAllowance")
+                    </td>
+                </tr>
+                <tr class="allowance">
+                    <td class="tdstrong">@Model.Label("FunctionAllowanceAmount")</td>
+                    <td>
+                        @Model.Element("FunctionAllowanceAmount")
+                    </td>
+                </tr>
+                <tr class="allowance">
+                    <td class="tdstrong">@Model.Label("FunctionAllowanceGrossNett")</td>
+                    <td>
+                        @Model.Element("FunctionAllowanceGrossNett")
+                    </td>
+                </tr>
+
+                @for(int i = 2; i <= 3; i++)
+                {
+                    <tr class="allowance@(i.ToString())" id="allowance@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h4>@Model.Translate("Allowance")</h4>
+                        </td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("FunctionAllowance" + i.ToString())</td>
+                        <td>
+                            @Model.Element("FunctionAllowance" + i.ToString())</td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("FunctionAllowanceAmount" + i.ToString())</td>
+                        <td>
+                            @Model.Element("FunctionAllowanceAmount" + i.ToString())</td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("FunctionAllowanceGrossNett" + i.ToString())</td>
+                        <td>
+                            @Model.Element("FunctionAllowanceGrossNett" + i.ToString())</td>
+                    </tr>
+                }
+
+                <tr id="addAllowanceTr">
+                    <td colspan="2">
+                        @Model.Element("Allowances")
+                        <a id="addAllowance" class="btn btn-link btn-mini pull-right">@Model.Translate("I want to add another Allowance")</a></td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Cost center")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("HomeCostCenter")</td>
+                    <td>
+                        @Model.Element("HomeCostCenter")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("HomeCostCenterAllocation")</td>
+                    <td>
+                        @Model.Element("HomeCostCenterAllocation")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AdditionalCostCenter")</td>
+                    <td>
+                        @Model.Element("AdditionalCostCenter")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AdditionalCostCenterAllocation")</td>
+                    <td>
+                        @Model.Element("AdditionalCostCenterAllocation")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AdditionalCostCenter2")</td>
+                    <td>
+                        @Model.Element("AdditionalCostCenter2")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AdditionalCostCenterAllocation2")</td>
+                    <td>
+                        @Model.Element("AdditionalCostCenterAllocation2")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Additional information")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("HealthInsuranceLocation")</td>
+                    <td>
+                        @Model.Element("HealthInsuranceLocation")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PensionerStatus")</td>
+                    <td>
+                        @Model.Element("PensionerStatus")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PESEL")</td>
+                    <td>
+                        @Model.Element("PESEL")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MobilityStatus")</td>
+                    <td>
+                        @Model.Element("MobilityStatus")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("DatejoiningTack")</td>
+                    <td>
+                        @Model.Element("DatejoiningTack")
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>     
+    var hiringDate = $('#date_EffectiveDate');
+    var typeOfHiring = $('#TypeOfHiring').val();
+    var hiringReason = $('#ReasonForHiring').val();
+   
+    $('#TypeOfHiring').change(function () {       
+        typeOfHiring = $('#TypeOfHiring option:selected').text();
+        if (document.getElementById('EffectiveDate'))
+            setHiringDateToDatejoiningTack();
+    });
+
+    $('#ReasonForHiring').change(function () {       
+        hiringReason = $('#ReasonForHiring option:selected').text();
+        if (document.getElementById('EffectiveDate'))
+            setHiringDateToDatejoiningTack();
+    });
+    
+    function setHiringDateToDatejoiningTack() {
+     
+        if ((typeOfHiring == "New Hire") && (hiringReason != "Change function")) {
+            document.getElementById('DatejoiningTack').value = document.getElementById('EffectiveDate').value;
+        }
+        else {
+
+            document.getElementById('DatejoiningTack').value = "";
+        }
+    }
+
+    
+    hiringDate.not(".disabled").datepicker()
+            .on('changeDate', function (e) {
+
+                setHiringDateToDatejoiningTack();
+
+            });
+
+    // To sets the value without choosing from calender
+    hiringDate.not(".disabled").datepicker()
+            .on('change', function (e) {
+
+                setHiringDateToDatejoiningTack();
+            });
+
+    // To narrow down ECM compensation program -> psArea -> psGroup -> Collective Sallary
+    $('#PSArea').on('change', function () {
+        eCMCompensationProgram = $('#ECMCompensationProgram option:selected').text();
+        var XML;
+        
+            if (eCMCompensationProgram == 'ECM Retail & Property') {
+                XML = 'predefined_RETPROP_PSArea_PSGroup.xml';
+                addPSGroupOnPSArea(XML);
+
+            }
+            if (eCMCompensationProgram == 'ECM DS') {
+                XML = 'predefined_DS_PSArea_PSGroup.xml';
+                addPSGroupOnPSArea(XML);
+            }
+
+        else return;
+
+    });
+    
+    function addPSGroupOnPSArea(xml) {       
+            GetXML(xml, addPSGroupOnPSAreaXML);       
+    }
+
+    function addPSGroupOnPSAreaXML(xml) {
+       
+        
+            var show = ''
+            var dep = '';
+
+            if (document.getElementById('PSArea')) {
+                dep = $("#PSArea option:selected").text();
+            }
+
+            if (document.getElementById('PSGroup')) {
+                psGroup = $("#PSGroup option:selected").text();
+            }
+
+            var temp = '';
+
+            $(xml).find('dependent').each(function () {
+
+                var $sel = $(this);
+
+                show = '';
+
+                var department = $sel.find('selected').text();
+
+                show = $sel.find('show').text();
+
+                    if (department.toString().trim() == dep.toString().trim()) {
+
+                        if (show != '') {
+
+                            var optionsarray = show.split(',');
+                            var seloption = "";
+
+                            $('#PSGroup')
+                                .find('option')
+                                .remove();
+
+                             //optionsarray.push('');
+
+                            $.each(optionsarray, function (key, value) {
+
+
+                                var s = value.replace(/\n/g, '');
+
+                                $('#PSGroup')
+                                    .append($("<option></option>")
+                                    .attr("value", s)
+                                    .text(s));
+                            });
+
+                            //To assign the choosen value again to PS group
+                            $('#PSGroup').val(psGroup);
+
+                            return;
+                        }
+                    }           
+            });
+        
+
+    }
+
+    function GetXML(xmlFile, url) {
+        //////////
+        //Gets XML File
+        //////////
+
+        var path = window.location.protocol + '//';
+        path = path + window.location.host + '/';
+
+        path = site.baseUrl + '/FormLibContent/Xmls/Poland/Templates/' + xmlFile
+
+        $.ajax({
+            type: "GET",
+            url: path,
+            dataType: "xml",
+            success: url,
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseText);
+                alert(textStatus);
+                alert(errorThrown);
+            }
+
+        });
+
+
+    }
+
+
+</script>

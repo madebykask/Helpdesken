@@ -1,0 +1,10 @@
+﻿<locks>
+  <lock>
+    <field>PaymentType</field>
+    <lockVal>Advance holiday money - full amount</lockVal>
+  </lock>
+  <lock>
+    <field>PaymentType</field>
+    <lockVal>Advance holiday money - partial amount</lockVal>
+  </lock>
+</locks>

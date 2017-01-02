@@ -1,0 +1,35 @@
+﻿<hides>
+  <hide>
+    <hideVal>Cafe</hideVal>
+    <hideSelector type="id">UBOne</hideSelector>
+    <hideSelector type="id">UBTwo</hideSelector>
+    <hideSelector type="id">UBThree</hideSelector>
+    <hideSelector type="id">50PercentNights</hideSelector>
+    <hideSelector type="id">100PercentNights</hideSelector>
+  </hide>
+  <hide>
+    <hideVal>Hjemme</hideVal>
+    <hideSelector type="id">EveningAllowance</hideSelector>
+    <hideSelector type="id">WeekendAllowance</hideSelector>
+  </hide>
+  <hide>
+    <hideVal>Holding</hideVal>
+    <hideSelector type="id">EveningAllowance</hideSelector>
+    <hideSelector type="id">WeekendAllowance</hideSelector>
+  </hide>
+  <hide>
+    <hideVal>IKEA AS Tromsø</hideVal>
+    <hideSelector type="id">EveningAllowance</hideSelector>
+    <hideSelector type="id">WeekendAllowance</hideSelector>
+  </hide>
+  <hide>
+    <hideVal>Service Office</hideVal>
+    <hideSelector type="id">EveningAllowance</hideSelector>
+    <hideSelector type="id">WeekendAllowance</hideSelector>
+  </hide>
+  <hide>
+    <hideVal>Varehus</hideVal>
+    <hideSelector type="id">EveningAllowance</hideSelector>
+    <hideSelector type="id">WeekendAllowance</hideSelector>
+  </hide>
+</hides>

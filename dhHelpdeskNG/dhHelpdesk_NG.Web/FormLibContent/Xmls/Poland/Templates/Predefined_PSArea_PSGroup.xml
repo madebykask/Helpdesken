@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<predefined>
+    <name>PSGroup</name>
+    <dependent>
+        <selected>Level 1</selected>
+        <show>41,42,43,44,45,50</show>
+    </dependent>
+    <dependent>
+        <selected>Level 2</selected>
+        <show>46,47,51</show>
+    </dependent>
+    <dependent>
+        <selected>Level 3</selected>
+        <show>48,49,52</show>
+    </dependent>
+    <dependent>
+        <selected>Level 3A</selected>
+        <show>47,48</show>
+    </dependent>
+    <dependent>
+        <selected>Level 3B</selected>
+        <show>49</show>
+    </dependent>
+    <dependent>
+        <selected>Level 4</selected>
+        <show>50,51,53</show>
+    </dependent>
+    <dependent>
+        <selected>Level 5</selected>
+        <show>52,53,56</show>
+    </dependent>
+    <dependent>
+        <selected>Level 6</selected>
+        <show>53,54,55,57</show>
+    </dependent>
+    <dependent>
+        <selected>Level 7</selected>
+        <show>54,55,56,57,58</show>
+    </dependent>
+    <dependent>
+        <selected>Level 8</selected>
+        <show>56,57,58,59</show>
+    </dependent>
+    <dependent>
+        <selected>Level 9</selected>
+        <show>58,60,61,62,63</show>
+    </dependent>
+    <dependent>
+        <selected>Level dummy hourly</selected>
+        <show>8</show>
+    </dependent>
+    <dependent>
+        <selected>Level dummy monthly</selected>
+        <show>9</show>
+    </dependent>
+    <dependent>
+        <selected>N/A</selected>
+        <show>N/A</show>
+    </dependent>
+</predefined>

@@ -1,0 +1,33 @@
+﻿@model DH.Helpdesk.EForm.FormLib.Models.FormModel
+@using DH.Helpdesk.EForm.FormLib;
+@using DH.Helpdesk.EForm.FormLib.Models;
+@using DH.Helpdesk.EForm.FormLib.Pdfs;
+@using DH.Helpdesk.EForm.Model.Entities;
+@{
+    Layout = null;
+    Model.Language = "nl";
+}
+
+@*  //Comment: Barcode for NL should only be shown in status 50 for hiring. In other processes in status 40.*@
+@if (Model.Contract.StateSecondaryId >= Model.DocumentData.BarcodeShowOnMinStateSecondaryId)
+{
+
+    if (Model.DocumentData.BarCodeUse == true && (!string.IsNullOrEmpty(Model.Contract.EmployeeNumber)))
+    {
+    <div style="width: 100%;">
+        <div style="text-align: right; font-size: 10pt;">
+            <font face="IDAutomationHC39M">*@Model.Contract.EmployeeNumber@Model.DocumentData.TypeCode*</font>
+        </div>
+    </div>
+    <br />
+    }
+}
+@{ if (Request.QueryString["debug"] == "1")
+   {
+        <div style="width: 100%;">
+        <div style="text-align: right; font-size: 10pt;">
+            <font face="IDAutomationHC39M">*123456789*</font>
+        </div>
+    </div>
+    <br />
+   }}

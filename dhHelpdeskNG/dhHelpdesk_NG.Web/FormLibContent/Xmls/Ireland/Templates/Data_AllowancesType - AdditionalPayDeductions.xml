@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<options>
+  <option value=""></option>
+  <option value="Advanced Hrly">Advanced Hrly</option>
+  <option value="Car Allowance">Car Allowance</option>
+  <option value="Cash Adjustment">Cash Adjustment</option>
+  <option value="Commission">Commission</option>
+  <option value="Competance Pay">Competance Pay</option>
+  <option value="First Aid Allowance">First Aid Allowance</option>
+  <option value="Fork Lift Truck Allowance">Fork Lift Truck Allowance</option>
+  <option value="Housing Allowance">Housing Allowance</option>
+  <option value="IKEA1 Skills">IKEA1 Skills</option>
+  <option value="IKEA2 Skills">IKEA2 Skills</option>
+  <option value="Kitchen Skills">Kitchen Skills</option>
+  <option value="Mortgage Subsidy">Mortgage Subsidy</option>
+  <!--<option value="Night Shift">Night Shift</option>-->
+  <option value="NTG Double Housing">NTG Double Housing</option>
+  <option value="NTG Housing Costs">NTG Housing Costs</option>
+  <option value="NTG Relocation Allow">NTG Relocation Allow</option>
+  <option value="NTG Rent Allowance">NTG Rent Allowance</option>
+  <option value="Power Stacker">Power Stacker</option>
+  <option value="Redundancy">Redundancy</option>
+  <option value="Relocation Allowance">Relocation Allowance</option>
+  <option value="Rent Allowance">Rent Allowance</option>
+  <option value="Responsibility Allow">Responsibility Allow</option>
+  <option value="Salary Advanced">Salary Advanced</option>
+  <option value="Salaried Overtime">Salaried Overtime</option>
+  <option value="Secondment">Secondment</option>
+  <option value="Stand By Allowance">Stand By Allowance</option>
+</options>

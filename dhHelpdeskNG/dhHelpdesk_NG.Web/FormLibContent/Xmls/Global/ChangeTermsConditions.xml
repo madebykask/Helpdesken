@@ -1,0 +1,1917 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE form [
+  <!ENTITY languages SYSTEM "Templates/Languages.xml">
+  <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
+  <!ENTITY state SYSTEM "Templates/ChangeTermsConditionsState.xml">
+  <!ENTITY pre_country SYSTEM "Templates/Data_country.xml">
+  <!ENTITY data_CostCentre SYSTEM "Templates/Data_CostCentre.xml">
+  <!ENTITY data_JobTitle SYSTEM "Templates/Data_JobTitle.xml">
+
+
+]>
+
+<form id="45" guid="2F8F6175-337B-4552-B854-8CED49BE9796" customerId="28">
+  &languages;
+  &regexs;
+  &state;
+  
+  <fields>
+
+    <!--Tab ServiceRequestDetails-->
+    <tab name="#ServiceRequestDetails" label="Service Request Details">
+      <element name="Co-WorkerGlobalviewID" type="text" label="Co-Worker Globalview ID" mandatory="1"></element>
+      <element name="FirstName" type="text" label="Co-Worker First Name" mandatory="1"></element>     
+      <element name="LastName" type="text" label="Co-Worker Last Name" mandatory="1"></element>
+      <element name="IKEAEmailAddress" type="text" label="IKEA Email Address" mandatory="1">
+        <regex inherit="email" message="" pattern=""></regex>
+      </element>
+      <element name="IKEANetworkID" type="text" label="IKEA Network ID" mandatory="1"></element>
+      <element name="Company" type="text" label="Company"></element>
+      <element name="BusinessUnit" type="text" label="Business Unit"></element>
+      <element name="ServiceArea" type="text" label="Function"></element>
+      <element name="Department" type="text" label="Department"></element>
+      <!--<element name="ChangeType" type="select" label="Change Type?" mandatory="1">
+        <options>
+          <option value=""></option>
+          <option value="Change Type 1">Change Type 1</option>
+          <option value="Change Type 2">Change Type 2</option>
+        </options>
+      </element>-->
+      <element name="ChangeValidFrom" type="date" label="Change Valid from:" mandatory="1" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="ChangeValidTo" type="date" label="Change Valid to:" mandatory="1" default="31.12.9999" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard">
+        <options>
+          <option value=""></option>
+          <option value="Urgent">Urgent</option>
+          <option value="Standard">Standard</option>
+        </options>
+      </element>
+      <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
+    <!--Permanent Address-->
+    <!--<element type="text" name="PermanentAddressLine1" label="Address line 1" mandatory="1"></element>
+      <element type="text" name="PermanentAddressLine2" label="Address line 2"></element>
+      <element type="text" name="PermanentPostalCode" label="Postal code" mandatory="1"></element>
+      <element type="text" name="PermanentCity" label="City" mandatory="1"></element>
+      <element type="text" name="PermanentCountry" label="Country" mandatory="1"></element>-->
+    </tab>
+    
+    <!--Tab OrganisationalAssignment-->
+    <tab name="#OrganisationalAssignment" label="Organisational Assignment">
+      <!--Organisation Assignment-->   
+      <element type="search-select" name="Country" label="Country" mandatory="1" default="Sweden">
+        &pre_country;
+      </element>
+      <element type="select" source="database" name="NewCompany" label="Company" mandatory="1">
+        <options>
+          <option value=""></option>
+        </options>
+      </element>     
+      <element type="select" source="database" name="NewBusinessUnit" label="Business Unit" mandatory="1">   
+        <options>
+          <option value=""></option>
+        </options>
+      </element>    
+      <element type="select" source="database" name="NewServiceArea" label="Function" mandatory="1">
+        <options>
+          <option value=""></option>
+        </options>
+      </element>  
+      <element type="select" source="database" name="NewDepartment" label="Department" mandatory="1">  
+        <options>
+          <option value=""></option>
+        </options>
+      </element>
+      <element name="MultiCostcentres" type="hidden" default="1"></element>
+      <element name="HomeCostCenter" type="search-select" label="Home Cost Centre" >
+        &data_CostCentre;
+      </element>
+      <element name="CostAllocation" type="text" label="Cost Allocation %" default="100">
+        <groupSum name="CostAllocation,AdditionalCostAllocation,AdditionalCostAllocation2,AdditionalCostAllocation3,AdditionalCostAllocation4,AdditionalCostAllocation5"
+            message="Cost allocation % (in all the fields) must always equal 100.">100</groupSum>
+      </element>
+      <element name="CrossChargeCostCentre" type="search-select" label="Additional Cost Centre" >
+        &data_CostCentre;
+      </element>
+      <element name="AdditionalCostAllocation" type="text" label="Additional Cost Centre %"></element>
+      <!-- 2 -->
+      <element name="CrossChargeCostCentre2" type="search-select" label="Additional Cost Centre" >
+        &data_CostCentre;
+      </element>
+      <element name="AdditionalCostAllocation2" type="text" label="Additional Cost Centre %"></element>
+      <!-- 3 -->
+      <element name="CrossChargeCostCentre3" type="search-select" label="Additional Cost Centre" >
+        &data_CostCentre;
+      </element>
+      <element name="AdditionalCostAllocation3" type="text" label="Additional Cost Centre %"></element>
+      <!-- 4 -->
+      <element name="CrossChargeCostCentre4" type="search-select" label="Additional Cost Centre" >
+        &data_CostCentre;
+      </element>
+      <element name="AdditionalCostAllocation4" type="text" label="Additional Cost Centre %"></element>
+      <!-- 5 -->
+      <element name="CrossChargeCostCentre5" type="search-select" label="Additional Cost Centre" >
+        &data_CostCentre;
+      </element>
+      <element name="AdditionalCostAllocation5" type="text" label="Additional Cost Centre %"></element>
+
+
+      <element type="search-select" name="JobTitle" label="Position Title (Local Job Name)">
+        <!--<options>
+          <option value=""></option>
+          <option value="﻿Account Receivable Co-worker">﻿Account Receivable Co-worker</option>
+          <option value="Accountant">Accountant</option>
+          <option value="Accountant General">Accountant General</option>
+          <option value="Accountant Payable">Accountant Payable</option>
+          <option value="Accountant Senior">Accountant Senior</option>
+          <option value="Accountant Tax">Accountant Tax</option>
+          <option value="Accounting &amp; Treasury Manager">Accounting &amp; Treasury Manager</option>
+          <option value="Accounting Assistant">Accounting Assistant</option>
+          <option value="Accounting Assistant Receivable">Accounting Assistant Receivable</option>
+          <option value="Accounting Co-worker">Accounting Co-worker</option>
+          <option value="Accounting Co-worker Senior">Accounting Co-worker Senior</option>
+          <option value="Accounting Manager">Accounting Manager</option>
+          <option value="Accounting Project Manager">Accounting Project Manager</option>
+          <option value="Accounting Store Support Manager">Accounting Store Support Manager</option>
+          <option value="Accounting Team Assistant">Accounting Team Assistant</option>
+          <option value="Accounting Team Leader">Accounting Team Leader</option>
+          <option value="Accounting Team Manager">Accounting Team Manager</option>
+          <option value="Accounts Payable">Accounts Payable</option>
+          <option value="Accounts Payable Co-worker">Accounts Payable Co-worker</option>
+          <option value="Accounts Payable Manager">Accounts Payable Manager</option>
+          <option value="Accounts Payable Team Leader">Accounts Payable Team Leader</option>
+          <option value="Accounts Receivable Manager">Accounts Receivable Manager</option>
+          <option value="Acquisition Co-worker">Acquisition Co-worker</option>
+          <option value="Activity &amp; Sales Support Specialist">Activity &amp; Sales Support Specialist</option>
+          <option value="Activity &amp; Sales Support Team Manager">Activity &amp; Sales Support Team Manager</option>
+          <option value="Activity Coordinator">Activity Coordinator</option>
+          <option value="Activity Co-worker">Activity Co-worker</option>
+          <option value="Activity Manager">Activity Manager</option>
+          <option value="Activity Specialist">Activity Specialist</option>
+          <option value="Administration Manager">Administration Manager</option>
+          <option value="Administrative Receivable Accounting Ass">Administrative Receivable Accounting Ass</option>
+          <option value="Administrative Sales Manager">Administrative Sales Manager</option>
+          <option value="Administrative Specialist">Administrative Specialist</option>
+          <option value="Administrator">Administrator</option>
+          <option value="Administrator Reception">Administrator Reception</option>
+          <option value="Advertising Assistant">Advertising Assistant</option>
+          <option value="Advertising Manager">Advertising Manager</option>
+          <option value="After Sales Front Line Manager">After Sales Front Line Manager</option>
+          <option value="After Sales Manager">After Sales Manager</option>
+          <option value="After Sales Team Leader">After Sales Team Leader</option>
+          <option value="Apprentice">Apprentice</option>
+          <option value="Architect">Architect</option>
+          <option value="Architect Assistant">Architect Assistant</option>
+          <option value="Architect Manager">Architect Manager</option>
+          <option value="Art Director">Art Director</option>
+          <option value="Aspirant">Aspirant</option>
+          <option value="Assembly co-worker">Assembly co-worker</option>
+          <option value="Asset Management Analyst">Asset Management Analyst</option>
+          <option value="Assistant">Assistant</option>
+          <option value="Assistant Store Manager">Assistant Store Manager</option>
+          <option value="Assistant Store Manager Sales">Assistant Store Manager Sales</option>
+          <option value="Assistant Store Manager Services">Assistant Store Manager Services</option>
+          <option value="BA05 and IKEA Business Shopkeeper">BA05 and IKEA Business Shopkeeper</option>
+          <option value="BA40 and Family Shop Keeper">BA40 and Family Shop Keeper</option>
+          <option value="Ballroom Co-worker">Ballroom Co-worker</option>
+          <option value="Benefits Manager">Benefits Manager</option>
+          <option value="Benefits Specialist">Benefits Specialist</option>
+          <option value="Benefits Specialist Senior">Benefits Specialist Senior</option>
+          <option value="Bistro &amp; Swede Team Assistant">Bistro &amp; Swede Team Assistant</option>
+          <option value="Build Up Service Specialist">Build Up Service Specialist</option>
+          <option value="Business Administration Manager">Business Administration Manager</option>
+          <option value="Business Analyst">Business Analyst</option>
+          <option value="Business Controller">Business Controller</option>
+          <option value="Business Developer">Business Developer</option>
+          <option value="Business Development Controller">Business Development Controller</option>
+          <option value="Business Intelligence Analyst">Business Intelligence Analyst</option>
+          <option value="Business Intelligence Analyst Senior">Business Intelligence Analyst Senior</option>
+          <option value="Business Intelligence Manager">Business Intelligence Manager</option>
+          <option value="Business Nav. &amp; Intelligence Manager">Business Nav. &amp; Intelligence Manager</option>
+          <option value="Business Navigation Analyst">Business Navigation Analyst</option>
+          <option value="Business Navigation Manager">Business Navigation Manager</option>
+          <option value="Business Navigation Team Leader">Business Navigation Team Leader</option>
+          <option value="Business Navigator">Business Navigator</option>
+          <option value="Business Navigator I">Business Navigator I</option>
+          <option value="Business Navigator II">Business Navigator II</option>
+          <option value="Business Navigator Trainee">Business Navigator Trainee</option>
+          <option value="Business Support Specialist">Business Support Specialist</option>
+          <option value="Business Support Team Leader">Business Support Team Leader</option>
+          <option value="Business Systems Analyst">Business Systems Analyst</option>
+          <option value="Business Systems analyst Junior">Business Systems analyst Junior</option>
+          <option value="Business Systems Analyst Senior">Business Systems Analyst Senior</option>
+          <option value="Business Systems Manager">Business Systems Manager</option>
+          <option value="Business Systems Team Leader">Business Systems Team Leader</option>
+          <option value="Business Systems Trainer">Business Systems Trainer</option>
+          <option value="Business Systems Trainer Senior">Business Systems Trainer Senior</option>
+          <option value="Cafe Manager">Cafe Manager</option>
+          <option value="Canteen Coordinator">Canteen Coordinator</option>
+          <option value="Canteen Co-worker">Canteen Co-worker</option>
+          <option value="Carpenter">Carpenter</option>
+          <option value="Carpenter Specialist">Carpenter Specialist</option>
+          <option value="Carts Co-worker">Carts Co-worker</option>
+          <option value="Cash Administration Co-worker">Cash Administration Co-worker</option>
+          <option value="Cash Administration Manager">Cash Administration Manager</option>
+          <option value="Cash Administration Team Assistant">Cash Administration Team Assistant</option>
+          <option value="Cash Administration Team Manager">Cash Administration Team Manager</option>
+          <option value="Cash Line Administration Manager">Cash Line Administration Manager</option>
+          <option value="Cash Line Co-worker">Cash Line Co-worker</option>
+          <option value="Cash Line Manager">Cash Line Manager</option>
+          <option value="Cash Line Team Manager">Cash Line Team Manager</option>
+          <option value="Cash Management Co-worker">Cash Management Co-worker</option>
+          <option value="Catalogue Coordinator">Catalogue Coordinator</option>
+          <option value="Catalogue Co-worker">Catalogue Co-worker</option>
+          <option value="Catalogue Specialist">Catalogue Specialist</option>
+          <option value="Central Planner">Central Planner</option>
+          <option value="Certified Kitchen Seller">Certified Kitchen Seller</option>
+          <option value="Certified Kitchen Seller II">Certified Kitchen Seller II</option>
+          <option value="Change and implementation manager">Change and implementation manager</option>
+          <option value="Checkout Coworker IKEA FOOD">Checkout Coworker IKEA FOOD</option>
+          <option value="Checkout Services Admin. Co-worker">Checkout Services Admin. Co-worker</option>
+          <option value="Checkout Services Co-worker I">Checkout Services Co-worker I</option>
+          <option value="Checkout Services Team Manager">Checkout Services Team Manager</option>
+          <option value="Chef">Chef</option>
+          <option value="Chief Finance Officer">Chief Finance Officer</option>
+          <option value="Claims Administrator">Claims Administrator</option>
+          <option value="Claims Administrator - Senior">Claims Administrator - Senior</option>
+          <option value="Cleaner">Cleaner</option>
+          <option value="Cleaning Services Co-worker">Cleaning Services Co-worker</option>
+          <option value="Cleaning Services Manager">Cleaning Services Manager</option>
+          <option value="Cleaning Services Team Leader">Cleaning Services Team Leader</option>
+          <option value="Cold Preparation / Server">Cold Preparation / Server</option>
+          <option value="Com &amp; In Co-worker">Com &amp; In Co-worker</option>
+          <option value="Com &amp; In Manager">Com &amp; In Manager</option>
+          <option value="Com &amp; In Manager Trainee">Com &amp; In Manager Trainee</option>
+          <option value="Com &amp; In Team Leader">Com &amp; In Team Leader</option>
+          <option value="Commercial Activity Leader">Commercial Activity Leader</option>
+          <option value="Commercial Assistant">Commercial Assistant</option>
+          <option value="Commercial Growth Review Facilitator">Commercial Growth Review Facilitator</option>
+          <option value="Commercial Planning Manager">Commercial Planning Manager</option>
+          <option value="Commercial Responsible">Commercial Responsible</option>
+          <option value="Commercial Restaurant Team Leader">Commercial Restaurant Team Leader</option>
+          <option value="Commercial Review Coordinator">Commercial Review Coordinator</option>
+          <option value="Commercial Review Co-worker">Commercial Review Co-worker</option>
+          <option value="Commercial Review Manager">Commercial Review Manager</option>
+          <option value="Commercial Review Responsible">Commercial Review Responsible</option>
+          <option value="Commercial SFM &amp; Bistro Manager">Commercial SFM &amp; Bistro Manager</option>
+          <option value="Commercial SFM &amp; Bistro Team Leader">Commercial SFM &amp; Bistro Team Leader</option>
+          <option value="Commercial Support Co-worker">Commercial Support Co-worker</option>
+          <option value="Commercial Support Manager">Commercial Support Manager</option>
+          <option value="Commercial Support Specialist">Commercial Support Specialist</option>
+          <option value="Commerciality Manager">Commerciality Manager</option>
+          <option value="Communication Responsible">Communication Responsible</option>
+          <option value="Communication Specialist Senior">Communication Specialist Senior</option>
+          <option value="Communication Team Assistant">Communication Team Assistant</option>
+          <option value="Communication Team Manager">Communication Team Manager</option>
+          <option value="Communications Specialist - Senior">Communications Specialist - Senior</option>
+          <option value="Communicator">Communicator</option>
+          <option value="Community Manager">Community Manager</option>
+          <option value="Comp. Dev. Specialist Checkout Services">Comp. Dev. Specialist Checkout Services</option>
+          <option value="Comp. Dev. Specialist Customer Service">Comp. Dev. Specialist Customer Service</option>
+          <option value="Comp. Dev. Specialist Operations">Comp. Dev. Specialist Operations</option>
+          <option value="Comp. Development Facilitator Senior">Comp. Development Facilitator Senior</option>
+          <option value="Comp. Development Specialist Com &amp; In">Comp. Development Specialist Com &amp; In</option>
+          <option value="Compensation &amp; Benefits Manager">Compensation &amp; Benefits Manager</option>
+          <option value="Compensation Manager">Compensation Manager</option>
+          <option value="Competence Center Manager">Competence Center Manager</option>
+          <option value="Competence Developer">Competence Developer</option>
+          <option value="Competence Development Facilitator">Competence Development Facilitator</option>
+          <option value="Competence Development Manager">Competence Development Manager</option>
+          <option value="Competence Development Specialist">Competence Development Specialist</option>
+          <option value="Competence Flow Manager">Competence Flow Manager</option>
+          <option value="Compliance Development Manager">Compliance Development Manager</option>
+          <option value="Construction Specialist">Construction Specialist</option>
+          <option value="Consumables Procurement Co-worker">Consumables Procurement Co-worker</option>
+          <option value="Contact Center Agent">Contact Center Agent</option>
+          <option value="Contact Center Co-worker">Contact Center Co-worker</option>
+          <option value="Contact Center Manager">Contact Center Manager</option>
+          <option value="Controller">Controller</option>
+          <option value="Controller Specialist">Controller Specialist</option>
+          <option value="Controlling Manager">Controlling Manager</option>
+          <option value="Controlling Team Manager">Controlling Team Manager</option>
+          <option value="Cook">Cook</option>
+          <option value="Cook / Assistant">Cook / Assistant</option>
+          <option value="Cook Server">Cook Server</option>
+          <option value="Copy Writer">Copy Writer</option>
+          <option value="Corporate Administrator">Corporate Administrator</option>
+          <option value="Corporate Attorney">Corporate Attorney</option>
+          <option value="Country Communication Manager">Country Communication Manager</option>
+          <option value="Country Food Specialist">Country Food Specialist</option>
+          <option value="Country HR Manager">Country HR Manager</option>
+          <option value="Country IKEA Food Manager">Country IKEA Food Manager</option>
+          <option value="Country Learning and Development Leader">Country Learning and Development Leader</option>
+          <option value="Country Organisational Change Manager">Country Organisational Change Manager</option>
+          <option value="Country Organisational Change Specialist">Country Organisational Change Specialist</option>
+          <option value="Country Sales Manager">Country Sales Manager</option>
+          <option value="Co-worker Relations Manager">Co-worker Relations Manager</option>
+          <option value="Co-worker Relations Specialist">Co-worker Relations Specialist</option>
+          <option value="Craftsman Co-worker">Craftsman Co-worker</option>
+          <option value="CSP Graphic Communication Specialist">CSP Graphic Communication Specialist</option>
+          <option value="CSP Graphic Design Specialist">CSP Graphic Design Specialist</option>
+          <option value="CSP Info &amp; Communication Specialist">CSP Info &amp; Communication Specialist</option>
+          <option value="CSP In-store Logistics Manager">CSP In-store Logistics Manager</option>
+          <option value="CSP In-Store Logistics Specialist">CSP In-Store Logistics Specialist</option>
+          <option value="CSP Interior Design Manager">CSP Interior Design Manager</option>
+          <option value="CSP Interior Design Specialist">CSP Interior Design Specialist</option>
+          <option value="CSP Manager">CSP Manager</option>
+          <option value="CSP Sales Market Hall/Activity Manager">CSP Sales Market Hall/Activity Manager</option>
+          <option value="CSP Sales Showroom/Self Serve Manager">CSP Sales Showroom/Self Serve Manager</option>
+          <option value="CSP Visual  Merch. &amp; Activity Manager">CSP Visual  Merch. &amp; Activity Manager</option>
+          <option value="CSP Visual Merch &amp; Activity Specialist">CSP Visual Merch &amp; Activity Specialist</option>
+          <option value="Customer Area Manager">Customer Area Manager</option>
+          <option value="Customer Area Team Leader">Customer Area Team Leader</option>
+          <option value="Customer Convenience Manager">Customer Convenience Manager</option>
+          <option value="Customer Convenience Team Leader">Customer Convenience Team Leader</option>
+          <option value="Customer Delivery Coordinator">Customer Delivery Coordinator</option>
+          <option value="Customer Delivery Manager">Customer Delivery Manager</option>
+          <option value="Customer Logistics Manager">Customer Logistics Manager</option>
+          <option value="Customer Logistics Specialist">Customer Logistics Specialist</option>
+          <option value="Customer Order Manager">Customer Order Manager</option>
+          <option value="Customer Relations Specialist">Customer Relations Specialist</option>
+          <option value="Customer Service Co-worker">Customer Service Co-worker</option>
+          <option value="Customer Service Co-worker I">Customer Service Co-worker I</option>
+          <option value="Customer Service Manager">Customer Service Manager</option>
+          <option value="Customer Service Specialist">Customer Service Specialist</option>
+          <option value="Customer Services Manager">Customer Services Manager</option>
+          <option value="Customer Services Team Assistant">Customer Services Team Assistant</option>
+          <option value="Customer Services Team Manager">Customer Services Team Manager</option>
+          <option value="Customs Administrator">Customs Administrator</option>
+          <option value="Customs Clerk">Customs Clerk</option>
+          <option value="Customs Co-worker">Customs Co-worker</option>
+          <option value="Customs Specialist">Customs Specialist</option>
+          <option value="Customs Team Leader">Customs Team Leader</option>
+          <option value="DC Handling Material Team Leader">DC Handling Material Team Leader</option>
+          <option value="DC Manager">DC Manager</option>
+          <option value="DC Quality Co-worker">DC Quality Co-worker</option>
+          <option value="DC Quality Team Leader">DC Quality Team Leader</option>
+          <option value="Delivery Support Manager">Delivery Support Manager</option>
+          <option value="Delivery Support Team Leader">Delivery Support Team Leader</option>
+          <option value="Deputy Administration Manager">Deputy Administration Manager</option>
+          <option value="Deputy Com &amp; In Manager">Deputy Com &amp; In Manager</option>
+          <option value="Deputy Construction Manager">Deputy Construction Manager</option>
+          <option value="Deputy Customer Order Manager">Deputy Customer Order Manager</option>
+          <option value="Deputy Customer Services Manager">Deputy Customer Services Manager</option>
+          <option value="Deputy Delivery Support Manager">Deputy Delivery Support Manager</option>
+          <option value="Deputy Expansion Manager">Deputy Expansion Manager</option>
+          <option value="Deputy Facility Manager">Deputy Facility Manager</option>
+          <option value="Deputy Food &amp; Beverage Manager">Deputy Food &amp; Beverage Manager</option>
+          <option value="Deputy Full Serve Manager">Deputy Full Serve Manager</option>
+          <option value="Deputy HR Manager">Deputy HR Manager</option>
+          <option value="Deputy IF Manager">Deputy IF Manager</option>
+          <option value="Deputy Interior Designer Specialist">Deputy Interior Designer Specialist</option>
+          <option value="Deputy Logistics Warehouse Manager">Deputy Logistics Warehouse Manager</option>
+          <option value="Deputy Project Development Manager">Deputy Project Development Manager</option>
+          <option value="Deputy Property Mnager">Deputy Property Mnager</option>
+          <option value="Deputy Retail Manager">Deputy Retail Manager</option>
+          <option value="Deputy Retail Preparation Manager">Deputy Retail Preparation Manager</option>
+          <option value="Deputy Risk Manager">Deputy Risk Manager</option>
+          <option value="Deputy Sales Manager">Deputy Sales Manager</option>
+          <option value="Deputy Sales Team Leader">Deputy Sales Team Leader</option>
+          <option value="Deputy Service Team Leader">Deputy Service Team Leader</option>
+          <option value="Deputy Team Leader">Deputy Team Leader</option>
+          <option value="Deputy Team Manager">Deputy Team Manager</option>
+          <option value="Deviation Claims Administrator">Deviation Claims Administrator</option>
+          <option value="Digital Marketing Coordinator">Digital Marketing Coordinator</option>
+          <option value="Digital Marketing Specialist">Digital Marketing Specialist</option>
+          <option value="Direct Marketing Manager">Direct Marketing Manager</option>
+          <option value="Direct Marketing Specialist">Direct Marketing Specialist</option>
+          <option value="Dishwasher / Attendant">Dishwasher / Attendant</option>
+          <option value="Dispatch-Planner Co-worker">Dispatch-Planner Co-worker</option>
+          <option value="Dispatch-Planner Team Leader">Dispatch-Planner Team Leader</option>
+          <option value="Distribution Services Systems Manager">Distribution Services Systems Manager</option>
+          <option value="Diversity Specialist">Diversity Specialist</option>
+          <option value="Doctor">Doctor</option>
+          <option value="Driver Manual Palette Jack">Driver Manual Palette Jack</option>
+          <option value="Energy Manager">Energy Manager</option>
+          <option value="Environment Coordinator">Environment Coordinator</option>
+          <option value="Environment Store Support">Environment Store Support</option>
+          <option value="Environmental Co-worker">Environmental Co-worker</option>
+          <option value="Environmental Quality Co-worker">Environmental Quality Co-worker</option>
+          <option value="Environmental Specialist">Environmental Specialist</option>
+          <option value="Exchange &amp; Returns Manager">Exchange &amp; Returns Manager</option>
+          <option value="Exchange &amp; Returns Team Leader">Exchange &amp; Returns Team Leader</option>
+          <option value="Expansion &amp; Facilities Manager">Expansion &amp; Facilities Manager</option>
+          <option value="Expansion Manager">Expansion Manager</option>
+          <option value="Expansion Retail Logistics Manager">Expansion Retail Logistics Manager</option>
+          <option value="Expansion Retail Logistics Specialist">Expansion Retail Logistics Specialist</option>
+          <option value="Expansion Sales Specialist">Expansion Sales Specialist</option>
+          <option value="Expansion Specialist">Expansion Specialist</option>
+          <option value="External Media Solution Manager">External Media Solution Manager</option>
+          <option value="Facility Co-worker">Facility Co-worker</option>
+          <option value="Facility Manager">Facility Manager</option>
+          <option value="Facility Team Assistant">Facility Team Assistant</option>
+          <option value="Facility Team Leader">Facility Team Leader</option>
+          <option value="Facility Team Manager">Facility Team Manager</option>
+          <option value="Family Communication Specialist">Family Communication Specialist</option>
+          <option value="Family Co-worker">Family Co-worker</option>
+          <option value="Family Database Specialist">Family Database Specialist</option>
+          <option value="Family Specialist">Family Specialist</option>
+          <option value="Finance &amp; Administration Manager">Finance &amp; Administration Manager</option>
+          <option value="Finance Manager">Finance Manager</option>
+          <option value="Financial Reporting Specialist">Financial Reporting Specialist</option>
+          <option value="Financial Systems &amp; Projects Specialist">Financial Systems &amp; Projects Specialist</option>
+          <option value="First Interior Designer">First Interior Designer</option>
+          <option value="First Visual Merchandiser">First Visual Merchandiser</option>
+          <option value="Flow Coordinator">Flow Coordinator</option>
+          <option value="Flow Planner">Flow Planner</option>
+          <option value="Food Service Function Support">Food Service Function Support</option>
+          <option value="Forklift Technician">Forklift Technician</option>
+          <option value="Free Range Specialist">Free Range Specialist</option>
+          <option value="Front Line Manager">Front Line Manager</option>
+          <option value="Front Line Team Leader">Front Line Team Leader</option>
+          <option value="Frontliner">Frontliner</option>
+          <option value="Full Serve Co-worker">Full Serve Co-worker</option>
+          <option value="Full Serve Manager">Full Serve Manager</option>
+          <option value="Full Serve Warehouse Team Leader">Full Serve Warehouse Team Leader</option>
+          <option value="Furniture Builder">Furniture Builder</option>
+          <option value="Furniture Pick Up Co-worker">Furniture Pick Up Co-worker</option>
+          <option value="General Accountant">General Accountant</option>
+          <option value="General Ledger Manager">General Ledger Manager</option>
+          <option value="General Ledger Specialist">General Ledger Specialist</option>
+          <option value="General Ledger Specialist Expansion">General Ledger Specialist Expansion</option>
+          <option value="General Ledger Supervisor">General Ledger Supervisor</option>
+          <option value="General Services &amp; HR Assistant">General Services &amp; HR Assistant</option>
+          <option value="Goods Delivery Co-worker">Goods Delivery Co-worker</option>
+          <option value="Goods Flow Manager In Flow">Goods Flow Manager In Flow</option>
+          <option value="Goods Flow Manager in Flow Trainee">Goods Flow Manager in Flow Trainee</option>
+          <option value="Goods Flow Manager Out Flow">Goods Flow Manager Out Flow</option>
+          <option value="Goods Flow Specialist">Goods Flow Specialist</option>
+          <option value="Goods Flow Supply Support">Goods Flow Supply Support</option>
+          <option value="Goods Flow Team Manager">Goods Flow Team Manager</option>
+          <option value="Goods Receiver IKEA Food">Goods Receiver IKEA Food</option>
+          <option value="Goods Receiver Specialist">Goods Receiver Specialist</option>
+          <option value="Goods Receiving Co-worker">Goods Receiving Co-worker</option>
+          <option value="Goods Receiving Manager">Goods Receiving Manager</option>
+          <option value="Goods Replenishment Co-worker">Goods Replenishment Co-worker</option>
+          <option value="Graduate Student">Graduate Student</option>
+          <option value="Graphic Communication Manager">Graphic Communication Manager</option>
+          <option value="Graphic Communication Project Leader">Graphic Communication Project Leader</option>
+          <option value="Graphic Communication Specialist">Graphic Communication Specialist</option>
+          <option value="Graphic Designer">Graphic Designer</option>
+          <option value="Graphic Production Designer">Graphic Production Designer</option>
+          <option value="Graphic Purchaser">Graphic Purchaser</option>
+          <option value="Graphical Specialist">Graphical Specialist</option>
+          <option value="Greeter">Greeter</option>
+          <option value="Handelsfachwirt">Handelsfachwirt</option>
+          <option value="Handling Material Controller">Handling Material Controller</option>
+          <option value="Handling Materials Administrator">Handling Materials Administrator</option>
+          <option value="Handling Materials Team Leader">Handling Materials Team Leader</option>
+          <option value="Head of Forklift Garage">Head of Forklift Garage</option>
+          <option value="Home Assembly Manager">Home Assembly Manager</option>
+          <option value="Home Delivery Co-worker">Home Delivery Co-worker</option>
+          <option value="Home Furnishing Consultant">Home Furnishing Consultant</option>
+          <option value="HR Administrator">HR Administrator</option>
+          <option value="HR Co-worker">HR Co-worker</option>
+          <option value="HR Generalist">HR Generalist</option>
+          <option value="HR Law Manager">HR Law Manager</option>
+          <option value="HR Manager">HR Manager</option>
+          <option value="HR Manager Assistant">HR Manager Assistant</option>
+          <option value="HR Marketing Co-worker">HR Marketing Co-worker</option>
+          <option value="HR Marketing Manager">HR Marketing Manager</option>
+          <option value="HR Operations Manager">HR Operations Manager</option>
+          <option value="HR Service Center Manager">HR Service Center Manager</option>
+          <option value="HR Site Manager">HR Site Manager</option>
+          <option value="HR Site Manager Trainee">HR Site Manager Trainee</option>
+          <option value="HR Specialist">HR Specialist</option>
+          <option value="HR Team Assistant">HR Team Assistant</option>
+          <option value="HR Team Manager">HR Team Manager</option>
+          <option value="HR Training Administrator">HR Training Administrator</option>
+          <option value="HRMS Manager">HRMS Manager</option>
+          <option value="HRMS Specialist">HRMS Specialist</option>
+          <option value="HRMS Specialist I">HRMS Specialist I</option>
+          <option value="HRSC Payroll Specialist II">HRSC Payroll Specialist II</option>
+          <option value="IF Bistro &amp; Sweden Shop Co-worker">IF Bistro &amp; Sweden Shop Co-worker</option>
+          <option value="IF Co-worker">IF Co-worker</option>
+          <option value="IF Manager">IF Manager</option>
+          <option value="IF Manager Trainee">IF Manager Trainee</option>
+          <option value="IF Sales Team Manager">IF Sales Team Manager</option>
+          <option value="IF Specialist">IF Specialist</option>
+          <option value="IF Specialist I">IF Specialist I</option>
+          <option value="IF Specialist Senior">IF Specialist Senior</option>
+          <option value="IF Team Leader">IF Team Leader</option>
+          <option value="IKEA Business Leader">IKEA Business Leader</option>
+          <option value="IKEA Business Manager">IKEA Business Manager</option>
+          <option value="IKEA Business Specialist">IKEA Business Specialist</option>
+          <option value="IKEA Card">IKEA Card</option>
+          <option value="IKEA Family Manager">IKEA Family Manager</option>
+          <option value="IKEA FOOD Administrator">IKEA FOOD Administrator</option>
+          <option value="IKEA FOOD Co-worker I">IKEA FOOD Co-worker I</option>
+          <option value="IKEA Food Specialist">IKEA Food Specialist</option>
+          <option value="IKEA FOOD Team Assistant">IKEA FOOD Team Assistant</option>
+          <option value="In Store Logistics Specialist I">In Store Logistics Specialist I</option>
+          <option value="Industrial Law Specialist">Industrial Law Specialist</option>
+          <option value="Info &amp; Smaland Co-worker">Info &amp; Smaland Co-worker</option>
+          <option value="Info &amp; Smaland Manager">Info &amp; Smaland Manager</option>
+          <option value="Info &amp; Smaland Team Leader">Info &amp; Smaland Team Leader</option>
+          <option value="Information &amp; Communication Coordinator">Information &amp; Communication Coordinator</option>
+          <option value="Information &amp; Communication Co-worker">Information &amp; Communication Co-worker</option>
+          <option value="Information &amp; Communication Specialist">Information &amp; Communication Specialist</option>
+          <option value="Information &amp; Web Responsible">Information &amp; Web Responsible</option>
+          <option value="Information Co-worker">Information Co-worker</option>
+          <option value="In-store Bilingual Project Leader">In-store Bilingual Project Leader</option>
+          <option value="In-store Logistics Co-worker">In-store Logistics Co-worker</option>
+          <option value="In-store Logistics Manager - Store">In-store Logistics Manager - Store</option>
+          <option value="In-store Logistics Specialist Senior">In-store Logistics Specialist Senior</option>
+          <option value="Insurance Manager">Insurance Manager</option>
+          <option value="Interior Architect">Interior Architect</option>
+          <option value="Interior Design Co-worker I">Interior Design Co-worker I</option>
+          <option value="Interior Design Manager Trainee">Interior Design Manager Trainee</option>
+          <option value="Interior Design Specialist Senior">Interior Design Specialist Senior</option>
+          <option value="Interior Design Team Assistant">Interior Design Team Assistant</option>
+          <option value="Interior Design Team Manager">Interior Design Team Manager</option>
+          <option value="Interior Designer">Interior Designer</option>
+          <option value="Interior Designer Manager">Interior Designer Manager</option>
+          <option value="Interior Designer Specialist">Interior Designer Specialist</option>
+          <option value="Intern">Intern</option>
+          <option value="Internal Audit Manager">Internal Audit Manager</option>
+          <option value="Internal Auditor">Internal Auditor</option>
+          <option value="Internal Auditor - Senior">Internal Auditor - Senior</option>
+          <option value="Internal Communication Manager">Internal Communication Manager</option>
+          <option value="Internal Information Coordinator">Internal Information Coordinator</option>
+          <option value="Internal Information Manager">Internal Information Manager</option>
+          <option value="Internal Media Solutions Co-worker">Internal Media Solutions Co-worker</option>
+          <option value="Internet Coordinator">Internet Coordinator</option>
+          <option value="Internet Specialist">Internet Specialist</option>
+          <option value="Internship">Internship</option>
+          <option value="Intranet Co-worker">Intranet Co-worker</option>
+          <option value="Inventory Control Manager">Inventory Control Manager</option>
+          <option value="Inventory Control Team Leader">Inventory Control Team Leader</option>
+          <option value="Inventory Co-worker">Inventory Co-worker</option>
+          <option value="Inventory Specialist">Inventory Specialist</option>
+          <option value="IT Coordinator">IT Coordinator</option>
+          <option value="IT Co-worker">IT Co-worker</option>
+          <option value="IT Manager">IT Manager</option>
+          <option value="IT Support">IT Support</option>
+          <option value="IT Team Assistant">IT Team Assistant</option>
+          <option value="IT Team Manager">IT Team Manager</option>
+          <option value="Kitchen &amp; Dining Co-worker">Kitchen &amp; Dining Co-worker</option>
+          <option value="Kitchen &amp; Restaurant Team Leader">Kitchen &amp; Restaurant Team Leader</option>
+          <option value="Kitchen Production Manager">Kitchen Production Manager</option>
+          <option value="Kitchen Production Specialist">Kitchen Production Specialist</option>
+          <option value="Kitchen Production Team Leader">Kitchen Production Team Leader</option>
+          <option value="Ktchen Production Specialist I">Ktchen Production Specialist I</option>
+          <option value="Land Acquisition Manager">Land Acquisition Manager</option>
+          <option value="Laws &amp; Standards Coordinator">Laws &amp; Standards Coordinator</option>
+          <option value="Laws &amp; Standards Manager">Laws &amp; Standards Manager</option>
+          <option value="Laws &amp; Standards System Administrator">Laws &amp; Standards System Administrator</option>
+          <option value="Leadership &amp; Diversity Manager">Leadership &amp; Diversity Manager</option>
+          <option value="Lean Retailing Specialist">Lean Retailing Specialist</option>
+          <option value="Learning &amp; Development Coordinator">Learning &amp; Development Coordinator</option>
+          <option value="Learning &amp; Development Manager">Learning &amp; Development Manager</option>
+          <option value="Learning &amp; Development Specialist">Learning &amp; Development Specialist</option>
+          <option value="Legal Administrator Senior">Legal Administrator Senior</option>
+          <option value="Local Advertising Specialist">Local Advertising Specialist</option>
+          <option value="Local Marketing Analyst">Local Marketing Analyst</option>
+          <option value="Local Marketing Co-worker">Local Marketing Co-worker</option>
+          <option value="Local Marketing Manager">Local Marketing Manager</option>
+          <option value="Logistics Administration Co-worker">Logistics Administration Co-worker</option>
+          <option value="Logistics Administration Team Manager">Logistics Administration Team Manager</option>
+          <option value="Logistics Coordinator">Logistics Coordinator</option>
+          <option value="Logistics Co-worker">Logistics Co-worker</option>
+          <option value="Logistics Co-worker I">Logistics Co-worker I</option>
+          <option value="Logistics Co-worker II">Logistics Co-worker II</option>
+          <option value="Logistics Function Support">Logistics Function Support</option>
+          <option value="Logistics Manager">Logistics Manager</option>
+          <option value="Logistics Manager Trainee">Logistics Manager Trainee</option>
+          <option value="Logistics Projects Team Leader">Logistics Projects Team Leader</option>
+          <option value="Logistics Team Assistant">Logistics Team Assistant</option>
+          <option value="Logistics Team Leader">Logistics Team Leader</option>
+          <option value="Logistics Team Manager">Logistics Team Manager</option>
+          <option value="Maintenance Co-worker">Maintenance Co-worker</option>
+          <option value="Maintenance Manager">Maintenance Manager</option>
+          <option value="Market Hall Planning Manager">Market Hall Planning Manager</option>
+          <option value="Marketing Advertising Specialist">Marketing Advertising Specialist</option>
+          <option value="Marketing Assistant">Marketing Assistant</option>
+          <option value="Marketing Business Partner">Marketing Business Partner</option>
+          <option value="Marketing Catalogue/Brochure Specialist">Marketing Catalogue/Brochure Specialist</option>
+          <option value="Marketing Co-worker">Marketing Co-worker</option>
+          <option value="Marketing Creative Specialist">Marketing Creative Specialist</option>
+          <option value="Marketing Direct Specialist">Marketing Direct Specialist</option>
+          <option value="Marketing Manager">Marketing Manager</option>
+          <option value="Marketing PR Specialist">Marketing PR Specialist</option>
+          <option value="Marketing Relationship Manager">Marketing Relationship Manager</option>
+          <option value="Marketing Research Coordinator">Marketing Research Coordinator</option>
+          <option value="Marketing Research Co-worker">Marketing Research Co-worker</option>
+          <option value="Marketing Research Specialist">Marketing Research Specialist</option>
+          <option value="Marketing Specialist">Marketing Specialist</option>
+          <option value="Marketing Web Specialist">Marketing Web Specialist</option>
+          <option value="Media Specialist">Media Specialist</option>
+          <option value="Meeting &amp; Travel Coordinator">Meeting &amp; Travel Coordinator</option>
+          <option value="Meeting Coordinator">Meeting Coordinator</option>
+          <option value="Montera &amp; Dinera &amp; Bistro Manager">Montera &amp; Dinera &amp; Bistro Manager</option>
+          <option value="National Advertising Specialist">National Advertising Specialist</option>
+          <option value="Nurse">Nurse</option>
+          <option value="Office manager">Office manager</option>
+          <option value="Office Service Co-worker">Office Service Co-worker</option>
+          <option value="Office Service Manager">Office Service Manager</option>
+          <option value="Office Services Co-worker">Office Services Co-worker</option>
+          <option value="Office Services Manager">Office Services Manager</option>
+          <option value="Office Support">Office Support</option>
+          <option value="Office Support Administrator">Office Support Administrator</option>
+          <option value="Operational Support">Operational Support</option>
+          <option value="Operational Support Co-worker">Operational Support Co-worker</option>
+          <option value="Operations Manager">Operations Manager</option>
+          <option value="Operations Manager Trainee">Operations Manager Trainee</option>
+          <option value="P3 Roll Out Co-ordinator">P3 Roll Out Co-ordinator</option>
+          <option value="Payroll Manager">Payroll Manager</option>
+          <option value="Payroll Specialist">Payroll Specialist</option>
+          <option value="Payroll Tax Specialist">Payroll Tax Specialist</option>
+          <option value="Planner">Planner</option>
+          <option value="PR &amp; Communication Manager">PR &amp; Communication Manager</option>
+          <option value="PR Co-worker">PR Co-worker</option>
+          <option value="PR Manager">PR Manager</option>
+          <option value="PR Specialist">PR Specialist</option>
+          <option value="Press &amp; PR Coordinator">Press &amp; PR Coordinator</option>
+          <option value="Press &amp; PR Manager">Press &amp; PR Manager</option>
+          <option value="Press Contact Officer">Press Contact Officer</option>
+          <option value="Preventative Maintenance Mechanic">Preventative Maintenance Mechanic</option>
+          <option value="Product Placement Co-worker">Product Placement Co-worker</option>
+          <option value="Product Placement Specialist">Product Placement Specialist</option>
+          <option value="Product Placement Specialist Senior">Product Placement Specialist Senior</option>
+          <option value="Product Quality Team Leader">Product Quality Team Leader</option>
+          <option value="Product Req &amp; Compliance Specialist">Product Req &amp; Compliance Specialist</option>
+          <option value="Project Controller">Project Controller</option>
+          <option value="Project Developer">Project Developer</option>
+          <option value="Project Development Manager">Project Development Manager</option>
+          <option value="Project Leader">Project Leader</option>
+          <option value="Project Leader I">Project Leader I</option>
+          <option value="Project Leader II">Project Leader II</option>
+          <option value="Project Leader III">Project Leader III</option>
+          <option value="Project Manager">Project Manager</option>
+          <option value="Project Manager Country RE">Project Manager Country RE</option>
+          <option value="Project Manager I">Project Manager I</option>
+          <option value="Project Manager II">Project Manager II</option>
+          <option value="Project Operations Manager">Project Operations Manager</option>
+          <option value="Project Specialist">Project Specialist</option>
+          <option value="Project Specialist I">Project Specialist I</option>
+          <option value="Project Support">Project Support</option>
+          <option value="Project Support I">Project Support I</option>
+          <option value="Project Support II">Project Support II</option>
+          <option value="Property Business Navigator">Property Business Navigator</option>
+          <option value="P-tag Co-worker">P-tag Co-worker</option>
+          <option value="P-tag Specialist">P-tag Specialist</option>
+          <option value="Public Affairs Manager">Public Affairs Manager</option>
+          <option value="Purchaser">Purchaser</option>
+          <option value="QSC Product Quality Coordinator">QSC Product Quality Coordinator</option>
+          <option value="QSC Supply Quality Co-worker">QSC Supply Quality Co-worker</option>
+          <option value="Q-Store Product Quality Technician">Q-Store Product Quality Technician</option>
+          <option value="Q-Store Quality Manager">Q-Store Quality Manager</option>
+          <option value="Quality Co-ordinator">Quality Co-ordinator</option>
+          <option value="Quality Co-worker">Quality Co-worker</option>
+          <option value="Quality Specialist">Quality Specialist</option>
+          <option value="Quality Support">Quality Support</option>
+          <option value="Quality Team Leader">Quality Team Leader</option>
+          <option value="Range &amp;Purchasing Manager">Range &amp;Purchasing Manager</option>
+          <option value="Range Presentation Manager">Range Presentation Manager</option>
+          <option value="Range Responsible">Range Responsible</option>
+          <option value="Range Support">Range Support</option>
+          <option value="Range System Support">Range System Support</option>
+          <option value="Real Estate Manager">Real Estate Manager</option>
+          <option value="Rebuilding Co-worker">Rebuilding Co-worker</option>
+          <option value="Receive Payment Manager">Receive Payment Manager</option>
+          <option value="Receive Payment Responsible">Receive Payment Responsible</option>
+          <option value="Receiving Team Leader">Receiving Team Leader</option>
+          <option value="Receptionist">Receptionist</option>
+          <option value="Recovery Co-worker">Recovery Co-worker</option>
+          <option value="Recovery Manager">Recovery Manager</option>
+          <option value="Recovery Responsible">Recovery Responsible</option>
+          <option value="Recovery Specialist">Recovery Specialist</option>
+          <option value="Recovery Team Assistant">Recovery Team Assistant</option>
+          <option value="Recovery Team Leader">Recovery Team Leader</option>
+          <option value="Recovery Team Manager">Recovery Team Manager</option>
+          <option value="Recruitment Manager">Recruitment Manager</option>
+          <option value="Recruitment Specialist">Recruitment Specialist</option>
+          <option value="Refilling Co-worker">Refilling Co-worker</option>
+          <option value="Refilling Manager">Refilling Manager</option>
+          <option value="Refilling Team Leader">Refilling Team Leader</option>
+          <option value="Regional Global Accountant">Regional Global Accountant</option>
+          <option value="Regional Marketing Manager">Regional Marketing Manager</option>
+          <option value="Replenishment Manager">Replenishment Manager</option>
+          <option value="Replenishment Team Leader">Replenishment Team Leader</option>
+          <option value="Restaurant Specialist">Restaurant Specialist</option>
+          <option value="Ret. Supply Chain Integration Specialist">Ret. Supply Chain Integration Specialist</option>
+          <option value="Retail Companies Co-worker">Retail Companies Co-worker</option>
+          <option value="Retail Manager Assistant">Retail Manager Assistant</option>
+          <option value="Retail Operations Manager">Retail Operations Manager</option>
+          <option value="Retail Preparation Layout &amp; Support">Retail Preparation Layout &amp; Support</option>
+          <option value="Retail Preparation Manager">Retail Preparation Manager</option>
+          <option value="Retail Preparation Specialist">Retail Preparation Specialist</option>
+          <option value="Retail Preparation Store Planner">Retail Preparation Store Planner</option>
+          <option value="Retail Project Mnager">Retail Project Mnager</option>
+          <option value="Retail Supply Chain Integration Manager">Retail Supply Chain Integration Manager</option>
+          <option value="Retail Supply Integration Team Leader">Retail Supply Integration Team Leader</option>
+          <option value="Retail Support Integration Manager">Retail Support Integration Manager</option>
+          <option value="Risk Management Administrator">Risk Management Administrator</option>
+          <option value="Risk Manager">Risk Manager</option>
+          <option value="Roll Out Manager">Roll Out Manager</option>
+          <option value="Roll Out Team Leader">Roll Out Team Leader</option>
+          <option value="Safety &amp; Security Co-worker">Safety &amp; Security Co-worker</option>
+          <option value="Safety &amp; Security Function Support">Safety &amp; Security Function Support</option>
+          <option value="Safety &amp; Security Manager">Safety &amp; Security Manager</option>
+          <option value="Safety &amp; Security Team Leader">Safety &amp; Security Team Leader</option>
+          <option value="Safety Co-worker">Safety Co-worker</option>
+          <option value="Sales &amp; Service Expeditor">Sales &amp; Service Expeditor</option>
+          <option value="Sales &amp; Supply Support">Sales &amp; Supply Support</option>
+          <option value="Sales &amp; Supply Support Co-worker">Sales &amp; Supply Support Co-worker</option>
+          <option value="Sales &amp; Supply Support Manager">Sales &amp; Supply Support Manager</option>
+          <option value="Sales &amp; Supply Support Manager Trainee">Sales &amp; Supply Support Manager Trainee</option>
+          <option value="Sales &amp; Supply Team Assistant">Sales &amp; Supply Team Assistant</option>
+          <option value="Sales Activities Co-worker">Sales Activities Co-worker</option>
+          <option value="Sales Apprentice">Sales Apprentice</option>
+          <option value="Sales Co-worker">Sales Co-worker</option>
+          <option value="Sales Co-worker II">Sales Co-worker II</option>
+          <option value="Sales Co-worker III">Sales Co-worker III</option>
+          <option value="Sales Co-worker IV">Sales Co-worker IV</option>
+          <option value="Sales External Co-worker">Sales External Co-worker</option>
+          <option value="Sales Function Support">Sales Function Support</option>
+          <option value="Sales Leader">Sales Leader</option>
+          <option value="Sales Leader I">Sales Leader I</option>
+          <option value="Sales Leader II">Sales Leader II</option>
+          <option value="Sales Manager Furniture">Sales Manager Furniture</option>
+          <option value="Sales Manager Market Place">Sales Manager Market Place</option>
+          <option value="Sales Manager Trainee">Sales Manager Trainee</option>
+          <option value="Sales Navigator">Sales Navigator</option>
+          <option value="Sales Planner">Sales Planner</option>
+          <option value="Sales Planning Manager">Sales Planning Manager</option>
+          <option value="Sales Self Serve Team Leader">Sales Self Serve Team Leader</option>
+          <option value="Sales Space Specialist">Sales Space Specialist</option>
+          <option value="Sales Stimulator">Sales Stimulator</option>
+          <option value="Sales Support Specialist">Sales Support Specialist</option>
+          <option value="Sales Team Leader">Sales Team Leader</option>
+          <option value="Sales Team Leader BA 01">Sales Team Leader BA 01</option>
+          <option value="Sales Team Leader BA 02">Sales Team Leader BA 02</option>
+          <option value="Sales Team Leader BA 03">Sales Team Leader BA 03</option>
+          <option value="Sales Team Leader BA 04">Sales Team Leader BA 04</option>
+          <option value="Sales Team Leader BA 05">Sales Team Leader BA 05</option>
+          <option value="Sales Team Leader BA 06">Sales Team Leader BA 06</option>
+          <option value="Sales Team Leader BA 08">Sales Team Leader BA 08</option>
+          <option value="Sales Team Leader BA 09">Sales Team Leader BA 09</option>
+          <option value="Sales Team Leader BA 10">Sales Team Leader BA 10</option>
+          <option value="Sales Team Leader BA 40">Sales Team Leader BA 40</option>
+          <option value="Sales Team Leader BA 50">Sales Team Leader BA 50</option>
+          <option value="Sales Team Leader BA 60">Sales Team Leader BA 60</option>
+          <option value="Sales Team Leader IKEA Bus. / Family">Sales Team Leader IKEA Bus. / Family</option>
+          <option value="Secretary">Secretary</option>
+          <option value="Security Co-worker">Security Co-worker</option>
+          <option value="Security Guard">Security Guard</option>
+          <option value="Security Manager">Security Manager</option>
+          <option value="Security Responsible">Security Responsible</option>
+          <option value="Security Specialist">Security Specialist</option>
+          <option value="Self Serve Co-worker">Self Serve Co-worker</option>
+          <option value="Self Serve Manager">Self Serve Manager</option>
+          <option value="Self Serve Team Assistant">Self Serve Team Assistant</option>
+          <option value="Self Serve Team Manager">Self Serve Team Manager</option>
+          <option value="Service Companies Team Manager">Service Companies Team Manager</option>
+          <option value="Service Co-worker">Service Co-worker</option>
+          <option value="Service Team Leader">Service Team Leader</option>
+          <option value="Services Function Support">Services Function Support</option>
+          <option value="Services Manager">Services Manager</option>
+          <option value="Shift Leader">Shift Leader</option>
+          <option value="Shopkeeper 1">Shopkeeper 1</option>
+          <option value="Shopkeeper Activities">Shopkeeper Activities</option>
+          <option value="Shopkeeper BA 01">Shopkeeper BA 01</option>
+          <option value="Shopkeeper BA 02">Shopkeeper BA 02</option>
+          <option value="Shopkeeper BA 03">Shopkeeper BA 03</option>
+          <option value="Shopkeeper BA 04">Shopkeeper BA 04</option>
+          <option value="Shopkeeper BA 05">Shopkeeper BA 05</option>
+          <option value="Shopkeeper BA 06">Shopkeeper BA 06</option>
+          <option value="Shopkeeper BA 06 &amp; 10">Shopkeeper BA 06 &amp; 10</option>
+          <option value="Shopkeeper BA 08">Shopkeeper BA 08</option>
+          <option value="Shopkeeper BA 09">Shopkeeper BA 09</option>
+          <option value="Shopkeeper Ba 09 &amp; Act">Shopkeeper Ba 09 &amp; Act</option>
+          <option value="Shopkeeper BA 10">Shopkeeper BA 10</option>
+          <option value="Shopkeeper BA 40">Shopkeeper BA 40</option>
+          <option value="Shopkeeper BA 50">Shopkeeper BA 50</option>
+          <option value="Shopkeeper BA 60">Shopkeeper BA 60</option>
+          <option value="Shopkeeper Glasshouse">Shopkeeper Glasshouse</option>
+          <option value="Shopkeeper II">Shopkeeper II</option>
+          <option value="Shopkeeper III">Shopkeeper III</option>
+          <option value="Shopkeeper IKEA Business / Family">Shopkeeper IKEA Business / Family</option>
+          <option value="Shopkeeper Self Serve">Shopkeeper Self Serve</option>
+          <option value="Showroom Planning Manager">Showroom Planning Manager</option>
+          <option value="Site Construction Coordinator">Site Construction Coordinator</option>
+          <option value="Site Installations Coordinator">Site Installations Coordinator</option>
+          <option value="Social &amp; Environmental Affairs Manager">Social &amp; Environmental Affairs Manager</option>
+          <option value="Social &amp; Environmental Coordinator">Social &amp; Environmental Coordinator</option>
+          <option value="Social &amp; Environmental Manager">Social &amp; Environmental Manager</option>
+          <option value="Staff Scheduler">Staff Scheduler</option>
+          <option value="Store &amp; Build Up Manager">Store &amp; Build Up Manager</option>
+          <option value="Store Accountant">Store Accountant</option>
+          <option value="Store Design Manager">Store Design Manager</option>
+          <option value="Store Manager Assistant">Store Manager Assistant</option>
+          <option value="Store Quality Technician">Store Quality Technician</option>
+          <option value="Store Support Co-worker">Store Support Co-worker</option>
+          <option value="Succession &amp; Recruitment Manager">Succession &amp; Recruitment Manager</option>
+          <option value="Superuser">Superuser</option>
+          <option value="Superuser 3">Superuser 3</option>
+          <option value="Superuser I">Superuser I</option>
+          <option value="Superuser II">Superuser II</option>
+          <option value="Superuser III">Superuser III</option>
+          <option value="Supply Quality Co-worker">Supply Quality Co-worker</option>
+          <option value="Sustainability Developer">Sustainability Developer</option>
+          <option value="Swedish Food Market Co-worker">Swedish Food Market Co-worker</option>
+          <option value="Tax Compliance Specialist">Tax Compliance Specialist</option>
+          <option value="Tax Manager">Tax Manager</option>
+          <option value="Tax Specialist">Tax Specialist</option>
+          <option value="Team Assistant Activities">Team Assistant Activities</option>
+          <option value="Team Assistant BA 01">Team Assistant BA 01</option>
+          <option value="Team Assistant BA 02">Team Assistant BA 02</option>
+          <option value="Team Assistant BA 03">Team Assistant BA 03</option>
+          <option value="Team Assistant BA 05">Team Assistant BA 05</option>
+          <option value="Team Assistant BA 06">Team Assistant BA 06</option>
+          <option value="Team Assistant BA 09">Team Assistant BA 09</option>
+          <option value="Team Assistant Glasshouse">Team Assistant Glasshouse</option>
+          <option value="Team Assistant Sales">Team Assistant Sales</option>
+          <option value="Team Leader">Team Leader</option>
+          <option value="Team Support">Team Support</option>
+          <option value="Technical Specialist">Technical Specialist</option>
+          <option value="Technician">Technician</option>
+          <option value="Temporary Staff">Temporary Staff</option>
+          <option value="Trainee">Trainee</option>
+          <option value="Trainer">Trainer</option>
+          <option value="Training &amp; Development Co-worker">Training &amp; Development Co-worker</option>
+          <option value="Training &amp; Development Manager">Training &amp; Development Manager</option>
+          <option value="Training &amp; Development Specialist">Training &amp; Development Specialist</option>
+          <option value="Training Responsible">Training Responsible</option>
+          <option value="Transport Business Development Support">Transport Business Development Support</option>
+          <option value="Travel Agent">Travel Agent</option>
+          <option value="Treasurer">Treasurer</option>
+          <option value="Treasurer Assistant">Treasurer Assistant</option>
+          <option value="Treasury &amp; Consumer Finance Specialist">Treasury &amp; Consumer Finance Specialist</option>
+          <option value="Truck Driver">Truck Driver</option>
+          <option value="User &amp; Maintenance Support">User &amp; Maintenance Support</option>
+          <option value="Visual Merchandiser">Visual Merchandiser</option>
+          <option value="Visual Merchandising Co-worker">Visual Merchandising Co-worker</option>
+          <option value="Visual Merchandising Manager">Visual Merchandising Manager</option>
+          <option value="Visual Merchandising Specialist">Visual Merchandising Specialist</option>
+          <option value="Visual Merchandising Specialist Senior">Visual Merchandising Specialist Senior</option>
+          <option value="Visual Merchandising Team Assistant">Visual Merchandising Team Assistant</option>
+          <option value="Visual Merchandising Team Manager">Visual Merchandising Team Manager</option>
+          <option value="Warehouse Co-worker">Warehouse Co-worker</option>
+          <option value="Warehouse Co-worker Senior">Warehouse Co-worker Senior</option>
+          <option value="Warehouse Team Leader">Warehouse Team Leader</option>
+          <option value="Warehousing Logistics Manager">Warehousing Logistics Manager</option>
+          <option value="Warehousing Logistics Team Leader">Warehousing Logistics Team Leader</option>
+          <option value="Web Communications Manager">Web Communications Manager</option>
+          <option value="Web Editor">Web Editor</option>
+          <option value="Work Council Representative">Work Council Representative</option>
+          <option value="Yard Operations Co-worker">Yard Operations Co-worker</option>
+
+        </options>-->
+        &data_JobTitle;
+      </element>
+      <element name="LocalJobTitle" type="search-select" label="Job Title (Global Catalouge)" >
+        <options>
+          <option value=""></option>
+          <option value="Accounting Assistant">Accounting Assistant</option>
+          <option value="Accounting Co-worker">Accounting Co-worker</option>
+          <option value="Accounting Manager">Accounting Manager</option>
+          <option value="Accountant Senior">Accountant Senior</option>
+          <option value="Accounting Co-worker Senior">Accounting Co-worker Senior</option>
+          <option value="Accounting Team Leader">Accounting Team Leader</option>
+          <option value="Accountant General">Accountant General</option>
+          <option value="Accountant">Accountant</option>
+          <option value="Accountant Tax">Accountant Tax</option>
+          <option value="Accounts Payable Manager">Accounts Payable Manager</option>
+          <option value="Accountant Payable">Accountant Payable</option>
+          <option value="Accounting Project Manager">Accounting Project Manager</option>
+          <option value="Accounts Payable Co-worker">Accounts Payable Co-worker</option>
+          <option value="Accounts Payable Team Leader">Accounts Payable Team Leader</option>
+          <option value="Acquisition Co-worker">Acquisition Co-worker</option>
+          <option value="Accounting Assistant Receivable">Accounting Assistant Receivable</option>
+          <option value="Account Receivable Co-worker">Account Receivable Co-worker</option>
+          <option value="Accounts Receivable Manager">Accounts Receivable Manager</option>
+          <option value="Accounting Store Support Manager">Accounting Store Support Manager</option>
+          <option value="Activity Coordinator">Activity Coordinator</option>
+          <option value="Activity &amp; Sales Support Specialist">Activity &amp; Sales Support Specialist</option>
+          <option value="Accounting &amp; Treasury Manager">Accounting &amp; Treasury Manager</option>
+          <option value="Administrator">Administrator</option>
+          <option value="Administration Manager">Administration Manager</option>
+          <option value="Administrative Specialist">Administrative Specialist</option>
+          <option value="Administrative Sales Manager">Administrative Sales Manager</option>
+          <option value="Administrative Receivable Accounting Ass">Administrative Receivable Accounting Ass</option>
+          <option value="Advertising Assistant">Advertising Assistant</option>
+          <option value="Advertising Manager">Advertising Manager</option>
+          <option value="Asset Management Analyst">Asset Management Analyst</option>
+          <option value="Apprentice">Apprentice</option>
+          <option value="Architect Assistant">Architect Assistant</option>
+          <option value="Architect Manager">Architect Manager</option>
+          <option value="Architect">Architect</option>
+          <option value="Art Director">Art Director</option>
+          <option value="Assistant">Assistant</option>
+          <option value="After Sales Front Line Manager">After Sales Front Line Manager</option>
+          <option value="Aspirant">Aspirant</option>
+          <option value="Benefits Manager">Benefits Manager</option>
+          <option value="Benefits Specialist">Benefits Specialist</option>
+          <option value="Benefits Specialist Senior">Benefits Specialist Senior</option>
+          <option value="Business Intelligence Analyst">Business Intelligence Analyst</option>
+          <option value="Business Intelligence Manager">Business Intelligence Manager</option>
+          <option value="Business Intelligence Analyst Senior">Business Intelligence Analyst Senior</option>
+          <option value="Business Systems Trainer Senior">Business Systems Trainer Senior</option>
+          <option value="Business Nav. &amp; Intelligence Manager">Business Nav. &amp; Intelligence Manager</option>
+          <option value="Build Up Service Specialist">Build Up Service Specialist</option>
+          <option value="Business Analyst">Business Analyst</option>
+          <option value="Business Administration Manager">Business Administration Manager</option>
+          <option value="Business Controller">Business Controller</option>
+          <option value="Business Developer">Business Developer</option>
+          <option value="Business Development Controller">Business Development Controller</option>
+          <option value="Business Navigation Analyst">Business Navigation Analyst</option>
+          <option value="Business Navigator Trainee">Business Navigator Trainee</option>
+          <option value="Business Navigator I">Business Navigator I</option>
+          <option value="Business Navigator II">Business Navigator II</option>
+          <option value="Business Systems Analyst">Business Systems Analyst</option>
+          <option value="Business Systems analyst Junior">Business Systems analyst Junior</option>
+          <option value="Business Systems Manager">Business Systems Manager</option>
+          <option value="Business Systems Analyst Senior">Business Systems Analyst Senior</option>
+          <option value="Business Systems Team Leader">Business Systems Team Leader</option>
+          <option value="Business Support Specialist">Business Support Specialist</option>
+          <option value="Business Systems Trainer">Business Systems Trainer</option>
+          <option value="Cash Management Co-worker">Cash Management Co-worker</option>
+          <option value="Carpenter">Carpenter</option>
+          <option value="Catalogue Coordinator">Catalogue Coordinator</option>
+          <option value="Catalogue Co-worker">Catalogue Co-worker</option>
+          <option value="Catalogue Specialist">Catalogue Specialist</option>
+          <option value="Commercial Activity Leader">Commercial Activity Leader</option>
+          <option value="Country Communication Manager">Country Communication Manager</option>
+          <option value="Customer Delivery Coordinator">Customer Delivery Coordinator</option>
+          <option value="Comp. Development Facilitator Senior">Comp. Development Facilitator Senior</option>
+          <option value="Comp. Dev. Specialist Checkout Services">Comp. Dev. Specialist Checkout Services</option>
+          <option value="Comp. Development Specialist Com &amp; In">Comp. Development Specialist Com &amp; In</option>
+          <option value="Comp. Dev. Specialist Customer Service">Comp. Dev. Specialist Customer Service</option>
+          <option value="Comp. Dev. Specialist Operations">Comp. Dev. Specialist Operations</option>
+          <option value="Chief Finance Officer">Chief Finance Officer</option>
+          <option value="Commercial Growth Review Facilitator">Commercial Growth Review Facilitator</option>
+          <option value="Change and implementation manager">Change and implementation manager</option>
+          <option value="Country HR Manager">Country HR Manager</option>
+          <option value="Claims Administrator">Claims Administrator</option>
+          <option value="Claims Administrator - Senior">Claims Administrator - Senior</option>
+          <option value="Customer Logistics Manager">Customer Logistics Manager</option>
+          <option value="Customer Logistics Specialist">Customer Logistics Specialist</option>
+          <option value="Commercial Assistant">Commercial Assistant</option>
+          <option value="Compensation &amp; Benefits Manager">Compensation &amp; Benefits Manager</option>
+          <option value="Country Learning and Development Leader">Country Learning and Development Leader</option>
+          <option value="Communication Specialist Senior">Communication Specialist Senior</option>
+          <option value="Commerciality Manager">Commerciality Manager</option>
+          <option value="Communicator">Communicator</option>
+          <option value="Competence Developer">Competence Developer</option>
+          <option value="Competence Center Manager">Competence Center Manager</option>
+          <option value="Competence Development Manager">Competence Development Manager</option>
+          <option value="Competence Development Specialist">Competence Development Specialist</option>
+          <option value="Competence Development Facilitator">Competence Development Facilitator</option>
+          <option value="Compensation Manager">Compensation Manager</option>
+          <option value="Competence Flow Manager">Competence Flow Manager</option>
+          <option value="Compliance Development Manager">Compliance Development Manager</option>
+          <option value="Communications Specialist - Senior">Communications Specialist - Senior</option>
+          <option value="Community Manager">Community Manager</option>
+          <option value="Deputy Construction Manager">Deputy Construction Manager</option>
+          <option value="Construction Specialist">Construction Specialist</option>
+          <option value="Controlling Manager">Controlling Manager</option>
+          <option value="Controlling Team Manager">Controlling Team Manager</option>
+          <option value="Controller">Controller</option>
+          <option value="Commercial Planning Manager">Commercial Planning Manager</option>
+          <option value="Copy Writer">Copy Writer</option>
+          <option value="Deputy Customer Order Manager">Deputy Customer Order Manager</option>
+          <option value="Customer Order Manager">Customer Order Manager</option>
+          <option value="Commercial Review Coordinator">Commercial Review Coordinator</option>
+          <option value="Commercial Review Co-worker">Commercial Review Co-worker</option>
+          <option value="Commercial Review Manager">Commercial Review Manager</option>
+          <option value="Commercial Review Responsible">Commercial Review Responsible</option>
+          <option value="Corporate Administrator">Corporate Administrator</option>
+          <option value="Corporate Attorney">Corporate Attorney</option>
+          <option value="Commercial Support Co-worker">Commercial Support Co-worker</option>
+          <option value="Commercial Support Manager">Commercial Support Manager</option>
+          <option value="Commercial Support Specialist">Commercial Support Specialist</option>
+          <option value="Country Sales Manager">Country Sales Manager</option>
+          <option value="Customer Service Co-worker">Customer Service Co-worker</option>
+          <option value="Customer Service Manager">Customer Service Manager</option>
+          <option value="Customer Service Specialist">Customer Service Specialist</option>
+          <option value="Central Planner">Central Planner</option>
+          <option value="Co-worker Relations Manager">Co-worker Relations Manager</option>
+          <option value="Co-worker Relations Specialist">Co-worker Relations Specialist</option>
+          <option value="Digital Marketing Coordinator">Digital Marketing Coordinator</option>
+          <option value="Digital Marketing Specialist">Digital Marketing Specialist</option>
+          <option value="Deputy Interior Designer Specialist">Deputy Interior Designer Specialist</option>
+          <option value="Direct Marketing Manager">Direct Marketing Manager</option>
+          <option value="Direct Marketing Specialist">Direct Marketing Specialist</option>
+          <option value="Diversity Specialist">Diversity Specialist</option>
+          <option value="Energy Manager">Energy Manager</option>
+          <option value="Environment Coordinator">Environment Coordinator</option>
+          <option value="Environment Store Support">Environment Store Support</option>
+          <option value="External Media Solution Manager">External Media Solution Manager</option>
+          <option value="Deputy Expansion Manager">Deputy Expansion Manager</option>
+          <option value="Expansion Manager">Expansion Manager</option>
+          <option value="Expansion Specialist">Expansion Specialist</option>
+          <option value="Expansion &amp; Facilities Manager">Expansion &amp; Facilities Manager</option>
+          <option value="Expansion Retail Logistics Manager">Expansion Retail Logistics Manager</option>
+          <option value="Expansion Retail Logistics Specialist">Expansion Retail Logistics Specialist</option>
+          <option value="Expansion Sales Specialist">Expansion Sales Specialist</option>
+          <option value="Exchange &amp; Returns Manager">Exchange &amp; Returns Manager</option>
+          <option value="Facility Co-worker">Facility Co-worker</option>
+          <option value="Deputy Facility Manager">Deputy Facility Manager</option>
+          <option value="Family Communication Specialist">Family Communication Specialist</option>
+          <option value="Family Database Specialist">Family Database Specialist</option>
+          <option value="Finance &amp; Administration Manager">Finance &amp; Administration Manager</option>
+          <option value="Financial Systems &amp; Projects Specialist">Financial Systems &amp; Projects Specialist</option>
+          <option value="Finance Manager">Finance Manager</option>
+          <option value="Financial Reporting Specialist">Financial Reporting Specialist</option>
+          <option value="Deputy Food &amp; Beverage Manager">Deputy Food &amp; Beverage Manager</option>
+          <option value="Country IKEA Food Manager">Country IKEA Food Manager</option>
+          <option value="Country Food Specialist">Country Food Specialist</option>
+          <option value="Front Line Manager">Front Line Manager</option>
+          <option value="Free Range Specialist">Free Range Specialist</option>
+          <option value="General Ledger Manager">General Ledger Manager</option>
+          <option value="General Ledger Specialist">General Ledger Specialist</option>
+          <option value="General Ledger Supervisor">General Ledger Supervisor</option>
+          <option value="General Ledger Specialist Expansion">General Ledger Specialist Expansion</option>
+          <option value="Goods Flow Specialist">Goods Flow Specialist</option>
+          <option value="Graduate Student">Graduate Student</option>
+          <option value="Graphical Specialist">Graphical Specialist</option>
+          <option value="Graphic Purchaser">Graphic Purchaser</option>
+          <option value="Graphic Communication Manager">Graphic Communication Manager</option>
+          <option value="Graphic Communication Specialist">Graphic Communication Specialist</option>
+          <option value="Graphic Communication Project Leader">Graphic Communication Project Leader</option>
+          <option value="Graphic Production Designer">Graphic Production Designer</option>
+          <option value="Handelsfachwirt">Handelsfachwirt</option>
+          <option value="Kitchen Production Manager">Kitchen Production Manager</option>
+          <option value="HR Co-worker">HR Co-worker</option>
+          <option value="Deputy HR Manager">Deputy HR Manager</option>
+          <option value="HR Generalist">HR Generalist</option>
+          <option value="HR Manager">HR Manager</option>
+          <option value="HR Specialist">HR Specialist</option>
+          <option value="HR Team Manager">HR Team Manager</option>
+          <option value="HR Law Manager">HR Law Manager</option>
+          <option value="HR Manager Assistant">HR Manager Assistant</option>
+          <option value="HR Marketing Co-worker">HR Marketing Co-worker</option>
+          <option value="HR Marketing Manager">HR Marketing Manager</option>
+          <option value="HRMS Manager">HRMS Manager</option>
+          <option value="HRMS Specialist">HRMS Specialist</option>
+          <option value="HRMS Specialist I">HRMS Specialist I</option>
+          <option value="HR Operations Manager">HR Operations Manager</option>
+          <option value="HR Service Center Manager">HR Service Center Manager</option>
+          <option value="HR Site Manager">HR Site Manager</option>
+          <option value="Interior Design Specialist Senior">Interior Design Specialist Senior</option>
+          <option value="IF Co-worker">IF Co-worker</option>
+          <option value="Deputy IF Manager">Deputy IF Manager</option>
+          <option value="IF Manager">IF Manager</option>
+          <option value="IF Specialist">IF Specialist</option>
+          <option value="IF Specialist Senior">IF Specialist Senior</option>
+          <option value="IF Manager Trainee">IF Manager Trainee</option>
+          <option value="IF Specialist I">IF Specialist I</option>
+          <option value="IKEA Business Leader">IKEA Business Leader</option>
+          <option value="Internal Media Solutions Co-worker">Internal Media Solutions Co-worker</option>
+          <option value="Internal Audit Manager">Internal Audit Manager</option>
+          <option value="Internal Auditor - Senior">Internal Auditor - Senior</option>
+          <option value="Internal Auditor">Internal Auditor</option>
+          <option value="Interior Designer Manager">Interior Designer Manager</option>
+          <option value="Interior Designer Specialist">Interior Designer Specialist</option>
+          <option value="Industrial Law Specialist">Industrial Law Specialist</option>
+          <option value="Information &amp; Communication Coordinator">Information &amp; Communication Coordinator</option>
+          <option value="Information Co-worker">Information Co-worker</option>
+          <option value="Information &amp; Web Responsible">Information &amp; Web Responsible</option>
+          <option value="In-store Bilingual Project Leader">In-store Bilingual Project Leader</option>
+          <option value="Insurance Manager">Insurance Manager</option>
+          <option value="Interior Designer">Interior Designer</option>
+          <option value="Internet Coordinator">Internet Coordinator</option>
+          <option value="Internet Specialist">Internet Specialist</option>
+          <option value="Internal Information Coordinator">Internal Information Coordinator</option>
+          <option value="Internal Information Manager">Internal Information Manager</option>
+          <option value="Intranet Co-worker">Intranet Co-worker</option>
+          <option value="Internship">Internship</option>
+          <option value="In Store Logistics Specialist I">In Store Logistics Specialist I</option>
+          <option value="In-store Logistics Co-worker">In-store Logistics Co-worker</option>
+          <option value="In-store Logistics Specialist Senior">In-store Logistics Specialist Senior</option>
+          <option value="IT Coordinator">IT Coordinator</option>
+          <option value="IT Manager">IT Manager</option>
+          <option value="IT Support">IT Support</option>
+          <option value="Land Acquisition Manager">Land Acquisition Manager</option>
+          <option value="Laws &amp; Standards System Administrator">Laws &amp; Standards System Administrator</option>
+          <option value="Laws &amp; Standards Coordinator">Laws &amp; Standards Coordinator</option>
+          <option value="Laws &amp; Standards Manager">Laws &amp; Standards Manager</option>
+          <option value="Lean Retailing Specialist">Lean Retailing Specialist</option>
+          <option value="Learning &amp; Development Coordinator">Learning &amp; Development Coordinator</option>
+          <option value="Learning &amp; Development Manager">Learning &amp; Development Manager</option>
+          <option value="Learning &amp; Development Specialist">Learning &amp; Development Specialist</option>
+          <option value="Leadership &amp; Diversity Manager">Leadership &amp; Diversity Manager</option>
+          <option value="Legal Administrator Senior">Legal Administrator Senior</option>
+          <option value="Local Advertising Specialist">Local Advertising Specialist</option>
+          <option value="Local Marketing Manager">Local Marketing Manager</option>
+          <option value="Logistics Coordinator">Logistics Coordinator</option>
+          <option value="Logistics Co-worker">Logistics Co-worker</option>
+          <option value="Logistics Manager">Logistics Manager</option>
+          <option value="Logistics Projects Team Leader">Logistics Projects Team Leader</option>
+          <option value="Maintenance Manager">Maintenance Manager</option>
+          <option value="Marketing Advertising Specialist">Marketing Advertising Specialist</option>
+          <option value="Marketing Catalogue/Brochure Specialist">Marketing Catalogue/Brochure Specialist</option>
+          <option value="Marketing Creative Specialist">Marketing Creative Specialist</option>
+          <option value="Marketing Direct Specialist">Marketing Direct Specialist</option>
+          <option value="Marketing Assistant">Marketing Assistant</option>
+          <option value="Marketing Co-worker">Marketing Co-worker</option>
+          <option value="Marketing Specialist">Marketing Specialist</option>
+          <option value="Marketing Business Partner">Marketing Business Partner</option>
+          <option value="Marketing PR Specialist">Marketing PR Specialist</option>
+          <option value="Marketing Relationship Manager">Marketing Relationship Manager</option>
+          <option value="Marketing Research Specialist">Marketing Research Specialist</option>
+          <option value="Marketing Web Specialist">Marketing Web Specialist</option>
+          <option value="Media Specialist">Media Specialist</option>
+          <option value="Meeting &amp; Travel Coordinator">Meeting &amp; Travel Coordinator</option>
+          <option value="Market Hall Planning Manager">Market Hall Planning Manager</option>
+          <option value="Marketing Research Coordinator">Marketing Research Coordinator</option>
+          <option value="Marketing Research Co-worker">Marketing Research Co-worker</option>
+          <option value="Meeting Coordinator">Meeting Coordinator</option>
+          <option value="National Advertising Specialist">National Advertising Specialist</option>
+          <option value="Office manager">Office manager</option>
+          <option value="Office Support">Office Support</option>
+          <option value="Office Support Administrator">Office Support Administrator</option>
+          <option value="Office Services Co-worker">Office Services Co-worker</option>
+          <option value="Office Services Manager">Office Services Manager</option>
+          <option value="Country Organisational Change Manager">Country Organisational Change Manager</option>
+          <option value="Country Organisational Change Specialist">Country Organisational Change Specialist</option>
+          <option value="P3 Roll Out Co-ordinator">P3 Roll Out Co-ordinator</option>
+          <option value="Payroll Manager">Payroll Manager</option>
+          <option value="HRSC Payroll Specialist II">HRSC Payroll Specialist II</option>
+          <option value="Payroll Specialist">Payroll Specialist</option>
+          <option value="Payroll Tax Specialist">Payroll Tax Specialist</option>
+          <option value="PR Co-worker">PR Co-worker</option>
+          <option value="PR Manager">PR Manager</option>
+          <option value="PR Specialist">PR Specialist</option>
+          <option value="PR &amp; Communication Manager">PR &amp; Communication Manager</option>
+          <option value="Press Contact Officer">Press Contact Officer</option>
+          <option value="Deputy Project Development Manager">Deputy Project Development Manager</option>
+          <option value="Project Development Manager">Project Development Manager</option>
+          <option value="Project Controller">Project Controller</option>
+          <option value="Project Developer">Project Developer</option>
+          <option value="Project Leader">Project Leader</option>
+          <option value="Project Manager">Project Manager</option>
+          <option value="Project Specialist">Project Specialist</option>
+          <option value="Project Support">Project Support</option>
+          <option value="Project Leader I">Project Leader I</option>
+          <option value="Project Manager I">Project Manager I</option>
+          <option value="Project Specialist I">Project Specialist I</option>
+          <option value="Project Support I">Project Support I</option>
+          <option value="Project Leader II">Project Leader II</option>
+          <option value="Project Manager II">Project Manager II</option>
+          <option value="Project Support II">Project Support II</option>
+          <option value="Project Leader III">Project Leader III</option>
+          <option value="Property Business Navigator">Property Business Navigator</option>
+          <option value="Project Manager Country RE">Project Manager Country RE</option>
+          <option value="Project Operations Manager">Project Operations Manager</option>
+          <option value="Deputy Property Mnager">Deputy Property Mnager</option>
+          <option value="Product Placement Co-worker">Product Placement Co-worker</option>
+          <option value="Product Placement Specialist">Product Placement Specialist</option>
+          <option value="Press &amp; PR Coordinator">Press &amp; PR Coordinator</option>
+          <option value="Press &amp; PR Manager">Press &amp; PR Manager</option>
+          <option value="Product Placement Specialist Senior">Product Placement Specialist Senior</option>
+          <option value="Product Req &amp; Compliance Specialist">Product Req &amp; Compliance Specialist</option>
+          <option value="P-tag Specialist">P-tag Specialist</option>
+          <option value="Public Affairs Manager">Public Affairs Manager</option>
+          <option value="Quality Co-ordinator">Quality Co-ordinator</option>
+          <option value="Range Presentation Manager">Range Presentation Manager</option>
+          <option value="Real Estate Manager">Real Estate Manager</option>
+          <option value="Receptionist">Receptionist</option>
+          <option value="Recovery Manager">Recovery Manager</option>
+          <option value="Receive Payment Manager">Receive Payment Manager</option>
+          <option value="Recruitment Manager">Recruitment Manager</option>
+          <option value="Recruitment Specialist">Recruitment Specialist</option>
+          <option value="Regional Marketing Manager">Regional Marketing Manager</option>
+          <option value="Retail Project Mnager">Retail Project Mnager</option>
+          <option value="Ret. Supply Chain Integration Specialist">Ret. Supply Chain Integration Specialist</option>
+          <option value="Restaurant Specialist">Restaurant Specialist</option>
+          <option value="Retail Manager Assistant">Retail Manager Assistant</option>
+          <option value="Deputy Retail Manager">Deputy Retail Manager</option>
+          <option value="Retail Companies Co-worker">Retail Companies Co-worker</option>
+          <option value="Retail Operations Manager">Retail Operations Manager</option>
+          <option value="Deputy Retail Preparation Manager">Deputy Retail Preparation Manager</option>
+          <option value="Retail Preparation Manager">Retail Preparation Manager</option>
+          <option value="Retail Preparation Specialist">Retail Preparation Specialist</option>
+          <option value="Retail Preparation Layout &amp; Support">Retail Preparation Layout &amp; Support</option>
+          <option value="Retail Preparation Store Planner">Retail Preparation Store Planner</option>
+          <option value="Retail Supply Chain Integration Manager">Retail Supply Chain Integration Manager</option>
+          <option value="Retail Support Integration Manager">Retail Support Integration Manager</option>
+          <option value="Range &amp;Purchasing Manager">Range &amp;Purchasing Manager</option>
+          <option value="Regional Global Accountant">Regional Global Accountant</option>
+          <option value="Deputy Risk Manager">Deputy Risk Manager</option>
+          <option value="Roll Out Manager">Roll Out Manager</option>
+          <option value="Roll Out Team Leader">Roll Out Team Leader</option>
+          <option value="Receive Payment Responsible">Receive Payment Responsible</option>
+          <option value="Risk Management Administrator">Risk Management Administrator</option>
+          <option value="Retail Supply Integration Team Leader">Retail Supply Integration Team Leader</option>
+          <option value="Safety Co-worker">Safety Co-worker</option>
+          <option value="Sales Leader I">Sales Leader I</option>
+          <option value="Sales Leader II">Sales Leader II</option>
+          <option value="Sales Co-worker">Sales Co-worker</option>
+          <option value="Deputy Sales Manager">Deputy Sales Manager</option>
+          <option value="Sales Navigator">Sales Navigator</option>
+          <option value="Sales Team Leader">Sales Team Leader</option>
+          <option value="Sales Planner">Sales Planner</option>
+          <option value="Sales Planning Manager">Sales Planning Manager</option>
+          <option value="Sales Stimulator">Sales Stimulator</option>
+          <option value="Safety &amp; Security Manager">Safety &amp; Security Manager</option>
+          <option value="Site Construction Coordinator">Site Construction Coordinator</option>
+          <option value="Service Companies Team Manager">Service Companies Team Manager</option>
+          <option value="Secretary">Secretary</option>
+          <option value="Security Co-worker">Security Co-worker</option>
+          <option value="Security Manager">Security Manager</option>
+          <option value="Security Specialist">Security Specialist</option>
+          <option value="Social &amp; Environmental Affairs Manager">Social &amp; Environmental Affairs Manager</option>
+          <option value="Service Co-worker">Service Co-worker</option>
+          <option value="Showroom Planning Manager">Showroom Planning Manager</option>
+          <option value="Site Installations Coordinator">Site Installations Coordinator</option>
+          <option value="IKEA Business Manager">IKEA Business Manager</option>
+          <option value="Social &amp; Environmental Coordinator">Social &amp; Environmental Coordinator</option>
+          <option value="Social &amp; Environmental Manager">Social &amp; Environmental Manager</option>
+          <option value="Sales &amp; Supply Support Manager">Sales &amp; Supply Support Manager</option>
+          <option value="Store &amp; Build Up Manager">Store &amp; Build Up Manager</option>
+          <option value="Store Design Manager">Store Design Manager</option>
+          <option value="Store Accountant">Store Accountant</option>
+          <option value="Succession &amp; Recruitment Manager">Succession &amp; Recruitment Manager</option>
+          <option value="Superuser I">Superuser I</option>
+          <option value="Superuser II">Superuser II</option>
+          <option value="Superuser III">Superuser III</option>
+          <option value="Superuser 3">Superuser 3</option>
+          <option value="Superuser">Superuser</option>
+          <option value="Tax Manager">Tax Manager</option>
+          <option value="Tax Specialist">Tax Specialist</option>
+          <option value="Tax Compliance Specialist">Tax Compliance Specialist</option>
+          <option value="Technical Specialist">Technical Specialist</option>
+          <option value="Temporary Staff">Temporary Staff</option>
+          <option value="Team Leader">Team Leader</option>
+          <option value="Treasury &amp; Consumer Finance Specialist">Treasury &amp; Consumer Finance Specialist</option>
+          <option value="Trainee">Trainee</option>
+          <option value="Training Responsible">Training Responsible</option>
+          <option value="Travel Agent">Travel Agent</option>
+          <option value="Training &amp; Development Co-worker">Training &amp; Development Co-worker</option>
+          <option value="Training &amp; Development Manager">Training &amp; Development Manager</option>
+          <option value="Training &amp; Development Specialist">Training &amp; Development Specialist</option>
+          <option value="Treasurer Assistant">Treasurer Assistant</option>
+          <option value="Treasurer">Treasurer</option>
+          <option value="Visual Merchandiser">Visual Merchandiser</option>
+          <option value="Visual Merchandising Manager">Visual Merchandising Manager</option>
+          <option value="Visual Merchandising Specialist">Visual Merchandising Specialist</option>
+          <option value="Visual Merchandising Specialist Senior">Visual Merchandising Specialist Senior</option>
+          <option value="Web Communications Manager">Web Communications Manager</option>
+          <option value="Web Editor">Web Editor</option>
+          <option value="Contact Center Co-worker">Contact Center Co-worker</option>
+          <option value="Contact Center Manager">Contact Center Manager</option>
+          <option value="BA05 and IKEA Business Shopkeeper">BA05 and IKEA Business Shopkeeper</option>
+          <option value="Certified Kitchen Seller II">Certified Kitchen Seller II</option>
+          <option value="Shopkeeper 1">Shopkeeper 1</option>
+          <option value="First Interior Designer">First Interior Designer</option>
+          <option value="First Visual Merchandiser">First Visual Merchandiser</option>
+          <option value="Shopkeeper II">Shopkeeper II</option>
+          <option value="Shopkeeper III">Shopkeeper III</option>
+          <option value="Accounting Team Assistant">Accounting Team Assistant</option>
+          <option value="Accounting Team Manager">Accounting Team Manager</option>
+          <option value="Activity &amp; Sales Support Team Manager">Activity &amp; Sales Support Team Manager</option>
+          <option value="Activity Co-worker">Activity Co-worker</option>
+          <option value="Activity Manager">Activity Manager</option>
+          <option value="Activity Specialist">Activity Specialist</option>
+          <option value="Team Assistant Activities">Team Assistant Activities</option>
+          <option value="Deputy Administration Manager">Deputy Administration Manager</option>
+          <option value="After Sales Manager">After Sales Manager</option>
+          <option value="After Sales Team Leader">After Sales Team Leader</option>
+          <option value="Shopkeeper BA 01">Shopkeeper BA 01</option>
+          <option value="Team Assistant BA 01">Team Assistant BA 01</option>
+          <option value="Sales Team Leader BA 01">Sales Team Leader BA 01</option>
+          <option value="Shopkeeper BA 02">Shopkeeper BA 02</option>
+          <option value="Team Assistant BA 02">Team Assistant BA 02</option>
+          <option value="Sales Team Leader BA 02">Sales Team Leader BA 02</option>
+          <option value="Shopkeeper BA 03">Shopkeeper BA 03</option>
+          <option value="Team Assistant BA 03">Team Assistant BA 03</option>
+          <option value="Sales Team Leader BA 03">Sales Team Leader BA 03</option>
+          <option value="Shopkeeper BA 04">Shopkeeper BA 04</option>
+          <option value="Sales Team Leader BA 04">Sales Team Leader BA 04</option>
+          <option value="Shopkeeper BA 05">Shopkeeper BA 05</option>
+          <option value="Team Assistant BA 05">Team Assistant BA 05</option>
+          <option value="Sales Team Leader BA 05">Sales Team Leader BA 05</option>
+          <option value="Shopkeeper BA 06">Shopkeeper BA 06</option>
+          <option value="Team Assistant BA 06">Team Assistant BA 06</option>
+          <option value="Sales Team Leader BA 06">Sales Team Leader BA 06</option>
+          <option value="Shopkeeper BA 06 &amp; 10">Shopkeeper BA 06 &amp; 10</option>
+          <option value="Shopkeeper BA 08">Shopkeeper BA 08</option>
+          <option value="Sales Team Leader BA 08">Sales Team Leader BA 08</option>
+          <option value="Shopkeeper BA 09">Shopkeeper BA 09</option>
+          <option value="Team Assistant BA 09">Team Assistant BA 09</option>
+          <option value="Sales Team Leader BA 09">Sales Team Leader BA 09</option>
+          <option value="Shopkeeper Ba 09 &amp; Act">Shopkeeper Ba 09 &amp; Act</option>
+          <option value="Shopkeeper BA 10">Shopkeeper BA 10</option>
+          <option value="Sales Team Leader BA 10">Sales Team Leader BA 10</option>
+          <option value="Shopkeeper BA 40">Shopkeeper BA 40</option>
+          <option value="Sales Team Leader BA 40">Sales Team Leader BA 40</option>
+          <option value="BA40 and Family Shop Keeper">BA40 and Family Shop Keeper</option>
+          <option value="Shopkeeper BA 50">Shopkeeper BA 50</option>
+          <option value="Sales Team Leader BA 50">Sales Team Leader BA 50</option>
+          <option value="Shopkeeper BA 60">Shopkeeper BA 60</option>
+          <option value="Sales Team Leader BA 60">Sales Team Leader BA 60</option>
+          <option value="Ballroom Co-worker">Ballroom Co-worker</option>
+          <option value="Bistro &amp; Swede Team Assistant">Bistro &amp; Swede Team Assistant</option>
+          <option value="Commercial SFM &amp; Bistro Manager">Commercial SFM &amp; Bistro Manager</option>
+          <option value="Business Navigator">Business Navigator</option>
+          <option value="Cash Administration Co-worker">Cash Administration Co-worker</option>
+          <option value="Cash Administration Manager">Cash Administration Manager</option>
+          <option value="Cash Administration Team Assistant">Cash Administration Team Assistant</option>
+          <option value="Cash Administration Team Manager">Cash Administration Team Manager</option>
+          <option value="Cafe Manager">Cafe Manager</option>
+          <option value="Carpenter Specialist">Carpenter Specialist</option>
+          <option value="Carts Co-worker">Carts Co-worker</option>
+          <option value="Cash Line Co-worker">Cash Line Co-worker</option>
+          <option value="Cash Line Manager">Cash Line Manager</option>
+          <option value="Cash Line Team Manager">Cash Line Team Manager</option>
+          <option value="Customer Convenience Manager">Customer Convenience Manager</option>
+          <option value="Customer Convenience Team Leader">Customer Convenience Team Leader</option>
+          <option value="Customer Delivery Manager">Customer Delivery Manager</option>
+          <option value="Certified Kitchen Seller">Certified Kitchen Seller</option>
+          <option value="Chef">Chef</option>
+          <option value="Checkout Services Admin. Co-worker">Checkout Services Admin. Co-worker</option>
+          <option value="Checkout Services Team Manager">Checkout Services Team Manager</option>
+          <option value="Checkout Services Co-worker I">Checkout Services Co-worker I</option>
+          <option value="Cash Line Administration Manager">Cash Line Administration Manager</option>
+          <option value="Cleaning Services Co-worker">Cleaning Services Co-worker</option>
+          <option value="Cleaning Services Manager">Cleaning Services Manager</option>
+          <option value="Cleaning Services Team Leader">Cleaning Services Team Leader</option>
+          <option value="Contact Center Agent">Contact Center Agent</option>
+          <option value="Checkout Coworker IKEA FOOD">Checkout Coworker IKEA FOOD</option>
+          <option value="Communication Responsible">Communication Responsible</option>
+          <option value="Com &amp; In Co-worker">Com &amp; In Co-worker</option>
+          <option value="Deputy Com &amp; In Manager">Deputy Com &amp; In Manager</option>
+          <option value="Com &amp; In Manager">Com &amp; In Manager</option>
+          <option value="Com &amp; In Team Leader">Com &amp; In Team Leader</option>
+          <option value="Com &amp; In Manager Trainee">Com &amp; In Manager Trainee</option>
+          <option value="Communication Team Assistant">Communication Team Assistant</option>
+          <option value="Communication Team Manager">Communication Team Manager</option>
+          <option value="Commercial Responsible">Commercial Responsible</option>
+          <option value="Controller Specialist">Controller Specialist</option>
+          <option value="Cook / Assistant">Cook / Assistant</option>
+          <option value="Cook">Cook</option>
+          <option value="Cook Server">Cook Server</option>
+          <option value="Cold Preparation / Server">Cold Preparation / Server</option>
+          <option value="Craftsman Co-worker">Craftsman Co-worker</option>
+          <option value="Customer Relations Specialist">Customer Relations Specialist</option>
+          <option value="Deputy Customer Services Manager">Deputy Customer Services Manager</option>
+          <option value="Customer Services Manager">Customer Services Manager</option>
+          <option value="Customer Services Team Assistant">Customer Services Team Assistant</option>
+          <option value="Customer Services Team Manager">Customer Services Team Manager</option>
+          <option value="Customer Service Co-worker I">Customer Service Co-worker I</option>
+          <option value="CSP Manager">CSP Manager</option>
+          <option value="CSP Graphic Design Specialist">CSP Graphic Design Specialist</option>
+          <option value="CSP Graphic Communication Specialist">CSP Graphic Communication Specialist</option>
+          <option value="CSP Interior Design Manager">CSP Interior Design Manager</option>
+          <option value="CSP In-store Logistics Manager">CSP In-store Logistics Manager</option>
+          <option value="CSP In-Store Logistics Specialist">CSP In-Store Logistics Specialist</option>
+          <option value="CSP Info &amp; Communication Specialist">CSP Info &amp; Communication Specialist</option>
+          <option value="CSP Interior Design Specialist">CSP Interior Design Specialist</option>
+          <option value="CSP Sales Market Hall/Activity Manager">CSP Sales Market Hall/Activity Manager</option>
+          <option value="CSP Sales Showroom/Self Serve Manager">CSP Sales Showroom/Self Serve Manager</option>
+          <option value="CSP Visual  Merch. &amp; Activity Manager">CSP Visual  Merch. &amp; Activity Manager</option>
+          <option value="CSP Visual Merch &amp; Activity Specialist">CSP Visual Merch &amp; Activity Specialist</option>
+          <option value="Customer Area Manager">Customer Area Manager</option>
+          <option value="Customer Area Team Leader">Customer Area Team Leader</option>
+          <option value="Dishwasher / Attendant">Dishwasher / Attendant</option>
+          <option value="Doctor">Doctor</option>
+          <option value="Environmental Co-worker">Environmental Co-worker</option>
+          <option value="Environmental Specialist">Environmental Specialist</option>
+          <option value="Exchange &amp; Returns Team Leader">Exchange &amp; Returns Team Leader</option>
+          <option value="Facility Team Assistant">Facility Team Assistant</option>
+          <option value="Facility Team Leader">Facility Team Leader</option>
+          <option value="Facility Team Manager">Facility Team Manager</option>
+          <option value="Family Co-worker">Family Co-worker</option>
+          <option value="IKEA Family Manager">IKEA Family Manager</option>
+          <option value="Family Specialist">Family Specialist</option>
+          <option value="Food Service Function Support">Food Service Function Support</option>
+          <option value="Front Line Team Leader">Front Line Team Leader</option>
+          <option value="Frontliner">Frontliner</option>
+          <option value="Full Serve Warehouse Team Leader">Full Serve Warehouse Team Leader</option>
+          <option value="Full Serve Co-worker">Full Serve Co-worker</option>
+          <option value="Deputy Full Serve Manager">Deputy Full Serve Manager</option>
+          <option value="Full Serve Manager">Full Serve Manager</option>
+          <option value="Furniture Builder">Furniture Builder</option>
+          <option value="Furniture Pick Up Co-worker">Furniture Pick Up Co-worker</option>
+          <option value="Shopkeeper Glasshouse">Shopkeeper Glasshouse</option>
+          <option value="Team Assistant Glasshouse">Team Assistant Glasshouse</option>
+          <option value="Goods Flow Manager in Flow Trainee">Goods Flow Manager in Flow Trainee</option>
+          <option value="Goods Flow Manager In Flow">Goods Flow Manager In Flow</option>
+          <option value="Goods Flow Team Manager">Goods Flow Team Manager</option>
+          <option value="Goods Delivery Co-worker">Goods Delivery Co-worker</option>
+          <option value="Goods Receiving Manager">Goods Receiving Manager</option>
+          <option value="Goods Receiver Specialist">Goods Receiver Specialist</option>
+          <option value="Goods Receiver IKEA Food">Goods Receiver IKEA Food</option>
+          <option value="Graphic Designer">Graphic Designer</option>
+          <option value="Goods Receiving Co-worker">Goods Receiving Co-worker</option>
+          <option value="Greeter">Greeter</option>
+          <option value="Goods Replenishment Co-worker">Goods Replenishment Co-worker</option>
+          <option value="Home Assembly Manager">Home Assembly Manager</option>
+          <option value="Home Delivery Co-worker">Home Delivery Co-worker</option>
+          <option value="Home Furnishing Consultant">Home Furnishing Consultant</option>
+          <option value="HR Administrator">HR Administrator</option>
+          <option value="HR Team Assistant">HR Team Assistant</option>
+          <option value="HR Site Manager Trainee">HR Site Manager Trainee</option>
+          <option value="Shopkeeper IKEA Business / Family">Shopkeeper IKEA Business / Family</option>
+          <option value="Sales Team Leader IKEA Bus. / Family">Sales Team Leader IKEA Bus. / Family</option>
+          <option value="IKEA FOOD Administrator">IKEA FOOD Administrator</option>
+          <option value="IKEA Food Specialist">IKEA Food Specialist</option>
+          <option value="IKEA FOOD Team Assistant">IKEA FOOD Team Assistant</option>
+          <option value="IF Team Leader">IF Team Leader</option>
+          <option value="IKEA FOOD Co-worker I">IKEA FOOD Co-worker I</option>
+          <option value="IF Bistro &amp; Sweden Shop Co-worker">IF Bistro &amp; Sweden Shop Co-worker</option>
+          <option value="Commercial SFM &amp; Bistro Team Leader">Commercial SFM &amp; Bistro Team Leader</option>
+          <option value="Kitchen Production Specialist">Kitchen Production Specialist</option>
+          <option value="Kitchen Production Team Leader">Kitchen Production Team Leader</option>
+          <option value="Ktchen Production Specialist I">Ktchen Production Specialist I</option>
+          <option value="Commercial Restaurant Team Leader">Commercial Restaurant Team Leader</option>
+          <option value="IF Sales Team Manager">IF Sales Team Manager</option>
+          <option value="IKEA Card">IKEA Card</option>
+          <option value="Information &amp; Communication Specialist">Information &amp; Communication Specialist</option>
+          <option value="Interior Design Manager Trainee">Interior Design Manager Trainee</option>
+          <option value="Info &amp; Smaland Co-worker">Info &amp; Smaland Co-worker</option>
+          <option value="Info &amp; Smaland Manager">Info &amp; Smaland Manager</option>
+          <option value="Info &amp; Smaland Team Leader">Info &amp; Smaland Team Leader</option>
+          <option value="Interior Architect">Interior Architect</option>
+          <option value="Interior Design Team Assistant">Interior Design Team Assistant</option>
+          <option value="Interior Design Team Manager">Interior Design Team Manager</option>
+          <option value="Interior Design Co-worker I">Interior Design Co-worker I</option>
+          <option value="Intern">Intern</option>
+          <option value="Inventory Specialist">Inventory Specialist</option>
+          <option value="In-store Logistics Manager - Store">In-store Logistics Manager - Store</option>
+          <option value="IT Co-worker">IT Co-worker</option>
+          <option value="IT Team Assistant">IT Team Assistant</option>
+          <option value="IT Team Manager">IT Team Manager</option>
+          <option value="Kitchen &amp; Dining Co-worker">Kitchen &amp; Dining Co-worker</option>
+          <option value="Kitchen &amp; Restaurant Team Leader">Kitchen &amp; Restaurant Team Leader</option>
+          <option value="Local Marketing Analyst">Local Marketing Analyst</option>
+          <option value="Local Marketing Co-worker">Local Marketing Co-worker</option>
+          <option value="Logistics Administration Co-worker">Logistics Administration Co-worker</option>
+          <option value="Logistics Administration Team Manager">Logistics Administration Team Manager</option>
+          <option value="Logistics Function Support">Logistics Function Support</option>
+          <option value="Logistics Co-worker I">Logistics Co-worker I</option>
+          <option value="Logistics Co-worker II">Logistics Co-worker II</option>
+          <option value="Logistics Team Assistant">Logistics Team Assistant</option>
+          <option value="Logistics Team Leader">Logistics Team Leader</option>
+          <option value="Logistics Team Manager">Logistics Team Manager</option>
+          <option value="Logistics Manager Trainee">Logistics Manager Trainee</option>
+          <option value="Deputy Logistics Warehouse Manager">Deputy Logistics Warehouse Manager</option>
+          <option value="Maintenance Co-worker">Maintenance Co-worker</option>
+          <option value="Marketing Manager">Marketing Manager</option>
+          <option value="Montera &amp; Dinera &amp; Bistro Manager">Montera &amp; Dinera &amp; Bistro Manager</option>
+          <option value="Nurse">Nurse</option>
+          <option value="Operations Manager">Operations Manager</option>
+          <option value="Operations Manager Trainee">Operations Manager Trainee</option>
+          <option value="Goods Flow Manager Out Flow">Goods Flow Manager Out Flow</option>
+          <option value="Planner">Planner</option>
+          <option value="P-tag Co-worker">P-tag Co-worker</option>
+          <option value="Q-Store Product Quality Technician">Q-Store Product Quality Technician</option>
+          <option value="Q-Store Quality Manager">Q-Store Quality Manager</option>
+          <option value="Quality Co-worker">Quality Co-worker</option>
+          <option value="Quality Specialist">Quality Specialist</option>
+          <option value="Quality Support">Quality Support</option>
+          <option value="Range Responsible">Range Responsible</option>
+          <option value="Range Support">Range Support</option>
+          <option value="Rebuilding Co-worker">Rebuilding Co-worker</option>
+          <option value="Receiving Team Leader">Receiving Team Leader</option>
+          <option value="Recovery Co-worker">Recovery Co-worker</option>
+          <option value="Recovery Responsible">Recovery Responsible</option>
+          <option value="Recovery Specialist">Recovery Specialist</option>
+          <option value="Recovery Team Assistant">Recovery Team Assistant</option>
+          <option value="Recovery Team Leader">Recovery Team Leader</option>
+          <option value="Recovery Team Manager">Recovery Team Manager</option>
+          <option value="Refilling Co-worker">Refilling Co-worker</option>
+          <option value="Refilling Manager">Refilling Manager</option>
+          <option value="Refilling Team Leader">Refilling Team Leader</option>
+          <option value="Replenishment Manager">Replenishment Manager</option>
+          <option value="Replenishment Team Leader">Replenishment Team Leader</option>
+          <option value="Team Assistant Sales">Team Assistant Sales</option>
+          <option value="Sales Activities Co-worker">Sales Activities Co-worker</option>
+          <option value="Safety &amp; Security Co-worker">Safety &amp; Security Co-worker</option>
+          <option value="Safety &amp; Security Team Leader">Safety &amp; Security Team Leader</option>
+          <option value="Sales Apprentice">Sales Apprentice</option>
+          <option value="Sales Leader">Sales Leader</option>
+          <option value="Sales Manager Trainee">Sales Manager Trainee</option>
+          <option value="Sales Co-worker II">Sales Co-worker II</option>
+          <option value="Sales Co-worker III">Sales Co-worker III</option>
+          <option value="Sales Co-worker IV">Sales Co-worker IV</option>
+          <option value="Sales External Co-worker">Sales External Co-worker</option>
+          <option value="Sales Manager Furniture">Sales Manager Furniture</option>
+          <option value="Sales Function Support">Sales Function Support</option>
+          <option value="Sales Manager Market Place">Sales Manager Market Place</option>
+          <option value="Sales &amp; Service Expeditor">Sales &amp; Service Expeditor</option>
+          <option value="Sales Self Serve Team Leader">Sales Self Serve Team Leader</option>
+          <option value="Sales &amp; Supply Support Manager Trainee">Sales &amp; Supply Support Manager Trainee</option>
+          <option value="Sales Support Specialist">Sales Support Specialist</option>
+          <option value="Sales Space Specialist">Sales Space Specialist</option>
+          <option value="Sales &amp; Supply Support">Sales &amp; Supply Support</option>
+          <option value="Sales &amp; Supply Team Assistant">Sales &amp; Supply Team Assistant</option>
+          <option value="Security Responsible">Security Responsible</option>
+          <option value="Shopkeeper Self Serve">Shopkeeper Self Serve</option>
+          <option value="Self Serve Co-worker">Self Serve Co-worker</option>
+          <option value="Self Serve Manager">Self Serve Manager</option>
+          <option value="Self Serve Team Assistant">Self Serve Team Assistant</option>
+          <option value="Self Serve Team Manager">Self Serve Team Manager</option>
+          <option value="Services Function Support">Services Function Support</option>
+          <option value="Deputy Service Team Leader">Deputy Service Team Leader</option>
+          <option value="Services Manager">Services Manager</option>
+          <option value="Service Team Leader">Service Team Leader</option>
+          <option value="Shift Leader">Shift Leader</option>
+          <option value="Shopkeeper Activities">Shopkeeper Activities</option>
+          <option value="Deputy Sales Team Leader">Deputy Sales Team Leader</option>
+          <option value="IKEA Business Specialist">IKEA Business Specialist</option>
+          <option value="Safety &amp; Security Function Support">Safety &amp; Security Function Support</option>
+          <option value="Sales &amp; Supply Support Co-worker">Sales &amp; Supply Support Co-worker</option>
+          <option value="Staff Scheduler">Staff Scheduler</option>
+          <option value="Store Manager Assistant">Store Manager Assistant</option>
+          <option value="Assistant Store Manager">Assistant Store Manager</option>
+          <option value="Assistant Store Manager Sales">Assistant Store Manager Sales</option>
+          <option value="Assistant Store Manager Services">Assistant Store Manager Services</option>
+          <option value="Swedish Food Market Co-worker">Swedish Food Market Co-worker</option>
+          <option value="Team Support">Team Support</option>
+          <option value="Deputy Team Manager">Deputy Team Manager</option>
+          <option value="Trainer">Trainer</option>
+          <option value="Visual Merchandising Co-worker">Visual Merchandising Co-worker</option>
+          <option value="Visual Merchandising Team Assistant">Visual Merchandising Team Assistant</option>
+          <option value="Visual Merchandising Team Manager">Visual Merchandising Team Manager</option>
+          <option value="Work Council Representative">Work Council Representative</option>
+          <option value="Accounts Payable">Accounts Payable</option>
+          <option value="Administrator Reception">Administrator Reception</option>
+          <option value="Assembly co-worker">Assembly co-worker</option>
+          <option value="Business Navigation Manager">Business Navigation Manager</option>
+          <option value="Business Navigation Team Leader">Business Navigation Team Leader</option>
+          <option value="Business Support Team Leader">Business Support Team Leader</option>
+          <option value="Canteen Coordinator">Canteen Coordinator</option>
+          <option value="Canteen Co-worker">Canteen Co-worker</option>
+          <option value="Cleaner">Cleaner</option>
+          <option value="Consumables Procurement Co-worker">Consumables Procurement Co-worker</option>
+          <option value="Customs Administrator">Customs Administrator</option>
+          <option value="Customs Clerk">Customs Clerk</option>
+          <option value="Customs Co-worker">Customs Co-worker</option>
+          <option value="Customs Specialist">Customs Specialist</option>
+          <option value="Customs Team Leader">Customs Team Leader</option>
+          <option value="DC Handling Material Team Leader">DC Handling Material Team Leader</option>
+          <option value="DC Manager">DC Manager</option>
+          <option value="DC Quality Co-worker">DC Quality Co-worker</option>
+          <option value="DC Quality Team Leader">DC Quality Team Leader</option>
+          <option value="Delivery Support Manager">Delivery Support Manager</option>
+          <option value="Delivery Support Team Leader">Delivery Support Team Leader</option>
+          <option value="Deputy Delivery Support Manager">Deputy Delivery Support Manager</option>
+          <option value="Deputy Team Leader">Deputy Team Leader</option>
+          <option value="Deviation Claims Administrator">Deviation Claims Administrator</option>
+          <option value="Dispatch-Planner Co-worker">Dispatch-Planner Co-worker</option>
+          <option value="Dispatch-Planner Team Leader">Dispatch-Planner Team Leader</option>
+          <option value="Distribution Services Systems Manager">Distribution Services Systems Manager</option>
+          <option value="Driver Manual Palette Jack">Driver Manual Palette Jack</option>
+          <option value="Environmental Quality Co-worker">Environmental Quality Co-worker</option>
+          <option value="Facility Manager">Facility Manager</option>
+          <option value="Flow Coordinator">Flow Coordinator</option>
+          <option value="Flow Planner">Flow Planner</option>
+          <option value="Forklift Technician">Forklift Technician</option>
+          <option value="General Accountant">General Accountant</option>
+          <option value="General Services &amp; HR Assistant">General Services &amp; HR Assistant</option>
+          <option value="Goods Flow Supply Support">Goods Flow Supply Support</option>
+          <option value="Handling Material Controller">Handling Material Controller</option>
+          <option value="Handling Materials Administrator">Handling Materials Administrator</option>
+          <option value="Handling Materials Team Leader">Handling Materials Team Leader</option>
+          <option value="Head of Forklift Garage">Head of Forklift Garage</option>
+          <option value="HR Training Administrator">HR Training Administrator</option>
+          <option value="Information &amp; Communication Co-worker">Information &amp; Communication Co-worker</option>
+          <option value="Internal Communication Manager">Internal Communication Manager</option>
+          <option value="Inventory Control Manager">Inventory Control Manager</option>
+          <option value="Inventory Control Team Leader">Inventory Control Team Leader</option>
+          <option value="Inventory Co-worker">Inventory Co-worker</option>
+          <option value="Office Service Co-worker">Office Service Co-worker</option>
+          <option value="Office Service Manager">Office Service Manager</option>
+          <option value="Operational Support">Operational Support</option>
+          <option value="Operational Support Co-worker">Operational Support Co-worker</option>
+          <option value="Preventative Maintenance Mechanic">Preventative Maintenance Mechanic</option>
+          <option value="Product Quality Team Leader">Product Quality Team Leader</option>
+          <option value="Purchaser">Purchaser</option>
+          <option value="QSC Product Quality Coordinator">QSC Product Quality Coordinator</option>
+          <option value="QSC Supply Quality Co-worker">QSC Supply Quality Co-worker</option>
+          <option value="Quality Team Leader">Quality Team Leader</option>
+          <option value="Range System Support">Range System Support</option>
+          <option value="Risk Manager">Risk Manager</option>
+          <option value="Security Guard">Security Guard</option>
+          <option value="Store Quality Technician">Store Quality Technician</option>
+          <option value="Store Support Co-worker">Store Support Co-worker</option>
+          <option value="Supply Quality Co-worker">Supply Quality Co-worker</option>
+          <option value="Sustainability Developer">Sustainability Developer</option>
+          <option value="Technician">Technician</option>
+          <option value="Transport Business Development Support">Transport Business Development Support</option>
+          <option value="Truck Driver">Truck Driver</option>
+          <option value="User &amp; Maintenance Support">User &amp; Maintenance Support</option>
+          <option value="Warehouse Co-worker">Warehouse Co-worker</option>
+          <option value="Warehouse Co-worker Senior">Warehouse Co-worker Senior</option>
+          <option value="Warehouse Team Leader">Warehouse Team Leader</option>
+          <option value="Warehousing Logistics Manager">Warehousing Logistics Manager</option>
+          <option value="Warehousing Logistics Team Leader">Warehousing Logistics Team Leader</option>
+          <option value="Yard Operations Co-worker">Yard Operations Co-worker</option>
+        </options>
+      </element>
+      <element name="NewPosition" type="select" label="New Position?" >
+        <options>
+          <option value=""></option>
+          <option value="New Position">New Position</option>
+          <option value="Fill Vacant Position">Fill Vacant Position</option>
+        </options>
+      </element>
+      <element type="search-select" name="ReportsToLineManager" source="1" label="Reports to Line Manager">
+        <options>
+          <option value=""></option>
+          <option value="Line Manager 1">Line Manager 1</option>
+          <option value="Line Manager 2">Line Manager 2</option>
+        </options>
+      </element>
+    
+    <!--Employment Conditions-->
+    <element name="EmploymentCategory" type="select" label="Employment Category" >
+      <options>
+        <option value=""></option>
+        <option value="Full Time">Full Time</option>
+        <option value="Part Time">Part Time</option>
+        <option value="Temporary">Temporary</option>
+      </options>
+    </element>
+    <element name="ContractedHours" type="text" label="Contracted Hours" ></element>
+    <element name="ContractType" type="select" label="Contract Type" >
+      <options>
+        <option value=""></option>
+        <option value="Permanent">Permanent</option>
+        <option value="Temporary">Temporary</option>        
+      </options>
+    </element>
+      <element name="ContractEndDate" type="date" format="dd.MM.yyyy" default="31.12.9999" label="Contract End Date">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+    <!--<element name="ProbationPeriod" type="select" label="Probation period" mandatory="1">
+      <options>
+        <option value=""></option>
+        <option value="Not Applicable">Not Applicable</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+      </options>
+    </element>-->
+    <!--<element name="ProbationEndDate" type="date" label="Probation end date" format="dd.MM.yyyy">
+      <mandatoryIf name="ProbationPeriod">Yes</mandatoryIf>
+      <regex inherit="date" pattern="" message=""></regex>
+    </element>-->
+    
+      <!--CDS-->
+      <element name="PrimarySite" type="select" label="Primary Site">
+        <options>
+          <option value=""></option>
+          <option value="Service Office">Service Office</option>
+          <option value="Big Store North">Big Store North</option>
+          <option value="Big Store South">Big Store South</option>
+          <option value="Big Store East">Big Store East</option>
+          <option value="Big Store West">Big Store West</option>
+          <option value="DC North">DC North</option>
+          <option value="DC South">DC South</option>
+          <option value="DC East">DC East</option>
+          <option value="DC West">DC West</option>
+          <!--<option value="Primary Site 1">Primary Site 1</option>
+          <option value="Primary Site 2">Primary Site 2</option>-->
+        </options>
+      </element>
+      <element name="TECApprover" type="search-select" label="TEC Approver">
+        <options>
+          <option value=""></option>
+          <option value="Line Manager 1">Line Manager 1</option>
+          <option value="Line Manager 2">Line Manager 2</option>
+          <option value="TECApprover 1">TECApprover 1</option>
+          <option value="TECApprover 2">TECApprover 2</option>
+        </options>
+      </element>
+      <element name="HelpDesk" type="select" label="Help Desk" default="TEST Helpdesk">
+        <options>
+          <option value=""></option>
+          <option value="GL Retail Helpdesk">GL Retail Helpdesk</option>
+          <option value="GL Dist. Helpdesk">GL Dist. Helpdesk</option>
+        </options>
+      </element>
+    </tab>
+    
+ <!--Tab: Payment Information-->
+    <tab name="#Payment" label="Payment Information">
+      <element type="select" name="PayrollCategory" label="Payroll Category" >
+        <options>
+          <option value=""></option>
+          <option value="Hourly">Hourly</option>
+          <option value="Salary">Salary</option>
+        </options>
+      </element>
+      <element type="text" name="BasicPayAmount" label="Basic Pay Amount" >
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element type="select" name="BasicPayChangeReason" label="Basic Pay Change Reason" >
+        <options>
+          <option value=""></option>
+          <option value="Promotion">Promotion</option>
+          <option value="Collective Increase">Collective Increase</option>
+          <option value="Individual Increase">Individual Increase</option>
+          <option value="Seniority">Seniority</option>
+          <option value="Collective Agreement Increase">Collective Agreement Increase</option>
+          <option value="Reclassification">Reclassification</option>
+        </options>
+      </element>
+      <element type="hidden" name="Allowances" default="1"></element>
+      <element type="select" name="AllowancesType" label="Allowance Type">
+        <options>
+          <option value=""></option>
+          <option value="Allowance Type 1">Allowance Type 1</option>
+          <option value="Allowance Type 2">Allowance Type 2</option>
+          <option value="Allowance Type 3">Allowance Type 3</option>
+        </options>
+      </element>
+      <element type="text" name="AllowancesAmountUnits" label="Amount/Units"></element>
+      <!--<element type="text" name="AllowancesNetGross" label="Net/Gross"></element>-->
+      <element type="date" name="AllowancesValidFrom" label="Valid from:" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="AllowancesValidTo" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      
+      <element type="select" name="AllowancesType2" label="Allowance Type" >
+        <options>
+        <option value=""></option>
+        <option value="Allowance Type 1">Allowance Type 1</option>
+        <option value="Allowance Type 2">Allowance Type 2</option>
+        <option value="Allowance Type 3">Allowance Type 3</option>
+        </options>
+      </element>
+      <element type="text" name="AllowancesAmountUnits2" label="Amount/Units" ></element>
+      <!--<element type="text" name="AllowancesNetGross2" label="Net/Gross" ></element>-->
+      <element type="date" name="AllowancesValidFrom2" label="Valid from:" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="AllowancesValidTo2" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+
+      <element type="select" name="AllowancesType3" label="Allowance Type" >
+        <options>
+          <option value=""></option>
+          <option value="Allowance Type 1">Allowance Type 1</option>
+          <option value="Allowance Type 2">Allowance Type 2</option>
+          <option value="Allowance Type 3">Allowance Type 3</option>
+        </options>
+      </element>
+      <element type="text" name="AllowancesAmountUnits3" label="Amount/Units" ></element>
+      <!--<element type="text" name="AllowancesNetGross3" label="Net/Gross" ></element>-->
+      <element type="date" name="AllowancesValidFrom3" label="Valid from:"  format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="AllowancesValidTo3" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      
+      <!--4-->
+      <element type="select" name="AllowancesType4" label="Allowance Type" >
+        <options>
+          <option value=""></option>
+          <option value="Allowance Type 1">Allowance Type 1</option>
+          <option value="Allowance Type 2">Allowance Type 2</option>
+          <option value="Allowance Type 3">Allowance Type 3</option>
+        </options>
+      </element>
+      <element type="text" name="AllowancesAmountUnits4" label="Amount/Units" ></element>
+      <!--<element type="text" name="AllowancesNetGross4" label="Net/Gross" ></element>-->
+      <element type="date" name="AllowancesValidFrom4" label="Valid from:"  format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="AllowancesValidTo4" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+
+      <!--5-->
+      <element type="select" name="AllowancesType5" label="Allowance Type" >
+        <options>
+          <option value=""></option>
+          <option value="Allowance Type 1">Allowance Type 1</option>
+          <option value="Allowance Type 2">Allowance Type 2</option>
+          <option value="Allowance Type 3">Allowance Type 3</option>
+        </options>
+      </element>
+      <element type="text" name="AllowancesAmountUnits5" label="Amount/Units" ></element>
+      <!--<element type="text" name="AllowancesNetGross5" label="Net/Gross" ></element>-->
+      <element type="date" name="AllowancesValidFrom5" label="Valid from:"  format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="AllowancesValidTo5" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+
+      <element type="hidden" name="Deductions" default="1"></element>
+      <element type="select" name="DeductionsType" label="Deduction Type" >
+        <options>
+          <option value=""></option>
+          <option value="Deductions Type 1">Deductions Type 1</option>
+          <option value="Deductions Type 2">Deductions Type 2</option>
+          <option value="Deductions Type 3">Deductions Type 3</option>
+        </options>
+      </element>
+      <element type="text" name="DeductionsAmountUnits" label="Amount/Units" ></element>
+      <!--<element type="text" name="DeductionsNetGross" label="Net/Gross" ></element>-->
+      <element type="date" name="DeductionsValidFrom" label="Valid from:" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="DeductionsValidTo" label="Valid to:" default="31.12.9999" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+
+      <element type="select" name="DeductionsType2" label="Deduction Type" >
+        <options>
+          <option value=""></option>
+          <option value="Deductions Type 1">Deductions Type 1</option>
+          <option value="Deductions Type 2">Deductions Type 2</option>
+          <option value="Deductions Type 3">Deductions Type 3</option>
+        </options>
+      </element>
+      <element type="text" name="DeductionsAmountUnits2" label="Amount/Units" ></element>
+      <!--<element type="text" name="DeductionsNetGross2" label="Net/Gross" ></element>-->
+      <element type="date" name="DeductionsValidFrom2" label="Valid from:"  format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="DeductionsValidTo2" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      
+      <element type="select" name="DeductionsType3" label="Deduction Type" >
+        <options>
+          <option value=""></option>
+          <option value="Deductions Type 1">Deductions Type 1</option>
+          <option value="Deductions Type 2">Deductions Type 2</option>
+          <option value="Deductions Type 3">Deductions Type 3</option>
+        </options>
+      </element>
+      <element type="text" name="DeductionsAmountUnits3" label="Amount/Units" ></element>
+      <!--<element type="text" name="DeductionsNetGross3" label="Net/Gross" ></element>-->
+      <element type="date" name="DeductionsValidFrom3" label="Valid from:"  format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="DeductionsValidTo3" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="select" name="OneIKEABonusLevel" label="One IKEA Bonus Level">
+        <options>
+          <option value=""></option>
+          <option value="Level 1">Level 1</option>
+          <option value="Level 2">Level 2</option>
+          <option value="Level 3">Level 3</option>
+        </options>
+      </element>
+      
+      <!--4-->
+      <element type="select" name="DeductionsType4" label="Deduction Type" >
+        <options>
+          <option value=""></option>
+          <option value="Deductions Type 1">Deductions Type 1</option>
+          <option value="Deductions Type 2">Deductions Type 2</option>
+          <option value="Deductions Type 3">Deductions Type 3</option>
+        </options>
+      </element>
+      <element type="text" name="DeductionsAmountUnits4" label="Amount/Units" ></element>
+      <!--<element type="text" name="DeductionsNetGross4" label="Net/Gross" ></element>-->
+      <element type="date" name="DeductionsValidFrom4" label="Valid from:"  format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="DeductionsValidTo4" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="select" name="OneIKEABonusLevel" label="One IKEA Bonus Level">
+        <options>
+          <option value=""></option>
+          <option value="Level 1">Level 1</option>
+          <option value="Level 2">Level 2</option>
+          <option value="Level 3">Level 3</option>
+        </options>
+      </element>
+
+      <!--5-->
+      <element type="select" name="DeductionsType5" label="Deduction Type" >
+        <options>
+          <option value=""></option>
+          <option value="Deductions Type 1">Deductions Type 1</option>
+          <option value="Deductions Type 2">Deductions Type 2</option>
+          <option value="Deductions Type 3">Deductions Type 3</option>
+        </options>
+      </element>
+      <element type="text" name="DeductionsAmountUnits5" label="Amount/Units" ></element>
+      <!--<element type="text" name="DeductionsNetGross5" label="Net/Gross" ></element>-->
+      <element type="date" name="DeductionsValidFrom5" label="Valid from:"  format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="DeductionsValidTo5" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="select" name="OneIKEABonusLevel" label="One IKEA Bonus Level">
+        <options>
+          <option value=""></option>
+          <option value="Level 1">Level 1</option>
+          <option value="Level 2">Level 2</option>
+          <option value="Level 3">Level 3</option>
+        </options>
+      </element>
+      
+    </tab>
+
+  </fields>
+</form>

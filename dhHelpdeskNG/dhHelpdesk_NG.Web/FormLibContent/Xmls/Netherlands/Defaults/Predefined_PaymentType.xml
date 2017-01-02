@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<predefined>
+    <name>PaymentType</name>
+    <dependent>
+        <selected>Union Membership</selected>
+        <show>Recurring</show>
+    </dependent>
+    <dependent>
+        <selected>Staff Association membership</selected>
+        <show>Recurring</show>
+    </dependent>
+</predefined>
+

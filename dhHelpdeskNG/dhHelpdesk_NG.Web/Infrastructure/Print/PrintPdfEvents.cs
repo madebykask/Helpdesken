@@ -71,14 +71,14 @@ namespace DH.Helpdesk.Web.Infrastructure.Print
             {
                 using (var sr = new StringReader(this.header))
                 {
-                    this.headerElements = HTMLWorker.ParseToList(sr, new StyleSheet());
+                    //this.headerElements = HTMLWorker.ParseToList(sr, new StyleSheet());
                 }                
             }
             if (!string.IsNullOrEmpty(this.footer))
             {
                 using (var sr = new StringReader(this.footer))
                 {
-                    this.footerElements = HTMLWorker.ParseToList(sr, new StyleSheet());
+                    //this.footerElements = HTMLWorker.ParseToList(sr, new StyleSheet());
                 }                
             }
             base.OnOpenDocument(writer, document);

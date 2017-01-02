@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<options>
+  <option value=""></option>
+  <option value="Agreed long term unpaid leave">Agreed long term unpaid leave</option>
+  <option value="Agreed short term unpaid leave">Agreed short term unpaid leave</option>
+  <option value="Back from long term leave">Back from long term leave</option>
+  <option value="Chronic illness">Chronic illness</option>
+  <option value="Chronic illness - Pregnancy">Chronic illness - Pregnancy</option>
+  <option value="Compassionate Leave">Compassionate Leave</option>
+  <option value="Compassionate Leave - for father after childbirth">Compassionate Leave - for father after childbirth</option>
+  <option value="Holiday">Holiday</option>
+  <option value="Military service">Military service</option>
+  <option value="One-week extra paid leave">One-week extra paid leave</option>
+  <option value="Other">Other</option>
+  <option value="Paid Absence">Paid Absence</option>
+  <option value="Parental leave 100%">Parental leave 100%</option>
+  <option value="Parental leave 80%">Parental leave 80%</option>
+  <option value="Refresher training for military service">Refresher training for military service</option>
+  <option value="Self-declared illness">Self-declared illness</option>
+  <option value="Self-declared illness - Sick Child/Sick Nanny">Self-declared illness - Sick Child/Sick Nanny</option>
+  <option value="Sick leave">Sick leave</option>
+  <option value="Transferred to NAV">Transferred to NAV</option>
+</options>

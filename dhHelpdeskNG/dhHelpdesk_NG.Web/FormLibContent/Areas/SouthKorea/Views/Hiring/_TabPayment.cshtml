@@ -1,0 +1,212 @@
+﻿@model DH.Helpdesk.EForm.FormLib.Models.FormModel
+@using DH.Helpdesk.EForm.FormLib;
+@using DH.Helpdesk.EForm.FormLib.Models;
+<div class="tab-pane" id="Payment">
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Basic pay")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Payrollcategory")</td>
+                    <td>@Model.Element("Payrollcategory")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("JobGrade")</td>
+                    <td>@Model.Element("JobGrade")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("JobLevel")</td>
+                    <td>@Model.Element("JobLevel")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Basicpayamount")</td>
+                    <td>@Model.Element("Basicpayamount")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ExtraBasicPayAmount")</td>
+                    <td>@Model.Element("ExtraBasicPayAmount")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Paidper")</td>
+                    <td>@Model.Element("Paidper")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Allowances")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AllowancesType")</td>
+                    <td>@Model.Element("AllowancesType")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AllowanceAmountUnits")</td>
+                    <td>@Model.Element("AllowanceAmountUnits")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AllowancePaidper")</td>
+                    <td>@Model.Element("AllowancePaidper")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AllowanceValidfrom")</td>
+                    <td>@Model.Element("AllowanceValidfrom")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AllowanceValidto")</td>
+                    <td>@Model.Element("AllowanceValidto")</td>
+                </tr>
+
+
+
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
+                {
+                    <tr class="allowance@(i.ToString())" id="allowance@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h4>@Model.Translate("Allowances") @i.ToString()</h4>
+                        </td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AllowancesType" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AllowancesType" + i.ToString())
+                        </td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AllowanceAmountUnits" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AllowanceAmountUnits" + i.ToString())</td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AllowancePaidper" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AllowancePaidper" + i.ToString())</td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AllowanceValidfrom" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AllowanceValidfrom" + i.ToString())</td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AllowanceValidto" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AllowanceValidto" + i.ToString())</td>
+                    </tr>
+                }
+                <tr id="addAllowanceTrr">
+                    <td colspan="2">
+                        @Model.Element("Allowances")
+                        <a id="addAllowance" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Allowance")</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="span6">
+
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Deductions")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionType")</td>
+                    <td>@Model.Element("DeductionType")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionAmountUnits")</td>
+                    <td>@Model.Element("DeductionAmountUnits")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionDeductedper")</td>
+                    <td>@Model.Element("DeductionDeductedper")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionValidfrom")</td>
+                    <td>@Model.Element("DeductionValidfrom")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionValidto")</td>
+                    <td>@Model.Element("DeductionValidto")</td>
+                </tr>
+
+
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
+                {
+                    <tr class="deduction@(i.ToString())" id="deduction@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h4>@Model.Translate("Deductions") @i.ToString()</h4>
+                        </td>
+                    </tr>
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionType" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionType" + i.ToString())</td>
+                    </tr>@*
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionsPaymentType" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionsPaymentType" + i.ToString())</td>
+                    </tr>*@
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionAmountUnits" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionAmountUnits" + i.ToString())</td>
+                    </tr>
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionDeductedper" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionDeductedper" + i.ToString())</td>
+                    </tr>
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionValidfrom" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionValidfrom" + i.ToString())</td>
+                    </tr>
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionValidto" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionValidto" + i.ToString())</td>
+                    </tr>
+                }
+                <tr id="addDeductionTrr">
+                    <td colspan="2">
+                        @Model.Element("Deductions")
+                        <a id="addDeduction" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Deduction")</a></td>
+                </tr>
+
+
+
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Bonus Eligibility")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("OneIKEABonusLevel")</td>
+                    <td>@Model.Element("OneIKEABonusLevel")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("DC Pension")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Participantstatus")</td>
+                    <td>@Model.Element("Participantstatus")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Calculationstartdate")</td>
+                    <td>@Model.Element("Calculationstartdate")</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+

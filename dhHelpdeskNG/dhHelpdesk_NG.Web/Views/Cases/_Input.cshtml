@@ -137,18 +137,22 @@
                 }
 
                 @if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
-        {
-            if (Model.DynamicCase.ViewMode == 0)
-            {
-                <li>
-                    <a href="#dh-form-area" id="loadContainer" class="eform">@(Translation.Get(Model.DynamicCase.FormName))</a>
-                </li>
+                {
+                    if (Model.DynamicCase.ViewMode == 0)
+                    {
+                        <li>
+                            <a href="#dh-form-area" id="loadContainer" class="eform">@(Translation.Get(Model.DynamicCase.FormName))</a>
+                        </li>
+                        @*<li>
+                            <a href="#e-form-area" class="eform"> Test </a>
+                        </li>*@
+                       
                     }
                     else if (Model.DynamicCase.ViewMode == 1)
                     {
-                <li class="dh-modal">
-                    <a id="openContainer">@(Translation.Get(Model.DynamicCase.FormName))</a>
-                </li>
+                        <li class="dh-modal">
+                            <a id="openContainer">@(Translation.Get(Model.DynamicCase.FormName))</a>
+                        </li>
                     }
                 }
 
@@ -2206,7 +2210,17 @@
                 @if (Model.DynamicCase != null && Model.DynamicCase.ViewMode == 0)
                 {
                     <div id="dh-form-area" class="tab-pane tab-pane-border">
+
                     </div>
+                    @*<div id="e-form-area" class="tab-pane tab-pane-border">
+                        <iframe sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+                                src="/netherlands/hiring/edit/95392/?UserId=mg&language=EN"
+                                style="border: 0; width:100%;" scrolling="no">
+                        </iframe>
+
+                        <a onclick="loadMyPage('/Cases/AdvancedSearch')" class="btn"> Load Page</a>
+                        <div id="eform-Holder"></div>
+                    </div>*@
                 }
 
                 @if (Model.IsItParentCase())
@@ -2258,6 +2272,11 @@
 
 
 <script type="text/javascript">
+
+    function loadMyPage(uri){
+        alert(uri);
+        $("#eform-Holder").load(uri);
+    }
 
     var validator = $("#target").validate({
         ignore: "",

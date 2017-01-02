@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<predefined>
+  <name>PayrollPayscale</name>
+  <!--<dependent>
+    <selected>Hourly</selected>
+    <show>150B - Hourly Location Allow, 150C - Hourly FLT Skills (Fork Lift Truck Allowance), 150C - Hourly FLT Skills (Fork Lift Truck Allowance Milton Keynes), 150D - Hourly Kitchen Skills, 150D - Hourly Kitchen Skills London, 150D - Hourly Kitchen Skills Edinburgh, 150E - Hourly IKEA1 Skills, 150F - Hourly IKEA2 Skills, 150G - Hourly Advanced Skills, 150G - Hourly Advanced Skills Cardiff, 150G - Hourly Advanced Skills Edinburgh, 150H - Hourly CDP Skills, 150P - NIght Premium, 150P - NIght Premium London 1, 150P - NIght Premium London 2, 150P - NIght Premium London 3, 150R - High Performer 11, 150W - Work Experience, 150Y - High Performer 12, 150Z - High Performer 13, 151X - High Performer 14, 150Y - Hourly High Performer, 150R - Hourly Good Example, 150H - Hourly CDP Skills, 150Q - Hrly Foundation Skills, 150G - Hourly Advanced Skills, 150X - Hourly AHP, 150J - Hourly First Aid, 150N - Hourly Pallet Resue, 150I - Hourly ACE, 150O - Hourly Shunter Allow, 150L - Hourly Manual Hand, 150K - Hourly Loaders, 150S - Hourly Day, 150M - Hourly MHE/H&amp;S Resp, 150V - Hourly Responsibility, 150U - Night Premium Dist, 340V - Travel Allowance, 360B - Commission, 340C - Cash Adjustment, 340T - Stand By Allowance, 4806 - NTG Relocation Allow, 340O - Relocation Allowance, 4805 - NTG Housing Costs, AWEM - SMP AWE Correction, AWEP - SPP AWE Correction, AWES - SSP AWE Correction, 300B - Competance Pay, 300N - NTG Double Housing, 300M - NTG Rent Allowance, 300D - First Aid Allowance</show>
+  </dependent>
+  <dependent>
+    <selected>Salaried</selected>
+    <show>100B - Salary Location Allow, 100D - Salary Advanced, 100E - Salary Day Shift, 100G - Salary Kitchen Skills, 100H - Salary Work IKEA1 Skills, 100I - Salary Work IKEA2 Skills, 100N - SalaryHighPerformer FY13, 100O - Salary Day Ann Allow, 100P - London Living Allowance, 100Q - Weekend Working Premium, 100R - Unsocial Hours Premium, 100S - SalaryHighPerformer FY14, 300C - Electricity Home Workers, 100F - Salary FLT Skills, 300E - Housing Allowance, 340V - Travel Allowance, 350F - Adj-Salary FLT Skills, 350M - Adj-Housing Allowance, 350A - Adj-Monthly Salary, 340C - Cash Adjustment, 340T - Stand By Allowance, 350R - Adj-Rent Allowance, 350C - Adj-Responsibility Allow, 4806 - NTG Relocation Allow, 340O - Relocation Allowance, 300G - Night Shift, 4805 - NTG Housing Costs, 300I - Rent Allowance, 100C - Responsibility Allow, 100J - Secondment, AWEM - SMP AWE Correction, AWEP - SPP AWE Correction, AWES - SSP AWE Correction, 300A - Car Allowance, 300B - Competance Pay, 300D - First Aid Allowance, 300F - Mortgage Subsidy, 300N - NTG Double Housing, 300M - NTG Rent Allowance</show>
+  </dependent>
+  <dependent>
+    <selected>Salaried Management</selected>
+    <show>100B - Salary Location Allow, 100D - Salary Advanced, 100E - Salary Day Shift, 100G - Salary Kitchen Skills, 100H - Salary Work IKEA1 Skills, 100I - Salary Work IKEA2 Skills, 100N - SalaryHighPerformer FY13, 100O - Salary Day Ann Allow, 100P - London Living Allowance, 100Q - Weekend Working Premium, 100R - Unsocial Hours Premium, 100S - SalaryHighPerformer FY14, 300C - Electricity Home Workers, 100F - Salary FLT Skills, 300E - Housing Allowance, 340V - Travel Allowance, 350F - Adj-Salary FLT Skills, 350M - Adj-Housing Allowance, 350A - Adj-Monthly Salary, 340C - Cash Adjustment, 340T - Stand By Allowance, 350R - Adj-Rent Allowance, 350C - Adj-Responsibility Allow, 4806 - NTG Relocation Allow, 340O - Relocation Allowance, 300G - Night Shift, 4805 - NTG Housing Costs, 300I - Rent Allowance, 100C - Responsibility Allow, 100J - Secondment, AWEM - SMP AWE Correction, AWEP - SPP AWE Correction, AWES - SSP AWE Correction, 300A - Car Allowance, 300B - Competance Pay, 300D - First Aid Allowance, 300F - Mortgage Subsidy, 300N - NTG Double Housing, 300M - NTG Rent Allowance</show>
+  </dependent>
+  <dependent>
+    <selected>Salaried Senior Management</selected>
+    <show>100B - Salary Location Allow, 100D - Salary Advanced, 100E - Salary Day Shift, 100G - Salary Kitchen Skills, 100H - Salary Work IKEA1 Skills, 100I - Salary Work IKEA2 Skills, 100N - SalaryHighPerformer FY13, 100O - Salary Day Ann Allow, 100P - London Living Allowance, 100Q - Weekend Working Premium, 100R - Unsocial Hours Premium, 100S - SalaryHighPerformer FY14, 300C - Electricity Home Workers, 100F - Salary FLT Skills, 300E - Housing Allowance, 340V - Travel Allowance, 350F - Adj-Salary FLT Skills, 350M - Adj-Housing Allowance, 350A - Adj-Monthly Salary, 340C - Cash Adjustment, 340T - Stand By Allowance, 350R - Adj-Rent Allowance, 350C - Adj-Responsibility Allow, 4806 - NTG Relocation Allow, 340O - Relocation Allowance, 300G - Night Shift, 4805 - NTG Housing Costs, 300I - Rent Allowance, 100C - Responsibility Allow, 100J - Secondment, AWEM - SMP AWE Correction, AWEP - SPP AWE Correction, AWES - SSP AWE Correction, 300A - Car Allowance, 300B - Competance Pay, 300D - First Aid Allowance, 300F - Mortgage Subsidy, 300N - NTG Double Housing, 300M - NTG Rent Allowance</show>
+  </dependent>-->
+
+  <dependent>
+    <selected>Hourly</selected>
+    <show>STARTIE,STARTER,FOUNDIE,FOUNDATION</show>
+  </dependent>
+  <dependent>
+    <selected>Salaried</selected>
+    <show>10,11,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,99</show>
+  </dependent>
+  <dependent>
+    <selected>Salaried Management</selected>
+    <show>10,11,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,99</show>
+  </dependent>
+  <dependent>
+    <selected>Salaried Senior Management</selected>
+    <show>10,11,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,99</show>
+  </dependent>
+</predefined>

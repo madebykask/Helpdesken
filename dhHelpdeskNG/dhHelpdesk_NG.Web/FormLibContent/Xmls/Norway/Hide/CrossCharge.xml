@@ -1,0 +1,10 @@
+﻿<hides>
+  <hide>
+    <hideVal></hideVal>
+    <hideSelector type="class">WorkedOrgData</hideSelector>
+  </hide>
+  <hide>
+    <hideVal>No</hideVal>
+    <hideSelector type="class">WorkedOrgData</hideSelector>
+  </hide>
+</hides>

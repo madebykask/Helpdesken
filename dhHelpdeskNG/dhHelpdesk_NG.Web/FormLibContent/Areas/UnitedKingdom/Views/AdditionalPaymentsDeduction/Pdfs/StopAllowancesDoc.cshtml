@@ -1,0 +1,41 @@
+﻿@model DH.Helpdesk.EForm.FormLib.Models.FormModel
+@using DH.Helpdesk.EForm.FormLib;
+@using DH.Helpdesk.EForm.FormLib.Models;
+@using DH.Helpdesk.EForm.FormLib.Pdfs;
+@using System.Globalization;
+@using DH.Helpdesk.EForm.Model.Entities;
+@{
+    Layout = null;
+    Model.Language = "en";
+}
+<!DOCTYPE html>
+<html>
+<body>
+    <div>
+       @* <table style="font-family: Verdana; font-size: 11px; width: 100%;" border="0">
+            <tr style="text-align: right;">
+                <td>@string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:d MMMMMM yyyy}", DateTime.Now)</td>
+            </tr>
+        </table>
+        <p style="text-align: left; font-family: Verdana; font-size: 11px;">
+            <strong>Private & Confidential</strong><br />
+            @Html.Partial("_HeaderAddress", Model)*@
+        <p style="@UnitedKingdomPdfPage.StyleValue()">
+            Dear @Model.GetDocumentAnswer("FirstName", true),<br />
+            <br />
+
+            
+                <text>We are writing to confirm that you will no longer receive a @Model.GetDocumentAnswer("AllowancesType" + Model.MultiNr).</text>
+                <br />
+                <br />
+                <text>This allowance will cease from @Model.GetDocumentAnswer("AllowancesValidFrom" + Model.MultiNr, true).</text>
+                <br />
+                <br />
+            
+            All other Terms and Conditions remain the same. IKEA reserves the right to vary terms and conditions of employment subject to consultation and reasonable notice.
+        </p>
+
+        <endpage />
+    </div>
+</body>
+</html>

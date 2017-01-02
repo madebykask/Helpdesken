@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<predefined>
+  <name>AllowancesType</name>
+  <dependent>
+    <selected>Hourly</selected>
+    <show>Car Allowance,Cash Adjustment,Commission,Competance Pay,Fork Lift Truck Allowance,Housing Allowance,IKEA1 Skills,IKEA2 Skills,Kitchen Skills,Mortgage Subsidy,Night Shift,NTG Double Housing,NTG Housing Costs,NTG Relocation Allow,NTG Rent Allowance,Power Stacker,Redundancy,Relocation Allowance,Rent Allowance,Responsibility Allow,Secondment,Stand By Allowance,</show>
+  </dependent>
+  <dependent>
+    <selected>Salaried</selected>
+    <show>Car Allowance,Cash Adjustment,Commission,Competance Pay,Fork Lift Truck Allowance,Housing Allowance,IKEA1 Skills,IKEA2 Skills,Kitchen Skills,Mortgage Subsidy,Night Shift,NTG Double Housing,NTG Housing Costs,NTG Relocation Allow,NTG Rent Allowance,Power Stacker,Redundancy,Relocation Allowance,Rent Allowance,Responsibility Allow,Secondment,Stand By Allowance,</show>
+  </dependent>
+  <dependent>
+    <selected>Salaried Management</selected>
+    <show>Car Allowance,Cash Adjustment,Commission,Competance Pay,Fork Lift Truck Allowance,Housing Allowance,IKEA1 Skills,IKEA2 Skills,Kitchen Skills,Mortgage Subsidy,Night Shift,NTG Double Housing,NTG Housing Costs,NTG Relocation Allow,NTG Rent Allowance,Power Stacker,Redundancy,Relocation Allowance,Rent Allowance,Responsibility Allow,Secondment,Stand By Allowance,</show>
+  </dependent>
+  <dependent>
+    <selected>Salaried Senior Management</selected>
+    <show>Car Allowance,Cash Adjustment,Commission,Competance Pay,Fork Lift Truck Allowance,Housing Allowance,IKEA1 Skills,IKEA2 Skills,Kitchen Skills,Mortgage Subsidy,Night Shift,NTG Double Housing,NTG Housing Costs,NTG Relocation Allow,NTG Rent Allowance,Power Stacker,Redundancy,Relocation Allowance,Rent Allowance,Responsibility Allow,Secondment,Stand By Allowance,</show>
+  </dependent>
+</predefined>

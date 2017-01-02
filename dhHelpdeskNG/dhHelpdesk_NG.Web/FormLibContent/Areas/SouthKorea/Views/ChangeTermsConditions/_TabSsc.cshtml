@@ -1,0 +1,20 @@
+﻿@model DH.Helpdesk.EForm.FormLib.Models.FormModel
+@using DH.Helpdesk.EForm.FormLib;
+@using DH.Helpdesk.EForm.FormLib.Models;
+
+<div class="tab-pane" id="SSCUseOnly">
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Annualleaveprorata")</td>
+                    <td>@Model.Element("Annualleaveprorata")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Annualleaveentitlement")</td>
+                    <td>@Model.Element("Annualleaveentitlement")</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

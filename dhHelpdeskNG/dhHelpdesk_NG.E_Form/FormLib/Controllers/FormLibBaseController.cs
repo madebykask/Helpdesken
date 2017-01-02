@@ -570,66 +570,83 @@ namespace DH.Helpdesk.EForm.FormLib.Controllers
             if(!string.IsNullOrEmpty(filterContext.RequestContext.HttpContext.Request.QueryString["clearsession"]))
                 Session.Clear();
 
-            if(!FormLibUtils.IsSelfService())
+            if (!string.IsNullOrEmpty(filterContext.RequestContext.HttpContext.Request.QueryString["userId"]))
+                FormLibSessions.User = null;
+
+            /*New authorize*/
+            if (FormLibSessions.User == null)
             {
-                if(!string.IsNullOrEmpty(filterContext.RequestContext.HttpContext.Request.QueryString["userId"]))
-                    FormLibSessions.User = null;
+                var identity = User.Identity.Name;
+                var queryStringUserId = filterContext.RequestContext.HttpContext.Request.QueryString["userId"];
 
-                if(FormLibSessions.User == null)
-                {
-                    var identity = User.Identity.Name;
-                    var queryStringUserId = filterContext.RequestContext.HttpContext.Request.QueryString["userId"];
+                var user = _userRepository.Get(identity, !string.IsNullOrEmpty(queryStringUserId) ? queryStringUserId : null);
 
-                    var user = _userRepository.Get(identity, !string.IsNullOrEmpty(queryStringUserId) ? queryStringUserId : null);
-
-                    if(user != null)
-                        FormLibSessions.User = user;
-                    else
-                        throw new HttpException(401, "Unauthorized access");
-                }
-            }
-            else
-            {
-                // If we self service assume that the user is a line manager...
-
-                if(FormLibSessions.CurrentUserIdentity == null && !string.IsNullOrEmpty(FormLibSessions.CurrentUserIdentity.EmployeeNumber))
-                {
-                    FormLibSessions.UserHasAccess = false;
-                    filterContext.Result = new RedirectResult(Url.Action("Index", "Error", new { area = "", message = "You don't have access to the portal! ", errorCode = 401 }));
-                }
-
-                // this is set from selfservice...
-                if(FormLibSessions.CustomerId > 0)
-                {
-                    var config = (DH.Helpdesk.EForm.FormLib.Configurable.AccessManagment)System.Configuration.ConfigurationManager.GetSection("formLibConfigurable/accessManagment");
-
-                    var country = config.Countries.Where(x => x.HelpdeskCustomerId == FormLibSessions.CustomerId.ToString()).FirstOrDefault();
-
-                    if(country == null || !FormLibSessions.CurrentUserIdentity.EmployeeNumber.StartsWith(country.EmployeePrefix))
-                    {
-                        FormLibSessions.UserHasAccess = false;
-                        FormLibSessions.CurrentCoWorkers = null;
-                        filterContext.Result = new RedirectResult(Url.Action("Index", "Error", new { area = "", message = "You don't have access to the portal! (user is not manager for country)", errorCode = 103 }));
-                    }
-                }
-
-                if(FormLibSessions.User == null)
-                {
-                    var user = new Model.Entities.User();
-
-                    regUserId = FormLibSessions.CurrentUserIdentity.UserId;
-
-                    FormLibSessions.CurrentSystemUser = regUserId;
-                    user.FirstName = FormLibSessions.CurrentUserIdentity.FirstName;
-                    user.Surname = FormLibSessions.CurrentUserIdentity.LastName;
-
-                    user.Id = 0;
-                    user.RegUserId = regUserId;
-                    user.WorkingGroups = new List<Model.Entities.WorkingGroup>();
-                    user.WorkingGroups.Add(new Model.Entities.WorkingGroup { Id = -1, Name = "Line Manager" });
+                if (user != null)
                     FormLibSessions.User = user;
-                }
+                else
+                    throw new HttpException(401, "Unauthorized access");
             }
+
+            //if (!FormLibUtils.IsSelfService())
+            //{
+            //    if(!string.IsNullOrEmpty(filterContext.RequestContext.HttpContext.Request.QueryString["userId"]))
+            //        FormLibSessions.User = null;
+
+            //    if(FormLibSessions.User == null)
+            //    {
+            //        var identity = User.Identity.Name;
+            //        var queryStringUserId = filterContext.RequestContext.HttpContext.Request.QueryString["userId"];
+
+            //        var user = _userRepository.Get(identity, !string.IsNullOrEmpty(queryStringUserId) ? queryStringUserId : null);
+
+            //        if(user != null)
+            //            FormLibSessions.User = user;
+            //        else
+            //            throw new HttpException(401, "Unauthorized access");
+            //    }
+            //}
+            //else
+            //{
+            //    // If we self service assume that the user is a line manager...
+
+            //    if(FormLibSessions.CurrentUserIdentity == null && !string.IsNullOrEmpty(FormLibSessions.CurrentUserIdentity.EmployeeNumber))
+            //    {
+            //        FormLibSessions.UserHasAccess = false;
+            //        filterContext.Result = new RedirectResult(Url.Action("Index", "Error", new { area = "", message = "You don't have access to the portal! ", errorCode = 401 }));
+            //    }
+
+            //    // this is set from selfservice...
+            //    if(FormLibSessions.CustomerId > 0)
+            //    {
+            //        var config = (DH.Helpdesk.EForm.FormLib.Configurable.AccessManagment)System.Configuration.ConfigurationManager.GetSection("formLibConfigurable/accessManagment");
+
+            //        var country = config.Countries.Where(x => x.HelpdeskCustomerId == FormLibSessions.CustomerId.ToString()).FirstOrDefault();
+
+            //        if(country == null || !FormLibSessions.CurrentUserIdentity.EmployeeNumber.StartsWith(country.EmployeePrefix))
+            //        {
+            //            FormLibSessions.UserHasAccess = false;
+            //            FormLibSessions.CurrentCoWorkers = null;
+            //            filterContext.Result = new RedirectResult(Url.Action("Index", "Error", new { area = "", message = "You don't have access to the portal! (user is not manager for country)", errorCode = 103 }));
+            //        }
+            //    }
+
+            //    if(FormLibSessions.User == null)
+            //    {
+            //        var user = new Model.Entities.User();
+
+            //        regUserId = FormLibSessions.CurrentUserIdentity.UserId;
+
+            //        FormLibSessions.CurrentSystemUser = regUserId;
+            //        user.FirstName = FormLibSessions.CurrentUserIdentity.FirstName;
+            //        user.Surname = FormLibSessions.CurrentUserIdentity.LastName;
+
+            //        user.Id = 0;
+            //        user.RegUserId = regUserId;
+            //        user.WorkingGroups = new List<Model.Entities.WorkingGroup>();
+            //        user.WorkingGroups.Add(new Model.Entities.WorkingGroup { Id = -1, Name = "Line Manager" });
+            //        FormLibSessions.User = user;
+            //    }
+            //}
 
             base.OnAuthorization(filterContext);
         }

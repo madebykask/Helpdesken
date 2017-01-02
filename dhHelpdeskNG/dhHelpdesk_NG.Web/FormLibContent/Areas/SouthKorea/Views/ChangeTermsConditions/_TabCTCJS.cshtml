@@ -1,0 +1,530 @@
+﻿@model DH.Helpdesk.EForm.FormLib.Models.FormModel
+@using DH.Helpdesk.EForm.FormLib;
+@using DH.Helpdesk.EForm.FormLib.Models;
+
+
+@{
+       
+    const string ContractType = "Permanent";
+    
+}
+
+<script>
+
+    var lockedbyUserGroup = document.getElementById('LockedByUserGroup').getAttribute('status');
+
+    if ("@Model.ReadOnlyTab("#Payment")" == 'False' && lockedbyUserGroup == 'False') {
+
+
+        $(function () {
+
+
+            $("#NewBusinessUnit").change(function () {
+
+                setTimeout(function () { setDefaultPrimarySite() }, 30);
+
+                setTimeout(function () { GetXML('Predefined_BusinessUnit_PositionTitle.xml', narrowDownPositionTitle); }, 1);
+                //setTimeout(function () { GetXML('Predefined_BusinessUnit_JobTitle.xml', narrowDownJobTitle); }, 1);
+            });
+
+        });
+
+    
+
+        function setPaymentDatePickersBehavior() {
+
+            $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,#date_AllowancesValidFrom4,#date_AllowancesValidFrom5,' +
+            '#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3,#date_DeductionsValidFrom4,#date_DeductionsValidFrom5,#date_CalculationStartDate').not(".disabled").datepicker('destroy');
+
+            var startDate = $('#ChangeValidFrom').val();
+            var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+            var dStart = APIGlobal.DateTime.parseDate(startDate, format);
+            var forcePicker = new Date(dStart.getFullYear(), dStart.getMonth(), dStart.getDate(), 0, 0, 0, 0);
+            $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,#date_AllowancesValidFrom4,#date_AllowancesValidFrom5,' +
+                '#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3,#date_DeductionsValidFrom4,#date_DeductionsValidFrom5,#date_CalculationStartDate').not(".disabled").datepicker(
+            {
+                onRender: function (ev) {
+                    return ev.valueOf() < forcePicker.valueOf() ? 'disabled' : '';
+                },
+            });
+
+            ////set value to the datepicker
+            $('#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3,#date_DeductionsValidFrom4,#date_DeductionsValidFrom5').not(".disabled").datepicker("setValue", forcePicker);
+            $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,#date_AllowancesValidFrom4,#date_AllowancesValidFrom5,#date_CalculationStartDate').not(".disabled").datepicker("setValue", forcePicker);
+            $('#date_ChangeValidFrom').datepicker("setValue", startDate);
+
+            $('#AllowancesValidFrom,#AllowancesValidFrom2,#AllowancesValidFrom3,#AllowancesValidFrom4,#AllowancesValidFrom5,' +
+      '#DeductionsValidFrom,#DeductionsValidFrom2,#DeductionsValidFrom3,#DeductionsValidFrom4,#DeductionsValidFrom5,#CalculationStartDate').val(startDate);
+        }
+
+        // setPaymentDatePickersBehavior();
+
+        $('#date_ChangeValidFrom').on('changeDate', function (ev) {
+            setPaymentDatePickersBehavior();
+        }).data('datepicker');
+
+        $('#ChangeValidFrom').change(function () {
+            setPaymentDatePickersBehavior();
+        });
+
+
+
+        $('#ChangeValidFrom').not(".disabled").change(function () {
+            SetProbationEndDate($('#ProbationPeriod').val());       
+        });
+        $('#ProbationPeriod').change(function () {
+            SetProbationEndDate($(this).val());
+        });
+
+        var SetProbationEndDate = function (value) {
+            var probationEndDate = $('#Probationenddate');
+            if (value == 'Yes') {
+                var sStart = $('#ChangeValidFrom').val();
+                var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+                var dStart = APIGlobal.DateTime.parseDate(sStart, format);
+
+                var endDate = new Date(dStart.getFullYear(), dStart.getMonth() + 3, dStart.getDate() - 1, 0, 0, 0, 0);
+                var visibleDate = APIGlobal.DateTime.formatDate(endDate, format);
+                probationEndDate.val(visibleDate.toString());
+            }
+            else {
+                probationEndDate.val("");
+            }
+        };
+
+
+        $('#DeductionsValidFrom,#DeductionsValidFrom2,#DeductionsValidFrom3,#DeductionsValidFrom4,#DeductionsValidFrom5').change(function () {
+
+            $('#date_' + $(this).attr("id")).datepicker("setValue", $(this).val());
+        });
+
+        $('#AllowancesValidFrom,#AllowancesValidFrom2,#AllowancesValidFrom3,#AllowancesValidFrom4,#AllowancesValidFrom5').change(function () {
+
+            $('#date_' + $(this).attr("id")).datepicker("setValue", $(this).val());
+        });
+
+        //sg : Week 1-2016 order #53881
+        $("#ReportsToLineManager").change(function () {
+            //SetDefaultTECApprover();
+        });
+
+        $("#EmploymentCategory").change(function () {
+
+            setEmployeeBehavior($(this).val());
+        });
+
+        //var SetDefaultTECApprover = function () {
+        //    var LineManager;
+        //    LineManager = $('#ReportsToLineManager').val();
+
+        //    if ($('#TECapprover')[0].selectize) {
+        //        $('#TECapprover')[0].selectize.setValue(LineManager);
+        //    }
+        //    else {
+        //        $('#TECapprover').val(LineManager);
+        //    }
+        //}
+
+        $("#ContractedHours").change(function () {
+            GetXML('default_AnnualLeaveEntitlement.xml', SetDefaultAnnualLeave);
+            SetContractType();
+        });
+        var SetContractType = function () {
+            if ($('#ContractedHours').val() < 40) {
+                $('#ContractType').val('Part time')
+            }
+            else {
+                $('#ContractType').val('Full Time')
+            }
+        }
+
+        //var SetDefaultCompany = function () {
+
+        //    if ($("#Company option").length == 2) {
+        //        $("#Company option").eq(1).attr('selected', true);
+        //        $("#Company").change();
+        //    }
+        //}
+
+       
+       
+        $("#NewBusinessUnit").change(function () {
+            setDefaultPrimarySite();
+        });
+
+        var setDefaultPrimarySite = function () {
+
+            var bu = $("#NewBusinessUnit").text();
+
+            $("#Primarysite").val(bu)
+        }
+
+        $("#NewDepartment").change(function () {
+            GetXML('default_costcentre.xml', SetDefaultCostCentre);
+        });
+
+        $("#PositionTitle").change(function () {
+            GetXML('default_jobtitle.xml', SetDefaultJobTitle);
+        });
+
+        function narrowDownPositionTitle(xml) {
+            //////////
+            //narrowDownJobTitle:
+            //Adds Jobtitles on selected Function
+            //////////
+
+            var show = ''
+            var bus = '';
+
+
+            if (document.getElementById('NewBusinessUnit')) {
+                bus = $("#NewBusinessUnit option:selected").text();
+            }
+
+
+            var jobtitle_value;
+            jobtitle_value = $('#PositionTitle').val();
+
+            $('#PositionTitle').val("");
+
+            var selectize_tags = $("#PositionTitle")[0].selectize
+            selectize_tags.clearOptions();
+
+
+
+            $(xml).find('dependent').each(function () {
+
+
+                var $sel = $(this);
+                show = '';
+
+                var businessunit = $sel.find('selected').text();
+
+                show = $sel.find('show').text();
+
+                if (businessunit == bus) {
+
+                    if (show != '') {
+
+                        show = ' ,' + show;
+
+                        //temp, replace spaces that occours in the beginning of comma separation.
+                        show = show.replace(/\, /g, ",");
+
+                        var optionsarray = show.split(',');
+                        optionsarray.unshift('');
+
+                        //TEMP for Steering Group_Doncaster, Sales (problem with commas in the name) so we use  #
+                        if (show.indexOf("#") > -1) {
+                            $.each(optionsarray, function (i) {
+                                optionsarray[i] = optionsarray[i].replace(/\#/g, ",");
+                            });
+                        }
+
+                        var items = optionsarray.map(function (x) { return { text: x, value: x }; });
+                  
+                        selectize_tags.addOption(items);
+
+
+                        if (jobtitle_value != '') {
+                            selectize_tags.setValue(jobtitle_value);
+
+                        }
+                        else
+                            selectize_tags.setValue('');
+                        return;
+                    }
+                }
+            });
+        }
+
+
+        function narrowDownJobTitle(xml) {
+            //////////
+            //narrowDownJobTitle:
+            //Adds Jobtitles on selected Function
+            //////////
+
+            var show = ''
+            var bus = '';
+
+
+            if (document.getElementById('NewBusinessUnit')) {
+                bus = $("#NewBusinessUnit option:selected").text();
+            }
+
+
+            var jobtitle_value;
+            jobtitle_value = $('#JobTitle').val();
+
+            $('#JobTitle').val("");
+
+            var selectize_tags = $("#JobTitle")[0].selectize
+            selectize_tags.clearOptions();
+
+
+
+            $(xml).find('dependent').each(function () {
+
+
+                var $sel = $(this);
+                show = '';
+
+                var businessunit = $sel.find('selected').text();
+
+                show = $sel.find('show').text();
+
+                if (businessunit == bus) {
+
+                    if (show != '') {
+
+                        show = ' ,' + show;
+
+                        //temp, replace spaces that occours in the beginning of comma separation.
+                        show = show.replace(/\, /g, ",");
+
+                        var optionsarray = show.split(',');
+                        optionsarray.unshift('');
+
+                        //TEMP for Steering Group_Doncaster, Sales (problem with commas in the name) so we use  #
+                        if (show.indexOf("#") > -1) {
+                            $.each(optionsarray, function (i) {
+                                optionsarray[i] = optionsarray[i].replace(/\#/g, ",");
+                            });
+                        }
+
+                        var items = optionsarray.map(function (x) { return { text: x, value: x }; });
+
+                        selectize_tags.addOption(items);
+
+
+                        if (jobtitle_value != '') {
+                            selectize_tags.setValue(jobtitle_value);
+
+                        }
+                        else
+                            selectize_tags.setValue('');
+                        return;
+                    }
+                }
+            });
+        }
+
+
+        var SetDefaultCostCentre = function (xml) {
+            var functiondepartment;
+            functiondepartment = $("#NewServiceArea option:selected").text() + "_" + $("#NewDepartment option:selected").text();
+            $(xml).find('dependent').each(function () {
+                var $sel = $(this);
+                show = '';
+
+                var department = $sel.find('selected').text();
+
+                show = $sel.find('show').text();
+
+                if (department == functiondepartment) {
+
+                    if (show != '') {
+                        var n = show.indexOf("#");
+
+                        if (n == -1) {
+                            if ($('#CostCentre')[0].selectize) {
+                                $('#CostCentre')[0].selectize.setValue(show);
+                            }
+                            else {
+                                $('#CostCentre').val(show);
+                            }
+                        }
+                        else {
+                            var res = show.substring(0, n);
+                            if ($('#CostCentre')[0].selectize) {
+                                $('#CostCentre')[0].selectize.setValue(res);
+                            }
+                            else {
+                                $('#CostCentre').val(show);
+                            }
+                        }
+                        return;
+                    }
+                }
+            })
+        }
+
+        var SetDefaultJobTitle = function (xml) {
+            var positiontitle;
+            positiontitle = $("#PositionTitle").val();
+            $(xml).find('dependent').each(function () {
+                var $sel = $(this);
+                show = '';
+
+                var jobtitle = $sel.find('selected').text();
+
+                show = $sel.find('show').text();
+
+                if (jobtitle == positiontitle) {
+                    if (show != '') {
+                        var n = show.indexOf("#");
+
+                        if (n == -1) {
+
+                            $('#JobTitle')[0].selectize.setValue(show);
+                        }
+                        else {
+                            var res = show.substring(0, n);
+
+                            $('#JobTitle')[0].selectize.setValue(res);
+                        }
+                        return;
+                    }
+                }
+            })
+        }
+
+        
+        $('#PayrollCategory').change(function () {
+            SetDefaultPaidPer();
+        });
+
+        var SetDefaultPaidPer = function () {
+            var pay = $('#PayrollCategory').val();
+
+            if (pay == 'Salaried - Monthly' || pay == 'Flex - Monthly') {
+                $('#PaidPer').val('month');
+            }
+            else if (pay == 'Salaried - Hourly' || pay == 'Flex - Hourly') {
+                $('#PaidPer').val('hour');
+            }
+        }
+
+
+        function setEmployeeBehavior(value) {
+            if (value == '@ContractType') {
+                $('#date_ContractEndDate').datepicker("destroy");
+                $('#date_ContractEndDate').addClass("disabled");
+                $('#ContractEndDate').prop('disabled', true);
+                $('#ContractEndDate').val("");
+            }
+            else {
+                $('#date_ContractEndDate').datepicker();
+                $('#ContractEndDate').prop('disabled', false);
+                $("#ContractEndDate").removeClass("disabled");
+            }
+
+
+        }
+
+        if ($('#ContractType').val() == '@ContractType') {
+            $('#date_ContractEndDate').datepicker("destroy");
+            $('#date_ContractEndDate').addClass("disabled");
+            $('#ContractEndDate').prop('disabled', true);
+            $('#ContractEndDate').val("");
+        }
+
+
+
+        $('#date_ContractEndDate').not(".disabled").datepicker().on('changeDate', function (ev) {
+            $('#ChangeValidTo').val($('#ContractEndDate').val());
+        });
+
+        $('#ContractEndDate').change(function () {
+            $('#ChangeValidTo').val($('#ContractEndDate').val());
+        });
+
+
+
+  
+    }
+    else {
+
+        // set Annualleaveentitlement on SSC Use Only Tab via Contracted Houres
+        var contracHoures = document.getElementById('ContractedHours').value;
+
+        if (contracHoures) {
+
+            GetAnnualXML();
+        }
+
+
+        function GetAnnualXML() {
+
+                path = '';
+                var path = window.location.protocol + '//';
+                path = path + window.location.host + '/';
+
+                path = site.baseUrl + '/FormLibContent/Xmls/SouthKorea/defaults/default_AnnualLeaveEntitlement.xml'
+
+                $.ajax({
+                    type: "GET",
+                    url: path,
+                    dataType: "xml",
+                    success: SetDefaultAnnualLeave,
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert(jqXHR.responseText);
+                        alert(textStatus);
+                        alert(errorThrown);
+                    }
+
+                });
+        }
+
+        function SetDefaultAnnualLeave(xml) {
+
+            var show = ''
+
+            var dep = '';
+         
+            var temp = '';
+
+            $(xml).find('dependent').each(function () {
+
+
+                var $sel = $(this);
+
+                show = '';
+
+
+                var department = $sel.find('selected').text();
+
+                show = $sel.find('show').text();
+            
+
+                    if (show != '') {
+
+                        $('#Annualleaveentitlement').val(show);
+
+                        return;
+                    }
+               
+            });
+
+        }
+
+    }
+
+
+    function GetXML(xmlFile, url) {
+        //////////
+        //Gets XML File
+        //////////
+
+        var path = window.location.protocol + '//';
+        path = path + window.location.host + '/';
+
+        path = site.baseUrl + '/FormLibContent/Xmls/SouthKorea/Defaults/' + xmlFile
+
+        $.ajax({
+            type: "GET",
+            url: path,
+            dataType: "xml",
+            success: url,
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseText);
+                alert(textStatus);
+                alert(errorThrown);
+            }
+
+        });
+    }
+
+
+</script>

@@ -1,0 +1,45 @@
+﻿@model DH.Helpdesk.EForm.FormLib.Models.FormModel
+@using DH.Helpdesk.EForm.FormLib;
+@using DH.Helpdesk.EForm.FormLib.Models;
+@using DH.Helpdesk.EForm.FormLib.Pdfs;
+@using System.Globalization;
+@using DH.Helpdesk.EForm.Model.Entities;
+
+@{
+    Layout = null;
+    Model.Language = "en";
+}
+
+@Model.GetDocumentAnswer("FirstName", true) @Model.GetDocumentAnswer("LastName", true)
+
+@if (!string.IsNullOrEmpty(Model.GetAnswer("PermanentAddressLine1")))
+{
+<br />
+@Model.GetAnswer("PermanentAddressLine1")
+}
+    
+@if (!string.IsNullOrEmpty(Model.GetAnswer("PermanentAddressLine2")))
+{
+    <br />
+    @Model.GetAnswer("PermanentAddressLine2")
+}
+
+@if (!string.IsNullOrEmpty(Model.GetAnswer("PermanentAddressLine3")))
+{
+    <br />
+    @Model.GetAnswer("PermanentAddressLine3")
+}
+
+@if (!string.IsNullOrEmpty(Model.GetAnswer("PermanentCity")))
+{
+    <br />
+    @Model.GetAnswer("PermanentCity")
+}
+
+@if (!string.IsNullOrEmpty(Model.GetAnswer("PermanentPostalCode")))
+{
+    <br />
+    @Model.GetAnswer("PermanentPostalCode")
+}
+<br />
+<br />

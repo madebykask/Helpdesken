@@ -45,7 +45,10 @@ namespace DH.Helpdesk.Web
 			JsonFormatConfig.ConfigWebApi();
 			JsonFormatConfig.ConfigMVC();
 
-			MvcHandler.DisableMvcResponseHeader = true;
+            EForm.FormLib.FormLibSetup.Setup();
+            EForm.FormLib.FormLibSetup.SetupRoutes(RouteTable.Routes);
+
+            MvcHandler.DisableMvcResponseHeader = true;
 			//System.Web.Helpers.AntiForgeryConfig.SuppressXFrameOptionsHeader = true;//uncomment this if XFrameOptions is added in web.config headers
 
 			// ECT.FormLib.FormLibSetup.Setup(); todo

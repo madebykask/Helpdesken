@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--<Contracts textAlign="left" fontSize="11">--> 
+<Contracts textAlign="justify" fontSize="10" style="text-align: justify; font-family: Malgun; font-size: 9px; line-height:17;">
+
+  <contract process="Hiring" id="ContractEnglish" addressBoxUse="false" signatureUse="true" pageNumberUse="true" draftTextUse="True">
+    <lastParagraphText>
+      <![CDATA[In order to fully comply with the above, the company and co-worker will sign two identical contracts, and will each retain one copy.]]>
+    </lastParagraphText>
+    <lastParagraphText2>
+      <![CDATA[]]>
+    </lastParagraphText2>
+    <encTextLeft></encTextLeft>
+    <encTextRight></encTextRight>
+  </contract>
+  
+  <contract process="Hiring" id="ContractKorean" addressBoxUse="false" signatureUse="true" pageNumberUse="true" draftTextUse="True">
+    <lastParagraphText>
+      <![CDATA[회사와 직원은 상기 사항을 준수하기 위하여 본 계약서 2통을 작성하고 각 1 부씩 보관합니다.]]>
+    </lastParagraphText>
+    <lastParagraphText2>
+      <![CDATA[]]>
+    </lastParagraphText2>
+    <encTextLeft></encTextLeft>
+    <encTextRight></encTextRight>
+  </contract>
+  
+
+  <!--<contract process="Hiring" id="ContractFlexMonthly" addressBoxUse="false" signatureUse="true" pageNumberUse="true" draftTextUse="True">
+    <lastParagraphText>
+      <![CDATA[]]>
+    </lastParagraphText>
+    <lastParagraphText2>
+      <![CDATA[]]>
+    </lastParagraphText2>
+    <encTextLeft><![CDATA[]]></encTextLeft>
+    <encTextRight><![CDATA[]]></encTextRight>
+  </contract>
+
+  <contract process="Hiring" id="ContractMonthlyExempted" addressBoxUse="false" signatureUse="true" pageNumberUse="true" draftTextUse="True">
+    <lastParagraphText>
+      <![CDATA[]]>
+    </lastParagraphText>
+    <lastParagraphText2>
+      <![CDATA[]]>
+    </lastParagraphText2>
+    <encTextLeft><![CDATA[]]></encTextLeft>
+    <encTextRight><![CDATA[]]></encTextRight>
+  </contract>-->
+
+</Contracts>
+
