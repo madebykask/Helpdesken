@@ -88,7 +88,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var filter = CS;
             
             //var filter = new InvoiceArticleProductAreaSelectedFilter();
-            model.Rows = GetIndexRowModel(customerId, filter, allInvoiceArticles);
+            model.Rows = GetIndexRowModel(customerId, filter, allInvoiceArticles, false);
             model.IAPSearch_Filter = CS;
             model.InvoiceArticles = allInvoiceArticles.OrderBy(a => a.Number).ToList();
             model.ProductAreas = lastLevels.OrderBy(l=> l.Name).ToList();
@@ -175,13 +175,13 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var selectedSearch = filter.MapToSelectedFilter();
 
             SessionFacade.CurrentInvoiceArticleProductAreaSearch = selectedSearch;
-            var model = GetIndexRowModel(selectedSearch.CustomerId, selectedSearch, null);
+            var model = GetIndexRowModel(selectedSearch.CustomerId, selectedSearch, null, true);
             return PartialView(model);            
         }
 
         private InvoiceArticleProductAreaIndexRowsModel GetIndexRowModel(int customerId, 
                                                                          InvoiceArticleProductAreaSelectedFilter selectedFilter, 
-                                                                         InvoiceArticle[] invoiceArticles = null)
+                                                                         InvoiceArticle[] invoiceArticles = null, bool ResolveName = false)
         {
             var customer = customerService.GetCustomer(customerId);
             var model = new InvoiceArticleProductAreaIndexRowsModel(customer);
@@ -213,17 +213,35 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     {
                         if (art.ProductAreas.Any())
                         {
-                            foreach (var prod in art.ProductAreas)
+                            if (ResolveName == true)
                             {
-                                model.Data.Add(new InvoiceArticleProductAreaIndexRowModel
+                                foreach (var prod in art.ProductAreas)
                                 {
-                                    InvoiceArticleId = art.Id,
-                                    InvoiceArticleName = art.Name, // add desction as well
-                                    InvoiceArticleNameEng = art.NameEng,
-                                    InvoiceArticleNumber = art.Number,
-                                    ProductAreaId = prod.Id,
-                                    ProductAreaName = prod.ResolveFullName()
-                                });
+                                    model.Data.Add(new InvoiceArticleProductAreaIndexRowModel
+                                    {
+                                        InvoiceArticleId = art.Id,
+                                        InvoiceArticleName = art.Name, // add desction as well
+                                        InvoiceArticleNameEng = art.NameEng,
+                                        InvoiceArticleNumber = art.Number,
+                                        ProductAreaId = prod.Id,
+                                        ProductAreaName = prod.ResolveFullName()
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                foreach (var prod in art.ProductAreas)
+                                {
+                                    model.Data.Add(new InvoiceArticleProductAreaIndexRowModel
+                                    {
+                                        InvoiceArticleId = art.Id,
+                                        InvoiceArticleName = art.Name, // add desction as well
+                                        InvoiceArticleNameEng = art.NameEng,
+                                        InvoiceArticleNumber = art.Number,
+                                        ProductAreaId = prod.Id,
+                                        ProductAreaName = prod.Name
+                                    });
+                                }
                             }
                         }
                     }
@@ -233,17 +251,35 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     {
                         if (art.ProductAreas.Any())
                         {
-                            foreach (var prod in art.ProductAreas)
+                            if (ResolveName == true)
                             {
-                                model.Data.Add(new InvoiceArticleProductAreaIndexRowModel
+                                foreach (var prod in art.ProductAreas)
                                 {
-                                    InvoiceArticleId = art.Id,
-                                    InvoiceArticleName = art.Name, // add desction as well
-                                    InvoiceArticleNameEng = art.NameEng,
-                                    InvoiceArticleNumber = art.Number,
-                                    ProductAreaId = prod.Id,
-                                    ProductAreaName = prod.ResolveFullName()
-                                });
+                                    model.Data.Add(new InvoiceArticleProductAreaIndexRowModel
+                                    {
+                                        InvoiceArticleId = art.Id,
+                                        InvoiceArticleName = art.Name, // add desction as well
+                                        InvoiceArticleNameEng = art.NameEng,
+                                        InvoiceArticleNumber = art.Number,
+                                        ProductAreaId = prod.Id,
+                                        ProductAreaName = prod.ResolveFullName()
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                foreach (var prod in art.ProductAreas)
+                                {
+                                    model.Data.Add(new InvoiceArticleProductAreaIndexRowModel
+                                    {
+                                        InvoiceArticleId = art.Id,
+                                        InvoiceArticleName = art.Name, // add desction as well
+                                        InvoiceArticleNameEng = art.NameEng,
+                                        InvoiceArticleNumber = art.Number,
+                                        ProductAreaId = prod.Id,
+                                        ProductAreaName = prod.Name
+                                    });
+                                }
                             }
                         }
                     }
@@ -254,17 +290,35 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                         var selectedProds = art.ProductAreas.Where(p => selectedFilter.SelectedProductAreas.Contains(p.Id)).ToList();
                         if (selectedProds.Any())
                         {
-                            foreach (var prod in selectedProds)
+                            if (ResolveName == true)
                             {
-                                model.Data.Add(new InvoiceArticleProductAreaIndexRowModel
+                                foreach (var prod in art.ProductAreas)
                                 {
-                                    InvoiceArticleId = art.Id,
-                                    InvoiceArticleName = art.Name, // add desction as well
-                                    InvoiceArticleNameEng = art.NameEng,
-                                    InvoiceArticleNumber = art.Number,
-                                    ProductAreaId = prod.Id,
-                                    ProductAreaName = prod.ResolveFullName()
-                                });
+                                    model.Data.Add(new InvoiceArticleProductAreaIndexRowModel
+                                    {
+                                        InvoiceArticleId = art.Id,
+                                        InvoiceArticleName = art.Name, // add desction as well
+                                        InvoiceArticleNameEng = art.NameEng,
+                                        InvoiceArticleNumber = art.Number,
+                                        ProductAreaId = prod.Id,
+                                        ProductAreaName = prod.ResolveFullName()
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                foreach (var prod in art.ProductAreas)
+                                {
+                                    model.Data.Add(new InvoiceArticleProductAreaIndexRowModel
+                                    {
+                                        InvoiceArticleId = art.Id,
+                                        InvoiceArticleName = art.Name, // add desction as well
+                                        InvoiceArticleNameEng = art.NameEng,
+                                        InvoiceArticleNumber = art.Number,
+                                        ProductAreaId = prod.Id,
+                                        ProductAreaName = prod.Name
+                                    });
+                                }
                             }
                         }
                     }
@@ -275,21 +329,38 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                         var selectedProds = art.ProductAreas.Where(p => selectedFilter.SelectedProductAreas.Contains(p.Id)).ToList();
                         if (selectedProds.Any())
                         {
-                            foreach (var prod in selectedProds)
+                            if (ResolveName == true)
                             {
-                                model.Data.Add(new InvoiceArticleProductAreaIndexRowModel
+                                foreach (var prod in art.ProductAreas)
                                 {
-                                    InvoiceArticleId = art.Id,
-                                    InvoiceArticleName = art.Name, // add desction as well
-                                    InvoiceArticleNameEng = art.NameEng,
-                                    InvoiceArticleNumber = art.Number,
-                                    ProductAreaId = prod.Id,
-                                    ProductAreaName = prod.ResolveFullName()
-                                });
+                                    model.Data.Add(new InvoiceArticleProductAreaIndexRowModel
+                                    {
+                                        InvoiceArticleId = art.Id,
+                                        InvoiceArticleName = art.Name, // add desction as well
+                                        InvoiceArticleNameEng = art.NameEng,
+                                        InvoiceArticleNumber = art.Number,
+                                        ProductAreaId = prod.Id,
+                                        ProductAreaName = prod.ResolveFullName()
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                foreach (var prod in art.ProductAreas)
+                                {
+                                    model.Data.Add(new InvoiceArticleProductAreaIndexRowModel
+                                    {
+                                        InvoiceArticleId = art.Id,
+                                        InvoiceArticleName = art.Name, // add desction as well
+                                        InvoiceArticleNameEng = art.NameEng,
+                                        InvoiceArticleNumber = art.Number,
+                                        ProductAreaId = prod.Id,
+                                        ProductAreaName = prod.Name
+                                    });
+                                }
                             }
                         }
                     }
-                    break;
                     break;
             }
                                     
