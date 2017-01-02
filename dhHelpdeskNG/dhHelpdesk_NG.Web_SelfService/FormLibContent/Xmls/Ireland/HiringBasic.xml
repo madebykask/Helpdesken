@@ -28,6 +28,7 @@
           <option value="New Hire">New Hire</option>
           <option value="International Transfer">International Transfer</option>
           <option value="Re-Hire">Re-Hire</option>
+          <option value="Transfer Between Business Units">Transfer Between Business Units</option>
         </options>
       </element>
       <element type="date" name="ContractStartDate" mandatory="1" label="Contract Start Date" format="dd.MM.yyyy">
@@ -74,7 +75,7 @@
 
       <element type="text" name="Co-WorkerID" label="Co-Worker ID">
         <mandatoryIf name="NewToIKEA">International Transfer</mandatoryIf>
-        
+        <mandatoryIf name="NewToIKEA">Transfer Between Business Units</mandatoryIf>
       </element>
       <element type="text" name="GlobalHRID" label="Global HR ID">
         <mandatoryIf name="NewToIKEA">International Transfer</mandatoryIf>
@@ -105,6 +106,8 @@
       <element type="search-select" source="1" name="PermanentCountry" label="Country" mandatory="1" default="Ireland">
         &dat_country;
       </element>
+
+      <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
     </tab>
 
     <tab name="#personal" label="Personal Information">

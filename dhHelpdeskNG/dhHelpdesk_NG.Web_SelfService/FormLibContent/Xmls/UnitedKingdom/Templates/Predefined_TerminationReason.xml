@@ -20,7 +20,7 @@
   </dependent>
   <dependent>
     <selected>Resignation</selected>
-    <show>Resignation,Lack of Opportunities,Salary,Unhappy with management,Domestic,Hours of work,Days of work,Health,Maternity rights,Moving away,Return to FT education,Exams pending,Leaving IKEA/New Job,Other</show>
+    <show>Resignation,Lack of opportunities,Salary,Unhappy with management,Domestic,Hours of work,Days of work,Health,Maternity rights,Moving away,Returning to FT education,Exams pending,Leaving IKEA/New job,Other</show>
   </dependent>
 
   <dependent>

@@ -3,19 +3,19 @@
   <name>DeductionsType</name>
   <dependent>
     <selected>Hourly</selected>
-    <show>Badge Charge,Uniform Deduction,ID Card,TEC Expenses Deduction,Travel Allowance,PHI-Private Health Ins,Rent Deduction</show>
+    <show>Badge Charge,Company Car,Uniform Deduction,ID Card,TEC Expenses Deduction,Travel Allowance,PHI-Private Health Ins,Rent Deduction</show>
   </dependent>
   <dependent>
     <selected>Salaried</selected>
-    <show>Badge Charge,Uniform Deduction,ID Card,TEC Expenses Deduction,Travel Allowance,PHI-Private Health Ins,Rent Deduction</show>
+    <show>Badge Charge,Company Car,Uniform Deduction,ID Card,TEC Expenses Deduction,Travel Allowance,PHI-Private Health Ins,Rent Deduction</show>
   </dependent>
   <dependent>
     <selected>Salaried Management</selected>
-    <show>Badge Charge,Uniform Deduction,ID Card,TEC Expenses Deduction,Travel Allowance,PHI-Private Health Ins,Rent Deduction</show>
+    <show>Badge Charge,Company Car,Uniform Deduction,ID Card,TEC Expenses Deduction,Travel Allowance,PHI-Private Health Ins,Rent Deduction</show>
   </dependent>
   <dependent>
     <selected>Salaried Senior Management</selected>
-    <show>Badge Charge,Uniform Deduction,ID Card,TEC Expenses Deduction,Travel Allowance,PHI-Private Health Ins,Rent Deduction</show>
+    <show>Badge Charge,Company Car,Uniform Deduction,ID Card,TEC Expenses Deduction,Travel Allowance,PHI-Private Health Ins,Rent Deduction</show>
   </dependent>
 
 </predefined>

@@ -8,9 +8,10 @@
             <action status="30" internal-val="30" text="Submit Complete Service Request to SSC">
                 <validateTabs>#ServiceRequestDetails,#Basic,#Complete</validateTabs>
             </action>
-            <action status="31" internal-val="30" init-form-guid="55A15759-7AB0-4081-A304-C43DBA784AB4" text="Submit Basic Service Request to SSC">
+            <!--S.G 20-10-2015: Change Request case No. 53039 Point 31 -->
+            <!--<action status="31" internal-val="30" init-form-guid="55A15759-7AB0-4081-A304-C43DBA784AB4" text="Submit Basic Service Request to SSC">
                 <validateTabs>#ServiceRequestDetails,#Basic</validateTabs>
-            </action>
+            </action>-->
             <action status="99" internal-val="70" text="Cancel Service request"></action>
         </actions>
     </status>
@@ -36,7 +37,7 @@
             <visibleTabs>#ServiceRequestDetails,#Basic</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#Basic</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#Basic,#Complete,#attachments</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Basic,#Complete,#documents,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
       <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
         <actions>
@@ -44,9 +45,10 @@
             <action status="30" internal-val="30" text="Submit Complete Service Request to SSC">
                 <validateTabs>#ServiceRequestDetails,#Basic,#Complete</validateTabs>
             </action>
-            <action status="31" internal-val="30" init-form-guid="55A15759-7AB0-4081-A304-C43DBA784AB4" text="Submit Basic Service Request to SSC">
+          <!--S.G 20-10-2015: Change Request case No. 53039 Point 31 -->
+            <!--<action status="31" internal-val="30" init-form-guid="55A15759-7AB0-4081-A304-C43DBA784AB4" text="Submit Basic Service Request to SSC">
                 <validateTabs>#ServiceRequestDetails,#Basic</validateTabs>
-            </action>
+            </action>-->
             <action status="99" internal-val="70" text="Cancel Service request"></action>
         </actions>
     </status>
@@ -56,7 +58,7 @@
             <visibleTabs>#ServiceRequestDetails,#Basic</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#Basic</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#Basic,#Complete,#attachments</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Basic,#Complete,#documents,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Basic,#Complete</readOnlyTabs>
       <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
         <actions>
@@ -71,7 +73,7 @@
             <visibleTabs>#ServiceRequestDetails,#Basic</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#Basic</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#Basic,#Complete,#globalview,#attachments</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Basic,#Complete,#globalview,#documents,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Basic,#Complete</readOnlyTabs>
       <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
         <actions>
@@ -84,7 +86,7 @@
             <visibleTabs>#ServiceRequestDetails,#Basic</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#Basic</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#Basic,#Complete,#globalview,#attachments</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Basic,#Complete,#globalview,#documents,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Basic,#Complete</readOnlyTabs>
       <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
         <actions>

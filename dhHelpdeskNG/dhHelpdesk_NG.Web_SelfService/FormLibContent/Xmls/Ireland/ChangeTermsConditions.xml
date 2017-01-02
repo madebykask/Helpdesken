@@ -32,7 +32,7 @@
       </element>
       <element name="IKEANetworkID" type="text" label="IKEA Network ID" mandatory="1"></element>
       <element name="Company" type="text" label="Company"></element>
-      <element name="BusinessUnit" type="text" label="Business Unit"></element>
+      <element name="BusinessUnit" type="text" label="Business Unit" mandatory="1"></element>
       <element name="ServiceArea" type="text" label="Function"></element>
       <element name="Department" type="text" label="Department"></element>
       <!--<element name="ChangeType" type="select" label="Change Type?" mandatory="1">
@@ -103,7 +103,7 @@
         </options>
       </element>-->
 
-
+      <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
 
     </tab>
 
@@ -117,32 +117,32 @@
       
 
       <!--Mandatory-->
-      <element type="select" name="NewCompany" source="database" label="Company" mandatory="1">
+      <element type="select" name="NewCompany" source="database" label="Company" mandatory="1" formfieldidentifier="E1P0001.BUKRS">
         <options>
           <option value=""></option>
         </options>
       </element>
       <!--Mandatory-->
-      <element type="select" source="database" name="NewBusinessUnit" label="Business Unit" mandatory="1">
+      <element type="select" source="database" name="NewBusinessUnit" label="Business Unit" mandatory="1" formfieldidentifier="E1P0001.WERKS">
         <options>
           <option value=""></option>
         </options>
       </element>
       <!--Mandatory-->
-      <element type="select" source="database" name="NewServiceArea" label="Function">
+      <element type="select" source="database" name="NewServiceArea" label="Function" formfieldidentifier="E1P0001.BTRTL">
         <options>
           <option value=""></option>
         </options>
       </element>
       <!--Mandatory-->
-      <element type="select" source="database" name="NewDepartment" label="Department">
+      <element type="select" source="database" name="NewDepartment" label="Department" formfieldidentifier="E1P0001.ORGEH">
         <options>
           <option value=""></option>
         </options>
       </element>
 
 
-      <element type="search-select" name="HomeCostCentre" source="1" label="Home Cost Centre">
+      <element type="search-select" name="HomeCostCentre" source="1" label="Home Cost Centre" formfieldidentifier="E1P0001.KOSTL" >
         &dat_costcentre;
       </element>
 
@@ -150,7 +150,7 @@
       <!--Mandatory-->
 
 
-      <element type="search-select" source="1" name="JobTitle" label="Job Title">
+      <element type="search-select" source="1" name="JobTitle" label="Job Title" formfieldidentifier="E1P0001.STELL">
         &dat_jobtitle;
       </element>
 
@@ -165,7 +165,7 @@
       </element>
      
 
-      <element type="search-select" source="1" name="ReportsToLineManager" label="Reports to Line Manager">
+      <element type="search-select" source="1" name="ReportsToLineManager" label="Reports to Line Manager" formfieldidentifier="E1P9000.PERNRMGR">
         &dat_linemanagers;
       </element>
       <!--Mandatory-->
@@ -179,7 +179,7 @@
       </element>
       <!--Employment Conditions-->
       <!--Mandatory-->
-      <element name="EmploymentCategory" type="select" label="Employment Category">
+      <element name="EmploymentCategory" type="select" label="Employment Category" formfieldidentifier="E1P0001.PERSG:1">
         <options>
           <option value=""></option>
           <option value="Full time">Full time</option>
@@ -190,7 +190,7 @@
       <element type="date" name="ContractEndDate" label="Contract End Date" format="dd.MM.yyyy">
       </element>
       <!--Mandatory-->
-      <element type="text" name="ContractedHours" label="Contracted Hours">
+      <element type="text" name="ContractedHours" label="Contracted Hours" formfieldidentifier="E1P0007.WOSTD">
         <regex inherit="unsignednum" pattern="" message=""></regex>
         <regex inherit="numMax39" pattern="" message=""></regex>
       </element>
@@ -208,7 +208,7 @@
         <regex inherit="unsignednum" pattern="" message=""></regex>
       </element>
       <!--Mandatory-->
-      <element name="ContractType" type="select" label="Contract Type">
+      <element name="ContractType" type="select" label="Contract Type" formfieldidentifier="E1P0001.PERSG:2">
         <options>
           <option value=""></option>
           <option value="Permanent">Permanent</option>
@@ -235,6 +235,7 @@
         <options>
           <option value=""></option>
           <option value="Store Dublin 038">Store Dublin 038</option>
+          <option value="Service Office IE">Service Office IE</option>
         </options>
       </element>
      
@@ -269,8 +270,12 @@
       <element type="select" name="PayScaleGroup" label="Pay Scale Group">
         <options>
           <option value=""></option>
+          <option value="STARTIE">STARTIE</option>
+          <option value="FOUNDIE">FOUNDIE</option>
           <option value="STARTER">STARTER</option>
           <option value="FOUNDATION">FOUNDATION</option>
+          <option value="10">10</option>
+          <option value="11">11</option>
           <option value="43">43</option>
           <option value="44">44</option>
           <option value="45">45</option>
@@ -296,6 +301,7 @@
           <option value="65">65</option>
           <option value="66">66</option>
           <option value="67">67</option>
+          <option value="99">99</option>
         </options>
       </element>
       <!--Mandatory-->

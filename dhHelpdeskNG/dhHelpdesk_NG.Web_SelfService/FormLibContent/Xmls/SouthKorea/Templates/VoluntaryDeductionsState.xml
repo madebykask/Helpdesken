@@ -12,8 +12,29 @@
     </actions>
   </status>
 
+  <!--LM-->
+  <status value="10">
+    <userGroup name="Line Manager">
+      <visibleTabs>#ServiceRequestDetails,#Payment</visibleTabs>
+      <readOnlyTabs></readOnlyTabs>
+    </userGroup>
+    <visibleTabs>#ServiceRequestDetails,#Payment,#attachments</visibleTabs>
+    <readOnlyTabs></readOnlyTabs>
+    <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
+    <actions>
+      <action status="20" internal-val="20" text="Submit to HR Unit">
+        <validateTabs>#ServiceRequestDetails</validateTabs>
+      </action>
+      <action status="99" internal-val="70" text="Cancel service request"></action>
+    </actions>
+  </status>
+
   <!-- HRU -->
   <status value="20">
+    <userGroup name="Line Manager">
+      <visibleTabs>#ServiceRequestDetails,#Payment</visibleTabs>
+      <readOnlyTabs>#ServiceRequestDetails,#Payment</readOnlyTabs>
+    </userGroup>
     <visibleTabs>#ServiceRequestDetails,#Payment,#attachments</visibleTabs>
     <readOnlyTabs></readOnlyTabs>
     <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
@@ -21,12 +42,15 @@
       <action status="30" internal-val="30" text="Submit Service Request to SSC">
         <validateTabs>#ServiceRequestDetails,#Payment</validateTabs>
       </action>
-
       <action status="99" internal-val="70" text="Cancel Service request"></action>
     </actions>
   </status>
   <!-- SSC -->
   <status value="30">
+    <userGroup name="Line Manager">
+      <visibleTabs>#ServiceRequestDetails,#Payment</visibleTabs>
+      <readOnlyTabs>#ServiceRequestDetails,#Payment</readOnlyTabs>
+    </userGroup>
     <visibleTabs>#ServiceRequestDetails,#Payment,#attachments</visibleTabs>
     <readOnlyTabs>#ServiceRequestDetails,#Payment</readOnlyTabs>
     <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
@@ -38,6 +62,10 @@
   </status>
   <!-- SSC -->
   <status value="40">
+    <userGroup name="Line Manager">
+      <visibleTabs>#ServiceRequestDetails,#Payment</visibleTabs>
+      <readOnlyTabs>#ServiceRequestDetails,#Payment</readOnlyTabs>
+    </userGroup>
     <visibleTabs>#ServiceRequestDetails,#Payment,#attachments</visibleTabs>
     <readOnlyTabs>#ServiceRequestDetails,#Payment</readOnlyTabs>
     <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
@@ -47,6 +75,10 @@
     </actions>
   </status>
   <status value="60">
+    <userGroup name="Line Manager">
+      <visibleTabs>#ServiceRequestDetails,#Payment</visibleTabs>
+      <readOnlyTabs>#ServiceRequestDetails,#Payment</readOnlyTabs>
+    </userGroup>
     <visibleTabs>#ServiceRequestDetails,#Payment,#attachments</visibleTabs>
     <readOnlyTabs>#ServiceRequestDetails,#Payment</readOnlyTabs>
     <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
@@ -54,6 +86,10 @@
     </actions>
   </status>
   <status value="70">
+    <userGroup name="Line Manager">
+      <visibleTabs>#ServiceRequestDetails,#Payment</visibleTabs>
+      <readOnlyTabs>#ServiceRequestDetails,#Payment</readOnlyTabs>
+    </userGroup>
     <visibleTabs>#ServiceRequestDetails,#Payment,#attachments</visibleTabs>
     <readOnlyTabs>#ServiceRequestDetails,#Payment</readOnlyTabs>
     <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>

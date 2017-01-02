@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<predefined>
+  <name>PSGroup</name>
+  <dependent>
+    <selected>Level 1</selected>
+    <show>43,44,45</show>
+  </dependent>
+  <dependent>
+    <selected>Level 2</selected>
+    <show>46,47,48,49</show>
+  </dependent>
+  <dependent>
+    <selected>Level 3</selected>
+    <show>50</show>
+  </dependent>  
+  <dependent>
+    <selected>Level 4</selected>
+    <show>51</show>
+  </dependent>
+  <dependent>
+    <selected>Level 5</selected>
+    <show>52,53,54</show>
+  </dependent>
+  <dependent>
+    <selected>Level 6</selected>
+    <show>55,56</show>
+  </dependent>
+  <dependent>
+    <selected>Level 7</selected>
+    <show>57,58</show>
+  </dependent>
+  <dependent>
+    <selected>Level 8</selected>
+    <show>59,60,61</show>
+  </dependent>
+</predefined>

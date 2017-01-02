@@ -30,7 +30,7 @@
         <actions>
             <action status="60" text="Approve"></action>
             <action status="10" text="Reject"></action>
-            <action status="98" internal-val="10" text="Send back to requestor"></action>
+            <!--<action status="98" internal-val="10" text="Send back to requestor"></action>-->
             <action status="99" text="Cancel service request"></action>
         </actions>
     </status>

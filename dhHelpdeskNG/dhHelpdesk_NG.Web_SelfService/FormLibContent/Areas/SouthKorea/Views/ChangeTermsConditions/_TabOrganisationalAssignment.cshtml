@@ -20,6 +20,11 @@
                 <tr>
                     <td class="tdstrong">@Model.Label("OrganisationCountry")</td>
                     <td>South Korea</td>
+                     <td>
+                       @* <input type="hidden" class="oldValue" id="OLD_OrganisationCountry" name="OLD_OrganisationCountry" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_OrganisationCountry").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_OrganisationCountry">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_OrganisationCountry").Select(x => x.Value).FirstOrDefault() : "")</em>*@
+                         <em class="muted">South Korea</em>
+                    </td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("NewCompany")</td>
@@ -99,6 +104,10 @@
                <tr>
                     <td class="tdstrong">@Model.Label("PositionTitle")</td>
                     <td>@Model.Element("PositionTitle")</td>
+                   <td>
+                        <input type="hidden" class="oldValue" id="OLD_PositionTitle" name="OLD_PositionTitle" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PositionTitle").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_PositionTitle">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PositionTitle").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("JobTitle")</td>
@@ -168,6 +177,14 @@
                         <input type="hidden" class="oldValue" id="OLD_ContractEndDate" name="OLD_ContractEndDate" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_ContractEndDate").Select(x => x.Value).FirstOrDefault() : "")"/>
                         <em class="muted" id="emOLD_ContractEndDate">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_ContractEndDate").Select(x => x.Value).FirstOrDefault() : "")</em>
                     </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ProbationPeriod")</td>
+                    <td>@Model.Element("ProbationPeriod")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Probationenddate")</td>
+                    <td>@Model.Element("Probationenddate")</td>
                 </tr>
                               
                 <tr>

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<elements>
+  <element baseVal="IKEA  Eiendom Holding AS" baseCode="XXX">
+    <narrowing>
+      <options elementName="ReportsToLineManager">
+        <option code="" value="Jonsson Søren">Jonsson Søren</option>
+      </options>
+    </narrowing>
+    <defaults></defaults>
+  </element>
+  <element>
+    
+  </element>
+</elements>

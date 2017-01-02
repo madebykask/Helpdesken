@@ -1,0 +1,58 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@{
+    Layout = null;  
+}
+<!DOCTYPE html>
+<html>
+<head>
+    @*<link href="@Model.Contract.BaseUrl/FormLibContent/assets/css/documents.css" rel="stylesheet" type="text/css" />*@
+    @Model.GetStyleAnswer("GetStyleLink")
+    @Html.Partial("../Shared/Pdfs/_Styles", Model)
+    @Model.GetStyleAnswer("GetStyles")
+</head>
+<body>
+    <div>
+        <p>Vedlegget oppbevares hos leder</p>
+        <h5 style="text-align: center;"><strong>VEDLEGG TIL AVTALE OM KORTVARIGE ENKELTOPPDRAG</strong></h5>
+        <p style="text-align: center; font-size:12pt;">Avtale mellom arbeidsgiver og arbeidstaker for hvert enkelt oppdrag.</p>
+
+        <table class="table-appendix table-bordered">
+            <tr class="table-header">
+                <td>
+                   Navn på ekstrahjelp:
+                </td>          
+                 <td>
+                   Ekstrahjelp for (navn)
+                </td> 
+                 <td>
+                   Arbeids-periode (fra-til dato)
+                </td> 
+                 <td>
+                   Lengde av den daglige og ukentlige arbeidstid (i timer)
+                </td> 
+                 <td>
+                   Lederens signatur
+                </td> 
+                 <td>
+                   Ekstrahjelp signatur
+                </td>      
+            </tr>
+          
+            @for (int i = 0; i <= 21; i++)
+            {
+                <tr style="height:30px;">
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                </tr> 
+            }
+
+        </table>
+    </div>
+</body>
+</html>

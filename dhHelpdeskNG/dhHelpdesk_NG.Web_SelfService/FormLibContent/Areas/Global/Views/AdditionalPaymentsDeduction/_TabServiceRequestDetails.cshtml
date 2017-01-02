@@ -94,6 +94,7 @@
                     </td>
                 </tr>   
                 }     
+                @Html.Partial("_InternalLogNoteV2", Model)
             </tbody>
         </table>
     </div>
@@ -107,7 +108,5 @@
         <img src="@Url.Content(filename)" />
     </div>
     <input type="hidden" id="CustomerId" value="@Model.Form.CustomerId" />
-    <input type="hidden" id="solutiontime" value="@Model.Form.SolutionTime"/>
-    <input type="hidden" id="WatchDate" name="WatchDate" value="@Model.Element("WatchDate")" />
     <input type="hidden" id="MultipleEntrySectionsNr" value="@FormLibConstants.FormField.MultipleEntrySectionsNr" />
 </div>

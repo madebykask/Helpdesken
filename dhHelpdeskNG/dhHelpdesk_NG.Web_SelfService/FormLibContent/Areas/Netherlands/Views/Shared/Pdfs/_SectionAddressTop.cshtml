@@ -1,0 +1,21 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@using ECT.FormLib.Pdfs;
+@{
+    Layout = null;
+}
+
+<div style="padding-top:20px;">
+<div style="float: left;"></div><br />
+<div style="float: right; width: 260px;">@Model.GetDocumentAnswer("FirstName", true)@if (!string.IsNullOrEmpty(Model.GetAnswer("Prefixes")))
+                                                                                    {<text>&nbsp;</text>@Model.GetAnswer("Prefixes")} @Model.GetDocumentAnswer("LastName", true)<br />
+
+    @*@Model.GetDocumentAnswer("PermanentAddressLine1", true)<br />@Model.GetDocumentAnswer("PermanentAddressLine2") @Model.GetDocumentAnswer("PermanentAddressLine3")@if (Model.GetAnswer("PermanentAddressLine2").Length > 0 | Model.GetAnswer("PermanentAddressLine3").Length > 0){<text><br /></text>}*@
+
+    @Model.GetDocumentAnswer("PermanentAddressLine1", true) @Model.GetDocumentAnswer("PermanentAddressLine2") @Model.GetDocumentAnswer("PermanentAddressLine3")<br />
+    @Model.GetDocumentAnswer("PermanentPostalCode") @Model.GetDocumentAnswer("PermanentCity")
+</div>
+<div style="clear:both;"></div><br />
+@Html.Partial("../Shared/Pdfs/_CityDate", Model)
+</div>

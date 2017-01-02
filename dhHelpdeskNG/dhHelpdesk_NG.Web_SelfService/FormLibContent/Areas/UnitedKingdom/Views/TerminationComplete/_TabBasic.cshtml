@@ -139,6 +139,10 @@
 
     document.getElementById('BasicTerminationType').onchange = selectIndexChangeTerminationType;
 
+    $('#BasicTerminationType').change(function () {
+        disableOneIKEABonus();
+    });
+
 
     var noticeHiringDate = $('#notice_HiringDate');
     var noticeHiringDateWrong = $('#notice_HiringDateWrong');

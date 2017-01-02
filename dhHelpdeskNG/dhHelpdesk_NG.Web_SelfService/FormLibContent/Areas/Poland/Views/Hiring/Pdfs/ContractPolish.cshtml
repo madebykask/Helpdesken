@@ -29,7 +29,7 @@
             <strong>@Model.Company.footerName</strong><br />
             z siedzibą w Jankach, Pl. Szwedzki 3; 05–090 Raszyn, reprezentowaną przez
             <br />
-            <strong>@Model.Company.PolishEmployer</strong><br />
+            <strong>@Model.Company.CountryEmployer</strong><br />
         </p>
         <p style="text-align: center; font-family: Verdana; font-size: 11px; line-height:16px;">
             a
@@ -189,7 +189,7 @@
                 else
                 {
                     <text>
-                    (słownie: @Model.GetAnswer("BasicPayInWordsPolish") złotych).<br />
+                    (słownie: @Model.GetAnswer("BasicPayInWordsPolish")).<br />
                     </text>
             
                 }
@@ -222,7 +222,7 @@
                 else
                 {
                     <text>
-                    (słownie: @Model.GetAnswer("BasicPayInWordsPolish") złotych).<br />
+                    (słownie: @Model.GetAnswer("BasicPayInWordsPolish")).<br />
                     </text>
             
                 }
@@ -236,7 +236,7 @@
             }<!-- end of switch-->
         </p>
 
-        <p style="font-family: Verdana; font-size: 10px; line-height:16px;">
+       @* <p style="font-family: Verdana; font-size: 10px; line-height:16px;">
 
                         @functions{
                 public static bool NewDateOver(DateTime? startDate, DateTime? endDate, int months)
@@ -247,6 +247,8 @@
                     return result >= 0;
                 }
             }
+
+            SG : Case : 55762  -- 12-09-2016
              @if (Model.GetAnswer("ContractType") == "Limited period"
                 && NewDateOver(Model.ConvertToDateTime("EffectiveDate"), Model.ConvertToDateTime("EndDate"), 6))
             {
@@ -256,7 +258,7 @@
                 <br />
                 </text>
             }
-        </p>
+        </p>*@
 
         <p style="font-family: Verdana; font-size: 10px; line-height:16px;">
             @if(Model.GetAnswer("ContractType") == "Replacement contract")
@@ -382,14 +384,23 @@
             
             case "Limited period": 
             <text>
-            <p style="font-family: Verdana; font-size: 10px;">
+             <p style="font-family: Verdana; font-size: 10px;">
+                5  .  Okres wypowiedzenia umowy o pracę jest zgodny z Art. 36. § 1. KP i wynosi:<br />
+            </p>
+            <p style="font-family: Verdana; font-size: 10px; padding-left: 20px;">
+                1) <strong>2 tygodnie</strong>, jeżeli pracownik był zatrudniony krócej niż 6 miesięcy,<br />
+                2) <strong>1 miesiąc</strong>, jeżeli pracownik był zatrudniony co najmniej 6 miesięcy,<br />
+                3) <strong>3 miesiące</strong>, jeżeli pracownik był zatrudniony co najmniej 3 lata.<br />
+            </p>
+            @* S.G : change request 10-02-2016 , Help desk case #53870 *@
+            @*  <p style="font-family: Verdana; font-size: 10px;">
                 5  . Okres wypowiedzenia umowy o pracę jest zgodny z Art. 33. KP i wynosi: 
                 <br />
             </p>
             <p style="font-family: Verdana; font-size: 10px; padding-left: 20px;">
                     1) <strong>2 tygodnie</strong>, jeżeli umowa została zawarta na czas dłuższy niż 6 miesięcy i strony uzgodniły okres wypowiedzenia,<br />
                     2) <strong>brak okresu wypowiedzenia</strong>, jeżeli umowa została zawarta na czas krótszy niż  6  miesięcy.<br />      
-            </p>
+            </p>*@
             </text>
             break;
             

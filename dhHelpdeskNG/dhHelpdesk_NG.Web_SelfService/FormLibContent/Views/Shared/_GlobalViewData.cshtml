@@ -1,6 +1,5 @@
 ﻿@model ECT.FormLib.Models.FormModelGlobalView
 @using ECT.FormLib.Models;
-
 <div class="span12">
     <table class="table-striped table-gv">
         <thead>
@@ -14,13 +13,9 @@
             @foreach(var item in Model.FormFields)
             {
                 <tr>
-                    <td class="tdstrong">@Model.FormModel.Label(item.FormFieldName)</td>
-                    <td class="copy-me">@item.FormFieldValue</td>
-                    <td>
-                        <div class="pull-right">
-                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.FormModel.Translate("Select")</button>
-                        </div>
-                    </td>
+                    <td class="tdstrong">@(!string.IsNullOrEmpty(item.GVLabel) ? Model.FormModel.Label(item.GVLabel):Model.FormModel.Label(item.FormFieldName))</td>
+                    <td class="copy-me">@(!string.IsNullOrEmpty(item.GVValue) ? item.GVValue:item.FormFieldValue)</td>
+                    <td><div class="pull-right"><button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.FormModel.Translate("Select")</button></div></td>
                 </tr>   
             }
         </tbody>

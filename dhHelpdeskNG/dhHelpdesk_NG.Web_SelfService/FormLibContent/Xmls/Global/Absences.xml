@@ -37,7 +37,7 @@
                     <option value ="Standard">Standard</option>
                 </options>
             </element>
-            
+          <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
         </tab>
 
         <!--Absences-->
@@ -58,8 +58,12 @@
                 <laterThanOrEqual name="AbsenceStartFrom"></laterThanOrEqual>
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
-            <element name="AbsenceHours" type="text" mandatory="1" label="Absence hours"></element>
-            <element name="AbsenceDays" type="text" mandatory="1" label="Absence days"></element>
+            <element name="AbsenceHours" type="text" mandatory="1" label="Absence hours">
+              <regex inherit="unsignednum" message="" pattern=""></regex>
+            </element>
+            <element name="AbsenceDays" type="text" mandatory="1" label="Absence days">
+              <regex inherit="unsignednum" message="" pattern=""></regex>
+            </element>
 
           <element name="AbsenceType2" type="select" label="Absence Type">
             <options>
@@ -80,9 +84,11 @@
           </element>
           <element name="AbsenceHours2" type="text" label="Absence hours">
             <mandatoryIfNotEmpty name="AbsenceType2"></mandatoryIfNotEmpty>
+            <regex inherit="unsignednum" message="" pattern=""></regex>
           </element>
           <element name="AbsenceDays2" type="text" label="Absence days">
             <mandatoryIfNotEmpty name="AbsenceType2"></mandatoryIfNotEmpty>
+            <regex inherit="unsignednum" message="" pattern=""></regex>
           </element>
 
           <element name="AbsenceType3" type="select" label="Absence Type">
@@ -104,9 +110,11 @@
           </element>
           <element name="AbsenceHours3" type="text" label="Absence hours">
             <mandatoryIfNotEmpty name="AbsenceType3"></mandatoryIfNotEmpty>
+            <regex inherit="unsignednum" message="" pattern=""></regex>
           </element>
           <element name="AbsenceDays3" type="text" label="Absence days">
             <mandatoryIfNotEmpty name="AbsenceType3"></mandatoryIfNotEmpty>
+            <regex inherit="unsignednum" message="" pattern=""></regex>
           </element>
           <element name="AbsenceType4" type="select" label="Absence Type">
             <options>
@@ -127,9 +135,11 @@
           </element>
           <element name="AbsenceHours4" type="text" label="Absence hours">
             <mandatoryIfNotEmpty name="AbsenceType4"></mandatoryIfNotEmpty>
+            <regex inherit="unsignednum" message="" pattern=""></regex>
           </element>
           <element name="AbsenceDays4" type="text" label="Absence days">
             <mandatoryIfNotEmpty name="AbsenceType4"></mandatoryIfNotEmpty>
+            <regex inherit="unsignednum" message="" pattern=""></regex>
           </element>
 
           <element name="AbsenceType5" type="select" label="Absence Type">
@@ -151,9 +161,11 @@
           </element>
           <element name="AbsenceHours5" type="text" label="Absence hours">
             <mandatoryIfNotEmpty name="AbsenceType5"></mandatoryIfNotEmpty>
+            <regex inherit="unsignednum" message="" pattern=""></regex>
           </element>
           <element name="AbsenceDays5" type="text" label="Absence days">
             <mandatoryIfNotEmpty name="AbsenceType5"></mandatoryIfNotEmpty>
+            <regex inherit="unsignednum" message="" pattern=""></regex>
           </element>
           
             <!--CDS-->

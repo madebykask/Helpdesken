@@ -38,24 +38,26 @@
                     <td class="tdstrong">@Model.Label("Costallocation")</td>
                     <td>@Model.Element("Costallocation")</td>
                 </tr>
-                
+
 
                 @for (int i = 2; i <= 3; i++)
-                  {
+                {
                     <tr class="costcentres@(i.ToString())">
-                    <td class="tdstrong" colspan="2"><h5>@Model.Translate("Additional Cost Centre " + i.ToString())</h5></td>
-                         </tr>     
+                        <td class="tdstrong" colspan="2">
+                            <h5>@Model.Translate("Additional Cost Centre " + i.ToString())</h5>
+                        </td>
+                    </tr>     
                                   
                     <tr class="costcentres@(i.ToString())">
-                              <td class="tdstrong">@Model.Label("CostCentre" + i.ToString())</td>
-                              <td>
-                                  @Model.Element("CostCentre" + i.ToString())</td>
-                          </tr>
+                        <td class="tdstrong">@Model.Label("CostCentre" + i.ToString())</td>
+                        <td>
+                            @Model.Element("CostCentre" + i.ToString())</td>
+                    </tr>
                     <tr class="costcentres@(i.ToString())">
-                              <td class="tdstrong">@Model.Label("Costallocation" + i.ToString())</td>
-                              <td>
-                                  @Model.Element("Costallocation" + i.ToString())</td>
-                          </tr>
+                        <td class="tdstrong">@Model.Label("Costallocation" + i.ToString())</td>
+                        <td>
+                            @Model.Element("Costallocation" + i.ToString())</td>
+                    </tr>
                       
                     
                 }
@@ -129,10 +131,10 @@
                     <td class="tdstrong">@Model.Label("Probationperiod")</td>
                     <td>@Model.Element("Probationperiod")</td>
                 </tr>
-                <tr>
+@*                <tr>
                     <td class="tdstrong">@Model.Label("Probationenddate")</td>
                     <td>@Model.Element("Probationenddate")</td>
-                </tr>
+                </tr>*@
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("CDS")</h4>
@@ -151,44 +153,17 @@
                     <td>@Model.Element("Helpdesk")</td>
                 </tr>
 
-                 <tr>
+             @*   <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Work Address")</h4>
                     </td>
                 </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("WorkAddressline1")</td>
-                    <td>@Model.Element("WorkAddressline1")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("WorkAddressline2")</td>
-                    <td>@Model.Element("WorkAddressline2")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("WorkAddressline3")</td>
-                    <td>@Model.Element("WorkAddressline3")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("WorkAddressline4")</td>
-                    <td>@Model.Element("WorkAddressline4")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("WorkPostalCode")</td>
-                    <td>@Model.Element("WorkPostalCode")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("WorkCity")</td>
-                    <td>@Model.Element("WorkCity")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("WorkCountry")</td>
-                    <td>@Model.Element("WorkCountry")</td>
-                </tr>
+
                 <tr>
                     <td class="tdstrong">@Model.Label("WorkTelephone")</td>
                     <td>@Model.Element("WorkTelephone")</td>
                 </tr>
-                 <tr>
+                <tr>
                     <td class="tdstrong">@Model.Label("WorkCommunicationtype")</td>
                     <td>@Model.Element("WorkCommunicationtype")</td>
                 </tr>
@@ -209,20 +184,28 @@
                             @Model.Element("WorkCommunicationtype" + i.ToString())
                         </td>
                     </tr>
-                      <tr class="WorkCommunicationType@(i.ToString())">
+                    <tr class="WorkCommunicationType@(i.ToString())">
                         <td class="tdstrong">@Model.Label("WorkCommunicationcontent" + i.ToString())</td>
                         <td>
                             @Model.Element("WorkCommunicationcontent" + i.ToString())
                         </td>
                     </tr>
-                  }
+                }
                 <tr id="addWorkCommunicationtypesTrr">
                     <td colspan="2">
                         @Model.Element("WorkCommunicationtypes")
                         <a id="addWorkCommunicationType" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another communication type")</a></td>
-                </tr>
+                </tr>*@
             </tbody>
         </table>
     </div>
+
+@*    @Model.Element("WorkAddressline1")
+    @Model.Element("WorkAddressline2")
+    @Model.Element("WorkAddressline3")
+    @Model.Element("WorkAddressline4")
+    @Model.Element("WorkPostalCode")
+    @Model.Element("WorkCity")
+    @Model.Element("WorkCountry")*@
 </div>
 

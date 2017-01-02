@@ -96,14 +96,13 @@
                     <td class="tdstrong">@Model.Label("PermanentCountry")</td>
                     <td>@Model.Element("PermanentCountry")</td>
                 </tr>
+                @Html.Partial("_InternalLogNoteV2", Model)
             </tbody>
         </table>
     </div>
 </div>
 <input type="hidden" id="CustomerId" value="@Model.Form.CustomerId" />
 <input type="hidden" id="formGuid" value="@Model.FormGuid" />
-<input type="hidden" id="WatchDate" name="WatchDate" value="@Model.Element("WatchDate")" />
-<input type="hidden" id="CalculateWatchDate" name="CalculateWatchDate" value="1" />
 <script>
 
     $("#NewToIKEA").change(function () {

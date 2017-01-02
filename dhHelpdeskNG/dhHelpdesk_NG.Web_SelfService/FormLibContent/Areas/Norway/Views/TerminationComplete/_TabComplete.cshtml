@@ -1,0 +1,93 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<div class="tab-pane" id="Complete">
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Termination Payments")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PaymentType")</td>
+                    <td>
+                        @Model.Element("PaymentType")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AmountUnits")</td>
+                    <td>
+                        @Model.Element("AmountUnits")
+                    </td>
+                </tr>
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
+                {
+                    <tr class="terminationpayments@(i.ToString())" id="terminationpayments@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h4>@Model.Translate("Termination Payments") @i.ToString()</h4>
+                        </td>
+                    </tr>
+                    <tr class="terminationpayments@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("PaymentType" + i.ToString())</td>
+                        <td>
+                            @Model.Element("PaymentType" + i.ToString())</td>
+                    </tr>
+                    <tr class="terminationpayments@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AmountUnits" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AmountUnits" + i.ToString())</td>
+                    </tr>
+                }
+                <tr id="addTerminationPaymentsTrr">
+                    <td colspan="2">
+                        @Model.Element("TerminationPayments")
+                        <a id="addTerminationPayment" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another termination payment")</a></td>
+                </tr>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Deductions from Termination Payment")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionType")</td>
+                    <td>
+                        @Model.Element("DeductionType")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionAmountUnits")</td>
+                    <td>
+                        @Model.Element("DeductionAmountUnits")
+                    </td>
+                </tr>
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
+                {
+                    <tr class="deduction@(i.ToString())" id="deduction@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h4>@Model.Translate("Deductions from Termination Payment") @i.ToString()</h4>
+                        </td>
+                    </tr>
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionType" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionType" + i.ToString())</td>
+                    </tr>
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionAmountUnits" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionAmountUnits" + i.ToString())</td>
+                    </tr>
+                }
+
+                <tr id="addDeductionTrr">
+                    <td colspan="2">
+                        @Model.Element("Deductions")
+                        <a id="addDeduction" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another deduction from Termination Payment")</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -91,20 +91,18 @@
                 }
                 <tr>
 
-                    <td class="tdstrong"><p>@Model.Translate("To SSC Administration"):</p></td>
+                    <td class="tdstrong">
+                        <p>@Model.Translate("To SSC Administration"):</p>
+                    </td>
                     <td>
-                        
-                    <p>@Model.Translate("Unfortunately this co-worker will not be joining IKEA.")</p>
-                    <p>@Model.Translate("Please correct the record in Globalview and other required administration activities to withdraw this co-worker.")</p>
-                        
-</td>
-                </tr>         
 
-                <tr>
-                    <td class="tdstrong">@Model.Label("InternalLogNote")</td>
-                    <td>
-                        @Model.Element("InternalLogNote")</td>
-                </tr>      
+                        <p>@Model.Translate("Unfortunately this co-worker will not be joining IKEA.")</p>
+                        <p>@Model.Translate("Please correct the record in Globalview and other required administration activities to withdraw this co-worker.")</p>
+
+                    </td>
+                </tr>
+
+                @Html.Partial("_InternalLogNoteV2", Model)
 
 
 

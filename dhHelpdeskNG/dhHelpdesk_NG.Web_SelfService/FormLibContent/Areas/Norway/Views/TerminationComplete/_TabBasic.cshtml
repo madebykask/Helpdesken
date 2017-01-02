@@ -1,0 +1,72 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<div class="tab-pane" id="Basic">
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TerminationReason")</td>
+                    <td>
+                        @Model.Element("TerminationReason")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("LastDayOfEmployment")</td>
+                    <td>
+                        @Model.Element("LastDayOfEmployment")
+                        <div id="notice_BackDate" style="display: none;" class="notice">
+                            @Model.Translate("Are you sure you want to backdate the last day of employment?")
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("CDS")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("LockCDSAccountFrom")</td>
+                    <td>
+                        @Model.Element("LockCDSAccountFrom")
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        var $dateSelector = $('#LastDayOfEmployment');
+        $('#date_LastDayOfEmployment,#LastDayOfEmployment').not("disabled").on({
+            changeDate: function (ev) {
+                setCDSDefaultDate();
+                showBackDateNotice($dateSelector);
+            },
+            change: function(){
+                setCDSDefaultDate();
+                showBackDateNotice($dateSelector);
+            }
+        });
+    });
+    var setCDSDefaultDate = function (){
+        var $LastDayOfEmployment = $('#LastDayOfEmployment');
+        var $LockCDSAccountFrom = $('#LockCDSAccountFrom');
+        $LockCDSAccountFrom.val($LastDayOfEmployment.val());
+    };
+    var showBackDateNotice = function ($dateSelector) {
+        var getTodaysDate = function () {
+            var todaysDate = new Date();
+            todaysDate.setHours(0, 0, 0, 0);
+            return todaysDate;
+        };
+        if (getTodaysDate() > getChosenDate($dateSelector)) {
+            selectorNotice($dateSelector, true);
+        }
+        else {
+            selectorNotice($dateSelector, false);
+        }
+    };
+</script>

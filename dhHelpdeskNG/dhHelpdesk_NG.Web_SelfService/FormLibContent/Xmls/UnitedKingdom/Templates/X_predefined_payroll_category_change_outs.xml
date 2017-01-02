@@ -382,16 +382,6 @@
     <show7>Salaried</show7>
   </dependent>
   <dependent>
-    <selected>Carpenter</selected>
-    <show1>45</show1>
-    <show2>46</show2>
-    <show3>46</show3>
-    <show4></show4>
-    <show5>Co-worker</show5>
-    <show6>Level 1</show6>
-    <show7>Salaried</show7>
-  </dependent>
-  <dependent>
     <selected>Cash Line Co-Worker</selected>
     <show1> </show1>
     <show2> </show2>
@@ -552,16 +542,6 @@
     <show7>Salaried Senior Management, Salaried Senior Management</show7>
   </dependent>
   <dependent>
-    <selected>Com &amp; In Co-worker</selected>
-    <show1> </show1>
-    <show2> </show2>
-    <show3> </show3>
-    <show4> </show4>
-    <show5>Co-worker</show5>
-    <show6>Level 1</show6>
-    <show7>Hourly</show7>
-  </dependent>
-  <dependent>
     <selected>Com &amp; In Manager</selected>
     <show1>54</show1>
     <show2>54</show2>
@@ -660,16 +640,6 @@
     <show5></show5>
     <show6></show6>
     <show7></show7>
-  </dependent>
-  <dependent>
-    <selected>Comp &amp; Bens Specialist</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4>49</show4>
-    <show5>Level 1</show5>
-    <show6>Level 1</show6>
-    <show7>Salaried, Salaried</show7>
   </dependent>
   <dependent>
     <selected>Compensation &amp; Benefits Manager</selected>
@@ -1092,16 +1062,6 @@
     <show7>Hourly</show7>
   </dependent>
   <dependent>
-    <selected>Customer Services CW Contact Centre</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5>Co-worker</show5>
-    <show6>Level 1</show6>
-    <show7>Hourly</show7>
-  </dependent>
-  <dependent>
     <selected>Customer Services CW Edinburgh Store</selected>
     <show1></show1>
     <show2></show2>
@@ -1460,67 +1420,7 @@
     <show5></show5>
     <show6></show6>
     <show7></show7>
-  </dependent>
-  <dependent>
-    <selected>Facilies Management Specialist</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
-    <show7></show7>
-  </dependent>
-  <dependent>
-    <selected>Facilities Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4>57</show4>
-    <show5>Level 2</show5>
-    <show6>Level 2</show6>
-    <show7>Salaried, Salaried, Salaried Senior Management</show7>
-  </dependent>
-  <dependent>
-    <selected>Facility Co-worker</selected>
-    <show1> </show1>
-    <show2> </show2>
-    <show3> </show3>
-    <show4> </show4>
-    <show5>Co-worker</show5>
-    <show6>Level 1</show6>
-    <show7>Hourly</show7>
-  </dependent>
-  <dependent>
-    <selected>Facility Management Specialist</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4>50</show4>
-    <show5>Level 1</show5>
-    <show6>Level 1</show6>
-    <show7>Salaried</show7>
-  </dependent>
-  <dependent>
-    <selected>Facility Manager</selected>
-    <show1>51</show1>
-    <show2>52</show2>
-    <show3>53</show3>
-    <show4></show4>
-    <show5>Level 1</show5>
-    <show6>Level 1</show6>
-    <show7>Salaried Management</show7>
-  </dependent>
-  <dependent>
-    <selected>Facility Specialist</selected>
-    <show1>48</show1>
-    <show2>48</show2>
-    <show3>48</show3>
-    <show4></show4>
-    <show5>Co-worker</show5>
-    <show6>Level 1</show6>
-    <show7>Salaried</show7>
-  </dependent>
+  </dependent>   
   <dependent>
     <selected>Family Co-ordinator</selected>
     <show1></show1>
@@ -1530,16 +1430,6 @@
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
     <show7>Salaried</show7>
-  </dependent>
-  <dependent>
-    <selected>Family Co-worker</selected>
-    <show1> </show1>
-    <show2> </show2>
-    <show3> </show3>
-    <show4> </show4>
-    <show5>Co-worker</show5>
-    <show6>Level 1</show6>
-    <show7>Hourly</show7>
   </dependent>
   <dependent>
     <selected>Family Manager</selected>
@@ -1760,46 +1650,6 @@
     <show5> </show5>
     <show6> </show6>
     <show7>Salaried Senior Management, Salaried</show7>
-  </dependent>
-  <dependent>
-    <selected>HFB 14,15 Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
-    <show7></show7>
-  </dependent>
-  <dependent>
-    <selected>HFB 16,17 Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
-    <show7></show7>
-  </dependent>
-  <dependent>
-    <selected>HFB 18,19 Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
-    <show7></show7>
-  </dependent>
-  <dependent>
-    <selected>HFB 4,5 Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
-    <show7></show7>
   </dependent>
   <dependent>
     <selected>HR Admin Manager</selected>
@@ -2160,16 +2010,6 @@
     <show5>Level 2</show5>
     <show6>Level 2</show6>
     <show7>Salaried Management</show7>
-  </dependent>
-  <dependent>
-    <selected>Kitchen Installation CW Glasgow Store</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5>Co-worker</show5>
-    <show6>Level 1</show6>
-    <show7>Hourly</show7>
   </dependent>
   <dependent>
     <selected>Kitchen Installation Manager</selected>

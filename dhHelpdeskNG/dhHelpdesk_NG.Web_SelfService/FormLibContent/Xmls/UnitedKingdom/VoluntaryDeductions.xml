@@ -24,7 +24,7 @@
         
       </element>
       <element name="Company" type="text" label="Company"></element>
-      <element name="BusinessUnit" type="text" label="Business Unit"></element>
+      <element name="BusinessUnit" type="text" label="Business Unit" mandatory="1"></element>
       <element name="ServiceArea" type="text" label="Function"></element>
       <element name="Department" type="text" label="Department"></element>
       <element name="ChangeValidFrom" type="date" label="Change Valid from:" mandatory="1" format="dd.MM.yyyy">
@@ -40,6 +40,7 @@
           <option value="Standard">Standard</option>
         </options>
       </element>
+      <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
     </tab>
 
     <tab name="#Payment" label="Payment Information">
@@ -50,6 +51,10 @@
           <!--<option value="760A - Charity Deduction">760A - Charity Deduction</option>
           <option value="770E - USDAW Union Deduction">770E - USDAW Union Deduction</option>-->
           <option value="Pension">Pension</option>
+          <option value="USDAW">USDAW</option>
+          <option value="GMB">GMB</option>
+          <option value="Health Shield">Health Shield</option>
+          <option value="Simply Health">Simply Health</option>
         </options>
       </element>
       <!--<element type="select" name="PaymentType" label="Payment Type">
@@ -89,6 +94,10 @@
           <!--<option value="760A - Charity Deduction">760A - Charity Deduction</option>
           <option value="770E - USDAW Union Deduction">770E - USDAW Union Deduction</option>-->
           <option value="Pension">Pension</option>
+          <option value="USDAW">USDAW</option>
+          <option value="GMB">GMB</option>
+          <option value="Health Shield">Health Shield</option>
+          <option value="Simply Health">Simply Health</option>
         </options>
       </element>
       <!--<element type="select" name="PaymentType2" label="Payment Type" >
@@ -128,6 +137,10 @@
           <!--<option value="760A - Charity Deduction">760A - Charity Deduction</option>
           <option value="770E - USDAW Union Deduction">770E - USDAW Union Deduction</option>-->
           <option value="Pension">Pension</option>
+          <option value="USDAW">USDAW</option>
+          <option value="GMB">GMB</option>
+          <option value="Health Shield">Health Shield</option>
+          <option value="Simply Health">Simply Health</option>
         </options>
       </element>
       <!--<element type="select" name="PaymentType3" label="Payment Type" >
@@ -165,6 +178,10 @@
         <options>
           <option value=""></option>
           <option value="Pension">Pension</option>
+          <option value="USDAW">USDAW</option>
+          <option value="GMB">GMB</option>
+          <option value="Health Shield">Health Shield</option>
+          <option value="Simply Health">Simply Health</option>
         </options>
       </element>
       <element type="text" name="DeductionsAmountUnits4" label="Amount/Units" >
@@ -184,6 +201,10 @@
         <options>
           <option value=""></option>
           <option value="Pension">Pension</option>
+          <option value="USDAW">USDAW</option>
+          <option value="GMB">GMB</option>
+          <option value="Health Shield">Health Shield</option>
+          <option value="Simply Health">Simply Health</option>
         </options>
       </element>
       <element type="text" name="DeductionsAmountUnits5" label="Amount/Units" >

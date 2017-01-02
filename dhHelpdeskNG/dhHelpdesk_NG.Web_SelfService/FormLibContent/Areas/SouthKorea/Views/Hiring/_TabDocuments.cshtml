@@ -12,31 +12,7 @@
             return "";
         }
 
-        //This template is applicable only if <Payrollcategory> = “Flex - Hourly”
-        if (Model.GetAnswer("Payrollcategory").ToLower() == "Flex - Hourly".ToLower())
-        {
-            return "ContractFlexHourly";
-        }
-
-        //This template is applicable only if <Payrollcategory> = “Flex - Monthly”
-        if (Model.GetAnswer("Payrollcategory").ToLower() == "Flex - Monthly".ToLower())
-        {
-            return "ContractFlexMonthly";
-        }
-
-        //This template is applicable only if <Payrollcategory> = “Exempted”
-        if (Model.GetAnswer("Payrollcategory").ToLower() == "Exempted".ToLower())
-        {
-            return "ContractMonthlyExempted";
-        }
-
-        //This template is applicable only if <Payrollcategory> = “Salaried - Monthly or Salaried - Hourly”
-        if (Model.GetAnswer("Payrollcategory").ToLower() == "Salaried - Monthly".ToLower() || Model.GetAnswer("Payrollcategory").ToLower() == "Salaried - Hourly".ToLower())
-        {
-            return "ContractSalaried";
-        }
-
-        return "";
+        return "ContractEnglish";
             
     }
 
@@ -62,18 +38,36 @@
             <tbody>
             @if (!string.IsNullOrEmpty(GetContract()))
             {
+                // English Version of contract
                     <tr>
-                        <td>@Model.Translate("Contract")</td>
+                        <td>@Model.Translate("English Contract")</td>
                         <td>pdf</td>
                         <td>&nbsp;</td>
                         <td>
-                            <a href="@Url.Action("print", "hiring", new
-                {
-                    id = GetContract(),
-                    caseId = Model.Contract.Id,
-                    path = Path.Combine(Path.GetDirectoryName(Model.FormXmlPath), Path.GetFileNameWithoutExtension(Model.FormXmlPath)),
-                    userId = FormLibSessions.User.UserId
-                })" class="btn pull-right print"><i class="icon-file"></i>&nbsp;@PrintText()</a>
+                           <a href="@Url.Action("print", "hiring", new
+                            {
+                                id = GetContract(),
+                                caseId = Model.Contract.Id,
+                                path = Path.Combine(Path.GetDirectoryName(Model.FormXmlPath), Path.GetFileNameWithoutExtension(Model.FormXmlPath)),
+                                userId = FormLibSessions.User.UserId
+                            })" class="btn pull-right print"><i class="icon-file"></i>&nbsp;@PrintText()</a>
+                        </td>
+                    </tr>
+                
+                
+                // Korean Version of contract
+                 <tr>
+                        <td>@Model.Translate("Korean Contract")</td>
+                        <td>pdf</td>
+                        <td>&nbsp;</td>
+                        <td>
+                          <a href="@Url.Action("print", "hiring", new
+                            {
+                                id = "ContractKorean",
+                                caseId = Model.Contract.Id,
+                                path = Path.Combine(Path.GetDirectoryName(Model.FormXmlPath), Path.GetFileNameWithoutExtension(Model.FormXmlPath)),
+                                userId = FormLibSessions.User.UserId
+                            })"class="btn pull-right print"><i class="icon-file"></i>&nbsp;@PrintText()</a>
                         </td>
                     </tr>
 

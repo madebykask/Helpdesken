@@ -121,6 +121,8 @@
                     {
                         @Html.Partial("_GlobalAttachments", Model)
                     }
+
+                    @Html.Partial("_TabHiringJS", Model)
                 </div>
             </div>
         </div>
@@ -129,7 +131,8 @@
 }
 
 <script>
-  
-    //InitIntegration();
-
+    function changeBusinessUnitCallback() {
+        GetXML('Predefined_BusinessUnit_LineManager.xml', narrowDownBusinessUnitLineManager);
+        GetXML('Predefined_BusinessUnit_LocalJobTitle.xml', narrowDownBusinessUnitLocalJobTitle);
+    }
 </script>

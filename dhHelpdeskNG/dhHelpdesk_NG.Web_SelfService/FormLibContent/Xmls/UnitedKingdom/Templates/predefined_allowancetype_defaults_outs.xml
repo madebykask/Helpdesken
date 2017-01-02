@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <predefined>
   <name>AllowancetypeDefault</name>
-
-  <dependent>
-    <selected>Advanced</selected>
-    <show1>0.35</show1>
-    <show2></show2>
-    <show3></show3>
-  </dependent>
   <dependent>
     <selected>Fork Lift Truck Allowance</selected>
     <show1>0.92</show1>
@@ -28,7 +21,7 @@
   </dependent>
   <dependent>
     <selected>Hourly Day</selected>
-    <show1>0.73</show1>
+    <show1>0.75</show1>
     <show2></show2>
     <show3></show3>
   </dependent>
@@ -46,7 +39,7 @@
   </dependent>
   <dependent>
     <selected>Manual Hand</selected>
-    <show1>0.35</show1>
+    <show1>0.36</show1>
     <show2></show2>
     <show3></show3>
   </dependent>
@@ -64,7 +57,7 @@
   </dependent>
   <dependent>
     <selected>Shunter Allow</selected>
-    <show1>0.35</show1>
+    <show1>0.36</show1>
     <show2></show2>
     <show3></show3>
   </dependent>
@@ -121,6 +114,12 @@
     <show1></show1>
     <show2></show2>
     <show3></show3>
+  </dependent>
+   <dependent>
+    <selected>MHS/H&amp;S</selected>
+    <show1>1.35</show1>
+     <show2></show2>
+     <show3></show3>
   </dependent>
   <dependent>
     <selected>Mortgage Subsidy</selected>
@@ -202,7 +201,7 @@
   </dependent>
   <dependent>
     <selected>Night Shift (Distribution Only)</selected>
-    <show1>1.80</show1>
+    <show1>1.84</show1>
     <show2></show2>
     <show3></show3>
   </dependent>

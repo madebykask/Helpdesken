@@ -60,6 +60,15 @@
                     <td class="tdstrong">@Model.Label("ManagersJobTitle")</td>
                     <td>@Model.Element("ManagersJobTitle")</td>
                 </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ChiefPosition")</td>
+                    <td>@Model.Element("ChiefPosition")
+                        <div id="notice_ChiefPosition" style="display:inline-block; color:black;" class="notice">
+                            @Model.Translate("Indicate if Manager/TL should have a Chief Position in GlobalView")
+                        </div>
+
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>

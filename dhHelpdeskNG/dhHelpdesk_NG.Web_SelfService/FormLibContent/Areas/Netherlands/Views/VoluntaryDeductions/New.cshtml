@@ -17,21 +17,20 @@
 
     </script>
 
-     @Html.Partial("_Validate", Model)
+    @Html.Partial("_Validate", Model)
 }
-@using (Html.BeginForm("new", "VoluntaryDeductions", FormMethod.Post, new { area = "netherlands", novalidate = "novalidate" }))
+@using(Html.BeginForm("new", "VoluntaryDeductions", FormMethod.Post, new { area = "netherlands", novalidate = "novalidate" }))
 {
     @Html.Partial("_GlobalNavRev", Model)
     <div class="container containeralignright">
-        @Html.Partial("_CurrentUser")  
-        @Html.Partial("_ErrorMessage", Model)    
+        @Html.Partial("_CurrentUser")
+        @Html.Partial("_ErrorMessage", Model)
         <ul class="nav nav-tabs">
-           @if(Model.VisibleTab("#ServiceRequestDetails"))
+            @if(Model.VisibleTab("#ServiceRequestDetails"))
             {
                 <li class="active @(Model.TabHasError("#ServiceRequestDetails") ? "error" : "")">
                     <a href="#ServiceRequestDetails">@Model.Translate("Service Request Details")</a></li>
             }
-            
             @if(Model.VisibleTab("#Payment"))
             {
                 <li class="@(Model.TabHasError("#Payment") ? "error" : "")">
@@ -46,16 +45,15 @@
         </ul>
         <div class="content">
             <div class="row-fluid">
-                <div class="tab-content">   
-                      @if(Model.VisibleTab("#ServiceRequestDetails"))
+                <div class="tab-content">
+                    @if(Model.VisibleTab("#ServiceRequestDetails"))
                     {
                         @Html.Partial("_TabServiceRequestDetails", Model)
                     }
-                    
-                    @if (Model.VisibleTab("#Payment"))
+                    @if(Model.VisibleTab("#Payment"))
                     {
                         @Html.Partial("_TabPayment", Model)
-                    }            
+                    }
                     @if(Model.VisibleTab("#attachments"))
                     {
                         @Html.Partial("_GlobalAttachments", Model)

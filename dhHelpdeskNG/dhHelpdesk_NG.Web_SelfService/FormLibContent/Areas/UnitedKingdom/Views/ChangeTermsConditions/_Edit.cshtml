@@ -177,12 +177,7 @@
             var selectize_tags = $("#JobTitle")[0].selectize
             selectize_tags.clearOptions();
 
-            //_Doncaster
-            var n = bus.indexOf("Doncaster");
 
-            if (n > 0) {
-                dep = dep + '_Doncaster';
-            }
 
             $(xml).find('dependent').each(function () {
 
@@ -225,6 +220,13 @@
                 }
 
             });
+
+            var jobtitleoptions = $('#JobTitle')[0].selectize.options;
+            var jobtitleoptionslength = Object.keys(jobtitleoptions).length;
+            if (jobtitleoptionslength == 0) {
+                GetXML('Data_JobTitle.xml', SetAllJobtitles);
+            }
+
             $('#JobTitle').on('change', function () {
                 ////////
                 //JobTitle change function

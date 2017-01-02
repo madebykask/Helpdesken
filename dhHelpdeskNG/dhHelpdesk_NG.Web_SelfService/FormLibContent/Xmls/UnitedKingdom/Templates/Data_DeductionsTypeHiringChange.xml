@@ -2,6 +2,7 @@
 <options>
   <option value=""></option>
   <option value="Badge Charge">Badge Charge</option>
+  <option value="Company Car">Company Car</option>
   <option value="Uniform Deduction">Uniform Deduction</option>
   <option value="ID Card">ID Card</option>
   <option value="TEC Expenses Deduction">TEC Expenses Deduction</option>

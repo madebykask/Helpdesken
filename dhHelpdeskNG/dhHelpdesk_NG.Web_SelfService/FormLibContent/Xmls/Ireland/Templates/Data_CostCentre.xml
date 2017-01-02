@@ -24,13 +24,17 @@
   <option value="4030 - Goods Receiving">4030 - Goods Receiving</option>
   <option value="4040 - Goods Replenishment">4040 - Goods Replenishment</option>
   <option value="4050 - Full Serve">4050 - Full Serve</option>
+  <option value="4050 - Full Serve/ EMPU">4050 - Full Serve/ EMPU</option>
   <option value="6070 - Marketing">6070 - Marketing</option>
   <option value="6071 - Communic &amp; Interior">6071 - Communic &amp; Interior</option>
   <option value="6072 - Family">6072 - Family</option>
+  <option value="6073 - PR">6073 - PR</option>
   <option value="6120 - CS After Sales Serv">6120 - CS After Sales Serv</option>
   <option value="6180 - CS Cash">6180 - CS Cash</option>
   <option value="6190 - Cash Administration">6190 - Cash Administration</option>
+  <option value="6204 - Support other(s) 3">6204 - Support other(s) 3</option>
   <option value="6210 - Administration">6210 - Administration</option>
+  <option value="6241 - Business Support 1">6241 - Business Support 1</option>
   <option value="6299 - Re-Invoice Intercmp">6299 - Re-Invoice Intercmp</option>
   <option value="6310 - Maintenance">6310 - Maintenance</option>
   <option value="6320 - Safety / Security 1">6320 - Safety / Security 1</option>
@@ -39,5 +43,6 @@
   <option value="6600 - Human Resource">6600 - Human Resource</option>
   <option value="6830 - Facility Management">6830 - Facility Management</option>
   <option value="7010 - Management Group">7010 - Management Group</option>
+  <option value="8240 - Project EO 1">8240 - Project EO 1</option>
   <option value="8241 - Project EO 2">8241 - Project EO 2</option>
 </options>

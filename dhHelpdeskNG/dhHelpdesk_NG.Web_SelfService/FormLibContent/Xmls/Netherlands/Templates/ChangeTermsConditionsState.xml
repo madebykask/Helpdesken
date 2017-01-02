@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <state status="0">
     <status value="0">
-        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
         <actions>
@@ -20,10 +20,10 @@
         </userGroup>
         <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
-        <readOnlyFields>Company,BusinessUnit,ServiceArea,Department,NewCompany,NewBusinessUnit</readOnlyFields>
+        <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
         <actions>
             <action status="20" internal-val="20" text="Submit to HR Unit">
-                <validateTabs>#ServiceRequestDetails,#Payment</validateTabs>
+                <validateTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</validateTabs>
             </action>
             <action status="99" internal-val="70" text="Cancel Service request"></action>
         </actions>

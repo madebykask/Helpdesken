@@ -4,7 +4,7 @@
   <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
   <!ENTITY state SYSTEM "Templates/VoluntaryDeductionsState.xml">
   <!ENTITY dat_changetype SYSTEM "Data/Data_ChangeType.xml">
-  <!ENTITY dat_deductiontype SYSTEM "Data/Data_VoluntaryDeductions_DeductionType.xml">
+  <!ENTITY dat_deductiontype SYSTEM "Data/Data_DeductionType.xml">
   ]>
 
   <form id="231" guid="6CE57CD6-E83B-4714-A16A-482C8B516AD5" customerId="32">
@@ -41,10 +41,13 @@
           <option value="Standard">Standard</option>
         </options>
       </element>
+      <element type="textarea" name="InternalLogNote" label="Comment"></element>
     </tab>
 
     <tab name="#Payment" label="Payment Information">
       <element type="hidden" name="Deductions" default="1"></element>
+
+<!--1-->      
       <element type="select" name="DeductionChangeType" label="Deduction Change Type">
         &dat_changetype;
         <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
@@ -74,11 +77,7 @@
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       
-      
-      
-      
-      
-      <!--2-->
+<!--2-->
       <element type="select" name="DeductionChangeType2" label="Deduction Change Type">
         &dat_changetype;
         <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
@@ -138,16 +137,7 @@
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      <!--4-->
+<!--4-->
       <element type="select" name="DeductionChangeType4" label="Deduction Change Type">
         &dat_changetype;
         <mandatoryIfNotEmpty name="DeductionsType4"></mandatoryIfNotEmpty>
@@ -177,9 +167,7 @@
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       
-      
-      
-      <!--5-->
+<!--5-->
       <element type="select" name="DeductionChangeType5" label="Deduction Change Type">
         &dat_changetype;
         <mandatoryIfNotEmpty name="DeductionsType5"></mandatoryIfNotEmpty>

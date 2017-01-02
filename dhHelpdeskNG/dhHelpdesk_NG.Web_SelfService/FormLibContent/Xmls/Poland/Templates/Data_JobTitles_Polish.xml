@@ -637,4 +637,8 @@
     <option value="Manager Serwisu Internetowego">Manager Serwisu Internetowego</option>
     <option value="Administrator Strony Internetowej">Administrator Strony Internetowej</option>
     <option value="Spec.ds. administracji syst.magazynowych">Spec.ds. administracji syst.magazynowych</option>
+    <option value="Kierownik ds. Wsparcia Sprzedaży i Zaopatrzenia w Sklepie">Kierownik ds. Wsparcia Sprzedaży i Zaopatrzenia w Sklepie</option>
+    <option value="Specjalista ds. Wsparcia Sprzedaży i Zaopatrzenia w Sklepie">Specjalista ds. Wsparcia Sprzedaży i Zaopatrzenia w Sklepie</option>
+    <option value="Pracownik ds. Wsparcia Sprzedaży i Zaopatrzenia w Sklepie">Pracownik ds. Wsparcia Sprzedaży i Zaopatrzenia w Sklepie</option>
+    <option value="Lider Zespołu w Dziale Przepływu Towaru">Lider Zespołu w Dziale Przepływu Towaru</option>
 </options>

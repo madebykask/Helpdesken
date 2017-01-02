@@ -5,58 +5,127 @@
 <div class="tab-pane" id="Basic">
     <div class="span6">
         <table class="table">
-            <tbody>       
-            <tr>
-                <td class="tdstrong">@Model.Label("BasicTerminationType")</td>
-                <td>
-                    @Model.Element("BasicTerminationType")
-                </td>
-            </tr>
-            <tr>
-                <td class="tdstrong">@Model.Label("LastDayOfEmployment")</td>
-                <td>
-                    @Model.Element("LastDayOfEmployment")
-                    <div id="notice_HiringDate" style="display:none;" class="notice">
+            <tbody>
+                <tr>
+                    <td class="tdstrong">@Model.Label("BasicTerminationType")</td>
+                    <td>
+                        @Model.Element("BasicTerminationType")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TerminationReason")</td>
+                    <td>
+                        @Model.Element("TerminationReason")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("LastDayOfEmployment")</td>
+                    <td>
+                        @Model.Element("LastDayOfEmployment")
+                        <div id="notice_HiringDate" style="display: none;" class="notice">
                             @Model.Translate("The date you've entered is in the past. Are you sure you want to backdate Last Day of Employment date?")
                         </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="tdstrong" colspan="2">
-                    <h4>@Model.Translate("CDS")</h4>
-                </td>                
-            </tr>  
-            <tr>
-                <td class="tdstrong">@Model.Label("LockCDSAccountFrom")</td>
-                <td>
-                    @Model.Element("LockCDSAccountFrom")</td>
-            </tr>         
-@*            <tr>
-                <td class="tdstrong" colspan="2">
-                    <h4>@Model.Translate("Country Specifics")</h4>
-                </td>                
-            </tr>  
-            <tr>
-                <td class="tdstrong">@Model.Label("Co-WorkerBeenEmployedFor2Months")</td>
-                <td>
-                    @Model.Element("Co-WorkerBeenEmployedFor2Months")</td>
-            </tr>
-            <tr>
-                <td class="tdstrong">@Model.Label("UsingCompanyFitness")</td>
-                <td>
-                    @Model.Element("UsingCompanyFitness")</td>
-            </tr>*@
-                </tbody>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("CDS")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("LockCDSAccountFrom")</td>
+                    <td>
+                        @Model.Element("LockCDSAccountFrom")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Country Specifics")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Co-WorkerBeenEmployedFor2Months")</td>
+                    <td>
+                        @Model.Element("Co-WorkerBeenEmployedFor2Months")</td>
+                </tr>
+                @*<tr>
+                    <td class="tdstrong">@Model.Label("UsingCompanyFitness")</td>
+                    <td>
+                        @Model.Element("UsingCompanyFitness")</td>
+                </tr>*@
+            </tbody>
         </table>
     </div>
 </div>
 
 <script>
+    var lockedbyUserGroup = document.getElementById('LockedByUserGroup').getAttribute('status');
+    if ("@Model.ReadOnlyTab("#Basic")" == 'False' && lockedbyUserGroup == 'False') {
+
+        var TerminationReasonValues = function (xml) {
+            var TermTypeCurrentVal = $('#BasicTerminationType').val();
+            var ReasonCurrentVal = $('#TerminationReason').val();
+            var TermReasonSelector = $('#TerminationReason');
+
+            $(xml).find('dependent').each(function () {
+                var $sel = $(this);
+                show = '';
+
+                var xmlSelected = $sel.find('selected').text();
+
+                show = $sel.find('show').text();
+
+                if (xmlSelected == TermTypeCurrentVal) {
+
+                    if (show != '') {
+                        show = ' ,' + show;
+
+                        //temp, replace spaces that occours in the beginning of comma separation.
+                        show = show.replace(/\, /g, ",");
+
+                        var optionsarray = show.split(',');
+                        TermReasonSelector.empty();
+                        $.each(optionsarray, function (index, value) {
+                            var opt = '<option value="' + value + '">' + value + '</option>';
+                            TermReasonSelector.append(opt);
+                        });
+                        TermReasonSelector.val(ReasonCurrentVal);
+
+                        return;
+                    }
+                }
+            });
+        };
+    };
+    $('#BasicTerminationType').change(function () {
+        GetXML('Predefined_TerminationReason.xml', TerminationReasonValues);
+        setTimeout(function () { TerminationReasonDefault(); }, 100);
+    });     
     
 
+    function TerminationReasonDefault(ExitTrigger) {
+        
+        var length = $('#TerminationReason').children('option').length;
+        if (!(length == 0)) {
+            if (length <= 2) {
+                $('#TerminationReason option')[1].selected = true;
+            }
+            if ($('#BasicTerminationType').val() == "Expiry of Contract") {
+                $('#TerminationReason').val('Expiry of Contract');
+            }
+        }
+        else {
+            if (ExitTrigger == true) {
+
+            }
+            else {
+                setTimeout(function () { TerminationReasonDefault(true); }, 100);
+            }
+        }
+    }
+    GetXML('Predefined_TerminationReason.xml', TerminationReasonValues);
+    
     function selectIndexChangeTerminationType() {
-        if (document.getElementById('CompleteTerminationType'))
-        {
+        if (document.getElementById('CompleteTerminationType')) {
             document.getElementById('CompleteTerminationType').value = document.getElementById('BasicTerminationType').value;
         }
     }
@@ -79,7 +148,7 @@
 
         if (dstartDate.valueOf() < now.valueOf())
             noticeHiringDate.show();
-                
+
     });
 
 
@@ -104,4 +173,29 @@
 
 
 
+
+
+
+
+    function GetXML(xmlFile, url) {
+        //////////
+        //Gets XML File
+        //////////
+        var path = window.location.protocol + '//';
+        path = path + window.location.host + '/';
+
+        path = site.baseUrl + '/FormLibContent/Xmls/Netherlands/Defaults/' + xmlFile
+
+        $.ajax({
+            type: "GET",
+            url: path,
+            dataType: "xml",
+            success: url,
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseText);
+                alert(textStatus);
+                alert(errorThrown);
+            }
+        });
+    }
 </script>

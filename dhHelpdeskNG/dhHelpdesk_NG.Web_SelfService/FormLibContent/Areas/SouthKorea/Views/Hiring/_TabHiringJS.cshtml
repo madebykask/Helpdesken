@@ -9,13 +9,15 @@
 }
 
 <script>
-    //function changeBusinessUnitCallback() {
-    //    setBusinessUnitAddress($('#BusinessUnit'));
-    //}
 
+    // Fix: Prevent to change saved JobTitle by SetDefJobTitle method S.G
+    // ToDo: Should do SetDefJobTitle only after "Selectize.OnClick()"
+    var maxLocalJobTitleDefCount = 2;
+    var SetDefCount;
 
     var lockedbyUserGroup = document.getElementById('LockedByUserGroup').getAttribute('status');
-    if ("@Model.ReadOnlyTab("#OrganisationalAssignment")" == 'False' && lockedbyUserGroup == 'False') {
+
+    if (("@Model.ReadOnlyTab("#OrganisationalAssignment")" == 'False' && "@Model.ReadOnlyTab("#ServiceRequestDetails")" == 'False') && lockedbyUserGroup == 'False') {
 
 
         $("#Department").change(function () {
@@ -26,79 +28,96 @@
             GetXML('default_jobtitle.xml', SetDefaultJobTitle);
         });
 
-
+        var BlockCoWorkerID = function () {
+            var val = $("#NewToIKEA").val();
+            if (val == "New-Hire") {
+                $('#Co-WorkerID').attr("disabled", true);
+                $('#GlobalHRID').attr("disabled", true);
+            }
+            else {
+                $('#Co-WorkerID').attr("disabled", false);
+                $('#GlobalHRID').attr("disabled", false);
+            }
+        }
 
 
         $(function () {
 
+            if ($('#PositionTitle').val() != '')
+                SetDefCount = 0;
+            else
+                SetDefCount = maxLocalJobTitleDefCount;
 
-            setTimeout(function () { SetDefaultCompany(); }, 1);
+            setTimeout(function () { SetDefaultCompany(); }, 10);
 
             BlockCoWorkerID();
 
             lockContractEndDate();
 
-            //setBusinessUnitAddress($('#BusinessUnit'));
+            SetDefaultPayee();
 
+            DisableAdoptionFosterDate();
 
 
             $("#BusinessUnit").change(function () {
-                //setBusinessUnitAddress(this);
-
                 setDefaultPrimarySite();
-
                 setTimeout(function () { GetXML('Predefined_BusinessUnit_PositionTitle.xml', narrowDownPositionTitle); }, 1);
-                setTimeout(function () { GetXML('Predefined_BusinessUnit_JobTitle.xml', narrowDownJobTitle); }, 1);
             });
-
-            //PersonelltaxstatusBehavior();
-
 
         })
     }
 
-    //$('[name="Personneltaxstatus"]').change(function () {
-    //    PersonelltaxstatusBehavior();
+    var DisableAdoptionFosterDate = function ()
+    {
+        for (var i = 0; i < 5; i++) {
+            DisableAdoptionFosterDateHandler(i);
+        }
+    }
 
-    //});
+    var DisableAdoptionFosterDateHandler = function (i)
+    {
 
-    //var DisableCalculationMethod = function () {
-    //    if (!($('[name="Personneltaxstatus"][value="Foreigner"]').prop('checked'))) {
-    //        $('#Taxationinformation').attr('disabled', false);
-    //    }
-    //    else {
-    //        $('#Taxationinformation').attr('disabled', true);
-    //    }
-    //}
+        if (i == 0)
+        {
+            i = '';
+        }
+        else if (i > 0)
+        {
+            i++;
+        }
 
-    //var PersonelltaxstatusBehavior = function () {
-    //    if ($('input[name="Personneltaxstatus"][value="Non-taxable Overseas Income"]').prop('checked')) {
-    //        $('#Taxationinformation').attr('disabled', false);
-    //    }
-    //    else {
-    //        $('#Taxationinformation').attr('disabled', true);
-    //    }
+        var dependancytax = 'input[name="DependancyTax' + i + '"][value="Fostered Child"]';
 
-    //    if ($('input[name="Personneltaxstatus"][value="Foreigner"]').prop('checked')) {
-    //        $('#Calculationmethod').attr('disabled', false);
-    //    }
-    //    else {
-    //        $('#Calculationmethod').attr('disabled', true);
-    //    }
-    //}
+        if (!$(dependancytax).prop('checked')) {
+            
+            $('#adoptionfosterdate' + i).attr("disabled", true);
 
+            $('#date_adoptionfosterdate' + i).addClass("disabled");
+            $('#date_adoptionfosterdate' + i).datepicker("destroy");
 
+        }
+        else {
+            $('#adoptionfosterdate' + i).attr("disabled", false);
+            $('#date_adoptionfosterdate' + i).removeClass("disabled");
+            $('#date_adoptionfosterdate' + i).datepicker();
+        }
+    }
 
-    $('#NewtoIKEA').change(function () {
+    $('[name^="DependancyTax"]').change(function () {
+        DisableAdoptionFosterDate();
+    });
+
+    $('#NewToIKEA').change(function () {
         setGlobalMobilityBehavior($(this).val());
     });
 
-    if ($('#NewtoIKEA').val() == '@IsTeWorker') {
+    if ($('#NewToIKEA').val() == '@IsTeWorker') {
         $(".globalmobility-first").show();
     }
     else {
         $(".globalmobility-first").hide();
     }
+
     function setGlobalMobilityBehavior(value) {
         if (!(value == '@IsTeWorker')) {
 
@@ -117,9 +136,8 @@
 
     };
 
-
     var setDefaultPrimarySite = function () {
-        debugger;
+
         var bu = $("#BusinessUnit option:selected").text();
 
         $('#Primarysite').val(bu)
@@ -139,7 +157,6 @@
             bus = $("#BusinessUnit option:selected").text();
         }
 
-
         var jobtitle_value;
         jobtitle_value = $('#PositionTitle').val();
 
@@ -147,8 +164,6 @@
 
         var selectize_tags = $("#PositionTitle")[0].selectize
         selectize_tags.clearOptions();
-
-
 
         $(xml).find('dependent').each(function () {
 
@@ -180,7 +195,7 @@
                     }
 
                     var items = optionsarray.map(function (x) { return { text: x, value: x }; });
-                    debugger;
+
                     selectize_tags.addOption(items);
 
 
@@ -252,7 +267,6 @@
                     }
 
                     var items = optionsarray.map(function (x) { return { text: x, value: x }; });
-                    debugger;
                     selectize_tags.addOption(items);
 
 
@@ -268,44 +282,20 @@
         });
     }
 
-    @*var setBusinessUnitAddress = function (e) {
-        //Timeout needed because of delay in setting the BU
-        setTimeout(function () {
-            if (!($(e).val() == ' ' || $(e).val() == '')) {
-                var actionUrl = '@Url.Action("BusinessUnitData", "Hiring")' + '?query=' + $(e).val();
-                $.getJSON(actionUrl, setBusinessUnitAddressFromResponse);
-            }
-        }, 50);
-    }*@
-
-    $("#Firstname").change(function () {
+    $("#FirstnameinKR").change(function () {
         SetDefaultPayee();
     });
-    $("#Lastname").change(function () {
+    $("#LastnameinKR").change(function () {
         SetDefaultPayee();
     });
 
     var SetDefaultPayee = function () {
         var PayeeName;
-        PayeeName = $('#Firstname').val() + " " + $('#Lastname').val()
+        PayeeName = $('#FirstnameinKR').val() + " " + $('#LastnameinKR').val()
 
         $('#Payee').val(PayeeName)
         $('#Payee2').val(PayeeName)
     }
-
-
-
-    //function setBusinessUnitAddressFromResponse(response) {
-    //    if (response != null) {
-    //        $('#WorkAddressline1').val(response.StrAddr.toString());
-    //        $('#WorkAddressline2').val(response.StrAddr2.toString());
-    //        $('#WorkAddressline3').val(response.StrAddr3.toString());
-    //        $('#WorkAddressline4').val(response.StrAddr4.toString());
-    //        $('#WorkPostalCode').val(response.PostalCode.toString());
-    //        $('#WorkCity').val(response.City.toString());
-    //        $('#WorkCountry').val('South Korea');
-    //    }
-    //}
 
     $("#Contractedhours").change(function () {
         SetContractType();
@@ -320,9 +310,14 @@
     }
 
 
+    $(function () {
+        if ($('#Contractstartdate').val() !== "") {
+
+            setValidFrom();
+        }
+    });
+
     $('#date_Contractstartdate').on('changeDate', function (ev) {
-
-
 
         setValidFrom();
 
@@ -344,32 +339,16 @@
         '#DeductionValidfrom,#DeductionValidfrom2,#DeductionValidfrom3,#DeductionValidfrom4,#DeductionValidfrom5,#JoinKRIKEAdate,#JoinIKEAGlobal,#Calculationstartdate').val($('#Contractstartdate').val());
     }
 
-
-    //Alternative way to set validfrom, maybe better?
-    //$("#AllowancesType").change(function () {
-    //    var contractstartdate;
-    //    contractstartdate = $('#Contractstartdate').val();
-
-    //    $('#AllowanceValidfrom').val(contractstartdate);
+    //#52776 Removed by popular demand
+    //$("#Reportstolinemanager").change(function () {
+    //    SetDefaultTECApprover();
     //});
-    //$("#DeductionType").change(function () {
-    //    var contractstartdate;
-    //    contractstartdate = $('#Contractstartdate').val();
-
-    //    $('#DeductionValidfrom').val(contractstartdate);
-    //});
-
-
-
-    $("#Reportstolinemanager").change(function () {
-        SetDefaultTECApprover();
-    });
 
     $("#Employmentcategory").change(function () {
         lockContractEndDate();
     });
 
-    $("#NewtoIKEA").change(function () {
+    $("#NewToIKEA").change(function () {
         BlockCoWorkerID();
     })
 
@@ -390,28 +369,27 @@
 
         if (val == 'Permanent') {
             $('#Contractenddate').attr('disabled', true);
+            $('#Contractenddate').addClass("disabled");
+            $('#date_Contractenddate').addClass("disabled");
+            $('#Contractenddate').datepicker("destroy");
+            $('#date_Contractenddate').datepicker("destroy");
+            
+
         }
         else {
             $('#Contractenddate').attr('disabled', false);
+            $('#Contractenddate').removeClass("disabled");
+            $('#date_Contractenddate').removeClass("disabled");
+            $('#date_Contractenddate').datepicker();
         }
     }
 
     var SetDefaultCompany = function () {
-
-        if ($("#Company option").length == 2) {
-            $("#Company option").eq(1).attr('selected', true);
-            $("#Company").change();
-        }
-    }
-
-
-    var BlockCoWorkerID = function () {
-        var val = $("#NewtoIKEA").val();
-        if (val == "New-Hire") {
-            $('#Co-workerID').attr("disabled", true);
-        }
-        else {
-            $('#Co-workerID').attr("disabled", false);
+        if ($("#Company").val() == '') {
+            if ($("#Company option").length == 2) {
+                $("#Company option").eq(1).attr('selected', true);
+                $("#Company").change();
+            }
         }
     }
 
@@ -455,8 +433,14 @@
     }
 
     var SetDefaultJobTitle = function (xml) {
+
+        SetDefCount += 1;
+        if (SetDefCount <= maxLocalJobTitleDefCount)
+            return;
+
         var positiontitle;
         positiontitle = $("#PositionTitle").val();
+
         $(xml).find('dependent').each(function () {
             var $sel = $(this);
             show = '';
@@ -466,7 +450,6 @@
             show = $sel.find('show').text();
 
             if (jobtitle == positiontitle) {
-                debugger;
                 if (show != '') {
                     var n = show.indexOf("#");
 
@@ -485,12 +468,7 @@
         })
     }
 
-
-
     $('#date_Contractstartdate').not(".disabled").datepicker().on('changeDate', function (ev) {
-
-        SetProbationEndDate($('#Probationperiod').val());
-
         SetAllowanceValidFrom($('#Contractstartdate').val());
         SetDeductionValidFrom($('#Contractstartdate').val());
     });
@@ -505,29 +483,9 @@
 
 
     $('#Contractstartdate').not(".disabled").change(function () {
-        SetProbationEndDate($('#Probationperiod').val());
         SetAllowanceValidFrom($('#Contractstartdate').val());
         SetDeductionValidFrom($('#Contractstartdate').val());
     });
-    $('#Probationperiod').change(function () {
-        SetProbationEndDate($(this).val());
-    });
-
-    var SetProbationEndDate = function (value) {
-        var probationEndDate = $('#Probationenddate');
-        if (value == 'Yes') {
-            var sStart = $('#Contractstartdate').val();
-            var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
-            var dStart = APIGlobal.DateTime.parseDate(sStart, format);
-
-            var endDate = new Date(dStart.getFullYear(), dStart.getMonth() + 3, dStart.getDate() - 1, 0, 0, 0, 0);
-            var visibleDate = APIGlobal.DateTime.formatDate(endDate, format);
-            probationEndDate.val(visibleDate.toString());
-        }
-        else {
-            probationEndDate.val("");
-        }
-    };
 
     $('#Payrollcategory').change(function () {
         SetDefaultPaidPer();

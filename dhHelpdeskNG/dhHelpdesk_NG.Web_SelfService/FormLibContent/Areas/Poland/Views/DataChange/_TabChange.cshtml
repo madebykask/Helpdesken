@@ -73,3 +73,116 @@
         </div>
     </div>
 </div>
+<script>
+    // S.G  Work order 54433 , 06 Maj 2016
+    // To narrow down ECM compensation program -> psArea -> psGroup -> Collective Sallary
+    $('#PSArea').on('change', function () {
+        eCMCompensationProgram = $('#ECMCompensationProgram option:selected').text();
+        var XML;
+
+        if (eCMCompensationProgram == 'ECM Retail & Property') {
+            XML = 'predefined_RETPROP_PSArea_PSGroup.xml';
+            addPSGroupOnPSArea(XML);
+
+        }
+        if (eCMCompensationProgram == 'ECM DS') {
+            XML = 'predefined_DS_PSArea_PSGroup.xml';
+            addPSGroupOnPSArea(XML);
+        }
+
+        else return;
+
+    });
+
+    function addPSGroupOnPSArea(xml) {
+        GetXML(xml, addPSGroupOnPSAreaXML);
+    }
+
+    function addPSGroupOnPSAreaXML(xml) {
+
+
+        var show = ''
+        var dep = '';
+
+        if (document.getElementById('PSArea')) {
+            dep = $("#PSArea option:selected").text();
+        }
+
+        if (document.getElementById('PSGroup')) {
+            psGroup = $("#PSGroup option:selected").text();
+        }
+
+        var temp = '';
+
+        $(xml).find('dependent').each(function () {
+
+            var $sel = $(this);
+
+            show = '';
+
+            var department = $sel.find('selected').text();
+
+            show = $sel.find('show').text();
+
+            if (department.toString().trim() == dep.toString().trim()) {
+
+                if (show != '') {
+
+                    var optionsarray = show.split(',');
+                    var seloption = "";
+
+                    $('#PSGroup')
+                        .find('option')
+                        .remove();
+
+                    //optionsarray.push('');
+
+                    $.each(optionsarray, function (key, value) {
+
+
+                        var s = value.replace(/\n/g, '');
+
+                        $('#PSGroup')
+                            .append($("<option></option>")
+                            .attr("value", s)
+                            .text(s));
+                    });
+
+                    //To assign the choosen value again to PS group
+                    $('#PSGroup').val(psGroup);
+
+                    return;
+                }
+            }
+        });
+
+
+    }
+
+    function GetXML(xmlFile, url) {
+        //////////
+        //Gets XML File
+        //////////
+
+        var path = window.location.protocol + '//';
+        path = path + window.location.host + '/';
+
+        path = site.baseUrl + '/FormLibContent/Xmls/Poland/Templates/' + xmlFile
+
+        $.ajax({
+            type: "GET",
+            url: path,
+            dataType: "xml",
+            success: url,
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseText);
+                alert(textStatus);
+                alert(errorThrown);
+            }
+
+        });
+
+
+    }
+
+</script>

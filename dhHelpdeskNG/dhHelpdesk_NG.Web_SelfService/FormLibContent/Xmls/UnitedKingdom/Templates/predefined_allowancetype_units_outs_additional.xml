@@ -2,10 +2,6 @@
 <predefined>
   <name>AllowancetypesUnits</name>
   <dependent>
-    <selected>Advanced</selected>
-    <show>0.35</show>
-  </dependent>
-  <dependent>
     <selected>Car Allowance</selected>
     <show></show>
   </dependent>
@@ -43,7 +39,7 @@
   </dependent>
   <dependent>
     <selected>Hourly Day</selected>
-    <show>0.73</show>
+    <show>0.75</show>
   </dependent>
   <dependent>
     <selected>Housing Allowance</selected>
@@ -66,12 +62,12 @@
     <show></show>
   </dependent>
   <dependent>
-    <selected>Location Allowance</selected>
-    <show></show>
+    <selected>Manual Hand</selected>
+    <show>0.36</show>
   </dependent>
   <dependent>
-    <selected>Manual Hand</selected>
-    <show>0.35</show>
+    <selected>MHS/H&amp;S</selected>
+    <show>1.35</show>
   </dependent>
   <dependent>
     <selected>Mortgage Subsidy</selected>
@@ -127,7 +123,7 @@
   </dependent>
   <dependent>
     <selected>Shunter Allow</selected>
-    <show>0.35</show>
+    <show>0.36</show>
   </dependent>
   <dependent>
     <selected>Stand By Allowance</selected>
@@ -135,6 +131,6 @@
   </dependent>
   <dependent>
     <selected>Night Shift (Distribution Only)</selected>
-    <show>1.80</show>
+    <show>1.84</show>
   </dependent>
 </predefined>

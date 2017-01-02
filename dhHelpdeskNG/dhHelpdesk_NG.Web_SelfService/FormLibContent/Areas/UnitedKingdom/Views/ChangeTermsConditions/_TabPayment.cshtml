@@ -325,14 +325,6 @@
     
     if ("@Model.ReadOnlyTab("#Payment")" == 'False' && lockedbyUserGroup == 'False') {
 
-        // Following script is for hiding global mobility class if NewToIKEA is equal to string 'International Transfer'
-        @*if ('@Model.GetAnswer("NewToIKEA")' == 'International Transfer') {
-        var globalmobility = document.getElementsByClassName('globalmobility'), i;
-        for (var i = 0; i < globalmobility.length; i++) {
-            globalmobility[i].style.display = 'none';
-        }
-    }*@
-
         function setPaymentDatePickersBehavior() {
 
             $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,#date_AllowancesValidFrom4,#date_AllowancesValidFrom5,' +
@@ -485,7 +477,7 @@
             
         });
 
-        setOneIKEABonusLevel($('#JobTitle').val());
+        //setOneIKEABonusLevel($('#JobTitle').val());
 
         //From OrganisationalAssignment
 
@@ -876,10 +868,7 @@
             //////////
             //DONE IN CHANGE
 
-            GetXML('predefined_payroll_payscale_Change_outs.xml', addPayScaleOnPayrollXML);
-
-
-
+            GetXML('predefined_payroll_payscale_Change_outs.xml', addPayScaleOnPayrollXML);            
 
         }
 
@@ -901,32 +890,7 @@
 
         }
 
-        function GetXML(xmlFile, url) {
-            //////////
-            //Gets XML File
-            //////////
-
-            var path = window.location.protocol + '//';
-            path = path + window.location.host + '/';
-
-            path = site.baseUrl + '/FormLibContent/Xmls/UnitedKingdom/Templates/' + xmlFile
-
-            $.ajax({
-                type: "GET",
-                url: path,
-                dataType: "xml",
-                success: url,
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert(jqXHR.responseText);
-                    alert(textStatus);
-                    alert(errorThrown);
-                }
-
-            });
-
-
-        }
-
+      
 
         function setLineManagerJob(xml) {
             //////////
@@ -955,6 +919,13 @@
 
                     if (show != '') {
                         var n = show.indexOf(",");
+
+                        //TEMP for Steering Group_Doncaster, Sales (problem with commas in the name) so we use  #
+                        if (show.indexOf("#") > -1) {
+                            //$.each(optionsarray, function (i) {
+                            show = show.replace(/\#/g, ",");
+                            //});
+                        }
 
                         if (n == -1) {
 
@@ -1233,7 +1204,7 @@
                 show2 = $sel.find('show2').text();
 
                 
-                    if (bus == 'Store Bristol 264' | bus == 'Store London Croydon 144' | bus == 'Store London Lakeside 262' | bus == 'Store Milton Keynes 185' | bus == 'Store London Tottenham 255' | bus == 'Store London Wembley 141' | bus == 'Service Office UK') {
+                if (bus == 'Store Bristol 264' | bus == 'Store London Croydon 144' | bus == 'Store London Lakeside 262' | bus == 'Store Milton Keynes 185' | bus == 'Store London Tottenham 255' | bus == 'Store London Wembley 141') { //// 2015-09-10 SG case : 52831 2015 week 36 changes : only for Service Office UK, no default value anymore | bus == 'Service Office UK'
                         
                         if (document.getElementById('AllowancesType').value == '') {
 
@@ -1399,32 +1370,34 @@
                                     }
                                 }
                             }
-                            else if (bus == 'Service Office UK') {
-                                if (pay == 'Hourly') {
-                                    if (AllowanceType == 1) {
-                                        if (document.getElementById('AllowancesAmountUnits')) {
-                                            document.getElementById('AllowancesAmountUnits').value = '1.28';
-                                        }
-                                    }
-                                    else {
-                                        if (document.getElementById('AllowancesAmountUnits' + AllowanceType.toString())) {
-                                            document.getElementById('AllowancesAmountUnits' + AllowanceType.toString()).value = '1.28';
-                                        }
-                                    }
-                                }
-                                else {
-                                    if (AllowanceType == 1) {
-                                        if (document.getElementById('AllowancesAmountUnits')) {
-                                            document.getElementById('AllowancesAmountUnits').value = '2600.00';
-                                        }
-                                    }
-                                    else {
-                                        if (document.getElementById('AllowancesAmountUnits' + AllowanceType.toString())) {
-                                            document.getElementById('AllowancesAmountUnits' + AllowanceType.toString()).value = '2600.00';
-                                        }
-                                    }
-                                }
-                            }
+
+                           // 2015 week 36 changes : only for Service Office UK, no default value anymore
+                            //else if (bus == 'Service Office UK') {
+                            //    if (pay == 'Hourly') {
+                            //        if (AllowanceType == 1) {
+                            //            if (document.getElementById('AllowancesAmountUnits')) {
+                            //                document.getElementById('AllowancesAmountUnits').value = '1.28';
+                            //            }
+                            //        }
+                            //        else {
+                            //            if (document.getElementById('AllowancesAmountUnits' + AllowanceType.toString())) {
+                            //                document.getElementById('AllowancesAmountUnits' + AllowanceType.toString()).value = '1.28';
+                            //            }
+                            //        }
+                            //    }
+                            //    else {
+                            //        if (AllowanceType == 1) {
+                            //            if (document.getElementById('AllowancesAmountUnits')) {
+                            //                document.getElementById('AllowancesAmountUnits').value = '2600.00';
+                            //            }
+                            //        }
+                            //        else {
+                            //            if (document.getElementById('AllowancesAmountUnits' + AllowanceType.toString())) {
+                            //                document.getElementById('AllowancesAmountUnits' + AllowanceType.toString()).value = '2600.00';
+                            //            }
+                            //        }
+                            //    }
+                            //}
                         }
                     }
                     
@@ -1572,7 +1545,7 @@
 
 
 
-        function addPayScaleOnPayrollXML(xml) {
+        function addPayScaleOnPayrollXML(xml) {    
             ///DONE IN CHANGE
             var show = ''
             var dep = '';
@@ -1618,10 +1591,24 @@
                         });
 
 
+                        var bus = '';
+                        if (document.getElementById('NewBusinessUnit')) {
+                            bus = $("#NewBusinessUnit option:selected").text();
+                        }
+                        if (bus == 'Service Office UK' | bus == 'IKEA Properties Investments Ltd') {
+                            document.getElementById('PayScaleGroup').value = 'INTERN';
+                        }
+
+                        if (bus == 'Store London Tottenham 255' | bus == 'Store London Wembley 141' | bus == 'Store London Croydon 144') {
+
+                            document.getElementById('PayScaleGroup').value = 'STARTLO';
+                        }
+                        else { document.getElementById('PayScaleGroup').value = 'STARTUK'; }
+
+
 
                         return;
                     }
-
 
                 }
             });
@@ -1656,72 +1643,91 @@
 
             }
 
-            if (bus != 'Distribution Centre Doncaster') {
+            //if (bus != 'Distribution Centre Doncaster') {
                 if (pay.toString().trim() == 'Hourly') {
                     var show;
 
-                    show = 'STARTER';
+                    show = 'STARTLO';
 
                     if (grp == '') {
-                        grp = 'STARTER';
-                        document.getElementById('PayScaleGroup').value = grp;
-                        document.getElementById('PayScaleGroup').selectedIndex = 1;
-
-                    }
-
-                    if (bus.toString().trim() == 'Peterborough Contact Centre') {
-                        if (grp.toString().trim() == 'STARTER') {
-                            if (document.getElementById('BasicPayAmount')) {
-                                document.getElementById('BasicPayAmount').value = '7.84'
-                            }
+                        if (bus.toString().trim() == 'Store London Tottenham 255' | bus.toString().trim() == 'Store London Wembley 141' | bus.toString().trim() == 'Store London Croydon 144') {
+                            grp = 'STARTLO';
+                            document.getElementById('PayScaleGroup').value = grp;
                         }
-                        else if (grp.toString().trim() == 'FOUNDATION') {
-                            if (document.getElementById('BasicPayAmount')) {
-                                document.getElementById('BasicPayAmount').value = '7.84'
-                            }
-                        }
-                        else if (grp.toString().trim() == 'ADVANCED') {
-                            if (document.getElementById('BasicPayAmount')) {
-                                document.getElementById('BasicPayAmount').value = ''
-                            }
+                        else {
+                            grp = 'STARTUK';
+                            document.getElementById('PayScaleGroup').value = grp;
                         }
                     }
-                    else if (bus.toString().trim() == 'Customer Distribution Centre Peterborough 269' | bus == 'Distribution Centre Peterborough 012' | bus == 'Distribution Centre Doncaster') {
-                        if (grp.toString().trim() == 'STARTER') {
+                                        
+                    //if (bus.toString().trim() == 'Peterborough Contact Centre') {
+                    //    if (grp.toString().trim() == 'STARTER') {
+                    //        if (document.getElementById('BasicPayAmount')) {
+                    //            document.getElementById('BasicPayAmount').value = '7.97'
+                    //        }
+                    //    }
+                    //    else if (grp.toString().trim() == 'FOUNDATION') {
+                    //        if (document.getElementById('BasicPayAmount')) {
+                    //            document.getElementById('BasicPayAmount').value = '7.97'
+                    //        }
+                    //    }
+                    //    else if (grp.toString().trim() == 'ADVANCED') {
+                    //        if (document.getElementById('BasicPayAmount')) {
+                    //            document.getElementById('BasicPayAmount').value = '8.52'
+                    //        }
+                    //    }
+                    //}
+                    //else
+                    if (bus.toString().trim() == 'Store London Tottenham 255' | bus == 'Store London Wembley 141' | bus == 'Store London Croydon 144') {
+                        if (grp.toString().trim() == 'STARTLO') {
                             if (document.getElementById('BasicPayAmount')) {
-                                document.getElementById('BasicPayAmount').value = '8.62'
+                                document.getElementById('BasicPayAmount').value = '9.40'
+                            }
+                        }
+                        if (grp.toString().trim() == 'FOUNDLO') {
+                            if (document.getElementById('BasicPayAmount')) {
+                                document.getElementById('BasicPayAmount').value = '9.40'
                             }
                         }
                         else if (grp.toString().trim() == 'MULTSKLL') {
                             if (document.getElementById('BasicPayAmount')) {
-                                document.getElementById('BasicPayAmount').value = '8.95'
+                                document.getElementById('BasicPayAmount').value = '9.13'
                             }
                         }
                         else if (grp.toString().trim() == 'BOOKOFF') {
                             if (document.getElementById('BasicPayAmount')) {
-                                document.getElementById('BasicPayAmount').value = '9.92'
+                                document.getElementById('BasicPayAmount').value = '10.12'
                             }
                         }
                         else if (grp.toString().trim() == 'QUALITY') {
                             if (document.getElementById('BasicPayAmount')) {
-                                document.getElementById('BasicPayAmount').value = '10.41'
+                                document.getElementById('BasicPayAmount').value = '10.62'
                             }
                         }
 
                     }
                     else {
 
-                        if (grp.toString().trim() == 'STARTER') {
-                            if (document.getElementById('BasicPayAmount')) {
-                                document.getElementById('BasicPayAmount').value = '7.13'
-                            }
+                        if (grp.toString().trim() == 'STARTUK') {
+                                                        
+                                if (document.getElementById('BasicPayAmount')) {
+                                    document.getElementById('BasicPayAmount').value = '8.25'
+                                }
                         }
-                        else if (grp.toString().trim() == 'FOUNDATION') {
-                            if (document.getElementById('BasicPayAmount')) {
-                                document.getElementById('BasicPayAmount').value = '7.13'
-                            }
+                        else if (grp.toString().trim() == 'FOUNDUK') {
+                                                                                 
+                                if (document.getElementById('BasicPayAmount')) {
+                                    document.getElementById('BasicPayAmount').value = '8.25'
+                                }
                         }
                         else if (grp.toString().trim() == 'INTERN') {
+                            if (bus.toString().trim() == 'Service Office UK' | bus == 'IKEA Properties Investments Ltd') {
+                                if (document.getElementById('BasicPayAmount')) {
+                                    document.getElementById('BasicPayAmount').value = '6.70'
+                                }
+                            }
+                        }
+                        else {
                             if (document.getElementById('BasicPayAmount')) {
                                 document.getElementById('BasicPayAmount').value = '6.50'
                             }
@@ -1729,15 +1735,15 @@
                     }
                 }
             }
-            else {
-                if (document.getElementById('BasicPayAmount')) {
-                    document.getElementById('BasicPayAmount').value = ''
-                }
-            }
+        //    else {
+        //        if (document.getElementById('BasicPayAmount')) {
+        //            document.getElementById('BasicPayAmount').value = ''
+        //        }
+        //    }
 
 
 
-        }
+        //}
 
         function setPayrollCategory() {
             //////////
@@ -1791,17 +1797,14 @@
 
 
                 if (document.getElementById('PayScaleGroup')) {
-                    if (bus == 'Store Cardiff 267' | bus == 'Store Edinburgh 265') {
-                        document.getElementById('PayScaleGroup').value = 'STARTER';
+                    if (bus == 'Service Office UK' | bus == 'IKEA Properties Investments Ltd') {
+                        document.getElementById('PayScaleGroup').value = 'INTERN';
                     }
-                    else if (bus == 'Peterborough Contact Centre') {
-                        document.getElementById('PayScaleGroup').value = 'STARTER';
-                    }
-                    else if (bus == 'Customer Distribution Centre Peterborough 269' | bus == 'Distribution Centre Peterborough 012') {
-                        document.getElementById('PayScaleGroup').value = 'STARTER';
+                    if (bus == 'Store London Tottenham 255' | bus == 'Store London Wembley 141' | bus == 'Store London Croydon 144') {
+                        document.getElementById('PayScaleGroup').value = 'STARTLO';
                     }
                     else {
-                        document.getElementById('PayScaleGroup').value = 'STARTER';
+                        document.getElementById('PayScaleGroup').value = 'STARTUK';
                     }
                 }
 
@@ -2323,6 +2326,12 @@
                 }
             });
 
+            var jobtitleoptions = $('#JobTitle')[0].selectize.options;
+            var jobtitleoptionslength = Object.keys(jobtitleoptions).length;
+            if (jobtitleoptionslength == 0) {
+                GetXML('Data_JobTitle.xml', SetAllJobtitles);
+            }
+
 
 
             $('#JobTitle').on('change', function () {
@@ -2336,6 +2345,20 @@
                 setBasicPayAmount();
             });
         }
+
+        function SetAllJobtitles(xml) {
+            var selectize_tags = $("#JobTitle")[0].selectize;
+            var jobtitles = [''];
+            $(xml).find('option').each(function () {
+                var a = $(this).text();
+                if (!(a == 'undefined' || a == '')) {
+                    jobtitles.push($(this).text());
+                }
+            });
+            var items = jobtitles.map(function (x) { return { text: x, value: x }; });
+            selectize_tags.addOption(items);
+        }
+
         function setLineManagerAndCostCentre(xml) {
 
             //////////
@@ -2393,6 +2416,7 @@
 
                     if (show1 != '') {
                         var n = show1.indexOf(",");
+                        show1 = show1.replace("#", ",");
 
                         if (n == -1) {
                             //document.getElementById('HomeCostCentre').value = show1;
@@ -2531,4 +2555,33 @@
             });
         }
     }
+
+
+    function GetXML(xmlFile, url) {
+        //////////
+        //Gets XML File
+        //////////
+
+        var path = window.location.protocol + '//';
+        path = path + window.location.host + '/';
+
+        path = site.baseUrl + '/FormLibContent/Xmls/UnitedKingdom/Templates/' + xmlFile
+
+        $.ajax({
+            type: "GET",
+            url: path,
+            dataType: "xml",
+            success: url,
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseText);
+                alert(textStatus);
+                alert(errorThrown);
+            }
+
+        });
+
+
+    }
+
+
 </script>

@@ -7,6 +7,7 @@ var isEmbed = window != window.parent;
 var site = site || {};
 site.baseUrl = "";
 var disableTypeahead = 1;
+
 // stolen from boostrap-datepicker.js DL...
 // Extend for general functions
 var APIGlobal = {
@@ -72,7 +73,8 @@ var APIGlobal = {
             return date.join(format.separator);
         },
         dateInRange: function (start, end, months) {
-            start.setMonth(start.getMonth() + months);
+            end.setMonth(end.getMonth() - months);
+
             var b = start <= end;
             return b;
         }
@@ -100,7 +102,7 @@ jQuery.fn.selectText = function () {
 // DH+ specific
 
 var reload = function (cancelCase) {
-
+    //debugger;
 
     var jump = false;
     if ('parentIFrame' in window)
@@ -109,7 +111,7 @@ var reload = function (cancelCase) {
     // DL: used with iframeResizer.contentWindow.min.js
     if (jump && cancelCase) {
         window.parentIFrame.sendMessage('cancelCase');
-    } 
+    }
 
     if (!jump && window.parent.cancelCase != undefined && cancelCase) {
         window.parent.cancelCase(3, 0);
@@ -162,6 +164,10 @@ var validate = {
 
 };
 
+//Future/DAB for "Global" customer (UK, IE, NL, KR and NO)
+//Get #CustomerId from ajaxinfo in _GlobalNavRev.cshtml
+//Istället för att lägga till på 69 olika ställen.
+//Kolla #AllCoWorkers
 var globalTypeAheadOptions = {
     items: 10,
     minLength: 3,
@@ -193,7 +199,6 @@ var globalTypeAheadOptions = {
                         , regTime: item.RegTime
                         , email: item.Email
                         , iKEANetworkID: item.IKEANetworkID
-                        , watchdate: item.WatchDate
                     };
 
                     return JSON.stringify(aItem);
@@ -250,37 +255,7 @@ var globalTypeAheadOptions = {
                 data: { formGuid: $('#formGuid').val(), employeenumber: item.num },
                 dataType: 'json',
                 success: function (result) {
-
-                    var resultList = jQuery.map(result, function (extendeditem) {
-                        var type = $('#' + extendeditem.FormFieldName).attr('type');
-                        if (type != 'text') {
-
-                            $('#' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
-
-                            $('#' + extendeditem.FormFieldName + ' option').filter(function () {
-                                return $(this).text() == extendeditem.FormFieldValue;
-                            }).prop('selected', true);
-
-                            if ($('#' + extendeditem.FormFieldName)[0] != undefined && $('#' + extendeditem.FormFieldName)[0].selectize) {
-                                $('#' + extendeditem.FormFieldName)[0].selectize.setValue(extendeditem.FormFieldValue);
-                            }
-
-                            if (extendeditem.FormFieldName == 'NewCompany')
-                                changeNewCompany(true);
-
-                            if (extendeditem.FormFieldName == 'EmploymentCategory' && extendeditem.FormFieldValue == 'Permanent') {
-                                $('#date_ContractEndDate').datepicker("destroy");
-                                $('#date_ContractEndDate').addClass("disabled");
-                                $('#ContractEndDate').prop('disabled', true);
-                            }
-
-                        } else {
-                            $('input[name="' + extendeditem.FormFieldName + '"]').val(extendeditem.FormFieldValue);
-                        }
-
-                        $('#emOLD_' + extendeditem.FormFieldName).text(extendeditem.FormFieldValue);
-                        $('#OLD_' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
-                    });
+                    setCurrentRecord(result);
                 }
             });
         }
@@ -324,17 +299,9 @@ var globalTypeAheadOptions = {
         $('#emOLD_IKEANetworkID').text(item.iKEANetworkID);
         $('#OLD_IKEANetworkID').val(item.iKEANetworkID);
 
-        if (document.getElementById("WatchDate") != null && document.getElementById("solutiontime") != null) {
-            if (document.getElementById("solutiontime").value == 0) {
-                document.getElementById("WatchDate").value = item.watchdate;
-            }
-
-        }
-
         return item.num;
     }
 };
-
 
 var globalEmailTypeAheadOptions = {
     items: 10,
@@ -364,9 +331,7 @@ var globalEmailTypeAheadOptions = {
                         , regTime: item.RegTime
                         , email: item.Email
                         , iKEANetworkID: item.IKEANetworkID
-                        , watchdate: item.WatchDate
                     };
-
 
                     return JSON.stringify(aItem);
                 });
@@ -422,34 +387,7 @@ var globalEmailTypeAheadOptions = {
                 data: { formGuid: $('#formGuid').val(), employeenumber: item.num },
                 dataType: 'json',
                 success: function (result) {
-                    var resultList = jQuery.map(result, function (extendeditem) {
-                        var type = $('#' + extendeditem.FormFieldName).attr('type');
-                        if (type != 'text') {
-                            $('#' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
-
-                            $('#' + extendeditem.FormFieldName + ' option').filter(function () {
-                                return $(this).text() == extendeditem.FormFieldValue;
-                            }).prop('selected', true);
-
-                            if ($('#' + extendeditem.FormFieldName)[0] != undefined && $('#' + extendeditem.FormFieldName)[0].selectize) {
-                                $('#' + extendeditem.FormFieldName)[0].selectize.setValue(extendeditem.FormFieldValue);
-                            }
-
-                            if (extendeditem.FormFieldName == 'NewCompany')
-                                changeNewCompany(true);
-
-                            if (extendeditem.FormFieldName == 'EmploymentCategory' && extendeditem.FormFieldValue == 'Permanent') {
-                                $('#date_ContractEndDate').datepicker("destroy");
-                                $('#date_ContractEndDate').addClass("disabled");
-                                $('#ContractEndDate').prop('disabled', true);
-                            }
-
-                        } else {
-                            $('input[name="' + extendeditem.FormFieldName + '"]').val(extendeditem.FormFieldValue);
-                        }
-                        $('#emOLD_' + extendeditem.FormFieldName).text(extendeditem.FormFieldValue);
-                        $('#OLD_' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
-                    });
+                    setCurrentRecord(result);
                 }
             });
         }
@@ -495,18 +433,9 @@ var globalEmailTypeAheadOptions = {
         $('#emOLD_IKEANetworkID').text(item.iKEANetworkID);
         $('#OLD_IKEANetworkID').val(item.iKEANetworkID);
 
-        if (document.getElementById("WatchDate") != null && document.getElementById("solutiontime") != null) {
-            if (document.getElementById("solutiontime").value == 0) {
-                document.getElementById("WatchDate").value = item.watchdate;
-            }
-
-        }
-
-
         return item.email;
     }
 };
-
 
 var globalNameTypeAheadOptions = {
     items: 10,
@@ -539,7 +468,6 @@ var globalNameTypeAheadOptions = {
                         , regTime: item.RegTime
                         , email: item.Email
                         , iKEANetworkID: item.IKEANetworkID
-                        , watchdate: item.watchdate
                     };
                     return JSON.stringify(aItem);
                 });
@@ -594,34 +522,7 @@ var globalNameTypeAheadOptions = {
                 data: { formGuid: $('#formGuid').val(), employeenumber: item.num },
                 dataType: 'json',
                 success: function (result) {
-                    var resultList = jQuery.map(result, function (extendeditem) {
-                        var type = $('#' + extendeditem.FormFieldName).attr('type');
-                        if (type != 'text') {
-                            $('#' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
-
-                            $('#' + extendeditem.FormFieldName + ' option').filter(function () {
-                                return $(this).text() == extendeditem.FormFieldValue;
-                            }).prop('selected', true);
-
-                            if ($('#' + extendeditem.FormFieldName)[0] != undefined && $('#' + extendeditem.FormFieldName)[0].selectize) {
-                                $('#' + extendeditem.FormFieldName)[0].selectize.setValue(extendeditem.FormFieldValue);
-                            }
-
-                            if (extendeditem.FormFieldName == 'NewCompany')
-                                changeNewCompany(true);
-
-                            if (extendeditem.FormFieldName == 'EmploymentCategory' && extendeditem.FormFieldValue == 'Permanent') {
-                                $('#date_ContractEndDate').datepicker("destroy");
-                                $('#date_ContractEndDate').addClass("disabled");
-                                $('#ContractEndDate').prop('disabled', true);
-                            }
-
-                        } else {
-                            $('input[name="' + extendeditem.FormFieldName + '"]').val(extendeditem.FormFieldValue);
-                        }
-                        $('#emOLD_' + extendeditem.FormFieldName).text(extendeditem.FormFieldValue);
-                        $('#OLD_' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
-                    });
+                    setCurrentRecord(result);
                 }
             });
         }
@@ -642,7 +543,7 @@ var globalNameTypeAheadOptions = {
             //1. Set UnitId to hidden field
             //2. Trigger change event
             $('#BusinessUnitId').val(item.unitId).trigger('change');
-        } 
+        }
 
         $('input[name="ServiceArea"]').val(item._function);
         $('#emOLD_ServiceArea').text(item._function);
@@ -667,13 +568,6 @@ var globalNameTypeAheadOptions = {
         $('input[name="IKEANetworkID"]').val(item.iKEANetworkID);
         $('#emOLD_IKEANetworkID').text(item.iKEANetworkID);
         $('#OLD_IKEANetworkID').val(item.iKEANetworkID);
-
-        if (document.getElementById("WatchDate") != null && document.getElementById("solutiontime") != null) {
-            if (document.getElementById("solutiontime").value == 0) {
-                document.getElementById("WatchDate").value = item.watchdate;
-            }
-
-        }
 
         return item.firstname;
     }
@@ -710,7 +604,7 @@ var globalLastNameTypeAheadOptions = {
                         , regTime: item.RegTime
                         , email: item.Email
                         , iKEANetworkID: item.IKEANetworkID
-                        , watchdate: item.watchdate
+                        //, watchdate: item.watchdate
                     };
                     return JSON.stringify(aItem);
                 });
@@ -765,34 +659,7 @@ var globalLastNameTypeAheadOptions = {
                 data: { formGuid: $('#formGuid').val(), employeenumber: item.num },
                 dataType: 'json',
                 success: function (result) {
-                    var resultList = jQuery.map(result, function (extendeditem) {
-                        var type = $('#' + extendeditem.FormFieldName).attr('type');
-                        if (type != 'text') {
-                            $('#' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
-
-                            $('#' + extendeditem.FormFieldName + ' option').filter(function () {
-                                return $(this).text() == extendeditem.FormFieldValue;
-                            }).prop('selected', true);
-
-                            if ($('#' + extendeditem.FormFieldName)[0] != undefined && $('#' + extendeditem.FormFieldName)[0].selectize) {
-                                $('#' + extendeditem.FormFieldName)[0].selectize.setValue(extendeditem.FormFieldValue);
-                            }
-
-                            if (extendeditem.FormFieldName == 'NewCompany')
-                                changeNewCompany(true);
-
-                            if (extendeditem.FormFieldName == 'EmploymentCategory' && extendeditem.FormFieldValue == 'Permanent') {
-                                $('#date_ContractEndDate').datepicker("destroy");
-                                $('#date_ContractEndDate').addClass("disabled");
-                                $('#ContractEndDate').prop('disabled', true);
-                            }
-
-                        } else {
-                            $('input[name="' + extendeditem.FormFieldName + '"]').val(extendeditem.FormFieldValue);
-                        }
-                        $('#emOLD_' + extendeditem.FormFieldName).text(extendeditem.FormFieldValue);
-                        $('#OLD_' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
-                    });
+                    setCurrentRecord(result);
                 }
             });
         }
@@ -839,17 +706,9 @@ var globalLastNameTypeAheadOptions = {
         $('#emOLD_IKEANetworkID').text(item.iKEANetworkID);
         $('#OLD_IKEANetworkID').val(item.iKEANetworkID);
 
-        if (document.getElementById("WatchDate") != null && document.getElementById("solutiontime") != null) {
-            if (document.getElementById("solutiontime").value == 0) {
-                document.getElementById("WatchDate").value = item.watchdate;
-            }
-
-        }
-
         return item.lastname;
     }
 };
-
 
 var globalNetworkIdTypeAheadOptions = {
     items: 10,
@@ -882,7 +741,6 @@ var globalNetworkIdTypeAheadOptions = {
                         , regTime: item.RegTime
                         , email: item.Email
                         , iKEANetworkID: item.IKEANetworkID
-                        , watchdate: item.watchdate
                     };
                     return JSON.stringify(aItem);
                 });
@@ -937,34 +795,7 @@ var globalNetworkIdTypeAheadOptions = {
                 data: { formGuid: $('#formGuid').val(), employeenumber: item.num },
                 dataType: 'json',
                 success: function (result) {
-                    var resultList = jQuery.map(result, function (extendeditem) {
-                        var type = $('#' + extendeditem.FormFieldName).attr('type');
-                        if (type != 'text') {
-                            $('#' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
-
-                            $('#' + extendeditem.FormFieldName + ' option').filter(function () {
-                                return $(this).text() == extendeditem.FormFieldValue;
-                            }).prop('selected', true);
-
-                            if ($('#' + extendeditem.FormFieldName)[0] != undefined && $('#' + extendeditem.FormFieldName)[0].selectize) {
-                                $('#' + extendeditem.FormFieldName)[0].selectize.setValue(extendeditem.FormFieldValue);
-                            }
-
-                            if (extendeditem.FormFieldName == 'NewCompany')
-                                changeNewCompany(true);
-
-                            if (extendeditem.FormFieldName == 'EmploymentCategory' && extendeditem.FormFieldValue == 'Permanent') {
-                                $('#date_ContractEndDate').datepicker("destroy");
-                                $('#date_ContractEndDate').addClass("disabled");
-                                $('#ContractEndDate').prop('disabled', true);
-                            }
-
-                        } else {
-                            $('input[name="' + extendeditem.FormFieldName + '"]').val(extendeditem.FormFieldValue);
-                        }
-                        $('#emOLD_' + extendeditem.FormFieldName).text(extendeditem.FormFieldValue);
-                        $('#OLD_' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
-                    });
+                    setCurrentRecord(result);
                 }
             });
         }
@@ -1011,17 +842,113 @@ var globalNetworkIdTypeAheadOptions = {
         $('#emOLD_IKEANetworkID').text(item.iKEANetworkID);
         $('#OLD_IKEANetworkID').val(item.iKEANetworkID);
 
-        if (document.getElementById("WatchDate") != null && document.getElementById("solutiontime") != null) {
-            if (document.getElementById("solutiontime").value == 0) {
-                document.getElementById("WatchDate").value = item.watchdate;
-            }
-
-        }
 
         return item.iKEANetworkID;
     }
 };
 
+function setCurrentRecord(result) {
+
+    var resultList = jQuery.map(result, function (extendeditem) {
+
+        //FIX, only set current value if formfieldvalue has value //TAN
+        if (extendeditem.FormFieldValue.length > 0) {
+
+            var element = $('#' + extendeditem.FormFieldName);
+            var type = $('#' + extendeditem.FormFieldName).attr('type');
+
+            var defaultbyformfieldidentifier = '1';
+
+            //check that attribute exist
+            if (element.attr('data-defaultbyformfieldidentifier') != undefined) {
+                defaultbyformfieldidentifier = element.data('defaultbyformfieldidentifier');
+            }
+
+            //only set if 
+            if (defaultbyformfieldidentifier == '1') {
+                if (extendeditem.FormFieldName.toLowerCase() == 'DateOfBirth'.toLowerCase() && extendeditem.FormFieldValue.length > 0) {
+                    $('#date_DateOfBirth').datepicker('setValue', extendeditem.FormFieldValue);
+                }
+                else if (extendeditem.FormFieldName.toLowerCase() == 'ContractEndDate'.toLowerCase() && extendeditem.FormFieldValue.length > 0) {
+                    $('#date_ContractEndDate').datepicker('setValue', extendeditem.FormFieldValue);
+                }
+                else {
+                    if (type != 'text') {
+
+                        //NO - narrowing down on change terms & conditions, therefore we need to wait... 
+                        //TODO: Change this solution...
+                        if (extendeditem.FormFieldName.toLowerCase() == 'PSGroup'.toLowerCase()) {
+
+                            setTimeout(function () {
+
+                                $('#' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
+
+                                $('#' + extendeditem.FormFieldName + ' option').filter(function () {
+                                    return $(this).text() == extendeditem.FormFieldValue;
+                                }).prop('selected', true);
+
+                                $('#PSGroup').trigger("change");
+
+                            }, 500);
+
+                        }
+                        else {
+                            $('#' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
+                            $('#' + extendeditem.FormFieldName + ' option').filter(function () {
+                                return $(this).text() == extendeditem.FormFieldValue;
+                            }).prop('selected', true);
+
+                        }
+
+                        if ($('#' + extendeditem.FormFieldName)[0] != undefined && $('#' + extendeditem.FormFieldName)[0].selectize) {
+
+                            //Used in NO - change terms conditions
+                            if (extendeditem.FormFieldName.toLowerCase() == 'PSGroup'.toLowerCase() || extendeditem.FormFieldName.toLowerCase() == 'ReportsToLineManager'.toLowerCase() || extendeditem.FormFieldName.toLowerCase() == 'PositionTitle'.toLowerCase() || extendeditem.FormFieldName.toLowerCase() == 'JobTitle'.toLowerCase()) {
+                                setTimeout(function () {
+                                    $('#' + extendeditem.FormFieldName)[0].selectize.setValue(extendeditem.FormFieldValue);
+                                }, 500);
+
+                                //dont need timeout, set directly
+                                if (extendeditem.FormFieldName.toLowerCase() == 'JobTitle'.toLowerCase()) {
+                                    try {
+                                        $('#employeeSearch_JobTitle').val(extendeditem.FormFieldValue);
+                                    } catch (e) {
+                                    }
+                                }
+                            }
+                            else {
+                                $('#' + extendeditem.FormFieldName)[0].selectize.setValue(extendeditem.FormFieldValue);
+                            }
+                        }
+
+                        if (extendeditem.FormFieldName == 'NewCompany')
+                            changeNewCompany(true);
+
+                        if (extendeditem.FormFieldName == 'WorkedCompany' | extendeditem.FormFieldName == 'WorkedCompany2' | extendeditem.FormFieldName == 'WorkedCompany3' | extendeditem.FormFieldName == 'WorkedCompany4' | extendeditem.FormFieldName == 'WorkedCompany5') {
+                            setCompanyValue(extendeditem.FormFieldName, extendeditem.FormFieldId, true);
+                        }
+
+
+                        if (extendeditem.FormFieldName == 'EmploymentCategory' && extendeditem.FormFieldValue == 'Permanent') {
+                            $('#date_ContractEndDate').datepicker("destroy");
+                            $('#date_ContractEndDate').addClass("disabled");
+                            $('#ContractEndDate').prop('disabled', true);
+                        }
+
+                    } else {
+                        $('input[name="' + extendeditem.FormFieldName + '"]').val(extendeditem.FormFieldValue);
+                    }
+                }
+            }
+        }
+
+        $('#emOLD_' + extendeditem.FormFieldName).text(extendeditem.FormFieldValue);
+        $('#OLD_' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
+    });
+}
+
+//Polen har inte #ajaxinfo - använder _Navigation.cshtml. 
+//Här får vi ha kvar #CustomerId
 // Special Type Ahead function for Poland
 var typeAheadOptions = {
     items: 10,
@@ -1102,7 +1029,6 @@ var typeAheadOptions = {
 };
 
 // Poland hiring Specific
-
 var homeCostCenterQuery = function (query, $homeCostCenter) {
 
     $.ajax({
@@ -1383,57 +1309,6 @@ var familyMembers = function () {
     });
 };
 
-
-
-//var terminationPayment = function () {
-
-//    var emptyElements = function () {
-
-//        return $('[class^=terminationPayment]')
-//                                    .filter(function () { return $(this).css('display') !== 'none'; })
-//                                    .find(':text, :radio, :checkbox, select')
-//                                    .filter(function () {
-//                                        return $(this).val() == '';
-//                                    });
-//    };
-
-//    $('[class^=terminationPayment]').hide();
-//    $('.terminationPayment').show();
-//    var counter = parseInt($('#TerminationPayments').val());
-
-//    var max = 3;
-
-//    var elements = $('[class^=terminationPayment]').find(':text, :radio, :checkbox, select');
-
-//    var enabled = elements.eq(0).is(':enabled');
-
-//    for (var i = 1; i <= counter; i++)
-//        $('.terminationPayment' + i).show();
-
-//    if (emptyElements().length == 0 && (counter < max) && enabled)
-//        $('#addTerminationPaymenttr').show();
-//    else
-//        //$('#addTerminationPaymenttr').hide();
-
-//    var elements = $('[class^=terminationPayment]').find(':text, :radio, :checkbox, select');
-
-//    elements.change(function () {
-//        if (emptyElements().length == 0 && (counter < max) && enabled)
-//            $('#addTerminationPaymenttr').show();
-//        else
-//            $('#addTerminationPaymenttr').hide();
-//    });
-
-//    $('#addTerminationPayment').click(function (e) {
-//        e.preventDefault();
-//        counter++;
-//        $('#TerminationPayments').val(counter);
-//        if (counter <= max)
-//            $('[class=terminationPayment' + counter + ']').show();
-//        //$('#addTerminationPaymenttr').hide();
-//    });
-//};
-
 var employeeDocuments = function () {
     var emptyElements = function () {
         return $('[class^=employeeDocument]')
@@ -1495,8 +1370,6 @@ var employeeDocuments = function () {
         }
     });
 };
-
-
 
 var PermanentCommunicationTypes = function () {
 
@@ -1561,9 +1434,6 @@ var PermanentCommunicationTypes = function () {
         }
     });
 };
-
-
-
 
 var EmergencyCommunicationTypes = function () {
 
@@ -1693,7 +1563,6 @@ var HomeCommunicationTypes = function () {
     });
 };
 
-
 var ENHomeCommunicationTypes = function () {
 
     var emptyElements = function () {
@@ -1821,8 +1690,6 @@ var WorkCommunicationTypes = function () {
         }
     });
 };
-
-
 
 var dependantFamilyMembers = function () {
 
@@ -1953,7 +1820,6 @@ var dependantsDocuments = function () {
         }
     });
 };
-
 
 var allowances = function () {
 
@@ -2181,7 +2047,7 @@ var costcentres = function () {
     $('#addCostCentre').click(function (e) {
         e.preventDefault();
         counter++;
-    
+
         $('#MultiCostcentres').val(counter);
         if (counter <= max)
             $('[class=costcentres' + counter + ']').show();
@@ -2193,7 +2059,6 @@ var costcentres = function () {
         }
     });
 };
-
 
 var benefits = function () {
 
@@ -2316,8 +2181,6 @@ var otherpreviousemployers = function () {
     });
 };
 
-
-
 var absencesmulti = function () {
 
     var emptyElements = function () {
@@ -2379,8 +2242,6 @@ var absencesmulti = function () {
         }
     });
 };
-
-
 
 var detailsonglobalcommuting = function () {
 
@@ -2505,7 +2366,6 @@ var terminationpayments = function () {
     });
 };
 
-
 var UnreturnedItem = function () {
 
     var emptyElements = function () {
@@ -2565,7 +2425,6 @@ var UnreturnedItem = function () {
         }
     });
 };
-
 
 var adddocument = function () {
 
@@ -2696,43 +2555,6 @@ var bankaccount = function () {
     });
 };
 
-
-/*
-var servicerequestpriority = function () {
-
-    $('#date_ProcessBeforeDate').not(".disabled").datepicker("destroy");
-
-    var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
-    var nowTemp = new Date();
-    var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-    var endDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate() + 3, 0, 0, 0, 0);
-    var sRDateUrgent = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate() + 1, 0, 0, 0, 0);
-    var sRDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate() - 3, 0, 0, 0, 0);
-
-    if ($('#ServiceRequestPriority').val() == 'Urgent') {
-        var visibledaate = APIGlobal.DateTime.formatDate(sRDateUrgent, format);
-        $('#ProcessBeforeDate').val(visibledaate);
-
-        $('#date_ProcessBeforeDate').not(".disabled").datepicker(
-        {
-            onRender: function (ev) {
-                return ev.valueOf() >= endDate.valueOf() || ev.valueOf() < now.valueOf() ? 'disabled' : '';
-            }
-        });
-    }
-    else {
-        var visibledate = APIGlobal.DateTime.formatDate(sRDate, format);
-        $('#ProcessBeforeDate').val(visibledate);
-        $('#date_ProcessBeforeDate').not(".disabled").datepicker(
-        {
-            onRender: function (ev) {
-                return ev.valueOf() > now.valueOf() ? 'disabled' : '';
-            }
-        });
-    }
-};
-*/
-
 var cache = {};
 
 //Global spinner, spin.js
@@ -2833,30 +2655,19 @@ var setActiveTab = function () {
 };
 
 var init = function () {
-
     // Initiate globalspinner for ajax requests
     globalSpinner.stop();
 
     // Prevent submit form on enter
     $(window).keydown(function (event) {
-        if (event.keyCode == 13) {
-            event.preventDefault();
-            return false;
+        // Make it Possible to USE enter in Internal lognote
+        if (event.target.tagName != 'TEXTAREA') {
+            if (event.keyCode == 13) {
+                event.preventDefault();
+                return false;
+            }
         }
     });
-
-    /*
-    var f = $('#LockedFields').val();
-     
-    if (f != null) {       
-        var fi = [];
-        fi = f.split(';');
-        for (var l = 1 ; l < fi.length - 1 ; l++) {
-            $('#' + fi[l]).attr('disabled', true);
-            $('#date_' + fi[l]).addClass("disabled");
-        }
-    }
-    */
 
     narrowDownInit();
     familyMembers();
@@ -2884,20 +2695,9 @@ var init = function () {
 
     InitIntegration();
 
-    //var eventHandler = function (name) {
-    //    return function () {
-    //        console.log(name, arguments);
-    //    };
-    //};
-
-    //$(".search-select").selectize({
-    //    create: true,
-    //    positionDropdown: eventHandler('onPositionDropdown'),
-    //    onDropdownOpen: eventHandler('onDropdownOpen'),
-    //});
-
-    $(".search-select").selectize();
-
+    //Sort by text
+    $('.search-select').selectize({sortField: [{ field: 'text' }]});
+  
     $('.typeahead').typeahead(typeAheadOptions);
     $('#Co-WorkerGlobalviewID').typeahead(globalTypeAheadOptions);
     $('#IKEAEmailAddress').typeahead(globalEmailTypeAheadOptions);
@@ -2924,17 +2724,7 @@ var init = function () {
         }*/
     });
 
-    /*
-    $('input').each(function (i) {
-        val = $(this).attr('id');
-        if ($('#' + val).val() !== $('#OLD_' + val).val() &&
-          $('#OLD_' + val).parent().find('.icon-flag').length == 0) {
-            $('#OLD_' + val).parent().prepend($(iconFlag));
-        }
-    });
-    */
-
-    if ($("#NewToIKEA").length > 0 && $("#NewToIKEA").val() != 'Re-Hire') {
+    if ($("#NewToIKEA").length > 0 && ($("#NewToIKEA").val() != 'Re-Hire' || $("#NewToIKEA").val() != 'Transfer Between Business Units')) {
         disableTypeahead = 0;
     }
 
@@ -2942,7 +2732,7 @@ var init = function () {
 
         if ($('#formGuid').length > 0) {
             $('#Co-WorkerID').typeahead(globalTypeAheadOptions);
-            if ($(this).val() == 'Re-Hire') {
+            if ($(this).val() == 'Re-Hire' || $(this).val() == 'Transfer Between Business Units') {
                 disableTypeahead = 1;
             }
             else {
@@ -2971,43 +2761,6 @@ var init = function () {
         }
     });
 
-    /*
-
-    $('#ServiceRequestPriority').change(function () {
-        $('#date_ProcessBeforeDate').not(".disabled").datepicker("destroy");
-
-        var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
-        var nowTemp = new Date();
-        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-        var endDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate() + 3, 0, 0, 0, 0);
-        var sRDateUrgent = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate() + 1, 0, 0, 0, 0);
-        var sRDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate() - 3, 0, 0, 0, 0);
-
-        if ($(this).val() == 'Urgent') {
-            var visibledaate = APIGlobal.DateTime.formatDate(sRDateUrgent, format);
-            $('#ProcessBeforeDate').val(visibledaate);
-
-            $('#date_ProcessBeforeDate').not(".disabled").datepicker(
-            {
-                onRender: function (ev) {
-                    return ev.valueOf() >= endDate.valueOf() || ev.valueOf() < now.valueOf() ? 'disabled' : '';
-                }
-            });
-        }
-        else {
-            var visibledate = APIGlobal.DateTime.formatDate(sRDate, format);
-            $('#ProcessBeforeDate').val(visibledate);
-            $('#date_ProcessBeforeDate').not(".disabled").datepicker(
-            {
-                onRender: function (ev) {
-                    return ev.valueOf() > now.valueOf() ? 'disabled' : '';
-                }
-            });
-        }
-    });
-
-    */
-
     setActiveTab();
 
     // DD 2015-01-08: Don't know what this is for?
@@ -3020,12 +2773,9 @@ var init = function () {
     initGV();
 
     // datepicker
-
     $(document).on("click", ".date", function () {
         $(this).not(".disabled").datepicker('show');
     });
-
-
 
     // Specific to Netherlands, enables only dates after ContractStartDate
     var nowTemp = new Date();
@@ -3047,8 +2797,6 @@ var init = function () {
             }
         });
     }
-
-
 
     // Built for Global, sets LockCDSAccountFrom date to same date as last day of employment
     var LastDayOfEmployment = $('#date_LastDayOfEmployment');
@@ -3097,9 +2845,6 @@ var init = function () {
 
             });
 
-
-
-
     var noticeHiringDate = $('#notice_HiringDate');
     var dateHiringDate = $('#date_HiringDate, #date_ContractStartDate, #date_LastDayOfEmployment');
     var noticeHiringDateWrong = $('#notice_HiringDateWrong');
@@ -3124,7 +2869,6 @@ var init = function () {
             });
     }
 
-
     var noticeFutureDate = $('#notice_ValidUntilDate, #notice_FutureDate');
     var dateDatePicker = $('#date_DocumentValidUntil, #date_ChangeValidFrom');
     if (noticeFutureDate.length > 0 && dateHiringDate.length > 0) {
@@ -3143,9 +2887,6 @@ var init = function () {
             });
     }
 
-
-
-
     // Specific to dateofbirth
     // Only enables past dates. So that users cannot add employees that is not born.
     var nowTemp = new Date();
@@ -3157,9 +2898,7 @@ var init = function () {
         }
     });
 
-
     // effective date
-
     var noticeEffectiveDate = $('#notice_EffectiveDate');
     var dateEffectiveDate = $('#date_EffectiveDate');
 
@@ -3179,15 +2918,7 @@ var init = function () {
 
     }
 
-    // predefined functions 
-
-    //var cache = {};
-    //$('select').each(function (i) {
-    //    cache[$(this).attr('id')] = $(this).html();
-    //});
-
     var predefined = $('.predefined');
-
     predefined.change(function (e) {
 
         var $this = $(this);
@@ -3266,11 +2997,7 @@ var init = function () {
         $(this).change();
     });
 
-
-    //$('#HasEvent').val('false');
-
     validate.run($('#actionState').val());
-
 };
 
 // plupload
@@ -3356,23 +3083,7 @@ var initUpload = function () {
     uploader.bind('FileUploaded', function (up, file) { $('#' + file.id + " b").html("100%"); });
 };
 
-//var f = "";
-//var hasChange = "";
 var actionStateChanged = function () {
-
-    /*f = $('#LockedFields').val();
-
-    if (f != null) {     
-        var fi = [];
-        fi = f.split(';');
-        for (var l = 1 ; l < fi.length - 1 ; l++) {
-            $('#' + fi[l]).prop('disabled', false);
-            $('#date_' + fi[l]).removeAttr("disabled");
-        }
-    }
-
-    hasChange = $('#FirstEventName').val();
-    */
     var form = $('form');
     var formData = form.serialize();
     var url = form.attr('action');
@@ -3387,7 +3098,19 @@ var actionStateChanged = function () {
             $('form').replaceWith(data.View);
             init();
             if ($('#pickfiles').length > 0) {
-                initUpload();
+                //this is in integration.js instead -- 52554
+                //initUpload();
+            }
+            if (data.Uploads != null) {
+                if (data.Uploads.length > 0) {
+                    $.each(data.Uploads, function () {
+                        var uploadItem = '<div>' + this + '<b></b> <a href=""'
+                        + 'class="removeTempFile btn btn-link btn-mini"><i class="icon-trash"></i></a>'
+                        + '<input type="hidden" name="uploads" value="' + this + '"></div>';
+                        $('#filelist').append(uploadItem);
+                    });
+
+                }
             }
         } else {
             reload(data.CancelCase);
@@ -3397,41 +3120,6 @@ var actionStateChanged = function () {
 };
 
 $(document).on('submit', 'form', function (e) {
-    /*var f = $('#LockedFields').val();
-
-    if (f != null) {
-        $('#ChangeType').prop('disabled', false);       
-        var fi = [];
-        fi = f.split(';');
-        for (var l = 1 ; l < fi.length - 1 ; l++) {
-            $('#' + fi[l]).prop('disabled', false);
-            $('#date_' + fi[l]).removeAttr("disabled");
-        }
-    }    
-
-    allFieldname = $('#FirstEventName').val();
-    var lastvalidation = $('#LastValidation').val();
-    var val = $('#actionState').val();
-    if (allFieldname != '' && allFieldname != undefined) {
-
-        var url = '';
-        var ajaxInfo = $('#ajaxInfo');
-        if (ajaxInfo.length > 0) {
-            url = ajaxInfo.attr('url');
-        }
-
-        return $.ajax({
-            url: site.baseUrl + url + 'ChangeRules/',
-            type: 'post',
-            data: { id: val, eventFieldName: allFieldname },
-            dataType: 'json',
-            success: function (result) {
-                $('#validate_' + val).val(result);
-                $('#LastValidation').val(result);
-                validate.run(val);
-            }
-        });
-    }*/
 
     var elem = $('#navigation').find(':button, select').addClass("disabled").attr('readonly', 'readonly').attr('disabled', 'disabled');
 
@@ -3449,18 +3137,16 @@ $(document).on('submit', 'form', function (e) {
 });
 
 $(document).on('click', '#actionStateChange', function (e) {
+    //SG To avoid disable both buttons while actionState is not chosen Roll Out #53866
+    if ($('#actionState').val() != '') {
+        $('#actionStateChange').attr("disabled", true);
 
+        // SG to disable save button while form is loading HD case : 52790
+        $('#btnGlobalSave').attr("disabled", true);
+    }
 
-    //var hasChange = $('#FirstEventName').val();
     var form = $('form');
     var url = form.attr('action');
-    /*
-    if ((url.toString().indexOf("ChangeTermsConditions") > -1) && hasChange == "")
-    {
-        alert("It will not possible to go furthure in this process as you didn't make any changes.");
-        return;
-    }
-    */
 
     if ($('#actionState').val() != '') {
 
@@ -3559,8 +3245,317 @@ $(document).on('click', '.btn-delete-file', function (e) {
 
 $(function () {
     init();
-    if ($('#pickfiles').length > 0)
-        initUpload();
+    //if ($('#pickfiles').length > 0)
+    //this is in integration.js instead - 52554
+    //initUpload();
+
+    $(document).on('click', '.removeTempFile', function (e) {
+        e.preventDefault();
+        removeTempFile(e);
+    });
 });
 
+function removeTempFile(e) {
+    $(e.target).parent().parent().remove();
+};
 
+function GetXMLandCallback(country, xmlFile, Callback, $BaseSelector, $DefaultSelector, MultiId, lockedbyUserGroup, isTabReadOnly) {
+    var path = window.location.protocol + '//';
+    path = path + window.location.host + '/';
+    path = site.baseUrl + '/FormLibContent/Xmls/' + country + '/' + xmlFile;
+
+    $.ajax({
+        type: "GET",
+        url: path,
+        dataType: "xml",
+        success: function (xml) {
+            Callback(xml, $BaseSelector, $DefaultSelector, MultiId, lockedbyUserGroup, isTabReadOnly);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert(jqXHR.responseText);
+            alert(textStatus);
+            alert(errorThrown);
+        }
+    });
+};
+
+function SetDefault(xml, $BaseSelector, $DefaultSelector) {
+    $(xml).find('defaults').find('default').each(function () {
+        var xmlBaseVal = $(this).find('baseVal').text();
+        var BaseVal = $BaseSelector.val();
+        if (xmlBaseVal.toLowerCase() == BaseVal.toLowerCase()) {
+            var defaultVal = $(this).find('defaultVal').text();
+            $DefaultSelector.val(defaultVal);
+            return;
+        }
+    });
+};
+
+function SetHideAndClear(xml, $BaseSelector, $DefaultSelector, MultiId) {
+    if (typeof MultiId === undefined) {
+        MultiId = "";
+    }
+
+    $(xml).find('hides').find('hide').each(function () {
+        $(this).find('hideSelector').each(function () {
+            thisXMLNode = $(this);
+            var xmlHideSelectorVal = thisXMLNode.text();
+            var HideSelector = "";
+            if (thisXMLNode.attr('type').toLowerCase() == 'id') {
+                HideSelector = $('#' + xmlHideSelectorVal + MultiId);
+                HideSelector.parent().parent().show();
+            }
+            else if (thisXMLNode.attr('type').toLowerCase() == 'class') {
+                HideSelector = $('.' + xmlHideSelectorVal + MultiId);
+                HideSelector.show();
+            }
+        });
+    });
+    $(xml).find('hides').find('hide').each(function () {
+        var xmlHideVal = $(this).find('hideVal').text();
+        var BaseVal = "";
+        if (IsElementSourceDB($BaseSelector)) {
+            if (IsSelectorSelectize($BaseSelector)) {
+                BaseVal = $($BaseSelector[0].selectize.getOption($BaseSelector[0].selectize.getValue())).text()
+            }
+            else {
+                BaseVal = $BaseSelector.children(':selected').val();
+            }
+        }
+        else {
+            BaseVal = $BaseSelector.children(':selected').val();
+        }
+        if (BaseVal == "" || BaseVal == null) {
+            BaseVal = $BaseSelector.val();
+            if (BaseVal == "" || BaseVal == null) {
+                BaseVal = "";
+            }
+        }
+        if (xmlHideVal.toLowerCase() == BaseVal.toLowerCase()) {
+            $(this).find('hideSelector').each(function () {
+                var thisXMLNode = $(this);
+                var xmlHideSelectorVal = thisXMLNode.text();
+                var HideSelector = "";
+                if (thisXMLNode.attr('type').toLowerCase() == 'id') {
+                    HideSelector = $('#' + xmlHideSelectorVal + MultiId);
+                    HideSelector.parent().parent().hide(); //if id, we need to hide the TR
+                }
+                else if (thisXMLNode.attr('type').toLowerCase() == 'class') {
+                    HideSelector = $('.' + xmlHideSelectorVal + MultiId);
+                    HideSelector.hide(); //if class, hide class
+                }
+            });
+        }
+    });
+};
+
+
+//S.G : Added  lockedbyUserGroup, isTabReadOnly becasuse it sets the disable to false while it is read only which is not correct.
+//This "Set Lock" Not such a good solution for date fields.
+//It is not working for date fields it just disables the text field for dates and not a date picker.
+//only tested for normal select and text... Currently no support for selectize/search-select
+function SetLock(xml, $BaseSelector, $LockSelector, lockedbyUserGroup, isTabReadOnly) {
+
+    var LockField = false;
+    $(xml).find('locks').find('lock').each(function () {
+        var xmlBaseVal = $(this).find('lockVal').text();
+        var BaseVal = $BaseSelector.val();
+        if (xmlBaseVal.toLowerCase() == BaseVal.toLowerCase()) {
+            LockField = true;
+        }
+    });
+
+    if (LockField) {
+        // To make the value empty if the field will be disable
+        $LockSelector.val("");
+        $LockSelector.prop('disabled', true);
+    }
+    else {
+          // If the Tabs are read only it shouldn't happen any thing.
+        if (!lockedbyUserGroup && !isTabReadOnly) {
+            return;
+        }
+        else
+            $LockSelector.prop('disabled', false);
+    }
+};
+
+var initOrgDataSection = function ($companySelector, $buSelector, $fuSelector, $depSelector, $costCentreSelector) {
+    var ajaxInfo = $('#ajaxInfo');
+    if (ajaxInfo.length > 0) {
+        var baseurl = ajaxInfo.attr('url');
+        var customerId = ajaxInfo.attr('customerId');
+        var LoadCompany = function ($selector) {
+            var url = baseurl + 'GetAllCompanies' + '?customerId=' + customerId;
+            LoadOrgData(url, $selector);
+        };
+        var LoadBU = function (companyId, $selector) {
+            if (companyId == "" || companyId == null) {
+                companyId = 0;
+            }
+            var url = baseurl + 'GetAllBusinessUnits' + '?customerId=' + customerId + '&companyId=' + companyId;
+            LoadOrgData(url, $selector);
+        };
+        var LoadFunction = function (buId, $selector) {
+            if (buId == "" || buId == null) {
+                buId = 0;
+            }
+            var url = baseurl + 'GetAllFunctions' + '?businessUnitId=' + buId;
+            LoadOrgData(url, $selector);
+        };
+        var LoadDepartments = function (functionId, $selector) {
+            if (functionId == "" || functionId == null) {
+                functionId = 0;
+            }
+            var url = baseurl + 'GetAllDepartments' + '?functionId=' + functionId;
+            LoadOrgData(url, $selector);
+        };
+        var LoadCostCentres = function (departmentId, $selector) {
+            if (departmentId == "" || departmentId == null) {
+                departmentId = 0;
+            }
+            var url = baseurl + 'GetCostCentresByDepartment' + '?departmentId=' + departmentId;
+            LoadOrgData(url, $selector);
+        };
+        LoadCompany($companySelector);
+        $companySelector.change(function () {
+            LoadBU($(this).val(), $buSelector)
+        });
+        $buSelector.change(function () {
+            LoadFunction($(this).val(), $fuSelector);
+        });
+        $fuSelector.change(function () {
+            LoadDepartments($(this).val(), $depSelector);
+        });
+        $depSelector.change(function () {
+            LoadCostCentres($(this).val(), $costCentreSelector);
+        });
+    }
+};
+
+function LoadOrgData(url, $selector) {
+    var option = function (value, text) {
+        var optionRow = '<option value="' + value + '">' + text + '</option>';
+        return optionRow;
+    };
+    var AddSelectizeOptions = function (data, CurrentVal) {
+        var selectizeSelector = $selector[0].selectize;
+        selectizeSelector.clearOptions();
+        var items = data.map(function (x) { return { text: x.Name, value: x.Id }; });
+        selectizeSelector.addOption(items);
+        selectizeSelector.setValue(CurrentVal);
+    };
+    var AddSelectOptions = function (data, CurrentVal) { 
+        $selector.empty()
+        var options = "";
+        options += option('', '');
+        $.each(data, function () {
+            options += option(this.Id, this.Name)
+        });
+        $selector.append(options);
+        $selector.val(CurrentVal);
+        $selector.change();
+    };
+    var ClearAndReset = function (CurrentVal) {
+        if (IsSelectorSelectize($selector)) {
+            var selectizeSelector = $selector[0].selectize;
+            selectizeSelector.clearOptions();
+            selectizeSelector.setValue(CurrentVal);
+            $selector.change();
+        }
+        else {
+            $selector.empty();
+            $selector.val(CurrentVal);
+            $selector.change();
+        }
+    };
+    var thisUrl = url + '&ie=' + Date.now();
+    $.getJSON(thisUrl, function (data) {
+        
+        var CurrentVal = "";
+        if (IsElementSourceDB($selector)) {
+            CurrentVal = $selector.parent().find('input[type=hidden]').val(); //printed by database="source"
+        }
+        else {
+            CurrentVal = $selector.val();
+        }
+
+        if (data) {
+            if (IsSelectorSelectize($selector)) {
+                AddSelectizeOptions(data, CurrentVal);
+            }
+            else {
+                AddSelectOptions(data, CurrentVal);
+            }
+        }
+        else if (data == false) {
+            ClearAndReset(CurrentVal);
+        }
+    });
+};
+
+//put this in some type of function called selectorHelper? does not need to be globally declared?
+function IsSelectorSelectize($selector) {
+    if ($selector.hasClass('search-select')) {
+        return true;
+    }
+    else {
+        return false;
+    }
+};
+
+//put this in some type of function called selectorHelper? does not need to be globally declared?
+function IsElementSourceDB($selector) {
+    if ($selector.parent().find('input[type=hidden]')) {
+        return true;
+    }
+    else {
+        return false;
+    }
+};
+
+//this can maybe be part of a datehelper class?
+function getChosenDate($dateSelector) {
+    var DateMonthYear = $dateSelector.val().split(".");
+    var chosenDate = new Date(DateMonthYear[2], DateMonthYear[1] - 1, DateMonthYear[0]);
+    return chosenDate;
+};
+
+///only works for date at the moment
+//put this in some type of function called selectorHelper? does not need to be globally declared
+function selectorNotice($selector, show) {
+    var noticeSelector = "";
+    if ($selector.parent().hasClass('date')) {
+        noticeSelector = $selector.parent().parent().find('[id^=notice_]');
+    }
+
+    if (show == true) {
+        noticeSelector.show();
+    }
+    else {
+        noticeSelector.hide();
+    }
+};
+
+//put this in a bigger function called datehelper? does not need to be globally declared?
+function validateFirstDayOfMonth($dateSelector) {
+    var chosenDate = getChosenDate($dateSelector);
+    var thisDate = chosenDate.getDate();
+    if (!(thisDate == 1)) {
+        return true;
+    }
+    else {
+        return false;
+    }
+};
+
+
+$(document).ready(function () {
+
+    //uppercase on input
+    $('.upper-case').bind('keyup', function () {
+        var val = $(this).val().toUpperCase();
+        $(this).val(val);
+    });
+
+});

@@ -36,7 +36,7 @@
           <option value="Standard">Standard</option>
         </options>
       </element>
-      
+      <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
     </tab>
 
     <tab name="#Payment" label="Payment Information">
@@ -99,8 +99,6 @@
         <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-
-
       <element type="select" name="DeductionsType4" label="Deduction Type" >
         <options>
           <option value=""></option>

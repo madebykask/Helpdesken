@@ -63,7 +63,7 @@
               &pre_country;
             </element>
 
-
+          <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
         </tab>
 
         <tab name="#OrganisationalAssignment" label="Organisational Assignment">

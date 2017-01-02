@@ -76,13 +76,12 @@
 <script>
     // Following script is for hiding global mobility class if NewToIKEA is equal to string 'International Transfer'
     if ('@Model.GetAnswer("NewToIKEA")' == 'International Transfer') {
-        var globalmobility = document.getElementsByClassName('globalmobility'), i;
+        var globalmobility = document.querySelectorAll('.globalmobility'), i;
+
         for (var i = 0; i < globalmobility.length; i++) {
             globalmobility[i].style.display = 'none';
         }
     }
-
-
 
     $('#date_ContractStartDate').not(".disabled").datepicker().on('changeDate', function (e) {
         SetAllowancesDates();

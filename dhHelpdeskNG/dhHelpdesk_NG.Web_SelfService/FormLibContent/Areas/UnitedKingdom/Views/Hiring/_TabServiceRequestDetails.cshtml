@@ -27,27 +27,56 @@
                     <td class="tdstrong">@Model.Label("InductionDate")</td>
                     <td>@Model.Element("InductionDate")</td>
                 </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("InductionStartTime")</td>
-                    <td>@Model.Element("InductionStartTime")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("InductionEndTime")</td>
-                    <td>@Model.Element("InductionEndTime")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("InductionStartTime2")</td>
-                    <td>@Model.Element("InductionStartTime2")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("InductionEndTime2")</td>
-                    <td>@Model.Element("InductionEndTime2")</td>
-                </tr>
+
                 <tr>
                     <td class="tdstrong">@Model.Label("LengthOfInductionInDays")</td>
                     <td>@Model.Element("LengthOfInductionInDays")</td>
                 </tr>
 
+                <tr class="Induction" Group="1">
+                    <td class="tdstrong">@Model.Label("InductionStartTime")</td>
+                    <td>@Model.Element("InductionStartTime")</td>
+                </tr>
+                <tr class="Induction" Group="1">
+                    <td class="tdstrong">@Model.Label("InductionEndTime")</td>
+                    <td>@Model.Element("InductionEndTime")</td>
+                </tr>
+               <tr class="Induction" Group="2">
+                    <td class="tdstrong">@Model.Label("InductionStartTime2")</td>
+                    <td>@Model.Element("InductionStartTime2")</td>
+                </tr>
+                <tr class="Induction" Group="2">
+                    <td class="tdstrong">@Model.Label("InductionEndTime2")</td>
+                    <td>@Model.Element("InductionEndTime2")</td>
+                </tr>
+
+                 <tr class="Induction" Group="3">
+                    <td class="tdstrong">@Model.Label("InductionStartTime3")</td>
+                    <td>@Model.Element("InductionStartTime3")</td>
+                </tr>
+                <tr class="Induction" Group="3">
+                    <td class="tdstrong">@Model.Label("InductionEndTime3")</td>
+                    <td>@Model.Element("InductionEndTime3")</td>
+                </tr>
+
+                 <tr class="Induction" Group="4">
+                    <td class="tdstrong">@Model.Label("InductionStartTime4")</td>
+                    <td>@Model.Element("InductionStartTime4")</td>
+                </tr>
+                <tr class="Induction" Group="4">
+                    <td class="tdstrong">@Model.Label("InductionEndTime4")</td>
+                    <td>@Model.Element("InductionEndTime4")</td>
+                </tr>
+
+                 <tr class="Induction" Group="5">
+                    <td class="tdstrong">@Model.Label("InductionStartTime5")</td>
+                    <td>@Model.Element("InductionStartTime5")</td>
+                </tr>
+                <tr class="Induction" Group="5">
+                    <td class="tdstrong">@Model.Label("InductionEndTime5")</td>
+                    <td>@Model.Element("InductionEndTime5")</td>
+                </tr>
+                
                 <tr>
                     <td class="tdstrong">@Model.Label("PreviousContractStartDate")</td>
                     <td>@Model.Element("PreviousContractStartDate")</td>
@@ -96,7 +125,8 @@
                     <td class="tdstrong">@Model.Label("DateOfBirth")</td>
                     <td>@Model.Element("DateOfBirth")</td>
                 </tr>
-                <tr>
+                
+                    
             </tbody>
         </table>
     </div>
@@ -132,6 +162,7 @@
                     <td class="tdstrong">@Model.Label("PermanentCountry")</td>
                     <td>@Model.Element("PermanentCountry")</td>
                 </tr>
+                @Html.Partial("_InternalLogNoteV2", Model)
             </tbody>
         </table>
     </div>

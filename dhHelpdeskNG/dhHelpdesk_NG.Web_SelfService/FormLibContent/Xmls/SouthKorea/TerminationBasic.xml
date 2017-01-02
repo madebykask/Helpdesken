@@ -3,8 +3,8 @@
     <!ENTITY languages SYSTEM "Templates/Languages.xml">
     <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
     <!ENTITY state SYSTEM "Templates/TerminationBasicState.xml">
-  <!--<!ENTITY pre_termination_reason SYSTEM "Templates/Predefined_TerminationReason.xml">
-  <!ENTITY pre_country SYSTEM "Templates/Data_Country.xml">-->
+  <!ENTITY pre_termination_reason SYSTEM "Defaults/Predefined_TerminationReason.xml">
+  <!--<!ENTITY pre_country SYSTEM "Templates/Data_Country.xml">-->
 ]>
 
 <form id="226" guid="FE0E9E9B-3B75-432D-B161-F57DFCED91CC" customerId="32">
@@ -61,15 +61,15 @@
           <options>
             <option value=""></option>
             <option value="Expiry of Contract">Expiry of Contract</option>
-            <option value="Dismissal with notice">Dismissal with notice</option>
-            <option value="Dismissal without notice">Dismissal without notice</option>
+            <option value="Dismissal - Without Notice">Dismissal - Without Notice</option>
+            <option value="Dismissal - With Notice">Dismissal - With Notice</option>
             <option value="Retirement">Retirement</option>
             <option value="Resignation">Resignation</option>
             <option value="Redundancy">Redundancy</option>
             <option value="Invalidity">Invalidity</option>
             <option value="Death">Death</option>
             <option value="International Transfer begins">International Transfer begins</option>
-            <option value="Internationa Transfer ends">Internationa Transfer ends</option>
+            <option value="International Transfer ends">International Transfer ends</option>
           </options>
         </element>  
         <element name="TerminationPaymentMethod" type="select" label="Termination Payment Method" mandatory="1" default="By Off cycle">
@@ -84,21 +84,29 @@
         <!--Termination Payments-->
         <element name="TerminationPayments" type="hidden" default="1"></element>
         <!--1-->
-        <element name="TerminationPaymentType" type="select" label="Payment Type">
+        <element name="TerminationPaymentType" type="select" label="Payment Type" default="Annual Leave encashment - 5010">
           <options>
             <option value=""></option>
-            <option value="Annual Leave encashment">Annual Leave encashment</option>
-            <option value="Overtime">Overtime</option>
+            <option value="Annual Leave encashment - 5010">Annual Leave encashment - 5010</option>
+            <option value="Overtime - 2115">Overtime - 2115</option>
+            <option value="Tax reimbursement - 4001">Tax reimbursement - 4001</option>
+            <option value="Payment Adjustment - 3010">Payment Adjustment - 3010</option>
+            <option value="Special Allowance - 3015">Special Allowance - 3015</option>
+            <option value="OIB - 36Z0">OIB - 36Z0</option>
+            <option value="Healthcare insurance Adj - 6511">Healthcare insurance Adj - 6511</option>
+            <option value="Staff Discount - 6005">Staff Discount - 6005</option>
+            <option value="Benefit (Others) - 6020">Benefit (Others) - 6020</option>
           </options>
         </element>
         <element name="TerminationAmountUnits" type="text" label="Amount/Units">
           <mandatoryIfNotEmpty name="TerminationPaymentType"></mandatoryIfNotEmpty>
-          <regex inherit="unsignednum" pattern="" message=""></regex>
+          <!--<regex inherit="amount3" pattern="" message=""></regex> #52776-->
         </element>
         <!--<element name="OneIKEABonusDue" type="text" label="One IKEA Bonus Due">
         <mandatoryIfNotEmpty name="TerminationPaymentType"></mandatoryIfNotEmpty>
         <regex inherit="unsignednum" pattern="" message=""></regex>
       </element>-->
+        <element name="NetGross" type="text"   label="Net/Gross"></element>
         <element name="TerminationPaymentDate" type="date" format="dd.MM.yyyy" label="Payment Date:">
           <regex inherit="date" pattern="" message=""></regex>
           <mandatoryIfNotEmpty name="TerminationPaymentType"></mandatoryIfNotEmpty>
@@ -107,14 +115,22 @@
         <element name="TerminationPaymentType2" type="select" label="Payment Type">
           <options>
             <option value=""></option>
-            <option value="Annual Leave encashment">Annual Leave encashment</option>
-            <option value="Overtime">Overtime</option>
+            <option value="Annual Leave encashment - 5010">Annual Leave encashment - 5010</option>
+            <option value="Overtime - 2115">Overtime - 2115</option>
+            <option value="Tax reimbursement - 4001">Tax reimbursement - 4001</option>
+            <option value="Payment Adjustment - 3010">Payment Adjustment - 3010</option>
+            <option value="Special Allowance - 3015">Special Allowance - 3015</option>
+            <option value="OIB - 36Z0">OIB - 36Z0</option>
+            <option value="Healthcare insurance Adj - 6511">Healthcare insurance Adj - 6511</option>
+            <option value="Staff Discount - 6005">Staff Discount - 6005</option>
+            <option value="Benefit (Others) - 6020">Benefit (Others) - 6020</option>
           </options>
         </element>
         <element name="TerminationAmountUnits2" type="text" label="Amount/Units">
           <mandatoryIfNotEmpty name="TerminationPaymentType2"></mandatoryIfNotEmpty>
-          <regex inherit="unsignednum" pattern="" message=""></regex>
+          <!--<regex inherit="amount3" pattern="" message=""></regex> #52776-->
         </element>
+        <element name="NetGross2" type="text"   label="Net/Gross"></element>
         <element name="TerminationPaymentDate2" type="date" format="dd.MM.yyyy" label="Payment Date:">
           <regex inherit="date" pattern="" message=""></regex>
           <mandatoryIfNotEmpty name="TerminationPaymentType2"></mandatoryIfNotEmpty>
@@ -123,14 +139,22 @@
         <element name="TerminationPaymentType3" type="select" label="Payment Type">
           <options>
             <option value=""></option>
-            <option value="Annual Leave encashment">Annual Leave encashment</option>
-            <option value="Overtime">Overtime</option>
+            <option value="Annual Leave encashment - 5010">Annual Leave encashment - 5010</option>
+            <option value="Overtime - 2115">Overtime - 2115</option>
+            <option value="Tax reimbursement - 4001">Tax reimbursement - 4001</option>
+            <option value="Payment Adjustment - 3010">Payment Adjustment - 3010</option>
+            <option value="Special Allowance - 3015">Special Allowance - 3015</option>
+            <option value="OIB - 36Z0">OIB - 36Z0</option>
+            <option value="Healthcare insurance Adj - 6511">Healthcare insurance Adj - 6511</option>
+            <option value="Staff Discount - 6005">Staff Discount - 6005</option>
+            <option value="Benefit (Others) - 6020">Benefit (Others) - 6020</option>
           </options>
         </element>
         <element name="TerminationAmountUnits3" type="text" label="Amount/Units">
           <mandatoryIfNotEmpty name="TerminationPaymentType3"></mandatoryIfNotEmpty>
-          <regex inherit="unsignednum" pattern="" message=""></regex>
+          <!--<regex inherit="amount3" pattern="" message=""></regex> #52776-->
         </element>
+        <element name="NetGross3" type="text"   label="Net/Gross"></element>
         <element name="TerminationPaymentDate3" type="date" format="dd.MM.yyyy" label="Payment Date:">
           <regex inherit="date" pattern="" message=""></regex>
           <mandatoryIfNotEmpty name="TerminationPaymentType3"></mandatoryIfNotEmpty>
@@ -139,14 +163,22 @@
         <element name="TerminationPaymentType4" type="select" label="Payment Type">
           <options>
             <option value=""></option>
-            <option value="Annual Leave encashment">Annual Leave encashment</option>
-            <option value="Overtime">Overtime</option>
+            <option value="Annual Leave encashment - 5010">Annual Leave encashment - 5010</option>
+            <option value="Overtime - 2115">Overtime - 2115</option>
+            <option value="Tax reimbursement - 4001">Tax reimbursement - 4001</option>
+            <option value="Payment Adjustment - 3010">Payment Adjustment - 3010</option>
+            <option value="Special Allowance - 3015">Special Allowance - 3015</option>
+            <option value="OIB - 36Z0">OIB - 36Z0</option>
+            <option value="Healthcare insurance Adj - 6511">Healthcare insurance Adj - 6511</option>
+            <option value="Staff Discount - 6005">Staff Discount - 6005</option>
+            <option value="Benefit (Others) - 6020">Benefit (Others) - 6020</option>
           </options>
         </element>
         <element name="TerminationAmountUnits4" type="text" label="Amount/Units">
           <mandatoryIfNotEmpty name="TerminationPaymentType4"></mandatoryIfNotEmpty>
-          <regex inherit="unsignednum" pattern="" message=""></regex>
+          <!--<regex inherit="amount3" pattern="" message=""></regex> #52776-->
         </element>
+        <element name="NetGross4" type="text"   label="Net/Gross"></element>
         <element name="TerminationPaymentDate4" type="date" format="dd.MM.yyyy" label="Payment Date:">
           <regex inherit="date" pattern="" message=""></regex>
           <mandatoryIfNotEmpty name="TerminationPaymentType4"></mandatoryIfNotEmpty>
@@ -155,14 +187,22 @@
         <element name="TerminationPaymentType5" type="select" label="Payment Type">
           <options>
             <option value=""></option>
-            <option value="Annual Leave encashment">Annual Leave encashment</option>
-            <option value="Overtime">Overtime</option>
+            <option value="Annual Leave encashment - 5010">Annual Leave encashment - 5010</option>
+            <option value="Overtime - 2115">Overtime - 2115</option>
+            <option value="Tax reimbursement - 4001">Tax reimbursement - 4001</option>
+            <option value="Payment Adjustment - 3010">Payment Adjustment - 3010</option>
+            <option value="Special Allowance - 3015">Special Allowance - 3015</option>
+            <option value="OIB - 36Z0">OIB - 36Z0</option>
+            <option value="Healthcare insurance Adj - 6511">Healthcare insurance Adj - 6511</option>
+            <option value="Staff Discount - 6005">Staff Discount - 6005</option>
+            <option value="Benefit (Others) - 6020">Benefit (Others) - 6020</option>
           </options>
         </element>
         <element name="TerminationAmountUnits5" type="text" label="Amount/Units">
           <mandatoryIfNotEmpty name="TerminationPaymentType5"></mandatoryIfNotEmpty>
-          <regex inherit="unsignednum" pattern="" message=""></regex>
+          <!--<regex inherit="amount3" pattern="" message=""></regex> #52776-->
         </element>
+        <element name="NetGross5" type="text"   label="Net/Gross"></element>
         <element name="TerminationPaymentDate5" type="date" format="dd.MM.yyyy" label="Payment Date:">
           <regex inherit="date" pattern="" message=""></regex>
           <mandatoryIfNotEmpty name="TerminationPaymentType5"></mandatoryIfNotEmpty>
@@ -172,15 +212,18 @@
         <element name="DeductionType" type="select" label="Deduction Type">
           <options>
             <option value=""></option>
-            <option value="Annual Leave overpayment">Annual Leave overpayment</option>
-            <option value="Other">Other</option>
+            <option value="Annual Leave overpayment - 5010">Annual Leave overpayment - 5010</option>
+            <option value="TE Advance Deduction - 7600">TE Advance Deduction - 7600</option>
+            <option value="Other Deduction - 7710">Other Deduction - 7710</option>
+            <option value="Garnishment - 7700">Garnishment - 7700</option>
+              <option value="Utility Cost - 7615">Utility Cost - 7615</option>
           </options>
         </element>
         <element name="DeductionAmountUnits" type="text" label="Amount/Units">
           <mandatoryIfNotEmpty name="DeductionType"></mandatoryIfNotEmpty>
-          <regex inherit="unsignednum" pattern="" message=""></regex>
+          <!--<regex inherit="amount3" pattern="" message=""></regex> #52776-->
         </element>
-
+        <element name="DeductionNetGross" type="text"   label="Net/Gross"></element>
         <element name="DeductionDate" type="date" format="dd.MM.yyyy" label="Deduction date:">
           <regex inherit="date" pattern="" message=""></regex>
           <mandatoryIfNotEmpty name="DeductionType"></mandatoryIfNotEmpty>
@@ -189,14 +232,18 @@
         <element name="DeductionType2" type="select" label="Deduction Type">
           <options>
             <option value=""></option>
-            <option value="Annual Leave overpayment">Annual Leave overpayment</option>
-            <option value="Other">Other</option>
+            <option value="Annual Leave overpayment - 5010">Annual Leave overpayment - 5010</option>
+            <option value="TE Advance Deduction - 7600">TE Advance Deduction - 7600</option>
+            <option value="Other Deduction - 7710">Other Deduction - 7710</option>
+            <option value="Garnishment - 7700">Garnishment - 7700</option>
+              <option value="Utility Cost - 7615">Utility Cost - 7615</option>
           </options>
         </element>
         <element name="DeductionAmountUnits2" type="text" label="Amount/Units">
           <mandatoryIfNotEmpty name="DeductionType2"></mandatoryIfNotEmpty>
-          <regex inherit="unsignednum" pattern="" message=""></regex>
+          <!--<regex inherit="amount3" pattern="" message=""></regex> #52776-->
         </element>
+        <element name="DeductionNetGross2" type="text"   label="Net/Gross"></element>
         <element name="DeductionDate2" type="date" format="dd.MM.yyyy" label="Deduction date:">
           <regex inherit="date" pattern="" message=""></regex>
           <mandatoryIfNotEmpty name="DeductionType2"></mandatoryIfNotEmpty>
@@ -204,14 +251,18 @@
         <element name="DeductionType3" type="select" label="Deduction Type">
           <options>
             <option value=""></option>
-            <option value="Annual Leave overpayment">Annual Leave overpayment</option>
-            <option value="Other">Other</option>
+            <option value="Annual Leave overpayment - 5010">Annual Leave overpayment - 5010</option>
+            <option value="TE Advance Deduction - 7600">TE Advance Deduction - 7600</option>
+            <option value="Other Deduction - 7710">Other Deduction - 7710</option>
+            <option value="Garnishment - 7700">Garnishment - 7700</option>
+              <option value="Utility Cost - 7615">Utility Cost - 7615</option>
           </options>
         </element>
         <element name="DeductionAmountUnits3" type="text" label="Amount/Units">
           <mandatoryIfNotEmpty name="DeductionType3"></mandatoryIfNotEmpty>
-          <regex inherit="unsignednum" pattern="" message=""></regex>
+          <!--<regex inherit="amount3" pattern="" message=""></regex> #52776-->
         </element>
+        <element name="DeductionNetGross3" type="text"   label="Net/Gross"></element>
         <element name="DeductionDate3" type="date" format="dd.MM.yyyy" label="Deduction date:">
           <regex inherit="date" pattern="" message=""></regex>
           <mandatoryIfNotEmpty name="DeductionType3"></mandatoryIfNotEmpty>
@@ -219,14 +270,18 @@
         <element name="DeductionType4" type="select" label="Deduction Type">
           <options>
             <option value=""></option>
-            <option value="Annual Leave overpayment">Annual Leave overpayment</option>
-            <option value="Other">Other</option>
+            <option value="Annual Leave overpayment - 5010">Annual Leave overpayment - 5010</option>
+            <option value="TE Advance Deduction - 7600">TE Advance Deduction - 7600</option>
+            <option value="Other Deduction - 7710">Other Deduction - 7710</option>
+            <option value="Garnishment - 7700">Garnishment - 7700</option>
+              <option value="Utility Cost - 7615">Utility Cost - 7615</option>
           </options>
         </element>
         <element name="DeductionAmountUnits4" type="text" label="Amount/Units">
           <mandatoryIfNotEmpty name="DeductionType4"></mandatoryIfNotEmpty>
-          <regex inherit="unsignednum" pattern="" message=""></regex>
+          <!--<regex inherit="amount3" pattern="" message=""></regex> #52776-->
         </element>
+        <element name="DeductionNetGross4" type="text"   label="Net/Gross"></element>
         <element name="DeductionDate4" type="date" format="dd.MM.yyyy" label="Deduction date:">
           <regex inherit="date" pattern="" message=""></regex>
           <mandatoryIfNotEmpty name="DeductionType4"></mandatoryIfNotEmpty>
@@ -234,14 +289,18 @@
         <element name="DeductionType5" type="select" label="Deduction Type">
           <options>
             <option value=""></option>
-            <option value="Annual Leave overpayment">Annual Leave overpayment</option>
-            <option value="Other">Other</option>
+            <option value="Annual Leave overpayment - 5010">Annual Leave overpayment - 5010</option>
+            <option value="TE Advance Deduction - 7600">TE Advance Deduction - 7600</option>
+            <option value="Other Deduction - 7710">Other Deduction - 7710</option>
+            <option value="Garnishment - 7700">Garnishment - 7700</option>
+              <option value="Utility Cost - 7615">Utility Cost - 7615</option>
           </options>
         </element>
         <element name="DeductionAmountUnits5" type="text" label="Amount/Units">
           <mandatoryIfNotEmpty name="DeductionType5"></mandatoryIfNotEmpty>
-          <regex inherit="unsignednum" pattern="" message=""></regex>
+          <!--<regex inherit="amount3" pattern="" message=""></regex> #52776-->
         </element>
+        <element name="DeductionNetGross5" type="text"   label="Net/Gross"></element>
         <element name="DeductionDate5" type="date" format="dd.MM.yyyy" label="Deduction date:">
           <regex inherit="date" pattern="" message=""></regex>
           <mandatoryIfNotEmpty name="DeductionType5"></mandatoryIfNotEmpty>
@@ -256,7 +315,7 @@
           <regex inherit="date" pattern="" message=""></regex>
           <mandatoryIfNotEmpty name="AdjustmentType"></mandatoryIfNotEmpty>
         </element>-->
-        <element name="LeavingReason" type="select" label="Leaving reason">
+        <element name="LeavingReason" type="select" label="Leaving reason" mandatory="1">
           <options>
             <option value=""></option>
             <option value="Unsatisfied w/ IKEA in general">Unsatisfied w/ IKEA in general</option>
@@ -290,11 +349,9 @@
             <option value="Finished the apprenticeship">Finished the apprenticeship</option>
             <option value="Temporary employment">Temporary employment</option>
             <option value="Turned 18">Turned 18</option>
-            <option value="Long distance (trip) to work (IKEA sore)">Long distance (trip) to work (IKEA sore)</option>
           </options>
         </element>
-      </tab>
-      
+      </tab> 
     </fields>
 </form>
 

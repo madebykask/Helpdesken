@@ -764,6 +764,12 @@
                 }
             });
 
+            var jobtitleoptions = $('#JobTitle')[0].selectize.options;
+            var jobtitleoptionslength = Object.keys(jobtitleoptions).length;
+            if (jobtitleoptionslength == 0) {
+                GetXML('Data_JobTitle.xml', SetAllJobtitles);
+            }
+
             $('#JobTitle').on('change', function () {
 
                 setDefaultPayroll();
@@ -771,6 +777,19 @@
                 setPayrollCategory();
                 setBasicPayAmount();
             });
+        }
+
+        function SetAllJobtitles(xml) {
+            var selectize_tags = $("#JobTitle")[0].selectize;
+            var jobtitles = [''];
+            $(xml).find('option').each(function () {
+                var a = $(this).text();
+                if (!(a == 'undefined' || a == '')) {
+                    jobtitles.push($(this).text());
+                }
+            });
+            var items = jobtitles.map(function (x) { return { text: x, value: x }; });
+            selectize_tags.addOption(items);
         }
 
         function setAllowanceTypeXML5(xml) {
@@ -1321,6 +1340,7 @@
                 document.getElementById('BasicPayAmount').value = ''
             }
 
+            var bus = '';
             if (document.getElementById('BusinessUnit')) {
                 bus = $("#BusinessUnit option:selected").text();
             }
@@ -1341,20 +1361,27 @@
             if (pay.toString().trim() == 'Hourly') {
                 var show;
                 //  alert();
-                show = 'STARTER';
+                show = 'STARTIE';
                 //document.getElementById('PayScaleGroup').value = show;
                 //grp = show;
 
                 if (grp == '') {
-                    grp = 'STARTER';
+                    grp = 'STARTIE';
                     document.getElementById('PayScaleGroup').value = grp;
                     document.getElementById('PayScaleGroup').selectedIndex = 1;
                 }
 
 
-                if (grp.toString().trim() == 'STARTER') {
+                if (grp.toString().trim() == 'STARTIE') {
+
+                    if (bus.toString().trim() == 'Store Dublin 038') {
+                        if (document.getElementById('BasicPayAmount')) {
+                            document.getElementById('BasicPayAmount').value = '11.50'
+                        }
+                    }
+                    else
                     if (document.getElementById('BasicPayAmount')) {
-                        document.getElementById('BasicPayAmount').value = '9.77'
+                        document.getElementById('BasicPayAmount').value = '11.50'
                     }
                 }
             }
@@ -1395,7 +1422,7 @@
 
 
                 if (document.getElementById('PayScaleGroup')) {
-                    document.getElementById('PayScaleGroup').value = 'STARTER';
+                    document.getElementById('PayScaleGroup').value = 'STARTIE';
                 }
 
 
@@ -1657,6 +1684,26 @@
                 }
             });
 
+            var jobtitleoptions = $('#JobTitle')[0].selectize.options;
+            var jobtitleoptionslength = Object.keys(jobtitleoptions).length;
+            if (jobtitleoptionslength == 0) {
+                GetXML('Data_JobTitle.xml', SetAllJobtitles);
+            }
+
+        }
+
+
+        function SetAllJobtitles(xml) {
+            var selectize_tags = $("#JobTitle")[0].selectize;
+            var jobtitles = [''];
+            $(xml).find('option').each(function () {
+                var a = $(this).text();
+                if (!(a == 'undefined' || a == '')) {
+                    jobtitles.push($(this).text());
+                }
+            });
+            var items = jobtitles.map(function (x) { return { text: x, value: x }; });
+            selectize_tags.addOption(items);
         }
 
         function setTecApprover(xml) {

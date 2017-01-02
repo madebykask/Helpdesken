@@ -132,17 +132,7 @@
                     </td>
                 </tr>
                 }
-                
-                 <tr>
-                    <td class="tdstrong" colspan="2">
-                        <h4>@Model.Translate("Comment")</h4>
-                    </td>                   
-                </tr> 
-                <tr>
-                    <td class="tdstrong">@Model.Label("InternalLogNote")</td>
-                    <td>
-                        @Model.Element("InternalLogNote")</td>
-                </tr>                             
+                @Html.Partial("_InternalLogNoteV2", Model)                         
             </tbody>
         </table>
     </div>

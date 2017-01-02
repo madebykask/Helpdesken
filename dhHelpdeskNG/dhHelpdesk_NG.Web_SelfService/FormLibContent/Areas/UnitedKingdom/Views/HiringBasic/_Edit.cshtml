@@ -67,3 +67,53 @@
     </div>
     <input type="hidden" id="activeTab" name="activeTab" value="@Model.ActiveTab" />
 }
+
+<script type="text/javascript">
+
+    // Could be placed in separate js file.
+    // country selectized ... will descrease loading time with 1/2. 
+    var selectize_options = {
+        valueField: 'Value',
+        labelField: 'Value',
+        searchField: 'Value',
+        create: false,
+        render: {
+            option: function (item, escape) {
+                return '<div>' +
+                    '<span class="title">' +
+                        '<span class="name">' + escape(item.Value) + '</span>' +
+                    '</span>' +
+                '</div>';
+            }
+        },
+        load: function (query, callback) {
+            if (!query.length) return callback();
+
+            $.ajax({
+                url: '@Url.CurrentController()CountrySearchUK/?query=' + encodeURIComponent(query) + "&=" + Math.random(),
+                type: 'GET',
+                error: function () {
+                    callback();
+                },
+                success: function (res) {
+                    callback(res.options.slice(0, 10));
+                }
+            });
+        }
+    };
+
+        $('#PermanentCountry, #OrganisationCountry, #MailingCountry, #EmergencyCountry, ' +
+            '#EmployeeDocumentCountry, #EmployeeDocumentIssuePlaceCountry, #EmployeeDocumentCountry2, ' +
+            '#EmployeeDocumentIssuePlaceCountry2, #EmployeeDocumentCountry3, #EmployeeDocumentIssuePlaceCountry3, ' +
+            '#EmployeeDocumentCountry4, #EmployeeDocumentIssuePlaceCountry4, #EmployeeDocumentCountry5, #EmployeeDocumentIssuePlaceCountry5 , ' +
+            '#DependantsDocumentCountry, #DependantsDocumentIssuePlaceCountry, #DependantsDocumentCountry2, #DependantsDocumentIssuePlaceCountry2, ' +
+            '#DependantsDocumentCountry3, #DependantsDocumentIssuePlaceCountry3, #DependantsDocumentCountry4, #DependantsDocumentIssuePlaceCountry4, ' +
+            '#DependantsDocumentCountry5, #DependantsDocumentIssuePlaceCountry5, #BankCountry, #DocumentCountryOfIssue, #DocumentCountryOfUse')
+            .each(function (e, i) {
+                var _this = $(this);
+                if (!_this[0].selectize) {
+                    _this.selectize(selectize_options);
+                }
+            });
+
+</script>

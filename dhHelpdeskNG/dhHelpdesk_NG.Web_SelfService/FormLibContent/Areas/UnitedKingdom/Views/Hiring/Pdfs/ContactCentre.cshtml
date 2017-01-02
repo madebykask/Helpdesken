@@ -68,7 +68,7 @@
             list.Add(new PdfListItem { Text = text5 });
 
             //6
-            string text6 = "Your annual holiday entitlement per calendar year is " + Model.GetDocumentAnswer("HolidayFull", true) + " hours this includes compensatory holiday entitlement (to cover annual public holidays). Holiday entitlement runs from 1st September – 31st August and is calculated on a pro rata basis. Your holiday entitlement for the remainder of 2013/14 up to 31st August is " + Model.GetDocumentAnswer("HolidayCurrent", true) + " hours.";
+            string text6 = "Your annual holiday entitlement per calendar year is " + Model.GetDocumentAnswer("HolidayFull", true) + " hours this includes compensatory holiday entitlement (to cover annual public holidays). Holiday entitlement runs from 1st September – 31st August and is calculated on a pro rata basis. Your holiday entitlement for the current holiday year is " + Model.GetDocumentAnswer("HolidayCurrent", true) + " hours.";
             list.Add(new PdfListItem { Text = text6 });
 
             //7

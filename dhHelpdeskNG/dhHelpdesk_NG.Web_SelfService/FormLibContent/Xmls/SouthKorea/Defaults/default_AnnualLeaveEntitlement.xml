@@ -13,19 +13,17 @@
         <selected>28</selected>
         <show>112 hours</show>
     </dependent>
-
-  <dependent>
+    <dependent>
         <selected>25</selected>
         <show>100 hours</show>
-  </dependent>
-  <dependent>
-    <selected>20</selected>
-    <show>80 hours</show>
-  </dependent>
-
-  <dependent>
-    <selected>16</selected>
-    <show>64 hours</show>
-  </dependent>
+    </dependent>
+    <dependent>
+        <selected>20</selected>
+        <show>80 hours</show>
+    </dependent>
+    <dependent>
+        <selected>16</selected>
+        <show>64 hours</show>
+    </dependent>
 </predefined>
 

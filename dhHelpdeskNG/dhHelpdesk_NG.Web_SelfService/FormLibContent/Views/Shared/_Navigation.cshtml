@@ -36,34 +36,22 @@
 
 @if(Model.Contract != null && Model.Contract.Id != 0)
 {
-    
     <style>
-               @*Define top margin depending on if StatusBar is visible or not*@
-        .containeralignright { margin-top: 130px;
+        @*Define top margin depending on if StatusBar is visible or not*@
+        .containeralignright { margin-top: 90px;
     </style>
     
     <div class="navbar navbar-inverse navbar-fixed-top">
-
           @*Add by Tan /Case: 51017*@
-
-    @*<div class="navbar-inner navbarbgcolorblue">
-        <div class="nav-collapse collapse" style="margin-left: 10px;">
+        <div class="navbarbgcolorblue">
             <ul class="nav">
                 @if (Model.Form != null)
-                {<li class="pull-left"><a>@Model.Translate(Model.Form.FormName)</a></li>}
-                <li class="pull-right" style="float: right;"><a><i class="icon icon-user icon-white"></i>&nbsp;@ECT.FormLib.FormLibSessions.User.FullName</a></li>
+                {<li class="pull-left">@Model.Translate(Model.Form.FormName)</li>}
+                <li class="pull-right">@ECT.FormLib.FormLibSessions.User.FullName</li>
+                <li style="float:right;"><i class="icon icon-user"></i>&nbsp;</li>
             </ul>
-        </div>
-    </div>*@
-    <div class="navbar-inner navbarbgcolorblue">
-        <div class="nav-collapse collapse" style="margin-left: 10px;">
-            <ul class="nav">
-                @if (Model.Form != null)
-                {<li class="pull-left"><a>@Model.Translate(Model.Form.FormName)</a></li>}
-                <li class="pull-right" style="float: right;"><a><i class="icon icon-user"></i>&nbsp;@ECT.FormLib.FormLibSessions.User.FullName</a></li>
-            </ul>
-        </div>
     </div>
+        <div class="clearfix"></div>
 
     @*don't show statusbar if we dont have any values*@
     @if (ShowStatusBar())
@@ -137,24 +125,21 @@
 else
 {
     
-        <style>
-               @*Define top margin depending on if StatusBar is visible or not*@
-        .containeralignright { margin-top: 90px;
+    <style>
+       @*Define top margin depending on if StatusBar is visible or not*@
+        .containeralignright { margin-top: 60px;
     </style>
-    
     <div class="navbar navbar-inverse navbar-fixed-top">
-
-          <div class="navbar-inner navbarbgcolorblue">
-        <div class="nav-collapse collapse" style="margin-left: 10px;">
+       <div class="navbarbgcolorblue">
             <ul class="nav">
                 @if (Model.Form != null)
-                {<li class="pull-left"><a>@Model.Translate(Model.Form.FormName)</a></li>}
-                <li class="pull-right" style="float: right;"><a><i class="icon icon-user icon-white"></i>&nbsp;@ECT.FormLib.FormLibSessions.User.FullName</a></li>
+                {<li class="pull-left">@Model.Translate(Model.Form.FormName)</li>}
+                <li class="pull-right">@ECT.FormLib.FormLibSessions.User.FullName</li>
+                <li style="float:right;"><i class="icon icon-user"></i>&nbsp;</li>
             </ul>
-        </div>
     </div>
-
-        <div class="navbar-inner navbarbgcolor">
+        <div class="clearfix"></div>
+    <div class="navbar-inner navbarbgcolor">
             <div class="nav-collapse collapse">
                 <ul class="nav" id="navigation">
                     <li>

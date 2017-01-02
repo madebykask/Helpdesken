@@ -22,7 +22,16 @@
 
             document.getElementById(prefix + "PostalCode").value = document.getElementById('PermanentPostalCode').value;
             document.getElementById(prefix + "City").value = document.getElementById('PermanentCity').value;
-            document.getElementById(prefix + "Country").value = document.getElementById('PermanentCountry').value;
+
+            var ctry = document.getElementById('PermanentCountry').value
+            var $select = $('#' + prefix + 'Country').selectize();
+
+            $select[0].selectize.clearOptions();
+            $select[0].selectize.addOption({
+                Value: ctry,
+            });
+            $select[0].selectize.setValue(ctry);
+           
         });
 
         validate.run($('#actionState').val());
@@ -116,12 +125,59 @@
     <input type="hidden" id="activeTab" name="activeTab" value="@Model.ActiveTab" />    
 }
 
-<script>
-    //InitIntegration();
+<script type="text/javascript">
 
-    function changeFunctionsCallback() {
-        //setTimeout(function () { GetXML('predefined_function_department_linemanager_outs.xml', setLineManagerAndCostCentre); }, 1);
+    // Could be placed in separate js file.
+    // country selectized ... will descrease loading time with 1/2. 
+    // located in _edit.cshtml and new.schtml
+    var selectize_options = {
+        valueField: 'Value',
+        labelField: 'Value',
+        searchField: 'Value',
+        create: false,
+        render: {
+            option: function (item, escape) {
+                return '<div>' +
+                    '<span class="title">' +
+                        '<span class="name">' + escape(item.Value) + '</span>' +
+                    '</span>' +
+                '</div>';
+            }
+        },
+        load: function (query, callback) {
+            if (!query.length) return callback();
 
-        //setTimeout(function () { GetXML('predefined_function_jobtitleUK_outs.xml', setLineManagerJobTitle); }, 1);
-    }
+            $.ajax({
+                url: '@Url.CurrentController()CountrySearchUK/?query=' + encodeURIComponent(query) + "&=" + Math.random(),
+                type: 'GET',
+                error: function () {
+                    callback();
+                },
+                success: function (res) {
+                    callback(res.options.slice(0, 10));
+                }
+            });
+        }
+    };
+
+    $('#PermanentCountry, #OrganisationCountry, #MailingCountry, #EmergencyCountry, ' +
+        '#EmployeeDocumentCountry, #EmployeeDocumentIssuePlaceCountry, #EmployeeDocumentCountry2, ' +
+        '#EmployeeDocumentIssuePlaceCountry2, #EmployeeDocumentCountry3, #EmployeeDocumentIssuePlaceCountry3, ' +
+        '#EmployeeDocumentCountry4, #EmployeeDocumentIssuePlaceCountry4, #EmployeeDocumentCountry5, #EmployeeDocumentIssuePlaceCountry5 , ' +
+        '#DependantsDocumentCountry, #DependantsDocumentIssuePlaceCountry, #DependantsDocumentCountry2, #DependantsDocumentIssuePlaceCountry2, ' +
+        '#DependantsDocumentCountry3, #DependantsDocumentIssuePlaceCountry3, #DependantsDocumentCountry4, #DependantsDocumentIssuePlaceCountry4, ' +
+        '#DependantsDocumentCountry5, #DependantsDocumentIssuePlaceCountry5, #BankCountry, #DocumentCountryOfIssue, #DocumentCountryOfUse')
+        .each(function (e, i) {
+            var _this = $(this);
+            if (!_this[0].selectize) {
+                _this.selectize(selectize_options);
+            }
+        });
+
+        //InitIntegration();
+
+        function changeFunctionsCallback() {
+            //setTimeout(function () { GetXML('predefined_function_department_linemanager_outs.xml', setLineManagerAndCostCentre); }, 1);
+            //setTimeout(function () { GetXML('predefined_function_jobtitleUK_outs.xml', setLineManagerJobTitle); }, 1);
+        }
 </script>

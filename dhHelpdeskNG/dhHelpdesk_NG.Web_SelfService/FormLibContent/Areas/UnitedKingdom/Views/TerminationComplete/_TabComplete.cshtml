@@ -297,17 +297,23 @@
     $('#TerminationReason').on('change', function () {
         disableOneIKEABonus();
     });
+  
+    
     $(function () {
-        disableOneIKEABonus();
-    })
+        disableOneIKEABonus();       
+    });
 
     function disableOneIKEABonus() {
 
         //Disables the value if called upon. Called by onload an termination reason change.
 
+        /// The payment type “One IKEA Bonus Due” shall be selectable for Termination Types:  Retirement, Redundancy, Other
+
+
         value = 'One IKEA Bonus Due';
 
-        if ($('#TerminationReason').val().toLowerCase() == 'International transfer begins'.toLowerCase()) {
+        if ($('#TerminationReason').val().toLowerCase() == 'International transfer begins'.toLowerCase() || $('#CompleteTerminationType').val().toLowerCase() == 'Retirement'.toLowerCase()
+            || $('#CompleteTerminationType').val().toLowerCase() == 'Redundancy'.toLowerCase() || $('#CompleteTerminationType').val().toLowerCase() == 'Other'.toLowerCase()) {
 
             $('#TerminationPaymentType option:contains("' + value + '")').removeAttr('disabled');
             $('#TerminationPaymentType2 option:contains("' + value + '")').removeAttr('disabled');
@@ -337,6 +343,8 @@
                 document.getElementById('TerminationPaymentType5').value = '';
             }
         }
+      
+
         value = 'Redundancy Payment';
         if ($('#TerminationReason').val().toLowerCase() == 'Redundancy'.toLowerCase()) {
 

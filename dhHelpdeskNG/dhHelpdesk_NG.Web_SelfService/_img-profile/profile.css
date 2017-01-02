@@ -1,0 +1,442 @@
+body {
+  background:#f2f7fe;
+}
+
+img
+{
+	max-width: 100%;
+}
+
+.navbar-brand {
+  float: left;
+  height: 50px;
+  padding: 15px 15px;
+  font-size: 18px;
+  line-height: 20px;
+}
+.toplogo {
+    background: url(ikea.png);
+    background-repeat: no-repeat;
+    width: 261px;
+    height: 28px;
+    margin:0;
+    padding:0;
+}
+@media (min-width: 768px) {
+  .navbar {
+    border-radius: 0px;
+  }
+}
+
+.navbar-default {
+  background-color: #0067b2;
+  border-color: #e7e7e7;
+  margin-left:-20px;
+}
+.navbar-default .navbar-brand {
+  color: #777;
+}
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+  color: #5e5e5e;
+  background-color: transparent;
+}
+.navbar-default .navbar-text {
+  color: #777;
+}
+.navbar-default .navbar-nav > li > a {
+  color: #777;
+}
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+  color: #333;
+  background-color: transparent;
+}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+  color: #555;
+  background-color: #e7e7e7;
+}
+.navbar-default .navbar-nav > .disabled > a,
+.navbar-default .navbar-nav > .disabled > a:hover,
+.navbar-default .navbar-nav > .disabled > a:focus {
+  color: #ccc;
+  background-color: transparent;
+}
+.navbar-default .navbar-toggle {
+  border-color: #ddd;
+}
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+  background-color: #ddd;
+}
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: #888;
+}
+.navbar-default .navbar-collapse,
+.navbar-default .navbar-form {
+  border-color: #e7e7e7;
+}
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus {
+  color: #555;
+  background-color: #e7e7e7;
+}
+@media (max-width: 767px) {
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+    color: #777;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+    color: #333;
+    background-color: transparent;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: #555;
+    background-color: #e7e7e7;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > .disabled > a,
+  .navbar-default .navbar-nav .open .dropdown-menu > .disabled > a:hover,
+  .navbar-default .navbar-nav .open .dropdown-menu > .disabled > a:focus {
+    color: #ccc;
+    background-color: transparent;
+  }
+}
+.navbar-default .navbar-link {
+  color: #777;
+}
+.navbar-default .navbar-link:hover {
+  color: #333;
+}
+
+.blue {
+  background-color:#0067b2 !important;
+}
+
+.blue:hover, .blue:active, .blue:focus {
+  background-color:#ffdf01 !important;
+}
+
+.green {
+  background-color:#ffdf01 !important;
+}
+
+.green:hover {
+  background-color:#2c7659 !important;
+}
+
+.purple {
+  background-color:#53378a !important;
+}
+
+.purple:hover {
+  background-color:#3e1d80 !important;
+}
+
+.light-blue {
+  background-color:#62a8d1 !important;
+}
+
+.light-blue:hover {
+  background-color:#579ec8 !important;
+}
+
+.purple a, .green a, .blue a, .light-blue a {
+  color: #fff !important;
+  text-align:center;
+}
+
+
+.dropdown-menu li a
+{
+	color: #333 !important;
+	text-align: left;
+}
+
+.dropdown-menu li a .small {
+  font-size: 75%;
+}
+
+.navbar-nav
+{
+	border-right: 1px solid #fff;
+}
+
+.navbar-nav > li {
+  color: #777;
+  border-left:1px solid #fff;
+}
+
+
+
+.panel {
+  margin-bottom: 20px;
+  background-color: #fff;
+  border: 1px solid transparent;
+  border-radius: 0px;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
+.panel-heading {
+  padding: 10px 15px;
+  border-bottom: 1px solid transparent;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+}
+
+.panel-default {
+  border-color: #ddd;
+}
+.panel-default > .panel-heading {
+  color: #fff;
+  background-color: #0067b2;
+  border-color: #0067b2;
+}
+
+.panel-default > .panel-heading.heading-color {
+  color: #fff;
+  background-color: #ffdf01;
+  border-color: #ffdf01;
+}
+.panel-default > .panel-heading h3 {
+  line-height:normal;
+  font-size:18px;
+  margin:0;
+  color:#0067b2;
+}
+.panel-default > .panel-heading h5 {
+  line-height:normal;
+  font-size:18px;
+  margin:0;
+  color:#fff;
+}
+
+
+.tab-pane
+{
+	border-left: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
+	background:#fff;
+}
+
+.nav-tabs > li > a {
+  margin-right: 2px;
+  line-height: 1.42857143;
+  border: 1px solid transparent;
+  border-radius: 0 0 0 0;
+  background-color: #438eb9;
+  color:#fff;
+}
+
+.nav-tabs > li > a:hover {
+  border-color: #eee #eee #ddd;
+  color:#333;
+}
+
+.dh-container
+{
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+
+.dh-col
+{
+	margin-left:-15px;
+}
+
+.jumbotron {
+  padding: 0 !important;
+  padding-top:5px !important;
+  padding-bottom:5px !important;
+  margin-bottom: 0;
+  color: inherit;
+  background-color: #fff !important;
+}
+.jumbotron h1,
+.jumbotron .h1 {
+  color: inherit;
+}
+.jumbotron p {
+  margin-bottom: 15px;
+  font-size: 21px;
+  font-weight: 200;
+}
+.container .jumbotron {
+  border-radius: 0px !important;
+}
+.jumbotron .container {
+  max-width: 100%;
+}
+@media screen and (min-width: 768px) {
+  .jumbotron {
+    padding-top: 48px;
+    padding-bottom: 48px;
+  }
+  .container .jumbotron {
+    padding-right: 60px;
+    padding-left: 60px;
+  }
+  .jumbotron h1,
+  .jumbotron .h1 {
+    font-size: 63px;
+  }
+}
+
+
+.btn-dhblue {
+  color: #fff;
+  background-color: #0067b2;
+  border-color: #0067b2;
+}
+.btn-dhblue:hover,
+.btn-dhblue:focus,
+.btn-dhblue:active,
+.btn-dhblue.active,
+.open .dropdown-toggle.btn-dhblue {
+  color: #fff;
+  background-color: #3276b1;
+  border-color: #285e8e;
+}
+    
+.bulletinimg {
+    background: url(ikea-peoplestart.png);
+    background-repeat:no-repeat;
+    background-size:100% auto;
+    min-height:300px;
+    background-position: top center;
+}
+
+
+
+.siteCom {
+  width:600px;
+  position:fixed;
+  left:-600px;
+  top:0;
+  display:block;
+  color:#FFF;
+  z-index:2000;
+  height:100%;
+  border:1px solid #0067b2;
+  background-color:#0067b2;
+}
+.mapText {
+  color:#fff;
+
+}
+
+.newcom {
+    left: 12px;
+    top: 4px;
+    color: #ff6600;
+    position: absolute;
+}
+
+.siteCom .mapButton {
+  display:block;
+  color:#fff;
+ background-color:#0067b2;
+  
+  padding:8px 5px 5px 5px;
+  height:32px;
+  width:30px;
+  text-align:center;
+  position:relative;
+  left: 100%;
+  margin-top:176px;
+  cursor:pointer;
+  border-radius: 0 4px 4px 0;
+  -moz-opacity: 0.80;
+  opacity:.80;
+  filter: alpha(opacity=80);
+
+}
+
+.siteCom .theMap {
+  width:100%;
+  height:100%;
+  color:#fff;
+  margin-top:-180px;
+  overflow: auto;
+}
+
+.siteCom .com-list {
+    padding: 20px 20px 20px 15px;
+    height: 100%;
+}
+
+.siteCom .com-list-com {
+    padding: 10px 10px 2px 10px;
+    background: #f2f7fe;
+    background:#5bc0de;
+    background:#fff;
+    color:#000;
+    margin-bottom: 20px;
+    border-right:5px solid #d96326;
+    border-right:5px solid #ffdf01;
+    margin-right:30px;
+    position:relative;
+}
+
+.siteCom .com-list-hd {
+    padding: 10px 10px 2px 10px;
+    background: #f2f7fe;
+    background:#5bc0de;
+    background:#fff;
+    color:#000;
+    margin-bottom: 20px;
+    border-left:5px solid #d96326;
+    margin-left:30px;
+    position:relative;
+}
+
+.siteCom > .arrow,
+.siteCom > .arrow:after {
+  position: absolute;
+  display: block;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+}
+.siteCom > .arrow {
+  border-width: 11px;
+}
+.siteCom > .arrow:after {
+  content: "";
+  border-width: 10px;
+}
+
+.list-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+}
+.siteCom .com-list-hd .list-arrow {
+  top: 45%;
+  right: -10px;
+  margin-top: -5px;
+  border-width: 10px 0 10px 10px;
+  border-left-color: #fff;
+}
+
+.siteCom .com-list-com .list-arrow {
+  top: 45%;
+  left: -10px;
+  margin-top: -5px;
+  border-width: 10px 10px 10px 0;
+  border-right-color: #fff;
+}
+    
+
+
+
+

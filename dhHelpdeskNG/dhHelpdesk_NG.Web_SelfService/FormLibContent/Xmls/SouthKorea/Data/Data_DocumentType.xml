@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
-  <options>
+<options>
     <option value=""></option>
     <option value="Visa">Visa</option>
-    <option value="Passport">Passport</option>
-  <option value="Residence permit">Residence permit</option>
+    <option value="Residence permit">Residence permit</option>
     <option value="Work permit">Work permit</option>
     <option value="Tax registration">Tax registration</option>
     <option value="Insurance and Social Security">Insurance and Social Security</option>
@@ -16,5 +15,4 @@
     <option value="School information">School information</option>
     <option value="Korean language lesson">Korean language lesson</option>
     <option value="Culture Training">Culture Training</option>
-    
-  </options> 
+</options>

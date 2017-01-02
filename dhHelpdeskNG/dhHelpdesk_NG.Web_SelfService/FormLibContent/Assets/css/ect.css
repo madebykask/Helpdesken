@@ -1181,6 +1181,11 @@ label.error, .notice {
     font-size: small;
 }
 
+.helptext {
+    color:black; 
+    padding-bottom:15px;
+}
+
 .typeahead-notice {
     display: none;
 }
@@ -1280,25 +1285,27 @@ option:disabled {
 }
 
 .navbarbgcolorblue {
-    /*height:20px !important;
-    max-height:20px !important;
-    margin:10px;*/
-    
-}
-
-.navbarbgcolorblue {
     background-color: #F0F0F0 !important;
     background-image: none !important;
     color: #000 !important;
-    border-top:1px solid #D8D8D8 !important;
-    
+    border: 0px solid #000 !important;
+    /*border-top:1px solid #D8D8D8 !important;
+    border-bottom:1px solid #D8D8D8 !important;*/
     filter: none !important;
+    height:20px !important;
+    max-height:20px !important;
+    vertical-align: middle !important;
+    font-size:11px;
 }
 
 .navbarbgcolorblue a, .navbarbgcolorlightblue a {
     color: #fff !important;
 }
 
+.navbarbgcolor {
+    border-top:1px solid #D8D8D8 !important;
+    z-index:99999 !important;
+}
 
 .navbar-inverse .brand, .navbar-inverse .nav > li > a {
     text-shadow: none !important;
@@ -1310,10 +1317,25 @@ option:disabled {
 
 .navbarbgcolorblue .nav {
     width: 1185px;
+   vertical-align: middle !important;
+   height:100% !important;
+   min-height:100% !important;
+
+}
+
+.navbarbgcolorblue .nav .pull-left {
+    margin-left:25px;
+    margin-top:1px; font-weight:bold;
+}
+
+.navbarbgcolorblue .nav .pull-right {
+    margin-top:1px; 
+    font-weight:bold;
+    float: right;
 }
  
 .navbarbgcolorblue .nav > li > a {
-    padding-right: 5px !important;
+    /*padding-right: 5px !important;*/
 }
 
 .employeename, .employeenumber
@@ -1325,10 +1347,10 @@ option:disabled {
 {
     color: #000 !important; 
     background-color: #D8D8D8; 
-    padding: 7px; 
+    
     padding-left: 25px; 
     font-size: 11px; 
-    height: 20px;
+    height:20px;
     min-height:20px;
 }
 
@@ -1339,6 +1361,56 @@ option:disabled {
 
 .statusbar
 {
-border-top: 1px solid #C0C0C0;
+    border-top: 1px solid #C0C0C0;
     border-bottom: 1px solid #C0C0C0;
+}
+
+.selectize-dropdown, .tab-content {
+    overflow:visible !important;
+}
+
+/*Same padding for LM*/
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+    padding:3px 8px !important;
+}
+
+/* same width as others for date input*/
+/*.date input {
+    width: 291px !important;
+}*/
+
+/*Current record as wide as table*/
+.current-record-th {
+    width:580px;
+    min-width:580px;
+}
+
+.upper-case {
+    text-transform: uppercase;
+}
+
+/* next_tariff in hiring*/
+
+.day-month {
+    min-height:30px;
+    line-height:30px;
+    vertical-align:middle;
+    display:block;
+    float:left;
+    padding-right:10px;
+}
+
+.date-month {
+    width: 65px;
+    max-width:65px;
+}
+
+/* next_tariff in hiring*/
+
+span.disabled, i.disabled {
+ cursor: not-allowed !important;
+}
+
+.search-select .locked {
+    cursor:not-allowed !important;
 }

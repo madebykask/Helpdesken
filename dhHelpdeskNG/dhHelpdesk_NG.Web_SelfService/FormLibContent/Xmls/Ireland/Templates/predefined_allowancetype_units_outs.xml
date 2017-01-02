@@ -2,11 +2,6 @@
 <predefined>
   <name>AllowanceTypeUnit</name>
   <dependent>
-    <selected>Advanced Hrly</selected>
-    <show1>0.65</show1>
-    <show2>Gross</show2>
-  </dependent>
-  <dependent>
     <selected>High Performer 11</selected>
     <show1>0.15</show1>
     <show2>Gross</show2>
@@ -158,11 +153,6 @@
   </dependent>
   <dependent>
     <selected>360A - Bonus</selected>
-    <show1></show1>
-    <show2>Gross</show2>
-  </dependent>
-  <dependent>
-    <selected>100D - Salary Advanced</selected>
     <show1></show1>
     <show2>Gross</show2>
   </dependent>

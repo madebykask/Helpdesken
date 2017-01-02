@@ -3,7 +3,7 @@
   <name>FunctionJobTitle</name>
   <dependent>
     <selected>Bus Navigation</selected>
-    <show>Accounting Assistant - Reconciliation,Business Navigation &amp; Operations Manager,Deputy Store Navigation and Operations Manager,Q-Store Quality Manager,Safety and Security Function Support (Specialist),Sustainability Responsible,Regional Facility Manager,Staff Planning Manager,Operations Support</show>
+    <show>Accounting Assistant - Reconciliation,Business Navigation &amp; Operations Manager,Deputy Store Navigation and Operations Manager,Q-Store Quality Manager,Safety and Security Function Support (Specialist),Sustainability Responsible,Regional Facility Manager,Staff Planning Manager,Staff Planning Specialist,Operations Support</show>
   </dependent>
   <dependent>
     <selected>Commin</selected>
@@ -23,7 +23,7 @@
   </dependent>
   <dependent>
     <selected>HR</selected>
-    <show>HR Administrator,HR Generalist,HR Manager,Learning &amp; Development Specialist,Staff Planner,Regional Facility Manager,Operations Support</show>
+    <show>HR Administrator,HR Generalist,HR Manager,Learning &amp; Development Specialist,Staff Planner,Regional Facility Manager,Operations Support,Team Leader, Competence Development Specialist</show>
   </dependent>
   <dependent>
     <selected>IKEA Food</selected>
@@ -43,7 +43,7 @@
   </dependent>
   <dependent>
     <selected>Operations</selected>
-    <show>Facility Manager,Facility Specialist,IT Support,Q-Store Product Quality Technician,Recovery Co-worker,Recovery Manager,Recovery Team Leader,Risk Supervisor,Safety &amp; Security Co-worker,Safety &amp; Security Manager,Site Facility Management Co-worker,Site Facility Manager,Regional Facility Manager,Operations Support</show>
+    <show>Facility Manager,Facility Specialist,IT Support,Product Quality Specialist,Q-Store Product Quality Technician,Recovery Co-worker,Recovery Manager,Recovery Team Leader,Risk Supervisor,Safety &amp; Security Co-worker,Safety &amp; Security Manager,Site Facility Management Co-worker,Site Facility Manager,Regional Facility Manager,Operations Support</show>
   </dependent>
   <dependent>
     <selected>Projects</selected>
@@ -55,6 +55,6 @@
   </dependent>
   <dependent>
     <selected>Steering Group</selected>
-    <show>ASM,Com &amp; In Manager,Competence Coach,Customer Relations Manager,IKEA Food Manager,Local Marketing Manager,Store Manager,Regional Facility Manager,Operations Support</show>
+    <show>ASM,Com &amp; In Manager,Competence Coach,Customer Relations Manager,HR Manager,IKEA Food Manager,Local Marketing Manager,Store Manager,Regional Facility Manager,Operations Support</show>
   </dependent>
 </predefined>

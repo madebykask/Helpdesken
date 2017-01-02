@@ -12,8 +12,14 @@
             return "";
         }
 
+        //This template is applicable only if Business unit = "Distribution Centre Doncaster"
+        if (Model.GetDocumentAnswer("BusinessUnit").ToLower() == "Distribution Centre Doncaster".ToLower() && (Model.GetAnswer("NewToIKEA").ToLower() == "New Hire".ToLower() | Model.GetAnswer("NewToIKEA").ToLower() == "Re-Hire".ToLower()))
+         {
+             return "Doncaster";
+         }
+
         //This template is applicable only if <Contract Type/OA14> = “Zero Hour”
-        if (Model.GetAnswer("ContractType").ToLower() == "Zero Hours".ToLower())
+        if (Model.GetAnswer("ContractType").ToLower() == "Zero Hours".ToLower() && Model.GetDocumentAnswer("BusinessUnit").ToLower() != "Distribution Centre Doncaster".ToLower())
         {
             return "ZeroHour";
         }

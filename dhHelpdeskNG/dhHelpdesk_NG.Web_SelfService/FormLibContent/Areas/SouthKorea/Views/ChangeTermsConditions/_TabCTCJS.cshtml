@@ -17,24 +17,31 @@
 
 
         $(function () {
-            setTimeout(function () { setDefaultPrimarySite() }, 30);
-            setTimeout(function () { GetXML('Predefined_BusinessUnit_PositionTitle.xml', narrowDownPositionTitle); }, 1);
-            setTimeout(function () { GetXML('Predefined_BusinessUnit_JobTitle.xml', narrowDownJobTitle); }, 1);
+
+
+            $("#NewBusinessUnit").change(function () {
+
+                setTimeout(function () { setDefaultPrimarySite() }, 30);
+
+                setTimeout(function () { GetXML('Predefined_BusinessUnit_PositionTitle.xml', narrowDownPositionTitle); }, 1);
+                //setTimeout(function () { GetXML('Predefined_BusinessUnit_JobTitle.xml', narrowDownJobTitle); }, 1);
+            });
 
         });
 
+    
 
         function setPaymentDatePickersBehavior() {
 
             $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,#date_AllowancesValidFrom4,#date_AllowancesValidFrom5,' +
-            '#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3,#date_DeductionsValidFrom4,#date_DeductionsValidFrom5').not(".disabled").datepicker('destroy');
+            '#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3,#date_DeductionsValidFrom4,#date_DeductionsValidFrom5,#date_CalculationStartDate').not(".disabled").datepicker('destroy');
 
             var startDate = $('#ChangeValidFrom').val();
             var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
             var dStart = APIGlobal.DateTime.parseDate(startDate, format);
             var forcePicker = new Date(dStart.getFullYear(), dStart.getMonth(), dStart.getDate(), 0, 0, 0, 0);
             $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,#date_AllowancesValidFrom4,#date_AllowancesValidFrom5,' +
-                '#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3,#date_DeductionsValidFrom4,#date_DeductionsValidFrom5').not(".disabled").datepicker(
+                '#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3,#date_DeductionsValidFrom4,#date_DeductionsValidFrom5,#date_CalculationStartDate').not(".disabled").datepicker(
             {
                 onRender: function (ev) {
                     return ev.valueOf() < forcePicker.valueOf() ? 'disabled' : '';
@@ -43,11 +50,11 @@
 
             ////set value to the datepicker
             $('#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3,#date_DeductionsValidFrom4,#date_DeductionsValidFrom5').not(".disabled").datepicker("setValue", forcePicker);
-            $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,#date_AllowancesValidFrom4,#date_AllowancesValidFrom5').not(".disabled").datepicker("setValue", forcePicker);
+            $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,#date_AllowancesValidFrom4,#date_AllowancesValidFrom5,#date_CalculationStartDate').not(".disabled").datepicker("setValue", forcePicker);
             $('#date_ChangeValidFrom').datepicker("setValue", startDate);
 
             $('#AllowancesValidFrom,#AllowancesValidFrom2,#AllowancesValidFrom3,#AllowancesValidFrom4,#AllowancesValidFrom5,' +
-      '#DeductionsValidFrom,#DeductionsValidFrom2,#DeductionsValidFrom3,#DeductionsValidFrom4,#DeductionsValidFrom5').val(startDate);
+      '#DeductionsValidFrom,#DeductionsValidFrom2,#DeductionsValidFrom3,#DeductionsValidFrom4,#DeductionsValidFrom5,#CalculationStartDate').val(startDate);
         }
 
         // setPaymentDatePickersBehavior();
@@ -60,6 +67,32 @@
             setPaymentDatePickersBehavior();
         });
 
+
+
+        $('#ChangeValidFrom').not(".disabled").change(function () {
+            SetProbationEndDate($('#ProbationPeriod').val());       
+        });
+        $('#ProbationPeriod').change(function () {
+            SetProbationEndDate($(this).val());
+        });
+
+        var SetProbationEndDate = function (value) {
+            var probationEndDate = $('#Probationenddate');
+            if (value == 'Yes') {
+                var sStart = $('#ChangeValidFrom').val();
+                var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+                var dStart = APIGlobal.DateTime.parseDate(sStart, format);
+
+                var endDate = new Date(dStart.getFullYear(), dStart.getMonth() + 3, dStart.getDate() - 1, 0, 0, 0, 0);
+                var visibleDate = APIGlobal.DateTime.formatDate(endDate, format);
+                probationEndDate.val(visibleDate.toString());
+            }
+            else {
+                probationEndDate.val("");
+            }
+        };
+
+
         $('#DeductionsValidFrom,#DeductionsValidFrom2,#DeductionsValidFrom3,#DeductionsValidFrom4,#DeductionsValidFrom5').change(function () {
 
             $('#date_' + $(this).attr("id")).datepicker("setValue", $(this).val());
@@ -70,9 +103,9 @@
             $('#date_' + $(this).attr("id")).datepicker("setValue", $(this).val());
         });
 
-
+        //sg : Week 1-2016 order #53881
         $("#ReportsToLineManager").change(function () {
-            SetDefaultTECApprover();
+            //SetDefaultTECApprover();
         });
 
         $("#EmploymentCategory").change(function () {
@@ -80,17 +113,17 @@
             setEmployeeBehavior($(this).val());
         });
 
-        var SetDefaultTECApprover = function () {
-            var LineManager;
-            LineManager = $('#ReportsToLineManager').val();
+        //var SetDefaultTECApprover = function () {
+        //    var LineManager;
+        //    LineManager = $('#ReportsToLineManager').val();
 
-            if ($('#TECapprover')[0].selectize) {
-                $('#TECapprover')[0].selectize.setValue(LineManager);
-            }
-            else {
-                $('#TECapprover').val(LineManager);
-            }
-        }
+        //    if ($('#TECapprover')[0].selectize) {
+        //        $('#TECapprover')[0].selectize.setValue(LineManager);
+        //    }
+        //    else {
+        //        $('#TECapprover').val(LineManager);
+        //    }
+        //}
 
         $("#ContractedHours").change(function () {
             GetXML('default_AnnualLeaveEntitlement.xml', SetDefaultAnnualLeave);
@@ -105,13 +138,13 @@
             }
         }
 
-        var SetDefaultCompany = function () {
+        //var SetDefaultCompany = function () {
 
-            if ($("#Company option").length == 2) {
-                $("#Company option").eq(1).attr('selected', true);
-                $("#Company").change();
-            }
-        }
+        //    if ($("#Company option").length == 2) {
+        //        $("#Company option").eq(1).attr('selected', true);
+        //        $("#Company").change();
+        //    }
+        //}
 
        
        
@@ -189,7 +222,7 @@
                         }
 
                         var items = optionsarray.map(function (x) { return { text: x, value: x }; });
-                        debugger;
+                  
                         selectize_tags.addOption(items);
 
 
@@ -261,7 +294,7 @@
                         }
 
                         var items = optionsarray.map(function (x) { return { text: x, value: x }; });
-                        debugger;
+
                         selectize_tags.addOption(items);
 
 
@@ -399,30 +432,7 @@
 
 
 
-        function GetXML(xmlFile, url) {
-            //////////
-            //Gets XML File
-            //////////
-
-            var path = window.location.protocol + '//';
-            path = path + window.location.host + '/';
-
-            path = site.baseUrl + '/FormLibContent/Xmls/SouthKorea/Defaults/' + xmlFile
-
-            $.ajax({
-                type: "GET",
-                url: path,
-                dataType: "xml",
-                success: url,
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert(jqXHR.responseText);
-                    alert(textStatus);
-                    alert(errorThrown);
-                }
-
-            });
-        }
-
+  
     }
     else {
 
@@ -490,5 +500,31 @@
         }
 
     }
+
+
+    function GetXML(xmlFile, url) {
+        //////////
+        //Gets XML File
+        //////////
+
+        var path = window.location.protocol + '//';
+        path = path + window.location.host + '/';
+
+        path = site.baseUrl + '/FormLibContent/Xmls/SouthKorea/Defaults/' + xmlFile
+
+        $.ajax({
+            type: "GET",
+            url: path,
+            dataType: "xml",
+            success: url,
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseText);
+                alert(textStatus);
+                alert(errorThrown);
+            }
+
+        });
+    }
+
 
 </script>

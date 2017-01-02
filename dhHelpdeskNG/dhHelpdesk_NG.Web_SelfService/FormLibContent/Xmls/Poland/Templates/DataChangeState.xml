@@ -13,7 +13,7 @@
     <status value="10">
         <visibleTabs>#selection,#change</visibleTabs>
         <readOnlyTabs>#selection</readOnlyTabs>
-        <readOnlyFields></readOnlyFields>
+        <readOnlyFields>TwoWeekNotice</readOnlyFields>
         <actions>
             <action status="50" text="Full service request">
                 <validateWhatYouSee></validateWhatYouSee>
@@ -25,7 +25,7 @@
         <visibleTabs>#selection,#change</visibleTabs>
         <readOnlyTabs>#selection,#change</readOnlyTabs>
         <workingGroupRules workingGroup="SSC PA">
-            <visibleFields>HouseNumber,TwoWeekNotice,AdditionalPlaceOfWork,BasicPayInWords,JobTitle,PolishJobTitle,PersonReplaced,Street,StreetNumber,City,PostCode,Region,District,Community,Extent,Workload,BasicPay,BasicPayInWordsPolish,MonthlyHourly,WorkingTimeSchedule</visibleFields>
+            <visibleFields>HouseNumber,AdditionalPlaceOfWork,BasicPayInWords,JobTitle,PolishJobTitle,PersonReplaced,Street,StreetNumber,City,PostCode,Region,District,Community,Extent,Workload,BasicPay,BasicPayInWordsPolish,MonthlyHourly,WorkingTimeSchedule</visibleFields>
         </workingGroupRules>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -36,7 +36,7 @@
                 <validateWhatYouSee></validateWhatYouSee>
             </action>
             <action status="10" text="Reject"></action>
-            <action status="98" internal-val="10" text="Send back to requestor"></action>
+            <!--<action status="98" internal-val="10" text="Send back to requestor"></action>-->
             <action status="99" text="Cancel service request"></action>
         </actions>
     </status>

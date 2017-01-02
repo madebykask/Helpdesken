@@ -66,6 +66,15 @@
                         </div>
                     </td>
                 </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EndDate")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("EndDate")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
                 @foreach(var value in Model.GetAnswer("DataChangeSelection").Split(','))
                 {
                     if(value == "")

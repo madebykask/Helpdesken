@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
   <options>
-    <option value="Dependant Family Memebr">Dependant Family Memebr</option>
-    <option value="Handycapped Person">Handycapped Person</option>
+    <option value="Dependant Family Member">Dependant Family Member</option>
+    <option value="Handicapped Person">Handicapped Person</option>
     <option value="Insurance">Insurance</option>
     <option value="Basic Living">Basic Living</option>
     <option value="Education expence">Education expence</option>
     <option value="Child care">Child care</option>
-    <option value="Adopted Child">Adopted Child</option>
-    <option value="Fostered Chiled">Fostered Chiled</option>
-    <option value="Adoption/Fostered date">Adoption/Fostered date</option>
+    <!--<option value="Adopted Child">Adopted Child</option>-->
+    <option value="Fostered Child">Fostered Child</option>
+    <!--<option value="Adoption/Fostered date">Adoption/Fostered date</option>-->
   </options> 

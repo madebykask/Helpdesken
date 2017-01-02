@@ -33,7 +33,7 @@
         
       </element>
       <element name="Company" type="text" label="Company"></element>
-      <element name="BusinessUnit" type="text" label="Business Unit"></element>
+      <element name="BusinessUnit" type="text" label="Business Unit" mandatory="1"></element>
       <element name="ServiceArea" type="text" label="Function"></element>
       <element name="Department" type="text" label="Department"></element>
       <element name="ChangeValidFrom" type="date" label="Change Valid from:" mandatory="1" format="dd.MM.yyyy">
@@ -50,13 +50,13 @@
         </options>
       </element>
 
-      <element type="hidden" name="PermanentAddressLine1" label="Address line 1"></element>
-      <element type="hidden" name="PermanentAddressLine2" label="Address line 2"></element>
-      <element type="hidden" name="PermanentAddressLine3" label="Address line 3"></element>
-      <element type="hidden" name="PermanentPostalCode" label="Postal code"></element>
-      <element type="hidden" name="PermanentCity" label="City"></element>
-      <element type="hidden" name="PermanentCountry" label="Country"></element>
-
+      <element type="hidden" name="PermanentAddressLine1" label="Address line 1" formfieldidentifier="E1P0006.STRAS:1"></element>
+      <element type="hidden" name="PermanentAddressLine2" label="Address line 2" formfieldidentifier="E1P0006.HSNMR:1"></element>
+      <element type="hidden" name="PermanentAddressLine3" label="Address line 3" formfieldidentifier="E1P0006.POSTA:1"></element>
+      <element type="hidden" name="PermanentPostalCode" label="Postal code" formfieldidentifier="E1P0006.PSTLZ:1"></element>
+      <element type="hidden" name="PermanentCity" label="City" formfieldidentifier="E1P0006.ORT01:1"></element>
+      <element type="hidden" name="PermanentCountry" label="Country" formfieldidentifier="E1P0006.LAND1:1"></element>
+      <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
     </tab>
 
     <tab name="#Payment" label="Payment Information">
@@ -323,6 +323,7 @@
         <options>
           <option value=""></option>
           <option value="Badge Charge">Badge Charge</option>
+          <option value="Company Car">Company Car</option>
           <option value="Uniform Deduction">Uniform Deduction</option>
           <option value="ID Card">ID Card</option>
           <option value="TEC Expenses Deduction">TEC Expenses Deduction</option>
@@ -383,6 +384,7 @@
         <options>
           <option value=""></option>
           <option value="Badge Charge">Badge Charge</option>
+          <option value="Company Car">Company Car</option>
           <option value="Uniform Deduction">Uniform Deduction</option>
           <option value="ID Card">ID Card</option>
           <option value="TEC Expenses Deduction">TEC Expenses Deduction</option>
@@ -444,6 +446,7 @@
         <options>
           <option value=""></option>
           <option value="Badge Charge">Badge Charge</option>
+          <option value="Company Car">Company Car</option>
           <option value="Uniform Deduction">Uniform Deduction</option>
           <option value="ID Card">ID Card</option>
           <option value="TEC Expenses Deduction">TEC Expenses Deduction</option>
@@ -506,6 +509,7 @@
         <options>
           <option value=""></option>
           <option value="Badge Charge">Badge Charge</option>
+          <option value="Company Car">Company Car</option>
           <option value="Uniform Deduction">Uniform Deduction</option>
           <option value="ID Card">ID Card</option>
           <option value="TEC Expenses Deduction">TEC Expenses Deduction</option>
@@ -550,6 +554,7 @@
         <options>
           <option value=""></option>
           <option value="Badge Charge">Badge Charge</option>
+          <option value="Company Car">Company Car</option>
           <option value="Uniform Deduction">Uniform Deduction</option>
           <option value="ID Card">ID Card</option>
           <option value="TEC Expenses Deduction">TEC Expenses Deduction</option>

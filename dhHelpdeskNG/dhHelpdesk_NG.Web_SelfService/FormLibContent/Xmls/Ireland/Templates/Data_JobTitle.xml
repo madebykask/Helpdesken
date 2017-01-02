@@ -5,6 +5,7 @@
   <option value="Activity Specialist">Activity Specialist</option>
   <option value="After Sales Team Leader">After Sales Team Leader</option>
   <option value="Assistant Store Manager">Assistant Store Manager</option>
+  <option value="BNOM">BNOM</option>
   <option value="Business Navigation &amp; Operations Manager">Business Navigation &amp; Operations Manager</option>
   <option value="Carpenter Co-worker">Carpenter Co-worker</option>
   <option value="Checkout Services Co-worker">Checkout Services Co-worker</option>
@@ -15,6 +16,8 @@
   <option value="Commercial Restaurant Team Leader">Commercial Restaurant Team Leader</option>
   <option value="Commercial SFM &amp; Bistro Manager">Commercial SFM &amp; Bistro Manager</option>
   <option value="Competence Coach">Competence Coach</option>
+  <option value="Competence Development Specialist">Competence Development Specialist</option>
+  <option value="Customer Experience Manager">Customer Experience Manager</option>
   <option value="Customer Relations Manager">Customer Relations Manager</option>
   <option value="Customer Service Co-worker">Customer Service Co-worker</option>
   <option value="Customer Services Manager">Customer Services Manager</option>
@@ -33,6 +36,7 @@
   <option value="HR Administrator">HR Administrator</option>
   <option value="HR Generalist">HR Generalist</option>
   <option value="HR Manager">HR Manager</option>
+  <option value="Home Furnishing Consultant or Sales Manager">Home Furnishing Consultant or Sales Manager</option>
   <option value="IKEA FAMILY Leader - Store">IKEA FAMILY Leader - Store</option>
   <option value="IKEA Food Co-worker">IKEA Food Co-worker</option>
   <option value="IKEA Food Manager">IKEA Food Manager</option>
@@ -48,6 +52,7 @@
   <option value="Logistics Manager">Logistics Manager</option>
   <option value="Marketing Manager">Marketing Manager</option>
   <option value="Operations Support">Operations Support</option>
+  <option value="Product Quality Specialist">Product Quality Specialist</option>
   <option value="Q-Store Product Quality Technician">Q-Store Product Quality Technician</option>
   <option value="Q-Store Quality Manager">Q-Store Quality Manager</option>
   <option value="Quality Co-worker">Quality Co-worker</option>
@@ -66,6 +71,7 @@
   <option value="Sales &amp; Supply Support Specialist">Sales &amp; Supply Support Specialist</option>
   <option value="Sales Co-worker">Sales Co-worker</option>
   <option value="Sales Manager">Sales Manager</option>
+  <option value="Sales or Customer Relations Co-worker">Sales or Customer Relations Co-worker</option>
   <option value="Sales Team Leader">Sales Team Leader</option>
   <option value="Services Function Support">Services Function Support</option>
   <option value="Shopkeeper">Shopkeeper</option>
@@ -74,8 +80,11 @@
   <option value="Site Facility Manager">Site Facility Manager</option>
   <option value="Staff Scheduler">Staff Scheduler</option>
   <option value="Staff Planning Manager">Staff Planning Manager</option>
+  <option value="Staff Planning Specialist">Staff Planning Specialist</option>
   <option value="Store Manager">Store Manager</option>
   <option value="Sustainability Responsible">Sustainability Responsible</option>
+  <option value="Team Leader">Team Leader</option>
+  <option value="Unit Manager">Unit Manager</option>
   <option value="Visual Merchandise / Activity Co-worker">Visual Merchandise / Activity Co-worker</option>
   <option value="Visual Merchandise / Activity Manager">Visual Merchandise / Activity Manager</option>
   <option value="Visual Merchandise/Activity Co-worker">Visual Merchandise/Activity Co-worker</option>

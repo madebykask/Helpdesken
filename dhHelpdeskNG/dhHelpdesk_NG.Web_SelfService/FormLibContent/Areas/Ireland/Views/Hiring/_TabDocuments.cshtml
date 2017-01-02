@@ -101,7 +101,7 @@
         //Not accepted jobtitles
         string[] jobTitlesNotAccepted = new string[] { "Safety & Security Manager".ToLower(), "Safety and Security Function Support (Specialist)".ToLower(), "Safety & Security Co-worker".ToLower(), "Facility Specialist".ToLower(), "Site Facility Management Co-worker".ToLower(), "HR Generalist".ToLower(), "HR Administrator".ToLower(), "HR Manager".ToLower(), "Staff Planner".ToLower(), "Accounting Assistant Reconciliation".ToLower(), "Accountant".ToLower() };
 
-        if ((payScaleGroupFromModel >= 43 && payScaleGroupFromModel <= 49) | Model.GetDocumentAnswer("PayScaleGroup").ToLower() == "Starter".ToLower())
+        if ((payScaleGroupFromModel >= 43 && payScaleGroupFromModel <= 49) | Model.GetDocumentAnswer("PayScaleGroup").ToLower() == "Starter".ToLower() | Model.GetDocumentAnswer("PayScaleGroup").ToLower() == "Startie".ToLower())
         {
             int pos = Array.IndexOf(jobTitlesNotAccepted, valueFromModel);
             if (pos == -1)

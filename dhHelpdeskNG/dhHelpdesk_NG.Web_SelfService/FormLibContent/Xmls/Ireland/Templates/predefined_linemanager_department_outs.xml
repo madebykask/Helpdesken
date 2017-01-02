@@ -11,11 +11,19 @@
   </dependent>
   <dependent>
     <selected>Andrias O'Shaughnessy</selected>
-    <show>Shopkeeper</show>
+    <show>Deputy Sales Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Anthony Browne</selected>
+    <show>Regional Change Leader</show>
   </dependent>
   <dependent>
     <selected>Brenda Massyn</selected>
     <show>IKEA Food Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Brian Harvey</selected>
+    <show>Goods Flow Team Manager</show>
   </dependent>
   <dependent>
     <selected>Bronagh Page</selected>
@@ -42,8 +50,12 @@
     <show>Safety &amp; Security Manager</show>
   </dependent>
   <dependent>
+    <selected>David Cox</selected>
+    <show>Commercial SFM &amp; Bistro Manager</show>
+  </dependent>
+  <dependent>
     <selected>Desmond Shelley</selected>
-    <show>Goods Flow Manager</show>
+    <show>Goods Flow Team Manager</show>
   </dependent>
   <dependent>
     <selected>Ema McKay</selected>
@@ -58,8 +70,20 @@
     <show>Site Facility Manager</show>
   </dependent>
   <dependent>
+    <selected>Gillian Drakeford</selected>
+    <show>Country Retail Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Glynn Rigby</selected>
+    <show>Business Navigator</show>
+  </dependent>
+  <dependent>
     <selected>Gillian Reilly</selected>
     <show>Com &amp; In Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Aoife Joyce</selected>
+    <show>HR Generalist</show>
   </dependent>
   <dependent>
     <selected>Aoife McCarthy</selected>
@@ -69,17 +93,29 @@
     <selected>Jamie Foers</selected>
     <show>Shopkeeper</show>
   </dependent>
+   <dependent>
+    <selected>Joanna Yarrow</selected>
+    <show>Sustainability Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Jose Cardenas</selected>
+    <show>Shopkeeper</show>
+  </dependent>
   <dependent>
     <selected>Karen Maritz</selected>
     <show>Checkout Services Manager</show>
   </dependent>
   <dependent>
+    <selected>Kathryn Payne</selected>
+    <show>Interior Design Manager</show>
+  </dependent>
+  <dependent>
     <selected>Keevagh Heverin</selected>
-    <show>Q-Store Quality Manager</show>
+    <show>HR Manager</show>
   </dependent>
   <dependent>
     <selected>Kieran Clancy</selected>
-    <show>Deputy Sales Manager</show>
+    <show>Home Furnishing Consultant</show>
   </dependent>
   <dependent>
     <selected>Laragh King</selected>
@@ -90,12 +126,28 @@
     <show>Shopkeeper</show>
   </dependent>
   <dependent>
+    <selected>Lewis Marshall</selected>
+    <show>PR &amp; Communication Manager</show>
+  </dependent>
+  <dependent>
     <selected>Lisa O'Brien</selected>
     <show>Marketing Manager</show>
   </dependent>
   <dependent>
+    <selected>Liz Musiol</selected>
+    <show>Shopkeeper</show>
+  </dependent>
+  <dependent>
     <selected>Mark Dempsey</selected>
     <show>Shopkeeper</show>
+  </dependent>
+  <dependent>
+    <selected>Mark Sokol</selected>
+    <show>Regional Change Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Mark Spence</selected>
+    <show>Regional Facility Manager</show>
   </dependent>
   <dependent>
     <selected>Marsha Smith</selected>
@@ -110,8 +162,16 @@
     <show>Q-Store Quality Manager</show>
   </dependent>
   <dependent>
-    <selected>Neal Corbett</selected>
+    <selected>Miranda Lyons</selected>
+    <show>Com &amp; In Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Monika Kobus</selected>
     <show>Shopkeeper</show>
+  </dependent>
+  <dependent>
+    <selected>Neal Corbett</selected>
+    <show>Sales &amp; Supply Support Manager</show>
   </dependent>
   <dependent>
     <selected>Paul Moore</selected>
@@ -119,7 +179,7 @@
   </dependent>
   <dependent>
     <selected>Paul Ringwood</selected>
-    <show>Recovery Manager</show>
+    <show>Shopkeeper</show>
   </dependent>
   <dependent>
     <selected>Peter Wagner</selected>
@@ -138,8 +198,16 @@
     <show>Shopkeeper</show>
   </dependent>
   <dependent>
+    <selected>Sally Kenny</selected>
+    <show>Sales Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Samuel Babarinde</selected>
+    <show>Recovery Team Leader</show>
+  </dependent>
+  <dependent>
     <selected>Stephen Ellis</selected>
-    <show>Customer Relations Manager</show>
+    <show>Commercial Restaurant Manager</show>
   </dependent>
   <dependent>
     <selected>Sharon White</selected>
@@ -147,7 +215,7 @@
   </dependent>
   <dependent>
     <selected>Tihomir Damjanovic</selected>
-    <show>Goods Flow Team Leader</show>
+    <show>Goods Flow Team Manager</show>
   </dependent>
   <dependent>
     <selected>Tina McDonald-Sisk</selected>
@@ -155,7 +223,7 @@
   </dependent>
   <dependent>
     <selected>Tom Woolverton</selected>
-    <show>Commercial SFM &amp; Bistro Manager</show>
+    <show>Shopkeeper</show>
   </dependent>
   <dependent>
     <selected>Tracey Finnegan</selected>
@@ -163,6 +231,22 @@
   </dependent>
   <dependent>
     <selected>Scott Jackson</selected>
-    <show>Logistics Manager</show>
+    <show>In-store Logistics Manager - Store</show>
   </dependent>
-  </predefined>
+  <dependent>
+    <selected>Suzanne Cooling</selected>
+    <show>Goods Flow Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Joanne Randle</selected>
+    <show>Unit Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Nicola Mac Inerney</selected>
+    <show>Customer Services Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Nicola McInerney</selected>
+    <show>Customer Services Manager</show>
+  </dependent>
+ </predefined>

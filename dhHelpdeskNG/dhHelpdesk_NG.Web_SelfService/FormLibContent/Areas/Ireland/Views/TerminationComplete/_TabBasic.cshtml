@@ -140,7 +140,9 @@
     document.getElementById('BasicTerminationType').onchange = selectIndexChangeTerminationType;
     document.getElementById('LastDayWorked').onchange = LastDayWorkedNotices;
     
-
+    $('#BasicTerminationType').change(function () {
+        disableOneIKEABonus();
+    });
 
     
     

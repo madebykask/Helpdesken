@@ -3,7 +3,7 @@
   <name>BusinessUnitTecProvider</name>
   <dependent>
     <selected>Customer Distribution Centre Peterborough 269</selected>
-    <show>Abdulwahid Mohamed, Andrea Stringer, Deborah Cooper, George Taylor, Graham Hyde, Helena King, James Cameron, Jay Brown, Matthew Humphrey, Michael Wells, Peter Linnell, Roger Thomson, Stephen Baker, Tony Brown</show>
+    <show>Abdulwahid Mohamed, Andrea Stringer, Deborah Cooper, George Taylor, Graham Hyde, Helena King, James Cameron, Jay Brown, Matthew Humphrey, Michael Wells, Paul Thompson, Peter Linnell, Roger Thomson, Raymond Herlihy, Stephen Baker, Tony Brown</show>
   </dependent>
   <dependent>
     <selected>Distribution Centre Peterborough 012</selected>
@@ -19,7 +19,7 @@
   </dependent>
   <dependent>
     <selected>Service Office UK</selected>
-    <show></show>
+    <show>Alberto Fernandez, Allan Gates, Altynay Kurmangalieva, Donna Moore, Jordi Esquinas, Lee Tupshafski, Victoria Bryant,Pauline Fowler,Christian Bugge</show>
   </dependent>
   <dependent>
     <selected>Store Belfast 113</selected>
@@ -39,11 +39,11 @@
   </dependent>
   <dependent>
     <selected>Store Coventry 150</selected>
-    <show>Karen Sutton</show>
+    <show>Katie Cairns-O’Reilly,Karen Sutton</show>
   </dependent>
   <dependent>
     <selected>Store Edinburgh 265</selected>
-    <show>Christine Gordon</show>
+    <show>Christine Gordon,Steven Hamilton</show>
   </dependent>
   <dependent>
     <selected>Store Gateshead 143</selected>
@@ -59,7 +59,7 @@
   </dependent>
   <dependent>
     <selected>Store London Croydon 144</selected>
-    <show>Colin Aburn</show>
+    <show>Angela Snelgrove, Giuseppe Greco</show>
   </dependent>
   <dependent>
     <selected>Store London Lakeside 262</selected>
@@ -71,7 +71,7 @@
   </dependent>
   <dependent>
     <selected>Store London Wembley 141</selected>
-    <show>Constantinos Mourouzides</show>
+    <show>Timothy Cox</show>
   </dependent>
   <dependent>
     <selected>Store Manchester 186</selected>
@@ -83,7 +83,11 @@
   </dependent>
   <dependent>
     <selected>Store Nottingham 263</selected>
-    <show>Anna Kiddle</show>
+    <show>Michael Fry, Anna Kiddle</show>
+  </dependent>
+  <dependent>
+    <selected>Store Sheffield 519</selected>
+    <show>Marta Garcia</show>
   </dependent>
   <dependent>
     <selected>Store Southampton 125</selected>
@@ -91,14 +95,18 @@
   </dependent>
   <dependent>
     <selected>Store Warrington 140</selected>
-    <show>Mikhail Kireev</show>
+    <show>David Armstrong, Mikhail Kireev</show>
   </dependent>
   <dependent>
     <selected>Distribution Centre Doncaster</selected>
-    <show>Adele Lowndes</show>
+    <show>Adele Lowndes, Julia Bason, Mark Telford, Paul Sapte</show>
   </dependent>
   <dependent>
     <selected>E-commerce</selected>
-    <show>Gordon Bell</show>
+    <show>Lotta Svedeborn, Gordon Bell</show>
+  </dependent>
+  <dependent>
+    <selected>Store Reading 461</selected>
+    <show>James Johnson</show>
   </dependent>
 </predefined>

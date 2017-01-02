@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" ?><predefined><name>Function</name>
+<dependent>       
+<selected>Holding</selected>
+<show>Construction Project Manager,Construction Manager,Facility Manager,Real Estate &amp; Development Manager</show>
+</dependent>
+<dependent>       
+<selected>Cafe</selected>
+<show>IKEA FOOD Co-worker,Team Leader,Kitchen Production Manager,IKEA Food Manager,Commercial SFM &amp; Bistro Manager,Commercial Restaurant Manager,IKEA FOOD Co-worker</show>
+</dependent>
+<dependent>       
+<selected>Varehus</selected>
+<show>Recovery Co-worker,Logistics Manager,Maintenance Co-worker,Maintenance Manager,Project Specialist,Interior Design Manager,Graphic Communication Co-worker,Interior Design Co-worker,HR Manager,HR Generalist,Goods Flow Team Leader,Goods Flow Manager,Goods Flow Co-worker,Sales Co-worker,Graphic Communication Leader,Sales &amp; Supply Support Specialist,Sales &amp; Supply Support Manager,Sales &amp; Service Expeditor,Recovery Team Leader,Deputy Sales Manager,Exchange &amp; Returns Team Leader,Exchange &amp; Returns Manager,Deputy Shopkeeper,Deputy Sales Manager Markethall,Deputy Logistics Manager,Customer Relations Manager,Customer Area Team Leader,Controller,Communication &amp; Interior Design Manager,Commercial Activity Leader,Checkout Services Team Leader,Checkout Services Manager,Carpenter Co-worker,Business Navigator,Service Co-worker,Sales Manager,Sales Navigator,Shopping Experience Leader,Service Team Leader,Shopkeeper,Staff Scheduler,Store Manager,Visual Merchandising/Activity Co-worker,Visual Merchandising/Activity Manager,Sales Learning and Development Leader,Sales Co-worker</show>
+</dependent>
+<dependent>       
+<selected>Cafe</selected>
+<show>IKEA Food Co-worker,IKEA Food Manager,Project Specialist,Kitchen Production Manager,IF Team Leader,Commercial SFM &amp; Bistro Manager,Commercial Restaurant Manager,IKEA Food Co-worker</show>
+</dependent>
+<dependent>       
+<selected>Varehus</selected>
+<show>Sales Co-worker,Service Co-worker,Sales Manager,Visual Merchandising/Activity Co-worker,Shopkeeper,Controller,Visual Merchandise/Activity Manager,Store Manager,Goods Flow Co-worker,Interior Design Co-worker,Goods Flow Team Leader,Deputy Logistics Manager,Information &amp; Communication Specialist,HR Manager,HR Generalist,Graphic Communication Leader,Goods Flow Manager,Graphic Communication Co-worker,Carpenter Co-worker,Deputy Sales Manager,Customer Relations Manager,Communication &amp; Interior Design Manager,Commercial Activity Leader,Checkout Services Team Leader,Deputy Shopkeeper,Checkout Services Manager,Business Navigator,Apprentice,Administration Manager,Exchange &amp; Returns Manager,Recovery Co-worker,Sales &amp; Supply Support Manager,Sales &amp; Supply Support Co-worker,Recovery Manager,Project Specialist,Maintenance Manager,Logistics Manager,Interior Design Manager,Sales Co-worker</show>
+</dependent>
+<dependent>       
+<selected>Cafe</selected>
+<show>IKEA FOOD Co-worker,Team Leader,Kitchen Production Team Leader,IKEA FOOD Manager,Commercial SFM &amp; Bistro Manager,Commercial Restaurant Manager,Team Leader</show>
+</dependent>
+<dependent>       
+<selected>Varehus</selected>
+<show>Sales Co-worker,Service Co-worker,Sales co-worker,Shopkeeper,Visual Merchandising/Activity Co-worker,Store Manager,Staff Scheduler,Shopping Experience Manager,Visual Merchandising/Activity Manager,Interior Design Co-worker,Graphic Communication Co-worker,HR Generalist,HR Manager,Information &amp; Communication Specialist,Recovery Co-worker,Goods Flow Team Leader,Interior Design Manager,Local Marketing Manager,Logistics Manager,Maintenance Co-worker,Maintenance Manager,Goods Flow Co-worker,Goods Flow Manager,Quality Support,Recovery Manager,Recovery Team Leader,Sales &amp; Supply Support Co-worker,Sales &amp; Supply Support Manager,Security Responsible,Sales Manager,Exchange &amp; Returns Team Leader,Customer Relations Manager,Administration Manager,Business Navigation &amp; Operations Manager,Business Navigator,Carpenter Co-worker,Checkout Services Manager,Checkout Services Team Leader,Full Serve Manager,Customer Area Team Leader,Deputy Sales Manager,Deputy Shopkeeper,Easy Buying Manager,Communication &amp; Interior Design Manager,Goods Flow Co-worker</show>
+</dependent>
+<dependent>       
+<selected>Hjemme</selected>
+<show>Call Center Co-worker,Team Leader,Contact Centre Manager,HR Generalist,HR Manager,Operations Manager,Staff Scheduler,Quality Specialist,Business Analyst,Business Developer,Business Navigator,Call Center Co-worker</show>
+</dependent>
+<dependent>       
+<selected>Cafe</selected>
+<show>IKEA Food Co-worker,IKEA FOOD Co-worker,Commercial SFM &amp; Bistro Manager,Team Leader,Commercial Restaurant Manager,Kitchen Production Manager,IKEA Food Manager,Team Leader</show>
+</dependent>
+<dependent>       
+<selected>IKEA AS TROMSØ</selected>
+<show>Sales Co-worker,Pick-up Point Manager,Goods Flow Team Leader,Deputy Sales Manager,Sales Co-worker</show>
+</dependent>
+<dependent>       
+<selected>Varehus</selected>
+<show>Sales Co-worker,Service Co-worker,Store Manager,Apprentice,Administration Manager,Sales Manager,Services Manager,Shopkeeper,Staff Planning Specialist,Staff Scheduler,Goods Flow Co-worker,Goods Flow Team Leader,Goods Flow Manager,Business Navigation &amp; Operations Manager,Carpenter Co-worker,Checkout Services Manager,Checkout Services Team Leader,Commercial Activity Leader,Communication &amp; Interior Design Manager,Customer Relations Manager,Deputy Shopkeeper,Graphic Communication Co-worker,Exchange &amp; Returns Manager,Sales &amp; Supply Support,Maintenance Manager,Graphic Communication Leader,HR Generalist,HR Manager,IKEA Business Specialist,Interior Design Co-worker,Interior Design Manager,Logistics Manager,Maintenance Co-worker,Sales &amp; Supply Support Specialist,Recovery Co-worker,Recovery Manager,Quality Support,Pick-up Point Manager,Sales &amp; Supply Support Manager,Visual Merchandising/Activity Manager,Visual Merchandising/Activity Co-worker,Sales Support,User experience Manager,Web Implementation Manager,Ecommerce Operations Specialist,Marketing Web Specialist,Sales Co-worker</show>
+</dependent>
+<dependent>       
+<selected>Cafe</selected>
+<show>IKEA Food Co-worker,Commercial SFM &amp; Bistro Manager,Commercial Restaurant Manager,Kitchen Production Manager,IKEA Food Co-worker</show>
+</dependent>
+<dependent>       
+<selected>Varehus</selected>
+<show>Service Co-worker,Sales Co-worker,Shopkeeper,Sales Manager,Visual Merchandising/Activity Co-worker,Visual Merchandise/Activity Manager,Staff Scheduler,Store Manager,Shopping Experience Manager,Interior Design Co-worker,Goods Flow Co-worker,Carpenter Co-worker,Apprentice,Goods Flow Manager,Graphic Communication Co-worker,HR Generalist,HR Manager,In-store Logistics Manager - Store,Interior Design Manager,Maintenance Manager,Recovery Manager,Sales &amp; Supply Support Manager,Sales &amp; Supply Support Specialist,Checkout Services Manager,Commercial Activity Leader,Communication &amp; Interior Design Manager,Customer Relation Manager,Easy Buying Leader,Sales Co-worker</show>
+</dependent>
+<dependent>       
+<selected>Cafe</selected>
+<show>IKEA Food Co-worker,Team Leader,Kitchen Production Manager,IF Team Leader,Commercial Restaurant Manager,Commercial SFM &amp; Bistro Manager,IKEA Food Co-worker</show>
+</dependent>
+<dependent>       
+<selected>Varehus</selected>
+<show>Goods Flow Co-worker,Customer Relations Team Leader,Communication &amp; Interior Design Manager,Deputy Sales Manager,Customer Relations Manager,Deputy Shopkeeper,Commercial Activity Leader,Checkout Services Manager,Carpenter Co-worker,Administrator,Activity Specialist,Exchange &amp; Returns Manager,Deputy Store Manager,Sales Co-worker,Service Co-worker,Sales Specialist,Sales Manager,Shopkeeper,Visual Merchandise/Activity Manager,Visual Merchandising/Activity Co-worker,Visual Merchandising Specialist,Store Manager,Staff Scheduler,Shopping Experience Manager,Recovery Co-worker,Sales &amp; Supply Support Co-worker,Safety &amp; Security Manager,Recovery Team Leader,Recovery Manager,Quality Support,Sales &amp; Supply Support Manager,Maintenance Manager,Goods Flow Team Leader,Goods Flow Manager,Graphic Communication Co-worker,IKEA Food Manager,Maintenance Co-worker,Logistics Manager,Interior Design Specialist,Interior Design Manager,Interior Design Co-worker,Integration: default posi,HR Manager,HR Generalist,Graphic Communication Leader,Sales Co-worker</show>
+</dependent>
+<dependent>       
+<selected>Cafe</selected>
+<show>IKEA Food Co-worker,Kitchen Production Manager,IKEA FOOD Manager,Commercial SFM &amp; Bistro Manager,IKEA Food Co-worker</show>
+</dependent>
+<dependent>       
+<selected>Varehus</selected>
+<show>Sales Co-worker,Recovery Co-worker,Sales &amp; Supply Support Specialist,Sales &amp; Supply Support Manager,Recovery Manager,Goods Flow Co-worker,Controller,Easy Buying Manager,Deputy Shopkeeper,Customer Area Team Leader,Communication &amp; Interior Design Manager,Commercial Activity Leader,Checkout Services Manager,Apprentice,Administration Manager,Service Co-worker,Deputy Goods Flow Manager,Goods Flow Manager,Maintenance Manager,Maintenance Co-worker,Logistics Manager,Interior Design Manager,Interior Design Co-worker,HR Manager,HR Generalist,Graphic Communication Co-worker,Graphic Communication Leader,Visual Merchandising/Activity Co-worker,Shopkeeper,Visual Merchandise/Activity Manager,Store Manager,Service Team Leader,Sales Manager,Sales Co-worker</show>
+</dependent>
+<dependent>       
+<selected>Service Office</selected>
+<show>Deputy Country Com&amp;In Manager,Deputy Retail Logistics Manager,Deputy Retail Manager,Deputy Sales Manager,eCommerce Manager,External Communication Manager,Expansion Specialist,Customer Service manager SO,Country Sales Manager,Country Payments Leader,Country Marketing Manager,Country Logistics Manager,Country HR Manager,Graphic Communication Co-worker,Country Easy Buying Leader,Integration: default posi,Country Graphic Communication Leader,In-store Logistics Manager,Administrator,Country Customer Relations Manager,IT Support,IT Manager,IT Coordinator,Interior Design Specialist,IKEA Food Manager,Interior Design Co-worker,Graphic Designer,HR Specialist,HR Operations Manager,HR Manager,HR Generalist,HR Business Navigator,Interior Design Manager,Accounting Co-worker,Administration Manager,Accounting Team Leader,Accounting Manager,Commercial Review Responsible,Country Activity Leader,Controller,Compensation &amp; Benefits Manager,Communications Specialist - Senior,IT Technician,Communication &amp; Interior Design Manager,Commercial Manager,Commercial Activity Leader,Business Navigator,Business Navigation Manager,Business Analyst,Assistant,Country Com/In Manager,Retail Logistics Capacity &amp; Flow Planner,Sales Leader,Risk Manager,Risk Management Administrator,Retail Supply Chain Integration Manager,Retail Project Leader,Visual Merchandising Specialist,Retail Logistics Development Manager,Recruitment Manager,Recovery Manager,Range &amp;Purchasing Manager,Purchaser,Retail Manager Assistant,Sales Support,,Translator,Talent Manager,Sustainability Responsible,Service Business Leader,Senior HR System Specialist,Sales Support Specialist,Sales Responsible Showroom,Project Manager,Marketing Creative Specialist,Property Business Navigator,Payroll Specialist,Payroll Manager,Operations Developer,Marketing Web Specialist,Marketing Relationship Manager,Learning &amp; Development Specialist,Learning &amp; Development Manager,Project Leader,Project Specialist,Project Implementation Manager,Project Co-worker,PR &amp; Communication Manager,Project Leader</show>
+</dependent>
+
+</predefined>

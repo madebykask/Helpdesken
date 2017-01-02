@@ -22,19 +22,19 @@
 
     <!--Tab ServiceRequestDetails-->
     <tab name="#ServiceRequestDetails" label="Service Request Details">
-      <element name="Co-WorkerGlobalviewID" type="text" label="Co-Worker Globalview ID" mandatory="1">
+      <element name="Co-WorkerGlobalviewID" type="text" label="Co-Worker Globalview ID" casefield="reportedby" mandatory="1" HCMData="1" SortOrder="1">
         <regex inherit="employeeno" pattern="" message=""></regex>
       </element>
-      <element name="FirstName" type="text" label="Co-Worker First Name" mandatory="1"></element>
-      <element name="LastName" type="text" label="Co-Worker Last Name" mandatory="1"></element>
+      <element name="FirstName" type="text" label="Co-Worker First Name" mandatory="1" casefield="persons_name" HCMData="1" SortOrder="2"></element>
+      <element name="LastName" type="text" label="Co-Worker Last Name" mandatory="1" casefield="persons_phone" HCMData="1" SortOrder="2"></element>
       <element name="IKEAEmailAddress" type="text" label="IKEA Email Address">
         <regex inherit="email" pattern="" message=""></regex>
       </element>
       <element name="IKEANetworkID" type="text" label="IKEA Network ID" mandatory="1"></element>
-      <element name="Company" type="text" label="Company"></element>
-      <element name="BusinessUnit" type="text" label="Business Unit"></element>
-      <element name="ServiceArea" type="text" label="Function"></element>
-      <element name="Department" type="text" label="Department"></element>
+      <element name="Company" type="text" label="Company" HCMData="1" SortOrder="4"></element>
+      <element name="BusinessUnit" type="text" label="Business Unit" mandatory="1" HCMData="1" SortOrder="5"></element>
+      <element name="ServiceArea" type="text" label="Function" HCMData="1" SortOrder="6"></element>
+      <element name="Department" type="text" label="Department" HCMData="1" SortOrder="7"></element>
       <!--<element name="ChangeType" type="select" label="Change Type?" mandatory="1">
                 <options>
                     <option value=""></option>
@@ -57,10 +57,10 @@
                     <option value="Career Break End">Career Break End</option>
                 </options>
             </element>-->
-      <element name="ChangeValidFrom" type="date" label="Change Valid from:" mandatory="1" format="dd.MM.yyyy">
+      <element name="ChangeValidFrom" type="date" label="Change Valid from:" mandatory="1" format="dd.MM.yyyy" HCMData="1" SortOrder="8">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element name="ChangeValidTo" type="date" label="Change Valid to:" mandatory="1" default="31.12.9999" format="dd.MM.yyyy">
+      <element name="ChangeValidTo" type="date" label="Change Valid to:" mandatory="1" default="31.12.9999" format="dd.MM.yyyy" HCMData="1" SortOrder="9">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard">
@@ -104,6 +104,7 @@
         </options>
         <!--<mandatoryIf name="ChangeType">Career Break End</mandatoryIf>-->
       </element>
+      <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
     </tab>
 
     <!--Tab OrganisationalAssignment-->
@@ -114,45 +115,45 @@
         &pre_country;
       </element>
       <!-- mandatory -->
-      <element type="select" source="database" name="NewCompany" label="Company" mandatory="1">
+      <element type="select" source="database" name="NewCompany" label="Company" mandatory="1" formfieldidentifier="E1P0001.BUKRS" casefield="region_id" HCMData="1" SortOrder="10">
         <options>
           <option value=""></option>
         </options>
       </element>
       <!-- mandatory -->
-      <element type="select" source="database" name="NewBusinessUnit" label="Business Unit" mandatory="1">
+      <element type="select" source="database" name="NewBusinessUnit" label="Business Unit" mandatory="1" formfieldidentifier="E1P0001.WERKS" casefield="department_id" HCMData="1" SortOrder="11">
         <options>
           <option value=""></option>
         </options>
       </element>
       <!-- mandatory -->
-      <element type="select" source="database" name="NewServiceArea" label="Function">
+      <element type="select" source="database" name="NewServiceArea" label="Function" formfieldidentifier="E1P0001.BTRTL" HCMData="1" SortOrder="12">
         <options>
           <option value=""></option>
         </options>
       </element>
       <!-- mandatory -->
-      <element type="select" source="database" name="NewDepartment" label="Department">
+      <element type="select" source="database" name="NewDepartment" label="Department" formfieldidentifier="E1P0001.ORGEH" casefield="ou_id" HCMData="1" SortOrder="13">
         <options>
           <option value=""></option>
         </options>
       </element>
      
       <!-- mandatory -->
-      <element name="HomeCostCentre" type="search-select" source="1" label="Home Cost Centre">
+      <element name="HomeCostCentre" type="search-select" source="1" label="Home Cost Centre" formfieldidentifier="E1P0001.KOSTL" HCMData="1" SortOrder="14">
         &dat_costcentre;
       </element>
       <element name="CostAllocation" type="text" label="Cost Allocation %" default="100">
         <regex inherit="numFrom1To100" pattern="" message=""></regex>
         <regex inherit="unsignednum" pattern="" message=""></regex>
       </element>
-      <element name="CrossChargeCostCentre" type="search-select" source="1" label="Cross Charge Cost Centre">
+      <element name="CrossChargeCostCentre" type="search-select" source="1" label="Cross Charge Cost Centre" formfieldidentifier="E1P0027.KOSTL">
         &dat_costcentre;
       </element>
 
       <!--Job-->
       <!-- mandatory -->
-      <element name="JobTitle" type="search-select" source="1" label="Job Title">
+      <element name="JobTitle" type="search-select" source="1" label="Job Title" formfieldidentifier="E1P0001.STELL" HCMData="1" SortOrder="15">
         &dat_jobtitle;
       </element>
       <!-- mandatory -->
@@ -164,17 +165,23 @@
           <option value="Local foreign Employee">Local foreign Employee</option>
         </options>
       </element>
-      <element name="ReportsToLineManager" type="search-select" source="1" label="Reports to Line Manager">
+      <element name="ReportsToLineManager" type="search-select" source="1" label="Reports to Line Manager" formfieldidentifier="E1P9000.PERNRMGR" HCMData="1" SortOrder="16">
         &dat_linemanagers;
       </element>
       <!-- mandatory -->
       <element name="ManagerJobTitle" type="search-select" source="1" label="Manager's Job Title">
         &dat_managerjobtitles;
       </element>
-
+      <element type="select" name="ChiefPosition" label="Chief Position" mandatory="1" default="No">
+        <options>
+          <option value=""></option>
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </options>
+      </element>
       <!--Employment Conditions-->
       <!-- mandatory -->
-      <element name="EmploymentCategory" type="select" label="Employment Category">
+      <element name="EmploymentCategory" type="select" label="Employment Category" formfieldidentifier="E1P0001.PERSG:1" HCMData="1" SortOrder="17">
         <options>
           <option value=""></option>
           <option value="Full Time">Full Time</option>
@@ -183,11 +190,11 @@
         </options>
       </element>
 
-      <element type="date" name="ContractEndDate" label="Contract End Date" format="dd.MM.yyyy">
+      <element type="date" name="ContractEndDate" label="Contract End Date" format="dd.MM.yyyy" HCMData="1" SortOrder="18">
       </element>
 
       <!-- mandatory -->
-      <element type="text" name="ContractedHours" label="Contracted Hours">
+      <element type="text" name="ContractedHours" label="Contracted Hours" formfieldidentifier="E1P0007.WOSTD">
         <regex inherit="unsignednum" pattern="" message=""></regex>
         <!--<regex inherit="numMax39" pattern="" message="" dropDownFieldToValidate="Company" validateAllExceptFor="IKEA Distribution Services Limited"></regex>-->
       </element>
@@ -214,7 +221,7 @@
       </element>
 
       <!-- mandatory -->
-      <element name="ContractType" type="select" label="Contract Type">
+      <element name="ContractType" type="select" label="Contract Type" formfieldidentifier="E1P0001.PERSG:2">
         <options>
           <option value=""></option>
           <option value="Permanent">Permanent</option>
@@ -267,8 +274,10 @@
           <option value="Store Manchester 186">Store Manchester 186</option>
           <option value="Store Milton Keynes 185">Store Milton Keynes 185</option>
           <option value="Store Nottingham 263">Store Nottingham 263</option>
+          <option value="Store Reading 461">Store Reading 461</option>
           <option value="IKEA Property Services">IKEA Property Services</option>
           <option value="Service Office UK">Service Office UK</option>
+          <option value="Store Sheffield 519">Store Sheffield 519</option>
           <option value="Store Southampton 125">Store Southampton 125</option>
           <option value="Store London Tottenham 255">Store London Tottenham 255</option>
           <option value="Store Warrington 140">Store Warrington 140</option>
@@ -767,18 +776,21 @@
       <element type="select" name="PayScaleGroup" label="Pay Scale Group">
         <options>
           <option value=""></option>
-          <option value="STARTER">STARTER</option>
+          <option value="STARTLO">STARTLO</option>
+          <option value="STARTUK">STARTUK</option>
           <option value="INTERN">INTERN</option>
           <!--<option value="APPRENT1">APPRENT1</option>
           <option value="APPRENT2">APPRENT2</option>-->
-          <option value="FOUNDATION">FOUNDATION</option>
+          <option value="FOUNDLO">FOUNDLO</option>
+          <option value="FOUNDUK">FOUNDUK</option>
           <option value="ADVANCED">ADVANCED</option>
           <option value="MULTSKLL">MULTSKLL</option>
           <option value="BOOKOFF">BOOKOFF</option>
           <option value="QUALITY">QUALITY</option>
           <!--<option value="APPRENTICE 7.69">APPRENTICE 7.69</option>
           <option value="APPRENTICE 6.66">APPRENTICE 6.66</option>-->
-          <option value="43">43</option>
+          <option value="10">10</option>
+          <option value="11">11</option>
           <option value="44">44</option>
           <option value="45">45</option>
           <option value="46">46</option>
@@ -1366,7 +1378,7 @@
       <element type="select" name="OneIKEABonusLevel" label="One IKEA Bonus Level">
         <options>
           <option value=""></option>
-          <option value="Co-worker">Co-worker</option>
+          <option value="Co-worker" disabled="1">Co-worker</option>
           <option value="Level 1">Level 1</option>
           <option value="Level 2">Level 2</option>
           <option value="Level 3">Level 3</option>
@@ -1374,7 +1386,7 @@
       </element>
 
       <!-- mandatory -->
-      <element type="date" name="DateOfNextSalaryReview" label="Date of next salary review">
+      <element type="date" name="DateOfNextSalaryReview" label="Date of next salary review" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="select" name="BenefitLevel" label="Benefit Level">

@@ -5,6 +5,8 @@
     <!ENTITY state SYSTEM "Templates/HiringState.xml">
     <!ENTITY pre_company_unit SYSTEM "Templates/Predefined_Company_Unit.xml">
     <!ENTITY pre_ecm_psarea SYSTEM "Templates/Predefined_ECMCompensationProgram_PSArea.xml">
+    <!ENTITY pre_ecm_psgroup SYSTEM "Templates/Predefined_ECMCompensationProgram_PSGroup.xml">
+    <!ENTITY pre_ecm_collectivess SYSTEM "Templates/Predefined_ECMCompensationProgram_CollectiveScaleSalary.xml">
     <!ENTITY pre_psarea_psgroup SYSTEM "Templates/Predefined_PSArea_PSGroup.xml">
     <!ENTITY data_jobtitles SYSTEM "Templates/Data_Jobtitles.xml">
     <!ENTITY data_jobtitles_polish SYSTEM "Templates/Data_Jobtitles_Polish.xml">
@@ -833,14 +835,14 @@
                     <option Unit="OT21" value="CBII Meeting with IoS/IS Team II ICOMP">CBII Meeting with IoS/IS Team II ICOMP</option>
                     <option Unit="OT21" value="Chemical Specialist TACE PL">Chemical Specialist TACE PL</option>
                     <option Unit="OT21" value="Components TACE">Components TACE</option>
-                    <option Unit="OT21" value="Deputy Trading Area Manager TACE PL">Deputy Trading Area Manager TACE PL</option>
+                    <option Unit="OT21" value="Deputy Purchasing Area Manager TACE PL">Deputy Purchasing Area Manager TACE PL</option>
                     <option Unit="OT21" value="Free Range TACE">Free Range TACE</option>
                     <option Unit="OT21" value="Human Resources TACE">Human Resources TACE</option>
                     <option Unit="OT21" value="Internal Communication TACE PL">Internal Communication TACE PL</option>
                     <option Unit="OT21" value="IT/Solution Area TACE">IT/Solution Area TACE</option>
                     <option Unit="OT21" value="Logistic TACE">Logistic TACE</option>
                     <option Unit="OT21" value="Logistics TACE">Logistics TACE</option>
-                    <option Unit="OT21" value="Management Group Trading Area Centr. EU">Management Group Trading Area Centr. EU</option>
+                    <option Unit="OT21" value="Management Group Purchasing Area Centr. EU">Management Group Purchasing Area Centr. EU</option>
                     <option Unit="OT21" value="Pigment &amp; Laquer TACE PL">Pigment &amp; Laquer TACE PL</option>
                     <option Unit="OT21" value="Product Quality TACE PL">Product Quality TACE PL</option>
                     <option Unit="OT21" value="Project  I TACE">Project  I TACE</option>
@@ -848,7 +850,7 @@
                     <option Unit="OT21" value="Sound and Picture">Sound and Picture</option>
                     <option Unit="OT21" value="Supply Planer TACE">Supply Planer TACE</option>
                     <option Unit="OT21" value="Sustainability TACE PL">Sustainability TACE PL</option>
-                    <option Unit="OT21" value="Trading Area Central Europe">Trading Area Central Europe</option>
+                    <option Unit="OT21" value="Purchasing Area Central Europe">Purchasing Area Central Europe</option>
                     <option Unit="OI04" value="Gdańsk/Poznań Shopping Centre">Gdańsk/Poznań Shopping Centre</option>
                     <option Unit="OI04" value="Maintenance  Gdańsk/Poznań">Maintenance  Gdańsk/Poznań</option>
                     <option Unit="OI04" value="Tenant Relations Gdańsk/Poznań">Tenant Relations Gdańsk/Poznań</option>
@@ -6412,10 +6414,12 @@
                     <option value=""></option>
                     <option value="ECM Retail &amp; Property">ECM Retail &amp; Property</option>
                     <option value="ECM DS">ECM DS</option>
-                    <option value="ECM Trading">ECM Trading</option>
+                    <option value="ECM Purchasing">ECM Purchasing</option>
                     <option value="ECM IICP">ECM IICP</option>
                 </options>
                 &pre_ecm_psarea;
+                &pre_ecm_collectivess;
+                &pre_ecm_psgroup;
             </element>
             <element type="select" name="PSArea" mandatory="1" label="PS Area">
                 <options>
@@ -6435,7 +6439,7 @@
                     <option value="Level dummy monthly">Level dummy monthly</option>
                     <option value="N/A">N/A</option>
                 </options>
-                &pre_psarea_psgroup;
+                <!--&pre_psarea_psgroup;-->
             </element>
             <element type="select" name="PSGroup" mandatory="1" label="PS Group">
                 <options>
@@ -6468,13 +6472,15 @@
                     <option value="N/A">N/A</option>
                 </options>
             </element>
-            <element type="select" name="CollectiveScaleSalary" mandatory="1" label="Collective scale salary">
+            <element type="select" name="CollectiveScaleSalary" label="Collective scale salary">
                 <options>
                     <option value=""></option>
                     <option value="1 - Aspirant">1 - Aspirant</option>
                     <option value="2 - In the role">2 - In the role</option>
                     <option value="3 - Senior">3 - Senior</option>
+                    <option value="n/a">n/a</option>
                 </options>
+               
             </element>
             <element type="select" name="OneIKEABonusType" mandatory="1" label="One IKEA bonus type">
                 <options>
@@ -6582,7 +6588,7 @@
                     <option Department="Human Resources TACE" value="OT60216600">OT60216600</option>
                     <option Department="Logistic TACE" value="OT60214000">OT60214000</option>
                     <option Department="Human Resources Service Office" value="OR20186630">OR20186630</option>
-                    <option Department="Trading Area Central Europe" value="OT60217010">OT60217010</option>
+                    <option Department="Purchasing Area Central Europe" value="OT60217010">OT60217010</option>
                     <option Department="Business Navigation Poznań Store" value="OR22057010">OR22057010</option>
                     <option Department="Free Range TACE" value="OT60212902">OT60212902</option>
                     <option Department="HFB 4-5-9-92 Gdańsk Store" value="OR22033300">OR22033300</option>
@@ -6733,7 +6739,7 @@
                     <option Department="Interior Design  Kraków Store" value="OR22046071">OR22046071</option>
                     <option Department="Self Service Kraków Store" value="OR22043300">OR22043300</option>
                     <option Department="Recovery Kraków Store" value="OR22046330">OR22046330</option>
-                    <option Department="Management Group Trading Area Centr. EU" value="OT60217010">OT60217010</option>
+                    <option Department="Management Group Purchasing Area Centr. EU" value="OT60217010">OT60217010</option>
                     <option Department="Logistics TACE" value="OT60214000">OT60214000</option>
                     <option Department="HFB 11-12-13 Poznań Store" value="OR22053300">OR22053300</option>
                     <option Department="HFB 10-18-19 Łódź Store" value="OR23293300">OR23293300</option>
@@ -6922,7 +6928,7 @@
                     <option Department="Visual Merchandising Gdańsk Store" value="OR22036071">OR22036071</option>
                     <option Department="Warszawa/Janki Shopping Centre" value="OC65411533">OC65411533</option>
                     <option Department="Marketing Łódź" value="OC65481504">OC65481504</option>
-                    <option Department="Management Group Trading Area Centr. EU" value="OT60212240">OT60212240</option>
+                    <option Department="Management Group Purchasing Area Centr. EU" value="OT60212240">OT60212240</option>
                     <option Department="Recevables IICP" value="OC60796200">OC60796200</option>
                     <option Department="Bistro &amp; Sweden Shop Kraków Store" value="OR22043900">OR22043900</option>
                     <option Department="Business Controling IICP" value="OC60796200">OC60796200</option>
@@ -6937,7 +6943,7 @@
                     <option Department="Tenant Coordinaton IICP" value="OC60797015">OC60797015</option>
                     <option Department="Tenant Relations Gdańsk/Poznań" value="OC65461531">OC65461531</option>
                     <option Department="HFB 1-2-3 Łódź Store" value="OR23293300">OR23293300</option>
-                    <option Department="Management Group Trading Area Centr. EU" value="OT60212000">OT60212000</option>
+                    <option Department="Management Group Purchasing Area Centr. EU" value="OT60212000">OT60212000</option>
                     <option Department="Legal Counsel IICP" value="OC60796200">OC60796200</option>
                     <option Department="Activity Katowice Store" value="OR23066080">OR23066080</option>
                     <option Department="Recovery Poznań Store" value="OR22056100">OR22056100</option>
@@ -6950,7 +6956,7 @@
                     <option Department="Qstore Service Office" value="OR20186232">OR20186232</option>
                     <option Department="Visual Merchandising Łódź Store" value="OR23296071">OR23296071</option>
                     <option Department="Store Kraków 204" value="OR22047010">OR22047010</option>
-                    <option Department="Management Group Trading Area Centr. EU" value="OT60216410">OT60216410</option>
+                    <option Department="Management Group Purchasing Area Centr. EU" value="OT60216410">OT60216410</option>
                     <option Department="PR Service Office" value="OR20186073">OR20186073</option>
                     <option Department="Refilling Katowice Store" value="OR23064040">OR23064040</option>
                     <option Department="Product Quality TACE PL" value="OT60212240">OT60212240</option>
@@ -7115,7 +7121,7 @@
                     <option Department="PY Cross Country BSC" value="OG20026769">OG20026769</option>
                     <option Department="Goods Flow Kraków Store" value="OR22044100">OR22044100</option>
                     <option Department="IKEA Business Targówek Store" value="OR23073300">OR23073300</option>
-                    <option Department="Deputy Trading Area Manager TACE PL" value="OT60217010">OT60217010</option>
+                    <option Department="Deputy Purchasing Area Manager TACE PL" value="OT60217010">OT60217010</option>
                     <option Department="Tenant Relations  Wrocław/Katowice" value="OC65441534">OC65441534</option>
                     <option Department="Goods Flow Gdańsk Store" value="OR22034100">OR22034100</option>
                     <option Department="Wrocław/Katowice Shopping Centre" value="OC65441537">OC65441537</option>
@@ -7138,7 +7144,7 @@
                     <option Department="Sales Kraków Store" value="OR22043300">OR22043300</option>
                     <option Department="Marketing IICP" value="OC60796200">OC60796200</option>
                     <option Department="Wola Park Shopping Centre" value="OC65481504">OC65481504</option>
-                    <option Department="Management Group Trading Area Centr. EU" value="OT60218630">OT60218630</option>
+                    <option Department="Management Group Purchasing Area Centr. EU" value="OT60218630">OT60218630</option>
                     <option Department="Warszawa/Janki Shopping Centre" value="OC65411534">OC65411534</option>
                     <option Department="Visual Communication Łódź Store" value="OR23296071">OR23296071</option>
                     <option Department="Service Warszawa Targówek Store" value="OR23076100">OR23076100</option>
@@ -7146,7 +7152,7 @@
                     <option Department="Goods Flow Janki Store" value="OR21884040">OR21884040</option>
                     <option Department="Office&amp;Training Administrator IICP" value="OC60796200">OC60796200</option>
                     <option Department="Store Wrocław 294" value="OR22947010">OR22947010</option>
-                    <option Department="Management Group Trading Area Centr. EU" value="OT60212240">OT60212240</option>
+                    <option Department="Management Group Purchasing Area Centr. EU" value="OT60212240">OT60212240</option>
                     <option Department="Managment Group. Service Office" value="OP9S647010">OP9S647010</option>
                     <option Department="DS Operations Poland &amp; EEC DSNEUR" value="OD50056232">OD50056232</option>
                     <option Department="Expansion &amp; Property Service Office" value="OP9S647010">OP9S647010</option>
@@ -8074,6 +8080,11 @@
                 </options>
             </element>
             <element type="textarea" name="SecondSpecialRemark" label="Special remarks"></element>
+
+          <element name="DatejoiningTack" type="date" format="dd.MM.yyyy" label="Date joining Tack!" mandatory="1">
+            <regex inherit="date" pattern="" message=""></regex>
+          </element>
+        
         </tab>
         <!-- Personal Information Tab -->
         <tab name="#personal">

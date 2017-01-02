@@ -59,7 +59,7 @@
       <element type="search-select" name="PermanentCountry" label="Country" mandatory="1" default="Sweden">
         &pre_country;
       </element>
-
+      <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
 
     </tab>
     <tab name="#personal" label="Personal Information">

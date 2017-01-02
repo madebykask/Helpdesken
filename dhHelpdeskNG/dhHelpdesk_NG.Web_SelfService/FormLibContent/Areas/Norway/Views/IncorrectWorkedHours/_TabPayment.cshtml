@@ -1,0 +1,446 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+@{
+    
+    //Layout = null;
+    //Model.Language = "nl";
+    var fillOldVal = TempData["oldValues"];
+    var newfill = (List<KeyValuePair<string, string>>)fillOldVal;
+                            //const string EmployeeCategory = "Permanent";
+}
+
+<div class="tab-pane" id="Payment">
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Incorrect Worked Hours")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Date")</td>
+                    <td>
+                        @Model.Element("Date")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("CorrectionType")</td>
+                    <td>
+                        @Model.Element("CorrectionType")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("CrossCharge")</td>
+                    <td>
+                        @Model.Element("CrossCharge", "CrossCharge")
+                    </td>
+                </tr>
+                <tr class="WorkedOrgData">
+                    <td class="tdstrong">@Model.Label("WorkedCompany")</td>
+                    <td>
+                        @Model.Element("WorkedCompany")
+                        <input type="hidden" class="oldValue"  id="OLD_WorkedCompany" name="OLD_WorkedCompany" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_WorkedCompany").Select(x => x.Value).FirstOrDefault() : "")"/>
+                    </td>
+                </tr>
+                <tr class="WorkedOrgData">
+                    <td class="tdstrong">@Model.Label("WorkedBusinessUnit")</td>
+                    <td>
+                        @Model.Element("WorkedBusinessUnit")
+                    </td>
+                </tr>
+                <tr class="WorkedOrgData">
+                    <td class="tdstrong">@Model.Label("WorkedFunction")</td>
+                    <td>
+                        @Model.Element("WorkedFunction", "WorkedFunction")
+                    </td>
+                </tr>
+                <tr class="WorkedOrgData">
+                    <td class="tdstrong">@Model.Label("WorkedDepartment")</td>
+                    <td>
+                        @Model.Element("WorkedDepartment")
+                    </td>
+                </tr>
+                <tr class="WorkedOrgData">
+                    <td class="tdstrong">@Model.Label("WorkedCostCentre")</td>
+                    <td>
+                        @Model.Element("WorkedCostCentre")
+                        <input type="hidden" name="val_WorkedCostCentre" id="val_WorkedCostCentre" value="@Model.GetAnswer("WorkedCostCentre")" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TotalNumberOfHours")</td>
+                    <td>
+                        @Model.Element("TotalNumberOfHours")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("UBOne")</td>
+                    <td>
+                        @Model.Element("UBOne")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("UBTwo")</td>
+                    <td>
+                        @Model.Element("UBTwo")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("UBThree")</td>
+                    <td>
+                        @Model.Element("UBThree")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("50PercentNights")</td>
+                    <td>
+                        @Model.Element("50PercentNights")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("100PercentNights")</td>
+                    <td>
+                        @Model.Element("100PercentNights")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("50PercentOvertime")</td>
+                    <td>
+                        @Model.Element("50PercentOvertime")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("100PercentOvertime")</td>
+                    <td>
+                        @Model.Element("100PercentOvertime")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("150PercentOvertime")</td>
+                    <td>
+                        @Model.Element("150PercentOvertime")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EveningAllowance")</td>
+                    <td>
+                        @Model.Element("EveningAllowance")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("WeekendAllowance")</td>
+                    <td>
+                        @Model.Element("WeekendAllowance")
+                    </td>
+                </tr>
+
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
+                {
+                    <tr class="allowance@(i.ToString())" id="allowance@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h4>@Model.Translate("Incorrect Worked Hours") @(i.ToString())</h4>
+                        </td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("Date" + i.ToString())</td>
+                        <td>
+                            @Model.Element("Date" + i.ToString())
+                        </td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("CorrectionType" + i.ToString())</td>
+                        <td>
+                            @Model.Element("CorrectionType" + i.ToString())
+                        </td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("CrossCharge" + i.ToString())</td>
+                        <td data-i="@i.ToString()">
+                            @Model.Element("CrossCharge" + i.ToString(), "CrossCharge")
+                        </td>
+                    </tr>            
+                    <tr class="allowance@(i.ToString()) WorkedOrgData@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("WorkedCompany" + i.ToString())</td>
+                        <td>
+                            @Model.Element("WorkedCompany" + i.ToString())
+                            @{
+                            string id = "OLD_WorkedCompany" + i.ToString();
+                            }
+                            <input type="hidden" class="oldValue"  id="@id" name="@id" value="@((newfill != null) ? newfill.Where(x => x.Key == id).Select(x => x.Value).FirstOrDefault() : "")"/>
+
+                        </td>
+                    </tr>
+                    <tr class="allowance@(i.ToString()) WorkedOrgData@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("WorkedBusinessUnit" + i.ToString())</td>
+                        <td>
+                            @Model.Element("WorkedBusinessUnit" + i.ToString())
+                        </td>
+                    </tr>
+                    <tr class="allowance@(i.ToString()) WorkedOrgData@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("WorkedFunction" + i.ToString(), "WorkedFunction")</td>
+                        <td data-i="@i.ToString()">
+                            @Model.Element("WorkedFunction" + i.ToString())
+                        </td>
+                    </tr>
+                    <tr class="allowance@(i.ToString()) WorkedOrgData@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("WorkedDepartment" + i.ToString())</td>
+                        <td>
+                            @Model.Element("WorkedDepartment" + i.ToString())
+                        </td>
+                    </tr>
+                    <tr class="allowance@(i.ToString()) WorkedOrgData@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("WorkedCostCentre" + i.ToString())</td>
+                        <td>
+                            @Model.Element("WorkedCostCentre" + i.ToString())
+                            <input type="hidden" name="val_WorkedCostCentre@(i.ToString())" id="val_WorkedCostCentre@(i.ToString())" value="@Model.GetAnswer("WorkedCostCentre" + i.ToString())" />
+                        </td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("TotalNumberOfHours" + i.ToString())</td>
+                        <td>
+                            @Model.Element("TotalNumberOfHours" + i.ToString())
+                        </td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("UBOne" + i.ToString())</td>
+                        <td>
+                            @Model.Element("UBOne" + i.ToString())
+                        </td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("UBTwo" + i.ToString())</td>
+                        <td>
+                            @Model.Element("UBTwo" + i.ToString())
+                        </td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("UBThree" + i.ToString())</td>
+                        <td>
+                            @Model.Element("UBThree" + i.ToString())
+                        </td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("50PercentNights" + i.ToString())</td>
+                        <td>
+                            @Model.Element("50PercentNights" + i.ToString())
+                        </td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("100PercentNights" + i.ToString())</td>
+                        <td>
+                            @Model.Element("100PercentNights" + i.ToString())
+                        </td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("50PercentOvertime" + i.ToString())</td>
+                        <td>
+                            @Model.Element("50PercentOvertime" + i.ToString())
+                        </td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("100PercentOvertime" + i.ToString())</td>
+                        <td>
+                            @Model.Element("100PercentOvertime" + i.ToString())
+                        </td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("150PercentOvertime" + i.ToString())</td>
+                        <td>
+                            @Model.Element("150PercentOvertime" + i.ToString())
+                        </td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("EveningAllowance" + i.ToString())</td>
+                        <td>
+                            @Model.Element("EveningAllowance" + i.ToString())
+                        </td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("WeekendAllowance" + i.ToString())</td>
+                        <td>
+                            @Model.Element("WeekendAllowance" + i.ToString())
+                        </td>
+                    </tr>                            
+                }
+                <tr id="addAllowanceTrr">
+                    <td colspan="2">
+                        @Model.Element("Allowances")
+                        <a id="addAllowance" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Incorrect Worked Hours")</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+
+
+    $(function () {
+        for (var i = 1; i <= '@FormLibConstants.FormField.MultipleEntrySectionsNr'; i++) {
+            var id = "";
+            if (i != 1) {
+                id = i;
+            }
+            initOrgDataSection($('#WorkedCompany' + id), $('#WorkedBusinessUnit' + id), $('#WorkedFunction' + id), $('#WorkedDepartment' + id), $('#WorkedCostCentre' + id));
+
+            //var $select = $('#WorkedCompany' + id).selectize();
+            //$select[0].selectize.lock();
+
+
+        }
+
+        for (var j = 1; j <= $('#Allowances').val() ; j++) {
+            var id = "";
+            if (j != 1) {
+                id = j;
+            }
+            HideAndLockOnCrossCharge(id);
+            HideAndLockOnFunction(id);
+            
+        }
+
+        $('.EmployeeSearch').change(function (e) {
+            for (var k = 1; k <= $('#Allowances').val() ; k++) {
+                var id = "";
+                if (k != 1) {
+                    id = k;
+                }
+                HideAndLockOnCrossCharge(id);
+                HideAndLockOnFunction(id);
+            //    SetDefaultCompany(id);
+            }
+        });
+
+        $('#addAllowance').click(function () {
+            var id = $('#Allowances').val();
+            HideAndLockOnCrossCharge(id);
+            HideAndLockOnFunction(id);
+        });
+
+        $('.CrossCharge').change(function (e) {
+            var $me = $(this);
+            var dataid = $me.parent().data("i");
+            if (!dataid) {
+                dataid = "";
+            }
+            HideAndLockOnCrossCharge(dataid);
+            HideAndLockOnFunction(dataid);
+            //  SetDefaultCompany(dataid);
+
+        });        
+    });
+
+
+    $('#addAllowance').click(function () {
+        var id = $('#Allowances').val();
+        id++;
+        HideAndLockOnCrossCharge(id);
+        HideAndLockOnFunction(id);
+    })
+  
+
+
+    // USE this to show the fields for function if the Cross charge is YES.
+    function SetSHowAndClear(xml, $BaseSelector, $DefaultSelector, MultiId) {
+        if (typeof MultiId === undefined) {
+            MultiId = "";
+        }
+
+        $(xml).find('hides').find('hide').each(function () {
+            $(this).find('hideSelector').each(function () {
+                thisXMLNode = $(this);
+                var xmlHideSelectorVal = thisXMLNode.text();
+                var HideSelector = "";
+                if (thisXMLNode.attr('type').toLowerCase() == 'id') {
+                    HideSelector = $('#' + xmlHideSelectorVal + MultiId);
+                    HideSelector.parent().parent().show();
+                }
+                else if (thisXMLNode.attr('type').toLowerCase() == 'class') {
+                    HideSelector = $('.' + xmlHideSelectorVal + MultiId);
+                    HideSelector.show();
+                }
+            });
+        });
+        $(xml).find('hides').find('hide').each(function () {
+            var xmlHideVal = $(this).find('hideVal').text();
+            var BaseVal = "";
+            if (IsElementSourceDB($BaseSelector)) {
+                if (IsSelectorSelectize($BaseSelector)) {
+                    BaseVal = $($BaseSelector[0].selectize.getOption($BaseSelector[0].selectize.getValue())).text()
+                }
+                else {
+                    BaseVal = $BaseSelector.children(':selected').val();
+                }
+            }
+            else {
+                BaseVal = $BaseSelector.children(':selected').val();
+            }
+            if (BaseVal == "" || BaseVal == null) {
+                BaseVal = $BaseSelector.val();
+                if (BaseVal == "" || BaseVal == null) {
+                    BaseVal = "";
+                }
+            }
+            if (xmlHideVal.toLowerCase() == BaseVal.toLowerCase()) {
+                $(this).find('hideSelector').each(function () {
+                    var thisXMLNode = $(this);
+                    var xmlHideSelectorVal = thisXMLNode.text();
+                    var HideSelector = "";
+                    if (thisXMLNode.attr('type').toLowerCase() == 'id') {
+                        HideSelector = $('#' + xmlHideSelectorVal + MultiId);
+                        HideSelector.parent().parent().show(); //if id, we need to hide the TR
+                    }
+                    else if (thisXMLNode.attr('type').toLowerCase() == 'class') {
+                        HideSelector = $('.' + xmlHideSelectorVal + MultiId);
+                        HideSelector.show(); //if class, hide class
+                    }
+                });
+            }
+        });
+    };
+
+
+    var HideAndLockOnCrossCharge = function (dataid) {
+        GetXMLandCallback("norway", "Hide/CrossCharge.xml", SetHideAndClear, $('#CrossCharge' + dataid),null, dataid);
+    };
+    var HideAndLockOnFunction = function (dataid) {
+
+        if ($('#CrossCharge' + dataid).val() != "Yes") {
+            GetXMLandCallback("norway", "Hide/WorkedFunction.xml", SetHideAndClear, $('#ServiceArea'), null, dataid);
+        }
+        else
+            GetXMLandCallback("norway", "Hide/WorkedFunction.xml", SetSHowAndClear, $('#ServiceArea'), null, dataid);
+    };
+
+    var SetDefaultCompany = function (dataid) {
+      
+        @*Based on that WorkedCompany is a Selectize //TAN*@
+        //var companyVal = $('#Company').val();
+
+        //if (companyVal.length > 0) {
+        //var $select = $('#WorkedCompany' + dataid).selectize();
+        //$select[0].selectize.setValue($select[0].selectize.search(companyVal).items[0].id);
+        //$select[0].selectize.lock();
+        //}
+             @*
+
+        ////$select[0].selectize.disable();
+        ////GET ID so that we can reset value
+        //var companyId = $('#WorkedCompany' + dataid)[0].selectize.getValue();
+
+        //$select[0].selectize.clearOptions();
+                
+        //$select[0].selectize.addOption({
+        //    text: companyVal,
+        //    value: companyId
+        //});
+        //$select[0].selectize.setValue(companyId);
+
+        //$('#WorkedCompany' + dataid).trigger("change");
+             *@
+        
+    };
+</script>

@@ -30,14 +30,11 @@
                     <td>
                         @Model.Element("TerminationPaymentMethod")</td>
                 </tr>
-
-
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Termination Payments")</h4>
                     </td>
                 </tr>
-
                 <tr>
                     <td class="tdstrong">@Model.Label("TerminationPaymentType")</td>
                     <td>
@@ -48,11 +45,11 @@
                     <td>
                         @Model.Element("TerminationAmountUnits")</td>
                 </tr>
-                @*             <tr>
-                <td class="tdstrong">@Model.Label("TerminationNetGross")</td>
-                <td>
-                    @Model.Element("TerminationNetGross")</td>
-            </tr>*@
+                <tr>
+                    <td class="tdstrong">@Model.Label("NetGross")</td>
+                    <td>
+                        @Model.Element("NetGross")</td>
+                </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("TerminationPaymentDate")</td>
                     <td>
@@ -65,7 +62,6 @@
                         </div>
                     </td>
                 </tr>
-
                 @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
                 {
                     <tr class="terminationpayments@(i.ToString())" id="terminationpayments@(i.ToString())">
@@ -83,11 +79,11 @@
                         <td>
                             @Model.Element("TerminationAmountUnits" + i.ToString())</td>
                     </tr>
-@*<tr class="terminationpayments@(i.ToString())">
-                          <td class="tdstrong">@Model.Label("TerminationNetGross" + i.ToString())</td>
+                    <tr class="terminationpayments@(i.ToString())">
+                          <td class="tdstrong">@Model.Label("NetGross" + i.ToString())</td>
                           <td>
-                              @Model.Element("TerminationNetGross" + i.ToString())</td>
-                      </tr>*@@*
+                              @Model.Element("NetGross" + i.ToString())</td>
+                      </tr>@*
                       <tr class="terminationpayments@(i.ToString())">
                           <td class="tdstrong">@Model.Label("OneIKEABonusDue" + i.ToString())</td>
                           <td>
@@ -110,7 +106,6 @@
                           </td>
                       </tr>
                 }
-
                 <tr id="addTerminationPaymentsTrr">
                     <td colspan="2">
                         @Model.Element("TerminationPayments")
@@ -135,6 +130,11 @@
                     <td class="tdstrong">@Model.Label("DeductionAmountUnits")</td>
                     <td>
                         @Model.Element("DeductionAmountUnits")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionNetGross")</td>
+                    <td>
+                        @Model.Element("DeductionNetGross")</td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("DeductionDate")</td>
@@ -164,8 +164,12 @@
                         <td class="tdstrong">@Model.Label("DeductionAmountUnits" + i.ToString())</td>
                         <td>
                             @Model.Element("DeductionAmountUnits" + i.ToString())</td>
+                    </tr>              
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionNetGross" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionNetGross" + i.ToString())</td>
                     </tr>
-
                     <tr class="deduction@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DeductionDate" + i.ToString())</td>
                         <td>
@@ -214,12 +218,6 @@
 
 <script>
 
-    $(function () {
-        var has = document.getElementById('TerminationReason');
-        if (!(has))
-        selectIndexChangeTerminationType();
-    });
-
     $('#addTerminationPayment').click(function (e) {
 
         //add 1, since the counter in the hidden field (#TerminationPayments) is updated in the click event in etc.js
@@ -266,88 +264,16 @@
         if (document.getElementById('CompleteTerminationType')) {
             if (document.getElementById('BasicTerminationType'))
                 document.getElementById('CompleteTerminationType').value = document.getElementById('BasicTerminationType').value;
-
-
-            path = '';
-            var path = window.location.protocol + '//';
-            path = path + window.location.host + '/';
-
-
-            //path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/predefined_linemanager_jobtitle_outs.xml'
-            path = site.baseUrl + '/FormLibContent/Xmls/SouthKorea/defaults/predefined_TerminationReason.xml'
-
-            $.ajax({
-                type: "GET",
-                url: path,
-                dataType: "xml",
-                success: setTerminationReason,
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert(jqXHR.responseText);
-                    alert(textStatus);
-                    alert(errorThrown);
-                }
-
-            });
-
-
-
         }
-    }
-
-    function setTerminationReason(xml) {
-
-        var show = ''
-
-        var dep = '';
-        if (document.getElementById('CompleteTerminationType')) {
-            dep = document.getElementById('CompleteTerminationType').value;
-        }
-        var temp = '';
-
-        $(xml).find('dependent').each(function () {
-
-
-            var $sel = $(this);
-
-            show = '';
-
-
-            var department = $sel.find('selected').text();
-
-            show = $sel.find('show').text();
-
-            if (department.toString().trim() == dep.toString().trim()) {
-
-                if (show != '') {
-
-                    var optionsarray = show.split(',');
-                    var seloption = "";
-
-                    $('#TerminationReason')
-                        .find('option')
-                        .remove();
-
-
-
-                    seloption = '<option value="' + temp + '">' + temp + '</option>';
-
-                    $.each(optionsarray, function (i) {
-                        seloption += '<option value="' + optionsarray[i] + '">' + optionsarray[i] + '</option>';
-                    });
-                    $('#TerminationReason').append(seloption);
-
-
-                    return;
-                }
-
-
-            }
-        });
-
     }
 
     $("#BasicTerminationType").change(function () {
         selectIndexChangeTerminationType();
+    });
+
+    //#52776 added in CR 
+    $('#BasicTerminationReason').change(function () {
+        $('#TerminationReason').val($(this).val());
     });
 
 
@@ -359,7 +285,7 @@
         if (document.getElementById('PaymentDate')) {
             document.getElementById('PaymentDate').value = document.getElementById('LastDayOfEmployment').value;
 
-            for (var i = 2; i <= 3; i++) {
+            for (var i = 2; i <= 5; i++) {
                 var PaymentDate = "PaymentDate" + [i].toString();
 
 
@@ -371,7 +297,7 @@
             if (document.getElementById('TerminationPaymentDate')) {
                 document.getElementById('TerminationPaymentDate').value = document.getElementById('LastDayOfEmployment').value;
 
-                for (var i = 2; i <= 3; i++) {
+                for (var i = 2; i <= 5; i++) {
                     var PaymentDate = "TerminationPaymentDate" + [i].toString();
 
 
@@ -386,7 +312,7 @@
 
             document.getElementById('DeductionDate').value = document.getElementById('LastDayOfEmployment').value;
 
-            for (var i = 2; i <= 3; i++) {
+            for (var i = 2; i <= 5; i++) {
 
                 var DeductionDate = "DeductionDate" + [i].toString();
 

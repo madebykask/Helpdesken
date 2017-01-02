@@ -28,7 +28,7 @@
     </status>
     <!-- HRU -->
     <status value="20">
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#attachments</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#documents,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -41,7 +41,7 @@
     </status>
     <!-- SSC -->
     <status value="30">
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#SSCUseOnly,#attachments</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#documents,#SSCUseOnly,#attachments</visibleTabs>
         <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>

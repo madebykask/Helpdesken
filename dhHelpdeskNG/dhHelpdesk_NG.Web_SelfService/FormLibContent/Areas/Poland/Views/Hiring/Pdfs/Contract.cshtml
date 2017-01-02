@@ -210,7 +210,7 @@
             }<!-- end of switch-->    
         </p>
 
-        <p style="text-align:justify; font-family:Verdana; font-size:10px; line-height:16px;">
+        @* <p style="text-align:justify; font-family:Verdana; font-size:10px; line-height:16px;">
 
             @functions{
                 public static bool NewDateOver(DateTime? startDate, DateTime? endDate, int months)
@@ -222,6 +222,7 @@
                 }
             }
 
+           SG : Case : 55762  -- 12-09-2016
 
             @if (Model.GetAnswer("ContractType") == "Limited period"
                 && NewDateOver(Model.ConvertToDateTime("EffectiveDate"), Model.ConvertToDateTime("EndDate"), 6))
@@ -230,8 +231,8 @@
                 The parties agreed that this Employment Agreement can be terminated with a two-week notice period by any of the Parties of the Agreement.
                 <br /><br />
                 </text>
-            }               
-        </p>
+            }              
+        </p>*@ 
 
         <p style="text-align:justify; font-family:Verdana; font-size:10px; line-height:16px;">
            @if(Model.GetAnswer("ContractType") == "Replacement contract")
@@ -360,13 +361,22 @@
              case "Limited period": 
              <text>
              <p style="font-family:Verdana; font-size:10px;">
+                5  .  Notice period according to article 36. § 1. Labour Code is:	<br />
+             </p>
+             <p style="font-family:Verdana; font-size:10px; padding-left: 20px;">
+               1)  <strong>2 weeks</strong>, if an Employee has been employed for a period shorter than 6 months,<br />
+               2)  <strong>1 month</strong>, if an Employee has been employed for at least 6 months,<br />
+               3)  <strong>3 months</strong>, if an Employee has been employed for at least 3 years.<br />
+             </p>
+            @* S.G : change request 10-02-2016 , Help desk case #53870 *@
+            @* <p style="font-family:Verdana; font-size:10px;">
                 5  .  Notice period according to article 33 Labour Code is:	<br />
              </p>
              <p style="font-family:Verdana; font-size:10px; padding-left: 20px;">
                
                   1)  <strong>2 weeks</strong> for Contract longer than 6 months if the parties agreed for notice period,<br />
                   2)  <strong>no notice period</strong> for Contract of up to 6 months. <br />
-             </p>
+             </p>*@
              </text>
              break;
              case "Permanent period": 

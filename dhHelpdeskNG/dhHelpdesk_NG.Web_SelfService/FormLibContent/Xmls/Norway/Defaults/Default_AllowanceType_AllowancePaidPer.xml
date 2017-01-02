@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<defaults>
+  <default>
+    <baseVal>Specialist Allowance</baseVal>
+    <defaultVal>hour</defaultVal>
+  </default>
+  <default>
+    <baseVal>Shiftleader</baseVal>
+    <defaultVal>hour</defaultVal>
+  </default>
+  <default>
+    <baseVal>Deputy Allowance</baseVal>
+    <defaultVal>month</defaultVal>
+  </default>
+</defaults>

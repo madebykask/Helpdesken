@@ -69,49 +69,50 @@
                     <td>
                         @Model.Element("TECoWorker")
                     </td>
-                </tr>      
+                </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("ServiceRequestPriority")</td>
                     <td>
                         @Model.Element("ServiceRequestPriority")</td>
                 </tr>
-                @if (!FormLibUtils.IsSelfService()){
+                @if(!FormLibUtils.IsSelfService())
+                {
+                    <tr>
+                        <td class="tdstrong">@Model.Translate("SLA")</td>
+                        <td>
+                            @if(Model.Contract.CaseNumber != null)
+                            {
+                                @Model.Translate(Model.Contract.PriorityName);
+                            }
+                            else
+                            {
+                                if(Model.Form != null)
+                                {
+                                    @Model.Translate(Model.Form.PriorityName);
+                                }
+                            }
+                        </td>
+                    </tr>    
+                }
                 <tr>
-                    <td class="tdstrong">@Model.Translate("SLA")</td>
-                    <td>
-                        @if (Model.Contract.CaseNumber != null)
-                        {
-                            @Model.Contract.PriorityName;
-                        }
-                        else { 
-                            @Model.Form.PriorityName;
-                        }
+                    <td class="tdstrong" style="vertical-align: top !important; padding-top: 5px;">
+                        <p>@Model.Translate("To SSC Administration:")</p>
                     </td>
-                </tr>    
-                }     
-                <tr>
-                    <td class="tdstrong"><p>@Model.Translate("To SSC Administration:")</p></td>
-                    <td>
-                        
-<p>@Model.Translate("I would like to notify you that unfortunately this co-worker will NOT be joining IKEA.")</p>
-<p>@Model.Translate("Please correct the record in Globalview and other required administration activities to withdraw this co-worker.")</p>
-<p>@Model.Translate("Thank you")</p>
-                        
-</td>
-                </tr>         
+                    <td style="padding-top: 5px;">
 
-                <tr>
-                    <td class="tdstrong">@Model.Label("Comment")</td>
-                    <td>
-                        @Model.Element("Comment")</td>
-                </tr>      
+                        <p>@Model.Translate("I would like to notify you that unfortunately this co-worker will NOT be joining IKEA.")</p>
+                        <p>@Model.Translate("Please correct the record in Globalview and other required administration activities to withdraw this co-worker.")</p>
+                        <p>@Model.Translate("Thank you")</p>
 
+                    </td>
+                </tr>
 
+                @Html.Partial("_InternalLogNoteV2", Model)
 
             </tbody>
         </table>
     </div>
-    
+
     <input type="hidden" id="CustomerId" value="@Model.Form.CustomerId" />
-    
+
 </div>

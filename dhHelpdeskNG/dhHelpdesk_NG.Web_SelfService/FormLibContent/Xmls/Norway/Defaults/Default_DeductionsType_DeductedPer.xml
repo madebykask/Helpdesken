@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<defaults>
+  <default>
+    <baseVal>Mobile phone deduction</baseVal>
+    <defaultVal>one off</defaultVal>
+  </default>
+</defaults>

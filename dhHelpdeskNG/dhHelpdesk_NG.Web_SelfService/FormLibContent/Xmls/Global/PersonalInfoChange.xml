@@ -44,7 +44,7 @@
           <option value ="Standard">Standard</option>
         </options>
       </element>
-      
+      <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
     </tab>
     <!--Personal Information Tab-->
     <tab name="#Personal" label="Personal Information">

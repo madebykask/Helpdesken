@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE form [
   <!ENTITY languages SYSTEM "Templates/Languages.xml">
+  <!ENTITY dat_language SYSTEM "Data/Data_Languages.xml">
   <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
-  <!ENTITY state SYSTEM "Templates/HiringBasicState.xml">
-  <!ENTITY pre_company_businessunit SYSTEM "Templates/Predefined_Company_BusinessUnit.xml">
-  <!ENTITY pre_businessunit_reportstolinemanager SYSTEM "Templates/Predefined_BusinessUnit_ReportsToLineManager.xml">
-  <!ENTITY pre_department_homecostcentre SYSTEM "Templates/Predefined_Department_HomeCostCentre.xml">
-  <!ENTITY pre_department_crosschargecostcentre SYSTEM "Templates/Predefined_Department_CrossChargeCostCentre.xml">
-  <!ENTITY pre_businessunit_jobtitle SYSTEM "Templates/Predefined_BusinessUnit_JobTitle.xml">
-  <!ENTITY pre_businessunit_localjobtitle SYSTEM "Templates/Predefined_BusinessUnit_LocalJobTitle.xml">
-  <!ENTITY pre_businessunit_primarysite SYSTEM "Templates/Predefined_BusinessUnit_PrimarySite.xml">
-  <!ENTITY pre_allowancestype_allowancesnetgross SYSTEM "Templates/Predefined_Allowances_NetGross.xml">
-  <!--<!ENTITY pre_deductionstype_deductionsnetgross SYSTEM "Templates/Predefined_Deductions_NetGross.xml">-->
-  <!ENTITY pre_country SYSTEM "Templates/Data_Country.xml">  
+  <!ENTITY state SYSTEM "Templates/HiringBasicState.xml">  
+  <!ENTITY pre_businessunit_jobtitle SYSTEM "Defaults/Predefined_BusinessUnit_JobTitle.xml">  
+  <!--<!ENTITY pre_deductionstype_deductionsnetgross SYSTEM "Defaults/Predefined_Deductions_NetGross.xml">-->
+  <!ENTITY pre_country SYSTEM "Data/Data_Country.xml">
+  <!ENTITY data_nationality SYSTEM "Data/Data_Nationality.xml">
 ]>
 
 <!-- Dev/Prod/Test -->
@@ -22,18 +17,19 @@
   &state;
   <fields>
     <!--Service Request Details-->
-    <tab name="#servicerequestdetails" label="Service Request Details">
+    <tab name="#servicerequestdetails" label="Service Request Details">date
       <element type="select" name="NewToIKEA" mandatory="1" label="New to IKEA?">
         <options>
           <option value=""></option>
           <option value="New Hire">New Hire</option>
-          <option value="Re-Hire" disableForSelfService="1">Re-Hire</option>
+          <option value="Re-Hire">Re-Hire</option>
           <option value="International Transfer">International Transfer</option>
+          <option value="Transfer Between Business Units">Transfer Between Business Units</option>
         </options>
       </element>
       <element type="date" name="ContractStartDate" mandatory="1" label="Contract Start Date" format="dd.MM.yyyy">
-        <checkStartDate name="EmploymentCategory" exception="Apprentice" message="The date you've entered doesn't start on the 1st or the 15th of a month"></checkStartDate>
         <regex inherit="date" pattern="" message=""></regex>
+        <checkStartDate name="EmploymentCategory" exception="Apprentice" message="The date you've entered doesn't start on the 1st or the 15th of a month"></checkStartDate>       
       </element>
       <element type="select" name="ServiceRequestPriority" mandatory="1" label="Service Request Priority" default="Standard">
         <options>
@@ -43,36 +39,36 @@
         </options>
       </element>
       <element type="text" name="Co-WorkerID" label="Co-Worker ID">
-        <mandatoryIf name="NewToIKEA">International Transfer,Re-Hire</mandatoryIf>
+        <mandatoryIf name="NewToIKEA">Transfer Between Business Units</mandatoryIf>
         <regex inherit="employeeno" pattern="" message=""></regex>
       </element>
       <element type="text" name="GlobalHRID" label="Global HR ID">
         <mandatoryIf name="NewToIKEA">International Transfer</mandatoryIf>
       </element>
-      <element type="select" name="Title" label="Title" >
+      <element type="select" name="Title" label="Title" mandatory="1">
         <options>
           <option value=""></option>
           <option value="Mr">Mr</option>
           <option value="Ms">Ms</option>
         </options>
       </element>
-      <element type="text" name="FirstName" label="First Name" mandatory="1"></element>
+      <element type="text" name="FirstName" label="Name First" mandatory="1"></element>
       <element type="text" name="Prefixes" label="Prefixes"></element>
-      <element type="text" name="LastName" label="Last Name" mandatory="1"></element>
-      <element type="text" name="PreferedName" label="Prefered Name"></element>
+      <element type="text" name="LastName" label="Name Last" mandatory="1"></element>
       <element type="text" name="Initials" label="Initials" mandatory="1"></element>
+      <!--<element type="text" name="PreferedName" label="Preferred name"></element>-->
       <element type="date" name="DateOfBirth" label="Date of birth" mandatory="1" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element type="text" name="PermanentAddressLine1" label="Address line 1" mandatory="1"></element>
-      <element type="text" name="PermanentAddressLine2" label="Address line 2"></element>
-      <element type="text" name="PermanentAddressLine3" label="Address line 3"></element>
-      <element type="text" name="PermanentPostalCode" label="Postal code" mandatory="1">
+      <element type="text" name="PermanentAddressLine1" label="Address line 1" mandatory="1" formfieldidentifier="E1P0006.STRAS:1"></element>
+      <element type="text" name="PermanentAddressLine2" label="Address line 2" formfieldidentifier="E1P0006.HSNMR:1"></element>
+      <element type="text" name="PermanentAddressLine3" label="Address line 3" formfieldidentifier="E1P0006.POSTA:1"></element>
+      <element type="text" name="PermanentPostalCode" label="Postal code" mandatory="1" formfieldidentifier="E1P0006.PSTLZ:1">
         <regex inherit="postcode" pattern="" message=""></regex>
         <validateIf name="PermanentCountry">Netherlands</validateIf>
       </element>
-      <element type="text" name="PermanentCity" label="City" mandatory="1"></element>
-      <element type="search-select" source="1" name="PermanentCountry" label="Country" mandatory="1" default="Netherlands">
+      <element type="text" name="PermanentCity" label="City" mandatory="1" formfieldidentifier="E1P0006.ORT01:1"></element>
+      <element type="search-select" source="1" name="PermanentCountry" label="Country" mandatory="1" default="Netherlands" formfieldidentifier="E1P0006.LAND1:1">
         &pre_country;
       </element>
 
@@ -80,296 +76,67 @@
       <element type="select" name="MaritalStatus" label="Marital Status" mandatory="1">
         <options>
           <option value=""></option>
-          <option value="Single">Single</option>
-          <option value="Married">Married</option>
-          <option value="Divorced">Divorced</option>
-          <option value="Cohabitating">Cohabitating</option>
+          <option value="Cohabiting">Cohabiting</option>
           <option value="Cohabiting with contract">Cohabiting with contract</option>
+          <option value="Divorced">Divorced</option>
+          <option value="Legal cohabitation">Legal cohabitation</option>
+          <option value="Married">Married</option>
           <option value="Registered partner">Registered partner</option>
+          <option value="Separated">Separated</option>
+          <option value="Single">Single</option>
+          <option value="Unknown">Unknown</option>
+          <option value="Widowed">Widowed</option>
         </options>
       </element>
       <element type="search-select" source="1" name="Nationality" label="Nationality" default="Dutch" mandatory="1">
-        <options>
-          <option value=""></option>
-          <option value="Unknown">Unknown</option>
-          <option value="Angolan">Angolan</option>
-          <option value="Brazilian">Brazilian</option>
-          <option value="Swiss">Swiss</option>
-          <option value="Chinese">Chinese</option>
-          <option value="German">German</option>
-          <option value="Spanish">Spanish</option>
-          <option value="French">French</option>
-          <option value="British">British</option>
-          <option value="Dutch">Dutch</option>
-          <option value="Polish">Polish</option>
-          <option value="Russian">Russian</option>
-          <option value="Swedish">Swedish</option>
-          <option value="Andorran">Andorran</option>
-          <option value="Unit.ArabEmir.">Unit.ArabEmir.</option>
-          <option value="Afghan">Afghan</option>
-          <option value="Antiguan">Antiguan</option>
-          <option value="Anguilla">Anguilla</option>
-          <option value="Albanian">Albanian</option>
-          <option value="Armenian">Armenian</option>
-          <option value="Antarctica">Antarctica</option>
-          <option value="Argentinian">Argentinian</option>
-          <option value="Samoan">Samoan</option>
-          <option value="Austrian">Austrian</option>
-          <option value="Australian">Australian</option>
-          <option value="Arubanic">Arubanic</option>
-          <option value="Azerbaijani">Azerbaijani</option>
-          <option value="Bosnian">Bosnian</option>
-          <option value="Barbadan">Barbadan</option>
-          <option value="Bangladeshi">Bangladeshi</option>
-          <option value="Belgian">Belgian</option>
-          <option value="Burkinabe">Burkinabe</option>
-          <option value="Bulgarian">Bulgarian</option>
-          <option value="Bahraini">Bahraini</option>
-          <option value="Burundian">Burundian</option>
-          <option value="Beninese">Beninese</option>
-          <option value="Bermudan">Bermudan</option>
-          <option value="Brunei">Brunei</option>
-          <option value="Bolivian">Bolivian</option>
-          <option value="Bahamian">Bahamian</option>
-          <option value="Bhutanese">Bhutanese</option>
-          <option value="BouvetIsland">BouvetIsland</option>
-          <option value="Botswanan">Botswanan</option>
-          <option value="Belarusian">Belarusian</option>
-          <option value="Belizean">Belizean</option>
-          <option value="Canadian">Canadian</option>
-          <option value="Australian">Australian</option>
-          <option value="Congolese">Congolese</option>
-          <option value="CentralAfr.Rep">CentralAfr.Rep</option>
-          <option value="Congolese">Congolese</option>
-          <option value="IvoryCoast">IvoryCoast</option>
-          <option value="CookIslands">CookIslands</option>
-          <option value="Chilean">Chilean</option>
-          <option value="Cameroonian">Cameroonian</option>
-          <option value="Colombian">Colombian</option>
-          <option value="CostaRican">CostaRican</option>
-          <option value="Serbian/Monten.">Serbian/Monten.</option>
-          <option value="Cuban">Cuban</option>
-          <option value="CapeVerdean">CapeVerdean</option>
-          <option value="Australian">Australian</option>
-          <option value="Cypriot">Cypriot</option>
-          <option value="Czech">Czech</option>
-          <option value="Djiboutian">Djiboutian</option>
-          <option value="Danish">Danish</option>
-          <option value="Dominican">Dominican</option>
-          <option value="Dominican">Dominican</option>
-          <option value="Algerian">Algerian</option>
-          <option value="Ecuadorian">Ecuadorian</option>
-          <option value="Estonian">Estonian</option>
-          <option value="Egyptian">Egyptian</option>
-          <option value="Eritrean">Eritrean</option>
-          <option value="Ethiopian">Ethiopian</option>
-          <option value="Finnish">Finnish</option>
-          <option value="Fijian">Fijian</option>
-          <option value="Micronesian">Micronesian</option>
-          <option value="Danish">Danish</option>
-          <option value="Gabonese">Gabonese</option>
-          <option value="Grenadian">Grenadian</option>
-          <option value="Georgian">Georgian</option>
-          <option value="Ghanaian">Ghanaian</option>
-          <option value="Gibraltar">Gibraltar</option>
-          <option value="Danish">Danish</option>
-          <option value="Gambian">Gambian</option>
-          <option value="Guinean">Guinean</option>
-          <option value="EquatorialGui.">EquatorialGui.</option>
-          <option value="Greek">Greek</option>
-          <option value="SouthGeorgia">SouthGeorgia</option>
-          <option value="Guatemalan">Guatemalan</option>
-          <option value="American">American</option>
-          <option value="Guinean">Guinean</option>
-          <option value="Guyanese">Guyanese</option>
-          <option value="HongKong">HongKong</option>
-          <option value="Heard/McDon.Isl">Heard/McDon.Isl</option>
-          <option value="Honduran">Honduran</option>
-          <option value="Croatian">Croatian</option>
-          <option value="Haitian">Haitian</option>
-          <option value="Hungarian">Hungarian</option>
-          <option value="Indonesian">Indonesian</option>
-          <option value="Irish">Irish</option>
-          <option value="Israeli">Israeli</option>
-          <option value="Indian">Indian</option>
-          <option value="Brit.Ind.Oc.Ter">Brit.Ind.Oc.Ter</option>
-          <option value="Iraqi">Iraqi</option>
-          <option value="Iranian">Iranian</option>
-          <option value="Icelandic">Icelandic</option>
-          <option value="Italian">Italian</option>
-          <option value="Jamaican">Jamaican</option>
-          <option value="Jordanian">Jordanian</option>
-          <option value="Japanese">Japanese</option>
-          <option value="Kenyan">Kenyan</option>
-          <option value="Kyrgyzstani">Kyrgyzstani</option>
-          <option value="Cambodian">Cambodian</option>
-          <option value="I-Kiribati">I-Kiribati</option>
-          <option value="Comoran">Comoran</option>
-          <option value="f.StKitts/Nev">f.StKitts/Nev</option>
-          <option value="Korean">Korean</option>
-          <option value="Korean">Korean</option>
-          <option value="Kuwaiti">Kuwaiti</option>
-          <option value="Kazakh">Kazakh</option>
-          <option value="Laotian">Laotian</option>
-          <option value="Lebanese">Lebanese</option>
-          <option value="Lucian">Lucian</option>
-          <option value="Liechtenstein">Liechtenstein</option>
-          <option value="SriLankan">SriLankan</option>
-          <option value="Liberian">Liberian</option>
-          <option value="Basotho">Basotho</option>
-          <option value="Lithuanian">Lithuanian</option>
-          <option value="Luxembourgian">Luxembourgian</option>
-          <option value="Latvian">Latvian</option>
-          <option value="Libyan">Libyan</option>
-          <option value="Moroccan">Moroccan</option>
-          <option value="Monegasque">Monegasque</option>
-          <option value="Moldovan">Moldovan</option>
-          <option value="Montenegrin">Montenegrin</option>
-          <option value="Madagascan">Madagascan</option>
-          <option value="MarshallIslnds">MarshallIslnds</option>
-          <option value="Macedonian">Macedonian</option>
-          <option value="Malian">Malian</option>
-          <option value="Myanmar">Myanmar</option>
-          <option value="Mongolian">Mongolian</option>
-          <option value="Marianian">Marianian</option>
-          <option value="Mauritanian">Mauritanian</option>
-          <option value="Montserrat">Montserrat</option>
-          <option value="Maltese">Maltese</option>
-          <option value="Mauritian">Mauritian</option>
-          <option value="Maldivian">Maldivian</option>
-          <option value="Malawian">Malawian</option>
-          <option value="Mexican">Mexican</option>
-          <option value="Malaysian">Malaysian</option>
-          <option value="Mozambican">Mozambican</option>
-          <option value="Namibian">Namibian</option>
-          <option value="Nigerien">Nigerien</option>
-          <option value="NorfolkIsland">NorfolkIsland</option>
-          <option value="Nigerian">Nigerian</option>
-          <option value="Nicaraguan">Nicaraguan</option>
-          <option value="Norwegian">Norwegian</option>
-          <option value="Nepalese">Nepalese</option>
-          <option value="Nauruan">Nauruan</option>
-          <option value="Niuean">Niuean</option>
-          <option value="NewZealand">NewZealand</option>
-          <option value="Omani">Omani</option>
-          <option value="Panamanian">Panamanian</option>
-          <option value="Peruvian">Peruvian</option>
-          <option value="Pap.NewGuinea">Pap.NewGuinea</option>
-          <option value="Filipino">Filipino</option>
-          <option value="Pakistani">Pakistani</option>
-          <option value="American">American</option>
-          <option value="Palestine">Palestine</option>
-          <option value="Portuguese">Portuguese</option>
-          <option value="Palau">Palau</option>
-          <option value="Paraguayan">Paraguayan</option>
-          <option value="Qatari">Qatari</option>
-          <option value="Rumanian">Rumanian</option>
-          <option value="Serbian">Serbian</option>
-          <option value="Rwandan">Rwandan</option>
-          <option value="SaudiArabian">SaudiArabian</option>
-          <option value="Solomonese">Solomonese</option>
-          <option value="Seychellian">Seychellian</option>
-          <option value="Sudanese">Sudanese</option>
-          <option value="Singaporean">Singaporean</option>
-          <option value="St.Helena">St.Helena</option>
-          <option value="Slovenian">Slovenian</option>
-          <option value="Norwegian">Norwegian</option>
-          <option value="Slovakian">Slovakian</option>
-          <option value="SierraLeonean">SierraLeonean</option>
-          <option value="Sammarinese">Sammarinese</option>
-          <option value="Senegalese">Senegalese</option>
-          <option value="Somali">Somali</option>
-          <option value="Surinamese">Surinamese</option>
-          <option value="Santomeic">Santomeic</option>
-          <option value="Salvdorean">Salvdorean</option>
-          <option value="Syrian">Syrian</option>
-          <option value="Swazi">Swazi</option>
-          <option value="TurkshCaicosin">TurkshCaicosin</option>
-          <option value="Chadian">Chadian</option>
-          <option value="Togolese">Togolese</option>
-          <option value="Thai">Thai</option>
-          <option value="Tajikstani">Tajikstani</option>
-          <option value="TokelauIslands">TokelauIslands</option>
-          <option value="EastTimorese">EastTimorese</option>
-          <option value="Turkmenian">Turkmenian</option>
-          <option value="Tunisian">Tunisian</option>
-          <option value="Tongan">Tongan</option>
-          <option value="Timorese">Timorese</option>
-          <option value="Turkish">Turkish</option>
-          <option value="f.Trinidad&amp;T">f.Trinidad&amp;T</option>
-          <option value="Tuvaluese">Tuvaluese</option>
-          <option value="Taiwanese">Taiwanese</option>
-          <option value="Tanzanian">Tanzanian</option>
-          <option value="Ukrainian">Ukrainian</option>
-          <option value="Ugandan">Ugandan</option>
-          <option value="MinorOutl.Isl.">MinorOutl.Isl.</option>
-          <option value="American">American</option>
-          <option value="Uruguayan">Uruguayan</option>
-          <option value="Uzbekistani">Uzbekistani</option>
-          <option value="Vatican">Vatican</option>
-          <option value="Vincentian">Vincentian</option>
-          <option value="Venezuelan">Venezuelan</option>
-          <option value="American">American</option>
-          <option value="Vietnamese">Vietnamese</option>
-          <option value="Vanuatese">Vanuatese</option>
-          <option value="Wallis,Futuna">Wallis,Futuna</option>
-          <option value="Samoan">Samoan</option>
-          <option value="CrossCountry">CrossCountry</option>
-          <option value="Yemeni">Yemeni</option>
-          <option value="Yugoslavian">Yugoslavian</option>
-          <option value="Other">Other</option>
-          <option value="SouthAfrican">SouthAfrican</option>
-          <option value="Zambian">Zambian</option>
-          <option value="Zimbabwean">Zimbabwean</option>
-
-        </options>
+        &data_nationality;
       </element>
       <element type="text" name="BSNCSN" label="BSN/CSN" mandatory="1">
         <regex inherit="unsignednum" pattern="" message=""></regex>
         <regex inherit="bsn" pattern="" message=""></regex>
       </element>
       <element type="text" name="Birthplace" label="Birthplace" mandatory="1"></element>
-      <element type="search-select" source="1" name="CountryOfBirth" label="Country of Birth" default="Netherlands">
+      <!--<element type="search-select" source="1" name="CountryOfBirth" label="Country of Birth" default="Netherlands">
         &pre_country;
-      </element>
+      </element>-->
+      <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
     </tab>
 
     <tab name="#personal" label="Personal Information">
       <element type="text" name="TelephoneNumber" label="Telephone Number"></element>
-      <element type="text" name="ContactEMailAddress" label="Contact e-mail address">
+      <element type="text" name="ContactEMailAddress" label="Contact e-mail address" formfieldidentifier="E1P0105.USRID_LONG:10">
         <regex inherit="email" pattern="" message=""></regex>
       </element>
 
-
-      <element type="text" name="MailingAddressLine1" label="Address line 1" ></element>
+      <element type="text" name="MailingAddressLine1" label="Address line 1" mandatory="1"></element>
       <element type="text" name="MailingAddressLine2" label="Address line 2"></element>
       <element type="text" name="MailingAddressLine3" label="Address line 3"></element>
-      <element type="text" name="MailingPostalCode" label="Postal code" >
+      <element type="text" name="MailingPostalCode" label="Postal code" mandatory="1" >
         <regex inherit="postcode" message="" pattern=""></regex>
         <validateIf name="MailingCountry">Netherlands</validateIf>
         <mandatoryIfNotEmpty name="MailingAddressLine1"></mandatoryIfNotEmpty>
       </element>
-      <element type="text" name="MailingCity" label="City" >
+      <element type="text" name="MailingCity" label="City" mandatory="1">
         <mandatoryIfNotEmpty name="MailingAddressLine1"></mandatoryIfNotEmpty>
       </element>
-      <element type="search-select" source="1" name="MailingCountry" label="Country" default="Netherlands">
+      <element type="search-select" source="1" name="MailingCountry" label="Country" default="Netherlands" mandatory="1">
         <mandatoryIfNotEmpty name="MailingAddressLine1"></mandatoryIfNotEmpty>
         &pre_country;
       </element>
 
-      <element type="text" name="EmergencyAddressLine1" label="Address line 1"></element>
+      <element type="text" name="EmergencyAddressLine1" label="Address line 1" mandatory="1"></element>
       <element type="text" name="EmergencyAddressLine2" label="Address line 2"></element>
       <element type="text" name="EmergencyAddressLine3" label="Address line 3"></element>
-      <element type="text" name="EmergencyPostalCode" label="Postal code">
+      <element type="text" name="EmergencyPostalCode" label="Postal code" mandatory="1">
         <regex inherit="postcode" message="" pattern=""></regex>
         <validateIf name="EmergencyCountry">Netherlands</validateIf>
       </element>
-      <element type="text" name="EmergencyCity" label="City"></element>
-      <element type="search-select" source="1" name="EmergencyCountry" label="Country" default="Netherlands">
+      <element type="text" name="EmergencyCity" label="City" mandatory="1"></element>
+      <element type="search-select" source="1" name="EmergencyCountry" label="Country" default="Netherlands" mandatory="1">
         &pre_country;
       </element>
       <element type="text" name="EmergencyContactNumber" label="Emergency contact number"></element>
-      <element type="text" name="EmergencyContactRelationship" label="Emergency contact/relationship"></element>
+      <element type="text" name="EmergencyContactRelationship" label="Emergency contact/relationship" mandatory="1"></element>
 
       <!--Family Member/Dependents-->
       <element type="hidden" name="FamilyMembers" default="1"></element>
@@ -490,8 +257,9 @@
         <options>
           <option value=""></option>
           <option value="Badge ID">Badge ID</option>
-          <option value="Passport / ID">Passport / ID</option>
-          <option value="Work permit">Work permit</option>
+          <option value="ID/passport">ID/passport</option>
+          <option value="Residence permit">Residence permit</option>
+          <option value="Work Permit">Work Permit</option>
         </options>
       </element>
       <element type="search-select" source="1" name="EmployeeDocumentCountry" label="Country" default="Netherlands">
@@ -510,8 +278,9 @@
         <options>
           <option value=""></option>
           <option value="Badge ID">Badge ID</option>
-          <option value="Passport / ID">Passport / ID</option>
-          <option value="Work permit">Work permit</option>
+          <option value="ID/passport">ID/passport</option>
+          <option value="Residence permit">Residence permit</option>
+          <option value="Work Permit">Work Permit</option>
         </options>
       </element>
       <element type="search-select" source="1" name="EmployeeDocumentCountry2" label="Country" default="Netherlands">
@@ -530,8 +299,9 @@
         <options>
           <option value=""></option>
           <option value="Badge ID">Badge ID</option>
-          <option value="Passport / ID">Passport / ID</option>
-          <option value="Work permit">Work permit</option>
+          <option value="ID/passport">ID/passport</option>
+          <option value="Residence permit">Residence permit</option>
+          <option value="Work Permit">Work Permit</option>
         </options>
       </element>
       <element type="search-select" source="1" name="EmployeeDocumentCountry3" label="Country" default="Netherlands">
@@ -550,8 +320,9 @@
         <options>
           <option value=""></option>
           <option value="Badge ID">Badge ID</option>
-          <option value="Passport / ID">Passport / ID</option>
-          <option value="Work permit">Work permit</option>
+          <option value="ID/passport">ID/passport</option>
+          <option value="Residence permit">Residence permit</option>
+          <option value="Work Permit">Work Permit</option>
         </options>
       </element>
       <element type="search-select" source="1" name="EmployeeDocumentCountry4" label="Country" default="Netherlands">
@@ -570,8 +341,9 @@
         <options>
           <option value=""></option>
           <option value="Badge ID">Badge ID</option>
-          <option value="Passport / ID">Passport / ID</option>
-          <option value="Work permit">Work permit</option>
+          <option value="ID/passport">ID/passport</option>
+          <option value="Residence permit">Residence permit</option>
+          <option value="Work Permit">Work Permit</option>
         </options>
       </element>
       <element type="search-select" source="1" name="EmployeeDocumentCountry5" label="Country" default="Netherlands">
@@ -596,7 +368,7 @@
         </options>
       </element>
       <element type="select" name="Accompanying" label="Accompanying">
-        <mandatoryIf name="DependantFamilyMember">Spouse,Child,Step Child</mandatoryIf>
+        <mandatoryIfNotEmpty name="DependantFamilyMember"></mandatoryIfNotEmpty>
         <options>
           <option value=""></option>
           <option value="Yes">Yes</option>
@@ -618,7 +390,7 @@
         </options>
       </element>
       <element type="select" name="Accompanying2" label="Accompanying">
-        <mandatoryIf name="DependantFamilyMember2">Spouse,Child,Step Child</mandatoryIf>
+        <mandatoryIfNotEmpty name="DependantFamilyMember2"></mandatoryIfNotEmpty>
         <options>
           <option value=""></option>
           <option value="Yes">Yes</option>
@@ -640,7 +412,7 @@
         </options>
       </element>
       <element type="select" name="Accompanying3" label="Accompanying">
-        <mandatoryIf name="DependantFamilyMember3">Spouse,Child,Step Child</mandatoryIf>
+        <mandatoryIfNotEmpty name="DependantFamilyMember3"></mandatoryIfNotEmpty>
         <options>
           <option value=""></option>
           <option value="Yes">Yes</option>
@@ -662,7 +434,7 @@
         </options>
       </element>
       <element type="select" name="Accompanying4" label="Accompanying">
-        <mandatoryIf name="DependantFamilyMember4">Spouse,Child,Step Child</mandatoryIf>
+        <mandatoryIfNotEmpty name="DependantFamilyMember4"></mandatoryIfNotEmpty>
         <options>
           <option value=""></option>
           <option value="Yes">Yes</option>
@@ -684,7 +456,7 @@
         </options>
       </element>
       <element type="select" name="Accompanying5" label="Accompanying">
-        <mandatoryIf name="DependantFamilyMember5">Spouse,Child,Step Child</mandatoryIf>
+        <mandatoryIfNotEmpty name="DependantFamilyMember5"></mandatoryIfNotEmpty>
         <options>
           <option value=""></option>
           <option value="Yes">Yes</option>
@@ -702,8 +474,8 @@
       <element type="select" name="DependantsDocumentType" label="Document Type">
         <options>
           <option value=""></option>
-          <option value="Badge ID">Badge ID</option>
-          <option value="Passport / ID">Passport / ID</option>
+          <option value="ID/passport">ID/passport</option>
+          <option value="Residence permit">Residence permit</option>
           <option value="Work permit">Work permit</option>
         </options>
       </element>
@@ -722,8 +494,8 @@
       <element type="select" name="DependantsDocumentType2" label="Document Type">
         <options>
           <option value=""></option>
-          <option value="Badge ID">Badge ID</option>
-          <option value="Passport / ID">Passport / ID</option>
+          <option value="ID/passport">ID/passport</option>
+          <option value="Residence permit">Residence permit</option>
           <option value="Work permit">Work permit</option>
         </options>
       </element>
@@ -742,8 +514,8 @@
       <element type="select" name="DependantsDocumentType3" label="Document Type">
         <options>
           <option value=""></option>
-          <option value="Badge ID">Badge ID</option>
-          <option value="Passport / ID">Passport / ID</option>
+          <option value="ID/passport">ID/passport</option>
+          <option value="Residence permit">Residence permit</option>
           <option value="Work permit">Work permit</option>
         </options>
       </element>
@@ -763,8 +535,8 @@
       <element type="select" name="DependantsDocumentType4" label="Document Type">
         <options>
           <option value=""></option>
-          <option value="Badge ID">Badge ID</option>
-          <option value="Passport / ID">Passport / ID</option>
+          <option value="ID/passport">ID/passport</option>
+          <option value="Residence permit">Residence permit</option>
           <option value="Work permit">Work permit</option>
         </options>
       </element>
@@ -784,8 +556,8 @@
       <element type="select" name="DependantsDocumentType5" label="Document Type">
         <options>
           <option value=""></option>
-          <option value="Badge ID">Badge ID</option>
-          <option value="Passport / ID">Passport / ID</option>
+          <option value="ID/passport">ID/passport</option>
+          <option value="Residence permit">Residence permit</option>
           <option value="Work permit">Work permit</option>
         </options>
       </element>
@@ -811,15 +583,10 @@
                     <option value="Other Bank">Other Bank</option>
                 </options>
             </element>-->
-      <element type="text" name="Payee" label="Payee" mandatory="1"></element>
-      <!--<element type="select" name="BankCountry" label="Bank Country" mandatory="1">
-                &pre_country;
-            </element>
-            <element type="text" name="BankKey" label="Bank Key" mandatory="1"></element>
-            <element type="text" name="AccountNumber" label="Account Number" mandatory="1"></element>-->
-      <element type="text" name="IBAN" label="IBAN"  mandatory="1">
-
+      <element type="text" name="Payee" label="Payee"></element>
+      <element type="text" name="IBAN" label="IBAN">
         <regexIf inherit="iban" pattern="" message="" name="BankCountry">Netherlands</regexIf>
+        <!--<validateIf name="PayrollCategory">, ,Hourly,Monthly,Juvenile Hourly,Juvenile Monthly,MT/Dep/SM</validateIf>-->
       </element>
       <element type="search-select" name="BankCountry" label="Bank Country" mandatory="1" default="Netherlands">
         &pre_country;
@@ -835,15 +602,11 @@
                 </options>
             </element>-->
       <element type="text" name="Payee2" label="Payee"></element>
-      <!--<element type="select" name="BankCountry2" label="Bank Country">
-                &pre_country;
-            </element>
-            <element type="text" name="BankKey2" label="Bank Key"></element>
-            <element type="text" name="AccountNumber2" label="Account Number"></element>-->
       <element type="text" name="IBAN2" label="IBAN">
         <regexIf inherit="iban" pattern="" message="" name="BankCountry2">Netherlands</regexIf>
+        <!--<validateIf name="PayrollCategory">, ,Hourly,Monthly,Juvenile Hourly,Juvenile Monthly,MT/Dep/SM</validateIf>-->
       </element>
-      <element type="search-select" name="BankCountry2" label="Bank Country" mandatory="1" default="Netherlands">
+      <element type="search-select" name="BankCountry2" label="Bank Country" default="Netherlands">
         &pre_country;
       </element>
       <element type="text" name="PaymentCurrency2" label="Payment Currency" default="EUR">
@@ -852,191 +615,129 @@
 
       <element type="text" name="OtherBankPercentageOrAmount" label="Other Bank Percentage or Amount">
         <mandatoryIfNotEmpty name="IBAN2"/>
+        <regex inherit="percentagewithdelimiter" pattern="" message=""></regex>
       </element>
 
       <!--FISCAL DATA and SOCIAL INSURANCE -->
 
-
+      <element type="select" name="Taxdeduction" label="Tax deduction (IKEA)">
+        <options>
+          <option value=""></option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </options>
+      </element>
 
       <!--Nationality / Language-->
 
-      <!-- <element type="typeahead-simple" source="1" name="Language" label="Language" default="Dutch">
-                
-                  <options>
-                    <option value=""></option>
-                    <option value="Vietnamese">Vietnamese</option>
-                    <option value="Ukrainian">Ukrainian</option>
-                    <option value="Turkish">Turkish</option>
-                    <option value="Thai">Thai</option>
-                    <option value="Swedish">Swedish</option>
-                    <option value="Spanish">Spanish</option>
-                    <option value="Slovenian">Slovenian</option>
-                    <option value="Slovakian">Slovakian</option>
-                    <option value="Serbian (Latin)">Serbian (Latin)</option>
-                    <option value="Serbian">Serbian</option>
-                    <option value="Russian">Russian</option>
-                    <option value="Romanian">Romanian</option>
-                    <option value="Portuguese">Portuguese</option>
-                    <option value="Polish">Polish</option>
-                    <option value="Norwegian">Norwegian</option>
-                    <option value="Malaysian">Malaysian</option>
-                    <option value="Lithuanian">Lithuanian</option>
-                    <option value="Latvian">Latvian</option>
-                    <option value="Korean">Korean</option>
-                    <option value="Japanese">Japanese</option>
-                    <option value="Italian">Italian</option>
-                    <option value="Indonesian">Indonesian</option>
-                    <option value="Icelandic">Icelandic</option>
-                    <option value="Hungarian">Hungarian</option>
-                    <option value="Hebrew">Hebrew</option>
-                    <option value="Greek">Greek</option>
-                    <option value="German">German</option>
-                    <option value="French">French</option>
-                    <option value="Finnish">Finnish</option>
-                    <option value="Estonian">Estonian</option>
-                    <option value="English">English</option>
-                    <option value="Dutch">Dutch</option>
-                    <option value="Danish">Danish</option>
-                    <option value="Czech">Czech</option>
-                    <option value="Customer reserve">Customer reserve</option>
-                    <option value="Croatian">Croatian</option>
-                    <option value="Chinese trad.">Chinese trad.</option>
-                    <option value="Chinese">Chinese</option>
-                    <option value="Catalan">Catalan</option>
-                    <option value="Bulgarian">Bulgarian</option>
-                    <option value="Arabic">Arabic</option>
-                    <option value="Afrikaans">Afrikaans</option>
-                </options>
-            </element>
--->
-
-      <!--Education-->
-      <!-- COMMENTED OUT BECAUSE NETHERLANDS CHANGED THEIR MIND
-            <element type="hidden" name="Educations" default="1"></element>
-            <element type="text" name="EducationalEstablishment" label="Educational Establishment"></element>
-            <element type="text" name="InstituteLocation" label="Institute Location"></element>
-            <element type="text" name="Certificate" label="Certificate"></element>
-            <element type="text" name="DurationOfCourse" label="Duration of Course"></element>
-            <element type="text" name="BranchOfStudy" label="Branch of Study"></element>
-
-            <element type="text" name="EducationalEstablishment2" label="Educational Establishment"></element>
-            <element type="text" name="InstituteLocation2" label="Institute Location"></element>
-            <element type="text" name="Certificate2" label="Certificate"></element>
-            <element type="text" name="DurationOfCourse2" label="Duration of Course"></element>
-            <element type="text" name="BranchOfStudy2" label="Branch of Study"></element>
-
-            <element type="text" name="EducationalEstablishment3" label="Educational Establishment"></element>
-            <element type="text" name="InstituteLocation3" label="Institute Location"></element>
-            <element type="text" name="Certificate3" label="Certificate"></element>
-            <element type="text" name="DurationOfCourse3" label="Duration of Course"></element>
-            <element type="text" name="BranchOfStudy3" label="Branch of Study"></element>
-
-            -->
-      <!--Other Previous employers-->
-      <!--
-            <element type="hidden" name="OtherPreviousEmployers" default="1"></element>
-            <element type="text" name="OtherPreviousEmployer" label="Employer"></element>
-            <element type="text" name="OtherPreviousEmployerCity" label="City"></element>
-            <element type="select" name="OtherPreviousEmployerCountry" label="Country">
-              &pre_country;
-            </element>
-            <element type="text" name="OtherPreviousEmployerIndustry" label="Industry"></element>
-            <element type="text" name="OtherPreviousEmployerJob" label="Job"></element>
-            <element type="text" name="OtherPreviousEmployerWorkContract" label="Work Contract"></element>
-
-
-            <element type="text" name="OtherPreviousEmployer2" label="Employer"></element>
-            <element type="text" name="OtherPreviousEmployerCity2" label="City"></element>
-            <element type="select" name="OtherPreviousEmployerCountry2" label="Country">
-             &pre_country;
-            </element>
-            <element type="text" name="OtherPreviousEmployerIndustry2" label="Industry"></element>
-            <element type="text" name="OtherPreviousEmployerJob2" label="Job"></element>
-            <element type="text" name="OtherPreviousEmployerWorkContract2" label="Work Contract"></element>
-
-
-            <element type="text" name="OtherPreviousEmployer3" label="Employer"></element>
-            <element type="text" name="OtherPreviousEmployerCity3" label="City"></element>
-            <element type="select" name="OtherPreviousEmployerCountry3" label="Country">
-              &pre_country;
-            </element>
-            <element type="text" name="OtherPreviousEmployerIndustry3" label="Industry"></element>
-            <element type="text" name="OtherPreviousEmployerJob3" label="Job"></element>
-            <element type="text" name="OtherPreviousEmployerWorkContract3" label="Work Contract"></element>-->
+      <element type="search-select" name="Language" label="Language" default="Dutch">
+        &dat_language;
+      </element>
 
       <element type="hidden" name="Documents" default="1"></element>
-      <element type="select" name="DocumentType" label="Document Type">
+      <element type="select" name="DocumentType" label="Document Type" mandatory="1" default="ID/passport">
         <options>
           <option value=""></option>
+          <option value="Badge ID">Badge ID</option>
           <option value="ID/passport">ID/passport</option>
+          <option value="Residence permit">Residence permit</option>
           <option value="Work Permit">Work Permit</option>
         </options>
       </element>
-      <element type="search-select" source="1" name="DocumentCountry" label="Country" default="Netherlands">
+      <element type="search-select" source="1" name="DocumentCountry" label="Country"  mandatory="1" default="Netherlands">
         &pre_country;
+        <mandatoryIfNotEmpty name="DocumentType"></mandatoryIfNotEmpty>
       </element>
-      <element type="text" name="DocumentNO" label="Document no."></element>
-      <element type="date" name="DocumentValidUntil" label="Document Valid Until" format="dd.MM.yyyy">
+      <element type="text" name="DocumentNO" label="Document no." mandatory="1">
+        <mandatoryIfNotEmpty name="DocumentType"></mandatoryIfNotEmpty>
+      </element>
+      <element type="date" name="DocumentValidUntil" label="Document Valid Until" future="1" mandatory="1" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
+        <mandatoryIfNotEmpty name="DocumentType"></mandatoryIfNotEmpty>
       </element>
 
       <element type="select" name="DocumentType2" label="Document Type">
         <options>
           <option value=""></option>
+          <option value="Badge ID">Badge ID</option>
           <option value="ID/passport">ID/passport</option>
+          <option value="Residence permit">Residence permit</option>
           <option value="Work Permit">Work Permit</option>
         </options>
       </element>
       <element type="search-select" source="1" name="DocumentCountry2" label="Country" default="Netherlands">
         &pre_country;
+        <mandatoryIfNotEmpty name="DocumentType2"></mandatoryIfNotEmpty>
       </element>
-      <element type="text" name="DocumentNO2" label="Document no."></element>
-      <element type="date" name="DocumentValidUntil2" label="Document Valid Until" format="dd.MM.yyyy">
+      <element type="text" name="DocumentNO2" label="Document no.">
+        <mandatoryIfNotEmpty name="DocumentType2"></mandatoryIfNotEmpty>
+      </element>
+      <element type="date" name="DocumentValidUntil2" label="Document Valid Until" future="1" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
+        <mandatoryIfNotEmpty name="DocumentType2"></mandatoryIfNotEmpty>
       </element>
+      
       <element type="select" name="DocumentType3" label="Document Type">
         <options>
           <option value=""></option>
+          <option value="Badge ID">Badge ID</option>
           <option value="ID/passport">ID/passport</option>
+          <option value="Residence permit">Residence permit</option>
           <option value="Work Permit">Work Permit</option>
         </options>
       </element>
       <element type="search-select" source="1" name="DocumentCountry3" label="Country" default="Netherlands">
         &pre_country;
+        <mandatoryIfNotEmpty name="DocumentType3"></mandatoryIfNotEmpty>
       </element>
-      <element type="text" name="DocumentNO3" label="Document no."></element>
-      <element type="date" name="DocumentValidUntil3" label="Document Valid Until" format="dd.MM.yyyy">
+      <element type="text" name="DocumentNO3" label="Document no.">
+        <mandatoryIfNotEmpty name="DocumentType3"></mandatoryIfNotEmpty>
+      </element>
+      <element type="date" name="DocumentValidUntil3" label="Document Valid Until" future="1" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
+        <mandatoryIfNotEmpty name="DocumentType3"></mandatoryIfNotEmpty>        
       </element>
 
       <element type="select" name="DocumentType4" label="Document Type">
         <options>
           <option value=""></option>
+          <option value="Badge ID">Badge ID</option>
           <option value="ID/passport">ID/passport</option>
+          <option value="Residence permit">Residence permit</option>
           <option value="Work Permit">Work Permit</option>
         </options>
       </element>
       <element type="search-select" source="1" name="DocumentCountry4" label="Country" default="Netherlands">
         &pre_country;
+        <mandatoryIfNotEmpty name="DocumentType4"></mandatoryIfNotEmpty>
       </element>
-      <element type="text" name="DocumentNO4" label="Document no."></element>
-      <element type="date" name="DocumentValidUntil4" label="Document Valid Until" format="dd.MM.yyyy">
+      <element type="text" name="DocumentNO4" label="Document no.">
+        <mandatoryIfNotEmpty name="DocumentType4"></mandatoryIfNotEmpty>
+      </element>
+      <element type="date" name="DocumentValidUntil4" label="Document Valid Until" future="1" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
+        <mandatoryIfNotEmpty name="DocumentType4"></mandatoryIfNotEmpty>
       </element>
 
       <element type="select" name="DocumentType5" label="Document Type">
         <options>
           <option value=""></option>
+          <option value="Badge ID">Badge ID</option>
           <option value="ID/passport">ID/passport</option>
+          <option value="Residence permit">Residence permit</option>
           <option value="Work Permit">Work Permit</option>
         </options>
       </element>
       <element type="search-select" source="1" name="DocumentCountry5" label="Country" default="Netherlands">
         &pre_country;
+        <mandatoryIfNotEmpty name="DocumentType5"></mandatoryIfNotEmpty>
       </element>
-      <element type="text" name="DocumentNO5" label="Document no."></element>
-      <element type="date" name="DocumentValidUntil5" label="Document Valid Until" format="dd.MM.yyyy">
+      <element type="text" name="DocumentNO5" label="Document no.">
+        <mandatoryIfNotEmpty name="DocumentType5"></mandatoryIfNotEmpty>
+      </element>
+      <element type="date" name="DocumentValidUntil5" label="Document Valid Until" future="1" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
+        <mandatoryIfNotEmpty name="DocumentType5"></mandatoryIfNotEmpty>
       </element>
 
       <element type="text" name="PartnerName" label="Partner Name">

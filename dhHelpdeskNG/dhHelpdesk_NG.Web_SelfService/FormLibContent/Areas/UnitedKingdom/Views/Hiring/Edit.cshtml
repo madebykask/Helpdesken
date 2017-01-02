@@ -14,7 +14,7 @@
 
 @section Script {
 
-    <script>
+    <script type="text/javascript">
 
         $(document).on('click', '#btnMailingAddress, #btnEmergencyAddress', function (e) {
             e.preventDefault();
@@ -24,7 +24,15 @@
             document.getElementById(prefix + "AddressLine2").value = document.getElementById('PermanentAddressLine2').value;
             document.getElementById(prefix + "PostalCode").value = document.getElementById('PermanentPostalCode').value;
             document.getElementById(prefix + "City").value = document.getElementById('PermanentCity').value;
-            document.getElementById(prefix + "Country").value = document.getElementById('PermanentCountry').value;
+
+            var ctry = document.getElementById('PermanentCountry').value
+            var $select = $('#' + prefix + 'Country').selectize();
+
+            $select[0].selectize.clearOptions();
+            $select[0].selectize.addOption({
+                Value: ctry,
+            });
+            $select[0].selectize.setValue(ctry);
         });
 
         validate.run($('#actionState').val());

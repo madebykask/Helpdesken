@@ -798,7 +798,7 @@
     <option value="Deputy TQE Manager - 40001735">Deputy TQE Manager - 40001735</option>
     <option value="Deputy TQEF manager - 40001736">Deputy TQEF manager - 40001736</option>
     <option value="Deputy Trade Lane Manager - 50080730">Deputy Trade Lane Manager - 50080730</option>
-    <option value="Deputy Trading Area Manager - 40001737">Deputy Trading Area Manager - 40001737</option>
+    <option value="Deputy Purchasing Area Manager - 40001737">Deputy Purchasing Area Manager - 40001737</option>
     <option value="Deputy Transport Area Manager - 40000090">Deputy Transport Area Manager - 40000090</option>
     <option value="Deputy Transport Operations Manager - 40001740">Deputy Transport Operations Manager - 40001740</option>
     <option value="Deputy Visual Merchandise/Activity Mgr - 50446317">Deputy Visual Merchandise/Activity Mgr - 50446317</option>
@@ -1177,7 +1177,7 @@
     <option value="HR Manager - 40000886">HR Manager - 40000886</option>
     <option value="HR Manager - 40000705">HR Manager - 40000705</option>
     <option value="HR Manager Assistant - 40001925">HR Manager Assistant - 40001925</option>
-    <option value="HR Manager Trading Area - 40001927">HR Manager Trading Area - 40001927</option>
+    <option value="HR Manager Purchasing Area - 40001927">HR Manager Purchasing Area - 40001927</option>
     <option value="HR Marketing Co-worker - 40001928">HR Marketing Co-worker - 40001928</option>
     <option value="HR Marketing Manager - 40001929">HR Marketing Manager - 40001929</option>
     <option value="HR Operations Manager - 40001926">HR Operations Manager - 40001926</option>
@@ -2482,8 +2482,8 @@
     <option value="Trade Lane Management Support - 50080732">Trade Lane Management Support - 50080732</option>
     <option value="Trade Lane Manager - 50032639">Trade Lane Manager - 50032639</option>
     <option value="Trader Free Range - 50019897">Trader Free Range - 50019897</option>
-    <option value="Trading Area Manager - 40000228">Trading Area Manager - 40000228</option>
-    <option value="Trading Area Operations Manager - 40002621">Trading Area Operations Manager - 40002621</option>
+    <option value="Purchasing Area Manager - 40000228">Purchasing Area Manager - 40000228</option>
+    <option value="Purchasing Area Operations Manager - 40002621">Purchasing Area Operations Manager - 40002621</option>
     <option value="Traffic Coordinator - 40000230">Traffic Coordinator - 40000230</option>
     <option value="Traffic Leader - 40002623">Traffic Leader - 40002623</option>
     <option value="Trainee - 40000585">Trainee - 40000585</option>

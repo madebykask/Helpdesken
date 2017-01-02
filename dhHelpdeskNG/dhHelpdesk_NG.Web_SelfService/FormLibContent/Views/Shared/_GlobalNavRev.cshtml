@@ -33,9 +33,11 @@
         freezeAction = "disabled";
         freeze = "disabled";
     }
-    
-}
 
+    int caseId = Model.Contract != null ? Model.Contract.Id : 0;
+    var rootUrl = Url.CurrentRoot();
+    var areaUrl = Url.CurrentArea();
+}
 
 @functions{
     
@@ -54,40 +56,30 @@
 
 }
 
-<span style="display: none;" id="ajaxInfo" customerId="@Model.Form.CustomerId" url="@baseUrl"></span>
-<span style="display: none;" id="LockedByUserGroup"  status="@lockedByUserGroup.ToString()"></span>
+<span style="display: none;" id="ajaxInfo" customerId="@Model.Form.CustomerId" url="@baseUrl" rootUrl="@rootUrl" areaUrl="@areaUrl" formGuid="@Model.Form.FormGuid" caseId="@caseId"></span>
+<span style="display: none;" id="LockedByUserGroup" status="@lockedByUserGroup.ToString()"></span>
 <div class="navbar navbar-inverse navbar-fixed-top">
     @*Add by Tan /Case: 51017*@
     <style>
      @*Define top margin depending on if StatusBar is visible or not*@
       @if (FormLibUtils.IsSelfService())
       {
-           if (ShowStatusBar()){<text> .containeralignright {margin-top: 70px;}</text>}  else  { <text> .containeralignright {margin-top: 40px;}</text> }
+           if (ShowStatusBar()){<text> .containeralignright {margin-top: 35px;}</text>}  else  { <text> .containeralignright {margin-top: 15px;}</text> }
       }
     else
       {
-          if (ShowStatusBar()){<text> .containeralignright {margin-top: 130px;}</text>}  else  { <text> .containeralignright {margin-top: 100px;}</text> }
+          if (ShowStatusBar()){<text> .containeralignright {margin-top: 88px;}</text>}  else  { <text> .containeralignright {margin-top: 60px;}</text> }
       }
     </style>
-   @* <div class="navbarbgcolorblue">
-        <div>
+     <div class="navbarbgcolorblue">
             <ul class="nav">
                 @if (Model.Form != null)
-                {<li class="pull-left" style="margin-left:10px;">@Model.Translate(Model.Form.FormName)</li>}
-                <li class="pull-right" style="float: right; margin-right:10px;"><i class="icon icon-user"></i>&nbsp;@ECT.FormLib.FormLibSessions.User.FullName</li>
+                {<li class="pull-left">@Model.Translate(Model.Form.FormName)</li>}
+                <li class="pull-right">@ECT.FormLib.FormLibSessions.User.FullName</li>
+                <li style="float:right;"><i class="icon icon-user"></i>&nbsp;</li>
             </ul>
-        </div>
-    </div>*@
-     <div class="navbar-inner navbarbgcolorblue">
-        <div class="nav-collapse collapse" style="margin-left: 10px;">
-            <ul class="nav">
-                @if (Model.Form != null)
-                {<li class="pull-left"><a>@Model.Translate(Model.Form.FormName)</a></li>}
-                <li class="pull-right" style="float: right;"><a><i class="icon icon-user"></i>&nbsp;@ECT.FormLib.FormLibSessions.User.FullName</a></li>
-            </ul>
-        </div>
     </div>
-
+    <div class="clearfix"></div>
     @*don't show statusbar if we dont have any values*@
     @if (ShowStatusBar())
     {
@@ -142,7 +134,7 @@
         <div class="nav-collapse collapse">
             <ul class="nav" id="navigation">
                 <li>
-                    <button type="submit" class="btn btnmarginleft" @freeze>
+                    <button id="btnGlobalSave" type="submit" class="btn btnmarginleft" @freeze>
                         @Model.Translate("Save")
                     </button>
                 </li>
@@ -158,22 +150,7 @@
                         <button class="btn" name="actionStateChange" id="actionStateChange" type="button" @freezeAction>@Model.Translate("Go") <i class="icon-chevron-right"></i></button>
                     </div>
                 </li>
-                @*Comment out Tan /Case: 51017*@
-                @* <li>
-                    <div class="margintopleft" style="padding: 5px;">
-                        @if (FormLibUtils.IsSelfService()
-                            && !string.IsNullOrEmpty(Model.Contract.AlternativeStateSecondaryName))
-                        {
-                            @Model.Translate(Model.Contract.AlternativeStateSecondaryName)
-                        }
-                        else
-                        {
-                            @Model.Translate(Model.Contract.StateSecondary)
-                        }
-                    </div>
-                </li>*@
             </ul>
         </div>
     </div>
 </div>
-

@@ -2,11 +2,6 @@
 <predefined>
   <name>AllowanceTypeUnit</name>
   <dependent>
-    <selected>Advanced Hrly</selected>
-    <show>0.65</show>
-    <show2></show2>
-  </dependent>
-  <dependent>
     <selected>Car Allowance</selected>
     <show></show>
     <show2></show2>
@@ -29,6 +24,11 @@
   <dependent>
     <selected>Fork Lift Truck Allowance</selected>
     <show>2.00</show>
+    <show2></show2>
+  </dependent>
+  <dependent>
+    <selected>First Aid Allowance</selected>
+    <show>20.00</show>
     <show2></show2>
   </dependent>
   <dependent>
@@ -102,11 +102,6 @@
   </dependent>
   <dependent>
     <selected>Responsibility Allow</selected>
-    <show></show>
-    <show2></show2>
-  </dependent>
-  <dependent>
-    <selected>Salary Advanced</selected>
     <show></show>
     <show2></show2>
   </dependent>

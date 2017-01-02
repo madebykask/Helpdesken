@@ -1,0 +1,108 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@using ECT.FormLib.Pdfs;
+@using System.Globalization;
+@using ECT.Model.Entities;
+
+@{
+    Layout = null;
+    Model.Language = "en";
+}
+
+@functions
+{
+    string GetCareerBreakLenghtText()
+    {
+
+        if (Model.GetDocumentAnswer("CareerBreakLength" + Model.MultiNr).ToLower() == "3 - 6 months".ToLower())
+        {
+            return "approximately 1 month";
+        }
+
+        if (Model.GetDocumentAnswer("CareerBreakLength" + Model.MultiNr).ToLower() == "6 months - 1 year".ToLower())
+        {
+            return "approximately 2 months";
+        }
+
+        if (Model.GetDocumentAnswer("CareerBreakLength" + Model.MultiNr).ToLower() == "1 - 2 years".ToLower())
+        {
+            return "approximately 3 months";
+        }
+
+        return Model.GetDocumentAnswer("CareerBreakLength" + Model.MultiNr);
+    }
+
+}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    <div>
+        @*<table style="font-family: Verdana; font-size: 11px; width: 100%;" border="0">
+            <tr style="text-align: right;">
+                <td>@string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:d MMMMMM yyyy}", DateTime.Now)</td>
+            </tr>
+        </table>
+        <p style="text-align: left; font-family: Verdana; font-size: 11px;">
+            <strong>Private & Confidential</strong><br />
+
+            @Html.Partial("_HeaderAddress", Model)
+            <br />
+            <br />
+            <br />*@
+
+        <p style="@UnitedKingdomPdfPage.StyleValue()">
+            Dear @Model.GetDocumentAnswer("FirstName", true),<br /><br />
+        </p>
+
+            <table style="font-family: Verdana; font-size: 10px; width: 100%;" border="0" >
+                <tr style="text-align: center;">
+                    <td><strong>Career Break</strong></td>                  
+                </tr>         
+            </table>
+            <br />
+            
+        <p style="@UnitedKingdomPdfPage.StyleValue()">
+            Thank you for your letter regarding your request for a career break, to commence from @Model.GetDocumentAnswer("AbsenceStartFrom" + Model.MultiNr, true) for a period of @Model.GetDocumentAnswer(FormLibConstants.FormField.CareerBreakLength  + Model.MultiNr, true) with your return date being @Model.GetDocumentAnswer("AbsenceEndsOn" + Model.MultiNr, true).
+            <br />
+            <br />
+            Having discussed your reasons for wishing to take a career break I am happy to authorise this request, on the following understanding:-    
+            <br />
+            <br />
+        </p>
+
+        <p style="@UnitedKingdomPdfPage.StyleValue() padding-left: 20px; padding-right: 50px;">
+            &bull; You have read the career break policy and procedure (a copy of which is attached)<br />
+            &bull; You understand and agree to follow the terms and conditions that will be applicable to you during your period of career break as detailed in the policy and procedure
+            <br />
+            <br />
+        </p>
+
+        <p style="@UnitedKingdomPdfPage.StyleValue()">
+
+            While you are on your career break we will endeavour to keep you informed of any news and important information with regard to the department and business. The content and frequency of what you receive can be discussed prior to you taking your career break.
+            <br />
+            <br />
+            You will also receive a letter @GetCareerBreakLenghtText() prior to your agreed date of return requesting you to write and confirm that you still intend to return. You must reply within the timescales set out in the letter. In order for us to contact you it is essential that a forwarding address is given, prior to you taking your career break.            
+            <br />
+            <br />
+            As discussed I cannot guarantee your return to your current position of @CustomPdfPage.IsEmpty(Model.GetAnswer("JobTitle"), "Job title from EMD"), however, we will be endeavour to find a suitable role for you within the business, based on your current position classification, salary and skills.
+            <br />
+            <br />
+            Would you please sign and return the copy letter of your acceptance of these conditions of employment.
+            <br />
+            <br />
+            Prior to you taking your career break I will conduct your development talk, as you will be away when your annual review is due, I will arrange a mutually convenient time in the next couple of weeks.
+            <br />
+
+        </p>
+        <endpage />
+    </div>
+</body>
+</html>

@@ -38,6 +38,7 @@
       </element>
       
       <element type="textarea" name="Comment" label="Additional Communication"></element>
+      <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
     </tab>
 
   </fields>

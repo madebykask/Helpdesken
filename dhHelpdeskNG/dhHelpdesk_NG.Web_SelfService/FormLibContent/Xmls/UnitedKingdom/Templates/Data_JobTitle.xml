@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <options>
   <option value=""></option>
-  <option value="﻿Job Title">﻿Job Title</option>
   <option value="Accountant">Accountant</option>
   <option value="Accounting Assistant">Accounting Assistant</option>
   <option value="Accounting Co-worker">Accounting Co-worker</option>
   <option value="Administrator">Administrator</option>
+  <option value="BNOM">BNOM</option>  
   <option value="Business Development Manager">Business Development Manager</option>
   <option value="Business Development Specialist">Business Development Specialist</option>
   <option value="Business Information Analyst">Business Information Analyst</option>
@@ -18,12 +18,16 @@
   <option value="Business Navigator in Training">Business Navigator in Training</option>
   <option value="Business Navigator Trainee">Business Navigator Trainee</option>
   <option value="Business Support">Business Support</option>
+  <option value="Communication Specialist ">Communication Specialist </option>
   <option value="Competence Development Specialist">Competence Development Specialist</option>
+  <option value="Competence Development Team Leader">Competence Development Team Leader</option>
   <option value="Deputy Business Navigation &amp; Ops Manager">Deputy Business Navigation &amp; Ops Manager</option>
   <option value="Deputy Business Navigation &amp; Ops Mgr">Deputy Business Navigation &amp; Ops Mgr</option>
   <option value="Deputy Business Navigation Manager">Deputy Business Navigation Manager</option>
   <option value="Deputy Category Manager">Deputy Category Manager</option>
   <option value="Deputy Category Manager CDT">Deputy Category Manager CDT</option>
+  <option value="Deputy Customer Support Centre Manager">Deputy Customer Support Centre Manager</option>
+  <option value="Deputy Logistics Manager">Deputy Logistics Manager</option>
   <option value="Deputy Store Navigation and Operations Manager">Deputy Store Navigation and Operations Manager</option>
   <option value="Safety &amp; Security Function Support">Safety &amp; Security Function Support</option>
   <option value="Safety &amp; Security Manager">Safety &amp; Security Manager</option>
@@ -37,21 +41,23 @@
   <option value="Staff Planning Super User">Staff Planning Super User</option>
   <option value="Staff Scheduler">Staff Scheduler</option>
   <option value="Strategic Purchase Manager">Strategic Purchase Manager</option>
+  <option value="Strategy# Planning &amp; Insights Manager">Strategy# Planning &amp; Insights Manager</option>
   <option value="Sustainability Responsible">Sustainability Responsible</option>
   <option value="Activity Specialist">Activity Specialist</option>
-  <option value="Backpacker">Backpacker</option>
-  <option value="Carpenter">Carpenter</option>
+  <option value="Backpacker">Backpacker</option>  
   <option value="Carpenter Co-worker">Carpenter Co-worker</option>
-  <option value="Com &amp; In Co-worker">Com &amp; In Co-worker</option>
   <option value="Com &amp; In Deputy Manager">Com &amp; In Deputy Manager</option>
   <option value="Com &amp; In Manager">Com &amp; In Manager</option>
   <option value="Com&amp;In Learning &amp; Development Leader">Com&amp;In Learning &amp; Development Leader</option>
   <option value="Comm &amp; In Manager">Comm &amp; In Manager</option>
   <option value="Comm-In Learning &amp; Development Leader">Comm-In Learning &amp; Development Leader</option>
+  <option value="Continuous Improvement Manager">Continuous Improvement Manager</option>
+  <option value="Continuous Improvement Specialist">Continuous Improvement Specialist</option>
   <option value="Country Activity Leader">Country Activity Leader</option>
   <option value="Country Com&amp;In Manager">Country Com&amp;In Manager</option>
   <option value="Country CommIn Manager">Country CommIn Manager</option>
   <option value="Country Graphic Communication Leader">Country Graphic Communication Leader</option>
+  <option value="Country Media Manager">Country Media Manager</option>
   <option value="Country Visual Merchandise/ Activity Co-worker">Country Visual Merchandise/ Activity Co-worker</option>
   <option value="Country Visual Merchandise/ Activity Manager">Country Visual Merchandise/ Activity Manager</option>
   <option value="Deputy Com &amp; In Manager">Deputy Com &amp; In Manager</option>
@@ -59,6 +65,7 @@
   <option value="Furniture Builder">Furniture Builder</option>
   <option value="Graphic Communication Co-worker">Graphic Communication Co-worker</option>
   <option value="Graphic Communication Leader">Graphic Communication Leader</option>
+  <option value="Graphic Communication Specialist">Graphic Communication Specialist</option>
   <option value="Interior Design Co-worker">Interior Design Co-worker</option>
   <option value="Interior Design Leader">Interior Design Leader</option>
   <option value="Interior Design Manager">Interior Design Manager</option>
@@ -79,16 +86,17 @@
   <option value="After Sales Team Leader">After Sales Team Leader</option>
   <option value="Cash Line Co-worker">Cash Line Co-worker</option>
   <option value="Cash Office Team Leader">Cash Office Team Leader</option>
-  <option value="Checkout Coworker Glasgow Store">Checkout Coworker Glasgow Store</option>
   <option value="Checkout Services Co-worker">Checkout Services Co-worker</option>
   <option value="Checkout Services Manager">Checkout Services Manager</option>
   <option value="Checkout Services Team Leader">Checkout Services Team Leader</option>
-  <option value="Checkout Team Leader Glasgow Store">Checkout Team Leader Glasgow Store</option>
   <option value="Commercial Specialist">Commercial Specialist</option>
   <option value="Country Customer Relations Manager">Country Customer Relations Manager</option>
   <option value="Country Implementation Leader">Country Implementation Leader</option>
   <option value="Country Payments Leader">Country Payments Leader</option>
+  <option value="Customer Experience Manager">Customer Experience Manager</option>
+  <option value="Customer Experience Specialist">Customer Experience Specialist</option>
   <option value="Customer Fulfillment Manager">Customer Fulfillment Manager</option>
+  <option value="Customer Fulfilment Support">Customer Fulfilment Support</option>
   <option value="Customer Order Delivery Specialist">Customer Order Delivery Specialist</option>
   <option value="Customer Relations Co-worker">Customer Relations Co-worker</option>
   <option value="Customer Relations Manager">Customer Relations Manager</option>
@@ -97,7 +105,6 @@
   <option value="Customer Service Co-worker">Customer Service Co-worker</option>
   <option value="Customer Service Manager">Customer Service Manager</option>
   <option value="Customer Service Specialist">Customer Service Specialist</option>
-  <option value="Customer Service TL Wembley Store">Customer Service TL Wembley Store</option>
   <option value="Customer Services Manager">Customer Services Manager</option>
   <option value="Customer Services Manager in Training">Customer Services Manager in Training</option>
   <option value="Customer Services Mananger">Customer Services Mananger</option>
@@ -113,7 +120,6 @@
   <option value="Functional Expansion Manager Customer Relations">Functional Expansion Manager Customer Relations</option>
   <option value="Greeter">Greeter</option>
   <option value="Info &amp; Smaland Team Leader">Info &amp; Smaland Team Leader</option>
-  <option value="Kitchen Installation CW Glasgow Store">Kitchen Installation CW Glasgow Store</option>
   <option value="Kitchen Installation Manager">Kitchen Installation Manager</option>
   <option value="Kitchen Installation Specialist">Kitchen Installation Specialist</option>
   <option value="Operations Manager">Operations Manager</option>
@@ -143,6 +149,8 @@
   <option value="Website Manager">Website Manager</option>
   <option value="CC Operations Training Specialist">CC Operations Training Specialist</option>
   <option value="Contact Centre Specialist">Contact Centre Specialist</option>
+  <option value="Continuous Development Manager">Continuous Development Manager</option>
+  <option value="Continuous Development Specialist">Continuous Development Specialist</option>
   <option value="Customer Care Administrator">Customer Care Administrator</option>
   <option value="Customer Care Specialist">Customer Care Specialist</option>
   <option value="Customer Service Manager - After Sales">Customer Service Manager - After Sales</option>
@@ -151,7 +159,6 @@
   <option value="Customer Service Manager - Deliveries">Customer Service Manager - Deliveries</option>
   <option value="Customer Service Team Leader">Customer Service Team Leader</option>
   <option value="Customer Services Co-worker">Customer Services Co-worker</option>
-  <option value="Customer Services CW Contact Centre">Customer Services CW Contact Centre</option>
   <option value="Customer Services Manager - Commercial">Customer Services Manager - Commercial</option>
   <option value="Quality Manager">Quality Manager</option>
   <option value="Services Manager">Services Manager</option>
@@ -160,8 +167,6 @@
   <option value="Workforce Scheduler">Workforce Scheduler</option>
   <option value="Workstream Leader">Workstream Leader</option>
   <option value="Engineering Manager">Engineering Manager</option>
-  <option value="Facility Management Specialist">Facility Management Specialist</option>
-  <option value="Facility Manager">Facility Manager</option>
   <option value="Information &amp; Communication Specialist">Information &amp; Communication Specialist</option>
   <option value="IT Support">IT Support</option>
   <option value="Logistics Specialist">Logistics Specialist</option>
@@ -182,7 +187,6 @@
   <option value="Administrator Risk">Administrator Risk</option>
   <option value="Business Analyst">Business Analyst</option>
   <option value="Business Support Manager">Business Support Manager</option>
-  <option value="Central Ordeing Specialist">Central Ordeing Specialist</option>
   <option value="Central Ordering Specialist">Central Ordering Specialist</option>
   <option value="Contact Center Specialist">Contact Center Specialist</option>
   <option value="Country Health &amp; Safety">Country Health &amp; Safety</option>
@@ -192,7 +196,6 @@
   <option value="Credit Control Co-worker">Credit Control Co-worker</option>
   <option value="Credit Control Manager &amp; Financial Acc">Credit Control Manager &amp; Financial Acc</option>
   <option value="Credit Control Manager &amp; Financial Accountant">Credit Control Manager &amp; Financial Accountant</option>
-  <option value="Credit Control Team Leader">Credit Control Team Leader</option>
   <option value="Deputy Finance Manager">Deputy Finance Manager</option>
   <option value="Deputy Risk Manager">Deputy Risk Manager</option>
   <option value="Finance Analyst">Finance Analyst</option>
@@ -223,6 +226,7 @@
   <option value="Paralegal">Paralegal</option>
   <option value="Payroll Tax Manager">Payroll Tax Manager</option>
   <option value="Procure to Pay Leader">Procure to Pay Leader</option>
+  <option value="Project Coordinator">Project Coordinator</option>
   <option value="Project Specialist">Project Specialist</option>
   <option value="Project Specialist Finance">Project Specialist Finance</option>
   <option value="Purchase Consultant">Purchase Consultant</option>
@@ -251,7 +255,7 @@
   <option value="Benefits Specialist">Benefits Specialist</option>
   <option value="Change Manager">Change Manager</option>
   <option value="Community Education Specialist">Community Education Specialist</option>
-  <option value="Comp &amp; Bens Specialist">Comp &amp; Bens Specialist</option>
+  <option value="Community Engagement Specialist">Community Engagement Specialist</option>
   <option value="Compensation &amp; Benefits Manager">Compensation &amp; Benefits Manager</option>
   <option value="Compensation &amp; Benefits Specialists">Compensation &amp; Benefits Specialists</option>
   <option value="Competence Development Manager">Competence Development Manager</option>
@@ -274,6 +278,8 @@
   <option value="HRMS Specialist">HRMS Specialist</option>
   <option value="HRSC Manager">HRSC Manager</option>
   <option value="Internal Communication Specialist">Internal Communication Specialist</option>
+  <option value="Internship">Internship</option>
+  <option value="Inventory Specialist">Inventory Specialist</option>  
   <option value="Leadership Development Specialist">Leadership Development Specialist</option>
   <option value="Learning &amp; Development Manager">Learning &amp; Development Manager</option>
   <option value="Learning &amp; Development Specialist">Learning &amp; Development Specialist</option>
@@ -372,9 +378,9 @@
   <option value="Database specialist">Database specialist</option>
   <option value="Deputy Marketing Manager">Deputy Marketing Manager</option>
   <option value="Family Co-ordinator">Family Co-ordinator</option>
-  <option value="Family Co-worker">Family Co-worker</option>
   <option value="IKEA Family Coordinator">IKEA Family Coordinator</option>
   <option value="IKEA Family Manager">IKEA Family Manager</option>
+  <option value="IKEA Family Specialist – Communication">IKEA Family Specialist – Communication</option>
   <option value="Internal Communications">Internal Communications</option>
   <option value="Internal Communications Specialist">Internal Communications Specialist</option>
   <option value="Internal Communicator">Internal Communicator</option>
@@ -388,6 +394,7 @@
   <option value="Local Marketing Specialist Comms">Local Marketing Specialist Comms</option>
   <option value="Local Marketing Specialist Family">Local Marketing Specialist Family</option>
   <option value="Market Intelligence Manager">Market Intelligence Manager</option>
+  <option value="Marketing Advertising Specialist">Marketing Advertising Specialist</option>
   <option value="Marketing Catalogue/Brochure Specialist">Marketing Catalogue/Brochure Specialist</option>
   <option value="Marketing Coordinator">Marketing Coordinator</option>
   <option value="Marketing Database Manager">Marketing Database Manager</option>
@@ -422,12 +429,13 @@
   <option value="Process Developer">Process Developer</option>
   <option value="Product Quality Technician">Product Quality Technician</option>
   <option value="Quality Auditor">Quality Auditor</option>
+  <option value="Quality and Safety Compliance Leader">Quality and Safety Compliance Leader</option>
   <option value="Store Support Co-worker">Store Support Co-worker</option>
   <option value="Warehouse Co-worker">Warehouse Co-worker</option>
+  <option value="Warehouse Shift Manager">Warehouse Shift Manager</option>
+  <option value="Warehouse team leader">Warehouse team leader</option>
   <option value="Assembley Specialist">Assembley Specialist</option>
   <option value="Environmental Specialist">Environmental Specialist</option>
-  <option value="Facility Co-worker">Facility Co-worker</option>
-  <option value="Facility Specialist">Facility Specialist</option>
   <option value="Local Facility Management Specialist">Local Facility Management Specialist</option>
   <option value="Q Store Quality Manager">Q Store Quality Manager</option>
   <option value="Quality Co-worker">Quality Co-worker</option>
@@ -449,15 +457,12 @@
   <option value="Internal Communications Manager">Internal Communications Manager</option>
   <option value="PR Manager Commercial">PR Manager Commercial</option>
   <option value="Asset Manager">Asset Manager</option>
-  <option value="Comm-In Manager Milton Keynes Store">Comm-In Manager Milton Keynes Store</option>
   <option value="Construction Manager">Construction Manager</option>
   <option value="Construction Project Manager">Construction Project Manager</option>
   <option value="Country Facility Management Specialist">Country Facility Management Specialist</option>
   <option value="Country Facility Manager">Country Facility Manager</option>
-  <option value="Facilies Management Specialist">Facilies Management Specialist</option>
-  <option value="Facilities Manager">Facilities Manager</option>
   <option value="Group Technical Manager Property">Group Technical Manager Property</option>
-  <option value="Interior Design CW Milton Keynes Store">Interior Design CW Milton Keynes Store</option>
+  <option value="Interior Design Specialist">Interior Design Specialist</option>
   <option value="Finance Project Specialist">Finance Project Specialist</option>
   <option value="Planning Specialist">Planning Specialist</option>
   <option value="Project Co-ordinator">Project Co-ordinator</option>
@@ -480,17 +485,15 @@
   <option value="UK &amp; IE Property Manager">UK &amp; IE Property Manager</option>
   <option value="Communications Specialist - Senior">Communications Specialist - Senior</option>
   <option value="Customer Insight Specialist">Customer Insight Specialist</option>
+  <option value="Customer Relations Administrator">Customer Relations Administrator</option>
   <option value="Resource Planning Manager">Resource Planning Manager</option>
   <option value="Scheduling Specialist">Scheduling Specialist</option>
   <option value="Workforce Administrator">Workforce Administrator</option>
   <option value="Deputy Facility Manager">Deputy Facility Manager</option>
-  <option value="Facilities Specialist">Facilities Specialist</option>
   <option value="FM Project Manager">FM Project Manager</option>
   <option value="Regional Facility Manager">Regional Facility Manager</option>
   <option value="Retail Facility Manager">Retail Facility Manager</option>
   <option value="Site Facilities Management Specialist">Site Facilities Management Specialist</option>
-  <option value="Activities Specialist">Activities Specialist</option>
-  <option value="Activity Co-worker">Activity Co-worker</option>
   <option value="Bathshop Team Leader">Bathshop Team Leader</option>
   <option value="Business Leader">Business Leader</option>
   <option value="Business leader Kitchen &amp; Dining">Business leader Kitchen &amp; Dining</option>
@@ -505,14 +508,7 @@
   <option value="Country IKEA Business Leader">Country IKEA Business Leader</option>
   <option value="External Kitchen Planner">External Kitchen Planner</option>
   <option value="Functional Expansion Manager Sales">Functional Expansion Manager Sales</option>
-  <option value="HFB 10 Manager">HFB 10 Manager</option>
-  <option value="HFB 11,12,13 Manager">HFB 11,12,13 Manager</option>
-  <option value="HFB 14,15 Manager">HFB 14,15 Manager</option>
-  <option value="HFB 16,17 Manager">HFB 16,17 Manager</option>
-  <option value="HFB 18,19 Manager">HFB 18,19 Manager</option>
-  <option value="HFB 3 Manager">HFB 3 Manager</option>
-  <option value="HFB 4,5 Manager">HFB 4,5 Manager</option>
-  <option value="HFB 9 Manager">HFB 9 Manager</option>
+  <option value="Home Furnishing Consultant or Sales Manager">Home Furnishing Consultant or Sales Manager</option>  
   <option value="IKEA Business Manager">IKEA Business Manager</option>
   <option value="Kitchen- Country Implementation Group Leader">Kitchen- Country Implementation Group Leader</option>
   <option value="Organisational Change Manager">Organisational Change Manager</option>
@@ -543,6 +539,7 @@
   <option value="Sales Manager">Sales Manager</option>
   <option value="Sales Manager in Training">Sales Manager in Training</option>
   <option value="Sales Navigator">Sales Navigator</option>
+  <option value="Sales or Customer Relations Co-worker">Sales or Customer Relations Co-worker</option>
   <option value="Sales Planner">Sales Planner</option>
   <option value="Sales Specialist">Sales Specialist</option>
   <option value="Sales Specialist - Training">Sales Specialist - Training</option>
@@ -610,6 +607,7 @@
   <option value="Store Manager Assistant">Store Manager Assistant</option>
   <option value="Sustainability Manager">Sustainability Manager</option>
   <option value="Trainee">Trainee</option>
+  <option value="Unit Manager">Unit Manager</option>
   <option value="Warehouse Co-worker Annualised">Warehouse Co-worker Annualised</option>
   <option value="Warehouse Manager">Warehouse Manager</option>
   <option value="Warehouse Team Leader">Warehouse Team Leader</option>
@@ -625,5 +623,5 @@
   <option value="Operations Support">Operations Support</option>
   <option value="WMS Super User">WMS Super User</option>
   <option value="Sourcing Specialist">Sourcing Specialist</option>
-
+  <option value="Facility Team Leader">Facility Team Leader</option>
 </options>

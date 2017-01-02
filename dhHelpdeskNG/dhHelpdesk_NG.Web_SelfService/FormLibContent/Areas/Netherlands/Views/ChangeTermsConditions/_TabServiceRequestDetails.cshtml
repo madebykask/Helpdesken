@@ -22,7 +22,7 @@
                 <tr>
                     <td class="tdstrong">@Model.Label("Co-WorkerGlobalviewID")</td>
                     <td>
-                        @Model.Element("Co-WorkerGlobalviewID", false)                        
+                        @Model.Element("Co-WorkerGlobalviewID", false)
                     </td>
                 </tr>
                 <tr>
@@ -38,10 +38,10 @@
                     <td>@Model.Element("LastName", false)</td>
                     <td>
                         <input class="oldValue" type="hidden" id="OLD_LastName" name="OLD_LastName" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_LastName").Select(x => x.Value).FirstOrDefault() : "")"/>
-                        <em class="muted" id="emOLD_LastName">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_LastName").Select(x => x.Value).FirstOrDefault() : "")</em>                        
+                        <em class="muted" id="emOLD_LastName">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_LastName").Select(x => x.Value).FirstOrDefault() : "")</em>
                     </td>
                 </tr>
-@*                 <tr>
+                @*                 <tr>
                     <td class="tdstrong">@Model.Label("PreferedName")</td>
                     <td>@Model.Element("PreferedName")</td>
                 </tr>*@
@@ -50,7 +50,7 @@
                     <td>@Model.Element("IKEAEmailAddress", false)</td>
                     <td>
                         <input type="hidden" class="oldValue" id="OLD_IKEAEmailAddress" name="OLD_IKEAEmailAddress" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_IKEAEmailAddress").Select(x => x.Value).FirstOrDefault() : "")"/>
-                        <em class="muted" id="emOLD_IKEAEmailAddress">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_IKEAEmailAddress").Select(x => x.Value).FirstOrDefault() : "")</em>                        
+                        <em class="muted" id="emOLD_IKEAEmailAddress">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_IKEAEmailAddress").Select(x => x.Value).FirstOrDefault() : "")</em>
                     </td>
                 </tr>
                 <tr>
@@ -58,7 +58,7 @@
                     <td>@Model.Element("IKEANetworkID", false)</td>
                     <td>
                         <input type="hidden" class="oldValue" id="OLD_IKEANetworkID" name="OLD_IKEANetworkID" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_IKEANetworkID").Select(x => x.Value).FirstOrDefault() : "")"/>
-                        <em class="muted" id="emOLD_IKEANetworkID">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_IKEANetworkID").Select(x => x.Value).FirstOrDefault() : "")</em>                        
+                        <em class="muted" id="emOLD_IKEANetworkID">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_IKEANetworkID").Select(x => x.Value).FirstOrDefault() : "")</em>
                     </td>
                 </tr>
                 <tr>
@@ -74,14 +74,14 @@
                     <td>@Model.Element("BusinessUnit")</td>
                     <td>
                         <input type="hidden" class="oldValue" id="OLD_BusinessUnit" name="OLD_BusinessUnit" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_BusinessUnit").Select(x => x.Value).FirstOrDefault() : "")"/>
-                        <em class="muted" id="emOLD_BusinessUnit">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_BusinessUnit").Select(x => x.Value).FirstOrDefault() : "")</em>                        
+                        <em class="muted" id="emOLD_BusinessUnit">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_BusinessUnit").Select(x => x.Value).FirstOrDefault() : "")</em>
                     </td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("ServiceArea")</td>
                     <td>@Model.Element("ServiceArea")</td>
                     <td>
-                         <input type="hidden" class="oldValue"  id="OLD_ServiceArea" name="OLD_ServiceArea" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_ServiceArea").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <input type="hidden" class="oldValue"  id="OLD_ServiceArea" name="OLD_ServiceArea" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_ServiceArea").Select(x => x.Value).FirstOrDefault() : "")"/>
                         <em class="muted" id="emOLD_ServiceArea">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_ServiceArea").Select(x => x.Value).FirstOrDefault() : "")</em>
                     </td>
                 </tr>
@@ -90,7 +90,7 @@
                     <td>@Model.Element("Department")</td>
                     <td>
                         <input type="hidden" class="oldValue" id="OLD_Department" name="OLD_Department" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_Department").Select(x => x.Value).FirstOrDefault() : "")"/>
-                        <em class="muted" id="emOLD_Department">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_Department").Select(x => x.Value).FirstOrDefault() : "")</em>                        
+                        <em class="muted" id="emOLD_Department">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_Department").Select(x => x.Value).FirstOrDefault() : "")</em>
                     </td>
                 </tr>
                 <tr>
@@ -103,7 +103,7 @@
                     <td class="tdstrong">@Model.Label("ChangeValidFrom")</td>
                     <td>
                         @Model.Element("ChangeValidFrom")
-                        <div id="notice_OldDate" style="display:none;" class="notice">
+                        <div id="notice_OldDate" style="display: none;" class="notice">
                             @Model.Translate("The date you've entered is in the past. Are you sure you want to backdate Change date?")
                         </div>
                     </td>
@@ -118,32 +118,39 @@
                     <td>
                         @Model.Element("ServiceRequestPriority")</td>
                 </tr>
-                @if (!FormLibUtils.IsSelfService()){
-                <tr>
-                    <td class="tdstrong">@Model.Translate("SLA")</td>
-                    <td>
-                        @if (Model.Contract.CaseNumber != null)
-                        {
-                            @Model.Contract.PriorityName;
-                        }
-                        else { 
-                            @Model.Form.PriorityName;
-                        }
-                    </td>
-                </tr>         
+                @if(!FormLibUtils.IsSelfService())
+                {
+                    <tr>
+                        <td class="tdstrong">@Model.Translate("SLA")</td>
+                        <td>
+                            @if(Model.Contract.CaseNumber != null)
+                            {
+                                @Model.Translate(Model.Contract.PriorityName);
+                            }
+                            else
+                            {
+                                if(Model.Form != null)
+                                {
+                                    @Model.Translate(Model.Form.PriorityName);
+                                }
+                            }
+                        </td>
+                    </tr>         
                 }
-                @*<tr>
+                <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Permanent Address")</h4>
                     </td>
-                    <td class="tdstrong" ><h4>@Model.Translate("Current record")</h4></td>
+                    <td class="tdstrong">
+                        <h4>@Model.Translate("Current record")</h4>
+                    </td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("PermanentAddressLine1")</td>
                     <td>@Model.Element("PermanentAddressLine1")</td>
                     <td>
                         <input type="hidden" class="oldValue" id="OLD_PermanentAddressLine1" name="OLD_PermanentAddressLine1" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentAddressLine1").Select(x => x.Value).FirstOrDefault() : "")"/>
-                        <em class="muted" id="emOLD_PermanentAddressLine1">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentAddressLine1").Select(x => x.Value).FirstOrDefault() : "")</em>                        
+                        <em class="muted" id="emOLD_PermanentAddressLine1">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentAddressLine1").Select(x => x.Value).FirstOrDefault() : "")</em>
                     </td>
                 </tr>
                 <tr>
@@ -151,15 +158,15 @@
                     <td>@Model.Element("PermanentAddressLine2")</td>
                     <td>
                         <input type="hidden" class="oldValue" id="OLD_PermanentAddressLine2" name="OLD_PermanentAddressLine2" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentAddressLine2").Select(x => x.Value).FirstOrDefault() : "")"/>
-                        <em class="muted" id="emOLD_PermanentAddressLine2">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentAddressLine2").Select(x => x.Value).FirstOrDefault() : "")</em>                        
+                        <em class="muted" id="emOLD_PermanentAddressLine2">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentAddressLine2").Select(x => x.Value).FirstOrDefault() : "")</em>
                     </td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("PermanentAddressLine3")</td>
                     <td>@Model.Element("PermanentAddressLine3")</td>
                     <td>
-                        <input type="hidden" class="oldValue" id="OLD_PermanentAddressLine3" name="OLD_PermanentAddressLine3" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentAddressLine3").Select(x => x.Value).FirstOrDefault() : "")"/>
-                        <em class="muted" id="emOLD_PermanentAddressLine3">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentAddressLine3").Select(x => x.Value).FirstOrDefault() : "")</em>                        
+                        @*<input type="hidden" class="oldValue" id="OLD_PermanentAddressLine3" name="OLD_PermanentAddressLine3" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentAddressLine3").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_PermanentAddressLine3">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentAddressLine3").Select(x => x.Value).FirstOrDefault() : "")</em>*@
                     </td>
                 </tr>
                 <tr>
@@ -167,7 +174,7 @@
                     <td>@Model.Element("PermanentPostalCode")</td>
                     <td>
                         <input type="hidden" class="oldValue" id="OLD_PermanentPostalCode" name="OLD_PermanentPostalCode" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentPostalCode").Select(x => x.Value).FirstOrDefault() : "")"/>
-                        <em class="muted" id="emOLD_PermanentPostalCode">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentPostalCode").Select(x => x.Value).FirstOrDefault() : "")</em>                        
+                        <em class="muted" id="emOLD_PermanentPostalCode">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentPostalCode").Select(x => x.Value).FirstOrDefault() : "")</em>
                     </td>
                 </tr>
                 <tr>
@@ -175,13 +182,19 @@
                     <td>@Model.Element("PermanentCity")</td>
                     <td>
                         <input type="hidden" class="oldValue" id="OLD_PermanentCity" name="OLD_PermanentCity" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentCity").Select(x => x.Value).FirstOrDefault() : "")"/>
-                        <em class="muted" id="emOLD_PermanentCity">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentCity").Select(x => x.Value).FirstOrDefault() : "")</em>                        
+                        <em class="muted" id="emOLD_PermanentCity">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentCity").Select(x => x.Value).FirstOrDefault() : "")</em>
                     </td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("PermanentCountry")</td>
                     <td>@Model.Element("PermanentCountry")</td>
-                </tr>*@
+                    <td>
+                        <input type="hidden" class="oldValue" id="OLD_PermanentCountry" name="OLD_PermanentCountry" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentCountry").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_PermanentCountry">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentCountry").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>
+
+                @Html.Partial("_InternalLogNoteV2", Model)
             </tbody>
         </table>
     </div>
@@ -189,31 +202,4 @@
     <input type="hidden" id="formGuid" value="@Model.FormGuid" />
 </div>
 
-<script>
-    
-    var nowTemp = new Date();
-    var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-
-    var noticeOldDate = $('#notice_OldDate');
-    $('#date_ChangeValidFrom').not(".disabled").datepicker({
-        onRender: function (date) {
-            return '';
-        }
-    }).on('changeDate', function (ev) {
-
-        noticeOldDate.hide();
-
-        if (ev.date.valueOf() < now.valueOf())
-            noticeOldDate.show();
-    }).data('datepicker');
-
-    $('#ChangeValidFrom').change(function () {
-        var validFrom = $('#ChangeValidFrom').val();
-        var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
-        var dvalidFrom = APIGlobal.DateTime.parseDate(validFrom, format);
-        noticeOldDate.hide();
-        if (dvalidFrom.valueOf() < now.valueOf())
-            noticeOldDate.show();
-    });   
-   
-</script>
+@*Scripts Moved to TabCTCJS*@

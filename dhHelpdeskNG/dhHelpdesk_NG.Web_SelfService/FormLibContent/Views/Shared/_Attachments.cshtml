@@ -35,8 +35,7 @@
                     <a target="_blank" href="@Url.Action("index", "files", new
                                                                  {
                                                                      area = "",
-                                                                     name = ECT.Core.FileStore.FileStore.GetFileNameWithoutExtension(file.FileName)
-                                                                     ,
+                                                                     name = ECT.Core.FileStore.FileStore.GetFileNameWithoutExtension(file.FileName),
                                                                      extension = ECT.Core.FileStore.FileStore.GetFileExtension(file.FileName),
                                                                      caseNumber = Model.Contract.CaseNumber
                                                                  })"><i class="icon-file"></i>&nbsp;@file.FileName</a>

@@ -53,7 +53,10 @@
                 <li class="@(Model.TabHasError("#SSCUseOnly") ? "error" : "")">
                     <a href="#SSCUseOnly">@Model.Translate("SSC use only")</a></li>
             }
-            <li>
+            
+            // No Documetn For change process 
+            @*  
+              <li>
                 <a href="@Url.Action("ChangePrint", "ChangeTermsConditions", new
                 {
                     id = "Print",
@@ -62,7 +65,7 @@
                     userId = FormLibSessions.User.UserId,
                     allowanceNr = ""
                 })" class="changeprint"><i class="icon-print icon-white"></i>&nbsp;@PrintText()</a>
-            </li>
+            </li>*@
             @if(Model.VisibleTab("#attachments"))
             {
                 <li class="pull-right">
@@ -111,7 +114,13 @@
     <input type="hidden" id="activeTab" name="activeTab" value="@Model.ActiveTab" />
     @Html.Partial("_Validate", Model)
     <script>
-  
+
+      function changeBusinessUnitCallback() {
+
+        GetXML('Predefined_BusinessUnit_PositionTitle.xml', narrowDownPositionTitle);
+    }
+
+
     validate.run($('#actionState').val());
 
     $(document).on('change', '#actionState', function (e) {

@@ -12,9 +12,22 @@
                     @Model.Element("BasicTerminationType")
                 </td>
             </tr>
+           
             <tr>
-                <td class="tdstrong">@Model.Label("LastDayOfEmployment")</td>
+                <td class="tdstrong">@Model.Label("BasicTerminationReason")</td>
                 <td>
+                    @Model.Element("BasicTerminationReason")
+                </td>
+            </tr>
+
+@*            <tr>
+                <td class="tdstrong" colspan="2">
+                    <h4>@Model.Translate("CDS")</h4>
+                </td>                
+            </tr> *@ 
+                 <tr>
+            <td class="tdstrong">@Model.Label("LastDayOfEmployment")</td>
+               <td>
                     @Model.Element("LastDayOfEmployment")
                     <div id="notice_HiringDate" style="display:none;" class="notice">
                             @Model.Translate("The date you've entered is in the past.")
@@ -23,12 +36,6 @@
                         </div>
                 </td>
             </tr>
-
-            <tr>
-                <td class="tdstrong" colspan="2">
-                    <h4>@Model.Translate("CDS")</h4>
-                </td>                
-            </tr>  
             <tr>
                 <td class="tdstrong">@Model.Label("LockCDSAccountFrom")</td>
                 <td>

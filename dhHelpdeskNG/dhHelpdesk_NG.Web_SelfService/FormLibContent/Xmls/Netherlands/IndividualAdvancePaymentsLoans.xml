@@ -22,11 +22,9 @@
       <element name="IKEAEmailAddress" type="text" label="IKEA Email Address">
         <regex inherit="email" pattern="" message=""></regex>
       </element>
-      <element name="IKEANetworkID" type="text" label="IKEA Network ID" mandatory="1">
-        
-      </element>
-      <element name="Company" type="text" label="Company"></element>
-      <element name="BusinessUnit" type="text" label="Business Unit"></element>
+      <element name="IKEANetworkID" type="text" label="IKEA Network ID"></element>
+      <element name="Company" type="text" label="Company" mandatory="1"></element>
+      <element name="BusinessUnit" type="text" label="Business Unit" mandatory="1"></element>
       <element name="ServiceArea" type="text" label="Function"></element>
       <element name="Department" type="text" label="Department"></element>
 
@@ -37,7 +35,7 @@
           <option value="Standard">Standard</option>
         </options>
       </element>
-      
+      <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
     </tab>
 
     <tab name="#payment" label="Payment Information">
@@ -45,11 +43,10 @@
       <element type="select" name="PaymentType" label="Payment Type" mandatory="1" default="Advance Payment">
         <options>
           <option value=""></option>
-          <option value="Advance Payment">Advance Payment</option>
-          <option value="Holiday Allowance Advance">Holiday Allowance Advance</option>
           <option value="13th month advance">13th month advance</option>
+          <option value="Advance Payment">Advance Payment</option>
           <option value="Extra legal holiday hours Advance">Extra legal holiday hours Advance</option>
-          <option value="Saved leave Advance">Saved leave Advance</option>
+          <option value="Holiday Allowance Advance">Holiday Allowance Advance</option>
         </options>
       </element>
       <element type="text" name="PaymentAmount" label="Amount">
@@ -61,11 +58,11 @@
       <element type="date" name="PaymentDate" label="Payment date" format="dd.MM.yyyy" mandatory="1">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element type="select" name="PaymentMethod" label="Payment Method" mandatory="1" default="By Manual Payment">
+      <element type="select" name="PaymentMethod" label="Payment Method" mandatory="1" default="By Payroll">
         <options>
           <option value=""></option>
-          <!--<option value="By Payroll">By Payroll</option>
-          <option value="By Off cycle">By Off cycle</option>-->
+          <option value="By Payroll">By Payroll</option>
+          <option value="By Off cycle">By Off cycle</option>
           <option value="By Manual Payment">By Manual Payment</option>
         </options>
       </element>

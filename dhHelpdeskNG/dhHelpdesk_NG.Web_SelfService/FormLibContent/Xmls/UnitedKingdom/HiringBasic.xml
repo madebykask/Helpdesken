@@ -6,7 +6,7 @@
 <!--<!ENTITY pre_company_unit SYSTEM "Templates/Predefined_Company_Unit.xml">
 <!ENTITY pre_unit_department SYSTEM "Templates/Predefined_Unit_Department.xml">
 <!ENTITY pre_psarea_psgroup SYSTEM "Templates/Predefined_PSArea_PSGroup.xml">-->
-<!ENTITY pre_country SYSTEM "Templates/Data_Country.xml">
+<!--<!ENTITY pre_country SYSTEM "Templates/Data_Country.xml">-->
   <!ENTITY dat_nationality SYSTEM "Templates/Data_Nationality.xml">
 ]>
 
@@ -25,6 +25,7 @@
             <option value="New Hire">New Hire</option>
             <option value="International Transfer">International Transfer</option>
             <option value="Re-Hire">Re-Hire</option>
+            <option value="Transfer Between Business Units">Transfer Between Business Units</option>
           </options>
         </element>
         <element type="date" name="ContractStartDate" label="Contract Start Date" format="dd.MM.yyyy" mandatory="1">
@@ -34,32 +35,60 @@
         <element type="date" name="InductionDate" mandatory="1" label="Induction Date" format="dd.MM.yyyy">
           <regex inherit="date" pattern="" message=""></regex>
         </element>
-        <element type="text" name="InductionStartTime" mandatory="1" label="Induction Start Time - Day 1">
-          <regex inherit="timestamp" pattern="" message=""></regex>
-        </element>
+       <element type="select" name="LengthOfInductionInDays" mandatory="1" label="Length of Induction in days" default="2 days">
+        <options>
+          <option value=""></option>
+          <option value="1 day">1 day</option>
+          <option value="2 days">2 days</option>
+          <option value="3 days">3 days</option>
+          <option value="4 days">4 days</option>
+          <option value="5 days">5 days</option>
+        </options>
+      </element>
+      
+      <element type="text" name="InductionStartTime" mandatory="1" label="Induction Start Time - Day 1">
+        <regex inherit="timestamp" pattern="" message=""></regex>
+      </element>
 
-        <element type="text" name="InductionEndTime" mandatory="1" label="Induction End Time - Day 1">
-          <regex inherit="timestamp" pattern="" message=""></regex>
-        </element>
-
-        <element type="text" name="InductionStartTime2" label="Induction Start Time - Day 2">
-          <regex inherit="timestamp" pattern="" message=""></regex>
-          <mandatoryIf name="LengthOfInductionInDays">2 days,3 days,4 days</mandatoryIf>
-        </element>
-
-        <element type="text" name="InductionEndTime2"  label="Induction End Time - Day 2">
-          <regex inherit="timestamp" pattern="" message=""></regex>
-          <mandatoryIf name="LengthOfInductionInDays">2 days,3 days,4 days</mandatoryIf>
-        </element>
-        <element type="select" name="LengthOfInductionInDays" mandatory="1" label="Length of Induction in days" default="2 days">
-          <options>
-            <option value=""></option>
-            <option value="1 day">1 day</option>
-            <option value="2 days">2 days</option>
-            <option value="3 days">3 days</option>
-            <option value="4 days">4 days</option>
-          </options>
-        </element>
+      <element type="text" name="InductionEndTime" mandatory="1" label="Induction End Time - Day 1">
+        <regex inherit="timestamp" pattern="" message=""></regex>
+      </element>
+<!--2-->
+      <element type="text" name="InductionStartTime2" label="Induction Start Time - Day 2">
+        <regex inherit="timestamp" pattern="" message=""></regex>
+        <mandatoryIf name="LengthOfInductionInDays">2 days,3 days,4 days,5 days</mandatoryIf>
+      </element>
+      <element type="text" name="InductionEndTime2"  label="Induction End Time - Day 2">
+        <regex inherit="timestamp" pattern="" message=""></regex>
+        <mandatoryIf name="LengthOfInductionInDays">2 days,3 days,4 days,5 days</mandatoryIf>
+      </element>
+<!--3-->
+      <element type="text" name="InductionStartTime3" label="Induction Start Time - Day 3">
+        <regex inherit="timestamp" pattern="" message=""></regex>
+        <mandatoryIf name="LengthOfInductionInDays">3 days,4 days,5 days</mandatoryIf>
+      </element>
+      <element type="text" name="InductionEndTime3"  label="Induction End Time - Day 3">
+        <regex inherit="timestamp" pattern="" message=""></regex>
+        <mandatoryIf name="LengthOfInductionInDays">3 days,4 days,5 days</mandatoryIf>
+      </element>
+<!--4-->
+      <element type="text" name="InductionStartTime4" label="Induction Start Time - Day 4">
+        <regex inherit="timestamp" pattern="" message=""></regex>
+        <mandatoryIf name="LengthOfInductionInDays">4 days,5 days</mandatoryIf>
+      </element>
+      <element type="text" name="InductionEndTime4"  label="Induction End Time - Day 4">
+        <regex inherit="timestamp" pattern="" message=""></regex>
+        <mandatoryIf name="LengthOfInductionInDays">4 days,5 days</mandatoryIf>
+      </element>
+<!--5-->
+      <element type="text" name="InductionStartTime5" label="Induction Start Time - Day 5">
+        <regex inherit="timestamp" pattern="" message=""></regex>
+        <mandatoryIf name="LengthOfInductionInDays">5 days</mandatoryIf>      
+    </element>
+      <element type="text" name="InductionEndTime5"  label="Induction End Time - Day 5">
+        <regex inherit="timestamp" pattern="" message=""></regex>
+        <mandatoryIf name="LengthOfInductionInDays">5 days</mandatoryIf>
+      </element>
         <element type="date" name="PreviousContractStartDate" label="Previous Contract Start Date" format="dd.MM.yyyy">
           <regex inherit="date" pattern="" message=""></regex>
           <mandatoryIf name="NewToIKEA">International Transfer</mandatoryIf>
@@ -73,6 +102,7 @@
         </element>
         <element type="text" name="Co-WorkerID" label="Co-Worker ID">
           <mandatoryIf name="NewToIKEA">International Transfer</mandatoryIf>
+          <mandatoryIf name="NewToIKEA">Transfer Between Business Units</mandatoryIf>
         </element>
         <element type="text" name="GlobalHRID" label="Global HR ID">
           <mandatoryIf name="NewToIKEA">International Transfer</mandatoryIf>
@@ -103,9 +133,9 @@
         <element type="text" name="PermanentAddressLine3" label="Address line 3"></element>
         <element type="text" name="PermanentPostalCode" label="Postal code" mandatory="1"></element>
         <element type="text" name="PermanentCity" label="City" mandatory="1"></element>
-        <element type="search-select" source="1" name="PermanentCountry" label="Country" mandatory="1" default="United Kingdom">
-          &pre_country;
+        <element type="select" source="database" name="PermanentCountry" label="Country" mandatory="1" default="United Kingdom">
         </element>
+        <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
       </tab>
 
 
@@ -121,16 +151,14 @@
         <element type="text" name="MailingAddressLine2" label="Address line 2"></element>
         <element type="text" name="MailingPostalCode" label="Postal code"></element>
         <element type="text" name="MailingCity" label="City"></element>
-        <element type="search-select" name="MailingCountry" label="Country" default="United Kingdom">
-          &pre_country;
+        <element type="select" source="database" name="MailingCountry" label="Country" default="United Kingdom">
         </element>
 
         <element type="text" name="EmergencyAddressLine1" label="Address line 1" mandatory="1"></element>
         <element type="text" name="EmergencyAddressLine2" label="Address line 2"></element>
         <element type="text" name="EmergencyPostalCode" label="Postal code" mandatory="1"></element>
         <element type="text" name="EmergencyCity" label="City" mandatory="1"></element>
-        <element type="search-select" name="EmergencyCountry" label="Country" default="United Kingdom" mandatory="1">
-          &pre_country;
+        <element type="select" source="database" name="EmergencyCountry" label="Country" default="United Kingdom" mandatory="1">
         </element>
         <element type="text" name="EmergencyContactNumber" label="Emergency contact number"></element>
         <element type="text" name="EmergencyContactRelationship" label="Emergency contact/relationship">
@@ -270,16 +298,14 @@
             <option value="Acc.Child Dental Form">Acc.Child Dental Form</option>
           </options>
         </element>
-        <element type="search-select" name="EmployeeDocumentCountry" label="Country" default="United Kingdom">
-          &pre_country;
+        <element type="select" source="database" name="EmployeeDocumentCountry" label="Country" default="United Kingdom">
         </element>
         <element type="text" name="EmployeeDocumentNo" label="Document No."></element>
         <element type="date" name="EmployeeDocumentIssueDate" label="Issue Date" format="dd.MM.yyyy">
           <regex inherit="date" pattern="" message=""></regex>
         </element>
         <element type="text" name="EmployeeDocumentIssuePlace" label="Issue Place"></element>
-        <element type="search-select" name="EmployeeDocumentIssuePlaceCountry" label="Issue Place Country" default="United Kingdom">
-          &pre_country;
+        <element type="select" source="database" name="EmployeeDocumentIssuePlaceCountry" label="Issue Place Country" default="United Kingdom">
         </element>
 
         <element type="select" name="EmployeeDocumentType2" label="Document Type">
@@ -299,16 +325,14 @@
             <option value="Acc.Child Dental Form">Acc.Child Dental Form</option>
           </options>
         </element>
-        <element type="search-select" name="EmployeeDocumentCountry2" label="Country" default="United Kingdom">
-          &pre_country;
+        <element type="select" source="database" name="EmployeeDocumentCountry2" label="Country" default="United Kingdom">
         </element>
         <element type="text" name="EmployeeDocumentNo2" label="Document No."></element>
         <element type="date" name="EmployeeDocumentIssueDate2" label="Issue Date" format="dd.MM.yyyy">
           <regex inherit="date" pattern="" message=""></regex>
         </element>
         <element type="text" name="EmployeeDocumentIssuePlace2" label="Issue Place"></element>
-        <element type="search-select" name="EmployeeDocumentIssuePlaceCountry2" label="Issue Place Country" default="United Kingdom">
-          &pre_country;
+        <element type="select" source="database" name="EmployeeDocumentIssuePlaceCountry2" label="Issue Place Country" default="United Kingdom">
         </element>
 
         <element type="select" name="EmployeeDocumentType3" label="Document Type">
@@ -328,16 +352,14 @@
             <option value="Acc.Child Dental Form">Acc.Child Dental Form</option>
           </options>
         </element>
-        <element type="search-select" name="EmployeeDocumentCountry3" label="Country" default="United Kingdom">
-          &pre_country;
+        <element type="select" source="database" name="EmployeeDocumentCountry3" label="Country" default="United Kingdom">
         </element>
         <element type="text" name="EmployeeDocumentNo3" label="Document No."></element>
         <element type="date" name="EmployeeDocumentIssueDate3" label="Issue Date" format="dd.MM.yyyy">
           <regex inherit="date" pattern="" message=""></regex>
         </element>
         <element type="text" name="EmployeeDocumentIssuePlace3" label="Issue Place"></element>
-        <element type="search-select" name="EmployeeDocumentIssuePlaceCountry3" label="Issue Place Country" default="United Kingdom">
-          &pre_country;
+        <element type="select" source="database" name="EmployeeDocumentIssuePlaceCountry3" label="Issue Place Country" default="United Kingdom">
         </element>
 
         <!--4-->
@@ -358,16 +380,14 @@
             <option value="Acc.Child Dental Form">Acc.Child Dental Form</option>
           </options>
         </element>
-        <element type="search-select" name="EmployeeDocumentCountry4" label="Country" default="United Kingdom">
-          &pre_country;
+        <element type="select" source="database" name="EmployeeDocumentCountry4" label="Country" default="United Kingdom">
         </element>
         <element type="text" name="EmployeeDocumentNo4" label="Document No."></element>
         <element type="date" name="EmployeeDocumentIssueDate4" label="Issue Date" format="dd.MM.yyyy">
           <regex inherit="date" pattern="" message=""></regex>
         </element>
         <element type="text" name="EmployeeDocumentIssuePlace4" label="Issue Place"></element>
-        <element type="search-select" name="EmployeeDocumentIssuePlaceCountry4" label="Issue Place Country" default="United Kingdom">
-          &pre_country;
+        <element type="select" source="database" name="EmployeeDocumentIssuePlaceCountry4" label="Issue Place Country" default="United Kingdom">
         </element>
         <!--4-->
 
@@ -389,16 +409,14 @@
             <option value="Acc.Child Dental Form">Acc.Child Dental Form</option>
           </options>
         </element>
-        <element type="search-select" name="EmployeeDocumentCountry5" label="Country" default="United Kingdom">
-          &pre_country;
+        <element type="select" source="database" name="EmployeeDocumentCountry5" label="Country" default="United Kingdom">
         </element>
         <element type="text" name="EmployeeDocumentNo5" label="Document No."></element>
         <element type="date" name="EmployeeDocumentIssueDate5" label="Issue Date" format="dd.MM.yyyy">
           <regex inherit="date" pattern="" message=""></regex>
         </element>
         <element type="text" name="EmployeeDocumentIssuePlace5" label="Issue Place"></element>
-        <element type="search-select" name="EmployeeDocumentIssuePlaceCountry5" label="Issue Place Country" default="United Kingdom">
-          &pre_country;
+        <element type="select" source="database" name="EmployeeDocumentIssuePlaceCountry5" label="Issue Place Country" default="United Kingdom">
         </element>
         <!--5-->
         
@@ -535,16 +553,14 @@
             <option value="Acc Partner Dental Form">Acc Partner Dental Form</option>
           </options>
         </element>
-        <element type="search-select" name="DependantsDocumentCountry" label="Country" default="United Kingdom">
-          &pre_country;
+        <element type="select" source="database" name="DependantsDocumentCountry" label="Country" default="United Kingdom">
         </element>
         <element type="text" name="DependantsDocumentNo" label="Document No."></element>
         <element type="date" name="DependantsDocumentIssueDate" label="Issue Date" format="dd.MM.yyyy">
           <regex inherit="date" pattern="" message=""></regex>
         </element>
         <element type="text" name="DependantsDocumentIssuePlace" label="Issue Place" ></element>
-        <element type="search-select" name="DependantsDocumentIssuePlaceCountry" label="Issue Place Country" default="United Kingdom">
-          &pre_country;
+        <element type="select" source="database" name="DependantsDocumentIssuePlaceCountry" label="Issue Place Country" default="United Kingdom">
         </element>
 
         <element type="select" name="DependantsDocumentType2" label="Document Type">
@@ -564,16 +580,14 @@
             <option value="Acc Partner Dental Form">Acc Partner Dental Form</option>
           </options>
         </element>
-        <element type="search-select" name="DependantsDocumentCountry2" label="Country" default="United Kingdom">
-          &pre_country;
+        <element type="select" source="database" name="DependantsDocumentCountry2" label="Country" default="United Kingdom">
         </element>
         <element type="text" name="DependantsDocumentNo2" label="Document No."></element>
         <element type="date" name="DependantsDocumentIssueDate2" label="Issue Date" format="dd.MM.yyyy">
           <regex inherit="date" pattern="" message=""></regex>
         </element>
         <element type="text" name="DependantsDocumentIssuePlace2" label="Issue Place"></element>
-        <element type="search-select" name="DependantsDocumentIssuePlaceCountry2" label="Issue Place Country" default="United Kingdom">
-          &pre_country;
+        <element type="select" source="database" name="DependantsDocumentIssuePlaceCountry2" label="Issue Place Country" default="United Kingdom">
         </element>
 
         <element type="select" name="DependantsDocumentType3" label="Document Type">
@@ -593,16 +607,14 @@
             <option value="Acc Partner Dental Form">Acc Partner Dental Form</option>
           </options>
         </element>
-        <element type="search-select" name="DependantsDocumentCountry3" label="Country" default="United Kingdom">
-          &pre_country;
+        <element type="select" source="database" name="DependantsDocumentCountry3" label="Country" default="United Kingdom">
         </element>
         <element type="text" name="DependantsDocumentNo3" label="Document No"></element>
         <element type="date" name="DependantsDocumentIssueDate3" label="Issue Date" format="dd.MM.yyyy">
           <regex inherit="date" pattern="" message=""></regex>
         </element>
         <element type="text" name="DependantsDocumentIssuePlace3" label="Issue Place"></element>
-        <element type="search-select" name="DependantsDocumentIssuePlaceCountry3" label="Issue Place Country" default="United Kingdom">
-          &pre_country;
+        <element type="select" source="database" name="DependantsDocumentIssuePlaceCountry3" label="Issue Place Country" default="United Kingdom">
         </element>
 
         <!--4-->
@@ -623,16 +635,14 @@
             <option value="Acc Partner Dental Form">Acc Partner Dental Form</option>
           </options>
         </element>
-        <element type="search-select" name="DependantsDocumentCountry4" label="Country" default="United Kingdom">
-          &pre_country;
+        <element type="select" source="database" name="DependantsDocumentCountry4" label="Country" default="United Kingdom">
         </element>
         <element type="text" name="DependantsDocumentNo4" label="Document No"></element>
         <element type="date" name="DependantsDocumentIssueDate4" label="Issue Date" format="dd.MM.yyyy">
           <regex inherit="date" pattern="" message=""></regex>
         </element>
         <element type="text" name="DependantsDocumentIssuePlace4" label="Issue Place"></element>
-        <element type="search-select" name="DependantsDocumentIssuePlaceCountry4" label="Issue Place Country" default="United Kingdom">
-          &pre_country;
+        <element type="select" source="database" name="DependantsDocumentIssuePlaceCountry4" label="Issue Place Country" default="United Kingdom">
         </element>
         <!--4-->
 
@@ -654,16 +664,14 @@
             <option value="Acc Partner Dental Form">Acc Partner Dental Form</option>
           </options>
         </element>
-        <element type="search-select" name="DependantsDocumentCountry5" label="Country" default="United Kingdom">
-          &pre_country;
+        <element type="select" source="database" name="DependantsDocumentCountry5" label="Country" default="United Kingdom">
         </element>
         <element type="text" name="DependantsDocumentNo5" label="Document No"></element>
         <element type="date" name="DependantsDocumentIssueDate5" label="Issue Date" format="dd.MM.yyyy">
           <regex inherit="date" pattern="" message=""></regex>
         </element>
         <element type="text" name="DependantsDocumentIssuePlace5" label="Issue Place"></element>
-        <element type="search-select" name="DependantsDocumentIssuePlaceCountry5" label="Issue Place Country" default="United Kingdom">
-          &pre_country;
+        <element type="select" source="database" name="DependantsDocumentIssuePlaceCountry5" label="Issue Place Country" default="United Kingdom">
         </element>
         <!--5-->
 
@@ -678,8 +686,7 @@
           </options>
         </element>
         <element type="text" name="Payee" label="Payee" mandatory="1"></element>
-        <element type="search-select" name="BankCountry" label="Bank Country" mandatory="1" default="United Kingdom">
-          &pre_country;
+        <element type="select" source="database" name="BankCountry" label="Bank Country" mandatory="1" default="United Kingdom">
         </element>
         <element type="text" name="BankKey" label="Bank Key" mandatory="1">
           <regex inherit="bankKeyUk" pattern="" message=""></regex>
@@ -820,12 +827,10 @@
             <option value="Work Permit">Work Permit</option>
           </options>
         </element>
-        <element type="search-select" name="DocumentCountryOfIssue" label="Country of issue" >
-          &pre_country;
+        <element type="select" source="database" name="DocumentCountryOfIssue" label="Country of issue" >
         </element>
-        <element type="search-select" default="United Kingdom" name="DocumentCountryOfUse" label="Country of use">
+        <element type="select" source="database" default="United Kingdom" name="DocumentCountryOfUse" label="Country of use">
           <mandatoryIf name="DocumentType">Visa</mandatoryIf>
-          &pre_country;
         </element>
         <element type="text" name="DocumentNO" label="Document No.">
           <mandatoryIf name="DocumentType">Passport</mandatoryIf>

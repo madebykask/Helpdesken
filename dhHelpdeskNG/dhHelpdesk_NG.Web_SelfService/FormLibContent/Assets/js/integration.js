@@ -22,7 +22,6 @@ function changeCompany() {
         var customerId = ajaxInfo.attr('customerId');
 
         if (url && customerId && companyId && (!isNaN(parseFloat(companyId)) && isFinite(companyId))) {
-
             var jqxhr = $.post(url + 'GetBusinessUnits?customerId=' + customerId + '&companyId=' + companyId + "&ie=" + (new Date()).getTime(), function () {
 
             })
@@ -86,8 +85,7 @@ function changeNewCompany(clear) {
                     }
 
                     if (!clear && selectedValue != '') {
-                        $('#NewBusinessUnit').val(selectedValue);
-                        
+                        $('#NewBusinessUnit').val(selectedValue);                     
                     }
                   
                     if ($("#NewBusinessUnit option").length == 2) {
@@ -101,11 +99,10 @@ function changeNewCompany(clear) {
                     }
 
                     changeNewBusinessUnit(clear);
+
                 })
                 .fail(function () { })
-                .always(function () { });
-            
-            
+                .always(function () { });                  
         }
     }
 
@@ -114,7 +111,25 @@ function changeNewCompany(clear) {
     }
 }
 
+//Used for Incorrect Worked Hours //NO
+function setCompanyValue(elementId, value, triggerChange) {
+    if ($("#" + elementId + " option").length == 2) {
+        $("#" + elementId + " option").eq(1).attr('selected', true);
+    }
+
+    var hidden = $("#hidden_" + elementId);
+
+    if (hidden.length > 0)
+        hidden.val(value);
+
+    if (triggerChange) {
+        $('#' + elementId).trigger('change');
+    }
+}
+
 function changeBusinessUnit() {
+    // Please don't check in Any alert , Debuggers and so on S.G
+    //alert();
 
     var businessUnitId = $("#BusinessUnit").val();
     var selectedValue = $("#val_ServiceArea").val();
@@ -222,7 +237,6 @@ function changeNewBusinessUnit(clear) {
 }
 
 function changeFunctions() {
-
     var serviceAreaId = $("#ServiceArea").val();
     var selectedValue = $("#val_Department").val();
 
@@ -243,7 +257,15 @@ function changeFunctions() {
                     $.each(data, function (i, e) {
                         // Only adds departments which are active or saved to case before -- AC 2014-10-24
                         if (e.Status == 1 || e.Id == selectedValue) {
-                            $("#Department")[0].add(new Option(e.Name, e.Id))
+
+                            //Add data-code if exist -- TAN 2015-11-17
+                            var newOption = new Option(e.Name, e.Id);
+                            if (e.Code.length > 0) {
+                                newOption.setAttribute("data-code", e.Code);
+                            }
+                            
+                            $("#Department")[0].add(newOption);
+
                         }
                     });
 
@@ -310,9 +332,7 @@ function changeNewFunctions(clear) {
         }
     }
 }
-
 function InitIntegration() {
-
     var company = $('#Company');
     var businessUnit = $('#BusinessUnit');
     var serviceArea = $('#ServiceArea');
@@ -361,5 +381,7 @@ function InitIntegration() {
 
         newCompany.change();
     }
+    if ($('#pickfiles').length > 0)
+    initUpload();
 }
 

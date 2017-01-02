@@ -20,15 +20,21 @@
                 <li class="@(Model.TabHasError("#personal") ? "error" : "")">
                     <a href="#personal">@Model.Translate("Personal Information")</a></li>
             }
-            @if(Model.VisibleTab("#documents"))
+           @* @if(Model.VisibleTab("#documents"))
             {
                 <li class="@(Model.TabHasError("#documents") ? "error" : "")">
                     <a href="#documents">@Model.Translate("Documents")</a></li>
-            }
+            }*@
             @if(Model.VisibleTab("#globalview"))
             {
                 <li class="@(Model.TabHasError("#globalview") ? "error" : "")">
                     <a href="#globalview" data-url="@Url.Action("GetGlobalViewFields", new { caseId = Model.Contract.Id, formGuid = Model.FormGuid })">@Model.Translate("Global View")</a></li>
+            }
+              @if(Model.VisibleTab("#attachments"))
+            {
+                <li class="pull-right">
+                    <a href="#attachments"><i class="icon-file icon-white"></i>&nbsp;@Model.Translate("Attachments")&nbsp;(<b id="attachmentCounter">@(Model.Contract.CaseFiles != null ? Model.Contract.CaseFiles.Count() : 0)</b>)</a>
+                </li>
             }
         </ul>
         <div class="content">
@@ -42,14 +48,19 @@
                     {
                         @Html.Partial("_TabPersonal", Model)
                     }
-                    @if(Model.VisibleTab("#documents"))
+                    @*@if(Model.VisibleTab("#documents"))
                     {
                         @Html.Partial("_TabDocuments", Model)
-                    }
+                    }*@
                     @if(Model.VisibleTab("#globalview"))
                     {
                         @Html.Partial("_TabGlobalView", Model)
                     }
+                    @if(Model.VisibleTab("#attachments"))
+                    {
+                        @Html.Partial("_GlobalAttachments", Model)
+                    }
+                     @Html.Partial("../Hiring/_TabHiringJS", Model)
                 </div>
             </div>
         </div>

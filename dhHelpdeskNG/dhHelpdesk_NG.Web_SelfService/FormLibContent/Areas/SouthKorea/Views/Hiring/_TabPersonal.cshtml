@@ -16,7 +16,7 @@
                 </tr>
                 <tr>
                     <td class="tdstrong" colspan="2">
-                        <h4>@Model.Translate("Permanent Address")</h4>
+                        <h4>@Model.Translate("Permanent Address(actual living address)")</h4>
                     </td>
                 </tr>
                 <tr>
@@ -27,14 +27,14 @@
                     <td class="tdstrong">@Model.Label("PermanentAddressline2")</td>
                     <td>@Model.Element("PermanentAddressline2")</td>
                 </tr>
-                <tr>
+@*                <tr>
                     <td class="tdstrong">@Model.Label("PermanentAddressline3")</td>
                     <td>@Model.Element("PermanentAddressline3")</td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("PermanentAddressline4")</td>
                     <td>@Model.Element("PermanentAddressline4")</td>
-                </tr>
+                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("PermanentPostalcode")</td>
                     <td>@Model.Element("PermanentPostalcode")</td>
@@ -104,14 +104,14 @@
                     <td class="tdstrong">@Model.Label("EmergencyAddressline2")</td>
                     <td>@Model.Element("EmergencyAddressline2")</td>
                 </tr>
-                <tr>
+@*                <tr>
                     <td class="tdstrong">@Model.Label("EmergencyAddressline3")</td>
                     <td>@Model.Element("EmergencyAddressline3")</td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("EmergencyAddressline4")</td>
                     <td>@Model.Element("EmergencyAddressline4")</td>
-                </tr>
+                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("EmergencyPostalCode")</td>
                     <td>@Model.Element("EmergencyPostalCode")</td>
@@ -163,7 +163,7 @@
                 </tr>
                 <tr>
                     <td class="tdstrong" colspan="2">
-                        <h4>@Model.Translate("Home Address")
+                        <h4>@Model.Translate("Home Address(registered address)")
                             <button class="btn btn-mini pull-right" id="btnHomeAddress" data-prefix="Home">
                                 <i class="icon-share"></i>&nbsp;@Model.Translate("Copy from Permanent Address")
                             </button>
@@ -178,14 +178,14 @@
                     <td class="tdstrong">@Model.Label("HomeAddressline2")</td>
                     <td>@Model.Element("HomeAddressline2")</td>
                 </tr>
-                <tr>
+@*                <tr>
                     <td class="tdstrong">@Model.Label("HomeAddressline3")</td>
                     <td>@Model.Element("HomeAddressline3")</td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("HomeAddressline4")</td>
                     <td>@Model.Element("HomeAddressline4")</td>
-                </tr>
+                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("HomePostalCode")</td>
                     <td>@Model.Element("HomePostalCode")</td>
@@ -238,7 +238,7 @@
 
 
 
-                <tr>
+            @*    <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Home Address in EN")
                             <button class="btn btn-mini pull-right" id="btnHomeAddressEN" data-prefix="ENHome">
@@ -311,7 +311,7 @@
                     <td colspan="2">
                         @Model.Element("ENHomeCommunicationtypes")
                         <a id="addENHomeCommunicationType" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another communication type")</a></td>
-                </tr>
+                </tr>*@
 
 
 
@@ -354,10 +354,10 @@
                     <td class="tdstrong">@Model.Label("FamilyMemberGender")</td>
                     <td>@Model.Element("FamilyMemberGender")</td>
                 </tr>
-                <tr>
+@*                <tr>
                     <td class="tdstrong">@Model.Label("FamilyMemberRegistrationNumber")</td>
                     <td>@Model.Element("FamilyMemberRegistrationNumber")</td>
-                </tr>
+                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("FamilyMemberDateofbirth")</td>
                     <td>@Model.Element("FamilyMemberDateofbirth")</td>
@@ -373,6 +373,10 @@
                 <tr>
                     <td class="tdstrong">@Model.Label("DependancyTax")</td>
                     <td>@Model.Element("DependancyTax")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("adoptionfosterdate")</td>
+                    <td>@Model.Element("adoptionfosterdate")</td>
                 </tr>
 
 
@@ -418,12 +422,12 @@
                         <td class="tdstrong">@Model.Label("FamilyMemberGender" + i.ToString())</td>
                         <td>
                             @Model.Element("FamilyMemberGender" + i.ToString())</td>
-                    </tr>
+                    </tr>@*
                     <tr class="familyMember@(i.ToString())">
                         <td class="tdstrong">@Model.Label("FamilyMemberRegistrationNumber" + i.ToString())</td>
                         <td>
                             @Model.Element("FamilyMemberRegistrationNumber" + i.ToString())</td>
-                    </tr>
+                    </tr>*@
                     <tr class="familyMember@(i.ToString())">
                         <td class="tdstrong">@Model.Label("FamilyMemberDateofbirth" + i.ToString())</td>
                         <td>
@@ -443,6 +447,11 @@
                         <td class="tdstrong">@Model.Label("DependancyTax" + i.ToString())</td>
                         <td>
                             @Model.Element("DependancyTax" + i.ToString())</td>
+                    </tr>
+                    <tr class="familyMember@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("adoptionfosterdate" + i.ToString())</td>
+                        <td>
+                            @Model.Element("adoptionfosterdate" + i.ToString())</td>
                     </tr>
 
                     
@@ -735,7 +744,7 @@
                     <td class="tdstrong">@Model.Label("OtherBankPercentageorAmount")</td>
                     <td>@Model.Element("OtherBankPercentageorAmount")</td>
                 </tr>
-                <tr>
+               @* <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Fiscal Data")</h4>
                     </td>
@@ -755,7 +764,7 @@
                 <tr>
                     <td class="tdstrong">@Model.Label("Personneltaxstatus4")</td>
                     <td>@Model.Element("Personneltaxstatus4")</td>
-                </tr>
+                </tr>*@
                @* <tr>
                     <td class="tdstrong">@Model.Label("Taxationinformation")</td>
                     <td>@Model.Element("Taxationinformation")</td>
@@ -788,7 +797,7 @@
                     <td class="tdstrong">@Model.Label("Exmpt.EndData")</td>
                     <td>@Model.Element("Exmpt.EndData")</td>
                 </tr>*@
-                <tr>
+                @*<tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Social Insurance")</h4>
                     </td>
@@ -796,7 +805,7 @@
                 <tr>
                     <td class="tdstrong">@Model.Label("SocialInsurance")</td>
                     <td>@Model.Element("SocialInsurance")</td>
-                </tr>
+                </tr>*@
               @*  <tr>
                     <td class="tdstrong">@Model.Label("Entitlementreason")</td>
                     <td>@Model.Element("Entitlementreason")</td>
@@ -872,6 +881,18 @@
                     <td class="tdstrong">@Model.Label("BranchofStudy")</td>
                     <td>@Model.Element("BranchofStudy")</td>
                 </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("BranchofStudyTwo")</td>
+                    <td>@Model.Element("BranchofStudyTwo")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Educationstartdate")</td>
+                    <td>@Model.Element("Educationstartdate")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Educationenddate")</td>
+                    <td>@Model.Element("Educationenddate")</td>
+                </tr>
 
                 @for (int i = 2; i <= 5; i++)
                 {
@@ -900,6 +921,21 @@
                         <td>
                             @Model.Element("BranchofStudy" + i.ToString())</td>
                     </tr>
+                     <tr class="education@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("BranchofStudyTwo" + i.ToString())</td>
+                        <td>
+                            @Model.Element("BranchofStudyTwo" + i.ToString())</td>
+                    </tr>
+                    <tr class="education@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("Educationstartdate" + i.ToString())</td>
+                        <td>
+                            @Model.Element("Educationstartdate" + i.ToString())</td>
+                    </tr>
+                    <tr class="education@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("Educationenddate" + i.ToString())</td>
+                        <td>
+                            @Model.Element("Educationenddate" + i.ToString())</td>
+                    </tr>
                 }
 
                 <tr id="addEducationTrr">
@@ -907,15 +943,15 @@
                         @Model.Element("Educations")
                         <a id="addEducation" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another education")</a></td>
                 </tr>
-                <tr>
+@*                  <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("CountrySpecifics")</h4>
                     </td>
                 </tr>
-                <tr>
+              <tr>
                     <td class="tdstrong">@Model.Label("Registrationnumber")</td>
                     <td>@Model.Element("Registrationnumber")</td>
-                </tr>
+                </tr>*@
 
             </tbody>
         </table>

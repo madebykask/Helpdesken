@@ -121,6 +121,7 @@
                     </td>
                 </tr>
                 }
+                @Html.Partial("_InternalLogNoteV2", Model)
                 @*<tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Permanent Address")</h4>
@@ -182,9 +183,7 @@
     </div>
 
     <input type="hidden" id="CustomerId" value="@Model.Form.CustomerId" />
-    <input type="hidden" id="WatchDate" name="WatchDate" value="@Model.Element("WatchDate")" />
     <input type="hidden" id="formGuid" value="@Model.FormGuid" />
     <input type="hidden" id="MultipleEntrySectionsNr" value="@FormLibConstants.FormField.MultipleEntrySectionsNr" />
-    <input type="hidden" id="CalculateWatchDate" name="CalculateWatchDate" value="1" />
 </div>
 

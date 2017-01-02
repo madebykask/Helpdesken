@@ -10,7 +10,7 @@
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Basic pay")</h4>
                     </td>
-                    <td class="tdstrong"> 
+                    <td class="tdstrong">
                         <h4>@Model.Translate("Current record")</h4>
                     </td>
                 </tr>
@@ -19,7 +19,15 @@
                     <td>
                         @Model.Element("PayrollCategory")
                     </td>
-                </tr>              
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("JobGrade")</td>
+                    <td>@Model.Element("JobGrade")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("JobLevel")</td>
+                    <td>@Model.Element("JobLevel")</td>
+                </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("BasicPayAmount")</td>
                     <td>
@@ -27,17 +35,43 @@
                     </td>
                 </tr>
                 <tr>
+                    <td class="tdstrong">@Model.Label("ExtraBasicPayAmount")</td>
+                    <td>
+                        @Model.Element("ExtraBasicPayAmount")
+                    </td>
+                </tr>
+                <tr>
                     <td class="tdstrong">@Model.Label("PaidPer")</td>
                     <td>
                         @Model.Element("PaidPer")
                     </td>
-                 </tr>     
-                 <tr>
+                </tr>
+                <tr>
                     <td class="tdstrong">@Model.Label("BasicPayChangeReason")</td>
                     <td>
                         @Model.Element("BasicPayChangeReason")
                     </td>
-                </tr>           
+                </tr>
+               @* <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("DC Pension")</h4>
+                    </td>
+                    <td class="tdstrong">
+                        <h4>@Model.Translate("Current record")</h4>                        
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ParticipantStatus")</td>
+                    <td>
+                        @Model.Element("ParticipantStatus")
+                    </td>
+                </tr>
+                 <tr>
+                    <td class="tdstrong">@Model.Label("CalculationStartDate")</td>
+                    <td>
+                        @Model.Element("CalculationStartDate")
+                    </td>
+                </tr>*@
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Allowances")</h4>
@@ -135,7 +169,7 @@
                         <h4>@Model.Translate("Current record")</h4>
                     </td>
                 </tr>
-                                <tr>
+                <tr>
                     <td class="tdstrong">@Model.Label("DeductionsChangeType")</td>
                     <td>
                         @Model.Element("DeductionsChangeType")
@@ -227,10 +261,23 @@
                     <td>
                         @Model.Element("OneIKEABonusLevel")
                     </td>
-                </tr>               
+                </tr>
+                @*<tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("DC Pension")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Participantstatus")</td>
+                    <td>@Model.Element("Participantstatus")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Calculationstartdate")</td>
+                    <td>@Model.Element("Calculationstartdate")</td>
+                </tr>*@
             </tbody>
         </table>
     </div>
-        <input type="hidden" id="MultipleEntrySectionsNr" value="@FormLibConstants.FormField.MultipleEntrySectionsNr" />
+    <input type="hidden" id="MultipleEntrySectionsNr" value="@FormLibConstants.FormField.MultipleEntrySectionsNr" />
 </div>
 

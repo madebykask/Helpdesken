@@ -25,7 +25,7 @@
         
       </element>
       <element name="Company" type="text" label="Company"></element>
-      <element name="BusinessUnit" type="text" label="Business Unit"></element>
+      <element name="BusinessUnit" type="text" label="Business Unit" mandatory="1"></element>
       <element name="ServiceArea" type="text" label="Function"></element>
       <element name="Department" type="text" label="Department"></element>
       <element name="TECoWorker" type="select" label="Is Co-Worker a TE?" mandatory="1">
@@ -43,15 +43,16 @@
         </options>
       </element>
       
-      <element type="text" name="PermanentAddressLine1" label="Address line 1"></element>
-      <element type="text" name="PermanentAddressLine2" label="Address line 2"></element>
-      <element type="text" name="PermanentAddressLine3" label="Address line 3"></element>
-      <element type="text" name="PermanentPostalCode" label="Postal code"></element>
-      <element type="text" name="PermanentCity" label="City"></element>
-      <element type="search-select" name="PermanentCountry" label="Country" default="United Kingdom">
+      <element type="text" name="PermanentAddressLine1" label="Address line 1" formfieldidentifier="E1P0006.STRAS:1"></element>
+      <element type="text" name="PermanentAddressLine2" label="Address line 2" formfieldidentifier="E1P0006.HSNMR:1"></element>
+      <element type="text" name="PermanentAddressLine3" label="Address line 3" formfieldidentifier="E1P0006.POSTA:1"></element>
+      <element type="text" name="PermanentPostalCode" label="Postal code" formfieldidentifier="E1P0006.PSTLZ:1"></element>
+      <element type="text" name="PermanentCity" label="City" formfieldidentifier="E1P0006.ORT01:1"></element>
+      <element type="search-select" name="PermanentCountry" label="Country" default="United Kingdom" formfieldidentifier="E1P0006.LAND1:1">
         &pre_country;
       </element>
-      <element type="hidden" name="JobTitle" label="Job Title" ></element>
+      <element type="hidden" name="JobTitle" label="Job Title" formfieldidentifier="E1P0001.STELL"></element>
+      <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
     </tab>
 
     <!--Absences-->
@@ -62,6 +63,7 @@
           <option value=""></option>
           <option value="Maternity leave">Maternity leave</option>
           <option value="Paternity leave">Paternity leave</option>
+          <option value="Shared parental leave">Shared parental leave</option>          
           <option value="Adoption leave">Adoption leave</option>
           <option value="Career Break - start">Career Break - start</option>
           <option value="Career Break - extension">Career Break - extension</option>
@@ -119,6 +121,7 @@
           <option value=""></option>
           <option value="Maternity leave">Maternity leave</option>
           <option value="Paternity leave">Paternity leave</option>
+          <option value="Shared parental leave">Shared parental leave</option>
           <option value="Adoption leave">Adoption leave</option>
           <option value="Career Break - start">Career Break - start</option>
           <option value="Career Break - extension">Career Break - extension</option>
@@ -169,6 +172,7 @@
           <option value=""></option>
           <option value="Maternity leave">Maternity leave</option>
           <option value="Paternity leave">Paternity leave</option>
+          <option value="Shared parental leave">Shared parental leave</option>
           <option value="Adoption leave">Adoption leave</option>
           <option value="Career Break - start">Career Break - start</option>
           <option value="Career Break - extension">Career Break - extension</option>
@@ -219,6 +223,7 @@
           <option value=""></option>
           <option value="Maternity leave">Maternity leave</option>
           <option value="Paternity leave">Paternity leave</option>
+          <option value="Shared parental leave">Shared parental leave</option>
           <option value="Adoption leave">Adoption leave</option>
           <option value="Career Break - start">Career Break - start</option>
           <option value="Career Break - extension">Career Break - extension</option>
@@ -269,6 +274,7 @@
           <option value=""></option>
           <option value="Maternity leave">Maternity leave</option>
           <option value="Paternity leave">Paternity leave</option>
+          <option value="Shared parental leave">Shared parental leave</option>
           <option value="Adoption leave">Adoption leave</option>
           <option value="Career Break - start">Career Break - start</option>
           <option value="Career Break - extension">Career Break - extension</option>

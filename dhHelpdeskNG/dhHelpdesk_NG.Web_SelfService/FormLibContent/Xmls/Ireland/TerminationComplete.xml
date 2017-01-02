@@ -24,7 +24,7 @@
                 
             </element>
           <element name="Company" type="text" label="Company"></element>
-            <element name="BusinessUnit" type="text" label="Business Unit"></element>
+            <element name="BusinessUnit" type="text" label="Business Unit" mandatory="1"></element>
           <element name="ServiceArea" type="text" label="Function"></element>
             <element name="Department" type="text" label="Department"></element>
             <element name="TECoWorker" type="select" label="Is Co-Worker a TE?" mandatory="1">
@@ -41,12 +41,12 @@
                 </options>
             </element>
             
-          <element type="text" name="PermanentAddressLine1" label="Address line 1" mandatory="1"></element>
-          <element type="text" name="PermanentAddressLine2" label="Address line 2"></element>
-          <element type="text" name="PermanentAddressLine3" label="Address line 3"></element>
-          <element type="text" name="PermanentPostalCode" label="Postal Code"></element>
-          <element type="text" name="PermanentCity" label="City" mandatory="1"></element>
-          <element type="search-select" name="PermanentCountry" label="Country" mandatory="1" default="Ireland">
+          <element type="text" name="PermanentAddressLine1" label="Address line 1" mandatory="1" formfieldidentifier="E1P0006.STRAS:1"></element>
+          <element type="text" name="PermanentAddressLine2" label="Address line 2" formfieldidentifier="E1P0006.HSNMR:1"></element>
+          <element type="text" name="PermanentAddressLine3" label="Address line 3" formfieldidentifier="E1P0006.POSTA:1"></element>
+          <element type="text" name="PermanentPostalCode" label="Postal Code" formfieldidentifier="E1P0006.PSTLZ:1"></element>
+          <element type="text" name="PermanentCity" label="City" mandatory="1" formfieldidentifier="E1P0006.ORT01:1"></element>
+          <element type="search-select" name="PermanentCountry" label="Country" mandatory="1" default="Ireland" formfieldidentifier="E1P0006.LAND1:1">
             <options>
               <option value=""></option>
               <option value="Unknown">Unknown</option>
@@ -302,7 +302,7 @@
               <option value="Zimbabwe">Zimbabwe</option>
             </options>
           </element>
-
+          <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
         </tab>
         <!--Basic Termination Details-->
         <tab name="#Basic" label="Basic">

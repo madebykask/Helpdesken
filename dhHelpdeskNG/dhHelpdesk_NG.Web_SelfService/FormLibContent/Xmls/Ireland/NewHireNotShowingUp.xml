@@ -26,7 +26,7 @@
         
       </element>
       <element name="Company" type="text" label="Company"></element>
-      <element name="BusinessUnit" type="text" label="Business Unit"></element>
+      <element name="BusinessUnit" type="text" label="Business Unit" mandatory="1"></element>
       <element name="ServiceArea" type="text" label="Function"></element>
       <element name="Department" type="text" label="Department">
         
@@ -46,6 +46,8 @@
       </element>
       
       <element type="textarea" name="Comment" label="Comment"></element>
+
+      <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
     </tab>
 
   </fields>

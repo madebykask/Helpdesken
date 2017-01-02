@@ -1,10 +1,7 @@
 ﻿@model ECT.FormLib.Models.FormModel
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
-@{
-    const string IsTeWorker = "International Transfer";
-    const string DefaultCountry = "Netherlands";
-}
+
 <div class="tab-pane" id="personal">
     <div class="span6">
         <table class="table">
@@ -133,7 +130,7 @@
                   {
                       <tr class="familyMember@(i.ToString())" id="familyMember@(i.ToString())">
                           <td class="tdstrong" colspan="2">
-                              <h4>@Model.Translate("Family Member & Dependents") @i.ToString()</h4>
+                              <h4>@Model.Translate("Family Member / Dependents") @i.ToString()</h4>
                           </td>
                       </tr>
                       <tr class="familyMember@(i.ToString())">
@@ -379,9 +376,23 @@
               <!-- Bank Account Details -->
               @Html.Partial("_SectionBank", Model)
                 
+
+                 <!-- FISCAL DATA -->
+                
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Fiscal Data")</h4>
+                    </td>
+                </tr>                  
+                <tr>
+                    <td class="tdstrong">@Model.Label("Taxdeduction")</td>
+                    <td>@Model.Element("Taxdeduction")</td>
+                </tr>
+
+
                 <!-- Nationality / Language -->
                 
-@*                <tr>
+                <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Nationality / Language")</h4>
                     </td>
@@ -389,156 +400,10 @@
                 <tr>
                     <td class="tdstrong">@Model.Label("Language")</td>
                     <td>@Model.Element("Language")</td>
-                </tr>*@
-                
-                <!-- Education - COMMENTED OUT BECAUSE THIS IS NOT VALID FOR NETHERLANDS -->
-                
-                @*<tr>
-                    <td class="tdstrong" colspan="2">
-                        <h4>@Model.Translate("Education")</h4>
-                    </td>
-                </tr>  
-                <tr>
-                    <td class="tdstrong">@Model.Label("EducationalEstablishment")</td>
-                    <td>@Model.Element("EducationalEstablishment")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("InstituteLocation")</td>
-                    <td>@Model.Element("InstituteLocation")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("Certificate")</td>
-                    <td>@Model.Element("Certificate")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("DurationOfCourse")</td>
-                    <td>@Model.Element("DurationOfCourse")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("BranchOfStudy")</td>
-                    <td>@Model.Element("BranchOfStudy")</td>
-                </tr>
-                
-                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
-                  {
-                      <tr class="education@(i.ToString())" id="education@(i.ToString())">
-                          <td class="tdstrong" colspan="2">
-                              <h4>@Model.Translate("Education") @i.ToString()</h4>
-                          </td>
-                      </tr>
-                      <tr class="education@(i.ToString())">
-                          <td class="tdstrong">@Model.Label("EducationalEstablishment" + i.ToString())</td>
-                          <td>
-                              @Model.Element("EducationalEstablishment" + i.ToString())</td>
-                      </tr>
-                    
-                    <tr class="education@(i.ToString())">
-                          <td class="tdstrong">@Model.Label("InstituteLocation" + i.ToString())</td>
-                          <td>
-                              @Model.Element("InstituteLocation" + i.ToString())</td>
-                      </tr>
-                    <tr class="education@(i.ToString())">
-                          <td class="tdstrong">@Model.Label("Certificate" + i.ToString())</td>
-                          <td>
-                              @Model.Element("Certificate" + i.ToString())</td>
-                      </tr>
-                    <tr class="education@(i.ToString())">
-                          <td class="tdstrong">@Model.Label("DurationOfCourse" + i.ToString())</td>
-                          <td>
-                              @Model.Element("DurationOfCourse" + i.ToString())</td>
-                      </tr>
-                    <tr class="education@(i.ToString())">
-                          <td class="tdstrong">@Model.Label("BranchOfStudy" + i.ToString())</td>
-                          <td>
-                              @Model.Element("BranchOfStudy" + i.ToString())</td>
-                      </tr>
-                }
-                <tr id="addEducationTr">
-                    <td colspan="2">
-                        @Model.Element("Educations")
-                        <a id="addEducation" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another education")</a></td>
-                </tr>
-
-                
-                <!-- Other / Previous employers -->
-                
+                </tr>        
                 <tr>
                     <td class="tdstrong" colspan="2">
-                        <h4>@Model.Translate("Other / Previous employers")</h4>
-                    </td>
-                </tr>  
-                <tr>
-                    <td class="tdstrong">@Model.Label("OtherPreviousEmployer")</td>
-                    <td>@Model.Element("OtherPreviousEmployer")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("OtherPreviousEmployerCity")</td>
-                    <td>@Model.Element("OtherPreviousEmployerCity")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("OtherPreviousEmployerCountry")</td>
-                    <td>@Model.Element("OtherPreviousEmployerCountry")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("OtherPreviousEmployerIndustry")</td>
-                    <td>@Model.Element("OtherPreviousEmployerIndustry")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("OtherPreviousEmployerJob")</td>
-                    <td>@Model.Element("OtherPreviousEmployerJob")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("OtherPreviousEmployerWorkContract")</td>
-                    <td>@Model.Element("OtherPreviousEmployerWorkContract")</td>
-                </tr>
-
-                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
-                  {
-                      <tr class="otherpreviousemployers@(i.ToString())" id="otherpreviousemployers@(i.ToString())">
-                          <td class="tdstrong" colspan="2">
-                              <h4>@Model.Translate("Other / Previous Employers") @i.ToString()</h4>
-                          </td>
-                      </tr>
-                      <tr class="otherpreviousemployers@(i.ToString())">
-                          <td class="tdstrong">@Model.Label("OtherPreviousEmployer" + i.ToString())</td>
-                          <td>
-                              @Model.Element("OtherPreviousEmployer" + i.ToString())</td>
-                      </tr>
-                    <tr class="otherpreviousemployers@(i.ToString())">
-                          <td class="tdstrong">@Model.Label("OtherPreviousEmployerCity" + i.ToString())</td>
-                          <td>
-                              @Model.Element("OtherPreviousEmployerCity" + i.ToString())</td>
-                      </tr>
-                    <tr class="otherpreviousemployers@(i.ToString())">
-                          <td class="tdstrong">@Model.Label("OtherPreviousEmployerCountry" + i.ToString())</td>
-                          <td>
-                              @Model.Element("OtherPreviousEmployerCountry" + i.ToString())</td>
-                      </tr>
-                    <tr class="otherpreviousemployers@(i.ToString())">
-                          <td class="tdstrong">@Model.Label("OtherPreviousEmployerIndustry" + i.ToString())</td>
-                          <td>
-                              @Model.Element("OtherPreviousEmployerIndustry" + i.ToString())</td>
-                      </tr>
-                    <tr class="otherpreviousemployers@(i.ToString())">
-                          <td class="tdstrong">@Model.Label("OtherPreviousEmployerJob" + i.ToString())</td>
-                          <td>
-                              @Model.Element("OtherPreviousEmployerJob" + i.ToString())</td>
-                      </tr>
-                    <tr class="otherpreviousemployers@(i.ToString())">
-                          <td class="tdstrong">@Model.Label("OtherPreviousEmployerWorkContract" + i.ToString())</td>
-                          <td>
-                              @Model.Element("OtherPreviousEmployerWorkContract" + i.ToString())</td>
-                      </tr>
-                }
-                <tr id="addOtherPreviousEmployersTr">
-                    <td colspan="2">
-                        @Model.Element("OtherPreviousEmployers")
-                        <a id="addOtherPreviousEmployers" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another previous employer")</a></td>
-                </tr>*@
-
-                <tr>
-                    <td class="tdstrong" colspan="2">
-                        <h4>@Model.Translate("Documents")</h4>
+                        <h4>@Model.Translate("ID Documents/Permits")</h4>
                     </td>
                 </tr>  
                 <tr>
@@ -616,51 +481,4 @@
     <input type="hidden" id="MultipleEntrySectionsNr" value="@FormLibConstants.FormField.MultipleEntrySectionsNr" />
 </div>
 
-<script>
-
-    //$(function () {
-
-        function setGlobalMobilityBehavior(value) {
-            if (!(value == '@IsTeWorker')) {
-                $("[class*=globalmobility]").hide();
-                $("[class*=globalmobility] input:not(input[type=hidden])").val("");
-                $("[class*=globalmobility] input[type=text][name*='Country']").val('@DefaultCountry');
-                $("[class*=globalmobility] select option:not([value])").prop('selected', true);
-            } else {
-                $(".globalmobility-first").show();
-            }
-
-            $("[class*=globalmobility-first] input[type=hidden]").val("1");
-        }
-
-        if (!($('#NewToIKEA').val() == '@IsTeWorker')) {
-            $(".globalmobility-first").hide();
-            $(".globalmobility").hide();
-        }
-
-        $('#NewToIKEA').change(function () {
-            setGlobalMobilityBehavior($(this).val());
-        });
-    //});
-
-    $("#FirstName,#LastName,#Co-WorkerID").change(function () {
-        SetPayeeDefault();
-    });
-
-    function SetPayeeDefault() {
-
-        var counterBankAccounts = parseInt($('#BankAccounts').val()) || 0;
-
-        var payeevalue = $("#FirstName").val() + " " + $("#LastName").val();
-
-        //set first
-        $("#Payee").val(payeevalue);
-
-            for (var i = 2; i <= counterBankAccounts; i++) {
-                //$('.bankaccount' + i).show();
-                var payeeid = $('#Payee' + i);
-                $(payeeid).val(payeevalue);
-            }
-    };
-
-</script>
+@*Scripts Moved to _TabHiringJS*@

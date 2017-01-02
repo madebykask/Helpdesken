@@ -12,8 +12,8 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="tdstrong">@Model.Label("NewtoIKEA")</td>
-                    <td>@Model.Element("NewtoIKEA")</td>
+                    <td class="tdstrong">@Model.Label("NewToIKEA")</td>
+                    <td>@Model.Element("NewToIKEA")</td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("Contractstartdate")</td>
@@ -48,8 +48,8 @@
                     </tr>  
                 }
                 <tr>
-                    <td class="tdstrong">@Model.Label("Co-workerID")</td>
-                    <td>@Model.Element("Co-workerID")</td>
+                    <td class="tdstrong">@Model.Label("Co-WorkerID")</td>
+                    <td>@Model.Element("Co-WorkerID", false)</td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("GlobalHRID")</td>
@@ -60,21 +60,22 @@
                     <td>@Model.Element("Title")</td>
                 </tr>
                 <tr>
-                    <td class="tdstrong">@Model.Label("Firstname")</td>
-                    <td>@Model.Element("Firstname")</td>
+                    <td class="tdstrong">@Model.Label("FirstnameinKR")</td>
+                    <td>@Model.Element("FirstnameinKR")</td>
                 </tr>
                 <tr>
-                    <td class="tdstrong">@Model.Label("FirstnameinEnglish")</td>
-                    <td>@Model.Element("FirstnameinEnglish")</td>
+                    <td class="tdstrong">@Model.Label("FirstName")</td>
+                    <td>@Model.Element("FirstName")</td>
+                </tr>
+                                <tr>
+                    <td class="tdstrong">@Model.Label("LastnameinKR")</td>
+                    <td>@Model.Element("LastnameinKR")</td>
                 </tr>
                 <tr>
-                    <td class="tdstrong">@Model.Label("Lastname")</td>
-                    <td>@Model.Element("Lastname")</td>
+                    <td class="tdstrong">@Model.Label("LastName")</td>
+                    <td>@Model.Element("LastName")</td>
                 </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("LastnameinEnglish")</td>
-                    <td>@Model.Element("LastnameinEnglish")</td>
-                </tr>
+
                 <tr>
                     <td class="tdstrong">@Model.Label("NickName")</td>
                     <td>@Model.Element("NickName")</td>
@@ -88,6 +89,7 @@
                     <td class="tdstrong">@Model.Label("Maritalstatus")</td>
                     <td>@Model.Element("Maritalstatus")</td>
                 </tr>
+                @Html.Partial("_InternalLogNoteV2", Model)
             </tbody>
         </table>
     </div>

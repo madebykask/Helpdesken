@@ -232,48 +232,61 @@
                 } // SSO Login
                 else
                     if (loginMode == LoginMode.Windows)
-                {
-                    var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
-                    SessionFacade.UserHasAccess = true;
-                    SessionFacade.CurrentCoWorkers = null;
-                    string fullName = identity.Name;
-                    string userId = fullName.GetUserFromAdPath();
-                    if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings[AppSettingsKey.DefaultUserId]))
-                        userId = ConfigurationManager.AppSettings[AppSettingsKey.DefaultUserId].ToString();
-
-                    string userDomain = fullName.GetDomainFromAdPath();
-                    SessionFacade.CurrentSystemUser = userId;
-                    var ui = new UserIdentity()
                     {
-                        UserId = userId,
-                        Domain = userDomain,
-                        FirstName = string.Empty
-                    };
+                        var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+                        SessionFacade.UserHasAccess = true;
+                        SessionFacade.CurrentCoWorkers = null;
+                        string fullName = identity.Name;
+                        string userId = fullName.GetUserFromAdPath();
+                        if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings[AppSettingsKey.DefaultUserId]))
+                            userId = ConfigurationManager.AppSettings[AppSettingsKey.DefaultUserId].ToString();
 
-                    SessionFacade.CurrentUserIdentity = ui;
-                }
-                else
-                        if (loginMode == LoginMode.Anonymous)
-                {
-                    var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
-                    SessionFacade.UserHasAccess = true;
-                    SessionFacade.CurrentCoWorkers = null;
-                    string fullName = identity.Name;
-                    string userId = fullName.GetUserFromAdPath();
-                    if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings[AppSettingsKey.DefaultUserId]))
-                        userId = ConfigurationManager.AppSettings[AppSettingsKey.DefaultUserId].ToString();
-                    string userDomain = fullName.GetDomainFromAdPath();
+                        var empployNum = "";
+                        var defaultEmployeeNumber = ConfigurationManager.AppSettings[AppSettingsKey.DefaultEmployeeNumber].ToString();
+                        if (!string.IsNullOrEmpty(defaultEmployeeNumber))
+                            empployNum = defaultEmployeeNumber;
 
-                    SessionFacade.CurrentSystemUser = userId;
-                    var ui = new UserIdentity()
+                        string userDomain = fullName.GetDomainFromAdPath();
+                        SessionFacade.CurrentSystemUser = userId;
+                        var ui = new UserIdentity()
+                        {
+                            UserId = userId,
+                            Domain = userDomain,
+                            FirstName = "Windows User",
+                            EmployeeNumber = empployNum
+                        };
+
+                        SessionFacade.CurrentUserIdentity = ui;
+                    }
+                    else
+                            if (loginMode == LoginMode.Anonymous)
                     {
-                        UserId = userId,
-                        Domain = userDomain,
-                        FirstName = string.Empty
-                    };
+                        var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+                        SessionFacade.UserHasAccess = true;
+                        SessionFacade.CurrentCoWorkers = null;
+                        string fullName = identity.Name;
+                        string userId = fullName.GetUserFromAdPath();
+                        if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings[AppSettingsKey.DefaultUserId]))
+                            userId = ConfigurationManager.AppSettings[AppSettingsKey.DefaultUserId].ToString();
 
-                    SessionFacade.CurrentUserIdentity = ui;
-                }
+                        var empployNum = "";
+                        var defaultEmployeeNumber = ConfigurationManager.AppSettings[AppSettingsKey.DefaultEmployeeNumber].ToString();
+                        if (!string.IsNullOrEmpty(defaultEmployeeNumber))
+                            empployNum = defaultEmployeeNumber;
+
+                        string userDomain = fullName.GetDomainFromAdPath();
+
+                        SessionFacade.CurrentSystemUser = userId;
+                        var ui = new UserIdentity()
+                        {
+                            UserId = userId,
+                            Domain = userDomain,
+                            FirstName = "Anonymous User",
+                            EmployeeNumber = empployNum
+                        };
+
+                        SessionFacade.CurrentUserIdentity = ui;
+                    }
 
                 // load user info according database info (tblComputerUser)
                 LoadUserInfo();

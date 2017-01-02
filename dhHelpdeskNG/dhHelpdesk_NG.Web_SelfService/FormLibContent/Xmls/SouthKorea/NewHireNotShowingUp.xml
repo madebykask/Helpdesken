@@ -14,7 +14,7 @@
 
     <!--Tab ServiceRequestDetails-->
     <tab name="#ServiceRequestDetails" label="Service Request Details">
-      <element name="Co-WorkerGlobalviewID" type="text" label="Co-Worker Globalview ID">
+      <element name="Co-WorkerGlobalviewID" type="text" label="Co-Worker Globalview ID" mandatory="1">
         <regex inherit="unsignednum" pattern="" message=""></regex>
         <regex inherit="employeeno" pattern="" message=""></regex>
       </element>
