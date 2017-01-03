@@ -11,12 +11,17 @@
             this.Programs = new List<OrderProgramModel>();
         }
 
-        public ProgramEditFields(List<OrderProgramModel> programs)
+        public ProgramEditFields(List<OrderProgramModel> programs, string infoProduct)
         {
-            this.Programs = programs;
+            Programs = programs;
+            InfoProduct = infoProduct;
         }
 
         [NotNull]
-        public List<OrderProgramModel> Programs { get; private set; }  
+        public List<OrderProgramModel> Programs { get; private set; }
+
+        [NotNull]
+        public string InfoProduct { get; private set; }
+
     }
 }

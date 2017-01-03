@@ -4,13 +4,18 @@
 <h4>@Translation.Get("Program")</h4>
 <table class="tableform">
     <tbody>
-        @foreach (var program in Model.Program.Value.Programs)
-        {
-            <tr>
-                <td>
-                    @program.Name
-                </td>
-            </tr>
-        }
+    @if (Model.Program.Show)
+    {
+        foreach (var program in Model.Program.Value.Programs)
+         {
+             <tr>
+                 <td>
+                     @program.Name
+                 </td>
+             </tr>
+         }
+    }
+    @*@Html.EditorFor(m => m.Programs, "Fields/MultiSelectList", new { Source = Model.AllPrograms })*@
+    @Html.EditorFor(m => m.InfoProduct, "Fields/WideText")
     </tbody>
 </table>

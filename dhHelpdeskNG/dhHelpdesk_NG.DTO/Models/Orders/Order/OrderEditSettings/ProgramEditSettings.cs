@@ -4,12 +4,17 @@
 
     public sealed class ProgramEditSettings
     {
-        public ProgramEditSettings(TextFieldEditSettings program)
+        public ProgramEditSettings(TextFieldEditSettings program, TextFieldEditSettings infoProduct)
         {
-            this.Program = program;
+            Program = program;
+            InfoProduct = infoProduct;
         }
 
         [NotNull]
-        public TextFieldEditSettings Program { get; private set; }         
+        public TextFieldEditSettings Program { get; private set; }
+
+
+        [NotNull]
+        public TextFieldEditSettings InfoProduct { get; private set; }
     }
 }

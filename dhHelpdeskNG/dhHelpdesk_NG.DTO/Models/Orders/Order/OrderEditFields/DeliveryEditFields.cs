@@ -2,7 +2,7 @@
 {
     using System;
 
-    using DH.Helpdesk.Common.ValidationAttributes;
+    using Common.ValidationAttributes;
 
     public sealed class DeliveryEditFields
     {
@@ -18,20 +18,24 @@
                 string deliveryInfo1, 
                 string deliveryInfo2, 
                 string deliveryInfo3,
-                int? deliveryOuIdId)
+                int? deliveryOuIdId,
+                string deliveryName,
+                string deliveryPhone)
         {
-            this.DeliveryOuIdId = deliveryOuIdId;
-            this.DeliveryInfo3 = deliveryInfo3;
-            this.DeliveryInfo2 = deliveryInfo2;
-            this.DeliveryInfo1 = deliveryInfo1;
-            this.DeliveryLocation = deliveryLocation;
-            this.DeliveryPostalAddress = deliveryPostalAddress;
-            this.DeliveryPostalCode = deliveryPostalCode;
-            this.DeliveryAddress = deliveryAddress;
-            this.DeliveryOu = deliveryOu;
-            this.DeliveryDepartmentId = deliveryDepartmentId;
-            this.InstallDate = installDate;
-            this.DeliveryDate = deliveryDate;
+            DeliveryOuIdId = deliveryOuIdId;
+            DeliveryInfo3 = deliveryInfo3;
+            DeliveryInfo2 = deliveryInfo2;
+            DeliveryInfo1 = deliveryInfo1;
+            DeliveryLocation = deliveryLocation;
+            DeliveryPostalAddress = deliveryPostalAddress;
+            DeliveryPostalCode = deliveryPostalCode;
+            DeliveryAddress = deliveryAddress;
+            DeliveryOu = deliveryOu;
+            DeliveryDepartmentId = deliveryDepartmentId;
+            InstallDate = installDate;
+            DeliveryDate = deliveryDate;
+            DeliveryName = deliveryName;
+            DeliveryPhone = deliveryPhone;
         }
 
         public DateTime? DeliveryDate { get; private set; }
@@ -62,5 +66,11 @@
 
         [IsId]
         public int? DeliveryOuIdId { get; private set; }
+
+        [NotNull]
+        public string DeliveryName { get; private set; }
+
+        [NotNull]
+        public string DeliveryPhone { get; private set; }
     }
 }

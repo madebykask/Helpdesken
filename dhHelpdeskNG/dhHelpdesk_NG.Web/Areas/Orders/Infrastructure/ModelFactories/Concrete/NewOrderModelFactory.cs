@@ -63,6 +63,8 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
             var deliveryInfo2 = _configurableFieldModelFactory.CreateStringField(settings.DeliveryInfo2, null);
             var deliveryInfo3 = _configurableFieldModelFactory.CreateStringField(settings.DeliveryInfo3, null);
             var deliveryOuId = _configurableFieldModelFactory.CreateSelectListField(settings.DeliveryOuId, options.DeliveryOuId, null);
+            var deliveryName = _configurableFieldModelFactory.CreateStringField(settings.DeliveryName, null);
+            var deliveryPhone = _configurableFieldModelFactory.CreateStringField(settings.DeliveryPhone, null);
 
             return new DeliveryEditModel(
                             deliveryDate,
@@ -76,7 +78,9 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                             deliveryInfo1,
                             deliveryInfo2,
                             deliveryInfo3,
-                            deliveryOuId);
+                            deliveryOuId,
+                            deliveryName,
+                            deliveryPhone);
         }
 
         private GeneralEditModel CreateGeneralEditModel(
@@ -203,8 +207,8 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
         private ProgramEditModel CreateProgramEditModel(ProgramEditSettings settings)
         {
             var program = _configurableFieldModelFactory.CreatePrograms(settings.Program, new List<ProgramModel>(0));
-
-            return new ProgramEditModel(program);
+            var infoProduct = _configurableFieldModelFactory.CreateStringField(settings.InfoProduct, null);
+            return new ProgramEditModel(program, infoProduct);
         }
 
         private ReceiverEditModel CreateReceiverEditModel(ReceiverEditSettings settings)

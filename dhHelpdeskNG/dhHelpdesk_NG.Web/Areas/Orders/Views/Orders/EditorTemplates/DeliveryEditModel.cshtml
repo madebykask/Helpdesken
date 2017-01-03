@@ -5,8 +5,12 @@
 <h4>@Translation.Get("Leveransinformation")</h4>
 <table class="tableform">
     <tbody>
-        @Html.EditorFor(m => m.DeliveryDate, "Fields/Date", new { id = "deliverydate_datepicker" })        
-        @Html.EditorFor(m => m.InstallDate, "Fields/Date", new { id = "installdate_datepicker" })     
+        @Html.EditorFor(m => m.DeliveryName, "Fields/Text")
+        @Html.EditorFor(m => m.DeliveryPhone, "Fields/Text")
+
+
+        @Html.EditorFor(m => m.DeliveryDate, "Fields/Date", new { id = "deliverydate_datepicker" })
+        @Html.EditorFor(m => m.InstallDate, "Fields/Date", new { id = "installdate_datepicker" })
         @if (Model.DeliveryDepartment.Show)
         {
             <tr>
@@ -22,14 +26,14 @@
                 </td>
             </tr>
         }
-        @Html.EditorFor(m => m.DeliveryOu, "Fields/Text")           
-        @Html.EditorFor(m => m.DeliveryAddress, "Fields/Text")           
-        @Html.EditorFor(m => m.DeliveryPostalCode, "Fields/Text")           
-        @Html.EditorFor(m => m.DeliveryPostalAddress, "Fields/Text")           
-        @Html.EditorFor(m => m.DeliveryLocation, "Fields/Text")           
-        @Html.EditorFor(m => m.DeliveryInfo1, "Fields/Text")           
-        @Html.EditorFor(m => m.DeliveryInfo2, "Fields/Text")           
-        @Html.EditorFor(m => m.DeliveryInfo3, "Fields/Text")   
+        @Html.EditorFor(m => m.DeliveryOu, "Fields/Text")
+        @Html.EditorFor(m => m.DeliveryAddress, "Fields/Text")
+        @Html.EditorFor(m => m.DeliveryPostalCode, "Fields/Text")
+        @Html.EditorFor(m => m.DeliveryPostalAddress, "Fields/Text")
+        @Html.EditorFor(m => m.DeliveryLocation, "Fields/Text")
+        @Html.EditorFor(m => m.DeliveryInfo1, "Fields/Text")
+        @Html.EditorFor(m => m.DeliveryInfo2, "Fields/Text")
+        @Html.EditorFor(m => m.DeliveryInfo3, "Fields/Text")
         @if (Model.DeliveryOuId.Show)
         {
             <tr>
@@ -43,7 +47,7 @@
                 <td class="span3">
                     @Model.DeliveryOuId.Help
                 </td>
-            </tr>                           
-        }  
+            </tr>
+        }
     </tbody>
 </table>

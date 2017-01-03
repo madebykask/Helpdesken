@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using Antlr.Runtime.Misc;
 
 namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
 {
@@ -79,7 +80,9 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.DeliveryInfo1),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.DeliveryInfo2),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.DeliveryInfo3),
-                    model.DeliveryOuIdId);
+                    model.DeliveryOuIdId,
+                    ConfigurableFieldModel<string>.GetValueOrDefault(model.DeliveryName),
+                    ConfigurableFieldModel<string>.GetValueOrDefault(model.DeliveryPhone));
         }
 
         private static GeneralEditFields CreateGeneralFields(GeneralEditModel model)
@@ -178,13 +181,12 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
 
         private static ProgramEditFields CreateProgramFields(ProgramEditModel model)
         {
-            if (model == null)
-            {
-                model = ProgramEditModel.CreateEmpty();
-            }
+            if (model == null) model = ProgramEditModel.CreateEmpty();
 
-            var programs = model.Program.Value.Programs.Select(p => new OrderProgramModel(p.Id, p.Name)).ToList();
-            return new ProgramEditFields(programs);
+            var programs = model.Program?.Value?.Programs?.Select(p => new OrderProgramModel(p.Id, p.Name)).ToList();
+            var infoProduct = ConfigurableFieldModel<string>.GetValueOrDefault(model.InfoProduct);
+
+            return new ProgramEditFields(programs ?? new List<OrderProgramModel>(), infoProduct);
         }
 
         private static ReceiverEditFields CreateReceiverFields(ReceiverEditModel model)

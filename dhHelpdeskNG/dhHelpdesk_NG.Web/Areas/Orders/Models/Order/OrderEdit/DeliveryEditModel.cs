@@ -3,8 +3,8 @@
     using System;
     using System.Web.Mvc;
 
-    using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Areas.Orders.Models.Order.FieldModels;
+    using Common.ValidationAttributes;
+    using FieldModels;
 
     public sealed class DeliveryEditModel
     {
@@ -24,20 +24,24 @@
                 ConfigurableFieldModel<string> deliveryInfo1,
                 ConfigurableFieldModel<string> deliveryInfo2,
                 ConfigurableFieldModel<string> deliveryInfo3,
-                ConfigurableFieldModel<SelectList> deliveryOuId)
+                ConfigurableFieldModel<SelectList> deliveryOuId,
+                ConfigurableFieldModel<string> name,
+                ConfigurableFieldModel<string> phone)
         {
-            this.DeliveryDate = deliveryDate;
-            this.InstallDate = installDate;
-            this.DeliveryDepartment = deliveryDepartment;
-            this.DeliveryOu = deliveryOu;
-            this.DeliveryAddress = deliveryAddress;
-            this.DeliveryPostalCode = deliveryPostalCode;
-            this.DeliveryPostalAddress = deliveryPostalAddress;
-            this.DeliveryLocation = deliveryLocation;
-            this.DeliveryInfo1 = deliveryInfo1;
-            this.DeliveryInfo2 = deliveryInfo2;
-            this.DeliveryInfo3 = deliveryInfo3;
-            this.DeliveryOuId = deliveryOuId;
+            DeliveryDate = deliveryDate;
+            InstallDate = installDate;
+            DeliveryDepartment = deliveryDepartment;
+            DeliveryOu = deliveryOu;
+            DeliveryAddress = deliveryAddress;
+            DeliveryPostalCode = deliveryPostalCode;
+            DeliveryPostalAddress = deliveryPostalAddress;
+            DeliveryLocation = deliveryLocation;
+            DeliveryInfo1 = deliveryInfo1;
+            DeliveryInfo2 = deliveryInfo2;
+            DeliveryInfo3 = deliveryInfo3;
+            DeliveryOuId = deliveryOuId;
+            DeliveryName = name;
+            DeliveryPhone = phone;
         }
 
         [NotNull]
@@ -77,7 +81,13 @@
         public ConfigurableFieldModel<string> DeliveryInfo3 { get; set; } 
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> DeliveryOuId { get; set; } 
+        public ConfigurableFieldModel<SelectList> DeliveryOuId { get; set; }
+
+        [NotNull]
+        public ConfigurableFieldModel<string> DeliveryName { get; set; }
+
+        [NotNull]
+        public ConfigurableFieldModel<string> DeliveryPhone { get; set; }
 
         [IsId]
         public int? DeliveryOuIdId { get; set; }
@@ -96,23 +106,27 @@
                 ConfigurableFieldModel<string>.CreateUnshowable(),
                 ConfigurableFieldModel<string>.CreateUnshowable(),
                 ConfigurableFieldModel<string>.CreateUnshowable(),
-                ConfigurableFieldModel<SelectList>.CreateUnshowable());
+                ConfigurableFieldModel<SelectList>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable());
         }
 
         public bool HasShowableFields()
         {
-            return this.DeliveryDate.Show ||
-                this.InstallDate.Show ||
-                this.DeliveryDepartment.Show ||
-                this.DeliveryOu.Show ||
-                this.DeliveryAddress.Show ||
-                this.DeliveryPostalCode.Show ||
-                this.DeliveryPostalAddress.Show ||
-                this.DeliveryLocation.Show ||
-                this.DeliveryInfo1.Show ||
-                this.DeliveryInfo2.Show ||
-                this.DeliveryInfo3.Show ||
-                this.DeliveryOuId.Show;
+            return DeliveryDate.Show ||
+                InstallDate.Show ||
+                DeliveryDepartment.Show ||
+                DeliveryOu.Show ||
+                DeliveryAddress.Show ||
+                DeliveryPostalCode.Show ||
+                DeliveryPostalAddress.Show ||
+                DeliveryLocation.Show ||
+                DeliveryInfo1.Show ||
+                DeliveryInfo2.Show ||
+                DeliveryInfo3.Show ||
+                DeliveryOuId.Show ||
+                DeliveryName.Show ||
+                DeliveryPhone.Show;
         }
     }
 }

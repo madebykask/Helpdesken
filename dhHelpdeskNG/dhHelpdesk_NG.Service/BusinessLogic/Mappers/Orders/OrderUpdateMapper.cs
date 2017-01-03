@@ -42,6 +42,8 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
             entity.DeliveryInfo2 = businessModel.DeliveryInfo2;
             entity.DeliveryInfo3 = businessModel.DeliveryInfo3;
             entity.DeliveryOuId = businessModel.DeliveryOuIdId;
+            entity.DeliveryName = businessModel.DeliveryName;
+            entity.DeliveryPhone = businessModel.DeliveryPhone;
         } 
 
         private static void MapGeneralFields(Order entity, GeneralEditFields businessModel)
@@ -113,6 +115,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
                                                                      {
                                                                          Id = p.Id
                                                                      }).ToList();
+            entity.InfoProduct = businessModel.InfoProduct;
         } 
 
         private static void MapReceiverFields(Order entity, ReceiverEditFields businessModel)

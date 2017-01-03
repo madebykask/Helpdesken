@@ -80,6 +80,8 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
             var deliveryInfo2 = this.configurableFieldModelFactory.CreateStringField(settings.DeliveryInfo2, fields.DeliveryInfo2);
             var deliveryInfo3 = this.configurableFieldModelFactory.CreateStringField(settings.DeliveryInfo3, fields.DeliveryInfo3);
             var deliveryOuId = this.configurableFieldModelFactory.CreateSelectListField(settings.DeliveryOuId, options.DeliveryOuId, fields.DeliveryOuIdId);
+            var deliveryName = this.configurableFieldModelFactory.CreateStringField(settings.DeliveryName, fields.DeliveryName);
+            var deliveryPhone = this.configurableFieldModelFactory.CreateStringField(settings.DeliveryPhone, fields.DeliveryPhone);
 
             return new DeliveryEditModel(
                             deliveryDate,
@@ -93,7 +95,9 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                             deliveryInfo1,
                             deliveryInfo2,
                             deliveryInfo3,
-                            deliveryOuId);
+                            deliveryOuId,
+                            deliveryName,
+                            deliveryPhone);
         }
 
         private GeneralEditModel CreateGeneralEditModel(
@@ -233,8 +237,9 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                                 ProgramEditFields fields)
         {
             var program = this.configurableFieldModelFactory.CreatePrograms(settings.Program, fields.Programs.Select(p => new ProgramModel(p.Id, p.Name)).ToList());
+            var infoProduct = this.configurableFieldModelFactory.CreateStringField(settings.InfoProduct, fields.InfoProduct);
 
-            return new ProgramEditModel(program);
+            return new ProgramEditModel(program, infoProduct);
         }
 
         private ReceiverEditModel CreateReceiverEditModel(

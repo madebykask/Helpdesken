@@ -56,7 +56,9 @@
                     CreateTextFieldSetting(editSettings.FindByName(DeliveryFields.DeliveryInfo1)),
                     CreateTextFieldSetting(editSettings.FindByName(DeliveryFields.DeliveryInfo2)),
                     CreateTextFieldSetting(editSettings.FindByName(DeliveryFields.DeliveryInfo3)),
-                    CreateTextFieldSetting(editSettings.FindByName(DeliveryFields.DeliveryOuId)));
+                    CreateTextFieldSetting(editSettings.FindByName(DeliveryFields.DeliveryOuId)),
+                    CreateTextFieldSetting(editSettings.FindByName(DeliveryFields.DeliveryName)),
+                    CreateTextFieldSetting(editSettings.FindByName(DeliveryFields.DeliveryPhone)));
         }
 
         private static GeneralEditSettings CreateGeneralEditSettings(
@@ -131,7 +133,8 @@
             NamedObjectCollection<OrdersEditSettingsMapData> editSettings)
         {
             return new ProgramEditSettings(
-                CreateTextFieldSetting(editSettings.FindByName(ProgramFields.Program)));
+                CreateTextFieldSetting(editSettings.FindByName(ProgramFields.Program)),
+                CreateTextFieldSetting(editSettings.FindByName(ProgramFields.InfoProduct)));
         }
 
         private static ReceiverEditSettings CreateReceiverEditSettings(

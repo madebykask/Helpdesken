@@ -220,7 +220,9 @@
                     entity.DeliveryInfo,
                     entity.DeliveryInfo2,
                     entity.DeliveryInfo3,
-                    entity.DeliveryOuId);
+                    entity.DeliveryOuId,
+                    entity.DeliveryName,
+                    entity.DeliveryPhone);
         }
 
         private static GeneralEditFields CreateGeneralEditFields(Order entity)
@@ -289,7 +291,9 @@
 
         private static ProgramEditFields CreateProgramEditFields(Order entity)
         {
-            return new ProgramEditFields(entity.Programs.Select(p => new OrderProgramModel(p.Id, p.Name)).ToList());
+            return new ProgramEditFields(
+                entity.Programs.Select(p => new OrderProgramModel(p.Id, p.Name)).ToList(),
+                entity.InfoProduct);
         }
 
         private static ReceiverEditFields CreateReceiverEditFields(Order entity)

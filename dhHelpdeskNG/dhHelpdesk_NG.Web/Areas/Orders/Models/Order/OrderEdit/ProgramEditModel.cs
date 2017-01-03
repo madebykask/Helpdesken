@@ -10,25 +10,33 @@
         }
 
         public ProgramEditModel(
-            ConfigurableFieldModel<ProgramsModel> program)
+            ConfigurableFieldModel<ProgramsModel> program,
+            ConfigurableFieldModel<string> infoProduct)
         {
-            this.Program = program;
+            Program = program;
+            InfoProduct = infoProduct;
         }
 
         [NotNull]
         public ConfigurableFieldModel<ProgramsModel> Program { get; set; }
 
+        [NotNull]
+        public ConfigurableFieldModel<string> InfoProduct { get; set; }
+
         public static ProgramEditModel CreateEmpty()
         {
             var program = ConfigurableFieldModel<ProgramsModel>.CreateUnshowable();
             program.Value = new ProgramsModel();
+            
 
-            return new ProgramEditModel(program);
+            return new ProgramEditModel(program,
+                ConfigurableFieldModel<string>.CreateUnshowable());
         }
 
         public bool HasShowableFields()
         {
-            return this.Program.Show;
+            return Program.Show ||
+                InfoProduct.Show;
         }
     }
 }
