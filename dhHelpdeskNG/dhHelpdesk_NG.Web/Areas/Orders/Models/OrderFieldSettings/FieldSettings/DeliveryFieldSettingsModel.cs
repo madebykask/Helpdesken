@@ -1,7 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings
 {
-    using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+    using Common.ValidationAttributes;
+    using Web.Infrastructure.LocalizedAttributes;
 
     public sealed class DeliveryFieldSettingsModel
     {
@@ -21,20 +21,24 @@
                 TextFieldSettingsModel deliveryInfo1, 
                 TextFieldSettingsModel deliveryInfo2, 
                 TextFieldSettingsModel deliveryInfo3, 
-                TextFieldSettingsModel deliveryOuId)
+                TextFieldSettingsModel deliveryOuId,
+                TextFieldSettingsModel name,
+                TextFieldSettingsModel phone)
         {
-            this.DeliveryOuId = deliveryOuId;
-            this.DeliveryInfo3 = deliveryInfo3;
-            this.DeliveryInfo2 = deliveryInfo2;
-            this.DeliveryInfo1 = deliveryInfo1;
-            this.DeliveryLocation = deliveryLocation;
-            this.DeliveryPostalAddress = deliveryPostalAddress;
-            this.DeliveryPostalCode = deliveryPostalCode;
-            this.DeliveryAddress = deliveryAddress;
-            this.DeliveryOu = deliveryOu;
-            this.DeliveryDepartment = deliveryDepartment;
-            this.InstallDate = installDate;
-            this.DeliveryDate = deliveryDate;
+            DeliveryOuId = deliveryOuId;
+            DeliveryInfo3 = deliveryInfo3;
+            DeliveryInfo2 = deliveryInfo2;
+            DeliveryInfo1 = deliveryInfo1;
+            DeliveryLocation = deliveryLocation;
+            DeliveryPostalAddress = deliveryPostalAddress;
+            DeliveryPostalCode = deliveryPostalCode;
+            DeliveryAddress = deliveryAddress;
+            DeliveryOu = deliveryOu;
+            DeliveryDepartment = deliveryDepartment;
+            InstallDate = installDate;
+            DeliveryDate = deliveryDate;
+            Name = name;
+            Phone = phone;
         }
 
         [NotNull]
@@ -84,5 +88,14 @@
         [NotNull]
         [LocalizedDisplay("Enhet")]
         public TextFieldSettingsModel DeliveryOuId { get; set; }
+
+        [NotNull]
+        [LocalizedDisplay("Namn")]
+        public TextFieldSettingsModel Name { get; set; }
+
+
+        [NotNull]
+        [LocalizedDisplay("Telefon")]
+        public TextFieldSettingsModel Phone { get; set; }
     }
 }

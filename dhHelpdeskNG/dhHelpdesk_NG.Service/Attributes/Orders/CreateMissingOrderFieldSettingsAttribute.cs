@@ -4,13 +4,13 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Enums.Orders.Fields;
-    using DH.Helpdesk.Common.Extensions.Boolean;
-    using DH.Helpdesk.Dal.NewInfrastructure;
-    using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Services.BusinessLogic.Mappers.Orders;
-    using DH.Helpdesk.Services.BusinessLogic.Specifications.Orders;
-    using DH.Helpdesk.Services.Infrastructure;
+    using BusinessData.Enums.Orders.Fields;
+    using Common.Extensions.Boolean;
+    using Dal.NewInfrastructure;
+    using Domain;
+    using BusinessLogic.Mappers.Orders;
+    using BusinessLogic.Specifications.Orders;
+    using Infrastructure;
 
     using PostSharp.Aspects;
 
@@ -18,26 +18,26 @@
     [AttributeUsage(AttributeTargets.Method)]
     internal sealed class CreateMissingOrderFieldSettingsAttribute : OnMethodBoundaryAspect
     {
-        private readonly string customerIdParameterName;
+        private readonly string _customerIdParameterName;
 
-        private readonly string orderTypeIdParameterName;
+        private readonly string _orderTypeIdParameterName;
 
         public CreateMissingOrderFieldSettingsAttribute(
                     string customerIdParameterName, 
                     string orderTypeIdParameterName)
         {
-            this.customerIdParameterName = customerIdParameterName;
-            this.orderTypeIdParameterName = orderTypeIdParameterName;
+            _customerIdParameterName = customerIdParameterName;
+            _orderTypeIdParameterName = orderTypeIdParameterName;
         }
 
         public override void OnEntry(MethodExecutionArgs args)
         {
             var methodParameters = args.Method.GetParameters();
             
-            var customerIdParameter = methodParameters.Single(p => p.Name == this.customerIdParameterName);
+            var customerIdParameter = methodParameters.Single(p => p.Name == _customerIdParameterName);
             var customerId = (int)args.Arguments[customerIdParameter.Position];
 
-            var orderTypeIdParameter = methodParameters.Single(p => p.Name == this.orderTypeIdParameterName);
+            var orderTypeIdParameter = methodParameters.Single(p => p.Name == _orderTypeIdParameterName);
             var orderTypeId = (int?)args.Arguments[orderTypeIdParameter.Position];
 
             var unitOfWorkFactory = ManualDependencyResolver.Get<IUnitOfWorkFactory>();
@@ -88,6 +88,8 @@
             CollectMissingField(DeliveryFields.DeliveryInfo2, existing, missingFields);
             CollectMissingField(DeliveryFields.DeliveryInfo3, existing, missingFields);
             CollectMissingField(DeliveryFields.DeliveryOuId, existing, missingFields);
+            CollectMissingField(DeliveryFields.DeliveryName, existing, missingFields);
+            CollectMissingField(DeliveryFields.DeliveryPhone, existing, missingFields);
         }
 
         private static void CollectGeneralMissingFields(string[] existing, List<string> missingFields)

@@ -116,7 +116,9 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
                     CreateTextFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryInfo1)),
                     CreateTextFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryInfo2)),
                     CreateTextFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryInfo3)),
-                    CreateTextFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryOuId)));
+                    CreateTextFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryOuId)),
+                    CreateTextFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryName)),
+                    CreateTextFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryPhone)));
         }
 
         private static GeneralFieldSettings CreateGeneralFieldSettings(
@@ -338,6 +340,8 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
             MapTextFieldSettings(updatedSettings.DeliveryInfo2, existingSettings.FindByName(DeliveryFields.DeliveryInfo2), changedDate);
             MapTextFieldSettings(updatedSettings.DeliveryInfo3, existingSettings.FindByName(DeliveryFields.DeliveryInfo3), changedDate);
             MapTextFieldSettings(updatedSettings.DeliveryOuId, existingSettings.FindByName(DeliveryFields.DeliveryOuId), changedDate);
+            MapTextFieldSettings(updatedSettings.Name, existingSettings.FindByName(DeliveryFields.DeliveryName), changedDate);
+            MapTextFieldSettings(updatedSettings.Phone, existingSettings.FindByName(DeliveryFields.DeliveryPhone), changedDate);
         }
 
         private static void MapGeneralSettings(

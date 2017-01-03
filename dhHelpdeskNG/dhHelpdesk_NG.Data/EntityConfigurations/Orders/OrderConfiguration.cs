@@ -148,6 +148,8 @@
             this.Property(o => o.DeliveryInfo).HasMaxLength(200).IsRequired();
             this.Property(o => o.DeliveryInfo2).HasMaxLength(50).IsRequired();
             this.Property(o => o.DeliveryInfo3).HasMaxLength(50).IsRequired();
+            this.Property(x => x.DeliveryName).IsOptional().HasMaxLength(50);
+            this.Property(x => x.DeliveryPhone).IsOptional().HasMaxLength(50);
             this.Property(o => o.Filename).HasMaxLength(100).IsRequired();
             this.Property(o => o.CaseNumber).HasPrecision(18, 0).IsOptional();
             this.Property(o => o.Info).HasMaxLength(200).IsOptional();

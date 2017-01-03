@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using DH.Helpdesk.Domain.Orders;
+using DH.Helpdesk.Web.Infrastructure.Extensions;
 
 namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
 {
@@ -80,7 +81,9 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                         CreateTextFieldSettingModel(settings.DeliveryInfo1),
                         CreateTextFieldSettingModel(settings.DeliveryInfo2),
                         CreateTextFieldSettingModel(settings.DeliveryInfo3),
-                        CreateTextFieldSettingModel(settings.DeliveryOuId));
+                        CreateTextFieldSettingModel(settings.DeliveryOuId),
+                        CreateTextFieldSettingModel(settings.Name),
+                        CreateTextFieldSettingModel(settings.Phone));
         }
 
         private static GeneralFieldSettingsModel CreateGeneralSettings(GeneralFieldSettings settings)
@@ -287,7 +290,9 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                         CreateTextFieldSettingForUpdate(settings.DeliveryInfo1),
                         CreateTextFieldSettingForUpdate(settings.DeliveryInfo2),
                         CreateTextFieldSettingForUpdate(settings.DeliveryInfo3),
-                        CreateTextFieldSettingForUpdate(settings.DeliveryOuId));
+                        CreateTextFieldSettingForUpdate(settings.DeliveryOuId),
+                        CreateTextFieldSettingForUpdate(settings.Name),
+                        CreateTextFieldSettingForUpdate(settings.Phone));
         }
 
         private static GeneralFieldSettings CreateGeneralForUpdate(GeneralFieldSettingsModel settings)

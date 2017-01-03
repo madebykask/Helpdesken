@@ -80,6 +80,10 @@
 
         public string DeliveryInfo3 { get; set; }
 
+        public string DeliveryName { get; set; }
+
+        public string DeliveryPhone { get; set; }
+
         public string Filename { get; set; }
 
         public string Info { get; set; }

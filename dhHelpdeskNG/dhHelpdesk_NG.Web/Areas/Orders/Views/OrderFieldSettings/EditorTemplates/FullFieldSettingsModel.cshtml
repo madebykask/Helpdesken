@@ -18,7 +18,7 @@
     <tbody>
         <tr>
             <td colspan="8" class="header">@Translation.Get("Allmänt")</td>
-        </tr>        
+        </tr>
         <tr>
             @Html.EditorFor(m => m.General.OrderNumber)
         </tr>
@@ -39,13 +39,13 @@
         </tr>
         <tr>
             <td colspan="8" class="header">@Translation.Get("Användare")</td>
-        </tr> 
+        </tr>
         <tr>
             @Html.EditorFor(m => m.User.UserId)
-        </tr>               
+        </tr>
         <tr>
             @Html.EditorFor(m => m.User.UserFirstName)
-        </tr>               
+        </tr>
         <tr>
             @Html.EditorFor(m => m.User.UserLastName)
         </tr>
@@ -162,189 +162,195 @@
         </tr>
         <tr>
             <td colspan="8" class="header">@Translation.Get("Beställare")</td>
-        </tr>    
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Orderer.OrdererId)
-        </tr>                           
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Orderer.OrdererName)
-        </tr>                           
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Orderer.OrdererLocation)
-        </tr>                           
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Orderer.OrdererEmail)
-        </tr>                           
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Orderer.OrdererPhone)
-        </tr>                           
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Orderer.OrdererCode)
-        </tr>                           
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Orderer.Department)
-        </tr>                           
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Orderer.Unit)
-        </tr>                           
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Orderer.OrdererAddress)
-        </tr>                           
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Orderer.OrdererInvoiceAddress)
-        </tr>                           
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Orderer.OrdererReferenceNumber)
-        </tr>                           
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Orderer.AccountingDimension1)
-        </tr>                           
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Orderer.AccountingDimension2)
-        </tr>                           
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Orderer.AccountingDimension3)
-        </tr>                           
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Orderer.AccountingDimension4)
-        </tr>                           
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Orderer.AccountingDimension5)
-        </tr>                           
+        </tr>
         <tr>
             <td colspan="8" class="header">@Translation.Get("Beställning")</td>
-        </tr> 
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Order.Property)
-        </tr>                                          
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Order.OrderRow1)
-        </tr>                                          
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Order.OrderRow2)
-        </tr>                                          
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Order.OrderRow3)
-        </tr>                                          
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Order.OrderRow4)
-        </tr>                                          
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Order.OrderRow5)
-        </tr>                                          
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Order.OrderRow6)
-        </tr>                                          
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Order.OrderRow7)
-        </tr>                                          
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Order.OrderRow8)
-        </tr>                                          
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Order.Configuration)
-        </tr>                                          
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Order.OrderInfo)
-        </tr>                                          
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Order.OrderInfo2)
-        </tr>                                          
+        </tr>
         <tr>
             <td colspan="8" class="header">@Translation.Get("Mottagare")</td>
-        </tr>  
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Receiver.ReceiverId)
-        </tr>                                                        
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Receiver.ReceiverName)
-        </tr>                                                        
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Receiver.ReceiverEmail)
-        </tr>                                                        
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Receiver.ReceiverPhone)
-        </tr>                                                        
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Receiver.ReceiverLocation)
-        </tr>                                                        
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Receiver.MarkOfGoods)
-        </tr>                                                        
+        </tr>
         <tr>
             <td colspan="8" class="header">@Translation.Get("Orderinformation")</td>
-        </tr>      
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Supplier.SupplierOrderNumber)
-        </tr>                                                                  
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Supplier.SupplierOrderDate)
-        </tr>                                                                  
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Supplier.SupplierOrderInfo)
-        </tr>                                                                  
+        </tr>
         <tr>
             <td colspan="8" class="header">@Translation.Get("Leveransinformation")</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Delivery.Name)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Delivery.Phone)
         </tr>  
         <tr>
             @Html.EditorFor(m => m.Delivery.DeliveryDate)
-        </tr>                                                                                
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Delivery.InstallDate)
-        </tr>                                                                                
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Delivery.DeliveryDepartment)
-        </tr>                                                                                
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Delivery.DeliveryOu)
-        </tr>                                                                                
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Delivery.DeliveryAddress)
-        </tr>                                                                                
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Delivery.DeliveryPostalCode)
-        </tr>                                                                                
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Delivery.DeliveryPostalAddress)
-        </tr>                                                                                
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Delivery.DeliveryLocation)
-        </tr>                                                                                
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Delivery.DeliveryInfo1)
-        </tr>                                                                                
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Delivery.DeliveryInfo2)
-        </tr>                                                                                
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Delivery.DeliveryInfo3)
-        </tr>                                                                                
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Delivery.DeliveryOuId)
-        </tr>                                                                                
+        </tr>
         <tr>
             <td colspan="8" class="header">@Translation.Get("Program")</td>
-        </tr>       
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Program.Program)
-        </tr>                                                                                         
+        </tr>
         <tr>
             <td colspan="8" class="header">@Translation.Get("Övrigt")</td>
-        </tr> 
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Other.FileName)
-        </tr>                                                                                                        
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Other.CaseNumber)
-        </tr>                                                                                                        
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Other.Info)
-        </tr>                                                                                                                                                                                                          
+        </tr>
         <tr>
             <td colspan="8" class="header">@Translation.Get("Logg")</td>
-        </tr>   
+        </tr>
         <tr>
             @Html.EditorFor(m => m.Log.Log)
-        </tr>                                                                                                                     
+        </tr>
     </tbody>
 </table>
