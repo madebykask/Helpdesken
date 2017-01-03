@@ -312,48 +312,37 @@
             var ret = "display:none";
             var cfs = model.CaseFieldSettings;
 
-            if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.ReportedBy.ToString()).ShowOnStartPage == 1 &&
-                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ReportedBy, CaseSolutionFields.UserNumber)))
+            if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.ReportedBy.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Persons_EMail.ToString()).ShowOnStartPage == 1 &&
-                     string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Persons_EMail, CaseSolutionFields.Email)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Persons_EMail.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Persons_Name.ToString()).ShowOnStartPage == 1 &&
-                     string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Persons_Name, CaseSolutionFields.PersonsName)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Persons_Name.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Persons_Phone.ToString()).ShowOnStartPage == 1 &&
-                     string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Persons_Phone, CaseSolutionFields.PersonsPhone)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Persons_Phone.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString()).ShowOnStartPage == 1 &&
-                     string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Persons_CellPhone, CaseSolutionFields.PersonsCellPhone)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Persons_EMail.ToString()).ShowOnStartPage == 1 &&
-                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Persons_EMail, CaseSolutionFields.PersonsEmail)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Persons_EMail.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Region_Id.ToString()).ShowOnStartPage == 1 &&
-                     string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Region_Id, CaseSolutionFields.Region)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Region_Id.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Department_Id.ToString()).ShowOnStartPage == 1 &&
-                     string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Department_Id, CaseSolutionFields.Department)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Department_Id.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Place.ToString()).ShowOnStartPage == 1 &&
-                     string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Place, CaseSolutionFields.Place)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Place.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.OU_Id.ToString()).ShowOnStartPage == 1 &&
-                     string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.OU_Id, CaseSolutionFields.OU)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.OU_Id.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.UserCode.ToString()).ShowOnStartPage == 1 &&
-                     string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.UserCode, CaseSolutionFields.Usercode)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.UserCode.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
             return ret;
@@ -442,48 +431,37 @@
             var ret = "display:none";
             var cfs = model.CaseFieldSettings;
 
-            if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString()).ShowOnStartPage == 1 &&
-                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy, CaseSolutionFields.IsAbout_ReportedBy)))
+            if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString()).ShowOnStartPage == 1 &&
-                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name, CaseSolutionFields.IsAbout_PersonsName)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString()).ShowOnStartPage == 1 &&
-                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail, CaseSolutionFields.IsAbout_PersonsEmail)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString()).ShowOnStartPage == 1 &&
-                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone, CaseSolutionFields.IsAbout_PersonsPhone)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString()).ShowOnStartPage == 1 &&
-                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone, CaseSolutionFields.IsAbout_PersonsCellPhone)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Region_Id.ToString()).ShowOnStartPage == 1 &&
-                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.IsAbout_Region_Id, CaseSolutionFields.IsAbout_Region_Id)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Region_Id.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString()).ShowOnStartPage == 1 &&
-                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.IsAbout_Department_Id, CaseSolutionFields.IsAbout_Department_Id)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_OU_Id.ToString()).ShowOnStartPage == 1 &&
-               string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.IsAbout_OU_Id, CaseSolutionFields.IsAbout_OU_Id)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_OU_Id.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_CostCentre.ToString()).ShowOnStartPage == 1 &&
-                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.IsAbout_CostCentre, CaseSolutionFields.IsAbout_CostCentre)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_CostCentre.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString()).ShowOnStartPage == 1 &&
-              string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.IsAbout_Place, CaseSolutionFields.IsAbout_Place)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString()).ShowOnStartPage == 1 &&
-                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.IsAbout_UserCode, CaseSolutionFields.IsAbout_UserCode)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
             return ret;
@@ -495,16 +473,13 @@
             var ret = "display:none";
             var cfs = model.CaseFieldSettings;
 
-            if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString()).ShowOnStartPage == 1 &&
-                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ComputerType_Id, CaseSolutionFields.InventoryType)))
+            if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.InventoryNumber.ToString()).ShowOnStartPage == 1 &&
-                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.InventoryNumber, CaseSolutionFields.InventoryNumber)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.InventoryNumber.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.InventoryLocation.ToString()).ShowOnStartPage == 1 &&
-                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.InventoryLocation, CaseSolutionFields.InventoryLocation)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.InventoryLocation.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
             return ret;
@@ -635,80 +610,62 @@
             //else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.User_Id.ToString()).ShowOnStartPage == 1)
             //    return string.Empty;
 
-            if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString()).ShowOnStartPage == 1 &&
-                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer, CaseSolutionFields.RegistrationSourceCustomer)))
+            if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()).ShowOnStartPage == 1 &&
-                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.CaseType_Id, CaseSolutionFields.CaseType)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()).ShowOnStartPage == 1 &&
-                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ProductArea_Id, CaseSolutionFields.ProductArea)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.System_Id.ToString()).ShowOnStartPage == 1 &&
-                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.System_Id, CaseSolutionFields.System)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.System_Id.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()).ShowOnStartPage == 1 &&
-                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Urgency_Id, CaseSolutionFields.Urgency)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Impact_Id.ToString()).ShowOnStartPage == 1 &&
-                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Impact_Id, CaseSolutionFields.Impact)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Impact_Id.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Category_Id.ToString()).ShowOnStartPage == 1 &&
-              string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Category_Id, CaseSolutionFields.Category)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Category_Id.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Supplier_Id.ToString()).ShowOnStartPage == 1 &&
-                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Supplier_Id, CaseSolutionFields.Supplier)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Supplier_Id.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString()).ShowOnStartPage == 1 &&
-              string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.InvoiceNumber, CaseSolutionFields.InvoiceNumber)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString()).ShowOnStartPage == 1 &&
-                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ReferenceNumber, CaseSolutionFields.ReferenceNumber)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Caption.ToString()).ShowOnStartPage == 1 &&
-                    string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Caption, CaseSolutionFields.Caption)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Caption.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Description.ToString()).ShowOnStartPage == 1 &&
-                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Description, CaseSolutionFields.Description)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Description.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString()).ShowOnStartPage == 1 &&
-              string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ContactBeforeAction, CaseSolutionFields.ContactBeforeAction)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Miscellaneous.ToString()).ShowOnStartPage == 1 &&
-                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Miscellaneous, CaseSolutionFields.Miscellaneous)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Miscellaneous.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
             /* Not implemented in Case Template*/
             //else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.AgreedDate.ToString()).ShowOnStartPage == 1)
             //    return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.SMS.ToString()).ShowOnStartPage == 1 &&
-                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.SMS, CaseSolutionFields.SMS)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.SMS.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Available.ToString()).ShowOnStartPage == 1 &&
-              string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Available, CaseSolutionFields.Available)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Available.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Cost.ToString()).ShowOnStartPage == 1 &&
-                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Cost, CaseSolutionFields.Cost)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Cost.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Filename.ToString()).ShowOnStartPage == 1 &&
-              string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Filename, CaseSolutionFields.FileName)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Filename.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
             return ret;
@@ -783,60 +740,46 @@
             var ret = "display:none";
             var cfs = model.CaseFieldSettings;
 
-            if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()).ShowOnStartPage == 1 &&
-                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.WorkingGroup_Id, CaseSolutionFields.WorkingGroup)))
+            if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString()).ShowOnStartPage == 1 &&
-                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Performer_User_Id, CaseSolutionFields.Administrator)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Priority_Id.ToString()).ShowOnStartPage == 1 &&
-                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Priority_Id, CaseSolutionFields.Priority)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Priority_Id.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Status_Id.ToString()).ShowOnStartPage == 1 &&
-                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Status_Id, CaseSolutionFields.Status)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Status_Id.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()).ShowOnStartPage == 1 &&
-                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.StateSecondary_Id, CaseSolutionFields.StateSecondary)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Project.ToString()).ShowOnStartPage == 1 &&
-                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Project, CaseSolutionFields.Project)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Project.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Problem.ToString()).ShowOnStartPage == 1 &&
-                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Problem, CaseSolutionFields.Problem)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Problem.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.CausingPart.ToString()).ShowOnStartPage == 1 &&
-                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.CausingPart, CaseSolutionFields.CausingPart)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.CausingPart.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Change.ToString()).ShowOnStartPage == 1 &&
-               string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Change, CaseSolutionFields.Change)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Change.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.PlanDate.ToString()).ShowOnStartPage == 1 &&
-               string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.PlanDate, CaseSolutionFields.PlanDate)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.PlanDate.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.WatchDate.ToString()).ShowOnStartPage == 1 &&
-               string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.WatchDate, CaseSolutionFields.WatchDate)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.WatchDate.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Verified.ToString()).ShowOnStartPage == 1 &&
-               string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Verified, CaseSolutionFields.Verified)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Verified.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString()).ShowOnStartPage == 1 &&
-               string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.VerifiedDescription, CaseSolutionFields.VerifiedDescription)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.SolutionRate.ToString()).ShowOnStartPage == 1 &&
-               string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.SolutionRate, CaseSolutionFields.SolutionRate)))
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.SolutionRate.ToString()).ShowOnStartPage == 1)
                 return string.Empty;
 
             return ret;
