@@ -193,7 +193,8 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
             NamedObjectCollection<OrdersFieldSettingsMapData> fieldSettings)
         {
             return new ProgramFieldSettings(
-                CreateTextFieldSetting(fieldSettings.FindByName(ProgramFields.Program)));
+                CreateTextFieldSetting(fieldSettings.FindByName(ProgramFields.Program)),
+                CreateTextFieldSetting(fieldSettings.FindByName(ProgramFields.InfoProduct)));
         }
 
         private static ReceiverFieldSettings CreateReceiverFieldSettings(
@@ -423,6 +424,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
                 DateTime changedDate)
         {
             MapTextFieldSettings(updatedSettings.Program, existingSettings.FindByName(ProgramFields.Program), changedDate);
+            MapTextFieldSettings(updatedSettings.InfoProduct, existingSettings.FindByName(ProgramFields.InfoProduct), changedDate);
         }
 
         private static void MapReceiverSettings(

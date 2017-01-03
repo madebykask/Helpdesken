@@ -220,6 +220,8 @@
 
         public string ContactPhone { get; set; }
 
+        public string InfoProduct { get; set; }
+
         public virtual Customer Customer { get; set; }
 
         public virtual Domain Domain { get; set; }

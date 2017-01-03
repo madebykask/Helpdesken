@@ -9,13 +9,17 @@
         {            
         }
 
-        public ProgramFieldSettingsModel(TextFieldSettingsModel program)
+        public ProgramFieldSettingsModel(TextFieldSettingsModel program, TextFieldSettingsModel infoProduct)
         {
-            this.Program = program;
+            Program = program;
+            InfoProduct = infoProduct;
         }
 
         [NotNull]
         [LocalizedDisplay("Program")]
-        public TextFieldSettingsModel Program { get; set; } 
+        public TextFieldSettingsModel Program { get; set; }
+
+        [LocalizedDisplay("Övrigt program")]
+        public TextFieldSettingsModel InfoProduct { get; set; }
     }
 }

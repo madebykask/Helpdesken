@@ -811,6 +811,26 @@ INSERT INTO [dbo].[tblOrderFieldSettings]
 				and ((iofs.OrderType_Id is not null and ofs.OrderType_Id is not null and iofs.OrderType_Id = ofs.OrderType_Id) or (iofs.OrderType_Id is null and ofs.OrderType_Id is null))) 
 GO
 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'InfoProduct' and sysobjects.name = N'tblOrder')
+	ALTER TABLE [dbo].[tblOrder] ADD [InfoProduct] [nvarchar](500) NULL
+GO
+
+Declare @OrderFieldValue nvarchar(50)
+Set @OrderFieldValue = 'InfoProduct'
+Declare @OrderFieldLabel nvarchar(50)
+Set @OrderFieldLabel = 'Övrigt program'
+
+INSERT INTO [dbo].[tblOrderFieldSettings]
+           ([OrderType_Id],[Customer_Id],[OrderField],[Show],[ShowInList],[ShowExternal]
+           ,[Label],[Required],[DefaultValue],[EMailIdentifier],[CreatedDate],[ChangedDate])
+	 SELECT distinct ofs.[OrderType_Id], ofs.[Customer_Id], @OrderFieldValue, 0, 0, 0,
+		   @OrderFieldLabel, 0, '', NULL, GETDATE(), GETDATE()
+		   from [dbo].[tblOrderFieldSettings] as ofs
+		   where Not Exists (Select iofs.Id from [dbo].[tblOrderFieldSettings] as iofs
+				where iofs.OrderField = @OrderFieldValue and iofs.Customer_Id = ofs.Customer_Id 
+				and ((iofs.OrderType_Id is not null and ofs.OrderType_Id is not null and iofs.OrderType_Id = ofs.OrderType_Id) or (iofs.OrderType_Id is null and ofs.OrderType_Id is null))) 
+GO
+
 update tblLog 
 set InvoiceRow_Id = (select Id from tblInvoiceRow ir where ir.Case_Id = l.Case_Id)
 from tblLog l

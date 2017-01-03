@@ -176,6 +176,8 @@
             this.Property(x => x.ContactPhone).IsOptional().HasMaxLength(50);
             this.Property(x => x.ContactEMail).IsOptional().HasMaxLength(50);
 
+            this.Property(x => x.InfoProduct).IsOptional().HasMaxLength(500);
+
             this.HasOptional(o => o.User)
                 .WithMany()
                 .HasForeignKey(o => o.User_Id);

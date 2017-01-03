@@ -152,7 +152,8 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
         private static ProgramFieldSettingsModel CreateProgramSettings(ProgramFieldSettings settings)
         {
             return new ProgramFieldSettingsModel(
-                        CreateTextFieldSettingModel(settings.Program));
+                        CreateTextFieldSettingModel(settings.Program),
+                        CreateTextFieldSettingModel(settings.InfoProduct));
         }
 
         private static ReceiverFieldSettingsModel CreateReceiverSettings(ReceiverFieldSettings settings)
@@ -361,7 +362,8 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
         private static ProgramFieldSettings CreateProgramForUpdate(ProgramFieldSettingsModel settings)
         {
             return new ProgramFieldSettings(
-                        CreateTextFieldSettingForUpdate(settings.Program));
+                        CreateTextFieldSettingForUpdate(settings.Program),
+                        CreateTextFieldSettingForUpdate(settings.InfoProduct));
         }
 
         private static ReceiverFieldSettings CreateReceiverForUpdate(ReceiverFieldSettingsModel settings)

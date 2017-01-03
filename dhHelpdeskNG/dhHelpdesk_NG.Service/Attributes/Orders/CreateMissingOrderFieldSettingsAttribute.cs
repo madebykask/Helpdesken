@@ -153,6 +153,7 @@
         private static void CollectProgramMissingFields(string[] existing, List<string> missingFields)
         {
             CollectMissingField(ProgramFields.Program, existing, missingFields);
+            CollectMissingField(ProgramFields.InfoProduct, existing, missingFields);
         }
 
         private static void CollectReceiverMissingFields(string[] existing, List<string> missingFields)
