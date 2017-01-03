@@ -78,15 +78,6 @@
             this.Property(x => x.Profile).IsRequired();
             this.Property(x => x.InventoryNumber).IsOptional().HasMaxLength(20);
             this.Property(x => x.AccountInfo).IsOptional().HasMaxLength(500);
-            //this.Property(x => x.AccountType_Id).IsOptional();
-            //this.HasOptional(x => x.AccountType)
-            //    .WithMany()
-            //    .HasForeignKey(x => x.AccountType_Id)
-            //    .WillCascadeOnDelete(false);
-            //this.Property(x => x.AccountType2).IsOptional().HasMaxLength(50);
-            //this.Property(x => x.AccountType3).IsOptional();
-            //this.Property(x => x.AccountType4).IsOptional();
-            //this.Property(x => x.AccountType5).IsOptional();
             this.Property(o => o.Department_Id).IsOptional();
             this.HasOptional(o => o.Ou)
                 .WithMany(o => o.Orders)
@@ -177,6 +168,11 @@
                     m.MapRightKey("Program_Id");
                     m.ToTable("tblOrder_tblProgram");
                 });
+
+            this.Property(x => x.ContactId).IsOptional().HasMaxLength(200);
+            this.Property(x => x.ContactName).IsOptional().HasMaxLength(50);
+            this.Property(x => x.ContactPhone).IsOptional().HasMaxLength(50);
+            this.Property(x => x.ContactEMail).IsOptional().HasMaxLength(50);
 
             this.HasOptional(o => o.User)
                 .WithMany()

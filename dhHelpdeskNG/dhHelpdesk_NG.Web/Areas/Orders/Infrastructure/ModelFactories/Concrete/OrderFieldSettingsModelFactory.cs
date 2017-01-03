@@ -36,7 +36,8 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                         CreateReceiverSettings(response.Settings.Receiver),
                         CreateSupplierSettings(response.Settings.Supplier),
                         CreateUserSettings(response.Settings.User),
-                        CreateAccountInfoSettings(response.Settings.AccountInfo));
+                        CreateAccountInfoSettings(response.Settings.AccountInfo),
+                        CreateContactSettings(response.Settings.Contact));
         }
 
         public FullFieldSettings CreateForUpdate(
@@ -59,6 +60,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                         CreateSupplierForUpdate(model.Supplier),
                         CreateUserForUpdate(model.User),
                         CreateAccountInfoForUpdate(model.AccountInfo),
+                        CreateContactForUpdate(model.Contact),
                         changedDate);
         }
 
@@ -210,6 +212,16 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                     CreateOrderFieldTypeSettingModel(settings.AccountType3, OrderFieldTypes.AccountType3),
                     CreateOrderFieldTypeSettingModel(settings.AccountType4, OrderFieldTypes.AccountType4),
                     CreateOrderFieldTypeSettingModel(settings.AccountType5, OrderFieldTypes.AccountType5)
+                );
+        }
+
+        private static ContactFieldSettingsModel CreateContactSettings(ContactFieldSettings settings)
+        {
+            return new ContactFieldSettingsModel(
+                    CreateTextFieldSettingModel(settings.Id),
+                    CreateTextFieldSettingModel(settings.Name),
+                    CreateTextFieldSettingModel(settings.Phone),
+                    CreateTextFieldSettingModel(settings.Email)
                 );
         }
 
@@ -407,6 +419,16 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                     CreateOrderFieldTypeSetting(settings.AccountType3, OrderFieldTypes.AccountType3),
                     CreateOrderFieldTypeSetting(settings.AccountType4, OrderFieldTypes.AccountType4),
                     CreateOrderFieldTypeSetting(settings.AccountType5, OrderFieldTypes.AccountType5)
+                );
+        }
+
+        private static ContactFieldSettings CreateContactForUpdate(ContactFieldSettingsModel settings)
+        {
+            return new ContactFieldSettings(
+                    CreateTextFieldSettingForUpdate(settings.Id),
+                    CreateTextFieldSettingForUpdate(settings.Name),
+                    CreateTextFieldSettingForUpdate(settings.Phone),
+                    CreateTextFieldSettingForUpdate(settings.Email)
                 );
         }
 

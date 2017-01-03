@@ -138,6 +138,7 @@
     <Compile Include="Enums\Orders\FieldNames\SupplierFieldNames.cs" />
     <Compile Include="Enums\Orders\FieldNames\UserFieldNames.cs" />
     <Compile Include="Enums\Orders\Fields\AccountInfoFields.cs" />
+    <Compile Include="Enums\Orders\Fields\ContactFields.cs" />
     <Compile Include="Enums\Orders\OrderDeletedItem.cs" />
     <Compile Include="Enums\Orders\OrderEmailTemplate.cs" />
     <Compile Include="Enums\Orders\Subtopic.cs" />
@@ -342,6 +343,7 @@
     <Compile Include="Models\Orders\Index\SearchResponse.cs" />
     <Compile Include="Models\Orders\Index\SearchResult.cs" />
     <Compile Include="Models\Orders\OrderFieldSettings\FieldSettings\AccountInfoFieldSettings.cs" />
+    <Compile Include="Models\Orders\OrderFieldSettings\FieldSettings\ContactFieldSettings.cs" />
     <Compile Include="Models\Orders\OrderFieldSettings\FieldSettings\DeliveryFieldSettings.cs" />
     <Compile Include="Models\Orders\OrderFieldSettings\FieldSettings\FullFieldSettings.cs" />
     <Compile Include="Models\Orders\OrderFieldSettings\FieldSettings\GeneralFieldSettings.cs" />

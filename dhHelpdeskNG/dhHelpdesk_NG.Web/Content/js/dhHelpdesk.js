@@ -625,10 +625,12 @@ function InitDataTable(tableUniqId, perText, showingText, options, onError) {
 
 
 // YES and NO SWITCH FOR CHECKBOXES
-$('.switchcheckbox').bootstrapSwitch('onText', trans_yes);
-$('.switchcheckbox').bootstrapSwitch('offText', trans_no);
-$('.switchcheckbox').bootstrapSwitch('size', 'small');
-$('.switchcheckbox').bootstrapSwitch('onColor', 'success');
+    $(".switchcheckbox").bootstrapSwitch({
+        "onText": window.trans_yes,
+        "offText": window.trans_no,
+        "size": "small",
+        "onColor": "success"
+    });
 //$('.switchcheckbox').bootstrapSwitch('offColor', 'danger');
 
 // YES and NO SWITCH FOR CHECKBOXES END

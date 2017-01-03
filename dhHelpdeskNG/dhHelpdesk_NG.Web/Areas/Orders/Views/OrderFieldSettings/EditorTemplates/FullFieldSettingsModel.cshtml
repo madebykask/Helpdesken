@@ -146,6 +146,21 @@
             @Html.EditorFor(m => m.AccountInfo.Info)
         </tr>
         <tr>
+            <td colspan="8" class="header">@Translation.Get("Kontakt")</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Contact.Id)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Contact.Name)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Contact.Phone)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Contact.Email)
+        </tr>
+        <tr>
             <td colspan="8" class="header">@Translation.Get("Beställare")</td>
         </tr>    
         <tr>

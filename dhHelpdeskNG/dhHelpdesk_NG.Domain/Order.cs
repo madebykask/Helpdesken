@@ -206,7 +206,15 @@
 
         public string AccountInfo { get; set; }
 
-        public int? DeliveryOuId { get; set; } 
+        public int? DeliveryOuId { get; set; }
+
+        public string ContactEMail { get; set; }
+
+        public string ContactId { get; set; }
+
+        public string ContactName { get; set; }
+
+        public string ContactPhone { get; set; }
 
         public virtual Customer Customer { get; set; }
 

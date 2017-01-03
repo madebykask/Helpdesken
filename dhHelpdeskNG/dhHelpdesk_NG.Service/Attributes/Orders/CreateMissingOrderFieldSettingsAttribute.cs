@@ -60,6 +60,7 @@
                 CollectSupplierMissingFields(existing, missing);
                 CollectUserMissingFields(existing, missing);
                 CollectAccountInfoMissingFields(existing, missing);
+                CollectContactMissingFields(existing, missing);
 
                 foreach (var fieldName in missing)
                 {
@@ -209,6 +210,15 @@
             CollectMissingField(AccountInfoFields.AccountType4, existing, missingFields);
             CollectMissingField(AccountInfoFields.AccountType5, existing, missingFields);
         }
+
+        private static void CollectContactMissingFields(string[] existing, List<string> missingFields)
+        {
+            CollectMissingField(ContactFields.ContactId, existing, missingFields);
+            CollectMissingField(ContactFields.ContactName, existing, missingFields);
+            CollectMissingField(ContactFields.ContactPhone, existing, missingFields);
+            CollectMissingField(ContactFields.ContactEMail, existing, missingFields);
+        }
+
 
         private static void CollectMissingField(
                         string fieldName,

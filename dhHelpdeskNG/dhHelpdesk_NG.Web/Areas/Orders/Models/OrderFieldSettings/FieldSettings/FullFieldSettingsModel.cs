@@ -20,7 +20,8 @@
             ReceiverFieldSettingsModel receiver,
             SupplierFieldSettingsModel supplier,
             UserFieldSettingsModel user,
-            AccountInfoFieldSettingsModel accountInfo)
+            AccountInfoFieldSettingsModel accountInfo,
+            ContactFieldSettingsModel contact)
         {
             OrderTypeId = orderTypeId;
             Delivery = delivery;
@@ -34,6 +35,7 @@
             Supplier = supplier;
             User = user;
             AccountInfo = accountInfo;
+            Contact = contact;
         }
 
         [IsId]
@@ -71,5 +73,8 @@
 
         [NotNull]
         public AccountInfoFieldSettingsModel AccountInfo { get; set; }
+
+        [NotNull]
+        public ContactFieldSettingsModel Contact { get; set; }
     }
 }

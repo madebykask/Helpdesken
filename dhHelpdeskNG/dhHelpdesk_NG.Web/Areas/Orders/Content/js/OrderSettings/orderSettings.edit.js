@@ -7,11 +7,13 @@
     }
 
     window.OrderSettings.prototype = {
-        init: function() {
-            $(".switchcheckbox").bootstrapSwitch("onText", window.trans_yes);
-            $(".switchcheckbox").bootstrapSwitch("offText", window.trans_no);
-            $(".switchcheckbox").bootstrapSwitch("size", "small");
-            $(".switchcheckbox").bootstrapSwitch("onColor", "success");
+        init: function () {
+            $(".switchcheckbox").bootstrapSwitch({
+                "onText": window.trans_yes,
+                "offText": window.trans_no,
+                "size": "small",
+                "onColor": "success"
+            });
 
             $(".order_field_values").on("click", this.openOrderFieldTypePopup());
         },

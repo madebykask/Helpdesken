@@ -77,6 +77,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
             MapSupplierSettings(settings.Supplier, fieldSettings, settings.ChangedDate);
             MapUserSettings(settings.User, fieldSettings, settings.ChangedDate);
             MapAccountSettings(settings.AccountInfo, fieldSettings, settings.ChangedDate);
+            MapContactSettings(settings.Contact, fieldSettings, settings.ChangedDate);
         }
 
         #region Map settings for edit
@@ -96,7 +97,8 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
                     CreateReceiverFieldSettings(fieldSettings),
                     CreateSupplierFieldSettings(fieldSettings),
                     CreateUserFieldSettings(fieldSettings),
-                    CreateAccountInfoFieldSettings(fieldSettings, orderFieldTypes));
+                    CreateAccountInfoFieldSettings(fieldSettings, orderFieldTypes),
+                    CreateContactFieldSettings(fieldSettings));
         }
 
         private static DeliveryFieldSettings CreateDeliveryFieldSettings(
@@ -257,6 +259,17 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
                     CreateOrderFieldTypeSetting(fieldSettings.FindByName(AccountInfoFields.AccountType3), OrderFieldTypes.AccountType3, orderFieldTypes),
                     CreateOrderFieldTypeSetting(fieldSettings.FindByName(AccountInfoFields.AccountType4), OrderFieldTypes.AccountType4, orderFieldTypes),
                     CreateOrderFieldTypeSetting(fieldSettings.FindByName(AccountInfoFields.AccountType5), OrderFieldTypes.AccountType5, orderFieldTypes)
+                );
+        }
+
+        private static ContactFieldSettings CreateContactFieldSettings(
+            NamedObjectCollection<OrdersFieldSettingsMapData> fieldSettings)
+        {
+            return new ContactFieldSettings(
+                    CreateTextFieldSetting(fieldSettings.FindByName(ContactFields.ContactId)),
+                    CreateTextFieldSetting(fieldSettings.FindByName(ContactFields.ContactName)),
+                    CreateTextFieldSetting(fieldSettings.FindByName(ContactFields.ContactPhone)),
+                    CreateTextFieldSetting(fieldSettings.FindByName(ContactFields.ContactEMail))
                 );
         }
 
@@ -476,6 +489,17 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
             MapOrderFieldTypeSettings(updatedSettings.AccountType3, existingSettings.FindByName(AccountInfoFields.AccountType3), changedDate);
             MapOrderFieldTypeSettings(updatedSettings.AccountType4, existingSettings.FindByName(AccountInfoFields.AccountType4), changedDate);
             MapOrderFieldTypeSettings(updatedSettings.AccountType5, existingSettings.FindByName(AccountInfoFields.AccountType5), changedDate);
+        }
+
+        private static void MapContactSettings(
+                ContactFieldSettings updatedSettings,
+                NamedObjectCollection<OrderFieldSettings> existingSettings,
+                DateTime changedDate)
+        {
+            MapTextFieldSettings(updatedSettings.Id, existingSettings.FindByName(ContactFields.ContactId), changedDate);
+            MapTextFieldSettings(updatedSettings.Name, existingSettings.FindByName(ContactFields.ContactName), changedDate);
+            MapTextFieldSettings(updatedSettings.Phone, existingSettings.FindByName(ContactFields.ContactPhone), changedDate);
+            MapTextFieldSettings(updatedSettings.Email, existingSettings.FindByName(ContactFields.ContactEMail), changedDate);
         }
 
         private static void MapOrderFieldTypeSettings(OrderFieldTypeSettings updatedSettings,
