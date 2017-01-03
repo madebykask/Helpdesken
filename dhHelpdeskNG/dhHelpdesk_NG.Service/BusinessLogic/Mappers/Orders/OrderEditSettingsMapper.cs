@@ -37,7 +37,8 @@
                         CreateReceiverEditSettings(fieldSettings),
                         CreateSupplierEditSettings(fieldSettings),
                         CreateUserEditSettings(fieldSettings),
-                        CreateAccountInfoEditSettings(fieldSettings));
+                        CreateAccountInfoEditSettings(fieldSettings),
+                        CreateContactEditSettings(fieldSettings));
         }
 
         private static DeliveryEditSettings CreateDeliveryEditSettings(
@@ -197,6 +198,17 @@
                     CreateFieldSetting(editSettings.FindByName(AccountInfoFields.AccountType3)),
                     CreateFieldSetting(editSettings.FindByName(AccountInfoFields.AccountType4)),
                     CreateFieldSetting(editSettings.FindByName(AccountInfoFields.AccountType5)));
+        }
+
+        private static ContactEditSettings CreateContactEditSettings(
+            NamedObjectCollection<OrdersEditSettingsMapData> editSettings)
+        {
+            return new ContactEditSettings(
+                    CreateTextFieldSetting(editSettings.FindByName(ContactFields.ContactId)),
+                    CreateTextFieldSetting(editSettings.FindByName(ContactFields.ContactName)),
+                    CreateTextFieldSetting(editSettings.FindByName(ContactFields.ContactPhone)),
+                    CreateTextFieldSetting(editSettings.FindByName(ContactFields.ContactEMail))
+                );
         }
 
         private static FieldEditSettings CreateFieldSetting(OrdersEditSettingsMapData data)

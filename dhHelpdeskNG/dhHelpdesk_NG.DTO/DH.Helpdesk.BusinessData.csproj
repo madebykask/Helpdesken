@@ -364,6 +364,7 @@
     <Compile Include="Models\Orders\OrderFieldSettings\GetSettingsResponse.cs" />
     <Compile Include="Models\Orders\Order\OrderAuditData.cs" />
     <Compile Include="Models\Orders\Order\OrderEditFields\AccountInfoEditFields.cs" />
+    <Compile Include="Models\Orders\Order\OrderEditFields\ContactEditFields.cs" />
     <Compile Include="Models\Orders\Order\OrderEditFields\DeliveryEditFields.cs" />
     <Compile Include="Models\Orders\Order\OrderEditFields\EmailLog.cs" />
     <Compile Include="Models\Orders\Order\OrderEditFields\EmailLogOverview.cs" />
@@ -391,6 +392,7 @@
     <Compile Include="Models\Orders\Order\OrderEditFields\UserEditFields.cs" />
     <Compile Include="Models\Orders\Order\OrderEditOptions.cs" />
     <Compile Include="Models\Orders\Order\OrderEditSettings\AccountInfoEditSettings.cs" />
+    <Compile Include="Models\Orders\Order\OrderEditSettings\ContactEditSettings.cs" />
     <Compile Include="Models\Orders\Order\OrderEditSettings\DeliveryEditSettings.cs" />
     <Compile Include="Models\Orders\Order\OrderEditSettings\FieldEditSettings.cs" />
     <Compile Include="Models\Orders\Order\OrderEditSettings\FullOrderEditSettings.cs" />

@@ -202,7 +202,8 @@
                     CreateReceiverEditFields(entity),
                     CreateSupplierEditFields(entity),
                     CreateUserEditFields(entity),
-                    CreateAccountInfoEditFields(entity));
+                    CreateAccountInfoEditFields(entity),
+                    CreateContactEditFields(entity));
         }
 
         private static DeliveryEditFields CreateDeliveryEditFields(Order entity)
@@ -356,6 +357,14 @@
                     entity.OrderFieldType5_Id
                 );
         }
-        
+
+        private static ContactEditFields CreateContactEditFields(Order entity)
+        {
+            return new ContactEditFields(
+                    entity.ContactId,
+                    entity.ContactName,
+                    entity.ContactPhone,
+                    entity.ContactEMail);
+        }
     }
 }

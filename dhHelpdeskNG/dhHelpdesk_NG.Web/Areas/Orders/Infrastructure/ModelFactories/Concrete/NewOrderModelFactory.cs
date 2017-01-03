@@ -39,6 +39,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                 CreateUserEditModel(data.EditSettings.User, workContext),
                 CreateUserInfoEditModel(data.EditSettings.User, data.EditOptions,  workContext),
                 CreateAccountInfoEditModel(data.EditSettings.AccountInfo, data.EditOptions, workContext),
+                CreateContactEditModel(data.EditSettings.Contact, data.EditOptions, workContext),
                 temporatyId,
                 workContext.Customer.CustomerId,
                 orderTypeId,
@@ -323,6 +324,19 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                     options.AccountTypes5, null);
 
             return model;
+        }
+
+        private ContactEditModel CreateContactEditModel(
+            ContactEditSettings settings,
+            OrderEditOptions options,
+            IWorkContext workContext)
+        {
+            return new ContactEditModel(
+                    _configurableFieldModelFactory.CreateStringField(settings.Id, null),
+                    _configurableFieldModelFactory.CreateStringField(settings.Name, null),
+                    _configurableFieldModelFactory.CreateStringField(settings.Phone, null),
+                    _configurableFieldModelFactory.CreateStringField(settings.EMail, null)
+                );
         }
 
         private static SelectList CreateSelectListField(

@@ -25,6 +25,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
             MapSupplierFields(entity, businessModel.Supplier);
             MapUserFields(entity, businessModel.User);
             MapAccountInfoFields(entity, businessModel.AccountInfo);
+            MapContactFields(entity, businessModel.Contact);
         }
 
         private static void MapDeliveryFields(Order entity, DeliveryEditFields businessModel)
@@ -170,6 +171,14 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
             entity.OrderFieldType3_Id = businessModel.AccountTypeId3;
             entity.OrderFieldType4_Id = businessModel.AccountTypeId4;
             entity.OrderFieldType5_Id = businessModel.AccountTypeId5;
+        }
+
+        private static void MapContactFields(Order entity, ContactEditFields businessModel)
+        {
+            entity.ContactId = businessModel.Id;
+            entity.ContactName = businessModel.Name;
+            entity.ContactPhone = businessModel.Phone;
+            entity.ContactEMail = businessModel.Email;
         }
     }
 }

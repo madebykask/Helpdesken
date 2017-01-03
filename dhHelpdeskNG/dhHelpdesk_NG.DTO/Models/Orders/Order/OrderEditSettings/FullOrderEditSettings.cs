@@ -15,7 +15,8 @@
                 ReceiverEditSettings receiver, 
                 SupplierEditSettings supplier, 
                 UserEditSettings user,
-                AccountInfoEditSettings accountInfo)
+                AccountInfoEditSettings accountInfo,
+                ContactEditSettings contact)
         {
             User = user;
             Supplier = supplier;
@@ -28,6 +29,7 @@
             General = general;
             Delivery = delivery;
             AccountInfo = accountInfo;
+            Contact = contact;
         }
 
         [NotNull]
@@ -62,5 +64,8 @@
 
         [NotNull]
         public AccountInfoEditSettings AccountInfo { get; private set; }
+
+        [NotNull]
+        public ContactEditSettings Contact { get; private set; }
     }
 }

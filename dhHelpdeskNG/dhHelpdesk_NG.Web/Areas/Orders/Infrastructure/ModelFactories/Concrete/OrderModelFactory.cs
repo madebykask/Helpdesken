@@ -55,6 +55,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                 CreateUserEditModel(response.EditSettings.User, response.EditData.Order.User),
                 CreateUserInfoEditModel(response.EditSettings.User, response.EditData.Order.User, response.EditOptions),
                 CreateAccountInfoEditModel(response.EditSettings.AccountInfo, response.EditData.Order.AccountInfo, response.EditOptions),
+                CreateContactEditModel(response.EditSettings.Contact, response.EditData.Order.Contact, response.EditOptions),
                 textOrderId,
                 customerId,
                 response.EditData.Order.OrderTypeId,
@@ -357,6 +358,19 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                     options.AccountTypes5, fields.AccountTypeId5.ToString());
 
             return model;
+        }
+
+        private ContactEditModel CreateContactEditModel(
+            ContactEditSettings settings,
+            ContactEditFields fields,
+            OrderEditOptions options)
+        {
+            return new ContactEditModel(
+                    configurableFieldModelFactory.CreateStringField(settings.Id, fields.Id),
+                    configurableFieldModelFactory.CreateStringField(settings.Name, fields.Name),
+                    configurableFieldModelFactory.CreateStringField(settings.Phone, fields.Phone),
+                    configurableFieldModelFactory.CreateStringField(settings.EMail, fields.Email)
+                );
         }
 
         private static SelectList CreateSelectListField(

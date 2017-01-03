@@ -50,7 +50,10 @@
                     {
                         @Html.EditorFor(m => m.AccountInfo)
                     }
-
+                    @if (Model.Contact.HasShowableFields())
+                    {
+                        @Html.EditorFor(m => m.Contact)
+                    }
                     @if (Model.Orderer.HasShowableFields())
                     {
                         @Html.EditorFor(m => m.Orderer)
