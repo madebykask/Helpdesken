@@ -8,6 +8,7 @@
     var popupIntLogInput = $("#caseInternalLogModalInput");
     var fakeInputTo = $("#fake_CaseLog_EmailRecepientsInternalLogTo");
     var fakeInputCc = $("#fake_CaseLog_EmailRecepientsInternalLogCc");
+    var isNeedToRemove = true;
 
     $("a[href='#case_internal_log_to_btn']").on("click", function (e) {
         var $src = $(this);
@@ -29,14 +30,16 @@
 
     $("#case_internal_log_popup").on("hide", function () {
         changeFakeInputValueForView();
+        isNeedToRemove = false;
         dropdownDeselectAll();
+        isNeedToRemove = true;
     });
 
     $("#case_internal_log_popup").on("shown", function () {
         popupIntLogInput.focus();
     });
 
-    $(".case-usersearch-multiselect")
+    $(".case-intlog-multiselect")
         .multiselect({
             enableFiltering: true,
             filterPlaceholder: "",
@@ -56,49 +59,49 @@
                     return selected.substr(0, selected.length - 2) + ' <i class="caret"></i>';
                 }
                 return '-- <i class="caret"></i>';
+            },
+            onChange: function (element, checked) {
+                if (element.parent().attr("id") === "caseInternalLogEmailGroupsDropdown") {
+                    if (checked) {
+                        appendDropdownsEmails(emailGroups, element.val());
+                    } else if (isNeedToRemove) {
+                        removeDropdownEmails(emailGroups, element.val());
+                    }
+                }
+                if (element.parent().attr("id") === "caseInternalLogWorkingGroupsDropdown") {
+                    if (checked) {
+                        appendDropdownsEmails(workingGroups, element.val());
+                    } else if (isNeedToRemove) {
+                        removeDropdownEmails(workingGroups, element.val());
+                    }
+                }
+                if (element.parent().attr("id") === "caseInternalLogAdministratorsDropdown") {
+                    if (checked) {
+                        checkAndAddEmailsFromDrops(element.val());
+                    } else if (isNeedToRemove) {
+                        removeEmailsFromDrops(element.val());
+                    }
+                }
             }
         });
 
-    $("#caseInternalLog_emailGroupsDiv").change(function () {
-        appendGroupEmails();
-    });
-    $("#caseInternalLog_workingGroupsDiv").change(function () {
-        appendWorkingGroupEmails();
-    });
-    $("#caseInternalLog_adminsDiv").change(function () {
-        appendAdminEmails();
-    });
-
-    function appendGroupEmails() {
-        var selectedGroupIds = $("#caseInternalLogEmailGroupsDropdown").val() || [];
-        for (var i = 0; i < selectedGroupIds.length; i++) {
-            var arr = jQuery.grep(emailGroups,
-                function (a) {
-                    return a.Id == selectedGroupIds[i];
-                });
-            for (var j = 0; j < arr[0].Emails.length; j++) {
-                checkAndAddEmailsFromDrops(arr[0].Emails[j]);
-            }
+    function appendDropdownsEmails(array, selectedId) {
+        var arr = jQuery.grep(array,
+                        function (a) {
+                            return a.Id == selectedId;
+                        });
+        for (var j = 0; j < arr[0].Emails.length; j++) {
+            checkAndAddEmailsFromDrops(arr[0].Emails[j]);
         }
     }
 
-    function appendWorkingGroupEmails() {
-        var selectedGroupIds = $("#caseInternalLogWorkingGroupsDropdown").val() || [];
-        for (var i = 0; i < selectedGroupIds.length; i++) {
-            var arr = jQuery.grep(workingGroups,
-                function (a) {
-                    return a.Id == selectedGroupIds[i];
-                });
-            for (var j = 0; j < arr[0].Emails.length; j++) {
-                checkAndAddEmailsFromDrops(arr[0].Emails[j]);
-            }
-        }
-    }
-
-    function appendAdminEmails() {
-        var selectedAdministratorEmails = $("#caseInternalLogAdministratorsDropdown").val() || [];
-        for (var i = 0; i < selectedAdministratorEmails.length; i++) {
-            checkAndAddEmailsFromDrops(selectedAdministratorEmails[i]);
+    function removeDropdownEmails(array, selectedId) {
+        var arr = jQuery.grep(array,
+                        function (a) {
+                            return a.Id == selectedId;
+                        });
+        for (var j = 0; j < arr[0].Emails.length; j++) {
+            removeEmailsFromDrops(arr[0].Emails[j]);
         }
     }
 
@@ -131,7 +134,7 @@
             if (email !== "") {
                 e.preventDefault();
                 text = text.replace(email, "");
-                popupIntLogInput.val(text);
+                popupIntLogInput.val(text.replace(/^ /, ""));
                 if (dialogType === 1) {
                     mainIntLogInputTo.val(popupIntLogInput.val());
                 }
@@ -149,7 +152,7 @@
             if (email !== "") {
                 e.preventDefault();
                 text = text.replace(email, "");
-                popupIntLogInput.val(text);
+                popupIntLogInput.val(text.replace(/^ /, ""));
                 if (dialogType === 1) {
                     mainIntLogInputTo.val(popupIntLogInput.val());
                 }
@@ -205,13 +208,13 @@
         if (e.keyCode === 13) {
             newEmail = arr[arr.length - 1].replace("\n", "");
             if (newEmail.trim() !== "" && checkAndAddEmailsTo(newEmail)) {
-                fakeInput.val(emails.replace("\n", "") + ";");
+                fakeInput.val(emails.replace("\n", "") + "; ");
             }
         }
         if (e.keyCode === 186) {
             newEmail = arr[arr.length - 2];
             if (newEmail.trim() !== "" && checkAndAddEmailsTo(newEmail)) {
-                fakeInput.val(emails);
+                fakeInput.val(emails + " ");
             }
         }
     }
@@ -222,7 +225,7 @@
             minLength: 2,
             source: function (query, process) {
                 var arr = query.split(";");
-                var searchText = arr[arr.length - 1];
+                var searchText = $.trim(arr[arr.length - 1]);
                 var lastInitiatorSearchKey = generateRandomKey();
                 return $.ajax({
                     url: "/cases/CaseSearchUserEmails",
@@ -286,7 +289,7 @@
                         emailsToAdd.push(value);
                 });
                 changeFakeInputValueForView();
-                return this.$element.val().replace(/[^;]*$/, "");
+                return this.$element.val().replace(/[^;]*$/, " ");
             }
         };
 
@@ -295,7 +298,7 @@
 
     function checkAndAddEmailsTo(value) {
         if (isValidEmailAddress(value)) {
-            var newToEmail = value + ";";
+            var newToEmail = value + "; ";
             if (dialogType === toType) {
                 if (mainIntLogInputCc.val().indexOf(newToEmail) >= 0)
                     mainIntLogInputCc.val(mainIntLogInputCc.val().replace(newToEmail, "")); //remove if exist in cc
@@ -319,14 +322,14 @@
                 }
             return true;
         } else {
-            ShowToastMessage(value + " : " + window.parameters.emailNotValid, 'error');
+            ShowToastMessage(value + " : " + window.parameters.emailNotValid, "error");
             return false;
         }
     }
 
     function checkAndAddEmailsFromDrops(value) {
         if (isValidEmailAddress(value)) {
-            var newToEmail = value + ";";
+            var newToEmail = value + "; ";
             if (dialogType === toType) {
                 if (mainIntLogInputCc.val().indexOf(newToEmail) >= 0) {
                     mainIntLogInputCc.val(mainIntLogInputCc.val().replace(newToEmail, ""));
@@ -358,5 +361,29 @@
             ShowToastMessage(value + " : " + window.parameters.emailNotValid, "error");
             return false;
         }
+    }
+
+    function removeEmailsFromDrops(value) {
+        if (isValidEmailAddress(value)) {
+            var newToEmail = value + "; ";
+            if (dialogType === toType) {
+                mainIntLogInputTo.val(mainIntLogInputTo.val().replace(newToEmail, ""));
+                popupIntLogInput.val(popupIntLogInput.val().replace(newToEmail, ""));
+            }
+            if (dialogType === ccType)
+                mainIntLogInputCc.val(mainIntLogInputCc.val().replace(newToEmail, ""));
+            popupIntLogInput.val(popupIntLogInput.val().replace(newToEmail, ""));
+        } else {
+            ShowToastMessage(value + " : " + window.parameters.emailNotValid, "error");
+        }
+    }
+
+    function dropdownDeselectAll() {
+        $(".case-intlog-multiselect").each(function () {
+            var select = $(this);
+            $("option", select).each(function () {
+                select.multiselect("deselect", $(this).val());
+            });
+        });
     }
 }

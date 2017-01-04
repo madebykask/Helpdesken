@@ -27,7 +27,7 @@
             <div class="modal-body overflow-visible case-dropdown-area">
                 <div id="caseInternalLog_emailGroupsDiv" class="case-dropdown-div">
                     @Translation.GetCoreTextTranslation("E-postgrupp")<br />
-                    <select id="caseInternalLogEmailGroupsDropdown" class="case-usersearch-multiselect multiselect-search" multiple="multiple">
+                    <select id="caseInternalLogEmailGroupsDropdown" class="case-intlog-multiselect multiselect-search" multiple="multiple">
                         @foreach (var emailGroup in Model.EmailGroups)
                         {
                             <option value="@emailGroup.Value">@emailGroup.Text</option>
@@ -36,7 +36,7 @@
                 </div>
                 <div id="caseInternalLog_workingGroupsDiv" class="case-dropdown-div">
                     @Translation.GetCoreTextTranslation("Driftgrupp")<br />
-                    <select id="caseInternalLogWorkingGroupsDropdown" class="case-usersearch-multiselect multiselect-search" multiple="multiple">
+                    <select id="caseInternalLogWorkingGroupsDropdown" class="case-intlog-multiselect multiselect-search" multiple="multiple">
                         @foreach (var workingGroup in Model.WorkingGroups)
                         {
                             <option value="@workingGroup.Value">@workingGroup.Text</option>
@@ -45,7 +45,7 @@
                 </div>
                 <div id="caseInternalLog_adminsDiv" class="case-dropdown-div">
                     @Translation.GetCoreTextTranslation("Handläggare")<br/>
-                    <select id="caseInternalLogAdministratorsDropdown" class="case-usersearch-multiselect multiselect-search" multiple="multiple">
+                    <select id="caseInternalLogAdministratorsDropdown" class="case-intlog-multiselect multiselect-search" multiple="multiple">
                         @foreach (var administrator in Model.Administrators)
                         {
                             <option value="@administrator.Value">@administrator.Text</option>
@@ -53,7 +53,7 @@
                     </select>
                 </div>
                 <div class="case-intlog-button-done">
-                    <button type="button" id="btnCancel" class="btn btn-cancel btn-default" data-dismiss="modal">@Translation.GetCoreTextTranslation("Klar")</button>
+                    <button type="button" id="btnCancel" class="btn btn-cancel btn-default" data-dismiss="modal">@Translation.GetCoreTextTranslation("OK")</button>
                 </div>
             </div>
         </div>

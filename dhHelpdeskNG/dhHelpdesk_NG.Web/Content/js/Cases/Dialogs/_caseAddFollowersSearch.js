@@ -14,7 +14,6 @@
 
     $("#case_add_followers_popup").on("hide", function () {
         changeFakeInputValueForView();
-        dropdownDeselectAll();
     });
 
     $("#case_add_followers_popup").on("shown", function () {
@@ -40,49 +39,49 @@
                 return selected.substr(0, selected.length - 2) + ' <i class="caret"></i>';
             }
             return '-- <i class="caret"></i>';
+        },
+        onChange: function (element, checked) {
+            if (element.parent().attr("id") === "caseFollowersEmailGroupsDropdown") {
+                if (checked) {
+                    appendDropdownsEmails(emailGroups, element.val());
+                } else {
+                    removeDropdownEmails(emailGroups, element.val());
+                }
+            }
+            if (element.parent().attr("id") === "caseFollowersWorkingGroupsDropdown") {
+                if (checked) {
+                    appendDropdownsEmails(workingGroups, element.val());
+                } else {
+                    removeDropdownEmails(workingGroups, element.val());
+                }
+            }
+            if (element.parent().attr("id") === "caseFollowersAdministratorsDropdown") {
+                if (checked) {
+                    checkAndAddEmailsFromDropdown(element.val());
+                } else {
+                    removeEmailsFromDropdown(element.val());
+                }
+            }
         }
     });
 
-    $("#caseFollowers_emailGroupsDiv").change(function () {
-        appendGroupEmails();
-    });
-    $("#caseFollowers_workingGroupsDiv").change(function () {
-        appendWorkingGroupEmails();
-    });
-    $("#caseFollowers_adminsDiv").change(function () {
-        appendAdminEmails();
-    });
-
-    function appendGroupEmails() {
-        var selectedGroupIds = $("#caseFollowersEmailGroupsDropdown").val() || [];
-        for (var i = 0; i < selectedGroupIds.length; i++) {
-            var arr = jQuery.grep(emailGroups,
-                function(a) {
-                    return a.Id == selectedGroupIds[i];
-                });
-            for (var j = 0; j < arr[0].Emails.length; j++) {
-                checkAndAddEmailsFromDropdown(arr[0].Emails[j]);
-            }
+    function appendDropdownsEmails(array, selectedId) {
+        var arr = jQuery.grep(array,
+                        function (a) {
+                            return a.Id == selectedId;
+                        });
+        for (var j = 0; j < arr[0].Emails.length; j++) {
+            checkAndAddEmailsFromDropdown(arr[0].Emails[j]);
         }
     }
 
-    function appendWorkingGroupEmails() {
-        var selectedGroupIds = $("#caseFollowersWorkingGroupsDropdown").val() || [];
-        for (var i = 0; i < selectedGroupIds.length; i++) {
-            var arr = jQuery.grep(workingGroups,
-                function (a) {
-                    return a.Id == selectedGroupIds[i];
-                });
-            for (var j = 0; j < arr[0].Emails.length; j++) {
-                checkAndAddEmailsFromDropdown(arr[0].Emails[j]);
-            }
-        }
-    }
-
-    function appendAdminEmails() {
-        var selectedAdministratorEmails = $("#caseFollowersAdministratorsDropdown").val() || [];
-        for (var i = 0; i < selectedAdministratorEmails.length; i++) {
-            checkAndAddEmailsFromDropdown(selectedAdministratorEmails[i]);
+    function removeDropdownEmails(array, selectedId) {
+        var arr = jQuery.grep(array,
+                        function (a) {
+                            return a.Id == selectedId;
+                        });
+        for (var j = 0; j < arr[0].Emails.length; j++) {
+            removeEmailsFromDropdown(arr[0].Emails[j]);
         }
     }
 
@@ -131,13 +130,13 @@
         if (e.keyCode === 13) {
             newEmail = arr[arr.length - 1].replace("\n", "");
             if (newEmail.trim() !== "" && checkAndAddEmailsTo(newEmail)) {
-                fakeInput.val(emails.replace("\n", "") + ";");
+                fakeInput.val(emails.replace("\n", "") + "; ");
             }
         }
         if (e.keyCode === 186) {
             newEmail = arr[arr.length - 2];
             if (newEmail.trim() !== "" && checkAndAddEmailsTo(newEmail)) {
-                fakeInput.val(emails);
+                fakeInput.val(emails + " ");
             }
 
         }
@@ -149,7 +148,7 @@
             minLength: 2,
             source: function (query, process) {
                 var arr = query.split(";");
-                var searchText = arr[arr.length - 1];
+                var searchText = $.trim(arr[arr.length - 1]);
                 var lastInitiatorSearchKey = generateRandomKey();
                 return $.ajax({
                     url: "/cases/CaseSearchUserEmails",
@@ -213,8 +212,8 @@
                         emailsToAdd.push(value);
                 });
                 if (emailsToAdd.length > 0)
-                    return this.$element.val().replace(/[^;]*$/, "") + emailsToAdd.join(";") + ";";
-                return this.$element.val().replace(/[^;]*$/, "");
+                    return this.$element.val().replace(/[^; ]*$/, "") + emailsToAdd.join("; ") + "; ";
+                return this.$element.val().replace(/[^;]*$/, " ");
             }
         };
 
@@ -223,9 +222,9 @@
 
     function checkAndAddEmailsTo(value) {
         if (isValidEmailAddress(value)) {
-            var newToEmail = value + ";";
-                if (mainFollowersInput.val().indexOf(newToEmail) < 0)
-                    mainFollowersInput.val(mainFollowersInput.val() + newToEmail);
+            var newToEmail = value + "; ";
+            if (mainFollowersInput.val().indexOf(newToEmail) < 0)
+                mainFollowersInput.val(mainFollowersInput.val() + newToEmail);
                 else {
                     ShowToastMessage(value + " : " + window.parameters.emailAlreadyAdded, "warning");
                     return false;
@@ -239,7 +238,7 @@
 
     function checkAndAddEmailsFromDropdown(value) {
         if (isValidEmailAddress(value)) {
-            var newToEmail = value + ";";
+            var newToEmail = value + "; ";
             if (mainFollowersInput.val().indexOf(newToEmail) < 0) {
                 mainFollowersInput.val(mainFollowersInput.val() + newToEmail);
                 popupFollowersInput.val(popupFollowersInput.val() + newToEmail);
@@ -250,6 +249,16 @@
         } else {
             ShowToastMessage(value + " : " + window.parameters.emailNotValid, "error");
             return false;
+        }
+    }
+
+    function removeEmailsFromDropdown(value) {
+        if (isValidEmailAddress(value)) {
+            var newToEmail = value + "; ";
+            mainFollowersInput.val(mainFollowersInput.val().replace(newToEmail, ""));
+            popupFollowersInput.val(popupFollowersInput.val().replace(newToEmail, ""));
+        } else {
+            ShowToastMessage(value + " : " + window.parameters.emailNotValid, "error");
         }
     }
 

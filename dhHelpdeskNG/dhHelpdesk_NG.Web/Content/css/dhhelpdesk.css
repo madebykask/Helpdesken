@@ -3757,24 +3757,15 @@ div.modal-body.max-height-600 {
     padding-left: 10px;
 }
 
-.case-div-span12 {
-    float: left;
-    margin-left: 20px;
-}
-
 .case-usersearch-textarea {
     height: 1.6em;
     min-height: 1em;
-    width: 50em;
+    width: 65%;
 }
 
 .case-usersearch-btn {
     margin-bottom: 0.4em;
     min-width: 40px;
-}
-
-.case-td-width90em {
-    width: 90em;
 }
 
 .case-followers-button-done {
