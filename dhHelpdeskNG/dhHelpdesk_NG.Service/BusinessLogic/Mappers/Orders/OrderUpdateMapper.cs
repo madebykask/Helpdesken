@@ -168,7 +168,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
             entity.HomeDirectory = businessModel.HomeDirectory;
             entity.Profile = businessModel.Profile;
             entity.InventoryNumber = businessModel.InventoryNumber;
-            entity.Info = businessModel.Info;
+            entity.AccountInfo = businessModel.Info;
             entity.OrderFieldType_Id = businessModel.AccountTypeId;
             entity.OrderFieldType2 = string.Join(",", businessModel.AccountTypeId2 ?? new List<int>());
             entity.OrderFieldType3_Id = businessModel.AccountTypeId3;

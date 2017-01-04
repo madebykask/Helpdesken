@@ -351,11 +351,11 @@
                     entity.HomeDirectory,
                     entity.Profile,
                     entity.InventoryNumber,
-                    entity.Info,
+                    entity.AccountInfo,
                     entity.OrderFieldType_Id,
                     string.IsNullOrEmpty(entity.OrderFieldType2) ?
                         new List<int>() :
-                        entity.OrderFieldType2.Split(',').ToList().Select(int.Parse).ToList(),
+                        entity.OrderFieldType2.Split(',').Select(int.Parse).ToList(),
                     entity.OrderFieldType3_Id,
                     entity.OrderFieldType4_Id,
                     entity.OrderFieldType5_Id
