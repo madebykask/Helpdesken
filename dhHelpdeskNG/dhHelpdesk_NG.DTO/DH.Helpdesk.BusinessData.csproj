@@ -127,6 +127,8 @@
     <Compile Include="Enums\Notifiers\OrdererField.cs" />
     <Compile Include="Enums\Notifiers\OrganizationField.cs" />
     <Compile Include="Enums\Notifiers\StateField.cs" />
+    <Compile Include="Enums\Orders\FieldNames\AccountInfoFieldNames.cs" />
+    <Compile Include="Enums\Orders\FieldNames\ContactFieldNames.cs" />
     <Compile Include="Enums\Orders\FieldNames\DeliveryFieldNames.cs" />
     <Compile Include="Enums\Orders\FieldNames\GeneralFieldNames.cs" />
     <Compile Include="Enums\Orders\FieldNames\LogFieldNames.cs" />
@@ -270,6 +272,7 @@
     <Compile Include="Models\Modules\Output\ModulesOverview.cs" />
     <Compile Include="Models\OperationLog\Output\OperationLogObjectOverview.cs" />
     <Compile Include="Models\Orders\Index\FieldSettingsOverview\AccountInfoFieldSettingsOverview.cs" />
+    <Compile Include="Models\Orders\Index\FieldSettingsOverview\ContactFieldSettingsOverview.cs" />
     <Compile Include="Models\Orders\Index\FieldSettingsOverview\DeliveryFieldSettingsOverview.cs" />
     <Compile Include="Models\Orders\Index\FieldSettingsOverview\GeneralFieldSettingsOverview.cs" />
     <Compile Include="Models\Orders\Index\FieldSettingsOverview\LogFieldSettingsOverview.cs" />
@@ -327,6 +330,7 @@
     <Compile Include="Enums\Orders\Fields\SupplierFields.cs" />
     <Compile Include="Enums\Orders\Fields\UserFields.cs" />
     <Compile Include="Models\Orders\Index\OrderOverview\AccountInfoOverview.cs" />
+    <Compile Include="Models\Orders\Index\OrderOverview\ContactOverview.cs" />
     <Compile Include="Models\Orders\Index\OrderOverview\DeliveryOverview.cs" />
     <Compile Include="Models\Orders\Index\OrderOverview\FullOrderOverview.cs" />
     <Compile Include="Models\Orders\Index\OrderOverview\GeneralOverview.cs" />

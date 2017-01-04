@@ -5,12 +5,16 @@
 
     public sealed class ProgramFieldSettingsOverview
     {
-        public ProgramFieldSettingsOverview(FieldOverviewSetting program)
+        public ProgramFieldSettingsOverview(FieldOverviewSetting program, FieldOverviewSetting infoProduct)
         {
-            this.Program = program;
+            Program = program;
+            InfoProduct = infoProduct;
         }
 
         [NotNull]
-        public FieldOverviewSetting Program { get; private set; }         
+        public FieldOverviewSetting Program { get; private set; }
+
+        [NotNull]
+        public FieldOverviewSetting InfoProduct { get; private set; }
     }
 }

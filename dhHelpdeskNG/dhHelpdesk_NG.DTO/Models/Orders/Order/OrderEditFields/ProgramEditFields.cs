@@ -20,7 +20,6 @@
         [NotNull]
         public List<OrderProgramModel> Programs { get; private set; }
 
-        [NotNull]
         public string InfoProduct { get; private set; }
 
     }

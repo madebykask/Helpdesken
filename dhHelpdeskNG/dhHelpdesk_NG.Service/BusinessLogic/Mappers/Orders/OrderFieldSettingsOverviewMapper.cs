@@ -42,6 +42,7 @@
             var supplier = CreateSupplierFieldSettingsOverview(fieldSettings);
             var user = CreateUserFieldSettingsOverview(fieldSettings);
             var accountInfo = CreateAccountInfoFieldSettingsOverview(fieldSettings);
+            var contact = CreateContactFieldSettingsOverview(fieldSettings);
 
             return new FullFieldSettingsOverview(
                                                 delivery,
@@ -54,7 +55,8 @@
                                                 receiver,
                                                 supplier,
                                                 user,
-                                                accountInfo);
+                                                accountInfo,
+                                                contact);
         }
 
         private static DeliveryFieldSettingsOverview CreateDeliveryFieldSettingsOverview(NamedObjectCollection<OrdersFieldSettingsOverviewMapData> fieldSettings)
@@ -71,6 +73,8 @@
             var deliveryInfo2 = CreateFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryInfo2));
             var deliveryInfo3 = CreateFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryInfo3));
             var deliveryOuId = CreateFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryOuId));
+            var deliveryName = CreateFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryName));
+            var deliveryPhone = CreateFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryPhone));
 
             return new DeliveryFieldSettingsOverview(
                                                 deliveryDate,
@@ -84,7 +88,9 @@
                                                 deliveryInfo1,
                                                 deliveryInfo2,
                                                 deliveryInfo3,
-                                                deliveryOuId);
+                                                deliveryOuId,
+                                                deliveryName,
+                                                deliveryPhone);
         }
 
         private static GeneralFieldSettingsOverview CreateGeneralFieldSettingsOverview(NamedObjectCollection<OrdersFieldSettingsOverviewMapData> fieldSettings)
@@ -195,8 +201,9 @@
         private static ProgramFieldSettingsOverview CreateProgramFieldSettingsOverview(NamedObjectCollection<OrdersFieldSettingsOverviewMapData> fieldSettings)
         {
             var program = CreateFieldSetting(fieldSettings.FindByName(ProgramFields.Program));
+            var infoProduct = CreateFieldSetting(fieldSettings.FindByName(ProgramFields.InfoProduct));
 
-            return new ProgramFieldSettingsOverview(program);
+            return new ProgramFieldSettingsOverview(program, infoProduct);
         }
 
         private static ReceiverFieldSettingsOverview CreateReceiverFieldSettingsOverview(NamedObjectCollection<OrdersFieldSettingsOverviewMapData> fieldSettings)
@@ -286,6 +293,11 @@
             var homeDirectory = CreateFieldSetting(fieldSettings.FindByName(AccountInfoFields.HomeDirectory));
             var profile = CreateFieldSetting(fieldSettings.FindByName(AccountInfoFields.Profile));
             var inventoryNumber = CreateFieldSetting(fieldSettings.FindByName(AccountInfoFields.InventoryNumber));
+            var accountType = CreateFieldSetting(fieldSettings.FindByName(AccountInfoFields.AccountType));
+            var accountType2 = CreateFieldSetting(fieldSettings.FindByName(AccountInfoFields.AccountType2));
+            var accountType3 = CreateFieldSetting(fieldSettings.FindByName(AccountInfoFields.AccountType3));
+            var accountType4 = CreateFieldSetting(fieldSettings.FindByName(AccountInfoFields.AccountType4));
+            var accountType5 = CreateFieldSetting(fieldSettings.FindByName(AccountInfoFields.AccountType5));
             var info = CreateFieldSetting(fieldSettings.FindByName(AccountInfoFields.Info));
 
             return new AccountInfoFieldSettingsOverview(
@@ -295,7 +307,26 @@
                 homeDirectory,
                 profile,
                 inventoryNumber,
+                accountType,
+                accountType2,
+                accountType3,
+                accountType4,
+                accountType5,
                 info);
+        }
+
+        private static ContactFieldSettingsOverview CreateContactFieldSettingsOverview(
+            NamedObjectCollection<OrdersFieldSettingsOverviewMapData> fieldSettings)
+        {
+            var id = CreateFieldSetting(fieldSettings.FindByName(ContactFields.ContactId));
+            var name = CreateFieldSetting(fieldSettings.FindByName(ContactFields.ContactName));
+            var phone = CreateFieldSetting(fieldSettings.FindByName(ContactFields.ContactPhone));
+            var email = CreateFieldSetting(fieldSettings.FindByName(ContactFields.ContactEMail));
+
+            return new ContactFieldSettingsOverview(id,
+                name,
+                phone,
+                email);
         }
 
         private static FieldOverviewSetting CreateFieldSetting(OrdersFieldSettingsOverviewMapData fieldSetting)

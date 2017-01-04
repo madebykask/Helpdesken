@@ -57,6 +57,7 @@
             CreateProgramHeaders(response.OverviewSettings.Program, headers);
             CreateUserHeaders(response.OverviewSettings.User, headers);
             CreateAccountInfoHeaders(response.OverviewSettings.AccountInfo, headers);
+            CreateContactHeaders(response.OverviewSettings.Contact, headers);
 
             var orderOverviews =
                 response.SearchResult.Orders.Select(o => CreateFullValues(response.OverviewSettings, o)).ToList();
@@ -80,6 +81,8 @@
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.DeliveryInfo2, DeliveryFieldNames.DeliveryInfo2, headers);
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.DeliveryInfo3, DeliveryFieldNames.DeliveryInfo3, headers);
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.DeliveryOuId, DeliveryFieldNames.DeliveryOuId, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.DeliveryName, DeliveryFieldNames.DeliveryName, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.DeliveryPhone, DeliveryFieldNames.DeliveryPhone, headers);
         }
 
         private static void CreateGeneralHeaders(GeneralFieldSettingsOverview settings, List<GridColumnHeaderModel> headers)
@@ -144,6 +147,7 @@
         private static void CreateProgramHeaders(ProgramFieldSettingsOverview settings, List<GridColumnHeaderModel> headers)
         {
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.Program, ProgramFieldNames.Program, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.InfoProduct, ProgramFieldNames.InfoProduct, headers);
         }
 
         private static void CreateReceiverHeaders(ReceiverFieldSettingsOverview settings, List<GridColumnHeaderModel> headers)
@@ -190,12 +194,32 @@
 
         private static void CreateAccountInfoHeaders(AccountInfoFieldSettingsOverview settings, List<GridColumnHeaderModel> headers)
         {
-            //TODO
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.StartedDate, AccountInfoFieldNames.StartedDate, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.FinishDate, AccountInfoFieldNames.FinishDate, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.EMailTypeId, AccountInfoFieldNames.EMailTypeId, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.HomeDirectory, AccountInfoFieldNames.HomeDirectory, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.Profile, AccountInfoFieldNames.Profile, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.InventoryNumber, AccountInfoFieldNames.InventoryNumber, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.AccountTypeId, AccountInfoFieldNames.AccountTypeId, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.AccountTypeId2, AccountInfoFieldNames.AccountTypeId2, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.AccountTypeId3, AccountInfoFieldNames.AccountTypeId3, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.AccountTypeId4, AccountInfoFieldNames.AccountTypeId4, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.AccountTypeId5, AccountInfoFieldNames.AccountTypeId5, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.Info, AccountInfoFieldNames.Info, headers);
+        }
+
+        private static void CreateContactHeaders(ContactFieldSettingsOverview settings,
+            List<GridColumnHeaderModel> headers)
+        {
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.Id, ContactFieldNames.Id, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.Name, ContactFieldNames.Name, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.Phone, ContactFieldNames.Phone, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.EMail, ContactFieldNames.EMail, headers);
         }
 
         #endregion
 
-        #region Create values
+            #region Create values
 
         private static OrderOverviewModel CreateFullValues(FullFieldSettingsOverview settings, FullOrderOverview order)
         {
@@ -211,7 +235,8 @@
             CreateOtherValues(settings.Other, order.Other, values);
             CreateProgramValues(settings.Program, order.Program, values);
             CreateUserValues(settings.User, order.User, values);
-            //TODO:CreateAccountInfoValues(settings.AccountInfo, order.AccountInfo, values);
+            CreateAccountInfoValues(settings.AccountInfo, order.AccountInfo, values);
+            CreateContactValues(settings.Contact, order.Contact, values);
 
             return new OrderOverviewModel(order.Id, order.OrderType, values);
         }
@@ -233,6 +258,8 @@
             FieldSettingsHelper.CreateValueIfNeeded(settings.DeliveryInfo2, DeliveryFieldNames.DeliveryInfo2, fields.DeliveryInfo2, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.DeliveryInfo3, DeliveryFieldNames.DeliveryInfo3, fields.DeliveryInfo3, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.DeliveryOuId, DeliveryFieldNames.DeliveryOuId, fields.DeliveryOuId, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.DeliveryName, DeliveryFieldNames.DeliveryName, fields.DeliveryName, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.DeliveryPhone, DeliveryFieldNames.DeliveryPhone, fields.DeliveryPhone, values);
         }
 
         private static void CreateGeneralValues(
@@ -307,7 +334,7 @@
             FieldSettingsHelper.CreateValueIfNeeded(settings.Info, OtherFieldNames.Info, fields.Info, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.Status, OtherFieldNames.Status, fields.Status, values);
 
-            if (fields.CaseInfo != null && fields.CaseInfo.FinishingDate.HasValue)
+            if (fields.CaseInfo?.FinishingDate != null)
                 FieldSettingsHelper.ForceCreateValue(OtherFieldNames.CaseIsFinished, bool.TrueString, values);
             else
                 FieldSettingsHelper.ForceCreateValue(OtherFieldNames.CaseIsFinished, bool.FalseString, values);
@@ -319,6 +346,7 @@
             List<NewGridRowCellValueModel> values)
         {
             FieldSettingsHelper.CreateValueIfNeeded(settings.Program, ProgramFieldNames.Program, fields.Programs, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.InfoProduct, ProgramFieldNames.InfoProduct, fields.InfoProduct, values);
         }
 
         private static void CreateReceiverValues(
@@ -370,6 +398,36 @@
             FieldSettingsHelper.CreateValueIfNeeded(settings.EmploymentType, UserFieldNames.EmploymentType, fields.EmploymentType, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.UserDepartment_Id1, UserFieldNames.UserDepartment_Id1, fields.UserDepartment_Id1, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.UserDepartment_Id2, UserFieldNames.UserDepartment_Id2, fields.UserDepartment_Id2, values);
+        }
+
+        private static void CreateAccountInfoValues(
+            AccountInfoFieldSettingsOverview settings,
+            AccountInfoOverview fields,
+            List<NewGridRowCellValueModel> values)
+        {
+            FieldSettingsHelper.CreateValueIfNeeded(settings.StartedDate, AccountInfoFieldNames.StartedDate, fields.StartedDate, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.FinishDate, AccountInfoFieldNames.FinishDate, fields.FinishDate, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.EMailTypeId, AccountInfoFieldNames.EMailTypeId, fields.EMailTypeId, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.HomeDirectory, AccountInfoFieldNames.HomeDirectory, fields.HomeDirectory, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.Profile, AccountInfoFieldNames.Profile, fields.Profile, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.InventoryNumber, AccountInfoFieldNames.InventoryNumber, fields.InventoryNumber, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.AccountTypeId, AccountInfoFieldNames.AccountTypeId, fields.AccountTypeId, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.AccountTypeId2, AccountInfoFieldNames.AccountTypeId2, fields.AccountTypeId2, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.AccountTypeId3, AccountInfoFieldNames.AccountTypeId3, fields.AccountTypeId3, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.AccountTypeId4, AccountInfoFieldNames.AccountTypeId4, fields.AccountTypeId4, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.AccountTypeId5, AccountInfoFieldNames.AccountTypeId5, fields.AccountTypeId5, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.Info, AccountInfoFieldNames.Info, fields.Info, values);
+        }
+
+        private static void CreateContactValues(
+            ContactFieldSettingsOverview settings,
+           ContactOverview fields,
+            List<NewGridRowCellValueModel> values)
+        {
+            FieldSettingsHelper.CreateValueIfNeeded(settings.Id, ContactFieldNames.Id, fields.Id, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.Name, ContactFieldNames.Name, fields.Name, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.Phone, ContactFieldNames.Phone, fields.Phone, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.EMail, ContactFieldNames.EMail, fields.Id, values);
         }
 
         #endregion

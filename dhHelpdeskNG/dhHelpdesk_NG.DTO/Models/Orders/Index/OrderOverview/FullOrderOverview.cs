@@ -19,7 +19,8 @@ namespace DH.Helpdesk.BusinessData.Models.Orders.Index.OrderOverview
                 ReceiverOverview receiver, 
                 SupplierOverview supplier, 
                 UserOverview user,
-                AccountInfoOverview accountInfo)
+                AccountInfoOverview accountInfo,
+                ContactOverview contact)
         {
             User = user;
             Supplier = supplier;
@@ -34,6 +35,7 @@ namespace DH.Helpdesk.BusinessData.Models.Orders.Index.OrderOverview
             Id = id;
             OrderType = orderType.Name;
             AccountInfo = accountInfo;
+            Contact = contact;
         }
 
         [IsId]
@@ -74,7 +76,9 @@ namespace DH.Helpdesk.BusinessData.Models.Orders.Index.OrderOverview
         [NotNull]
         public AccountInfoOverview AccountInfo { get; private set; }
 
+        [NotNull]
+        public ContactOverview Contact { get; private set; }
 
-        
+
     }
 }

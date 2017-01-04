@@ -15,7 +15,8 @@
                 ReceiverFieldSettingsOverview receiver, 
                 SupplierFieldSettingsOverview supplier, 
                 UserFieldSettingsOverview user,
-                AccountInfoFieldSettingsOverview accountInfo)
+                AccountInfoFieldSettingsOverview accountInfo,
+                ContactFieldSettingsOverview contact)
         {
             User = user;
             Supplier = supplier;
@@ -28,6 +29,7 @@
             General = general;
             Delivery = delivery;
             AccountInfo = accountInfo;
+            Contact = contact;
         }
 
         [NotNull]
@@ -62,5 +64,8 @@
 
         [NotNull]
         public AccountInfoFieldSettingsOverview AccountInfo { get; private set; }
+
+        [NotNull]
+        public ContactFieldSettingsOverview Contact { get; private set; }
     }
 }

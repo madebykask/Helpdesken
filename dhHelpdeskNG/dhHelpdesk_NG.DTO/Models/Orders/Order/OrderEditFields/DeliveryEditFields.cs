@@ -67,10 +67,8 @@
         [IsId]
         public int? DeliveryOuIdId { get; private set; }
 
-        [NotNull]
         public string DeliveryName { get; private set; }
 
-        [NotNull]
         public string DeliveryPhone { get; private set; }
     }
 }

@@ -214,7 +214,8 @@
 			using (var uow = this._unitOfWorkFactory.CreateWithDisabledLazyLoading())
 			{
 				var orderTypeRep = uow.GetRepository<OrderType>();
-				var orderTypes = orderTypeRep.GetAll()
+                var orderFieldTypesRep = uow.GetRepository<OrderFieldType>();
+                var orderTypes = orderTypeRep.GetAll()
 									.GetOrderTypes(parameters.CustomerId).ToList();
 				var rootOrderType = orderTypes.Where(ot => ot.Id == parameters.OrderTypeId).ToList();
 				var orderTypeDescendants = GetChildrenInRow(rootOrderType, true).ToList();
@@ -235,8 +236,9 @@
 				var caseNumbers = overviews.Where(o => o.CaseNumber.HasValue).Select(o => o.CaseNumber).ToList();
 				var caseRep = uow.GetRepository<Case>();
 				var caseEntities = caseRep.GetAll().Where(c => caseNumbers.Contains(c.CaseNumber)).ToList();
+			    var orderFieldTypes = orderFieldTypesRep.GetAll().GetByType(parameters.OrderTypeId);
 
-				var orderData = overviews.MapToFullOverviews(orderTypes, caseEntities);
+				var orderData = overviews.MapToFullOverviews(orderTypes, caseEntities, orderFieldTypes);
 
 				var searchResult = new SearchResult(orderData.Count(), orderData);
 				return new SearchResponse(settings, searchResult);

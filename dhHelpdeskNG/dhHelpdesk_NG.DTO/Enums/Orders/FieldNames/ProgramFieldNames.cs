@@ -3,5 +3,6 @@
     public static class ProgramFieldNames
     {
         public const string Program = "Program.Program";
+        public const string InfoProduct = "Program.InfoProduct";
     }
 }
