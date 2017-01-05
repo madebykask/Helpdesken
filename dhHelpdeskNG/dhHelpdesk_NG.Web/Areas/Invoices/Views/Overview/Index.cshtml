@@ -1,4 +1,5 @@
-﻿@using DH.Helpdesk.Domain.Invoice
+﻿@using DH.Helpdesk.BusinessData.OldComponents
+@using DH.Helpdesk.Domain.Invoice
 @using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
@@ -54,9 +55,9 @@
 				<th></th>
 				<th>@Translation.GetCoreTextTranslation("Ärende")</th>
 				<th>@Translation.GetCoreTextTranslation("Text")</th>
-				<th>@Translation.GetCoreTextTranslation("Cat")</th>
+				<th>@Translation.CaseString(GlobalEnums.TranslationCaseFields.Category_Id.ToString())</th>
 				<th>@Translation.GetCoreTextTranslation("Avslutsdatum")</th>
-				<th>@Translation.GetCoreTextTranslation("Dept")</th>
+				<th>@Translation.CaseString(GlobalEnums.TranslationCaseFields.Department_Id.ToString())</th>
 				<th>@Translation.GetCoreTextTranslation("Arbete") @Translation.GetCoreTextTranslation("timmar")</th>
 				<th>@Translation.GetCoreTextTranslation("Övertid") @Translation.GetCoreTextTranslation("timmar")</th>
 				<th>@Translation.GetCoreTextTranslation("Arbete") @Translation.GetCoreTextTranslation("belopp")</th>
