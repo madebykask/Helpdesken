@@ -546,3 +546,59 @@ GO
 If not exists (select * from tblTextTranslation where text_id = 1711 and Language_Id = 1)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1711, 1, 'inte har valts. Vänligen kontrollera ärendet.')
 	
+
+
+If not exists (select * from tbltext where id = 1751)
+	insert into tbltext (id, TextString, TextType) VALUES (1751, 'Select E-mail', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1751 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1751, 1, 'Välj E-post')
+	
+
+If not exists (select * from tbltext where id = 1752)
+	insert into tbltext (id, TextString, TextType) VALUES (1752, 'Done', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1752 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1752, 1, 'Klar')
+	
+
+If not exists (select * from tbltext where id = 1753)
+	insert into tbltext (id, TextString, TextType) VALUES (1753, 'Email address is not valid.', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1753 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1753, 1, 'E-postadress är inte giltig.')
+	
+
+If not exists (select * from tbltext where id = 1754)
+	insert into tbltext (id, TextString, TextType) VALUES (1754, 'Same email already added.', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1754 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1754, 1, 'Samma e-post redan lagts.')
+	
+
+If not exists (select * from tbltext where id = 1755)
+	insert into tbltext (id, TextString, TextType) VALUES (1755, 'User', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1755 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1755, 1, 'Anmälare')
+	
+
+If not exists (select * from tbltext where id = 1756)
+	insert into tbltext (id, TextString, TextType) VALUES (1756, 'selected', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1756 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1756, 1, 'vald')
+	
+
+If not exists (select * from tbltext where id = 1757)
+	insert into tbltext (id, TextString, TextType) VALUES (1757, 'Add followers', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1757 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1757, 1, 'Välj följare')
+	
+
+
+
+
+
+

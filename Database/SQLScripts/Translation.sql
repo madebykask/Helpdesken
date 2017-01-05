@@ -5457,5 +5457,9 @@ If not exists (select * from tblTextTranslation where text_id = 1750 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1750, 2, 'No email')
 GO
 
+
+/* Ids 1751 - 1757 reserved for SelfService */
+
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

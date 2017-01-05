@@ -30,11 +30,11 @@
     };
 
     window.parameters = {
-        emailNotValid: '@Translation.GetForJS("E-postadress är inte giltig.")',
-        emailAlreadyAdded: '@Translation.GetForJS("Samma e-post redan lagts.")',        
-        initGroup: '@Translation.GetForJS("Anmälare")',        
-        closeBtn: '@Html.Raw(Translation.GetForJS("Stäng"))',
-        selectedLabel: '@Translation.GetForJS("vald")'
+        emailNotValid: '@Translation.GetForJS("Email address is not valid.")',
+        emailAlreadyAdded: '@Translation.GetForJS("Same email already added.")',        
+        initGroup: '@Translation.GetForJS("User")',        
+        closeBtn: '@Html.Raw(Translation.GetForJS("Close"))',
+        selectedLabel: '@Translation.GetForJS("selected")'
     }
 
 </script>
@@ -145,7 +145,7 @@
                                                 <span class="case-div-width90em">
                                                     @Html.HiddenFor(model => Model.FollowerUsers, new { @readonly = "true", id = "caseFollowerUsersInput" })
                                                     @Html.Partial("_CaseAddFollowers", Model.SendToDialogModel)
-                                                    <a href="#case_add_followers_btn" role="button" class="btn btn-default case-usersearch-btn hasAttribute" data-toggle="modal" standardName = "@GlobalEnums.TranslationCaseFields.Persons_Name.ToString()">@Translation.Get("Välj följare", Enums.TranslationSource.TextTranslation)</a>
+                                                    <a href="#case_add_followers_btn" role="button" class="btn btn-default case-usersearch-btn hasAttribute" data-toggle="modal" standardName = "@GlobalEnums.TranslationCaseFields.Persons_Name.ToString()">@Translation.Get("Add followers", Enums.TranslationSource.TextTranslation)</a>
                                                     @Html.TextAreaFor(model => model.FollowerUsers, new { id = "fakeCaseFollowerUsersInput", @class = "case-usersearch-textarea hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Persons_Name.ToString() })
 
                                                 </span>
