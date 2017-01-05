@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using DH.Helpdesk.BusinessData.Models.ExternalInvoice;
+using DH.Helpdesk.Web.Models.Invoice;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -1266,8 +1267,8 @@ namespace DH.Helpdesk.Web.Controllers
                     m.OutFormatter = new OutputFormatter(customerSettings.IsUserFirstLastNameRepresentation == 1, userTimeZone);
                     m.ResponsibleUsersAvailable = responsibleUsersAvailable.MapToSelectList(customerSettings, isAddEmpty);
                     m.SendToDialogModel = this.CreateNewSendToDialogModel(customerId, responsibleUsersAvailable.ToList(), cs); //ToDo: remove after release
-                    m.CaseLog.SendMailAboutCaseToNotifier = false;
-                    m.MinWorkingTime = cs.MinRegWorkingTime != 0 ? cs.MinRegWorkingTime : 30;                    
+	                m.MinWorkingTime = cs.MinRegWorkingTime;
+					m.CaseLog.SendMailAboutCaseToNotifier = false;
                     // check department info
                     m.ShowInvoiceFields = 0;
                     if (m.case_.Department_Id > 0 && m.case_.Department_Id.HasValue)
@@ -2809,7 +2810,7 @@ namespace DH.Helpdesk.Web.Controllers
 			        {
 				        Id = x.Id,
 				        InvoiceNumber = x.Name,
-				        InvoicePrice = x.Value,
+				        InvoicePrice = x.Amount,
 				        CreatedDate = DateTime.UtcNow,
 				        CreatedByUserId = workContext.User.UserId
 			        }).ToList());
@@ -3763,7 +3764,9 @@ namespace DH.Helpdesk.Web.Controllers
 	            {
 		            Id = x.Id,
 					Name = x.InvoiceNumber,
-					Value = x.InvoicePrice
+					Amount = x.InvoicePrice,
+					Charge = x.Charge,
+					InvoiceRow = x.InvoiceRow == null ? null : new InvoiceRowViewModel { Status = x.InvoiceRow.Status}
 	            }).ToList();
                 var caseFolowerUsers = _caseExtraFollowersService.GetCaseExtraFollowers(caseId).Select(x => x.Follower).ToArray();
                 var followerUsers = caseFolowerUsers.Any() ? string.Join(";", caseFolowerUsers) + ";" : string.Empty;
@@ -3788,8 +3791,8 @@ namespace DH.Helpdesk.Web.Controllers
             m.ParantPath_CaseType = ParentPathDefaultValue;
             m.ParantPath_ProductArea = ParentPathDefaultValue;
             m.ParantPath_OU = ParentPathDefaultValue;
-            m.MinWorkingTime = customerSetting.MinRegWorkingTime != 0 ? customerSetting.MinRegWorkingTime : 30;
-            m.CaseFilesModel = new CaseFilesModel();
+			m.MinWorkingTime = customerSetting.MinRegWorkingTime;
+			m.CaseFilesModel = new CaseFilesModel();
             m.LogFilesModel = new FilesModel();
             m.CaseFileNames = GetCaseFileNames(caseId.ToString());
             m.LogFileNames = GetLogFileNames(caseId.ToString());

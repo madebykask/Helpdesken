@@ -13,6 +13,7 @@ using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Invoice;
 using DH.Helpdesk.Web.Areas.Invoices.Models;
 using DH.Helpdesk.Web.Infrastructure;
+using DH.Helpdesk.Web.Models.Invoice;
 
 namespace DH.Helpdesk.Web.Areas.Invoices.Controllers.WebApi
 {
@@ -58,7 +59,7 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers.WebApi
 					WorkingHourRate = x.WorkingHourRate,
 					InvoiceRow = new InvoiceRowViewModel { Status = y.InvoiceRow.Status }
 				}).ToList(),
-				ExternalInvoices = x.ExternalInvoices.Select(y => new ExternalInvoiceItemViewModel
+				ExternalInvoices = x.ExternalInvoices.Select(y => new ExternalInvoiceModel
 				{
 					Id = y.Id,
 					Name = y.InvoiceNumber,
@@ -79,7 +80,7 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers.WebApi
 				_externalInvoiceService.UpdateExternalInvoiceValues(invoiceParams.ExternalInvoices.Select(x => new ExternalInvoice
 				{
 					Id = x.Id,
-					InvoicePrice = x.Value,
+					InvoicePrice = x.Amount,
 					Charge = x.Charge
 				}).ToList());
 			}

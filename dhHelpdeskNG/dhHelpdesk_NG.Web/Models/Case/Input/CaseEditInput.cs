@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DH.Helpdesk.Web.Models.Invoice;
 
 namespace DH.Helpdesk.Web.Models.Case.Input
 {

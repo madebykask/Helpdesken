@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using DH.Helpdesk.Domain.Invoice;
 
-namespace DH.Helpdesk.Web.Areas.Invoices.Models
+namespace DH.Helpdesk.Web.Models.Invoice
 {
 	public class InvoiceRowViewModel
 	{

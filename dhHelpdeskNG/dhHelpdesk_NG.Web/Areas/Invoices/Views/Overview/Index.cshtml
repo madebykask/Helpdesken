@@ -1,5 +1,6 @@
 ﻿@using DH.Helpdesk.Domain.Invoice
 @using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @using DH.Helpdesk.Web.Infrastructure.UrlHelpers.Api.Invoices
 @model DH.Helpdesk.Web.Areas.Invoices.Models.InvoiceOverviewFilterModel
@@ -8,7 +9,7 @@
 	{
 		<ul class="secnav">
 			<li>
-				<input type="button" value="@Translation.Get("Spara")" class="btn" id="btnInvoiceAction"/>
+				<input type="button" value="@Translation.Get("Skicka")" class="btn" id="btnInvoiceAction"/>
 			</li>
 			<li>
 				@Html.ActionLink(Translation.Get("Export"), "InvoiceExport", new RouteValueDictionary {
@@ -40,7 +41,7 @@
 			<td class="span3">@Translation.Get("Visa")</td>
 			<td>
 				@Html.DropDownListFor(m => m.Status, (List<SelectListItem>)ViewBag.Statuses, Translation.Get("Selektera ut"), new { id = "ddlStatus", @class = "inputw300" })
-				<input type="button" value="@Translation.Get("Sök")" class="btn" id="btnSearch" />
+				<input type="button" value="@Translation.Get("Visa")" class="btn" id="btnSearch" />
 			</td>
 		</tr>
 	</table>
@@ -62,10 +63,10 @@
 				<th>@Translation.GetCoreTextTranslation("Material")</th>
 				<th>@Translation.GetCoreTextTranslation("Pris")</th>
 				<th>@Translation.GetCoreTextTranslation("Fakturor")</th>
-				<th>@Translation.GetCoreTextTranslation("Debitering")</th>
+				<th>@Translation.GetCoreTextTranslation("Valda för debitering")</th>
 				@*<th>@Translation.GetCoreTextTranslation("Status")</th>*@
-				<th>@Translation.GetCoreTextTranslation("Debiterade")</th>
-				<th>@Translation.GetCoreTextTranslation("Ej Debiterade")</th>
+				<th>@Translation.GetCoreTextTranslation("Fakturera")</th>
+				<th>@Translation.GetCoreTextTranslation("Fakturera inte")</th>
 			</tr>
 		</thead>
 		<tbody></tbody>
@@ -87,12 +88,13 @@
 				copyText: '@Translation.GetForJS("Kopiera")',
 				statusList: @Html.SerializeObject(new Dictionary<int, string>
 							{
-								{ (int)InvoiceStatus.Invoiced, Translation.GetCoreTextTranslation("Debiterade") },
-								{ (int)InvoiceStatus.NotInvoiced, Translation.GetCoreTextTranslation("Ej Debiterade") }
+								{ (int)InvoiceStatus.Invoiced, InvoiceStatus.Invoiced.GetTranslation(true) },
+								{ (int)InvoiceStatus.NotInvoiced, InvoiceStatus.NotInvoiced.GetTranslation(true) }
 							}),
 				getListUrl: "@Url.ApiAction(WebApiInvoicesUrlName.Invoices.GetInvoicesOverviewList, WebApiInvoicesUrlName.Invoices.Controller)",
 				saveValuesUrl: "@Url.ApiAction(WebApiInvoicesUrlName.Invoices.SaveInvoiceValues, WebApiInvoicesUrlName.Invoices.Controller)",
 				actionUrl: "@Url.ApiAction(WebApiInvoicesUrlName.Invoices.InvoiceAction, WebApiInvoicesUrlName.Invoices.Controller)",
+				minStep: @ViewBag.MinStep
 			});
 			window.pageObj = pageObj;
 		});

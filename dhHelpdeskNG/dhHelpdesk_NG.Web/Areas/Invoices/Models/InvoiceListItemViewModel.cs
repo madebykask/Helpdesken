@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using DH.Helpdesk.Web.Models.Invoice;
 
 namespace DH.Helpdesk.Web.Areas.Invoices.Models
 {
@@ -10,7 +11,7 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Models
 		public InvoiceListItemViewModel()
 		{
 			LogInvoices = new List<LogInvoiceItemViewModel>();
-			ExternalInvoices = new List<ExternalInvoiceItemViewModel>();
+			ExternalInvoices = new List<ExternalInvoiceModel>();
 		}
 
 		public int CaseId { get; set; }
@@ -21,6 +22,6 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Models
 		public string Department { get; set; }
 		
 		public List<LogInvoiceItemViewModel> LogInvoices { get; set; }
-		public List<ExternalInvoiceItemViewModel> ExternalInvoices { get; set; }
+		public List<ExternalInvoiceModel> ExternalInvoices { get; set; }
 	}
 }

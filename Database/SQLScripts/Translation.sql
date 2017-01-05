@@ -5403,5 +5403,37 @@ GO
 UPDATE tblText Set TextString = 'Välj följare' WHERE Id=1717;
 GO
 
+If not exists (select * from tbltext where id = 1744)
+	insert into tbltext (id, TextString) VALUES (1744, 'Ej fakturerade')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1744 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1744, 2, 'Not invoiced')
+GO
+
+If not exists (select * from tbltext where id = 1745)
+	insert into tbltext (id, TextString) VALUES (1745, 'Klara (fakturerade)')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1745 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1745, 2, 'Ready (Invoiced)')
+GO
+
+If not exists (select * from tbltext where id = 1746)
+	insert into tbltext (id, TextString) VALUES (1746, 'Klara (ej fakturerade)')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1746 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1746, 2, 'Ready (Not invoiced)')
+GO
+
+If not exists (select * from tbltext where id = 1747)
+	insert into tbltext (id, TextString) VALUES (1747, 'Skicka')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1747 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1747, 2, 'Send')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

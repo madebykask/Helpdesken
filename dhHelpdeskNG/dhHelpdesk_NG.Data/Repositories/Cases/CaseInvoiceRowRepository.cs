@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using DH.Helpdesk.Dal.Infrastructure;
@@ -15,7 +16,9 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
 
 	    public List<CaseInvoiceRow> GetCaseInvoiceRows(int caseId)
 	    {
-		    return GetAll().Where(x => x.Case_Id == caseId).ToList();
+		    return Table
+					.Include(x => x.InvoiceRow)
+					.Where(x => x.Case_Id == caseId).ToList();
 	    }
 
 		public void SaveCaseInvoiceRows(int caseId, List<CaseInvoiceRow> rows)

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace DH.Helpdesk.Web.Areas.Invoices.Models
+﻿namespace DH.Helpdesk.Web.Models.Invoice
 {
-	public class ExternalInvoiceItemViewModel
+	public class ExternalInvoiceModel
 	{
 		public int Id { get; set; }
 		public string Name { get; set; }

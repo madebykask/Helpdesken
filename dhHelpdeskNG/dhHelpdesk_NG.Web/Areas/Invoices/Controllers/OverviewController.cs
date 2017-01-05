@@ -10,6 +10,7 @@ using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Invoice;
 using DH.Helpdesk.Web.Areas.Invoices.Models;
 using DH.Helpdesk.Web.Infrastructure;
+using DH.Helpdesk.Web.Infrastructure.Extensions;
 
 namespace DH.Helpdesk.Web.Areas.Invoices.Controllers
 {
@@ -17,40 +18,39 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers
     {
 	    private readonly IDepartmentService _departmentService;
 		private readonly IInvoiceService _invoiceService;
+	    private readonly ISettingService _settingService;
 
 		public OverviewController(
 		    IMasterDataService masterDataService,
 			IDepartmentService departmentService,
-			IInvoiceService invoiceService)
+			IInvoiceService invoiceService,
+			ISettingService settingService)
 		    : base(masterDataService)
 		{
 			_departmentService = departmentService;
 			_invoiceService = invoiceService;
+			_settingService = settingService;
 		}
 
 		// GET: Invoices/Overview
 		public ActionResult Index()
 		{
-			ViewBag.Departments = _departmentService.GetChargedDepartments(SessionFacade.CurrentCustomer.Id)
+			var customerId = SessionFacade.CurrentCustomer.Id;
+
+			ViewBag.Departments = _departmentService.GetChargedDepartments(customerId)
 				.Select(x => new SelectListItem
 				{
 					Text = x.DepartmentName,
 					Value = x.Id.ToString()
 				}).ToList();
-			ViewBag.Statuses = new List<SelectListItem>
-			{
-				new SelectListItem {Text = Translation.GetCoreTextTranslation("Ej debiterade"), Value = ((int)InvoiceStatus.No).ToString()},
-				new SelectListItem
-				{
-					Text = $"{Translation.GetCoreTextTranslation("Klara")} ({Translation.GetCoreTextTranslation("Debiterade")})",
-					Value = ((int)InvoiceStatus.Invoiced).ToString()
-				},
-				new SelectListItem
-				{
-					Text = $"{Translation.GetCoreTextTranslation("Klara")} ({Translation.GetCoreTextTranslation("Ej Debiterade")})",
-					Value = ((int)InvoiceStatus.NotInvoiced).ToString()
-				},
-			};
+
+			var statuses = InvoiceStatus.No.ToSelectListItems();
+			statuses.RemoveAll(x => x.Value == InvoiceStatus.No.ToInt().ToString());
+			ViewBag.Statuses = statuses;
+
+			var settings = _settingService.GetCustomerSetting(customerId);
+
+			ViewBag.MinStep = settings.MinRegWorkingTime;
 
 			var model = new InvoiceOverviewFilterModel();
 			return View(model);
@@ -157,9 +157,7 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers
 					</HTML>");
 
 			var bytes = Encoding.ASCII.GetBytes(sb.ToString());
-			return File(
-				   bytes,
-				   "application/vnd.ms-excel", "Invoice.xls");
+			return File(bytes, "application/vnd.ms-excel", "Invoice.xls");
 		}
 	}
 }

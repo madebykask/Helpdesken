@@ -167,37 +167,37 @@ InvoicesOverview.prototype = {
             });
 
         $('#invoiceGrid tbody').on('click', 'tr.expanded-toolbar #btnCancel', function (e) {
-            self._cancelExpansionForChild(e.currentTarget.closest("tr"));
+            self._cancelExpansionForChild($(this).closest("tr"));
             return false;
         });
 
         $('#invoiceGrid tbody').on('click', 'tr.expanded-toolbar #btnSave', function (e) {
-            self._saveRow(e.currentTarget.closest("tr"));
+            self._saveRow($(this).closest("tr"));
             return false;
         });
 
         $('#invoiceGrid tbody').on('change', 'tr.expanded-row #cbInvoice', function (e) {
-            self._selectAction(e.currentTarget.closest("tr"), $(this).is(":checked") ? 2 : 0);
+            self._selectAction($(this).closest("tr"), $(this).is(":checked") ? 2 : 0);
             return false;
         });
 
         $('#invoiceGrid tbody').on('change', 'tr.expanded-row #cbNotInvoice', function (e) {
-            self._selectAction(e.currentTarget.closest("tr"), $(this).is(":checked") ? 3 : 0);
+            self._selectAction($(this).closest("tr"), $(this).is(":checked") ? 3 : 0);
             return false;
         });
 
         $('#invoiceGrid tbody').on('change', 'tr #cbInvoiceChildren', function (e) {
-            self._selectChildActions(e.currentTarget.closest("tr"), $(this).is(":checked") ? 2 : 0);
+            self._selectChildActions($(this).closest("tr"), $(this).is(":checked") ? 2 : 0);
             return false;
         });
 
         $('#invoiceGrid tbody').on('change', 'tr #cbNotInvoiceChildren', function (e) {
-            self._selectChildActions(e.currentTarget.closest("tr"), $(this).is(":checked") ? 3 : 0);
+            self._selectChildActions($(this).closest("tr"), $(this).is(":checked") ? 3 : 0);
             return false;
         });
 
         $('#invoiceGrid tbody').on('click', 'tr #btnInvoiceChargedChildren', function (e) {
-            self._selectChildActionsByCharge(e.currentTarget.closest("tr"));
+            self._selectChildActionsByCharge($(this).closest("tr"));
             return false;
         });
     },
@@ -417,7 +417,7 @@ InvoicesOverview.prototype = {
 		    "<td class='align-right'>" + (isRowReadOnly ? self._formatNumber(data.ExternalInvoices[i].Amount, 2, 3, " ", ",") : self._getTextBox(data.ExternalInvoices[i].Amount, "txtExternalAmount")) + "</td>" +
 		    "<td class='align-center'>" + self._getChargeBox(isRowReadOnly, data.ExternalInvoices[i].Charge) + "</td>" +
 		    //"<td>" + self._getStatusText(data.ExternalInvoices[i].InvoiceRow.Status) + "</td>" +
-		    "<td class='align-rightcenter'>" + self._getInvoiceActionBox(isRowReadOnly, data.ExternalInvoices[i].InvoiceRow.Status, data.ExternalInvoices[i].InvoiceAction) + "</td>" +
+		    "<td class='align-center'>" + self._getInvoiceActionBox(isRowReadOnly, data.ExternalInvoices[i].InvoiceRow.Status, data.ExternalInvoices[i].InvoiceAction) + "</td>" +
 		    "<td class='align-center'>" + self._getNotInvoiceActionBox(isRowReadOnly, data.ExternalInvoices[i].InvoiceRow.Status, data.ExternalInvoices[i].InvoiceAction) + "</td>" +
             "</tr>";
             row = $(rowString);
@@ -457,7 +457,7 @@ InvoicesOverview.prototype = {
             }));
         }
         var minutes = $("<select id='ddl" + name + "Minutes' name='ddl" + name + "Minutes' class='inputw50'></select>");
-        for (i = 0; i < 60; i++) {
+        for (i = 0; i < 60; i+= self.options.minStep) {
             minutes.append($('<option>', {
                 value: i,
                 text: i,
@@ -563,7 +563,7 @@ InvoicesOverview.prototype = {
                     continue;
                 externalInvoices.push({
                     Id: externalInvoiceId,
-                    Value: Number($("#txtExternalAmount", row).val()),
+                    Amount: Number($("#txtExternalAmount", row).val()),
                     Charge: $("#cbCharge", row).is(':checked')
                 });
             }
@@ -598,7 +598,7 @@ InvoicesOverview.prototype = {
             for (i = 0; i < externalInvoices.length; i++) {
                 dataEntry = self._findById(data.ExternalInvoices, externalInvoices[i].Id);
                 if (dataEntry) {
-                    dataEntry.Amount = externalInvoices[i].Value;
+                    dataEntry.Amount = externalInvoices[i].Amount;
                     dataEntry.Charge = externalInvoices[i].Charge;
                 }
             }
@@ -719,7 +719,7 @@ InvoicesOverview.prototype = {
         self._selectActionUi(row, action);
     },
 
-    _selectChildActions(tr, action) {
+    _selectChildActions: function (tr, action) {
         "use strict";
         var self = this;
 
@@ -743,7 +743,7 @@ InvoicesOverview.prototype = {
         }
     },
 
-    _selectChildActionsByCharge(tr) {
+    _selectChildActionsByCharge: function (tr) {
         "use strict";
         var self = this;
 
