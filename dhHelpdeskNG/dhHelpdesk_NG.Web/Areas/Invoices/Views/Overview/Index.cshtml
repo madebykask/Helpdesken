@@ -4,6 +4,7 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @using DH.Helpdesk.Web.Infrastructure.UrlHelpers.Api.Invoices
+@using DH.Helpdesk.Web.Infrastructure.UrlHelpers.Mvc.Invoices
 @model DH.Helpdesk.Web.Areas.Invoices.Models.InvoiceOverviewFilterModel
 @section Actions {
 	@if (true)
@@ -13,12 +14,7 @@
 				<input type="button" value="@Translation.Get("Skicka")" class="btn" id="btnInvoiceAction"/>
 			</li>
 			<li>
-				@Html.ActionLink(Translation.Get("Export"), "InvoiceExport", new RouteValueDictionary {
-													  {"DepartmentId", Model.DepartmentId},
-													  {"DateFrom", Model.DateFrom},
-													  {"DateTo.CompanyName", Model.DateTo},
-													  {"Status", Model.Status},
-												  }, new { @class = "btn", target = "_blank"})
+				<input type="button" value="@Translation.Get("Export")" class="btn" id="btnExportGrid" />
 			</li>
 		</ul>
 	}
@@ -95,6 +91,7 @@
 				getListUrl: "@Url.ApiAction(WebApiInvoicesUrlName.Invoices.GetInvoicesOverviewList, WebApiInvoicesUrlName.Invoices.Controller)",
 				saveValuesUrl: "@Url.ApiAction(WebApiInvoicesUrlName.Invoices.SaveInvoiceValues, WebApiInvoicesUrlName.Invoices.Controller)",
 				actionUrl: "@Url.ApiAction(WebApiInvoicesUrlName.Invoices.InvoiceAction, WebApiInvoicesUrlName.Invoices.Controller)",
+				exportUrl: "@Url.Action(MvcInvoicesUrlName.Overview.InvoiceExport, MvcInvoicesUrlName.Overview.Controller)",
 				minStep: @ViewBag.MinStep
 			});
 			window.pageObj = pageObj;

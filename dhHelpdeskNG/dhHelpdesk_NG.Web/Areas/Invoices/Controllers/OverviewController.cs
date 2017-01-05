@@ -145,7 +145,7 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers
 					caseRow.Department,
 					caseRow.LogInvoices.Sum(x => x.WorkingTime),
 					caseRow.LogInvoices.Sum(x => x.Overtime),
-					caseRow.LogInvoices.Sum(x => x.WorkingTime) * caseRow.WorkingHourRate + caseRow.LogInvoices.Sum(x => x.Overtime) * caseRow.OvertimeHourRate,
+					Math.Round(((decimal)caseRow.LogInvoices.Sum(x => x.WorkingTime)) / 60 * caseRow.WorkingHourRate + ((decimal)caseRow.LogInvoices.Sum(x => x.Overtime)) / 60 * caseRow.OvertimeHourRate, 2),
 					caseRow.LogInvoices.Sum(x => x.Price),
 					caseRow.LogInvoices.Sum(x => x.EquipmentPrice),
 					caseRow.ExternalInvoices.Sum(x => x.InvoicePrice)

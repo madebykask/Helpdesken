@@ -19,6 +19,9 @@ InvoicesOverview.prototype = {
         $("#btnInvoiceAction").on("click", function () {
             self._invoiceAction();
         });
+        $("#btnExportGrid").on("click", function () {
+            self._exportGrid();
+        });
     },
 
     getDefaults: function () {
@@ -668,6 +671,14 @@ InvoicesOverview.prototype = {
             $("#btnInvoiceAction").prop('disabled', false);
         });
 
+    },
+
+    _exportGrid: function() {
+        "use strict";
+        var self = this;
+
+        var params = self._getInvoicesGridParams();
+        window.open(self.options.exportUrl + "?" + $.param(params));
     },
 
     _selectActionData: function (parent, id, collection, action) {
