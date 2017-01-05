@@ -508,6 +508,8 @@
     <Content Include="Content\img\ic_sentiment_very_satisfied_black_24dp_2x.png" />
     <Content Include="Content\js\Account\order.js" />
     <Content Include="Areas\Admin\Content\js\Users\_input.js" />
+    <Content Include="Content\js\additional-methods.js" />
+    <Content Include="Content\js\additional-methods.min.js" />
     <Content Include="Content\js\AdvancedSearch\index.specialfilter.js" />
     <Content Include="Content\js\AdvancedSearch\index.logic.js" />
     <Content Include="Content\js\bootstrap-tagsinput.js" />

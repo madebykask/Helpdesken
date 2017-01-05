@@ -31,13 +31,14 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
 					, rows
 					, (a, b) => a.Id == b.Id
 					, (a, b) =>
-				{
-					if (a.InvoiceNumber != b.InvoiceNumber || a.InvoicePrice != b.InvoicePrice)
-					{
-						a.InvoiceNumber = b.InvoiceNumber;
-						a.InvoicePrice = b.InvoicePrice;
-					}
-				});
+						{
+							if (a.InvoiceNumber != b.InvoiceNumber || a.InvoicePrice != b.InvoicePrice)
+							{
+								a.InvoiceNumber = b.InvoiceNumber;
+								a.InvoicePrice = b.InvoicePrice;
+							}
+						}
+					, true);
 		}
 
 	    public void UpdateExternalInvoiceValues(List<CaseInvoiceRow> rows)

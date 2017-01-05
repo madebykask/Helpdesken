@@ -2288,7 +2288,7 @@
         ignore: "",
         rules: {
             "case_.ReportedBy": {
-                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.ReportedBy, CaseSolutionFields.UserNumber))  
+                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.ReportedBy, CaseSolutionFields.UserNumber))
                 },
             "case_.PersonsName": {
                 required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Persons_Name.ToString())")
@@ -2306,7 +2306,7 @@
                 required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Region_Id.ToString())")
             },
             "case_.Department_Id": {
-                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Department_Id, CaseSolutionFields.Department))  
+                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Department_Id, CaseSolutionFields.Department))
             },
             "case_.OU_Id": {
                 required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.OU_Id.ToString())")
@@ -2330,10 +2330,10 @@
                 required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString())")
             },
             "case_.ProductArea_Id": {
-                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.ProductArea_Id, CaseSolutionFields.ProductArea))  
+                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.ProductArea_Id, CaseSolutionFields.ProductArea))
                 },
             "case_.CaseType_Id": {
-                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.CaseType_Id, CaseSolutionFields.CaseType))  
+                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.CaseType_Id, CaseSolutionFields.CaseType))
                 },
             "case_.System_Id": {
                 required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.System_Id.ToString())")
@@ -2345,7 +2345,7 @@
                 required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Impact_Id.ToString())")
             },
             "case_.Category_Id": {
-                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Category_Id, CaseSolutionFields.Category))  
+                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Category_Id, CaseSolutionFields.Category))
                 },
             "case_.Supplier_Id": {
                 required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString())")
@@ -2357,13 +2357,13 @@
                 required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString())")
             },
             "case_.Caption": {
-                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Caption, CaseSolutionFields.Caption))  
+                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Caption, CaseSolutionFields.Caption))
                 },
             "case_.Description": {
-                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Description, CaseSolutionFields.Description))  
+                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Description, CaseSolutionFields.Description))
                 },
             "case_.Miscellaneous": {
-                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Miscellaneous, CaseSolutionFields.Miscellaneous))  
+                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Miscellaneous, CaseSolutionFields.Miscellaneous))
                 },
             "case_.AgreedDate": {
                 required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.AgreedDate.ToString())")
@@ -2378,10 +2378,10 @@
                 required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString())")
             },
             "Performer_Id": {
-                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Performer_User_Id, CaseSolutionFields.Administrator))  
+                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Performer_User_Id, CaseSolutionFields.Administrator))
                 },
             "case_.Priority_Id": {
-                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Priority_Id, CaseSolutionFields.Priority))  
+                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Priority_Id, CaseSolutionFields.Priority))
                 },
             "case_.Status_Id": {
                 required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Status_Id.ToString())")
@@ -2436,9 +2436,59 @@
             },
             "CaseLog.TextInternal": {
                 maxlength: 3000
-            }            
+            },
+            "CaseLog.WorkingTimeHour": {
+            	require_from_group: {
+            		param: [1, ".time-field"],
+            		depends: function(element) {
+            			var setting = @(Model.TimeRequired.ToJavaScriptBool());
+            			var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== "";
+            			return setting && logPopulated;
+            		}
+            	}
+            },
+            "CaseLog.WorkingTimeMinute": {
+            	require_from_group: {
+            		param: [1, ".time-field"],
+            		depends: function(element) {
+            			var setting = @(Model.TimeRequired.ToJavaScriptBool());
+            			var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== "";
+            			return setting && logPopulated;
+            		}
+            	}
+            },
+            "CaseLog.OvertimeHour": {
+            	require_from_group: {
+            		param: [1, ".time-field"],
+            		depends: function(element) {
+            			var setting = @(Model.TimeRequired.ToJavaScriptBool());
+            			var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== "";
+            			return setting && logPopulated;
+            		}
+            	}
+            },
+            "CaseLog.OvertimeMinute": {
+            	require_from_group: {
+            		param: [1, ".time-field"],
+            		depends: function(element) {
+            			var setting = @(Model.TimeRequired.ToJavaScriptBool());
+            			var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== "";
+            			return setting && logPopulated;
+		            }
+				}
+            },
         },
-        messages: {
+    	groups: {
+    		time: "CaseLog.WorkingTimeHour CaseLog.WorkingTimeMinute CaseLog.OvertimeHour CaseLog.OvertimeMinute"
+    	},
+    	errorPlacement: function(error, element) {
+		    if (element.hasClass("time-field")) {
+		        $("#timeValidationMessage").html(error);
+		    } else {
+		    	error.insertAfter(element);
+		    }
+	    },
+    	messages: {
             "case_.ReportedBy": {
                 required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
             },
@@ -2513,7 +2563,7 @@
             },
             "case_.Description": {
                 required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-            }, 
+            },
             "case_.Miscellaneous": {
                 required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
             },
@@ -2526,7 +2576,7 @@
             "case_.WorkingGroup_Id": {
                 required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
             },
-            "Performer_Id": {               
+            "Performer_Id": {
                 required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
             },
             "ResponsibleUser_Id": {
@@ -2552,7 +2602,7 @@
             },
             "CaseLog.FinishingDate": {
                 required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-            }, 
+            },
             "case_.IsAbout.Department_Id": {
                 required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
             },
@@ -2561,7 +2611,19 @@
             },
             "CaseLog.TextExternal": {
                 maxlength: "@Translation.GetForJS("Ange inte mer än 3000 tecken", Enums.TranslationSource.TextTranslation)"
-            }
+            },
+    		"CaseLog.WorkingTimeHour": {
+    			require_from_group: "@Translation.GetForJS("Välj en eller flera")"
+    		},
+    		"CaseLog.WorkingTimeMinute": {
+    			require_from_group: "@Translation.GetForJS("Välj en eller flera")"
+			},
+        	"CaseLog.OvertimeHour": {
+				require_from_group: "@Translation.GetForJS("Välj en eller flera")"
+			},
+			"CaseLog.OvertimeMinute": {
+				require_from_group: "@Translation.GetForJS("Välj en eller flera")"
+			},
         },
 //        submitHandler: function(form) {
 //        }
@@ -2587,71 +2649,71 @@
     }
 
 
-    $(function() {        
-        
+    $(function() {
+
         SetDynamicDropDowns();
 
-        $( ".dropdown-submenu.DynamicDropDown_Up" ).mousemove(function( event ) {                                
+        $( ".dropdown-submenu.DynamicDropDown_Up" ).mousemove(function( event ) {
             var target = $(event.target.parentElement);
             if (target != undefined && target.hasClass('DynamicDropDown_Up') && target.index(0) != -1) {
-                var objPos = GetObjectPosInView(target[0].id);                
-                var subMenu = "#subDropDownMenu_" + target[0].id;                                               
+                var objPos = GetObjectPosInView(target[0].id);
+                var subMenu = "#subDropDownMenu_" + target[0].id;
                 $(subMenu).css("bottom", "auto");
                 $(subMenu).css("top", "auto");
                 if ($(".DynamicDropDown").hasClass('dropup'))
                 {
-                    if (objPos.ToTop < objPos.ToDown )          
+                    if (objPos.ToTop < objPos.ToDown )
                     {
-                        var h = -$(subMenu).height() + 25;                        
-                        var hstr = h+"px";                    
-                        $(subMenu).css("bottom",hstr);                        
-                    }                    
+                        var h = -$(subMenu).height() + 25;
+                        var hstr = h+"px";
+                        $(subMenu).css("bottom",hstr);
+                    }
                     else
-                        $(subMenu).css("bottom","0");  
+                        $(subMenu).css("bottom","0");
                 }
                 else
-                {                    
-                    if (objPos.ToTop < objPos.ToDown || $(subMenu).height() < objPos.ToDown)                                                      
-                        $(subMenu).css("top","0");                                        
+                {
+                    if (objPos.ToTop < objPos.ToDown || $(subMenu).height() < objPos.ToDown)
+                        $(subMenu).css("top","0");
                     else
                     {
-                        var h = -$(subMenu).height() + 25;                        
-                        var hstr = h+"px";                    
-                        $(subMenu).css("top",hstr);                        
-                    }                        
+                        var h = -$(subMenu).height() + 25;
+                        var hstr = h+"px";
+                        $(subMenu).css("top",hstr);
+                    }
                 }
-            }            
+            }
         });
 
         function GetObjectPosInView(objectId)
         {
             var fixedArea = 90;
             var pageSize = $(window).height() - fixedArea;
-            var scrollPos = $(window).scrollTop();            
+            var scrollPos = $(window).scrollTop();
             var elementToTop = $("#" + objectId).offset().top  - scrollPos - fixedArea;
             var elementToDown = pageSize - elementToTop;
             return {ToTop: elementToTop, ToDown: elementToDown};
         }
 
-        $(window).scroll(function() {            
+        $(window).scroll(function() {
             SetDynamicDropDowns()
-        });      
+        });
 
         function SetDynamicDropDowns()
         {
             var fixedArea = 90;
             var pageSize = $(window).height() - fixedArea;
-            var scrollPos = $(window).scrollTop();            
+            var scrollPos = $(window).scrollTop();
             var elementToTop = $(".DynamicDropDown").offset().top  - scrollPos - fixedArea;
-            var elementToDown = pageSize - elementToTop;            
+            var elementToDown = pageSize - elementToTop;
             if (elementToTop < -$(".DynamicDropDown").height())
                 $(".DynamicDropDown").removeClass('open');
 
             if (elementToTop <= elementToDown) {
-                $(".DynamicDropDown").removeClass('dropup');        
-            } else {    
-                $(".DynamicDropDown").addClass('dropup');                
-            } 
+                $(".DynamicDropDown").removeClass('dropup');
+            } else {
+                $(".DynamicDropDown").addClass('dropup');
+            }
         }
 
         $("#caseDescriptionPreview").click(function() {
@@ -2661,7 +2723,7 @@
             var d = $(document.createElement("div"))
                 .html(description)
                 .dialog({
-                    title: "@Translation.Get(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)",    
+                    title: "@Translation.Get(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)",
                     modal: true,
                     width: 600,
                     height: 400,
@@ -2722,7 +2784,7 @@
     //    weekStart: 1,
     //    todayHighlight: true,
     //    clearBtn : true,
-    //    autoclose:true,        
+    //    autoclose:true,
     //});
 
 </script>

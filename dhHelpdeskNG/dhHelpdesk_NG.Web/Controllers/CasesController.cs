@@ -4326,6 +4326,7 @@ namespace DH.Helpdesk.Web.Controllers
                 if (d != null)
                 {
                     m.ShowInvoiceFields = d.Charge;
+	                m.TimeRequired = d.ChargeMandatory.ToBool();
                 }
             }
 

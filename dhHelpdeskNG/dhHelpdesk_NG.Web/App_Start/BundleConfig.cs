@@ -56,12 +56,14 @@ namespace DH.Helpdesk.Web
                             "~/Scripts/jquery-1.8.3.js",
                             "~/Content/js/jquery.unobtrusive-ajax.min.js",
                             "~/Content/js/jquery.validate.js",
+							"~/Content/js/additional-methods.js",
 #else
 							"~/Scripts/jquery-1.8.3.min.js",
                             "~/Content/js/jquery.unobtrusive-ajax.min.js",
                             "~/Content/js/jquery.validate.min.js",
+							"~/Content/js/additional-methods.min.js",
 #endif
-                "~/Content/js/jquery.unobtrusive-ajax.min.js",
+				"~/Content/js/jquery.unobtrusive-ajax.min.js",
                 "~/Content/js/jquery.validate.unobtrusive.min.js",
 #if DEBUG
  "~/Scripts/jquery-ui-1.9.2.js",
@@ -108,7 +110,8 @@ namespace DH.Helpdesk.Web
 							"~/Scripts/jquery-1.8.3.min.js",
                             "~/Content/js/jquery.unobtrusive-ajax.min.js",
                             "~/Content/js/jquery.validate.min.js",
-                            "~/Content/js/jquery.validate.unobtrusive.min.js",
+							"~/Content/js/additional-methods.min.js",
+							"~/Content/js/jquery.validate.unobtrusive.min.js",
                             "~/Content/js/jquery-ui-1.9.2.min.js",
                             "~/Content/js/bootstrap.js",
                             "~/Content/js/chosen.jquery.min.js",
@@ -300,10 +303,12 @@ namespace DH.Helpdesk.Web
                            "~/Content/js/bootstrap-tagsinput.js",
                         #if DEBUG
                             "~/Content/js/jquery.validate.js",
-                        #else 
-                                                    "~/Content/js/jquery.validate.min.js",
-                        #endif
-                            "~/Content/js/plupload.full.min.js",
+							"~/Content/js/additional-methods.js",
+#else
+                            "~/Content/js/jquery.validate.min.js",
+							"~/Content/js/additional-methods.min.js",
+#endif
+							"~/Content/js/plupload.full.min.js",
                            "~/Content/js/jquery.plupload.queue/jquery.plupload.queue.js",
                            "~/Content/js/dhHelpdesk-head.js",
                            "~/Content/js/jquery.form.min.js",

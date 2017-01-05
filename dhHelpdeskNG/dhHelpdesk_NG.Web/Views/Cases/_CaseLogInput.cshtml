@@ -325,17 +325,16 @@
 												@Translation.Get("Tidsåtgång", SessionFacade.CurrentCaseLanguageId)
 											</td>
 											<td>
-												<select id="CaseLog_WorkingTimeHour" name="CaseLog.WorkingTimeHour" class="inputw100" @((readonlyMode || invoiceClaimed) ? "disabled=\"disabled\"" : "")>
+												<select id="CaseLog_WorkingTimeHour" name="CaseLog.WorkingTimeHour" class="inputw100 time-field" @((readonlyMode || invoiceClaimed) ? "disabled=\"disabled\"" : "")>
 													@for (var i = 0; i < 100; i++)
 													{
-														<option value="@i.ToString()" @i.IdIsSelected(Model.CaseLog.WorkingTimeHour.ToString())>@i.ToString()</option>
+														<option value="@(i == 0 ? "" : i.ToString())" @i.IdIsSelected(Model.CaseLog.WorkingTimeHour.ToString())>@i.ToString()</option>
 													}
 												</select>&nbsp;@Translation.Get("Tim")&nbsp;
-
-												<select id="CaseLog_WorkingTimeMinute" name="CaseLog.WorkingTimeMinute" class="inputw100" @((readonlyMode || invoiceClaimed) ? "disabled=\"disabled\"" : "")>
+												<select id="CaseLog_WorkingTimeMinute" name="CaseLog.WorkingTimeMinute" class="inputw100 time-field" @((readonlyMode || invoiceClaimed) ? "disabled=\"disabled\"" : "")>
 													@for (var i = 0; i < 59; i = i + Model.MinWorkingTime)
 													{
-														<option value="@i.ToString()" @i.IdIsSelected(Model.CaseLog.WorkingTimeMinute.ToString())>@i.ToString()</option>
+														<option value="@(i == 0 ? "" : i.ToString())" @i.IdIsSelected(Model.CaseLog.WorkingTimeMinute.ToString())>@i.ToString()</option>
 													}
 												</select>&nbsp;@Translation.Get("Min", SessionFacade.CurrentCaseLanguageId)
 											</td>
@@ -346,20 +345,24 @@
 												@Translation.Get("Övertid", SessionFacade.CurrentCaseLanguageId)
 											</td>
 											<td>
-												<select id="CaseLog_OvertimeHour" name="CaseLog.OvertimeHour" class="inputw100" @((readonlyMode || invoiceClaimed) ? "disabled=\"disabled\"" : "")>
+												<select id="CaseLog_OvertimeHour" name="CaseLog.OvertimeHour" class="inputw100 time-field" @((readonlyMode || invoiceClaimed) ? "disabled=\"disabled\"" : "")>
 													@for (var i = 0; i < 100; i++)
 													{
-														<option value="@i.ToString()" @i.IdIsSelected(Model.CaseLog.OvertimeHour.ToString())>@i.ToString()</option>
+														<option value="@(i == 0 ? "" : i.ToString())" @i.IdIsSelected(Model.CaseLog.OvertimeHour.ToString())>@i.ToString()</option>
 													}
 												</select>&nbsp;@Translation.Get("Tim")&nbsp;
-
-												<select id="CaseLog_OvertimeMinute" name="CaseLog.OvertimeMinute" class="inputw100" @((readonlyMode || invoiceClaimed) ? "disabled=\"disabled\"" : "")>
+												<select id="CaseLog_OvertimeMinute" name="CaseLog.OvertimeMinute" class="inputw100 time-field" @((readonlyMode || invoiceClaimed) ? "disabled=\"disabled\"" : "")>
 													@for (var i = 0; i < 59; i = i + Model.MinWorkingTime)
 													{
-														<option value="@i.ToString()" @i.IdIsSelected(Model.CaseLog.OvertimeMinute.ToString())>@i.ToString()</option>
+														<option value="@(i == 0 ? "" : i.ToString())" @i.IdIsSelected(Model.CaseLog.OvertimeMinute.ToString())>@i.ToString()</option>
 													}
 												</select>&nbsp;@Translation.Get("Min", SessionFacade.CurrentCaseLanguageId)
 											</td>
+											<td></td>
+										</tr>
+										<tr>
+											<td></td>
+											<td id="timeValidationMessage"></td>
 											<td></td>
 										</tr>
 										<tr>
@@ -458,6 +461,14 @@
 
 	$('#CaseLog_TextInternal').on('onpaste', function () {
 		checkLength(this);
+	});
+
+	$("#" + "@Html.IdFor(x => x.CaseLog.WorkingTimeHour)" +
+		", #" + "@Html.IdFor(x => x.CaseLog.WorkingTimeMinute)" +
+		", #" + "@Html.IdFor(x => x.CaseLog.OvertimeHour)" +
+		", #" + "@Html.IdFor(x => x.CaseLog.OvertimeMinute)")
+		.on('change', function () {
+			$("#" + "@Html.IdFor(x => x.CaseLog.Charge)").attr("checked", "checked");
 	});
 
 	var maxLength = 3000;
