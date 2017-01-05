@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using Antlr.Runtime.Misc;
+using DH.Helpdesk.Domain.Orders;
 
 namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
 {
@@ -255,7 +256,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
             return new AccountInfoEditFields(
                 ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.StartedDate),
                 ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.FinishDate),
-                ConfigurableFieldModel<int?>.GetValueOrDefault(model.EMailTypeId) ?? 0,
+                (EMailTypes?)ConfigurableFieldModel<int?>.GetValueOrDefault(model.EMailTypeId),
                 ConfigurableFieldModel<bool>.GetValueOrDefault(model.HomeDirectory),
                 ConfigurableFieldModel<bool>.GetValueOrDefault(model.Profile),
                 ConfigurableFieldModel<string>.GetValueOrDefault(model.InventoryNumber),

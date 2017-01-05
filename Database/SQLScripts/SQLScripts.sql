@@ -437,7 +437,12 @@ INSERT INTO [dbo].[tblOrderFieldSettings]
 GO
 
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'EMailType' and sysobjects.name = N'tblOrder')
-	ALTER TABLE [dbo].[tblOrder] ADD [EMailType] int NOT NULL CONSTRAINT [DF_tblOrder_EMailType] DEFAULT ((0))
+	ALTER TABLE [dbo].[tblOrder] ADD [EMailType] int NULL
+ELSE
+BEGIN
+	ALTER TABLE [dbo].[tblOrder] ALTER COLUMN [EMailType] int NULL
+	UPDATE [dbo].[tblOrder] SET [EMailType] = NULL WHERE [EMailType] = 0
+END
 GO
 
 Declare @OrderFieldValue nvarchar(50)

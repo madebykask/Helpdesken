@@ -1,8 +1,10 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Tools
+﻿using DH.Helpdesk.Web.Infrastructure.Extensions;
+
+namespace DH.Helpdesk.Web.Infrastructure.Tools
 {
     using System;
     using System.Collections.Generic;
-
+    using BusinessData.Enums.Accounts.Fields;
     using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Services.DisplayValues;
     using DH.Helpdesk.Web.Models.Shared;
@@ -110,6 +112,18 @@
             values.Add(fieldValue);
         }
 
+        public static void CreateValueIfNeeded(FieldOverviewSetting setting, string fieldName,
+            Enum value, List<NewGridRowCellValueModel> values)
+        {
+            if (!setting.Show)
+            {
+                return;
+            }
+
+            var fieldValue = new NewGridRowCellValueModel(fieldName, new StringDisplayValue(value != null ? value.GetDisplayName() : string.Empty));
+            values.Add(fieldValue);
+        }
+
         public static void CreateSolvedTimeValueIfNeeded(
             FieldOverviewSetting setting,
             string fieldName,
@@ -130,5 +144,6 @@
             var displayValue = new StringDisplayValue(tempValue);
             CreateValueIfNeeded(setting, fieldName, displayValue, values);
         }
+
     }
 }

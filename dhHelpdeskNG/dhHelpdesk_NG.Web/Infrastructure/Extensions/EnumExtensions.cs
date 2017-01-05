@@ -26,11 +26,32 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return new SelectList(list, "ID", "Name");
         }
 
+        /// <summary>
+        /// Takes text from enum and translates it.
+        /// </summary>
+        /// <param name="enumeration"></param>
+        /// <param name="selected"></param>
+        /// <returns></returns>
         public static SelectList ToSelectList(this Enum enumeration, string selected)
         {
             var list =
                 (from Enum d in Enum.GetValues(enumeration.GetType())
                  select new { ID = Convert.ToInt32(d), Name = Translation.Get(d.ToString()) }).ToList();
+            return new SelectList(list, "ID", "Name", selected);
+        }
+
+        /// <summary>
+        /// Takes text from DisplayAttribute and translates it.
+        /// </summary>
+        /// <param name="enumeration"></param>
+        /// <param name="selected"></param>
+        /// <returns></returns>
+        public static SelectList ToSelectListDipslay(this Enum enumeration, string selected)
+        {
+            var type = enumeration.GetType();
+            var list =
+                (from Enum d in Enum.GetValues(enumeration.GetType())
+                 select new { ID = Convert.ToInt32(d), Name = Translation.GetCoreTextTranslation(GetDisplayName(type, d)) }).ToList();
             return new SelectList(list, "ID", "Name", selected);
         }
 

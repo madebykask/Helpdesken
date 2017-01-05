@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using DH.Helpdesk.Domain.Orders;
 
 namespace DH.Helpdesk.BusinessData.Models.Orders.Index.OrderOverview
 {
     public class AccountInfoOverview
     {
-        public AccountInfoOverview(DateTime? startedDate, DateTime? finishDate, string eMailTypeId, string homeDirectory, string profile, string inventoryNumber, string accountTypeId, string accountTypeId2, string accountTypeId3, string accountTypeId4, string accountTypeId5, string info)
+        public AccountInfoOverview(DateTime? startedDate, DateTime? finishDate, EMailTypes? eMailTypeId, bool homeDirectory, bool profile, string inventoryNumber, string accountTypeId, string accountTypeId2, string accountTypeId3, string accountTypeId4, string accountTypeId5, string info)
         {
             StartedDate = startedDate;
             FinishDate = finishDate;
@@ -25,9 +23,9 @@ namespace DH.Helpdesk.BusinessData.Models.Orders.Index.OrderOverview
 
         public DateTime? StartedDate { get; private set; }
         public DateTime? FinishDate { get; private set; }
-        public string EMailTypeId { get; private set; }
-        public string HomeDirectory { get; private set; }
-        public string Profile { get; private set; }
+        public EMailTypes? EMailTypeId { get; private set; }
+        public bool HomeDirectory { get; private set; }
+        public bool Profile { get; private set; }
         public string InventoryNumber { get; private set; }
         public string AccountTypeId { get; private set; }
         public string AccountTypeId2 { get; private set; }

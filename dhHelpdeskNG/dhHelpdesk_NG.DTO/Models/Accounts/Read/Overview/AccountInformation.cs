@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Accounts.Read.Overview
+﻿using DH.Helpdesk.Domain.Orders;
+
+namespace DH.Helpdesk.BusinessData.Models.Accounts.Read.Overview
 {
     using System;
     using System.Collections.Generic;

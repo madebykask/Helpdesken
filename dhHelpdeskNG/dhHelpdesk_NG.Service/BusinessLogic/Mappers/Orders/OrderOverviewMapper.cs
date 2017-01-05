@@ -286,9 +286,9 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
             return new AccountInfoOverview(
                 entity.AccountStartDate,
                 entity.AccountEndDate,
-                entity.EMailType != 0 ? ((EMailTypes)entity.EMailType).ToString() : string.Empty,
-                entity.HomeDirectory.ToYesNoString(),
-                entity.Profile.ToYesNoString(),
+                entity.EMailType,
+                entity.HomeDirectory,
+                entity.Profile,
                 entity.InventoryNumber,
                 orderFieldType1 ?? string.Empty,
                 orderFieldType2 ?? string.Empty,

@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using DH.Helpdesk.BusinessData.Enums.Accounts.Fields;
 using DH.Helpdesk.BusinessData.Models.Shared;
+using DH.Helpdesk.Domain.Orders;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 
 namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
@@ -350,7 +351,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                     configurableFieldModelFactory.CreateNullableIntegerField(settings.AccountTypeId5, fields.AccountTypeId5)
                 );
 
-            model.EmailTypes = new EMailTypes().ToSelectList(fields.EMailTypeId.ToString(CultureInfo.InvariantCulture));
+            model.EmailTypes = new EMailTypes().ToSelectListDipslay(fields.EMailTypeId != null ? ((int)fields.EMailTypeId).ToString() : null);
             model.AccountTypes = CreateSelectListField(settings.AccountTypeId,
                     options.AccountTypes, fields.AccountTypeId.ToString());
             model.AccountTypes2 = CreateMultiSelectListField(

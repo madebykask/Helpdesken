@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using DH.Helpdesk.Domain.Orders;
 
 namespace DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditFields
 {
     public class AccountInfoEditFields
     {
-        public AccountInfoEditFields(DateTime? startedDate, DateTime? finishDate, int eMailTypeId, bool homeDirectory, bool profile, string inventoryNumber, string info, int? accountTypeId, List<int> accountTypeId2, int? accountTypeId3, int? accountTypeId4, int? accountTypeId5)
+        public AccountInfoEditFields(DateTime? startedDate, DateTime? finishDate, EMailTypes? eMailTypeId, bool homeDirectory, bool profile, string inventoryNumber, string info, int? accountTypeId, List<int> accountTypeId2, int? accountTypeId3, int? accountTypeId4, int? accountTypeId5)
         {
             StartedDate = startedDate;
             FinishDate = finishDate;
@@ -27,7 +28,7 @@ namespace DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditFields
 
         public DateTime? FinishDate { get; private set; }
 
-        public int EMailTypeId { get; private set; }
+        public EMailTypes? EMailTypeId { get; private set; }
 
         public bool HomeDirectory { get; private set; }
 

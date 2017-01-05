@@ -27,6 +27,7 @@
             this.ValidateSupplierFields(updatedOrder.Supplier, existingOrder.Supplier, settings.Supplier);
             this.ValidateUserFields(updatedOrder.User, existingOrder.User, settings.User);
             ValidateAccountInfoFields(updatedOrder.AccountInfo, existingOrder.AccountInfo, settings.AccountInfo);
+            ValidateContactFields(updatedOrder.Contact, existingOrder.Contact, settings.Contact);
         }
 
         private void ValidateDeliveryFields(
@@ -46,6 +47,8 @@
             this.elementaryRulesValidator.ValidateStringField(updatedFields.DeliveryInfo2, existingFields.DeliveryInfo2, DeliveryFields.DeliveryInfo2, new ElementaryValidationRule(!settings.DeliveryInfo2.Show, settings.DeliveryInfo2.Required));
             this.elementaryRulesValidator.ValidateStringField(updatedFields.DeliveryInfo3, existingFields.DeliveryInfo3, DeliveryFields.DeliveryInfo3, new ElementaryValidationRule(!settings.DeliveryInfo3.Show, settings.DeliveryInfo3.Required));
             this.elementaryRulesValidator.ValidateIntegerField(updatedFields.DeliveryOuIdId, existingFields.DeliveryOuIdId, DeliveryFields.DeliveryOuId, new ElementaryValidationRule(!settings.DeliveryOuId.Show, settings.DeliveryOuId.Required));
+            this.elementaryRulesValidator.ValidateStringField(updatedFields.DeliveryName, existingFields.DeliveryName, DeliveryFields.DeliveryName, new ElementaryValidationRule(!settings.DeliveryName.Show, settings.DeliveryName.Required));
+            this.elementaryRulesValidator.ValidateStringField(updatedFields.DeliveryPhone, existingFields.DeliveryPhone, DeliveryFields.DeliveryPhone, new ElementaryValidationRule(!settings.DeliveryPhone.Show, settings.DeliveryPhone.Required));
         }
 
         private void ValidateGeneralFields(
@@ -122,7 +125,8 @@
             ProgramEditFields updatedFields,
             ProgramEditFields existingFields,
             ProgramEditSettings settings)
-        {            
+        {
+            this.elementaryRulesValidator.ValidateStringField(updatedFields.InfoProduct, existingFields.InfoProduct, ProgramFields.InfoProduct, new ElementaryValidationRule(!settings.InfoProduct.Show, settings.InfoProduct.Required));
         }
 
         private void ValidateReceiverFields(
@@ -179,11 +183,27 @@
         {
             elementaryRulesValidator.ValidateDateTimeField(updatedFields.StartedDate, existingFields.StartedDate, AccountInfoFields.StartedDate, new ElementaryValidationRule(!settings.StartedDate.Show, settings.StartedDate.Required));
             elementaryRulesValidator.ValidateDateTimeField(updatedFields.FinishDate, existingFields.FinishDate, AccountInfoFields.FinishDate, new ElementaryValidationRule(!settings.FinishDate.Show, settings.FinishDate.Required));
-            elementaryRulesValidator.ValidateIntegerField(updatedFields.EMailTypeId, existingFields.EMailTypeId, AccountInfoFields.EMailTypeId, new ElementaryValidationRule(!settings.EMailTypeId.Show, settings.EMailTypeId.Required));
+            elementaryRulesValidator.ValidateIntegerField((int?)updatedFields.EMailTypeId, (int?)existingFields.EMailTypeId, AccountInfoFields.EMailTypeId, new ElementaryValidationRule(!settings.EMailTypeId.Show, settings.EMailTypeId.Required));
             elementaryRulesValidator.ValidateBooleanField(updatedFields.HomeDirectory, existingFields.HomeDirectory, AccountInfoFields.HomeDirectory, new ElementaryValidationRule(!settings.HomeDirectory.Show, settings.HomeDirectory.Required));
             elementaryRulesValidator.ValidateBooleanField(updatedFields.Profile, existingFields.Profile, AccountInfoFields.Profile, new ElementaryValidationRule(!settings.Profile.Show, settings.Profile.Required));
             elementaryRulesValidator.ValidateStringField(updatedFields.InventoryNumber, existingFields.InventoryNumber, AccountInfoFields.InventoryNumber, new ElementaryValidationRule(!settings.InventoryNumber.Show, settings.InventoryNumber.Required));
+            elementaryRulesValidator.ValidateIntegerField(updatedFields.AccountTypeId, existingFields.AccountTypeId, AccountInfoFields.AccountType, new ElementaryValidationRule(!settings.AccountTypeId.Show, settings.AccountTypeId.Required));
+            //elementaryRulesValidator.ValidateStringField(updatedFields.AccountTypeId2, existingFields.AccountTypeId2, AccountInfoFields.AccountType2, new ElementaryValidationRule(!settings.AccountTypeId2.Show, settings.AccountTypeId2.Required));
+            elementaryRulesValidator.ValidateIntegerField(updatedFields.AccountTypeId3, existingFields.AccountTypeId3, AccountInfoFields.AccountType3, new ElementaryValidationRule(!settings.AccountTypeId3.Show, settings.AccountTypeId3.Required));
+            elementaryRulesValidator.ValidateIntegerField(updatedFields.AccountTypeId4, existingFields.AccountTypeId4, AccountInfoFields.AccountType4, new ElementaryValidationRule(!settings.AccountTypeId4.Show, settings.AccountTypeId4.Required));
+            elementaryRulesValidator.ValidateIntegerField(updatedFields.AccountTypeId5, existingFields.AccountTypeId5, AccountInfoFields.AccountType5, new ElementaryValidationRule(!settings.AccountTypeId5.Show, settings.AccountTypeId5.Required));
             elementaryRulesValidator.ValidateStringField(updatedFields.Info, existingFields.Info, AccountInfoFields.Info, new ElementaryValidationRule(!settings.Info.Show, settings.Info.Required));
+        }
+
+        private void ValidateContactFields(
+            ContactEditFields updatedFields,
+            ContactEditFields existingFields,
+            ContactEditSettings settings)
+        {
+            elementaryRulesValidator.ValidateStringField(updatedFields.Name, existingFields.Name, ContactFields.ContactName, new ElementaryValidationRule(!settings.Name.Show, settings.Name.Required));
+            elementaryRulesValidator.ValidateStringField(updatedFields.Id, existingFields.Id, ContactFields.ContactId, new ElementaryValidationRule(!settings.Id.Show, settings.Id.Required));
+            elementaryRulesValidator.ValidateStringField(updatedFields.Phone, existingFields.Phone, ContactFields.ContactPhone, new ElementaryValidationRule(!settings.Phone.Show, settings.Phone.Required));
+            elementaryRulesValidator.ValidateStringField(updatedFields.Email, existingFields.Email, ContactFields.ContactEMail, new ElementaryValidationRule(!settings.EMail.Show, settings.EMail.Required));
         }
     }
 }

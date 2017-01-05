@@ -200,7 +200,7 @@
 
         public DateTime? AccountStartDate { get; set; }
 
-        public int EMailType { get; set; }
+        public EMailTypes? EMailType { get; set; }
 
         public bool HomeDirectory { get; set; }
 

@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.DisplayValues.Account
+﻿using DH.Helpdesk.Domain.Orders;
+
+namespace DH.Helpdesk.Services.DisplayValues.Account
 {
     using System;
 

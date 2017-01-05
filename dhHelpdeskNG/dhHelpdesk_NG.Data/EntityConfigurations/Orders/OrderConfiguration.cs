@@ -73,7 +73,7 @@
             this.Property(o => o.AccountingDimension5).IsOptional().HasMaxLength(20);
             this.Property(x => x.AccountStartDate).IsOptional();
             this.Property(x => x.AccountEndDate).IsOptional();
-            this.Property(x => x.EMailType).IsRequired();
+            this.Property(x => x.EMailType).IsOptional();
             this.Property(x => x.HomeDirectory).IsRequired();
             this.Property(x => x.Profile).IsRequired();
             this.Property(x => x.InventoryNumber).IsOptional().HasMaxLength(20);

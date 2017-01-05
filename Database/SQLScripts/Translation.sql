@@ -5404,6 +5404,7 @@ UPDATE tblText Set TextString = 'Välj följare' WHERE Id=1717;
 GO
 
 If not exists (select * from tbltext where id = 1744)
+<<<<<<< Updated upstream
 	insert into tbltext (id, TextString) VALUES (1744, 'Ej fakturerade')
 GO
 
@@ -5433,6 +5434,27 @@ GO
 
 If not exists (select * from tblTextTranslation where text_id = 1747 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1747, 2, 'Send')
+GO
+
+If not exists (select * from tbltext where id = 1748)
+	insert into tbltext (id, TextString) VALUES (1748, 'Standart')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1748 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1748, 2, 'Standard')
+GO
+
+If not exists (select * from tbltext where id = 1749)
+	insert into tbltext (id, TextString) VALUES (1749, 'Utökad')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1749 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1749, 2, 'Expanded')
+GO
+
+If not exists (select * from tbltext where id = 1750)
+	insert into tbltext (id, TextString) VALUES (1750, 'Ingen e-post')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1750 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1750, 2, 'No email')
 GO
 
 -- *** Run this last when put translation script above this line **--

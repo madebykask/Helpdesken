@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Accounts
+﻿using DH.Helpdesk.Domain.Orders;
+
+namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Accounts
 {
     using System;
     using System.Collections.Generic;

@@ -568,9 +568,6 @@
                         case AccountInfoFieldNames.Profile:
                             query = querySortedByType.ThenBy(o => o.Profile);
                             break;
-                        //case AccountInfoFieldNames.EMailTypeId:
-                        //    query = querySortedByType.ThenBy(o => o.Profile);
-                        //    break;
                         case AccountInfoFieldNames.InventoryNumber:
                             query = querySortedByType.ThenBy(o => o.InventoryNumber);
                             break;
@@ -886,9 +883,6 @@
                         case AccountInfoFieldNames.Profile:
                             query = querySortedByType.ThenByDescending(o => o.Profile);
                             break;
-                        //case AccountInfoFieldNames.EMailTypeId:
-                        //    query = querySortedByType.ThenByDescending(o => o.Profile);
-                        //    break;
                         case AccountInfoFieldNames.InventoryNumber:
                             query = querySortedByType.ThenByDescending(o => o.InventoryNumber);
                             break;

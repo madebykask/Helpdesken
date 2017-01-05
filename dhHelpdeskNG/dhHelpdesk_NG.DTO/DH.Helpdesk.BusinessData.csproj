@@ -62,7 +62,6 @@
     <Compile Include="Enums\Accounts\Fields\AccountStates.cs" />
     <Compile Include="Enums\Accounts\Fields\ContactFields.cs" />
     <Compile Include="Enums\Accounts\Fields\DeliveryInformationFields.cs" />
-    <Compile Include="Enums\Accounts\Fields\EMailTypes.cs" />
     <Compile Include="Enums\Accounts\Fields\OrdererFields.cs" />
     <Compile Include="Enums\Accounts\Fields\OtherFields.cs" />
     <Compile Include="Enums\Accounts\Fields\ProgramFields.cs" />
