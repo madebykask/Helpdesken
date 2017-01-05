@@ -899,6 +899,34 @@ a.error, input[type=¨button].error .btn
 }
 
 
+.case-div-width90em {
+    width: 90em;
+}
 
+.case-dropdown-area {
+    display: inline-flex;
+    text-align: left;
+}
+
+.case-usersearch-textarea {
+    height: 2.4em;
+    min-height: 1em;
+    width: 30em;
+}
+
+
+.case-followers-button-done {
+    /*padding-top: 1.8em;
+    padding-left: 80px;*/
+    
+   float: right;
+}
+
+.width100 {
+    width: 100%!important;
+}
+.width90 {
+    width: 90%!important;
+}
 
 

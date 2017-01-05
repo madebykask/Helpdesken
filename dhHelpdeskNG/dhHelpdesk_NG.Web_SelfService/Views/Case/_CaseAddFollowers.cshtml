@@ -1,0 +1,33 @@
+﻿@using DH.Helpdesk.SelfService.Infrastructure
+@model DH.Helpdesk.SelfService.Models.Shared.SendToDialogModel
+@using System.Web.Optimization
+
+@Scripts.Render("~/bundles/case/caseaddfollowerssearch")
+@*<script src="~/Content/js/Case/_caseAddFollowersSearch.js"></script>
+<script src="~/Content/js/Case/_caseUserSearchCommon.js"></script>*@
+
+
+<script type="text/javascript">
+    $(function() {       
+        InitCaseAddFollowersSearch();
+    });
+</script>
+
+<div id="case_add_followers_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabelCase" aria-hidden="true" style="display: none">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h5> @Translation.Get("Välj E-post")</h5>
+            </div>
+            <div class="modal-body overflow-visible">
+                <textarea cols="20" id="caseAddFollowersModalInput" class="width100" autofocus></textarea>
+            </div>
+            <div class="modal-body overflow-visible case-dropdown-area">                
+                <div class="case-followers-button-done">
+                    <button type="button" id="btnCancel" class="btn btn-default" data-dismiss="modal" style="float: right;">@Translation.Get("Klar")</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

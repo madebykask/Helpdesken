@@ -29,6 +29,14 @@
         fetchOUUrl: '@Url.Content("~/Case/GetOrgUnitsByDepartments")'
     };
 
+    window.parameters = {
+        emailNotValid: '@Translation.GetForJS("E-postadress är inte giltig.")',
+        emailAlreadyAdded: '@Translation.GetForJS("Samma e-post redan lagts.")',        
+        initGroup: '@Translation.GetForJS("Anmälare")',        
+        closeBtn: '@Html.Raw(Translation.GetForJS("Stäng"))',
+        selectedLabel: '@Translation.GetForJS("vald")'
+    }
+
 </script>
 @*<script  src="~/Content/js/Case/edit.js"></script>*@
 
@@ -133,7 +141,17 @@
                                             </label>
                                             <div class="col-md-9">                                                                                                
                                                 @Html.TextBoxFor(p => Model.NewCase.PersonsName, new { @class = "hasAttribute", standardName= GlobalEnums.TranslationCaseFields.Persons_Name.ToString() })
+
+                                                <span class="case-div-width90em">
+                                                    @Html.HiddenFor(model => Model.FollowerUsers, new { @readonly = "true", id = "caseFollowerUsersInput" })
+                                                    @Html.Partial("_CaseAddFollowers", Model.SendToDialogModel)
+                                                    <a href="#case_add_followers_btn" role="button" class="btn btn-default case-usersearch-btn hasAttribute" data-toggle="modal" standardName = "@GlobalEnums.TranslationCaseFields.Persons_Name.ToString()">@Translation.Get("Välj följare", Enums.TranslationSource.TextTranslation)</a>
+                                                    @Html.TextAreaFor(model => model.FollowerUsers, new { id = "fakeCaseFollowerUsersInput", @class = "case-usersearch-textarea hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Persons_Name.ToString() })
+
+                                                </span>
                                             </div>
+                                            
+
                                         </div>
                                     }
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString()))
@@ -421,7 +439,7 @@
                                                     {
                                                         foreach (var e in Model.Systems)
                                                         {
-                                                            <option value="@e.Id">@e.SystemName</option>
+                                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.NewCase.System_Id.ToString())>@e.SystemName</option>
                                                         }
                                                     }
                                                 </select>
@@ -446,7 +464,7 @@
                                                     {
                                                         foreach (var e in Model.Urgencies)
                                                         {
-                                                            <option value="@e.Id">@e.Name</option>
+                                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.NewCase.Urgency_Id.ToString())>@e.Name</option>
                                                         }
                                                     }
                                                 </select>
@@ -471,7 +489,7 @@
                                                     {
                                                         foreach (var e in Model.Impacts)
                                                         {
-                                                            <option value="@e.Id">@e.Name</option>
+                                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.NewCase.Impact_Id.ToString())>@e.Name</option>
                                                         }
                                                     }
                                                 </select>
@@ -495,7 +513,7 @@
                                                     {
                                                         foreach (var e in Model.Categories.Where(c => c.IsActive == 1))
                                                         {
-                                                            <option value="@e.Id">@e.Name</option>
+                                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.NewCase.Category_Id.ToString())>@e.Name</option>
                                                         }
                                                     }
                                                 </select>
@@ -520,7 +538,7 @@
                                                         <option value="">&nbsp;</option>
                                                         @foreach (var e in Model.Suppliers.Where(e => e.IsActive == 1))
                                                         {
-                                                            <option value="@e.Id">@e.Name</option>
+                                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.NewCase.Supplier_Id.ToString())>@e.Name</option>
                                                         }
                                                     </select>
                                                 </div>
@@ -539,7 +557,7 @@
                                                 }
                                             </label>
                                             <div class="col-md-9">                                                
-                                                @Html.TextBoxFor(i => Model.NewCase.InvoiceNumber, new { @class="hasAttribute", standardName=GlobalEnums.TranslationCaseFields.InventoryNumber.ToString() })
+                                                @Html.TextBoxFor(i => Model.NewCase.InvoiceNumber, new { @class="hasAttribute", standardName=GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString() })
                                             </div>
                                         </div>
                                     }
@@ -675,7 +693,8 @@
                                                                 {
                                                                     foreach (var e in Model.Currencies)
                                                                     {
-                                                                        <option value="@e.Code" >@e.Code</option>
+                                                                        var selected = Model.NewCase.Currency.ToString() == @e.Code? "selected":"";
+                                                                        <option value="@e.Code" @selected > @e.Code</option>
                                                                     }
                                                                 }
                                                             </select>

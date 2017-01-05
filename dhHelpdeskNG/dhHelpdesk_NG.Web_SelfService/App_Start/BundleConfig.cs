@@ -71,6 +71,11 @@
 
             bundles.Add(new ScriptBundle("~/Content/js/helpdesk").Include(
                          "~/Content/js/dhHelpdesk.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/case/caseaddfollowerssearch").Include(
+               "~/Content/js/Case/_caseAddFollowersSearch.js",
+               "~/Content/js/Case/_caseUserSearchCommon.js"));
+
             #endregion
         }
     }

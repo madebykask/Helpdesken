@@ -5,6 +5,7 @@
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.Domain;
+    using Shared;
 
     public class JsApplicationOptions
     {
@@ -107,6 +108,10 @@
         public List<FieldSettingJSModel> JsFieldSettings { get; set; }
 
         public List<ProductAreaChild> ProductAreaChildren { get; set; }
+
+        public string FollowerUsers { get; set; }
+
+        public SendToDialogModel SendToDialogModel { get; set; }
     }
 
 

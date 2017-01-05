@@ -30,6 +30,7 @@
     using DH.Helpdesk.Services.Services.Concrete;
     using DH.Helpdesk.Services.utils;
     using DH.Helpdesk.SelfService.Infrastructure;
+    using Models.Shared;
 
     public class CaseController : BaseController
     {
@@ -382,8 +383,13 @@
                     model.NewCase.OU_Id = caseTemplate.OU_Id.HasValue ? caseTemplate.OU_Id.Value : notifier?.OrganizationUnitId;
                     model.NewCase.Place = string.IsNullOrEmpty(caseTemplate.Place) ? notifier?.Place : caseTemplate.Place;
                     model.NewCase.UserCode = string.IsNullOrEmpty(caseTemplate.UserCode) ? notifier?.Code : caseTemplate.UserCode;
-                    
+
+                    model.NewCase.InventoryNumber = caseTemplate.InventoryNumber;
+                    model.NewCase.InventoryType = caseTemplate.InventoryType;
+                    model.NewCase.InventoryLocation = caseTemplate.InventoryLocation;
+
                     model.NewCase.ProductArea_Id = caseTemplate.ProductArea_Id;
+                    model.NewCase.System_Id = caseTemplate.System_Id;
                     model.NewCase.Caption = caseTemplate.Caption;
                     model.NewCase.Description = caseTemplate.Description;
                     model.NewCase.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id;
@@ -391,6 +397,19 @@
                     model.NewCase.Project_Id = caseTemplate.Project_Id;
                     model.NewCase.Urgency_Id = caseTemplate.Urgency_Id;
                     model.NewCase.Impact_Id = caseTemplate.Impact_Id;
+                    model.NewCase.Category_Id = caseTemplate.Category_Id;
+                    model.NewCase.Supplier_Id = caseTemplate.Supplier_Id;
+
+                    model.NewCase.InvoiceNumber = caseTemplate.InvoiceNumber;
+                    model.NewCase.ReferenceNumber = caseTemplate.ReferenceNumber;
+                    model.NewCase.Miscellaneous = caseTemplate.Miscellaneous;
+                    model.NewCase.ContactBeforeAction = caseTemplate.ContactBeforeAction;
+                    model.NewCase.SMS = caseTemplate.SMS;
+                    model.NewCase.Available = caseTemplate.Available;
+                    model.NewCase.Cost = caseTemplate.Cost;
+                    model.NewCase.OtherCost = caseTemplate.OtherCost;
+                    model.NewCase.Currency = caseTemplate.Currency;
+
                 }
 
                 if(model.NewCase.ProductArea_Id.HasValue)
@@ -828,6 +847,14 @@
             }
         }
 
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult CaseSearchUserEmails(string query, string searchKey)
+        {
+            var models = _caseSearchService.GetUserEmailsForCaseSend(SessionFacade.CurrentCustomer.Id, query, false, true, false, false);
+            return Json(new { searchKey = searchKey, result = models });
+        }
+
         public List<CaseSolution> GetCaseSolutions(int customerId)
         {
             return _caseSolutionService.GetCaseSolutions(customerId).Where(t => t.ShowInSelfService).ToList();
@@ -1210,6 +1237,7 @@
             model.ProductAreaParantPath = "--";
             model.CaseFileKey = Guid.NewGuid().ToString();
             model.ProductAreaChildren = traversedData.Item2.ToList();
+            model.SendToDialogModel = new SendToDialogModel();
 
             return model;
         }       
