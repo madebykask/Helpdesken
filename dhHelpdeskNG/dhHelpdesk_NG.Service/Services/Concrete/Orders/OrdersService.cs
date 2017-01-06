@@ -236,7 +236,7 @@
 				var caseNumbers = overviews.Where(o => o.CaseNumber.HasValue).Select(o => o.CaseNumber).ToList();
 				var caseRep = uow.GetRepository<Case>();
 				var caseEntities = caseRep.GetAll().Where(c => caseNumbers.Contains(c.CaseNumber)).ToList();
-			    var orderFieldTypes = orderFieldTypesRep.GetAll().GetByType(parameters.OrderTypeId);
+			    var orderFieldTypes = orderFieldTypesRep.GetAll().GetByType(parameters.OrderTypeId).ToList();
 
 				var orderData = overviews.MapToFullOverviews(orderTypes, caseEntities, orderFieldTypes);
 
@@ -262,6 +262,7 @@
             {
                 var ordersRep = uow.GetRepository<Order>();
                 var orderHistoryRep = uow.GetRepository<OrderHistoryEntity>();
+                var orderFieldTypesRep = uow.GetRepository<OrderFieldType>();
                 //var orderLogRep = uow.GetRepository<OrderLog>();
                 var orderEmailLogRep = uow.GetRepository<OrderEMailLog>();
 
@@ -300,10 +301,11 @@
                 var settings = this._orderFieldSettingsService.GetOrderEditSettings(customerId, firstLevelParentId, uow);
                 var options = this.GetEditOptions(customerId, firstLevelParentId, settings, uow, order.OrderTypeId);
                 //var options = this.GetEditOptions(customerId, order.OrderTypeId, settings, uow, firstLevelParentId);
+                var orderFieldTypes = orderFieldTypesRep.GetAll().GetByType(order.OrderTypeId).ToList();
 
                 var histories = orderHistoryRep.GetAll()
                                 .GetByOrder(orderId)
-                                .MapToOverviews();
+                                .MapToOverviews(orderFieldTypes);
                 var historyIds = histories.Select(i => i.Id).ToArray();
                 //var logOverviews = orderLogRep.GetAll()
                 //                .GetByHistoryIds(historyIds)

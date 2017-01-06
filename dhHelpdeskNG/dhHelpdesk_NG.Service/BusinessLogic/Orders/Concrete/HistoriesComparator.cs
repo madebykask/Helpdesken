@@ -10,6 +10,7 @@
     using DH.Helpdesk.Common.Extensions.String;
     using DH.Helpdesk.Common.Types;
     using System.Threading;
+    using Domain.Orders;
 
     public sealed class HistoriesComparator : IHistoriesComparator
     {
@@ -44,6 +45,8 @@
             AddFirstDifference(history, settings.Delivery.DeliveryInfo1, firstHistory.Order.Delivery.DeliveryInfo1);
             AddFirstDifference(history, settings.Delivery.DeliveryInfo2, firstHistory.Order.Delivery.DeliveryInfo2);
             AddFirstDifference(history, settings.Delivery.DeliveryInfo3, firstHistory.Order.Delivery.DeliveryInfo3);
+            AddFirstDifference(history, settings.Delivery.DeliveryName, firstHistory.Order.Delivery.DeliveryName);
+            AddFirstDifference(history, settings.Delivery.DeliveryPhone, firstHistory.Order.Delivery.DeliveryPhone);
 
             AddFirstDifference(history, settings.General.Administrator, firstHistory.Order.General.AdministratorId, firstHistory.Order.General.Administrator);
             AddFirstDifference(history, settings.General.Domain, firstHistory.Order.General.DomainId, firstHistory.Order.General.Domain);
@@ -98,7 +101,46 @@
 
             AddFirstDifference(history, settings.User.UserId, firstHistory.Order.User.UserId);            
             AddFirstDifference(history, settings.User.UserFirstName, firstHistory.Order.User.UserFirstName);
-            AddFirstDifference(history, settings.User.UserLastName, firstHistory.Order.User.UserLastName);            
+            AddFirstDifference(history, settings.User.UserLastName, firstHistory.Order.User.UserLastName);
+            AddFirstDifference(history, settings.User.UserPhone, firstHistory.Order.User.UserPhone);
+            AddFirstDifference(history, settings.User.UserEMail, firstHistory.Order.User.UserEMail);
+
+            AddFirstDifference(history, settings.User.Initials, firstHistory.Order.User.UserInitials);
+            AddFirstDifference(history, settings.User.PersonalIdentityNumber, firstHistory.Order.User.UserPersonalIdentityNumber);
+            AddFirstDifference(history, settings.User.Extension, firstHistory.Order.User.UserExtension);
+            AddFirstDifference(history, settings.User.Title, firstHistory.Order.User.UserTitle);
+            AddFirstDifference(history, settings.User.Location, firstHistory.Order.User.UserLocation);
+            AddFirstDifference(history, settings.User.RoomNumber, firstHistory.Order.User.UserRoomNumber);
+            AddFirstDifference(history, settings.User.PostalAddress, firstHistory.Order.User.UserPostalAddress);
+            AddFirstDifference(history, settings.User.Responsibility, firstHistory.Order.User.Responsibility);
+            AddFirstDifference(history, settings.User.Activity, firstHistory.Order.User.Activity);
+            AddFirstDifference(history, settings.User.Manager, firstHistory.Order.User.Manager);
+            AddFirstDifference(history, settings.User.ReferenceNumber, firstHistory.Order.User.ReferenceNumber);
+            AddFirstDifference(history, settings.User.Info, firstHistory.Order.User.InfoUser);
+            AddFirstDifference(history, settings.User.UnitId, firstHistory.Order.User.UserOU_Id, firstHistory.Order.User.UserOUName);
+            AddFirstDifference(history, settings.User.EmploymentType, firstHistory.Order.User.EmploymentType_Id, firstHistory.Order.User.EmploymentTypeName);
+            AddFirstDifference(history, settings.User.DepartmentId1, firstHistory.Order.User.UserDepartment_Id1, firstHistory.Order.User.UserDepartmentName);
+            AddFirstDifference(history, settings.User.DepartmentId2, firstHistory.Order.User.UserDepartment_Id2, firstHistory.Order.User.UserDepartmentName2);
+
+            AddFirstDifference(history, settings.AccountInfo.StartedDate, firstHistory.Order.AccountInfo.StartedDate);
+            AddFirstDifference(history, settings.AccountInfo.FinishDate, firstHistory.Order.AccountInfo.FinishDate);
+            //AddFirstDifference(history, settings.AccountInfo.EMailTypeId, firstHistory.Order.AccountInfo.EMailTypeId);
+            //AddFirstDifference(history, settings.AccountInfo.HomeDirectory, firstHistory.Order.AccountInfo.HomeDirectory);
+            //AddFirstDifference(history, settings.AccountInfo.Profile, firstHistory.Order.AccountInfo.Profile);
+            AddFirstDifference(history, settings.AccountInfo.InventoryNumber, firstHistory.Order.AccountInfo.InventoryNumber);
+            AddFirstDifference(history, settings.AccountInfo.Info, firstHistory.Order.AccountInfo.Info);
+            AddFirstDifference(history, settings.AccountInfo.AccountTypeId, firstHistory.Order.AccountInfo.AccountTypeId, firstHistory.Order.AccountInfo.AccountTypeIdName);
+            //AddFirstDifference(history, settings.AccountInfo.AccountTypeId2, firstHistory.Order.AccountInfo.AccountTypeId2, firstHistory.Order.AccountInfo.AccountTypeId2Name);
+            AddFirstDifference(history, settings.AccountInfo.AccountTypeId3, firstHistory.Order.AccountInfo.AccountTypeId3, firstHistory.Order.AccountInfo.AccountTypeId3Name);
+            AddFirstDifference(history, settings.AccountInfo.AccountTypeId4, firstHistory.Order.AccountInfo.AccountTypeId4, firstHistory.Order.AccountInfo.AccountTypeId4Name);
+            AddFirstDifference(history, settings.AccountInfo.AccountTypeId5, firstHistory.Order.AccountInfo.AccountTypeId5, firstHistory.Order.AccountInfo.AccountTypeId5Name);
+
+            AddFirstDifference(history, settings.Contact.Id, firstHistory.Order.Contact.Id);
+            AddFirstDifference(history, settings.Contact.Name, firstHistory.Order.Contact.Name);
+            AddFirstDifference(history, settings.Contact.Phone, firstHistory.Order.Contact.Phone);
+            AddFirstDifference(history, settings.Contact.EMail, firstHistory.Order.Contact.Email);
+
+            AddFirstDifference(history, settings.Program.InfoProduct, firstHistory.Order.Program.InfoProduct);
 
             var emails = emailLogs.Select(l => l.Email).ToList();
             //var logs = log.Select(l => l.Text).ToList();
@@ -132,6 +174,8 @@
             AddDifference(history, settings.Delivery.DeliveryInfo1, previousHistory.Order.Delivery.DeliveryInfo1, currentHistory.Order.Delivery.DeliveryInfo1);
             AddDifference(history, settings.Delivery.DeliveryInfo2, previousHistory.Order.Delivery.DeliveryInfo2, currentHistory.Order.Delivery.DeliveryInfo2);
             AddDifference(history, settings.Delivery.DeliveryInfo3, previousHistory.Order.Delivery.DeliveryInfo3, currentHistory.Order.Delivery.DeliveryInfo3);
+            AddDifference(history, settings.Delivery.DeliveryName, previousHistory.Order.Delivery.DeliveryName, currentHistory.Order.Delivery.DeliveryName);
+            AddDifference(history, settings.Delivery.DeliveryPhone, previousHistory.Order.Delivery.DeliveryPhone, currentHistory.Order.Delivery.DeliveryPhone);
 
             AddDifference(history, settings.General.Administrator, 
                 previousHistory.Order.General.AdministratorId, previousHistory.Order.General.Administrator,
@@ -200,7 +244,64 @@
 
             AddDifference(history, settings.User.UserId, previousHistory.Order.User.UserId, currentHistory.Order.User.UserId);
             AddDifference(history, settings.User.UserFirstName, previousHistory.Order.User.UserFirstName, currentHistory.Order.User.UserFirstName);
-            AddDifference(history, settings.User.UserLastName, previousHistory.Order.User.UserLastName, currentHistory.Order.User.UserLastName);            
+            AddDifference(history, settings.User.UserLastName, previousHistory.Order.User.UserLastName, currentHistory.Order.User.UserLastName);
+            AddDifference(history, settings.User.UserPhone, previousHistory.Order.User.UserPhone, currentHistory.Order.User.UserPhone);
+            AddDifference(history, settings.User.UserEMail, previousHistory.Order.User.UserEMail, currentHistory.Order.User.UserEMail);
+
+            AddDifference(history, settings.User.Initials, previousHistory.Order.User.UserInitials, currentHistory.Order.User.UserInitials);
+            AddDifference(history, settings.User.PersonalIdentityNumber, previousHistory.Order.User.UserPersonalIdentityNumber, currentHistory.Order.User.UserPersonalIdentityNumber);
+            AddDifference(history, settings.User.Extension, previousHistory.Order.User.UserExtension, currentHistory.Order.User.UserExtension);
+            AddDifference(history, settings.User.Title, previousHistory.Order.User.UserTitle, currentHistory.Order.User.UserTitle);
+            AddDifference(history, settings.User.Location, previousHistory.Order.User.UserLocation, currentHistory.Order.User.UserLocation);
+            AddDifference(history, settings.User.RoomNumber, previousHistory.Order.User.UserRoomNumber, currentHistory.Order.User.UserRoomNumber);
+            AddDifference(history, settings.User.PostalAddress, previousHistory.Order.User.UserPostalAddress, currentHistory.Order.User.UserPostalAddress);
+            AddDifference(history, settings.User.Responsibility, previousHistory.Order.User.Responsibility, currentHistory.Order.User.Responsibility);
+            AddDifference(history, settings.User.Activity, previousHistory.Order.User.Activity, currentHistory.Order.User.Activity);
+            AddDifference(history, settings.User.Manager, previousHistory.Order.User.Manager, currentHistory.Order.User.Manager);
+            AddDifference(history, settings.User.ReferenceNumber, previousHistory.Order.User.ReferenceNumber, currentHistory.Order.User.ReferenceNumber);
+            AddDifference(history, settings.User.Info, previousHistory.Order.User.InfoUser, currentHistory.Order.User.InfoUser);
+            AddDifference(history, settings.User.UnitId,
+                                    previousHistory.Order.User.UserOU_Id, previousHistory.Order.User.UserOUName,
+                                    currentHistory.Order.User.UserOU_Id, currentHistory.Order.User.UserOUName);
+            AddDifference(history, settings.User.EmploymentType,
+                                    previousHistory.Order.User.EmploymentType_Id, previousHistory.Order.User.EmploymentTypeName,
+                                    currentHistory.Order.User.EmploymentType_Id, currentHistory.Order.User.EmploymentTypeName);
+            AddDifference(history, settings.User.DepartmentId1,
+                                    previousHistory.Order.User.UserDepartment_Id1, previousHistory.Order.User.UserDepartmentName,
+                                    currentHistory.Order.User.UserDepartment_Id1, currentHistory.Order.User.UserDepartmentName);
+            AddDifference(history, settings.User.DepartmentId2,
+                                    previousHistory.Order.User.UserDepartment_Id2, previousHistory.Order.User.UserDepartmentName2,
+                                    currentHistory.Order.User.UserDepartment_Id2, currentHistory.Order.User.UserDepartmentName2);
+
+            AddDifference(history, settings.AccountInfo.StartedDate, previousHistory.Order.AccountInfo.StartedDate, currentHistory.Order.AccountInfo.StartedDate);
+            AddDifference(history, settings.AccountInfo.FinishDate, previousHistory.Order.AccountInfo.FinishDate, currentHistory.Order.AccountInfo.FinishDate);
+            //AddDifference(history, settings.AccountInfo.EMailTypeId, previousHistory.Order.AccountInfo.EMailTypeId);
+            //AddDifference(history, settings.AccountInfo.HomeDirectory, previousHistory.Order.AccountInfo.HomeDirectory);
+            //AddDifference(history, settings.AccountInfo.Profile, previousHistory.Order.AccountInfo.Profile);
+            AddDifference(history, settings.AccountInfo.InventoryNumber, previousHistory.Order.AccountInfo.InventoryNumber, currentHistory.Order.AccountInfo.InventoryNumber);
+            AddDifference(history, settings.AccountInfo.Info, previousHistory.Order.AccountInfo.Info, currentHistory.Order.AccountInfo.Info);
+            AddDifference(history, settings.AccountInfo.AccountTypeId,
+                                    previousHistory.Order.AccountInfo.AccountTypeId, previousHistory.Order.AccountInfo.AccountTypeIdName,
+                                    currentHistory.Order.AccountInfo.AccountTypeId, currentHistory.Order.AccountInfo.AccountTypeIdName);
+            //AddDifference(history, settings.AccountInfo.AccountTypeId2,
+            //                        previousHistory.Order.AccountInfo.AccountTypeId2, previousHistory.Order.AccountInfo.AccountTypeId2Name,
+            //                        currentHistory.Order.AccountInfo.AccountTypeId2, currentHistory.Order.AccountInfo.AccountTypeId2Name);
+            AddDifference(history, settings.AccountInfo.AccountTypeId3,
+                                    previousHistory.Order.AccountInfo.AccountTypeId3, previousHistory.Order.AccountInfo.AccountTypeId3Name,
+                                    currentHistory.Order.AccountInfo.AccountTypeId3, currentHistory.Order.AccountInfo.AccountTypeId3Name);
+            AddDifference(history, settings.AccountInfo.AccountTypeId4,
+                                    previousHistory.Order.AccountInfo.AccountTypeId4, previousHistory.Order.AccountInfo.AccountTypeId4Name,
+                                    currentHistory.Order.AccountInfo.AccountTypeId4, currentHistory.Order.AccountInfo.AccountTypeId4Name);
+            AddDifference(history, settings.AccountInfo.AccountTypeId5,
+                                    previousHistory.Order.AccountInfo.AccountTypeId5, previousHistory.Order.AccountInfo.AccountTypeId5Name,
+                                    currentHistory.Order.AccountInfo.AccountTypeId5, currentHistory.Order.AccountInfo.AccountTypeId5Name);
+
+            AddDifference(history, settings.Contact.Id, previousHistory.Order.Contact.Id, currentHistory.Order.Contact.Id);
+            AddDifference(history, settings.Contact.Name, previousHistory.Order.Contact.Name, currentHistory.Order.Contact.Name);
+            AddDifference(history, settings.Contact.Phone, previousHistory.Order.Contact.Phone, currentHistory.Order.Contact.Phone);
+            AddDifference(history, settings.Contact.EMail, previousHistory.Order.Contact.Email, currentHistory.Order.Contact.Email);
+
+            AddDifference(history, settings.Program.InfoProduct, previousHistory.Order.Program.InfoProduct, currentHistory.Order.Program.InfoProduct);
 
             var emails = currentHistoryEmailLogs.Select(l => l.Email).ToList();
             //var logs = currentHistoryLog.Select(l => l.Text).ToList();
@@ -271,6 +372,7 @@
                 differencies.Add(difference);
             }
         }
+
 
         private static void AddDifference(List<FieldDifference> differencies, FieldEditSettings settings, int? oldValue, string oldText, int? newValue, string newText)
         {

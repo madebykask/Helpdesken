@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Orders.Order.OrderHistoryFields
 {
-    using DH.Helpdesk.Common.ValidationAttributes;
+    using Common.ValidationAttributes;
 
     public sealed class FullOrderHistoryFields
     {
@@ -14,18 +14,22 @@
                 ProgramHistoryFields program, 
                 ReceiverHistoryFields receiver, 
                 SupplierHistoryFields supplier, 
-                UserHistoryFields user)
+                UserHistoryFields user,
+                AccountInfoHistoryFields accountInfo,
+                ContactHistoryFields contact)
         {
-            this.User = user;
-            this.Supplier = supplier;
-            this.Receiver = receiver;
-            this.Program = program;
-            this.Other = other;
-            this.Order = order;
-            this.Orderer = orderer;
-            this.Log = log;
-            this.General = general;
-            this.Delivery = delivery;
+            User = user;
+            Supplier = supplier;
+            Receiver = receiver;
+            Program = program;
+            Other = other;
+            Order = order;
+            Orderer = orderer;
+            Log = log;
+            General = general;
+            Delivery = delivery;
+            AccountInfo = accountInfo;
+            Contact = contact;
         }
 
         [NotNull]
@@ -57,5 +61,11 @@
 
         [NotNull]
         public UserHistoryFields User { get; private set; }
+
+        [NotNull]
+        public AccountInfoHistoryFields AccountInfo { get; private set; }
+
+        [NotNull]
+        public ContactHistoryFields Contact { get; private set; }
     }
 }

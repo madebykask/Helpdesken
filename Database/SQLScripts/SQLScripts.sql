@@ -195,10 +195,10 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 BEGIN
 	ALTER TABLE [dbo].[tblOrder] ADD [EmploymentType_Id] [int] NULL
 
-	ALTER TABLE [dbo].[tblOrder]  WITH NOCHECK ADD  CONSTRAINT [FK_tblOrder_tblDepartment3] FOREIGN KEY([UserDepartment_Id2])
-	REFERENCES [dbo].[tblDepartment] ([Id])
+	ALTER TABLE [dbo].[tblOrder]  WITH NOCHECK ADD  CONSTRAINT [FK_tblOrder_tblEmploymentType] FOREIGN KEY([EmploymentType_Id])
+	REFERENCES [dbo].[tblEmploymentType] ([Id])
 	
-	ALTER TABLE [dbo].[tblOrder] CHECK CONSTRAINT [FK_tblOrder_tblDepartment3]
+	ALTER TABLE [dbo].[tblOrder] CHECK CONSTRAINT [FK_tblOrder_tblEmploymentType]
 END 
 GO
 
@@ -850,6 +850,205 @@ set InvoiceRow_Id = (select Id from tblInvoiceRow ir where ir.Case_Id = cir.Case
 from tblCaseInvoiceRow cir
 GO
 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'UserPhone' and sysobjects.name = N'tblOrderHistory')
+	ALTER TABLE [dbo].[tblOrderHistory] ADD [UserPhone] [nvarchar](20) NULL
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'UserEMail' and sysobjects.name = N'tblOrderHistory')
+	ALTER TABLE [dbo].[tblOrderHistory] ADD [UserEMail] [nvarchar](50) NULL
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'UserPersonalIdentityNumber' and sysobjects.name = N'tblOrderHistory')
+	ALTER TABLE [dbo].[tblOrderHistory] ADD [UserPersonalIdentityNumber] [nvarchar](200) NULL
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'UserInitials' and sysobjects.name = N'tblOrderHistory')
+	ALTER TABLE [dbo].[tblOrderHistory] ADD [UserInitials] [nvarchar](10) NULL
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'UserExtension' and sysobjects.name = N'tblOrderHistory')
+	ALTER TABLE [dbo].[tblOrderHistory] ADD [UserExtension] [nvarchar](20) NULL
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'UserTitle' and sysobjects.name = N'tblOrderHistory')
+	ALTER TABLE [dbo].[tblOrderHistory] ADD [UserTitle] [nvarchar](50) NULL
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'UserLocation' and sysobjects.name = N'tblOrderHistory')
+	ALTER TABLE [dbo].[tblOrderHistory] ADD [UserLocation] [nvarchar](50) NULL
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'UserRoomNumber' and sysobjects.name = N'tblOrderHistory')
+	ALTER TABLE [dbo].[tblOrderHistory] ADD [UserRoomNumber] [nvarchar](50) NULL
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'UserPostalAddress' and sysobjects.name = N'tblOrderHistory')
+	ALTER TABLE [dbo].[tblOrderHistory] ADD [UserPostalAddress] [nvarchar](50) NULL
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'EmploymentType_Id' and sysobjects.name = N'tblOrderHistory')	
+BEGIN
+	ALTER TABLE [dbo].[tblOrderHistory] ADD [EmploymentType_Id] [int] NULL
+
+	ALTER TABLE [dbo].[tblOrderHistory]  WITH NOCHECK ADD  CONSTRAINT [FK_tblOrderHistory_tblEmploymentType] FOREIGN KEY([EmploymentType_Id])
+	REFERENCES [dbo].[tblEmploymentType] ([Id])
+	
+	ALTER TABLE [dbo].[tblOrderHistory] CHECK CONSTRAINT [FK_tblOrderHistory_tblEmploymentType]
+END 
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'UserDepartment_Id' and sysobjects.name = N'tblOrderHistory')
+BEGIN
+	ALTER TABLE [dbo].[tblOrderHistory] ADD [UserDepartment_Id] [int] NULL 
+
+	ALTER TABLE [dbo].[tblOrderHistory]  WITH NOCHECK ADD  CONSTRAINT [FK_tblOrderHistory_tblDepartment1] FOREIGN KEY([UserDepartment_Id])
+	REFERENCES [dbo].[tblDepartment] ([Id])
+	
+	ALTER TABLE [dbo].[tblOrderHistory] CHECK CONSTRAINT [FK_tblOrderHistory_tblDepartment1]
+END 
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'UserDepartment_Id2' and sysobjects.name = N'tblOrderHistory')
+BEGIN
+	ALTER TABLE [dbo].[tblOrderHistory] ADD [UserDepartment_Id2] [int] NULL
+
+	ALTER TABLE [dbo].[tblOrderHistory]  WITH NOCHECK ADD  CONSTRAINT [FK_tblOrderHistory_tblDepartment3] FOREIGN KEY([UserDepartment_Id2])
+	REFERENCES [dbo].[tblDepartment] ([Id])
+	
+	ALTER TABLE [dbo].[tblOrderHistory] CHECK CONSTRAINT [FK_tblOrderHistory_tblDepartment3]
+END
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'UserOU_Id' and sysobjects.name = N'tblOrderHistory')
+BEGIN
+	ALTER TABLE [dbo].[tblOrderHistory] ADD [UserOU_Id] [int] NULL
+
+	ALTER TABLE [dbo].[tblOrderHistory]  WITH NOCHECK ADD  CONSTRAINT [FK_tblOrderHistory_tblOU1] FOREIGN KEY([UserOU_Id])
+	REFERENCES [dbo].[tblOU] ([Id])
+
+	ALTER TABLE [dbo].[tblOrderHistory] CHECK CONSTRAINT [FK_tblOrderHistory_tblOU1]
+END 
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'InfoUser' and sysobjects.name = N'tblOrderHistory')
+	ALTER TABLE [dbo].[tblOrderHistory] ADD [InfoUser] [nvarchar](200) NULL
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Responsibility' and sysobjects.name = N'tblOrderHistory')
+	ALTER TABLE [dbo].[tblOrderHistory] ADD [Responsibility] [nvarchar](20) NULL
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Activity' and sysobjects.name = N'tblOrderHistory')
+	ALTER TABLE [dbo].[tblOrderHistory] ADD [Activity] [nvarchar](50) NULL
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Manager' and sysobjects.name = N'tblOrderHistory')
+	ALTER TABLE [dbo].[tblOrderHistory] ADD [Manager] [nvarchar](50) NULL
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ReferenceNumber' and sysobjects.name = N'tblOrderHistory')
+	ALTER TABLE [dbo].[tblOrderHistory] ADD [ReferenceNumber] [nvarchar](20) NULL
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'AccountStartDate' and sysobjects.name = N'tblOrderHistory')
+	ALTER TABLE [dbo].[tblOrderHistory] ADD [AccountStartDate] [datetime] NULL
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'AccountEndDate' and sysobjects.name = N'tblOrderHistory')
+	ALTER TABLE [dbo].[tblOrderHistory] ADD [AccountEndDate] [datetime] NULL
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'EMailType' and sysobjects.name = N'tblOrderHistory')
+	ALTER TABLE [dbo].[tblOrderHistory] ADD [EMailType] int NULL
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'HomeDirectory' and sysobjects.name = N'tblOrderHistory')
+	ALTER TABLE [dbo].[tblOrderHistory] ADD [HomeDirectory] [bit] NULL
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Profile' and sysobjects.name = N'tblOrderHistory')
+	ALTER TABLE [dbo].[tblOrderHistory] ADD [Profile] [bit] NULL
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'InventoryNumber' and sysobjects.name = N'tblOrderHistory')
+	ALTER TABLE [dbo].[tblOrderHistory] ADD [InventoryNumber] [nvarchar](20) NULL
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'AccountInfo' and sysobjects.name = N'tblOrderHistory')
+	ALTER TABLE [dbo].[tblOrderHistory] ADD [AccountInfo] [nvarchar](500) NULL
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'OrderFieldType_Id' and sysobjects.name = N'tblOrderHistory')
+BEGIN
+	ALTER TABLE [dbo].[tblOrderHistory] ADD [OrderFieldType_Id] [int] NULL
+
+	ALTER TABLE [dbo].[tblOrderHistory]  WITH NOCHECK ADD  CONSTRAINT [FK_tblOrderHistory_tblOrderFieldTypes] FOREIGN KEY([OrderFieldType_Id])
+		REFERENCES [dbo].[tblOrderFieldTypes] ([Id])
+
+	ALTER TABLE [dbo].[tblOrderHistory] CHECK CONSTRAINT [FK_tblOrderHistory_tblOrderFieldTypes]
+END
+
+--if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'OrderFieldType2' and sysobjects.name = N'tblOrderHistory')
+--BEGIN
+--	ALTER TABLE [dbo].[tblOrderHistory] ADD [OrderFieldType2] [nvarchar](500) NULL
+--END
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'OrderFieldType3_Id' and sysobjects.name = N'tblOrderHistory')
+BEGIN
+	ALTER TABLE [dbo].[tblOrderHistory] ADD [OrderFieldType3_Id] [int] NULL
+
+	ALTER TABLE [dbo].[tblOrderHistory]  WITH NOCHECK ADD  CONSTRAINT [FK_tblOrderHistory_tblOrderFieldTypes3] FOREIGN KEY([OrderFieldType3_Id])
+		REFERENCES [dbo].[tblOrderFieldTypes] ([Id])
+
+	ALTER TABLE [dbo].[tblOrderHistory] CHECK CONSTRAINT [FK_tblOrderHistory_tblOrderFieldTypes3]
+END
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'OrderFieldType4_Id' and sysobjects.name = N'tblOrderHistory')
+BEGIN
+	ALTER TABLE [dbo].[tblOrderHistory] ADD [OrderFieldType4_Id] [int] NULL
+
+	
+	ALTER TABLE [dbo].[tblOrderHistory]  WITH NOCHECK ADD  CONSTRAINT [FK_tblOrderHistory_tblOrderFieldTypes4] FOREIGN KEY([OrderFieldType4_Id])
+		REFERENCES [dbo].[tblOrderFieldTypes] ([Id])
+
+	ALTER TABLE [dbo].[tblOrderHistory] CHECK CONSTRAINT [FK_tblOrderHistory_tblOrderFieldTypes4]
+END
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'OrderFieldType5_Id' and sysobjects.name = N'tblOrderHistory')
+BEGIN
+	ALTER TABLE [dbo].[tblOrderHistory] ADD [OrderFieldType5_Id] [int] NULL
+
+	ALTER TABLE [dbo].[tblOrderHistory]  WITH NOCHECK ADD  CONSTRAINT [FK_tblOrderHistory_tblOrderFieldTypes5] FOREIGN KEY([OrderFieldType5_Id])
+		REFERENCES [dbo].[tblOrderFieldTypes] ([Id])
+
+	ALTER TABLE [dbo].[tblOrderHistory] CHECK CONSTRAINT [FK_tblOrderHistory_tblOrderFieldTypes5]
+END
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ContactId' and sysobjects.name = N'tblOrderHistory')
+	ALTER TABLE [dbo].[tblOrderHistory] ADD [ContactId] [nvarchar](200) NULL
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ContactName' and sysobjects.name = N'tblOrderHistory')
+	ALTER TABLE [dbo].[tblOrderHistory] ADD [ContactName] [nvarchar](50) NULL
+GO
+
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ContactPhone' and sysobjects.name = N'tblOrderHistory')
+	ALTER TABLE [dbo].[tblOrderHistory] ADD [ContactPhone] [nvarchar](50) NULL
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ContactEMail' and sysobjects.name = N'tblOrderHistory')
+	ALTER TABLE [dbo].[tblOrderHistory] ADD [ContactEMail] [nvarchar](50) NULL
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'DeliveryName' and sysobjects.name = N'tblOrderHistory')
+	ALTER TABLE [dbo].[tblOrderHistory] ADD [DeliveryName] [nvarchar](50) NULL
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'DeliveryPhone' and sysobjects.name = N'tblOrderHistory')
+	ALTER TABLE [dbo].[tblOrderHistory] ADD [DeliveryPhone] [nvarchar](50) NULL
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'InfoProduct' and sysobjects.name = N'tblOrderHistory')
+	ALTER TABLE [dbo].[tblOrderHistory] ADD [InfoProduct] [nvarchar](500) NULL
+GO
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.30'

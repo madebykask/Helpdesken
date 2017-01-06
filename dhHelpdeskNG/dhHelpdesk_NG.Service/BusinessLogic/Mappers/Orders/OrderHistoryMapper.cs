@@ -37,7 +37,8 @@
             MapReceiverFields(entity, businessModel.Order.Receiver);
             MapSupplierFields(entity, businessModel.Order.Supplier);
             MapUserFields(entity, businessModel.Order.User);
-            //TODO:MapAccountInfoFields(entity, businessModel.Order.AccountInfo);
+            MapAccountInfoFields(entity, businessModel.Order.AccountInfo);
+            MapContactFields(entity, businessModel.Order.Contact);
 
             return entity;
         }
@@ -55,6 +56,8 @@
             entity.DeliveryInfo = businessModel.DeliveryInfo1;
             entity.DeliveryInfo2 = businessModel.DeliveryInfo2;
             entity.DeliveryInfo3 = businessModel.DeliveryInfo3;
+            entity.DeliveryName = businessModel.DeliveryName;
+            entity.DeliveryPhone = businessModel.DeliveryPhone;
         }
 
         private static void MapGeneralFields(OrderHistoryEntity entity, GeneralEditFields businessModel)
@@ -114,6 +117,7 @@
 
         private static void MapProgramFields(OrderHistoryEntity entity, ProgramEditFields businessModel)
         {
+            entity.InfoProduct = businessModel.InfoProduct;
         }
 
         private static void MapReceiverFields(OrderHistoryEntity entity, ReceiverEditFields businessModel)
@@ -138,7 +142,48 @@
             entity.UserId = businessModel.UserId;
             entity.UserFirstName = businessModel.UserFirstName;
             entity.UserLastName = businessModel.UserLastName;
-            //TODO: Add missing fields
-        } 
+            entity.UserEMail = businessModel.UserEMail;
+            entity.UserPhone = businessModel.UserPhone;
+            entity.UserInitials = businessModel.UserInitials;
+            entity.UserPersonalIdentityNumber = businessModel.UserPersonalIdentityNumber;
+            entity.UserExtension = businessModel.UserExtension;
+            entity.UserTitle = businessModel.UserTitle;
+            entity.UserLocation = businessModel.UserLocation;
+            entity.UserRoomNumber = businessModel.UserRoomNumber;
+            entity.UserPostalAddress = businessModel.UserPostalAddress;
+            entity.Responsibility = businessModel.Responsibility;
+            entity.Activity = businessModel.Activity;
+            entity.Manager = businessModel.Manager;
+            entity.ReferenceNumber = businessModel.ReferenceNumber;
+            entity.InfoUser = businessModel.InfoUser;
+            entity.UserOU_Id = businessModel.UserOU_Id;
+            entity.EmploymentType_Id = businessModel.EmploymentType_Id;
+            entity.UserDepartment_Id = businessModel.UserDepartment_Id1;
+            entity.UserDepartment_Id2 = businessModel.UserDepartment_Id2;
+        }
+
+        private static void MapContactFields(OrderHistoryEntity entity, ContactEditFields businessModel)
+        {
+            entity.ContactId = businessModel.Id;
+            entity.ContactName = businessModel.Name;
+            entity.ContactPhone = businessModel.Phone;
+            entity.ContactEMail = businessModel.Email;
+        }
+
+        private static void MapAccountInfoFields(OrderHistoryEntity entity, AccountInfoEditFields businessModel)
+        {
+            entity.AccountStartDate = businessModel.StartedDate;
+            entity.AccountEndDate = businessModel.FinishDate;
+            entity.EMailType = businessModel.EMailTypeId;
+            entity.HomeDirectory = businessModel.HomeDirectory;
+            entity.Profile = businessModel.Profile;
+            entity.InventoryNumber = businessModel.InventoryNumber;
+            entity.AccountInfo = businessModel.Info;
+            entity.OrderFieldType_Id = businessModel.AccountTypeId;
+            //entity.OrderFieldType2 = businessModel.Id;
+            entity.OrderFieldType3_Id = businessModel.AccountTypeId3;
+            entity.OrderFieldType4_Id = businessModel.AccountTypeId4;
+            entity.OrderFieldType5_Id = businessModel.AccountTypeId5;
+        }
     }
 }

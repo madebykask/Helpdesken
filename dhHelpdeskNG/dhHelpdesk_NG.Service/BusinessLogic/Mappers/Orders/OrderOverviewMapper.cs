@@ -19,7 +19,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
         public static FullOrderOverview[] MapToFullOverviews(this IQueryable<Order> query,
             IList<OrderType> orderTypes,
             IList<Case> caseEntities,
-            IQueryable<OrderFieldType> orderFieldTypes)
+            IList<OrderFieldType> orderFieldTypes)
         {
             var entities = query
                             .SelectIncluding(new List<Expression<Func<Order, object>>>
@@ -72,7 +72,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
 
         private static FullOrderOverview CreateFullOverview(Order entity,
             IList<Case> caseEntities,
-            IQueryable<OrderFieldType> orderFieldTypes)
+            IList<OrderFieldType> orderFieldTypes)
         {
             var delivery = CreateDeliveryOverview(entity);
             var general = CreateGeneralOverview(entity);
@@ -238,7 +238,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
         }
 
         private static AccountInfoOverview CreateAccountInfoOverview(Order entity,
-            IQueryable<OrderFieldType> orderFieldTypes)
+            IList<OrderFieldType> orderFieldTypes)
         {
             var orderFieldType1 = "";
             var orderFieldType2 = "";
@@ -251,9 +251,8 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
                 entity.OrderFieldType4_Id.HasValue ||
                 entity.OrderFieldType5_Id.HasValue)
             {
-                var orderFieldTypesList = orderFieldTypes.ToArray();
                 if (entity.OrderFieldType_Id.HasValue)
-                    orderFieldType1 = orderFieldTypesList
+                    orderFieldType1 = orderFieldTypes
                         .FirstOrDefault(o => o.OrderField == OrderFieldTypes.AccountType
                                              && o.Id == entity.OrderFieldType_Id.Value)?.Name;
 
@@ -261,24 +260,24 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
                 {
                     var orderFieldTypes2 = entity.OrderFieldType2.Split(',')
                         .Select(int.Parse).ToList();
-                    orderFieldType2 = string.Join("; ", orderFieldTypesList
+                    orderFieldType2 = string.Join("; ", orderFieldTypes
                         .Where(o => o.OrderField == OrderFieldTypes.AccountType2
                                     && orderFieldTypes2.Any(i => i == o.Id))
                         .Select(o => o.Name).ToArray());
                 }
 
                 if (entity.OrderFieldType3_Id.HasValue)
-                    orderFieldType3 = orderFieldTypesList
+                    orderFieldType3 = orderFieldTypes
                         .FirstOrDefault(o => o.OrderField == OrderFieldTypes.AccountType3
                                              && o.Id == entity.OrderFieldType3_Id.Value)?.Name;
 
                 if (entity.OrderFieldType4_Id.HasValue)
-                    orderFieldType4 = orderFieldTypesList
+                    orderFieldType4 = orderFieldTypes
                         .FirstOrDefault(o => o.OrderField == OrderFieldTypes.AccountType4
                                              && o.Id == entity.OrderFieldType4_Id.Value)?.Name;
 
                 if (entity.OrderFieldType5_Id.HasValue)
-                    orderFieldType5 = orderFieldTypesList
+                    orderFieldType5 = orderFieldTypes
                         .FirstOrDefault(o => o.OrderField == OrderFieldTypes.AccountType5
                                              && o.Id == entity.OrderFieldType5_Id.Value)?.Name;
             }

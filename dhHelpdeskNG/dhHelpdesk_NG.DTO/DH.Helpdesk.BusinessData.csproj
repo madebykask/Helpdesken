@@ -409,6 +409,8 @@
     <Compile Include="Models\Orders\Order\OrderEditSettings\SupplierEditSettings.cs" />
     <Compile Include="Models\Orders\Order\OrderEditSettings\TextFieldEditSettings.cs" />
     <Compile Include="Models\Orders\Order\OrderEditSettings\UserEditSettings.cs" />
+    <Compile Include="Models\Orders\Order\OrderHistoryFields\AccountInfoHistoryFields.cs" />
+    <Compile Include="Models\Orders\Order\OrderHistoryFields\ContactHistoryFields.cs" />
     <Compile Include="Models\Orders\Order\OrderHistoryFields\DeliveryHistoryFields.cs" />
     <Compile Include="Models\Orders\Order\OrderHistoryFields\FullOrderHistoryFields.cs" />
     <Compile Include="Models\Orders\Order\OrderHistoryFields\GeneralHistoryFields.cs" />

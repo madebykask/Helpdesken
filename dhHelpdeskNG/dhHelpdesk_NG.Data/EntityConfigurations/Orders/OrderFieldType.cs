@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity.ModelConfiguration;
-using System.Linq;
-using System.Text;
+﻿using System.Data.Entity.ModelConfiguration;
 using DH.Helpdesk.Domain;
 
-namespace DH.Helpdesk.Dal.EntityConfigurations
+namespace DH.Helpdesk.Dal.EntityConfigurations.Orders
 {
     public class OrderFieldTypeConfiguration : EntityTypeConfiguration<OrderFieldType>
     {
