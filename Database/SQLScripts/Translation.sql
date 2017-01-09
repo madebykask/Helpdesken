@@ -5475,5 +5475,12 @@ If not exists (select * from tblTextTranslation where text_id = 1759 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1759, 2, 'Remove from parent')
 GO
 
+If not exists (select * from tbltext where id = 1760)
+	insert into tbltext (id, TextString) VALUES (1760, 'Användaren sätts som administratör vid skapa ärende')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1760 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1760, 2, 'User is set as administrator when create case')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
