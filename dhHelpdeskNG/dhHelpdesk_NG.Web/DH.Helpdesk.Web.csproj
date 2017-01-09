@@ -550,6 +550,7 @@
     <Content Include="Content\js\Cases\case.templates.js" />
     <Content Include="Content\js\Cases\caseByIds.logic.js" />
     <Content Include="Content\js\Cases\Dialogs\_caseAddFollowersSearch.js" />
+    <Content Include="Content\js\Cases\Dialogs\_caseConnectToParent.js" />
     <Content Include="Content\js\Cases\Dialogs\_caseIntLogSearch.js" />
     <Content Include="Content\js\Cases\Dialogs\_caseUserSearchCommon.js" />
     <Content Include="Content\js\Cases\externalInvoice.js" />
@@ -2567,6 +2568,7 @@
     <Content Include="Views\Feedback\ThankYou.cshtml" />
     <Content Include="Views\Cases\ModalDialogs\_CaseAddFollowers.cshtml" />
     <Content Include="Views\Cases\ModalDialogs\_SendIntLogToDiallog.cshtml" />
+    <Content Include="Views\Cases\_ParentCases.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">

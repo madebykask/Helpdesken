@@ -23,5 +23,7 @@
         public DateTime? ApprovedDate { get; set; }
 
         public bool IsRequriedToApprive { get; set; }
+
+        public int ParentId { get; set; }
     }
 }

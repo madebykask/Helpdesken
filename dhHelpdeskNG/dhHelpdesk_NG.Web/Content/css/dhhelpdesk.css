@@ -3848,3 +3848,16 @@ tr.expanded-toolbar .btn {
     margin-left: 2px;
     margin-right: 2px;
 }
+
+.content.modalpopup {
+	margin: 20px 20px 20px 20px;
+}
+
+div.content.modalpopup > div > div.tab-content > div.tab-pane > form > div.container > div.row > div.span5 {
+    display: none;
+}
+
+.case-connect-to-parent {
+    width: 1315px;
+    left: 35%;
+}

@@ -1288,6 +1288,11 @@ namespace DH.Helpdesk.Dal.Repositories
 			sb.Append(" where (tblCase.Customer_Id = " + f.CustomerId + ")");
 			sb.Append(" and (tblCase.Deleted = 0)");
 
+		    if (f.OnlyParentCases)
+		    {
+                sb.AppendFormat(" AND tblCase.Id NOT IN (select Descendant_Id From tblParentChildCaseRelations) ");
+            }
+
 			if (caseIds != null && caseIds.Any())
 			{
 				sb.AppendFormat(" AND ([tblCase].[Id] IN ({0})) ", string.Join(",", caseIds));

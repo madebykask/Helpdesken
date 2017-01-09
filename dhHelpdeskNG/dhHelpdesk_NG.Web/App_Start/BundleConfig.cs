@@ -20,6 +20,7 @@ namespace DH.Helpdesk.Web
             public const string CaseIntLogEmailSearch = ("~/bundles/case/caseintlogemailsearch");
             public const string CaseAddFollowersSearch = ("~/bundles/case/caseaddfollowerssearch");
 			public const string Select2 = "~/bundles/select2";
+			public const string CaseConnectToParent = "~/bundles/case/caseconnecttoparent";
 		}
 
 
@@ -440,6 +441,12 @@ namespace DH.Helpdesk.Web
             bundles.Add(new ScriptBundle(ScriptNames.CaseAddFollowersSearch).Include(
                 "~/Content/js/Cases/Dialogs/_caseAddFollowersSearch.js",
                 "~/Content/js/Cases/Dialogs/_caseUserSearchCommon.js"));
+            bundles.Add(new ScriptBundle(ScriptNames.CaseConnectToParent).Include(
+                "~/Content/js/Cases/Dialogs/_caseConnectToParent.js",
+                "~/Content/js/Cases/components/FilterForm.js",
+                "~/Content/js/Cases/components/BaseField.js",
+                "~/Content/js/Cases/components/JQueryChosenField.js",
+                "~/Content/js/Cases/components/DropdownButtonField.js"));
 
             RegisterOrdersAreaBundles(bundles);
 

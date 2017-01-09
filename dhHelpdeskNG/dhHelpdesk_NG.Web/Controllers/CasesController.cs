@@ -602,6 +602,7 @@ namespace DH.Helpdesk.Web.Controllers
 			f.CaseClosingDateEndFilter = frm.GetDate(CaseFilterFields.CaseClosingDateEndFilterNameAttribute);
 			f.CaseClosingReasonFilter = frm.ReturnFormValue(CaseFilterFields.ClosingReasonNameAttribute).ReturnCustomerUserValue();
 			f.SearchInMyCasesOnly = frm.IsFormValueTrue("SearchInMyCasesOnly");
+			f.OnlyParentCases = frm.IsFormValueTrue(CaseFilterFields.OnlyParentCases);
 
 			f.CaseProgress = frm.ReturnFormValue(CaseFilterFields.FilterCaseProgressNameAttribute);
 			f.CaseFilterFavorite = frm.ReturnFormValue(CaseFilterFields.CaseFilterFavoriteNameAttribute);
@@ -783,44 +784,35 @@ namespace DH.Helpdesk.Web.Controllers
 				{
 					var searchCol = searchRow.Columns.FirstOrDefault(it => it.Key == col.name);
 					jsRow.Add(col.name, searchCol != null ? outputFormatter.FormatField(searchCol) : string.Empty);
-
-
-
-
-
-
-
 				}
 
 				data.Add(jsRow);
 			}
 
 			var remainingView = string.Empty;
-			if (SessionFacade.CurrentUser.ShowSolutionTime)
-			{
-				remainingView = RenderPartialViewToString(
-					"CaseRemainingTime",
-					this.caseModelFactory.GetCaseRemainingTimeModel(remainingTimeData, this.workContext));
-			}
+            string statisticsView = null;
 
-			string statisticsView = null;
+            if (!f.OnlyParentCases)
+            {
+                if (SessionFacade.CurrentUser.ShowSolutionTime)
+                {
+                    remainingView = RenderPartialViewToString("CaseRemainingTime", this.caseModelFactory.GetCaseRemainingTimeModel(remainingTimeData, this.workContext));
+                }
 
-			var statisticsFields = m.GridSettings.CaseFieldSettings.Where(cf => cf.ShowOnStartPage != 0 &&
-																			   (cf.Name == GlobalEnums.TranslationCaseFields.Status_Id.ToString() ||
-																				cf.Name == GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()))
-																   .Select(cf => cf.Name)
-																   .ToList();
-			var showCaseStatistics = SessionFacade.CurrentUser.ShowCaseStatistics && statisticsFields.Any();
-			if (showCaseStatistics)
-			{
-				var expandedGroup = frm.ReturnFormValue("expandedGroup");
-				if (string.IsNullOrEmpty(expandedGroup))
-					expandedGroup = SessionFacade.CaseOverviewGridSettings.ExpandedStatistics;
+                var statisticsFields = m.GridSettings.CaseFieldSettings.Where(cf => cf.ShowOnStartPage != 0 &&
+                                                                                    (cf.Name == GlobalEnums.TranslationCaseFields.Status_Id.ToString() ||
+                                                                                     cf.Name == GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()))
+                    .Select(cf => cf.Name).ToList();
+                var showCaseStatistics = SessionFacade.CurrentUser.ShowCaseStatistics && statisticsFields.Any();
+                if (showCaseStatistics)
+                {
+                    var expandedGroup = frm.ReturnFormValue("expandedGroup");
+                    if (string.IsNullOrEmpty(expandedGroup))
+                        expandedGroup = SessionFacade.CaseOverviewGridSettings.ExpandedStatistics;
 
-				statisticsView = this.RenderPartialViewToString(
-					"_Statistics",
-					GetCaseStatisticsModel(aggregateData, searchResult.Count, expandedGroup, statisticsFields));
-			}
+                    statisticsView = this.RenderPartialViewToString("_Statistics", GetCaseStatisticsModel(aggregateData, searchResult.Count, expandedGroup, statisticsFields));
+                }
+            }
 
             sw.Stop();
             var duration = sw.ElapsedMilliseconds;
@@ -1220,8 +1212,41 @@ namespace DH.Helpdesk.Web.Controllers
                 m.CustomerSettings = this.workContext.Customer.Settings;
 
                 m.CustomerSettings.ModuleCaseInvoice = Convert.ToBoolean(this._settingService.GetCustomerSetting(m.case_.Customer_Id).ModuleCaseInvoice); // TODO FIX
-            }        
 
+                #region ConnectToParentModel
+
+                m.ConnectToParentModel = new JsonCaseIndexViewModel();
+
+                var customerUser = this._customerUserService.GetCustomerSettings(currentCustomerId, userId);
+                m.ConnectToParentModel.CaseSearchFilterData = this.CreateCaseSearchFilterData(currentCustomerId, SessionFacade.CurrentUser, customerUser, this.InitCaseSearchModel(customerId, userId));
+                m.ConnectToParentModel.CaseSetting = this.GetCaseSettingModel(currentCustomerId, userId);
+
+                var gridSettings = this.gridSettingsService.GetForCustomerUserGrid(
+                        customerId,
+                        SessionFacade.CurrentUser.UserGroupId,
+                        userId,
+                        GridSettingsService.CASE_OVERVIEW_GRID_ID);
+                m.ConnectToParentModel.PageSettings = new PageSettingsModel()
+                {
+                    searchFilter = JsonCaseSearchFilterData.MapFrom(m.ConnectToParentModel.CaseSetting),
+                    userFilterFavorites = GetMyFavorites(currentCustomerId, userId),
+                    gridSettings = JsonGridSettingsMapper.ToJsonGridSettingsModel(
+                                                 gridSettings,
+                                                 SessionFacade.CurrentCustomer.Id,
+                                                 m.ConnectToParentModel.CaseSetting.ColumnSettingModel.AvailableColumns.Count(),
+                                                 new[] { "5", "7", "10" }),
+                    messages = new Dictionary<string, string>()
+                                                    {
+                                                        { "information", Translation.GetCoreTextTranslation("Information") },
+                                                        { "records_limited_msg", Translation.GetCoreTextTranslation("Antal ärende som visas är begränsade till 500.") },
+                                                    }
+                };
+                m.ConnectToParentModel.PageSettings.gridSettings.columnDefs.RemoveAll(x => x.field.Equals("_temporary_LeadTime") || x.field.Equals("WatchDate") || x.field.Equals("Status_Id"));
+                m.ConnectToParentModel.PageSettings.gridSettings.pageOptions.recPerPage = 5;
+
+                #endregion
+
+            }
             AddViewDataValues();
 
             // Positive: Send Mail to...
@@ -1229,7 +1254,7 @@ namespace DH.Helpdesk.Web.Controllers
                 m.CaseMailSetting.DontSendMailToNotifier = true;
             else
                 m.CaseMailSetting.DontSendMailToNotifier = false;
-            
+
             return this.View(m);
         }
 
@@ -2121,6 +2146,30 @@ namespace DH.Helpdesk.Web.Controllers
                 m.CaseMailSetting.DontSendMailToNotifier = false;
 
             return this.View("New", m);
+        }
+
+        public ActionResult ConnectToParentCase(int id, int parentCaseId)
+        {
+            if (SessionFacade.CurrentCustomer == null || SessionFacade.CurrentUser == null)
+            {
+                return new RedirectResult("~/Error/Unathorized");
+            }
+
+            if (SessionFacade.CurrentUser.CreateCasePermission != 1 || SessionFacade.CurrentUser.CreateSubCasePermission != 1)
+            {
+                return new RedirectResult("~/Error/Forbidden");
+            }
+
+            _caseService.AddParentCase(id, parentCaseId);
+
+            return this.RedirectToAction("Edit", "cases", new { id = parentCaseId });
+        }
+        
+        [UserCasePermissions]
+        public ActionResult RemoveChild(int id, int parentId)
+        {
+            _caseService.DeleteChildCaseFromParent(id, parentId);
+            return this.RedirectToAction("Edit", "cases", new { id = parentId });
         }
 
         [HttpPost]

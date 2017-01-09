@@ -5404,7 +5404,6 @@ UPDATE tblText Set TextString = 'Välj följare' WHERE Id=1717;
 GO
 
 If not exists (select * from tbltext where id = 1744)
-<<<<<<< Updated upstream
 	insert into tbltext (id, TextString) VALUES (1744, 'Ej fakturerade')
 GO
 
@@ -5460,6 +5459,19 @@ GO
 
 /* Ids 1751 - 1757 reserved for SelfService */
 
+If not exists (select * from tbltext where id = 1758)
+	insert into tbltext (id, TextString) VALUES (1758, 'Ansluta till moder')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1758 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1758, 2, 'Connect to Parent')
+GO
+
+If not exists (select * from tbltext where id = 1759)
+	insert into tbltext (id, TextString) VALUES (1759, 'Ta bort från moder')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1759 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1759, 2, 'Remove from parent')
+GO
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

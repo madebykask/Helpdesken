@@ -147,6 +147,8 @@ namespace DH.Helpdesk.Services.Services
         string SaveFavorite(CaseFilterFavorite favorite);
 
         string DeleteFavorite(int favoriteId);
+	    void DeleteChildCaseFromParent(int id, int parentId);
+	    bool AddParentCase(int id, int parentId);
     }
 
     public class CaseService : ICaseService
@@ -473,6 +475,49 @@ namespace DH.Helpdesk.Services.Services
             return res;
         }
 
+        public void DeleteChildCaseFromParent(int id, int parentCaseId)
+        {
+            using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            {
+                var relationsRepo = uow.GetRepository<ParentChildRelation>();
+                var relation = relationsRepo.GetAll().FirstOrDefault(it => it.DescendantId == id);
+                if (relation == null || relation.AncestorId != parentCaseId)
+                {
+                    throw new ArgumentException(string.Format("bad parentCaseId \"{0}\" for case id \"{1}\"", parentCaseId, id));
+                }
+
+                relationsRepo.Delete(relation);
+                uow.Save();
+            }
+        }
+
+        public bool AddParentCase(int childCaseId, int parentCaseId)
+        {
+            if (childCaseId == parentCaseId)
+                return false;
+            using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            {
+                var parentChildRelationRepo = uow.GetRepository<ParentChildRelation>();
+                var allreadyExists = parentChildRelationRepo.GetAll()
+                        .Where(it => it.DescendantId == childCaseId // allready a child for [other|this] case
+                            || it.AncestorId == childCaseId // child case is a parent already
+                            || it.DescendantId == parentCaseId) // parent case is a child
+                        .FirstOrDefault();
+                if (allreadyExists != null)
+                {
+                    return false;
+                }
+
+                parentChildRelationRepo.Add(new ParentChildRelation()
+                {
+                    AncestorId = parentCaseId,
+                    DescendantId = childCaseId
+                });
+                uow.Save();
+            }
+            return true;
+        }
+
         private void DeleteChildCasesFor(int caseId)
         {
             using (var uow = unitOfWorkFactory.CreateWithDisabledLazyLoading())
@@ -670,7 +715,8 @@ namespace DH.Helpdesk.Services.Services
                                         RegistrationDate = it.registrationDate,
                                         ClosingDate = it.closingDate,
                                         ApprovedDate = it.approvedDate,
-                                        IsRequriedToApprive = it.IsApprovingRequired
+                                        IsRequriedToApprive = it.IsApprovingRequired,
+                                        ParentId = it.parentId
                                      }).ToArray();
             }
         }
