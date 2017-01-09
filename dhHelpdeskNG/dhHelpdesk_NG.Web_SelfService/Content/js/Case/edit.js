@@ -6,7 +6,8 @@
         window.Application.prototype = window.Application.prototype || {};
 
         var fieldSettings = window.fieldSettings || {};
-
+        var caseTypeRelatedFields = window.caseTypeRelatedFields || {};
+        
         var uploadCaseFileUrl = window.appParameters.uploadCaseFileUrl;
         var caseFileKey = window.appParameters.caseFileKey;
         var newCaseFilesUrl = window.appParameters.newCaseFilesUrl;
@@ -24,6 +25,8 @@
         var alreadyExistFileIds = [];
         var attrApplyClass = "hasAttribute";
         var attrFieldNameHolder = "standardName";
+        var relatedFieldBlockPrefix = "#relatedFieldBlock-";
+        var mandatorySignPrefix = "#mandatory_sign_";                
 
         Application.prototype.init = function () {
             var self = this;       
@@ -31,9 +34,10 @@
             self.$regionControl = $('#NewCase_Region_Id');
             self.$departmentControl = $('#NewCase_Department_Id');
             self.$orgUnitControl = $('#NewCase_Ou_Id');
+            self.$caseTypeControl = $(document.getElementById("NewCase.CaseType_Id"));
 
             $('#NewCase_ReportedBy').typeahead(Application.prototype._GetComputerUserSearchOptions());
-            $('#NewCase_InventoryNumber').typeahead(Application.prototype._GetComputerSearchOptions());
+            $('#NewCase_InventoryNumber').typeahead(Application.prototype._GetComputerSearchOptions());            
 
             // Remove after implementing http://redmine.fastdev.se/issues/10995
             self.$regionControl.on('change', function () {
@@ -46,9 +50,14 @@
                 self.refreshOrganizationUnit(departmentId);
             });
 
-            self.applyFieldAttributes();
-        };
+            self.$caseTypeControl.change(function () {
+                self.checkCaseTypeRelationRules($(this));
+            });
 
+            self.applyFieldAttributes();            
+            self.$caseTypeControl.change();
+        };
+        
         Application.prototype.applyFieldAttributes = function () {
             if (fieldSettings == undefined || fieldSettings == null || fieldSettings.length <= 0)
                 return;
@@ -75,6 +84,70 @@
             return false;
         }
 
+        Application.prototype.checkCaseTypeRelationRules = function ($caseType) {
+            if ($caseType == undefined || $caseType == null)
+                return;
+
+            var caseTypeId = $caseType.val();
+            var relatedField = getCaseTypeRelatedField(caseTypeId);
+
+            if (relatedField == undefined || relatedField == null || relatedField == '') {
+                removeCaseTypeRule('Impact_Id', '#NewCase_Impact_Id');
+                removeCaseTypeRule('Urgency_Id', '#NewCase_Urgency_Id');
+                return;
+            }
+                
+            switch (relatedField.toLowerCase()) {
+                case 'impact':
+                    addCaseTypeRule('Impact_Id', '#NewCase_Impact_Id');
+                    addCaseTypeRule('Urgency_Id', '#NewCase_Urgency_Id');
+                    break;
+            }          
+        }
+
+
+        var canApplyCaseTypeRule = function (standardFieldName) {
+            var impactSetting = getFieldSetting(standardFieldName);
+            if (impactSetting == null || (impactSetting != null && !impactSetting.IsVisible))
+                return true;
+
+            return false;
+        }       
+
+        var addCaseTypeRule = function (standardFieldName, elementId) {
+            var impactSetting = getFieldSetting(standardFieldName);
+            if (impactSetting == null || (impactSetting != null && !impactSetting.IsVisible)) {
+                var $elmToShow = $(relatedFieldBlockPrefix + standardFieldName);                
+                $(elementId).val('').change();             
+                showElement($elmToShow);
+            }
+
+            $(elementId).attr("required", "required");
+            $(elementId).rules("add", "required");
+            var $mandatorySign = $(mandatorySignPrefix + standardFieldName);
+            showElement($mandatorySign);
+            $(elementId).rules("add", {
+                required: true
+            });
+            
+        }
+
+        var removeCaseTypeRule = function (standardFieldName, elementId) {
+            var impactSetting = getFieldSetting(standardFieldName);
+            if (impactSetting == null || (impactSetting != null && !impactSetting.IsVisible)) {
+                var $elmToHide = $(relatedFieldBlockPrefix + standardFieldName);
+                $(elementId).val('').change();
+                hideElement($elmToHide);
+            }
+
+            if (impactSetting == null ||  (impactSetting != null && !impactSetting.IsRequired)) {
+                $(elementId).removeAttr('required');                
+                $(elementId).rules("remove");
+                var $mandatorySign = $(mandatorySignPrefix + standardFieldName);
+                hideElement($mandatorySign);                
+            }
+        }
+
         var getFieldSetting = function (fieldName) {
             if (fieldSettings == undefined || fieldSettings == null || fieldSettings.length <= 0 || fieldName == undefined || fieldName == null)
                 return null;
@@ -86,6 +159,18 @@
             }
 
             return null;
+        }
+
+        var getCaseTypeRelatedField = function (caseTypeId) {
+            if (caseTypeRelatedFields == undefined || caseTypeRelatedFields == null || caseTypeRelatedFields.length <= 0 || caseTypeId == undefined || caseTypeId == null)
+                return "";
+            
+            for (var ct = 0; ct < caseTypeRelatedFields.length; ct++) {
+                if (caseTypeRelatedFields[ct].Key == caseTypeId)
+                    return caseTypeRelatedFields[ct].Value;
+            }
+
+            return "";
         }
 
         var applySettingOnElement = function ($element, settings) {
@@ -113,7 +198,13 @@
         }
 
         var hideElement = function ($element) {
-            $element.hide();            
+            if ($element != undefined && $element != null)
+                $element.hide();            
+        }
+
+        var showElement = function ($element) {
+            if ($element != undefined && $element != null)
+                $element.show();
         }
 
         /**
@@ -147,6 +238,7 @@
         * @param { number } selectedId = null
         * @param { number } selectedOrgUnitId = null
         */
+
         Application.prototype.refreshDepartment = function (regionId, selectedId, selectedOrgUnitId) {
             var me = this;
             me.$departmentControl.val('').find('option').remove();
@@ -521,6 +613,7 @@
             $("#divBreadcrumbs_CaseType").text(getBreadcrumbs(this));
             var ee = document.getElementById("NewCase.CaseType_Id");
             ee.setAttribute('value', val);
+            $(ee).trigger('change');            
         });
 
         $('#divCaseTypeSetting ul.dropdown-menu li a').click(function (e) {

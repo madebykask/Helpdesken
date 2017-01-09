@@ -64,13 +64,14 @@
         private readonly ICaseSolutionSettingService _caseSolutionSettingService;
         private readonly IWorkContext workContext;
         private readonly IEmailService _emailService;        
-        private readonly IMasterDataService _masterDataService;        
+        private readonly IMasterDataService _masterDataService;
+        private readonly ICaseExtraFollowersService _caseExtraFollowersService;
 
         private const string ParentPathDefaultValue = "--";
         private const string EnterMarkup = "<br />";
         private readonly IOrganizationService _orgService;
         private readonly OrganizationJsonService _orgJsonService;
-
+        private readonly char[] EMAIL_SEPARATOR = new char[] { ';' };
 
         public CaseController(
             ICaseService caseService,
@@ -105,7 +106,8 @@
             IOrganizationService orgService,            
             OrganizationJsonService orgJsonService,
             ICaseSolutionSettingService caseSolutionSettingService,
-            IEmailService emailService)
+            IEmailService emailService,
+            ICaseExtraFollowersService caseExtraFollowersService)
             : base(masterDataService, caseSolutionService)
         {
             _masterDataService = masterDataService;
@@ -140,7 +142,8 @@
             _emailService = emailService;
             _urgencyService = urgencyService;
             _impactService = impactService;
-            _caseSolutionSettingService = caseSolutionSettingService;      
+            _caseSolutionSettingService = caseSolutionSettingService;
+            _caseExtraFollowersService = caseExtraFollowersService;     
         }
 
 
@@ -794,9 +797,9 @@
         }
 
         [HttpPost]
-        public RedirectToRouteResult NewCase(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey)
+        public RedirectToRouteResult NewCase(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey, string followerUsers)
         {
-            int caseId = Save(newCase, caseMailSetting, caseFileKey);
+            int caseId = Save(newCase, caseMailSetting, caseFileKey, followerUsers);
             return RedirectToAction("Index", "case", new { id = newCase.Id, showRegistrationMessage = true });
         }
 
@@ -897,7 +900,7 @@
         }
 
         
-        private int Save(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey)
+        private int Save(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey, string followerUsers)
         {
             IDictionary<string, string> errors;
 
@@ -942,6 +945,14 @@
             var oldCase = new Case();            
             // send emails
             var userTimeZone = TimeZoneInfo.Local;
+
+            //TODO: Save must accept UserId as string
+            //if (!string.IsNullOrEmpty(followerUsers))
+            //{
+            //    var _followerUsers = followerUsers.Split(EMAIL_SEPARATOR, StringSplitOptions.RemoveEmptyEntries).ToList();
+            //    _caseExtraFollowersService.SaveExtraFollowers(newCase.Id, _followerUsers, workContext.User.UserId);
+            //}
+
             _caseService.SendCaseEmail(newCase.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase);
 
             return newCase.Id;
@@ -1239,6 +1250,8 @@
             model.ProductAreaChildren = traversedData.Item2.ToList();
             model.SendToDialogModel = new SendToDialogModel();
 
+            var _caseTypes = _caseTypeService.GetAllCaseTypes(customerId).Where(c => c.ShowOnExternalPage != 0).ToList();
+            model.CaseTypeRelatedFields = _caseTypes.Select(c => new KeyValuePair<int, string>(c.Id, c.RelatedField)).ToList();
             return model;
         }       
 

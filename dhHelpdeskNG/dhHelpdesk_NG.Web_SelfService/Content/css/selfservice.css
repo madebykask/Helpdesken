@@ -911,7 +911,9 @@ a.error, input[type=¨button].error .btn
 .case-usersearch-textarea {
     height: 2.4em;
     min-height: 1em;
-    width: 30em;
+    width: 30em; 
+    max-width: 30em;   
+    vertical-align:bottom;
 }
 
 
