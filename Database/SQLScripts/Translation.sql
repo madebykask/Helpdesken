@@ -5482,5 +5482,8 @@ If not exists (select * from tblTextTranslation where text_id = 1760 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1760, 2, 'User is set as administrator when create case')
 GO
 
+/* Id 1761 SelfService */
+
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
