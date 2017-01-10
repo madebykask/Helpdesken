@@ -931,7 +931,16 @@
                 {
                     newCase.Priority_Id = prioInfo.Priority_Id;
                 }
-            }            
+            }
+
+            if (newCase.ProductArea_Id.HasValue)
+            {
+                var productArea = _productAreaService.GetProductArea(newCase.ProductArea_Id.Value);                
+                if (productArea != null && productArea.WorkingGroup_Id.HasValue)
+                {
+                    newCase.WorkingGroup_Id = productArea.WorkingGroup_Id;
+                }
+            }
 
             int caseHistoryId = _caseService.SaveCase(newCase, null, caseMailSetting, 0, SessionFacade.CurrentUserIdentity.UserId, ei, out errors);
             
@@ -946,12 +955,12 @@
             // send emails
             var userTimeZone = TimeZoneInfo.Local;
 
-            //TODO: Save must accept UserId as string
-            //if (!string.IsNullOrEmpty(followerUsers))
-            //{
-            //    var _followerUsers = followerUsers.Split(EMAIL_SEPARATOR, StringSplitOptions.RemoveEmptyEntries).ToList();
-            //    _caseExtraFollowersService.SaveExtraFollowers(newCase.Id, _followerUsers, workContext.User.UserId);
-            //}
+            //save extra followers            
+            if (!string.IsNullOrEmpty(followerUsers))
+            {
+                var _followerUsers = followerUsers.Split(EMAIL_SEPARATOR, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).ToList();
+                _caseExtraFollowersService.SaveExtraFollowers(newCase.Id, _followerUsers, null);
+            }
 
             _caseService.SendCaseEmail(newCase.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase);
 

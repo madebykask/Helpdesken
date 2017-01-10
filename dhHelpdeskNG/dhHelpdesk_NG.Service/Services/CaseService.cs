@@ -95,7 +95,7 @@ namespace DH.Helpdesk.Services.Services
             string defaultUser = "",
             ExtraFieldCaseHistory extraField = null);
 
-        void SendCaseEmail(int caseId, CaseMailSetting cms, int caseHistoryId, string basePath, TimeZoneInfo userTimeZone,                            
+        void SendCaseEmail(int caseId, CaseMailSetting cms, int caseHistoryId, string basePath, TimeZoneInfo userTimeZone,
                            Case oldCase = null, CaseLog log = null, List<CaseFileDto> logFiles = null);
 
         List<BusinessRuleActionModel> CheckBusinessRules(BREventType occurredEvent, Case currentCase, Case oldCase = null);
@@ -1294,7 +1294,7 @@ namespace DH.Helpdesk.Services.Services
             CaseMailSetting cms, 
             int caseHistoryId, 
             string basePath, 
-            TimeZoneInfo userTimeZone, 
+            TimeZoneInfo userTimeZone,             
             Case oldCase = null, 
             CaseLog log = null, 
             List<CaseFileDto> logFiles = null)

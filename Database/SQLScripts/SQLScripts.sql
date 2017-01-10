@@ -1050,5 +1050,12 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	ALTER TABLE [dbo].[tblOrderHistory] ADD [InfoProduct] [nvarchar](500) NULL
 GO
 
+
+if exists(select * from sysobjects WHERE Name = N'tblCaseExtraFollowers')
+begin
+  ALTER TABLE [dbo].[tblCaseExtraFollowers] ALTER COLUMN [CreatedByUser_Id] int NULL 
+end
+go
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.30'
