@@ -2,7 +2,9 @@
 using System.Web.Mvc;
 using DH.Helpdesk.BusinessData.Enums.Accounts.Fields;
 using DH.Helpdesk.BusinessData.Models.Shared;
+using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Domain.Orders;
+using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 
 namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
@@ -27,7 +29,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
 
         public FullOrderEditModel Create(string temporatyId, NewOrderEditData data, IWorkContext workContext, int? orderTypeId)
         {
-            return new FullOrderEditModel(
+            var model = new FullOrderEditModel(
                 CreateDeliveryEditModel(data.EditSettings.Delivery, data.EditOptions),
                 CreateGeneralEditModel(data.EditSettings.General, data.EditOptions),
                 CreateLogEditModel(data.EditSettings.Log, data.EditOptions),
@@ -46,6 +48,10 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                 orderTypeId,
                 true,
                 null);
+            model.CreateCase = workContext.Customer.Settings.CreateCaseFromOrder;
+            model.Statuses = data.EditOptions.Statuses;
+
+            return model;
         }
 
         private DeliveryEditModel CreateDeliveryEditModel(

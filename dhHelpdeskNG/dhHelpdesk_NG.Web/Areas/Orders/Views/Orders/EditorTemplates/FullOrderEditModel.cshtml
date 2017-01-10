@@ -5,10 +5,10 @@
 @Html.HiddenFor(m => m.CustomerId, new { id = "order_customerId"})
 @Html.HiddenFor(m => m.OrderTypeId)
 
-@Html.HiddenFor(m => m.InformOrderer, new { id = "InformOrderer"})
-@Html.HiddenFor(m => m.InformReceiver, new { id = "InformReceiver"})
+@Html.HiddenFor(m => m.InformOrderer, new { id = "informOrderer"})
+@Html.HiddenFor(m => m.InformReceiver, new { id = "informReceiver"})
 @if (Model.Other.CaseNumber.Value == null || Model.Other.CaseNumber.Value == 0) { 
-   @Html.HiddenFor(m => m.CreateCase, new { id = "CreateCase"})
+   @Html.HiddenFor(m => m.CreateCase, new { id = "createCase"})
 }
 
 <ul class="nav nav-tabs">

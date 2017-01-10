@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
+﻿using DH.Helpdesk.BusinessData.Models.Orders.Order;
+
+namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
 {
     using System.Collections.Generic;
 
@@ -128,5 +130,6 @@
         public List<int> DeletedLogIds { get; set; }
 
         public HistoryModel History { get; set; }
+        public OrderStatusItem[] Statuses { get; set; }
     }
 }

@@ -10,7 +10,7 @@
     {
         public OrderEditOptions(
                 string orderTypeName,
-                ItemOverview[] statuses, 
+                OrderStatusItem[] statuses, 
                 ItemOverview[] administrators, 
                 ItemOverview[] domains, 
                 ItemOverview[] departments, 
@@ -53,7 +53,7 @@
         public string OrderTypeName { get; private set; }
 
         [NotNull]
-        public ItemOverview[] Statuses { get; private set; }
+        public OrderStatusItem[] Statuses { get; private set; }
 
         [NotNull]
         public ItemOverview[] Administrators { get; private set; } 

@@ -2,7 +2,9 @@
     "use strict";
 
     window.EditOrder = function (options) {
-        this._options = $.extend({}, options);
+        this._options = $.extend({
+            statuses: []
+        }, options);
     }
 
     window.EditOrder.prototype = {
@@ -50,9 +52,9 @@
 
             $("#btnSave").on("click", function () {
 
-                $("#InformOrderer").val($("#InformOrderer_action").prop("checked"));
-                $("#InformReceiver").val($("#InformReceiver_action").prop("checked"));
-                $("#CreateCase").val($("#CreateCase_action").prop("checked"));
+                $("#informOrderer").val($("#informOrderer_action").prop("checked"));
+                $("#informReceiver").val($("#informReceiver_action").prop("checked"));
+                $("#createCase").val($("#createCase_action").prop("checked"));
 
                 $("#edit_form").submit();
                 return false;
@@ -94,7 +96,51 @@
 
             }
 
+            var $status = $("#general_status:not(:hidden)");
+            if ($status.length > 0) {
 
+                var $informOrderer = $("#informOrderer_action");
+                if($informOrderer.length > 0)
+                {
+                
+                }
+
+                var $informReceiver = $("#informReceiver_action");
+                if ($informReceiver.length > 0) {
+
+                }
+
+                var $createCase = $("#createCase_action:not(:hidden)");
+                if ($createCase.length > 0) {
+
+                }
+
+                $status.on("change", function () {
+                    var val = $(this).val();
+                    var item = that._options.statuses.filter(function(e) {
+                        return e.Value === val;
+                    });
+                    if (item.length <= 0) return;
+
+                    item = item[0];
+
+                    var $informOrderer = $("#informOrderer_action");
+                    if ($informOrderer.length > 0 && item.NotifyOrderer) {
+                        $informOrderer.prop("checked", true);
+                    }
+
+                    var $informReceiver = $("#informReceiver_action");
+                    if ($informReceiver.length > 0 && item.NotifyReceiver) {
+                        $informReceiver.prop("checked", true);
+                    }
+
+                    var $createCase = $("#createCase_action:not(:hidden)");
+                    if ($createCase.length > 0 && item.NotifyReceiver) {
+                        $createCase.prop("checked", true);
+                    }
+
+                });
+            }
         }
     }
 })(jQuery);

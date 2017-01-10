@@ -27,7 +27,7 @@
                     @Html.FieldCaption(Model.Status)
                 </td>
                 <td class="span6">
-                    @Html.DropDownListFor(m => m.StatusId, Model.Status.Value)
+                    @Html.DropDownListFor(m => m.StatusId, Model.Status.Value, new { @id = "general_status"})
                     @Html.ValidationMessageFor(m => m.StatusId)
                 </td>
                 <td class="span3">

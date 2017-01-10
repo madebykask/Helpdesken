@@ -37,7 +37,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
             var textOrderId = orderId.ToString(CultureInfo.InvariantCulture);
             var history = _historyModelFactory.Create(response);
 
-            return new FullOrderEditModel(
+            var model = new FullOrderEditModel(
                 CreateDeliveryEditModel(response.EditSettings.Delivery, response.EditData.Order.Delivery,
                     response.EditOptions),
                 CreateGeneralEditModel(response.EditSettings.General, response.EditData.Order.General,
@@ -62,6 +62,9 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                 response.EditData.Order.OrderTypeId,
                 false,
                 history);
+            model.Statuses = response.EditOptions.Statuses;
+
+            return model;
         }
 
         private DeliveryEditModel CreateDeliveryEditModel(                                

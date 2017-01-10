@@ -497,7 +497,7 @@
 
                 }
 
-                if (request.CreateCase == true)
+                if (request.CreateCase)
                 {
                     IDictionary<string, string> errors;
 
@@ -727,7 +727,7 @@
                                     settings,
                                     employmentTypes,
                                     regions,
-                                    accountTypes);            
+                                    accountTypes);
         }        
     }
 }

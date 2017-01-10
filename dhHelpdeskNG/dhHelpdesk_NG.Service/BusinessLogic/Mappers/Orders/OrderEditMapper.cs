@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
+﻿using DH.Helpdesk.Common.Extensions.Integer;
+
+namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
 {
     using System;
     using System.Collections.Generic;
@@ -37,17 +39,11 @@
 	    {
 		    IQueryable<UnionItemDependentOverview> query = null;
 
-		    if (settings.General.Status.Show)
-		    {
-			    query =
-				    statuses.Select(
-					    s => new UnionItemDependentOverview {Id = s.Id, Name = s.Name, Type = "statuses", DependentId = null});
-		    }
+	        var allStatuses = statuses.Where(o => o.IsActive == 1).OrderBy(o => o.SortOrder).ToList();
 
 		    if (settings.General.Administrator.Show)
 		    {
-			    var union = administrators.Select(a => new UnionItemDependentOverview{Id = a.Id, Name = a.FirstName + " " + a.SurName, Type = "administrators", DependentId = null});
-			    query = query?.Union(union) ?? union;
+                query = administrators.Select(a => new UnionItemDependentOverview{Id = a.Id, Name = a.FirstName + " " + a.SurName, Type = "administrators", DependentId = null});
 		    }
 
 		    if (settings.General.Domain.Show)
@@ -153,9 +149,9 @@
 				    .ToArray();
 		    }
 
-		    return new OrderEditOptions(
+		    var editOptions = new OrderEditOptions(
 			    orderTypeName,
-			    overviews.Where(o => o.Type == "statuses").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
+                allStatuses.Select(o => new OrderStatusItem(o.Name, o.Id.ToString(CultureInfo.InvariantCulture), o.CreateCase.ToBool(), o.NotifyOrderer.ToBool(), o.NotifyReceiver.ToBool())).ToArray(),
 			    overviews.Where(o => o.Type == "administrators").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
 			    overviews.Where(o => o.Type == "domains").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
 			    overviews.Where(o => o.Type == "departments").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
@@ -178,6 +174,7 @@
                 overviews.Where(o => o.Type == "accountTypes3").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
                 overviews.Where(o => o.Type == "accountTypes4").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
                 overviews.Where(o => o.Type == "accountTypes5").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray());
+	        return editOptions;
 	    }
 
 	    public static FullOrderEditFields MapToFullOrderEditFields(this IQueryable<Order> query)
@@ -371,4 +368,5 @@
                     entity.ContactEMail);
         }
     }
+
 }

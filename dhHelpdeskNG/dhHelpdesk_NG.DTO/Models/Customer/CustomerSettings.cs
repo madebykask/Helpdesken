@@ -154,6 +154,8 @@ namespace DH.Helpdesk.BusinessData.Models.Customer
 
         public bool ShowStatusPanel { get; set; }
 
+        public bool CreateCaseFromOrder { get; set; }
+
         /// <summary>
         /// The is module on.
         /// </summary>

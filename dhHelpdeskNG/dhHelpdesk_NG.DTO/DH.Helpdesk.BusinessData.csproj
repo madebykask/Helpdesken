@@ -422,6 +422,7 @@
     <Compile Include="Models\Orders\Order\OrderHistoryFields\ReceiverHistoryFields.cs" />
     <Compile Include="Models\Orders\Order\OrderHistoryFields\SupplierHistoryFields.cs" />
     <Compile Include="Models\Orders\Order\OrderHistoryFields\UserHistoryFields.cs" />
+    <Compile Include="Models\Orders\Order\OrderStatusItem.cs" />
     <Compile Include="Models\Orders\Order\UpdateOrderRequest.cs" />
     <Compile Include="Models\Paging\PageInfo.cs" />
     <Compile Include="Models\ProductArea\IProductAreaNameResolver.cs" />
