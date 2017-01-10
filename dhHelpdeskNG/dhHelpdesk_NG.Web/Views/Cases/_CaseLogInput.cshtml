@@ -3,6 +3,7 @@
 @using System.Linq;
 @using DH.Helpdesk.BusinessData.OldComponents
 @using DH.Helpdesk.Common.Enums.Settings
+@using DH.Helpdesk.Common.Extensions.Integer
 @using DH.Helpdesk.Domain.Invoice
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
@@ -31,72 +32,76 @@
 {
     <div class="secnavs secnavmarg">
         <div class="pull-left">
-            <ul class="secnav">
-                @if (Model.CustomerSettings.ModuleFaq == true && Model.customerUserSetting.User.FAQPermission == 1)
-                {
-                    <li><a href="#" id="AddFAQ" class="btn">@Translation.Get("Ny FAQ", Enums.TranslationSource.TextTranslation)</a></li>
-                    <li class="secspace"></li>
-                }
-                <li>
-                    <div class="checkbox">
-                        @if (Model.Disable_SendMailAboutCaseToNotifier || Model.EditMode == Enums.AccessMode.ReadOnly)
-                        {                        
-                            @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier,
-                                new { @disabled = "disabled", InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool() })
-                        }
-                        else
-                        {
-                            @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier,
-                                new { InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool() }) 
-                        }
-                        <span class="lbl">@Translation.Get("Informera initiativtagare och anhängare av åtgärder", SessionFacade.CurrentCaseLanguageId) </span>
-                    </div>
-                </li>
-                <li class="secspace"></li>
-                <li>
-                    <div class="checkbox">
-                        @if (Model.EditMode == Enums.AccessMode.ReadOnly)
-                        {
-                            @Html.CheckBoxFor(model => model.CaseLog.HighPriority, new { @disabled = true })
-                        }
-                        else
-                        {
-                            @Html.CheckBoxFor(model => model.CaseLog.HighPriority)
-                        }
-                        <span class="lbl">@Translation.Get("Hög prioritet", SessionFacade.CurrentCaseLanguageId) </span>
-                    </div>
-                </li>
-                @if (Model.CaseLog.Id == 0)
-                {
-                    if (Model.standardTexts != null)
-                    {
-                        if (Model.standardTexts.Any())
-                        {
-                            <li class="secspace"></li>
-                            <li>
-                                <div class="btn-group" id="standardtextDropdownMenu">
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                        @Translation.GetCoreTextTranslation("Standardtext")&nbsp;<span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu case-standardText-keep-open" role="menu">
-                                        <li>
-                                            <div id="standardTextAccordion" class="case-div-standardtext-accordion">
-                                                    @foreach (var e in Model.standardTexts.Where(e => e.IsActive == 1))
-                                                     {
-                                                         <h3>
-                                                             <div id="stHeader_@e.Id" class="case-standardtext-space standardtext-header">@Html.Raw(e.Name.Split('\n').FirstOrDefault())</div>
-                                                         </h3>
-                                                         <div class="case-div-standardtext case-standardtext-space"><span id="stText_@e.Id">@Html.Raw(e.Name)</span></div>
-                                                    }
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                        }
-                    }
-                }
-            </ul>
+	        <ul class="secnav">
+				@if (Model.CustomerSettings.ModuleInvoice)
+				{
+					<li><input type="button" id="btnCaseCharge" class="btn" style="@Model.ShowInvoiceFields.displayHtml()" value="@Translation.GetCoreTextTranslation("Debitering")"/></li>
+				}
+		        @if (Model.CustomerSettings.ModuleFaq == true && Model.customerUserSetting.User.FAQPermission == 1)
+		        {
+			        <li><a href="#" id="AddFAQ" class="btn">@Translation.Get("Ny FAQ", Enums.TranslationSource.TextTranslation)</a></li>
+			        <li class="secspace"></li>
+		        }
+		        <li>
+			        <div class="checkbox">
+				        @if (Model.Disable_SendMailAboutCaseToNotifier || Model.EditMode == Enums.AccessMode.ReadOnly)
+				        {
+					        @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier,
+						        new {@disabled = "disabled", InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool()})
+				        }
+				        else
+				        {
+					        @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier,
+						        new {InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool()})
+				        }
+				        <span class="lbl">@Translation.Get("Informera initiativtagare och anhängare av åtgärder", SessionFacade.CurrentCaseLanguageId) </span>
+			        </div>
+		        </li>
+		        <li class="secspace"></li>
+		        <li>
+			        <div class="checkbox">
+				        @if (Model.EditMode == Enums.AccessMode.ReadOnly)
+				        {
+					        @Html.CheckBoxFor(model => model.CaseLog.HighPriority, new {@disabled = true})
+				        }
+				        else
+				        {
+					        @Html.CheckBoxFor(model => model.CaseLog.HighPriority)
+				        }
+				        <span class="lbl">@Translation.Get("Hög prioritet", SessionFacade.CurrentCaseLanguageId) </span>
+			        </div>
+		        </li>
+		        @if (Model.CaseLog.Id == 0)
+		        {
+			        if (Model.standardTexts != null)
+			        {
+				        if (Model.standardTexts.Any())
+				        {
+					        <li class="secspace"></li>
+					        <li>
+						        <div class="btn-group" id="standardtextDropdownMenu">
+							        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+								        @Translation.GetCoreTextTranslation("Standardtext")&nbsp;<span class="caret"></span>
+							        </button>
+							        <ul class="dropdown-menu case-standardText-keep-open" role="menu">
+								        <li>
+									        <div id="standardTextAccordion" class="case-div-standardtext-accordion">
+										        @foreach (var e in Model.standardTexts.Where(e => e.IsActive == 1))
+										        {
+											        <h3>
+												        <div id="stHeader_@e.Id" class="case-standardtext-space standardtext-header">@Html.Raw(e.Name.Split('\n').FirstOrDefault())</div>
+											        </h3>
+											        <div class="case-div-standardtext case-standardtext-space"><span id="stText_@e.Id">@Html.Raw(e.Name)</span></div>
+										        }
+									        </div>
+								        </li>
+							        </ul>
+						        </div>
+					        </li>
+				        }
+			        }
+		        }
+	        </ul>
         </div>
     </div>
 }
@@ -419,6 +424,10 @@
 						</div>
 								}
 @Html.Partial("ModalDialogs/_SendIntLogToDiallog", Model.SendToDialogModel)
+@if (Model.CustomerSettings.ModuleInvoice && Model.ShowInvoiceFields.ToBool())
+{
+	@Html.Partial("ModalDialogs/_CaseCharge", Model)
+}
 @*<div id="divNewFAQ" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true" >
 		@Html.Partial("_NewFAQ", Model.EditFaqModel)
 	</div>*@

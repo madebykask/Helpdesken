@@ -41,4 +41,8 @@ function LogInitForm() {
     });
 
     bindDeleteLogFileBehaviorToDeleteButtons();
+
+    $("#btnCaseCharge").on('click', function (ev) {
+        window.caseChargeObj.show();
+    });
 }

@@ -62,7 +62,7 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers
 			var sb = new StringBuilder();
 			var customerId = SessionFacade.CurrentCustomer.Id;
 			var data = _invoiceService.GetInvoiceOverviewList(customerId, filter.DepartmentId, filter.DateFrom, filter.DateTo,
-				filter.Status);
+				filter.Status, null);
 
 			sb.AppendFormat(@"<HTML xmlns:x=""urn:schemas-microsoft-com:office:excel"">
 							<HEAD>

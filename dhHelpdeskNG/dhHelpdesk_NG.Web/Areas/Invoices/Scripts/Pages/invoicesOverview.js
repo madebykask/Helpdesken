@@ -649,28 +649,29 @@ InvoicesOverview.prototype = {
             }
         }
 
-        $("#btnInvoiceAction").prop('disabled', true);
+        if (logInvoices.length || externalInvoices.length) {
+            $("#btnInvoiceAction").prop('disabled', true);
 
-        $.postAntiForgery({
-            url: self.options.actionUrl,
-            data: {
-                LogInvoices: logInvoices,
-                ExternalInvoices: externalInvoices
-            }
-        })
-        .done(function (responseData) {
-            if (!responseData) {
-                throw new Error('invoiceaction error');
-            }
-
-            //refresh
-            self.table.ajax.reload();
-        })
-        .always(function () {
-            //spinner
-            $("#btnInvoiceAction").prop('disabled', false);
-        });
-
+            $.postAntiForgery({
+                url: self.options.actionUrl,
+                data: {
+                    LogInvoices: logInvoices,
+                    ExternalInvoices: externalInvoices
+                }
+            })
+           .done(function (responseData) {
+               if (!responseData) {
+                   throw new Error('invoiceaction error');
+               }
+               
+               //refresh
+               self.table.ajax.reload();
+           })
+           .always(function () {
+               //spinner
+               $("#btnInvoiceAction").prop('disabled', false);
+           });
+        }
     },
 
     _exportGrid: function() {

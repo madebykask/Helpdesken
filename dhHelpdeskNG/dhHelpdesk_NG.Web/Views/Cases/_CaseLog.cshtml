@@ -190,42 +190,42 @@
 					<td>
 						@Translation.GetCoreTextTranslation("Totalt") @Translation.GetCoreTextTranslation("Arbete"):
 					</td>
-					<td>
-						@(Model.Logs.Sum(x => x.WorkingTime) / 60) @Translation.GetCoreTextTranslation("Tim")
-						@(Model.Logs.Sum(x => x.WorkingTime) % 60) @Translation.GetCoreTextTranslation("Min")
+					<td id="totalWorkingTime">
+						@(Model.Logs.Sum(x => x.WorkingTime) / 60)@Translation.GetCoreTextTranslation("Tim")
+						@(Model.Logs.Sum(x => x.WorkingTime) % 60)@Translation.GetCoreTextTranslation("Min")
 					</td>
 				</tr>
 				<tr>
 					<td>
 						@Translation.GetCoreTextTranslation("Totalt") @Translation.GetCoreTextTranslation("Övertid"):
 					</td>
-					<td>
-						@(Model.Logs.Sum(x => x.OverTime) / 60) @Translation.GetCoreTextTranslation("Tim")
-						@(Model.Logs.Sum(x => x.OverTime) % 60) @Translation.GetCoreTextTranslation("Min")
+					<td id="totalOvertime">
+						@(Model.Logs.Sum(x => x.OverTime) / 60)@Translation.GetCoreTextTranslation("Tim")
+						@(Model.Logs.Sum(x => x.OverTime) % 60)@Translation.GetCoreTextTranslation("Min")
 					</td>
 				</tr>
 				<tr>
 					<td>
 						@Translation.GetCoreTextTranslation("Totalt") @Translation.GetCoreTextTranslation("Material"):
 					</td>
-					<td>
-						@Model.Logs.Sum(x => x.Price)
+					<td id="totalMaterial">
+						@Model.Logs.Sum(x => x.Price).ToString("0.00")
 					</td>
 				</tr>
 				<tr>
 					<td>
 						@Translation.GetCoreTextTranslation("Totalt") @Translation.GetCoreTextTranslation("Pris"):
 					</td>
-					<td>
-						@Model.Logs.Sum(x => x.EquipmentPrice).ToString("0.##")
+					<td id="totalPrice">
+						@Model.Logs.Sum(x => x.EquipmentPrice).ToString("0.00")
 					</td>
 				</tr>
 				<tr>
 					<td>
 						@Translation.GetCoreTextTranslation("Totalt") @Translation.GetCoreTextTranslation("Fakturor"):
 					</td>
-					<td>
-						@Model.ExternalInvoices.Sum(x => x.Amount).ToString("0.##")
+					<td id="totalExternalAmount">
+						@Model.ExternalInvoices.Sum(x => x.Amount).ToString("0.00")
 					</td>
 				</tr>
 		    </tbody>

@@ -9,6 +9,7 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Models
 	public class LogInvoiceItemViewModel
 	{
 		public int Id { get; set; }
+		public DateTime Date { get; set; }
 		public string Text { get; set; }
 		public int WorkingTime { get; set; }
 		public int Overtime { get; set; }

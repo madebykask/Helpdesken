@@ -19,6 +19,7 @@ namespace DH.Helpdesk.Web
             public const string InventoryUserSearch = ("~/bundles/inventory/inventorysearch");
             public const string CaseIntLogEmailSearch = ("~/bundles/case/caseintlogemailsearch");
             public const string CaseAddFollowersSearch = ("~/bundles/case/caseaddfollowerssearch");
+			public const string CaseCharge = ("~/bundles/case/CaseCharge.js");
 			public const string Select2 = "~/bundles/select2";
 			public const string CaseConnectToParent = "~/bundles/case/caseconnecttoparent";
 		}
@@ -207,10 +208,11 @@ namespace DH.Helpdesk.Web
                     "~/Content/js/Cases/_childCases.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/cases/editLog").Include("~/Content/js/Cases/editLog.logic.js"));
+			bundles.Add(new ScriptBundle(ScriptNames.CaseCharge).Include("~/Content/js/Cases/Dialogs/CaseCharge.js"));
 
-            #endregion
+			#endregion
 
-            bundles.Add(new ScriptBundle("~/bundles/casetemplates/edit").Include(
+			bundles.Add(new ScriptBundle("~/bundles/casetemplates/edit").Include(
                 "~/Content/js/CaseTemplates/edit.logic.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/casetemplates/index").Include(
