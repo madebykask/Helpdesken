@@ -2868,7 +2868,7 @@ namespace DH.Helpdesk.Web.Controllers
 	        //save extra followers
             if (!string.IsNullOrEmpty(m.FollowerUsers))
             {
-                var followerUsers = m.FollowerUsers.Split(';').Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
+                var followerUsers = m.FollowerUsers.Split(';').Where(s => !string.IsNullOrWhiteSpace(s)).Select(x => x.Trim()).ToList();
                 _caseExtraFollowersService.SaveExtraFollowers(case_.Id, followerUsers, workContext.User.UserId);
             }
 
@@ -3818,7 +3818,7 @@ namespace DH.Helpdesk.Web.Controllers
 					InvoiceRow = x.InvoiceRow == null ? null : new InvoiceRowViewModel { Status = x.InvoiceRow.Status}
 	            }).ToList();
                 var caseFolowerUsers = _caseExtraFollowersService.GetCaseExtraFollowers(caseId).Select(x => x.Follower).ToArray();
-                var followerUsers = caseFolowerUsers.Any() ? string.Join(";", caseFolowerUsers) + ";" : string.Empty;
+                var followerUsers = caseFolowerUsers.Any() ? string.Join("; ", caseFolowerUsers) + "; " : string.Empty;
                 m.FollowerUsers = followerUsers;
             }
 
