@@ -1,5 +1,7 @@
-﻿function InitCaseAddFollowersSearch() {
+﻿var _searchUriPath = "";
+function InitCaseAddFollowersSearch(searchUriPath) {
 
+    _searchUriPath = searchUriPath;
     var mainFollowersInput = $("#caseFollowerUsersInput");
     var mainFakeFollowersInput = $("#fakeCaseFollowerUsersInput");
     var popupFollowersInput = $("#caseAddFollowersModalInput");
@@ -121,7 +123,7 @@
                 var searchText = $.trim(arr[arr.length - 1]);
                 lastInitiatorSearchKey = generateRandomKey();
                 return $.ajax({
-                    url: "/case/CaseSearchUserEmails",
+                    url: searchUriPath,
                     type: "POST",
                     data: { query: searchText, searchKey: lastInitiatorSearchKey },
                     dataType:"json",
