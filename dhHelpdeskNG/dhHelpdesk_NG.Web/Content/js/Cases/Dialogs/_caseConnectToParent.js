@@ -1,4 +1,4 @@
-﻿function LoadConnectToParent() {
+﻿function LoadConnectToParent(pageSettings) {
     "use strict";
 
     var GRID_STATE = {
@@ -18,19 +18,12 @@
         var BADCONFIG_MSG_TYPE = 3;
         var NO_COL_SELECTED_MSG_TYPE = 4;
 
-        function Page() {};
+        function CTP() {};
 
-        /**
-        * Initialization method. Called when page ready
-        * @param { object } appSettings
-        */
-
-        var globalTimerStartTime = 0;
-        Page.prototype.init = function(appSettings) {
+        CTP.prototype.init = function (appSettings) {
             "use strict";
             var self = this;
 
-            globalTimerStartTime = performance.now();
             self.msgs = appSettings.messages || {};
 
             self.settings = {
@@ -45,8 +38,7 @@
             self.$tableErrorMsg = ' div.error-msg';
             self.$noFieldsMsg = $('#search_result div.nofields-msg');
             self.$noAvailableFieldsMsg = $('#search_result div.noavailablefields-msg');
-            self.$buttonsToDisableWhenGridLoads =
-                $('ul.secnav a.btn, ul.secnav div.btn-group button, ul.secnav input[type=button], .submit, #btnClearFilter');
+            self.$buttonsToDisableWhenGridLoads = $('ul.secnav a.btn, ul.secnav div.btn-group button, ul.secnav input[type=button], .submit, #btnClearFilter');
             self.$caseRecordCount = $('[data-field="TotalAmountCases"]');
 
             self.filterForm = new FilterForm();
@@ -56,7 +48,6 @@
                 favorites: appSettings.userFilterFavorites,
                 onBeforeSearch: callAsMe(self.canMakeSearch, self),
                 onSearch: Utils.applyAsMe(function() {
-                        globalTimerStartTime = performance.now();
                         self.table.ajax.reload.call(self);
                     },
                     self,
@@ -104,7 +95,7 @@
                             var params = self.getFetchParams(appSettings.gridSettings);
                             params.push({ name: "start", value: data.start });
                             params.push({ name: "length", value: data.length });
-                            params.push({ name: "OnlyParentCases", value: true });
+                            params.push({ name: "IsConnectToParent", value: true });
                             params.push({
                                 name: "order",
                                 value: data.order.length === 1 ? data.columns[data.order[0].column].data : ""
@@ -151,7 +142,8 @@
                             self.$caseRecordCount.text(json.recordsTotal);
 
                             var newCaseType = self.filterForm.getSearchCaseType();
-                            $("#caseLimitInfo").toggle((newCaseType === -1 || newCaseType === 1) && json.recordsTotal === 500);
+                            $("#caseLimitInfo")
+                                .toggle((newCaseType === -1 || newCaseType === 1) && json.recordsTotal === 500);
                         } else {
                             self.showMsg(ERROR_MSG_TYPE);
                             self.setGridState(GRID_STATE.IDLE);
@@ -159,7 +151,7 @@
 
                         $(document).trigger("OnCasesLoaded");
                     })
-                .on("processing.dt",
+            .on("processing.dt",
                     function(e, settings, processing) {
                         if (processing) {
                             self.setGridState(GRID_STATE.LOADING);
@@ -168,10 +160,6 @@
                             self.hideMessage();
                             self.setGridState(GRID_STATE.IDLE);
                         }
-                    })
-                .on("order.dt",
-                    function(a, b, c) {
-
                     });
 
             //// Bind events
@@ -187,7 +175,7 @@
                     });
         };
 
-        Page.prototype.getFetchParams = function() {
+        CTP.prototype.getFetchParams = function () {
             "use strict";
             var self = this;
             var fetchParams;
@@ -209,19 +197,18 @@
         * @private
         * @returns bool
         */
-        Page.prototype.canMakeSearch = function() {
+        CTP.prototype.canMakeSearch = function () {
             var self = this;
             if (self._gridState === GRID_STATE.IDLE) {
                 return true;
             };
             if (self._gridState === GRID_STATE.LOADING) {
-                //self.abortAjaxReq();
                 return true;
             }
             return false;
         };
 
-        Page.prototype.setGridState = function(newGridState) {
+        CTP.prototype.setGridState = function (newGridState) {
             "use strict";
             var self = this;
             switch (newGridState) {
@@ -242,11 +229,11 @@
             self._gridState = newGridState;
         };
 
-        Page.prototype.getGridState = function() {
+        CTP.prototype.getGridState = function () {
             return this._gridState;
         };
 
-        Page.prototype.getColumnSettings = function(gridSettings) {
+        CTP.prototype.getColumnSettings = function (gridSettings) {
             "use strict";
             var self = this;
 
@@ -279,7 +266,7 @@
             return columns;
         };
 
-        Page.prototype.showMsg = function(msgType) {
+        CTP.prototype.showMsg = function (msgType) {
             var me = this;
             me.hideMessage();
             if (msgType === LOADING_MSG_TYPE) {
@@ -309,14 +296,14 @@
             console.warn('not implemented');
         };
 
-        Page.prototype.hideMessage = function() {
+        CTP.prototype.hideMessage = function () {
             var me = this;
             $(me.$tableLoaderMsg).hide();
             $(me.$tableErrorMsg).hide();
             $(me.$tableNoDataMsg).hide();
         };
 
-        Page.prototype.getClsRow = function(record) {
+        CTP.prototype.getClsRow = function (record) {
             var res = [];
             if (record.isUnread) {
                 res.push('textbold');
@@ -327,24 +314,12 @@
             return res.join(' ');
         };
 
-        Page.prototype.formatCell = function (caseId, cellValue) {
+        CTP.prototype.formatCell = function (caseId, cellValue) {
             var out = [strJoin('<a href="/Cases/ConnectToParentCase?id=', childId, "&parentCaseId=", caseId, '">', cellValue == null ? "&nbsp;" : cellValue.replace(/<[^>]+>/ig, ""),"</a>")];
             return out.join(JOINER);
         };
 
-        Page.prototype.abortAjaxReq = function() {
-            var self = this;
-            //TODO: customize data table behaviour
-            //if (self.table.ajax != null && self.table.ajax.status == null) {
-            //    self.table.ajax.abort();
-            //}
-        };
-
-        window.app = new Page();
-
-        $(document)
-            .ready(function() {
-                app.init.call(window.app, window.pageSettings);
-            });
+        window.ctp = new CTP();
+        ctp.init.call(window.ctp, pageSettings);
     })($);
 };

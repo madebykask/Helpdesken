@@ -38,7 +38,7 @@
 		public const string PageStart = "start";
 		public const string PageSize = "length";
 
-        public const string OnlyParentCases = "OnlyParentCases";
+        public const string IsConnectToParent = "IsConnectToParent";
 
 
     }

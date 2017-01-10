@@ -92,7 +92,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
         public PageInfo PageInfo { get; set; }
 
-        public bool OnlyParentCases { get; set; }
+        public bool IsConnectToParent { get; set; }
 
         public CaseSearchFilter Copy(CaseSearchFilter o)
         {
@@ -143,7 +143,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             r.CaseFilterFavorite = o.CaseFilterFavorite;
             r.MaxTextCharacters = o.MaxTextCharacters;
             r.PageInfo = o.PageInfo;
-            r.OnlyParentCases = o.OnlyParentCases;
+            r.IsConnectToParent = o.IsConnectToParent;
 
             return r;
         }

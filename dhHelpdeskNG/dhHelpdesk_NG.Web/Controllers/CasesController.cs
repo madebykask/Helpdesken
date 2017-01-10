@@ -569,14 +569,6 @@ namespace DH.Helpdesk.Web.Controllers
 
 			#region Code from old method. TODO: code review wanted
 			var f = new CaseSearchFilter();
-			var m = new CaseSearchResultModel
-			{
-				GridSettings =
-					caseOverviewSettingsService.GetSettings(
-						SessionFacade.CurrentCustomer.Id,
-						SessionFacade.CurrentUser.UserGroupId,
-						SessionFacade.CurrentUser.Id)
-			};
 			f.CustomerId = SessionFacade.CurrentCustomer.Id;
 			f.UserId = SessionFacade.CurrentUser.Id;
 			f.Initiator = frm.ReturnFormValue(CaseFilterFields.InitiatorNameAttribute);
@@ -602,7 +594,7 @@ namespace DH.Helpdesk.Web.Controllers
 			f.CaseClosingDateEndFilter = frm.GetDate(CaseFilterFields.CaseClosingDateEndFilterNameAttribute);
 			f.CaseClosingReasonFilter = frm.ReturnFormValue(CaseFilterFields.ClosingReasonNameAttribute).ReturnCustomerUserValue();
 			f.SearchInMyCasesOnly = frm.IsFormValueTrue("SearchInMyCasesOnly");
-			f.OnlyParentCases = frm.IsFormValueTrue(CaseFilterFields.OnlyParentCases);
+			f.IsConnectToParent = frm.IsFormValueTrue(CaseFilterFields.IsConnectToParent);
 
 			f.CaseProgress = frm.ReturnFormValue(CaseFilterFields.FilterCaseProgressNameAttribute);
 			f.CaseFilterFavorite = frm.ReturnFormValue(CaseFilterFields.CaseFilterFavoriteNameAttribute);
@@ -669,38 +661,55 @@ namespace DH.Helpdesk.Web.Controllers
 
 			ResolveParentPathesForFilter(f);
 			sm.caseSearchFilter = f;
-			if (SessionFacade.CaseOverviewGridSettings == null)
-			{
-				SessionFacade.CaseOverviewGridSettings =
-					gridSettingsService.GetForCustomerUserGrid(
-						SessionFacade.CurrentCustomer.Id,
-						SessionFacade.CurrentUser.UserGroupId,
-						SessionFacade.CurrentUser.Id,
-						GridSettingsService.CASE_OVERVIEW_GRID_ID);
-			}
-			else
-			{
+            if (SessionFacade.CaseOverviewGridSettings == null)
+            {
+                SessionFacade.CaseOverviewGridSettings = f.IsConnectToParent
+                    ? gridSettingsService.GetForCustomerUserGrid(
+                        SessionFacade.CurrentCustomer.Id,
+                        SessionFacade.CurrentUser.UserGroupId,
+                        SessionFacade.CurrentUser.Id,
+                        GridSettingsService.CASE_CONNECTPARENT_GRID_ID)
+                    : gridSettingsService.GetForCustomerUserGrid(
+                        SessionFacade.CurrentCustomer.Id,
+                        SessionFacade.CurrentUser.UserGroupId,
+                        SessionFacade.CurrentUser.Id,
+                        GridSettingsService.CASE_OVERVIEW_GRID_ID);
+            }
+            else
+            {
+                // TODO: (alexander.semenischev): put validation for sortOpt.sortBy
+                var sortBy = frm.ReturnFormValue(CaseFilterFields.OrderColumnNum);
+                var sort = frm.ReturnFormValue(CaseFilterFields.OrderColumnDir);
+                var sortDir = !string.IsNullOrEmpty(sort)
+                    ? GridSortOptions.SortDirectionFromString(sort)
+                    : SortingDirection.Asc;
 
-				// TODO: (alexander.semenischev): put validation for sortOpt.sortBy
-				var sortBy = frm.ReturnFormValue(CaseFilterFields.OrderColumnNum);
-				var sort = frm.ReturnFormValue(CaseFilterFields.OrderColumnDir);
-				var sortDir = !string.IsNullOrEmpty(sort) ? GridSortOptions.SortDirectionFromString(sort) : SortingDirection.Asc;
 
-
-				if (sortBy != SessionFacade.CaseOverviewGridSettings.sortOptions.sortBy
-					|| sortDir != SessionFacade.CaseOverviewGridSettings.sortOptions.sortDir)
-				{
-					SessionFacade.CaseOverviewGridSettings.sortOptions.sortBy = sortBy;
-					SessionFacade.CaseOverviewGridSettings.sortOptions.sortDir = sortDir;
-					gridSettingsService.SaveCaseoviewSettings(
-						SessionFacade.CaseOverviewGridSettings,
-						SessionFacade.CurrentCustomer.Id,
-						SessionFacade.CurrentUser.Id,
-						SessionFacade.CurrentUser.UserGroupId);
-				}
-			}
-
-			var gridSettings = SessionFacade.CaseOverviewGridSettings;
+                if (sortBy != SessionFacade.CaseOverviewGridSettings.sortOptions.sortBy
+                    || sortDir != SessionFacade.CaseOverviewGridSettings.sortOptions.sortDir)
+                {
+                    SessionFacade.CaseOverviewGridSettings.sortOptions.sortBy = sortBy;
+                    SessionFacade.CaseOverviewGridSettings.sortOptions.sortDir = sortDir;
+                    gridSettingsService.SaveCaseoviewSettings(
+                        SessionFacade.CaseOverviewGridSettings,
+                        SessionFacade.CurrentCustomer.Id,
+                        SessionFacade.CurrentUser.Id,
+                        SessionFacade.CurrentUser.UserGroupId);
+                }
+            }
+            var m = new CaseSearchResultModel
+            {
+                GridSettings = f.IsConnectToParent
+                    ? caseOverviewSettingsService.GetSettings(
+                        SessionFacade.CurrentCustomer.Id,
+                        SessionFacade.CurrentUser.UserGroupId,
+                        SessionFacade.CurrentUser.Id, GridSettingsService.CASE_CONNECTPARENT_GRID_ID)
+                    : caseOverviewSettingsService.GetSettings(
+                        SessionFacade.CurrentCustomer.Id,
+                        SessionFacade.CurrentUser.UserGroupId,
+                        SessionFacade.CurrentUser.Id)
+            };
+            var gridSettings = SessionFacade.CaseOverviewGridSettings;
 			sm.Search.SortBy = gridSettings.sortOptions.sortBy;
 			sm.Search.Ascending = gridSettings.sortOptions.sortDir == SortingDirection.Asc;
 			m.caseSettings = _caseSettingService.GetCaseSettingsWithUser(f.CustomerId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
@@ -792,7 +801,7 @@ namespace DH.Helpdesk.Web.Controllers
 			var remainingView = string.Empty;
             string statisticsView = null;
 
-            if (!f.OnlyParentCases)
+            if (!f.IsConnectToParent)
             {
                 if (SessionFacade.CurrentUser.ShowSolutionTime)
                 {
@@ -1216,33 +1225,36 @@ namespace DH.Helpdesk.Web.Controllers
                 #region ConnectToParentModel
 
                 m.ConnectToParentModel = new JsonCaseIndexViewModel();
+                if (!m.IsItChildCase())
+                {
+                    var customerUser = this._customerUserService.GetCustomerSettings(currentCustomerId, userId);
+                    m.ConnectToParentModel.CaseSearchFilterData = this.CreateCaseSearchFilterData(currentCustomerId, SessionFacade.CurrentUser, customerUser, this.InitCaseSearchModel(customerId, userId));
+                    m.ConnectToParentModel.CaseSetting = this.GetCaseSettingModel(currentCustomerId, userId, GridSettingsService.CASE_CONNECTPARENT_GRID_ID);
 
-                var customerUser = this._customerUserService.GetCustomerSettings(currentCustomerId, userId);
-                m.ConnectToParentModel.CaseSearchFilterData = this.CreateCaseSearchFilterData(currentCustomerId, SessionFacade.CurrentUser, customerUser, this.InitCaseSearchModel(customerId, userId));
-                m.ConnectToParentModel.CaseSetting = this.GetCaseSettingModel(currentCustomerId, userId);
-
-                var gridSettings = this.gridSettingsService.GetForCustomerUserGrid(
+                    var gridSettings = this.gridSettingsService.GetForCustomerUserGrid(
                         customerId,
                         SessionFacade.CurrentUser.UserGroupId,
                         userId,
-                        GridSettingsService.CASE_OVERVIEW_GRID_ID);
-                m.ConnectToParentModel.PageSettings = new PageSettingsModel()
-                {
-                    searchFilter = JsonCaseSearchFilterData.MapFrom(m.ConnectToParentModel.CaseSetting),
-                    userFilterFavorites = GetMyFavorites(currentCustomerId, userId),
-                    gridSettings = JsonGridSettingsMapper.ToJsonGridSettingsModel(
-                                                 gridSettings,
-                                                 SessionFacade.CurrentCustomer.Id,
-                                                 m.ConnectToParentModel.CaseSetting.ColumnSettingModel.AvailableColumns.Count(),
-                                                 new[] { "5", "7", "10" }),
-                    messages = new Dictionary<string, string>()
-                                                    {
-                                                        { "information", Translation.GetCoreTextTranslation("Information") },
-                                                        { "records_limited_msg", Translation.GetCoreTextTranslation("Antal ärende som visas är begränsade till 500.") },
-                                                    }
-                };
-                m.ConnectToParentModel.PageSettings.gridSettings.columnDefs.RemoveAll(x => x.field.Equals("_temporary_LeadTime") || x.field.Equals("WatchDate") || x.field.Equals("Status_Id"));
-                m.ConnectToParentModel.PageSettings.gridSettings.pageOptions.recPerPage = 5;
+                        GridSettingsService.CASE_CONNECTPARENT_GRID_ID);
+                    m.ConnectToParentModel.PageSettings = new PageSettingsModel()
+                    {
+                        searchFilter = JsonCaseSearchFilterData.MapFrom(m.ConnectToParentModel.CaseSetting),
+                        userFilterFavorites = GetMyFavorites(currentCustomerId, userId),
+                        gridSettings = JsonGridSettingsMapper.ToJsonGridSettingsModel(
+                            gridSettings,
+                            SessionFacade.CurrentCustomer.Id,
+                            m.ConnectToParentModel.CaseSetting.ColumnSettingModel.AvailableColumns.Count(),
+                            new[] {"5", "7", "10"}),
+                        messages = new Dictionary<string, string>()
+                        {
+                            {"information", Translation.GetCoreTextTranslation("Information")},
+                            {
+                                "records_limited_msg",
+                                Translation.GetCoreTextTranslation("Antal ärende som visas är begränsade till 500.")
+                            },
+                        }
+                    };
+                }
 
                 #endregion
 
@@ -4905,7 +4917,7 @@ namespace DH.Helpdesk.Web.Controllers
                 administratorList);
         }        
 
-        private CaseSettingModel GetCaseSettingModel(int customerId, int userId)
+        private CaseSettingModel GetCaseSettingModel(int customerId, int userId, int gridId = GridSettingsService.CASE_OVERVIEW_GRID_ID)
         {
             var ret = new CaseSettingModel();
             const bool IsTakeOnlyActive = true;
@@ -5077,7 +5089,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             ret.ClosingReasonCheck = userCaseSettings.CaseClosingReasonFilter != string.Empty;
             ret.ClosingReasons = this._finishingCauseService.GetFinishingCauses(customerId);
-            ret.ColumnSettingModel = this.caseOverviewSettingsService.GetSettings(customerId, SessionFacade.CurrentUser.UserGroupId, userId);
+            ret.ColumnSettingModel = this.caseOverviewSettingsService.GetSettings(customerId, SessionFacade.CurrentUser.UserGroupId, userId, gridId);
 
             return ret;
         }

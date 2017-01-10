@@ -419,8 +419,11 @@
     </div>    
     <div id="divCopyCase" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
         @Html.Partial("_CopyCase", Model)
-    </div>    
-    <div id="divConnectParentToParent" role="dialog" class="modal hide fade case-connect-to-parent" aria-labelledby="myModalLabel" aria-hidden="true">
-        @Html.Partial("_ParentCases", Model.ConnectToParentModel)
     </div>
+    if (!Model.IsItChildCase())
+    {
+        <div id="divConnectParentToParent" role="dialog" class="modal hide fade case-connect-to-parent" aria-labelledby="myModalLabel" aria-hidden="true">
+            @Html.Partial("_ParentCases", Model.ConnectToParentModel)
+        </div>
+    }
 }
