@@ -1244,7 +1244,7 @@ namespace DH.Helpdesk.Web.Controllers
                             gridSettings,
                             SessionFacade.CurrentCustomer.Id,
                             m.ConnectToParentModel.CaseSetting.ColumnSettingModel.AvailableColumns.Count(),
-                            new[] {"5", "7", "10"}),
+                            new[] {"5", "10", "15"}),
                         messages = new Dictionary<string, string>()
                         {
                             {"information", Translation.GetCoreTextTranslation("Information")},

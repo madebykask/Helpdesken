@@ -3773,6 +3773,10 @@ div.modal-body.max-height-600 {
     padding-left: 30px;
 }
 
+.case-followers-toastmessage {
+    z-index: 100051 !important;
+}
+
 .case-intlog-button-done {
     padding-top: 1.4em;
     padding-left: 30px;

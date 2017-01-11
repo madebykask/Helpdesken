@@ -29,6 +29,7 @@
     });
 
     $("#case_internal_log_popup").on("hide", function () {
+        $(".toast-container").removeClass("case-followers-toastmessage");
         changeFakeInputValueForView();
         isNeedToRemove = false;
         dropdownDeselectAll();
@@ -207,14 +208,22 @@
         var newEmail = "";
         if (e.keyCode === 13) {
             newEmail = arr[arr.length - 1].replace("\n", "");
-            if (newEmail.trim() !== "" && checkAndAddEmailsTo(newEmail)) {
-                fakeInput.val(emails.replace("\n", "") + "; ");
+            if (newEmail.trim() !== "") {
+                if (checkAndAddEmailsTo(newEmail)) {
+                    fakeInput.val(emails.replace("\n", "") + "; ");
+                } else {
+                    fakeInput.val(emails.replace(newEmail.trim() + "\n", "") + "");
+                }
             }
         }
         if (e.keyCode === 186) {
             newEmail = arr[arr.length - 2];
-            if (newEmail.trim() !== "" && checkAndAddEmailsTo(newEmail)) {
-                fakeInput.val(emails + " ");
+            if (newEmail.trim() !== "") {
+                if (checkAndAddEmailsTo(newEmail)) {
+                    fakeInput.val(emails + " ");
+                } else {
+                    fakeInput.val(emails.replace(newEmail.trim() + ";", ""));
+                }
             }
         }
     }
@@ -310,7 +319,7 @@
             }
             if (dialogType === ccType)
                 if (mainIntLogInputTo.val().indexOf(newToEmail) >= 0) {
-                    ShowToastMessage(value + " : " + window.parameters.emailAlreadyAdded, "warning");
+                    ShowToastModalMessage(value + " : " + window.parameters.emailAlreadyAdded, "warning");
                     return false;
                 }
                 else {
@@ -322,7 +331,7 @@
                 }
             return true;
         } else {
-            ShowToastMessage(value + " : " + window.parameters.emailNotValid, "error");
+            ShowToastModalMessage(value + " : " + window.parameters.emailNotValid, "error");
             return false;
         }
     }
@@ -344,7 +353,7 @@
             }
             if (dialogType === ccType)
                 if (mainIntLogInputTo.val().indexOf(newToEmail) >= 0) {
-                    ShowToastMessage(value + " : " + window.parameters.emailAlreadyAdded, "warning");
+                    ShowToastModalMessage(value + " : " + window.parameters.emailAlreadyAdded, "warning");
                     return false;
                 }
                 else {
@@ -358,7 +367,7 @@
                 }
             return true;
         } else {
-            ShowToastMessage(value + " : " + window.parameters.emailNotValid, "error");
+            ShowToastModalMessage(value + " : " + window.parameters.emailNotValid, "error");
             return false;
         }
     }
@@ -374,7 +383,7 @@
                 mainIntLogInputCc.val(mainIntLogInputCc.val().replace(newToEmail, ""));
             popupIntLogInput.val(popupIntLogInput.val().replace(newToEmail, ""));
         } else {
-            ShowToastMessage(value + " : " + window.parameters.emailNotValid, "error");
+            ShowToastModalMessage(value + " : " + window.parameters.emailNotValid, "error");
         }
     }
 
