@@ -18,6 +18,7 @@ namespace DH.Helpdesk.Dal.EntityConfigurations.Orders
             this.Property(x => x.OrderField).IsRequired();
             this.Property(x => x.CreatedDate).IsRequired();
             this.Property(x => x.ChangedDate).IsRequired();
+            this.Property(x => x.Deleted).IsRequired();
 
             this.ToTable("tblOrderFieldTypes");
         }

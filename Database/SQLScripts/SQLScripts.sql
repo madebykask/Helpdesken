@@ -1057,5 +1057,10 @@ begin
 end
 go
 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Deleted' and sysobjects.name = N'tblOrderFieldTypes')
+	ALTER TABLE [dbo].[tblOrderFieldTypes] ADD [Deleted] BIT NOT NULL CONSTRAINT [DF_tblOrderFieldTypes_Deleted]  DEFAULT ((0))
+GO
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.30'

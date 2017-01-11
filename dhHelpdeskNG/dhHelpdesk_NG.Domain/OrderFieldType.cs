@@ -14,6 +14,8 @@ namespace DH.Helpdesk.Domain
 
         public string Name { get; set; }
 
+        public bool Deleted { get; set; }
+
         public DateTime ChangedDate { get; set; }
 
         public DateTime CreatedDate { get; set; }

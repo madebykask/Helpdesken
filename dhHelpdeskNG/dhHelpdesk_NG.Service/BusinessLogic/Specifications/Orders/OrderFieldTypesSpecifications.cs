@@ -12,10 +12,14 @@ namespace DH.Helpdesk.Services.BusinessLogic.Specifications.Orders
                                 this IQueryable<OrderFieldType> query,
                                 int? orderTypeId)
         {
-            query = query
+            return query
                     .Where(f => f.OrderType_Id == orderTypeId);
+        }
 
-            return query;
+        public static IQueryable<OrderFieldType> ActiveOnly(this IQueryable<OrderFieldType> query)
+        {
+            return query
+                    .Where(f => !f.Deleted);
         }
     }
 }

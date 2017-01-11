@@ -62,7 +62,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                 var orderFieldTypeRep = uow.GetRepository<OrderFieldType>();
 
                 var orderFieldTypes = orderFieldTypeRep.GetAll()
-                    .GetByType(orderTypeId).ToList();
+                    .GetByType(orderTypeId).ActiveOnly().ToList();
 
                 return fieldSettingsRep.GetAll()
                         .GetByType(customerId, orderTypeId)
@@ -78,7 +78,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                 var orderFieldTypeRep = uow.GetRepository<OrderFieldType>();
 
                 var orderFieldTypes = orderFieldTypeRep.GetAll()
-                    .GetByType(settings.OrderTypeId).ToList();
+                    .GetByType(settings.OrderTypeId).ActiveOnly().ToList();
 
                 var allAccountTypeValues = new List<OrderFieldTypeValueSetting>()
                     .Concat(settings.AccountInfo.AccountType.Values)
@@ -88,7 +88,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                     .Concat(settings.AccountInfo.AccountType5.Values)
                     .ToArray();
 
-                var toDelete = orderFieldTypes.Where(e => !allAccountTypeValues.Any(t => t.Id == e.Id));
+                var toDelete = orderFieldTypes.Where(e => !allAccountTypeValues.Any(t => t.Id == e.Id && !e.Deleted));
                 var toAdd = allAccountTypeValues.Where(a => !a.Id.HasValue)
                     .Select(e => new OrderFieldType
                     {
@@ -106,7 +106,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                         e.Name = updateDto.Value;
                         e.ChangedDate = settings.ChangedDate;
                     });
-                toDelete.ForEach(d => orderFieldTypeRep.Delete(d));
+                toDelete.ForEach(d => d.Deleted = true );
                 toAdd.ForEach(a => orderFieldTypeRep.Add(a));
 
                 fieldSettingsRep.GetAll()

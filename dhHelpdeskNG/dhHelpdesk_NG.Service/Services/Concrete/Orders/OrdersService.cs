@@ -236,7 +236,7 @@
 				var caseNumbers = overviews.Where(o => o.CaseNumber.HasValue).Select(o => o.CaseNumber).ToList();
 				var caseRep = uow.GetRepository<Case>();
 				var caseEntities = caseRep.GetAll().Where(c => caseNumbers.Contains(c.CaseNumber)).ToList();
-			    var orderFieldTypes = orderFieldTypesRep.GetAll().GetByType(parameters.OrderTypeId).ToList();
+			    var orderFieldTypes = orderFieldTypesRep.GetAll().GetByType(parameters.OrderTypeId).ActiveOnly().ToList();
 
 				var orderData = overviews.MapToFullOverviews(orderTypes, caseEntities, orderFieldTypes);
 
@@ -631,7 +631,7 @@
             var orderType = orderTypeId.HasValue ? orderTypeRep.GetAll().GetById(orderTypeId.Value).MapToName() : null;
             var employmentTypes = employmentTypeRep.GetAll();
             var regions = regionsRep.GetAll().GetByCustomer(customerId);
-            var accountTypes = orderFieldTypesRep.GetAll().GetByType(orderTypeId);
+            var accountTypes = orderFieldTypesRep.GetAll().GetByType(orderTypeId).ActiveOnly();
 
             // get parentordertypename
             if (orderTypeId != lowestchildordertypeid.Value)

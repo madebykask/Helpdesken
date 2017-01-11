@@ -18,6 +18,7 @@
             this.RestoreSupplier(updatedOrder.Supplier, existingOrder.Supplier, settings.Supplier);
             this.RestoreUser(updatedOrder.User, existingOrder.User, settings.User);
             this.RestoreAccountInfo(updatedOrder.AccountInfo, existingOrder.AccountInfo, settings.AccountInfo);
+            this.RestoreContact(updatedOrder.Contact, existingOrder.Contact, settings.Contact);
         }
 
         private void RestoreDelivery(
@@ -37,6 +38,8 @@
             this.RestoreFieldIfNeeded(updated, () => updated.DeliveryInfo2, existing.DeliveryInfo2, settings.DeliveryInfo2.Show);
             this.RestoreFieldIfNeeded(updated, () => updated.DeliveryInfo3, existing.DeliveryInfo3, settings.DeliveryInfo3.Show);
             this.RestoreFieldIfNeeded(updated, () => updated.DeliveryOuIdId, existing.DeliveryOuIdId, settings.DeliveryOuId.Show);
+            this.RestoreFieldIfNeeded(updated, () => updated.DeliveryName, existing.DeliveryName, settings.DeliveryName.Show);
+            this.RestoreFieldIfNeeded(updated, () => updated.DeliveryPhone, existing.DeliveryPhone, settings.DeliveryPhone.Show);
         }
 
         private void RestoreGeneral(
@@ -118,6 +121,7 @@
             ProgramEditSettings settings)
         {
             this.RestoreFieldIfNeeded(updated, () => updated.Programs, existing.Programs, settings.Program.Show);
+            this.RestoreFieldIfNeeded(updated, () => updated.InfoProduct, existing.InfoProduct, settings.InfoProduct.Show);
         }
 
         private void RestoreReceiver(
@@ -177,7 +181,23 @@
             RestoreFieldIfNeeded(updated, () => updated.HomeDirectory, existing.HomeDirectory, settings.HomeDirectory.Show);
             RestoreFieldIfNeeded(updated, () => updated.Profile, existing.Profile, settings.Profile.Show);
             RestoreFieldIfNeeded(updated, () => updated.InventoryNumber, existing.InventoryNumber, settings.InventoryNumber.Show);
+            RestoreFieldIfNeeded(updated, () => updated.AccountTypeId, existing.AccountTypeId, settings.AccountTypeId.Show);
+            RestoreFieldIfNeeded(updated, () => updated.AccountTypeId2, existing.AccountTypeId, settings.AccountTypeId2.Show);
+            RestoreFieldIfNeeded(updated, () => updated.AccountTypeId3, existing.AccountTypeId3, settings.AccountTypeId3.Show);
+            RestoreFieldIfNeeded(updated, () => updated.AccountTypeId4, existing.AccountTypeId4, settings.AccountTypeId4.Show);
+            RestoreFieldIfNeeded(updated, () => updated.AccountTypeId5, existing.AccountTypeId5, settings.AccountTypeId5.Show);
             RestoreFieldIfNeeded(updated, () => updated.Info, existing.Info, settings.Info.Show);
+        }
+
+        private void RestoreContact(
+            ContactEditFields updated,
+            ContactEditFields existing,
+            ContactEditSettings settings)
+        {
+            RestoreFieldIfNeeded(updated, () => updated.Id, existing.Id, settings.Id.Show);
+            RestoreFieldIfNeeded(updated, () => updated.Name, existing.Name, settings.Name.Show);
+            RestoreFieldIfNeeded(updated, () => updated.Email, existing.Email, settings.EMail.Show);
+            RestoreFieldIfNeeded(updated, () => updated.Phone, existing.Phone, settings.Phone.Show);
         }
     }
 }

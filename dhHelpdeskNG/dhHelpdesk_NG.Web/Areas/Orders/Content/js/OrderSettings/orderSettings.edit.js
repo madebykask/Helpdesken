@@ -99,7 +99,7 @@
         resetDataFields: function () {
             var that = this;
 
-            that.$modal.find("#deleteBtn").off("click");
+            that.$modal.find(".deleteBtn").off("click");
             that.$modal.find("input[type='text']").val("");
         },
 
@@ -137,8 +137,7 @@
         initDataFields: function () {
             var that = this;
 
-            that.$modal.find("#deleteBtn").on("click", function (e) {
-                //TODO: check if it used already, if yes - not allow to delete
+            that.$modal.find(".deleteBtn").on("click", function (e) {
                 $(e.target).closest("tr").remove();
                 that.collectData();
                 that.render(true);
@@ -160,7 +159,7 @@
 
         render: function (init) {
             var that = this;
-            that.$modal.find("#deleteBtn").off("click");
+            that.$modal.find(".deleteBtn").off("click");
             var $html = $("<div>");
 
             if (that.data.length > 0) {
@@ -181,10 +180,6 @@
                     $idCtrl.attr("id", newIdName);
                     $idCtrl.attr("name", newIdName);
                     $idCtrl.val(orderData.id);
-
-                    if (orderData.id) {
-                        $("#deleteBtn", $template).remove();
-                    }
 
                     $template.appendTo($html);
                 });
