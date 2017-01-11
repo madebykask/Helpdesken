@@ -547,27 +547,52 @@
                             <td colspan="6"></td>
                         </tr>
                         @*"Save user info" checkbox *@
+                    <tr>
+                        <td><i class="dh-icon-checkbox" rel="tooltip" title="@Translation.Get("Checkbox", Enums.TranslationSource.TextTranslation)"></i>
+                        </td>
+                        <td>
+                            @Translation.Get("Spara användaruppgifter")
+                        </td>
+                        <td>
+                            <input type="checkbox" name="CaseFieldSettings[58].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.UpdateNotifierInformation.ToString()) == 1 ? "checked=checked" : "") value="1"/>
+                            <input type="hidden" name="CaseFieldSettings[58].ShowOnStartPage" value="0"/>
+                            <input type="hidden" name="CaseFieldSettings[58].Customer_Id" value="@Model.Customer.Id"/>
+                            <input type="hidden" name="CaseFieldSettings[58].Name" value="UpdateNotifierInformation"/>
+                            <input type="hidden" name="CaseFieldSettings[58].Id" value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.UpdateNotifierInformation.ToString())"/>
+                            <input type="hidden" name="CaseFieldSettings[58].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.UpdateNotifierInformation.ToString())"/>
+                            <input type="hidden" name="CaseFieldSettingWithLangauges[58].Name" value="UpdateNotifierInformation"/>
+                            <input type="hidden" name="CaseFieldSettings[58].ShowExternal" value="0"/>
+                            <input type="hidden" name="CaseFieldSettingWithLangauges[58].FieldHelp" value="0"/>
+                        </td>
+                        <td colspan="6"></td>
+                    </tr>
+
+                        @*"Add followers" checkbox *@
                         <tr>
-                            <td><i class="dh-icon-checkbox" rel="tooltip" title="@Translation.Get("Checkbox", Enums.TranslationSource.TextTranslation)"></i>
+                            <td>
+                                <i class="dh-icon-checkbox" rel="tooltip" title="@Translation.GetCoreTextTranslation("Checkbox")"></i>
                             </td>
                             <td>
-                                @Translation.Get("Spara användaruppgifter")
+                                @Translation.GetCoreTextTranslation("Välj följare")
                             </td>
                             <td>
-                                <input type="checkbox" name="CaseFieldSettings[58].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.UpdateNotifierInformation.ToString()) == 1 ? "checked=checked" : "") value="1"/>
-                                <input type="hidden" name="CaseFieldSettings[58].ShowOnStartPage" value="0" />
-                                <input type="hidden" name="CaseFieldSettings[58].Customer_Id" value="@Model.Customer.Id" />
-                                <input type="hidden" name="CaseFieldSettings[58].Name" value="UpdateNotifierInformation" />
-                                <input type="hidden" name="CaseFieldSettings[58].Id" value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.UpdateNotifierInformation.ToString())" />
-                                <input type="hidden" name="CaseFieldSettings[58].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.UpdateNotifierInformation.ToString())" />
-                                <input type="hidden" name="CaseFieldSettingWithLangauges[58].Name" value="UpdateNotifierInformation" />
-                                <input type="hidden" name="CaseFieldSettings[58].ShowExternal" value="0" />   
-                                <input type="hidden" name="CaseFieldSettingWithLangauges[58].FieldHelp" value="0" /> 
+                                <input type="checkbox" name="CaseFieldSettings[70].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString()) == 1 ? "checked=checked" : "") value="1"/>
+                                <input type="hidden" name="CaseFieldSettings[70].ShowOnStartPage" value="0"/>
+                                <input type="hidden" name="CaseFieldSettings[70].Customer_Id" value="@Model.Customer.Id"/>
+                                <input type="hidden" name="CaseFieldSettings[70].Name" value="AddFollowersBtn"/>
+                                <input type="hidden" name="CaseFieldSettings[70].Id" value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString())"/>
+                                <input type="hidden" name="CaseFieldSettings[70].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString())"/>
+                                <input type="hidden" name="CaseFieldSettingWithLangauges[70].Name" value="AddFollowersBtn"/>
+                                <input type="hidden" name="CaseFieldSettingWithLangauges[70].FieldHelp" value="0"/>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="CaseFieldSettings[70].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString()) == 1 ? "checked=checked" : "") value="1" />
+                                <input type="hidden" name="CaseFieldSettings[70].ShowExternal" value="0" />
                             </td>
                             <td colspan="6"></td>
                         </tr>
 
-                        @* Case about field *@
+                    @* Case about field *@
                          <tr>
                             <th colspan="9">
                                 @Translation.Get("Angående", Enums.TranslationSource.TextTranslation)
