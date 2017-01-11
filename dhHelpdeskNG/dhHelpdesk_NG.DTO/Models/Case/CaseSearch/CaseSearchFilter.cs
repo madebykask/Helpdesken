@@ -35,6 +35,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         /// String that will be searched in "Initiator" case field
         /// </summary>
         public string Initiator { get; set; }
+		public CaseInitiatorSearchScope InitiatorSearchScope { get; set; }
 
         public string Category { get; set; }
         public string WorkingGroup { get; set; }
@@ -133,6 +134,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             r.CaseRemainingTimeMaxFilter = o.CaseRemainingTimeMaxFilter;
             r.CaseRemainingTimeHoursFilter = o.CaseRemainingTimeHoursFilter;
             r.Initiator = o.Initiator;
+	        r.InitiatorSearchScope = o.InitiatorSearchScope;
             r.SearchInMyCasesOnly = o.SearchInMyCasesOnly;
             r.Customer = o.Customer;
             r.CaseNumber = o.CaseNumber;

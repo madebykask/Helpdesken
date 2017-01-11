@@ -1554,6 +1554,15 @@ namespace DH.Helpdesk.Dal.Repositories
 					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Phone]", text));
 					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_CellPhone]", text));
 					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Place]", text));
+
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[ReportedBy]", text));
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Person_Name]", text));
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[UserCode]", text));
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Person_Email]", text));
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Place]", text));
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Person_CellPhone]", text));
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Person_Phone]", text));
+
 					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Caption]", text));
 					sb.AppendFormat(" OR [tblCase].[Description] LIKE N'%{0}%'", text);
 					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Miscellaneous]", text));
@@ -1596,13 +1605,36 @@ namespace DH.Helpdesk.Dal.Repositories
 			if (!string.IsNullOrEmpty(f.Initiator))
 			{
 				sb.Append(" AND (");
-				sb.AppendFormat("{0}", this.GetSqlLike("[tblCase].[ReportedBy]", f.Initiator.SafeForSqlInject(), Combinator_AND));
-				sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Name]", f.Initiator.SafeForSqlInject(), Combinator_AND));
-				sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[UserCode]", f.Initiator.SafeForSqlInject(), Combinator_AND));
-				sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Email]", f.Initiator.SafeForSqlInject(), Combinator_AND));
-				sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Place]", f.Initiator.SafeForSqlInject(), Combinator_AND));
-				sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_CellPhone]", f.Initiator.SafeForSqlInject(), Combinator_AND));
-				sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Phone]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+
+				if (f.InitiatorSearchScope == CaseInitiatorSearchScope.User || f.InitiatorSearchScope == CaseInitiatorSearchScope.UserAndIsAbout)
+				{
+					sb.Append("(");
+					sb.AppendFormat("{0}", this.GetSqlLike("[tblCase].[ReportedBy]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Name]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[UserCode]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Email]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Place]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_CellPhone]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Phone]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+					sb.Append(")");
+				}
+				if (f.InitiatorSearchScope == CaseInitiatorSearchScope.UserAndIsAbout)
+				{
+					sb.Append(" OR ");
+				}
+				if (f.InitiatorSearchScope == CaseInitiatorSearchScope.IsAbout || f.InitiatorSearchScope == CaseInitiatorSearchScope.UserAndIsAbout)
+				{
+					sb.Append("(");
+					sb.AppendFormat("{0}", this.GetSqlLike("[tblCaseIsAbout].[ReportedBy]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Person_Name]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[UserCode]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Person_Email]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Place]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Person_CellPhone]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Person_Phone]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+					sb.Append(")");
+				}
+
 				sb.Append(") ");
 			}
 

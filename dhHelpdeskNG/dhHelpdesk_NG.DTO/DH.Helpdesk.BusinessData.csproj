@@ -70,6 +70,7 @@
     <Compile Include="Enums\Admin\Users\UserOrderPermission.cs" />
     <Compile Include="Enums\Admin\Users\UserPermission.cs" />
     <Compile Include="Enums\BusinessRules\BusinessRuleEnums.cs" />
+    <Compile Include="Enums\Case\CaseInitiatorSearchScope.cs" />
     <Compile Include="Enums\Case\CaseProgressFilter.cs" />
     <Compile Include="Enums\Case\CasesCustomFilter.cs" />
     <Compile Include="Enums\Case\CaseSearchGroup.cs" />

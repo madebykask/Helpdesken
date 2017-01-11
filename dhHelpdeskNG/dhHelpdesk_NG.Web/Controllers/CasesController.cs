@@ -572,6 +572,11 @@ namespace DH.Helpdesk.Web.Controllers
 			f.CustomerId = SessionFacade.CurrentCustomer.Id;
 			f.UserId = SessionFacade.CurrentUser.Id;
 			f.Initiator = frm.ReturnFormValue(CaseFilterFields.InitiatorNameAttribute);
+			CaseInitiatorSearchScope initiatorSearchScope;
+			if (Enum.TryParse(frm.ReturnFormValue(CaseFilterFields.InitiatorSearchScopeAttribute), out initiatorSearchScope))
+			{
+				f.InitiatorSearchScope = initiatorSearchScope;
+			}
 			f.CaseType = frm.ReturnFormValue(CaseFilterFields.CaseTypeIdNameAttribute).convertStringToInt();
 			f.ProductArea = frm.ReturnFormValue(CaseFilterFields.ProductAreaIdNameAttribute).ReturnCustomerUserValue();
 			f.Region = frm.ReturnFormValue(CaseFilterFields.RegionNameAttribute);
@@ -3366,6 +3371,7 @@ namespace DH.Helpdesk.Web.Controllers
             fd.CaseWatchDateEndFilter = sm.caseSearchFilter.CaseWatchDateEndFilter;
             fd.CaseWatchDateStartFilter = sm.caseSearchFilter.CaseWatchDateStartFilter;
             fd.CaseInitiatorFilter = sm.caseSearchFilter.Initiator;
+	        fd.InitiatorSearchScope = sm.caseSearchFilter.InitiatorSearchScope;
             fd.SearchInMyCasesOnly = sm.caseSearchFilter.SearchInMyCasesOnly;
 
             //användare
@@ -3412,6 +3418,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             fd.caseSearchFilter = sm.caseSearchFilter;
             fd.CaseInitiatorFilter = sm.caseSearchFilter.Initiator;
+	        fd.InitiatorSearchScope = sm.caseSearchFilter.InitiatorSearchScope;
             fd.customerSetting = this._settingService.GetCustomerSetting(cusId);
             fd.filterCustomers = customers;
             fd.filterCustomerId = cusId;
@@ -5477,7 +5484,12 @@ namespace DH.Helpdesk.Web.Controllers
             f.CaseProgress = frm.ReturnFormValue("lstFilterCaseProgress");
             f.UserPerformer = frm.ReturnFormValue("lstFilterPerformer");
             f.Initiator = frm.ReturnFormValue("CaseInitiatorFilter");
-            f.CaseRegistrationDateStartFilter = frm.GetDate("CaseRegistrationDateStartFilter");
+			CaseInitiatorSearchScope initiatorSearchScope;
+			if (Enum.TryParse(frm.ReturnFormValue("CaseSearchFilterData.InitiatorSearchScope"), out initiatorSearchScope))
+			{
+				f.InitiatorSearchScope = initiatorSearchScope;
+			}
+			f.CaseRegistrationDateStartFilter = frm.GetDate("CaseRegistrationDateStartFilter");
             f.CaseRegistrationDateEndFilter = frm.GetDate("CaseRegistrationDateEndFilter");
             f.CaseClosingDateStartFilter = frm.GetDate("CaseClosingDateStartFilter");
             f.CaseClosingDateEndFilter = frm.GetDate("CaseClosingDateEndFilter");

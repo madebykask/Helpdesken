@@ -1,5 +1,6 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.Output.CaseSearchFilterData 
 @using System.Web.Script.Serialization
+@using DH.Helpdesk.BusinessData.Enums.Case
 @using DH.Helpdesk.BusinessData.Models.Case
 @using DH.Helpdesk.Web.Enums
 @using DH.Helpdesk.BusinessData.OldComponents
@@ -51,9 +52,13 @@
                              <td>                                
                                  @Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId)                                   
                              </td>
-                             <td>
-                                 @Html.TextBoxFor(m => m.CaseInitiatorFilter, new { @class = "fixed-length", id = "caseInitiatorText" })
-                             </td>
+	                         <td>
+		                         @Html.TextBoxFor(m => m.CaseInitiatorFilter, new { @class = "fixed-length", id = "caseInitiatorText" })
+								 
+	                         </td>
+						 	<td>
+						 		@Html.DropDownListFor(m => m.InitiatorSearchScope, CaseInitiatorSearchScope.UserAndIsAbout.ToSelectListItems(), new { @class = "", id = "initiatorSearchScope" })
+							</td>
                          </tr>                
                      }
 

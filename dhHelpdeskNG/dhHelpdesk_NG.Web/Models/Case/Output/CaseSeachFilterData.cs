@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Models.Case.Output
+﻿using DH.Helpdesk.BusinessData.Enums.Case;
+
+namespace DH.Helpdesk.Web.Models.Case.Output
 {
     using System;
     using System.Collections.Generic;
@@ -53,6 +55,8 @@
         /// Preset string in "filter by intitator" filter field on case overview page
         /// </summary>
         public string CaseInitiatorFilter { get; set; }
+
+		public CaseInitiatorSearchScope InitiatorSearchScope { get; set; }
         
 
         public bool IsAdvancedSearch { get; set; }

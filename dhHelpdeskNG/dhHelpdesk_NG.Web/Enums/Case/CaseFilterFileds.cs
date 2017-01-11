@@ -3,7 +3,8 @@
     public class CaseFilterFields
     {
         public const string InitiatorNameAttribute = "CaseInitiatorFilter";
-        public const string FreeTextSearchNameAttribute = "txtFreeTextSearch";        
+		public const string InitiatorSearchScopeAttribute = "InitiatorSearchScope";
+		public const string FreeTextSearchNameAttribute = "txtFreeTextSearch";        
 
         public const string RegionNameAttribute = "lstFilterRegion";        
         public const string DepartmentNameAttribute = "lstfilterDepartment";        

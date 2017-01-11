@@ -41,7 +41,12 @@
                                      attrName = CaseFilterFields.InitiatorNameAttribute,
                                      value = string.Empty
                                  });
-            }
+				res.data.Add(new JsonCaseSearchFilterItem()
+				{
+					attrName = CaseFilterFields.InitiatorSearchScopeAttribute,
+					value = string.Empty
+				});
+			}
 
             if (caseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Region_Id.ToString()) == 1)
             {

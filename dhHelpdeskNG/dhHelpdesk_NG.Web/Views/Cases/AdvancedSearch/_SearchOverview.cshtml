@@ -2,6 +2,7 @@
 @using DH.Helpdesk.BusinessData.Models.Case
 @using DH.Helpdesk.BusinessData.OldComponents
 @using System.Web.Optimization
+@using DH.Helpdesk.BusinessData.Enums.Case
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 
 @if (Model != null)
@@ -98,7 +99,8 @@
                             @Translation.Get("Anmälare")
                         </td>
                         <td>                            
-                            <input type="text" id="CaseInitiatorFilter" value="@Model.CaseSearchFilterData.CaseInitiatorFilter" name="CaseInitiatorFilter" />
+	                        <input type="text" id="CaseInitiatorFilter" value="@Model.CaseSearchFilterData.CaseInitiatorFilter" name="CaseInitiatorFilter" />
+							@Html.DropDownListFor(m => m.CaseSearchFilterData.InitiatorSearchScope, CaseInitiatorSearchScope.UserAndIsAbout.ToSelectListItems(), new { @class = "", id = "initiatorSearchScope" })
                         </td>
                     </tr>    
 

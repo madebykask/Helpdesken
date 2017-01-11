@@ -11,7 +11,7 @@ var controlsId = ['CaseInitiatorFilter', 'lstFilterRegion', 'lstfilterDepartment
         'hidFilterClosingReasonId',
         'CaseRegistrationDateStartFilter', 'CaseRegistrationDateEndFilter',
         'CaseWatchDateStartFilter', 'CaseWatchDateEndFilter',
-        'CaseClosingDateStartFilter', 'CaseClosingDateEndFilter', 'lstfilterCaseRemainingTime'
+        'CaseClosingDateStartFilter', 'CaseClosingDateEndFilter', 'lstfilterCaseRemainingTime', 'InitiatorSearchScope'
 ];
 
 var chosenSelects = ['#lstFilterRegion', '#lstfilterDepartment', '#lstfilterUser',
@@ -580,11 +580,18 @@ FilterForm.prototype.initControlsMap = function() {
         switch(controlName) {
             case 'CaseInitiatorFilter':
             case 'txtFreeTextSearch':
+            case 'InitiatorSearchScope':
                 $el = me.$el.find(searchEl);
                 if (!window.is$ElEmpty($el)) {
                     control = CreateInstance(BaseField, { $el: $el });    
                 }
                 break;
+            //case 'initiatorSearchScope':
+            //    $el = $("", me.$el);
+            //    if (!window.is$ElEmpty($el)) {
+            //        control = CreateInstance(JQueryChosenField, { $el: $el });
+            //    }
+            //    break;
             case 'lstFilterRegion':
             case 'lstfilterDepartment':
             case 'lstfilterUser':
