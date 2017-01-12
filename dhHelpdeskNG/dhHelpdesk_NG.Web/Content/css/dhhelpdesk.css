@@ -3760,7 +3760,9 @@ div.modal-body.max-height-600 {
 .case-usersearch-textarea {
     height: 1.6em;
     min-height: 1em;
-    width: 65%;
+    width: 40%;
+    position: absolute;
+    margin-left: 10px;
 }
 
 .case-usersearch-btn {
