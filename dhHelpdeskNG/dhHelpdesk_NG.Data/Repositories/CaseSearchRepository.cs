@@ -1625,6 +1625,7 @@ namespace DH.Helpdesk.Dal.Repositories
 				if (f.InitiatorSearchScope == CaseInitiatorSearchScope.IsAbout || f.InitiatorSearchScope == CaseInitiatorSearchScope.UserAndIsAbout)
 				{
 					sb.Append("(");
+					sb.Append("(");
 					sb.AppendFormat("{0}", this.GetSqlLike("[tblCaseIsAbout].[ReportedBy]", f.Initiator.SafeForSqlInject(), Combinator_AND));
 					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Person_Name]", f.Initiator.SafeForSqlInject(), Combinator_AND));
 					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[UserCode]", f.Initiator.SafeForSqlInject(), Combinator_AND));
@@ -1632,6 +1633,26 @@ namespace DH.Helpdesk.Dal.Repositories
 					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Place]", f.Initiator.SafeForSqlInject(), Combinator_AND));
 					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Person_CellPhone]", f.Initiator.SafeForSqlInject(), Combinator_AND));
 					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Person_Phone]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+					sb.Append(")");
+
+					if (!string.IsNullOrWhiteSpace(f.Region))
+						sb.Append(" AND ([tblCaseIsAbout].[Region_Id] IN (" + f.Region.SafeForSqlInject() + "))");
+					if (!string.IsNullOrWhiteSpace(f.Department))
+					{
+						// organizationUnit
+						if (!string.IsNullOrWhiteSpace(f.OrganizationUnit))
+							sb.Append(" AND ([tblCaseIsAbout].[Department_Id] IN (" + f.Department.SafeForSqlInject() + ") IN " +
+											"[tblCaseIsAbout].[OU_Id] IN (" + f.OrganizationUnit.SafeForSqlInject() + "))");
+						else
+							sb.Append(" AND ([tblCaseIsAbout].[Department_Id] IN (" + f.Department.SafeForSqlInject() + "))");
+					}
+					else
+					{
+						// organizationUnit
+						if (!string.IsNullOrWhiteSpace(f.OrganizationUnit))
+							sb.Append(" AND ([tblCaseIsAbout].[OU_Id] IN (" + f.OrganizationUnit.SafeForSqlInject() + "))");
+					}
+
 					sb.Append(")");
 				}
 
