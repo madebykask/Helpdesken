@@ -166,6 +166,10 @@
     <show>Deputy Business Navigation and Operation</show>
   </dependent>
   <dependent>
+    <selected>Alex Ruane</selected>
+    <show>Kitchen Production Manager</show>
+  </dependent>
+  <dependent>
     <selected>Alex Scoggins</selected>
     <show>Marketing Manager</show>
   </dependent>
@@ -183,7 +187,7 @@
   </dependent>
   <dependent>
     <selected>Alexis Powell</selected>
-    <show>IKEA Food Manager</show>
+    <show>Project Manager</show>
   </dependent>
   <dependent>
     <selected>Ali Al Sharook</selected>
@@ -314,6 +318,10 @@
     <show>Goods Flow Team Manager</show>
   </dependent>
   <dependent>
+    <selected>Andrew Brown</selected>
+    <show>Commercial SFM &amp; Bistro Manager</show>
+  </dependent>
+  <dependent>
     <selected>Andrew Butler</selected>
     <show>Warehouse Team Leader</show>
   </dependent>
@@ -343,7 +351,7 @@
   </dependent>
   <dependent>
     <selected>Andrew Horn</selected>
-    <show>Deputy Sales Manager</show>
+    <show>Home Furnishing Consultant</show>
   </dependent>
   <dependent>
     <selected>Andrew Inston</selected>
@@ -379,7 +387,7 @@
   </dependent>
   <dependent>
     <selected>Andrew Robinson</selected>
-    <show>Team Leader</show>
+    <show>DC Quality Team Leader</show>
   </dependent>
   <dependent>
     <selected>Andrew Russell</selected>
@@ -399,7 +407,7 @@
   </dependent>
   <dependent>
     <selected>Andy Westland</selected>
-    <show>Customer Services Manager</show>
+    <show>Shopkeeper</show>
   </dependent>
   <dependent>
     <selected>Anette Madsen</selected>
@@ -510,8 +518,12 @@
     <show>After Sales Team Leader</show>
   </dependent>
   <dependent>
+    <selected>April Steele-Edwards</selected>
+    <show>Interior Design Manager</show>
+  </dependent>
+  <dependent>
     <selected>Arron Smith</selected>
-    <show>Shopkeeper</show>
+    <show>Customer Relations Manager</show>
   </dependent>
   <dependent>
     <selected>Arslan Ali</selected>
@@ -543,7 +555,7 @@
   </dependent>
   <dependent>
     <selected>Ashraf Choudhury</selected>
-    <show>Shopkeeper</show>
+    <show>Sales Manager</show>
   </dependent>
   <dependent>
     <selected>Ashvin Ramhit</selected>
@@ -562,6 +574,10 @@
     <show>Store Manager</show>
   </dependent>
   <dependent>
+    <selected>Barbara Kaslova</selected>
+    <show>Visual Merchandising/Activity Manager</show>
+  </dependent>
+  <dependent>
     <selected>Barbara Kruzic Loncaric</selected>
     <show>Shopkeeper</show>
   </dependent>
@@ -572,6 +588,10 @@
   <dependent>
     <selected>Barry Gilmour</selected>
     <show>Goods Flow Team Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Barry Heap</selected>
+    <show>Facility Manager</show>
   </dependent>
   <dependent>
     <selected>Barry Jenner</selected>
@@ -604,6 +624,10 @@
   <dependent>
     <selected>Benjamin Broadhead</selected>
     <show>IKEA Food Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Besnik Pashaj</selected>
+    <show>Goods Flow Team Manager</show>
   </dependent>
   <dependent>
     <selected>Berith Falch-Madsen</selected>
@@ -695,7 +719,7 @@
   </dependent>
   <dependent>
     <selected>Cameron Goodall</selected>
-    <show>Commercial Activity Leader</show>
+    <show>Deputy Sales Manager</show>
   </dependent>
   <dependent>
     <selected>Carl Critchlow</selected>
@@ -744,6 +768,10 @@
   <dependent>
     <selected>Carolyn Duffy</selected>
     <show>Checkout Services Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Carolyn Hawthorn</selected>
+    <show>IKEA Food Manager</show>
   </dependent>
   <dependent>
     <selected>Carolyn Young</selected>
@@ -939,7 +967,7 @@
   </dependent>
   <dependent>
     <selected>Claire Killerby-Smith</selected>
-    <show>Goods Flow Team Leader</show>
+    <show>Goods Flow Manager</show>
   </dependent>
   <dependent>
     <selected>Claire McClory</selected>
@@ -991,7 +1019,7 @@
   </dependent>
   <dependent>
     <selected>Colin Sharp</selected>
-    <show>Goods Flow Manager</show>
+    <show>Customer Relations Manager</show>
   </dependent>
   <dependent>
     <selected>Connell Blackett</selected>
@@ -1039,7 +1067,7 @@
   </dependent>
   <dependent>
     <selected>Daisy Clarke</selected>
-    <show>Sales Manager</show>
+    <show>In-store Logistics Manager - Store</show>
   </dependent>
   <dependent>
     <selected>Dale Lloyd</selected>
@@ -1130,6 +1158,10 @@
     <show>Warehouse Team Leader</show>
   </dependent>
   <dependent>
+    <selected>Darren Henry</selected>
+    <show>Commercial SFM &amp; Bistro Manager</show>
+  </dependent>
+  <dependent>
     <selected>DARREN LANCASTER</selected>
     <show>Assistant Store Manager</show>
   </dependent>
@@ -1195,6 +1227,10 @@
   </dependent>
   <dependent>
     <selected>David Roberts</selected>
+    <show>Warehouse Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>David Spence</selected>
     <show>Warehouse Team Leader</show>
   </dependent>
   <dependent>
@@ -1310,6 +1346,10 @@
     <show>Checkout Services Team Leader</show>
   </dependent>
   <dependent>
+    <selected>Dominik Gawior</selected>
+    <show>Payroll Manager</show>
+  </dependent>
+  <dependent>
     <selected>Dominique Sayce</selected>
     <show>HR Manager</show>
   </dependent>
@@ -1366,6 +1406,10 @@
     <show>Safety &amp; Security Manager</show>
   </dependent>
   <dependent>
+    <selected>Ekaterina Egorova</selected>
+    <show>Deputy Retail Manager</show>
+  </dependent>
+  <dependent>
     <selected>Elaine Donnelly</selected>
     <show>Shopkeeper</show>
   </dependent>
@@ -1400,6 +1444,10 @@
   <dependent>
     <selected>Elizabeth Crotty</selected>
     <show>Checkout Services Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Elizabeth Deacon</selected>
+    <show>Shopkeeper</show>
   </dependent>
   <dependent>
     <selected>Elizabeth Prowse</selected>
@@ -1550,6 +1598,10 @@
     <show>Visual Merchandising/Activity Manager</show>
   </dependent>
   <dependent>
+    <selected>Freda Learmond</selected>
+    <show>Checkout Services Manager</show>
+  </dependent>
+  <dependent>
     <selected>Gabriel Modrisan</selected>
     <show>Commercial Restaurant Manager</show>
   </dependent>
@@ -1655,7 +1707,7 @@
   </dependent>
   <dependent>
     <selected>Gemma Howe</selected>
-    <show>Shopkeeper</show>
+    <show>Sales Manager</show>
   </dependent>
   <dependent>
     <selected>Geoff Gotts</selected>
@@ -1663,7 +1715,7 @@
   </dependent>
   <dependent>
     <selected>Geoffrey Hughes</selected>
-    <show>Business Analyst</show>
+    <show>WMS Super User</show>
   </dependent>
   <dependent>
     <selected>George Manhire</selected>
@@ -1787,7 +1839,7 @@
   </dependent>
   <dependent>
     <selected>Gregory Lailvaux</selected>
-    <show>Backpacker</show>
+    <show>Shopkeeper</show>
   </dependent>
   <dependent>
     <selected>Greig McLeod</selected>
@@ -1819,7 +1871,7 @@
   </dependent>
   <dependent>
     <selected>Harriet Clarke</selected>
-    <show>Services Team Leader</show>
+    <show>Shopping Experience Manager</show>
   </dependent>
   <dependent>
     <selected>Harsha Bhudia</selected>
@@ -1828,6 +1880,10 @@
   <dependent>
     <selected>Harsha Patel</selected>
     <show>Shopkeeper</show>
+  </dependent>
+  <dependent>
+    <selected>Haroon Shaikh</selected>
+    <show>Goods Flow Manager</show>
   </dependent>
   <dependent>
     <selected>Harvey Fletcher</selected>
@@ -1839,6 +1895,14 @@
   </dependent>
   <dependent>
     <selected>Hayley James</selected>
+    <show>Shopkeeper</show>
+  </dependent>
+  <dependent>
+    <selected>Hayley Neal</selected>
+    <show>Commercial Activity Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Hayley Mackowski</selected>
     <show>Shopkeeper</show>
   </dependent>
   <dependent>
@@ -1898,6 +1962,10 @@
     <show>Recovery Manager</show>
   </dependent>
   <dependent>
+    <selected>Iain Williams</selected>
+    <show>Commercial Review Manager</show>
+  </dependent>
+  <dependent>
     <selected>Ian Gamble</selected>
     <show>Shopkeeper</show>
   </dependent>
@@ -1907,7 +1975,7 @@
   </dependent>
   <dependent>
     <selected>Ian Haslett</selected>
-    <show>Customer Services Manager</show>
+    <show>Shopkeeper</show>
   </dependent>
   <dependent>
     <selected>Ian Jeffries</selected>
@@ -2007,7 +2075,7 @@
   </dependent>
   <dependent>
     <selected>Jackie Timmins</selected>
-    <show>Customer Services Manager</show>
+    <show>Recovery Manager</show>
   </dependent>
   <dependent>
     <selected>Jacob Lainton</selected>
@@ -2032,6 +2100,10 @@
   <dependent>
     <selected>Jake Mathieson</selected>
     <show>Shopkeeper</show>
+  </dependent>
+  <dependent>
+    <selected>Jakob Bertilsson</selected>
+    <show>Warehouse Manager</show>
   </dependent>
   <dependent>
     <selected>Jakub Bloch</selected>
@@ -2064,6 +2136,10 @@
   <dependent>
     <selected>James Doswell</selected>
     <show>Commercial Activity Leader</show>
+  </dependent>
+  <dependent>
+    <selected>James Godbehere</selected>
+    <show>Shopkeeper</show>
   </dependent>
   <dependent>
     <selected>James Goldthorpe</selected>
@@ -2123,6 +2199,10 @@
   </dependent>
   <dependent>
     <selected>Jamie Pawley</selected>
+    <show>Shopkeeper</show>
+  </dependent>
+  <dependent>
+    <selected>Jamie Stewart</selected>
     <show>Shopkeeper</show>
   </dependent>
   <dependent>
@@ -2206,6 +2286,10 @@
     <show>Shopkeeper</show>
   </dependent>
   <dependent>
+    <selected>Jay Jackson</selected>
+    <show>Warehouse Team Leader</show>
+  </dependent>
+  <dependent>
     <selected>Jayesh Patel</selected>
     <show>Shopkeeper</show>
   </dependent>
@@ -2247,7 +2331,7 @@
   </dependent>
   <dependent>
     <selected>Jennifer Nyamekye</selected>
-    <show>Goods Flow Team Manager</show>
+    <show>Safety &amp; Security Manager</show>
   </dependent>
   <dependent>
     <selected>Jessica Brennan</selected>
@@ -2414,6 +2498,10 @@
     <show>Goods Flow Team Manager</show>
   </dependent>
   <dependent>
+    <selected>Jonathan Keightley</selected>
+    <show>Site Facility Manager</show>
+  </dependent>
+  <dependent>
     <selected>Jonathan Seddon</selected>
     <show>Sales &amp; Supply Support Manager</show>
   </dependent>
@@ -2476,6 +2564,10 @@
   <dependent>
     <selected>Julie Charge</selected>
     <show>Services Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Julie Hume</selected>
+    <show>Interior Design Leader</show>
   </dependent>
   <dependent>
     <selected>Julie Johnson</selected>
@@ -2544,6 +2636,10 @@
   <dependent>
     <selected>Karley Buck</selected>
     <show>Shopkeeper</show>
+  </dependent>
+  <dependent>
+    <selected>Karolina Murawska</selected>
+    <show>Warehouse Team Leader</show>
   </dependent>
   <dependent>
     <selected>Kas Perera</selected>
@@ -2667,7 +2763,7 @@
   </dependent>
   <dependent>
     <selected>Kemi Anthony</selected>
-    <show>Advertising Manager</show>
+    <show>Country Communication Manager</show>
   </dependent>
   <dependent>
     <selected>Kenneth Holt</selected>
@@ -2675,7 +2771,7 @@
   </dependent>
   <dependent>
     <selected>Kenneth McCann</selected>
-    <show>Shopkeeper</show>
+    <show>Recovery Manager</show>
   </dependent>
   <dependent>
     <selected>Kerrie Fox</selected>
@@ -2742,6 +2838,10 @@
     <show>Shopkeeper</show>
   </dependent>
   <dependent>
+    <selected>Kirstie Archibald</selected>
+    <show>Customer Services Manager</show>
+  </dependent>
+  <dependent>
     <selected>Kirsty Bingham</selected>
     <show>HR Manager</show>
   </dependent>
@@ -2799,7 +2899,7 @@
   </dependent>
   <dependent>
     <selected>Laura Brown</selected>
-    <show>Sales &amp; Supply Support Specialist</show>
+    <show>Goods Flow Team Manager</show>
   </dependent>
   <dependent>
     <selected>Laura Elizabeth Brickell-Bowers</selected>
@@ -2843,7 +2943,7 @@
   </dependent>
   <dependent>
     <selected>Lawrence Chiari</selected>
-    <show>Shopkeeper</show>
+    <show>Customer Services Manager</show>
   </dependent>
   <dependent>
     <selected>Lee Adair</selected>
@@ -2895,7 +2995,7 @@
   </dependent>
   <dependent>
     <selected>Liam O'Sullivan</selected>
-    <show>Services Manager</show>
+    <show>Services Team Leader</show>
   </dependent>
   <dependent>
     <selected>Lidia Kifle</selected>
@@ -3159,7 +3259,7 @@
   </dependent>
   <dependent>
     <selected>Mandy Evans</selected>
-    <show>Shopkeeper</show>
+    <show>Staff Planning Manager</show>
   </dependent>
   <dependent>
     <selected>MANUEL FERRETE</selected>
@@ -3326,6 +3426,10 @@
     <show>IKEA Food Manager</show>
   </dependent>
   <dependent>
+    <selected>Martin McLaughlin</selected>
+    <show>Logistics Manager</show>
+  </dependent>
+  <dependent>
     <selected>Martin Prekop</selected>
     <show>Goods Flow Team Manager</show>
   </dependent>
@@ -3368,6 +3472,10 @@
   <dependent>
     <selected>Matthew Baddley</selected>
     <show>Com &amp; In Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Matthew Bennett</selected>
+    <show>Shopkeeper</show>
   </dependent>
   <dependent>
     <selected>Matthew Butler</selected>
@@ -3414,6 +3522,10 @@
     <show>Recovery Manager</show>
   </dependent>
   <dependent>
+    <selected>Matthew Martin</selected>
+    <show>Warehouse Team Leader</show>
+  </dependent>
+  <dependent>
     <selected>Matthew Phippard</selected>
     <show>Graphic Communication Leader</show>
   </dependent>
@@ -3422,12 +3534,20 @@
     <show>Shopkeeper</show>
   </dependent>
   <dependent>
+    <selected>Matthew Robertson</selected>
+    <show>Customer Services Manager</show>
+  </dependent>
+  <dependent>
     <selected>Matthew Vernalls</selected>
     <show>Goods Flow Team Manager</show>
   </dependent>
   <dependent>
     <selected>Matthew Webb</selected>
     <show>Commercial Restaurant Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Matthew Wilson</selected>
+    <show>Goods Flow Team Manager</show>
   </dependent>
   <dependent>
     <selected>Mattias Ronngard</selected>
@@ -3591,7 +3711,7 @@
   </dependent>
   <dependent>
     <selected>Nadine Murphy</selected>
-    <show>HR Manager</show>
+    <show>Deputy HR Manager</show>
   </dependent>
   <dependent>
     <selected>Narinder Singh</selected>
@@ -3710,6 +3830,10 @@
     <show>Services Team Leader</show>
   </dependent>
   <dependent>
+    <selected>Nicola Speed</selected>
+    <show>Business Navigation Team Leader</show>
+  </dependent>
+  <dependent>
     <selected>Nicola Walsh</selected>
     <show>Business Navigation Team Leader</show>
   </dependent>
@@ -3735,7 +3859,7 @@
   </dependent>
   <dependent>
     <selected>Nikunj Patel</selected>
-    <show>Sales &amp; Supply Support Manager</show>
+    <show>Goods Flow Manager</show>
   </dependent>
   <dependent>
     <selected>Nirmal Jhumat</selected>
@@ -3750,12 +3874,20 @@
     <show>Visual Merchandising/Activity Manager</show>
   </dependent>
   <dependent>
+    <selected>Olga Fowler</selected>
+    <show>Retail Supply Chain Integration Manager</show>
+  </dependent>
+  <dependent>
     <selected>Oliver Parry</selected>
     <show>Services Team Leader</show>
   </dependent>
   <dependent>
     <selected>Olivia Webb</selected>
     <show>Sales Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Otto Van Daal</selected>
+    <show>Deputy IF Manager</show>
   </dependent>
   <dependent>
     <selected>Oya Arslan Ozmen</selected>
@@ -3882,6 +4014,10 @@
     <show>HR Manager</show>
   </dependent>
   <dependent>
+    <selected>Peter Mewes</selected>
+    <show>Warehouse Team Leader</show>
+  </dependent>
+  <dependent>
     <selected>Peter McMeekin</selected>
     <show>Shopkeeper</show>
   </dependent>
@@ -3940,6 +4076,10 @@
   <dependent>
     <selected>Phineas Mandebvu</selected>
     <show>Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Piotr Wisniewski</selected>
+    <show>Warehouse Team Leader</show>
   </dependent>
   <dependent>
     <selected>Pritesh Patel</selected>
@@ -4414,12 +4554,20 @@
     <show>IKEA Food Manager</show>
   </dependent>
   <dependent>
+    <selected>Sean Chamberlain</selected>
+    <show>Goods Flow Team Manager</show>
+  </dependent>
+  <dependent>
     <selected>Sean Derbyshire</selected>
     <show>Shopkeeper</show>
   </dependent>
   <dependent>
     <selected>Sean Savage</selected>
     <show>Graphic Communication Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Sean Strugnell</selected>
+    <show>Shopkeeper</show>
   </dependent>
   <dependent>
     <selected>Senad Bokhari</selected>
@@ -4444,6 +4592,14 @@
   <dependent>
     <selected>Shane Willn</selected>
     <show>In-store Logistics Manager - Store</show>
+  </dependent>
+  <dependent>
+    <selected>Shannon O'Dowd</selected>
+    <show>Checkout Services Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Sharon Hay</selected>
+    <show>Visual Merchandising/Activity Manager</show>
   </dependent>
   <dependent>
     <selected>Sharon McCracken</selected>
@@ -4490,6 +4646,10 @@
     <show>Marketing Manager</show>
   </dependent>
   <dependent>
+    <selected>Simon Betts</selected>
+    <show>Shopkeeper</show>
+  </dependent>
+  <dependent>
     <selected>Simon Carter</selected>
     <show>IKEA Food Manager</show>
   </dependent>
@@ -4528,6 +4688,10 @@
   <dependent>
     <selected>Sophie Nicola</selected>
     <show>Customer Experience Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Sophie Randall</selected>
+    <show>Shopkeeper</show>
   </dependent>
   <dependent>
     <selected>Sophie Rizzotti</selected>
@@ -4574,6 +4738,10 @@
     <show>Kitchen Production Manager</show>
   </dependent>
   <dependent>
+    <selected>Stephanie Ward</selected>
+    <show>Shopkeeper</show>
+  </dependent>
+  <dependent>
     <selected>Stephen Baker</selected>
     <show>Operational Support Team Leader</show>
   </dependent>
@@ -4616,6 +4784,10 @@
   <dependent>
     <selected>Stephen Reid</selected>
     <show>Deputy Customer Support Centre Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Stephen Williams</selected>
+    <show>Sales &amp; Supply Support Manager</show>
   </dependent>
   <dependent>
     <selected>Steve Aldred</selected>
@@ -4683,11 +4855,11 @@
   </dependent>
   <dependent>
     <selected>Stuart Graham</selected>
-    <show>Logistics Manager</show>
+    <show>Project Leader</show>
   </dependent>
   <dependent>
     <selected>Stuart Harvey</selected>
-    <show>Sales &amp; Supply Support Manager</show>
+    <show>Shopkeeper</show>
   </dependent>
   <dependent>
     <selected>Stuart Kennedy</selected>
@@ -4787,7 +4959,7 @@
   </dependent>
   <dependent>
     <selected>Teresa James</selected>
-    <show>Checkout Services Manager</show>
+    <show>Safety &amp; Security Manager</show>
   </dependent>
   <dependent>
     <selected>Terry Harris</selected>
@@ -4804,6 +4976,10 @@
   <dependent>
     <selected>Thomas O'Leary</selected>
     <show>Visual Merchandising/Activity Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Thomas Sanders</selected>
+    <show>Shopkeeper</show>
   </dependent>
   <dependent>
     <selected>Thomas Shepherd-Mogensen</selected>
@@ -4824,6 +5000,10 @@
   <dependent>
     <selected>Timothy Cox</selected>
     <show>Business Navigation &amp; Operations Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Timothy Cunningham</selected>
+    <show>Graphic Communication Leader</show>
   </dependent>
   <dependent>
     <selected>Timothy Stoakes</selected>
@@ -4854,6 +5034,10 @@
     <show>IKEA Food Manager</show>
   </dependent>
   <dependent>
+    <selected>Tracy Rippin</selected>
+    <show>Visual Merchandising Manager</show>
+  </dependent>
+  <dependent>
     <selected>Trevor Gale</selected>
     <show>Checkout Services Manager</show>
   </dependent>
@@ -4879,7 +5063,7 @@
   </dependent>
   <dependent>
     <selected>Vicky Cosentino</selected>
-    <show>Shopkeeper</show>
+    <show>Commercial Activity Leader</show>
   </dependent>
   <dependent>
     <selected>Vicky Toomer</selected>
@@ -4907,7 +5091,7 @@
   </dependent>
   <dependent>
     <selected>Victoria Neely</selected>
-    <show>Interior Design Manager</show>
+    <show>Com &amp; In Manager</show>
   </dependent>
   <dependent>
     <selected>Victoria Richards</selected>
@@ -4975,7 +5159,7 @@
   </dependent>
   <dependent>
     <selected>Zahed Shah</selected>
-    <show>Services Team Leader</show>
+    <show>Services Manager</show>
   </dependent>
   <dependent>
     <selected>Zoe Roff</selected>

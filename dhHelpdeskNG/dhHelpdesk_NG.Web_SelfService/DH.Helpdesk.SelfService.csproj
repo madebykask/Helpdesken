@@ -65,22 +65,6 @@
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="ECT.Core, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>FormLibContent\Assemblies\ECT.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="ECT.FormLib, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>FormLibContent\Assemblies\ECT.FormLib.dll</HintPath>
-    </Reference>
-    <Reference Include="ECT.Model, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>FormLibContent\Assemblies\ECT.Model.dll</HintPath>
-    </Reference>
-    <Reference Include="ECT.Service, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>FormLibContent\Assemblies\ECT.Service.dll</HintPath>
-    </Reference>
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.6.1.0\lib\net40\EntityFramework.dll</HintPath>
     </Reference>
@@ -368,6 +352,10 @@
     <Content Include="Content\js\Case\case.log.js" />
     <Content Include="Content\js\Shared\app.layout.js" />
     <Content Include="Content\js\typeahead.js" />
+    <Content Include="FormLibContent\Assemblies\DH.Helpdesk.EForm.Core.dll" />
+    <Content Include="FormLibContent\Assemblies\DH.Helpdesk.EForm.FormLib.dll" />
+    <Content Include="FormLibContent\Assemblies\DH.Helpdesk.EForm.Model.dll" />
+    <Content Include="FormLibContent\Assemblies\DH.Helpdesk.EForm.Service.dll" />
     <Content Include="img-profile\profile.css" />
     <Content Include="Content\css\selfservice.css" />
     <Content Include="Content\dialog.css" />
@@ -674,10 +662,6 @@
     <Content Include="FormLibContent\Areas\UnitedKingdom\Views\VoluntaryDeductions\_TabServiceRequestDetails.cshtml" />
     <Content Include="FormLibContent\Areas\UnitedKingdom\Views\Web.config" />
     <Content Include="FormLibContent\Areas\UnitedKingdom\Views\_ViewStart.cshtml" />
-    <Content Include="FormLibContent\Assemblies\ECT.Core.dll" />
-    <Content Include="FormLibContent\Assemblies\ECT.FormLib.dll" />
-    <Content Include="FormLibContent\Assemblies\ECT.Model.dll" />
-    <Content Include="FormLibContent\Assemblies\ECT.Service.dll" />
     <Content Include="FormLibContent\Assemblies\itextsharp.dll" />
     <Content Include="FormLibContent\Assets\css\bootstrap-responsive.css" />
     <Content Include="FormLibContent\Assets\css\bootstrap.css" />
@@ -941,6 +925,22 @@
     <ProjectReference Include="..\dhHelpdesk_NG.DTO\DH.Helpdesk.BusinessData.csproj">
       <Project>{C4520E52-CB9E-4FD6-BEE9-92AA532685A2}</Project>
       <Name>DH.Helpdesk.BusinessData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\dhHelpdesk_NG.E_Form\Core\DH.Helpdesk.EForm.Core.csproj">
+      <Project>{e2080f1d-1a86-4846-9cea-620f99c5678d}</Project>
+      <Name>DH.Helpdesk.EForm.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\dhHelpdesk_NG.E_Form\FormLib\DH.Helpdesk.EForm.FormLib.csproj">
+      <Project>{4723b7a1-b0bd-4421-8670-a6f6fb9975b2}</Project>
+      <Name>DH.Helpdesk.EForm.FormLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\dhHelpdesk_NG.E_Form\Model\DH.Helpdesk.EForm.Model.csproj">
+      <Project>{4826D35D-823C-4E12-9905-771261721661}</Project>
+      <Name>DH.Helpdesk.EForm.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\dhHelpdesk_NG.E_Form\Service\DH.Helpdesk.EForm.Service.csproj">
+      <Project>{c5500586-9bf2-4381-9e26-bde146879e1e}</Project>
+      <Name>DH.Helpdesk.EForm.Service</Name>
     </ProjectReference>
     <ProjectReference Include="..\dhHelpdesk_NG.Service\DH.Helpdesk.Services.csproj">
       <Project>{3A5BFA9B-C033-4C1C-81AF-7B4E1BEDCFA3}</Project>

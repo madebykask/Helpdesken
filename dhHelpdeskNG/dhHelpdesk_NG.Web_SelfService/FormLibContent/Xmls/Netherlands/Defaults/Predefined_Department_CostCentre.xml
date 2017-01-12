@@ -246,6 +246,10 @@
     <show>6071</show>
   </dependent>
   <dependent>
+    <selected>Com&amp;In tm4 Breda Sto</selected>
+    <show>6071</show>
+  </dependent>
+  <dependent>
     <selected>Com&amp;In tm4 Groningen Sto</selected>
     <show>6071</show>
   </dependent>
@@ -1214,6 +1218,10 @@
     <show>3340</show>
   </dependent>
   <dependent>
+    <selected>HFB Bedrooms Haarlem store</selected>
+    <show>3340</show>
+  </dependent>
+  <dependent>
     <selected>HFB Child IKEA tm 2 Barendrecht Sto</selected>
     <show>3370</show>
   </dependent>
@@ -2074,6 +2082,10 @@
     <show>3900</show>
   </dependent>
   <dependent>
+    <selected>Knowledge Management &amp; Insights</selected>
+    <show>6000</show>
+  </dependent>
+  <dependent>
     <selected>Livingroom &amp; Organising Heerlen sto</selected>
     <show>3320</show>
   </dependent>
@@ -2147,7 +2159,7 @@
   </dependent>
   <dependent>
     <selected>Meubel Opbouw Eindhoven Sto</selected>
-    <show>3310</show>
+    <show>3400</show>
   </dependent>
   <dependent>
     <selected>Multi Channel Management CSC</selected>
@@ -2212,6 +2224,10 @@
   <dependent>
     <selected>Re-invoice SO</selected>
     <show>6299</show>
+  </dependent>
+  <dependent>
+    <selected>Resolutions</selected>
+    <show>6100</show>
   </dependent>
   <dependent>
     <selected>Retail Com&amp;In (property)</selected>
@@ -2303,6 +2319,10 @@
   </dependent>
   <dependent>
     <selected>Retail Logistisc Barendrecht Store</selected>
+    <show>7010</show>
+  </dependent>
+  <dependent>
+    <selected>Retail Logistics &amp; GF Groningen store</selected>
     <show>7010</show>
   </dependent>
   <dependent>
@@ -2400,6 +2420,10 @@
   <dependent>
     <selected>Sales 3 Amersfoort Store</selected>
     <show>7010</show>
+  </dependent>
+  <dependent>
+    <selected>Sales Amersfoort Store</selected>
+    <show>3570</show>
   </dependent>
   <dependent>
     <selected>Sales Amsterdam Sto</selected>
@@ -2582,6 +2606,10 @@
     <show>6240</show>
   </dependent>
   <dependent>
+    <selected>Service en Sales Support</selected>
+    <show>6000</show>
+  </dependent>
+  <dependent>
     <selected>Service Office NL</selected>
     <show>6200</show>
   </dependent>
@@ -2618,6 +2646,10 @@
     <show>6100</show>
   </dependent>
   <dependent>
+    <selected>Solutions team 5 CSC</selected>
+    <show>6100</show>
+  </dependent>
+  <dependent>
     <selected>SSW tm1 Groningen Sto</selected>
     <show>3400</show>
   </dependent>
@@ -2628,6 +2660,10 @@
   <dependent>
     <selected>Staffing Optimizing Haarlem Sto</selected>
     <show>6635</show>
+  </dependent>
+  <dependent>
+    <selected>Staffplanning</selected>
+    <show>6000</show>
   </dependent>
   <dependent>
     <selected>STORE Amersfoort 415</selected>
@@ -2710,11 +2746,19 @@
     <show>6632</show>
   </dependent>
   <dependent>
+    <selected>Team CR 1</selected>
+    <show>6100</show>
+  </dependent>
+  <dependent>
     <selected>Team Frontliners Groningen Sto</selected>
     <show>6100</show>
   </dependent>
   <dependent>
     <selected>Team Technicians</selected>
+    <show>6240</show>
+  </dependent>
+  <dependent>
+    <selected>Team Technicians SO</selected>
     <show>6240</show>
   </dependent>
   <dependent>

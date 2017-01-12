@@ -37,11 +37,13 @@
   <option value="6071">6071 - Communic &amp; Interior</option>
   <option value="6100">6100 - Customer Service</option>
   <option value="6120">6120 - CS After Sales serv</option>
+  <option value="6121">6121 - After Sales Management</option>
   <option value="6122">6122 - After Sales Returns</option>
   <option value="6123">6123 - After Sales Handout</option>
   <option value="6130">6130 - CS entrance</option>
   <option value="6150">6150 - CS Additional services</option>
   <option value="6180">6180 - CS cash</option>
+  <option value="6190">6190 - Checkouts Management</option>
   <option value="6200">6200 - Operations Common</option>
   <option value="6210">6210 - Administration</option>
   <option value="6230">6230 - Finance</option>

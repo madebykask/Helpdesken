@@ -5,6 +5,7 @@
 <option value="Aga Marianne">Aga Marianne</option>
 <option value="Ahamed Farzana">Ahamed Farzana</option>
 <option value="Ahlén Maria">Ahlén Maria</option>
+<option value="Ahmed Waqar">Ahmed Waqar</option>
 <option value="Alestrand Karl Erik">Alestrand Karl Erik</option>
 <option value="Al-Hasnawi Ali Naeem">Al-Hasnawi Ali Naeem</option>
 <option value="Altenby Jessica">Altenby Jessica</option>
@@ -16,6 +17,7 @@
 <option value="Andresen Jenny">Andresen Jenny</option>
 <option value="Asbjørnsen Stine Junker">Asbjørnsen Stine Junker</option>
 <option value="Asgeirsson Skarelius Hans">Asgeirsson Skarelius Hans</option>
+<option value="Asp Henrick Kjell-Åke">Asp Henrick Kjell-Åke</option>
 <option value="Aune Sander Asbjørnsen">Aune Sander Asbjørnsen</option>
 <option value="Backe Mette">Backe Mette</option>
 <option value="Backström Kim">Backström Kim</option>
@@ -28,6 +30,7 @@
 <option value="Bentzen Heidi">Bentzen Heidi</option>
 <option value="Berg Trude">Berg Trude</option>
 <option value="Bergersen Ole">Bergersen Ole</option>
+<option value="Bergqvist Elin Josefin">Bergqvist Elin Josefin</option>
 <option value="Berntzen Geir Egil">Berntzen Geir Egil</option>
 <option value="Bjølgerud Martina">Bjølgerud Martina</option>
 <option value="Bjørkeng Tone">Bjørkeng Tone</option>
@@ -36,9 +39,11 @@
 <option value="Bø Siv">Bø Siv</option>
 <option value="Boije Cathrine">Boije Cathrine</option>
 <option value="Børresen Arne-Olav">Børresen Arne-Olav</option>
+<option value="Borthen Kristine">Borthen Kristine</option>
 <option value="Bosancic Veljko">Bosancic Veljko</option>
 <option value="Bryne Jon">Bryne Jon</option>
 <option value="Bure Anette Cecilie">Bure Anette Cecilie</option>
+<option value="Casqueiro Godinho Paulo">Casqueiro Godinho Paulo</option>
 <option value="Cesar Monica Hege">Cesar Monica Hege</option>
 <option value="Christiansen Øyvind Hauge">Christiansen Øyvind Hauge</option>
 <option value="Csermak Ibolya Tünde">Csermak Ibolya Tünde</option>
@@ -75,10 +80,8 @@
 <option value="Føll Vidar">Føll Vidar</option>
 <option value="Forsstrøm Kook Ulla Charlotta">Forsstrøm Kook Ulla Charlotta</option>
 <option value="Fossedal Guro">Fossedal Guro</option>
-<option value="Franks Schon">Franks Schon</option>
 <option value="Fraser Ronald">Fraser Ronald</option>
 <option value="Frydenlund Heidi">Frydenlund Heidi</option>
-<option value="Furnes Alfred">Furnes Alfred</option>
 <option value="Fyllingsnes Endre">Fyllingsnes Endre</option>
 <option value="Gillies Leanna J">Gillies Leanna J</option>
 <option value="Gjerde Marianne">Gjerde Marianne</option>
@@ -88,6 +91,7 @@
 <option value="Grislingaas Trine">Grislingaas Trine</option>
 <option value="Groh Andreas">Groh Andreas</option>
 <option value="Grønflaten Simen Trovatten">Grønflaten Simen Trovatten</option>
+<option value="Gulbrandsen Yvonne Marie">Gulbrandsen Yvonne Marie</option>
 <option value="Gulden Steinar Brusletto">Gulden Steinar Brusletto</option>
 <option value="Gunderstad Kamilla">Gunderstad Kamilla</option>
 <option value="Gustafsson Lise Lotte B">Gustafsson Lise Lotte B</option>
@@ -107,7 +111,6 @@
 <option value="Heggertveit Johnny">Heggertveit Johnny</option>
 <option value="Heier Malena">Heier Malena</option>
 <option value="Heimland Jannicke">Heimland Jannicke</option>
-<option value="Helland Aina">Helland Aina</option>
 <option value="Henriksen Hans Thomas">Henriksen Hans Thomas</option>
 <option value="Hermansson Nils Anders">Hermansson Nils Anders</option>
 <option value="Hilleren Eli">Hilleren Eli</option>
@@ -154,7 +157,6 @@
 <option value="Karlsson Nicklas Karl H">Karlsson Nicklas Karl H</option>
 <option value="Kartum Anders">Kartum Anders</option>
 <option value="Kavanagh Elizabeth Mary">Kavanagh Elizabeth Mary</option>
-<option value="Kavli Lene Skorpen">Kavli Lene Skorpen</option>
 <option value="Kilian Danuta">Kilian Danuta</option>
 <option value="Kiss Gyula">Kiss Gyula</option>
 <option value="Kjeldsen Martine">Kjeldsen Martine</option>
@@ -166,7 +168,6 @@
 <option value="Konningen Merethe">Konningen Merethe</option>
 <option value="Kornby Magnus">Kornby Magnus</option>
 <option value="Kristoffersen Karete">Kristoffersen Karete</option>
-<option value="Kristoffersen Line">Kristoffersen Line</option>
 <option value="Krøvel Sigbjørn">Krøvel Sigbjørn</option>
 <option value="Kuoppa Anette">Kuoppa Anette</option>
 <option value="Kvalheim Even">Kvalheim Even</option>
@@ -177,11 +178,9 @@
 <option value="Langum Jannicke V">Langum Jannicke V</option>
 <option value="Large Brendan">Large Brendan</option>
 <option value="Larsen Merete Aase">Larsen Merete Aase</option>
-<option value="Larsson Jonas Henrik">Larsson Jonas Henrik</option>
 <option value="Lassen Steffen">Lassen Steffen</option>
 <option value="Latifi Valbona">Latifi Valbona</option>
 <option value="Lennartsson Anders">Lennartsson Anders</option>
-<option value="Lidheim Anna">Lidheim Anna</option>
 <option value="Lie Ståle Johannessen">Lie Ståle Johannessen</option>
 <option value="Lien Leif Anton">Lien Leif Anton</option>
 <option value="Liknes Stian Nilsen">Liknes Stian Nilsen</option>
@@ -207,9 +206,11 @@
 <option value="Meland Elise">Meland Elise</option>
 <option value="Mentzoni Christina Hustad">Mentzoni Christina Hustad</option>
 <option value="Mjelde Torill">Mjelde Torill</option>
-<option value="Mjøen Ekaterina">Mjøen Ekaterina</option>
 <option value="Möbius Aditsa">Möbius Aditsa</option>
+<option value="Moen Marius">Moen Marius</option>
 <option value="Møklebust Tom Erik">Møklebust Tom Erik</option>
+<option value="Møll Elisabeth">Møll Elisabeth</option>
+<option value="Moreno Linn-Monica Gomez">Moreno Linn-Monica Gomez</option>
 <option value="Møskeland Roald Alexander">Møskeland Roald Alexander</option>
 <option value="Mossefinn Lise">Mossefinn Lise</option>
 <option value="Myrholt Yngve">Myrholt Yngve</option>
@@ -220,11 +221,12 @@
 <option value="Norhagen Siri">Norhagen Siri</option>
 <option value="Nybakken Merethe Kristiansen">Nybakken Merethe Kristiansen</option>
 <option value="Nygaard-Domett Kristin">Nygaard-Domett Kristin</option>
+<option value="Nygaardsvold Line">Nygaardsvold Line</option>
 <option value="Nygård Elin">Nygård Elin</option>
 <option value="Odland Stine">Odland Stine</option>
-<option value="Ogenvall Charlotta">Ogenvall Charlotta</option>
 <option value="Øktedalen Nina">Øktedalen Nina</option>
 <option value="Olsen Fred">Olsen Fred</option>
+<option value="Olsen Tom Erik">Olsen Tom Erik</option>
 <option value="Omanovic Haris">Omanovic Haris</option>
 <option value="Oprann Susanne">Oprann Susanne</option>
 <option value="Osebakken Lasse">Osebakken Lasse</option>
@@ -247,11 +249,9 @@
 <option value="Pettersson Michelle Nathalie">Pettersson Michelle Nathalie</option>
 <option value="Platou Anette">Platou Anette</option>
 <option value="Poor Omed Mostapha">Poor Omed Mostapha</option>
-<option value="Prestmo Anniken">Prestmo Anniken</option>
 <option value="Pristinski Alexander">Pristinski Alexander</option>
 <option value="Raanes Aniela">Raanes Aniela</option>
 <option value="Radwan Fuad Mohammed">Radwan Fuad Mohammed</option>
-<option value="Rakic Zoran">Rakic Zoran</option>
 <option value="Ranvik Anny Marie">Ranvik Anny Marie</option>
 <option value="Rekkebo Mette-Marit">Rekkebo Mette-Marit</option>
 <option value="Reknes Ida">Reknes Ida</option>
@@ -261,6 +261,7 @@
 <option value="Rognstad Febe">Rognstad Febe</option>
 <option value="Rosendahl Liv">Rosendahl Liv</option>
 <option value="Rudningen Lillian">Rudningen Lillian</option>
+<option value="Rurling Johanna Maria M">Rurling Johanna Maria M</option>
 <option value="Salimovs Samirs">Salimovs Samirs</option>
 <option value="Salomonsen Oda">Salomonsen Oda</option>
 <option value="Samawi Sarah">Samawi Sarah</option>
@@ -270,7 +271,6 @@
 <option value="Schei Karina Andreassen">Schei Karina Andreassen</option>
 <option value="Schjetne Randi">Schjetne Randi</option>
 <option value="Schottenius Johanna">Schottenius Johanna</option>
-<option value="Schøyen Lisbet">Schøyen Lisbet</option>
 <option value="Selbo Espen">Selbo Espen</option>
 <option value="Selnes Jens Ole">Selnes Jens Ole</option>
 <option value="Seppola Rune">Seppola Rune</option>
@@ -285,9 +285,11 @@
 <option value="Skilbred Karina">Skilbred Karina</option>
 <option value="Skorgan Vibeke">Skorgan Vibeke</option>
 <option value="Sletvold Kjartan">Sletvold Kjartan</option>
+<option value="Småland Remi">Småland Remi</option>
 <option value="Søiland Anders Mikal">Søiland Anders Mikal</option>
 <option value="Solhøj Jakob">Solhøj Jakob</option>
 <option value="Sommervold Trond">Sommervold Trond</option>
+<option value="Sørli Knut Olav">Sørli Knut Olav</option>
 <option value="Steinbø Eivind">Steinbø Eivind</option>
 <option value="Stenstadvolden Lindy">Stenstadvolden Lindy</option>
 <option value="Stern Alexander">Stern Alexander</option>
@@ -295,6 +297,7 @@
 <option value="Stöckert Manuel">Stöckert Manuel</option>
 <option value="Stølen Alexandra">Stølen Alexandra</option>
 <option value="Størdal Rune">Størdal Rune</option>
+<option value="Styhre Martin Olof">Styhre Martin Olof</option>
 <option value="Sunde Robert">Sunde Robert</option>
 <option value="Tahir Naqash">Tahir Naqash</option>
 <option value="Talhaug Morten">Talhaug Morten</option>
@@ -314,6 +317,7 @@
 <option value="Vinda Daniel">Vinda Daniel</option>
 <option value="Vinje Morten">Vinje Morten</option>
 <option value="Voigt Rolf Eirik">Voigt Rolf Eirik</option>
+<option value="Waade Marthe">Waade Marthe</option>
 <option value="Waage Lise Cathrine">Waage Lise Cathrine</option>
 <option value="Waage Marie Søyland">Waage Marie Søyland</option>
 <option value="Wakeham Dellie">Wakeham Dellie</option>
@@ -325,6 +329,5 @@
 <option value="Wiig Cecilie">Wiig Cecilie</option>
 <option value="Wiles Therese Veronica">Wiles Therese Veronica</option>
 <option value="Wormdal John">Wormdal John</option>
-<option value="Yarwood Michael">Yarwood Michael</option>
 
 </options>

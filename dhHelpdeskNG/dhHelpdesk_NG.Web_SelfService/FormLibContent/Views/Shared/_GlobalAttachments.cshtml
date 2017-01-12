@@ -1,11 +1,11 @@
-﻿@model ECT.FormLib.Models.FormModel
-@using ECT.FormLib;
-@using ECT.FormLib.Models;
+﻿@model DH.Helpdesk.EForm.FormLib.Models.FormModel
+@using DH.Helpdesk.EForm.FormLib;
+@using DH.Helpdesk.EForm.FormLib.Models;
 
 @{
     var disabled = string.Empty;
 
-    if((ECT.FormLib.FormLibSessions.User.WorkingGroups.FirstOrDefault(x => x.Id == Model.Contract.WorkingGroupId) == null && Model.Contract.WorkingGroupId != 0)
+    if((DH.Helpdesk.EForm.FormLib.FormLibSessions.User.WorkingGroups.FirstOrDefault(x => x.Id == Model.Contract.WorkingGroupId) == null && Model.Contract.WorkingGroupId != 0)
         || Model.IsLooked
         || Model.ReadOnlyTab("#attachments"))
     {
@@ -25,8 +25,8 @@
                     <a target="_blank" href="@Url.Action("index", "files", new
                                                                  {
                                                                      area = "",
-                                                                     name = ECT.Core.FileStore.FileStore.GetFileNameWithoutExtension(file.FileName),
-                                                                     extension = ECT.Core.FileStore.FileStore.GetFileExtension(file.FileName),
+                                                                     name = DH.Helpdesk.EForm.Core.FileStore.FileStore.GetFileNameWithoutExtension(file.FileName),
+                                                                     extension = DH.Helpdesk.EForm.Core.FileStore.FileStore.GetFileExtension(file.FileName),
                                                                      caseNumber = Model.Contract.CaseNumber
                                                                  })"><i class="icon-file"></i>&nbsp;@file.FileName</a>
 

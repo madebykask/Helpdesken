@@ -1,9 +1,9 @@
-﻿@model ECT.FormLib.Models.FormModel
-@using ECT.FormLib;
-@using ECT.FormLib.Models;
-@using ECT.FormLib.Pdfs;
+﻿@model DH.Helpdesk.EForm.FormLib.Models.FormModel
+@using DH.Helpdesk.EForm.FormLib;
+@using DH.Helpdesk.EForm.FormLib.Models;
+@using DH.Helpdesk.EForm.FormLib.Pdfs;
 @using System.Globalization;
-@using ECT.Model.Entities;
+@using DH.Helpdesk.EForm.Model.Entities;
 @{
     Layout = null;
     Model.Language = "en";
@@ -180,7 +180,7 @@
                 list.Add(new PdfListItem { Text = "You will be required to complete a Medical Questionnaire (and Food Questionnaire if applicable to your role). Please note that this is offer of employment is subject to a satisfactory outcome.<br />" });
             }
 
-            if (Model.GetDocumentAnswer("BusinessUnit").ToLower() == "Peterborough Contact Centre".ToLower())
+            if (Model.GetDocumentAnswer("BusinessUnit").ToLower() == "IKEA Contact Centre".ToLower())
             {
                 list.Add(new PdfListItem { Text = "You will be required to complete a Medical Questionnaire (and Food Questionnaire if applicable to your role). Please note that this is offer of employment is subject to a satisfactory outcome.<br />" });
             }

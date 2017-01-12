@@ -47,6 +47,8 @@
 <show>Communications Specialist - Senior</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Compensation &amp; Benefits Manager</selected>
 <show>Compensation &amp; Benefits Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Competence Development Specialist Hjemme</selected>
+<show>Competence Development Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Construction Manager</selected>
 <show>Construction Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Construction Project Manager</selected>
@@ -79,6 +81,10 @@
 <show>Country Retail Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Country Sales Manager</selected>
 <show>Country Sales Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Co-worker Relations Manager SO</selected>
+<show>Co-worker Relations Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Creative Leader SO</selected>
+<show>Creative Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Area Team Leader</selected>
 <show>Customer Area Team Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Knowledge &amp; Insight Mgr Hjemme</selected>
@@ -95,6 +101,8 @@
 <show>Database specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Deputy Business Navigation Manager</selected>
 <show>Deputy Business Navigation Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Deputy Country Com&amp;In Manager</selected>
+<show>Deputy Country Com&amp;In Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Deputy Goods Flow Manager</selected>
 <show>Deputy Goods Flow Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Deputy Logistics Manager</selected>
@@ -102,6 +110,8 @@
 <selected>Deputy Retail Manager</selected>
 <show>Deputy Retail Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Deputy Sales Manager</selected>
+<show>Deputy Sales Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Deputy Sales Manager Åsane</selected>
 <show>Deputy Sales Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Deputy Shopkeeper</selected>
 <show>Deputy Shopkeeper</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
@@ -159,7 +169,7 @@
 <show>IKEA Business Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IKEA Business Specialist</selected>
 <show>IKEA Business Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>IKEA Food Co-worker</selected>
+<selected>IKEA FOOD Co-worker</selected>
 <show>IKEA Food Co-worker</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IKEA Food Manager</selected>
 <show>IKEA Food Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
@@ -177,6 +187,8 @@
 <show>Interior Designer Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Interior Designer Leader</selected>
 <show>Interior Design Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>iShop Administrator</selected>
+<show>iShop Administrator</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IT Coordinator</selected>
 <show>IT Coordinator</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IT Manager</selected>
@@ -197,6 +209,8 @@
 <show>Local Marketing Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Logistics Manager</selected>
 <show>Logistics Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Logistics Specialist SO</selected>
+<show>Logistics Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Maintenance Co-worker</selected>
 <show>Maintenance Co-worker</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Maintenance Manager</selected>

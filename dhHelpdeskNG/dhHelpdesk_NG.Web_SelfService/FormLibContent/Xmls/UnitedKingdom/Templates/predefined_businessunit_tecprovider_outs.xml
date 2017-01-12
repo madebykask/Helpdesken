@@ -2,111 +2,111 @@
 <predefined>
   <name>BusinessUnitTecProvider</name>
   <dependent>
-    <selected>Customer Distribution Centre Peterborough 269</selected>
+    <selected>IKEA Customer Delivery Centre</selected>
     <show>Abdulwahid Mohamed, Andrea Stringer, Deborah Cooper, George Taylor, Graham Hyde, Helena King, James Cameron, Jay Brown, Matthew Humphrey, Michael Wells, Paul Thompson, Peter Linnell, Roger Thomson, Raymond Herlihy, Stephen Baker, Tony Brown</show>
   </dependent>
   <dependent>
-    <selected>Distribution Centre Peterborough 012</selected>
+    <selected>IKEA Distribution Services Uni</selected>
     <show></show>
   </dependent>
   <dependent>
-    <selected>IKEA Property Services</selected>
+    <selected>IKEA Property Investments Ltd</selected>
     <show></show>
   </dependent>
   <dependent>
-    <selected>Peterborough Contact Centre</selected>
+    <selected>IKEA Contact Centre</selected>
     <show></show>
   </dependent>
   <dependent>
-    <selected>Service Office UK</selected>
+    <selected>IKEA Service Office</selected>
     <show>Alberto Fernandez, Allan Gates, Altynay Kurmangalieva, Donna Moore, Jordi Esquinas, Lee Tupshafski, Victoria Bryant,Pauline Fowler,Christian Bugge</show>
   </dependent>
   <dependent>
-    <selected>Store Belfast 113</selected>
+    <selected>IKEA Belfast</selected>
     <show>Mary Collins</show>
   </dependent>
   <dependent>
-    <selected>Store Birmingham 142</selected>
+    <selected>IKEA Birmingham</selected>
     <show>Emma Brannigan-Lawson</show>
   </dependent>
   <dependent>
-    <selected>Store Bristol 264</selected>
+    <selected>IKEA Bristol</selected>
     <show>Matthew Lewis</show>
   </dependent>
   <dependent>
-    <selected>Store Cardiff 267</selected>
+    <selected>IKEA Cardiff</selected>
     <show>Michael Hawkins</show>
   </dependent>
   <dependent>
-    <selected>Store Coventry 150</selected>
+    <selected>IKEA Coventry</selected>
     <show>Katie Cairns-O’Reilly,Karen Sutton</show>
   </dependent>
   <dependent>
-    <selected>Store Edinburgh 265</selected>
+    <selected>IKEA Edinburgh</selected>
     <show>Christine Gordon,Steven Hamilton</show>
   </dependent>
   <dependent>
-    <selected>Store Gateshead 143</selected>
+    <selected>IKEA Gateshead</selected>
     <show>Salomon Benzaquen</show>
   </dependent>
   <dependent>
-    <selected>Store Glasgow 266</selected>
-    <show>James Lindsay</show>
+    <selected>IKEA Glasgow</selected>
+    <show>Bernard McCafferty</show>
   </dependent>
   <dependent>
-    <selected>Store Leeds 261</selected>
+    <selected>IKEA Leeds</selected>
     <show>Teresa Broadbent</show>
   </dependent>
   <dependent>
-    <selected>Store London Croydon 144</selected>
+    <selected>IKEA Croydon</selected>
     <show>Angela Snelgrove, Giuseppe Greco</show>
   </dependent>
   <dependent>
-    <selected>Store London Lakeside 262</selected>
+    <selected>IKEA Lakeside</selected>
     <show>Sean Smith</show>
   </dependent>
   <dependent>
-    <selected>Store London Tottenham 255</selected>
+    <selected>IKEA Tottenham</selected>
     <show>Shakeel Ahmed</show>
   </dependent>
   <dependent>
-    <selected>Store London Wembley 141</selected>
+    <selected>IKEA Wembley</selected>
     <show>Timothy Cox</show>
   </dependent>
   <dependent>
-    <selected>Store Manchester 186</selected>
+    <selected>IKEA Manchester</selected>
     <show>Andrew Pickup</show>
   </dependent>
   <dependent>
-    <selected>Store Milton Keynes 185</selected>
+    <selected>IKEA Milton Keynes</selected>
     <show>Agnieszka Zabczyk</show>
   </dependent>
   <dependent>
-    <selected>Store Nottingham 263</selected>
+    <selected>IKEA Nottingham</selected>
     <show>Michael Fry, Anna Kiddle</show>
   </dependent>
   <dependent>
-    <selected>Store Sheffield 519</selected>
+    <selected>IKEA Sheffield</selected>
     <show>Marta Garcia</show>
   </dependent>
   <dependent>
-    <selected>Store Southampton 125</selected>
+    <selected>IKEA Southampton</selected>
     <show>Mariusz Matyja</show>
   </dependent>
   <dependent>
-    <selected>Store Warrington 140</selected>
+    <selected>IKEA Warrington</selected>
     <show>David Armstrong, Mikhail Kireev</show>
   </dependent>
   <dependent>
-    <selected>Distribution Centre Doncaster</selected>
+    <selected>IKEA Delivery Centre Doncaster</selected>
     <show>Adele Lowndes, Julia Bason, Mark Telford, Paul Sapte</show>
   </dependent>
   <dependent>
-    <selected>E-commerce</selected>
+    <selected>IKEA E-Commerce</selected>
     <show>Lotta Svedeborn, Gordon Bell</show>
   </dependent>
   <dependent>
-    <selected>Store Reading 461</selected>
+    <selected>IKEA Reading</selected>
     <show>James Johnson</show>
   </dependent>
 </predefined>

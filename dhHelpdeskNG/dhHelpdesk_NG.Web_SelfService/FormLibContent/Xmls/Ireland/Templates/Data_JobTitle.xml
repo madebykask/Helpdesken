@@ -6,12 +6,14 @@
   <option value="After Sales Team Leader">After Sales Team Leader</option>
   <option value="Assistant Store Manager">Assistant Store Manager</option>
   <option value="BNOM">BNOM</option>
+  <option value="Business Analyst">Business Analyst</option>
   <option value="Business Navigation &amp; Operations Manager">Business Navigation &amp; Operations Manager</option>
   <option value="Carpenter Co-worker">Carpenter Co-worker</option>
   <option value="Checkout Services Co-worker">Checkout Services Co-worker</option>
   <option value="Checkout Services Manager">Checkout Services Manager</option>
   <option value="Checkout Services Team Leader">Checkout Services Team Leader</option>
   <option value="Com &amp; In Manager">Com &amp; In Manager</option>
+  <option value="Com&amp;In Learning &amp; Development Leader">Com&amp;In Learning &amp; Development Leader</option>
   <option value="Commercial Activity Leader">Commercial Activity Leader</option>
   <option value="Commercial Restaurant Team Leader">Commercial Restaurant Team Leader</option>
   <option value="Commercial SFM &amp; Bistro Manager">Commercial SFM &amp; Bistro Manager</option>
@@ -24,6 +26,7 @@
   <option value="Customer Services Specialist">Customer Services Specialist</option>
   <option value="Customer Services Team Leader">Customer Services Team Leader</option>
   <option value="Deputy Sales Manager">Deputy Sales Manager</option>
+  <option value="E-Commerce Manager">E-Commerce Manager</option>  
   <option value="Facility Manager">Facility Manager</option>
   <option value="Food Production Specialist">Food Production Specialist</option>
   <option value="Furniture Builder">Furniture Builder</option>
@@ -50,6 +53,7 @@
   <option value="Local Marketing Leader">Local Marketing Leader</option>
   <option value="Local Marketing Specialist">Local Marketing Specialist</option>
   <option value="Logistics Manager">Logistics Manager</option>
+  <option value="Marketing Intelligence Manager">Marketing Intelligence Manager</option>
   <option value="Marketing Manager">Marketing Manager</option>
   <option value="Operations Support">Operations Support</option>
   <option value="Product Quality Specialist">Product Quality Specialist</option>
@@ -62,6 +66,7 @@
   <option value="Recovery Manager">Recovery Manager</option>
   <option value="Recovery Team Leader">Recovery Team Leader</option>
   <option value="Regional Facility Manager">Regional Facility Manager</option>
+  <option value="Retail Logistics Capacity &amp; flow Planner">Retail Logistics Capacity &amp; flow Planner</option>  
   <option value="Safety &amp; Security Co-worker">Safety &amp; Security Co-worker</option>
   <option value="Safety &amp; Security Manager">Safety &amp; Security Manager</option>
   <option value="Safety &amp; Security Team Leader">Safety &amp; Security Team Leader</option>
@@ -70,9 +75,11 @@
   <option value="Sales &amp; Supply Support Manager">Sales &amp; Supply Support Manager</option>
   <option value="Sales &amp; Supply Support Specialist">Sales &amp; Supply Support Specialist</option>
   <option value="Sales Co-worker">Sales Co-worker</option>
+  <option value="Sales Leader">Sales Leader</option>  
   <option value="Sales Manager">Sales Manager</option>
   <option value="Sales or Customer Relations Co-worker">Sales or Customer Relations Co-worker</option>
   <option value="Sales Team Leader">Sales Team Leader</option>
+  <option value="Service Business Leader">Service Business Leader</option>
   <option value="Services Function Support">Services Function Support</option>
   <option value="Shopkeeper">Shopkeeper</option>
   <option value="Shopkeeper Sales HFB4 &amp; 5 (Bedrooms)">Shopkeeper Sales HFB4 &amp; 5 (Bedrooms)</option>

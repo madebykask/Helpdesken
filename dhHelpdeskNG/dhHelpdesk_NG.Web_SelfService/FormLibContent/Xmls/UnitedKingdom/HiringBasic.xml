@@ -124,8 +124,8 @@
           <regex inherit="date" pattern="" message=""></regex>
         </element>-->
         <element type="date" name="DateOfBirth" label="Date of birth" mandatory="1" format="dd.MM.yyyy">
-          <!--<agecheck name="ContractStartDate" dropDownFieldToValidate="Company" validateFor="IKEA Properties Investments Ltd,IKEA Limited" age="16" message="Employee under 16, you are unable to proceed with this service request"></agecheck>
-          <agecheck name="ContractStartDate" dropDownFieldToValidate="Company" validateFor="IKEA Distribution Services Limited" age="18" message="Employee under 18, you are unable to proceed with this service request"></agecheck>-->
+          <!--<agecheck name="ContractStartDate" dropDownFieldToValidate="Company" validateFor="IKEA Prop Investments Ltd,IKEA Ltd" age="16" message="Employee under 16, you are unable to proceed with this service request"></agecheck>
+          <agecheck name="ContractStartDate" dropDownFieldToValidate="Company" validateFor="IKEA Dist Services Ltd" age="18" message="Employee under 18, you are unable to proceed with this service request"></agecheck>-->
           <regex inherit="date" pattern="" message=""></regex>
         </element>
         <element type="text" name="PermanentAddressLine1" label="Address line 1" mandatory="1"></element>

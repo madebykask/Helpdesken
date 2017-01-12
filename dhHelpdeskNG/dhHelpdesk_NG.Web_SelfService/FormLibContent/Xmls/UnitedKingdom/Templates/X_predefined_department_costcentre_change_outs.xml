@@ -2,7 +2,7 @@
 <predefined>
   <name>CostCentre</name>
   <dependent>
-    <selected>Store Edinburgh 265</selected>
+    <selected>IKEA Edinburgh</selected>
     <show>7010</show>
   </dependent>
   <dependent>
@@ -82,7 +82,7 @@
     <show>4000</show>
   </dependent>
   <dependent>
-    <selected>Store Southampton 125</selected>
+    <selected>IKEA Southampton</selected>
     <show>7010</show>
   </dependent>
   <dependent>
@@ -830,7 +830,7 @@
     <show>6122</show>
   </dependent>
   <dependent>
-    <selected>Store Leeds 261</selected>
+    <selected>IKEA Leeds</selected>
     <show>7010</show>
   </dependent>
   <dependent>
@@ -994,7 +994,7 @@
     <show>4000</show>
   </dependent>
   <dependent>
-    <selected>Store Milton Keynes 185</selected>
+    <selected>IKEA Milton Keynes</selected>
     <show>7010</show>
   </dependent>
   <dependent>
@@ -1598,7 +1598,7 @@
     <show>6070</show>
   </dependent>
   <dependent>
-    <selected>Store Nottingham 263</selected>
+    <selected>IKEA Nottingham</selected>
     <show>7010</show>
   </dependent>
   <dependent>
@@ -1922,7 +1922,7 @@
     <show>6180</show>
   </dependent>
   <dependent>
-    <selected>Store Belfast 113</selected>
+    <selected>IKEA Belfast</selected>
     <show>7010</show>
   </dependent>
   <dependent>
@@ -2006,7 +2006,7 @@
     <show>3900</show>
   </dependent>
   <dependent>
-    <selected>Store Manchester 186</selected>
+    <selected>IKEA Manchester</selected>
     <show>7010</show>
   </dependent>
   <dependent>
@@ -2178,7 +2178,7 @@
     <show>6180</show>
   </dependent>
   <dependent>
-    <selected>Store Gateshead 143</selected>
+    <selected>IKEA Gateshead</selected>
     <show>7010</show>
   </dependent>
   <dependent>
@@ -2562,7 +2562,7 @@
     <show>6120</show>
   </dependent>
   <dependent>
-    <selected>Store Birmingham 142</selected>
+    <selected>IKEA Birmingham</selected>
     <show>7010</show>
   </dependent>
   <dependent>
@@ -2570,7 +2570,7 @@
     <show>6120</show>
   </dependent>
   <dependent>
-    <selected>Store Warrington 140</selected>
+    <selected>IKEA Warrington</selected>
     <show>7010</show>
   </dependent>
   <dependent>
@@ -2950,7 +2950,7 @@
     <show>6071</show>
   </dependent>
   <dependent>
-    <selected>Store Coventry 150</selected>
+    <selected>IKEA Coventry</selected>
     <show>7010</show>
   </dependent>
   <dependent>
@@ -3498,7 +3498,7 @@
     <show>4040</show>
   </dependent>
   <dependent>
-    <selected>Store Glasgow 266</selected>
+    <selected>IKEA Glasgow</selected>
     <show>7010</show>
   </dependent>
   <dependent>
@@ -3562,7 +3562,7 @@
     <show>7010</show>
   </dependent>
   <dependent>
-    <selected>Store Cardiff 267</selected>
+    <selected>IKEA Cardiff</selected>
     <show>7010</show>
   </dependent>
   <dependent>
@@ -4086,7 +4086,7 @@
     <show>7010</show>
   </dependent>
   <dependent>
-    <selected>Store Bristol 264</selected>
+    <selected>IKEA Bristol</selected>
     <show>7010</show>
   </dependent>
   <dependent>

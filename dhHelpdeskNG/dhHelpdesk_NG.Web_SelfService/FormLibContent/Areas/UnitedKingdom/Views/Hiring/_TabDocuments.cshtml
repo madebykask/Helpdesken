@@ -1,6 +1,6 @@
-﻿@model ECT.FormLib.Models.FormModel
-@using ECT.FormLib;
-@using ECT.FormLib.Models;
+﻿@model DH.Helpdesk.EForm.FormLib.Models.FormModel
+@using DH.Helpdesk.EForm.FormLib;
+@using DH.Helpdesk.EForm.FormLib.Models;
 
 
 @functions{
@@ -12,20 +12,20 @@
             return "";
         }
 
-        //This template is applicable only if Business unit = "Distribution Centre Doncaster"
-        if (Model.GetDocumentAnswer("BusinessUnit").ToLower() == "Distribution Centre Doncaster".ToLower() && (Model.GetAnswer("NewToIKEA").ToLower() == "New Hire".ToLower() | Model.GetAnswer("NewToIKEA").ToLower() == "Re-Hire".ToLower()))
+        //This template is applicable only if Business unit = "IKEA Delivery Centre Doncaster"
+        if (Model.GetDocumentAnswer("BusinessUnit").ToLower() == "IKEA Delivery Centre Doncaster".ToLower() && (Model.GetAnswer("NewToIKEA").ToLower() == "New Hire".ToLower() | Model.GetAnswer("NewToIKEA").ToLower() == "Re-Hire".ToLower()))
          {
              return "Doncaster";
          }
 
         //This template is applicable only if <Contract Type/OA14> = “Zero Hour”
-        if (Model.GetAnswer("ContractType").ToLower() == "Zero Hours".ToLower() && Model.GetDocumentAnswer("BusinessUnit").ToLower() != "Distribution Centre Doncaster".ToLower())
+        if (Model.GetAnswer("ContractType").ToLower() == "Zero Hours".ToLower() && Model.GetDocumentAnswer("BusinessUnit").ToLower() != "IKEA Delivery Centre Doncaster".ToLower())
         {
             return "ZeroHour";
         }
 
         //<Business Unit/OA3> different than U.K & IE Contact Centre or Distribution Services Ltd or Distribution Service Office
-        if (Model.GetDocumentAnswer("BusinessUnit").ToLower() != "Peterborough Contact Centre".ToLower() && Model.GetDocumentAnswer("BusinessUnit").ToLower() != "Distribution Centre Peterborough 012".ToLower() && Model.GetDocumentAnswer("BusinessUnit").ToLower() != "Distribution Service Office".ToLower() && Model.GetDocumentAnswer("BusinessUnit").ToLower() != "Distribution Centre Doncaster".ToLower())
+        if (Model.GetDocumentAnswer("BusinessUnit").ToLower() != "IKEA Contact Centre".ToLower() && Model.GetDocumentAnswer("BusinessUnit").ToLower() != "IKEA Distribution Services Uni".ToLower() && Model.GetDocumentAnswer("BusinessUnit").ToLower() != "Distribution Service Office".ToLower() && Model.GetDocumentAnswer("BusinessUnit").ToLower() != "IKEA Delivery Centre Doncaster".ToLower())
         {
 
             //IF <Employment Category/OA12> = Temporary or Fixed Term AND <Business Unit/OA3> different than U.K & IE Contact Centre or Distribution Services Ltd or Distribution Service Office   
@@ -43,7 +43,7 @@
         }
         //This template should be applicable for Permanent type and unit Contact Centre only which means both conditions must be met:
         //IF <Employment Category/OA12> = Permanent AND <Business Unit/OA3> = U.K & IE Contact Centre
-        else if (Model.GetAnswer("ContractType").ToLower() == "Permanent".ToLower() && Model.GetDocumentAnswer("BusinessUnit").ToLower() == "Peterborough Contact Centre".ToLower())
+        else if (Model.GetAnswer("ContractType").ToLower() == "Permanent".ToLower() && Model.GetDocumentAnswer("BusinessUnit").ToLower() == "IKEA Contact Centre".ToLower())
         {
             return "ContactCentre";
         }

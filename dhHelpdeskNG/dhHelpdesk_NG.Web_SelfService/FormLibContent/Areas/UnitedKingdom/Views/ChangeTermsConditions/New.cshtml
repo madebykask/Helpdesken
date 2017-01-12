@@ -1,6 +1,6 @@
-﻿@model ECT.FormLib.Models.FormModel
-@using ECT.FormLib;
-@using ECT.FormLib.Models;
+﻿@model DH.Helpdesk.EForm.FormLib.Models.FormModel
+@using DH.Helpdesk.EForm.FormLib;
+@using DH.Helpdesk.EForm.FormLib.Models;
 
 @{
     ViewBag.Title = Model.Translate("United Kingdom") + " - " + Model.Translate("Service Request Details");
@@ -111,16 +111,16 @@
             if (value == '')
                 return;
 
-            if (value == 'IKEA Limited')
+            if (value == 'IKEA Ltd')
                 document.getElementById('HelpDesk').value = 'ICC3 UK Retail';
 
-            if (value == 'IKEA Properties Investments Ltd')
+            if (value == 'IKEA Prop Investments Ltd')
                 document.getElementById('HelpDesk').value = 'ICC3 UK Retail';
 
-            if (value == 'IKEA Distribution Services Limited')
+            if (value == 'IKEA Dist Services Ltd')
                 document.getElementById('HelpDesk').value = 'ICC3 WER DS';
 
-            if (value != 'IKEA Distribution Services Limited') {
+            if (value != 'IKEA Dist Services Ltd') {
                 document.getElementById('CostAllocation').disabled = true;
                 if ($('#CrossChargeCostCentre')[0] != undefined && $('#CrossChargeCostCentre')[0].selectize)
                     $('#CrossChargeCostCentre')[0].selectize.disable();

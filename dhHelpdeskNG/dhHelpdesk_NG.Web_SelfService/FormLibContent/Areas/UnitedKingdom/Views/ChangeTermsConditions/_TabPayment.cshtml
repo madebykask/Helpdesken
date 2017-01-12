@@ -1,10 +1,10 @@
-﻿@model ECT.FormLib.Models.FormModel
-@using ECT.FormLib;
-@using ECT.FormLib.Models;
+﻿@model DH.Helpdesk.EForm.FormLib.Models.FormModel
+@using DH.Helpdesk.EForm.FormLib;
+@using DH.Helpdesk.EForm.FormLib.Models;
 @{
     const string Level = "Level 1";
 
-    const string CompanyName = "IKEA Distribution Services Limited";
+    const string CompanyName = "IKEA Dist Services Ltd";
     const string ContractType = "Permanent";
     const string PartTime = "Part Time";
     const string FullTime = "Full Time";
@@ -498,7 +498,7 @@
             }
 
 
-            //This validation doesen´t apply to "IKEA Distribution Services Limited";
+            //This validation doesen´t apply to "IKEA Dist Services Ltd";
             var newCompany = $("#NewCompany option:selected").text();
 
             if (newCompany != '@CompanyName') {
@@ -536,7 +536,7 @@
 
         $('#ContractedHours').change(function () {
 
-            //This validation doesen´t apply to "IKEA Distribution Services Limited";
+            //This validation doesen´t apply to "IKEA Dist Services Ltd";
             var newCompany = $("#NewCompany option:selected").text();
             var value = $(this).val();
 
@@ -572,7 +572,7 @@
 
             var bus = $("#NewBusinessUnit option:selected").text();
 
-            if (bus == 'Distribution Centre Peterborough 012' | bus == 'IKEA Property Services' | bus == 'Peterborough Contact Centre' | bus == 'Service Office UK' | bus == 'Customer Distribution Centre Peterborough 269') {
+            if (bus == 'IKEA Distribution Services Uni' | bus == 'IKEA Property Investments Ltd' | bus == 'IKEA Contact Centre' | bus == 'IKEA Service Office' | bus == 'IKEA Customer Delivery Centre') {
                 var line = document.getElementById('ReportsToLineManager').value;
 
                 var tec = $("#TECApprover option:selected").text();
@@ -590,11 +590,11 @@
 
         $('#NewCompany').change(function () {
 
-            if ($("#NewCompany option:selected").text() == 'IKEA Limited')
+            if ($("#NewCompany option:selected").text() == 'IKEA Ltd')
             { document.getElementById('HelpDesk').value = 'ICC3 UK Retail'; }
-            else if ($("#NewCompany option:selected").text() == 'IKEA Properties Investments Ltd')
+            else if ($("#NewCompany option:selected").text() == 'IKEA Prop Investments Ltd')
             { document.getElementById('HelpDesk').value = 'ICC3 UK Retail'; }
-            else if ($("#NewCompany option:selected").text() == 'IKEA Distribution Services Limited')
+            else if ($("#NewCompany option:selected").text() == 'IKEA Dist Services Ltd')
             { document.getElementById('HelpDesk').value = 'ICC3 WER DS'; }
             else
             {
@@ -1204,7 +1204,7 @@
                 show2 = $sel.find('show2').text();
 
                 
-                if (bus == 'Store Bristol 264' | bus == 'Store London Croydon 144' | bus == 'Store London Lakeside 262' | bus == 'Store Milton Keynes 185' | bus == 'Store London Tottenham 255' | bus == 'Store London Wembley 141') { //// 2015-09-10 SG case : 52831 2015 week 36 changes : only for Service Office UK, no default value anymore | bus == 'Service Office UK'
+                if (bus == 'IKEA Bristol' | bus == 'IKEA Croydon' | bus == 'IKEA Lakeside' | bus == 'IKEA Milton Keynes' | bus == 'IKEA Tottenham' | bus == 'IKEA Wembley') { //// 2015-09-10 SG case : 52831 2015 week 36 changes : only for IKEA Service Office, no default value anymore | bus == 'IKEA Service Office'
                         
                         if (document.getElementById('AllowancesType').value == '') {
 
@@ -1212,7 +1212,7 @@
                         }
                         if (dep.toString().trim() == 'Location Allowance') {
               
-                            if (bus == 'Store Bristol 264') {
+                            if (bus == 'IKEA Bristol') {
                                 
                                 if (pay == 'Hourly') {
                                     if (AllowanceType == 1) {
@@ -1239,7 +1239,7 @@
                                     }
                                 }
                             }
-                            else if (bus == 'Store London Croydon 144') {
+                            else if (bus == 'IKEA Croydon') {
                                 if (pay == 'Hourly') {
                                     if (AllowanceType == 1) {
                                         if (document.getElementById('AllowancesAmountUnits')) {
@@ -1265,7 +1265,7 @@
                                     }
                                 }
                             }
-                            else if (bus == 'Store London Lakeside 262') {
+                            else if (bus == 'IKEA Lakeside') {
                                 if (pay == 'Hourly') {
                                     if (AllowanceType == 1) {
                                         if (document.getElementById('AllowancesAmountUnits')) {
@@ -1291,7 +1291,7 @@
                                     }
                                 }
                             }
-                            else if (bus == 'Store Milton Keynes 185') {
+                            else if (bus == 'IKEA Milton Keynes') {
                                 if (pay == 'Hourly') {
                                     if (AllowanceType == 1) {
                                         if (document.getElementById('AllowancesAmountUnits')) {
@@ -1317,7 +1317,7 @@
                                     }
                                 }
                             }
-                            else if (bus == 'Store London Tottenham 255') {
+                            else if (bus == 'IKEA Tottenham') {
                                 if (pay == 'Hourly') {
                                     if (AllowanceType == 1) {
                                         if (document.getElementById('AllowancesAmountUnits')) {
@@ -1343,7 +1343,7 @@
                                     }
                                 }
                             }
-                            else if (bus == 'Store London Wembley 141') {
+                            else if (bus == 'IKEA Wembley') {
                                 if (pay == 'Hourly') {
                                     if (AllowanceType == 1) {
                                         if (document.getElementById('AllowancesAmountUnits')) {
@@ -1371,8 +1371,8 @@
                                 }
                             }
 
-                           // 2015 week 36 changes : only for Service Office UK, no default value anymore
-                            //else if (bus == 'Service Office UK') {
+                           // 2015 week 36 changes : only for IKEA Service Office, no default value anymore
+                            //else if (bus == 'IKEA Service Office') {
                             //    if (pay == 'Hourly') {
                             //        if (AllowanceType == 1) {
                             //            if (document.getElementById('AllowancesAmountUnits')) {
@@ -1409,7 +1409,7 @@
                             if (show != '') {
 
                                 if (dep.toString().trim() == 'Advanced') {
-                                    if (bus.toString().trim() != 'Peterborough Contact Centre') {
+                                    if (bus.toString().trim() != 'IKEA Contact Centre') {
                                         if (AllowanceType == 1) {
                                             if (document.getElementById('AllowancesAmountUnits')) {
                                                 document.getElementById('AllowancesAmountUnits').value = show;
@@ -1436,7 +1436,7 @@
                                 }
                                 else if (dep.toString().trim() == 'First Aid Allowance') {
 
-                                    //if (bus.toString().trim() == 'Customer Distribution Centre Peterborough 269' | bus.toString().trim() == 'Distribution Centre Peterborough 012') {
+                                    //if (bus.toString().trim() == 'IKEA Customer Delivery Centre' | bus.toString().trim() == 'IKEA Distribution Services Uni') {
                                     if (AllowanceType == 1) {
                                         if (document.getElementById('AllowancesAmountUnits')) {
                                             document.getElementById('AllowancesAmountUnits').value = show;
@@ -1450,7 +1450,7 @@
                                     //}
                                 }
                                 else if (dep.toString().trim() == 'Fork Lift Truck Allowance') {
-                                    if (bus.toString().trim() != 'Store Milton Keynes 185') {
+                                    if (bus.toString().trim() != 'IKEA Milton Keynes') {
                                         if (AllowanceType == 1) {
                                             if (document.getElementById('AllowancesAmountUnits')) {
                                                 document.getElementById('AllowancesAmountUnits').value = show;
@@ -1476,7 +1476,7 @@
                                     }
                                 }
                                 else if (dep.toString().trim() == 'Kitchen Skills') {
-                                    if (bus.toString().trim() == 'Store Edinburgh 265') {
+                                    if (bus.toString().trim() == 'IKEA Edinburgh') {
                                         if (AllowanceType == 1) {
                                             if (document.getElementById('AllowancesAmountUnits')) {
                                                 document.getElementById('AllowancesAmountUnits').value = '1.00';
@@ -1489,7 +1489,7 @@
                                         }
                                     }
 
-                                    else if (bus.toString().trim() == 'Store London Tottenham 255' | bus == 'Store London Wembley 141' | bus == 'Store London Croydon 144' | bus == 'Store London Lakeside 262') {
+                                    else if (bus.toString().trim() == 'IKEA Tottenham' | bus == 'IKEA Wembley' | bus == 'IKEA Croydon' | bus == 'IKEA Lakeside') {
                                         if (AllowanceType == 1) {
                                             if (document.getElementById('AllowancesAmountUnits')) {
                                                 document.getElementById('AllowancesAmountUnits').value = '0.30';
@@ -1595,11 +1595,11 @@
                         if (document.getElementById('NewBusinessUnit')) {
                             bus = $("#NewBusinessUnit option:selected").text();
                         }
-                        if (bus == 'Service Office UK' | bus == 'IKEA Properties Investments Ltd') {
+                        if (bus == 'IKEA Service Office' | bus == 'IKEA Prop Investments Ltd') {
                             document.getElementById('PayScaleGroup').value = 'INTERN';
                         }
 
-                        if (bus == 'Store London Tottenham 255' | bus == 'Store London Wembley 141' | bus == 'Store London Croydon 144') {
+                        if (bus == 'IKEA Tottenham' | bus == 'IKEA Wembley' | bus == 'IKEA Croydon') {
 
                             document.getElementById('PayScaleGroup').value = 'STARTLO';
                         }
@@ -1626,6 +1626,10 @@
                 document.getElementById('BasicPayAmount').value = ''
             }
 
+            var comp = '';
+            if (document.getElementById('NewCompany')) {
+                comp = $("#NewCompany option:selected").text();
+            }
 
             var bus = '';
             if (document.getElementById('NewBusinessUnit')) {
@@ -1643,14 +1647,14 @@
 
             }
 
-            //if (bus != 'Distribution Centre Doncaster') {
+            //if (bus != 'IKEA Delivery Centre Doncaster') {
                 if (pay.toString().trim() == 'Hourly') {
                     var show;
 
                     show = 'STARTLO';
 
                     if (grp == '') {
-                        if (bus.toString().trim() == 'Store London Tottenham 255' | bus.toString().trim() == 'Store London Wembley 141' | bus.toString().trim() == 'Store London Croydon 144') {
+                        if (bus.toString().trim() == 'IKEA Tottenham' | bus.toString().trim() == 'IKEA Wembley' | bus.toString().trim() == 'IKEA Croydon') {
                             grp = 'STARTLO';
                             document.getElementById('PayScaleGroup').value = grp;
                         }
@@ -1660,25 +1664,25 @@
                         }
                     }
                                         
-                    //if (bus.toString().trim() == 'Peterborough Contact Centre') {
-                    //    if (grp.toString().trim() == 'STARTER') {
-                    //        if (document.getElementById('BasicPayAmount')) {
-                    //            document.getElementById('BasicPayAmount').value = '7.97'
-                    //        }
-                    //    }
-                    //    else if (grp.toString().trim() == 'FOUNDATION') {
-                    //        if (document.getElementById('BasicPayAmount')) {
-                    //            document.getElementById('BasicPayAmount').value = '7.97'
-                    //        }
-                    //    }
-                    //    else if (grp.toString().trim() == 'ADVANCED') {
-                    //        if (document.getElementById('BasicPayAmount')) {
-                    //            document.getElementById('BasicPayAmount').value = '8.52'
-                    //        }
-                    //    }
-                    //}
+                    if (comp.toString().trim() == 'IKEA Ltd' | comp == 'IKEA Dist Services Ltd') {
+                        if (grp.toString().trim() == 'STARTER') {
+                            if (document.getElementById('BasicPayAmount')) {
+                                document.getElementById('BasicPayAmount').value = '8.25'
+                            }
+                        }
+                        else if (grp.toString().trim() == 'FOUNDATION') {
+                            if (document.getElementById('BasicPayAmount')) {
+                                document.getElementById('BasicPayAmount').value = '8.25'
+                            }
+                        }
+                        //else if (grp.toString().trim() == 'ADVANCED') {
+                        //    if (document.getElementById('BasicPayAmount')) {
+                        //        document.getElementById('BasicPayAmount').value = '8.52'
+                        //    }
+                        //}
+                    }
                     //else
-                    if (bus.toString().trim() == 'Store London Tottenham 255' | bus == 'Store London Wembley 141' | bus == 'Store London Croydon 144') {
+                    if (bus.toString().trim() == 'IKEA Tottenham' | bus == 'IKEA Wembley' | bus == 'IKEA Croydon') {
                         if (grp.toString().trim() == 'STARTLO') {
                             if (document.getElementById('BasicPayAmount')) {
                                 document.getElementById('BasicPayAmount').value = '9.40'
@@ -1721,12 +1725,29 @@
                                 }
                         }
                         else if (grp.toString().trim() == 'INTERN') {
-                            if (bus.toString().trim() == 'Service Office UK' | bus == 'IKEA Properties Investments Ltd') {
+                            if (bus.toString().trim() == 'IKEA Service Office' | bus == 'IKEA Prop Investments Ltd') {
                                 if (document.getElementById('BasicPayAmount')) {
                                     document.getElementById('BasicPayAmount').value = '6.70'
                                 }
                             }
                         }
+                        else
+                        
+                            if (grp.toString().trim() == 'STARTER') {
+                                if (comp.toString().trim() == 'IKEA Ltd' | comp == 'IKEA Dist Services Ltd') {
+                                    if (document.getElementById('BasicPayAmount')) {
+                                        document.getElementById('BasicPayAmount').value = '8.25'
+                                    }
+                                }
+                            }
+                            else if (grp.toString().trim() == 'FOUNDATION') {
+                                if (comp.toString().trim() == 'IKEA Ltd' | comp == 'IKEA Dist Services Ltd') {
+                                    if (document.getElementById('BasicPayAmount')) {
+                                        document.getElementById('BasicPayAmount').value = '8.25'
+                                    }
+                                }
+                            }
+                        
                         else {
                             if (document.getElementById('BasicPayAmount')) {
                                 document.getElementById('BasicPayAmount').value = '6.50'
@@ -1797,10 +1818,10 @@
 
 
                 if (document.getElementById('PayScaleGroup')) {
-                    if (bus == 'Service Office UK' | bus == 'IKEA Properties Investments Ltd') {
+                    if (bus == 'IKEA Service Office' | bus == 'IKEA Prop Investments Ltd') {
                         document.getElementById('PayScaleGroup').value = 'INTERN';
                     }
-                    if (bus == 'Store London Tottenham 255' | bus == 'Store London Wembley 141' | bus == 'Store London Croydon 144') {
+                    if (bus == 'IKEA Tottenham' | bus == 'IKEA Wembley' | bus == 'IKEA Croydon') {
                         document.getElementById('PayScaleGroup').value = 'STARTLO';
                     }
                     else {
@@ -2044,7 +2065,7 @@
 
                 if (department.toString().trim() == dep.toString().trim()) {
 
-                    if (bus == 'Store Manchester 186' | bus == 'Store Belfast 113' | bus == 'Store Cardiff 267' | bus == 'Store Edinburgh 265' | bus == 'Store Gateshead 143' | bus == 'Store Milton Keynes 185' | bus == 'Store Coventry 150') {
+                    if (bus == 'IKEA Manchester' | bus == 'IKEA Belfast' | bus == 'IKEA Cardiff' | bus == 'IKEA Edinburgh' | bus == 'IKEA Gateshead' | bus == 'IKEA Milton Keynes' | bus == 'IKEA Coventry') {
                         res = '1';
                         if (show != '') {
                             var n = show.indexOf(",");
@@ -2067,7 +2088,7 @@
                             }
                         }
                     }
-                    else if (bus == 'Store Bristol 264' | bus == 'Store London Tottenham 255' | bus == 'Store Glasgow 266' | bus == 'Store London Lakeside 262' | bus == 'Store Leeds 261' | bus == 'Store Nottingham 263' | bus == 'Store Southampton 125' | bus == 'Store Warrington 140' | bus == 'Store Birmingham 142') {
+                    else if (bus == 'IKEA Bristol' | bus == 'IKEA Tottenham' | bus == 'IKEA Glasgow' | bus == 'IKEA Lakeside' | bus == 'IKEA Leeds' | bus == 'IKEA Nottingham' | bus == 'IKEA Southampton' | bus == 'IKEA Warrington' | bus == 'IKEA Birmingham') {
                         res = '1';
 
                         if (show2 != '') {
@@ -2091,7 +2112,7 @@
                             }
                         }
                     }
-                    else if (bus == 'Store London Croydon 144' | bus == 'Store London Wembley 141' | bus == 'Store Glasgow 266') {
+                    else if (bus == 'IKEA Croydon' | bus == 'IKEA Wembley' | bus == 'IKEA Glasgow') {
                         res = '1';
                         if (show3 != '') {
                             var n = show3.indexOf(",");
@@ -2212,7 +2233,7 @@
                 line = document.getElementById('ReportsToLineManager').value;
             }
 
-            if (dep == 'Distribution Centre Peterborough 012' | dep == 'IKEA Property Services' | dep == 'Peterborough Contact Centre' | dep == 'Service Office UK' | dep == 'Customer Distribution Centre Peterborough 269' | dep == 'E-Commerce') {
+            if (dep == 'IKEA Distribution Services Uni' | dep == 'IKEA Property Investments Ltd' | dep == 'IKEA Contact Centre' | dep == 'IKEA Service Office' | dep == 'IKEA Customer Delivery Centre' | dep == 'IKEA E-Commerce') {
 
                 if (document.getElementById('TECApprover')) {
                     $('#TECApprover')[0].selectize.setValue(line);

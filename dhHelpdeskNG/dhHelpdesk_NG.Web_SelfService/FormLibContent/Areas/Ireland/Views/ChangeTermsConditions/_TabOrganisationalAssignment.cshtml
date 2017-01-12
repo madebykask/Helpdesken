@@ -1,6 +1,6 @@
-﻿@model ECT.FormLib.Models.FormModel
-@using ECT.FormLib;
-@using ECT.FormLib.Models;
+﻿@model DH.Helpdesk.EForm.FormLib.Models.FormModel
+@using DH.Helpdesk.EForm.FormLib;
+@using DH.Helpdesk.EForm.FormLib.Models;
 
 @{
     const string CompanyName = "IKEA Distribution Services Limited";
@@ -281,7 +281,7 @@ $('#Company').change(function () {
             setTimeout(function () { GetXML('predefined_linemanager_department_outs.xml', setLineManagerJob); }, 30);
 
             //Department /Tec approver
-            GetXML('predefined_department_tecapprover_outs.xml', setTecApprover);
+            //GetXML('predefined_department_tecapprover_outs.xml', setTecApprover);
         });
         function setLineManagerAndCostCentre(xml) {
             //////////
@@ -360,7 +360,7 @@ $('#Company').change(function () {
             //////////
             //alert();
 
-            setTecApprover();
+            //setTecApprover();
             setPayrollCategory();
             setBasicPayAmount();
             //setAllowanceType2();

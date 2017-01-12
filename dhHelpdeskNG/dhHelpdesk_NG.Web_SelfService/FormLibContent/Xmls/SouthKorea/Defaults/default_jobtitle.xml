@@ -322,6 +322,10 @@
     <show>Deputy Customer Relations Manager</show>
   </dependent>
   <dependent>
+    <selected>Deputy HR manager 373</selected>
+    <show>Deputy HR manager</show>
+  </dependent>
+  <dependent>
     <selected>Deputy HR manager 522</selected>
     <show>Deputy HR manager</show>
   </dependent>
@@ -368,6 +372,10 @@
   <dependent>
     <selected>Digital Marketing Coordinator SO</selected>
     <show>Digital Marketing Coordinator</show>
+  </dependent>
+  <dependent>
+    <selected>Distribution Operation Manager SO</selected>
+    <show>Distribution Operation Manager</show>
   </dependent>
   <dependent>
     <selected>Engineering Manager SO</selected>
@@ -532,6 +540,10 @@
   <dependent>
     <selected>HR Manager 522</selected>
     <show>HR Manager</show>
+  </dependent>
+  <dependent>
+    <selected>HR Manager CSC</selected>
+    <show>HR Manager CSC</show>
   </dependent>
   <dependent>
     <selected>HR Manager SO</selected>
@@ -710,8 +722,16 @@
     <show>Leadership &amp; Competence Manager</show>
   </dependent>
   <dependent>
+    <selected>Legal Manager SO</selected>
+    <show>Legal Manager</show>
+  </dependent>
+  <dependent>
     <selected>Learning &amp; Development Specialist SO</selected>
     <show>Learning &amp; Development Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Facility Management Specialist 522</selected>
+    <show>Local Facility Management Specialist</show>
   </dependent>
   <dependent>
     <selected>Local Marketing Manager 373</selected>
@@ -796,6 +816,10 @@
   <dependent>
     <selected>Project Manager SO</selected>
     <show>Project Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Project Specialist I SO</selected>
+    <show>Project Specialist I</show>
   </dependent>
   <dependent>
     <selected>Project Specialist SO</selected>
@@ -927,7 +951,7 @@
   </dependent>
   <dependent>
     <selected>Sales &amp; Supply Sup. Specialist 373</selected>
-    <show>Sales Support Specialist</show>
+    <show>Sales &amp; Supply Support Specialist</show>
   </dependent>
   <dependent>
     <selected>Sales &amp; Supply Support Co-worker 373</selected>
@@ -1002,6 +1026,10 @@
     <show>Sales Team Leader</show>
   </dependent>
   <dependent>
+    <selected>Service Business Leader SO</selected>
+    <show>Service Business Leader</show>
+  </dependent>
+  <dependent>
     <selected>Shopkeeper 373</selected>
     <show>Shopkeeper 1</show>
   </dependent>
@@ -1066,6 +1094,10 @@
     <show>Talent Manager</show>
   </dependent>
   <dependent>
+    <selected>Trainee SO</selected>
+    <show>Trainee</show>
+  </dependent>
+  <dependent>
     <selected>Translation Coordinator SO</selected>
     <show>Translator</show>
   </dependent>
@@ -1100,6 +1132,10 @@
   <dependent>
     <selected>Visual Merchandising Manager 522</selected>
     <show>Visual Merchandising Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Web Communication Specialist STO</selected>
+    <show>Web Communication Specialist</show>
   </dependent>
   <dependent>
     <selected>Web editor SO</selected>

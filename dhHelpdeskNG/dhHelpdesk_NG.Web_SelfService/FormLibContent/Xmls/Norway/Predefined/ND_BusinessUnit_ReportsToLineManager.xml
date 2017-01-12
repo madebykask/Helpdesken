@@ -1,58 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?><predefined><name>BusinessUnit</name>
-<dependent>       
-<selectedCode>V047</selectedCode>
-<selected>IKEA  Eiendom Holding AS</selected>
-<show>Grane Ulf,Hajny Filip,Jonsson Søren</show>
-</dependent>
-<dependent>       
-<selectedCode>V126</selectedCode>
-<selected>IKEA Forus</selected>
-<show>Aarflot Ellinor Kolnes,Asbjørnsen Stine Junker,Bjotveit Barbro Stendahl,Bryne Jon,Bø Siv,Danielsen Martin,Dirdal Anne Lene S,Dyvik Kaj,Eliassen Marit,Gjerde Marianne,Hajny Filip,Handeland Eli Ann,Hansen Ingrid Marie,Helland Aina,Hinna Kjersti,Idland Cecilie Vognsen,Idland Tone Tveit,Jama Abdikarim Farah,Junge Tone Rita,Langeland Tove,Latifi Valbona,Nielsen Steinar,Olsen Tom Erik,Osmundsen Ida,Palmqvist Emmy,Pasha Chand Vicky,Pristinski Alexander,Rosland Silje,Samawi Sarah,Schei Karina Andreassen,Seppola Rune,Skadberg Hans Inge,Skjærpe Astrid,Sletvold Kjartan,Storbukås Therese,Waage Lise Cathrine,Waage Marie Søyland,Walsh Fintan,Wigdel Kine,Øvstebø Siri Annette</show>
-</dependent>
-<dependent>       
-<selectedCode>V095</selectedCode>
-<selected>IKEA Furuset</selected>
-<show>Aase Tore,Andersson Lars-Åke,Asp Henrick Kjell-Åke,Backe Mette,Baisgård Hedda,Bang-Haagensen Per,Berntzen Geir Egil,Bjørkeng Tone,Bosancic Veljko,Christiansen Øyvind Hauge,Dahl Lea,Di Giovanni Oscar,Dirir Ahmed Abdimajid,Dislik Ibrahim,Drevsjø Cecilie,Ellingsen Even,Elmgren Hege Synøve,Fager Victor Johannes,Fjerdingby Denniz,Fossedal Guro,Ghebrehiwet Thomas,Gulbrandsen Josefine,Hajny Filip,Halvardsson Marie,Hansen Merethe,Hermansen Ingvill Greve,Hermansen Kine,Hermansson Nils Anders,Hos Saskia,Idrisoglu Mehmet,Jøransen Marianne,Karlsson Nicklas Karl H,Kvalheim Even,Larsson Jonas Henrik,Liknes Stian Nilsen,Mattsson Magnus,Mentzoni Christina Hustad,Myrholt Yngve,Möbius Aditsa,Omanovic Haris,Persson Beatrice,Petersson Patrik,Petersson Therese,Pettersen Robert,Poor Omed Mostapha,Raanes Aniela,Radwan Fuad Mohammed,Rakic Zoran,Rystad Glenn,Saravani Sutha Haran,Simsek Murat,Svensson Jenny C U,Syverstad Mari,Tahir Naqash,Thorèn Katarina,Torgersen Thomas,Tvetbråten Frode,Wallman Oscar,Ødegård Hilde Gro</show>
-</dependent>
-<dependent>       
-<selectedCode>V011</selectedCode>
-<selected>IKEA Hjemme</selected>
-<show>Andersen Karin,Carlsen Therese Åneby,Engeskog Janne Merete Rennan,Flornes Lars,Green Are,Haukås Nina Løken,Hilleren Eli,Husby Ove Edvin,Larsen Merete Aase,Løkken Liv Tonje Veslemøy,Thunes Lill</show>
-</dependent>
-<dependent>       
-<selectedCode>V371</selectedCode>
-<selected>IKEA Leangen</selected>
-<show>Bakken Mari,Ballo Janne-Kari,Feragen Marthe Kløften,Flåøien Turid Kristine,Føll Vidar,Grane Ulf,Grubba Linn Katarina,Grønflaten Simen Trovatten,Gåsvik Stig,Hajny Filip,Hammer Kent Ove,Hangerhagen Per,Henriksen Hans Thomas,Jensen Anne Vinje,Khan Malin,Kristoffersen Line,Lassen Steffen,Lysholm Randi Merete,Lønset Øystein,Løvlie Randi,Løvrød Marit,Mjøen Ekaterina,Morgenstierne Stine,Nybakken Merethe Kristiansen,Pedersen Jeanette Gulstad,Prestmo Anniken,Schjetne Randi,Selnes Jens Ole,Sjømark Beathe,Skanche Henrik,Sommervold Trond,Vinje Morten,Voigt Rolf Eirik,Waade Marthe,Winsjansen Maria,Wormdal John,Yttersian Heidi</show>
-</dependent>
-<dependent>       
-<selectedCode>V076</selectedCode>
-<selected>IKEA Netthandel</selected>
-<show>Hajny Filip,Horne-Olsen Kenneth,Lohne Trude,Stern Alexander</show>
-</dependent>
-<dependent>       
-<selectedCode>V390</selectedCode>
-<selected>IKEA Ringsaker</selected>
-<show>Al-Hasnawi Ali Naeem,Alestrand Karl Erik,Andresen Jenny,Bure Anette Cecilie,Børresen Arne-Olav,Ellingsen Petter Ystebø,Falch Stian,Falldalen Heidi,Franks Schon,Habbestad Haldis,Hajny Filip,Heimdal Tonje,Hjeltereie Linn,Karlsson Dennis,Kilian Danuta,Kløvjan Sivert,Kolstad Jarl Julian Mathias,Kornby Magnus,Krook Linnea Louise,Kuoppa Anette,Kvello Evy Cecilie,Listrup Jens,Osebakken Lasse,Persson Sofia,Rognstad Febe,Silset Torfinn,Strid Tobias,Sviund Kama</show>
-</dependent>
-<dependent>       
-<selectedCode>V091</selectedCode>
-<selected>IKEA Slependen</selected>
-<show>Ahamed Farzana,Andersson Anna,Andreassen Vidar,Bentzen Trond Gleisner,Borgmalm Pär Kenneth,Christensson Johan,Csermak Ibolya Tünde,Daltveit Randi,Danås Carl Martin,Drejare Mattias,Frydenlund Heidi,Grindheim Kjetil,Grislingaas Trine,Gustafsson Lise Lotte B,Hafne Line Tonette,Hajny Filip,Härjerud Johan,Jacobsen Jan Erik,Lande Elisabet,Lie Ståle Johannessen,Lunder Hege,Malaekeh Behrooz,Menezes Filipin Ivana,Nilhamn Sebastian,Norèn Frida,Nørgaard Rasmus,Ogenvall Charlotta,Olsen Ola J,Osman Linda,Paulsen Ståle,Persson Pernilla Maria,Sand Solvår Ødegård,Sapkauske Egle,Schøyen Lisbet,Selbo Espen,Skarelius Lisa M,Smith Fredrik Sam,Søiland Anders Mikal,Terryn Talitha,Torres Adrian,Wiles Therese Veronica</show>
-</dependent>
-<dependent>       
-<selectedCode>V007</selectedCode>
-<selected>IKEA Sørlandet</selected>
-<show>Andersen Dan,Berg Trude,Båge Lene,Eliassen Erik,Falch Laine,Gutvik Maud,Hagen Beate,Hajny Filip,Hitland Solrun K,Jakobsen Emil,Kallestad Aina,Klausen Arve,Konningen Merethe,Large Brendan,Lundahl Mathilda,Marley Ellisiv,Møskeland Roald Alexander,Nielsen Bjørn Erik,Nokevje Gro,Nordal Eirik,Nygaard-Domett Kristin,Nygård Elin,Olsen Fred,Oprann Susanne,Simonstad Linda Merete Tveit,Solhøj Jakob,Stjärnhimmel Viktoria,Tofteland Wenche,Wethal Ida</show>
-</dependent>
-<dependent>       
-<selectedCode>V441</selectedCode>
-<selected>IKEA Åsane/Ulset NEW</selected>
-<show>Aga Marianne,Alnæs Hilde,Barsnes Camilla,Cesar Monica Hege,Eilertsen Eva Catrine M,Fløysand Bjarte,Fyllingsnes Endre,Grutle Hanne,Hajny Filip,Haukås Anja,Haveland Siw,Heggertveit Johnny,Holm Øyvind,Ingebrigtsen Jan-Gunnar,Iversen Eirin,Jacobsen Kristine Løvaas,Jensen Kenneth,Johannessen Ann-Britt,Johansen Marius Bendik,Jonassen Sindre Kalve,Karlsen Mai-Britt R,Kavanagh Elizabeth Mary,Kavli Lene Skorpen,Kleppe Linda,Langum Jannicke V,Lokvancic Erzana,Lund Turid,Lundberg Anton,Meland Elise,Mjelde Torill,Moreno Linn-Monica Gomez,Møklebust Tom Erik,Pedersen Jeanette Tolleshaug,Pettersen Ståle Elling,Rosendahl Liv,Rødland Jørgen,Småland Remi,Størdal Rune,Talhaug Morten,Tesdal Hildegunn Breivik,Tollefsen Leif Eirik,Veastad Charlotte,Vinda Daniel</show>
-</dependent>
-<dependent>       
-<selectedCode>V006</selectedCode>
-<selected>Service Office</selected>
-<show>Andersen Stig Ketil,Asgeirsson Hans,Beltran Silvia,Bentzen Heidi,Bergersen Ole,Boije Cathrine,Carlsen Therese Åneby,Elvevold Thor,Engelschiøn Cecilie H,Engelschiøn Siri Enes,Fløgstad Sissel Vagle,Fyhn Johan Sandberg,Grane Ulf,Hajny Filip,Hinrichsen Finn Eirik,Johansen Evy,Johnsen Jøril Korperud,Johnsen Tormod Flaten,Lennartsson Anders,Lillevold Jon,Lygresten Mette,Løvstad Heidi,Norhagen Siri,Ovesen Hans-Erling,Platou Anette,Pleym Trude,Rudningen Lillian,Skauge Kenneth,Skorgan Vibeke,Thommesen Jan Christian,Ullebust Frode Skage,Weberg Ragnhildr,Wigen Kjersti,Østby Inger-Helene</show>
-</dependent>
-
-</predefined>

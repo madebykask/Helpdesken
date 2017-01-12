@@ -71,6 +71,7 @@
   <option value="Deputy Sales Manager">Deputy Sales Manager</option>
   <option value="Deputy Store Manager">Deputy Store Manager</option>
   <option value="Digital Marketing Coordinator">Digital Marketing Coordinator</option>
+  <option value="Distribution Operation Manager">Distribution Operation Manager</option>
   <option value="Engineering Manager">Engineering Manager</option>
   <option value="Exchange &amp; Returns Co-worker">Exchange &amp; Returns Co-worker</option>
   <option value="Exchange &amp; Returns Manager">Exchange &amp; Returns Manager</option>
@@ -95,6 +96,7 @@
   <option value="HR Administrator">HR Administrator</option>
   <option value="HR Generalist">HR Generalist</option>
   <option value="HR Manager">HR Manager</option>
+  <option value="HR Manager CSC">HR Manager CSC</option>
   <option value="HR Operations Manager">HR Operations Manager</option>
   <option value="HR Specialist">HR Specialist</option>
   <option value="IKEA Family Coordinator">IKEA Family Coordinator</option>
@@ -123,6 +125,8 @@
   <option value="Laws &amp; Standards Coordinator">Laws &amp; Standards Coordinator</option>
   <option value="Leadership &amp; Competence Manager ">Leadership &amp; Competence Manager </option>
   <option value="Learning &amp; Development Specialist">Learning &amp; Development Specialist</option>
+  <option value="Legal Manager">Legal Manager</option>
+  <option value="Local Facility Management Specialist">Local Facility Management Specialist</option>
   <option value="Local Marketing Manager">Local Marketing Manager</option>
   <option value="Local Marketing Specialist">Local Marketing Specialist</option>
   <option value="Logistics Rollout Manager">Logistics Rollout Manager</option>
@@ -139,6 +143,7 @@
   <option value="Project Leader">Project Leader</option>
   <option value="Project Manager">Project Manager</option>
   <option value="Project Specialist">Project Specialist</option>
+  <option value="Project Specialist I">Project Specialist I</option>
   <option value="Project Support">Project Support</option>
   <option value="Property Assistant">Property Assistant</option>
   <option value="Property Business Navigator">Property Business Navigator</option>
@@ -177,6 +182,7 @@
   <option value="Sales Support Co-worker">Sales Support Co-worker</option>
   <option value="Sales Support Specialist">Sales Support Specialist</option>
   <option value="Sales Team Leader">Sales Team Leader</option>
+  <option value="Service Business Leader">Service Business Leader</option>
   <option value="Shopkeeper 1">Shopkeeper 1</option>
   <option value="Shopkeeper II">Shopkeeper II</option>
   <option value="Shopkeeper III">Shopkeeper III</option>
@@ -190,11 +196,13 @@
   <option value="Sustainability Co-ordinator">Sustainability Co-ordinator</option>
   <option value="Talent Manager">Talent Manager</option>
   <option value="Team Leader">Team Leader</option>
+  <option value="Trainee">Trainee</option>
   <option value="Translator">Translator</option>
   <option value="Transport Operations Coordinator">Transport Operations Coordinator</option>
   <option value="Treasurer">Treasurer</option>
   <option value="Visual Merchandising Co-worker">Visual Merchandising Co-worker</option>
   <option value="Visual Merchandising Manager">Visual Merchandising Manager</option>
+  <option value="Web Communication Specialist">Web Communication Specialist</option>
   <option value="Web editor">Web editor</option>
   <option value="Workforce Management Co-worker">Workforce Management Co-worker</option>
 </options>

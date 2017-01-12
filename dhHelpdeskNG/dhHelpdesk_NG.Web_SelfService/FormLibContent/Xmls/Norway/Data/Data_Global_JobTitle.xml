@@ -28,6 +28,7 @@
 <option value="Communication &amp; Interior Design Manager">Communication &amp; Interior Design Manager</option>
 <option value="Communications Specialist - Senior">Communications Specialist - Senior</option>
 <option value="Compensation &amp; Benefits Manager">Compensation &amp; Benefits Manager</option>
+<option value="Competence Development Specialist">Competence Development Specialist</option>
 <option value="Construction Manager">Construction Manager</option>
 <option value="Construction Project Manager">Construction Project Manager</option>
 <option value="Controller">Controller</option>
@@ -49,11 +50,14 @@
 <option value="Country Risk Manager">Country Risk Manager</option>
 <option value="Country Sales Manager">Country Sales Manager</option>
 <option value="Country Web &amp; Digital Manager">Country Web &amp; Digital Manager</option>
+<option value="Co-worker Relations Manager">Co-worker Relations Manager</option>
+<option value="Creative Leader">Creative Leader</option>
 <option value="Customer Area Team Leader">Customer Area Team Leader</option>
 <option value="Customer Relations Manager">Customer Relations Manager</option>
 <option value="Customer Relations Team Leader">Customer Relations Team Leader</option>
 <option value="Database specialist">Database specialist</option>
 <option value="Deputy Business Navigation Manager">Deputy Business Navigation Manager</option>
+<option value="Deputy Country Com&amp;In Manager">Deputy Country Com&amp;In Manager</option>
 <option value="Deputy Goods Flow Manager">Deputy Goods Flow Manager</option>
 <option value="Deputy Logistics Manager">Deputy Logistics Manager</option>
 <option value="Deputy Retail Manager">Deputy Retail Manager</option>
@@ -92,6 +96,7 @@
 <option value="Interior Design Leader">Interior Design Leader</option>
 <option value="Interior Design Manager">Interior Design Manager</option>
 <option value="Interior Designer Specialist">Interior Designer Specialist</option>
+<option value="iShop Administrator">iShop Administrator</option>
 <option value="IT Coordinator">IT Coordinator</option>
 <option value="IT Manager">IT Manager</option>
 <option value="IT Support">IT Support</option>
@@ -103,6 +108,7 @@
 <option value="Local IT Technician">Local IT Technician</option>
 <option value="Local Marketing Manager">Local Marketing Manager</option>
 <option value="Logistics Manager">Logistics Manager</option>
+<option value="Logistics Specialist">Logistics Specialist</option>
 <option value="Maintenance Co-worker">Maintenance Co-worker</option>
 <option value="Maintenance Manager">Maintenance Manager</option>
 <option value="Marketing Creative Specialist">Marketing Creative Specialist</option>

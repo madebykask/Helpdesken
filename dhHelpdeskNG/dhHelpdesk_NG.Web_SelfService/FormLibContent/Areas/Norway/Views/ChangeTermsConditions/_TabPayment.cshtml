@@ -1,6 +1,6 @@
-﻿@model ECT.FormLib.Models.FormModel
-@using ECT.FormLib;
-@using ECT.FormLib.Models;
+﻿@model DH.Helpdesk.EForm.FormLib.Models.FormModel
+@using DH.Helpdesk.EForm.FormLib;
+@using DH.Helpdesk.EForm.FormLib.Models;
 @{
     var workingGroups = FormLibSessions.User.WorkingGroups.Where(c => c.CustomerId == Model.Form.CustomerId).Select(x => x.Name).ToArray();
 

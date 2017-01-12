@@ -181,7 +181,7 @@
                             {
                                 if (SessionFacade.CurrentCustomer != null && !string.IsNullOrEmpty(userIdentity.EmployeeNumber))
                                 {
-                                    var config = (ECT.FormLib.Configurable.AccessManagment)System.Configuration.ConfigurationManager.GetSection("formLibConfigurable/accessManagment");
+                                    var config = (DH.Helpdesk.EForm.FormLib.Configurable.AccessManagment)ConfigurationManager.GetSection("formLibConfigurable/accessManagment");
                                     var country = config.Countries.Where(x => x.HelpdeskCustomerId == SessionFacade.CurrentCustomer.Id.ToString()).FirstOrDefault();
 
                                     if (country == null || (country != null && !userIdentity.EmployeeNumber.StartsWith(country.EmployeePrefix)))
@@ -252,7 +252,7 @@
                         {
                             UserId = userId,
                             Domain = userDomain,
-                            FirstName = "Windows User",
+                            FirstName = string.Format("{0}", User.Identity.Name, userId),
                             EmployeeNumber = empployNum
                         };
 
@@ -281,7 +281,7 @@
                         {
                             UserId = userId,
                             Domain = userDomain,
-                            FirstName = "Anonymous User",
+                            FirstName = string.Format("Anonymous User ({0})", userId),                            
                             EmployeeNumber = empployNum
                         };
 

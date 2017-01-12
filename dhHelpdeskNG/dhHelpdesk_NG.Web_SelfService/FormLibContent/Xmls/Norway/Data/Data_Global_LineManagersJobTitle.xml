@@ -22,11 +22,12 @@
 <option value="Country Retail Manager">Country Retail Manager</option>
 <option value="Country Risk Manager">Country Risk Manager</option>
 <option value="Country Sales Manager">Country Sales Manager</option>
+<option value="Creative Leader">Creative Leader</option>
 <option value="Customer Area Team Leader">Customer Area Team Leader</option>
 <option value="Customer Relations Manager">Customer Relations Manager</option>
 <option value="Customer Relations Team Leader">Customer Relations Team Leader</option>
 <option value="Deputy Business Navigation Manager">Deputy Business Navigation Manager</option>
-<option value="Deputy Logistics Manager">Deputy Logistics Manager</option>
+<option value="Deputy Country Com&amp;In Manager">Deputy Country Com&amp;In Manager</option>
 <option value="Deputy Retail Manager">Deputy Retail Manager</option>
 <option value="Deputy Sales Manager">Deputy Sales Manager</option>
 <option value="Deputy Shopkeeper">Deputy Shopkeeper</option>
@@ -51,6 +52,7 @@
 <option value="IT Manager">IT Manager</option>
 <option value="Kitchen Production Manager">Kitchen Production Manager</option>
 <option value="Kitchen Production Team Leader">Kitchen Production Team Leader</option>
+<option value="Knowledge and Insight Manager">Knowledge and Insight Manager</option>
 <option value="Local Marketing Manager">Local Marketing Manager</option>
 <option value="Logistics Manager">Logistics Manager</option>
 <option value="Maintenance Manager">Maintenance Manager</option>
@@ -60,7 +62,6 @@
 <option value="Payroll Manager">Payroll Manager</option>
 <option value="Pick-up Point Manager">Pick-up Point Manager</option>
 <option value="PR &amp; Communication Manager">PR &amp; Communication Manager</option>
-<option value="Project Leader">Project Leader</option>
 <option value="Project Manager">Project Manager</option>
 <option value="Project Specialist">Project Specialist</option>
 <option value="Property Manager">Property Manager</option>
@@ -72,7 +73,6 @@
 <option value="Sales &amp; Supply Support Manager">Sales &amp; Supply Support Manager</option>
 <option value="Sales Manager">Sales Manager</option>
 <option value="Sales Navigator">Sales Navigator</option>
-<option value="Service Business Leader">Service Business Leader</option>
 <option value="Service Team Leader">Service Team Leader</option>
 <option value="Services Manager">Services Manager</option>
 <option value="Shopkeeper">Shopkeeper</option>

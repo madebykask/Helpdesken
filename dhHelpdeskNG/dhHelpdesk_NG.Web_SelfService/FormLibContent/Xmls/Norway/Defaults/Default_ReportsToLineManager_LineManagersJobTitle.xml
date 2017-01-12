@@ -7,6 +7,8 @@
 <show>Shopkeeper</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Ahlén Maria</selected>
 <show>Customer Area Team Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Ahmed Waqar</selected>
+<show>Customer Relations Team Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Alestrand Karl Erik</selected>
 <show>Shopkeeper</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Al-Hasnawi Ali Naeem</selected>
@@ -29,6 +31,8 @@
 <show>HR Generalist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Asgeirsson Skarelius Hans</selected>
 <show>Deputy Sales Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Asp Henrick Kjell-Åke</selected>
+<show>Shopkeeper</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Aune Sander Asbjørnsen</selected>
 <show>Commercial SFM &amp; Bistro Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Backe Mette</selected>
@@ -53,6 +57,8 @@
 <show>Com &amp; In Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Bergersen Ole</selected>
 <show>HR Operations Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Bergqvist Elin Josefin</selected>
+<show>Shopkeeper</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Berntzen Geir Egil</selected>
 <show>Shopkeeper</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Bjølgerud Martina</selected>
@@ -69,12 +75,16 @@
 <show>Country External Communication Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Børresen Arne-Olav</selected>
 <show>Kitchen Production Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Borthen Kristine</selected>
+<show>Team Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Bosancic Veljko</selected>
 <show>Shopkeeper</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Bryne Jon</selected>
 <show>Sales Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Bure Anette Cecilie</selected>
 <show>Shopkeeper</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Casqueiro Godinho Paulo</selected>
+<show>Deputy Country Com&amp;In Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Cesar Monica Hege</selected>
 <show>Store Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Christiansen Øyvind Hauge</selected>
@@ -147,14 +157,10 @@
 <show>IKEA Business Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Fossedal Guro</selected>
 <show>Shopkeeper</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Franks Schon</selected>
-<show>Customer Relations Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Fraser Ronald</selected>
 <show>Team Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Frydenlund Heidi</selected>
 <show>Commercial SFM &amp; Bistro Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Furnes Alfred</selected>
-<show>Deputy Shopkeeper</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Fyllingsnes Endre</selected>
 <show>Commercial Restaurant Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Gillies Leanna J</selected>
@@ -173,6 +179,8 @@
 <show>Deputy Business Navigation Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Grønflaten Simen Trovatten</selected>
 <show>Sales &amp; Supply Support Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Gulbrandsen Yvonne Marie</selected>
+<show>Commercial Activity Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Gulden Steinar Brusletto</selected>
 <show>Administration Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Gunderstad Kamilla</selected>
@@ -211,8 +219,6 @@
 <show>Shopkeeper</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Heimland Jannicke</selected>
 <show>Pick-up Point Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Helland Aina</selected>
-<show>Checkout Services Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Henriksen Hans Thomas</selected>
 <show>Kitchen Production Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Hermansson Nils Anders</selected>
@@ -230,7 +236,7 @@
 <selected>Holland Patrick</selected>
 <show>Deputy Shopkeeper</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Holm Øyvind</selected>
-<show>Deputy Logistics Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Logistics Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Horne-Olsen Kenneth</selected>
 <show>Business Navigation &amp; Operations Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Hos Saskia</selected>
@@ -303,8 +309,6 @@
 <show>Sales &amp; Supply Support Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Kavanagh Elizabeth Mary</selected>
 <show>Deputy Sales Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Kavli Lene Skorpen</selected>
-<show>Shopkeeper</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Kilian Danuta</selected>
 <show>Interior Design Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Kiss Gyula</selected>
@@ -326,9 +330,7 @@
 <selected>Kornby Magnus</selected>
 <show>Goods Flow Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Kristoffersen Karete</selected>
-<show>Project Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Kristoffersen Line</selected>
-<show>Shopkeeper</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Creative Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Krøvel Sigbjørn</selected>
 <show>Services Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Kuoppa Anette</selected>
@@ -349,16 +351,12 @@
 <show>Goods Flow Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Larsen Merete Aase</selected>
 <show>HR Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Larsson Jonas Henrik</selected>
-<show>Goods Flow Team Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Lassen Steffen</selected>
 <show>Shopkeeper</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Latifi Valbona</selected>
 <show>Commercial Restaurant Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Lennartsson Anders</selected>
 <show>Sustainability Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Lidheim Anna</selected>
-<show>Deputy Shopkeeper</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Lie Ståle Johannessen</selected>
 <show>Shopkeeper</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Lien Leif Anton</selected>
@@ -409,12 +407,16 @@
 <show>Exchange &amp; Returns Team Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Mjelde Torill</selected>
 <show>Graphic Communication Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Mjøen Ekaterina</selected>
-<show>Commercial Restaurant Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Möbius Aditsa</selected>
 <show>Store Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Moen Marius</selected>
+<show>Graphic Communication Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Møklebust Tom Erik</selected>
 <show>Easy Buying Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Møll Elisabeth</selected>
+<show>Deputy Shopkeeper</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Moreno Linn-Monica Gomez</selected>
+<show>Shopkeeper</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Møskeland Roald Alexander</selected>
 <show>Shopkeeper</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Mossefinn Lise</selected>
@@ -435,16 +437,18 @@
 <show>Visual Merchandising/Activity Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Nygaard-Domett Kristin</selected>
 <show>Shopkeeper</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Nygaardsvold Line</selected>
+<show>Shopkeeper</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Nygård Elin</selected>
 <show>Commercial SFM &amp; Bistro Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Odland Stine</selected>
 <show>Recovery Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Ogenvall Charlotta</selected>
-<show>Exchange &amp; Returns Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Øktedalen Nina</selected>
 <show>eCommerce Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Olsen Fred</selected>
 <show>Deputy Shopkeeper</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Olsen Tom Erik</selected>
+<show>Customer Relations Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Omanovic Haris</selected>
 <show>Kitchen Production Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Oprann Susanne</selected>
@@ -489,16 +493,12 @@
 <show>HR Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Poor Omed Mostapha</selected>
 <show>Logistics Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Prestmo Anniken</selected>
-<show>Shopkeeper</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Pristinski Alexander</selected>
 <show>Recovery Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Raanes Aniela</selected>
 <show>Commercial SFM &amp; Bistro Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Radwan Fuad Mohammed</selected>
 <show>Goods Flow Team Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Rakic Zoran</selected>
-<show>Goods Flow Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Ranvik Anny Marie</selected>
 <show>HR Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Rekkebo Mette-Marit</selected>
@@ -517,6 +517,8 @@
 <show>Shopkeeper</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Rudningen Lillian</selected>
 <show>Payroll Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Rurling Johanna Maria M</selected>
+<show>Knowledge and Insight Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Salimovs Samirs</selected>
 <show>Team Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Salomonsen Oda</selected>
@@ -535,8 +537,6 @@
 <show>Store Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Schottenius Johanna</selected>
 <show>Deputy Store Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Schøyen Lisbet</selected>
-<show>Com &amp; In Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Selbo Espen</selected>
 <show>Shopkeeper</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Selnes Jens Ole</selected>
@@ -565,16 +565,20 @@
 <show>Country Risk Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sletvold Kjartan</selected>
 <show>Goods Flow Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Småland Remi</selected>
+<show>IKEA Food Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Søiland Anders Mikal</selected>
 <show>Logistics Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Solhøj Jakob</selected>
 <show>Logistics Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sommervold Trond</selected>
 <show>Goods Flow Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Sørli Knut Olav</selected>
+<show>Shopkeeper</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Steinbø Eivind</selected>
 <show>IF Team Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Stenstadvolden Lindy</selected>
-<show>Commercial SFM &amp; Bistro Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Commercial Restaurant Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Stern Alexander</selected>
 <show>Project Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Stevanovic Marko</selected>
@@ -585,6 +589,8 @@
 <show>Shopkeeper</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Størdal Rune</selected>
 <show>Sales &amp; Supply Support Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Styhre Martin Olof</selected>
+<show>Deputy Shopkeeper</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sunde Robert</selected>
 <show>Logistics Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Tahir Naqash</selected>
@@ -623,6 +629,8 @@
 <show>Business Navigation &amp; Operations Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Voigt Rolf Eirik</selected>
 <show>Goods Flow Team Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Waade Marthe</selected>
+<show>IKEA Food Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Waage Lise Cathrine</selected>
 <show>Project Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Waage Marie Søyland</selected>
@@ -644,6 +652,4 @@
 <selected>Wiles Therese Veronica</selected>
 <show>Interior Design Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Wormdal John</selected>
-<show>Shopkeeper</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Yarwood Michael</selected>
-<show>Service Business Leader</show></dependent></predefined>
+<show>Shopkeeper</show></dependent></predefined>

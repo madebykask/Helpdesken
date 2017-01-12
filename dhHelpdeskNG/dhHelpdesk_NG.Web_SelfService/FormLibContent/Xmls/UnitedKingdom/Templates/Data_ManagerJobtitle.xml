@@ -35,6 +35,7 @@
   <option value="Commerciality Manager">Commerciality Manager</option>
   <option value="Commercial Activity Leader">Commercial Activity Leader</option>
   <option value="Commercial Restaurant Manager">Commercial Restaurant Manager</option>
+  <option value="Commercial Review Manager">Commercial Review Manager</option>
   <option value="Commercial SFM &amp; Bistro Manager">Commercial SFM &amp; Bistro Manager</option>
   <option value="Compensation &amp; Benefits Manager">Compensation &amp; Benefits Manager</option>
   <option value="Competence Development Manager">Competence Development Manager</option>
@@ -46,6 +47,7 @@
   <option value="Contact Centre Manager">Contact Centre Manager</option>
   <option value="Continous Improvement Manager">Continous Improvement Manager</option>
   <option value="Country Com&amp;In Manager">Country Com&amp;In Manager</option>
+  <option value="Country Communication Manager">Country Communication Manager</option>
   <option value="Country Customer Relations Manager">Country Customer Relations Manager</option>
   <option value="Country Facility Manager">Country Facility Manager</option>
   <option value="Country Graphic Communication Leader">Country Graphic Communication Leader</option>
@@ -71,7 +73,8 @@
   <option value="Customer Services Team Manager">Customer Services Team Manager</option>
   <option value="DC Handling Material Team Leader">DC Handling Material Team Leader</option>
   <option value="DC Manager">DC Manager</option>
-  <option value="DC Quality Co-worker">DC Quality Co-worker</option> 
+  <option value="DC Quality Co-worker">DC Quality Co-worker</option>
+  <option value="DC Quality Team Leader">DC Quality Team Leader</option>
   <option value="Delivery Support Manager">Delivery Support Manager</option>
   <option value="Deputy Business Navigation and Operation">Deputy Business Navigation and Operation</option>
   <option value="Deputy Category Manager">Deputy Category Manager</option>
@@ -80,6 +83,7 @@
   <option value="Deputy DC Manager">Deputy DC Manager</option>
   <option value="Deputy Facility Manager">Deputy Facility Manager</option>
   <option value="Deputy Finance Manager">Deputy Finance Manager</option>
+  <option value="Deputy HR Manager">Deputy HR Manager</option>
   <option value="Deputy IF Manager">Deputy IF Manager</option>
   <option value="Deputy Managing Director">Deputy Managing Director</option>
   <option value="Deputy Marketing Manager">Deputy Marketing Manager</option>
@@ -224,4 +228,5 @@
   <option value="Warehouse Team Leader">Warehouse Team Leader</option>
   <option value="Warehousing Logistics Manager">Warehousing Logistics Manager</option>
   <option value="Web Communications Manager">Web Communications Manager</option>
+  <option value="WMS Super User">WMS Super User</option>  
 </options>

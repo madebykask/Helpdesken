@@ -140,8 +140,8 @@
       <element type="text" name="LastName" label="Last Name" mandatory="1"></element>
       <element type="date" name="DateOfBirth" label="Date of birth" mandatory="1" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
-        <agecheck name="ContractStartDate" dropDownFieldToValidate="Company" validateFor="IKEA Properties Investments Ltd,IKEA Limited" age="16" message="Employee under 16, you are unable to proceed with this service request"></agecheck>
-        <agecheck name="ContractStartDate" dropDownFieldToValidate="Company" validateFor="IKEA Distribution Services Limited" age="18" message="Employee under 18, you are unable to proceed with this service request"></agecheck>
+        <agecheck name="ContractStartDate" dropDownFieldToValidate="Company" validateFor="IKEA Prop Investments Ltd,IKEA Ltd" age="16" message="Employee under 16, you are unable to proceed with this service request"></agecheck>
+        <agecheck name="ContractStartDate" dropDownFieldToValidate="Company" validateFor="IKEA Dist Services Ltd" age="18" message="Employee under 18, you are unable to proceed with this service request"></agecheck>
 
       </element>
       <element type="text" name="PermanentAddressLine1" label="Address line 1" mandatory="1"></element>
@@ -236,7 +236,7 @@
       </element>
       <element type="text" name="ContractedHours" label="Contracted Hours" mandatory="1">
         <regex inherit="unsignednum" pattern="" message=""></regex>
-        <regex inherit="numMax39" pattern="" message="" dropDownFieldToValidate="Company" validateAllExceptFor="IKEA Distribution Services Limited"></regex>
+        <regex inherit="numMax39" pattern="" message="" dropDownFieldToValidate="Company" validateAllExceptFor="IKEA Dist Services Ltd"></regex>
       </element>
       <element type="select" name="DaysPerWeek" label="Days per week" default="5" mandatory="1">
         <regex inherit="unsignednum" pattern="" message=""></regex>
@@ -280,33 +280,33 @@
       <element name="PrimarySite" type="search-select" label="Primary Site" mandatory="1">
         <options>
           <option value=""></option>
-          <option value="Distribution Centre Doncaster">Distribution Centre Doncaster</option>
-          <option value="Store Belfast 113">Store Belfast 113</option>
-          <option value="Store Birmingham 142">Store Birmingham 142</option>
-          <option value="Store Bristol 264">Store Bristol 264</option>
-          <option value="Store Cardiff 267">Store Cardiff 267</option>
-          <option value="Peterborough Contact Centre">Peterborough Contact Centre</option>
-          <option value="Store Coventry 150">Store Coventry 150</option>
-          <option value="Store London Croydon 144">Store London Croydon 144</option>
-          <option value="Customer Distribution Centre Peterborough 269">Customer Distribution Centre Peterborough 269</option>
-          <option value="Distribution Centre Peterborough 012">Distribution Centre Peterborough 012</option>
-          <option value="E-commerce">E-commerce</option>
-          <option value="Store Edinburgh 265">Store Edinburgh 265</option>
-          <option value="Store Gateshead 143">Store Gateshead 143</option>
-          <option value="Store Glasgow 266">Store Glasgow 266</option>
-          <option value="Store London Lakeside 262">Store London Lakeside 262</option>
-          <option value="Store Leeds 261">Store Leeds 261</option>
-          <option value="Store Manchester 186">Store Manchester 186</option>
-          <option value="Store Milton Keynes 185">Store Milton Keynes 185</option>
-          <option value="Store Nottingham 263">Store Nottingham 263</option>
-          <option value="Store Reading 461">Store Reading 461</option>
-          <option value="IKEA Property Services">IKEA Property Services</option>
-          <option value="Service Office UK">Service Office UK</option>
-          <option value="Store Sheffield 519">Store Sheffield 519</option>
-          <option value="Store Southampton 125">Store Southampton 125</option>          
-          <option value="Store London Tottenham 255">Store London Tottenham 255</option>
-          <option value="Store Warrington 140">Store Warrington 140</option>
-          <option value="Store London Wembley 141">Store London Wembley 141</option>
+          <option value="IKEA Delivery Centre Doncaster">IKEA Delivery Centre Doncaster</option>
+          <option value="IKEA Belfast">IKEA Belfast</option>
+          <option value="IKEA Birmingham">IKEA Birmingham</option>
+          <option value="IKEA Bristol">IKEA Bristol</option>
+          <option value="IKEA Cardiff">IKEA Cardiff</option>
+          <option value="IKEA Contact Centre">IKEA Contact Centre</option>
+          <option value="IKEA Coventry">IKEA Coventry</option>
+          <option value="IKEA Croydon">IKEA Croydon</option>
+          <option value="IKEA Customer Delivery Centre">IKEA Customer Delivery Centre</option>
+          <option value="IKEA Distribution Services Uni">IKEA Distribution Services Uni</option>
+          <option value="IKEA E-Commerce">IKEA E-Commerce</option>
+          <option value="IKEA Edinburgh">IKEA Edinburgh</option>
+          <option value="IKEA Gateshead">IKEA Gateshead</option>
+          <option value="IKEA Glasgow">IKEA Glasgow</option>
+          <option value="IKEA Lakeside">IKEA Lakeside</option>
+          <option value="IKEA Leeds">IKEA Leeds</option>
+          <option value="IKEA Manchester">IKEA Manchester</option>
+          <option value="IKEA Milton Keynes">IKEA Milton Keynes</option>
+          <option value="IKEA Nottingham">IKEA Nottingham</option>
+          <option value="IKEA Reading">IKEA Reading</option>
+          <option value="IKEA Property Investments Ltd">IKEA Property Investments Ltd</option>
+          <option value="IKEA Service Office">IKEA Service Office</option>
+          <option value="IKEA Sheffield">IKEA Sheffield</option>
+          <option value="IKEA Southampton">IKEA Southampton</option>          
+          <option value="IKEA Tottenham">IKEA Tottenham</option>
+          <option value="IKEA Warrington">IKEA Warrington</option>
+          <option value="IKEA Wembley">IKEA Wembley</option>
         </options>
       </element>
       <element name="TECApprover" type="search-select" label="TEC Approver" mandatory="1">

@@ -80,6 +80,7 @@
   <option value="CDOS Co-worker">CDOS Co-worker</option>
   <option value="CDOS Team Leader">CDOS Team Leader</option>
   <option value="Operations Field Responsible">Operations Field Responsible</option>
+  <option value="Service Business Leader">Service Business Leader</option>  
   <option value="Service Business Operations Manager">Service Business Operations Manager</option>
   <option value="Service Business Ops Field Responsible">Service Business Ops Field Responsible</option>
   <option value="Transport Planner">Transport Planner</option>
@@ -368,6 +369,7 @@
   <option value="Sales &amp; Supply Support Manager">Sales &amp; Supply Support Manager</option>
   <option value="Sales &amp; Supply Support Specialist">Sales &amp; Supply Support Specialist</option>
   <option value="Supply Support Specialist">Supply Support Specialist</option>
+  <option value="Supply Quality Co-worker">Supply Quality Co-worker</option>
   <option value="UK/IE Goods Flow Specialist">UK/IE Goods Flow Specialist</option>
   <option value="Advertising Manager">Advertising Manager</option>
   <option value="Catalogue &amp; Brochure Specialist">Catalogue &amp; Brochure Specialist</option>
@@ -417,11 +419,13 @@
   <option value="Web Manager">Web Manager</option>
   <option value="Customs Co-worker">Customs Co-worker</option>
   <option value="DC Quality Co-worker">DC Quality Co-worker</option>
+  <option value="DC Quality Team Leader">DC Quality Team Leader</option>
   <option value="DCG Operational Support Coordinator">DCG Operational Support Coordinator</option>
   <option value="ESP Operations Coordinator">ESP Operations Coordinator</option>
   <option value="Handling Materials Administrator">Handling Materials Administrator</option>
   <option value="Inventory Co-worker">Inventory Co-worker</option>
   <option value="Mapping Co-worker">Mapping Co-worker</option>
+  <option value="Mapping and Logistics Coordinator">Mapping and Logistics Coordinator</option>
   <option value="Operational Support Co-worker">Operational Support Co-worker</option>
   <option value="Operational Support Manager">Operational Support Manager</option>
   <option value="Operational Support Team Leader">Operational Support Team Leader</option>
@@ -463,6 +467,7 @@
   <option value="Country Facility Manager">Country Facility Manager</option>
   <option value="Group Technical Manager Property">Group Technical Manager Property</option>
   <option value="Interior Design Specialist">Interior Design Specialist</option>
+  <option value="Facility co-worker">Facility co-worker</option>
   <option value="Finance Project Specialist">Finance Project Specialist</option>
   <option value="Planning Specialist">Planning Specialist</option>
   <option value="Project Co-ordinator">Project Co-ordinator</option>
@@ -594,6 +599,8 @@
   <option value="eCommerce Fraud Specialist">eCommerce Fraud Specialist</option>
   <option value="Ecommerce Operations Specialist">Ecommerce Operations Specialist</option>
   <option value="Flow and Capacity Planner">Flow and Capacity Planner</option>
+  <option value="Flow Coordinator">Flow Coordinator</option>
+  <option value="Flow Planner">Flow Planner</option>
   <option value="ISL Manager - Training">ISL Manager - Training</option>
   <option value="Logistics Manager Trainee">Logistics Manager Trainee</option>
   <option value="Logistics Manager Trainning">Logistics Manager Trainning</option>

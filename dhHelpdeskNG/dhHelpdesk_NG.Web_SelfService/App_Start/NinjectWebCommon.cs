@@ -286,16 +286,16 @@ namespace DH.Helpdesk.SelfService
             // FormLib
             var connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["DSN"].ConnectionString;
 
-            kernel.Bind<ECT.Model.Abstract.IGlobalViewRepository>()
-            .To<ECT.Model.Contrete.GlobalViewRepository>().InRequestScope().WithConstructorArgument("connectionString", connectionString);
+            kernel.Bind<EForm.Model.Abstract.IGlobalViewRepository>()
+            .To<EForm.Model.Contrete.GlobalViewRepository>().InRequestScope().WithConstructorArgument("connectionString", connectionString);
 
-            kernel.Bind<ECT.Model.Abstract.IContractRepository>()
-            .To<ECT.Model.Contrete.ContractRepository>().InRequestScope().WithConstructorArgument("connectionString", connectionString);
+            kernel.Bind<EForm.Model.Abstract.IContractRepository>()
+            .To<EForm.Model.Contrete.ContractRepository>().InRequestScope().WithConstructorArgument("connectionString", connectionString);
 
-            kernel.Bind<ECT.Model.Abstract.IUserRepository>()
-            .To<ECT.Model.Contrete.UserRepository>().InRequestScope().WithConstructorArgument("connectionString", connectionString);
+            kernel.Bind<EForm.Model.Abstract.IUserRepository>()
+            .To<EForm.Model.Contrete.UserRepository>().InRequestScope().WithConstructorArgument("connectionString", connectionString);
 
-            kernel.Bind<ECT.Core.Service.IFileService>().To<ECT.Service.FileService>().InRequestScope();
+            kernel.Bind<EForm.Core.Service.IFileService>().To<EForm.Service.FileService>().InRequestScope();
         }        
     }
    

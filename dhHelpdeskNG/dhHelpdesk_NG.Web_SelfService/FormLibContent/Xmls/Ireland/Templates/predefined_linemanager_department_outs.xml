@@ -30,6 +30,10 @@
     <show>Interior Design Manager</show>
   </dependent>
   <dependent>
+    <selected>Boris Kurt Johansson</selected>
+    <show>Retail Establishment Manager</show>
+  </dependent>
+  <dependent>
     <selected>Cassandra McManus</selected>
     <show>Visual Merchandising/Activity Manager</show>
   </dependent>
@@ -44,6 +48,10 @@
   <dependent>
     <selected>Daniel Byrne</selected>
     <show>Shopkeeper</show>
+  </dependent>
+  <dependent>
+    <selected>Danny Chorley</selected>
+    <show>IT Team Manager</show>
   </dependent>
   <dependent>
     <selected>David Looker</selected>
@@ -70,6 +78,10 @@
     <show>Site Facility Manager</show>
   </dependent>
   <dependent>
+    <selected>GEMMA ARRANZ-LORENZO</selected>
+    <show>Country Com&amp;In Manager</show>
+  </dependent>
+  <dependent>
     <selected>Gillian Drakeford</selected>
     <show>Country Retail Manager</show>
   </dependent>
@@ -80,6 +92,10 @@
   <dependent>
     <selected>Gillian Reilly</selected>
     <show>Com &amp; In Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Ian Randle</selected>
+    <show>Site Facility Manager</show>
   </dependent>
   <dependent>
     <selected>Aoife Joyce</selected>
@@ -204,6 +220,10 @@
   <dependent>
     <selected>Samuel Babarinde</selected>
     <show>Recovery Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Siobhan Barrett</selected>
+    <show>Shopkeeper</show>
   </dependent>
   <dependent>
     <selected>Stephen Ellis</selected>

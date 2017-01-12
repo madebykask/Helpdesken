@@ -4,6 +4,7 @@
   <option value="Accounting Co-worker">Accounting Co-worker</option>
   <option value="Accounting Co-worker Senior">Accounting Co-worker Senior</option>
   <option value="Accounting Manager">Accounting Manager</option>
+  <option value="Accounting Team Leader">Accounting Team Leader</option>
   <option value="Accounting Team Manager">Accounting Team Manager</option>
   <option value="Accounts Payable Co-worker">Accounts Payable Co-worker</option>
   <option value="Activity Leader">Activity Leader</option>
@@ -31,6 +32,7 @@
   <option value="Com&amp;In Manager Expansion">Com&amp;In Manager Expansion</option>
   <option value="Commercial Activity Leader">Commercial Activity Leader</option>
   <option value="Commercial Manager">Commercial Manager</option>
+  <option value="Communication &amp; Information Specialist">Communication &amp; Information Specialist</option>
   <option value="Communication &amp; Interior Design Manager">Communication &amp; Interior Design Manager</option>
   <option value="Communication Responsible">Communication Responsible</option>
   <option value="Communications Specialist - Senior">Communications Specialist - Senior</option>
@@ -127,6 +129,7 @@
   <option value="Internal Information Coordinator">Internal Information Coordinator</option>
   <option value="Internet Coordinator">Internet Coordinator</option>
   <option value="Internet Specialist">Internet Specialist</option>
+  <option value="IS &amp; DP Specialist">IS &amp; DP Specialist</option>  
   <option value="IT Manager">IT Manager</option>
   <option value="IT Support">IT Support</option>
   <option value="Kitchen Production Specialist">Kitchen Production Specialist</option>
@@ -166,6 +169,7 @@
   <option value="Quality Assurance Analyst">Quality Assurance Analyst</option>
   <option value="Quality Co-worker">Quality Co-worker</option>
   <option value="Quality Specialist">Quality Specialist</option>
+  <option value="Real Estate Manager">Real Estate Manager</option>
   <option value="Receptionist">Receptionist</option>
   <option value="Recovery Co-worker">Recovery Co-worker</option>
   <option value="Recovery Team Leader">Recovery Team Leader</option>
@@ -204,6 +208,7 @@
   <option value="Social Media Manager">Social Media Manager</option>
   <option value="Software Specialist">Software Specialist</option>
   <option value="Solution Owner">Solution Owner</option>
+  <option value="Staff Planning Manager">Staff Planning Manager</option>
   <option value="Staff Planning Specialist">Staff Planning Specialist</option>
   <option value="Staff Scheduler">Staff Scheduler</option>  
   <option value="Store Manager">Store Manager</option>

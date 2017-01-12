@@ -81,6 +81,7 @@
   <option value="Deputy Com &amp; In Manager 373">Deputy Com &amp; In Manager 373</option>
   <option value="Deputy Customer Relations Manager 373">Deputy Customer Relations Manager 373</option>
   <option value="Deputy Customer Relations Manager 522">Deputy Customer Relations Manager 522</option>
+  <option value="Deputy HR manager 373">Deputy HR manager 373</option>  
   <option value="Deputy HR manager 522">Deputy HR manager 522</option>
   <option value="Deputy IF Manager 373">Deputy IF Manager 373</option>
   <option value="Deputy IKEA Food Manager 373">Deputy IKEA Food Manager 373</option>
@@ -93,6 +94,7 @@
   <option value="Deputy Store Manager 373">Deputy Store Manager 373</option>
   <option value="Deputy Store Manager 522">Deputy Store Manager 522</option>
   <option value="Digital Marketing Coordinator SO">Digital Marketing Coordinator SO</option>
+  <option value="Distribution Operation Manager SO">Distribution Operation Manager SO</option>
   <option value="Engineering Manager SO">Engineering Manager SO</option>
   <option value="Exchange &amp; Returns Co-worker 373">Exchange &amp; Returns Co-worker 373</option>
   <option value="Exchange &amp; Returns Co-worker 522">Exchange &amp; Returns Co-worker 522</option>
@@ -134,6 +136,7 @@
   <option value="HR Generalist 522">HR Generalist 522</option>
   <option value="HR Manager 373">HR Manager 373</option>
   <option value="HR Manager 522">HR Manager 522</option>
+  <option value="HR Manager CSC">HR Manager CSC</option>
   <option value="HR Manager SO">HR Manager SO</option>
   <option value="HR Operations Manager SO">HR Operations Manager SO</option>
   <option value="HR Specialist SO">HR Specialist SO</option>
@@ -179,6 +182,8 @@
   <option value="Laws &amp; Standards Coordinator SO">Laws &amp; Standards Coordinator SO</option>
   <option value="Leadership &amp; Competence Manager SO">Leadership &amp; Competence Manager SO</option>
   <option value="Learning &amp; Development Specialist SO">Learning &amp; Development Specialist SO</option>
+  <option value="Legal Manager SO">Legal Manager SO</option>
+  <option value="Local Facility Management Specialist 522">Local Facility Management Specialist 522</option>
   <option value="Local Marketing Manager 373">Local Marketing Manager 373</option>
   <option value="Local Marketing Manager 522">Local Marketing Manager 522</option>
   <option value="Local Marketing Specialist 373">Local Marketing Specialist 373</option>
@@ -199,6 +204,7 @@
   <option value="Product Req &amp; Compliance Specialist SO">Product Req &amp; Compliance Specialist SO</option>
   <option value="Project Manager 373">Project Manager 373</option>
   <option value="Project Manager SO">Project Manager SO</option>
+  <option value="Project Specialist I SO">Project Specialist I SO</option>
   <option value="Project Specialist SO">Project Specialist SO</option>
   <option value="Project Support SO">Project Support SO</option>
   <option value="Property Assistant SO">Property Assistant SO</option>
@@ -250,6 +256,7 @@
   <option value="Sales Support Specialist SO">Sales Support Specialist SO</option>
   <option value="Sales Team Leader 373">Sales Team Leader 373</option>
   <option value="Sales Team Leader 522">Sales Team Leader 522</option>
+  <option value="Service Business Leader SO">Service Business Leader SO</option>
   <option value="Shopkeeper 373">Shopkeeper 373</option>
   <option value="Shopkeeper 522">Shopkeeper 522</option>
   <option value="Shopkeeper II 522">Shopkeeper II 522</option>
@@ -269,12 +276,14 @@
   <option value="Translation Coordinator SO">Translation Coordinator SO</option>
   <option value="Translator SO">Translator SO</option>
   <option value="Transport Operations Coordinator SO">Transport Operations Coordinator SO</option>
+  <option value="Trainee SO">Trainee SO</option>
   <option value="Treasurer SO">Treasurer SO</option>
   <option value="Visual Merchandising Co-worker 373">Visual Merchandising Co-worker 373</option>
   <option value="Visual Merchandising Co-worker 522">Visual Merchandising Co-worker 522</option>
   <option value="Visual Merchandising Co-worker Expansion">Visual Merchandising Co-worker Expansion</option>
   <option value="Visual Merchandising Manager 373">Visual Merchandising Manager 373</option>
   <option value="Visual Merchandising Manager 522">Visual Merchandising Manager 522</option>
+  <option value="Web Communication Specialist STO">Web Communication Specialist STO</option>
   <option value="Web editor SO">Web editor SO</option>
   <option value="Workforce Management Co-worker CSC">Workforce Management Co-worker CSC</option>
 </options>
