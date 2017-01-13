@@ -134,6 +134,7 @@
 
             if (caseType.Id == 0)
             {
+                caseType.CaseTypeGUID = Guid.NewGuid();
                 this.caseTypeRepository.Add(caseType);
             }
             else

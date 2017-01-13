@@ -257,6 +257,7 @@
             workingGroup.EMail = workingGroup.EMail ?? string.Empty;
             workingGroup.SendExternalEmailToWGUsers = workingGroup.SendExternalEmailToWGUsers.HasValue ? workingGroup.SendExternalEmailToWGUsers.Value : 0;
             workingGroup.ChangedDate = DateTime.UtcNow;
+            
 
             if (string.IsNullOrEmpty(workingGroup.WorkingGroupName))
             {
@@ -265,6 +266,7 @@
 
             if (workingGroup.Id == 0)
             {
+                workingGroup.WorkingGroupGUID = Guid.NewGuid();
                 this.workingGroupRepository.Add(workingGroup);
             }
             else

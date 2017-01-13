@@ -242,9 +242,10 @@
             department.IsEMailDefault = department.IsEMailDefault;
             department.ChangedDate = DateTime.UtcNow;
             department.OverTimeAmount = department.OverTimeAmount;
-
+            
             if (department.Id == 0)
             {
+                department.DepartmentGUID = Guid.NewGuid();
                 this.departmentRepository.Add(department);
             }
             else
