@@ -96,6 +96,8 @@ namespace DH.Helpdesk.Web.Models.Case.Output
         public SelectList CaseRemainingTimeList { get; set; }
         public int[] lstfilterCaseRemainingTime { get; set; }
         public CaseStatisticsViewModel CaseStatisticsModel { get; set; }
+
+		public bool IsAboutEnabled { get; set; }
     }
 
     public class AdvancedSearchSpecificFilterData

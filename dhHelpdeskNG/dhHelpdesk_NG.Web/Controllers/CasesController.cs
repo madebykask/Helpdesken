@@ -381,6 +381,8 @@ namespace DH.Helpdesk.Web.Controllers
 					sortDir = advancedSearchModel.Search.Ascending ? SortingDirection.Asc : SortingDirection.Desc
 				};
 
+			m.CaseSearchFilterData.IsAboutEnabled = m.CaseSetting.ColumnSettingModel.CaseFieldSettings.GetIsAboutEnabled();
+
 			m.DoSearchAtBegining = doSearchAtBegining;
 			return this.View("AdvancedSearch/Index", m);
 		}
@@ -529,7 +531,9 @@ namespace DH.Helpdesk.Web.Controllers
             m.CaseTemplateTreeButton = this.GetCaseTemplateTreeModel(customerId, userId, CaseSolutionLocationShow.OnCaseOverview);
             this._caseSettingService.GetCaseSettingsWithUser(customerId, userId, SessionFacade.CurrentUser.UserGroupId);
             m.CaseSetting = this.GetCaseSettingModel(customerId, userId);
-            var user = this._userService.GetUser(userId);
+	        m.CaseSearchFilterData.IsAboutEnabled = m.CaseSetting.ColumnSettingModel.CaseFieldSettings.GetIsAboutEnabled();
+
+			var user = this._userService.GetUser(userId);
 
 	        SessionFacade.CaseOverviewGridSettings.pageOptions.pageIndex =
 		        SessionFacade.CurrentCaseSearch.caseSearchFilter.PageInfo.PageNumber;

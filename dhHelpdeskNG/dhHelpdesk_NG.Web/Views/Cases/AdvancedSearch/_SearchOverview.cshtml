@@ -100,7 +100,10 @@
                         </td>
                         <td>                            
 	                        <input type="text" id="CaseInitiatorFilter" value="@Model.CaseSearchFilterData.CaseInitiatorFilter" name="CaseInitiatorFilter" />
-							@Html.DropDownListFor(m => m.CaseSearchFilterData.InitiatorSearchScope, CaseInitiatorSearchScope.UserAndIsAbout.ToSelectListItems(), new { @class = "", id = "initiatorSearchScope" })
+							@if (Model.CaseSearchFilterData.IsAboutEnabled)
+							{
+								@Html.DropDownListFor(m => m.CaseSearchFilterData.InitiatorSearchScope, CaseInitiatorSearchScope.UserAndIsAbout.ToSelectListItems(), new { @class = "", id = "initiatorSearchScope" })
+							}
                         </td>
                     </tr>    
 

@@ -56,9 +56,12 @@
 		                         @Html.TextBoxFor(m => m.CaseInitiatorFilter, new { @class = "fixed-length", id = "caseInitiatorText" })
 								 
 	                         </td>
-						 	<td>
-						 		@Html.DropDownListFor(m => m.InitiatorSearchScope, CaseInitiatorSearchScope.UserAndIsAbout.ToSelectListItems(), new { @class = "", id = "initiatorSearchScope" })
-							</td>
+							 @if (Model.IsAboutEnabled)
+							 {
+								<td>
+									@Html.DropDownListFor(m => m.InitiatorSearchScope, CaseInitiatorSearchScope.UserAndIsAbout.ToSelectListItems(), new { @class = "", id = "initiatorSearchScope" })
+								</td>
+							 }
                          </tr>                
                      }
 
