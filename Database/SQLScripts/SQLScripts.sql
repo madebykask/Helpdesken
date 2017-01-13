@@ -1061,6 +1061,76 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	ALTER TABLE [dbo].[tblOrderFieldTypes] ADD [Deleted] BIT NOT NULL CONSTRAINT [DF_tblOrderFieldTypes_Deleted]  DEFAULT ((0))
 GO
 
+--Populate GUID
+-- tblWorkingGroup
+--New field in tblWorkingGroup
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'WorkingGroupGUID' and sysobjects.name = N'tblWorkingGroup')
+	begin
+		ALTER TABLE tblWorkingGroup ADD WorkingGroupGUID uniqueidentifier Default (newid()) NULL
+	end
+GO
+--Update tblWorkinGroup with WorkingGroupGUID
+UPDATE tblWorkingGroup
+SET WorkingGroupGUID = newid()
+WHERE WorkingGroupGUID IS NULL
+
+-- tblCaseType
+--New field in tblCaseType
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CaseTypeGUID' and sysobjects.name = N'tblCaseType')
+	begin
+		ALTER TABLE tblCaseType ADD CaseTypeGUID uniqueidentifier Default (newid()) NULL
+	end
+GO
+--Update tblCaseType with CaseTypeGUID
+UPDATE tblCasetype
+SET CaseTypeGUID = newid()
+WHERE CaseTypeGUID IS NULL
+
+-- tblDepartment
+--New field in tblDepartment
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'DepartmentGUID' and sysobjects.name = N'tblDepartment')
+	begin
+		ALTER TABLE tblDepartment ADD DepartmentGUID uniqueidentifier Default (newid()) NULL
+	end
+GO
+--Update tblDepartment with DepartmentGUID
+UPDATE tblDepartment
+SET DepartmentGUID = newid()
+WHERE DepartmentGUID IS NULL
+
+-- tblFinishingCause
+--New field in tblFinishingCause
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'FinishingCauseGUID' and sysobjects.name = N'tblFinishingCause')
+	begin
+		ALTER TABLE tblFinishingCause ADD FinishingCauseGUID uniqueidentifier Default (newid()) NULL
+	end
+GO
+--Update tblFinishingCause with FinishingCauseGUID
+UPDATE tblFinishingCause
+SET FinishingCauseGUID = newid()
+WHERE FinishingCauseGUID IS NULL
+
+-- tblFinishingCauseCategory
+--New field in tblFinishingCauseCategory
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'FinishingCauseCategoryGUID' and sysobjects.name = N'tblFinishingCauseCategory')
+	begin
+		ALTER TABLE tblFinishingCauseCategory ADD FinishingCauseCategoryGUID uniqueidentifier Default (newid()) NULL
+	end
+GO
+--Update tblFinishingCauseCategory with FinishingCauseCategoryGUID
+UPDATE tblFinishingCauseCategory
+SET FinishingCauseCategoryGUID = newid()
+WHERE FinishingCauseCategoryGUID IS NULL
+
+-- tblAccountActivityGroup
+--New field in tblAccountActivityGroup
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'AccountActivityGroupGUID' and sysobjects.name = N'tblAccountActivityGroup')
+	begin
+		ALTER TABLE tblAccountActivityGroup ADD AccountActivityGroupGUID uniqueidentifier Default (newid()) NULL
+	end
+GO
+
+
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.30'
