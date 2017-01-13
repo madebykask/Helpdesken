@@ -1387,6 +1387,8 @@
     <Compile Include="Models\Case\CaseRemainingTimeTable.cs" />
     <Compile Include="Models\Case\CaseStatisticsViewModel.cs" />
     <Compile Include="Models\Case\CaseInvoiceModel.cs" />
+    <Compile Include="Models\Feedback\FeedbackStatisticsViewModel.cs" />
+    <Compile Include="Models\Feedback\StatisticsFilter.cs" />
     <Compile Include="Models\Invoice\ExternalInvoiceModel.cs" />
     <Compile Include="Models\Case\Input\CaseEditInput.cs" />
     <Compile Include="Models\Case\MyFavoriteFilterModel.cs" />
@@ -2571,6 +2573,7 @@
     <Content Include="Views\Cases\ModalDialogs\_SendIntLogToDiallog.cshtml" />
     <Content Include="Views\Cases\_ParentCases.cshtml" />
     <Content Include="Views\Cases\ModalDialogs\_CaseCharge.cshtml" />
+    <Content Include="Views\Feedback\Statistics.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">
