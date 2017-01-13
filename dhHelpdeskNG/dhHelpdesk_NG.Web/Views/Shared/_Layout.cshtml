@@ -1,5 +1,6 @@
 ﻿@using System.Web.Optimization
 @using DH.Helpdesk.Web.Infrastructure.Extensions
+@using DH.Helpdesk.Web.Infrastructure.UrlHelpers.Mvc.Invoices
 
 <!DOCTYPE html>
 <html>
@@ -231,10 +232,10 @@
                         <img src="@Url.Content("~/Content/icons/deal.png")"/>
                         @Translation.Get("Avtal")</a></li>
                 }
-				@if (model.IsOrderVisible())
+				@if (model.IsInvoicesVisible())
 				{
 					<li>
-						<a href="@Url.Action("Index", "Overview", new {area = "Invoices"})">
+						<a href="@Url.Action(MvcInvoicesUrlName.Overview.Index, MvcInvoicesUrlName.Overview.Controller, new {area = MvcInvoicesUrlName.Overview.Name})">
 							<img src="@Url.Content("~/Content/icons/order.png")" />
 							@Translation.Get("Fakturering")
 						</a>

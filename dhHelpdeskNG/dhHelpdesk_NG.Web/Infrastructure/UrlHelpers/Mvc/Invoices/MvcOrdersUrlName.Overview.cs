@@ -10,7 +10,12 @@ namespace DH.Helpdesk.Web.Infrastructure.UrlHelpers.Mvc.Invoices
 	{
 		public partial class Overview : MvcUrlNameBase.BaseNameHelper<OverviewController>
 		{
-			public static string Name => "Overview";
+			public static string Name => "Invoices";
+
+			public static string Index
+			{
+				get { return GetAction(e => e.Index()); }
+			}
 
 			public static string InvoiceExport
 			{
