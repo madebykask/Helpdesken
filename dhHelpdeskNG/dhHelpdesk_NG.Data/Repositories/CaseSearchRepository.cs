@@ -188,9 +188,29 @@ namespace DH.Helpdesk.Dal.Repositories
 						var dr = cmd.ExecuteReader();
 						if (dr != null && dr.HasRows)
 						{
+							int? closingReasonFilter = null;
+							if (!string.IsNullOrEmpty(f.CaseClosingReasonFilter))
+							{
+								int closingReason;
+								if (int.TryParse(f.CaseClosingReasonFilter, out closingReason))
+								{
+									closingReasonFilter = closingReason;
+								}
+							}
 
 							while (dr.Read())
 							{
+								var caseId = int.Parse(dr["Id"].ToString());
+
+								if (closingReasonFilter.HasValue)
+								{
+									var log = this.logRepository.GetLastLog(caseId);
+									if (log?.FinishingType == null || closingReasonFilter != log.FinishingType)
+									{
+										continue;
+									}
+								}
+
 								var doCalcTimeLeft = displayLeftTime || calculateRemainingTime;
 
 								var row = new CaseSearchResult();
@@ -198,24 +218,6 @@ namespace DH.Helpdesk.Dal.Repositories
 								var toolTip = string.Empty;
 								var sortOrder = string.Empty;
 								DateTime caseRegistrationDate;
-
-								int? curStatus = dr.SafeGetNullableInteger("aggregate_Status");
-								if (curStatus.HasValue)
-								{
-									if (aggregateData.Status.Keys.Contains(curStatus.Value))
-										aggregateData.Status[curStatus.Value] += 1;
-									else
-										aggregateData.Status.Add(curStatus.Value, 1);
-								}
-
-								int? curSubStatus = dr.SafeGetNullableInteger("aggregate_SubStatus");
-								if (curSubStatus.HasValue)
-								{
-									if (aggregateData.SubStatus.Keys.Contains(curSubStatus.Value))
-										aggregateData.SubStatus[curSubStatus.Value] += 1;
-									else
-										aggregateData.SubStatus.Add(curSubStatus.Value, 1);
-								}
 
 								DateTime.TryParse(dr["RegTime"].ToString(), out caseRegistrationDate);
 								DateTime dtTmp;
@@ -301,11 +303,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
 								if (timeLeft.HasValue)
 								{
-									int caseId;
-									if (int.TryParse(dr["Id"].ToString(), out caseId))
-									{
-										remainingTime.AddRemainingTime(caseId, timeLeft.Value);
-									}
+									remainingTime.AddRemainingTime(caseId, timeLeft.Value);
 								}
 
 								var isExternalEnv = (context.applicationType.ToLower() == ApplicationTypes.LineManager || context.applicationType.ToLower() == ApplicationTypes.SelfService);
@@ -388,7 +386,27 @@ namespace DH.Helpdesk.Dal.Repositories
 								row.IsUnread = dr.SafeGetInteger("Status") == 1;
 								row.IsUrgent = timeLeft.HasValue && timeLeft < 0;
 								if (!row.Ignored)
+								{
 									ret.Items.Add(row);
+
+									int? curStatus = dr.SafeGetNullableInteger("aggregate_Status");
+									if (curStatus.HasValue)
+									{
+										if (aggregateData.Status.Keys.Contains(curStatus.Value))
+											aggregateData.Status[curStatus.Value] += 1;
+										else
+											aggregateData.Status.Add(curStatus.Value, 1);
+									}
+
+									int? curSubStatus = dr.SafeGetNullableInteger("aggregate_SubStatus");
+									if (curSubStatus.HasValue)
+									{
+										if (aggregateData.SubStatus.Keys.Contains(curSubStatus.Value))
+											aggregateData.SubStatus[curSubStatus.Value] += 1;
+										else
+											aggregateData.SubStatus.Add(curSubStatus.Value, 1);
+									}
+								}
 							}
 						}
 
@@ -402,27 +420,6 @@ namespace DH.Helpdesk.Dal.Repositories
 			}
 
 			var result = ret;
-
-			if (!string.IsNullOrEmpty(f.CaseClosingReasonFilter))
-			{
-				int closingReason;
-				if (int.TryParse(f.CaseClosingReasonFilter, out closingReason))
-				{
-					var closingReasons = new List<int> { closingReason };
-					var filtered = new SearchResult<CaseSearchResult>();
-					foreach (var foundedCase in ret.Items)
-					{
-						var log = this.logRepository.GetLastLog(foundedCase.Id);
-						if (log != null && log.FinishingType.HasValue
-							&& closingReasons.Contains(log.FinishingType.Value))
-						{
-							filtered.Items.Add(foundedCase);
-						}
-					}
-
-					result = filtered;
-				}
-			}
 
 			result = SortSearchResult(result, s);
 
