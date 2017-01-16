@@ -2,12 +2,12 @@
 {
     public class UserStatisticsModel
     {
-        public UserStatisticsModel(int numberOfUsers)
+        public UserStatisticsModel(string numberOfUsers)
         {
             NumberOfUsers = numberOfUsers;
         }
 
-        public int NumberOfUsers { get; set; }
+        public string NumberOfUsers { get; set; }
 
     }
 }

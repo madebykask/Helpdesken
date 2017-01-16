@@ -171,6 +171,8 @@
         int? GetUserDefaultWorkingGroupId(int userId, int customerId);
 
         WorkingGroupEntity GetUserDefaultWorkingGroup(int userId, int customerId);
+
+        bool IsUserValidAdmin(string userId, string pass);
     }
 
     public class UserService : IUserService
@@ -969,6 +971,15 @@
             this.Commit();
 
             return init;
+        }
+
+        public bool IsUserValidAdmin(string userId, string pass)
+        {
+            var entities = _userRepository.GetMany(u => u.UserID.ToLower() == userId.ToLower() &&
+                                                      u.Password == pass &&
+                                                      u.UserGroup_Id == 4)
+                                          .ToList();
+            return entities.Any();
         }
 
         /// <summary>
