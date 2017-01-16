@@ -59,6 +59,7 @@
         public Infrastructure.Enums.AccessMode EditMode { get; set; } //(-1,0,1)
         public bool Disable_SendMailAboutCaseToNotifier { get; set; }
         public int ProductAreaHasChild { get; set; }
+        public int? OrderId { get; set; }
 
         [Obsolete("Put all fields that you required into this CaseInputViewModel model")]
         public Case case_  { get; set; }

@@ -141,6 +141,14 @@
 
                 });
             }
+
+            $("#case-url").off("click").on("click", function (e) {
+                e.preventDefault();
+
+                var href = $(this).attr("href");
+                document.location.href = href;
+            });
+
         }
     }
 })(jQuery);

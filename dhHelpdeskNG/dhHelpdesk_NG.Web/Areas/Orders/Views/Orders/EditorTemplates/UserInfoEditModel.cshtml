@@ -2,7 +2,7 @@
 @using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.UserInfoEditModel
 
-<h4>@Translation.Get("Användarinformation")</h4>
+<h4>@Translation.GetCoreTextTranslation("Användarinformation")</h4>
 <table class="tableform">
     <tbody>
         @Html.EditorFor(m => m.Initials, "Fields/Text")
@@ -18,7 +18,7 @@
         {
             <tr>
                 <td class="span3">
-                    <label>@Translation.Get("Område")</label>
+                    <label>@Translation.GetCoreTextTranslation("Område")</label>
                 </td>
                 <td class="span6">
                     @Html.DropDownListFor(m => m.RegionId, Model.Regions, string.Empty, new {id = "region_dropdown"})

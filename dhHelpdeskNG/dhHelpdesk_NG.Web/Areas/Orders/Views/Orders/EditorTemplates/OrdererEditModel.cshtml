@@ -38,7 +38,7 @@
                 @Html.FieldCaption(Model.Department)
             </td>
             <td class="span6">
-                @Html.DropDownListFor(m => m.DepartmentId, Model.Department.Value, new {Id = "Orderer_DepartmentId", data_dh_is_required = Model.Department.IsRequired.ToJavaScriptBool() })
+                @Html.DropDownListFor(m => m.DepartmentId, Model.Department.Value, new {Id = "Orderer_DepartmentId", data_dh_is_required = Model.Department.IsRequired })
                 @Html.ValidationMessageFor(m => m.DepartmentId)
             </td>
             <td class="span3">
@@ -53,7 +53,7 @@
                 @Html.FieldCaption(Model.Unit)
             </td>
             <td class="span6">
-                @Html.DropDownListFor(m => m.UnitId, Model.Unit.Value, new {Id = "orderer_unit_select"})
+                @Html.DropDownListFor(m => m.UnitId, Model.Unit.Value, new { Id = "orderer_unit_select", data_dh_is_required = Model.Unit.IsRequired })
                 @Html.ValidationMessageFor(m => m.UnitId)
             </td>
             <td class="span3">

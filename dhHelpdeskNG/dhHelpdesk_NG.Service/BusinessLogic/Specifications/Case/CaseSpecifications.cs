@@ -474,6 +474,13 @@
             return query;
         }
 
+        public static IQueryable<Case> GetByCaseNumber(this IQueryable<Case> query, decimal caseNumber)
+        {
+            query = query.Where(c => c.CaseNumber == caseNumber);
+
+            return query;
+        }
+
         #region Sort
 
         public static IQueryable<Case> Sort(this IQueryable<Case> query, SortField sort)

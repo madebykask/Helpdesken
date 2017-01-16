@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
+﻿using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+
+namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
 {
     using System.Web.Mvc;
 

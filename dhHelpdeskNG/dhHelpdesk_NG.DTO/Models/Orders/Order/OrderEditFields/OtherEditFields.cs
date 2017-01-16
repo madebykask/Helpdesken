@@ -6,19 +6,20 @@
     {
         public OtherEditFields(
                 string fileName, 
-                decimal? caseNumber, 
+                decimal? caseNumber,
                 string info)
         {
-            this.Info = info;
-            this.CaseNumber = caseNumber;
-            this.FileName = fileName;
+            Info = info;
+            CaseNumber = caseNumber;
+            FileName = fileName;
         }
 
         [NotNull]
         public string FileName { get; private set; }
         
         public decimal? CaseNumber { get; private set; }
-        
+        public int? CaseId { get; set; }
+
         public string Info { get; private set; }
     }
 }

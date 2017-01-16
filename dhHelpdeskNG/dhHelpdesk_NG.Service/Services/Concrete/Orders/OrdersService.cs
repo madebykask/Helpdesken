@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services.Concrete.Orders
+﻿using DH.Helpdesk.Services.BusinessLogic.Specifications.Case;
+
+namespace DH.Helpdesk.Services.Services.Concrete.Orders
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -265,10 +267,16 @@
                 var orderFieldTypesRep = uow.GetRepository<OrderFieldType>();
                 //var orderLogRep = uow.GetRepository<OrderLog>();
                 var orderEmailLogRep = uow.GetRepository<OrderEMailLog>();
+                var caseRep = uow.GetRepository<Case>();
 
                 var order = ordersRep.GetAll()
                                 .GetById(orderId)
                                 .MapToFullOrderEditFields();
+                if (order.Other.CaseNumber.HasValue)
+                {
+                    order.Other.CaseId = caseRep.GetAll()
+                        .GetByCaseNumber(order.Other.CaseNumber.Value).FirstOrDefault()?.Id;
+                }
 
                 var firstLevelParentId = 0;
                

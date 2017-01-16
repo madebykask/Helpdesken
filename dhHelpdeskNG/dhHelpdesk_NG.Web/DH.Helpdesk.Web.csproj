@@ -1270,6 +1270,7 @@
     <Compile Include="Infrastructure\UrlHelpers\Mvc\MvcUrlName.cs" />
     <Compile Include="Infrastructure\UrlHelpers\Mvc\MvcUrlName.Feedback.cs" />
     <Compile Include="Infrastructure\UrlHelpers\Mvc\MvcUrlName.Questionnaire.cs" />
+    <Compile Include="Infrastructure\UrlHelpers\Mvc\Orders\MvcOrdersUrlName.cs" />
     <Compile Include="Infrastructure\UrlHelpers\Mvc\Orders\MvcOrdersUrlName.Orders.cs" />
     <Compile Include="Infrastructure\UrlHelpers\WebApiUrlNameBase.cs" />
     <Compile Include="Infrastructure\Utilities\PropertyHelper.cs" />

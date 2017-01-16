@@ -203,11 +203,13 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
         {
             var fileName = _configurableFieldModelFactory.CreateAttachedFiles(settings.FileName, orderId, Subtopic.FileName, new List<string>(0));
             var caseNumber = _configurableFieldModelFactory.CreateNullableDecimalField(settings.CaseNumber, null);
+            var caseId = _configurableFieldModelFactory.CreateNullableIntegerField(settings.CaseNumber, null);
             var info = _configurableFieldModelFactory.CreateStringField(settings.Info, null);
 
             return new OtherEditModel(
                             fileName,
                             caseNumber,
+                            caseId,
                             info);
         }
 

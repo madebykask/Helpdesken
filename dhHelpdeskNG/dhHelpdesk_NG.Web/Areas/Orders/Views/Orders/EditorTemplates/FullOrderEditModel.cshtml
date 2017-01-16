@@ -12,21 +12,27 @@
 }
 
 <ul class="nav nav-tabs">
+    @if (Model.Other.CaseNumber.Value.HasValue && Model.Other.CaseId.Value.HasValue)
+    {
+        <li>
+            <a href="@Url.Content("~/Cases/Edit/" + Model.Other.CaseId.Value.Value)" id="case-url">@Translation.GetCoreTextTranslation("Ärende")</a>
+        </li>
+    }
     <li class="active">
-        <a href="#tab-1">@Translation.Get("Beställning")</a>
-    </li>    
+        <a href="#tab-1">@Translation.GetCoreTextTranslation("Beställning")</a>
+    </li>
     @if (Model.Log.HasShowableFields())
     {
         <li>
-            <a href="#tab-2">@Translation.Get("Logg")</a>
-        </li>                                
-    }      
+            <a href="#tab-2">@Translation.GetCoreTextTranslation("Logg")</a>
+        </li>
+    }
     @if (!Model.IsNew)
     {
         <li>
-            <a href="#tab-3">@Translation.Get("Historik")</a>
-        </li>                                    
-    }                      
+            <a href="#tab-3">@Translation.GetCoreTextTranslation("Historik")</a>
+        </li>
+    }
 </ul>
 
 <div class="tab-content">

@@ -13,7 +13,7 @@
             <ul class="secnav">
                 <li>
                     @Html.DropDownListFor(m => m.OrderTypeForCteateOrderId, Model.OrderTypesForCreateOrder, new { id = "ordertypesforcreateorder_dropdown" })
-                    <input type="submit" value="@Translation.Get("Skapa beställning")" class="btn" />
+                    <input type="submit" value="@Translation.GetCoreTextTranslation("Skapa beställning")" class="btn" />
                 </li>
             </ul>                     
         }
@@ -36,16 +36,16 @@
 
     <table class="tableform">
         <tr>
-            <td class="span3">@Translation.Get("Typ")</td>
+            <td class="span3">@Translation.GetCoreTextTranslation("Typ")</td>
             <td>@Html.DropDownListFor(m => m.OrderTypeId, Model.OrderTypesSearch, new { id = "ordertypes_dropdown", @style = "width:300px", data_placeholder = Translation.Get("Välj en eller flera") })</td>
         </tr>                
         <tr>
-            <td class="span3">@Translation.Get("Handläggare")</td>
+            <td class="span3">@Translation.GetCoreTextTranslation("Handläggare")</td>
             <td>@Html.DropDownListFor(m => m.AdministratorIds, Model.Administrators, new { id = "administrators_dropdown", multiple = "multiple", @class = "chosen-select", data_placeholder = Translation.Get("Välj en eller flera") })</td>
         </tr>         
         <tr>
             <td class="span3">
-                @Translation.Get("Beställningsdatum")
+                @Translation.GetCoreTextTranslation("Beställningsdatum")
             </td>
             <td>
                 @Html.EditorFor(m => m.StartDate, "DatePicker", new { id = "StartDate" })
@@ -53,11 +53,11 @@
             </td>
         </tr>
         <tr>
-            <td class="span3">@Translation.Get("Status")</td>
+            <td class="span3">@Translation.GetCoreTextTranslation("Status")</td>
             <td>@Html.DropDownListFor(m => m.StatusIds, Model.Statuses, new { id = "statuses_dropdown", multiple = "multiple", @class = "chosen-select", data_placeholder = Translation.Get("Välj en eller flera") })</td>
         </tr>    
         <tr>
-            <td class="span3">@Translation.Get("Sök")</td>
+            <td class="span3">@Translation.GetCoreTextTranslation("Sök")</td>
             <td>@Html.TextBoxFor(m => m.Text, new { @style = "width:285px"}) <input type="submit" value="@Translation.Get("Sök")" class="btn" /></td>
         </tr>              
     </table>

@@ -116,59 +116,65 @@
 
                     @if (Model.CaseTemplateName != null)
                 {
-                    <a id="case-tab" href="#case" class="case">@Model.CaseTemplateName</a>
-            }
+                        <a id="case-tab" href="#case" class="case">@Model.CaseTemplateName</a>
+                    }
                     else
                     {
-                    <a id="case-tab" href="#case" class="case">
-                        @Translation.Get("Ärende")
-                    @if (Model.case_.Id != 0)
-            {
-                    @Model.case_.CaseNumber
+                        <a id="case-tab" href="#case" class="case">
+                            @Translation.GetCoreTextTranslation("Ärende")
+                            @if (Model.case_.Id != 0)
+                            {
+                                @Model.case_.CaseNumber
                             }
-                </a>
+                        </a>
                     }
                 </li>
                 @if (Model.IsItParentCase())
                 {
-                <li>
-                    <a href="#childcases-tab" title="@string.Format("{0}/{1} {2}", Model.ClosedChildCasesCount, Model.ChildCaseViewModel.ChildCaseList.Length, Translation.GetCoreTextTranslation("avslutade").ToLower())">
-                        @string.Format("{0} ({1}/{2} {3})", Translation.GetCoreTextTranslation("Underärenden"), Model.ClosedChildCasesCount, Model.ChildCaseViewModel.ChildCaseList.Length, Translation.GetCoreTextTranslation("avslutade").ToLower())
-                    </a>
-                </li>
+                    <li>
+                        <a href="#childcases-tab" title="@string.Format("{0}/{1} {2}", Model.ClosedChildCasesCount, Model.ChildCaseViewModel.ChildCaseList.Length, Translation.GetCoreTextTranslation("avslutade").ToLower())">
+                            @string.Format("{0} ({1}/{2} {3})", Translation.GetCoreTextTranslation("Underärenden"), Model.ClosedChildCasesCount, Model.ChildCaseViewModel.ChildCaseList.Length, Translation.GetCoreTextTranslation("avslutade").ToLower())
+                        </a>
+                    </li>
                 }
 
                 @if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
-        {
-            if (Model.DynamicCase.ViewMode == 0)
-            {
-                <li>
-                    <a href="#dh-form-area" id="loadContainer" class="eform">@(Translation.Get(Model.DynamicCase.FormName))</a>
-                </li>
+                {
+                    if (Model.DynamicCase.ViewMode == 0)
+                    {
+                        <li>
+                            <a href="#dh-form-area" id="loadContainer" class="eform">@(Translation.GetCoreTextTranslation(Model.DynamicCase.FormName))</a>
+                        </li>
                     }
                     else if (Model.DynamicCase.ViewMode == 1)
                     {
-                <li class="dh-modal">
-                    <a id="openContainer">@(Translation.Get(Model.DynamicCase.FormName))</a>
-                </li>
+                        <li class="dh-modal">
+                            <a id="openContainer">@(Translation.GetCoreTextTranslation(Model.DynamicCase.FormName))</a>
+                        </li>
                     }
                 }
 
                 @if (Model.CaseLock != null && Model.CaseLock.IsLocked && Model.CaseLock.User != null)
-        {
-            if (Model.CaseLock.UserId == SessionFacade.CurrentUser.Id)
-            {
-                <li class="notice">
-                    <a>@Translation.Get("OBS! Du har redan öppnat detta ärende i en annan session.")</a>
-                </li>
+                {
+                    if (Model.CaseLock.UserId == SessionFacade.CurrentUser.Id)
+                    {
+                        <li class="notice">
+                            <a>@Translation.GetCoreTextTranslation("OBS! Du har redan öppnat detta ärende i en annan session.")</a>
+                        </li>
                     }
                     else
                     {
                         var userName = string.Format("{0} {1} ({2})", Model.CaseLock.User.FirstName, Model.CaseLock.User.SurName, Model.CaseLock.User.UserID);
-                <li class="notice">
-                    <a>@Translation.Get("OBS! Detta ärende är öppnat av")&nbsp; @userName</a>
-                </li>
+                        <li class="notice">
+                            <a>@Translation.GetCoreTextTranslation("OBS! Detta ärende är öppnat av")&nbsp; @userName</a>
+                        </li>
                     }
+                }
+                @if (Model.OrderId.HasValue)
+                {
+                    <li>
+                        <a id="case-order-url" href="@Url.Content("~/Orders/Orders/Edit/" + Model.OrderId.Value)">@Translation.GetCoreTextTranslation("Beställning")</a>
+                    </li>
                 }
             </ul>
             <div class="tab-content">

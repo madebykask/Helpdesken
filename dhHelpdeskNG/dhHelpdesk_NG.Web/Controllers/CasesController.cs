@@ -180,7 +180,8 @@ namespace DH.Helpdesk.Web.Controllers
 		private readonly ICaseExtraFollowersService _caseExtraFollowersService;
 
         private readonly ICaseRuleFactory _caseRuleFactory;
-        
+        private readonly IOrderService _orderService;
+
 
         #endregion
 
@@ -251,7 +252,8 @@ namespace DH.Helpdesk.Web.Controllers
             IUserPermissionsChecker userPermissionsChecker,
 			IExternalInvoiceService externalInvoiceService,
             ICaseExtraFollowersService caseExtraFollowersService,
-            ICaseRuleFactory caseRuleFactory)
+            ICaseRuleFactory caseRuleFactory,
+            IOrderService orderService)
             : base(masterDataService)
         {
             this._masterDataService = masterDataService;
@@ -322,6 +324,7 @@ namespace DH.Helpdesk.Web.Controllers
 			_externalInvoiceService = externalInvoiceService;
 			_caseExtraFollowersService = caseExtraFollowersService;
             _caseRuleFactory = caseRuleFactory;
+            _orderService = orderService;
         }
 
 		#endregion
@@ -1181,7 +1184,10 @@ namespace DH.Helpdesk.Web.Controllers
                 var currentCase = this._caseService.GetCaseById(id);
                 if (currentCustomerId != currentCase.Customer_Id)
                     this.InitFilter(currentCase.Customer_Id, false, CasesCustomFilter.None, false, true);
-                    
+
+                //Get order
+                m.OrderId = _orderService.GetOrder(id)?.Id;
+
                 // User has not access to case
                 if (m.EditMode == Enums.AccessMode.NoAccess)
                     return this.RedirectToAction("index", "home");
