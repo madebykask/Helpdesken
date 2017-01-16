@@ -247,11 +247,13 @@
 
                     string userDomain = fullName.GetDomainFromAdPath();
                     SessionFacade.CurrentSystemUser = userId;
+                    var initiator = _masterDataService.GetInitiatorByUserId(userId, customerId);
                     var ui = new UserIdentity()
                     {
                         UserId = userId,
-                        Domain = userDomain,
-                        FirstName = userId,
+                        Domain = userDomain,                        
+                        FirstName = initiator?.FirstName,
+                        LastName = initiator?.LastName,
                         EmployeeNumber = employeeNum
                     };
 
@@ -273,13 +275,14 @@
                         employeeNum = ConfigurationManager.AppSettings[AppSettingsKey.DefaultEmployeeNumber].ToString();
 
                     string userDomain = fullName.GetDomainFromAdPath();
-
+                    var initiator = _masterDataService.GetInitiatorByUserId(userId, customerId);
                     SessionFacade.CurrentSystemUser = userId;
                     var ui = new UserIdentity()
                     {
                         UserId = userId,
                         Domain = userDomain,
-                        FirstName = userId,
+                        FirstName = initiator?.FirstName,
+                        LastName = initiator?.LastName,
                         EmployeeNumber = employeeNum
                     };
 

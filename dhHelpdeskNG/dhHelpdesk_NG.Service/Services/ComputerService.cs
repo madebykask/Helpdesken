@@ -46,7 +46,7 @@
         void SaveComputerUserGroup(ComputerUserGroup computerUserGroup, int[] ous, out IDictionary<string, string> errors);
         void UpdateComputerUsersBlackList(ComputerUsersBlackList computerUsersBlackList);
 
-        Notifier GetInitiatorByUserId(string userId, int customerId);
+        Notifier GetInitiatorByUserId(string userId, int customerId, bool activeOnly = true);
         void Commit();
 
     }
@@ -441,9 +441,9 @@
             this._computerUsersBlackListRepository.Update(computerUsersBlackList);
         }
 
-        public Notifier GetInitiatorByUserId(string userId, int customerId)
+        public Notifier GetInitiatorByUserId(string userId, int customerId, bool activeOnly = true)
         {
-            return _computerUserRepository.GetInitiatorByUserId(userId, customerId);
+            return _computerUserRepository.GetInitiatorByUserId(userId, customerId, activeOnly);
         }
 
         public void Commit()

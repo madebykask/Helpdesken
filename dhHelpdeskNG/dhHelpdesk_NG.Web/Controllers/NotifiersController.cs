@@ -785,7 +785,7 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpGet]
         public JsonResult CheckUniqueUserId(string userId)
         {
-            var user = notifierRepository.GetInitiatorByUserId(userId, SessionFacade.CurrentCustomer.Id);
+            var user = notifierRepository.GetInitiatorByUserId(userId, SessionFacade.CurrentCustomer.Id, true);
             return Json(user == null, JsonRequestBehavior.AllowGet);
         }
 

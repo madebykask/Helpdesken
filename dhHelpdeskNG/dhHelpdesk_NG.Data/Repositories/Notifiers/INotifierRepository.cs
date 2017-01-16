@@ -32,6 +32,6 @@
 
         void UpdateCaseNotifier(CaseNotifier caseNotifier);
 
-        Notifier GetInitiatorByUserId(string userId, int customerId);
+        Notifier GetInitiatorByUserId(string userId, int customerId, bool activeOnly);
     }
 }
