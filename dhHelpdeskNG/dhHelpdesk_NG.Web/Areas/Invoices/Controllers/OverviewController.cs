@@ -52,7 +52,7 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers
 
 			ViewBag.MinStep = settings.MinRegWorkingTime;
 
-			var model = new InvoiceOverviewFilterModel();
+			var model = new InvoiceOverviewFilterModel {Status = InvoiceStatus.Ready};
 			return View(model);
         }
 
