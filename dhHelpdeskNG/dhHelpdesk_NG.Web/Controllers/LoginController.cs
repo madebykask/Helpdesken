@@ -17,6 +17,7 @@
     using DH.Helpdesk.BusinessData.Models.LogProgram;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
     using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
+    using Models.Login;
 
     public class LoginController : Controller
     {
@@ -199,6 +200,16 @@
             }
 
             return this.View("Login");
+        }
+
+        public ActionResult GetUserCount()
+        {
+            var nums = 0;
+            if (ApplicationFacade.LoggedInUsers != null)
+                nums = ApplicationFacade.LoggedInUsers.Count();
+
+            var model = new UserStatisticsModel(nums);
+            return View(model);
         }
 
         [NonAction]
