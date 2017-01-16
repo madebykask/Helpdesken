@@ -558,8 +558,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                                                          a.IsActive != 0)
                               {
                                   ForeignKeyValue1 = string.Join(",", a.UserWorkingGroups.Where(w => w.UserRole == 2)
-                                                                                                                   .Select(w => w.WorkingGroup_Id)
-                                                                                                                   .ToArray())
+                                                                                        .Select(w => w.WorkingGroup_Id)
+                                                                                        .ToArray())
                               })
                               .OrderBy(i => i.ItemText).ToList()
             };
@@ -1986,7 +1986,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                                                     ActionType = RelationActionType.ListPopulator.ToInt(),
                                                     FieldId = TranslationCaseFields.Performer_User_Id.ToString(),
                                                     ForeignKeyNumber = ForeignKeyNum.FKeyNum1.ToInt(),
-                                                    ShowRunTimeCurrentValue = ruleMode == CaseRuleMode.TemplateUserChangeMode
+                                                    ShowRunTimeCurrentValue = ruleMode == CaseRuleMode.TemplateUserChangeMode,
+                                                    ShowAllIfKeyIsNull = true                                                   
                                                 });
             }            
 
