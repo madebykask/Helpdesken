@@ -11,6 +11,7 @@
     using DH.Helpdesk.Web.Models.Case;
     using DH.Helpdesk.Common.Enums.Settings;
     using Models.CaseSolution;
+    using System;
 
     public static class ObjectExtensions
     {
@@ -225,7 +226,10 @@
         {
             return cfs.ToList().getCaseSettingsValue(valueToFind).EMailIdentifier;
         }
-
+        public static Guid? getCaseFieldSettingsGUID(this IEnumerable<CaseFieldSetting> cfs, string valueToFind)
+        {
+            return cfs.ToList().getCaseSettingsValue(valueToFind).CaseFieldSettingsGUID;
+        }
         public static string getLabel(this IEnumerable<CaseFieldSettingsWithLanguage> cfsl, string valueToFind)
         {
             return cfsl.ToList().getCaseFieldSettingsLanguageValue(valueToFind).Label;

@@ -1130,6 +1130,212 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	end
 GO
 
+-- tblCaseFieldSettings
+--New field in tblCaseFieldSettings
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CaseFieldSettingsGUID' and sysobjects.name = N'tblCaseFieldSettings')
+	begin
+		ALTER TABLE tblCaseFieldSettings ADD CaseFieldSettingsGUID uniqueidentifier Default (newid()) NOT NULL
+	end
+GO
+
+UPDATE tblCaseFieldSettings
+SET CaseFieldSettingsGUID = newid()
+WHERE CaseFieldSettingsGUID IS NULL
+
+-- tblCategory
+--New field in tblCategory
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CategoryGUID' and sysobjects.name = N'tblCategory')
+	begin
+		ALTER TABLE tblCategory ADD CategoryGUID uniqueidentifier Default (newid()) NOT NULL
+	end
+GO
+
+UPDATE tblCategory
+SET CategoryGUID = newid()
+WHERE CategoryGUID IS NULL
+
+--tblCausingpart
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CausingPartGUID' and sysobjects.name = N'tblCausingPart')
+	begin
+		ALTER TABLE tblCausingPart ADD CausingPartGUID uniqueidentifier Default (newid()) NOT NULL
+	end
+GO
+
+--tblCountry
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CountryGUID' and sysobjects.name = N'tblCountry')
+	begin
+		ALTER TABLE tblCountry ADD CountryGUID uniqueidentifier Default (newid()) NOT NULL
+	end
+GO
+
+--tblDocument
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'DocumentGUID' and sysobjects.name = N'tblDocument')
+	begin
+		ALTER TABLE tblDocument ADD DocumentGUID uniqueidentifier Default (newid()) NOT NULL
+	end
+GO
+
+--tblDomain
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'DomainGUID' and sysobjects.name = N'tblDomain')
+	begin
+		ALTER TABLE tblDomain ADD DomainGUID uniqueidentifier Default (newid()) NOT NULL
+	end
+GO
+
+--tblHoliday
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'HolidayGUID' and sysobjects.name = N'tblHoliday')
+	begin
+		ALTER TABLE tblHoliday ADD HolidayGUID uniqueidentifier Default (newid()) NOT NULL
+	end
+GO
+
+--tblHolidayHeader
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'HolidayHeaderGUID' and sysobjects.name = N'tblHolidayHeader')
+	begin
+		ALTER TABLE tblHolidayHeader ADD HolidayHeaderGUID uniqueidentifier Default (newid()) NOT NULL
+	end
+GO
+
+--tblImpact
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ImpactGUID' and sysobjects.name = N'tblImpact')
+	begin
+		ALTER TABLE tblImpact ADD ImpactGUID uniqueidentifier Default (newid()) NOT NULL
+	end
+GO
+
+--tblInfoText
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'InfoTextGUID' and sysobjects.name = N'tblInfoText')
+	begin
+		ALTER TABLE tblInfoText ADD InfoTextGUID uniqueidentifier Default (newid()) NOT NULL
+	end
+GO
+
+--tblLanguage
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageGUID' and sysobjects.name = N'tblLanguage')
+	begin
+		ALTER TABLE tblLanguage ADD LanguageGUID uniqueidentifier Default (newid()) NOT NULL
+	end
+GO
+
+--tblLinkGroup
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LinkGroupGUID' and sysobjects.name = N'tblLinkGroup')
+	begin
+		ALTER TABLE tblLinkGroup ADD LinkGroupGUID uniqueidentifier Default (newid()) NOT NULL
+	end
+GO
+
+--tblOperatingSystem
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'OperatingSystemGUID' and sysobjects.name = N'tblOperatingSystem')
+	begin
+		ALTER TABLE tblOperatingSystem ADD OperatingSystemGUID uniqueidentifier Default (newid()) NOT NULL
+	end
+GO
+
+--tblOrderState
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'OrderStateGUID' and sysobjects.name = N'tblOrderState')
+	begin
+		ALTER TABLE tblOrderState ADD OrderStateGUID uniqueidentifier Default (newid()) NOT NULL
+	end
+GO
+
+--tblOrderType
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'OrderTypeGUID' and sysobjects.name = N'tblOrderType')
+	begin
+		ALTER TABLE tblOrderType ADD OrderTypeGUID uniqueidentifier Default (newid()) NOT NULL
+	end
+GO
+
+--tblRegistrationSourceCustomer
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'RegistrationSourceCustomerGUID' and sysobjects.name = N'tblRegistrationSourceCustomer')
+	begin
+		ALTER TABLE tblRegistrationSourceCustomer ADD RegistrationSourceCustomerGUID uniqueidentifier Default (newid()) NOT NULL
+	end
+GO
+
+--tblReport
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ReportGUID' and sysobjects.name = N'tblReport')
+	begin
+		ALTER TABLE tblReport ADD ReportGUID uniqueidentifier Default (newid()) NOT NULL
+	end
+GO
+
+--tblSettings
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'SettingsGUID' and sysobjects.name = N'tblSettings')
+	begin
+		ALTER TABLE tblSettings ADD SettingsGUID uniqueidentifier Default (newid()) NOT NULL
+	end
+GO
+
+--tblSupplier
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'SupplierGUID' and sysobjects.name = N'tblSupplier')
+	begin
+		ALTER TABLE tblSupplier ADD SupplierGUID uniqueidentifier Default (newid()) NOT NULL
+	end
+GO
+
+--tblSystem
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'SystemGUID' and sysobjects.name = N'tblSystem')
+	begin
+		ALTER TABLE tblSystem ADD SystemGUID uniqueidentifier Default (newid()) NOT NULL
+	end
+GO
+
+--tblText
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'TextGUID' and sysobjects.name = N'tblText')
+	begin
+		ALTER TABLE tblText ADD TextGUID uniqueidentifier Default (newid()) NOT NULL
+	end
+GO
+
+--tblTextTranslation
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'TextTranslationGUID' and sysobjects.name = N'tblTextTranslation')
+	begin
+		ALTER TABLE tblTextTranslation ADD TextTranslationGUID uniqueidentifier Default (newid()) NOT NULL
+	end
+GO
+
+--tblUrgency
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'UrgencyGUID' and sysobjects.name = N'tblUrgency')
+	begin
+		ALTER TABLE tblUrgency ADD UrgencyGUID uniqueidentifier Default (newid()) NOT NULL
+	end
+GO
+
+--tblWatchDateCalendar
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'WatchDateCalendarGUID' and sysobjects.name = N'tblWatchDateCalendar')
+	begin
+		ALTER TABLE tblWatchDateCalendar ADD WatchDateCalendarGUID uniqueidentifier Default (newid()) NOT NULL
+	end
+GO
+
+
+--tblOU
+Alter table tblOU
+ Drop column OUGUID
+ GO
+
+ ALTER TABLE tblOU
+ ADD OUGUID uniqueIdentifier default newid() NOT NULL
+
+--tblPriority
+Alter table tblPriority
+ Drop column PriorityGUID
+ GO
+
+ ALTER TABLE tblPriority
+ ADD PriorityGUID uniqueIdentifier default newid() NOT NULL
+
+ --tblProductArea
+Alter table tblProductArea
+ Drop column ProductAreaGUID
+ GO
+
+ ALTER TABLE tblProductArea
+ ADD ProductAreaGUID uniqueIdentifier default newid() NOT NULL
+
+
+
+
 
 
 -- Last Line to update database version
