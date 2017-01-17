@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using DH.Helpdesk.Common.ValidationAttributes;
 using DH.Helpdesk.Web.Areas.Orders.Models.Order.FieldModels;
+using DH.Helpdesk.Web.Models;
 
 namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
 {
@@ -14,7 +15,18 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
         {
         }
 
-        public AccountInfoEditModel(ConfigurableFieldModel<DateTime?> startedDate, ConfigurableFieldModel<DateTime?> finishDate, ConfigurableFieldModel<int?> eMailTypeId, ConfigurableFieldModel<bool> homeDirectory, ConfigurableFieldModel<bool> profile, ConfigurableFieldModel<string> inventoryNumber, ConfigurableFieldModel<string> info, ConfigurableFieldModel<int?> accountTypeId, ConfigurableFieldModel<List<int>> accountTypeId2, ConfigurableFieldModel<int?> accountTypeId3, ConfigurableFieldModel<int?> accountTypeId4, ConfigurableFieldModel<int?> accountTypeId5)
+        public AccountInfoEditModel(ConfigurableFieldModel<DateTime?> startedDate,
+            ConfigurableFieldModel<DateTime?> finishDate,
+            ConfigurableFieldModel<int?> eMailTypeId, 
+            ConfigurableFieldModel<bool> homeDirectory,
+            ConfigurableFieldModel<bool> profile,
+            ConfigurableFieldModel<string> inventoryNumber,
+            ConfigurableFieldModel<string> info,
+            ConfigurableFieldModel<int?> accountTypeId,
+            ConfigurableFieldModel<List<CheckBoxListItem>> accountTypeId2,
+            ConfigurableFieldModel<int?> accountTypeId3,
+            ConfigurableFieldModel<int?> accountTypeId4,
+            ConfigurableFieldModel<int?> accountTypeId5)
         {
             StartedDate = startedDate;
             FinishDate = finishDate;
@@ -53,7 +65,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
 
         public ConfigurableFieldModel<int?> AccountTypeId { get; set; }
 
-        public ConfigurableFieldModel<List<int>> AccountTypeId2 { get; set; }
+        public ConfigurableFieldModel<List<CheckBoxListItem>> AccountTypeId2 { get; set; }
 
         public ConfigurableFieldModel<int?> AccountTypeId3 { get; set; }
 
@@ -90,7 +102,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
                 ConfigurableFieldModel<string>.CreateUnshowable(),
                 ConfigurableFieldModel<string>.CreateUnshowable(),
                 ConfigurableFieldModel<int?>.CreateUnshowable(),
-                ConfigurableFieldModel<List<int>>.CreateUnshowable(),
+                ConfigurableFieldModel<List<CheckBoxListItem>>.CreateUnshowable(),
                 ConfigurableFieldModel<int?>.CreateUnshowable(),
                 ConfigurableFieldModel<int?>.CreateUnshowable(),
                 ConfigurableFieldModel<int?>.CreateUnshowable());

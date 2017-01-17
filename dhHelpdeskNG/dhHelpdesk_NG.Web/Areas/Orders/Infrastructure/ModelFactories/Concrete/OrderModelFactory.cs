@@ -350,7 +350,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                     _configurableFieldModelFactory.CreateStringField(settings.InventoryNumber, fields.InventoryNumber),
                     _configurableFieldModelFactory.CreateStringField(settings.Info, fields.Info),
                     _configurableFieldModelFactory.CreateNullableIntegerField(settings.AccountTypeId, fields.AccountTypeId),
-                    _configurableFieldModelFactory.CreateListIntField(settings.AccountTypeId2, fields.AccountTypeId2),
+                    _configurableFieldModelFactory.CreateCheckBoxListField(settings.AccountTypeId2, fields.AccountTypeId2, options.AccountTypes2),
                     _configurableFieldModelFactory.CreateNullableIntegerField(settings.AccountTypeId3, fields.AccountTypeId3),
                     _configurableFieldModelFactory.CreateNullableIntegerField(settings.AccountTypeId4, fields.AccountTypeId4),
                     _configurableFieldModelFactory.CreateNullableIntegerField(settings.AccountTypeId5, fields.AccountTypeId5)

@@ -3883,3 +3883,7 @@ div.content.modalpopup > div > div.tab-content > div.tab-pane > form > div.conta
 .img-case-parent {
     position: relative;
 }
+
+label.checkbox-label-inline {
+    display: inline;
+}

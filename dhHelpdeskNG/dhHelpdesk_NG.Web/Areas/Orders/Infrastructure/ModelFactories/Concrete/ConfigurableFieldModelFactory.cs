@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
+﻿using DH.Helpdesk.Web.Models;
+
+namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
 {
     using System;
     using System.Collections.Generic;
@@ -187,11 +189,21 @@
                        : new ConfigurableFieldModel<int?>(setting.Caption, value, setting.Required, setting.Help);
         }
 
-        public ConfigurableFieldModel<List<int>> CreateListIntField(FieldEditSettings setting, List<int> value)
+        public ConfigurableFieldModel<List<CheckBoxListItem>> CreateCheckBoxListField(FieldEditSettings setting, List<int> sourceValues, ItemOverview[] source)
         {
+            var values = source?.Select(s =>
+            {
+                var id = int.Parse(s.Value);
+                return new CheckBoxListItem
+                {
+                    Id = id,
+                    Name = s.Name,
+                    IsChecked = sourceValues?.Contains(id) ?? false
+                };
+            }).ToList() ?? new List<CheckBoxListItem>();
             return !setting.Show
-                       ? ConfigurableFieldModel<List<int>>.CreateUnshowable()
-                       : new ConfigurableFieldModel<List<int>>(setting.Caption, value, setting.Required, setting.Help);
+                       ? ConfigurableFieldModel<List<CheckBoxListItem>>.CreateUnshowable()
+                       : new ConfigurableFieldModel<List<CheckBoxListItem>>(setting.Caption, values, setting.Required, setting.Help);
         }
 
         #endregion

@@ -318,7 +318,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                     _configurableFieldModelFactory.CreateStringField(settings.InventoryNumber, null),
                     _configurableFieldModelFactory.CreateStringField(settings.Info, null),
                     _configurableFieldModelFactory.CreateNullableIntegerField(settings.AccountTypeId, null),
-                    _configurableFieldModelFactory.CreateListIntField(settings.AccountTypeId2, null),
+                    _configurableFieldModelFactory.CreateCheckBoxListField(settings.AccountTypeId2, null, options.AccountTypes2),
                     _configurableFieldModelFactory.CreateNullableIntegerField(settings.AccountTypeId3, null),
                     _configurableFieldModelFactory.CreateNullableIntegerField(settings.AccountTypeId4, null),
                     _configurableFieldModelFactory.CreateNullableIntegerField(settings.AccountTypeId5, null)
@@ -373,7 +373,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
         {
             if (!setting.Show)
             {
-                return new MultiSelectList(Enumerable.Empty<SelectListItem>(), Enumerable.Empty<SelectListItem>());
+                return new MultiSelectList(Enumerable.Empty<ItemOverview>(), Enumerable.Empty<ItemOverview>());
             }
 
 
