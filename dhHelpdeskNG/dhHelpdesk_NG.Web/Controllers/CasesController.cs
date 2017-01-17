@@ -3865,7 +3865,7 @@ namespace DH.Helpdesk.Web.Controllers
             m.OutFormatter = outputFormatter;
             m.customerUserSetting = customerUserSetting;
             m.caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customerId);
-            m.CaseFieldSettingWithLangauges = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customerId, SessionFacade.CurrentLanguageId);
+            m.CaseFieldSettingWithLangauges = this._caseFieldSettingService.GetAllCaseFieldSettingsWithLanguages(customerId, SessionFacade.CurrentLanguageId);
             m.DepartmentFilterFormat = customerSetting.DepartmentFilterFormat;
             m.ParantPath_CaseType = ParentPathDefaultValue;
             m.ParantPath_ProductArea = ParentPathDefaultValue;
