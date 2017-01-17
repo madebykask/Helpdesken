@@ -1333,7 +1333,37 @@ Alter table tblProductArea
  ALTER TABLE tblProductArea
  ADD ProductAreaGUID uniqueIdentifier default newid() NOT NULL
 
+--tblLink
+Alter table tblLink
+ Drop column LinkGUID
+ GO
 
+ ALTER TABLE tblLink
+ ADD LinkGUID uniqueIdentifier default newid() NOT NULL
+
+  --tblRegion
+Alter table tblRegion
+ Drop column RegionGUID
+ GO
+
+ ALTER TABLE tblRegion
+ ADD RegionGUID uniqueIdentifier default newid() NOT NULL
+
+   --tblStateSecondary
+Alter table tblStateSecondary
+ Drop column StateSecondaryGUID
+ GO
+
+ ALTER TABLE tblStateSecondary
+ ADD StateSecondaryGUID uniqueIdentifier default newid() NOT NULL
+
+    --tblStatus
+Alter table tblStatus
+ Drop column StatusGUID
+ GO
+
+ ALTER TABLE tblStatus
+ ADD StatusGUID uniqueIdentifier default newid() NOT NULL
 
 
 
