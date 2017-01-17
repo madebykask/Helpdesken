@@ -3872,3 +3872,14 @@ div.content.modalpopup > div > div.tab-content > div.tab-pane > form > div.conta
     width: 1315px;
     left: 35%;
 }
+
+.img-case-locked {
+    position: absolute;
+    left: 8px;
+    width: 12px;
+    top: 8px;
+}
+
+.img-case-parent {
+    position: relative;
+}

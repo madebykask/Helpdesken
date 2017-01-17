@@ -12,6 +12,7 @@ namespace DH.Helpdesk.BusinessData.OldComponents
             Urgent = 1,
             Finished = 2,
             FinishedNotApproved = 3,
+			Locked = 4
         }
 
         public enum MailTemplates

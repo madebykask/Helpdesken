@@ -789,19 +789,21 @@ namespace DH.Helpdesk.Web.Controllers
 			foreach (var searchRow in m.cases)
 			{
 				var jsRow = new Dictionary<string, object>
-								{
-									{ "case_id", searchRow.Id },
-									{ "caseIconTitle", searchRow.CaseIcon.CaseIconTitle() },
-									{
-										"caseIconUrl",
-										string.Format(
-											"/Content/icons/{0}",
-											searchRow.CaseIcon.CaseIconSrc())
-									},
-									{ "isUnread", searchRow.IsUnread },
-									{ "isUrgent", searchRow.IsUrgent },
-								};
-				foreach (var col in gridSettings.columnDefs)
+				{
+					{"case_id", searchRow.Id},
+					{"caseIconTitle", searchRow.CaseIcon.CaseIconTitle()},
+					{"caseIconUrl", string.Format("/Content/icons/{0}", searchRow.CaseIcon.CaseIconSrc())},
+					{"isUnread", searchRow.IsUnread},
+					{"isUrgent", searchRow.IsUrgent}
+				};
+				var caseLockModel = GetCaseLockModel(searchRow.Id, SessionFacade.CurrentUser.Id);
+				if (caseLockModel.IsLocked)
+				{
+					jsRow.Add("isCaseLocked", caseLockModel.IsLocked);
+					jsRow.Add("caseLockedIconTitle", string.Format("{0} {1} ({2})", caseLockModel.User.FirstName, caseLockModel.User.SurName, caseLockModel.User.UserID));
+					jsRow.Add("caseLockedIconUrl", string.Format("/Content/icons/{0}", CaseIcon.Locked.CaseIconSrc()));
+				}
+                foreach (var col in gridSettings.columnDefs)
 				{
 					var searchCol = searchRow.Columns.FirstOrDefault(it => it.Key == col.name);
 					jsRow.Add(col.name, searchCol != null ? outputFormatter.FormatField(searchCol) : string.Empty);
@@ -1350,7 +1352,6 @@ namespace DH.Helpdesk.Web.Controllers
                     // User has not access to case/log
                     if (m.EditMode == Enums.AccessMode.NoAccess)
                         return this.RedirectToAction("index", "home");
-
                 }
             }
 
