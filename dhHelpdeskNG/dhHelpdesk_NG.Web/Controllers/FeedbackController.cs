@@ -309,8 +309,9 @@ namespace DH.Helpdesk.Web.Controllers
 			var participant = new ParticipantForInsert(model.Guid, model.IsAnonym, OperationContext.DateAndTime, ids);
 			_circularService.SaveAnswers(participant);
 
-			return View(model);
-		}
+            //return View(model);
+            return RedirectToAction(MvcUrlName.Feedback.ThankYou, MvcUrlName.Feedback.Controller);
+        }
 
 		[HttpPost]
 		public ActionResult Answer(FeedbackAnswerModel model)
