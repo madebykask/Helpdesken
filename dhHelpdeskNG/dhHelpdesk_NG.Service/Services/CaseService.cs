@@ -2379,6 +2379,7 @@ namespace DH.Helpdesk.Services.Services
             ret.Add(new Field { Key = "[#12]", StringValue = c.Priority != null ? c.Priority.Name : string.Empty });
             ret.Add(new Field { Key = "[#20]", StringValue = c.Priority != null ? c.Priority.Description : string.Empty });
             ret.Add(new Field { Key = "[#21]", StringValue = c.WatchDate.ToString() } );
+            ret.Add(new Field { Key = "[#28]", StringValue = c.ProductArea != null ? c.ProductArea.Name : string.Empty });
             if (l != null)
             {
                 ret.Add(new Field { Key = "[#10]", StringValue = l.TextExternal });

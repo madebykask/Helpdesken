@@ -1366,6 +1366,10 @@ Alter table tblStatus
  ADD StatusGUID uniqueIdentifier default newid() NOT NULL
 
 
+ --New EMailIdentifier for ProductArea
+UPDATE tblCaseFieldSettings SET EMailIdentifier = '[#28]'
+WHERE CaseField = 'ProductArea_Id'
+
 
 
 -- Last Line to update database version
