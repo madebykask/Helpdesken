@@ -3,24 +3,10 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.OrderEditModel
 
-<h4>@Translation.Get("Beställning")</h4>
+<h4>@Translation.GetCoreTextTranslation("Beställning")</h4>
 <table class="tableform">
     <tbody>
-        @if (Model.Property.Show)
-        {
-            <tr>
-                <td class="span3">
-                    @Html.FieldCaption(Model.Property)
-                </td>
-                <td class="span6">
-                    @Html.DropDownListFor(m => m.PropertyId, Model.Property.Value)
-                    @Html.ValidationMessageFor(m => m.PropertyId)
-                </td>
-                <td class="span3">
-                    @Model.Property.Help
-                </td>
-            </tr>             
-        }
+        @Html.EditorFor(m => m.Property, "Fields/List", new { Source = Model.Properties })
         @Html.EditorFor(m => m.OrderRow1, "Fields/Text")           
         @Html.EditorFor(m => m.OrderRow2, "Fields/Text")           
         @Html.EditorFor(m => m.OrderRow3, "Fields/Text")           

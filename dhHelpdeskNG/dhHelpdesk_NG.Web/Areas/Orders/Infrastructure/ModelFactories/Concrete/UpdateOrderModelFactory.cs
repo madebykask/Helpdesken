@@ -72,7 +72,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
             return new DeliveryEditFields(
                     ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.DeliveryDate),
                     ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.InstallDate),
-                    model.DeliveryDepartmentId,
+                    ConfigurableFieldModel<int?>.GetValueOrDefault(model.DeliveryDepartment),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.DeliveryOu),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.DeliveryAddress),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.DeliveryPostalCode),
@@ -81,7 +81,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.DeliveryInfo1),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.DeliveryInfo2),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.DeliveryInfo3),
-                    model.DeliveryOuIdId,
+                    ConfigurableFieldModel<int?>.GetValueOrDefault(model.DeliveryOuId),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.DeliveryName),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.DeliveryPhone));
         }
@@ -96,8 +96,8 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
             return new GeneralEditFields(
                     ConfigurableFieldModel<int>.GetValueOrDefault(model.OrderNumber),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.Customer),
-                    model.AdministratorId,
-                    model.DomainId,
+                    ConfigurableFieldModel<int?>.GetValueOrDefault(model.Administrator),
+                    ConfigurableFieldModel<int?>.GetValueOrDefault(model.Domain),
                     ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.OrderDate),
                     model.StatusId);
         }
@@ -127,8 +127,8 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.OrdererEmail),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.OrdererPhone),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.OrdererCode),
-                    model.DepartmentId,
-                    model.UnitId,
+                    ConfigurableFieldModel<int?>.GetValueOrDefault(model.Department),
+                    ConfigurableFieldModel<int?>.GetValueOrDefault(model.Unit),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.OrdererAddress),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.OrdererInvoiceAddress),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.OrdererReferenceNumber),
@@ -147,7 +147,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
             }
 
             return new OrderEditFields(
-                    model.PropertyId,
+                    ConfigurableFieldModel<int?>.GetValueOrDefault(model.Property),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.OrderRow1),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.OrderRow2),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.OrderRow3),

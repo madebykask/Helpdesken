@@ -17,7 +17,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
         public DeliveryEditModel(
                 ConfigurableFieldModel<DateTime?> deliveryDate,
                 ConfigurableFieldModel<DateTime?> installDate,
-                ConfigurableFieldModel<SelectList> deliveryDepartment,
+                ConfigurableFieldModel<int?> deliveryDepartment,
                 ConfigurableFieldModel<string> deliveryOu,
                 ConfigurableFieldModel<string> deliveryAddress,
                 ConfigurableFieldModel<string> deliveryPostalCode,
@@ -26,7 +26,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
                 ConfigurableFieldModel<string> deliveryInfo1,
                 ConfigurableFieldModel<string> deliveryInfo2,
                 ConfigurableFieldModel<string> deliveryInfo3,
-                ConfigurableFieldModel<SelectList> deliveryOuId,
+                ConfigurableFieldModel<int?> deliveryOuId,
                 ConfigurableFieldModel<string> name,
                 ConfigurableFieldModel<string> phone)
         {
@@ -53,10 +53,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
         public ConfigurableFieldModel<DateTime?> InstallDate { get; set; } 
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> DeliveryDepartment { get; set; } 
-
-        [IsId]
-        public int? DeliveryDepartmentId { get; set; }
+        public ConfigurableFieldModel<int?> DeliveryDepartment { get; set; } 
 
         [NotNull]
         public ConfigurableFieldModel<string> DeliveryOu { get; set; } 
@@ -83,7 +80,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
         public ConfigurableFieldModel<string> DeliveryInfo3 { get; set; } 
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> DeliveryOuId { get; set; }
+        public ConfigurableFieldModel<int?> DeliveryOuId { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<string> DeliveryName { get; set; }
@@ -91,15 +88,18 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
         [NotNull]
         public ConfigurableFieldModel<string> DeliveryPhone { get; set; }
 
-        [IsId]
-        public int? DeliveryOuIdId { get; set; }
+        [NotNull]
+        public SelectList Departments { get; set; }
+
+        [NotNull]
+        public SelectList Units { get; set; }
 
         public static DeliveryEditModel CreateEmpty()
         {
             return new DeliveryEditModel(
                 ConfigurableFieldModel<DateTime?>.CreateUnshowable(),
                 ConfigurableFieldModel<DateTime?>.CreateUnshowable(),
-                ConfigurableFieldModel<SelectList>.CreateUnshowable(),
+                ConfigurableFieldModel<int?>.CreateUnshowable(),
                 ConfigurableFieldModel<string>.CreateUnshowable(),
                 ConfigurableFieldModel<string>.CreateUnshowable(),
                 ConfigurableFieldModel<string>.CreateUnshowable(),
@@ -108,7 +108,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
                 ConfigurableFieldModel<string>.CreateUnshowable(),
                 ConfigurableFieldModel<string>.CreateUnshowable(),
                 ConfigurableFieldModel<string>.CreateUnshowable(),
-                ConfigurableFieldModel<SelectList>.CreateUnshowable(),
+                ConfigurableFieldModel<int?>.CreateUnshowable(),
                 ConfigurableFieldModel<string>.CreateUnshowable(),
                 ConfigurableFieldModel<string>.CreateUnshowable());
         }

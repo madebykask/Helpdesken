@@ -154,7 +154,7 @@
                     $('#order_OrdererEmail').val(item.email);
                     $('#order_OrdererPhone').val(item.phone);
                     $('#order_OrdererCode').val(item.usercode);
-                    $('#Orderer_DepartmentId').val(item.departmentid);
+                    $('#orderer_departmentId').val(item.departmentid);
               
                 return item.num;
             }

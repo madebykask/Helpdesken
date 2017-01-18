@@ -75,11 +75,11 @@
 
             var pageObject = new EditOrder(
                 {
-                    isOrdererUnitVisible: @((Model.Orderer.Unit.Show && Model.Orderer.Unit.Value != null).ToJavaScriptBool()),
+                    isOrdererUnitVisible: @((Model.Orderer.Unit.Show && Model.Orderer.Units != null).ToJavaScriptBool()),
                     isUserDepartmentVisible: @((Model.UserInfo.DepartmentId1.Show).ToJavaScriptBool()),
-                    @if (Model.Orderer.Unit.Value != null && Model.Orderer.Unit.Show)
+                    @if (Model.Orderer.Units != null && Model.Orderer.Unit.Show)
                     {
-                        @Html.Raw(string.Format("units: {0},", Html.SerializeObjectToJson(Model.Orderer.Unit.Value.Items)))
+                        @Html.Raw(string.Format("units: {0},", Html.SerializeObjectToJson(Model.Orderer.Units.Items)))
                     }
                     @if (Model.Statuses != null)
                     {

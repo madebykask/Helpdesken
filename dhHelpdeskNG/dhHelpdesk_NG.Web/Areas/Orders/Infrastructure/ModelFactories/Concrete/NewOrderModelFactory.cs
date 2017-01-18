@@ -60,7 +60,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
         {
             var deliveryDate = _configurableFieldModelFactory.CreateNullableDateTimeField(settings.DeliveryDate, null);
             var installDate = _configurableFieldModelFactory.CreateNullableDateTimeField(settings.InstallDate, null);
-            var deliveryDepartment = _configurableFieldModelFactory.CreateSelectListField(settings.DeliveryDepartment, options.DeliveryDepartment, null);
+            var deliveryDepartment = _configurableFieldModelFactory.CreateNullableIntegerField(settings.DeliveryDepartment, null);
             var deliveryOu = _configurableFieldModelFactory.CreateStringField(settings.DeliveryOu, null);
             var deliveryAddress = _configurableFieldModelFactory.CreateStringField(settings.DeliveryAddress, null);
             var deliveryPostalCode = _configurableFieldModelFactory.CreateStringField(settings.DeliveryPostalCode, null);
@@ -69,11 +69,11 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
             var deliveryInfo1 = _configurableFieldModelFactory.CreateStringField(settings.DeliveryInfo1, null);
             var deliveryInfo2 = _configurableFieldModelFactory.CreateStringField(settings.DeliveryInfo2, null);
             var deliveryInfo3 = _configurableFieldModelFactory.CreateStringField(settings.DeliveryInfo3, null);
-            var deliveryOuId = _configurableFieldModelFactory.CreateSelectListField(settings.DeliveryOuId, options.DeliveryOuId, null);
+            var deliveryOuId = _configurableFieldModelFactory.CreateNullableIntegerField(settings.DeliveryOuId, null);
             var deliveryName = _configurableFieldModelFactory.CreateStringField(settings.DeliveryName, null);
             var deliveryPhone = _configurableFieldModelFactory.CreateStringField(settings.DeliveryPhone, null);
 
-            return new DeliveryEditModel(
+            var model = new DeliveryEditModel(
                             deliveryDate,
                             installDate,
                             deliveryDepartment,
@@ -88,6 +88,10 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                             deliveryOuId,
                             deliveryName,
                             deliveryPhone);
+            model.Departments = CreateSelectListField(settings.DeliveryDepartment, options.DeliveryDepartment, null);
+            model.Units = CreateSelectListField(settings.DeliveryOuId, options.DeliveryOuId, null);
+
+            return model;
         }
 
         private GeneralEditModel CreateGeneralEditModel(
@@ -96,12 +100,12 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
         {
             var orderNumber = _configurableFieldModelFactory.CreateIntegerField(settings.OrderNumber, 0);
             var customer = _configurableFieldModelFactory.CreateStringField(settings.Customer, null);
-            var administrator = _configurableFieldModelFactory.CreateSelectListField(settings.Administrator, options.Administrators, null);
-            var domain = _configurableFieldModelFactory.CreateSelectListField(settings.Domain, options.Domains, null);
+            var administrator = _configurableFieldModelFactory.CreateNullableIntegerField(settings.Administrator, null);
+            var domain = _configurableFieldModelFactory.CreateNullableIntegerField(settings.Domain, null);
             var orderDate = _configurableFieldModelFactory.CreateNullableDateTimeField(settings.OrderDate, null);
             var status = _configurableFieldModelFactory.CreateSelectListField(settings.Status, options.Statuses, null, false);
 
-            return new GeneralEditModel(
+            var model = new GeneralEditModel(
                             orderNumber,
                             customer,
                             administrator,
@@ -109,6 +113,12 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                             orderDate,
                             options.OrderTypeName,
                             status);
+
+            model.Administrators = CreateSelectListField(settings.Administrator, options.Administrators, null);
+            model.Domains = CreateSelectListField(settings.Domain, options.Domains, null);
+
+            return model;
+
         }
 
         private LogEditModel CreateLogEditModel(
@@ -134,8 +144,8 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
             var ordererEmail = _configurableFieldModelFactory.CreateStringField(settings.OrdererEmail, null);
             var ordererPhone = _configurableFieldModelFactory.CreateStringField(settings.OrdererPhone, null);
             var ordererCode = _configurableFieldModelFactory.CreateStringField(settings.OrdererCode, null);
-            var department = _configurableFieldModelFactory.CreateSelectListField(settings.Department, options.Departments, null);
-            var unit = _configurableFieldModelFactory.CreateSelectListField(settings.Unit, options.Units, null);
+            var department = _configurableFieldModelFactory.CreateNullableIntegerField(settings.Department, null);
+            var unit = _configurableFieldModelFactory.CreateNullableIntegerField(settings.Unit, null);
             var ordererAddress = _configurableFieldModelFactory.CreateStringField(settings.OrdererAddress, null);
             var ordererInvoiceAddress = _configurableFieldModelFactory.CreateStringField(settings.OrdererInvoiceAddress, null);
             var ordererReferenceNumber = _configurableFieldModelFactory.CreateStringField(settings.OrdererReferenceNumber, null);
@@ -145,7 +155,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
             var accountingDimension4 = _configurableFieldModelFactory.CreateStringField(settings.AccountingDimension4, null);
             var accountingDimension5 = _configurableFieldModelFactory.CreateStringField(settings.AccountingDimension5, null);
 
-            return new OrdererEditModel(
+            var model = new OrdererEditModel(
                             ordererId,
                             ordererName,
                             ordererLocation,
@@ -162,13 +172,18 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                             accountingDimension3,
                             accountingDimension4,
                             accountingDimension5);
+            model.Departments = CreateSelectListField(settings.Department, options.Departments, null);
+            model.Units = CreateSelectListField(settings.Unit, options.Units, null);
+
+            return model;
+
         }
 
         private OrderEditModel CreateOrderEditModel(
                                 OrderEditSettings settings,
                                 OrderEditOptions options)
         {
-            var property = _configurableFieldModelFactory.CreateSelectListField(settings.Property, options.Properties, null);
+            var property = _configurableFieldModelFactory.CreateNullableIntegerField(settings.Property, null);
             var orderRow1 = _configurableFieldModelFactory.CreateStringField(settings.OrderRow1, null);
             var orderRow2 = _configurableFieldModelFactory.CreateStringField(settings.OrderRow2, null);
             var orderRow3 = _configurableFieldModelFactory.CreateStringField(settings.OrderRow3, null);
@@ -181,7 +196,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
             var orderInfo = _configurableFieldModelFactory.CreateStringField(settings.OrderInfo, null);
             var orderInfo2 = _configurableFieldModelFactory.CreateIntegerField(settings.OrderInfo2, 0);
 
-            return new OrderEditModel(
+            var model = new OrderEditModel(
                             property,
                             orderRow1,
                             orderRow2,
@@ -194,6 +209,10 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                             configuration,
                             orderInfo,
                             orderInfo2);
+
+            model.Properties = CreateSelectListField(settings.Property, options.Properties, null);
+
+            return model;
         }
 
         private OtherEditModel CreateOtherEditModel(

@@ -2,8 +2,8 @@
 {
     using System.Web.Mvc;
 
-    using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Areas.Orders.Models.Order.FieldModels;
+    using Common.ValidationAttributes;
+    using FieldModels;
 
     public sealed class OrderEditModel
     {
@@ -12,7 +12,7 @@
         }
 
         public OrderEditModel(
-            ConfigurableFieldModel<SelectList> property,
+            ConfigurableFieldModel<int?> property,
             ConfigurableFieldModel<string> orderRow1,
             ConfigurableFieldModel<string> orderRow2,
             ConfigurableFieldModel<string> orderRow3,
@@ -25,25 +25,22 @@
             ConfigurableFieldModel<string> orderInfo,
             ConfigurableFieldModel<int> orderInfo2)
         {
-            this.Property = property;
-            this.OrderRow1 = orderRow1;
-            this.OrderRow2 = orderRow2;
-            this.OrderRow3 = orderRow3;
-            this.OrderRow4 = orderRow4;
-            this.OrderRow5 = orderRow5;
-            this.OrderRow6 = orderRow6;
-            this.OrderRow7 = orderRow7;
-            this.OrderRow8 = orderRow8;
-            this.Configuration = configuration;
-            this.OrderInfo = orderInfo;
-            this.OrderInfo2 = orderInfo2;
+            Property = property;
+            OrderRow1 = orderRow1;
+            OrderRow2 = orderRow2;
+            OrderRow3 = orderRow3;
+            OrderRow4 = orderRow4;
+            OrderRow5 = orderRow5;
+            OrderRow6 = orderRow6;
+            OrderRow7 = orderRow7;
+            OrderRow8 = orderRow8;
+            Configuration = configuration;
+            OrderInfo = orderInfo;
+            OrderInfo2 = orderInfo2;
         }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> Property { get; set; } 
-
-        [IsId]
-        public int? PropertyId { get; set; }
+        public ConfigurableFieldModel<int?> Property { get; set; } 
 
         [NotNull]
         public ConfigurableFieldModel<string> OrderRow1 { get; set; } 
@@ -78,10 +75,13 @@
         [NotNull]
         public ConfigurableFieldModel<int> OrderInfo2 { get; set; }
 
+        [NotNull]
+        public SelectList Properties { get; set; }
+
         public static OrderEditModel CreateEmpty()
         {
             return new OrderEditModel(
-                ConfigurableFieldModel<SelectList>.CreateUnshowable(),
+                ConfigurableFieldModel<int?>.CreateUnshowable(),
                 ConfigurableFieldModel<string>.CreateUnshowable(),
                 ConfigurableFieldModel<string>.CreateUnshowable(),
                 ConfigurableFieldModel<string>.CreateUnshowable(),
@@ -97,18 +97,18 @@
 
         public bool HasShowableFields()
         {
-            return this.Property.Show ||
-                this.OrderRow1.Show ||
-                this.OrderRow2.Show ||
-                this.OrderRow3.Show ||
-                this.OrderRow4.Show ||
-                this.OrderRow5.Show ||
-                this.OrderRow6.Show ||
-                this.OrderRow7.Show ||
-                this.OrderRow8.Show ||
-                this.Configuration.Show ||
-                this.OrderInfo.Show ||
-                this.OrderInfo2.Show;
+            return Property.Show ||
+                OrderRow1.Show ||
+                OrderRow2.Show ||
+                OrderRow3.Show ||
+                OrderRow4.Show ||
+                OrderRow5.Show ||
+                OrderRow6.Show ||
+                OrderRow7.Show ||
+                OrderRow8.Show ||
+                Configuration.Show ||
+                OrderInfo.Show ||
+                OrderInfo2.Show;
         }
     }
 }

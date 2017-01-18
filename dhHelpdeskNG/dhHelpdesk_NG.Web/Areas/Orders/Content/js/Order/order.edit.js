@@ -81,7 +81,7 @@
 
             if (that._options.isOrdererUnitVisible) {
 
-                var $ordererDep = $("#Orderer_DepartmentId");
+                var $ordererDep = $("#orderer_departmentId");
                 if ($ordererDep.val()) {
                     var $unit = $("#orderer_unit_select");
                     var originUnitVal = $unit.val();
