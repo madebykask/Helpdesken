@@ -2405,7 +2405,10 @@ namespace DH.Helpdesk.Web.Controllers
         /// <param name="m"></param>
         /// <returns></returns>
         private int Save(CaseEditInput m)
-        {            
+        {
+           
+            var t = SessionFacade.TestDataChanged;
+
             var utcNow = DateTime.UtcNow;
             var movedFromCustomerId = m.MovedFromCustomerId;
             var case_ = m.case_;

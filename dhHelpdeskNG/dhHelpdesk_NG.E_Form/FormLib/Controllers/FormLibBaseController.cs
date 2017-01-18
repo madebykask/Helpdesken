@@ -255,7 +255,9 @@ namespace DH.Helpdesk.EForm.FormLib.Controllers
             _fileService.SaveUploads(uploads, model.Contract.Id, uploadPath, Session.SessionID);
 
             model.Contract = _contractRepository.Get(id);
-            model.StaticFiles = _contractRepository.GetStaticDocuments(model.Contract.ProductAreaId);     
+            model.StaticFiles = _contractRepository.GetStaticDocuments(model.Contract.ProductAreaId);
+
+            FormLibSessions.TestDataChanged = "MyValue1";
 
             if (!Request.IsAjaxRequest())
             {

@@ -13,7 +13,6 @@
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
     <!-- Le styles --> 
-    
     @Styles.Render("~/FormLibContent/assets/css/bundle")
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -31,7 +30,6 @@
     <div style="display: none;">
         <span id="cancelRequest">@DH.Helpdesk.EForm.FormLib.FormLibI18N.Translate("Are you sure you want to cancel the request?", DH.Helpdesk.EForm.FormLib.FormLibSessions.User.Language)</span>
     </div>
-        
     @RenderBody()
     @RenderSection("Validation", required: false)
     @RenderSection("Script", required: false)
@@ -39,7 +37,7 @@
         <small>@DH.Helpdesk.EForm.FormLib.FormLibI18N.Translate("Version", DH.Helpdesk.EForm.FormLib.FormLibSessions.User.Language)&nbsp;@DH.Helpdesk.EForm.FormLib.FormLibUtils.AssemblyVersion()</small>
     </div>
     <div id="spinnerDiv" style="position:fixed;top:50%;left:50%"></div> 
-    <input type="hidden" id="core_baseUrl" name="core_baseUrl" value="@(!HttpContext.Current.Request.Url.Host.ToLower().Contains("localhost") ? "/ect" : "")" />
+    <input type="hidden" id="core_baseUrl" name="core_baseUrl" value="" />
     <input type="hidden" id="core_area" name="core_area" value="@area" />
     <input type="hidden" id="core_controller" name="core_controller" value="@controller" />
     <input type="hidden" id="core_rooturl" name="core_rooturl" value="@Url.CurrentRoot()" />
@@ -50,16 +48,25 @@
 }
 else
 {
-
+@*Layout for LM*@
 Layout = "~/Views/Shared/_Layout.cshtml";
 
-
+@*@Styles.Render("~/FormLibContent/assets/css/bundle")*@
 <link href="~/FormLibContent/assets/css/bootstrap.css" rel="stylesheet">
 <link href="~/FormLibContent/assets/css/datepicker.css" rel="stylesheet">
 <link href="~/FormLibContent/assets/css/ect.css" rel="stylesheet">
 <link href="~/FormLibContent/assets/selectize/css/selectize.css" rel="stylesheet" />
 <link href="~/Content/css/dhplus.css" rel="stylesheet" />
-
+<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+      <script src="~/FormLibContent/assets/js/html5shiv.js"></script>
+    <![endif]-->
+<!-- For IE7 support of JSON functions -->
+<!--[if lt IE 8]>
+      <script src="~/FormLibContent/assets/js/json2.js"></script>
+    <![endif]-->
+<!-- Le scripts -->
+@*@Scripts.Render("~/FormLibContent/assets/js/bundle")*@
 <script src="~/FormLibContent/assets/js/typeahead.js"></script>
 <script src="~/FormLibContent/assets/js/bootstrap-datepicker.js"></script>
 <script src="~/FormLibContent/assets/selectize/js/standalone/selectize.min.js"></script>

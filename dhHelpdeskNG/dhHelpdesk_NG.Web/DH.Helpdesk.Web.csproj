@@ -75,22 +75,6 @@
       <HintPath>..\packages\DataAnnotationsExtensions.MVC.5.0.0.0\lib\net45\DataAnnotationsExtensions.ClientValidation.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DH.Helpdesk.EForm.Core, Version=1.5.13.58, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>FormLibContent\Assemblies\DH.Helpdesk.EForm.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="DH.Helpdesk.EForm.FormLib, Version=1.5.13.58, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>FormLibContent\Assemblies\DH.Helpdesk.EForm.FormLib.dll</HintPath>
-    </Reference>
-    <Reference Include="DH.Helpdesk.EForm.Model, Version=1.5.13.58, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>FormLibContent\Assemblies\DH.Helpdesk.EForm.Model.dll</HintPath>
-    </Reference>
-    <Reference Include="DH.Helpdesk.EForm.Service, Version=1.5.13.58, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>FormLibContent\Assemblies\DH.Helpdesk.EForm.Service.dll</HintPath>
-    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -3773,6 +3757,22 @@
     <ProjectReference Include="..\dhHelpdesk_NG.DTO\DH.Helpdesk.BusinessData.csproj">
       <Project>{C4520E52-CB9E-4FD6-BEE9-92AA532685A2}</Project>
       <Name>DH.Helpdesk.BusinessData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\dhHelpdesk_NG.E_Form\Core\DH.Helpdesk.EForm.Core.csproj">
+      <Project>{e2080f1d-1a86-4846-9cea-620f99c5678d}</Project>
+      <Name>DH.Helpdesk.EForm.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\dhHelpdesk_NG.E_Form\FormLib\DH.Helpdesk.EForm.FormLib.csproj">
+      <Project>{4723b7a1-b0bd-4421-8670-a6f6fb9975b2}</Project>
+      <Name>DH.Helpdesk.EForm.FormLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\dhHelpdesk_NG.E_Form\Model\DH.Helpdesk.EForm.Model.csproj">
+      <Project>{4826d35d-823c-4e12-9905-771261721661}</Project>
+      <Name>DH.Helpdesk.EForm.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\dhHelpdesk_NG.E_Form\Service\DH.Helpdesk.EForm.Service.csproj">
+      <Project>{c5500586-9bf2-4381-9e26-bde146879e1e}</Project>
+      <Name>DH.Helpdesk.EForm.Service</Name>
     </ProjectReference>
     <ProjectReference Include="..\dhHelpdesk_NG.Service\DH.Helpdesk.Services.csproj">
       <Project>{3A5BFA9B-C033-4C1C-81AF-7B4E1BEDCFA3}</Project>
