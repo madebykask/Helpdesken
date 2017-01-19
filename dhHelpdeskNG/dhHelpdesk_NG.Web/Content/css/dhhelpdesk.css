@@ -3800,6 +3800,11 @@ div.case-dropdown-div > span.btn-group > button.multiselect.dropdown-toggle.btn 
 	min-width:175px;
 }
 
+div.case-dropdown-div > span.btn-group > ul.multiselect-container > div.options-holder input
+{
+    display: none;
+}
+
 .case-div-standardtext {
     padding: 1em !important;
     font-size: 0.9em;

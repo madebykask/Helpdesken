@@ -28,40 +28,17 @@
         buttonClass: "btn",
         buttonContainer: '<span class="btn-group" />',
         buttonText: function(options) {
-            if (options.length === 0) {
-                return '-- <i class="caret"></i>';
-            } else if (options.length > 1) {
-                return options.length + " " + window.parameters.selectedLabel + '  <i class="caret"></i>';
-            } else if (options.length > 0) {
-                var selected = '';
-                options.each(function() {
-                    selected += $(this).text() + ', ';
-                });
-                return selected.substr(0, selected.length - 2) + ' <i class="caret"></i>';
-            }
             return '-- <i class="caret"></i>';
         },
         onChange: function (element, checked) {
             if (element.parent().attr("id") === "caseFollowersEmailGroupsDropdown") {
-                if (checked) {
                     appendDropdownsEmails(emailGroups, element.val());
-                } else {
-                    removeDropdownEmails(emailGroups, element.val());
-                }
             }
             if (element.parent().attr("id") === "caseFollowersWorkingGroupsDropdown") {
-                if (checked) {
                     appendDropdownsEmails(workingGroups, element.val());
-                } else {
-                    removeDropdownEmails(workingGroups, element.val());
-                }
             }
             if (element.parent().attr("id") === "caseFollowersAdministratorsDropdown") {
-                if (checked) {
                     checkAndAddEmailsFromDropdown(element.val());
-                } else {
-                    removeEmailsFromDropdown(element.val());
-                }
             }
         }
     });
@@ -73,16 +50,6 @@
                         });
         for (var j = 0; j < arr[0].Emails.length; j++) {
             checkAndAddEmailsFromDropdown(arr[0].Emails[j]);
-        }
-    }
-
-    function removeDropdownEmails(array, selectedId) {
-        var arr = jQuery.grep(array,
-                        function (a) {
-                            return a.Id == selectedId;
-                        });
-        for (var j = 0; j < arr[0].Emails.length; j++) {
-            removeEmailsFromDropdown(arr[0].Emails[j]);
         }
     }
 
@@ -101,6 +68,14 @@
         if (e.keyCode === 46) {
             onDeleteKeyDown(e, mainFakeFollowersInput, mainFollowersInput);
         }
+    });
+
+    popupFollowersInput.focusout(function (e) {
+        onEnterKeyUp(e, popupFollowersInput, true);
+    });
+
+    mainFakeFollowersInput.focusout(function (e) {
+        onEnterKeyUp(e, mainFakeFollowersInput, true);
     });
 
     popupFollowersInput.typeahead(getCasesAddFollowersSearchOptions());
@@ -122,32 +97,46 @@
         }
     });
 
-    function onEnterKeyUp(e, fakeInput) {
+    function onEnterKeyUp(e, fakeInput, isFocusOut) {
         e.preventDefault();
         e.stopImmediatePropagation();
         var emails = $(e.target).val();
         var arr = emails.split(";");
         var newEmail = "";
+        var trimmedEm = newEmail;
         if (e.keyCode === 13) {
             newEmail = arr[arr.length - 1].replace("\n", "");
-            if (newEmail.trim() !== "") {
+            trimmedEm = newEmail.trim();
+            if (trimmedEm !== "") {
                 if (checkAndAddEmailsTo(newEmail)) {
                     fakeInput.val(emails.replace("\n", "") + "; ");
                 } else {
-                    fakeInput.val(emails.replace(newEmail.trim() + "\n", "") + "");
+                    fakeInput.val(emails.replace(trimmedEm + "\n", "") + "");
                 }
             }
         }
         if (e.keyCode === 186) {
             newEmail = arr[arr.length - 2];
-            if (newEmail.trim() !== "") {
+            trimmedEm = newEmail.trim();
+            if (trimmedEm !== "") {
                 if (checkAndAddEmailsTo(newEmail)) {
                     fakeInput.val(emails + " ");
                 } else {
-                    fakeInput.val(emails.replace(newEmail.trim() + ";", ""));
+                    fakeInput.val(emails.replace(trimmedEm + ";", ""));
                 }
             }
-
+        }
+        if (isFocusOut) {
+            newEmail = arr[arr.length - 1];
+            trimmedEm = newEmail.trim();
+            if (trimmedEm !== "") {
+                if (checkAndAddEmailsTo(newEmail)) {
+                    fakeInput.val(emails + "; ");
+                }
+                else {
+                    fakeInput.val(emails.replace(trimmedEm, ""));
+                }
+            }
         }
     }
 
@@ -258,16 +247,6 @@
         } else {
             ShowToastModalMessage(value + " : " + window.parameters.emailNotValid, "error");
             return false;
-        }
-    }
-
-    function removeEmailsFromDropdown(value) {
-        if (isValidEmailAddress(value)) {
-            var newToEmail = value + "; ";
-            mainFollowersInput.val(mainFollowersInput.val().replace(newToEmail, ""));
-            popupFollowersInput.val(popupFollowersInput.val().replace(newToEmail, ""));
-        } else {
-            ShowToastModalMessage(value + " : " + window.parameters.emailNotValid, "error");
         }
     }
 

@@ -8,7 +8,6 @@
     var popupIntLogInput = $("#caseInternalLogModalInput");
     var fakeInputTo = $("#fake_CaseLog_EmailRecepientsInternalLogTo");
     var fakeInputCc = $("#fake_CaseLog_EmailRecepientsInternalLogCc");
-    var isNeedToRemove = true;
 
     $("a[href='#case_internal_log_to_btn']").on("click", function (e) {
         var $src = $(this);
@@ -31,9 +30,6 @@
     $("#case_internal_log_popup").on("hide", function () {
         $(".toast-container").removeClass("case-followers-toastmessage");
         changeFakeInputValueForView();
-        isNeedToRemove = false;
-        dropdownDeselectAll();
-        isNeedToRemove = true;
     });
 
     $("#case_internal_log_popup").on("shown", function () {
@@ -48,40 +44,17 @@
             buttonClass: "btn",
             buttonContainer: '<span class="btn-group" />',
             buttonText: function(options) {
-                if (options.length === 0) {
-                    return '-- <i class="caret"></i>';
-                } else if (options.length > 1) {
-                    return options.length + " " + window.parameters.selectedLabel + '  <i class="caret"></i>';
-                } else if (options.length > 0) {
-                    var selected = "";
-                    options.each(function() {
-                        selected += $(this).text() + ", ";
-                    });
-                    return selected.substr(0, selected.length - 2) + ' <i class="caret"></i>';
-                }
                 return '-- <i class="caret"></i>';
             },
             onChange: function (element, checked) {
                 if (element.parent().attr("id") === "caseInternalLogEmailGroupsDropdown") {
-                    if (checked) {
                         appendDropdownsEmails(emailGroups, element.val());
-                    } else if (isNeedToRemove) {
-                        removeDropdownEmails(emailGroups, element.val());
-                    }
                 }
                 if (element.parent().attr("id") === "caseInternalLogWorkingGroupsDropdown") {
-                    if (checked) {
                         appendDropdownsEmails(workingGroups, element.val());
-                    } else if (isNeedToRemove) {
-                        removeDropdownEmails(workingGroups, element.val());
-                    }
                 }
                 if (element.parent().attr("id") === "caseInternalLogAdministratorsDropdown") {
-                    if (checked) {
                         checkAndAddEmailsFromDrops(element.val());
-                    } else if (isNeedToRemove) {
-                        removeEmailsFromDrops(element.val());
-                    }
                 }
             }
         });
@@ -93,16 +66,6 @@
                         });
         for (var j = 0; j < arr[0].Emails.length; j++) {
             checkAndAddEmailsFromDrops(arr[0].Emails[j]);
-        }
-    }
-
-    function removeDropdownEmails(array, selectedId) {
-        var arr = jQuery.grep(array,
-                        function (a) {
-                            return a.Id == selectedId;
-                        });
-        for (var j = 0; j < arr[0].Emails.length; j++) {
-            removeEmailsFromDrops(arr[0].Emails[j]);
         }
     }
 
@@ -370,29 +333,5 @@
             ShowToastModalMessage(value + " : " + window.parameters.emailNotValid, "error");
             return false;
         }
-    }
-
-    function removeEmailsFromDrops(value) {
-        if (isValidEmailAddress(value)) {
-            var newToEmail = value + "; ";
-            if (dialogType === toType) {
-                mainIntLogInputTo.val(mainIntLogInputTo.val().replace(newToEmail, ""));
-                popupIntLogInput.val(popupIntLogInput.val().replace(newToEmail, ""));
-            }
-            if (dialogType === ccType)
-                mainIntLogInputCc.val(mainIntLogInputCc.val().replace(newToEmail, ""));
-            popupIntLogInput.val(popupIntLogInput.val().replace(newToEmail, ""));
-        } else {
-            ShowToastModalMessage(value + " : " + window.parameters.emailNotValid, "error");
-        }
-    }
-
-    function dropdownDeselectAll() {
-        $(".case-intlog-multiselect").each(function () {
-            var select = $(this);
-            $("option", select).each(function () {
-                select.multiselect("deselect", $(this).val());
-            });
-        });
     }
 }

@@ -42,7 +42,7 @@ function getEmailsByCaretPos(text, posStart, posEnd, e) {
     if (posStart === posEnd && posStart === 0 && e.keyCode === 8)
         return "";
     var emails = text.substring(result1, result2);
-    if (emails.indexOf("@") > 0)
+    if (emails.indexOf(";") > 0)
         return emails.replace(/\s*$/, "");
     return "";
 }
