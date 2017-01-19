@@ -252,6 +252,7 @@
     <Compile Include="Areas\Invoices\Models\InvoiceValuesParams.cs" />
     <Compile Include="Areas\Invoices\Models\LogInvoiceParams.cs" />
     <Compile Include="Areas\Orders\Controllers\WebApi\OrdersApiController.cs" />
+    <Compile Include="Areas\Orders\Infrastructure\Enum\OrderSettingWebType.cs" />
     <Compile Include="Areas\Orders\Models\OrderFieldSettings\FieldSettings\AccountInfoFieldSettingsModel.cs" />
     <Compile Include="Areas\Orders\Models\OrderFieldSettings\FieldSettings\ContactFieldSettingsModel.cs" />
     <Compile Include="Areas\Orders\Models\OrderFieldSettings\FieldSettings\OrderFieldTypeSettingsModel.cs" />
@@ -263,6 +264,7 @@
     <Compile Include="Areas\Invoices\InvoicesAreaRegistration.cs" />
     <Compile Include="Areas\Invoices\Models\InvoiceListItemViewModel.cs" />
     <Compile Include="Areas\Invoices\Models\LogInvoiceItemViewModel.cs" />
+    <Content Include="Areas\Orders\Views\OrderFieldSettings\Partials\OrderFieldWebTypes.cshtml" />
     <None Include="Areas\Orders\Views\Orders\EditorTemplates\Fields\FlagsList.cshtml" />
     <None Include="Areas\Orders\Views\Orders\EditorTemplates\Fields\FlagListItem.cshtml" />
     <Compile Include="Controllers\FeedbackController.cs" />
