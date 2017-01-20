@@ -386,8 +386,8 @@
                     model.NewCase.OU_Id = caseTemplate.OU_Id.HasValue ? caseTemplate.OU_Id.Value : notifier?.OrganizationUnitId;
                     model.NewCase.Place = string.IsNullOrEmpty(caseTemplate.Place) ? notifier?.Place : caseTemplate.Place;
                     model.NewCase.UserCode = string.IsNullOrEmpty(caseTemplate.UserCode) ? notifier?.Code : caseTemplate.UserCode;
-
-                    model.NewCase.InventoryNumber = caseTemplate.InventoryNumber;
+                    
+                    model.NewCase.InventoryNumber = string.IsNullOrEmpty(caseTemplate.InventoryNumber)? Request.GetComputerName() : caseTemplate.InventoryNumber;
                     model.NewCase.InventoryType = caseTemplate.InventoryType;
                     model.NewCase.InventoryLocation = caseTemplate.InventoryLocation;
 
@@ -1257,13 +1257,13 @@
             model.ProductAreaParantPath = "--";
             model.CaseFileKey = Guid.NewGuid().ToString();
             model.ProductAreaChildren = traversedData.Item2.ToList();
-            model.SendToDialogModel = new SendToDialogModel();
+            model.SendToDialogModel = new SendToDialogModel();            
 
             var _caseTypes = _caseTypeService.GetAllCaseTypes(customerId).Where(c => c.ShowOnExternalPage != 0).ToList();
             model.CaseTypeRelatedFields = _caseTypes.Select(c => new KeyValuePair<int, string>(c.Id, c.RelatedField)).ToList();
             return model;
-        }       
-
+        }
+        
         private List<string> GetVisibleFieldGroups(List<CaseListToCase> fieldList)
         {
             List<string> ret = new List<string>();

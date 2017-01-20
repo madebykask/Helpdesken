@@ -1,9 +1,24 @@
 ﻿namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
 {
+    using System.Net;
     using System.Web;
 
     public static class RequestExtension
     {
+
+        public static string GetComputerName(this HttpRequestBase request)
+        {
+            try
+            {
+                var ipAddress = request.GetIpAddress();
+                var hostInfo = Dns.GetHostEntry(ipAddress);
+                return hostInfo.HostName;
+            }
+            catch 
+            {
+                return "";
+            }
+        }
 
         public static string GetIpAddress(this HttpRequestBase request)
         {
