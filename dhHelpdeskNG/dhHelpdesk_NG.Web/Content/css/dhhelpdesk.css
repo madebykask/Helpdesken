@@ -3892,3 +3892,20 @@ div.content.modalpopup > div > div.tab-content > div.tab-pane > form > div.conta
 label.checkbox-label-inline {
     display: inline;
 }
+
+.invoice-files li {
+    list-style: none;
+}
+
+.invoice-files li > span {
+    cursor: pointer;
+     font-weight: normal;
+}
+
+.invoice-files li.selected > span {
+    font-weight: bold;
+}
+
+.invoice-files td {
+    vertical-align: top;
+}

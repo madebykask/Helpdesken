@@ -151,11 +151,6 @@ namespace DH.Helpdesk.Web
                             "~/Content/js/chosen.jquery.min.js",           
                             "~/Content/js/Invoice/invoice.js"));
 
-			bundles.Add(new ScriptBundle("~/bundles/invoicesoverview").Include(
-							 //"~/Content/js/bootstrap-multiselect.js",
-							 //"~/Content/js/chosen.jquery.min.js",
-							 "~/Areas/Invoices/Scripts/Pages/invoicesOverview.js"));
-
 			bundles.Add(new ScriptBundle("~/bundles/cases/index").Include(
                 "~/Scripts/jquery.cookie.js",
                 "~/Content/js/Cases/components/Utils.js",
@@ -451,8 +446,9 @@ namespace DH.Helpdesk.Web
                 "~/Content/js/Cases/components/DropdownButtonField.js"));
 
             RegisterOrdersAreaBundles(bundles);
+			RegisterInvoicesAreaBundles(bundles);
 
-        }
+		}
 
     }
 }

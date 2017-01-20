@@ -5,39 +5,36 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @using DH.Helpdesk.Web.Infrastructure.UrlHelpers.Api.Invoices
 @using DH.Helpdesk.Web.Infrastructure.UrlHelpers.Mvc.Invoices
-@model DH.Helpdesk.Web.Areas.Invoices.Models.InvoiceOverviewFilterModel
+@model DH.Helpdesk.Web.Areas.Invoices.Models.InvoiceOverviewViewModel
 @section Actions {
-	@if (true)
-	{
-		<ul class="secnav">
-			<li>
-				<input type="button" value="@Translation.Get("Skicka")" class="btn" id="btnInvoiceAction"/>
-			</li>
-			<li>
-				<input type="button" value="@Translation.Get("Export")" class="btn" id="btnExportGrid" />
-			</li>
-		</ul>
-	}
+<ul class="secnav">
+	<li>
+		<input type="button" value="@Translation.Get("Skicka")" class="btn" id="btnInvoiceAction" />
+	</li>
+	<li>
+		<input type="button" value="@Translation.Get("Export")" class="btn" id="btnExportGrid" />
+	</li>
+</ul>
 }
 <div>
 	<table class="tableform" id="invoiceFilter">
 		<tr>
 			<td class="span3">@Translation.Get("Avdelning")</td>
-			<td>@Html.DropDownListFor(m => m.DepartmentId, (List<SelectListItem>)ViewBag.Departments, Translation.Get("Selektera ut"), new { id = "ddlDepartment", @class = "inputw300" })</td>
+			<td>@Html.DropDownListFor(m => m.Filter.DepartmentId, (List<SelectListItem>)ViewBag.Departments, Translation.Get("Selektera ut"), new { id = "ddlDepartment", @class = "inputw300" })</td>
 		</tr>
 		<tr>
 			<td class="span3">
 				@Translation.Get("Period")
 			</td>
 			<td>
-				@Html.EditorFor(m => m.DateFrom, "DatePicker", new { id = "dateFrom" })
-				@Html.EditorFor(m => m.DateTo, "DatePicker", new { id = "dateTo" })
+				@Html.EditorFor(m => m.Filter.DateFrom, "DatePicker", new { id = "dateFrom" })
+				@Html.EditorFor(m => m.Filter.DateTo, "DatePicker", new { id = "dateTo" })
 			</td>
 		</tr>
 		<tr>
 			<td class="span3">@Translation.Get("Visa")</td>
 			<td>
-				@Html.DropDownListFor(m => m.Status, (List<SelectListItem>)ViewBag.Statuses, Translation.Get("Selektera ut"), new { id = "ddlStatus", @class = "inputw300" })
+				@Html.DropDownListFor(m => m.Filter.Status, (List<SelectListItem>)ViewBag.Statuses, Translation.Get("Selektera ut"), new { id = "ddlStatus", @class = "inputw300" })
 				<input type="button" value="@Translation.Get("Visa")" class="btn" id="btnSearch" />
 			</td>
 		</tr>
@@ -71,7 +68,7 @@
 </div>
 
 @section Scripts {
-	@Scripts.Render("~/bundles/invoicesoverview")
+	@Scripts.Render(BundleConfig.ScriptNames.Invoices.Overview)
 
 	<script type="text/javascript">
 		$(function () {

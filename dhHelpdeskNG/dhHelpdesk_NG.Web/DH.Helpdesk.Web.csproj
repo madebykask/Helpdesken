@@ -244,11 +244,17 @@
     <Compile Include="..\CommonAssembly\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="App_Start\BundleConfig.Invoices.cs" />
     <Compile Include="App_Start\BundleConfig.Orders.cs" />
     <Compile Include="Areas\Invoices\Controllers\WebApi\InvoicesApiController.cs" />
+    <Compile Include="Areas\Invoices\Models\BaseIndexModel.cs" />
+    <Compile Include="Areas\Invoices\Models\IndexModelType.cs" />
     <Compile Include="Areas\Invoices\Models\InvoiceActionParam.cs" />
     <Compile Include="Areas\Invoices\Models\InvoiceActionParams.cs" />
+    <Compile Include="Areas\Invoices\Models\InvoiceFilesViewModel.cs" />
+    <Compile Include="Areas\Invoices\Models\InvoiceFileViewModel.cs" />
     <Compile Include="Areas\Invoices\Models\InvoiceOverviewFilterModel.cs" />
+    <Compile Include="Areas\Invoices\Models\InvoiceOverviewViewModel.cs" />
     <Compile Include="Areas\Invoices\Models\InvoiceValuesParams.cs" />
     <Compile Include="Areas\Invoices\Models\LogInvoiceParams.cs" />
     <Compile Include="Areas\Orders\Controllers\WebApi\OrdersApiController.cs" />
@@ -265,6 +271,8 @@
     <Compile Include="Areas\Invoices\Models\InvoiceListItemViewModel.cs" />
     <Compile Include="Areas\Invoices\Models\LogInvoiceItemViewModel.cs" />
     <Content Include="Areas\Orders\Views\OrderFieldSettings\Partials\OrderFieldWebTypes.cshtml" />
+    <Content Include="Areas\Invoices\Scripts\Pages\invoiceFiles.js" />
+    <Content Include="Areas\Invoices\Views\Overview\Files.cshtml" />
     <None Include="Areas\Orders\Views\Orders\EditorTemplates\Fields\FlagsList.cshtml" />
     <None Include="Areas\Orders\Views\Orders\EditorTemplates\Fields\FlagListItem.cshtml" />
     <Compile Include="Controllers\FeedbackController.cs" />
@@ -1281,6 +1289,7 @@
     <Compile Include="Infrastructure\UrlHelpers\Api\Orders\WebApiOrdersUrlName.Orders.cs" />
     <Compile Include="Infrastructure\UrlHelpers\Api\WebApiUrlName.cs" />
     <Compile Include="Infrastructure\UrlHelpers\MvcUrlNameBase.cs" />
+    <Compile Include="Infrastructure\UrlHelpers\Mvc\Invoices\MvcInvoicesUrlName.cs" />
     <Compile Include="Infrastructure\UrlHelpers\Mvc\MvcUrlName.cs" />
     <Compile Include="Infrastructure\UrlHelpers\Mvc\MvcUrlName.Feedback.cs" />
     <Compile Include="Infrastructure\UrlHelpers\Mvc\MvcUrlName.Questionnaire.cs" />

@@ -5500,5 +5500,26 @@ If not exists (select * from tblTextTranslation where text_id = 1763 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1763, 2, 'Initiator and Regarding')
 GO
 
+If not exists (select * from tbltext where id = 1764)
+	insert into tbltext (id, TextString) VALUES (1764, 'ServiceDesk (direktdebitering)')
+GO
+
+If not exists (select * from tbltext where id = 1765)
+	insert into tbltext (id, TextString) VALUES (1765, 'ÄrNr')
+GO
+
+If not exists (select * from tbltext where id = 1766)
+	insert into tbltext (id, TextString) VALUES (1766, 'FakturaNr')
+GO
+
+If not exists (select * from tbltext where id = 1767)
+	insert into tbltext (id, TextString) VALUES (1767, 'RefNr')
+GO
+
+If not exists (select * from tbltext where id = 1768)
+	insert into tbltext (id, TextString) VALUES (1768, 'DH')
+GO
+
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

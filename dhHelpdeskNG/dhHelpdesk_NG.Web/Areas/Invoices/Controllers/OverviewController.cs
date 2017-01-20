@@ -19,17 +19,20 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers
 	    private readonly IDepartmentService _departmentService;
 		private readonly IInvoiceService _invoiceService;
 	    private readonly ISettingService _settingService;
+		private readonly IGlobalSettingService _globalSettingService;
 
 		public OverviewController(
 		    IMasterDataService masterDataService,
 			IDepartmentService departmentService,
 			IInvoiceService invoiceService,
-			ISettingService settingService)
+			ISettingService settingService,
+			IGlobalSettingService globalSettingService)
 		    : base(masterDataService)
 		{
 			_departmentService = departmentService;
 			_invoiceService = invoiceService;
 			_settingService = settingService;
+			_globalSettingService = globalSettingService;
 		}
 
 		// GET: Invoices/Overview
@@ -52,9 +55,34 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers
 
 			ViewBag.MinStep = settings.MinRegWorkingTime;
 
-			var model = new InvoiceOverviewFilterModel {Status = InvoiceStatus.Ready};
+			var model = new InvoiceOverviewViewModel { Filter = new InvoiceOverviewFilterModel { Status = InvoiceStatus.Ready }, ShowFiles = settings.InvoiceType == 2 };
 			return View(model);
         }
+
+	    public ActionResult Files()
+	    {
+			var customerId = SessionFacade.CurrentCustomer.Id;
+
+			var settings = _settingService.GetCustomerSetting(customerId);
+
+			if (settings.InvoiceType != 2)
+				return new HttpNotFoundResult();
+
+		    var files = _invoiceService.GetInvoiceHeaders(customerId).Select(x => new InvoiceFileViewModel
+		    {
+				Guid = x.Guid,
+				Date = x.Date,
+				Name = x.Name
+		    }).ToList();
+
+		    var filesModel = files.GroupBy(x => x.Date.ToString("yyyy"))
+			    .ToDictionary(x => x.Key.ToString(), x => x.GroupBy(y => y.Date.ToString("MM"))
+					.ToDictionary(y => y.Key, y => y.Select(z => z).ToList()));
+
+			var model = new InvoiceFilesViewModel {ShowFiles = true, Files = filesModel };
+
+			return View(model);
+	    }
 
 		[System.Web.Http.HttpGet]
 		public ActionResult InvoiceExport(InvoiceOverviewFilterModel filter)
@@ -159,5 +187,18 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers
 			var bytes = Encoding.ASCII.GetBytes(sb.ToString());
 			return File(bytes, "application/vnd.ms-excel", "Invoice.xls");
 		}
+
+	    [System.Web.Http.HttpGet]
+	    public ActionResult InvoiceFile(Guid id)
+	    {
+		    var file = _invoiceService.GetInvoiceHeader(id);
+
+			if (file == null)
+				return HttpNotFound();
+
+			var globalSetting = _globalSettingService.GetGlobalSettings().First();
+
+			return File(Path.Combine(globalSetting.InvoiceFileFolder, file.Guid.ToString()), "text/plain", file.Name);
+	    }
 	}
 }

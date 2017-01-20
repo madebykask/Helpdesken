@@ -1370,6 +1370,11 @@ Alter table tblStatus
 UPDATE tblCaseFieldSettings SET EMailIdentifier = '[#28]'
 WHERE CaseField = 'ProductArea_Id'
 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'InvoiceFileFolder' and sysobjects.name = N'tblGlobalSettings')
+	begin
+		ALTER TABLE tblGlobalSettings ADD InvoiceFileFolder NVARCHAR(500) NOT NULL Default ('')
+	end
+GO
 
 
 -- Last Line to update database version

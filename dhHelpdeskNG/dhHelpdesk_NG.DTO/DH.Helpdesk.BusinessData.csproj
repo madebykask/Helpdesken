@@ -261,6 +261,7 @@
     <Compile Include="Models\Invoice\CaseInvoiceOrderFile.cs" />
     <Compile Include="Models\Invoice\InvoiceArticleProductAreaSelectedFilter.cs" />
     <Compile Include="Models\Invoice\InvoiceArticleProductArea.cs" />
+    <Compile Include="Models\Invoice\InvoiceFile.cs" />
     <Compile Include="Models\Invoice\InvoiceHeader.cs" />
     <Compile Include="Models\Invoice\InvoiceOverview.cs" />
     <Compile Include="Models\Invoice\InvoiceRow.cs" />

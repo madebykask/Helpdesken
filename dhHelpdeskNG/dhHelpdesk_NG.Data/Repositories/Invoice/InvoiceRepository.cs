@@ -50,10 +50,10 @@ namespace DH.Helpdesk.Dal.Repositories.Invoice
 			if (departmentId.HasValue)
 				query = query.Where(x => x.Department_Id == departmentId);
 
-			if (status.HasValue && status.Value != InvoiceStatus.No)
+			if (status.HasValue && status.Value != InvoiceStatus.No && status.Value != InvoiceStatus.Ready)
 				query = query.Where(x => x.Logs.Any(y => (y.WorkingTime > 0 || y.OverTime > 0 || y.EquipmentPrice > 0 || y.Price > 0) && y.InvoiceRow.Status == status) 
 					|| x.CaseInvoiceRows.Any(y => y.InvoiceRow.Status == status));
-			if (status.HasValue && status.Value == InvoiceStatus.No)
+			if (status.HasValue && status.Value == InvoiceStatus.Ready)
 				query = query.Where(x => x.Logs.Any(y => (y.WorkingTime > 0 || y.OverTime > 0 || y.EquipmentPrice > 0 || y.Price > 0) && (y.InvoiceRow.Status != InvoiceStatus.Invoiced && y.InvoiceRow.Status != InvoiceStatus.NotInvoiced))
 					|| x.CaseInvoiceRows.Any(y => y.InvoiceRow.Status != InvoiceStatus.Invoiced && y.InvoiceRow.Status != InvoiceStatus.NotInvoiced));
 
@@ -68,12 +68,12 @@ namespace DH.Helpdesk.Dal.Repositories.Invoice
 			{
 				var logQuery = item.Logs.Where(y => y.WorkingTime > 0 || y.OverTime > 0 || y.EquipmentPrice > 0 || y.Price > 0);
 				var externalQuery = item.CaseInvoiceRows.Where(x => true);
-				if (status.HasValue && status.Value != InvoiceStatus.No)
+				if (status.HasValue && status.Value != InvoiceStatus.No && status.Value != InvoiceStatus.Ready)
 				{
 					logQuery = logQuery.Where(y => y.InvoiceRow?.Status == status);
 					externalQuery = externalQuery.Where(y => y.InvoiceRow?.Status == status);
 				}
-				if (status.HasValue && status.Value == InvoiceStatus.No)
+				if (status.HasValue && status.Value == InvoiceStatus.Ready)
 				{
 					logQuery = logQuery.Where(y => y.InvoiceRow == null 
 						|| (y.InvoiceRow.Status != InvoiceStatus.Invoiced && y.InvoiceRow.Status != InvoiceStatus.NotInvoiced));

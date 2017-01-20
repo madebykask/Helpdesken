@@ -11,8 +11,8 @@ namespace DH.Helpdesk.Domain
 		    InvoiceRows = new List<InvoiceRow>();
 	    }
 
-		public double VerificationNumberEnd { get; set; }
-        public double VerificationNumberStart { get; set; }
+		public decimal VerificationNumberEnd { get; set; }
+        public decimal VerificationNumberStart { get; set; }
         public int User_Id { get; set; }
         public string InvoiceFilename { get; set; }
         public DateTime CreatedDate { get; set; }

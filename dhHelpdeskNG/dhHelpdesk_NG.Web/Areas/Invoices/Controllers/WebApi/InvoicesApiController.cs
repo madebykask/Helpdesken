@@ -105,6 +105,7 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers.WebApi
 		[HttpPost]
 		public object InvoiceAction([FromBody]InvoiceActionParams actionParams)
 		{
+			var customerId = SessionFacade.CurrentCustomer.Id;
 			var invoiceHeader = new InvoiceHeader();
 			invoiceHeader.CreatedById = SessionFacade.CurrentUser.Id;
 
@@ -128,7 +129,15 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers.WebApi
 				invoiceHeader.InvoiceRows.Add(invoiceRow);
 			}
 
-			_invoiceService.SaveInvoiceActions(invoiceHeader);
+			var translations = new List<string>
+			{
+				Translation.GetCoreTextTranslation("ServiceDesk (direktdebitering)"),
+				Translation.GetCoreTextTranslation("ÄrNr"),
+				Translation.GetCoreTextTranslation("FakturaNr"),
+				Translation.GetCoreTextTranslation("RefNr"),
+				Translation.GetCoreTextTranslation("DH"),
+			};
+			_invoiceService.SaveInvoiceActions(customerId, invoiceHeader, translations);
 			return true;
 		}
 	}

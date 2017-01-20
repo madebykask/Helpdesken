@@ -1,0 +1,51 @@
+﻿@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+@using DH.Helpdesk.Web.Infrastructure.UrlHelpers.Api.Invoices
+@using DH.Helpdesk.Web.Infrastructure.UrlHelpers.Mvc.Invoices
+@model DH.Helpdesk.Web.Areas.Invoices.Models.InvoiceFilesViewModel
+
+<table class="invoice-files">
+	<tr>
+		<td class="span3" id="tree">
+			<ul>
+				@foreach (var year in Model.Files)
+				{
+					<li>
+						<span><span class="icon icon-folder-close"></span>@year.Key</span>
+						<ul style="display: none;">
+							@foreach (var month in year.Value)
+							{
+								<li data-year="@year.Key" data-month="@month.Key">
+									<span><span class="icon icon-folder-close"></span>@month.Key</span>
+								</li>
+							}
+						</ul>
+					</li>
+				}
+			</ul>
+		</td>
+		<td id="fileList"></td>
+	</tr>
+</table>
+
+@section Scripts {
+	@Scripts.Render(BundleConfig.ScriptNames.Invoices.Files)
+
+	<script type="text/javascript">
+		$(function () {
+			var pageObj = new InvoiceFiles({
+				data: @Html.SerializeObjectToJson(Model.Files),
+				fileUrl: "@Url.Action(MvcInvoicesUrlName.Overview.InvoiceFile, MvcInvoicesUrlName.Overview.Controller)",
+			});
+			window.pageObj = pageObj;
+		});
+
+	</script>
+}
+
+
+
+
+
+
+
+
