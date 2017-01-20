@@ -15,6 +15,9 @@ BaseField.prototype.init = function (opt) {
     if (me.$el == null || me.$el.length == 0) {
         throw Error('me.$el should be JQuery element');
     }
+
+    me.defaultValue = opt.defaultValue;
+
     return me;
 };
 
@@ -39,7 +42,7 @@ BaseField.prototype.getValue = function () {
 */
 BaseField.prototype.isValueEmpty = function () {
     var me = this;
-    return window.isNullOrEmpty(me.$el.val());
+    return me.defaultValue == undefined ? window.isNullOrEmpty(me.$el.val()) : me.$el.val() === me.defaultValue;
 };
 
 /**
@@ -48,7 +51,7 @@ BaseField.prototype.isValueEmpty = function () {
 */
 BaseField.prototype.clear = function () {
     var me = this;
-    me.setValue(window.EMTPY_STR);
+    me.setValue(me.defaultValue == undefined ? window.EMTPY_STR : me.defaultValue);
 };
 
 BaseField.prototype.on = function() {

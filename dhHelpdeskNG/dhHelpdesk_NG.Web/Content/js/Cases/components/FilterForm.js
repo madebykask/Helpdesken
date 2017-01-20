@@ -580,10 +580,15 @@ FilterForm.prototype.initControlsMap = function() {
         switch(controlName) {
             case 'CaseInitiatorFilter':
             case 'txtFreeTextSearch':
-            case 'InitiatorSearchScope':
                 $el = me.$el.find(searchEl);
                 if (!window.is$ElEmpty($el)) {
                     control = CreateInstance(BaseField, { $el: $el });    
+                }
+                break;
+            case 'InitiatorSearchScope':
+                $el = me.$el.find(searchEl);
+                if (!window.is$ElEmpty($el)) {
+                    control = CreateInstance(BaseField, { $el: $el, defaultValue: "0" });
                 }
                 break;
             //case 'initiatorSearchScope':
