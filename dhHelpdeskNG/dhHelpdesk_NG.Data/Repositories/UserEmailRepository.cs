@@ -40,19 +40,6 @@ namespace DH.Helpdesk.Dal.Repositories
         {
             var result = new List<CaseEmailSendOverview>();
 
-            if (searchInWorkingGrs)
-            {
-                var wgs = DbContext.WorkingGroups
-                    .Include(x => x.UserWorkingGroups.Select(u => u.User))
-                    .Where(x => x.IsActive == 1 && x.Customer_Id == customerId && x.WorkingGroupName.Contains(searchText)).ToList();
-                var newList = wgs.Select(x => new CaseEmailSendOverview
-                {
-                    Name = x.WorkingGroupName,
-                    Emails = x.UserWorkingGroups.Where(r => r.User.IsActive == 1).Select(r => r.User.Email).ToList(),
-                    GroupType = CaseUserSearchGroup.WorkingGroup
-                }).ToList();
-                result.AddRange(newList);
-            }
             if (searchInInitiators)
             {
                 var inits = DbContext.Users
@@ -92,6 +79,19 @@ namespace DH.Helpdesk.Dal.Repositories
                     newItem.Emails.Add(user.Email);
                     result.Add(newItem);
                 }
+            }
+            if (searchInWorkingGrs)
+            {
+                var wgs = DbContext.WorkingGroups
+                    .Include(x => x.UserWorkingGroups.Select(u => u.User))
+                    .Where(x => x.IsActive == 1 && x.Customer_Id == customerId && x.WorkingGroupName.Contains(searchText)).ToList();
+                var newList = wgs.Select(x => new CaseEmailSendOverview
+                {
+                    Name = x.WorkingGroupName,
+                    Emails = x.UserWorkingGroups.Where(r => r.User.IsActive == 1).Select(r => r.User.Email).ToList(),
+                    GroupType = CaseUserSearchGroup.WorkingGroup
+                }).ToList();
+                result.AddRange(newList);
             }
             if (searchInEmailGrs)
             {

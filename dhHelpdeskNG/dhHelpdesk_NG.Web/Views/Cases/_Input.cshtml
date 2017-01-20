@@ -309,12 +309,12 @@
                                                     {
                                                         @Html.Partial("ModalDialogs/_CaseAddFollowers", Model.SendToDialogModel)
                                                         <a href="#case_add_followers_btn" role="button" class="btn case-usersearch-btn" data-src="case" data-toggle="modal">@Translation.GetCoreTextTranslation("Välj följare")</a>
-                                                        @Html.TextAreaFor(model => model.FollowerUsers, new {id = "fakeCaseFollowerUsersInput", @class = "case-usersearch-textarea"})
+                                                        <div id="fakeCaseFollowerUsersInput" contenteditable="true" class="case-send-emails-div case-usersearch-textarea"></div>
                                                     }
                                                     else
                                                     {
                                                         <a href="#case_add_followers_btn" role="button" class="btn case-usersearch-btn disabled" disabled="true" data-toggle="modal">@Translation.GetCoreTextTranslation("Välj följare")</a>
-                                                        @Html.TextAreaFor(model => model.FollowerUsers, new {id = "fakeCaseFollowerUsersInput", @readonly = "true", @class = "case-usersearch-textarea"})
+                                                        <div id="fakeCaseFollowerUsersInput" contenteditable="false" class="case-send-emails-div-readonly case-send-emails-div case-usersearch-textarea"></div>
                                                     }
                                                 </td>
                                             }

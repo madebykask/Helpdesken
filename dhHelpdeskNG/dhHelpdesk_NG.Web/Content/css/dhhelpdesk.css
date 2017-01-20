@@ -3758,16 +3758,15 @@ div.modal-body.max-height-600 {
 }
 
 .case-usersearch-textarea {
-    height: 1.6em;
-    min-height: 1em;
+    height: 25px;
     width: 40%;
     position: absolute;
-    margin-left: 10px;
 }
 
 .case-usersearch-btn {
     margin-bottom: 0.4em;
     min-width: 40px;
+    margin-right: 10px;
 }
 
 .case-followers-button-done {
@@ -3803,6 +3802,43 @@ div.case-dropdown-div > span.btn-group > button.multiselect.dropdown-toggle.btn 
 div.case-dropdown-div > span.btn-group > ul.multiselect-container > div.options-holder input
 {
     display: none;
+}
+
+.case-send-emails-div {
+    overflow: auto;
+    padding: 2px;
+    resize: both;
+    text-align: left;
+    display: inline-block;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    word-wrap: break-word;
+}
+
+.case-email-selected {
+    border: 1px solid #cccccc;
+    padding-left: 2px;
+    padding-right: 2px;
+    margin: 2px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    background-color: #e6e6e6;
+    display: inline-block;
+    line-height: 20px;
+}
+
+.case-send-emails-div-readonly {
+    cursor: not-allowed;
+    background-color: #eeeeee;
+}
+
+.case-popup-div {
+    min-height: 80px;
+    width: 95%!important;
 }
 
 .case-div-standardtext {

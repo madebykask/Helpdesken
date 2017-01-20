@@ -3848,7 +3848,7 @@ namespace DH.Helpdesk.Web.Controllers
 					InvoiceRow = x.InvoiceRow == null ? null : new InvoiceRowViewModel { Status = x.InvoiceRow.Status}
 	            }).ToList();
                 var caseFolowerUsers = _caseExtraFollowersService.GetCaseExtraFollowers(caseId).Select(x => x.Follower).ToArray();
-                var followerUsers = caseFolowerUsers.Any() ? string.Join("; ", caseFolowerUsers) + "; " : string.Empty;
+                var followerUsers = caseFolowerUsers.Any() ? string.Join(";", caseFolowerUsers) + ";" : string.Empty;
                 m.FollowerUsers = followerUsers;
             }
 

@@ -4,10 +4,14 @@
     var mainFakeFollowersInput = $("#fakeCaseFollowerUsersInput");
     var popupFollowersInput = $("#caseAddFollowersModalInput");
 
+    mainFakeFollowersInput.html(getHtmlFromEmails(mainFollowersInput.val()));
+
+    initEditableDiv();
+
     $("a[href='#case_add_followers_btn']").on("click", function () {
         var $src = $(this);
         var $target = $("#case_add_followers_popup");
-        popupFollowersInput.val(mainFollowersInput.val());
+        popupFollowersInput.html(getHtmlFromEmails(mainFollowersInput.val()));
         $target.attr("data-src", $src.attr("data-src"));
         $target.modal("show");
     });
@@ -18,7 +22,7 @@
     });
 
     $("#case_add_followers_popup").on("shown", function () {
-        popupFollowersInput.focus();
+        placeCaretAtEnd(popupFollowersInput);
     });
 
     $(".case-usersearch-multiselect").multiselect({
@@ -44,7 +48,7 @@
     });
 
     function appendDropdownsEmails(array, selectedId) {
-        var arr = jQuery.grep(array,
+        var arr = $.grep(array,
                         function (a) {
                             return a.Id == selectedId;
                         });
@@ -55,87 +59,38 @@
 
     mainFakeFollowersInput.typeahead(getCasesAddFollowersSearchOptions());
 
-    mainFakeFollowersInput.keyup(function (e) {
+    mainFakeFollowersInput.keydown(function (e) {
+        if (e.keyCode === 8 || e.keyCode === 46) {
+            onRemoveKeyDown(e, mainFakeFollowersInput, mainFollowersInput);
+        }
         if (e.keyCode === 13 || e.keyCode === 186) {
             onEnterKeyUp(e, mainFakeFollowersInput);
         }
     });
 
-    mainFakeFollowersInput.keydown(function (e) {
-        if (e.keyCode === 8) {
-            onBackspaceKeyDown(e, mainFakeFollowersInput, mainFollowersInput);
-        }
-        if (e.keyCode === 46) {
-            onDeleteKeyDown(e, mainFakeFollowersInput, mainFollowersInput);
-        }
-    });
-
-    popupFollowersInput.focusout(function (e) {
-        onEnterKeyUp(e, popupFollowersInput, true);
-    });
-
-    mainFakeFollowersInput.focusout(function (e) {
-        onEnterKeyUp(e, mainFakeFollowersInput, true);
-    });
-
     popupFollowersInput.typeahead(getCasesAddFollowersSearchOptions());
 
-    popupFollowersInput.keyup(function (e) {
+    popupFollowersInput.keydown(function (e) {
+        if (e.keyCode === 8 || e.keyCode === 46) {
+            onRemoveKeyDown(e, popupFollowersInput, mainFollowersInput);
+        }
         if (e.keyCode === 13 || e.keyCode === 186) {
             onEnterKeyUp(e, popupFollowersInput);
         }
     });
 
-    popupFollowersInput.keydown(function (e) {
-        if (e.keyCode === 8) {
-            onBackspaceKeyDown(e, popupFollowersInput, mainFollowersInput);
-            popupFollowersInput.focus();
-        }
-        if (e.keyCode === 46) {
-            onDeleteKeyDown(e, popupFollowersInput, mainFollowersInput);
-            popupFollowersInput.focus();
-        }
-    });
-
-    function onEnterKeyUp(e, fakeInput, isFocusOut) {
+    function onEnterKeyUp(e, fakeInput) {
         e.preventDefault();
         e.stopImmediatePropagation();
-        var emails = $(e.target).val();
-        var arr = emails.split(";");
+        var emails = $(e.target).html();
+        var arr = getEmailsFromHtml(emails);
         var newEmail = "";
-        var trimmedEm = newEmail;
-        if (e.keyCode === 13) {
-            newEmail = arr[arr.length - 1].replace("\n", "");
-            trimmedEm = newEmail.trim();
-            if (trimmedEm !== "") {
-                if (checkAndAddEmailsTo(newEmail)) {
-                    fakeInput.val(emails.replace("\n", "") + "; ");
-                } else {
-                    fakeInput.val(emails.replace(trimmedEm + "\n", "") + "");
-                }
-            }
-        }
-        if (e.keyCode === 186) {
-            newEmail = arr[arr.length - 2];
-            trimmedEm = newEmail.trim();
-            if (trimmedEm !== "") {
-                if (checkAndAddEmailsTo(newEmail)) {
-                    fakeInput.val(emails + " ");
-                } else {
-                    fakeInput.val(emails.replace(trimmedEm + ";", ""));
-                }
-            }
-        }
-        if (isFocusOut) {
+        if (e.keyCode === 13 || e.keyCode === 186) {
             newEmail = arr[arr.length - 1];
-            trimmedEm = newEmail.trim();
-            if (trimmedEm !== "") {
-                if (checkAndAddEmailsTo(newEmail)) {
-                    fakeInput.val(emails + "; ");
-                }
-                else {
-                    fakeInput.val(emails.replace(trimmedEm, ""));
-                }
+            if (newEmail !== "" && newEmail !== "&nbsp" && newEmail.indexOf("@") >= 0) {
+                checkAndAddEmailsTo(newEmail);
+                fakeInput.html(getHtmlFromEmails(mainFollowersInput.val()));
+                placeCaretAtEnd(fakeInput);
             }
         }
     }
@@ -145,7 +100,7 @@
             items: 20,
             minLength: 2,
             source: function (query, process) {
-                var arr = query.split(";");
+                var arr = query.replace(/<[^>]*>/g, "").split(";");
                 var searchText = $.trim(arr[arr.length - 1]);
                 var lastInitiatorSearchKey = generateRandomKey();
                 return $.ajax({
@@ -157,7 +112,7 @@
                         if (result.searchKey !== lastInitiatorSearchKey)
                             return;
 
-                        var resultList = jQuery.map(result.result,
+                        var resultList = $.map(result.result,
                             function (item) {
                                 var aItem = {
                                     userId: item.UserId,
@@ -174,7 +129,7 @@
             },
 
             matcher: function (item) {
-                var arr = this.query.split(";");
+                var arr = this.query.replace(/<[^>]*>/g, "").split(";");
                 var searchText = arr[arr.length - 1];
                 var tquery = extractor(searchText);
                 if (!tquery) return false;
@@ -195,7 +150,7 @@
                 var userId = item.userId != null ? item.userId + ' - ' : "";
 
                 var result = item.name + ' - ' + userId + item.email;
-                var query = extractor(this.query).replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
+                var query = extractor(this.query.replace(/<[^>]*>/g, "")).replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
                 return grType + result.replace(new RegExp('(' + query + ')', 'ig'),
                     function ($1, match) {
                         return '<strong>' + match + '</strong>';
@@ -209,9 +164,10 @@
                     if (checkAndAddEmailsTo(value) === true)
                         emailsToAdd.push(value);
                 });
-                if (emailsToAdd.length > 0)
-                    return this.$element.val().replace(/[^; ]*$/, "") + emailsToAdd.join("; ") + "; ";
-                return this.$element.val().replace(/[^;]*$/, " ");
+                mainFakeFollowersInput.html(getHtmlFromEmails(mainFollowersInput.val()));
+                popupFollowersInput.html(getHtmlFromEmails(mainFollowersInput.val()));
+                placeCaretAtEnd(this.$element);
+                return;
             }
         };
 
@@ -220,9 +176,10 @@
 
     function checkAndAddEmailsTo(value) {
         if (isValidEmailAddress(value)) {
-            var newToEmail = value + "; ";
-            if (mainFollowersInput.val().indexOf(newToEmail) < 0)
-                mainFollowersInput.val(mainFollowersInput.val() + newToEmail);
+            var newToEmail = value;
+            var emails = mainFollowersInput.val().split(";");
+            if (emails.indexOf(newToEmail) < 0)
+                mainFollowersInput.val(mainFollowersInput.val() + newToEmail + ";");
             else {
                 ShowToastModalMessage(value + " : " + window.parameters.emailAlreadyAdded, "warning");
                 return false;
@@ -236,10 +193,9 @@
 
     function checkAndAddEmailsFromDropdown(value) {
         if (isValidEmailAddress(value)) {
-            var newToEmail = value + "; ";
-            if (mainFollowersInput.val().indexOf(newToEmail) < 0) {
-                mainFollowersInput.val(mainFollowersInput.val() + newToEmail);
-                popupFollowersInput.val(popupFollowersInput.val() + newToEmail);
+            if (mainFollowersInput.val().indexOf(value) < 0) {
+                mainFollowersInput.val(mainFollowersInput.val() + value + ";");
+                popupFollowersInput.html(getHtmlFromEmails(mainFollowersInput.val()));
             } else {
                 return false;
             }
@@ -252,7 +208,7 @@
 
     function changeFakeInputValueForView() {
         var text = mainFollowersInput.val();
-        mainFakeFollowersInput.val(text);
+        mainFakeFollowersInput.html(getHtmlFromEmails(text));
     }
 
 }
