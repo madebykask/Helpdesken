@@ -162,30 +162,33 @@
             source: function (query, process) {
                 var arr = query.replace("&nbsp;","").replace(/<[^>]*>/g, "").split(";");
                 var searchText = $.trim(arr[arr.length - 1]);
-                var lastInitiatorSearchKey = generateRandomKey();
-                return $.ajax({
-                    url: "/cases/CaseSearchUserEmails",
-                    type: "post",
-                    data: { query: searchText, searchKey: lastInitiatorSearchKey },
-                    dataType: "json",
-                    success: function (result) {
-                        if (result.searchKey !== lastInitiatorSearchKey)
-                            return;
+                if (searchText) {
+                    var lastInitiatorSearchKey = generateRandomKey();
+                    return $.ajax({
+                        url: "/cases/CaseSearchUserEmails",
+                        type: "post",
+                        data: { query: searchText, searchKey: lastInitiatorSearchKey },
+                        dataType: "json",
+                        success: function(result) {
+                            if (result.searchKey !== lastInitiatorSearchKey)
+                                return;
 
-                        var resultList = $.map(result.result,
-                            function (item) {
-                                var aItem = {
-                                    userId: item.UserId,
-                                    name: item.Name,
-                                    email: item.Emails,
-                                    groupType: item.GroupType
-                                };
-                                return JSON.stringify(aItem);
-                            });
+                            var resultList = $.map(result.result,
+                                function(item) {
+                                    var aItem = {
+                                        userId: item.UserId,
+                                        name: item.Name,
+                                        email: item.Emails,
+                                        groupType: item.GroupType
+                                    };
+                                    return JSON.stringify(aItem);
+                                });
 
-                        return process(resultList);
-                    }
-                });
+                            return process(resultList);
+                        }
+                    });
+                }
+                return;
             },
 
             matcher: function (item) {

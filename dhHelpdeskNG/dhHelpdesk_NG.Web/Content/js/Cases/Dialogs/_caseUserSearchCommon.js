@@ -2,9 +2,19 @@
     e.stopImmediatePropagation();
     var text = mainInput.val();
     var email = getEmailsToRemove();
-    if (email === "&nbsp;" || email.trim() === "")
+    if (email === "&nbsp;" || email.trim() === "") {
         e.preventDefault();
-    else {
+        if (e.keyCode !== 46) {
+            var arr = text.split(";");
+            var lastEmail = arr[arr.length - 2];
+            if (lastEmail) {
+                text = text.replace(lastEmail + ";", "");
+                mainInput.val(text);
+                fakeInput.html(getHtmlFromEmails(mainInput.val()));
+                placeCaretAtEnd(fakeInput);
+            }
+        }
+    } else {
         if (email !== "" && email.indexOf(";") >= 0) {
             e.preventDefault();
             text = text.replace(email, "");
@@ -44,32 +54,20 @@ function isValidEmailAddress(emailAddress) {
 
 function getEmailsToRemove() {
     var selection = window.getSelection();
-    if (selection.type === "Range") {
-        var range = selection.getRangeAt(0);
-        var allWithinRangeParent = range.commonAncestorContainer.getElementsByTagName("*");
-        var allSelected = [];
-        for (var i = 0, el; el = allWithinRangeParent[i]; i++) {
-            if (selection.containsNode(el, true)) {
-                allSelected.push(el.textContent);
-            }
-        }
-        return allSelected.join("");
-    } else {
         if ($(selection.anchorNode.parentNode).html() === "&nbsp;") {
             return "&nbsp;";
         } else {
             return selection.anchorNode.textContent;
         }
-    }
 }
 
 function getHtmlFromEmails(emails) {
-    var aaa = emails.split(";");
+    var arr = emails.split(";");
     var result = [];
-    for (var i = 0; i < aaa.length -1; i++) {
-        result.push("<span class='case-email-selected'>" + aaa[i] + ";</span>");
+    for (var i = 0; i < arr.length - 1; i++) {
+        result.push("<span class='case-email-selected'>" + arr[i] + ";</span>");
     }
-    if (result.length > 0)result.push("<span>&nbsp</span>");
+    if (result.length > 0) result.push("<span>&nbsp</span>");
     return result.join("");
 }
 
@@ -83,21 +81,16 @@ function getEmailsFromHtml(html) {
     return  result;
 }
 
-function placeCaretAtEnd(el) {
-    el.focus();
-    if (typeof window.getSelection != "undefined"
-            && typeof document.createRange != "undefined") {
+function placeCaretAtEnd(node) {
+    node[0].focus();
+    var textNode = node[0].lastChild;
+    if (textNode) {
         var range = document.createRange();
-        range.selectNodeContents(el[0]);
-        range.collapse(false);
+        range.setStart(textNode, 1);
+        range.setEnd(textNode, 1);
         var sel = window.getSelection();
         sel.removeAllRanges();
         sel.addRange(range);
-    } else if (typeof document.body.createTextRange != "undefined") {
-        var textRange = document.body.createTextRange();
-        textRange.moveToElementText(el[0]);
-        textRange.collapse(false);
-        textRange.select();
     }
 }
 
