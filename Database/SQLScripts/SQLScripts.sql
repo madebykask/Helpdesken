@@ -1381,5 +1381,10 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	ALTER TABLE tblUsers ADD SettingForNoMail int Default(0) NOT NULL
 GO
 
+--New length in tblSettings
+ALTER TABLE tblSettings
+ALTER COLUMN LDAPBase nvarchar(200) NOT NULL
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.30'
