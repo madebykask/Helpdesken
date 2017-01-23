@@ -5520,6 +5520,14 @@ If not exists (select * from tbltext where id = 1768)
 	insert into tbltext (id, TextString) VALUES (1768, 'DH')
 GO
 
+If not exists (select * from tbltext where id = 1769)
+	insert into tbltext (id, TextString) VALUES (1769, 'Skicka mail om användaren tilldelar sig själv ett ärende')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1769 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1769, 2, 'Send e-mail if the user assigned him/her self a case')
+GO
+
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

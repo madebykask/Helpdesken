@@ -1376,6 +1376,10 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	end
 GO
 
+-- New field in tblUsers
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'SettingForNoMail' and sysobjects.name = N'tblUsers')
+	ALTER TABLE tblUsers ADD SettingForNoMail int Default(0) NOT NULL
+GO
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.30'

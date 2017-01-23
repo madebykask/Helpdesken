@@ -102,6 +102,8 @@
         /// </summary>
         public int ShowSolutionTime { get; set; }
         public int ShowCaseStatistics { get; set; }
+        public int SettingForNoMail { get; set; }
+
 
         public string TimeZoneId { get; set; }
 

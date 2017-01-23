@@ -117,7 +117,17 @@
     </table>
     <h4>@Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)</h4>
     
-    <table class="tableform">       
+    <table class="tableform"> 
+        <tr>
+            <td class="span3">
+                @Translation.Get("Meddelande", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                <input type="checkbox" name="User.SettingForNoMail" @(Model.User.SettingForNoMail == 1 ? "checked=checked" : "") value="1" />
+                <input type="hidden" name="User.SettingForNoMail" value="0" />
+                &nbsp; &nbsp;@Translation.Get("Skicka mail om användaren tilldelar sig själv ett ärende")
+            </td>
+        </tr>      
         <tr>
             <td class="span3">
                 @Translation.Get("Ärendeöversikt", Enums.TranslationSource.TextTranslation)
