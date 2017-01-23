@@ -31,8 +31,16 @@ namespace DH.Helpdesk.Web.Infrastructure.Attributes.Api
 										actionExecutedContext.ActionContext.ActionDescriptor.ActionName,
 										httpContext,
 										workContext).ToString());
+
+            Services.Services.DataLogService.SaveLog(new ErrorContext(errorId,
+                                        actionExecutedContext.Exception,
+                                        actionExecutedContext.ActionContext.ControllerContext.ControllerDescriptor.ControllerName,
+                                        actionExecutedContext.ActionContext.ActionDescriptor.ActionName,
+                                        httpContext,
+                                        workContext).ToString(), Common.Enums.DataLogTypes.GENERAL);
+
 #if DEBUG
-			actionExecutedContext.Response = actionExecutedContext.Request
+            actionExecutedContext.Response = actionExecutedContext.Request
 					.CreateResponse(HttpStatusCode.InternalServerError,
 					actionExecutedContext.Exception);
 #else
