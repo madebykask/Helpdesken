@@ -425,7 +425,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
 			//TODO: refactor when true server paging will be implemented
 			result.Count = result.Items.Count;
-			if (f.PageInfo != null)
+			if (f.PageInfo != null && f.PageInfo.PageSize > 0)
 			{
 				result.Items = result.Items.Skip(f.PageInfo.PageNumber * f.PageInfo.PageSize).Take(f.PageInfo.PageSize).ToList();
 			}
