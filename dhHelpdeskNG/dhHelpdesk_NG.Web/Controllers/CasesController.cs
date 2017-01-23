@@ -796,7 +796,7 @@ namespace DH.Helpdesk.Web.Controllers
 					{"isUnread", searchRow.IsUnread},
 					{"isUrgent", searchRow.IsUrgent}
 				};
-				var caseLockModel = GetCaseLockModel(searchRow.Id, SessionFacade.CurrentUser.Id);
+				var caseLockModel = GetCaseLockModel(searchRow.Id, SessionFacade.CurrentUser.Id, false);
 				if (caseLockModel.IsLocked)
 				{
 					jsRow.Add("isCaseLocked", caseLockModel.IsLocked);
@@ -4782,7 +4782,7 @@ namespace DH.Helpdesk.Web.Controllers
             return ret;
         }
 
-        private CaseLockModel GetCaseLockModel(int caseId, int userId)
+        private CaseLockModel GetCaseLockModel(int caseId, int userId, bool isNeedLock = true)
         {
             var caseLock = this._caseLockService.GetCaseLockByCaseId(caseId);
             var caseIsLocked = true;
@@ -4820,7 +4820,8 @@ namespace DH.Helpdesk.Web.Controllers
                 caseLockGUID = newLockGUID.ToString();
                 var user = this._userService.GetUser(userId);
                 var newCaseLock = new CaseLock(caseId, userId, newLockGUID, Session.SessionID, now, extendedLockTime, user);
-                this._caseLockService.LockCase(newCaseLock);
+                if (isNeedLock)
+                    this._caseLockService.LockCase(newCaseLock);
                 caseLock = newCaseLock;
             }
 
