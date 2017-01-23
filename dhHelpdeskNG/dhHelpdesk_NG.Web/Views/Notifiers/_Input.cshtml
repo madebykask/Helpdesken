@@ -78,7 +78,7 @@
             "UserId.Value": {
                 required: getBoolean("@Model.UserId.Required"),
                 remote: {
-                    url: "CheckUniqueUserId",
+                    url: "@Url.Action("CheckUniqueUserId", "Notifiers")",
                     type: "GET",
                     data: {
                         userId: function() {
