@@ -5528,6 +5528,23 @@ If not exists (select * from tblTextTranslation where text_id = 1769 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1769, 2, 'Send e-mail if the user assigned him/her self a case')
 GO
 
+UPDATE tblText Set TextString = 'Koppla till huvudärende' WHERE Id=1758;
+GO
+
+UPDATE tblText Set TextString = 'Koppla från moder' WHERE Id=1759;
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'Unconnect from parent' where text_id = 1759 and Language_Id = 2;
+GO
+
+If not exists (select * from tbltext where id = 1770)
+	insert into tbltext (id, TextString) VALUES (1770, 'Koppla från')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1770 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1770, 2, 'Unconnect')
+GO
+
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
