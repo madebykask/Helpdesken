@@ -1310,60 +1310,194 @@ GO
 
 
 --tblOU
-Alter table tblOU
- Drop column OUGUID
- GO
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'OUGUID' and sysobjects.name = N'tblOU')
+begin
+		Alter table tblOU
+		Alter Column OUGUID uniqueIdentifier NOT NULL 
 
- ALTER TABLE tblOU
- ADD OUGUID uniqueIdentifier default newid() NOT NULL
+		if not exists(select *
+					  from sys.all_columns c
+					  join sys.tables t on t.object_id = c.object_id
+					  join sys.schemas s on s.schema_id = t.schema_id
+					  join sys.default_constraints d on c.default_object_id = d.object_id
+					  where t.name = 'tblOU'
+					  and c.name = 'OUGUID'
+					  and s.name = 'dbo'
+					  and d.name = 'DF_OUGUID')
+		begin
+			Alter table tblOU
+			Add constraint DF_OUGUID default (newid()) For OUGUID		
+		end		
+end
+else
+begin
+	Alter table tblOU
+	Add OUGUID uniqueIdentifier NOT NULL default (newid())
+end
+GO
+
 
 --tblPriority
-Alter table tblPriority
- Drop column PriorityGUID
- GO
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'PriorityGUID' and sysobjects.name = N'tblPriority')
+begin
+		Alter table tblPriority
+		Alter Column PriorityGUID uniqueIdentifier NOT NULL 
 
- ALTER TABLE tblPriority
- ADD PriorityGUID uniqueIdentifier default newid() NOT NULL
+		if not exists(select *
+					  from sys.all_columns c
+					  join sys.tables t on t.object_id = c.object_id
+					  join sys.schemas s on s.schema_id = t.schema_id
+					  join sys.default_constraints d on c.default_object_id = d.object_id
+					  where t.name = 'tblPriority'
+					  and c.name = 'PriorityGUID'
+					  and s.name = 'dbo'
+					  and d.name = 'DF_PriorityGUID')
+		begin
+			Alter table tblPriority
+			Add constraint DF_PriorityGUID default (newid()) For PriorityGUID		
+		end		
+end
+else
+begin
+	Alter table tblPriority
+	Add PriorityGUID uniqueIdentifier NOT NULL default (newid())
+end
+GO
 
  --tblProductArea
-Alter table tblProductArea
- Drop column ProductAreaGUID
- GO
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ProductAreaGUID' and sysobjects.name = N'tblProductArea')
+begin
+		Alter table tblProductArea
+		Alter Column ProductAreaGUID uniqueIdentifier NOT NULL 
 
- ALTER TABLE tblProductArea
- ADD ProductAreaGUID uniqueIdentifier default newid() NOT NULL
+		if not exists(select *
+					  from sys.all_columns c
+					  join sys.tables t on t.object_id = c.object_id
+					  join sys.schemas s on s.schema_id = t.schema_id
+					  join sys.default_constraints d on c.default_object_id = d.object_id
+					  where t.name = 'tblProductArea'
+					  and c.name = 'ProductAreaGUID'
+					  and s.name = 'dbo'
+					  and d.name = 'DF_ProductAreaGUID')
+		begin
+			Alter table tblProductArea
+			Add constraint DF_ProductAreaGUID default (newid()) For ProductAreaGUID		
+		end		
+end
+else
+begin
+	Alter table tblProductArea
+	Add ProductAreaGUID uniqueIdentifier NOT NULL default (newid())
+end
+GO
 
 --tblLink
-Alter table tblLink
- Drop column LinkGUID
- GO
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LinkGUID' and sysobjects.name = N'tblLink')
+begin
+		Alter table tblLink
+		Alter Column LinkGUID uniqueIdentifier NOT NULL 
 
- ALTER TABLE tblLink
- ADD LinkGUID uniqueIdentifier default newid() NOT NULL
+		if not exists(select *
+					  from sys.all_columns c
+					  join sys.tables t on t.object_id = c.object_id
+					  join sys.schemas s on s.schema_id = t.schema_id
+					  join sys.default_constraints d on c.default_object_id = d.object_id
+					  where t.name = 'tblLink'
+					  and c.name = 'LinkGUID'
+					  and s.name = 'dbo'
+					  and d.name = 'DF_LinkGUID')
+		begin
+			Alter table tblLink
+			Add constraint DF_LinkGUID default (newid()) For LinkGUID		
+		end		
+end
+else
+begin
+	Alter table tblLink
+	Add LinkGUID uniqueIdentifier NOT NULL default (newid())
+end
+GO
 
   --tblRegion
-Alter table tblRegion
- Drop column RegionGUID
- GO
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'RegionGUID' and sysobjects.name = N'tblRegion')
+begin
+		Alter table tblRegion
+		Alter Column RegionGUID uniqueIdentifier NOT NULL 
 
- ALTER TABLE tblRegion
- ADD RegionGUID uniqueIdentifier default newid() NOT NULL
+		if not exists(select *
+					  from sys.all_columns c
+					  join sys.tables t on t.object_id = c.object_id
+					  join sys.schemas s on s.schema_id = t.schema_id
+					  join sys.default_constraints d on c.default_object_id = d.object_id
+					  where t.name = 'tblRegion'
+					  and c.name = 'RegionGUID'
+					  and s.name = 'dbo'
+					  and d.name = 'DF_RegionGUID')
+		begin
+			Alter table tblRegion
+			Add constraint DF_RegionGUID default (newid()) For RegionGUID		
+		end		
+end
+else
+begin
+	Alter table tblRegion
+	Add RegionGUID uniqueIdentifier NOT NULL default (newid())
+end
+GO
 
    --tblStateSecondary
-Alter table tblStateSecondary
- Drop column StateSecondaryGUID
- GO
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'StateSecondaryGUID' and sysobjects.name = N'tblStateSecondary')
+begin
+		Alter table tblStateSecondary
+		Alter Column StateSecondaryGUID uniqueIdentifier NOT NULL 
 
- ALTER TABLE tblStateSecondary
- ADD StateSecondaryGUID uniqueIdentifier default newid() NOT NULL
+		if not exists(select *
+					  from sys.all_columns c
+					  join sys.tables t on t.object_id = c.object_id
+					  join sys.schemas s on s.schema_id = t.schema_id
+					  join sys.default_constraints d on c.default_object_id = d.object_id
+					  where t.name = 'tblStateSecondary'
+					  and c.name = 'StateSecondaryGUID'
+					  and s.name = 'dbo'
+					  and d.name = 'DF_StateSecondaryGUID')
+		begin
+			Alter table tblStateSecondary
+			Add constraint DF_StateSecondaryGUID default (newid()) For StateSecondaryGUID		
+		end		
+end
+else
+begin
+	Alter table tblStateSecondary
+	Add StateSecondaryGUID uniqueIdentifier NOT NULL default (newid())
+end
+GO
 
-    --tblStatus
-Alter table tblStatus
- Drop column StatusGUID
- GO
+--tblStatus
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'StatusGUID' and sysobjects.name = N'tblStatus')
+begin
+		Alter table tblStatus
+		Alter Column StatusGUID uniqueIdentifier NOT NULL 
 
- ALTER TABLE tblStatus
- ADD StatusGUID uniqueIdentifier default newid() NOT NULL
+		if not exists(select *
+					  from sys.all_columns c
+					  join sys.tables t on t.object_id = c.object_id
+					  join sys.schemas s on s.schema_id = t.schema_id
+					  join sys.default_constraints d on c.default_object_id = d.object_id
+					  where t.name = 'tblStatus'
+					  and c.name = 'StatusGUID'
+					  and s.name = 'dbo'
+					  and d.name = 'DF_StatusGUID')
+		begin
+			Alter table tblStatus
+			Add constraint DF_StatusGUID default (newid()) For StatusGUID		
+		end		
+end
+else
+begin
+	Alter table tblStatus
+	Add StatusGUID uniqueIdentifier NOT NULL default (newid())
+end
+GO
 
 
  --New EMailIdentifier for ProductArea
