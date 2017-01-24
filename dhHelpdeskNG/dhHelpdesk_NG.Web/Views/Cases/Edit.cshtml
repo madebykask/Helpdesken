@@ -288,9 +288,11 @@
                                 @if (!Model.IsItChildCase() && SessionFacade.CurrentUser.CreateSubCasePermission == 1)
                                 {
                                     <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Skapa underärende"), "NewChildCase", new {parentCaseId = Model.case_.Id})</li>
-
-                                    <li><a data-toggle="modal" id="case_connect_to_parent_btn" href="#">@Translation.GetCoreTextTranslation("Ansluta till moder")</a></li>
-                                    @Html.HiddenFor(m => m.case_.Id, new {@id = "connect_to_parent_childId"})
+                                    if (!Model.IsItParentCase())
+                                     {
+                                         <li><a data-toggle="modal" id="case_connect_to_parent_btn" href="#">@Translation.GetCoreTextTranslation("Ansluta till moder")</a></li>
+                                         @Html.HiddenFor(m => m.case_.Id, new {@id = "connect_to_parent_childId"})
+                                     }
                                 }
                                 @if (SessionFacade.CurrentUser.ActivateCasePermission == 1 && Model.case_.FinishingDate.HasValue
                             && (!Model.IsItChildCase() || (Model.IsItChildCase() && !Model.ParentCaseInfo.IsCaseClosed)))
@@ -420,7 +422,7 @@
     <div id="divCopyCase" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
         @Html.Partial("_CopyCase", Model)
     </div>
-    if (!Model.IsItChildCase())
+    if (!Model.IsItChildCase() && !Model.IsItParentCase())
     {
         <div id="divConnectParentToParent" role="dialog" class="modal hide fade case-connect-to-parent" aria-labelledby="myModalLabel" aria-hidden="true">
             @Html.Partial("_ParentCases", Model.ConnectToParentModel)
