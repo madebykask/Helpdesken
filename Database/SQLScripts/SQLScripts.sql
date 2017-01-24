@@ -1520,12 +1520,5 @@ ALTER TABLE tblSettings
 ALTER COLUMN LDAPBase nvarchar(200) NOT NULL
 
 
-ALTER TABLE tblCase
-ALTER COLUMN InventoryNumber nvarchar(50) NOT NULL
-
-
-ALTER TABLE tblCaseHistory
-ALTER COLUMN InventoryNumber nvarchar(50) NOT NULL
-
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.30'
