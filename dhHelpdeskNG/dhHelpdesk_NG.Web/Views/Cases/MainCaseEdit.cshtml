@@ -1,0 +1,13 @@
+﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel
+@using System.Web.Optimization
+@using DH.Helpdesk.Web
+
+@{
+    ViewBag.Title = "View";
+}
+
+<h2>View</h2>
+@Scripts.Render(BundleConfig.ScriptNames.DynamicCase)
+<div class="editmode" id="casePart001">
+    @Html.Partial("Edit", Model)
+</div>

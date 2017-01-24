@@ -569,8 +569,8 @@ namespace DH.Helpdesk.EForm.FormLib.Controllers
             // Hook up so we fetch xmls from share or area specified
             //mainXmlPath = Path.Combine(@"C:\Temp\ect\FormLibContent\Xmls",mainXmlPath);
 
-            if (!string.IsNullOrEmpty(filterContext.RequestContext.HttpContext.Request.QueryString["clearsession"]))
-                Session.Clear();
+            //if (!string.IsNullOrEmpty(filterContext.RequestContext.HttpContext.Request.QueryString["clearsession"]))
+                //Session.Clear();
 
             if (!string.IsNullOrEmpty(filterContext.RequestContext.HttpContext.Request.QueryString["userId"]))
                 FormLibSessions.User = null;

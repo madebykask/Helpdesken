@@ -2,20 +2,21 @@
 @using System.Web.Optimization
 @using DH.Helpdesk.Web
 
-@{ var t = new ViewDataDictionary();
-   t.Add("isJS", "true");
-}
+<div id="caseContainer">
+    @{ var t = new ViewDataDictionary();
+        t.Add("isJS", "true");
+    }
 
-@if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
-{
-    @Styles.Render("~/cases/dynamic-cases")
-}
+    @if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
+    {
+        @Styles.Render("~/cases/dynamic-cases")
+    }
 
-@Scripts.Render("~/bundles/cases/edit")
+    @Scripts.Render("~/bundles/cases/edit")
 
-@section Scripts {
-    <script type="text/javascript">
-        
+    @section Scripts {
+        <script type="text/javascript">
+
         $(document).ready(function () {
 
             CaseInitForm();
@@ -62,47 +63,47 @@
                 });
             };
 
-        
+
 
             var emptyFn = function() {};
 
             $("#case-action-save").click(function (e) {
-               e.preventDefault();               
+               e.preventDefault();
                //$('#case__StateSecondary_Id').removeAttr('disabled');
 
             });
 
             $("#case-action-save-and-close").click(function (e) {
-                e.preventDefault();                
+                e.preventDefault();
                 //$('#case__StateSecondary_Id').removeAttr('disabled');
             });
 
             $("#case-action-save-and-new").click(function (e) {
-                e.preventDefault();                
+                e.preventDefault();
                 //$('#case__StateSecondary_Id').removeAttr('disabled');
             });
-                      
+
             $("#case-action-close").click(function (e) {
                 e.preventDefault();
                 var targetUrl = $(this).attr("href");
                 if ('@Model.CaseLock.LockGUID' != '')
-                    UnLockCase('@Model.CaseLock.LockGUID', targetUrl);               
+                    UnLockCase('@Model.CaseLock.LockGUID', targetUrl);
             });
-            
-             @*$("#case-action-delete").click(function (e) {                               
+
+             @*$("#case-action-delete").click(function (e) {
                 if (hasNotInvoicedArticles()) {
                     messageDialog(dc('@Translation.GetForJS("Du får inte ta bort ett ärende som har invalda men ofakturerade artiklar.")'));
                     return false;
                 }
-                return true;                       
+                return true;
             })*@
-        });                
-     
-        function redirectToUrl(url) {            
+        });
+
+        function redirectToUrl(url) {
             window.location.href = url;
         }
 
-        function MakeAsUnread() {             
+        function MakeAsUnread() {
             $.post('@Url.Content("~/Cases/IsCaseAvailable/")',
                 {
                     caseId: '@Model.CaseLock.CaseId',
@@ -119,23 +120,23 @@
                         });
                     }
                     else {
-                        ShowToastMessage('@Translation.GetForJS("Ärendet kan inte ändras då det är öppet hos en annan användare.")', "error", false);                        
+                        ShowToastMessage('@Translation.GetForJS("Ärendet kan inte ändras då det är öppet hos en annan användare.")', "error", false);
                     }
-                });            
+                });
         };
-        
+
         function UnLockCase(lockGuid, url) {
-            $.post('@Url.Content("~/Cases/UnLockCase/")', { lockGUID: lockGuid }, function (data) {                
+            $.post('@Url.Content("~/Cases/UnLockCase/")', { lockGUID: lockGuid }, function (data) {
                 if (data != "Success")
-                {                    
+                {
                     ShowToastMessage('@Translation.GetForJS("Ett fel inträffade när ärendet skulle låsas upp automatiskt. Var vänlig kontakta systemadministratören.")', "Error");
                 }
-                if (url) {                    
+                if (url) {
                     redirectToUrl(url);
                 }
             });
         };
-                
+
         //HIDE SHOW
         $( ".hidebtn" ).on( "click", function() {
             $( this ).parents( ".notifier-block" ).addClass( "hideshow" );
@@ -169,14 +170,17 @@
         $( ".showbtn" ).on( "click", function() {
             $( this ).parents( ".casehandling-block" ).removeClass( "hideshow" );
         });
-    </script>
-}
+        </script>
+    }
 
-@if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
-{
-    @Scripts.Render(BundleConfig.ScriptNames.DynamicCase)
+    @if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
+    {
+        if (!Model.RefreshTab)
+        {
+            @Scripts.Render(BundleConfig.ScriptNames.DynamicCase)
+        }
 
-    <script type="text/javascript">
+        <script type="text/javascript">
         $(function () {
             @{
 
@@ -236,190 +240,196 @@
             var currentpage = new dhform({ url: '@_url', modal: '@Model.DynamicCase.ViewMode' });
 
         });
-    </script>
- }
+        </script>
+    }
 
-@Html.Partial("_Plupload")
+    @Html.Partial("_Plupload")
 
-@if (Html.MasterModel() != null && SessionFacade.CurrentUser != null && Model != null)
-{
-    using (Html.BeginForm("edit", "cases", null, FormMethod.Post, new { id = "target" }))
-    {    
-        @Html.HiddenFor(m => m.BackUrl) 
-    <div class="secnavs fixed">
-        <div class="pull-left">
-            <ul class="secnav">
-                @if (Model.EditMode == Enums.AccessMode.FullAccess)
-                {
-                    <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), null, null, null, new { @class = "btn save", id = "case-action-save" })</li>
-                    <li>@Html.ActionLink(Translation.Get("Spara och stäng", Enums.TranslationSource.TextTranslation), null, null, new { @class = "btn save-close", id = "case-action-save-and-close" })</li>
-                    <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation), null, null, new { @class = "btn save-new", id = "case-action-save-and-new" })</li>
-                    <li><i id="TemplateQuickButtonIndicator" class="gif-loader" style="display:none">&nbsp;</i></li>
-                    <li class="secspace"></li>
-                    if (SessionFacade.CurrentUser.DeleteCasePermission == 1)
+
+    @if (Html.MasterModel() != null && SessionFacade.CurrentUser != null && Model != null)
+    {
+
+        using (Html.BeginForm("edit", "cases", null, FormMethod.Post, new { id = "target" }))
+        {
+            @Html.HiddenFor(m => m.BackUrl)
+            <div class="secnavs fixed">
+                <div class="pull-left">
+                    <ul class="secnav">
+                        @if (Model.EditMode == Enums.AccessMode.FullAccess)
                     {
-                        <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "DeleteCase",
-                                new { caseId = @Model.case_.Id, customerId = @Model.case_.Customer_Id }, new
-                                {
-                                    @class = "btn caseDeleteDialog",
-                                    id = "case-action-delete",
-                                    deleteDialogText = Translation.Get("Är du säker på att du vill radera detta ärende", Enums.TranslationSource.TextTranslation) + '?'
-                                })</li>
-                    }
-                }
-                @if (string.IsNullOrEmpty(Model.BackUrl))
-                {
-                    <li>@Html.ActionLink(Translation.Get("Stäng", Enums.TranslationSource.TextTranslation), "Index", new { customerId = @Model.case_.Customer_Id }, new { @class = "btn", id = "case-action-close" })</li>
-                }
-                else
-                {
-                    <li><a id="case-action-close" class = "btn" href="@Model.BackUrl">@Translation.Get("Stäng")</a></li>
-                }
-
-                @if (Model.EditMode == Enums.AccessMode.FullAccess)
-                {
-                    <li>
-                        <div id="divActionMenu" class="btn-group">
-                            <button class="btn dropdown-toggle" data-toggle="dropdown" id="btnActionMenu">
-                                @Translation.Get("Åtgärder", Enums.TranslationSource.TextTranslation)
-                                <span class="caret">&nbsp;</span>
-                            </button>
-                            <ul class="dropdown-menu">
+                            <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), null, null, null, new { @class = "btn save", id = "case-action-save" })</li>
+                            <li>@Html.ActionLink(Translation.Get("Spara och stäng", Enums.TranslationSource.TextTranslation), null, null, new { @class = "btn save-close", id = "case-action-save-and-close" })</li>
+                            <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation), null, null, new { @class = "btn save-new", id = "case-action-save-and-new" })</li>
+                            <li><i id="TemplateQuickButtonIndicator" class="gif-loader" style="display:none">&nbsp;</i></li>
+                            <li class="secspace"></li>
+                            if (SessionFacade.CurrentUser.DeleteCasePermission == 1)
+                            {
                                 <li>
-                                    <a href="#" onclick="MakeAsUnread();">
-                                        @Translation.Get("Markera ärendet som oläst", Enums.TranslationSource.TextTranslation)
-                                    </a>
+                                    @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "DeleteCase",
+                                    new { caseId = @Model.case_.Id, customerId = @Model.case_.Customer_Id }, new
+                                    {
+                                        @class = "btn caseDeleteDialog",
+                                        id = "case-action-delete",
+                                        deleteDialogText = Translation.Get("Är du säker på att du vill radera detta ärende", Enums.TranslationSource.TextTranslation) + '?'
+                                    })
                                 </li>
-                                @if (!Model.IsItChildCase() && SessionFacade.CurrentUser.CreateSubCasePermission == 1)
-                                {
-                                    <li>@Html.ActionLink(Translation.Get("Skapa underärende"), "NewChildCase", new { parentCaseId = Model.case_.Id })</li>
-                                }
-                                @if (SessionFacade.CurrentUser.ActivateCasePermission == 1 && Model.case_.FinishingDate.HasValue
-                            && (!Model.IsItChildCase() || (Model.IsItChildCase() && !Model.ParentCaseInfo.IsCaseClosed)))
-                                {
-                                    <li>@Html.ActionLink(Translation.Get("Aktivera"), "Activate", "Cases", new { id = Model.case_.Id, backUrl = Model.BackUrl }, new { @class = "btn" })</li>
-                                }
+                            }
+                        }
+                        @if (string.IsNullOrEmpty(Model.BackUrl))
+                    {
+                            <li>@Html.ActionLink(Translation.Get("Stäng", Enums.TranslationSource.TextTranslation), "Index", new { customerId = @Model.case_.Customer_Id }, new { @class = "btn", id = "case-action-close" })</li>
+                        }
+                        else
+                        {
+                            <li><a id="case-action-close" class="btn" href="@Model.BackUrl">@Translation.Get("Stäng")</a></li>
+                        }
 
-                                @if (SessionFacade.CurrentUser.MoveCasePermission == 1)
-                                {
-                                    <li><a data-toggle="modal" href="#divMoveCase">@Translation.Get("Flytta", Enums.TranslationSource.TextTranslation)</a></li>
-                                }
-                                @if (SessionFacade.CurrentUser.CopyCasePermission == 1)
-                                {
-                                    <li><a data-toggle="modal" href="#divCopyCase">@Translation.Get("Kopiera", Enums.TranslationSource.TextTranslation)</a></li>
-                                }
-
-                                @if (SessionFacade.CurrentUser.FollowUpPermission == 1)
-                                {
-                                    if (Model.IsFollowUp)
-                                    {
-                                        <li><a href="/cases/followupRemove/@Model.case_.Id" >@Translation.Get("Ta bort uppföljning", Enums.TranslationSource.TextTranslation)</a></li>
-                                    }
-                                    else
-                                    {
-                                        <li><a href="/cases/followup/@Model.case_.Id" >@Translation.Get("Följ upp", Enums.TranslationSource.TextTranslation)</a></li>
-                                    }
-                                }
-
-                                @if (Model.Languages != null && Model.Languages.Where(l => l.IsActive).ToList().Count > 1)
-                                {
-                                    var curLanguage = (Model.case_.Id == 0 ? SessionFacade.CurrentLanguageId : Model.case_.RegLanguage_Id);
-                                    <li class="dropdown-submenu">
-                                        <a href="#">
-                                            @Translation.Get("Språk för E-mail")
-                                        </a>
-                                        <ul class="dropdown-menu">
-                                            @foreach (var lang in Model.Languages.Where(l => l.IsActive).ToList())
-                                            {
-                                                var langNameId = "langItem" + lang.Id;
-                                                <li>
-
-                                                    <a id="@langNameId" class="langItem" href="#" onclick="ChangeCaseLanguageTo(@lang.Id,true);">@Translation.Get(lang.Name)
-                                                    @if (lang.Id == curLanguage)
-                                                    {
-                                                        <i class='icon-ok'></i>
-                                                    }
-                                                </a>
-                                            </li>
-                                            }
-                                        </ul>
-                                    </li>
-                                }
-                            </ul>
-                        </div>
-                    </li>
-
-                    <li id="btnCaseTemplate">
-                        @Html.Partial("_CaseTemplateTree", Model.CaseTemplateTreeButton, t)
-                    </li>
-
-                }
-                else
-                {
-                    if (Model.EditMode != Enums.AccessMode.FullAccess && SessionFacade.CurrentUser.FollowUpPermission == 1)
+                        @if (Model.EditMode == Enums.AccessMode.FullAccess)
                     {
                             <li>
                                 <div id="divActionMenu" class="btn-group">
                                     <button class="btn dropdown-toggle" data-toggle="dropdown" id="btnActionMenu">
-                                        @Translation.GetCoreTextTranslation("Åtgärder")
+                                        @Translation.Get("Åtgärder", Enums.TranslationSource.TextTranslation)
                                         <span class="caret">&nbsp;</span>
                                     </button>
                                     <ul class="dropdown-menu">
-                                        @if (Model.IsFollowUp)
+                                        <li>
+                                            <a href="#" onclick="MakeAsUnread();">
+                                                @Translation.Get("Markera ärendet som oläst", Enums.TranslationSource.TextTranslation)
+                                            </a>
+                                        </li>
+                                        @if (!Model.IsItChildCase() && SessionFacade.CurrentUser.CreateSubCasePermission == 1)
                                         {
-                                        <li><a href="/cases/followupRemove/@Model.case_.Id">@Translation.GetCoreTextTranslation("Ta bort uppföljning")</a></li>
+                                            <li>@Html.ActionLink(Translation.Get("Skapa underärende"), "NewChildCase", new { parentCaseId = Model.case_.Id })</li>
                                         }
-                                        else
+                                        @if (SessionFacade.CurrentUser.ActivateCasePermission == 1 && Model.case_.FinishingDate.HasValue
+&& (!Model.IsItChildCase() || (Model.IsItChildCase() && !Model.ParentCaseInfo.IsCaseClosed)))
                                         {
-                                        <li><a href="/cases/followup/@Model.case_.Id">@Translation.GetCoreTextTranslation("Följ upp")</a></li>
+                                            <li>@Html.ActionLink(Translation.Get("Aktivera"), "Activate", "Cases", new { id = Model.case_.Id, backUrl = Model.BackUrl }, new { @class = "btn" })</li>
+                                        }
+
+                                        @if (SessionFacade.CurrentUser.MoveCasePermission == 1)
+                                        {
+                                            <li><a data-toggle="modal" href="#divMoveCase">@Translation.Get("Flytta", Enums.TranslationSource.TextTranslation)</a></li>
+                                        }
+                                        @if (SessionFacade.CurrentUser.CopyCasePermission == 1)
+                                        {
+                                            <li><a data-toggle="modal" href="#divCopyCase">@Translation.Get("Kopiera", Enums.TranslationSource.TextTranslation)</a></li>
+                                        }
+
+                                        @if (SessionFacade.CurrentUser.FollowUpPermission == 1)
+                                        {
+                                            if (Model.IsFollowUp)
+                                            {
+                                                <li><a href="/cases/followupRemove/@Model.case_.Id">@Translation.Get("Ta bort uppföljning", Enums.TranslationSource.TextTranslation)</a></li>
+                                            }
+                                            else
+                                            {
+                                                <li><a href="/cases/followup/@Model.case_.Id">@Translation.Get("Följ upp", Enums.TranslationSource.TextTranslation)</a></li>
+                                            }
+                                        }
+
+                                        @if (Model.Languages != null && Model.Languages.Where(l => l.IsActive).ToList().Count > 1)
+                                        {
+                                            var curLanguage = (Model.case_.Id == 0 ? SessionFacade.CurrentLanguageId : Model.case_.RegLanguage_Id);
+                                            <li class="dropdown-submenu">
+                                                <a href="#">
+                                                    @Translation.Get("Språk för E-mail")
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    @foreach (var lang in Model.Languages.Where(l => l.IsActive).ToList())
+                                                    {
+                                                        var langNameId = "langItem" + lang.Id;
+                                                        <li>
+
+                                                            <a id="@langNameId" class="langItem" href="#" onclick="ChangeCaseLanguageTo(@lang.Id,true);">
+                                                                @Translation.Get(lang.Name)
+                                                                @if (lang.Id == curLanguage)
+                                                                {
+                                                                    <i class='icon-ok'></i>
+                                                                }
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            </li>
                                         }
                                     </ul>
                                 </div>
                             </li>
-                    }
 
-                    if (SessionFacade.CurrentUser.ActivateCasePermission == 1 && Model.case_.FinishingDate.HasValue
-                        && (!Model.IsItChildCase() || (Model.IsItChildCase() && !Model.ParentCaseInfo.IsCaseClosed)))
+                            <li id="btnCaseTemplate">
+                                @Html.Partial("_CaseTemplateTree", Model.CaseTemplateTreeButton, t)
+                            </li>
+
+                        }
+                        else
+                        {
+                            if (Model.EditMode != Enums.AccessMode.FullAccess && SessionFacade.CurrentUser.FollowUpPermission == 1)
+                            {
+                                <li>
+                                    <div id="divActionMenu" class="btn-group">
+                                        <button class="btn dropdown-toggle" data-toggle="dropdown" id="btnActionMenu">
+                                            @Translation.GetCoreTextTranslation("Åtgärder")
+                                            <span class="caret">&nbsp;</span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            @if (Model.IsFollowUp)
+                                            {
+                                                <li><a href="/cases/followupRemove/@Model.case_.Id">@Translation.GetCoreTextTranslation("Ta bort uppföljning")</a></li>
+                                            }
+                                            else
+                                            {
+                                                <li><a href="/cases/followup/@Model.case_.Id">@Translation.GetCoreTextTranslation("Följ upp")</a></li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </li>
+                            }
+
+                            if (SessionFacade.CurrentUser.ActivateCasePermission == 1 && Model.case_.FinishingDate.HasValue
+                                && (!Model.IsItChildCase() || (Model.IsItChildCase() && !Model.ParentCaseInfo.IsCaseClosed)))
+                            {
+                                <li>@Html.ActionLink(Translation.Get("Aktivera"), "Activate", "Cases", new { id = Model.case_.Id, backUrl = Model.BackUrl }, new { @class = "btn" })</li>
+                            }
+
+                        }
+                    </ul>
+                </div>
+                <div class="pull-right">
+                    <ul class="secnav">
+                        @if (Model.CaseTemplateButtons != null && Model.CaseTemplateButtons.Any())
                     {
-                        <li>@Html.ActionLink(Translation.Get("Aktivera"), "Activate", "Cases", new { id = Model.case_.Id, backUrl = Model.BackUrl }, new { @class = "btn" })</li>
-                    }
+                        foreach (var button in Model.CaseTemplateButtons)
+                        {
+                                <li><a href="#" onclick='LoadTemplate("@button.CaseTemplateId.ToString()")' title="@button.CaseTemplateName" class="btn templateQuickButton" rel="tooltip" data-placement="bottom" data-original-title="@button.CaseTemplateName"> @button.ButtonNumber </a></li>
+                            }
+                        }
 
-                }
-            </ul>
-        </div>
-        <div class="pull-right">
-            <ul class="secnav">
-                @if (Model.CaseTemplateButtons != null && Model.CaseTemplateButtons.Any())
-                {                    
-                    foreach (var button in Model.CaseTemplateButtons)
+                        @if (Model.case_.Id > 0)
                     {
-                        <li><a href="#" onclick='LoadTemplate("@button.CaseTemplateId.ToString()")' title="@button.CaseTemplateName" class="btn templateQuickButton" rel="tooltip" data-placement="bottom" data-original-title="@button.CaseTemplateName"> @button.ButtonNumber </a></li>
-                    }
-                }
+                            <li><a title="@Translation.Get("Skriv ut")" class="btn print-case"><i class="icon-file"></i></a></li>
+                        }
 
-                @if (Model.case_.Id > 0)
-                {
-                   <li><a title="@Translation.Get("Skriv ut")" class="btn print-case"><i class="icon-file"></i></a></li>
-                }
-                
-                @if (Html.MasterModel().CustomerSetting.ModuleInventory > 0)
-                {                                                            
-                    <li><a href="#" title="@Translation.Get("Visa inventarie", Enums.TranslationSource.TextTranslation)" class="btn show-inventory"><i class="icon-th-large"></i></a></li>
-                }
-                <li><a onclick="UnLockCase('@Model.CaseLock.LockGUID')" href="@Model.case_.Id.GetUrlForNavigationBetweenCases()" title="@Translation.Get("Föregående ärende", Enums.TranslationSource.TextTranslation)" class="btn previous-case"><i class="icon-chevron-left"></i></a></li>
-                <li><a onclick="UnLockCase('@Model.CaseLock.LockGUID')" href="@Model.case_.Id.GetUrlForNavigationBetweenCases(true)"  title="@Translation.Get("Nästa ärende", Enums.TranslationSource.TextTranslation)" class="btn next-case"><i class="icon-chevron-right"></i></a></li>
-            </ul>
+                        @if (Html.MasterModel().CustomerSetting.ModuleInventory > 0)
+                    {
+                            <li><a href="#" title="@Translation.Get("Visa inventarie", Enums.TranslationSource.TextTranslation)" class="btn show-inventory"><i class="icon-th-large"></i></a></li>
+                        }
+                        <li><a onclick="UnLockCase('@Model.CaseLock.LockGUID')" href="@Model.case_.Id.GetUrlForNavigationBetweenCases()" title="@Translation.Get("Föregående ärende", Enums.TranslationSource.TextTranslation)" class="btn previous-case"><i class="icon-chevron-left"></i></a></li>
+                        <li><a onclick="UnLockCase('@Model.CaseLock.LockGUID')" href="@Model.case_.Id.GetUrlForNavigationBetweenCases(true)" title="@Translation.Get("Nästa ärende", Enums.TranslationSource.TextTranslation)" class="btn next-case"><i class="icon-chevron-right"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="editmode">
+                @Html.Partial("_Input", Model)
+            </div>
+        }
+        <div id="divMoveCase" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
+            @Html.Partial("_MoveCase", Model)
         </div>
-    </div>
-    
-    <div class="editmode">
-        @Html.Partial("_Input", Model)
-    </div>
+        <div id="divCopyCase" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
+            @Html.Partial("_CopyCase", Model)
+        </div>
     }
-    <div id="divMoveCase" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
-        @Html.Partial("_MoveCase", Model)
-    </div>    
-    <div id="divCopyCase" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
-        @Html.Partial("_CopyCase", Model)
-    </div>    
-}
+</div>

@@ -1312,7 +1312,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetCaseInfo(int caseId)
+        public PartialViewResult GetCaseInfo(int caseId)
         {
             CaseInputViewModel m = null;
 
@@ -1336,8 +1336,8 @@ namespace DH.Helpdesk.Web.Controllers
                     this.InitFilter(currentCase.Customer_Id, false, CasesCustomFilter.None, false, true);
 
                 // User has not access to case
-                if (m.EditMode == Enums.AccessMode.NoAccess)
-                    return this.RedirectToAction("index", "home");
+                //if (m.EditMode == Enums.AccessMode.NoAccess)
+                  //  return this.RedirectToAction("index", "home");
 
                 
                 var moduleCaseInvoice = this._settingService.GetCustomerSetting(m.case_.Customer_Id).ModuleCaseInvoice;
@@ -1360,8 +1360,9 @@ namespace DH.Helpdesk.Web.Controllers
                 m.CaseMailSetting.DontSendMailToNotifier = true;
             else
                 m.CaseMailSetting.DontSendMailToNotifier = false;
-                        
-            return View("Edit", m);
+
+            m.RefreshTab = true;
+            return PartialView("Edit", m);
         }
 
         #endregion
@@ -3787,6 +3788,7 @@ namespace DH.Helpdesk.Web.Controllers
             int? parentCaseId = null)
         {
             var m = new CaseInputViewModel ();
+            m.RefreshTab = false;
             m.BackUrl = backUrl;
             m.CanGetRelatedCases = SessionFacade.CurrentUser.IsAdministrator();
             SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;

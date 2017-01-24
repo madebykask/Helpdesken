@@ -2696,7 +2696,7 @@ var init = function () {
     InitIntegration();
 
     //Sort by text
-    $('.search-select').selectize({sortField: [{ field: 'text' }]});
+    //$('.search-select').selectize({sortField: [{ field: 'text' }]});
   
     $('.typeahead').typeahead(typeAheadOptions);
     $('#Co-WorkerGlobalviewID').typeahead(globalTypeAheadOptions);

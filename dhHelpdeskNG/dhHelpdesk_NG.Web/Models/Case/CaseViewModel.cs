@@ -242,6 +242,8 @@
 		public List<ExternalInvoiceModel> ExternalInvoices { get; set; }
 
         public string FollowerUsers { get; set; }
+
+        public bool RefreshTab { get; set; }
 	}
 
     public class CaseIndexViewModel

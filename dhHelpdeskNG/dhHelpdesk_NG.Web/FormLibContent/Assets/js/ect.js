@@ -2696,8 +2696,13 @@ var init = function () {
     InitIntegration();
 
     //Sort by text
-    $('.search-select').selectize({sortField: [{ field: 'text' }]});
-  
+    //$('.search-select').selectize({sortField: [{ field: 'text' }]});
+    //$('.search-select').selectize();
+    //$(".search-select").chosen({
+    //    width: "300px",
+    //    'placeholder_text_multiple': "Test",
+    //    'no_results_text': 'nothing'
+    //});
     $('.typeahead').typeahead(typeAheadOptions);
     $('#Co-WorkerGlobalviewID').typeahead(globalTypeAheadOptions);
     $('#IKEAEmailAddress').typeahead(globalEmailTypeAheadOptions);
