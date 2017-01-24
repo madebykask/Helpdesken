@@ -759,7 +759,7 @@
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>
                                         <td>
-                                            @Html.TextBoxFor(model => model.CaseSolution.InventoryNumber, new { id = "InventoryNumber", maxlength = "20", @class = "acceptRules", standardId = GlobalEnums.TranslationCaseFields.InventoryNumber.ToString() })
+                                            @Html.TextBoxFor(model => model.CaseSolution.InventoryNumber, new { id = "InventoryNumber", maxlength = "50", @class = "acceptRules", standardId = GlobalEnums.TranslationCaseFields.InventoryNumber.ToString() })
                                         </td>
                                         <td>
                                             <table>

@@ -326,8 +326,9 @@
                                                     <span class="mandatorystar">*</span>
                                                 }
                                             </label>
+                                            
                                             <div class="col-md-9">
-                                                @Html.TextBoxFor(i => Model.NewCase.InventoryNumber, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.InventoryNumber.ToString() })
+                                                @Html.TextBoxFor(i => Model.NewCase.InventoryNumber, new { @class = "hasAttribute", maxlength = "50", standardName = GlobalEnums.TranslationCaseFields.InventoryNumber.ToString() })
                                             </div>
                                         </div>
                                     }
