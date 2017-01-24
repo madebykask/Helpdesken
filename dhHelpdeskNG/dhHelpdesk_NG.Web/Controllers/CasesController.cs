@@ -607,6 +607,15 @@ namespace DH.Helpdesk.Web.Controllers
 			f.CaseClosingReasonFilter = frm.ReturnFormValue(CaseFilterFields.ClosingReasonNameAttribute).ReturnCustomerUserValue();
 			f.SearchInMyCasesOnly = frm.IsFormValueTrue("SearchInMyCasesOnly");
 			f.IsConnectToParent = frm.IsFormValueTrue(CaseFilterFields.IsConnectToParent);
+            if (f.IsConnectToParent)
+            {
+                var id = frm.ReturnFormValue(CaseFilterFields.CurrentCaseId);
+                int currentCaseId;
+                if (!string.IsNullOrEmpty(id) && int.TryParse(id, out currentCaseId))
+                {
+                    f.CurrentCaseId = currentCaseId;
+                }
+            }
 
 			f.CaseProgress = frm.ReturnFormValue(CaseFilterFields.FilterCaseProgressNameAttribute);
 			f.CaseFilterFavorite = frm.ReturnFormValue(CaseFilterFields.CaseFilterFavoriteNameAttribute);

@@ -96,6 +96,7 @@
                             params.push({ name: "start", value: data.start });
                             params.push({ name: "length", value: data.length });
                             params.push({ name: "IsConnectToParent", value: true });
+                            params.push({ name: "currentCaseId", value: childId });
                             params.push({
                                 name: "order",
                                 value: data.order.length === 1 ? data.columns[data.order[0].column].data : ""

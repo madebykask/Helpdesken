@@ -95,6 +95,9 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
         public bool IsConnectToParent { get; set; }
 
+        public int? CurrentCaseId { get; set; }
+
+
         public CaseSearchFilter Copy(CaseSearchFilter o)
         {
             var r = new CaseSearchFilter();
@@ -146,6 +149,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             r.MaxTextCharacters = o.MaxTextCharacters;
             r.PageInfo = o.PageInfo;
             r.IsConnectToParent = o.IsConnectToParent;
+            r.CurrentCaseId = o.CurrentCaseId;
 
             return r;
         }

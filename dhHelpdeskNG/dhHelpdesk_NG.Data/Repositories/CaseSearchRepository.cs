@@ -1288,7 +1288,9 @@ namespace DH.Helpdesk.Dal.Repositories
 		    if (f.IsConnectToParent)
 		    {
                 sb.AppendFormat(" AND tblCase.Id NOT IN (select Descendant_Id From tblParentChildCaseRelations) ");
-            }
+		        if (f.CurrentCaseId.HasValue)
+		            sb.AppendFormat(" AND tblCase.Id != {0} ", f.CurrentCaseId);
+		    }
 
 			if (caseIds != null && caseIds.Any())
 			{
