@@ -670,7 +670,7 @@ namespace DH.Helpdesk.Web.Controllers
 
 			CaseSearchModel sm;
 			if (SessionFacade.CurrentCaseSearch == null
-				|| SessionFacade.CurrentCaseSearch.caseSearchFilter.CustomerId != f.CustomerId)
+				|| SessionFacade.CurrentCaseSearch.caseSearchFilter.CustomerId != f.CustomerId || f.IsConnectToParent)
 			{
 				sm = InitCaseSearchModel(f.CustomerId, f.UserId);
 			}
@@ -788,7 +788,8 @@ namespace DH.Helpdesk.Web.Controllers
 					}
 			}
 
-			SessionFacade.CurrentCaseSearch = sm;
+            if (!f.IsConnectToParent)
+                SessionFacade.CurrentCaseSearch = sm;
 			#endregion
 
 			var customerSettings = _settingService.GetCustomerSetting(f.CustomerId);
