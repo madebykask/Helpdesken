@@ -2910,8 +2910,12 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             caseMailSetting.CustomeMailFromAddress = mailSenders;
+
+            //get logged in user
+            var currentLoggedInUser = this._userService.GetUser(SessionFacade.CurrentUser.Id);
+
             // send emails
-            this._caseService.SendCaseEmail(case_.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase, caseLog, newLogFiles);
+            this._caseService.SendCaseEmail(case_.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase, caseLog, newLogFiles, currentLoggedInUser);
 
             var actions = this._caseService.CheckBusinessRules(BREventType.OnSaveCase, case_, oldCase);
             if (actions.Any())

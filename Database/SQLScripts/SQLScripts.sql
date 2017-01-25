@@ -1512,7 +1512,7 @@ GO
 
 -- New field in tblUsers
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'SettingForNoMail' and sysobjects.name = N'tblUsers')
-	ALTER TABLE tblUsers ADD SettingForNoMail int Default(0) NOT NULL
+	ALTER TABLE tblUsers ADD SettingForNoMail int Default(1) NOT NULL
 GO
 
 --New length in tblSettings

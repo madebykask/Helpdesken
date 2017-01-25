@@ -96,7 +96,7 @@ namespace DH.Helpdesk.Services.Services
             ExtraFieldCaseHistory extraField = null);
 
         void SendCaseEmail(int caseId, CaseMailSetting cms, int caseHistoryId, string basePath, TimeZoneInfo userTimeZone,
-                           Case oldCase = null, CaseLog log = null, List<CaseFileDto> logFiles = null);
+                           Case oldCase = null, CaseLog log = null, List<CaseFileDto> logFiles = null, User currentLoggedInUser = null);
 
         List<BusinessRuleActionModel> CheckBusinessRules(BREventType occurredEvent, Case currentCase, Case oldCase = null);
 
@@ -1297,7 +1297,8 @@ namespace DH.Helpdesk.Services.Services
             TimeZoneInfo userTimeZone,             
             Case oldCase = null, 
             CaseLog log = null, 
-            List<CaseFileDto> logFiles = null)
+            List<CaseFileDto> logFiles = null,
+            User currentLoggedInUser = null)
         {
             //get sender email adress
             var helpdeskMailFromAdress = string.Empty;
@@ -1544,7 +1545,12 @@ namespace DH.Helpdesk.Services.Services
             {
                 if (newCase.Administrator.AllocateCaseMail == 1 && this._emailService.IsValidEmail(newCase.Administrator.Email))
                 {
-                    this.SendTemplateEmail(GlobalEnums.MailTemplates.AssignedCaseToUser, newCase, log, caseHistoryId, cms, newCase.Administrator.Email, userTimeZone);
+                    if (currentLoggedInUser.SettingForNoMail == 1 || (currentLoggedInUser.Id == newCase.Performer_User_Id && currentLoggedInUser.SettingForNoMail == 1) 
+                                || (currentLoggedInUser.Id != newCase.Performer_User_Id && currentLoggedInUser.SettingForNoMail == 0))
+                    {
+                        this.SendTemplateEmail(GlobalEnums.MailTemplates.AssignedCaseToUser, newCase, log, caseHistoryId, cms, newCase.Administrator.Email, userTimeZone);
+                    }
+                    
                 }
 
                 // send sms to tblCase.Performer_User_Id 
