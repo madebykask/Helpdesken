@@ -1499,6 +1499,33 @@ begin
 end
 GO
 
+--tblComputerType
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ComputerTypeGUID' and sysobjects.name = N'tblComputerType')
+begin
+		Alter table tblComputerType
+		Alter Column ComputerTypeGUID uniqueIdentifier NOT NULL 
+
+		if not exists(select *
+					  from sys.all_columns c
+					  join sys.tables t on t.object_id = c.object_id
+					  join sys.schemas s on s.schema_id = t.schema_id
+					  join sys.default_constraints d on c.default_object_id = d.object_id
+					  where t.name = 'tblComputerType'
+					  and c.name = 'ComputerTypeGUID'
+					  and s.name = 'dbo'
+					  and d.name = 'DF_ComputerTypeGUID')
+		begin
+			Alter table tblComputerType
+			Add constraint DF_ComputerTypeGUID default (newid()) For ComputerTypeGUID		
+		end		
+end
+else
+begin
+	Alter table tblComputerType
+	Add ComputerTypeGUID uniqueIdentifier NOT NULL default (newid())
+end
+GO
+
 
  --New EMailIdentifier for ProductArea
 UPDATE tblCaseFieldSettings SET EMailIdentifier = '[#28]'
@@ -1519,6 +1546,14 @@ GO
 ALTER TABLE tblSettings
 ALTER COLUMN LDAPBase nvarchar(200) NOT NULL
 
+
+
+--tblComputerType
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'InventoryType_Id' and sysobjects.name = N'tblComputerType')
+	begin
+		ALTER TABLE tblComputerType ADD InventoryType_Id int NULL
+	end
+GO
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.30'
