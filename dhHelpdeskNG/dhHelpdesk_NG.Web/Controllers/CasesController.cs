@@ -1312,6 +1312,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpGet]
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
         public PartialViewResult GetCaseInfo(int caseId)
         {
             CaseInputViewModel m = null;
@@ -1362,7 +1363,8 @@ namespace DH.Helpdesk.Web.Controllers
                 m.CaseMailSetting.DontSendMailToNotifier = false;
 
             m.RefreshTab = true;
-            return PartialView("Edit", m);
+            ModelState.Clear();
+            return PartialView("_Input", m);
         }
 
         #endregion

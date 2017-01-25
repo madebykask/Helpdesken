@@ -175,11 +175,8 @@
 
     @if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
     {
-        if (!Model.RefreshTab)
-        {
-            @Scripts.Render(BundleConfig.ScriptNames.DynamicCase)
-        }
-
+        @Scripts.Render(BundleConfig.ScriptNames.DynamicCase)
+       
         <script type="text/javascript">
         $(function () {
             @{
@@ -420,9 +417,9 @@
                     </ul>
                 </div>
             </div>
-
-            <div class="editmode">
-                @Html.Partial("_Input", Model)
+            
+            <div id="casePart001" class="editmode">                              
+                @Html.Partial("_Input", Model)                         
             </div>
         }
         <div id="divMoveCase" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">

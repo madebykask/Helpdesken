@@ -95,6 +95,7 @@
 
 @Scripts.Render("~/bundles/cases/_input")
 
+
 <script type="text/javascript">
     function CalcSLA()
                 {
@@ -2680,6 +2681,8 @@
             window.scrollTo(0, 0);
         });
 
+            
+        
         tab.click(function(ev) {
 
             if (ev.target.className.indexOf("case") >= 0) {
@@ -2695,9 +2698,8 @@
                     type: "GET",
                     data: { year: Date.now, caseId: '@Model.case_.Id' }
                 })
-                .done(function(partialViewResult) {
-                    $('#casePart001').html('');
-                    $("#casePart001").html(partialViewResult);
+                .done(function(partialViewResult) {                    
+                    $("#casePart001").html(partialViewResult);                                       
                 });
                 //location.reload(true);
             }
@@ -2718,6 +2720,7 @@
         var scope = dhHelpdesk.cases.scope(window.parameters.casesScopeInitParameters);
     });
 
+  
     //$('#divCase__WatchDate').datepicker({
     //    format: 'yyyy-mm-dd',
     //    weekStart: 1,
