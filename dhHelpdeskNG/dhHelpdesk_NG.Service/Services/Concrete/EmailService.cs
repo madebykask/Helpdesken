@@ -1,16 +1,14 @@
-﻿using DH.Helpdesk.Services.Services.Feedback;
+﻿using DH.Helpdesk.BusinessData.Enums.Email;
 
 namespace DH.Helpdesk.Services.Services.Concrete
 {
     using System;
     using System.Collections.Generic;
-    using System.Configuration;
     using System.Net.Mail;
     using System.Text.RegularExpressions;
     using DH.Helpdesk.BusinessData.Models.Email;
     using DH.Helpdesk.BusinessData.Models.MailTemplates;
     using DH.Helpdesk.Common.Tools;
-    using DH.Helpdesk.Services.Infrastructure;
     using System.Threading;
     using System.Globalization;
     using System.Net;
@@ -95,7 +93,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
             return res;
         }
 
-        public EmailResponse SendEmail(EmailItem item, EmailSettings emailsettings, string siteSelfService = "", string siteHelpdesk = "", bool isCcMail = false)
+        public EmailResponse SendEmail(EmailItem item, EmailSettings emailsettings, string siteSelfService = "", string siteHelpdesk = "", EmailType emailType = EmailType.ToMail)
         {
             return this.SendEmail(
                                 item.From,
@@ -108,7 +106,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
                                 item.IsHighPriority,
                                 item.Files,
                                 siteSelfService, siteHelpdesk,
-                                isCcMail);
+                                emailType);
         }
 
         public EmailResponse SendEmail(
@@ -123,7 +121,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
             List<string> files = null,
             string siteSelfService = "",
             string siteHelpdesk = "",
-            bool isCcMail = false)
+            EmailType emailType = EmailType.ToMail)
         {
             EmailResponse res = emailsettings.Response;
             var sendTime = DateTime.Now;
@@ -164,41 +162,25 @@ namespace DH.Helpdesk.Services.Services.Concrete
                         if (highPriority)
                             msg.Priority = MailPriority.High;
 
-                        if (isCcMail)
+                        if (IsValidEmail(to))
                         {
-                            if (IsValidEmail(to))
-                                msg.CC.Add(new MailAddress(to));
-                        }
-                        else
-                        {
-                            string[] strTo = to.Replace(" ", string.Empty).Replace(Environment.NewLine, string.Empty).Split(new Char[] {';'});
-                            for (int i = 0; i < strTo.Length; i++)
+                            switch (emailType)
                             {
-                                if (strTo[i].Length > 2)
-                                {
-                                    switch (strTo[i].Substring(0, 3))
-                                    {
-                                        case "cc:":
-                                            string cc = strTo[i].Substring(3);
-                                            if (IsValidEmail(cc))
-                                                msg.CC.Add(new MailAddress(cc));
-                                            break;
-                                        case "bcc":
-                                            string bcc = strTo[i].Substring(4);
-                                            if (IsValidEmail(bcc))
-                                                msg.Bcc.Add(new MailAddress(bcc));
-                                            break;
-                                        case "to:":
-                                            string to_ = strTo[i].Substring(3);
-                                            if (IsValidEmail(to_))
-                                                msg.To.Add(new MailAddress(to_));
-                                            break;
-                                        default:
-                                            if (IsValidEmail(strTo[i]))
-                                                msg.To.Add(new MailAddress(strTo[i]));
-                                            break;
-                                    }
-                                }
+                                case EmailType.ToMail:
+                                    msg.To.Add(new MailAddress(to));
+                                    break;
+
+                                case EmailType.CcMail:
+                                    msg.CC.Add(new MailAddress(to));
+                                    break;
+
+                                case EmailType.BccMail:
+                                    msg.Bcc.Add(new MailAddress(to));
+                                    break;
+
+                                default:
+                                    msg.To.Add(new MailAddress(to));
+                                    break;
                             }
                         }
 

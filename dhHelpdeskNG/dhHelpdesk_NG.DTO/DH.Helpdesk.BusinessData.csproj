@@ -121,6 +121,7 @@
     <Compile Include="Enums\Changes\StepStatus.cs" />
     <Compile Include="Enums\MailTemplates\FeedbackTemplate.cs" />
     <Compile Include="Enums\MailTemplates\QuestionnaireTemplates.cs" />
+    <Compile Include="Enums\Email\EmailType.cs" />
     <Compile Include="Enums\Notifiers\AddressField.cs" />
     <Compile Include="Enums\Notifiers\GeneralField.cs" />
     <Compile Include="Enums\Notifiers\NotifierStatus.cs" />
