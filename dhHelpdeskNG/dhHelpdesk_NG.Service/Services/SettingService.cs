@@ -118,7 +118,7 @@ namespace DH.Helpdesk.Services.Services
             var res = this.settingRepository.GetCustomerSetting(id);
 
 			//TODO default values. move to mapper
-	        if (res.MinRegWorkingTime == 0)
+	        if (res != null && res.MinRegWorkingTime == 0)
 		        res.MinRegWorkingTime = 30;
 			return res;
         }
