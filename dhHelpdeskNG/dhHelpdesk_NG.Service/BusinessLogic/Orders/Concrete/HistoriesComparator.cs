@@ -341,7 +341,7 @@
         {
             if (firstValue.HasValue)
             {
-                var difference = new FieldDifference(settings.Caption, null, firstUserName.GetFullName());
+                var difference = new FieldDifference(settings.Caption, null, firstUserName.GetReversedFullName());
                 differencies.Add(difference);
             }
         }

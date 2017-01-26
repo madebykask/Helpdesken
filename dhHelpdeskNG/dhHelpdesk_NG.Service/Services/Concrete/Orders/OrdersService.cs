@@ -1,4 +1,7 @@
-﻿using DH.Helpdesk.Services.BusinessLogic.Specifications.Case;
+﻿using DH.Helpdesk.BusinessData.Enums.Orders.FieldNames;
+using DH.Helpdesk.BusinessData.Models.Orders.Index.OrderOverview;
+using DH.Helpdesk.BusinessData.Models.Shared.Input;
+using DH.Helpdesk.Services.BusinessLogic.Specifications.Case;
 
 namespace DH.Helpdesk.Services.Services.Concrete.Orders
 {
@@ -240,9 +243,9 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
 				var caseEntities = caseRep.GetAll().Where(c => caseNumbers.Contains(c.CaseNumber)).ToList();
 			    var orderFieldTypes = orderFieldTypesRep.GetAll().GetByType(parameters.OrderTypeId).ActiveOnly().ToList();
 
-				var orderData = overviews.MapToFullOverviews(orderTypes, caseEntities, orderFieldTypes);
+				var orderData = Sort(overviews.MapToFullOverviews(orderTypes, caseEntities, orderFieldTypes), parameters.SortField);
 
-				var searchResult = new SearchResult(orderData.Count(), orderData);
+                var searchResult = new SearchResult(orderData.Count(), orderData);
 				return new SearchResponse(settings, searchResult);
 			}
 		}
@@ -736,6 +739,652 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                                     employmentTypes,
                                     regions,
                                     accountTypes);
-        }        
+        }
+
+        private FullOrderOverview[] Sort(FullOrderOverview[] items, SortField sort)
+        {
+            var orderSort = items.OrderBy(o => o.OrderType);
+
+            if (sort == null) return orderSort.ToArray();
+
+            switch (sort.SortBy)
+            {
+                case SortBy.Ascending:
+                    switch (sort.Name)
+                    {
+                        // Delivery
+                        case DeliveryFieldNames.DeliveryDate:
+                            orderSort = orderSort.ThenBy(o => o.Delivery?.DeliveryDate);
+                            break;
+                        case DeliveryFieldNames.InstallDate:
+                            orderSort = orderSort.ThenBy(o => o.Delivery?.InstallDate);
+                            break;
+                        case DeliveryFieldNames.DeliveryDepartment:
+                            orderSort = orderSort.ThenBy(o => o.Delivery?.DeliveryDepartment);
+                            break;
+                        case DeliveryFieldNames.DeliveryOu:
+                            orderSort = orderSort.ThenBy(o => o.Delivery?.DeliveryOu);
+                            break;
+                        case DeliveryFieldNames.DeliveryAddress:
+                            orderSort = orderSort.ThenBy(o => o.Delivery?.DeliveryAddress);
+                            break;
+                        case DeliveryFieldNames.DeliveryPostalCode:
+                            orderSort = orderSort.ThenBy(o => o.Delivery?.DeliveryPostalCode);
+                            break;
+                        case DeliveryFieldNames.DeliveryPostalAddress:
+                            orderSort = orderSort.ThenBy(o => o.Delivery?.DeliveryPostalAddress);
+                            break;
+                        case DeliveryFieldNames.DeliveryLocation:
+                            orderSort = orderSort.ThenBy(o => o.Delivery?.DeliveryLocation);
+                            break;
+                        case DeliveryFieldNames.DeliveryInfo1:
+                            orderSort = orderSort.ThenBy(o => o.Delivery?.DeliveryInfo1);
+                            break;
+                        case DeliveryFieldNames.DeliveryInfo2:
+                            orderSort = orderSort.ThenBy(o => o.Delivery?.DeliveryInfo2);
+                            break;
+                        case DeliveryFieldNames.DeliveryInfo3:
+                            orderSort = orderSort.ThenBy(o => o.Delivery?.DeliveryInfo3);
+                            break;
+                        case DeliveryFieldNames.DeliveryOuId:
+                            orderSort = orderSort.ThenBy(o => o.Delivery?.DeliveryOuId);
+                            break;
+                        case DeliveryFieldNames.DeliveryName:
+                            orderSort = orderSort.ThenBy(o => o.Delivery?.DeliveryName);
+                            break;
+                        case DeliveryFieldNames.DeliveryPhone:
+                            orderSort = orderSort.ThenBy(o => o.Delivery?.DeliveryPhone);
+                            break;
+
+                        // General
+                        case GeneralFieldNames.OrderNumber:
+                            orderSort = orderSort.ThenBy(o => o.General?.OrderNumber);
+                            break;
+                        case GeneralFieldNames.Customer:
+                            orderSort = orderSort.ThenBy(o => o.General?.Customer);
+                            break;
+                        case GeneralFieldNames.Administrator:
+                            orderSort = orderSort.ThenBy(o => o.General?.Administrator);
+                            break;
+                        case GeneralFieldNames.Domain:
+                            orderSort = orderSort.ThenBy(o => o.General?.Domain);
+                            break;
+                        case GeneralFieldNames.OrderDate:
+                            orderSort = orderSort.ThenBy(o => o.General?.OrderDate);
+                            break;
+                        //Log
+                        case LogFieldNames.Log:
+                            orderSort = orderSort.ThenBy(l => l.Log);
+                            break;
+                        //Orderer
+                        case OrdererFieldNames.OrdererId:
+                            orderSort = orderSort.ThenBy(o => o.Orderer?.OrdererId);
+                            break;
+                        case OrdererFieldNames.OrdererName:
+                            orderSort = orderSort.ThenBy(o => o.Orderer?.OrdererName);
+                            break;
+                        case OrdererFieldNames.OrdererLocation:
+                            orderSort = orderSort.ThenBy(o => o.Orderer?.OrdererLocation);
+                            break;
+                        case OrdererFieldNames.OrdererEmail:
+                            orderSort = orderSort.ThenBy(o => o.Orderer?.OrdererEmail);
+                            break;
+                        case OrdererFieldNames.OrdererPhone:
+                            orderSort = orderSort.ThenBy(o => o.Orderer?.OrdererPhone);
+                            break;
+                        case OrdererFieldNames.OrdererCode:
+                            orderSort = orderSort.ThenBy(o => o.Orderer?.OrdererCode);
+                            break;
+                        case OrdererFieldNames.Department:
+                            orderSort = orderSort.ThenBy(o => o.Orderer?.Department);
+                            break;
+                        case OrdererFieldNames.Unit:
+                            orderSort = orderSort.ThenBy(o => o.Orderer?.Unit);
+                            break;
+                        case OrdererFieldNames.OrdererAddress:
+                            orderSort = orderSort.ThenBy(o => o.Orderer?.OrdererAddress);
+                            break;
+                        case OrdererFieldNames.OrdererInvoiceAddress:
+                            orderSort = orderSort.ThenBy(o => o.Orderer?.OrdererInvoiceAddress);
+                            break;
+                        case OrdererFieldNames.OrdererReferenceNumber:
+                            orderSort = orderSort.ThenBy(o => o.Orderer?.OrdererReferenceNumber);
+                            break;
+                        case OrdererFieldNames.AccountingDimension1:
+                            orderSort = orderSort.ThenBy(o => o.Orderer?.AccountingDimension1);
+                            break;
+                        case OrdererFieldNames.AccountingDimension2:
+                            orderSort = orderSort.ThenBy(o => o.Orderer?.AccountingDimension2);
+                            break;
+                        case OrdererFieldNames.AccountingDimension3:
+                            orderSort = orderSort.ThenBy(o => o.Orderer?.AccountingDimension3);
+                            break;
+                        case OrdererFieldNames.AccountingDimension4:
+                            orderSort = orderSort.ThenBy(o => o.Orderer?.AccountingDimension4);
+                            break;
+                        case OrdererFieldNames.AccountingDimension5:
+                            orderSort = orderSort.ThenBy(o => o.Orderer?.AccountingDimension5);
+                            break;
+                        //Order
+                        case OrderFieldNames.Property:
+                            orderSort = orderSort.ThenBy(o => o.Order?.Property);
+                            break;
+                        case OrderFieldNames.OrderRow1:
+                            orderSort = orderSort.ThenBy(o => o.Order?.OrderRow1);
+                            break;
+                        case OrderFieldNames.OrderRow2:
+                            orderSort = orderSort.ThenBy(o => o.Order?.OrderRow2);
+                            break;
+                        case OrderFieldNames.OrderRow3:
+                            orderSort = orderSort.ThenBy(o => o.Order?.OrderRow3);
+                            break;
+                        case OrderFieldNames.OrderRow4:
+                            orderSort = orderSort.ThenBy(o => o.Order?.OrderRow4);
+                            break;
+                        case OrderFieldNames.OrderRow5:
+                            orderSort = orderSort.ThenBy(o => o.Order?.OrderRow5);
+                            break;
+                        case OrderFieldNames.OrderRow6:
+                            orderSort = orderSort.ThenBy(o => o.Order?.OrderRow6);
+                            break;
+                        case OrderFieldNames.OrderRow7:
+                            orderSort = orderSort.ThenBy(o => o.Order?.OrderRow7);
+                            break;
+                        case OrderFieldNames.OrderRow8:
+                            orderSort = orderSort.ThenBy(o => o.Order?.OrderRow8);
+                            break;
+                        case OrderFieldNames.Configuration:
+                            orderSort = orderSort.ThenBy(o => o.Order?.Configuration);
+                            break;
+                        case OrderFieldNames.OrderInfo:
+                            orderSort = orderSort.ThenBy(o => o.Order?.OrderInfo);
+                            break;
+                        case OrderFieldNames.OrderInfo2:
+                            orderSort = orderSort.ThenBy(o => o.Order?.OrderInfo2);
+                            break;
+                        // Other
+                        case OtherFieldNames.FileName:
+                            orderSort = orderSort.ThenBy(o => o.Other?.FileName);
+                            break;
+                        case OtherFieldNames.CaseNumber:
+                            orderSort = orderSort.ThenBy(o => o.Other?.CaseNumber);
+                            break;
+                        case OtherFieldNames.Info:
+                            orderSort = orderSort.ThenBy(o => o.Other?.Info);
+                            break;
+                        case OtherFieldNames.Status:
+                            orderSort = orderSort.ThenBy(o => o.Other?.Status);
+                            break;
+                        //Programm
+                        case ProgramFieldNames.Program:
+                            orderSort = orderSort.ThenBy(o => o.Program?.Programs?.Length);
+                            break;
+                        case ProgramFieldNames.InfoProduct:
+                            orderSort = orderSort.ThenBy(o => o.Program?.InfoProduct);
+                            break;
+                        //Reciever
+                        case ReceiverFieldNames.ReceiverId:
+                            orderSort = orderSort.ThenBy(o => o.Receiver?.ReceiverId);
+                            break;
+                        case ReceiverFieldNames.ReceiverName:
+                            orderSort = orderSort.ThenBy(o => o.Receiver?.ReceiverName);
+                            break;
+                        case ReceiverFieldNames.ReceiverEmail:
+                            orderSort = orderSort.ThenBy(o => o.Receiver?.ReceiverEmail);
+                            break;
+                        case ReceiverFieldNames.ReceiverPhone:
+                            orderSort = orderSort.ThenBy(o => o.Receiver?.ReceiverPhone);
+                            break;
+                        case ReceiverFieldNames.ReceiverLocation:
+                            orderSort = orderSort.ThenBy(o => o.Receiver?.ReceiverLocation);
+                            break;
+                        case ReceiverFieldNames.MarkOfGoods:
+                            orderSort = orderSort.ThenBy(o => o.Receiver?.MarkOfGoods);
+                            break;
+                        //Supplier
+                        case SupplierFieldNames.SupplierOrderNumber:
+                            orderSort = orderSort.ThenBy(o => o.Supplier?.SupplierOrderNumber);
+                            break;
+                        case SupplierFieldNames.SupplierOrderDate:
+                            orderSort = orderSort.ThenBy(o => o.Supplier?.SupplierOrderDate);
+                            break;
+                        case SupplierFieldNames.SupplierOrderInfo:
+                            orderSort = orderSort.ThenBy(o => o.Supplier?.SupplierOrderInfo);
+                            break;
+                        //User
+                        case UserFieldNames.UserId:
+                            orderSort = orderSort.ThenBy(o => o.User?.UserId);
+                            break;
+                        case UserFieldNames.UserFirstName:
+                            orderSort = orderSort.ThenBy(o => o.User?.UserFirstName);
+                            break;
+                        case UserFieldNames.UserLastName:
+                            orderSort = orderSort.ThenBy(o => o.User?.UserLastName);
+                            break;
+                        case UserFieldNames.UserPhone:
+                            orderSort = orderSort.ThenBy(o => o.User?.UserPhone);
+                            break;
+                        case UserFieldNames.UserEMail:
+                            orderSort = orderSort.ThenBy(o => o.User?.UserEMail);
+                            break;
+                        case UserFieldNames.UserInitials:
+                            orderSort = orderSort.ThenBy(o => o.User?.UserInitials);
+                            break;
+                        case UserFieldNames.UserPersonalIdentityNumber:
+                            orderSort = orderSort.ThenBy(o => o.User?.UserPersonalIdentityNumber);
+                            break;
+                        case UserFieldNames.UserExtension:
+                            orderSort = orderSort.ThenBy(o => o.User?.UserExtension);
+                            break;
+                        case UserFieldNames.UserTitle:
+                            orderSort = orderSort.ThenBy(o => o.User?.UserTitle);
+                            break;
+                        case UserFieldNames.UserLocation:
+                            orderSort = orderSort.ThenBy(o => o.User?.UserLocation);
+                            break;
+                        case UserFieldNames.UserRoomNumber:
+                            orderSort = orderSort.ThenBy(o => o.User?.UserRoomNumber);
+                            break;
+                        case UserFieldNames.UserPostalAddress:
+                            orderSort = orderSort.ThenBy(o => o.User?.UserPostalAddress);
+                            break;
+                        case UserFieldNames.Responsibility:
+                            orderSort = orderSort.ThenBy(o => o.User?.Responsibility);
+                            break;
+                        case UserFieldNames.Activity:
+                            orderSort = orderSort.ThenBy(o => o.User?.Activity);
+                            break;
+                        case UserFieldNames.Manager:
+                            orderSort = orderSort.ThenBy(o => o.User?.Manager);
+                            break;
+                        case UserFieldNames.ReferenceNumber:
+                            orderSort = orderSort.ThenBy(o => o.User?.ReferenceNumber);
+                            break;
+                        case UserFieldNames.InfoUser:
+                            orderSort = orderSort.ThenBy(o => o.User?.InfoUser);
+                            break;
+                        case UserFieldNames.UserOU_Id:
+                            orderSort = orderSort.ThenBy(o => o.User?.UserOU_Id);
+                            break;
+                        case UserFieldNames.EmploymentType:
+                            orderSort = orderSort.ThenBy(o => o.User?.EmploymentType);
+                            break;
+                        case UserFieldNames.UserDepartment_Id1:
+                            orderSort = orderSort.ThenBy(o => o.User?.UserDepartment_Id1);
+                            break;
+                        case UserFieldNames.UserDepartment_Id2:
+                            orderSort = orderSort.ThenBy(o => o.User?.UserDepartment_Id2);
+                            break;
+
+                        //Account Info
+                        case AccountInfoFieldNames.StartedDate:
+                            orderSort = orderSort.ThenBy(o => o.AccountInfo?.StartedDate);
+                            break;
+                        case AccountInfoFieldNames.FinishDate:
+                            orderSort = orderSort.ThenBy(o => o.AccountInfo?.FinishDate);
+                            break;
+                        case AccountInfoFieldNames.HomeDirectory:
+                            orderSort = orderSort.ThenBy(o => o.AccountInfo?.HomeDirectory);
+                            break;
+                        case AccountInfoFieldNames.Profile:
+                            orderSort = orderSort.ThenBy(o => o.AccountInfo?.Profile);
+                            break;
+                        case AccountInfoFieldNames.InventoryNumber:
+                            orderSort = orderSort.ThenBy(o => o.AccountInfo?.InventoryNumber);
+                            break;
+                        case AccountInfoFieldNames.Info:
+                            orderSort = orderSort.ThenBy(o => o.AccountInfo?.Info);
+                            break;
+                        case AccountInfoFieldNames.AccountTypeId:
+                            orderSort = orderSort.ThenBy(o => o.AccountInfo?.AccountTypeId);
+                            break;
+                        //case AccountInfoFieldNames.AccountTypeId2:
+                        //    orderSort = orderSort.ThenBy(o => o.AccountInfo?.OrderFieldType2.Name);
+                        //    break;
+                        case AccountInfoFieldNames.AccountTypeId3:
+                            orderSort = orderSort.ThenBy(o => o.AccountInfo?.AccountTypeId3);
+                            break;
+                        case AccountInfoFieldNames.AccountTypeId4:
+                            orderSort = orderSort.ThenBy(o => o.AccountInfo?.AccountTypeId4);
+                            break;
+                        case AccountInfoFieldNames.AccountTypeId5:
+                            orderSort = orderSort.ThenBy(o => o.AccountInfo?.AccountTypeId5);
+                            break;
+                        //Contact
+                        case ContactFieldNames.Id:
+                            orderSort = orderSort.ThenBy(o => o.Contact?.Id);
+                            break;
+                        case ContactFieldNames.EMail:
+                            orderSort = orderSort.ThenBy(o => o.Contact?.EMail);
+                            break;
+                        case ContactFieldNames.Name:
+                            orderSort = orderSort.ThenBy(o => o.Contact?.Name);
+                            break;
+                        case ContactFieldNames.Phone:
+                            orderSort = orderSort.ThenBy(o => o.Contact?.Phone);
+                            break;
+                    }
+                    break;
+
+                case SortBy.Descending:
+                    switch (sort.Name)
+                    {
+                        // Delivery
+                        case DeliveryFieldNames.DeliveryDate:
+                            orderSort = orderSort.ThenByDescending(o => o.Delivery?.DeliveryDate);
+                            break;
+                        case DeliveryFieldNames.InstallDate:
+                            orderSort = orderSort.ThenByDescending(o => o.Delivery?.InstallDate);
+                            break;
+                        case DeliveryFieldNames.DeliveryDepartment:
+                            orderSort = orderSort.ThenByDescending(o => o.Delivery?.DeliveryDepartment);
+                            break;
+                        case DeliveryFieldNames.DeliveryOu:
+                            orderSort = orderSort.ThenByDescending(o => o.Delivery?.DeliveryOu);
+                            break;
+                        case DeliveryFieldNames.DeliveryAddress:
+                            orderSort = orderSort.ThenByDescending(o => o.Delivery?.DeliveryAddress);
+                            break;
+                        case DeliveryFieldNames.DeliveryPostalCode:
+                            orderSort = orderSort.ThenByDescending(o => o.Delivery?.DeliveryPostalCode);
+                            break;
+                        case DeliveryFieldNames.DeliveryPostalAddress:
+                            orderSort = orderSort.ThenByDescending(o => o.Delivery?.DeliveryPostalAddress);
+                            break;
+                        case DeliveryFieldNames.DeliveryLocation:
+                            orderSort = orderSort.ThenByDescending(o => o.Delivery?.DeliveryLocation);
+                            break;
+                        case DeliveryFieldNames.DeliveryInfo1:
+                            orderSort = orderSort.ThenByDescending(o => o.Delivery?.DeliveryInfo1);
+                            break;
+                        case DeliveryFieldNames.DeliveryInfo2:
+                            orderSort = orderSort.ThenByDescending(o => o.Delivery?.DeliveryInfo2);
+                            break;
+                        case DeliveryFieldNames.DeliveryInfo3:
+                            orderSort = orderSort.ThenByDescending(o => o.Delivery?.DeliveryInfo3);
+                            break;
+                        case DeliveryFieldNames.DeliveryOuId:
+                            orderSort = orderSort.ThenByDescending(o => o.Delivery?.DeliveryOuId);
+                            break;
+                        case DeliveryFieldNames.DeliveryName:
+                            orderSort = orderSort.ThenByDescending(o => o.Delivery?.DeliveryName);
+                            break;
+                        case DeliveryFieldNames.DeliveryPhone:
+                            orderSort = orderSort.ThenByDescending(o => o.Delivery?.DeliveryPhone);
+                            break;
+
+                        // General
+                        case GeneralFieldNames.OrderNumber:
+                            orderSort = orderSort.ThenByDescending(o => o.General?.OrderNumber);
+                            break;
+                        case GeneralFieldNames.Customer:
+                            orderSort = orderSort.ThenByDescending(o => o.General?.Customer);
+                            break;
+                        case GeneralFieldNames.Administrator:
+                            orderSort = orderSort.ThenByDescending(o => o.General?.Administrator);
+                            break;
+                        case GeneralFieldNames.Domain:
+                            orderSort = orderSort.ThenByDescending(o => o.General?.Domain);
+                            break;
+                        case GeneralFieldNames.OrderDate:
+                            orderSort = orderSort.ThenByDescending(o => o.General?.OrderDate);
+                            break;
+                        //Log
+                        case LogFieldNames.Log:
+                            orderSort = orderSort.ThenByDescending(l => l.Log);
+                            break;
+                        //Orderer
+                        case OrdererFieldNames.OrdererId:
+                            orderSort = orderSort.ThenByDescending(o => o.Orderer?.OrdererId);
+                            break;
+                        case OrdererFieldNames.OrdererName:
+                            orderSort = orderSort.ThenByDescending(o => o.Orderer?.OrdererName);
+                            break;
+                        case OrdererFieldNames.OrdererLocation:
+                            orderSort = orderSort.ThenByDescending(o => o.Orderer?.OrdererLocation);
+                            break;
+                        case OrdererFieldNames.OrdererEmail:
+                            orderSort = orderSort.ThenByDescending(o => o.Orderer?.OrdererEmail);
+                            break;
+                        case OrdererFieldNames.OrdererPhone:
+                            orderSort = orderSort.ThenByDescending(o => o.Orderer?.OrdererPhone);
+                            break;
+                        case OrdererFieldNames.OrdererCode:
+                            orderSort = orderSort.ThenByDescending(o => o.Orderer?.OrdererCode);
+                            break;
+                        case OrdererFieldNames.Department:
+                            orderSort = orderSort.ThenByDescending(o => o.Orderer?.Department);
+                            break;
+                        case OrdererFieldNames.Unit:
+                            orderSort = orderSort.ThenByDescending(o => o.Orderer?.Unit);
+                            break;
+                        case OrdererFieldNames.OrdererAddress:
+                            orderSort = orderSort.ThenByDescending(o => o.Orderer?.OrdererAddress);
+                            break;
+                        case OrdererFieldNames.OrdererInvoiceAddress:
+                            orderSort = orderSort.ThenByDescending(o => o.Orderer?.OrdererInvoiceAddress);
+                            break;
+                        case OrdererFieldNames.OrdererReferenceNumber:
+                            orderSort = orderSort.ThenByDescending(o => o.Orderer?.OrdererReferenceNumber);
+                            break;
+                        case OrdererFieldNames.AccountingDimension1:
+                            orderSort = orderSort.ThenByDescending(o => o.Orderer?.AccountingDimension1);
+                            break;
+                        case OrdererFieldNames.AccountingDimension2:
+                            orderSort = orderSort.ThenByDescending(o => o.Orderer?.AccountingDimension2);
+                            break;
+                        case OrdererFieldNames.AccountingDimension3:
+                            orderSort = orderSort.ThenByDescending(o => o.Orderer?.AccountingDimension3);
+                            break;
+                        case OrdererFieldNames.AccountingDimension4:
+                            orderSort = orderSort.ThenByDescending(o => o.Orderer?.AccountingDimension4);
+                            break;
+                        case OrdererFieldNames.AccountingDimension5:
+                            orderSort = orderSort.ThenByDescending(o => o.Orderer?.AccountingDimension5);
+                            break;
+                        //Order
+                        case OrderFieldNames.Property:
+                            orderSort = orderSort.ThenByDescending(o => o.Order?.Property);
+                            break;
+                        case OrderFieldNames.OrderRow1:
+                            orderSort = orderSort.ThenByDescending(o => o.Order?.OrderRow1);
+                            break;
+                        case OrderFieldNames.OrderRow2:
+                            orderSort = orderSort.ThenByDescending(o => o.Order?.OrderRow2);
+                            break;
+                        case OrderFieldNames.OrderRow3:
+                            orderSort = orderSort.ThenByDescending(o => o.Order?.OrderRow3);
+                            break;
+                        case OrderFieldNames.OrderRow4:
+                            orderSort = orderSort.ThenByDescending(o => o.Order?.OrderRow4);
+                            break;
+                        case OrderFieldNames.OrderRow5:
+                            orderSort = orderSort.ThenByDescending(o => o.Order?.OrderRow5);
+                            break;
+                        case OrderFieldNames.OrderRow6:
+                            orderSort = orderSort.ThenByDescending(o => o.Order?.OrderRow6);
+                            break;
+                        case OrderFieldNames.OrderRow7:
+                            orderSort = orderSort.ThenByDescending(o => o.Order?.OrderRow7);
+                            break;
+                        case OrderFieldNames.OrderRow8:
+                            orderSort = orderSort.ThenByDescending(o => o.Order?.OrderRow8);
+                            break;
+                        case OrderFieldNames.Configuration:
+                            orderSort = orderSort.ThenByDescending(o => o.Order?.Configuration);
+                            break;
+                        case OrderFieldNames.OrderInfo:
+                            orderSort = orderSort.ThenByDescending(o => o.Order?.OrderInfo);
+                            break;
+                        case OrderFieldNames.OrderInfo2:
+                            orderSort = orderSort.ThenByDescending(o => o.Order?.OrderInfo2);
+                            break;
+                        // Other
+                        case OtherFieldNames.FileName:
+                            orderSort = orderSort.ThenByDescending(o => o.Other?.FileName);
+                            break;
+                        case OtherFieldNames.CaseNumber:
+                            orderSort = orderSort.ThenByDescending(o => o.Other?.CaseNumber);
+                            break;
+                        case OtherFieldNames.Info:
+                            orderSort = orderSort.ThenByDescending(o => o.Other?.Info);
+                            break;
+                        case OtherFieldNames.Status:
+                            orderSort = orderSort.ThenByDescending(o => o.Other?.Status);
+                            break;
+                        //Programm
+                        case ProgramFieldNames.Program:
+                            orderSort = orderSort.ThenByDescending(o => o.Program?.Programs?.Length);
+                            break;
+                        case ProgramFieldNames.InfoProduct:
+                            orderSort = orderSort.ThenByDescending(o => o.Program?.InfoProduct);
+                            break;
+                        //Reciever
+                        case ReceiverFieldNames.ReceiverId:
+                            orderSort = orderSort.ThenByDescending(o => o.Receiver?.ReceiverId);
+                            break;
+                        case ReceiverFieldNames.ReceiverName:
+                            orderSort = orderSort.ThenByDescending(o => o.Receiver?.ReceiverName);
+                            break;
+                        case ReceiverFieldNames.ReceiverEmail:
+                            orderSort = orderSort.ThenByDescending(o => o.Receiver?.ReceiverEmail);
+                            break;
+                        case ReceiverFieldNames.ReceiverPhone:
+                            orderSort = orderSort.ThenByDescending(o => o.Receiver?.ReceiverPhone);
+                            break;
+                        case ReceiverFieldNames.ReceiverLocation:
+                            orderSort = orderSort.ThenByDescending(o => o.Receiver?.ReceiverLocation);
+                            break;
+                        case ReceiverFieldNames.MarkOfGoods:
+                            orderSort = orderSort.ThenByDescending(o => o.Receiver?.MarkOfGoods);
+                            break;
+                        //Supplier
+                        case SupplierFieldNames.SupplierOrderNumber:
+                            orderSort = orderSort.ThenByDescending(o => o.Supplier?.SupplierOrderNumber);
+                            break;
+                        case SupplierFieldNames.SupplierOrderDate:
+                            orderSort = orderSort.ThenByDescending(o => o.Supplier?.SupplierOrderDate);
+                            break;
+                        case SupplierFieldNames.SupplierOrderInfo:
+                            orderSort = orderSort.ThenByDescending(o => o.Supplier?.SupplierOrderInfo);
+                            break;
+                        //User
+                        case UserFieldNames.UserId:
+                            orderSort = orderSort.ThenByDescending(o => o.User?.UserId);
+                            break;
+                        case UserFieldNames.UserFirstName:
+                            orderSort = orderSort.ThenByDescending(o => o.User?.UserFirstName);
+                            break;
+                        case UserFieldNames.UserLastName:
+                            orderSort = orderSort.ThenByDescending(o => o.User?.UserLastName);
+                            break;
+                        case UserFieldNames.UserPhone:
+                            orderSort = orderSort.ThenByDescending(o => o.User?.UserPhone);
+                            break;
+                        case UserFieldNames.UserEMail:
+                            orderSort = orderSort.ThenByDescending(o => o.User?.UserEMail);
+                            break;
+                        case UserFieldNames.UserInitials:
+                            orderSort = orderSort.ThenByDescending(o => o.User?.UserInitials);
+                            break;
+                        case UserFieldNames.UserPersonalIdentityNumber:
+                            orderSort = orderSort.ThenByDescending(o => o.User?.UserPersonalIdentityNumber);
+                            break;
+                        case UserFieldNames.UserExtension:
+                            orderSort = orderSort.ThenByDescending(o => o.User?.UserExtension);
+                            break;
+                        case UserFieldNames.UserTitle:
+                            orderSort = orderSort.ThenByDescending(o => o.User?.UserTitle);
+                            break;
+                        case UserFieldNames.UserLocation:
+                            orderSort = orderSort.ThenByDescending(o => o.User?.UserLocation);
+                            break;
+                        case UserFieldNames.UserRoomNumber:
+                            orderSort = orderSort.ThenByDescending(o => o.User?.UserRoomNumber);
+                            break;
+                        case UserFieldNames.UserPostalAddress:
+                            orderSort = orderSort.ThenByDescending(o => o.User?.UserPostalAddress);
+                            break;
+                        case UserFieldNames.Responsibility:
+                            orderSort = orderSort.ThenByDescending(o => o.User?.Responsibility);
+                            break;
+                        case UserFieldNames.Activity:
+                            orderSort = orderSort.ThenByDescending(o => o.User?.Activity);
+                            break;
+                        case UserFieldNames.Manager:
+                            orderSort = orderSort.ThenByDescending(o => o.User?.Manager);
+                            break;
+                        case UserFieldNames.ReferenceNumber:
+                            orderSort = orderSort.ThenByDescending(o => o.User?.ReferenceNumber);
+                            break;
+                        case UserFieldNames.InfoUser:
+                            orderSort = orderSort.ThenByDescending(o => o.User?.InfoUser);
+                            break;
+                        case UserFieldNames.UserOU_Id:
+                            orderSort = orderSort.ThenByDescending(o => o.User?.UserOU_Id);
+                            break;
+                        case UserFieldNames.EmploymentType:
+                            orderSort = orderSort.ThenByDescending(o => o.User?.EmploymentType);
+                            break;
+                        case UserFieldNames.UserDepartment_Id1:
+                            orderSort = orderSort.ThenByDescending(o => o.User?.UserDepartment_Id1);
+                            break;
+                        case UserFieldNames.UserDepartment_Id2:
+                            orderSort = orderSort.ThenByDescending(o => o.User?.UserDepartment_Id2);
+                            break;
+
+                        //Account Info
+                        case AccountInfoFieldNames.StartedDate:
+                            orderSort = orderSort.ThenByDescending(o => o.AccountInfo?.StartedDate);
+                            break;
+                        case AccountInfoFieldNames.FinishDate:
+                            orderSort = orderSort.ThenByDescending(o => o.AccountInfo?.FinishDate);
+                            break;
+                        case AccountInfoFieldNames.HomeDirectory:
+                            orderSort = orderSort.ThenByDescending(o => o.AccountInfo?.HomeDirectory);
+                            break;
+                        case AccountInfoFieldNames.Profile:
+                            orderSort = orderSort.ThenByDescending(o => o.AccountInfo?.Profile);
+                            break;
+                        case AccountInfoFieldNames.InventoryNumber:
+                            orderSort = orderSort.ThenByDescending(o => o.AccountInfo?.InventoryNumber);
+                            break;
+                        case AccountInfoFieldNames.Info:
+                            orderSort = orderSort.ThenByDescending(o => o.AccountInfo?.Info);
+                            break;
+                        case AccountInfoFieldNames.AccountTypeId:
+                            orderSort = orderSort.ThenByDescending(o => o.AccountInfo?.AccountTypeId);
+                            break;
+                        //case AccountInfoFieldNames.AccountTypeId2:
+                        //    orderSort = orderSort.ThenByDescending(o => o.AccountInfo?.OrderFieldType2.Name);
+                        //    break;
+                        case AccountInfoFieldNames.AccountTypeId3:
+                            orderSort = orderSort.ThenByDescending(o => o.AccountInfo?.AccountTypeId3);
+                            break;
+                        case AccountInfoFieldNames.AccountTypeId4:
+                            orderSort = orderSort.ThenByDescending(o => o.AccountInfo?.AccountTypeId4);
+                            break;
+                        case AccountInfoFieldNames.AccountTypeId5:
+                            orderSort = orderSort.ThenByDescending(o => o.AccountInfo?.AccountTypeId5);
+                            break;
+                        //Contact
+                        case ContactFieldNames.Id:
+                            orderSort = orderSort.ThenByDescending(o => o.Contact?.Id);
+                            break;
+                        case ContactFieldNames.EMail:
+                            orderSort = orderSort.ThenByDescending(o => o.Contact?.EMail);
+                            break;
+                        case ContactFieldNames.Name:
+                            orderSort = orderSort.ThenByDescending(o => o.Contact?.Name);
+                            break;
+                        case ContactFieldNames.Phone:
+                            orderSort = orderSort.ThenByDescending(o => o.Contact?.Phone);
+                            break;
+                    }
+                    break;
+            }
+
+            return orderSort.ToArray();
+        }
     }
 }
