@@ -2,7 +2,7 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.OtherEditModel
 
-<h4>@Translation.Get("Övrigt")</h4>
+<h4>@Translation.GetCoreTextTranslation("Övrigt")</h4>
 <table class="tableform">
     <tbody>
         @if (Model.FileName.Show)
@@ -45,7 +45,8 @@
                     @Html.FieldCaption(Model.CaseNumber)
                 </td>
                 <td class="span6">
-                    @Model.CaseNumber.Value
+                    @Html.HiddenFor(m => m.CaseNumber.Value)
+                    @Html.DisplayFor(m => m.CaseNumber.Value)
                 </td>
                 <td class="span3">
                     @Model.CaseNumber.Help
