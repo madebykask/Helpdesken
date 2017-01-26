@@ -77,6 +77,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
         #endregion
 
         private bool initiated;
+        private const string CURRENT_USER_ITEM_CAPTION = "Inloggad användare";
+        private const string CURRENT_USER_WORKINGGROUP_CAPTION = "Inloggad användares driftgrupp";
 
         public CaseRuleFactory()
         {
@@ -545,6 +547,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                                     .OrderBy(r => r.ItemText).ToList()
             };
 
+            caseBasicInfo.WorkingGroups.Items.Insert(0, new FieldItem("-1", string.Format("-- {0} --", Translation.GetCoreTextTranslation(CURRENT_USER_WORKINGGROUP_CAPTION))));
+
             var admins = _userService.GetAvailablePerformersOrUserId(customerId);
             caseBasicInfo.Administrators = new BasicMultiItemField()
             {
@@ -563,6 +567,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                               })
                               .OrderBy(i => i.ItemText).ToList()
             };
+            caseBasicInfo.Administrators.Items.Insert(0, new FieldItem("-1", string.Format("-- {0} --", Translation.GetCoreTextTranslation(CURRENT_USER_ITEM_CAPTION))));
+
 
             var priorities = _priorityService.GetPriorities(customerId);
             var defaultPrio = priorities.Where(p => p.IsDefault != 0 && p.IsActive != 0).FirstOrDefault();
@@ -1987,7 +1993,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                                                     FieldId = TranslationCaseFields.Performer_User_Id.ToString(),
                                                     ForeignKeyNumber = ForeignKeyNum.FKeyNum1.ToInt(),
                                                     ShowRunTimeCurrentValue = ruleMode == CaseRuleMode.TemplateUserChangeMode,
-                                                    ShowAllIfKeyIsNull = true                                                   
+                                                    ShowAllIfKeyIsNull = true                                                                                                                                               
                                                 });
             }            
 

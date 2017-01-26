@@ -607,10 +607,12 @@ function CaseInitForm() {
         }, 'json');
     }
 
-    $('#case__Status_Id').change(function () {
+    $('#case__Status_Id').change(function () {        
+
         if ($(this).val() > 0) {
             $.post('/Cases/ChangeStatus/', { 'id': $(this).val() }, function (data) {
-                if (data != undefined) {
+                var alreadySetByCaseTemplate = ($('#CaseTemplate_StateSecondary_Id').val() != "");
+                if (data != undefined && !alreadySetByCaseTemplate) {
                     var exists = $('#case__WorkingGroup_Id option[value=' + data.WorkingGroup_Id + ']').length;
                     if (exists > 0 && data.WorkingGroup_Id > 0) {
                         $("#case__WorkingGroup_Id").val(data.WorkingGroup_Id).change();
@@ -622,7 +624,11 @@ function CaseInitForm() {
                     }
                 }
             }, 'json');
+
+            $('#CaseTemplate_StateSecondary_Id').val("");
         }
+        
+        
 
     });
 
