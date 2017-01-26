@@ -5545,6 +5545,9 @@ If not exists (select * from tblTextTranslation where text_id = 1770 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1770, 2, 'Unconnect')
 GO
 
+UPDATE tblText Set TextString = 'Informera initiativtagare och anhängare om åtgärder' WHERE Id=1743;
+GO
+
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
