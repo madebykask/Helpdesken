@@ -394,8 +394,8 @@
 
         private static void AddDifference(List<FieldDifference> differencies, FieldEditSettings settings, int? oldValue, UserName oldUserName, int? newValue, UserName newUserName)
         {
-            var oldText = oldUserName != null ? oldUserName.GetFullName() : string.Empty;
-            var newText = newUserName != null ? newUserName.GetFullName() : string.Empty;
+            var oldText = oldUserName != null ? oldUserName.GetReversedFullName() : string.Empty;
+            var newText = newUserName != null ? newUserName.GetReversedFullName() : string.Empty;
 
             AddDifference(differencies, settings, oldValue, oldText, newValue, newText);
         }

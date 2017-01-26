@@ -129,7 +129,8 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
             return new GeneralOverview(
                                     entity.Id.MapToOrderNumber(),
                                     entity.Customer != null ? entity.Customer.Name : string.Empty,
-                                    entity.User != null ? string.Format("{0} {1}", entity.User.FirstName, entity.User.SurName) : string.Empty,
+                                    entity.User != null ? $"{entity.User.SurName} {entity.User.FirstName}"
+                                        : string.Empty,
                                     entity.Domain != null ? entity.Domain.Name : string.Empty,
                                     entity.OrderDate);
         }

@@ -43,7 +43,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
 
 		    if (settings.General.Administrator.Show)
 		    {
-                query = administrators.Select(a => new UnionItemDependentOverview{Id = a.Id, Name = a.FirstName + " " + a.SurName, Type = "administrators", DependentId = null});
+                query = administrators.Select(a => new UnionItemDependentOverview{Id = a.Id, Name = a.SurName + " " +a.FirstName, Type = "administrators", DependentId = null});
 		    }
 
 		    if (settings.General.Domain.Show)
@@ -99,7 +99,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
 
 		    if (settings.Log.Log.Show)
 		    {
-			    var union = administratorsWithEmails.Select(a => new UnionItemDependentOverview {Id = a.Id, Name = a.FirstName + " " + a.SurName + separator + a.Email, Type = "administratorsWithEmails", DependentId = null});
+			    var union = administratorsWithEmails.Select(a => new UnionItemDependentOverview {Id = a.Id, Name = a.SurName +" " + a.FirstName + separator + a.Email, Type = "administratorsWithEmails", DependentId = null});
 			    query = query?.Union(union) ?? union;
 		    }
 
