@@ -52,6 +52,8 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
 
         public SelectList Languages { get; set; }
 
+        public bool IsSent { get; set; }
+
         public List<QuestionnaireQuestionsOverviewModel> Questions { get; set; } 
     }
 }

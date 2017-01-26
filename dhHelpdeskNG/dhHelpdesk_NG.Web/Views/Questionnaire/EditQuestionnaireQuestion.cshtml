@@ -16,20 +16,28 @@
         <div class="pull-left">
             <ul class="secnav">
                 <li>
-                    <input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn" />
+                    <input type="submit" value="@Translation.GetCoreTextTranslation("Spara")" class="btn"/>
                 </li>
-                <li>
-                    @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "DeleteQuestion",
-                              new { questionnaireId = Model.QuestionnaireId,                                  
-                                  languageId = Model.LanguageId,
-                                  questionId = Model.Id},
-                              new { @class = "btn deleteDialog", 
-                              deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post" ,
-                              Enums.TranslationSource.TextTranslation) + "?"}) 
-                </li>
+                @if (!Model.IsSent)
+                {
+                    <li>
+                        @Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), "DeleteQuestion",
+                            new
+                            {
+                                questionnaireId = Model.QuestionnaireId,
+                                languageId = Model.LanguageId,
+                                questionId = Model.Id
+                            },
+                            new
+                            {
+                                @class = "btn deleteDialog",
+                                deleteDialogText = Translation.GetCoreTextTranslation("Är du säker på att du vill ta bort aktuell post") + "?"
+                            })
+                    </li>
+                }
                 <li>
                     <a href="@Url.Action("EditQuestionnaire",new {questionnaireId = Model.QuestionnaireId, languageId = Model.LanguageId})" class="btn">
-                        @Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)
+                        @Translation.GetCoreTextTranslation("Avbryt")
                     </a>
                 </li>
             </ul>
@@ -40,19 +48,19 @@
         <div class="container">
             <ul class="nav nav-tabs">
                 <li class="active">
-                    <a href="#fragment-1">@Translation.Get("Fråga", Enums.TranslationSource.TextTranslation)</a>
+                    <a href="#fragment-1">@Translation.GetCoreTextTranslation("Fråga")</a>
                 </li>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane tab-pane-border active" id="fragment-1">
                     <div class="container">
-                        <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
+                        <h4>@Translation.GetCoreTextTranslation("Allmänt")</h4>
                         <div class="row">
                             <div class="span12">
                                 <table class="tableform">
                                     <tr>
                                         <td class="span3">
-                                            @Translation.Get("Språk", Enums.TranslationSource.TextTranslation)
+                                            @Translation.GetCoreTextTranslation("Språk")
                                         </td>
                                         <td class="span9">
                                             @Html.DropDownListFor(model => model.LanguageId, Model.Languages,new {id = "languageList"} )                                            
@@ -60,7 +68,7 @@
                                     </tr>
                                     <tr>
                                         <td class="span3">
-                                            @Translation.Get("Nummer", Enums.TranslationSource.TextTranslation)
+                                            @Translation.GetCoreTextTranslation("Nummer")
                                         </td>
                                         <td class="span9">
                                             @if (Model.LanguageId == LanguageIds.Swedish)
@@ -76,7 +84,7 @@
                                     </tr>
                                     <tr>
                                         <td class="span3">
-                                            @Translation.Get("Fråga", Enums.TranslationSource.TextTranslation)
+                                            @Translation.GetCoreTextTranslation("Fråga")
                                         </td>
                                         <td class="span9">
                                             @Html.TextAreaFor(model => model.Question, new { maxlength = "1000", style = "height:100px;" })
@@ -85,7 +93,7 @@
                                     </tr>
                                     <tr>
                                         <td class="span3">
-                                            @Translation.Get("Visa kommentar", Enums.TranslationSource.TextTranslation)
+                                            @Translation.GetCoreTextTranslation("Visa kommentar")
                                         </td>                                        
                                         <td class="checkbox" style="padding-left: 20px">                                        
                                             <input type="checkbox" name="ShowNote" @(Model.ShowNote == 1 ? "checked=checked" : "")  @(Model.LanguageId != LanguageIds.Swedish ? "disabled" : "") value ="1" />                                        
@@ -94,7 +102,7 @@
                                     </tr>                                    
                                     <tr>
                                         <td class="span3">
-                                            @Translation.Get("Text kommentar", Enums.TranslationSource.TextTranslation)
+                                            @Translation.GetCoreTextTranslation("Text kommentar")
                                         </td>
                                         <td class="span9">                                                                                        
                                             @Html.TextAreaFor(model => model.NoteText, new { maxlength = "1000", style = "height:100px;" })                                            

@@ -83,14 +83,12 @@ namespace DH.Helpdesk.Web.Controllers
             var languageOverviews =
                 languageOverviewsOrginal.Select(
                     o =>
-                    new ItemOverview(
-                        Translation.Get(o.Name, Enums.TranslationSource.TextTranslation),
+                    new ItemOverview(Translation.GetCoreTextTranslation(o.Name),
                         o.Value.ToString())).ToList();
             var languageList = new SelectList(languageOverviews, "Value", "Name");
 
             var questionnaireQuestions =
                 _questionnaireQuestionService.FindQuestionnaireQuestionsOverviews(questionnaireId, languageId);
-
             List<QuestionnaireQuestionsOverviewModel> questionModel = null;
             if (questionnaireQuestions != null)
             {
@@ -125,6 +123,10 @@ namespace DH.Helpdesk.Web.Controllers
                     languageList,
                     null);
             }
+
+            var dbCirculars = _circularService.GetCircularOverviews(questionnaireId, (int)CircularStates.Sent);
+            model.IsSent = dbCirculars.Any();
+
             return View(model);
         }
 
@@ -225,7 +227,7 @@ namespace DH.Helpdesk.Web.Controllers
                 languageOverviewsOrginal.Select(
                     o =>
                     new ItemOverview(
-                        Translation.Get(o.Name, Enums.TranslationSource.TextTranslation),
+                        Translation.GetCoreTextTranslation(o.Name),
                         o.Value.ToString())).ToList();
             var languageList = new SelectList(languageOverviews, "Value", "Name");
 
@@ -269,6 +271,8 @@ namespace DH.Helpdesk.Web.Controllers
                             q.ChangedDate)).OrderBy(qq => qq.OptionPos).ToList();
             }
 
+            var dbCirculars = _circularService.GetCircularOverviews(questionnaireId, (int)CircularStates.Sent);
+            var isSent = dbCirculars.Any();
 
             EditQuestionnaireQuestionModel model = null;
             if (questionnaireQuestion != null)
@@ -283,7 +287,8 @@ namespace DH.Helpdesk.Web.Controllers
                     questionnaireQuestion.NoteText,
                     questionnaireQuestion.ChangeDate,
                     languageList,
-                    questionOptionsModel);
+                    questionOptionsModel,
+                    isSent);
             }
             else
             {
@@ -297,7 +302,8 @@ namespace DH.Helpdesk.Web.Controllers
                     "",
                     DateTime.Now,
                     languageList,
-                    questionOptionsModel);
+                    questionOptionsModel,
+                    isSent);
             }
             return View(model);
         }
