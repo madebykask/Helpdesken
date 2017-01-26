@@ -433,6 +433,7 @@
                     user.Departments.Clear();
                     user.OLs.Clear();                    
                     user.OTs.Clear();
+                    user.UserRoles.Clear();
 
                     //Remove Case Settings
                     var userCaseSettings = this._casesettingRepository.GetAll().Where(cs => cs.User_Id == id).ToList();
