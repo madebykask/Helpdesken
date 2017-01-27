@@ -114,7 +114,8 @@
                                                                            LogFields.AttachedFile, 
                                                                            "FinishingCause_Id",
                                                                            "AddUserBtn",
-                                                                           "UpdateNotifierInformation"
+                                                                           "UpdateNotifierInformation",
+                                                                           "AddFollowersBtn"
                                                                        };
     }
 }
