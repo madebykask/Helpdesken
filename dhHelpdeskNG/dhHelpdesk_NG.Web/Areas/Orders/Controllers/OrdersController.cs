@@ -279,8 +279,9 @@
 
             var id = int.Parse(model.Id);
             var filesInDb = model.Other?.FileName?.Value != null ? model.Other.FileName.Value.Files : new List<string>();
-            model.NewFiles = _filesStore.FindFiles(model.Id, Subtopic.FileName.ToString()).Where(f => !filesInDb.Contains(f.Name)).ToList();
-            model.DeletedFiles = _filesStateStore.FindDeletedFileNames(id, Subtopic.FileName.ToString());
+            var deletedFiles = _filesStateStore.FindDeletedFileNames(id, Subtopic.FileName.ToString()) ?? new List<string>();
+            model.NewFiles = _filesStore.FindFiles(model.Id, Subtopic.FileName.ToString()).Where(f => !filesInDb.Contains(f.Name) && !deletedFiles.Contains(f.Name)).ToList();
+            model.DeletedFiles = deletedFiles;
 
             model.DeletedLogIds = _filesStateStore.GetDeletedItemIds(id, OrderDeletedItem.Logs);
 

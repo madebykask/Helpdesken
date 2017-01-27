@@ -14,10 +14,36 @@
         url: parameters.uploadFileUrl,
         multipart_params: { entityId: parameters.id, subtopic: parameters.fileNameSubtopic },
         max_file_size: '10mb',
+        multi_selection: false,
+        max_files: 1,
+        multiple_queues: true,
 
         init: {
+            FilesAdded: function(up, files) {
+                if (up.files.length >= up.settings.max_files) {
+                    up.splice(up.settings.max_files);
+                    if (typeof up.settings.browse_button === "string") {
+                        $('#' + up.settings.browse_button).hide();
+                    } else {
+                        $(up.settings.browse_button).hide();
+                    }
+                    $('#fileName_files_uploader_popup').find("input[type='file']")
+                        .prop('disabled', true).parent().css("z-index", -10000);
+                }
+            },
+            FilesRemoved: function(up, files) {
+                if (up.files.length < up.settings.max_files) {
+                    if (typeof up.settings.browse_button === "string") {
+                        $('#' + up.settings.browse_button).show();
+                    } else {
+                        $(up.settings.browse_button).show();
+                    }
+                    $('#fileName_files_uploader_popup').find("input[type='file']")
+                        .prop('disabled', false).parent().css("z-index", 0);
+                }
+            },
             FileUploaded: function (uploader, uploadedFile, responseContent) {
-                $('#filename_files_container').html(responseContent.response);
+                $('#file_container').html(responseContent.response);
             }
         }
     });

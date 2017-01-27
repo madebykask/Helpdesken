@@ -5545,6 +5545,14 @@ If not exists (select * from tblTextTranslation where text_id = 1770 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1770, 2, 'Unconnect')
 GO
 
+If not exists (select * from tbltext where id = 1771)
+	insert into tbltext (id, TextString) VALUES (1771, 'Inga fler filer tillåts')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1771 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1771, 2, 'No more files allowed')
+GO
+
 UPDATE tblText Set TextString = 'Informera initiativtagare och anhängare om åtgärder' WHERE Id=1743;
 GO
 

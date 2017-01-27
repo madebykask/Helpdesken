@@ -12,7 +12,7 @@
                     @Html.FieldCaption(Model.FileName)
                 </td>
                 <td class="span6">
-                    <a href="#fileName_files_uploader_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Upload")</a>
+                    <a href="#fileName_files_uploader_popup" role="button" class="btn" data-toggle="modal">@Translation.GetCoreTextTranslation("Upload")</a>
                     <div id="fileName_files_uploader_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -22,7 +22,7 @@
                             <div id="fileName_files_uploader"></div>
                         </div>
                         <div class="modal-footer">
-                            <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Close")</button>
+                            <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.GetCoreTextTranslation("Close")</button>
                         </div>
                     </div>
                 </td>
@@ -32,7 +32,7 @@
             </tr>
             <tr>
                 <td></td>
-                <td >
+                <td id="file_container">
                     @Html.Partial("AttachedFiles", Model.FileName.Value)
                 </td>
                 <td></td>
@@ -46,7 +46,7 @@
                 </td>
                 <td class="span6">
                     @Html.HiddenFor(m => m.CaseNumber.Value)
-                    @Html.DisplayFor(m => m.CaseNumber.Value)
+                    @Model.CaseNumber.Value
                 </td>
                 <td class="span3">
                     @Model.CaseNumber.Help

@@ -168,11 +168,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                 model = OtherEditModel.CreateEmpty();
             }
 
-            var fileName = !deletedFiles.Any() ? newFiles.Select(f => f.Name).FirstOrDefault() : string.Empty;
-            if (fileName == null)
-            {
-                fileName = string.Empty;
-            }
+            var fileName = newFiles.Select(f => f.Name).FirstOrDefault() ?? string.Empty;
 
             return new OtherEditFields(
                     fileName,

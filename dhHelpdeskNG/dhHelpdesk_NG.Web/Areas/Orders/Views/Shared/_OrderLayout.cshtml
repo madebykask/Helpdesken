@@ -1,5 +1,6 @@
 ﻿@using System.Web.Optimization
 @using DH.Helpdesk.BusinessData.Enums.Orders
+@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.FullOrderEditModel
 
 @{
@@ -17,7 +18,8 @@
             deleteFileUrl: '@Url.Action("DeleteFile")',
             deleteLogUrl: '@Url.Action("DeleteLog")',
             logSubtopic: '@Subtopic.Log',
-            fileNameSubtopic: '@Subtopic.FileName',            
+            fileNameSubtopic: '@Subtopic.FileName',
+            noMoreFilesText: '@Translation.GetForJS("Inga fler filer tillåts")'
         };
 
         applyOrderBehavior(parameters);
