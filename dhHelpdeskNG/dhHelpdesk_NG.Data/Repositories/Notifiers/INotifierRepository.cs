@@ -33,5 +33,7 @@
         void UpdateCaseNotifier(CaseNotifier caseNotifier);
 
         Notifier GetInitiatorByUserId(string userId, int customerId, bool activeOnly);
+
+        bool IsInitiatorUserIdUnique(string userId, int initiatorId, int customerId, bool activeOnly);
     }
 }

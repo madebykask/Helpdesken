@@ -528,6 +528,16 @@
 
             return null;
         }
+
+        public bool IsInitiatorUserIdUnique(string userId, int initiatorId, int customerId, bool activeOnly)
+        {
+            var initiators = initiatorId > 0 ? DataContext.ComputerUsers.Where(x => x.Id != initiatorId) : DataContext.ComputerUsers;
+            var initiator = initiators.FirstOrDefault(cu => cu.Customer_Id == customerId &&
+                                                   cu.UserId.ToLower() == userId.ToLower() &&
+                                                   (activeOnly ? cu.Status != 0 : true));
+            return initiator == null;
+        }
+
         #endregion
 
         #region Methods

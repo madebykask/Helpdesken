@@ -83,6 +83,9 @@
                     data: {
                         userId: function() {
                             return $("#@Html.IdFor(m => m.UserId.Value)").val();
+                        },
+                        initiatorId: function () {
+                            return @Model.Id;
                         }
                     }
                 }

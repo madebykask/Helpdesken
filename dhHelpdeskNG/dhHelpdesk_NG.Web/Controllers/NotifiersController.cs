@@ -783,10 +783,10 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpGet]
-        public JsonResult CheckUniqueUserId(string userId)
+        public JsonResult CheckUniqueUserId(string userId, int initiatorId)
         {
-            var user = notifierRepository.GetInitiatorByUserId(userId, SessionFacade.CurrentCustomer.Id, true);
-            return Json(user == null, JsonRequestBehavior.AllowGet);
+            var isUnique = notifierRepository.IsInitiatorUserIdUnique(userId, initiatorId, SessionFacade.CurrentCustomer.Id, true);
+            return Json(isUnique, JsonRequestBehavior.AllowGet);
         }
 
         private KeyValuePair<string, string> GetSplitedName(string fullName)
