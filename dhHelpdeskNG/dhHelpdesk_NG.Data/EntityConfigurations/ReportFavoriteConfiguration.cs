@@ -20,7 +20,12 @@ namespace DH.Helpdesk.Dal.EntityConfigurations
                 .HasForeignKey(l => l.Customer_Id)
                 .WillCascadeOnDelete(false);
 
-            this.Property(l => l.Name).IsRequired().HasMaxLength(200);
+			this.HasRequired(l => l.User)
+				.WithMany(l => l.ReportFavorites)
+				.HasForeignKey(l => l.User_Id)
+				.WillCascadeOnDelete(false);
+
+			this.Property(l => l.Name).IsRequired().HasMaxLength(200);
             this.Property(l => l.Type).IsRequired();
 
             this.ToTable("tblReportFavorites");

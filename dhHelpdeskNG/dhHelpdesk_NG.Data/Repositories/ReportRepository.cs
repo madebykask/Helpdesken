@@ -457,10 +457,10 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public interface IReportFavoriteRepository : IRepository<ReportFavorite>
     {
-        IEnumerable<ReportFavoriteList> GetCustomerReportFavoriteListForCustomer(int id);
-        ReportFavorite GetCustomerReportFavoriteById(int reportFavoriteId, int customerId);
-        bool IsCustomerReportFavoriteNameUnique(int reportFavoriteId, int customerId, string name);
-        void DeleteCustomerReportFavoriteById(int reportFavoriteId, int customerId);
+        IEnumerable<ReportFavoriteList> GetCustomerReportFavoriteList(int customerId, int? userId);
+        ReportFavorite GetCustomerReportFavoriteById(int reportFavoriteId, int customerId, int? userId);
+        bool IsCustomerReportFavoriteNameUnique(int reportFavoriteId, int customerId, int? userId, string name);
+        void DeleteCustomerReportFavoriteById(int reportFavoriteId, int customerId, int? userId);
     }
 
     public class ReportFavoriteRepository : RepositoryBase<ReportFavorite>, IReportFavoriteRepository
@@ -473,35 +473,53 @@ namespace DH.Helpdesk.Dal.Repositories
             this.translator = translator;
         }
 
-        public IEnumerable<ReportFavoriteList> GetCustomerReportFavoriteListForCustomer(int id)
+        public IEnumerable<ReportFavoriteList> GetCustomerReportFavoriteList(int customerId, int? userId)
         {
-            var query = from rc in this.DataContext.ReportFavorites
-                        join c in this.DataContext.Customers on rc.Customer_Id equals c.Id
-                        where c.Id == id
-                        select new ReportFavoriteList
-                        {
-                            Id = rc.Id,
-                            Type = rc.Type,
-                            Name = rc.Name,
-                        };
+	        var query = DataContext.ReportFavorites.Where(x => x.Customer_Id == customerId);
+			if (userId.HasValue)
+			{
+				query = query.Where(x => x.User_Id == userId.Value);
+			}
 
-            return query;
+            return query.Select(x => new ReportFavoriteList
+			{
+				Id = x.Id,
+				Type = x.Type,
+				Name = x.Name,
+			}).ToList();
         }
 
-        public ReportFavorite GetCustomerReportFavoriteById(int reportFavoriteId, int customerId)
+        public ReportFavorite GetCustomerReportFavoriteById(int reportFavoriteId, int customerId, int? userId)
         {
-            return DataContext.ReportFavorites.FirstOrDefault(x => x.Id == reportFavoriteId && x.Customer_Id == customerId);
+            var query =  DataContext.ReportFavorites.Where(x => x.Id == reportFavoriteId && x.Customer_Id == customerId);
+	        if (userId.HasValue)
+	        {
+		        query = query.Where(x => x.User_Id == userId.Value);
+	        }
+
+	        return query.FirstOrDefault();
         }
 
-        public bool IsCustomerReportFavoriteNameUnique(int reportFavoriteId, int customerId, string name)
+        public bool IsCustomerReportFavoriteNameUnique(int reportFavoriteId, int customerId, int? userId, string name)
         {
-            return !DataContext.ReportFavorites.Any(x => x.Id != reportFavoriteId && x.Customer_Id == customerId && x.Name.ToLower() == name.ToLower());
+			var query = DataContext.ReportFavorites.Where(x => x.Id != reportFavoriteId && x.Customer_Id == customerId && x.Name.ToLower() == name.ToLower());
+			if (userId.HasValue)
+			{
+				query = query.Where(x => x.User_Id == userId.Value);
+			}
+			return !query.Any();
         }
 
-        public void DeleteCustomerReportFavoriteById(int reportFavoriteId, int customerId)
+        public void DeleteCustomerReportFavoriteById(int reportFavoriteId, int customerId, int? userId)
         {
-            var report = DataContext.ReportFavorites.FirstOrDefault(x => x.Id == reportFavoriteId && x.Customer_Id == customerId);
-            if (report != null)
+            var query = DataContext.ReportFavorites.Where(x => x.Id == reportFavoriteId && x.Customer_Id == customerId);
+			if (userId.HasValue)
+			{
+				query = query.Where(x => x.User_Id == userId.Value);
+			}
+
+	        var report = query.FirstOrDefault();
+			if (report != null)
             {
                 Delete(report);
             }
