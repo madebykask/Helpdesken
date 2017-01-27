@@ -2500,6 +2500,7 @@ namespace DH.Helpdesk.Web.Controllers
             var caseLog = m.caseLog;
             var caseMailSetting = m.caseMailSetting;
             var updateNotifierInformation = m.updateNotifierInformation;
+            m.caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(case_.Customer_Id);
             case_.Performer_User_Id = m.Performer_Id.HasValue && m.Performer_Id == 0 ? null : m.Performer_Id;
             case_.CaseResponsibleUser_Id = m.ResponsibleUser_Id.HasValue && m.ResponsibleUser_Id == 0 ? null : m.ResponsibleUser_Id; 
             case_.RegistrationSourceCustomer_Id = m.customerRegistrationSourceId;
@@ -2566,7 +2567,17 @@ namespace DH.Helpdesk.Web.Controllers
             // offset in Minute
             var customerTimeOffset = customerSetting.TimeZone_offset;                        
             var actionExternalTime = 0;
-            
+
+
+            //If Persons_Email field not show on case, then the field should not be saved on case in db
+            var customerfieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(case_.Customer_Id);
+
+            if (customerfieldSettings.Where(fs => fs.Name == GlobalEnums.TranslationCaseFields.Persons_EMail.ToString() &&
+                                                  fs.ShowOnStartPage == 0).Any())
+            {
+                case_.PersonsEmail = string.Empty;
+            }
+
             DHDomain.Case oldCase = new DHDomain.Case();
             if (edit)
             {                

@@ -47,5 +47,7 @@ namespace DH.Helpdesk.Web.Models.Case.Input
 
         public string FollowerUsers { get; set; }
 
-	}
+        public IList<CaseFieldSetting> caseFieldSettings { get; set; }
+
+    }
 }
