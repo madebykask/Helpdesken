@@ -246,6 +246,7 @@
     </Compile>
     <Compile Include="App_Start\BundleConfig.Invoices.cs" />
     <Compile Include="App_Start\BundleConfig.Orders.cs" />
+    <Compile Include="Areas\Admin\Controllers\Api\InvoiceApiController.cs" />
     <Compile Include="Areas\Invoices\Controllers\WebApi\InvoicesApiController.cs" />
     <Compile Include="Areas\Invoices\Models\BaseIndexModel.cs" />
     <Compile Include="Areas\Invoices\Models\IndexModelType.cs" />
@@ -1285,6 +1286,7 @@
     <Compile Include="Infrastructure\Tools\MimeHelper.cs" />
     <Compile Include="Infrastructure\Tools\WebMvcHelper.cs" />
     <Compile Include="Infrastructure\Translate\Translator.cs" />
+    <Compile Include="Infrastructure\UrlHelpers\Api\Admin\WebApiAdminUrlName.Invoice.cs" />
     <Compile Include="Infrastructure\UrlHelpers\Api\Invoices\WebApiInvoicesUrlName.Invoices.cs" />
     <Compile Include="Infrastructure\UrlHelpers\Api\Orders\WebApiOrdersUrlName.Orders.cs" />
     <Compile Include="Infrastructure\UrlHelpers\Api\WebApiUrlName.cs" />
@@ -3317,7 +3319,6 @@
     <Content Include="Areas\Admin\Views\Users\_Appearance.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\Admin\Controllers\Api\" />
     <Folder Include="Areas\Inventory\Infrastucture\" />
     <Folder Include="Infrastructure\ModelFactories\Problems\Concrete\" />
   </ItemGroup>
