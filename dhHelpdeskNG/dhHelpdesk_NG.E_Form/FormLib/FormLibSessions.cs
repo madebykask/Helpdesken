@@ -19,11 +19,11 @@ namespace DH.Helpdesk.EForm.FormLib
         private const string _CURRENT_COWORKERS = "CURRENT_COWORKERS";
         private const string _LAST_CASE_DATA_CHANGED = "LAST_CASE_DATA_CHANGED";
 
-        public static string TestDataChanged
+        public static bool LastCaseDataChanged
         {
             get
             {
-                return (string)HttpContext.Current.Session[_LAST_CASE_DATA_CHANGED];
+                return (bool)HttpContext.Current.Session[_LAST_CASE_DATA_CHANGED];
             }
             set
             {

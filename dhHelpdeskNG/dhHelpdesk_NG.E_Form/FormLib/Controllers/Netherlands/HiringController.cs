@@ -202,6 +202,7 @@ namespace DH.Helpdesk.EForm.FormLib.Areas.Netherlands.Controllers
             if (contract == null)
                 throw new HttpException(404, "Page not found");
 
+            FormLibSessions.LastCaseDataChanged = true;
             // Use for from Line manger portal to hide och show communicate window.
             if (contract.FinishingDate == null)
             {

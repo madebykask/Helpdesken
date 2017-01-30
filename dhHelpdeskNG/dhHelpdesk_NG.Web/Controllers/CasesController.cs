@@ -1319,10 +1319,47 @@ namespace DH.Helpdesk.Web.Controllers
 
             var _case = _caseService.GetCaseById(caseId);
             if (_case.FinishingDate != null)
+            {
+                SessionFacade.LastCaseDataChanged = false;
                 return Json(new { needUpdate = true, shouldReload = true, newData = "" }, JsonRequestBehavior.AllowGet);
+            }
 
+            var caseInfo = new CaseCurrentDataModel() {
+                Available = _case.Available,
+                Caption = _case.Caption,
+                CaseType_Id = _case.CaseType_Id,
+                Category_Id = _case.Category_Id,
+                CausingPart_Id = _case.CausingPartId,
+                Change_Id = _case.Change_Id,
+                CostCentre = _case.CostCentre,                
+                Description = _case.Description,
+                FinishingDate = _case.FinishingDate,
+                FinishingDescription = _case.FinishingDescription,
+                Miscellaneous = _case.Miscellaneous,
+                Region_Id = _case.Region_Id,
+                Department_Id = _case.Department_Id,
+                OU_Id = _case.OU_Id,                
+                PerformerUser_Id = _case.Performer_User_Id,
+                PersonsCellPhone = _case.PersonsCellphone,
+                PersonsEmail = _case.PersonsEmail,
+                PersonsPhone = _case.PersonsPhone,
+                PersonsName = _case.PersonsName,
+                Priority_Id = _case.Priority_Id,
+                Problem_Id = _case.Problem_Id,
+                ProductArea_Id = _case.ProductArea_Id,
+                ReferenceNumber = _case.ReferenceNumber,                
+                Place = _case.Place,
+                RegistrationSource = _case.RegistrationSource,
+                ReportedBy = _case.ReportedBy,
+                StateSecondary_Id = _case.StateSecondary_Id,
+                Status_Id = _case.Status_Id,
+                Supplier_Id = _case.Supplier_Id,
+                Urgency_Id = _case.Urgency_Id,
+                WorkingGroup_Id = _case.WorkingGroup_Id
+            };
 
-            return Json(new { shouldReload = _case });
+            SessionFacade.LastCaseDataChanged = false;
+            return Json(new { needUpdate = true, shouldReload = true, newData = caseInfo }, JsonRequestBehavior.AllowGet);
         }
 
         #endregion
@@ -2419,10 +2456,7 @@ namespace DH.Helpdesk.Web.Controllers
         /// <param name="m"></param>
         /// <returns></returns>
         private int Save(CaseEditInput m)
-        {
-           
-            var t = SessionFacade.TestDataChanged;
-
+        {           
             var utcNow = DateTime.UtcNow;
             var movedFromCustomerId = m.MovedFromCustomerId;
             var case_ = m.case_;
@@ -3748,7 +3782,8 @@ namespace DH.Helpdesk.Web.Controllers
             int? parentCaseId = null)
         {
             var m = new CaseInputViewModel ();
-            m.RefreshTab = false;
+            SessionFacade.LastCaseDataChanged = false;
+
             m.BackUrl = backUrl;
             m.CanGetRelatedCases = SessionFacade.CurrentUser.IsAdministrator();
             SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
