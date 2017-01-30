@@ -13,6 +13,14 @@
         <tr>
             <td></td>
             <td>
+                <input type="checkbox" name="User.SettingForNoMail" @(Model.User.SettingForNoMail == 1 ? "checked=checked" : "") value="1" />
+                <input type="hidden" name="User.SettingForNoMail" value="0" />
+                @Translation.Get("Skicka mail om användaren tilldelar sig själv ett ärende", Enums.TranslationSource.TextTranslation)
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
                 <input type="checkbox" name="User.AllocateCaseSMS" @(Model.User.AllocateCaseSMS == 1 ? "checked=checked" : "") value="1"/>
                 <input type="hidden" name="User.AllocateCaseSMS" value="0" />
                 @Translation.Get("Skicka SMS om användaren tilldelas ett ärende", Enums.TranslationSource.TextTranslation)
@@ -49,14 +57,6 @@
                 <input type="hidden" name="SendMailYesNo" value="0" />
                 @Translation.Get("Skicka mail om aktiva ärenden", Enums.TranslationSource.TextTranslation)
                 @Html.DropDownListFor(model => model.SendMailYesNoWhen, Model.CaseInfoMailList, "", new { style = "width: auto;" })
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                <input type="checkbox" name="User.SettingForNoMail" @(Model.User.SettingForNoMail == 1 ? "checked=checked" : "") value="1" />
-                <input type="hidden" name="User.SettingForNoMail" value="0" />
-                @Translation.Get("Skicka mail om användaren tilldelar sig själv ett ärende", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
     </table>
