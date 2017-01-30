@@ -240,9 +240,9 @@ namespace DH.Helpdesk.Web.Controllers
                 caseSolutionInputViewModel.CaseSolution.SetCurrentUserAsPerformer = null;
             }
 
-            if (caseSolutionInputViewModel.CaseSolution.WorkingGroup_Id == -1)
+            if (caseSolutionInputViewModel.CaseSolution.CaseWorkingGroup_Id == -1)
             {
-                caseSolutionInputViewModel.CaseSolution.WorkingGroup_Id = null;
+                caseSolutionInputViewModel.CaseSolution.CaseWorkingGroup_Id = null;
                 caseSolutionInputViewModel.CaseSolution.SetCurrentUsersWorkingGroup = 1;
             }
             else

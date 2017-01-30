@@ -639,7 +639,9 @@
                             var curItem = field.Items[i];
 
                             if ((relation.ShowAllIfKeyIsNull && dataHelper.isNullOrEmpty(primaryKeyValue)) ||
-                                (relation.ShowRunTimeCurrentValue && curItem.ItemValue == _CURRENT_RUN_TIME_ITEM_ID)) {
+                                (relation.ShowRunTimeCurrentValue && 
+                                 curItem.ItemValue == _CURRENT_RUN_TIME_ITEM_ID && 
+                                 primaryKeyValue == _CURRENT_RUN_TIME_ITEM_ID)) {
                                 canAdd = true;
                             }
                             else {                                
