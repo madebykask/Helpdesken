@@ -5556,6 +5556,30 @@ GO
 UPDATE tblText Set TextString = 'Informera initiativtagare och anhängare om åtgärder' WHERE Id=1743;
 GO
 
+If not exists (select * from tbltext where id = 1772)
+	insert into tbltext (id, TextString) VALUES (1772, '1. Skriv ett filnamn (kan lämnas blankt)')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1772 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1772, 2, '1. Write filename (leave blank for automatic naming)')
+GO
+
+If not exists (select * from tbltext where id = 1773)
+	insert into tbltext (id, TextString) VALUES (1773, '2. Tryck Ctrl+V för att klippa in bilden')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1773 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1773, 2, '2. Press Ctrl+V for inserting picture')
+GO
+
+If not exists (select * from tbltext where id = 1774)
+	insert into tbltext (id, TextString) VALUES (1774, '3. Spara för att lägga till på ärendet')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1774 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1774, 2, '3. Click on Save for adding to case')
+GO
+
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
