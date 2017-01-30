@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
 {
+    using System.Linq;
     using System.Net;
     using System.Web;
 
@@ -12,7 +13,8 @@
             {
                 var ipAddress = request.GetIpAddress();
                 var hostInfo = Dns.GetHostEntry(ipAddress);
-                return hostInfo.HostName;
+                var splitedName = hostInfo.HostName.ToString().Split('.').ToList();
+                return splitedName.First();                
             }
             catch 
             {
