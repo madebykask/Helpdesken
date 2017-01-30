@@ -32,7 +32,7 @@
             this.Property(x => x.EMailList).IsRequired().HasMaxLength(500);
             this.Property(x => x.FileName).IsRequired().HasMaxLength(100);
             this.Property(x => x.InformUser).IsRequired();
-            this.Property(x => x.InformUserText).IsOptional().HasMaxLength(500);
+            this.Property(x => x.InformUserText).IsOptional().HasMaxLength(520);
             this.Property(x => x.IsActive).IsRequired().HasColumnName("Status");
             this.Property(x => x.IsDefault).IsRequired().HasColumnName("isDefault");
             this.Property(x => x.IsEmailDefault).IsRequired().HasColumnName("isEMailDefault");

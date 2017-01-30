@@ -1565,6 +1565,9 @@ BEGIN
 	ALTER TABLE [dbo].[tblReportFavorites] CHECK CONSTRAINT [FK_tblReportFavorites_tblUsers]
 END
 
+--tblPriority
+ALTER TABLE tblPriority
+ALTER COLUMN InformUserText nvarchar(520)
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.30'
