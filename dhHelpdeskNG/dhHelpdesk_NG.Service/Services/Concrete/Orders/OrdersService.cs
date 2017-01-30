@@ -422,90 +422,14 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
 
                 uow.Save();
 
-                if (request.InformOrderer == true)
+                if (request.InformOrderer)
                 {
-                    var currentUser = this._userRepository.GetById(request.UserId);
-                    var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(currentUser.TimeZoneId);
-                    // get list of fields to replace [#1] tags in the subjcet and body texts
-                    List<Field> fields = GetOrderFieldsForEmail(entity, string.Empty, userTimeZone);
-                    var customer = this._customerRepository.GetById(request.CustomerId);
-
-                    var customEmailSender1 = customer.HelpdeskEmail;
-                    MailTemplateLanguageEntity m = this._mailTemplateService.GetMailTemplateLanguageForCustomer(40, request.CustomerId, request.LanguageId, request.Order.OrderTypeId);
-                    if (m != null)
-                    {
-                        if (!String.IsNullOrEmpty(m.Body) && !String.IsNullOrEmpty(m.Subject))
-                        {
-                            var to = request.Order.Orderer.OrdererEmail;
-
-                            var curMail = to.ToString();
-                            if (!string.IsNullOrWhiteSpace(curMail) && _emailService.IsValidEmail(curMail))
-                            {
-
-                                var el = new OrderEMailLog(orderId, historyEntity.Id, 40, curMail, customEmailSender1);
-                                fields = GetOrderFieldsForEmail(entity, el.OrderEMailLogGUID.ToString(), userTimeZone);
-                                string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.OrderEMailLogGUID.ToString();
-
-                                //var AbsoluteUrl = RequestExtension.GetAbsoluteUrl();
-                                var AbsoluteUrl = "";
-                                var mailResponse = EmailResponse.GetEmptyEmailResponse();
-                                var mailSetting = new EmailSettings(mailResponse, smtpInfo);
-                                var siteHelpdesk = AbsoluteUrl + "Areas/Orders/edit/" + orderId;
-                                var e_res = this._emailService.SendEmail(customEmailSender1, el.EMailAddress, m.Subject, m.Body, fields, mailSetting, el.MessageId, false, null, siteSelfService, siteHelpdesk);
-
-                                //el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
-                                var now = DateTime.Now;
-                                el.CreatedDate = now;
-                                this._orderEMailLogRepsoitory.Add(el);
-                                this._orderEMailLogRepsoitory.Commit();
-                            }
-                        }
-
-                    }
-
+                    SendOrderNotification(request, historyEntity, entity, smtpInfo, request.Order.Orderer.OrdererEmail);
                 }
 
-                if (request.InformReceiver == true)
+                if (request.InformReceiver)
                 {
-                    var currentUser = this._userRepository.GetById(request.UserId);
-                    var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(currentUser.TimeZoneId);
-                    // get list of fields to replace [#1] tags in the subjcet and body texts
-                    List<Field> fields = GetOrderFieldsForEmail(entity, string.Empty, userTimeZone);
-                    var customer = this._customerRepository.GetById(request.CustomerId);
-
-                    var customEmailSender1 = customer.HelpdeskEmail;
-                    MailTemplateLanguageEntity m = this._mailTemplateService.GetMailTemplateLanguageForCustomer(40, request.CustomerId, request.LanguageId, request.Order.OrderTypeId);
-                    if (m != null)
-                    {
-                        if (!String.IsNullOrEmpty(m.Body) && !String.IsNullOrEmpty(m.Subject))
-                        {
-                            var to = request.Order.Receiver.ReceiverEmail;
-
-                            var curMail = to.ToString();
-                            if (!string.IsNullOrWhiteSpace(curMail) && _emailService.IsValidEmail(curMail))
-                            {
-
-                                var el = new OrderEMailLog(orderId, historyEntity.Id, 40, curMail, customEmailSender1);
-                                fields = GetOrderFieldsForEmail(entity, el.OrderEMailLogGUID.ToString(), userTimeZone);
-                                string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.OrderEMailLogGUID.ToString();
-
-                                //var AbsoluteUrl = RequestExtension.GetAbsoluteUrl();
-                                var AbsoluteUrl = "";
-                                var mailResponse = EmailResponse.GetEmptyEmailResponse();
-                                var mailSetting = new EmailSettings(mailResponse, smtpInfo);
-                                var siteHelpdesk = AbsoluteUrl + "Areas/Orders/edit/" + orderId;
-                                var e_res = this._emailService.SendEmail(customEmailSender1, el.EMailAddress, m.Subject, m.Body, fields, mailSetting, el.MessageId, false, null, siteSelfService, siteHelpdesk);
-
-                                //el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
-                                var now = DateTime.Now;
-                                el.CreatedDate = now;
-                                this._orderEMailLogRepsoitory.Add(el);
-                                this._orderEMailLogRepsoitory.Commit();
-                            }
-                        }
-
-                    }
-
+                    SendOrderNotification(request, historyEntity, entity, smtpInfo, request.Order.Receiver.ReceiverEmail);
                 }
 
                 if (request.CreateCase)
@@ -561,6 +485,41 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                 this._orderAuditors.ForEach(a => a.Audit(request, new OrderAuditData(historyEntity.Id, existingOrder)));
 
                 return entity.Id;
+            }
+        }
+
+        private void SendOrderNotification(UpdateOrderRequest request, 
+            OrderHistoryEntity historyEntity, Order entity,
+            MailSMTPSetting smtpInfo, string mailto)
+        {
+            var currentUser = _userRepository.GetById(request.UserId);
+            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(currentUser.TimeZoneId);
+            var customer = _customerRepository.GetById(request.CustomerId);
+
+            var customEmailSender1 = customer.HelpdeskEmail;
+            var m = _mailTemplateService.GetMailTemplateLanguageForCustomer(40, request.CustomerId, request.LanguageId,
+                request.Order.OrderTypeId);
+            if (!String.IsNullOrEmpty(m?.Body) && !String.IsNullOrEmpty(m.Subject) &&
+                !string.IsNullOrWhiteSpace(mailto) && _emailService.IsValidEmail(mailto))
+            {
+                var el = new OrderEMailLog(entity.Id, historyEntity.Id, 40, mailto, customEmailSender1);
+                var fields = GetOrderFieldsForEmail(entity, el.OrderEMailLogGUID.ToString(), userTimeZone);
+                var siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() +
+                                      el.OrderEMailLogGUID.ToString();
+
+                //var AbsoluteUrl = RequestExtension.GetAbsoluteUrl();
+                var AbsoluteUrl = "";
+                var mailResponse = EmailResponse.GetEmptyEmailResponse();
+                var mailSetting = new EmailSettings(mailResponse, smtpInfo);
+                var siteHelpdesk = AbsoluteUrl + "Areas/Orders/edit/" + entity.Id;
+                var e_res = _emailService.SendEmail(customEmailSender1, el.EMailAddress, m.Subject, m.Body, fields, mailSetting,
+                    el.MessageId, false, null, siteSelfService, siteHelpdesk);
+
+                //el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                var now = DateTime.Now;
+                el.CreatedDate = now;
+                _orderEMailLogRepsoitory.Add(el);
+                _orderEMailLogRepsoitory.Commit();
             }
         }
 
