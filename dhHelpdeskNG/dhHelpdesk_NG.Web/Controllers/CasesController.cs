@@ -1311,60 +1311,18 @@ namespace DH.Helpdesk.Web.Controllers
             return this.RedirectToAction("edit", "cases", new { id = caseLog.CaseId });
         }
 
-        [HttpGet]
-        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
-        public PartialViewResult GetCaseInfo(int caseId)
+        [HttpGet]        
+        public JsonResult GetCaseInfo(int caseId)
         {
-            CaseInputViewModel m = null;
+            if (!SessionFacade.LastCaseDataChanged)
+                return Json(new { needUpdate = false, shouldReload = false, newData = "" }, JsonRequestBehavior.AllowGet);
 
-            if (SessionFacade.CurrentUser != null)
-            {
-                var userId = SessionFacade.CurrentUser.Id;
+            var _case = _caseService.GetCaseById(caseId);
+            if (_case.FinishingDate != null)
+                return Json(new { needUpdate = true, shouldReload = true, newData = "" }, JsonRequestBehavior.AllowGet);
 
-                var caseLockViewModel = GetCaseLockModel(caseId, userId);
-                var _case = _caseService.GetCaseById(caseId);
-                int customerId = _case.Customer_Id;
 
-                m = this.GetCaseInputViewModel(userId, customerId, caseId, caseLockViewModel, "", null, null, null, true);
-                
-                
-                ApplicationFacade.UpdateLoggedInUser(Session.SessionID, string.Empty);
-
-                // If user logged in from link in email
-                var currentCustomerId = SessionFacade.CurrentCustomer.Id;
-                var currentCase = _case;
-                if (currentCustomerId != currentCase.Customer_Id)
-                    this.InitFilter(currentCase.Customer_Id, false, CasesCustomFilter.None, false, true);
-
-                // User has not access to case
-                //if (m.EditMode == Enums.AccessMode.NoAccess)
-                  //  return this.RedirectToAction("index", "home");
-
-                
-                var moduleCaseInvoice = this._settingService.GetCustomerSetting(m.case_.Customer_Id).ModuleCaseInvoice;
-                if (moduleCaseInvoice == 1)
-                {
-                    var caseInvoices = this.invoiceArticleService.GetCaseInvoicesWithTimeZone(caseId, TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
-                    var invoiceArticles = this.invoiceArticlesModelFactory.CreateCaseInvoiceArticlesModel(caseInvoices);
-                    m.InvoiceModel = new CaseInvoiceModel(m.case_.Customer_Id, m.case_.Id, invoiceArticles, "", m.CaseKey, m.LogKey);
-                }
-
-                m.CustomerSettings = this.workContext.Customer.Settings;
-
-                m.CustomerSettings.ModuleCaseInvoice = Convert.ToBoolean(this._settingService.GetCustomerSetting(m.case_.Customer_Id).ModuleCaseInvoice); // TODO FIX
-            }
-
-            AddViewDataValues();
-
-            // Positive: Send Mail to...
-            if (m.CaseMailSetting.DontSendMailToNotifier == false)
-                m.CaseMailSetting.DontSendMailToNotifier = true;
-            else
-                m.CaseMailSetting.DontSendMailToNotifier = false;
-
-            m.RefreshTab = true;
-            ModelState.Clear();
-            return PartialView("_Input", m);
+            return Json(new { shouldReload = _case });
         }
 
         #endregion

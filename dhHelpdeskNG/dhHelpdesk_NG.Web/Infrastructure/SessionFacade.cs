@@ -129,11 +129,11 @@
 
         #region Public Properties
 
-        public static string TestDataChanged
+        public static bool LastCaseDataChanged
         {
             get
             {
-                return (string)HttpContext.Current.Session[_LAST_CASE_DATA_CHANGED];
+                return (bool)HttpContext.Current.Session[_LAST_CASE_DATA_CHANGED];
             }
             set
             {

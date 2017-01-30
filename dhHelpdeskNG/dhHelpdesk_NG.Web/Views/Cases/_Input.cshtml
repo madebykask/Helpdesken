@@ -2693,15 +2693,15 @@
                 }
                 
                 //$('#caseContainer').load('@Url.Content("~/Cases/GetCaseInfo?caseId=" + Model.case_.Id)');
-                $.ajax({
+                @*$.ajax({
                     url: "/Cases/GetCaseInfo",
                     type: "GET",
                     data: { year: Date.now, caseId: '@Model.case_.Id' }
                 })
                 .done(function(partialViewResult) {                    
                     $("#casePart001").html(partialViewResult);                                       
-                });
-                //location.reload(true);
+                });*@
+                location.reload(true);
             }
 
             if (ev.target.className.indexOf("eform") >= 0) {
