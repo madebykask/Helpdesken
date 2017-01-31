@@ -856,7 +856,25 @@ $(function () {
         $('#case__UserCode').val(updatedInfo.UserCode);
         $('#case__Region_Id').val(updatedInfo.Region_Id).change();
         $('#case__Department_Id').val(updatedInfo.Department_Id).change();
-        $('#case__OU_Id').val(updatedInfo.OU_Id).change();
+        $('#case__OU_Id').val(updatedInfo.OU_Id).change();        
+        $('#CustomerRegistrationSourceId').val(updatedInfo.CustomerRegistrationSourceId).change();
+        $('#case__CaseType_Id').val(updatedInfo.CaseType_Id).change();
+        $('#case__ProductArea_Id').val(updatedInfo.ProductArea_Id).change();
+        $('#case__System_Id').val(updatedInfo.System_Id).change();
+        $('#case__Urgency_Id').val(updatedInfo.Urgency_Id).change();
+        $('#case__Category_Id').val(updatedInfo.Category_Id).change();
+        $('#case__Supplier_Id').val(updatedInfo.Supplier_Id).change();
+        $('#case__InvoiceNumber').val(updatedInfo.InvoiceNumber);
+        $('#case__Caption').val(updatedInfo.Caption);
+        $('#case__Description').val(updatedInfo.Description);
+        $('#case__Miscellaneous').val(updatedInfo.Miscellaneous);
+        $('#case__Available').val(updatedInfo.Available);
+        $('#case__WorkingGroup_Id').val(updatedInfo.WorkingGroup_Id).change();
+        $('#case__CaseResponsibleUser_Id').val(updatedInfo.CaseResponsibleUser_Id).change();
+        $('#case__Performer_User_Id').val(updatedInfo.Performer_User_Id).change();
+        $('#case__Priority_Id').val(updatedInfo.Priority_Id).change();
+        $('#case__Status_Id').val(updatedInfo.Status_Id).change();
+        $('#case__StateSecondary_Id').val(updatedInfo.StateSecondary_Id).change();
 
     }
 
