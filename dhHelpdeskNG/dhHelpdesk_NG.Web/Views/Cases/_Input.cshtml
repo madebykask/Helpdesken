@@ -2698,9 +2698,14 @@
                     data: { year: Date.now, caseId: '@Model.case_.Id' }
                 })
                 .done(function(result) {
-                    debugger;
-                    var t = result;
-                    //$("#casePart001").html(partialViewResult);                                       
+                    //debugger;
+                    if (result.needUpdate){
+                        if (result.shouldReload){
+                            location.reload(true);
+                        }else{
+                            dhHelpdesk.refreshCaseInfo(result.newData);
+                        }
+                    }
                 });
                 //location.reload(true);
             }

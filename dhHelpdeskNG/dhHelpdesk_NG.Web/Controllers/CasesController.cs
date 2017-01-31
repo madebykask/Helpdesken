@@ -1359,7 +1359,7 @@ namespace DH.Helpdesk.Web.Controllers
             };
 
             SessionFacade.LastCaseDataChanged = false;
-            return Json(new { needUpdate = true, shouldReload = true, newData = caseInfo }, JsonRequestBehavior.AllowGet);
+            return Json(new { needUpdate = true, shouldReload = false, newData = caseInfo }, JsonRequestBehavior.AllowGet);
         }
 
         #endregion

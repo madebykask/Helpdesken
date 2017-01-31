@@ -842,6 +842,24 @@ $(function () {
         return that;
     }
 
+    dhHelpdesk.refreshCaseInfo = function (updatedInfo) {
+        if (updatedInfo == null)
+            return;
+
+        $('#case__ReportedBy').val(updatedInfo.ReportedBy);
+        $('#case__PersonsName').val(updatedInfo.PersonsName);
+        $('#case__PersonsEmail').val(updatedInfo.PersonsEmail);
+        $('#case__PersonsPhone').val(updatedInfo.PersonsPhone);
+        $('#case__PersonsCellphone').val(updatedInfo.PersonsCellPhone);
+        $('#case__CostCentre').val(updatedInfo.CostCentre);
+        $('#case__Place').val(updatedInfo.Place);
+        $('#case__UserCode').val(updatedInfo.UserCode);
+        $('#case__Region_Id').val(updatedInfo.Region_Id).change();
+        $('#case__Department_Id').val(updatedInfo.Department_Id).change();
+        $('#case__OU_Id').val(updatedInfo.OU_Id).change();
+
+    }
+
     function ClearCostCentre() {
         $('#case__CostCentre').val('');
     }
