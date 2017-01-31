@@ -15,7 +15,7 @@
 
 
 @{
-    this.ViewBag.Title = @Translation.Get("Edit FAQ", Enums.TranslationSource.TextTranslation);
+    this.ViewBag.Title = @Translation.GetCoreTextTranslation("Edit FAQ");
 }
 
 <script type="text/javascript">
@@ -36,13 +36,13 @@
             <ul class="secnav">
                 @if (Model.UserHasFaqAdminPermission)
                 {
-                <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", null, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
+                <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Spara"), "edit", null, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
                     <!--<li><input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn" /></li>-->
-                    <li><a id="delete_button" class="btn">@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</a></li>                    
+                    <li><a id="delete_button" class="btn">@Translation.GetCoreTextTranslation("Ta bort")</a></li>
                 }
-                <li><a href="@Url.Action("Index")" class="btn">@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)</a></li>
+                <li><a href="@Url.Action("Index")" class="btn">@Translation.GetCoreTextTranslation("Avbryt")</a></li>
             </ul>
         </div>
     </div>
-    @Html.Partial("FaqEditing", new EditingFaqModel(this.Model.Id.ToString(CultureInfo.InvariantCulture), this.Model.Category, this.Model.Question, this.Model.Answer, this.Model.InternalAnswer, this.Model.Files, this.Model.UrlOne, this.Model.UrlTwo, this.Model.WorkingGroup, this.Model.InformationIsAvailableForNotifiers, this.Model.ShowOnStartPage))
+    @Html.Partial("FaqEditing", new EditingFaqModel(this.Model.Id.ToString(), this.Model.Category, this.Model.Question, this.Model.Answer, this.Model.InternalAnswer, this.Model.Files, this.Model.UrlOne, this.Model.UrlTwo, this.Model.WorkingGroup, this.Model.InformationIsAvailableForNotifiers, this.Model.ShowOnStartPage, Model.Languages, Model.LanguageId))
 }

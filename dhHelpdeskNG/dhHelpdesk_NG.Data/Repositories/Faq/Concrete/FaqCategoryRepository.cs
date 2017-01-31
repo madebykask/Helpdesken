@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
+﻿using DH.Helpdesk.Common.Enums;
+
+namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -41,10 +43,59 @@
             this.DataContext.FAQCategories.Remove(faqCategory);
         }
 
-        public CategoryOverview FindById(int categoryId)
+        public CategoryOverview GetCategoryById(int categoryId, int languageId)
         {
-            var faqCategory = this.DataContext.FAQCategories.Find(categoryId);
-            return new CategoryOverview { Id = faqCategory.Id, Name = faqCategory.Name };
+            CategoryOverview result = null;
+
+            if (languageId != LanguageIds.Swedish)
+            {
+                var faqCategoryLng = DataContext.FaqCategoryLanguages.FirstOrDefault(x => x.FAQCategory_Id == categoryId & x.Language_Id == languageId);
+                if (faqCategoryLng != null)
+                {
+                    result = new CategoryOverview
+                    {
+                        Id = faqCategoryLng.FAQCategory_Id,
+                        Name = faqCategoryLng.Name
+                    };
+                }
+            }
+            if (result == null)
+            {
+                var faqCategory = DataContext.FAQCategories.Find(categoryId);
+                result = new CategoryOverview {Id = faqCategory.Id, Name = faqCategory.Name};
+            }
+
+            return result;
+        }
+
+        public void UpdateSwedishCategory(EditCategory editedCategory)
+        {
+            var category = DataContext.FAQCategories.Find(editedCategory.Id);
+
+            category.Name = editedCategory.Name;
+            category.ChangedDate = editedCategory.ChangedDate;
+        }
+
+        public void UpdateOtherLanguageCategory(EditCategory editedCategory)
+        {
+            var categoryLng = DataContext.FaqCategoryLanguages.SingleOrDefault(
+                    l => l.FAQCategory_Id == editedCategory.Id && l.Language_Id == editedCategory.LanguageId);
+
+            if (categoryLng != null)
+            {
+                categoryLng.Name = editedCategory.Name;
+            }
+            else
+            {
+                var newCategoryLng = new FaqCategoryLanguageEntity
+                {
+                    FAQCategory_Id = editedCategory.Id,
+                    Name = editedCategory.Name,
+                    Language_Id = editedCategory.LanguageId
+                };
+
+                DataContext.FaqCategoryLanguages.Add(newCategoryLng);
+            }
         }
 
         public List<CategoryWithSubcategories> FindCategoriesWithSubcategoriesByCustomerId(int customerId)
@@ -65,12 +116,6 @@
         public bool CategoryHasSubcategories(int categoryId)
         {
             return this.DataContext.FAQCategories.Any(c => c.Parent_FAQCategory_Id == categoryId);
-        }
-
-        public void UpdateNameById(int categoryId, string newName)
-        {
-            var faqCategory = this.DataContext.FAQCategories.Find(categoryId);
-            faqCategory.Name = newName;
         }
 
         #endregion

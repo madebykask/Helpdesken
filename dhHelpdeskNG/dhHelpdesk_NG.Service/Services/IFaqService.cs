@@ -38,5 +38,9 @@
         IList<Faq> GetFaqs(int customerId);
 
         byte[] GetFileContentByFaqIdAndFileName(int faqId, string basePath, string fileName);
+
+        void UpdateCategory(EditCategory editedCategory);
+
+        Faq GetFaqById(int id, int languageId);
     }
 }

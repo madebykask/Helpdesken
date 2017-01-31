@@ -43,6 +43,8 @@ namespace DH.Helpdesk.Web.Controllers
 
         private readonly IInfoService _infoService;
 
+        private readonly ILanguageService _languageService;
+
         #endregion
 
         #region Constructors and Destructors
@@ -58,6 +60,7 @@ namespace DH.Helpdesk.Web.Controllers
             IProductAreaService productAreaService,
             IWorkingGroupService workingGroupService,
             IMasterDataService masterDataService,
+            ILanguageService languageService,
             IInfoService infoService)
             : base(masterDataService)
         {
@@ -71,6 +74,7 @@ namespace DH.Helpdesk.Web.Controllers
             _productAreaService = productAreaService;
             _workingGroupService = workingGroupService;
             _infoService = infoService;
+            _languageService = languageService;
         }
 
         #endregion
@@ -79,7 +83,7 @@ namespace DH.Helpdesk.Web.Controllers
         public ViewResult EditQuestionnaire(int questionnaireId, int languageId)
         {
             var questionnaire = _questionnaireService.GetQuestionnaireById(questionnaireId, languageId);
-            var languageOverviewsOrginal = _questionnaireService.FindActiveLanguageOverivews();
+            var languageOverviewsOrginal = _languageService.FindActiveLanguageOverivews();
             var languageOverviews =
                 languageOverviewsOrginal.Select(
                     o =>

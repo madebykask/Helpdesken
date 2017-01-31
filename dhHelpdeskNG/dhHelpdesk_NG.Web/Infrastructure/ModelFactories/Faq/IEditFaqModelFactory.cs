@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Faq
+﻿using System.Web.Mvc;
+
+namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Faq
 {
     using System.Collections.Generic;
 
@@ -13,6 +15,8 @@
             List<CategoryWithSubcategories> categories, 
             List<string> fileNames, 
             List<ItemOverview> workingGroups,
-            bool userHasFaqAdminPermission);
+            bool userHasFaqAdminPermission,
+            SelectList languages,
+            int languageId);
     }
 }

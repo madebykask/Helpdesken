@@ -9,7 +9,7 @@
 
     public static class DropDownWithSubmenusExtension
     {
-        public static MvcHtmlString DropDownWithSubmenus(this HtmlHelper htmlHelper, string id, string name, bool allowEmpty, DropDownWithSubmenusContent dropDownWithSubmenusContent)
+        public static MvcHtmlString DropDownWithSubmenus(this HtmlHelper htmlHelper, string id, string name, bool allowEmpty, DropDownWithSubmenusContent dropDownWithSubmenusContent, bool disabled = false)
         {
             var htmlOutput = new StringBuilder();
 
@@ -18,7 +18,7 @@
 
             DrawScripts(htmlOutput, id, buttonId, valueContainerId);
             DrawHat(htmlOutput, id);
-            DrawButton(htmlOutput, buttonId, dropDownWithSubmenusContent);
+            DrawButton(htmlOutput, buttonId, dropDownWithSubmenusContent, disabled);
             DrawMenu(htmlOutput, allowEmpty, dropDownWithSubmenusContent.Items);
             DrawValueContainer(htmlOutput, valueContainerId, name, dropDownWithSubmenusContent.SelectedValue);
             DrawFooter(htmlOutput);
@@ -50,7 +50,7 @@
             return null;
         }
 
-        private static void DrawButton(StringBuilder htmlOutput, string buttonId, DropDownWithSubmenusContent dropDownWithSubmenusContent)
+        private static void DrawButton(StringBuilder htmlOutput, string buttonId, DropDownWithSubmenusContent dropDownWithSubmenusContent, bool disabled = false)
         {
             var buttonText = string.Empty;
 
@@ -67,11 +67,20 @@
                     }
                 }
             }
-
-            htmlOutput.AppendLine(
-                string.Format(
-                    @"<button id=""{0}"" class=""btn dropdown-toggle sr-only"" type=""button"" data-toggle=""dropdown"">",
-                    buttonId));
+            if (disabled)
+            {
+                htmlOutput.AppendLine(
+                    string.Format(
+                        @"<button id=""{0}"" class=""btn dropdown-toggle sr-only"" type=""button"" data-toggle=""dropdown"" disabled=""disabled"">",
+                        buttonId));
+            }
+            else
+            {
+                htmlOutput.AppendLine(
+                    string.Format(
+                        @"<button id=""{0}"" class=""btn dropdown-toggle sr-only"" type=""button"" data-toggle=""dropdown"">",
+                        buttonId));
+            }
 
             htmlOutput.AppendLine(buttonText);
             htmlOutput.AppendLine(@"<span class=""caret""></span>");

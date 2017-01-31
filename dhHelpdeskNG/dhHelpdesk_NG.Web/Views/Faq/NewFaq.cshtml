@@ -1,4 +1,5 @@
 ﻿@using System.Web.Optimization
+@using DH.Helpdesk.Common.Enums
 @using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Models.Faq.Output
 
@@ -39,7 +40,7 @@
             </ul>
         </div>
     </div>
-    @Html.Partial("FaqEditing", new EditingFaqModel(this.Model.TemporaryId, this.Model.Categories, string.Empty, string.Empty, string.Empty, new List<string>(0), string.Empty, string.Empty, this.Model.WorkingGroups, false, false))
+    @Html.Partial("FaqEditing", new EditingFaqModel(this.Model.TemporaryId, this.Model.Categories, string.Empty, string.Empty, string.Empty, new List<string>(0), string.Empty, string.Empty, this.Model.WorkingGroups, false, false, null, LanguageIds.Swedish))
 }
 
 @*<script type="text/javascript" src="~/Content/js/dhHelpdesk.js">*@

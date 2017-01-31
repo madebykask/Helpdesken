@@ -1,10 +1,12 @@
-﻿namespace DH.Helpdesk.Web.Models.Faq.Output
+﻿using System.Web.Mvc;
+
+namespace DH.Helpdesk.Web.Models.Faq.Output
 {
     using System;
 
     public sealed class EditCategoryModel
     {
-        public EditCategoryModel(int id, string name, bool hasFaqs, bool hasSubcategories, bool userHasFaqAdminPermission)
+        public EditCategoryModel(int id, string name, bool hasFaqs, bool hasSubcategories, bool userHasFaqAdminPermission, SelectList languages)
         {
             this.UserHasFaqAdminPermission = userHasFaqAdminPermission;
             if (id <= 0)
@@ -21,6 +23,7 @@
             this.Name = name;
             this.HasFaqs = hasFaqs;
             this.HasSubcategories = hasSubcategories;
+            this.Languages = languages;
         }
 
         public int Id { get; private set; }
@@ -32,5 +35,7 @@
         public bool HasSubcategories { get; private set; }
 
         public bool UserHasFaqAdminPermission { get; private set; }
+
+        public SelectList Languages { get; set; }
     }
 }

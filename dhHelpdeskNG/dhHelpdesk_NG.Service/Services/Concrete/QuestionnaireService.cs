@@ -46,13 +46,6 @@
             this._questionnaireRepository.Commit();
         }
 
-        public List<ItemOverview> FindActiveLanguageOverivews()
-        {
-            var overviews = this._languageRepository.GetAll().Select(l => new { Name = l.Name, Value = l.Id.ToString() }).ToList();
-            return
-               overviews.Select(o => new ItemOverview(o.Name, o.Value.ToString(CultureInfo.InvariantCulture))).ToList();
-        }
-
         public List<QuestionnaireOverview> FindQuestionnaireOverviews(int customerId)
         {
             return this._questionnaireRepository.FindQuestionnaireOverviews(customerId);
