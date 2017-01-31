@@ -14,19 +14,19 @@
                 <thead>
                 <tr>
                     <th>
-                        @Translation.Get("Ärende")
+                        @Translation.GetCoreTextTranslation("Ärende")
                     </th>
                     <th>
-                        @Translation.Get("Rubrik")
+                        @Translation.GetCoreTextTranslation("Rubrik")
                     </th>
                     <th>
-                        @Translation.Get("E-post")
+                        @Translation.GetCoreTextTranslation("E-post")
                     </th>
                     <th>
-                        @Translation.Get("Status")
+                        @Translation.GetCoreTextTranslation("Status")
                     </th>
                     <th>
-                        @Translation.Get("Ta bort")
+                        @Translation.GetCoreTextTranslation("Ta bort")
                     </th>
                 </tr>
                 </thead>
@@ -48,10 +48,17 @@
                             <td>
                                 @connectedCase.IsSent.GetDisplayValue()
                             </td>
-                            <td>
-                                @*@Html.ActionLink(Translation.Get("Ta bort"), "DeleteConnectedCase", new {questionnaireId, caseId = @connectedCase.CaseId, circularId = @connectedCase.CircularId}, new {@class = "btn"})*@
-                                <input type="button" value="@Translation.Get("Ta bort")" class="btn" id="btnDeleteCase" onclick="removeCase.call(this);"/>
-                            </td>
+                                <td>
+                                    @*@Html.ActionLink(Translation.Get("Ta bort"), "DeleteConnectedCase", new {questionnaireId, caseId = @connectedCase.CaseId, circularId = @connectedCase.CircularId}, new {@class = "btn"})*@
+                                    @if (!connectedCase.IsSent.Value)
+                                    {
+                                        <input type="button" value="@Translation.GetCoreTextTranslation("Ta bort")" class="btn" id="btnDeleteCase" onclick="removeCase.call(this);"/>
+                                    }
+                                    else
+                                    {
+                                        <input type="button" value="@Translation.GetCoreTextTranslation("Ta bort")" class="btn" id="btnDeleteCase" disabled="disabled" onclick="removeCase.call(this);" />
+                                    }
+                                </td>
                         </tr>
                     }
                 }
