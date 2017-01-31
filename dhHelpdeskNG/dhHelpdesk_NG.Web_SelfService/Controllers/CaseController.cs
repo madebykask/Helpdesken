@@ -386,7 +386,8 @@
                     model.NewCase.OU_Id = caseTemplate.OU_Id.HasValue ? caseTemplate.OU_Id.Value : notifier?.OrganizationUnitId;
                     model.NewCase.Place = string.IsNullOrEmpty(caseTemplate.Place) ? notifier?.Place : caseTemplate.Place;
                     model.NewCase.UserCode = string.IsNullOrEmpty(caseTemplate.UserCode) ? notifier?.Code : caseTemplate.UserCode;
-                    
+                    model.NewCase.CostCentre = caseTemplate.CostCentre;
+
                     model.NewCase.InventoryNumber = string.IsNullOrEmpty(caseTemplate.InventoryNumber)? Request.GetComputerName() : caseTemplate.InventoryNumber;
                     model.NewCase.InventoryType = caseTemplate.InventoryType;
                     model.NewCase.InventoryLocation = caseTemplate.InventoryLocation;
@@ -1280,7 +1281,8 @@
                             GlobalEnums.TranslationCaseFields.Department_Id.ToString(), 
                             GlobalEnums.TranslationCaseFields.OU_Id.ToString(), 
                             GlobalEnums.TranslationCaseFields.Place.ToString(), 
-                            GlobalEnums.TranslationCaseFields.UserCode.ToString()
+                            GlobalEnums.TranslationCaseFields.UserCode.ToString(),
+                            GlobalEnums.TranslationCaseFields.CostCentre.ToString()
                         };
 
             string[] computerInformationGroup = new string[] 

@@ -274,6 +274,23 @@
                                         </div>
                                     }
 
+                                    @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.CostCentre.ToString()))
+                                    {
+                                        <div class="form-group row @GlobalEnums.TranslationCaseFields.CostCentre.ToString()">
+                                            <label class="col-md-3">
+                                                @Translation.Get(GlobalEnums.TranslationCaseFields.CostCentre.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
+                                                @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.CostCentre.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
+                                                {
+                                                    <span class="mandatorystar">*</span>
+                                                }
+                                            </label>
+
+                                            <div class="col-md-9">
+                                                @Html.TextBoxFor(i => Model.NewCase.CostCentre, new { @class = "hasAttribute", maxlength = "50", standardName = GlobalEnums.TranslationCaseFields.CostCentre.ToString() })
+                                            </div>
+                                        </div>
+                                    }
+
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Place.ToString()))
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.Place.ToString()">
