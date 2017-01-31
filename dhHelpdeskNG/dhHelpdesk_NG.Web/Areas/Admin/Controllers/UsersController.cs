@@ -556,6 +556,7 @@
             var copy = userModel.User;
             copy.Id = 0;
             copy.Password = NewPassword;
+            copy.TimeZoneId = userModel.SelectedTimeZone;
 
             if (copy.Language_Id == 0)
             {
