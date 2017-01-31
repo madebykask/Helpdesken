@@ -55,31 +55,31 @@
                             var isInactive = item.IsActive == 0; 
                             
                             <tr id="@item.Id" class="SortableRow @(isInactive?"inactive":"")">
-                                <td style="cursor:move">
+                                <td>
                                     @Html.HiddenFor(modelItem => item.OrderNum)
 
                                     <a href="@Url.Action("edit", "priority", new { area = "admin", id = item.Id })">@Html.DisplayFor(modelItem => item.Code)</a>
                                 </td>
-                                <td style="cursor:move">
+                                <td>
                                     <a href="@Url.Action("edit", "priority", new { area = "admin", id = item.Id })">@Html.DisplayFor(modelItem => item.Name)</a>
                                 </td>
-                                <td style="cursor:move">
+                                <td> 
                                     <a href="@Url.Action("edit", "priority", new { area = "admin", id = item.Id })">@Html.DisplayFor(modelItem => item.Description)</a>
                                 </td>
-                                <td style="cursor:move">
+                                <td>
                                     @if (item.SolutionTime != 0)
                                     {
                                         <a href="@Url.Action("edit", "priority", new { area = "admin", id = item.Id })">@Html.DisplayFor(modelItem => item.SolutionTime)
                                             @Translation.Get("timmar", Enums.TranslationSource.TextTranslation)</a>
                                     }
                                 </td>
-                                <td style="cursor:move">
+                                <td>
                                     <a href="@Url.Action("edit", "priority", new { area = "admin", id = item.Id })">@Translation.Get(item.IsDefault.TranslateBit(), Enums.TranslationSource.TextTranslation)</a>
                                 </td>
-                                <td style="cursor:move">
+                                <td>
                                     <a href="@Url.Action("edit", "priority", new { area = "admin", id = item.Id })">@Translation.Get(item.IsActive.TranslateBit(), Enums.TranslationSource.TextTranslation)</a>
                                 </td>
-                                <td style="cursor:move">
+                                <td>
                                     <a href="@Url.Action("edit", "priority", new { area = "admin", id = item.Id })">@Html.DisplayFor(modelItem => item.FileName)</a>
                                 </td>
                             </tr>
@@ -93,7 +93,7 @@
 
 <script type="text/javascript">    
 
-    $(function () {        
+    @*$(function () {        
         $("#tblpriority tbody").sortable(
             {                                
                 update: function (event, ui) {                    
@@ -117,7 +117,7 @@
 
         //Has problem in FireFox
         //$("#tblpriority tbody").disableSelection();
-    });
+    });*@
 
 </script>
     
