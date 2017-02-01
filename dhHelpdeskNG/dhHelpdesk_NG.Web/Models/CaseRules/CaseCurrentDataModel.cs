@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace DH.Helpdesk.Web.Models.CaseRules
 {
@@ -8,7 +9,7 @@ namespace DH.Helpdesk.Web.Models.CaseRules
 
         #region Initiator      
 
-        public string ReportedBy { get; set; }        
+        public string ReportedBy { get; set; }
 
         public string PersonsName { get; set; }
 
@@ -160,5 +161,53 @@ namespace DH.Helpdesk.Web.Models.CaseRules
 
         #endregion    
 
+    }
+
+    public sealed class CaseCurrentDataModelJS : CaseCurrentDataModel
+    {
+        public CaseCurrentDataModelJS()
+        {
+            Logs = new List<LogJS>();
+            Files = new List<FileJS>(); 
+        }
+
+        public string PlanDateJS { get; set; }
+
+        public string WatchDateJS { get; set; }
+
+        public List<LogJS> Logs { get; set; }
+
+        public List<FileJS> Files { get; set; }
+    }
+
+    public sealed class LogJS
+    {
+        public int Id { get; set; }
+
+        public string LogDate { get; set; }
+
+        public string Text_External { get; set; }
+
+        public string Text_Internal { get; set; }
+
+        public string FinishingDescription { get; set; }
+
+        public string FinishingDate { get; set; }
+
+        public int? FinishingCause_Id { get; set; }
+
+        public string UserId { get; set; }
+    }
+
+    public sealed class FileJS
+    {
+        public int Id { get; set; }
+
+        public string FileName { get; set; }
+
+        public string CreateDate { get; set; }
+
+        public string UserId { get; set; }
+        
     }
 }

@@ -117,6 +117,7 @@ namespace DH.Helpdesk.EForm.FormLib.Areas.Norway.Controllers
             model.TempSave(ref dictionary);
 
             model.ActiveTab = formCollection["activeTab"];
+            FormLibSessions.LastCaseDataChanged = true;
 
             var actionStateChange = formCollection["actionStateChange"] != null || Request.IsAjaxRequest();
             var actionState = formCollection["actionState"];
@@ -238,6 +239,8 @@ namespace DH.Helpdesk.EForm.FormLib.Areas.Norway.Controllers
             {
                 ViewBag.CurrentCaseId = contract.Id;
             }
+
+            FormLibSessions.LastCaseDataChanged = true;
 
             var model = FormModelFactory.InitEdit(xmlPath, contract, !string.IsNullOrEmpty(Request.QueryString["locked"]));
             model.Form = _contractRepository.GetFormByGuid(model.FormGuid);

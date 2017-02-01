@@ -28,7 +28,7 @@
                 <tbody>
                 @foreach (var r in Model.Logs)
                 {
-                    <tr>
+                    <tr id="@r.Id">
                         <td style="max-width:105px">
                             @if (r.FinishingDate.HasValue)
                             {

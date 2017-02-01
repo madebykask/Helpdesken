@@ -1323,39 +1323,40 @@ namespace DH.Helpdesk.Web.Controllers
                 SessionFacade.LastCaseDataChanged = false;
                 return Json(new { needUpdate = true, shouldReload = true, newData = "" }, JsonRequestBehavior.AllowGet);
             }
+            
+            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
 
-            var caseInfo = new CaseCurrentDataModel() {
-                Available = _case.Available,
-                Caption = _case.Caption,
-                CaseType_Id = _case.CaseType_Id,
-                Category_Id = _case.Category_Id,
-                CausingPart_Id = _case.CausingPartId,
-                Change_Id = _case.Change_Id,
-                CostCentre = _case.CostCentre,                
-                Description = _case.Description,
-                FinishingDate = _case.FinishingDate,
-                FinishingDescription = _case.FinishingDescription,
-                Miscellaneous = _case.Miscellaneous,
+            var caseInfo = new CaseCurrentDataModelJS() {
+                ReportedBy = _case.ReportedBy,
+                PersonsName = _case.PersonsName,
+                PersonsPhone = _case.PersonsPhone,
+                PlanDateJS = _case.PlanDate.HasValue ? _case.PlanDate.Value.ToLongDateString() : "",
+                WatchDateJS = _case.WatchDate.HasValue ? _case.WatchDate.Value.ToLongDateString() : "",
                 Region_Id = _case.Region_Id,
                 Department_Id = _case.Department_Id,
-                OU_Id = _case.OU_Id,                
-                PerformerUser_Id = _case.Performer_User_Id,
-                PersonsCellPhone = _case.PersonsCellphone,
-                PersonsEmail = _case.PersonsEmail,
-                PersonsPhone = _case.PersonsPhone,
-                PersonsName = _case.PersonsName,
+                OU_Id = _case.OU_Id,
+                CaseType_Id = _case.CaseType_Id,
                 Priority_Id = _case.Priority_Id,
-                Problem_Id = _case.Problem_Id,
                 ProductArea_Id = _case.ProductArea_Id,
-                ReferenceNumber = _case.ReferenceNumber,                
-                Place = _case.Place,
-                RegistrationSource = _case.RegistrationSource,
-                ReportedBy = _case.ReportedBy,
                 StateSecondary_Id = _case.StateSecondary_Id,
                 Status_Id = _case.Status_Id,
-                Supplier_Id = _case.Supplier_Id,
-                Urgency_Id = _case.Urgency_Id,
-                WorkingGroup_Id = _case.WorkingGroup_Id
+                WorkingGroup_Id = _case.WorkingGroup_Id,
+                Files = _case.CaseFiles.Select(f=> 
+                                new FileJS {
+                                            Id = f.Id,
+                                            FileName = f.FileName,
+                                            UserId = SessionFacade.CurrentUser.FirstName + " " + SessionFacade.CurrentUser.SurName
+                                }).ToList(),
+
+                Logs = _case.Logs.Select(l => 
+                                new LogJS {
+                                            Id = l.Id,
+                                            LogDate = TimeZoneInfo.ConvertTimeFromUtc(l.LogDate.ToUniversalTime(), userTimeZone).ToString(),
+                                            Text_Internal = l.Text_Internal,
+                                            Text_External = l.Text_External,
+                                            UserId = l.User == null ? l.RegUser : l.User.FirstName + " " + l.User.SurName
+                                }).ToList()
+
             };
 
             SessionFacade.LastCaseDataChanged = false;
