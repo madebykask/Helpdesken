@@ -602,6 +602,30 @@ GO
 If not exists (select * from tblTextTranslation where text_id = 1761 and Language_Id = 1)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1761, 1, 'måste anges')
 	
+
+If not exists (select * from tbltext where id = 1775)
+	insert into tbltext (id, TextString, TextType) VALUES (1775, '1. Write filename (leave blank for automatic naming)', 300)
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1775 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1775, 1, '1. Skriv ett filnamn (kan lämnas blankt)')
+GO
+
+If not exists (select * from tbltext where id = 1776)
+	insert into tbltext (id, TextString, TextType) VALUES (1776, '2. Press Ctrl+V for inserting picture', 300)
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1776 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1776, 1, '2. Tryck Ctrl+V för att klippa in bilden')
+GO
+
+If not exists (select * from tbltext where id = 1777)
+	insert into tbltext (id, TextString, TextType) VALUES (1777, '3. Click on Save for adding to case', 300)
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1777 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1777, 1, '3. Spara för att lägga till på ärendet')
+GO
 	
 
 

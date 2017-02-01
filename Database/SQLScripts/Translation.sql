@@ -5580,6 +5580,7 @@ If not exists (select * from tblTextTranslation where text_id = 1774 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1774, 2, '3. Click on Save for adding to case')
 GO
 
+/* Id 1775 - 1777 SelfService */
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
