@@ -862,7 +862,7 @@ $(function () {
         setTimeout(function () {
             $('#case__Department_Id').val(updatedInfo.Department_Id).change();
             setTimeout(function () {
-                $('#case__Ou_Id').val(updatedInfo.OU_Id);
+                $('#case__Ou_Id').val(updatedInfo.OU_Id).change();
             }, 3000);
         }, 2000);
 
