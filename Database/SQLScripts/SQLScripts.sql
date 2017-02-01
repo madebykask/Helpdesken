@@ -1569,5 +1569,10 @@ END
 ALTER TABLE tblPriority
 ALTER COLUMN InformUserText nvarchar(520)
 
+UPDATE [dbo].[tblOrderFieldSettings] SET Show = 0, ShowInList = 0, [Required] = 0, ShowExternal = 0
+WHERE [OrderField] IN ('UserInitials', 'UserLocation',
+ 'UserPostalAddress', 'UserDepartment_Id', 'UserOU_Id',
+  'Responsibility', 'ReferenceNumber')
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.30'

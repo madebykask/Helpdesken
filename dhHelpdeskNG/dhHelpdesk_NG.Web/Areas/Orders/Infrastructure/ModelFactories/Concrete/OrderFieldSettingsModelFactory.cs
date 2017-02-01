@@ -393,22 +393,22 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                         CreateTextFieldSettingForUpdate(settings.UserLastName),
                         CreateTextFieldSettingForUpdate(settings.UserPhone),
                         CreateTextFieldSettingForUpdate(settings.UserEMail),
-                        CreateTextFieldSettingForUpdate(settings.Initials),
+                        null,
                         CreateTextFieldSettingForUpdate(settings.PersonalIdentityNumber),
                         CreateTextFieldSettingForUpdate(settings.Extension),
                         CreateTextFieldSettingForUpdate(settings.Title),
-                        CreateTextFieldSettingForUpdate(settings.Location),
+                        null,
                         CreateTextFieldSettingForUpdate(settings.RoomNumber),
-                        CreateTextFieldSettingForUpdate(settings.PostalAddress),
+                        null,
                         CreateTextFieldSettingForUpdate(settings.EmploymentType),
-                        CreateTextFieldSettingForUpdate(settings.DepartmentId1),
-                        CreateTextFieldSettingForUpdate(settings.UnitId),
+                        null,
+                        null,
                         CreateTextFieldSettingForUpdate(settings.DepartmentId2),
                         CreateTextFieldSettingForUpdate(settings.Info),
-                        CreateTextFieldSettingForUpdate(settings.Responsibility),
+                        null,
                         CreateTextFieldSettingForUpdate(settings.Activity),
                         CreateTextFieldSettingForUpdate(settings.Manager),
-                        CreateTextFieldSettingForUpdate(settings.ReferenceNumber));
+                        null);
         }
 
         private static AccountInfoFieldSettings CreateAccountInfoForUpdate(AccountInfoFieldSettingsModel settings)
@@ -455,6 +455,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
 
         private static FieldSettings CreateFieldSettingForUpdate(FieldSettingsModel settings)
         {
+
             return FieldSettings.CreateUpdated(
                         settings.Show,
                         settings.ShowInList,

@@ -61,12 +61,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.FieldModels
 
         public static string GetValueOrDefault(ConfigurableFieldModel<string> field)
         {
-            if (field?.Value == null)
-            {
-                return string.Empty;
-            }
-
-            return field.Value;
+            return field?.Value ?? string.Empty;
         }
 
         #endregion         

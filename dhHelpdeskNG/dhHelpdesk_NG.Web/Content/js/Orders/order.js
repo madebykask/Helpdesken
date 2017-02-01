@@ -174,13 +174,14 @@
             updater: function (obj) {
                 var item = JSON.parse(obj);
               
-                    $('#Orderer_OrdererId_Value').val(item.num);
+                    $('#orderer_OrdererId').val(item.num);
                     $('#order_OrdererName').val(item.name);
                     $('#order_OrdererLocation').val(item.place);
                     $('#order_OrdererEmail').val(item.email);
                     $('#order_OrdererPhone').val(item.phone);
                     $('#order_OrdererCode').val(item.usercode);
                     $('#orderer_departmentId').val(item.departmentid);
+                    $('#orderer_departmentId').trigger('change');
               
                 return item.num;
             }
@@ -294,7 +295,7 @@
         return options;
     }
 
-    $('#Orderer_OrdererId_Value').typeahead(getOrderComputerUserSearchOptionsForOrderer());
+    $('#orderer_OrdererId').typeahead(getOrderComputerUserSearchOptionsForOrderer());
     $('#Receiver_ReceiverId_Value').typeahead(getOrderComputerUserSearchOptionsForReciever());
     
     function generateRandomKey() {

@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using DH.Helpdesk.BusinessData.Enums.Accounts.Fields;
 using DH.Helpdesk.BusinessData.Models.Shared;
 using DH.Helpdesk.Common.Extensions.Integer;
+using DH.Helpdesk.Domain;
 using DH.Helpdesk.Domain.Orders;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
@@ -33,14 +34,14 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                 CreateDeliveryEditModel(data.EditSettings.Delivery, data.EditOptions),
                 CreateGeneralEditModel(data.EditSettings.General, data.EditOptions),
                 CreateLogEditModel(data.EditSettings.Log, data.EditOptions),
-                CreateOrdererEditModel(data.EditSettings.Orderer, data.EditOptions),
+                //CreateOrdererEditModel(data.EditSettings.Orderer, data.EditOptions),
                 CreateOrderEditModel(data.EditSettings.Order, data.EditOptions),
                 CreateOtherEditModel(data.EditSettings.Other, data.EditOptions, temporatyId),
                 CreateProgramEditModel(data.EditSettings.Program),
                 CreateReceiverEditModel(data.EditSettings.Receiver),
                 CreateSupplierEditModel(data.EditSettings.Supplier),
                 CreateUserEditModel(data.EditSettings.User, workContext),
-                CreateUserInfoEditModel(data.EditSettings.User, data.EditOptions,  workContext),
+                CreateUserInfoEditModel(data.EditSettings, data.EditOptions,  workContext),
                 CreateAccountInfoEditModel(data.EditSettings.AccountInfo, data.EditOptions, workContext),
                 CreateContactEditModel(data.EditSettings.Contact, data.EditOptions, workContext),
                 temporatyId,
@@ -288,36 +289,84 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
         }
 
         private UserInfoEditModel CreateUserInfoEditModel(
-                UserEditSettings settings,
+                FullOrderEditSettings settings,
                 OrderEditOptions options,
                 IWorkContext workContext)
         {
+            var personalIdentityNumber =
+                _configurableFieldModelFactory.CreateStringField(settings.User.PersonalIdentityNumber, null);
+            //var initials = _configurableFieldModelFactory.CreateStringField(settings.User.Initials, null);
+            var extension = _configurableFieldModelFactory.CreateStringField(settings.User.Extension, null);
+            var title = _configurableFieldModelFactory.CreateStringField(settings.User.Title, null);
+            //var location = _configurableFieldModelFactory.CreateStringField(settings.User.Location, null);
+            var roomNumber = _configurableFieldModelFactory.CreateStringField(settings.User.RoomNumber, null);
+            //var postalAddress = _configurableFieldModelFactory.CreateStringField(settings.User.PostalAddress, null);
+            var employmentType = _configurableFieldModelFactory.CreateNullableIntegerField(settings.User.EmploymentType, null);
+            //var departmentId1 = _configurableFieldModelFactory.CreateNullableIntegerField(settings.User.DepartmentId1, null);
+            //var unitId = _configurableFieldModelFactory.CreateNullableIntegerField(settings.User.UnitId, null);
+            var departmentId2 = _configurableFieldModelFactory.CreateNullableIntegerField(settings.User.DepartmentId2, null);
+            var info = _configurableFieldModelFactory.CreateStringField(settings.User.Info, null);
+            //var responsibility = _configurableFieldModelFactory.CreateStringField(settings.User.Responsibility, null);
+            var activity = _configurableFieldModelFactory.CreateStringField(settings.User.Activity, null);
+            var manager = _configurableFieldModelFactory.CreateStringField(settings.User.Manager, null);
+            //var referenceNumber = _configurableFieldModelFactory.CreateStringField(settings.User.ReferenceNumber, null);
+            var ordererId = _configurableFieldModelFactory.CreateStringField(settings.Orderer.OrdererId, null);
+            var ordererName = _configurableFieldModelFactory.CreateStringField(settings.Orderer.OrdererName, null);
+            var ordererLocation = _configurableFieldModelFactory.CreateStringField(settings.Orderer.OrdererLocation, null);
+            var ordererEmail = _configurableFieldModelFactory.CreateStringField(settings.Orderer.OrdererEmail, null);
+            var ordererPhone = _configurableFieldModelFactory.CreateStringField(settings.Orderer.OrdererPhone, null);
+            var ordererCode = _configurableFieldModelFactory.CreateStringField(settings.Orderer.OrdererCode, null);
+            var department = _configurableFieldModelFactory.CreateNullableIntegerField(settings.Orderer.Department, null);
+            var unit = _configurableFieldModelFactory.CreateNullableIntegerField(settings.Orderer.Unit, null);
+            var ordererAddress = _configurableFieldModelFactory.CreateStringField(settings.Orderer.OrdererAddress, null);
+            var ordererInvoiceAddress = _configurableFieldModelFactory.CreateStringField(settings.Orderer.OrdererInvoiceAddress, null);
+            var ordererReferenceNumber = _configurableFieldModelFactory.CreateStringField(settings.Orderer.OrdererReferenceNumber, null);
+            var accountingDimension1 = _configurableFieldModelFactory.CreateStringField(settings.Orderer.AccountingDimension1, null);
+            var accountingDimension2 = _configurableFieldModelFactory.CreateStringField(settings.Orderer.AccountingDimension2, null);
+            var accountingDimension3 = _configurableFieldModelFactory.CreateStringField(settings.Orderer.AccountingDimension3, null);
+            var accountingDimension4 = _configurableFieldModelFactory.CreateStringField(settings.Orderer.AccountingDimension4, null);
+            var accountingDimension5 = _configurableFieldModelFactory.CreateStringField(settings.Orderer.AccountingDimension5, null);
+
             var model = new UserInfoEditModel(
-                            _configurableFieldModelFactory.CreateStringField(settings.PersonalIdentityNumber, null),
-                            _configurableFieldModelFactory.CreateStringField(settings.Initials, null),
-                            _configurableFieldModelFactory.CreateStringField(settings.Extension, null),
-                            _configurableFieldModelFactory.CreateStringField(settings.Title, null),
-                            _configurableFieldModelFactory.CreateStringField(settings.Location, null),
-                            _configurableFieldModelFactory.CreateStringField(settings.RoomNumber, null),
-                            _configurableFieldModelFactory.CreateStringField(settings.PostalAddress, null),
-                            _configurableFieldModelFactory.CreateNullableIntegerField(settings.EmploymentType, null),
-                            _configurableFieldModelFactory.CreateNullableIntegerField(settings.DepartmentId1, null),
-                            _configurableFieldModelFactory.CreateNullableIntegerField(settings.UnitId, null),
-                            _configurableFieldModelFactory.CreateNullableIntegerField(settings.DepartmentId2, null),
-                            _configurableFieldModelFactory.CreateStringField(settings.Info, null),
-                            _configurableFieldModelFactory.CreateStringField(settings.Responsibility, null),
-                            _configurableFieldModelFactory.CreateStringField(settings.Activity, null),
-                            _configurableFieldModelFactory.CreateStringField(settings.Manager, null),
-                            _configurableFieldModelFactory.CreateStringField(settings.ReferenceNumber, null));
-            model.EmploymentTypes = CreateSelectListField(settings.EmploymentType,
+                            personalIdentityNumber,
+                            ConfigurableFieldModel<string>.CreateUnshowable(),
+                            extension,
+                            title,
+                            ConfigurableFieldModel<string>.CreateUnshowable(),
+                            roomNumber,
+                            ConfigurableFieldModel<string>.CreateUnshowable(),
+                            employmentType,
+                            department,
+                            unit,
+                            departmentId2,
+                            info,
+                            ConfigurableFieldModel<string>.CreateUnshowable(),
+                            activity,
+                            manager,
+                            ConfigurableFieldModel<string>.CreateUnshowable(),
+                            ordererId,
+                            ordererName,
+                            ordererLocation,
+                            ordererEmail,
+                            ordererPhone,
+                            ordererCode,
+                            ordererAddress,
+                            ordererInvoiceAddress,
+                            ordererReferenceNumber,
+                            accountingDimension1,
+                            accountingDimension2,
+                            accountingDimension3,
+                            accountingDimension4,
+                            accountingDimension5);
+            model.EmploymentTypes = CreateSelectListField(settings.User.EmploymentType,
                 options.EmploymentTypes, null);
-            model.Departments = CreateSelectListField(settings.DepartmentId1,
+            model.Departments = CreateSelectListField(settings.Orderer.Department,
                 options.Departments, null);
-            model.Departments2 = CreateSelectListField(settings.DepartmentId2,
+            model.Departments2 = CreateSelectListField(settings.User.DepartmentId2,
                 options.Departments, null);
-            model.Units = CreateSelectListField(settings.UnitId,
+            model.Units = CreateSelectListField(settings.Orderer.Unit,
                 options.Units, null);
-            model.Regions = CreateSelectListField(settings.DepartmentId1,
+            model.Regions = CreateSelectListField(settings.Orderer.Department,
                 options.Regions, null);
 
             return model;

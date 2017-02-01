@@ -334,9 +334,9 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
                     entity.InfoUser,
                     entity.UserOU_Id,
                     entity.EmploymentType_Id,
-                    entity.UserDepartment_Id,
+                    entity.Department_Id,
                     entity.UserDepartment_Id2,
-                    entity.UserDepartment1?.Region_Id);
+                    entity.Department?.Region_Id);
         }
 
         private static AccountInfoEditFields CreateAccountInfoEditFields(Order entity)

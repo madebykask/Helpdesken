@@ -37,7 +37,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                 CreateDeliveryFields(model.Delivery),
                 CreateGeneralFields(model.General),
                 CreateLogFields(model.Log),
-                CreateOrdererFields(model.Orderer),
+                CreateOrdererFields(model.UserInfo),
                 CreateOrderFields(model.Order),
                 CreateOtherFields(model.Other, model.NewFiles, model.DeletedFiles),
                 CreateProgramFields(model.Program),
@@ -113,11 +113,11 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
             return new LogEditFields(logs);
         }
 
-        private static OrdererEditFields CreateOrdererFields(OrdererEditModel model)
+        private static OrdererEditFields CreateOrdererFields(UserInfoEditModel model)
         {
             if (model == null)
             {
-                model = OrdererEditModel.CreateEmpty();
+                model = UserInfoEditModel.CreateEmpty();
             }
 
             return new OrdererEditFields(
@@ -127,7 +127,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.OrdererEmail),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.OrdererPhone),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.OrdererCode),
-                    ConfigurableFieldModel<int?>.GetValueOrDefault(model.Department),
+                    ConfigurableFieldModel<int?>.GetValueOrDefault(model.DepartmentId1),
                     ConfigurableFieldModel<int?>.GetValueOrDefault(model.Unit),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.OrdererAddress),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.OrdererInvoiceAddress),
@@ -238,7 +238,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                 ConfigurableFieldModel<string>.GetValueOrDefault(infoModel.Manager),
                 ConfigurableFieldModel<string>.GetValueOrDefault(infoModel.ReferenceNumber),
                 ConfigurableFieldModel<string>.GetValueOrDefault(infoModel.Info),
-                ConfigurableFieldModel<int?>.GetValueOrDefault(infoModel.UnitId),
+                ConfigurableFieldModel<int?>.GetValueOrDefault(infoModel.Unit),
                 ConfigurableFieldModel<int?>.GetValueOrDefault(infoModel.EmploymentTypeId),
                 ConfigurableFieldModel<int?>.GetValueOrDefault(infoModel.DepartmentId1),
                 ConfigurableFieldModel<int?>.GetValueOrDefault(infoModel.DepartmentId2),

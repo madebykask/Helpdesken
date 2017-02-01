@@ -21,7 +21,6 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
                     DeliveryEditModel delivery,
                     GeneralEditModel general,
                     LogEditModel log,
-                    OrdererEditModel orderer,
                     OrderEditModel order,
                     OtherEditModel other,
                     ProgramEditModel program,
@@ -41,7 +40,6 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
             Delivery = delivery;
             General = general;
             Log = log;
-            Orderer = orderer;
             Order = order;
             Other = other;
             Program = program;
@@ -72,8 +70,6 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
         [NotNull]
         public LogEditModel Log { get; set; }
 
-        [NotNull]
-        public OrdererEditModel Orderer { get; set; }
 
         [NotNull]
         public OrderEditModel Order { get; set; }

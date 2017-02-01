@@ -18,13 +18,14 @@
                 return $.get(that._options.searchDepartmentsByRegionIdUrl,
                     data,
                     function (json) {
-                        var sel = $("#department_dropdown");
-                        sel.empty();
-                        sel.prepend("<option></option>");
+                        var $ordererDep = $("#orderer_departmentId");
+                        $ordererDep.empty();
+                        $ordererDep.prepend("<option></option>");
                         for (var i = 0; i < json.length; i++) {
                             var e = json[i];
-                            $("<option>").text(e.Name).val(e.Value).appendTo(sel);
+                            $("<option>").text(e.Name).val(e.Value).appendTo($ordererDep);
                         }
+                        $ordererDep.trigger("change");
                     });
             };
 
@@ -64,7 +65,7 @@
 
                 var $region = $("#region_dropdown");
                 if ($region.val()) {
-                    var $department = $("#department_dropdown");
+                    var $department = $("#orderer_departmentId");
                     var originVal = $department.val();
 
                     applyUserDepartmentFilter($region.val())

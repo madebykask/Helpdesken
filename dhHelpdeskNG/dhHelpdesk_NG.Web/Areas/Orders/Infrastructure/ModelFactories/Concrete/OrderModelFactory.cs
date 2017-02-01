@@ -44,8 +44,8 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                     response.EditOptions),
                 CreateLogEditModel(response.EditSettings.Log, response.EditData.Order.Log, response.EditOptions,
                     orderId),
-                CreateOrdererEditModel(response.EditSettings.Orderer, response.EditData.Order.Orderer,
-                    response.EditOptions),
+                //CreateOrdererEditModel(response.EditSettings.Orderer, response.EditData.Order.Orderer,
+                    //response.EditOptions),
                 CreateOrderEditModel(response.EditSettings.Order, response.EditData.Order.Order,
                     response.EditOptions),
                 CreateOtherEditModel(response.EditSettings.Other, response.EditData.Order.Other,
@@ -54,7 +54,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                 CreateReceiverEditModel(response.EditSettings.Receiver, response.EditData.Order.Receiver),
                 CreateSupplierEditModel(response.EditSettings.Supplier, response.EditData.Order.Supplier),
                 CreateUserEditModel(response.EditSettings.User, response.EditData.Order.User),
-                CreateUserInfoEditModel(response.EditSettings.User, response.EditData.Order.User, response.EditOptions),
+                CreateUserInfoEditModel(response.EditSettings, response.EditData.Order, response.EditOptions),
                 CreateAccountInfoEditModel(response.EditSettings.AccountInfo, response.EditData.Order.AccountInfo, response.EditOptions),
                 CreateContactEditModel(response.EditSettings.Contact, response.EditData.Order.Contact, response.EditOptions),
                 textOrderId,
@@ -322,37 +322,78 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
         }
 
         private UserInfoEditModel CreateUserInfoEditModel(
-                        UserEditSettings settings,
-                        UserEditFields fields,
+                        FullOrderEditSettings settings,
+                        FullOrderEditFields fields,
                         OrderEditOptions options)
         {
+            var personalIdentityNumber =
+                _configurableFieldModelFactory.CreateStringField(settings.User.PersonalIdentityNumber, fields.User.UserPersonalIdentityNumber);
+            var extension = _configurableFieldModelFactory.CreateStringField(settings.User.Extension, fields.User.UserExtension);
+            var title = _configurableFieldModelFactory.CreateStringField(settings.User.Title, fields.User.UserTitle);
+            var roomNumber = _configurableFieldModelFactory.CreateStringField(settings.User.RoomNumber, fields.User.UserRoomNumber);
+            var employmentType = _configurableFieldModelFactory.CreateNullableIntegerField(settings.User.EmploymentType, fields.User.EmploymentType_Id);
+            var departmentId2 = _configurableFieldModelFactory.CreateNullableIntegerField(settings.User.DepartmentId2, fields.User.UserDepartment_Id2);
+            var info = _configurableFieldModelFactory.CreateStringField(settings.User.Info, fields.User.InfoUser);
+            var activity = _configurableFieldModelFactory.CreateStringField(settings.User.Activity, fields.User.Activity);
+            var manager = _configurableFieldModelFactory.CreateStringField(settings.User.Manager, fields.User.Manager);
+            var ordererId = _configurableFieldModelFactory.CreateStringField(settings.Orderer.OrdererId, fields.Orderer.OrdererId);
+            var ordererName = _configurableFieldModelFactory.CreateStringField(settings.Orderer.OrdererName, fields.Orderer.OrdererName);
+            var ordererLocation = _configurableFieldModelFactory.CreateStringField(settings.Orderer.OrdererLocation, fields.Orderer.OrdererLocation);
+            var ordererEmail = _configurableFieldModelFactory.CreateStringField(settings.Orderer.OrdererEmail, fields.Orderer.OrdererEmail);
+            var ordererPhone = _configurableFieldModelFactory.CreateStringField(settings.Orderer.OrdererPhone, fields.Orderer.OrdererPhone);
+            var ordererCode = _configurableFieldModelFactory.CreateStringField(settings.Orderer.OrdererCode, fields.Orderer.OrdererCode);
+            var department = _configurableFieldModelFactory.CreateNullableIntegerField(settings.Orderer.Department, fields.Orderer.DepartmentId);
+            var unit = _configurableFieldModelFactory.CreateNullableIntegerField(settings.Orderer.Unit, fields.Orderer.UnitId);
+            var ordererAddress = _configurableFieldModelFactory.CreateStringField(settings.Orderer.OrdererAddress, fields.Orderer.OrdererAddress);
+            var ordererInvoiceAddress = _configurableFieldModelFactory.CreateStringField(settings.Orderer.OrdererInvoiceAddress, fields.Orderer.OrdererInvoiceAddress);
+            var ordererReferenceNumber = _configurableFieldModelFactory.CreateStringField(settings.Orderer.OrdererReferenceNumber, fields.Orderer.OrdererReferenceNumber);
+            var accountingDimension1 = _configurableFieldModelFactory.CreateStringField(settings.Orderer.AccountingDimension1, fields.Orderer.AccountingDimension1);
+            var accountingDimension2 = _configurableFieldModelFactory.CreateStringField(settings.Orderer.AccountingDimension2, fields.Orderer.AccountingDimension2);
+            var accountingDimension3 = _configurableFieldModelFactory.CreateStringField(settings.Orderer.AccountingDimension3, fields.Orderer.AccountingDimension3);
+            var accountingDimension4 = _configurableFieldModelFactory.CreateStringField(settings.Orderer.AccountingDimension4, fields.Orderer.AccountingDimension4);
+            var accountingDimension5 = _configurableFieldModelFactory.CreateStringField(settings.Orderer.AccountingDimension5, fields.Orderer.AccountingDimension5);
+
             var model = new UserInfoEditModel(
-                            _configurableFieldModelFactory.CreateStringField(settings.PersonalIdentityNumber, fields.UserPersonalIdentityNumber),
-                            _configurableFieldModelFactory.CreateStringField(settings.Initials, fields.UserInitials),
-                            _configurableFieldModelFactory.CreateStringField(settings.Extension, fields.UserExtension),
-                            _configurableFieldModelFactory.CreateStringField(settings.Title, fields.UserTitle),
-                            _configurableFieldModelFactory.CreateStringField(settings.Location, fields.UserLocation),
-                            _configurableFieldModelFactory.CreateStringField(settings.RoomNumber, fields.UserRoomNumber),
-                            _configurableFieldModelFactory.CreateStringField(settings.PostalAddress, fields.UserPostalAddress),
-                            _configurableFieldModelFactory.CreateNullableIntegerField(settings.EmploymentType, fields.EmploymentType_Id),
-                            _configurableFieldModelFactory.CreateNullableIntegerField(settings.DepartmentId1, fields.UserDepartment_Id1),
-                            _configurableFieldModelFactory.CreateNullableIntegerField(settings.UnitId, fields.UserOU_Id),
-                            _configurableFieldModelFactory.CreateNullableIntegerField(settings.DepartmentId2, fields.UserDepartment_Id2),
-                            _configurableFieldModelFactory.CreateStringField(settings.Info, fields.InfoUser),
-                            _configurableFieldModelFactory.CreateStringField(settings.Responsibility, fields.Responsibility),
-                            _configurableFieldModelFactory.CreateStringField(settings.Activity, fields.Activity),
-                            _configurableFieldModelFactory.CreateStringField(settings.Manager, fields.Manager),
-                            _configurableFieldModelFactory.CreateStringField(settings.ReferenceNumber, fields.ReferenceNumber));
-            model.EmploymentTypes = CreateSelectListField(settings.EmploymentType,
-                options.EmploymentTypes, fields.EmploymentType_Id.ToString());
-            model.Departments = CreateSelectListField(settings.DepartmentId1,
-                options.Departments, fields.UserDepartment_Id1.ToString());
-            model.Departments2 = CreateSelectListField(settings.DepartmentId2,
-                options.Departments, fields.UserDepartment_Id2.ToString());
-            model.Units = CreateSelectListField(settings.UnitId,
-                options.Units, fields.UserOU_Id.ToString());
-            model.Regions = CreateSelectListField(settings.DepartmentId1,
-                options.Regions, fields.RegionId.ToString());
+                            personalIdentityNumber,
+                            ConfigurableFieldModel<string>.CreateUnshowable(),
+                            extension,
+                            title,
+                            ConfigurableFieldModel<string>.CreateUnshowable(),
+                            roomNumber,
+                            ConfigurableFieldModel<string>.CreateUnshowable(),
+                            employmentType,
+                            department,
+                            unit,
+                            departmentId2,
+                            info,
+                            ConfigurableFieldModel<string>.CreateUnshowable(),
+                            activity,
+                            manager,
+                            ConfigurableFieldModel<string>.CreateUnshowable(),
+                            ordererId,
+                            ordererName,
+                            ordererLocation,
+                            ordererEmail,
+                            ordererPhone,
+                            ordererCode,
+                            ordererAddress,
+                            ordererInvoiceAddress,
+                            ordererReferenceNumber,
+                            accountingDimension1,
+                            accountingDimension2,
+                            accountingDimension3,
+                            accountingDimension4,
+                            accountingDimension5);
+            model.EmploymentTypes = CreateSelectListField(settings.User.EmploymentType,
+                options.EmploymentTypes, fields.User.EmploymentType_Id.ToString());
+            model.Departments = CreateSelectListField(settings.Orderer.Department,
+                options.Departments, fields.Orderer.DepartmentId.ToString());
+            model.Departments2 = CreateSelectListField(settings.User.DepartmentId2,
+                options.Departments, fields.User.UserDepartment_Id2.ToString());
+            model.Units = CreateSelectListField(settings.Orderer.Unit,
+                options.Units, fields.Orderer.UnitId.ToString());
+            model.Regions = CreateSelectListField(settings.Orderer.Department,
+                options.Regions, fields.User.RegionId.ToString());
 
             return model;
         }

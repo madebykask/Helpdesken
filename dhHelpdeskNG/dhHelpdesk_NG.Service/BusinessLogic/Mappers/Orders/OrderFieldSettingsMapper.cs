@@ -460,22 +460,22 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
             MapTextFieldSettings(updatedSettings.UserLastName, existingSettings.FindByName(UserFields.UserLastName), changedDate);
             MapTextFieldSettings(updatedSettings.UserPhone, existingSettings.FindByName(UserFields.UserPhone), changedDate);
             MapTextFieldSettings(updatedSettings.UserEMail, existingSettings.FindByName(UserFields.UserEMail), changedDate);
-            MapTextFieldSettings(updatedSettings.Initials, existingSettings.FindByName(UserFields.UserInitials), changedDate);
+            //MapTextFieldSettings(updatedSettings.Initials, existingSettings.FindByName(UserFields.UserInitials), changedDate);
             MapTextFieldSettings(updatedSettings.Info, existingSettings.FindByName(UserFields.InfoUser), changedDate);
             MapTextFieldSettings(updatedSettings.Activity, existingSettings.FindByName(UserFields.Activity), changedDate);
-            MapTextFieldSettings(updatedSettings.DepartmentId1, existingSettings.FindByName(UserFields.UserDepartment_Id1), changedDate);
+            //MapTextFieldSettings(updatedSettings.DepartmentId1, existingSettings.FindByName(UserFields.UserDepartment_Id1), changedDate);
             MapTextFieldSettings(updatedSettings.DepartmentId2, existingSettings.FindByName(UserFields.UserDepartment_Id2), changedDate);
             MapTextFieldSettings(updatedSettings.EmploymentType, existingSettings.FindByName(UserFields.EmploymentType), changedDate);
             MapTextFieldSettings(updatedSettings.Extension, existingSettings.FindByName(UserFields.UserExtension), changedDate);
-            MapTextFieldSettings(updatedSettings.Location, existingSettings.FindByName(UserFields.UserLocation), changedDate);
+            //MapTextFieldSettings(updatedSettings.Location, existingSettings.FindByName(UserFields.UserLocation), changedDate);
             MapTextFieldSettings(updatedSettings.Manager, existingSettings.FindByName(UserFields.Manager), changedDate);
             MapTextFieldSettings(updatedSettings.PersonalIdentityNumber, existingSettings.FindByName(UserFields.UserPersonalIdentityNumber), changedDate);
-            MapTextFieldSettings(updatedSettings.PostalAddress, existingSettings.FindByName(UserFields.UserPostalAddress), changedDate);
-            MapTextFieldSettings(updatedSettings.ReferenceNumber, existingSettings.FindByName(UserFields.ReferenceNumber), changedDate);
-            MapTextFieldSettings(updatedSettings.Responsibility, existingSettings.FindByName(UserFields.Responsibility), changedDate);
+            //MapTextFieldSettings(updatedSettings.PostalAddress, existingSettings.FindByName(UserFields.UserPostalAddress), changedDate);
+            //MapTextFieldSettings(updatedSettings.ReferenceNumber, existingSettings.FindByName(UserFields.ReferenceNumber), changedDate);
+            //MapTextFieldSettings(updatedSettings.Responsibility, existingSettings.FindByName(UserFields.Responsibility), changedDate);
             MapTextFieldSettings(updatedSettings.RoomNumber, existingSettings.FindByName(UserFields.UserRoomNumber), changedDate);
             MapTextFieldSettings(updatedSettings.Title, existingSettings.FindByName(UserFields.UserTitle), changedDate);
-            MapTextFieldSettings(updatedSettings.UnitId, existingSettings.FindByName(UserFields.UserOU_Id), changedDate);
+            //MapTextFieldSettings(updatedSettings.UnitId, existingSettings.FindByName(UserFields.UserOU_Id), changedDate);
         }
 
         private static void MapAccountSettings(

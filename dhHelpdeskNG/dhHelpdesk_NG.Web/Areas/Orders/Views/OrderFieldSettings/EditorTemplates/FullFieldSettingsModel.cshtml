@@ -73,7 +73,7 @@
             @Html.EditorFor(m => m.General.OrderDate, new { type = OrderSettingWebType.Date })
         </tr>
         <tr>
-            <td colspan="8" class="header">@Translation.GetCoreTextTranslation("Användare")</td>
+            <td colspan="8" class="header">@Translation.GetCoreTextTranslation("Beställare")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.User.UserId, new { type = OrderSettingWebType.Label })
@@ -94,10 +94,19 @@
             <td colspan="8" class="header">@Translation.GetCoreTextTranslation("Användarinformation")</td>
         </tr>
         <tr>
-            @Html.EditorFor(m => m.User.Initials, new { type = OrderSettingWebType.Text })
+            @Html.EditorFor(m => m.Orderer.OrdererId, new { type = OrderSettingWebType.Text })
         </tr>
         <tr>
-            @Html.EditorFor(m => m.User.PersonalIdentityNumber, new { type = OrderSettingWebType.Text })
+            @Html.EditorFor(m => m.User.PersonalIdentityNumber, new {type = OrderSettingWebType.Text})
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Orderer.OrdererName, new { type = OrderSettingWebType.Text })
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Orderer.OrdererLocation, new { type = OrderSettingWebType.Text })
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Orderer.OrdererEmail, new { type = OrderSettingWebType.Text })
         </tr>
         <tr>
             @Html.EditorFor(m => m.User.Extension, new { type = OrderSettingWebType.Text })
@@ -106,31 +115,28 @@
             @Html.EditorFor(m => m.User.Title, new { type = OrderSettingWebType.Text })
         </tr>
         <tr>
-            @Html.EditorFor(m => m.User.Location, new { type = OrderSettingWebType.Text })
-        </tr>
-        <tr>
-            @Html.EditorFor(m => m.User.RoomNumber, new { type = OrderSettingWebType.Text })
-        </tr>
-        <tr>
-            @Html.EditorFor(m => m.User.PostalAddress, new { type = OrderSettingWebType.Text })
-        </tr>
-        <tr>
             @Html.EditorFor(m => m.User.EmploymentType, new { type = OrderSettingWebType.SelectList })
         </tr>
         <tr>
-            @Html.EditorFor(m => m.User.DepartmentId1, new { type = OrderSettingWebType.SelectList })
+            @Html.EditorFor(m => m.Orderer.OrdererAddress, new { type = OrderSettingWebType.Text })
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Orderer.Department, new {type = OrderSettingWebType.SelectList})
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Orderer.Unit, new { type = OrderSettingWebType.SelectList })
         </tr>
         <tr>
             @Html.EditorFor(m => m.User.DepartmentId2, new { type = OrderSettingWebType.SelectList })
         </tr>
         <tr>
-            @Html.EditorFor(m => m.User.UnitId, new { type = OrderSettingWebType.SelectList })
+            @Html.EditorFor(m => m.User.RoomNumber, new {type = OrderSettingWebType.Text})
         </tr>
         <tr>
-            @Html.EditorFor(m => m.User.Info, new { type = OrderSettingWebType.Text })
+            @Html.EditorFor(m => m.Orderer.OrdererPhone, new { type = OrderSettingWebType.Text })
         </tr>
         <tr>
-            @Html.EditorFor(m => m.User.Responsibility, new { type = OrderSettingWebType.Text })
+            @Html.EditorFor(m => m.Orderer.OrdererCode, new { type = OrderSettingWebType.Text })
         </tr>
         <tr>
             @Html.EditorFor(m => m.User.Activity, new { type = OrderSettingWebType.Text })
@@ -139,7 +145,28 @@
             @Html.EditorFor(m => m.User.Manager, new { type = OrderSettingWebType.Text })
         </tr>
         <tr>
-            @Html.EditorFor(m => m.User.ReferenceNumber, new { type = OrderSettingWebType.Text })
+            @Html.EditorFor(m => m.Orderer.OrdererInvoiceAddress, new { type = OrderSettingWebType.Text })
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Orderer.OrdererReferenceNumber, new { type = OrderSettingWebType.Text })
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Orderer.AccountingDimension1, new { type = OrderSettingWebType.Text })
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Orderer.AccountingDimension2, new { type = OrderSettingWebType.Text })
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Orderer.AccountingDimension3, new { type = OrderSettingWebType.Text })
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Orderer.AccountingDimension4, new { type = OrderSettingWebType.Text })
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Orderer.AccountingDimension5, new { type = OrderSettingWebType.Text })
+        </tr>
+        <tr>    
+            @Html.EditorFor(m => m.User.Info, new { type = OrderSettingWebType.Text })
         </tr>
         <tr>
             <td colspan="8" class="header">@Translation.GetCoreTextTranslation("Kontoinformation")</td>
@@ -195,7 +222,7 @@
         <tr>
             @Html.EditorFor(m => m.Contact.Email, new { type = OrderSettingWebType.Text })
         </tr>
-        <tr>
+        @*<tr>
             <td colspan="8" class="header">@Translation.GetCoreTextTranslation("Beställare")</td>
         </tr>
         <tr>
@@ -245,7 +272,7 @@
         </tr>
         <tr>
             @Html.EditorFor(m => m.Orderer.AccountingDimension5, new { type = OrderSettingWebType.Text })
-        </tr>
+        </tr>*@
         <tr>
             <td colspan="8" class="header">@Translation.GetCoreTextTranslation("Beställning")</td>
         </tr>
