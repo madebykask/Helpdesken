@@ -36,7 +36,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                 CreateLogEditModel(data.EditSettings.Log, data.EditOptions),
                 CreateOrderEditModel(data.EditSettings, data.EditOptions),
                 CreateOtherEditModel(data.EditSettings.Other, data.EditOptions, temporatyId),
-                CreateProgramEditModel(data.EditSettings.Program),
+                CreateProgramEditModel(data.EditSettings.Program, data.EditOptions),
                 CreateReceiverEditModel(data.EditSettings.Receiver),
                 CreateSupplierEditModel(data.EditSettings.Supplier),
                 CreateUserEditModel(data.EditSettings.User, workContext),
@@ -226,11 +226,15 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                             info);
         }
 
-        private ProgramEditModel CreateProgramEditModel(ProgramEditSettings settings)
+        private ProgramEditModel CreateProgramEditModel(ProgramEditSettings settings, OrderEditOptions options)
         {
-            var program = _configurableFieldModelFactory.CreatePrograms(settings.Program, new List<ProgramModel>(0));
+            var programs = _configurableFieldModelFactory.CreateCheckBoxListField(settings.Program, null, options.Programs);
             var infoProduct = _configurableFieldModelFactory.CreateStringField(settings.InfoProduct, null);
-            return new ProgramEditModel(program, infoProduct);
+            var model = new ProgramEditModel(infoProduct, programs)
+            {
+                AllPrograms = CreateMultiSelectListField(settings.Program, options.Programs, null)
+            };
+            return model;
         }
 
         private ReceiverEditModel CreateReceiverEditModel(ReceiverEditSettings settings)

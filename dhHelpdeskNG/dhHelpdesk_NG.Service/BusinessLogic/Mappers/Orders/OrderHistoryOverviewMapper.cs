@@ -197,7 +197,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
 
         private static ProgramHistoryFields MapProgramFields(OrderHistoryEntity entity)
         {
-            return new ProgramHistoryFields(new List<OrderProgramModel>(), entity.InfoProduct);
+            return new ProgramHistoryFields(new List<int>(), entity.InfoProduct);
         }
 
         private static ReceiverHistoryFields MapReceiverFields(OrderHistoryEntity entity)

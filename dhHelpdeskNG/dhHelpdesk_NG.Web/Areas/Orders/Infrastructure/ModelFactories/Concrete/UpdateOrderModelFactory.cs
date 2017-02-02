@@ -179,10 +179,10 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
         {
             if (model == null) model = ProgramEditModel.CreateEmpty();
 
-            var programs = model.Program?.Value?.Programs?.Select(p => new OrderProgramModel(p.Id, p.Name)).ToList();
+            var programs = model.Programs?.Value?.Where(x => x.IsChecked).Select(p => p.Id).ToList();
             var infoProduct = ConfigurableFieldModel<string>.GetValueOrDefault(model.InfoProduct);
 
-            return new ProgramEditFields(programs ?? new List<OrderProgramModel>(), infoProduct);
+            return new ProgramEditFields(programs ?? new List<int>(), infoProduct);
         }
 
         private static ReceiverEditFields CreateReceiverFields(ReceiverEditModel model)

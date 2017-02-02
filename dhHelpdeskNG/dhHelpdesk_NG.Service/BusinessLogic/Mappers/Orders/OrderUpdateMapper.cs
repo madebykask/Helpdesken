@@ -9,7 +9,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
 
     public static class OrderUpdateMapper
     {
-        public static void MapToEntity(Order entity, FullOrderEditFields businessModel, int customerId)
+        public static void MapToEntity(Order entity, FullOrderEditFields businessModel, int customerId, List<Program> programs)
         {
             entity.Customer_Id = customerId;
             entity.OrderType_Id = businessModel.OrderTypeId;
@@ -20,7 +20,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
             MapOrdererFields(entity, businessModel.Orderer);
             MapOrderFields(entity, businessModel.Order);
             MapOtherFields(entity, businessModel.Other);
-            MapProgramFields(entity, businessModel.Program);
+            MapProgramFields(entity, businessModel.Program, programs);
             MapReceiverFields(entity, businessModel.Receiver);
             MapSupplierFields(entity, businessModel.Supplier);
             MapUserFields(entity, businessModel.User);
@@ -108,12 +108,9 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
             entity.Info = businessModel.Info;
         } 
 
-        private static void MapProgramFields(Order entity, ProgramEditFields businessModel)
+        private static void MapProgramFields(Order entity, ProgramEditFields businessModel, ICollection<Program> programs)
         {
-            entity.Programs = businessModel.Programs.Select(p => new Program
-                                                                     {
-                                                                         Id = p.Id
-                                                                     }).ToList();
+            entity.Programs = programs;
             entity.InfoProduct = businessModel.InfoProduct;
         } 
 

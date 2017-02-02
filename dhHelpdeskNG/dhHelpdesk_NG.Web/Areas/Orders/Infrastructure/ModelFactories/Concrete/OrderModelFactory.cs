@@ -3,6 +3,7 @@ using DH.Helpdesk.BusinessData.Enums.Accounts.Fields;
 using DH.Helpdesk.BusinessData.Models.Shared;
 using DH.Helpdesk.Domain.Orders;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
+using DH.Helpdesk.Web.Models;
 
 namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
 {
@@ -48,7 +49,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                     response.EditOptions),
                 CreateOtherEditModel(response.EditSettings.Other, response.EditData.Order.Other,
                     response.EditOptions, textOrderId),
-                CreateProgramEditModel(response.EditSettings.Program, response.EditData.Order.Program),
+                CreateProgramEditModel(response.EditSettings.Program, response.EditData.Order.Program, response.EditOptions),
                 CreateReceiverEditModel(response.EditSettings.Receiver, response.EditData.Order.Receiver),
                 CreateSupplierEditModel(response.EditSettings.Supplier, response.EditData.Order.Supplier),
                 CreateUserEditModel(response.EditSettings.User, response.EditData.Order.User),
@@ -241,14 +242,17 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                             info);
         }
 
-        private ProgramEditModel CreateProgramEditModel(
-                                ProgramEditSettings settings,
-                                ProgramEditFields fields)
+        private ProgramEditModel CreateProgramEditModel(ProgramEditSettings settings, ProgramEditFields fields,OrderEditOptions options)
         {
-            var program = _configurableFieldModelFactory.CreatePrograms(settings.Program, fields.Programs.Select(p => new ProgramModel(p.Id, p.Name)).ToList());
             var infoProduct = _configurableFieldModelFactory.CreateStringField(settings.InfoProduct, fields.InfoProduct);
+            var programs = _configurableFieldModelFactory.CreateCheckBoxListField(settings.Program, fields.Programs,
+                options.Programs);
+            var model = new ProgramEditModel(infoProduct, programs)
+            {
+                AllPrograms = CreateMultiSelectListField(settings.Program, options.Programs, fields.Programs)
+            };
 
-            return new ProgramEditModel(program, infoProduct);
+            return model;
         }
 
         private ReceiverEditModel CreateReceiverEditModel(

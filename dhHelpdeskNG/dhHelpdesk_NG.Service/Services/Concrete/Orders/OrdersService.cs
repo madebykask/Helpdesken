@@ -339,6 +339,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                 var ordersRep = uow.GetRepository<Order>();
                 var orderLogsRep = uow.GetRepository<OrderLog>();
                 var orderHistoryRep = uow.GetRepository<OrderHistoryEntity>();
+                var programRep = uow.GetRepository<Program>();
 
                 var customerSetting = _settingService.GetCustomerSetting(request.CustomerId);
                 var smtpInfo = new MailSMTPSetting(customerSetting.SMTPServer, customerSetting.SMTPPort, customerSetting.SMTPUserName, customerSetting.SMTPPassWord, customerSetting.IsSMTPSecured);
@@ -349,12 +350,19 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                     smtpInfo = new MailSMTPSetting(info.SmtpServer, info.SmtpPort);
                 }
 
+                var programs = new List<Program>();
+                var programIds = request.Order.Program.Programs;
+                if (programIds.Any())
+                {
+                    programs = programRep.GetAll().Where(x => programIds.Contains(x.Id)).ToList();
+                }
+
                 Order entity;
                 FullOrderEditFields existingOrder = null;
                 if (request.Order.IsNew())
                 {
                     entity = new Order();
-                    OrderUpdateMapper.MapToEntity(entity, request.Order, request.CustomerId);
+                    OrderUpdateMapper.MapToEntity(entity, request.Order, request.CustomerId, programs);
                     entity.CreatedDate = request.DateAndTime;
                     entity.ChangedDate = request.DateAndTime;
                     ordersRep.Add(entity);
@@ -390,16 +398,15 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                     {
                         firstLevelParentId = entity.OrderType_Id.Value;
                     }
-
+                    
                     var settings = this._orderFieldSettingsService.GetOrderEditSettings(request.CustomerId, firstLevelParentId, uow);
                     this._orderRestorer.Restore(request.Order, existingOrder, settings);
                     this._updateOrderRequestValidator.Validate(request.Order, existingOrder, settings);
 
-                    OrderUpdateMapper.MapToEntity(entity, request.Order, request.CustomerId);
+                    OrderUpdateMapper.MapToEntity(entity, request.Order, request.CustomerId, programs);
                     entity.ChangedDate = request.DateAndTime;
                     ordersRep.Update(entity);
                 }
-
                 
                 var history = OrderHistoryMapper.MapToBusinessModel(request);
                 var historyEntity = OrderHistoryMapper.MapToEntity(history);
@@ -588,6 +595,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
             var employmentTypeRep = uow.GetRepository<EmploymentType>();
             var regionsRep = uow.GetRepository<Region>();
             var orderFieldTypesRep = uow.GetRepository<OrderFieldType>();
+            var programsRep = uow.GetRepository<Program>();
 
             var statuses = statusesRep.GetAll().GetByCustomer(customerId).OrderBy(x => x.SortOrder);
             var administrators = administratorsRep.GetAll().GetByCustomer(customerId).GetActiveUsers(customerId);
@@ -602,6 +610,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
             var employmentTypes = employmentTypeRep.GetAll();
             var regions = regionsRep.GetAll().GetByCustomer(customerId);
             var accountTypes = orderFieldTypesRep.GetAll().GetByType(orderTypeId).ActiveOnly();
+            var allPrograms = programsRep.GetAll().Where(x => x.IsActive != 0 && x.Customer_Id == customerId && x.ShowOnStartPage > 0);
 
             // get parentordertypename
             if (orderTypeId != lowestchildordertypeid.Value)
@@ -697,7 +706,8 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                                     settings,
                                     employmentTypes,
                                     regions,
-                                    accountTypes);
+                                    accountTypes,
+                                    allPrograms);
         }
 
         private FullOrderOverview[] Sort(FullOrderOverview[] items, SortField sort)

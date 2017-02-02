@@ -8,17 +8,17 @@
     {
         public ProgramEditFields()
         {
-            this.Programs = new List<OrderProgramModel>();
+            this.Programs = new List<int>();
         }
 
-        public ProgramEditFields(List<OrderProgramModel> programs, string infoProduct)
+        public ProgramEditFields(List<int> programs, string infoProduct)
         {
             Programs = programs;
             InfoProduct = infoProduct;
         }
 
         [NotNull]
-        public List<OrderProgramModel> Programs { get; private set; }
+        public List<int> Programs { get; private set; }
 
         public string InfoProduct { get; private set; }
 

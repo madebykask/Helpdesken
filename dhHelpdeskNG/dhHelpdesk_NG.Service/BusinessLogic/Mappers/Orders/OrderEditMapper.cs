@@ -19,23 +19,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
 
     public static class OrderEditMapper
     {
-	    public static OrderEditOptions MapToOrderEditOptions(
-		    string orderTypeName,
-		    IQueryable<OrderState> statuses,
-		    IQueryable<User> administrators,
-		    IQueryable<Domain> domains,
-		    IQueryable<Department> departments,
-		    IQueryable<OU> units,
-		    IQueryable<OrderPropertyEntity> properties,
-		    IQueryable<Department> deliveryDepartments,
-		    IQueryable<OU> deliveryOuIds,
-		    List<GroupWithEmails> emailGroups,
-		    List<GroupWithEmails> workingGroupsWithEmails,
-		    IQueryable<User> administratorsWithEmails,
-		    FullOrderEditSettings settings,
-            IQueryable<EmploymentType> employmentTypes,
-            IQueryable<Region> regions,
-            IQueryable<OrderFieldType> accountTypes)
+	    public static OrderEditOptions MapToOrderEditOptions(string orderTypeName, IQueryable<OrderState> statuses, IQueryable<User> administrators, IQueryable<Domain> domains, IQueryable<Department> departments, IQueryable<OU> units, IQueryable<OrderPropertyEntity> properties, IQueryable<Department> deliveryDepartments, IQueryable<OU> deliveryOuIds, List<GroupWithEmails> emailGroups, List<GroupWithEmails> workingGroupsWithEmails, IQueryable<User> administratorsWithEmails, FullOrderEditSettings settings, IQueryable<EmploymentType> employmentTypes, IQueryable<Region> regions, IQueryable<OrderFieldType> accountTypes, IQueryable<Program> programs)
 	    {
 		    IQueryable<UnionItemDependentOverview> query = null;
 
@@ -138,6 +122,12 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
                 query = query?.Union(union) ?? union;
             }
 
+            if (settings.Program.Program.Show)
+            {
+                var union = programs.Select(a => new UnionItemDependentOverview { Id = a.Id, Name = a.Name, Type = "programs", DependentId = null });
+                query = query?.Union(union) ?? union;
+            }
+
 
             var overviews = new UnionItemDependentOverview[0];
 
@@ -173,7 +163,8 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
                 overviews.Where(o => o.Type == "accountTypes2").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
                 overviews.Where(o => o.Type == "accountTypes3").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
                 overviews.Where(o => o.Type == "accountTypes4").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
-                overviews.Where(o => o.Type == "accountTypes5").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray());
+                overviews.Where(o => o.Type == "accountTypes5").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
+                overviews.Where(o => o.Type == "programs").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray());
 	        return editOptions;
 	    }
 
@@ -288,7 +279,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
         private static ProgramEditFields CreateProgramEditFields(Order entity)
         {
             return new ProgramEditFields(
-                entity.Programs.Select(p => new OrderProgramModel(p.Id, p.Name)).ToList(),
+                entity.Programs.Select(p => p.Id).ToList(),
                 entity.InfoProduct);
         }
 
