@@ -79,7 +79,7 @@
             {
                 faqLng.Answer = faq.Answer;
                 faqLng.FAQQuery = faq.Question;
-                faqLng.Answer_Internal = faq.InternalAnswer;
+                faqLng.Answer_Internal = string.IsNullOrEmpty(faq.InternalAnswer) ? string.Empty : faq.InternalAnswer;
             }
             else
             {
@@ -88,7 +88,7 @@
                     FAQ_Id = faq.Id,
                     FAQQuery = faq.Question,
                     Answer = faq.Answer,
-                    Answer_Internal = faq.InternalAnswer,
+                    Answer_Internal = string.IsNullOrEmpty(faq.InternalAnswer) ? string.Empty : faq.InternalAnswer,
                     Language_Id = faq.LanguageId
                 };
 
