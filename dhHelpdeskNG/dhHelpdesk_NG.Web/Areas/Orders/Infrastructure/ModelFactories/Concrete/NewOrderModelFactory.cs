@@ -41,7 +41,6 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                 CreateSupplierEditModel(data.EditSettings.Supplier),
                 CreateUserEditModel(data.EditSettings.User, workContext),
                 CreateUserInfoEditModel(data.EditSettings, data.EditOptions,  workContext),
-                CreateContactEditModel(data.EditSettings.Contact, data.EditOptions, workContext),
                 temporatyId,
                 workContext.Customer.CustomerId,
                 orderTypeId,
@@ -359,19 +358,6 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
             return model;
         }
         
-        private ContactEditModel CreateContactEditModel(
-            ContactEditSettings settings,
-            OrderEditOptions options,
-            IWorkContext workContext)
-        {
-            return new ContactEditModel(
-                    _configurableFieldModelFactory.CreateStringField(settings.Id, null),
-                    _configurableFieldModelFactory.CreateStringField(settings.Name, null),
-                    _configurableFieldModelFactory.CreateStringField(settings.Phone, null),
-                    _configurableFieldModelFactory.CreateStringField(settings.EMail, null)
-                );
-        }
-
         private static SelectList CreateSelectListField(
                 FieldEditSettings setting,
                 ItemOverview[] items,

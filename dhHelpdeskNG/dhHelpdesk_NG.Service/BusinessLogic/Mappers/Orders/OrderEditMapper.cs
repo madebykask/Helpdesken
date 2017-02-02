@@ -199,8 +199,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
                     CreateReceiverEditFields(entity),
                     CreateSupplierEditFields(entity),
                     CreateUserEditFields(entity),
-                    CreateAccountInfoEditFields(entity),
-                    CreateContactEditFields(entity));
+                    CreateAccountInfoEditFields(entity));
         }
 
         private static DeliveryEditFields CreateDeliveryEditFields(Order entity)

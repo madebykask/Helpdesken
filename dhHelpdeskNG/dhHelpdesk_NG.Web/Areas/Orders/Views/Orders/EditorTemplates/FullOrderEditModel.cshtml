@@ -56,10 +56,6 @@
                     {
                         @Html.EditorFor(m => m.Order)
                     }
-                    @if (Model.Contact.HasShowableFields())
-                    {
-                        @Html.EditorFor(m => m.Contact)
-                    }
                     @if (Model.Receiver.HasShowableFields())
                     {
                         @Html.EditorFor(m => m.Receiver)

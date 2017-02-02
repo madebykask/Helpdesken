@@ -44,8 +44,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                 CreateReceiverFields(model.Receiver),
                 CreateSupplierFields(model.Supplier),
                 CreateUserFields(model.User, model.UserInfo),
-                CreateAccountInfoFields(model.Order),
-                CreateContactFields(model.Contact));
+                CreateAccountInfoFields(model.Order));
 
             var newLogs = CreateNewLogCollection(model, emailService);
 
@@ -262,18 +261,6 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                 ConfigurableFieldModel<int?>.GetValueOrDefault(model.AccountTypeId3),
                 ConfigurableFieldModel<int?>.GetValueOrDefault(model.AccountTypeId4),
                 ConfigurableFieldModel<int?>.GetValueOrDefault(model.AccountTypeId5));
-        }
-
-        private static ContactEditFields CreateContactFields(ContactEditModel model)
-        {
-            if (model == null) model = ContactEditModel.CreateEmpty();
-
-            return new ContactEditFields(
-                    ConfigurableFieldModel<string>.GetValueOrDefault(model.Id),
-                    ConfigurableFieldModel<string>.GetValueOrDefault(model.Name),
-                    ConfigurableFieldModel<string>.GetValueOrDefault(model.Phone),
-                    ConfigurableFieldModel<string>.GetValueOrDefault(model.Email)
-                );
         }
 
         private static List<ManualLog> CreateNewLogCollection(FullOrderEditModel model, IEmailService emailService)

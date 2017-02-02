@@ -17,8 +17,7 @@
                 ReceiverEditFields receiver, 
                 SupplierEditFields supplier, 
                 UserEditFields user,
-                AccountInfoEditFields accountInfo,
-                ContactEditFields contact)
+                AccountInfoEditFields accountInfo)
         {
             OrderTypeId = orderTypeId;
             User = user;
@@ -33,7 +32,6 @@
             Delivery = delivery;
             Id = id;
             AccountInfo = accountInfo;
-            Contact = contact;
         }
 
         [IsId]
@@ -72,7 +70,5 @@
         [NotNull]
         public AccountInfoEditFields AccountInfo { get; private set; }
 
-        [NotNull]
-        public ContactEditFields Contact { get; private set; }
     }
 }

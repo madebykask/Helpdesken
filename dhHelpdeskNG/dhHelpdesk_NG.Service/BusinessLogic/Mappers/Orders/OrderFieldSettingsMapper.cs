@@ -77,7 +77,6 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
             MapSupplierSettings(settings.Supplier, fieldSettings, settings.ChangedDate);
             MapUserSettings(settings.User, fieldSettings, settings.ChangedDate);
             MapAccountSettings(settings.AccountInfo, fieldSettings, settings.ChangedDate);
-            MapContactSettings(settings.Contact, fieldSettings, settings.ChangedDate);
         }
 
         #region Map settings for edit
@@ -97,8 +96,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
                     CreateReceiverFieldSettings(fieldSettings),
                     CreateSupplierFieldSettings(fieldSettings),
                     CreateUserFieldSettings(fieldSettings),
-                    CreateAccountInfoFieldSettings(fieldSettings, orderFieldTypes),
-                    CreateContactFieldSettings(fieldSettings));
+                    CreateAccountInfoFieldSettings(fieldSettings, orderFieldTypes));
         }
 
         private static DeliveryFieldSettings CreateDeliveryFieldSettings(

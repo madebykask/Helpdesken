@@ -37,8 +37,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                         CreateReceiverSettings(response.Settings.Receiver),
                         CreateSupplierSettings(response.Settings.Supplier),
                         CreateUserSettings(response.Settings.User),
-                        CreateAccountInfoSettings(response.Settings.AccountInfo),
-                        CreateContactSettings(response.Settings.Contact));
+                        CreateAccountInfoSettings(response.Settings.AccountInfo));
         }
 
         public FullFieldSettings CreateForUpdate(
@@ -61,7 +60,6 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                         CreateSupplierForUpdate(model.Supplier),
                         CreateUserForUpdate(model.User),
                         CreateAccountInfoForUpdate(model.AccountInfo),
-                        CreateContactForUpdate(model.Contact),
                         changedDate);
         }
 

@@ -49,9 +49,6 @@
         [NotNull]
         public AccountInfoFieldSettings AccountInfo { get; private set; }
 
-        [NotNull]
-        public ContactFieldSettings Contact { get; private set; }
-
 
         public DateTime ChangedDate { get; private set; }
 
@@ -66,8 +63,7 @@
                         ReceiverFieldSettings receiver,
                         SupplierFieldSettings supplier,
                         UserFieldSettings user,
-                        AccountInfoFieldSettings accountInfo,
-                        ContactFieldSettings contact)
+                        AccountInfoFieldSettings accountInfo)
         {
             return new FullFieldSettings
                        {
@@ -82,7 +78,6 @@
                            Supplier = supplier,
                            User = user,
                            AccountInfo = accountInfo,
-                           Contact = contact
                         };
         }
 
@@ -100,7 +95,6 @@
                         SupplierFieldSettings supplier,
                         UserFieldSettings user,
                         AccountInfoFieldSettings accountInfo,
-                        ContactFieldSettings contact,
                         DateTime changedDate)
         {
             return new FullFieldSettings
@@ -118,7 +112,6 @@
                            Supplier = supplier,
                            User = user,
                            AccountInfo = accountInfo,
-                           Contact = contact,
                            ChangedDate = changedDate
                        };
         }

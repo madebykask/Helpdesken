@@ -53,7 +53,6 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                 CreateSupplierEditModel(response.EditSettings.Supplier, response.EditData.Order.Supplier),
                 CreateUserEditModel(response.EditSettings.User, response.EditData.Order.User),
                 CreateUserInfoEditModel(response.EditSettings, response.EditData.Order, response.EditOptions),
-                CreateContactEditModel(response.EditSettings.Contact, response.EditData.Order.Contact, response.EditOptions),
                 textOrderId,
                 customerId,
                 response.EditData.Order.OrderTypeId,
@@ -379,19 +378,6 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                 options.Regions, fields.User.RegionId.ToString());
 
             return model;
-        }
-
-        private ContactEditModel CreateContactEditModel(
-            ContactEditSettings settings,
-            ContactEditFields fields,
-            OrderEditOptions options)
-        {
-            return new ContactEditModel(
-                    _configurableFieldModelFactory.CreateStringField(settings.Id, fields.Id),
-                    _configurableFieldModelFactory.CreateStringField(settings.Name, fields.Name),
-                    _configurableFieldModelFactory.CreateStringField(settings.Phone, fields.Phone),
-                    _configurableFieldModelFactory.CreateStringField(settings.EMail, fields.Email)
-                );
         }
 
         private static SelectList CreateSelectListField(

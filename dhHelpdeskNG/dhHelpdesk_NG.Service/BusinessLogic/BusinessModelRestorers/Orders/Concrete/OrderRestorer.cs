@@ -18,7 +18,6 @@
             this.RestoreSupplier(updatedOrder.Supplier, existingOrder.Supplier, settings.Supplier);
             this.RestoreUser(updatedOrder.User, existingOrder.User, settings.User);
             this.RestoreAccountInfo(updatedOrder.AccountInfo, existingOrder.AccountInfo, settings.AccountInfo);
-            this.RestoreContact(updatedOrder.Contact, existingOrder.Contact, settings.Contact);
         }
 
         private void RestoreDelivery(
@@ -189,15 +188,5 @@
             RestoreFieldIfNeeded(updated, () => updated.Info, existing.Info, settings.Info.Show);
         }
 
-        private void RestoreContact(
-            ContactEditFields updated,
-            ContactEditFields existing,
-            ContactEditSettings settings)
-        {
-            RestoreFieldIfNeeded(updated, () => updated.Id, existing.Id, settings.Id.Show);
-            RestoreFieldIfNeeded(updated, () => updated.Name, existing.Name, settings.Name.Show);
-            RestoreFieldIfNeeded(updated, () => updated.Email, existing.Email, settings.EMail.Show);
-            RestoreFieldIfNeeded(updated, () => updated.Phone, existing.Phone, settings.Phone.Show);
-        }
     }
 }

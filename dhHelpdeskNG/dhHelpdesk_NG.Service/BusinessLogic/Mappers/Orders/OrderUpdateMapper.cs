@@ -25,7 +25,6 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
             MapSupplierFields(entity, businessModel.Supplier);
             MapUserFields(entity, businessModel.User);
             MapAccountInfoFields(entity, businessModel.AccountInfo);
-            MapContactFields(entity, businessModel.Contact);
         }
 
         private static void MapDeliveryFields(Order entity, DeliveryEditFields businessModel)

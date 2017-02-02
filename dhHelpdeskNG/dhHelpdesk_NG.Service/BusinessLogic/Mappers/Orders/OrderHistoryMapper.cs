@@ -38,7 +38,6 @@
             MapSupplierFields(entity, businessModel.Order.Supplier);
             MapUserFields(entity, businessModel.Order.User);
             MapAccountInfoFields(entity, businessModel.Order.AccountInfo);
-            MapContactFields(entity, businessModel.Order.Contact);
 
             return entity;
         }
