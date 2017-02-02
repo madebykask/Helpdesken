@@ -318,7 +318,7 @@ namespace DH.Helpdesk.Services.Services
                             var el = new OperationLogEMailLog(operationLog.Id, string.Empty, t);
                             fields = GetFieldsForEmail(operationLogList);
                             var mailResponse = EmailResponse.GetEmptyEmailResponse();
-                            var mailSetting = new EmailSettings(mailResponse, smtpInfo);
+                            var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
                             var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.Recipients, template.Subject, template.Body, fields, mailSetting, null, false, null);
 
                             //el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
@@ -389,7 +389,7 @@ namespace DH.Helpdesk.Services.Services
                         {
                             var el = new OperationLogEMailLog(operationLog.Id, txtSMS, t);
                             var mailResponse = EmailResponse.GetEmptyEmailResponse();
-                            var mailSetting = new EmailSettings(mailResponse, smtpInfo);
+                            var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
                             var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.Recipients, smsSubject, el.SMSText, null, mailSetting, null, false, null);
 
                             var now = DateTime.Now;

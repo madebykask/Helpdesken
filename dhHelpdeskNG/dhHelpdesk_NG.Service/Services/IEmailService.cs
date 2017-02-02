@@ -37,7 +37,22 @@ namespace DH.Helpdesk.Services.Services
             string siteHelpdesk = "",
             EmailType emailType = EmailType.ToMail);
 
-        EmailResponse SendEmail(EmailItem item, EmailSettings emailsettings, string siteSelfService = "", string siteHelpdesk = "", EmailType emailType = EmailType.ToMail);
+		EmailResponse SendEmail(
+			EmailLog el,
+			string from,
+			string to,
+			string subject,
+			string body,
+			List<Field> fields,
+			EmailSettings emailsettings,
+			string mailMessageId = "",
+			bool highPriority = false,
+			List<string> files = null,
+			string siteSelfService = "",
+			string siteHelpdesk = "",
+			EmailType emailType = EmailType.ToMail);
+
+		EmailResponse SendEmail(EmailLog el, EmailItem item, EmailSettings emailsettings, string siteSelfService = "", string siteHelpdesk = "", EmailType emailType = EmailType.ToMail);
 
         #endregion
     }

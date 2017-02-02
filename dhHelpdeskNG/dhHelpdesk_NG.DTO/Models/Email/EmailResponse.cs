@@ -8,15 +8,18 @@
         {
         }
 
-        public EmailSettings(EmailResponse response, MailSMTPSetting smtpSettings)
+        public EmailSettings(EmailResponse response, MailSMTPSetting smtpSettings, bool batchEmail)
         {
             Response = response;
             SmtpSettings = smtpSettings;
+	        BatchEmail = batchEmail;
         }
 
         public EmailResponse Response { get; private set; }
 
         public MailSMTPSetting SmtpSettings { get; private set; }
+
+		public bool BatchEmail { get; set; }
 
     }
 

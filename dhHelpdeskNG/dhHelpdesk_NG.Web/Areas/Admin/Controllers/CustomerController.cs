@@ -353,6 +353,7 @@
                 setting.ComplexPassword = vmodel.Setting.ComplexPassword;
                 setting.IsUserFirstLastNameRepresentation = vmodel.UserFirstLastNameRepresentationId == UserFirstLastNameModes.LastFirstNameMode ? 0 : 1;
                 setting.CalcSolvedInTimeByLatestSLADate = vmodel.Setting.CalcSolvedInTimeByLatestSLADate;
+	            setting.BatchEmail = vmodel.Setting.BatchEmail;
             }
 
             IDictionary<string, string> errors;
@@ -874,7 +875,8 @@
                 PreventToSaveCaseWithInactiveValue = customerToCopySettings.PreventToSaveCaseWithInactiveValue,
                 ShowOUsOnDepartmentFilter = customerToCopySettings.ShowOUsOnDepartmentFilter,
                 FileIndexingServerName = customerToCopySettings.FileIndexingServerName,
-                FileIndexingCatalogName = customerToCopySettings.FileIndexingCatalogName
+                FileIndexingCatalogName = customerToCopySettings.FileIndexingCatalogName,
+				BatchEmail = customerToCopySettings.BatchEmail
             };
 
             //Get CaseSettings to copy

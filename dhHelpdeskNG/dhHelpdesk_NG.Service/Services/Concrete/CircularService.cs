@@ -789,7 +789,7 @@
                 smtpInfo = new MailSMTPSetting(info.SmtpServer, info.SmtpPort);
             }
             var mailResponse = EmailResponse.GetEmptyEmailResponse();
-            var mailSetting = new EmailSettings(mailResponse, smtpInfo);
+            var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
 
             this.emailService.SendEmail(mailItem.MailItem, mailSetting);
 

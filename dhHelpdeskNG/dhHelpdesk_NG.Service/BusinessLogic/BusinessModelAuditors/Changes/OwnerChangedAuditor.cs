@@ -129,7 +129,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
                 smtpInfo = new MailSMTPSetting(info.SmtpServer, info.SmtpPort);
             }
             var mailResponse = EmailResponse.GetEmptyEmailResponse();
-            var mailSetting = new EmailSettings(mailResponse, smtpInfo);
+            var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
             emailService.SendEmail(from, newOwnerEmails, mail, mailSetting);
 
             var mailUniqueIdentifier = this.mailUniqueIdentifierProvider.Provide(

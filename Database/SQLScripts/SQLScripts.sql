@@ -1564,6 +1564,7 @@ BEGIN
 
 	ALTER TABLE [dbo].[tblReportFavorites] CHECK CONSTRAINT [FK_tblReportFavorites_tblUsers]
 END
+GO
 
 --tblPriority
 ALTER TABLE tblPriority
@@ -1575,6 +1576,87 @@ WHERE [OrderField] IN ('UserInitials', 'UserLocation',
   'Responsibility', 'ReferenceNumber', 'InventoryNumber',
   'AccountInfo', 'ContactId', 'ContactName',
   'ContactPhone', 'ContactEMail')
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'BatchEmail' and sysobjects.name = N'tblSettings')
+BEGIN
+	ALTER TABLE [dbo].[tblSettings] ADD [BatchEmail] BIT NOT NULL DEFAULT(0)
+END
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Body' and sysobjects.name = N'tblEmailLog')
+BEGIN
+	ALTER TABLE [dbo].[tblEmailLog] ADD [Body] NVARCHAR(MAX) NULL
+END
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Subject' and sysobjects.name = N'tblEmailLog')
+BEGIN
+	ALTER TABLE [dbo].[tblEmailLog] ADD [Subject] NVARCHAR(MAX) NULL
+END
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Cc' and sysobjects.name = N'tblEmailLog')
+BEGIN
+	ALTER TABLE [dbo].[tblEmailLog] ADD [Cc] NVARCHAR(1000) NULL 
+END
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Bcc' and sysobjects.name = N'tblEmailLog')
+BEGIN
+	ALTER TABLE [dbo].[tblEmailLog] ADD [Bcc] NVARCHAR(1000) NULL 
+END
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'HighPriority' and sysobjects.name = N'tblEmailLog')
+BEGIN
+	ALTER TABLE [dbo].[tblEmailLog] ADD [HighPriority] BIT NOT NULL DEFAULT(0)
+END
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Files' and sysobjects.name = N'tblEmailLog')
+BEGIN
+	ALTER TABLE [dbo].[tblEmailLog] ADD [Files] NVARCHAR(MAX) NULL
+END
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'From' and sysobjects.name = N'tblEmailLog')
+BEGIN
+	ALTER TABLE [dbo].[tblEmailLog] ADD [From] NVARCHAR(1000) NULL
+END
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'SendStatus' and sysobjects.name = N'tblEmailLog')
+BEGIN
+	ALTER TABLE [dbo].[tblEmailLog] ADD [SendStatus] INT NOT NULL DEFAULT(0)
+END
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LastAttempt' and sysobjects.name = N'tblEmailLog')
+BEGIN
+	ALTER TABLE [dbo].[tblEmailLog] ADD [LastAttempt] DATETIME NULL
+END
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Attempts' and sysobjects.name = N'tblEmailLog')
+BEGIN
+	ALTER TABLE [dbo].[tblEmailLog] ADD [Attempts] INT NULL
+END
+GO
+
+if not exists(select * from sysobjects WHERE Name = N'tblEmailLogAttempts')
+BEGIN
+	CREATE TABLE [dbo].[tblEmailLogAttempts](
+		[Id] [int] IDENTITY(1,1) NOT NULL,
+		[EmailLog_Id] INT NOT NULL,
+		[Date] DATETIME NOT NULL,
+		[Message] NVARCHAR(MAX) NULL,
+		PRIMARY KEY CLUSTERED ([Id] ASC),
+		CONSTRAINT [FK_tblEmailLogAttempts_tblEmailLog] FOREIGN KEY ([EmailLog_Id]) REFERENCES [dbo].[tblEmailLog] ([Id])
+	)
+END
+GO
+
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.30'

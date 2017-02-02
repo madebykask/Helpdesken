@@ -80,7 +80,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
         private readonly IOrderRepository _orderRepository;
 
 
-        public OrdersService(
+		public OrdersService(
                 IUnitOfWorkFactory unitOfWorkFactory, 
                 IOrderFieldSettingsService orderFieldSettingsService, 
                 IWorkingGroupRepository workingGroupRepository, 
@@ -502,8 +502,9 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
             var currentUser = _userRepository.GetById(request.UserId);
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(currentUser.TimeZoneId);
             var customer = _customerRepository.GetById(request.CustomerId);
+			var customerSetting = _settingService.GetCustomerSetting(request.CustomerId);
 
-            var customEmailSender1 = customer.HelpdeskEmail;
+			var customEmailSender1 = customer.HelpdeskEmail;
             var m = _mailTemplateService.GetMailTemplateLanguageForCustomer(40, request.CustomerId, request.LanguageId,
                 request.Order.OrderTypeId);
             if (!String.IsNullOrEmpty(m?.Body) && !String.IsNullOrEmpty(m.Subject) &&
@@ -517,7 +518,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                 //var AbsoluteUrl = RequestExtension.GetAbsoluteUrl();
                 var AbsoluteUrl = "";
                 var mailResponse = EmailResponse.GetEmptyEmailResponse();
-                var mailSetting = new EmailSettings(mailResponse, smtpInfo);
+                var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
                 var siteHelpdesk = AbsoluteUrl + "Areas/Orders/edit/" + entity.Id;
                 var e_res = _emailService.SendEmail(customEmailSender1, el.EMailAddress, m.Subject, m.Body, fields, mailSetting,
                     el.MessageId, false, null, siteSelfService, siteHelpdesk);

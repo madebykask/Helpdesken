@@ -129,6 +129,7 @@ namespace DH.Helpdesk.Domain
         public string SMTPUserName { get; set; }
         public string SMTPPassWord { get; set; }
         public bool IsSMTPSecured { get; set; }
+		public bool BatchEmail { get; set; }
 
 
 
