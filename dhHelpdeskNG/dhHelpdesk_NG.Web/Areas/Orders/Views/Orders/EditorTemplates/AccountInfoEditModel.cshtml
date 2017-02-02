@@ -2,7 +2,7 @@
 @using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.AccountInfoEditModel
 
-<h4>@Translation.Get("Kontoinformation")</h4>
+<h4>@Translation.GetCoreTextTranslation("Kontoinformation")</h4>
 <table class="tableform">
     <tbody>
         @Html.EditorFor(m => m.StartedDate, "Fields/Date", new { Id = "accInfo_started_date" })

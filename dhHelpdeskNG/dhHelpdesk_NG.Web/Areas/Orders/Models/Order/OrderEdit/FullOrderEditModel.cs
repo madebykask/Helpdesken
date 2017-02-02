@@ -28,7 +28,6 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
                     SupplierEditModel supplier,
                     UserEditModel user,
                     UserInfoEditModel userInfo,
-                    AccountInfoEditModel accountInfo,
                     ContactEditModel contact,
                     string id,
                     int customerId,
@@ -46,7 +45,6 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
             Receiver = receiver;
             Supplier = supplier;
             User = user;
-            AccountInfo = accountInfo;
             Contact = contact;
             UserInfo = userInfo;
             Id = id;
@@ -92,8 +90,6 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
         [NotNull]
         public UserInfoEditModel UserInfo { get; set; }
 
-        [NotNull]
-        public AccountInfoEditModel AccountInfo { get; set; }
 
         [NotNull]
         public ContactEditModel Contact { get; set; }

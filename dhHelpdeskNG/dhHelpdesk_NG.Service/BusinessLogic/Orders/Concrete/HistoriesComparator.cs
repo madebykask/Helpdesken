@@ -125,8 +125,8 @@
             AddFirstDifference(history, settings.AccountInfo.StartedDate, firstHistory.Order.AccountInfo.StartedDate);
             AddFirstDifference(history, settings.AccountInfo.FinishDate, firstHistory.Order.AccountInfo.FinishDate);
             //AddFirstDifference(history, settings.AccountInfo.EMailTypeId, firstHistory.Order.AccountInfo.EMailTypeId);
-            //AddFirstDifference(history, settings.AccountInfo.HomeDirectory, firstHistory.Order.AccountInfo.HomeDirectory);
-            //AddFirstDifference(history, settings.AccountInfo.Profile, firstHistory.Order.AccountInfo.Profile);
+            AddFirstDifference(history, settings.AccountInfo.HomeDirectory, firstHistory.Order.AccountInfo.HomeDirectory);
+            AddFirstDifference(history, settings.AccountInfo.Profile, firstHistory.Order.AccountInfo.Profile);
             AddFirstDifference(history, settings.AccountInfo.InventoryNumber, firstHistory.Order.AccountInfo.InventoryNumber);
             AddFirstDifference(history, settings.AccountInfo.Info, firstHistory.Order.AccountInfo.Info);
             AddFirstDifference(history, settings.AccountInfo.AccountTypeId, firstHistory.Order.AccountInfo.AccountTypeId, firstHistory.Order.AccountInfo.AccountTypeIdName);
@@ -276,8 +276,8 @@
             AddDifference(history, settings.AccountInfo.StartedDate, previousHistory.Order.AccountInfo.StartedDate, currentHistory.Order.AccountInfo.StartedDate);
             AddDifference(history, settings.AccountInfo.FinishDate, previousHistory.Order.AccountInfo.FinishDate, currentHistory.Order.AccountInfo.FinishDate);
             //AddDifference(history, settings.AccountInfo.EMailTypeId, previousHistory.Order.AccountInfo.EMailTypeId);
-            //AddDifference(history, settings.AccountInfo.HomeDirectory, previousHistory.Order.AccountInfo.HomeDirectory);
-            //AddDifference(history, settings.AccountInfo.Profile, previousHistory.Order.AccountInfo.Profile);
+            AddDifference(history, settings.AccountInfo.HomeDirectory, previousHistory.Order.AccountInfo.HomeDirectory, currentHistory.Order.AccountInfo.HomeDirectory);
+            AddDifference(history, settings.AccountInfo.Profile, previousHistory.Order.AccountInfo.Profile, currentHistory.Order.AccountInfo.Profile);
             AddDifference(history, settings.AccountInfo.InventoryNumber, previousHistory.Order.AccountInfo.InventoryNumber, currentHistory.Order.AccountInfo.InventoryNumber);
             AddDifference(history, settings.AccountInfo.Info, previousHistory.Order.AccountInfo.Info, currentHistory.Order.AccountInfo.Info);
             AddDifference(history, settings.AccountInfo.AccountTypeId,
@@ -364,6 +364,15 @@
             }
         }
 
+        private static void AddFirstDifference(List<FieldDifference> differencies, FieldEditSettings settings, bool? firstValue)
+        {
+            if (firstValue.HasValue)
+            {
+                var difference = new FieldDifference(settings.Caption, null, firstValue.Value.ToString(CultureInfo.InvariantCulture));
+                differencies.Add(difference);
+            }
+        }
+
         private static void AddFirstDifference(List<FieldDifference> differencies, FieldEditSettings settings, decimal? firstValue)
         {
             if (firstValue.HasValue)
@@ -423,6 +432,20 @@
                 differencies.Add(difference);
             }
         }
+
+        private static void AddDifference(List<FieldDifference> differencies, FieldEditSettings settings, bool? oldValue, bool? newValue)
+        {
+            var noValueText = "null";
+            if (oldValue != newValue)
+            {
+                var difference = new FieldDifference(
+                            settings.Caption,
+                            oldValue?.ToString(CultureInfo.InvariantCulture) ?? noValueText,
+                            newValue?.ToString(CultureInfo.InvariantCulture) ?? noValueText);
+                differencies.Add(difference);
+            }
+        }
+
 
         private static void AddDifference(List<FieldDifference> differencies, FieldEditSettings settings, decimal? oldValue, decimal? newValue)
         {

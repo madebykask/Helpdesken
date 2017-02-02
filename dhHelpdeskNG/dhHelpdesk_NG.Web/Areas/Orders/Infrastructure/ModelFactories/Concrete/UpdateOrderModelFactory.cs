@@ -44,7 +44,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                 CreateReceiverFields(model.Receiver),
                 CreateSupplierFields(model.Supplier),
                 CreateUserFields(model.User, model.UserInfo),
-                CreateAccountInfoFields(model.AccountInfo),
+                CreateAccountInfoFields(model.Order),
                 CreateContactFields(model.Contact));
 
             var newLogs = CreateNewLogCollection(model, emailService);
@@ -245,9 +245,9 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                 infoModel.RegionId);
         }
 
-        private static AccountInfoEditFields CreateAccountInfoFields(AccountInfoEditModel model)
+        private static AccountInfoEditFields CreateAccountInfoFields(OrderEditModel model)
         {
-            if (model == null) model = AccountInfoEditModel.CreateEmpty();
+            if (model == null) model = OrderEditModel.CreateEmpty();
 
             return new AccountInfoEditFields(
                 ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.StartedDate),

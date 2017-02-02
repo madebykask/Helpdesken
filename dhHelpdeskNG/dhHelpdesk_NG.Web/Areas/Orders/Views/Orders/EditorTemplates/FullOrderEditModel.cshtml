@@ -52,21 +52,13 @@
                     {
                         @Html.EditorFor(m => m.UserInfo)
                     }
-                    @if (Model.AccountInfo.HasShowableFields())
+                    @if (Model.Order.HasShowableFields())
                     {
-                        @Html.EditorFor(m => m.AccountInfo)
+                        @Html.EditorFor(m => m.Order)
                     }
                     @if (Model.Contact.HasShowableFields())
                     {
                         @Html.EditorFor(m => m.Contact)
-                    }
-                    @*@if (Model.Orderer.HasShowableFields())
-                    {
-                        @Html.EditorFor(m => m.Orderer)
-                    }*@
-                    @if (Model.Order.HasShowableFields())
-                    {
-                        @Html.EditorFor(m => m.Order)
                     }
                     @if (Model.Receiver.HasShowableFields())
                     {
