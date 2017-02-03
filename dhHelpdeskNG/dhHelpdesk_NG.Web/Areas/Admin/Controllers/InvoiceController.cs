@@ -1,6 +1,9 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+
 namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
     using DH.Helpdesk.BusinessData.Models.Invoice;
@@ -82,10 +85,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 
             }
 
-            var filter = CS;
-            
-            //var filter = new InvoiceArticleProductAreaSelectedFilter();
-            model.Rows = GetIndexRowModel(customerId, filter, allInvoiceArticles);
             model.IAPSearch_Filter = CS;
             model.InvoiceArticles = allInvoiceArticles.OrderBy(a => a.Number).ToList();
             model.ProductAreas = lastLevels.OrderBy(l=> l.Name).ToList();
@@ -166,149 +165,49 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             return model;
         }
 
-        [HttpGet]
-        public PartialViewResult _ArticleProductAreaIndexRows(InvoiceArticleProductAreaFilterJSModel filter)
-        {
-            var selectedSearch = filter.MapToSelectedFilter();
-
-            SessionFacade.CurrentInvoiceArticleProductAreaSearch = selectedSearch;
-            var model = GetIndexRowModel(selectedSearch.CustomerId, selectedSearch, null);
-            return PartialView(model);            
-        }
-
-        private InvoiceArticleProductAreaIndexRowsModel GetIndexRowModel(int customerId, 
-                                                                         InvoiceArticleProductAreaSelectedFilter selectedFilter, 
-                                                                         InvoiceArticle[] invoiceArticles = null)
-        {
-            var customer = customerService.GetCustomer(customerId);
-            var model = new InvoiceArticleProductAreaIndexRowsModel(customer);
-
-            /*Selection modes*/
-            // 0: Article(empty)  - ProductArea(empty)   
-            // 1: Article(filled) - ProductArea(empty)   
-            // 2: Article(empty)  - ProductArea(filled)   
-            // 3: Article(filled) - ProductArea(filled)   
-            var selectionMode = 0;
-            if (selectedFilter.SelectedInvoiceArticles.Any())
-            {
-                if (selectedFilter.SelectedProductAreas.Any())
-                    selectionMode = 3;
-                else
-                    selectionMode = 1;
-            }
-            else
-            {
-                if (selectedFilter.SelectedProductAreas.Any())
-                    selectionMode = 2;             
-            }
-
-            var allInvoiceArticles = invoiceArticles == null? invoiceArticleService.GetArticles(customerId) : invoiceArticles;
-            switch (selectionMode)
-            {
-                case 0:
-                    foreach (var art in allInvoiceArticles)
-                    {
-                        if (art.ProductAreas.Any())
-                        {
-                            foreach (var prod in art.ProductAreas)
-                            {
-                                model.Data.Add(new InvoiceArticleProductAreaIndexRowModel
-                                {
-                                    InvoiceArticleId = art.Id,
-                                    InvoiceArticleName = art.Name, // add desction as well
-                                    InvoiceArticleNameEng = art.NameEng,
-                                    InvoiceArticleNumber = art.Number,
-                                    ProductAreaId = prod.Id,
-                                    ProductAreaName = prod.ResolveFullName()
-                                });
-                            }
-                        }
-                    }
-                    break;
-                case 1:
-                    foreach (var art in allInvoiceArticles.Where(a=> selectedFilter.SelectedInvoiceArticles.Contains(a.Id)).ToList())
-                    {
-                        if (art.ProductAreas.Any())
-                        {
-                            foreach (var prod in art.ProductAreas)
-                            {
-                                model.Data.Add(new InvoiceArticleProductAreaIndexRowModel
-                                {
-                                    InvoiceArticleId = art.Id,
-                                    InvoiceArticleName = art.Name, // add desction as well
-                                    InvoiceArticleNameEng = art.NameEng,
-                                    InvoiceArticleNumber = art.Number,
-                                    ProductAreaId = prod.Id,
-                                    ProductAreaName = prod.ResolveFullName()
-                                });
-                            }
-                        }
-                    }
-                    break;
-                case 2:
-                    foreach (var art in allInvoiceArticles)
-                    {
-                        var selectedProds = art.ProductAreas.Where(p => selectedFilter.SelectedProductAreas.Contains(p.Id)).ToList();
-                        if (selectedProds.Any())
-                        {
-                            foreach (var prod in selectedProds)
-                            {
-                                model.Data.Add(new InvoiceArticleProductAreaIndexRowModel
-                                {
-                                    InvoiceArticleId = art.Id,
-                                    InvoiceArticleName = art.Name, // add desction as well
-                                    InvoiceArticleNameEng = art.NameEng,
-                                    InvoiceArticleNumber = art.Number,
-                                    ProductAreaId = prod.Id,
-                                    ProductAreaName = prod.ResolveFullName()
-                                });
-                            }
-                        }
-                    }
-                    break;
-                case 3:
-                    foreach (var art in allInvoiceArticles.Where(a => selectedFilter.SelectedInvoiceArticles.Contains(a.Id)).ToList())
-                    {
-                        var selectedProds = art.ProductAreas.Where(p => selectedFilter.SelectedProductAreas.Contains(p.Id)).ToList();
-                        if (selectedProds.Any())
-                        {
-                            foreach (var prod in selectedProds)
-                            {
-                                model.Data.Add(new InvoiceArticleProductAreaIndexRowModel
-                                {
-                                    InvoiceArticleId = art.Id,
-                                    InvoiceArticleName = art.Name, // add desction as well
-                                    InvoiceArticleNameEng = art.NameEng,
-                                    InvoiceArticleNumber = art.Number,
-                                    ProductAreaId = prod.Id,
-                                    ProductAreaName = prod.ResolveFullName()
-                                });
-                            }
-                        }
-                    }
-                    break;
-                    break;
-            }
-                                    
-            return model;
-        }
-
         [HttpPost]
         [BadRequestOnNotValid]
         [ValidateAntiForgeryToken]
-        public string ArticlesImport(CaseInvoiceSettingsModel model)
+        public JsonResult ArticlesImport(CaseInvoiceSettingsModel model)
         {
             if (model.ArticlesImport == null ||
                 model.ArticlesImport.File == null || 
                 model.ArticlesImport.File.ContentLength == 0)
             {
-                return "File is empty!";
+                var answer = new
+                {
+                    Success = false,
+                    Status = Translation.GetCoreTextTranslation("Filen är tom")
+                };
+                return Json(answer, JsonRequestBehavior.AllowGet);
             }
-
+            var lastSyncDate = DateTime.UtcNow;
             var importer = this.caseInvoiceFactory.GetImporter(this.productAreaService, this.invoiceArticleService);
-            var result = importer.ImportArticles(model.ArticlesImport.File.InputStream);
-            importer.SaveImportedArticles(result, model.ArticlesImport.CustomerId);
-            return "Import completed successfully!";
+            var result = importer.ImportArticles(model.ArticlesImport.File.InputStream, lastSyncDate);
+            if (result.Errors.Any())
+            {
+                var error = new StringBuilder();
+                foreach (var resError in result.Errors)
+                {
+                    error.AppendLine(Translation.GetCoreTextTranslation(resError));
+                }
+                var answer = new
+                {
+                    Success = false,
+                    Status = error.ToString()
+                };
+                return Json(answer, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                importer.SaveImportedArticles(result, model.ArticlesImport.CustomerId, lastSyncDate);
+                var answer = new
+                {
+                    Success = true,
+                    Status = Translation.GetCoreTextTranslation("Import slutförts")
+                };
+                return Json(answer, JsonRequestBehavior.AllowGet);
+            }
         }
 
         [HttpPost]

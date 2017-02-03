@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using DH.Helpdesk.Common.Enums;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System;
     using System.Collections.Generic;
@@ -33,6 +35,8 @@
 
         List<OptionResult> GetResults(List<int> circularIds, DateTime? from, DateTime? to);
 
+        List<OptionResult> GetResults(int circularId, DateTime? from, DateTime? to);
+
         List<AvailableCase> GetAvailableCases(
             int customerId,
             int questionnaireId,
@@ -55,5 +59,8 @@
 
 	    List<BusinessLogic.MapperData.Participant> GetNotAnsweredParticipants(int circularId);
 
+        void SetStatus(int circularId, CircularStates circularState);
+        void UpdateParticipantSendDate(Guid participantGuid, DateTime operationDate);
+        int GetCircularIdByQuestionnaireId(int questionaireId);
     }
 }

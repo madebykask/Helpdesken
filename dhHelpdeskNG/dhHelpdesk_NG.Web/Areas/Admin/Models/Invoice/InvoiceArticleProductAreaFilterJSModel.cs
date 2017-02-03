@@ -2,6 +2,7 @@
 using DH.Helpdesk.Common.ValidationAttributes;
 using DH.Helpdesk.Domain;
 using System.Collections.Generic;
+using DH.Helpdesk.BusinessData.Models.Shared;
 
 namespace DH.Helpdesk.Web.Areas.Admin.Models.Invoice
 {
@@ -29,8 +30,12 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.Invoice
         {
             var ret = new InvoiceArticleProductAreaSelectedFilter();
             ret.CustomerId = articleAndProdAreaFilter.CustomerId;
-            ret.SelectedProductAreas.AddItems(articleAndProdAreaFilter.ProductAreas);
-            ret.SelectedInvoiceArticles.AddItems(articleAndProdAreaFilter.InvoiceArticles);
+			var pa = new SelectedItems();
+			pa.AddItems(articleAndProdAreaFilter.ProductAreas);
+            ret.SelectedProductAreas.AddRange(pa);
+			var ia = new SelectedItems();
+			ia.AddItems(articleAndProdAreaFilter.InvoiceArticles);
+            ret.SelectedInvoiceArticles.AddRange(ia);
             
             return ret;
         }

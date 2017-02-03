@@ -9,15 +9,18 @@
     {
         public ProgramHistoryFields()
         {
-            this.Programs = new List<OrderProgramModel>();
+            Programs = new List<int>();
         }
 
-        public ProgramHistoryFields(List<OrderProgramModel> programs)
+        public ProgramHistoryFields(List<int> programs, string infoProduct)
         {
-            this.Programs = programs;
+            Programs = programs;
+            InfoProduct = infoProduct;
         }
 
         [NotNull]
-        public List<OrderProgramModel> Programs { get; private set; }  
+        public List<int> Programs { get; private set; }  
+
+        public string InfoProduct { get; set; }
     }
 }

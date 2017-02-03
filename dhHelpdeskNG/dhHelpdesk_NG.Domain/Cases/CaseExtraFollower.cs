@@ -9,7 +9,7 @@ namespace DH.Helpdesk.Domain.Cases
     {
         public string Follower { get; set; }
         public int Case_Id { get; set; }
-        public int CreatedByUser_Id { get; set; }
+        public int? CreatedByUser_Id { get; set; }
         public DateTime CreatedDate { get; set; }
 
         public virtual User CreatedByUser { get; set; }

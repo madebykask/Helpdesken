@@ -72,16 +72,17 @@
         
             {{if IsCredited}}
                 <td class='article-total'>-{{:Total}}</td>
-                <td colspan="2" style="width:5px">
-                    <a href='javascript:void(0);' onclick='dhHelpdesk.CaseArticles.DeleteArticle($(this).parent().parent())' class='btn btn-small'>x</a>
+                <td colspan="2" style="width:5px" title="">
+                    <a href='javascript:void(0);' onclick='dhHelpdesk.CaseArticles.DeleteArticle($(this).parent().parent())' class='btn btn-small' title="">x</a>
                 </td>
             {{else}}
                 <td class='article-total'>{{:Total}}</td>  
-                <td style="width:5px">
-                    <a href='javascript:void(0);' onclick='dhHelpdesk.CaseArticles.DeleteArticle($(this).parent().parent())' class='btn btn-small'>x</a>
+                <td style="width:5px" title="">
+                    <a href='javascript:void(0);' onclick='dhHelpdesk.CaseArticles.DeleteArticle($(this).parent().parent())' class='btn btn-small' title="">x</a>
                 </td>             
-                <td style="vertical-align:top;width:5px;">                        
-                    <a id="add-blank-article_{{:Id}}" class="btn btn-small add-blank-article" style="cursor: pointer;" onclick="dhHelpdesk.CaseArticles.AddTextToArticle('{{:Id}}'); return false;"><i class="icon-plus-sign"></i></a>                    
+                <td style="vertical-align:top;width:5px;" title="">                        
+                    <a id="add-blank-article_{{:Id}}" class="btn btn-small add-blank-article" style="cursor: pointer;" title=""
+                       onclick="dhHelpdesk.CaseArticles.AddTextToArticle('{{:Id}}'); return false;"><i class="icon-plus-sign"></i></a>                    
                 </td>            
             {{/if}}
         </tr>

@@ -16,20 +16,24 @@
                 string deliveryLocation, 
                 string deliveryInfo1, 
                 string deliveryInfo2, 
-                string deliveryInfo3)
+                string deliveryInfo3,
+                string deliveryName,
+                string deliveryPhone)
         {
-            this.DeliveryDepartmentId = deliveryDepartmentId;
-            this.DeliveryInfo3 = deliveryInfo3;
-            this.DeliveryInfo2 = deliveryInfo2;
-            this.DeliveryInfo1 = deliveryInfo1;
-            this.DeliveryLocation = deliveryLocation;
-            this.DeliveryPostalAddress = deliveryPostalAddress;
-            this.DeliveryPostalCode = deliveryPostalCode;
-            this.DeliveryAddress = deliveryAddress;
-            this.DeliveryOu = deliveryOu;
-            this.DeliveryDepartment = deliveryDepartment;
-            this.InstallDate = installDate;
-            this.DeliveryDate = deliveryDate;
+            DeliveryDepartmentId = deliveryDepartmentId;
+            DeliveryInfo3 = deliveryInfo3;
+            DeliveryInfo2 = deliveryInfo2;
+            DeliveryInfo1 = deliveryInfo1;
+            DeliveryLocation = deliveryLocation;
+            DeliveryPostalAddress = deliveryPostalAddress;
+            DeliveryPostalCode = deliveryPostalCode;
+            DeliveryAddress = deliveryAddress;
+            DeliveryOu = deliveryOu;
+            DeliveryDepartment = deliveryDepartment;
+            InstallDate = installDate;
+            DeliveryDate = deliveryDate;
+            DeliveryName = deliveryName;
+            DeliveryPhone = deliveryPhone;
         }
 
         public DateTime? DeliveryDate { get; private set; }
@@ -55,5 +59,9 @@
         public string DeliveryInfo2 { get; private set; }
         
         public string DeliveryInfo3 { get; private set; }
+
+        public string DeliveryName { get; private set; }
+
+        public string DeliveryPhone { get; private set; }
     }
 }

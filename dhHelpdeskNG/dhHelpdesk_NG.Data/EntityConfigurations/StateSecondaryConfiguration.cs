@@ -38,7 +38,7 @@
             this.Property(x => x.WorkingGroup_Id).IsOptional();
             this.Property(x => x.MailTemplate_Id).IsOptional();
             this.Property(x => x.ReminderDays).IsOptional();
-            this.Property(x => x.StateSecondaryGUID).IsOptional();
+            //this.Property(x => x.StateSecondaryGUID).IsOptional();
 
             this.ToTable("tblstatesecondary");
         }

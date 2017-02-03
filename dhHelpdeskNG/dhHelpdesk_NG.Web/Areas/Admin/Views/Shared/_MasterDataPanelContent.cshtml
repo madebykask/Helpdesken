@@ -106,12 +106,13 @@
 <li class="line"></li>
 <li class="dropdown-submenu">
     <a href="#">
-        @Translation.Get("Beställning", Enums.TranslationSource.TextTranslation)
+        @Translation.GetCoreTextTranslation("Beställning")
     </a>
     <ul class="dropdown-menu">
-        <li class="@Html.ActiveTab(new string[] { "orderstate" })"><a href="@Url.Action("index", "orderstate", new { customerId = Model.Id })">@Translation.Get("Beställningsstatus", Enums.TranslationSource.TextTranslation)</a></li>
-        <li class="@Html.ActiveTab(new string[] { "ordertype" })"><a href="@Url.Action("index", "ordertype", new { customerId = Model.Id })">@Translation.Get("Beställningstyper", Enums.TranslationSource.TextTranslation)</a></li>
-        <li class="@Html.ActiveTab(new string[] { "accountactivity" })"><a href="@Url.Action("index", "accountactivity", new { customerId = Model.Id })">@Translation.Get("Kontoaktiviteter", Enums.TranslationSource.TextTranslation)</a></li>
+        <li class="@Html.ActiveTab(new string[] { "orderstate" })"><a href="@Url.Action("index", "orderstate", new { customerId = Model.Id })">@Translation.GetCoreTextTranslation("Beställningsstatus")</a></li>
+        <li class="@Html.ActiveTab(new string[] { "ordertype" })"><a href="@Url.Action("index", "ordertype", new { customerId = Model.Id })">@Translation.GetCoreTextTranslation("Beställningstyper")</a></li>
+        <li class="@Html.ActiveTab(new string[] {"accountactivity"})"><a href="@Url.Action("index", "accountactivity", new {customerId = Model.Id})">@Translation.GetCoreTextTranslation("Kontoaktiviteter")</a></li>
+        <li class="@Html.ActiveTab(new string[] { "program" })"><a href="@Url.Action("index", "program", new { customerId = Model.Id })">@Translation.GetCoreTextTranslation("Program")</a></li>
     </ul>
 </li>
 <li class="line"></li>
@@ -204,11 +205,6 @@
                 @Translation.Get("Snabblänkar", Enums.TranslationSource.TextTranslation)
             </a>
         </li>*@
-        <li class="@Html.ActiveTab(new string[] { "program" })">
-            <a href="@Url.Action("index", "program", new { customerId = Model.Id })">
-                @Translation.Get("Program", Enums.TranslationSource.TextTranslation)
-            </a>
-        </li>
         @*<li class="@Html.ActiveTab(new string[] { "currency" })"><a href="@Url.Action("index", "currency", new { customerId = Model.Id })">@Translation.Get("Valuta", Enums.TranslationSource.TextTranslation)</a></li>
         <li class="line"></li>*@
 

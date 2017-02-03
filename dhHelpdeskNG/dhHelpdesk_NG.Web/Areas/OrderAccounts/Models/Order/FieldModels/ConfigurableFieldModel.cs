@@ -40,7 +40,7 @@
 
         public static ConfigurableFieldModel<TValue> CreateUnshowable()
         {
-            return new ConfigurableFieldModel<TValue> { Show = false };
+            return new ConfigurableFieldModel<TValue> { Caption = "", Show = false };
         }
 
         public static TValue GetValueOrDefault(ConfigurableFieldModel<TValue> field)

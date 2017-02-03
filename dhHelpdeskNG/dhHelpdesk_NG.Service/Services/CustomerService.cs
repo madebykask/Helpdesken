@@ -329,8 +329,11 @@
                     }
 
                     caseFieldSetting.ChangedDate = DateTime.UtcNow;
-                    if(caseFieldSetting.Id == 0)
+                    if (caseFieldSetting.Id == 0)
+                    {
+                        caseFieldSetting.CaseFieldSettingsGUID = Guid.NewGuid();
                         _caseFieldSettingRepository.Add(caseFieldSetting);
+                    }    
                     else
                         _caseFieldSettingRepository.Update(caseFieldSetting);
                 }

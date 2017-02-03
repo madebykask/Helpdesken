@@ -1,9 +1,9 @@
 ﻿$(function () {
-    $("#ordertypes_dropdown").change(function () {
+    $("#ordertypes_dropdown").on("change", function () {
         $("#OrderFieldSettingsSearchForm").submit();
     });
 
-    $("#SaveOrderFieldSettings").click(function() {
+    $("#SaveOrderFieldSettings").on("click", function() {
         $("#SaveSettingsForm").submit();
     });
 });

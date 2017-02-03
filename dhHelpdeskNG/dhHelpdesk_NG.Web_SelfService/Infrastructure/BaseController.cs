@@ -241,13 +241,20 @@
                     if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings[AppSettingsKey.DefaultUserId]))
                         userId = ConfigurationManager.AppSettings[AppSettingsKey.DefaultUserId].ToString();
 
+                    var employeeNum = string.Empty;
+                    if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings[AppSettingsKey.DefaultEmployeeNumber]))
+                        employeeNum = ConfigurationManager.AppSettings[AppSettingsKey.DefaultEmployeeNumber].ToString();
+
                     string userDomain = fullName.GetDomainFromAdPath();
                     SessionFacade.CurrentSystemUser = userId;
+                    var initiator = _masterDataService.GetInitiatorByUserId(userId, customerId);
                     var ui = new UserIdentity()
                     {
                         UserId = userId,
-                        Domain = userDomain,
-                        FirstName = string.Empty
+                        Domain = userDomain,                        
+                        FirstName = initiator?.FirstName,
+                        LastName = initiator?.LastName,
+                        EmployeeNumber = employeeNum
                     };
 
                     SessionFacade.CurrentUserIdentity = ui;
@@ -262,14 +269,21 @@
                     string userId = fullName.GetUserFromAdPath();
                     if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings[AppSettingsKey.DefaultUserId]))
                         userId = ConfigurationManager.AppSettings[AppSettingsKey.DefaultUserId].ToString();
-                    string userDomain = fullName.GetDomainFromAdPath();
 
+                    var employeeNum = string.Empty;
+                    if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings[AppSettingsKey.DefaultEmployeeNumber]))
+                        employeeNum = ConfigurationManager.AppSettings[AppSettingsKey.DefaultEmployeeNumber].ToString();
+
+                    string userDomain = fullName.GetDomainFromAdPath();
+                    var initiator = _masterDataService.GetInitiatorByUserId(userId, customerId);
                     SessionFacade.CurrentSystemUser = userId;
                     var ui = new UserIdentity()
                     {
                         UserId = userId,
                         Domain = userDomain,
-                        FirstName = string.Empty
+                        FirstName = initiator?.FirstName,
+                        LastName = initiator?.LastName,
+                        EmployeeNumber = employeeNum
                     };
 
                     SessionFacade.CurrentUserIdentity = ui;

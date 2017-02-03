@@ -1,4 +1,9 @@
-﻿namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
+﻿using System.Collections.Generic;
+using System.Linq;
+using DH.Helpdesk.Domain.Orders;
+using DH.Helpdesk.Web.Infrastructure.Extensions;
+
+namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
 {
     using System;
 
@@ -31,7 +36,8 @@
                         CreateProgramSettings(response.Settings.Program),
                         CreateReceiverSettings(response.Settings.Receiver),
                         CreateSupplierSettings(response.Settings.Supplier),
-                        CreateUserSettings(response.Settings.User));
+                        CreateUserSettings(response.Settings.User),
+                        CreateAccountInfoSettings(response.Settings.AccountInfo));
         }
 
         public FullFieldSettings CreateForUpdate(
@@ -53,6 +59,7 @@
                         CreateReceiverForUpdate(model.Receiver),
                         CreateSupplierForUpdate(model.Supplier),
                         CreateUserForUpdate(model.User),
+                        CreateAccountInfoForUpdate(model.AccountInfo),
                         changedDate);
         }
 
@@ -72,7 +79,9 @@
                         CreateTextFieldSettingModel(settings.DeliveryInfo1),
                         CreateTextFieldSettingModel(settings.DeliveryInfo2),
                         CreateTextFieldSettingModel(settings.DeliveryInfo3),
-                        CreateTextFieldSettingModel(settings.DeliveryOuId));
+                        CreateTextFieldSettingModel(settings.DeliveryOuId),
+                        CreateTextFieldSettingModel(settings.Name),
+                        CreateTextFieldSettingModel(settings.Phone));
         }
 
         private static GeneralFieldSettingsModel CreateGeneralSettings(GeneralFieldSettings settings)
@@ -141,7 +150,8 @@
         private static ProgramFieldSettingsModel CreateProgramSettings(ProgramFieldSettings settings)
         {
             return new ProgramFieldSettingsModel(
-                        CreateTextFieldSettingModel(settings.Program));
+                        CreateTextFieldSettingModel(settings.Program),
+                        CreateTextFieldSettingModel(settings.InfoProduct));
         }
 
         private static ReceiverFieldSettingsModel CreateReceiverSettings(ReceiverFieldSettings settings)
@@ -168,7 +178,72 @@
             return new UserFieldSettingsModel(
                         CreateTextFieldSettingModel(settings.UserId),
                         CreateTextFieldSettingModel(settings.UserFirstName),
-                        CreateTextFieldSettingModel(settings.UserLastName));
+                        CreateTextFieldSettingModel(settings.UserLastName),
+                        CreateTextFieldSettingModel(settings.UserPhone),
+                        CreateTextFieldSettingModel(settings.UserEMail),
+                        CreateTextFieldSettingModel(settings.PersonalIdentityNumber),
+                        CreateTextFieldSettingModel(settings.Initials),
+                        CreateTextFieldSettingModel(settings.Extension),
+                        CreateTextFieldSettingModel(settings.Title),
+                        CreateTextFieldSettingModel(settings.Location),
+                        CreateTextFieldSettingModel(settings.RoomNumber),
+                        CreateTextFieldSettingModel(settings.PostalAddress),
+                        CreateTextFieldSettingModel(settings.EmploymentType),
+                        CreateTextFieldSettingModel(settings.DepartmentId1),
+                        CreateTextFieldSettingModel(settings.UnitId),
+                        CreateTextFieldSettingModel(settings.DepartmentId2),
+                        CreateTextFieldSettingModel(settings.Info),
+                        CreateTextFieldSettingModel(settings.Responsibility),
+                        CreateTextFieldSettingModel(settings.Activity),
+                        CreateTextFieldSettingModel(settings.Manager),
+                        CreateTextFieldSettingModel(settings.ReferenceNumber));
+        }
+
+        private static AccountInfoFieldSettingsModel CreateAccountInfoSettings(AccountInfoFieldSettings settings)
+        {
+            return new AccountInfoFieldSettingsModel(
+                    CreateTextFieldSettingModel(settings.StartedDate),
+                    CreateTextFieldSettingModel(settings.FinishDate),
+                    CreateTextFieldSettingModel(settings.EMailTypeId),
+                    CreateTextFieldSettingModel(settings.HomeDirectory),
+                    CreateTextFieldSettingModel(settings.Profile),
+                    CreateTextFieldSettingModel(settings.InventoryNumber),
+                    CreateTextFieldSettingModel(settings.Info),
+                    CreateOrderFieldTypeSettingModel(settings.AccountType, OrderFieldTypes.AccountType),
+                    CreateOrderFieldTypeSettingModel(settings.AccountType2, OrderFieldTypes.AccountType2),
+                    CreateOrderFieldTypeSettingModel(settings.AccountType3, OrderFieldTypes.AccountType3),
+                    CreateOrderFieldTypeSettingModel(settings.AccountType4, OrderFieldTypes.AccountType4),
+                    CreateOrderFieldTypeSettingModel(settings.AccountType5, OrderFieldTypes.AccountType5)
+                );
+        }
+
+        private static ContactFieldSettingsModel CreateContactSettings(ContactFieldSettings settings)
+        {
+            return new ContactFieldSettingsModel(
+                    CreateTextFieldSettingModel(settings.Id),
+                    CreateTextFieldSettingModel(settings.Name),
+                    CreateTextFieldSettingModel(settings.Phone),
+                    CreateTextFieldSettingModel(settings.Email)
+                );
+        }
+
+        private static OrderFieldTypeSettingsModel CreateOrderFieldTypeSettingModel(OrderFieldTypeSettings settings, OrderFieldTypes type)
+        {
+            var values = settings.Values?.Select(v => new OrderFieldTypeValueSettingsModel
+            {
+                Id = v.Id,
+                Value = v.Value
+            }).ToList();
+            return new OrderFieldTypeSettingsModel(
+                settings.Show,
+                settings.ShowInList,
+                settings.ShowExternal,
+                settings.Label,
+                settings.Required,
+                settings.EmailIdentifier,
+                settings.FieldHelp,
+                values,
+                type);
         }
 
         private static FieldSettingsModel CreateFieldSettingModel(FieldSettings settings)
@@ -179,7 +254,8 @@
                         settings.ShowExternal,
                         settings.Label,
                         settings.Required,
-                        settings.EmailIdentifier);
+                        settings.EmailIdentifier,
+                        settings.FieldHelp);
         }
 
         private static TextFieldSettingsModel CreateTextFieldSettingModel(TextFieldSettings settings)
@@ -191,7 +267,8 @@
                         settings.Label,
                         settings.Required,
                         settings.EmailIdentifier,
-                        settings.DefaultValue);
+                        settings.DefaultValue,
+                        settings.FieldHelp);
         }
 
         #endregion
@@ -212,7 +289,9 @@
                         CreateTextFieldSettingForUpdate(settings.DeliveryInfo1),
                         CreateTextFieldSettingForUpdate(settings.DeliveryInfo2),
                         CreateTextFieldSettingForUpdate(settings.DeliveryInfo3),
-                        CreateTextFieldSettingForUpdate(settings.DeliveryOuId));
+                        CreateTextFieldSettingForUpdate(settings.DeliveryOuId),
+                        CreateTextFieldSettingForUpdate(settings.Name),
+                        CreateTextFieldSettingForUpdate(settings.Phone));
         }
 
         private static GeneralFieldSettings CreateGeneralForUpdate(GeneralFieldSettingsModel settings)
@@ -281,7 +360,8 @@
         private static ProgramFieldSettings CreateProgramForUpdate(ProgramFieldSettingsModel settings)
         {
             return new ProgramFieldSettings(
-                        CreateTextFieldSettingForUpdate(settings.Program));
+                        CreateTextFieldSettingForUpdate(settings.Program),
+                        CreateTextFieldSettingForUpdate(settings.InfoProduct));
         }
 
         private static ReceiverFieldSettings CreateReceiverForUpdate(ReceiverFieldSettingsModel settings)
@@ -308,18 +388,80 @@
             return new UserFieldSettings(
                         CreateTextFieldSettingForUpdate(settings.UserId),
                         CreateTextFieldSettingForUpdate(settings.UserFirstName),
-                        CreateTextFieldSettingForUpdate(settings.UserLastName));
+                        CreateTextFieldSettingForUpdate(settings.UserLastName),
+                        CreateTextFieldSettingForUpdate(settings.UserPhone),
+                        CreateTextFieldSettingForUpdate(settings.UserEMail),
+                        null,
+                        CreateTextFieldSettingForUpdate(settings.PersonalIdentityNumber),
+                        CreateTextFieldSettingForUpdate(settings.Extension),
+                        CreateTextFieldSettingForUpdate(settings.Title),
+                        null,
+                        CreateTextFieldSettingForUpdate(settings.RoomNumber),
+                        null,
+                        CreateTextFieldSettingForUpdate(settings.EmploymentType),
+                        null,
+                        null,
+                        CreateTextFieldSettingForUpdate(settings.DepartmentId2),
+                        CreateTextFieldSettingForUpdate(settings.Info),
+                        null,
+                        CreateTextFieldSettingForUpdate(settings.Activity),
+                        CreateTextFieldSettingForUpdate(settings.Manager),
+                        null);
+        }
+
+        private static AccountInfoFieldSettings CreateAccountInfoForUpdate(AccountInfoFieldSettingsModel settings)
+        {
+            return new AccountInfoFieldSettings(
+                    CreateTextFieldSettingForUpdate(settings.StartedDate),
+                    CreateTextFieldSettingForUpdate(settings.FinishDate),
+                    CreateTextFieldSettingForUpdate(settings.EMailTypeId),
+                    CreateTextFieldSettingForUpdate(settings.HomeDirectory),
+                    CreateTextFieldSettingForUpdate(settings.Profile),
+                    null,
+                    null,
+                    CreateOrderFieldTypeSetting(settings.AccountType, OrderFieldTypes.AccountType),
+                    CreateOrderFieldTypeSetting(settings.AccountType2, OrderFieldTypes.AccountType2),
+                    CreateOrderFieldTypeSetting(settings.AccountType3, OrderFieldTypes.AccountType3),
+                    CreateOrderFieldTypeSetting(settings.AccountType4, OrderFieldTypes.AccountType4),
+                    CreateOrderFieldTypeSetting(settings.AccountType5, OrderFieldTypes.AccountType5)
+                );
+        }
+
+        private static ContactFieldSettings CreateContactForUpdate(ContactFieldSettingsModel settings)
+        {
+            return new ContactFieldSettings(
+                    CreateTextFieldSettingForUpdate(settings.Id),
+                    CreateTextFieldSettingForUpdate(settings.Name),
+                    CreateTextFieldSettingForUpdate(settings.Phone),
+                    CreateTextFieldSettingForUpdate(settings.Email)
+                );
+        }
+
+        private static OrderFieldTypeSettings CreateOrderFieldTypeSetting(OrderFieldTypeSettingsModel settings, OrderFieldTypes type)
+        {
+            var values = settings.Values?.Select(s => new OrderFieldTypeValueSetting(s.Id, s.Value, type)).ToList();
+            return OrderFieldTypeSettings.CreateUpdated(
+                        settings.Show,
+                        settings.ShowInList,
+                        settings.ShowExternal,
+                        settings.Label,
+                        settings.Required,
+                        settings.EmailIdentifier,
+                        settings.Help,
+                        values);
         }
 
         private static FieldSettings CreateFieldSettingForUpdate(FieldSettingsModel settings)
         {
+
             return FieldSettings.CreateUpdated(
                         settings.Show,
                         settings.ShowInList,
                         settings.ShowExternal,
                         settings.Label,
                         settings.Required,
-                        settings.EmailIdentifier);
+                        settings.EmailIdentifier,
+                        settings.Help);
         }
 
         private static TextFieldSettings CreateTextFieldSettingForUpdate(TextFieldSettingsModel settings)
@@ -331,7 +473,8 @@
                         settings.Label,
                         settings.Required,
                         settings.EmailIdentifier,
-                        settings.DefaultValue);
+                        settings.DefaultValue,
+                        settings.Help);
         }
 
         #endregion

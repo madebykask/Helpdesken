@@ -146,6 +146,17 @@
                         </div>
                     </div>
                 }
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.CostCentre.ToString()))
+                {
+                    <div class="form-group row">
+                        <label class="col-md-3">
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.CostCentre.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
+                        </label>
+                        <div class="col-md-9">
+                            @Model.CasePreview.CostCentre
+                        </div>
+                    </div>
+                }
                 @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Place.ToString()))
                 {
                     <div class="form-group row">

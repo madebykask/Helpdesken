@@ -169,7 +169,7 @@
             return model;
         }
 
-        public string AddRowToCaseSettings(int usergroupId, int customerId, string labellist, int linelist, int minWidthValue, int colOrderValue)
+        public string AddRowToCaseSettings(int usergroupId, int customerId, string labellist, int linelist, int minWidthValue, int colOrderValue, string clientOrder)
         {
             var caseSetting = new CaseSettings();
             var customer = this._customerService.GetCustomer(customerId);
@@ -197,7 +197,7 @@
             model.CSetting = caseSetting;
             this._caseSettingsService.SaveCaseSetting(model.CSetting, out errors);
 
-            return this.UpdateUserGroupList(usergroupId, customerId);
+            return this.UpdateUserGroupList(usergroupId, customerId, clientOrder);
         }
 
         public string ChangeLabel(int id, int customerId)
@@ -221,30 +221,36 @@
 
         [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
-        public string DeleteRowFromCaseSettings(int id, int usergroupId, int customerId)
+        public string DeleteRowFromCaseSettings(int id, int usergroupId, int customerId, string clientOrder)
         {
             var caseSetting = this._caseSettingsService.GetCaseSetting(id);
             var customer = this._customerService.GetCustomer(customerId);
             var model = this.CustomerCaseSummaryViewModel(caseSetting, customer, usergroupId);
 
             if (this._caseSettingsService.DeleteCaseSetting(id) == DeleteMessage.Success)
-                return this.UpdateUserGroupList(usergroupId, customerId);
+                return this.UpdateUserGroupList(usergroupId, customerId, clientOrder);
             else
             {
                 this.TempData.Add("Error", "");
-                return this.UpdateUserGroupList(usergroupId, customerId);
+                return this.UpdateUserGroupList(usergroupId, customerId, clientOrder);
             }
         }
 
         [CustomAuthorize(Roles = "3,4")]
         [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")] //TODO: Is duration time (10 seconds) too short? well, 60 seconds is too much anyway.. 
-        public string UpdateUserGroupList(int id, int customerId)
+        public string UpdateUserGroupList(int id, int customerId, string clientOrder)
         {
             var customer = this._customerService.GetCustomer(customerId);
             var ugListToUpdate = this._caseSettingsService.GenerateCSFromUGChoice(customer.Id, id);
 
             if (ugListToUpdate == null)
                 ugListToUpdate = this._caseSettingsService.GetCaseSettings(customer.Id).ToList();
+
+            if (!string.IsNullOrEmpty(clientOrder))
+            {
+                var orderForList = clientOrder.Split(',').Select(int.Parse).ToList();
+                ugListToUpdate = ugListToUpdate.OrderBy(d => orderForList.Contains(d.Id) ? orderForList.IndexOf(d.Id) : 99).ToList();
+            }
 
             var labelForDDL = this._caseFieldSettingService.ListToShowOnCustomerSettingSummaryPage(customer.Id, SessionFacade.CurrentLanguageId, id); //customer.Language_Id
             var caseSettings = new CaseSettings() { };

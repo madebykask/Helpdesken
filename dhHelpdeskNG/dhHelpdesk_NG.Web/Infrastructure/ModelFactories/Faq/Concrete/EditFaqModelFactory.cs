@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Faq.Concrete
+﻿using System.Web.Mvc;
+
+namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Faq.Concrete
 {
     using System.Collections.Generic;
     using System.Globalization;
@@ -16,7 +18,9 @@
             List<CategoryWithSubcategories> categories, 
             List<string> fileNames, 
             List<ItemOverview> workingGroups,
-            bool userHasFaqAdminPermission)
+            bool userHasFaqAdminPermission,
+            SelectList languages,
+            int languageId)
         {
             var categoryDropDownItems = categories.Select(this.CategoryToDropDownItem).ToList();
 
@@ -48,7 +52,9 @@
                 workingGroupDropDownContent,
                 faq.InformationIsAvailableForNotifiers,
                 faq.ShowOnStartPage,
-                userHasFaqAdminPermission);
+                userHasFaqAdminPermission,
+                languageId,
+                languages);
         }
 
         private DropDownWithSubmenusItem CategoryToDropDownItem(CategoryWithSubcategories categoryWithSubcategories)

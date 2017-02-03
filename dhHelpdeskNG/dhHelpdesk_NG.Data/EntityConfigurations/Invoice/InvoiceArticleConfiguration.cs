@@ -21,6 +21,8 @@
             this.Property(a => a.NameEng).IsRequired().HasMaxLength(100);
             this.Property(a => a.Description).IsOptional().HasMaxLength(200);
             this.Property(a => a.UnitId).IsOptional();
+            this.Property(a => a.LastSyncedDate).IsRequired();
+            this.Property(x => x.IsActive).IsRequired().HasColumnName("Status");
             this.HasOptional(a => a.Unit)
                 .WithMany()
                 .HasForeignKey(a => a.UnitId)

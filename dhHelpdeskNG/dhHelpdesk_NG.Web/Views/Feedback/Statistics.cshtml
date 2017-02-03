@@ -1,0 +1,57 @@
+﻿@using DH.Helpdesk.Web.Models.Feedback
+@model FeedbackStatisticsViewModel
+<div class="secnavs fixed">
+    <div class="pull-left">
+        <ul class="secnav">
+            <li>
+                <a href="@Url.Action(MvcUrlName.Questionnaire.Index, MvcUrlName.Questionnaire.Controller, new {tab = "feedback"})" class="btn">
+                    @Translation.GetCoreTextTranslation("Avbryt")
+                </a>
+            </li>
+            <li>
+                <button value="@Translation.GetCoreTextTranslation("Visa")" class="btn" id="show_feedback_ctatistics">@Translation.GetCoreTextTranslation("Visa")</button>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs">
+            <li class="active"></li>
+        </ul>
+        <div class="tab-content">
+            <div id="fragment-2" class="tab-pane tab-pane-border active">
+                <div class="row">
+                    <div class="span12">
+                        @using (Ajax.BeginForm("Statistics", null, new AjaxOptions {UpdateTargetId = "feedback_statistics_grid"}, new {id = "feedback_statistics_search_form"}))
+                        {
+                            @Html.HiddenFor(x => x.QuestionnaireId)
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">@Translation.GetCoreTextTranslation("Återkoppling") @Translation.GetCoreTextTranslation("Datum")</td>
+                                    <td>
+                                        @Html.EditorFor(m => m.StatisticsFilter.CircularCreatedDate.DateFrom, "DatePicker", new {id = "feedbackCreatedDateFrom_datepicker"})
+                                        -
+                                        @Html.EditorFor(m => m.StatisticsFilter.CircularCreatedDate.DateTo, "DatePicker", new {id = "feedbackCreatedDateTo_datepicker"})
+                                    </td>
+                                </tr>
+                            </table>
+                        }
+                    </div>
+                </div>
+                <div id="feedback_statistics_grid">
+                    @Html.Partial("~/Views/Questionnaire/StatisticsGrid.cshtml", Model)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $('#show_feedback_ctatistics').click(function () {
+            $('#feedback_statistics_search_form').submit();
+        });
+    });
+</script>

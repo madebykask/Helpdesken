@@ -9,7 +9,12 @@
 
     public class Case : Entity, ICustomerEntity
     {
-        public Guid CaseGUID { get; set; }
+	    public Case()
+	    {
+		    InvoiceRows = new List<InvoiceRow>();
+	    }
+
+		public Guid CaseGUID { get; set; }
         public String ReportedBy { get; set; }
         public String PersonsName { get; set; }
         public String PersonsEmail { get; set; }
@@ -129,8 +134,9 @@
         public virtual ICollection<CaseHistory> CaseHistories { get; set; }
         public virtual ICollection<CaseInvoiceRow> CaseInvoiceRows { get; set; }
         public virtual ICollection<CaseQuestionHeader> CaseQuestionHeaders { get; set; }
+		public virtual ICollection<InvoiceRow> InvoiceRows { get; set; }
 
-        public virtual User User { get; set; }
+		public virtual User User { get; set; }
 
         public virtual Region Region { get; set; }
 
@@ -148,7 +154,7 @@
 
         public virtual Status Status { get; set; }
 
-        public virtual ICollection<Log> Logs { get; set; }
+        public virtual IList<Log> Logs { get; set; }
 
         public virtual ICollection<Mail2Ticket> Mail2Tickets { get; set; }
 

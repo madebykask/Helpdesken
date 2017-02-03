@@ -159,7 +159,10 @@ namespace DH.Helpdesk.Dal.Repositories
     public interface IContractFileRepository : INewRepository
     {
         void SaveContracFile(ContractFileModel file);
-        List<ContractFile> GetContractFile(int contractId);
+        List<ContractFile> GetContractFiles(int contractId);
+        ContractFile GetContractFile(int fileId);
+        void DeleteContractFile(int fileId);
+        void DeleteAllContractFiles(int contractId);
     }
 
     public class ContractFileRepository : Repository, IContractFileRepository
@@ -189,11 +192,50 @@ namespace DH.Helpdesk.Dal.Repositories
 
         }
 
-        public List<ContractFile> GetContractFile(int contractId)
+        public List<ContractFile> GetContractFiles(int contractId)
         {           
             var query = this.DbContext.ContractFiles.Where(c => c.Contract_Id == contractId);
             return query.ToList();
         }
+
+        public ContractFile GetContractFile(int fileId)
+        {
+            var query = this.DbContext.ContractFiles.FirstOrDefault(c => c.Id == fileId);
+            return query;
+        }
+
+        public void DeleteContractFile(int fileId)
+        {
+            //var contractFileEntity = new ContractFile()
+            //{
+            //    Id = contractFile.Id,
+            //    Contract_Id = contractFile.Contract_Id,
+            //    File = contractFile.Content,
+            //    ContentType = contractFile.ContentType,
+            //    ArchivedContractFile_Id = contractFile.ArchivedContractFile_Id,
+            //    FileName = contractFile.FileName,
+            //    ArchivedDate = contractFile.ArchivedDate,
+            //    CreatedDate = contractFile.CreatedDate,
+            //    ContractFileGUID = contractFile.ContractFileGuid
+            //};
+
+            var contractFileEntity =  this.DbContext.ContractFiles.Find(fileId);
+            this.DbContext.ContractFiles.Remove(contractFileEntity);
+        }
+
+        public void DeleteAllContractFiles(int contractId)
+        {
+            var contractFiles = this.DbContext.ContractFiles.Where(c => c.Contract_Id == contractId).ToList();
+            if (contractFiles != null)
+            {
+                foreach (var contractFile in contractFiles)
+                {
+                    this.DbContext.ContractFiles.Remove(contractFile);
+                }
+            }
+            
+        }
+
 
     }
 

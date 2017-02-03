@@ -83,7 +83,7 @@
 
         public IList<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguages(int? customerId, int languageId)
         {
-            return this._caseFieldSettingLanguageRepository.GetCaseFieldSettingsWithLanguages(customerId, languageId).Where(c => !c.Name.ToLower().Contains("isabout_")).ToList();
+            return this._caseFieldSettingLanguageRepository.GetCaseFieldSettingsWithLanguages(customerId, languageId).Where(c => !c.Name.ToLower().Contains("isabout_") && !c.Name.ToLower().Contains("addfollowersbtn") && !c.Name.ToLower().Contains("adduserbtn")).ToList();
         }
         public IList<CaseFieldSettingsWithLanguage> GetAllCaseFieldSettingsWithLanguages(int? customerId, int languageId)
         {

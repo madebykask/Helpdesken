@@ -102,6 +102,8 @@
         /// </summary>
         public int ShowSolutionTime { get; set; }
         public int ShowCaseStatistics { get; set; }
+        public int SettingForNoMail { get; set; }
+
 
         public string TimeZoneId { get; set; }
 
@@ -129,5 +131,6 @@
         public virtual ICollection<AccountActivity> AAs { get; set; }
         public virtual ICollection<OrderType> OTs { get; set; }
         public virtual ICollection<OperationLog> OLs { get; set; }
-    }
+		public virtual ICollection<ReportFavorite> ReportFavorites { get; set; }
+	}
 }

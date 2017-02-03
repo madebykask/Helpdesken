@@ -10,36 +10,52 @@
     {
         public OrderEditOptions(
                 string orderTypeName,
-                ItemOverview[] statuses, 
+                OrderStatusItem[] statuses, 
                 ItemOverview[] administrators, 
                 ItemOverview[] domains, 
                 ItemOverview[] departments, 
-                ItemOverview[] units, 
+                ItemDependentOverview[] units, 
                 ItemOverview[] properties, 
                 ItemOverview[] deliveryDepartment, 
                 ItemOverview[] deliveryOuId, 
                 List<GroupWithEmails> emailGroups, 
                 List<GroupWithEmails> workingGroupsWithEmails, 
-                List<ItemOverview> administratorsWithEmails)
+                List<ItemOverview> administratorsWithEmails,
+                ItemOverview[] employmentTypes,
+                ItemOverview[] regions,
+                ItemOverview[] accountTypes,
+                ItemOverview[] accountTypes2,
+                ItemOverview[] accountTypes3,
+                ItemOverview[] accountTypes4,
+                ItemOverview[] accountTypes5,
+                ItemOverview[] programs)
         {
-            this.OrderTypeName = orderTypeName;
-            this.AdministratorsWithEmails = administratorsWithEmails;
-            this.WorkingGroupsWithEmails = workingGroupsWithEmails;
-            this.EmailGroups = emailGroups;
-            this.DeliveryOuId = deliveryOuId;
-            this.DeliveryDepartment = deliveryDepartment;
-            this.Properties = properties;
-            this.Units = units;
-            this.Departments = departments;
-            this.Domains = domains;
-            this.Administrators = administrators;
-            this.Statuses = statuses;
+            OrderTypeName = orderTypeName;
+            AdministratorsWithEmails = administratorsWithEmails;
+            WorkingGroupsWithEmails = workingGroupsWithEmails;
+            EmailGroups = emailGroups;
+            DeliveryOuId = deliveryOuId;
+            DeliveryDepartment = deliveryDepartment;
+            Properties = properties;
+            Units = units;
+            Departments = departments;
+            Domains = domains;
+            Administrators = administrators;
+            Statuses = statuses;
+            EmploymentTypes = employmentTypes;
+            Regions = regions;
+            AccountTypes = accountTypes;
+            AccountTypes2 = accountTypes2;
+            AccountTypes3 = accountTypes3;
+            AccountTypes4 = accountTypes4;
+            AccountTypes5 = accountTypes5;
+            Programs = programs;
         }
 
         public string OrderTypeName { get; private set; }
 
         [NotNull]
-        public ItemOverview[] Statuses { get; private set; }
+        public OrderStatusItem[] Statuses { get; private set; }
 
         [NotNull]
         public ItemOverview[] Administrators { get; private set; } 
@@ -51,7 +67,7 @@
         public ItemOverview[] Departments { get; private set; } 
         
         [NotNull]
-        public ItemOverview[] Units { get; private set; } 
+        public ItemDependentOverview[] Units { get; private set; } 
         
         [NotNull]
         public ItemOverview[] Properties { get; private set; } 
@@ -70,5 +86,30 @@
 
         [NotNull]
         public List<ItemOverview> AdministratorsWithEmails { get; private set; }
+
+        [NotNull]
+        public ItemOverview[] EmploymentTypes { get; private set; }
+        
+        [NotNull]
+        public ItemOverview[] Regions { get; private set; }
+
+        [NotNull]
+        public ItemOverview[] AccountTypes { get; private set; }
+
+        [NotNull]
+        public ItemOverview[] AccountTypes2 { get; private set; }
+
+        [NotNull]
+        public ItemOverview[] AccountTypes3 { get; private set; }
+
+        [NotNull]
+        public ItemOverview[] AccountTypes4 { get; private set; }
+
+        [NotNull]
+        public ItemOverview[] AccountTypes5 { get; private set; }
+
+        [NotNull]
+        public ItemOverview[] Programs { get; private set; }
+
     }
 }

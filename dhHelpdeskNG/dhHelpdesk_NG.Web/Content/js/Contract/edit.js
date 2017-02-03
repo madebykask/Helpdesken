@@ -134,10 +134,9 @@
             var fileMarkup;
             for (var i = 0; i < files.length; i++) {
                 var file = files[i];
-                 
                 fileMarkup =
                     $('<tr>' +
-                        '<td><a href="' + downloadContractFileUrl+ '?id=0&fileName=' + file + '"><i class="icon-file"></i>' + file + '</a></td>' +
+                        '<td><a href="' + downloadContractFileUrl + '?id=0&fileName=' + file + '&fileplace=' + ContractFileKey +'"><i class="icon-file"></i>' + file + '</a></td>' +
                         '<td><a id="newFileDeleteButton" data-id="0" class="btn bt-small deleteContractFile" data-fileName="' + file + '" title="Ta bort"><i class="icon-remove"></i></a></td>' +
                       '</tr>');
 
@@ -326,7 +325,7 @@
                 var refredhCallback;
                 var imgFilename = imgFilenameCtrl.val();
 
-                if (source == 'Contract') {
+                if (source == 'contract') {
                     key = ContractFileKey;
                     submitUrl = uploadContractFileUrl;
                     refredhCallback = function () {

@@ -54,6 +54,8 @@
 
         private readonly IMasterDataService masterDataService;
 
+        private readonly ILanguageService _languageService;
+
         #endregion
 
         #region Public Methods and Operators
@@ -69,6 +71,7 @@
             INewFaqModelFactory newFaqModelFactory,
             ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory,
             IWorkingGroupRepository workingGroupRepository, 
+            ILanguageService languageService, 
             IUserPermissionsChecker userPermissionsChecker)
             : base(masterDataService)
         {
@@ -82,6 +85,7 @@
             this.newFaqModelFactory = newFaqModelFactory;
             this.workingGroupRepository = workingGroupRepository;
             this.userPermissionsChecker = userPermissionsChecker;
+            this._languageService = languageService;
 
             this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Faq);
         }
@@ -136,9 +140,9 @@
         }
 
         [HttpGet]
-        public ViewResult EditCategory(int id)
+        public ViewResult EditCategory(int id, int languageId)
         {
-            var category = this.faqCategoryRepository.FindById(id);
+            var category = this.faqCategoryRepository.GetCategoryById(id, languageId);
             if (category == null)
             {
                 throw new HttpException((int)HttpStatusCode.NotFound, null);
@@ -147,8 +151,16 @@
             var hasFaqs = this.faqRepository.AnyFaqWithCategoryId(id);
             var hasSubcategories = this.faqCategoryRepository.CategoryHasSubcategories(id);
 
+            var languageOverviewsOrginal = _languageService.FindActiveLanguageOverivews();
+            var languageOverviews =
+                languageOverviewsOrginal.Select(
+                    o =>
+                    new ItemOverview(Translation.GetCoreTextTranslation(o.Name),
+                        o.Value.ToString())).ToList();
+            var languageList = new SelectList(languageOverviews, "Value", "Name");
+
             var userHasFaqAdminPermission = this.userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.FaqPermission);
-            var model = new EditCategoryModel(category.Id, category.Name, hasFaqs, hasSubcategories, userHasFaqAdminPermission);
+            var model = new EditCategoryModel(category.Id, category.Name, hasFaqs, hasSubcategories, userHasFaqAdminPermission, languageList);
             return this.View(model);
         }
 
@@ -157,15 +169,15 @@
         [UserPermissions(UserPermission.FaqPermission)]
         public RedirectToRouteResult EditCategory(EditCategoryInputModel model)
         {
-            this.faqCategoryRepository.UpdateNameById(model.Id, model.Name);
-            this.faqCategoryRepository.Commit();
+            var editCategory = new EditCategory(model.Id, model.Name, model.LanguageId, DateTime.UtcNow);
+            faqService.UpdateCategory(editCategory);
             return this.RedirectToAction("Index");
         }
 
         [HttpGet]
-        public ViewResult EditFaq(int id)
+        public ViewResult EditFaq(int id, int languageId)
         {
-            var faq = this.faqService.FindById(id);
+            var faq = this.faqService.GetFaqById(id, languageId);
             if (faq == null)
             {
                 throw new HttpException((int)HttpStatusCode.NotFound, null);
@@ -190,7 +202,15 @@
 
             var userHasFaqAdminPermission = this.userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.FaqPermission);
 
-            var model = this.editFaqModelFactory.Create(faq, categoriesWithSubcategories, fileNames, workingGroups, userHasFaqAdminPermission);
+            var languageOverviewsOrginal = _languageService.FindActiveLanguageOverivews();
+            var languageOverviews =
+                languageOverviewsOrginal.Select(
+                    o =>
+                    new ItemOverview(Translation.GetCoreTextTranslation(o.Name),
+                        o.Value.ToString())).ToList();
+            var languageList = new SelectList(languageOverviews, "Value", "Name");
+
+            var model = this.editFaqModelFactory.Create(faq, categoriesWithSubcategories, fileNames, workingGroups, userHasFaqAdminPermission, languageList, languageId);
             ViewData["FN"] = GetFAQFileNames(faq.Id.ToString());
 
             return this.View(model);
@@ -212,7 +232,8 @@
                 model.WorkingGroupId,
                 model.InformationIsAvailableForNotifiers,
                 model.ShowOnStartPage,
-                DateTime.Now);
+                DateTime.Now,
+                model.LanguageId);
 
             this.faqService.UpdateFaq(updatedFaq);
             return this.RedirectToAction("Index");

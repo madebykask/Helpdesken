@@ -1,4 +1,9 @@
-﻿namespace DH.Helpdesk.Services.Services.Concrete.Orders
+﻿using System.Collections.Generic;
+using System.Linq;
+using DH.Helpdesk.Domain.Orders;
+using LinqLib.Operators;
+
+namespace DH.Helpdesk.Services.Services.Concrete.Orders
 {
     using DH.Helpdesk.BusinessData.Models.Orders.Index.FieldSettingsOverview;
     using DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditSettings;
@@ -54,10 +59,14 @@
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var fieldSettingsRep = uow.GetRepository<OrderFieldSettings>();
+                var orderFieldTypeRep = uow.GetRepository<OrderFieldType>();
+
+                var orderFieldTypes = orderFieldTypeRep.GetAll()
+                    .GetByType(orderTypeId).ActiveOnly().ToList();
 
                 return fieldSettingsRep.GetAll()
                         .GetByType(customerId, orderTypeId)
-                        .MapToFullFieldSettings();
+                        .MapToFullFieldSettings(orderFieldTypes);
             }
         }
 
@@ -66,6 +75,39 @@
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var fieldSettingsRep = uow.GetRepository<OrderFieldSettings>();
+                var orderFieldTypeRep = uow.GetRepository<OrderFieldType>();
+
+                var orderFieldTypes = orderFieldTypeRep.GetAll()
+                    .GetByType(settings.OrderTypeId).ActiveOnly().ToList();
+
+                var allAccountTypeValues = new List<OrderFieldTypeValueSetting>()
+                    .Concat(settings.AccountInfo.AccountType.Values)
+                    .Concat(settings.AccountInfo.AccountType2.Values)
+                    .Concat(settings.AccountInfo.AccountType3.Values)
+                    .Concat(settings.AccountInfo.AccountType4.Values)
+                    .Concat(settings.AccountInfo.AccountType5.Values)
+                    .ToArray();
+
+                var toDelete = orderFieldTypes.Where(e => !allAccountTypeValues.Any(t => t.Id == e.Id && !e.Deleted));
+                var toAdd = allAccountTypeValues.Where(a => !a.Id.HasValue)
+                    .Select(e => new OrderFieldType
+                    {
+                        ChangedDate = settings.ChangedDate,
+                        CreatedDate = settings.ChangedDate,
+                        Name = e.Value,
+                        OrderField = e.Type,
+                        OrderType_Id = settings.OrderTypeId
+                    });
+                //Update
+                orderFieldTypes.Where(e => allAccountTypeValues.Any(t => t.Id == e.Id))
+                    .ForEach(e =>
+                    {
+                        var updateDto = allAccountTypeValues.Single(t => t.Id == e.Id);
+                        e.Name = updateDto.Value;
+                        e.ChangedDate = settings.ChangedDate;
+                    });
+                toDelete.ForEach(d => d.Deleted = true );
+                toAdd.ForEach(a => orderFieldTypeRep.Add(a));
 
                 fieldSettingsRep.GetAll()
                         .GetByType(settings.CustomerId, settings.OrderTypeId)

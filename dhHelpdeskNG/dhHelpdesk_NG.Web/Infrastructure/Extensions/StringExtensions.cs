@@ -138,18 +138,20 @@
             return string.Empty;
         }
 
-        public static string CaseIconTitle(this GlobalEnums.CaseIcon value )
+        public static string CaseIconTitle(this GlobalEnums.CaseIcon value)
         {
-            string ret; 
+            string ret;
 
             if (value == GlobalEnums.CaseIcon.Finished)
-                ret = Translation.Get("Avslutat ärende", Enums.TranslationSource.TextTranslation);
+                ret = Translation.GetCoreTextTranslation("Avslutat ärende");
             else if (value == GlobalEnums.CaseIcon.FinishedNotApproved)
-                ret = Translation.Get("Åtgärdat ärende, ej godkänt", Enums.TranslationSource.TextTranslation);
+                ret = Translation.GetCoreTextTranslation("Åtgärdat ärende, ej godkänt");
             else if (value == GlobalEnums.CaseIcon.Urgent)
-                ret = Translation.Get("Ärende", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("akut", Enums.TranslationSource.TextTranslation) + ")";
+                ret = Translation.GetCoreTextTranslation("Ärende") + " (" +Translation.GetCoreTextTranslation("akut") + ")";
+            else if (value == GlobalEnums.CaseIcon.Locked)
+                ret = Translation.GetCoreTextTranslation("Låst");
             else
-                ret = Translation.Get("Ärende", Enums.TranslationSource.TextTranslation);
+                ret = Translation.GetCoreTextTranslation("Ärende");
 
             return ret;
         }
@@ -164,6 +166,8 @@
                 ret = "case_close_notapproved.png";
             else if (value == GlobalEnums.CaseIcon.Urgent)
                 ret = "case_Log_urgent.png";
+            else if (value == GlobalEnums.CaseIcon.Locked)
+                ret = "case_locked.png";
 
             return ret;
         }

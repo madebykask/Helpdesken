@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Web.Models.Faq.Output
+﻿using System.Web.Mvc;
+using DH.Helpdesk.Common.Enums;
+
+namespace DH.Helpdesk.Web.Models.Faq.Output
 {
     using System;
     using System.Collections.Generic;
@@ -21,7 +24,9 @@
             string urlTwo,
             DropDownContent workingGroup,
             bool informationIsAvailableForNotifiers,
-            bool showOnStartPage)
+            bool showOnStartPage,
+            SelectList languages,
+            int languageId)
         {
             if (category == null)
             {
@@ -49,8 +54,10 @@
             this.WorkingGroup = workingGroup;
             this.InformationIsAvailableForNotifiers = informationIsAvailableForNotifiers;
             this.ShowOnStartPage = showOnStartPage;
+            this.Languages = languages;
+            this.LanguageId = languageId;
 
-            var ff = new FAQFileModel() { FAQId = id, FAQFiles = files };
+            var ff = new FAQFileModel() { FAQId = id, FAQFiles = files, LanguageId = languageId};
             this.FAQLFile = ff;
         }
 
@@ -86,6 +93,20 @@
         public string UrlTwo { get; private set; }
 
         public DropDownContent WorkingGroup { get; private set; }
+
+        [LocalizedDisplay("LanquageId")]
+        public int LanguageId { get; set; }
+
+        public SelectList Languages { get; set; }
+
+        public bool IsNew
+        {
+            get
+            {
+                int result;
+                return !int.TryParse(Id, out result);
+            }
+        }
 
         #endregion
     }

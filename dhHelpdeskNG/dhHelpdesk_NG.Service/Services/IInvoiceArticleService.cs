@@ -37,5 +37,8 @@
         void SaveArticleProductArea(InvoiceArticleProductAreaSelectedFilter selectedItems);
 
         void DeleteArticleProductArea(int articleid, int productareaid);
+
+        void DeactivateArticlesBySyncDate(int customerId, DateTime lastSyncDate);
+        void SaveArticles(List<InvoiceArticle> articles);
     }
 }

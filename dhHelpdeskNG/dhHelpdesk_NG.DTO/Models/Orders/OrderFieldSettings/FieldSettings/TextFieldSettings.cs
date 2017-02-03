@@ -18,7 +18,8 @@
                         string label,
                         bool required,
                         string emailIdentifier,
-                        string defaultValue)
+                        string defaultValue,
+                        string help)
         {
             return new TextFieldSettings
             {
@@ -28,7 +29,8 @@
                 Label = label,
                 Required = required,
                 EmailIdentifier = emailIdentifier,
-                DefaultValue = !string.IsNullOrEmpty(defaultValue) ? defaultValue : string.Empty
+                DefaultValue = !string.IsNullOrEmpty(defaultValue) ? defaultValue : string.Empty,
+                FieldHelp = !string.IsNullOrEmpty(help) ? help : string.Empty,
             };
         }
 
@@ -40,7 +42,8 @@
                 string label,
                 bool required,
                 string emailIdentifier,
-                string defaultValue)
+                string defaultValue,
+                string help)
         {
             return new TextFieldSettings
             {
@@ -51,7 +54,8 @@
                 Label = label,
                 Required = required,
                 EmailIdentifier = emailIdentifier,
-                DefaultValue = defaultValue
+                DefaultValue = defaultValue,
+                FieldHelp = help
             };
         }
     }

@@ -26,7 +26,18 @@
         public DateTime? SendTime { get; set; }
         public string ResponseMessage { get; set; }
 
-        public virtual CaseHistory CaseHistory { get; set; }
+		public string Body { get; set; }
+		public string Subject { get; set; }
+		public string Cc { get; set; }
+		public string Bcc { get; set; }
+		public bool HighPriority { get; set; }
+		public string Files { get; set; }
+		public string From { get; set; }
+		public EmailSendStatus SendStatus { get; set; }
+		public DateTime? LastAttempt { get; set; }
+		public int? Attempts { get; set; }
+
+		public virtual CaseHistory CaseHistory { get; set; }
 
         public void SetResponse(DateTime? sendTime, string resopnseMessage)
         {

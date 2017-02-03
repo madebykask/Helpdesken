@@ -41,11 +41,24 @@ namespace DH.Helpdesk.Services.Services
 
 			_caseInvoiceRowRepository.SaveCaseInvoiceRows(caseId, data);
 		}
+
+		public void UpdateExternalInvoiceValues(List<ExternalInvoice> rows)
+		{
+			var data = rows.Select(x =>
+			{
+				var ret = new CaseInvoiceRow();
+				_externalInvoiceToEntityMapper.Map(x, ret);
+				return ret;
+			}).ToList();
+
+			_caseInvoiceRowRepository.UpdateExternalInvoiceValues(data);
+		}
 	}
 
 	public interface IExternalInvoiceService
 	{
 		List<ExternalInvoice> GetExternalInvoices(int caseId);
 		void SaveExternalInvoices(int caseId, List<ExternalInvoice> rows);
+		void UpdateExternalInvoiceValues(List<ExternalInvoice> rows);
 	}
 }

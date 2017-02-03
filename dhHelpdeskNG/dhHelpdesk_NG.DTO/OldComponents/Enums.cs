@@ -12,6 +12,7 @@ namespace DH.Helpdesk.BusinessData.OldComponents
             Urgent = 1,
             Finished = 2,
             FinishedNotApproved = 3,
+			Locked = 4
         }
 
         public enum MailTemplates
@@ -111,7 +112,8 @@ namespace DH.Helpdesk.BusinessData.OldComponents
             IsAbout_CostCentre = 72,
             IsAbout_Place = 73,
             IsAbout_UserCode = 74,
-            MailToNotifier = 75
+            MailToNotifier = 75,
+            AddFollowersBtn = 76
         }
     }
 
@@ -122,6 +124,9 @@ namespace DH.Helpdesk.BusinessData.OldComponents
         {
             switch (it)
             {
+                case CaseSolutionFields.AddFollowersBtn:
+                    return TranslationCaseFields.AddFollowersBtn;
+
                 case CaseSolutionFields.AddUserBtn:
                     return TranslationCaseFields.AddUserBtn;
 

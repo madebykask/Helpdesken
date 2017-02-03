@@ -17,6 +17,7 @@
             this.RestoreReceiver(updatedOrder.Receiver, existingOrder.Receiver, settings.Receiver);
             this.RestoreSupplier(updatedOrder.Supplier, existingOrder.Supplier, settings.Supplier);
             this.RestoreUser(updatedOrder.User, existingOrder.User, settings.User);
+            this.RestoreAccountInfo(updatedOrder.AccountInfo, existingOrder.AccountInfo, settings.AccountInfo);
         }
 
         private void RestoreDelivery(
@@ -36,6 +37,8 @@
             this.RestoreFieldIfNeeded(updated, () => updated.DeliveryInfo2, existing.DeliveryInfo2, settings.DeliveryInfo2.Show);
             this.RestoreFieldIfNeeded(updated, () => updated.DeliveryInfo3, existing.DeliveryInfo3, settings.DeliveryInfo3.Show);
             this.RestoreFieldIfNeeded(updated, () => updated.DeliveryOuIdId, existing.DeliveryOuIdId, settings.DeliveryOuId.Show);
+            this.RestoreFieldIfNeeded(updated, () => updated.DeliveryName, existing.DeliveryName, settings.DeliveryName.Show);
+            this.RestoreFieldIfNeeded(updated, () => updated.DeliveryPhone, existing.DeliveryPhone, settings.DeliveryPhone.Show);
         }
 
         private void RestoreGeneral(
@@ -117,6 +120,7 @@
             ProgramEditSettings settings)
         {
             this.RestoreFieldIfNeeded(updated, () => updated.Programs, existing.Programs, settings.Program.Show);
+            this.RestoreFieldIfNeeded(updated, () => updated.InfoProduct, existing.InfoProduct, settings.InfoProduct.Show);
         }
 
         private void RestoreReceiver(
@@ -150,6 +154,39 @@
             this.RestoreFieldIfNeeded(updated, () => updated.UserId, existing.UserId, settings.UserId.Show);
             this.RestoreFieldIfNeeded(updated, () => updated.UserFirstName, existing.UserFirstName, settings.UserFirstName.Show);
             this.RestoreFieldIfNeeded(updated, () => updated.UserLastName, existing.UserLastName, settings.UserLastName.Show);
+            this.RestoreFieldIfNeeded(updated, () => updated.UserPhone, existing.UserPhone, settings.UserPhone.Show);
+            this.RestoreFieldIfNeeded(updated, () => updated.UserEMail, existing.UserEMail, settings.UserEMail.Show);
+            this.RestoreFieldIfNeeded(updated, () => updated.UserExtension, existing.UserExtension, settings.Extension.Show);
+            this.RestoreFieldIfNeeded(updated, () => updated.UserInitials, existing.UserInitials, settings.Initials.Show);
+            this.RestoreFieldIfNeeded(updated, () => updated.UserLocation, existing.UserLocation, settings.Location.Show);
+            this.RestoreFieldIfNeeded(updated, () => updated.UserPersonalIdentityNumber, existing.UserPersonalIdentityNumber, settings.PersonalIdentityNumber.Show);
+            this.RestoreFieldIfNeeded(updated, () => updated.UserPostalAddress, existing.UserPostalAddress, settings.PostalAddress.Show);
+            this.RestoreFieldIfNeeded(updated, () => updated.UserRoomNumber, existing.UserRoomNumber, settings.RoomNumber.Show);
+            this.RestoreFieldIfNeeded(updated, () => updated.UserTitle, existing.UserTitle, settings.Title.Show);
+            this.RestoreFieldIfNeeded(updated, () => updated.UserDepartment_Id1, existing.UserDepartment_Id1, settings.DepartmentId1.Show);
+            this.RestoreFieldIfNeeded(updated, () => updated.UserDepartment_Id2, existing.UserDepartment_Id2, settings.DepartmentId2.Show);
+            this.RestoreFieldIfNeeded(updated, () => updated.UserOU_Id, existing.UserOU_Id, settings.UnitId.Show);
+            this.RestoreFieldIfNeeded(updated, () => updated.InfoUser, existing.InfoUser, settings.Info.Show);
+            this.RestoreFieldIfNeeded(updated, () => updated.EmploymentType_Id, existing.EmploymentType_Id, settings.EmploymentType.Show);
         }
+        private void RestoreAccountInfo(
+                    AccountInfoEditFields updated,
+                    AccountInfoEditFields existing,
+                    AccountInfoEditSettings settings)
+        {
+            RestoreFieldIfNeeded(updated, () => updated.StartedDate, existing.StartedDate, settings.StartedDate.Show);
+            RestoreFieldIfNeeded(updated, () => updated.FinishDate, existing.FinishDate, settings.FinishDate.Show);
+            RestoreFieldIfNeeded(updated, () => updated.EMailTypeId, existing.EMailTypeId, settings.EMailTypeId.Show);
+            RestoreFieldIfNeeded(updated, () => updated.HomeDirectory, existing.HomeDirectory, settings.HomeDirectory.Show);
+            RestoreFieldIfNeeded(updated, () => updated.Profile, existing.Profile, settings.Profile.Show);
+            RestoreFieldIfNeeded(updated, () => updated.InventoryNumber, existing.InventoryNumber, settings.InventoryNumber.Show);
+            RestoreFieldIfNeeded(updated, () => updated.AccountTypeId, existing.AccountTypeId, settings.AccountTypeId.Show);
+            RestoreFieldIfNeeded(updated, () => updated.AccountTypeId2, existing.AccountTypeId, settings.AccountTypeId2.Show);
+            RestoreFieldIfNeeded(updated, () => updated.AccountTypeId3, existing.AccountTypeId3, settings.AccountTypeId3.Show);
+            RestoreFieldIfNeeded(updated, () => updated.AccountTypeId4, existing.AccountTypeId4, settings.AccountTypeId4.Show);
+            RestoreFieldIfNeeded(updated, () => updated.AccountTypeId5, existing.AccountTypeId5, settings.AccountTypeId5.Show);
+            RestoreFieldIfNeeded(updated, () => updated.Info, existing.Info, settings.Info.Show);
+        }
+
     }
 }

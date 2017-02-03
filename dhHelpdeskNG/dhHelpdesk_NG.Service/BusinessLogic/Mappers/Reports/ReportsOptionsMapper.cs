@@ -244,7 +244,7 @@
                 productAreasResult = productAreaLineRelations ? productAreaEntities.BuildLineRelations() : productAreaEntities.BuildRelations();                
             }
 
-            string[] exceptionList = {"IsAbout_Region_Id", "IsAbout_Department_Id", "IsAbout_OU_Id"};
+            string[] exceptionList = {"IsAbout_Region_Id", "IsAbout_Department_Id", "IsAbout_OU_Id", "AddFollowersBtn" };
             if (fields != null)
             {
                 fieldsResult = fields.Select(f => new

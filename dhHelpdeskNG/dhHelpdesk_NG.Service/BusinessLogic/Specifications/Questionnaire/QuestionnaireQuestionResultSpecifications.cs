@@ -62,5 +62,32 @@
 
             return query;
         }
+
+        public static IQueryable<QuestionnaireQuestionResultEntity> GetQuestionResultDateFrom(
+            this IQueryable<QuestionnaireQuestionResultEntity> query,
+            DateTime? dateTime)
+        {
+            if (dateTime.HasValue)
+            {
+                query = query.Where(x => x.QuestionnaireResult.CreatedDate >= dateTime);
+            }
+
+            return query;
+        }
+
+        public static IQueryable<QuestionnaireQuestionResultEntity> GetQuestionResultDateTo(
+            this IQueryable<QuestionnaireQuestionResultEntity> query,
+            DateTime? dateTime)
+        {
+            if (!dateTime.HasValue)
+            {
+                return query;
+            }
+
+            DateTime time = dateTime.Value.AddHours(24);
+            query = query.Where(x => x.QuestionnaireResult.CreatedDate <= time);
+
+            return query;
+        }
     }
 }

@@ -102,7 +102,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                             })
                                            .OrderBy(fi => fi.CreatedDate)
                                            .ToList()
-                        }).ToList();
+                        }).OrderBy(f=> f.Question).ToList();
 
             return ret;
         }

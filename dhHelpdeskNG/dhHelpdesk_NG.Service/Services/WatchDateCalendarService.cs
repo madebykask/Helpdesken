@@ -27,6 +27,8 @@
 
         DateTime? GetClosestDateTo(int calendarId, DateTime now);
 
+        List<WatchDateCalendarValue> GetAllClosestDateTo(DateTime now);
+
         void Commit();
     }
 
@@ -139,6 +141,16 @@
                 return watchDateCalendarValue.WatchDate;
             }
             return null;
+        }
+
+        public List<WatchDateCalendarValue> GetAllClosestDateTo(DateTime now)
+        {
+
+            var watchDateCalendarValue =
+                    _watchDateCalendarValueRepository.GetAll()
+                                                     .Where(it => it.WatchDate > now && (it.ValidUntilDate == null || it.ValidUntilDate.Value.Date >= now.Date))
+                                                     .ToList();            
+            return watchDateCalendarValue;
         }
 
         public DeleteMessage DeleteWDCV(int id)

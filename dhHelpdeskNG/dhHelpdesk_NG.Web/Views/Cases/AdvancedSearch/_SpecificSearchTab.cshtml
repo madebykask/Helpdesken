@@ -80,7 +80,7 @@
                         </td>
                         <td>
                             <select id="lstfilterPriority" name="lstfilterPriority" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
-                                @foreach (var e in Model.PriorityList.OrderBy(p => p.Name))
+                                @foreach (var e in Model.PriorityList)
                                 {
                                     if (e.IsActive == 1)
                                     {

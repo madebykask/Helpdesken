@@ -70,6 +70,7 @@ var GRID_STATE = {
         me.$searchField = '#txtFreeTextSearch';
         me.$filterForm = $('#frmAdvanceSearch');        
         me.$availableCustomer = [];
+        me.$caseAdvSearchRecordCount = $('[data-field="TotalAdvSearchCount"]');
 
         $('#lstfilterCustomers option').each(function () {
             me.$availableCustomer.push({
@@ -369,12 +370,12 @@ var GRID_STATE = {
     Page.prototype.onGetData = function (response) {
         var me = this;
 
-        if (response && response.result === 'success' && response.data) {
-            for (var i = 0; i < response.data.length; i++) {
-                if (response.data[i].data.length > 0) {
+        if (response && response.result === 'success' && response.data && response.data.Items) {
+            for (var i = 0; i < response.data.Items.length; i++) {
+                if (response.data.Items[i].data.length > 0) {
                     currentCustomerTable = '';
                     currentCustomerName = '';
-                    me.loadData(response.data[i].data, response.data[i].gridSettings);
+                    me.loadData(response.data.Items[i].data, response.data.Items[i].gridSettings);
                     var newTable = {
                         CustomerName: currentCustomerName,
                         TableId: i,
@@ -383,7 +384,9 @@ var GRID_STATE = {
                     customerTableRepository.push(newTable);
                 }
             }
+            me.$caseAdvSearchRecordCount.text(response.data.TotalCount);
         } else {
+            me.$caseAdvSearchRecordCount.text("0");
             me.showMsg(ERROR_MSG_TYPE);
             me.setGridState(window.GRID_STATE.IDLE);
         }

@@ -24,11 +24,11 @@ $(function () {
         var displayType = '';
         if (lastSelected == expandEl) {
             displayType = 'none';
-            $('#lastMailSelected' + logId).val('')
+            $('#lastMailSelected' + logId).val('');
         }
         else {
             displayType = 'block';
-            $('#lastMailSelected' + logId).val(expandEl)
+            $('#lastMailSelected' + logId).val(expandEl);
         }
 
         switch (expandEl) {
@@ -48,6 +48,13 @@ $(function () {
     $userId.on('change', function(ev) {
         var userId = $(ev.target).val();
         hideShowSaveUserInfoBtn(userId);
+    });
+
+    $("#case-order-url").off("click").on('click', function (e) {
+        e.preventDefault();
+
+        var href = $(this).attr("href");
+        document.location.href = href;
     });
 
     var langEl = $('#case__RegLanguage_Id'),
@@ -346,7 +353,7 @@ $(function () {
 
         return that;
     }
-
+   
     dhHelpdesk.cases.user = function (spec, my) {
         my = my || {};
         var that = dhHelpdesk.cases.caseFields(spec, my);
@@ -463,12 +470,7 @@ $(function () {
 
         return that;
     }
-
-    function ClearCostCentre()
-    {
-        $('#case__CostCentre').val('');
-    }
-
+    
     dhHelpdesk.cases.computer = function (spec, my) {
         my = my || {};
         var that = dhHelpdesk.cases.caseFields(spec, my);
@@ -845,5 +847,9 @@ $(function () {
         that.getCase = getCase;
 
         return that;
+    }
+
+    function ClearCostCentre() {
+        $('#case__CostCentre').val('');
     }
 });

@@ -8,25 +8,5 @@
             <th>@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</th>
         </tr>
         </thead>
-         @{
-           foreach (var row in Model.Data)
-            {
-               
-                <tr>
-                    <td>@row.InvoiceArticleNumber - @row.InvoiceArticleName - @row.InvoiceArticleNameEng</td>
-                    <td>@row.ProductAreaName</td>
-                    <td>
-                        @*<a id="@string.Format("delete_artprod_button_{0}")" class="btn bt-small" data-field="" title="@Translation.Get("Ta bort")"><i class="icon-remove"></i></a>*@
-                     
-                            @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "DeleteArticleProductArea",
-                                new { articleid = row.InvoiceArticleId, productareaid = row.ProductAreaId, customerid = Model.Customer.Id}, 
-                                new { @class = "btn deleteDialog", 
-                                      deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) + "?" })
-                        
-                    </td>
-                </tr>
-            }
-         }
     </table>
-</div>  
-           
+</div>       

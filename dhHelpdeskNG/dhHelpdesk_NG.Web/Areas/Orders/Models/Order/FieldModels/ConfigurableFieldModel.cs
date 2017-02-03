@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.FieldModels
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.FieldModels
 {
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
@@ -12,12 +15,13 @@
         {
         }
 
-        public ConfigurableFieldModel(string caption, TValue value, bool required)
+        public ConfigurableFieldModel(string caption, TValue value, bool required, string help)
         {
-            this.Show = true;
-            this.Caption = caption;
-            this.Value = value;
-            this.IsRequired = required;
+            Show = true;
+            Caption = caption;
+            Value = value;
+            IsRequired = required;
+            Help = help;
         }
 
         #endregion
@@ -34,6 +38,8 @@
         [LocalizedRequiredFrom("IsRequired")]
         public TValue Value { get; set; }
 
+        public string Help { get; set; }
+
         #endregion
 
         #region Public Methods and Operators
@@ -48,14 +54,14 @@
             return field != null ? field.Value : default(TValue);
         }
 
+        public static List<int> GetValueOrDefault(ConfigurableFieldModel<List<CheckBoxListItem>> field)
+        {
+            return field?.Value?.Where(s => s.IsChecked).Select(s => s.Id).ToList() ?? new List<int>();
+        }
+
         public static string GetValueOrDefault(ConfigurableFieldModel<string> field)
         {
-            if (field == null || field.Value == null)
-            {
-                return string.Empty;
-            }
-
-            return field.Value;
+            return field?.Value ?? string.Empty;
         }
 
         #endregion         

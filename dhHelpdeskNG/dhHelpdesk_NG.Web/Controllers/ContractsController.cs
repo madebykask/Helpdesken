@@ -15,6 +15,7 @@ using DH.Helpdesk.Web.Infrastructure.Tools;
 using System.Net;
 using DH.Helpdesk.Dal.Enums;
 using System.IO;
+using DH.Helpdesk.Web.Infrastructure.Mvc;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -179,10 +180,10 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var cId = this.SaveContract(contractInput);
             var temporaryFiles = userTemporaryFilesStorage.FindFiles(contractFileKey.ToString());
-            var contractFiles = temporaryFiles.Select(f => new ContractFileModel(0, cId, f.Content, null, "", f.Name, DateTime.UtcNow, DateTime.UtcNow, Guid.NewGuid())).ToList();
+            var contractFiles = temporaryFiles.Select(f => new ContractFileModel(0, cId, f.Content, null, MimeMapping.GetMimeMapping(f.Name), f.Name, DateTime.UtcNow, DateTime.UtcNow, Guid.NewGuid())).ToList();           
 
             foreach(var contractFile in contractFiles)
-            {
+            {                
                 this._contractService.SaveContracFile(contractFile);
                 userTemporaryFilesStorage.DeleteFile(contractFile.FileName, contractInput.ContractFileKey);
             }            
@@ -190,10 +191,7 @@ namespace DH.Helpdesk.Web.Controllers
             if (actiontype != "Spara och stäng")
             {             
                 return this.RedirectToAction("Edit", "Contracts", new { id = cId });
-            }
-
-                     
-           // this.SaveContractFiles(mmm, cId);
+            }                    
             
             return RedirectToAction("index", "Contracts");            
         }
@@ -403,9 +401,8 @@ namespace DH.Helpdesk.Web.Controllers
             if (GuidHelper.IsGuid(id))
             {
                 if (this.userTemporaryFilesStorage.FileExists(name, id))
-                {
-                    //return;
-                    //this.userTemporaryFilesStorage.DeleteFile(name, id, ModuleName.Log); 
+                {                    
+                    userTemporaryFilesStorage.DeleteFile(name, id);
                     //throw new HttpException((int)HttpStatusCode.Conflict, null); because it take a long time.
                 }
                 this.userTemporaryFilesStorage.AddFile(uploadedData, name, id);
@@ -414,18 +411,20 @@ namespace DH.Helpdesk.Web.Controllers
        
 
         [HttpGet]
-        public FileContentResult DownloadContractFile(string id, string fileName)
+        public UnicodeFileContentResult DownloadFile(string id, string fileName, string filePlace)
         {
             byte[] fileContent;
-            if (GuidHelper.IsGuid(id))
-                fileContent = userTemporaryFilesStorage.GetFileContent(fileName, id, "");
+            if (id == "0")
+                fileContent = userTemporaryFilesStorage.GetFileContent(fileName.Trim(), filePlace, "");
             else
-            {
-                
-                //fileContent = _caseFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
-                fileContent = null;
-            }
-            return File(fileContent, "application/octet-stream", fileName);
+            {                
+                fileContent = _contractService.GetContractFile(int.Parse(id)).Content;                
+            }        
+
+            Response.AddHeader("Content-Disposition", string.Format("attachment; filename=\"{0}\"", fileName));
+
+            return new UnicodeFileContentResult(fileContent, fileName);
+
         }
 
         [HttpGet]
@@ -436,8 +435,8 @@ namespace DH.Helpdesk.Web.Controllers
                 if (id == "0")
                     userTemporaryFilesStorage.DeleteFile(fileName.Trim(), filePlace);
                 else
-                {
-
+                {                    
+                    this._contractService.DeleteContractFile(int.Parse(id));
                 }
                 return Json(new { result = true, message = string.Empty }, JsonRequestBehavior.AllowGet);
             }
@@ -495,31 +494,12 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             return cId;
-        }
-        private void SaveContractFiles(List<ContractFileViewModel> contractFilesInputs, int contractId)
-        {
-            foreach (var contractFile in contractFilesInputs)
-            {
-                var contractFileInputToSave = new ContractFileModel
-                    (
-                     0,
-                     contractId,
-                     contractFile.Content,
-                     0,
-                     contractFile.ContractType,
-                     contractFile.FileName,
-                     DateTime.UtcNow,                                         
-                     DateTime.UtcNow,
-                     Guid.Empty
-                    );
+        }       
 
-              this._contractService.SaveContracFile(contractFileInputToSave);
-            }           
-        }
-
-        private List<ContractFileViewModel> CreateContractFilesModel(int contractId)
+        private List<ContractFileViewModel> CreateContractFilesModel(int contractId, string CFileKey)
         {
-            var contractFiles = this._contractService.GetContractFiles(contractId);
+            var contractFiles = this._contractService.GetContractFiles(contractId);            
+
             var contractFilesInput = contractFiles.Select(conf => new ContractFileViewModel()
             {
                 Id = conf.Id,
@@ -529,6 +509,7 @@ namespace DH.Helpdesk.Web.Controllers
                 ArchivedDate = conf.ArchivedDate,
                 Content = conf.Content,
                 ContractType = conf.ContentType,
+                ContractFileKey = CFileKey,
                 ContractFileGuid = conf.ContractFileGuid,
                 CreatedDate = conf.CreatedDate
             }).ToList();
@@ -542,6 +523,13 @@ namespace DH.Helpdesk.Web.Controllers
             contractFilesNames = contractFiles.Select(conf => conf.FileName).ToList();
 
             return contractFilesNames;
+        }
+
+        private ContractFileModel findContractFile(int fileId, string fileName)
+        {            
+            var contractFile = this._contractService.GetContractFile(fileId);
+           
+            return contractFile;
         }
 
         private List<WebTemporaryFile> TransferContractFiles(string contractFilesKey, int contractId)
@@ -628,7 +616,7 @@ namespace DH.Helpdesk.Web.Controllers
                 contractEditInput.ChangedByUser = changedbyUser.SurName + " " + changedbyUser.FirstName;
                 contractEditInput.CreatedDate = contract.CreatedDate.ToShortDateString();
                 contractEditInput.ChangedDate = contract.ChangedDate.ToShortDateString();
-                contractEditInput.ContractFiles = CreateContractFilesModel(contract.Id);
+                contractEditInput.ContractFiles = CreateContractFilesModel(contract.Id, contractEditInput.ContractFileKey);
 
                 return this.View(contractEditInput);
             }
@@ -646,7 +634,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var cId = SaveContract(contractInput);
                 var temporaryFiles = userTemporaryFilesStorage.FindFiles(contractFileKey);
                 var contractsExistingFiles = this._contractService.GetContractFiles(id);
-                var contractFiles = temporaryFiles.Select(f => new ContractFileModel(0, cId, f.Content, null, "", f.Name, DateTime.UtcNow, DateTime.UtcNow, Guid.NewGuid())).ToList();
+                var contractFiles = temporaryFiles.Select(f => new ContractFileModel(0, cId, f.Content, null, MimeMapping.GetMimeMapping(f.Name), f.Name, DateTime.UtcNow, DateTime.UtcNow, Guid.NewGuid())).ToList();
 
                 foreach (var contractFile in contractFiles)
                 {

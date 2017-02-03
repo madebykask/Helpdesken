@@ -73,7 +73,7 @@
                                     </td>
                                          <td>
                                              @if (Model.LanguageId == LanguageIds.Swedish)
-                                             {@Html.TextBoxFor(o => o.Options[i].OptionValue, new {style = "width: 85%;"})
+                                             {@Html.TextBoxFor(o => o.Options[i].OptionValue, new {style = "width: 85%;", @class="question_option"})
                                              }
                                              else
                                              {@Html.TextBoxFor(o => o.Options[i].OptionValue, new {style = "width: 85%;", @readonly = ""})
@@ -93,7 +93,7 @@
                                         }
                                     </td>
                                     <td style="text-align:center;">
-                                        @if (Model.LanguageId != LanguageIds.Swedish && Model.Options[i].LanguageId == LanguageIds.Swedish)
+                                        @if ((Model.LanguageId != LanguageIds.Swedish && Model.Options[i].LanguageId == LanguageIds.Swedish) || Model.IsSent)
                                         {<input type="button" disabled="" value="@Translation.GetCoreTextTranslation("Delete")" class="btn" />}
                                         else
                                         {

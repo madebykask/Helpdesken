@@ -463,6 +463,22 @@
             }
         }
 
+        public List<OptionResult> GetResults(int circularId, DateTime? from, DateTime? to)
+        {
+            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            {
+                var questionnaireQuestionResultRepository = uof.GetRepository<QuestionnaireQuestionResultEntity>();
+                List<OptionResult> overviews =
+                    questionnaireQuestionResultRepository.GetAll()
+                        .GetCircularQuestionnaireQuestionResultEntities(circularId)
+                        .GetQuestionResultDateFrom(from)
+                        .GetQuestionResultDateTo(to)
+                        .MapToOptionResults();
+
+                return overviews;
+            }
+        }
+
         public void SaveAnswers(ParticipantForInsert businessModel)
         {
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
@@ -545,6 +561,53 @@
             }
 
             return connectedCases;
+        }
+
+        public void SetStatus(int circularId, CircularStates circularState)
+        {
+            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            {
+                var circularRepository = uof.GetRepository<QuestionnaireCircularEntity>();
+
+                QuestionnaireCircularEntity circular = circularRepository.GetById(circularId);
+                circular.Status = (int)circularState;
+
+                uof.Save();
+            }
+        }
+
+        public void UpdateParticipantSendDate(Guid participantGuid, DateTime operationDate)
+        {
+            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            {
+                var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
+
+                QuestionnaireCircularPartEntity circularPart =
+                    circularPartRepository.GetAll().GetByGuid(participantGuid).SingleOrDefault();
+
+                if (circularPart != null)
+                {
+                    circularPart.SendDate = operationDate;
+                }
+
+                uof.Save();
+            }
+        }
+
+		/// <summary>
+		/// Returns circularId, if entity not found returns -1
+		/// </summary>
+		/// <param name="questionnaireId"></param>
+		/// <returns></returns>
+		public int GetCircularIdByQuestionnaireId(int questionnaireId)
+        {
+            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            {
+                var circularRepository = uof.GetRepository<QuestionnaireCircularEntity>();
+
+                var entity = circularRepository.GetAll().SingleOrDefault(x => x.Questionnaire_Id == questionnaireId);
+                return entity != null ? entity.Id : -1;
+            }
         }
 
         #endregion
@@ -707,19 +770,6 @@
             return mails;
         }
 
-        private void SetStatus(int circularId, CircularStates circularState)
-        {
-            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
-            {
-                var circularRepository = uof.GetRepository<QuestionnaireCircularEntity>();
-
-                QuestionnaireCircularEntity circular = circularRepository.GetById(circularId);
-                circular.Status = (int)circularState;
-
-                uof.Save();
-            }
-        }
-
         private void SendMails(List<QuestionnaireMailItem> mailItems, DateTime operationDate, int customerId)
         {
             foreach (QuestionnaireMailItem mailItem in mailItems)
@@ -739,24 +789,11 @@
                 smtpInfo = new MailSMTPSetting(info.SmtpServer, info.SmtpPort);
             }
             var mailResponse = EmailResponse.GetEmptyEmailResponse();
-            var mailSetting = new EmailSettings(mailResponse, smtpInfo);
+            var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
 
             this.emailService.SendEmail(mailItem.MailItem, mailSetting);
 
-            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
-            {
-                var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
-
-                QuestionnaireCircularPartEntity circularPart =
-                    circularPartRepository.GetAll().GetByGuid(mailItem.Guid).SingleOrDefault();
-
-                if (circularPart != null)
-                {
-                    circularPart.SendDate = operationDate;
-                }
-
-                uof.Save();
-            }
+            UpdateParticipantSendDate(mailItem.Guid, operationDate);
         }
 
         #endregion

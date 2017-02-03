@@ -12,14 +12,15 @@
         public static OrderEMailLog MapToEntity(BusinessData.Models.Orders.Order.OrderEditFields.EmailLog log)
         {
             return new OrderEMailLog
-                       {
-                           OrderEMailLogGUID = Guid.NewGuid(),
-                           OrderHistoryId = log.HistoryId,
-                           CreatedDate = log.CreatedDateAndTime,
-                           EMailAddress = string.Join(";", log.Emails),
-                           MailID = log.MailId,
-                           MessageId = log.MessageId
-                       };
+            {
+                Order_Id = log.OrderId,
+                OrderEMailLogGUID = Guid.NewGuid(),
+                OrderHistoryId = log.HistoryId,
+                CreatedDate = log.CreatedDateAndTime,
+                EMailAddress = string.Join(";", log.Emails),
+                MailID = log.MailId,
+                MessageId = log.MessageId
+            };
         }
 
         public static List<EmailLogOverview> MapToOverviews(this IQueryable<OrderEMailLog> query)

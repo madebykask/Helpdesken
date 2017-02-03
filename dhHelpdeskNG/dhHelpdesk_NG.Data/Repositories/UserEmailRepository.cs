@@ -36,12 +36,51 @@ namespace DH.Helpdesk.Dal.Repositories
                 .ToList();
         }
 
-        public List<CaseEmailSendOverview> GetEmailsListForIntLogSend(int customerId, string searchText, bool isWgChecked, bool isInitChecked,
-            bool isAdmChecked, bool isEgChecked)
+        public List<CaseEmailSendOverview> GetUserEmailsListForCaseSend(int customerId, string searchText, bool searchInWorkingGrs, bool searchInInitiators, bool searchInAdmins, bool searchInEmailGrs)
         {
             var result = new List<CaseEmailSendOverview>();
 
-            if (isWgChecked)
+            if (searchInInitiators)
+            {
+                var inits = DbContext.Users
+                    .Where(x => x.IsActive == 1 && x.Customer_Id == customerId)
+                    .Where(x => x.UserID.Contains(searchText) || x.FirstName.Contains(searchText) || x.SurName.Contains(searchText) || x.Email.Contains(searchText))
+                    .OrderBy(x => x.SurName).ToList();
+                foreach (var user in inits)
+                {
+                    var newItem = new CaseEmailSendOverview
+                    {
+                        UserId = user.UserID,
+                        Name = string.Format("{0} {1}", user.SurName, user.FirstName),
+                        Emails = new List<string>(),
+                        GroupType = CaseUserSearchGroup.Initiator
+                    };
+                    newItem.Emails.Add(user.Email);
+                    result.Add(newItem);
+                }
+            }
+
+            if (searchInAdmins)
+            {
+                var admins = DbContext.Users
+                    .Where(x => x.Performer == 1)
+                    .Where(x => x.IsActive == 1 && x.CustomerUsers.Any(cu => cu.Customer_Id == customerId))
+                    .Where(x => x.UserID.Contains(searchText) || x.FirstName.Contains(searchText) || x.SurName.Contains(searchText) || x.Email.Contains(searchText))
+                    .OrderBy(x => x.SurName).ToList();
+                foreach (var user in admins)
+                {
+                    var newItem = new CaseEmailSendOverview
+                    {
+                        UserId = user.UserID,
+                        Name = string.Format("{0} {1}", user.SurName, user.FirstName),
+                        Emails = new List<string>(),
+                        GroupType = CaseUserSearchGroup.Administaror
+                    };
+                    newItem.Emails.Add(user.Email);
+                    result.Add(newItem);
+                }
+            }
+            if (searchInWorkingGrs)
             {
                 var wgs = DbContext.WorkingGroups
                     .Include(x => x.UserWorkingGroups.Select(u => u.User))
@@ -54,47 +93,7 @@ namespace DH.Helpdesk.Dal.Repositories
                 }).ToList();
                 result.AddRange(newList);
             }
-            if (isInitChecked)
-            {
-                var inits = DbContext.Users
-                    .Where(x => x.IsActive == 1 && x.Customer_Id == customerId)
-                    .Where(x => x.UserID.Contains(searchText) || x.FirstName.Contains(searchText) || x.SurName.Contains(searchText) || x.Email.Contains(searchText))
-                    .OrderBy(x => x.SurName).ToList();
-                foreach (var user in inits)
-                {
-                    var newItem = new CaseEmailSendOverview
-                    {
-                        UserId = user.UserID,
-                        Name = user.SurName + " " + user.FirstName,
-                        Emails = new List<string>(),
-                        GroupType = CaseUserSearchGroup.Initiator
-                    };
-                    newItem.Emails.Add(user.Email);
-                    result.Add(newItem);
-                }
-            }
-
-            if (isAdmChecked)
-            {
-                var admins = DbContext.Users
-                    .Where(x => x.Performer == 1)
-                    .Where(x => x.IsActive == 1 && x.CustomerUsers.Any(cu => cu.Customer_Id == customerId))
-                    .Where(x => x.UserID.Contains(searchText) || x.FirstName.Contains(searchText) || x.SurName.Contains(searchText) || x.Email.Contains(searchText))
-                    .OrderBy(x => x.SurName).ToList();
-                foreach (var user in admins)
-                {
-                    var newItem = new CaseEmailSendOverview
-                    {
-                        UserId = user.UserID,
-                        Name = user.SurName + " " + user.FirstName,
-                        Emails = new List<string>(),
-                        GroupType = CaseUserSearchGroup.Administaror
-                    };
-                    newItem.Emails.Add(user.Email);
-                    result.Add(newItem);
-                }
-            }
-            if (isEgChecked)
+            if (searchInEmailGrs)
             {
                 var emailGroups = DbContext.EMailGroups
                     .Where(x => x.IsActive == 1 && x.Customer_Id == customerId && (x.Members.Contains(searchText) || x.Name.Contains(searchText))).ToList();

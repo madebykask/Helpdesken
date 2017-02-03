@@ -1,0 +1,26 @@
+﻿
+@using DH.Helpdesk.Web.Areas.Orders.Infrastructure.Enum
+@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings.OrderFieldTypeSettingsModel
+
+<td>
+    @{ Html.RenderPartial("Partials/OrderFieldWebTypes"); }
+</td>
+<td>@Html.LabelFor(m => m)</td>
+<td>@Html.CheckBoxFor(m => m.Show, new { @class = "switchcheckbox" })</td>
+<td>@Html.CheckBoxFor(m => m.ShowExternal, new { @class = "switchcheckbox" })</td>
+<td>@Html.TextBoxFor(m => m.Label)</td>
+<td>@Html.CheckBoxFor(m => m.Required, new { @class = "switchcheckbox" })</td>
+<td>@Html.CheckBoxFor(m => m.ShowInList, new { @class = "switchcheckbox" })</td>
+<td>
+    <a class="btn order_field_values" data-type="@Model.Type.ToString()">@Translation.GetCoreTextTranslation("Värden")</a>
+    <div class="hide">
+        @for (var i = 0; i < Model.Values.Count; i++)
+        {
+            @Html.HiddenFor(m => Model.Values[i].Id)
+            @Html.HiddenFor(m => Model.Values[i].Value)
+        }
+    </div>
+</td>
+<td>@Html.TextBoxFor(m => m.Help)</td>
+@*<td>@Html.TextBoxFor(m => m.EmailIdentifier)</td>*@

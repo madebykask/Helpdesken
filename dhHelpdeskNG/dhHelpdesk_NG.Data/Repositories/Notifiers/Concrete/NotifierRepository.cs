@@ -479,12 +479,12 @@
             this.Update(notifierEntity);
         }
 
-        public Notifier GetInitiatorByUserId(string userId, int customerId)
+        public Notifier GetInitiatorByUserId(string userId, int customerId, bool activeOnly)
         {
             var notifier = DataContext.ComputerUsers
                                       .Where(cu => cu.Customer_Id == customerId &&
                                                    cu.LogonName.ToLower() == userId.ToLower() &&
-                                                   cu.Status != 0).FirstOrDefault();
+                                                   (activeOnly? cu.Status != 0 : true)).FirstOrDefault();
             
              
             if (notifier == null)
@@ -492,7 +492,7 @@
                 notifier = DataContext.ComputerUsers
                                       .Where(cu => cu.Customer_Id == customerId &&
                                                    cu.UserId.ToLower() == userId.ToLower() &&
-                                                   cu.Status != 0).FirstOrDefault();
+                                                   (activeOnly ? cu.Status != 0 : true)).FirstOrDefault();
             }
 
             if (notifier != null)
@@ -528,6 +528,16 @@
 
             return null;
         }
+
+        public bool IsInitiatorUserIdUnique(string userId, int initiatorId, int customerId, bool activeOnly)
+        {
+            var initiators = initiatorId > 0 ? DataContext.ComputerUsers.Where(x => x.Id != initiatorId) : DataContext.ComputerUsers;
+            var initiator = initiators.FirstOrDefault(cu => cu.Customer_Id == customerId &&
+                                                   cu.UserId.ToLower() == userId.ToLower() &&
+                                                   (activeOnly ? cu.Status != 0 : true));
+            return initiator == null;
+        }
+
         #endregion
 
         #region Methods

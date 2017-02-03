@@ -29,19 +29,20 @@
             <div class="modal-body" style="max-height: 600px; text-align:center;">
                 <form onsubmit="return false;">
                     <div class="form-group">
-                        <label>@Translation.Get("File name", Enums.TranslationSource.TextTranslation) </label>
+						<label>@Translation.Get("1. Skriv ett filnamn (kan lämnas blankt)")</label>
                         <input class="" type="text" id="imgFilename" autocomplete="Off" />
                         <span id="imageNameRequired" style="color:red"> @Translation.Get("must be specified", Enums.TranslationSource.TextTranslation) </span>
                     </div>
                     <div class="form-group">
-                        <label>@(Translation.Get("Preview") + " (" + Translation.Get("Copy image data into clipboard and press Ctrl+V", Enums.TranslationSource.TextTranslation) + ")") </label>
+						<label>@(Translation.Get("2. Tryck Ctrl+V för att klippa in bilden"))</label>
+						<label>@(Translation.Get("3. Spara för att lägga till på ärendet")) </label>
                         <div id="previewPnl"></div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" id="btnSave" class="btn btn-ok btn-default" style="display: none">@Translation.Get("Save", Enums.TranslationSource.TextTranslation)</button>
-                <button type="button" id="btnCancel" class="btn btn-cancel btn-default" data-dismiss="modal">@Translation.Get("Cancel", Enums.TranslationSource.TextTranslation)</button>
+                <button type="button" id="btnSave" class="btn btn-ok" style="display: none">@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)</button>
+                <button type="button" id="btnCancel" class="btn btn-cancel" data-dismiss="modal">@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)</button>
             </div>
         </div>
     </div>
@@ -52,9 +53,9 @@
     {
         <tbody id="oldFiles">
          @foreach (var f in Model)
-         {
+         {             
              <tr>                 
-                 <td><a href = "@Url.Action("DownloadFile", new RouteValueDictionary { { "id", f.Id }, { "fileName", f.FileName }, { "contractId", f.Contract_Id } })" ><i class="icon-file"></i>@f.FileName</a></td>
+                 <td><a href = "@Url.Action("DownloadFile", new RouteValueDictionary { { "id", f.Id }, { "fileName", f.FileName }, { "contractId", f.Contract_Id } , { "filePlace", f.ContractFileKey} })" ><i class="icon-file"></i>@f.FileName</a></td>
                  <td><a data-id="@f.Id" class="btn bt-small deleteContractFile" data-fileName="@f.FileName"  title="@Translation.Get("Ta bort")"><i class="icon-remove"></i></a></td>
              </tr>
          }

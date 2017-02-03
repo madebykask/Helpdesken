@@ -421,6 +421,7 @@
                                 @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.CaseType_Id.ToString() });
                                 @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.Category_Id.ToString() });
                                 @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.Caption.ToString() });
+                                @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString() });
                                 @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.Description.ToString() });
                                 @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.Miscellaneous.ToString() });
                                 @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.Available.ToString() });
@@ -1144,7 +1145,7 @@
                                         [#59]
                                     </td>
                                 </tr>}
-                            @*@if (Model.MailTemplateLanguage.MailTemplate.MailID == (int)GlobalEnums.MailTemplates.ClosedCase)
+                            @if (Model.MailTemplateLanguage.MailTemplate.MailID == (int)GlobalEnums.MailTemplates.ClosedCase)
                             {
                                 <tr>
                                     <th colspan="2">
@@ -1161,7 +1162,7 @@
                                         </td>
                                     </tr>
 }
-                            }*@
+                            }
                             @*
                 COMMENTED OUT BECAUSE THIS MODULE IS NOT YET FINISHED
             <tr>

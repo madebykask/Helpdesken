@@ -21,7 +21,9 @@ namespace DH.Helpdesk.Web.Models.Feedback
 		[LocalizedDisplay("Name")]
 		public string Name { get; set; }
 
-		[LocalizedDisplay("Description")]
+        public bool IsSent { get; set; }
+
+        [LocalizedDisplay("Description")]
 		public string Description { get; set; }
 
 		[LocalizedDisplay("LanguageId")]

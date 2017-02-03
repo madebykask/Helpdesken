@@ -46,6 +46,10 @@
         [NotNull]
         public UserFieldSettings User { get; private set; }
 
+        [NotNull]
+        public AccountInfoFieldSettings AccountInfo { get; private set; }
+
+
         public DateTime ChangedDate { get; private set; }
 
         public static FullFieldSettings CreateForEdit(
@@ -58,7 +62,8 @@
                         ProgramFieldSettings program,
                         ReceiverFieldSettings receiver,
                         SupplierFieldSettings supplier,
-                        UserFieldSettings user)
+                        UserFieldSettings user,
+                        AccountInfoFieldSettings accountInfo)
         {
             return new FullFieldSettings
                        {
@@ -71,8 +76,9 @@
                            Program = program,
                            Receiver = receiver,
                            Supplier = supplier,
-                           User = user
-                       };
+                           User = user,
+                           AccountInfo = accountInfo,
+                        };
         }
 
         public static FullFieldSettings CreateUpdated(
@@ -88,6 +94,7 @@
                         ReceiverFieldSettings receiver,
                         SupplierFieldSettings supplier,
                         UserFieldSettings user,
+                        AccountInfoFieldSettings accountInfo,
                         DateTime changedDate)
         {
             return new FullFieldSettings
@@ -104,6 +111,7 @@
                            Receiver = receiver,
                            Supplier = supplier,
                            User = user,
+                           AccountInfo = accountInfo,
                            ChangedDate = changedDate
                        };
         }

@@ -1,0 +1,104 @@
+﻿@using DH.Helpdesk.BusinessData.OldComponents
+@using DH.Helpdesk.Domain.Invoice
+@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Infrastructure.Extensions
+@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+@using DH.Helpdesk.Web.Infrastructure.UrlHelpers.Api.Invoices
+@using DH.Helpdesk.Web.Infrastructure.UrlHelpers.Mvc.Invoices
+@model DH.Helpdesk.Web.Areas.Invoices.Models.InvoiceOverviewViewModel
+@section Actions {
+<ul class="secnav">
+	<li>
+		<input type="button" value="@Translation.Get("Skicka")" class="btn" id="btnInvoiceAction" />
+	</li>
+	<li>
+		<input type="button" value="@Translation.Get("Export")" class="btn" id="btnExportGrid" />
+	</li>
+</ul>
+}
+<div>
+	<table class="tableform" id="invoiceFilter">
+		<tr>
+			<td class="span3">@Translation.Get("Avdelning")</td>
+			<td>@Html.DropDownListFor(m => m.Filter.DepartmentId, (List<SelectListItem>)ViewBag.Departments, Translation.Get("Selektera ut"), new { id = "ddlDepartment", @class = "inputw300" })</td>
+		</tr>
+		<tr>
+			<td class="span3">
+				@Translation.Get("Period")
+			</td>
+			<td>
+				@Html.EditorFor(m => m.Filter.DateFrom, "DatePicker", new { id = "dateFrom" })
+				@Html.EditorFor(m => m.Filter.DateTo, "DatePicker", new { id = "dateTo" })
+			</td>
+		</tr>
+		<tr>
+			<td class="span3">@Translation.Get("Visa")</td>
+			<td>
+				@Html.DropDownListFor(m => m.Filter.Status, (List<SelectListItem>)ViewBag.Statuses, Translation.Get("Selektera ut"), new { id = "ddlStatus", @class = "inputw300" })
+				<input type="button" value="@Translation.Get("Visa")" class="btn" id="btnSearch" />
+			</td>
+		</tr>
+	</table>
+</div>
+<div>
+	<div>@Translation.GetCoreTextTranslation("poster i sökresultat"): <span id="totalRows"></span></div>
+	<table id="invoiceGrid" class="table table-striped table-bordered table-hover table-cases">
+		<thead>
+			<tr>
+				<th></th>
+				<th>@Translation.GetCoreTextTranslation("Ärende")</th>
+				<th>@Translation.GetCoreTextTranslation("Text")</th>
+				<th>@Translation.CaseString(GlobalEnums.TranslationCaseFields.Category_Id.ToString())</th>
+				<th>@Translation.GetCoreTextTranslation("Avslutsdatum")</th>
+				<th>@Translation.CaseString(GlobalEnums.TranslationCaseFields.Department_Id.ToString())</th>
+				<th>@Translation.GetCoreTextTranslation("Arbete") @Translation.GetCoreTextTranslation("timmar")</th>
+				<th>@Translation.GetCoreTextTranslation("Övertid") @Translation.GetCoreTextTranslation("timmar")</th>
+				<th>@Translation.GetCoreTextTranslation("Arbete") @Translation.GetCoreTextTranslation("belopp")</th>
+				<th>@Translation.GetCoreTextTranslation("Material")</th>
+				<th>@Translation.GetCoreTextTranslation("Pris")</th>
+				<th>@Translation.GetCoreTextTranslation("Fakturor")</th>
+				<th>@Translation.GetCoreTextTranslation("Valda för debitering")</th>
+				@*<th>@Translation.GetCoreTextTranslation("Status")</th>*@
+				<th>@Translation.GetCoreTextTranslation("Fakturera")</th>
+				<th>@Translation.GetCoreTextTranslation("Fakturera inte")</th>
+			</tr>
+		</thead>
+		<tbody></tbody>
+	</table>
+</div>
+
+@section Scripts {
+	@Scripts.Render(BundleConfig.ScriptNames.Invoices.Overview)
+
+	<script type="text/javascript">
+		$(function () {
+			var pageObj = new InvoicesOverview({
+				perPageText: '@Translation.GetForJS("Antal per sida")',
+				perShowingText: '@Translation.GetForJS("Visar sida")',
+				hourText: '@Translation.GetForJS("tim")',
+				minText: '@Translation.GetForJS("min")',
+				saveText: '@Translation.GetForJS("Spara")',
+				cancelText: '@Translation.GetForJS("Avbryt")',
+				copyText: '@Translation.GetForJS("Kopiera")',
+				statusList: @Html.SerializeObject(new Dictionary<int, string>
+							{
+								{ (int)InvoiceStatus.Invoiced, InvoiceStatus.Invoiced.GetTranslation(true) },
+								{ (int)InvoiceStatus.NotInvoiced, InvoiceStatus.NotInvoiced.GetTranslation(true) }
+							}),
+				getListUrl: "@Url.ApiAction(WebApiInvoicesUrlName.Invoices.GetInvoicesOverviewList, WebApiInvoicesUrlName.Invoices.Controller)",
+				saveValuesUrl: "@Url.ApiAction(WebApiInvoicesUrlName.Invoices.SaveInvoiceValues, WebApiInvoicesUrlName.Invoices.Controller)",
+				actionUrl: "@Url.ApiAction(WebApiInvoicesUrlName.Invoices.InvoiceAction, WebApiInvoicesUrlName.Invoices.Controller)",
+				exportUrl: "@Url.Action(MvcInvoicesUrlName.Overview.InvoiceExport, MvcInvoicesUrlName.Overview.Controller)",
+				minStep: @ViewBag.MinStep
+			});
+			window.pageObj = pageObj;
+		});
+
+	</script>
+}
+
+
+
+
+
+

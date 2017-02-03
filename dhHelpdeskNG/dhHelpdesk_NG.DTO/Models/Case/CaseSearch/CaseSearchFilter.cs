@@ -35,6 +35,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         /// String that will be searched in "Initiator" case field
         /// </summary>
         public string Initiator { get; set; }
+		public CaseInitiatorSearchScope InitiatorSearchScope { get; set; }
 
         public string Category { get; set; }
         public string WorkingGroup { get; set; }
@@ -92,6 +93,11 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
         public PageInfo PageInfo { get; set; }
 
+        public bool IsConnectToParent { get; set; }
+
+        public int? CurrentCaseId { get; set; }
+
+
         public CaseSearchFilter Copy(CaseSearchFilter o)
         {
             var r = new CaseSearchFilter();
@@ -131,6 +137,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             r.CaseRemainingTimeMaxFilter = o.CaseRemainingTimeMaxFilter;
             r.CaseRemainingTimeHoursFilter = o.CaseRemainingTimeHoursFilter;
             r.Initiator = o.Initiator;
+	        r.InitiatorSearchScope = o.InitiatorSearchScope;
             r.SearchInMyCasesOnly = o.SearchInMyCasesOnly;
             r.Customer = o.Customer;
             r.CaseNumber = o.CaseNumber;
@@ -141,6 +148,8 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             r.CaseFilterFavorite = o.CaseFilterFavorite;
             r.MaxTextCharacters = o.MaxTextCharacters;
             r.PageInfo = o.PageInfo;
+            r.IsConnectToParent = o.IsConnectToParent;
+            r.CurrentCaseId = o.CurrentCaseId;
 
             return r;
         }

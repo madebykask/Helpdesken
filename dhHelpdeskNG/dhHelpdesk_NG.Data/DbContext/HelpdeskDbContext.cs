@@ -706,6 +706,7 @@
             modelBuilder.Configurations.Add(new OperationObjectConfiguration());
             modelBuilder.Configurations.Add(new OperatingSystemConfiguration());
             modelBuilder.Configurations.Add(new OrderConfiguration());
+            modelBuilder.Configurations.Add(new OrderFieldTypeConfiguration());
             modelBuilder.Configurations.Add(new OrderHistoryConfiguration());
             modelBuilder.Configurations.Add(new OrderLogConfiguration());
             modelBuilder.Configurations.Add(new OrderPropertyConfiguration());
@@ -821,9 +822,12 @@
 
             modelBuilder.Configurations.Add(new ParentChildRelationConfiguration());
 
-            #endregion
+			modelBuilder.Configurations.Add(new InvoiceRowConfiguration());
+			modelBuilder.Configurations.Add(new InvoiceHeaderConfiguration());
 
-            base.OnModelCreating(modelBuilder);
+			#endregion
+
+			base.OnModelCreating(modelBuilder);
         }
 
         #endregion

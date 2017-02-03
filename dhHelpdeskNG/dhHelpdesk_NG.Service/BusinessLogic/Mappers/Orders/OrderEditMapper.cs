@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
+﻿using DH.Helpdesk.Common.Extensions.Integer;
+
+namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
 {
     using System;
     using System.Collections.Generic;
@@ -17,52 +19,46 @@
 
     public static class OrderEditMapper
     {
-	    public static OrderEditOptions MapToOrderEditOptions(
-		    string orderTypeName,
-		    IQueryable<OrderState> statuses,
-		    IQueryable<User> administrators,
-		    IQueryable<Domain> domains,
-		    IQueryable<Department> departments,
-		    IQueryable<OU> units,
-		    IQueryable<OrderPropertyEntity> properties,
-		    IQueryable<Department> deliveryDepartments,
-		    IQueryable<OU> deliveryOuIds,
-		    List<GroupWithEmails> emailGroups,
-		    List<GroupWithEmails> workingGroupsWithEmails,
-		    IQueryable<User> administratorsWithEmails,
-		    FullOrderEditSettings settings)
+	    public static OrderEditOptions MapToOrderEditOptions(string orderTypeName, IQueryable<OrderState> statuses, IQueryable<User> administrators, IQueryable<Domain> domains, IQueryable<Department> departments, IQueryable<OU> units, IQueryable<OrderPropertyEntity> properties, IQueryable<Department> deliveryDepartments, IQueryable<OU> deliveryOuIds, List<GroupWithEmails> emailGroups, List<GroupWithEmails> workingGroupsWithEmails, IQueryable<User> administratorsWithEmails, FullOrderEditSettings settings, IQueryable<EmploymentType> employmentTypes, IQueryable<Region> regions, IQueryable<OrderFieldType> accountTypes, IQueryable<Program> programs)
 	    {
 		    IQueryable<UnionItemDependentOverview> query = null;
 
-		    if (settings.General.Status.Show)
-		    {
-			    query =
-				    statuses.Select(
-					    s => new UnionItemDependentOverview {Id = s.Id, Name = s.Name, Type = "statuses", DependentId = null});
-		    }
+	        var allStatuses = statuses.Where(o => o.IsActive == 1).OrderBy(o => o.SortOrder).ToList();
 
 		    if (settings.General.Administrator.Show)
 		    {
-			    var union = administrators.Select(a => new UnionItemDependentOverview{Id = a.Id, Name = a.FirstName + " " + a.SurName, Type = "administrators", DependentId = null});
-			    query = query == null ? union : query.Union(union);
+                query = administrators.Select(a => new UnionItemDependentOverview{Id = a.Id, Name = a.SurName + " " +a.FirstName, Type = "administrators", DependentId = null});
 		    }
 
 		    if (settings.General.Domain.Show)
 		    {
 			    var union = domains.Select(d => new UnionItemDependentOverview {Id = d.Id, Name = d.Name, Type = "domains", DependentId = null});
-			    query = query == null ? union : query.Union(union);
+			    query = query?.Union(union) ?? union;
 		    }
 
-		    if (settings.Orderer.Department.Show)
-		    {
+            if (settings.User.EmploymentType.Show)
+            {
+                var union = employmentTypes.Select(d => new UnionItemDependentOverview { Id = d.Id, Name = d.Name, Type = "employmentTypes", DependentId = null });
+                query = query?.Union(union) ?? union;
+            }
+
+            if (settings.Orderer.Department.Show ||
+                settings.User.DepartmentId1.Show ||
+                settings.User.DepartmentId2.Show)
+            {
 			    var union = departments.Select(d => new UnionItemDependentOverview {Id = d.Id, Name = d.DepartmentName, Type = "departments", DependentId = null});
-			    query = query == null ? union : query.Union(union);
-		    }
+			    query = query?.Union(union) ?? union;
 
-		    if (settings.Orderer.Unit.Show)
+                var regionsUnion = regions.Select(d => new UnionItemDependentOverview { Id = d.Id, Name = d.Name, Type = "regions", DependentId = null });
+                query = query.Union(regionsUnion);
+
+            }
+
+            if (settings.Orderer.Unit.Show ||
+                settings.User.UnitId.Show)
 		    {
 			    var union = units.Select(u => new UnionItemDependentOverview {Id = u.Id, Name = u.Name, Type = "units", DependentId = u.Department_Id});
-			    query = query == null ? union : query.Union(union);
+			    query = query?.Union(union) ?? union;
 		    }
 
 		    var propertiesOverviews = new ItemOverview[0];
@@ -74,24 +70,66 @@
 		    if (settings.Delivery.DeliveryDepartment.Show)
 		    {
 			    var union = deliveryDepartments.Select(d => new UnionItemDependentOverview {Id = d.Id, Name = d.DepartmentName, Type = "deliveryDepartments", DependentId = null});
-			    query = query == null ? union : query.Union(union);
+			    query = query?.Union(union) ?? union;
 		    }
 
 		    if (settings.Delivery.DeliveryOuId.Show)
 		    {
 			    var union = deliveryOuIds.Select(u => new UnionItemDependentOverview {Id = u.Id, Name = u.Name, Type = "deliveryOuIds", DependentId = null});
-			    query = query == null ? union : query.Union(union);
+			    query = query?.Union(union) ?? union;
 		    }
 
 		    var separator = Guid.NewGuid().ToString();
 
 		    if (settings.Log.Log.Show)
 		    {
-			    var union = administratorsWithEmails.Select(a => new UnionItemDependentOverview {Id = a.Id, Name = a.FirstName + " " + a.SurName + separator + a.Email, Type = "administratorsWithEmails", DependentId = null});
-			    query = query == null ? union : query.Union(union);
+			    var union = administratorsWithEmails.Select(a => new UnionItemDependentOverview {Id = a.Id, Name = a.SurName +" " + a.FirstName + separator + a.Email, Type = "administratorsWithEmails", DependentId = null});
+			    query = query?.Union(union) ?? union;
 		    }
 
-		    var overviews = new UnionItemDependentOverview[0];
+            if (settings.AccountInfo.AccountTypeId.Show)
+            {
+                var union = accountTypes.Where(a => a.OrderField == OrderFieldTypes.AccountType)
+                    .Select(a => new UnionItemDependentOverview { Id = a.Id, Name = a.Name, Type = "accountTypes", DependentId = null });
+                query = query?.Union(union) ?? union;
+            }
+
+            if (settings.AccountInfo.AccountTypeId2.Show)
+            {
+                var union = accountTypes.Where(a => a.OrderField == OrderFieldTypes.AccountType2).
+                    Select(a => new UnionItemDependentOverview { Id = a.Id, Name = a.Name, Type = "accountTypes2", DependentId = null });
+                query = query?.Union(union) ?? union;
+            }
+
+            if (settings.AccountInfo.AccountTypeId3.Show)
+            {
+                var union = accountTypes.Where(a => a.OrderField == OrderFieldTypes.AccountType3).
+                    Select(a => new UnionItemDependentOverview { Id = a.Id, Name = a.Name, Type = "accountTypes3", DependentId = null });
+                query = query?.Union(union) ?? union;
+            }
+
+            if (settings.AccountInfo.AccountTypeId4.Show)
+            {
+                var union = accountTypes.Where(a => a.OrderField == OrderFieldTypes.AccountType4).
+                    Select(a => new UnionItemDependentOverview { Id = a.Id, Name = a.Name, Type = "accountTypes4", DependentId = null });
+                query = query?.Union(union) ?? union;
+            }
+
+            if (settings.AccountInfo.AccountTypeId5.Show)
+            {
+                var union = accountTypes.Where(a => a.OrderField == OrderFieldTypes.AccountType5).
+                    Select(a => new UnionItemDependentOverview { Id = a.Id, Name = a.Name, Type = "accountTypes5", DependentId = null });
+                query = query?.Union(union) ?? union;
+            }
+
+            if (settings.Program.Program.Show)
+            {
+                var union = programs.Select(a => new UnionItemDependentOverview { Id = a.Id, Name = a.Name, Type = "programs", DependentId = null });
+                query = query?.Union(union) ?? union;
+            }
+
+
+            var overviews = new UnionItemDependentOverview[0];
 
 		    if (query != null)
 		    {
@@ -101,14 +139,14 @@
 				    .ToArray();
 		    }
 
-		    return new OrderEditOptions(
+		    var editOptions = new OrderEditOptions(
 			    orderTypeName,
-			    overviews.Where(o => o.Type == "statuses").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
+                allStatuses.Select(o => new OrderStatusItem(o.Name, o.Id.ToString(CultureInfo.InvariantCulture), o.CreateCase.ToBool(), o.NotifyOrderer.ToBool(), o.NotifyReceiver.ToBool())).ToArray(),
 			    overviews.Where(o => o.Type == "administrators").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
 			    overviews.Where(o => o.Type == "domains").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
 			    overviews.Where(o => o.Type == "departments").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
 			    overviews.Where(o => o.Type == "units").Select(o => new ItemDependentOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture),
-								o.DependentId.HasValue ? o.DependentId.Value.ToString(CultureInfo.InvariantCulture) : string.Empty)).ToArray(),
+								o.DependentId?.ToString(CultureInfo.InvariantCulture) ?? string.Empty)).ToArray(),
 			    propertiesOverviews,
 			    overviews.Where(o => o.Type == "deliveryDepartments").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
 			    overviews.Where(o => o.Type == "deliveryOuIds").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
@@ -118,7 +156,16 @@
 			    {
 				    var values = a.Name.Split(new[] {separator}, StringSplitOptions.RemoveEmptyEntries);
 				    return new ItemOverview(values[0], values.Length > 1 ? values[1].Split(';').First() : string.Empty);
-			    }).ToList());
+			    }).ToList(),
+                overviews.Where(o => o.Type == "employmentTypes").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
+                overviews.Where(o => o.Type == "regions").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
+                overviews.Where(o => o.Type == "accountTypes").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
+                overviews.Where(o => o.Type == "accountTypes2").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
+                overviews.Where(o => o.Type == "accountTypes3").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
+                overviews.Where(o => o.Type == "accountTypes4").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
+                overviews.Where(o => o.Type == "accountTypes5").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
+                overviews.Where(o => o.Type == "programs").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray());
+	        return editOptions;
 	    }
 
 	    public static FullOrderEditFields MapToFullOrderEditFields(this IQueryable<Order> query)
@@ -142,7 +189,8 @@
                     CreateProgramEditFields(entity),
                     CreateReceiverEditFields(entity),
                     CreateSupplierEditFields(entity),
-                    CreateUserEditFields(entity));            
+                    CreateUserEditFields(entity),
+                    CreateAccountInfoEditFields(entity));
         }
 
         private static DeliveryEditFields CreateDeliveryEditFields(Order entity)
@@ -159,7 +207,9 @@
                     entity.DeliveryInfo,
                     entity.DeliveryInfo2,
                     entity.DeliveryInfo3,
-                    entity.DeliveryOuId);
+                    entity.DeliveryOuId,
+                    entity.DeliveryName,
+                    entity.DeliveryPhone);
         }
 
         private static GeneralEditFields CreateGeneralEditFields(Order entity)
@@ -228,7 +278,9 @@
 
         private static ProgramEditFields CreateProgramEditFields(Order entity)
         {
-            return new ProgramEditFields(entity.Programs.Select(p => new OrderProgramModel(p.Id, p.Name)).ToList());
+            return new ProgramEditFields(
+                entity.Programs.Select(p => p.Id).ToList(),
+                entity.InfoProduct);
         }
 
         private static ReceiverEditFields CreateReceiverEditFields(Order entity)
@@ -255,7 +307,56 @@
             return new UserEditFields(
                     entity.UserId,
                     entity.UserFirstName,
-                    entity.UserLastName);
+                    entity.UserLastName,
+                    entity.UserPhone,
+                    entity.UserEMail,
+                    entity.UserInitials,
+                    entity.UserPersonalIdentityNumber,
+                    entity.UserExtension,
+                    entity.UserTitle,
+                    entity.UserLocation,
+                    entity.UserRoomNumber,
+                    entity.UserPostalAddress,
+                    entity.Responsibility,
+                    entity.Activity,
+                    entity.Manager,
+                    entity.ReferenceNumber,
+                    entity.InfoUser,
+                    entity.UserOU_Id,
+                    entity.EmploymentType_Id,
+                    entity.Department_Id,
+                    entity.UserDepartment_Id2,
+                    entity.Department?.Region_Id);
+        }
+
+        private static AccountInfoEditFields CreateAccountInfoEditFields(Order entity)
+        {
+            return new AccountInfoEditFields(
+                    entity.AccountStartDate,
+                    entity.AccountEndDate,
+                    entity.EMailType,
+                    entity.HomeDirectory,
+                    entity.Profile,
+                    entity.InventoryNumber,
+                    entity.AccountInfo,
+                    entity.OrderFieldType_Id,
+                    string.IsNullOrEmpty(entity.OrderFieldType2) ?
+                        new List<int>() :
+                        entity.OrderFieldType2.Split(',').Select(int.Parse).ToList(),
+                    entity.OrderFieldType3_Id,
+                    entity.OrderFieldType4_Id,
+                    entity.OrderFieldType5_Id
+                );
+        }
+
+        private static ContactEditFields CreateContactEditFields(Order entity)
+        {
+            return new ContactEditFields(
+                    entity.ContactId,
+                    entity.ContactName,
+                    entity.ContactPhone,
+                    entity.ContactEMail);
         }
     }
+
 }

@@ -426,13 +426,12 @@ $(function () {
             var _region = this;
             this.Items = [];
 
-            this.Fill = function (customerId, methodUrl) {
+            this.Fill = function(customerId, methodUrl) {
                 if (customerId == null)
-                    return;
+                    return null;
 
-                $.get(methodUrl, {
-                    customerId: customerId
-                }, function (data) {
+                var promise = $.ajax(methodUrl, { data: { customerId: customerId }});
+                promise.done(function (data) {
                     _region.Items = [];
                     if (data != undefined) {
                         for (var i = 0; i < data.regions.length; i++) {
@@ -441,8 +440,9 @@ $(function () {
                         }
                     }
                 });
-            }
 
+                return promise;
+            }
             this.GetById = function (regionId) {
                 for (var i = 0; i < _region.Items.length; i++) {
                     var item = _region.Items[i];
@@ -478,18 +478,21 @@ $(function () {
 
             this.Fill = function (customerId, methodUrl) {
                 if (customerId == null)
-                    return;
+                    return null;
 
-                $.get(methodUrl, { customerId: customerId }, function (data) {
-                    _department.Items = [];
-                    if (data != undefined) {
-                        for (var i = 0; i < data.departments.length; i++) {
-                            var item = data.departments[i];
-                            var curRegion = (item.RegionId != null ? _region.GetById(item.RegionId) : null);
-                            _department.Items.push({ Id: item.Id, Name: item.Name, IsActive: item.IsActive, RegionId: item.RegionId, Region: curRegion });
+                var promise = $.ajax(methodUrl, { data: { customerId: customerId } });
+                promise.done(function (data) {
+                        _department.Items = [];
+                        if (data != undefined) {
+                            for (var i = 0; i < data.departments.length; i++) {
+                                var item = data.departments[i];
+                                var curRegion = (item.RegionId != null ? _region.GetById(item.RegionId) : null);
+                                _department.Items.push({ Id: item.Id, Name: item.Name, IsActive: item.IsActive, RegionId: item.RegionId, Region: curRegion });
+                            }
                         }
-                    }
                 });
+
+                return promise;
             }
 
             this.GetById = function (departmentId) {
@@ -527,18 +530,21 @@ $(function () {
 
             this.Fill = function (customerId, methodUrl) {
                 if (customerId == null)
-                    return;
+                    return null;
 
-                $.get(methodUrl, { customerId: customerId }, function (data) {
-                    _ou.Items = [];
-                    if (data != undefined) {
-                        for (var i = 0; i < data.ous.length; i++) {
-                            var item = data.ous[i];
-                            var curDepartment = (item.DepartmentId != null ? _department.GetById(item.DepartmentId) : null);
-                            _ou.Items.push({ Id: item.Id, Name: item.Name, IsActive: item.IsActive, DepartmentId: item.DepartmentId, Department: curDepartment });
+                var promise = $.ajax(methodUrl, { data: { customerId: customerId } });
+                promise.done(function (data) {
+                        _ou.Items = [];
+                        if (data != undefined) {
+                            for (var i = 0; i < data.ous.length; i++) {
+                                var item = data.ous[i];
+                                var curDepartment = (item.DepartmentId != null ? _department.GetById(item.DepartmentId) : null);
+                                _ou.Items.push({ Id: item.Id, Name: item.Name, IsActive: item.IsActive, DepartmentId: item.DepartmentId, Department: curDepartment });
+                            }
                         }
-                    }
                 });
+
+                return promise;
             }
 
             this.GetById = function (ouId) {
@@ -580,9 +586,9 @@ $(function () {
             this.OU = new dhHelpdesk.OrganizationLevels.OU(this.Department);
 
             this.Initialize = function () {
-                base.Region.Fill(base.CusromerId, RegionPath);
-                base.Department.Fill(base.CusromerId, DepartmentPath);
-                base.OU.Fill(base.CusromerId, OUPath);
+                return base.Region.Fill(base.CusromerId, RegionPath)
+                    .then(function() { return base.Department.Fill(base.CusromerId, DepartmentPath); })
+                    .then(function () { return base.OU.Fill(base.CusromerId, OUPath) });
             }
         }
     }
@@ -4288,7 +4294,7 @@ $(function () {
     var loadOrganizationData = function () {
         var customerId = $('#case__Customer_Id').val();
         dhHelpdesk.CaseArticles.OrganizationData = new dhHelpdesk.OrganizationLevels.OrganizationStruct(customerId, regionUrl, departmentUrl, ouUrl);
-        dhHelpdesk.CaseArticles.OrganizationData.Initialize();
+        return dhHelpdesk.CaseArticles.OrganizationData.Initialize();
     };
 
     var loadCaseFiles = function () {
@@ -4325,14 +4331,14 @@ $(function () {
         return $.get('/Translation/GetAllTextTranslations', {
             curTime: Date.now
         }, function (returnedData) {
-            AllTranslations = returnedData            
-        });        
+            AllTranslations = returnedData
+        });
     };
 
     var loadCaseFieldTranslations = function () {
         return $.get("/Translation/GetCaseFieldsForTranslation", {
             curTime: Date.now
-        },function (data){ 
+        }, function (data) {
             AllCaseFields = data;
         });
     };
@@ -4340,9 +4346,9 @@ $(function () {
     var loadCaseFieldSettings = function () {
         return $.getJSON("/Cases/GetCaseFields", function (data) {
             CaseFieldSettings = data;
-            
-            var caseFieldSettings = new dhHelpdesk.CaseArticles.OtherReferenceMandatoryFields();            
-            if (CaseFieldSettings.Result != null){
+
+            var caseFieldSettings = new dhHelpdesk.CaseArticles.OtherReferenceMandatoryFields();
+            if (CaseFieldSettings.Result != null) {
                 for (var i = 0; i < CaseFieldSettings.Result.length; i++) {
                     switch (CaseFieldSettings.Result[i].Name.toLowerCase()) {
                         case 'reportedby':
@@ -4390,7 +4396,7 @@ $(function () {
                             caseFieldSettings.CostCentre = true;
                             break;
 
-                    }                    
+                    }
                 }
 
                 dhHelpdesk.CaseArticles.OtherReferenceRequired = caseFieldSettings;

@@ -1,4 +1,8 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
+﻿@using System.Web.Optimization
+@using DH.Helpdesk.Web
+@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Infrastructure.Extensions
+@using DH.Helpdesk.Web.Infrastructure.UrlHelpers.Api.Orders
 @model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.FullOrderEditModel
 @{
     Layout = "~/Areas/Orders/Views/Shared/_OrderLayout.cshtml";
@@ -8,54 +12,67 @@
 {
     <ul class="secnav">               
         <li>
-            @Html.ActionLink(Translation.Get("Spara"), null, null, new { id = "btnSave", @class = "btn" })
+            @Html.ActionLink(Translation.GetCoreTextTranslation("Spara"), null, null, new { id = "btnSave", @class = "btn" })
         </li>
         <li>
-            @Html.ActionLink(Translation.Get("Avbryt"), "Index", "Orders", null, new { @class = "btn" })
-        </li>
-        <li class="secspace"></li>      
-        <li>
-            @Html.CheckBoxFor(m => m.InformOrderer, new { id = "InformOrderer_action"})
+            @Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "Index", "Orders", null, new {@class = "btn" })
         </li>
         <li>
-            @Html.LabelFor(m => m.InformOrderer, Translation.Get("Informera beställare"))
+            <i id="actionIndicator" class="gif-loader" style="display: none">&nbsp;</i>
         </li>
         <li class="secspace"></li>      
         <li>
-            @Html.CheckBoxFor(m => m.InformReceiver, new { id = "InformReceiver_action"})
+            @Html.CheckBoxFor(m => m.InformOrderer, new { id = "informOrderer_action"})
         </li>
         <li>
-            @Html.LabelFor(m => m.InformReceiver, Translation.Get("Informera mottagare"))
+            @Html.Label("informOrderer_action", Translation.GetCoreTextTranslation("Informera beställare"))
         </li>
         <li class="secspace"></li>      
         <li>
-            @Html.CheckBoxFor(m => m.CreateCase, new { id = "CreateCase_action"})
+            @Html.CheckBoxFor(m => m.InformReceiver, new { id = "informReceiver_action"})
         </li>
         <li>
-            @Html.LabelFor(m => m.CreateCase, Translation.Get("Skapa ärende"))
+            @Html.Label("informReceiver_action", Translation.GetCoreTextTranslation("Informera mottagare"))
+        </li>
+        <li class="secspace"></li>      
+        <li>
+            @Html.CheckBoxFor(m => m.CreateCase, new { id = "createCase_action"})
+        </li>
+        <li>
+            @Html.Label("createCase_action", Translation.GetCoreTextTranslation("Skapa ärende"))
         </li>        
     </ul>        
 }
 
 @section Content
 {
-    @using (Html.BeginForm("New", "Orders", FormMethod.Post, new { id = "edit_form" }))
+    @using (Html.BeginForm("New", "Orders", FormMethod.Post, new {id = "edit_form"}))
     {
         @Html.EditorFor(m => m)
     }
-    
-    <script type="text/javascript">
-        $(function() {
-            $("#btnSave").click(function () {
-
-                $("#InformOrderer").val($("#InformOrderer_action").prop("checked"));
-                $("#InformReceiver").val($("#InformReceiver_action").prop("checked"));
-                $("#CreateCase").val($("#CreateCase_action").prop("checked"));
-
-                $("#edit_form").submit();
-                return false;
-            });
-        });
-    </script>      
 }
 
+@section Scripts {
+    @Scripts.Render(BundleConfig.ScriptNames.Orders.EditOrder)
+
+    <script type="text/javascript">
+        $(function () {
+
+            var pageObject = new EditOrder(
+                {
+                    isOrdererUnitVisible: @((Model.UserInfo.Unit.Show && Model.UserInfo.Units != null).ToJavaScriptBool()),
+                    isUserDepartmentVisible: @((Model.UserInfo.DepartmentId1.Show).ToJavaScriptBool()),
+                    @if (Model.UserInfo.Units != null && Model.UserInfo.Unit.Show)
+                    {
+                        @Html.Raw(string.Format("units: {0},", Html.SerializeObjectToJson(Model.UserInfo.Units.Items)))
+                    }
+                    @if (Model.Statuses != null)
+                    {
+                        @Html.Raw(string.Format("statuses: {0},", Html.SerializeObjectToJson(Model.Statuses)))
+                    }
+                    searchDepartmentsByRegionIdUrl: "@Url.ApiOrdersAction(WebApiOrdersUrlName.Orders.SearchDepartmentsByRegionId, WebApiOrdersUrlName.Orders.Controller)"
+                });
+            pageObject.init();
+        });
+    </script>    
+}

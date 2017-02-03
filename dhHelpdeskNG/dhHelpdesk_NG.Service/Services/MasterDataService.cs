@@ -32,7 +32,7 @@ namespace DH.Helpdesk.Services.Services
         int? GetCustomerIdByEMailGUID(Guid GUID);
         string GetFilePath(int customerId);
         string GetVirtualDirectoryPath(int customerId);
-        Notifier GetInitiatorByUserId(string userId, int customerId);
+        Notifier GetInitiatorByUserId(string userId, int customerId, bool activeOnly = true);
     }
 
     public class MasterDataService : IMasterDataService
@@ -117,9 +117,9 @@ namespace DH.Helpdesk.Services.Services
             return languages;
         }
 
-        public Notifier GetInitiatorByUserId(string userId, int customerId)
+        public Notifier GetInitiatorByUserId(string userId, int customerId, bool activeOnly = true)
         {
-            return _computerUserRepository.GetInitiatorByUserId(userId, customerId);
+            return _computerUserRepository.GetInitiatorByUserId(userId, customerId, activeOnly);
         }
 
         public IList<Text> GetTranslationTexts()

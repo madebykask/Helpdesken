@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Dal.Repositories.Invoice
+﻿using System;
+using System.Collections.Generic;
+
+namespace DH.Helpdesk.Dal.Repositories.Invoice
 {
     using DH.Helpdesk.BusinessData.Models.Invoice;
 
@@ -13,5 +16,7 @@
         void SaveArticleProductArea(InvoiceArticleProductAreaSelectedFilter selectedItems);
 
         void DeleteArticleProductArea(int articleid, int productareaid);
+        void DeactivateArticlesBySyncDate(int customerId, DateTime lastSyncDate);
+        void SaveArticles(List<InvoiceArticle> articles);
     }
 }

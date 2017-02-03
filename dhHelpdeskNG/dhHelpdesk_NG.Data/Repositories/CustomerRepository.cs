@@ -246,6 +246,9 @@ using System;
                 userSettingEntity.CaseStateSecondaryFilter = (newSetting.SubState == string.Empty)
                     ? null
                     : newSetting.SubState;
+                userSettingEntity.CaseCategoryFilter = (newSetting.Category == string.Empty)
+                    ? null
+                    : newSetting.Category;
 
                 userSettingEntity.CaseRegistrationDateStartFilter = newSetting.CaseRegistrationDateStartFilter;
                 userSettingEntity.CaseRegistrationDateEndFilter = newSetting.CaseRegistrationDateEndFilter;

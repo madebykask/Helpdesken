@@ -188,9 +188,29 @@ namespace DH.Helpdesk.Dal.Repositories
 						var dr = cmd.ExecuteReader();
 						if (dr != null && dr.HasRows)
 						{
+							int? closingReasonFilter = null;
+							if (!string.IsNullOrEmpty(f.CaseClosingReasonFilter))
+							{
+								int closingReason;
+								if (int.TryParse(f.CaseClosingReasonFilter, out closingReason))
+								{
+									closingReasonFilter = closingReason;
+								}
+							}
 
 							while (dr.Read())
 							{
+								var caseId = int.Parse(dr["Id"].ToString());
+
+								if (closingReasonFilter.HasValue)
+								{
+									var log = this.logRepository.GetLastLog(caseId);
+									if (log?.FinishingType == null || closingReasonFilter != log.FinishingType)
+									{
+										continue;
+									}
+								}
+
 								var doCalcTimeLeft = displayLeftTime || calculateRemainingTime;
 
 								var row = new CaseSearchResult();
@@ -198,24 +218,6 @@ namespace DH.Helpdesk.Dal.Repositories
 								var toolTip = string.Empty;
 								var sortOrder = string.Empty;
 								DateTime caseRegistrationDate;
-
-								int? curStatus = dr.SafeGetNullableInteger("aggregate_Status");
-								if (curStatus.HasValue)
-								{
-									if (aggregateData.Status.Keys.Contains(curStatus.Value))
-										aggregateData.Status[curStatus.Value] += 1;
-									else
-										aggregateData.Status.Add(curStatus.Value, 1);
-								}
-
-								int? curSubStatus = dr.SafeGetNullableInteger("aggregate_SubStatus");
-								if (curSubStatus.HasValue)
-								{
-									if (aggregateData.SubStatus.Keys.Contains(curSubStatus.Value))
-										aggregateData.SubStatus[curSubStatus.Value] += 1;
-									else
-										aggregateData.SubStatus.Add(curSubStatus.Value, 1);
-								}
 
 								DateTime.TryParse(dr["RegTime"].ToString(), out caseRegistrationDate);
 								DateTime dtTmp;
@@ -301,11 +303,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
 								if (timeLeft.HasValue)
 								{
-									int caseId;
-									if (int.TryParse(dr["Id"].ToString(), out caseId))
-									{
-										remainingTime.AddRemainingTime(caseId, timeLeft.Value);
-									}
+									remainingTime.AddRemainingTime(caseId, timeLeft.Value);
 								}
 
 								var isExternalEnv = (context.applicationType.ToLower() == ApplicationTypes.LineManager || context.applicationType.ToLower() == ApplicationTypes.SelfService);
@@ -388,7 +386,27 @@ namespace DH.Helpdesk.Dal.Repositories
 								row.IsUnread = dr.SafeGetInteger("Status") == 1;
 								row.IsUrgent = timeLeft.HasValue && timeLeft < 0;
 								if (!row.Ignored)
+								{
 									ret.Items.Add(row);
+
+									int? curStatus = dr.SafeGetNullableInteger("aggregate_Status");
+									if (curStatus.HasValue)
+									{
+										if (aggregateData.Status.Keys.Contains(curStatus.Value))
+											aggregateData.Status[curStatus.Value] += 1;
+										else
+											aggregateData.Status.Add(curStatus.Value, 1);
+									}
+
+									int? curSubStatus = dr.SafeGetNullableInteger("aggregate_SubStatus");
+									if (curSubStatus.HasValue)
+									{
+										if (aggregateData.SubStatus.Keys.Contains(curSubStatus.Value))
+											aggregateData.SubStatus[curSubStatus.Value] += 1;
+										else
+											aggregateData.SubStatus.Add(curSubStatus.Value, 1);
+									}
+								}
 							}
 						}
 
@@ -403,32 +421,11 @@ namespace DH.Helpdesk.Dal.Repositories
 
 			var result = ret;
 
-			if (!string.IsNullOrEmpty(f.CaseClosingReasonFilter))
-			{
-				int closingReason;
-				if (int.TryParse(f.CaseClosingReasonFilter, out closingReason))
-				{
-					var closingReasons = new List<int> { closingReason };
-					var filtered = new SearchResult<CaseSearchResult>();
-					foreach (var foundedCase in ret.Items)
-					{
-						var log = this.logRepository.GetLastLog(foundedCase.Id);
-						if (log != null && log.FinishingType.HasValue
-							&& closingReasons.Contains(log.FinishingType.Value))
-						{
-							filtered.Items.Add(foundedCase);
-						}
-					}
-
-					result = filtered;
-				}
-			}
-
 			result = SortSearchResult(result, s);
 
 			//TODO: refactor when true server paging will be implemented
 			result.Count = result.Items.Count;
-			if (f.PageInfo != null)
+			if (f.PageInfo != null && f.PageInfo.PageSize > 0)
 			{
 				result.Items = result.Items.Skip(f.PageInfo.PageNumber * f.PageInfo.PageSize).Take(f.PageInfo.PageSize).ToList();
 			}
@@ -1288,6 +1285,13 @@ namespace DH.Helpdesk.Dal.Repositories
 			sb.Append(" where (tblCase.Customer_Id = " + f.CustomerId + ")");
 			sb.Append(" and (tblCase.Deleted = 0)");
 
+		    if (f.IsConnectToParent)
+		    {
+                sb.AppendFormat(" AND tblCase.Id NOT IN (select Descendant_Id From tblParentChildCaseRelations) ");
+		        if (f.CurrentCaseId.HasValue)
+		            sb.AppendFormat(" AND tblCase.Id != {0} ", f.CurrentCaseId);
+		    }
+
 			if (caseIds != null && caseIds.Any())
 			{
 				sb.AppendFormat(" AND ([tblCase].[Id] IN ({0})) ", string.Join(",", caseIds));
@@ -1549,6 +1553,15 @@ namespace DH.Helpdesk.Dal.Repositories
 					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Phone]", text));
 					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_CellPhone]", text));
 					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Place]", text));
+
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[ReportedBy]", text));
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Person_Name]", text));
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[UserCode]", text));
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Person_Email]", text));
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Place]", text));
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Person_CellPhone]", text));
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Person_Phone]", text));
+
 					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Caption]", text));
 					sb.AppendFormat(" OR [tblCase].[Description] LIKE N'%{0}%'", text);
 					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Miscellaneous]", text));
@@ -1591,13 +1604,57 @@ namespace DH.Helpdesk.Dal.Repositories
 			if (!string.IsNullOrEmpty(f.Initiator))
 			{
 				sb.Append(" AND (");
-				sb.AppendFormat("{0}", this.GetSqlLike("[tblCase].[ReportedBy]", f.Initiator.SafeForSqlInject(), Combinator_AND));
-				sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Name]", f.Initiator.SafeForSqlInject(), Combinator_AND));
-				sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[UserCode]", f.Initiator.SafeForSqlInject(), Combinator_AND));
-				sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Email]", f.Initiator.SafeForSqlInject(), Combinator_AND));
-				sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Place]", f.Initiator.SafeForSqlInject(), Combinator_AND));
-				sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_CellPhone]", f.Initiator.SafeForSqlInject(), Combinator_AND));
-				sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Phone]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+
+				if (f.InitiatorSearchScope == CaseInitiatorSearchScope.User || f.InitiatorSearchScope == CaseInitiatorSearchScope.UserAndIsAbout)
+				{
+					sb.Append("(");
+					sb.AppendFormat("{0}", this.GetSqlLike("[tblCase].[ReportedBy]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Name]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[UserCode]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Email]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Place]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_CellPhone]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Phone]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+					sb.Append(")");
+				}
+				if (f.InitiatorSearchScope == CaseInitiatorSearchScope.UserAndIsAbout)
+				{
+					sb.Append(" OR ");
+				}
+				if (f.InitiatorSearchScope == CaseInitiatorSearchScope.IsAbout || f.InitiatorSearchScope == CaseInitiatorSearchScope.UserAndIsAbout)
+				{
+					sb.Append("(");
+					sb.Append("(");
+					sb.AppendFormat("{0}", this.GetSqlLike("[tblCaseIsAbout].[ReportedBy]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Person_Name]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[UserCode]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Person_Email]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Place]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Person_CellPhone]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Person_Phone]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+					sb.Append(")");
+
+					//if (!string.IsNullOrWhiteSpace(f.Region))
+					//	sb.Append(" AND ([tblCaseIsAbout].[Region_Id] IN (" + f.Region.SafeForSqlInject() + "))");
+					//if (!string.IsNullOrWhiteSpace(f.Department))
+					//{
+					//	// organizationUnit
+					//	if (!string.IsNullOrWhiteSpace(f.OrganizationUnit))
+					//		sb.Append(" AND ([tblCaseIsAbout].[Department_Id] IN (" + f.Department.SafeForSqlInject() + ") IN " +
+					//						"[tblCaseIsAbout].[OU_Id] IN (" + f.OrganizationUnit.SafeForSqlInject() + "))");
+					//	else
+					//		sb.Append(" AND ([tblCaseIsAbout].[Department_Id] IN (" + f.Department.SafeForSqlInject() + "))");
+					//}
+					//else
+					//{
+					//	// organizationUnit
+					//	if (!string.IsNullOrWhiteSpace(f.OrganizationUnit))
+					//		sb.Append(" AND ([tblCaseIsAbout].[OU_Id] IN (" + f.OrganizationUnit.SafeForSqlInject() + "))");
+					//}
+
+					sb.Append(")");
+				}
+
 				sb.Append(") ");
 			}
 

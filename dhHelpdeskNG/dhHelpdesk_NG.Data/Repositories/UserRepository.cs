@@ -57,7 +57,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         IEnumerable<User> FindUsersByName(string name);
 
-        bool UserHasCase(int customerId, int userId, List<int> workingGroupIds);
+        bool UserHasActiveCase(int customerId, int userId, List<int> workingGroupIds);
 
         int? GetUserDefaultWorkingGroupId(int userId, int customerId);
 
@@ -76,13 +76,13 @@ namespace DH.Helpdesk.Dal.Repositories
             return this.DataContext.Users.Where(u => u.Customer_Id == customerId);
         }
 
-        public bool UserHasCase(int customerId, int userId, List<int> workingGroupIds)
+        public bool UserHasActiveCase(int customerId, int userId, List<int> workingGroupIds)
         {
             if (workingGroupIds.Any())
             {
                 var allUserCases =
                     this.DataContext.Cases.Where(
-                        c => c.Customer_Id == customerId && c.Performer_User_Id == userId && c.WorkingGroup_Id != null)
+                        c => c.Customer_Id == customerId && c.Performer_User_Id == userId && c.WorkingGroup_Id != null && c.FinishingDate == null)
                         .Select(c => new { c.WorkingGroup_Id })
                         .ToList();
 
@@ -98,7 +98,7 @@ namespace DH.Helpdesk.Dal.Repositories
             {
                 var allUserCases =
                     this.DataContext.Cases.Where(
-                        c => c.Customer_Id == customerId && c.Performer_User_Id == userId)
+                        c => c.Customer_Id == customerId && c.Performer_User_Id == userId && c.FinishingDate == null)
                         .Select(c => new { c.Id })
                         .ToList();
 

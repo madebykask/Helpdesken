@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 namespace DH.Helpdesk.Domain.Invoice
 {
     public class InvoiceArticleEntity : Entity
@@ -32,5 +33,9 @@ namespace DH.Helpdesk.Domain.Invoice
         public int CustomerId { get; set; }
 
         public virtual Customer Customer { get; set; }
+
+        public DateTime LastSyncedDate { get; set; }
+
+        public int IsActive { get; set; }
     }
 }

@@ -2,42 +2,24 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.DeliveryEditModel
 
-<h4>@Translation.Get("Leveransinformation")</h4>
+<h4>@Translation.GetCoreTextTranslation("Leveransinformation")</h4>
 <table class="tableform">
     <tbody>
-        @Html.EditorFor(m => m.DeliveryDate, "Fields/Date", new { id = "deliverydate_datepicker" })        
-        @Html.EditorFor(m => m.InstallDate, "Fields/Date", new { id = "installdate_datepicker" })     
-        @if (Model.DeliveryDepartment.Show)
-        {
-            <tr>
-                <td class="span3">
-                    @Html.FieldCaption(Model.DeliveryDepartment)
-                </td>
-                <td class="span9">
-                    @Html.DropDownListFor(m => m.DeliveryDepartmentId, Model.DeliveryDepartment.Value)
-                    @Html.ValidationMessageFor(m => m.DeliveryDepartmentId)
-                </td>
-            </tr>             
-        }
-        @Html.EditorFor(m => m.DeliveryOu, "Fields/Text")           
-        @Html.EditorFor(m => m.DeliveryAddress, "Fields/Text")           
-        @Html.EditorFor(m => m.DeliveryPostalCode, "Fields/Text")           
-        @Html.EditorFor(m => m.DeliveryPostalAddress, "Fields/Text")           
-        @Html.EditorFor(m => m.DeliveryLocation, "Fields/Text")           
-        @Html.EditorFor(m => m.DeliveryInfo1, "Fields/Text")           
-        @Html.EditorFor(m => m.DeliveryInfo2, "Fields/Text")           
-        @Html.EditorFor(m => m.DeliveryInfo3, "Fields/Text")   
-        @if (Model.DeliveryOuId.Show)
-        {
-            <tr>
-                <td class="span3">
-                    @Html.FieldCaption(Model.DeliveryOuId)
-                </td>
-                <td class="span9">
-                    @Html.DropDownListFor(m => m.DeliveryOuIdId, Model.DeliveryOuId.Value)
-                    @Html.ValidationMessageFor(m => m.DeliveryOuIdId)
-                </td>
-            </tr>                           
-        }  
+        @Html.EditorFor(m => m.DeliveryName, "Fields/Text")
+        @Html.EditorFor(m => m.DeliveryPhone, "Fields/Text")
+
+
+        @Html.EditorFor(m => m.DeliveryDate, "Fields/Date", new { id = "deliverydate_datepicker" })
+        @Html.EditorFor(m => m.InstallDate, "Fields/Date", new { id = "installdate_datepicker" })
+        @Html.EditorFor(m => m.DeliveryDepartment, "Fields/List", new { Source = Model.Departments })
+        @Html.EditorFor(m => m.DeliveryOu, "Fields/Text")
+        @Html.EditorFor(m => m.DeliveryAddress, "Fields/Text")
+        @Html.EditorFor(m => m.DeliveryPostalCode, "Fields/Text")
+        @Html.EditorFor(m => m.DeliveryPostalAddress, "Fields/Text")
+        @Html.EditorFor(m => m.DeliveryLocation, "Fields/Text")
+        @Html.EditorFor(m => m.DeliveryInfo1, "Fields/Text")
+        @Html.EditorFor(m => m.DeliveryInfo2, "Fields/Text")
+        @Html.EditorFor(m => m.DeliveryInfo3, "Fields/Text")
+        @Html.EditorFor(m => m.DeliveryOuId, "Fields/List", new { Source = Model.Units })
     </tbody>
 </table>

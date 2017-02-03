@@ -129,11 +129,11 @@ namespace DH.Helpdesk.Domain
         public string SMTPUserName { get; set; }
         public string SMTPPassWord { get; set; }
         public bool IsSMTPSecured { get; set; }
+		public bool BatchEmail { get; set; }
 
 
 
-
-        public virtual OrderState CloseOrderState { get; set; }
+		public virtual OrderState CloseOrderState { get; set; }
         /// <summary>
         /// If 1 - indicates that users should be presented(and sorted by) as "FirstName LastName", and vice versa
         /// </summary>

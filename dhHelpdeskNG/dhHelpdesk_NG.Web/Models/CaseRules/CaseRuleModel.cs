@@ -1,29 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using DH.Helpdesk.Web.Infrastructure.Extensions;
 
 namespace DH.Helpdesk.Web.Models.CaseRules
 {
-    public enum CaseRuleType
+    public enum VirtualFields
     {
-        OriginalRule = 0,
-        NewMode = 1,
-        InheritMode = 2,
-        SelfService = 3
+        Priority_Impact_Urgent = 1,
+        Department_WatchDate = 2
+    }
+
+    #region Enums
+    public enum CaseRuleMode
+    {
+        TemplateUserChangeMode   = 0,
+        CaseUserChangeMode       = 1,
+        CaseInheritTemplateMode  = 2,
+        CaseNewTemplateMode      = 3,
+        SelfService              = 4
     }
 
     public enum RelationType
     {
         OneToOne = 1,
         OneToMany = 2,
-        ManyToMany = 3
+        ManyToMany = 3,
+        Virtual = 4
     }
 
     public enum RelationActionType
     {
         ValueSetter = 1,
         ListCleaner = 2,
-        ListPopulator = 3,
-        StaticRuntimeAction = 9
+        ListPopulator = 3       
     }
 
     public enum CaseFieldType
@@ -46,19 +54,36 @@ namespace DH.Helpdesk.Web.Models.CaseRules
         Hidden = 3
     }
 
+    public enum ConditionOperator
+    {                
+        HasValue = 1,
+        HasNotValue = 2,
+        Equal = 3,
+        NotEqual = 4
+    }
+
+    public enum ForeignKeyNum
+    {
+        FKeyNum0 = 0, // 0 is Field Current Value
+        FKeyNum1 = 1,
+        FKeyNum2 = 2,
+        FKeyNum3 = 3,
+    }
+
+    #endregion
+
     public class CaseRuleModel
     {
         public CaseRuleModel()
         {
-            FieldAttributes = new List<FieldAttributeModel>();
-            CustomerSettings = new CaseCustomerSettings();
+            FieldAttributes = new List<FieldAttributeModel>();                        
         }
 
-        public CaseRuleType RuleType { get; set; }
+        public CaseRuleMode RuleMode { get; set; }
 
-        public List<FieldAttributeModel> FieldAttributes { get; set; }
+        public List<FieldAttributeModel> FieldAttributes { get; set; }                
 
-        public CaseCustomerSettings CustomerSettings { get; set; }
+        public string DateFormat { get; set; }
     }
 
     public class CaseCustomerSettings
@@ -106,6 +131,7 @@ namespace DH.Helpdesk.Web.Models.CaseRules
 
         public List<FieldRelation> Relations { get; set; }
 
+        public string GeneralInformation { get; set; }
 
         public void AddItem(FieldItem item)
         {
@@ -130,7 +156,7 @@ namespace DH.Helpdesk.Web.Models.CaseRules
         }
 
         public string ItemValue { get; private set; }
-        
+
 
         public string ItemText { get; private set; }
 
@@ -142,6 +168,8 @@ namespace DH.Helpdesk.Web.Models.CaseRules
 
         public string ForeignKeyValue3 { get; set; }
 
+        public string ResultKeyValue { get; set; }
+
         public string ParentItemValue { get; set; }
 
         public static FieldItem CreateEmpty()
@@ -150,12 +178,28 @@ namespace DH.Helpdesk.Web.Models.CaseRules
         }
 
     }
-   
+
     public sealed class FieldRelation
     {
-        public FieldRelation()
+        public FieldRelation(params CaseRuleMode[] applicableIns)
         {
-           
+
+            ApplicableIn = new List<int>();
+            
+
+            foreach (var applicableIn in applicableIns)
+            {
+                ApplicableIn.Add(applicableIn.ToInt());
+            }
+
+            // Used for Region & Department when Region is null all department can be shown
+            ShowAllIfKeyIsNull = false;
+
+            // Used for WokingGroup & Adminstrator when both have Current RunTime value item in CaseTemplate.  (Inloggad användare, Inloggad användares driftgrupp)
+            ShowRunTimeCurrentValue = false;
+            ShowDetailsInformation = true;
+          
+            Conditions = new List<FieldRelationCondition>();
         }
 
         public int SequenceNo { get; set; }
@@ -164,25 +208,62 @@ namespace DH.Helpdesk.Web.Models.CaseRules
 
         public int RelationType { get; set; }
 
-        public int ActionType { get; set; }          
+        public int ActionType { get; set; }
 
         public int? ForeignKeyNumber { get; set; }
 
-        public int? StaticActionId { get; set; }
+        public string DataStore1 { get; set; }
 
+        public string DataStore2 { get; set; }
+
+        public string DataStore3 { get; set; }
+
+        public string ResultDataKey { get; set; }        
+
+        public List<int> ApplicableIn { get; private set; }        
+
+        public bool ShowAllIfKeyIsNull { get; set; }
+
+        public bool ShowRunTimeCurrentValue { get; set; }               
+
+        public bool ShowDetailsInformation { get; set; }
+
+        public string StaticMessage { get; set; }
+
+        public List<FieldRelationCondition> Conditions { get; set; }
+        
     }
 
+    public sealed class FieldRelationCondition
+    {
+        public FieldRelationCondition(string fieldId, ForeignKeyNum foreignKeyNum, ConditionOperator conOperator, string otherSideValue = "")
+        {
+            FieldId = fieldId;
+            ForeignKeyNum = foreignKeyNum.ToInt();
+            ConditionOperator = conOperator.ToInt();
+            OtherSideValue = otherSideValue;
+        }
+
+        public string FieldId { get; private set; }
+
+        public int ForeignKeyNum { get; private set; }
+
+        public int ConditionOperator { get; private set; }
+
+        public string OtherSideValue { get; private set; }
+
+    }
 
     public sealed class BasicSingleItemField
     {
         public BasicSingleItemField()
         {
-            
-        }
-        
-        public CaseFieldStatusType StatusType { get; set; }        
 
-        public FieldItem Selected { get; set; }        
+        }
+
+        public CaseFieldStatusType StatusType { get; set; }
+
+        public FieldItem Selected { get; set; }
 
     }
 
@@ -198,6 +279,17 @@ namespace DH.Helpdesk.Web.Models.CaseRules
         public FieldItem DefaultItem { get; set; }
 
         public FieldItem Selected { get; set; }
+
+        public List<FieldItem> Items { get; set; }
+
+    }
+
+    public sealed class BasicVirtualDataField
+    {
+        public BasicVirtualDataField()
+        {
+            Items = new List<FieldItem>();
+        }
 
         public List<FieldItem> Items { get; set; }
 
@@ -241,7 +333,7 @@ namespace DH.Helpdesk.Web.Models.CaseRules
 
         public BasicSingleItemField IsAbout_PersonsName { get; set; }
 
-        public BasicSingleItemField IsAbout_PersonsEmail { get; set; }        
+        public BasicSingleItemField IsAbout_PersonsEmail { get; set; }
 
         public BasicSingleItemField IsAbout_PersonsPhone { get; set; }
 
@@ -252,7 +344,7 @@ namespace DH.Helpdesk.Web.Models.CaseRules
         public BasicSingleItemField IsAbout_Place { get; set; }
 
         public BasicSingleItemField IsAbout_UserCode { get; set; }
-        
+
         public BasicMultiItemField IsAbout_Regions { get; set; }
 
         public BasicMultiItemField IsAbout_Departments { get; set; }
@@ -356,12 +448,37 @@ namespace DH.Helpdesk.Web.Models.CaseRules
         public BasicSingleItemField FinishingDescription { get; set; }
 
         public BasicSingleItemField LogFile { get; set; }
-      
+
         public BasicSingleItemField FinishingDate { get; set; }
-     
+
         public BasicMultiItemField ClosingReason { get; set; }
 
         #endregion
 
+        #region Virtual Fields
+
+        public BasicVirtualDataField Priority_Impact_Urgent { get; set; }
+
+        public BasicVirtualDataField Department_WatchDate { get; set; }
+
+        #endregion
+    }
+
+
+    public static class CaseRuleExtenstions
+    {
+        public static string ToString(this VirtualFields it)
+        {
+            switch (it)
+            {
+                case VirtualFields.Priority_Impact_Urgent:
+                    return "Priority_Impact_Urgent";
+
+                case VirtualFields.Department_WatchDate:
+                    return "Department_WatchDate";
+            }
+
+            return string.Empty;
+        }
     }
 }

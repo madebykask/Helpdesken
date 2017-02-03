@@ -2,7 +2,7 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.GeneralEditModel
 
-<h4>@Translation.Get("Allmänt")</h4>
+<h4>@Translation.GetCoreTextTranslation("Allmänt")</h4>
 <table class="tableform">
     <tbody>
         @if (Model.OrderNumber.Value > 0)
@@ -11,10 +11,13 @@
         }
         <tr>
             <td class="span3">
-                @Translation.Get("Typ")
+                @Translation.GetCoreTextTranslation("Typ")
             </td>
-            <td class="span9">
-                @Html.DisplayFor(m => m.OrderTypeName)    
+            <td class="span6">
+                @Html.DisplayFor(m => m.OrderTypeName)
+            </td>
+            <td class="span3">
+                
             </td>
         </tr>
         @if (Model.Status.Show)
@@ -23,36 +26,17 @@
                 <td class="span3">
                     @Html.FieldCaption(Model.Status)
                 </td>
-                <td class="span9">
-                    @Html.DropDownListFor(m => m.StatusId, Model.Status.Value)
+                <td class="span6">
+                    @Html.DropDownListFor(m => m.StatusId, Model.Status.Value, new { @id = "general_status"})
                     @Html.ValidationMessageFor(m => m.StatusId)
+                </td>
+                <td class="span3">
+                    @Model.Status.Help
                 </td>
             </tr>             
         }          
-        @if (Model.Administrator.Show)
-        {
-            <tr>
-                <td class="span3">
-                    @Html.FieldCaption(Model.Administrator)
-                </td>
-                <td class="span9">
-                    @Html.DropDownListFor(m => m.AdministratorId, Model.Administrator.Value)
-                    @Html.ValidationMessageFor(m => m.AdministratorId)
-                </td>
-            </tr>             
-        }
-        @if (Model.Domain.Show)
-        {
-            <tr>
-                <td class="span3">
-                    @Html.FieldCaption(Model.Domain)
-                </td>
-                <td class="span9">
-                    @Html.DropDownListFor(m => m.DomainId, Model.Domain.Value)
-                    @Html.ValidationMessageFor(m => m.DomainId)
-                </td>
-            </tr>             
-        }
+        @Html.EditorFor(m => m.Administrator, "Fields/List", new { Source = Model.Administrators })
+        @Html.EditorFor(m => m.Domain, "Fields/List", new { Source = Model.Domains })
         @Html.EditorFor(m => m.OrderDate, "Fields/Date", new { id = "orderdate_datepicker" })                                
     </tbody>
 </table>

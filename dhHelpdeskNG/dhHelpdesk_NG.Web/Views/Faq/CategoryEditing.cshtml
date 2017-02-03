@@ -1,11 +1,12 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
+﻿@using System.Globalization
+@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Models.Faq.Output.EditingCategoryModel
 
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs">
             <li class="active">
-                <a href="#fragment-1">@Translation.Get("FAQ Kategori", Enums.TranslationSource.TextTranslation)</a>
+                <a href="#fragment-1">@Translation.GetCoreTextTranslation("FAQ Kategori")</a>
             </li>
         </ul>
         <div class="tab-content">
@@ -14,9 +15,20 @@
                     <div class="row">
                         <div class="span12">
                             <table class="tableform">
+                                @if (!Model.IsNew)
+                                {
+                                    <tr>
+                                        <td class="span3">
+                                            @Translation.GetCoreTextTranslation("Språk")
+                                        </td>
+                                        <td class="span9">
+                                            @Html.DropDownListFor(model => model.LanguageId, Model.Languages, new {id = "languageList"})
+                                        </td>
+                                    </tr>
+                                }
                                 <tr>
                                     <td class="span3">
-                                        @Translation.Get("Namn", Enums.TranslationSource.TextTranslation) <span class="mandatorystar">*</span>
+                                        @Translation.GetCoreTextTranslation("Namn") <span class="mandatorystar">*</span>
                                     </td>
                                     <td class="span9">
                                         @Html.TextBoxFor(m => m.Name)
@@ -31,3 +43,12 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    $(function() {
+        $("#languageList").change(function() {
+            var selectedItem = $(this).val();
+            window.location.href = '@Url.Action("EditCategory", "Faq")?id=' + @Model.Id.ToString(CultureInfo.InvariantCulture) + "&languageId=" + selectedItem;
+        });
+    });
+</script>

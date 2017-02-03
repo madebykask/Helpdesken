@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
+﻿using DH.Helpdesk.BusinessData.Enums.Accounts.Fields;
+using DH.Helpdesk.Common.Extensions.Boolean;
+
+namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
 {
     using System;
     using System.Collections.Generic;
@@ -13,7 +16,10 @@
 
     public static class OrderOverviewMapper
     {
-        public static FullOrderOverview[] MapToFullOverviews(this IQueryable<Order> query, IList<OrderType> orderTypes, IList<Case> caseEntities)
+        public static FullOrderOverview[] MapToFullOverviews(this IQueryable<Order> query,
+            IList<OrderType> orderTypes,
+            IList<Case> caseEntities,
+            IList<OrderFieldType> orderFieldTypes)
         {
             var entities = query
                             .SelectIncluding(new List<Expression<Func<Order, object>>>
@@ -30,7 +36,11 @@
                                                     o => o.Programs.Select(p => p.Name),
                                                     o => o.User.FirstName,
                                                     o => o.User.SurName,
-                                                    o => o.Department.DepartmentName
+                                                    o => o.Department.DepartmentName,
+                                                    o => o.UserOU.Name,
+                                                    o => o.EmploymentType.Name,
+                                                    o => o.UserDepartment1.DepartmentName,
+                                                    o => o.UserDepartment2.DepartmentName
                                                 })
                                                 .ToArray();
 
@@ -50,13 +60,19 @@
                     order.Programs = ((List<string>)o.f9).Select(p => new Program { Name = p }).ToArray();
                     order.User = new User { FirstName = o.f10, SurName = o.f11 };
                     order.Department = new Department { DepartmentName = o.f12 };
-                    return CreateFullOverview(order, caseEntities);                    
+                    order.UserOU = new OU { Name = o.f13 };
+                    order.EmploymentType = new EmploymentType { Name = o.f14 };
+                    order.UserDepartment1 = new Department { DepartmentName = o.f15 };
+                    order.UserDepartment2 = new Department { DepartmentName = o.f16 };
+                    return CreateFullOverview(order, caseEntities, orderFieldTypes);                    
                 }).ToArray();
         }
 
         #region Create fields
 
-        private static FullOrderOverview CreateFullOverview(Order entity, IList<Case> caseEntities)
+        private static FullOrderOverview CreateFullOverview(Order entity,
+            IList<Case> caseEntities,
+            IList<OrderFieldType> orderFieldTypes)
         {
             var delivery = CreateDeliveryOverview(entity);
             var general = CreateGeneralOverview(entity);
@@ -69,6 +85,8 @@
             var receiver = CreateReceiverOverview(entity);
             var supplier = CreateSupplierOverview(entity);
             var user = CreateUserOverview(entity);
+            var accountInfo = CreateAccountInfoOverview(entity, orderFieldTypes);
+            var contact = CreateContactOverview(entity);
 
             return new FullOrderOverview(
                                     entity.Id,
@@ -82,7 +100,9 @@
                                     program,
                                     receiver,
                                     supplier,
-                                    user);
+                                    user,
+                                    accountInfo,
+                                    contact);
         }
 
         private static DeliveryOverview CreateDeliveryOverview(Order entity)
@@ -99,7 +119,9 @@
                                     entity.DeliveryInfo,
                                     entity.DeliveryInfo2,
                                     entity.DeliveryInfo3,
-                                    entity.DeliveryOuEntity != null ? entity.DeliveryOuEntity.Name : string.Empty);
+                                    entity.DeliveryOuEntity != null ? entity.DeliveryOuEntity.Name : string.Empty,
+                                    entity.DeliveryName,
+                                    entity.DeliveryPhone);
         }
 
         private static GeneralOverview CreateGeneralOverview(Order entity)
@@ -107,7 +129,8 @@
             return new GeneralOverview(
                                     entity.Id.MapToOrderNumber(),
                                     entity.Customer != null ? entity.Customer.Name : string.Empty,
-                                    entity.User != null ? string.Format("{0} {1}", entity.User.FirstName, entity.User.SurName) : string.Empty,
+                                    entity.User != null ? $"{entity.User.SurName} {entity.User.FirstName}"
+                                        : string.Empty,
                                     entity.Domain != null ? entity.Domain.Name : string.Empty,
                                     entity.OrderDate);
         }
@@ -167,7 +190,7 @@
 
         private static ProgramOverview CreateProgramOverview(Order entity)
         {
-           return new ProgramOverview(entity.Programs.Select(p => p.Name).ToArray());
+           return new ProgramOverview(entity.Programs.Select(p => p.Name).ToArray(), entity.InfoProduct);
         }
 
         private static ReceiverOverview CreateReceiverOverview(Order entity)
@@ -194,7 +217,94 @@
             return new UserOverview(
                                     entity.UserId,
                                     entity.UserFirstName,
-                                    entity.UserLastName);
+                                    entity.UserLastName,
+                                    entity.UserPhone,
+                                    entity.UserEMail,
+                                    entity.UserInitials,
+                                    entity.UserPersonalIdentityNumber,
+                                    entity.UserExtension,
+                                    entity.UserTitle,
+                                    entity.UserLocation,
+                                    entity.UserRoomNumber,
+                                    entity.UserPostalAddress,
+                                    entity.Responsibility,
+                                    entity.Activity,
+                                    entity.Manager,
+                                    entity.ReferenceNumber,
+                                    entity.InfoUser,
+                                    entity.UserOU != null ? entity.UserOU.Name : string.Empty,
+                                    entity.EmploymentType != null ? entity.EmploymentType.Name : string.Empty,
+                                    entity.UserDepartment1 != null ? entity.UserDepartment1.DepartmentName : string.Empty,
+                                    entity.UserDepartment2 != null ? entity.UserDepartment2.DepartmentName : string.Empty);
+        }
+
+        private static AccountInfoOverview CreateAccountInfoOverview(Order entity,
+            IList<OrderFieldType> orderFieldTypes)
+        {
+            var orderFieldType1 = "";
+            var orderFieldType2 = "";
+            var orderFieldType3 = "";
+            var orderFieldType4 = "";
+            var orderFieldType5 = "";
+            if (entity.OrderFieldType_Id.HasValue ||
+                string.IsNullOrEmpty(entity.OrderFieldType2) ||
+                entity.OrderFieldType3_Id.HasValue ||
+                entity.OrderFieldType4_Id.HasValue ||
+                entity.OrderFieldType5_Id.HasValue)
+            {
+                if (entity.OrderFieldType_Id.HasValue)
+                    orderFieldType1 = orderFieldTypes
+                        .FirstOrDefault(o => o.OrderField == OrderFieldTypes.AccountType
+                                             && o.Id == entity.OrderFieldType_Id.Value)?.Name;
+
+                if (!string.IsNullOrEmpty(entity.OrderFieldType2))
+                {
+                    var orderFieldTypes2 = entity.OrderFieldType2.Split(',')
+                        .Select(int.Parse).ToList();
+                    orderFieldType2 = string.Join("; ", orderFieldTypes
+                        .Where(o => o.OrderField == OrderFieldTypes.AccountType2
+                                    && orderFieldTypes2.Any(i => i == o.Id))
+                        .Select(o => o.Name).ToArray());
+                }
+
+                if (entity.OrderFieldType3_Id.HasValue)
+                    orderFieldType3 = orderFieldTypes
+                        .FirstOrDefault(o => o.OrderField == OrderFieldTypes.AccountType3
+                                             && o.Id == entity.OrderFieldType3_Id.Value)?.Name;
+
+                if (entity.OrderFieldType4_Id.HasValue)
+                    orderFieldType4 = orderFieldTypes
+                        .FirstOrDefault(o => o.OrderField == OrderFieldTypes.AccountType4
+                                             && o.Id == entity.OrderFieldType4_Id.Value)?.Name;
+
+                if (entity.OrderFieldType5_Id.HasValue)
+                    orderFieldType5 = orderFieldTypes
+                        .FirstOrDefault(o => o.OrderField == OrderFieldTypes.AccountType5
+                                             && o.Id == entity.OrderFieldType5_Id.Value)?.Name;
+            }
+
+            return new AccountInfoOverview(
+                entity.AccountStartDate,
+                entity.AccountEndDate,
+                entity.EMailType,
+                entity.HomeDirectory,
+                entity.Profile,
+                entity.InventoryNumber,
+                orderFieldType1 ?? string.Empty,
+                orderFieldType2 ?? string.Empty,
+                orderFieldType3 ?? string.Empty,
+                orderFieldType4 ?? string.Empty,
+                orderFieldType5 ?? string.Empty,
+                entity.AccountInfo);
+        }
+
+        private static ContactOverview CreateContactOverview(Order entity)
+        {
+            return new ContactOverview(
+                entity.ContactId,
+                entity.ContactName,
+                entity.ContactPhone,
+                entity.ContactPhone);
         }
 
         #endregion

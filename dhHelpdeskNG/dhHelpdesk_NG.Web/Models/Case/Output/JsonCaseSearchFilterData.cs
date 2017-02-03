@@ -41,7 +41,12 @@
                                      attrName = CaseFilterFields.InitiatorNameAttribute,
                                      value = string.Empty
                                  });
-            }
+				res.data.Add(new JsonCaseSearchFilterItem()
+				{
+					attrName = CaseFilterFields.InitiatorSearchScopeAttribute,
+					value = string.Empty
+				});
+			}
 
             if (caseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Region_Id.ToString()) == 1)
             {
@@ -135,7 +140,16 @@
                 res.data.Add(new JsonCaseSearchFilterItem()
                 {
                     attrName = CaseFilterFields.StatusNameAttribute,
-                    value = string.Empty
+                    value = SaveExtractArray(defaultSearchFilter.SelectedState)
+                });
+            }
+            // "Category"
+            if (caseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Category_Id.ToString()) == 1)
+            {
+                res.data.Add(new JsonCaseSearchFilterItem()
+                {
+                    attrName = CaseFilterFields.CategoryNameAttribute,
+                    value = SaveExtractArray(defaultSearchFilter.SelectedCategory)
                 });
             }
 

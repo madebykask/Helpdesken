@@ -4,9 +4,10 @@
 @using System.Linq;
 @using DH.Helpdesk.BusinessData.OldComponents
 @using DH.Helpdesk.Web
+@using DH.Helpdesk.Web.Infrastructure.Extensions
 @model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.OrdererEditModel
 
-<h4>@Translation.Get("Beställare")</h4>
+<h4>@Translation.GetCoreTextTranslation("Beställare")</h4>
 <table class="tableform">
     <tbody>
     @if (Model.OrdererId.Show)
@@ -15,8 +16,11 @@
             <td class="span3">
                 @Html.FieldCaption(Model.OrdererId)
             </td>
-            <td class="span9">
-                @Html.TextBoxFor(model => model.OrdererId.Value, new { maxlength = "40", autocomplete = "Off", data_field = "userId" })
+            <td class="span6">
+                @Html.TextBoxFor(model => model.OrdererId.Value, new {maxlength = "40", autocomplete = "Off", data_field = "userId"})
+            </td>
+            <td class="span3">
+                @Model.OrdererId.Help
             </td>
         </tr>
     }
@@ -26,30 +30,8 @@
     @Html.EditorFor(m => m.OrdererEmail, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererEmail" } }})
     @Html.EditorFor(m => m.OrdererPhone, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererPhone" } }})
     @Html.EditorFor(m => m.OrdererCode, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererCode" } }})
-    @if (Model.Department.Show)
-    {
-        <tr>
-            <td class="span3">
-                @Html.FieldCaption(Model.Department)
-            </td>
-            <td class="span9">
-                @Html.DropDownListFor(m => m.DepartmentId, Model.Department.Value, new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererDepartment" }} })
-                @Html.ValidationMessageFor(m => m.DepartmentId)
-            </td>
-        </tr>
-    }
-    @if (Model.Unit.Show)
-    {
-        <tr>
-            <td class="span3">
-                @Html.FieldCaption(Model.Unit)
-            </td>
-            <td class="span9">
-                @Html.DropDownListFor(m => m.UnitId, Model.Unit.Value, new {Id = "orderer_unit_select"})
-                @Html.ValidationMessageFor(m => m.UnitId)
-            </td>
-        </tr>
-    }
+    @Html.EditorFor(m => m.Department, "Fields/List", new { Source = Model.Departments, Id = "orderer_departmentId" })
+    @Html.EditorFor(m => m.Unit, "Fields/List", new { Source = Model.Units, Id = "orderer_unit_select" })
     @Html.EditorFor(m => m.OrdererAddress, "Fields/Text")
     @Html.EditorFor(m => m.OrdererInvoiceAddress, "Fields/Text")
     @Html.EditorFor(m => m.OrdererReferenceNumber, "Fields/Text")
@@ -60,16 +42,3 @@
     @Html.EditorFor(m => m.AccountingDimension5, "Fields/Text")
     </tbody>
 </table>
-
-@if (Model.Unit.Show && Model.Unit.Value != null)
-{
-    @Scripts.Render(BundleConfig.ScriptNames.EditOrder)
-    <script type="text/javascript">
-        $(function() {
-            var parameters = {
-                Units: @Html.SerializeObjectToJson(Model.Unit.Value.Items)
-            };
-            OrderEdit(parameters);
-        });
-    </script>
-}

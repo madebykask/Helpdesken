@@ -15,14 +15,16 @@
                 bool showExternal,
                 string label,
                 bool required,
-                string emailIdentifier)
+                string emailIdentifier,
+                string help)
         {
-            this.Show = show;
-            this.ShowInList = showInList;
-            this.ShowExternal = showExternal;
-            this.Label = label;
-            this.Required = required;
-            this.EmailIdentifier = emailIdentifier;
+            Show = show;
+            ShowInList = showInList;
+            ShowExternal = showExternal;
+            Label = label;
+            Required = required;
+            EmailIdentifier = emailIdentifier;
+            Help = help;
         }
 
         public bool Show { get; set; }
@@ -37,6 +39,9 @@
 
         public bool Required { get; set; }
 
-        public string EmailIdentifier { get; set; } 
+        public string EmailIdentifier { get; set; }
+
+        [LocalizedStringLength(200)]
+        public string Help { get; set; }
     }
 }

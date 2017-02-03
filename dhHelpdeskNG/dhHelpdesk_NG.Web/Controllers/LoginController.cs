@@ -17,6 +17,7 @@
     using DH.Helpdesk.BusinessData.Models.LogProgram;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
     using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
+    using Models.Login;
 
     public class LoginController : Controller
     {
@@ -199,6 +200,49 @@
             }
 
             return this.View("Login");
+        }
+
+        [HttpGet]
+        public JsonResult GetUserCountJS(string userId, string pass)
+        {
+            var wrongAnswer = Json(string.Empty, JsonRequestBehavior.AllowGet);
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(pass))
+                return wrongAnswer;
+
+            if (userService.IsUserValidAdmin(userId, pass))
+            {
+                var nums = 0;
+                if (ApplicationFacade.LoggedInUsers != null)
+                    nums = ApplicationFacade.LoggedInUsers.Count();
+                
+                return Json(nums, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return wrongAnswer;
+            }            
+        }
+
+        [HttpGet]
+        public ActionResult GetUserCount(string userId, string pass)
+        {
+            var model = new UserStatisticsModel(string.Empty);
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(pass))
+                return View(model);
+
+            if (userService.IsUserValidAdmin(userId, pass))
+            {
+                var nums = 0;
+                if (ApplicationFacade.LoggedInUsers != null)
+                    nums = ApplicationFacade.LoggedInUsers.Count();
+
+                model = new UserStatisticsModel(nums.ToString());
+                return View(model);
+            }
+            else
+            {                
+                return View(model);
+            }
         }
 
         [NonAction]

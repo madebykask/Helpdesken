@@ -16,6 +16,10 @@
             //entity.ProductAreaId = businessModel.ProductAreaId;
             entity.UnitId = businessModel.UnitId;
             entity.CustomerId = businessModel.CustomerId;
+            entity.LastSyncedDate = businessModel.LastSyncDate;
+            entity.IsActive = businessModel.IsActive;
+            entity.Blocked = businessModel.Blocked;
+            entity.TextDemand = businessModel.TextDemand;
         }
     }
 }

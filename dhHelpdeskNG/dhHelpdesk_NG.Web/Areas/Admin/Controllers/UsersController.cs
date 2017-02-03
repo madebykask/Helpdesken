@@ -356,6 +356,18 @@
                 CsSelected = CsSelected.Where(availableCustomersHash.ContainsKey).ToArray();
             }
 
+            if (user.UserRoles != null)
+                foreach (var delete in user.UserRoles.ToList())
+                    user.UserRoles.Remove(delete);
+            else
+                user.UserRoles = new List<UserRole>();
+
+            if (userInputViewModel.UserRights.HasValue)
+            {
+                var userRight = this._userService.GetUserRoleById(userInputViewModel.UserRights.Value);
+                user.UserRoles.Add(userRight);
+            }
+
             this._userService.SaveNewUser(user, AAsSelected, CsSelected, OTsSelected, null, null, out errors, ConfirmPassword);
             if (errors.Count == 0)
             {
@@ -447,7 +459,7 @@
                     var emptyWG = new List<int>();
                     foreach (var c in allCustomers)
                     {                        
-                        if (_userService.UserHasCase(c.Id, userToSave.Id, emptyWG))
+                        if (_userService.UserHasActiveCase(c.Id, userToSave.Id, emptyWG))
                              customersAlert.Add(c.Name);
                     }                                       
                 }
@@ -544,6 +556,7 @@
             var copy = userModel.User;
             copy.Id = 0;
             copy.Password = NewPassword;
+            copy.TimeZoneId = userModel.SelectedTimeZone;
 
             if (copy.Language_Id == 0)
             {
@@ -699,7 +712,7 @@
             var emptyWG = new List<int>();
             foreach (var c in allCustomers)
             {
-                if (_userService.UserHasCase(c.Id, id, emptyWG))
+                if (_userService.UserHasActiveCase(c.Id, id, emptyWG))
                     customersAlert.Add(c.Name);
             }
                         

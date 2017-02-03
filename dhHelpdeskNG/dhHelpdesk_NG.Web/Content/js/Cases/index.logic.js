@@ -155,7 +155,14 @@ function getCollapseCaption(cap) {
                 createdRow: function (row, data, dataIndex) {
                     if (data) {
                         $(row).addClass(self.getClsRow(data) + " caseid=" + data.case_id);
-                        row.cells[0].innerHTML = strJoin('<a href="/Cases/Edit/', data.case_id, '"><img title="', data.caseIconTitle, '" alt="', data.caseIconTitle, '" src="', data.caseIconUrl, '" /></a>');
+                        var html = [];
+                        html.push('<a class="img-case-parent" href="/Cases/Edit/', data.case_id, '">');
+                        html.push('<img class="img-case-parent" title="', data.caseIconTitle, '" alt="', data.caseIconTitle, '" src="', data.caseIconUrl, '" />');
+                        if (data.isCaseLocked) {
+                            html.push('<img class="img-case-locked" title="', data.caseLockedIconTitle, '" alt="', data.caseLockedIconTitle, '" src="', data.caseLockedIconUrl, '" />');
+                        }
+                        html.push('</a>');
+                        row.cells[0].innerHTML = html.join("");
                     }
                 },
                 columns: columns,

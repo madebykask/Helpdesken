@@ -156,6 +156,14 @@ input[type="text"] {
 {
 	width: 200px !important;
 }
+.inputw300
+{
+	width: 300px !important;
+}
+.inputw450
+{
+	width: 450px !important;
+}
 .inputw500
 {
 	width: 500px !important;
@@ -679,6 +687,10 @@ input[type="text"] {
   -webkit-border-radius: 0px !important;
      -moz-border-radius: 0px !important;
           border-radius: 0px !important;
+}
+
+ul.typeahead.dropdown-menu {
+    text-align: left;
 }
 
 .dropup { bottom:100% !important; top:auto !important; }
@@ -2112,7 +2124,7 @@ td.td-bottom-multiselect .btn-group {
 }
 .tooltip-inner {
   max-width: 220px;
-  max-height:100px;
+  max-height:150px;
   padding: 8px;
   color: #fff;
   overflow:hidden;
@@ -3243,6 +3255,10 @@ body.login {
     text-align: right!important;
 }
 
+.min-width-300 {
+    min-width: 300px;
+}
+
 .min-width-500 {
     min-width: 500px!important;
 }
@@ -3736,5 +3752,200 @@ div.modal-body.max-height-600 {
     max-height: 600px
 }
 
+.case-dropdown-area {
+    display: inline-flex;
+    text-align: left;
+}
 
+.case-dropdown-div {
+    padding-left: 10px;
+}
 
+.case-usersearch-textarea {
+    height: 25px;
+    width: 40%;
+    position: absolute;
+}
+
+.case-usersearch-btn {
+    margin-bottom: 0.4em;
+    min-width: 40px;
+    margin-right: 10px;
+}
+
+.case-followers-button-done {
+    padding-top: 1.8em;
+    padding-left: 30px;
+}
+
+.case-followers-toastmessage {
+    z-index: 100051 !important;
+}
+
+.case-intlog-button-done {
+    padding-top: 1.4em;
+    padding-left: 30px;
+}
+
+div.case-dropdown-div > span.btn-group.open > ul > div.options-holder li {
+    display: flex;
+}
+
+.article-import-div {
+    border: 1px solid #f1f1f1;
+    float: left;
+    min-height: 50px;
+    padding: 10px;
+}
+
+div.case-dropdown-div > span.btn-group > button.multiselect.dropdown-toggle.btn {
+    max-width:175px;
+	min-width:175px;
+}
+
+div.case-dropdown-div > span.btn-group > ul.multiselect-container > div.options-holder input
+{
+    display: none;
+}
+
+.case-send-emails-div {
+    overflow: auto;
+    padding: 2px;
+    resize: both;
+    text-align: left;
+    display: inline-block;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    word-wrap: break-word;
+}
+
+.case-email-selected {
+    border: 1px solid #cccccc;
+    padding-left: 2px;
+    padding-right: 2px;
+    margin: 2px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    background-color: #e6e6e6;
+    display: inline-block;
+    line-height: 20px;
+}
+
+.case-send-emails-div-readonly {
+    cursor: not-allowed;
+    background-color: #eeeeee;
+}
+
+.case-popup-div {
+    min-height: 80px;
+    width: 95%!important;
+}
+
+.case-div-standardtext {
+    padding: 1em !important;
+    font-size: 0.9em;
+    cursor: pointer;
+}
+
+.case-standardtext-space {
+    white-space: pre-line;
+}
+
+.case-div-standardtext-accordion {
+    max-width: 35em;
+    min-width: 35em;
+}
+
+.case-standardText-keep-open {
+    z-index: 10001;
+}
+
+table.table-add-order-field-type tr td:first-child {
+    width: 80%
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+td.align-right {
+  text-align: right;
+}
+
+td.align-center {
+  text-align: center;
+}
+
+.table-striped tbody > tr.expanded-row:nth-child(odd) > td,
+.table-striped tbody > tr.expanded-row:nth-child(odd) > th {
+  background-color: #f4f9fc;
+}
+
+.table-striped tbody > tr.expanded-row > td,
+.table-striped tbody > tr.expanded-row > th {
+  background-color: #f5f5f5;
+}
+
+.table-hover tbody tr.expanded-row:hover > td,
+.table-hover tbody tr.expanded-row:hover > th {
+  background-color: #ffefd5;
+}
+
+tr.expanded-toolbar .btn {
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+.content.modalpopup {
+	margin: 20px 20px 20px 20px;
+}
+
+div.content.modalpopup > div > div.tab-content > div.tab-pane > form > div.container > div.row > div.span5 {
+    display: none;
+}
+
+.case-connect-to-parent {
+    width: 1315px;
+    left: 35%;
+}
+
+.modal-wide {
+    width: 1315px;
+    left: 35%;
+}
+
+.img-case-locked {
+    position: absolute;
+    left: 8px;
+    width: 12px;
+    top: 8px;
+}
+
+.img-case-parent {
+    position: relative;
+}
+
+label.checkbox-label-inline {
+    display: inline;
+}
+
+.invoice-files li {
+    list-style: none;
+}
+
+.invoice-files li > span {
+    cursor: pointer;
+     font-weight: normal;
+}
+
+.invoice-files li.selected > span {
+    font-weight: bold;
+}
+
+.invoice-files td {
+    vertical-align: top;
+}

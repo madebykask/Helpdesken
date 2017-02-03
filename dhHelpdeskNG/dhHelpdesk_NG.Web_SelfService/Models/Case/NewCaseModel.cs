@@ -5,6 +5,7 @@
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.Domain;
+    using Shared;
 
     public class JsApplicationOptions
     {
@@ -55,6 +56,7 @@
             CaseFilesModel = caseFiles;
             CaseFieldSettings = caseFieldSettings;
             JsApplicationOptions = jsApplicationOptions;
+            CaseTypeRelatedFields = new List<KeyValuePair<int, string>>();
         }
 
 
@@ -107,6 +109,13 @@
         public List<FieldSettingJSModel> JsFieldSettings { get; set; }
 
         public List<ProductAreaChild> ProductAreaChildren { get; set; }
+
+        public string FollowerUsers { get; set; }
+
+        public SendToDialogModel SendToDialogModel { get; set; }
+
+        public List<KeyValuePair<int,string>> CaseTypeRelatedFields { get; set; }
+
     }
 
 

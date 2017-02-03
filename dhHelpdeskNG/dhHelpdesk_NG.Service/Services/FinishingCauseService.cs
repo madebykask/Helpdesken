@@ -147,7 +147,10 @@
                 errors.Add("FinishingCauseCategory.Name", "Du måste ange en avslutningskategori");
 
             if (finishingCauseCategory.Id == 0)
+            {
+                finishingCauseCategory.FinishingCauseCategoryGUID = Guid.NewGuid();
                 this._finishingCauseCategoryRepository.Add(finishingCauseCategory);
+            }    
             else
                 this._finishingCauseCategoryRepository.Update(finishingCauseCategory);
 
@@ -167,7 +170,10 @@
                 errors.Add("FinishingCause.Name", "Du måste ange en avslutsorsak");
 
             if (finishingCause.Id == 0)
+            {
+                finishingCause.FinishingCauseGUID = Guid.NewGuid();
                 this._finishingCauseRepository.Add(finishingCause);
+            }
             else
                 this._finishingCauseRepository.Update(finishingCause);
 

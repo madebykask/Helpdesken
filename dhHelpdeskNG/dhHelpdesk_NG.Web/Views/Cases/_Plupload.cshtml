@@ -32,11 +32,12 @@
     <div class="modal-body max-height-600">
         <form onsubmit="return false;">
             <div class="form-group">
-                <label >@Translation.Get("Filnamn"): </label>
+                <label >@Translation.Get("1. Skriv ett filnamn (kan lämnas blankt)")</label>
                 <input class="form-control" type="text" id="imgFilename" required/>
             </div>
             <div class="form-group">
-                <label >@(Translation.Get("Förhandsgranska") + " (" +Translation.Get("Kopiera bilddata till Urklipp och tryck Ctrl + V") +")"): </label>
+	            <label >@(Translation.Get("2. Tryck Ctrl+V för att klippa in bilden"))</label>
+				<label>@(Translation.Get("3. Spara för att lägga till på ärendet")) </label>
                 <div id="previewPnl"></div>
             </div>
         </form>

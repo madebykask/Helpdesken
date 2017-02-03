@@ -29,13 +29,18 @@ $(function () {
 
 function addCaseSettingRow() {    
     var displayName = $(overviewParameters.FieldName + " option:selected").text();
+    var itemsOrderArray = [];
+    $("#dataTable").find(".SortableRow").each(function () {
+        itemsOrderArray.push(this.id);
+    });
     $.post(overviewParameters.ControllerAddUrl +
-        '?usergroupId=' + $(overviewParameters.UserGroupId).val() +
-        '&customerId=' + $(overviewParameters.CustomerId).val() +
-        '&labellist=' + $(overviewParameters.FieldName).val() +
-        '&linelist=1' +
-        '&minWidthValue=' + $(overviewParameters.FieldWidth).val() +
-        '&colOrderValue=' + $(overviewParameters.FieldOrder).val(),        
+        "?usergroupId=" + $(overviewParameters.UserGroupId).val() +
+        "&customerId=" + $(overviewParameters.CustomerId).val() +
+        "&labellist=" + $(overviewParameters.FieldName).val() +
+        "&linelist=1" +
+        "&minWidthValue=" + $(overviewParameters.FieldWidth).val() +
+        "&colOrderValue=" + $(overviewParameters.FieldOrder).val() +
+        "&clientOrder=" + itemsOrderArray,
         function (result) {
             if (result == "Repeated")
                 ShowToastMessage(overviewParameters.RepeatedMessage.replace(/\{0\}/, displayName), 'warning', false);
@@ -45,10 +50,15 @@ function addCaseSettingRow() {
    );
 }
 
-function deleteCaseSettingRow(id) {    
+function deleteCaseSettingRow(id) {
+    var itemsOrderArray = [];
+    $("#dataTable").find(".SortableRow").each(function () {
+        itemsOrderArray.push(this.id);
+    });
     $.post(overviewParameters.ControllerDeleteUrl + id +
-        '?usergroupId=' + $(overviewParameters.UserGroupId).val() +
-        '&customerId=' + $(overviewParameters.CustomerId).val(),
+        "?usergroupId=" + $(overviewParameters.UserGroupId).val() +
+        "&customerId=" + $(overviewParameters.CustomerId).val() +
+        "&clientOrder=" + itemsOrderArray,
         function (result) {
             $(overviewParameters.UserGroupList).html(result);
         }

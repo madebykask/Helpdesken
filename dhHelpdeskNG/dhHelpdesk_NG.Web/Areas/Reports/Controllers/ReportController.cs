@@ -94,13 +94,12 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            int customerId = this.OperationContext != null
-                                 ? this.OperationContext.CustomerId
-                                 : SessionFacade.CurrentCustomer.Id;
+			var customerId = OperationContext?.CustomerId ?? SessionFacade.CurrentCustomer.Id;
+			var userId = OperationContext?.UserId ?? SessionFacade.CurrentUser.Id;
 
-            var model = new ReportsOptions();
+			var model = new ReportsOptions();
             var lastState = SessionFacade.ReportService ?? SessionFacade.ReportService;
-            model.ReportServiceOverview = GetReportServiceModel(customerId, lastState);
+            model.ReportServiceOverview = GetReportServiceModel(customerId, userId, lastState);
 
             return this.View(model);
         }
@@ -465,12 +464,12 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
         [BadRequestOnNotValid]
         public int SaveReportFilters(SaveReportFavoriteModel options)
         {
-            int customerId = this.OperationContext != null
-                     ? this.OperationContext.CustomerId
-                     : SessionFacade.CurrentCustomer.Id;
+			var customerId = OperationContext?.CustomerId ?? SessionFacade.CurrentCustomer.Id;
+			var userId = OperationContext?.UserId ?? SessionFacade.CurrentUser.Id;
 
-            var favorite = new ReportFavorite();
+			var favorite = new ReportFavorite();
             favorite.Customer_Id = customerId;
+	        favorite.User_Id = userId;
             favorite.Filters = options.Filters;
             favorite.Name = options.Name;
             favorite.Type = options.OriginalReportId;
@@ -485,20 +484,18 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
         [BadRequestOnNotValid]
         public void DeleteReportFavorite(int id)
         {
-            int customerId = this.OperationContext != null
-                     ? this.OperationContext.CustomerId
-                     : SessionFacade.CurrentCustomer.Id;
-            this.reportService.DeleteCustomerReportFavorite(id, customerId);
+            var customerId = OperationContext?.CustomerId ?? SessionFacade.CurrentCustomer.Id;
+			var userId = OperationContext?.UserId ?? SessionFacade.CurrentUser.Id;
+			this.reportService.DeleteCustomerReportFavorite(id, customerId, userId);
         }
 
         [HttpGet]
         public JsonResult GetReportFilterOptions(int id)
         {
-            int customerId = this.OperationContext != null
-                 ? this.OperationContext.CustomerId
-                 : SessionFacade.CurrentCustomer.Id;
+            var customerId = OperationContext?.CustomerId ?? SessionFacade.CurrentCustomer.Id;
+			var userId = OperationContext?.UserId ?? SessionFacade.CurrentUser.Id;
 
-            var favorite = this.reportService.GetCustomerReportFavorite(id, customerId);
+			var favorite = this.reportService.GetCustomerReportFavorite(id, customerId, userId);
             var model = new ReportFavoriteModel();
             model.Id = favorite.Id;
             model.Filters = favorite.Filters;
@@ -602,16 +599,16 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             return ret;
         }
 
-        private ReportServiceOverviewModel GetReportServiceModel(int customerId, ReportServiceSessionModel lastState = null)
+        private ReportServiceOverviewModel GetReportServiceModel(int customerId, int userId, ReportServiceSessionModel lastState = null)
         {
-            var reports = this.reportService.GetAvailableCustomerReports(customerId);
+			var reports = this.reportService.GetAvailableCustomerReports(customerId);
             var options = this.reportModelFactory.GetReportsOptions(reports);
 
             var model = new ReportServiceOverviewModel();
             model.CustomerId = SessionFacade.CurrentCustomer.Id;
             model.ReportFilter = GetReportFilterModel(model.CustomerId, lastState);
             model.ReportList = GetReportList(lastState != null ? lastState.ReportName : string.Empty, options.Reports);
-            model.ReportFavorites = GetSavedReportFilters(customerId);
+            model.ReportFavorites = GetSavedReportFilters(customerId, userId);
             model.ReportViewerData = new ReportPresentationModel();
             model.ReportGeneratorOptions = GetReportGeneratorOptions(customerId);
             model.ReportGeneratorOptions.FieldIds = new List<int>();
@@ -690,9 +687,9 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             return ret;
         }
 
-        private List<SavedReportFavoriteItemModel> GetSavedReportFilters(int custometId)
+        private List<SavedReportFavoriteItemModel> GetSavedReportFilters(int custometId, int userId)
         {
-            var favorites = this.reportService.GetCustomerReportFavoriteList(custometId);
+			var favorites = this.reportService.GetCustomerReportFavoriteList(custometId, userId);
             var list = favorites.Select(f => new SavedReportFavoriteItemModel
             {
                 Id = f.Id,

@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings
 {
-    using DH.Helpdesk.Common.ValidationAttributes;
+    using Common.ValidationAttributes;
 
     public sealed class FullFieldSettingsModel
     {
@@ -19,19 +19,21 @@
             ProgramFieldSettingsModel program,
             ReceiverFieldSettingsModel receiver,
             SupplierFieldSettingsModel supplier,
-            UserFieldSettingsModel user)
+            UserFieldSettingsModel user,
+            AccountInfoFieldSettingsModel accountInfo)
         {
-            this.OrderTypeId = orderTypeId;
-            this.Delivery = delivery;
-            this.General = general;
-            this.Log = log;
-            this.Orderer = orderer;
-            this.Order = order;
-            this.Other = other;
-            this.Program = program;
-            this.Receiver = receiver;
-            this.Supplier = supplier;
-            this.User = user;
+            OrderTypeId = orderTypeId;
+            Delivery = delivery;
+            General = general;
+            Log = log;
+            Orderer = orderer;
+            Order = order;
+            Other = other;
+            Program = program;
+            Receiver = receiver;
+            Supplier = supplier;
+            User = user;
+            AccountInfo = accountInfo;
         }
 
         [IsId]
@@ -66,5 +68,9 @@
 
         [NotNull]
         public UserFieldSettingsModel User { get; set; }
+
+        [NotNull]
+        public AccountInfoFieldSettingsModel AccountInfo { get; set; }
+
     }
 }

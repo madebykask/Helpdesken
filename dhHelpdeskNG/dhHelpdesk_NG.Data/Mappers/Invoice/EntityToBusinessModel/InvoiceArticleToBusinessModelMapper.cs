@@ -47,7 +47,9 @@ namespace DH.Helpdesk.Dal.Mappers.Invoice.EntityToBusinessModel
                         entity.CustomerId,
                         entity.TextDemand.HasValue && entity.TextDemand.Value? true: false,
                         entity.Blocked.HasValue && entity.Blocked.Value? true: false,
-                        this.customerMapper.Map(entity.Customer));
+                        this.customerMapper.Map(entity.Customer),
+                        entity.LastSyncedDate,
+                        entity.IsActive);
         }
     }
 }

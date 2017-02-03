@@ -43,7 +43,7 @@ ExternalInvoice.prototype = {
 
         var lastRow = $('#externalInvoices > tbody tr:last-child');
         var lastId = $('[id^=btnDeleteExternalInvoice]', lastRow).data('rowid');
-        var row = $('<tr><td><input type="text" id="ExternalInvoices[{0}].Name" name="ExternalInvoices[{0}].Name"></td><td><input type="text" class="inputw100" id="ExternalInvoices[{0}].Value" name="ExternalInvoices[{0}].Value" placeholder="0.00"><input type="hidden" id="ExternalInvoices[{0}].Id" name="ExternalInvoices[{0}].Id" value="0"> </td><td><a id="btnDeleteExternalInvoice{0}" class="btn bt-small" title="Delete" data-rowid="{0}"><i class="icon-remove"></i></a></td></tr>'
+        var row = $('<tr><td><input type="text" id="ExternalInvoices[{0}].Name" name="ExternalInvoices[{0}].Name"></td><td><input type="text" class="inputw100" id="ExternalInvoices[{0}].Amount" name="ExternalInvoices[{0}].Amount" placeholder="0.00"><input type="hidden" id="ExternalInvoices[{0}].Id" name="ExternalInvoices[{0}].Id" value="0"> </td><td><a id="btnDeleteExternalInvoice{0}" class="btn bt-small" title="Delete" data-rowid="{0}"><i class="icon-remove"></i></a></td></tr>'
             .replace(/\{0\}/g, ++lastId)
         );
 
@@ -60,7 +60,7 @@ ExternalInvoice.prototype = {
         "use strict";
         var self = this;
 
-        var btn = $(e.currentTarget);
+        var btn = $(this);
         var row = btn.parents(':eq(1)');
         var rowId = $('[id^=btnDeleteExternalInvoice]', row).data('rowid');
         var isLast = $('#btnAddExternalInvoice', row).length === 1;
@@ -87,8 +87,8 @@ ExternalInvoice.prototype = {
             txtName.prop('id', prefix + '.Name');
             txtName.prop('name', prefix + '.Name');
             var txtValue = $('td:nth-child(2) input[type="text"]', el);
-            txtValue.prop('id', prefix + '.Value');
-            txtValue.prop('name', prefix + '.Value');
+            txtValue.prop('id', prefix + '.Amount');
+            txtValue.prop('name', prefix + '.Amount');
             var txtId = $('td:nth-child(2) input[type="hidden"]', el);
             txtId.prop('id', prefix + '.Id');
             txtId.prop('name', prefix + '.Id');

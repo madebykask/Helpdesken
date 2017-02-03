@@ -13,6 +13,10 @@ function SetValueIfElVisible(el, val, opt, forceApply) {
             if (el.selector == "#case__WorkingGroup_Id") {
                 $("#CaseTemplate_WorkingGroup_Id").val(val);
             }
+
+            if (el.selector == "#case__StateSecondary_Id") {
+                $("#CaseTemplate_StateSecondary_Id").val(val);
+            }
         }
     }
 }
@@ -474,7 +478,7 @@ var ApplyTemplate = function (data, doOverwrite) {
                         if (ou_Id != undefined && ou_Id != null)
                             $('#CaseTemplate_IsAbout_OU_Id').val(ou_Id);
                         else
-                            $('#CaseTemplate_IsAbout_OU _Id').val("");
+                            $('#CaseTemplate_IsAbout_OU_Id').val("");
                     }
 
                     SetValueIfElVisible(el, val, cfg, true);

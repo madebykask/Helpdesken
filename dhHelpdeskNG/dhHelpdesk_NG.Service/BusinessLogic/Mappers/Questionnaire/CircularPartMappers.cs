@@ -73,6 +73,7 @@
                         {
                             Guid = x.Guid,
                             CaseNumber = x.Case.CaseNumber,
+                            CaseId = x.Case.Id,
                             CaseDescription = x.Case.Description,
                             Caption = x.Case.Caption,
                             Email = x.Case.PersonsEmail

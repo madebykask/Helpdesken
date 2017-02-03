@@ -13,8 +13,9 @@
                 string label,
                 bool required,
                 string emailIdentifier,
-                string defaultValue)
-                : base(show, showInList, showExternal, label, required, emailIdentifier)
+                string defaultValue,
+                string help)
+                : base(show, showInList, showExternal, label, required, emailIdentifier, help)
         {
             this.DefaultValue = defaultValue;
         }

@@ -1,0 +1,13 @@
+﻿
+@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.ContactEditModel
+
+<h4>@Translation.GetCoreTextTranslation("Kontakt")</h4>
+<table class="tableform">
+    <tbody>
+        @Html.EditorFor(m => m.Id, "Fields/Text")
+        @Html.EditorFor(m => m.Name, "Fields/Text")
+        @Html.EditorFor(m => m.Phone, "Fields/Text")
+        @Html.EditorFor(m => m.Email, "Fields/Text")
+    </tbody>
+</table>

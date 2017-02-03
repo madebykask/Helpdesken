@@ -24,7 +24,15 @@
         htmlAttributes = new Dictionary<string, object>(1);
     }
 
-    htmlAttributes.Add("class", "span2");
+    if (htmlAttributes.Keys.Contains("class"))
+    {
+        var passedClass = htmlAttributes["class"];
+        htmlAttributes["class"] = string.Format("span2 {0}", passedClass);
+    }
+    else
+    {
+        htmlAttributes.Add("class", "span2");
+    }
 
     var dateFormat = Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern;
     string formattedDate = null;

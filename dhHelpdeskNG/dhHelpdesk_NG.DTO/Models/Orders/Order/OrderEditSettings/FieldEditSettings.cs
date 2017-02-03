@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditSettings
 {
-    using DH.Helpdesk.Common.ValidationAttributes;
+    using Common.ValidationAttributes;
 
     public class FieldEditSettings
     {
@@ -8,12 +8,14 @@
                 bool show, 
                 string caption, 
                 bool required, 
-                string emailIdentifier)
+                string emailIdentifier,
+                string help)
         {
-            this.EmailIdentifier = emailIdentifier;
-            this.Required = required;
-            this.Caption = caption;
-            this.Show = show;
+            EmailIdentifier = emailIdentifier;
+            Required = required;
+            Caption = caption;
+            Show = show;
+            Help = help;
         }
 
         public bool Show { get; private set; }
@@ -24,5 +26,7 @@
         public bool Required { get; private set; }
 
         public string EmailIdentifier { get; private set; } 
+
+        public string Help { get; private set; }
     }
 }

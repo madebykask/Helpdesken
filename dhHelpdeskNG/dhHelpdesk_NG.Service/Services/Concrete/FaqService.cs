@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services.Concrete
+﻿using DH.Helpdesk.Common.Enums;
+
+namespace DH.Helpdesk.Services.Services.Concrete
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -108,7 +110,17 @@
 
         public void UpdateFaq(ExistingFaq faq)
         {
-            this.faqRepository.Update(faq);
+            switch (faq.LanguageId)
+            {
+                case LanguageIds.Swedish:
+                    faqRepository.UpdateSwedishFaq(faq);
+                    break;
+
+                default:
+                    faqRepository.UpdateOtherLanguageFaq(faq);
+                    break;
+            }
+
             this.faqRepository.Commit();
         }
 
@@ -338,6 +350,69 @@
         public byte[] GetFileContentByFaqIdAndFileName(int faqId, string basePath, string fileName)
         {
             return faqFileRepository.GetFileContentByFaqIdAndFileName(faqId, basePath, fileName);
+        }
+
+        public void UpdateCategory(EditCategory editedCategory)
+        {
+            switch (editedCategory.LanguageId)
+            {
+                case LanguageIds.Swedish:
+                    faqCategoryRepository.UpdateSwedishCategory(editedCategory);
+                    break;
+
+                default:
+                    faqCategoryRepository.UpdateOtherLanguageCategory(editedCategory);
+                    break;
+            }
+
+            faqCategoryRepository.Commit();
+        }
+
+        public Faq GetFaqById(int id, int languageId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                Faq result = null;
+                var repository = uow.GetRepository<FaqEntity>();
+                var repositoryLng = uow.GetRepository<FaqLanguageEntity>();
+
+                var faqEntity = repository.GetAll()
+                                .GetById(id)
+                                .SingleOrDefault();
+
+                if (faqEntity != null)
+                {
+                    result = new Faq
+                    {
+                        Answer = faqEntity.Answer,
+                        ChangedDate = faqEntity.ChangedDate,
+                        CreatedDate = faqEntity.CreatedDate,
+                        CustomerId = faqEntity.Customer_Id.Value,
+                        FaqCategoryId = faqEntity.FAQCategory_Id,
+                        Id = faqEntity.Id,
+                        InformationIsAvailableForNotifiers = faqEntity.InformationIsAvailableForNotifiers != 0,
+                        InternalAnswer = faqEntity.Answer_Internal,
+                        Question = faqEntity.FAQQuery,
+                        ShowOnStartPage = faqEntity.ShowOnStartPage != 0,
+                        UrlOne = faqEntity.URL1,
+                        UrlTwo = faqEntity.URL2,
+                        WorkingGroupId = faqEntity.WorkingGroup_Id
+                    };
+                }
+
+                if (languageId != LanguageIds.Swedish && result != null)
+                {
+                    var faqLng = repositoryLng.GetAll().FirstOrDefault(x => x.FAQ_Id == id && x.Language_Id == languageId);
+                    if (faqLng != null)
+                    {
+                        result.Answer = faqLng.Answer;
+                        result.InternalAnswer = faqLng.Answer_Internal;
+                        result.Question = faqLng.FAQQuery;
+                    }
+                }
+
+                return result;
+            }
         }
     }
 }

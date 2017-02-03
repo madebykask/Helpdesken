@@ -1,5 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -37,6 +39,8 @@
     <TargetFrameworkProfile />
     <MvcProjectUpgradeChecked>true</MvcProjectUpgradeChecked>
     <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -94,6 +98,10 @@
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
       <Private>True</Private>
@@ -122,6 +130,14 @@
       <HintPath>..\packages\Ninject.MVC5.3.2.1.0\lib\net45-full\Ninject.Web.Mvc.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Ninject.Web.WebApi, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.Web.WebApi.3.2.4.0\lib\net45-full\Ninject.Web.WebApi.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ninject.Web.WebApi.WebHost, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.Web.WebApi.WebHost.3.2.4.0\lib\net45-full\Ninject.Web.WebApi.WebHost.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="PostSharp, Version=4.0.36.0, Culture=neutral, PublicKeyToken=b13fd38b8f9c99d7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\PostSharp.4.0.36\lib\net35-client\PostSharp.dll</HintPath>
@@ -140,9 +156,7 @@
     <Reference Include="System.IdentityModel.Tokens.ValidatingIssuerNameRegistry">
       <HintPath>..\packages\System.IdentityModel.Tokens.ValidatingIssuerNameRegistry.4.5.1\lib\net45\System.IdentityModel.Tokens.ValidatingIssuerNameRegistry.dll</HintPath>
     </Reference>
-    <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.dll</HintPath>
-    </Reference>
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
       <Private>True</Private>
@@ -212,6 +226,7 @@
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.XML">
       <Private>True</Private>
     </Reference>
@@ -229,6 +244,38 @@
     <Compile Include="..\CommonAssembly\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="App_Start\BundleConfig.Invoices.cs" />
+    <Compile Include="App_Start\BundleConfig.Orders.cs" />
+    <Compile Include="Areas\Admin\Controllers\Api\InvoiceApiController.cs" />
+    <Compile Include="Areas\Invoices\Controllers\WebApi\InvoicesApiController.cs" />
+    <Compile Include="Areas\Invoices\Models\BaseIndexModel.cs" />
+    <Compile Include="Areas\Invoices\Models\IndexModelType.cs" />
+    <Compile Include="Areas\Invoices\Models\InvoiceActionParam.cs" />
+    <Compile Include="Areas\Invoices\Models\InvoiceActionParams.cs" />
+    <Compile Include="Areas\Invoices\Models\InvoiceFilesViewModel.cs" />
+    <Compile Include="Areas\Invoices\Models\InvoiceFileViewModel.cs" />
+    <Compile Include="Areas\Invoices\Models\InvoiceOverviewFilterModel.cs" />
+    <Compile Include="Areas\Invoices\Models\InvoiceOverviewViewModel.cs" />
+    <Compile Include="Areas\Invoices\Models\InvoiceValuesParams.cs" />
+    <Compile Include="Areas\Invoices\Models\LogInvoiceParams.cs" />
+    <Compile Include="Areas\Orders\Controllers\WebApi\OrdersApiController.cs" />
+    <Compile Include="Areas\Orders\Infrastructure\Enum\OrderSettingWebType.cs" />
+    <Compile Include="Areas\Orders\Models\OrderFieldSettings\FieldSettings\AccountInfoFieldSettingsModel.cs" />
+    <Compile Include="Areas\Orders\Models\OrderFieldSettings\FieldSettings\ContactFieldSettingsModel.cs" />
+    <Compile Include="Areas\Orders\Models\OrderFieldSettings\FieldSettings\OrderFieldTypeSettingsModel.cs" />
+    <Compile Include="Areas\Orders\Models\OrderFieldSettings\FieldSettings\OrderFieldTypeValueSettingsModel.cs" />
+    <Compile Include="Areas\Orders\Models\Order\OrderEdit\ContactEditModel.cs" />
+    <Compile Include="Areas\Orders\Models\Order\OrderEdit\AccountInfoEditModel.cs" />
+    <Compile Include="Areas\Orders\Models\Order\OrderEdit\UserInfoEditModel.cs" />
+    <Compile Include="Areas\Invoices\Controllers\OverviewController.cs" />
+    <Compile Include="Areas\Invoices\InvoicesAreaRegistration.cs" />
+    <Compile Include="Areas\Invoices\Models\InvoiceListItemViewModel.cs" />
+    <Compile Include="Areas\Invoices\Models\LogInvoiceItemViewModel.cs" />
+    <Content Include="Areas\Orders\Views\OrderFieldSettings\Partials\OrderFieldWebTypes.cshtml" />
+    <Content Include="Areas\Invoices\Scripts\Pages\invoiceFiles.js" />
+    <Content Include="Areas\Invoices\Views\Overview\Files.cshtml" />
+    <None Include="Areas\Orders\Views\Orders\EditorTemplates\Fields\FlagsList.cshtml" />
+    <None Include="Areas\Orders\Views\Orders\EditorTemplates\Fields\FlagListItem.cshtml" />
     <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Infrastructure\Attributes\RequiredIfNotEmptyAttribute.cs" />
     <Compile Include="Infrastructure\Extensions\ProperyExtensions.cs" />
@@ -441,6 +488,9 @@
     <Content Include="Areas\Admin\Content\templates\BusinessRule\rule.tmpl.html" />
     <Content Include="Areas\Admin\Content\templates\BusinessRule\condition.tmpl.html" />
     <Content Include="Areas\Admin\Content\templates\BusinessRule\condition-rows.tmpl.html" />
+    <Content Include="Areas\Orders\Content\js\OrderSettings\orderSettings.edit.js" />
+    <Content Include="Areas\Orders\Content\js\Order\order.edit.js" />
+    <Content Include="Areas\Invoices\Scripts\Pages\invoicesOverview.js" />
     <Content Include="Areas\Reports\Content\js\reportViewer.logic.js" />
     <Content Include="Areas\Reports\Content\js\reports.js" />
     <Content Include="Content\bootstrap-tagsinput.css" />
@@ -460,6 +510,8 @@
     <Content Include="Content\icons\ico-doc-black.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\icons\case_locked.png" />
+    <Content Include="Content\icons\case_log_new.png" />
     <Content Include="Content\img\ajax-loader.GIF" />
     <Content Include="Content\img\clickmultimenu-1.png" />
     <Content Include="Content\img\clickmultimenu-2.png" />
@@ -479,6 +531,8 @@
     <Content Include="Content\img\ic_sentiment_very_satisfied_black_24dp_2x.png" />
     <Content Include="Content\js\Account\order.js" />
     <Content Include="Areas\Admin\Content\js\Users\_input.js" />
+    <Content Include="Content\js\additional-methods.js" />
+    <Content Include="Content\js\additional-methods.min.js" />
     <Content Include="Content\js\AdvancedSearch\index.specialfilter.js" />
     <Content Include="Content\js\AdvancedSearch\index.logic.js" />
     <Content Include="Content\js\bootstrap-tagsinput.js" />
@@ -518,8 +572,11 @@
     <Content Include="Content\js\bootstrap-tagsinput.min.js" />
     <Content Include="Content\js\Cases\case.templates.js" />
     <Content Include="Content\js\Cases\caseByIds.logic.js" />
+    <Content Include="Content\js\Cases\Dialogs\CaseCharge.js" />
     <Content Include="Content\js\Cases\Dialogs\_caseAddFollowersSearch.js" />
+    <Content Include="Content\js\Cases\Dialogs\_caseConnectToParent.js" />
     <Content Include="Content\js\Cases\Dialogs\_caseIntLogSearch.js" />
+    <Content Include="Content\js\Cases\Dialogs\_caseUserSearchCommon.js" />
     <Content Include="Content\js\Cases\externalInvoice.js" />
     <Content Include="Content\js\Cases\_caseLogInput.js" />
     <Content Include="Content\js\Cases\components\BaseField.js" />
@@ -1137,6 +1194,7 @@
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\JavaScriptConvertExtention.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\UserFormatterExtension.cs" />
     <Compile Include="Infrastructure\ModelFactories\Case\Concrete\CaseRuleFactory.cs" />
+    <Compile Include="Infrastructure\RouteValueDictionaryHelper.cs" />
     <Compile Include="Infrastructure\SelectListMapper.cs" />
     <Compile Include="Infrastructure\Enums.cs" />
     <Compile Include="Infrastructure\Extensions\BooleanExtansions.cs" />
@@ -1228,11 +1286,19 @@
     <Compile Include="Infrastructure\Tools\MimeHelper.cs" />
     <Compile Include="Infrastructure\Tools\WebMvcHelper.cs" />
     <Compile Include="Infrastructure\Translate\Translator.cs" />
+    <Compile Include="Infrastructure\UrlHelpers\Api\Admin\WebApiAdminUrlName.Invoice.cs" />
+    <Compile Include="Infrastructure\UrlHelpers\Api\Invoices\WebApiInvoicesUrlName.Invoices.cs" />
+    <Compile Include="Infrastructure\UrlHelpers\Api\Orders\WebApiOrdersUrlName.Orders.cs" />
+    <Compile Include="Infrastructure\UrlHelpers\Api\WebApiUrlName.cs" />
     <Compile Include="Infrastructure\UrlHelpers\MvcUrlNameBase.cs" />
+    <Compile Include="Infrastructure\UrlHelpers\Mvc\Invoices\MvcInvoicesUrlName.cs" />
     <Compile Include="Infrastructure\UrlHelpers\Mvc\MvcUrlName.cs" />
     <Compile Include="Infrastructure\UrlHelpers\Mvc\MvcUrlName.Feedback.cs" />
     <Compile Include="Infrastructure\UrlHelpers\Mvc\MvcUrlName.Questionnaire.cs" />
+    <Compile Include="Infrastructure\UrlHelpers\Mvc\Orders\MvcOrdersUrlName.cs" />
+    <Compile Include="Infrastructure\UrlHelpers\Mvc\Orders\MvcOrdersUrlName.Orders.cs" />
     <Compile Include="Infrastructure\UrlHelpers\WebApiUrlNameBase.cs" />
+    <Compile Include="Infrastructure\Utilities\PropertyHelper.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\CacheContext.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\CustomerContext.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\UserContext.cs" />
@@ -1334,6 +1400,7 @@
     <Compile Include="Models\BulletinBoardInputViewModel.cs" />
     <Compile Include="Models\CalendarInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\LockedCaseOverviewModel.cs" />
+    <Compile Include="Models\CaseRules\CaseCurrentDataModel.cs" />
     <Compile Include="Models\CaseRules\CaseRuleModel.cs" />
     <Compile Include="Models\CaseSolutionSettingModel.cs" />
     <Compile Include="Models\CaseSolution\CaseSolutionIndex.cs" />
@@ -1346,7 +1413,10 @@
     <Compile Include="Models\Case\CaseRemainingTimeTable.cs" />
     <Compile Include="Models\Case\CaseStatisticsViewModel.cs" />
     <Compile Include="Models\Case\CaseInvoiceModel.cs" />
-    <Compile Include="Models\Case\ExternalInvoiceModel.cs" />
+    <Compile Include="Models\CheckBoxListItem.cs" />
+    <Compile Include="Models\Feedback\FeedbackStatisticsViewModel.cs" />
+    <Compile Include="Models\Feedback\StatisticsFilter.cs" />
+    <Compile Include="Models\Invoice\ExternalInvoiceModel.cs" />
     <Compile Include="Models\Case\Input\CaseEditInput.cs" />
     <Compile Include="Models\Case\MyFavoriteFilterModel.cs" />
     <Compile Include="Models\Case\Output\CaseSeachFilterData.cs" />
@@ -1405,6 +1475,7 @@
     <Compile Include="Models\CheckLists\CheckListActionsInputModel.cs" />
     <Compile Include="Models\CheckLists\CheckListsModel.cs" />
     <Compile Include="Models\CheckLists\WorkingGroupMapperModel.cs" />
+    <Compile Include="Models\Common\NullableIdParams.cs" />
     <Compile Include="Models\Contract\ContractFileViewModel.cs" />
     <Compile Include="Models\Contract\ContractIndexViewModel.cs" />
     <Compile Include="Models\Contract\ContractsSettingViewModel.cs" />
@@ -1424,6 +1495,8 @@
     <Compile Include="Areas\Admin\Models\Invoice\ArticlesImportModel.cs" />
     <Compile Include="Models\Invoice\CaseFileModel.cs" />
     <Compile Include="Models\Invoice\CaseInvoiceArticlesModel.cs" />
+    <Compile Include="Models\Invoice\InvoiceRowViewModel.cs" />
+    <Compile Include="Models\Login\UserStatistics.cs" />
     <Compile Include="Models\Profile\UserCustomersSettingsViewModel.cs" />
     <Compile Include="Models\Projects\ProjectOverviewSorting.cs" />
     <Compile Include="Models\Questionnaire\Input\CircularCaseFilter.cs" />
@@ -1860,7 +1933,20 @@
     <Content Include="Areas\Admin\Views\BusinessRule\_InputRule.cshtml" />
     <Content Include="Areas\Admin\Views\BusinessRule\_RuleCondition.cshtml" />
     <Content Include="Areas\Admin\Views\BusinessRule\_RuleAction.cshtml" />
-    <Content Include="Content\js\Orders\order.edit.js" />
+    <Content Include="log4net.config" />
+    <Content Include="Areas\Orders\Views\Orders\EditorTemplates\UserInfoEditModel.cshtml" />
+    <Content Include="Areas\Orders\Views\Orders\EditorTemplates\Fields\List.cshtml" />
+    <Content Include="Areas\Orders\Views\Orders\EditorTemplates\AccountInfoEditModel.cshtml" />
+    <Content Include="Areas\Orders\Views\Orders\EditorTemplates\Fields\Flag.cshtml" />
+    <Content Include="Areas\Orders\Views\OrderFieldSettings\EditorTemplates\OrderFieldTypeSettingsModel.cshtml" />
+    <Content Include="Areas\Orders\Views\OrderFieldSettings\Modals\OrderFieldTypeModal.cshtml" />
+    <Content Include="Areas\Orders\Views\Orders\EditorTemplates\Fields\MultiSelectList.cshtml" />
+    <Content Include="Areas\Invoices\Views\web.config" />
+    <Content Include="Areas\Invoices\Views\Overview\Index.cshtml" />
+    <Content Include="Areas\Invoices\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Invoices\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Orders\Views\Orders\EditorTemplates\ContactEditModel.cshtml" />
+    <Compile Include="Infrastructure\UrlHelpers\Mvc\Invoices\MvcOrdersUrlName.Overview.cs" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx" />
     <Content Include="Content\js\Shared\custom.validation.reuiredifnotempty.js" />
@@ -2513,6 +2599,10 @@
     <Content Include="Views\Feedback\ThankYou.cshtml" />
     <Content Include="Views\Cases\ModalDialogs\_CaseAddFollowers.cshtml" />
     <Content Include="Views\Cases\ModalDialogs\_SendIntLogToDiallog.cshtml" />
+    <Content Include="Views\Cases\_ParentCases.cshtml" />
+    <Content Include="Views\Cases\ModalDialogs\_CaseCharge.cshtml" />
+    <Content Include="Views\Login\GetUserCount.cshtml" />
+    <Content Include="Views\Feedback\Statistics.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">
@@ -3229,10 +3319,8 @@
     <Content Include="Areas\Admin\Views\Users\_Appearance.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\Admin\Controllers\Api\" />
     <Folder Include="Areas\Inventory\Infrastucture\" />
     <Folder Include="Infrastructure\ModelFactories\Problems\Concrete\" />
-    <Folder Include="Infrastructure\UrlHelpers\Api\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Login\Login.cshtml" />
@@ -3348,4 +3436,11 @@
     </PreBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
 </Project>

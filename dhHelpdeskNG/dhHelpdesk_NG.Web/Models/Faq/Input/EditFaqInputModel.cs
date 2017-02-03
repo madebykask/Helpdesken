@@ -30,5 +30,7 @@
         public int? WorkingGroupId { get; set; }
 
         public int CategoryId { get; set; }
+
+        public int LanguageId { get; set; }
     }
 }

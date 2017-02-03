@@ -19,7 +19,8 @@
             int? workingGroupId,
             bool informationIsAvailableForNotifiers,
             bool showOnStartPage,
-            DateTime changedDate)
+            DateTime changedDate,
+            int languageId)
         {
             this.Id = id;
             this.FaqCategoryId = faqCategoryId;
@@ -32,6 +33,7 @@
             this.InformationIsAvailableForNotifiers = informationIsAvailableForNotifiers;
             this.ShowOnStartPage = showOnStartPage;
             this.ChangedDate = changedDate;
+            this.LanguageId = languageId;
         }
 
         #endregion
@@ -64,6 +66,8 @@
 
         [IsId]
         public int? WorkingGroupId { get; private set; }
+
+        public int LanguageId { get; set; }
 
         #endregion
     }

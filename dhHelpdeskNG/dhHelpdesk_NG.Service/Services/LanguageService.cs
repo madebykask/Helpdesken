@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using System.Globalization;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System;
     using System.Collections.Generic;
@@ -32,6 +34,8 @@
         /// The result.
         /// </returns>
         IEnumerable<LanguageOverview> GetActiveLanguages();
+
+        List<ItemOverview> FindActiveLanguageOverivews();
     }
 
     public class LanguageService : ILanguageService
@@ -127,6 +131,12 @@
         public IEnumerable<LanguageOverview> GetActiveLanguages()
         {
             return this._languageRepository.GetActiveLanguages();
+        }
+
+        public List<ItemOverview> FindActiveLanguageOverivews()
+        {
+            var overviews = this._languageRepository.GetAll().Select(l => new { Name = l.Name, Value = l.Id.ToString() }).ToList();
+            return overviews.Select(o => new ItemOverview(o.Name, o.Value.ToString(CultureInfo.InvariantCulture))).ToList();
         }
     }
 }

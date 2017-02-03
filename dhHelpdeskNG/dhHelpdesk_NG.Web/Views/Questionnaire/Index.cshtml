@@ -25,7 +25,7 @@
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
             <li class="active"><a href="#questionnaire">@Translation.GetCoreTextTranslation("Enkät")</a></li>
-            @*<li><a href="#feedback">@Translation.GetCoreTextTranslation("Återkoppling")</a></li>*@
+            <li><a href="#feedback">@Translation.GetCoreTextTranslation("Återkoppling")</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="questionnaire">
@@ -95,8 +95,11 @@
                             <th style="cursor: pointer; cursor: hand; width: 25%">
                                 @Translation.GetCoreTextTranslation("Namn")
                             </th>
-                            <th style="cursor: pointer; cursor: hand; width: 75%">
+                            <th style="cursor: pointer; cursor: hand; width: 65%">
                                 @Translation.GetCoreTextTranslation("Text")
+                            </th>
+                            <th style="cursor: pointer; cursor: hand; width: 10%">
+                                @Translation.Get("Statistik")
                             </th>
                         </tr>
                         </thead>
@@ -112,6 +115,11 @@
                                 <td>
                                     <a href="@Url.Action("EditFeedback", "Feedback", new {feedbackId = item.Id, languageId = LanguageIds.Swedish})">
                                         @item.Description.ForHtmlView()
+                                    </a>
+                                </td>
+                                <td>
+                                    <a class="btn" href="@Url.Action("Statistics", "Feedback", new { feedbackId = item.Id})" rel="tooltip" title="@Translation.GetCoreTextTranslation("Statistik")">
+                                        <i class="icon-signal"></i>
                                     </a>
                                 </td>
                             </tr>

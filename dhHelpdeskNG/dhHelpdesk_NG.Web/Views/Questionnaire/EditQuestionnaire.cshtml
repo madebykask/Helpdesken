@@ -11,18 +11,20 @@
         <div class="pull-left">
             <ul class="secnav">
                 <li>
-                    <input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn" />
+                    <input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn"/>
                 </li>
-                <li>
-                    @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "DeleteQuestionnaire",
-                        new { questionnaireId = Model.Id },
-                        new
-                        {
-                            @class = "btn deleteDialog",
-                            deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post",
-                                Enums.TranslationSource.TextTranslation) + "?"
-                        })
-                </li>
+                @if (!Model.IsSent)
+                {
+                    <li>
+                        @Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), "DeleteQuestionnaire",
+                            new {questionnaireId = Model.Id},
+                            new
+                            {
+                                @class = "btn deleteDialog",
+                                deleteDialogText = Translation.GetCoreTextTranslation("Är du säker på att du vill ta bort aktuell post") + "?"
+                            })
+                    </li>
+                }
                 <li>
                     @Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "Index", "Questionnaire", null, new { @class = "btn" })
                 </li>

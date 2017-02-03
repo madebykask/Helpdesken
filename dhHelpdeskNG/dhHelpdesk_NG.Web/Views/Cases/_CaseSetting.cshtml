@@ -164,7 +164,32 @@
                                     </td>
                                 </tr>             
                             }
+                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Category_Id.ToString()) == 1)
+                            {
+                                <tr>
+                                    <td class="span3">
+                                        @{
+                                            var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
+                                        }
+                                        @lbl
+                                    </td>
+                                    <td>
+                                        @Html.CheckBoxFor(m => Model.CategoryCheck, new { @class = "switchcheckbox" })
+                                    </td>
+                                    <td colspan="2">
+                                        <select id="lstCategory" name="lstCategory" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                            @foreach (var e in Model.Categories)
+                                            {
+                                                if (e.IsActive != 0)
+                                                {
+                                                    <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedCategory)>@Translation.Get(e.Name, Enums.TranslationSource.TextTranslation) </option>
+                                                }
+                                            }
+                                        </select>
+                                    </td>
 
+                                </tr>
+                            }
                             @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()) == 1)
                             {                                         
                                 <tr>
