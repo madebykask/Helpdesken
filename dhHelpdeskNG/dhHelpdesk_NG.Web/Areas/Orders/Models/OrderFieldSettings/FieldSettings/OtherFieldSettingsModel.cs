@@ -19,6 +19,8 @@
             this.FileName = fileName;
         }
 
+        public string Header { get; set; }
+
         [NotNull]
         [LocalizedDisplay("Filnamn")]
         public TextFieldSettingsModel FileName { get; set; }

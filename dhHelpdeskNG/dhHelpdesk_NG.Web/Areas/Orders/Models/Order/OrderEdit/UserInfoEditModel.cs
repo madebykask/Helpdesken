@@ -68,6 +68,8 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
             OrdererPhone = ordererPhone;
         }
 
+        public string Header { get; set; }
+
         [NotNull]
         public ConfigurableFieldModel<string> PersonalIdentityNumber { get; set; }
 

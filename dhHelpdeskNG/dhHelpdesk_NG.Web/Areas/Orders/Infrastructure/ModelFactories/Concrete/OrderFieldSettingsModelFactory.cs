@@ -81,18 +81,24 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                         CreateTextFieldSettingModel(settings.DeliveryInfo3),
                         CreateTextFieldSettingModel(settings.DeliveryOuId),
                         CreateTextFieldSettingModel(settings.Name),
-                        CreateTextFieldSettingModel(settings.Phone));
+                        CreateTextFieldSettingModel(settings.Phone))
+            {
+                Header = settings.Header
+            };
         }
 
         private static GeneralFieldSettingsModel CreateGeneralSettings(GeneralFieldSettings settings)
         {
             return new GeneralFieldSettingsModel(
-                        CreateFieldSettingModel(settings.OrderNumber),
-                        CreateFieldSettingModel(settings.Customer),
-                        CreateTextFieldSettingModel(settings.Administrator),
-                        CreateTextFieldSettingModel(settings.Domain),
-                        CreateTextFieldSettingModel(settings.OrderDate),
-                        CreateTextFieldSettingModel(settings.Status));
+                CreateFieldSettingModel(settings.OrderNumber),
+                CreateFieldSettingModel(settings.Customer),
+                CreateTextFieldSettingModel(settings.Administrator),
+                CreateTextFieldSettingModel(settings.Domain),
+                CreateTextFieldSettingModel(settings.OrderDate),
+                CreateTextFieldSettingModel(settings.Status))
+            {
+                Header = settings.Header
+            };
         }
 
         private static LogFieldSettingsModel CreateLogSettings(LogFieldSettings settings)
@@ -119,7 +125,10 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                         CreateFieldSettingModel(settings.AccountingDimension2),
                         CreateTextFieldSettingModel(settings.AccountingDimension3),
                         CreateFieldSettingModel(settings.AccountingDimension4),
-                        CreateTextFieldSettingModel(settings.AccountingDimension5));
+                        CreateTextFieldSettingModel(settings.AccountingDimension5))
+            {
+                Header = settings.Header
+            };
         }
 
         private static OrderFieldSettingsModel CreateOrderSettings(OrderFieldSettings settings)
@@ -136,7 +145,10 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                         CreateTextFieldSettingModel(settings.OrderRow8),
                         CreateTextFieldSettingModel(settings.Configuration),
                         CreateTextFieldSettingModel(settings.OrderInfo),
-                        CreateTextFieldSettingModel(settings.OrderInfo2));
+                        CreateTextFieldSettingModel(settings.OrderInfo2))
+            {
+                Header = settings.Header
+            };
         }
 
         private static OtherFieldSettingsModel CreateOtherSettings(OtherFieldSettings settings)
@@ -144,14 +156,20 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
             return new OtherFieldSettingsModel(
                         CreateTextFieldSettingModel(settings.FileName),
                         CreateTextFieldSettingModel(settings.CaseNumber),
-                        CreateTextFieldSettingModel(settings.Info));
+                        CreateTextFieldSettingModel(settings.Info))
+            {
+                Header = settings.Header
+            };
         }
 
         private static ProgramFieldSettingsModel CreateProgramSettings(ProgramFieldSettings settings)
         {
             return new ProgramFieldSettingsModel(
                         CreateTextFieldSettingModel(settings.Program),
-                        CreateTextFieldSettingModel(settings.InfoProduct));
+                        CreateTextFieldSettingModel(settings.InfoProduct))
+            {
+                Header = settings.Header
+            };
         }
 
         private static ReceiverFieldSettingsModel CreateReceiverSettings(ReceiverFieldSettings settings)
@@ -162,7 +180,10 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                         CreateTextFieldSettingModel(settings.ReceiverEmail),
                         CreateTextFieldSettingModel(settings.ReceiverPhone),
                         CreateTextFieldSettingModel(settings.ReceiverLocation),
-                        CreateTextFieldSettingModel(settings.MarkOfGoods));
+                        CreateTextFieldSettingModel(settings.MarkOfGoods))
+            {
+                Header = settings.Header
+            };
         }
 
         private static SupplierFieldSettingsModel CreateSupplierSettings(SupplierFieldSettings settings)
@@ -170,7 +191,10 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
             return new SupplierFieldSettingsModel(
                         CreateTextFieldSettingModel(settings.SupplierOrderNumber),
                         CreateTextFieldSettingModel(settings.SupplierOrderDate),
-                        CreateTextFieldSettingModel(settings.SupplierOrderInfo));
+                        CreateTextFieldSettingModel(settings.SupplierOrderInfo))
+            {
+                Header = settings.Header
+            };
         }        
 
         private static UserFieldSettingsModel CreateUserSettings(UserFieldSettings settings)
@@ -196,7 +220,10 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                         CreateTextFieldSettingModel(settings.Responsibility),
                         CreateTextFieldSettingModel(settings.Activity),
                         CreateTextFieldSettingModel(settings.Manager),
-                        CreateTextFieldSettingModel(settings.ReferenceNumber));
+                        CreateTextFieldSettingModel(settings.ReferenceNumber))
+            {
+                Header = settings.Header
+            };
         }
 
         private static AccountInfoFieldSettingsModel CreateAccountInfoSettings(AccountInfoFieldSettings settings)
@@ -217,15 +244,6 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                 );
         }
 
-        private static ContactFieldSettingsModel CreateContactSettings(ContactFieldSettings settings)
-        {
-            return new ContactFieldSettingsModel(
-                    CreateTextFieldSettingModel(settings.Id),
-                    CreateTextFieldSettingModel(settings.Name),
-                    CreateTextFieldSettingModel(settings.Phone),
-                    CreateTextFieldSettingModel(settings.Email)
-                );
-        }
 
         private static OrderFieldTypeSettingsModel CreateOrderFieldTypeSettingModel(OrderFieldTypeSettings settings, OrderFieldTypes type)
         {
@@ -291,7 +309,10 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                         CreateTextFieldSettingForUpdate(settings.DeliveryInfo3),
                         CreateTextFieldSettingForUpdate(settings.DeliveryOuId),
                         CreateTextFieldSettingForUpdate(settings.Name),
-                        CreateTextFieldSettingForUpdate(settings.Phone));
+                        CreateTextFieldSettingForUpdate(settings.Phone))
+            {
+                Header = settings.Header
+            };
         }
 
         private static GeneralFieldSettings CreateGeneralForUpdate(GeneralFieldSettingsModel settings)
@@ -302,7 +323,10 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                         CreateTextFieldSettingForUpdate(settings.Administrator),
                         CreateTextFieldSettingForUpdate(settings.Domain),
                         CreateTextFieldSettingForUpdate(settings.OrderDate),
-                        CreateTextFieldSettingForUpdate(settings.Status));
+                        CreateTextFieldSettingForUpdate(settings.Status))
+            {
+                Header = settings.Header
+            };
         }
 
         private static LogFieldSettings CreateLogForUpdate(LogFieldSettingsModel settings)
@@ -329,7 +353,10 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                         CreateFieldSettingForUpdate(settings.AccountingDimension2),
                         CreateTextFieldSettingForUpdate(settings.AccountingDimension3),
                         CreateFieldSettingForUpdate(settings.AccountingDimension4),
-                        CreateTextFieldSettingForUpdate(settings.AccountingDimension5));
+                        CreateTextFieldSettingForUpdate(settings.AccountingDimension5))
+            {
+                Header = settings.Header
+            };
         }
 
         private static OrderFieldSettings CreateOrderForUpdate(OrderFieldSettingsModel settings)
@@ -346,7 +373,10 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                         CreateTextFieldSettingForUpdate(settings.OrderRow8),
                         CreateTextFieldSettingForUpdate(settings.Configuration),
                         CreateTextFieldSettingForUpdate(settings.OrderInfo),
-                        CreateTextFieldSettingForUpdate(settings.OrderInfo2));
+                        CreateTextFieldSettingForUpdate(settings.OrderInfo2))
+            {
+                Header = settings.Header
+            };
         }
 
         private static OtherFieldSettings CreateOtherForUpdate(OtherFieldSettingsModel settings)
@@ -354,14 +384,20 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
             return new OtherFieldSettings(
                         CreateTextFieldSettingForUpdate(settings.FileName),
                         CreateTextFieldSettingForUpdate(settings.CaseNumber),
-                        CreateTextFieldSettingForUpdate(settings.Info));
+                        CreateTextFieldSettingForUpdate(settings.Info))
+            {
+                Header = settings.Header
+            };
         }
 
         private static ProgramFieldSettings CreateProgramForUpdate(ProgramFieldSettingsModel settings)
         {
             return new ProgramFieldSettings(
                         CreateTextFieldSettingForUpdate(settings.Program),
-                        CreateTextFieldSettingForUpdate(settings.InfoProduct));
+                        CreateTextFieldSettingForUpdate(settings.InfoProduct))
+            {
+                Header = settings.Header
+            };
         }
 
         private static ReceiverFieldSettings CreateReceiverForUpdate(ReceiverFieldSettingsModel settings)
@@ -372,7 +408,10 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                         CreateTextFieldSettingForUpdate(settings.ReceiverEmail),
                         CreateTextFieldSettingForUpdate(settings.ReceiverPhone),
                         CreateTextFieldSettingForUpdate(settings.ReceiverLocation),
-                        CreateTextFieldSettingForUpdate(settings.MarkOfGoods));
+                        CreateTextFieldSettingForUpdate(settings.MarkOfGoods))
+            {
+                Header = settings.Header
+            };
         }
 
         private static SupplierFieldSettings CreateSupplierForUpdate(SupplierFieldSettingsModel settings)
@@ -380,7 +419,10 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
             return new SupplierFieldSettings(
                         CreateTextFieldSettingForUpdate(settings.SupplierOrderNumber),
                         CreateTextFieldSettingForUpdate(settings.SupplierOrderDate),
-                        CreateTextFieldSettingForUpdate(settings.SupplierOrderInfo));
+                        CreateTextFieldSettingForUpdate(settings.SupplierOrderInfo))
+            {
+                Header = settings.Header
+            };
         }
 
         private static UserFieldSettings CreateUserForUpdate(UserFieldSettingsModel settings)
@@ -406,7 +448,10 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                         null,
                         CreateTextFieldSettingForUpdate(settings.Activity),
                         CreateTextFieldSettingForUpdate(settings.Manager),
-                        null);
+                        null)
+            {
+                Header = settings.Header
+            };
         }
 
         private static AccountInfoFieldSettings CreateAccountInfoForUpdate(AccountInfoFieldSettingsModel settings)
@@ -424,16 +469,6 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                     CreateOrderFieldTypeSetting(settings.AccountType3, OrderFieldTypes.AccountType3),
                     CreateOrderFieldTypeSetting(settings.AccountType4, OrderFieldTypes.AccountType4),
                     CreateOrderFieldTypeSetting(settings.AccountType5, OrderFieldTypes.AccountType5)
-                );
-        }
-
-        private static ContactFieldSettings CreateContactForUpdate(ContactFieldSettingsModel settings)
-        {
-            return new ContactFieldSettings(
-                    CreateTextFieldSettingForUpdate(settings.Id),
-                    CreateTextFieldSettingForUpdate(settings.Name),
-                    CreateTextFieldSettingForUpdate(settings.Phone),
-                    CreateTextFieldSettingForUpdate(settings.Email)
                 );
         }
 

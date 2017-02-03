@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using DH.Helpdesk.Domain.Orders;
+using DH.Helpdesk.Services.BusinessLogic.Specifications;
 using LinqLib.Operators;
 
 namespace DH.Helpdesk.Services.Services.Concrete.Orders
@@ -60,13 +61,17 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
             {
                 var fieldSettingsRep = uow.GetRepository<OrderFieldSettings>();
                 var orderFieldTypeRep = uow.GetRepository<OrderFieldType>();
+                var orderTypeRep = uow.GetRepository<OrderType>();
 
                 var orderFieldTypes = orderFieldTypeRep.GetAll()
                     .GetByType(orderTypeId).ActiveOnly().ToList();
 
+                var orderTypeSettings = orderTypeRep.GetAll()
+                    .GetById(orderTypeId).ToList();
+
                 return fieldSettingsRep.GetAll()
                         .GetByType(customerId, orderTypeId)
-                        .MapToFullFieldSettings(orderFieldTypes);
+                        .MapToFullFieldSettings(orderFieldTypes, orderTypeSettings);
             }
         }
 
@@ -76,9 +81,26 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
             {
                 var fieldSettingsRep = uow.GetRepository<OrderFieldSettings>();
                 var orderFieldTypeRep = uow.GetRepository<OrderFieldType>();
+                var orderTypeRep = uow.GetRepository<OrderType>();
 
                 var orderFieldTypes = orderFieldTypeRep.GetAll()
                     .GetByType(settings.OrderTypeId).ActiveOnly().ToList();
+                if (settings.OrderTypeId.HasValue)
+                {
+                    var orderTypeSettings = orderTypeRep.GetById(settings.OrderTypeId.Value);
+                    if (orderTypeSettings != null)
+                    {
+                        orderTypeSettings.CaptionDeliveryInfo = settings.Delivery.Header ?? "";
+                        orderTypeSettings.CaptionGeneral = settings.General.Header ?? "";
+                        orderTypeSettings.CaptionOrder = settings.Order.Header ?? "";
+                        orderTypeSettings.CaptionOrderInfo = settings.Supplier.Header ?? "";
+                        orderTypeSettings.CaptionOrdererInfo = settings.Orderer.Header ?? "";
+                        orderTypeSettings.CaptionOther = settings.Other.Header ?? "";
+                        orderTypeSettings.CaptionProgram = settings.Program.Header ?? "";
+                        orderTypeSettings.CaptionReceiverInfo = settings.Receiver.Header ?? "";
+                        orderTypeSettings.CaptionUserInfo = settings.User.Header ?? "";
+                    }
+                }
 
                 var allAccountTypeValues = new List<OrderFieldTypeValueSetting>()
                     .Concat(settings.AccountInfo.AccountType.Values)
@@ -121,10 +143,14 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
         public FullOrderEditSettings GetOrderEditSettings(int customerId, int? orderTypeId, IUnitOfWork uow)
         {
             var fieldSettingsRep = uow.GetRepository<OrderFieldSettings>();
+            var orderTypeRep = uow.GetRepository<OrderType>();
+
+            var orderTypeSettings = orderTypeRep.GetAll()
+                .GetById(orderTypeId).FirstOrDefault();
 
             return fieldSettingsRep.GetAll()
                         .GetByType(customerId, orderTypeId)
-                        .MapToFullOrderEditSettings();
+                        .MapToFullOrderEditSettings(orderTypeSettings);
         }
     }
 }

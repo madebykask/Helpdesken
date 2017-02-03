@@ -2,7 +2,7 @@
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class OrderFieldSettings
+    public sealed class OrderFieldSettings : HeaderSettings
     {
         public OrderFieldSettings(
                 FieldSettings property, 

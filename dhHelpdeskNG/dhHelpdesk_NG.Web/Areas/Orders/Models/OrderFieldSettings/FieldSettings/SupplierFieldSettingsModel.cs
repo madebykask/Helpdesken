@@ -19,6 +19,8 @@
             this.SupplierOrderNumber = supplierOrderNumber;
         }
 
+        public string Header { get; set; }
+
         [NotNull]
         [LocalizedDisplay("Ordernummer")]
         public TextFieldSettingsModel SupplierOrderNumber { get; set; }

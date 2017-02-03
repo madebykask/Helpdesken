@@ -23,6 +23,8 @@
             Info = info;
         }
 
+        public string Header { get; set; }
+
         [NotNull]
         public ConfigurableFieldModel<AttachedFilesModel> FileName { get; set; }
 

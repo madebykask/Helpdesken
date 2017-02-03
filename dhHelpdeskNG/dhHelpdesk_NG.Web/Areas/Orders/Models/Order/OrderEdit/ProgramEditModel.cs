@@ -21,13 +21,15 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
             Programs = programs;
         }
 
-        public ConfigurableFieldModel<List<CheckBoxListItem>> Programs { get; set; }
+        public string Header { get; set; }
+
 
         [NotNull]
         public MultiSelectList AllPrograms { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<string> InfoProduct { get; set; }
+        public ConfigurableFieldModel<List<CheckBoxListItem>> Programs { get; set; }
 
         public static ProgramEditModel CreateEmpty()
         {
