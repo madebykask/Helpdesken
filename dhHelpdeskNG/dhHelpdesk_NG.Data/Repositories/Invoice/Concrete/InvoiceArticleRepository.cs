@@ -55,7 +55,19 @@ namespace DH.Helpdesk.Dal.Repositories.Invoice.Concrete
                     .ToArray();
         }
 
-        public int SaveArticle(InvoiceArticle article)
+		public List<InvoiceArticle> GetActiveArticles(int customerId)
+		{
+			var entities = this.DbContext.InvoiceArticles
+						.Where(a => a.CustomerId == customerId && (a.Blocked == false || a.Blocked == null) && a.IsActive == 1)
+						.OrderBy(a => a.Number)
+						.ToList();
+
+			return entities
+					.Select(a => this.articleMapper.Map(a))
+					.ToList();
+		}
+
+		public int SaveArticle(InvoiceArticle article)
         {
             InvoiceArticleEntity entity;
             if (article.Id > 0)

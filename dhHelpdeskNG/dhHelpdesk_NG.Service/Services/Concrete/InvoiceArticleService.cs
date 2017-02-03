@@ -75,7 +75,12 @@
             return this.invoiceArticleRepository.GetArticles(customerId);
         }
 
-        public CaseInvoice[] GetCaseInvoices(int caseId)
+		public List<InvoiceArticle> GetActiveArticles(int customerId)
+		{
+			return this.invoiceArticleRepository.GetActiveArticles(customerId);
+		}
+
+		public CaseInvoice[] GetCaseInvoices(int caseId)
         {
             var CaseInvoices = this.caseInvoiceArticleRepository.GetCaseInvoices(caseId);
             CaseInvoices = SetInvoicedByUsername(CaseInvoices);

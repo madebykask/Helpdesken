@@ -28,10 +28,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers.Api
 
 			var res = new List<InvoiceArticleProductAreaIndexRowModel>();
 
-			var articles = _invoiceArticleService.GetArticles(filter.CustomerId);
+			var articles = _invoiceArticleService.GetActiveArticles(filter.CustomerId);
 			if (filter.SelectedInvoiceArticles.Any())
 			{
-				articles = articles.Where(x => filter.SelectedInvoiceArticles.Contains(x.Id)).ToArray();
+				articles = articles.Where(x => filter.SelectedInvoiceArticles.Contains(x.Id)).ToList();
 			}
 
 			foreach (var article in articles)
