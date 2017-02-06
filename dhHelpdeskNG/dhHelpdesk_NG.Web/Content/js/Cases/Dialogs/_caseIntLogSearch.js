@@ -182,7 +182,8 @@
                                         userId: item.UserId,
                                         name: item.Name,
                                         email: item.Emails,
-                                        groupType: item.GroupType
+                                        groupType: item.GroupType,
+                                        departmentname: item.DepartmentName
                                     };
                                     return JSON.stringify(aItem);
                                 });
@@ -202,6 +203,20 @@
                 return ~item.toLowerCase().indexOf(tquery.toLowerCase());
             },
 
+            sorter: function (items) {
+                return items.sort(function (a, b) {
+                    var itemA = JSON.parse(a);
+                    var itemB = JSON.parse(b);
+                    if (itemA.groupType > itemB.groupType) {
+                        return 1;
+                    }
+                    if (itemA.groupType < itemB.groupType) {
+                        return -1;
+                    }
+                    return 0;
+                });
+            },
+
             highlighter: function (obj) {
                 var item = JSON.parse(obj);
                 var grType = "";
@@ -214,8 +229,7 @@
                 if (item.groupType === 3)
                     grType = window.parameters.emailGroup + ": ";
                 var userId = item.userId != null ? item.userId + ' - ' : "";
-
-                var result = item.name + ' - ' + userId + item.email;
+                var result = item.name + " - " + userId + item.email + " - " + item.departmentname;
                 var query = extractor(this.query.replace(/<[^>]*>/g, "")).replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
                 return grType + result.replace(new RegExp('(' + query + ')', 'ig'),
                     function ($1, match) {
