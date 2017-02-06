@@ -2661,6 +2661,12 @@ namespace DH.Helpdesk.Web.Controllers
                 #endregion
             }
 
+            if (case_.ProductArea_Id.HasValue && case_.ProductAreaSetDate == null)
+                case_.ProductAreaSetDate = utcNow;
+
+            if (movedFromCustomerId.HasValue)
+                oldCase.ProductAreaSetDate = null;
+
             case_.LatestSLACountDate = CalculateLatestSLACountDate(oldCase.StateSecondary_Id, case_.StateSecondary_Id, oldCase.LatestSLACountDate);
             
             var leadTime = 0;
