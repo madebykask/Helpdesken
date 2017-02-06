@@ -30,7 +30,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
 
         public FullOrderEditModel Create(string temporatyId, NewOrderEditData data, IWorkContext workContext, int? orderTypeId)
         {
-            var model = new FullOrderEditModel(
+            return new FullOrderEditModel(
                 CreateDeliveryEditModel(data.EditSettings.Delivery, data.EditOptions),
                 CreateGeneralEditModel(data.EditSettings.General, data.EditOptions),
                 CreateLogEditModel(data.EditSettings.Log, data.EditOptions),
@@ -39,17 +39,17 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                 CreateProgramEditModel(data.EditSettings.Program, data.EditOptions),
                 CreateReceiverEditModel(data.EditSettings.Receiver),
                 CreateSupplierEditModel(data.EditSettings.Supplier),
-                CreateUserEditModel(data.EditSettings.User, workContext),
-                CreateUserInfoEditModel(data.EditSettings, data.EditOptions,  workContext),
+                CreateUserEditModel(data.EditSettings, workContext),
+                CreateUserInfoEditModel(data.EditSettings, data.EditOptions, workContext),
                 temporatyId,
                 workContext.Customer.CustomerId,
                 orderTypeId,
                 true,
-                null);
-            model.CreateCase = workContext.Customer.Settings.CreateCaseFromOrder;
-            model.Statuses = data.EditOptions.Statuses;
-
-            return model;
+                null)
+            {
+                CreateCase = workContext.Customer.Settings.CreateCaseFromOrder,
+                Statuses = data.EditOptions.Statuses
+            };
         }
 
         private DeliveryEditModel CreateDeliveryEditModel(
@@ -72,22 +72,25 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
             var deliveryPhone = _configurableFieldModelFactory.CreateStringField(settings.DeliveryPhone, null);
 
             var model = new DeliveryEditModel(
-                            deliveryDate,
-                            installDate,
-                            deliveryDepartment,
-                            deliveryOu,
-                            deliveryAddress,
-                            deliveryPostalCode,
-                            deliveryPostalAddress,
-                            deliveryLocation,
-                            deliveryInfo1,
-                            deliveryInfo2,
-                            deliveryInfo3,
-                            deliveryOuId,
-                            deliveryName,
-                            deliveryPhone);
-            model.Departments = CreateSelectListField(settings.DeliveryDepartment, options.DeliveryDepartment, null);
-            model.Units = CreateSelectListField(settings.DeliveryOuId, options.DeliveryOuId, null);
+                deliveryDate,
+                installDate,
+                deliveryDepartment,
+                deliveryOu,
+                deliveryAddress,
+                deliveryPostalCode,
+                deliveryPostalAddress,
+                deliveryLocation,
+                deliveryInfo1,
+                deliveryInfo2,
+                deliveryInfo3,
+                deliveryOuId,
+                deliveryName,
+                deliveryPhone)
+            {
+                Departments = CreateSelectListField(settings.DeliveryDepartment, options.DeliveryDepartment, null),
+                Units = CreateSelectListField(settings.DeliveryOuId, options.DeliveryOuId, null),
+                Header = settings.Header
+            };
 
             return model;
         }
@@ -104,16 +107,19 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
             var status = _configurableFieldModelFactory.CreateSelectListField(settings.Status, options.Statuses, null, false);
 
             var model = new GeneralEditModel(
-                            orderNumber,
-                            customer,
-                            administrator,
-                            domain,
-                            orderDate,
-                            options.OrderTypeName,
-                            status);
+                orderNumber,
+                customer,
+                administrator,
+                domain,
+                orderDate,
+                options.OrderTypeName,
+                status)
+            {
+                Administrators = CreateSelectListField(settings.Administrator, options.Administrators, null),
+                Domains = CreateSelectListField(settings.Domain, options.Domains, null),
+                Header = settings.Header
+            };
 
-            model.Administrators = CreateSelectListField(settings.Administrator, options.Administrators, null);
-            model.Domains = CreateSelectListField(settings.Domain, options.Domains, null);
 
             return model;
 
@@ -205,6 +211,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                     options.AccountTypes4, null);
             model.AccountTypes5 = CreateSelectListField(settings.AccountInfo.AccountTypeId5,
                     options.AccountTypes5, null);
+            model.Header = settings.Order.Header;
 
             return model;
         }
@@ -232,7 +239,8 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
             var infoProduct = _configurableFieldModelFactory.CreateStringField(settings.InfoProduct, null);
             var model = new ProgramEditModel(infoProduct, programs)
             {
-                AllPrograms = CreateMultiSelectListField(settings.Program, options.Programs, null)
+                AllPrograms = CreateMultiSelectListField(settings.Program, options.Programs, null),
+                Header = settings.Header
             };
             return model;
         }
@@ -252,7 +260,10 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                             receiverEmail,
                             receiverPhone,
                             receiverLocation,
-                            markOfGoods);
+                            markOfGoods)
+            {
+                Header = settings.Header
+            };
         }
 
         private SupplierEditModel CreateSupplierEditModel(SupplierEditSettings settings)
@@ -264,25 +275,31 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
             return new SupplierEditModel(
                             supplierOrderNumber,
                             supplierOrderDate,
-                            supplierOrderInfo);
+                            supplierOrderInfo)
+            {
+                Header = settings.Header
+            };
         }
 
         private UserEditModel CreateUserEditModel(
-                        UserEditSettings settings,
+                        FullOrderEditSettings settings,
                         IWorkContext workContext)
         {
-            var userId = _configurableFieldModelFactory.CreateStringField(settings.UserId, workContext.User.Login);
-            var userFirstName = _configurableFieldModelFactory.CreateStringField(settings.UserFirstName, workContext.User.FirstName);
-            var userLastName = _configurableFieldModelFactory.CreateStringField(settings.UserLastName, workContext.User.LastName);
-            var userPhone = _configurableFieldModelFactory.CreateStringField(settings.UserPhone, workContext.User.Phone);
-            var userEmail = _configurableFieldModelFactory.CreateStringField(settings.UserEMail, workContext.User.Email);
+            var userId = _configurableFieldModelFactory.CreateStringField(settings.User.UserId, workContext.User.Login);
+            var userFirstName = _configurableFieldModelFactory.CreateStringField(settings.User.UserFirstName, workContext.User.FirstName);
+            var userLastName = _configurableFieldModelFactory.CreateStringField(settings.User.UserLastName, workContext.User.LastName);
+            var userPhone = _configurableFieldModelFactory.CreateStringField(settings.User.UserPhone, workContext.User.Phone);
+            var userEmail = _configurableFieldModelFactory.CreateStringField(settings.User.UserEMail, workContext.User.Email);
 
             return new UserEditModel(
                             userId,
                             userFirstName,
                             userLastName,
                             userPhone,
-                            userEmail);
+                            userEmail)
+            {
+                Header = settings.Orderer.Header
+            };
         }
 
         private UserInfoEditModel CreateUserInfoEditModel(
@@ -358,6 +375,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                 options.Units, null);
             model.Regions = CreateSelectListField(settings.Orderer.Department,
                 options.Regions, null);
+            model.Header = settings.User.Header;
 
             return model;
         }

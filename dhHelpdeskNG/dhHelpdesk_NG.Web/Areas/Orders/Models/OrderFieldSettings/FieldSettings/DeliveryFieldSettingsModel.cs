@@ -41,6 +41,8 @@
             Phone = phone;
         }
 
+        public string Header { get; set; }
+
         [NotNull]
         [LocalizedDisplay("Leveransdatum")]
         public TextFieldSettingsModel DeliveryDate { get; set; }

@@ -37,6 +37,8 @@
             this.Property = property;
         }
 
+        public string Header { get; set; }
+
         [NotNull]
         [LocalizedDisplay("Egenskap")]
         public FieldSettingsModel Property { get; set; }

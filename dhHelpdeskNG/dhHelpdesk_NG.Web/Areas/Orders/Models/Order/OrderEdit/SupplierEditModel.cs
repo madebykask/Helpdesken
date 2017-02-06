@@ -21,6 +21,8 @@
             this.SupplierOrderInfo = supplierOrderInfo;
         }
 
+        public string Header { get; set; }
+
         [NotNull]
         public ConfigurableFieldModel<string> SupplierOrderNumber { get; set; } 
 

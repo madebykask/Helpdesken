@@ -8,6 +8,7 @@
     var popupIntLogInput = $("#caseInternalLogModalInput");
     var fakeInputTo = $("#fake_CaseLog_EmailRecepientsInternalLogTo");
     var fakeInputCc = $("#fake_CaseLog_EmailRecepientsInternalLogCc");
+    var searchSelected = false;
 
     fakeInputTo.html(getHtmlFromEmails(mainIntLogInputTo.val()));
     fakeInputCc.html(getHtmlFromEmails(mainIntLogInputCc.val()));
@@ -140,6 +141,8 @@
     });
 
     function onEnterKeyUp(e, fakeInput, mainInput) {
+        if (e.keyCode === 13 && searchSelected)
+            return;
         e.preventDefault();
         e.stopImmediatePropagation();
         var emails = $(e.target).html();
@@ -183,7 +186,7 @@
                                     };
                                     return JSON.stringify(aItem);
                                 });
-
+                            searchSelected = resultList.length > 0;
                             return process(resultList);
                         }
                     });

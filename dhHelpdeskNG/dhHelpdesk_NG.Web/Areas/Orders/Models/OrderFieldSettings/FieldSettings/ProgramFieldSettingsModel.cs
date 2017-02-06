@@ -15,6 +15,8 @@
             InfoProduct = infoProduct;
         }
 
+        public string Header { get; set; }
+
         [NotNull]
         [LocalizedDisplay("Program")]
         public TextFieldSettingsModel Program { get; set; }

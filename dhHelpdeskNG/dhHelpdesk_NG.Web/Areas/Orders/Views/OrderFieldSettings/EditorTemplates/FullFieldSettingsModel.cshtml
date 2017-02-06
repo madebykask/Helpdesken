@@ -52,7 +52,10 @@
     </thead>
     <tbody>
         <tr>
-            <td colspan="8" class="header">@Translation.GetCoreTextTranslation("Allmänt")</td>
+            <td colspan="4" class="header valign-middle">@Translation.GetCoreTextTranslation("Allmänt")</td>
+            <td colspan="5">
+                @Html.TextBoxFor(m => m.General.Header)
+            </td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.General.OrderNumber, new { type = OrderSettingWebType.Label })
@@ -73,7 +76,10 @@
             @Html.EditorFor(m => m.General.OrderDate, new { type = OrderSettingWebType.Date })
         </tr>
         <tr>
-            <td colspan="8" class="header">@Translation.GetCoreTextTranslation("Beställare")</td>
+            <td colspan="4" class="header valign-middle">@Translation.GetCoreTextTranslation("Beställare")</td>
+            <td colspan="5">
+                @Html.TextBoxFor(m => m.Orderer.Header)
+            </td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.User.UserId, new { type = OrderSettingWebType.Label })
@@ -91,7 +97,10 @@
             @Html.EditorFor(m => m.User.UserEMail, new { type = OrderSettingWebType.Label })
         </tr>
         <tr>
-            <td colspan="8" class="header">@Translation.GetCoreTextTranslation("Användarinformation")</td>
+            <td colspan="4" class="header valign-middle">@Translation.GetCoreTextTranslation("Användarinformation")</td>
+            <td colspan="5">
+                @Html.TextBoxFor(m => m.User.Header)
+            </td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.Orderer.OrdererId, new { type = OrderSettingWebType.Text })
@@ -169,7 +178,10 @@
             @Html.EditorFor(m => m.User.Info, new { type = OrderSettingWebType.Text })
         </tr>
         <tr>
-            <td colspan="8" class="header">@Translation.GetCoreTextTranslation("Beställning")</td>
+            <td colspan="4" class="header valign-middle">@Translation.GetCoreTextTranslation("Beställning")</td>
+            <td colspan="5">
+                @Html.TextBoxFor(m => m.Order.Header)
+            </td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.AccountInfo.StartedDate, new { type = OrderSettingWebType.Date })
@@ -238,7 +250,10 @@
             @Html.EditorFor(m => m.Order.OrderInfo2, new { type = OrderSettingWebType.Flag })
         </tr>
         <tr>
-            <td colspan="8" class="header">@Translation.GetCoreTextTranslation("Mottagare")</td>
+            <td colspan="4" class="header valign-middle">@Translation.GetCoreTextTranslation("Mottagare")</td>
+            <td colspan="5">
+                @Html.TextBoxFor(m => m.Receiver.Header)
+            </td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.Receiver.ReceiverId, new { type = OrderSettingWebType.Text })
@@ -259,7 +274,10 @@
             @Html.EditorFor(m => m.Receiver.MarkOfGoods, new { type = OrderSettingWebType.Text })
         </tr>
         <tr>
-            <td colspan="8" class="header">@Translation.GetCoreTextTranslation("Orderinformation")</td>
+            <td colspan="4" class="header valign-middle">@Translation.GetCoreTextTranslation("Orderinformation")</td>
+            <td colspan="5">
+                @Html.TextBoxFor(m => m.Supplier.Header)
+            </td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.Supplier.SupplierOrderNumber, new { type = OrderSettingWebType.Text })
@@ -271,7 +289,10 @@
             @Html.EditorFor(m => m.Supplier.SupplierOrderInfo, new { type = OrderSettingWebType.Text })
         </tr>
         <tr>
-            <td colspan="8" class="header">@Translation.GetCoreTextTranslation("Leveransinformation")</td>
+            <td colspan="4" class="header valign-middle">@Translation.GetCoreTextTranslation("Leveransinformation")</td>
+            <td colspan="5">
+                @Html.TextBoxFor(m => m.Delivery.Header)
+            </td>        
         </tr>
         <tr>
             @Html.EditorFor(m => m.Delivery.Name, new { type = OrderSettingWebType.Text })
@@ -316,7 +337,10 @@
             @Html.EditorFor(m => m.Delivery.DeliveryOuId, new { type = OrderSettingWebType.SelectList })
         </tr>
         <tr>
-            <td colspan="8" class="header">@Translation.GetCoreTextTranslation("Program")</td>
+            <td colspan="4" class="header valign-middle">@Translation.GetCoreTextTranslation("Program")</td>
+            <td colspan="5">
+                @Html.TextBoxFor(m => m.Program.Header)
+            </td>         
         </tr>
         <tr>
             @Html.EditorFor(m => m.Program.Program, new { type = OrderSettingWebType.Flag })
@@ -325,7 +349,10 @@
             @Html.EditorFor(m => m.Program.InfoProduct, new { type = OrderSettingWebType.WideText })
         </tr>
         <tr>
-            <td colspan="8" class="header">@Translation.GetCoreTextTranslation("Övrigt")</td>
+            <td colspan="4" class="header valign-middle">@Translation.GetCoreTextTranslation("Övrigt")</td>
+            <td colspan="5">
+                @Html.TextBoxFor(m => m.Other.Header)
+            </td>          
         </tr>
         <tr>
             @Html.EditorFor(m => m.Other.FileName, new { type = OrderSettingWebType.FileUpload })
@@ -337,7 +364,7 @@
             @Html.EditorFor(m => m.Other.Info, new { type = OrderSettingWebType.WideText })
         </tr>
         <tr>
-            <td colspan="8" class="header">@Translation.GetCoreTextTranslation("Logg")</td>
+            <td colspan="9" class="header">@Translation.GetCoreTextTranslation("Logg")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.Log.Log)

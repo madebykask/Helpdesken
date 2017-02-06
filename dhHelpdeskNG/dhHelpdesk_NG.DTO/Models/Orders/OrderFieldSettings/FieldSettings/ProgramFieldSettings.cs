@@ -2,7 +2,7 @@
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class ProgramFieldSettings
+    public sealed class ProgramFieldSettings : HeaderSettings
     {
         public ProgramFieldSettings(TextFieldSettings program, TextFieldSettings infoProduct)
         {

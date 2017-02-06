@@ -2,7 +2,7 @@
 {
     using Common.ValidationAttributes;
 
-    public sealed class DeliveryFieldSettings
+    public sealed class DeliveryFieldSettings : HeaderSettings
     {
         public DeliveryFieldSettings(
                 TextFieldSettings deliveryDate, 

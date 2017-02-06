@@ -1657,6 +1657,47 @@ BEGIN
 END
 GO
 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CaptionGeneral' and sysobjects.name = N'tblOrderType')
+	ALTER TABLE [dbo].[tblOrderType] ADD [CaptionGeneral] [nvarchar](30) NULL
+GO
+
+UPDATE [dbo].[tblOrderType] SET [CaptionGeneral] = N'Allmänt'
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CaptionOrder' and sysobjects.name = N'tblOrderType')
+	ALTER TABLE [dbo].[tblOrderType] ADD [CaptionOrder] [nvarchar](30) NULL
+GO
+
+UPDATE [dbo].[tblOrderType] SET [CaptionOrder] = N'Beställning'
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CaptionOrderInfo' and sysobjects.name = N'tblOrderType')
+	ALTER TABLE [dbo].[tblOrderType] ADD [CaptionOrderInfo] [nvarchar](30) NULL
+GO
+
+UPDATE [dbo].[tblOrderType] SET [CaptionOrderInfo] = N'Beställningsinformation'
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CaptionDeliveryInfo' and sysobjects.name = N'tblOrderType')
+	ALTER TABLE [dbo].[tblOrderType] ADD [CaptionDeliveryInfo] [nvarchar](30) NULL
+GO
+
+UPDATE [dbo].[tblOrderType] SET [CaptionDeliveryInfo] = N'Leveransinformation'
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CaptionProgram' and sysobjects.name = N'tblOrderType')
+	ALTER TABLE [dbo].[tblOrderType] ADD [CaptionProgram] [nvarchar](30) NULL
+GO
+
+UPDATE [dbo].[tblOrderType] SET [CaptionProgram] = N'Program'
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CaptionOther' and sysobjects.name = N'tblOrderType')
+	ALTER TABLE [dbo].[tblOrderType] ADD [CaptionOther] [nvarchar](30) NULL
+GO
+
+UPDATE [dbo].[tblOrderType] SET [CaptionOther] = N'Övrigt'
+GO
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.30'

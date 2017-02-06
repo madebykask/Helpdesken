@@ -65,6 +65,8 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
             AccountTypeId5 = accountTypeId5;
         }
 
+        public string Header { get; set; }
+
         [NotNull]
         public ConfigurableFieldModel<int?> Property { get; set; } 
 

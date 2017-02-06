@@ -34,6 +34,13 @@
 
             this.Property(x => x.CaptionOrdererInfo).IsOptional().HasMaxLength(30);
             this.Property(x => x.CaptionUserInfo).IsOptional().HasMaxLength(30);
+            this.Property(x => x.CaptionReceiverInfo).IsOptional().HasMaxLength(30);
+            this.Property(x => x.CaptionGeneral).IsOptional().HasMaxLength(30);
+            this.Property(x => x.CaptionOrderInfo).IsOptional().HasMaxLength(30);
+            this.Property(x => x.CaptionOrder).IsOptional().HasMaxLength(30);
+            this.Property(x => x.CaptionDeliveryInfo).IsOptional().HasMaxLength(30);
+            this.Property(x => x.CaptionProgram).IsOptional().HasMaxLength(30);
+            this.Property(x => x.CaptionOther).IsOptional().HasMaxLength(30);
             this.Property(x => x.CreateCase_CaseType_Id).IsOptional();
             this.Property(x => x.Customer_Id).IsRequired();
             this.Property(x => x.Description).IsOptional().HasMaxLength(500).HasColumnName("OrderTypeDescription");

@@ -3,6 +3,7 @@
     var mainFollowersInput = $("#caseFollowerUsersInput");
     var mainFakeFollowersInput = $("#fakeCaseFollowerUsersInput");
     var popupFollowersInput = $("#caseAddFollowersModalInput");
+    var searchSelected = false;
 
     mainFakeFollowersInput.html(getHtmlFromEmails(mainFollowersInput.val()));
 
@@ -80,6 +81,8 @@
     });
 
     function onEnterKeyUp(e, fakeInput) {
+        if (e.keyCode === 13 && searchSelected)
+            return;
         e.preventDefault();
         e.stopImmediatePropagation();
         var emails = $(e.target).html();
@@ -123,7 +126,7 @@
                                     };
                                     return JSON.stringify(aItem);
                                 });
-
+                            searchSelected = resultList.length > 0;
                             return process(resultList);
                         }
                     });

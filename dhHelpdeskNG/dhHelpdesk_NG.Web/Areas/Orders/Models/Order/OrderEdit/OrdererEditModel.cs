@@ -49,6 +49,8 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
             AccountingDimension5 = accountingDimension5;
         }
 
+        public string Header { get; set; }
+
         [NotNull]
         public ConfigurableFieldModel<string> OrdererId { get; set; } 
 

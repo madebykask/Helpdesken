@@ -2,7 +2,7 @@
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class OtherFieldSettings
+    public sealed class OtherFieldSettings : HeaderSettings
     {
         public OtherFieldSettings(
                 TextFieldSettings fileName, 

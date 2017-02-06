@@ -20,6 +20,8 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
             UserEMail = userEMail;
         }
 
+        public string Header { get; set; }
+
         [NotNull]
         public ConfigurableFieldModel<string> UserId { get; set; } 
 

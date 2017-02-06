@@ -41,7 +41,9 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
                 entities.Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray());
         }
 
-        public static GetSettingsResponse MapToFullFieldSettings(this IQueryable<OrderFieldSettings> query, List<OrderFieldType> orderFieldTypes)
+        public static GetSettingsResponse MapToFullFieldSettings(this IQueryable<OrderFieldSettings> query,
+            List<OrderFieldType> orderFieldTypes,
+            List<OrderType> orderTypeSettings)
         {
             var entities = query.Select(f => new OrdersFieldSettingsMapData
                                                  {
@@ -57,7 +59,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
                                                  }).ToList();
 
             var fieldSettings = new NamedObjectCollection<OrdersFieldSettingsMapData>(entities);
-            return new GetSettingsResponse(CreateFullFieldSettings(fieldSettings, orderFieldTypes));
+            return new GetSettingsResponse(CreateFullFieldSettings(fieldSettings, orderFieldTypes, orderTypeSettings.FirstOrDefault()));
         }
 
         public static void MapToEntitiesForUpdate(
@@ -83,44 +85,48 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
 
         private static FullFieldSettings CreateFullFieldSettings(
             NamedObjectCollection<OrdersFieldSettingsMapData> fieldSettings,
-            List<OrderFieldType> orderFieldTypes)
+            List<OrderFieldType> orderFieldTypes,
+            OrderType orderTypeSettings)
         {
             return FullFieldSettings.CreateForEdit(
-                    CreateDeliveryFieldSettings(fieldSettings),
-                    CreateGeneralFieldSettings(fieldSettings),
+                    CreateDeliveryFieldSettings(fieldSettings, orderTypeSettings?.CaptionDeliveryInfo ?? ""),
+                    CreateGeneralFieldSettings(fieldSettings, orderTypeSettings?.CaptionGeneral ?? ""),
                     CreateLogFieldSettings(fieldSettings),
-                    CreateOrdererFieldSettings(fieldSettings),
-                    CreateOrderFieldSettings(fieldSettings),
-                    CreateOtherFieldSettings(fieldSettings),
-                    CreateProgramFieldSettings(fieldSettings),
-                    CreateReceiverFieldSettings(fieldSettings),
-                    CreateSupplierFieldSettings(fieldSettings),
-                    CreateUserFieldSettings(fieldSettings),
+                    CreateOrdererFieldSettings(fieldSettings, orderTypeSettings?.CaptionOrdererInfo ?? ""),
+                    CreateOrderFieldSettings(fieldSettings, orderTypeSettings?.CaptionOrder ?? ""),
+                    CreateOtherFieldSettings(fieldSettings, orderTypeSettings?.CaptionOther ?? ""),
+                    CreateProgramFieldSettings(fieldSettings, orderTypeSettings?.CaptionProgram ?? ""),
+                    CreateReceiverFieldSettings(fieldSettings, orderTypeSettings?.CaptionReceiverInfo ?? ""),
+                    CreateSupplierFieldSettings(fieldSettings, orderTypeSettings?.CaptionOrderInfo ?? ""),
+                    CreateUserFieldSettings(fieldSettings, orderTypeSettings?.CaptionUserInfo ?? ""),
                     CreateAccountInfoFieldSettings(fieldSettings, orderFieldTypes));
         }
 
         private static DeliveryFieldSettings CreateDeliveryFieldSettings(
-            NamedObjectCollection<OrdersFieldSettingsMapData> fieldSettings)
+            NamedObjectCollection<OrdersFieldSettingsMapData> fieldSettings, string headerText)
         {
             return new DeliveryFieldSettings(
-                    CreateTextFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryDate)),
-                    CreateTextFieldSetting(fieldSettings.FindByName(DeliveryFields.InstallDate)),
-                    CreateTextFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryDepartment)),
-                    CreateTextFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryOu)),
-                    CreateTextFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryAddress)),
-                    CreateTextFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryPostalCode)),
-                    CreateTextFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryPostalAddress)),
-                    CreateTextFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryLocation)),
-                    CreateTextFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryInfo1)),
-                    CreateTextFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryInfo2)),
-                    CreateTextFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryInfo3)),
-                    CreateTextFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryOuId)),
-                    CreateTextFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryName)),
-                    CreateTextFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryPhone)));
+                CreateTextFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryDate)),
+                CreateTextFieldSetting(fieldSettings.FindByName(DeliveryFields.InstallDate)),
+                CreateTextFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryDepartment)),
+                CreateTextFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryOu)),
+                CreateTextFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryAddress)),
+                CreateTextFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryPostalCode)),
+                CreateTextFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryPostalAddress)),
+                CreateTextFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryLocation)),
+                CreateTextFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryInfo1)),
+                CreateTextFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryInfo2)),
+                CreateTextFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryInfo3)),
+                CreateTextFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryOuId)),
+                CreateTextFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryName)),
+                CreateTextFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryPhone)))
+            {
+                Header = headerText
+            };
         }
 
         private static GeneralFieldSettings CreateGeneralFieldSettings(
-            NamedObjectCollection<OrdersFieldSettingsMapData> fieldSettings)
+            NamedObjectCollection<OrdersFieldSettingsMapData> fieldSettings, string headerText)
         {
             return new GeneralFieldSettings(
                     CreateFieldSetting(fieldSettings.FindByName(GeneralFields.OrderNumber)),
@@ -128,7 +134,10 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
                     CreateTextFieldSetting(fieldSettings.FindByName(GeneralFields.Administrator)),
                     CreateTextFieldSetting(fieldSettings.FindByName(GeneralFields.Domain)),
                     CreateTextFieldSetting(fieldSettings.FindByName(GeneralFields.OrderDate)),
-                    CreateTextFieldSetting(fieldSettings.FindByName(GeneralFields.Status)));
+                    CreateTextFieldSetting(fieldSettings.FindByName(GeneralFields.Status)))
+            {
+                Header = headerText
+            };
         }
 
         private static LogFieldSettings CreateLogFieldSettings(
@@ -139,7 +148,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
         }
 
         private static OrdererFieldSettings CreateOrdererFieldSettings(
-            NamedObjectCollection<OrdersFieldSettingsMapData> fieldSettings)
+            NamedObjectCollection<OrdersFieldSettingsMapData> fieldSettings, string headerText)
         {
             return new OrdererFieldSettings(
                     CreateTextFieldSetting(fieldSettings.FindByName(OrdererFields.OrdererId)),
@@ -157,11 +166,14 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
                     CreateFieldSetting(fieldSettings.FindByName(OrdererFields.AccountingDimension2)),
                     CreateTextFieldSetting(fieldSettings.FindByName(OrdererFields.AccountingDimension3)),
                     CreateFieldSetting(fieldSettings.FindByName(OrdererFields.AccountingDimension4)),
-                    CreateTextFieldSetting(fieldSettings.FindByName(OrdererFields.AccountingDimension5)));
+                    CreateTextFieldSetting(fieldSettings.FindByName(OrdererFields.AccountingDimension5)))
+            {
+                Header = headerText
+            };
         }
 
         private static BusinessData.Models.Orders.OrderFieldSettings.FieldSettings.OrderFieldSettings CreateOrderFieldSettings(
-            NamedObjectCollection<OrdersFieldSettingsMapData> fieldSettings)
+            NamedObjectCollection<OrdersFieldSettingsMapData> fieldSettings, string headerText)
         {
             return new BusinessData.Models.Orders.OrderFieldSettings.FieldSettings.OrderFieldSettings(
                     CreateFieldSetting(fieldSettings.FindByName(OrderFields.Property)),
@@ -175,28 +187,37 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
                     CreateTextFieldSetting(fieldSettings.FindByName(OrderFields.OrderRow8)),
                     CreateTextFieldSetting(fieldSettings.FindByName(OrderFields.Configuration)),
                     CreateTextFieldSetting(fieldSettings.FindByName(OrderFields.OrderInfo)),
-                    CreateTextFieldSetting(fieldSettings.FindByName(OrderFields.OrderInfo2)));
+                    CreateTextFieldSetting(fieldSettings.FindByName(OrderFields.OrderInfo2)))
+            {
+                Header = headerText
+            };
         }
 
         private static OtherFieldSettings CreateOtherFieldSettings(
-            NamedObjectCollection<OrdersFieldSettingsMapData> fieldSettings)
+            NamedObjectCollection<OrdersFieldSettingsMapData> fieldSettings, string headerText)
         {
             return new OtherFieldSettings(
                     CreateTextFieldSetting(fieldSettings.FindByName(OtherFields.FileName)),
                     CreateTextFieldSetting(fieldSettings.FindByName(OtherFields.CaseNumber)),
-                    CreateTextFieldSetting(fieldSettings.FindByName(OtherFields.Info)));
+                    CreateTextFieldSetting(fieldSettings.FindByName(OtherFields.Info)))
+            {
+                Header = headerText
+            };
         }
 
         private static ProgramFieldSettings CreateProgramFieldSettings(
-            NamedObjectCollection<OrdersFieldSettingsMapData> fieldSettings)
+            NamedObjectCollection<OrdersFieldSettingsMapData> fieldSettings, string headerText)
         {
             return new ProgramFieldSettings(
                 CreateTextFieldSetting(fieldSettings.FindByName(ProgramFields.Program)),
-                CreateTextFieldSetting(fieldSettings.FindByName(ProgramFields.InfoProduct)));
+                CreateTextFieldSetting(fieldSettings.FindByName(ProgramFields.InfoProduct)))
+            {
+                Header = headerText
+            };
         }
 
         private static ReceiverFieldSettings CreateReceiverFieldSettings(
-            NamedObjectCollection<OrdersFieldSettingsMapData> fieldSettings)
+            NamedObjectCollection<OrdersFieldSettingsMapData> fieldSettings, string headerText)
         {
             return new ReceiverFieldSettings(
                     CreateTextFieldSetting(fieldSettings.FindByName(ReceiverFields.ReceiverId)),
@@ -204,20 +225,26 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
                     CreateTextFieldSetting(fieldSettings.FindByName(ReceiverFields.ReceiverEmail)),
                     CreateTextFieldSetting(fieldSettings.FindByName(ReceiverFields.ReceiverPhone)),
                     CreateTextFieldSetting(fieldSettings.FindByName(ReceiverFields.ReceiverLocation)),
-                    CreateTextFieldSetting(fieldSettings.FindByName(ReceiverFields.MarkOfGoods)));
+                    CreateTextFieldSetting(fieldSettings.FindByName(ReceiverFields.MarkOfGoods)))
+            {
+                Header = headerText
+            };
         }
 
         private static SupplierFieldSettings CreateSupplierFieldSettings(
-            NamedObjectCollection<OrdersFieldSettingsMapData> fieldSettings)
+            NamedObjectCollection<OrdersFieldSettingsMapData> fieldSettings, string headerText)
         {
             return new SupplierFieldSettings(
                     CreateTextFieldSetting(fieldSettings.FindByName(SupplierFields.SupplierOrderNumber)),
                     CreateTextFieldSetting(fieldSettings.FindByName(SupplierFields.SupplierOrderDate)),
-                    CreateTextFieldSetting(fieldSettings.FindByName(SupplierFields.SupplierOrderInfo)));
+                    CreateTextFieldSetting(fieldSettings.FindByName(SupplierFields.SupplierOrderInfo)))
+            {
+                Header = headerText
+            };
         }
 
         private static UserFieldSettings CreateUserFieldSettings(
-            NamedObjectCollection<OrdersFieldSettingsMapData> fieldSettings)
+            NamedObjectCollection<OrdersFieldSettingsMapData> fieldSettings, string headerText)
         {
             return new UserFieldSettings(
                     CreateTextFieldSetting(fieldSettings.FindByName(UserFields.UserId)),
@@ -240,7 +267,10 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
                     CreateTextFieldSetting(fieldSettings.FindByName(UserFields.Responsibility)),
                     CreateTextFieldSetting(fieldSettings.FindByName(UserFields.Activity)),
                     CreateTextFieldSetting(fieldSettings.FindByName(UserFields.Manager)),
-                    CreateTextFieldSetting(fieldSettings.FindByName(UserFields.ReferenceNumber)));
+                    CreateTextFieldSetting(fieldSettings.FindByName(UserFields.ReferenceNumber)))
+            {
+                Header = headerText
+            };
         }
 
         private static AccountInfoFieldSettings CreateAccountInfoFieldSettings(

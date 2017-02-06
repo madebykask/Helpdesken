@@ -2,7 +2,7 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.OtherEditModel
 
-<h4>@Translation.GetCoreTextTranslation("Övrigt")</h4>
+<h4>@Model.Header</h4>
 <table class="tableform">
     <tbody>
         @if (Model.FileName.Show)

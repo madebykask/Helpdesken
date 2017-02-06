@@ -2,7 +2,8 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.DeliveryEditModel
 
-<h4>@Translation.GetCoreTextTranslation("Leveransinformation")</h4>
+<h4>@Model.Header
+</h4>
 <table class="tableform">
     <tbody>
         @Html.EditorFor(m => m.DeliveryName, "Fields/Text")

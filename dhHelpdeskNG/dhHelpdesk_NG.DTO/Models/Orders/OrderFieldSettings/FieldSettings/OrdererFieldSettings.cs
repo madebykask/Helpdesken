@@ -2,7 +2,7 @@
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class OrdererFieldSettings
+    public sealed class OrdererFieldSettings : HeaderSettings
     {
         public OrdererFieldSettings(
                 TextFieldSettings ordererId, 

@@ -3,7 +3,7 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.OrderEditModel
 
-<h4>@Translation.GetCoreTextTranslation("Beställning")</h4>
+<h4>@Model.Header</h4>
 <table class="tableform">
     <tbody>
         @Html.EditorFor(m => m.StartedDate, "Fields/Date", new { Id = "accInfo_started_date" })

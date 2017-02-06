@@ -1,8 +1,10 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditSettings
+﻿using DH.Helpdesk.BusinessData.Models.Orders.OrderFieldSettings.FieldSettings;
+
+namespace DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditSettings
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class OrderEditSettings
+    public sealed class OrderEditSettings : HeaderSettings
     {
          public OrderEditSettings(
                 FieldEditSettings property, 

@@ -354,6 +354,7 @@
     <Compile Include="Models\Orders\OrderFieldSettings\FieldSettings\DeliveryFieldSettings.cs" />
     <Compile Include="Models\Orders\OrderFieldSettings\FieldSettings\FullFieldSettings.cs" />
     <Compile Include="Models\Orders\OrderFieldSettings\FieldSettings\GeneralFieldSettings.cs" />
+    <Compile Include="Models\Orders\OrderFieldSettings\FieldSettings\HeaderSettings.cs" />
     <Compile Include="Models\Orders\OrderFieldSettings\FieldSettings\LogFieldSettings.cs" />
     <Compile Include="Models\Orders\OrderFieldSettings\FieldSettings\OrdererFieldSettings.cs" />
     <Compile Include="Models\Orders\OrderFieldSettings\FieldSettings\OrderFieldSettings.cs" />

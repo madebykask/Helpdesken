@@ -1,8 +1,10 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditSettings
+﻿using DH.Helpdesk.BusinessData.Models.Orders.OrderFieldSettings.FieldSettings;
+
+namespace DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditSettings
 {
     using Common.ValidationAttributes;
 
-    public sealed class DeliveryEditSettings
+    public sealed class DeliveryEditSettings : HeaderSettings
     {
          public DeliveryEditSettings(
                 TextFieldEditSettings deliveryDate, 

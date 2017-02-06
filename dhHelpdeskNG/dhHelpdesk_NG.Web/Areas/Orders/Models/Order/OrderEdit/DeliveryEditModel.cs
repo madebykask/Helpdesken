@@ -46,6 +46,8 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
             DeliveryPhone = phone;
         }
 
+        public string Header { get; set; }
+
         [NotNull]
         public ConfigurableFieldModel<DateTime?> DeliveryDate { get; set; } 
 

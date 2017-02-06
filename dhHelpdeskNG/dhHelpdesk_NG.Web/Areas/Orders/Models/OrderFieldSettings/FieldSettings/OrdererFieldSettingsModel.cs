@@ -45,6 +45,8 @@
             this.OrdererId = ordererId;
         }
 
+        public string Header { get; set; }
+
         [NotNull]
         [LocalizedDisplay("Identifierare")]
         public TextFieldSettingsModel OrdererId { get; set; }

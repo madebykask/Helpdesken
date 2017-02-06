@@ -30,6 +30,8 @@
             Status = status;
         }
 
+        public string Header { get; set; }
+
         public string OrderTypeName { get; private set; }
 
         [NotNull]
