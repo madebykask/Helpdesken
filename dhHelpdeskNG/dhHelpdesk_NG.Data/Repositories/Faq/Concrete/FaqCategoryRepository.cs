@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.Common.Enums;
+﻿using System.Data.Entity;
+using DH.Helpdesk.Common.Enums;
 
 namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
 {
@@ -98,19 +99,9 @@ namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
             }
         }
 
-        public List<CategoryWithSubcategories> FindCategoriesWithSubcategoriesByCustomerId(int customerId)
+        public List<FaqCategoryEntity> GetCategoriesByCustomer(int customerId)
         {
-            var categoryEntities = this.DataContext.FAQCategories.Where(c => c.Customer_Id == customerId).ToList();
-            var parentCategories = categoryEntities.Where(c => c.Parent_FAQCategory_Id == null).ToList();
-            var categories = new List<CategoryWithSubcategories>(parentCategories.Count);
-
-            foreach (var parentCategory in parentCategories)
-            {
-                var category = this.CreateBrunchForParent(parentCategory, categoryEntities);
-                categories.Add(category);
-            }
-
-            return categories.OrderBy(c=> c.Name).ToList();
+            return DataContext.FAQCategories.Include(x => x.FaqCategoryLanguages).Where(c => c.Customer_Id == customerId).ToList();
         }
 
         public bool CategoryHasSubcategories(int categoryId)
@@ -119,21 +110,5 @@ namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
         }
 
         #endregion
-
-        private CategoryWithSubcategories CreateBrunchForParent(FaqCategoryEntity parentCategory, List<FaqCategoryEntity> allCategories)
-        {
-            var category = new CategoryWithSubcategories { Id = parentCategory.Id, Name = parentCategory.Name };
-
-            var subcategoryEntities = allCategories.Where(c => c.Parent_FAQCategory_Id == parentCategory.Id).OrderBy(c=>c.Name).ToList();
-            if (subcategoryEntities.Any())
-            {
-                var subcategories =
-                    subcategoryEntities.Select(c => this.CreateBrunchForParent(c, allCategories)).ToList();
-
-                category.Subcategories.AddRange(subcategories);
-            }
-
-            return category;
-        }
     }
 }

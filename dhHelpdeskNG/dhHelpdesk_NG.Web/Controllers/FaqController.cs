@@ -183,8 +183,7 @@
                 throw new HttpException((int)HttpStatusCode.NotFound, null);
             }
 
-            var categoriesWithSubcategories =
-                this.faqCategoryRepository.FindCategoriesWithSubcategoriesByCustomerId(SessionFacade.CurrentCustomer.Id);
+            var categoriesWithSubcategories = faqService.GetCategoriesWithSubcategoriesByCustomerId(SessionFacade.CurrentCustomer.Id, languageId);
 
             var fileNames = this.faqFileRepository.FindFileNamesByFaqId(id);
             List<ItemOverview> workingGroups;
@@ -242,7 +241,7 @@
         [HttpGet]
         public JsonResult Faqs(int categoryId)
         {
-            var faqOverviews = this.faqService.FindOverviewsByCategoryId(categoryId);
+            var faqOverviews = this.faqService.FindOverviewsByCategoryId(categoryId, SessionFacade.CurrentLanguageId);
 
             var faqModels =
                 faqOverviews.Select(
@@ -255,7 +254,7 @@
         [HttpGet]
         public JsonResult FaqsDetailed(int categoryId)
         {
-            var faqDetailedOverviews = this.faqService.FindDetailedOverviewsByCategoryId(categoryId);
+            var faqDetailedOverviews = this.faqService.FindDetailedOverviewsByCategoryId(categoryId, SessionFacade.CurrentLanguageId);
             var faqIds = faqDetailedOverviews.Select(f => f.Id).ToList();
             var faqFiles = this.faqFileRepository.FindFileOverviewsByFaqIds(faqIds);
             var faqModels = new List<FaqDetailedOverviewModel>(faqFiles.Count);
@@ -297,11 +296,8 @@
         /// </returns>
         [HttpGet]
         public ViewResult Index()
-        {            
-            var currentCustomerId = SessionFacade.CurrentCustomer.Id;
-
-            var categoriesWithSubcategories =
-                this.faqCategoryRepository.FindCategoriesWithSubcategoriesByCustomerId(currentCustomerId);
+        {
+            var categoriesWithSubcategories = faqService.GetCategoriesWithSubcategoriesByCustomerId(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
 
             var userHasFaqAdminPermission = this.userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.FaqPermission);
 
@@ -321,7 +317,7 @@
             else
                 firstCategoryId = int.Parse(SessionFacade.TemporaryValue);
 
-            var faqs = this.faqService.FindOverviewsByCategoryId(firstCategoryId);
+            var faqs = this.faqService.FindOverviewsByCategoryId(firstCategoryId, SessionFacade.CurrentLanguageId);
             model = this.indexModelFactory.Create(categoriesWithSubcategories, firstCategoryId, faqs, userHasFaqAdminPermission);            
 
             return this.View(model);
@@ -355,8 +351,7 @@
         {
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
 
-            var categoriesWithSubcategories =
-                this.faqCategoryRepository.FindCategoriesWithSubcategoriesByCustomerId(currentCustomerId);
+            var categoriesWithSubcategories = faqService.GetCategoriesWithSubcategoriesByCustomerId(currentCustomerId, SessionFacade.CurrentLanguageId);
 
             var workingGroups = this.workingGroupRepository.FindActiveOverviews(currentCustomerId).OrderBy(w=> w.Name).ToList();
 
@@ -399,10 +394,9 @@
         {
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
 
-            var categoriesWithSubcategories =
-                this.faqCategoryRepository.FindCategoriesWithSubcategoriesByCustomerId(currentCustomerId);
+            var categoriesWithSubcategories = faqService.GetCategoriesWithSubcategoriesByCustomerId(currentCustomerId, SessionFacade.CurrentLanguageId);
 
-           
+
             var workingGroups = this.workingGroupRepository.FindActiveOverviews(currentCustomerId).OrderBy(w=> w.Name).ToList();
             if (categoriesWithSubcategories == null || categoriesWithSubcategories.Count < 1)
             {
@@ -423,7 +417,7 @@
         [HttpGet]
         public JsonResult Search(string pharse)
         {
-            var faqOverviews = this.faqService.SearchOverviewsByPharse(pharse, SessionFacade.CurrentCustomer.Id);
+            var faqOverviews = this.faqService.SearchOverviewsByPharse(pharse, SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
 
             var faqModels =
                 faqOverviews.Select(
@@ -436,7 +430,7 @@
         public JsonResult SearchDetailed(string pharse)
         {
             var faqDetailedOverviews = this.faqService.SearchDetailedOverviewsByPharse(
-                pharse, SessionFacade.CurrentCustomer.Id);
+                pharse, SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
 
             var faqIds = faqDetailedOverviews.Select(f => f.Id).ToList();
             var faqFiles = this.faqFileRepository.FindFileOverviewsByFaqIds(faqIds);

@@ -10,6 +10,8 @@
 
         public string Name { get; set; }
 
+        public virtual FaqCategoryEntity FaqCategory { get; set; }
+
         #endregion
     }
 }

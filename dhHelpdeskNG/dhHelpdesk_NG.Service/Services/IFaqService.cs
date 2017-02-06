@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using DH.Helpdesk.Common.Enums;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System.Collections.Generic;
 
@@ -23,13 +25,13 @@
 
         IEnumerable<FaqInfoOverview> GetFaqByCustomers(int[] customers, int? count, bool forStartPage);
 
-        List<FaqOverview> FindOverviewsByCategoryId(int categoryId);
+        List<FaqOverview> FindOverviewsByCategoryId(int categoryId, int languageId = LanguageIds.Swedish);
 
-        List<FaqDetailedOverview> FindDetailedOverviewsByCategoryId(int categoryId);
+        List<FaqDetailedOverview> FindDetailedOverviewsByCategoryId(int categoryId, int languageId = LanguageIds.Swedish);
 
-        List<FaqOverview> SearchOverviewsByPharse(string pharse, int customerId);
+        List<FaqOverview> SearchOverviewsByPharse(string pharse, int customerId, int languageId = LanguageIds.Swedish);
 
-        List<FaqDetailedOverview> SearchDetailedOverviewsByPharse(string pharse, int customerId);
+        List<FaqDetailedOverview> SearchDetailedOverviewsByPharse(string pharse, int customerId, int languageId = LanguageIds.Swedish);
 
         Faq FindById(int faqId);
 
@@ -42,5 +44,7 @@
         void UpdateCategory(EditCategory editedCategory);
 
         Faq GetFaqById(int id, int languageId);
+
+        List<CategoryWithSubcategories> GetCategoriesWithSubcategoriesByCustomerId(int id, int languageId = LanguageIds.Swedish);
     }
 }
