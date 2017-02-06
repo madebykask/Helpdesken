@@ -3831,7 +3831,7 @@ div.case-dropdown-div > span.btn-group > ul.multiselect-container > div.options-
     -moz-border-radius: 4px;
     border-radius: 4px;
     background-color: #e6e6e6;
-    display: inline-block;
+    display: inline;
     line-height: 20px;
 }
 
