@@ -850,13 +850,14 @@ $(function () {
         $('#case__PersonsName').val(updatedInfo.PersonsName);
         $('#case__PersonsPhone').val(updatedInfo.PersonsPhone);
         $('#case__PlanDate').val(updatedInfo.PlanDateJS);
-        $('#case__WatchDate').val(updatedInfo.WatchDateJS);
         $('#case__CaseType_Id').val(updatedInfo.CaseType_Id).change();
+        
         $('#case__ProductArea_Id').val(updatedInfo.ProductArea_Id).change();
         $('#case__WorkingGroup_Id').val(updatedInfo.WorkingGroup_Id).change();
         $('#case__Priority_Id').val(updatedInfo.Priority_Id).change();
         $('#case__Status_Id').val(updatedInfo.Status_Id).change();
         $('#case__StateSecondary_Id').val(updatedInfo.StateSecondary_Id).change();
+        $('#case__WatchDate').val(updatedInfo.WatchDateJS);
 
         $('#case__Region_Id').val(updatedInfo.Region_Id).change();
         setTimeout(function () {
@@ -865,6 +866,8 @@ $(function () {
                 $('#case__Ou_Id').val(updatedInfo.OU_Id).change();
             }, 3000);
         }, 2000);
+
+        var t = $('#case_files_table > tbody > tr')[0];
 
     }
 

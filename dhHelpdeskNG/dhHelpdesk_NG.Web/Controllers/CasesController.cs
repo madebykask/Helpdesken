@@ -1345,7 +1345,8 @@ namespace DH.Helpdesk.Web.Controllers
                                 new FileJS {
                                             Id = f.Id,
                                             FileName = f.FileName,
-                                            UserId = SessionFacade.CurrentUser.FirstName + " " + SessionFacade.CurrentUser.SurName
+                                            UserId = SessionFacade.CurrentUser.FirstName + " " + SessionFacade.CurrentUser.SurName,
+                                            CreateDate = TimeZoneInfo.ConvertTimeFromUtc(f.CreatedDate.ToUniversalTime(), userTimeZone).ToString()
                                 }).ToList(),
 
                 Logs = _case.Logs.Select(l => 
