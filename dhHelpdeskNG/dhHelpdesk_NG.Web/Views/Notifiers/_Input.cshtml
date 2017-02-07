@@ -76,7 +76,8 @@
         ignore: "",
         rules: {
             "UserId.Value": {
-                required: getBoolean("@Model.UserId.Required"),
+                required: getBoolean("@Model.UserId.Required")
+                @*,
                 remote: {
                     url: "@Url.Action("CheckUniqueUserId", "Notifiers")",
                     type: "GET",
@@ -86,11 +87,9 @@
                         },
                         initiatorId: function () {
                             return @Model.Id;
-                        },
-                        curTime: Date.now
-                        
+                        }                        
                     }
-                }
+                }*@
             },
 
             "DomainId": {
@@ -187,8 +186,9 @@
         },
         messages: {
             "UserId.Value": {
-                required: "@Model.UserId.Caption" + " " + validationTrans,
-                remote: "@Model.UserId.Caption" + " " + userIdNotUnique
+                required: "@Model.UserId.Caption" + " " + validationTrans
+                @*,
+                remote: "@Model.UserId.Caption" + " " + userIdNotUnique*@
             },            
 
             "DomainId": {
