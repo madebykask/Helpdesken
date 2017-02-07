@@ -208,7 +208,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var repository = uow.GetRepository<FaqEntity>();
-                var faqs = this.SearchByPharse(pharse, customerId, repository);
+                var faqs = this.SearchByPharse(pharse, customerId, repository, languageId);
                 result = MapToDetailedOverview(faqs, languageId);
             }
             return result;
@@ -220,7 +220,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var repository = uow.GetRepository<FaqEntity>();
-                var faqs = SearchByPharse(pharse, customerId, repository);
+                var faqs = SearchByPharse(pharse, customerId, repository, languageId);
                 result = MapToOverview(faqs, languageId);
             }
             return result;
@@ -467,14 +467,17 @@ namespace DH.Helpdesk.Services.Services.Concrete
             return result;
         }
 
-        private IEnumerable<FaqEntity> SearchByPharse(string pharse, int customerId, IRepository<FaqEntity> repository)
+        private IEnumerable<FaqEntity> SearchByPharse(string pharse, int customerId, IRepository<FaqEntity> repository, int languageId = LanguageIds.Swedish)
         {
             var pharseInLowerCase = pharse.ToLower();
-
-            return repository.GetAll()
-                .Where(f => f.Customer_Id == customerId)
-                .Where(
-                    f =>
+            var faqs = repository.GetAll().Where(f => f.Customer_Id == customerId);
+            if (languageId != LanguageIds.Swedish)
+            {
+                return faqs.Where(f => f.FaqLanguages.Any(x => x.Language_Id == languageId && x.FAQQuery.ToLower().Contains(pharseInLowerCase))
+                            || f.FaqLanguages.Any(x => x.Language_Id == languageId && x.Answer.ToLower().Contains(pharseInLowerCase))
+                            || f.FaqLanguages.Any(x => x.Language_Id == languageId && x.Answer_Internal.ToLower().Contains(pharseInLowerCase))).ToList();
+            }
+            return faqs.Where(f =>
                         f.FAQQuery.ToLower().Contains(pharseInLowerCase)
                         || f.Answer.ToLower().Contains(pharseInLowerCase)
                         || f.Answer_Internal.ToLower().Contains(pharseInLowerCase)).ToList();
