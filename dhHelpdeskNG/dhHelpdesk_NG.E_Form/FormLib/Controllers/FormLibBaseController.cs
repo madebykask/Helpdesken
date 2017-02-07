@@ -67,7 +67,7 @@ namespace DH.Helpdesk.EForm.FormLib.Controllers
             var model = FormModelFactory.InitNew(mainXmlPath);
             model.Form = _contractRepository.GetFormByGuid(model.FormGuid);
 
-            FormLibSessions.LastCaseDataChanged = true;
+            FormLibSessions.IsCaseDataChanged = true;
 
             PopulateWithOptions(ref model);
 
@@ -199,7 +199,7 @@ namespace DH.Helpdesk.EForm.FormLib.Controllers
             if(contract == null)
                 throw new HttpException(404, "Page not found");
 
-            FormLibSessions.LastCaseDataChanged = true;
+            FormLibSessions.IsCaseDataChanged = true;
             // Use for from Line manger portal to hide och show communicate window.
             if (contract.FinishingDate == null)
             {

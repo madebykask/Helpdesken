@@ -17,20 +17,20 @@ namespace DH.Helpdesk.EForm.FormLib
         private const string _CURRENT_USER_IDENTITY = "CURRENT_USER_IDENTITY";
         private const string _USER_HAS_ACCESS = "USER_HAS_ACCESS";
         private const string _CURRENT_COWORKERS = "CURRENT_COWORKERS";
-        private const string _LAST_CASE_DATA_CHANGED = "LAST_CASE_DATA_CHANGED";
+        private const string _IS_CASE_DATA_CHANGED = "IS_CASE_DATA_CHANGED";
 
-        public static bool LastCaseDataChanged
+        public static bool IsCaseDataChanged
         {
             get
             {
-                return (bool)HttpContext.Current.Session[_LAST_CASE_DATA_CHANGED];
+                return (bool)HttpContext.Current.Session[_IS_CASE_DATA_CHANGED];
             }
             set
             {
-                if (HttpContext.Current.Session[_LAST_CASE_DATA_CHANGED] == null)
-                    HttpContext.Current.Session.Add(_LAST_CASE_DATA_CHANGED, value);
+                if (HttpContext.Current.Session[_IS_CASE_DATA_CHANGED] == null)
+                    HttpContext.Current.Session.Add(_IS_CASE_DATA_CHANGED, value);
                 else
-                    HttpContext.Current.Session[_LAST_CASE_DATA_CHANGED] = value;
+                    HttpContext.Current.Session[_IS_CASE_DATA_CHANGED] = value;
             }
         }
 

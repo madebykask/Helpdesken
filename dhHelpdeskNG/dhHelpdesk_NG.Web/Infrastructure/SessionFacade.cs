@@ -123,24 +123,24 @@
 
         private const string _REPORT_SERVICE_SESSION_MODEL = "REPORT_SERVICE_SESSION_MODEL";
 
-        private const string _LAST_CASE_DATA_CHANGED = "LAST_CASE_DATA_CHANGED";
+        private const string _IS_CASE_DATA_CHANGED = "Is_CASE_DATA_CHANGED";
 
         #endregion
 
         #region Public Properties
 
-        public static bool LastCaseDataChanged
+        public static bool IsCaseDataChanged
         {
             get
             {
-                return (bool)HttpContext.Current.Session[_LAST_CASE_DATA_CHANGED];
+                return (bool)HttpContext.Current.Session[_IS_CASE_DATA_CHANGED];
             }
             set
             {
-                if (HttpContext.Current.Session[_LAST_CASE_DATA_CHANGED] == null)
-                    HttpContext.Current.Session.Add(_LAST_CASE_DATA_CHANGED, value);
+                if (HttpContext.Current.Session[_IS_CASE_DATA_CHANGED] == null)
+                    HttpContext.Current.Session.Add(_IS_CASE_DATA_CHANGED, value);
                 else
-                    HttpContext.Current.Session[_LAST_CASE_DATA_CHANGED] = value;
+                    HttpContext.Current.Session[_IS_CASE_DATA_CHANGED] = value;
             }
         }
 

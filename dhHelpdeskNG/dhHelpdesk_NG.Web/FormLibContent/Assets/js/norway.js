@@ -68,7 +68,8 @@ function narrowingWithXML(xmlFile,xmlFileAllOptions, $baseSelector, $targetSelec
             //Clear list
             if (targetIsSelectize) {
                 selectize_tags = $targetSelector[0].selectize
-                selectize_tags.clearOptions();
+                if (selectize_tags != undefined)
+                    selectize_tags.clearOptions();
             }
             else {
                 $targetSelector.find('option').remove();
@@ -96,12 +97,15 @@ function narrowingWithXML(xmlFile,xmlFileAllOptions, $baseSelector, $targetSelec
                         var items = optionsarray.map(function (x) { return { text: x, value: x }; });
                         
                         if (targetIsSelectize) {
-                            selectize_tags.addOption(items);
+                            if (selectize_tags != undefined)
+                                selectize_tags.addOption(items);
                             if (targetValue != '') {
-                                selectize_tags.setValue(targetValue);
+                                if (selectize_tags != undefined)
+                                    selectize_tags.setValue(targetValue);
                             }
                             else
-                                selectize_tags.setValue('');
+                                if (selectize_tags != undefined)
+                                    selectize_tags.setValue('');
                             return;
                         }
                         else {
@@ -264,13 +268,16 @@ function getAllOptions(xmlFile, $targetSelector, targetValue) {
            
             if (targetIsSelectize) {
                 var selectize_tags = $targetSelector[0].selectize;
-                selectize_tags.addOption(items);
+                if (selectize_tags != undefined)
+                    selectize_tags.addOption(items);
 
                 if (targetValue != '') {
-                    selectize_tags.setValue(targetValue);
+                    if (selectize_tags != undefined)
+                        selectize_tags.setValue(targetValue);
                 }
                 else
-                    selectize_tags.setValue('');
+                    if (selectize_tags != undefined)
+                        selectize_tags.setValue('');
                 return;
             }
             else {
@@ -357,7 +364,8 @@ function narrowingWithXML2Base(xmlFile, xmlFileAllOptions, $baseSelector, $base2
             //Clear list
             if (targetIsSelectize) {
                 selectize_tags = $targetSelector[0].selectize
-                selectize_tags.clearOptions();
+                if (selectize_tags != undefined)
+                    selectize_tags.clearOptions();
             }
             else {
                 $targetSelector.find('option').remove();
@@ -387,12 +395,15 @@ function narrowingWithXML2Base(xmlFile, xmlFileAllOptions, $baseSelector, $base2
                         var items = optionsarray.map(function (x) { return { text: x, value: x }; });
 
                         if (targetIsSelectize) {
-                            selectize_tags.addOption(items);
+                            if (selectize_tags != undefined)
+                                selectize_tags.addOption(items);
                             if (targetValue != '') {
-                                selectize_tags.setValue(targetValue);
+                                if (selectize_tags != undefined)
+                                    selectize_tags.setValue(targetValue);
                             }
                             else
-                                selectize_tags.setValue('');
+                                if (selectize_tags != undefined)
+                                    selectize_tags.setValue('');
                             return;
                         }
                         else {

@@ -31,6 +31,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DH.Helpdesk.EForm.Service", "dhHelpdesk_NG.E_Form\Service\DH.Helpdesk.EForm.Service.csproj", "{C5500586-9BF2-4381-9E26-BDE146879E1E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DH.Helpdesk.EForm.FormLib", "dhHelpdesk_NG.E_Form\FormLib\DH.Helpdesk.EForm.FormLib.csproj", "{4723B7A1-B0BD-4421-8670-A6F6FB9975B2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4826D35D-823C-4E12-9905-771261721661} = {4826D35D-823C-4E12-9905-771261721661}
+		{C5500586-9BF2-4381-9E26-BDE146879E1E} = {C5500586-9BF2-4381-9E26-BDE146879E1E}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

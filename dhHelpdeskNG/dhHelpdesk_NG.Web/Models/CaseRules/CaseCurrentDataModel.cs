@@ -171,6 +171,8 @@ namespace DH.Helpdesk.Web.Models.CaseRules
             Files = new List<FileJS>(); 
         }
 
+        public string DateFormat { get; set; }
+
         public string PlanDateJS { get; set; }
 
         public string WatchDateJS { get; set; }

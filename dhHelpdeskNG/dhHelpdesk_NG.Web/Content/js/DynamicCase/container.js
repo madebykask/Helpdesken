@@ -46,7 +46,11 @@ var dhform = function (options) {
         if (_this._options.modal == 0) {
             $('#loadContainer').on('click', function (event) {
                 event.preventDefault();
-                _this.load({ url: _this._options.url });
+                var curState = $(this).attr("data-state");
+                if (curState == "") {
+                    _this.load({ url: _this._options.url });
+                    $(this).attr("data-state", "loaded");
+                }
             });
         } else if (_this._options.modal == 1) {
             $('#openContainer').on('click', function (event) {

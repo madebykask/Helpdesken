@@ -849,7 +849,7 @@ $(function () {
         $('#case__ReportedBy').val(updatedInfo.ReportedBy);
         $('#case__PersonsName').val(updatedInfo.PersonsName);
         $('#case__PersonsPhone').val(updatedInfo.PersonsPhone);
-        $('#case__PlanDate').val(updatedInfo.PlanDateJS);
+        
         $('#case__CaseType_Id').val(updatedInfo.CaseType_Id).change();
         
         $('#case__ProductArea_Id').val(updatedInfo.ProductArea_Id).change();
@@ -857,16 +857,29 @@ $(function () {
         $('#case__Priority_Id').val(updatedInfo.Priority_Id).change();
         $('#case__Status_Id').val(updatedInfo.Status_Id).change();
         $('#case__StateSecondary_Id').val(updatedInfo.StateSecondary_Id).change();
-        $('#case__WatchDate').val(updatedInfo.WatchDateJS);
 
-        $('#case__Region_Id').val(updatedInfo.Region_Id).change();
-        setTimeout(function () {
-            $('#case__Department_Id').val(updatedInfo.Department_Id).change();
-            setTimeout(function () {
-                $('#case__Ou_Id').val(updatedInfo.OU_Id).change();
-            }, 3000);
-        }, 2000);
+        $("#case__PlanDate").datepicker({
+            format: updatedInfo.DateFormat.toLowerCase(),
+            autoclose: true
+        }).datepicker('setDate', updatedInfo.PlanDateJS);
 
+        $("#case__WatchDate").datepicker({
+            format: updatedInfo.DateFormat.toLowerCase(),
+            autoclose: true
+        }).datepicker('setDate', updatedInfo.WatchDateJS);
+        
+        $("#CaseTemplate_Department_Id").val();
+        $("#CaseTemplate_OU_Id").val();
+
+        if (updatedInfo.Department_Id != null && updatedInfo.Department_Id != 0) {
+            $("#CaseTemplate_Department_Id").val(updatedInfo.Department_Id);
+        }
+         
+        if (updatedInfo.OU_Id != null && updatedInfo.OU_Id != 0) {
+            $("#CaseTemplate_OU_Id").val(updatedInfo.OU_Id);
+        }
+
+        $('#case__Region_Id').val(updatedInfo.Region_Id).change();       
         var t = $('#case_files_table > tbody > tr')[0];
 
     }

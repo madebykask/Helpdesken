@@ -1796,10 +1796,6 @@
     <Content Include="favicon.ico" />
     <Content Include="FormLibContent\Areas\Netherlands\Views\Hiring\Predifened_CostCentre.xml" />
     <Content Include="FormLibContent\Areas\SouthKorea\Shared\SouthKoreaJS.js" />
-    <Content Include="FormLibContent\Assemblies\DH.Helpdesk.EForm.Core.dll" />
-    <Content Include="FormLibContent\Assemblies\DH.Helpdesk.EForm.FormLib.dll" />
-    <Content Include="FormLibContent\Assemblies\DH.Helpdesk.EForm.Model.dll" />
-    <Content Include="FormLibContent\Assemblies\DH.Helpdesk.EForm.Service.dll" />
     <Content Include="FormLibContent\Assemblies\itextsharp.dll" />
     <Content Include="FormLibContent\Assets\css\bootstrap-responsive.css" />
     <Content Include="FormLibContent\Assets\css\bootstrap.css" />

@@ -77,6 +77,8 @@ namespace DH.Helpdesk.EForm.FormLib.Areas.Poland.Controllers
             var model = new FormModel(xmlPath) { };
             model.Contract = new Contract { Initiator = FormLibSessions.User.FullName };
             model.Form = _contractRepository.GetFormByGuid(model.FormGuid);
+            FormLibSessions.IsCaseDataChanged = true;
+
             PopulateWithFormOptions(ref model);
 
             var dictionary = formCollection.ToDictionary();
@@ -141,7 +143,7 @@ namespace DH.Helpdesk.EForm.FormLib.Areas.Poland.Controllers
 
             if(contract == null)
                 throw new HttpException(404, "Page not found");
-
+            
             var model = new FormModel(xmlPath)
             {
                 Contract = contract,
@@ -151,6 +153,8 @@ namespace DH.Helpdesk.EForm.FormLib.Areas.Poland.Controllers
             };
 
             model.Form = _contractRepository.GetFormByGuid(model.FormGuid);
+
+            FormLibSessions.IsCaseDataChanged = true;
 
             // change Send back to requestor internal-val="40"
             if(HiringAdditional(model))

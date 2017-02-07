@@ -69,6 +69,7 @@ namespace DH.Helpdesk.EForm.FormLib.Areas.Poland.Controllers
             model.Form = _contractRepository.GetFormByGuid(model.FormGuid);
 
             PopulateWithOptions(ref model);
+            FormLibSessions.IsCaseDataChanged = true;
 
             var dictionary = formCollection.ToDictionary();
             model.TempSave(ref dictionary);
@@ -139,6 +140,7 @@ namespace DH.Helpdesk.EForm.FormLib.Areas.Poland.Controllers
                     || (FormLibSessions.User.WorkingGroups.FirstOrDefault(x => x.Id == contract.WorkingGroupId) == null)
             };
 
+            FormLibSessions.IsCaseDataChanged = true;
             model.Form = _contractRepository.GetFormByGuid(model.FormGuid);
 
             PopulateWithOptions(ref model);

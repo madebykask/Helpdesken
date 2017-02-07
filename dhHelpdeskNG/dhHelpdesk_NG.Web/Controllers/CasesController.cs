@@ -75,6 +75,7 @@ namespace DH.Helpdesk.Web.Controllers
     using Common.Enums.Settings;
     using Infrastructure.ModelFactories.Case.Concrete;
     using static BusinessData.OldComponents.GlobalEnums;
+    using System.Threading;
 
     public class CasesController : BaseController
     {        
@@ -1314,24 +1315,25 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpGet]        
         public JsonResult GetCaseInfo(int caseId)
         {
-            if (!SessionFacade.LastCaseDataChanged)
+            if (!SessionFacade.IsCaseDataChanged)
                 return Json(new { needUpdate = false, shouldReload = false, newData = "" }, JsonRequestBehavior.AllowGet);
 
             var _case = _caseService.GetCaseById(caseId);
             if (_case.FinishingDate != null)
             {
-                SessionFacade.LastCaseDataChanged = false;
+                SessionFacade.IsCaseDataChanged = false;
                 return Json(new { needUpdate = true, shouldReload = true, newData = "" }, JsonRequestBehavior.AllowGet);
             }
             
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
 
             var caseInfo = new CaseCurrentDataModelJS() {
+                DateFormat = Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern,
                 ReportedBy = _case.ReportedBy,
                 PersonsName = _case.PersonsName,
                 PersonsPhone = _case.PersonsPhone,
-                PlanDateJS = _case.PlanDate.HasValue ? _case.PlanDate.Value.ToLongDateString() : "",
-                WatchDateJS = _case.WatchDate.HasValue ? _case.WatchDate.Value.ToLongDateString() : "",
+                PlanDateJS = _case.PlanDate.HasValue ? _case.PlanDate.Value.ToShortDateString() : "",
+                WatchDateJS = _case.WatchDate.HasValue ? _case.WatchDate.Value.ToShortDateString() : "",
                 Region_Id = _case.Region_Id,
                 Department_Id = _case.Department_Id,
                 OU_Id = _case.OU_Id,
@@ -1360,7 +1362,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             };
 
-            SessionFacade.LastCaseDataChanged = false;
+            SessionFacade.IsCaseDataChanged = false;
             return Json(new { needUpdate = true, shouldReload = false, newData = caseInfo }, JsonRequestBehavior.AllowGet);
         }
 
@@ -3784,7 +3786,7 @@ namespace DH.Helpdesk.Web.Controllers
             int? parentCaseId = null)
         {
             var m = new CaseInputViewModel ();
-            SessionFacade.LastCaseDataChanged = false;
+            SessionFacade.IsCaseDataChanged = false;
 
             m.BackUrl = backUrl;
             m.CanGetRelatedCases = SessionFacade.CurrentUser.IsAdministrator();
