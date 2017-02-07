@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Domain
+﻿using System.Collections.Generic;
+
+namespace DH.Helpdesk.Domain
 {
     using global::System;
 
@@ -39,7 +41,10 @@
 
 		public virtual CaseHistory CaseHistory { get; set; }
 
-        public void SetResponse(DateTime? sendTime, string resopnseMessage)
+		public virtual List<EmailLogAttempt> EmailLogAttempts { get; set; }
+
+
+		public void SetResponse(DateTime? sendTime, string resopnseMessage)
         {
             this.SendTime = sendTime;
             this.ResponseMessage = resopnseMessage;
