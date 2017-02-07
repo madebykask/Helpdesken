@@ -1699,5 +1699,12 @@ GO
 UPDATE [dbo].[tblOrderType] SET [CaptionOther] = N'Övrigt'
 GO
 
+if not exists(select * from tblDate where DateKey = '20170101')
+begin
+ exec [dbo].[sp_PopulateTblDate] '2017-01-01', '2017-12-31'
+end
+GO
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.30'
