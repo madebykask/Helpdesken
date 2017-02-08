@@ -1328,6 +1328,7 @@ namespace DH.Helpdesk.Web.Controllers
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
 
             var caseInfo = new CaseCurrentDataModelJS() {
+                Id = caseId,
                 DateFormat = Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern,
                 ReportedBy = _case.ReportedBy,
                 PersonsName = _case.PersonsName,
@@ -1342,26 +1343,9 @@ namespace DH.Helpdesk.Web.Controllers
                 ProductArea_Id = _case.ProductArea_Id,
                 StateSecondary_Id = _case.StateSecondary_Id,
                 Status_Id = _case.Status_Id,
-                WorkingGroup_Id = _case.WorkingGroup_Id,
-                Files = _case.CaseFiles.Select(f=> 
-                                new FileJS {
-                                            Id = f.Id,
-                                            FileName = f.FileName,
-                                            UserId = SessionFacade.CurrentUser.FirstName + " " + SessionFacade.CurrentUser.SurName,
-                                            CreateDate = TimeZoneInfo.ConvertTimeFromUtc(f.CreatedDate.ToUniversalTime(), userTimeZone).ToString()
-                                }).ToList(),
-
-                Logs = _case.Logs.Select(l => 
-                                new LogJS {
-                                            Id = l.Id,
-                                            LogDate = TimeZoneInfo.ConvertTimeFromUtc(l.LogDate.ToUniversalTime(), userTimeZone).ToString(),
-                                            Text_Internal = l.Text_Internal,
-                                            Text_External = l.Text_External,
-                                            UserId = l.User == null ? l.RegUser : l.User.FirstName + " " + l.User.SurName
-                                }).ToList()
-
+                WorkingGroup_Id = _case.WorkingGroup_Id
             };
-
+            
             SessionFacade.IsCaseDataChanged = false;
             return Json(new { needUpdate = true, shouldReload = false, newData = caseInfo }, JsonRequestBehavior.AllowGet);
         }
@@ -1745,7 +1729,37 @@ namespace DH.Helpdesk.Web.Controllers
             var model = new CaseFilesModel(id, cfs.ToArray(), savedFiles, UseVD);
             return this.PartialView("_CaseFiles", model);
         }
-        
+
+        [HttpGet]
+        public ActionResult GetCaseFilesJS(int caseId)
+        {            
+            var files = _caseFileService.FindFileNamesByCaseId(caseId);
+            var cfs = MakeCaseFileModel(files, string.Empty);
+            var customerId = 0;            
+            customerId = _caseService.GetCaseById(caseId).Customer_Id;
+            
+            bool UseVD = false;
+            if (customerId != 0 && !string.IsNullOrEmpty(_masterDataService.GetVirtualDirectoryPath(customerId)))
+            {
+                UseVD = true;
+            }
+
+            var model = new CaseFilesModel(caseId.ToString(), cfs.ToArray(), string.Empty, UseVD);
+            return PartialView("_CaseFiles", model);
+        }
+
+
+        [HttpGet]
+        public ActionResult GetCaseInputModel(int caseId)
+        {
+            var customerId = SessionFacade.CurrentCustomer.Id;
+            var userId = SessionFacade.CurrentUser.Id;
+            var caseLockModel = new CaseLockModel();
+
+            var model = this.GetCaseInputViewModel(userId, customerId, caseId, caseLockModel);
+            return PartialView("_CaseLog", model);
+        }
+
         [HttpGet]
         public ActionResult LogFiles(string id)
         {

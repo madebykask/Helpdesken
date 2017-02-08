@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace DH.Helpdesk.Web.Models.CaseRules
 {
@@ -8,6 +9,11 @@ namespace DH.Helpdesk.Web.Models.CaseRules
         public int Customer_Id { get; set; }
 
         #region Initiator      
+
+        public int Id { get; set; }
+
+        public decimal CaseNumber { get; set; }
+
 
         public string ReportedBy { get; set; }
 
@@ -167,19 +173,13 @@ namespace DH.Helpdesk.Web.Models.CaseRules
     {
         public CaseCurrentDataModelJS()
         {
-            Logs = new List<LogJS>();
-            Files = new List<FileJS>(); 
         }
 
         public string DateFormat { get; set; }
 
         public string PlanDateJS { get; set; }
 
-        public string WatchDateJS { get; set; }
-
-        public List<LogJS> Logs { get; set; }
-
-        public List<FileJS> Files { get; set; }
+        public string WatchDateJS { get; set; }       
     }
 
     public sealed class LogJS

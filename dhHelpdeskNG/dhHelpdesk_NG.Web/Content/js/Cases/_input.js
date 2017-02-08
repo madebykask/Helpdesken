@@ -879,11 +879,22 @@ $(function () {
             $("#CaseTemplate_OU_Id").val(updatedInfo.OU_Id);
         }
 
-        $('#case__Region_Id').val(updatedInfo.Region_Id).change();       
-        var t = $('#case_files_table > tbody > tr')[0];
+        $('#case__Region_Id').val(updatedInfo.Region_Id).change();
 
+        $.get('/Cases/GetCaseFilesJS', { caseId: updatedInfo.Id, now: Date.now() }, function (data) {
+            $('#divCaseFiles').html(data);            
+            $(document).trigger("OnUploadedCaseFileRendered", []);
+            bindDeleteCaseFileBehaviorToDeleteButtons();
+        });
+
+        $.get('/Cases/GetCaseInputModel', { caseId: updatedInfo.Id, now: Date.now() }, function (data) {
+            //$('#divCaseLog').html('');
+            $('#logtab').html(data);
+        });
+        
     }
 
+  
     function ClearCostCentre() {
         $('#case__CostCentre').val('');
     }
