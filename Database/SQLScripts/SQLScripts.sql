@@ -1332,7 +1332,8 @@ end
 else
 begin
 	Alter table tblOU
-	Add OUGUID uniqueIdentifier NOT NULL default (newid())
+	--Add OUGUID uniqueIdentifier NOT NULL default (newid())
+	Add OUGUID uniqueIdentifier NOT NULL CONSTRAINT DF_OUGUID default (newid())
 end
 GO
 
@@ -1360,7 +1361,8 @@ end
 else
 begin
 	Alter table tblPriority
-	Add PriorityGUID uniqueIdentifier NOT NULL default (newid())
+	--Add PriorityGUID uniqueIdentifier NOT NULL default (newid())
+	Add PriorityGUID uniqueIdentifier NOT NULL CONSTRAINT DF_PriorityGUID default (newid())
 end
 GO
 
@@ -1387,7 +1389,8 @@ end
 else
 begin
 	Alter table tblProductArea
-	Add ProductAreaGUID uniqueIdentifier NOT NULL default (newid())
+	--Add ProductAreaGUID uniqueIdentifier NOT NULL default (newid())
+	Add ProductAreaGUID uniqueIdentifier NOT NULL CONSTRAINT DF_ProductAreaGUID default (newid())
 end
 GO
 
@@ -1414,7 +1417,8 @@ end
 else
 begin
 	Alter table tblLink
-	Add LinkGUID uniqueIdentifier NOT NULL default (newid())
+	--Add LinkGUID uniqueIdentifier NOT NULL default (newid())
+	Add LinkGUID uniqueIdentifier NOT NULL CONSTRAINT DF_LinkGUID default (newid())
 end
 GO
 
@@ -1441,7 +1445,8 @@ end
 else
 begin
 	Alter table tblRegion
-	Add RegionGUID uniqueIdentifier NOT NULL default (newid())
+	--Add RegionGUID uniqueIdentifier NOT NULL default (newid())
+	Add RegionGUID uniqueIdentifier NOT NULL CONSTRAINT DF_RegionGUID default (newid())
 end
 GO
 
@@ -1468,7 +1473,8 @@ end
 else
 begin
 	Alter table tblStateSecondary
-	Add StateSecondaryGUID uniqueIdentifier NOT NULL default (newid())
+	--Add StateSecondaryGUID uniqueIdentifier NOT NULL default (newid())
+	Add StateSecondaryGUID uniqueIdentifier NOT NULL CONSTRAINT DF_StateSecondaryGUID default (newid())
 end
 GO
 
@@ -1495,7 +1501,8 @@ end
 else
 begin
 	Alter table tblStatus
-	Add StatusGUID uniqueIdentifier NOT NULL default (newid())
+	--Add StatusGUID uniqueIdentifier NOT NULL default (newid())
+	Add StatusGUID uniqueIdentifier NOT NULL CONSTRAINT DF_StatusGUID default (newid())
 end
 GO
 
@@ -1522,7 +1529,8 @@ end
 else
 begin
 	Alter table tblComputerType
-	Add ComputerTypeGUID uniqueIdentifier NOT NULL default (newid())
+	--Add ComputerTypeGUID uniqueIdentifier NOT NULL default (newid())
+	Add ComputerTypeGUID uniqueIdentifier NOT NULL CONSTRAINT DF_ComputerTypeGUID default (newid())
 end
 GO
 
