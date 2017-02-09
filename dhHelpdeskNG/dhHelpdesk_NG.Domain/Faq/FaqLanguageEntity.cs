@@ -14,6 +14,8 @@
 
         public int Language_Id { get; set; }
 
+        public virtual FaqEntity Faq { get; set; }
+
         #endregion
     }
 }

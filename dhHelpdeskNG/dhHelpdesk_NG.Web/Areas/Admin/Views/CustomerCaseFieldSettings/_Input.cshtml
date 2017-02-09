@@ -308,23 +308,7 @@
                         <tr>
 
                             <td>
-                                <input type="hidden" name="CaseFieldSettings[5].ShowOnStartPage" value="0"/>
-                                <input type="hidden" name="CaseFieldSettings[5].ShowOnStartPage" value="0" />
-                                <input type="hidden" name="CaseFieldSettings[5].Customer_Id" value="@Model.Customer.Id" />
-                                <input type="hidden" name="CaseFieldSettings[5].Name" value="Customer_Id" />
-                                <input type="hidden" name="CaseFieldSettings[5].Id" value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Customer_Id.ToString())" />
-                                <input type="hidden" name="CaseFieldSettings[5].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.Customer_Id.ToString())" />
-                                <input type="hidden" name="CaseFieldSettings[5].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.Customer_Id.ToString())" />
                                 
-                                <input type="hidden" name="CaseFieldSettings[5].ShowExternal" value="0"/>
-                                <input type="hidden" name="CaseFieldSettings[5].ShowExternal" value="0" />
-                                <input type="hidden" name="CaseFieldSettings[5].Locked" value="0" />
-
-                                <input type="hidden" name="CaseFieldSettingWithLangauges[5].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.Customer_Id.ToString())"/>
-                                <input type="hidden" name="CaseFieldSettingWithLangauges[5].Name" value="Customer_Id" />
-
-                                <input type="hidden" name="CaseFieldSettings[5].Required" value="1" />
-                                <input type="hidden" name="CaseFieldSettingWithLangauges[5].FieldHelp" value="0" />
 
                                 <i class="dh-icon-select" rel="tooltip" title="@Translation.Get("Vallista - dropdown", Enums.TranslationSource.TextTranslation)"></i>
                             </td>
@@ -2612,6 +2596,24 @@
                     @Html.HiddenFor(model => model.CaseFieldSettingLanguage.Language_Id)
                     @Html.HiddenFor(model => model.CaseFieldSettingLanguage.CaseFieldSettings_Id)
                     @Html.HiddenFor(model => model.CaseFieldSettingLanguage)
+
+                    <input type="hidden" name="CaseFieldSettings[5].ShowOnStartPage" value="0" />
+                    <input type="hidden" name="CaseFieldSettings[5].ShowOnStartPage" value="0" />
+                    <input type="hidden" name="CaseFieldSettings[5].Customer_Id" value="@Model.Customer.Id" />
+                    <input type="hidden" name="CaseFieldSettings[5].Name" value="Customer_Id" />
+                    <input type="hidden" name="CaseFieldSettings[5].Id" value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Customer_Id.ToString())" />
+                    <input type="hidden" name="CaseFieldSettings[5].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.Customer_Id.ToString())" />
+                    <input type="hidden" name="CaseFieldSettings[5].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.Customer_Id.ToString())" />
+
+                    <input type="hidden" name="CaseFieldSettings[5].ShowExternal" value="0" />
+                    <input type="hidden" name="CaseFieldSettings[5].ShowExternal" value="0" />
+                    <input type="hidden" name="CaseFieldSettings[5].Locked" value="0" />
+
+                    <input type="hidden" name="CaseFieldSettingWithLangauges[5].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.Customer_Id.ToString())" />
+                    <input type="hidden" name="CaseFieldSettingWithLangauges[5].Name" value="Customer_Id" />
+
+                    <input type="hidden" name="CaseFieldSettings[5].Required" value="1" />
+                    <input type="hidden" name="CaseFieldSettingWithLangauges[5].FieldHelp" value="0" />
                 </div>
 
             </div>

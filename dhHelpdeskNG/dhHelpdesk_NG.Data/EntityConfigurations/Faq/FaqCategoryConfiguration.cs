@@ -21,7 +21,12 @@
                 .WithMany(c => c.SubFAQCategories)
                 .HasForeignKey(c => c.Parent_FAQCategory_Id)
                 .WillCascadeOnDelete(false);
-            
+
+            this.HasMany(f => f.FaqCategoryLanguages)
+                .WithRequired(f => f.FaqCategory)
+                .HasForeignKey(f => f.FAQCategory_Id)
+                .WillCascadeOnDelete(false);
+
             this.Property(c => c.PublicFAQCategory).IsRequired().HasColumnName("PublicFAQCat");
             this.Property(c => c.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(c => c.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);

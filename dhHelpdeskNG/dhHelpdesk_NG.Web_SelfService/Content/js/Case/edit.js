@@ -520,6 +520,8 @@
                     $('#NewCase_Place').val(item.place);
                     $('#NewCase_UserCode').val(item.usercode);
                     $('#NewCase_Region_Id').val(item.regionid);
+                    $('#NewCase_CostCentre').val(item.costcentre);
+                    
                     me.setOrganizationData(item.regionid, item.departmentid, item.ouid);
 
                     return item.num;

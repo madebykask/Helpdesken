@@ -438,11 +438,6 @@ GO
 
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'EMailType' and sysobjects.name = N'tblOrder')
 	ALTER TABLE [dbo].[tblOrder] ADD [EMailType] int NULL
-ELSE
-BEGIN
-	ALTER TABLE [dbo].[tblOrder] ALTER COLUMN [EMailType] int NULL
-	UPDATE [dbo].[tblOrder] SET [EMailType] = NULL WHERE [EMailType] = 0
-END
 GO
 
 Declare @OrderFieldValue nvarchar(50)
@@ -1312,8 +1307,7 @@ GO
 --tblOU
 if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'OUGUID' and sysobjects.name = N'tblOU')
 begin
-		Alter table tblOU
-		Alter Column OUGUID uniqueIdentifier NOT NULL 
+		EXECUTE  sp_executesql  "update tblOU set OUGUID = newid() where OUGUID is null" 
 
 		if not exists(select *
 					  from sys.all_columns c
@@ -1332,7 +1326,8 @@ end
 else
 begin
 	Alter table tblOU
-	Add OUGUID uniqueIdentifier NOT NULL default (newid())
+	--Add OUGUID uniqueIdentifier NOT NULL default (newid())
+	Add OUGUID uniqueIdentifier NOT NULL CONSTRAINT DF_OUGUID default (newid())
 end
 GO
 
@@ -1340,8 +1335,7 @@ GO
 --tblPriority
 if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'PriorityGUID' and sysobjects.name = N'tblPriority')
 begin
-		Alter table tblPriority
-		Alter Column PriorityGUID uniqueIdentifier NOT NULL 
+		EXECUTE  sp_executesql  "update tblPriority set PriorityGUID = newid() where PriorityGUID is null"
 
 		if not exists(select *
 					  from sys.all_columns c
@@ -1360,15 +1354,15 @@ end
 else
 begin
 	Alter table tblPriority
-	Add PriorityGUID uniqueIdentifier NOT NULL default (newid())
+	--Add PriorityGUID uniqueIdentifier NOT NULL default (newid())
+	Add PriorityGUID uniqueIdentifier NOT NULL CONSTRAINT DF_PriorityGUID default (newid())
 end
 GO
 
  --tblProductArea
 if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ProductAreaGUID' and sysobjects.name = N'tblProductArea')
 begin
-		Alter table tblProductArea
-		Alter Column ProductAreaGUID uniqueIdentifier NOT NULL 
+		EXECUTE  sp_executesql  "update tblProductArea set ProductAreaGUID = newid() where ProductAreaGUID is null"
 
 		if not exists(select *
 					  from sys.all_columns c
@@ -1387,15 +1381,15 @@ end
 else
 begin
 	Alter table tblProductArea
-	Add ProductAreaGUID uniqueIdentifier NOT NULL default (newid())
+	--Add ProductAreaGUID uniqueIdentifier NOT NULL default (newid())
+	Add ProductAreaGUID uniqueIdentifier NOT NULL CONSTRAINT DF_ProductAreaGUID default (newid())
 end
 GO
 
 --tblLink
 if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LinkGUID' and sysobjects.name = N'tblLink')
 begin
-		Alter table tblLink
-		Alter Column LinkGUID uniqueIdentifier NOT NULL 
+		EXECUTE  sp_executesql  "update tblLink set LinkGUID = newid() where LinkGUID is null"
 
 		if not exists(select *
 					  from sys.all_columns c
@@ -1414,15 +1408,15 @@ end
 else
 begin
 	Alter table tblLink
-	Add LinkGUID uniqueIdentifier NOT NULL default (newid())
+	--Add LinkGUID uniqueIdentifier NOT NULL default (newid())
+	Add LinkGUID uniqueIdentifier NOT NULL CONSTRAINT DF_LinkGUID default (newid())
 end
 GO
 
   --tblRegion
 if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'RegionGUID' and sysobjects.name = N'tblRegion')
 begin
-		Alter table tblRegion
-		Alter Column RegionGUID uniqueIdentifier NOT NULL 
+		EXECUTE  sp_executesql  "update tblRegion set RegionGUID = newid() where RegionGUID is null"
 
 		if not exists(select *
 					  from sys.all_columns c
@@ -1441,15 +1435,15 @@ end
 else
 begin
 	Alter table tblRegion
-	Add RegionGUID uniqueIdentifier NOT NULL default (newid())
+	--Add RegionGUID uniqueIdentifier NOT NULL default (newid())
+	Add RegionGUID uniqueIdentifier NOT NULL CONSTRAINT DF_RegionGUID default (newid())
 end
 GO
 
    --tblStateSecondary
 if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'StateSecondaryGUID' and sysobjects.name = N'tblStateSecondary')
 begin
-		Alter table tblStateSecondary
-		Alter Column StateSecondaryGUID uniqueIdentifier NOT NULL 
+		EXECUTE  sp_executesql  "update tblStateSecondary set StateSecondaryGUID = newid() where StateSecondaryGUID is null"
 
 		if not exists(select *
 					  from sys.all_columns c
@@ -1468,15 +1462,15 @@ end
 else
 begin
 	Alter table tblStateSecondary
-	Add StateSecondaryGUID uniqueIdentifier NOT NULL default (newid())
+	--Add StateSecondaryGUID uniqueIdentifier NOT NULL default (newid())
+	Add StateSecondaryGUID uniqueIdentifier NOT NULL CONSTRAINT DF_StateSecondaryGUID default (newid())
 end
 GO
 
 --tblStatus
 if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'StatusGUID' and sysobjects.name = N'tblStatus')
 begin
-		Alter table tblStatus
-		Alter Column StatusGUID uniqueIdentifier NOT NULL 
+		EXECUTE  sp_executesql  "update tblStatus set StatusGUID = newid() where StatusGUID is null"
 
 		if not exists(select *
 					  from sys.all_columns c
@@ -1495,15 +1489,15 @@ end
 else
 begin
 	Alter table tblStatus
-	Add StatusGUID uniqueIdentifier NOT NULL default (newid())
+	--Add StatusGUID uniqueIdentifier NOT NULL default (newid())
+	Add StatusGUID uniqueIdentifier NOT NULL CONSTRAINT DF_StatusGUID default (newid())
 end
 GO
 
 --tblComputerType
 if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ComputerTypeGUID' and sysobjects.name = N'tblComputerType')
 begin
-		Alter table tblComputerType
-		Alter Column ComputerTypeGUID uniqueIdentifier NOT NULL 
+		EXECUTE  sp_executesql  "update tblComputerType set ComputerTypeGUID = newid() where ComputerTypeGUID is null" 
 
 		if not exists(select *
 					  from sys.all_columns c
@@ -1522,7 +1516,8 @@ end
 else
 begin
 	Alter table tblComputerType
-	Add ComputerTypeGUID uniqueIdentifier NOT NULL default (newid())
+	--Add ComputerTypeGUID uniqueIdentifier NOT NULL default (newid())
+	Add ComputerTypeGUID uniqueIdentifier NOT NULL CONSTRAINT DF_ComputerTypeGUID default (newid())
 end
 GO
 
@@ -1698,6 +1693,13 @@ GO
 
 UPDATE [dbo].[tblOrderType] SET [CaptionOther] = N'Övrigt'
 GO
+
+if not exists(select * from tblDate where DateKey = '20170101')
+begin
+ exec [dbo].[sp_PopulateTblDate] '2017-01-01', '2017-12-31'
+end
+GO
+
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.30'

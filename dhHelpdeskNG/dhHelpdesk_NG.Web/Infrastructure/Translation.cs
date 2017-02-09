@@ -272,7 +272,8 @@
                             "Ärende",
                             "Ärendefiler",
                             "Översikt",
-                            "kan inte ändras eftersom det finns order som är skickade."
+                            "kan inte ändras eftersom det finns order som är skickade.",
+                            "Det finns inga valbara filer att lägga till på ordern."
                         };
             return ret;
         }

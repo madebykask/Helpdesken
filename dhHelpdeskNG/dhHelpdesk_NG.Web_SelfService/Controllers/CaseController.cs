@@ -386,7 +386,7 @@
                     model.NewCase.OU_Id = caseTemplate.OU_Id.HasValue ? caseTemplate.OU_Id.Value : notifier?.OrganizationUnitId;
                     model.NewCase.Place = string.IsNullOrEmpty(caseTemplate.Place) ? notifier?.Place : caseTemplate.Place;
                     model.NewCase.UserCode = string.IsNullOrEmpty(caseTemplate.UserCode) ? notifier?.Code : caseTemplate.UserCode;
-                    model.NewCase.CostCentre = caseTemplate.CostCentre;
+                    model.NewCase.CostCentre = string.IsNullOrEmpty(caseTemplate.CostCentre) ? notifier?.CostCentre : caseTemplate.CostCentre;
 
                     model.NewCase.InventoryNumber = string.IsNullOrEmpty(caseTemplate.InventoryNumber)? Request.GetComputerName() : caseTemplate.InventoryNumber;
                     model.NewCase.InventoryType = caseTemplate.InventoryType;

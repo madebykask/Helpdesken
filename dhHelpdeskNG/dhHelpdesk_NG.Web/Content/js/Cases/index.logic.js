@@ -261,7 +261,7 @@ function getCollapseCaption(cap) {
         var fetchParams;
         var expandedGroup = $(self.$hidExpandedGroup).val();
         var baseParams = self.filterForm.getFilterToSend();
-        var p = params || {};
+        var p = favoritParams || {};
         baseParams.push({ name: "expandedGroup", value: expandedGroup });
 
         if (self.appendFetch != null && self.appendFetch.length > 0) {

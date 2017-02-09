@@ -13,7 +13,7 @@
 }
 <script type="text/javascript">
     window.i18n = @Html.Raw(jsSerializer.Serialize(i18n))
-    window.params = {
+    window.favoritParams = {
         saveFavoriteUrl: '@Url.Content("~/Cases/SaveFavorite/")',
         deleteFavoriteUrl: '@Url.Content("~/Cases/DeleteFavorite/")',
         loadFavoritesUrl: '@Url.Content("~/Cases/LoadFavorites/")',

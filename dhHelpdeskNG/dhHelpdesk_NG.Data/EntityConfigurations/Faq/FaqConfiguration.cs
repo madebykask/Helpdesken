@@ -51,6 +51,11 @@
                 .HasForeignKey(f => f.FAQ_Id)
                 .WillCascadeOnDelete(false);
 
+            this.HasMany(f => f.FaqLanguages)
+                .WithRequired(f => f.Faq)
+                .HasForeignKey(f => f.FAQ_Id)
+                .WillCascadeOnDelete(false);
+
             this.Property(f => f.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             this.ToTable("tblFAQ");
         }

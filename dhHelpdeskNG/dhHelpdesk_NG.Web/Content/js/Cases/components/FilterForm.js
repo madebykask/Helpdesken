@@ -64,15 +64,15 @@ FilterForm.prototype.init = function (opt) {
     me.$explainText = $("#explainText");
     me.$requireText = $("#requiredFavoriteText");
 
-    me.$addingDialogHeader = window.params.addingDialogHeader;
-    me.$updatingDialogHeader = window.params.updatingDialogHeader;
+    me.$addingDialogHeader = window.favoritParams.addingDialogHeader;
+    me.$updatingDialogHeader = window.favoritParams.updatingDialogHeader;
     
-    me.$addingDialogDescription = window.params.addingDialogDescription;
-    me.$updatingDialogDescription = window.params.updatingDialogDescription;
+    me.$addingDialogDescription = window.favoritParams.addingDialogDescription;
+    me.$updatingDialogDescription = window.favoritParams.updatingDialogDescription;
     
-    me.$saveFavoriteUrl = window.params.saveFavoriteUrl;
-    me.$deleteFavoriteUrl = window.params.deleteFavoriteUrl;
-    me.$loadFavoritesUrl = window.params.loadFavoritesUrl;
+    me.$saveFavoriteUrl = window.favoritParams.saveFavoriteUrl;
+    me.$deleteFavoriteUrl = window.favoritParams.deleteFavoriteUrl;
+    me.$loadFavoritesUrl = window.favoritParams.loadFavoritesUrl;
     
 
     /************** EVENTS BINDING ************************/

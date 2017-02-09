@@ -15,7 +15,10 @@
 
         InvoiceArticle[] GetArticles(int customerId);
 
-        CaseInvoice[] GetCaseInvoices(int caseId);
+	    List<InvoiceArticle> GetActiveArticles(int customerId);
+
+
+		CaseInvoice[] GetCaseInvoices(int caseId);
 
         CaseInvoice[] GetCaseInvoicesWithTimeZone(int caseId, TimeZoneInfo userTimeZone);
 

@@ -443,6 +443,8 @@ namespace DH.Helpdesk.Web
                 "~/Content/js/Cases/components/FilterForm.js",
                 "~/Content/js/Cases/components/BaseField.js",
                 "~/Content/js/Cases/components/JQueryChosenField.js",
+                "~/Content/js/Cases/components/DateField.js",
+                "~/Content/js/Cases/components/JQueryChosenField.js",
                 "~/Content/js/Cases/components/DropdownButtonField.js"));
 
             RegisterOrdersAreaBundles(bundles);
