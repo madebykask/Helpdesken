@@ -2,6 +2,10 @@
 
 var _parameters = window.parameters;
    
+var caseButtonsToLock = $('.btn.save, .btn.save-close, .btn.save-new, .btn.caseDeleteDialog, ' +
+                    '#case-action-close, #divActionMenu, #btnActionMenu, #divCaseTemplate, #btnCaseTemplateTree, .btn.print-case,' +
+                    '.btn.show-inventory, .btn.previous-case, .btn.next-case, .btn.templateQuickButton');
+
 $(function () {
     var $userId = $('#case__ReportedBy');
     var $updateUserInfo = $('#UpdateNotifierInformation');
@@ -846,6 +850,8 @@ $(function () {
         if (updatedInfo == null)
             return;
 
+        changeCaseButtonsState(false);
+
         $('#case__ReportedBy').val(updatedInfo.ReportedBy);
         $('#case__PersonsName').val(updatedInfo.PersonsName);
         $('#case__PersonsPhone').val(updatedInfo.PersonsPhone);
@@ -887,9 +893,10 @@ $(function () {
             bindDeleteCaseFileBehaviorToDeleteButtons();
         });
 
-        $.get('/Cases/GetCaseInputModel', { caseId: updatedInfo.Id, now: Date.now() }, function (data) {
-            //$('#divCaseLog').html('');
+        $.get('/Cases/GetCaseInputModel', { caseId: updatedInfo.Id, now: Date.now() }, function (data) {            
             $('#logtab').html(data);
+        }).done(function () {
+            changeCaseButtonsState(true);
         });
         
     }
@@ -898,4 +905,18 @@ $(function () {
     function ClearCostCentre() {
         $('#case__CostCentre').val('');
     }
+
+    function changeCaseButtonsState(state) {
+        if (state) {
+            caseButtons.removeClass('disabled');
+            caseButtons.css("pointer-events", "");
+            $(templateQuickButtonIndicator).css("display", "none");
+        }
+        else {
+            caseButtons.addClass("disabled");
+            caseButtons.css("pointer-events", "none");
+            $(templateQuickButtonIndicator).css("display", "block");
+        }
+    }
+
 });

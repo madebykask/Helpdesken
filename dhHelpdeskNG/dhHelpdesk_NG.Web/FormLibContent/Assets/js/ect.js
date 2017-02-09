@@ -2694,15 +2694,10 @@ var init = function () {
     WorkCommunicationTypes();
 
     InitIntegration();
-
+    
     //Sort by text
-    //$('.search-select').selectize({sortField: [{ field: 'text' }]});
-    //$('.search-select').selectize();
-    //$(".search-select").chosen({
-    //    width: "300px",
-    //    'placeholder_text_multiple': "Test",
-    //    'no_results_text': 'nothing'
-    //});
+    $('.search-select').selectize({sortField: [{ field: 'text' }]});
+    
     $('.typeahead').typeahead(typeAheadOptions);
     $('#Co-WorkerGlobalviewID').typeahead(globalTypeAheadOptions);
     $('#IKEAEmailAddress').typeahead(globalEmailTypeAheadOptions);
