@@ -1307,7 +1307,7 @@ GO
 --tblOU
 if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'OUGUID' and sysobjects.name = N'tblOU')
 begin
-		EXECUTE  sp_executesql  'update tblOU set OUGUID = newid() where OUGUID is null' 
+		EXECUTE  sp_executesql  "update tblOU set OUGUID = newid() where OUGUID is null" 
 
 		if not exists(select *
 					  from sys.all_columns c
@@ -1335,7 +1335,7 @@ GO
 --tblPriority
 if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'PriorityGUID' and sysobjects.name = N'tblPriority')
 begin
-		EXECUTE  sp_executesql  'update tblPriority set PriorityGUID = newid() where PriorityGUID is null'
+		EXECUTE  sp_executesql  "update tblPriority set PriorityGUID = newid() where PriorityGUID is null"
 
 		if not exists(select *
 					  from sys.all_columns c
@@ -1362,7 +1362,7 @@ GO
  --tblProductArea
 if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ProductAreaGUID' and sysobjects.name = N'tblProductArea')
 begin
-		EXECUTE  sp_executesql  'update tblProductArea set ProductAreaGUID = newid() where ProductAreaGUID is null'
+		EXECUTE  sp_executesql  "update tblProductArea set ProductAreaGUID = newid() where ProductAreaGUID is null"
 
 		if not exists(select *
 					  from sys.all_columns c
@@ -1389,7 +1389,7 @@ GO
 --tblLink
 if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LinkGUID' and sysobjects.name = N'tblLink')
 begin
-		EXECUTE  sp_executesql  'update tblLink set LinkGUID = newid() where LinkGUID is null'
+		EXECUTE  sp_executesql  "update tblLink set LinkGUID = newid() where LinkGUID is null"
 
 		if not exists(select *
 					  from sys.all_columns c
@@ -1416,7 +1416,7 @@ GO
   --tblRegion
 if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'RegionGUID' and sysobjects.name = N'tblRegion')
 begin
-		EXECUTE  sp_executesql  'update tblRegion set RegionGUID = newid() where RegionGUID is null'
+		EXECUTE  sp_executesql  "update tblRegion set RegionGUID = newid() where RegionGUID is null"
 
 		if not exists(select *
 					  from sys.all_columns c
@@ -1443,7 +1443,7 @@ GO
    --tblStateSecondary
 if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'StateSecondaryGUID' and sysobjects.name = N'tblStateSecondary')
 begin
-		EXECUTE  sp_executesql  'update tblStateSecondary set StateSecondaryGUID = newid() where StateSecondaryGUID is null' 
+		EXECUTE  sp_executesql  "update tblStateSecondary set StateSecondaryGUID = newid() where StateSecondaryGUID is null"
 
 		if not exists(select *
 					  from sys.all_columns c
@@ -1470,7 +1470,7 @@ GO
 --tblStatus
 if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'StatusGUID' and sysobjects.name = N'tblStatus')
 begin
-		EXECUTE  sp_executesql  'update tblStatus set StatusGUID = newid() where StatusGUID is null'
+		EXECUTE  sp_executesql  "update tblStatus set StatusGUID = newid() where StatusGUID is null"
 
 		if not exists(select *
 					  from sys.all_columns c
@@ -1497,7 +1497,7 @@ GO
 --tblComputerType
 if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ComputerTypeGUID' and sysobjects.name = N'tblComputerType')
 begin
-		EXECUTE  sp_executesql  'update tblComputerType set ComputerTypeGUID = newid() where ComputerTypeGUID is null' 
+		EXECUTE  sp_executesql  "update tblComputerType set ComputerTypeGUID = newid() where ComputerTypeGUID is null" 
 
 		if not exists(select *
 					  from sys.all_columns c
