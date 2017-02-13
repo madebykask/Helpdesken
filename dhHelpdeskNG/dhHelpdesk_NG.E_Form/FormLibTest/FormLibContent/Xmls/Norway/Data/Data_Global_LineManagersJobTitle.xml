@@ -18,7 +18,6 @@
 <option value="Country Com&amp;In Manager">Country Com&amp;In Manager</option>
 <option value="Country Customer Support Centre Manager">Country Customer Support Centre Manager</option>
 <option value="Country External Communication Manager">Country External Communication Manager</option>
-<option value="Country IKEA Food Manager">Country IKEA Food Manager</option>
 <option value="Country Retail Manager">Country Retail Manager</option>
 <option value="Country Risk Manager">Country Risk Manager</option>
 <option value="Country Sales Manager">Country Sales Manager</option>
@@ -27,14 +26,15 @@
 <option value="Customer Relations Manager">Customer Relations Manager</option>
 <option value="Customer Relations Team Leader">Customer Relations Team Leader</option>
 <option value="Deputy Business Navigation Manager">Deputy Business Navigation Manager</option>
+<option value="Deputy Checkout Services Manager">Deputy Checkout Services Manager</option>
 <option value="Deputy Country Com&amp;In Manager">Deputy Country Com&amp;In Manager</option>
+<option value="Deputy Logistics Manager">Deputy Logistics Manager</option>
 <option value="Deputy Retail Manager">Deputy Retail Manager</option>
 <option value="Deputy Sales Manager">Deputy Sales Manager</option>
 <option value="Deputy Shopkeeper">Deputy Shopkeeper</option>
 <option value="Deputy Store Manager">Deputy Store Manager</option>
 <option value="Easy Buying Leader">Easy Buying Leader</option>
 <option value="Easy Buying Manager">Easy Buying Manager</option>
-<option value="eCommerce Manager">eCommerce Manager</option>
 <option value="Exchange &amp; Returns Manager">Exchange &amp; Returns Manager</option>
 <option value="Exchange &amp; Returns Team Leader">Exchange &amp; Returns Team Leader</option>
 <option value="Finance Manager">Finance Manager</option>
@@ -73,6 +73,7 @@
 <option value="Sales &amp; Supply Support Manager">Sales &amp; Supply Support Manager</option>
 <option value="Sales Manager">Sales Manager</option>
 <option value="Sales Navigator">Sales Navigator</option>
+<option value="Service Business Leader">Service Business Leader</option>
 <option value="Service Team Leader">Service Team Leader</option>
 <option value="Services Manager">Services Manager</option>
 <option value="Shopkeeper">Shopkeeper</option>

@@ -232,6 +232,7 @@
           <option value="Annualised">Annualised</option>
           <option value="Secondment">Secondment</option>
           <option value="Term Time">Term Time</option>
+          <option value="Apprentice">Apprentice</option>
         </options>
       </element>
       <!-- mandatory -->

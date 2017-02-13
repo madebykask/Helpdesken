@@ -57,6 +57,7 @@
 <option value="Customer Relations Team Leader">Customer Relations Team Leader</option>
 <option value="Database specialist">Database specialist</option>
 <option value="Deputy Business Navigation Manager">Deputy Business Navigation Manager</option>
+<option value="Deputy Checkout Services Manager">Deputy Checkout Services Manager</option>
 <option value="Deputy Country Com&amp;In Manager">Deputy Country Com&amp;In Manager</option>
 <option value="Deputy Goods Flow Manager">Deputy Goods Flow Manager</option>
 <option value="Deputy Logistics Manager">Deputy Logistics Manager</option>
@@ -115,6 +116,7 @@
 <option value="Marketing Relationship Manager">Marketing Relationship Manager</option>
 <option value="Marketing Web Specialist">Marketing Web Specialist</option>
 <option value="Media Specialist">Media Specialist</option>
+<option value="Office Support Administrator">Office Support Administrator</option>
 <option value="Operations Developer">Operations Developer</option>
 <option value="Operations Manager">Operations Manager</option>
 <option value="Payroll Manager">Payroll Manager</option>
@@ -131,6 +133,7 @@
 <option value="Project Specialist">Project Specialist</option>
 <option value="Property Business Navigator">Property Business Navigator</option>
 <option value="Property Manager">Property Manager</option>
+<option value="Purchase Specialist">Purchase Specialist</option>
 <option value="Purchaser">Purchaser</option>
 <option value="Quality Support">Quality Support</option>
 <option value="Range &amp;Purchasing Manager">Range &amp;Purchasing Manager</option>
@@ -159,7 +162,6 @@
 <option value="Sales Support Co-worker">Sales Support Co-worker</option>
 <option value="Sales Support Specialist">Sales Support Specialist</option>
 <option value="Security Responsible">Security Responsible</option>
-<option value="Senior HR System Specialist">Senior HR System Specialist</option>
 <option value="Service Business Leader">Service Business Leader</option>
 <option value="Service Co-worker">Service Co-worker</option>
 <option value="Service Team Leader">Service Team Leader</option>
