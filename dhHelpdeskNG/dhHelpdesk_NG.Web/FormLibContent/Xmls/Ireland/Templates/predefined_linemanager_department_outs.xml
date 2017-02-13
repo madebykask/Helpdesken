@@ -34,6 +34,10 @@
     <show>Retail Establishment Manager</show>
   </dependent>
   <dependent>
+    <selected>Caroline Finglas</selected>
+    <show>Goods Flow Manager</show>
+  </dependent>
+  <dependent>
     <selected>Cassandra McManus</selected>
     <show>Visual Merchandising/Activity Manager</show>
   </dependent>
@@ -154,6 +158,10 @@
     <show>Shopkeeper</show>
   </dependent>
   <dependent>
+    <selected>Marie Marsh</selected>
+    <show>Shopkeeper</show>
+  </dependent>
+  <dependent>
     <selected>Mark Dempsey</selected>
     <show>Shopkeeper</show>
   </dependent>
@@ -188,6 +196,10 @@
   <dependent>
     <selected>Neal Corbett</selected>
     <show>Sales &amp; Supply Support Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Paul Flood</selected>
+    <show>Shopkeeper Self Serve</show>
   </dependent>
   <dependent>
     <selected>Paul Moore</selected>
@@ -228,6 +240,10 @@
   <dependent>
     <selected>Stephen Ellis</selected>
     <show>Commercial Restaurant Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Steven Lam</selected>
+    <show>Team Leader</show>
   </dependent>
   <dependent>
     <selected>Sharon White</selected>

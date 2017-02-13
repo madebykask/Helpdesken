@@ -16,27 +16,27 @@
 
     <!--Tab ServiceRequestDetails-->
     <tab name="#ServiceRequestDetails" label="Service Request Details">
-      <element name="Co-WorkerGlobalviewID" type="text" label="Co-Worker Globalview ID" mandatory="1">
+      <element name="Co-WorkerGlobalviewID" type="text" label="Co-Worker Globalview ID" mandatory="1" casefield="reportedby">
         <regex inherit="employeeno" message="" pattern=""></regex>
       </element>
-      <element name="FirstName" type="text" label="Co-Worker First Name" mandatory="1"></element>
-      <element name="LastName" type="text" label="Co-Worker Last Name" mandatory="1"></element>
+      <element name="FirstName" type="text" label="Co-Worker First Name" mandatory="1" casefield="persons_name"></element>
+      <element name="LastName" type="text" label="Co-Worker Last Name" mandatory="1" casefield="persons_phone"></element>
       <element name="IKEAEmailAddress" type="text" label="IKEA Email Address">
         <regex inherit="email" message="" pattern=""></regex>
       </element>
       <element name="IKEANetworkID" type="text" label="IKEA Network ID"></element>
-      <element name="Company" type="text" label="Company" mandatory="1"></element>
-      <element name="BusinessUnit" type="text" label="Business Unit" mandatory="1"></element>
+      <element name="Company" type="text" label="Company" mandatory="1" casefield="region_id"></element>
+      <element name="BusinessUnit" type="text" label="Business Unit" mandatory="1" casefield="department_id"></element>
       <element name="ServiceArea" type="text" label="Function"></element>
-      <element name="Department" type="text" label="Department"></element>
-      <element name="ChangeValidFrom" type="date" label="Change Valid from:" mandatory="1" format="dd.MM.yyyy">
+      <element name="Department" type="text" label="Department" casefield="ou_id"></element>
+      <element name="ChangeValidFrom" type="date" label="Change Valid from:" mandatory="1" format="dd.MM.yyyy" casefield="plandate">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element name="ChangeValidTo" type="date" label="Change Valid to:" mandatory="1" default="31.12.9999" format="dd.MM.yyyy">
         <laterThanOrEqual name="ChangeValidFrom" message="This date cannot be earlier than Change valid from date."></laterThanOrEqual>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard">
+      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard" casefield="status_id">
         <options>
           <option value=""></option>
           <option value="Urgent">Urgent</option>
