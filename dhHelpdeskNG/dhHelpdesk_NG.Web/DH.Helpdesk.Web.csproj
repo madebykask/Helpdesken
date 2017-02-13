@@ -3147,7 +3147,6 @@
     <Content Include="FormLibContent\Views\Shared\_InternalLogNote.cshtml" />
     <Content Include="FormLibContent\Views\Shared\_InternalLogNoteV2.cshtml" />
     <Content Include="FormLibContent\Views\Shared\_Layout.cshtml" />
-    <Content Include="FormLibContent\Views\Shared\_LayoutLM.cshtml" />
     <Content Include="FormLibContent\Views\Shared\_Navigation.cshtml" />
     <Content Include="FormLibContent\Views\Shared\_Scripts.cshtml" />
     <Content Include="FormLibContent\Views\Shared\_StaticDocuments.cshtml" />
