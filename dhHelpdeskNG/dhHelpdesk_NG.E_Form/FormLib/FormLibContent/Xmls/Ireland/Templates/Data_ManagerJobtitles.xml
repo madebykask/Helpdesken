@@ -15,6 +15,7 @@
   <option value="Customer Services Manager">Customer Services Manager</option>
   <option value="Deputy Retail Manager">Deputy Retail Manager</option>
   <option value="Deputy Sales Manager">Deputy Sales Manager</option>
+  <option value="Deputy Shopkeeper">Deputy Shopkeeper</option>
   <option value="Goods Flow Manager">Goods Flow Manager</option>
   <option value="Goods Flow Team Leader">Goods Flow Team Leader</option>
   <option value="Goods Flow Team Manager">Goods Flow Team Manager</option>
@@ -40,10 +41,12 @@
   <option value="Sales Manager">Sales Manager</option>
   <option value="Sales Team Leader">Sales Team Leader</option>
   <option value="Shopkeeper">Shopkeeper</option>
+  <option value="Shopkeeper Self Serve">Shopkeeper Self Serve</option>
   <option value="Site Facility Manager">Site Facility Manager</option>
   <option value="Staff Planning Manager">Staff Planning Manager</option>
   <option value="Store Manager">Store Manager</option>
   <option value="Sustainability Manager">Sustainability Manager</option>
+  <option value="Team Leader">Team Leader</option>
   <option value="Unit Manager">Unit Manager</option>
   <option value="Visual Merchandising/Activity Manager">Visual Merchandising/Activity Manager</option>  
 </options>

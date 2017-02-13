@@ -252,18 +252,13 @@
         </options>
       </element>
       <element type="select" name="ContractType" label="Contract Type" mandatory="1">
-        <!--<options>
-          <option value=""></option>
-          <option value="Part Time">Part Time</option>
-          <option value="Full Time">Full Time</option>
-          <option value="Zero Hours">Zero Hours</option>
-        </options>-->
         <options>
-          <option value=""></option>
+          <option value=""></option>          
           <option value="Permanent">Permanent</option>
           <option value="Temporary">Temporary</option>
           <option value="Fixed Term">Fixed Term</option>
           <option value="Zero Hours">Zero Hours</option>
+          <option value="Apprentice">Apprentice</option>
         </options>
       </element>
       <element type="select" name="ProbationPeriod" label="Probation Period" mandatory="1" default="Yes">

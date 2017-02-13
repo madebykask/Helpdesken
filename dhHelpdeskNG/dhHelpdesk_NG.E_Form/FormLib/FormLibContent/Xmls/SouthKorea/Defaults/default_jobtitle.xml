@@ -54,6 +54,10 @@
     <show>Architect</show>
   </dependent>
   <dependent>
+    <selected>Business Analyst CSC</selected>
+    <show>Business Analyst</show>
+  </dependent>
+  <dependent>
     <selected>Business Analyst SO</selected>
     <show>Business Analyst</show>
   </dependent>
@@ -86,8 +90,16 @@
     <show>Business Navigator</show>
   </dependent>
   <dependent>
+    <selected>Business Navigator SO</selected>
+    <show>Business Navigator</show>
+  </dependent>
+  <dependent>
     <selected>Business Navigator Trainee SO</selected>
     <show>Business Navigator Trainee</show>
+  </dependent>
+  <dependent>
+    <selected>Business Service Manager CSC</selected>
+    <show>Business Service Manager</show>
   </dependent>
   <dependent>
     <selected>Business support SO</selected>
@@ -292,6 +304,10 @@
   <dependent>
     <selected>Customer Relations Manager 522</selected>
     <show>Customer Relations Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Customer Resolution Manager CSC</selected>
+    <show>Customer Resolution Manager</show>
   </dependent>
   <dependent>
     <selected>Customs Manager SO</selected>
@@ -786,6 +802,10 @@
     <show>Operations Developer</show>
   </dependent>
   <dependent>
+    <selected>Operations Manager CSC</selected>
+    <show>Operations Manager</show>
+  </dependent>
+  <dependent>
     <selected>Payroll Specialist SO</selected>
     <show>Payroll Specialist</show>
   </dependent>
@@ -950,6 +970,10 @@
     <show>Safety &amp; Security Team Leader</show>
   </dependent>
   <dependent>
+    <selected>Sales &amp; Services Manager CSC</selected>
+    <show>Sales &amp; Services Manager</show>
+  </dependent>
+  <dependent>
     <selected>Sales &amp; Supply Sup. Specialist 373</selected>
     <show>Sales &amp; Supply Support Specialist</show>
   </dependent>
@@ -1076,6 +1100,14 @@
   <dependent>
     <selected>Store Quality &amp; Safety Compliance Leader 522</selected>
     <show>Store Quality &amp; Safety Compliance Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Superuser (SAMS) CSC</selected>
+    <show>Superuser (SAMS)</show>
+  </dependent>
+  <dependent>
+    <selected>Super User (RTS) CSC</selected>
+    <show>Super User (RTS)</show>
   </dependent>
   <dependent>
     <selected>Supply Chain Integration Specialist SO</selected>

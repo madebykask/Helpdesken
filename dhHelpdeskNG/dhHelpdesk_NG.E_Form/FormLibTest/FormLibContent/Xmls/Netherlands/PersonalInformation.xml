@@ -13,33 +13,33 @@
   <fields>
     <!--Tab Service Request Details-->
     <tab name="#ServiceRequestDetails" label="Service Request Details">
-      <element name="Co-WorkerGlobalviewID" type="text" label="Co-Worker Globalview ID" mandatory="1">
+      <element name="Co-WorkerGlobalviewID" type="text" label="Co-Worker Globalview ID" mandatory="1" casefield="reportedby" HcmData="1" SortOrder="1" ParentGVFields="0">
         <regex inherit="employeeno" message="" pattern=""></regex>
       </element>
-      <element name="FirstName" type="text" label="Co-Worker First Name" mandatory="1"></element>
-      <element name="LastName" type="text" label="Co-Worker Last name" mandatory="1"></element>
-      <element name="IKEAEmailAddress" type="text" label="IKEA Email Address">
+      <element name="FirstName" type="text" label="Co-Worker First Name" mandatory="1" casefield="persons_name" HcmData="1" SortOrder="2" ParentGVFields="0"></element>
+      <element name="LastName" type="text" label="Co-Worker Last name" mandatory="1" casefield="persons_phone" HcmData="1" SortOrder="3" ParentGVFields="0"></element>
+      <element name="IKEAEmailAddress" type="text" label="IKEA Email Address" HcmData="1" SortOrder="4" ParentGVFields="0">
         <regex inherit="email" message="" pattern=""></regex>
       </element>
-      <element name="IKEANetworkID" type="text"  label="IKEA Network ID"></element>
-      <element name="Company" type="text" label="Company" mandatory="1"></element>
-      <element name="BusinessUnit" type="text" label="Business Unit" mandatory="1"></element>
+      <element name="IKEANetworkID" type="text"  label="IKEA Network ID" HcmData="1" SortOrder="5" ParentGVFields="0"></element>
+      <element name="Company" type="text" label="Company" mandatory="1" casefield="region_id"></element>
+      <element name="BusinessUnit" type="text" label="Business Unit" mandatory="1" casefield="department_id" HcmData="1" SortOrder="6" ParentGVFields="0"></element>
       <element name="ServiceArea" type="text" label="Function"></element>
-      <element name="Department" type="text" label="Department"></element>
+      <element name="Department" type="text" label="Department" casefield="ou_id" HcmData="1" SortOrder="7" ParentGVFields="0"></element>
       <element name="TECoWorker" type="select" label="Is Co-Worker a TE?" mandatory="1">
         <options>
           <option value ="No">No</option>
           <option value ="Yes">Yes</option>
         </options>
       </element>
-      <element name="ChangeValidFrom" type="date" format="dd.MM.yyyy" mandatory="1" label="Change valid from:">
+      <element name="ChangeValidFrom" type="date" format="dd.MM.yyyy" mandatory="1" label="Change valid from:" casefield="plandate" HcmData="1" SortOrder="8" ParentGVFields="0">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element name="ChangeValidTo" type="date" format="dd.MM.yyyy" mandatory="1" default="31.12.9999" label="Change valid to:">
+      <element name="ChangeValidTo" type="date" format="dd.MM.yyyy" mandatory="1" default="31.12.9999" label="Change valid to:" HcmData="1" SortOrder="9" ParentGVFields="0">
         <regex inherit="date" pattern="" message=""></regex>
         <laterThanOrEqual name="ChangeValidFrom" message="This date cannot be earlier than Change valid from date."></laterThanOrEqual>
       </element>
-      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard">
+      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard" casefield="status_id">
         <options>
           <option value =""></option>
           <option value ="Urgent">Urgent</option>
@@ -50,46 +50,46 @@
     </tab>
     <!--Personal Information Tab-->
     <tab name="#Personal" label="Personal Information">
-      <element type="text" name="TelephoneNumber" label="Telephone Number"></element>
-      <element type="text" name="ContactEMailAddress" label="Contact e-mail address" formfieldidentifier="E1P0105.USRID_LONG:10">
+      <element type="text" name="TelephoneNumber" label="Telephone Number" HcmData="1" SortOrder="10" ParentGVFields="0"></element>
+      <element type="text" name="ContactEMailAddress" label="Contact e-mail address" formfieldidentifier="E1P0105.USRID_LONG:10" HcmData="1" SortOrder="11" ParentGVFields="0">
         <regex inherit="email" message="" pattern=""></regex>
       </element>
       
-      <element type="text" name="PermanentAddressLine1" label="Address line 1" formfieldidentifier="E1P0006.STRAS:1"></element>
-      <element type="text" name="PermanentAddressLine2" label="Address line 2" formfieldidentifier="E1P0006.HSNMR:1"></element>
-      <element type="text" name="PermanentAddressLine3" label="Address line 3" formfieldidentifier="E1P0006.POSTA:1"></element>
-      <element type="text" name="PermanentPostalCode" label="Postal code" formfieldidentifier="E1P0006.PSTLZ:1">
+      <element type="text" name="PermanentAddressLine1" label="Address line 1" formfieldidentifier="E1P0006.STRAS:1" HcmData="1" SortOrder="21" ParentGVFields="0"></element>
+      <element type="text" name="PermanentAddressLine2" label="Address line 2" formfieldidentifier="E1P0006.HSNMR:1" HcmData="1" SortOrder="22" ParentGVFields="0"></element>
+      <element type="text" name="PermanentAddressLine3" label="Address line 3" formfieldidentifier="E1P0006.POSTA:1" HcmData="1" SortOrder="23" ParentGVFields="0"></element>
+      <element type="text" name="PermanentPostalCode" label="Postal code" formfieldidentifier="E1P0006.PSTLZ:1" HcmData="1" SortOrder="24" ParentGVFields="0">
         <regex inherit="postcode" pattern="" message=""></regex>
         <validateIf name="PermanentCountry">Netherlands</validateIf>
       </element>
-      <element type="text" name="PermanentCity" label="City" formfieldidentifier="E1P0006.ORT01:1"></element>
-      <element type="search-select" source="1" name="PermanentCountry" label="Country" default="Netherlands" formfieldidentifier="E1P0006.LAND1:1">
+      <element type="text" name="PermanentCity" label="City" formfieldidentifier="E1P0006.ORT01:1" HcmData="1" SortOrder="25" ParentGVFields="0"></element>
+      <element type="search-select" source="1" name="PermanentCountry" label="Country" default="Netherlands" formfieldidentifier="E1P0006.LAND1:1" HcmData="1" SortOrder="26" ParentGVFields="0">
         &pre_country;
       </element>
-      <element type="text" name="MailingAddressLine1" label="Address line 1" ></element>
-      <element type="text" name="MailingAddressLine2" label="Address line 2"></element>
-      <element type="text" name="MailingAddressLine3" label="Address line 3"></element>
-      <element type="text" name="MailingPostalCode" label="Postal code" >
+      <element type="text" name="MailingAddressLine1" label="Address line 1" HcmData="1" SortOrder="27" ParentGVFields="0"></element>
+      <element type="text" name="MailingAddressLine2" label="Address line 2" HcmData="1" SortOrder="28" ParentGVFields="0"></element>
+      <element type="text" name="MailingAddressLine3" label="Address line 3" HcmData="1" SortOrder="0" ParentGVFields="0"></element>
+      <element type="text" name="MailingPostalCode" label="Postal code" HcmData="1" SortOrder="29" ParentGVFields="0">
         <regex inherit="postcode" message="" pattern=""></regex>
         <validateIf name="MailingCountry">Netherlands</validateIf>
       </element>
-      <element type="text" name="MailingCity" label="City" ></element>
-      <element type="search-select" source="1" name="MailingCountry" label="Country" default="Netherlands">        
+      <element type="text" name="MailingCity" label="City" HcmData="1" SortOrder="30" ParentGVFields="0"></element>
+      <element type="search-select" source="1" name="MailingCountry" label="Country" default="Netherlands"  HcmData="1" SortOrder="31" ParentGVFields="0">        
         &pre_country;
       </element>
-      <element type="text" name="EmergencyAddressLine1" label="Address line 1" formfieldidentifier="E1P0006.STRAS:4"></element>
-      <element type="text" name="EmergencyAddressLine2" label="Address line 2" formfieldidentifier="E1P0006.HSNMR:4"></element>
-      <element type="text" name="EmergencyAddressLine3" label="Address line 3"></element>
-      <element type="text" name="EmergencyPostalCode" label="Postal code" formfieldidentifier="E1P0006.PSTLZ:4">
+      <element type="text" name="EmergencyAddressLine1" label="Address line 1" formfieldidentifier="E1P0006.STRAS:4" HcmData="1" SortOrder="32" ParentGVFields="0"></element>
+      <element type="text" name="EmergencyAddressLine2" label="Address line 2" formfieldidentifier="E1P0006.HSNMR:4" HcmData="1" SortOrder="33" ParentGVFields="0"></element>
+      <element type="text" name="EmergencyAddressLine3" label="Address line 3" HcmData="1" SortOrder="34" ParentGVFields="0"></element>
+      <element type="text" name="EmergencyPostalCode" label="Postal code" formfieldidentifier="E1P0006.PSTLZ:4" HcmData="1" SortOrder="35" ParentGVFields="0">
         <regex inherit="postcode" message="" pattern=""></regex>
         <validateIf name="MailingCountry">Netherlands</validateIf>
       </element>
-      <element type="text" name="EmergencyCity" label="City" formfieldidentifier="E1P0006.ORT01:4"></element>
-      <element type="search-select" source="1" name="EmergencyCountry" label="Country" default="Netherlands" formfieldidentifier="E1P0006.LAND1:4">
+      <element type="text" name="EmergencyCity" label="City" formfieldidentifier="E1P0006.ORT01:4" HcmData="1" SortOrder="36" ParentGVFields="0"></element>
+      <element type="search-select" source="1" name="EmergencyCountry" label="Country" default="Netherlands" formfieldidentifier="E1P0006.LAND1:4" HcmData="1" SortOrder="37" ParentGVFields="0">
         &pre_country;
       </element>
-      <element type="text" name="EmergencyContactNumber" label="Emergency contact number"></element>
-      <element type="text" name="EmergencyContactRelationship" label="Emergency contact/relationship"></element>
+      <element type="text" name="EmergencyContactNumber" label="Emergency contact number" HcmData="1" SortOrder="38" ParentGVFields="0"></element>
+      <element type="text" name="EmergencyContactRelationship" label="Emergency contact/relationship" HcmData="1" SortOrder="39" ParentGVFields="0"></element>
       <!--Family Member/Dependents-->
       <element type="hidden" name="FamilyMembers" default="1"></element>
       <element type="select" name="FamilyMember" label="Family Member">
@@ -208,8 +208,8 @@
       </element>
 
       <!--Global mobility Employee Documents-->
-      <element type="hidden" name="EmployeeDocuments"> </element>
-      <element type="select" name="EmployeeDocumentType" label="Document Type">
+      <element type="hidden" name="EmployeeDocuments" HcmData="1" SortOrder="0" ParentGVFields="0"> </element>
+      <element type="select" name="EmployeeDocumentType" label="Document Type" HcmData="1" SortOrder="50" ParentGVFields="0">
         <options>
           <option value=""></option>
           <option value="Badge ID">Badge ID</option>
@@ -218,18 +218,18 @@
           <option value="Work Permit">Work Permit</option>
         </options>
       </element>
-      <element type="search-select" source="1" name="EmployeeDocumentCountry" label="Country" default="Netherlands">
+      <element type="search-select" source="1" name="EmployeeDocumentCountry" label="Country" default="Netherlands" HcmData="1" SortOrder="51" ParentGVFields="0">
         &pre_country;
       </element>
-      <element type="text" name="EmployeeDocumentNo" label="Document No"></element>
-      <element type="date" name="EmployeeDocumentIssueDate" label="Issue Date" format="dd.MM.yyyy">
+      <element type="text" name="EmployeeDocumentNo" label="Document No" HcmData="1" SortOrder="52" ParentGVFields="0"></element>
+      <element type="date" name="EmployeeDocumentIssueDate" label="Issue Date" format="dd.MM.yyyy" HcmData="1" SortOrder="53" ParentGVFields="0">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element type="text" name="EmployeeDocumentIssuePlace" label="Issue Place"></element>
-      <element type="search-select" source="1" name="EmployeeDocumentIssuePlaceCountry" label="Issue Place Country" default="Netherlands">
+      <element type="text" name="EmployeeDocumentIssuePlace" label="Issue Place" HcmData="1" SortOrder="54" ParentGVFields="0"></element>
+      <element type="search-select" source="1" name="EmployeeDocumentIssuePlaceCountry" label="Issue Place Country" default="Netherlands" HcmData="1" SortOrder="55" ParentGVFields="0">
         &pre_country;        
       </element>
-      <element type="select" name="EmployeeDocumentType2" label="Document Type">
+      <element type="select" name="EmployeeDocumentType2" label="Document Type" HcmData="1" SortOrder="56" ParentGVFields="0">
         <options>
           <option value=""></option>
           <option value="Badge ID">Badge ID</option>
@@ -238,19 +238,19 @@
           <option value="Work Permit">Work Permit</option>
         </options>
       </element>
-      <element type="search-select" source="1" name="EmployeeDocumentCountry2" label="Country" default="Netherlands">
+      <element type="search-select" source="1" name="EmployeeDocumentCountry2" label="Country" default="Netherlands" HcmData="1" SortOrder="57" ParentGVFields="0">
         &pre_country;
       </element>
-      <element type="text" name="EmployeeDocumentNo2" label="Document No"></element>
-      <element type="date" name="EmployeeDocumentIssueDate2" label="Issue Date" format="dd.MM.yyyy">
+      <element type="text" name="EmployeeDocumentNo2" label="Document No" HcmData="1" SortOrder="58" ParentGVFields="0"></element>
+      <element type="date" name="EmployeeDocumentIssueDate2" label="Issue Date" format="dd.MM.yyyy" HcmData="1" SortOrder="59" ParentGVFields="0">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element type="text" name="EmployeeDocumentIssuePlace2" label="Issue Place"></element>
-      <element type="search-select" source="1" name="EmployeeDocumentIssuePlaceCountry2" label="Issue Place Country" default="Netherlands">
+      <element type="text" name="EmployeeDocumentIssuePlace2" label="Issue Place" HcmData="1" SortOrder="60" ParentGVFields="0"></element>
+      <element type="search-select" source="1" name="EmployeeDocumentIssuePlaceCountry2" label="Issue Place Country" default="Netherlands" HcmData="1" SortOrder="61" ParentGVFields="0">
         &pre_country;
       </element>
       
-      <element type="select" name="EmployeeDocumentType3" label="Document Type">
+      <element type="select" name="EmployeeDocumentType3" label="Document Type" HcmData="1" SortOrder="62" ParentGVFields="0">
         <options>
           <option value=""></option>
           <option value="Badge ID">Badge ID</option>
@@ -259,15 +259,15 @@
           <option value="Work Permit">Work Permit</option>
         </options>
       </element>
-      <element type="search-select" source="1" name="EmployeeDocumentCountry3" label="Country" default="Netherlands">
+      <element type="search-select" source="1" name="EmployeeDocumentCountry3" label="Country" default="Netherlands" HcmData="1" SortOrder="63" ParentGVFields="0">
         &pre_country;
       </element>
-      <element type="text" name="EmployeeDocumentNo3" label="Document No"></element>
-      <element type="date" name="EmployeeDocumentIssueDate3" label="Issue Date" format="dd.MM.yyyy">
+      <element type="text" name="EmployeeDocumentNo3" label="Document No" HcmData="1" SortOrder="64" ParentGVFields="0"></element>
+      <element type="date" name="EmployeeDocumentIssueDate3" label="Issue Date" format="dd.MM.yyyy" HcmData="1" SortOrder="65" ParentGVFields="0">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element type="text" name="EmployeeDocumentIssuePlace3" label="Issue Place"></element>
-      <element type="search-select" source="1" name="EmployeeDocumentIssuePlaceCountry3" label="Issue Place Country" default="Netherlands">
+      <element type="text" name="EmployeeDocumentIssuePlace3" label="Issue Place" HcmData="1" SortOrder="66" ParentGVFields="0"></element>
+      <element type="search-select" source="1" name="EmployeeDocumentIssuePlaceCountry3" label="Issue Place Country" default="Netherlands" HcmData="1" SortOrder="67" ParentGVFields="0">
         &pre_country;
       </element>
 
@@ -315,8 +315,8 @@
 
 
       <!--Global mobility Dependants-->
-      <element type="hidden" name="DependantFamilyMembers"></element>
-      <element type="select" name="DependantFamilyMember" label="Dependant Family Member">
+      <element type="hidden" name="DependantFamilyMembers" HcmData="1" SortOrder="0" ParentGVFields="0"></element>
+      <element type="select" name="DependantFamilyMember" label="Dependant Family Member" HcmData="1" SortOrder="86" ParentGVFields="0">
         <options>
           <option value=""></option>
           <option value="Spouse">Spouse</option>
@@ -324,7 +324,7 @@
           <option value="Step Child">Step Child</option>
         </options>
       </element>
-      <element type="select" name="Accompanying" label="Accompanying">
+      <element type="select" name="Accompanying" label="Accompanying" HcmData="1" SortOrder="87" ParentGVFields="0">
         <mandatoryIfNotEmpty name="DependantFamilyMember"></mandatoryIfNotEmpty>
         <options>
           <option value=""></option>
@@ -332,12 +332,12 @@
           <option value="No">No</option>
         </options>
       </element>
-      <element type="text" name="DependantsLastName" label="Dependant's Last Name"></element>
-      <element type="text" name="DependantsFirstName" label="Dependant's First Name"></element>
-      <element type="date" name="DependantsDateOfBirth" label="Dependant's Date of birth" format="dd.MM.yyyy">
+      <element type="text" name="DependantsLastName" label="Dependant's Last Name" HcmData="1" SortOrder="88" ParentGVFields="0"></element>
+      <element type="text" name="DependantsFirstName" label="Dependant's First Name" HcmData="1" SortOrder="89" ParentGVFields="0"></element>
+      <element type="date" name="DependantsDateOfBirth" label="Dependant's Date of birth" format="dd.MM.yyyy" HcmData="1" SortOrder="90" ParentGVFields="0">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element type="select" name="DependantFamilyMember2" label="Dependant Family Member">
+      <element type="select" name="DependantFamilyMember2" label="Dependant Family Member" HcmData="1" SortOrder="91" ParentGVFields="0">
         <options>
           <option value=""></option>
           <option value="Spouse">Spouse</option>
@@ -345,7 +345,7 @@
           <option value="Step Child">Step Child</option>
         </options>
       </element>
-      <element type="select" name="Accompanying2" label="Accompanying"> 
+      <element type="select" name="Accompanying2" label="Accompanying" HcmData="1" SortOrder="92" ParentGVFields="0"> 
         <mandatoryIfNotEmpty name="DependantFamilyMember2"></mandatoryIfNotEmpty>        
         <options>
           <option value=""></option>
@@ -353,13 +353,13 @@
           <option value="No">No</option>
         </options>
       </element>
-      <element type="text" name="DependantsLastName2" label="Dependant's Last Name"></element>
-      <element type="text" name="DependantsFirstName2" label="Dependant's First Name"></element>
-      <element type="date" name="DependantsDateOfBirth2" label="Dependant's Date of birth" format="dd.MM.yyyy">
+      <element type="text" name="DependantsLastName2" label="Dependant's Last Name" HcmData="1" SortOrder="93" ParentGVFields="0"></element>
+      <element type="text" name="DependantsFirstName2" label="Dependant's First Name" HcmData="1" SortOrder="94" ParentGVFields="0"></element>
+      <element type="date" name="DependantsDateOfBirth2" label="Dependant's Date of birth" format="dd.MM.yyyy" HcmData="1" SortOrder="95" ParentGVFields="0">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
     
-      <element type="select" name="DependantFamilyMember3" label="Dependant Family Member">
+      <element type="select" name="DependantFamilyMember3" label="Dependant Family Member" HcmData="1" SortOrder="96" ParentGVFields="0">
         <options>
           <option value=""></option>
           <option value="Spouse">Spouse</option>
@@ -367,7 +367,7 @@
           <option value="Step Child">Step Child</option>
         </options>
       </element>
-      <element type="select" name="Accompanying3" label="Accompanying">
+      <element type="select" name="Accompanying3" label="Accompanying" HcmData="1" SortOrder="97" ParentGVFields="0">
         <mandatoryIfNotEmpty name="DependantFamilyMember3"></mandatoryIfNotEmpty>
         <options>
           <option value=""></option>
@@ -375,9 +375,9 @@
           <option value="No">No</option>
         </options>
       </element>
-      <element type="text" name="DependantsLastName3" label="Dependant's Last Name"></element>
-      <element type="text" name="DependantsFirstName3" label="Dependant's First Name"></element>
-      <element type="date" name="DependantsDateOfBirth3" label="Dependant's Date of birth" format="dd.MM.yyyy">
+      <element type="text" name="DependantsLastName3" label="Dependant's Last Name" HcmData="1" SortOrder="98" ParentGVFields="0"></element>
+      <element type="text" name="DependantsFirstName3" label="Dependant's First Name" HcmData="1" SortOrder="99" ParentGVFields="0"></element>
+      <element type="date" name="DependantsDateOfBirth3" label="Dependant's Date of birth" format="dd.MM.yyyy" HcmData="1" SortOrder="100" ParentGVFields="0">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
 
@@ -427,8 +427,8 @@
 
 
       <!--Global Mobility Dependants Documents-->
-      <element type="hidden" name="DependantsDocuments"></element>
-      <element type="select" name="DependantsDocumentType" label="Document Type">
+      <element type="hidden" name="DependantsDocuments" HcmData="1" SortOrder="0" ParentGVFields="0"></element>
+      <element type="select" name="DependantsDocumentType" label="Document Type" HcmData="1" SortOrder="68" ParentGVFields="0">
         <options>
           <option value=""></option>
           <option value="ID/passport">ID/passport</option>
@@ -436,18 +436,18 @@
           <option value="Work permit">Work permit</option>
         </options>
       </element>
-      <element type="search-select" source="1" name="DependantsDocumentCountry" label="Country" default="Netherlands">
+      <element type="search-select" source="1" name="DependantsDocumentCountry" label="Country" default="Netherlands" HcmData="1" SortOrder="69" ParentGVFields="0">
         &pre_country;
       </element>
-      <element type="text" name="DependantsDocumentNo" label="Document No"></element>
-      <element type="date" name="DependantsDocumentIssueDate" label="Issue Date" format="dd.MM.yyyy">
+      <element type="text" name="DependantsDocumentNo" label="Document No" HcmData="1" SortOrder="70" ParentGVFields="0"></element>
+      <element type="date" name="DependantsDocumentIssueDate" label="Issue Date" format="dd.MM.yyyy" HcmData="1" SortOrder="71" ParentGVFields="0">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element type="text" name="DependantsDocumentIssuePlace" label="Issue Place" ></element>
-      <element type="search-select" source="1" name="DependantsDocumentIssuePlaceCountry" label="Issue Place Country" default="Netherlands">
+      <element type="text" name="DependantsDocumentIssuePlace" label="Issue Place" HcmData="1" SortOrder="72" ParentGVFields="0" ></element>
+      <element type="search-select" source="1" name="DependantsDocumentIssuePlaceCountry" label="Issue Place Country" default="Netherlands" HcmData="1" SortOrder="73" ParentGVFields="0">
         &pre_country;
       </element>
-      <element type="select" name="DependantsDocumentType2" label="Document Type">
+      <element type="select" name="DependantsDocumentType2" label="Document Type" HcmData="1" SortOrder="74" ParentGVFields="0">
         <options>
           <option value=""></option>
           <option value="ID/passport">ID/passport</option>
@@ -455,19 +455,19 @@
           <option value="Work permit">Work permit</option>
         </options>
       </element>
-      <element type="search-select" source="1" name="DependantsDocumentCountry2" label="Country" default="Netherlands">
+      <element type="search-select" source="1" name="DependantsDocumentCountry2" label="Country" default="Netherlands" HcmData="1" SortOrder="75" ParentGVFields="0">
         &pre_country;
       </element>
-      <element type="text" name="DependantsDocumentNo2" label="Document No"></element>
-      <element type="date" name="DependantsDocumentIssueDate2" label="Issue Date" format="dd.MM.yyyy">
+      <element type="text" name="DependantsDocumentNo2" label="Document No" HcmData="1" SortOrder="76" ParentGVFields="0"></element>
+      <element type="date" name="DependantsDocumentIssueDate2" label="Issue Date" format="dd.MM.yyyy" HcmData="1" SortOrder="77" ParentGVFields="0">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element type="text" name="DependantsDocumentIssuePlace2" label="Issue Place"></element>
-      <element type="search-select" source="1" name="DependantsDocumentIssuePlaceCountry2" label="Issue Place Country" default="Netherlands">
+      <element type="text" name="DependantsDocumentIssuePlace2" label="Issue Place" HcmData="1" SortOrder="78" ParentGVFields="0"></element>
+      <element type="search-select" source="1" name="DependantsDocumentIssuePlaceCountry2" label="Issue Place Country" default="Netherlands" HcmData="1" SortOrder="79" ParentGVFields="0">
         &pre_country;
       </element>
 
-      <element type="select" name="DependantsDocumentType3" label="Document Type">
+      <element type="select" name="DependantsDocumentType3" label="Document Type" HcmData="1" SortOrder="80" ParentGVFields="0">
         <options>
           <option value=""></option>
           <option value="ID/passport">ID/passport</option>
@@ -475,15 +475,15 @@
           <option value="Work permit">Work permit</option>
         </options>
       </element>
-      <element type="search-select" source="1" name="DependantsDocumentCountry3" label="Country" default="Netherlands">
+      <element type="search-select" source="1" name="DependantsDocumentCountry3" label="Country" default="Netherlands" HcmData="1" SortOrder="81" ParentGVFields="0">
         &pre_country;
       </element>
-      <element type="text" name="DependantsDocumentNo3" label="Document No"></element>
-      <element type="date" name="DependantsDocumentIssueDate3" label="Issue Date" format="dd.MM.yyyy">
+      <element type="text" name="DependantsDocumentNo3" label="Document No" HcmData="1" SortOrder="82" ParentGVFields="0"></element>
+      <element type="date" name="DependantsDocumentIssueDate3" label="Issue Date" format="dd.MM.yyyy" HcmData="1" SortOrder="83" ParentGVFields="0">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element type="text" name="DependantsDocumentIssuePlace3" label="Issue Place"></element>
-      <element type="search-select" source="1" name="DependantsDocumentIssuePlaceCountry3" label="Issue Place Country" default="Netherlands">
+      <element type="text" name="DependantsDocumentIssuePlace3" label="Issue Place" HcmData="1" SortOrder="84" ParentGVFields="0"></element>
+      <element type="search-select" source="1" name="DependantsDocumentIssuePlaceCountry3" label="Issue Place Country" default="Netherlands" HcmData="1" SortOrder="85" ParentGVFields="0">
         &pre_country;
       </element>
 
@@ -530,57 +530,34 @@
 
       <!--Bank Account Details-->
       <element type="hidden" name="BankAccounts" default="1"> </element>
-      <!--<element type="select" name="BankType" label="Bank Type" mandatory="1" default="Main Bank">
-                <options>
-                    <option value="Main Bank">Main Bank</option>
-                    <option value="Other Bank">Other Bank</option>
-                </options>
-            </element>-->
-      <element type="text" name="Payee" label="Payee"></element>
-      <!--<element type="select" name="BankCountry" label="Bank Country" mandatory="1">
-                       &pre_country;
-            </element>
-            <element type="text" name="BankKey" label="Bank Key" mandatory="1"></element>
-            <element type="text" name="AccountNumber" label="Account Number" mandatory="1"></element>-->
-      <element type="text" name="IBAN" label="IBAN">
+      <element type="text" name="Payee" label="Payee" HcmData="1" SortOrder="41" ParentGVFields="0"></element>
+      <element type="text" name="IBAN" label="IBAN" HcmData="1" SortOrder="42" ParentGVFields="0">
         <regexIf inherit="iban" pattern="" message="" name="BankCountry">Netherlands</regexIf>
       </element>
       <element type="search-select" name="BankCountry" label="Bank Country" default="Netherlands">
         &pre_country;
       </element>
-      <element type="text" name="PaymentCurrency" label="Payment Currency" default="EUR">
+      <element type="text" name="PaymentCurrency" label="Payment Currency" default="EUR" HcmData="1" SortOrder="43" ParentGVFields="0">
         <regex inherit="currency" pattern="" message=""></regex>
       </element>
-
-      <!--<element type="select" name="BankType2" label="Bank Type" default="Other Bank">
-                <options>
-                    <option value=""></option>
-                    <option value="Other Bank">Other Bank</option>
-                </options>
-            </element>-->
-      <element type="text" name="Payee2" label="Payee"></element>
-      <!--<element type="select" name="BankCountry2" label="Bank Country">
-                        &pre_country;
-            </element>
-            <element type="text" name="BankKey2" label="Bank Key"></element>
-            <element type="text" name="AccountNumber2" label="Account Number"></element>-->
-      <element type="text" name="IBAN2" label="IBAN">
+      <element type="text" name="Payee2" label="Payee" HcmData="1" SortOrder="45" ParentGVFields="0"></element>
+      <element type="text" name="IBAN2" label="IBAN" HcmData="1" SortOrder="46" ParentGVFields="0">
         <regexIf inherit="iban" pattern="" message="" name="BankCountry2">Netherlands</regexIf>
       </element>
       <element type="search-select" name="BankCountry2" label="Bank Country" default="Netherlands">
         &pre_country;
       </element>
-      <element type="text" name="PaymentCurrency2" label="Payment Currency" default="EUR">
+      <element type="text" name="PaymentCurrency2" label="Payment Currency" default="EUR" HcmData="1" SortOrder="47" ParentGVFields="0">
         <regex inherit="currency" pattern="" message=""></regex>
       </element>
 
-      <element type="text" name="OtherBankPercentageOrAmount" label="Other Bank Percentage or Amount">
+      <element type="text" name="OtherBankPercentageOrAmount" label="Other Bank Percentage or Amount" HcmData="1" SortOrder="48" ParentGVFields="0">
         <mandatoryIfNotEmpty name="IBAN2"></mandatoryIfNotEmpty>
         <regex inherit="percentagewithdelimiter" pattern="" message=""></regex> 
       </element>
 
       <!--FISCAL DATA and SOCIAL INSURANCE -->
-      <element type="select" name="TaxDeduction" label="Tax Deduction">
+      <element type="select" name="TaxDeduction" label="Tax Deduction" HcmData="1" SortOrder="49" ParentGVFields="0">
         <options>
           <option value=" "></option>
           <option value="Yes">Yes</option>
@@ -589,7 +566,7 @@
       </element>
 
       <!--Nationality / Language-->
-      <element type="search-select" source="1" name="Language" label="Language" default="Dutch">
+      <element type="search-select" source="1" name="Language" label="Language" default="Dutch" HcmData="1" SortOrder="16" ParentGVFields="0">
         <options>
           <option value=""></option>
           <option value="Vietnamese">Vietnamese</option>
@@ -636,7 +613,7 @@
           <option value="Afrikaans">Afrikaans</option>
         </options>
       </element>
-      <element type="search-select" source="1" name="Nationality" label="Nationality" default="Dutch">
+      <element type="search-select" source="1" name="Nationality" label="Nationality" default="Dutch" HcmData="1" SortOrder="15" ParentGVFields="0">
         <options>
           <option value=""></option>
           <option value="Unknown">Unknown</option>
@@ -872,68 +849,13 @@
         </options>
       </element>
 
-      <!--Education-->
-      <!-- COMMENTED OUT BECAUSE NETHERLANDS CHANGED THEIR MIND
-            <element type="hidden" name="Educations" default="1"></element>
-            <element type="text" name="EducationalEstablishment" label="Educational Establishment"></element>
-            <element type="text" name="InstituteLocation" label="Institute Location"></element>
-            <element type="text" name="Certificate" label="Certificate"></element>
-            <element type="text" name="DurationOfCourse" label="Duration of Course"></element>
-            <element type="text" name="BranchOfStudy" label="Branch of Study"></element>
-
-            <element type="text" name="EducationalEstablishment2" label="Educational Establishment"></element>
-            <element type="text" name="InstituteLocation2" label="Institute Location"></element>
-            <element type="text" name="Certificate2" label="Certificate"></element>
-            <element type="text" name="DurationOfCourse2" label="Duration of Course"></element>
-            <element type="text" name="BranchOfStudy2" label="Branch of Study"></element>
-
-            <element type="text" name="EducationalEstablishment3" label="Educational Establishment"></element>
-            <element type="text" name="InstituteLocation3" label="Institute Location"></element>
-            <element type="text" name="Certificate3" label="Certificate"></element>
-            <element type="text" name="DurationOfCourse3" label="Duration of Course"></element>
-            <element type="text" name="BranchOfStudy3" label="Branch of Study"></element>
-
-            -->
-      <!--Other Previous employers-->
-      <!--
-            <element type="hidden" name="OtherPreviousEmployers" default="1"></element>
-            <element type="text" name="OtherPreviousEmployer" label="Employer"></element>
-            <element type="text" name="OtherPreviousEmployerCity" label="City"></element>
-            <element type="select" name="OtherPreviousEmployerCountry" label="Country">
-                      &pre_country;
-            </element>
-            <element type="text" name="OtherPreviousEmployerIndustry" label="Industry"></element>
-            <element type="text" name="OtherPreviousEmployerJob" label="Job"></element>
-            <element type="text" name="OtherPreviousEmployerWorkContract" label="Work Contract"></element>
-
-
-            <element type="text" name="OtherPreviousEmployer2" label="Employer"></element>
-            <element type="text" name="OtherPreviousEmployerCity2" label="City"></element>
-            <element type="select" name="OtherPreviousEmployerCountry2" label="Country">
-                      &pre_country;
-            </element>
-            <element type="text" name="OtherPreviousEmployerIndustry2" label="Industry"></element>
-            <element type="text" name="OtherPreviousEmployerJob2" label="Job"></element>
-            <element type="text" name="OtherPreviousEmployerWorkContract2" label="Work Contract"></element>
-
-
-            <element type="text" name="OtherPreviousEmployer3" label="Employer"></element>
-            <element type="text" name="OtherPreviousEmployerCity3" label="City"></element>
-            <element type="select" name="OtherPreviousEmployerCountry3" label="Country">
-                      &pre_country;
-            </element>
-            <element type="text" name="OtherPreviousEmployerIndustry3" label="Industry"></element>
-            <element type="text" name="OtherPreviousEmployerJob3" label="Job"></element>
-            <element type="text" name="OtherPreviousEmployerWorkContract3" label="Work Contract"></element>-->
-
       <!--Name Change-->
-      <element type="text" name="NewFirstName" label="Co-worker First Name"></element>
-      <element type="text" name="NewPrefix" label="Prefix"></element>
-      <element type="text" name="NewLastName" label="Co-worker Last Name"></element>
-      <!--<element type="text" name="PreferedName" label="Prefered Name"></element>-->
+      <element type="text" name="NewFirstName" label="Co-worker First Name" HcmData="1" SortOrder="12" ParentGVFields="0"></element>
+      <element type="text" name="NewPrefix" label="Prefix" HcmData="1" SortOrder="0" ParentGVFields="0"></element>
+      <element type="text" name="NewLastName" label="Co-worker Last Name" HcmData="1" SortOrder="14" ParentGVFields="0"></element>
 
       <!--Documents-->
-      <element type="select" name="DocumentType" label="Document Type">
+      <element type="select" name="DocumentType" label="Document Type" HcmData="1" SortOrder="0" ParentGVFields="0">
         <options>
           <option value=""></option>
           <option value="Badge ID">Badge ID</option>
@@ -942,14 +864,14 @@
           <option value="Work Permit">Work Permit</option>
         </options>
       </element>
-      <element type="search-select" source="1" name="DocumentCountry" label="Country" default="Netherlands">
+      <element type="search-select" source="1" name="DocumentCountry" label="Country" default="Netherlands" HcmData="1" SortOrder="0" ParentGVFields="0">
         &pre_country;
       </element>
-      <element type="text" name="DocumentNO" label="Document no."></element>
-      <element type="date" name="DocumentValidUntil" label="Document Valid Until:" future="1" format="dd.MM.yyyy">
+      <element type="text" name="DocumentNO" label="Document no." HcmData="1" SortOrder="0" ParentGVFields="0"></element>
+      <element type="date" name="DocumentValidUntil" label="Document Valid Until:" future="1" format="dd.MM.yyyy" HcmData="1" SortOrder="0" ParentGVFields="0">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element type="select" name="MaritalStatus" label="Marital Status">
+      <element type="select" name="MaritalStatus" label="Marital Status" HcmData="1" SortOrder="17" ParentGVFields="0">
         <options>
           <option value=""></option>
           <option value="Cohabiting">Cohabiting</option>
@@ -964,8 +886,8 @@
           <option value="Widowed">Widowed</option>
         </options>
       </element>
-      <element type="text" name="PartnerName" label="Partner Name"></element>
-      <element type="select" name="Gender" label="Gender">
+      <element type="text" name="PartnerName" label="Partner Name" HcmData="1" SortOrder="18" ParentGVFields="0"></element>
+      <element type="select" name="Gender" label="Gender" HcmData="1" SortOrder="19" ParentGVFields="0">
         <options>
           <option value=""></option>
           <option value="Male">Male</option>

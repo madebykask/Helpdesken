@@ -18,6 +18,7 @@
   <option value="Business Navigation Manager">Business Navigation Manager</option>
   <option value="Business Navigator">Business Navigator</option>
   <option value="Business Navigator Trainee">Business Navigator Trainee</option>
+  <option value="Business Service Manager">Business Service Manager</option>
   <option value="Business support">Business support</option>
   <option value="Carpenter Co-worker">Carpenter Co-worker</option>
   <option value="Catalogue Specialist">Catalogue Specialist</option>
@@ -58,6 +59,7 @@
   <option value="Country Web &amp; Digital Manager">Country Web &amp; Digital Manager</option>
   <option value="Customer Convenience Manager">Customer Convenience Manager</option>
   <option value="Customer Relations Manager">Customer Relations Manager</option>
+  <option value="Customer Resolution Manager">Customer Resolution Manager</option>
   <option value="Customs Manager">Customs Manager</option>
   <option value="Customs Specialist">Customs Specialist</option>
   <option value="DC Contract / ESP Manager">DC Contract / ESP Manager</option>
@@ -136,6 +138,7 @@
   <option value="Marketing Specialist">Marketing Specialist</option>
   <option value="Marketing Web Specialist">Marketing Web Specialist</option>
   <option value="Operations Developer">Operations Developer</option>
+  <option value="Operations Manager">Operations Manager</option>
   <option value="Payroll Specialist">Payroll Specialist</option>
   <option value="PR &amp; Communication Manager">PR &amp; Communication Manager</option>
   <option value="Product Quality Specialist">Product Quality Specialist</option>
@@ -168,6 +171,7 @@
   <option value="Safety &amp; Security Manager">Safety &amp; Security Manager</option>
   <option value="Safety &amp; Security Manager">Safety &amp; Security Manager</option>
   <option value="Safety &amp; Security Team Leader">Safety &amp; Security Team Leader</option>
+  <option value="Sales &amp; Services Manager">Sales &amp; Services Manager</option>
   <option value="Sales &amp; Supply Support Co-worker">Sales &amp; Supply Support Co-worker</option>
   <option value="Sales &amp; Supply Support Manager">Sales &amp; Supply Support Manager</option>
   <option value="Sales &amp; Supply Support Specialist">Sales &amp; Supply Support Specialist</option>
@@ -191,6 +195,8 @@
   <option value="Store Design Manager">Store Design Manager</option>
   <option value="Store Manager">Store Manager</option>
   <option value="Store Quality &amp; Safety Compliance Leader">Store Quality &amp; Safety Compliance Leader</option>
+  <option value="Superuser (SAMS)">Superuser (SAMS)</option>
+  <option value="Super User (RTS)">Super User (RTS)</option>
   <option value="Supply Chain Integration Specialist">Supply Chain Integration Specialist</option>
   <option value="Supply Support Specialist">Supply Support Specialist</option>
   <option value="Sustainability Co-ordinator">Sustainability Co-ordinator</option>
