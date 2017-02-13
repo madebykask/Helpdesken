@@ -712,9 +712,13 @@
             IDictionary<string, string> errors;            
             var currentCase = _caseService.GetCaseById(caseId);
             var currentCustomer = _customerService.GetCustomer(currentCase.Customer_Id);
-            var cs = _settingService.GetCustomerSetting(currentCustomer.Id);            
+            var cs = _settingService.GetCustomerSetting(currentCustomer.Id);
             // save case history
-            
+
+            // unread/status flag update if not case is closed
+            if (!currentCase.FinishingDate.HasValue)
+                currentCase.Unread = 1;
+
             int caseHistoryId = _caseService.SaveCaseHistory(currentCase, 0, currentCase.PersonsEmail, CreatedByApplications.SelfService5,  out errors, SessionFacade.CurrentUserIdentity.UserId);            
             // save log
             var caseLog = new CaseLog
