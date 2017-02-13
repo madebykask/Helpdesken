@@ -719,6 +719,16 @@
             if (!currentCase.FinishingDate.HasValue)
                 currentCase.Unread = 1;
 
+            // if statesecondary has ResetOnExternalUpdate
+            if (currentCase.StateSecondary_Id.HasValue)
+            {
+                //get substatus
+                var casestatesecundary = _stateSecondaryService.GetStateSecondary(currentCase.StateSecondary_Id.Value);
+
+                if (casestatesecundary.ResetOnExternalUpdate == 1)
+                    currentCase.StateSecondary_Id = null;
+            }
+
             int caseHistoryId = _caseService.SaveCaseHistory(currentCase, 0, currentCase.PersonsEmail, CreatedByApplications.SelfService5,  out errors, SessionFacade.CurrentUserIdentity.UserId);            
             // save log
             var caseLog = new CaseLog
