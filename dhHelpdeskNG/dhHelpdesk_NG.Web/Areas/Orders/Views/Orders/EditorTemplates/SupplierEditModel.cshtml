@@ -1,7 +1,7 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.SupplierEditModel
 
-<h4>@Translation.Get("Orderinformation")</h4>
+<h4>@Model.Header</h4>
 <table class="tableform">
     <tbody>
         @Html.EditorFor(m => m.SupplierOrderNumber, "Fields/Text")              

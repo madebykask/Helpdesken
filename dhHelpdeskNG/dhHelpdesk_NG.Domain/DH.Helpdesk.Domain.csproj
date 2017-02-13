@@ -129,11 +129,16 @@
     <Compile Include="Computers\ComputerType.cs" />
     <Compile Include="CaseSource.cs" />
     <Compile Include="CaseIsAbout.cs" />
+    <Compile Include="EmailSendStatus.cs" />
     <Compile Include="Invoice\InvoiceArticleProductAreaEntity.cs" />
+    <Compile Include="Invoice\InvoiceStatus.cs" />
     <Compile Include="Mail2Ticket.cs" />
     <Compile Include="FormUrl.cs" />
     <Compile Include="FileViewLogEntity.cs" />
     <Compile Include="Grid\GridSettingsEntity.cs" />
+    <Compile Include="OrderFieldType.cs" />
+    <Compile Include="Orders\EMailTypes.cs" />
+    <Compile Include="Orders\OrderFieldTypes.cs" />
     <Compile Include="ParentChildCaseRelation.cs" />
     <Compile Include="Questionnaire\QuestionnaireCircularCaseTypeEntity.cs" />
     <Compile Include="Questionnaire\QuestionnaireCircularDepartmentEntity.cs" />
@@ -225,8 +230,8 @@
     <Compile Include="Inventory\InventoryType.cs" />
     <Compile Include="Inventory\InventoryTypeProperty.cs" />
     <Compile Include="Inventory\InventoryTypePropertyValue.cs" />
-    <Compile Include="InvoiceHeader.cs" />
-    <Compile Include="InvoiceRow.cs" />
+    <Compile Include="Invoice\InvoiceHeader.cs" />
+    <Compile Include="Invoice\InvoiceRow.cs" />
     <Compile Include="Language.cs" />
     <Compile Include="License.cs" />
     <Compile Include="LicenseFile.cs" />

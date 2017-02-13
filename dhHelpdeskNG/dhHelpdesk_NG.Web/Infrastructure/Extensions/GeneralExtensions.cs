@@ -10,6 +10,7 @@
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Web.Models.Case;
     using DH.Helpdesk.Web.Models;
+    using Models.CaseSolution;
 
     public static class GeneralExtensions
     {
@@ -86,6 +87,23 @@
                 return string.Empty;
             }
             
+            return "display:none";
+        }
+
+        public static string GetFieldStyle(this CaseSolutionInputViewModel model, GlobalEnums.TranslationCaseFields caseFieldName, CaseSolutionFields caseTemplateFieldName)
+        {
+            var fieldSetting = model.CaseSolutionSettingModels.FirstOrDefault(x => x.CaseSolutionField == caseTemplateFieldName);
+
+            // if (!model.caseFieldSettings.IsFieldRequired(caseFieldName) && fieldSetting != null && fieldSetting.CaseSolutionMode == CaseSolutionModes.Hide)
+            if (fieldSetting != null && fieldSetting.CaseSolutionMode == CaseSolutionModes.Hide)
+                return "display:none";
+
+            if ((model.CaseFieldSettings.IsFieldVisible(caseFieldName))
+                || (CaseSolutionSettingModel.IsFieldAlwaysVisible(caseTemplateFieldName) || model.CaseFieldSettings.IsFieldRequiredOrVisible(caseFieldName)))
+            {
+                return string.Empty;
+            }
+
             return "display:none";
         }
 

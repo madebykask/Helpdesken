@@ -1,0 +1,45 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+@model DH.Helpdesk.Web.Areas.Orders.Models.Order.FieldModels.ConfigurableFieldModel<List<int>>
+
+@if (!Model.Show)
+{
+    return;
+}
+
+@{
+    if (!ViewData.ContainsKey("Source"))
+    {
+        throw new ArgumentNullException("Source", "\"ComputerId\" ViewData parameter must be specified.");
+    }
+
+    var source = (MultiSelectList)ViewData["Source"];
+
+    var attributes = new Dictionary<string, object>(1);
+
+    if (ViewData.ContainsKey("Id"))
+    {
+        attributes.Add("Id", ViewData["Id"]);
+    }
+
+    attributes.Add("data-dh-is-required", Model.IsRequired);
+    attributes.Add("id", "collaborators_dropdown");
+    attributes.Add("multiple", "multiple");
+    attributes.Add("class", "chosen-select");
+    attributes.Add("data-placeholder", Translation.GetCoreTextTranslation("Välj en eller flera"));
+}
+
+<tr>
+    <td class="span3">
+        @Html.FieldCaption(Model)
+    </td>
+    <td class="span6">
+        @Html.ListBoxFor(x => x.Value, source, attributes)
+        @Html.HiddenFor(m => m.IsRequired)
+        @Html.ValidationMessageFor(m => m.Value)
+    </td>
+    <td class="span3">
+        @Model.Help
+    </td>
+
+</tr>

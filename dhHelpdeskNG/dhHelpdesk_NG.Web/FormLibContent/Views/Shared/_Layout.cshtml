@@ -37,7 +37,7 @@
         <small>@DH.Helpdesk.EForm.FormLib.FormLibI18N.Translate("Version", DH.Helpdesk.EForm.FormLib.FormLibSessions.User.Language)&nbsp;@DH.Helpdesk.EForm.FormLib.FormLibUtils.AssemblyVersion()</small>
     </div>
     <div id="spinnerDiv" style="position:fixed;top:50%;left:50%"></div> 
-    <input type="hidden" id="core_baseUrl" name="core_baseUrl" value="" />
+    <input type="hidden" id="core_baseUrl" name="core_baseUrl" value="@(!HttpContext.Current.Request.Url.Host.ToLower().Contains("localhost") ? "/ect" : "")" />
     <input type="hidden" id="core_area" name="core_area" value="@area" />
     <input type="hidden" id="core_controller" name="core_controller" value="@controller" />
     <input type="hidden" id="core_rooturl" name="core_rooturl" value="@Url.CurrentRoot()" />

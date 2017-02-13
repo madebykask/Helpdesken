@@ -1,25 +1,27 @@
 ﻿@using System.Web.Optimization
+@using DH.Helpdesk.Web
 @using DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings
+@using DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings
 @using DH.Helpdesk.Web.Infrastructure
 @model OrderFieldSettingsIndexModel
 
 @Scripts.Render("~/bundles/orders/settings")
 
 @section Actions {
-    <ul class="secnav">               
+    <ul class="secnav">
         <li>
-            <a id="SaveOrderFieldSettings" href="javascript:void(0)" class="btn">@Translation.Get("Spara")</a>    
+            <a id="SaveOrderFieldSettings" href="javascript:void(0)" class="btn">@Translation.Get("Spara")</a>
         </li>
     </ul>
 }
 @using (Ajax.BeginForm("OrderFieldSettings", "OrderFieldSettings", null,
-    new AjaxOptions
-        {
-            UpdateTargetId = "OrderFieldSettingsTableContainer", 
-            OnBegin = "OnBeginLoadSettings", 
-            OnComplete = "OnCompleteLoadSettings"
-        },
-    new { id ="OrderFieldSettingsSearchForm" } ))
+                new AjaxOptions
+                {
+                    UpdateTargetId = "OrderFieldSettingsTableContainer",
+                    OnBegin = "OnBeginLoadSettings",
+                    OnComplete = "OnCompleteLoadSettings"
+                },
+                new { id = "OrderFieldSettingsSearchForm" }))
 {
     <table class="tableform">
         <tr>
@@ -27,22 +29,46 @@
             <td>
                 @Html.DropDownListFor(m => m.OrderTypeId, Model.OrderTypes, new { id = "ordertypes_dropdown", data_placeholder = Translation.Get("Välj en eller flera") })
             </td>
-        </tr>                
+        </tr>
     </table>
 }
 
 <div id="OrderFieldSettingsTableContainer">
-    @Html.Action("OrderFieldSettings", "OrderFieldSettings", new { model = (OrderFieldSettingsIndexModel)null })
+    @Html.Action("OrderFieldSettings", "OrderFieldSettings", new {model = (OrderFieldSettingsIndexModel) null})
 </div>
 
-<script type="text/javascript">
-    function OnBeginLoadSettings() {
-        $("#ordertypes_dropdown").prop("disabled", true);
-        $("#OrderFieldSettingsTableContainer").prop("disabled", true);
-    }
-
-    function OnCompleteLoadSettings() {
-        $("#ordertypes_dropdown").prop("disabled", false);
-        $("#OrderFieldSettingsTableContainer").prop("disabled", false);
-    }
+<script type="html/template" id="hiddenFieldTypeTemplate">
+    <input id="AccountInfo_{type}_Values_{index}__Id" name="AccountInfo.{type}.Values[{index}].Id" type="hidden" value="{id}">
+    <input id="AccountInfo_{type}_Values_{index}__Value" name="AccountInfo.{type}.Values[{index}].Value" type="hidden" value="{value}">
 </script>
+
+@section Scripts {
+    @Scripts.Render(BundleConfig.ScriptNames.Orders.OrderSettings)
+
+    <script type="text/javascript">
+
+        function initPage() {
+            var pageObject = new OrderSettings(
+            {
+            });
+            pageObject.init();
+        }
+
+        function OnBeginLoadSettings() {
+            $("#ordertypes_dropdown").prop("disabled", true);
+            $("#OrderFieldSettingsTableContainer").prop("disabled", true);
+        }
+
+        function OnCompleteLoadSettings() {
+            $("#ordertypes_dropdown").prop("disabled", false);
+            $("#OrderFieldSettingsTableContainer").prop("disabled", false);
+            initPage();
+        }
+
+        $(function () {
+            initPage();
+        });
+    </script>
+}
+
+            

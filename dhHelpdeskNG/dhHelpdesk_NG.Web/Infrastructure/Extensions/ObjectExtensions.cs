@@ -9,7 +9,9 @@
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Problems;
     using DH.Helpdesk.Web.Models.Case;
-    using DH.Helpdesk.Common.Enums.Settings;    
+    using DH.Helpdesk.Common.Enums.Settings;
+    using Models.CaseSolution;
+    using System;
 
     public static class ObjectExtensions
     {
@@ -224,7 +226,10 @@
         {
             return cfs.ToList().getCaseSettingsValue(valueToFind).EMailIdentifier;
         }
-
+        public static Guid? getCaseFieldSettingsGUID(this IEnumerable<CaseFieldSetting> cfs, string valueToFind)
+        {
+            return cfs.ToList().getCaseSettingsValue(valueToFind).CaseFieldSettingsGUID;
+        }
         public static string getLabel(this IEnumerable<CaseFieldSettingsWithLanguage> cfsl, string valueToFind)
         {
             return cfsl.ToList().getCaseFieldSettingsLanguageValue(valueToFind).Label;
@@ -306,6 +311,46 @@
             return ret;
         }
 
+        public static string displayUserInfoHtml(this CaseSolutionInputViewModel model)
+        {
+            var ret = "display:none";
+            var cfs = model.CaseFieldSettings;
+
+            if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.ReportedBy.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Persons_EMail.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Persons_Name.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Persons_Phone.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Persons_EMail.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Region_Id.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Department_Id.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Place.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.OU_Id.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.UserCode.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            return ret;
+        }
         public static string displayAboutUserInfoHtml(this CaseInputViewModel model)
         {
             var ret = "display:none";
@@ -383,6 +428,65 @@
             //    return string.Empty;
 
             //return ret;
+        }
+
+        public static string displayAboutUserInfoHtml(this CaseSolutionInputViewModel model)
+        {
+            var ret = "display:none";
+            var cfs = model.CaseFieldSettings;
+
+            if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Region_Id.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_OU_Id.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_CostCentre.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            return ret;
+
+        }
+
+        public static string displayComputerInfoHtml(this CaseSolutionInputViewModel model)
+        {
+            var ret = "display:none";
+            var cfs = model.CaseFieldSettings;
+
+            if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.InventoryNumber.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.InventoryLocation.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            return ret;
         }
 
         public static string displayComputerInfoHtml(this CaseInputViewModel model)
@@ -497,6 +601,80 @@
             return ret;
         }
 
+        public static string displayCaseInfoHtml(this CaseSolutionInputViewModel model)
+        {
+            var ret = "display:none";
+            var cfs = model.CaseFieldSettings;
+
+            /* Not implemented in Case Template*/
+            //if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.CaseNumber.ToString()).ShowOnStartPage == 1)
+            //    return string.Empty;
+
+            /* Not implemented in Case Template*/
+            //else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.User_Id.ToString()).ShowOnStartPage == 1)
+            //    return string.Empty;
+
+            if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.System_Id.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Impact_Id.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Category_Id.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Supplier_Id.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Caption.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Description.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Miscellaneous.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            /* Not implemented in Case Template*/
+            //else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.AgreedDate.ToString()).ShowOnStartPage == 1)
+            //    return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.SMS.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Available.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Cost.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Filename.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            return ret;
+        }
+
         public static string displayCaseManagementInfoHtml(this CaseInputViewModel model)
         {
             var ret = "display:none";
@@ -561,6 +739,55 @@
             return ret;
         }
 
+        public static string displayCaseManagementInfoHtml(this CaseSolutionInputViewModel model)
+        {
+            var ret = "display:none";
+            var cfs = model.CaseFieldSettings;
+
+            if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Priority_Id.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Status_Id.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Project.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Problem.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.CausingPart.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Change.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.PlanDate.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.WatchDate.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Verified.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.SolutionRate.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            return ret;
+        }
         public static string displayLogInfoHtml(this CaseInputViewModel model)
         {
             var ret = "display:none";
@@ -593,5 +820,20 @@
             return ret;
         }
 
-    }
+		public static bool GetIsAboutEnabled(this IList<CaseFieldSetting> cfs)
+		{
+			return getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString()).ShowOnStartPage == 1
+			        || getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString()).ShowOnStartPage == 1
+					|| getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString()).ShowOnStartPage == 1
+					|| getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString()).ShowOnStartPage == 1
+					|| getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString()).ShowOnStartPage == 1
+					|| getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Region_Id.ToString()).ShowOnStartPage == 1
+					|| getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString()).ShowOnStartPage == 1
+					|| getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_OU_Id.ToString()).ShowOnStartPage == 1
+					|| getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_CostCentre.ToString()).ShowOnStartPage == 1
+					|| getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString()).ShowOnStartPage == 1
+					|| getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString()).ShowOnStartPage == 1;
+		}
+
+	}
 }

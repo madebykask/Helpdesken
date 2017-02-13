@@ -10,6 +10,7 @@
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Web.Areas.Orders.Models.Order.FieldModels;
+    using Web.Models;
 
     public interface IConfigurableFieldModelFactory
     {
@@ -62,5 +63,6 @@
         ConfigurableFieldModel<ProgramsModel> CreatePrograms(FieldEditSettings setting, int orderId, List<ProgramModel> programs);
 
         ConfigurableFieldModel<int?> CreateNullableIntegerField(FieldEditSettings setting, int? value);
+        ConfigurableFieldModel<List<CheckBoxListItem>> CreateCheckBoxListField(FieldEditSettings setting, List<int> sourceValues, ItemOverview[] source);
     }
 }

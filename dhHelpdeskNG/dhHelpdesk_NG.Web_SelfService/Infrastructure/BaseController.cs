@@ -241,19 +241,21 @@
                         if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings[AppSettingsKey.DefaultUserId]))
                             userId = ConfigurationManager.AppSettings[AppSettingsKey.DefaultUserId].ToString();
 
-                        var empployNum = "";
-                        var defaultEmployeeNumber = ConfigurationManager.AppSettings[AppSettingsKey.DefaultEmployeeNumber].ToString();
-                        if (!string.IsNullOrEmpty(defaultEmployeeNumber))
-                            empployNum = defaultEmployeeNumber;
+                    var employeeNum = string.Empty;
+                    if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings[AppSettingsKey.DefaultEmployeeNumber]))
+                        employeeNum = ConfigurationManager.AppSettings[AppSettingsKey.DefaultEmployeeNumber].ToString();
+
 
                         string userDomain = fullName.GetDomainFromAdPath();
                         SessionFacade.CurrentSystemUser = userId;
+                    var initiator = _masterDataService.GetInitiatorByUserId(userId, customerId);
                         var ui = new UserIdentity()
                         {
                             UserId = userId,
-                            Domain = userDomain,
-                            FirstName = string.Format("{0}", User.Identity.Name, userId),
-                            EmployeeNumber = empployNum
+                        Domain = userDomain,                        
+                        FirstName = initiator?.FirstName,
+                        LastName = initiator?.LastName,
+                        EmployeeNumber = employeeNum
                         };
 
                         SessionFacade.CurrentUserIdentity = ui;
@@ -274,15 +276,21 @@
                         if (!string.IsNullOrEmpty(defaultEmployeeNumber))
                             empployNum = defaultEmployeeNumber;
 
-                        string userDomain = fullName.GetDomainFromAdPath();
 
+                    var employeeNum = string.Empty;
+                    if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings[AppSettingsKey.DefaultEmployeeNumber]))
+                        employeeNum = ConfigurationManager.AppSettings[AppSettingsKey.DefaultEmployeeNumber].ToString();
+
+                    string userDomain = fullName.GetDomainFromAdPath();
+                    var initiator = _masterDataService.GetInitiatorByUserId(userId, customerId);
                         SessionFacade.CurrentSystemUser = userId;
                         var ui = new UserIdentity()
                         {
                             UserId = userId,
                             Domain = userDomain,
-                            FirstName = string.Format("Anonymous User ({0})", userId),                            
-                            EmployeeNumber = empployNum
+                        FirstName = initiator?.FirstName,
+                        LastName = initiator?.LastName,
+                        EmployeeNumber = employeeNum
                         };
 
                         SessionFacade.CurrentUserIdentity = ui;

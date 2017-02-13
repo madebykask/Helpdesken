@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using DH.Helpdesk.Common.Extensions.Boolean;
 using DH.Helpdesk.Domain;
 
 namespace DH.Helpdesk.Dal.Mappers.ExternalInvoice.BusinessModelToEntity
@@ -19,7 +20,7 @@ namespace DH.Helpdesk.Dal.Mappers.ExternalInvoice.BusinessModelToEntity
 			entity.Case_Id = businessModel.CaseId;
 			entity.InvoiceNumber = businessModel.InvoiceNumber;
 			entity.InvoicePrice = businessModel.InvoicePrice;
-			entity.Charge = businessModel.Charge;
+			entity.Charge = businessModel.Charge.ToInt();
 			entity.CreatedDate = businessModel.CreatedDate;
 			entity.CreatedByUser_Id = businessModel.CreatedByUserId;
 		}

@@ -2,7 +2,7 @@
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class UserFieldSettings
+    public sealed class UserFieldSettings : HeaderSettings
     {
         public UserFieldSettings(TextFieldSettings userId, TextFieldSettings userFirstName, TextFieldSettings userLastName, TextFieldSettings userPhone, TextFieldSettings userEMail, TextFieldSettings initials, TextFieldSettings personalIdentityNumber, TextFieldSettings extension, TextFieldSettings title, TextFieldSettings location, TextFieldSettings roomNumber, TextFieldSettings postalAddress, TextFieldSettings employmentType, TextFieldSettings departmentId1, TextFieldSettings unitId, TextFieldSettings departmentId2, TextFieldSettings info, TextFieldSettings responsibility, TextFieldSettings activity, TextFieldSettings manager, TextFieldSettings referenceNumber)
         {

@@ -34,6 +34,8 @@
             ReferenceNumber = referenceNumber;
         }
 
+        public string Header { get; set; }
+
         [NotNull]
         [LocalizedDisplay("Användar ID")]
         public TextFieldSettingsModel UserId { get; set; }

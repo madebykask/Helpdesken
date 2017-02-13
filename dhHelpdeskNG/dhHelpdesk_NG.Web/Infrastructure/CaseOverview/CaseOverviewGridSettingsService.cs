@@ -34,10 +34,11 @@
         /// <param name="customerId"></param>
         /// <param name="userGroupId"></param>
         /// <param name="userId"></param>
+        /// <param name="gridId"></param>
         /// <returns></returns>
-        public CaseColumnsSettingsModel GetSettings(int customerId, int userGroupId, int userId)
+        public CaseColumnsSettingsModel GetSettings(int customerId, int userGroupId, int userId, int gridId = GridSettingsService.CASE_OVERVIEW_GRID_ID)
         {
-            var gridSettings = this.gridSettingsService.GetForCustomerUserGrid(customerId, userGroupId, userId, GridSettingsService.CASE_OVERVIEW_GRID_ID);
+            var gridSettings = this.gridSettingsService.GetForCustomerUserGrid(customerId, userGroupId, userId, gridId);
             var exceptedList = new string[]
                 { 
                     UserFields.IsAbout_CostCentre.ToLower(), 

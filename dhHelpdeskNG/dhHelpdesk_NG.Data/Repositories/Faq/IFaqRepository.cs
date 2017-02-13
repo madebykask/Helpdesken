@@ -8,8 +8,10 @@ namespace DH.Helpdesk.Dal.Repositories.Faq
     {
         bool AnyFaqWithCategoryId(int categoryId);
 
-        void Update(ExistingFaq existingFaq);
-            
         void Add(NewFaq newFaq);
+
+        void UpdateSwedishFaq(ExistingFaq faq);
+
+        void UpdateOtherLanguageFaq(ExistingFaq faq);
     }
 }

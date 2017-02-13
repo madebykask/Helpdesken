@@ -19,15 +19,15 @@ namespace DH.Helpdesk.BusinessData.Enums.Orders.Fields
 
         public static readonly string InventoryNumber = "InventoryNumber";
 
-        public static readonly string AccountTypeId = "AccountType_Id";
+        public static readonly string AccountType = "OrderFieldType";
 
-        public static readonly string AccountType2 = "AccountType2";
+        public static readonly string AccountType2 = "OrderFieldType2";
 
-        public static readonly string AccountType3 = "AccountType3";
+        public static readonly string AccountType3 = "OrderFieldType3";
 
-        public static readonly string AccountType4 = "AccountType4";
+        public static readonly string AccountType4 = "OrderFieldType4";
 
-        public static readonly string AccountType5 = "AccountType5";
+        public static readonly string AccountType5 = "OrderFieldType5";
 
         public static readonly string Info = "AccountInfo";
     }

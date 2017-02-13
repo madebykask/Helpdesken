@@ -18,7 +18,7 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
 
         public EditQuestionnaireQuestionModel(int id,int questionnaireId, int languageId, string questionNumber, 
                                               string question, int showNote, string noteText,  DateTime createDate, 
-                                              SelectList languages, List<QuestionnaireQuesOptionModel> options )
+                                              SelectList languages, List<QuestionnaireQuesOptionModel> options, bool isSent)
         {
             this.Id = id;
             this.QuestionnaireId = questionnaireId;
@@ -30,6 +30,7 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
             this.CreateDate = createDate;
             this.Languages = languages;
             this.Options = options;
+            IsSent = isSent;
         }
 
         [IsId]
@@ -63,6 +64,8 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
         [LocalizedDisplay("CreateDate")]
         public DateTime CreateDate { get; set; }
 
-        public List<QuestionnaireQuesOptionModel> Options { get; set; } 
+        public List<QuestionnaireQuesOptionModel> Options { get; set; }
+
+        public bool IsSent { get; set; }
     }
 }

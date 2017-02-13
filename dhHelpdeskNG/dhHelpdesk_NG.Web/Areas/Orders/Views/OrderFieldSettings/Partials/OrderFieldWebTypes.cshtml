@@ -1,0 +1,51 @@
+﻿@using DH.Helpdesk.Web.Areas.Orders.Infrastructure.Enum
+@using DH.Helpdesk.Web.Infrastructure
+@{
+    var className = "";
+    var title = "";
+    var text = "";
+
+    if (ViewData.ContainsKey("type"))
+    {
+        var type = (OrderSettingWebType)ViewData["type"];
+        switch (type)
+        {
+            case OrderSettingWebType.Text:
+                className = "dh-icon-textfield";
+                title = Translation.GetCoreTextTranslation("Textfält");
+                break;
+            case OrderSettingWebType.WideText:
+                className = "dh-icon-textarea";
+                title = Translation.GetCoreTextTranslation("Textfält - större");
+                break;
+            case OrderSettingWebType.Number:
+                className = "dh-icon-numericfield";
+                title = Translation.GetCoreTextTranslation("Numeriskt fält");
+                break;
+            case OrderSettingWebType.Date:
+                className = "dh-icon-calendar";
+                title = Translation.GetCoreTextTranslation("Datumfält");
+                break;
+            case OrderSettingWebType.Flag:
+                className = "dh-icon-checkbox";
+                title = Translation.GetCoreTextTranslation("Checkbox");
+                break;
+            case OrderSettingWebType.SelectList:
+                className = "dh-icon-select";
+                title = Translation.GetCoreTextTranslation("Vallista - dropdown");
+                break;
+            case OrderSettingWebType.Label:
+                text = "---";
+                title = Translation.GetCoreTextTranslation("Automatisk hämtning");
+                break;
+            case OrderSettingWebType.FileUpload:
+                className = "dh-icon-attachment";
+                title = Translation.GetCoreTextTranslation("Bifoga fil");
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
+}
+
+<i class="@className" rel="tooltip" title="@title">@text</i>

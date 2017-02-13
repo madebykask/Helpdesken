@@ -14,12 +14,15 @@
     });
 </script>
 
-<div id="case_add_followers_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabelCase" aria-hidden="true" style="display: none">
+<div id="case_add_followers_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabelCase" aria-hidden="true" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h5>@Translation.GetCoreTextTranslation("Välj E-post")</h5>
+            </div>
+            <div class="modal-body overflow-visible">
+                <div id="caseAddFollowersModalInput" contenteditable="true" class="case-send-emails-div case-popup-div"></div>
             </div>
             <div class="modal-body overflow-visible case-dropdown-area">
                 <div id="caseFollowers_emailGroupsDiv" class="case-dropdown-div">
@@ -41,7 +44,7 @@
                     </select>
                 </div>
                 <div id="caseFollowers_adminsDiv" class="case-dropdown-div">
-                    @Translation.GetCoreTextTranslation("Handläggare")<br />
+                    @Translation.GetCoreTextTranslation("Handläggare")<br/>
                     <select id="caseFollowersAdministratorsDropdown" class="case-usersearch-multiselect multiselect-search" multiple="multiple">
                         @foreach (var administrator in Model.Administrators)
                         {
@@ -49,12 +52,9 @@
                         }
                     </select>
                 </div>
-            </div>
-            <div class="modal-body overflow-visible">
-                <textarea cols="20" id="caseAddFollowersModalInput" class="width90" autofocus></textarea>
-            </div>
-            <div class="modal-footer">
-                <button type="button" id="btnCancel" class="btn btn-cancel btn-default" data-dismiss="modal">@Translation.GetCoreTextTranslation("Klar")</button>
+                <div class="case-followers-button-done">
+                    <button type="button" id="btnCancel" class="btn btn-cancel btn-default" data-dismiss="modal">@Translation.GetCoreTextTranslation("OK")</button>
+                </div>
             </div>
         </div>
     </div>

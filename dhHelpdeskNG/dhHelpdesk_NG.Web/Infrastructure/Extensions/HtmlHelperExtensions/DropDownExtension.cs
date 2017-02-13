@@ -15,16 +15,22 @@
             string name, 
             bool allowEmpty, 
             DropDownContent dropDownContent,
-            bool required = false) 
+            bool required = false,
+            bool disabled = false)
         {
             var htmlOutput = new StringBuilder();
             var validation = new StringBuilder();
+            var disable = new StringBuilder();
             if (required)
             {
                 validation.Append(@"data-val='true' data-val-required='The field is required.'");
             }
+            if (disabled)
+            {
+                disable.Append(@"disabled");
+            }
 
-            htmlOutput.Append(string.Format(@"<select id=""{0}"" name=""{1}"" {2}>", id, name, validation));
+            htmlOutput.Append(string.Format(@"<select id=""{0}"" name=""{1}"" {2} {3}>", id, name, validation, disable));
 
             if (allowEmpty)
             {

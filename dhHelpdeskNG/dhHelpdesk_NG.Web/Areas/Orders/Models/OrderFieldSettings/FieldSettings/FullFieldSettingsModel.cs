@@ -71,5 +71,6 @@
 
         [NotNull]
         public AccountInfoFieldSettingsModel AccountInfo { get; set; }
+
     }
 }

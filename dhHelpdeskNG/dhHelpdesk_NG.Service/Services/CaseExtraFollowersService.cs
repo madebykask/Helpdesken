@@ -28,7 +28,7 @@ namespace DH.Helpdesk.Services.Services
             return items.Select(x => _caseExtraFollowersToBusinessModelMapper.Map(x)).ToList();
         }
 
-        public void SaveExtraFollowers(int caseId, List<string> extraFollowers, int userId)
+        public void SaveExtraFollowers(int caseId, List<string> extraFollowers, int? userId)
         {
             var existFollowers = _caseExtraFollowersRepository.GetCaseExtraFollowersByCaseAndFollower(caseId, extraFollowers);
             var allFollowers = new List<CaseExtraFollower>();
@@ -67,6 +67,6 @@ namespace DH.Helpdesk.Services.Services
     public interface ICaseExtraFollowersService
     {
         List<ExtraFollower> GetCaseExtraFollowers(int caseId);
-        void SaveExtraFollowers(int caseId, List<string> extraFollowers, int userId);
+        void SaveExtraFollowers(int caseId, List<string> extraFollowers, int? userId);
     }
 }

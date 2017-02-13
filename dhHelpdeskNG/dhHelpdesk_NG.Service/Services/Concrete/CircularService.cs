@@ -463,6 +463,22 @@
             }
         }
 
+        public List<OptionResult> GetResults(int circularId, DateTime? from, DateTime? to)
+        {
+            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            {
+                var questionnaireQuestionResultRepository = uof.GetRepository<QuestionnaireQuestionResultEntity>();
+                List<OptionResult> overviews =
+                    questionnaireQuestionResultRepository.GetAll()
+                        .GetCircularQuestionnaireQuestionResultEntities(circularId)
+                        .GetQuestionResultDateFrom(from)
+                        .GetQuestionResultDateTo(to)
+                        .MapToOptionResults();
+
+                return overviews;
+            }
+        }
+
         public void SaveAnswers(ParticipantForInsert businessModel)
         {
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
@@ -575,6 +591,22 @@
                 }
 
                 uof.Save();
+            }
+        }
+
+		/// <summary>
+		/// Returns circularId, if entity not found returns -1
+		/// </summary>
+		/// <param name="questionnaireId"></param>
+		/// <returns></returns>
+		public int GetCircularIdByQuestionnaireId(int questionnaireId)
+        {
+            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            {
+                var circularRepository = uof.GetRepository<QuestionnaireCircularEntity>();
+
+                var entity = circularRepository.GetAll().SingleOrDefault(x => x.Questionnaire_Id == questionnaireId);
+                return entity != null ? entity.Id : -1;
             }
         }
 
@@ -757,7 +789,7 @@
                 smtpInfo = new MailSMTPSetting(info.SmtpServer, info.SmtpPort);
             }
             var mailResponse = EmailResponse.GetEmptyEmailResponse();
-            var mailSetting = new EmailSettings(mailResponse, smtpInfo);
+            var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
 
             this.emailService.SendEmail(mailItem.MailItem, mailSetting);
 

@@ -115,7 +115,12 @@ namespace DH.Helpdesk.Services.Services
         /// </returns>
         public Setting GetCustomerSetting(int id)
         {
-            return this.settingRepository.GetCustomerSetting(id); 
+            var res = this.settingRepository.GetCustomerSetting(id);
+
+			//TODO default values. move to mapper
+	        if (res != null && res.MinRegWorkingTime == 0)
+		        res.MinRegWorkingTime = 30;
+			return res;
         }
 
         /// <summary>

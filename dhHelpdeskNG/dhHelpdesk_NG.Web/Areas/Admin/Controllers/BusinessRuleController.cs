@@ -276,7 +276,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
 		private List<DdlModel> GetSubStatusesList(int customerId, List<DdlModel> fieldItems)
 		{
-			var subStatusList = fieldItems.Union(_subStatusService.GetActiveStateSecondaries(customerId).Select(s => new DdlModel
+			var subStatusList = fieldItems.Union(_subStatusService.GetStateSecondaries(customerId).Select(s => new DdlModel
 			{
 				Value = s.Id.ToString(),
 				Text = s.Name,
@@ -301,7 +301,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 		private List<DdlModel> GetAdminsList(int customerId, List<DdlModel> currentValue)
 		{
 			var customerSetting = _settingService.GetCustomerSetting(customerId);
-			var performers = _userService.GetAvailablePerformersOrUserId(customerId);
+			var performers = _userService.GetPerformersOrUserId(customerId);
 			var adminList = performers.MapToCustomSelectList(string.Empty, customerSetting);
 			var allAdmins = currentValue.Union(adminList.Items.Select(i => new DdlModel
 			{
@@ -315,7 +315,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
 		private List<DdlModel> GetWorkgroupsList(int customerId)
 		{
-			var wgs = _workingGroupService.GetAllWorkingGroupsForCustomer(customerId)
+			var wgs = _workingGroupService.GetAllWorkingGroupsForCustomer(customerId, false)
 				.Select(wg => new DdlModel
 				{
 					Value = wg.Id.ToString(),

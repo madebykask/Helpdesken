@@ -1,0 +1,80 @@
+﻿
+@using DH.Helpdesk.Domain.Invoice
+@using DH.Helpdesk.Web
+@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+@using DH.Helpdesk.Web.Infrastructure.UrlHelpers.Api.Invoices
+@using DH.Helpdesk.Web.Infrastructure.UrlHelpers.Mvc.Invoices
+@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel
+
+@Scripts.Render(BundleConfig.ScriptNames.CaseCharge)
+
+<script type="text/javascript">
+    $(function() {
+    	var caseChargeObj = new CaseCharge({
+				hourText: '@Translation.GetForJS("tim")',
+				minText: '@Translation.GetForJS("min")',
+				statusList: @Html.SerializeObject(new Dictionary<int, string>
+							{
+								{ (int)InvoiceStatus.Invoiced, InvoiceStatus.Invoiced.GetTranslation(true) },
+								{ (int)InvoiceStatus.NotInvoiced, InvoiceStatus.NotInvoiced.GetTranslation(true) }
+							}),
+				getListUrl: "@Url.ApiAction(WebApiInvoicesUrlName.Invoices.GetInvoicesOverviewList, WebApiInvoicesUrlName.Invoices.Controller)",
+				saveValuesUrl: "@Url.ApiAction(WebApiInvoicesUrlName.Invoices.SaveInvoiceValues, WebApiInvoicesUrlName.Invoices.Controller)",
+				actionUrl: "@Url.ApiAction(WebApiInvoicesUrlName.Invoices.InvoiceAction, WebApiInvoicesUrlName.Invoices.Controller)",
+				exportUrl: "@Url.Action(MvcInvoicesUrlName.Overview.InvoiceExport, MvcInvoicesUrlName.Overview.Controller)",
+    			minStep: @Model.Setting.MinRegWorkingTime,
+				caseId: @Model.case_.Id
+			});
+    	window.caseChargeObj = caseChargeObj;
+
+    });
+</script>
+
+<div id="caseChargePopup" role="dialog" class="modal modal-wide fade" aria-labelledby="modalCaseCharge" aria-hidden="true" style="display: none">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h5>@Translation.GetCoreTextTranslation("Debitering")</h5>
+			</div>
+			<div class="modal-body overflow-visible">
+				<div>
+					<table id="logInvoiceGrid" class="table table-striped table-bordered table-hover table-cases">
+						<thead>
+							<tr>
+								<th>@Translation.GetCoreTextTranslation("Datum")</th>
+								<th>@Translation.GetCoreTextTranslation("Text")</th>
+								<th>@Translation.GetCoreTextTranslation("Arbete") @Translation.GetCoreTextTranslation("timmar")</th>
+								<th>@Translation.GetCoreTextTranslation("Övertid") @Translation.GetCoreTextTranslation("timmar")</th>
+								<th>@Translation.GetCoreTextTranslation("Material")</th>
+								<th>@Translation.GetCoreTextTranslation("Pris")</th>
+								<th>@Translation.GetCoreTextTranslation("Valda för debitering")</th>
+								<th>@Translation.GetCoreTextTranslation("Status")</th>
+							</tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+				</div>
+				<div>
+					<table id="externalInvoiceGrid" class="table table-striped table-bordered table-hover table-cases">
+						<thead>
+							<tr>
+								<th>@Translation.GetCoreTextTranslation("Fakturanummer")</th>
+								<th>@Translation.GetCoreTextTranslation("Fakturapris")</th>
+								<th>@Translation.GetCoreTextTranslation("Valda för debitering")</th>
+								<th>@Translation.GetCoreTextTranslation("Status")</th>
+							</tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+				</div>
+				<div class="">
+					<button type="button" id="btnSave" class="btn btn-default">@Translation.GetCoreTextTranslation("Spara")</button>
+					<button type="button" id="btnCancel" class="btn btn-cancel btn-default" data-dismiss="modal">@Translation.GetCoreTextTranslation("Avbryt")</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+

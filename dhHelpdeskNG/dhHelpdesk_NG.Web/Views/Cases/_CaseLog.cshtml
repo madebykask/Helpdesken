@@ -10,7 +10,7 @@
     var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
     
         <div class="tab-pane tab-pane-border active" id="logtab">
-            <table class="table table-striped table-bordered table-hover caselog">
+    <table class="table table-striped table-bordered table-hover caselog">
 
                 @if (Model.Logs.Any())
                 {
@@ -189,6 +189,55 @@
                                         }
 
             </table>
+		@if (Model.CustomerSettings.ModuleInvoice)
+		{
+			<table style="@Model.ShowInvoiceFields.displayHtml()">
+				<tbody>
+					<tr>
+						<td>
+							@Translation.GetCoreTextTranslation("Totalt") @Translation.GetCoreTextTranslation("Arbete"):
+						</td>
+						<td id="totalWorkingTime">
+							@(Model.Logs.Sum(x => x.WorkingTime) / 60)@Translation.GetCoreTextTranslation("Tim")
+							@(Model.Logs.Sum(x => x.WorkingTime) % 60)@Translation.GetCoreTextTranslation("Min")
+						</td>
+					</tr>
+					<tr>
+						<td>
+							@Translation.GetCoreTextTranslation("Totalt") @Translation.GetCoreTextTranslation("Övertid"):
+						</td>
+						<td id="totalOvertime">
+							@(Model.Logs.Sum(x => x.OverTime) / 60)@Translation.GetCoreTextTranslation("Tim")
+							@(Model.Logs.Sum(x => x.OverTime) % 60)@Translation.GetCoreTextTranslation("Min")
+						</td>
+					</tr>
+					<tr>
+						<td>
+							@Translation.GetCoreTextTranslation("Totalt") @Translation.GetCoreTextTranslation("Material"):
+						</td>
+						<td id="totalMaterial">
+							@Model.Logs.Sum(x => x.Price).ToString("0.00")
+						</td>
+					</tr>
+					<tr>
+						<td>
+							@Translation.GetCoreTextTranslation("Totalt") @Translation.GetCoreTextTranslation("Pris"):
+						</td>
+						<td id="totalPrice">
+							@Model.Logs.Sum(x => x.EquipmentPrice).ToString("0.00")
+						</td>
+					</tr>
+					<tr>
+						<td>
+							@Translation.GetCoreTextTranslation("Totalt") @Translation.GetCoreTextTranslation("Fakturor"):
+						</td>
+						<td id="totalExternalAmount">
+							@Model.ExternalInvoices.Sum(x => x.Amount).ToString("0.00")
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		}
         </div>    
                                         }
 

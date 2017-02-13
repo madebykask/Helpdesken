@@ -2,39 +2,59 @@
 @using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.UserInfoEditModel
 
-<h4>@Translation.Get("Användarinformation")</h4>
+<h4>@Model.Header</h4>
 <table class="tableform">
     <tbody>
-        @Html.EditorFor(m => m.Initials, "Fields/Text")
-        @Html.EditorFor(m => m.PersonalIdentityNumber, "Fields/Text")
-        @Html.EditorFor(m => m.Extension, "Fields/Text")
-        @Html.EditorFor(m => m.Title, "Fields/Text")
-        @Html.EditorFor(m => m.Location, "Fields/Text")
-        @Html.EditorFor(m => m.RoomNumber, "Fields/Text")
-        @Html.EditorFor(m => m.PostalAddress, "Fields/Text")
-        @Html.EditorFor(m => m.EmploymentType, "Fields/List", new { Source = Model.EmploymentTypes })
-
-        @if (Model.DepartmentId1.Show)
+        @if (Model.OrdererId.Show)
         {
             <tr>
                 <td class="span3">
-                    <label>@Translation.Get("Område")</label>
+                    @Html.FieldCaption(Model.OrdererId)
                 </td>
                 <td class="span6">
-                    @Html.DropDownListFor(m => m.RegionId, Model.Regions, string.Empty, new {id = "region_dropdown"})
+                    @Html.TextBoxFor(model => model.OrdererId.Value, new { maxlength = "40", autocomplete = "Off", data_field = "userId", @id="orderer_OrdererId" })
                 </td>
                 <td class="span3">
+                    @Model.OrdererId.Help
                 </td>
             </tr>
         }
-
-        @Html.EditorFor(m => m.DepartmentId1, "Fields/List", new { Source = Model.Departments, Id = "department_dropdown" })
-        @Html.EditorFor(m => m.DepartmentId2, "Fields/List", new { Source = Model.Departments2 })
-        @Html.EditorFor(m => m.UnitId, "Fields/List", new { Source = Model.Units })
-        @Html.EditorFor(m => m.Info, "Fields/Text")
-        @Html.EditorFor(m => m.Responsibility, "Fields/Text")
-        @Html.EditorFor(m => m.Activity, "Fields/Text")
-        @Html.EditorFor(m => m.Manager, "Fields/Text")
-        @Html.EditorFor(m => m.ReferenceNumber, "Fields/Text")
+    
+    @Html.EditorFor(m => m.PersonalIdentityNumber, "Fields/Text")
+    @Html.EditorFor(m => m.OrdererName, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererName" } } })
+    @Html.EditorFor(m => m.OrdererLocation, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererLocation" } } })
+    @Html.EditorFor(m => m.OrdererEmail, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererEmail" } } })
+    @Html.EditorFor(m => m.Extension, "Fields/Text")
+    @Html.EditorFor(m => m.Title, "Fields/Text")
+    @Html.EditorFor(m => m.EmploymentTypeId, "Fields/List", new { Source = Model.EmploymentTypes })
+    @Html.EditorFor(m => m.OrdererAddress, "Fields/Text")
+    @if (Model.DepartmentId1.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.GetCoreTextTranslation("Område")</label>
+            </td>
+            <td class="span6">
+                @Html.DropDownListFor(m => m.RegionId, Model.Regions, string.Empty, new { id = "region_dropdown" })
+            </td>
+            <td class="span3"></td>
+        </tr>
+    }
+    @Html.EditorFor(m => m.DepartmentId1, "Fields/List", new { Source = Model.Departments, Id = "orderer_departmentId" })
+    @Html.EditorFor(m => m.Unit, "Fields/List", new { Source = Model.Units, Id = "orderer_unit_select" })
+    @Html.EditorFor(m => m.DepartmentId2, "Fields/List", new {Source = Model.Departments2})
+    @Html.EditorFor(m => m.RoomNumber, "Fields/Text")
+    @Html.EditorFor(m => m.OrdererPhone, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererPhone" } } })
+    @Html.EditorFor(m => m.OrdererCode, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererCode" } } })
+    @Html.EditorFor(m => m.Activity, "Fields/Text")
+    @Html.EditorFor(m => m.Manager, "Fields/Text")
+    @Html.EditorFor(m => m.OrdererInvoiceAddress, "Fields/Text")
+    @Html.EditorFor(m => m.OrdererReferenceNumber, "Fields/Text")
+    @Html.EditorFor(m => m.AccountingDimension1, "Fields/Text")
+    @Html.EditorFor(m => m.AccountingDimension2, "Fields/Text")
+    @Html.EditorFor(m => m.AccountingDimension3, "Fields/Text")
+    @Html.EditorFor(m => m.AccountingDimension4, "Fields/Text")
+    @Html.EditorFor(m => m.AccountingDimension5, "Fields/Text")
+    @Html.EditorFor(m => m.Info, "Fields/Text")
     </tbody>
 </table>

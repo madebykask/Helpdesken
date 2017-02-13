@@ -112,7 +112,7 @@
 
                     var from = new MailAddress(customerEmail);
                     var mailResponse = EmailResponse.GetEmptyEmailResponse();
-                    var mailSetting = new EmailSettings(mailResponse, smtpInfo);
+                    var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
 
                     this.emailService.SendEmail(from, log.Emails, mail, mailSetting);
 

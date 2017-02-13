@@ -1,4 +1,8 @@
-﻿namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
+using DH.Helpdesk.Web.Models;
+
+namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
 {
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Areas.Orders.Models.Order.FieldModels;
@@ -10,25 +14,33 @@
         }
 
         public ProgramEditModel(
-            ConfigurableFieldModel<ProgramsModel> program)
+            ConfigurableFieldModel<string> infoProduct,
+            ConfigurableFieldModel<List<CheckBoxListItem>> programs)
         {
-            this.Program = program;
+            InfoProduct = infoProduct;
+            Programs = programs;
         }
 
+        public string Header { get; set; }
+
+
         [NotNull]
-        public ConfigurableFieldModel<ProgramsModel> Program { get; set; }
+        public MultiSelectList AllPrograms { get; set; }
+
+        [NotNull]
+        public ConfigurableFieldModel<string> InfoProduct { get; set; }
+        public ConfigurableFieldModel<List<CheckBoxListItem>> Programs { get; set; }
 
         public static ProgramEditModel CreateEmpty()
         {
-            var program = ConfigurableFieldModel<ProgramsModel>.CreateUnshowable();
-            program.Value = new ProgramsModel();
-
-            return new ProgramEditModel(program);
+            var programs = ConfigurableFieldModel<List<CheckBoxListItem>>.CreateUnshowable();
+            return new ProgramEditModel(ConfigurableFieldModel<string>.CreateUnshowable(), programs);
         }
 
         public bool HasShowableFields()
         {
-            return this.Program.Show;
+            return Programs.Show ||
+                InfoProduct.Show;
         }
     }
 }

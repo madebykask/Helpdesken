@@ -114,6 +114,19 @@
         }
 
         /// <summary>
+        /// Returns columns for case connect to parent grid
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <param name="userGroupId"></param>
+        /// <returns></returns>
+        public IEnumerable<CaseOverviewGridColumnSetting> GetConnectToParentGridColumnSettings(int customerId, int userGroupId)
+        {
+            return 
+                GridColumnsDefinition.CaseConnectToParentColumns.Select(
+                    x => new CaseOverviewGridColumnSetting() {Name = x}).ToList();
+        }
+
+        /// <summary>
         /// Returns column settings for case overview table selected by user 
         /// </summary>
         /// <param name="customerId"></param>
@@ -360,6 +373,5 @@
                 this._caseSettingRepository.GetMany(
                     it => it.Customer_Id == customerId && it.User_Id == userId && it.Line == 1);
         }
-
     }
 }

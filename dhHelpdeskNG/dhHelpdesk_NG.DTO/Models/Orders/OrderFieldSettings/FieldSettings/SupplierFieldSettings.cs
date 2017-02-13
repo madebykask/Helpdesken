@@ -2,7 +2,7 @@
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class SupplierFieldSettings
+    public sealed class SupplierFieldSettings : HeaderSettings
     {
         public SupplierFieldSettings(
                 TextFieldSettings supplierOrderNumber, 

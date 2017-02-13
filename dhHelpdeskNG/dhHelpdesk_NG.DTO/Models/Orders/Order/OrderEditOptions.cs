@@ -10,7 +10,7 @@
     {
         public OrderEditOptions(
                 string orderTypeName,
-                ItemOverview[] statuses, 
+                OrderStatusItem[] statuses, 
                 ItemOverview[] administrators, 
                 ItemOverview[] domains, 
                 ItemOverview[] departments, 
@@ -22,7 +22,13 @@
                 List<GroupWithEmails> workingGroupsWithEmails, 
                 List<ItemOverview> administratorsWithEmails,
                 ItemOverview[] employmentTypes,
-                ItemOverview[] regions)
+                ItemOverview[] regions,
+                ItemOverview[] accountTypes,
+                ItemOverview[] accountTypes2,
+                ItemOverview[] accountTypes3,
+                ItemOverview[] accountTypes4,
+                ItemOverview[] accountTypes5,
+                ItemOverview[] programs)
         {
             OrderTypeName = orderTypeName;
             AdministratorsWithEmails = administratorsWithEmails;
@@ -38,12 +44,18 @@
             Statuses = statuses;
             EmploymentTypes = employmentTypes;
             Regions = regions;
+            AccountTypes = accountTypes;
+            AccountTypes2 = accountTypes2;
+            AccountTypes3 = accountTypes3;
+            AccountTypes4 = accountTypes4;
+            AccountTypes5 = accountTypes5;
+            Programs = programs;
         }
 
         public string OrderTypeName { get; private set; }
 
         [NotNull]
-        public ItemOverview[] Statuses { get; private set; }
+        public OrderStatusItem[] Statuses { get; private set; }
 
         [NotNull]
         public ItemOverview[] Administrators { get; private set; } 
@@ -80,5 +92,24 @@
         
         [NotNull]
         public ItemOverview[] Regions { get; private set; }
+
+        [NotNull]
+        public ItemOverview[] AccountTypes { get; private set; }
+
+        [NotNull]
+        public ItemOverview[] AccountTypes2 { get; private set; }
+
+        [NotNull]
+        public ItemOverview[] AccountTypes3 { get; private set; }
+
+        [NotNull]
+        public ItemOverview[] AccountTypes4 { get; private set; }
+
+        [NotNull]
+        public ItemOverview[] AccountTypes5 { get; private set; }
+
+        [NotNull]
+        public ItemOverview[] Programs { get; private set; }
+
     }
 }

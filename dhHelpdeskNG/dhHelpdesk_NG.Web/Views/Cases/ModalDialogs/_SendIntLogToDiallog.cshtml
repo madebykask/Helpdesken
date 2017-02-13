@@ -20,10 +20,14 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h5>@Translation.GetCoreTextTranslation("Välj E-post")</h5>
             </div>
+
+            <div class="modal-body overflow-visible">
+                <div id="caseInternalLogModalInput" contenteditable="true" class="case-send-emails-div case-popup-div"></div>
+            </div>
             <div class="modal-body overflow-visible case-dropdown-area">
                 <div id="caseInternalLog_emailGroupsDiv" class="case-dropdown-div">
                     @Translation.GetCoreTextTranslation("E-postgrupp")<br />
-                    <select id="caseInternalLogEmailGroupsDropdown" class="case-usersearch-multiselect multiselect-search" multiple="multiple">
+                    <select id="caseInternalLogEmailGroupsDropdown" class="case-intlog-multiselect multiselect-search" multiple="multiple">
                         @foreach (var emailGroup in Model.EmailGroups)
                         {
                             <option value="@emailGroup.Value">@emailGroup.Text</option>
@@ -32,7 +36,7 @@
                 </div>
                 <div id="caseInternalLog_workingGroupsDiv" class="case-dropdown-div">
                     @Translation.GetCoreTextTranslation("Driftgrupp")<br />
-                    <select id="caseInternalLogWorkingGroupsDropdown" class="case-usersearch-multiselect multiselect-search" multiple="multiple">
+                    <select id="caseInternalLogWorkingGroupsDropdown" class="case-intlog-multiselect multiselect-search" multiple="multiple">
                         @foreach (var workingGroup in Model.WorkingGroups)
                         {
                             <option value="@workingGroup.Value">@workingGroup.Text</option>
@@ -40,38 +44,18 @@
                     </select>
                 </div>
                 <div id="caseInternalLog_adminsDiv" class="case-dropdown-div">
-                    @Translation.GetCoreTextTranslation("Handläggare")<br />
-                    <select id="caseInternalLogAdministratorsDropdown" class="case-usersearch-multiselect multiselect-search" multiple="multiple">
+                    @Translation.GetCoreTextTranslation("Handläggare")<br/>
+                    <select id="caseInternalLogAdministratorsDropdown" class="case-intlog-multiselect multiselect-search" multiple="multiple">
                         @foreach (var administrator in Model.Administrators)
                         {
                             <option value="@administrator.Value">@administrator.Text</option>
                         }
                     </select>
                 </div>
-            </div>
-            <div class="modal-body overflow-visible">
-                <textarea cols="20" id="caseInternalLogModalInput" class="width90" autofocus></textarea>
-            </div>
-            <div class="modal-footer">
-                <button type="button" id="btnCancel" class="btn btn-cancel btn-default" data-dismiss="modal">@Translation.GetCoreTextTranslation("Klar")</button>
+                <div class="case-intlog-button-done">
+                    <button type="button" id="btnCancel" class="btn btn-cancel btn-default" data-dismiss="modal">@Translation.GetCoreTextTranslation("OK")</button>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
-@*<div id="SendIntLogCase" title="@Translation.GetCoreTextTranslation("E-post")" class="overflow-visible">*@
-@*    <label>*@
-@*        <input id="searchIntSendToCheckboxWg" checked="checked" name="WorkingGroup" type="checkbox" value="true"> @Translation.GetCoreTextTranslation("Driftgrupp")*@
-@*    </label>*@
-@*    <label>*@
-@*        <input id="searchIntSendToCheckboxInit" checked="checked" name="Initiator" type="checkbox" value="true"> @Translation.GetCoreTextTranslation("Anmälare")*@
-@*    </label>*@
-@*    <label>*@
-@*        <input id="searchIntSendToCheckboxAdm" checked="checked" name="Administrator" type="checkbox" value="true"> @Translation.GetCoreTextTranslation("Handläggare")*@
-@*    </label>*@
-@*    <label>*@
-@*        <input id="searchIntSendToCheckboxEg" checked="checked" name="EmailGroup" type="checkbox" value="true"> @Translation.GetCoreTextTranslation("E-postgrupp")*@
-@*    </label>*@
-@*    <br/>*@
-@*    <textarea cols="20" id="casesIntLogSendInput" ></textarea>*@
-@*</div>*@

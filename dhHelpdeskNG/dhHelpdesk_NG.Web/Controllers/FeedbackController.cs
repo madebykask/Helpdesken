@@ -8,12 +8,14 @@ using DH.Helpdesk.BusinessData.Models.Questionnaire.Read;
 using DH.Helpdesk.BusinessData.Models.Questionnaire.Write;
 using DH.Helpdesk.BusinessData.Models.Shared;
 using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Services.Response.Questionnaire;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Web.Infrastructure;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 using DH.Helpdesk.Web.Infrastructure.UrlHelpers.Mvc;
 using DH.Helpdesk.Web.Models.Feedback;
 using DH.Helpdesk.Web.Models.Questionnaire.Input;
+using DH.Helpdesk.Web.Models.Questionnaire.Output;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -307,8 +309,9 @@ namespace DH.Helpdesk.Web.Controllers
 			var participant = new ParticipantForInsert(model.Guid, model.IsAnonym, OperationContext.DateAndTime, ids);
 			_circularService.SaveAnswers(participant);
 
-			return View(model);
-		}
+            //return View(model);
+            return RedirectToAction(MvcUrlName.Feedback.ThankYou, MvcUrlName.Feedback.Controller);
+        }
 
 		[HttpPost]
 		public ActionResult Answer(FeedbackAnswerModel model)
@@ -328,9 +331,45 @@ namespace DH.Helpdesk.Web.Controllers
 			return View(model: html);
 		}
 
+		[HttpGet]
+		public ViewResult Statistics(int feedbackId)
+		{
+			var circularId = this._circularService.GetCircularIdByQuestionnaireId(feedbackId);
+			if (circularId < 0)
+			{
+				throw new NullReferenceException("Missing Circular for Feedback. Feedback should contain Circular");
+			}
+			var results = this._circularService.GetResult(circularId);
+			var feedbackOverview = this._circularService.GetQuestionnaire(feedbackId, OperationContext);
+
+			var viewModel = new FeedbackStatisticsViewModel(feedbackId, feedbackOverview, results, new StatisticsFilter());
+			return this.View("Statistics", viewModel);
+		}
+
+		[HttpPost]
+		public PartialViewResult Statistics(int questionnaireId, StatisticsFilter statisticsFilter)
+		{
+			var circularId = this._circularService.GetCircularIdByQuestionnaireId(questionnaireId);
+			if (circularId < 0)
+			{
+				throw new NullReferenceException("Missing Circular for Feedback. Feedback should contain Circular");
+			}
+			var questionnaire = this._circularService.GetQuestionnaire(
+				questionnaireId,
+				OperationContext);
+			var results = this._circularService.GetResults(
+				circularId,
+				statisticsFilter.CircularCreatedDate.DateFrom,
+				statisticsFilter.CircularCreatedDate.DateTo);
+
+			var viewModel = new StatisticsViewModel(questionnaireId, questionnaire, results);
+
+			return this.PartialView("~/Views/Questionnaire/StatisticsGrid.cshtml", viewModel);
+		}
+
 		#region Private
 
-		private List<SelectListItem> GetPercents()
+        private List<SelectListItem> GetPercents()
 		{
 			var lst = new List<SelectListItem>();
 

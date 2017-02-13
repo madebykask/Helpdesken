@@ -546,3 +546,89 @@ GO
 If not exists (select * from tblTextTranslation where text_id = 1711 and Language_Id = 1)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1711, 1, 'inte har valts. Vänligen kontrollera ärendet.')
 	
+
+
+If not exists (select * from tbltext where id = 1751)
+	insert into tbltext (id, TextString, TextType) VALUES (1751, 'Select E-mail', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1751 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1751, 1, 'Välj E-post')
+	
+
+If not exists (select * from tbltext where id = 1752)
+	insert into tbltext (id, TextString, TextType) VALUES (1752, 'Done', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1752 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1752, 1, 'Klar')
+	
+
+If not exists (select * from tbltext where id = 1753)
+	insert into tbltext (id, TextString, TextType) VALUES (1753, 'Email address is not valid.', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1753 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1753, 1, 'E-postadress är inte giltig.')
+	
+
+If not exists (select * from tbltext where id = 1754)
+	insert into tbltext (id, TextString, TextType) VALUES (1754, 'Same email already added.', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1754 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1754, 1, 'Samma e-post redan lagts.')
+	
+
+If not exists (select * from tbltext where id = 1755)
+	insert into tbltext (id, TextString, TextType) VALUES (1755, 'User', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1755 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1755, 1, 'Anmälare')
+	
+
+If not exists (select * from tbltext where id = 1756)
+	insert into tbltext (id, TextString, TextType) VALUES (1756, 'selected', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1756 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1756, 1, 'vald')
+	
+
+If not exists (select * from tbltext where id = 1757)
+	insert into tbltext (id, TextString, TextType) VALUES (1757, 'Add followers', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1757 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1757, 1, 'Välj följare')
+	
+If not exists (select * from tbltext where id = 1761)
+	insert into tbltext (id, TextString, TextType) VALUES (1761, 'must be specified', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1761 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1761, 1, 'måste anges')
+	
+
+If not exists (select * from tbltext where id = 1775)
+	insert into tbltext (id, TextString, TextType) VALUES (1775, '1. Write filename (leave blank for automatic naming)', 300)
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1775 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1775, 1, '1. Skriv ett filnamn (kan lämnas blankt)')
+GO
+
+If not exists (select * from tbltext where id = 1776)
+	insert into tbltext (id, TextString, TextType) VALUES (1776, '2. Press Ctrl+V for inserting picture', 300)
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1776 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1776, 1, '2. Tryck Ctrl+V för att klippa in bilden')
+GO
+
+If not exists (select * from tbltext where id = 1777)
+	insert into tbltext (id, TextString, TextType) VALUES (1777, '3. Click on Save for adding to case', 300)
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1777 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1777, 1, '3. Spara för att lägga till på ärendet')
+GO
+	
+
+
+
+
+

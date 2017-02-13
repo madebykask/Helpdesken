@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
+﻿using DH.Helpdesk.BusinessData.Models.Orders.Order;
+
+namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
 {
     using System.Collections.Generic;
 
@@ -19,7 +21,6 @@
                     DeliveryEditModel delivery,
                     GeneralEditModel general,
                     LogEditModel log,
-                    OrdererEditModel orderer,
                     OrderEditModel order,
                     OtherEditModel other,
                     ProgramEditModel program,
@@ -37,7 +38,6 @@
             Delivery = delivery;
             General = general;
             Log = log;
-            Orderer = orderer;
             Order = order;
             Other = other;
             Program = program;
@@ -66,8 +66,6 @@
         [NotNull]
         public LogEditModel Log { get; set; }
 
-        [NotNull]
-        public OrdererEditModel Orderer { get; set; }
 
         [NotNull]
         public OrderEditModel Order { get; set; }
@@ -117,5 +115,6 @@
         public List<int> DeletedLogIds { get; set; }
 
         public HistoryModel History { get; set; }
+        public OrderStatusItem[] Statuses { get; set; }
     }
 }

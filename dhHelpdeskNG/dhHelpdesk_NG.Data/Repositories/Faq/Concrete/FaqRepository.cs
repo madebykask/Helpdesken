@@ -56,7 +56,7 @@
             return this.Table.Any(f => f.FAQCategory_Id == categoryId);
         }
 
-        public void Update(ExistingFaq existingFaq)
+        public void UpdateSwedishFaq(ExistingFaq existingFaq)
         {
             var faqEntity = GetById(existingFaq.Id);
 
@@ -71,7 +71,31 @@
             faqEntity.URL2 = existingFaq.UrlTwo ?? string.Empty;
             faqEntity.WorkingGroup_Id = existingFaq.WorkingGroupId;
         }
-        
+
+        public void UpdateOtherLanguageFaq(ExistingFaq faq)
+        {
+            var faqLng = DataContext.FAQLanguages.SingleOrDefault(l => l.FAQ_Id == faq.Id && l.Language_Id == faq.LanguageId);
+            if (faqLng != null)
+            {
+                faqLng.Answer = faq.Answer;
+                faqLng.FAQQuery = faq.Question;
+                faqLng.Answer_Internal = string.IsNullOrEmpty(faq.InternalAnswer) ? string.Empty : faq.InternalAnswer;
+            }
+            else
+            {
+                var newFaqLng = new FaqLanguageEntity
+                {
+                    FAQ_Id = faq.Id,
+                    FAQQuery = faq.Question,
+                    Answer = faq.Answer,
+                    Answer_Internal = string.IsNullOrEmpty(faq.InternalAnswer) ? string.Empty : faq.InternalAnswer,
+                    Language_Id = faq.LanguageId
+                };
+
+                DataContext.FAQLanguages.Add(newFaqLng);
+            }
+        }
+
         #endregion
     }
 }

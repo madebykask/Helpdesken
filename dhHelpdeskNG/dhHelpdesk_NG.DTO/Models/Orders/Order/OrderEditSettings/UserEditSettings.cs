@@ -1,8 +1,10 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditSettings
+﻿using DH.Helpdesk.BusinessData.Models.Orders.OrderFieldSettings.FieldSettings;
+
+namespace DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditSettings
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class UserEditSettings
+    public sealed class UserEditSettings : HeaderSettings
     {
         public UserEditSettings(TextFieldEditSettings userId, TextFieldEditSettings userFirstName, TextFieldEditSettings userLastName, TextFieldEditSettings userPhone, TextFieldEditSettings userEMail, TextFieldEditSettings initials, TextFieldEditSettings personalIdentityNumber, TextFieldEditSettings extension, TextFieldEditSettings title, TextFieldEditSettings location, TextFieldEditSettings roomNumber, TextFieldEditSettings postalAddress, TextFieldEditSettings employmentType, TextFieldEditSettings departmentId1, TextFieldEditSettings unitId, TextFieldEditSettings departmentId2, TextFieldEditSettings info, TextFieldEditSettings responsibility, TextFieldEditSettings activity, TextFieldEditSettings manager, TextFieldEditSettings referenceNumber)
         {

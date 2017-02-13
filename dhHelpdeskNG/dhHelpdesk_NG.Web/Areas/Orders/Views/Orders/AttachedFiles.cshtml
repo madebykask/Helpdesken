@@ -8,7 +8,7 @@
 <div id="@filesContainerId">
     @if (!Model.Files.Any())
     {
-        @Translation.Get("No Uploaded Files")
+        @Translation.GetCoreTextTranslation("No Uploaded Files")
         return;
     }
     <table class="table table-striped">
@@ -21,7 +21,7 @@
             <thead>
             <tr>
                 <th>
-                    @Translation.Get("Filnamn")
+                    @Translation.GetCoreTextTranslation("Filnamn")
                 </th>
                
                 <th></th>
@@ -30,10 +30,10 @@
         <tbody>
             <tr>
                 <td>
-                    @Html.ActionLink(file, "DownloadFile", new { entityId = Model.OrderId, fileName = file })
+                    @Html.ActionLink(file, "DownloadFile", new { entityId = Model.OrderId, subtopic = Model.Area, fileName = file })
                 </td>
                 <td>
-                    <a onclick="deleteFile('@Model.Area', '@file', '@filesContainerId')" class="btn" title="@Translation.Get("Ta bort")">
+                    <a onclick="deleteFile('@Model.Area', '@file', '@filesContainerId')" class="btn" title="@Translation.GetCoreTextTranslation("Ta bort")">
                         <i class="icon-remove"></i>
                     </a>
                 </td>

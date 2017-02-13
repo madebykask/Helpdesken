@@ -1,0 +1,46 @@
+﻿@using DH.Helpdesk.Web.Areas.Invoices.Models
+@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Infrastructure.UrlHelpers.Mvc.Invoices
+@model DH.Helpdesk.Web.Areas.Invoices.Models.BaseIndexModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="secnavs fixed">
+	<div class="pull-left">
+		@RenderSection("Actions", false)
+	</div>
+</div>
+<div class="content">
+	<div class="container">
+		<ul class="nav nav-tabs nav-tabs-actions">
+			<li class="@GetIsActive(IndexModelType.InvoiceOvweview)">
+				@Html.ActionLink(Translation.Get("Fakturering"), MvcInvoicesUrlName.Overview.Index, MvcInvoicesUrlName.Overview.Controller)
+			</li>
+			@if (Model.ShowFiles)
+			{
+				<li class="@GetIsActive(IndexModelType.InvoiceFiles)">
+					@Html.ActionLink(Translation.Get("Fakturafiler"), MvcInvoicesUrlName.Overview.Files, MvcInvoicesUrlName.Overview.Controller)
+				</li>
+			}
+		</ul>
+		<div class="tab-content overflow-visible">
+			<div class="tab-pane tab-pane-border active">
+				@RenderBody()
+			</div>
+		</div>
+	</div>
+</div>
+@section Scripts {
+	@RenderSection("Scripts", false)
+}
+
+@functions    {
+	private MvcHtmlString GetIsActive(IndexModelType type)
+	{
+		return MvcHtmlString.Create(Model.Type == type ? "active" : null);
+	}
+
+}
+

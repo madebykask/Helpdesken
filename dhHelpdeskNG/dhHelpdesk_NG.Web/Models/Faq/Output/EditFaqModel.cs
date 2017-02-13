@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Models.Faq.Output
+﻿using System.Web.Mvc;
+
+namespace DH.Helpdesk.Web.Models.Faq.Output
 {
     using System;
     using System.Collections.Generic;
@@ -21,7 +23,9 @@
             DropDownContent workingGroup, 
             bool informationIsAvailableForNotifiers, 
             bool showOnStartPage, 
-            bool userHasFaqAdminPermission)
+            bool userHasFaqAdminPermission,
+            int languageId,
+            SelectList languages)
         {
             this.UserHasFaqAdminPermission = userHasFaqAdminPermission;
             //if (id <= 0)
@@ -65,6 +69,8 @@
             this.WorkingGroup = workingGroup;
             this.InformationIsAvailableForNotifiers = informationIsAvailableForNotifiers;
             this.ShowOnStartPage = showOnStartPage;
+            this.LanguageId = languageId;
+            this.Languages = languages;
         }
 
         #endregion
@@ -94,6 +100,10 @@
         public DropDownContent WorkingGroup { get; private set; }
 
         public bool UserHasFaqAdminPermission { get; private set; }
+
+        public int LanguageId { get; set; }
+
+        public SelectList Languages { get; set; }
 
         #endregion
     }

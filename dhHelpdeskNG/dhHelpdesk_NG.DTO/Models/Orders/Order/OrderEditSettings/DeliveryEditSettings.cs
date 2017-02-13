@@ -1,8 +1,10 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditSettings
-{
-    using DH.Helpdesk.Common.ValidationAttributes;
+﻿using DH.Helpdesk.BusinessData.Models.Orders.OrderFieldSettings.FieldSettings;
 
-    public sealed class DeliveryEditSettings
+namespace DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditSettings
+{
+    using Common.ValidationAttributes;
+
+    public sealed class DeliveryEditSettings : HeaderSettings
     {
          public DeliveryEditSettings(
                 TextFieldEditSettings deliveryDate, 
@@ -16,20 +18,24 @@
                 TextFieldEditSettings deliveryInfo1, 
                 TextFieldEditSettings deliveryInfo2, 
                 TextFieldEditSettings deliveryInfo3, 
-                TextFieldEditSettings deliveryOuId)
+                TextFieldEditSettings deliveryOuId,
+                TextFieldEditSettings deliveryName,
+                TextFieldEditSettings deliveryPhone)
         {
-            this.DeliveryOuId = deliveryOuId;
-            this.DeliveryInfo3 = deliveryInfo3;
-            this.DeliveryInfo2 = deliveryInfo2;
-            this.DeliveryInfo1 = deliveryInfo1;
-            this.DeliveryLocation = deliveryLocation;
-            this.DeliveryPostalAddress = deliveryPostalAddress;
-            this.DeliveryPostalCode = deliveryPostalCode;
-            this.DeliveryAddress = deliveryAddress;
-            this.DeliveryOu = deliveryOu;
-            this.DeliveryDepartment = deliveryDepartment;
-            this.InstallDate = installDate;
-            this.DeliveryDate = deliveryDate;
+            DeliveryOuId = deliveryOuId;
+            DeliveryInfo3 = deliveryInfo3;
+            DeliveryInfo2 = deliveryInfo2;
+            DeliveryInfo1 = deliveryInfo1;
+            DeliveryLocation = deliveryLocation;
+            DeliveryPostalAddress = deliveryPostalAddress;
+            DeliveryPostalCode = deliveryPostalCode;
+            DeliveryAddress = deliveryAddress;
+            DeliveryOu = deliveryOu;
+            DeliveryDepartment = deliveryDepartment;
+            InstallDate = installDate;
+            DeliveryDate = deliveryDate;
+            DeliveryName = deliveryName;
+            DeliveryPhone = deliveryPhone;
         }
 
         [NotNull]
@@ -67,5 +73,13 @@
 
         [NotNull]
         public TextFieldEditSettings DeliveryOuId { get; private set; }
+
+        [NotNull]
+        public TextFieldEditSettings DeliveryName { get; private set; }
+
+        [NotNull]
+        public TextFieldEditSettings DeliveryPhone { get; private set; }
+
+
     }
 }

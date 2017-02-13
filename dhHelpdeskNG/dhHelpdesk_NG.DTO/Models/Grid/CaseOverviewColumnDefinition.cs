@@ -81,9 +81,27 @@
 
         #endregion
 
-         /// <summary>
-        /// List of fields that we use in case overview tabel but they does not exists in case
+        #region Case connect to parent grid
+
+        /// <summary>
+        /// List of fields for case connect to parent grid
         /// </summary>
+        public static readonly string[] CaseConnectToParentColumns =
+        {
+            CaseInfoFields.Case,
+            CaseInfoFields.RegistrationDate,
+            CaseInfoFields.Caption,
+            CaseInfoFields.CaseType,
+            OtherFields.Administrator,
+            OtherFields.SubState,
+            LogFields.FinishingDate
+        };
+
+        #endregion
+
+            /// <summary>
+            /// List of fields that we use in case overview tabel but they does not exists in case
+            /// </summary>
         public static readonly HashSet<string> VirtualColumns = new HashSet<string> { "_temporary_LeadTime", "tblProblem.ResponsibleUser_Id" };
 
         /// <summary>
@@ -96,7 +114,8 @@
                                                                            LogFields.AttachedFile, 
                                                                            "FinishingCause_Id",
                                                                            "AddUserBtn",
-                                                                           "UpdateNotifierInformation"
+                                                                           "UpdateNotifierInformation",
+                                                                           "AddFollowersBtn"
                                                                        };
     }
 }

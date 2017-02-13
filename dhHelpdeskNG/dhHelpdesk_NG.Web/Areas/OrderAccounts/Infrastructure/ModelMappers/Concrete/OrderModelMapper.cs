@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.OrderAccounts.Infrastructure.ModelMappers.Concrete
+﻿using DH.Helpdesk.Domain.Orders;
+
+namespace DH.Helpdesk.Web.Areas.OrderAccounts.Infrastructure.ModelMappers.Concrete
 {
     using System;
     using System.Collections.Generic;

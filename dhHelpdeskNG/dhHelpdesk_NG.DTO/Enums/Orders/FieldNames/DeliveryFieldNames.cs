@@ -25,5 +25,9 @@
         public const string DeliveryInfo3 = "Delivery.DeliveryInfo3";
 
         public const string DeliveryOuId = "Delivery.DeliveryOuId";
+
+        public const string DeliveryName = "Delivery.DeliveryName";
+
+        public const string DeliveryPhone = "Delivery.DeliveryPhone";
     }
 }

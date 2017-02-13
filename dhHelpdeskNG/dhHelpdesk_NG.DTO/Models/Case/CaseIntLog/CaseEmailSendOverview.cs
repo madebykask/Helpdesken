@@ -14,6 +14,8 @@ namespace DH.Helpdesk.BusinessData.Models.Case.CaseIntLog
 
         public List<string> Emails { get; set; }
 
+        public string DepartmentName { get; set; }
+
         public CaseUserSearchGroup GroupType { get; set; }
     }
 }

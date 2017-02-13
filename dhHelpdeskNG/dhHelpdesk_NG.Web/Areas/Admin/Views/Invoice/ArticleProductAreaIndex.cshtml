@@ -1,11 +1,7 @@
-﻿@model DH.Helpdesk.Web.Areas.Admin.Models.Invoice.InvoiceArticleProductAreaIndexModel
+﻿@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+@using DH.Helpdesk.Web.Infrastructure.UrlHelpers.Api.Admin
+@model DH.Helpdesk.Web.Areas.Admin.Models.Invoice.InvoiceArticleProductAreaIndexModel
 
-@Scripts.Render("~/bundles/admininvoice")
-<script type="text/javascript">
-    window.Params = {
-        ShowSearchResult: '@Url.Action("_ArticleProductAreaIndexRows", "Invoice", "areas")',
-    };
-</script>
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
@@ -15,76 +11,97 @@
     @Html.Partial("_MasterDataPanel", Model.Customer)
 </div>
 <div class="content  invoice-article admin">
-    <div class="container">
-        <ul class="nav nav-tabs" id="myTab">
-            <li class="active"><a href="#fragment-1">@Translation.Get("Artiklar och produktområden")</a></li>            
-        </ul>
-        <div class="tab-content">
-            <div class="tab-pane tab-pane-border active" id="fragment-1">
-              <div>
-                  <input type="hidden" id="currentCustomerId" value="@Model.Customer.Id" />
-                  <table>
-                      <tr>
-                          <td>@Translation.Get("Artikel", Enums.TranslationSource.TextTranslation)</td>
-                          <td>
-                              <select id="lstInvoiceArticles" name="lstInvoiceArticles" data-field="region" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
-                                     @{
-                                         string s = "";
-                                         if (Model.IAPSearch_Filter.SelectedInvoiceArticles != null)
-                                         {
-                                             s = string.Join(",", Model.IAPSearch_Filter.SelectedInvoiceArticles);
-                                         } 
-                                         foreach (var a in Model.InvoiceArticles)
-                                         {             
-                                            <option value="@a.Id" @a.Id.IdIsSelected(s)>@a.Number - @a.Name - @a.NameEng</option>
-                                         }
-                                     }
-                                 </select>
-                          </td>
-                      </tr>
-                      <tr>
-                          <td style="width:120px">@Translation.Get("Produktområde", Enums.TranslationSource.TextTranslation)</td>
-                          <td style="width:120px">
-                              <select id="lstProductAreas" name="lstProductAreas" data-field="region" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
-                                  @{
-                                         string m = "";
-                                         if (Model.IAPSearch_Filter.SelectedProductAreas != null)
-                                         {
-                                             m = string.Join(",", Model.IAPSearch_Filter.SelectedProductAreas);
-                                         } 
-                                         foreach (var p in Model.ProductAreas)
-                                         {
-                                             if (p.IsActive == 1)
-                                             {
-                                                <option value="@p.Id" @p.Id.IdIsSelected(m)>
-                                                    @p.Name
-                                                </option>
-                                             }
-                                             else
-                                             {
-                                                <option value="@p.Id" @p.Id.IdIsSelected(m)class="DisabledChosen" >
-                                                    @p.Name
-                                                </option>
-                                             }
+	<div class="container">
+		<ul class="nav nav-tabs" id="myTab">
+			<li class="active"><a href="#fragment-1">@Translation.Get("Artiklar och produktområden")</a></li>            
+		</ul>
+		<div class="tab-content">
+			<div class="tab-pane tab-pane-border active" id="fragment-1">
+				<div>
+					<input type="hidden" id="currentCustomerId" value="@Model.Customer.Id" />
+					<table>
+						<tr>
+							<td>@Translation.Get("Artikel", Enums.TranslationSource.TextTranslation)</td>
+							<td>
+								<select id="lstInvoiceArticles" name="lstInvoiceArticles" data-field="region" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+									@{
+										string s = "";
+										if (Model.IAPSearch_Filter.SelectedInvoiceArticles != null)
+										{
+											s = string.Join(",", Model.IAPSearch_Filter.SelectedInvoiceArticles);
+										} 
+										foreach (var a in Model.InvoiceArticles)
+										{             
+											<option value="@a.Id" @a.Id.IdIsSelected(s)>@a.Number - @a.Name - @a.NameEng</option>
+										}
+									}
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td style="width:120px">@Translation.Get("Produktområde", Enums.TranslationSource.TextTranslation)</td>
+							<td style="width:120px">
+								<select id="lstProductAreas" name="lstProductAreas" data-field="region" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+									@{
+										string m = "";
+										if (Model.IAPSearch_Filter.SelectedProductAreas != null)
+										{
+											m = string.Join(",", Model.IAPSearch_Filter.SelectedProductAreas);
+										} 
+										foreach (var p in Model.ProductAreas)
+										{
+											if (p.IsActive == 1)
+											{
+												<option value="@p.Id" @p.Id.IdIsSelected(m)>
+													@p.Name
+												</option>
+											}
+											else
+											{
+												<option value="@p.Id" @p.Id.IdIsSelected(m)class="DisabledChosen" >
+													@p.Name
+												</option>
+											}
 
-                                        }
-                                     }   
+										}
+									}   
                                 
-                                 </select>
-                          </td>
-                          <td>
-                             <input type="button" class="btn" id="ShowSearchResult"  value="@Translation.Get("Sök")"/>
-                         </td>
-                      </tr>
-                      <tr>
-                          <td>
-                              &nbsp;
-                          </td>
-                      </tr>
-                  </table>  
-              </div>
-              @Html.Partial("_ArticleProductAreaIndexRows", Model.Rows)
-            </div>            
-        </div>        
-    </div>
+								</select>
+							</td>
+							<td>
+								<input type="button" class="btn" id="ShowSearchResult"  value="@Translation.Get("Sök")"/>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								&nbsp;
+							</td>
+						</tr>
+					</table>  
+				</div>
+				@Html.Partial("_ArticleProductAreaIndexRows", Model.Rows)
+			</div>            
+		</div>        
+	</div>
 </div>
+
+@section Scripts {
+@Scripts.Render("~/bundles/admininvoice")
+	<script type="text/javascript">
+		$(function () {
+			var pageObj = new InvoiceArticles({
+				customerId: @Model.Customer.Id,
+				initOrder: @Model.IAPSearch_Filter.Order,
+				initDir: "@Model.IAPSearch_Filter.Dir",
+				perPageText: '@Translation.GetForJS("Antal per sida")',
+				perShowingText: '@Translation.GetForJS("Visar sida")',
+				deleteText: '@Translation.GetForJS("Ta bort")',
+				deleteDialogText: '@Translation.GetForJS("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) + "?")',
+				getListUrl: "@Url.ApiAction(WebApiAdminUrlName.Invoice.GetArticleProductAreaList, WebApiAdminUrlName.Invoice.Controller)",
+				deleteUrl: "@Url.Action("DeleteArticleProductArea", "Invoice")"
+			});
+			window.pageObj = pageObj;
+		});
+
+	</script>
+}

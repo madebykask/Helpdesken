@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services.Concrete
+﻿using DH.Helpdesk.Common.Enums;
+
+namespace DH.Helpdesk.Services.Services.Concrete
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -108,7 +110,17 @@
 
         public void UpdateFaq(ExistingFaq faq)
         {
-            this.faqRepository.Update(faq);
+            switch (faq.LanguageId)
+            {
+                case LanguageIds.Swedish:
+                    faqRepository.UpdateSwedishFaq(faq);
+                    break;
+
+                default:
+                    faqRepository.UpdateOtherLanguageFaq(faq);
+                    break;
+            }
+
             this.faqRepository.Commit();
         }
 
@@ -164,59 +176,57 @@
             }
         }
 
-        public List<FaqOverview> FindOverviewsByCategoryId(int categoryId)
+        public List<FaqOverview> FindOverviewsByCategoryId(int categoryId, int languageId = LanguageIds.Swedish)
         {
-            return
-                this.FindFaqsByCategoryId(categoryId)
-                    .Select(f => new FaqOverview { CreatedDate = f.CreatedDate, Id = f.Id, Text = f.FAQQuery })
-                    .ToList();
+            List<FaqOverview> result;
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var repository = uow.GetRepository<FaqEntity>();
+                var faqs = repository.GetAll()
+                    .Where(f => f.FAQCategory_Id == categoryId && !string.IsNullOrEmpty(f.FAQQuery));
+                result = MapToOverview(faqs, languageId);
+            }
+            return result;
         }
 
-        public List<FaqDetailedOverview> FindDetailedOverviewsByCategoryId(int categoryId)
+        public List<FaqDetailedOverview> FindDetailedOverviewsByCategoryId(int categoryId, int languageId = LanguageIds.Swedish)
         {
-            var faqEntities = this.FindFaqsByCategoryId(categoryId);
-
-            return
-                faqEntities.Select(
-                    f =>
-                    new FaqDetailedOverview
-                    {
-                        Answer = f.Answer,
-                        CreatedDate = f.CreatedDate,
-                        Id = f.Id,
-                        InternalAnswer = f.Answer_Internal,
-                        Text = f.FAQQuery,
-                        UrlOne = f.URL1,
-                        UrlTwo = f.URL2
-                    }).ToList();
+            List<FaqDetailedOverview> result;
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var repository = uow.GetRepository<FaqEntity>();
+                var faqs = repository.GetAll()
+                    .Where(f => f.FAQCategory_Id == categoryId && !string.IsNullOrEmpty(f.FAQQuery));
+                result = MapToDetailedOverview(faqs, languageId);
+            }
+            return result;
         }
 
-        public List<FaqDetailedOverview> SearchDetailedOverviewsByPharse(string pharse, int customerId)
+        public List<FaqDetailedOverview> SearchDetailedOverviewsByPharse(string pharse, int customerId, int languageId = LanguageIds.Swedish)
         {
-            var faqEntities = this.SearchByPharse(pharse, customerId);
-
-            return
-                faqEntities.Select(
-                    f =>
-                    new FaqDetailedOverview
-                    {
-                        Answer = f.Answer,
-                        CreatedDate = f.CreatedDate,
-                        Id = f.Id,
-                        InternalAnswer = f.Answer_Internal,
-                        Text = f.FAQQuery,
-                        UrlOne = f.URL1,
-                        UrlTwo = f.URL2
-                    }).ToList();
+            List<FaqDetailedOverview> result;
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var repository = uow.GetRepository<FaqEntity>();
+                var faqs = this.SearchByPharse(pharse, customerId, repository, languageId);
+                result = MapToDetailedOverview(faqs, languageId);
+            }
+            return result;
         }
 
-        public List<FaqOverview> SearchOverviewsByPharse(string pharse, int customerId)
+        public List<FaqOverview> SearchOverviewsByPharse(string pharse, int customerId, int languageId = LanguageIds.Swedish)
         {
-            return
-                this.SearchByPharse(pharse, customerId)
-                    .Select(f => new FaqOverview { CreatedDate = f.CreatedDate, Id = f.Id, Text = f.FAQQuery })
-                    .ToList();
+            List<FaqOverview> result;
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var repository = uow.GetRepository<FaqEntity>();
+                var faqs = SearchByPharse(pharse, customerId, repository, languageId);
+                result = MapToOverview(faqs, languageId);
+            }
+            return result;
         }
+
+        
 
         public Faq FindById(int faqId)
         {
@@ -252,50 +262,21 @@
             }
         }
 
-        #endregion
-
-        private IEnumerable<FaqEntity> FindFaqsByCategoryId(int categoryId)
-        {
-            using (var uow = this.unitOfWorkFactory.Create())
-            {
-                var repository = uow.GetRepository<FaqEntity>();
-                return repository.GetAll()
-                    .Where(f => f.FAQCategory_Id == categoryId && !string.IsNullOrEmpty(f.FAQQuery))
-                    .ToList();
-            }
-        }
-
-        private IEnumerable<FaqEntity> SearchByPharse(string pharse, int customerId)
-        {
-            using (var uow = this.unitOfWorkFactory.Create())
-            {
-                var pharseInLowerCase = pharse.ToLower();
-
-                var repository = uow.GetRepository<FaqEntity>();
-                return repository.GetAll()
-                    .Where(f => f.Customer_Id == customerId)
-                    .Where(
-                        f =>
-                        f.FAQQuery.ToLower().Contains(pharseInLowerCase)
-                        || f.Answer.ToLower().Contains(pharseInLowerCase)
-                        || f.Answer_Internal.ToLower().Contains(pharseInLowerCase)).ToList();                    
-            }
-        }       
-
         public IList<FaqCategory> GetFaqCategories(int customerId)
         {
-           var ret= faqCategoryRepository.GetMany(c => c.Customer_Id.HasValue && c.Customer_Id.Value == customerId)
-                                         .Select(c=> 
-                                               new FaqCategory {
+            var ret = faqCategoryRepository.GetMany(c => c.Customer_Id.HasValue && c.Customer_Id.Value == customerId)
+                                          .Select(c =>
+                                                new FaqCategory
+                                                {
                                                     Id = c.Id,
-                                                    Name = c.Name, 
+                                                    Name = c.Name,
                                                     CustomerId = c.Customer_Id.Value,
-                                                    Parent_Id = c.Parent_FAQCategory_Id, 
+                                                    Parent_Id = c.Parent_FAQCategory_Id,
                                                     PublicCatId = c.PublicFAQCategory,
-                                                    CreatedDate = c.CreatedDate, 
+                                                    CreatedDate = c.CreatedDate,
                                                     ChangedDate = c.ChangedDate
-                                               })
-                                         .ToList();
+                                                })
+                                          .ToList();
             return ret;
         }
 
@@ -339,5 +320,186 @@
         {
             return faqFileRepository.GetFileContentByFaqIdAndFileName(faqId, basePath, fileName);
         }
+
+        public void UpdateCategory(EditCategory editedCategory)
+        {
+            switch (editedCategory.LanguageId)
+            {
+                case LanguageIds.Swedish:
+                    faqCategoryRepository.UpdateSwedishCategory(editedCategory);
+                    break;
+
+                default:
+                    faqCategoryRepository.UpdateOtherLanguageCategory(editedCategory);
+                    break;
+            }
+
+            faqCategoryRepository.Commit();
+        }
+
+        public Faq GetFaqById(int id, int languageId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                Faq result = null;
+                var repository = uow.GetRepository<FaqEntity>();
+                var repositoryLng = uow.GetRepository<FaqLanguageEntity>();
+
+                var faqEntity = repository.GetAll()
+                                .GetById(id)
+                                .SingleOrDefault();
+
+                if (faqEntity != null)
+                {
+                    result = new Faq
+                    {
+                        Answer = faqEntity.Answer,
+                        ChangedDate = faqEntity.ChangedDate,
+                        CreatedDate = faqEntity.CreatedDate,
+                        CustomerId = faqEntity.Customer_Id.Value,
+                        FaqCategoryId = faqEntity.FAQCategory_Id,
+                        Id = faqEntity.Id,
+                        InformationIsAvailableForNotifiers = faqEntity.InformationIsAvailableForNotifiers != 0,
+                        InternalAnswer = faqEntity.Answer_Internal,
+                        Question = faqEntity.FAQQuery,
+                        ShowOnStartPage = faqEntity.ShowOnStartPage != 0,
+                        UrlOne = faqEntity.URL1,
+                        UrlTwo = faqEntity.URL2,
+                        WorkingGroupId = faqEntity.WorkingGroup_Id
+                    };
+                }
+
+                if (languageId != LanguageIds.Swedish && result != null)
+                {
+                    var faqLng = repositoryLng.GetAll().FirstOrDefault(x => x.FAQ_Id == id && x.Language_Id == languageId);
+                    if (faqLng != null)
+                    {
+                        result.Answer = faqLng.Answer;
+                        result.InternalAnswer = faqLng.Answer_Internal;
+                        result.Question = faqLng.FAQQuery;
+                    }
+                }
+
+                return result;
+            }
+        }
+
+        public List<CategoryWithSubcategories> GetCategoriesWithSubcategoriesByCustomerId(int customerId, int languageId = LanguageIds.Swedish)
+        {
+            var categoryEntities = faqCategoryRepository.GetCategoriesByCustomer(customerId);
+            var parentCategories = categoryEntities.Where(c => c.Parent_FAQCategory_Id == null).ToList();
+            var categories = new List<CategoryWithSubcategories>(parentCategories.Count);
+
+            foreach (var parentCategory in parentCategories)
+            {
+                var category = this.CreateBrunchForParent(parentCategory, categoryEntities, languageId);
+                categories.Add(category);
+            }
+
+            return categories.OrderBy(c => c.Name).ToList();
+        }
+
+        #endregion
+
+        #region Private
+
+        private List<FaqOverview> MapToOverview(IEnumerable<FaqEntity> faqs, int languageId)
+        {
+            var result = new List<FaqOverview>();
+            if (languageId == LanguageIds.Swedish)
+            {
+                result = faqs
+                    .Select(f => new FaqOverview { CreatedDate = f.CreatedDate, Id = f.Id, Text = f.FAQQuery })
+                    .ToList();
+            }
+            else
+            {
+                foreach (var f in faqs)
+                {
+                    var translate = f.FaqLanguages.FirstOrDefault(x => x.Language_Id == languageId);
+                    var item = new FaqOverview
+                    {
+                        Id = f.Id,
+                        CreatedDate = f.CreatedDate,
+                        Text = translate != null ? translate.FAQQuery : f.FAQQuery
+                    };
+                    result.Add(item);
+                }
+            }
+            return result;
+        }
+
+        private List<FaqDetailedOverview> MapToDetailedOverview(IEnumerable<FaqEntity> faqs, int languageId)
+        {
+            var result = new List<FaqDetailedOverview>();
+            if (languageId == LanguageIds.Swedish)
+            {
+                result = faqs.Select(f =>
+                        new FaqDetailedOverview
+                        {
+                            Answer = f.Answer,
+                            CreatedDate = f.CreatedDate,
+                            Id = f.Id,
+                            InternalAnswer = f.Answer_Internal,
+                            Text = f.FAQQuery,
+                            UrlOne = f.URL1,
+                            UrlTwo = f.URL2
+                        }).ToList();
+            }
+            else
+            {
+                foreach (var f in faqs)
+                {
+                    var translate = f.FaqLanguages.FirstOrDefault(x => x.Language_Id == languageId);
+                    var item = new FaqDetailedOverview
+                    {
+                        Answer = translate != null ? translate.Answer : f.Answer,
+                        Id = f.Id,
+                        CreatedDate = f.CreatedDate,
+                        InternalAnswer = translate != null ? translate.Answer_Internal : f.Answer_Internal,
+                        Text = translate != null ? translate.FAQQuery : f.FAQQuery,
+                        UrlOne = f.URL1,
+                        UrlTwo = f.URL2
+                    };
+                    result.Add(item);
+                }
+            }
+            return result;
+        }
+
+        private IEnumerable<FaqEntity> SearchByPharse(string pharse, int customerId, IRepository<FaqEntity> repository, int languageId = LanguageIds.Swedish)
+        {
+            var pharseInLowerCase = pharse.ToLower();
+            var faqs = repository.GetAll().Where(f => f.Customer_Id == customerId);
+            if (languageId != LanguageIds.Swedish)
+            {
+                return faqs.Where(f => f.FaqLanguages.Any(x => x.Language_Id == languageId && x.FAQQuery.ToLower().Contains(pharseInLowerCase))
+                            || f.FaqLanguages.Any(x => x.Language_Id == languageId && x.Answer.ToLower().Contains(pharseInLowerCase))
+                            || f.FaqLanguages.Any(x => x.Language_Id == languageId && x.Answer_Internal.ToLower().Contains(pharseInLowerCase))).ToList();
+            }
+            return faqs.Where(f =>
+                        f.FAQQuery.ToLower().Contains(pharseInLowerCase)
+                        || f.Answer.ToLower().Contains(pharseInLowerCase)
+                        || f.Answer_Internal.ToLower().Contains(pharseInLowerCase)).ToList();
+        }
+
+        private CategoryWithSubcategories CreateBrunchForParent(FaqCategoryEntity parentCategory, List<FaqCategoryEntity> allCategories, int languageId)
+        {
+            var translate = parentCategory.FaqCategoryLanguages.FirstOrDefault(x => x.Language_Id == languageId);
+            var category = new CategoryWithSubcategories { Id = parentCategory.Id, Name = translate != null ? translate.Name : parentCategory.Name };
+
+            var subcategoryEntities = allCategories.Where(c => c.Parent_FAQCategory_Id == parentCategory.Id).OrderBy(c => c.Name).ToList();
+            if (subcategoryEntities.Any())
+            {
+                var subcategories =
+                    subcategoryEntities.Select(c => this.CreateBrunchForParent(c, allCategories, languageId)).ToList();
+
+                category.Subcategories.AddRange(subcategories);
+            }
+
+            return category;
+        }
+
+        #endregion
     }
 }

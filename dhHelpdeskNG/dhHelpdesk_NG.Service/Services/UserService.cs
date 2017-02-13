@@ -60,7 +60,7 @@
         /// <param name="userId"></param>
         /// <returns></returns>
         IList<User> GetAvailablePerformersOrUserId(int customerId, int? userId = null);
-
+        IList<User> GetPerformersOrUserId(int customerId, int? userId = null);
         IList<User> GetAllPerformers(int customerId);
 
         IList<User> GetAvailablePerformersForWorkingGroup(int customerId, int? workingGroup = null);
@@ -171,6 +171,8 @@
         int? GetUserDefaultWorkingGroupId(int userId, int customerId);
 
         WorkingGroupEntity GetUserDefaultWorkingGroup(int userId, int customerId);
+
+        bool IsUserValidAdmin(string userId, string pass);
     }
 
     public class UserService : IUserService
@@ -343,6 +345,14 @@
                     .ToList();
         }
 
+        public IList<User> GetPerformersOrUserId(int customerId, int? userId = null)
+        {
+            return
+                this._userRepository.GetUsers(customerId)
+                    .Where(e => e.Performer == 1 || (userId.HasValue && e.Id == userId)).OrderBy(e => e.SurName)
+                    .ToList();
+        }
+
         public IList<User> GetAllPerformers(int customerId)
         {
             return
@@ -423,6 +433,7 @@
                     user.Departments.Clear();
                     user.OLs.Clear();                    
                     user.OTs.Clear();
+                    user.UserRoles.Clear();
 
                     //Remove Case Settings
                     var userCaseSettings = this._casesettingRepository.GetAll().Where(cs => cs.User_Id == id).ToList();
@@ -961,6 +972,15 @@
             this.Commit();
 
             return init;
+        }
+
+        public bool IsUserValidAdmin(string userId, string pass)
+        {
+            var entities = _userRepository.GetMany(u => u.UserID.ToLower() == userId.ToLower() &&
+                                                      u.Password == pass &&
+                                                      u.UserGroup_Id == 4)
+                                          .ToList();
+            return entities.Any();
         }
 
         /// <summary>

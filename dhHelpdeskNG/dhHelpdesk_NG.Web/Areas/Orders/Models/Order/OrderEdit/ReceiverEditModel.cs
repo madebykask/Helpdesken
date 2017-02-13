@@ -25,6 +25,8 @@
             this.MarkOfGoods = markOfGoods;
         }
 
+        public string Header { get; set; }
+
         [NotNull]
         public ConfigurableFieldModel<string> ReceiverId { get; set; } 
 

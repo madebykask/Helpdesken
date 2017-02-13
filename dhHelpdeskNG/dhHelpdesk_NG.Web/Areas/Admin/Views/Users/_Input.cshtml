@@ -21,7 +21,7 @@
                     {
                         var msg = (string)TempData["PreventError"];
                         <div class="alert alert-error">
-                            @msg
+                            @Translation.Get(msg, Enums.TranslationSource.TextTranslation)
                         </div>   
                     }
                    

@@ -2,7 +2,7 @@
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class ReceiverFieldSettings
+    public sealed class ReceiverFieldSettings : HeaderSettings
     {
         public ReceiverFieldSettings(
                 TextFieldSettings receiverId, 

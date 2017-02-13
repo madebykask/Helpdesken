@@ -28,11 +28,11 @@ $(function () {
         var displayType = '';
         if (lastSelected == expandEl) {
             displayType = 'none';
-            $('#lastMailSelected' + logId).val('')
+            $('#lastMailSelected' + logId).val('');
         }
         else {
             displayType = 'block';
-            $('#lastMailSelected' + logId).val(expandEl)
+            $('#lastMailSelected' + logId).val(expandEl);
         }
 
         switch (expandEl) {
@@ -52,6 +52,13 @@ $(function () {
     $userId.on('change', function(ev) {
         var userId = $(ev.target).val();
         hideShowSaveUserInfoBtn(userId);
+    });
+
+    $("#case-order-url").off("click").on('click', function (e) {
+        e.preventDefault();
+
+        var href = $(this).attr("href");
+        document.location.href = href;
     });
 
     var langEl = $('#case__RegLanguage_Id'),

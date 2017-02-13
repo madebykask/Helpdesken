@@ -1,11 +1,16 @@
-﻿@model DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings.FieldSettingsModel
+﻿@using DH.Helpdesk.Web.Areas.Orders.Infrastructure.Enum
+@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings.FieldSettingsModel
 
+<td>
+    @{ Html.RenderPartial("Partials/OrderFieldWebTypes"); }
+</td>
 <td>@Html.LabelFor(m => m)</td>
-<td>@Html.CheckBoxFor(m => m.Show, new { @class = "switchcheckbox" })</td>
-<td>@Html.CheckBoxFor(m => m.ShowExternal, new { @class = "switchcheckbox" })</td>
+<td>@Html.CheckBoxFor(m => m.Show, new {@class = "switchcheckbox"})</td>
+<td>@Html.CheckBoxFor(m => m.ShowExternal, new {@class = "switchcheckbox"})</td>
 <td>@Html.TextBoxFor(m => m.Label)</td>
-<td>@Html.CheckBoxFor(m => m.Required, new { @class = "switchcheckbox" })</td>
-<td>@Html.CheckBoxFor(m => m.ShowInList, new { @class = "switchcheckbox" })</td>
+<td>@Html.CheckBoxFor(m => m.Required, new {@class = "switchcheckbox"})</td>
+<td>@Html.CheckBoxFor(m => m.ShowInList, new {@class = "switchcheckbox"})</td>
 <td></td>
 <td>@Html.TextBoxFor(m => m.Help)</td>
 @*<td>@Html.TextBoxFor(m => m.EmailIdentifier)</td>*@

@@ -2,6 +2,11 @@
 @model DH.Helpdesk.Web.Areas.Orders.Models.Order.FieldModels.ConfigurableFieldModel<int?>
 
 
+@if (!Model.Show)
+{
+    return;
+}
+
 @{
     if (!ViewData.ContainsKey("Source"))
     {
@@ -18,11 +23,6 @@
     }
 
     attributes.Add("data-dh-is-required", Model.IsRequired);
-}
-
-@if (!Model.Show)
-{
-    return;
 }
 
 <tr>

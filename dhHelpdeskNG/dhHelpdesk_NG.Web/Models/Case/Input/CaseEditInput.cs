@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DH.Helpdesk.Web.Models.Invoice;
 
 namespace DH.Helpdesk.Web.Models.Case.Input
 {
@@ -46,5 +47,7 @@ namespace DH.Helpdesk.Web.Models.Case.Input
 
         public string FollowerUsers { get; set; }
 
-	}
+        public IList<CaseFieldSetting> caseFieldSettings { get; set; }
+
+    }
 }

@@ -15,11 +15,11 @@
 
     public class OrderFieldSettingsController : BaseController
     {
-        private readonly IOrderFieldSettingsService orderFieldSettingsService;
+        private readonly IOrderFieldSettingsService _orderFieldSettingsService;
 
-        private readonly IOrderFieldSettingsModelFactory orderFieldSettingsModelFactory;
+        private readonly IOrderFieldSettingsModelFactory _orderFieldSettingsModelFactory;
 
-        private readonly IWorkContext workContext;
+        private readonly IWorkContext _workContext;
 
         public OrderFieldSettingsController(
                 IMasterDataService masterDataService, 
@@ -28,9 +28,9 @@
                 IOrderFieldSettingsModelFactory orderFieldSettingsModelFactory)
             : base(masterDataService)
         {
-            this.orderFieldSettingsService = orderFieldSettingsService;
-            this.workContext = workContext;
-            this.orderFieldSettingsModelFactory = orderFieldSettingsModelFactory;
+            _orderFieldSettingsService = orderFieldSettingsService;
+            _workContext = workContext;
+            _orderFieldSettingsModelFactory = orderFieldSettingsModelFactory;
         }
 
         [HttpGet]
@@ -43,8 +43,8 @@
                 SessionFacade.SavePageFilters(PageName.OrdersOrderFieldSettings, filters);
             }
 
-            var data = this.orderFieldSettingsService.GetFilterData(this.workContext.Customer.CustomerId);
-            var model = this.orderFieldSettingsModelFactory.GetIndexModel(data, filters);
+            var data = this._orderFieldSettingsService.GetFilterData(this._workContext.Customer.CustomerId);
+            var model = this._orderFieldSettingsModelFactory.GetIndexModel(data, filters);
 
             return this.View(model);
         }
@@ -59,10 +59,10 @@
 
             SessionFacade.SavePageFilters(PageName.OrdersOrderFieldSettings, filters);
 
-            var response = this.orderFieldSettingsService.GetOrderFieldSettings(
-                                    this.workContext.Customer.CustomerId,
+            var response = this._orderFieldSettingsService.GetOrderFieldSettings(
+                                    this._workContext.Customer.CustomerId,
                                     filters.OrderTypeId);
-            var settingsModel = this.orderFieldSettingsModelFactory.Create(response, filters.OrderTypeId);
+            var settingsModel = this._orderFieldSettingsModelFactory.Create(response, filters.OrderTypeId);
 
             return this.PartialView(settingsModel);
         }
@@ -71,14 +71,14 @@
         [BadRequestOnNotValid]
         public RedirectToRouteResult SaveSettings(FullFieldSettingsModel model, int? orderTypeId)
         {
-            var customerId = this.workContext.Customer.CustomerId;
-            var settings = this.orderFieldSettingsModelFactory.CreateForUpdate(
+            var customerId = this._workContext.Customer.CustomerId;
+            var settings = this._orderFieldSettingsModelFactory.CreateForUpdate(
                                     model,
                                     customerId,
                                     orderTypeId,
                                     DateTime.Now);
 
-            this.orderFieldSettingsService.UpdateSettings(settings);
+            this._orderFieldSettingsService.UpdateSettings(settings);
 
             return this.RedirectToAction("Index");
         }

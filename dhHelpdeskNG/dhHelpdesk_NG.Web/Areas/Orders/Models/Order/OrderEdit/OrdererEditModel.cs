@@ -1,9 +1,11 @@
-﻿namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
+﻿using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+
+namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
 {
     using System.Web.Mvc;
 
-    using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Areas.Orders.Models.Order.FieldModels;
+    using Common.ValidationAttributes;
+    using FieldModels;
 
     public sealed class OrdererEditModel
     {
@@ -18,8 +20,8 @@
             ConfigurableFieldModel<string> ordererEmail,
             ConfigurableFieldModel<string> ordererPhone,
             ConfigurableFieldModel<string> ordererCode,
-            ConfigurableFieldModel<SelectList> department,
-            ConfigurableFieldModel<SelectList> unit,
+            ConfigurableFieldModel<int?> department,
+            ConfigurableFieldModel<int?> unit,
             ConfigurableFieldModel<string> ordererAddress,
             ConfigurableFieldModel<string> ordererInvoiceAddress,
             ConfigurableFieldModel<string> ordererReferenceNumber,
@@ -29,23 +31,25 @@
             ConfigurableFieldModel<string> accountingDimension4,
             ConfigurableFieldModel<string> accountingDimension5)
         {
-            this.OrdererId = ordererId;
-            this.OrdererName = ordererName;
-            this.OrdererLocation = ordererLocation;
-            this.OrdererEmail = ordererEmail;
-            this.OrdererPhone = ordererPhone;
-            this.OrdererCode = ordererCode;
-            this.Department = department;
-            this.Unit = unit;
-            this.OrdererAddress = ordererAddress;
-            this.OrdererInvoiceAddress = ordererInvoiceAddress;
-            this.OrdererReferenceNumber = ordererReferenceNumber;
-            this.AccountingDimension1 = accountingDimension1;
-            this.AccountingDimension2 = accountingDimension2;
-            this.AccountingDimension3 = accountingDimension3;
-            this.AccountingDimension4 = accountingDimension4;
-            this.AccountingDimension5 = accountingDimension5;
+            OrdererId = ordererId;
+            OrdererName = ordererName;
+            OrdererLocation = ordererLocation;
+            OrdererEmail = ordererEmail;
+            OrdererPhone = ordererPhone;
+            OrdererCode = ordererCode;
+            Department = department;
+            Unit = unit;
+            OrdererAddress = ordererAddress;
+            OrdererInvoiceAddress = ordererInvoiceAddress;
+            OrdererReferenceNumber = ordererReferenceNumber;
+            AccountingDimension1 = accountingDimension1;
+            AccountingDimension2 = accountingDimension2;
+            AccountingDimension3 = accountingDimension3;
+            AccountingDimension4 = accountingDimension4;
+            AccountingDimension5 = accountingDimension5;
         }
+
+        public string Header { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<string> OrdererId { get; set; } 
@@ -66,16 +70,10 @@
         public ConfigurableFieldModel<string> OrdererCode { get; set; } 
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> Department { get; set; } 
-
-        [IsId]
-        public int? DepartmentId { get; set; }
+        public ConfigurableFieldModel<int?> Department { get; set; } 
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> Unit { get; set; } 
-
-        [IsId]
-        public int? UnitId { get; set; }
+        public ConfigurableFieldModel<int?> Unit { get; set; } 
 
         [NotNull]
         public ConfigurableFieldModel<string> OrdererAddress { get; set; } 
@@ -101,6 +99,12 @@
         [NotNull]
         public ConfigurableFieldModel<string> AccountingDimension5 { get; set; }
 
+        [NotNull]
+        public SelectList Departments { get; set; }
+
+        [NotNull]
+        public SelectList Units { get; set; }
+
         public static OrdererEditModel CreateEmpty()
         {
             return new OrdererEditModel(
@@ -110,8 +114,8 @@
                 ConfigurableFieldModel<string>.CreateUnshowable(),
                 ConfigurableFieldModel<string>.CreateUnshowable(),
                 ConfigurableFieldModel<string>.CreateUnshowable(),
-                ConfigurableFieldModel<SelectList>.CreateUnshowable(),
-                ConfigurableFieldModel<SelectList>.CreateUnshowable(),
+                ConfigurableFieldModel<int?>.CreateUnshowable(),
+                ConfigurableFieldModel<int?>.CreateUnshowable(),
                 ConfigurableFieldModel<string>.CreateUnshowable(),
                 ConfigurableFieldModel<string>.CreateUnshowable(),
                 ConfigurableFieldModel<string>.CreateUnshowable(),
@@ -124,22 +128,22 @@
 
         public bool HasShowableFields()
         {
-            return this.OrdererId.Show ||
-                this.OrdererName.Show ||
-                this.OrdererLocation.Show ||
-                this.OrdererEmail.Show ||
-                this.OrdererPhone.Show ||
-                this.OrdererCode.Show ||
-                this.Department.Show ||
-                this.Unit.Show ||
-                this.OrdererAddress.Show ||
-                this.OrdererInvoiceAddress.Show ||
-                this.OrdererReferenceNumber.Show ||
-                this.AccountingDimension1.Show ||
-                this.AccountingDimension2.Show ||
-                this.AccountingDimension3.Show ||
-                this.AccountingDimension4.Show ||
-                this.AccountingDimension5.Show;
+            return OrdererId.Show ||
+                OrdererName.Show ||
+                OrdererLocation.Show ||
+                OrdererEmail.Show ||
+                OrdererPhone.Show ||
+                OrdererCode.Show ||
+                Department.Show ||
+                Unit.Show ||
+                OrdererAddress.Show ||
+                OrdererInvoiceAddress.Show ||
+                OrdererReferenceNumber.Show ||
+                AccountingDimension1.Show ||
+                AccountingDimension2.Show ||
+                AccountingDimension3.Show ||
+                AccountingDimension4.Show ||
+                AccountingDimension5.Show;
         }
     }
 }

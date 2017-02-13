@@ -2694,10 +2694,10 @@ var init = function () {
     WorkCommunicationTypes();
 
     InitIntegration();
-    
+
     //Sort by text
     $('.search-select').selectize({sortField: [{ field: 'text' }]});
-    
+  
     $('.typeahead').typeahead(typeAheadOptions);
     $('#Co-WorkerGlobalviewID').typeahead(globalTypeAheadOptions);
     $('#IKEAEmailAddress').typeahead(globalEmailTypeAheadOptions);

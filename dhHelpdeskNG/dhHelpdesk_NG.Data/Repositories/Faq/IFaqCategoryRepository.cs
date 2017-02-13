@@ -1,3 +1,5 @@
+using DH.Helpdesk.Common.Enums;
+
 namespace DH.Helpdesk.Dal.Repositories.Faq
 {
     using System.Collections.Generic;
@@ -11,14 +13,16 @@ namespace DH.Helpdesk.Dal.Repositories.Faq
     {
         bool CategoryHasSubcategories(int categoryId);
 
-        void UpdateNameById(int categoryId, string newName);
-
-        CategoryOverview FindById(int categoryId);
-
-        List<CategoryWithSubcategories> FindCategoriesWithSubcategoriesByCustomerId(int customerId);
-
         void Add(NewCategory newCategory);
 
         void DeleteById(int categoryId);
+
+        CategoryOverview GetCategoryById(int categoryId, int languageId);
+
+        void UpdateSwedishCategory(EditCategory editedCategory);
+
+        void UpdateOtherLanguageCategory(EditCategory editedCategory);
+
+        List<FaqCategoryEntity> GetCategoriesByCustomer(int customerId);
     }
 }

@@ -64,7 +64,12 @@
             this.HasMany(l => l.LogFiles)
                 .WithRequired(f => f.Log);
 
-            this.Property(l => l.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+			this.HasOptional(c => c.InvoiceRow)
+				.WithMany()
+				.HasForeignKey(c => c.InvoiceRow_Id)
+				.WillCascadeOnDelete(false);
+
+			this.Property(l => l.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             this.ToTable("tblLog");
         }

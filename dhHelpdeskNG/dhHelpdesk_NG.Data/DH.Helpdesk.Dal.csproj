@@ -61,6 +61,8 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -90,6 +92,8 @@
     <Compile Include="EntityConfigurations\ContractConfiguration.cs" />
     <Compile Include="EntityConfigurations\ContractFieldSettingConfiguration.cs" />
     <Compile Include="EntityConfigurations\Invoice\InvoiceArticleProductAreaConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Invoice\InvoiceRowConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Invoice\InvoiceHeaderConfiguration.cs" />
     <Compile Include="EntityConfigurations\LogProgramConfiguration.cs" />
     <Compile Include="EntityConfigurations\Mail2TicketConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CaseSolutionSettingConfiguration.cs" />
@@ -119,6 +123,7 @@
     <Compile Include="EntityConfigurations\Licenses\VendorConfiguration.cs" />
     <Compile Include="EntityConfigurations\MailTemplates\MailTemplateLanguageConfiguration.cs" />
     <Compile Include="EntityConfigurations\OperationLogEmailLogConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Orders\OrderFieldTypeConfiguration.cs" />
     <Compile Include="EntityConfigurations\Orders\OrderEMailLogConfiguration.cs" />
     <Compile Include="EntityConfigurations\Orders\OrderHistoryConfiguration.cs" />
     <Compile Include="EntityConfigurations\Orders\OrderLogConfiguration.cs" />
@@ -437,6 +442,7 @@
     <Compile Include="Repositories\Changes\IChangeGroupRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeLogRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeFileRepository.cs" />
+    <Compile Include="Repositories\Invoice\InvoiceRepository.cs" />
     <Compile Include="Repositories\IOrderEmailLogRepository.cs" />
     <Compile Include="Repositories\OrderEmailLogRepository.cs" />
     <Compile Include="Repositories\Mail2TicketRepository.cs" />
@@ -755,6 +761,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Enums\Orders\" />
     <Folder Include="Mappers\Inventory\BusinessModelToEntity\" />
     <Folder Include="Mappers\Inventory\EntityToBusinessModel\Inventory\" />
     <Folder Include="SearchRequestBuilders\Inventory\" />

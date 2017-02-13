@@ -37,7 +37,7 @@
             //                .ThenBy(o => o.Name)
             //                .ToArray();
 
-            var overviews = administrators.Select(a => new { a.Id, Name = a.FirstName + " " + a.SurName, Type = "Administrator" })
+            var overviews = administrators.Select(a => new { a.Id, Name = a.SurName +" " +a.FirstName, Type = "Administrator" })
                             .OrderBy(o => o.Type)
                             .ThenBy(o => o.Name)
                             .ToArray();

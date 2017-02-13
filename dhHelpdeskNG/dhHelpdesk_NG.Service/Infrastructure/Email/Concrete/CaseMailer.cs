@@ -9,6 +9,7 @@ using DH.Helpdesk.Domain;
 using DH.Helpdesk.Services.Services;
 using System.Configuration;
 using System.Linq;
+using DH.Helpdesk.BusinessData.Enums.Email;
 using DH.Helpdesk.BusinessData.Models.Email;
 
 namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
@@ -100,11 +101,21 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
             if (!String.IsNullOrEmpty(template.Body) && !String.IsNullOrEmpty(template.Subject))
                 {
                     var to = newCase.PersonsEmail.Split(';', ',').ToList();
-                    var extraFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(newCase.Id).Select(x => x.Follower).ToList();
-                    to.AddRange(extraFollowers);
-                    foreach (var t in to)
+                    var allEmails = to.Select(x => new
                     {
-                        var curMail = t.Trim();
+                        EmailAddress = x,
+                        EmailType = EmailType.ToMail
+                    }).ToList();
+                    var extraFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(newCase.Id).Select(x => x.Follower).ToList();
+                    var ccEmails = extraFollowers.Select(x => new
+                    {
+                        EmailAddress = x,
+                        EmailType = EmailType.CcMail
+                    }).ToList();
+                    allEmails.AddRange(ccEmails);
+                    foreach (var t in allEmails)
+                    {
+                        var curMail = t.EmailAddress.Trim();
                         if (!string.IsNullOrWhiteSpace(curMail) && this.emailService.IsValidEmail(curMail))
                         {
                             string customEmailSender4 = mailSenders.DefaultOwnerWGEMail;
@@ -122,7 +133,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
 
                             string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + notifierEmailLog.EmailLogGUID.ToString();
                             var mailResponse = EmailResponse.GetEmptyEmailResponse();
-                            var mailSetting = new EmailSettings(mailResponse, smtpInfo);
+                            var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
                             //var siteHelpdesk = AbsoluterUrl;
                             var siteHelpdesk = AbsoluterUrl + "Cases/edit/" + newCase.Id.ToString();
                             var notifierEmailItem = this.emailFactory.CreateEmailItem(
@@ -134,7 +145,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                                                             notifierEmailLog.MessageId,
                                                             log.HighPriority,
                                                             files);
-                            var e_res = this.emailService.SendEmail(notifierEmailItem, mailSetting, siteSelfService, siteHelpdesk);
+                            var e_res = this.emailService.SendEmail(notifierEmailLog, notifierEmailItem, mailSetting, siteSelfService, siteHelpdesk, t.EmailType);
                             notifierEmailLog.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                             var now = DateTime.Now;
                             notifierEmailLog.CreatedDate = now;
@@ -219,7 +230,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                 //var siteHelpdesk = AbsoluterUrl;
                 var siteHelpdesk = AbsoluterUrl + "Cases/edit/" + newCase.Id.ToString();
                 var mailResponse = EmailResponse.GetEmptyEmailResponse();
-                var mailSetting = new EmailSettings(mailResponse, smtpInfo);
+                var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
                 var defaultWorkingGroupEmailItem = this.emailFactory.CreateEmailItem(
                                                 helpdeskMailFromAdress,
                                                 defaultWorkingGroupEmailLog.EmailAddress,
@@ -229,7 +240,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                                                 defaultWorkingGroupEmailLog.MessageId,
                                                 log.HighPriority,
                                                 files);
-                var e_res = this.emailService.SendEmail(defaultWorkingGroupEmailItem, mailSetting, site, siteHelpdesk);
+                var e_res = this.emailService.SendEmail(defaultWorkingGroupEmailLog, defaultWorkingGroupEmailItem, mailSetting, site, siteHelpdesk);
                 defaultWorkingGroupEmailLog.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                 var now = DateTime.Now;
                 defaultWorkingGroupEmailLog.CreatedDate = now;
@@ -298,27 +309,29 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                 var allEmails = to.Select(x => new
                 {
                     EmailAdress = x,
-                    IsCc = false
+                    EmailType = EmailType.ToMail
                 }).ToList();
                 var emailsCc = cc.Select(x => new
                 {
                     EmailAdress = x,
-                    IsCc = true
+                    EmailType = EmailType.CcMail
                 }).ToList();
                 allEmails.AddRange(emailsCc);
-                        foreach (var item in allEmails)
+
+                foreach (var item in allEmails)
                 {
                     if (!string.IsNullOrWhiteSpace(item.EmailAdress) && this.emailService.IsValidEmail(item.EmailAdress))
                     {
                         var internalEmailLog = this.emailFactory.CreatEmailLog(
-                                                        caseHistoryId,
-                                                        (int)GlobalEnums.MailTemplates.InternalLogNote,
-                                                        item.EmailAdress,
-                                                        this.emailService.GetMailMessageId(helpdeskMailFromAdress));
-                        string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + internalEmailLog.EmailLogGUID.ToString();
+                            caseHistoryId,
+                            (int) GlobalEnums.MailTemplates.InternalLogNote,
+                            item.EmailAdress,
+                            this.emailService.GetMailMessageId(helpdeskMailFromAdress));
+                        string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() +
+                                                 internalEmailLog.EmailLogGUID.ToString();
                         var siteHelpdesk = AbsoluterUrl + "Cases/edit/" + newCase.Id.ToString();
                         var mailResponse = EmailResponse.GetEmptyEmailResponse();
-                        var mailSetting = new EmailSettings(mailResponse, smtpInfo);
+                        var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
                         var internalEmail = this.emailFactory.CreateEmailItem(
                             customEmailSender4,
                             internalEmailLog.EmailAddress,
@@ -328,7 +341,8 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                             internalEmailLog.MessageId,
                             log.HighPriority,
                             files);
-                        mailResponse = this.emailService.SendEmail(internalEmail, mailSetting, siteSelfService, siteHelpdesk, item.IsCc);
+                        mailResponse = this.emailService.SendEmail(internalEmailLog, internalEmail, mailSetting, siteSelfService,
+                            siteHelpdesk, item.EmailType);
                         internalEmailLog.SetResponse(mailResponse.SendTime, mailResponse.ResponseMessage);
                         var now = DateTime.Now;
                         internalEmailLog.CreatedDate = now;

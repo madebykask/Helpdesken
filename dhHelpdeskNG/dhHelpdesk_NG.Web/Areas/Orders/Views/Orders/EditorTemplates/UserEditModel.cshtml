@@ -1,10 +1,10 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.UserEditModel
 
-<h4>@Translation.Get("Användare")</h4>
+<h4>@Model.Header</h4>
 <table class="tableform">
     <tbody>
-        @Html.DisplayFor(m => m.UserId, "Fields/Label")        
+        @Html.DisplayFor(m => m.UserId, "Fields/Label")
         @Html.DisplayFor(m => m.UserFirstName, "Fields/Label")
         @Html.DisplayFor(m => m.UserLastName, "Fields/Label")
         @Html.DisplayFor(m => m.UserPhone, "Fields/Label")

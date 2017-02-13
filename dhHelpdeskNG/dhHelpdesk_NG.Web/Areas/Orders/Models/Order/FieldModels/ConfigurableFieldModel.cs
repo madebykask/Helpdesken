@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.FieldModels
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.FieldModels
 {
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
@@ -51,14 +54,14 @@
             return field != null ? field.Value : default(TValue);
         }
 
+        public static List<int> GetValueOrDefault(ConfigurableFieldModel<List<CheckBoxListItem>> field)
+        {
+            return field?.Value?.Where(s => s.IsChecked).Select(s => s.Id).ToList() ?? new List<int>();
+        }
+
         public static string GetValueOrDefault(ConfigurableFieldModel<string> field)
         {
-            if (field == null || field.Value == null)
-            {
-                return string.Empty;
-            }
-
-            return field.Value;
+            return field?.Value ?? string.Empty;
         }
 
         #endregion         

@@ -2,14 +2,19 @@
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class ProgramFieldSettings
+    public sealed class ProgramFieldSettings : HeaderSettings
     {
-        public ProgramFieldSettings(TextFieldSettings program)
+        public ProgramFieldSettings(TextFieldSettings program, TextFieldSettings infoProduct)
         {
-            this.Program = program;
+            Program = program;
+            InfoProduct = infoProduct;
         }
 
         [NotNull]
-        public TextFieldSettings Program { get; private set; }         
+        public TextFieldSettings Program { get; private set; }
+
+        [NotNull]
+        public TextFieldSettings InfoProduct { get; private set; }
+
     }
 }

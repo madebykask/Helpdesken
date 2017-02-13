@@ -25,6 +25,8 @@
             this.ReceiverId = receiverId;
         }
 
+        public string Header { get; set; }
+
         [NotNull]
         [LocalizedDisplay("ID mottagare")]
         public TextFieldSettingsModel ReceiverId { get; set; }

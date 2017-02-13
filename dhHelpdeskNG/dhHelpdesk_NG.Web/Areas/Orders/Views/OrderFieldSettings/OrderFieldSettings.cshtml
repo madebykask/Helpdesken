@@ -1,4 +1,5 @@
-﻿@model DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings.FullFieldSettingsModel
+﻿@using DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings
+@model DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings.FullFieldSettingsModel
 
 @using (Html.BeginForm("SaveSettings", "OrderFieldSettings",
             FormMethod.Post,
@@ -7,11 +8,5 @@
     @Html.HiddenFor(m => m.OrderTypeId)
     @Html.EditorFor(m => m)
 }
-<script type="text/javascript">
-    $(function() {
-        $('.switchcheckbox').bootstrapSwitch('onText', trans_yes);
-        $('.switchcheckbox').bootstrapSwitch('offText', trans_no);
-        $('.switchcheckbox').bootstrapSwitch('size', 'small');
-        $('.switchcheckbox').bootstrapSwitch('onColor', 'success');
-    });
-</script>
+
+@{ Html.RenderPartial("Modals/OrderFieldTypeModal", new OrderFieldTypeValueSettingsModel()); }

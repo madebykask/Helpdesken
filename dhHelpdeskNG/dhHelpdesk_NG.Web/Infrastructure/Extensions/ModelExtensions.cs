@@ -15,7 +15,7 @@
                 var value = modelState[key];
                 if (value.Errors.Any())
                 {
-                    modelErrors.Add(new ModelError(key, value.Value.AttemptedValue, value.Errors.Select(e => e.ErrorMessage)));
+                    modelErrors.Add(new ModelError(key, value.Value?.AttemptedValue, value.Errors.Select(e => e.ErrorMessage)));
                 }
             }
 

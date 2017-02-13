@@ -14,6 +14,7 @@ namespace DH.Helpdesk.Web
             public struct Orders
             {
                 public const string EditOrder = ("~/bundles/orders/orderedit");
+                public const string OrderSettings = ("~/bundles/orders/ordersettings");
             }
         }
 
@@ -21,6 +22,8 @@ namespace DH.Helpdesk.Web
         {
             bundles.Add(new ScriptBundle(ScriptNames.Orders.EditOrder).Include(
                         "~/Areas/" + MvcOrdersUrlName.Name + "/Content/js/Order/order.edit.js"));
+            bundles.Add(new ScriptBundle(ScriptNames.Orders.OrderSettings).Include(
+                        "~/Areas/" + MvcOrdersUrlName.Name + "/Content/js/OrderSettings/orderSettings.edit.js"));
 
         }
     }

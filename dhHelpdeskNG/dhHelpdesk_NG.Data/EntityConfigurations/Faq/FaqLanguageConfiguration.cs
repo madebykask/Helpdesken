@@ -16,6 +16,11 @@
             this.Property(fl => fl.Answer).IsRequired().HasMaxLength(2000);
             this.Property(fl => fl.Answer_Internal).IsRequired().HasMaxLength(1000);
 
+            this.HasRequired(f => f.Faq)
+                .WithMany(f => f.FaqLanguages)
+                .HasForeignKey(f => f.FAQ_Id)
+                .WillCascadeOnDelete(false);
+
             this.ToTable("tblfaq_tbllanguage");
         }
     }

@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Orders.Index.FieldSettingsOverview
 {
-    using DH.Helpdesk.Common.ValidationAttributes;
+    using Common.ValidationAttributes;
 
     public sealed class FullFieldSettingsOverview
     {
@@ -14,18 +14,22 @@
                 ProgramFieldSettingsOverview program, 
                 ReceiverFieldSettingsOverview receiver, 
                 SupplierFieldSettingsOverview supplier, 
-                UserFieldSettingsOverview user)
+                UserFieldSettingsOverview user,
+                AccountInfoFieldSettingsOverview accountInfo,
+                ContactFieldSettingsOverview contact)
         {
-            this.User = user;
-            this.Supplier = supplier;
-            this.Receiver = receiver;
-            this.Program = program;
-            this.Other = other;
-            this.Order = order;
-            this.Orderer = orderer;
-            this.Log = log;
-            this.General = general;
-            this.Delivery = delivery;
+            User = user;
+            Supplier = supplier;
+            Receiver = receiver;
+            Program = program;
+            Other = other;
+            Order = order;
+            Orderer = orderer;
+            Log = log;
+            General = general;
+            Delivery = delivery;
+            AccountInfo = accountInfo;
+            Contact = contact;
         }
 
         [NotNull]
@@ -57,5 +61,11 @@
 
         [NotNull]
         public UserFieldSettingsOverview User { get; private set; }
+
+        [NotNull]
+        public AccountInfoFieldSettingsOverview AccountInfo { get; private set; }
+
+        [NotNull]
+        public ContactFieldSettingsOverview Contact { get; private set; }
     }
 }

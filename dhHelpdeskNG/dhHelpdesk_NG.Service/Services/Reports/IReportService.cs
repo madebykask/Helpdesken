@@ -173,9 +173,9 @@ namespace DH.Helpdesk.Services.Services.Reports
                                     int? administratorId,
                                     DateTime period);
 
-        List<ReportFavoriteList> GetCustomerReportFavoriteList(int customerId);
-        ReportFavorite GetCustomerReportFavorite(int reportFavoriteId, int customerId);
+        List<ReportFavoriteList> GetCustomerReportFavoriteList(int customerId, int? userId);
+        ReportFavorite GetCustomerReportFavorite(int reportFavoriteId, int customerId, int? userId);
         int SaveCustomerReportFavorite(ReportFavorite reportFavorite);
-        void DeleteCustomerReportFavorite(int reportFavoriteId, int customerId);
+        void DeleteCustomerReportFavorite(int reportFavoriteId, int customerId, int? userId);
     }
 }

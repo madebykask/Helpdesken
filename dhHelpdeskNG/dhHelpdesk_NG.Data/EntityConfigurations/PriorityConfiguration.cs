@@ -32,7 +32,7 @@
             this.Property(x => x.EMailList).IsRequired().HasMaxLength(500);
             this.Property(x => x.FileName).IsRequired().HasMaxLength(100);
             this.Property(x => x.InformUser).IsRequired();
-            this.Property(x => x.InformUserText).IsOptional().HasMaxLength(500);
+            this.Property(x => x.InformUserText).IsOptional().HasMaxLength(520);
             this.Property(x => x.IsActive).IsRequired().HasColumnName("Status");
             this.Property(x => x.IsDefault).IsRequired().HasColumnName("isDefault");
             this.Property(x => x.IsEmailDefault).IsRequired().HasColumnName("isEMailDefault");
@@ -46,7 +46,7 @@
             this.Property(x => x.RelatedField).IsRequired().HasMaxLength(50).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             this.Property(x => x.OrderNum).IsOptional();
-            this.Property(x => x.PriorityGUID).IsOptional();
+            //this.Property(x => x.PriorityGUID).IsOptional();
 
             this.ToTable("tblpriority");
         }

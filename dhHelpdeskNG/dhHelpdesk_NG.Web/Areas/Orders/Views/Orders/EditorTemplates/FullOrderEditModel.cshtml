@@ -5,26 +5,34 @@
 @Html.HiddenFor(m => m.CustomerId, new { id = "order_customerId"})
 @Html.HiddenFor(m => m.OrderTypeId)
 
-@Html.HiddenFor(m => m.InformOrderer, new { id = "InformOrderer"})
-@Html.HiddenFor(m => m.InformReceiver, new { id = "InformReceiver"})
-@Html.HiddenFor(m => m.CreateCase, new { id = "CreateCase"})
+@Html.HiddenFor(m => m.InformOrderer, new { id = "informOrderer"})
+@Html.HiddenFor(m => m.InformReceiver, new { id = "informReceiver"})
+@if (Model.Other.CaseNumber.Value == null || Model.Other.CaseNumber.Value == 0) { 
+   @Html.HiddenFor(m => m.CreateCase, new { id = "createCase"})
+}
 
 <ul class="nav nav-tabs">
+    @if (Model.Other.CaseNumber.Value.HasValue && Model.Other.CaseId.Value.HasValue)
+    {
+        <li>
+            <a href="@Url.Content("~/Cases/Edit/" + Model.Other.CaseId.Value.Value)" id="case-url">@Translation.GetCoreTextTranslation("Ärende")</a>
+        </li>
+    }
     <li class="active">
-        <a href="#tab-1">@Translation.Get("Beställning")</a>
-    </li>    
+        <a href="#tab-1">@Translation.GetCoreTextTranslation("Beställning")</a>
+    </li>
     @if (Model.Log.HasShowableFields())
     {
         <li>
-            <a href="#tab-2">@Translation.Get("Logg")</a>
-        </li>                                
-    }      
+            <a href="#tab-2">@Translation.GetCoreTextTranslation("Logg")</a>
+        </li>
+    }
     @if (!Model.IsNew)
     {
         <li>
-            <a href="#tab-3">@Translation.Get("Historik")</a>
-        </li>                                    
-    }                      
+            <a href="#tab-3">@Translation.GetCoreTextTranslation("Historik")</a>
+        </li>
+    }
 </ul>
 
 <div class="tab-content">
@@ -43,10 +51,6 @@
                     @if (Model.UserInfo.HasShowableFields())
                     {
                         @Html.EditorFor(m => m.UserInfo)
-                    }
-                    @if (Model.Orderer.HasShowableFields())
-                    {
-                        @Html.EditorFor(m => m.Orderer)
                     }
                     @if (Model.Order.HasShowableFields())
                     {

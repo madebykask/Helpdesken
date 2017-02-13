@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Dal.Repositories
+﻿using System.Data.Entity;
+
+namespace DH.Helpdesk.Dal.Repositories
 {
     using System;
     using System.Collections.Generic;
@@ -30,6 +32,8 @@
         void MarkCaseAsRead(int id);
         IEnumerable<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user);
         IEnumerable<CaseOverview> GetCaseOverviews(int[] customers);
+
+	    Case GetCaseIncluding(int id);
 
         /// <summary>
         /// The get case overview.
@@ -317,5 +321,13 @@
             this.Update(cases);
             this.Commit();
         }
-    }
+
+		public Case GetCaseIncluding(int id)
+		{
+			return DataContext.Cases
+				.Include(x => x.Department)
+				.Include(x => x.Workinggroup)
+				.FirstOrDefault(x => x.Id == id);
+		}
+	}
 }

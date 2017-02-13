@@ -29,12 +29,16 @@
                 .WithMany()
                 .HasForeignKey(x => x.UserDepartment_Id2)
                 .WillCascadeOnDelete(false);
+            this.HasOptional(x => x.EmploymentType)
+                .WithMany()
+                .HasForeignKey(x => x.EmploymentType_Id)
+                .WillCascadeOnDelete(false);
             this.HasOptional(x => x.UserOU)
                 .WithMany()
                 .HasForeignKey(x => x.UserOU_Id)
                 .WillCascadeOnDelete(false);
 
-            this.Property(x => x.EmploymentType).IsRequired();
+            this.Property(x => x.EmploymentType_Id).IsOptional();
             this.Property(o => o.OrderDate).IsOptional();
             this.Property(o => o.UserId).IsOptional().HasMaxLength(20);
             this.Property(o => o.UserFirstName).IsOptional().HasMaxLength(20);
@@ -69,20 +73,11 @@
             this.Property(o => o.AccountingDimension5).IsOptional().HasMaxLength(20);
             this.Property(x => x.AccountStartDate).IsOptional();
             this.Property(x => x.AccountEndDate).IsOptional();
-            this.Property(x => x.EMailType).IsRequired();
+            this.Property(x => x.EMailType).IsOptional();
             this.Property(x => x.HomeDirectory).IsRequired();
             this.Property(x => x.Profile).IsRequired();
             this.Property(x => x.InventoryNumber).IsOptional().HasMaxLength(20);
             this.Property(x => x.AccountInfo).IsOptional().HasMaxLength(500);
-            //this.Property(x => x.AccountType_Id).IsOptional();
-            //this.HasOptional(x => x.AccountType)
-            //    .WithMany()
-            //    .HasForeignKey(x => x.AccountType_Id)
-            //    .WillCascadeOnDelete(false);
-            //this.Property(x => x.AccountType2).IsOptional().HasMaxLength(50);
-            //this.Property(x => x.AccountType3).IsOptional();
-            //this.Property(x => x.AccountType4).IsOptional();
-            //this.Property(x => x.AccountType5).IsOptional();
             this.Property(o => o.Department_Id).IsOptional();
             this.HasOptional(o => o.Ou)
                 .WithMany(o => o.Orders)
@@ -120,6 +115,27 @@
             this.HasOptional(o => o.OrderType)
                 .WithMany()
                 .HasForeignKey(o => o.OrderType_Id);
+            this.Property(o => o.OrderFieldType_Id).IsOptional();
+            this.HasOptional(x => x.OrderFieldType)
+                .WithMany()
+                .HasForeignKey(x => x.OrderFieldType_Id)
+                .WillCascadeOnDelete(false);
+            this.Property(o => o.OrderFieldType2).IsOptional().HasMaxLength(500);
+            this.Property(o => o.OrderFieldType3_Id).IsOptional();
+            this.HasOptional(x => x.OrderFieldType3)
+                .WithMany()
+                .HasForeignKey(x => x.OrderFieldType3_Id)
+                .WillCascadeOnDelete(false);
+            this.Property(o => o.OrderFieldType4_Id).IsOptional();
+            this.HasOptional(x => x.OrderFieldType4)
+                .WithMany()
+                .HasForeignKey(x => x.OrderFieldType4_Id)
+                .WillCascadeOnDelete(false);
+            this.Property(o => o.OrderFieldType5_Id).IsOptional();
+            this.HasOptional(x => x.OrderFieldType5)
+                .WithMany()
+                .HasForeignKey(x => x.OrderFieldType5_Id)
+                .WillCascadeOnDelete(false);
             this.Property(o => o.DeliveryDepartmentId).IsOptional().HasColumnName("DeliveryDepartment_Id");
             this.HasOptional(o => o.DeliveryDepartment)
                 .WithMany()
@@ -132,6 +148,8 @@
             this.Property(o => o.DeliveryInfo).HasMaxLength(200).IsRequired();
             this.Property(o => o.DeliveryInfo2).HasMaxLength(50).IsRequired();
             this.Property(o => o.DeliveryInfo3).HasMaxLength(50).IsRequired();
+            this.Property(x => x.DeliveryName).IsOptional().HasMaxLength(50);
+            this.Property(x => x.DeliveryPhone).IsOptional().HasMaxLength(50);
             this.Property(o => o.Filename).HasMaxLength(100).IsRequired();
             this.Property(o => o.CaseNumber).HasPrecision(18, 0).IsOptional();
             this.Property(o => o.Info).HasMaxLength(200).IsOptional();
@@ -152,6 +170,13 @@
                     m.MapRightKey("Program_Id");
                     m.ToTable("tblOrder_tblProgram");
                 });
+
+            this.Property(x => x.ContactId).IsOptional().HasMaxLength(200);
+            this.Property(x => x.ContactName).IsOptional().HasMaxLength(50);
+            this.Property(x => x.ContactPhone).IsOptional().HasMaxLength(50);
+            this.Property(x => x.ContactEMail).IsOptional().HasMaxLength(50);
+
+            this.Property(x => x.InfoProduct).IsOptional().HasMaxLength(500);
 
             this.HasOptional(o => o.User)
                 .WithMany()

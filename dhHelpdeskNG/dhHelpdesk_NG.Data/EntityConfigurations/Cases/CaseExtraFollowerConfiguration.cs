@@ -16,7 +16,7 @@ namespace DH.Helpdesk.Dal.EntityConfigurations.Cases
             this.Property(x => x.CreatedDate).IsRequired();
             this.Property(x => x.Follower).IsRequired();
 
-            this.HasRequired(x => x.CreatedByUser)
+            this.HasOptional(x => x.CreatedByUser)
                 .WithMany()
                 .HasForeignKey(x => x.CreatedByUser_Id)
                 .WillCascadeOnDelete(false);

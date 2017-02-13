@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
+﻿using System.Collections.Generic;
+
+namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
 {
     using System.Linq;
 
@@ -7,7 +9,7 @@
 
     public static class OrderUpdateMapper
     {
-        public static void MapToEntity(Order entity, FullOrderEditFields businessModel, int customerId)
+        public static void MapToEntity(Order entity, FullOrderEditFields businessModel, int customerId, List<Program> programs)
         {
             entity.Customer_Id = customerId;
             entity.OrderType_Id = businessModel.OrderTypeId;
@@ -18,10 +20,11 @@
             MapOrdererFields(entity, businessModel.Orderer);
             MapOrderFields(entity, businessModel.Order);
             MapOtherFields(entity, businessModel.Other);
-            MapProgramFields(entity, businessModel.Program);
+            MapProgramFields(entity, businessModel.Program, programs);
             MapReceiverFields(entity, businessModel.Receiver);
             MapSupplierFields(entity, businessModel.Supplier);
             MapUserFields(entity, businessModel.User);
+            MapAccountInfoFields(entity, businessModel.AccountInfo);
         }
 
         private static void MapDeliveryFields(Order entity, DeliveryEditFields businessModel)
@@ -38,6 +41,8 @@
             entity.DeliveryInfo2 = businessModel.DeliveryInfo2;
             entity.DeliveryInfo3 = businessModel.DeliveryInfo3;
             entity.DeliveryOuId = businessModel.DeliveryOuIdId;
+            entity.DeliveryName = businessModel.DeliveryName;
+            entity.DeliveryPhone = businessModel.DeliveryPhone;
         } 
 
         private static void MapGeneralFields(Order entity, GeneralEditFields businessModel)
@@ -103,12 +108,10 @@
             entity.Info = businessModel.Info;
         } 
 
-        private static void MapProgramFields(Order entity, ProgramEditFields businessModel)
+        private static void MapProgramFields(Order entity, ProgramEditFields businessModel, ICollection<Program> programs)
         {
-            entity.Programs = businessModel.Programs.Select(p => new Program
-                                                                     {
-                                                                         Id = p.Id
-                                                                     }).ToList();
+            entity.Programs = programs;
+            entity.InfoProduct = businessModel.InfoProduct;
         } 
 
         private static void MapReceiverFields(Order entity, ReceiverEditFields businessModel)
@@ -140,7 +143,7 @@
             entity.Activity = businessModel.Activity;
             entity.UserDepartment_Id = businessModel.UserDepartment_Id1;
             entity.UserDepartment_Id2 = businessModel.UserDepartment_Id2;
-            entity.EmploymentType = businessModel.EmploymentType;
+            entity.EmploymentType_Id = businessModel.EmploymentType_Id;
             entity.UserExtension = businessModel.UserExtension;
             entity.UserLocation = businessModel.UserLocation;
             entity.Manager = businessModel.Manager;
@@ -151,6 +154,30 @@
             entity.UserRoomNumber = businessModel.UserRoomNumber;
             entity.UserTitle = businessModel.UserTitle;
             entity.UserOU_Id = businessModel.UserOU_Id;
+        }
+
+        private static void MapAccountInfoFields(Order entity, AccountInfoEditFields businessModel)
+        {
+            entity.AccountStartDate = businessModel.StartedDate;
+            entity.AccountEndDate = businessModel.FinishDate;
+            entity.EMailType = businessModel.EMailTypeId;
+            entity.HomeDirectory = businessModel.HomeDirectory;
+            entity.Profile = businessModel.Profile;
+            entity.InventoryNumber = businessModel.InventoryNumber;
+            entity.AccountInfo = businessModel.Info;
+            entity.OrderFieldType_Id = businessModel.AccountTypeId;
+            entity.OrderFieldType2 = string.Join(",", businessModel.AccountTypeId2 ?? new List<int>());
+            entity.OrderFieldType3_Id = businessModel.AccountTypeId3;
+            entity.OrderFieldType4_Id = businessModel.AccountTypeId4;
+            entity.OrderFieldType5_Id = businessModel.AccountTypeId5;
+        }
+
+        private static void MapContactFields(Order entity, ContactEditFields businessModel)
+        {
+            entity.ContactId = businessModel.Id;
+            entity.ContactName = businessModel.Name;
+            entity.ContactPhone = businessModel.Phone;
+            entity.ContactEMail = businessModel.Email;
         }
     }
 }

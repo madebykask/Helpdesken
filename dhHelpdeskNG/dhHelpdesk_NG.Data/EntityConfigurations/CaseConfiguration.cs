@@ -198,7 +198,11 @@
 
             this.Property(x => x.LatestSLACountDate).IsOptional();
 
-            this.ToTable("tblcase");
+			this.HasMany(x => x.InvoiceRows)
+				.WithOptional(x => x.Case)
+				.HasForeignKey(x => x.Case_Id);
+
+			this.ToTable("tblcase");
         }
     }
 }

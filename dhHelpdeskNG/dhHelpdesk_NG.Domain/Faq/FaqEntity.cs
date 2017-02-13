@@ -41,6 +41,8 @@ namespace DH.Helpdesk.Domain.Faq
 
         public int? WorkingGroup_Id { get; set; }
 
+        public virtual ICollection<FaqLanguageEntity> FaqLanguages { get; set; }
+
         #endregion
     }
 }

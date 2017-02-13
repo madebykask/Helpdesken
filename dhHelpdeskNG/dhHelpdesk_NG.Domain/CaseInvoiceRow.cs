@@ -10,8 +10,10 @@
         public int CreatedByUser_Id { get; set; }
         public string InvoiceNumber { get; set; }
         public DateTime CreatedDate { get; set; }
+		public int? InvoiceRow_Id { get; set; }
 
-        public virtual Case Case { get; set; }
+		public virtual Case Case { get; set; }
         public virtual User CreatedByUser { get; set; }
-    }
+		public virtual InvoiceRow InvoiceRow { get; set; }
+	}
 }

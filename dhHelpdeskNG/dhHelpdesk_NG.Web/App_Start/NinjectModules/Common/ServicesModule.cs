@@ -1,4 +1,5 @@
 ﻿using DH.Helpdesk.Services.Services.Feedback;
+using DH.Helpdesk.Services.Services.Invoice;
 
 namespace DH.Helpdesk.Web.NinjectModules.Common
 {
@@ -158,7 +159,10 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
 
             this.Bind<IBusinessRuleService>().To<BusinessRuleService>();
 
+			//Invoice
 			Bind<IExternalInvoiceService>().To<ExternalInvoiceService>();
+			Bind<IInvoiceService>().To<InvoiceService>();
+
 			Bind<ICaseExtraFollowersService>().To<CaseExtraFollowersService>();
 		}
 

@@ -21,7 +21,14 @@
 		public int? Parent_OrderType_Id { get; set; }
 		public string CaptionOrdererInfo { get; set; }
 		public string CaptionUserInfo { get; set; }
-		public string Description { get; set; }
+        public string CaptionReceiverInfo { get; set; }
+        public string CaptionGeneral { get; set; }
+        public string CaptionOrder { get; set; }
+        public string CaptionOrderInfo { get; set; }
+        public string CaptionDeliveryInfo { get; set; }
+        public string CaptionProgram { get; set; }
+        public string CaptionOther { get; set; }
+        public string Description { get; set; }
 		public string EMail { get; set; }
 		public string Name { get; set; }
 		public DateTime ChangedDate { get; set; }

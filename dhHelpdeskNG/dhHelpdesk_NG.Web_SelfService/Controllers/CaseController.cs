@@ -30,6 +30,7 @@
     using DH.Helpdesk.Services.Services.Concrete;
     using DH.Helpdesk.Services.utils;
     using DH.Helpdesk.SelfService.Infrastructure;
+    using Models.Shared;
 
     public class CaseController : BaseController
     {
@@ -64,12 +65,13 @@
         private readonly IWorkContext workContext;
         private readonly IEmailService _emailService;        
         private readonly IMasterDataService _masterDataService;
+        private readonly ICaseExtraFollowersService _caseExtraFollowersService;
 
         private const string ParentPathDefaultValue = "--";
         private const string EnterMarkup = "<br />";
         private readonly IOrganizationService _orgService;
         private readonly OrganizationJsonService _orgJsonService;
-
+        private readonly char[] EMAIL_SEPARATOR = new char[] { ';' };
 
         public CaseController(
             ICaseService caseService,
@@ -104,7 +106,8 @@
             IOrganizationService orgService,            
             OrganizationJsonService orgJsonService,
             ICaseSolutionSettingService caseSolutionSettingService,
-            IEmailService emailService)
+            IEmailService emailService,
+            ICaseExtraFollowersService caseExtraFollowersService)
             : base(masterDataService, caseSolutionService)
         {
             _masterDataService = masterDataService;
@@ -139,7 +142,8 @@
             _emailService = emailService;
             _urgencyService = urgencyService;
             _impactService = impactService;
-            _caseSolutionSettingService = caseSolutionSettingService;      
+            _caseSolutionSettingService = caseSolutionSettingService;
+            _caseExtraFollowersService = caseExtraFollowersService;     
         }
 
 
@@ -382,8 +386,14 @@
                     model.NewCase.OU_Id = caseTemplate.OU_Id.HasValue ? caseTemplate.OU_Id.Value : notifier?.OrganizationUnitId;
                     model.NewCase.Place = string.IsNullOrEmpty(caseTemplate.Place) ? notifier?.Place : caseTemplate.Place;
                     model.NewCase.UserCode = string.IsNullOrEmpty(caseTemplate.UserCode) ? notifier?.Code : caseTemplate.UserCode;
-                    
+                    model.NewCase.CostCentre = string.IsNullOrEmpty(caseTemplate.CostCentre) ? notifier?.CostCentre : caseTemplate.CostCentre;
+
+                    model.NewCase.InventoryNumber = string.IsNullOrEmpty(caseTemplate.InventoryNumber)? Request.GetComputerName() : caseTemplate.InventoryNumber;
+                    model.NewCase.InventoryType = caseTemplate.InventoryType;
+                    model.NewCase.InventoryLocation = caseTemplate.InventoryLocation;
+
                     model.NewCase.ProductArea_Id = caseTemplate.ProductArea_Id;
+                    model.NewCase.System_Id = caseTemplate.System_Id;
                     model.NewCase.Caption = caseTemplate.Caption;
                     model.NewCase.Description = caseTemplate.Description;
                     model.NewCase.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id;
@@ -391,6 +401,19 @@
                     model.NewCase.Project_Id = caseTemplate.Project_Id;
                     model.NewCase.Urgency_Id = caseTemplate.Urgency_Id;
                     model.NewCase.Impact_Id = caseTemplate.Impact_Id;
+                    model.NewCase.Category_Id = caseTemplate.Category_Id;
+                    model.NewCase.Supplier_Id = caseTemplate.Supplier_Id;
+
+                    model.NewCase.InvoiceNumber = caseTemplate.InvoiceNumber;
+                    model.NewCase.ReferenceNumber = caseTemplate.ReferenceNumber;
+                    model.NewCase.Miscellaneous = caseTemplate.Miscellaneous;
+                    model.NewCase.ContactBeforeAction = caseTemplate.ContactBeforeAction;
+                    model.NewCase.SMS = caseTemplate.SMS;
+                    model.NewCase.Available = caseTemplate.Available;
+                    model.NewCase.Cost = caseTemplate.Cost;
+                    model.NewCase.OtherCost = caseTemplate.OtherCost;
+                    model.NewCase.Currency = caseTemplate.Currency;
+
                 }
 
                 if(model.NewCase.ProductArea_Id.HasValue)
@@ -702,8 +725,7 @@
                                   TextExternal = (currentCustomer.UseInternalLogNoteOnExternalPage == (int)Enums.LogNote.UseExternalLogNote? extraNote : string.Empty),
                                   UserId = null,
                                   TextInternal = (currentCustomer.UseInternalLogNoteOnExternalPage == (int)Enums.LogNote.UseInternalLogNote? extraNote : string.Empty),
-                                  WorkingTimeHour = 0,
-                                  WorkingTimeMinute = 0,
+                                  WorkingTime = 0,
                                   EquipmentPrice = 0,
                                   Price = 0,
                                   Charge = false,
@@ -776,9 +798,9 @@
         }
 
         [HttpPost]
-        public RedirectToRouteResult NewCase(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey)
+        public RedirectToRouteResult NewCase(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey, string followerUsers)
         {
-            int caseId = Save(newCase, caseMailSetting, caseFileKey);
+            int caseId = Save(newCase, caseMailSetting, caseFileKey, followerUsers);
             return RedirectToAction("Index", "case", new { id = newCase.Id, showRegistrationMessage = true });
         }
 
@@ -829,6 +851,14 @@
             }
         }
 
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult CaseSearchUserEmails(string query, string searchKey)
+        {
+            var models = _caseSearchService.GetUserEmailsForCaseSend(SessionFacade.CurrentCustomer.Id, query, false, true, false, false);
+            return Json(new { searchKey = searchKey, result = models });
+        }
+
         public List<CaseSolution> GetCaseSolutions(int customerId)
         {
             return _caseSolutionService.GetCaseSolutions(customerId).Where(t => t.ShowInSelfService).ToList();
@@ -871,7 +901,7 @@
         }
 
         
-        private int Save(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey)
+        private int Save(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey, string followerUsers)
         {
             IDictionary<string, string> errors;
 
@@ -893,6 +923,26 @@
             var basePath = _masterDataService.GetFilePath(newCase.Customer_Id);
             newCase.LatestSLACountDate = CalculateLatestSLACountDate(newCase.StateSecondary_Id);
             var ei = new CaseExtraInfo() { CreatedByApp = CreatedByApplications.SelfService5, LeadTimeForNow = 0, ActionLeadTime = 0, ActionExternalTime = 0};
+
+            if (newCase.Urgency_Id.HasValue && newCase.Impact_Id.HasValue)
+            {
+                var prio_Impact_Urgent = _urgencyService.GetPriorityImpactUrgencies(newCase.Customer_Id);
+                var prioInfo = prio_Impact_Urgent.FirstOrDefault(p=> p.Impact_Id == newCase.Impact_Id && p.Urgency_Id == newCase.Urgency_Id);
+                if (prioInfo != null)
+                {
+                    newCase.Priority_Id = prioInfo.Priority_Id;
+                }
+            }
+
+            if (newCase.ProductArea_Id.HasValue)
+            {
+                var productArea = _productAreaService.GetProductArea(newCase.ProductArea_Id.Value);                
+                if (productArea != null && productArea.WorkingGroup_Id.HasValue)
+                {
+                    newCase.WorkingGroup_Id = productArea.WorkingGroup_Id;
+                }
+            }
+
             int caseHistoryId = _caseService.SaveCase(newCase, null, caseMailSetting, 0, SessionFacade.CurrentUserIdentity.UserId, ei, out errors);
             
             // save case files            
@@ -905,6 +955,14 @@
             var oldCase = new Case();            
             // send emails
             var userTimeZone = TimeZoneInfo.Local;
+
+            //save extra followers            
+            if (!string.IsNullOrEmpty(followerUsers))
+            {
+                var _followerUsers = followerUsers.Split(EMAIL_SEPARATOR, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).ToList();
+                _caseExtraFollowersService.SaveExtraFollowers(newCase.Id, _followerUsers, null);
+            }
+
             _caseService.SendCaseEmail(newCase.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase);
 
             return newCase.Id;
@@ -1144,7 +1202,7 @@
             caseTypes = CaseTypeTreeTranslation(caseTypes).ToList();
 
             //Product Area tree            
-            var productAreas = _productAreaService.GetTopProductAreas(customerId).Where(p=> p.ShowOnExternalPage != 0).ToList();
+            var productAreas = _productAreaService.GetTopProductAreas(customerId).Where(p=> p.IsActive != 0 && p.ShowOnExternalPage != 0).ToList();
             var traversedData = ProductAreaTreeTranslation(productAreas);
             productAreas = traversedData.Item1.ToList();
 
@@ -1200,10 +1258,13 @@
             model.ProductAreaParantPath = "--";
             model.CaseFileKey = Guid.NewGuid().ToString();
             model.ProductAreaChildren = traversedData.Item2.ToList();
+            model.SendToDialogModel = new SendToDialogModel();            
 
+            var _caseTypes = _caseTypeService.GetAllCaseTypes(customerId).Where(c => c.ShowOnExternalPage != 0).ToList();
+            model.CaseTypeRelatedFields = _caseTypes.Select(c => new KeyValuePair<int, string>(c.Id, c.RelatedField)).ToList();
             return model;
-        }       
-
+        }
+        
         private List<string> GetVisibleFieldGroups(List<CaseListToCase> fieldList)
         {
             List<string> ret = new List<string>();
@@ -1220,7 +1281,8 @@
                             GlobalEnums.TranslationCaseFields.Department_Id.ToString(), 
                             GlobalEnums.TranslationCaseFields.OU_Id.ToString(), 
                             GlobalEnums.TranslationCaseFields.Place.ToString(), 
-                            GlobalEnums.TranslationCaseFields.UserCode.ToString()
+                            GlobalEnums.TranslationCaseFields.UserCode.ToString(),
+                            GlobalEnums.TranslationCaseFields.CostCentre.ToString()
                         };
 
             string[] computerInformationGroup = new string[] 
@@ -1311,6 +1373,11 @@
                     {
                         isReadonly = templateField.CaseSolutionMode == Common.Enums.Settings.CaseSolutionModes.ReadOnly;
                     }
+
+                    if (templateField != null && isVisible)
+                    {
+                        isVisible = templateField.CaseSolutionMode != Common.Enums.Settings.CaseSolutionModes.Hide;
+                    }
                 }
 
                 ret.Add(new FieldSettingJSModel(field.Name, isVisible, isReadonly, isRequired));
@@ -1326,10 +1393,10 @@
             foreach (var pa in productAreas)
             {
                 pa.Name = Translation.Get(pa.Name, Enums.TranslationSource.TextTranslation);
-                if (pa.SubProductAreas.Any())
+                if (pa.SubProductAreas.Where(sp=> sp.IsActive != 0 && sp.ShowOnExternalPage != 0).Any())
                 {
                     paChildren.Add(new ProductAreaChild(pa.Id, true));
-                    var newList = ProductAreaTreeTranslation(pa.SubProductAreas.ToList());
+                    var newList = ProductAreaTreeTranslation(pa.SubProductAreas.Where(sp => sp.IsActive != 0 && sp.ShowOnExternalPage != 0).ToList());
                     pa.SubProductAreas = newList.Item1;                    
                     if (newList.Item2.Any())
                         paChildren.AddRange(newList.Item2);

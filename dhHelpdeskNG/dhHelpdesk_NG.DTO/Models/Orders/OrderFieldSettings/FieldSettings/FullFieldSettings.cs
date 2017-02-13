@@ -49,6 +49,7 @@
         [NotNull]
         public AccountInfoFieldSettings AccountInfo { get; private set; }
 
+
         public DateTime ChangedDate { get; private set; }
 
         public static FullFieldSettings CreateForEdit(
@@ -76,7 +77,7 @@
                            Receiver = receiver,
                            Supplier = supplier,
                            User = user,
-                           AccountInfo = accountInfo
+                           AccountInfo = accountInfo,
                         };
         }
 

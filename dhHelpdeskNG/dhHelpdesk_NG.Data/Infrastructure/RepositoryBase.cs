@@ -297,15 +297,20 @@ namespace DH.Helpdesk.Dal.Infrastructure
 		/// <param name="newList">New selection, list of entries to what a repository needs to be updated to</param>
 		/// <param name="comparePredicate">Comparer expression used to compare old and new entries</param>
 		/// <param name="updater">Function to update if existing matching records from new list</param>
+		/// <param name="skipDelete">If true, do not remove missing items</param>
 		/// <returns></returns>
-		public void MergeList(Expression<Func<T, bool>> currentPredicate, IList<T> newList, Func<T, T, bool> comparePredicate, Action<T, T> updater = null)
+		public void MergeList(Expression<Func<T, bool>> currentPredicate, IList<T> newList, Func<T, T, bool> comparePredicate, Action<T, T> updater = null, bool skipDelete = false)
 		{
 			var current = Table.Where(currentPredicate).ToList();
 
-			foreach (var toDel in current.Where(x => !newList.Any(y => comparePredicate(x, y))).ToList())
+			if (!skipDelete)
 			{
-				Delete(toDel);
+				foreach (var toDel in current.Where(x => !newList.Any(y => comparePredicate(x, y))).ToList())
+				{
+					Delete(toDel);
+				}
 			}
+			
 			foreach (var toIns in newList.Where(x => !current.Any(y => comparePredicate(x, y))).ToList())
 			{
 				Add(toIns);

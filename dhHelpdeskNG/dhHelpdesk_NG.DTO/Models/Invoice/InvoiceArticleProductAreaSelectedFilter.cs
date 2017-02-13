@@ -13,9 +13,12 @@
 
         public int CustomerId { get; set; }
 
-        public SelectedItems SelectedProductAreas { get; set; }
+        public List<int> SelectedProductAreas { get; set; }
 
-        public SelectedItems SelectedInvoiceArticles { get; set; }
+        public List<int> SelectedInvoiceArticles { get; set; }
+
+		public int Order { get; set; }
+		public string Dir { get; set; }
 
     }
 }

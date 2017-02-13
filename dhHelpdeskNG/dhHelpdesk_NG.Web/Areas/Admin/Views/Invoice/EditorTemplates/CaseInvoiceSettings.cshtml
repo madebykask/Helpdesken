@@ -10,7 +10,7 @@
                 <table class="tableform">
                     <tr>
                         <td class="span3">
-                            @Translation.Get("Export sökväg", Enums.TranslationSource.TextTranslation)
+                            @Translation.GetCoreTextTranslation("Export sökväg")
                         </td>
                         <td class="span9">
                             @Html.TextBoxFor(m => m.ExportPath, new { maxlength = "200" })
@@ -18,7 +18,7 @@
                     </tr>
                     <tr>
                         <td class="span3">
-                            @Translation.Get("Valuta", Enums.TranslationSource.TextTranslation)
+                            @Translation.GetCoreTextTranslation("Valuta")
                         </td>
                         <td class="span9">
                             @Html.TextBoxFor(m => m.Currency, new { maxlength = "50" })
@@ -26,7 +26,7 @@
                     </tr>
                     <tr>
                         <td class="span3">
-                            @Translation.Get("Utfärdare", Enums.TranslationSource.TextTranslation)
+                            @Translation.GetCoreTextTranslation("Utfärdare")
                         </td>
                         <td class="span9">
                             @Html.TextBoxFor(m => m.Issuer, new { maxlength = "50" })
@@ -34,7 +34,7 @@
                     </tr>
                     <tr>
                         <td class="span3">
-                            @Translation.Get("Vår referens", Enums.TranslationSource.TextTranslation)
+                            @Translation.GetCoreTextTranslation("Vår referens")
                         </td>
                         <td class="span9">
                             @Html.TextBoxFor(m => m.OurReference, new { maxlength = "50" })
@@ -42,7 +42,7 @@
                     </tr>
                     <tr>
                         <td class="span3">
-                            @Translation.Get("Ordernummer/prefix", Enums.TranslationSource.TextTranslation)
+                            @Translation.GetCoreTextTranslation("Ordernummer/prefix")
                         </td>
                         <td class="span9">
                             @Html.TextBoxFor(m => m.OrderNoPrefix, new { maxlength = "50" })
@@ -50,7 +50,7 @@
                     </tr>
                     <tr>
                         <td class="span3">
-                            @Translation.Get("Dokumentmall", Enums.TranslationSource.TextTranslation)
+                            @Translation.GetCoreTextTranslation("Dokumentmall")
                         </td>
                         <td class="span9">
                             @Html.TextBoxFor(m => m.DocTemplate, new { maxlength = "50" })

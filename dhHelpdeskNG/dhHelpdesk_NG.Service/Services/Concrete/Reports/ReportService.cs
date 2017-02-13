@@ -90,23 +90,23 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
 
         #region ReportFavorites
 
-        public List<ReportFavoriteList> GetCustomerReportFavoriteList(int customerId)
+        public List<ReportFavoriteList> GetCustomerReportFavoriteList(int customerId, int? userId)
         {
-            var reports = _reportFavoriteRepository.GetCustomerReportFavoriteListForCustomer(customerId);
+            var reports = _reportFavoriteRepository.GetCustomerReportFavoriteList(customerId, userId);
 
             return reports.ToList();
         }
 
-        public ReportFavorite GetCustomerReportFavorite(int reportFavoriteId, int customerId)
+        public ReportFavorite GetCustomerReportFavorite(int reportFavoriteId, int customerId, int? userId)
         {
-            var report = _reportFavoriteRepository.GetCustomerReportFavoriteById(reportFavoriteId, customerId);
+            var report = _reportFavoriteRepository.GetCustomerReportFavoriteById(reportFavoriteId, customerId, userId);
 
             return report;
         }
 
         public int SaveCustomerReportFavorite(ReportFavorite reportFavorite)
         {
-            if (!_reportFavoriteRepository.IsCustomerReportFavoriteNameUnique(reportFavorite.Id, reportFavorite.Customer_Id, reportFavorite.Name))
+            if (!_reportFavoriteRepository.IsCustomerReportFavoriteNameUnique(reportFavorite.Id, reportFavorite.Customer_Id, reportFavorite.User_Id, reportFavorite.Name))
             {
                 return -2;
             }
@@ -119,7 +119,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             }
             else
             {
-                var report = _reportFavoriteRepository.GetCustomerReportFavoriteById(reportFavorite.Id, reportFavorite.Customer_Id);
+                var report = _reportFavoriteRepository.GetCustomerReportFavoriteById(reportFavorite.Id, reportFavorite.Customer_Id, reportFavorite.User_Id);
 
                 if (report == null)
                 {
@@ -136,9 +136,9 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             return reportFavorite.Id;
         }
 
-        public void DeleteCustomerReportFavorite(int reportFavoriteId, int customerId)
+        public void DeleteCustomerReportFavorite(int reportFavoriteId, int customerId, int? userId)
         {
-            _reportFavoriteRepository.DeleteCustomerReportFavoriteById(reportFavoriteId, customerId);
+            _reportFavoriteRepository.DeleteCustomerReportFavoriteById(reportFavoriteId, customerId, userId);
             _reportFavoriteRepository.Commit();
         }
 

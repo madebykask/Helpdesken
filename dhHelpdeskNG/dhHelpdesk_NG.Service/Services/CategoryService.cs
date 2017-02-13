@@ -146,7 +146,10 @@
                 errors.Add("Category.Name", "Du måste ange en kategori");
 
             if (category.Id == 0)
+            {
+                category.CategoryGUID = Guid.NewGuid();
                 this._categoryRepository.Add(category);
+            }    
             else
                 this._categoryRepository.Update(category);
 

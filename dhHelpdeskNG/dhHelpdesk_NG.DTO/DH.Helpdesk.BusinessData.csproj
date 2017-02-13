@@ -62,7 +62,6 @@
     <Compile Include="Enums\Accounts\Fields\AccountStates.cs" />
     <Compile Include="Enums\Accounts\Fields\ContactFields.cs" />
     <Compile Include="Enums\Accounts\Fields\DeliveryInformationFields.cs" />
-    <Compile Include="Enums\Accounts\Fields\EMailTypes.cs" />
     <Compile Include="Enums\Accounts\Fields\OrdererFields.cs" />
     <Compile Include="Enums\Accounts\Fields\OtherFields.cs" />
     <Compile Include="Enums\Accounts\Fields\ProgramFields.cs" />
@@ -71,6 +70,7 @@
     <Compile Include="Enums\Admin\Users\UserOrderPermission.cs" />
     <Compile Include="Enums\Admin\Users\UserPermission.cs" />
     <Compile Include="Enums\BusinessRules\BusinessRuleEnums.cs" />
+    <Compile Include="Enums\Case\CaseInitiatorSearchScope.cs" />
     <Compile Include="Enums\Case\CaseProgressFilter.cs" />
     <Compile Include="Enums\Case\CasesCustomFilter.cs" />
     <Compile Include="Enums\Case\CaseSearchGroup.cs" />
@@ -121,12 +121,15 @@
     <Compile Include="Enums\Changes\StepStatus.cs" />
     <Compile Include="Enums\MailTemplates\FeedbackTemplate.cs" />
     <Compile Include="Enums\MailTemplates\QuestionnaireTemplates.cs" />
+    <Compile Include="Enums\Email\EmailType.cs" />
     <Compile Include="Enums\Notifiers\AddressField.cs" />
     <Compile Include="Enums\Notifiers\GeneralField.cs" />
     <Compile Include="Enums\Notifiers\NotifierStatus.cs" />
     <Compile Include="Enums\Notifiers\OrdererField.cs" />
     <Compile Include="Enums\Notifiers\OrganizationField.cs" />
     <Compile Include="Enums\Notifiers\StateField.cs" />
+    <Compile Include="Enums\Orders\FieldNames\AccountInfoFieldNames.cs" />
+    <Compile Include="Enums\Orders\FieldNames\ContactFieldNames.cs" />
     <Compile Include="Enums\Orders\FieldNames\DeliveryFieldNames.cs" />
     <Compile Include="Enums\Orders\FieldNames\GeneralFieldNames.cs" />
     <Compile Include="Enums\Orders\FieldNames\LogFieldNames.cs" />
@@ -138,6 +141,7 @@
     <Compile Include="Enums\Orders\FieldNames\SupplierFieldNames.cs" />
     <Compile Include="Enums\Orders\FieldNames\UserFieldNames.cs" />
     <Compile Include="Enums\Orders\Fields\AccountInfoFields.cs" />
+    <Compile Include="Enums\Orders\Fields\ContactFields.cs" />
     <Compile Include="Enums\Orders\OrderDeletedItem.cs" />
     <Compile Include="Enums\Orders\OrderEmailTemplate.cs" />
     <Compile Include="Enums\Orders\Subtopic.cs" />
@@ -245,6 +249,7 @@
     <Compile Include="Models\Email\EmailResponse.cs" />
     <Compile Include="Models\Error\ErrorModel.cs" />
     <Compile Include="Models\ExternalInvoice\ExternalInvoice.cs" />
+    <Compile Include="Models\Faq\Input\EditCategory.cs" />
     <Compile Include="Models\Faq\Input\FaqCategory.cs" />
     <Compile Include="Models\Feedback\FeedbackField.cs" />
     <Compile Include="Models\Feedback\FeedbackFullItem.cs" />
@@ -258,6 +263,10 @@
     <Compile Include="Models\Invoice\CaseInvoiceOrderFile.cs" />
     <Compile Include="Models\Invoice\InvoiceArticleProductAreaSelectedFilter.cs" />
     <Compile Include="Models\Invoice\InvoiceArticleProductArea.cs" />
+    <Compile Include="Models\Invoice\InvoiceFile.cs" />
+    <Compile Include="Models\Invoice\InvoiceHeader.cs" />
+    <Compile Include="Models\Invoice\InvoiceOverview.cs" />
+    <Compile Include="Models\Invoice\InvoiceRow.cs" />
     <Compile Include="Models\Invoice\Xml\ExportInvoiceOrderXML.cs" />
     <Compile Include="Models\Licenses\Computers\ComputerOverview.cs" />
     <Compile Include="Models\DailyReport\Output\DailyReportSubject.cs" />
@@ -265,6 +274,8 @@
     <Compile Include="Models\MailTemplates\CustomMailTemplateLanguage.cs" />
     <Compile Include="Models\Modules\Output\ModulesOverview.cs" />
     <Compile Include="Models\OperationLog\Output\OperationLogObjectOverview.cs" />
+    <Compile Include="Models\Orders\Index\FieldSettingsOverview\AccountInfoFieldSettingsOverview.cs" />
+    <Compile Include="Models\Orders\Index\FieldSettingsOverview\ContactFieldSettingsOverview.cs" />
     <Compile Include="Models\Orders\Index\FieldSettingsOverview\DeliveryFieldSettingsOverview.cs" />
     <Compile Include="Models\Orders\Index\FieldSettingsOverview\GeneralFieldSettingsOverview.cs" />
     <Compile Include="Models\Orders\Index\FieldSettingsOverview\LogFieldSettingsOverview.cs" />
@@ -321,6 +332,8 @@
     <Compile Include="Enums\Orders\Fields\ReceiverFields.cs" />
     <Compile Include="Enums\Orders\Fields\SupplierFields.cs" />
     <Compile Include="Enums\Orders\Fields\UserFields.cs" />
+    <Compile Include="Models\Orders\Index\OrderOverview\AccountInfoOverview.cs" />
+    <Compile Include="Models\Orders\Index\OrderOverview\ContactOverview.cs" />
     <Compile Include="Models\Orders\Index\OrderOverview\DeliveryOverview.cs" />
     <Compile Include="Models\Orders\Index\OrderOverview\FullOrderOverview.cs" />
     <Compile Include="Models\Orders\Index\OrderOverview\GeneralOverview.cs" />
@@ -337,12 +350,16 @@
     <Compile Include="Models\Orders\Index\SearchResponse.cs" />
     <Compile Include="Models\Orders\Index\SearchResult.cs" />
     <Compile Include="Models\Orders\OrderFieldSettings\FieldSettings\AccountInfoFieldSettings.cs" />
+    <Compile Include="Models\Orders\OrderFieldSettings\FieldSettings\ContactFieldSettings.cs" />
     <Compile Include="Models\Orders\OrderFieldSettings\FieldSettings\DeliveryFieldSettings.cs" />
     <Compile Include="Models\Orders\OrderFieldSettings\FieldSettings\FullFieldSettings.cs" />
     <Compile Include="Models\Orders\OrderFieldSettings\FieldSettings\GeneralFieldSettings.cs" />
+    <Compile Include="Models\Orders\OrderFieldSettings\FieldSettings\HeaderSettings.cs" />
     <Compile Include="Models\Orders\OrderFieldSettings\FieldSettings\LogFieldSettings.cs" />
     <Compile Include="Models\Orders\OrderFieldSettings\FieldSettings\OrdererFieldSettings.cs" />
     <Compile Include="Models\Orders\OrderFieldSettings\FieldSettings\OrderFieldSettings.cs" />
+    <Compile Include="Models\Orders\OrderFieldSettings\FieldSettings\OrderFieldTypeSettings.cs" />
+    <Compile Include="Models\Orders\OrderFieldSettings\FieldSettings\OrderFieldTypeValueSetting.cs" />
     <Compile Include="Models\Orders\OrderFieldSettings\FieldSettings\OtherFieldSettings.cs" />
     <Compile Include="Models\Orders\OrderFieldSettings\FieldSettings\ProgramFieldSettings.cs" />
     <Compile Include="Models\Orders\OrderFieldSettings\FieldSettings\ReceiverFieldSettings.cs" />
@@ -354,6 +371,8 @@
     <Compile Include="Models\Orders\Index\OrdersFilterData.cs" />
     <Compile Include="Models\Orders\OrderFieldSettings\GetSettingsResponse.cs" />
     <Compile Include="Models\Orders\Order\OrderAuditData.cs" />
+    <Compile Include="Models\Orders\Order\OrderEditFields\AccountInfoEditFields.cs" />
+    <Compile Include="Models\Orders\Order\OrderEditFields\ContactEditFields.cs" />
     <Compile Include="Models\Orders\Order\OrderEditFields\DeliveryEditFields.cs" />
     <Compile Include="Models\Orders\Order\OrderEditFields\EmailLog.cs" />
     <Compile Include="Models\Orders\Order\OrderEditFields\EmailLogOverview.cs" />
@@ -380,6 +399,8 @@
     <Compile Include="Models\Orders\Order\OrderEditFields\SupplierEditFields.cs" />
     <Compile Include="Models\Orders\Order\OrderEditFields\UserEditFields.cs" />
     <Compile Include="Models\Orders\Order\OrderEditOptions.cs" />
+    <Compile Include="Models\Orders\Order\OrderEditSettings\AccountInfoEditSettings.cs" />
+    <Compile Include="Models\Orders\Order\OrderEditSettings\ContactEditSettings.cs" />
     <Compile Include="Models\Orders\Order\OrderEditSettings\DeliveryEditSettings.cs" />
     <Compile Include="Models\Orders\Order\OrderEditSettings\FieldEditSettings.cs" />
     <Compile Include="Models\Orders\Order\OrderEditSettings\FullOrderEditSettings.cs" />
@@ -393,6 +414,8 @@
     <Compile Include="Models\Orders\Order\OrderEditSettings\SupplierEditSettings.cs" />
     <Compile Include="Models\Orders\Order\OrderEditSettings\TextFieldEditSettings.cs" />
     <Compile Include="Models\Orders\Order\OrderEditSettings\UserEditSettings.cs" />
+    <Compile Include="Models\Orders\Order\OrderHistoryFields\AccountInfoHistoryFields.cs" />
+    <Compile Include="Models\Orders\Order\OrderHistoryFields\ContactHistoryFields.cs" />
     <Compile Include="Models\Orders\Order\OrderHistoryFields\DeliveryHistoryFields.cs" />
     <Compile Include="Models\Orders\Order\OrderHistoryFields\FullOrderHistoryFields.cs" />
     <Compile Include="Models\Orders\Order\OrderHistoryFields\GeneralHistoryFields.cs" />
@@ -404,6 +427,7 @@
     <Compile Include="Models\Orders\Order\OrderHistoryFields\ReceiverHistoryFields.cs" />
     <Compile Include="Models\Orders\Order\OrderHistoryFields\SupplierHistoryFields.cs" />
     <Compile Include="Models\Orders\Order\OrderHistoryFields\UserHistoryFields.cs" />
+    <Compile Include="Models\Orders\Order\OrderStatusItem.cs" />
     <Compile Include="Models\Orders\Order\UpdateOrderRequest.cs" />
     <Compile Include="Models\Paging\PageInfo.cs" />
     <Compile Include="Models\ProductArea\IProductAreaNameResolver.cs" />

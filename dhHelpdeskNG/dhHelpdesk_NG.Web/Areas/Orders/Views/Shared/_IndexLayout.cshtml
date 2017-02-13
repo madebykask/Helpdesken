@@ -32,4 +32,9 @@
     {
         return MvcHtmlString.Create(Model.Type == type ? "active" : null);
     }
+
+}
+
+@section Scripts {
+    @RenderSection("Scripts", false)
 }

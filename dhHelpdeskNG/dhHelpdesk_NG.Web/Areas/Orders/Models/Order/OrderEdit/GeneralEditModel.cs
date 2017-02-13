@@ -3,8 +3,8 @@
     using System;
     using System.Web.Mvc;
 
-    using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Areas.Orders.Models.Order.FieldModels;
+    using Common.ValidationAttributes;
+    using FieldModels;
 
     public sealed class GeneralEditModel
     {
@@ -15,20 +15,22 @@
         public GeneralEditModel(
             ConfigurableFieldModel<int> orderNumber,
             ConfigurableFieldModel<string> customer,
-            ConfigurableFieldModel<SelectList> administrator,
-            ConfigurableFieldModel<SelectList> domain,
+            ConfigurableFieldModel<int?> administrator,
+            ConfigurableFieldModel<int?> domain,
             ConfigurableFieldModel<DateTime?> orderDate,
             string orderTypeName,
             ConfigurableFieldModel<SelectList> status)
         {
-            this.OrderTypeName = orderTypeName;
-            this.OrderNumber = orderNumber;
-            this.Customer = customer;
-            this.Administrator = administrator;
-            this.Domain = domain;
-            this.OrderDate = orderDate;
-            this.Status = status;
+            OrderTypeName = orderTypeName;
+            OrderNumber = orderNumber;
+            Customer = customer;
+            Administrator = administrator;
+            Domain = domain;
+            OrderDate = orderDate;
+            Status = status;
         }
+
+        public string Header { get; set; }
 
         public string OrderTypeName { get; private set; }
 
@@ -39,16 +41,11 @@
         public ConfigurableFieldModel<string> Customer { get; set; } 
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> Administrator { get; set; } 
+        public ConfigurableFieldModel<int?> Administrator { get; set; } 
 
-        [IsId]
-        public int? AdministratorId { get; set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> Domain { get; set; } 
-
-        [IsId]
-        public int? DomainId { get; set; }
+        public ConfigurableFieldModel<int?> Domain { get; set; } 
 
         [NotNull]
         public ConfigurableFieldModel<DateTime?> OrderDate { get; set; }
@@ -59,13 +56,19 @@
         [IsId]
         public int? StatusId { get; set; }
 
+        [NotNull]
+        public SelectList Administrators { get; set; }
+
+        [NotNull]
+        public SelectList Domains { get; set; }
+
         public static GeneralEditModel CreateEmpty()
         {
             return new GeneralEditModel(
                 ConfigurableFieldModel<int>.CreateUnshowable(),
                 ConfigurableFieldModel<string>.CreateUnshowable(),
-                ConfigurableFieldModel<SelectList>.CreateUnshowable(),
-                ConfigurableFieldModel<SelectList>.CreateUnshowable(),
+                ConfigurableFieldModel<int?>.CreateUnshowable(),
+                ConfigurableFieldModel<int?>.CreateUnshowable(),
                 ConfigurableFieldModel<DateTime?>.CreateUnshowable(),
                 string.Empty,
                 ConfigurableFieldModel<SelectList>.CreateUnshowable());
@@ -73,12 +76,12 @@
 
         public bool HasShowableFields()
         {
-            return this.OrderNumber.Show ||
-                this.Customer.Show ||
-                this.Administrator.Show ||
-                this.Domain.Show ||
-                this.OrderDate.Show ||
-                this.Status.Show;
+            return OrderNumber.Show ||
+                Customer.Show ||
+                Administrator.Show ||
+                Domain.Show ||
+                OrderDate.Show ||
+                Status.Show;
         }
     }
 }

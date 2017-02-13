@@ -31,7 +31,7 @@
                                         @Translation.Get("Base DN", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @Html.TextBoxFor(model => model.Setting.LDAPBase, new { maxlength = "100", style = "width: 400px;" })
+                                        @Html.TextBoxFor(model => model.Setting.LDAPBase, new { maxlength = "200", style = "width: 400px;" })
                                     </td>
                                 </tr>
                                 <tr>
@@ -456,13 +456,13 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <label> @Translation.GetCoreTextTranslation("Användare") </label>
+                                        <label>@Translation.GetCoreTextTranslation("Administratör")</label>
                                     </td>
                                     <td>
                                         <input type="checkbox" name="setting.SetUserToAdministrator" @(Model.Setting.SetUserToAdministrator == 1 ? "checked=checked" : "") value="1" />
                                         <input type="hidden" name="setting.SetUserToAdministrator" value="0" />
                                         <span>
-                                            @Translation.GetCoreTextTranslation("Ställ användaren att Administratör")
+                                            @Translation.GetCoreTextTranslation("Användaren sätts som administratör vid skapa ärende")
                                         </span>
                                     </td>
                                 </tr>

@@ -11,7 +11,7 @@ var controlsId = ['CaseInitiatorFilter', 'lstFilterRegion', 'lstfilterDepartment
         'hidFilterClosingReasonId',
         'CaseRegistrationDateStartFilter', 'CaseRegistrationDateEndFilter',
         'CaseWatchDateStartFilter', 'CaseWatchDateEndFilter',
-        'CaseClosingDateStartFilter', 'CaseClosingDateEndFilter', 'lstfilterCaseRemainingTime'
+        'CaseClosingDateStartFilter', 'CaseClosingDateEndFilter', 'lstfilterCaseRemainingTime', 'InitiatorSearchScope'
 ];
 
 var chosenSelects = ['#lstFilterRegion', '#lstfilterDepartment', '#lstfilterUser',
@@ -64,15 +64,15 @@ FilterForm.prototype.init = function (opt) {
     me.$explainText = $("#explainText");
     me.$requireText = $("#requiredFavoriteText");
 
-    me.$addingDialogHeader = window.params.addingDialogHeader;
-    me.$updatingDialogHeader = window.params.updatingDialogHeader;
+    me.$addingDialogHeader = window.favoritParams.addingDialogHeader;
+    me.$updatingDialogHeader = window.favoritParams.updatingDialogHeader;
     
-    me.$addingDialogDescription = window.params.addingDialogDescription;
-    me.$updatingDialogDescription = window.params.updatingDialogDescription;
+    me.$addingDialogDescription = window.favoritParams.addingDialogDescription;
+    me.$updatingDialogDescription = window.favoritParams.updatingDialogDescription;
     
-    me.$saveFavoriteUrl = window.params.saveFavoriteUrl;
-    me.$deleteFavoriteUrl = window.params.deleteFavoriteUrl;
-    me.$loadFavoritesUrl = window.params.loadFavoritesUrl;
+    me.$saveFavoriteUrl = window.favoritParams.saveFavoriteUrl;
+    me.$deleteFavoriteUrl = window.favoritParams.deleteFavoriteUrl;
+    me.$loadFavoritesUrl = window.favoritParams.loadFavoritesUrl;
     
 
     /************** EVENTS BINDING ************************/
@@ -585,6 +585,18 @@ FilterForm.prototype.initControlsMap = function() {
                     control = CreateInstance(BaseField, { $el: $el });    
                 }
                 break;
+            case 'InitiatorSearchScope':
+                $el = me.$el.find(searchEl);
+                if (!window.is$ElEmpty($el)) {
+                    control = CreateInstance(BaseField, { $el: $el, defaultValue: "0" });
+                }
+                break;
+            //case 'initiatorSearchScope':
+            //    $el = $("", me.$el);
+            //    if (!window.is$ElEmpty($el)) {
+            //        control = CreateInstance(JQueryChosenField, { $el: $el });
+            //    }
+            //    break;
             case 'lstFilterRegion':
             case 'lstfilterDepartment':
             case 'lstfilterUser':

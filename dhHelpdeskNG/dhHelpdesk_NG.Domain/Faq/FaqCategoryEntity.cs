@@ -27,6 +27,8 @@
 
         public virtual ICollection<FaqCategoryEntity> SubFAQCategories { get; set; }
 
+        public virtual ICollection<FaqCategoryLanguageEntity> FaqCategoryLanguages { get; set; }
+
         #endregion
     }
 }

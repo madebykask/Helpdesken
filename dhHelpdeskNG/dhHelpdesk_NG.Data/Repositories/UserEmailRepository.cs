@@ -2,6 +2,7 @@
 using System.Data.Entity;
 using DH.Helpdesk.BusinessData.Enums.Case;
 using DH.Helpdesk.BusinessData.Models.Case.CaseIntLog;
+using DH.Helpdesk.Dal.Repositories.Notifiers;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
@@ -16,9 +17,12 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public sealed class UserEmailRepository : Repository, IUserEmailRepository
     {
-        public UserEmailRepository(IDatabaseFactory databaseFactory)
+        private readonly INotifierRepository _notifierRepository;
+
+        public UserEmailRepository(IDatabaseFactory databaseFactory, INotifierRepository notifierRepository)
             : base(databaseFactory)
         {
+            _notifierRepository = notifierRepository;
         }
 
         public List<MailAddress> FindUserEmails(int userId)
@@ -40,6 +44,43 @@ namespace DH.Helpdesk.Dal.Repositories
         {
             var result = new List<CaseEmailSendOverview>();
 
+            if (searchInInitiators)
+            {
+                var inits = _notifierRepository.Search(customerId, searchText).Where(x => !string.IsNullOrEmpty(x.Email)).Select(x => new CaseEmailSendOverview
+                {
+                    UserId = x.UserId,
+                    Name = x.SurName + " " + x.FirstName,
+                    Emails = new List<string>
+                    {
+                        x.Email
+                    },
+                    GroupType = CaseUserSearchGroup.Initiator,
+                    DepartmentName = string.IsNullOrEmpty(x.DepartmentName) ? string.Empty : x.DepartmentName
+                }).ToList();
+                result.AddRange(inits);
+            }
+
+            if (searchInAdmins)
+            {
+                var admins = DbContext.Users
+                    .Where(x => x.Performer == 1)
+                    .Where(x => x.IsActive == 1 && x.CustomerUsers.Any(cu => cu.Customer_Id == customerId))
+                    .Where(x => x.UserID.Contains(searchText) || x.FirstName.Contains(searchText) || x.SurName.Contains(searchText) || x.Email.Contains(searchText))
+                    .Where(x => !string.IsNullOrEmpty(x.Email))
+                    .OrderBy(x => x.SurName)
+                    .Select(x => new CaseEmailSendOverview
+                    {
+                        UserId = x.UserID,
+                        Name = x.SurName + " " + x.FirstName,
+                        Emails = new List<string>
+                        {
+                            x.Email
+                        },
+                        GroupType = CaseUserSearchGroup.Administaror,
+                        DepartmentName = string.Empty
+                    }).ToList();
+                result.AddRange(admins);
+            }
             if (searchInWorkingGrs)
             {
                 var wgs = DbContext.WorkingGroups
@@ -49,49 +90,10 @@ namespace DH.Helpdesk.Dal.Repositories
                 {
                     Name = x.WorkingGroupName,
                     Emails = x.UserWorkingGroups.Where(r => r.User.IsActive == 1).Select(r => r.User.Email).ToList(),
-                    GroupType = CaseUserSearchGroup.WorkingGroup
-                }).ToList();
+                    GroupType = CaseUserSearchGroup.WorkingGroup,
+                    DepartmentName = string.Empty
+                }).Where(x => x.Emails.Any()).ToList();
                 result.AddRange(newList);
-            }
-            if (searchInInitiators)
-            {
-                var inits = DbContext.Users
-                    .Where(x => x.IsActive == 1 && x.Customer_Id == customerId)
-                    .Where(x => x.UserID.Contains(searchText) || x.FirstName.Contains(searchText) || x.SurName.Contains(searchText) || x.Email.Contains(searchText))
-                    .OrderBy(x => x.SurName).ToList();
-                foreach (var user in inits)
-                {
-                    var newItem = new CaseEmailSendOverview
-                    {
-                        UserId = user.UserID,
-                        Name = string.Format("{0} {1}", user.SurName, user.FirstName),
-                        Emails = new List<string>(),
-                        GroupType = CaseUserSearchGroup.Initiator
-                    };
-                    newItem.Emails.Add(user.Email);
-                    result.Add(newItem);
-                }
-            }
-
-            if (searchInAdmins)
-            {
-                var admins = DbContext.Users
-                    .Where(x => x.Performer == 1)
-                    .Where(x => x.IsActive == 1 && x.CustomerUsers.Any(cu => cu.Customer_Id == customerId))
-                    .Where(x => x.UserID.Contains(searchText) || x.FirstName.Contains(searchText) || x.SurName.Contains(searchText) || x.Email.Contains(searchText))
-                    .OrderBy(x => x.SurName).ToList();
-                foreach (var user in admins)
-                {
-                    var newItem = new CaseEmailSendOverview
-                    {
-                        UserId = user.UserID,
-                        Name = string.Format("{0} {1}", user.SurName, user.FirstName),
-                        Emails = new List<string>(),
-                        GroupType = CaseUserSearchGroup.Administaror
-                    };
-                    newItem.Emails.Add(user.Email);
-                    result.Add(newItem);
-                }
             }
             if (searchInEmailGrs)
             {
@@ -101,12 +103,12 @@ namespace DH.Helpdesk.Dal.Repositories
                 {
                     Name = x.Name,
                     Emails = x.Members.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList(),
-                    GroupType = CaseUserSearchGroup.EmailGroup
-                }).ToList();
+                    GroupType = CaseUserSearchGroup.EmailGroup,
+                    DepartmentName = string.Empty
+                }).Where(x => x.Emails.Any()).ToList();
                 result.AddRange(newList);
             }
-            result = result.Where(x => x.Emails.Any()).ToList();
-            return result;
+            return result.ToList();
         }
     }
 }

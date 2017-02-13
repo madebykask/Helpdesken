@@ -1,4 +1,5 @@
 ﻿@using System.Web.Optimization
+@using DH.Helpdesk.Common.Enums
 @using DH.Helpdesk.Common.Extensions.DateTime
 @using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
@@ -42,7 +43,7 @@
         $('#show_all_answers_within_category').change(function () {
             if (!window.selectedCategoryId) {
                 return;
-            }            
+            }
             if ($(this).is(':checked')) {
                 $.get('@Url.Action("FaqsDetailed")', { categoryId: window.selectedCategoryId, now: Date.now() }, function (faqsWithDescription) {
                     refreshFaqTableWithDescription(faqsWithDescription);
@@ -54,17 +55,17 @@
             }
         });
 
-        $('#categories_tree').find('a.tree-node, a.tree-selected-node').click(function () {            
-            var selectedCategoryId = $(this).siblings('input').val();            
+        $('#categories_tree').find('a.tree-node, a.tree-selected-node').click(function () {
+            var selectedCategoryId = $(this).siblings('input').val();
             window.selectedCategoryId = selectedCategoryId;
 
             ChangeCat(selectedCategoryId);
 
-            if ($('#show_all_answers_within_category').is(':checked')) {                
+            if ($('#show_all_answers_within_category').is(':checked')) {
                 $.get('@Url.Action("FaqsDetailed")', { categoryId: window.selectedCategoryId, now: Date.now() }, function (faqsWithDescription) {
                     refreshFaqTableWithDescription(faqsWithDescription);
                 });
-            } else {                
+            } else {
                 $.get('@Url.Action("Faqs")', { categoryId: selectedCategoryId, now: Date.now() } , function (faqs) {
                     refreshFaqTable(faqs);
                 });
@@ -77,7 +78,7 @@
             window.location.href = '@Url.Action("NewFaq")?categoryId=' + window.selectedCategoryId;
         });
 
-        
+
 
         @*$('#search_field').typing({
             stop: function (event, $elem) {
@@ -115,11 +116,11 @@
             }
         });
 
-        ChangeCat(selectedCategoryId);        
+        ChangeCat(selectedCategoryId);
 
         $('#categories_editing_tree').find('a.tree-node, a.tree-selected-node').click(function () {
             var selectedCategoryId = $(this).siblings('input').val();
-            window.location.href = '@Url.Action("EditCategory")?id=' + selectedCategoryId;
+            window.location.href = '@Url.Action("EditCategory")?id=' + selectedCategoryId + '&languageId='+@LanguageIds.Swedish;
         });
     });
 
@@ -158,10 +159,10 @@
             var faqMarkup = $(
                 '<tr>' +
                     '<td>' +
-                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '">' + faq.CreatedDateText + '</a>' +
+                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '&languageId='+@LanguageIds.Swedish + '">' + faq.CreatedDateText + '</a>' +
                     '</td>' +
                     '<td>' +
-                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '">' + faq.Text + '</a>' +
+                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '&languageId='+@LanguageIds.Swedish + '">' + faq.Text + '</a>' +
                     '</td>' +
                     '</tr>');
 
@@ -179,10 +180,10 @@
             var faqMarkup =
                 '<tr>' +
                     '<td>' +
-                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '">' + faq.CreatedDateText + '</a>' +
+                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '&languageId='+@LanguageIds.Swedish + '">' + faq.CreatedDateText + '</a>' +
                     '</td>' +
                     '<td>' +
-                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '">' + faq.Text + '</a>' +
+                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '&languageId='+@LanguageIds.Swedish + '">' + faq.Text + '</a>' +
                     '<table>' +
                     '<tr>' +
                     '<td>' +
@@ -264,10 +265,10 @@
             var faqMarkup = $(
                 '<tr>' +
                     '<td>' +
-                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '">' + faq.CreatedDateText + '</a>' +
+                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '&languageId='+@LanguageIds.Swedish + '">' + faq.CreatedDateText + '</a>' +
                     '</td>' +
                     '<td>' +
-                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '">' + faq.Text + '</a>' +
+                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '&languageId='+@LanguageIds.Swedish + '">' + faq.Text + '</a>' +
                     '</td>' +
                     '</tr>');
 
@@ -285,10 +286,10 @@
             var faqMarkup =
                 '<tr>' +
                     '<td>' +
-                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '">' + faq.CreatedDateText + '</a>' +
+                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '&languageId='+@LanguageIds.Swedish + '">' + faq.CreatedDateText + '</a>' +
                     '</td>' +
                     '<td>' +
-                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '">' + faq.Text + '</a>' +
+                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '&languageId='+@LanguageIds.Swedish + '">' + faq.Text + '</a>' +
                     '<table>' +
                     '<tr>' +
                     '<td>' +
@@ -444,10 +445,10 @@
                                     {
                                         <tr>
                                             <td style="width:10%">
-                                                <a href="@Url.Action("EditFaq", "faq", new { id = faq.Id })">@faq.CreatedDate.ToFormattedDate()</a>
+                                                <a href="@Url.Action("EditFaq", "faq", new { id = faq.Id, languageId = LanguageIds.Swedish })">@faq.CreatedDate.ToFormattedDate()</a>
                                             </td>
                                             <td style="width:90%">
-                                                <a href="@Url.Action("EditFaq", "faq", new { id = faq.Id })">@faq.Text</a>
+                                                <a href="@Url.Action("EditFaq", "faq", new { id = faq.Id, languageId = LanguageIds.Swedish })">@faq.Text</a>
                                             </td>
                                         </tr>
                                     }

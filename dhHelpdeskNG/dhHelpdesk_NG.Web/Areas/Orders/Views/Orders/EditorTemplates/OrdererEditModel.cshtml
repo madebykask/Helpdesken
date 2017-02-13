@@ -7,7 +7,7 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.OrdererEditModel
 
-<h4>@Translation.Get("Beställare")</h4>
+<h4>@Model.Header</h4>
 <table class="tableform">
     <tbody>
     @if (Model.OrdererId.Show)
@@ -30,37 +30,8 @@
     @Html.EditorFor(m => m.OrdererEmail, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererEmail" } }})
     @Html.EditorFor(m => m.OrdererPhone, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererPhone" } }})
     @Html.EditorFor(m => m.OrdererCode, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererCode" } }})
-    @*@Html.EditorFor(m => m.Department, "Fields/List", new { Source = Model.Department.Value, Id = "Orderer_DepartmentId" })*@
-    @if (Model.Department.Show)
-    {
-        <tr>
-            <td class="span3">
-                @Html.FieldCaption(Model.Department)
-            </td>
-            <td class="span6">
-                @Html.DropDownListFor(m => m.DepartmentId, Model.Department.Value, new {Id = "Orderer_DepartmentId", data_dh_is_required = Model.Department.IsRequired.ToJavaScriptBool() })
-                @Html.ValidationMessageFor(m => m.DepartmentId)
-            </td>
-            <td class="span3">
-                @Model.Department.Help
-            </td>
-        </tr>
-    }
-    @if (Model.Unit.Show)
-    {
-        <tr>
-            <td class="span3">
-                @Html.FieldCaption(Model.Unit)
-            </td>
-            <td class="span6">
-                @Html.DropDownListFor(m => m.UnitId, Model.Unit.Value, new {Id = "orderer_unit_select"})
-                @Html.ValidationMessageFor(m => m.UnitId)
-            </td>
-            <td class="span3">
-                @Model.Unit.Help
-            </td>
-        </tr>
-    }
+    @Html.EditorFor(m => m.Department, "Fields/List", new { Source = Model.Departments, Id = "orderer_departmentId" })
+    @Html.EditorFor(m => m.Unit, "Fields/List", new { Source = Model.Units, Id = "orderer_unit_select" })
     @Html.EditorFor(m => m.OrdererAddress, "Fields/Text")
     @Html.EditorFor(m => m.OrdererInvoiceAddress, "Fields/Text")
     @Html.EditorFor(m => m.OrdererReferenceNumber, "Fields/Text")

@@ -11,7 +11,10 @@ namespace DH.Helpdesk.Dal.Repositories.Invoice
 
         InvoiceArticle[] GetArticles(int customerId);
 
-        int SaveArticle(InvoiceArticle article);
+	    List<InvoiceArticle> GetActiveArticles(int customerId);
+
+
+		int SaveArticle(InvoiceArticle article);
 
         void SaveArticleProductArea(InvoiceArticleProductAreaSelectedFilter selectedItems);
 

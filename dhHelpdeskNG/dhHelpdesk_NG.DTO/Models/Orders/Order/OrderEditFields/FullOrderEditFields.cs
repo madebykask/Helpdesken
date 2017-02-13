@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditFields
 {
-    using DH.Helpdesk.Common.ValidationAttributes;
+    using Common.ValidationAttributes;
 
     public sealed class FullOrderEditFields : Shared.Input.BusinessModel
     {
@@ -16,20 +16,22 @@
                 ProgramEditFields program, 
                 ReceiverEditFields receiver, 
                 SupplierEditFields supplier, 
-                UserEditFields user)
+                UserEditFields user,
+                AccountInfoEditFields accountInfo)
         {
-            this.OrderTypeId = orderTypeId;
-            this.User = user;
-            this.Supplier = supplier;
-            this.Receiver = receiver;
-            this.Program = program;
-            this.Other = other;
-            this.Order = order;
-            this.Orderer = orderer;
-            this.Log = log;
-            this.General = general;
-            this.Delivery = delivery;
-            this.Id = id;
+            OrderTypeId = orderTypeId;
+            User = user;
+            Supplier = supplier;
+            Receiver = receiver;
+            Program = program;
+            Other = other;
+            Order = order;
+            Orderer = orderer;
+            Log = log;
+            General = general;
+            Delivery = delivery;
+            Id = id;
+            AccountInfo = accountInfo;
         }
 
         [IsId]
@@ -64,5 +66,9 @@
 
         [NotNull]
         public UserEditFields User { get; private set; }
+
+        [NotNull]
+        public AccountInfoEditFields AccountInfo { get; private set; }
+
     }
 }

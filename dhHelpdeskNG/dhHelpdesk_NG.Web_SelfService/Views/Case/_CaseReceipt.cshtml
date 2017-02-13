@@ -146,6 +146,17 @@
                         </div>
                     </div>
                 }
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.CostCentre.ToString()))
+                {
+                    <div class="form-group row">
+                        <label class="col-md-3">
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.CostCentre.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
+                        </label>
+                        <div class="col-md-9">
+                            @Model.CasePreview.CostCentre
+                        </div>
+                    </div>
+                }
                 @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Place.ToString()))
                 {
                     <div class="form-group row">
@@ -552,12 +563,13 @@
                                                         <div class="modal-body" style="max-height: 600px; text-align:center;">
                                                             <form onsubmit="return false;">
                                                                 <div class="form-group">
-                                                                    <label>@Translation.Get("File name", Enums.TranslationSource.TextTranslation) </label>
+                                                                    <label>@Translation.Get("1. Write filename (leave blank for automatic naming)", Enums.TranslationSource.TextTranslation) </label><br />
                                                                     <input class="" type="text" id="imgFilename" autocomplete = "Off" />
                                                                     <span id="imageNameRequired" style="color:red"> @Translation.Get("must be specified", Enums.TranslationSource.TextTranslation) </span>
                                                                 </div>
                                                                 <div class="form-group">
-                                                                    <label>@(Translation.Get("Preview") + " (" + Translation.Get("Copy image data into clipboard and press Ctrl+V", Enums.TranslationSource.TextTranslation) + ")") </label>
+                                                                    <label>@(Translation.Get("2. Press Ctrl+V for inserting picture", Enums.TranslationSource.TextTranslation) )</label><br />
+                                                                    <label>@(Translation.Get("3. Click on Save for adding to case", Enums.TranslationSource.TextTranslation)) </label>
                                                                     <div id="previewPnl"></div>
                                                                 </div>
                                                             </form>
