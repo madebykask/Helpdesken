@@ -1512,11 +1512,11 @@
                                                     {
                                                     <td>
                                                         @Translation.Get("Artikelkostnad", SessionFacade.CurrentLanguageId)<br />
-                                                    @Html.TextBoxFor(model => model.case_.Cost, new { maxlength = "7", Class = "inputw50", @readonly = "readonly" })
+                                                    @Html.TextBoxFor(model => model.case_.Cost, new { maxlength = "7", Class = "inputw50" })
                                                 </td>
                                                     <td>
                                                         @Translation.Get("Övrig kostnad", SessionFacade.CurrentLanguageId)<br />
-                                                    @Html.TextBoxFor(model => model.case_.OtherCost, new { maxlength = "7", Class = "inputw50", @readonly = "readonly" })
+                                                    @Html.TextBoxFor(model => model.case_.OtherCost, new { maxlength = "7", Class = "inputw50" })
                                                 </td>
                                                     <td>
                                                         @Translation.Get("Valuta", SessionFacade.CurrentLanguageId)<br />
