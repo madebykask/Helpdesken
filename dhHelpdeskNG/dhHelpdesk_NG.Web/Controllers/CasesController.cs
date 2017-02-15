@@ -1400,14 +1400,24 @@ namespace DH.Helpdesk.Web.Controllers
                 PlanDateJS = _case.PlanDate.HasValue ? _case.PlanDate.Value.ToShortDateString() : "",
                 WatchDateJS = _case.WatchDate.HasValue ? _case.WatchDate.Value.ToShortDateString() : "",
                 Region_Id = _case.Region_Id,
+                RegionCaption = _case.Region?.Name,
                 Department_Id = _case.Department_Id,
+                DepartmentCaption = _case.Department?.DepartmentName,
                 OU_Id = _case.OU_Id,
+                OUCaption = _case.Ou != null? _case.Ou.Parent != null? 
+                                string.Format("{0} - {1}", _case.Ou.Parent.Name, _case.Ou.Name): _case.Ou.Name : string.Empty,
                 CaseType_Id = _case.CaseType_Id,
+                CaseTypeCaption = _case.CaseType?.Name,
                 Priority_Id = _case.Priority_Id,
+                PriorityCaption = _case.Priority?.Name,
                 ProductArea_Id = _case.ProductArea_Id,
+                ProductAreaCaption = _case.ProductArea?.ResolveFullName(),
                 StateSecondary_Id = _case.StateSecondary_Id,
+                SubStateCaption = _case.StateSecondary?.Name,
                 Status_Id = _case.Status_Id,
-                WorkingGroup_Id = _case.WorkingGroup_Id
+                StatusCaption = _case.Status?.Name,
+                WorkingGroup_Id = _case.WorkingGroup_Id,
+                WorkingGroupCaption = _case.Workinggroup?.WorkingGroupName
             };
             
             SessionFacade.IsCaseDataChanged = false;
@@ -1814,7 +1824,7 @@ namespace DH.Helpdesk.Web.Controllers
 
 
         [HttpGet]
-        public ActionResult GetCaseInputModel(int caseId)
+        public ActionResult GetCaseInputModelForLog(int caseId)
         {
             var customerId = SessionFacade.CurrentCustomer.Id;
             var userId = SessionFacade.CurrentUser.Id;
@@ -1822,6 +1832,17 @@ namespace DH.Helpdesk.Web.Controllers
 
             var model = this.GetCaseInputViewModel(userId, customerId, caseId, caseLockModel);
             return PartialView("_CaseLog", model);
+        }
+
+        [HttpGet]
+        public ActionResult GetCaseInputModelForHistory(int caseId)
+        {
+            var customerId = SessionFacade.CurrentCustomer.Id;
+            var userId = SessionFacade.CurrentUser.Id;
+            var caseLockModel = new CaseLockModel();
+
+            var model = this.GetCaseInputViewModel(userId, customerId, caseId, caseLockModel);
+            return PartialView("_CaseHistory", model);
         }
 
         [HttpGet]

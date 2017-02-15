@@ -1749,7 +1749,7 @@
                                                         }
                                                         else
                                                         {
-                                                    @Html.TextBoxFor(m => m.statuses.SingleOrDefault(x => x.Id == Model.case_.Status_Id).Name, new { @readonly = true })
+                                                    @Html.TextBoxFor(m => m.statuses.SingleOrDefault(x => x.Id == Model.case_.Status_Id).Name, new { @readonly = true, id = "statusCaption" })
                                                     @Html.HiddenFor(x => x.case_.Status_Id)
                                                         }
                                                     }
@@ -1785,7 +1785,7 @@
                                                         }
                                                         else
                                                         {
-                                                    @Html.TextBoxFor(m => m.stateSecondaries.SingleOrDefault(x => x.Id == Model.case_.StateSecondary_Id).Name, new { @readonly = true })
+                                                    @Html.TextBoxFor(m => m.stateSecondaries.SingleOrDefault(x => x.Id == Model.case_.StateSecondary_Id).Name, new { @readonly = true, id="subStateCaption" })
                                                     @Html.HiddenFor(x => x.case_.StateSecondary_Id)
                                                         }
                                                     }

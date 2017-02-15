@@ -863,13 +863,12 @@ $(function () {
         $('#case__PersonsName').val(updatedInfo.PersonsName);
         $('#case__PersonsPhone').val(updatedInfo.PersonsPhone);
         
-        $('#case__CaseType_Id').val(updatedInfo.CaseType_Id).change();
+        $('#case__CaseType_Id').val(updatedInfo.CaseType_Id).change();        
         
         $('#case__ProductArea_Id').val(updatedInfo.ProductArea_Id).change();
         $('#case__WorkingGroup_Id').val(updatedInfo.WorkingGroup_Id).change();
-        $('#case__Priority_Id').val(updatedInfo.Priority_Id).change();
-        $('#case__Status_Id').val(updatedInfo.Status_Id).change();
-        $('#case__StateSecondary_Id').val(updatedInfo.StateSecondary_Id).change();
+        $('#workingGroup_Name').val(updatedInfo.WorkingGroupCaption);        
+        $('#case__Priority_Id').val(updatedInfo.Priority_Id).change();        
 
         $("#case__PlanDate").datepicker({
             format: updatedInfo.DateFormat.toLowerCase(),
@@ -893,19 +892,33 @@ $(function () {
         }
 
         $('#case__Region_Id').val(updatedInfo.Region_Id).change();
-
+        $('#RegionName').val(updatedInfo.RegionCaption);
+        $('#DepartmentName').val(updatedInfo.DepartmentCaption);
+        $('#OuName').val(updatedInfo.OUCaption);
+                
         $.get('/Cases/GetCaseFilesJS', { caseId: updatedInfo.Id, now: Date.now() }, function (data) {
             $('#divCaseFiles').html(data);            
             $(document).trigger("OnUploadedCaseFileRendered", []);
             bindDeleteCaseFileBehaviorToDeleteButtons();
         });
 
-        $.get('/Cases/GetCaseInputModel', { caseId: updatedInfo.Id, now: Date.now() }, function (data) {            
-            $('#logtab').html(data);
+        $.get('/Cases/GetCaseInputModelForLog', { caseId: updatedInfo.Id, now: Date.now() }, function (data) {
+            $('#logtab').html(data);            
+        }).done(function () {
+            
+        });
+        
+        $.get('/Cases/GetCaseInputModelForHistory', { caseId: updatedInfo.Id, now: Date.now() }, function (data) {
+            $('#case__Status_Id').val(updatedInfo.Status_Id).change();
+            $('#statusCaption').val(updatedInfo.StatusCaption).change();
+            $('#case__StateSecondary_Id').val(updatedInfo.StateSecondary_Id).change();
+            $(".readonlySubstate").val(updatedInfo.StateSecondary_Id);
+            $("#subStateCaption").val(updatedInfo.SubStateCaption);
+            $('#historytab').html(data);
         }).done(function () {
             changeCaseButtonsState(true);
         });
-        
+
     }
 
   
