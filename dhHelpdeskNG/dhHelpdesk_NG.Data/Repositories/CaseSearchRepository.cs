@@ -1457,11 +1457,13 @@ namespace DH.Helpdesk.Dal.Repositories
 			if (!string.IsNullOrWhiteSpace(f.Department))
 			{
 				// organizationUnit
-				if (!string.IsNullOrWhiteSpace(f.OrganizationUnit))
-					sb.Append(" and (tblCase.Department_Id in (" + f.Department.SafeForSqlInject() + ") or " +
-									"tblCase.OU_Id in (" + f.OrganizationUnit.SafeForSqlInject() + "))");
-				else
-					sb.Append(" and (tblCase.Department_Id in (" + f.Department.SafeForSqlInject() + "))");
+			    if (!string.IsNullOrWhiteSpace(f.OrganizationUnit))
+			        sb.Append(" and (tblCase.Department_Id in (" + f.Department.SafeForSqlInject() + ") or " +
+                              "tblCaseIsAbout.Department_Id in (" + f.Department.SafeForSqlInject() + ") or " +
+			                  "tblCase.OU_Id in (" + f.OrganizationUnit.SafeForSqlInject() + "))");
+			    else
+			        sb.Append(" and (tblCase.Department_Id in (" + f.Department.SafeForSqlInject() + ")" +
+			                  " or tblCaseIsAbout.Department_Id in (" + f.Department.SafeForSqlInject() + "))");
 			}
 			else
 			{
@@ -1478,7 +1480,8 @@ namespace DH.Helpdesk.Dal.Repositories
 
 			// region
 			if (!string.IsNullOrWhiteSpace(f.Region))
-				sb.Append(" and (tblDepartment.Region_Id in (" + f.Region.SafeForSqlInject() + "))");
+				sb.Append(" and (tblDepartment.Region_Id in (" + f.Region.SafeForSqlInject() + ")" +
+                          " or tblCaseIsAbout.Region_Id in (" + f.Region.SafeForSqlInject() + "))");
 			// prio
 			if (!string.IsNullOrWhiteSpace(f.Priority))
 				sb.Append(" and (tblcase.Priority_Id in (" + f.Priority.SafeForSqlInject() + "))");
