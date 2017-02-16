@@ -361,17 +361,28 @@ $(function () {
             globalClipboard.init.call(globalClipboard, $(e.target).attr('data-src'));
         });
         
-        selfService.caseLog.saveLogMessage = function() {            
+        selfService.caseLog.saveLogMessage = function(isPopup, mandatoryMessage) {            
             var note = $('#logNote').val();
+            $("#popupError").css("display", "none");            
             if (note == "") {
-                ShowToastMessage('Comment text is empty!', "warning", false);
+                if (isPopup) {
+                    $("#popupError").text(mandatoryMessage);
+                    $("#popupError").css("display", "block");
+                }
+                else
+                    ShowToastMessage(mandatoryMessage, "warning", false);
             } else {
                 this.changeState(true);
                 $.get(saveLogMessageUrl, { caseId: casePreviewId, note: note, logFileGuid: logFileKey }, function (_CaseLogNoteMarkup) {
-                    $('#Receipt_CaseLogPartial').html(_CaseLogNoteMarkup);
-                    $('#logNote').val('');
-                    selfService.caseLog.reloadLogFiles();
-                    selfService.caseLog.changeState(false);
+                    if (isPopup) {
+                        selfService.caseLog.changeState(false);
+                        window.location.href = "/case/Index/"+ casePreviewId;
+                    } else {
+                        $('#Receipt_CaseLogPartial').html(_CaseLogNoteMarkup);
+                        $('#logNote').val('');
+                        selfService.caseLog.reloadLogFiles();
+                        selfService.caseLog.changeState(false);
+                    }
                 });
             }
         }
@@ -400,6 +411,22 @@ $(function () {
         }
         return s4() + '-' + s4() + '-' + s4();
     }
+
+    $("a[href='#upload_clipboard_file_popup_2']").on('click', function (e) {
+        e.preventDefault();
+        var $target = $('#upload_clipboard_file_popup_2');
+        $target.modal('show');
+    });
+
+
+    $('#btnReOpen').click(function (e) {
+        e.preventDefault();
+        var $target = $('#logNotePopup');
+        $("#logNote").val("");
+        $("#popupError").css("display", "none");
+        $target.modal('show');
+
+    });
 
     selfService.caseLog.init();
 });

@@ -1,7 +1,24 @@
 ﻿-- update DB from 5.3.30 to 5.3.31 version
 
+if not exists (SELECT name FROM sysindexes WHERE name = 'IX_tblUsers_UserId_Status')
+	CREATE INDEX IX_tblUsers_UserId_Status ON tblUsers (UserId, Status)
+GO
 
+if not exists (SELECT name FROM sysindexes WHERE name = 'IX_tblCase_Customer_Id_User_Id')
+	CREATE INDEX IX_tblCase_Customer_Id_User_Id ON tblCase (Customer_Id, User_Id)
+GO
 
+if not exists (SELECT name FROM sysindexes WHERE name = 'IX_tblUsers_UserId_Password_Status')
+	CREATE INDEX IX_tblUsers_UserId_Password_Status ON tblUsers (UserId, Password, Status)
+GO
+
+if not exists (SELECT name FROM sysindexes WHERE name = 'IX_tblProductArea_Customer_Id_Parent_ProductArea_Id')
+	CREATE INDEX IX_tblProductArea_Customer_Id_Parent_ProductArea_Id ON tblProductArea (Customer_Id, Parent_ProductArea_Id)
+GO
+
+if not exists (SELECT name FROM sysindexes WHERE name = 'IX_tblCustomerUser_UserId')
+	CREATE INDEX IX_tblCustomerUser_UserId ON tblCustomerUser (User_Id)
+GO
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.31'

@@ -69,6 +69,8 @@ using System;
         public FilesModel LogFilesModel { get; set; }
 
         public string LogFileGuid { get; set; }  
+
+        public Setting CustomerSettings { get; set; }
                 
     }
   

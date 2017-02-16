@@ -719,6 +719,13 @@
             if (!currentCase.FinishingDate.HasValue)
                 currentCase.Unread = 1;
 
+            if (currentCase.FinishingDate.HasValue)
+            {
+                string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+                this._caseService.Activate(currentCase.Id, 0, adUser, CreatedByApplications.SelfService5, out errors);
+            }
+                
+
             // if statesecondary has ResetOnExternalUpdate
             if (currentCase.StateSecondary_Id.HasValue)
             {
@@ -745,7 +752,7 @@
                                   Charge = false,
                                   RegUser = SessionFacade.CurrentSystemUser,
                                   SendMailAboutCaseToNotifier = true,
-                                  SendMailAboutLog = true
+                                  SendMailAboutLog = true                                 
                               };
             
             if(currentCase.WorkingGroup_Id != null)
@@ -1016,6 +1023,9 @@
             var caseFieldGroups = GetVisibleFieldGroups(caseFieldSetting);            
             var infoText = _infoService.GetInfoText((int) InfoTextType.SelfServiceInformation, currentCase.Customer_Id, languageId);
 
+            // get customersettings
+            var customersettings = _settingService.GetCustomerSetting(currentCase.Customer_Id);
+
             var regions = _regionService.GetRegions(currentCase.Customer_Id);
             var suppliers = _supplierService.GetSuppliers(currentCase.Customer_Id);
             var systems = _systemService.GetSystems(currentCase.Customer_Id);
@@ -1061,7 +1071,8 @@
                     Regions = regions,
                     Suppliers = suppliers,
                     Systems = systems,
-                    LogFileGuid = Guid.NewGuid().ToString()
+                    LogFileGuid = Guid.NewGuid().ToString(),
+                    CustomerSettings = customersettings
                 };
             }
             return model;
@@ -1465,5 +1476,10 @@
             return ret;
         }
 
+        public ViewResult AddCommentPopup(int casePreviewId)
+        {
+        
+             return this.View("_AddCommentPopup");
+        }
     }
 }

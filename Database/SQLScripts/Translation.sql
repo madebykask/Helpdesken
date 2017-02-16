@@ -5596,15 +5596,15 @@ If not exists (select * from tblTextTranslation where text_id = 1778 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1778, 2, 'No files selectable for attaching to order.')
 GO
 
-If not exists (select * from tbltext where id = 1779)
-	insert into tbltext (id, TextString) VALUES (1779, 'Möjligt att aktivera ärende inom')
+/* Id 1779 - 1780 SelfService */
+
+If not exists (select * from tbltext where id = 1781)
+	insert into tbltext (id, TextString) VALUES (1781, 'Möjligt att aktivera ärende inom')
 GO
 
-If not exists (select * from tblTextTranslation where text_id = 1779 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1779, 2, 'Possible to re-open case within')
+If not exists (select * from tblTextTranslation where text_id = 1781 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1781, 2, 'Possible to re-open case within')
 GO
-
-
 
 
 -- *** Run this last when put translation script above this line **--

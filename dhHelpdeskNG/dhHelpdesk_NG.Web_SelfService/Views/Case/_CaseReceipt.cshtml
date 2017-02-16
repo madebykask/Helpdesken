@@ -19,6 +19,7 @@
         pCaseLogs = helper.GetCaseLogs(currentCaseId);
     }
     var appType = ConfigurationManager.AppSettings[AppSettingsKey.CurrentApplicationType].ToString().ToLower();
+    var logMandatoryText = Translation.Get("Comment is required!");
 }
 
 <script type="text/javascript">
@@ -527,8 +528,7 @@
                             </label>
                             <div>
                                 <textarea id="logNote" class="col-md-12" style="height: 100px; margin-bottom: 10px;"></textarea>
-                            </div>
-
+                            </div>                            
                             <span>
                                 @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString().Replace('_', '.')))
                                 {
@@ -594,8 +594,8 @@
                                         </div>
                                     </div>
                                 }
-                                <button id="btnSendLog" class="btn btn-success" onclick=" selfService.caseLog.saveLogMessage() ">@Translation.Get("Send", Enums.TranslationSource.TextTranslation)</button>
-                                <i id="sendLogIndicator" class="gif-loader" >&nbsp;</i>                                
+                                <button id="btnSendLog" class="btn btn-success" onclick=" selfService.caseLog.saveLogMessage(false, '@logMandatoryText') ">@Translation.Get("Send", Enums.TranslationSource.TextTranslation)</button>
+                                <i id="sendLogIndicator" class="gif-loader" >&nbsp;</i>
                             </span>
                             <hr />
                         </div>
@@ -609,6 +609,34 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div id="logNotePopup" role="dialog" class="modal fade" aria-labelledby="myModalLabelCase_1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body" style="max-height: 600px; text-align:left;">
+                    <form onsubmit="return false;">
+                        <div class="form-group">
+                            <label>
+                                @Translation.Get("Add comment", Enums.TranslationSource.TextTranslation)
+                            </label><br />
+                            <div>
+                                <textarea id="logNote" class="col-md-12" style="height: 100px; margin-bottom: 10px;"></textarea>
+                            </div>                            
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <i id="sendLogIndicator" class="gif-loader">&nbsp;</i>
+                    <label id="popupError" class="error pull-left" style="display:none">  </label>
+                    <button id="btnSendLog" class="btn btn-success" onclick=" selfService.caseLog.saveLogMessage(true, '@logMandatoryText') ">@Translation.Get("Send", Enums.TranslationSource.TextTranslation)</button>                    
+                    <button type="button" id="btnCancel" class="btn btn-cancel btn-default" data-dismiss="modal">@Translation.Get("Cancel", Enums.TranslationSource.TextTranslation)</button>
+                    
                 </div>
             </div>
         </div>
