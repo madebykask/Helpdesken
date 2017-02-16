@@ -32,7 +32,8 @@
         downloadLogFileUrl: '@Url.Action("DownloadLogFile")',
         downloadLogFileParamUrl: '@(!string.IsNullOrEmpty(Model.LogFileGuid) ? "id=" + Model.LogFileGuid + "&" : string.Empty)',
         saveLogMessageUrl: '@Url.Content("~/Case/_CaseLogNote")',
-        casePreviewId: '@Model.CasePreview.Id'
+        casePreviewId: '@Model.CasePreview.Id',
+        caseDetailsUrl: '@Url.Content("~/Case/Index")'
     };
 </script>
 

@@ -14,6 +14,7 @@ $(function () {
         var downloadLogFileParamUrl = window.appParameters.downloadLogFileParamUrl;        
         var saveLogMessageUrl = window.appParameters.saveLogMessageUrl; 
         var casePreviewId = window.appParameters.casePreviewId;       
+        var caseDetailsUrl = window.appParameters.caseDetailsUrl;
 
         var alreadyExistFileIds = [];
 
@@ -376,7 +377,7 @@ $(function () {
                 $.get(saveLogMessageUrl, { caseId: casePreviewId, note: note, logFileGuid: logFileKey }, function (_CaseLogNoteMarkup) {
                     if (isPopup) {
                         selfService.caseLog.changeState(false);
-                        window.location.href = "/case/Index/"+ casePreviewId;
+                        window.location.href = caseDetailsUrl + "/" + casePreviewId;
                     } else {
                         $('#Receipt_CaseLogPartial').html(_CaseLogNoteMarkup);
                         $('#logNote').val('');
