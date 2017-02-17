@@ -1,0 +1,53 @@
+﻿@using System.Web.Optimization
+@using DH.Helpdesk.BusinessData.Enums.Orders
+@using DH.Helpdesk.SelfService
+@using DH.Helpdesk.SelfService.Infrastructure.Extensions.HtmlHelperExtensions
+@model DH.Helpdesk.SelfService.Models.Orders.OrderEdit.FullOrderEditModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="jumbotron greybar">
+    <div class="container-fluid">
+        @RenderSection("Actions", false)
+    </div>
+</div>
+<div class="container-fluid dh-container order-edit">
+       @RenderSection("Content")
+</div>
+@section Scripts {
+    @Scripts.Render(BundleConfig.ScriptNames.EditOrder)
+
+    <script type="text/javascript">
+        $(function() {
+
+            var pageObject = new EditOrder(
+            {
+                isOrdererUnitVisible: @((Model.UserInfo.Unit.Show && Model.UserInfo.Units != null).ToJavaScriptBool()),
+                isUserDepartmentVisible: @((Model.UserInfo.DepartmentId1.Show).ToJavaScriptBool()),
+                @if (Model.UserInfo.Units != null && Model.UserInfo.Unit.Show)
+                    {
+                        @Html.Raw(string.Format("units: {0},", Html.SerializeObjectToJson(Model.UserInfo.Units.Items)))
+                    }
+                @if (Model.Statuses != null)
+                {
+                    @Html.Raw(string.Format("statuses: {0},", Html.SerializeObjectToJson(Model.Statuses)))
+                }
+                searchDepartmentsByRegionIdUrl: "@Url.Action("SearchDepartmentsByRegionId", "Orders")",
+                id: '@Model.Id',
+                deleteOrderUrl: '@Url.Action("Delete")',
+                uploadFileUrl: '@Url.Action("UploadFile")',
+                deleteFileUrl: '@Url.Action("DeleteFile")',
+                deleteLogUrl: '@Url.Action("DeleteLog")',
+                logSubtopic: '@Subtopic.Log',
+                fileNameSubtopic: '@Subtopic.FileName',
+                noMoreFilesText: '@Translation.GetForJS("Inga fler filer tillåts")',
+                searchUserUrl: "@Url.Action("SearchUser", "Case")"
+            });
+            pageObject.init();
+        });
+    </script>
+
+    @RenderSection("Scripts", false)
+}

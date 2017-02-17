@@ -24,7 +24,9 @@
 
         public static IQueryable<Order> GetByTypes(this IQueryable<Order> query, int[] orderTypeIds)
         {
-            if (orderTypeIds == null || !orderTypeIds.Any())
+            //orderTypeIds == null - no filtering
+            //!orderTypeIds.Any() - filter
+            if (orderTypeIds == null)
             {
                 return query;
             }
@@ -72,6 +74,18 @@
             }
 
             query = query.Where(o => o.OrderState_Id.HasValue && statusIds.Contains(o.OrderState_Id.Value));
+
+            return query;
+        }
+
+        public static IQueryable<Order> GetByUser(this IQueryable<Order> query, int? userId)
+        {
+            if (!userId.HasValue)
+            {
+                return query;
+            }
+
+            query = query.Where(o => o.CreatedByUser_Id == userId);
 
             return query;
         }
@@ -204,7 +218,8 @@
                         int[] statusIds,
                         string text,
                         SortField sort,
-                        int selectCount)
+                        int selectCount,
+                        int? createdBy)
         {
             query = query
                 .GetByCustomer(customerId)
@@ -212,7 +227,8 @@
                 .GetByAdministrators(administratorIds)
                 .GetByPeriod(startDate, endDate)
                 .GetByStatuses(statusIds)
-                .GetByText(text);
+                .GetByText(text)
+                .GetByUser(createdBy);
             //.Sort(sort);
 
             if (selectCount > 0)
@@ -233,7 +249,8 @@
                         int[] statusIds,
                         string text,
                         SortField sort,
-                        int selectCount)
+                        int selectCount,
+                        int? createdBy)
         {
             query = query
                         .GetByCustomer(customerId)
@@ -241,7 +258,8 @@
                         .GetByAdministrators(administratorIds)
                         .GetByPeriod(startDate, endDate)
                         .GetByStatuses(statusIds)
-                        .GetByText(text);
+                        .GetByText(text)
+                        .GetByUser(createdBy);
             //.Sort(sort);
 
             if (selectCount > 0)
@@ -256,6 +274,14 @@
         {
             query = query.GetByCustomer(customerId)
                     .Where(t => t.IsActive == 1 && t.Parent_OrderType_Id == null);
+
+            return query;
+        }
+
+        public static IQueryable<OrderType> GetByUsers(this IQueryable<OrderType> query, int userId)
+        {
+            query = query
+                .Where(t => t.Users.Any(u => u.Id == userId) && t.IsActive == 1 && t.Parent_OrderType_Id == null);
 
             return query;
         }

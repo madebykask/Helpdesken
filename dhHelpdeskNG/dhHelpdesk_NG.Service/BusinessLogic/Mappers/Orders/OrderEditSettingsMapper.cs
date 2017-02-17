@@ -11,12 +11,12 @@
 
     public static class OrderEditSettingsMapper
     {
-        public static FullOrderEditSettings MapToFullOrderEditSettings(this IQueryable<OrderFieldSettings> query, OrderType orderType)
+        public static FullOrderEditSettings MapToFullOrderEditSettings(this IQueryable<OrderFieldSettings> query, OrderType orderType, bool useExtenal)
         {
             var entities = query.Select(f => new OrdersEditSettingsMapData
                                                  {
                                                      OrderField = f.OrderField,
-                                                     Show = f.Show,
+                                                     Show = useExtenal ? f.ShowExternal : f.Show,
                                                      Label = f.Label,
                                                      Required = f.Required,
                                                      EmailIdentifier = f.EMailIdentifier,

@@ -62,7 +62,6 @@
         private readonly IStateSecondaryService _stateSecondaryService;
         private readonly ICaseSolutionService _caseSolutionService;
         private readonly ICaseSolutionSettingService _caseSolutionSettingService;
-        private readonly IWorkContext workContext;
         private readonly IEmailService _emailService;        
         private readonly IMasterDataService _masterDataService;
         private readonly ICaseExtraFollowersService _caseExtraFollowersService;
@@ -97,7 +96,6 @@
             ICustomerUserService customerUserService,
             ICaseSettingsService caseSettingService,
             ICaseSearchService caseSearchService,
-            IWorkContext workContext, 
             IUserService userService,
             IWorkingGroupService workingGroupService,
             IStateSecondaryService stateSecondaryService,
@@ -136,7 +134,6 @@
             _userService = userService;
             _stateSecondaryService = stateSecondaryService;
             _caseSolutionService = caseSolutionService;
-            this.workContext = workContext;
             _orgService = orgService;
             _orgJsonService = orgJsonService;
             _emailService = emailService;
@@ -850,7 +847,7 @@
                 var maxRecords = frm.ReturnFormValue("maxRecords").convertStringToInt();
                 var progressId = frm.ReturnFormValue("progressId");
                 var sortBy = frm.ReturnFormValue("hidSortBy");
-                var ascending = frm.ReturnFormValue("hidSortByAsc").convertStringToBool();
+                var ascending = frm.ReturnFormValue("hidSortByAsc").ConvertStringToBool();
                 var id = frm.ReturnFormValue("MailGuid");
 
                 if (progressId != CaseProgressFilter.ClosedCases && progressId != CaseProgressFilter.CasesInProgress)
@@ -1386,8 +1383,8 @@
             var ret = new List<FieldSettingJSModel>();
             foreach (var field in customerFieldSettings)
             {
-                var isVisible = field.ShowExternal.convertIntToBool();
-                var isRequired = field.Required.convertIntToBool();
+                var isVisible = field.ShowExternal.ConvertIntToBool();
+                var isRequired = field.Required.ConvertIntToBool();
                 var isReadonly = false;                
                 
                 if (templateSettings != null && templateSettings.Any())

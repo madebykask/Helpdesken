@@ -140,7 +140,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
         }
 
         [CreateMissingOrderFieldSettings("customerId", "orderTypeId")]
-        public FullOrderEditSettings GetOrderEditSettings(int customerId, int? orderTypeId, IUnitOfWork uow)
+        public FullOrderEditSettings GetOrderEditSettings(int customerId, int? orderTypeId, IUnitOfWork uow, bool useExtenal)
         {
             var fieldSettingsRep = uow.GetRepository<OrderFieldSettings>();
             var orderTypeRep = uow.GetRepository<OrderType>();
@@ -150,7 +150,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
 
             return fieldSettingsRep.GetAll()
                         .GetByType(customerId, orderTypeId)
-                        .MapToFullOrderEditSettings(orderTypeSettings);
+                        .MapToFullOrderEditSettings(orderTypeSettings, useExtenal);
         }
     }
 }

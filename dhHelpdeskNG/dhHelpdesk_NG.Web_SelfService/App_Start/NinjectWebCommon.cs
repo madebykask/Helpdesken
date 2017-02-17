@@ -88,7 +88,9 @@ namespace DH.Helpdesk.SelfService
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
-            var kernel = new StandardKernel(new WorkContextModule(),  new UserModule() , new ProblemModule() , new CommonModule(), new EmailModule() , new NotifiersModule() , new ToolsModule());
+            var kernel = new StandardKernel(new WorkContextModule(),  new UserModule() , new ProblemModule() ,
+                new CommonModule(), new EmailModule() , new NotifiersModule() , new ToolsModule(),
+                new OrdersModule());
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
             
@@ -219,6 +221,11 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IUrgencyRepository>().To<UrgencyRepository>();
             kernel.Bind<ICaseExtraFollowersRepository>().To<CaseExtraFollowersRepository>();
             kernel.Bind<IUserEmailRepository>().To<UserEmailRepository>();
+            kernel.Bind<IOrderEMailLogRepository>().To<OrderEMailLogRepository>();
+            kernel.Bind<IOrderFieldSettingsRepository>().To<OrderFieldSettingsRepository>();
+            kernel.Bind<IOrderLogRepository>().To<OrderLogRepository>();
+            kernel.Bind<IOrderRepository>().To<OrderRepository>();
+            kernel.Bind<IOrderStateRepository>().To<OrderStateRepository>();
 
             // Service             
             kernel.Bind<IMasterDataService>().To<MasterDataService>();            

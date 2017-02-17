@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using DH.Helpdesk.Dal.Repositories;
+
 namespace DH.Helpdesk.SelfService.NinjectModules.Modules
 {
     using DH.Helpdesk.BusinessData.Models.Case;

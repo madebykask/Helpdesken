@@ -1,0 +1,61 @@
+﻿@model DH.Helpdesk.SelfService.Models.Orders.OrderEdit.OtherEditModel
+
+<h4>@Model.Header</h4>
+<div class="container">
+    <div class="row form-horizontal">
+        <div class="col-md-12 dh-col ">
+            @if (Model.FileName.Show)
+            {
+                <div class="row form-group">
+                    <div class="col-md-3">
+                        @Html.FieldCaption(Model.FileName)
+                    </div>
+                    <div class="col-md-6">
+                        <a href="#fileName_files_uploader_popup" role="button" class="btn btn-default" data-toggle="modal">@Translation.Get("Upload")</a>
+                        <div id="fileName_files_uploader_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                        <h3>&nbsp;</h3>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div id="fileName_files_uploader"></div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Close")</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+                        <div class="col-md-3">
+                            @Model.FileName.Help
+                        </div>
+                    </div>
+                <div class="row form-group">
+                    <div class="col-md-4 col-md-offset-3" id="file_container">
+                        @Html.Partial("AttachedFiles", Model.FileName.Value)
+                    </div>
+                </div>
+            }
+            @Html.DisplayFor(m => m.CaseNumber, "Fields/DecimalLabel")
+            @*@if (Model.CaseNumber.Show)
+                    {
+                        <tr>
+                            <td>
+                                @Html.FieldCaption(Model.CaseNumber)
+                            </td>
+                            <td class="span6">
+                                @Html.HiddenFor(m => m.CaseNumber.Value)
+                                @Model.CaseNumber.Value
+                            </td>
+                            <td class="span3">
+                                @Model.CaseNumber.Help
+                            </td>
+                        </tr>
+                    }*@
+            @Html.EditorFor(m => m.Info, "Fields/WideText")
+        </div>
+    </div>
+</div>

@@ -1,0 +1,39 @@
+﻿@model DH.Helpdesk.SelfService.Models.Orders.FieldModels.ConfigurableFieldModel<int?>
+
+
+@if (!Model.Show)
+{
+    return;
+}
+
+@{
+    if (!ViewData.ContainsKey("Source"))
+    {
+        throw new ArgumentNullException("Source", "\"ComputerId\" ViewData parameter must be specified.");
+    }
+
+    var source = (SelectList)ViewData["Source"];
+
+    var attributes = new Dictionary<string, object>(1);
+
+    if (ViewData.ContainsKey("Id"))
+    {
+        attributes.Add("Id", ViewData["Id"]);
+    }
+
+    attributes.Add("data-dh-is-required", Model.IsRequired);
+}
+
+<div class="row form-group">
+    <div class="col-md-3">
+        @Html.FieldCaption(Model)
+    </div>
+    <div class="col-md-6">
+        @Html.DropDownListFor(m => m.Value, source, string.Empty, attributes)
+        @Html.HiddenFor(m => m.IsRequired)
+        @Html.ValidationMessageFor(m => m.Value)
+    </div>
+    <div class="col-md-3">
+        @Model.Help
+    </div>
+</div>

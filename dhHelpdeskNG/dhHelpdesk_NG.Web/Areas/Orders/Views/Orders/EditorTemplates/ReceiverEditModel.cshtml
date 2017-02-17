@@ -16,7 +16,7 @@
                     @Html.FieldCaption(Model.ReceiverId)
                 </td>
                 <td class="span6">
-                    @Html.TextBoxFor(model => model.ReceiverId.Value, new {maxlength = "40", autocomplete = "Off", data_field = "userId"})
+                    @Html.TextBoxFor(model => model.ReceiverId.Value, new {maxlength = "40", autocomplete = "Off", data_field = "userId", @id= "order_ReceiverId" })
                 </td>
                 <td class="span3">
                     @Model.ReceiverId.Help

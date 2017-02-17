@@ -1,0 +1,21 @@
+﻿@model DH.Helpdesk.SelfService.Models.Orders.FieldModels.ConfigurableFieldModel<string>
+           
+@if (!Model.Show)
+{    
+    @Html.HiddenFor(m => m.Value, new { data_dh_is_required = false, @class = "inputw450 inputmh100" })
+    return;
+}
+
+<div class="row form-group">
+    <div class="col-md-3">
+        @Html.FieldCaption(Model)
+    </div>
+    <div class="col-md-6">
+        @Html.TextAreaFor(m => m.Value, new {data_dh_is_required = Model.IsRequired, @class = "inputw450 inputmh100" })
+        @Html.HiddenFor(m => m.IsRequired)
+        @Html.ValidationMessageFor(m => m.Value)
+    </div>
+    <div class="col-md-3">
+        @Model.Help
+    </div>
+</div>

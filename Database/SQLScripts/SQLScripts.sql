@@ -20,5 +20,10 @@ if not exists (SELECT name FROM sysindexes WHERE name = 'IX_tblCustomerUser_User
 	CREATE INDEX IX_tblCustomerUser_UserId ON tblCustomerUser (User_Id)
 GO
 
+UPDATE [dbo].[tblOrderType] SET [CaptionUserInfo] = N'Användare' WHERE [CaptionUserInfo] is NULL
+UPDATE [dbo].[tblOrderType] SET [CaptionOrdererInfo] = N'Beställare' WHERE [CaptionOrdererInfo] is NULL
+UPDATE [dbo].[tblOrderType] SET [CaptionReceiverInfo] = N'Kontakt' WHERE [CaptionReceiverInfo] is NULL
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.31'

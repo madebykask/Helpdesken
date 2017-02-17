@@ -1,9 +1,9 @@
 ﻿
 namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
 {
-    public static class BooleanExtansions
+    public static class BooleanExtensions
     {
-        public static bool convertStringToBool(this string value)
+        public static bool ConvertStringToBool(this string value)
         {
             bool ret = false;
 
@@ -13,7 +13,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
             return ret;
         }
 
-        public static bool convertIntToBool(this int value)
+        public static bool ConvertIntToBool(this int value)
         {
             if (value == 1)
                 return true;
@@ -24,6 +24,11 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
         public static bool IntHasValue(this int? value)
         {
             return value != null && value != 0;
+        }
+
+        public static string ToJavaScriptBool(this bool value)
+        {
+            return value ? "true" : "false";
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.SelfService.Infrastructure
+﻿using DH.Helpdesk.SelfService.Infrastructure.Session;
+
+namespace DH.Helpdesk.SelfService.Infrastructure
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -18,6 +20,7 @@
     public static class SessionFacade
     {
         private const string _CURRENT_USER = "CURRENT_USER";
+        private const string _CURRENT_LOCAL_USER = "CURRENT_LOCAL_USER";
         private const string _CURRENT_CASE_SEARCH = "CURRENT_CASE_SEARCH";
         private const string _CASE_TRANSLATION = "CASE_TRANSLATION";
         private const string _COMPUTER_USER_SEARCH = "COMPUTER_USER_SEARCH";
@@ -405,8 +408,54 @@
                     HttpContext.Current.Session[_ACTIVE_TAB] = value;
             }
         }
-               
-       
+
+        public static UserOverview CurrentLocalUser
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_CURRENT_LOCAL_USER] == null)
+                    return null;
+                return (UserOverview)HttpContext.Current.Session[_CURRENT_LOCAL_USER];
+            }
+            set
+            {
+                if (HttpContext.Current.Session[_CURRENT_LOCAL_USER] == null)
+                    HttpContext.Current.Session.Add(_CURRENT_LOCAL_USER, value);
+                else
+                    HttpContext.Current.Session[_CURRENT_LOCAL_USER] = value;
+            }
+        }
+
+        public static TFilters FindPageFilters<TFilters>(string pageName) where TFilters : class
+        {
+            var pagesFilters = (List<PageFilters>)HttpContext.Current.Session[_PAGE_FILTERS];
+
+            var pageFilters = pagesFilters?.SingleOrDefault(f => f.PageName == pageName);
+
+            return (TFilters) pageFilters?.Filters;
+        }
+
+        public static void SavePageFilters<TFilters>(string pageName, TFilters filters) where TFilters : class
+        {
+            var pageFilters = new PageFilters(pageName, filters);
+
+            var pagesFilters = (List<PageFilters>)HttpContext.Current.Session[_PAGE_FILTERS];
+            if (pagesFilters == null)
+            {
+                HttpContext.Current.Session.Add(_PAGE_FILTERS, new List<PageFilters> { pageFilters });
+            }
+            else
+            {
+                var existingFilters = pagesFilters.SingleOrDefault(f => f.PageName == pageName);
+                if (existingFilters != null)
+                {
+                    pagesFilters.Remove(existingFilters);
+                }
+
+                pagesFilters.Add(pageFilters);
+            }
+        }
+
 
         public static bool ContainsCustomKey(string key)
         {

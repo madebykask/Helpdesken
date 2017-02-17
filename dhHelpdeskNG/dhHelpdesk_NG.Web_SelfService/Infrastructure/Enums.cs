@@ -37,6 +37,8 @@
             public static readonly string Projects = "Projects";
 
             public static readonly string Changes = "Changes";
+
+            public static readonly string Orders = "Orders";
         }
 
         public static class SubtopicName
@@ -68,6 +70,8 @@
             public static readonly string ClaimLastName = "ClaimLastName";
 
             public static readonly string ClaimEmail = "ClaimEmail";
+
+            public static readonly string ClaimPhone = "ClaimPhone";
         }
 
         public static class CaseFieldGroups
@@ -89,5 +93,13 @@
             UseExternalLogNote = 0,
             UseInternalLogNote = 1
         }
+
+        public static class MimeType
+        {
+            public static readonly string ExcelFile = "application/vnd.ms-excel";
+
+            public static readonly string BinaryFile = "application/octet-stream";
+        }
+
     }
 }

@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.SelfService
+﻿using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Common;
+using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Common.Concrete;
+
+namespace DH.Helpdesk.SelfService
 {
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Infrastructure.Concrete;
@@ -24,6 +27,10 @@
             this.Bind<ISessionFactory>().To<HelpdeskSessionFactory>().InRequestScope();
             this.Bind<IUnitOfWorkFactory>().To<UnitOfWorkFactory>().InRequestScope();
             this.Bind<IMailTemplateFormatterNew>().To<MailTemplateFormatterNew>().InRequestScope();
+            Bind<IElementaryRulesValidator>().To<ElementaryRulesValidator>().InSingletonScope();
+            Bind<IEditorStateCacheFactory>().To<EditorStateCacheFactory>().InSingletonScope();
+            Bind<ITemporaryFilesCacheFactory>().To<TemporaryFilesCacheFactory>().InSingletonScope();
+
         }
     }
 }

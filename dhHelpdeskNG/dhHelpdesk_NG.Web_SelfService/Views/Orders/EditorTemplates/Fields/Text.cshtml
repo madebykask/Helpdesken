@@ -1,0 +1,51 @@
+﻿@model DH.Helpdesk.SelfService.Models.Orders.FieldModels.ConfigurableFieldModel<string>
+           
+@if (!Model.Show)
+{
+    return;
+}
+
+@{
+    var inputAttributes = (Dictionary<string, object>)ViewData["inputAttributes"];
+    Dictionary<string, object> htmlAttributes;
+    var useRequiredAttribute = true;
+    if (inputAttributes != null)
+    {
+        htmlAttributes = new Dictionary<string, object>(inputAttributes.Count + 1);
+
+        foreach (var inputAttribute in inputAttributes)
+        {
+            if (inputAttribute.Key == "required")
+            {
+                useRequiredAttribute = (bool)inputAttribute.Value;
+                continue;
+            }
+            htmlAttributes.Add(inputAttribute.Key, inputAttribute.Value);
+        }
+    }
+    else
+    {
+        htmlAttributes = new Dictionary<string, object>(1);
+    }
+    if (useRequiredAttribute)
+    {
+        htmlAttributes.Add("data-dh-is-required", Model.IsRequired);
+    }
+}
+
+<div class="row form-group">
+    <div class="col-md-3">
+        @Html.FieldCaption(Model)
+    </div>
+    <div class="col-md-6">
+        @Html.TextBoxFor(m => m.Value, htmlAttributes)
+        @if (useRequiredAttribute)
+        {
+            @Html.HiddenFor(m => m.IsRequired)
+        }
+        @Html.ValidationMessageFor(m => m.Value)
+    </div>
+    <div class="col-md-3">
+        @Model.Help
+    </div>
+</div>

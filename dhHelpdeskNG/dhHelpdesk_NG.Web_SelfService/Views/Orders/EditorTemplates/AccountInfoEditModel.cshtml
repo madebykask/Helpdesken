@@ -1,0 +1,22 @@
+﻿
+@model DH.Helpdesk.SelfService.Models.Orders.OrderEdit.AccountInfoEditModel
+
+<h4>@Translation.Get("Kontoinformation")</h4>
+<div class="container">
+    <div class="row form-horizontal">
+        <div class="col-md-12 dh-col ">
+            @Html.EditorFor(m => m.StartedDate, "Fields/Date", new { Id = "accInfo_started_date" })
+            @Html.EditorFor(m => m.FinishDate, "Fields/Date", new { Id = "accInfo_finish_date" })
+            @Html.EditorFor(m => m.EMailTypeId, "Fields/List", new { Source = Model.EmailTypes })
+            @Html.EditorFor(m => m.HomeDirectory, "Fields/Flag")
+            @Html.EditorFor(m => m.Profile, "Fields/Flag")
+            @Html.EditorFor(m => m.InventoryNumber, "Fields/Text")
+            @Html.EditorFor(m => m.AccountTypeId, "Fields/List", new { Source = Model.AccountTypes })
+            @Html.EditorFor(m => m.AccountTypeId2, "Fields/FlagsList", new { Source = Model.AccountTypes2 })
+            @Html.EditorFor(m => m.AccountTypeId3, "Fields/List", new { Source = Model.AccountTypes3 })
+            @Html.EditorFor(m => m.AccountTypeId4, "Fields/List", new { Source = Model.AccountTypes4 })
+            @Html.EditorFor(m => m.AccountTypeId5, "Fields/List", new { Source = Model.AccountTypes5 })
+            @Html.EditorFor(m => m.Info, "Fields/WideText")
+        </div>
+    </div>
+</div>

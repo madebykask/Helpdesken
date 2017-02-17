@@ -1,0 +1,20 @@
+﻿@model DH.Helpdesk.SelfService.Models.Orders.FieldModels.ConfigurableFieldModel<DateTime?>
+           
+@if (!Model.Show)
+{
+    return;
+}           
+
+<div class="row form-group">
+    <div class="col-md-3">
+        @Html.FieldCaption(Model)
+    </div>
+    <div class="col-md-6">
+        @Html.EditorFor(m => m.Value, "DatePicker", new {id = ViewData["Id"], inputAttributes = new Dictionary<string, object> {{"data-dh-is-required", Model.IsRequired}}})
+        @Html.HiddenFor(m => m.IsRequired)
+        @Html.ValidationMessageFor(m => m.Value)
+    </div>
+    <div class="col-md-3">
+        @Model.Help
+    </div>
+</div>

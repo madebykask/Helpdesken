@@ -155,7 +155,7 @@
                 var item = JSON.parse(obj);
                 var orgQuery = this.query;
                 if (item.departmentname == null)
-                    item.departmentname = ""
+                    item.departmentname = "";
                 var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
                 var result = item.name + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email + ' - ' + item.departmentname + ' - ' + item.usercode;
                 var resultBy_NameFamily = item.name_family + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email + ' - ' + item.departmentname + ' - ' + item.usercode;
@@ -281,7 +281,7 @@
 
             updater: function (obj) {
                 var item = JSON.parse(obj);
-                $('#Receiver_ReceiverId_Value').val(item.num);
+                $('#order_ReceiverId').val(item.num);
                 $('#order_ReceiverName').val(item.name);
                 $('#order_ReceiverLocation').val(item.place);
                 $('#order_ReceiverEmail').val(item.email);
@@ -296,7 +296,7 @@
     }
 
     $('#orderer_OrdererId').typeahead(getOrderComputerUserSearchOptionsForOrderer());
-    $('#Receiver_ReceiverId_Value').typeahead(getOrderComputerUserSearchOptionsForReciever());
+    $('#order_ReceiverId').typeahead(getOrderComputerUserSearchOptionsForReciever());
     
     function generateRandomKey() {
         function s4() {

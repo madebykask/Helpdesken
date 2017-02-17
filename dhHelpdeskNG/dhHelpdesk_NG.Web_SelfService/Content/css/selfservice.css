@@ -931,4 +931,60 @@ a.error, input[type=¨button].error .btn
     width: 90%!important;
 }
 
+.order-date-search .input-group {
+    display: inline-table;
+}
 
+.order-date-search .date
+{
+	width: 140px;
+    margin-right: 10px;
+}
+
+table.table-orders th span.glyphicon {
+    float: right;
+}
+
+.order-edit .container {
+    margin-left: 0;
+}
+
+.table-orders tbody tr {
+    cursor: pointer
+}
+
+.order-edit .date {
+    width: 140px;
+}
+
+/**************************** Validation **************************************************/
+
+.field-validation-error
+{
+    color: #ff0000;
+}
+
+.field-validation-valid
+{
+    display: none;
+}
+
+.input-validation-error
+{
+    border: 1px solid #ff0000 !important;
+    background-color: #ffeeee !important;
+}
+
+.validation-summary-errors
+{
+    font-weight: bold;
+    color: #ff0000;
+    margin: 10px 10px;
+}
+
+.validation-summary-valid
+{
+    display: none;
+}
+
+/******************************************************************************/

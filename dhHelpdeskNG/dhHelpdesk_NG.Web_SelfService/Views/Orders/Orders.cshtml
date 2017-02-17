@@ -1,0 +1,86 @@
+﻿@using DH.Helpdesk.BusinessData.Enums.Orders.FieldNames
+@using DH.Helpdesk.Common.Enums
+@model DH.Helpdesk.SelfService.Models.Orders.OrdersGridModel
+
+
+@Translation.Get("Poster i sökresultat"):
+@Model.OrdersFound
+
+<table id="Orders_Table" class="table table-striped table-bordered table-hover table-orders">
+    <thead>
+        <tr>
+            @if (Model.ShowType)
+            {
+                <th>
+                    @Translation.Get("Beställningstyp")
+                </th>
+            }
+            @foreach (var header in Model.Headers)
+            {
+                <th onclick="sortGrid('@header.FieldName') " class="thpointer">
+                    @Translation.Get(header.Caption)
+                    @if (Model.SortField != null && header.FieldName == Model.SortField.Name)
+                    {
+                        switch (Model.SortField.SortBy)
+                        {
+                            case SortBy.Ascending:
+                                <span class="glyphicon glyphicon-sort-by-attributes"></span>
+                                break;
+                            case SortBy.Descending:
+                                <span class="glyphicon glyphicon-sort-by-attributes-alt"></span>
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+                    }
+                </th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model.Orders)
+        {
+            <tr onclick="window.location.href='@Url.Action("Edit", new RouteValueDictionary { { "id", order.Id }, {"customerId", SessionFacade.CurrentCustomerID } })' ">
+                @if (Model.ShowType)
+                {
+                    <td class="tdpointer">@(order.OrderType ?? "")</td>
+                }
+                @foreach (var value in order.FieldValues)
+                {
+                    if (value.FieldName == OtherFieldNames.CaseNumber)
+
+                    {
+                        if (value.Value.GetDisplayValue() != null)
+                        {
+                            var isFinished = order.FieldValues.Where(v => v.FieldName == OtherFieldNames.CaseIsFinished).SingleOrDefault();
+                            if (isFinished != null && isFinished.Value.GetDisplayValue() == bool.TrueString)
+                            {
+                                <td class="tdpointer"><img title="Ärende" alt="Ärende" src="/Content/icons/case_close.png">@value.Value.GetDisplayValue().ForHtmlView()</td>
+                            }
+                            else
+                            {
+                                <td class="tdpointer"><img title="Ärende" alt="Ärende" src="/Content/icons/case.png">@value.Value.GetDisplayValue().ForHtmlView()</td>
+                            }
+                        }
+                        else
+                        {
+                            <td class="tdpointer">@value.Value.GetDisplayValue().ForHtmlView()</td>
+                        }
+                    }
+                    else
+                    {
+                        <td class="tdpointer">@value.Value.GetDisplayValue().ForHtmlView()</td>
+                    }
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script type="text/javascript">
+    $(function () {
+        var perPageText = '@Translation.GetForJS("Antal per sida")';
+        var perShowingText = '@Translation.GetForJS("Visar sida")';
+        InitDataTable("Orders_Table", perPageText, perShowingText, { "ordering": false });
+    });
+</script>

@@ -7,25 +7,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@Scripts.Render("~/bundles/orders/order")
-
-<script type="text/javascript">
-    $(function () {
-        var parameters = {
-            id: '@Model.Id',
-            deleteOrderUrl: '@Url.Action("Delete")',
-            uploadFileUrl: '@Url.Action("UploadFile")',
-            deleteFileUrl: '@Url.Action("DeleteFile")',
-            deleteLogUrl: '@Url.Action("DeleteLog")',
-            logSubtopic: '@Subtopic.Log',
-            fileNameSubtopic: '@Subtopic.FileName',
-            noMoreFilesText: '@Translation.GetForJS("Inga fler filer tillåts")'
-        };
-
-        applyOrderBehavior(parameters);
-    });
-</script>
-
 <div class="secnavs fixed">
     <div class="pull-left">
         @RenderSection("Actions", false)
@@ -37,5 +18,24 @@
     </div>
 </div>
 @section Scripts {
+    @Scripts.Render("~/bundles/orders/order")
+
+    <script type="text/javascript">
+        $(function () {
+            var parameters = {
+                id: '@Model.Id',
+                deleteOrderUrl: '@Url.Action("Delete")',
+                uploadFileUrl: '@Url.Action("UploadFile")',
+                deleteFileUrl: '@Url.Action("DeleteFile")',
+                deleteLogUrl: '@Url.Action("DeleteLog")',
+                logSubtopic: '@Subtopic.Log',
+                fileNameSubtopic: '@Subtopic.FileName',
+                noMoreFilesText: '@Translation.GetForJS("Inga fler filer tillåts")'
+            };
+
+            applyOrderBehavior(parameters);
+        });
+    </script>
+
     @RenderSection("Scripts", false)
 }
