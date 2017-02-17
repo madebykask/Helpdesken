@@ -92,6 +92,7 @@
     <Compile Include="Entities\TextTranslation.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Entities\WorkingGroup.cs" />
+    <Compile Include="Enums\EForm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

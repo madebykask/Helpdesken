@@ -9,10 +9,9 @@ using System.Web.Hosting;
 using System.Xml;
 using System.Xml.Linq;
 using DH.Helpdesk.EForm.Model.Entities;
-using System.Web;
 using Newtonsoft.Json;
-using System.Web.Script.Serialization;
-using System.Threading.Tasks;
+using System.ComponentModel;
+
 
 namespace DH.Helpdesk.EForm.FormLib.Models
 {
@@ -79,6 +78,10 @@ namespace DH.Helpdesk.EForm.FormLib.Models
 
         public IList<StaticFile> StaticFiles { get; set; }
 
+        [Description("This value is placed in e-Form XML root <form>)")]
+        public Model.Enums.EForm.DataSource DataSource { get; set; }
+
+
         public FormModel(string xmlPath)
         {
             var di = new DirectoryInfo(HostingEnvironment.MapPath(FormLibConstants.Paths.XmlDirectory));
@@ -96,6 +99,17 @@ namespace DH.Helpdesk.EForm.FormLib.Models
 
             if (FormXml.Root.HasAttributes && FormXml.Root.Attribute("guid") != null)
                 FormGuid = Guid.Parse(FormXml.Root.Attribute("guid").Value);
+
+            //Check DataSource for Form, Set XML as default.
+            if (FormXml.Root.HasAttributes && FormXml.Root.Attribute("dataSource") != null)
+            {
+                DataSource = (Model.Enums.EForm.DataSource)int.Parse(FormXml.Root.Attribute("dataSource").Value);
+            }
+            else
+            {
+                DataSource = Model.Enums.EForm.DataSource.XML;
+            }
+
 
             if (FormXml.Root.HasAttributes && FormXml.Root.Attribute("customerId") != null)
             {
