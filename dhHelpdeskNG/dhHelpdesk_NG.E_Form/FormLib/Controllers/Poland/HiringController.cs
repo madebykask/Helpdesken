@@ -154,10 +154,11 @@ namespace DH.Helpdesk.EForm.FormLib.Areas.Poland.Controllers
 
             model.Form = _contractRepository.GetFormByGuid(model.FormGuid);
 
+            //Communicate with HD case that information is changed
             FormLibSessions.IsCaseDataChanged = true;
 
             // change Send back to requestor internal-val="40"
-            if(HiringAdditional(model))
+            if (HiringAdditional(model))
             {
                 model.ChangeStatusActionInternalValue("Send back to requestor", "40");
             }

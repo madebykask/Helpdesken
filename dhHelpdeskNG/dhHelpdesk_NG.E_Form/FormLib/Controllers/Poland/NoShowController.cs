@@ -115,6 +115,10 @@ namespace DH.Helpdesk.EForm.FormLib.Areas.Poland.Controllers
                 Contract = contract,
                 Status = contract.StateSecondaryId
             };
+
+            //Communicate with HD case that information is changed
+            FormLibSessions.IsCaseDataChanged = true;
+
             model.Form = _contractRepository.GetFormByGuid(model.FormGuid);
 
             PopulateWithOptions(ref model);

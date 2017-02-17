@@ -140,7 +140,9 @@ namespace DH.Helpdesk.EForm.FormLib.Areas.Poland.Controllers
                     || (FormLibSessions.User.WorkingGroups.FirstOrDefault(x => x.Id == contract.WorkingGroupId) == null)
             };
 
+            //Communicate with HD case that information is changed
             FormLibSessions.IsCaseDataChanged = true;
+
             model.Form = _contractRepository.GetFormByGuid(model.FormGuid);
 
             PopulateWithOptions(ref model);
