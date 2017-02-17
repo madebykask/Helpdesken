@@ -166,12 +166,14 @@ namespace DH.Helpdesk.EForm.FormLib.Areas.Netherlands.Controllers
             if (contract == null)
                 throw new HttpException(404, "Page not found");
 
-            FormLibSessions.IsCaseDataChanged = true;
             // Use for from Line manger portal to hide och show communicate window.
             if (contract.FinishingDate == null)
             {
                 ViewBag.CurrentCaseId = contract.Id;
             }
+
+            //Communicate with HD case that information is changed
+            FormLibSessions.IsCaseDataChanged = true;
 
             var model = FormModelFactory.InitEdit(xmlPath, contract, !string.IsNullOrEmpty(Request.QueryString["locked"]));
             model.Form = _contractRepository.GetFormByGuid(model.FormGuid);
@@ -197,8 +199,6 @@ namespace DH.Helpdesk.EForm.FormLib.Areas.Netherlands.Controllers
                 InitSubProcess(model, actionState, id, dictionary);
                 model.Status = int.Parse(model.GetStatusActionInternalValue(actionState));
             }
-
-
 
             var lognote = "";
             //Set lognote to empty if errormessages
