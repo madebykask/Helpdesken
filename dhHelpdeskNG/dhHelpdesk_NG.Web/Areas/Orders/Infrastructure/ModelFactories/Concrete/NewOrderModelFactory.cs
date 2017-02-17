@@ -212,6 +212,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
             model.AccountTypes5 = CreateSelectListField(settings.AccountInfo.AccountTypeId5,
                     options.AccountTypes5, null);
             model.Header = settings.Order.Header;
+            model.Description = options.OrderTypeDescription;
 
             return model;
         }

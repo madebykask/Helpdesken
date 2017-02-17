@@ -19,7 +19,8 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
 
     public static class OrderEditMapper
     {
-	    public static OrderEditOptions MapToOrderEditOptions(string orderTypeName, IQueryable<OrderState> statuses, IQueryable<User> administrators, IQueryable<Domain> domains, IQueryable<Department> departments, IQueryable<OU> units, IQueryable<OrderPropertyEntity> properties, IQueryable<Department> deliveryDepartments, IQueryable<OU> deliveryOuIds, List<GroupWithEmails> emailGroups, List<GroupWithEmails> workingGroupsWithEmails, IQueryable<User> administratorsWithEmails, FullOrderEditSettings settings, IQueryable<EmploymentType> employmentTypes, IQueryable<Region> regions, IQueryable<OrderFieldType> accountTypes, IQueryable<Program> programs)
+	    public static OrderEditOptions MapToOrderEditOptions(string orderTypeName, IQueryable<OrderState> statuses, IQueryable<User> administrators, IQueryable<Domain> domains, IQueryable<Department> departments, IQueryable<OU> units, IQueryable<OrderPropertyEntity> properties, IQueryable<Department> deliveryDepartments, IQueryable<OU> deliveryOuIds, List<GroupWithEmails> emailGroups, List<GroupWithEmails> workingGroupsWithEmails, IQueryable<User> administratorsWithEmails, FullOrderEditSettings settings, IQueryable<EmploymentType> employmentTypes, IQueryable<Region> regions, IQueryable<OrderFieldType> accountTypes, IQueryable<Program> programs,
+            string orderTypeDescription = null)
 	    {
 		    IQueryable<UnionItemDependentOverview> query = null;
 
@@ -164,7 +165,8 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
                 overviews.Where(o => o.Type == "accountTypes3").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
                 overviews.Where(o => o.Type == "accountTypes4").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
                 overviews.Where(o => o.Type == "accountTypes5").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
-                overviews.Where(o => o.Type == "programs").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray());
+                overviews.Where(o => o.Type == "programs").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
+                orderTypeDescription);
 	        return editOptions;
 	    }
 

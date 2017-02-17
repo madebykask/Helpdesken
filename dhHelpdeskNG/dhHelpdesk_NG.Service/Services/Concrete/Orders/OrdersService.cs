@@ -607,7 +607,9 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
             var deliveryDepartments = departmentsRep.GetAll().GetActiveByCustomer(customerId);
             var deliveryOuIds = ousRep.GetAll();
             var administratorsWithEmails = administratorsRep.GetAll().GetActiveUsers(customerId).Where(x => x.Performer == 1 && x.Email != string.Empty);
-            var orderType = orderTypeId.HasValue ? orderTypeRep.GetAll().GetById(orderTypeId.Value).MapToName() : null;
+            var orderType = orderTypeId.HasValue ? orderTypeRep.GetAll().GetById(orderTypeId.Value) : null;
+            var orderTypeName = orderType != null ? orderType.MapToName() : null;
+            var orderTypeDesc = orderType?.MapToDescription();
             var employmentTypes = employmentTypeRep.GetAll();
             var regions = regionsRep.GetAll().GetByCustomer(customerId);
             var accountTypes = orderFieldTypesRep.GetAll().GetByType(orderTypeId).ActiveOnly();
@@ -630,19 +632,19 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                         if (lowestchild.ParentOrderType.Parent_OrderType_Id.HasValue)
                         {
                             level2Name = lowestchild.ParentOrderType.Parent_OrderType_Id.HasValue ? orderTypeRep.GetAll().GetById(lowestchild.ParentOrderType.Parent_OrderType_Id.Value).MapToName() : null;
-                            orderType = orderType + " - " + level2Name;
+                            orderTypeName = orderTypeName + " - " + level2Name;
                         }
 
                         if (orderTypeId != lowestchild.Parent_OrderType_Id.Value)
                         {
                             level3Name = lowestchild.Parent_OrderType_Id.HasValue ? orderTypeRep.GetAll().GetById(lowestchild.Parent_OrderType_Id.Value).MapToName() : null;
-                            orderType = orderType + " - " + level3Name;
+                            orderTypeName = orderTypeName + " - " + level3Name;
                         }
                     }
 
                     level4Name = lowestchildordertypeid.HasValue ? orderTypeRep.GetAll().GetById(lowestchildordertypeid.Value).MapToName() : null;
 
-                    orderType = orderType + " - " + level4Name;
+                    orderTypeName = orderTypeName + " - " + level4Name;
                 }
             }
 
@@ -690,9 +692,9 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                     emailGroupsWithEmails.Add(groupWithEmails);
                 }
             }
-
+            
             return OrderEditMapper.MapToOrderEditOptions(
-                                    orderType,
+                                    orderTypeName,
                                     statuses,
                                     administrators,
                                     domains,
@@ -708,7 +710,8 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                                     employmentTypes,
                                     regions,
                                     accountTypes,
-                                    allPrograms);
+                                    allPrograms,
+                                    orderTypeDesc);
         }
 
         private FullOrderOverview[] Sort(FullOrderOverview[] items, SortField sort)
