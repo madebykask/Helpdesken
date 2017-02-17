@@ -30,43 +30,6 @@ namespace DH.Helpdesk.EForm.FormLib.Areas.Norway.Controllers
             //_fileService = fileService;
         }
 
-        public JsonResult Typeahead(string query, string node, string dependentAttribute, string dependentAttributeValue)
-        {
-            var model = new FormModel(mainXmlPath);
-            var element = model.GetElement(node);
-
-            if (element.Attribute("source") != null)
-            {
-                var options1 = element.Descendants("option").Select(x => x.Value).ToArray();
-                return Json(new { options1 });
-            }
-            else
-            {
-                if (element == null && element.Descendants("option").Any())
-                    return Json(new object { });
-
-                var options = element.Descendants("option").Where(x => x.Attribute(dependentAttribute) != null
-                    && x.Attribute(dependentAttribute).Value == dependentAttributeValue
-                    || string.IsNullOrEmpty(dependentAttributeValue)).Select(x => x.Value).ToArray();
-
-                return Json(new { options });
-            }
-        }
-
-        public JsonResult HomeCostCentre(string query, string node)
-        {
-            var model = new FormModel(mainXmlPath);
-            var element = model.GetElement(node);
-            if(element == null && element.Descendants("option").Any())
-                return Json(new object { });
-            var option = element.Descendants("option").Where(x => x.Attribute("NewDepartment") != null);
-            option = option.Where(x => x.Attribute("NewDepartment").Value == query);
-
-            if(option.FirstOrDefault() == null)
-                return Json(new object { });
-            return Json(new { option.FirstOrDefault().Value });
-        }
-
         [HttpPost]
         public ActionResult ChangePrint(string id, int caseId, string path, string allowanceNr, string query)
         {
