@@ -18,16 +18,12 @@ namespace DH.Helpdesk.EForm.FormLib.Areas.Netherlands.Controllers
 {
     public class ChangeTermsConditionsController : FormLibBaseController
     {
-        //public const string xmlPath = "netherlands/changetermsconditions.xml";
-
         private readonly IContractRepository _contractRepository;
-        //private readonly IFileService _fileService;
 
         public ChangeTermsConditionsController(IContractRepository contractRepository, IUserRepository userRepository, IFileService fileService)
             : base(userRepository, contractRepository, fileService)
         {
             _contractRepository = contractRepository;
-            //_fileService = fileService;
         }
 
     }
