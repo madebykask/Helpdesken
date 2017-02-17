@@ -177,6 +177,9 @@ namespace DH.Helpdesk.EForm.FormLib.Areas.UnitedKingdom.Controllers
                 ViewBag.CurrentCaseId = contract.Id;
             }
 
+            //Communicate with HD case that information is changed
+            FormLibSessions.IsCaseDataChanged = true;
+
             var model = FormModelFactory.InitEdit(xmlPath, contract, !string.IsNullOrEmpty(Request.QueryString["locked"]));
             model.Form = _contractRepository.GetFormByGuid(model.FormGuid);
             PopulateWithOptions(ref model);
