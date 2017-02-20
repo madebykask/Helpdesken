@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings
+﻿using System.ComponentModel.DataAnnotations;
+using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+
+namespace DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings
 {
     public sealed class TextFieldSettingsModel : FieldSettingsModel
     {
@@ -20,6 +23,7 @@
             this.DefaultValue = defaultValue;
         }
 
+        [LocalizedStringLength(50)]
         public string DefaultValue { get; set; }
     }
 }
