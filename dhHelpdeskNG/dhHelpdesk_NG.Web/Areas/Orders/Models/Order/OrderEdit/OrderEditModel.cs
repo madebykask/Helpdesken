@@ -67,8 +67,6 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
 
         public string Header { get; set; }
 
-        public string Description { get; set; }
-
         [NotNull]
         public ConfigurableFieldModel<int?> Property { get; set; } 
 

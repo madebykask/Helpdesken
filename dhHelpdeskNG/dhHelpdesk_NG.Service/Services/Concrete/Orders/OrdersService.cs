@@ -644,36 +644,34 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
             var allPrograms = programsRep.GetAll().Where(x => x.IsActive != 0 && x.Customer_Id == customerId && x.ShowOnStartPage > 0);
 
             // get parentordertypename
-            if (orderTypeId != lowestchildordertypeid.Value)
+            if (lowestchildordertypeid.HasValue && orderTypeId != lowestchildordertypeid.Value)
             {
-                if (lowestchildordertypeid.HasValue)
+                var level2Name = "";
+                var level3Name = "";
+                var level4Name = "";
+
+                //get
+                var lowestchild = this._orderTypeRepository.GetById(lowestchildordertypeid.Value);
+
+                if (lowestchild.Parent_OrderType_Id.HasValue)
                 {
-                    var level2Name = "";
-                    var level3Name = "";
-                    var level4Name = "";
-
-                    //get
-                    var lowestchild = this._orderTypeRepository.GetById(lowestchildordertypeid.Value);
-
-                    if (lowestchild.Parent_OrderType_Id.HasValue)
+                    if (lowestchild.ParentOrderType.Parent_OrderType_Id.HasValue)
                     {
-                        if (lowestchild.ParentOrderType.Parent_OrderType_Id.HasValue)
-                        {
-                            level2Name = lowestchild.ParentOrderType.Parent_OrderType_Id.HasValue ? orderTypeRep.GetAll().GetById(lowestchild.ParentOrderType.Parent_OrderType_Id.Value).MapToName() : null;
-                            orderTypeName = orderTypeName + " - " + level2Name;
-                        }
-
-                        if (orderTypeId != lowestchild.Parent_OrderType_Id.Value)
-                        {
-                            level3Name = lowestchild.Parent_OrderType_Id.HasValue ? orderTypeRep.GetAll().GetById(lowestchild.Parent_OrderType_Id.Value).MapToName() : null;
-                            orderTypeName = orderTypeName + " - " + level3Name;
-                        }
+                        level2Name = orderTypeRep.GetAll().GetById(lowestchild.ParentOrderType.Parent_OrderType_Id.Value).MapToName();
+                        orderTypeName = orderTypeName + " - " + level2Name;
                     }
 
-                    level4Name = lowestchildordertypeid.HasValue ? orderTypeRep.GetAll().GetById(lowestchildordertypeid.Value).MapToName() : null;
-
-                    orderTypeName = orderTypeName + " - " + level4Name;
+                    if (orderTypeId != lowestchild.Parent_OrderType_Id.Value)
+                    {
+                        level3Name = orderTypeRep.GetAll().GetById(lowestchild.Parent_OrderType_Id.Value).MapToName();
+                        orderTypeName = orderTypeName + " - " + level3Name;
+                    }
                 }
+
+                var ordType = orderTypeRep.GetAll().GetById(lowestchildordertypeid.Value);
+                level4Name = ordType.MapToName();
+                orderTypeName = orderTypeName + " - " + level4Name;
+                orderTypeDesc = ordType.MapToDescription();
             }
 
             var workingGroupsWithEmails = new List<GroupWithEmails>();

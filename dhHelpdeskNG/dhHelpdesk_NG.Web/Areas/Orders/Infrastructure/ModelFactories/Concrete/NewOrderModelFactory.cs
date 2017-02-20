@@ -48,7 +48,8 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                 null)
             {
                 CreateCase = workContext.Customer.Settings.CreateCaseFromOrder,
-                Statuses = data.EditOptions.Statuses
+                Statuses = data.EditOptions.Statuses,
+                OrderTypeDescription = data.EditOptions.OrderTypeDescription
             };
         }
 
@@ -212,7 +213,6 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
             model.AccountTypes5 = CreateSelectListField(settings.AccountInfo.AccountTypeId5,
                     options.AccountTypes5, null);
             model.Header = settings.Order.Header;
-            model.Description = options.OrderTypeDescription;
 
             return model;
         }
