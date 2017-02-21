@@ -25,5 +25,17 @@ UPDATE [dbo].[tblOrderType] SET [CaptionOrdererInfo] = N'Beställare' WHERE [Cap
 UPDATE [dbo].[tblOrderType] SET [CaptionReceiverInfo] = N'Kontakt' WHERE [CaptionReceiverInfo] is NULL
 GO
 
+--New fields in tblCaseFieldSettings
+INSERT INTO tblCasefieldsettings 
+(Customer_Id, CaseField, Show, [Required], ShowExternal, FieldSize, RelatedField, DefaultValue, ListEdit, EMailIdentifier, CreatedDate, ChangedDate, Locked)
+Select Id, 'Project', 0, 0,0,0, '',NULL, 0, NULL, Getdate(), GetDate(), 0 from tblCustomer c
+where not exists (select * from tblCasefieldsettings where  Customer_Id = c.Id and CaseField = 'Project')
+
+INSERT INTO tblCasefieldsettings 
+(Customer_Id, CaseField, Show, [Required], ShowExternal, FieldSize, RelatedField, DefaultValue, ListEdit, EMailIdentifier, CreatedDate, ChangedDate, Locked)
+Select Id, 'Problem', 0, 0,0,0, '',NULL, 0, NULL, Getdate(), GetDate(), 0 from tblCustomer c
+where not exists (select * from tblCasefieldsettings where  Customer_Id = c.Id and CaseField = 'Problem')
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.31'

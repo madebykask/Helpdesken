@@ -1793,13 +1793,13 @@
                                             {
                                                 if (Model.projects.Any())
                                                 {
-                                            <tr class="displaytr" style="@Model.GetFieldStyle(CaseSolutionFields.Project)">
+                                            <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Project, CaseSolutionFields.Project)">
                                                 <td>
                                                     @Translation.Get("Projekt", SessionFacade.CurrentLanguageId)
                                                 </td>
                                                 <td>
-                                                    @if (!Model.IsReadOnly(CaseSolutionFields.Project))
-                                                        {
+                                                    @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Project, CaseSolutionFields.Project))
+                                                    {
                                                         <select id="case__Project_Id" name="case_.Project_Id">
                                                             <option value="">&nbsp;</option>
                                                             @if (Model.projects != null)
@@ -1831,12 +1831,12 @@
                                             {
                                                 if (Model.problems.Any())
                                                 {
-                                            <tr class="displaytr" style="@Model.GetFieldStyle(CaseSolutionFields.Problem)">
+                                            <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Problem, CaseSolutionFields.Problem)">
                                                 <td>
                                                     @Translation.Get("ITIL Problem", SessionFacade.CurrentLanguageId)
                                                 </td>
                                                 <td>
-                                                    @if (!Model.IsReadOnly(CaseSolutionFields.Project))
+                                                    @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Problem, CaseSolutionFields.Project))
                                                          {
                                                         <select id="case__Problem_Id" name="case_.Problem_Id">
                                                             <option value="">&nbsp;</option>
