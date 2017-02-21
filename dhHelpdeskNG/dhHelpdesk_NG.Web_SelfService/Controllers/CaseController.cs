@@ -1077,6 +1077,11 @@
                     CustomerSettings = customersettings
                 };
             }
+
+            var caseFolowerUsers = _caseExtraFollowersService.GetCaseExtraFollowers(currentCase.Id).Select(x => x.Follower).ToArray();
+            var followerUsers = caseFolowerUsers.Any() ? string.Join(";", caseFolowerUsers) + ";" : string.Empty;
+            model.FollowerUsers = followerUsers;
+
             return model;
         }
 

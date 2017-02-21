@@ -71,7 +71,8 @@ using System;
         public string LogFileGuid { get; set; }  
 
         public Setting CustomerSettings { get; set; }
-                
+        public string FollowerUsers { get; set; }
+
     }
   
 }

@@ -63,9 +63,12 @@
                         <label class="col-md-3">
                             @Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
                         </label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
                             @Model.CasePreview.PersonsName
                         </div>
+                        <label class="col-md-6">
+                            @Translation.Get("Följare"): @Model.FollowerUsers
+                        </label>
                     </div>
                 }
                 @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString()))
