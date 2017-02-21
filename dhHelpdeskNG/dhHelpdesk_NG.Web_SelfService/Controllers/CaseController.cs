@@ -65,6 +65,7 @@
         private readonly IEmailService _emailService;        
         private readonly IMasterDataService _masterDataService;
         private readonly ICaseExtraFollowersService _caseExtraFollowersService;
+        private readonly IPriorityService _priorityService;
 
         private const string ParentPathDefaultValue = "--";
         private const string EnterMarkup = "<br />";
@@ -105,7 +106,8 @@
             OrganizationJsonService orgJsonService,
             ICaseSolutionSettingService caseSolutionSettingService,
             IEmailService emailService,
-            ICaseExtraFollowersService caseExtraFollowersService)
+            ICaseExtraFollowersService caseExtraFollowersService,
+            IPriorityService priorityService)
             : base(masterDataService, caseSolutionService)
         {
             _masterDataService = masterDataService;
@@ -140,7 +142,8 @@
             _urgencyService = urgencyService;
             _impactService = impactService;
             _caseSolutionSettingService = caseSolutionSettingService;
-            _caseExtraFollowersService = caseExtraFollowersService;     
+            _caseExtraFollowersService = caseExtraFollowersService;
+            _priorityService = priorityService;    
         }
 
 
@@ -309,7 +312,7 @@
                                                           .Where(c => c.ShowExternal == 1)
                                                           .ToList();
 
-
+            
             var model = GetNewCaseModel(currentCustomer.Id, languageId, caseFieldSetting);
             model.ExLogFileGuid = Guid.NewGuid().ToString();
 
@@ -410,6 +413,7 @@
                     model.NewCase.Cost = caseTemplate.Cost;
                     model.NewCase.OtherCost = caseTemplate.OtherCost;
                     model.NewCase.Currency = caseTemplate.Currency;
+                    model.NewCase.Priority_Id = caseTemplate.Priority_Id;
 
                 }
 
@@ -1014,7 +1018,8 @@
                                                            .Where(c => c.ShowExternal == 1 ||
                                                                        c.Name == GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString() ||
                                                                        c.Name == GlobalEnums.TranslationCaseFields.CaseNumber.ToString() ||
-                                                                       c.Name == GlobalEnums.TranslationCaseFields.RegTime.ToString())
+                                                                       c.Name == GlobalEnums.TranslationCaseFields.RegTime.ToString() ||
+                                                                       c.Name == GlobalEnums.TranslationCaseFields.Priority_Id.ToString()) 
                                                            .ToList();
             
             var caseFieldGroups = GetVisibleFieldGroups(caseFieldSetting);            
@@ -1246,6 +1251,9 @@
             //Country list
             var suppliers = _supplierService.GetSuppliers(customerId);
 
+            //Priority list
+            var priorities = _priorityService.GetPriorities(customerId);
+
             //Field Settings
             var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
 
@@ -1268,6 +1276,7 @@
                 caseFieldSetting, 
                 caseFile, 
                 caseFieldSettings,
+                priorities,
                 new JsApplicationOptions()
                     {
                         customerId = customerId,
@@ -1336,7 +1345,8 @@
                             GlobalEnums.TranslationCaseFields.AgreedDate.ToString(), 
                             GlobalEnums.TranslationCaseFields.Available.ToString(), 
                             GlobalEnums.TranslationCaseFields.Cost.ToString(),
-                            GlobalEnums.TranslationCaseFields.Filename.ToString()                                                                                
+                            GlobalEnums.TranslationCaseFields.Filename.ToString(),
+                            GlobalEnums.TranslationCaseFields.Priority_Id.ToString()
                         };
 
             string[] otherGroup = new string[] 
@@ -1345,7 +1355,8 @@
                             GlobalEnums.TranslationCaseFields.WatchDate.ToString(),
                             GlobalEnums.TranslationCaseFields.Verified.ToString(),
                             GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString(),
-                            GlobalEnums.TranslationCaseFields.SolutionRate.ToString(),
+                            GlobalEnums.TranslationCaseFields.SolutionRate.ToString()
+                            
                         };
 
             string[] caseLogGroup = new string[] 

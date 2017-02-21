@@ -37,6 +37,7 @@
             List<CaseListToCase> fieldSettings, 
             FilesModel caseFiles, 
             IList<CaseFieldSetting> caseFieldSettings,
+            IList<Priority> priorities,
             JsApplicationOptions jsApplicationOptions)
         {
             NewCase = newCase;
@@ -57,6 +58,7 @@
             CaseFieldSettings = caseFieldSettings;
             JsApplicationOptions = jsApplicationOptions;
             CaseTypeRelatedFields = new List<KeyValuePair<int, string>>();
+            Priorities = priorities;
         }
 
 
@@ -115,6 +117,8 @@
         public SendToDialogModel SendToDialogModel { get; set; }
 
         public List<KeyValuePair<int,string>> CaseTypeRelatedFields { get; set; }
+    
+        public IList<Priority> Priorities { get; set; }
 
     }
 

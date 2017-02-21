@@ -2042,8 +2042,10 @@
                                 <input type="hidden" name="CaseFieldSettings[39].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.Priority_Id.ToString())" />
                             </td>
                             <td>
-                                <input type="checkbox" name="CaseFieldSettings[39].ShowExternal" disabled="disabled" />
+                                <input type="checkbox" name="CaseFieldSettings[39].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
                                 <input type="hidden" name="CaseFieldSettings[39].ShowExternal" value="0" />
+                                @*<input type="checkbox" name="CaseFieldSettings[39].ShowExternal" disabled="disabled" />
+                                <input type="hidden" name="CaseFieldSettings[39].ShowExternal" value="0" />*@
                             </td>
                             <td>@RenderLockedFieldOption("CaseFieldSettings[39].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()))</td>
                             <td>
