@@ -122,6 +122,9 @@
     <Compile Include="EntityConfigurations\Licenses\ProductConfiguration.cs" />
     <Compile Include="EntityConfigurations\Licenses\VendorConfiguration.cs" />
     <Compile Include="EntityConfigurations\MailTemplates\MailTemplateLanguageConfiguration.cs" />
+    <Compile Include="EntityConfigurations\MetaDataEntity\EntityRelationshipConfiguration.cs" />
+    <Compile Include="EntityConfigurations\MetaDataEntity\MetaDataConfiguration.cs" />
+    <Compile Include="EntityConfigurations\MetaDataEntity\EntityInfoConfiguration.cs" />
     <Compile Include="EntityConfigurations\OperationLogEmailLogConfiguration.cs" />
     <Compile Include="EntityConfigurations\Orders\OrderFieldTypeConfiguration.cs" />
     <Compile Include="EntityConfigurations\Orders\OrderEMailLogConfiguration.cs" />

@@ -50,7 +50,7 @@
     using DH.Helpdesk.Domain.BusinessRules;
     using DH.Helpdesk.Dal.EntityConfigurations.BusinessRule;
     using DH.Helpdesk.Domain.Orders;
-    
+    using Domain.MetaDataEntity;
 
     public class HelpdeskDbContext : DbContext, IDbContext
     {
@@ -257,6 +257,10 @@
 
         public DbSet<EmploymentType> EmploymentTypes { get; set; }
 
+        public DbSet<EntityInfo> EntityInfos { get; set; }
+
+        public DbSet<EntityRelationship> EntityRelationships { get; set; }
+
         public DbSet<FaqCategoryEntity> FAQCategories { get; set; }
 
         public DbSet<FaqFileEntity> FAQFiles { get; set; }
@@ -338,6 +342,8 @@
         public DbSet<MailTemplateEntity> MailTemplates { get; set; }
 
         public DbSet<Manufacturer> Manufacturers { get; set; }
+
+        public DbSet<MetaData> MetaDatas { get; set; }
 
         public DbSet<ModuleEntity> Modules { get; set; }
 
