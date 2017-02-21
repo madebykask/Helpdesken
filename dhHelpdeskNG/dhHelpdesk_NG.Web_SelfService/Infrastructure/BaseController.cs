@@ -140,6 +140,9 @@
 
                                 if (pureType.CleanSpaceAndLowStr() == ConfigurationManager.AppSettings[Enums.FederationServiceKeys.ClaimEmail].ToString().CleanSpaceAndLowStr())
                                     userIdentity.Email = value;
+
+                                if (pureType.CleanSpaceAndLowStr() == ConfigurationManager.AppSettings[Enums.FederationServiceKeys.ClaimPhone].CleanSpaceAndLowStr())
+                                    userIdentity.Phone = value;
                             }
                         }
 
@@ -230,8 +233,7 @@
                         }
                     }
                 } // SSO Login
-                else
-                    if (loginMode == LoginMode.Windows)
+                else if (loginMode == LoginMode.Windows)
                     {
                         var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
                         SessionFacade.UserHasAccess = true;
@@ -255,13 +257,14 @@
                         Domain = userDomain,                        
                         FirstName = initiator?.FirstName,
                         LastName = initiator?.LastName,
-                        EmployeeNumber = employeeNum
+                        EmployeeNumber = employeeNum,
+                        Phone = initiator?.Phone,
+                        Email = initiator?.Email
                         };
 
                         SessionFacade.CurrentUserIdentity = ui;
                     }
-                    else
-                            if (loginMode == LoginMode.Anonymous)
+                else if (loginMode == LoginMode.Anonymous)
                     {
                         var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
                         SessionFacade.UserHasAccess = true;
@@ -290,7 +293,9 @@
                             Domain = userDomain,
                         FirstName = initiator?.FirstName,
                         LastName = initiator?.LastName,
-                        EmployeeNumber = employeeNum
+                        EmployeeNumber = employeeNum,
+                        Phone = initiator?.Phone,
+                        Email = initiator?.Email
                         };
 
                         SessionFacade.CurrentUserIdentity = ui;
@@ -299,10 +304,14 @@
                 // load user info according database info (tblComputerUser)
                 LoadUserInfo();
 
+                //load user info from tblUsers if such user exist
+                LoadLocalUserInfo();
+
             } //User Idendity is null
 
             this.SetTextTranslation(filterContext);
         }
+
 
         private void LoadUserInfo()
         {
@@ -318,6 +327,19 @@
                     SessionFacade.CurrentUserIdentity.FirstName = dbInitiator.FirstName;
                     SessionFacade.CurrentUserIdentity.LastName = dbInitiator.LastName;
                     SessionFacade.CurrentUserIdentity.Email = dbInitiator.Email;
+                }
+            }
+        }
+
+        private void LoadLocalUserInfo()
+        {
+            if (SessionFacade.CurrentCustomer != null &&
+                SessionFacade.CurrentUserIdentity != null)
+            {
+                var user = _masterDataService.GetUserForLogin(SessionFacade.CurrentUserIdentity.UserId);
+                if (SessionFacade.CurrentCustomer.Users.Any(u => u.Id == user.Id))
+                {
+                    SessionFacade.CurrentLocalUser = user;
                 }
             }
         }
@@ -387,7 +409,7 @@
         {
             var activeLangs = _masterDataService.GetLanguages()
                                         .Where(l => l.IsActive == 1)
-                                        .Select(la => new LanguageOverview { Id = la.Id, IsActive = la.IsActive.convertIntToBool(), LanguageId = la.LanguageID, Name = la.Name })
+                                        .Select(la => new LanguageOverview { Id = la.Id, IsActive = la.IsActive.ConvertIntToBool(), LanguageId = la.LanguageID, Name = la.Name })
                                         .OrderBy(l => l.Name)
                                         .ToList();
             return activeLangs;

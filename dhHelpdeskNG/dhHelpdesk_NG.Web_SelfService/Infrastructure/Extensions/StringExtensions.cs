@@ -430,6 +430,16 @@
 
         }
 
+        public static MvcHtmlString ForHtmlView(this string str)
+        {
+            if (string.IsNullOrEmpty(str))
+            {
+                return MvcHtmlString.Create(str);
+            }
+
+            return MvcHtmlString.Create(str.Replace(Environment.NewLine, "<br />"));
+        }
+
         public static string AddCharacterInParts(this string s, int partLength, string charToSearch, string replaceStr)
         {
             if (string.IsNullOrEmpty(s))

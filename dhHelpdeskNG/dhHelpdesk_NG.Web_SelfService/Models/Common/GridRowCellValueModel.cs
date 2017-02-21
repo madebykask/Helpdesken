@@ -7,8 +7,8 @@
     {
         public GridRowCellValueModel(string fieldName, string value)
         {
-            this.FieldName = fieldName;
-            this.Value = value;
+            FieldName = fieldName;
+            Value = value;
         }
 
         [NotNullAndEmpty]
@@ -21,8 +21,8 @@
     {
         public NewGridRowCellValueModel(string fieldName, DisplayValue value)
         {
-            this.FieldName = fieldName;
-            this.Value = value;
+            FieldName = fieldName;
+            Value = value;
         }
 
         [NotNullAndEmpty]

@@ -1,0 +1,5 @@
+﻿@model DH.Helpdesk.SelfService.Models.CheckBoxListItem
+
+    @Html.HiddenFor(x => x.Id)
+    @Html.CheckBoxFor(x => x.IsChecked)
+    @Html.LabelFor(x => x.IsChecked, Model.Name, new { @class="checkbox-label-inline"})

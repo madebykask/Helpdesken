@@ -48,7 +48,8 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                 null)
             {
                 CreateCase = workContext.Customer.Settings.CreateCaseFromOrder,
-                Statuses = data.EditOptions.Statuses
+                Statuses = data.EditOptions.Statuses,
+                OrderTypeDescription = data.EditOptions.OrderTypeDescription
             };
         }
 

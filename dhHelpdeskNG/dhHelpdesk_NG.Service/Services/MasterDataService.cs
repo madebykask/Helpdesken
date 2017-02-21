@@ -23,7 +23,7 @@ namespace DH.Helpdesk.Services.Services
         IList<CaseFieldSettingsForTranslation> GetCaseTranslations(int userId);
         IList<CaseFieldSettingsForTranslation> GetCaseTranslations();
         Language GetLanguage(int id);
-        UserOverview GetUserForLogin(string userid);
+        UserOverview GetUserForLogin(string userid, int? customerId = null);
         void ClearCache();
         void SaveSSOLog(NewSSOLog SSOLog);
         void SaveADFSSetting(ADFSSetting adfsSetting);
@@ -163,9 +163,9 @@ namespace DH.Helpdesk.Services.Services
             return this._languageRepository.GetById(id);
         }
 
-        public UserOverview GetUserForLogin(string userid)
+        public UserOverview GetUserForLogin(string userid, int? customerId = null)
         {
-            return this._userRepository.GetUserByLogin(userid);
+            return this._userRepository.GetUserByLogin(userid, customerId);
         }
 
         public void ClearCache()

@@ -126,7 +126,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
             _orderRepository = orderRepository;
         }
 
-        public OrdersFilterData GetOrdersFilterData(int customerId, out int[] selectedStatuses)
+        public OrdersFilterData GetOrdersFilterData(int customerId, int userId, out int[] selectedStatuses)
         {
             using (var uow = this._unitOfWorkFactory.Create())
             {
@@ -135,11 +135,11 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                 var statusRep = uow.GetRepository<OrderState>();
 
                 var orderTypes = orderTypeRep.GetAll()
-                                    .GetRootOrderTypes(customerId).ToList();
+                                    .GetRootOrderTypes(customerId)
+                                    .GetByUsers(userId)
+                                    .ToList();
 
                 var orderTypesInRow = this.GetChildrenInRow(orderTypes, true).ToList();
-
-
 
                 var administrators = administratorRep.GetAll()
                                     .GetAdministrators(customerId);
@@ -213,16 +213,17 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
             return ret;
         }
 
-        public SearchResponse Search(SearchParameters parameters)
+        public SearchResponse Search(SearchParameters parameters, int userId)
         {
 			var settings = this._orderFieldSettingsService.GetOrdersFieldSettingsOverview(parameters.CustomerId, parameters.OrderTypeId);
 			using (var uow = this._unitOfWorkFactory.CreateWithDisabledLazyLoading())
 			{
 				var orderTypeRep = uow.GetRepository<OrderType>();
                 var orderFieldTypesRep = uow.GetRepository<OrderFieldType>();
-                var orderTypes = orderTypeRep.GetAll()
+                var orderTypes = orderTypeRep.GetAll(x => x.Users)
 									.GetOrderTypes(parameters.CustomerId).ToList();
-				var rootOrderType = orderTypes.Where(ot => ot.Id == parameters.OrderTypeId).ToList();
+			    var filteredOrderTypes = FilterOrderTypeByUser(orderTypes, userId);
+                var rootOrderType = filteredOrderTypes.Where(ot => parameters.OrderTypeId == null || ot.Id == parameters.OrderTypeId).ToList();
 				var orderTypeDescendants = GetChildrenInRow(rootOrderType, true).ToList();
 				orderTypeDescendants.AddRange(rootOrderType);
 				var orderRep = uow.GetRepository<Order>();
@@ -236,7 +237,8 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
 									parameters.StatusIds,
 									parameters.Phrase,
 									parameters.SortField,
-									parameters.SelectCount);
+									parameters.SelectCount,
+                                    parameters.CreatedBy);
 
 				var caseNumbers = overviews.Where(o => o.CaseNumber.HasValue).Select(o => o.CaseNumber).ToList();
 				var caseRep = uow.GetRepository<Case>();
@@ -250,18 +252,43 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
 			}
 		}
 
-        public NewOrderEditData GetNewOrderEditData(int customerId, int orderTypeId, int? lowestchildordertypeid)
+        private List<OrderType> FilterOrderTypeByUser(List<OrderType> orderTypes, int userId)
+        {
+            return orderTypes
+                .Select(orderType => TestOrderType(userId, orderType))
+                .Where(type => type != null).ToList();
+        }
+
+        private static OrderType TestOrderType(int userId, OrderType orderType)
+        {
+            for (var i = 0; i < 100000; i++)
+            {
+                if (orderType.Users.Any(u => u.Id == userId))
+                {
+                    return orderType;
+                }
+                if (orderType.Parent_OrderType_Id.HasValue)
+                {
+                    orderType = orderType.ParentOrderType;
+                    continue;
+                }
+                return null;
+            }
+            return null;
+        }
+
+        public NewOrderEditData GetNewOrderEditData(int customerId, int orderTypeId, int? lowestchildordertypeid, bool useExternal)
         {
             using (var uow = this._unitOfWorkFactory.Create())
             {
-                var settings = this._orderFieldSettingsService.GetOrderEditSettings(customerId, orderTypeId, uow);
+                var settings = this._orderFieldSettingsService.GetOrderEditSettings(customerId, orderTypeId, uow, useExternal);
                 var options = this.GetEditOptions(customerId, orderTypeId, settings, uow, lowestchildordertypeid);
 
                 return new NewOrderEditData(settings, options);
             }
         }
 
-        public FindOrderResponse FindOrder(int orderId, int customerId)
+        public FindOrderResponse FindOrder(int orderId, int customerId, bool useExternal)
         {
             using (var uow = this._unitOfWorkFactory.Create())
             {
@@ -309,7 +336,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                     firstLevelParentId = order.OrderTypeId.Value;
                 }
 
-                var settings = this._orderFieldSettingsService.GetOrderEditSettings(customerId, firstLevelParentId, uow);
+                var settings = this._orderFieldSettingsService.GetOrderEditSettings(customerId, firstLevelParentId, uow, useExternal);
                 var options = this.GetEditOptions(customerId, firstLevelParentId, settings, uow, order.OrderTypeId);
                 //var options = this.GetEditOptions(customerId, order.OrderTypeId, settings, uow, firstLevelParentId);
                 var orderFieldTypes = orderFieldTypesRep.GetAll().GetByType(order.OrderTypeId).ToList();
@@ -332,7 +359,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
             }
         }
 
-        public int AddOrUpdate(UpdateOrderRequest request, string userId, CaseMailSetting caseMailSetting, int languageId)
+        public int AddOrUpdate(UpdateOrderRequest request, string userId, CaseMailSetting caseMailSetting, int languageId, bool useExternal)
         {
             using (var uow = this._unitOfWorkFactory.Create())
             {
@@ -364,6 +391,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                     entity = new Order();
                     OrderUpdateMapper.MapToEntity(entity, request.Order, request.CustomerId, programs);
                     entity.CreatedDate = request.DateAndTime;
+                    entity.CreatedByUser_Id = request.UserId;
                     entity.ChangedDate = request.DateAndTime;
                     ordersRep.Add(entity);
                 }
@@ -399,7 +427,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                         firstLevelParentId = entity.OrderType_Id.Value;
                     }
                     
-                    var settings = this._orderFieldSettingsService.GetOrderEditSettings(request.CustomerId, firstLevelParentId, uow);
+                    var settings = this._orderFieldSettingsService.GetOrderEditSettings(request.CustomerId, firstLevelParentId, uow, useExternal);
                     this._orderRestorer.Restore(request.Order, existingOrder, settings);
                     this._updateOrderRequestValidator.Validate(request.Order, existingOrder, settings);
 
@@ -607,43 +635,43 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
             var deliveryDepartments = departmentsRep.GetAll().GetActiveByCustomer(customerId);
             var deliveryOuIds = ousRep.GetAll();
             var administratorsWithEmails = administratorsRep.GetAll().GetActiveUsers(customerId).Where(x => x.Performer == 1 && x.Email != string.Empty);
-            var orderType = orderTypeId.HasValue ? orderTypeRep.GetAll().GetById(orderTypeId.Value).MapToName() : null;
+            var orderType = orderTypeId.HasValue ? orderTypeRep.GetAll().GetById(orderTypeId.Value) : null;
+            var orderTypeName = orderType != null ? orderType.MapToName() : null;
+            var orderTypeDesc = orderType?.MapToDescription();
             var employmentTypes = employmentTypeRep.GetAll();
             var regions = regionsRep.GetAll().GetByCustomer(customerId);
             var accountTypes = orderFieldTypesRep.GetAll().GetByType(orderTypeId).ActiveOnly();
             var allPrograms = programsRep.GetAll().Where(x => x.IsActive != 0 && x.Customer_Id == customerId && x.ShowOnStartPage > 0);
 
             // get parentordertypename
-            if (orderTypeId != lowestchildordertypeid.Value)
+            if (lowestchildordertypeid.HasValue && orderTypeId != lowestchildordertypeid.Value)
             {
-                if (lowestchildordertypeid.HasValue)
+                var level2Name = "";
+                var level3Name = "";
+                var level4Name = "";
+
+                //get
+                var lowestchild = this._orderTypeRepository.GetById(lowestchildordertypeid.Value);
+
+                if (lowestchild.Parent_OrderType_Id.HasValue)
                 {
-                    var level2Name = "";
-                    var level3Name = "";
-                    var level4Name = "";
-
-                    //get
-                    var lowestchild = this._orderTypeRepository.GetById(lowestchildordertypeid.Value);
-
-                    if (lowestchild.Parent_OrderType_Id.HasValue)
+                    if (lowestchild.ParentOrderType.Parent_OrderType_Id.HasValue)
                     {
-                        if (lowestchild.ParentOrderType.Parent_OrderType_Id.HasValue)
-                        {
-                            level2Name = lowestchild.ParentOrderType.Parent_OrderType_Id.HasValue ? orderTypeRep.GetAll().GetById(lowestchild.ParentOrderType.Parent_OrderType_Id.Value).MapToName() : null;
-                            orderType = orderType + " - " + level2Name;
-                        }
-
-                        if (orderTypeId != lowestchild.Parent_OrderType_Id.Value)
-                        {
-                            level3Name = lowestchild.Parent_OrderType_Id.HasValue ? orderTypeRep.GetAll().GetById(lowestchild.Parent_OrderType_Id.Value).MapToName() : null;
-                            orderType = orderType + " - " + level3Name;
-                        }
+                        level2Name = orderTypeRep.GetAll().GetById(lowestchild.ParentOrderType.Parent_OrderType_Id.Value).MapToName();
+                        orderTypeName = orderTypeName + " - " + level2Name;
                     }
 
-                    level4Name = lowestchildordertypeid.HasValue ? orderTypeRep.GetAll().GetById(lowestchildordertypeid.Value).MapToName() : null;
-
-                    orderType = orderType + " - " + level4Name;
+                    if (orderTypeId != lowestchild.Parent_OrderType_Id.Value)
+                    {
+                        level3Name = orderTypeRep.GetAll().GetById(lowestchild.Parent_OrderType_Id.Value).MapToName();
+                        orderTypeName = orderTypeName + " - " + level3Name;
+                    }
                 }
+
+                var ordType = orderTypeRep.GetAll().GetById(lowestchildordertypeid.Value);
+                level4Name = ordType.MapToName();
+                orderTypeName = orderTypeName + " - " + level4Name;
+                orderTypeDesc = ordType.MapToDescription();
             }
 
             var workingGroupsWithEmails = new List<GroupWithEmails>();
@@ -690,9 +718,9 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                     emailGroupsWithEmails.Add(groupWithEmails);
                 }
             }
-
+            
             return OrderEditMapper.MapToOrderEditOptions(
-                                    orderType,
+                                    orderTypeName,
                                     statuses,
                                     administrators,
                                     domains,
@@ -708,7 +736,8 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                                     employmentTypes,
                                     regions,
                                     accountTypes,
-                                    allPrograms);
+                                    allPrograms,
+                                    orderTypeDesc);
         }
 
         private FullOrderOverview[] Sort(FullOrderOverview[] items, SortField sort)

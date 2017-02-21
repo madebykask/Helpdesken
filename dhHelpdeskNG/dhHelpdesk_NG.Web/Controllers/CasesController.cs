@@ -3444,13 +3444,25 @@ namespace DH.Helpdesk.Web.Controllers
                 var gs = _globalSettingService.GetGlobalSettings().FirstOrDefault();
                 const bool isTakeOnlyActive = true;
                 if (gs.LockCaseToWorkingGroup == 0)
-                    fd.filterWorkingGroup = this._workingGroupService.GetAllWorkingGroupsForCustomer(cusId);
+                {
+                    var wkgrs = _workingGroupService.GetAllWorkingGroupsForCustomer(cusId);
+                    wkgrs.Insert(0, ObjectExtensions.notAssignedWorkingGroup());
+                    fd.filterWorkingGroup = wkgrs;
+                }
                 else
                 {
                     if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.UserGroupId == 2)
-                        fd.filterWorkingGroup = this._workingGroupService.GetWorkingGroups(cusId, userId, isTakeOnlyActive);
+                    {
+                        var wkgrs = _workingGroupService.GetWorkingGroups(cusId, userId, isTakeOnlyActive);
+                        wkgrs.Insert(0, ObjectExtensions.notAssignedWorkingGroup());
+                        fd.filterWorkingGroup = wkgrs;
+                    }
                     else
-                        fd.filterWorkingGroup = this._workingGroupService.GetWorkingGroups(cusId, isTakeOnlyActive);
+                    {
+                        var wkgrs = _workingGroupService.GetWorkingGroups(cusId, isTakeOnlyActive);
+                        wkgrs.Insert(0, ObjectExtensions.notAssignedWorkingGroup());
+                        fd.filterWorkingGroup = wkgrs;
+                    }
 
                     //var isAdmin = SessionFacade.CurrentUser.IsAdministrator();
                     //if (isAdmin)                    

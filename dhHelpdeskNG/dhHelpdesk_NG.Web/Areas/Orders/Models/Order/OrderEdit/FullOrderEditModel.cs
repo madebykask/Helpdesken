@@ -57,6 +57,8 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
 
         public bool IsNew { get; private set; }
 
+        public string OrderTypeDescription { get; set; }
+
         [NotNull]
         public DeliveryEditModel Delivery { get; set; }
 

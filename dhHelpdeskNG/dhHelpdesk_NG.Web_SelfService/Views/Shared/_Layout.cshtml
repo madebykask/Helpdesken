@@ -7,6 +7,7 @@
 @using DH.Helpdesk.BusinessData.Enums.Case;
 @using DH.Helpdesk.SelfService.Models.Case;
 @using System.Web.Optimization
+@using DH.Helpdesk.SelfService
 
 
  @{        
@@ -78,7 +79,7 @@
     </title>            
  
      
-    @Styles.Render("~/Content/bundles/css")
+    @Styles.Render(BundleConfig.StyleNames.Common)
     @Styles.Render("~/img-profile/css")     
     @RenderSection("Styles", false)
   
@@ -372,6 +373,15 @@
                             </li>
                         }
                     }
+                    @if (!hideMenu && SessionFacade.CurrentLocalUser != null)
+                    {
+                        <li class="blue">
+                            <a href="@Url.Action("Index", "Orders", new { customerId = pCustomerId, area = "" })">
+                                <i class="fa fa-archive mnu-fa"></i><br />
+                                @Translation.Get("Orders")
+                            </a>
+                        </li>
+                    }
 
                     @if (!pHasError && SessionFacade.CurrentCustomer != null && SessionFacade.CurrentCustomer.ShowDocumentsOnExternalPage != 0)
                     {
@@ -520,10 +530,12 @@
 
 
 <script type="text/javascript">
-      
+
     window.ShowLanguage = '@showLanguageSelect';
     window.CaseId = '@currentCaseId';
     window.SaveMessageUrl = '@Url.Content("~/Case/_CaseLogNote")';
     window.ChangeLanguageUrl = '@Url.Action("ChangeLanguage", "Case")';
+    window.no_results_text = '@Translation.GetForJS("Inga resultat matchar")';
+    window.placeholder_text_multiple = '@Html.Raw(Translation.GetForJS("Välj en eller flera"))';
 
 </script>

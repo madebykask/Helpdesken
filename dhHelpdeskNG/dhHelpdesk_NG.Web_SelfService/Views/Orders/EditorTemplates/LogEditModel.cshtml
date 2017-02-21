@@ -1,0 +1,36 @@
+﻿@model DH.Helpdesk.SelfService.Models.Orders.OrderEdit.LogEditModel
+
+@if (Model.Log.Show)
+{
+    <div class="container">
+        <div class="row form-horizontal">
+            <div class="col-md-12 dh-col ">
+                <div>
+                    <div class="span2">
+                        @*@Html.FieldCaption(Model.Log)*@
+                    </div>
+                    <div class="span10" colspan="2">
+                        <div id="log_logs_container">
+                            @Html.Partial("Logs", Model.Log.Value)
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        @Html.FieldCaption(Model.Log)
+                    </div>
+                    <div>
+                        @Html.TextAreaFor(m => m.Log.Value.Text, new { style = "width:380px; height:105px;" })
+                    </div>
+                    <div>
+                        @Html.Partial("_SendToDialog", Model.Log.Value.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "log_send_to_dialog" }, { "Callback", "fillLogSendLogNoteToEmailsTextArea" } }))
+                        <a id="log_send_to_button" class="btn btn-default">
+                            @Translation.Get("till")
+                        </a><br />
+                        @Html.TextAreaFor(m => m.Log.Value.Emails, new { id = "log_send_to_emails_textarea", @readonly = "readonly", rows = "2" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

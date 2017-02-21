@@ -62,10 +62,10 @@
         private readonly IStateSecondaryService _stateSecondaryService;
         private readonly ICaseSolutionService _caseSolutionService;
         private readonly ICaseSolutionSettingService _caseSolutionSettingService;
-        private readonly IWorkContext workContext;
         private readonly IEmailService _emailService;        
         private readonly IMasterDataService _masterDataService;
         private readonly ICaseExtraFollowersService _caseExtraFollowersService;
+        private readonly IPriorityService _priorityService;
 
         private const string ParentPathDefaultValue = "--";
         private const string EnterMarkup = "<br />";
@@ -97,7 +97,6 @@
             ICustomerUserService customerUserService,
             ICaseSettingsService caseSettingService,
             ICaseSearchService caseSearchService,
-            IWorkContext workContext, 
             IUserService userService,
             IWorkingGroupService workingGroupService,
             IStateSecondaryService stateSecondaryService,
@@ -107,7 +106,8 @@
             OrganizationJsonService orgJsonService,
             ICaseSolutionSettingService caseSolutionSettingService,
             IEmailService emailService,
-            ICaseExtraFollowersService caseExtraFollowersService)
+            ICaseExtraFollowersService caseExtraFollowersService,
+            IPriorityService priorityService)
             : base(masterDataService, caseSolutionService)
         {
             _masterDataService = masterDataService;
@@ -136,14 +136,14 @@
             _userService = userService;
             _stateSecondaryService = stateSecondaryService;
             _caseSolutionService = caseSolutionService;
-            this.workContext = workContext;
             _orgService = orgService;
             _orgJsonService = orgJsonService;
             _emailService = emailService;
             _urgencyService = urgencyService;
             _impactService = impactService;
             _caseSolutionSettingService = caseSolutionSettingService;
-            _caseExtraFollowersService = caseExtraFollowersService;     
+            _caseExtraFollowersService = caseExtraFollowersService;
+            _priorityService = priorityService;    
         }
 
 
@@ -312,7 +312,7 @@
                                                           .Where(c => c.ShowExternal == 1)
                                                           .ToList();
 
-
+            
             var model = GetNewCaseModel(currentCustomer.Id, languageId, caseFieldSetting);
             model.ExLogFileGuid = Guid.NewGuid().ToString();
 
@@ -413,6 +413,7 @@
                     model.NewCase.Cost = caseTemplate.Cost;
                     model.NewCase.OtherCost = caseTemplate.OtherCost;
                     model.NewCase.Currency = caseTemplate.Currency;
+                    model.NewCase.Priority_Id = caseTemplate.Priority_Id;
 
                 }
 
@@ -712,9 +713,30 @@
             IDictionary<string, string> errors;            
             var currentCase = _caseService.GetCaseById(caseId);
             var currentCustomer = _customerService.GetCustomer(currentCase.Customer_Id);
-            var cs = _settingService.GetCustomerSetting(currentCustomer.Id);            
+            var cs = _settingService.GetCustomerSetting(currentCustomer.Id);
             // save case history
-            
+
+            // unread/status flag update if not case is closed
+            if (!currentCase.FinishingDate.HasValue)
+                currentCase.Unread = 1;
+
+            if (currentCase.FinishingDate.HasValue)
+            {
+                string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+                this._caseService.Activate(currentCase.Id, 0, adUser, CreatedByApplications.SelfService5, out errors);
+            }
+                
+
+            // if statesecondary has ResetOnExternalUpdate
+            if (currentCase.StateSecondary_Id.HasValue)
+            {
+                //get substatus
+                var casestatesecundary = _stateSecondaryService.GetStateSecondary(currentCase.StateSecondary_Id.Value);
+
+                if (casestatesecundary.ResetOnExternalUpdate == 1)
+                    currentCase.StateSecondary_Id = null;
+            }
+
             int caseHistoryId = _caseService.SaveCaseHistory(currentCase, 0, currentCase.PersonsEmail, CreatedByApplications.SelfService5,  out errors, SessionFacade.CurrentUserIdentity.UserId);            
             // save log
             var caseLog = new CaseLog
@@ -731,7 +753,7 @@
                                   Charge = false,
                                   RegUser = SessionFacade.CurrentSystemUser,
                                   SendMailAboutCaseToNotifier = true,
-                                  SendMailAboutLog = true
+                                  SendMailAboutLog = true                                 
                               };
             
             if(currentCase.WorkingGroup_Id != null)
@@ -829,7 +851,7 @@
                 var maxRecords = frm.ReturnFormValue("maxRecords").convertStringToInt();
                 var progressId = frm.ReturnFormValue("progressId");
                 var sortBy = frm.ReturnFormValue("hidSortBy");
-                var ascending = frm.ReturnFormValue("hidSortByAsc").convertStringToBool();
+                var ascending = frm.ReturnFormValue("hidSortByAsc").ConvertStringToBool();
                 var id = frm.ReturnFormValue("MailGuid");
 
                 if (progressId != CaseProgressFilter.ClosedCases && progressId != CaseProgressFilter.CasesInProgress)
@@ -996,11 +1018,15 @@
                                                            .Where(c => c.ShowExternal == 1 ||
                                                                        c.Name == GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString() ||
                                                                        c.Name == GlobalEnums.TranslationCaseFields.CaseNumber.ToString() ||
-                                                                       c.Name == GlobalEnums.TranslationCaseFields.RegTime.ToString())
+                                                                       c.Name == GlobalEnums.TranslationCaseFields.RegTime.ToString() ||
+                                                                       c.Name == GlobalEnums.TranslationCaseFields.Priority_Id.ToString()) 
                                                            .ToList();
             
             var caseFieldGroups = GetVisibleFieldGroups(caseFieldSetting);            
             var infoText = _infoService.GetInfoText((int) InfoTextType.SelfServiceInformation, currentCase.Customer_Id, languageId);
+
+            // get customersettings
+            var customersettings = _settingService.GetCustomerSetting(currentCase.Customer_Id);
 
             var regions = _regionService.GetRegions(currentCase.Customer_Id);
             var suppliers = _supplierService.GetSuppliers(currentCase.Customer_Id);
@@ -1047,9 +1073,15 @@
                     Regions = regions,
                     Suppliers = suppliers,
                     Systems = systems,
-                    LogFileGuid = Guid.NewGuid().ToString()
+                    LogFileGuid = Guid.NewGuid().ToString(),
+                    CustomerSettings = customersettings
                 };
             }
+
+            var caseFolowerUsers = _caseExtraFollowersService.GetCaseExtraFollowers(currentCase.Id).Select(x => x.Follower).ToArray();
+            var followerUsers = caseFolowerUsers.Any() ? string.Join(";", caseFolowerUsers) + ";" : string.Empty;
+            model.FollowerUsers = followerUsers;
+
             return model;
         }
 
@@ -1224,6 +1256,9 @@
             //Country list
             var suppliers = _supplierService.GetSuppliers(customerId);
 
+            //Priority list
+            var priorities = _priorityService.GetPriorities(customerId);
+
             //Field Settings
             var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
 
@@ -1246,6 +1281,7 @@
                 caseFieldSetting, 
                 caseFile, 
                 caseFieldSettings,
+                priorities,
                 new JsApplicationOptions()
                     {
                         customerId = customerId,
@@ -1314,7 +1350,8 @@
                             GlobalEnums.TranslationCaseFields.AgreedDate.ToString(), 
                             GlobalEnums.TranslationCaseFields.Available.ToString(), 
                             GlobalEnums.TranslationCaseFields.Cost.ToString(),
-                            GlobalEnums.TranslationCaseFields.Filename.ToString()                                                                                
+                            GlobalEnums.TranslationCaseFields.Filename.ToString(),
+                            GlobalEnums.TranslationCaseFields.Priority_Id.ToString()
                         };
 
             string[] otherGroup = new string[] 
@@ -1323,7 +1360,8 @@
                             GlobalEnums.TranslationCaseFields.WatchDate.ToString(),
                             GlobalEnums.TranslationCaseFields.Verified.ToString(),
                             GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString(),
-                            GlobalEnums.TranslationCaseFields.SolutionRate.ToString(),
+                            GlobalEnums.TranslationCaseFields.SolutionRate.ToString()
+                            
                         };
 
             string[] caseLogGroup = new string[] 
@@ -1361,8 +1399,8 @@
             var ret = new List<FieldSettingJSModel>();
             foreach (var field in customerFieldSettings)
             {
-                var isVisible = field.ShowExternal.convertIntToBool();
-                var isRequired = field.Required.convertIntToBool();
+                var isVisible = field.ShowExternal.ConvertIntToBool();
+                var isRequired = field.Required.ConvertIntToBool();
                 var isReadonly = false;                
                 
                 if (templateSettings != null && templateSettings.Any())
@@ -1451,5 +1489,10 @@
             return ret;
         }
 
+        public ViewResult AddCommentPopup(int casePreviewId)
+        {
+        
+             return this.View("_AddCommentPopup");
+        }
     }
 }

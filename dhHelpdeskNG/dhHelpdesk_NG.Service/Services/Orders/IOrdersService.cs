@@ -8,15 +8,15 @@ using DH.Helpdesk.BusinessData.Models.Case;
 
     public interface IOrdersService
     {
-        OrdersFilterData GetOrdersFilterData(int customerId, out int[] filters);
+        OrdersFilterData GetOrdersFilterData(int customerId, int userId, out int[] filters);
 
-        SearchResponse Search(SearchParameters parameters);
+        SearchResponse Search(SearchParameters parameters, int userId);
 
-        NewOrderEditData GetNewOrderEditData(int customerId, int orderTypeId, int? lowestchildordertypeid);
+        NewOrderEditData GetNewOrderEditData(int customerId, int orderTypeId, int? lowestchildordertypeid, bool useExternal);
 
-        FindOrderResponse FindOrder(int orderId, int customerId);
+        FindOrderResponse FindOrder(int orderId, int customerId, bool useExternal);
 
-        int AddOrUpdate(UpdateOrderRequest request, string userId, CaseMailSetting caseMailSetting, int languageId);
+        int AddOrUpdate(UpdateOrderRequest request, string userId, CaseMailSetting caseMailSetting, int languageId, bool useExternal);
 
         void Delete(int id);
 

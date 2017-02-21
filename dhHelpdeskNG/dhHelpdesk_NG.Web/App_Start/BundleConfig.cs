@@ -19,7 +19,7 @@ namespace DH.Helpdesk.Web
             public const string InventoryUserSearch = ("~/bundles/inventory/inventorysearch");
             public const string CaseIntLogEmailSearch = ("~/bundles/case/caseintlogemailsearch");
             public const string CaseAddFollowersSearch = ("~/bundles/case/caseaddfollowerssearch");
-			public const string CaseCharge = ("~/bundles/case/CaseCharge.js");
+			public const string CaseCharge = ("~/bundles/case/CaseCharge");
 			public const string Select2 = "~/bundles/select2";
 			public const string CaseConnectToParent = "~/bundles/case/caseconnecttoparent";
 		}

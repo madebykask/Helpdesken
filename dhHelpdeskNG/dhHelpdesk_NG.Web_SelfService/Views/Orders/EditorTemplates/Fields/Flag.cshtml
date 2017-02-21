@@ -1,0 +1,32 @@
+﻿@model DH.Helpdesk.SelfService.Models.Orders.FieldModels.ConfigurableFieldModel<bool>
+@if (!Model.Show)
+{
+    return;
+}
+
+
+@{
+
+    var attributes = new Dictionary<string, object>(1);
+
+    if (ViewData.ContainsKey("Id"))
+    {
+        attributes.Add("Id", ViewData["Id"]);
+    }
+
+    attributes.Add("data-dh-is-required", Model.IsRequired);
+}
+
+<div class="row form-group">
+    <div class="col-md-3">
+        @Html.FieldCaption(Model)
+    </div>
+    <div class="col-md-6">
+        @Html.CheckBoxFor(m => m.Value, attributes)
+        @Html.HiddenFor(m => m.IsRequired)
+        @Html.ValidationMessageFor(m => m.Value)
+    </div>
+    <div class="col-md-3">
+        @Model.Help
+    </div>
+</div>

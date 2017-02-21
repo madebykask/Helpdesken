@@ -10,5 +10,10 @@
         {
             return query.First().Name;
         }
+
+        public static string MapToDescription(this IQueryable<OrderType> query)
+        {
+            return query.First().Description;
+        }
     }
 }

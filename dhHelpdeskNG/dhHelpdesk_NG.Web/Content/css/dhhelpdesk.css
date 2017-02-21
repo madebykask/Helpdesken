@@ -3953,3 +3953,7 @@ label.checkbox-label-inline {
 .table td.valign-middle {
     vertical-align: middle
 }
+
+.cursor-default {
+    cursor: default;
+}

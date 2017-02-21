@@ -151,15 +151,24 @@
                                 <td class="span3">
                                     @Translation.Get("Loggpost", Enums.TranslationSource.TextTranslation)
                                 </td>
-                            </tr>                              
-                            <tr style="height:40px">
+                            </tr>
+                            <tr style="height: 40px">
                                 <td></td>
                                 <td>
                                     <input type="checkbox" name="customer.UseInternalLogNoteOnExternalPage" @(Model.Customer.UseInternalLogNoteOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
-                                    <input type="hidden" name="customer.UseInternalLogNoteOnExternalPage" value="0" />
+                                    <input type="hidden" name="customer.UseInternalLogNoteOnExternalPage" value="0"/>
                                     &nbsp; &nbsp; @Translation.Get("Intern loggpost i ärende", Enums.TranslationSource.TextTranslation)
                                 </td>
-                            </tr>                              
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Translation.GetCoreTextTranslation("Möjligt att aktivera ärende inom")
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.CaseComplaintDays, new { style = "width: 40px;" })&nbsp;
+                                    @Translation.GetCoreTextTranslation("dagar")
+                                </td>
+                            </tr>
                         </table>
                     </div>
                 </div>

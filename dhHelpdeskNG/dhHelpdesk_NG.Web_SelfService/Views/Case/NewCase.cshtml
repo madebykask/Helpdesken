@@ -92,8 +92,7 @@
                     @Html.HiddenFor(model => model.CaseMailSetting.HelpdeskMailFromAdress)
                     @Html.HiddenFor(model => model.CaseMailSetting.AbsoluterUrl)
                     @Html.HiddenFor(model => model.CaseMailSetting.DontConnectUserToWorkingGroup)
-                    @Html.HiddenFor(l => Model.NewCase.RegLanguage_Id)
-
+                    @Html.HiddenFor(l => Model.NewCase.RegLanguage_Id)                    
                     @Html.HiddenFor(k => Model.CaseFileKey)
 
                     @Html.HiddenFor(model => model.DepartmentFilterFormat, new { data_field = "departmentFilterFormat" })
@@ -383,8 +382,10 @@
                             </div>
                         </div>
                     }
-                    <!-- Computer Information Fields -->
 
+                    
+
+                    <!-- Computer Information Fields -->
                     if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.CaseInfo))
                     {
                         <h4>@Translation.Get("Case Information", Enums.TranslationSource.TextTranslation) </h4>
@@ -713,6 +714,31 @@
                                         </div>
                                     }
 
+                                    @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()))
+                                    {
+                                        <div class="form-group row @GlobalEnums.TranslationCaseFields.Priority_Id.ToString()">
+                                            <label class="col-md-3">
+                                                @Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
+                                                @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Priority_Id.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
+                                                {
+                                                    <span class="mandatorystar">*</span>
+                                                }
+                                            </label>
+                                            <div class="col-md-9">
+                                                <select id="NewCase_Priority_Id" name="NewCase.Priority_Id" class="hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.Priority_Id.ToString()">
+                                                    <option value="">&nbsp;</option>
+                                                    @if (Model.Priorities != null)
+                                                    {
+                                                        foreach (var e in Model.Priorities.Where(c => c.IsActive == 1))
+                                                        {
+                                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.NewCase.Priority_Id.ToString())>@e.Name</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                    }
+
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString()))
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString()">
@@ -863,21 +889,27 @@
                                         </div>
                                     }
                                     <div class="form-group row">
-                                        <label class="col-md-3"></label>
+                                        <label class="col-md-3"> </label>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     }
-                    <!-- Case Info Fields -->
-
                 }
             </div>
 
         </div>
     </div>
 </div>
-
+<div class="jumbotron greybar">
+    <div class="container-fluid">
+        <ul class="secnav">
+            <li>
+                <input type="button" value='@Translation.Get("Save and Send", Enums.TranslationSource.TextTranslation)' onclick="SaveNewCase(); return false;" class="btn btn-default" />
+            </li>
+        </ul>
+    </div>
+</div>
 <script type="text/javascript">
 
     var $mainForm = $("#newCaseForm");

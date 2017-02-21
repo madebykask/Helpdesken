@@ -28,7 +28,8 @@
                 ItemOverview[] accountTypes3,
                 ItemOverview[] accountTypes4,
                 ItemOverview[] accountTypes5,
-                ItemOverview[] programs)
+                ItemOverview[] programs,
+                string orderTypeDecription)
         {
             OrderTypeName = orderTypeName;
             AdministratorsWithEmails = administratorsWithEmails;
@@ -50,9 +51,12 @@
             AccountTypes4 = accountTypes4;
             AccountTypes5 = accountTypes5;
             Programs = programs;
+            OrderTypeDescription = orderTypeDecription;
         }
 
         public string OrderTypeName { get; private set; }
+
+        public string OrderTypeDescription { get; private set; }
 
         [NotNull]
         public OrderStatusItem[] Statuses { get; private set; }

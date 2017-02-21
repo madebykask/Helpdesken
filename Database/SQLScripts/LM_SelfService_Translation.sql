@@ -626,7 +626,22 @@ GO
 If not exists (select * from tblTextTranslation where text_id = 1777 and Language_Id = 1)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1777, 1, '3. Spara för att lägga till på ärendet')
 GO
+
+If not exists (select * from tbltext where id = 1779)
+	insert into tbltext (id, TextString, TextType) VALUES (1779, 'Comment is required!', 300)
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1779 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1779, 1, 'Måste ange kommentar!')
+GO
 	
+If not exists (select * from tbltext where id = 1780)
+	insert into tbltext (id, TextString, TextType) VALUES (1780, 'Re-open', 300)
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1780 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1780, 1, 'Aktivera')
+GO
 
 
 

@@ -112,7 +112,7 @@
             }
 
             int[] selectedStatuses;
-            var data = _ordersService.GetOrdersFilterData(_workContext.Customer.CustomerId, out selectedStatuses);
+            var data = _ordersService.GetOrdersFilterData(_workContext.Customer.CustomerId, _workContext.User.UserId, out selectedStatuses);
 
             var filledFilters = new OrdersFilterModel(filters.OrderTypeId, filters.AdministratiorIds, filters.StartDate, filters.EndDate, selectedStatuses, filters.Text, filters.RecordsOnPage, filters.SortField);
 
@@ -139,9 +139,10 @@
                                     filters.StatusIds,
                                     filters.Text,
                                     filters.RecordsOnPage,
-                                    filters.SortField);
+                                    filters.SortField,
+                                    null);
 
-            var response = _ordersService.Search(parameters);
+            var response = _ordersService.Search(parameters, _workContext.User.UserId);
             var ordersModel = _ordersModelFactory.Create(response, filters.SortField, filters.OrderTypeId == null);
 
 
@@ -185,7 +186,7 @@
                 orderTypeForCteateOrderId = orderType.Id;
             }
 
-            var data = _ordersService.GetNewOrderEditData(_workContext.Customer.CustomerId, orderTypeForCteateOrderId, lowestchildordertypeid);
+            var data = _ordersService.GetNewOrderEditData(_workContext.Customer.CustomerId, orderTypeForCteateOrderId, lowestchildordertypeid, false);
             var temporaryId = _temporaryIdProvider.ProvideTemporaryId();
 
             var model = _newOrderModelFactory.Create(
@@ -225,7 +226,7 @@
                                                          RequestExtension.GetAbsoluteUrl(),
                                                          cs.DontConnectUserToWorkingGroup
                                                        );
-            var id = _ordersService.AddOrUpdate(request, SessionFacade.CurrentUser.UserId, caseMailSetting, SessionFacade.CurrentLanguageId);
+            var id = _ordersService.AddOrUpdate(request, SessionFacade.CurrentUser.UserId, caseMailSetting, SessionFacade.CurrentLanguageId, false);
 
             foreach (var newFile in model.NewFiles)
             {
@@ -244,7 +245,7 @@
         {
             _filesStateStore.ClearObjectDeletedItems(id, OrderDeletedItem.Logs);
 
-            var response = _ordersService.FindOrder(id, _workContext.Customer.CustomerId);
+            var response = _ordersService.FindOrder(id, _workContext.Customer.CustomerId, false);
             if (response == null)
             {
                 throw new HttpException((int)HttpStatusCode.NotFound, null);
@@ -300,7 +301,7 @@
                                                         cs.DontConnectUserToWorkingGroup
                                                     );
 
-            _ordersService.AddOrUpdate(request, SessionFacade.CurrentUser.UserId, caseMailSetting, SessionFacade.CurrentLanguageId);
+            _ordersService.AddOrUpdate(request, SessionFacade.CurrentUser.UserId, caseMailSetting, SessionFacade.CurrentLanguageId, false);
 
             foreach (var deletedFile in model.DeletedFiles)
             {
@@ -404,7 +405,7 @@
             var deletedLogIds = _filesStateStore.GetDeletedItemIds(orderId, OrderDeletedItem.Logs);
             var logs = _ordersService.FindLogsExcludeSpecified(orderId, deletedLogIds);
 
-            var response = _ordersService.FindOrder(orderId, _workContext.Customer.CustomerId);
+            var response = _ordersService.FindOrder(orderId, _workContext.Customer.CustomerId, false);
 
             var model = _logsModelFactory.Create(orderId, subtopic, logs, response.EditOptions);
 

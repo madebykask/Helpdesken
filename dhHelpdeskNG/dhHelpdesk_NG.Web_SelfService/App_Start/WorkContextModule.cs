@@ -10,8 +10,8 @@
     {
         public override void Load()
         {
-            this.Bind<IWorkContext>().To<WorkContext>().InRequestScope();
-            this.Bind<IUserContext>().To<UserContext>().InRequestScope();
+            Bind<IWorkContext>().To<WorkContext>().InRequestScope();
+            Bind<IUserContext>().To<UserContext>().InRequestScope();
         }
     }
 }

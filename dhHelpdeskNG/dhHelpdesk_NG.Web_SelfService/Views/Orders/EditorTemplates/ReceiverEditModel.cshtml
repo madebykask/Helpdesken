@@ -1,0 +1,42 @@
+﻿
+@model DH.Helpdesk.SelfService.Models.Orders.OrderEdit.ReceiverEditModel
+
+<h4>@Model.Header</h4>
+<div class="container">
+    <div class="row form-horizontal">
+        <div class="col-md-12 dh-col ">
+            @Html.EditorFor(m => m.ReceiverId, "Fields/Text",
+                new
+                {
+                    inputAttributes = new Dictionary<string, object>
+                {
+                    { "id", "order_ReceiverId" },
+                    { "maxlength", "40" },
+                    { "autocomplete", "Off" },
+                    { "data-field", "userId" },
+                    { "required", false }
+                }
+                })
+            @*@if (Model.ReceiverId.Show)
+                {
+                    <tr>
+                        <td class="span3">
+                            @Html.FieldCaption(Model.ReceiverId)
+                        </td>
+                        <td class="span6">
+                            @Html.TextBoxFor(model => model.ReceiverId.Value, new {maxlength = "40", autocomplete = "Off", data_field = "userId"})
+                        </td>
+                        <td class="span3">
+                            @Model.ReceiverId.Help
+                        </td>
+                    </tr>
+                }*@
+            @*@Html.EditorFor(m => m.ReceiverId, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_ReceiverId" } }}) *@
+            @Html.EditorFor(m => m.ReceiverName, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_ReceiverName" } } })
+            @Html.EditorFor(m => m.ReceiverEmail, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_ReceiverEmail" } } })
+            @Html.EditorFor(m => m.ReceiverPhone, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_ReceiverPhone" } } })
+            @Html.EditorFor(m => m.ReceiverLocation, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_ReceiverLocation" } } })
+            @Html.EditorFor(m => m.MarkOfGoods, "Fields/Text")
+        </div>
+    </div>
+</div>

@@ -1,0 +1,28 @@
+﻿@model DH.Helpdesk.SelfService.Models.Orders.FieldModels.ConfigurableFieldModel<List<DH.Helpdesk.SelfService.Models.CheckBoxListItem>>
+
+@if (!Model.Show)
+{
+    return;
+}
+
+<div class="row form-group">
+    <div class="col-md-3">
+        @Html.FieldCaption(Model)
+    </div>
+    <div class="col-md-6">
+        <table>
+            @for (var i = 0; i < Model.Value.Count; i++)
+            {
+                <tr>
+                    <td>
+                        @Html.EditorFor(m => m.Value[i], "Fields/FlagListItem")
+                    </td>
+                </tr>
+            }
+        </table>
+        @Html.HiddenFor(m => m.IsRequired)
+    </div>
+    <div class="col-md-3">
+        @Model.Help
+    </div>
+</div>
