@@ -10,8 +10,7 @@
   <!ENTITY data_nationality SYSTEM "Data/Data_Nationality.xml">
 ]>
 
-<!-- Dev/Prod/Test -->
-<form id="55" guid="2BEC7193-FE4E-4314-B8CE-4CF5C619975B" customerId="29">
+<form guid="2BEC7193-FE4E-4314-B8CE-4CF5C619975B" dataSource="2">
   &languages;
   &regexs;
   &state;

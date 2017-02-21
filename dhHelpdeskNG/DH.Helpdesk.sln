@@ -24,8 +24,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CommonAssembly", "CommonAss
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DH.Helpdesk.SelfService", "dhHelpdesk_NG.Web_SelfService\DH.Helpdesk.SelfService.csproj", "{9DBE7D20-DEE8-427C-9A68-FC338B1108FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DH.Helpdesk.EForm.Core", "dhHelpdesk_NG.E_Form\Core\DH.Helpdesk.EForm.Core.csproj", "{E2080F1D-1A86-4846-9CEA-620F99C5678D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DH.Helpdesk.EForm.Model", "dhHelpdesk_NG.E_Form\Model\DH.Helpdesk.EForm.Model.csproj", "{4826D35D-823C-4E12-9905-771261721661}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DH.Helpdesk.EForm.Service", "dhHelpdesk_NG.E_Form\Service\DH.Helpdesk.EForm.Service.csproj", "{C5500586-9BF2-4381-9E26-BDE146879E1E}"
@@ -125,18 +123,6 @@ Global
 		{9DBE7D20-DEE8-427C-9A68-FC338B1108FC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{9DBE7D20-DEE8-427C-9A68-FC338B1108FC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{9DBE7D20-DEE8-427C-9A68-FC338B1108FC}.Release|x86.ActiveCfg = Release|Any CPU
-		{E2080F1D-1A86-4846-9CEA-620F99C5678D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E2080F1D-1A86-4846-9CEA-620F99C5678D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E2080F1D-1A86-4846-9CEA-620F99C5678D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{E2080F1D-1A86-4846-9CEA-620F99C5678D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{E2080F1D-1A86-4846-9CEA-620F99C5678D}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{E2080F1D-1A86-4846-9CEA-620F99C5678D}.Debug|x86.Build.0 = Debug|Any CPU
-		{E2080F1D-1A86-4846-9CEA-620F99C5678D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E2080F1D-1A86-4846-9CEA-620F99C5678D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E2080F1D-1A86-4846-9CEA-620F99C5678D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{E2080F1D-1A86-4846-9CEA-620F99C5678D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{E2080F1D-1A86-4846-9CEA-620F99C5678D}.Release|x86.ActiveCfg = Release|Any CPU
-		{E2080F1D-1A86-4846-9CEA-620F99C5678D}.Release|x86.Build.0 = Release|Any CPU
 		{4826D35D-823C-4E12-9905-771261721661}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4826D35D-823C-4E12-9905-771261721661}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4826D35D-823C-4E12-9905-771261721661}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
