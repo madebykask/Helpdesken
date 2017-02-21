@@ -1640,30 +1640,47 @@ namespace DH.Helpdesk.Services.Services
                         string wgEmails = string.Empty;
                         if (!string.IsNullOrWhiteSpace(newCase.Workinggroup.EMail))
                             wgEmails = newCase.Workinggroup.EMail;
-
-                        if (newCase.Workinggroup.AllocateCaseMail == 1 && !string.IsNullOrWhiteSpace(newCase.Workinggroup.EMail))
+                        else
                         {
-                            var el = new EmailLog(
-                                caseHistoryId,
-                                mailTemplateId,
-                                wgEmails,
-                                _emailService.GetMailMessageId(helpdeskMailFromAdress));
-                            
-                            fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 6, userTimeZone);
+                            if (newCase.Workinggroup.UserWorkingGroups != null)
+                                foreach (var ur in newCase.Workinggroup.UserWorkingGroups)                         
+                                {
+                                    if (ur.User != null)
+                                        if (ur.User.IsActive == 1 && ur.User.AllocateCaseMail == 1 && _emailService.IsValidEmail(ur.User.Email))
+                                        {
+                                            wgEmails = wgEmails + ur.User.Email + ";";
+                                        }
+                                }
+                        }
 
-                            string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
-                            
-                            var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
-                            var mailResponse = EmailResponse.GetEmptyEmailResponse();
-                            var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
-                            var e_res = _emailService.SendEmail(el, helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, mailSetting, el.MessageId, false, files, siteSelfService, siteHelpdesk);
+                        if (newCase.Workinggroup.AllocateCaseMail == 1 && !string.IsNullOrWhiteSpace(wgEmails))
+                        {
+                            var to = wgEmails.Split(';', ',').ToList();
+                           
+                            foreach (var t in to)
+                            {
+                                var curMail = t.Trim();
+                                if (!string.IsNullOrWhiteSpace(curMail) && _emailService.IsValidEmail(curMail))
+                                {
+                                    var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(helpdeskMailFromAdress));
 
-                            el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
-                            var now = DateTime.Now;
-                            el.CreatedDate = now;
-                            el.ChangedDate = now;
-                            _emailLogRepository.Add(el);
-                            _emailLogRepository.Commit();
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 6, userTimeZone);
+
+                                    string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
+
+                                    var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
+                                    var mailResponse = EmailResponse.GetEmptyEmailResponse();
+                                    var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
+                                    var e_res = _emailService.SendEmail(el, helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, mailSetting, el.MessageId, false, files, siteSelfService, siteHelpdesk);
+
+                                    el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                                    var now = DateTime.Now;
+                                    el.CreatedDate = now;
+                                    el.ChangedDate = now;
+                                    _emailLogRepository.Add(el);
+                                    _emailLogRepository.Commit();
+                                }
+                            } 
                         }
                     }
                 }
