@@ -36,6 +36,10 @@
 {
     @using (Html.BeginForm("New", "Orders", FormMethod.Post, new { id = "edit_form" }))
     {
+        if (!string.IsNullOrEmpty(Model.OrderTypeDescription))
+        {
+            <label class="alert alert-info cursor-default order-description">@Model.OrderTypeDescription</label>
+        }
         @Html.EditorFor(m => m)
     }
 }

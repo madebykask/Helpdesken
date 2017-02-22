@@ -42,7 +42,8 @@ namespace DH.Helpdesk.SelfService.Infrastructure.BusinessModelFactories.Orders.C
                 true)
             {
                 CreateCase = createCaseFromOrder,
-                Statuses = data.EditOptions.Statuses
+                Statuses = data.EditOptions.Statuses,
+                OrderTypeDescription = data.EditOptions.OrderTypeDescription
             };
         }
 

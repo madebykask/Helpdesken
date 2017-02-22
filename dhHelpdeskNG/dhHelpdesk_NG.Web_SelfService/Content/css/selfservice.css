@@ -957,6 +957,11 @@ table.table-orders th span.glyphicon {
     width: 140px;
 }
 
+.order-description {
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
 /**************************** Validation **************************************************/
 
 .field-validation-error
