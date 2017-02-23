@@ -133,7 +133,10 @@
         {
             get
             {
-                return (bool)HttpContext.Current.Session[_IS_CASE_DATA_CHANGED];
+                if (HttpContext.Current.Session[_IS_CASE_DATA_CHANGED] != null)
+                    return (bool)HttpContext.Current.Session[_IS_CASE_DATA_CHANGED];
+                else
+                    return false;
             }
             set
             {

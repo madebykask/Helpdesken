@@ -1,6 +1,6 @@
-﻿@model DH.Helpdesk.EForm.FormLib.Models.FormModel
-@using DH.Helpdesk.EForm.FormLib;
-@using DH.Helpdesk.EForm.FormLib.Models;
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
 
 @{
     Layout = null;
@@ -35,8 +35,20 @@
             
             }
             
-           between<strong> @Model.Company.footerName</strong><br /> seated in Janki, 
-            Pl. Szwedzki 3; 05 – 090 Raszyn, represented by<br /> <strong>@Model.Company.EmployerName </strong><br />Hereinafter referred to as <strong>Employer</strong><br />
+           between<strong> @Model.Company.footerName</strong><br /> seated in 
+            @if(Model.Company.Searchkey == "OT")
+            {
+               <text>
+                  Warszawa, Al. Krakowska 61, 02-183 Warszawa,
+               </text>
+            }
+            else
+            {
+               <text>
+                  Janki, Pl. Szwedzki 3; 05 – 090 Raszyn,
+               </text>
+            }
+             represented by<br /><strong>@Model.Company.EmployerName </strong><br />Hereinafter referred to as <strong>Employer</strong><br />
         </p>
         <p style="text-align: center;font-family:Verdana; font-size:10px; line-height:16px;">
             and 

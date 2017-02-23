@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <options>
 <option value=""></option>
+<option value="#N/A">#N/A</option>
 <option value="Accounting Manager">Accounting Manager</option>
 <option value="Accounting Team Leader">Accounting Team Leader</option>
 <option value="Administration Manager">Administration Manager</option>
 <option value="Business Navigation &amp; Operations Manager">Business Navigation &amp; Operations Manager</option>
 <option value="Business Navigation Manager">Business Navigation Manager</option>
 <option value="Business Navigator">Business Navigator</option>
+<option value="Business Service Manager">Business Service Manager</option>
 <option value="Checkout Services Manager">Checkout Services Manager</option>
 <option value="Checkout Services Team Leader">Checkout Services Team Leader</option>
 <option value="Com &amp; In Manager">Com &amp; In Manager</option>
@@ -18,6 +20,8 @@
 <option value="Country Com&amp;In Manager">Country Com&amp;In Manager</option>
 <option value="Country Customer Support Centre Manager">Country Customer Support Centre Manager</option>
 <option value="Country External Communication Manager">Country External Communication Manager</option>
+<option value="Country HR Manager">Country HR Manager</option>
+<option value="Country IKEA Food Manager">Country IKEA Food Manager</option>
 <option value="Country Retail Manager">Country Retail Manager</option>
 <option value="Country Risk Manager">Country Risk Manager</option>
 <option value="Country Sales Manager">Country Sales Manager</option>

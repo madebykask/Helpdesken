@@ -1,6 +1,6 @@
-﻿@model DH.Helpdesk.EForm.FormLib.Models.FormModel
-@using DH.Helpdesk.EForm.FormLib;
-@using DH.Helpdesk.EForm.FormLib.Models;
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
 
 @*<div class="row-fluid">
     <ul class="inline alignrighttop marginbuttontop">
@@ -16,6 +16,6 @@
         {
             <li>@Model.Translate("Child case number") @Model.Contract.ChildCaseNumbers.FirstOrDefault()</li>
         }
-        <li>@DH.Helpdesk.EForm.FormLib.FormLibSessions.User.FullName</li>
+        <li>@ECT.FormLib.FormLibSessions.User.FullName</li>
     </ul>
 </div>*@

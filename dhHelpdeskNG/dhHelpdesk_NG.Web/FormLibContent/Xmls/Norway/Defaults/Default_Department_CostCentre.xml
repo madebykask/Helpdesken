@@ -17,8 +17,6 @@
 <show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>After Sales Service Forus</selected>
 <show>6120</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>After Sales Service Furuset</selected>
-<show>6121</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>After Sales Service Leangen</selected>
 <show>6130</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>After Sales Service Team 1 Åsane</selected>
@@ -72,8 +70,6 @@
 <selected>Business Navigator Slependen</selected>
 <show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Check Out Forus</selected>
-<show>6190</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Check Out Furuset</selected>
 <show>6190</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Check Out Leangen</selected>
 <show>6180</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
@@ -166,6 +162,8 @@
 <selected>Cookshop HFB 14 15 Forus</selected>
 <show>3540</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Cross Functional Team Furuset</selected>
+<show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>CSC Business Services IKEA Hjemme</selected>
 <show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Area Furuset</selected>
 <show>6130</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
@@ -299,7 +297,7 @@
 <show>4030</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Goods Flow Leangen</selected>
 <show>4000</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Goods Flow Team 1</selected>
+<selected>Goods flow Team 1</selected>
 <show>4030</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Goods Flow Team 1 Åsane</selected>
 <show>4040</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
@@ -620,7 +618,7 @@
 <selected>Pick-up Point Team 3</selected>
 <show>6206</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Pick-Up Point Tromsø</selected>
-<show>6152</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>6204</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>PR and Communications SO</selected>
 <show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Project Forus</selected>

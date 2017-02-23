@@ -121,6 +121,7 @@
   <option value="IKEA Food Team Leader">IKEA Food Team Leader</option>
   <option value="Info &amp; Smaland Team Leader">Info &amp; Smaland Team Leader</option>
   <option value="Information Security Manager">Information Security Manager</option>
+  <option value="Integrated Insights Leader">Integrated Insights Leader</option>
   <option value="Interior Design Co-worker">Interior Design Co-worker</option>
   <option value="Interior Design Leader">Interior Design Leader</option>  
   <option value="Interior Design Manager">Interior Design Manager</option>
@@ -151,6 +152,7 @@
   <option value="Operational Support Team Leader">Operational Support Team Leader</option>
   <option value="Operations Field Responsible">Operations Field Responsible</option>
   <option value="Operations Manager">Operations Manager</option>
+  <option value="Operations Planning Coordinator">Operations Planning Coordinator</option>
   <option value="Operations Support">Operations Support</option>
   <option value="Operations Support Manager">Operations Support Manager</option>
   <option value="P2P Leader">P2P Leader</option>
@@ -226,6 +228,7 @@
   <option value="Trainer">Trainer</option>
   <option value="Unit Manager">Unit Manager</option>
   <option value="Visual Merchandise/Activity Manager">Visual Merchandise/Activity Manager</option>
+  <option value="Visual Merchandising Leader">Visual Merchandising Leader</option>
   <option value="Visual Merchandising Manager">Visual Merchandising Manager</option>
   <option value="Visual Merchandising/Activity Co-worker">Visual Merchandising/Activity Co-worker</option>
   <option value="Visual Merchandising/Activity Manager">Visual Merchandising/Activity Manager</option>

@@ -88,11 +88,12 @@
 <option value="IF Team Leader">IF Team Leader</option>
 <option value="IKEA Business Manager">IKEA Business Manager</option>
 <option value="IKEA Business Specialist">IKEA Business Specialist</option>
-<option value="IKEA FOOD Co-worker">IKEA FOOD Co-worker</option>
+<option value="IKEA Food Co-worker">IKEA Food Co-worker</option>
 <option value="IKEA Food Manager">IKEA Food Manager</option>
 <option value="Information &amp; Communication Specialist">Information &amp; Communication Specialist</option>
 <option value="In-store Logistics Manager">In-store Logistics Manager</option>
 <option value="In-store Logistics Manager - Store">In-store Logistics Manager - Store</option>
+<option value="Integration: default posi">Integration: default posi</option>
 <option value="Interior Design Co-worker">Interior Design Co-worker</option>
 <option value="Interior Design Manager">Interior Design Manager</option>
 <option value="Interior Design Specialist">Interior Design Specialist</option>
@@ -148,6 +149,7 @@
 <option value="Retail Supply Chain Integration Manager">Retail Supply Chain Integration Manager</option>
 <option value="Risk Management Administrator">Risk Management Administrator</option>
 <option value="Risk Manager">Risk Manager</option>
+<option value="RTS Specialist">RTS Specialist</option>
 <option value="Safety &amp; Security Manager">Safety &amp; Security Manager</option>
 <option value="Sales &amp; Service Expeditor">Sales &amp; Service Expeditor</option>
 <option value="Sales &amp; Supply Support">Sales &amp; Supply Support</option>

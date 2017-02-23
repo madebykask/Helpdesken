@@ -178,6 +178,10 @@
     <show>HR Generalist</show>
   </dependent>
   <dependent>
+    <selected>Alexander Open</selected>
+    <show>Shopkeeper</show>
+  </dependent>
+  <dependent>
     <selected>Alexandra Anacleto</selected>
     <show>Services Team Leader</show>
   </dependent>
@@ -323,7 +327,7 @@
   </dependent>
   <dependent>
     <selected>Andrew Butler</selected>
-    <show>Warehouse Team Leader</show>
+    <show>Operations Planning Coordinator</show>
   </dependent>
   <dependent>
     <selected>Andrew Callaghan</selected>
@@ -616,6 +620,10 @@
   <dependent>
     <selected>Becky Haverty</selected>
     <show>Interior Design Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Ben Heywood</selected>
+    <show>Shopkeeper</show>
   </dependent>
   <dependent>
     <selected>Ben Rosser</selected>
@@ -1024,6 +1032,10 @@
   <dependent>
     <selected>Clare Burke</selected>
     <show>Shopkeeper</show>
+  </dependent>
+  <dependent>
+    <selected>Clare Davis</selected>
+    <show>Visual Merchandising Leader</show>
   </dependent>
   <dependent>
     <selected>Clare Priest</selected>
@@ -1618,6 +1630,10 @@
     <show>Shopkeeper</show>
   </dependent>
   <dependent>
+    <selected>Flemming Thygesen</selected>
+    <show>Integrated Insights Leader</show>
+  </dependent>
+  <dependent>
     <selected>Francesca Heatley</selected>
     <show>Shopkeeper</show>
   </dependent>
@@ -1631,7 +1647,7 @@
   </dependent>
   <dependent>
     <selected>Franklin Matijevic</selected>
-    <show>Goods Flow Team Manager</show>
+    <show>Shopkeeper</show>
   </dependent>
   <dependent>
     <selected>Fred Nason</selected>
@@ -2374,6 +2390,10 @@
     <show>HR Generalist</show>
   </dependent>
   <dependent>
+    <selected>Jennelyn Bigus</selected>
+    <show>Shopkeeper</show>
+  </dependent>
+  <dependent>
     <selected>Jennifer Edwards</selected>
     <show>Shopkeeper</show>
   </dependent>
@@ -2946,6 +2966,10 @@
     <show>Marketing Manager</show>
   </dependent>
   <dependent>
+    <selected>Krzysztof Lech</selected>
+    <show>Backpacker</show>
+  </dependent>
+  <dependent>
     <selected>Kuldeep Barot</selected>
     <show>Goods Flow Team Manager</show>
   </dependent>
@@ -3438,6 +3462,10 @@
     <show>Shopkeeper</show>
   </dependent>
   <dependent>
+    <selected>Mark Greenblatt</selected>
+    <show>Goods Flow Team Manager</show>
+  </dependent>
+  <dependent>
     <selected>Mark Kelly</selected>
     <show>Sales Manager</show>
   </dependent>
@@ -3782,6 +3810,10 @@
     <show>Commercial SFM &amp; Bistro Manager</show>
   </dependent>
   <dependent>
+    <selected>Monika Lipinska</selected>
+    <show>IKEA Food Team Leader</show>
+  </dependent>
+  <dependent>
     <selected>Myriam Ruffo</selected>
     <show>Deputy Sales Manager</show>
   </dependent>
@@ -3875,7 +3907,7 @@
   </dependent>
   <dependent>
     <selected>Nicholas Earle</selected>
-    <show>Retail Logistics Manager</show>
+    <show>Store Manager</show>
   </dependent>
   <dependent>
     <selected>Nicholas French</selected>
@@ -4112,6 +4144,10 @@
   <dependent>
     <selected>Pernille Hagild</selected>
     <show>HR Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Peter Lewis</selected>
+    <show>IKEA Food Manager</show>
   </dependent>
   <dependent>
     <selected>Peter McMeekin</selected>
@@ -4483,7 +4519,7 @@
   </dependent>
   <dependent>
     <selected>Sally Hall</selected>
-    <show>Commercial Activity Leader</show>
+    <show>Shopkeeper</show>
   </dependent>
   <dependent>
     <selected>Sally Kenny</selected>
@@ -5180,6 +5216,10 @@
   <dependent>
     <selected>Trevor Gale</selected>
     <show>Checkout Services Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Ursula Noronha</selected>
+    <show>Shopkeeper</show>
   </dependent>
   <dependent>
     <selected>Valentina Dazzini</selected>

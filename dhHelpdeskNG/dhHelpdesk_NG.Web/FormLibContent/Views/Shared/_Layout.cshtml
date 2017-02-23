@@ -1,4 +1,4 @@
-﻿@using DH.Helpdesk.EForm.FormLib
+﻿@using ECT.FormLib
 @{
     var area = (!string.IsNullOrEmpty(ViewContext.RouteData.DataTokens["area"].ToString()) ? ViewContext.RouteData.DataTokens["area"].ToString() : "");
     var controller = (!string.IsNullOrEmpty(ViewContext.RouteData.Values["controller"].ToString().ToLower()) ? ViewContext.RouteData.Values["controller"].ToString().ToLower() : "");
@@ -26,18 +26,18 @@
     @Scripts.Render("~/FormLibContent/assets/js/bundle")
     @RenderSection("CountrySpecificScript", required: false)
 </head>
-<body data-spy="scroll" data-target=".bs-docs-sidebar" data-twttr-rendered="true" data-lang="@DH.Helpdesk.EForm.FormLib.FormLibSessions.User.Language">
+<body data-spy="scroll" data-target=".bs-docs-sidebar" data-twttr-rendered="true" data-lang="@ECT.FormLib.FormLibSessions.User.Language">
     <div style="display: none;">
-        <span id="cancelRequest">@DH.Helpdesk.EForm.FormLib.FormLibI18N.Translate("Are you sure you want to cancel the request?", DH.Helpdesk.EForm.FormLib.FormLibSessions.User.Language)</span>
+        <span id="cancelRequest">@ECT.FormLib.FormLibI18N.Translate("Are you sure you want to cancel the request?", ECT.FormLib.FormLibSessions.User.Language)</span>
     </div>
     @RenderBody()
     @RenderSection("Validation", required: false)
     @RenderSection("Script", required: false)
     <div class="container containeralignright" style="margin-top:5px;">
-        <small>@DH.Helpdesk.EForm.FormLib.FormLibI18N.Translate("Version", DH.Helpdesk.EForm.FormLib.FormLibSessions.User.Language)&nbsp;@DH.Helpdesk.EForm.FormLib.FormLibUtils.AssemblyVersion()</small>
+        <small>@ECT.FormLib.FormLibI18N.Translate("Version", ECT.FormLib.FormLibSessions.User.Language)&nbsp;@ECT.FormLib.FormLibUtils.AssemblyVersion()</small>
     </div>
     <div id="spinnerDiv" style="position:fixed;top:50%;left:50%"></div> 
-    <input type="hidden" id="core_baseUrl" name="core_baseUrl" value="" />
+    <input type="hidden" id="core_baseUrl" name="core_baseUrl" value="@(!HttpContext.Current.Request.Url.Host.ToLower().Contains("localhost") ? "/ect" : "")" />
     <input type="hidden" id="core_area" name="core_area" value="@area" />
     <input type="hidden" id="core_controller" name="core_controller" value="@controller" />
     <input type="hidden" id="core_rooturl" name="core_rooturl" value="@Url.CurrentRoot()" />
@@ -77,13 +77,13 @@ Layout = "~/Views/Shared/_Layout.cshtml";
 <script src="~/FormLibContent/assets/js/norway.js"></script>
 <div id="lmEmbedded">
     <div style="display: none;">
-        <span id="cancelRequest">@DH.Helpdesk.EForm.FormLib.FormLibI18N.Translate("Are you sure you want to cancel the request?", DH.Helpdesk.EForm.FormLib.FormLibSessions.User.Language)</span>
+        <span id="cancelRequest">@ECT.FormLib.FormLibI18N.Translate("Are you sure you want to cancel the request?", ECT.FormLib.FormLibSessions.User.Language)</span>
     </div>
     @RenderBody()
     @RenderSection("Validation", required: false)
     @RenderSection("Script", required: false)
     <div class="container containeralignright">
-        <small>@DH.Helpdesk.EForm.FormLib.FormLibI18N.Translate("Version", DH.Helpdesk.EForm.FormLib.FormLibSessions.User.Language)&nbsp;@DH.Helpdesk.EForm.FormLib.FormLibUtils.AssemblyVersion()</small>
+        <small>@ECT.FormLib.FormLibI18N.Translate("Version", ECT.FormLib.FormLibSessions.User.Language)&nbsp;@ECT.FormLib.FormLibUtils.AssemblyVersion()</small>
     </div>
 </div>
 <div id="spinnerDiv" style="position:fixed;top:50%;left:50%"></div>

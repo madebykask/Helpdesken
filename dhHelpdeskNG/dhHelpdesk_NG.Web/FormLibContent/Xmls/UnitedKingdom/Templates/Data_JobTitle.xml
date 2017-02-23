@@ -434,6 +434,7 @@
   <option value="Solar Project Manager">Solar Project Manager</option>
   <option value="Web Manager">Web Manager</option>
   <option value="Customs Co-worker">Customs Co-worker</option>
+  <option value="DC Manager">DC Manager</option>
   <option value="DC Quality Co-worker">DC Quality Co-worker</option>
   <option value="DC Quality Team Leader">DC Quality Team Leader</option>
   <option value="DCG Operational Support Coordinator">DCG Operational Support Coordinator</option>
@@ -650,7 +651,7 @@
   <option value="Expansion Manager">Expansion Manager</option>
   <option value="Functional Expansion Manager">Functional Expansion Manager</option>
   <option value="Home Furnishing Consultant">Home Furnishing Consultant</option>
-  <option value="HR Business partner">HR Business partner</option>
+  <option value="HR Business partner">HR Business Partner</option>
   <option value="IKEA FAMILY Leader - Store">IKEA FAMILY Leader - Store</option>
   <option value="IKEA FAMILY Specialist - Communication">IKEA FAMILY Specialist - Communication</option>
   <option value="Implementation Coordinator">Implementation Coordinator</option>
@@ -659,6 +660,7 @@
   <option value="Kitchen Co-worker">Kitchen Co-worker</option>
   <option value="Learning Designer">Learning Designer</option>
   <option value="Marketing Specialist">Marketing Specialist</option>
+  <option value="Office Assistant">Office Assistant</option>
   <option value="Office Services Manager">Office Services Manager</option>
   <option value="Payroll Compliance Manager">Payroll Compliance Manager</option>
   <option value="Planner">Planner</option>

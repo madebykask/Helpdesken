@@ -79,21 +79,21 @@
       <HintPath>..\packages\DataAnnotationsExtensions.MVC.5.0.0.0\lib\net45\DataAnnotationsExtensions.ClientValidation.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DH.Helpdesk.EForm.Core, Version=1.5.13.58, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ECT.Core, Version=1.5.14.26, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>FormLibContent\Assemblies\DH.Helpdesk.EForm.Core.dll</HintPath>
+      <HintPath>FormLibContent\Assemblies\ECT.Core.dll</HintPath>
     </Reference>
-    <Reference Include="DH.Helpdesk.EForm.FormLib, Version=1.5.13.58, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ECT.FormLib, Version=1.5.14.26, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>FormLibContent\Assemblies\DH.Helpdesk.EForm.FormLib.dll</HintPath>
+      <HintPath>FormLibContent\Assemblies\ECT.FormLib.dll</HintPath>
     </Reference>
-    <Reference Include="DH.Helpdesk.EForm.Model, Version=1.5.13.58, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ECT.Model, Version=1.5.14.26, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>FormLibContent\Assemblies\DH.Helpdesk.EForm.Model.dll</HintPath>
+      <HintPath>FormLibContent\Assemblies\ECT.Model.dll</HintPath>
     </Reference>
-    <Reference Include="DH.Helpdesk.EForm.Service, Version=1.5.13.58, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ECT.Service, Version=1.5.14.26, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>FormLibContent\Assemblies\DH.Helpdesk.EForm.Service.dll</HintPath>
+      <HintPath>FormLibContent\Assemblies\ECT.Service.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
@@ -1866,10 +1866,10 @@
     <Content Include="favicon.ico" />
     <Content Include="FormLibContent\Areas\Netherlands\Views\Hiring\Predifened_CostCentre.xml" />
     <Content Include="FormLibContent\Areas\SouthKorea\Shared\SouthKoreaJS.js" />
-    <Content Include="FormLibContent\Assemblies\DH.Helpdesk.EForm.Core.dll" />
-    <Content Include="FormLibContent\Assemblies\DH.Helpdesk.EForm.FormLib.dll" />
-    <Content Include="FormLibContent\Assemblies\DH.Helpdesk.EForm.Model.dll" />
-    <Content Include="FormLibContent\Assemblies\DH.Helpdesk.EForm.Service.dll" />
+    <Content Include="FormLibContent\Assemblies\ECT.Core.dll" />
+    <Content Include="FormLibContent\Assemblies\ECT.FormLib.dll" />
+    <Content Include="FormLibContent\Assemblies\ECT.Model.dll" />
+    <Content Include="FormLibContent\Assemblies\ECT.Service.dll" />
     <Content Include="FormLibContent\Assemblies\itextsharp.dll" />
     <Content Include="FormLibContent\Assets\css\bootstrap-responsive.css" />
     <Content Include="FormLibContent\Assets\css\bootstrap.css" />

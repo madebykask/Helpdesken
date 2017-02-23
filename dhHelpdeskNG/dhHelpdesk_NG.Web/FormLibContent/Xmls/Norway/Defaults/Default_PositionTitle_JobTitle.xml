@@ -173,7 +173,7 @@
 <show>IKEA Business Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IKEA Business Specialist</selected>
 <show>IKEA Business Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>IKEA FOOD Co-worker</selected>
+<selected>IKEA Food Co-worker</selected>
 <show>IKEA Food Co-worker</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IKEA Food Manager</selected>
 <show>IKEA Food Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
@@ -183,6 +183,8 @@
 <show>Country In-Store Logistics Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>In-store Logistics Manager - Store</selected>
 <show>In-store Logistics Manager - Store</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Integration: default posi</selected>
+<show>Sales Co-worker</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Interior Design Co-worker</selected>
 <show>Interior Design Co-worker</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Interior Design Manager</selected>
@@ -293,6 +295,8 @@
 <show>Risk Management Administrator</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Risk Manager</selected>
 <show>Country Risk Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>RTS Specialist</selected>
+<show>Workforce Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Safety &amp; Security Manager</selected>
 <show>Safety &amp; Security Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sales &amp; Service Expeditor</selected>
@@ -354,7 +358,7 @@
 <selected>Talent Manager</selected>
 <show>Talent Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Team Leader</selected>
-<show>Team Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Call Center Co-worker</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Translator</selected>
 <show>Translator</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>User experience Manager</selected>
