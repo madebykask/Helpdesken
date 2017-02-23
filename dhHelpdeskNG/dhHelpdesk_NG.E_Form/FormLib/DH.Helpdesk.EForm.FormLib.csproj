@@ -1825,11 +1825,7 @@
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(ProjectDir)\FormLibContent" "$(SolutionDir)\dhHelpdesk_NG.Web\FormLibContent\" /s /i /y
-xcopy "$(ProjectDir)\bin\Debug\DH.Helpdesk.EForm.Core.dll" "$(SolutionDir)\dhHelpdesk_NG.Web\FormLibContent\Assemblies\" /s /i /y
-xcopy "$(ProjectDir)\bin\Debug\DH.Helpdesk.EForm.FormLib.dll" "$(SolutionDir)\dhHelpdesk_NG.Web\FormLibContent\Assemblies\" /s /i /y
-xcopy "$(ProjectDir)\bin\Debug\DH.Helpdesk.EForm.Model.dll" "$(SolutionDir)\dhHelpdesk_NG.Web\FormLibContent\Assemblies\" /s /i /y
-xcopy "$(ProjectDir)\bin\Debug\DH.Helpdesk.EForm.Service.dll" "$(SolutionDir)\dhHelpdesk_NG.Web\FormLibContent\Assemblies\" /s /i /y</PostBuildEvent>
+    <PostBuildEvent>xcopy "$(ProjectDir)\FormLibContent" "$(SolutionDir)\dhHelpdesk_NG.E_Form\FormLibTest\FormLibContent\" /s /i /y</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
