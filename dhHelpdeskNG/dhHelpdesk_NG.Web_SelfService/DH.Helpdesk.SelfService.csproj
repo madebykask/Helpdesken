@@ -29,7 +29,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
-    <IISExpressSSLPort>44300</IISExpressSSLPort>
+    <IISExpressSSLPort>44340</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
     <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
@@ -127,7 +127,9 @@
       <HintPath>..\packages\System.IdentityModel.Tokens.ValidatingIssuerNameRegistry.4.5.1\lib\net45\System.IdentityModel.Tokens.ValidatingIssuerNameRegistry.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http" />
-    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Net.Http.Formatting">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -277,6 +279,7 @@
     <Compile Include="Infrastructure\Extensions\FileExtensions.cs" />
     <Compile Include="Infrastructure\Extensions\GeneralExtensions.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtension.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\CaseFieldExtension.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\Content\DropDownContent.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\Content\DropDownItem.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\Content\DropDownWithSubmenusContent.cs" />
