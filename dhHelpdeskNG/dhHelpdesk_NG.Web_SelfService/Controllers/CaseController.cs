@@ -1262,6 +1262,8 @@
             //Field Settings
             var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
 
+            var caseFieldSettingsWithLanguages = _caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customerId, SessionFacade.CurrentLanguageId);
+
             var cs = _settingService.GetCustomerSetting(customerId);
             
             var model = new NewCaseModel(
@@ -1288,7 +1290,8 @@
                         departmentFilterFormat = cs.DepartmentFilterFormat,
                         departmentsURL = Url.Content("~/Case/GetDepartmentsByRegion"),
                         orgUnitURL = Url.Content("~/Case/GetOrgUnitsByDepartments")
-                    });
+                    },
+                caseFieldSettingsWithLanguages);
 
             model.CaseTypeParantPath = "--";
             model.ProductAreaParantPath = "--";

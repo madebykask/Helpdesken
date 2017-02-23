@@ -38,7 +38,8 @@
             FilesModel caseFiles, 
             IList<CaseFieldSetting> caseFieldSettings,
             IList<Priority> priorities,
-            JsApplicationOptions jsApplicationOptions)
+            JsApplicationOptions jsApplicationOptions,
+            IEnumerable<CaseFieldSettingsWithLanguage> caseFieldSettingWithLangauges)
         {
             NewCase = newCase;
             Regions = regions;
@@ -59,6 +60,7 @@
             JsApplicationOptions = jsApplicationOptions;
             CaseTypeRelatedFields = new List<KeyValuePair<int, string>>();
             Priorities = priorities;
+            CaseFieldSettingWithLangauges = caseFieldSettingWithLangauges;
         }
 
 
@@ -105,6 +107,8 @@
         public CaseMailSetting CaseMailSetting { get; set; }
 
         public IList<CaseFieldSetting> CaseFieldSettings { get; set; }
+
+        public IEnumerable<CaseFieldSettingsWithLanguage> CaseFieldSettingWithLangauges { get; set; }
 
         public JsApplicationOptions JsApplicationOptions { get; set; }
 
