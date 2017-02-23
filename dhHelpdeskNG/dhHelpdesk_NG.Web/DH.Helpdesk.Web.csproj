@@ -262,6 +262,7 @@
     <Compile Include="Areas\Orders\Infrastructure\Enum\OrderSettingWebType.cs" />
     <Compile Include="Areas\Orders\Models\OrderFieldSettings\FieldSettings\AccountInfoFieldSettingsModel.cs" />
     <Compile Include="Areas\Orders\Models\OrderFieldSettings\FieldSettings\ContactFieldSettingsModel.cs" />
+    <Compile Include="Areas\Orders\Models\OrderFieldSettings\FieldSettings\MultiTextFieldSettingsModel.cs" />
     <Compile Include="Areas\Orders\Models\OrderFieldSettings\FieldSettings\OrderFieldTypeSettingsModel.cs" />
     <Compile Include="Areas\Orders\Models\OrderFieldSettings\FieldSettings\OrderFieldTypeValueSettingsModel.cs" />
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\ContactEditModel.cs" />
@@ -274,6 +275,7 @@
     <Content Include="Areas\Orders\Views\OrderFieldSettings\Partials\OrderFieldWebTypes.cshtml" />
     <Content Include="Areas\Invoices\Scripts\Pages\invoiceFiles.js" />
     <Content Include="Areas\Invoices\Views\Overview\Files.cshtml" />
+    <Content Include="Areas\Orders\Views\OrderFieldSettings\EditorTemplates\MultiTextFieldSettingsModel.cshtml" />
     <None Include="Areas\Orders\Views\Orders\EditorTemplates\Fields\FlagsList.cshtml" />
     <None Include="Areas\Orders\Views\Orders\EditorTemplates\Fields\FlagListItem.cshtml" />
     <Compile Include="Controllers\FeedbackController.cs" />

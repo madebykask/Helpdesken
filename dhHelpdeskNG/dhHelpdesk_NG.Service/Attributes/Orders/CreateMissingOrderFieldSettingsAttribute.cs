@@ -264,8 +264,9 @@
                            ShowExternal = 0,
                            ShowInList = visibleByDefault,
                            DefaultValue = string.Empty,
-                           FieldHelp = string.Empty
-                       };
+                           FieldHelp = string.Empty,
+                           MultiValue = false
+                        };
         }
     }
 }

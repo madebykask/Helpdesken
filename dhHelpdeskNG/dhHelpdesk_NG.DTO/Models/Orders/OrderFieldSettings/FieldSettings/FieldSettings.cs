@@ -44,7 +44,7 @@
                            Required = required,
                            EmailIdentifier = emailIdentifier,
                            FieldHelp = help
-                       };
+            };
         }
 
         public static FieldSettings CreateForEdit(

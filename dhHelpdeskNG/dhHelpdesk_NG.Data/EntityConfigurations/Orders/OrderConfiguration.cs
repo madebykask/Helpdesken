@@ -40,7 +40,7 @@
 
             this.Property(x => x.EmploymentType_Id).IsOptional();
             this.Property(o => o.OrderDate).IsOptional();
-            this.Property(o => o.UserId).IsOptional().HasMaxLength(20);
+            this.Property(o => o.UserId).IsOptional().HasMaxLength(200);
             this.Property(o => o.UserFirstName).IsOptional().HasMaxLength(20);
             this.Property(o => o.UserLastName).IsOptional().HasMaxLength(50);
             this.Property(x => x.UserPhone).IsOptional().HasMaxLength(20);

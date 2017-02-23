@@ -21,8 +21,8 @@
                                                      Required = f.Required,
                                                      EmailIdentifier = f.EMailIdentifier,
                                                      DefaultValue = f.DefaultValue,
-                                                     FieldHelp = f.FieldHelp
-                                                 }).ToList();
+                                                     FieldHelp = f.FieldHelp,
+                                                     MultiValue = f.MultiValue}).ToList();
 
             var fieldSettings = new NamedObjectCollection<OrdersEditSettingsMapData>(entities);
 

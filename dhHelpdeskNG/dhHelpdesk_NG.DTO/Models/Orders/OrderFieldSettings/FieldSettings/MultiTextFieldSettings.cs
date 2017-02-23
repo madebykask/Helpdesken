@@ -1,27 +1,30 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Orders.OrderFieldSettings.FieldSettings
-{
-    using DH.Helpdesk.Common.ValidationAttributes;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using DH.Helpdesk.Common.ValidationAttributes;
 
-    public class TextFieldSettings : FieldSettings
+namespace DH.Helpdesk.BusinessData.Models.Orders.OrderFieldSettings.FieldSettings
+{
+    public class MultiTextFieldSettings : TextFieldSettings
     {
-        protected TextFieldSettings()
-        {            
+
+        private MultiTextFieldSettings()
+        {
         }
 
-        [NotNull]
-        public string DefaultValue { get; protected set; }
-
-        public static TextFieldSettings CreateUpdated(
-                        bool show,
-                        bool showInList,
-                        bool showExternal,
-                        string label,
-                        bool required,
-                        string emailIdentifier,
-                        string defaultValue,
-                        string help)
+        public static MultiTextFieldSettings CreateUpdated(
+                 bool show,
+                 bool showInList,
+                 bool showExternal,
+                 string label,
+                 bool required,
+                 string emailIdentifier,
+                 string defaultValue,
+                 string help,
+                 bool multiValue)
         {
-            return new TextFieldSettings
+            return new MultiTextFieldSettings
             {
                 Show = show,
                 ShowInList = showInList,
@@ -31,10 +34,11 @@
                 EmailIdentifier = emailIdentifier,
                 DefaultValue = !string.IsNullOrEmpty(defaultValue) ? defaultValue : string.Empty,
                 FieldHelp = !string.IsNullOrEmpty(help) ? help : string.Empty,
+                MultiValue = multiValue
             };
         }
 
-        public static TextFieldSettings CreateForEdit(
+        public static MultiTextFieldSettings CreateForEdit(
                 string orderField,
                 bool show,
                 bool showInList,
@@ -43,9 +47,10 @@
                 bool required,
                 string emailIdentifier,
                 string defaultValue,
-                string help)
+                string help,
+                bool multiValue)
         {
-            return new TextFieldSettings
+            return new MultiTextFieldSettings
             {
                 OrderField = orderField,
                 Show = show,
@@ -55,8 +60,12 @@
                 Required = required,
                 EmailIdentifier = emailIdentifier,
                 DefaultValue = defaultValue,
-                FieldHelp = help
+                FieldHelp = help,
+                MultiValue = multiValue
             };
         }
+
+        [NotNull]
+        public bool MultiValue { get; private set; }
     }
 }

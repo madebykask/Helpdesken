@@ -44,5 +44,6 @@
 
         [LocalizedStringLength(200)]
         public string Help { get; set; }
+
     }
 }

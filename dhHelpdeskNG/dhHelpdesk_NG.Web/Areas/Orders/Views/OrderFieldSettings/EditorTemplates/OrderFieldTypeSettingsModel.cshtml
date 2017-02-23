@@ -11,7 +11,8 @@
 <td>@Html.CheckBoxFor(m => m.ShowExternal, new { @class = "switchcheckbox" })</td>
 <td>@Html.TextBoxFor(m => m.Label)</td>
 <td>@Html.CheckBoxFor(m => m.Required, new { @class = "switchcheckbox" })</td>
-<td>@Html.CheckBoxFor(m => m.ShowInList, new { @class = "switchcheckbox" })</td>
+<td>@Html.CheckBoxFor(m => m.ShowInList, new {@class = "switchcheckbox"})</td>
+<td></td>
 <td>
     <a class="btn order_field_values" data-type="@Model.Type.ToString()">@Translation.GetCoreTextTranslation("Värden")</a>
     <div class="hide">

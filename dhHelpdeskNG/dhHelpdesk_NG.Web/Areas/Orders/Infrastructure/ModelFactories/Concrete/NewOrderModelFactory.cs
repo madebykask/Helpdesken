@@ -231,7 +231,10 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                             fileName,
                             caseNumber,
                             caseId,
-                            info);
+                            info)
+            {
+                Header = settings.Header
+            };
         }
 
         private ProgramEditModel CreateProgramEditModel(ProgramEditSettings settings, OrderEditOptions options)

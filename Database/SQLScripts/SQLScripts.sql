@@ -36,6 +36,13 @@ INSERT INTO tblCasefieldsettings
 Select Id, 'Problem', 0, 0,0,0, '',NULL, 0, NULL, Getdate(), GetDate(), 0 from tblCustomer c
 where not exists (select * from tblCasefieldsettings where  Customer_Id = c.Id and CaseField = 'Problem')
 
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'OrdererID' and sysobjects.name = N'tblOrder')
+	ALTER TABLE [dbo].[tblOrder] ALTER COLUMN [OrdererID] [nvarchar](200) NULL
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'MultiValue' and sysobjects.name = N'tblOrderFieldSettings')
+	ALTER TABLE [dbo].[tblOrderFieldSettings] ADD [MultiValue] [bit] NOT NULL CONSTRAINT [DF_tblOrderFieldSettings_MultiValue]  DEFAULT ((0))
+GO
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.31'

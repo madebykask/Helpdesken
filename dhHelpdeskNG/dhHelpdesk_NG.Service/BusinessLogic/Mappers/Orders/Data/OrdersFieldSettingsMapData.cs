@@ -22,6 +22,8 @@
 
         public string FieldHelp { get; set; }
 
+        public bool MultiValue { get; set; }
+
         public string GetName()
         {
             return this.OrderField;
