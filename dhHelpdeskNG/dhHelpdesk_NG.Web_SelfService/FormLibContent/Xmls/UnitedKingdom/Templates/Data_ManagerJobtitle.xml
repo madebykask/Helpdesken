@@ -65,6 +65,7 @@
   <option value="Customer Care Specialist">Customer Care Specialist</option>
   <option value="Customer Distribution Manager">Customer Distribution Manager</option>
   <option value="Customer Experience Manager">Customer Experience Manager</option>
+  <option value="Customer Knowledge Manager">Customer Knowledge Manager</option>
   <option value="Customer Relations Manager">Customer Relations Manager</option>
   <option value="Customer Relations Team Leader">Customer Relations Team Leader</option>  
   <option value="Customer Services Co-worker">Customer Services Co-worker</option>
@@ -85,6 +86,7 @@
   <option value="Deputy Finance Manager">Deputy Finance Manager</option>
   <option value="Deputy HR Manager">Deputy HR Manager</option>
   <option value="Deputy IF Manager">Deputy IF Manager</option>
+  <option value="Deputy IT Manager">Deputy IT Manager</option>
   <option value="Deputy Managing Director">Deputy Managing Director</option>
   <option value="Deputy Marketing Manager">Deputy Marketing Manager</option>
   <option value="Deputy Property Manager">Deputy Property Manager</option>
@@ -119,6 +121,8 @@
   <option value="IKEA Food Team Leader">IKEA Food Team Leader</option>
   <option value="Info &amp; Smaland Team Leader">Info &amp; Smaland Team Leader</option>
   <option value="Information Security Manager">Information Security Manager</option>
+  <option value="Integrated Insights Leader">Integrated Insights Leader</option>
+  <option value="Interior Design Co-worker">Interior Design Co-worker</option>
   <option value="Interior Design Leader">Interior Design Leader</option>  
   <option value="Interior Design Manager">Interior Design Manager</option>
   <option value="Interior Designer Manager">Interior Designer Manager</option>
@@ -148,6 +152,8 @@
   <option value="Operational Support Team Leader">Operational Support Team Leader</option>
   <option value="Operations Field Responsible">Operations Field Responsible</option>
   <option value="Operations Manager">Operations Manager</option>
+  <option value="Operations Planning Coordinator">Operations Planning Coordinator</option>
+  <option value="Operations Support">Operations Support</option>
   <option value="Operations Support Manager">Operations Support Manager</option>
   <option value="P2P Leader">P2P Leader</option>
   <option value="Payroll Manager">Payroll Manager</option>
@@ -161,6 +167,7 @@
   <option value="Quality Manager">Quality Manager</option>
   <option value="Quality Team Leader">Quality Team Leader</option>
   <option value="Range Manager">Range Manager</option>
+  <option value="Range &amp;Purchasing Manager">Range &amp;Purchasing Manager</option>
   <option value="Real Estate Manager">Real Estate Manager</option>
   <option value="Receive Payment Manager">Receive Payment Manager</option>
   <option value="Recovery Co-worker">Recovery Co-worker</option>
@@ -201,6 +208,7 @@
   <option value="Shopkeeper BA 40">Shopkeeper BA 40</option>
   <option value="Shopkeeper BA 60">Shopkeeper BA 60</option>
   <option value="Shopkeeper Sales">Shopkeeper Sales</option>
+  <option value="Shopkeeper Self Serve">Shopkeeper Self Serve</option>
   <option value="Shopping Experience Manager">Shopping Experience Manager</option>
   <option value="Site Facility Manager">Site Facility Manager</option>
   <option value="Social Media Manager">Social Media Manager</option>
@@ -220,6 +228,7 @@
   <option value="Trainer">Trainer</option>
   <option value="Unit Manager">Unit Manager</option>
   <option value="Visual Merchandise/Activity Manager">Visual Merchandise/Activity Manager</option>
+  <option value="Visual Merchandising Leader">Visual Merchandising Leader</option>
   <option value="Visual Merchandising Manager">Visual Merchandising Manager</option>
   <option value="Visual Merchandising/Activity Co-worker">Visual Merchandising/Activity Co-worker</option>
   <option value="Visual Merchandising/Activity Manager">Visual Merchandising/Activity Manager</option>

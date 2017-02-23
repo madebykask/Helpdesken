@@ -29,7 +29,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
-    <IISExpressSSLPort>44300</IISExpressSSLPort>
+    <IISExpressSSLPort>44340</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
     <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
@@ -69,21 +69,17 @@
       <HintPath>..\packages\DataAnnotationsExtensions.5.0.1.16\lib\NETFramework40\DataAnnotationsExtensions.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ECT.Core, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>FormLibContent\Assemblies\DH.Helpdesk.EForm.Core.dll</HintPath>
+    <Reference Include="ECT.Core">
+      <HintPath>FormLibContent\Assemblies\ECT.Core.dll</HintPath>
     </Reference>
-    <Reference Include="DH.Helpdesk.EForm.FormLib, Version=1.5.13.58, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>FormLibContent\Assemblies\DH.Helpdesk.EForm.FormLib.dll</HintPath>
+    <Reference Include="ECT.FormLib">
+      <HintPath>FormLibContent\Assemblies\ECT.FormLib.dll</HintPath>
     </Reference>
-    <Reference Include="DH.Helpdesk.EForm.Model, Version=1.5.13.58, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>FormLibContent\Assemblies\DH.Helpdesk.EForm.Model.dll</HintPath>
+    <Reference Include="ECT.Model">
+      <HintPath>FormLibContent\Assemblies\ECT.Model.dll</HintPath>
     </Reference>
-    <Reference Include="DH.Helpdesk.EForm.Service, Version=1.5.13.58, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>FormLibContent\Assemblies\DH.Helpdesk.EForm.Service.dll</HintPath>
+    <Reference Include="ECT.Service">
+      <HintPath>FormLibContent\Assemblies\ECT.Service.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.6.1.0\lib\net40\EntityFramework.dll</HintPath>

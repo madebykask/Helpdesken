@@ -1,6 +1,6 @@
-﻿@model DH.Helpdesk.EForm.FormLib.Models.FormModel
-@using DH.Helpdesk.EForm.FormLib;
-@using DH.Helpdesk.EForm.FormLib.Models;
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
 <script>
     var isTabReadOnly = "@Model.ReadOnlyTab("#OrganisationalAssignment")";
 
@@ -304,7 +304,7 @@
                 $('#Autopunch').attr("disabled", false);
 
                 // SG : Case 54681 -  Locked if PM.CS.1.1 PS Group is different than INDIVID and if PM.CS.3.1 Overtime included in the salary = No
-                if ($('#Overtime').val() == "" || $('#Overtime').val() == "Yes")
+                //if ($('#Overtime').val() == "" || $('#Overtime').val() == "Yes")
                     $('#ParticipatingInJour').attr("disabled", false);
 
                 if (!$("#NextTariff_Year").is(":disabled")) {
@@ -358,7 +358,7 @@
         var psGroup = $('#PSGroup');
 
         $('#Overtime').change(function () {
-            lockParticipatingInJour();
+           // lockParticipatingInJour();
         });
 
         var lockParticipatingInJour = function () {

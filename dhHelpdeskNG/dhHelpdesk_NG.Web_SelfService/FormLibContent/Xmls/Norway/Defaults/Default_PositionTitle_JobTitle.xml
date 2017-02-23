@@ -99,8 +99,12 @@
 <show>Shopping Experience Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Database specialist</selected>
 <show>Database specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Department Manager Operations</selected>
+<show>Operations Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Deputy Business Navigation Manager</selected>
 <show>Deputy Business Navigation Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Deputy Checkout Services Manager</selected>
+<show>Deputy Checkout Services Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Deputy Country Com&amp;In Manager</selected>
 <show>Deputy Country Com&amp;In Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Deputy Goods Flow Manager</selected>
@@ -169,7 +173,7 @@
 <show>IKEA Business Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IKEA Business Specialist</selected>
 <show>IKEA Business Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>IKEA FOOD Co-worker</selected>
+<selected>IKEA Food Co-worker</selected>
 <show>IKEA Food Co-worker</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IKEA Food Manager</selected>
 <show>IKEA Food Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
@@ -179,6 +183,8 @@
 <show>Country In-Store Logistics Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>In-store Logistics Manager - Store</selected>
 <show>In-store Logistics Manager - Store</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Integration: default posi</selected>
+<show>Sales Co-worker</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Interior Design Co-worker</selected>
 <show>Interior Design Co-worker</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Interior Design Manager</selected>
@@ -225,10 +231,10 @@
 <show>Marketing Web Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Media Specialist</selected>
 <show>Media Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Office Support Administrator</selected>
+<show>Office Support Administrator</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Operations Developer</selected>
 <show>Operations Developer</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Operations Manager</selected>
-<show>Operations Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Payroll Manager</selected>
 <show>Payroll Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Payroll Specialist</selected>
@@ -261,6 +267,8 @@
 <show>Property Business Navigator</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Property Manager</selected>
 <show>Property Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Purchase Specialist</selected>
+<show>Purchase Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Purchaser</selected>
 <show>Purchaser</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Quality Support</selected>
@@ -287,6 +295,8 @@
 <show>Risk Management Administrator</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Risk Manager</selected>
 <show>Country Risk Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>RTS Specialist</selected>
+<show>Workforce Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Safety &amp; Security Manager</selected>
 <show>Safety &amp; Security Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sales &amp; Service Expeditor</selected>
@@ -317,8 +327,6 @@
 <show>Sales Support Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Security Responsible</selected>
 <show>Security Responsible</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Senior HR System Specialist</selected>
-<show>Senior HR System Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Service Business Leader</selected>
 <show>Service Business Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Service Co-worker</selected>
@@ -350,7 +358,7 @@
 <selected>Talent Manager</selected>
 <show>Talent Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Team Leader</selected>
-<show>Team Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Call Center Co-worker</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Translator</selected>
 <show>Translator</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>User experience Manager</selected>

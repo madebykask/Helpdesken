@@ -5,7 +5,7 @@
   <!ENTITY state SYSTEM "Templates/IndividualAdvancePaymentsLoansState.xml">
 ]>
 
-<form id="63" guid="BB4051A7-380C-467B-8BCC-D5D743BEEB67" customerId="29">
+<form guid="BB4051A7-380C-467B-8BCC-D5D743BEEB67" dataSource="2">
   &languages;
   &regexs;
   &state;

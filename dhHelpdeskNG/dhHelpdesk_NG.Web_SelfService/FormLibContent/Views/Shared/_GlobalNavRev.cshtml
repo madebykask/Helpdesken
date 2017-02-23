@@ -1,6 +1,6 @@
-﻿@model DH.Helpdesk.EForm.FormLib.Models.FormModel
-@using DH.Helpdesk.EForm.FormLib;
-@using DH.Helpdesk.EForm.FormLib.Models;
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
 
 @{
     var baseUrl = Url.CurrentController();
@@ -12,8 +12,8 @@
     {
         if (Model.Contract.Id > 0)
         {
-            if (DH.Helpdesk.EForm.FormLib.FormLibSessions.User.WorkingGroups != null
-                && DH.Helpdesk.EForm.FormLib.FormLibSessions.User.WorkingGroups.FirstOrDefault(x => x.Id == Model.Contract.WorkingGroupId) == null)
+            if (ECT.FormLib.FormLibSessions.User.WorkingGroups != null
+                && ECT.FormLib.FormLibSessions.User.WorkingGroups.FirstOrDefault(x => x.Id == Model.Contract.WorkingGroupId) == null)
             {
                 Model.IsLooked = true;
                 lockedByUserGroup = true;
@@ -75,7 +75,7 @@
             <ul class="nav">
                 @if (Model.Form != null)
                 {<li class="pull-left">@Model.Translate(Model.Form.FormName)</li>}
-                <li class="pull-right">@DH.Helpdesk.EForm.FormLib.FormLibSessions.User.FullName</li>
+                <li class="pull-right">@ECT.FormLib.FormLibSessions.User.FullName</li>
                 <li style="float:right;"><i class="icon icon-user"></i>&nbsp;</li>
             </ul>
     </div>

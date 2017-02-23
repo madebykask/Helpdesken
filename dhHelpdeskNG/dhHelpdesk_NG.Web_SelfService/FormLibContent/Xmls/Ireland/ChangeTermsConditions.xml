@@ -234,6 +234,7 @@
       <element name="PrimarySite" type="select" label="Primary Site" default="Store Dublin 038">
         <options>
           <option value=""></option>
+          <option value="IKEA Dublin">IKEA Dublin</option>
           <option value="Store Dublin 038">Store Dublin 038</option>
           <option value="Service Office IE">Service Office IE</option>
         </options>

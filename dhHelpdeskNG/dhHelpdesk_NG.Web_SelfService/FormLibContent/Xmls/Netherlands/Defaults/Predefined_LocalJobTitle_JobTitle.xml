@@ -22,6 +22,10 @@
     <show>Accounting Co-worker</show>
   </dependent>
   <dependent>
+    <selected>Accounting Co-worker CSC</selected>
+    <show>Accounting Co-worker</show>
+  </dependent>
+  <dependent>
     <selected>Accounting Co-worker SO</selected>
     <show>Accounting Co-worker</show>
   </dependent>
@@ -94,8 +98,16 @@
     <show>Accounting Manager</show>
   </dependent>
   <dependent>
+    <selected>Acting IF Team Leader Duiven Sto</selected>
+    <show>IF Team Leader</show>
+  </dependent>
+  <dependent>
     <selected>Acting Interior Design Manager</selected>
     <show>Interior Design Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Acting Purchase &amp; Supply Leader SO</selected>
+    <show>Food Safety Specialist</show>
   </dependent>
   <dependent>
     <selected>Acting Range &amp; Commercial Leader</selected>
@@ -456,6 +468,10 @@
   <dependent>
     <selected>Business Navigator Zwolle Store</selected>
     <show>Business Navigator</show>
+  </dependent>
+  <dependent>
+    <selected>Business Service Manager CSC</selected>
+    <show>Business Service Manager</show>
   </dependent>
   <dependent>
     <selected>Business Service Super User CSC</selected>
@@ -1039,7 +1055,7 @@
   </dependent>
   <dependent>
     <selected>Co-worker Frontoffice CSC</selected>
-    <show>Call Center Representative</show>
+    <show>Call Center Representative I</show>
   </dependent>
   <dependent>
     <selected>Co-worker Information &amp; Communication</selected>
@@ -1063,7 +1079,7 @@
   </dependent>
   <dependent>
     <selected>Co-worker Solutions CSC</selected>
-    <show>Back-Office Co-worker</show>
+    <show>Call Center Representative</show>
   </dependent>
   <dependent>
     <selected>Customer Delivery Coordinator</selected>
@@ -1079,15 +1095,15 @@
   </dependent>
   <dependent>
     <selected>Customer Relations Co-worker Breda Sto</selected>
-    <show>Carts Co-worker</show>
+    <show>Cash Line Co-worker</show>
   </dependent>
   <dependent>
     <selected>Customer Relations Co-worker Duiven Sto</selected>
-    <show>Carts Co-worker</show>
+    <show>Cash Line Co-worker</show>
   </dependent>
   <dependent>
     <selected>Customer Relations Co-worker Haarlem Sto</selected>
-    <show>Carts Co-worker</show>
+    <show>Cash Line Co-worker</show>
   </dependent>
   <dependent>
     <selected>Customer Relations Co-worker Heerlen Sto</selected>
@@ -1107,7 +1123,7 @@
   </dependent>
   <dependent>
     <selected>Customer Relations Cw Amersfoort Sto</selected>
-    <show>Cash Line Co-worker</show>
+    <show>Carts Co-worker</show>
   </dependent>
   <dependent>
     <selected>Customer Relations Cw Amsterdam Sto</selected>
@@ -1123,7 +1139,7 @@
   </dependent>
   <dependent>
     <selected>Customer Relations Cw Groningen Sto</selected>
-    <show>Cash Line Co-worker</show>
+    <show>Carts Co-worker</show>
   </dependent>
   <dependent>
     <selected>Customer Relations Manager</selected>
@@ -1254,6 +1270,10 @@
     <show>Customer Services Team Manager</show>
   </dependent>
   <dependent>
+    <selected>Customer Relations Tm Zwolle Sto</selected>
+    <show>Customer Services Team Manager</show>
+  </dependent>
+  <dependent>
     <selected>Customer Resolutions Manager CSC</selected>
     <show>Team Leader</show>
   </dependent>
@@ -1284,6 +1304,10 @@
   <dependent>
     <selected>Customer Support Center Manager CSC</selected>
     <show>Contact Center Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Customer Support Generalist CSC</selected>
+    <show>Customer Support Generalist</show>
   </dependent>
   <dependent>
     <selected>Customur Support Center Manager</selected>
@@ -1470,6 +1494,10 @@
     <show>Deputy Sales Manager</show>
   </dependent>
   <dependent>
+    <selected>Deputy Sales Manager Barendrecht store</selected>
+    <show>Deputy Sales Manager</show>
+  </dependent>
+  <dependent>
     <selected>Deputy Sales Manager Breda Sto</selected>
     <show>Deputy Sales Manager</show>
   </dependent>
@@ -1636,6 +1664,10 @@
   <dependent>
     <selected>Easy Buying Specialist SO</selected>
     <show>Easy Buying Leader</show>
+  </dependent>
+  <dependent>
+    <selected>E-commerce Finance Specialist SO</selected>
+    <show>eCommerce Finance Specialist</show>
   </dependent>
   <dependent>
     <selected>eCommerce Fraud Specialist</selected>
@@ -1883,15 +1915,15 @@
   </dependent>
   <dependent>
     <selected>Goods Flow Co-worker Breda Sto</selected>
-    <show>Goods Flow Co-worker I</show>
+    <show>Goods Flow Co-worker</show>
   </dependent>
   <dependent>
     <selected>Goods Flow Co-worker Duiven Sto</selected>
-    <show>Goods Flow Co-worker I</show>
+    <show>Goods Flow Co-worker</show>
   </dependent>
   <dependent>
     <selected>Goods Flow Co-worker Eindhoven Sto</selected>
-    <show>Goods Flow Co-worker I</show>
+    <show>Goods Flow Co-worker</show>
   </dependent>
   <dependent>
     <selected>Goods Flow Co-worker Groningen Sto</selected>
@@ -2144,6 +2176,10 @@
   <dependent>
     <selected>HR Co-worker SO</selected>
     <show>Project Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>HR Co-worker Zwolle Sto</selected>
+    <show>HR Co-worker</show>
   </dependent>
   <dependent>
     <selected>HR Generalist</selected>
@@ -2467,7 +2503,7 @@
   </dependent>
   <dependent>
     <selected>IKEA FOOD Co-worker Duiven Sto</selected>
-    <show>IKEA Food Co-worker</show>
+    <show>IKEA FOOD Co-worker I</show>
   </dependent>
   <dependent>
     <selected>IKEA FOOD Co-worker Duiven store</selected>
@@ -2475,7 +2511,7 @@
   </dependent>
   <dependent>
     <selected>IKEA Food Co-worker Eindhoven Sto</selected>
-    <show>IKEA Food Co-worker</show>
+    <show>Checkout Coworker IKEA FOOD</show>
   </dependent>
   <dependent>
     <selected>IKEA Food Co-worker Groningen Sto</selected>
@@ -2487,7 +2523,7 @@
   </dependent>
   <dependent>
     <selected>IKEA Food Co-worker Haarlem Sto</selected>
-    <show>IKEA Food Co-worker</show>
+    <show>Checkout Coworker IKEA FOOD</show>
   </dependent>
   <dependent>
     <selected>IKEA FOOD Co-worker Haarlem store</selected>
@@ -2800,10 +2836,6 @@
   <dependent>
     <selected>Junior Project Leader Competence</selected>
     <show>Project Leader II</show>
-  </dependent>
-  <dependent>
-    <selected>Project Leader Zwolle Sto</selected>
-    <show>Project Leader</show>
   </dependent>
   <dependent>
     <selected>Kitchen Production Sp Amersfoort Sto</selected>
@@ -3275,7 +3307,7 @@
   </dependent>
   <dependent>
     <selected>Project Co-worker SO</selected>
-    <show>Competence Development Manager</show>
+    <show>Project Co-worker</show>
   </dependent>
   <dependent>
     <selected>Project coworker SO Haarlem Sto</selected>
@@ -3303,6 +3335,10 @@
   </dependent>
   <dependent>
     <selected>Project Leader SO</selected>
+    <show>Project Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Project Leader Zwolle Sto</selected>
     <show>Project Leader</show>
   </dependent>
   <dependent>
@@ -3879,7 +3915,7 @@
   </dependent>
   <dependent>
     <selected>Sales Co-worker Breda Sto</selected>
-    <show>Sales Co-worker</show>
+    <show>Sales Co-worker II</show>
   </dependent>
   <dependent>
     <selected>Sales Co-worker Duiven Sto</selected>
@@ -4230,6 +4266,10 @@
     <show>Social Media Manager</show>
   </dependent>
   <dependent>
+    <selected>Social Media Specialist SO</selected>
+    <show>Social Media Specialist</show>
+  </dependent>
+  <dependent>
     <selected>Software Specialist</selected>
     <show>Software Specialist</show>
   </dependent>
@@ -4499,7 +4539,7 @@
   </dependent>
   <dependent>
     <selected>Team Leader CSC</selected>
-    <show>Team Leader</show>
+    <show>Project Co-worker</show>
   </dependent>
   <dependent>
     <selected>Team Manager</selected>
@@ -4586,7 +4626,51 @@
     <show>IF Team Leader</show>
   </dependent>
   <dependent>
+    <selected>Teammanager IKEA Food  Hengelo Sto</selected>
+    <show>IF Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Teammanager IKEA Food Amersfoort Sto</selected>
+    <show>IF Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Teammanager IKEA Food Amersfoort store</selected>
+    <show>IF Team Leader</show>
+  </dependent>
+  <dependent>
     <selected>Teammanager IKEA Food Barendrecht Sto</selected>
+    <show>IF Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Teammanager IKEA Food Breda Sto</selected>
+    <show>IF Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Teammanager IKEA Food Eindhoven Sto</selected>
+    <show>IF Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Teammanager IKEA Food Groningen Sto</selected>
+    <show>IF Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Teammanager IKEA Food Haarlem Sto</selected>
+    <show>IF Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Teammanager IKEA Food Heerlen Sto</selected>
+    <show>IF Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Teammanager IKEA Food Hengelo Sto</selected>
+    <show>IF Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Teammanager IKEA Food Hengelo store</selected>
+    <show>IF Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Teammanager IKEA Food Utrecht store</selected>
     <show>IF Team Leader</show>
   </dependent>
   <dependent>
@@ -4644,6 +4728,10 @@
   <dependent>
     <selected>Test Manager  Competence</selected>
     <show>Test Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Trainee IKEA Eindhoven Sto</selected>
+    <show>Project Co-worker</show>
   </dependent>
   <dependent>
     <selected>Translation Co-worker</selected>

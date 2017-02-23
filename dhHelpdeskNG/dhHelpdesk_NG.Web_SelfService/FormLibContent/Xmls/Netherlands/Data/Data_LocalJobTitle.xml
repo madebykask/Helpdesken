@@ -6,6 +6,7 @@
   <option value="1st Visual Merchandiser Barendrecht Sto">1st Visual Merchandiser Barendrecht Sto</option>
   <option value="Account spec. SO">Account spec. SO</option>
   <option value="Accounting Co-worker">Accounting Co-worker</option>
+  <option value="Accounting Co-worker CSC">Accounting Co-worker CSC</option>
   <option value="Accounting Co-worker SO">Accounting Co-worker SO</option>
   <option value="Accounting Manager">Accounting Manager</option>
   <option value="Accounting Manager SO">Accounting Manager SO</option>
@@ -27,7 +28,9 @@
   <option value="Accounts Payable Co-worker SO">Accounts Payable Co-worker SO</option>
   <option value="Acting Accounting Manager">Acting Accounting Manager</option>
   <option value="Acting Accounting Manager SO">Acting Accounting Manager SO</option>
+  <option value="Acting IF Team Leader Duiven Sto">Acting IF Team Leader Duiven Sto</option>
   <option value="Acting Interior Design Manager">Acting Interior Design Manager</option>
+  <option value="Acting Purchase &amp; Supply Leader SO">Acting Purchase &amp; Supply Leader SO</option>
   <option value="Acting Range &amp; Commercial Leader">Acting Range &amp; Commercial Leader</option>
   <option value="Acting Range &amp; Commercial Leader SO">Acting Range &amp; Commercial Leader SO</option>
   <option value="Activity Leader">Activity Leader</option>
@@ -119,6 +122,7 @@
   <option value="Business Navigator SO">Business Navigator SO</option>
   <option value="Business Navigator Zwolle Sto">Business Navigator Zwolle Sto</option>
   <option value="Business Navigator Zwolle Store">Business Navigator Zwolle Store</option>
+  <option value="Business Service Manager CSC">Business Service Manager CSC</option>
   <option value="Business Service Super User CSC">Business Service Super User CSC</option>
   <option value="Call Center Representative">Call Center Representative</option>
   <option value="Call Center Representative CSC">Call Center Representative CSC</option>
@@ -320,6 +324,7 @@
   <option value="Customer Relations Tm Heerlen Sto">Customer Relations Tm Heerlen Sto</option>
   <option value="Customer Relations Tm Hengelo Sto">Customer Relations Tm Hengelo Sto</option>
   <option value="Customer Relations Tm Utrecht Sto">Customer Relations Tm Utrecht Sto</option>
+  <option value="Customer Relations Tm Zwolle Sto">Customer Relations Tm Zwolle Sto</option>
   <option value="Customer Resolutions Manager CSC">Customer Resolutions Manager CSC</option>
   <option value="Customer Service Specialist">Customer Service Specialist</option>
   <option value="Customer Service Specialist SO">Customer Service Specialist SO</option>
@@ -328,6 +333,7 @@
   <option value="Customer Services TM Duiven Sto">Customer Services TM Duiven Sto</option>
   <option value="Customer Support Center Manager">Customer Support Center Manager</option>
   <option value="Customer Support Center Manager CSC">Customer Support Center Manager CSC</option>
+  <option value="Customer Support Generalist CSC">Customer Support Generalist CSC</option>
   <option value="Customur Support Center Manager">Customur Support Center Manager</option>
   <option value="Data Resource Analyst">Data Resource Analyst</option>
   <option value="Data Resource Analyst SO">Data Resource Analyst SO</option>
@@ -378,6 +384,7 @@
   <option value="Deputy Sales Manager Amersfoort store">Deputy Sales Manager Amersfoort store</option>
   <option value="Deputy Sales Manager Amsterdam Sto">Deputy Sales Manager Amsterdam Sto</option>
   <option value="Deputy Sales Manager Amsterdam store">Deputy Sales Manager Amsterdam store</option>
+  <option value="Deputy Sales Manager Barendrecht store">Deputy Sales Manager Barendrecht store</option>
   <option value="Deputy Sales Manager Breda Sto">Deputy Sales Manager Breda Sto</option>
   <option value="Deputy Sales Manager Breda store">Deputy Sales Manager Breda store</option>
   <option value="Deputy Sales Manager Duiven Sto">Deputy Sales Manager Duiven Sto</option>
@@ -421,6 +428,7 @@
   <option value="Easy Buying Leader SO">Easy Buying Leader SO</option>
   <option value="Easy Buying Specialist">Easy Buying Specialist</option>
   <option value="Easy Buying Specialist SO">Easy Buying Specialist SO</option>
+  <option value="E-commerce Finance Specialist SO">E-commerce Finance Specialist SO</option>
   <option value="eCommerce Fraud Specialist">eCommerce Fraud Specialist</option>
   <option value="eCommerce Fraud Specialist SO">eCommerce Fraud Specialist SO</option>
   <option value="E-commerce Fraud Specialist SO">E-commerce Fraud Specialist SO</option>
@@ -550,6 +558,7 @@
   <option value="HR Co-worker Duiven Sto">HR Co-worker Duiven Sto</option>
   <option value="HR Co-worker Eindhoven Sto">HR Co-worker Eindhoven Sto</option>
   <option value="HR Co-worker SO">HR Co-worker SO</option>
+  <option value="HR Co-worker Zwolle Sto">HR Co-worker Zwolle Sto</option>
   <option value="HR Generalist">HR Generalist</option>
   <option value="HR Generalist Amersfoort Sto">HR Generalist Amersfoort Sto</option>
   <option value="HR Generalist Amsterdam Sto">HR Generalist Amsterdam Sto</option>
@@ -840,7 +849,7 @@
   <option value="Project Leader Competence">Project Leader Competence</option>
   <option value="Project Leader Eindhoven Sto">Project Leader Eindhoven Sto</option>
   <option value="Project Leader SO">Project Leader SO</option>
-  <option value="Project Leader Zwolle Sto">Project Leader Zwolle Sto</option>  
+  <option value="Project Leader Zwolle Sto">Project Leader Zwolle Sto</option>
   <option value="Project manager">Project manager</option>
   <option value="Project Manager RS">Project Manager RS</option>
   <option value="Project manager SO">Project manager SO</option>
@@ -1077,6 +1086,7 @@
   <option value="Shopping Experience Manager Zwolle Sto">Shopping Experience Manager Zwolle Sto</option>
   <option value="Social Media Manager">Social Media Manager</option>
   <option value="Social Media Manager SO">Social Media Manager SO</option>
+  <option value="Social Media Specialist SO">Social Media Specialist SO</option>
   <option value="Software Specialist">Software Specialist</option>
   <option value="Software Specialist CSC">Software Specialist CSC</option>
   <option value="Solution Owner CSC">Solution Owner CSC</option>
@@ -1168,7 +1178,18 @@
   <option value="Teammanager Goodsflow">Teammanager Goodsflow</option>
   <option value="Teammanager Goodsflow Amsterdam Sto">Teammanager Goodsflow Amsterdam Sto</option>
   <option value="Teammanager IKEA Food">Teammanager IKEA Food</option>
+  <option value="Teammanager IKEA Food  Hengelo Sto">Teammanager IKEA Food  Hengelo Sto</option>
+  <option value="Teammanager IKEA Food Amersfoort Sto">Teammanager IKEA Food Amersfoort Sto</option>
+  <option value="Teammanager IKEA Food Amersfoort store">Teammanager IKEA Food Amersfoort store</option>
   <option value="Teammanager IKEA Food Barendrecht Sto">Teammanager IKEA Food Barendrecht Sto</option>
+  <option value="Teammanager IKEA Food Breda Sto">Teammanager IKEA Food Breda Sto</option>
+  <option value="Teammanager IKEA Food Eindhoven Sto">Teammanager IKEA Food Eindhoven Sto</option>
+  <option value="Teammanager IKEA Food Groningen Sto">Teammanager IKEA Food Groningen Sto</option>
+  <option value="Teammanager IKEA Food Haarlem Sto">Teammanager IKEA Food Haarlem Sto</option>
+  <option value="Teammanager IKEA Food Heerlen Sto">Teammanager IKEA Food Heerlen Sto</option>
+  <option value="Teammanager IKEA Food Hengelo Sto">Teammanager IKEA Food Hengelo Sto</option>
+  <option value="Teammanager IKEA Food Hengelo store">Teammanager IKEA Food Hengelo store</option>
+  <option value="Teammanager IKEA Food Utrecht store">Teammanager IKEA Food Utrecht store</option>
   <option value="Teammanager Maintenance">Teammanager Maintenance</option>
   <option value="Teammanager Maintenance Barendrecht Sto">Teammanager Maintenance Barendrecht Sto</option>
   <option value="Teammanager Maintenance Breda Sto">Teammanager Maintenance Breda Sto</option>
@@ -1185,6 +1206,7 @@
   <option value="Test Manager">Test Manager</option>
   <option value="Test manager">Test manager</option>
   <option value="Test manager  Competence">Test manager  Competence</option>
+  <option value="Trainee IKEA Eindhoven Sto">Trainee IKEA Eindhoven Sto</option>
   <option value="Translation Co-worker">Translation Co-worker</option>
   <option value="Translation Co-worker SO">Translation Co-worker SO</option>
   <option value="Unit Generalist">Unit Generalist</option>

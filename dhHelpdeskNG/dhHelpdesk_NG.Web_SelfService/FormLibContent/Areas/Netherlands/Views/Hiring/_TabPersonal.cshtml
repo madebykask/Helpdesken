@@ -1,6 +1,6 @@
-﻿@model DH.Helpdesk.EForm.FormLib.Models.FormModel
-@using DH.Helpdesk.EForm.FormLib;
-@using DH.Helpdesk.EForm.FormLib.Models;
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
 
 <div class="tab-pane" id="personal">
     <div class="span6">
@@ -379,7 +379,7 @@
 
                  <!-- FISCAL DATA -->
                 
-                <tr>
+             @*   <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Fiscal Data")</h4>
                     </td>
@@ -387,7 +387,7 @@
                 <tr>
                     <td class="tdstrong">@Model.Label("Taxdeduction")</td>
                     <td>@Model.Element("Taxdeduction")</td>
-                </tr>
+                </tr>*@
 
 
                 <!-- Nationality / Language -->

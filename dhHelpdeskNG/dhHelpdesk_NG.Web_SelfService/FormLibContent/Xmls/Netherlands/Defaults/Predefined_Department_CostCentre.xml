@@ -42,6 +42,10 @@
     <show>6633</show>
   </dependent>
   <dependent>
+    <selected>Business Navigation CSC</selected>
+    <show>6210</show>
+  </dependent>
+  <dependent>
     <selected>Business Navigation &amp; Operations SO</selected>
     <show>6232</show>
   </dependent>
@@ -56,6 +60,10 @@
   <dependent>
     <selected>Business Navigator</selected>
     <show>6610</show>
+  </dependent>
+  <dependent>
+    <selected>Business Service CSC</selected>
+    <show></show>
   </dependent>
   <dependent>
     <selected>Business support</selected>
@@ -287,7 +295,7 @@
   </dependent>
   <dependent>
     <selected>Contr. &amp; Bus. Nav. Amersfoort Sto</selected>
-    <show>7010</show>
+    <show>6330</show>
   </dependent>
   <dependent>
     <selected>Contr. &amp; Bus. Nav. Eindhoven Sto</selected>
@@ -678,6 +686,10 @@
     <show>6100</show>
   </dependent>
   <dependent>
+    <selected>Customer Relations tm5 Breda Sto</selected>
+    <show>6100</show>
+  </dependent>
+  <dependent>
     <selected>Customer Relations tm5 Duiven Sto</selected>
     <show>6100</show>
   </dependent>
@@ -696,6 +708,34 @@
   <dependent>
     <selected>Customer Relations Utrecht Sto</selected>
     <show>7010</show>
+  </dependent>
+  <dependent>
+    <selected>Customer Resolutions</selected>
+    <show>6010</show>
+  </dependent>
+  <dependent>
+    <selected>Customer Resolutions team 1 CSC</selected>
+    <show>6010</show>
+  </dependent>
+  <dependent>
+    <selected>Customer Resolutions team 2 CSC</selected>
+    <show>6010</show>
+  </dependent>
+  <dependent>
+    <selected>Customer Resolutions team 3 CSC</selected>
+    <show>6010</show>
+  </dependent>
+  <dependent>
+    <selected>Customer Resolutions team 4 CSC</selected>
+    <show>6010</show>
+  </dependent>
+  <dependent>
+    <selected>Customer Resolutions team 5 CSC</selected>
+    <show>6010</show>
+  </dependent>
+  <dependent>
+    <selected>Customer Resolutions team 6 CSC</selected>
+    <show>6010</show>
   </dependent>
   <dependent>
     <selected>Customer Service</selected>
@@ -732,6 +772,10 @@
   <dependent>
     <selected>Easy Buying tm2 Amsterdam Sto</selected>
     <show>6100</show>
+  </dependent>
+  <dependent>
+    <selected>Editorial Content SO</selected>
+    <show>6070</show>
   </dependent>
   <dependent>
     <selected>Exchange &amp; Returns Amsterdam Sto</selected>
@@ -798,6 +842,18 @@
     <show>6000</show>
   </dependent>
   <dependent>
+    <selected>Front office team 7 CSC</selected>
+    <show>6000</show>
+  </dependent>
+  <dependent>
+    <selected>Front office team 8 CSC</selected>
+    <show>6000</show>
+  </dependent>
+  <dependent>
+    <selected>Front office team 9 CSC</selected>
+    <show>6000</show>
+  </dependent>
+  <dependent>
     <selected>Furniture Building Amsterdam Sto</selected>
     <show>6330</show>
   </dependent>
@@ -811,6 +867,10 @@
   </dependent>
   <dependent>
     <selected>Goodsflow team 1 Amersfoort Store</selected>
+    <show>4030</show>
+  </dependent>
+  <dependent>
+    <selected>Goodsflow team 1 Groningen Sto</selected>
     <show>4030</show>
   </dependent>
   <dependent>
@@ -1146,6 +1206,10 @@
     <show>3340</show>
   </dependent>
   <dependent>
+    <selected>HFB Bedr. &amp; Matrass. tm3 Barendrecht Sto</selected>
+    <show>3340</show>
+  </dependent>
+  <dependent>
     <selected>HFB Bedr. &amp; Matress. Amersfoort Sto</selected>
     <show>3340</show>
   </dependent>
@@ -1175,6 +1239,10 @@
   </dependent>
   <dependent>
     <selected>HFB Bedroom&amp; Mattrasses Utrecht Sto</selected>
+    <show>3340</show>
+  </dependent>
+  <dependent>
+    <selected>HFB Bedroom&amp; Mattrasses tm 2 Heerlen</selected>
     <show>3340</show>
   </dependent>
   <dependent>
@@ -1594,6 +1662,10 @@
     <show>3530</show>
   </dependent>
   <dependent>
+    <selected>HFB Textiles &amp; Rugs 2 Haarlem Sto</selected>
+    <show>3530</show>
+  </dependent>
+  <dependent>
     <selected>HFB Textiles &amp; Rugs Heerlen Sto</selected>
     <show>3530</show>
   </dependent>
@@ -1735,6 +1807,10 @@
   </dependent>
   <dependent>
     <selected>Human Resources Duiven Sto</selected>
+    <show>6600</show>
+  </dependent>
+  <dependent>
+    <selected>Human Resources Duiven Sto2</selected>
     <show>6600</show>
   </dependent>
   <dependent>
@@ -2083,7 +2159,7 @@
   </dependent>
   <dependent>
     <selected>Knowledge Management &amp; Insights</selected>
-    <show>6000</show>
+    <show></show>
   </dependent>
   <dependent>
     <selected>Livingroom &amp; Organising Heerlen sto</selected>
@@ -2199,7 +2275,7 @@
   </dependent>
   <dependent>
     <selected>Q Store SO</selected>
-    <show>6299</show>
+    <show>6232</show>
   </dependent>
   <dependent>
     <selected>Receive Payment Amsterdam Sto</selected>
@@ -2474,6 +2550,10 @@
     <show>3000</show>
   </dependent>
   <dependent>
+    <selected>Sales II SO</selected>
+    <show>3000</show>
+  </dependent>
+  <dependent>
     <selected>Sales III Haarlem Sto</selected>
     <show>7010</show>
   </dependent>
@@ -2500,6 +2580,10 @@
   <dependent>
     <selected>Sales SO</selected>
     <show>3000</show>
+  </dependent>
+  <dependent>
+    <selected>Sales team 1 Barendrecht Store</selected>
+    <show>7010</show>
   </dependent>
   <dependent>
     <selected>Sales team 2 Groningen Store</selected>
@@ -2614,6 +2698,46 @@
     <show>6200</show>
   </dependent>
   <dependent>
+    <selected>Services &amp; Sales Support</selected>
+    <show>6000</show>
+  </dependent>
+  <dependent>
+    <selected>Services &amp; Sales Support team 1 CSC</selected>
+    <show>6000</show>
+  </dependent>
+  <dependent>
+    <selected>Services &amp; Sales Support team 2 CSC</selected>
+    <show>6000</show>
+  </dependent>
+  <dependent>
+    <selected>Services &amp; Sales Support team 3 CSC</selected>
+    <show>6000</show>
+  </dependent>
+  <dependent>
+    <selected>Services &amp; Sales Support team 4 CSC</selected>
+    <show>6000</show>
+  </dependent>
+  <dependent>
+    <selected>Services &amp; Sales Support team 5 CSC</selected>
+    <show>6000</show>
+  </dependent>
+  <dependent>
+    <selected>Services &amp; Sales Support team 6 CSC</selected>
+    <show>6000</show>
+  </dependent>
+  <dependent>
+    <selected>Services &amp; Sales Support team 7 CSC</selected>
+    <show>6000</show>
+  </dependent>
+  <dependent>
+    <selected>Services &amp; Sales Support team 8 CSC</selected>
+    <show>6000</show>
+  </dependent>
+  <dependent>
+    <selected>Services &amp; Sales Support team 9 CSC</selected>
+    <show>6000</show>
+  </dependent>
+  <dependent>
     <selected>SFM/Bistro Haarlem Sto</selected>
     <show>3900</show>
   </dependent>
@@ -2650,6 +2774,10 @@
     <show>6100</show>
   </dependent>
   <dependent>
+    <selected>Solutions team 6 CSC</selected>
+    <show>6100</show>
+  </dependent>
+  <dependent>
     <selected>SSW tm1 Groningen Sto</selected>
     <show>3400</show>
   </dependent>
@@ -2663,7 +2791,7 @@
   </dependent>
   <dependent>
     <selected>Staffplanning</selected>
-    <show>6000</show>
+    <show></show>
   </dependent>
   <dependent>
     <selected>STORE Amersfoort 415</selected>

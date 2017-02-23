@@ -34,8 +34,8 @@
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
            
-            EForm.FormLib.FormLibSetup.Setup();
-            EForm.FormLib.FormLibSetup.SetupRoutes(RouteTable.Routes);
+            ECT.FormLib.FormLibSetup.Setup();
+            ECT.FormLib.FormLibSetup.SetupRoutes(RouteTable.Routes);
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);

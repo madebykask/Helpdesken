@@ -30,6 +30,9 @@
   <option value="6072 - Family">6072 - Family</option>
   <option value="6073 - PR">6073 - PR</option>
   <option value="6120 - CS After Sales Serv">6120 - CS After Sales Serv</option>
+  <option value="6121 - After Sales Mng">6121 - After Sales Mng</option>
+  <option value="6122 - After Sales Returns">6122 - After Sales Returns</option>
+  <option value="6150 - CS Additional Serv">6150 - CS Additional Serv</option>
   <option value="6180 - CS Cash">6180 - CS Cash</option>
   <option value="6190 - Cash Administration">6190 - Cash Administration</option>
   <option value="6204 - Support other(s) 3">6204 - Support other(s) 3</option>
@@ -39,6 +42,7 @@
   <option value="6310 - Maintenance">6310 - Maintenance</option>
   <option value="6320 - Safety / Security 1">6320 - Safety / Security 1</option>
   <option value="6330 - IKEA Green (Rec&amp;Env)">6330 - IKEA Green (Rec&amp;Env)</option>
+  <option value="6340 - Safety &amp; Security 2">6340 - Safety &amp; Security 2</option>
   <option value="6400 - Quality Common">6400 - Quality Common</option>
   <option value="6600 - Human Resource">6600 - Human Resource</option>
   <option value="6830 - Facility Management">6830 - Facility Management</option>

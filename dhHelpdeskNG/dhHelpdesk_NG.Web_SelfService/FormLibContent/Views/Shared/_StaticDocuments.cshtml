@@ -1,10 +1,10 @@
-﻿@model DH.Helpdesk.EForm.FormLib.Models.FormModel
-@using DH.Helpdesk.EForm.FormLib;
-@using DH.Helpdesk.EForm.FormLib.Models;
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
 
  @if (Model.StaticFiles!=null && Model.StaticFiles.Count > 0)
 { 
-    foreach (DH.Helpdesk.EForm.Model.Entities.StaticFile file in Model.StaticFiles){
+    foreach (ECT.Model.Entities.StaticFile file in Model.StaticFiles){
         <tr>
             <td>@file.Name</td>
             <td>@file.Extension.Substring(1)</td>

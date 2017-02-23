@@ -6,7 +6,7 @@
 <selected>Accounting Service Office Team 2</selected>
 <show>Løvstad Heidi</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Add-on</selected>
-<show>Andersson Anna</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Selbo Espen</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Administration Forus</selected>
 <show>Skadberg Hans Inge</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Administration Leangen</selected>
@@ -14,11 +14,9 @@
 <selected>Administration Service Office</selected>
 <show>Bentzen Heidi</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Administration Slependen</selected>
-<show>Jacobsen Jan Erik</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Schouten-Kemna Sandra</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>After Sales Service Forus</selected>
 <show>Mossefinn Lise</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>After Sales Service Furuset</selected>
-<show>Backe Mette</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>After Sales Service Leangen</selected>
 <show>Krøvel Sigbjørn</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>After Sales Service Team 1 Åsane</selected>
@@ -49,6 +47,8 @@
 <show>Asp Henrick Kjell-Åke</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Bedroom HFB 4 Team 2</selected>
 <show>Eriksson Ulrika</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Bedroom HFB 4 Team 3</selected>
+<show>Asp Henrick Kjell-Åke</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Bedroom HFB 4-5 Sørlandet</selected>
 <show>Båge Lene</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Bedroom Team 1 Åsane</selected>
@@ -60,7 +60,7 @@
 <selected>Business Navigation &amp; Operations</selected>
 <show>Stöckert Manuel</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Business Navigation IKEA Hjemme</selected>
-<show>Andersen Karin</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Haukås Nina Løken</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Business Navigation Team</selected>
 <show>Groh Andreas</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Business Navigation,Operations&amp;Finance</selected>
@@ -70,9 +70,7 @@
 <selected>Business Navigator Slependen</selected>
 <show>Hårklau Kenneth</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Check Out Forus</selected>
-<show>Olsen Tom Erik</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Check Out Furuset</selected>
-<show>Backe Mette</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Herneshagen Emilie</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Check Out Leangen</selected>
 <show>Pedersen Jeanette Gulstad</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Check Out Sørlandet</selected>
@@ -136,13 +134,13 @@
 <selected>Com-In Sørlandet</selected>
 <show>Cesar Monica Hege</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Commercial Activity</selected>
-<show>Falch Laine</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Gunderstad Kamilla</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Commercial Activity Slependen</selected>
-<show>Andersson Anna</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Selbo Espen</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Commercial Activity Team 1</selected>
 <show>Gillies Leanna J</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Commercial Functions Slependen</selected>
-<show>Jacobsen Jan Erik</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Schouten-Kemna Sandra</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Commercial SFM &amp; Bistro</selected>
 <show>Aune Sander Asbjørnsen</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Common Sales Forus</selected>
@@ -152,19 +150,21 @@
 <selected>Construction Norway</selected>
 <show>Jonsson Søren</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Cooking &amp; Eating HFB 14 - 15 Sørlandet</selected>
-<show>Gunderstad Kamilla</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Larsen Silje-Kristine Fåfeng</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Cooking &amp; Eating HFB14_15 Slependen</selected>
-<show>Osman Linda</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Johansson Rebecca</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Cooking &amp; Eating Team 1</selected>
 <show>Fossedal Guro</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Cooking&amp;Eating HFB 14 - 15 Leangen</selected>
-<show>Føll Vidar</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Grimsrud Anders</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Cooking&amp;Eating HFB 14-15 Team 2</selected>
 <show>Møll Elisabeth</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Cookshop HFB 14 15 Forus</selected>
 <show>Wigdel Kine</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Cross Functional Team Furuset</selected>
 <show>Borthen Kristine</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>CSC Business Services IKEA Hjemme</selected>
+<show>Breivik Gerard Andre</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Area Furuset</selected>
 <show>Ingand Helene</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Area Slependen</selected>
@@ -173,8 +173,6 @@
 <show>Ahlén Maria</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Areas Sørlandet</selected>
 <show>Kjeldsen Martine</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Customer Center Operation IKEA Hjemme</selected>
-<show>Engeskog Janne Merete Rennan</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Knowledge &amp; Insight</selected>
 <show>Rurling Johanna Maria M</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Relation &amp; Checkout Sørlandet</selected>
@@ -190,7 +188,7 @@
 <selected>Customer Relations Leangen</selected>
 <show>Schjetne Randi</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Relations Slependen</selected>
-<show>Jacobsen Jan Erik</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Schouten-Kemna Sandra</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Relations SO</selected>
 <show>Rodgers Clare</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Relations Team 1 Slependen</selected>
@@ -198,7 +196,7 @@
 <selected>Customer Relations Team 2 Slependen</selected>
 <show>Norèn Frida</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Relations Team 3 Slependen</selected>
-<show>Farpajoh Varshasb</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Sapkauske Egle</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Relations Team 4 Slependen</selected>
 <show>Wakeham Dellie</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Relations Team 5 Slependen</selected>
@@ -212,7 +210,7 @@
 <selected>Customer Restaurant</selected>
 <show>Hjeltereie Linn</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Serv, Exchange&amp;Return Sørlandet</selected>
-<show>Oprann Susanne</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Esdar Stefan</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Service</selected>
 <show>Skauge Kenneth</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Service Backline team</selected>
@@ -220,23 +218,19 @@
 <selected>Customer Service Centre IKEA Hjemme</selected>
 <show>Engeskog Janne Merete Rennan</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Service Centre team 1</selected>
-<show>Hilleren Eli</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Aune Tone</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Service Centre team 2</selected>
 <show>Thunes Lill</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Service Centre team 3</selected>
-<show>Løkken Tonje</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Hölke Alexandra</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Service Centre team 4</selected>
 <show>Bjølgerud Martina</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Service Centre team 5</selected>
 <show>Riis Lene</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Customer Service Centre team 6</selected>
-<show>Reknes Ida</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Customer Service Centre team 7</selected>
-<show>Skilbred Karina</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Service Centre team 8</selected>
 <show>Husby Ove Edvin</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Service Centre team 9</selected>
-<show>Hilleren Eli</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Hölke Alexandra</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Service Team 1 Åsane</selected>
 <show>Jonassen Sindre Kalve</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Service Team 2 Åsane</selected>
@@ -255,8 +249,14 @@
 <show>Persson Beatrice</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Decoration Team 1</selected>
 <show>Pettersen Robert</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Delivery &amp; Service Team</selected>
+<show>Skilbred Karina</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Deputy Logistics Åsane</selected>
 <show>Holm Øyvind</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Deputy Logistics Forus</selected>
+<show>Walsh Fintan</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Digital Channels</selected>
+<show>Reknes Ida</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Ecommerce 076</selected>
 <show>Hajny Filip</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>eCommerce Sales</selected>
@@ -264,7 +264,7 @@
 <selected>Establishment</selected>
 <show>Engelschiøn Siri Enes</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Exchange &amp; Return</selected>
-<show>Jama Abdikarim Farah</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Danielsen Yngve</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Exchange &amp; Return 1</selected>
 <show>Mentzoni Christina Hustad</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Exchange &amp; Return 2</selected>
@@ -282,7 +282,7 @@
 <selected>External Full Serve Team 2</selected>
 <show>Vimme Stian Andre</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>External Full Serve Team 3</selected>
-<show>Hailemariam Seare</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Andreasson Lisa</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Facility</selected>
 <show>Grane Ulf</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Finance</selected>
@@ -299,14 +299,14 @@
 <show>Danielsen Martin</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Goods Flow Team 1 Åsane</selected>
 <show>Talhaug Morten</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Goods flow Team 2</selected>
-<show>Idland Cecilie Vognsen</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Goods Flow Team 2</selected>
+<show>Gulbrandsen Josefine</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Goods Flow Team 2 Åsane</selected>
-<show>Pettersen Ståle Elling</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Talhaug Morten</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Goods Flow Team 3</selected>
 <show>Thavarajah Prasath</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Goods Flow Team 3 Åsane</selected>
-<show>Rødland Jørgen</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Talhaug Morten</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Goods Flow Team 4</selected>
 <show>Stevanovic Marko</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Goods Flow Team 5</selected>
@@ -318,9 +318,9 @@
 <selected>Goods Receiving</selected>
 <show>Voigt Rolf Eirik</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Goods Replenishment Leangen</selected>
-<show>Marken Walter</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Flåøien Turid Kristine</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Goodsflow Furuset</selected>
-<show>Poor Omed Mostapha</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Gulbrandsen Josefine</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Goodsflow Sørlandet</selected>
 <show>Large Brendan</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Graphic Communication</selected>
@@ -338,8 +338,6 @@
 <selected>Green Slependen</selected>
 <show>Odland Stine</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>HFB 11-13 Textiles&amp;Rugs Åsane Store</selected>
-<show>Rosendahl Liv</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>HFB 6 Bathroom Åsane Store</selected>
 <show>Rosendahl Liv</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>HFB 6,11-13 Bathroom,Textiles&amp;Rugs Åsane</selected>
 <show>Rosendahl Liv</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
@@ -376,7 +374,7 @@
 <selected>Human Resource Leangen</selected>
 <show>Wiig Cecilie</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Human Resource Service Office</selected>
-<show>Rodgers Clare</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Taylor Darren</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Human Resource Slependen</selected>
 <show>Ranvik Anny Marie</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IF Åsane</selected>
@@ -388,7 +386,7 @@
 <selected>IF Bistro Furuset</selected>
 <show>Christiansen Øyvind Hauge</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IF Bistro Leangen</selected>
-<show>Waade Marthe</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Rehnsbo Ida</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IF Bistro Slependen</selected>
 <show>Frydenlund Heidi</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IF Bistro Team 1</selected>
@@ -448,7 +446,7 @@
 <selected>IKEA Business</selected>
 <show>Bech Kenneth</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IKEA Food</selected>
-<show>Johansen Evy</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Myrseth Tor Morten</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IKEA Food Forus</selected>
 <show>Gjerde Marianne</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IKEA Food Kitchen Sørlandet</selected>
@@ -456,9 +454,9 @@
 <selected>IKEA Food Leangen</selected>
 <show>Schjetne Randi</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IKEA Food Restaurant Sørlandet</selected>
-<show>Eliassen Erik</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Eliassen Kristiansen Erik</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IKEA Food Slependen</selected>
-<show>Jacobsen Jan Erik</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Schouten-Kemna Sandra</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IKEA Food Sørlandet</selected>
 <show>Cesar Monica Hege</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IKEA GREEN FORUS</selected>
@@ -466,7 +464,7 @@
 <selected>IKEA Service &amp; Pick-Up Point Ålesund</selected>
 <show>Dahl Ann Helen</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IKEA Service &amp; Pick-Up Point Skøyen</selected>
-<show>Jacobsen Jan Erik</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Schouten-Kemna Sandra</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>In-Store Logistics</selected>
 <show>Juntti Per Tommy</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Interior Design</selected>
@@ -484,11 +482,13 @@
 <selected>Kitchen &amp; Dining HFB 7 - 8</selected>
 <show>Pettersen Aleksander</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Kitchen &amp; Dining HFB 7 - 8 Team 1</selected>
-<show>Pettersen Aleksander</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Olsen Lill Veronica</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Kitchen and dining HFB 7-8 Leangen</selected>
 <show>Wormdal John</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Kitchen Åsane</selected>
 <show>Langum Jannicke V</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Kitchen HFB 7</selected>
+<show>Elmgren Hege Synøve</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Kitchen HFB 7 &amp; 8 Slependen</selected>
 <show>Løver-Gårderhagen Knut Olav</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Kitchen Production</selected>
@@ -498,11 +498,13 @@
 <selected>Kitchen Team 1 Åsane</selected>
 <show>Eilertsen Eva Catrine M</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Kitchen Team 2</selected>
-<show>Löthman Philip</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Halvorsen Andreas</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Kitchen Team 2 Åsane</selected>
 <show>Veastad Charlotte</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Kitchen Team 3</selected>
 <show>Fjerdingby Denniz</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Kitchen Team 3 Åsane</selected>
+<show>Kvamme Tonje</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Kitchen Team 4</selected>
 <show>Parmlöv Amalia</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Kitchen Team 5</selected>
@@ -520,7 +522,7 @@
 <selected>Lighting HFB 10 Forus</selected>
 <show>Eliassen Marit</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Lighting Leangen HFB 10</selected>
-<show>Grimsrud Anders</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Løvrød Marit</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Lighting Team 1</selected>
 <show>Jøransen Marianne</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Lighting, Cooking &amp; Eating HFB 10/14/15</selected>
@@ -540,7 +542,7 @@
 <selected>Livingroom &amp; Storage HFB1-2 Slependen</selected>
 <show>Meier Nina</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Livingroom&amp;Storage HFB 1-2</selected>
-<show>Nygaardsvold Line</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Selnes Jens Ole</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Livingroom-Storage-Work Spaces HFB 1-2-3</selected>
 <show>Bergqvist Elin Josefin</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Logistic Sørlandet</selected>
@@ -548,7 +550,7 @@
 <selected>Logistics Administration Furuset</selected>
 <show>Hermansson Nils Anders</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Logistics Forus</selected>
-<show>Walsh Fintan</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Skadberg Hans Inge</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Logistics Furuset</selected>
 <show>Poor Omed Mostapha</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Logistics Goods Flow Leangen</selected>
@@ -646,7 +648,7 @@
 <selected>Safety &amp; Security Slependen</selected>
 <show>Gulden Steinar Brusletto</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sales</selected>
-<show>Øktedalen Nina</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Salevik Ricard</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sales &amp; Supply Support</selected>
 <show>Falldalen Heidi</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sales &amp; Supply Support Åsane</selected>
@@ -660,7 +662,7 @@
 <selected>Sales Åsane</selected>
 <show>Langum Jannicke V</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sales Deputy Market hall/Flexipool</selected>
-<show>Andersson Anna</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Hagen Beate</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sales Deputy Showroom</selected>
 <show>Skarelius Lisa M</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sales Forus</selected>
@@ -676,9 +678,9 @@
 <selected>Sales HFB 17 CAL Xmas</selected>
 <show>Andresen Jenny</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sales HFB 4 5</selected>
-<show>Alestrand Karl Erik</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>#N/A</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sales HFB 6 16</selected>
-<show>Kvello Evy Cecilie</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Strid Tobias</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sales HFB 7 8</selected>
 <show>Bure Anette Cecilie</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sales Markedhall</selected>
@@ -695,10 +697,6 @@
 <show>Hinrichsen Finn Eirik</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sales Showroom</selected>
 <show>Möbius Aditsa</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Sales Showroom Leangen</selected>
-<show>Schjetne Randi</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Sales Slependen</selected>
-<show>Hagen Beate</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sales SO</selected>
 <show>Asgeirsson Skarelius Hans</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sales Sørlandet</selected>
@@ -712,19 +710,19 @@
 <selected>Self Serve &amp; Outdoor(HFB 17) Sørlandet</selected>
 <show>Olsen Fred</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Self Serve and outdoor Leangen</selected>
-<show>Lassen Steffen</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Hoff Frode</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Self Serve Forus</selected>
 <show>Seppola Rune</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Self Service</selected>
 <show>Elmgren Hege Synøve</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Self Service Slependen</selected>
-<show>Selbo Espen</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Søiland Anders Mikal</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Self Service Team 1</selected>
 <show>Bosancic Veljko</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Self Service Team 1 Åsane</selected>
 <show>Holm Øyvind</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Self Service Team 2</selected>
-<show>Bosancic Veljko</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Karimi Peshawa</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Self Service Team 2 Åsane</selected>
 <show>Sørli Knut Olav</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Service Administration Leangen</selected>
@@ -732,7 +730,7 @@
 <selected>Service Business</selected>
 <show>Berntzen Geir Egil</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>SFM &amp; Birstro team 1</selected>
-<show>Basharati Kameran</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Osen Erik</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Staff Planning</selected>
 <show>Skattem Gønner Cecilie</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Staff Planning IKEA Hjemme</selected>
@@ -742,9 +740,9 @@
 <selected>Storage HFB 18</selected>
 <show>Wallman Oscar</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Storage Team 1</selected>
-<show>Mattsson Magnus</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Tran Bao Chau</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Store Åsane 441</selected>
-<show>Hajny Filip</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Hitland Solrun K</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Store Forus 126</selected>
 <show>Hajny Filip</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Store Furuset 095</selected>
@@ -752,8 +750,6 @@
 <selected>Store Leangen 371</selected>
 <show>Schjetne Randi</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Store Ringsaker 390</selected>
-<show>Hajny Filip</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Store Slependen 091</selected>
 <show>Hajny Filip</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Store Sørlandet 007</selected>
 <show>Hajny Filip</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
@@ -788,9 +784,9 @@
 <selected>Textiles HFB 11-12-13 Team 2</selected>
 <show>Torgersen Thomas</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Textiles, Rugs Bathroom HFB11-13,6 Leang</selected>
-<show>Løvrød Marit</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Føll Vidar</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Tralle</selected>
-<show>Oprann Susanne</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Esdar Stefan</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Visual Merchandising</selected>
 <show>Haugen Tone</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Visual merchandising Åsane</selected>
@@ -806,7 +802,7 @@
 <selected>Work Åsane</selected>
 <show>Lund Turid</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Work IKEA HFB 3</selected>
-<show>Selnes Jens Ole</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Schjetne Randi</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Work IKEA HFB 3 Slependen</selected>
 <show>Kiss Gyula</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Work IKEA HFB3 Forus</selected>

@@ -184,7 +184,7 @@
                             {
                                 if (SessionFacade.CurrentCustomer != null && !string.IsNullOrEmpty(userIdentity.EmployeeNumber))
                                 {
-                                    var config = (DH.Helpdesk.EForm.FormLib.Configurable.AccessManagment)ConfigurationManager.GetSection("formLibConfigurable/accessManagment");
+                                    var config = (ECT.FormLib.Configurable.AccessManagment)ConfigurationManager.GetSection("formLibConfigurable/accessManagment");
                                     var country = config.Countries.Where(x => x.HelpdeskCustomerId == SessionFacade.CurrentCustomer.Id.ToString()).FirstOrDefault();
 
                                     if (country == null || (country != null && !userIdentity.EmployeeNumber.StartsWith(country.EmployeePrefix)))

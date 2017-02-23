@@ -38,7 +38,6 @@
 <option value="6123">6123 - After Sales Handout</option>
 <option value="6130">6130 - CS entrance</option>
 <option value="6150">6150 - CS Additional Serv</option>
-<option value="6152">6152 - CS Pickup Services</option>
 <option value="6160">6160 - CS Trolley handling</option>
 <option value="6180">6180 - CS cash</option>
 <option value="6190">6190 - Cash Administration</option>
@@ -63,6 +62,7 @@
 <option value="7010">7010 - Management Group</option>
 <option value="7050">7050 - Expansion Team</option>
 <option value="8240">8240 - Project EO 1</option>
+<option value="8244">8244 - PROJECT EO 5</option>
 <option value="8246">8246 - Project EO 7</option>
 <option value="8249">8249 - Project EO 10</option>
 <option value="8500">8500 - Buildings Projects 1</option>

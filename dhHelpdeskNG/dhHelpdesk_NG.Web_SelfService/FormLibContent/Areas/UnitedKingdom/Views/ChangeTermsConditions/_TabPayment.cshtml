@@ -1,6 +1,6 @@
-﻿@model DH.Helpdesk.EForm.FormLib.Models.FormModel
-@using DH.Helpdesk.EForm.FormLib;
-@using DH.Helpdesk.EForm.FormLib.Models;
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
 @{
     const string Level = "Level 1";
 
@@ -1663,8 +1663,38 @@
                             document.getElementById('PayScaleGroup').value = grp;
                         }
                     }
-                                        
-                    if (comp.toString().trim() == 'IKEA Ltd' | comp == 'IKEA Dist Services Ltd') {
+
+                    if (bus.toString().trim() == 'IKEA Contact Centre' | bus.toString().trim() == 'IKEA Belfast' | bus.toString().trim() == 'IKEA Birmingham' | bus.toString().trim() == 'IKEA Bristol' | bus.toString().trim() == 'IKEA Cardiff' | bus.toString().trim() == 'IKEA Coventry' | bus.toString().trim() == 'IKEA Edinburgh' | bus.toString().trim() == 'IKEA Gateshead' | bus.toString().trim() == 'IKEA Glasgow' | bus.toString().trim() == 'IKEA Leeds' | bus.toString().trim() == 'IKEA Lakeside' | bus.toString().trim() == 'IKEA Manchester' | bus.toString().trim() == 'IKEA Milton Keynes' | bus.toString().trim() == 'IKEA Nottingham' | bus.toString().trim() == 'IKEA Reading' | bus.toString().trim() == 'IKEA Sheffield' | bus.toString().trim() == 'IKEA Southampton' | bus.toString().trim() == 'IKEA Warrington') {
+                        if (grp.toString().trim() == 'STARTUK') {
+
+                            if (document.getElementById('BasicPayAmount')) {
+                                document.getElementById('BasicPayAmount').value = '8.45'
+                            }
+                        }
+
+                        if (grp.toString().trim() == 'FOUNDATION') {
+
+                            if (document.getElementById('BasicPayAmount')) {
+                                document.getElementById('BasicPayAmount').value = '8.45'
+                            }
+                        }
+
+                        if (grp.toString().trim() == 'STARTER') {
+
+                            if (document.getElementById('BasicPayAmount')) {
+                                document.getElementById('BasicPayAmount').value = '8.45'
+                            }
+                        }
+                        if (grp.toString().trim() == 'FOUNDUK') {
+
+                            if (document.getElementById('BasicPayAmount')) {
+                                document.getElementById('BasicPayAmount').value = '8.45'
+                            }
+                        }
+
+                    }
+                    else
+                    if (comp == 'IKEA Dist Services Ltd') {
                         if (grp.toString().trim() == 'STARTER') {
                             if (document.getElementById('BasicPayAmount')) {
                                 document.getElementById('BasicPayAmount').value = '8.25'
@@ -1675,22 +1705,29 @@
                                 document.getElementById('BasicPayAmount').value = '8.25'
                             }
                         }
-                        //else if (grp.toString().trim() == 'ADVANCED') {
-                        //    if (document.getElementById('BasicPayAmount')) {
-                        //        document.getElementById('BasicPayAmount').value = '8.52'
-                        //    }
-                        //}
                     }
-                    //else
-                    if (bus.toString().trim() == 'IKEA Tottenham' | bus == 'IKEA Wembley' | bus == 'IKEA Croydon') {
+                   else
+                    if (bus.toString().trim() == 'IKEA Tottenham' | bus == 'IKEA Wembley' | bus == 'IKEA Croydon' | bus == 'IKEA Service Office') {
                         if (grp.toString().trim() == 'STARTLO') {
                             if (document.getElementById('BasicPayAmount')) {
-                                document.getElementById('BasicPayAmount').value = '9.40'
+                                document.getElementById('BasicPayAmount').value = '9.75'
                             }
                         }
                         if (grp.toString().trim() == 'FOUNDLO') {
                             if (document.getElementById('BasicPayAmount')) {
-                                document.getElementById('BasicPayAmount').value = '9.40'
+                                document.getElementById('BasicPayAmount').value = '9.75'
+                            }
+                        }
+                        if (grp.toString().trim() == 'FOUNDATION') {
+
+                            if (document.getElementById('BasicPayAmount')) {
+                                document.getElementById('BasicPayAmount').value = '9.75'
+                            }
+                        }
+                        if (grp.toString().trim() == 'STARTER') {
+
+                            if (document.getElementById('BasicPayAmount')) {
+                                document.getElementById('BasicPayAmount').value = '9.75'
                             }
                         }
                         else if (grp.toString().trim() == 'MULTSKLL') {

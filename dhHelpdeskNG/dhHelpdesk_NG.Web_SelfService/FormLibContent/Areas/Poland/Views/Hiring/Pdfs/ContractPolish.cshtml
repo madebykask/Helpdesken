@@ -1,6 +1,6 @@
-﻿@model DH.Helpdesk.EForm.FormLib.Models.FormModel
-@using DH.Helpdesk.EForm.FormLib;
-@using DH.Helpdesk.EForm.FormLib.Models;
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
 
 @{
     Layout = null;
@@ -27,7 +27,20 @@
             pomiędzy firmą
             <br />
             <strong>@Model.Company.footerName</strong><br />
-            z siedzibą w Jankach, Pl. Szwedzki 3; 05–090 Raszyn, reprezentowaną przez
+            z siedzibą w 
+            @if(Model.Company.Searchkey == "OT")
+            {
+               <text>
+                  Warszawie, Al. Krakowska 61, 02-183 Warszawa,
+               </text>
+            }
+            else
+            {
+               <text>
+                 Jankach, Pl. Szwedzki 3; 05–090 Raszyn,
+               </text>
+            }
+             reprezentowaną przez
             <br />
             <strong>@Model.Company.CountryEmployer</strong><br />
         </p>

@@ -1,9 +1,9 @@
-﻿@model DH.Helpdesk.EForm.FormLib.Models.FormModel
-@using DH.Helpdesk.EForm.FormLib;
-@using DH.Helpdesk.EForm.FormLib.Models;
-@using DH.Helpdesk.EForm.FormLib.Pdfs;
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@using ECT.FormLib.Pdfs;
 @using System.Globalization;
-@using DH.Helpdesk.EForm.Model.Entities;
+@using ECT.Model.Entities;
 @{
     Layout = null;
     Model.Language = "en";
@@ -75,7 +75,7 @@
             list.Add(new PdfListItem { Text = text3 });
 
             //4
-            string text4 = "The " + UnitedKingdomPdfPage.GetServiceAreaText("ServiceArea", Model) + " is your primary place of work. You will on occasions be expected to work in other areas within the Store/Unit to support the business need.";
+            string text4 = "The " + UnitedKingdomPdfPage.GetServiceAreaText("ServiceArea", Model) + " is your primary place of work. You will on occasions be expected to work in other areas within the Unit to support the business need.";
             list.Add(new PdfListItem { Text = text4 });
 
             //5
@@ -120,7 +120,7 @@
             list.Add(new PdfListItem { Text = text8 });
 
             //9
-            string text9 = "You must save holiday hours for days of store closure when you would normally be scheduled to work. The store will be closed on Easter Sunday and Christmas Day.";
+            string text9 = "You must save holiday hours for days of store closure when you would normally be scheduled to work. The unit will be closed on Easter Sunday and Christmas Day.";
             list.Add(new PdfListItem { Text = text9 });
 
             //10

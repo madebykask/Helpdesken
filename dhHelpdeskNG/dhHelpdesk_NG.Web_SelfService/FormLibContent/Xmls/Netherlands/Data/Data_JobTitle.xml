@@ -4,6 +4,7 @@
   <option value="Accounting Co-worker">Accounting Co-worker</option>
   <option value="Accounting Co-worker Senior">Accounting Co-worker Senior</option>
   <option value="Accounting Manager">Accounting Manager</option>
+  <option value="Accounting Specialist">Accounting Specialist</option>
   <option value="Accounting Team Leader">Accounting Team Leader</option>
   <option value="Accounting Team Manager">Accounting Team Manager</option>
   <option value="Accounts Payable Co-worker">Accounts Payable Co-worker</option>
@@ -21,6 +22,7 @@
   <option value="Business Navigation &amp; Operations Manager">Business Navigation &amp; Operations Manager</option>
   <option value="Business Navigation Manager">Business Navigation Manager</option>
   <option value="Business Navigator">Business Navigator</option>
+  <option value="Business Service Manager">Business Service Manager</option>
   <option value="Call Center Representative">Call Center Representative</option>
   <option value="Call Center Representative I">Call Center Representative I</option>
   <option value="Carpenter Co-worker">Carpenter Co-worker</option>
@@ -67,6 +69,7 @@
   <option value="Customer Services Manager">Customer Services Manager</option>
   <option value="Customer Services Team Assistant">Customer Services Team Assistant</option>
   <option value="Customer Services Team Manager">Customer Services Team Manager</option>
+  <option value="Customer Support Generalist">Customer Support Generalist</option>
   <option value="Database specialist">Database specialist</option>
   <option value="Department Head">Department Head</option>
   <option value="Deputy Com &amp; In Manager">Deputy Com &amp; In Manager</option>
@@ -206,6 +209,7 @@
   <option value="Shopping Experience Leader">Shopping Experience Leader</option>
   <option value="Shopping Experience Manager">Shopping Experience Manager</option>
   <option value="Social Media Manager">Social Media Manager</option>
+  <option value="Social Media Specialist">Social Media Specialist</option>
   <option value="Software Specialist">Software Specialist</option>
   <option value="Solution Owner">Solution Owner</option>
   <option value="Staff Planning Manager">Staff Planning Manager</option>
