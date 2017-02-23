@@ -22,7 +22,7 @@
     </li>
     }
         <li>
-            @if (Model.Other.CaseNumber.Value.HasValue && Model.Other.CaseId.Value.HasValue)
+            @if (Model.IsReturnToCase && Model.Other.CaseNumber.Value.HasValue && Model.Other.CaseId.Value.HasValue)
             {
                 <a href="@Url.Content("~/Cases/Edit/" + Model.Other.CaseId.Value.Value)" class="btn">@Translation.GetCoreTextTranslation("Avbryt")</a>
             }

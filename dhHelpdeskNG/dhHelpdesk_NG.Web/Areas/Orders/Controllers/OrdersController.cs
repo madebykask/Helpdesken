@@ -241,7 +241,7 @@
         }
 
         [HttpGet]
-        public ViewResult Edit(int id)
+        public ViewResult Edit(int id, bool retToCase = false)
         {
             _filesStateStore.ClearObjectDeletedItems(id, OrderDeletedItem.Logs);
 
@@ -267,6 +267,7 @@
 
             var model = _orderModelFactory.Create(response, _workContext.Customer.CustomerId);
             model.UserHasAdminOrderPermission = userHasAdminOrderPermission;
+            model.IsReturnToCase = retToCase;
 
             return View(model);
         }
