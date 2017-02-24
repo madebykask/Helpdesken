@@ -173,7 +173,7 @@
                 @if (Model.OrderId.HasValue)
                 {
                     <li>
-                        <a id="case-order-url" href="@Url.Content("~/Orders/Orders/Edit/" + Model.OrderId.Value + "?retToCase=true")">@Translation.GetCoreTextTranslation("Beställning")</a>
+                        <a id="case-order-url" href="@Url.Content("~/Orders/Orders/Edit/" + Model.OrderId.Value + "?retToCase=" + Model.IsReturnToCase)">@Translation.GetCoreTextTranslation("Beställning")</a>
                     </li>
                 }
             </ul>

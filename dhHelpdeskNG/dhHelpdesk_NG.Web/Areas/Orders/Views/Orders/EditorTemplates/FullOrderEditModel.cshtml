@@ -15,7 +15,7 @@
     @if (Model.Other.CaseNumber.Value.HasValue && Model.Other.CaseId.Value.HasValue)
     {
         <li>
-            <a href="@Url.Content("~/Cases/Edit/" + Model.Other.CaseId.Value.Value)" id="case-url">@Translation.GetCoreTextTranslation("Ärende")</a>
+            <a href="@Url.Content("~/Cases/Edit/" + Model.Other.CaseId.Value.Value + "?retToCase=" + Model.IsReturnToCase)" id="case-url">@Translation.GetCoreTextTranslation("Ärende")</a>
         </li>
     }
     <li class="active">

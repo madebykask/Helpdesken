@@ -1168,7 +1168,8 @@ namespace DH.Helpdesk.Web.Controllers
             int? moveToCustomerId = null, 
             bool? uni = null, 
             bool updateState = true, 
-            string backUrl = null)
+            string backUrl = null,
+            bool retToCase = true)
         {
             CaseInputViewModel m = null;
             
@@ -1293,6 +1294,8 @@ namespace DH.Helpdesk.Web.Controllers
                 m.CaseMailSetting.DontSendMailToNotifier = true;
             else
                 m.CaseMailSetting.DontSendMailToNotifier = false;
+
+            m.IsReturnToCase = retToCase;
 
             return this.View(m);
         }
