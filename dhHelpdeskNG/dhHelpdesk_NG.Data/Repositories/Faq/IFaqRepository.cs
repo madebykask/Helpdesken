@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace DH.Helpdesk.Dal.Repositories.Faq
 {
     using DH.Helpdesk.BusinessData.Models.Faq.Input;
@@ -13,5 +15,7 @@ namespace DH.Helpdesk.Dal.Repositories.Faq
         void UpdateSwedishFaq(ExistingFaq faq);
 
         void UpdateOtherLanguageFaq(ExistingFaq faq);
+
+        List<FaqEntity> GetFaqsByCustomerId(int customerId);
     }
 }

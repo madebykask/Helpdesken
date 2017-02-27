@@ -35,9 +35,9 @@ namespace DH.Helpdesk.Services.Services
 
         Faq FindById(int faqId);
 
-        IList<FaqCategory> GetFaqCategories(int customerId);
+        IList<FaqCategory> GetFaqCategories(int customerId, int languageId);
 
-        IList<Faq> GetFaqs(int customerId);
+        IList<Faq> GetFaqs(int customerId, int languageId);
 
         byte[] GetFileContentByFaqIdAndFileName(int faqId, string basePath, string fileName);
 

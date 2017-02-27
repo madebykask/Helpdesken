@@ -262,57 +262,61 @@ namespace DH.Helpdesk.Services.Services.Concrete
             }
         }
 
-        public IList<FaqCategory> GetFaqCategories(int customerId)
+        public IList<FaqCategory> GetFaqCategories(int customerId, int languageId)
         {
-            var ret = faqCategoryRepository.GetMany(c => c.Customer_Id.HasValue && c.Customer_Id.Value == customerId)
-                                          .Select(c =>
-                                                new FaqCategory
-                                                {
-                                                    Id = c.Id,
-                                                    Name = c.Name,
-                                                    CustomerId = c.Customer_Id.Value,
-                                                    Parent_Id = c.Parent_FAQCategory_Id,
-                                                    PublicCatId = c.PublicFAQCategory,
-                                                    CreatedDate = c.CreatedDate,
-                                                    ChangedDate = c.ChangedDate
-                                                })
-                                          .ToList();
-            return ret;
+            var categs = faqCategoryRepository.GetCategoriesByCustomer(customerId);
+
+            var result = categs.Select(c =>
+            {
+                var name = c.FaqCategoryLanguages.FirstOrDefault(x => x.Language_Id == languageId);
+                return new FaqCategory
+                {
+                    Id = c.Id,
+                    Name = name != null ? name.Name : c.Name,
+                    CustomerId = customerId,
+                    Parent_Id = c.Parent_FAQCategory_Id,
+                    PublicCatId = c.PublicFAQCategory,
+                    CreatedDate = c.CreatedDate,
+                    ChangedDate = c.ChangedDate
+                };
+            }).ToList();
+            return result;
         }
 
-        public IList<Faq> GetFaqs(int customerId)
+        public IList<Faq> GetFaqs(int customerId, int languageId)
         {
             var faqFiles = faqFileRepository.GetMany(f => f.FAQ != null && f.FAQ.Customer_Id == customerId).ToList();
-
-            var ret = faqRepository.GetMany(f => f.Customer_Id.HasValue && f.Customer_Id.Value == customerId)
-                                   .Select(f =>
-                                               new Faq
-                                               {
-                                                   Id = f.Id,
-                                                   Question = f.FAQQuery,
-                                                   Answer = f.Answer,
-                                                   FaqCategoryId = f.FAQCategory_Id,
-                                                   InternalAnswer = f.Answer_Internal,
-                                                   UrlOne = f.URL1,
-                                                   UrlTwo = f.URL2,
-                                                   WorkingGroupId = f.WorkingGroup_Id,
-                                                   InformationIsAvailableForNotifiers = Convert.ToBoolean(f.InformationIsAvailableForNotifiers),
-                                                   CustomerId = f.Customer_Id.Value,
-                                                   ShowOnStartPage = Convert.ToBoolean(f.ShowOnStartPage),
-                                                   CreatedDate = f.CreatedDate,
-                                                   ChangedDate = f.ChangedDate,
-                                                   Files = faqFiles.Where(fi => fi.FAQ_Id == f.Id)
-                                                                   .Select(ff => new FaqFile
-                                                                   {
-                                                                       Id = ff.Id,
-                                                                       Faq_Id = f.Id,
-                                                                       FileName = ff.FileName,
-                                                                       CreatedDate = ff.CreatedDate
-                                                                   })
-                                                                   .ToArray()
-                                               })
-                                   .ToList();
-            return ret;
+            var faqs = faqRepository.GetFaqsByCustomerId(customerId);
+            var result = faqs.Select(f =>
+            {
+                var fLng = f.FaqLanguages.FirstOrDefault(x => x.Language_Id == languageId);
+                return new Faq
+                {
+                    Id = f.Id,
+                    Question = fLng != null ? fLng.FAQQuery : f.FAQQuery,
+                    Answer = fLng != null ? fLng.Answer : f.Answer,
+                    FaqCategoryId = f.FAQCategory_Id,
+                    InternalAnswer = fLng != null ? fLng.Answer_Internal : f.Answer_Internal,
+                    UrlOne = f.URL1,
+                    UrlTwo = f.URL2,
+                    WorkingGroupId = f.WorkingGroup_Id,
+                    InformationIsAvailableForNotifiers = Convert.ToBoolean(f.InformationIsAvailableForNotifiers),
+                    CustomerId = customerId,
+                    ShowOnStartPage = Convert.ToBoolean(f.ShowOnStartPage),
+                    CreatedDate = f.CreatedDate,
+                    ChangedDate = f.ChangedDate,
+                    Files = faqFiles.Where(fi => fi.FAQ_Id == f.Id)
+                        .Select(ff => new FaqFile
+                        {
+                            Id = ff.Id,
+                            Faq_Id = f.Id,
+                            FileName = ff.FileName,
+                            CreatedDate = ff.CreatedDate
+                        })
+                        .ToArray()
+                };
+            }).ToList();
+            return result;
         }
 
 
