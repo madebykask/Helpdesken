@@ -127,7 +127,16 @@
 
                 var $createCase = $("#createCase_action:not(:hidden)");
                 if ($createCase.length > 0) {
+                    var val = $status.val();
+                    var item = that._options.statuses.filter(function (e) {
+                        return e.Value === val;
+                    });
+                    if (item.length <= 0) return;
 
+                    item = item[0];
+                    if (item.CreateCase) {
+                        $createCase.prop("checked", true);
+                    }
                 }
 
                 $status.on("change", function () {
@@ -150,10 +159,13 @@
                     }
 
                     var $createCase = $("#createCase_action:not(:hidden)");
-                    if ($createCase.length > 0 && item.NotifyReceiver) {
-                        $createCase.prop("checked", true);
+                    if ($createCase.length > 0) {
+                        if (item.CreateCase) {
+                            $createCase.prop("checked", true);
+                        } else {
+                            $createCase.prop("checked", false);
+                        }
                     }
-
                 });
             }
 
