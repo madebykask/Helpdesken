@@ -28,5 +28,6 @@
         public string EmailIdentifier { get; private set; } 
 
         public string Help { get; private set; }
+
     }
 }

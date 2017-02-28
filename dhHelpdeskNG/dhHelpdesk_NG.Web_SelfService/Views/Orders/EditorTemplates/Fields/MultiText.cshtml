@@ -1,0 +1,48 @@
+﻿@using LinqLib.Operators
+@model DH.Helpdesk.SelfService.Models.Orders.FieldModels.ConfigurableFieldModel<string>
+
+@if (!Model.Show)
+{
+    return;
+}
+
+@{
+    var valuesSplitter = "&,";
+    var pairSplitter = "&;";
+    Model.Value = Model.Value ?? "";
+    var multiTextValues = Model.Value
+        .Split(new[] {pairSplitter}, StringSplitOptions.None)
+        .Where(s => !string.IsNullOrWhiteSpace(s))
+        .Select(s =>
+        {
+            var values = s.Split(new[] {valuesSplitter}, StringSplitOptions.None);
+            return new {Id = values[0] ?? "", Name = values.Length == 2 ? values[1] ?? "" : ""};
+        });
+    if(!multiTextValues.Any())
+    {
+        multiTextValues = new[] {new {Id = "", Name = ""}};
+    };
+    var multiTextValuesArr = multiTextValues.ToArray();
+}
+@Html.HiddenFor(m => m.IsRequired)
+@Html.HiddenFor(m => m.Value, new { multitext = "" })
+@for (var i = 0; i < multiTextValuesArr.Length; i++)
+{
+    <div  class="row form-group multitext" data-field-id="@Html.IdFor(m => m.Value)">
+        <div class="col-md-3">
+            @Html.FieldCaption(Model) <span class="number">@(i + 1)</span>
+        </div>
+        <div class="col-md-9 input-group">
+            @Html.TextBox("id", multiTextValuesArr[i].Id)
+            @Html.TextBox("name", multiTextValuesArr[i].Name)
+            <i class="glyphicon glyphicon-plus-sign" name="add"></i>
+            <i class="glyphicon glyphicon-minus-sign" name="remove"></i>
+        </div>
+        @*<div class="col-md-3">
+            @if (i == multiTextValuesArr.Length - 1)
+            {
+                @Model.Help
+            }
+        </div>*@
+    </div>
+}

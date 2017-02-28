@@ -344,7 +344,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
             var info = _configurableFieldModelFactory.CreateStringField(settings.User.Info, fields.User.InfoUser);
             var activity = _configurableFieldModelFactory.CreateStringField(settings.User.Activity, fields.User.Activity);
             var manager = _configurableFieldModelFactory.CreateStringField(settings.User.Manager, fields.User.Manager);
-            var ordererId = _configurableFieldModelFactory.CreateStringField(settings.Orderer.OrdererId, fields.Orderer.OrdererId);
+            var ordererId = _configurableFieldModelFactory.CreateMultiStringField(settings.Orderer.OrdererId, fields.Orderer.OrdererId);
             var ordererName = _configurableFieldModelFactory.CreateStringField(settings.Orderer.OrdererName, fields.Orderer.OrdererName);
             var ordererLocation = _configurableFieldModelFactory.CreateStringField(settings.Orderer.OrdererLocation, fields.Orderer.OrdererLocation);
             var ordererEmail = _configurableFieldModelFactory.CreateStringField(settings.Orderer.OrdererEmail, fields.Orderer.OrdererEmail);

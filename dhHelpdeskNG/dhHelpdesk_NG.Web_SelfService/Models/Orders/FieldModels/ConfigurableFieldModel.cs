@@ -13,13 +13,14 @@ namespace DH.Helpdesk.SelfService.Models.Orders.FieldModels
         {
         }
 
-        public ConfigurableFieldModel(string caption, TValue value, bool required, string help)
+        public ConfigurableFieldModel(string caption, TValue value, bool required, string help, bool isMultiple = false)
         {
             Show = true;
             Caption = caption;
             Value = value;
             IsRequired = required;
             Help = help;
+            IsMultiple = isMultiple;
         }
 
         #endregion
@@ -37,6 +38,8 @@ namespace DH.Helpdesk.SelfService.Models.Orders.FieldModels
         public TValue Value { get; set; }
 
         public string Help { get; set; }
+
+        public bool IsMultiple { get; set; }
 
         #endregion
 

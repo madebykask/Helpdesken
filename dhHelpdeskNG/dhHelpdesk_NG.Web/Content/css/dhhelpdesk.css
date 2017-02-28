@@ -3957,3 +3957,12 @@ label.checkbox-label-inline {
 .cursor-default {
     cursor: default;
 }
+
+table .multitext input[type='text'] {
+    width: 190px;
+    margin-right: 5px;
+}
+
+table .multitext i {
+    cursor: pointer;
+}

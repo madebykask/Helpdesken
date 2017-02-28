@@ -37,7 +37,7 @@ Select Id, 'Problem', 0, 0,0,0, '',NULL, 0, NULL, Getdate(), GetDate(), 0 from t
 where not exists (select * from tblCasefieldsettings where  Customer_Id = c.Id and CaseField = 'Problem')
 
 if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'OrdererID' and sysobjects.name = N'tblOrder')
-	ALTER TABLE [dbo].[tblOrder] ALTER COLUMN [OrdererID] [nvarchar](200) NULL
+	ALTER TABLE [dbo].[tblOrder] ALTER COLUMN [OrdererID] [nvarchar](400) NULL
 GO
 
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'MultiValue' and sysobjects.name = N'tblOrderFieldSettings')

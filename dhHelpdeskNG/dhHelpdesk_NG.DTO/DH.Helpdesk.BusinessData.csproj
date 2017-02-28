@@ -407,6 +407,7 @@
     <Compile Include="Models\Orders\Order\OrderEditSettings\FullOrderEditSettings.cs" />
     <Compile Include="Models\Orders\Order\OrderEditSettings\GeneralEditSettings.cs" />
     <Compile Include="Models\Orders\Order\OrderEditSettings\LogEditSettings.cs" />
+    <Compile Include="Models\Orders\Order\OrderEditSettings\MultiTextFieldEditSettings.cs" />
     <Compile Include="Models\Orders\Order\OrderEditSettings\OrderEditSettings.cs" />
     <Compile Include="Models\Orders\Order\OrderEditSettings\OrdererEditSettings.cs" />
     <Compile Include="Models\Orders\Order\OrderEditSettings\OtherEditSettings.cs" />

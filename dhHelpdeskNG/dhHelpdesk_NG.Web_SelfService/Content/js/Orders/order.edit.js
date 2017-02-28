@@ -268,6 +268,20 @@
                 $("#informOrderer").val($("#informOrderer_action").prop("checked"));
                 $("#informReceiver").val($("#informReceiver_action").prop("checked"));
                 $("#createCase").val($("#createCase_action").prop("checked"));
+                $("input[type='hidden'][multitext]").each(function (i, e) {
+                    var fieldId = $(e).prop("id");
+                    var allRows = $(".multitext[data-field-id='" + fieldId + "']");
+                    var result = "";
+                    allRows.each(function (index, el) {
+                        var $el = $(el);
+                        var id = $el.find("input[name$='id']").val();
+                        var name = $el.find("input[name$='name']").val();
+                        if (!id.length && !name.length) return;
+                        result = result + id + that._options.valuesSplitter
+                            + name + that._options.pairSplitter;
+                    });
+                    $(e).val(result);
+                });
 
                 $("#edit_form").submit();
                 return false;
@@ -362,6 +376,44 @@
                 document.location.href = href;
             });
 
+            function addMultiTextField(e) {
+                var maxFields = 10;
+                var $row = $(this.closest(".multitext"));
+                var fieldId = $row.data("fieldId");
+                var allRows = $(".multitext[data-field-id='" + fieldId + "']");
+                if (allRows.length >= maxFields) {
+                    return;
+                }
+
+                var $templateHtml = $($row.clone().wrapAll("<div/>").parent().html());
+                $templateHtml.find(".number").html(allRows.length + 1);
+                $templateHtml.find("input[name$='id']").val("");
+                $templateHtml.find("input[name$='name']").val("");
+                $templateHtml.find("i[name='add']").on("click", addMultiTextField);
+                $templateHtml.find("i[name='remove']").on("click", removeMultiTextField);
+                allRows.last().after($templateHtml);
+            }
+
+            function removeMultiTextField(e) {
+                var minFields = 1;
+                var $row = $(this.closest(".multitext"));
+                var fieldId = $row.data("fieldId");
+                var allRows = $(".multitext[data-field-id='" + fieldId + "']");
+                if (allRows.length <= minFields) {
+                    return;
+                }
+
+                $row.remove();
+                allRows = $(".multitext[data-field-id='" + fieldId + "']");
+                allRows.find(".number").each(function (i, e) {
+                    $(e).html(i + 1);
+                });
+            }
+
+            $(".multitext i[name='add']")
+                .on("click", addMultiTextField);
+            $(".multitext i[name='remove']")
+                .on("click", removeMultiTextField);
         }
     }
 })(jQuery);

@@ -2,7 +2,7 @@
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class TextFieldEditSettings : FieldEditSettings
+    public class TextFieldEditSettings : FieldEditSettings
     {
         public TextFieldEditSettings(bool show, string caption,
             bool required, string emailIdentifier, string defaultValue, string help)

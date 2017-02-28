@@ -997,3 +997,7 @@ table.table-orders th span.glyphicon {
 .ml15 {
     margin-left: 0.5em !important;
 }
+
+.multitext .input-group {
+    display: inline-block;
+}

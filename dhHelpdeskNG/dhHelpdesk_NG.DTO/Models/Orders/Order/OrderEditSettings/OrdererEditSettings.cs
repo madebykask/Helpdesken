@@ -7,7 +7,7 @@ namespace DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditSettings
     public sealed class OrdererEditSettings : HeaderSettings
     {
         public OrdererEditSettings(
-                TextFieldEditSettings ordererId, 
+                MultiTextFieldEditSettings ordererId, 
                 TextFieldEditSettings ordererName, 
                 TextFieldEditSettings ordererLocation, 
                 TextFieldEditSettings ordererEmail, 
@@ -43,7 +43,7 @@ namespace DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditSettings
         }
 
         [NotNull]
-        public TextFieldEditSettings OrdererId { get; private set; }
+        public MultiTextFieldEditSettings OrdererId { get; private set; }
 
         [NotNull]
         public TextFieldEditSettings OrdererName { get; private set; }

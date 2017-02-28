@@ -104,14 +104,7 @@
             </td>
         </tr>
         <tr>
-            @if (Model.Orderer.OrdererId.IsMultiple)
-            {
-                @Html.EditorFor(m => m.Orderer.OrdererId, "EditorTemplates/MultiTextFieldSettingsModel", new {type = OrderSettingWebType.Text})
-            }
-            else
-            {
-                @Html.EditorFor(m => m.Orderer.OrdererId, "EditorTemplates/TextFieldSettingsModel", new { type = OrderSettingWebType.Text })
-            }
+            @Html.EditorFor(m => m.Orderer.OrdererId, new {type = OrderSettingWebType.Text})
         </tr>
         <tr>
             @Html.EditorFor(m => m.User.PersonalIdentityNumber, new {type = OrderSettingWebType.Text})

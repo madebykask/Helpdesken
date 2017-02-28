@@ -419,5 +419,6 @@
             _filesStateStore.AddDeletedItem(logId, OrderDeletedItem.Logs, orderId);
             return RedirectToAction("Logs", new { orderId, subtopic });
         }
+
     }
 }
