@@ -355,7 +355,7 @@ namespace DH.Helpdesk.Web.Areas.OrderAccounts.Infrastructure.ModelMappers.Concre
             }
             else
             {
-                fileName = ConfigurableFieldModel<FilesModel>.CreateUnshowable();
+                fileName = ConfigurableFieldModel<FilesModel>.CreateUnshowable(settings.Other.FileName.Caption);
             }
 
             return new Other(caseNumber, info, fileName);
@@ -568,7 +568,7 @@ namespace DH.Helpdesk.Web.Areas.OrderAccounts.Infrastructure.ModelMappers.Concre
             }
             else
             {
-                fileName = ConfigurableFieldModel<FilesModel>.CreateUnshowable();
+                fileName = ConfigurableFieldModel<FilesModel>.CreateUnshowable(settings.Other.FileName.Caption);
             }
 
             return new Other(caseNumber, info, fileName);
@@ -581,14 +581,14 @@ namespace DH.Helpdesk.Web.Areas.OrderAccounts.Infrastructure.ModelMappers.Concre
             DateTime? value)
         {
             return !setting.IsShowInDetails
-                       ? ConfigurableFieldModel<DateTime?>.CreateUnshowable()
+                       ? ConfigurableFieldModel<DateTime?>.CreateUnshowable(setting.Caption)
                        : new ConfigurableFieldModel<DateTime?>(setting.Caption, value, setting.IsRequired);
         }
 
         private static ConfigurableFieldModel<DateTime> CreateDateTimeField(FieldSetting setting, DateTime value)
         {
             return !setting.IsShowInDetails
-                       ? ConfigurableFieldModel<DateTime>.CreateUnshowable()
+                       ? ConfigurableFieldModel<DateTime>.CreateUnshowable(setting.Caption)
                        : new ConfigurableFieldModel<DateTime>(setting.Caption, value, setting.IsRequired);
         }
 
@@ -635,7 +635,7 @@ namespace DH.Helpdesk.Web.Areas.OrderAccounts.Infrastructure.ModelMappers.Concre
         private static ConfigurableFieldModel<string> CreateStringField(FieldSetting setting, string value)
         {
             return !setting.IsShowInDetails
-                       ? ConfigurableFieldModel<string>.CreateUnshowable()
+                       ? ConfigurableFieldModel<string>.CreateUnshowable(setting.Caption)
                        : new ConfigurableFieldModel<string>(setting.Caption, value, setting.IsRequired);
         }
 
@@ -649,28 +649,28 @@ namespace DH.Helpdesk.Web.Areas.OrderAccounts.Infrastructure.ModelMappers.Concre
         private static ConfigurableFieldModel<bool> CreateBooleanField(FieldSetting setting, bool value)
         {
             return !setting.IsShowInDetails
-                       ? ConfigurableFieldModel<bool>.CreateUnshowable()
+                       ? ConfigurableFieldModel<bool>.CreateUnshowable(setting.Caption)
                        : new ConfigurableFieldModel<bool>(setting.Caption, value, setting.IsRequired);
         }
 
         private static ConfigurableFieldModel<int> CreateIntegerField(FieldSetting setting, int value)
         {
             return !setting.IsShowInDetails
-                       ? ConfigurableFieldModel<int>.CreateUnshowable()
+                       ? ConfigurableFieldModel<int>.CreateUnshowable(setting.Caption)
                        : new ConfigurableFieldModel<int>(setting.Caption, value, setting.IsRequired);
         }
 
         private static ConfigurableFieldModel<decimal?> CreateNullableDecimalField(FieldSetting setting, decimal? value)
         {
             return !setting.IsShowInDetails
-                       ? ConfigurableFieldModel<decimal?>.CreateUnshowable()
+                       ? ConfigurableFieldModel<decimal?>.CreateUnshowable(setting.Caption)
                        : new ConfigurableFieldModel<decimal?>(setting.Caption, value, setting.IsRequired);
         }
 
         private static ConfigurableFieldModel<int?> CreateNullableIntegerField(FieldSetting setting, int? value)
         {
             return !setting.IsShowInDetails
-                       ? ConfigurableFieldModel<int?>.CreateUnshowable()
+                       ? ConfigurableFieldModel<int?>.CreateUnshowable(setting.Caption)
                        : new ConfigurableFieldModel<int?>(setting.Caption, value, setting.IsRequired);
         }
 
@@ -679,14 +679,14 @@ namespace DH.Helpdesk.Web.Areas.OrderAccounts.Infrastructure.ModelMappers.Concre
             List<string> value)
         {
             return !setting.IsShowInDetails
-                       ? ConfigurableFieldModel<List<string>>.CreateUnshowable()
+                       ? ConfigurableFieldModel<List<string>>.CreateUnshowable(setting.Caption)
                        : new ConfigurableFieldModel<List<string>>(setting.Caption, value, setting.IsRequired);
         }
 
         private static ConfigurableFieldModel<List<int>> CreateListIntField(FieldSetting setting, List<int> value)
         {
             return !setting.IsShowInDetails
-                       ? ConfigurableFieldModel<List<int>>.CreateUnshowable()
+                       ? ConfigurableFieldModel<List<int>>.CreateUnshowable(setting.Caption)
                        : new ConfigurableFieldModel<List<int>>(setting.Caption, value, setting.IsRequired);
         }
 

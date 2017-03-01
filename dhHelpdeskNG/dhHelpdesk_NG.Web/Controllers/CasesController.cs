@@ -181,6 +181,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         private readonly ICaseRuleFactory _caseRuleFactory;
         private readonly IOrderService _orderService;
+        private readonly IOrderAccountService _orderAccountService;
 
 
         #endregion
@@ -253,7 +254,8 @@ namespace DH.Helpdesk.Web.Controllers
 			IExternalInvoiceService externalInvoiceService,
             ICaseExtraFollowersService caseExtraFollowersService,
             ICaseRuleFactory caseRuleFactory,
-            IOrderService orderService)
+            IOrderService orderService,
+            IOrderAccountService orderAccountService)
             : base(masterDataService)
         {
             this._masterDataService = masterDataService;
@@ -325,6 +327,7 @@ namespace DH.Helpdesk.Web.Controllers
 			_caseExtraFollowersService = caseExtraFollowersService;
             _caseRuleFactory = caseRuleFactory;
             _orderService = orderService;
+            _orderAccountService = orderAccountService;
         }
 
 		#endregion
@@ -1200,6 +1203,9 @@ namespace DH.Helpdesk.Web.Controllers
 
                 //Get order
                 m.OrderId = _orderService.GetOrder(id)?.Id;
+
+                //Get account id
+                m.AccountId = _orderAccountService.GetAccountIdByCaseNumber(currentCase.CaseNumber);
 
                 // User has not access to case
                 if (m.EditMode == Enums.AccessMode.NoAccess)

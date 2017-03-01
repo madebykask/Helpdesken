@@ -36,6 +36,8 @@
 
         public int ActivityTypeId { get; set; }
 
+        public int CaseId { get; set; }
+
         public string ActivityName { get; set; }
 
         public DateTime CreatedDate { get; set; }

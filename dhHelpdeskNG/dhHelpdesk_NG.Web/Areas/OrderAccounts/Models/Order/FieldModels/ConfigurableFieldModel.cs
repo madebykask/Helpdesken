@@ -38,9 +38,9 @@
 
         #region Public Methods and Operators
 
-        public static ConfigurableFieldModel<TValue> CreateUnshowable()
+        public static ConfigurableFieldModel<TValue> CreateUnshowable(string caption)
         {
-            return new ConfigurableFieldModel<TValue> { Caption = "", Show = false };
+            return new ConfigurableFieldModel<TValue> { Caption = caption, Show = false };
         }
 
         public static TValue GetValueOrDefault(ConfigurableFieldModel<TValue> field)

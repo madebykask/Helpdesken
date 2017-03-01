@@ -176,6 +176,12 @@
                         <a id="case-order-url" href="@Url.Content("~/Orders/Orders/Edit/" + Model.OrderId.Value + "?retToCase=" + Model.IsReturnToCase)">@Translation.GetCoreTextTranslation("Beställning")</a>
                     </li>
                 }
+                @if (Model.AccountId.HasValue)
+                {
+                    <li>
+                        <a id="case-orderaccount-url" href="@Url.Content("~/OrderAccounts/Orders/Edit/" + Model.AccountId.Value + "?activityType=1&caseId=" + Model.case_.Id)">@Translation.GetCoreTextTranslation("Beställning konto")</a>
+                    </li>
+                }
             </ul>
             <div class="tab-content">
                 <div class="tab-pane tab-pane-border active" id="case">

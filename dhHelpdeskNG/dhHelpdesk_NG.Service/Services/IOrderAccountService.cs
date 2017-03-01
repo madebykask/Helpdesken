@@ -37,5 +37,6 @@
         string GetFileName(int orderId);
 
         byte[] GetFileContent(int orderId);
+        int? GetAccountIdByCaseNumber(decimal caseNum);
     }
 }

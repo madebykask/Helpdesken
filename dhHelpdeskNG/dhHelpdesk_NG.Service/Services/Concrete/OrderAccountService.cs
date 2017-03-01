@@ -185,6 +185,16 @@
             }
         }
 
+        public int? GetAccountIdByCaseNumber(decimal caseNum)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var accountRepository = uow.GetRepository<Account>();
+                var acc = accountRepository.GetAll().FirstOrDefault(x => x.CaseNumber == caseNum);
+                return acc?.Id;
+            }
+        }
+
         public List<ItemOverview> GetAccountActivivties()
         {
             using (var uow = this.unitOfWorkFactory.Create())

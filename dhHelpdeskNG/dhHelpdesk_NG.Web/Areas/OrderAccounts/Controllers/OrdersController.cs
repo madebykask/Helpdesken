@@ -116,7 +116,7 @@
         }
 
         [HttpGet]
-        public ViewResult Edit(int id, int activityType)
+        public ViewResult Edit(int id, int activityType, int caseId)
         {
             this.userTemporaryFilesStorage.ResetCacheForObject(id);
             this.userEditorValuesStorage.ClearObjectDeletedFiles(id);
@@ -128,6 +128,7 @@
             HeadersFieldSettings headers = this.orderAccountSettingsProxyService.GetHeadersFieldSettings(activityType);
 
             AccountModel viewModel = this.orderModelMapper.BuildViewModel(model, options, settings, headers);
+            viewModel.CaseId = caseId;
 
             return this.View(viewModel);
         }
