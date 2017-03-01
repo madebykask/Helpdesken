@@ -17,19 +17,22 @@
         private readonly ICaseSettingsService _caseSettingsService;
         private readonly ICustomerService _customerService;
         private readonly ILanguageService _languageService;
+        private readonly ISettingService _settingService;
 
         public CustomerCaseFieldSettingsController(
             ICaseFieldSettingService caseFieldSettingService,
             ICaseSettingsService caseSettingsService,
             ICustomerService customerService,
             ILanguageService languageService,
-            IMasterDataService masterDataService)
+            IMasterDataService masterDataService,
+            ISettingService settingService)
             : base(masterDataService)
         {
             this._caseFieldSettingService = caseFieldSettingService;
             this._caseSettingsService = caseSettingsService;
             this._customerService = customerService;
             this._languageService = languageService;
+            this._settingService = settingService;
         }
 
         [CustomAuthorize(Roles = "3,4")]
@@ -126,6 +129,7 @@
                 Customer = customer,
                 Language = language,
                 ListCaseForLabel = this._caseFieldSettingService.ListToShowOnCasePage(customer.Id, language.Id),
+                Setting = this._settingService.GetCustomerSetting(customer.Id),
                 Customers = this._customerService.GetAllCustomers().Select(x => new SelectListItem
                 {
                     Text = x.Name,
