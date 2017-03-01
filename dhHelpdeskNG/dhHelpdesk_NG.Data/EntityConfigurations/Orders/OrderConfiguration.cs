@@ -57,7 +57,7 @@
             this.Property(x => x.Manager).IsOptional().HasMaxLength(50);
             this.Property(x => x.ReferenceNumber).IsOptional().HasMaxLength(200);
             this.Property(x => x.InfoUser).IsOptional().HasMaxLength(20);
-            this.Property(o => o.OrdererID).IsRequired().HasMaxLength(40);
+            this.Property(o => o.OrdererID).IsRequired().HasMaxLength(600);
             this.Property(o => o.Orderer).IsRequired().HasMaxLength(50);
             this.Property(o => o.OrdererAddress).IsRequired().HasMaxLength(50);
             this.Property(o => o.OrdererInvoiceAddress).IsRequired().HasMaxLength(50);

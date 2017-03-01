@@ -491,7 +491,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
 
                     newCase.Priority_Id = entity.OrderPropertyId;
                     newCase.User_Id = entity.User_Id;
-                    newCase.ReportedBy = entity.OrdererID;
+                    newCase.ReportedBy = entity.UserId;
                     newCase.PersonsName = entity.Orderer;
                     newCase.PersonsPhone = entity.OrdererPhone;
                     newCase.Caption = orderType.Name;

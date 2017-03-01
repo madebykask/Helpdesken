@@ -21,7 +21,7 @@
             this.Property(o => o.UserId).IsOptional().HasMaxLength(20);
             this.Property(o => o.UserFirstName).IsOptional().HasMaxLength(20);
             this.Property(o => o.UserLastName).IsOptional().HasMaxLength(50);
-            this.Property(o => o.OrdererID).IsRequired().HasMaxLength(40);
+            this.Property(o => o.OrdererID).IsRequired().HasMaxLength(600);
             this.Property(o => o.Orderer).IsRequired().HasMaxLength(50);
             this.Property(o => o.OrdererAddress).IsRequired().HasMaxLength(50);
             this.Property(o => o.OrdererInvoiceAddress).IsRequired().HasMaxLength(50);

@@ -386,12 +386,21 @@
                 }
 
                 var $templateHtml = $($row.clone().wrapAll("<div/>").parent().html());
+                var $id = $templateHtml.find("input[name$='id']");
+                var $name = $templateHtml.find("input[name$='name']");
                 $templateHtml.find(".number").html(allRows.length + 1);
-                $templateHtml.find("input[name$='id']").val("");
-                $templateHtml.find("input[name$='name']").val("");
+                $id.val("");
+                $name.val("");
                 $templateHtml.find("i[name='add']").on("click", addMultiTextField);
                 $templateHtml.find("i[name='remove']").on("click", removeMultiTextField);
                 allRows.last().after($templateHtml);
+
+                $id.typeahead(getOrderComputerUserSearchOptions(function (obj) {
+                    var item = JSON.parse(obj);
+
+                    $name.val(item.name);
+                    return item.num;
+                }));
             }
 
             function removeMultiTextField(e) {
@@ -410,6 +419,18 @@
                 });
             }
 
+            var $ids = $(".multitext input[name$='id']");
+
+            $ids.each(function (i, el) {
+                var $id = $(el);
+                $id.typeahead(getOrderComputerUserSearchOptions(function (obj) {
+                    var item = JSON.parse(obj);
+                    var $row = $id.closest(".multitext");
+                    $row.find("input[name$='name']").val(item.name);
+                    return item.num;
+                }));
+            });
+            
             $(".multitext i[name='add']")
                 .on("click", addMultiTextField);
             $(".multitext i[name='remove']")

@@ -10,7 +10,138 @@
     window.EditOrder.prototype = {
         init: function () {
             var that = this;
-            
+            var lastInitiatorSearchKey = '';
+
+            function getOrderComputerUserSearchOptions(updateCallback) {
+
+                var options = {
+                    items: 20,
+                    minLength: 2,
+
+                    source: function (query, process) {
+                        lastInitiatorSearchKey = generateRandomKey();
+                        return $.ajax({
+                            url: '/cases/search_user',
+                            type: "post",
+                            data: { query: query, customerId: $("#order_customerId").val(), searchKey: lastInitiatorSearchKey },
+                            dataType: "json",
+                            success: function (result) {
+                                if (result.searchKey != lastInitiatorSearchKey)
+                                    return;
+                                var resultList = jQuery.map(result.result, function (item) {
+                                    var aItem = {
+                                        id: item.Id
+                                                , num: item.UserId
+                                                , name: item.FirstName + " " + item.SurName
+                                                , email: item.Email
+                                                , place: item.Location
+                                                , phone: item.Phone
+                                                , usercode: item.UserCode
+                                                , cellphone: item.CellPhone
+                                                , regionid: item.Region_Id
+                                                , regionname: item.RegionName
+                                                , departmentid: item.Department_Id
+                                                , departmentname: item.DepartmentName
+                                                , ouid: item.OU_Id
+                                                , ouname: item.OUName
+                                                , name_family: item.SurName + " " + item.FirstName
+                                                , customername: item.CustomerName
+                                                , costcentre: item.CostCentre
+
+                                    };
+                                    return JSON.stringify(aItem);
+
+                                });
+
+                                return process(resultList);
+                            }
+                        });
+                    },
+
+                    matcher: function (obj) {
+                        var item = JSON.parse(obj);
+                        //console.log(JSON.stringify(item));
+                        return ~item.name.toLowerCase().indexOf(this.query.toLowerCase())
+                            || ~item.name_family.toLowerCase().indexOf(this.query.toLowerCase())
+                            || ~item.num.toLowerCase().indexOf(this.query.toLowerCase())
+                            || ~item.phone.toLowerCase().indexOf(this.query.toLowerCase())
+                            || ~item.email.toLowerCase().indexOf(this.query.toLowerCase())
+                            || ~item.usercode.toLowerCase().indexOf(this.query.toLowerCase());
+                    },
+
+                    sorter: function (items) {
+                        var beginswith = [], caseSensitive = [], caseInsensitive = [];
+                        while (items.length > 0) {
+                            var aItem = items.shift();
+                            var item = JSON.parse(aItem);
+                            if (!item.num.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
+                            else if (~item.num.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
+                            else caseInsensitive.push(JSON.stringify(item));
+                        }
+
+                        return beginswith.concat(caseSensitive, caseInsensitive);
+                    },
+
+                    highlighter: function (obj) {
+                        var item = JSON.parse(obj);
+                        var orgQuery = this.query;
+                        if (item.departmentname == null)
+                            item.departmentname = ""
+                        var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&");
+                        var result = item.name + " - " + item.num + " - " + item.phone + " - " + item.email + " - " + item.departmentname + " - " + item.usercode;
+                        var resultBy_NameFamily = item.name_family + " - " + item.num + " - " + item.phone + " - " + item.email + " - " + item.departmentname + " - " + item.usercode;
+
+                        if (result.toLowerCase().indexOf(orgQuery.toLowerCase()) > -1)
+                            return result.replace(new RegExp("(" + query + ")", "ig"), function ($1, match) {
+                                return "<strong>" + match + "</strong>";
+                            });
+                        else
+                            return resultBy_NameFamily.replace(new RegExp("(" + query + ")", "ig"), function ($1, match) {
+                                return "<strong>" + match + "</strong>";
+                            });
+
+                    },
+
+                    updater: updateCallback
+                };
+
+                return options;
+            }
+
+            $("#orderer_OrdererId").typeahead(getOrderComputerUserSearchOptions(function (obj) {
+                var item = JSON.parse(obj);
+
+                $("#orderer_OrdererId").val(item.num);
+                $("#order_OrdererName").val(item.name);
+                $("#order_OrdererLocation").val(item.place);
+                $("#order_OrdererEmail").val(item.email);
+                $("#order_OrdererPhone").val(item.phone);
+                $("#order_OrdererCode").val(item.usercode);
+                $("#orderer_departmentId").val(item.departmentid);
+                $("#orderer_departmentId").trigger("change");
+
+                return item.num;
+            }));
+            $("#order_ReceiverId").typeahead(getOrderComputerUserSearchOptions(function (obj) {
+                var item = JSON.parse(obj);
+                $("#order_ReceiverId").val(item.num);
+                $("#order_ReceiverName").val(item.name);
+                $("#order_ReceiverLocation").val(item.place);
+                $("#order_ReceiverEmail").val(item.email);
+                $("#order_ReceiverPhone").val(item.phone);
+                $("#order_ReceiverLocation").val(item.place);
+
+                return item.num;
+            }));
+            function generateRandomKey() {
+                function s4() {
+                    return Math.floor((1 + Math.random()) * 0x10000)
+                      .toString(16)
+                      .substring(1);
+                }
+                return s4() + '-' + s4() + '-' + s4();
+            }
+
             function applyUserDepartmentFilter(orderId) {
                 var data = {
                     id: orderId
@@ -186,12 +317,21 @@
                 }
 
                 var $templateHtml = $($row.clone().wrapAll("<div/>").parent().html());
+                var $id = $templateHtml.find("input[name$='id']");
+                var $name = $templateHtml.find("input[name$='name']");
                 $templateHtml.find(".number").html(allRows.length + 1);
-                $templateHtml.find("input[name$='id']").val("");
-                $templateHtml.find("input[name$='name']").val("");
+                $id.val("");
+                $name.val("");
                 $templateHtml.find("i[name='add']").on("click", addMultiTextField);
                 $templateHtml.find("i[name='remove']").on("click", removeMultiTextField);
                 allRows.last().after($templateHtml);
+
+                $id.typeahead(getOrderComputerUserSearchOptions(function (obj) {
+                    var item = JSON.parse(obj);
+
+                    $name.val(item.name);
+                    return item.num;
+                }));
             }
 
             function removeMultiTextField(e) {
@@ -209,6 +349,18 @@
                     $(e).html(i + 1);
                 });
             }
+
+            var $ids = $(".multitext input[name$='id']");
+
+            $ids.each(function (i, el) {
+                var $id = $(el);
+                $id.typeahead(getOrderComputerUserSearchOptions(function (obj) {
+                    var item = JSON.parse(obj);
+                    var $row = $id.closest(".multitext");
+                    $row.find("input[name$='name']").val(item.name);
+                    return item.num;
+                }));
+            });
 
             $(".multitext i[name='add']")
                 .on("click", addMultiTextField);
