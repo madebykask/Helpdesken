@@ -326,14 +326,10 @@
 
         private void LoadLocalUserInfo()
         {
-            if (SessionFacade.CurrentCustomer != null &&
-                SessionFacade.CurrentUserIdentity != null)
+            var user = _masterDataService.GetUserForLogin(SessionFacade.CurrentUserIdentity.UserId);
+            if (user != null && SessionFacade.CurrentCustomer.Users.Any(u => u.Id == user.Id))
             {
-                var user = _masterDataService.GetUserForLogin(SessionFacade.CurrentUserIdentity.UserId);
-                if (user != null && SessionFacade.CurrentCustomer.Users.Any(u => u.Id == user.Id))
-                {
-                    SessionFacade.CurrentLocalUser = user;
-                }
+                SessionFacade.CurrentLocalUser = user;
             }
         }
 

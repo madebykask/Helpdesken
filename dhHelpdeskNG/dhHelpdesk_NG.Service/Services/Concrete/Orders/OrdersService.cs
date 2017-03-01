@@ -134,7 +134,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                 var administratorRep = uow.GetRepository<User>();
                 var statusRep = uow.GetRepository<OrderState>();
 
-                var orderTypes = orderTypeRep.GetAll()
+                var orderTypes = orderTypeRep.GetAll(m => m.Users)
                                     .GetRootOrderTypes(customerId)
                                     .GetByUsers(userId)
                                     .ToList();
