@@ -88,7 +88,11 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             customerToSave.ShowFAQOnExternalStartPage = vmodel.Customer.ShowFAQOnExternalStartPage;
             customerToSave.ShowCoWorkersOnExternalPage = vmodel.Customer.ShowCoWorkersOnExternalPage;
             customerToSave.ShowHelpOnExternalPage = vmodel.Customer.ShowHelpOnExternalPage;
-            customerToSave.UseInternalLogNoteOnExternalPage = vmodel.Customer.UseInternalLogNoteOnExternalPage;           
+            customerToSave.UseInternalLogNoteOnExternalPage = vmodel.Customer.UseInternalLogNoteOnExternalPage;
+            customerToSave.MyCasesFollower = vmodel.Customer.MyCasesFollower;
+            customerToSave.MyCasesInitiator = vmodel.Customer.MyCasesInitiator;
+            customerToSave.MyCasesRegarding = vmodel.Customer.MyCasesRegarding;
+            customerToSave.MyCasesRegistrator = vmodel.Customer.MyCasesRegistrator;
 
             if (customerToSave == null)
                 throw new Exception("No customer found...");

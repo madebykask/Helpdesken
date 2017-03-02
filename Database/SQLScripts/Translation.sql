@@ -5606,6 +5606,27 @@ If not exists (select * from tblTextTranslation where text_id = 1781 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1781, 2, 'Possible to re-open case within')
 GO
 
+If not exists (select * from tbltext where id = 1782)
+	insert into tbltext (id, TextString) VALUES (1782, 'Logga in')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1782 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1782, 2, 'Log in')
+GO
+
+If not exists (select * from tbltext where id = 1783)
+	insert into tbltext (id, TextString) VALUES (1783, 'Mina ärende visar')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1783 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1783, 2, 'My cases show')
+GO
+
+If not exists (select * from tbltext where id = 1784)
+	insert into tbltext (id, TextString) VALUES (1784, 'Registrerare')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1784 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1784, 2, 'Registrator')
+GO
+
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

@@ -48,5 +48,21 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	ALTER TABLE [dbo].[tblOrderFieldSettings] ADD [MultiValue] [bit] NOT NULL CONSTRAINT [DF_tblOrderFieldSettings_MultiValue]  DEFAULT ((0))
 GO
 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'MyCasesInitiator' and sysobjects.name = N'tblCustomer')
+	ALTER TABLE [dbo].[tblCustomer] ADD [MyCasesInitiator] [bit] NOT NULL DEFAULT ((0))
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'MyCasesRegistrator' and sysobjects.name = N'tblCustomer')
+	ALTER TABLE [dbo].[tblCustomer] ADD [MyCasesRegistrator] [bit] NOT NULL DEFAULT ((1))
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'MyCasesFollower' and sysobjects.name = N'tblCustomer')
+	ALTER TABLE [dbo].[tblCustomer] ADD [MyCasesFollower] [bit] NOT NULL DEFAULT ((0))
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'MyCasesRegarding' and sysobjects.name = N'tblCustomer')
+	ALTER TABLE [dbo].[tblCustomer] ADD [MyCasesRegarding] [bit] NOT NULL DEFAULT ((0))
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.31'
