@@ -94,6 +94,7 @@
                     @Html.HiddenFor(model => model.CaseMailSetting.DontConnectUserToWorkingGroup)
                     @Html.HiddenFor(l => Model.NewCase.RegLanguage_Id)                    
                     @Html.HiddenFor(k => Model.CaseFileKey)
+                    @Html.HiddenFor(model => model.NewCase.Priority_Id)
 
                     @Html.HiddenFor(model => model.DepartmentFilterFormat, new { data_field = "departmentFilterFormat" })
 
@@ -621,7 +622,7 @@
                                         </div>
                                     }
 
-                                    @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()))
+                                    @*@if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()))
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.Priority_Id.ToString()">
                                             <label class="col-md-3">
@@ -640,7 +641,7 @@
                                                 </select>
                                             </div>
                                         </div>
-                                    }
+                                    }*@
 
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString()))
                                     {
