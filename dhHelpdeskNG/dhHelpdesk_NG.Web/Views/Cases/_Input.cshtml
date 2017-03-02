@@ -1795,7 +1795,7 @@
                                                     }
                                             </td>
                                         </tr>
-                                        @if (Model.projects != null)
+                                        @if (Model.CustomerSettings.ModuleProject == true)
                                             {
                                                 if (Model.projects.Any())
                                                 {
@@ -1833,7 +1833,7 @@
                                             </tr>
                                                 }
                                             }
-                                        @if (Model.problems != null)
+                                        @if (Model.CustomerSettings.ModuleProblem == true)
                                             {
                                                 if (Model.problems.Any())
                                                 {
