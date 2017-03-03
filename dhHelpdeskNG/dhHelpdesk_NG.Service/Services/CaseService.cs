@@ -1647,7 +1647,7 @@ namespace DH.Helpdesk.Services.Services
                                 foreach (var ur in newCase.Workinggroup.UserWorkingGroups)                         
                                 {
                                     if (ur.User != null)
-                                        if (ur.User.IsActive == 1 && ur.User.AllocateCaseMail == 1 && _emailService.IsValidEmail(ur.User.Email))
+                                        if (ur.User.IsActive == 1 && ur.User.AllocateCaseMail == 1 && _emailService.IsValidEmail(ur.User.Email) && ur.UserRole == 2)
                                         {
                                             wgEmails = wgEmails + ur.User.Email + ";";
                                         }
