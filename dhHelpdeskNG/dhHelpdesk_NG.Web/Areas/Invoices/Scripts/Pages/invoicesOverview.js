@@ -390,7 +390,7 @@ InvoicesOverview.prototype = {
 		    "<td class='align-right'>" + (isRowReadOnly ? self._formatNumber(data.LogInvoices[i].Material, 2, 3, " ", ",") : self._getTextBox(data.LogInvoices[i].Material, "txtMaterial")) + "</td>" +
 		    "<td class='align-right'>" + (isRowReadOnly ? self._formatNumber(data.LogInvoices[i].Price, 2, 3, " ", ",") : self._getTextBox(data.LogInvoices[i].Price, "txtPrice")) + "</td>" +
 		    "<td></td>" +
-		    "<td class='align-center'>" + self._getChargeBox(isRowReadOnly, data.LogInvoices[i].Charge) + "</td>" +
+		    "<td class='align-center'>" + self._getChargeBox(true, data.LogInvoices[i].Charge) + "</td>" +
 		    //"<td>" + self._getStatusText(data.LogInvoices[i].InvoiceRow.Status) + "</td>" +
 		    "<td class='align-center'>" + self._getInvoiceActionBox(isRowReadOnly, data.LogInvoices[i].InvoiceRow.Status, data.LogInvoices[i].InvoiceAction) + "</td>" +
 		    "<td class='align-center'>" + self._getNotInvoiceActionBox(isRowReadOnly, data.LogInvoices[i].InvoiceRow.Status, data.LogInvoices[i].InvoiceAction) + "</td>" +
@@ -418,7 +418,7 @@ InvoicesOverview.prototype = {
 		    "<td></td>" +
             "<td></td>" +
 		    "<td class='align-right'>" + (isRowReadOnly ? self._formatNumber(data.ExternalInvoices[i].Amount, 2, 3, " ", ",") : self._getTextBox(data.ExternalInvoices[i].Amount, "txtExternalAmount")) + "</td>" +
-		    "<td class='align-center'>" + self._getChargeBox(isRowReadOnly, data.ExternalInvoices[i].Charge) + "</td>" +
+		    "<td class='align-center'>" + self._getChargeBox(true, data.ExternalInvoices[i].Charge) + "</td>" +
 		    //"<td>" + self._getStatusText(data.ExternalInvoices[i].InvoiceRow.Status) + "</td>" +
 		    "<td class='align-center'>" + self._getInvoiceActionBox(isRowReadOnly, data.ExternalInvoices[i].InvoiceRow.Status, data.ExternalInvoices[i].InvoiceAction) + "</td>" +
 		    "<td class='align-center'>" + self._getNotInvoiceActionBox(isRowReadOnly, data.ExternalInvoices[i].InvoiceRow.Status, data.ExternalInvoices[i].InvoiceAction) + "</td>" +
@@ -430,7 +430,7 @@ InvoicesOverview.prototype = {
         if (!isSectionReadOnly) {
             rowString =
             "<tr class='expanded-toolbar' data-parentrowid='" + data.CaseId + "'>" +
-            "<td colspan=20 class='align-center'>" +
+            "<td colspan=20 class='align-right'>" +
             "<div class='width100'>" +
             "<input class='btn btn small ' type=button value='" + self.options.saveText + "' id='btnSave'>" +
             "<input class='btn btn small ' type=button value='" + self.options.cancelText + "' id='btnCancel'>" +
@@ -764,7 +764,7 @@ InvoicesOverview.prototype = {
 
         for (var i = 0; i < data.LogInvoices.length; i++) {
             if (!self._isInvoiceValueReadOnly(data.LogInvoices[i].InvoiceRow.Status)) {
-                var action = data.LogInvoices[i].Charge ? 2 : 0;
+                var action = data.LogInvoices[i].Charge ? 2 : 3;
                 self._selectActionData(parent, data.LogInvoices[i].Id, data.LogInvoices, action);
                 if (parent.child.isShown()) {
                     var childRow = self._getTrForLogInvoice(data.LogInvoices[i].Id);
@@ -775,7 +775,7 @@ InvoicesOverview.prototype = {
         }
         for (i = 0; i < data.ExternalInvoices.length; i++) {
             if (!self._isInvoiceValueReadOnly(data.ExternalInvoices[i].InvoiceRow.Status)) {
-                var action = data.ExternalInvoices[i].Charge ? 2 : 0;
+                var action = data.ExternalInvoices[i].Charge ? 2 : 3;
                 self._selectActionData(parent, data.ExternalInvoices[i].Id, data.ExternalInvoices, action);
                 if (parent.child.isShown()) {
                     var childRow = self._getTrForExternalInvoice(data.ExternalInvoices[i].Id);
