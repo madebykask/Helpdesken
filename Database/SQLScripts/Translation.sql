@@ -5627,6 +5627,40 @@ If not exists (select * from tblTextTranslation where text_id = 1784 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1784, 2, 'Registrator')
 GO
 
+If not exists (select * from tbltext where id = 1785)
+	insert into tbltext (id, TextString) VALUES (1785, 'Fakturor')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1785 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1785, 2, 'Invoices')
+GO
+
+If not exists (select * from tbltext where id = 1786)
+	insert into tbltext (id, TextString) VALUES (1786, 'Pris')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1786 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1786, 2, 'Price')
+GO
+
+If not exists (select * from tbltext where id = 1787)
+	insert into tbltext (id, TextString) VALUES (1787, 'Valda för debitering')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1787 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1787, 2, 'Selected as charge')
+GO
+
+If not exists (select * from tbltext where id = 1788)
+	insert into tbltext (id, TextString) VALUES (1788, 'Fakturera')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1788 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1788, 2, 'Invoice')
+GO
+
+If not exists (select * from tbltext where id = 1789)
+	insert into tbltext (id, TextString) VALUES (1789, 'Fakturera inte')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1789 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1789, 2, 'Do not invoice')
+GO
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
