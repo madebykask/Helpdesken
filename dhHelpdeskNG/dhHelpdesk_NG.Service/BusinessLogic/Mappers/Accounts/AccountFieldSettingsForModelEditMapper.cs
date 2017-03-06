@@ -25,7 +25,7 @@
                         {
                             Caption = s.Label,
                             FieldName = s.AccountField,
-                            ShowInDetails = s.Show,
+                            ShowInDetails = 1,// s.Show,
                             Required = s.Required,
                             Help = s.FieldHelp,
                             MultiValue = s.MultiValue
