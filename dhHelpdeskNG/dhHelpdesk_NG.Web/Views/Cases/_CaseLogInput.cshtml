@@ -10,14 +10,17 @@
 
 @Scripts.Render("~/bundles/Cases/_CaseLogInput")
 @{
-	var readonlyMode = false;
-	if ((ViewData.Keys.Any() && ViewData.Keys.Contains("readonlyLog")) || Model.EditMode == Enums.AccessMode.ReadOnly)
-	{
-		readonlyMode = Convert.ToBoolean(ViewData["readonlyLog"]);
-	}
+    var readonlyMode = false;
+    
+    var hasReadonlyLog = (ViewData.Keys.Any() && ViewData.Keys.Contains("readonlyLog"));
 
-	var translation = Translation.GetForJS("Till");
-	var btnToLabel = translation.First().ToString().ToUpper() + translation.Substring(1);
+    if (hasReadonlyLog || Model.EditMode == Enums.AccessMode.ReadOnly)
+    {
+        readonlyMode = Convert.ToBoolean(ViewData["readonlyLog"]);
+    }
+
+    var translation = Translation.GetForJS("Till");
+    var btnToLabel = translation.First().ToString().ToUpper() + translation.Substring(1);
 }
 
 <h4 style="@Model.displayLogInfoHtml()">
@@ -28,7 +31,7 @@
 
 	@Translation.Get("Kommunikation")
 </h4>
-@if (Model.templateistrue != 1 && !readonlyMode)
+@if (Model.templateistrue != 1 && !readonlyMode && !hasReadonlyLog )
 {
     <div class="secnavs secnavmarg">
         <div class="pull-left">

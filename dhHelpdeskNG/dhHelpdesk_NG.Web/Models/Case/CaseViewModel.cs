@@ -249,6 +249,8 @@
         public string FollowerUsers { get; set; }
 
         public JsonCaseIndexViewModel ConnectToParentModel { get; set; }
+        public bool newLog { get; set; }
+
     }
 
     public class CaseIndexViewModel

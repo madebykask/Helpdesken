@@ -1306,7 +1306,7 @@ namespace DH.Helpdesk.Web.Controllers
             return this.View(m);
         }
 
-        public ActionResult EditLog(int id, int customerId)
+        public ActionResult EditLog(int id, int customerId, bool newLog = false)
         {
             CaseInputViewModel m = null;
 
@@ -1371,11 +1371,18 @@ namespace DH.Helpdesk.Web.Controllers
                     // User has not access to case/log
                     if (m.EditMode == Enums.AccessMode.NoAccess)
                         return this.RedirectToAction("index", "home");
+
+                    
+                    m.newLog = newLog;
+                    if (newLog)
+                        m.CaseLog.Id = 0;
+
                 }
             }
 
             return this.View(m);
         }
+        
 
         [HttpPost]
         public RedirectToRouteResult EditLog(Case case_, CaseLog caseLog)
