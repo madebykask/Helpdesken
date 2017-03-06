@@ -1411,9 +1411,9 @@ namespace DH.Helpdesk.Web.Controllers
 
         [ValidateInput(false)]
         [HttpPost]
-        public ActionResult CaseSearchUserEmails(string query, string searchKey)
+        public ActionResult CaseSearchUserEmails(string query, string searchKey, bool isInternalLog = false)
         {
-            var models = _caseSearchService.GetUserEmailsForCaseSend(SessionFacade.CurrentCustomer.Id, query, true, true, true, true);
+            var models = _caseSearchService.GetUserEmailsForCaseSend(SessionFacade.CurrentCustomer.Id, query, true, true, true, true, isInternalLog);
             return Json(new { searchKey = searchKey, result = models });
         }
 

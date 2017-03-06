@@ -40,7 +40,7 @@ namespace DH.Helpdesk.Dal.Repositories
                 .ToList();
         }
 
-        public List<CaseEmailSendOverview> GetUserEmailsListForCaseSend(int customerId, string searchText, bool searchInWorkingGrs, bool searchInInitiators, bool searchInAdmins, bool searchInEmailGrs)
+        public List<CaseEmailSendOverview> GetUserEmailsListForCaseSend(int customerId, string searchText, bool searchInWorkingGrs, bool searchInInitiators, bool searchInAdmins, bool searchInEmailGrs, bool isInternalLog = false)
         {
             var result = new List<CaseEmailSendOverview>();
 
@@ -83,13 +83,28 @@ namespace DH.Helpdesk.Dal.Repositories
             }
             if (searchInWorkingGrs)
             {
-                var wgs = DbContext.WorkingGroups
-                    .Include(x => x.UserWorkingGroups.Select(u => u.User))
-                    .Where(x => x.IsActive == 1 && x.Customer_Id == customerId && x.WorkingGroupName.Contains(searchText)).ToList();
-                var newList = wgs.Select(x => new CaseEmailSendOverview
+                var wgs = DbContext.WorkingGroups.Where(x => x.IsActive == 1 && x.Customer_Id == customerId && x.WorkingGroupName.Contains(searchText)).AsQueryable();
+
+                var usWkgs = DbContext.UserWorkingGroups
+                    .Include(x => x.User)
+                    .Where(x => x.User.IsActive == 1)
+                    .AsQueryable();
+
+                if (isInternalLog)
                 {
-                    Name = x.WorkingGroupName,
-                    Emails = x.UserWorkingGroups.Where(r => r.User.IsActive == 1).Select(r => r.User.Email).ToList(),
+                    usWkgs = usWkgs.Where(x => x.UserRole == 2);
+                }
+
+                var workGs = wgs.GroupJoin(usWkgs, wg => wg.Id, uwg => uwg.WorkingGroup_Id, (wg, uwgs) => new
+                {
+                    WorkingGroup = wg,
+                    UserWorkingGroups = uwgs
+                }).ToList();
+
+                var newList = workGs.Select(x => new CaseEmailSendOverview
+                {
+                    Name = x.WorkingGroup.WorkingGroupName,
+                    Emails = x.UserWorkingGroups.Select(r => r.User.Email).ToList(),
                     GroupType = CaseUserSearchGroup.WorkingGroup,
                     DepartmentName = string.Empty
                 }).Where(x => x.Emails.Any()).ToList();

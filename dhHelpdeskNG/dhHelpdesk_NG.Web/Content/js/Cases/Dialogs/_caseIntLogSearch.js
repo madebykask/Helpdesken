@@ -170,7 +170,7 @@
                     return $.ajax({
                         url: "/cases/CaseSearchUserEmails",
                         type: "post",
-                        data: { query: searchText, searchKey: lastInitiatorSearchKey },
+                        data: { query: searchText, searchKey: lastInitiatorSearchKey, isInternalLog: true },
                         dataType: "json",
                         success: function(result) {
                             if (result.searchKey !== lastInitiatorSearchKey)
