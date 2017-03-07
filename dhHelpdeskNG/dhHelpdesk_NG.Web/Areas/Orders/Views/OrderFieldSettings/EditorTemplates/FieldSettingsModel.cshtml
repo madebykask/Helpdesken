@@ -8,7 +8,10 @@
 <td>@Html.LabelFor(m => m)</td>
 <td>@Html.CheckBoxFor(m => m.Show, new {@class = "switchcheckbox"})</td>
 <td>@Html.CheckBoxFor(m => m.ShowExternal, new {@class = "switchcheckbox"})</td>
-<td>@Html.TextBoxFor(m => m.Label)</td>
+<td>@Html.TextBoxFor(m => m.Label)
+    <br/>
+    @Html.ValidationMessageFor(m => m.Label)
+</td>
 <td>@Html.CheckBoxFor(m => m.Required, new {@class = "switchcheckbox"})</td>
 <td>@Html.CheckBoxFor(m => m.ShowInList, new {@class = "switchcheckbox"})</td>
 <td></td>

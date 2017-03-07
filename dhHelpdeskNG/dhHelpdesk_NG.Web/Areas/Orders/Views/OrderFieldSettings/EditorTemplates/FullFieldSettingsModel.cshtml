@@ -56,6 +56,7 @@
             <td colspan="4" class="header valign-middle">@Translation.GetCoreTextTranslation("Allmänt")</td>
             <td colspan="6">
                 @Html.TextBoxFor(m => m.General.Header)
+                @Html.ValidationMessageFor(m => m.General.Header)
             </td>
         </tr>
         <tr>
@@ -80,6 +81,7 @@
             <td colspan="4" class="header valign-middle">@Translation.GetCoreTextTranslation("Beställare")</td>
             <td colspan="6">
                 @Html.TextBoxFor(m => m.Orderer.Header)
+                @Html.ValidationMessageFor(m => m.Orderer.Header)
             </td>
         </tr>
         <tr>
@@ -101,6 +103,7 @@
             <td colspan="4" class="header valign-middle">@Translation.GetCoreTextTranslation("Användarinformation")</td>
             <td colspan="6">
                 @Html.TextBoxFor(m => m.User.Header)
+                @Html.ValidationMessageFor(m => m.User.Header)
             </td>
         </tr>
         <tr>
@@ -182,6 +185,7 @@
             <td colspan="4" class="header valign-middle">@Translation.GetCoreTextTranslation("Beställning")</td>
             <td colspan="6">
                 @Html.TextBoxFor(m => m.Order.Header)
+                @Html.ValidationMessageFor(m => m.Order.Header)
             </td>
         </tr>
         <tr>
@@ -254,6 +258,7 @@
             <td colspan="4" class="header valign-middle">@Translation.GetCoreTextTranslation("Mottagare")</td>
             <td colspan="6">
                 @Html.TextBoxFor(m => m.Receiver.Header)
+                @Html.ValidationMessageFor(m => m.Receiver.Header)
             </td>
         </tr>
         <tr>
@@ -278,6 +283,7 @@
             <td colspan="4" class="header valign-middle">@Translation.GetCoreTextTranslation("Orderinformation")</td>
             <td colspan="6">
                 @Html.TextBoxFor(m => m.Supplier.Header)
+                @Html.ValidationMessageFor(m => m.Supplier.Header)
             </td>
         </tr>
         <tr>
@@ -293,6 +299,7 @@
             <td colspan="4" class="header valign-middle">@Translation.GetCoreTextTranslation("Leveransinformation")</td>
             <td colspan="6">
                 @Html.TextBoxFor(m => m.Delivery.Header)
+                @Html.ValidationMessageFor(m => m.Delivery.Header)
             </td>        
         </tr>
         <tr>
@@ -341,6 +348,7 @@
             <td colspan="4" class="header valign-middle">@Translation.GetCoreTextTranslation("Program")</td>
             <td colspan="6">
                 @Html.TextBoxFor(m => m.Program.Header)
+                @Html.ValidationMessageFor(m => m.Program.Header)
             </td>         
         </tr>
         <tr>
@@ -353,6 +361,7 @@
             <td colspan="4" class="header valign-middle">@Translation.GetCoreTextTranslation("Övrigt")</td>
             <td colspan="6">
                 @Html.TextBoxFor(m => m.Other.Header)
+                @Html.ValidationMessageFor(m => m.Other.Header)
             </td>          
         </tr>
         <tr>

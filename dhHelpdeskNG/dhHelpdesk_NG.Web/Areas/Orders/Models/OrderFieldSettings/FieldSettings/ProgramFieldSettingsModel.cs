@@ -15,6 +15,7 @@
             InfoProduct = infoProduct;
         }
 
+        [LocalizedStringLength(30)]
         public string Header { get; set; }
 
         [NotNull]
