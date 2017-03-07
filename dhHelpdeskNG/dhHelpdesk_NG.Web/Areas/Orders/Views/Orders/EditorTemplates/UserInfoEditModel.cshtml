@@ -35,7 +35,7 @@
             }
         }
 
-        @Html.EditorFor(m => m.PersonalIdentityNumber, "Fields/Text")
+        @Html.EditorFor(m => m.PersonalIdentityNumber, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererCode" } } })
         @Html.EditorFor(m => m.OrdererName, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererName" } } })
         @Html.EditorFor(m => m.OrdererLocation, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererLocation" } } })
         @Html.EditorFor(m => m.OrdererEmail, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererEmail" } } })
