@@ -76,6 +76,14 @@
                                 <table class="tableform">
                                     <tr>
                                         <td class="span3">
+                                            <label>@Translation.GetCoreTextTranslation("Avslutsdatum")</label>
+                                        </td>
+                                        <td class="span9">
+                                            @Html.DisplayFor(m => m.FinishDate, "Date")
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="span3">
                                             <label>@Translation.GetCoreTextTranslation("Skapad datum")</label>
                                         </td>
                                         <td class="span9">
