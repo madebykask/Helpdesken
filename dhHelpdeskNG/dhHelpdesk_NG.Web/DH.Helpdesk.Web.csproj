@@ -276,8 +276,8 @@
     <Content Include="Areas\Invoices\Scripts\Pages\invoiceFiles.js" />
     <Content Include="Areas\Invoices\Views\Overview\Files.cshtml" />
     <Content Include="Areas\Orders\Views\OrderFieldSettings\EditorTemplates\MultiTextFieldSettingsModel.cshtml" />
-    <None Include="Areas\Orders\Views\Orders\EditorTemplates\Fields\FlagsList.cshtml" />
-    <None Include="Areas\Orders\Views\Orders\EditorTemplates\Fields\FlagListItem.cshtml" />
+    <Content Include="Areas\Orders\Views\Orders\EditorTemplates\Fields\FlagsList.cshtml" />
+    <Content Include="Areas\Orders\Views\Orders\EditorTemplates\Fields\FlagListItem.cshtml" />
     <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Infrastructure\Attributes\RequiredIfNotEmptyAttribute.cs" />
     <Compile Include="Infrastructure\Extensions\ProperyExtensions.cs" />
