@@ -138,11 +138,11 @@
                 <td>
                     @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_External, CaseSolutionFields.ExternalLogNote) && !readonlyMode)
                     {
-                        @Html.TextAreaFor(model => Model.CaseLog.TextExternal, new { style = "height:105px;", maxlength = "3000" })
+                        @Html.TextAreaFor(model => Model.CaseLog.TextExternal, new { style = "height:105px;", maxlength = "3000", @class = "log-field" })
                     }
                     else
                     {
-                        @Html.TextAreaFor(model => model.CaseLog.TextExternal, new { style = "height:105px;", @readonly = true })
+                        @Html.TextAreaFor(model => model.CaseLog.TextExternal, new { style = "height:105px;", @readonly = true, @class = "log-field" })
                     }
                 </td>
                 <td>
@@ -164,11 +164,11 @@
 				<td>
 					@if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote) && !readonlyMode)
 					{
-						@Html.TextAreaFor(model => Model.CaseLog.TextInternal, new { style = "height:105px;", maxlength = "3000" })
+						@Html.TextAreaFor(model => Model.CaseLog.TextInternal, new { style = "height:105px;", maxlength = "3000", @class = "log-field" })
 					}
 					else
 					{
-						@Html.TextAreaFor(model => model.CaseLog.TextInternal, new { style = "height:105px;", @readonly = true })
+						@Html.TextAreaFor(model => model.CaseLog.TextInternal, new { style = "height:105px;", @readonly = true, @class = "log-field" })
 					}
 				</td>
 

@@ -2447,17 +2447,46 @@
                 }
             },
             "CaseLog.TextExternal": {
-                maxlength: 3000
+                maxlength: 3000,
+                require_from_group: {
+                    param: [1, ".log-field"],
+                    depends: function(element) {
+                        var timeSpentHour = $("#CaseLog_WorkingTimeHour").val().replace(/\r/g, "") !== "";
+                        var timeSpentMin = $("#CaseLog_WorkingTimeMinute").val().replace(/\r/g, "") !== "";
+                        var overTimeHour = $("#CaseLog_OvertimeHour").val().replace(/\r/g, "") !== "";
+                        var overTimeMin = $("#CaseLog_OvertimeMinute").val().replace(/\r/g, "") !== "";
+                        var material = $("#" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)").val().replace(/\r/g, "") !== "0"
+                        && $("#" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)").val().replace(/\r/g, "") !== "";
+                        var price = $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "0"
+                        && $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "";
+                        return timeSpentHour || timeSpentMin || overTimeHour || overTimeMin || material || price;
+                    }
+                }
             },
             "CaseLog.TextInternal": {
-                maxlength: 3000
+                maxlength: 3000,
+                require_from_group: {
+                    param: [1, ".log-field"],
+                    depends: function(element) {
+                        var timeSpentHour = $("#CaseLog_WorkingTimeHour").val().replace(/\r/g, "") !== "";
+                        var timeSpentMin = $("#CaseLog_WorkingTimeMinute").val().replace(/\r/g, "") !== "";
+                        var overTimeHour = $("#CaseLog_OvertimeHour").val().replace(/\r/g, "") !== "";
+                        var overTimeMin = $("#CaseLog_OvertimeMinute").val().replace(/\r/g, "") !== "";
+                        var material = $("#" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)").val().replace(/\r/g, "") !== "0"
+                        && $("#" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)").val().replace(/\r/g, "") !== "";
+                        var price = $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "0"
+                        && $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "";
+                        return timeSpentHour || timeSpentMin || overTimeHour || overTimeMin || material || price;
+                    }
+                }
             },
             "CaseLog.WorkingTimeHour": {
             	require_from_group: {
             		param: [1, ".time-field"],
             		depends: function(element) {
             			var setting = _parameters.departmentInvoiceMandatory;
-            			var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== "";
+            			var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== ""
+            		    || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "") !== "";
             			return setting && logPopulated;
             		}
             	}
@@ -2467,7 +2496,8 @@
             		param: [1, ".time-field"],
             		depends: function(element) {
             			var setting = _parameters.departmentInvoiceMandatory;
-            			var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== "";
+            			var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== ""
+            		    || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "") !== "";
             			return setting && logPopulated;
             		}
             	}
@@ -2477,7 +2507,8 @@
             		param: [1, ".time-field"],
             		depends: function(element) {
             			var setting = _parameters.departmentInvoiceMandatory;
-            			var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== "";
+            			var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== ""
+            		    || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "") !== "";
             			return setting && logPopulated;
             		}
             	}
@@ -2487,14 +2518,16 @@
             		param: [1, ".time-field"],
             		depends: function(element) {
             			var setting = _parameters.departmentInvoiceMandatory;
-            			var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== "";
+            			var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== ""
+                            || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "") !== "";
             			return setting && logPopulated;
 		            }
 				}
             },
         },
     	groups: {
-    		time: "CaseLog.WorkingTimeHour CaseLog.WorkingTimeMinute CaseLog.OvertimeHour CaseLog.OvertimeMinute"
+    	    time: "CaseLog.WorkingTimeHour CaseLog.WorkingTimeMinute CaseLog.OvertimeHour CaseLog.OvertimeMinute",
+    	    logInput: "CaseLog.TextExternal CaseLog.TextInternal"
     	},
     	errorPlacement: function(error, element) {
 		    if (element.hasClass("time-field")) {
@@ -2622,10 +2655,12 @@
                 required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
             },
             "CaseLog.TextInternal": {
-                maxlength: "@Translation.GetForJS("Ange inte mer än 3000 tecken", Enums.TranslationSource.TextTranslation)"
+                maxlength: "@Translation.GetForJS("Ange inte mer än 3000 tecken", Enums.TranslationSource.TextTranslation)",
+                require_from_group: "@Translation.GetForJS("Något av följande fält måste fyllas i")"
             },
             "CaseLog.TextExternal": {
-                maxlength: "@Translation.GetForJS("Ange inte mer än 3000 tecken", Enums.TranslationSource.TextTranslation)"
+                maxlength: "@Translation.GetForJS("Ange inte mer än 3000 tecken", Enums.TranslationSource.TextTranslation)",
+                require_from_group: "@Translation.GetForJS("Något av följande fält måste fyllas i")"
             },
     		"CaseLog.WorkingTimeHour": {
     			require_from_group: "@Translation.GetForJS("Välj en eller flera")"

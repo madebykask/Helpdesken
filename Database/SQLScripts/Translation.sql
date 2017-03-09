@@ -5669,5 +5669,12 @@ If not exists (select * from tblTextTranslation where text_id = 1790 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1790, 2, 'Case is finished')
 GO
 
+If not exists (select * from tbltext where id = 1791)
+	insert into tbltext (id, TextString) VALUES (1791, 'Något av följande fält måste fyllas i')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1791 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1791, 2, 'One of these fields must be populated')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
