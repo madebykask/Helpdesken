@@ -255,6 +255,10 @@
       <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="wnvhtmltopdf, Version=11.19.0.0, Culture=neutral, PublicKeyToken=b12703d35a33ff98, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>FormLibContent\Assemblies\wnvhtmltopdf.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\CommonAssembly\SharedAssemblyInfo.cs">
