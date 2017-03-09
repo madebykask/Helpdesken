@@ -64,5 +64,9 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	ALTER TABLE [dbo].[tblCustomer] ADD [MyCasesRegarding] [bit] NOT NULL DEFAULT ((0))
 GO
 
+--tblMail2Ticket
+ALTER TABLE tblMail2Ticket ALTER COLUMN EMailAddress NVARCHAR(200) NOT NULL
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.31'
