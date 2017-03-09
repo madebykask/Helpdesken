@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.Web.Infrastructure.Extensions;
+﻿using DH.Helpdesk.BusinessData.Enums.Orders.FieldNames;
+using DH.Helpdesk.Web.Infrastructure.Extensions;
 
 namespace DH.Helpdesk.Web.Infrastructure.Tools
 {
@@ -29,13 +30,19 @@ namespace DH.Helpdesk.Web.Infrastructure.Tools
             headers.Add(header);
         }
 
-        public static void ForceCreateHeader(            
-            string fieldName,
-            List<GridColumnHeaderModel> headers)
-        {       
-            
-            var header = new GridColumnHeaderModel(fieldName, string.Empty);
-            headers.Add(header);
+        public static void ForceCreateHeader(string fieldName, List<GridColumnHeaderModel> headers)
+        {
+            switch (fieldName)
+            {
+                case OtherFieldNames.CaseIsFinished:
+                    var caseFinished = new GridColumnHeaderModel(fieldName, Translation.GetCoreTextTranslation("Ärendet är klar"));
+                    headers.Add(caseFinished);
+                    break;
+                default:
+                    var header = new GridColumnHeaderModel(fieldName, string.Empty);
+                    headers.Add(header);
+                    break;
+            }
         }
 
         public static void CreateValueIfNeeded(

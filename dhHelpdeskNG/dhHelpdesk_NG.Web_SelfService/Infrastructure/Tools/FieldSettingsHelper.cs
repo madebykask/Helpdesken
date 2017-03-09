@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using DH.Helpdesk.BusinessData.Enums.Orders.FieldNames;
 using DH.Helpdesk.BusinessData.Models.Shared.Output;
 using DH.Helpdesk.SelfService.Infrastructure.Extensions;
 using DH.Helpdesk.SelfService.Models.Common;
@@ -33,9 +34,17 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Tools
             string fieldName,
             List<GridColumnHeaderModel> headers)
         {
-
-            var header = new GridColumnHeaderModel(fieldName, string.Empty);
-            headers.Add(header);
+            switch (fieldName)
+            {
+                case OtherFieldNames.CaseIsFinished:
+                    var caseFinished = new GridColumnHeaderModel(fieldName, Translation.Get("Ärendet är klar"));
+                    headers.Add(caseFinished);
+                    break;
+                default:
+                    var header = new GridColumnHeaderModel(fieldName, string.Empty);
+                    headers.Add(header);
+                    break;
+            }
         }
 
         public static void CreateValueIfNeeded(

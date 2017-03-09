@@ -5662,5 +5662,12 @@ If not exists (select * from tblTextTranslation where text_id = 1789 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1789, 2, 'Do not invoice')
 GO
 
+If not exists (select * from tbltext where id = 1790)
+	insert into tbltext (id, TextString) VALUES (1790, 'Ärendet är klar')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1790 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1790, 2, 'Case is finished')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
