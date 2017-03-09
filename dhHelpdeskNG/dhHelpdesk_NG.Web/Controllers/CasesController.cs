@@ -1553,14 +1553,14 @@ namespace DH.Helpdesk.Web.Controllers
             return ret;
         }
 
-        public int ShowInvoiceFields(int? departmentId)
+        public JsonResult GetDepartmentInvoiceParameters(int? departmentId)
         {
             if (departmentId.HasValue)
             {
-                var d = this._departmentService.GetDepartment(departmentId.Value);
-                return d.ShowInvoice;
+                var d = _departmentService.GetDepartment(departmentId.Value);
+                return Json(new { ShowInvoice = d.ShowInvoice == 1, ChargeMandatory = d.ChargeMandatory == 1 }, JsonRequestBehavior.AllowGet);
             }
-            return 0;
+            return null;
         }
 
         public JsonResult ChangeDepartment(int? id, int customerId)
