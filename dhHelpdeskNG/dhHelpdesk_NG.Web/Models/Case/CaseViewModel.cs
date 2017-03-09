@@ -53,7 +53,8 @@
         public int DepartmentFilterFormat { get; set; }
         public int? CountryId { get; set; }
         public int ShowInvoiceFields { get; set; }
-		public bool TimeRequired { get; set; }
+        public int ShowExternalInvoiceFields { get; set; }
+        public bool TimeRequired { get; set; }
 		public CaseLockModel CaseLock { get; set; }
         public int MinWorkingTime { get; set; }        
         public Infrastructure.Enums.AccessMode EditMode { get; set; } //(-1,0,1)

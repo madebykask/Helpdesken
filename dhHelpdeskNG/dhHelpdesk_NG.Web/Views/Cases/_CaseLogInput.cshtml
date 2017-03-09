@@ -473,7 +473,7 @@
 						</div>
 								}
 @Html.Partial("ModalDialogs/_SendIntLogToDiallog", Model.SendToDialogModel)
-@if (Model.CustomerSettings.ModuleInvoice && Model.ShowInvoiceFields.ToBool())
+@if (Model.CustomerSettings.ModuleInvoice)
 {
 	@Html.Partial("ModalDialogs/_CaseCharge", Model)
 }

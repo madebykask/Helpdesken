@@ -599,13 +599,18 @@ function CaseInitForm() {
     });
 
     function showInvoice(departmentId) {
-        var controlSelector = "#divInvoice, #divExternalInvoice, #btnCaseCharge, #tblCaseChargeSummary";
-        $(controlSelector).hide();
+        var invoiceSelector = "#divInvoice, #btnCaseCharge, #tblCaseChargeSummary";
+        var externalInvoiceSelector = "#divExternalInvoice, #totalExternalAmountRow, #externalInvoiceGrid";
+        $(invoiceSelector).hide();
+        $(externalInvoiceSelector).hide();
         $.get("/Cases/GetDepartmentInvoiceParameters/", { departmentId: departmentId }, function (data) {
             if (data) {
                 _parameters.departmentInvoiceMandatory = data.ChargeMandatory;
-                if (data.ShowInvoice === true) {
-                    $(controlSelector).show();
+                if (data.Charge) {
+                    $(invoiceSelector).show();
+                }
+                if (data.ShowInvoice) {
+                    $(externalInvoiceSelector).show();
                 }
             }
         }, "json");

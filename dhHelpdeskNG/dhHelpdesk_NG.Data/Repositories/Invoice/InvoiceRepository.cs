@@ -27,7 +27,7 @@ namespace DH.Helpdesk.Dal.Repositories.Invoice
 			//this._caseLockToEntityMapper = caseLockToEntityMapper;
 		}
 
-		public List<Case> GetInvoiceOverviewList(int customerId, int? departmentId, DateTime? dateFrom, DateTime? dateTo, InvoiceStatus? status, int? caseId)
+		public List<Case> GetInvoiceOverviewList(int customerId, int? departmentId, DateTime? dateFrom, DateTime? dateTo, InvoiceStatus? status, int? caseId, bool departmentCharge = true)
 		{
 
 			var query = DataContext.Cases
@@ -40,8 +40,7 @@ namespace DH.Helpdesk.Dal.Repositories.Invoice
 				.Where(x =>
 					(x.Logs.Any(y => y.WorkingTime > 0 || y.OverTime > 0 || y.EquipmentPrice > 0 || y.Price > 0)
 					 || x.CaseInvoiceRows.Any())
-					&& x.Deleted == 0 && x.Customer_Id == customerId
-					&& x.Department.Charge == 1);
+					&& x.Deleted == 0 && x.Customer_Id == customerId);
 
 			if (dateFrom.HasValue)
 				query = query.Where(x => x.FinishingDate >= dateFrom);
@@ -61,8 +60,12 @@ namespace DH.Helpdesk.Dal.Repositories.Invoice
 			{
 				query = query.Where(x => x.Id == caseId.Value);
 			}
+            if (departmentCharge)
+            {
+                query = query.Where(x => x.Department.Charge == 1);
+            }
 
-			var res = query.ToList();
+            var res = query.ToList();
 
 			foreach (var item in res)
 			{
@@ -137,6 +140,6 @@ namespace DH.Helpdesk.Dal.Repositories.Invoice
 
 	public interface IInvoiceRepository
 	{
-		List<Case> GetInvoiceOverviewList(int customerId, int? departmentId, DateTime? dateFrom, DateTime? dateTo, InvoiceStatus? status, int? caseId);
+		List<Case> GetInvoiceOverviewList(int customerId, int? departmentId, DateTime? dateFrom, DateTime? dateTo, InvoiceStatus? status, int? caseId, bool departmentCharge = true);
 	}
 }

@@ -1354,7 +1354,11 @@ namespace DH.Helpdesk.Web.Controllers
                     {
                         var d = this._departmentService.GetDepartment(m.case_.Department_Id.Value);
                         if (d != null)
-                            m.ShowInvoiceFields = d.ShowInvoice;
+                        {
+                            m.ShowInvoiceFields = d.Charge;
+                            m.ShowExternalInvoiceFields = d.ShowInvoice;
+                            m.TimeRequired = d.ChargeMandatory.ToBool();
+                        }
                     }
                     // check state secondary info
                     m.Disable_SendMailAboutCaseToNotifier = false;
@@ -1558,7 +1562,7 @@ namespace DH.Helpdesk.Web.Controllers
             if (departmentId.HasValue)
             {
                 var d = _departmentService.GetDepartment(departmentId.Value);
-                return Json(new { ShowInvoice = d.ShowInvoice == 1, ChargeMandatory = d.ChargeMandatory == 1 }, JsonRequestBehavior.AllowGet);
+                return Json(new { ShowInvoice = d.ShowInvoice.ToBool(), ChargeMandatory = d.ChargeMandatory.ToBool(), Charge = d.Charge.ToBool() }, JsonRequestBehavior.AllowGet);
             }
             return null;
         }
@@ -4526,7 +4530,8 @@ namespace DH.Helpdesk.Web.Controllers
                 var d = this._departmentService.GetDepartment(m.case_.Department_Id.Value);
                 if (d != null)
                 {
-                    m.ShowInvoiceFields = d.ShowInvoice;
+                    m.ShowInvoiceFields = d.Charge;
+                    m.ShowExternalInvoiceFields = d.ShowInvoice;
 	                m.TimeRequired = d.ChargeMandatory.ToBool();
                 }
             }
