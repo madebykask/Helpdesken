@@ -599,12 +599,13 @@ function CaseInitForm() {
     });
 
     function showInvoice(departmentId) {
-        $('#divInvoice').hide();
-        $.get('/Cases/ShowInvoiceFields/', { 'departmentId': departmentId }, function (data) {
-            if (data == 1) {
-                $('#divInvoice').show();
+        var controlSelector = "#divInvoice, #divExternalInvoice, #btnCaseCharge, #tblCaseChargeSummary";
+        $(controlSelector).hide();
+        $.get("/Cases/ShowInvoiceFields/", { departmentId: departmentId }, function (data) {
+            if (data === 1) {
+                $(controlSelector).show();
             }
-        }, 'json');
+        }, "json");
     }
 
     $('#case__Status_Id').change(function () {        
