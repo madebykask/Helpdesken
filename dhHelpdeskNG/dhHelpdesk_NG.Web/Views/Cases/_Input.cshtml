@@ -1772,20 +1772,20 @@
                                                             {
                                                                 foreach (var e in Model.stateSecondaries.Where(e => e.IsActive == 1 || Model.case_.StateSecondary_Id == e.Id))
                                                                 {
-                                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.StateSecondary_Id.ToString())>@Translation.Get(e.Name)</option>
+                                                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.StateSecondary_Id.ToString())>@Translation.Get(e.Name)</option>
                                                                 }
                                                             }
                                                     </select>
                                                             if (Model.customerUserSetting.StateSecondaryPermission == 0)
                                                             {
-                                                    @Html.HiddenFor(x => x.case_.StateSecondary_Id, new { @class = "readonlySubstate" })
+                                                                 @Html.HiddenFor(x => x.case_.StateSecondary_Id, new { @class = "readonlySubstate" })
                                                             }
                                                     }
                                                     else
                                                     {
                                                         if (!Model.case_.StateSecondary_Id.HasValue)
                                                         {
-                                                    @Html.TextBoxFor(m => m.case_.StateSecondary_Id, new { @readonly = true })
+                                                            @Html.TextBoxFor(m => m.case_.StateSecondary_Id, new { @readonly = true })
                                                         }
                                                         else
                                                         {

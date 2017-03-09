@@ -250,6 +250,7 @@
 
         public JsonCaseIndexViewModel ConnectToParentModel { get; set; }
         public bool newLog { get; set; }
+        public bool editLog { get; set; }
 
     }
 

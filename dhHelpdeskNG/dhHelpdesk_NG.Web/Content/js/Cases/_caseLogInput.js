@@ -48,6 +48,6 @@ function LogInitForm() {
     });
 
     $('#log-action-save').on('click',function(e){
-        
+      
     });
 }
