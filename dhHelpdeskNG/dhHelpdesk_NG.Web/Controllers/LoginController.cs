@@ -64,11 +64,11 @@
             return this.View("Login");
         }
 
-        [HttpGet]
+        [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Head)]
         public ViewResult Login()
         {            
             return this.View();
-        } 
+        }
 
         [HttpPost]
         public ActionResult Login(FormCollection coll, string returnUrl)
