@@ -1,6 +1,25 @@
-﻿@model  DH.Helpdesk.SelfService.Models.Case.UserCasesModel  
+﻿@using System.Configuration;
+@using DH.Helpdesk.Common.Enums;
+@using DH.Helpdesk.BusinessData.Enums.Case;
+@model  DH.Helpdesk.SelfService.Models.Case.UserCasesModel
 
-<form id="frmCaseSearch" name="frmCaseSearch">   
+@{
+    var appType = ConfigurationManager.AppSettings[AppSettingsKey.CurrentApplicationType].ToString().ToLower();
+
+    var ongoingCaseCaption = appType == ApplicationTypes.LineManager ?
+                                Translation.Get("Ongoing Service Requests", Enums.TranslationSource.TextTranslation) :
+                                Translation.Get("Ongoing Cases", Enums.TranslationSource.TextTranslation);
+
+    var closedCaseCaption = appType == ApplicationTypes.LineManager ?
+                                Translation.Get("Finished Service Requests", Enums.TranslationSource.TextTranslation) :
+                                Translation.Get("Closed Cases", Enums.TranslationSource.TextTranslation);
+
+    var allCaseCaption = appType == ApplicationTypes.LineManager ?
+                                Translation.Get("All Service Requests", Enums.TranslationSource.TextTranslation) :
+                                Translation.Get("All Cases", Enums.TranslationSource.TextTranslation);
+
+}
+<form id="frmCaseSearch" name="frmCaseSearch">
     <input type="hidden" value="@SessionFacade.CurrentCaseSearch.Search.SortBy" id="hidSortBy" name="hidSortBy" />
     <input type="hidden" value="@SessionFacade.CurrentCaseSearch.Search.Ascending" id="hidSortByAsc" name="hidSortByAsc" />
 
@@ -11,7 +30,21 @@
                     <table>
                         <tr>
                             <td class="">
-                                &nbsp; &nbsp;  @Translation.Get("Search Phrase", Enums.TranslationSource.TextTranslation) &nbsp;&nbsp;                    
+                                &nbsp; &nbsp;  @Translation.Get("Filter", Enums.TranslationSource.TextTranslation) &nbsp;&nbsp;
+                            </td>
+                            <td>
+                                <select id="ProgressId" name="ProgressId">
+                                    <option value="@CaseProgressFilter.CasesInProgress">@ongoingCaseCaption</option>
+                                    <option value="@CaseProgressFilter.ClosedCases">@closedCaseCaption</option>
+                                    <option value="@CaseProgressFilter.None">@allCaseCaption</option>
+                                </select>
+                                @Html.TextBoxFor(s => Model.ProgressId)
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="">
+                                &nbsp; &nbsp;  @Translation.Get("Search Phrase", Enums.TranslationSource.TextTranslation) &nbsp;&nbsp;
                             </td>
                             <td>
                                 @Html.TextBoxFor(s => Model.PharasSearch)
@@ -20,11 +53,11 @@
                             </td>
                         </tr>
                     </table>
-                        
+
                     @*<div class="col-md-10">
-                        
-                    </div>*@
-                </div>                              
+
+                        </div>*@
+                </div>
             </div>
         </div>
     </div>
@@ -41,22 +74,22 @@
     function search() {
         $("#searchIndicator").show();
         $.post('@Url.Action("SearchUserCase", "Case")', $("#frmUserCases").serialize(), function (result) {
-            $('#search_result').html(result);           
+            $('#search_result').html(result);
         }).done(function () { $("#searchIndicator").hide(); });
     }
 
 
     function sortCases(sortBy) {
-        var asc = '@SessionFacade.CurrentCaseSearch.Search.Ascending'; 
+        var asc = '@SessionFacade.CurrentCaseSearch.Search.Ascending';
         var selected = $("#hidSortBy").val();
-        
-        if (sortBy == selected) {            
-            asc = asc.toLowerCase().match('true') ? 'false' : 'true';            
+
+        if (sortBy == selected) {
+            asc = asc.toLowerCase().match('true') ? 'false' : 'true';
         }
         else {
             asc = 'true';
         }
-        
+
         $("#hidSortBy").val(sortBy);
         $("#hidSortByAsc").val(asc);
         search();
