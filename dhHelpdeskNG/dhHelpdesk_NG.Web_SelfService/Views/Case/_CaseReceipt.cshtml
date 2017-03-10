@@ -67,7 +67,10 @@
                             @Model.CasePreview.PersonsName
                         </div>
                         <label class="col-md-6">
-                            @Translation.Get("Följare"): @Model.FollowerUsers
+                            @if (Model.FollowerUsers != "")
+                            {
+                                @Translation.Get("Följare") @Model.FollowerUsers
+                            }
                         </label>
                     </div>
                 }
