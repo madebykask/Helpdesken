@@ -271,7 +271,8 @@ InvoicesOverview.prototype = {
             DepartmentId: $("#invoiceFilter #ddlDepartment").val(),
             DateFrom: $("#invoiceFilter #dateFrom input").val(),
             DateTo: $("#invoiceFilter #dateTo input").val(),
-            Status: $("#invoiceFilter #ddlStatus").val()
+            Status: $("#invoiceFilter #ddlStatus").val(),
+            DepartmentCharge: true
         }
     },
 
