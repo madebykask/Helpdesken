@@ -67,6 +67,163 @@ GO
 --tblMail2Ticket
 ALTER TABLE tblMail2Ticket ALTER COLUMN EMailAddress NVARCHAR(200) NOT NULL
 
+--ADD GUID
+--tblAccountActivity
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'AccountActivityGUID' and sysobjects.name = N'tblAccountActivity')
+begin
+		EXECUTE  sp_executesql  "update tblAccountActivity set AccountActivityGUID = newid() where AccountActivityGUID is null" 
+
+		if not exists(select *
+					  from sys.all_columns c
+					  join sys.tables t on t.object_id = c.object_id
+					  join sys.schemas s on s.schema_id = t.schema_id
+					  join sys.default_constraints d on c.default_object_id = d.object_id
+					  where t.name = 'tblAccountActivity'
+					  and c.name = 'AccountActivityGUID'
+					  and s.name = 'dbo'
+					  and d.name = 'DF_AccountActivityGUID')
+		begin
+			Alter table tblAccountActivity
+			Add constraint DF_AccountActivityGUID default (newid()) For AccountActivityGUID		
+		end		
+end
+else
+begin
+	Alter table tblAccountActivity
+	Add AccountActivityGUID uniqueIdentifier NOT NULL CONSTRAINT DF_AccountActivityGUID default (newid())
+end
+GO
+
+--tblDocumentCategory
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'DocumentCategoryGUID' and sysobjects.name = N'tblDocumentCategory')
+begin
+		EXECUTE  sp_executesql  "update tblDocumentCategory set DocumentCategoryGUID = newid() where DocumentCategoryGUID is null" 
+
+		if not exists(select *
+					  from sys.all_columns c
+					  join sys.tables t on t.object_id = c.object_id
+					  join sys.schemas s on s.schema_id = t.schema_id
+					  join sys.default_constraints d on c.default_object_id = d.object_id
+					  where t.name = 'tblDocumentCategory'
+					  and c.name = 'DocumentCategoryGUID'
+					  and s.name = 'dbo'
+					  and d.name = 'DF_DocumentCategoryGUID')
+		begin
+			Alter table tblDocumentCategory
+			Add constraint DF_DocumentCategoryGUID default (newid()) For DocumentCategoryGUID		
+		end		
+end
+else
+begin
+	Alter table tblDocumentCategory
+	Add DocumentCategoryGUID uniqueIdentifier NOT NULL CONSTRAINT DF_DocumentCategoryGUID default (newid())
+end
+GO
+
+--tblCaseSolution
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CaseSolutionGUID' and sysobjects.name = N'tblCaseSolution')
+begin
+		EXECUTE  sp_executesql  "update tblCaseSolution set CaseSolutionGUID = newid() where CaseSolutionGUID is null" 
+
+		if not exists(select *
+					  from sys.all_columns c
+					  join sys.tables t on t.object_id = c.object_id
+					  join sys.schemas s on s.schema_id = t.schema_id
+					  join sys.default_constraints d on c.default_object_id = d.object_id
+					  where t.name = 'tblCaseSolution'
+					  and c.name = 'CaseSolutionGUID'
+					  and s.name = 'dbo'
+					  and d.name = 'DF_CaseSolutionGUID')
+		begin
+			Alter table tblCaseSolution
+			Add constraint DF_CaseSolutionGUID default (newid()) For CaseSolutionGUID		
+		end		
+end
+else
+begin
+	Alter table tblCaseSolution
+	Add CaseSolutionGUID uniqueIdentifier NOT NULL CONSTRAINT DF_CaseSolutionGUID default (newid())
+end
+GO
+
+--tblCaseSolutionCategory
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CaseSolutionCategoryGUID' and sysobjects.name = N'tblCaseSolutionCategory')
+begin
+		EXECUTE  sp_executesql  "update tblCaseSolutionCategory set CaseSolutionCategoryGUID = newid() where CaseSolutionCategoryGUID is null" 
+
+		if not exists(select *
+					  from sys.all_columns c
+					  join sys.tables t on t.object_id = c.object_id
+					  join sys.schemas s on s.schema_id = t.schema_id
+					  join sys.default_constraints d on c.default_object_id = d.object_id
+					  where t.name = 'tblCaseSolutionCategory'
+					  and c.name = 'CaseSolutionCategoryGUID'
+					  and s.name = 'dbo'
+					  and d.name = 'DF_CaseSolutionCategoryGUID')
+		begin
+			Alter table tblCaseSolutionCategory
+			Add constraint DF_CaseSolutionCategoryGUID default (newid()) For CaseSolutionCategoryGUID		
+		end		
+end
+else
+begin
+	Alter table tblCaseSolutionCategory
+	Add CaseSolutionCategoryGUID uniqueIdentifier NOT NULL CONSTRAINT DF_CaseSolutionCategoryGUID default (newid())
+end
+GO
+
+--tblProblem
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ProblemGUID' and sysobjects.name = N'tblProblem')
+begin
+		EXECUTE  sp_executesql  "update tblProblem set ProblemGUID = newid() where ProblemGUID is null" 
+
+		if not exists(select *
+					  from sys.all_columns c
+					  join sys.tables t on t.object_id = c.object_id
+					  join sys.schemas s on s.schema_id = t.schema_id
+					  join sys.default_constraints d on c.default_object_id = d.object_id
+					  where t.name = 'tblProblem'
+					  and c.name = 'ProblemGUID'
+					  and s.name = 'dbo'
+					  and d.name = 'DF_ProblemGUID')
+		begin
+			Alter table tblProblem
+			Add constraint DF_ProblemGUID default (newid()) For ProblemGUID		
+		end		
+end
+else
+begin
+	Alter table tblProblem
+	Add ProblemGUID uniqueIdentifier NOT NULL CONSTRAINT DF_ProblemGUID default (newid())
+end
+GO
+
+--tblProject
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ProjectGUID' and sysobjects.name = N'tblProject')
+begin
+		EXECUTE  sp_executesql  "update tblProject set ProjectGUID = newid() where ProjectGUID is null" 
+
+		if not exists(select *
+					  from sys.all_columns c
+					  join sys.tables t on t.object_id = c.object_id
+					  join sys.schemas s on s.schema_id = t.schema_id
+					  join sys.default_constraints d on c.default_object_id = d.object_id
+					  where t.name = 'tblProject'
+					  and c.name = 'ProjectGUID'
+					  and s.name = 'dbo'
+					  and d.name = 'DF_ProjectGUID')
+		begin
+			Alter table tblProject
+			Add constraint DF_ProjectGUID default (newid()) For ProjectGUID		
+		end		
+end
+else
+begin
+	Alter table tblProject
+	Add ProjectGUID uniqueIdentifier NOT NULL CONSTRAINT DF_ProjectGUID default (newid())
+end
+GO
+
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.31'
