@@ -25,7 +25,6 @@
                         new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post",                                                                                                 
                               Enums.TranslationSource.TextTranslation) + "?" })</li>
                     }                    
-                    <li>@Html.ActionLink(Translation.Get("Stäng", Enums.TranslationSource.TextTranslation), "edit", "cases", new { Id = @Model.case_.Id }, new { @class = "btn"})</li>
                     @if (Model.newLog)
                     {
                         @*<li>@Html.ActionLink(Translation.GetCoreTextTranslation("Spara"), null, null, null, new { @class = "btn", id = "log-action-save" })</li>*@
@@ -35,9 +34,9 @@
                     }
                     else
                     {
-
                         <li>@Html.ActionLink(Translation.Get("Ändra", Enums.TranslationSource.TextTranslation), "editlog", "cases", new { Id = @Model.CaseLog.Id, customerId = Model.case_.Customer_Id, newLog = true }, new { @class = "btn" })</li>
                     }
+                    <li>@Html.ActionLink(Translation.Get("Stäng", Enums.TranslationSource.TextTranslation), "edit", "cases", new { Id = @Model.case_.Id }, new { @class = "btn" })</li>
                 </ul>
             </div>
         </div>
