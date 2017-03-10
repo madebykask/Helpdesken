@@ -224,6 +224,9 @@ begin
 end
 GO
 
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'OrderTypeDescription' and sysobjects.name = N'tblOrderType')
+	ALTER TABLE [dbo].[tblOrderType] ALTER COLUMN [OrderTypeDescription] nvarchar(1500) NULL
+GO
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.31'

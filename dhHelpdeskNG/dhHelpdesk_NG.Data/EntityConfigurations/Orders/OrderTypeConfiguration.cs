@@ -43,7 +43,7 @@
             this.Property(x => x.CaptionOther).IsOptional().HasMaxLength(30);
             this.Property(x => x.CreateCase_CaseType_Id).IsOptional();
             this.Property(x => x.Customer_Id).IsRequired();
-            this.Property(x => x.Description).IsOptional().HasMaxLength(500).HasColumnName("OrderTypeDescription");
+            this.Property(x => x.Description).IsOptional().HasMaxLength(1500).HasColumnName("OrderTypeDescription");
             this.Property(x => x.Document_Id).IsOptional();
             this.Property(x => x.EMail).IsOptional().HasMaxLength(100);
             this.Property(x => x.IsActive).IsRequired().HasColumnName("Status");
