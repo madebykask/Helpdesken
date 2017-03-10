@@ -1177,7 +1177,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
 				//Manager Cases Only
 				case CaseListTypes.ManagerCases:
-					sb.Append(" and (tblCase.[RegUserId] = '" + userUserId.SafeForSqlInject() + "' or tblCase.[ReportedBy] = " + f.ReportedBy.SafeForSqlInject() + ")");
+					sb.Append(" and (tblCase.[RegUserId] = '" + userUserId.SafeForSqlInject() + "' or tblCase.[ReportedBy] = " + f.ReportedBy.SafeForSqlInjectForInOperator() + ")");
 					break;
 
 				//CoWorkers Cases Only
@@ -1185,12 +1185,12 @@ namespace DH.Helpdesk.Dal.Repositories
 					if (string.IsNullOrEmpty(f.ReportedBy.Replace(" ", "").Replace("'", "")))
 						sb.Append(" and (tblCase.[RegUserId] = '" + userUserId.SafeForSqlInject() + "')");
 					else
-						sb.Append(" and (((tblCase.[ReportedBy] is null or tblCase.[ReportedBy] = '') and tblCase.[RegUserId] = '" + userUserId.SafeForSqlInject() + "') or tblCase.[ReportedBy] in (" + f.ReportedBy.SafeForSqlInject() + "))");
+						sb.Append(" and (((tblCase.[ReportedBy] is null or tblCase.[ReportedBy] = '') and tblCase.[RegUserId] = '" + userUserId.SafeForSqlInject() + "') or tblCase.[ReportedBy] in (" + f.ReportedBy.SafeForSqlInjectForInOperator() + "))");
 					break;
 
 				//Manager & Coworkers Cases
 				case CaseListTypes.ManagerCoWorkerCases:
-					sb.Append(" and (tblCase.[RegUserId] = '" + userUserId.SafeForSqlInject() + "' or tblCase.[ReportedBy] in (" + f.ReportedBy.SafeForSqlInject() + "))");
+					sb.Append(" and (tblCase.[RegUserId] = '" + userUserId.SafeForSqlInject() + "' or tblCase.[ReportedBy] in (" + f.ReportedBy.SafeForSqlInjectForInOperator() + "))");
 					break;
 
 			}

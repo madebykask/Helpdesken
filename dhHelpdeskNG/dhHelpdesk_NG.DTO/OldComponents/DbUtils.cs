@@ -153,6 +153,50 @@
                 else
                     return string.Empty;
             }
+            public static string SafeForSqlInjectForInOperator(this string valueToCheck)
+            {
+                if (!string.IsNullOrWhiteSpace(valueToCheck))
+                {
+                    var args = valueToCheck.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                    var ret = string.Empty;
+                     
+                    foreach (var arg in args)
+                    {
+                        var hasQutationAtStart = false;
+                        var isSurroundedByQutaion = false;  
+                        var curArg = arg;
+                        if (curArg.StartsWith("'"))
+                        {
+                            hasQutationAtStart = true;
+                            curArg = curArg.Substring(1, curArg.Length - 1);
+                        }
+
+                        if (curArg.EndsWith("'"))
+                        {
+                            isSurroundedByQutaion = hasQutationAtStart;
+                            curArg = curArg.Substring(0, curArg.Length - 1);
+                        }
+
+                        curArg = curArg.Replace("'", "''");
+                        if (isSurroundedByQutaion)
+                        {
+                            if (ret == string.Empty)
+                                ret = string.Format("'{0}'", curArg);
+                            else
+                                ret += string.Format(",'{0}'", curArg);
+                        }else
+                        {
+                            if (ret == string.Empty)
+                                ret = string.Format("{0}", curArg);
+                            else
+                                ret += string.Format(",{0}", curArg);
+                        }
+                    }
+                    return ret;
+                }
+                else
+                    return string.Empty;
+            }
 
             public static string FreeTextSafeForSqlInject(this string valueToCheck)
             {

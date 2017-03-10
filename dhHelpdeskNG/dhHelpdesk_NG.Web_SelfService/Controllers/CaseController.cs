@@ -185,24 +185,26 @@
                 bool userHasAccessToCase = false;
                 var currentApplicationType = ConfigurationManager.AppSettings[AppSettingsKey.CurrentApplicationType].ToString().ToLower();
                 var curUserId = SessionFacade.CurrentUserIdentity.UserId;
+                var caseListCondition = ConfigurationManager.AppSettings[AppSettingsKey.CaseList].ToString().ToLower().Split(',');
+
                 if (currentApplicationType == ApplicationTypes.LineManager)
                 {
                     var coWorkers = SessionFacade.CurrentCoWorkers != null ?
                                         SessionFacade.CurrentCoWorkers.Select(c => c.EmployeeNumber).ToList() : 
                                         new List<string>();
-
-                    var caseListCondition = ConfigurationManager.AppSettings[AppSettingsKey.CaseList].ToString().ToLower().Split(',');
+                                        
                     if (caseListCondition.Contains(CaseListTypes.ManagerCases))
                     {
                         if (caseListCondition.Contains(CaseListTypes.CoWorkerCases))
                         {
-                            if (currentCase.RegUserId.ToLower() == curUserId.ToLower() || coWorkers.Contains(currentCase.ReportedBy))
+                            if ((!string.IsNullOrEmpty(currentCase.RegUserId) && currentCase.RegUserId.ToLower() == curUserId.ToLower()) 
+                                || coWorkers.Contains(currentCase.ReportedBy))
                                 userHasAccessToCase = true;               
                         }
                         else
                         {
-                            if (currentCase.RegUserId.ToLower() == curUserId.ToLower() || 
-                                currentCase.ReportedBy == SessionFacade.CurrentUserIdentity.EmployeeNumber)
+                            if ((!string.IsNullOrEmpty(currentCase.RegUserId) && currentCase.RegUserId.ToLower() == curUserId.ToLower())
+                                || currentCase.ReportedBy == SessionFacade.CurrentUserIdentity.EmployeeNumber)
                                 userHasAccessToCase = true;                                                                       
                         }                        
                     }
@@ -210,13 +212,23 @@
                     if (caseListCondition.Contains(CaseListTypes.CoWorkerCases))
                     {
                         if (coWorkers.Contains(currentCase.ReportedBy) || 
-                            (string.IsNullOrEmpty(currentCase.ReportedBy) && currentCase.RegUserId.ToLower() == curUserId.ToLower()))
+                            (string.IsNullOrEmpty(currentCase.ReportedBy) && 
+                            (!string.IsNullOrEmpty(currentCase.RegUserId) && currentCase.RegUserId.ToLower() == curUserId.ToLower())))
                             userHasAccessToCase = true;                        
                     }                                    
                 }
                 else
-                {
-                    if (currentCase.RegUserId.ToLower() == curUserId.ToLower())
+                {                                        
+                    if (caseListCondition.Contains(CaseListTypes.ManagerCases))
+                    {                        
+                        if (!string.IsNullOrEmpty(currentCase.ReportedBy) && 
+                            currentCase.ReportedBy.ToLower() == curUserId.ToLower())
+                        { 
+                                userHasAccessToCase = true;
+                        }
+                    }
+
+                    if ((!string.IsNullOrEmpty(currentCase.RegUserId) && currentCase.RegUserId.ToLower() == curUserId.ToLower()))
                         userHasAccessToCase = true;   
                 }
 
@@ -1110,10 +1122,10 @@
             var caseListType = string.Empty;
             var currentApplicationType = ConfigurationManager.AppSettings[AppSettingsKey.CurrentApplicationType].ToString().ToLower();
 
-            if (currentApplicationType == ApplicationTypes.LineManager)
-            {
-                var caseListCondition = ConfigurationManager.AppSettings[AppSettingsKey.CaseList].ToString().ToLower().Split(',');
+            var caseListCondition = ConfigurationManager.AppSettings[AppSettingsKey.CaseList].ToString().ToLower().Split(',');
 
+            if (currentApplicationType == ApplicationTypes.LineManager)
+            {                
                 if (caseListCondition.Contains(CaseListTypes.ManagerCases))
                 {
                     caseListType = CaseListTypes.ManagerCases;
@@ -1150,13 +1162,25 @@
                 cs.CaseListType = caseListType;
             } 
             else// Self Service 
-            {
+            {                
+                if (caseListCondition.Contains(CaseListTypes.ManagerCases))
+                {
+                    caseListType = CaseListTypes.ManagerCases;
+                    cs.ReportedBy = string.Format("'{0}'", curUser);
+                }
+
+                /* CoWorker is not defined in SelfService Mode */
+                if (caseListCondition.Contains(CaseListTypes.CoWorkerCases))
+                {
+                    caseListType = CaseListTypes.UserCases;
+                }
+
+                if (caseListCondition.Contains(CaseListTypes.UserCases) || !caseListCondition.Any())
+                    caseListType = CaseListTypes.UserCases;
+
                 cs.RegUserId = curUser;
-                cs.CaseListType = CaseListTypes.UserCases;
-            }
-
-
-            cs.ReportedBy = cs.ReportedBy;
+                cs.CaseListType = caseListType;
+            }            
 
             search.SortBy = sortBy;
             search.Ascending = ascending;
