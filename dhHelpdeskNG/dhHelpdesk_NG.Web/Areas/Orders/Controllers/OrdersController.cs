@@ -108,17 +108,17 @@
         [HttpGet]
         public ActionResult Index()
         {
-            var filters = SessionFacade.FindPageFilters<OrdersFilterModel>(PageName.OrdersOrders);
-            if (filters == null)
-            {
-                filters = OrdersFilterModel.CreateDefault();
-                SessionFacade.SavePageFilters(PageName.OrdersOrders, filters);
-            }
-
             int[] selectedStatuses;
             var data = _ordersService.GetOrdersFilterData(_workContext.Customer.CustomerId, _workContext.User.UserId, out selectedStatuses);
 
-            var filledFilters = new OrdersFilterModel(filters.OrderTypeId, filters.AdministratiorIds, filters.StartDate, filters.EndDate, selectedStatuses, filters.Text, filters.RecordsOnPage, filters.SortField);
+            var filters = SessionFacade.FindPageFilters<OrdersFilterModel>(PageName.OrdersOrders);
+            if (filters == null)
+            {
+                filters = OrdersFilterModel.CreateDefault(selectedStatuses);
+                SessionFacade.SavePageFilters(PageName.OrdersOrders, filters);
+            }
+
+            var filledFilters = new OrdersFilterModel(filters.OrderTypeId, filters.AdministratiorIds, filters.StartDate, filters.EndDate, filters.StatusIds, filters.Text, filters.RecordsOnPage, filters.SortField);
 
             var model = _ordersModelFactory.GetIndexModel(data, filledFilters);
             return View(model);

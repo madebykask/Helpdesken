@@ -88,18 +88,17 @@ namespace DH.Helpdesk.SelfService.Controllers
 
         public ActionResult Index(int customerId)
         {
-            var filters = SessionFacade.FindPageFilters<OrdersFilterModel>(PageName.Orders);
-            if (filters == null)
-            {
-                filters = OrdersFilterModel.CreateDefault();
-                SessionFacade.SavePageFilters(PageName.Orders, filters);
-            }
-
             int[] selectedStatuses;
             var data = _ordersService.GetOrdersFilterData(SessionFacade.CurrentCustomerID, SessionFacade.CurrentLocalUser.Id, out selectedStatuses);
 
-            var filledFilters = new OrdersFilterModel(filters.OrderTypeId, filters.AdministratiorIds, filters.StartDate,
-                filters.EndDate, selectedStatuses, filters.Text, filters.RecordsOnPage, filters.SortField);
+            var filters = SessionFacade.FindPageFilters<OrdersFilterModel>(PageName.Orders);
+            if (filters == null)
+            {
+                filters = OrdersFilterModel.CreateDefault(selectedStatuses);
+                SessionFacade.SavePageFilters(PageName.Orders, filters);
+            }
+
+            var filledFilters = new OrdersFilterModel(filters.OrderTypeId, filters.AdministratiorIds, filters.StartDate, filters.EndDate, filters.StatusIds, filters.Text, filters.RecordsOnPage, filters.SortField);
 
             var model = _ordersModelFactory.GetIndexModel(data, filledFilters);
 

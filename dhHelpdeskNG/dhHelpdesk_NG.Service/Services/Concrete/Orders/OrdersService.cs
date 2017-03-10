@@ -255,11 +255,11 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
         private List<OrderType> FilterOrderTypeByUser(List<OrderType> orderTypes, int userId)
         {
             return orderTypes
-                .Select(orderType => TestOrderType(userId, orderType))
+                .Select(orderType => GetParentOrChildAssignedToUser(userId, orderType))
                 .Where(type => type != null).ToList();
         }
 
-        private static OrderType TestOrderType(int userId, OrderType orderType)
+        private static OrderType GetParentOrChildAssignedToUser(int userId, OrderType orderType)
         {
             for (var i = 0; i < 100000; i++)
             {
