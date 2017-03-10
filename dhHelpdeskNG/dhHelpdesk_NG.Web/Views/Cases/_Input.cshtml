@@ -25,7 +25,7 @@
         userCaseLocker: '@Model.CaseLock.UserId',
         extendValue: '@Model.CaseLock.ExtendValue',
         timerInterval: '@Model.CaseLock.TimerInterval',
-        departmentInvoiceMandatory: '@Model.TimeRequired.ToJavaScriptBool()',
+        departmentInvoiceMandatory: @Model.TimeRequired.ToJavaScriptBool(),
         invoicePreventsToCloseCaseMessage: '@Translation.GetForJS("Du kan inte avsluta ärendet eftersom det finns öppna order.")',
         caseLockChecker: '@Url.Content("~/Cases/IsCaseAvailable/")',
         caseLockExtender: '@Url.Content("~/Cases/ReExtendCaseLock/")',
