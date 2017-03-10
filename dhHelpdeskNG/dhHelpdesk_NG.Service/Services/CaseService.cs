@@ -948,6 +948,17 @@ namespace DH.Helpdesk.Services.Services
             //get settings for smtp
             var customerSetting =_settingService.GetCustomerSetting(newCase.Customer_Id);
 
+            var performerUserEmail = string.Empty;
+            //get performerUser emailaddress
+            if (newCase.Performer_User_Id.HasValue)
+            {
+                var performerUser = this._userService.GetUser(newCase.Performer_User_Id.Value);
+                performerUserEmail = performerUser.Email;
+            }
+            
+
+
+
             var smtpInfo = new MailSMTPSetting(customerSetting.SMTPServer, customerSetting.SMTPPort, customerSetting.SMTPUserName, customerSetting.SMTPPassWord, customerSetting.IsSMTPSecured);
 
             if (string.IsNullOrEmpty(smtpInfo.Server) || smtpInfo.Port <= 0)
@@ -973,11 +984,11 @@ namespace DH.Helpdesk.Services.Services
                     if (logFiles.Count > 0)
                         files = logFiles.Select(f => _filesStorage.ComposeFilePath(ModuleName.Log, log.Id, basePath, f.FileName)).ToList();
 
-                if (newCase.PersonsEmail != null)
+                if (!String.IsNullOrEmpty(performerUserEmail))
                 {
                     if (log.SendMailAboutCaseToNotifier && newCase.FinishingDate == null)
                     {
-                        var to = newCase.PersonsEmail.Split(';', ',').ToList();
+                        var to = performerUserEmail.Split(';', ',').ToList();
                         var extraFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(newCase.Id).Select(x => x.Follower).ToList();
                         to.AddRange(extraFollowers);
                         foreach (var t in to)
