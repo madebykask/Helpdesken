@@ -99,9 +99,12 @@ namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
             }
         }
 
-        public List<FaqEntity> GetFaqsByCustomerId(int customerId)
+        public List<FaqEntity> GetFaqsByCustomerId(int customerId, bool includePublic = true)
         {
-            return DataContext.FAQs.Include(x => x.FaqLanguages).Where(x => x.Customer_Id == customerId).ToList();
+            var faqs = DataContext.FAQs.Include(x => x.FaqLanguages).Where(x => x.Customer_Id == customerId);
+            if (!includePublic)
+                faqs = faqs.Where(x => x.InformationIsAvailableForNotifiers == 1);
+            return faqs.ToList();
         }
 
         #endregion

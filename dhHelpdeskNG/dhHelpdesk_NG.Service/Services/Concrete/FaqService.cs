@@ -283,10 +283,10 @@ namespace DH.Helpdesk.Services.Services.Concrete
             return result;
         }
 
-        public IList<Faq> GetFaqs(int customerId, int languageId)
+        public IList<Faq> GetFaqs(int customerId, int languageId, bool includePublic = true)
         {
             var faqFiles = faqFileRepository.GetMany(f => f.FAQ != null && f.FAQ.Customer_Id == customerId).ToList();
-            var faqs = faqRepository.GetFaqsByCustomerId(customerId);
+            var faqs = faqRepository.GetFaqsByCustomerId(customerId, includePublic);
             var result = faqs.Select(f =>
             {
                 var fLng = f.FaqLanguages.FirstOrDefault(x => x.Language_Id == languageId);

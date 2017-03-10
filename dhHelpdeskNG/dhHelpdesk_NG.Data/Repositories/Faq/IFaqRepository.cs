@@ -16,6 +16,6 @@ namespace DH.Helpdesk.Dal.Repositories.Faq
 
         void UpdateOtherLanguageFaq(ExistingFaq faq);
 
-        List<FaqEntity> GetFaqsByCustomerId(int customerId);
+        List<FaqEntity> GetFaqsByCustomerId(int customerId, bool includePublic = true);
     }
 }

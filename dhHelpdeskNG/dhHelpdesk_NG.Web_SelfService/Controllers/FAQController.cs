@@ -51,7 +51,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         {
             var ret = new FAQIndexViewModel();
             var allFaqCats = _faqService.GetFaqCategories(customerId, languageId).OrderBy(c => c.Name).ToList();
-            var allFaqs = _faqService.GetFaqs(customerId, languageId);
+            var allFaqs = _faqService.GetFaqs(customerId, languageId, false);
 
             var parentsCategories = allFaqCats.Where(c => !c.Parent_Id.HasValue).ToList();
 
