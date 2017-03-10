@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.Concurrent;
     using System.Linq;
     using System.Web;
 
@@ -89,29 +90,25 @@
             UpdateLoggedInUser(sessionId, "");
         }
 
-        public static IList<LoggedInUsers> LoggedInUsers
+        public static ConcurrentDictionary<string, LoggedInUsers> LoggedInUsers
         {
             get
             {
-                return (IList<LoggedInUsers>)HttpContext.Current.Application[_USER_LOGGED_IN];
+                return (ConcurrentDictionary<string, LoggedInUsers>)HttpContext.Current.Application[_USER_LOGGED_IN];
             }
             private set { }
         }
 
         public static IList<LoggedInUsers> GetLoggedInUsers(int customerId)
         {
-            if (LoggedInUsers == null) return null;
-
-            var loggedInUsers = LoggedInUsers.Where(x => x.Customer_Id == customerId).ToList();
+            var loggedInUsers = LoggedInUsers?.Where(x => x.Value.Customer_Id == customerId).Select(x => x.Value).ToList();
 
             return loggedInUsers;
         }
 
         public static IList<LoggedInUsers> GetAllLoggedInUsers()
         {
-            if (LoggedInUsers == null) return null;
-
-            var loggedInUsers = LoggedInUsers.ToList();
+            var loggedInUsers = LoggedInUsers?.Select(x => x.Value).ToList();
 
             return loggedInUsers;
         }
@@ -120,21 +117,18 @@
         {
             if (LoggedInUsers == null)
             {
-                HttpContext.Current.Application[_USER_LOGGED_IN] = new List<LoggedInUsers>();
+                HttpContext.Current.Application[_USER_LOGGED_IN] = new ConcurrentDictionary<string, LoggedInUsers>();
             }
-            var usr = (LoggedInUsers.FirstOrDefault(x => x.SessionId == loggedInUsers.SessionId));
-            if (usr == null)
-                LoggedInUsers.Add(loggedInUsers);
+            LoggedInUsers.GetOrAdd(loggedInUsers.SessionId, loggedInUsers);
         }
 
         public static void UpdateLoggedInUserActivity(string sessionId)
         {
             if (LoggedInUsers != null)
             {
-                var usr = (LoggedInUsers.FirstOrDefault(x => x.SessionId == sessionId));
-                if (usr != null)
+                if (LoggedInUsers.ContainsKey(sessionId))
                 {
-                    usr.LatestActivity = DateTime.UtcNow;
+                    LoggedInUsers[sessionId].LatestActivity = DateTime.UtcNow;
                 }
             }
         }
@@ -153,14 +147,13 @@
         {
             if (LoggedInUsers != null)
             {
-                var usr = (LoggedInUsers.FirstOrDefault(x => x.SessionId == sessionId));
-                if (usr != null)
+                if (LoggedInUsers.ContainsKey(sessionId))
                 {
-                    usr.LatestActivity = DateTime.UtcNow;
+                    LoggedInUsers[sessionId].LatestActivity = DateTime.UtcNow;
                     if (caseNumber != null)
                     {
-                        usr.CaseNumber = caseNumber;
-                        usr.CaseId = caseId;
+                        LoggedInUsers[sessionId].CaseNumber = caseNumber;
+                        LoggedInUsers[sessionId].CaseId = caseId;
                     }
                 }
             }
@@ -170,10 +163,15 @@
         {
             if (LoggedInUsers == null) return;
 
-            var loggedInUsers = LoggedInUsers.FirstOrDefault(x => x.SessionId == sessionId);
-
-            if (loggedInUsers != null)
-                LoggedInUsers.Remove(loggedInUsers);
+            if (LoggedInUsers.ContainsKey(sessionId))
+            {
+                LoggedInUsers user;
+                var maxCount = 3;
+                for (var i = 0; i < maxCount; i++)
+                {
+                    if(LoggedInUsers.TryRemove(sessionId, out user)) break;
+                }
+            }
         }
         
     }

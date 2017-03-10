@@ -16,6 +16,7 @@
         IEnumerable<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguages(int? customerId, int? languageId);
         IEnumerable<CaseFieldSettingsWithLanguage> GetAllCaseFieldSettingsWithLanguages(int? customerId, int? languageId);
         IEnumerable<CaseFieldSettingsForTranslation> GetCaseFieldSettingsForTranslation(int userId);
+        IEnumerable<CaseFieldSettingsForTranslation> GetCustomerCaseFieldSettingsForTranslation(int customerId);
         IEnumerable<CaseFieldSettingsForTranslation> GetCaseFieldSettingsForTranslation();
         IEnumerable<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguagesForDefaultCust(int languageId);
     }
@@ -126,6 +127,24 @@
                         {
                             Customer_Id = grouped.Key.Customer_Id.HasValue ? grouped.Key.Customer_Id.Value : 0,
                             Language_Id = grouped.Key.Language_Id,   
+                            Label = grouped.Key.Label,
+                            Name = grouped.Key.Name
+                        };
+
+            return query;
+        }
+
+        public IEnumerable<CaseFieldSettingsForTranslation> GetCustomerCaseFieldSettingsForTranslation(int customerId)
+        {
+            var query = from s in this.DataContext.CaseFieldSettings
+                        join sl in this.DataContext.CaseFieldSettingLanguages on s.Id equals sl.CaseFieldSettings_Id
+                        join cu in this.DataContext.CustomerUsers on s.Customer_Id equals cu.Customer_Id
+                        where (cu.Customer_Id == customerId)
+                        group s by new { s.Customer_Id, s.Name, sl.Label, sl.Language_Id } into grouped
+                        select new CaseFieldSettingsForTranslation
+                        {
+                            Customer_Id = grouped.Key.Customer_Id.HasValue ? grouped.Key.Customer_Id.Value : 0,
+                            Language_Id = grouped.Key.Language_Id,
                             Label = grouped.Key.Label,
                             Name = grouped.Key.Name
                         };

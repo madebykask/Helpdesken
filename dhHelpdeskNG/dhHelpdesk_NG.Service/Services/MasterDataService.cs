@@ -21,6 +21,7 @@ namespace DH.Helpdesk.Services.Services
         IList<Language> GetLanguages();
         IList<Text> GetTranslationTexts();
         IList<CaseFieldSettingsForTranslation> GetCaseTranslations(int userId);
+        IList<CaseFieldSettingsForTranslation> GetCustomerCaseTranslations(int customerId);
         IList<CaseFieldSettingsForTranslation> GetCaseTranslations();
         Language GetLanguage(int id);
         UserOverview GetUserForLogin(string userid);
@@ -124,33 +125,17 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<Text> GetTranslationTexts()
         {
-            IList<Text> texts = this._cache.Get("text") as IList<Text>;
-
-            if (texts == null)
-            {
-                texts = this._textRepository.GetAllWithTranslation().ToList();
-
-                if (texts.Any())
-                    this._cache.Set("text", texts, 60);
-            }
-
-            return texts;
+            return _textRepository.GetAllWithTranslation().ToList();
         }
 
         public IList<CaseFieldSettingsForTranslation> GetCaseTranslations(int userId)
         {
             return this._caseFieldSettingLanguageRepository.GetCaseFieldSettingsForTranslation(userId).ToList();   
-            //IList<CaseFieldSettingsForTranslation> languages = this._cache.Get("casetranslation") as IList<CaseFieldSettingsForTranslation>;
+        }
 
-            //if (languages == null)
-            //{
-            //    languages = this._caseFieldSettingLanguageRepository.GetCaseFieldSettingsForTranslation(userId).ToList();   
-
-            //    if (languages.Any())
-            //        this._cache.Set("casetranslation", languages, 60);
-            //}
-
-            //return languages;
+        public IList<CaseFieldSettingsForTranslation> GetCustomerCaseTranslations(int customerId)
+        {
+            return this._caseFieldSettingLanguageRepository.GetCustomerCaseFieldSettingsForTranslation(customerId).ToList();
         }
 
         public IList<CaseFieldSettingsForTranslation> GetCaseTranslations()

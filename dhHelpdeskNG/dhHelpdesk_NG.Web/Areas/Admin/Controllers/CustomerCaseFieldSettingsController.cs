@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
+﻿using DH.Helpdesk.Web.Infrastructure.Cache;
+
+namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -17,19 +19,22 @@
         private readonly ICaseSettingsService _caseSettingsService;
         private readonly ICustomerService _customerService;
         private readonly ILanguageService _languageService;
+        private readonly IHelpdeskCache _cache;
 
         public CustomerCaseFieldSettingsController(
             ICaseFieldSettingService caseFieldSettingService,
             ICaseSettingsService caseSettingsService,
             ICustomerService customerService,
             ILanguageService languageService,
-            IMasterDataService masterDataService)
+            IMasterDataService masterDataService,
+            IHelpdeskCache cache)
             : base(masterDataService)
         {
             this._caseFieldSettingService = caseFieldSettingService;
             this._caseSettingsService = caseSettingsService;
             this._customerService = customerService;
             this._languageService = languageService;
+            _cache = cache;
         }
 
         [CustomAuthorize(Roles = "3,4")]
@@ -57,9 +62,9 @@
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
             _customerService.SaveCaseFieldSettingsForCustomer(customerId, languageId, vmodel.CaseFieldSettingWithLangauges, CaseFieldSettings, out errors);
-            SessionFacade.CaseTranslation = null;
+            _cache.ClearCaseTranslations(customerId);
 
-            if(errors.Count == 0)
+            if (errors.Count == 0)
                 return this.RedirectToAction("edit", "customercasefieldsettings", new { customerId = customerId, languageId = languageId });
 
             var customer = this._customerService.GetCustomer(customerId);

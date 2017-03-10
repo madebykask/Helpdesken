@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure
+﻿using System.Web.Mvc;
+using DH.Helpdesk.Web.Infrastructure.Cache;
+
+namespace DH.Helpdesk.Web.Infrastructure
 {
     using System.Linq;
     using DH.Helpdesk.Common.Extensions.String;
@@ -7,6 +10,14 @@
 
     public static class Translation
     {
+        public static IHelpdeskCache Cache
+        {
+            get
+            {
+                return DependencyResolver.Current.GetService<IHelpdeskCache>();//hack to support legacy code. TODO: should be injection, otherwise WebApi possible issues
+            } 
+        }
+
         /// <summary>
         /// Get translation for a string. It will generate translation based on currentLanguageId in the session.
         /// </summary>
@@ -95,41 +106,38 @@
         {
             if (source == Enums.TranslationSource.TextTranslation)
             {
-                if (SessionFacade.TextTranslation != null)
+                try
                 {
-                    try
+                    var translation = Cache.GetTextTranslations().FirstOrDefault(x => x.TextToTranslate.ToLower() == translate.ToLower());
+                    if (DiffTextType)
                     {
-                        var translation = SessionFacade.TextTranslation.Where(x => x.TextToTranslate.ToLower() == translate.ToLower()).FirstOrDefault();
-                        if (DiffTextType)
-                        {
-                            translation = SessionFacade.TextTranslation.Where(x => x.TextToTranslate.ToLower() == translate.ToLower() && x.Type == TextTypeId).FirstOrDefault();
-                        }
+                        translation = Cache.GetTextTranslations().FirstOrDefault(x => x.TextToTranslate.ToLower() == translate.ToLower() && x.Type == TextTypeId);
+                    }
                                                 
-                        if (translation != null)
-                        {
-                            var trans = translation.TextTranslations.Where(x => x.Language_Id == languageId).FirstOrDefault();
-                            var text = (trans != null ? trans.TextTranslated : string.Empty);
-                            if (string.IsNullOrEmpty(text) && SessionFacade.CurrentLanguageId != LanguageIds.Swedish)
-                            {
-                                trans = translation.TextTranslations.Where(x => x.Language_Id == SessionFacade.CurrentLanguageId).FirstOrDefault();
-                                text = (trans != null ? trans.TextTranslated : string.Empty);
-                            }
-
-                            translate = !string.IsNullOrEmpty(text) ? text : translate;
-                        }
-                    }
-                    catch
+                    if (translation != null)
                     {
+                        var trans = translation.TextTranslations.FirstOrDefault(x => x.Language_Id == languageId);
+                        var text = (trans != null ? trans.TextTranslated : string.Empty);
+                        if (string.IsNullOrEmpty(text) && SessionFacade.CurrentLanguageId != LanguageIds.Swedish)
+                        {
+                            trans = translation.TextTranslations.FirstOrDefault(x => x.Language_Id == SessionFacade.CurrentLanguageId);
+                            text = (trans != null ? trans.TextTranslated : string.Empty);
+                        }
+
+                        translate = !string.IsNullOrEmpty(text) ? text : translate;
                     }
+                }
+                catch
+                {
                 }
             }
             else if (source == Enums.TranslationSource.CaseTranslation)
             {
-                if (SessionFacade.CaseTranslation != null && customerId > 0)
+                if (customerId > 0)
                 {
                     try
                     {
-                        var translation = SessionFacade.CaseTranslation.Where(x => x.Customer_Id == customerId && x.Name.ToLower() == translate.getCaseFieldName().ToLower() && x.Language_Id == languageId).FirstOrDefault();
+                        var translation = Cache.GetCaseTranslations(customerId).FirstOrDefault(x => x.Name.ToLower() == translate.getCaseFieldName().ToLower() && x.Language_Id == languageId);
                         if (translation != null && !string.IsNullOrEmpty(translation.Label))
                             translate = translation.Label;
                         else
@@ -138,10 +146,10 @@
                             var instanceWord = GetInstanceWord(translate);
                             if (instanceWord != string.Empty)
                             {
-                                var translationText = SessionFacade.TextTranslation.Where(x => x.TextToTranslate.ToLower() == instanceWord.ToLower()).FirstOrDefault();
+                                var translationText = Cache.GetTextTranslations().FirstOrDefault(x => x.TextToTranslate.ToLower() == instanceWord.ToLower());
                                 if (translationText != null)
                                 {
-                                    var trans = translationText.TextTranslations.Where(x => x.Language_Id == languageId).FirstOrDefault();
+                                    var trans = translationText.TextTranslations.FirstOrDefault(x => x.Language_Id == languageId);
                                     translateByText = (trans != null ? trans.TextTranslated : string.Empty);
                                     if (translateByText != string.Empty)
                                         translate = translateByText;
