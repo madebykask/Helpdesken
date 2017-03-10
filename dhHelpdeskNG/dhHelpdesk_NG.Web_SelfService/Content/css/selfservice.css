@@ -1010,3 +1010,9 @@ div .multitext input[type='text'] {
 div .multitext i {
     cursor: pointer;
 }
+
+.btn-document {
+    margin-bottom: 10px;
+    display: block;
+    width: 3em;
+}

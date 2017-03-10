@@ -638,6 +638,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
             var orderType = orderTypeId.HasValue ? orderTypeRep.GetAll().GetById(orderTypeId.Value) : null;
             var orderTypeName = orderType != null ? orderType.MapToName() : null;
             var orderTypeDesc = orderType?.MapToDescription();
+            var orderTypeDoc = orderType?.MapToDocument();
             var employmentTypes = employmentTypeRep.GetAll();
             var regions = regionsRep.GetAll().GetByCustomer(customerId);
             var accountTypes = orderFieldTypesRep.GetAll().GetByType(orderTypeId).ActiveOnly();
@@ -672,6 +673,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                 level4Name = ordType.MapToName();
                 orderTypeName = orderTypeName + " - " + level4Name;
                 orderTypeDesc = ordType.MapToDescription();
+                orderTypeDoc = ordType.MapToDocument();
             }
 
             var workingGroupsWithEmails = new List<GroupWithEmails>();
@@ -737,7 +739,8 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                                     regions,
                                     accountTypes,
                                     allPrograms,
-                                    orderTypeDesc);
+                                    orderTypeDesc,
+                                    orderTypeDoc);
         }
 
         private FullOrderOverview[] Sort(FullOrderOverview[] items, SortField sort)

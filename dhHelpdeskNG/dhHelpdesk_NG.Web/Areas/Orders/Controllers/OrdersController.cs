@@ -64,6 +64,8 @@
 
         private readonly ISettingService _settingService;
 
+        private readonly IDocumentService _documentService;
+
         public OrdersController(
                 IMasterDataService masterDataService,
                 IOrdersService ordersService,
@@ -80,7 +82,8 @@
                 IUserPermissionsChecker userPermissionsChecker,
                 IOrderTypeService orderTypeService,
                 ICustomerService customerService,
-                ISettingService settingService)
+                ISettingService settingService,
+                IDocumentService documentService)
             : base(masterDataService)
         {
             _ordersService = ordersService;
@@ -96,6 +99,7 @@
             _orderTypeService = orderTypeService;
             _customerService = customerService;
             _settingService = settingService;
+            _documentService = documentService;
 
             _filesStateStore = editorStateCacheFactory.CreateForModule(ModuleName.Orders);
             _filesStore = temporaryFilesCacheFactory.CreateForModule(ModuleName.Orders);
@@ -418,6 +422,17 @@
         {
             _filesStateStore.AddDeletedItem(logId, OrderDeletedItem.Logs, orderId);
             return RedirectToAction("Logs", new { orderId, subtopic });
+        }
+
+        [HttpGet]
+        public FileContentResult DownloadDocument(int documentId)
+        {
+            var file = _documentService.GetDocumentFile(documentId);
+            if (file == null)
+            {
+                throw new HttpException((int)HttpStatusCode.NotFound, null);
+            }
+            return File(file.File, MimeType.BinaryFile, file.FileName);
         }
 
     }

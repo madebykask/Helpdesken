@@ -47,6 +47,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         private readonly IEmailService _emailService;
         private readonly TemporaryIdProvider _temporaryIdProvider;
         private readonly IOrderTypeService _orderTypeService;
+        private readonly IDocumentService _documentService;
 
         public OrdersController(IMasterDataService masterDataService,
             ICaseSolutionService caseSolutionService,
@@ -63,7 +64,8 @@ namespace DH.Helpdesk.SelfService.Controllers
             INewOrderModelFactory newOrderModelFactory,
             IEmailService emailService,
             TemporaryIdProvider temporaryIdProvider,
-            IOrderTypeService orderTypeService)
+            IOrderTypeService orderTypeService,
+            IDocumentService documentService)
             : base(masterDataService, caseSolutionService)
         {
             _ordersService = ordersService;
@@ -78,6 +80,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             _emailService = emailService;
             _temporaryIdProvider = temporaryIdProvider;
             _orderTypeService = orderTypeService;
+            _documentService = documentService;
 
             _filesStateStore = editorStateCacheFactory.CreateForModule(ModuleName.Orders);
             _filesStore = temporaryFilesCacheFactory.CreateForModule(ModuleName.Orders);
@@ -391,6 +394,17 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
 
             return RedirectToAction("AttachedFiles", new { entityId, subtopic });
+        }
+
+        [HttpGet]
+        public FileContentResult DownloadDocument(int documentId)
+        {
+            var file = _documentService.GetDocumentFile(documentId);
+            if (file == null)
+            {
+                throw new HttpException((int)HttpStatusCode.NotFound, null);
+            }
+            return File(file.File, MimeType.BinaryFile, file.FileName);
         }
     }
 }

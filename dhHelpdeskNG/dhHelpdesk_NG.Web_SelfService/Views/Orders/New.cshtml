@@ -40,6 +40,12 @@
         {
             <label class="alert alert-info cursor-default order-description">@Model.OrderTypeDescription</label>
         }
+        if (Model.OrderTypeDocument.Item1.HasValue)
+        {
+            <a href="@Url.Action("DownloadDocument", new {documentId = Model.OrderTypeDocument.Item1.Value})" class="btn btn-default btn-document" title="@Model.OrderTypeDocument.Item2">
+                <span class="glyphicon glyphicon-file"></span>
+            </a>
+        }
         @Html.EditorFor(m => m)
     }
 }
