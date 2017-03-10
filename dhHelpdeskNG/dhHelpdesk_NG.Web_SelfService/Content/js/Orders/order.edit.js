@@ -378,7 +378,7 @@
 
             function addMultiTextField(e) {
                 var maxFields = 10;
-                var $row = $(this.closest(".multitext"));
+                var $row = $(this).closest(".multitext");
                 var fieldId = $row.data("fieldId");
                 var allRows = $(".multitext[data-field-id='" + fieldId + "']");
                 if (allRows.length >= maxFields) {
@@ -405,7 +405,7 @@
 
             function removeMultiTextField(e) {
                 var minFields = 1;
-                var $row = $(this.closest(".multitext"));
+                var $row = $(this).closest(".multitext");
                 var fieldId = $row.data("fieldId");
                 var allRows = $(".multitext[data-field-id='" + fieldId + "']");
                 if (allRows.length <= minFields) {
