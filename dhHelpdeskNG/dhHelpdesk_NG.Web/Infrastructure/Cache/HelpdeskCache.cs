@@ -26,9 +26,6 @@ namespace DH.Helpdesk.Web.Infrastructure.Cache
 
         public IList<CaseFieldSettingsForTranslation> GetCaseTranslations(int customerId)
         {
-            if (SessionFacade.CurrentUser == null)
-                return null;
-
             return _cacheService.Get(string.Format(_caseTranslationsFormat, _caseTranslationsKey, customerId),
                 () => _masterDataService.GetCustomerCaseTranslations(customerId),
                 DateTime.UtcNow.AddMinutes(10));

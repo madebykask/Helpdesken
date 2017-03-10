@@ -100,12 +100,10 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
                 .InSingletonScope();
 
             this.Bind<ICacheService>()
-                .To<WebCacheService>()
-                .InSingletonScope();
+                .To<WebCacheService>();
 
             this.Bind<IHelpdeskCache>()
-                .To<HelpdeskCache>()
-                .InSingletonScope();
+                .To<HelpdeskCache>();
 
             this.Bind<IModulesInfoFactory>().To<ModulesInfoFactory>().InSingletonScope();
         }
