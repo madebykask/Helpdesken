@@ -39,7 +39,10 @@
                                     filter.Text,
                                     filter.RecordsOnPage,
                                     sortField,
-                                    orderTypesForCreateOrder);
+                                    orderTypesForCreateOrder)
+            {
+                OrderTypeId = filter.OrderTypeId
+            };
         }
 
         public OrdersGridModel Create(SearchResponse response, SortField sortField, bool showType)

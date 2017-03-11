@@ -43,7 +43,7 @@
         @Html.EditorFor(m => m.Title, "Fields/Text")
         @Html.EditorFor(m => m.EmploymentTypeId, "Fields/List", new { Source = Model.EmploymentTypes })
         @Html.EditorFor(m => m.OrdererAddress, "Fields/Text")
-        @if (Model.DepartmentId1.Show)
+        @*@if (Model.DepartmentId1.Show)
         {
             <tr>
                 <td class="span3">
@@ -54,7 +54,7 @@
                 </td>
                 <td class="span3"></td>
             </tr>
-        }
+        }*@
         @Html.EditorFor(m => m.DepartmentId1, "Fields/List", new { Source = Model.Departments, Id = "orderer_departmentId" })
         @Html.EditorFor(m => m.Unit, "Fields/List", new { Source = Model.Units, Id = "orderer_unit_select" })
         @Html.EditorFor(m => m.DepartmentId2, "Fields/List", new { Source = Model.Departments2 })

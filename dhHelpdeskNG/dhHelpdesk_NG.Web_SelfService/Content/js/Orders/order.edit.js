@@ -287,24 +287,24 @@
                 return false;
             });
 
-            if (that._options.isUserDepartmentVisible) {
+            //if (that._options.isUserDepartmentVisible) {
 
-                var $region = $("#region_dropdown");
-                if ($region.val()) {
-                    var $department = $("#orderer_departmentId");
-                    var originVal = $department.val();
+            //    var $region = $("#region_dropdown");
+            //    if ($region.val()) {
+            //        var $department = $("#orderer_departmentId");
+            //        var originVal = $department.val();
 
-                    applyUserDepartmentFilter($region.val())
-                    .done(function () {
-                        $department.val(originVal);
-                    });
-                }
+            //        applyUserDepartmentFilter($region.val())
+            //        .done(function () {
+            //            $department.val(originVal);
+            //        });
+            //    }
 
 
-                $region.on("change", function () {
-                    applyUserDepartmentFilter($(this).val());
-                });
-            }
+            //    $region.on("change", function () {
+            //        applyUserDepartmentFilter($(this).val());
+            //    });
+            //}
 
             if (that._options.isOrdererUnitVisible) {
 

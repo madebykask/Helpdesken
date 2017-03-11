@@ -33,18 +33,18 @@
             @Html.EditorFor(m => m.Title, "Fields/Text")
             @Html.EditorFor(m => m.EmploymentTypeId, "Fields/List", new {Source = Model.EmploymentTypes})
             @Html.EditorFor(m => m.OrdererAddress, "Fields/Text")
-            @if (Model.DepartmentId1.Show)
-            {
-                <div class="row form-group">
-                    <div class="col-md-3">
-                        <label>@Translation.Get("Område")</label>
-                    </div>
-                    <div class="col-md-6">
-                        @Html.DropDownListFor(m => m.RegionId, Model.Regions, string.Empty, new {id = "region_dropdown"})
-                    </div>
-                    <div class="col-md-3"></div>
-                </div>
-            }
+            @*@if (Model.DepartmentId1.Show)
+    {
+        <div class="row form-group">
+            <div class="col-md-3">
+                <label>@Translation.Get("Område")</label>
+            </div>
+            <div class="col-md-6">
+                @Html.DropDownListFor(m => m.RegionId, Model.Regions, string.Empty, new {id = "region_dropdown"})
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+    }*@
             @Html.EditorFor(m => m.DepartmentId1, "Fields/List", new {Source = Model.Departments, Id = "orderer_departmentId"})
             @Html.EditorFor(m => m.Unit, "Fields/List", new {Source = Model.Units, Id = "orderer_unit_select"})
             @Html.EditorFor(m => m.DepartmentId2, "Fields/List", new {Source = Model.Departments2})

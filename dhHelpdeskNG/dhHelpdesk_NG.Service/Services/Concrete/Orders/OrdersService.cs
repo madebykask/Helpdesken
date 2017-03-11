@@ -489,7 +489,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                         newCase.CaseType_Id = casetype.Id;                    //get another id
                     }
 
-                    newCase.Priority_Id = entity.OrderPropertyId;
+                    //newCase.Priority_Id = entity.OrderPropertyId;
                     newCase.User_Id = entity.User_Id;
                     newCase.ReportedBy = entity.UserId;
                     newCase.PersonsName = entity.Orderer;
