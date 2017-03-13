@@ -72,7 +72,7 @@
                             { 
                                 <tr>
                                     <td class="span3">
-                                        @Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id):
+                                        @Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id)
                                     </td>
                                     <td>
                                         @Html.CheckBoxFor(m => Model.IsDepartmentChecked, new { @class = "switchcheckbox" })
