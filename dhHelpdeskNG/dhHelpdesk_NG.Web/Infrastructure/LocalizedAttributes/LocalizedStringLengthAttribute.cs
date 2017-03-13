@@ -13,12 +13,17 @@
 
         public override string FormatErrorMessage(string name)
         {
-            var errorMessage = string.Format(
-                "string length should be between {0} and {1} character(s)",
-                this.MinimumLength,
-                this.MaximumLength);
+            var errorMessage = string.Format("{0} {1} {2}", Translation.GetCoreTextTranslation("Max"),
+                this.MaximumLength, Translation.GetCoreTextTranslation("tecken"));
 
-            return Translation.Get(errorMessage, Enums.TranslationSource.TextTranslation);
+            return errorMessage;
+
+//            var errorMessage = string.Format(
+//                "string length should be between {0} and {1} character(s)",
+//                this.MinimumLength,
+//                this.MaximumLength);
+//
+//            return Translation.Get(errorMessage, Enums.TranslationSource.TextTranslation);
         }
     }
 }

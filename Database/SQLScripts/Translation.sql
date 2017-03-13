@@ -5676,6 +5676,13 @@ If not exists (select * from tblTextTranslation where text_id = 1791 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1791, 2, 'One of these fields must be populated')
 GO
 
+If not exists (select * from tbltext where id = 1792)
+	insert into tbltext (id, TextString) VALUES (1792, 'Max')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1792 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1792, 2, 'Max')
+GO
+
 /* Id 1793 - 1800 SelfService */
 
 -- *** Run this last when put translation script above this line **--
