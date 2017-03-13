@@ -649,6 +649,27 @@ GO
 
 If not exists (select * from tblTextTranslation where text_id = 1793 and Language_Id = 1)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1793, 1, 'Beställningar')
+If not exists (select * from tbltext where id = 1794)
+	insert into tbltext (id, TextString, TextType) VALUES (1794, 'Records in search result', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1794 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1794, 1, 'Poster i sökresultat')
+GO
+
+
+If not exists (select * from tbltext where id = 1795)
+	insert into tbltext (id, TextString, TextType) VALUES (1795, 'Cases', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1795 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1795, 1, 'Ärenden')
+GO
+
+
+If not exists (select * from tbltext where id = 1796)
+	insert into tbltext (id, TextString, TextType) VALUES (1796, 'All Cases', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1796 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1796, 1, 'Alla ärenden')
 GO
 
 

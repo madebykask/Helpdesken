@@ -5681,6 +5681,13 @@ If not exists (select * from tbltext where id = 1792)
 GO
 If not exists (select * from tblTextTranslation where text_id = 1792 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1792, 2, 'Max')
+	
+	
+--**** 1794, 1795, 1796 Reserved in SelfService ****--
+
+
+
+
 GO
 
 /* Id 1793 - 1800 SelfService */

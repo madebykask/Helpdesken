@@ -26,6 +26,8 @@ namespace DH.Helpdesk.SelfService.Models.Case
         public List<DynamicCase> DynamicCases { get; set; }
 
         public CaseSearchResultModel CaseSearchResult { get; set; }
+
+        public int NumberOfCases { get; set; }
     }
 
  public class CaseSearchResultModel

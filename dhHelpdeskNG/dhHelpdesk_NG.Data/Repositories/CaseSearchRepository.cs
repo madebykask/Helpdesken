@@ -385,6 +385,8 @@ namespace DH.Helpdesk.Dal.Repositories
 								row.Columns = cols;
 								row.IsUnread = dr.SafeGetInteger("Status") == 1;
 								row.IsUrgent = timeLeft.HasValue && timeLeft < 0;
+                                row.IsClosed = caseFinishingDate.HasValue;
+
 								if (!row.Ignored)
 								{
 									ret.Items.Add(row);

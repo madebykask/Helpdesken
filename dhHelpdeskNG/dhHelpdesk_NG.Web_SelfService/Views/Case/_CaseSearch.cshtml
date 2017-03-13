@@ -30,17 +30,21 @@
                     <table>
                         <tr>
                             <td class="">
-                                &nbsp; &nbsp;  @Translation.Get("Filter", Enums.TranslationSource.TextTranslation) &nbsp;&nbsp;
+                                &nbsp; &nbsp;  @Translation.Get("Status", Enums.TranslationSource.TextTranslation) &nbsp;&nbsp;
                             </td>
                             <td>
                                 <select id="ProgressId" name="ProgressId">
-                                    <option value="@CaseProgressFilter.CasesInProgress">@ongoingCaseCaption</option>
-                                    <option value="@CaseProgressFilter.ClosedCases">@closedCaseCaption</option>
-                                    <option value="@CaseProgressFilter.None">@allCaseCaption</option>
-                                </select>
-                                @Html.TextBoxFor(s => Model.ProgressId)
-
+                                    <option value="@CaseProgressFilter.CasesInProgress" @(Model.ProgressId==CaseProgressFilter.CasesInProgress?"selected":"")>@ongoingCaseCaption</option>
+                                    <option value="@CaseProgressFilter.ClosedCases" @(Model.ProgressId==CaseProgressFilter.ClosedCases?"selected":"")>@closedCaseCaption</option>
+                                    <option value="@CaseProgressFilter.None" @(Model.ProgressId==CaseProgressFilter.None?"selected":"")>@allCaseCaption</option>
+                                </select>                                
                             </td>
+                            
+                        </tr>
+                        <tr>
+                            <td>
+                                <br />
+                            </td>                            
                         </tr>
                         <tr>
                             <td class="">

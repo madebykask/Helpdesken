@@ -500,7 +500,7 @@
         }
 
         [HttpGet]
-        public ActionResult UserCases(int customerId, string progressId)
+        public ActionResult UserCases(int customerId, string progressId = "")
         {
             var currentCustomer = default(Customer);
             if (SessionFacade.CurrentCustomer != null)
@@ -509,13 +509,30 @@
             {
                 ErrorGenerator.MakeError("Customer is not valid!");
                 return RedirectToAction("Index", "Error");
-            }                
+            }
+
+            var pharaseSearch = "";        
+            if (progressId == "")
+            {
+                if (SessionFacade.CurrentCaseSearch != null)
+                {
+                    var lastprogressId = SessionFacade.CurrentCaseSearch.caseSearchFilter?.CaseProgress;
+                    pharaseSearch = SessionFacade.CurrentCaseSearch.caseSearchFilter?.FreeTextSearch;
+                    progressId = (!string.IsNullOrEmpty(lastprogressId) ? lastprogressId : CaseProgressFilter.CasesInProgress);
+                }
+                else
+                {
+                    progressId = CaseProgressFilter.CasesInProgress;
+                }
+            }
 
             var languageId = SessionFacade.CurrentLanguageId;
 
             UserCasesModel model = null;
 
-            if (progressId != CaseProgressFilter.ClosedCases && progressId != CaseProgressFilter.CasesInProgress)
+            if (progressId != CaseProgressFilter.ClosedCases && 
+                progressId != CaseProgressFilter.CasesInProgress &&
+                progressId != CaseProgressFilter.None)
             {
                 ErrorGenerator.MakeError("Process is not valid!", 202);
                 return RedirectToAction("Index", "Error");                
@@ -524,7 +541,7 @@
             if(SessionFacade.CurrentUserIdentity != null)
             {
 
-                model = GetUserCasesModel(currentCustomer.Id, languageId, SessionFacade.CurrentUserIdentity.UserId, "", 20, progressId);
+                model = GetUserCasesModel(currentCustomer.Id, languageId, SessionFacade.CurrentUserIdentity.UserId, pharaseSearch, 20, progressId);
 
             }
             else
@@ -862,7 +879,9 @@
                 var ascending = frm.ReturnFormValue("hidSortByAsc").ConvertStringToBool();
                 var id = frm.ReturnFormValue("MailGuid");
 
-                if (progressId != CaseProgressFilter.ClosedCases && progressId != CaseProgressFilter.CasesInProgress)
+                if (progressId != CaseProgressFilter.ClosedCases && 
+                    progressId != CaseProgressFilter.CasesInProgress &&
+                    progressId != CaseProgressFilter.None)
                 {                    
                     ErrorGenerator.MakeError("Process is not valid!", 202);
                     return RedirectToAction("Index", "Error");                                 
@@ -872,6 +891,7 @@
                                               pharasSearch, maxRecords, progressId,
                                               sortBy, ascending);
 
+                model.ProgressId = progressId;
                 return PartialView("CaseOverview", model);
             }
             catch(Exception e)
@@ -1227,7 +1247,12 @@
             }
             srm.Cases = CaseSearchTranslate(srm.Cases, cusId);
             model.CaseSearchResult = srm;
+
             SessionFacade.CurrentCaseSearch = sm;
+            SessionFacade.CurrentCaseSearch.caseSearchFilter.CaseProgress = progressId;
+            SessionFacade.CurrentCaseSearch.caseSearchFilter.FreeTextSearch = pharasSearch;
+
+            model.NumberOfCases = srm.Cases.Count;
 
             return model;
         }

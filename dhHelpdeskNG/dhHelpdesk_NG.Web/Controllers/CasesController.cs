@@ -807,8 +807,9 @@ namespace DH.Helpdesk.Web.Controllers
 					{"caseIconTitle", searchRow.CaseIcon.CaseIconTitle()},
 					{"caseIconUrl", string.Format("/Content/icons/{0}", searchRow.CaseIcon.CaseIconSrc())},
 					{"isUnread", searchRow.IsUnread},
-					{"isUrgent", searchRow.IsUrgent}
-				};
+					{"isUrgent", searchRow.IsUrgent},
+                    {"isClosed", searchRow.IsUrgent}
+                };
 				var caseLockModel = GetCaseLockModel(searchRow.Id, SessionFacade.CurrentUser.Id, false);
 				if (caseLockModel.IsLocked)
 				{
@@ -5808,6 +5809,7 @@ namespace DH.Helpdesk.Web.Controllers
                                     },
                                     { "isUnread", searchRow.IsUnread },
                                     { "isUrgent", searchRow.IsUrgent },
+                                    { "isClosed", searchRow.IsClosed},
                                 };
                 foreach (var col in gridSettings.columnDefs)
                 {
