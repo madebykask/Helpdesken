@@ -47,7 +47,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings
             this.OrdererId = ordererId;
         }
 
-        [LocalizedStringLength(30)]
+        [LocalizedStringLength(50)]
         public string Header { get; set; }
 
         [NotNull]

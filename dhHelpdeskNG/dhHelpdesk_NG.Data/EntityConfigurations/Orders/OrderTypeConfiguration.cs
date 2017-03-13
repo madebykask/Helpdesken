@@ -32,15 +32,15 @@
                 .HasForeignKey(x => x.Parent_OrderType_Id)
                 .WillCascadeOnDelete(false);
 
-            this.Property(x => x.CaptionOrdererInfo).IsOptional().HasMaxLength(30);
-            this.Property(x => x.CaptionUserInfo).IsOptional().HasMaxLength(30);
-            this.Property(x => x.CaptionReceiverInfo).IsOptional().HasMaxLength(30);
-            this.Property(x => x.CaptionGeneral).IsOptional().HasMaxLength(30);
-            this.Property(x => x.CaptionOrderInfo).IsOptional().HasMaxLength(30);
-            this.Property(x => x.CaptionOrder).IsOptional().HasMaxLength(30);
-            this.Property(x => x.CaptionDeliveryInfo).IsOptional().HasMaxLength(30);
-            this.Property(x => x.CaptionProgram).IsOptional().HasMaxLength(30);
-            this.Property(x => x.CaptionOther).IsOptional().HasMaxLength(30);
+            this.Property(x => x.CaptionOrdererInfo).IsOptional().HasMaxLength(50);
+            this.Property(x => x.CaptionUserInfo).IsOptional().HasMaxLength(50);
+            this.Property(x => x.CaptionReceiverInfo).IsOptional().HasMaxLength(50);
+            this.Property(x => x.CaptionGeneral).IsOptional().HasMaxLength(50);
+            this.Property(x => x.CaptionOrderInfo).IsOptional().HasMaxLength(50);
+            this.Property(x => x.CaptionOrder).IsOptional().HasMaxLength(50);
+            this.Property(x => x.CaptionDeliveryInfo).IsOptional().HasMaxLength(50);
+            this.Property(x => x.CaptionProgram).IsOptional().HasMaxLength(50);
+            this.Property(x => x.CaptionOther).IsOptional().HasMaxLength(50);
             this.Property(x => x.CreateCase_CaseType_Id).IsOptional();
             this.Property(x => x.Customer_Id).IsRequired();
             this.Property(x => x.Description).IsOptional().HasMaxLength(1500).HasColumnName("OrderTypeDescription");

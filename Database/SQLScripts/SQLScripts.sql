@@ -228,5 +228,19 @@ if exists (select * from syscolumns inner join sysobjects on sysobjects.id = sys
 	ALTER TABLE [dbo].[tblOrderType] ALTER COLUMN [OrderTypeDescription] nvarchar(1500) NULL
 GO
 
+if exists(select * from sysobjects WHERE Name = N'tblOrderType')
+	begin
+	Alter table [tblOrderType] alter column [CaptionUserInfo] [nvarchar](50)
+	Alter table [tblOrderType] alter column [CaptionOrdererInfo] [nvarchar](50)
+	Alter table [tblOrderType] alter column [CaptionReceiverInfo] [nvarchar](50)
+	Alter table [tblOrderType] alter column [CaptionGeneral] [nvarchar](50)
+	Alter table [tblOrderType] alter column [CaptionOrder] [nvarchar](50)
+	Alter table [tblOrderType] alter column [CaptionOrderInfo] [nvarchar](50)
+	Alter table [tblOrderType] alter column [CaptionDeliveryInfo] [nvarchar](50)
+	Alter table [tblOrderType] alter column [CaptionProgram] [nvarchar](50)
+	Alter table [tblOrderType] alter column [CaptionOther] [nvarchar](50)
+	end
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.31'

@@ -25,7 +25,7 @@
             this.ReceiverId = receiverId;
         }
 
-        [LocalizedStringLength(30)]
+        [LocalizedStringLength(50)]
         public string Header { get; set; }
 
         [NotNull]
