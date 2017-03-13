@@ -4252,7 +4252,8 @@ namespace DH.Helpdesk.Web.Controllers
 
             m.standardTexts = this._standardTextService.GetStandardTexts(customerId);
             m.Languages = this._languageService.GetActiveLanguages();
-            m.SendToDialogModel = this.CreateNewSendToDialogModel(customerId, responsibleUsersList.ToList(), customerSetting); //ToDo: remove after release
+            m.SendToDialogModel = this.CreateNewSendToDialogModel(customerId, responsibleUsersList.ToList(), customerSetting, false);
+            m.FollowersModel = this.CreateNewSendToDialogModel(customerId, responsibleUsersList.ToList(), customerSetting);
             m.CaseLog = this._logService.InitCaseLog(SessionFacade.CurrentUser.Id, string.Empty);
             m.CaseKey = m.case_.Id == 0 ? m.case_.CaseGUID.ToString() : m.case_.Id.ToString(global::System.Globalization.CultureInfo.InvariantCulture);
             m.LogKey = m.CaseLog.LogGuid.ToString();
@@ -5025,10 +5026,10 @@ namespace DH.Helpdesk.Web.Controllers
             return ret;
         }
 
-        private SendToDialogModel CreateNewSendToDialogModel(int customerId, IList<DHDomain.User> users, Setting customerSetting)
+        private SendToDialogModel CreateNewSendToDialogModel(int customerId, IList<DHDomain.User> users, Setting customerSetting, bool includeAdmins = true)
         {            
             var emailGroups = _emailGroupService.GetEmailGroupsWithEmails(customerId);
-            var workingGroups = _workingGroupService.GetWorkingGroupsWithActiveEmails(customerId);
+            var workingGroups = _workingGroupService.GetWorkingGroupsWithActiveEmails(customerId, includeAdmins);
             var administrators = new List<ItemOverview>();
 
             if (users != null)

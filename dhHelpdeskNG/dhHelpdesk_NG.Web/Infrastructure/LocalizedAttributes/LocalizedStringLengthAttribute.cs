@@ -17,13 +17,6 @@
                 this.MaximumLength, Translation.GetCoreTextTranslation("tecken"));
 
             return errorMessage;
-
-//            var errorMessage = string.Format(
-//                "string length should be between {0} and {1} character(s)",
-//                this.MinimumLength,
-//                this.MaximumLength);
-//
-//            return Translation.Get(errorMessage, Enums.TranslationSource.TextTranslation);
         }
     }
 }

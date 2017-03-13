@@ -68,6 +68,7 @@
 
         public CaseLog CaseLog { get; set; }
         public SendToDialogModel SendToDialogModel { get; set; }
+        public SendToDialogModel FollowersModel { get; set; }
 
         public CaseMailSetting CaseMailSetting { get; set; }
         public User RegByUser { get; set; }
