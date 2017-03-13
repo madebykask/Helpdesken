@@ -1360,7 +1360,10 @@ namespace DH.Helpdesk.Web.Controllers
                             m.TimeRequired = d.ChargeMandatory.ToBool();
                         }
                     }
+                    
                     // check state secondary info
+                    m.CaseLog.SendMailAboutCaseToNotifier = customer.CommunicateWithNotifier.ToBool();
+
                     m.Disable_SendMailAboutCaseToNotifier = false;
                     if (m.case_.StateSecondary_Id > 0)
                         if (m.case_.StateSecondary != null)

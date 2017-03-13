@@ -50,4 +50,22 @@ function LogInitForm() {
     $('#log-action-save').on('click',function(e){
       
     });
+
+    $('#case__StateSecondary_Id').change(function () {
+        $('#CaseLog_SendMailAboutCaseToNotifier').removeAttr('disabled');
+        var curVal = $('#case__StateSecondary_Id').val();
+        $('#case__StateSecondary_Id option[value=' + curVal + ']').attr('selected', 'selected');
+        $.post('/Cases/ChangeStateSecondary', { 'id': $(this).val() }, function (data) {
+            // disable send mail checkbox
+            if (data.NoMailToNotifier == 1) {
+                $('#CaseLog_SendMailAboutCaseToNotifier').prop('checked', false);
+                $('#CaseLog_SendMailAboutCaseToNotifier').attr('disabled', true);
+            }
+            // set workinggroup id
+            var exists = $('#case__WorkingGroup_Id option[value=' + data.WorkingGroup_Id + ']').length;
+            if (exists > 0 && data.WorkingGroup_Id > 0) {
+                $("#case__WorkingGroup_Id").val(data.WorkingGroup_Id);
+            }
+        }, 'json');
+    });
 }
