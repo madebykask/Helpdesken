@@ -12,6 +12,7 @@ $(function () {
         var defaultCategoryId = 0;
         var answerCaption = '';
         var internalAnswerCaption = '';
+        var urlCaption = '';
         var fontBoldClass;
         var downloadFileUrl = '';
         var baseFilePath = '';
@@ -25,6 +26,7 @@ $(function () {
             hierarchyData = params.hierarchyData || [];
             answerCaption = params.answerCaption ||'';
             internalAnswerCaption = params.internalAnswerCaption || '';
+            urlCaption = params.URLCaption || '';
 
             downloadFileUrl = params.downloadFileUrl || '';            
 
@@ -178,9 +180,17 @@ $(function () {
                 var faq = faqs[i];                
 
                 if (faq.Question != '' || faq.Answer != '') {
+                    var url1 = faq.Url1.replace(/\</g, "").replace(/\</g, "");
+                    var url2 = faq.Url2.replace(/\</g, "").replace(/\</g, "");
                     var faqDetails = dateToDisplayDate(faq.CreatedDate) + '<br /><br />' +
-                                    '<b>' + answerCaption + '</b><br />' + faq.Answer.replace(/\</g, "").replace(/\>/g, "") + '<br /><br />' +
-                                    '<b>' + internalAnswerCaption + '</b><br/>' + faq.InternalAnswer.replace(/\</g, "").replace(/\</g, "") + '<br />';
+                                    '<b>' + answerCaption + '</b><br />' + faq.Answer.replace(/\</g, "").replace(/\>/g, "") + '<br /><br />';
+                    //                                    '<b>' + internalAnswerCaption + '</b><br/>' + faq.InternalAnswer.replace(/\</g, "").replace(/\</g, "") + '<br /><br />' +
+                    if (url1) {
+                        faqDetails = faqDetails + '<b>' + urlCaption + '</b><br/>' + '<a href="' + url1 + '">' + url1 + '<a/>' + '<br />';
+                    }
+                    if (url2) {
+                        faqDetails = faqDetails + '<b>' + urlCaption + '</b><br/>' + '<a href="' + url2 + '">' + url2 + '<a/>' + '<br /><br />';
+                    }
 
                     faqDetails = faqDetails.replace(/(?:\r\n|\r|\n)/g, '<br />');
 
