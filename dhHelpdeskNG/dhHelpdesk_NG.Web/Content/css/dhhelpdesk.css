@@ -3969,3 +3969,7 @@ table .multitext input[type='text'] {
 table .multitext i {
     cursor: pointer;
 }
+
+.pb5 {
+    padding-bottom: 5px !important;
+}
