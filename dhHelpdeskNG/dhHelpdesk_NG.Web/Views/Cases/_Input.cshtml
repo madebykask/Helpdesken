@@ -2442,36 +2442,46 @@
             },
             "CaseLog.TextExternal": {
                 maxlength: 3000,
-                require_from_group: {
-                    param: [1, ".log-field"],
-                    depends: function(element) {
-                        var timeSpentHour = $("#CaseLog_WorkingTimeHour").val().replace(/\r/g, "") !== "";
-                        var timeSpentMin = $("#CaseLog_WorkingTimeMinute").val().replace(/\r/g, "") !== "";
-                        var overTimeHour = $("#CaseLog_OvertimeHour").val().replace(/\r/g, "") !== "";
-                        var overTimeMin = $("#CaseLog_OvertimeMinute").val().replace(/\r/g, "") !== "";
-                        var material = $("#" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)").val().replace(/\r/g, "") !== "0"
-                        && $("#" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)").val().replace(/\r/g, "") !== "";
-                        var price = $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "0"
-                        && $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "";
-                        return timeSpentHour || timeSpentMin || overTimeHour || overTimeMin || material || price;
-                    }
+                @if (Model.CustomerSettings.ModuleInvoice)
+                {
+                    <text>
+                        require_from_group: {
+                            param: [1, ".log-field"],
+                            depends: function(element) {
+                                var timeSpentHour = $("#CaseLog_WorkingTimeHour").val().replace(/\r/g, "") !== "";
+                                var timeSpentMin = $("#CaseLog_WorkingTimeMinute").val().replace(/\r/g, "") !== "";
+                                var overTimeHour = $("#CaseLog_OvertimeHour").val().replace(/\r/g, "") !== "";
+                                var overTimeMin = $("#CaseLog_OvertimeMinute").val().replace(/\r/g, "") !== "";
+                                var material = $("#" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)").val().replace(/\r/g, "") !== "0"
+                                && $("#" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)").val().replace(/\r/g, "") !== "";
+                                var price = $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "0"
+                                && $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "";
+                                return timeSpentHour || timeSpentMin || overTimeHour || overTimeMin || material || price;
+                            }
+                        }
+                    </text>
                 }
             },
             "CaseLog.TextInternal": {
                 maxlength: 3000,
-                require_from_group: {
-                    param: [1, ".log-field"],
-                    depends: function(element) {
-                        var timeSpentHour = $("#CaseLog_WorkingTimeHour").val().replace(/\r/g, "") !== "";
-                        var timeSpentMin = $("#CaseLog_WorkingTimeMinute").val().replace(/\r/g, "") !== "";
-                        var overTimeHour = $("#CaseLog_OvertimeHour").val().replace(/\r/g, "") !== "";
-                        var overTimeMin = $("#CaseLog_OvertimeMinute").val().replace(/\r/g, "") !== "";
-                        var material = $("#" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)").val().replace(/\r/g, "") !== "0"
-                        && $("#" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)").val().replace(/\r/g, "") !== "";
-                        var price = $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "0"
-                        && $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "";
-                        return timeSpentHour || timeSpentMin || overTimeHour || overTimeMin || material || price;
-                    }
+                @if (Model.CustomerSettings.ModuleInvoice)
+                {
+                    <text>
+                        require_from_group: {
+                            param: [1, ".log-field"],
+                            depends: function(element) {
+                                var timeSpentHour = $("#CaseLog_WorkingTimeHour").val().replace(/\r/g, "") !== "";
+                                var timeSpentMin = $("#CaseLog_WorkingTimeMinute").val().replace(/\r/g, "") !== "";
+                                var overTimeHour = $("#CaseLog_OvertimeHour").val().replace(/\r/g, "") !== "";
+                                var overTimeMin = $("#CaseLog_OvertimeMinute").val().replace(/\r/g, "") !== "";
+                                var material = $("#" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)").val().replace(/\r/g, "") !== "0"
+                                && $("#" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)").val().replace(/\r/g, "") !== "";
+                                var price = $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "0"
+                                && $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "";
+                                return timeSpentHour || timeSpentMin || overTimeHour || overTimeMin || material || price;
+                            }
+                        }
+                    </text>
                 }
             },
             "CaseLog.WorkingTimeHour": {
