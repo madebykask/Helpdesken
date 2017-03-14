@@ -38,11 +38,11 @@
             <i class="icon-plus-sign" name="add"></i>
             <i class="icon-minus-sign" name="remove"></i>
         </td>
-        <td class="span3">
-            @*@if (i == multiTextValuesArr.Length - 1)
-            {
-                @Model.Help
-            }*@
+@if (i == 0)
+{
+        <td class="span3" rowspan="@multiTextValuesArr.Length">
+            @Model.Help
         </td>
+}
     </tr>
 }

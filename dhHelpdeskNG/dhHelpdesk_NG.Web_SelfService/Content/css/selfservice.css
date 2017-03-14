@@ -1000,11 +1000,13 @@ table.table-orders th span.glyphicon {
 
 .multitext .input-group {
     display: inline-block;
-    padding-left: 15px; 
+    padding-left: 15px;
+    float: left;
 }
 
 div .multitext input[type='text'] {
     margin-right: 5px;
+    width: 190px;
 }
 
 div .multitext i {

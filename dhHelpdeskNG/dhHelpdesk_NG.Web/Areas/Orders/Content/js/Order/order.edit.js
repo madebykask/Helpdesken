@@ -316,7 +316,9 @@
                     return;
                 }
 
-                var $templateHtml = $($row.clone().wrapAll("<div/>").parent().html());
+                var $rowClone = $row.clone();
+                $rowClone.find("td:eq(2)").remove(); //remove helpcolumn
+                var $templateHtml = $($rowClone.wrapAll("<div/>").parent().html());
                 var $id = $templateHtml.find("input[name$='id']");
                 var $name = $templateHtml.find("input[name$='name']");
                 $templateHtml.find(".number").html(allRows.length + 1);
@@ -325,6 +327,7 @@
                 $templateHtml.find("i[name='add']").on("click", addMultiTextField);
                 $templateHtml.find("i[name='remove']").on("click", removeMultiTextField);
                 allRows.last().after($templateHtml);
+                allRows.first().find("td:eq(2)").attr("rowspan", allRows.length + 1);
 
                 $id.typeahead(getOrderComputerUserSearchOptions(function (obj) {
                     var item = JSON.parse(obj);
@@ -342,9 +345,16 @@
                 if (allRows.length <= minFields) {
                     return;
                 }
-
+                var helpText = allRows.first().find("td:eq(2)");
                 $row.remove();
                 allRows = $(".multitext[data-field-id='" + fieldId + "']");
+                //insert helptext if deleted
+                var $firstRow = allRows.first();
+                if ($firstRow.find("td").length < 3) {
+                    $firstRow.append(helpText);
+                }
+                $firstRow.find("td:eq(2)").attr("rowspan", allRows.length);
+                //reindex names
                 allRows.find(".number").each(function(i, e) {
                     $(e).html(i + 1);
                 });

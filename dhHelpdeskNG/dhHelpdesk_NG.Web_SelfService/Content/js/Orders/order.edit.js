@@ -385,7 +385,9 @@
                     return;
                 }
 
-                var $templateHtml = $($row.clone().wrapAll("<div/>").parent().html());
+                var $rowClone = $row.clone();
+                $rowClone.find("div:eq(2)").remove(); //remove helpcolumn
+                var $templateHtml = $($rowClone.wrapAll("<div/>").parent().html());
                 var $id = $templateHtml.find("input[name$='id']");
                 var $name = $templateHtml.find("input[name$='name']");
                 $templateHtml.find(".number").html(allRows.length + 1);
@@ -412,8 +414,15 @@
                     return;
                 }
 
+                var helpText = allRows.first().find("div:eq(2)");
                 $row.remove();
                 allRows = $(".multitext[data-field-id='" + fieldId + "']");
+                //insert helptext if deleted
+                var $firstRow = allRows.first();
+                if ($firstRow.find("div").length < 3) {
+                    $firstRow.append(helpText);
+                }
+                //reindex names
                 allRows.find(".number").each(function (i, e) {
                     $(e).html(i + 1);
                 });
