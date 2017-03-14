@@ -40,8 +40,8 @@
                                     <td>
                                         @Translation.Get("Beskrivning", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td>
-                                        @Html.TextAreaFor(model => model.OrderType.Description, new { style = "width:600px; height:125px;", maxlength = "1500" })
+                                    <td class="pb5">
+                                        @Html.TextAreaFor(model => model.OrderType.Description, new { style = "width:600px; height:125px;", maxlength = "1500", @class = "richtexteditor"  })
                                     </td>
                                 </tr>
                                 <tr>

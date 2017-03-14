@@ -85,6 +85,7 @@
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult Edit(OrderType orderType)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
