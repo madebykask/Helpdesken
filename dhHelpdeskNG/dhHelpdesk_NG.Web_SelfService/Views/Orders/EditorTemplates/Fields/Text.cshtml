@@ -21,6 +21,11 @@
                 continue;
             }
             htmlAttributes.Add(inputAttribute.Key, inputAttribute.Value);
+            if (inputAttribute.Key.Equals("maxlength", StringComparison.InvariantCultureIgnoreCase))
+            {
+                htmlAttributes.Add("data-val-length", string.Format(Translation.Get("Ange högst {0} tecken."), inputAttribute.Value));
+                htmlAttributes.Add("data-val-length-max", inputAttribute.Value);
+            }
         }
     }
     else

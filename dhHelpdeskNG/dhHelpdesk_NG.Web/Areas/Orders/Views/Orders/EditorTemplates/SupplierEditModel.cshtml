@@ -4,8 +4,8 @@
 <h4>@Model.Header</h4>
 <table class="tableform">
     <tbody>
-        @Html.EditorFor(m => m.SupplierOrderNumber, "Fields/Text")              
+        @Html.EditorFor(m => m.SupplierOrderNumber, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "20" } } })              
         @Html.EditorFor(m => m.SupplierOrderDate, "Fields/Date", new { id = "supplierorderdate_datepicker" })              
-        @Html.EditorFor(m => m.SupplierOrderInfo, "Fields/Text")              
+        @Html.EditorFor(m => m.SupplierOrderInfo, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "200" } } })             
     </tbody>
 </table>

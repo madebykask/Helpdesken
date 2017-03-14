@@ -32,11 +32,12 @@
                     </tr>
                 }*@
             @*@Html.EditorFor(m => m.ReceiverId, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_ReceiverId" } }}) *@
-            @Html.EditorFor(m => m.ReceiverName, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_ReceiverName" } } })
-            @Html.EditorFor(m => m.ReceiverEmail, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_ReceiverEmail" } } })
-            @Html.EditorFor(m => m.ReceiverPhone, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_ReceiverPhone" } } })
-            @Html.EditorFor(m => m.ReceiverLocation, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_ReceiverLocation" } } })
-            @Html.EditorFor(m => m.MarkOfGoods, "Fields/Text")
+            @Html.EditorFor(m => m.ReceiverName, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_ReceiverName" }, { "maxlength", "50" } } })
+            @Html.EditorFor(m => m.ReceiverEmail, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_ReceiverEmail" }, { "maxlength", "100" } } })
+            @Html.EditorFor(m => m.ReceiverPhone, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_ReceiverPhone" }, { "maxlength", "50" } } })
+            @Html.EditorFor(m => m.ReceiverLocation, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_ReceiverLocation" }, { "maxlength", "50" } } })
+            @Html.EditorFor(m => m.MarkOfGoods, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "50" } } })
+            
         </div>
     </div>
 </div>

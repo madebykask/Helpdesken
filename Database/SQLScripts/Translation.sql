@@ -5681,16 +5681,17 @@ If not exists (select * from tbltext where id = 1792)
 GO
 If not exists (select * from tblTextTranslation where text_id = 1792 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1792, 2, 'Max')
-	
-	
---**** 1794, 1795, 1796 Reserved in SelfService ****--
-
-
-
-
 GO
+	
+	
+--**** 1793, 1794, 1795, 1796 Reserved in SelfService ****--
 
-/* Id 1793 - 1800 SelfService */
+If not exists (select * from tbltext where id = 1800)
+	insert into tbltext (id, TextString) VALUES (1800, 'Ange högst {0} tecken')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1800 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1800, 2, 'Please enter no more than {0} characters.')
+GO
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
