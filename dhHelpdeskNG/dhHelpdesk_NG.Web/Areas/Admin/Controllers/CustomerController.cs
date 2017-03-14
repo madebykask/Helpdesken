@@ -188,6 +188,7 @@
                 newCustomerCaseFieldSettings.EMailIdentifier = cfs.EMailIdentifier;
                 newCustomerCaseFieldSettings.ChangedDate = DateTime.UtcNow;
                 newCustomerCaseFieldSettings.CreatedDate = DateTime.UtcNow;
+                newCustomerCaseFieldSettings.CaseFieldSettingsGUID = Guid.NewGuid();
               
 
                 this._customerService.SaveCaseFieldSettingsForCustomerCopy(customer.Id, customer.Language_Id, newCustomerCaseFieldSettings, out errors);
