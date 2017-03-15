@@ -1370,6 +1370,10 @@ namespace DH.Helpdesk.Web.Controllers
                         if (m.case_.StateSecondary != null)
                         {
                             m.Disable_SendMailAboutCaseToNotifier = m.case_.StateSecondary.NoMailToNotifier == 1 ? true : false;
+                            if (m.case_.StateSecondary.NoMailToNotifier == 1)
+                                m.CaseLog.SendMailAboutCaseToNotifier = false;
+                            else
+                                m.CaseLog.SendMailAboutCaseToNotifier = true;
                         }
 
                     m.stateSecondaries = this._stateSecondaryService.GetStateSecondaries(customerId);
@@ -4550,6 +4554,10 @@ namespace DH.Helpdesk.Web.Controllers
                 if (m.case_.StateSecondary != null)
                 {
                     m.Disable_SendMailAboutCaseToNotifier = m.case_.StateSecondary.NoMailToNotifier == 1;
+                    if (m.case_.StateSecondary.NoMailToNotifier == 1)
+                        m.CaseLog.SendMailAboutCaseToNotifier = false;
+                    else
+                        m.CaseLog.SendMailAboutCaseToNotifier = true;
                 }
             }
 

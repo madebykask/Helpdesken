@@ -735,6 +735,10 @@ function CaseInitForm() {
                 $('#CaseLog_SendMailAboutCaseToNotifier').prop('checked', false);
                 $('#CaseLog_SendMailAboutCaseToNotifier').attr('disabled', true);
             }
+            else {
+                $('#CaseLog_SendMailAboutCaseToNotifier').prop('checked', true);
+                $('#CaseLog_SendMailAboutCaseToNotifier').attr('disabled', false);
+            }
             // set workinggroup id
             var exists = $('#case__WorkingGroup_Id option[value=' + data.WorkingGroup_Id + ']').length;
             if (exists > 0 && data.WorkingGroup_Id > 0) {               

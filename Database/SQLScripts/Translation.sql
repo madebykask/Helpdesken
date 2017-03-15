@@ -5693,5 +5693,15 @@ If not exists (select * from tblTextTranslation where text_id = 1800 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1800, 2, 'Please enter no more than {0} characters.')
 GO
 
+UPDATE tblText Set TextString = 'Informera anmälare och följare om åtgärder' WHERE Id=1743;
+GO
+
+If not exists (select * from tbltext where id = 1797)
+	insert into tbltext (id, TextString) VALUES (1797, 'Skicka mail med extern notering till anmälaren')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1797 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1797, 2, 'Send external lognote to initiator')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

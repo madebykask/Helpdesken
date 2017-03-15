@@ -1381,7 +1381,7 @@ namespace DH.Helpdesk.Services.Services
                 {
                     if (!String.IsNullOrEmpty(m.Body) && !String.IsNullOrEmpty(m.Subject))
                     {
-                        if (!cms.DontSendMailToNotifier && !dontSendMailToNotfier && !string.IsNullOrEmpty(newCase.PersonsEmail))
+                        if (!cms.DontSendMailToNotifier && !string.IsNullOrEmpty(newCase.PersonsEmail))
                         {
                             var to = newCase.PersonsEmail.Split(';', ',').ToList();
                             var extraFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(newCase.Id).Select(x => x.Follower).ToList();
@@ -1797,7 +1797,7 @@ namespace DH.Helpdesk.Services.Services
                             }
                         }
 
-                        if (!cms.DontSendMailToNotifier && !dontSendMailToNotfier)
+                        if (!cms.DontSendMailToNotifier)
                         {                                
                             var to = newCase.PersonsEmail.Split(';', ',').ToList();
                             var extraFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(newCase.Id).Select(x => x.Follower).ToList();
