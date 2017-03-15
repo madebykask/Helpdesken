@@ -116,16 +116,16 @@
         }
 
         [HttpGet]
-        public ViewResult Edit(int id, int activityType, int caseId)
+        public ViewResult Edit(int id, int accountActivityId, int caseId)
         {
             this.userTemporaryFilesStorage.ResetCacheForObject(id);
             this.userEditorValuesStorage.ClearObjectDeletedFiles(id);
 
             AccountForEdit model = this.orderAccountProxyService.Get(id);
             AccountFieldsSettingsForModelEdit settings =
-                this.orderAccountSettingsProxyService.GetFieldsSettingsForModelEdit(activityType, OperationContext);
-            AccountOptionsResponse options = this.orderAccountProxyService.GetOptions(activityType, OperationContext);
-            HeadersFieldSettings headers = this.orderAccountSettingsProxyService.GetHeadersFieldSettings(activityType);
+                this.orderAccountSettingsProxyService.GetFieldsSettingsForModelEdit(accountActivityId, OperationContext);
+            AccountOptionsResponse options = this.orderAccountProxyService.GetOptions(accountActivityId, OperationContext);
+            HeadersFieldSettings headers = this.orderAccountSettingsProxyService.GetHeadersFieldSettings(accountActivityId);
 
             AccountModel viewModel = this.orderModelMapper.BuildViewModel(model, options, settings, headers);
             viewModel.CaseId = caseId;

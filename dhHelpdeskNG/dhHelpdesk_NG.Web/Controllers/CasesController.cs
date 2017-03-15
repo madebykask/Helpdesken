@@ -1206,7 +1206,13 @@ namespace DH.Helpdesk.Web.Controllers
                 m.OrderId = _orderService.GetOrder(id)?.Id;
 
                 //Get account id
-                m.AccountId = _orderAccountService.GetAccountIdByCaseNumber(currentCase.CaseNumber);
+                var account = _orderAccountService.GetAccountByCaseNumber(currentCase.CaseNumber);
+                if (account != null)
+                {
+                    m.AccountId = account.Item1;
+                    m.AccountActivityId = account.Item2;
+                }
+                
 
                 // User has not access to case
                 if (m.EditMode == Enums.AccessMode.NoAccess)

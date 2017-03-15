@@ -23,8 +23,6 @@
         #endregion
 
         #region Public Properties
-
-        [NotNullAndEmpty]
         public string Caption { get; set; }
 
         public bool IsRequired { get; set; }
@@ -38,9 +36,9 @@
 
         #region Public Methods and Operators
 
-        public static ConfigurableFieldModel<TValue> CreateUnshowable(string caption)
+        public static ConfigurableFieldModel<TValue> CreateUnshowable()
         {
-            return new ConfigurableFieldModel<TValue> { Caption = caption, Show = false };
+            return new ConfigurableFieldModel<TValue> { Caption = "", Show = false };
         }
 
         public static TValue GetValueOrDefault(ConfigurableFieldModel<TValue> field)

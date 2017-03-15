@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services.Concrete
+﻿using System;
+
+namespace DH.Helpdesk.Services.Services.Concrete
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -185,13 +187,13 @@
             }
         }
 
-        public int? GetAccountIdByCaseNumber(decimal caseNum)
+        public Tuple<int, int> GetAccountByCaseNumber(decimal caseNum)
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var accountRepository = uow.GetRepository<Account>();
-                var acc = accountRepository.GetAll().FirstOrDefault(x => x.CaseNumber == caseNum);
-                return acc?.Id;
+                var acc = accountRepository.GetAll().FirstOrDefault(x => x.CaseNumber.Equals(caseNum));
+                return acc != null ? new Tuple<int, int>(acc.Id, acc.AccountActivity_Id) : null;
             }
         }
 

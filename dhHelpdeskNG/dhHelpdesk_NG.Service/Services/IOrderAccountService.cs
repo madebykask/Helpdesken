@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using System;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System.Collections.Generic;
 
@@ -37,6 +39,6 @@
         string GetFileName(int orderId);
 
         byte[] GetFileContent(int orderId);
-        int? GetAccountIdByCaseNumber(decimal caseNum);
+        Tuple<int, int> GetAccountByCaseNumber(decimal caseNum);
     }
 }

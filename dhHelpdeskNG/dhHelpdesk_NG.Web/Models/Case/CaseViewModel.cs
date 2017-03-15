@@ -62,6 +62,7 @@
         public int ProductAreaHasChild { get; set; }
         public int? OrderId { get; set; }
         public int? AccountId { get; set; }
+        public int? AccountActivityId { get; set; }
 
         [Obsolete("Put all fields that you required into this CaseInputViewModel model")]
         public Case case_  { get; set; }
