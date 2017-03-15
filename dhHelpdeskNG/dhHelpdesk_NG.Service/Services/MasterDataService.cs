@@ -16,6 +16,7 @@ namespace DH.Helpdesk.Services.Services
     {
         IList<Customer> GetCustomers(int userId);
         Customer GetCustomer(int customerId);
+        bool IsCustomerUser(int customerId, int userId);
         User GetUser(int userId);
         Setting GetCustomerSetting(int customerId);
         IList<Language> GetLanguages();
@@ -48,6 +49,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly IADFSRepository _adfsRepository;
         private readonly IGlobalSettingRepository _globalSettingRepository;
         private readonly INotifierRepository _computerUserRepository;
+        private readonly ICustomerUserRepository _customerUserRepository;
 
         public MasterDataService(
             ICustomerRepository customerRepository,
@@ -59,7 +61,8 @@ namespace DH.Helpdesk.Services.Services
             ICacheProvider cache,
             IGlobalSettingRepository globalSettingRepository,
             IADFSRepository adfsRepository,
-            INotifierRepository computerUserRepository)
+            INotifierRepository computerUserRepository,
+            ICustomerUserRepository customerUserRepository)
         {
             this._customerRepository = customerRepository;
             this._languageRepository = languageRepository;
@@ -71,6 +74,7 @@ namespace DH.Helpdesk.Services.Services
             this._adfsRepository = adfsRepository;
             this._globalSettingRepository = globalSettingRepository;
             _computerUserRepository = computerUserRepository;
+            _customerUserRepository = customerUserRepository;
         }
 
         public IList<Customer> GetCustomers(int userId)
@@ -86,6 +90,11 @@ namespace DH.Helpdesk.Services.Services
         public Customer GetCustomer(int customerId)
         {
             return this._customerRepository.GetById(customerId);  
+        }
+
+        public bool IsCustomerUser(int customerId, int userId)
+        {
+            return this._customerUserRepository.IsCustomerUser(customerId, userId);
         }
 
         public User GetUser(int userId)

@@ -297,10 +297,10 @@
                 // load user info according database info (tblComputerUser)
                 LoadUserInfo();
 
-                //load user info from tblUsers if such user exist
-                LoadLocalUserInfo();
-
             } //User Idendity is null
+
+            //load user info from tblUsers if such user exist
+            LoadLocalUserInfo();
 
             this.SetTextTranslation(filterContext);
         }
@@ -329,12 +329,25 @@
             if (SessionFacade.CurrentCustomer != null &&
                 SessionFacade.CurrentUserIdentity != null)
             {
-                var user = _masterDataService.GetUserForLogin(SessionFacade.CurrentUserIdentity.UserId);
-                if (user != null && SessionFacade.CurrentCustomer.Users.Any(u => u.Id == user.Id))
+                var userNames = SessionFacade.CurrentUserIdentity.UserId.Split(@"\");
+                var userNamesToCheck = new []
                 {
-                    SessionFacade.CurrentLocalUser = user;
+                    SessionFacade.CurrentUserIdentity.UserId,
+                    userNames.Length > 1 ? userNames[userNames.Length - 1] : ""
+                };
+                foreach (var userName in userNamesToCheck)
+                {
+                    if(string.IsNullOrWhiteSpace(userName)) continue;
+
+                    var user = _masterDataService.GetUserForLogin(userName);
+                    if (user != null && _masterDataService.IsCustomerUser(SessionFacade.CurrentCustomer.Id, user.Id))
+                    {
+                        SessionFacade.CurrentLocalUser = user;
+                        return;
+                    }
                 }
             }
+            SessionFacade.CurrentLocalUser = null;
         }
 
         private int RetrieveCustomer(ActionExecutingContext filterContext)
