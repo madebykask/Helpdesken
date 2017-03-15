@@ -49,7 +49,7 @@
     {
         if (!string.IsNullOrEmpty(Model.OrderTypeDescription))
         {
-            <label class="alert alert-info cursor-default mb10">@Model.OrderTypeDescription</label>
+            <label class="alert alert-info cursor-default mb10">@Html.Raw(Model.OrderTypeDescription)</label>
         }
         if (Model.OrderTypeDocument.Item1.HasValue)
         {
