@@ -1,4 +1,5 @@
-﻿@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+﻿@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @model DH.Helpdesk.Web.Areas.Orders.Models.Order.FieldModels.ConfigurableFieldModel<string>
            
 @if (!Model.Show)
@@ -7,12 +8,38 @@
     return;
 }
 
+@{
+    var inputAttributes = (Dictionary<string, object>)ViewData["inputAttributes"];
+    Dictionary<string, object> htmlAttributes;
+    if (inputAttributes != null)
+    {
+        htmlAttributes = new Dictionary<string, object>(inputAttributes.Count + 1);
+
+        foreach (var inputAttribute in inputAttributes)
+        {
+            htmlAttributes.Add(inputAttribute.Key, inputAttribute.Value);
+            if (inputAttribute.Key.Equals("maxlength", StringComparison.InvariantCultureIgnoreCase))
+            {
+                htmlAttributes.Add("data-val-length", string.Format(Translation.GetCoreTextTranslation("Ange högst {0} tecken."), inputAttribute.Value));
+                htmlAttributes.Add("data-val-length-max", inputAttribute.Value);
+            }
+        }
+
+    }
+    else
+    {
+        htmlAttributes = new Dictionary<string, object>(1);
+    }
+    htmlAttributes.Add("data-dh-is-required", Model.IsRequired);
+    htmlAttributes.Add("class", "inputw450 inputmh100");
+}
+
 <tr>
     <td class="span3">
         @Html.FieldCaption(Model)
     </td>
     <td class="span6">
-        @Html.TextAreaFor(m => m.Value, new {data_dh_is_required = Model.IsRequired, @class = "inputw450 inputmh100" })
+        @Html.TextAreaFor(m => m.Value, htmlAttributes)
         @Html.HiddenFor(m => m.IsRequired)
         @Html.ValidationMessageFor(m => m.Value)
     </td>

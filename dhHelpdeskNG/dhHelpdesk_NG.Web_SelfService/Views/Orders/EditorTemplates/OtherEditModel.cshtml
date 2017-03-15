@@ -55,7 +55,7 @@
                             </td>
                         </tr>
                     }*@
-            @Html.EditorFor(m => m.Info, "Fields/WideText")
+            @Html.EditorFor(m => m.Info, "Fields/WideText", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "200" } } })
         </div>
     </div>
 </div>

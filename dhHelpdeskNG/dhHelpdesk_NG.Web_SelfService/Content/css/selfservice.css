@@ -1018,3 +1018,13 @@ div .multitext i {
     display: block;
     width: 3em;
 }
+
+.inputw450
+{
+	width: 450px !important;
+}
+
+.inputmh100
+{
+	min-height: 150px !important;
+}
