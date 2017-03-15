@@ -130,8 +130,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 CaseFieldSettingWithLangauges = this._caseFieldSettingService.GetAllCaseFieldSettingsWithLanguages(customer.Id, language.Id),
                 Customer = customer,
                 Language = language,
-                ListCaseForLabel = this._caseFieldSettingService.ListToShowOnCasePage(customer.Id, language.Id),
-                Setting = this._settingService.GetCustomerSetting(customer.Id),
+                ListCaseForLabel = this._caseFieldSettingService.ListToShowOnCasePage(customer.Id, language.Id),               
                 Customers = this._customerService.GetAllCustomers().Select(x => new SelectListItem
                 {
                     Text = x.Name,
