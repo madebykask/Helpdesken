@@ -24,7 +24,8 @@
                 <div class="alert alert-error">
                     @TempData["LoginFailed"]; 
                 </div>
-            }
+            }            
+            
 
             @(Translation.Get("Username") + ":")<br />
             <input type="text" maxlength="50" name="txtUid" id="txtUid" class="input-block-level" placeholder="Username" />
@@ -60,5 +61,15 @@
         document.getElementById('timeZoneOffsetInJul1').value = Jul1.getTimezoneOffset();
         $("input:text:visible:first").focus();
     };
+
+    console.log('ServerName:' + '@Environment.MachineName');
+    console.log('ServerIP:' + '@Request.ServerVariables["LOCAL_ADDR"]');
+    console.log('Server:' + '@Request.ServerVariables["X-Forwarded-For"]');
+    console.log('URL:' + '@Request.ServerVariables["SERVER_NAME"];');
+    console.log('SiteID:' + '@TempData["CurrentWebSiteID"]');
+    console.log('SiteName:' + '@TempData["CurrentWebSiteName"]');
+
+    console.log('NO:' + '@TempData["NumOfUsers"]');
+
 </script>
 </html>

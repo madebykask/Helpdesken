@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure
+﻿using DH.Helpdesk.Web.Infrastructure.Cache;
+
+namespace DH.Helpdesk.Web.Infrastructure
 {
     using System;
     using System.IO;
@@ -27,8 +29,7 @@
     {
         #region Fields
 
-        private readonly IMasterDataService _masterDataService;               
-                
+        private readonly IMasterDataService _masterDataService;
 
         #endregion
 
@@ -36,7 +37,7 @@
 
         public BaseController(IMasterDataService masterDataService)
         {
-            this._masterDataService = masterDataService;            
+            _masterDataService = masterDataService;
         }
 
         #endregion
@@ -267,15 +268,8 @@
         {
             if (this._masterDataService != null)
             {
-                if (SessionFacade.TextTranslation == null)
-                {
-                    SessionFacade.TextTranslation = this._masterDataService.GetTranslationTexts();
-                }
-                if (SessionFacade.CaseTranslation == null && SessionFacade.CurrentUser != null)
-                {
-                    SessionFacade.CaseTranslation =
-                        this._masterDataService.GetCaseTranslations(SessionFacade.CurrentUser.Id);
-                }
+                //_cache.GetTextTranslations();
+                //_cache.GetCaseTranslations();
             }
         }
 

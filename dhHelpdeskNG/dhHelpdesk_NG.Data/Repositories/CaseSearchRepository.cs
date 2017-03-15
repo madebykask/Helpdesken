@@ -185,234 +185,239 @@ namespace DH.Helpdesk.Dal.Repositories
 						cmd.CommandType = CommandType.Text;
 						cmd.CommandText = sql;
 						cmd.CommandTimeout = 300;
-						var dr = cmd.ExecuteReader();
-						if (dr != null && dr.HasRows)
-						{
-							int? closingReasonFilter = null;
-							if (!string.IsNullOrEmpty(f.CaseClosingReasonFilter))
-							{
-								int closingReason;
-								if (int.TryParse(f.CaseClosingReasonFilter, out closingReason))
-								{
-									closingReasonFilter = closingReason;
-								}
-							}
+					    using (var dr = cmd.ExecuteReader())
+					    {
+					        if (dr != null && dr.HasRows)
+					        {
+					            int? closingReasonFilter = null;
+					            if (!string.IsNullOrEmpty(f.CaseClosingReasonFilter))
+					            {
+					                int closingReason;
+					                if (int.TryParse(f.CaseClosingReasonFilter, out closingReason))
+					                {
+					                    closingReasonFilter = closingReason;
+					                }
+					            }
 
-							while (dr.Read())
-							{
-								var caseId = int.Parse(dr["Id"].ToString());
+					            while (dr.Read())
+					            {
+					                var caseId = int.Parse(dr["Id"].ToString());
 
-								if (closingReasonFilter.HasValue)
-								{
-									var log = this.logRepository.GetLastLog(caseId);
-									if (log?.FinishingType == null || closingReasonFilter != log.FinishingType)
-									{
-										continue;
-									}
-								}
+					                if (closingReasonFilter.HasValue)
+					                {
+					                    var log = this.logRepository.GetLastLog(caseId);
+					                    if (log?.FinishingType == null || closingReasonFilter != log.FinishingType)
+					                    {
+					                        continue;
+					                    }
+					                }
 
-								var doCalcTimeLeft = displayLeftTime || calculateRemainingTime;
+					                var doCalcTimeLeft = displayLeftTime || calculateRemainingTime;
 
-								var row = new CaseSearchResult();
-								IList<Field> cols = new List<Field>();
-								var toolTip = string.Empty;
-								var sortOrder = string.Empty;
-								DateTime caseRegistrationDate;
+					                var row = new CaseSearchResult();
+					                IList<Field> cols = new List<Field>();
+					                var toolTip = string.Empty;
+					                var sortOrder = string.Empty;
+					                DateTime caseRegistrationDate;
 
-								DateTime.TryParse(dr["RegTime"].ToString(), out caseRegistrationDate);
-								DateTime dtTmp;
-								DateTime? caseFinishingDate = null;
-								if (DateTime.TryParse(dr["FinishingDate"].ToString(), out dtTmp))
-								{
-									caseFinishingDate = dtTmp;
-									doCalcTimeLeft = false;
-								}
+					                DateTime.TryParse(dr["RegTime"].ToString(), out caseRegistrationDate);
+					                DateTime dtTmp;
+					                DateTime? caseFinishingDate = null;
+					                if (DateTime.TryParse(dr["FinishingDate"].ToString(), out dtTmp))
+					                {
+					                    caseFinishingDate = dtTmp;
+					                    doCalcTimeLeft = false;
+					                }
 
-								int intTmp;
-								if (int.TryParse(dr["IncludeInCaseStatistics"].ToString(), out intTmp))
-								{
-									doCalcTimeLeft = doCalcTimeLeft && intTmp == 1;
-								}
+					                int intTmp;
+					                if (int.TryParse(dr["IncludeInCaseStatistics"].ToString(), out intTmp))
+					                {
+					                    doCalcTimeLeft = doCalcTimeLeft && intTmp == 1;
+					                }
 
-								DateTime? watchDate = null;
-								if (DateTime.TryParse(dr["WatchDate"].ToString(), out dtTmp))
-								{
-									watchDate = dtTmp;
-								}
+					                DateTime? watchDate = null;
+					                if (DateTime.TryParse(dr["WatchDate"].ToString(), out dtTmp))
+					                {
+					                    watchDate = dtTmp;
+					                }
 
-								int SLAtime;
-								int.TryParse(dr["SolutionTime"].ToString(), out SLAtime);
-								int timeOnPause;
-								int.TryParse(dr["ExternalTime"].ToString(), out timeOnPause);
-								int? departmentId = null;
-								if (int.TryParse(dr["Department_Id"].ToString(), out intTmp))
-								{
-									departmentId = intTmp;
-								}
+					                int SLAtime;
+					                int.TryParse(dr["SolutionTime"].ToString(), out SLAtime);
+					                int timeOnPause;
+					                int.TryParse(dr["ExternalTime"].ToString(), out timeOnPause);
+					                int? departmentId = null;
+					                if (int.TryParse(dr["Department_Id"].ToString(), out intTmp))
+					                {
+					                    departmentId = intTmp;
+					                }
 
-								int? timeLeft = null;
-								if (doCalcTimeLeft)
-								{
-									if (watchDate.HasValue)
-									{
-										var watchDateDue = watchDate.Value.MakeTomorrow();
-										int workTime = 0;
-										//// calc time by watching date
-										if (watchDateDue > now)
-										{
-											// #52951 timeOnPause shouldn't calculate when watchdate has value
-											workTime = workTimeCalculator.CalculateWorkTime(
-																							now,
-																							watchDateDue,
-																							departmentId);
-										}
-										else
-										{
-											//// for cases that should be closed in the past
-											// #52951 timeOnPause shouldn't calculate when watchdate has value
-											workTime = -workTimeCalculator.CalculateWorkTime(
-																							 watchDateDue,
-																							 now,
-																							 departmentId);
-										}
+					                int? timeLeft = null;
+					                if (doCalcTimeLeft)
+					                {
+					                    if (watchDate.HasValue)
+					                    {
+					                        var watchDateDue = watchDate.Value.MakeTomorrow();
+					                        int workTime = 0;
+					                        //// calc time by watching date
+					                        if (watchDateDue > now)
+					                        {
+					                            // #52951 timeOnPause shouldn't calculate when watchdate has value
+					                            workTime = workTimeCalculator.CalculateWorkTime(
+					                                now,
+					                                watchDateDue,
+					                                departmentId);
+					                        }
+					                        else
+					                        {
+					                            //// for cases that should be closed in the past
+					                            // #52951 timeOnPause shouldn't calculate when watchdate has value
+					                            workTime = -workTimeCalculator.CalculateWorkTime(
+					                                watchDateDue,
+					                                now,
+					                                departmentId);
+					                        }
 
-										timeLeft = workTime / 60;
-										var floatingPoint = workTime % 60;
-										secSortOrder = floatingPoint.ToString();
+					                        timeLeft = workTime/60;
+					                        var floatingPoint = workTime%60;
+					                        secSortOrder = floatingPoint.ToString();
 
-										if (timeLeft <= 0 && floatingPoint < 0)
-											timeLeft--;
-									}
-									else if (SLAtime > 0)
-									{
-										//// calc by SLA value
-										var dtFrom = DatesHelper.Min(caseRegistrationDate, now);
-										var dtTo = DatesHelper.Max(caseRegistrationDate, now);
-										var calcTime = workTimeCalculator.CalculateWorkTime(dtFrom, dtTo, departmentId);
-										timeLeft = (SLAtime * 60 - calcTime + timeOnPause) / 60;
-										var floatingPoint = (SLAtime * 60 - calcTime + timeOnPause) % 60;
-										secSortOrder = floatingPoint.ToString();
+					                        if (timeLeft <= 0 && floatingPoint < 0)
+					                            timeLeft--;
+					                    }
+					                    else if (SLAtime > 0)
+					                    {
+					                        //// calc by SLA value
+					                        var dtFrom = DatesHelper.Min(caseRegistrationDate, now);
+					                        var dtTo = DatesHelper.Max(caseRegistrationDate, now);
+					                        var calcTime = workTimeCalculator.CalculateWorkTime(dtFrom, dtTo, departmentId);
+					                        timeLeft = (SLAtime*60 - calcTime + timeOnPause)/60;
+					                        var floatingPoint = (SLAtime*60 - calcTime + timeOnPause)%60;
+					                        secSortOrder = floatingPoint.ToString();
 
-										if (timeLeft <= 0 && floatingPoint < 0)
-											timeLeft--;
-									}
-								}
+					                        if (timeLeft <= 0 && floatingPoint < 0)
+					                            timeLeft--;
+					                    }
+					                }
 
-								if (!CheckRemainingTimeFilter(timeLeft, workingHours, f))
-									continue;
+					                if (!CheckRemainingTimeFilter(timeLeft, workingHours, f))
+					                    continue;
 
-								if (timeLeft.HasValue)
-								{
-									remainingTime.AddRemainingTime(caseId, timeLeft.Value);
-								}
+					                if (timeLeft.HasValue)
+					                {
+					                    remainingTime.AddRemainingTime(caseId, timeLeft.Value);
+					                }
 
-								var isExternalEnv = (context.applicationType.ToLower() == ApplicationTypes.LineManager || context.applicationType.ToLower() == ApplicationTypes.SelfService);
-								row.Ignored = false;
-								foreach (var c in userCaseSettings)
-								{
-									Field field = null;
-									for (var i = 0; i < dr.FieldCount; i++)
-									{
-										if (string.Compare(dr.GetName(i), GetCaseFieldName(c.Name), true, CultureInfo.InvariantCulture) == 0)
-										{
-											if (!dr.IsDBNull(i))
-											{
-												FieldTypes fieldType;
-												DateTime? dateValue;
-												bool translateField;
-												bool treeTranslation;
-												int baseId = 0;
-												bool preventToAddRecord = false;
+					                var isExternalEnv = (context.applicationType.ToLower() == ApplicationTypes.LineManager ||
+					                                     context.applicationType.ToLower() == ApplicationTypes.SelfService);
+					                row.Ignored = false;
+					                foreach (var c in userCaseSettings)
+					                {
+					                    Field field = null;
+					                    for (var i = 0; i < dr.FieldCount; i++)
+					                    {
+					                        if (
+					                            string.Compare(dr.GetName(i), GetCaseFieldName(c.Name), true,
+					                                CultureInfo.InvariantCulture) == 0)
+					                        {
+					                            if (!dr.IsDBNull(i))
+					                            {
+					                                FieldTypes fieldType;
+					                                DateTime? dateValue;
+					                                bool translateField;
+					                                bool treeTranslation;
+					                                int baseId = 0;
+					                                bool preventToAddRecord = false;
 
-												var value = GetDatareaderValue(
-																				dr,
-																				i,
-																				c.Name,
-																				customerSetting,
-																				pal,
-																				timeLeft,
-																				caseTypes,
-																				productAreaNamesResolver,
-																				isExternalEnv,
-																				out translateField,
-																				out treeTranslation,
-																				out dateValue,
-																				out fieldType,
-																				out baseId,
-																				out preventToAddRecord);
+					                                var value = GetDatareaderValue(
+					                                    dr,
+					                                    i,
+					                                    c.Name,
+					                                    customerSetting,
+					                                    pal,
+					                                    timeLeft,
+					                                    caseTypes,
+					                                    productAreaNamesResolver,
+					                                    isExternalEnv,
+					                                    out translateField,
+					                                    out treeTranslation,
+					                                    out dateValue,
+					                                    out fieldType,
+					                                    out baseId,
+					                                    out preventToAddRecord);
 
-												// according to some rules it can/canot be shown
-												if (!row.Ignored)
-													row.Ignored = preventToAddRecord;
+					                                // according to some rules it can/canot be shown
+					                                if (!row.Ignored)
+					                                    row.Ignored = preventToAddRecord;
 
-												field = new Field
-												{
-													Key = c.Name,
-													Id = baseId,
-													StringValue = value,
-													TranslateThis = translateField,
-													TreeTranslation = treeTranslation,
-													DateTimeValue = dateValue,
-													FieldType = fieldType
-												};
+					                                field = new Field
+					                                {
+					                                    Key = c.Name,
+					                                    Id = baseId,
+					                                    StringValue = value,
+					                                    TranslateThis = translateField,
+					                                    TreeTranslation = treeTranslation,
+					                                    DateTimeValue = dateValue,
+					                                    FieldType = fieldType
+					                                };
 
-												if (string.Compare(
-													s.SortBy,
-													c.Name,
-													true,
-													CultureInfo.InvariantCulture) == 0)
-												{
-													sortOrder = value;
-												}
-											}
+					                                if (string.Compare(
+					                                    s.SortBy,
+					                                    c.Name,
+					                                    true,
+					                                    CultureInfo.InvariantCulture) == 0)
+					                                {
+					                                    sortOrder = value;
+					                                }
+					                            }
 
-											break;
-										}
-									}
+					                            break;
+					                        }
+					                    }
 
-									if (field == null)
-									{
-										field = new Field { StringValue = string.Empty };
-									}
+					                    if (field == null)
+					                    {
+					                        field = new Field {StringValue = string.Empty};
+					                    }
 
-									cols.Add(field);
-								}
-								row.SortOrder = sortOrder;
-								row.SecSortOrder = secSortOrder;
-								row.Tooltip = toolTip;
-								row.CaseIcon = GetCaseIcon(dr);
-								row.Id = dr.SafeGetInteger("Id");
-								row.Columns = cols;
-								row.IsUnread = dr.SafeGetInteger("Status") == 1;
-								row.IsUrgent = timeLeft.HasValue && timeLeft < 0;
+					                    cols.Add(field);
+					                }
+					                row.SortOrder = sortOrder;
+					                row.SecSortOrder = secSortOrder;
+					                row.Tooltip = toolTip;
+					                row.CaseIcon = GetCaseIcon(dr);
+					                row.Id = dr.SafeGetInteger("Id");
+					                row.Columns = cols;
+					                row.IsUnread = dr.SafeGetInteger("Status") == 1;
+					                row.IsUrgent = timeLeft.HasValue && timeLeft < 0;
                                 row.IsClosed = caseFinishingDate.HasValue;
 
-								if (!row.Ignored)
-								{
-									ret.Items.Add(row);
+					                if (!row.Ignored)
+					                {
+					                    ret.Items.Add(row);
 
-									int? curStatus = dr.SafeGetNullableInteger("aggregate_Status");
-									if (curStatus.HasValue)
-									{
-										if (aggregateData.Status.Keys.Contains(curStatus.Value))
-											aggregateData.Status[curStatus.Value] += 1;
-										else
-											aggregateData.Status.Add(curStatus.Value, 1);
-									}
+					                    int? curStatus = dr.SafeGetNullableInteger("aggregate_Status");
+					                    if (curStatus.HasValue)
+					                    {
+					                        if (aggregateData.Status.Keys.Contains(curStatus.Value))
+					                            aggregateData.Status[curStatus.Value] += 1;
+					                        else
+					                            aggregateData.Status.Add(curStatus.Value, 1);
+					                    }
 
-									int? curSubStatus = dr.SafeGetNullableInteger("aggregate_SubStatus");
-									if (curSubStatus.HasValue)
-									{
-										if (aggregateData.SubStatus.Keys.Contains(curSubStatus.Value))
-											aggregateData.SubStatus[curSubStatus.Value] += 1;
-										else
-											aggregateData.SubStatus.Add(curSubStatus.Value, 1);
-									}
-								}
-							}
-						}
+					                    int? curSubStatus = dr.SafeGetNullableInteger("aggregate_SubStatus");
+					                    if (curSubStatus.HasValue)
+					                    {
+					                        if (aggregateData.SubStatus.Keys.Contains(curSubStatus.Value))
+					                            aggregateData.SubStatus[curSubStatus.Value] += 1;
+					                        else
+					                            aggregateData.SubStatus.Add(curSubStatus.Value, 1);
+					                    }
+					                }
+					            }
+					        }
 
-						dr.Close();
+					        dr.Close();
+					    }
 					}
 					finally
 					{
@@ -498,47 +503,50 @@ namespace DH.Helpdesk.Dal.Repositories
 						cmd.CommandText = sql;
 						cmd.CommandTimeout = 300;
 
-						var dr = cmd.ExecuteReader();
-						if (dr != null)
-						{
-							if (dr.HasRows)
-							{
-								while (dr.Read())
-								{
-									var intTmp = 0;
-									if (int.TryParse(dr["Department_Id"].ToString(), out intTmp) && !deptIds.Contains(intTmp))
-									{
-										deptIds.Add(intTmp);
-									}
+                        using (var dr = cmd.ExecuteReader())
+                        {
+                            if (dr != null)
+                            {
+                                if (dr.HasRows)
+                                {
+                                    while (dr.Read())
+                                    {
+                                        var intTmp = 0;
+                                        if (int.TryParse(dr["Department_Id"].ToString(), out intTmp) &&
+                                            !deptIds.Contains(intTmp))
+                                        {
+                                            deptIds.Add(intTmp);
+                                        }
 
-									DateTime caseRegistrationDate;
-									DateTime.TryParse(dr["RegTime"].ToString(), out caseRegistrationDate);
-									int SLAtime;
-									int.TryParse(dr["SolutionTime"].ToString(), out SLAtime);
-									DateTime watchDate;
-									if (DateTime.TryParse(dr["WatchDate"].ToString(), out watchDate))
-									{
-										//// calc time by watching date
-										if (watchDate > utcNow)
-										{
-											fetchRangeEnd = DatesHelper.Max(fetchRangeEnd, watchDate);
-										}
-										else
-										{
-											//// for cases that should be closed in the past
-											fetchRangeBegin = DatesHelper.Min(fetchRangeBegin, watchDate);
-										}
-									}
-									else if (SLAtime > 0)
-									{
-										//// calc by SLA value
-										fetchRangeBegin = DatesHelper.Min(fetchRangeBegin, caseRegistrationDate);
-									}
-								}
-							}
+                                        DateTime caseRegistrationDate;
+                                        DateTime.TryParse(dr["RegTime"].ToString(), out caseRegistrationDate);
+                                        int SLAtime;
+                                        int.TryParse(dr["SolutionTime"].ToString(), out SLAtime);
+                                        DateTime watchDate;
+                                        if (DateTime.TryParse(dr["WatchDate"].ToString(), out watchDate))
+                                        {
+                                            //// calc time by watching date
+                                            if (watchDate > utcNow)
+                                            {
+                                                fetchRangeEnd = DatesHelper.Max(fetchRangeEnd, watchDate);
+                                            }
+                                            else
+                                            {
+                                                //// for cases that should be closed in the past
+                                                fetchRangeBegin = DatesHelper.Min(fetchRangeBegin, watchDate);
+                                            }
+                                        }
+                                        else if (SLAtime > 0)
+                                        {
+                                            //// calc by SLA value
+                                            fetchRangeBegin = DatesHelper.Min(fetchRangeBegin, caseRegistrationDate);
+                                        }
+                                    }
+                                }
 
-							dr.Close();
-						}
+                                dr.Close();
+                            }
+                        }
 					}
 					finally
 					{

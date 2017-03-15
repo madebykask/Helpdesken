@@ -51,25 +51,27 @@ namespace DH.Helpdesk.Dal.Repositories
                         con.Open();
                         cmd.Connection = con;
                         cmd.CommandType = CommandType.Text;
-                        cmd.CommandText = indexQuery;                        
-                        var dr = cmd.ExecuteReader();
-                        if (dr != null)
-                        {                            
-                            while (dr.Read())
-                            {                                                                    
-                                var fullPath = dr["path"].ToString();
-                                bool isLog  = false;
-                                int number = -1; 
+                        cmd.CommandText = indexQuery;
+                        using (var dr = cmd.ExecuteReader())
+                        {
+                            if (dr != null)
+                            {
+                                while (dr.Read())
+                                {
+                                    var fullPath = dr["path"].ToString();
+                                    bool isLog = false;
+                                    int number = -1;
 
-                                RetrieveNumber(fullPath, out number, out isLog);
-                                if (number != -1)                                
-                                    if (isLog)
-                                        logIds.Add(number);
-                                    else
-                                        caseNumbers.Add(number);                                                                
+                                    RetrieveNumber(fullPath, out number, out isLog);
+                                    if (number != -1)
+                                        if (isLog)
+                                            logIds.Add(number);
+                                        else
+                                            caseNumbers.Add(number);
+                                }
                             }
+                            dr.Close();
                         }
-                        dr.Close();
                     }
                     catch (Exception ex)
                     {

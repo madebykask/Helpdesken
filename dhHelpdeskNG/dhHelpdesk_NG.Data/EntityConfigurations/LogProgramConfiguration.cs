@@ -20,6 +20,8 @@
             this.Property(l => l.Customer_Id).IsOptional();
             this.Property(l => l.LogText).IsRequired().HasMaxLength(2000);
             this.Property(l => l.RegTime).IsRequired();
+            this.Property(l => l.ServerNameIP).IsOptional().HasMaxLength(100);
+            this.Property(l => l.NumberOfUsers).IsOptional();
 
             this.HasOptional(l => l.User)
                         .WithMany()

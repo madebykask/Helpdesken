@@ -280,6 +280,8 @@
     <Content Include="Areas\Orders\Views\Orders\EditorTemplates\Fields\FlagListItem.cshtml" />
     <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Infrastructure\Attributes\RequiredIfNotEmptyAttribute.cs" />
+    <Compile Include="Infrastructure\Cache\HelpdeskCache.cs" />
+    <Compile Include="Infrastructure\Cache\WebCacheService.cs" />
     <Compile Include="Infrastructure\Extensions\ProperyExtensions.cs" />
     <Compile Include="Infrastructure\Extensions\SelectExtensions.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />

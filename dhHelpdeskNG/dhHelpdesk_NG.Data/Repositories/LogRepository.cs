@@ -168,7 +168,9 @@ using Log = DH.Helpdesk.Domain.Log;
                 New_Performer_user_Id = logProgram.New_Performer_user_Id,
                 Old_Performer_User_Id = logProgram.Old_Performer_User_Id,
                 RegTime = logProgram.RegTime,
-                User_Id = logProgram.UserId
+                User_Id = logProgram.UserId,
+                ServerNameIP = logProgram.ServerNameIP,
+                NumberOfUsers = logProgram.NumberOfUsers
             };
 
             this.DataContext.LogPrograms.Add(logProgramEntity);
