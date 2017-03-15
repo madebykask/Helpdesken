@@ -12,6 +12,8 @@
         public string LogText { get; set; }
         public string Old_Performer_User_Id { get; set; }
         public DateTime RegTime { get; set; }
+        public string ServerNameIP { get; set; }
+        public int? NumberOfUsers { get; set; }
 
         public virtual User User { get; set; }
     }

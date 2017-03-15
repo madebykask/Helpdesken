@@ -18,7 +18,8 @@
     using DH.Helpdesk.Web.Infrastructure.Extensions;
     using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
     using Models.Login;
-
+    using System.Web.Hosting;
+    
     public class LoginController : Controller
     {
         private const string Root = "/";
@@ -66,8 +67,12 @@
 
         [HttpGet]
         public ViewResult Login()
-        {            
-            return this.View();
+        {          
+            TempData["NumOfUsers"] = GetLiveUserCount();
+            TempData["CurrentWebSiteID"] = HostingEnvironment.ApplicationHost.GetSiteID();
+            TempData["CurrentWebSiteName"] = HostingEnvironment.ApplicationHost.GetSiteName();
+            
+            return View();
         } 
 
         [HttpPost]
@@ -177,7 +182,9 @@
                         New_Performer_user_Id = 0,
                         Old_Performer_User_Id = "0",
                         RegTime = DateTime.UtcNow,
-                        UserId = user.Id
+                        UserId = user.Id,
+                        ServerNameIP = string.Format("{0} ({1})", Environment.MachineName, Request.ServerVariables["LOCAL_ADDR"]),
+                        NumberOfUsers = GetLiveUserCount()                        
                     };
 
                     _logProgramService.UpdateUserLogin(logProgramModel);
@@ -202,25 +209,13 @@
             return this.View("Login");
         }
 
-        [HttpGet]
-        public JsonResult GetUserCountJS(string userId, string pass)
+        
+        private int GetLiveUserCount()
         {
-            var wrongAnswer = Json(string.Empty, JsonRequestBehavior.AllowGet);
-            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(pass))
-                return wrongAnswer;
-
-            if (userService.IsUserValidAdmin(userId, pass))
-            {
-                var nums = 0;
-                if (ApplicationFacade.LoggedInUsers != null)
-                    nums = ApplicationFacade.LoggedInUsers.Count();
-                
-                return Json(nums, JsonRequestBehavior.AllowGet);
-            }
+            if (ApplicationFacade.LoggedInUsers != null)
+                return ApplicationFacade.LoggedInUsers.Count();
             else
-            {
-                return wrongAnswer;
-            }            
+                return 0;                
         }
 
         [HttpGet]

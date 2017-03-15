@@ -1701,5 +1701,19 @@ end
 GO
 
 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'ServerNameIP' and sysobjects.name = N'tblLogProgram')
+	begin
+		ALTER TABLE tblLogProgram ADD ServerNameIP Nvarchar(100) NULL
+	end
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'NumberOfUsers' and sysobjects.name = N'tblLogProgram')
+	begin
+		ALTER TABLE tblLogProgram ADD NumberOfUsers int NULL
+	end
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.30'
