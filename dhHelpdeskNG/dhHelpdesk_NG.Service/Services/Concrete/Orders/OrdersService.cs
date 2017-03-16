@@ -500,6 +500,11 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
 
                     if (!string.IsNullOrEmpty(entity.UserId))
                     {
+                        var user = _userRepository.GetUserByLogin(entity.UserId, request.CustomerId);
+                        if (user != null)
+                        {
+                            newCase.User_Id = user.Id;
+                        }
                         var cUser = _computerUsersRepository.GetComputerUserByUserId(entity.UserId, request.CustomerId, entity.Domain_Id);
                         if (cUser != null)
                         {
@@ -518,7 +523,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                     if (!newCase.Department_Id.HasValue)
                         newCase.Department_Id = entity.Department_Id;
                     //newCase.Priority_Id = entity.OrderPropertyId;
-                    newCase.User_Id = entity.User_Id;
+                    
                     newCase.Caption = orderType.Name;
                     newCase.RegLanguage_Id = languageId;
                     newCase.StateSecondary_Id = null;
