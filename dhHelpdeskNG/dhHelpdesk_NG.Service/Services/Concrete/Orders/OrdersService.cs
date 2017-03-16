@@ -530,35 +530,17 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                     #region Select Case Followers
 
                     var toFollowers = entity.OrdererID ?? string.Empty;
-                    var emails = new List<string>();
                     var valuesSplitter = "&,";
                     var pairSplitter = "&;";
-                    var multiTextValues = toFollowers
+                    var userIds = toFollowers
                         .Split(new[] { pairSplitter }, StringSplitOptions.None)
                         .Where(s => !string.IsNullOrWhiteSpace(s))
                         .Select(s =>
                         {
                             var values = s.Split(new[] { valuesSplitter }, StringSplitOptions.None);
-                            return new { UserId = values[0] ?? "", FullName = values.Length == 2 ? values[1] ?? "" : "" };
+                            return values[0];
                         }).ToList();
-                    foreach (var multiTextValue in multiTextValues)
-                    {
-                        if (!string.IsNullOrEmpty(multiTextValue.UserId))
-                        {
-                            var cUserEmail = _computerUsersRepository.GetEmailByUserId(multiTextValue.UserId, request.CustomerId);
-                            if (!string.IsNullOrEmpty(cUserEmail))
-                                emails.Add(cUserEmail);
-                        }
-                        else
-                        {
-                            if (!string.IsNullOrEmpty(multiTextValue.FullName))
-                            {
-                                var cUserEmail = _computerUsersRepository.GetEmailByName(multiTextValue.FullName, request.CustomerId);
-                                if (!string.IsNullOrEmpty(cUserEmail))
-                                    emails.Add(cUserEmail);
-                            }
-                        }
-                    }
+                    var emails = _computerUsersRepository.GetEmailByUserIds(userIds, request.CustomerId);
 
                     #endregion
 

@@ -14,8 +14,7 @@ namespace DH.Helpdesk.Dal.Repositories
         List<ComputerUserOverview> GetConnectedToComputerOverviews(int computerId);
 
         string FindUserGuidById(int id);
-        string GetEmailByUserId(string userId, int customerId);
-        string GetEmailByName(string fullName, int customerId);
         ComputerUser GetComputerUserByUserId(string userId, int customerId, int? domainId = null);
+        List<string> GetEmailByUserIds(List<string> userIds, int customerId);
     }
 }
