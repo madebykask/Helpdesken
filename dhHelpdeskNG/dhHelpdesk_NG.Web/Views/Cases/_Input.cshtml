@@ -521,11 +521,11 @@
 
                                                 @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.UserCode, CaseSolutionFields.Usercode))
                                                     {
-                                                    @Html.TextBoxFor(model => model.case_.UserCode, new { maxlength = "20" })
+                                                    @Html.TextBoxFor(model => model.case_.UserCode, new { maxlength = "50" })
                                                     }
                                                     else
                                                     {
-                                                    @Html.TextBoxFor(model => model.case_.UserCode, new { maxlength = "20", @readonly = "readonly" })
+                                                    @Html.TextBoxFor(model => model.case_.UserCode, new { maxlength = "50", @readonly = "readonly" })
                                                     }
                                             </td>
                                         </tr>
@@ -828,11 +828,11 @@
 
                                                 @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.IsAbout_UserCode))
                                                     {
-                                                    @Html.TextBoxFor(model => model.case_.IsAbout.UserCode, new { maxlength = "20" })
+                                                    @Html.TextBoxFor(model => model.case_.IsAbout.UserCode, new { maxlength = "50" })
                                                     }
                                                     else
                                                     {
-                                                    @Html.TextBoxFor(model => model.case_.IsAbout.UserCode, new { maxlength = "20", @readonly = "readonly" })
+                                                    @Html.TextBoxFor(model => model.case_.IsAbout.UserCode, new { maxlength = "50", @readonly = "readonly" })
                                                     }
                                             </td>
                                         </tr>
