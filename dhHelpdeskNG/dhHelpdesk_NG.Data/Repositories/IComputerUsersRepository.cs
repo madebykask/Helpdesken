@@ -1,3 +1,5 @@
+using DH.Helpdesk.Domain.Computers;
+
 namespace DH.Helpdesk.Dal.Repositories
 {
     using System.Collections.Generic;
@@ -12,5 +14,8 @@ namespace DH.Helpdesk.Dal.Repositories
         List<ComputerUserOverview> GetConnectedToComputerOverviews(int computerId);
 
         string FindUserGuidById(int id);
+        string GetEmailByUserId(string userId, int customerId);
+        string GetEmailByName(string fullName, int customerId);
+        ComputerUser GetComputerUserByUserId(string userId, int customerId, int? domainId = null);
     }
 }

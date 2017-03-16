@@ -1,6 +1,7 @@
 ﻿using DH.Helpdesk.BusinessData.Enums.Orders.FieldNames;
 using DH.Helpdesk.BusinessData.Models.Orders.Index.OrderOverview;
 using DH.Helpdesk.BusinessData.Models.Shared.Input;
+using DH.Helpdesk.Domain.Cases;
 using DH.Helpdesk.Services.BusinessLogic.Specifications.Case;
 
 namespace DH.Helpdesk.Services.Services.Concrete.Orders
@@ -79,6 +80,10 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
 
         private readonly IOrderRepository _orderRepository;
 
+        private readonly IComputerUsersRepository _computerUsersRepository;
+
+        private readonly ICaseExtraFollowersService _caseExtraFollowersService;
+
 
 		public OrdersService(
                 IUnitOfWorkFactory unitOfWorkFactory, 
@@ -101,7 +106,9 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                 ICaseTypeRepository caseTypeRepository,
                 ISettingService settingService,
                 IOrderRepository orderRepository,
-                IEmailSendingSettingsProvider emailSendingSettingsProvider)
+                IEmailSendingSettingsProvider emailSendingSettingsProvider,
+                IComputerUsersRepository computerUsersRepository,
+                ICaseExtraFollowersService caseExtraFollowersService)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _orderFieldSettingsService = orderFieldSettingsService;
@@ -124,6 +131,8 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
             _settingService = settingService;
             _emailSendingSettingsProvider = emailSendingSettingsProvider;
             _orderRepository = orderRepository;
+            _computerUsersRepository = computerUsersRepository;
+            _caseExtraFollowersService = caseExtraFollowersService;
         }
 
         public OrdersFilterData GetOrdersFilterData(int customerId, int userId, out int[] selectedStatuses)
@@ -473,11 +482,11 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
 
                     //get createcasetype by ordertype
                     var orderType = this._orderTypeRepository.GetById(entity.OrderType_Id.Value);
+                    
 
                     var newCase = new Case();
 
                     newCase.Customer_Id = entity.Customer_Id;
-                    newCase.Department_Id = entity.Department_Id;
                     if (orderType.CreateCase_CaseType_Id.HasValue)
                     {
                         newCase.CaseType_Id = orderType.CreateCase_CaseType_Id.Value;
@@ -489,20 +498,89 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                         newCase.CaseType_Id = casetype.Id;                    //get another id
                     }
 
+                    if (!string.IsNullOrEmpty(entity.UserId))
+                    {
+                        var cUser = _computerUsersRepository.GetComputerUserByUserId(entity.UserId, request.CustomerId, entity.Domain_Id);
+                        if (cUser != null)
+                        {
+                            newCase.ReportedBy = cUser.UserId;
+                            newCase.PersonsName = cUser.SurName + " " + cUser.FirstName;
+                            newCase.PersonsEmail = cUser.Email;
+                            newCase.PersonsPhone = cUser.Phone;
+                            newCase.PersonsCellphone = cUser.Cellphone;
+                            newCase.Department_Id = cUser.Department_Id;
+                            newCase.OU_Id = cUser.OU_Id;
+                            newCase.CostCentre = cUser.CostCentre;
+                            newCase.UserCode = cUser.UserCode;
+                        }
+                    }
+
+                    if (!newCase.Department_Id.HasValue)
+                        newCase.Department_Id = entity.Department_Id;
                     //newCase.Priority_Id = entity.OrderPropertyId;
                     newCase.User_Id = entity.User_Id;
-                    newCase.ReportedBy = entity.UserId;
-                    newCase.PersonsName = entity.Orderer;
-                    newCase.PersonsPhone = entity.OrdererPhone;
                     newCase.Caption = orderType.Name;
-                    newCase.Description = entity.OrderRow;
                     newCase.RegLanguage_Id = languageId;
-                    newCase.PersonsEmail = entity.OrdererEMail;
                     newCase.StateSecondary_Id = null;
                     newCase.Performer_User_Id = null;
                     newCase.CaseGUID = Guid.NewGuid();
 
                     var ei = new CaseExtraInfo() { CreatedByApp = CreatedByApplications.Helpdesk5, LeadTimeForNow = 0, ActionLeadTime = 0, ActionExternalTime = 0 };
+
+                    #region Select Case Followers
+
+                    var toFollowers = entity.OrdererID ?? string.Empty;
+                    var emails = new List<string>();
+                    var valuesSplitter = "&,";
+                    var pairSplitter = "&;";
+                    var multiTextValues = toFollowers
+                        .Split(new[] { pairSplitter }, StringSplitOptions.None)
+                        .Where(s => !string.IsNullOrWhiteSpace(s))
+                        .Select(s =>
+                        {
+                            var values = s.Split(new[] { valuesSplitter }, StringSplitOptions.None);
+                            return new { UserId = values[0] ?? "", FullName = values.Length == 2 ? values[1] ?? "" : "" };
+                        }).ToList();
+                    foreach (var multiTextValue in multiTextValues)
+                    {
+                        if (!string.IsNullOrEmpty(multiTextValue.UserId))
+                        {
+                            var cUserEmail = _computerUsersRepository.GetEmailByUserId(multiTextValue.UserId, request.CustomerId);
+                            if (!string.IsNullOrEmpty(cUserEmail))
+                                emails.Add(cUserEmail);
+                        }
+                        else
+                        {
+                            if (!string.IsNullOrEmpty(multiTextValue.FullName))
+                            {
+                                var cUserEmail = _computerUsersRepository.GetEmailByName(multiTextValue.FullName, request.CustomerId);
+                                if (!string.IsNullOrEmpty(cUserEmail))
+                                    emails.Add(cUserEmail);
+                            }
+                        }
+                    }
+
+                    #endregion
+
+                    var orderRows = new List<string>
+                    {
+                        entity.OrderRow,
+                        entity.OrderRow2,
+                        entity.OrderRow3,
+                        entity.OrderRow4,
+                        entity.OrderRow5,
+                        entity.OrderRow6,
+                        entity.OrderRow7,
+                        entity.OrderRow8,
+                        entity.OrderInfo
+                    };
+                    var description = string.Empty;
+                    foreach (var orderRow in orderRows)
+                    {
+                        if (!string.IsNullOrEmpty(orderRow))
+                            description = description + orderRow + Environment.NewLine;
+                    }
+                    newCase.Description = string.IsNullOrEmpty(description) ? "." : description;
 
                     this._caseService.SaveCase(newCase, null, caseMailSetting, 0, userId, ei, out errors);
 
@@ -510,6 +588,9 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                     var newcase = this._caseService.GetCaseById(newCase.Id);
 
                     entity.CaseNumber = newcase.CaseNumber;
+
+                    if (emails.Any())
+                        _caseExtraFollowersService.SaveExtraFollowers(newCase.Id, emails, entity.User_Id);
 
                     ordersRep.Update(entity);
                     uow.Save();

@@ -46,6 +46,29 @@ namespace DH.Helpdesk.Dal.Repositories
             return guid;
         }
 
+        public string GetEmailByUserId(string userId, int customerId)
+        {
+            var cUser = DbSet.FirstOrDefault(x => x.UserId.Equals(userId) && x.Customer_Id == customerId);
+            if (cUser != null)
+                return cUser.Email;
+            return string.Empty;
+        }
+
+        public string GetEmailByName(string fullName, int customerId)
+        {
+            var cUser = DbSet.FirstOrDefault(x => fullName.Contains(x.FirstName) && fullName.Contains(x.SurName) && x.Customer_Id == customerId);
+            if (cUser != null)
+                return cUser.Email;
+            return string.Empty;
+        }
+
+        public ComputerUser GetComputerUserByUserId(string userId, int customerId, int? domainId = null)
+        {
+            if (domainId.HasValue)
+                return DbSet.FirstOrDefault(x => x.UserId.Equals(userId) && x.Customer_Id == customerId && x.Domain_Id == domainId);
+            return DbSet.FirstOrDefault(x => x.UserId.Equals(userId) && x.Customer_Id == customerId);
+        }
+
         private static List<ComputerUserOverview> GetConnectedToComputerOverviews(IQueryable<ComputerUser> queryable)
         {
             var anonymus =
