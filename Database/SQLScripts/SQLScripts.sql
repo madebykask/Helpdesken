@@ -262,11 +262,32 @@ ALTER TABLE tblCase ALTER COLUMN UserCode NVARCHAR(50)
 
 --tblCaseIsAbout
 ALTER TABLE tblCaseIsAbout ALTER COLUMN UserCode NVARCHAR(50)
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'SynchronizedDate' and sysobjects.name = N'tblRegion')
+	begin
+		ALTER TABLE tblRegion ADD SynchronizedDate DateTime NULL
+	end
+GO
 
 --tblCaseHistory
 ALTER TABLE tblCaseHistory ALTER COLUMN UserCode NVARCHAR(50)
 ALTER TABLE tblCaseHistory ALTER COLUMN IsAbout_UserCode NVARCHAR(50)
 
+
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'SynchronizedDate' and sysobjects.name = N'tblDepartment')
+	begin
+		ALTER TABLE tblDepartment ADD SynchronizedDate DateTime NULL
+	end
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'SynchronizedDate' and sysobjects.name = N'tblOU')
+	begin
+		ALTER TABLE tblOU ADD SynchronizedDate DateTime NULL
+	end
+GO
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.31'
