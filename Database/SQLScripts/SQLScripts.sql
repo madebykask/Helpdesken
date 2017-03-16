@@ -267,6 +267,9 @@ ALTER TABLE tblCaseIsAbout ALTER COLUMN UserCode NVARCHAR(50)
 ALTER TABLE tblCaseHistory ALTER COLUMN UserCode NVARCHAR(50)
 ALTER TABLE tblCaseHistory ALTER COLUMN IsAbout_UserCode NVARCHAR(50)
 
+--tblCaseSolution
+ALTER TABLE tblCaseSolution ALTER COLUMN UserCode NVARCHAR(50)
+ALTER TABLE tblCaseSolution ALTER COLUMN IsAbout_UserCode NVARCHAR(50)
 
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
                where syscolumns.name = N'SynchronizedDate' and sysobjects.name = N'tblRegion')
