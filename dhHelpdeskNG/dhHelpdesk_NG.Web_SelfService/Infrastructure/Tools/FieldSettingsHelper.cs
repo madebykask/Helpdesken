@@ -30,21 +30,10 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Tools
             headers.Add(header);
         }
 
-        public static void ForceCreateHeader(
-            string fieldName,
-            List<GridColumnHeaderModel> headers)
+        public static void ForceCreateHeader(string fieldName, List<GridColumnHeaderModel> headers)
         {
-            switch (fieldName)
-            {
-                case OtherFieldNames.CaseIsFinished:
-                    var caseFinished = new GridColumnHeaderModel(fieldName, Translation.Get("Ärendet är klar"));
-                    headers.Add(caseFinished);
-                    break;
-                default:
-                    var header = new GridColumnHeaderModel(fieldName, string.Empty);
-                    headers.Add(header);
-                    break;
-            }
+            var header = new GridColumnHeaderModel(fieldName, string.Empty);
+            headers.Add(header);
         }
 
         public static void CreateValueIfNeeded(

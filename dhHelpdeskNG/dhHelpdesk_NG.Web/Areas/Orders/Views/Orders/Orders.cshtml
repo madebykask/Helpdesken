@@ -52,8 +52,7 @@
 	                {
 		                if (value.Value.GetDisplayValue() != null)
 		                {
-                            var isFinished = order.FieldValues.Where(v => v.FieldName == OtherFieldNames.CaseIsFinished).SingleOrDefault();
-                            if (isFinished != null && isFinished.Value.GetDisplayValue() == bool.TrueString)
+                            if (order.CaseIsFinished)
                             {
                                 <td class="tdpointer"><img title="Ärende" alt="Ärende" src="/Content/icons/case_close.png">@value.Value.GetDisplayValue().ForHtmlView()</td>
                             }                                
