@@ -1,7 +1,6 @@
 ﻿using DH.Helpdesk.BusinessData.Enums.Orders.FieldNames;
 using DH.Helpdesk.BusinessData.Models.Orders.Index.OrderOverview;
 using DH.Helpdesk.BusinessData.Models.Shared.Input;
-using DH.Helpdesk.Domain.Cases;
 using DH.Helpdesk.Services.BusinessLogic.Specifications.Case;
 
 namespace DH.Helpdesk.Services.Services.Concrete.Orders
@@ -26,10 +25,8 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Common;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Orders;
-    using DH.Helpdesk.Services.BusinessLogic.Specifications.User;
     using DH.Helpdesk.Services.Services.Orders;
     using System;
-    using DH.Helpdesk.Domain.MailTemplates;
     using DH.Helpdesk.BusinessData.Models.Email;
     using System.Configuration;
     using DH.Helpdesk.BusinessData.Models.Case;
@@ -84,6 +81,8 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
 
         private readonly ICaseExtraFollowersService _caseExtraFollowersService;
 
+        private readonly IPriorityService _priorityService;
+
 
 		public OrdersService(
                 IUnitOfWorkFactory unitOfWorkFactory, 
@@ -108,7 +107,8 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                 IOrderRepository orderRepository,
                 IEmailSendingSettingsProvider emailSendingSettingsProvider,
                 IComputerUsersRepository computerUsersRepository,
-                ICaseExtraFollowersService caseExtraFollowersService)
+                ICaseExtraFollowersService caseExtraFollowersService,
+                IPriorityService priorityService)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _orderFieldSettingsService = orderFieldSettingsService;
@@ -133,6 +133,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
             _orderRepository = orderRepository;
             _computerUsersRepository = computerUsersRepository;
             _caseExtraFollowersService = caseExtraFollowersService;
+            _priorityService = priorityService;
         }
 
         public OrdersFilterData GetOrdersFilterData(int customerId, int userId, out int[] selectedStatuses)
@@ -519,6 +520,8 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                             newCase.UserCode = cUser.UserCode;
                         }
                     }
+
+                    newCase.Priority_Id = _priorityService.GetDefaultId(request.CustomerId);
 
                     if (!newCase.Department_Id.HasValue)
                         newCase.Department_Id = entity.Department_Id;
