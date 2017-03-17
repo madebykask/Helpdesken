@@ -330,11 +330,13 @@
                 SessionFacade.CurrentUserIdentity != null)
             {
                 var userNames = SessionFacade.CurrentUserIdentity.UserId.Split(@"\");
-                var userNamesToCheck = new []
+                var userNamesToCheck = new List<string>
                 {
-                    SessionFacade.CurrentUserIdentity.UserId,
-                    userNames.Length > 1 ? userNames[userNames.Length - 1] : ""
+                    SessionFacade.CurrentUserIdentity.UserId
                 };
+                if(!string.IsNullOrWhiteSpace(SessionFacade.CurrentUserIdentity.Domain)) userNamesToCheck.Add($@"{SessionFacade.CurrentUserIdentity.Domain}\{SessionFacade.CurrentUserIdentity.UserId}");
+                if (userNames.Length > 1) userNamesToCheck.Add(userNames[userNames.Length - 1]);
+
                 foreach (var userName in userNamesToCheck)
                 {
                     if(string.IsNullOrWhiteSpace(userName)) continue;
