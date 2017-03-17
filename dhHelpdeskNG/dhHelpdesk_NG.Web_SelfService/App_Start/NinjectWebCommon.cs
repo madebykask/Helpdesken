@@ -161,6 +161,7 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<INotifierGroupRepository>().To<NotifierGroupRepository>();
             kernel.Bind<INotifierRepository>().To<NotifierRepository>();
             kernel.Bind<IComputerUsersBlackListRepository>().To<ComputerUsersBlackListRepository>();
+            kernel.Bind<IComputerUsersRepository>().To<ComputerUsersRepository>();
             kernel.Bind<IComputerRepository>().To<ComputerRepository>();
             kernel.Bind<IOrganizationUnitRepository>().To<OrganizationUnitRepository>();
             kernel.Bind<IAccountActivityRepository>().To<AccountActivityRepository>();
