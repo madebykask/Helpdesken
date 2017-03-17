@@ -44,7 +44,8 @@
             var customerId = -1;
             TempData["ShowLanguageSelect"] = true;
             SessionFacade.LastError = null;
-            customerId = RetrieveCustomer(filterContext);            
+            var sessionCustomerId = SessionFacade.CurrentCustomer != null ? SessionFacade.CurrentCustomer.Id : -1;
+            customerId = RetrieveCustomer(filterContext, sessionCustomerId);
 
             if(SessionFacade.CurrentCustomer == null && customerId == -1)
             {             
@@ -352,7 +353,7 @@
             SessionFacade.CurrentLocalUser = null;
         }
 
-        private int RetrieveCustomer(ActionExecutingContext filterContext)
+        private int RetrieveCustomer(ActionExecutingContext filterContext, int sessionCustomerId)
         {
             var ret = -1;
 
@@ -386,6 +387,19 @@
                         if (tempCustomerId != null && tempCustomerId > 0)
                             ret = tempCustomerId.Value;
                     }
+                }
+            }
+
+            if (sessionCustomerId <0 && ret < 0 && filterContext.HttpContext.Request.QueryString["customerId"] != null)
+            {
+                int paramCustomerId;
+                if (int.TryParse(filterContext.HttpContext.Request.QueryString["customerId"], out paramCustomerId))
+                    ret = paramCustomerId;
+                else
+                {
+                    ErrorGenerator.MakeError("Customer Id not valid!", 105);
+                    filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
+                    return -1;
                 }
             }
 
