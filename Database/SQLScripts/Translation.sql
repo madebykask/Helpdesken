@@ -5703,5 +5703,12 @@ If not exists (select * from tblTextTranslation where text_id = 1797 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1797, 2, 'Send external lognote to initiator')
 GO
 
+If not exists (select * from tbltext where id = 1798)
+	insert into tbltext (id, TextString) VALUES (1798, 'Visa på säljvservice')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1798 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1798, 2, 'Show on self-service')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
