@@ -762,6 +762,8 @@
                     currentCase.StateSecondary_Id = null;
             }
 
+
+            currentCase.ChangeTime = DateTime.UtcNow;
             int caseHistoryId = _caseService.SaveCaseHistory(currentCase, 0, currentCase.PersonsEmail, CreatedByApplications.SelfService5,  out errors, SessionFacade.CurrentUserIdentity.UserId);            
             // save log
             var caseLog = new CaseLog
