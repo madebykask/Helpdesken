@@ -118,7 +118,7 @@
     <h4>@Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)</h4>
     
     <table class="tableform"> 
-        <tr>
+        <tr id="settingForNoMailRow" @(Model.User.AllocateCaseMail == 1 ? "style=display" : "block") style="display:none">
             <td class="span3">
                 @Translation.Get("Meddelande", Enums.TranslationSource.TextTranslation)
             </td>
