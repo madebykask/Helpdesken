@@ -850,7 +850,7 @@ namespace DH.Helpdesk.Services.Services
 
         public Case Copy(int copyFromCaseid, int userId, int languageId, string ipAddress, CaseRegistrationSource source, string adUser)
         {
-            var c = this._caseRepository.GetDetachedCaseById(copyFromCaseid);
+            var c = this._caseRepository.GetDetachedCaseIncludesById(copyFromCaseid);
             c.User_Id = userId;
             return InitNewCaseCopy(c, userId, ipAddress, source, adUser);
         }

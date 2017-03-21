@@ -3987,9 +3987,8 @@ namespace DH.Helpdesk.Web.Controllers
 					Charge = x.Charge,
 					InvoiceRow = x.InvoiceRow == null ? null : new InvoiceRowViewModel { Status = x.InvoiceRow.Status}
 	            }).ToList();
-                var caseFolowerUsers = _caseExtraFollowersService.GetCaseExtraFollowers(caseId).Select(x => x.Follower).ToArray();
-                var followerUsers = caseFolowerUsers.Any() ? string.Join(";", caseFolowerUsers) + ";" : string.Empty;
-                m.FollowerUsers = followerUsers;
+                var caseFolowerUsers = _caseExtraFollowersService.GetCaseExtraFollowers(caseId);
+                m.MapToFollowerUsers(caseFolowerUsers);
             }
 
             var customerUserSetting = this._customerUserService.GetCustomerSettings(customerId, userId);
@@ -4030,6 +4029,7 @@ namespace DH.Helpdesk.Web.Controllers
                         this.Request.GetIpAddress(),
                         CaseRegistrationSource.Administrator,
                         windowsUser);
+                        m.MapToFollowerUsers(m.case_.CaseFollowers);
                 }
                 else if (parentCaseId.HasValue)
                 {

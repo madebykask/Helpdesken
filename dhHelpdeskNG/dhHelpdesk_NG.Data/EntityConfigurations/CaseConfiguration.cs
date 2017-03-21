@@ -202,7 +202,11 @@
 				.WithOptional(x => x.Case)
 				.HasForeignKey(x => x.Case_Id);
 
-			this.ToTable("tblcase");
+            this.HasMany(x => x.CaseFollowers)
+                .WithRequired(x => x.Case)
+                .HasForeignKey(x => x.Case_Id);
+
+            this.ToTable("tblcase");
         }
     }
 }
