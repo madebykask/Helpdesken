@@ -739,6 +739,7 @@
             var currentCase = _caseService.GetCaseById(caseId);
             var currentCustomer = _customerService.GetCustomer(currentCase.Customer_Id);
             var cs = _settingService.GetCustomerSetting(currentCustomer.Id);
+            var caseIsActivated = false;
             // save case history
 
             // unread/status flag update if not case is closed
@@ -749,6 +750,7 @@
             {
                 string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
                 this._caseService.Activate(currentCase.Id, 0, adUser, CreatedByApplications.SelfService5, out errors);
+                caseIsActivated = true;
             }
                 
 
@@ -836,13 +838,13 @@
                 _logFileService.AddFiles(newLogFiles);
                 // send emails
                 var userTimeZone = TimeZoneInfo.Local;
-                _caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, basePath, userTimeZone, newLogFiles);
+                _caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, basePath, userTimeZone, newLogFiles, caseIsActivated);
                 _userTemporaryFilesStorage.DeleteFiles(logFileGuid);
             }
             else
             {
                 caseLog.Id = _logService.SaveLog(caseLog, temporaryLogFiles.Count, out errors);
-                _caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, string.Empty, null);
+                _caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, string.Empty, null, null, caseIsActivated);
             }
         }
 

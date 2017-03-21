@@ -108,7 +108,7 @@ namespace DH.Helpdesk.Services.Services
         void UpdateFollowUpDate(int caseId, DateTime? time);
         void MarkAsUnread(int caseId);
         void MarkAsRead(int caseId);
-        void SendSelfServiceCaseLogEmail(int caseId, CaseMailSetting cms, int caseHistoryId, CaseLog log, string basePath, TimeZoneInfo userTimeZone, List<CaseFileDto> logFiles = null);
+        void SendSelfServiceCaseLogEmail(int caseId, CaseMailSetting cms, int caseHistoryId, CaseLog log, string basePath, TimeZoneInfo userTimeZone, List<CaseFileDto> logFiles = null, bool caseIsActivated = false);
         void Activate(int caseId, int userId, string adUser, string createByApp, out IDictionary<string, string> errors);
         IList<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user);
         void Commit();
@@ -940,10 +940,11 @@ namespace DH.Helpdesk.Services.Services
             SaveCaseHistory(c, userId, adUser, createdByApp, out errors);  
         }
 
-        public void SendSelfServiceCaseLogEmail(int caseId, CaseMailSetting cms, int caseHistoryId, CaseLog log, string basePath, TimeZoneInfo userTimeZone, List<CaseFileDto> logFiles = null)
+        public void SendSelfServiceCaseLogEmail(int caseId, CaseMailSetting cms, int caseHistoryId, CaseLog log, string basePath, TimeZoneInfo userTimeZone, List<CaseFileDto> logFiles = null, bool caseIsActivated = false)
         {
             // get new case information
             var newCase = _caseRepository.GetDetachedCaseById(caseId);
+            var mailTemplateId = 0;
 
             //get settings for smtp
             var customerSetting =_settingService.GetCustomerSetting(newCase.Customer_Id);
@@ -956,8 +957,10 @@ namespace DH.Helpdesk.Services.Services
                 performerUserEmail = performerUser.Email;
             }
             
-
-
+            if (!caseIsActivated)
+                 mailTemplateId = (int)GlobalEnums.MailTemplates.CaseIsUpdated;
+            else
+                mailTemplateId = (int)GlobalEnums.MailTemplates.CaseIsActivated;
 
             var smtpInfo = new MailSMTPSetting(customerSetting.SMTPServer, customerSetting.SMTPPort, customerSetting.SMTPUserName, customerSetting.SMTPPassWord, customerSetting.IsSMTPSecured);
 
@@ -997,7 +1000,6 @@ namespace DH.Helpdesk.Services.Services
                             if (!string.IsNullOrWhiteSpace(curMail) && _emailService.IsValidEmail(curMail))
                             {
                                 // Inform notifier about external lognote
-                                int mailTemplateId = (int)GlobalEnums.MailTemplates.CaseIsUpdated;
                                 MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                                 if (m != null)
                                 {
@@ -1025,7 +1027,6 @@ namespace DH.Helpdesk.Services.Services
                 // mail about lognote to Working Group User or Working Group Mail
                 if ((!string.IsNullOrEmpty(log.EmailRecepientsInternalLogTo) || !string.IsNullOrEmpty(log.EmailRecepientsInternalLogCc)) && !string.IsNullOrWhiteSpace(log.EmailRecepientsExternalLog) )
                 {
-                    int mailTemplateId = (int)GlobalEnums.MailTemplates.CaseIsUpdated;
                     MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                     if (m != null)
                     {
