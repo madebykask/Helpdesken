@@ -65,6 +65,7 @@
         private readonly IEmailService _emailService;        
         private readonly IMasterDataService _masterDataService;
         private readonly ICaseExtraFollowersService _caseExtraFollowersService;
+        private readonly IRegistrationSourceCustomerService _registrationSourceCustomerService;
 
         private const string ParentPathDefaultValue = "--";
         private const string EnterMarkup = "<br />";
@@ -105,7 +106,8 @@
             OrganizationJsonService orgJsonService,
             ICaseSolutionSettingService caseSolutionSettingService,
             IEmailService emailService,
-            ICaseExtraFollowersService caseExtraFollowersService)
+            ICaseExtraFollowersService caseExtraFollowersService,
+            IRegistrationSourceCustomerService registrationSourceCustomerService)
             : base(masterDataService, caseSolutionService)
         {
             _masterDataService = masterDataService;
@@ -140,7 +142,8 @@
             _urgencyService = urgencyService;
             _impactService = impactService;
             _caseSolutionSettingService = caseSolutionSettingService;
-            _caseExtraFollowersService = caseExtraFollowersService;   
+            _caseExtraFollowersService = caseExtraFollowersService;
+            _registrationSourceCustomerService = registrationSourceCustomerService;
         }
 
 
@@ -346,7 +349,6 @@
 
                 model.NewCase.RegUserId = SessionFacade.CurrentUserIdentity.UserId;
                 model.NewCase.RegUserDomain = SessionFacade.CurrentUserIdentity.Domain;
- 
             }
 
             model.CaseTypeParantPath = ParentPathDefaultValue;
@@ -423,6 +425,17 @@
                     model.NewCase.OtherCost = caseTemplate.OtherCost;
                     model.NewCase.Currency = caseTemplate.Currency;
 
+                    if (caseTemplate.RegistrationSource.HasValue)
+                    {
+                        model.NewCase.RegistrationSourceCustomer_Id = caseTemplate.RegistrationSource.Value;
+                    }
+                    else
+                    {
+                        var registrationSource = _registrationSourceCustomerService.GetCustomersActiveRegistrationSources(customerId)
+                                .FirstOrDefault(x => x.SystemCode == (int)CaseRegistrationSource.SelfService);
+                        if (registrationSource != null)
+                            model.NewCase.RegistrationSourceCustomer_Id = registrationSource.Id;
+                    }
                 }
 
                 if(model.NewCase.ProductArea_Id.HasValue)
