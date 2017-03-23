@@ -20,7 +20,7 @@
     {
         IList<BulletinBoard> GetBulletinBoards(int customerId, bool secure = false);
 
-        IList<BulletinBoard> SearchAndGenerateBulletinBoard(int customerId, IBulletinBoardSearch SearchBulletinBoards);
+        IList<BulletinBoard> SearchAndGenerateBulletinBoard(int customerId, IBulletinBoardSearch SearchBulletinBoards, bool secure = false);
 
         BulletinBoard GetBulletinBoard(int id);
 
@@ -74,16 +74,20 @@
             }
         }
         
-        public IList<BulletinBoard> SearchAndGenerateBulletinBoard(int customerId, IBulletinBoardSearch SearchBulletinBoards)
+        public IList<BulletinBoard> SearchAndGenerateBulletinBoard(int customerId, IBulletinBoardSearch SearchBulletinBoards, bool secure = false)
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var rep = uow.GetRepository<BulletinBoard>();
+                var query = rep.GetAll();
 
-                var query = from bb in rep.GetAll()
-                                        .GetByCustomer(customerId)
-                             select bb;
+                if (secure)
+                {
+                    query = query.RestrictByWorkingGroups(this.workContext);
+                }
 
+                query.GetByCustomer(customerId);
+             
                 if (!string.IsNullOrEmpty(SearchBulletinBoards.SearchBbs))
                 {
                     query = query.Where(x => x.Text.Trim().ToLower().Contains(SearchBulletinBoards.SearchBbs.Trim().ToLower()));
