@@ -76,6 +76,8 @@
 
         public Case NewCase { get; set; }
 
+        public CaseLog CaseLog { get; set; }
+
         public IList<Region> Regions { get; set; }
 
         public IList<Department> Departments { get; set; }

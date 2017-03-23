@@ -5,7 +5,6 @@
     using System.Configuration;
     using System.Linq;
     using System.Net;
-    using System.Net;
     using System.Web;
     using System.Web.Mvc;
     using System.Web.WebPages;
@@ -18,7 +17,6 @@
     using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Enums;
-    using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.SelfService.Infrastructure;
     using DH.Helpdesk.SelfService.Infrastructure.Common.Concrete;
@@ -28,8 +26,6 @@
     using DH.Helpdesk.SelfService.Models.Case;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Concrete;
-    using DH.Helpdesk.Services.utils;
-    using DH.Helpdesk.SelfService.Infrastructure;
     using Models.Shared;
 
     public class CaseController : BaseController
@@ -376,11 +372,6 @@
                         model.NewCase.CaseType_Id = caseTemplate.CaseType_Id.Value;
                     }
 
-                    if(caseTemplate.PerformerUser_Id != null)
-                    {
-                        model.NewCase.Performer_User_Id = caseTemplate.PerformerUser_Id.Value;
-                    }
-
                     var notifier = _computerService.GetInitiatorByUserId(SessionFacade.CurrentUserIdentity.UserId, customerId);
 
                     model.NewCase.ReportedBy = string.IsNullOrEmpty(caseTemplate.ReportedBy)? notifier?.UserId : caseTemplate.ReportedBy;
@@ -407,7 +398,6 @@
                     model.NewCase.System_Id = caseTemplate.System_Id;
                     model.NewCase.Caption = caseTemplate.Caption;
                     model.NewCase.Description = caseTemplate.Description;
-                    model.NewCase.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id;
                     model.NewCase.Priority_Id = caseTemplate.Priority_Id;
                     model.NewCase.Project_Id = caseTemplate.Project_Id;
                     model.NewCase.Urgency_Id = caseTemplate.Urgency_Id;
@@ -424,6 +414,50 @@
                     model.NewCase.Cost = caseTemplate.Cost;
                     model.NewCase.OtherCost = caseTemplate.OtherCost;
                     model.NewCase.Currency = caseTemplate.Currency;
+
+                    //Hidden fields
+                    model.NewCase.Performer_User_Id = caseTemplate.PerformerUser_Id;
+                    model.NewCase.CausingPartId = caseTemplate.CausingPartId;
+                    model.NewCase.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id;
+                    model.NewCase.Project_Id = caseTemplate.Project_Id;
+                    model.NewCase.Problem_Id = caseTemplate.Problem_Id;
+                    model.NewCase.PlanDate = caseTemplate.PlanDate;
+                    model.NewCase.WatchDate = caseTemplate.WatchDate;
+
+                    if(model.NewCase.IsAbout == null)
+                        model.NewCase.IsAbout = new CaseIsAboutEntity();
+
+                    model.NewCase.IsAbout.Id = 0;
+                    model.NewCase.IsAbout.ReportedBy = caseTemplate.IsAbout_ReportedBy;
+                    model.NewCase.IsAbout.Person_Name = caseTemplate.IsAbout_PersonsName;
+                    model.NewCase.IsAbout.Person_Email = caseTemplate.IsAbout_PersonsEmail;
+                    model.NewCase.IsAbout.Person_Phone = caseTemplate.IsAbout_PersonsPhone;
+                    model.NewCase.IsAbout.Person_Cellphone = caseTemplate.IsAbout_PersonsCellPhone;
+                    model.NewCase.IsAbout.Region_Id = caseTemplate.IsAbout_Region_Id;
+                    model.NewCase.IsAbout.Department_Id = caseTemplate.IsAbout_Department_Id;
+                    model.NewCase.IsAbout.OU_Id = caseTemplate.IsAbout_OU_Id;
+                    model.NewCase.IsAbout.CostCentre = caseTemplate.IsAbout_CostCentre;
+                    model.NewCase.IsAbout.Place = caseTemplate.IsAbout_Place;
+                    model.NewCase.IsAbout.UserCode = caseTemplate.UserCode;
+
+                    model.NewCase.Status_Id = caseTemplate.Status_Id;
+                    model.NewCase.StateSecondary_Id = caseTemplate.StateSecondary_Id;
+                    model.NewCase.Verified = caseTemplate.Verified;
+                    model.NewCase.VerifiedDescription = caseTemplate.VerifiedDescription;
+                    model.NewCase.SolutionRate = caseTemplate.SolutionRate;
+
+                    if (!string.IsNullOrEmpty(caseTemplate.Text_External) ||
+                        !string.IsNullOrEmpty(caseTemplate.Text_Internal) || caseTemplate.FinishingCause_Id.HasValue)
+                    {
+                        model.CaseLog = new CaseLog
+                        {
+                            LogType = 0,
+                            LogGuid = Guid.NewGuid(),
+                            TextExternal = caseTemplate.Text_External,
+                            TextInternal = caseTemplate.Text_Internal,
+                            FinishingType = caseTemplate.FinishingCause_Id
+                        };
+                    }
 
                     if (caseTemplate.RegistrationSource.HasValue)
                     {
@@ -862,9 +896,9 @@
         }
 
         [HttpPost]
-        public RedirectToRouteResult NewCase(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey, string followerUsers)
+        public RedirectToRouteResult NewCase(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey, string followerUsers, CaseLog caseLog)
         {
-            int caseId = Save(newCase, caseMailSetting, caseFileKey, followerUsers);
+            int caseId = Save(newCase, caseMailSetting, caseFileKey, followerUsers, caseLog);
             return RedirectToAction("Index", "case", new { id = newCase.Id, showRegistrationMessage = true });
         }
 
@@ -968,7 +1002,7 @@
         }
 
         
-        private int Save(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey, string followerUsers)
+        private int Save(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey, string followerUsers, CaseLog caseLog)
         {
             IDictionary<string, string> errors;
 
@@ -1010,9 +1044,14 @@
                 }
             }
 
-            int caseHistoryId = _caseService.SaveCase(newCase, null, caseMailSetting, 0, SessionFacade.CurrentUserIdentity.UserId, ei, out errors);
-            
-            // save case files            
+            int caseHistoryId = _caseService.SaveCase(newCase, caseLog, caseMailSetting, 0, SessionFacade.CurrentUserIdentity.UserId, ei, out errors);
+
+            // save log
+            caseLog.CaseId = newCase.Id;
+            caseLog.CaseHistoryId = caseHistoryId;
+            caseLog.Id = this._logService.SaveLog(caseLog, 0, out errors);
+
+            // save case files
             var temporaryFiles = _userTemporaryFilesStorage.GetFiles(caseFileKey, ModuleName.Cases);
             var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, newCase.Id)).ToList();
             _caseFileService.AddFiles(newCaseFiles);
