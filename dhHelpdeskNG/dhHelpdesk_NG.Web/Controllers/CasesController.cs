@@ -4552,7 +4552,7 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             // check state secondary info
-            m.CaseLog.SendMailAboutCaseToNotifier = customer.CommunicateWithNotifier.ToBool();
+            m.CaseLog.SendMailAboutCaseToNotifier = false;
 
             m.Disable_SendMailAboutCaseToNotifier = false;
             if (m.case_.StateSecondary_Id > 0)

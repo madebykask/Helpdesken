@@ -30,10 +30,10 @@ function LogInitForm() {
 
     $('#CaseLog_TextExternal').bind('input propertychange', function () {
         var informNotifier = $('#CaseLog_SendMailAboutCaseToNotifier');
-        var isInformNotifierBehavior = informNotifier.attr("InformNotifierBehavior");
-        if (isInformNotifierBehavior == "false") {
-            return;
-        }
+//        var isInformNotifierBehavior = informNotifier.attr("InformNotifierBehavior");
+//        if (isInformNotifierBehavior == "false") {
+//            return;
+//        }
 
         informNotifier.removeAttr('checked');
         if (this.value.length) {
