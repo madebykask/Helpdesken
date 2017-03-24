@@ -208,7 +208,7 @@ $(function () {
                         for (var j = 0; j < faq.Files.length; j++) {
                             var file = faq.Files[j];                            
                             var downloadLink = downloadFileUrl + '?faqId=' + faq.Id + '&fileName=' + file.FileName;
-                            faqFiles += '<a href=' + downloadLink + ' style="cursor: pointer;">' +
+                            faqFiles += '<a href="' + downloadLink + '" style="cursor: pointer;">' +
                                         '<span class="glyphicon glyphicon-file"></span>&nbsp;' + file.FileName + '</a>';
                             faqFiles += '<br />';
                         }
