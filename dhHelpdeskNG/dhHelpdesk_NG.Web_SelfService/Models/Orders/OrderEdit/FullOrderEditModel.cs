@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DH.Helpdesk.BusinessData.Models.Orders.Order;
 using DH.Helpdesk.Common.ValidationAttributes;
 using DH.Helpdesk.SelfService.Infrastructure.Tools;
@@ -51,6 +52,8 @@ namespace DH.Helpdesk.SelfService.Models.Orders.OrderEdit
         }
 
         public bool IsNew { get; private set; }
+
+        public string OrderTypeDescription { get; set; }
 
         [NotNull]
         public DeliveryEditModel Delivery { get; set; }
@@ -110,5 +113,7 @@ namespace DH.Helpdesk.SelfService.Models.Orders.OrderEdit
         public List<int> DeletedLogIds { get; set; }
 
         public OrderStatusItem[] Statuses { get; set; }
+
+        public Tuple<int?, string> OrderTypeDocument { get; set; }
     }
 }

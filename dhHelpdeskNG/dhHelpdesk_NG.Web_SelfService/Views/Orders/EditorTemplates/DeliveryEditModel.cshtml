@@ -7,21 +7,21 @@
     <div class="row form-horizontal">
         <div class="col-md-12 dh-col ">
 
-            @Html.EditorFor(m => m.DeliveryName, "Fields/Text")
-            @Html.EditorFor(m => m.DeliveryPhone, "Fields/Text")
+            @Html.EditorFor(m => m.DeliveryName, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "50" } } })
+            @Html.EditorFor(m => m.DeliveryPhone, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "50" } } })
 
 
             @Html.EditorFor(m => m.DeliveryDate, "Fields/Date", new { id = "deliverydate_datepicker" })
             @Html.EditorFor(m => m.InstallDate, "Fields/Date", new { id = "installdate_datepicker" })
             @Html.EditorFor(m => m.DeliveryDepartment, "Fields/List", new { Source = Model.Departments })
-            @Html.EditorFor(m => m.DeliveryOu, "Fields/Text")
-            @Html.EditorFor(m => m.DeliveryAddress, "Fields/Text")
-            @Html.EditorFor(m => m.DeliveryPostalCode, "Fields/Text")
-            @Html.EditorFor(m => m.DeliveryPostalAddress, "Fields/Text")
-            @Html.EditorFor(m => m.DeliveryLocation, "Fields/Text")
-            @Html.EditorFor(m => m.DeliveryInfo1, "Fields/Text")
-            @Html.EditorFor(m => m.DeliveryInfo2, "Fields/Text")
-            @Html.EditorFor(m => m.DeliveryInfo3, "Fields/Text")
+            @Html.EditorFor(m => m.DeliveryOu, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "50" } } })
+            @Html.EditorFor(m => m.DeliveryAddress, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "50" } } })
+            @Html.EditorFor(m => m.DeliveryPostalCode, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "10" } } })
+            @Html.EditorFor(m => m.DeliveryPostalAddress, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "50" } } })
+            @Html.EditorFor(m => m.DeliveryLocation, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "50" } } })
+            @Html.EditorFor(m => m.DeliveryInfo1, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "200" } } })
+            @Html.EditorFor(m => m.DeliveryInfo2, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "50" } } })
+            @Html.EditorFor(m => m.DeliveryInfo3, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "50" } } })
             @Html.EditorFor(m => m.DeliveryOuId, "Fields/List", new { Source = Model.Units })
         </div>
     </div>

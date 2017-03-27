@@ -25,6 +25,7 @@
             this.Status = status;
         }
 
+        [LocalizedStringLength(50)]
         public string Header { get; set; }
 
         [NotNull]

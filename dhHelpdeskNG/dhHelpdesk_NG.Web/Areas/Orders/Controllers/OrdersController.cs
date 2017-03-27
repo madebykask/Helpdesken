@@ -64,6 +64,8 @@
 
         private readonly ISettingService _settingService;
 
+        private readonly IDocumentService _documentService;
+
         public OrdersController(
                 IMasterDataService masterDataService,
                 IOrdersService ordersService,
@@ -80,7 +82,8 @@
                 IUserPermissionsChecker userPermissionsChecker,
                 IOrderTypeService orderTypeService,
                 ICustomerService customerService,
-                ISettingService settingService)
+                ISettingService settingService,
+                IDocumentService documentService)
             : base(masterDataService)
         {
             _ordersService = ordersService;
@@ -96,6 +99,7 @@
             _orderTypeService = orderTypeService;
             _customerService = customerService;
             _settingService = settingService;
+            _documentService = documentService;
 
             _filesStateStore = editorStateCacheFactory.CreateForModule(ModuleName.Orders);
             _filesStore = temporaryFilesCacheFactory.CreateForModule(ModuleName.Orders);
@@ -104,17 +108,17 @@
         [HttpGet]
         public ActionResult Index()
         {
-            var filters = SessionFacade.FindPageFilters<OrdersFilterModel>(PageName.OrdersOrders);
-            if (filters == null)
-            {
-                filters = OrdersFilterModel.CreateDefault();
-                SessionFacade.SavePageFilters(PageName.OrdersOrders, filters);
-            }
-
             int[] selectedStatuses;
             var data = _ordersService.GetOrdersFilterData(_workContext.Customer.CustomerId, _workContext.User.UserId, out selectedStatuses);
 
-            var filledFilters = new OrdersFilterModel(filters.OrderTypeId, filters.AdministratiorIds, filters.StartDate, filters.EndDate, selectedStatuses, filters.Text, filters.RecordsOnPage, filters.SortField);
+            var filters = SessionFacade.FindPageFilters<OrdersFilterModel>(PageName.OrdersOrders);
+            if (filters == null)
+            {
+                filters = OrdersFilterModel.CreateDefault(selectedStatuses);
+                SessionFacade.SavePageFilters(PageName.OrdersOrders, filters);
+            }
+
+            var filledFilters = new OrdersFilterModel(filters.OrderTypeId, filters.AdministratiorIds, filters.StartDate, filters.EndDate, filters.StatusIds, filters.Text, filters.RecordsOnPage, filters.SortField);
 
             var model = _ordersModelFactory.GetIndexModel(data, filledFilters);
             return View(model);
@@ -241,7 +245,7 @@
         }
 
         [HttpGet]
-        public ViewResult Edit(int id)
+        public ViewResult Edit(int id, bool retToCase = false)
         {
             _filesStateStore.ClearObjectDeletedItems(id, OrderDeletedItem.Logs);
 
@@ -267,6 +271,7 @@
 
             var model = _orderModelFactory.Create(response, _workContext.Customer.CustomerId);
             model.UserHasAdminOrderPermission = userHasAdminOrderPermission;
+            model.IsReturnToCase = retToCase;
 
             return View(model);
         }
@@ -418,5 +423,17 @@
             _filesStateStore.AddDeletedItem(logId, OrderDeletedItem.Logs, orderId);
             return RedirectToAction("Logs", new { orderId, subtopic });
         }
+
+        [HttpGet]
+        public FileContentResult DownloadDocument(int documentId)
+        {
+            var file = _documentService.GetDocumentFile(documentId);
+            if (file == null)
+            {
+                throw new HttpException((int)HttpStatusCode.NotFound, null);
+            }
+            return File(file.File, MimeType.BinaryFile, file.FileName);
+        }
+
     }
 }

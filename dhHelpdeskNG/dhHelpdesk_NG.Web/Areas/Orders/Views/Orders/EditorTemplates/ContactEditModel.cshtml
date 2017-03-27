@@ -5,9 +5,9 @@
 <h4>@Translation.GetCoreTextTranslation("Kontakt")</h4>
 <table class="tableform">
     <tbody>
-        @Html.EditorFor(m => m.Id, "Fields/Text")
-        @Html.EditorFor(m => m.Name, "Fields/Text")
-        @Html.EditorFor(m => m.Phone, "Fields/Text")
-        @Html.EditorFor(m => m.Email, "Fields/Text")
+        @Html.EditorFor(m => m.Id, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "200" } } })
+        @Html.EditorFor(m => m.Name, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "50" } } })
+        @Html.EditorFor(m => m.Phone, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "50" } } })
+        @Html.EditorFor(m => m.Email, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "50" } } })
     </tbody>
 </table>

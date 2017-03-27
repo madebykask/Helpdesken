@@ -120,11 +120,14 @@ using System;
     public interface ICustomerUserRepository : IRepository<CustomerUser>
     {
         CustomerUser GetCustomerSettings(int customer, int user);
+
         IList<UserCustomer> GetCustomerUsersForStart(int userId);
         IList<CustomerUserList> GetCustomerUsersForStartFinal(int userId);
         IList<CustomerUser> GetCustomerUsersForCustomer(int customeId);
         IList<CustomerUser> GetCustomerUsersForUser(int userId);
         void UpdateUserSetting(UserCaseSetting newSetting);
+        bool IsCustomerUser(int customerId, int userId);
+
     }
 
     public class CustomerUserRepository : RepositoryBase<CustomerUser>, ICustomerUserRepository
@@ -269,6 +272,12 @@ using System;
                                                              : newSetting.CaseRemainingTime;
             }
         }
+
+        public bool IsCustomerUser(int customerId, int userId)
+        {
+            return DataContext.CustomerUsers.Any(cu => cu.Customer_Id == customerId && cu.User_Id == userId);
+        }
+
     }
 
     #endregion

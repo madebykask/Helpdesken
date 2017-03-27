@@ -6,30 +6,30 @@
     <table>
         <tr>
             <td style="width: 210px;">
-                <i class="dh-icon-textfield"></i>&nbsp;@Translation.Get("Textfält", Enums.TranslationSource.TextTranslation)<br />
+                <i class="dh-icon-textfield"></i>&nbsp;@Translation.GetCoreTextTranslation("Textfält")<br />
             </td>
             <td style="width: 210px;">
-                <i class="dh-icon-select"></i>&nbsp;@Translation.Get("Vallista - dropdown", Enums.TranslationSource.TextTranslation)<br />
+                <i class="dh-icon-select"></i>&nbsp;@Translation.GetCoreTextTranslation("Vallista - dropdown")<br />
             </td>
             <td style="width: 210px;">
-                <i class="dh-icon-numericfield"></i>&nbsp;@Translation.Get("Numeriskt fält", Enums.TranslationSource.TextTranslation)<br />
+                <i class="dh-icon-numericfield"></i>&nbsp;@Translation.GetCoreTextTranslation("Numeriskt fält")<br />
             </td>
             <td>
-                <i class="dh-icon-attachment"></i>&nbsp;@Translation.Get("Bifoga fil", Enums.TranslationSource.TextTranslation)<br />
+                <i class="dh-icon-attachment"></i>&nbsp;@Translation.GetCoreTextTranslation("Bifoga fil")<br />
             </td>
         </tr>
         <tr>
             <td>
-                <i class="dh-icon-textarea"></i>&nbsp;@Translation.Get("Textfält - större", Enums.TranslationSource.TextTranslation)<br />
+                <i class="dh-icon-textarea"></i>&nbsp;@Translation.GetCoreTextTranslation("Textfält - större")<br />
             </td>
             <td>
-                <i class="dh-icon-calendar"></i>&nbsp;@Translation.Get("Datumfält", Enums.TranslationSource.TextTranslation)<br />
+                <i class="dh-icon-calendar"></i>&nbsp;@Translation.GetCoreTextTranslation("Datumfält")<br />
             </td>
             <td>
-                <i class="dh-icon-checkbox"></i>&nbsp;@Translation.Get("Checkbox", Enums.TranslationSource.TextTranslation)<br />
+                <i class="dh-icon-checkbox"></i>&nbsp;@Translation.GetCoreTextTranslation("Checkbox")<br />
             </td>
             <td>
-                ---&nbsp;@Translation.Get("Automatisk hämtning", Enums.TranslationSource.TextTranslation)<br />
+                ---&nbsp;@Translation.GetCoreTextTranslation("Automatisk hämtning")<br />
             </td>
         </tr>
     </table>
@@ -45,6 +45,7 @@
         <th>@Translation.GetCoreTextTranslation("Rubrik")</th>
         <th>@Translation.GetCoreTextTranslation("Obligatorisk")</th>
         <th>@Translation.GetCoreTextTranslation("Lista")</th>
+        <th>@Translation.GetCoreTextTranslation("Flerval")</th>
         <th>@Translation.GetCoreTextTranslation("Standardvärde")</th>
         <th>@Translation.GetCoreTextTranslation("Hjälp")</th>
         @*<th>@Translation.GetCoreTextTranslation("Identifierare")</th>*@
@@ -53,8 +54,9 @@
     <tbody>
         <tr>
             <td colspan="4" class="header valign-middle">@Translation.GetCoreTextTranslation("Allmänt")</td>
-            <td colspan="5">
+            <td colspan="6">
                 @Html.TextBoxFor(m => m.General.Header)
+                @Html.ValidationMessageFor(m => m.General.Header)
             </td>
         </tr>
         <tr>
@@ -77,8 +79,9 @@
         </tr>
         <tr>
             <td colspan="4" class="header valign-middle">@Translation.GetCoreTextTranslation("Beställare")</td>
-            <td colspan="5">
+            <td colspan="6">
                 @Html.TextBoxFor(m => m.Orderer.Header)
+                @Html.ValidationMessageFor(m => m.Orderer.Header)
             </td>
         </tr>
         <tr>
@@ -98,12 +101,13 @@
         </tr>
         <tr>
             <td colspan="4" class="header valign-middle">@Translation.GetCoreTextTranslation("Användarinformation")</td>
-            <td colspan="5">
+            <td colspan="6">
                 @Html.TextBoxFor(m => m.User.Header)
+                @Html.ValidationMessageFor(m => m.User.Header)
             </td>
         </tr>
         <tr>
-            @Html.EditorFor(m => m.Orderer.OrdererId, new { type = OrderSettingWebType.Text })
+            @Html.EditorFor(m => m.Orderer.OrdererId, new {type = OrderSettingWebType.Text})
         </tr>
         <tr>
             @Html.EditorFor(m => m.User.PersonalIdentityNumber, new {type = OrderSettingWebType.Text})
@@ -179,8 +183,9 @@
         </tr>
         <tr>
             <td colspan="4" class="header valign-middle">@Translation.GetCoreTextTranslation("Beställning")</td>
-            <td colspan="5">
+            <td colspan="6">
                 @Html.TextBoxFor(m => m.Order.Header)
+                @Html.ValidationMessageFor(m => m.Order.Header)
             </td>
         </tr>
         <tr>
@@ -251,8 +256,9 @@
         </tr>
         <tr>
             <td colspan="4" class="header valign-middle">@Translation.GetCoreTextTranslation("Mottagare")</td>
-            <td colspan="5">
+            <td colspan="6">
                 @Html.TextBoxFor(m => m.Receiver.Header)
+                @Html.ValidationMessageFor(m => m.Receiver.Header)
             </td>
         </tr>
         <tr>
@@ -275,8 +281,9 @@
         </tr>
         <tr>
             <td colspan="4" class="header valign-middle">@Translation.GetCoreTextTranslation("Orderinformation")</td>
-            <td colspan="5">
+            <td colspan="6">
                 @Html.TextBoxFor(m => m.Supplier.Header)
+                @Html.ValidationMessageFor(m => m.Supplier.Header)
             </td>
         </tr>
         <tr>
@@ -290,8 +297,9 @@
         </tr>
         <tr>
             <td colspan="4" class="header valign-middle">@Translation.GetCoreTextTranslation("Leveransinformation")</td>
-            <td colspan="5">
+            <td colspan="6">
                 @Html.TextBoxFor(m => m.Delivery.Header)
+                @Html.ValidationMessageFor(m => m.Delivery.Header)
             </td>        
         </tr>
         <tr>
@@ -338,8 +346,9 @@
         </tr>
         <tr>
             <td colspan="4" class="header valign-middle">@Translation.GetCoreTextTranslation("Program")</td>
-            <td colspan="5">
+            <td colspan="6">
                 @Html.TextBoxFor(m => m.Program.Header)
+                @Html.ValidationMessageFor(m => m.Program.Header)
             </td>         
         </tr>
         <tr>
@@ -350,8 +359,9 @@
         </tr>
         <tr>
             <td colspan="4" class="header valign-middle">@Translation.GetCoreTextTranslation("Övrigt")</td>
-            <td colspan="5">
+            <td colspan="6">
                 @Html.TextBoxFor(m => m.Other.Header)
+                @Html.ValidationMessageFor(m => m.Other.Header)
             </td>          
         </tr>
         <tr>
@@ -364,7 +374,7 @@
             @Html.EditorFor(m => m.Other.Info, new { type = OrderSettingWebType.WideText })
         </tr>
         <tr>
-            <td colspan="9" class="header">@Translation.GetCoreTextTranslation("Logg")</td>
+            <td colspan="10" class="header">@Translation.GetCoreTextTranslation("Logg")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.Log.Log)

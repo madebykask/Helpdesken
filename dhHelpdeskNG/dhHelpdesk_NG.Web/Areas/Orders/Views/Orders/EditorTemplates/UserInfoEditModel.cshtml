@@ -1,60 +1,76 @@
 ﻿
 @using DH.Helpdesk.Web.Infrastructure
+@using LinqLib.Array
 @model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.UserInfoEditModel
+
 
 <h4>@Model.Header</h4>
 <table class="tableform">
     <tbody>
         @if (Model.OrdererId.Show)
         {
+            if (Model.OrdererId.IsMultiple)
+            {
+                @Html.EditorFor(m => m.OrdererId, "Fields/MultiText")
+            }
+            else
+            {
+                <tr>
+                    <td class="span3">
+                        @Html.FieldCaption(Model.OrdererId)
+                    </td>
+                    <td class="span6">
+                        @Html.TextBoxFor(model => model.OrdererId.Value, new
+                   {
+                       maxlength = "40",
+                       autocomplete = "Off",
+                       data_field = "userId",
+                       @id = "orderer_OrdererId"
+                   })
+                    </td>
+                    <td class="span3">
+                        @Model.OrdererId.Help
+                    </td>
+                </tr>
+            }
+        }
+
+        @Html.EditorFor(m => m.PersonalIdentityNumber, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererCode" }, { "maxlength", "200" } } })
+        @Html.EditorFor(m => m.OrdererName, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererName" }, { "maxlength", "50" } } })
+        @Html.EditorFor(m => m.OrdererLocation, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererLocation" }, { "maxlength", "50" } } })
+        @Html.EditorFor(m => m.OrdererEmail, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererEmail" }, { "maxlength", "100" } } })
+        @Html.EditorFor(m => m.Extension, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "20" } } })
+        @Html.EditorFor(m => m.Title, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "50" } } })
+        @Html.EditorFor(m => m.EmploymentTypeId, "Fields/List", new { Source = Model.EmploymentTypes })
+        @Html.EditorFor(m => m.OrdererAddress, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "50" } } })
+        @*@if (Model.DepartmentId1.Show)
+        {
             <tr>
                 <td class="span3">
-                    @Html.FieldCaption(Model.OrdererId)
+                    <label>@Translation.GetCoreTextTranslation("Område")</label>
                 </td>
                 <td class="span6">
-                    @Html.TextBoxFor(model => model.OrdererId.Value, new { maxlength = "40", autocomplete = "Off", data_field = "userId", @id="orderer_OrdererId" })
+                    @Html.DropDownListFor(m => m.RegionId, Model.Regions, string.Empty, new { id = "region_dropdown" })
                 </td>
-                <td class="span3">
-                    @Model.OrdererId.Help
-                </td>
+                <td class="span3"></td>
             </tr>
-        }
-    
-    @Html.EditorFor(m => m.PersonalIdentityNumber, "Fields/Text")
-    @Html.EditorFor(m => m.OrdererName, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererName" } } })
-    @Html.EditorFor(m => m.OrdererLocation, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererLocation" } } })
-    @Html.EditorFor(m => m.OrdererEmail, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererEmail" } } })
-    @Html.EditorFor(m => m.Extension, "Fields/Text")
-    @Html.EditorFor(m => m.Title, "Fields/Text")
-    @Html.EditorFor(m => m.EmploymentTypeId, "Fields/List", new { Source = Model.EmploymentTypes })
-    @Html.EditorFor(m => m.OrdererAddress, "Fields/Text")
-    @if (Model.DepartmentId1.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.GetCoreTextTranslation("Område")</label>
-            </td>
-            <td class="span6">
-                @Html.DropDownListFor(m => m.RegionId, Model.Regions, string.Empty, new { id = "region_dropdown" })
-            </td>
-            <td class="span3"></td>
-        </tr>
-    }
-    @Html.EditorFor(m => m.DepartmentId1, "Fields/List", new { Source = Model.Departments, Id = "orderer_departmentId" })
-    @Html.EditorFor(m => m.Unit, "Fields/List", new { Source = Model.Units, Id = "orderer_unit_select" })
-    @Html.EditorFor(m => m.DepartmentId2, "Fields/List", new {Source = Model.Departments2})
-    @Html.EditorFor(m => m.RoomNumber, "Fields/Text")
-    @Html.EditorFor(m => m.OrdererPhone, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererPhone" } } })
-    @Html.EditorFor(m => m.OrdererCode, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererCode" } } })
-    @Html.EditorFor(m => m.Activity, "Fields/Text")
-    @Html.EditorFor(m => m.Manager, "Fields/Text")
-    @Html.EditorFor(m => m.OrdererInvoiceAddress, "Fields/Text")
-    @Html.EditorFor(m => m.OrdererReferenceNumber, "Fields/Text")
-    @Html.EditorFor(m => m.AccountingDimension1, "Fields/Text")
-    @Html.EditorFor(m => m.AccountingDimension2, "Fields/Text")
-    @Html.EditorFor(m => m.AccountingDimension3, "Fields/Text")
-    @Html.EditorFor(m => m.AccountingDimension4, "Fields/Text")
-    @Html.EditorFor(m => m.AccountingDimension5, "Fields/Text")
-    @Html.EditorFor(m => m.Info, "Fields/Text")
+        }*@
+        @Html.EditorFor(m => m.DepartmentId1, "Fields/List", new { Source = Model.Departments, Id = "orderer_departmentId" })
+        @Html.EditorFor(m => m.Unit, "Fields/List", new { Source = Model.Units, Id = "orderer_unit_select" })
+        @Html.EditorFor(m => m.DepartmentId2, "Fields/List", new { Source = Model.Departments2 })
+        @Html.EditorFor(m => m.RoomNumber, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "50" } } })
+        @Html.EditorFor(m => m.OrdererPhone, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "order_OrdererPhone" }, { "maxlength", "50" } } })
+        @Html.EditorFor(m => m.OrdererCode, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "10" } } })
+        @Html.EditorFor(m => m.Activity, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "50" } } })
+        @Html.EditorFor(m => m.Manager, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "50" } } })
+        @Html.EditorFor(m => m.OrdererInvoiceAddress, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "50" } } })
+        @Html.EditorFor(m => m.OrdererReferenceNumber, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "20" } } })
+        @Html.EditorFor(m => m.AccountingDimension1, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "20" } } })
+        @Html.EditorFor(m => m.AccountingDimension2, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "20" } } })
+        @Html.EditorFor(m => m.AccountingDimension3, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "20" } } })
+        @Html.EditorFor(m => m.AccountingDimension4, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "20" } } })
+        @Html.EditorFor(m => m.AccountingDimension5, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "20" } } })
+        @Html.EditorFor(m => m.Info, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "200" } } })
     </tbody>
+
 </table>

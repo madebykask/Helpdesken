@@ -5,7 +5,7 @@
     <div class="row form-horizontal">
         <div class="col-md-12 dh-col">
             @Html.EditorFor(m => m.Programs, "Fields/FlagsList", new { Source = Model.AllPrograms })
-            @Html.EditorFor(m => m.InfoProduct, "Fields/WideText")
+            @Html.EditorFor(m => m.InfoProduct, "Fields/WideText", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "500" } } })
         </div>
     </div>
 </div>

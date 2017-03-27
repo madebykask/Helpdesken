@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
+﻿using System.Collections.Generic;
+using System.Data.Entity;
+
+namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
 {
     using System.Linq;
 
@@ -94,6 +97,14 @@
 
                 DataContext.FAQLanguages.Add(newFaqLng);
             }
+        }
+
+        public List<FaqEntity> GetFaqsByCustomerId(int customerId, bool includePublic = true)
+        {
+            var faqs = DataContext.FAQs.Include(x => x.FaqLanguages).Where(x => x.Customer_Id == customerId);
+            if (!includePublic)
+                faqs = faqs.Where(x => x.InformationIsAvailableForNotifiers == 1);
+            return faqs.ToList();
         }
 
         #endregion

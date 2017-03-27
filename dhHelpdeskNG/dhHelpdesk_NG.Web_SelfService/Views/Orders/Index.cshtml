@@ -50,10 +50,10 @@
                                 @Html.DropDownListFor(m => m.OrderTypeId, Model.OrderTypesSearch, new { id = "ordertypes_dropdown", @style = "width:300px", data_placeholder = Translation.Get("Välj en eller flera"), @class = "" })
                             </div>
                         </div>
-                        <div class="form-group row">
+                        @*<div class="form-group row">
                             <div class="col-md-1">@Translation.Get("Handläggare")</div>
                             <div class="col-md-11">@Html.DropDownListFor(m => m.AdministratorIds, Model.Administrators, new { id = "administrators_dropdown", multiple = "multiple", @class = "chosen-select", data_placeholder = Translation.Get("Välj en eller flera") })</div>
-                        </div>
+                        </div>*@
                         <div class="form-group row">
                             <div class="col-md-1">
                                 @Translation.Get("Beställningsdatum")
@@ -84,7 +84,17 @@
             <div class="row">
                 <div class="col-md-12 table-responsive">
                     <div id="OrdersOrdersTableContainer">
-                        @Html.Action("Orders", "Orders", new { model = (OrdersIndexModel)null })
+                        @{
+                            if (Model.Statuses.SelectedValues != null)
+                            {
+                                Model.StatusIds = (int[])Model.Statuses.SelectedValues;
+                            }
+                            if (Model.Administrators.SelectedValues != null)
+                            {
+                                Model.AdministratorIds = (int[])Model.Administrators.SelectedValues;
+                            }
+                        }
+                        @Html.Action("Orders", "Orders", new {model = Model})
                     </div>
                 </div>
             </div>

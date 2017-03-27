@@ -37,8 +37,8 @@
             List<CaseListToCase> fieldSettings, 
             FilesModel caseFiles, 
             IList<CaseFieldSetting> caseFieldSettings,
-            IList<Priority> priorities,
-            JsApplicationOptions jsApplicationOptions)
+            JsApplicationOptions jsApplicationOptions,
+            IEnumerable<CaseFieldSettingsWithLanguage> caseFieldSettingWithLangauges)
         {
             NewCase = newCase;
             Regions = regions;
@@ -58,7 +58,7 @@
             CaseFieldSettings = caseFieldSettings;
             JsApplicationOptions = jsApplicationOptions;
             CaseTypeRelatedFields = new List<KeyValuePair<int, string>>();
-            Priorities = priorities;
+            CaseFieldSettingWithLangauges = caseFieldSettingWithLangauges;
         }
 
 
@@ -75,6 +75,8 @@
         public IList<ProductArea> ProductAreas { get; set; }
 
         public Case NewCase { get; set; }
+
+        public CaseLog CaseLog { get; set; }
 
         public IList<Region> Regions { get; set; }
 
@@ -106,6 +108,8 @@
 
         public IList<CaseFieldSetting> CaseFieldSettings { get; set; }
 
+        public IEnumerable<CaseFieldSettingsWithLanguage> CaseFieldSettingWithLangauges { get; set; }
+
         public JsApplicationOptions JsApplicationOptions { get; set; }
 
         public List<FieldSettingJSModel> JsFieldSettings { get; set; }
@@ -117,8 +121,7 @@
         public SendToDialogModel SendToDialogModel { get; set; }
 
         public List<KeyValuePair<int,string>> CaseTypeRelatedFields { get; set; }
-    
-        public IList<Priority> Priorities { get; set; }
+   
 
     }
 

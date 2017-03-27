@@ -12,6 +12,7 @@ $(function () {
         var defaultCategoryId = 0;
         var answerCaption = '';
         var internalAnswerCaption = '';
+        var urlCaption = '';
         var fontBoldClass;
         var downloadFileUrl = '';
         var baseFilePath = '';
@@ -25,6 +26,7 @@ $(function () {
             hierarchyData = params.hierarchyData || [];
             answerCaption = params.answerCaption ||'';
             internalAnswerCaption = params.internalAnswerCaption || '';
+            urlCaption = params.URLCaption || '';
 
             downloadFileUrl = params.downloadFileUrl || '';            
 
@@ -179,8 +181,22 @@ $(function () {
 
                 if (faq.Question != '' || faq.Answer != '') {
                     var faqDetails = dateToDisplayDate(faq.CreatedDate) + '<br /><br />' +
-                                    '<b>' + answerCaption + '</b><br />' + faq.Answer.replace(/\</g, "").replace(/\>/g, "") + '<br /><br />' +
-                                    '<b>' + internalAnswerCaption + '</b><br/>' + faq.InternalAnswer.replace(/\</g, "").replace(/\</g, "") + '<br />';
+                                    '<b>' + answerCaption + '</b><br />' + faq.Answer + '<br /><br />';
+                    //                                    '<b>' + internalAnswerCaption + '</b><br/>' + faq.InternalAnswer.replace(/\</g, "").replace(/\</g, "") + '<br /><br />' +
+                    if (faq.Url1) {
+                        var url1 = faq.Url1;
+                        if (url1.indexOf("http://") < 0 && url1.indexOf("https://") < 0) {
+                            url1 = "http://" + url1;
+                        }
+                        faqDetails = faqDetails + '<b>' + urlCaption + '</b><br/>' + '<a href="' + url1 + '">' + faq.Url1 + '<a/>' + '<br />';
+                    }
+                    if (faq.Url2) {
+                        var url2 = faq.Url2;
+                        if (url2.indexOf("http://") < 0 && url2.indexOf("https://") < 0) {
+                            url2 = "http://" + url2;
+                        }
+                        faqDetails = faqDetails + '<b>' + urlCaption + '</b><br/>' + '<a href="' + url2 + '">' + faq.Url2 + '<a/>' + '<br /><br />';
+                    }
 
                     faqDetails = faqDetails.replace(/(?:\r\n|\r|\n)/g, '<br />');
 
@@ -192,7 +208,7 @@ $(function () {
                         for (var j = 0; j < faq.Files.length; j++) {
                             var file = faq.Files[j];                            
                             var downloadLink = downloadFileUrl + '?faqId=' + faq.Id + '&fileName=' + file.FileName;
-                            faqFiles += '<a href=' + downloadLink + ' style="cursor: pointer;">' +
+                            faqFiles += '<a href="' + downloadLink + '" style="cursor: pointer;">' +
                                         '<span class="glyphicon glyphicon-file"></span>&nbsp;' + file.FileName + '</a>';
                             faqFiles += '<br />';
                         }

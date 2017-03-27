@@ -325,60 +325,28 @@
                         else
                         {
                             <li class="blue">
-                                <a href="@Url.Action("UserCases", "case", new { customerId = pCustomerId, progressId = CaseProgressFilter.CasesInProgress, area = "" })">
+                                <a href="@Url.Action("UserCases", "case", new { customerId = pCustomerId, area = "" })">
                                     <i class="fa fa-clock-o mnu-fa"></i><br />
                                     @*<div class="ico-ongoing"></div>*@
                                     @if (appType == ApplicationTypes.LineManager)
                                     {
-                                        @Translation.Get("Ongoing Service Requests", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Service Requests", Enums.TranslationSource.TextTranslation)
                                     }
                                     else
                                     {
-                                        @Translation.Get("Ongoing cases", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Cases", Enums.TranslationSource.TextTranslation)
                                     }
                                 </a>
                             </li>
                         }
                     }
-
-                    @if (!hideMenu)
-                    {
-                        var finishedService = pActionSettings.SingleOrDefault(a => a.ObjectId == ActionObject.FinishedService);
-                        if (finishedService != null)
-                        {
-                            if (finishedService.Visibled)
-                            {
-                                <li class="blue">
-                                    <a href="@Url.Action("UserCases", "case", new { customerId = pCustomerId, progressId = CaseProgressFilter.ClosedCases, area = "" })">
-                                        <i class="@(string.IsNullOrEmpty(finishedService.ObjectClass) ? "fa fa-thumbs-o-up mnu-fa" : finishedService.ObjectClass)"></i><br />
-                                        @Translation.Get(finishedService.ObjectValue, Enums.TranslationSource.TextTranslation)
-                                    </a>
-                                </li>
-                            }
-                        }
-                        else
-                        {
-                            <li class="blue">
-                                <a href="@Url.Action("UserCases", "case", new { customerId = pCustomerId, progressId = CaseProgressFilter.ClosedCases, area = "" })">
-                                    <i class="fa fa-thumbs-o-up mnu-fa"></i><br />
-                                    @if (appType == ApplicationTypes.LineManager)
-                                    {
-                                        @Translation.Get("Finished Service Requests", Enums.TranslationSource.TextTranslation)
-                                    }
-                                    else
-                                    {
-                                        @Translation.Get("Closed cases", Enums.TranslationSource.TextTranslation)
-                                    }
-                                </a>
-                            </li>
-                        }
-                    }
+                    
                     @if (!hideMenu && SessionFacade.CurrentLocalUser != null)
                     {
                         <li class="blue">
                             <a href="@Url.Action("Index", "Orders", new { customerId = pCustomerId, area = "" })">
                                 <i class="fa fa-archive mnu-fa"></i><br />
-                                @Translation.Get("Orders")
+                                @Translation.Get("Orders", Enums.TranslationSource.TextTranslation)
                             </a>
                         </li>
                     }

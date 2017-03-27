@@ -5,7 +5,6 @@
     using System.Configuration;
     using System.Linq;
     using System.Net;
-    using System.Net;
     using System.Web;
     using System.Web.Mvc;
     using System.Web.WebPages;
@@ -18,7 +17,6 @@
     using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Enums;
-    using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.SelfService.Infrastructure;
     using DH.Helpdesk.SelfService.Infrastructure.Common.Concrete;
@@ -28,8 +26,6 @@
     using DH.Helpdesk.SelfService.Models.Case;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Concrete;
-    using DH.Helpdesk.Services.utils;
-    using DH.Helpdesk.SelfService.Infrastructure;
     using Models.Shared;
 
     public class CaseController : BaseController
@@ -65,7 +61,7 @@
         private readonly IEmailService _emailService;        
         private readonly IMasterDataService _masterDataService;
         private readonly ICaseExtraFollowersService _caseExtraFollowersService;
-        private readonly IPriorityService _priorityService;
+        private readonly IRegistrationSourceCustomerService _registrationSourceCustomerService;
 
         private const string ParentPathDefaultValue = "--";
         private const string EnterMarkup = "<br />";
@@ -107,7 +103,7 @@
             ICaseSolutionSettingService caseSolutionSettingService,
             IEmailService emailService,
             ICaseExtraFollowersService caseExtraFollowersService,
-            IPriorityService priorityService)
+            IRegistrationSourceCustomerService registrationSourceCustomerService)
             : base(masterDataService, caseSolutionService)
         {
             _masterDataService = masterDataService;
@@ -143,7 +139,7 @@
             _impactService = impactService;
             _caseSolutionSettingService = caseSolutionSettingService;
             _caseExtraFollowersService = caseExtraFollowersService;
-            _priorityService = priorityService;    
+            _registrationSourceCustomerService = registrationSourceCustomerService;
         }
 
 
@@ -188,24 +184,26 @@
                 bool userHasAccessToCase = false;
                 var currentApplicationType = ConfigurationManager.AppSettings[AppSettingsKey.CurrentApplicationType].ToString().ToLower();
                 var curUserId = SessionFacade.CurrentUserIdentity.UserId;
+                var caseListCondition = ConfigurationManager.AppSettings[AppSettingsKey.CaseList].ToString().ToLower().Split(',');
+
                 if (currentApplicationType == ApplicationTypes.LineManager)
                 {
                     var coWorkers = SessionFacade.CurrentCoWorkers != null ?
                                         SessionFacade.CurrentCoWorkers.Select(c => c.EmployeeNumber).ToList() : 
                                         new List<string>();
-
-                    var caseListCondition = ConfigurationManager.AppSettings[AppSettingsKey.CaseList].ToString().ToLower().Split(',');
+                                        
                     if (caseListCondition.Contains(CaseListTypes.ManagerCases))
                     {
                         if (caseListCondition.Contains(CaseListTypes.CoWorkerCases))
                         {
-                            if (currentCase.RegUserId.ToLower() == curUserId.ToLower() || coWorkers.Contains(currentCase.ReportedBy))
+                            if ((!string.IsNullOrEmpty(currentCase.RegUserId) && currentCase.RegUserId.ToLower() == curUserId.ToLower()) 
+                                || coWorkers.Contains(currentCase.ReportedBy))
                                 userHasAccessToCase = true;               
                         }
                         else
                         {
-                            if (currentCase.RegUserId.ToLower() == curUserId.ToLower() || 
-                                currentCase.ReportedBy == SessionFacade.CurrentUserIdentity.EmployeeNumber)
+                            if ((!string.IsNullOrEmpty(currentCase.RegUserId) && currentCase.RegUserId.ToLower() == curUserId.ToLower())
+                                || currentCase.ReportedBy == SessionFacade.CurrentUserIdentity.EmployeeNumber)
                                 userHasAccessToCase = true;                                                                       
                         }                        
                     }
@@ -213,13 +211,23 @@
                     if (caseListCondition.Contains(CaseListTypes.CoWorkerCases))
                     {
                         if (coWorkers.Contains(currentCase.ReportedBy) || 
-                            (string.IsNullOrEmpty(currentCase.ReportedBy) && currentCase.RegUserId.ToLower() == curUserId.ToLower()))
+                            (string.IsNullOrEmpty(currentCase.ReportedBy) && 
+                            (!string.IsNullOrEmpty(currentCase.RegUserId) && currentCase.RegUserId.ToLower() == curUserId.ToLower())))
                             userHasAccessToCase = true;                        
                     }                                    
                 }
                 else
-                {
-                    if (currentCase.RegUserId.ToLower() == curUserId.ToLower())
+                {                                        
+                    if (caseListCondition.Contains(CaseListTypes.ManagerCases))
+                    {                        
+                        if (!string.IsNullOrEmpty(currentCase.ReportedBy) && 
+                            currentCase.ReportedBy.ToLower() == curUserId.ToLower())
+                        { 
+                                userHasAccessToCase = true;
+                        }
+                    }
+
+                    if ((!string.IsNullOrEmpty(currentCase.RegUserId) && currentCase.RegUserId.ToLower() == curUserId.ToLower()))
                         userHasAccessToCase = true;   
                 }
 
@@ -337,7 +345,6 @@
 
                 model.NewCase.RegUserId = SessionFacade.CurrentUserIdentity.UserId;
                 model.NewCase.RegUserDomain = SessionFacade.CurrentUserIdentity.Domain;
- 
             }
 
             model.CaseTypeParantPath = ParentPathDefaultValue;
@@ -363,11 +370,6 @@
                     if(caseTemplate.CaseType_Id != null)
                     {
                         model.NewCase.CaseType_Id = caseTemplate.CaseType_Id.Value;
-                    }
-
-                    if(caseTemplate.PerformerUser_Id != null)
-                    {
-                        model.NewCase.Performer_User_Id = caseTemplate.PerformerUser_Id.Value;
                     }
 
                     var notifier = _computerService.GetInitiatorByUserId(SessionFacade.CurrentUserIdentity.UserId, customerId);
@@ -396,7 +398,6 @@
                     model.NewCase.System_Id = caseTemplate.System_Id;
                     model.NewCase.Caption = caseTemplate.Caption;
                     model.NewCase.Description = caseTemplate.Description;
-                    model.NewCase.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id;
                     model.NewCase.Priority_Id = caseTemplate.Priority_Id;
                     model.NewCase.Project_Id = caseTemplate.Project_Id;
                     model.NewCase.Urgency_Id = caseTemplate.Urgency_Id;
@@ -413,8 +414,62 @@
                     model.NewCase.Cost = caseTemplate.Cost;
                     model.NewCase.OtherCost = caseTemplate.OtherCost;
                     model.NewCase.Currency = caseTemplate.Currency;
-                    model.NewCase.Priority_Id = caseTemplate.Priority_Id;
 
+                    //Hidden fields
+                    model.NewCase.Performer_User_Id = caseTemplate.PerformerUser_Id;
+                    model.NewCase.CausingPartId = caseTemplate.CausingPartId;
+                    model.NewCase.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id;
+                    model.NewCase.Project_Id = caseTemplate.Project_Id;
+                    model.NewCase.Problem_Id = caseTemplate.Problem_Id;
+                    model.NewCase.PlanDate = caseTemplate.PlanDate;
+                    model.NewCase.WatchDate = caseTemplate.WatchDate;
+
+                    if(model.NewCase.IsAbout == null)
+                        model.NewCase.IsAbout = new CaseIsAboutEntity();
+
+                    model.NewCase.IsAbout.Id = 0;
+                    model.NewCase.IsAbout.ReportedBy = caseTemplate.IsAbout_ReportedBy;
+                    model.NewCase.IsAbout.Person_Name = caseTemplate.IsAbout_PersonsName;
+                    model.NewCase.IsAbout.Person_Email = caseTemplate.IsAbout_PersonsEmail;
+                    model.NewCase.IsAbout.Person_Phone = caseTemplate.IsAbout_PersonsPhone;
+                    model.NewCase.IsAbout.Person_Cellphone = caseTemplate.IsAbout_PersonsCellPhone;
+                    model.NewCase.IsAbout.Region_Id = caseTemplate.IsAbout_Region_Id;
+                    model.NewCase.IsAbout.Department_Id = caseTemplate.IsAbout_Department_Id;
+                    model.NewCase.IsAbout.OU_Id = caseTemplate.IsAbout_OU_Id;
+                    model.NewCase.IsAbout.CostCentre = caseTemplate.IsAbout_CostCentre;
+                    model.NewCase.IsAbout.Place = caseTemplate.IsAbout_Place;
+                    model.NewCase.IsAbout.UserCode = caseTemplate.UserCode;
+
+                    model.NewCase.Status_Id = caseTemplate.Status_Id;
+                    model.NewCase.StateSecondary_Id = caseTemplate.StateSecondary_Id;
+                    model.NewCase.Verified = caseTemplate.Verified;
+                    model.NewCase.VerifiedDescription = caseTemplate.VerifiedDescription;
+                    model.NewCase.SolutionRate = caseTemplate.SolutionRate;
+
+                    if (!string.IsNullOrEmpty(caseTemplate.Text_External) ||
+                        !string.IsNullOrEmpty(caseTemplate.Text_Internal) || caseTemplate.FinishingCause_Id.HasValue)
+                    {
+                        model.CaseLog = new CaseLog
+                        {
+                            LogType = 0,
+                            LogGuid = Guid.NewGuid(),
+                            TextExternal = caseTemplate.Text_External,
+                            TextInternal = caseTemplate.Text_Internal,
+                            FinishingType = caseTemplate.FinishingCause_Id
+                        };
+                    }
+
+                    if (caseTemplate.RegistrationSource.HasValue)
+                    {
+                        model.NewCase.RegistrationSourceCustomer_Id = caseTemplate.RegistrationSource.Value;
+                    }
+                    else
+                    {
+                        var registrationSource = _registrationSourceCustomerService.GetCustomersActiveRegistrationSources(customerId)
+                                .FirstOrDefault(x => x.SystemCode == (int)CaseRegistrationSource.SelfService);
+                        if (registrationSource != null)
+                            model.NewCase.RegistrationSourceCustomer_Id = registrationSource.Id;
+                    }
                 }
 
                 if(model.NewCase.ProductArea_Id.HasValue)
@@ -492,7 +547,7 @@
         }
 
         [HttpGet]
-        public ActionResult UserCases(int customerId, string progressId)
+        public ActionResult UserCases(int customerId, string progressId = "")
         {
             var currentCustomer = default(Customer);
             if (SessionFacade.CurrentCustomer != null)
@@ -501,13 +556,30 @@
             {
                 ErrorGenerator.MakeError("Customer is not valid!");
                 return RedirectToAction("Index", "Error");
-            }                
+            }
+
+            var pharaseSearch = "";        
+            if (progressId == "")
+            {
+                if (SessionFacade.CurrentCaseSearch != null)
+                {
+                    var lastprogressId = SessionFacade.CurrentCaseSearch.caseSearchFilter?.CaseProgress;
+                    pharaseSearch = SessionFacade.CurrentCaseSearch.caseSearchFilter?.FreeTextSearch;
+                    progressId = (!string.IsNullOrEmpty(lastprogressId) ? lastprogressId : CaseProgressFilter.CasesInProgress);
+                }
+                else
+                {
+                    progressId = CaseProgressFilter.CasesInProgress;
+                }
+            }
 
             var languageId = SessionFacade.CurrentLanguageId;
 
             UserCasesModel model = null;
 
-            if (progressId != CaseProgressFilter.ClosedCases && progressId != CaseProgressFilter.CasesInProgress)
+            if (progressId != CaseProgressFilter.ClosedCases && 
+                progressId != CaseProgressFilter.CasesInProgress &&
+                progressId != CaseProgressFilter.None)
             {
                 ErrorGenerator.MakeError("Process is not valid!", 202);
                 return RedirectToAction("Index", "Error");                
@@ -516,7 +588,7 @@
             if(SessionFacade.CurrentUserIdentity != null)
             {
 
-                model = GetUserCasesModel(currentCustomer.Id, languageId, SessionFacade.CurrentUserIdentity.UserId, "", 20, progressId);
+                model = GetUserCasesModel(currentCustomer.Id, languageId, SessionFacade.CurrentUserIdentity.UserId, pharaseSearch, 20, progressId);
 
             }
             else
@@ -714,6 +786,7 @@
             var currentCase = _caseService.GetCaseById(caseId);
             var currentCustomer = _customerService.GetCustomer(currentCase.Customer_Id);
             var cs = _settingService.GetCustomerSetting(currentCustomer.Id);
+            var caseIsActivated = false;
             // save case history
 
             // unread/status flag update if not case is closed
@@ -724,6 +797,7 @@
             {
                 string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
                 this._caseService.Activate(currentCase.Id, 0, adUser, CreatedByApplications.SelfService5, out errors);
+                caseIsActivated = true;
             }
                 
 
@@ -737,6 +811,8 @@
                     currentCase.StateSecondary_Id = null;
             }
 
+
+            currentCase.ChangeTime = DateTime.UtcNow;
             int caseHistoryId = _caseService.SaveCaseHistory(currentCase, 0, currentCase.PersonsEmail, CreatedByApplications.SelfService5,  out errors, SessionFacade.CurrentUserIdentity.UserId);            
             // save log
             var caseLog = new CaseLog
@@ -809,20 +885,20 @@
                 _logFileService.AddFiles(newLogFiles);
                 // send emails
                 var userTimeZone = TimeZoneInfo.Local;
-                _caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, basePath, userTimeZone, newLogFiles);
+                _caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, basePath, userTimeZone, newLogFiles, caseIsActivated);
                 _userTemporaryFilesStorage.DeleteFiles(logFileGuid);
             }
             else
             {
                 caseLog.Id = _logService.SaveLog(caseLog, temporaryLogFiles.Count, out errors);
-                _caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, string.Empty, null);
+                _caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, string.Empty, null, null, caseIsActivated);
             }
         }
 
         [HttpPost]
-        public RedirectToRouteResult NewCase(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey, string followerUsers)
+        public RedirectToRouteResult NewCase(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey, string followerUsers, CaseLog caseLog)
         {
-            int caseId = Save(newCase, caseMailSetting, caseFileKey, followerUsers);
+            int caseId = Save(newCase, caseMailSetting, caseFileKey, followerUsers, caseLog);
             return RedirectToAction("Index", "case", new { id = newCase.Id, showRegistrationMessage = true });
         }
 
@@ -854,7 +930,9 @@
                 var ascending = frm.ReturnFormValue("hidSortByAsc").ConvertStringToBool();
                 var id = frm.ReturnFormValue("MailGuid");
 
-                if (progressId != CaseProgressFilter.ClosedCases && progressId != CaseProgressFilter.CasesInProgress)
+                if (progressId != CaseProgressFilter.ClosedCases && 
+                    progressId != CaseProgressFilter.CasesInProgress &&
+                    progressId != CaseProgressFilter.None)
                 {                    
                     ErrorGenerator.MakeError("Process is not valid!", 202);
                     return RedirectToAction("Index", "Error");                                 
@@ -864,6 +942,7 @@
                                               pharasSearch, maxRecords, progressId,
                                               sortBy, ascending);
 
+                model.ProgressId = progressId;
                 return PartialView("CaseOverview", model);
             }
             catch(Exception e)
@@ -923,7 +1002,7 @@
         }
 
         
-        private int Save(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey, string followerUsers)
+        private int Save(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey, string followerUsers, CaseLog caseLog)
         {
             IDictionary<string, string> errors;
 
@@ -965,9 +1044,14 @@
                 }
             }
 
-            int caseHistoryId = _caseService.SaveCase(newCase, null, caseMailSetting, 0, SessionFacade.CurrentUserIdentity.UserId, ei, out errors);
-            
-            // save case files            
+            int caseHistoryId = _caseService.SaveCase(newCase, caseLog, caseMailSetting, 0, SessionFacade.CurrentUserIdentity.UserId, ei, out errors);
+
+            // save log
+            caseLog.CaseId = newCase.Id;
+            caseLog.CaseHistoryId = caseHistoryId;
+            caseLog.Id = this._logService.SaveLog(caseLog, 0, out errors);
+
+            // save case files
             var temporaryFiles = _userTemporaryFilesStorage.GetFiles(caseFileKey, ModuleName.Cases);
             var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, newCase.Id)).ToList();
             _caseFileService.AddFiles(newCaseFiles);
@@ -1018,8 +1102,7 @@
                                                            .Where(c => c.ShowExternal == 1 ||
                                                                        c.Name == GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString() ||
                                                                        c.Name == GlobalEnums.TranslationCaseFields.CaseNumber.ToString() ||
-                                                                       c.Name == GlobalEnums.TranslationCaseFields.RegTime.ToString() ||
-                                                                       c.Name == GlobalEnums.TranslationCaseFields.Priority_Id.ToString()) 
+                                                                       c.Name == GlobalEnums.TranslationCaseFields.RegTime.ToString()) 
                                                            .ToList();
             
             var caseFieldGroups = GetVisibleFieldGroups(caseFieldSetting);            
@@ -1115,10 +1198,10 @@
             var caseListType = string.Empty;
             var currentApplicationType = ConfigurationManager.AppSettings[AppSettingsKey.CurrentApplicationType].ToString().ToLower();
 
-            if (currentApplicationType == ApplicationTypes.LineManager)
-            {
-                var caseListCondition = ConfigurationManager.AppSettings[AppSettingsKey.CaseList].ToString().ToLower().Split(',');
+            var caseListCondition = ConfigurationManager.AppSettings[AppSettingsKey.CaseList].ToString().ToLower().Split(',');
 
+            if (currentApplicationType == ApplicationTypes.LineManager)
+            {                
                 if (caseListCondition.Contains(CaseListTypes.ManagerCases))
                 {
                     caseListType = CaseListTypes.ManagerCases;
@@ -1155,13 +1238,25 @@
                 cs.CaseListType = caseListType;
             } 
             else// Self Service 
-            {
+            {                
+                if (caseListCondition.Contains(CaseListTypes.ManagerCases))
+                {
+                    caseListType = CaseListTypes.ManagerCases;
+                    cs.ReportedBy = string.Format("'{0}'", curUser);
+                }
+
+                /* CoWorker is not defined in SelfService Mode */
+                if (caseListCondition.Contains(CaseListTypes.CoWorkerCases))
+                {
+                    caseListType = CaseListTypes.UserCases;
+                }
+
+                if (caseListCondition.Contains(CaseListTypes.UserCases) || !caseListCondition.Any())
+                    caseListType = CaseListTypes.UserCases;
+
                 cs.RegUserId = curUser;
-                cs.CaseListType = CaseListTypes.UserCases;
-            }
-
-
-            cs.ReportedBy = cs.ReportedBy;
+                cs.CaseListType = caseListType;
+            }            
 
             search.SortBy = sortBy;
             search.Ascending = ascending;
@@ -1208,7 +1303,12 @@
             }
             srm.Cases = CaseSearchTranslate(srm.Cases, cusId);
             model.CaseSearchResult = srm;
+
             SessionFacade.CurrentCaseSearch = sm;
+            SessionFacade.CurrentCaseSearch.caseSearchFilter.CaseProgress = progressId;
+            SessionFacade.CurrentCaseSearch.caseSearchFilter.FreeTextSearch = pharasSearch;
+
+            model.NumberOfCases = srm.Cases.Count;
 
             return model;
         }
@@ -1256,11 +1356,10 @@
             //Country list
             var suppliers = _supplierService.GetSuppliers(customerId);
 
-            //Priority list
-            var priorities = _priorityService.GetPriorities(customerId);
-
             //Field Settings
             var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
+
+            var caseFieldSettingsWithLanguages = _caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customerId, SessionFacade.CurrentLanguageId);
 
             var cs = _settingService.GetCustomerSetting(customerId);
             
@@ -1281,14 +1380,14 @@
                 caseFieldSetting, 
                 caseFile, 
                 caseFieldSettings,
-                priorities,
                 new JsApplicationOptions()
                     {
                         customerId = customerId,
                         departmentFilterFormat = cs.DepartmentFilterFormat,
                         departmentsURL = Url.Content("~/Case/GetDepartmentsByRegion"),
                         orgUnitURL = Url.Content("~/Case/GetOrgUnitsByDepartments")
-                    });
+                    },
+                caseFieldSettingsWithLanguages);
 
             model.CaseTypeParantPath = "--";
             model.ProductAreaParantPath = "--";
@@ -1351,7 +1450,6 @@
                             GlobalEnums.TranslationCaseFields.Available.ToString(), 
                             GlobalEnums.TranslationCaseFields.Cost.ToString(),
                             GlobalEnums.TranslationCaseFields.Filename.ToString(),
-                            GlobalEnums.TranslationCaseFields.Priority_Id.ToString()
                         };
 
             string[] otherGroup = new string[] 

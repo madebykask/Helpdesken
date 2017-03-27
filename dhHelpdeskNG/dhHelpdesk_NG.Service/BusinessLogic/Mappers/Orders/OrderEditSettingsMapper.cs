@@ -21,8 +21,8 @@
                                                      Required = f.Required,
                                                      EmailIdentifier = f.EMailIdentifier,
                                                      DefaultValue = f.DefaultValue,
-                                                     FieldHelp = f.FieldHelp
-                                                 }).ToList();
+                                                     FieldHelp = f.FieldHelp,
+                                                     MultiValue = f.MultiValue}).ToList();
 
             var fieldSettings = new NamedObjectCollection<OrdersEditSettingsMapData>(entities);
 
@@ -90,7 +90,7 @@
             NamedObjectCollection<OrdersEditSettingsMapData> editSettings, string headerText)
         {
             return new OrdererEditSettings(
-                    CreateTextFieldSetting(editSettings.FindByName(OrdererFields.OrdererId)),
+                    CreateMultiTextFieldSetting(editSettings.FindByName(OrdererFields.OrdererId)),
                     CreateTextFieldSetting(editSettings.FindByName(OrdererFields.OrdererName)),
                     CreateTextFieldSetting(editSettings.FindByName(OrdererFields.OrdererLocation)),
                     CreateTextFieldSetting(editSettings.FindByName(OrdererFields.OrdererEmail)),
@@ -260,6 +260,18 @@
                         data.EmailIdentifier,
                         data.DefaultValue,
                         data.FieldHelp);
+        }
+
+        private static MultiTextFieldEditSettings CreateMultiTextFieldSetting(OrdersEditSettingsMapData data)
+        {
+            return new MultiTextFieldEditSettings(
+                        data.Show.ToBool(),
+                        data.Label,
+                        data.Required.ToBool(),
+                        data.EmailIdentifier,
+                        data.DefaultValue,
+                        data.FieldHelp,
+                        data.MultiValue);
         }
     }
 }

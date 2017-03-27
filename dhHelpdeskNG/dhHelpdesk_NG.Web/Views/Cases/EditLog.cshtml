@@ -13,19 +13,30 @@
 
 @if (Model != null)
 {   
-    ViewData.Add("readonlyLog", true);
+    ViewData.Add("readonlyLog", !Model.newLog);
     using (Html.BeginForm("editlog", "cases", null, FormMethod.Post, new { id = "target" }))
-    {    
+    {
         <div class="secnavs fixed">
             <div class="pull-left">
                 <ul class="secnav">                
-                    @if (Model.EditMode == Enums.AccessMode.FullAccess)
+                    @if (Model.EditMode == Enums.AccessMode.FullAccess && !Model.newLog)
                     {
                         <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "deletelog", new { id = @Model.CaseLog.Id, caseId = @Model.case_.Id }, 
                         new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post",                                                                                                 
                               Enums.TranslationSource.TextTranslation) + "?" })</li>
                     }                    
-                    <li>@Html.ActionLink(Translation.Get("Stäng", Enums.TranslationSource.TextTranslation), "edit", "cases", new { Id = @Model.case_.Id }, new { @class = "btn"})</li>
+                    @if (Model.newLog)
+                    {
+                        @*<li>@Html.ActionLink(Translation.GetCoreTextTranslation("Spara"), null, null, null, new { @class = "btn", id = "log-action-save" })</li>*@
+                        <li><input type="submit" id = "log-action-save" class = "btn" value="@Translation.GetCoreTextTranslation("Spara")"> </li>
+                        @*<li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "editlog", "cases", new { Id = Model.CaseLog.Id }, new { @class = "btn save", id = "case-action-save" })</li>*@
+                        
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink(Translation.Get("Ändra", Enums.TranslationSource.TextTranslation), "editlog", "cases", new { Id = @Model.CaseLog.Id, customerId = Model.case_.Customer_Id, newLog = true }, new { @class = "btn" })</li>
+                    }
+                    <li>@Html.ActionLink(Translation.Get("Stäng", Enums.TranslationSource.TextTranslation), "edit", "cases", new { Id = @Model.case_.Id }, new { @class = "btn" })</li>
                 </ul>
             </div>
         </div>

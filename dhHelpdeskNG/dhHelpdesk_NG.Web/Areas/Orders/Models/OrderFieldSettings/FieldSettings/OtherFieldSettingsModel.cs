@@ -19,6 +19,7 @@
             this.FileName = fileName;
         }
 
+        [LocalizedStringLength(50)]
         public string Header { get; set; }
 
         [NotNull]

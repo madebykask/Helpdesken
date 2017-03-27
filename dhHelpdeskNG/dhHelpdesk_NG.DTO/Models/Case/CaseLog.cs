@@ -87,6 +87,8 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 		/// </summary>
 		public bool? SendLogToParentChildLog { get; set; }
 		public InvoiceRow InvoiceRow { get; set; }
-	}
+
+        public int? OldLog_Id { get; set; }
+    }
 }
 

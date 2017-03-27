@@ -62,6 +62,9 @@ namespace DH.Helpdesk.SelfService.Infrastructure.BusinessModelFactories.Orders
         ConfigurableFieldModel<ProgramsModel> CreatePrograms(FieldEditSettings setting, int orderId, List<ProgramModel> programs);
 
         ConfigurableFieldModel<int?> CreateNullableIntegerField(FieldEditSettings setting, int? value);
+
         ConfigurableFieldModel<List<CheckBoxListItem>> CreateCheckBoxListField(FieldEditSettings setting, List<int> sourceValues, ItemOverview[] source);
+
+        ConfigurableFieldModel<string> CreateMultiStringField(MultiTextFieldEditSettings setting, string value);
     }
 }

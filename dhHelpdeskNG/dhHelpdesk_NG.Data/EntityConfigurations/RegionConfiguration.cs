@@ -22,6 +22,7 @@
             this.Property(x => x.SearchKey).IsOptional();
             this.Property(x => x.Code).IsOptional().HasMaxLength(20);
             //this.Property(x => x.RegionGUID).IsOptional();
+            //this.Property(x => x.SynchronizedDate).IsOptional();
 
             this.ToTable("tblregion");
         }

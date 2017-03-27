@@ -129,7 +129,7 @@
             this.Property(x => x.ReportedBy).IsOptional().HasMaxLength(40);
             this.Property(x => x.SMS).IsRequired();
             this.Property(x => x.SolutionRate).IsOptional().HasMaxLength(10);
-            this.Property(x => x.UserCode).IsOptional().HasMaxLength(20);
+            this.Property(x => x.UserCode).IsOptional().HasMaxLength(50);
             this.Property(x => x.Verified).IsRequired();
             this.Property(x => x.VerifiedDescription).IsOptional().HasMaxLength(200);
             this.Property(x => x.WatchDate).IsOptional();
@@ -202,7 +202,11 @@
 				.WithOptional(x => x.Case)
 				.HasForeignKey(x => x.Case_Id);
 
-			this.ToTable("tblcase");
+            this.HasMany(x => x.CaseFollowers)
+                .WithRequired(x => x.Case)
+                .HasForeignKey(x => x.Case_Id);
+
+            this.ToTable("tblcase");
         }
     }
 }

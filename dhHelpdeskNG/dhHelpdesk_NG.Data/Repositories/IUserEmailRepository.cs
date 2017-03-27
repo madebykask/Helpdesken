@@ -10,6 +10,6 @@ namespace DH.Helpdesk.Dal.Repositories
     public interface IUserEmailRepository : INewRepository
     {
         List<MailAddress> FindUserEmails(int userId);
-        List<CaseEmailSendOverview> GetUserEmailsListForCaseSend(int customerId, string searchText, bool searchInWorkingGrs, bool searchInInitiators, bool searchInAdmins, bool searchInEmailGrs);
+        List<CaseEmailSendOverview> GetUserEmailsListForCaseSend(int customerId, string searchText, bool searchInWorkingGrs, bool searchInInitiators, bool searchInAdmins, bool searchInEmailGrs, bool isInternalLog = false);
     }
 }

@@ -268,29 +268,43 @@
                 $("#informOrderer").val($("#informOrderer_action").prop("checked"));
                 $("#informReceiver").val($("#informReceiver_action").prop("checked"));
                 $("#createCase").val($("#createCase_action").prop("checked"));
+                $("input[type='hidden'][multitext]").each(function (i, e) {
+                    var fieldId = $(e).prop("id");
+                    var allRows = $(".multitext[data-field-id='" + fieldId + "']");
+                    var result = "";
+                    allRows.each(function (index, el) {
+                        var $el = $(el);
+                        var id = $el.find("input[name$='id']").val();
+                        var name = $el.find("input[name$='name']").val();
+                        if (!id.length && !name.length) return;
+                        result = result + id + that._options.valuesSplitter
+                            + name + that._options.pairSplitter;
+                    });
+                    $(e).val(result);
+                });
 
                 $("#edit_form").submit();
                 return false;
             });
 
-            if (that._options.isUserDepartmentVisible) {
+            //if (that._options.isUserDepartmentVisible) {
 
-                var $region = $("#region_dropdown");
-                if ($region.val()) {
-                    var $department = $("#orderer_departmentId");
-                    var originVal = $department.val();
+            //    var $region = $("#region_dropdown");
+            //    if ($region.val()) {
+            //        var $department = $("#orderer_departmentId");
+            //        var originVal = $department.val();
 
-                    applyUserDepartmentFilter($region.val())
-                    .done(function () {
-                        $department.val(originVal);
-                    });
-                }
+            //        applyUserDepartmentFilter($region.val())
+            //        .done(function () {
+            //            $department.val(originVal);
+            //        });
+            //    }
 
 
-                $region.on("change", function () {
-                    applyUserDepartmentFilter($(this).val());
-                });
-            }
+            //    $region.on("change", function () {
+            //        applyUserDepartmentFilter($(this).val());
+            //    });
+            //}
 
             if (that._options.isOrdererUnitVisible) {
 
@@ -362,6 +376,74 @@
                 document.location.href = href;
             });
 
+            function addMultiTextField(e) {
+                var maxFields = 10;
+                var $row = $(this).closest(".multitext");
+                var fieldId = $row.data("fieldId");
+                var allRows = $(".multitext[data-field-id='" + fieldId + "']");
+                if (allRows.length >= maxFields) {
+                    return;
+                }
+
+                var $rowClone = $row.clone();
+                $rowClone.find("div:eq(2)").remove(); //remove helpcolumn
+                var $templateHtml = $($rowClone.wrapAll("<div/>").parent().html());
+                var $id = $templateHtml.find("input[name$='id']");
+                var $name = $templateHtml.find("input[name$='name']");
+                $templateHtml.find(".number").html(allRows.length + 1);
+                $id.val("");
+                $name.val("");
+                $templateHtml.find("i[name='add']").on("click", addMultiTextField);
+                $templateHtml.find("i[name='remove']").on("click", removeMultiTextField);
+                allRows.last().after($templateHtml);
+
+                $id.typeahead(getOrderComputerUserSearchOptions(function (obj) {
+                    var item = JSON.parse(obj);
+
+                    $name.val(item.name);
+                    return item.num;
+                }));
+            }
+
+            function removeMultiTextField(e) {
+                var minFields = 1;
+                var $row = $(this).closest(".multitext");
+                var fieldId = $row.data("fieldId");
+                var allRows = $(".multitext[data-field-id='" + fieldId + "']");
+                if (allRows.length <= minFields) {
+                    return;
+                }
+
+                var helpText = allRows.first().find("div:eq(2)");
+                $row.remove();
+                allRows = $(".multitext[data-field-id='" + fieldId + "']");
+                //insert helptext if deleted
+                var $firstRow = allRows.first();
+                if ($firstRow.find("div").length < 3) {
+                    $firstRow.append(helpText);
+                }
+                //reindex names
+                allRows.find(".number").each(function (i, e) {
+                    $(e).html(i + 1);
+                });
+            }
+
+            var $ids = $(".multitext input[name$='id']");
+
+            $ids.each(function (i, el) {
+                var $id = $(el);
+                $id.typeahead(getOrderComputerUserSearchOptions(function (obj) {
+                    var item = JSON.parse(obj);
+                    var $row = $id.closest(".multitext");
+                    $row.find("input[name$='name']").val(item.name);
+                    return item.num;
+                }));
+            });
+            
+            $(".multitext i[name='add']")
+                .on("click", addMultiTextField);
+            $(".multitext i[name='remove']")
+                .on("click", removeMultiTextField);
         }
     }
 })(jQuery);

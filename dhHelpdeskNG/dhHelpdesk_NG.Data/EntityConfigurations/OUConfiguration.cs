@@ -46,7 +46,7 @@
             this.Property(x => x.Code).IsOptional().HasMaxLength(20);
             this.Property(x => x.SearchKey).IsOptional().HasMaxLength(200);
             //this.Property(x => x.OUGUID).IsOptional();
-            
+            //this.Property(x => x.SynchronizedDate).IsOptional();
 
             this.ToTable("tblou");
         }

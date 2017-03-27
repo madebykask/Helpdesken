@@ -135,6 +135,7 @@
         public virtual ICollection<CaseInvoiceRow> CaseInvoiceRows { get; set; }
         public virtual ICollection<CaseQuestionHeader> CaseQuestionHeaders { get; set; }
 		public virtual ICollection<InvoiceRow> InvoiceRows { get; set; }
+		public virtual ICollection<CaseExtraFollower> CaseFollowers { get; set; }
 
 		public virtual User User { get; set; }
 

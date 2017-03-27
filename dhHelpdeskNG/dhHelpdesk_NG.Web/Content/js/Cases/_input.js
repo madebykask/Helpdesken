@@ -61,6 +61,13 @@ $(function () {
         document.location.href = href;
     });
 
+    $("#case-orderaccount-url").off("click").on('click', function (e) {
+        e.preventDefault();
+
+        var href = $(this).attr("href");
+        document.location.href = href;
+    });
+
     var langEl = $('#case__RegLanguage_Id'),
         doNotSendEl = $("#CaseMailSetting_DontSendMailToNotifier");
 

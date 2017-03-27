@@ -40,12 +40,20 @@ namespace DH.Helpdesk.Web.Controllers
             if (SessionFacade.CurrentBulletinBoardSearch != null)
             {                
                 CS = SessionFacade.CurrentBulletinBoardSearch;
-                model.BulletinBoards = this._bulletinBoardService.SearchAndGenerateBulletinBoard(SessionFacade.CurrentCustomer.Id, CS);
+                if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.UserGroupId == 2)
+                    model.BulletinBoards = this._bulletinBoardService.SearchAndGenerateBulletinBoard(SessionFacade.CurrentCustomer.Id, CS, true);
+                else
+                    model.BulletinBoards = this._bulletinBoardService.SearchAndGenerateBulletinBoard(SessionFacade.CurrentCustomer.Id, CS);
+
                 model.SearchBbs = CS.SearchBbs;
             }
             else
             {
-                model.BulletinBoards = this._bulletinBoardService.GetBulletinBoards(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.ChangedDate).ToList();
+                if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.UserGroupId == 2)
+                    model.BulletinBoards = this._bulletinBoardService.GetBulletinBoards(SessionFacade.CurrentCustomer.Id, true).OrderBy(x => x.ChangedDate).ToList();
+                else
+                    model.BulletinBoards = this._bulletinBoardService.GetBulletinBoards(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.ChangedDate).ToList();
+
                 CS.SortBy = "ChangedDate";
                 CS.Ascending = true;
                 SessionFacade.CurrentBulletinBoardSearch = CS;
@@ -63,7 +71,11 @@ namespace DH.Helpdesk.Web.Controllers
 
             CS.SearchBbs = SearchBulletinBoards.SearchBbs;
 
-            var bb = this._bulletinBoardService.SearchAndGenerateBulletinBoard(SessionFacade.CurrentCustomer.Id, CS);
+            var restrictsearch = false;
+            if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.UserGroupId == 2)
+                restrictsearch = true;
+            
+            var bb = this._bulletinBoardService.SearchAndGenerateBulletinBoard(SessionFacade.CurrentCustomer.Id, CS, restrictsearch);
 
             if (SearchBulletinBoards != null)
                 SessionFacade.CurrentBulletinBoardSearch = CS;

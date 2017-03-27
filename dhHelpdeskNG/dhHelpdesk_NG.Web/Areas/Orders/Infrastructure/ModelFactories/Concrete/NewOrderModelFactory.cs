@@ -1,10 +1,13 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
 using DH.Helpdesk.BusinessData.Enums.Accounts.Fields;
+using DH.Helpdesk.BusinessData.Models.Document.Output;
 using DH.Helpdesk.BusinessData.Models.Shared;
 using DH.Helpdesk.Common.Extensions.Integer;
+using DH.Helpdesk.Dal.NewInfrastructure;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Domain.Orders;
+using DH.Helpdesk.Services.BusinessLogic.Specifications;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 
@@ -49,7 +52,8 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
             {
                 CreateCase = workContext.Customer.Settings.CreateCaseFromOrder,
                 Statuses = data.EditOptions.Statuses,
-                OrderTypeDescription = data.EditOptions.OrderTypeDescription
+                OrderTypeDescription = data.EditOptions.OrderTypeDescription,
+                OrderTypeDocument = data.EditOptions.OrderTypeDocument
             };
         }
 
@@ -231,7 +235,10 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                             fileName,
                             caseNumber,
                             caseId,
-                            info);
+                            info)
+            {
+                Header = settings.Header
+            };
         }
 
         private ProgramEditModel CreateProgramEditModel(ProgramEditSettings settings, OrderEditOptions options)
@@ -318,7 +325,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
             var info = _configurableFieldModelFactory.CreateStringField(settings.User.Info, null);
             var activity = _configurableFieldModelFactory.CreateStringField(settings.User.Activity, null);
             var manager = _configurableFieldModelFactory.CreateStringField(settings.User.Manager, null);
-            var ordererId = _configurableFieldModelFactory.CreateStringField(settings.Orderer.OrdererId, null);
+            var ordererId = _configurableFieldModelFactory.CreateMultiStringField(settings.Orderer.OrdererId, null);
             var ordererName = _configurableFieldModelFactory.CreateStringField(settings.Orderer.OrdererName, null);
             var ordererLocation = _configurableFieldModelFactory.CreateStringField(settings.Orderer.OrdererLocation, null);
             var ordererEmail = _configurableFieldModelFactory.CreateStringField(settings.Orderer.OrdererEmail, null);

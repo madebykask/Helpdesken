@@ -20,7 +20,7 @@
             this.Property(f => f.Place).IsOptional().HasMaxLength(100);
             this.Property(f => f.Region_Id).IsOptional();
             this.Property(f => f.ReportedBy).IsOptional().HasMaxLength(40);
-            this.Property(f => f.UserCode).IsOptional().HasMaxLength(20);            
+            this.Property(f => f.UserCode).IsOptional().HasMaxLength(50);            
 
             this.ToTable("tblCaseIsAbout");
         }

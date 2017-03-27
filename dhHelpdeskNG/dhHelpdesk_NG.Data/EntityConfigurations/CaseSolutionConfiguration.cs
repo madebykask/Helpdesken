@@ -105,7 +105,7 @@
             this.Property(x => x.Region_Id).IsOptional();
             this.Property(x => x.OU_Id).IsOptional();
             this.Property(x => x.Place);
-            this.Property(x => x.UserCode);
+            this.Property(x => x.UserCode).IsOptional().HasMaxLength(50);
             this.Property(x => x.System_Id).IsOptional();
             this.Property(x => x.Urgency_Id).IsOptional();
             this.Property(x => x.Impact_Id).IsOptional();
@@ -145,7 +145,7 @@
             this.Property(x => x.IsAbout_Place).IsOptional();
             this.Property(x => x.IsAbout_Region_Id).IsOptional();
             this.Property(x => x.IsAbout_ReportedBy).IsOptional();
-            this.Property(x => x.IsAbout_UserCode).IsOptional();
+            this.Property(x => x.IsAbout_UserCode).IsOptional().HasMaxLength(50);
             this.Property(x => x.ShowOnCaseOverview).IsRequired();
             this.Property(x => x.ShowInsideCase).IsRequired();
             this.Property(x => x.SetCurrentUserAsPerformer).IsOptional();

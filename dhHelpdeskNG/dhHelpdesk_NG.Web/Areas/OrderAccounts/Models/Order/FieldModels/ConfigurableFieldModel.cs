@@ -23,8 +23,6 @@
         #endregion
 
         #region Public Properties
-
-        [NotNullAndEmpty]
         public string Caption { get; set; }
 
         public bool IsRequired { get; set; }

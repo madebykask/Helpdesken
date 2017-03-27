@@ -34,6 +34,8 @@
 
         public DateTime CreatedDate { get; set; }
 
+        public bool MultiValue { get; set; }
+
         public virtual Customer Customer { get; set; }
 
         public virtual OrderType OrderType { get; set; }

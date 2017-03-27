@@ -161,13 +161,13 @@
                 var item = JSON.parse(obj);
                 var grType = "";
                 if (item.groupType === 0)
-                    grType = window.parameters.initGroup + ": ";
+                    grType = document.parameters.initLabel + ": ";
                 if (item.groupType === 1)
-                    grType = window.parameters.adminGroup + ": ";
+                    grType = document.parameters.adminLabel + ": ";
                 if (item.groupType === 2)
-                    grType = window.parameters.wgGroup + ": ";
+                    grType = document.parameters.wgLabel + ": ";
                 if (item.groupType === 3)
-                    grType = window.parameters.emailGroup + ": ";
+                    grType = document.parameters.emailLabel + ": ";
                 var userId = item.userId != null ? item.userId + ' - ' : "";
 
                 var result = item.name + " - " + userId + item.email + " - " + item.departmentname;
@@ -202,12 +202,12 @@
             if (emails.indexOf(newToEmail) < 0)
                 mainFollowersInput.val(mainFollowersInput.val() + newToEmail + ";");
             else {
-                ShowToastModalMessage(value + " : " + window.parameters.emailAlreadyAdded, "warning");
+                ShowToastModalMessage(value + " : " + document.parameters.emailAlreadyAdded, "warning");
                 return false;
             }
             return true;
         } else {
-            ShowToastModalMessage(value + " : " + window.parameters.emailNotValid, "error");
+            ShowToastModalMessage(value + " : " + document.parameters.emailNotValid, "error");
             return false;
         }
     }
@@ -222,7 +222,7 @@
             }
             return true;
         } else {
-            ShowToastModalMessage(value + " : " + window.parameters.emailNotValid, "error");
+            ShowToastModalMessage(value + " : " + document.parameters.emailNotValid, "error");
             return false;
         }
     }

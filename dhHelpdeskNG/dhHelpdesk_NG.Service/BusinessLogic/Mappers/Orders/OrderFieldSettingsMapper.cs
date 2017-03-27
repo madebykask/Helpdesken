@@ -55,7 +55,8 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
                                                      Required = f.Required,
                                                      EmailIdentifier = f.EMailIdentifier,
                                                      DefaultValue = f.DefaultValue,
-                                                     FieldHelp = f.FieldHelp
+                                                     FieldHelp = f.FieldHelp,
+                                                     MultiValue = f.MultiValue
                                                  }).ToList();
 
             var fieldSettings = new NamedObjectCollection<OrdersFieldSettingsMapData>(entities);
@@ -151,7 +152,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
             NamedObjectCollection<OrdersFieldSettingsMapData> fieldSettings, string headerText)
         {
             return new OrdererFieldSettings(
-                    CreateTextFieldSetting(fieldSettings.FindByName(OrdererFields.OrdererId)),
+                    CreateMultiTextFieldSetting(fieldSettings.FindByName(OrdererFields.OrdererId)),
                     CreateTextFieldSetting(fieldSettings.FindByName(OrdererFields.OrdererName)),
                     CreateTextFieldSetting(fieldSettings.FindByName(OrdererFields.OrdererLocation)),
                     CreateTextFieldSetting(fieldSettings.FindByName(OrdererFields.OrdererEmail)),
@@ -348,6 +349,21 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
                         data.FieldHelp);
         }
 
+        private static MultiTextFieldSettings CreateMultiTextFieldSetting(OrdersFieldSettingsMapData data)
+        {
+            return MultiTextFieldSettings.CreateForEdit(
+                        data.OrderField,
+                        data.Show.ToBool(),
+                        data.ShowInList.ToBool(),
+                        data.ShowExternal.ToBool(),
+                        data.Label,
+                        data.Required.ToBool(),
+                        data.EmailIdentifier,
+                        data.DefaultValue,
+                        data.FieldHelp,
+                        data.MultiValue);
+        }
+
         #endregion
 
         #region Map settings for update
@@ -399,7 +415,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
                 NamedObjectCollection<OrderFieldSettings> existingSettings,
                 DateTime changedDate)
         {
-            MapTextFieldSettings(updatedSettings.OrdererId, existingSettings.FindByName(OrdererFields.OrdererId), changedDate);
+            MapMultiTextFieldSettings(updatedSettings.OrdererId, existingSettings.FindByName(OrdererFields.OrdererId), changedDate);
             MapTextFieldSettings(updatedSettings.OrdererName, existingSettings.FindByName(OrdererFields.OrdererName), changedDate);
             MapTextFieldSettings(updatedSettings.OrdererLocation, existingSettings.FindByName(OrdererFields.OrdererLocation), changedDate);
             MapTextFieldSettings(updatedSettings.OrdererEmail, existingSettings.FindByName(OrdererFields.OrdererEmail), changedDate);
@@ -572,6 +588,23 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
             fieldSettings.ChangedDate = changedDate;
             fieldSettings.DefaultValue = updatedSettings.DefaultValue;
             fieldSettings.FieldHelp = updatedSettings.FieldHelp;
+        }
+
+        private static void MapMultiTextFieldSettings(
+        MultiTextFieldSettings updatedSettings,
+        OrderFieldSettings fieldSettings,
+        DateTime changedDate)
+        {
+            fieldSettings.Required = updatedSettings.Required.ToInt();
+            fieldSettings.Show = updatedSettings.Show.ToInt();
+            fieldSettings.ShowExternal = updatedSettings.ShowExternal.ToInt();
+            fieldSettings.ShowInList = updatedSettings.ShowInList.ToInt();
+            fieldSettings.EMailIdentifier = updatedSettings.EmailIdentifier;
+            fieldSettings.Label = updatedSettings.Label;
+            fieldSettings.ChangedDate = changedDate;
+            fieldSettings.DefaultValue = updatedSettings.DefaultValue;
+            fieldSettings.FieldHelp = updatedSettings.FieldHelp;
+            fieldSettings.MultiValue = updatedSettings.MultiValue;
         }
 
         #endregion

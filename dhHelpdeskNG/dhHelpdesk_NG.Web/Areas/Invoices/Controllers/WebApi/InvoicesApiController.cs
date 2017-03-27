@@ -36,7 +36,7 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers.WebApi
 		public object GetInvoicesOverviewList([FromUri]InvoiceOverviewFilterModel filter)
 		{
 			var customerId = SessionFacade.CurrentCustomer.Id;
-			var srvModels = _invoiceService.GetInvoiceOverviewList(customerId, filter.DepartmentId, filter.DateFrom, filter.DateTo, filter.Status, filter.CaseId);
+			var srvModels = _invoiceService.GetInvoiceOverviewList(customerId, filter.DepartmentId, filter.DateFrom, filter.DateTo, filter.Status, filter.CaseId, filter.DepartmentCharge);
 
 			var res = srvModels.Select(x => new InvoiceListItemViewModel
 			{

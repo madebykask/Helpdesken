@@ -25,6 +25,7 @@
     htmlAttributes.Add("data-dh-is-required", Model.IsRequired);
     htmlAttributes.Add("data-role", "tagsinput");
     htmlAttributes.Add("class", "tagsinput");    
+    htmlAttributes.Add("readonly", "readonly");    
 }
 
 <tr>
@@ -32,8 +33,9 @@
         @Html.FieldCaption(Model)
     </td>
     <td class="span9">
-        @Html.TextBoxFor(m => m.Value, htmlAttributes)
-        @Html.HiddenFor(m => m.IsRequired)
-        @Html.ValidationMessageFor(m => m.Value)
+        @Html.DisplayTextFor(m => m.Value)
+@*        @Html.TextBoxFor(m => m.Value, htmlAttributes)*@
+@*        @Html.HiddenFor(m => m.IsRequired)*@
+@*        @Html.ValidationMessageFor(m => m.Value)*@
     </td>
 </tr>

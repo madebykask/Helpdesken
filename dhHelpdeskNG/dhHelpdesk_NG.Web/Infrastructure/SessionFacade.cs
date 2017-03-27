@@ -185,24 +185,24 @@
             }
         }
 
-        public static IList<CaseFieldSettingsForTranslation> CaseTranslation
-        {
-            get
-            {
-                return (IList<CaseFieldSettingsForTranslation>)HttpContext.Current.Session[_CASE_TRANSLATION];
-            }
-            set
-            {
-                if (HttpContext.Current.Session[_CASE_TRANSLATION] == null)
-                {
-                    HttpContext.Current.Session.Add(_CASE_TRANSLATION, value);
-                }
-                else
-                {
-                    HttpContext.Current.Session[_CASE_TRANSLATION] = value;
-                }
-            }
-        }
+        //public static IList<CaseFieldSettingsForTranslation> CaseTranslation
+        //{
+        //    get
+        //    {
+        //        return (IList<CaseFieldSettingsForTranslation>)HttpContext.Current.Session[_CASE_TRANSLATION];
+        //    }
+        //    set
+        //    {
+        //        if (HttpContext.Current.Session[_CASE_TRANSLATION] == null)
+        //        {
+        //            HttpContext.Current.Session.Add(_CASE_TRANSLATION, value);
+        //        }
+        //        else
+        //        {
+        //            HttpContext.Current.Session[_CASE_TRANSLATION] = value;
+        //        }
+        //    }
+        //}
 
         public static int CurrentCaseLanguageId
         {
@@ -558,24 +558,24 @@
             }
         }
 
-        public static IList<Text> TextTranslation
-        {
-            get
-            {
-                return (IList<Text>)HttpContext.Current.Session[_TEXT_TRANSLATION];
-            }
-            set
-            {
-                if (HttpContext.Current.Session[_TEXT_TRANSLATION] == null)
-                {
-                    HttpContext.Current.Session.Add(_TEXT_TRANSLATION, value);
-                }
-                else
-                {
-                    HttpContext.Current.Session[_TEXT_TRANSLATION] = value;
-                }
-            }
-        }
+        //public static IList<Text> TextTranslation
+        //{
+        //    get
+        //    {
+        //        return (IList<Text>)HttpContext.Current.Session[_TEXT_TRANSLATION];
+        //    }
+        //    set
+        //    {
+        //        if (HttpContext.Current.Session[_TEXT_TRANSLATION] == null)
+        //        {
+        //            HttpContext.Current.Session.Add(_TEXT_TRANSLATION, value);
+        //        }
+        //        else
+        //        {
+        //            HttpContext.Current.Session[_TEXT_TRANSLATION] = value;
+        //        }
+        //    }
+        //}
 
         /// <summary>
         /// Holds settings for "Case overview" grid

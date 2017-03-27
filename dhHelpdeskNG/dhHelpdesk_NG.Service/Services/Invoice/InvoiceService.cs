@@ -55,9 +55,9 @@ namespace DH.Helpdesk.Services.Services.Invoice
 			_accountRepository = accountRepository;
 		}
 
-		public List<InvoiceOverview> GetInvoiceOverviewList(int customerId, int? departmentId, DateTime? dateFrom, DateTime? dateTo, InvoiceStatus? status, int? caseId)
+		public List<InvoiceOverview> GetInvoiceOverviewList(int customerId, int? departmentId, DateTime? dateFrom, DateTime? dateTo, InvoiceStatus? status, int? caseId, bool departmentCharge = true)
 		{
-			var dbModels = _invoiceRepository.GetInvoiceOverviewList(customerId, departmentId, dateFrom, dateTo, status, caseId);
+			var dbModels = _invoiceRepository.GetInvoiceOverviewList(customerId, departmentId, dateFrom, dateTo, status, caseId, departmentCharge);
 			var res = new List<InvoiceOverview>();
 			foreach (var dbModel in dbModels)
 			{
@@ -246,7 +246,7 @@ namespace DH.Helpdesk.Services.Services.Invoice
 
 	public interface IInvoiceService
 	{
-		List<InvoiceOverview> GetInvoiceOverviewList(int customerId, int? departmentId, DateTime? dateFrom, DateTime? dateTo, InvoiceStatus? status, int? caseId);
+		List<InvoiceOverview> GetInvoiceOverviewList(int customerId, int? departmentId, DateTime? dateFrom, DateTime? dateTo, InvoiceStatus? status, int? caseId, bool departmentCharge = true);
 
 		void SaveInvoiceActions(int customerId, InvoiceHeader invoiceHeader, List<string> translations);
 

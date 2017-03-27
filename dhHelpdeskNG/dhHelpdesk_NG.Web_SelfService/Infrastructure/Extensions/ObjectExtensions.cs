@@ -219,6 +219,11 @@
             return cfsl.ToList().getCaseFieldSettingsLanguageValue(valueToFind).Language_Id.ToString();
         }
 
+        public static string getFieldHelp(this IEnumerable<CaseFieldSettingsWithLanguage> cfsl, string valueToFind)
+        {
+            return cfsl.ToList().getCaseFieldSettingsLanguageValue(valueToFind).FieldHelp;
+        }
+
         public static string displayUserInfoHtml(this IList<CaseFieldSetting> cfs)
         {
             var ret = "display:none";

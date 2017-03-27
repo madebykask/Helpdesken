@@ -108,7 +108,7 @@ namespace DH.Helpdesk.Services.Services
         void UpdateFollowUpDate(int caseId, DateTime? time);
         void MarkAsUnread(int caseId);
         void MarkAsRead(int caseId);
-        void SendSelfServiceCaseLogEmail(int caseId, CaseMailSetting cms, int caseHistoryId, CaseLog log, string basePath, TimeZoneInfo userTimeZone, List<CaseFileDto> logFiles = null);
+        void SendSelfServiceCaseLogEmail(int caseId, CaseMailSetting cms, int caseHistoryId, CaseLog log, string basePath, TimeZoneInfo userTimeZone, List<CaseFileDto> logFiles = null, bool caseIsActivated = false);
         void Activate(int caseId, int userId, string adUser, string createByApp, out IDictionary<string, string> errors);
         IList<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user);
         void Commit();
@@ -850,7 +850,8 @@ namespace DH.Helpdesk.Services.Services
 
         public Case Copy(int copyFromCaseid, int userId, int languageId, string ipAddress, CaseRegistrationSource source, string adUser)
         {
-            var c = this._caseRepository.GetDetachedCaseById(copyFromCaseid);
+            var c = this._caseRepository.GetDetachedCaseIncludesById(copyFromCaseid);
+            c.User_Id = userId;
             return InitNewCaseCopy(c, userId, ipAddress, source, adUser);
         }
 
@@ -939,13 +940,27 @@ namespace DH.Helpdesk.Services.Services
             SaveCaseHistory(c, userId, adUser, createdByApp, out errors);  
         }
 
-        public void SendSelfServiceCaseLogEmail(int caseId, CaseMailSetting cms, int caseHistoryId, CaseLog log, string basePath, TimeZoneInfo userTimeZone, List<CaseFileDto> logFiles = null)
+        public void SendSelfServiceCaseLogEmail(int caseId, CaseMailSetting cms, int caseHistoryId, CaseLog log, string basePath, TimeZoneInfo userTimeZone, List<CaseFileDto> logFiles = null, bool caseIsActivated = false)
         {
             // get new case information
             var newCase = _caseRepository.GetDetachedCaseById(caseId);
+            var mailTemplateId = 0;
 
             //get settings for smtp
             var customerSetting =_settingService.GetCustomerSetting(newCase.Customer_Id);
+
+            var performerUserEmail = string.Empty;
+            //get performerUser emailaddress
+            if (newCase.Performer_User_Id.HasValue)
+            {
+                var performerUser = this._userService.GetUser(newCase.Performer_User_Id.Value);
+                performerUserEmail = performerUser.Email;
+            }
+            
+            if (!caseIsActivated)
+                 mailTemplateId = (int)GlobalEnums.MailTemplates.CaseIsUpdated;
+            else
+                mailTemplateId = (int)GlobalEnums.MailTemplates.CaseIsActivated;
 
             var smtpInfo = new MailSMTPSetting(customerSetting.SMTPServer, customerSetting.SMTPPort, customerSetting.SMTPUserName, customerSetting.SMTPPassWord, customerSetting.IsSMTPSecured);
 
@@ -972,11 +987,11 @@ namespace DH.Helpdesk.Services.Services
                     if (logFiles.Count > 0)
                         files = logFiles.Select(f => _filesStorage.ComposeFilePath(ModuleName.Log, log.Id, basePath, f.FileName)).ToList();
 
-                if (newCase.PersonsEmail != null)
+                if (!String.IsNullOrEmpty(performerUserEmail))
                 {
                     if (log.SendMailAboutCaseToNotifier && newCase.FinishingDate == null)
                     {
-                        var to = newCase.PersonsEmail.Split(';', ',').ToList();
+                        var to = performerUserEmail.Split(';', ',').ToList();
                         var extraFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(newCase.Id).Select(x => x.Follower).ToList();
                         to.AddRange(extraFollowers);
                         foreach (var t in to)
@@ -985,7 +1000,6 @@ namespace DH.Helpdesk.Services.Services
                             if (!string.IsNullOrWhiteSpace(curMail) && _emailService.IsValidEmail(curMail))
                             {
                                 // Inform notifier about external lognote
-                                int mailTemplateId = (int)GlobalEnums.MailTemplates.CaseIsUpdated;
                                 MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                                 if (m != null)
                                 {
@@ -1013,7 +1027,6 @@ namespace DH.Helpdesk.Services.Services
                 // mail about lognote to Working Group User or Working Group Mail
                 if ((!string.IsNullOrEmpty(log.EmailRecepientsInternalLogTo) || !string.IsNullOrEmpty(log.EmailRecepientsInternalLogCc)) && !string.IsNullOrWhiteSpace(log.EmailRecepientsExternalLog) )
                 {
-                    int mailTemplateId = (int)GlobalEnums.MailTemplates.CaseIsUpdated;
                     MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                     if (m != null)
                     {
@@ -1369,7 +1382,7 @@ namespace DH.Helpdesk.Services.Services
                 {
                     if (!String.IsNullOrEmpty(m.Body) && !String.IsNullOrEmpty(m.Subject))
                     {
-                        if (!cms.DontSendMailToNotifier && !dontSendMailToNotfier && !string.IsNullOrEmpty(newCase.PersonsEmail))
+                        if (!cms.DontSendMailToNotifier && !string.IsNullOrEmpty(newCase.PersonsEmail))
                         {
                             var to = newCase.PersonsEmail.Split(';', ',').ToList();
                             var extraFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(newCase.Id).Select(x => x.Follower).ToList();
@@ -1646,7 +1659,7 @@ namespace DH.Helpdesk.Services.Services
                                 foreach (var ur in newCase.Workinggroup.UserWorkingGroups)                         
                                 {
                                     if (ur.User != null)
-                                        if (ur.User.IsActive == 1 && ur.User.AllocateCaseMail == 1 && _emailService.IsValidEmail(ur.User.Email))
+                                        if (ur.User.IsActive == 1 && ur.User.AllocateCaseMail == 1 && _emailService.IsValidEmail(ur.User.Email) && ur.UserRole == 2)
                                         {
                                             wgEmails = wgEmails + ur.User.Email + ";";
                                         }
@@ -1785,7 +1798,7 @@ namespace DH.Helpdesk.Services.Services
                             }
                         }
 
-                        if (!cms.DontSendMailToNotifier && !dontSendMailToNotfier)
+                        if (!cms.DontSendMailToNotifier)
                         {                                
                             var to = newCase.PersonsEmail.Split(';', ',').ToList();
                             var extraFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(newCase.Id).Select(x => x.Follower).ToList();

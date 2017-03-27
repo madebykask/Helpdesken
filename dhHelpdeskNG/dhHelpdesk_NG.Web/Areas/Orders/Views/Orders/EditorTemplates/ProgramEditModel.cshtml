@@ -5,6 +5,6 @@
 <table class="tableform">
     <tbody>
         @Html.EditorFor(m => m.Programs, "Fields/FlagsList", new {Source = Model.AllPrograms})
-        @Html.EditorFor(m => m.InfoProduct, "Fields/WideText")
+        @Html.EditorFor(m => m.InfoProduct, "Fields/WideText", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "500" } } })
     </tbody>
 </table>

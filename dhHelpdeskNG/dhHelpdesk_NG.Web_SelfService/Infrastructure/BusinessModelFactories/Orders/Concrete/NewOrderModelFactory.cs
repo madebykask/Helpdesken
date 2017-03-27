@@ -42,7 +42,9 @@ namespace DH.Helpdesk.SelfService.Infrastructure.BusinessModelFactories.Orders.C
                 true)
             {
                 CreateCase = createCaseFromOrder,
-                Statuses = data.EditOptions.Statuses
+                Statuses = data.EditOptions.Statuses,
+                OrderTypeDescription = data.EditOptions.OrderTypeDescription,
+                OrderTypeDocument = data.EditOptions.OrderTypeDocument
             };
         }
 
@@ -310,7 +312,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure.BusinessModelFactories.Orders.C
             var info = _configurableFieldModelFactory.CreateStringField(settings.User.Info, null);
             var activity = _configurableFieldModelFactory.CreateStringField(settings.User.Activity, null);
             var manager = _configurableFieldModelFactory.CreateStringField(settings.User.Manager, null);
-            var ordererId = _configurableFieldModelFactory.CreateStringField(settings.Orderer.OrdererId, null);
+            var ordererId = _configurableFieldModelFactory.CreateMultiStringField(settings.Orderer.OrdererId, null);
             var ordererName = _configurableFieldModelFactory.CreateStringField(settings.Orderer.OrdererName, null);
             var ordererLocation = _configurableFieldModelFactory.CreateStringField(settings.Orderer.OrdererLocation, null);
             var ordererEmail = _configurableFieldModelFactory.CreateStringField(settings.Orderer.OrdererEmail, null);

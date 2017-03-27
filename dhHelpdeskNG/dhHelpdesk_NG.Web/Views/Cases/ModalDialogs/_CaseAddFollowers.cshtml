@@ -1,12 +1,19 @@
 ﻿
 @using DH.Helpdesk.Web
-@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @model DH.Helpdesk.Web.Models.Shared.SendToDialogModel
 
 @Scripts.Render(BundleConfig.ScriptNames.CaseAddFollowersSearch)
 
 <script type="text/javascript">
     $(function() {
+        document.parameters = {
+            emailNotValid: '@Translation.GetForJS("E-postadress är inte giltig.")',
+            emailAlreadyAdded: '@Translation.GetForJS("Samma e-post redan lagts.")',
+            adminLabel: '@Translation.GetForJS("Handläggare")',
+            emailLabel: '@Translation.GetForJS("E-postgrupp")',
+            initLabel: '@Translation.GetForJS("Anmälare")',
+            wgLabel: '@Translation.GetForJS("Driftgrupp")'
+        }
         var admins = @Html.SerializeObjectToJson(Model.Administrators.Items);
         var emailGroups = @Html.SerializeObjectToJson(Model.EmailGroups.Items);
         var workingGroups = @Html.SerializeObjectToJson(Model.WorkingGroups.Items);

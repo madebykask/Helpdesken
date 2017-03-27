@@ -67,8 +67,9 @@
                         @Translation.GetCoreTextTranslation("Svar")
                         <span class="mandatorystar">*</span>
                     </td>
-                    <td>
-                        @Html.TextAreaFor(m => m.Answer, new {style = "height: 250px;"})
+                    <td class="pb5">
+                        @Html.TextAreaFor(m => m.Answer, new { style = "height:250px;", @class = "richtexteditor" })
+@*                        @Html.TextAreaFor(m => m.Answer, new {style = "height: 250px;"})*@
                         @Html.ValidationMessageFor(m => m.Answer)
                     </td>
                 </tr>
@@ -215,7 +216,7 @@
             <table>
                 <tr>
                     <td class="span3">
-                        @Translation.GetCoreTextTranslation("Uppgifterna är tillgängliga för anmälare")
+                        @Translation.GetCoreTextTranslation("Visa på säljvservice")
                     </td>
                     <td>
                         @if (Model.LanguageId == LanguageIds.Swedish)

@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.Web.Infrastructure.Extensions;
+﻿using DH.Helpdesk.BusinessData.Enums.Orders.FieldNames;
+using DH.Helpdesk.Web.Infrastructure.Extensions;
 
 namespace DH.Helpdesk.Web.Infrastructure.Tools
 {
@@ -29,11 +30,8 @@ namespace DH.Helpdesk.Web.Infrastructure.Tools
             headers.Add(header);
         }
 
-        public static void ForceCreateHeader(            
-            string fieldName,
-            List<GridColumnHeaderModel> headers)
-        {       
-            
+        public static void ForceCreateHeader(string fieldName, List<GridColumnHeaderModel> headers)
+        {
             var header = new GridColumnHeaderModel(fieldName, string.Empty);
             headers.Add(header);
         }

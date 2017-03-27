@@ -15,6 +15,7 @@
         hierarchyData : @Html.Raw(jsSerializer.Serialize(Model.FAQCategories)),
         answerCaption : '@Translation.Get("Answer", Enums.TranslationSource.TextTranslation)',
         internalAnswerCaption : '@Translation.Get("Internal response", Enums.TranslationSource.TextTranslation)',
+        URLCaption : '@Translation.Get("URL")',
         downloadFileUrl: '@Url.Action("DownloadFile","Faq")'        
     };
 </script>

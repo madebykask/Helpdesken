@@ -59,5 +59,15 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Index
         {
             return new OrdersFilterModel { RecordsOnPage = 100, SortField = new SortField(BusinessData.Enums.Orders.FieldNames.GeneralFieldNames.OrderDate, SortBy.Descending) };
         }
+
+        public static OrdersFilterModel CreateDefault(int[] statusIds)
+        {
+            return new OrdersFilterModel
+            {
+                RecordsOnPage = 100,
+                SortField = new SortField(BusinessData.Enums.Orders.FieldNames.GeneralFieldNames.OrderDate, SortBy.Descending),
+                StatusIds = statusIds
+            };
+        }
     }
 }

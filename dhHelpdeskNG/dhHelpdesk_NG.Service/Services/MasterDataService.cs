@@ -16,11 +16,13 @@ namespace DH.Helpdesk.Services.Services
     {
         IList<Customer> GetCustomers(int userId);
         Customer GetCustomer(int customerId);
+        bool IsCustomerUser(int customerId, int userId);
         User GetUser(int userId);
         Setting GetCustomerSetting(int customerId);
         IList<Language> GetLanguages();
         IList<Text> GetTranslationTexts();
         IList<CaseFieldSettingsForTranslation> GetCaseTranslations(int userId);
+        IList<CaseFieldSettingsForTranslation> GetCustomerCaseTranslations(int customerId);
         IList<CaseFieldSettingsForTranslation> GetCaseTranslations();
         Language GetLanguage(int id);
         UserOverview GetUserForLogin(string userid, int? customerId = null);
@@ -47,6 +49,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly IADFSRepository _adfsRepository;
         private readonly IGlobalSettingRepository _globalSettingRepository;
         private readonly INotifierRepository _computerUserRepository;
+        private readonly ICustomerUserRepository _customerUserRepository;
 
         public MasterDataService(
             ICustomerRepository customerRepository,
@@ -58,7 +61,8 @@ namespace DH.Helpdesk.Services.Services
             ICacheProvider cache,
             IGlobalSettingRepository globalSettingRepository,
             IADFSRepository adfsRepository,
-            INotifierRepository computerUserRepository)
+            INotifierRepository computerUserRepository,
+            ICustomerUserRepository customerUserRepository)
         {
             this._customerRepository = customerRepository;
             this._languageRepository = languageRepository;
@@ -70,6 +74,7 @@ namespace DH.Helpdesk.Services.Services
             this._adfsRepository = adfsRepository;
             this._globalSettingRepository = globalSettingRepository;
             _computerUserRepository = computerUserRepository;
+            _customerUserRepository = customerUserRepository;
         }
 
         public IList<Customer> GetCustomers(int userId)
@@ -85,6 +90,11 @@ namespace DH.Helpdesk.Services.Services
         public Customer GetCustomer(int customerId)
         {
             return this._customerRepository.GetById(customerId);  
+        }
+
+        public bool IsCustomerUser(int customerId, int userId)
+        {
+            return this._customerUserRepository.IsCustomerUser(customerId, userId);
         }
 
         public User GetUser(int userId)
@@ -124,33 +134,17 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<Text> GetTranslationTexts()
         {
-            IList<Text> texts = this._cache.Get("text") as IList<Text>;
-
-            if (texts == null)
-            {
-                texts = this._textRepository.GetAllWithTranslation().ToList();
-
-                if (texts.Any())
-                    this._cache.Set("text", texts, 60);
-            }
-
-            return texts;
+            return _textRepository.GetAllWithTranslation().ToList();
         }
 
         public IList<CaseFieldSettingsForTranslation> GetCaseTranslations(int userId)
         {
             return this._caseFieldSettingLanguageRepository.GetCaseFieldSettingsForTranslation(userId).ToList();   
-            //IList<CaseFieldSettingsForTranslation> languages = this._cache.Get("casetranslation") as IList<CaseFieldSettingsForTranslation>;
+        }
 
-            //if (languages == null)
-            //{
-            //    languages = this._caseFieldSettingLanguageRepository.GetCaseFieldSettingsForTranslation(userId).ToList();   
-
-            //    if (languages.Any())
-            //        this._cache.Set("casetranslation", languages, 60);
-            //}
-
-            //return languages;
+        public IList<CaseFieldSettingsForTranslation> GetCustomerCaseTranslations(int customerId)
+        {
+            return this._caseFieldSettingLanguageRepository.GetCustomerCaseFieldSettingsForTranslation(customerId).ToList();
         }
 
         public IList<CaseFieldSettingsForTranslation> GetCaseTranslations()

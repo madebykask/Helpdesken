@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using DH.Helpdesk.BusinessData.Enums.Orders.FieldNames;
 using DH.Helpdesk.BusinessData.Models.Shared.Output;
 using DH.Helpdesk.SelfService.Infrastructure.Extensions;
 using DH.Helpdesk.SelfService.Models.Common;
@@ -29,11 +30,8 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Tools
             headers.Add(header);
         }
 
-        public static void ForceCreateHeader(
-            string fieldName,
-            List<GridColumnHeaderModel> headers)
+        public static void ForceCreateHeader(string fieldName, List<GridColumnHeaderModel> headers)
         {
-
             var header = new GridColumnHeaderModel(fieldName, string.Empty);
             headers.Add(header);
         }

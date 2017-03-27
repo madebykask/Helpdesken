@@ -21,10 +21,11 @@
                                            Translation.GetForJS(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) + "] " +
                                            Translation.GetForJS("inte har valts. Vänligen kontrollera ärendet."))',
         caseLockGuid: '@Model.CaseLock.LockGUID',
-        caseChangedTime: '@Model.case_.ChangeTime',        
+        caseChangedTime: '@Model.case_.ChangeTime',
         userCaseLocker: '@Model.CaseLock.UserId',
         extendValue: '@Model.CaseLock.ExtendValue',
         timerInterval: '@Model.CaseLock.TimerInterval',
+        departmentInvoiceMandatory: @Model.TimeRequired.ToJavaScriptBool(),
         invoicePreventsToCloseCaseMessage: '@Translation.GetForJS("Du kan inte avsluta ärendet eftersom det finns öppna order.")',
         caseLockChecker: '@Url.Content("~/Cases/IsCaseAvailable/")',
         caseLockExtender: '@Url.Content("~/Cases/ReExtendCaseLock/")',
@@ -46,12 +47,6 @@
         isCaseFileMandatory: '@Model.caseFieldSettings.getRequired(GlobalEnums.TranslationCaseFields.Filename.ToString())',
         caseFileCaption: '@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Filename.ToString(),
                                                 Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)',
-        emailNotValid: '@Translation.GetForJS("E-postadress är inte giltig.")',
-        emailAlreadyAdded: '@Translation.GetForJS("Samma e-post redan lagts.")',
-        adminGroup: '@Translation.GetForJS("Handläggare")',
-        emailGroup: '@Translation.GetForJS("E-postgrupp")',
-        initGroup: '@Translation.GetForJS("Anmälare")',
-        wgGroup: '@Translation.GetForJS("Driftgrupp")',
         closeBtn: '@Html.Raw(Translation.GetForJS("Stäng"))',
         selectedLabel: '@Translation.GetForJS("vald")',
 
@@ -175,7 +170,13 @@
                 @if (Model.OrderId.HasValue)
                 {
                     <li>
-                        <a id="case-order-url" href="@Url.Content("~/Orders/Orders/Edit/" + Model.OrderId.Value)">@Translation.GetCoreTextTranslation("Beställning")</a>
+                        <a id="case-order-url" href="@Url.Content("~/Orders/Orders/Edit/" + Model.OrderId.Value + "?retToCase=" + Model.IsReturnToCase)">@Translation.GetCoreTextTranslation("Beställning")</a>
+                    </li>
+                }
+                @if (Model.AccountId.HasValue && Model.AccountActivityId.HasValue)
+                {
+                    <li>
+                        <a id="case-orderaccount-url" href="@Url.Content("~/OrderAccounts/Orders/Edit/" + Model.AccountId.Value + "?accountActivityId=" + Model.AccountActivityId.Value + "&caseId=" + Model.case_.Id)">@Translation.GetCoreTextTranslation("Beställning konto")</a>
                     </li>
                 }
             </ul>
@@ -310,7 +311,7 @@
                                                     @Html.HiddenFor(model => model.FollowerUsers, new {@readonly = "true", id = "caseFollowerUsersInput"})
                                                     @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.AddFollowersBtn, CaseSolutionFields.AddFollowersBtn))
                                                     {
-                                                        @Html.Partial("ModalDialogs/_CaseAddFollowers", Model.SendToDialogModel)
+                                                        @Html.Partial("ModalDialogs/_CaseAddFollowers", Model.FollowersModel)
                                                         <a href="#case_add_followers_btn" role="button" class="btn case-usersearch-btn" data-src="case" data-toggle="modal">@Translation.GetCoreTextTranslation("Välj följare")</a>
                                                         <div id="fakeCaseFollowerUsersInput" contenteditable="true" class="case-send-emails-div case-usersearch-textarea"></div>
                                                     }
@@ -522,11 +523,11 @@
 
                                                 @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.UserCode, CaseSolutionFields.Usercode))
                                                     {
-                                                    @Html.TextBoxFor(model => model.case_.UserCode, new { maxlength = "20" })
+                                                    @Html.TextBoxFor(model => model.case_.UserCode, new { maxlength = "50" })
                                                     }
                                                     else
                                                     {
-                                                    @Html.TextBoxFor(model => model.case_.UserCode, new { maxlength = "20", @readonly = "readonly" })
+                                                    @Html.TextBoxFor(model => model.case_.UserCode, new { maxlength = "50", @readonly = "readonly" })
                                                     }
                                             </td>
                                         </tr>
@@ -829,11 +830,11 @@
 
                                                 @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.IsAbout_UserCode))
                                                     {
-                                                    @Html.TextBoxFor(model => model.case_.IsAbout.UserCode, new { maxlength = "20" })
+                                                    @Html.TextBoxFor(model => model.case_.IsAbout.UserCode, new { maxlength = "50" })
                                                     }
                                                     else
                                                     {
-                                                    @Html.TextBoxFor(model => model.case_.IsAbout.UserCode, new { maxlength = "20", @readonly = "readonly" })
+                                                    @Html.TextBoxFor(model => model.case_.IsAbout.UserCode, new { maxlength = "50", @readonly = "readonly" })
                                                     }
                                             </td>
                                         </tr>
@@ -1768,20 +1769,20 @@
                                                             {
                                                                 foreach (var e in Model.stateSecondaries.Where(e => e.IsActive == 1 || Model.case_.StateSecondary_Id == e.Id))
                                                                 {
-                                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.StateSecondary_Id.ToString())>@Translation.Get(e.Name)</option>
+                                                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.StateSecondary_Id.ToString())>@Translation.Get(e.Name)</option>
                                                                 }
                                                             }
                                                     </select>
                                                             if (Model.customerUserSetting.StateSecondaryPermission == 0)
                                                             {
-                                                    @Html.HiddenFor(x => x.case_.StateSecondary_Id, new { @class = "readonlySubstate" })
+                                                                 @Html.HiddenFor(x => x.case_.StateSecondary_Id, new { @class = "readonlySubstate" })
                                                             }
                                                     }
                                                     else
                                                     {
                                                         if (!Model.case_.StateSecondary_Id.HasValue)
                                                         {
-                                                    @Html.TextBoxFor(m => m.case_.StateSecondary_Id, new { @readonly = true })
+                                                            @Html.TextBoxFor(m => m.case_.StateSecondary_Id, new { @readonly = true })
                                                         }
                                                         else
                                                         {
@@ -1791,7 +1792,7 @@
                                                     }
                                             </td>
                                         </tr>
-                                        @if (Model.projects != null)
+                                        @if (Model.CustomerSettings.ModuleProject == true)
                                             {
                                                 if (Model.projects.Any())
                                                 {
@@ -1829,7 +1830,7 @@
                                             </tr>
                                                 }
                                             }
-                                        @if (Model.problems != null)
+                                        @if (Model.CustomerSettings.ModuleProblem == true)
                                             {
                                                 if (Model.problems.Any())
                                                 {
@@ -2163,9 +2164,9 @@
                             }
                             if (Model.CustomerSettings.ModuleInvoice == true)
                             {
-                                <div id="divExternalInvoice" style="@Model.ShowInvoiceFields.displayHtml()">
+                                <div id="divExternalInvoice" style="@Model.ShowExternalInvoiceFields.displayHtml()">
                                 <h4>
-                                    @Translation.Get("Fakturor")
+                                    @Translation.GetCoreTextTranslation("Fakturor")
                                 </h4>
                                 <div class="row">
                                     <div class="span12">
@@ -2457,17 +2458,56 @@
                 }
             },
             "CaseLog.TextExternal": {
-                maxlength: 3000
+                maxlength: 3000,
+                @if (Model.CustomerSettings.ModuleInvoice)
+                {
+                    <text>
+                        require_from_group: {
+                            param: [1, ".log-field"],
+                            depends: function(element) {
+                                var timeSpentHour = $("#CaseLog_WorkingTimeHour").val().replace(/\r/g, "") !== "";
+                                var timeSpentMin = $("#CaseLog_WorkingTimeMinute").val().replace(/\r/g, "") !== "";
+                                var overTimeHour = $("#CaseLog_OvertimeHour").val().replace(/\r/g, "") !== "";
+                                var overTimeMin = $("#CaseLog_OvertimeMinute").val().replace(/\r/g, "") !== "";
+                                var material = $("#" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)").val().replace(/\r/g, "") !== "0"
+                                && $("#" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)").val().replace(/\r/g, "") !== "";
+                                var price = $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "0"
+                                && $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "";
+                                return timeSpentHour || timeSpentMin || overTimeHour || overTimeMin || material || price;
+                            }
+                        }
+                    </text>
+                }
             },
             "CaseLog.TextInternal": {
-                maxlength: 3000
+                maxlength: 3000,
+                @if (Model.CustomerSettings.ModuleInvoice)
+                {
+                    <text>
+                        require_from_group: {
+                            param: [1, ".log-field"],
+                            depends: function(element) {
+                                var timeSpentHour = $("#CaseLog_WorkingTimeHour").val().replace(/\r/g, "") !== "";
+                                var timeSpentMin = $("#CaseLog_WorkingTimeMinute").val().replace(/\r/g, "") !== "";
+                                var overTimeHour = $("#CaseLog_OvertimeHour").val().replace(/\r/g, "") !== "";
+                                var overTimeMin = $("#CaseLog_OvertimeMinute").val().replace(/\r/g, "") !== "";
+                                var material = $("#" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)").val().replace(/\r/g, "") !== "0"
+                                && $("#" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)").val().replace(/\r/g, "") !== "";
+                                var price = $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "0"
+                                && $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "";
+                                return timeSpentHour || timeSpentMin || overTimeHour || overTimeMin || material || price;
+                            }
+                        }
+                    </text>
+                }
             },
             "CaseLog.WorkingTimeHour": {
             	require_from_group: {
             		param: [1, ".time-field"],
             		depends: function(element) {
-            			var setting = @(Model.TimeRequired.ToJavaScriptBool());
-            			var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== "";
+            			var setting = _parameters.departmentInvoiceMandatory;
+            			var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== ""
+            		    || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "") !== "";
             			return setting && logPopulated;
             		}
             	}
@@ -2476,8 +2516,9 @@
             	require_from_group: {
             		param: [1, ".time-field"],
             		depends: function(element) {
-            			var setting = @(Model.TimeRequired.ToJavaScriptBool());
-            			var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== "";
+            			var setting = _parameters.departmentInvoiceMandatory;
+            			var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== ""
+            		    || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "") !== "";
             			return setting && logPopulated;
             		}
             	}
@@ -2486,8 +2527,9 @@
             	require_from_group: {
             		param: [1, ".time-field"],
             		depends: function(element) {
-            			var setting = @(Model.TimeRequired.ToJavaScriptBool());
-            			var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== "";
+            			var setting = _parameters.departmentInvoiceMandatory;
+            			var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== ""
+            		    || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "") !== "";
             			return setting && logPopulated;
             		}
             	}
@@ -2496,15 +2538,17 @@
             	require_from_group: {
             		param: [1, ".time-field"],
             		depends: function(element) {
-            			var setting = @(Model.TimeRequired.ToJavaScriptBool());
-            			var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== "";
+            			var setting = _parameters.departmentInvoiceMandatory;
+            			var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== ""
+                            || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "") !== "";
             			return setting && logPopulated;
 		            }
 				}
             },
         },
     	groups: {
-    		time: "CaseLog.WorkingTimeHour CaseLog.WorkingTimeMinute CaseLog.OvertimeHour CaseLog.OvertimeMinute"
+    	    time: "CaseLog.WorkingTimeHour CaseLog.WorkingTimeMinute CaseLog.OvertimeHour CaseLog.OvertimeMinute",
+    	    logInput: "CaseLog.TextExternal CaseLog.TextInternal"
     	},
     	errorPlacement: function(error, element) {
 		    if (element.hasClass("time-field")) {
@@ -2632,10 +2676,12 @@
                 required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
             },
             "CaseLog.TextInternal": {
-                maxlength: "@Translation.GetForJS("Ange inte mer än 3000 tecken", Enums.TranslationSource.TextTranslation)"
+                maxlength: "@Translation.GetForJS("Ange inte mer än 3000 tecken", Enums.TranslationSource.TextTranslation)",
+                require_from_group: "@Translation.GetForJS("Något av följande fält måste fyllas i")"
             },
             "CaseLog.TextExternal": {
-                maxlength: "@Translation.GetForJS("Ange inte mer än 3000 tecken", Enums.TranslationSource.TextTranslation)"
+                maxlength: "@Translation.GetForJS("Ange inte mer än 3000 tecken", Enums.TranslationSource.TextTranslation)",
+                require_from_group: "@Translation.GetForJS("Något av följande fält måste fyllas i")"
             },
     		"CaseLog.WorkingTimeHour": {
     			require_from_group: "@Translation.GetForJS("Välj en eller flera")"

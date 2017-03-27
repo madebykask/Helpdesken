@@ -38,7 +38,10 @@ namespace DH.Helpdesk.SelfService.Infrastructure.BusinessModelFactories.Orders.C
                                     filter.Text,
                                     filter.RecordsOnPage,
                                     sortField,
-                                    orderTypesForCreateOrder);
+                                    orderTypesForCreateOrder)
+            {
+                OrderTypeId = filter.OrderTypeId
+            };
         }
 
         public OrdersGridModel Create(SearchResponse response, SortField sortField, bool showType)
@@ -140,7 +143,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure.BusinessModelFactories.Orders.C
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.CaseNumber, OtherFieldNames.CaseNumber, headers);            
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.Info, OtherFieldNames.Info, headers);
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.Status, OtherFieldNames.Status, headers);            
-            FieldSettingsHelper.ForceCreateHeader(OtherFieldNames.CaseIsFinished, headers);
+//            FieldSettingsHelper.ForceCreateHeader(OtherFieldNames.CaseIsFinished, headers);
         }
 
         private static void CreateProgramHeaders(ProgramFieldSettingsOverview settings, List<GridColumnHeaderModel> headers)
@@ -236,8 +239,9 @@ namespace DH.Helpdesk.SelfService.Infrastructure.BusinessModelFactories.Orders.C
             CreateUserValues(settings.User, order.User, values);
             CreateAccountInfoValues(settings.AccountInfo, order.AccountInfo, values);
             CreateContactValues(settings.Contact, order.Contact, values);
+            var caseIsFinished = order.Other.CaseInfo?.FinishingDate != null;
 
-            return new OrderOverviewModel(order.Id, order.OrderType, values);
+            return new OrderOverviewModel(order.Id, order.OrderType, values, caseIsFinished);
         }
 
         private static void CreateDeliveryValues(
@@ -332,11 +336,6 @@ namespace DH.Helpdesk.SelfService.Infrastructure.BusinessModelFactories.Orders.C
             FieldSettingsHelper.CreateValueIfNeeded(settings.CaseNumber, OtherFieldNames.CaseNumber, fields.CaseNumber, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.Info, OtherFieldNames.Info, fields.Info, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.Status, OtherFieldNames.Status, fields.Status, values);
-
-            if (fields.CaseInfo?.FinishingDate != null)
-                FieldSettingsHelper.ForceCreateValue(OtherFieldNames.CaseIsFinished, bool.TrueString, values);
-            else
-                FieldSettingsHelper.ForceCreateValue(OtherFieldNames.CaseIsFinished, bool.FalseString, values);
         }
 
         private static void CreateProgramValues(

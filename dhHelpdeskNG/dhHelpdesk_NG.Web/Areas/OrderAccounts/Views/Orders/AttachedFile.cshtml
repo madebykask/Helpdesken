@@ -15,11 +15,11 @@
             <td>
                 @Html.ActionLink(Model.File, "DownloadFile", new { orderId = Model.OrderId, fileName = Model.File })
             </td>
-            <td>
-                <a onclick="deleteFile('@Model.File', '@FilesContainerId')" class="btn">
-                    @Translation.Get("Ta bort")
-                </a>
-            </td>
+@*            <td>*@
+@*                <a onclick="deleteFile('@Model.File', '@FilesContainerId')" class="btn">*@
+@*                    @Translation.Get("Ta bort")*@
+@*                </a>*@
+@*            </td>*@
         </tr>
     </table>
 </div>

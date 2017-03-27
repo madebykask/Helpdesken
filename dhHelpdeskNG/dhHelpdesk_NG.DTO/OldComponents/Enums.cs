@@ -31,6 +31,7 @@ namespace DH.Helpdesk.BusinessData.OldComponents
             PlannedDateOccurs = 12,
             AssignedCaseToPriority = 13,
             SmsClosedCase = 14,
+            CaseIsActivated = 15,
             OperationLog = 60,
         }
 

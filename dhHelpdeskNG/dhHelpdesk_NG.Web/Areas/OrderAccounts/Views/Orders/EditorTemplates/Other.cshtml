@@ -16,29 +16,32 @@
                             @Html.FieldCaption(Model.FileName)
                         </td>
                         <td class="span9">
-                            <a href="#fileName_files_uploader_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Upload")</a>
-                            <div id="fileName_files_uploader_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                    <h3>&nbsp;</h3>
-                                </div>
-                                <div class="modal-body">
-                                    <div id="fileName_files_uploader"></div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Close")</button>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>
                             <div id="filename_files_container">
                                 @Html.Partial("AttachedFile", Model.FileName.Value)
                             </div>
+                            @*                            <a href="#fileName_files_uploader_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Upload")</a>*@
+                            @*                            <div id="fileName_files_uploader_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">*@
+                            @*                                <div class="modal-header">*@
+                            @*                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>*@
+                            @*                                    <h3>&nbsp;</h3>*@
+                            @*                                </div>*@
+                            @*                                <div class="modal-body">*@
+                            @*                                    <div id="fileName_files_uploader"></div>*@
+                            @*                                </div>*@
+                            @*                                <div class="modal-footer">*@
+                            @*                                    <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Close")</button>*@
+                            @*                                </div>*@
+                            @*                            </div>*@
                         </td>
                     </tr>
+@*                    <tr>*@
+@*                        <td></td>*@
+@*                        <td>*@
+@*                            <div id="filename_files_container">*@
+@*                                @Html.Partial("AttachedFile", Model.FileName.Value)*@
+@*                            </div>*@
+@*                        </td>*@
+@*                    </tr>*@
                 }
 
                 @Html.EditorFor(m => m.Info, "Fields/WideText")

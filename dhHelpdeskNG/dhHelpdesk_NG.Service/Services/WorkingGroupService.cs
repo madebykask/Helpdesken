@@ -28,7 +28,7 @@
 
         int? GetDefaultId(int customerId, int userId);
 
-        List<GroupWithEmails> GetWorkingGroupsWithActiveEmails(int customerId);
+        List<GroupWithEmails> GetWorkingGroupsWithActiveEmails(int customerId, bool includeAdmins = true);
 
         IList<UserWorkingGroup> GetUsersForWorkingGroup(int workingGroupId);
 
@@ -166,13 +166,13 @@
             return this.workingGroupRepository.GetDefaultWorkingGroupId(customerId, userId);  
         }
 
-        public List<GroupWithEmails> GetWorkingGroupsWithActiveEmails(int customerId)
+        public List<GroupWithEmails> GetWorkingGroupsWithActiveEmails(int customerId, bool includeAdmins = true)
         {
             List<GroupWithEmails> workingGroupsWithEmails;
 
             var workingGroupOverviews = this.workingGroupRepository.FindActiveIdAndNameOverviews(customerId);
             var workingGroupIds = workingGroupOverviews.Select(g => g.Id).ToList();
-            var workingGroupsUserIds = this.userWorkingGroupRepository.FindWorkingGroupsUserIds(workingGroupIds);
+            var workingGroupsUserIds = this.userWorkingGroupRepository.FindWorkingGroupsUserIds(workingGroupIds, includeAdmins);
             var userIdsSet = new HashSet<int>();
             foreach (var id in workingGroupsUserIds.SelectMany(g => g.UserIds))
             {
