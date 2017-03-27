@@ -1485,6 +1485,36 @@ namespace DH.Helpdesk.Services.Services
                         }
                     }
                 }
+                // if priority has value and an emailaddress
+                if (newCase.Priority != null)
+                {
+                    if (!string.IsNullOrWhiteSpace(newCase.Priority.EMailList))
+                    {
+                        mailTemplateId = (int)GlobalEnums.MailTemplates.AssignedCaseToPriority;
+                        MailTemplateLanguageEntity mt = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
+                        if (mt != null)
+                        {
+                            if (!String.IsNullOrEmpty(mt.Body) && !String.IsNullOrEmpty(mt.Subject))
+                            {
+                                var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.Priority.EMailList, _emailService.GetMailMessageId(helpdeskMailFromAdress));
+                                fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 5, userTimeZone);
+
+                                string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
+                                var mailResponse = EmailResponse.GetEmptyEmailResponse();
+                                var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
+                                var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
+
+                                var e_res = _emailService.SendEmail(el, helpdeskMailFromAdress, el.EmailAddress, mt.Subject, mt.Body, fields, mailSetting, el.MessageId, false, files, siteSelfService, siteHelpdesk);
+                                el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                                var now = DateTime.Now;
+                                el.CreatedDate = now;
+                                el.ChangedDate = now;
+                                _emailLogRepository.Add(el);
+                                _emailLogRepository.Commit();
+                            }
+                        }
+                    }
+                }
             }
 
             // send mail template from productArea if productarea has a mailtemplate
