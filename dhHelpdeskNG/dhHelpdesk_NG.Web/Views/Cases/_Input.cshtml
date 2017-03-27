@@ -50,6 +50,8 @@
         closeBtn: '@Html.Raw(Translation.GetForJS("Stäng"))',
         selectedLabel: '@Translation.GetForJS("vald")',
 
+        fileNameError: '@Translation.GetForJS("Filnamn är inte giltigt. Special tecken (!@#=$&?*) är inte tillåtna")',
+
         caseFieldNames:{
                         CustomerId: "case__Customer_Id",
             RegionId: "case__Region_Id",
@@ -2269,8 +2271,9 @@
         <div>
             @Html.Partial("_CasePrint", Model.CasePrintView)
         </div>
-        }
     }
+    <div class="toast-container toast-position-top-center" style="z-index: 100051;"></div>
+}
 
 @functions    {
 

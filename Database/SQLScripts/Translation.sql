@@ -5717,5 +5717,12 @@ If not exists (select * from tblTextTranslation where text_id = 1799 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1799, 2, 'No Uploaded Files')
 GO
 
+If not exists (select * from tbltext where id = 1801)
+	insert into tbltext (id, TextString) VALUES (1801, 'Filnamn är inte giltigt. Special tecken (!@#=$&?*) är inte tillåtna')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1801 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1801, 2, 'Filename is not valid. Special character (!@#=$&?*) is not allowed')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
