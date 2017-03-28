@@ -163,7 +163,7 @@
                                         </label>
                                     </td>
                                     <td><label class="checkbox">
-                                        <input type="checkbox" name="setting.ModuleBulletinBoard" @(Model.Setting.ModuleBulletinBoard == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="checkbox" id="moduleBulletinBoard" name="setting.ModuleBulletinBoard" @(Model.Setting.ModuleBulletinBoard == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="setting.ModuleBulletinBoard" value="0" />
                                         &nbsp;@Translation.Get("Anslagstavla", Enums.TranslationSource.TextTranslation)
                                         </label>
@@ -269,6 +269,22 @@
                                         <input type="hidden" name="setting.ModuleCaseInvoice" value="0" />
                                         &nbsp;@Translation.Get("Fakturering artikel")
                                         </label>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <h4 id="settingForBulletinBoard" @(Model.Setting.ModuleBulletinBoard == 1 ? "style=display" : "block") style="display:none">@Translation.Get("Anslagstavla", Enums.TranslationSource.TextTranslation)</h4>
+                <div class="container">
+                    <div class="row">
+                        <div class="span15">
+                            <table>
+                                <tr id="rowSettingForBulletinBoard" @(Model.Setting.ModuleBulletinBoard == 1 ? "style=display" : "block") style="display:none">
+                                    <td>
+                                        <input type="checkbox" id="setting.BulletinBoardWGRestriction" name="setting.BulletinBoardWGRestriction" @(Model.Setting.BulletinBoardWGRestriction == 1 ? "checked=checked" : "") value="1" />
+                                        <input type="hidden" name="setting.BulletinBoardWGRestriction" value="0" />
+                                        &nbsp;@Translation.Get("Begränsa innehåll för användare med endast läsrättighet till driftgruppen", Enums.TranslationSource.TextTranslation)
                                     </td>
                                 </tr>
                             </table>
@@ -544,4 +560,16 @@
             $("#Setting_MinPasswordLength").val("0");
         }
     }
+
+    $("#moduleBulletinBoard").click(function () {
+        if ($(moduleBulletinBoard).is(':checked')) {
+            $("#settingForBulletinBoard").attr('style', 'display:block');
+            $("#rowSettingForBulletinBoard").attr('style', 'display:block');
+        } else {
+            $("#settingForBulletinBoard").attr('style', 'display:none');
+            $("#rowSettingForBulletinBoard").attr('style', 'display:none');
+            
+        }
+    });
+
 </script>

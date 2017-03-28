@@ -877,7 +877,8 @@
                 ShowOUsOnDepartmentFilter = customerToCopySettings.ShowOUsOnDepartmentFilter,
                 FileIndexingServerName = customerToCopySettings.FileIndexingServerName,
                 FileIndexingCatalogName = customerToCopySettings.FileIndexingCatalogName,
-				BatchEmail = customerToCopySettings.BatchEmail
+				BatchEmail = customerToCopySettings.BatchEmail,
+                BulletinBoardWGRestriction = customerToCopySettings.BulletinBoardWGRestriction
             };
 
             //Get CaseSettings to copy
