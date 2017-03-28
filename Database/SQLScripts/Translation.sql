@@ -5731,5 +5731,19 @@ If not exists (select * from tblTextTranslation where text_id = 1802 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1802, 2, 'Restrict content for users with only read permissions for working group')
 GO
 
+If not exists (select * from tbltext where id = 1803)
+	insert into tbltext (id, TextString) VALUES (1803, 'Ingen data är tillgänglig')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1803 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1803, 2, 'No data available in table')
+GO
+
+If not exists (select * from tbltext where id = 1804)
+	insert into tbltext (id, TextString) VALUES (1804, 'Visa {0} av {1} poster')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1804 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1804, 2, 'Show {0} of {1} records')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
