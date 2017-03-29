@@ -81,9 +81,12 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><input type="checkbox" id="LimitWGs"> @Translation.Get("Begränsa läsrättighet till",Enums.TranslationSource.TextTranslation):<br></td>
                                     <td>
-                                        @Html.ListBox("WGsAvailable", Model.WGsAvailable, new { style = "width: 340px; height: 150px" })                                        
+                                        <input type="checkbox" id="LimitWGs" @(Model.CurrentUser.UserGroup_Id <= 2 ? "checked=checked" : "" ) @(Model.CurrentUser.UserGroup_Id <= 2 ? "disabled" : "" )> @Translation.Get("Begränsa läsrättighet till", Enums.TranslationSource.TextTranslation):<br>
+                                        <input type="hidden" id="userGroupId" value="@Model.CurrentUser.UserGroup_Id" />
+                                    </td>
+                                    <td>
+                                        @Html.ListBox("WGsAvailable", Model.WGsAvailable, new { style = "width: 340px; height: 150px" })                               
                                     </td>
                                     <td>
                                         <input type="button" value="&gt;" id="addWGs" class="btn"/><br />
@@ -113,7 +116,9 @@
 
     $('.btn.save').on('click', function () {
         $("#WGsSelected option").attr("selected", "selected");
+        
         $("#target").submit();
+      
         return false;
     });
 
@@ -132,6 +137,16 @@
         $("#WGsSelected option:selected").remove().appendTo("#WGsAvailable");
         $("#WGsAvailable").get(0).selectedIndex = -1;
         $("#WGsAvailable").get(0).selectedIndex = -1;
+        if ($("#WGsSelected option").length == 0) {
+            if ($("#userGroupId").val() > 2)
+            {
+                $("#LimitWGs").attr("checked", false);
+                $("#WGsSelected").removeAttr('required');
+                $("#WGsSelected").rules("remove");
+            }
+            
+        };
+        
         return false;
     });
 
@@ -139,10 +154,16 @@
         if ($("#LimitWGs").attr("checked")) {
             $("#WGsAvailable").attr("disabled", false);
             $("#WGsSelected").attr("disabled", false);
+            $("#WGsSelected").rules("add", {
+                required: true
+            });
         } else {
             $("#WGsSelected option").remove().appendTo("#WGsAvailable");
             $("#WGsAvailable").attr("disabled", true);
             $("#WGsSelected").attr("disabled", true);
+
+            $("#WGsSelected").removeAttr('required');
+            $("#WGsSelected").rules("remove");
         }
     });
 
@@ -151,12 +172,20 @@
         $("#WGsAvailable").attr("disabled", false);
         $("#WGsSelected").attr("disabled", false);
     } else {
-        $("#WGsAvailable").attr("disabled", true);
-        $("#WGsSelected").attr("disabled", true);
+        if ($("#LimitWGs").attr('checked'))
+        {
+            $("#WGsAvailable").attr("disabled", false);
+            $("#WGsSelected").attr("disabled", false);
+        }
+        else
+        {
+            $("#WGsAvailable").attr("disabled", true);
+            $("#WGsSelected").attr("disabled", true);
+        }   
     }
 
     var validator = $("#target")
-        .submit(function() {
+        .submit(function () {
             // update underlying textarea before submit validation
             tinyMCE.triggerSave();
         })
@@ -169,7 +198,8 @@
                 },
                 "BulletinBoard.ShowUntilDate": {
                     date: true
-                }
+                },
+                "WGsSelected": { 'required': $("#LimitWGs").attr('checked') == "checked" }
             },
             messages: {
                 'BulletinBoard.ShowDate': {
@@ -180,6 +210,9 @@
                 },
                 "BulletinBoard.Text": {
                     required: "@Translation.GetForJS("Du måste ange en anslagstavla", Enums.TranslationSource.TextTranslation)"
+                },
+                "WGsSelected": {
+                    required: "@Translation.GetForJS("Du måste ange en driftgrupp", Enums.TranslationSource.TextTranslation)"
                 }
             },
             errorPlacement: function (error, element) {
@@ -210,4 +243,5 @@
             }
         }
     };
+
 </script>

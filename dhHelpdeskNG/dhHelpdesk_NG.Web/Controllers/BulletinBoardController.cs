@@ -20,19 +20,22 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IWorkingGroupService _workingGroupService;
         private readonly IUserPermissionsChecker _userPermissionsChecker;
         private readonly ISettingService _settingService;
+        private readonly IUserService _userService;
 
         public BulletinBoardController(
             IBulletinBoardService bulletinBoardService,
             IWorkingGroupService workingGroupService,
             IMasterDataService masterDataService,
             IUserPermissionsChecker userPermissionsChecker,
-            ISettingService settingService)
+            ISettingService settingService,
+            IUserService userService)
             : base(masterDataService)
         {
             this._bulletinBoardService = bulletinBoardService;
             this._workingGroupService = workingGroupService;
             this._userPermissionsChecker = userPermissionsChecker;
             this._settingService = settingService;
+            this._userService = userService;
         }
 
         public ActionResult Index()
@@ -217,7 +220,9 @@ namespace DH.Helpdesk.Web.Controllers
             var wgsSelected = bulletinBoard.WGs ?? new List<WorkingGroupEntity>();
             var wgsAvailable = new List<WorkingGroupEntity>();
 
-            var workingGroups = this._workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id);
+            var user = this._userService.GetUser(SessionFacade.CurrentUser.Id);
+
+            var workingGroups = this._workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id, user.Id);
             var wgsSelectedIds = wgsSelected.Select(g => g.Id).ToArray();
 
             foreach (var wg in workingGroups)
@@ -245,6 +250,7 @@ namespace DH.Helpdesk.Web.Controllers
             };
 
             model.UserHasBulletinBoardAdminPermission = userHasBulletinBoardAdminPermission;
+            model.CurrentUser = user;
 
             return model;
         }
