@@ -1,10 +1,8 @@
 ﻿namespace DH.Helpdesk.Dal.Repositories.ADFS.Concrete
 {
-    using System.Collections.Generic;
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.ADFS.Input;    
-    using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories.ADFS;
@@ -31,8 +29,7 @@
                 CreatedDate = SSOLog.CreatedDate
             };
 
-            this.DbContext.SSOLogs.Add(ssoLogEntity);
-            //this.InitializeAfterCommit(newCircular, circularEntity);            
+            this.DbContext.SSOLogs.Add(ssoLogEntity);          
 
         }
 

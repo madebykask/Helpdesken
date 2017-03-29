@@ -288,6 +288,7 @@
     <Compile Include="Services\FeedbackService.cs" />
     <Compile Include="Services\Feedback\FeedbackTemplateService.cs" />
     <Compile Include="Services\Invoice\InvoiceService.cs" />
+    <Compile Include="Services\WorkFlow\IWorkFlowService.cs" />
     <Compile Include="Services\OperationLogEmailLogService.cs" />
     <Compile Include="Services\Reports\IReportServiceService.cs" />
     <Compile Include="Services\ICaseLockService.cs" />
@@ -489,6 +490,7 @@
     <Compile Include="Infrastructure\Concrete\EmailSendingSettingsProvider.cs" />
     <Compile Include="Infrastructure\IEmailSendingSettingsProvider.cs" />
     <Compile Include="Services\Users\IUsersPasswordHistoryService.cs" />
+    <Compile Include="Services\WorkFlow\WorkFlowService.cs" />
     <Compile Include="utils\ServiceUtils.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Changes\IUpdateChangeRequestValidator.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Changes\Concrete\UpdateChangeRequestValidator.cs" />
