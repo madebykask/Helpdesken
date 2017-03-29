@@ -306,5 +306,10 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	end
 GO
 
+IF COL_LENGTH('tblFormSettings','CacheData') IS NULL
+BEGIN
+      ALTER TABLE tblFormSettings ADD [CacheData] bit NULL
+END
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.31'
