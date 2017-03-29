@@ -5745,5 +5745,12 @@ If not exists (select * from tblTextTranslation where text_id = 1804 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1804, 2, 'Show {0} of {1} records')
 GO
 
+UPDATE tblText Set TextString = 'Om e-postmall väljs så skickas meddelande till ovanstående adresser när notering skrivs' WHERE Id=63;
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'If e-mail template is selected, a message is sent to the addresses above when log note is written' WHERE Text_Id=63 AND Language_Id=2;
+GO
+
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
