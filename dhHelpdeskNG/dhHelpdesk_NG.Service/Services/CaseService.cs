@@ -1496,21 +1496,30 @@ namespace DH.Helpdesk.Services.Services
                         {
                             if (!String.IsNullOrEmpty(mt.Body) && !String.IsNullOrEmpty(mt.Subject))
                             {
-                                var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.Priority.EMailList, _emailService.GetMailMessageId(helpdeskMailFromAdress));
-                                fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 5, userTimeZone);
+                                var to = newCase.Priority.EMailList.Split(';', ',').ToList();
+                                foreach (var t in to)
+                                {
+                                    var curMail = t.Trim();
+                                    if (!string.IsNullOrWhiteSpace(curMail) && _emailService.IsValidEmail(curMail))
+                                    { 
+                                        var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(helpdeskMailFromAdress));
+                                        fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 5, userTimeZone);
 
-                                string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
-                                var mailResponse = EmailResponse.GetEmptyEmailResponse();
-                                var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
-                                var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
+                                        string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
+                                        var mailResponse = EmailResponse.GetEmptyEmailResponse();
+                                        var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
+                                        var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
 
-                                var e_res = _emailService.SendEmail(el, helpdeskMailFromAdress, el.EmailAddress, mt.Subject, mt.Body, fields, mailSetting, el.MessageId, false, files, siteSelfService, siteHelpdesk);
-                                el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
-                                var now = DateTime.Now;
-                                el.CreatedDate = now;
-                                el.ChangedDate = now;
-                                _emailLogRepository.Add(el);
-                                _emailLogRepository.Commit();
+                                        var e_res = _emailService.SendEmail(el, helpdeskMailFromAdress, el.EmailAddress, mt.Subject, mt.Body, fields, mailSetting, el.MessageId, false, files, siteSelfService, siteHelpdesk);
+                                        el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                                        var now = DateTime.Now;
+                                        el.CreatedDate = now;
+                                        el.ChangedDate = now;
+                                        _emailLogRepository.Add(el);
+                                        _emailLogRepository.Commit();
+
+                                    }
+                                }
                             }
                         }
                     }
@@ -1632,39 +1641,48 @@ namespace DH.Helpdesk.Services.Services
 
             // send email priority has changed
             if (newCase.FinishingDate == null && oldCase != null && oldCase.Id > 0)
+            {
                 if (newCase.Priority_Id != oldCase.Priority_Id)
                 {
-                    if (newCase.Priority != null)
+                    if (!string.IsNullOrWhiteSpace(newCase.Priority.EMailList))
                     {
-                        if (!string.IsNullOrWhiteSpace(newCase.Priority.EMailList))
+                        int mailTemplateId = (int)GlobalEnums.MailTemplates.AssignedCaseToPriority;
+                        MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
+                        if (m != null)
                         {
-                            int mailTemplateId = (int)GlobalEnums.MailTemplates.AssignedCaseToPriority;
-                            MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
-                            if (m != null)
+                            if (!String.IsNullOrEmpty(m.Body) && !String.IsNullOrEmpty(m.Subject))
                             {
-                                if (!String.IsNullOrEmpty(m.Body) && !String.IsNullOrEmpty(m.Subject))
+                                var to = newCase.Priority.EMailList.Split(';', ',').ToList();
+                                foreach (var t in to)
                                 {
-                                    var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.Priority.EMailList, _emailService.GetMailMessageId(helpdeskMailFromAdress));                                    
-                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 5, userTimeZone);
+                                    var curMail = t.Trim();
+                                    if (!string.IsNullOrWhiteSpace(curMail) && _emailService.IsValidEmail(curMail))
+                                    {
+                                        if (!String.IsNullOrEmpty(m.Body) && !String.IsNullOrEmpty(m.Subject))
+                                        {
+                                            var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(helpdeskMailFromAdress));
+                                            fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 5, userTimeZone);
 
-                                    string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
-                                    var mailResponse = EmailResponse.GetEmptyEmailResponse();
-                                    var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
-                                    var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
+                                            string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
+                                            var mailResponse = EmailResponse.GetEmptyEmailResponse();
+                                            var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
+                                            var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
 
-                                    var e_res = _emailService.SendEmail(el, helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, mailSetting, el.MessageId, false, files, siteSelfService, siteHelpdesk);
-                                    el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
-                                    var now = DateTime.Now;
-                                    el.CreatedDate = now;
-                                    el.ChangedDate = now;
-                                    _emailLogRepository.Add(el);
-                                    _emailLogRepository.Commit();
+                                            var e_res = _emailService.SendEmail(el, helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, mailSetting, el.MessageId, false, files, siteSelfService, siteHelpdesk);
+                                            el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                                            var now = DateTime.Now;
+                                            el.CreatedDate = now;
+                                            el.ChangedDate = now;
+                                            _emailLogRepository.Add(el);
+                                            _emailLogRepository.Commit();
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
                 }
-
+            }
             // send email working group has changed
             if (!isClosingCase
                 && newCase.Workinggroup != null
