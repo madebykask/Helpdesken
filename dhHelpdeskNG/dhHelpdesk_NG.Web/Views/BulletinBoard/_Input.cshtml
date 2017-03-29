@@ -82,7 +82,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input type="checkbox" id="LimitWGs" @(Model.CurrentUser.UserGroup_Id <= 2 ? "checked=checked" : "" ) @(Model.CurrentUser.UserGroup_Id <= 2 ? "disabled" : "" )> @Translation.Get("Begränsa läsrättighet till", Enums.TranslationSource.TextTranslation):<br>
+                                        <input type="checkbox" id="LimitWGs" @(Model.CurrentUser.UserGroup_Id <= 2 ? "checked=checked" : "" ) @(Model.CurrentUser.UserGroup_Id <= 2 ? "disabled" : "" )> @Translation.Get("Begränsa rättigheter till", Enums.TranslationSource.TextTranslation)<br>
                                         <input type="hidden" id="userGroupId" value="@Model.CurrentUser.UserGroup_Id" />
                                     </td>
                                     <td>

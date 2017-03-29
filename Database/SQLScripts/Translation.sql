@@ -5751,6 +5751,12 @@ GO
 UPDATE tblTextTranslation Set TextTranslation = 'If e-mail template is selected, a message is sent to the addresses above when log note is written' WHERE Text_Id=63 AND Language_Id=2;
 GO
 
+If not exists (select * from tbltext where id = 1805)
+	insert into tbltext (id, TextString) VALUES (1805, 'Begränsa rättigheter till')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1805 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1805, 2, 'Limit rights to')
+GO
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
