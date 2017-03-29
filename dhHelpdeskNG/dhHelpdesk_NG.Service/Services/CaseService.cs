@@ -1440,8 +1440,15 @@ namespace DH.Helpdesk.Services.Services
             {
                 if (newCase.Administrator.AllocateCaseMail == 1 && this._emailService.IsValidEmail(newCase.Administrator.Email))
                 {
-                    if (currentLoggedInUser.SettingForNoMail == 1 || (currentLoggedInUser.Id == newCase.Performer_User_Id && currentLoggedInUser.SettingForNoMail == 1) 
+                    if (currentLoggedInUser != null)
+                    {
+                            if (currentLoggedInUser.SettingForNoMail == 1 || (currentLoggedInUser.Id == newCase.Performer_User_Id && currentLoggedInUser.SettingForNoMail == 1) 
                                 || (currentLoggedInUser.Id != newCase.Performer_User_Id && currentLoggedInUser.SettingForNoMail == 0))
+                            {
+                                this.SendTemplateEmail(GlobalEnums.MailTemplates.AssignedCaseToUser, newCase, log, caseHistoryId, cms, newCase.Administrator.Email, userTimeZone);
+                            }
+                    }
+                    else
                     {
                         this.SendTemplateEmail(GlobalEnums.MailTemplates.AssignedCaseToUser, newCase, log, caseHistoryId, cms, newCase.Administrator.Email, userTimeZone);
                     }
