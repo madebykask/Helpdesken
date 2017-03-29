@@ -18,9 +18,9 @@
 
     public interface IBulletinBoardService
     {
-        IList<BulletinBoard> GetBulletinBoards(int customerId, bool secure = false);
+        IList<BulletinBoard> GetBulletinBoards(int customerId, bool secure = false, bool bulletinBoardWGRestriction = false);
 
-        IList<BulletinBoard> SearchAndGenerateBulletinBoard(int customerId, IBulletinBoardSearch SearchBulletinBoards, bool secure = false);
+        IList<BulletinBoard> SearchAndGenerateBulletinBoard(int customerId, IBulletinBoardSearch SearchBulletinBoards, bool secure = false, bool bulletinBoardWGRestriction = false);
 
         BulletinBoard GetBulletinBoard(int id);
 
@@ -30,7 +30,7 @@
 
         void Commit();
 
-        IEnumerable<BulletinBoardOverview> GetBulletinBoardOverviews(int[] customers, int? count, bool forStartPage);
+        IEnumerable<BulletinBoardOverview> GetBulletinBoardOverviews(int[] customers, int? count, bool forStartPage, bool bulletinBoardWGRestriction = false);
     }
 
     public class BulletinBoardService : IBulletinBoardService
@@ -43,19 +43,23 @@
 
         private readonly IWorkContext workContext;
 
+        private readonly IUserService _userService;
+
         public BulletinBoardService(
             IBulletinBoardRepository bulletinBoardRepository,
             IUnitOfWork unitOfwork,
             IUnitOfWorkFactory unitOfWorkFactory, 
+            IUserService userService,
             IWorkContext workContext)
         {
             this._bulletinBoardRepository = bulletinBoardRepository;
             this._unitOfWork = unitOfwork;
             this.unitOfWorkFactory = unitOfWorkFactory;
             this.workContext = workContext;
+            this._userService = userService;
         }
 
-        public IList<BulletinBoard> GetBulletinBoards(int customerId, bool secure = false)
+        public IList<BulletinBoard> GetBulletinBoards(int customerId, bool secure = false, bool bulletinBoardWGRestriction = false)
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
@@ -64,7 +68,10 @@
 
                 if (secure)
                 {
-                    query = query.RestrictByWorkingGroups(this.workContext);
+                    if (!bulletinBoardWGRestriction)
+                        query = query.RestrictByWorkingGroups(this.workContext);
+                    else
+                        query = query.RestrictByWorkingGroupsOnyRead(this.workContext);
                 }
 
                 return query                            
@@ -74,7 +81,7 @@
             }
         }
         
-        public IList<BulletinBoard> SearchAndGenerateBulletinBoard(int customerId, IBulletinBoardSearch SearchBulletinBoards, bool secure = false)
+        public IList<BulletinBoard> SearchAndGenerateBulletinBoard(int customerId, IBulletinBoardSearch SearchBulletinBoards, bool secure = false, bool bulletinBoardWGRestriction = false)
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
@@ -83,7 +90,10 @@
 
                 if (secure)
                 {
-                    query = query.RestrictByWorkingGroups(this.workContext);
+                    if (!bulletinBoardWGRestriction)
+                        query = query.RestrictByWorkingGroups(this.workContext);
+                    else
+                        query = query.RestrictByWorkingGroupsOnyRead(this.workContext);
                 }
 
                 query.GetByCustomer(customerId);
@@ -216,7 +226,7 @@
             this._unitOfWork.Commit();
         }
 
-        public IEnumerable<BulletinBoardOverview> GetBulletinBoardOverviews(int[] customers, int? count, bool forStartPage)
+        public IEnumerable<BulletinBoardOverview> GetBulletinBoardOverviews(int[] customers, int? count, bool forStartPage, bool bulletinBoardWGRestriction = false)
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
@@ -225,7 +235,10 @@
 
                 if (forStartPage)
                 {
-                    query = query.RestrictByWorkingGroups(this.workContext);
+                    if (!bulletinBoardWGRestriction)
+                        query = query.RestrictByWorkingGroups(this.workContext);
+                    else
+                        query = query.RestrictByWorkingGroupsOnyRead(this.workContext);
                 }
 
                 return query

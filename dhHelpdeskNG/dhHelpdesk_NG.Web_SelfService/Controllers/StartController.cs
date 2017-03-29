@@ -26,29 +26,37 @@ namespace DH.Helpdesk.SelfService.Controllers
         private readonly ICustomerService _customerService;                
         private readonly IBulletinBoardService _bulletinBoardService;
         private readonly IInfoService _infoService;
+        private readonly ISettingService _settingService;
+        private readonly IUserService _userService;
 
         public StartController(IMasterDataService masterDataService,
                                ICustomerService customerService,
                                ICaseSolutionService caseSolutionService,
                                IInfoService infoService,                               
-                               IBulletinBoardService bulletinBoardService
+                               IBulletinBoardService bulletinBoardService,
+                               ISettingService settingService,
+                               IUserService userService
                               ):base(masterDataService, caseSolutionService)
         {
             
             this._customerService = customerService;
             this._bulletinBoardService = bulletinBoardService;
             this._infoService = infoService;
+            this._settingService = settingService;
+            this._userService = userService;
         }
 
         //
         // GET: /Start/
 
         public  ActionResult Index(int customerId = -1)
+
         {
             var htmlData = _infoService.GetInfoText((int)InfoTextType.SelfServiceWelcome, SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
             var model = new StartPageModel(htmlData == null ? string.Empty : htmlData.Name);
+            var customerSetting = this._settingService.GetCustomerSettings(SessionFacade.CurrentCustomer.Id);
 
-            var bb = _bulletinBoardService.GetBulletinBoards(SessionFacade.CurrentCustomer.Id, false);
+            var bb = _bulletinBoardService.GetBulletinBoards(SessionFacade.CurrentCustomer.Id, false, customerSetting.BulletinBoardWGRestriction);
             model.BulletinBoard = bb.Where(b => b.PublicInformation != 0 &&
                                                 b.ShowDate <= DateTime.Now.Date && b.ShowUntilDate >= DateTime.Now.Date)
                                     .OrderByDescending(b => b.ShowDate)
