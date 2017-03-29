@@ -1,23 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?><predefined><name>BusinessUnit</name><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Service Office</selected>
-<show>Service Office Norway</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Sørlandet</selected>
-<show>Store Kristiansand Sorlandet 007</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Hjemme</selected>
-<show>Customer Center Norway</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>IKEA Eiendom Holding AS</selected>
-<show>IKEA Eiendom Holding AS</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Netthandel</selected>
-<show>E-commerce NO 076</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Slependen</selected>
-<show>Store Oslo Slependen 091</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Furuset</selected>
-<show>Store Oslo Furuset 095</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Forus</selected>
-<show>Store Stavanger Forus 126</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Leangen</selected>
-<show>Store Trondheim Leangen 371</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Ringsaker</selected>
-<show>Store Ringsaker 390</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Åsane</selected>
-<show>Store Bergen Åsane 441</show></dependent></predefined>
