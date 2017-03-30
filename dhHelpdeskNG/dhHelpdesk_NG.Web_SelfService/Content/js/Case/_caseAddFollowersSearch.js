@@ -155,6 +155,22 @@ function InitCaseAddFollowersSearch(searchUriPath) {
                 return ~item.toLowerCase().indexOf(tquery.toLowerCase());
             },
 
+            sorter: function (items) {
+                var beginswith = [], caseSensitive = [], caseInsensitive = [], other = [], item;
+                while (aItem = items.shift()) {
+                    item = JSON.parse(aItem);
+                    if (item.groupType === 0) {
+                        if (!item.userId.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
+                        else if (~item.userId.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
+                        else caseInsensitive.push(JSON.stringify(item));
+                    } else {
+                        other.push(JSON.stringify(item));
+                    }
+                }
+                var initiators = beginswith.concat(caseSensitive, caseInsensitive);
+                return initiators.concat(other);
+            },
+
             highlighter: function (obj) {
                 var item = JSON.parse(obj);
                 var grType = window.parameters.initGroup + ": ";
