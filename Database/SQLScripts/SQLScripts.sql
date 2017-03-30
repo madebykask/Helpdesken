@@ -321,7 +321,7 @@ GO
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
                where syscolumns.name = N'Export' and sysobjects.name = N'tblOrder')
 	begin
-		ALTER TABLE tblOrder ADD Export int NULL
+		ALTER TABLE tblOrder ADD Export int NOT NULL Default(0)
 	end
 GO
 
