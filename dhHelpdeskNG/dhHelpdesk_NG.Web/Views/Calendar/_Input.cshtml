@@ -97,7 +97,8 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        
+                                        <input type="checkbox" id="LimitWGs" @(Model.CurrentUser.UserGroup_Id <= 2 ? "checked=checked" : "" ) @(Model.CurrentUser.UserGroup_Id <= 2 ? "disabled" : "" )> @Translation.Get("Begränsa rättigheter till", Enums.TranslationSource.TextTranslation)<br>
+                                        <input type="hidden" id="userGroupId" value="@Model.CurrentUser.UserGroup_Id" />
                                     </td>
                                     <td>
                                         @Html.ListBox("WGsAvailable", Model.WGsAvailable, new { style = "width: 340px; height: 100px" })
@@ -140,7 +141,90 @@
         $("#WGsSelected option:selected").remove().appendTo("#WGsAvailable");
         $("#WGsAvailable").get(0).selectedIndex = -1;
         $("#WGsAvailable").get(0).selectedIndex = -1;
+        if ($("#WGsSelected option").length == 0) {
+            if ($("#userGroupId").val() > 2) {
+                $("#LimitWGs").attr("checked", false);
+                $("#WGsSelected").removeAttr('required');
+                $("#WGsSelected").rules("remove");
+            }
+
+        };
         return false;
     });
 
+    $("#LimitWGs").change(function () {
+        if ($("#LimitWGs").attr("checked")) {
+            $("#WGsAvailable").attr("disabled", false);
+            $("#WGsSelected").attr("disabled", false);
+            $("#WGsSelected").rules("add", {
+                required: true
+            });
+        } else {
+            $("#WGsSelected option").remove().appendTo("#WGsAvailable");
+            $("#WGsAvailable").attr("disabled", true);
+            $("#WGsSelected").attr("disabled", true);
+
+            $("#WGsSelected").removeAttr('required');
+            $("#WGsSelected").rules("remove");
+        }
+    });
+
+    if ($("#WGsSelected option").length > 0) {
+        $("#LimitWGs").attr("checked", true)
+        $("#WGsAvailable").attr("disabled", false);
+        $("#WGsSelected").attr("disabled", false);
+    } else {
+        if ($("#LimitWGs").attr('checked')) {
+            $("#WGsAvailable").attr("disabled", false);
+            $("#WGsSelected").attr("disabled", false);
+        }
+        else {
+            $("#WGsAvailable").attr("disabled", true);
+            $("#WGsSelected").attr("disabled", true);
+        }
+    }
+
+    var validator = $("#target")
+        .submit(function () {
+            // update underlying textarea before submit validation
+            tinyMCE.triggerSave();
+        })
+        .validate({
+            ignore: "",
+            rules: {
+                "WGsSelected": { 'required': $("#LimitWGs").attr('checked') == "checked" }
+            },
+            messages: {
+                "WGsSelected": {
+                    required: "@Translation.GetForJS("Du måste ange en driftgrupp", Enums.TranslationSource.TextTranslation)"
+        }
+    },
+        errorPlacement: function (error, element) {
+        if (element.is("textarea")) {
+            element.parent().prepend(error);
+        } else if (element.parent().hasClass('date')) {
+            element.parent().append(error);
+        } else {
+            error.insertAfter(element);
+        }
+    },
+    submitHandler: function (form) {
+        form.submit();
+    }
+    });
+    validator.focusInvalid = function() {
+        // put focus on tinymce on submit validation
+        if (this.settings.focusInvalid) {
+            try {
+                var toFocus = $(this.findLastActive() || this.errorList.length && this.errorList[0].element || []);
+                if (toFocus.is("textarea")) {
+                    tinyMCE.get(toFocus.attr("id")).focus();
+                } else {
+                    toFocus.filter(":visible").focus();
+                }
+            } catch (e) {
+                // ignore IE throwing errors when focusing hidden elements
+            }
+        }
+    };
 </script>

@@ -59,5 +59,7 @@ namespace DH.Helpdesk.Web.Models
 
         public CalendarInputViewModel() { }
         public bool UserHasCalendarAdminPermission { get; set; }
+
+        public User CurrentUser { get; set; }
     }
 }

@@ -41,6 +41,7 @@ using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
         private readonly IWorkingGroupService workingGroupService;
         private readonly IUserPermissionsChecker _userPermissionsChecker;
         private readonly ISettingService _settingService;
+        private readonly IUserService _userService;
         /// <summary>
         /// Initializes a new instance of the <see cref="CalendarController"/> class.
         /// </summary>
@@ -58,13 +59,15 @@ using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
             IWorkingGroupService workingGroupService,
             IMasterDataService masterDataService,
             IUserPermissionsChecker userPermissionsChecker,
-            ISettingService settingService)
+            ISettingService settingService,
+            IUserService userService)
             : base(masterDataService)
         {
             this.calendarService = calendarService;
             this.workingGroupService = workingGroupService;
             this._userPermissionsChecker = userPermissionsChecker;
             this._settingService = settingService;
+            this._userService = userService;
         }
 
         /// <summary>
@@ -329,7 +332,9 @@ using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
             var wgsSelected = calendar.WGs ?? new List<WorkingGroupEntity>();
             var wgsAvailable = new List<WorkingGroupEntity>();
 
-            var workingGroups = this.workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id);
+            var user = this._userService.GetUser(SessionFacade.CurrentUser.Id);
+
+            var workingGroups = this.workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id, user.Id);
             var wgsSelectedIds = wgsSelected.Select(g => g.Id).ToArray();
 
             var userHasCalenderAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CalendarPermission);
@@ -357,6 +362,7 @@ using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
                 }).ToList(),
             };
             model.UserHasCalendarAdminPermission = userHasCalenderAdminPermission;
+            model.CurrentUser = user;
             return model;
         }
     }
