@@ -39,7 +39,7 @@ namespace DH.Helpdesk.Services.Services
         /// <returns>
         /// The result.
         /// </returns>
-        IList<CalendarOverview> GetCalendars(int customerId);
+        IList<CalendarOverview> GetCalendars(int customerId, bool secure = false);
 
         /// <summary>
         /// The search and generate calendar.
@@ -53,7 +53,7 @@ namespace DH.Helpdesk.Services.Services
         /// <returns>
         /// The result.
         /// </returns>
-        IList<CalendarOverview> SearchAndGenerateCalendar(int customerId, ICalendarSearch searchCalendars);
+        IList<CalendarOverview> SearchAndGenerateCalendar(int customerId, ICalendarSearch searchCalendars, bool secure = false);
 
         /// <summary>
         /// The get calendar.
@@ -93,7 +93,7 @@ namespace DH.Helpdesk.Services.Services
         /// </summary>
         void Commit();
 
-        IEnumerable<CalendarOverview> GetCalendarOverviews(int[] customers, int? count, bool forStartPage, bool untilTodayOnly);
+        IEnumerable<CalendarOverview> GetCalendarOverviews(int[] customers, int? count, bool forStartPage, bool untilTodayOnly, bool secure = false);
     }
 
     /// <summary>
@@ -143,9 +143,9 @@ namespace DH.Helpdesk.Services.Services
         /// <returns>
         /// The result.
         /// </returns>
-        public IList<CalendarOverview> GetCalendars(int customerId)
+        public IList<CalendarOverview> GetCalendars(int customerId, bool secure = false)
         {
-            return this.GetCalendarOverviews(new[] { customerId }, null, false, false).ToList();
+            return this.GetCalendarOverviews(new[] { customerId }, null, false, false, secure).ToList();
         }
 
         /// <summary>
@@ -160,9 +160,9 @@ namespace DH.Helpdesk.Services.Services
         /// <returns>
         /// The result.
         /// </returns>
-        public IList<CalendarOverview> SearchAndGenerateCalendar(int customerId, ICalendarSearch searchCalendars)
+        public IList<CalendarOverview> SearchAndGenerateCalendar(int customerId, ICalendarSearch searchCalendars, bool secure = false)
         {
-            var query = from c in this.GetCalendarOverviews(new[] { customerId }, null, false, false) select c;
+            var query = from c in this.GetCalendarOverviews(new[] { customerId }, null, false, false, secure) select c;
 
             if (!string.IsNullOrEmpty(searchCalendars.SearchCs))
             {
@@ -313,7 +313,7 @@ namespace DH.Helpdesk.Services.Services
             this.unitOfWork.Commit();
         }
 
-        public IEnumerable<CalendarOverview> GetCalendarOverviews(int[] customers, int? count, bool forStartPage, bool untilTodayOnly)
+        public IEnumerable<CalendarOverview> GetCalendarOverviews(int[] customers, int? count, bool forStartPage, bool untilTodayOnly, bool secure = false)
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
@@ -328,11 +328,11 @@ namespace DH.Helpdesk.Services.Services
                         .GetUntilDate();
                 }
 
-                if (forStartPage)
+                if (secure)
                 {
                     query = query.RestrictByWorkingGroups(this.workContext);
                 }
-
+                
                 return query.GetForStartPage(customers, count, forStartPage)
                         .MapToOverviews().OrderBy(x => x.CalendarDate).ThenBy(x => x.CustomerName);
             }

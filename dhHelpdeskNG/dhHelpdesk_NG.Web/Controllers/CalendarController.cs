@@ -79,12 +79,19 @@ using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
             if (SessionFacade.CurrentCalenderSearch != null)
             {                
                 cs = SessionFacade.CurrentCalenderSearch;
-                model.Calendars = this.calendarService.SearchAndGenerateCalendar(SessionFacade.CurrentCustomer.Id, cs);
+                if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.UserGroupId == 2)
+                    model.Calendars = this.calendarService.SearchAndGenerateCalendar(SessionFacade.CurrentCustomer.Id, cs, true);
+                else
+                    model.Calendars = this.calendarService.SearchAndGenerateCalendar(SessionFacade.CurrentCustomer.Id, cs);
                 model.SearchCs = cs.SearchCs;
             }
             else
             {
-                model.Calendars = this.calendarService.GetCalendars(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.CalendarDate).ToList();
+                if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.UserGroupId == 2)
+                    model.Calendars = this.calendarService.GetCalendars(SessionFacade.CurrentCustomer.Id, true).OrderBy(x => x.CalendarDate).ToList();
+                else
+                    model.Calendars = this.calendarService.GetCalendars(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.CalendarDate).ToList();
+
                 cs.SortBy = "CalendarDate";
                 cs.Ascending = true;
                 SessionFacade.CurrentCalenderSearch = cs;

@@ -214,7 +214,10 @@
                             model.BulletinBoardOverviews = this.bulletinBoardService.GetBulletinBoardOverviews(customerIdsAll, module.NumberOfRows, true);
                         break;
                     case Module.Calendar:
-                        model.CalendarOverviews = this.calendarService.GetCalendarOverviews(customerIdsAll, module.NumberOfRows, true, true);
+                        if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.UserGroupId == 2)
+                            model.CalendarOverviews = this.calendarService.GetCalendarOverviews(customerIdsAll, module.NumberOfRows, true, true, true);
+                        else
+                            model.CalendarOverviews = this.calendarService.GetCalendarOverviews(customerIdsAll, module.NumberOfRows, true, true);
                         break;
                     case Module.Customers:
                         var customerCases = this.caseService.GetCustomersCases(customersIds, this.workContext.User.UserId);                        
