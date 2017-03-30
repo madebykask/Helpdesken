@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Dal.Repositories
+﻿using System.Linq.Expressions;
+
+namespace DH.Helpdesk.Dal.Repositories
 {
     using System.Collections.Generic;
     using System.Globalization;
@@ -127,7 +129,7 @@ using System;
         IList<CustomerUser> GetCustomerUsersForUser(int userId);
         void UpdateUserSetting(UserCaseSetting newSetting);
         bool IsCustomerUser(int customerId, int userId);
-
+        bool CheckUserCasePermissions(int userId, int[] customerIds, int caseId, Expression<Func<Case, bool>> casePermissionsFilter = null);
     }
 
     public class CustomerUserRepository : RepositoryBase<CustomerUser>, ICustomerUserRepository
@@ -278,6 +280,22 @@ using System;
             return DataContext.CustomerUsers.Any(cu => cu.Customer_Id == customerId && cu.User_Id == userId);
         }
 
+        public bool CheckUserCasePermissions(int userId, int[] customerIds, int caseId, Expression<Func<Case, bool>> casePermissionsFilter = null)
+        {
+            IQueryable<Case> query = from c in DataContext.Set<Customer>()
+                        from cu in c.Users
+                        from _case in c.Cases
+                        where customerIds.Contains(c.Id) &&
+                        cu.Id == userId
+                        select _case;
+
+            if (casePermissionsFilter != null)
+            {
+                query = query.Where(casePermissionsFilter);
+            }
+                        
+            return query.Any(o => o.Id == caseId);
+        }
     }
 
     #endregion

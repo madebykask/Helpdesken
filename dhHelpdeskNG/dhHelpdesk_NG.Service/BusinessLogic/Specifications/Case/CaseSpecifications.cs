@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.BusinessLogic.Specifications.Case
+﻿using System.Linq.Expressions;
+
+namespace DH.Helpdesk.Services.BusinessLogic.Specifications.Case
 {
     using System;
     using System.Collections.Generic;
@@ -205,23 +207,19 @@
             return query;
         }
 
-        public static IQueryable<Case> GetByAdministratorOrResponsibleUser(
-                                this IQueryable<Case> query, 
+        public static Expression<Func<Case, bool>> GetByAdministratorOrResponsibleUserExpression(
                                 int administratorId,
                                 int responsibleUserId)
         {
-            query = query.Where(c => c.Performer_User_Id == administratorId || c.CaseResponsibleUser_Id == responsibleUserId);
-
-            return query;
+            Expression<Func<Case, bool>> exp = c => c.Performer_User_Id == administratorId || c.CaseResponsibleUser_Id == responsibleUserId;
+            return exp;
         }
 
-        public static IQueryable<Case> GetByReportedByOrUserId(
-                                this IQueryable<Case> query, 
+        public static Expression<Func<Case, bool>> GetByReportedByOrUserId(
                                 string reportedBy,
                                 int userId)
         {
-            query = query.Where(c => c.ReportedBy.Trim().ToLower() == reportedBy.Trim().ToLower() || c.CaseResponsibleUser_Id == userId);
-
+            Expression<Func<Case, bool>> query = c => c.ReportedBy.Trim().ToLower() == reportedBy.Trim().ToLower() || c.CaseResponsibleUser_Id == userId;
             return query;
         }
 
