@@ -170,6 +170,7 @@
             var customersSettings = this.userService.GetUserCustomersSettings(SessionFacade.CurrentUser.Id);
             var currentCustomerSettings = customersSettings.FirstOrDefault(s => s.CustomerId == this.workContext.Customer.CustomerId);
             var bulletinBoardWGRestriction = currentCustomerSettings.BulletinBoardWGRestriction;
+            var calendarWGRestriction = currentCustomerSettings.CalendarWGRestriction;
             var currentUser = this.userService.GetUser(SessionFacade.CurrentUser.Id);
 
             if (string.IsNullOrEmpty(SessionFacade.CurrentLanguageCode))
@@ -215,7 +216,7 @@
                         break;
                     case Module.Calendar:
                         if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.UserGroupId == 2)
-                            model.CalendarOverviews = this.calendarService.GetCalendarOverviews(customerIdsAll, module.NumberOfRows, true, true, true);
+                            model.CalendarOverviews = this.calendarService.GetCalendarOverviews(customerIdsAll, module.NumberOfRows, true, true, true, calendarWGRestriction);
                         else
                             model.CalendarOverviews = this.calendarService.GetCalendarOverviews(customerIdsAll, module.NumberOfRows, true, true);
                         break;

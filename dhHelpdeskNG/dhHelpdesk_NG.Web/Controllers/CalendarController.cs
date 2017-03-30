@@ -40,6 +40,7 @@ using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
         /// </summary>
         private readonly IWorkingGroupService workingGroupService;
         private readonly IUserPermissionsChecker _userPermissionsChecker;
+        private readonly ISettingService _settingService;
         /// <summary>
         /// Initializes a new instance of the <see cref="CalendarController"/> class.
         /// </summary>
@@ -56,12 +57,14 @@ using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
             ICalendarService calendarService,
             IWorkingGroupService workingGroupService,
             IMasterDataService masterDataService,
-            IUserPermissionsChecker userPermissionsChecker)
+            IUserPermissionsChecker userPermissionsChecker,
+            ISettingService settingService)
             : base(masterDataService)
         {
             this.calendarService = calendarService;
             this.workingGroupService = workingGroupService;
             this._userPermissionsChecker = userPermissionsChecker;
+            this._settingService = settingService;
         }
 
         /// <summary>
@@ -74,13 +77,15 @@ using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
         public ActionResult Index()
         {
             var model = this.IndexViewModel();
+            var customerSetting = this._settingService.GetCustomerSettings(SessionFacade.CurrentCustomer.Id);
+            var calendarWGRestriction = customerSetting.CalendarWGRestriction;
 
             var cs = new CalendarSearch();
             if (SessionFacade.CurrentCalenderSearch != null)
             {                
                 cs = SessionFacade.CurrentCalenderSearch;
                 if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.UserGroupId == 2)
-                    model.Calendars = this.calendarService.SearchAndGenerateCalendar(SessionFacade.CurrentCustomer.Id, cs, true);
+                    model.Calendars = this.calendarService.SearchAndGenerateCalendar(SessionFacade.CurrentCustomer.Id, cs, true, calendarWGRestriction);
                 else
                     model.Calendars = this.calendarService.SearchAndGenerateCalendar(SessionFacade.CurrentCustomer.Id, cs);
                 model.SearchCs = cs.SearchCs;
@@ -88,7 +93,7 @@ using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
             else
             {
                 if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.UserGroupId == 2)
-                    model.Calendars = this.calendarService.GetCalendars(SessionFacade.CurrentCustomer.Id, true).OrderBy(x => x.CalendarDate).ToList();
+                    model.Calendars = this.calendarService.GetCalendars(SessionFacade.CurrentCustomer.Id, true, calendarWGRestriction).OrderBy(x => x.CalendarDate).ToList();
                 else
                     model.Calendars = this.calendarService.GetCalendars(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.CalendarDate).ToList();
 
@@ -112,6 +117,9 @@ using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
         [HttpPost]       
         public ActionResult Index(CalendarSearch searchCalendars)
         {
+            var customerSetting = this._settingService.GetCustomerSettings(SessionFacade.CurrentCustomer.Id);
+            var calendarWGRestriction = customerSetting.CalendarWGRestriction;
+
             var cs = new CalendarSearch();
             if (SessionFacade.CurrentCalenderSearch != null)
             {
@@ -119,8 +127,16 @@ using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
             }
             
             cs.SearchCs = searchCalendars.SearchCs;
-           
-            var c = this.calendarService.SearchAndGenerateCalendar(SessionFacade.CurrentCustomer.Id, cs);
+
+            var restrictsearch = false;
+            if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.UserGroupId == 2)
+            {
+                restrictsearch = true;
+            }
+            else
+                calendarWGRestriction = false;
+
+            var c = this.calendarService.SearchAndGenerateCalendar(SessionFacade.CurrentCustomer.Id, cs, restrictsearch, calendarWGRestriction);
             SessionFacade.CurrentCalenderSearch = cs;
 
             var model = this.IndexViewModel();

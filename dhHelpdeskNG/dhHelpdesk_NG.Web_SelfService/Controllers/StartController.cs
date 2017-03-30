@@ -56,7 +56,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             var model = new StartPageModel(htmlData == null ? string.Empty : htmlData.Name);
             var customerSetting = this._settingService.GetCustomerSettings(SessionFacade.CurrentCustomer.Id);
 
-            var bb = _bulletinBoardService.GetBulletinBoards(SessionFacade.CurrentCustomer.Id, false, customerSetting.BulletinBoardWGRestriction);
+            var bb = _bulletinBoardService.GetBulletinBoards(SessionFacade.CurrentCustomer.Id, false);
             model.BulletinBoard = bb.Where(b => b.PublicInformation != 0 &&
                                                 b.ShowDate <= DateTime.Now.Date && b.ShowUntilDate >= DateTime.Now.Date)
                                     .OrderByDescending(b => b.ShowDate)

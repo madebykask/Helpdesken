@@ -39,7 +39,7 @@ namespace DH.Helpdesk.Services.Services
         /// <returns>
         /// The result.
         /// </returns>
-        IList<CalendarOverview> GetCalendars(int customerId, bool secure = false);
+        IList<CalendarOverview> GetCalendars(int customerId, bool secure = false, bool calendarWGRestriction = false);
 
         /// <summary>
         /// The search and generate calendar.
@@ -53,7 +53,7 @@ namespace DH.Helpdesk.Services.Services
         /// <returns>
         /// The result.
         /// </returns>
-        IList<CalendarOverview> SearchAndGenerateCalendar(int customerId, ICalendarSearch searchCalendars, bool secure = false);
+        IList<CalendarOverview> SearchAndGenerateCalendar(int customerId, ICalendarSearch searchCalendars, bool secure = false, bool calendarWGRestriction = false);
 
         /// <summary>
         /// The get calendar.
@@ -93,7 +93,7 @@ namespace DH.Helpdesk.Services.Services
         /// </summary>
         void Commit();
 
-        IEnumerable<CalendarOverview> GetCalendarOverviews(int[] customers, int? count, bool forStartPage, bool untilTodayOnly, bool secure = false);
+        IEnumerable<CalendarOverview> GetCalendarOverviews(int[] customers, int? count, bool forStartPage, bool untilTodayOnly, bool secure = false, bool calendarWGRestriction = false);
     }
 
     /// <summary>
@@ -143,9 +143,9 @@ namespace DH.Helpdesk.Services.Services
         /// <returns>
         /// The result.
         /// </returns>
-        public IList<CalendarOverview> GetCalendars(int customerId, bool secure = false)
+        public IList<CalendarOverview> GetCalendars(int customerId, bool secure = false, bool calendarWGRestriction = false)
         {
-            return this.GetCalendarOverviews(new[] { customerId }, null, false, false, secure).ToList();
+            return this.GetCalendarOverviews(new[] { customerId }, null, false, false, secure, calendarWGRestriction).ToList();
         }
 
         /// <summary>
@@ -160,9 +160,9 @@ namespace DH.Helpdesk.Services.Services
         /// <returns>
         /// The result.
         /// </returns>
-        public IList<CalendarOverview> SearchAndGenerateCalendar(int customerId, ICalendarSearch searchCalendars, bool secure = false)
+        public IList<CalendarOverview> SearchAndGenerateCalendar(int customerId, ICalendarSearch searchCalendars, bool secure = false, bool calendarWGRestriction = false)
         {
-            var query = from c in this.GetCalendarOverviews(new[] { customerId }, null, false, false, secure) select c;
+            var query = from c in this.GetCalendarOverviews(new[] { customerId }, null, false, false, secure, calendarWGRestriction) select c;
 
             if (!string.IsNullOrEmpty(searchCalendars.SearchCs))
             {
@@ -313,7 +313,7 @@ namespace DH.Helpdesk.Services.Services
             this.unitOfWork.Commit();
         }
 
-        public IEnumerable<CalendarOverview> GetCalendarOverviews(int[] customers, int? count, bool forStartPage, bool untilTodayOnly, bool secure = false)
+        public IEnumerable<CalendarOverview> GetCalendarOverviews(int[] customers, int? count, bool forStartPage, bool untilTodayOnly, bool secure = false, bool calendarWGRestriction = false)
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
@@ -330,7 +330,11 @@ namespace DH.Helpdesk.Services.Services
 
                 if (secure)
                 {
-                    query = query.RestrictByWorkingGroups(this.workContext);
+
+                    if (!calendarWGRestriction)
+                        query = query.RestrictByWorkingGroups(this.workContext);
+                    else
+                        query = query.RestrictByWorkingGroupsOnyRead(this.workContext);
                 }
                 
                 return query.GetForStartPage(customers, count, forStartPage)

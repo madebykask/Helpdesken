@@ -151,9 +151,9 @@
         public static IQueryable<T> RestrictByWorkingGroupsOnyRead<T>(this IQueryable<T> query, IWorkContext workContext)
             where T : class, IWorkingGroupEntity
         {
-            var userGroups = workContext.User.UserWorkingGroups.Select(u => u.WorkingGroup_Id);
-
-            query = query.Where(x => !x.WGs.Any());
+            //var userGroups = workContext.User.UserWorkingGroups.Select(u => u.WorkingGroup_Id);
+            var userGroups = workContext.User.UserWorkingGroups.Where(u => u.UserRole == 2).Select(u => u.WorkingGroup_Id);
+            query = query.Where(x => !x.WGs.Any() || x.WGs.Any(g => userGroups.Contains(g.Id)));
 
             return query;
         }
