@@ -311,5 +311,12 @@ BEGIN
       ALTER TABLE tblFormSettings ADD [CacheData] bit NULL
 END
 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'CalendarWGRestriction' and sysobjects.name = N'tblSettings')
+	begin
+		ALTER TABLE tblSettings ADD CalendarWGRestriction int NOT NULL Default(0)
+	end
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.31'

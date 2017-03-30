@@ -131,7 +131,7 @@ namespace DH.Helpdesk.Domain
         public bool IsSMTPSecured { get; set; }
 		public bool BatchEmail { get; set; }
         public int BulletinBoardWGRestriction { get; set; }
-
+        public int CalendarWGRestriction { get; set; }
 
 
         public virtual OrderState CloseOrderState { get; set; }

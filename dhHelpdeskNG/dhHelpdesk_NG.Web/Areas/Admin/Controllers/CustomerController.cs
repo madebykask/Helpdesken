@@ -878,7 +878,8 @@
                 FileIndexingServerName = customerToCopySettings.FileIndexingServerName,
                 FileIndexingCatalogName = customerToCopySettings.FileIndexingCatalogName,
 				BatchEmail = customerToCopySettings.BatchEmail,
-                BulletinBoardWGRestriction = customerToCopySettings.BulletinBoardWGRestriction
+                BulletinBoardWGRestriction = customerToCopySettings.BulletinBoardWGRestriction,
+                CalendarWGRestriction = customerToCopySettings.CalendarWGRestriction
             };
 
             //Get CaseSettings to copy
