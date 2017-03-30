@@ -192,9 +192,13 @@
         .validate({
             ignore: "",
             rules: {
+                "Calendar.Text": 'required',
                 "WGsSelected": { 'required': $("#LimitWGs").attr('checked') == "checked" }
             },
             messages: {
+                "Calendar.Text": {
+                    required: "@Translation.GetForJS("Du måste ange en text", Enums.TranslationSource.TextTranslation)"
+            },
                 "WGsSelected": {
                     required: "@Translation.GetForJS("Du måste ange en driftgrupp", Enums.TranslationSource.TextTranslation)"
         }
