@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 namespace DH.Helpdesk.Services.Services
 {
@@ -204,17 +205,15 @@ namespace DH.Helpdesk.Services.Services
 
         public string GetVirtualDirectoryPath(int customerId)
         {
-            var customerFilePath = this._settingRepository.GetAll()
-                                                          .Where(s => s.Customer_Id == customerId)
-                                                          .Select(s => s.VirtualFilePath)
-                                                          .FirstOrDefault();
-            if (string.IsNullOrEmpty(customerFilePath)) {
-                var globalSetting = this._globalSettingRepository.GetAll().FirstOrDefault();
-                if (globalSetting != null)
-                    customerFilePath = globalSetting.VirtualFileFolder;
-            }
-            return (string.IsNullOrEmpty(customerFilePath) ? string.Empty : customerFilePath);
-        }
+            var virtualDirectoryPath = 
+                _settingRepository.Get(s => s.Customer_Id == customerId, s => s.VirtualFilePath);
 
+            if (string.IsNullOrEmpty(virtualDirectoryPath))
+            {
+                virtualDirectoryPath = this._globalSettingRepository.Get(s => true, s => s.VirtualFileFolder);
+            }
+
+            return virtualDirectoryPath ?? string.Empty;
+        }
     }
 }

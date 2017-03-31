@@ -14,6 +14,7 @@
         T GetById(int Id);
         T GetById(string Id);
         T Get(Expression<Func<T, bool>> where);
+        TResult Get<TResult>(Expression<Func<T, bool>> where, Expression<Func<T, TResult>> selector);
         IEnumerable<T> GetAll();
         IEnumerable<T> GetMany(Expression<Func<T, bool>> where);
 
