@@ -82,7 +82,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input type="checkbox" id="LimitWGs" @(Model.CurrentUser.UserGroup_Id <= 2 ? "checked=checked" : "" ) @(Model.CurrentUser.UserGroup_Id <= 2 ? "disabled" : "" )> @Translation.Get("Begränsa rättigheter till", Enums.TranslationSource.TextTranslation)<br>
+                                        <input type="checkbox" id="LimitWGs"> @Translation.Get("Begränsa rättigheter till", Enums.TranslationSource.TextTranslation)<br>
                                         <input type="hidden" id="userGroupId" value="@Model.CurrentUser.UserGroup_Id" />
                                     </td>
                                     <td>
@@ -138,13 +138,11 @@
         $("#WGsAvailable").get(0).selectedIndex = -1;
         $("#WGsAvailable").get(0).selectedIndex = -1;
         if ($("#WGsSelected option").length == 0) {
-            if ($("#userGroupId").val() > 2)
-            {
-                $("#LimitWGs").attr("checked", false);
-                $("#WGsSelected").removeAttr('required');
-                $("#WGsSelected").rules("remove");
-            }
-            
+            $("#LimitWGs").attr("checked", false);
+            $("#WGsAvailable").attr("disabled", true);
+            $("#WGsSelected").attr("disabled", true);
+            $("#WGsSelected").removeAttr('required');
+            $("#WGsSelected").rules("remove");
         };
         
         return false;
