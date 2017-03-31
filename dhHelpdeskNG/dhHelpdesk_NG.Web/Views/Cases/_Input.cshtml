@@ -4,6 +4,7 @@
 @using DH.Helpdesk.BusinessData.OldComponents
 @using DH.Helpdesk.Common.Enums.Settings
 @using DH.Helpdesk.Domain.Invoice
+@using DH.Helpdesk.Web
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @using DH.Helpdesk.Web.Models.Invoice
@@ -93,6 +94,7 @@
 </script>
 
 @Scripts.Render("~/bundles/cases/_input")
+@Scripts.Render(BundleConfig.ScriptNames.CaseFollowersAndLogCommon)
 
 <script type="text/javascript">
     function CalcSLA()
@@ -2705,6 +2707,7 @@
         return ret;
     }
 
+    $("#fakeCaseFollowerUsersInput").html(getHtmlFromEmails($("#caseFollowerUsersInput").val()));
 
     $(function() {
 

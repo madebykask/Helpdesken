@@ -5,7 +5,7 @@
     var popupFollowersInput = $("#caseAddFollowersModalInput");
     var searchSelected = false;
 
-    mainFakeFollowersInput.html(getHtmlFromEmails(mainFollowersInput.val()));
+//    mainFakeFollowersInput.html(getHtmlFromEmails(mainFollowersInput.val()));
 
     initEditableDiv();
 
