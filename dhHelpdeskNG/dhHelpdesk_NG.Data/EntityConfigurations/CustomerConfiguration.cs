@@ -90,6 +90,10 @@
             this.Property(x => x.ShowCoWorkersOnExternalPage).IsRequired();
             this.Property(x => x.ShowHelpOnExternalPage).IsRequired();
             this.Property(x => x.UseInternalLogNoteOnExternalPage).IsRequired();
+            this.Property(x => x.MyCasesFollower).IsRequired();
+            this.Property(x => x.MyCasesInitiator).IsRequired();
+            this.Property(x => x.MyCasesRegarding).IsRequired();
+            this.Property(x => x.MyCasesRegistrator).IsRequired();
 
             this.ToTable("tblcustomer");
         }

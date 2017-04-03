@@ -931,4 +931,104 @@ a.error, input[type=¨button].error .btn
     width: 90%!important;
 }
 
+.padding20 {
+    padding: 20px;
+}
 
+.order-date-search .input-group {
+    display: inline-table;
+}
+
+.order-date-search .date
+{
+	width: 140px;
+    margin-right: 10px;
+}
+
+table.table-orders th span.glyphicon {
+    float: right;
+}
+
+.order-edit .container {
+    margin-left: 0;
+}
+
+.table-orders tbody tr {
+    cursor: pointer
+}
+
+.order-edit .date {
+    width: 140px;
+}
+
+.order-description {
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+/**************************** Validation **************************************************/
+
+.field-validation-error
+{
+    color: #ff0000;
+}
+
+.field-validation-valid
+{
+    display: none;
+}
+
+.input-validation-error
+{
+    border: 1px solid #ff0000 !important;
+    background-color: #ffeeee !important;
+}
+
+.validation-summary-errors
+{
+    font-weight: bold;
+    color: #ff0000;
+    margin: 10px 10px;
+}
+
+.validation-summary-valid
+{
+    display: none;
+}
+
+/******************************************************************************/
+
+.ml15 {
+    margin-left: 0.5em !important;
+}
+
+.multitext .input-group {
+    display: inline-block;
+    padding-left: 15px;
+    float: left;
+}
+
+div .multitext input[type='text'] {
+    margin-right: 5px;
+    width: 190px;
+}
+
+div .multitext i {
+    cursor: pointer;
+}
+
+.btn-document {
+    margin-bottom: 10px;
+    display: block;
+    width: 3em;
+}
+
+.inputw450
+{
+	width: 450px !important;
+}
+
+.inputmh100
+{
+	min-height: 150px !important;
+}

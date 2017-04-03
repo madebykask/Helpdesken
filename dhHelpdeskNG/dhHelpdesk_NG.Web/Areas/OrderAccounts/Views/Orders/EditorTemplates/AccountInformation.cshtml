@@ -16,20 +16,21 @@
     || Model.AccountType5.Show
     || Model.Info.Show)
 {
-    <h4>@Translation.Get(header)</h4>
+    <h4>@Translation.GetCoreTextTranslation(header)</h4>
     <div class="row">
         <div class="span12">
             <table class="tableform">
-                @Html.EditorFor(m => m.StartedDate, "Fields/Date", new { Id = "acccount_information_started_date" })
-                @Html.EditorFor(m => m.FinishDate, "Fields/Date", new { Id = "acccount_information_finish_date" })
                 @Html.EditorFor(m => m.EMailTypeId, "Fields/List", new { Source = Model.EmailTypes })
                 @Html.EditorFor(m => m.HomeDirectory, "Fields/Flag")
                 @Html.EditorFor(m => m.Profile, "Fields/Flag")
+                @Html.EditorFor(m => m.StartedDate, "Fields/Date", new { Id = "acccount_information_started_date" })
+                @Html.EditorFor(m => m.FinishDate, "Fields/Date", new { Id = "acccount_information_finish_date" })
+                @Html.EditorFor(m => m.InventoryNumber, "Fields/Text")
                 @Html.EditorFor(m => m.AccountTypeId, "Fields/List", new { Source = Model.AccountTypes })
                 @Html.EditorFor(m => m.AccountType2, "Fields/MultiSelectList", new { Source = Model.AccountTypes2 })
                 @Html.EditorFor(m => m.AccountType3, "Fields/List", new { Source = Model.AccountTypes3 })
                 @Html.EditorFor(m => m.AccountType4, "Fields/List", new { Source = Model.AccountTypes4 })
-                @Html.EditorFor(m => m.AccountType5, "Fields/List", new { Source = Model.AccountTypes4 })
+                @Html.EditorFor(m => m.AccountType5, "Fields/List", new { Source = Model.AccountTypes5 })
                 @Html.EditorFor(m => m.Info, "Fields/WideText")
             </table>
         </div>

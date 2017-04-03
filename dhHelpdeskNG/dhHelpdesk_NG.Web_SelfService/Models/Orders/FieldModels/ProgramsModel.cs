@@ -1,0 +1,24 @@
+﻿using System.Collections.Generic;
+using DH.Helpdesk.Common.ValidationAttributes;
+
+namespace DH.Helpdesk.SelfService.Models.Orders.FieldModels
+{
+    public sealed class ProgramsModel
+    {
+        public ProgramsModel()
+        {
+            this.Programs = new List<ProgramModel>();
+        }
+
+        public ProgramsModel(int orderId, List<ProgramModel> programs)
+        {
+            this.OrderId = orderId;
+            this.Programs = programs;
+        }
+
+        public int OrderId { get; set; }
+
+        [NotNull]
+        public List<ProgramModel> Programs { get; set; }
+    }
+}

@@ -54,7 +54,7 @@ namespace DH.Helpdesk.Services.Services
             string relatedCasesUserId = null,
             int[] caseIds = null);
 
-        List<CaseEmailSendOverview> GetUserEmailsForCaseSend(int customerId, string query, bool searchInWorkingGrs, bool searchInInitiators, bool searchInAdmins, bool searchInEmailGrs);
+        List<CaseEmailSendOverview> GetUserEmailsForCaseSend(int customerId, string query, bool searchInWorkingGrs, bool searchInInitiators, bool searchInAdmins, bool searchInEmailGrs, bool isInternalLog = false);
     }
 
     public class CaseSearchService : ICaseSearchService
@@ -177,9 +177,9 @@ namespace DH.Helpdesk.Services.Services
             return result;
         }
 
-        public List<CaseEmailSendOverview> GetUserEmailsForCaseSend(int customerId, string query, bool searchInWorkingGrs, bool searchInInitiators, bool searchInAdmins, bool searchInEmailGrs)
+        public List<CaseEmailSendOverview> GetUserEmailsForCaseSend(int customerId, string query, bool searchInWorkingGrs, bool searchInInitiators, bool searchInAdmins, bool searchInEmailGrs, bool isInternalLog = false)
         {
-            return _userEmailRepository.GetUserEmailsListForCaseSend(customerId, query, searchInWorkingGrs, searchInInitiators, searchInAdmins, searchInEmailGrs);
+            return _userEmailRepository.GetUserEmailsListForCaseSend(customerId, query, searchInWorkingGrs, searchInInitiators, searchInAdmins, searchInEmailGrs, isInternalLog);
         }
 
         private CaseSearchFilter DoFilterValidation(CaseSearchFilter filter)

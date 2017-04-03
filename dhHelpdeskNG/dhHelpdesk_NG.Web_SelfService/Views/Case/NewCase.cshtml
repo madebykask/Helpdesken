@@ -92,9 +92,41 @@
                     @Html.HiddenFor(model => model.CaseMailSetting.HelpdeskMailFromAdress)
                     @Html.HiddenFor(model => model.CaseMailSetting.AbsoluterUrl)
                     @Html.HiddenFor(model => model.CaseMailSetting.DontConnectUserToWorkingGroup)
-                    @Html.HiddenFor(l => Model.NewCase.RegLanguage_Id)
-
+                    @Html.HiddenFor(l => Model.NewCase.RegLanguage_Id)                    
                     @Html.HiddenFor(k => Model.CaseFileKey)
+                    @Html.HiddenFor(model => model.NewCase.Priority_Id)
+                    @Html.HiddenFor(model => model.NewCase.RegistrationSourceCustomer_Id)
+
+                    @Html.HiddenFor(model => model.NewCase.CausingPartId)
+                    @Html.HiddenFor(model => model.NewCase.WorkingGroup_Id)
+                    @Html.HiddenFor(model => model.NewCase.Project_Id)
+                    @Html.HiddenFor(model => model.NewCase.Problem_Id)
+                    @Html.HiddenFor(model => model.NewCase.WatchDate)
+                    @Html.HiddenFor(model => model.NewCase.Status_Id)
+                    @Html.HiddenFor(model => model.NewCase.StateSecondary_Id)
+                    @Html.HiddenFor(model => model.NewCase.Verified)
+                    @Html.HiddenFor(model => model.NewCase.VerifiedDescription)
+                    @Html.HiddenFor(model => model.NewCase.SolutionRate)
+                    @Html.HiddenFor(model => model.NewCase.FinishingDate)
+                    @Html.HiddenFor(model => model.NewCase.FinishingDescription)
+                    @Html.HiddenFor(model => model.NewCase.PlanDate)
+                    @Html.HiddenFor(model => model.NewCase.Performer_User_Id)
+
+                    @Html.HiddenFor(model => model.NewCase.IsAbout.ReportedBy)
+                    @Html.HiddenFor(model => model.NewCase.IsAbout.Person_Name)
+                    @Html.HiddenFor(model => model.NewCase.IsAbout.Person_Email)
+                    @Html.HiddenFor(model => model.NewCase.IsAbout.Person_Phone)
+                    @Html.HiddenFor(model => model.NewCase.IsAbout.Person_Cellphone)
+                    @Html.HiddenFor(model => model.NewCase.IsAbout.Region_Id)
+                    @Html.HiddenFor(model => model.NewCase.IsAbout.Department_Id)
+                    @Html.HiddenFor(model => model.NewCase.IsAbout.OU_Id)
+                    @Html.HiddenFor(model => model.NewCase.IsAbout.CostCentre)
+                    @Html.HiddenFor(model => model.NewCase.IsAbout.Place)
+                    @Html.HiddenFor(model => model.NewCase.IsAbout.UserCode)
+
+                    @Html.HiddenFor(model => model.CaseLog.TextExternal)
+                    @Html.HiddenFor(model => model.CaseLog.TextInternal)
+                    @Html.HiddenFor(model => model.CaseLog.FinishingType)
 
                     @Html.HiddenFor(model => model.DepartmentFilterFormat, new { data_field = "departmentFilterFormat" })
 
@@ -108,7 +140,7 @@
                                     {
                                         <div class="form-group row">
                                             <label class="col-md-3">
-                                                @Translation.Get(GlobalEnums.TranslationCaseFields.Customer_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Customer_Id, false)
                                             </label>
                                             <div class="col-md-9">
                                                 @Model.NewCase.Customer.Name
@@ -119,11 +151,7 @@
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.ReportedBy.ToString()">
                                             <label class="col-md-3">
-                                                @Translation.Get(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
-                                                @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.ReportedBy.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
-                                                {
-                                                    <span class="mandatorystar">*</span>
-                                                }
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ReportedBy)
                                             </label>
                                             <div class="col-md-9">
                                                 @Html.TextBoxFor(model => model.NewCase.ReportedBy, new { maxlength = "40", autocomplete = "Off", @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.ReportedBy.ToString() })
@@ -134,11 +162,7 @@
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.Persons_Name.ToString()">
                                             <label class="col-md-3">
-                                                @Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
-                                                @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Persons_Name.ToString()).Select(f => f.Required).FirstOrDefault() == 1)
-                                                {
-                                                    <span class="mandatorystar">*</span>
-                                                }
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Persons_Name)
                                             </label>
                                             <div class="col-md-9">
                                                 @Html.TextBoxFor(p => Model.NewCase.PersonsName, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Persons_Name.ToString() })
@@ -159,11 +183,7 @@
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.Persons_EMail.ToString()">
                                             <label class="col-md-3">
-                                                @Translation.Get(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
-                                                @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Persons_EMail.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
-                                                {
-                                                    <span class="mandatorystar">*</span>
-                                                }
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Persons_EMail)
                                             </label>
                                             <div class="col-md-9">
                                                 @Html.TextBoxFor(p => Model.NewCase.PersonsEmail, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Persons_EMail.ToString() })
@@ -174,11 +194,7 @@
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.Persons_Phone.ToString()">
                                             <label class="col-md-3">
-                                                @Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
-                                                @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Persons_Phone.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
-                                                {
-                                                    <span class="mandatorystar">*</span>
-                                                }
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Persons_Phone)
                                             </label>
                                             <div class="col-md-9">
                                                 @Html.TextBoxFor(p => Model.NewCase.PersonsPhone, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Persons_Phone.ToString() })
@@ -189,11 +205,7 @@
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString()">
                                             <label class="col-md-3">
-                                                @Translation.Get(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
-                                                @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
-                                                {
-                                                    <span class="mandatorystar">*</span>
-                                                }
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Persons_CellPhone)
                                             </label>
                                             <div class="col-md-9">
                                                 @Html.TextBoxFor(c => Model.NewCase.PersonsCellphone, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString() })
@@ -204,11 +216,7 @@
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.Region_Id.ToString()">
                                             <label class="col-md-3">
-                                                @Translation.Get(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
-                                                @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Region_Id.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
-                                                {
-                                                    <span class="mandatorystar">*</span>
-                                                }
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Region_Id)
                                             </label>
                                             <div class="col-md-9">
                                                 <select id="NewCase_Region_Id" name="NewCase.Region_Id" class="hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.Region_Id.ToString()">
@@ -228,11 +236,7 @@
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.Department_Id.ToString()">
                                             <label class="col-md-3">
-                                                @Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
-                                                @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Department_Id.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
-                                                {
-                                                    <span class="mandatorystar">*</span>
-                                                }
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Department_Id)
                                             </label>
                                             <div class="col-md-9">
                                                 <select id="NewCase_Department_Id" name="NewCase.Department_Id" class="hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.Department_Id.ToString()">
@@ -253,11 +257,7 @@
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.OU_Id.ToString()">
                                             <label class="col-md-3">
-                                                @Translation.Get(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
-                                                @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.OU_Id.ToString()).Select(f => f.Required).FirstOrDefault() == 1)
-                                                {
-                                                    <span class="mandatorystar">*</span>
-                                                }
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.OU_Id)
                                             </label>
                                             <div class="col-md-9">
                                                 <select id="NewCase_Ou_Id" name="NewCase.OU_Id" class="hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.OU_Id.ToString()">
@@ -278,11 +278,7 @@
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.CostCentre.ToString()">
                                             <label class="col-md-3">
-                                                @Translation.Get(GlobalEnums.TranslationCaseFields.CostCentre.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
-                                                @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.CostCentre.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
-                                                {
-                                                    <span class="mandatorystar">*</span>
-                                                }
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.CostCentre)
                                             </label>
 
                                             <div class="col-md-9">
@@ -295,11 +291,7 @@
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.Place.ToString()">
                                             <label class="col-md-3">
-                                                @Translation.Get(GlobalEnums.TranslationCaseFields.Place.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
-                                                @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Place.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
-                                                {
-                                                    <span class="mandatorystar">*</span>
-                                                }
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Place)
                                             </label>
                                             <div class="col-md-9">
                                                 @Html.TextBoxFor(p => Model.NewCase.Place, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Place.ToString() })
@@ -310,11 +302,7 @@
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.UserCode.ToString()">
                                             <label class="col-md-3">
-                                                @Translation.Get(GlobalEnums.TranslationCaseFields.UserCode.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
-                                                @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.UserCode.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
-                                                {
-                                                    <span class="mandatorystar">*</span>
-                                                }
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.UserCode)
                                             </label>
                                             <div class="col-md-9">
                                                 @Html.TextBoxFor(u => Model.NewCase.UserCode, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.UserCode.ToString() })
@@ -337,13 +325,8 @@
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.InventoryNumber.ToString()">
                                             <label class="col-md-3">
-                                                @Translation.Get(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
-                                                @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.InventoryNumber.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
-                                                {
-                                                    <span class="mandatorystar">*</span>
-                                                }
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.InventoryNumber)
                                             </label>
-                                            
                                             <div class="col-md-9">
                                                 @Html.TextBoxFor(i => Model.NewCase.InventoryNumber, new { @class = "hasAttribute", maxlength = "20", standardName = GlobalEnums.TranslationCaseFields.InventoryNumber.ToString() })
                                             </div>
@@ -353,11 +336,7 @@
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString()">
                                             <label class="col-md-3">
-                                                @Translation.Get(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
-                                                @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
-                                                {
-                                                    <span class="mandatorystar">*</span>
-                                                }
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ComputerType_Id)
                                             </label>
                                             <div class="col-md-9">
                                                 @Html.TextBoxFor(i => Model.NewCase.InventoryType, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString() })
@@ -368,11 +347,7 @@
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.InventoryLocation.ToString()">
                                             <label class="col-md-3">
-                                                @Translation.Get(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
-                                                @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.InventoryLocation.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
-                                                {
-                                                    <span class="mandatorystar">*</span>
-                                                }
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.InventoryLocation)
                                             </label>
                                             <div class="col-md-9">
                                                 @Html.TextBoxFor(i => Model.NewCase.InventoryLocation, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.InventoryLocation.ToString() })
@@ -383,8 +358,10 @@
                             </div>
                         </div>
                     }
-                    <!-- Computer Information Fields -->
 
+                    
+
+                    <!-- Computer Information Fields -->
                     if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.CaseInfo))
                     {
                         <h4>@Translation.Get("Case Information", Enums.TranslationSource.TextTranslation) </h4>
@@ -393,11 +370,7 @@
                                 <div class="container form-horizontal">
                                     <div class="form-group row">
                                         <label class="col-md-3">
-                                            @Translation.Get(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
-                                            @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
-                                            {
-                                                <span class="mandatorystar">*</span>
-                                            }
+                                            @CaseFieldCaption(GlobalEnums.TranslationCaseFields.CaseType_Id)
                                         </label>
                                         <div class="col-md-9">
                                             <div id="divCaseType" class="btn-group">
@@ -419,11 +392,7 @@
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()">
                                             <label class="col-md-3">
-                                                @Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
-                                                @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
-                                                {
-                                                    <span class="mandatorystar">*</span>
-                                                }
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ProductArea_Id)
                                             </label>
                                             <div class="col-md-9">
                                                 <div id="divProductArea" class="btn-group">
@@ -445,11 +414,7 @@
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.System_Id.ToString()">
                                             <label class="col-md-3">
-                                                @Translation.Get(GlobalEnums.TranslationCaseFields.System_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
-                                                @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.System_Id.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
-                                                {
-                                                    <span class="mandatorystar">*</span>
-                                                }
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.System_Id)
                                             </label>
                                             <div class="col-md-9">
                                                 <select id="NewCase_System_Id" name="NewCase.System_Id" class="hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.System_Id.ToString()">
@@ -470,14 +435,14 @@
                                     {
                                         <div id="relatedFieldBlock-@GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()" class="form-group row @GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()">
                                             <label class="col-md-3">
-                                                @Translation.Get(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Urgency_Id, false)
                                                 @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
                                                 {
                                                     <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()" class="mandatorystar">*</span>
                                                 }
                                                 else
                                                 {
-                                                    <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()" class="mandatorystar" style="display:none">*</span>
+                                                    <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()" class="mandatorystar" style="display: none">*</span>
                                                 }
                                             </label>
                                             <div class="col-md-9">
@@ -498,14 +463,14 @@
                                     {
                                         <div id="relatedFieldBlock-@GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()" class="form-group row @GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()" style="display:none">
                                             <label class="col-md-3">
-                                                @Translation.Get(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Urgency_Id, false)
                                                 @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
                                                 {
                                                     <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()" class="mandatorystar">*</span>
                                                 }
                                                 else
                                                 {
-                                                    <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()" class="mandatorystar" style="display:none">*</span>
+                                                    <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()" class="mandatorystar" style="display: none">*</span>
                                                 }
                                             </label>
                                             <div class="col-md-9">
@@ -528,14 +493,14 @@
                                     {
                                         <div id="relatedFieldBlock-@GlobalEnums.TranslationCaseFields.Impact_Id.ToString()" class="form-group row @GlobalEnums.TranslationCaseFields.Impact_Id.ToString()">
                                             <label class="col-md-3">
-                                                @Translation.Get(GlobalEnums.TranslationCaseFields.Impact_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Impact_Id, false)
                                                 @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Impact_Id.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
                                                 {
                                                     <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Impact_Id.ToString()" class="mandatorystar">*</span>
                                                 }
                                                 else
                                                 {
-                                                    <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Impact_Id.ToString()" class="mandatorystar" style="display:none">*</span>
+                                                    <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Impact_Id.ToString()" class="mandatorystar" style="display: none">*</span>
                                                 }
                                             </label>
                                             <div class="col-md-9">
@@ -557,14 +522,14 @@
                                     {
                                         <div id="relatedFieldBlock-@GlobalEnums.TranslationCaseFields.Impact_Id.ToString()" class="form-group row @GlobalEnums.TranslationCaseFields.Impact_Id.ToString()" style='display:none'>
                                             <label class="col-md-3">
-                                                @Translation.Get(GlobalEnums.TranslationCaseFields.Impact_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Impact_Id, false)
                                                 @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Impact_Id.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
                                                 {
                                                     <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Impact_Id.ToString()" class="mandatorystar">*</span>
                                                 }
                                                 else
                                                 {
-                                                    <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Impact_Id.ToString()" class="mandatorystar" style="display:none">*</span>
+                                                    <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Impact_Id.ToString()" class="mandatorystar" style="display: none">*</span>
                                                 }
                                             </label>
                                             <div class="col-md-9">
@@ -587,11 +552,7 @@
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.Category_Id.ToString()">
                                             <label class="col-md-3">
-                                                @Translation.Get(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
-                                                @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Category_Id.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
-                                                {
-                                                    <span class="mandatorystar">*</span>
-                                                }
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Category_Id)
                                             </label>
                                             <div class="col-md-9">
                                                 <select id="NewCase_Category_Id" name="NewCase.Category_Id" class="hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.Category_Id.ToString()">
@@ -612,11 +573,7 @@
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.Supplier_Id.ToString()">
                                             <label class="col-md-3">
-                                                @Translation.Get(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
-                                                @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Supplier_Id.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
-                                                {
-                                                    <span class="mandatorystar">*</span>
-                                                }
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Supplier_Id)
                                             </label>
                                             @if (Model.Suppliers != null)
                                             {
@@ -637,11 +594,7 @@
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString()">
                                             <label class="col-md-3">
-                                                @Translation.Get(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
-                                                @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
-                                                {
-                                                    <span class="mandatorystar">*</span>
-                                                }
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.InvoiceNumber)
                                             </label>
                                             <div class="col-md-9">
                                                 @Html.TextBoxFor(i => Model.NewCase.InvoiceNumber, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString() })
@@ -653,7 +606,7 @@
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString()">
                                             <label class="col-md-3">
-                                                @Translation.Get(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ReferenceNumber)
                                                 @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
                                                 {
                                                     <span class="mandatorystar">*</span>
@@ -669,11 +622,7 @@
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.Caption.ToString()">
                                             <label class="col-md-3">
-                                                @Translation.Get(GlobalEnums.TranslationCaseFields.Caption.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
-                                                @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Caption.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
-                                                {
-                                                    <span class="mandatorystar">*</span>
-                                                }
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Caption)
                                             </label>
                                             <div class="col-md-9">
                                                 @Html.TextBoxFor(c => Model.NewCase.Caption, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Caption.ToString() })
@@ -685,11 +634,7 @@
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.Description.ToString()">
                                             <label class="col-md-3">
-                                                @Translation.Get(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
-                                                @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Description.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
-                                                {
-                                                    <span class="mandatorystar">*</span>
-                                                }
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Description)
                                             </label>
                                             <div class="col-md-9">
                                                 @Html.TextAreaFor(d => Model.NewCase.Description, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Description.ToString() })
@@ -701,11 +646,7 @@
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.Miscellaneous.ToString()">
                                             <label class="col-md-3">
-                                                @Translation.Get(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
-                                                @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Miscellaneous.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
-                                                {
-                                                    <span class="mandatorystar">*</span>
-                                                }
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Miscellaneous)
                                             </label>
                                             <div class="col-md-9">
                                                 @Html.TextAreaFor(m => Model.NewCase.Miscellaneous, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Miscellaneous.ToString() })
@@ -713,11 +654,32 @@
                                         </div>
                                     }
 
+                                    @*@if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()))
+                                    {
+                                        <div class="form-group row @GlobalEnums.TranslationCaseFields.Priority_Id.ToString()">
+                                            <label class="col-md-3">
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Priority_Id)
+                                            </label>
+                                            <div class="col-md-9">
+                                                <select id="NewCase_Priority_Id" name="NewCase.Priority_Id" class="hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.Priority_Id.ToString()">
+                                                    <option value="">&nbsp;</option>
+                                                    @if (Model.Priorities != null)
+                                                    {
+                                                        foreach (var e in Model.Priorities.Where(c => c.IsActive == 1))
+                                                        {
+                                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.NewCase.Priority_Id.ToString())>@e.Name</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                    }*@
+
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString()))
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString()">
                                             <label class="col-md-3">
-                                                @Translation.Get(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ContactBeforeAction, false)
                                             </label>
                                             <div class="col-md-9">
                                                 <input type="checkbox" name="NewCase.ContactBeforeAction" @(Model.NewCase.ContactBeforeAction == 1 ? "checked=checked" : "") value="1" class="hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString()" } />
@@ -731,7 +693,7 @@
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.SMS.ToString()">
                                             <label class="col-md-3">
-                                                @Translation.Get(GlobalEnums.TranslationCaseFields.SMS.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.SMS, false)
                                             </label>
                                             <div class="col-md-9">
                                                 <input type="checkbox" name="NewCase.SMS" @(Model.NewCase.SMS == 1 ? "checked=checked" : "") value="1" class="hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.SMS.ToString()" } />
@@ -745,11 +707,7 @@
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.Available.ToString()">
                                             <label class="col-md-3">
-                                                @Translation.Get(GlobalEnums.TranslationCaseFields.Available.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
-                                                @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Available.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
-                                                {
-                                                    <span class="mandatorystar">*</span>
-                                                }
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Available)
                                             </label>
                                             <div class="col-md-9">
                                                 @Html.TextBoxFor(m => Model.NewCase.Available, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Available.ToString() })
@@ -762,7 +720,7 @@
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.Cost.ToString()">
                                             <label class="col-md-3">
-                                                @Translation.Get(GlobalEnums.TranslationCaseFields.Cost.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Cost, false)
                                             </label>
                                             <div class="col-md-9">
                                                 <table>
@@ -799,7 +757,7 @@
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.Filename.ToString()">
                                             <label class="col-md-3">
-                                                @Translation.Get(GlobalEnums.TranslationCaseFields.Filename.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Filename, false)
                                             </label>
                                             <div class="col-md-4">
                                                 <a href="#NewCase_upload_files_popup" role="button" class="btn btn-default hasAttribute" data-toggle="modal" standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add", Enums.TranslationSource.TextTranslation)</a>
@@ -863,33 +821,75 @@
                                         </div>
                                     }
                                     <div class="form-group row">
-                                        <label class="col-md-3"></label>
+                                        <label class="col-md-3"> </label>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     }
-                    <!-- Case Info Fields -->
-
                 }
             </div>
 
         </div>
     </div>
 </div>
+<div class="jumbotron greybar">
+    <div class="container-fluid">
+        <ul class="secnav">
+            <li>
+                <input type="button" value='@Translation.Get("Save and Send", Enums.TranslationSource.TextTranslation)' onclick="SaveNewCase(); return false;" class="btn btn-default"/>
+            </li>
+        </ul>
+    </div>
+</div>
+<div id="case_urgent_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabelCase" aria-hidden="true" style="display: none">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h5> @Translation.Get("Kritisk incident")!</h5>
+            </div>
+            <div class="modal-body padding20">
+                <label id="urgentInfoMessage"> --- </label>
+                <br/>
+                <br/>
+                <label><input type="checkbox" id="urgentAcceptChbx"/> @Translation.Get("Jag accepterar att det är kritiskt och kan komma att medföra extra kostnader")</label>
+            </div>
+            <div class="modal-body padding20 case-dropdown-area">
+                <div class="case-followers-button-done">
+                    <button type="button" id="btnChange" class="btn btn-default" data-dismiss="modal">@Translation.Get("Ändra brådskande/påverkan")</button>
+                    <button type="button" id="btnAccept" class="btn btn-default" disabled="disabled">@Translation.Get("Acceptera kritisk incident")</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@functions    {
 
+    private MvcHtmlString CaseFieldCaption(GlobalEnums.TranslationCaseFields field, bool withManadatory = true)
+    {
+        return Html.CaseFieldCaption(
+            Model.CaseFieldSettings,
+            Model.CaseFieldSettingWithLangauges,
+            field,
+            Model.NewCase.Customer_Id,
+            SessionFacade.CurrentLanguageId,
+            withManadatory);
+    }
+
+}
 <script type="text/javascript">
 
     var $mainForm = $("#newCaseForm");
     var $elmProductArea = $("#NewCase_ProductArea_Id");
     var requiredText = '@Translation.Get("must be specified", Enums.TranslationSource.TextTranslation)';
-    var productAreaErrMessage = '@Html.Raw(Translation.GetForJS("The case could not be saved because the lowest possible level on the field") + " [" +
-    Translation.GetForJS(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID) + "] " +
-    Translation.Get("has not been selected. Please check the case."))';
+    var productAreaErrMessage ='@Html.Raw(Translation.GetForJS("The case could not be saved because the lowest possible level on the field") + " [" +
+                   Translation.GetForJS(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID) + "] " +
+                   Translation.Get("has not been selected. Please check the case."))';
 
-    function SaveNewCase() {        
+    function SaveNewCase() {
         var productAreaValidation = isProductAreaValid();
-        var formValidation =  isFormValid();
+        var formValidation = isFormValid();
 
         if (!productAreaValidation || !formValidation) {
             if (!productAreaValidation) {
@@ -901,6 +901,43 @@
             return false;
         }
 
+        var urgentId = $("#NewCase_Urgency_Id").val();
+        var impactId = $("#NewCase_Impact_Id").val();
+        if (urgentId && impactId) {
+            $.ajax({
+                url: '@Url.Content("~/Case/UrgentInfoMessage")',
+                type: "POST",
+                data: { urgentId: urgentId, impactId: impactId },
+                dataType: "json",
+                success: function(result) {
+                    if (result) {
+                        $("#urgentInfoMessage").html(result);
+                    }
+                }
+            });
+            var $src = $(this);
+            var $target = $("#case_urgent_popup");
+            $target.attr("data-src", $src.attr("data-src"));
+            $target.modal("show");
+
+            $target.on('hidden.bs.modal', function (e) {
+                $('#urgentAcceptChbx').attr('checked', false);
+                $("#btnAccept").attr("disabled", true);
+            });
+
+            $('#urgentAcceptChbx').change(function() {
+                    $("#btnAccept").attr("disabled", !this.checked);
+                });
+
+            $("#btnAccept").on("click", function() {
+                CallSaving();
+                    });
+        } else {
+            CallSaving();
+        }
+    }
+
+    function CallSaving() {
         $mainForm.attr("action", '@Url.Content("~/Case/NewCase")');
         $('.disabled').removeAttr('disabled');
         $mainForm.submit();

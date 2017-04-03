@@ -1,6 +1,9 @@
-﻿namespace DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings
+﻿using System.ComponentModel.DataAnnotations;
+using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+
+namespace DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings
 {
-    public sealed class TextFieldSettingsModel : FieldSettingsModel
+    public class TextFieldSettingsModel : FieldSettingsModel
     {
         public TextFieldSettingsModel()
         {            
@@ -17,9 +20,10 @@
                 string help)
                 : base(show, showInList, showExternal, label, required, emailIdentifier, help)
         {
-            this.DefaultValue = defaultValue;
+            DefaultValue = defaultValue;
         }
 
+        [LocalizedStringLength(50)]
         public string DefaultValue { get; set; }
     }
 }

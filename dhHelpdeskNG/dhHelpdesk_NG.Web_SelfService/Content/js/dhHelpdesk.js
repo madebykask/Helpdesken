@@ -9,7 +9,7 @@ $('.nav-tabs li:not(.disabled) a').click(function (e) {
     //activeTab.val($(this).attr('href'));
 });
 
-$("input:text:visible:first").focus();
+$("input:text:visible:not(.ignore-globalfocus):first").focus();
 
 //Hämtar vald text från droptodwn button
 function getBreadcrumbs(a) {
@@ -661,7 +661,71 @@ function SetPriority() {
 
 }
 
+
+/* Table initialisation */
+function ResetDataTable(tableUniqId) {
+    //alert('reset: ' + tableUniqId);
+    var oTable = $('#' + tableUniqId).dataTable();
+    oTable.fnPageChange('first');
+};
+
+function DestroyDataTable(tableUniqId) {
+    var oTable = $('#' + tableUniqId).dataTable();
+    oTable.destroy();
+};
+
+function InitDataTable(tableUniqId, lengthMenu, emptyTable, next, prev, search, info, infoEmpty, options, onError) {
+    var dataTable = $('#' + tableUniqId);
+    $.fn.dataTable.ext.errMode = 'none';
+    if (onError && typeof onError === "function")
+        dataTable.on('error.dt', function (e, settings, techNote, message) {
+            onError(e, settings, techNote, message);
+        });
+    return dataTable.DataTable($.extend({},
+    {
+        language: {
+            "sLengthMenu": "_MENU_ " + lengthMenu,
+            "sEmptyTable": emptyTable,
+            "sInfo": info,
+            "sInfoEmpty": infoEmpty,
+            "sSearch": search,
+            "oPaginate": {
+                "sFirst": "Första",
+                "sLast": "Sista",
+                "sNext": next,
+                "sPrevious": prev
+            }
+}
+        //'sError': (onError && typeof onError === "function") ? 'none' : 'throw',
+        //"sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
+        //"sPaginationType": "bootstrap",
+        //"oLanguage": {
+        //    "sLengthMenu": "_MENU_ " + perText,
+        //    "sInfo": showingText + " _PAGE_ / _PAGES_",
+        //    "oPaginate": {
+        //        "sFirst": "First",
+        //        "sLast": "Last",
+        //        "sNext": "",
+        //        "sPrevious": ""
+        //    }
+        //}
+    }, options || {}));
+}
+// TABLE PAGING END
+
 function CaseNewNotifierEvent(id) {
     alert(id);
 }
+
+$(".chosen-select").chosen({
+    width: "300px",
+    'placeholder_text_multiple': window.placeholder_text_multiple,
+    'no_results_text': window.no_results_text
+});
+
+$(".chosen-single-select").chosen({
+    width: "315px",
+    'placeholder_text_multiple': window.placeholder_text_multiple,
+    'no_results_text': window.no_results_text
+});
 

@@ -12,6 +12,7 @@
     </td>
     <td class="span9">
         @Html.HiddenFor(m => m.Value)
-        @Html.DisplayFor(m => m.Value)
+        @string.Format("{0:#}", Model.Value)
+@*        @Html.DisplayFor(m => m.Value)*@
     </td>
 </tr>

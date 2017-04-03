@@ -59,4 +59,12 @@
         $("#OTsAvailable").get(0).selectedIndex = -1;
         return false;
     });
+
+    $("#allocateCaseMail").click(function () {
+        if ($(allocateCaseMail).is(':checked')) {
+            $("#rowSettingForNoMail").attr('style', 'display:block');
+        } else {
+            $("#rowSettingForNoMail").attr('style', 'display:none');
+        }
+    });
 });

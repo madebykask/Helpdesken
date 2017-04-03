@@ -1,0 +1,20 @@
+﻿@model DH.Helpdesk.SelfService.Models.Orders.FieldModels.ConfigurableFieldModel<decimal?>
+
+@if (!Model.Show)
+{
+    return;
+}
+
+<tr>
+    <td class="span3">
+        @Html.FieldCaption(Model)
+    </td>
+    <td class="span6">
+        @Html.TextBoxFor(m => m.Value, new Dictionary<string, object> {{"data-dh-is-required", Model.IsRequired}})
+        @Html.HiddenFor(m => m.IsRequired)
+        @Html.ValidationMessageFor(m => m.Value)
+    </td>
+    <td class="span3">
+        @Model.Help
+    </td>
+</tr>

@@ -25,10 +25,8 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Common;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Orders;
-    using DH.Helpdesk.Services.BusinessLogic.Specifications.User;
     using DH.Helpdesk.Services.Services.Orders;
     using System;
-    using DH.Helpdesk.Domain.MailTemplates;
     using DH.Helpdesk.BusinessData.Models.Email;
     using System.Configuration;
     using DH.Helpdesk.BusinessData.Models.Case;
@@ -79,6 +77,12 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
 
         private readonly IOrderRepository _orderRepository;
 
+        private readonly IComputerUsersRepository _computerUsersRepository;
+
+        private readonly ICaseExtraFollowersService _caseExtraFollowersService;
+
+        private readonly IPriorityService _priorityService;
+
 
 		public OrdersService(
                 IUnitOfWorkFactory unitOfWorkFactory, 
@@ -101,7 +105,10 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                 ICaseTypeRepository caseTypeRepository,
                 ISettingService settingService,
                 IOrderRepository orderRepository,
-                IEmailSendingSettingsProvider emailSendingSettingsProvider)
+                IEmailSendingSettingsProvider emailSendingSettingsProvider,
+                IComputerUsersRepository computerUsersRepository,
+                ICaseExtraFollowersService caseExtraFollowersService,
+                IPriorityService priorityService)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _orderFieldSettingsService = orderFieldSettingsService;
@@ -124,9 +131,12 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
             _settingService = settingService;
             _emailSendingSettingsProvider = emailSendingSettingsProvider;
             _orderRepository = orderRepository;
+            _computerUsersRepository = computerUsersRepository;
+            _caseExtraFollowersService = caseExtraFollowersService;
+            _priorityService = priorityService;
         }
 
-        public OrdersFilterData GetOrdersFilterData(int customerId, out int[] selectedStatuses)
+        public OrdersFilterData GetOrdersFilterData(int customerId, int userId, out int[] selectedStatuses)
         {
             using (var uow = this._unitOfWorkFactory.Create())
             {
@@ -134,12 +144,12 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                 var administratorRep = uow.GetRepository<User>();
                 var statusRep = uow.GetRepository<OrderState>();
 
-                var orderTypes = orderTypeRep.GetAll()
-                                    .GetRootOrderTypes(customerId).ToList();
+                var orderTypes = orderTypeRep.GetAll(m => m.Users)
+                                    .GetRootOrderTypes(customerId)
+                                    .GetByUsers(userId)
+                                    .ToList();
 
                 var orderTypesInRow = this.GetChildrenInRow(orderTypes, true).ToList();
-
-
 
                 var administrators = administratorRep.GetAll()
                                     .GetAdministrators(customerId);
@@ -213,16 +223,17 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
             return ret;
         }
 
-        public SearchResponse Search(SearchParameters parameters)
+        public SearchResponse Search(SearchParameters parameters, int userId)
         {
 			var settings = this._orderFieldSettingsService.GetOrdersFieldSettingsOverview(parameters.CustomerId, parameters.OrderTypeId);
 			using (var uow = this._unitOfWorkFactory.CreateWithDisabledLazyLoading())
 			{
 				var orderTypeRep = uow.GetRepository<OrderType>();
                 var orderFieldTypesRep = uow.GetRepository<OrderFieldType>();
-                var orderTypes = orderTypeRep.GetAll()
+                var orderTypes = orderTypeRep.GetAll(x => x.Users)
 									.GetOrderTypes(parameters.CustomerId).ToList();
-				var rootOrderType = orderTypes.Where(ot => ot.Id == parameters.OrderTypeId).ToList();
+			    var filteredOrderTypes = FilterOrderTypeByUser(orderTypes, userId);
+                var rootOrderType = filteredOrderTypes.Where(ot => parameters.OrderTypeId == null || ot.Id == parameters.OrderTypeId).ToList();
 				var orderTypeDescendants = GetChildrenInRow(rootOrderType, true).ToList();
 				orderTypeDescendants.AddRange(rootOrderType);
 				var orderRep = uow.GetRepository<Order>();
@@ -236,7 +247,8 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
 									parameters.StatusIds,
 									parameters.Phrase,
 									parameters.SortField,
-									parameters.SelectCount);
+									parameters.SelectCount,
+                                    parameters.CreatedBy);
 
 				var caseNumbers = overviews.Where(o => o.CaseNumber.HasValue).Select(o => o.CaseNumber).ToList();
 				var caseRep = uow.GetRepository<Case>();
@@ -250,18 +262,43 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
 			}
 		}
 
-        public NewOrderEditData GetNewOrderEditData(int customerId, int orderTypeId, int? lowestchildordertypeid)
+        private List<OrderType> FilterOrderTypeByUser(List<OrderType> orderTypes, int userId)
+        {
+            return orderTypes
+                .Select(orderType => GetParentOrChildAssignedToUser(userId, orderType))
+                .Where(type => type != null).ToList();
+        }
+
+        private static OrderType GetParentOrChildAssignedToUser(int userId, OrderType orderType)
+        {
+            for (var i = 0; i < 100000; i++)
+            {
+                if (orderType.Users.Any(u => u.Id == userId))
+                {
+                    return orderType;
+                }
+                if (orderType.Parent_OrderType_Id.HasValue)
+                {
+                    orderType = orderType.ParentOrderType;
+                    continue;
+                }
+                return null;
+            }
+            return null;
+        }
+
+        public NewOrderEditData GetNewOrderEditData(int customerId, int orderTypeId, int? lowestchildordertypeid, bool useExternal)
         {
             using (var uow = this._unitOfWorkFactory.Create())
             {
-                var settings = this._orderFieldSettingsService.GetOrderEditSettings(customerId, orderTypeId, uow);
+                var settings = this._orderFieldSettingsService.GetOrderEditSettings(customerId, orderTypeId, uow, useExternal);
                 var options = this.GetEditOptions(customerId, orderTypeId, settings, uow, lowestchildordertypeid);
 
                 return new NewOrderEditData(settings, options);
             }
         }
 
-        public FindOrderResponse FindOrder(int orderId, int customerId)
+        public FindOrderResponse FindOrder(int orderId, int customerId, bool useExternal)
         {
             using (var uow = this._unitOfWorkFactory.Create())
             {
@@ -309,7 +346,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                     firstLevelParentId = order.OrderTypeId.Value;
                 }
 
-                var settings = this._orderFieldSettingsService.GetOrderEditSettings(customerId, firstLevelParentId, uow);
+                var settings = this._orderFieldSettingsService.GetOrderEditSettings(customerId, firstLevelParentId, uow, useExternal);
                 var options = this.GetEditOptions(customerId, firstLevelParentId, settings, uow, order.OrderTypeId);
                 //var options = this.GetEditOptions(customerId, order.OrderTypeId, settings, uow, firstLevelParentId);
                 var orderFieldTypes = orderFieldTypesRep.GetAll().GetByType(order.OrderTypeId).ToList();
@@ -332,7 +369,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
             }
         }
 
-        public int AddOrUpdate(UpdateOrderRequest request, string userId, CaseMailSetting caseMailSetting, int languageId)
+        public int AddOrUpdate(UpdateOrderRequest request, string userId, CaseMailSetting caseMailSetting, int languageId, bool useExternal)
         {
             using (var uow = this._unitOfWorkFactory.Create())
             {
@@ -364,6 +401,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                     entity = new Order();
                     OrderUpdateMapper.MapToEntity(entity, request.Order, request.CustomerId, programs);
                     entity.CreatedDate = request.DateAndTime;
+                    entity.CreatedByUser_Id = request.UserId;
                     entity.ChangedDate = request.DateAndTime;
                     ordersRep.Add(entity);
                 }
@@ -399,7 +437,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                         firstLevelParentId = entity.OrderType_Id.Value;
                     }
                     
-                    var settings = this._orderFieldSettingsService.GetOrderEditSettings(request.CustomerId, firstLevelParentId, uow);
+                    var settings = this._orderFieldSettingsService.GetOrderEditSettings(request.CustomerId, firstLevelParentId, uow, useExternal);
                     this._orderRestorer.Restore(request.Order, existingOrder, settings);
                     this._updateOrderRequestValidator.Validate(request.Order, existingOrder, settings);
 
@@ -445,11 +483,11 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
 
                     //get createcasetype by ordertype
                     var orderType = this._orderTypeRepository.GetById(entity.OrderType_Id.Value);
+                    
 
                     var newCase = new Case();
 
                     newCase.Customer_Id = entity.Customer_Id;
-                    newCase.Department_Id = entity.Department_Id;
                     if (orderType.CreateCase_CaseType_Id.HasValue)
                     {
                         newCase.CaseType_Id = orderType.CreateCase_CaseType_Id.Value;
@@ -461,20 +499,78 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                         newCase.CaseType_Id = casetype.Id;                    //get another id
                     }
 
-                    newCase.Priority_Id = entity.OrderPropertyId;
-                    newCase.User_Id = entity.User_Id;
-                    newCase.ReportedBy = entity.OrdererID;
-                    newCase.PersonsName = entity.Orderer;
-                    newCase.PersonsPhone = entity.OrdererPhone;
+                    if (!string.IsNullOrEmpty(entity.UserId))
+                    {
+                        var user = _userRepository.GetUserByLogin(entity.UserId, request.CustomerId);
+                        if (user != null)
+                        {
+                            newCase.User_Id = user.Id;
+                        }
+                        var cUser = _computerUsersRepository.GetComputerUserByUserId(entity.UserId, request.CustomerId, entity.Domain_Id);
+                        if (cUser != null)
+                        {
+                            newCase.ReportedBy = cUser.UserId;
+                            newCase.PersonsName = cUser.SurName + " " + cUser.FirstName;
+                            newCase.PersonsEmail = cUser.Email;
+                            newCase.PersonsPhone = cUser.Phone;
+                            newCase.PersonsCellphone = cUser.Cellphone;
+                            newCase.Department_Id = cUser.Department_Id;
+                            newCase.OU_Id = cUser.OU_Id;
+                            newCase.CostCentre = cUser.CostCentre;
+                            newCase.UserCode = cUser.UserCode;
+                        }
+                    }
+
+                    newCase.Priority_Id = _priorityService.GetDefaultId(request.CustomerId);
+
+                    if (!newCase.Department_Id.HasValue)
+                        newCase.Department_Id = entity.Department_Id;
+                    //newCase.Priority_Id = entity.OrderPropertyId;
+                    
                     newCase.Caption = orderType.Name;
-                    newCase.Description = entity.OrderRow;
                     newCase.RegLanguage_Id = languageId;
-                    newCase.PersonsEmail = entity.OrdererEMail;
                     newCase.StateSecondary_Id = null;
                     newCase.Performer_User_Id = null;
                     newCase.CaseGUID = Guid.NewGuid();
 
                     var ei = new CaseExtraInfo() { CreatedByApp = CreatedByApplications.Helpdesk5, LeadTimeForNow = 0, ActionLeadTime = 0, ActionExternalTime = 0 };
+
+                    #region Select Case Followers
+
+                    var toFollowers = entity.OrdererID ?? string.Empty;
+                    var valuesSplitter = "&,";
+                    var pairSplitter = "&;";
+                    var userIds = toFollowers
+                        .Split(new[] { pairSplitter }, StringSplitOptions.None)
+                        .Where(s => !string.IsNullOrWhiteSpace(s))
+                        .Select(s =>
+                        {
+                            var values = s.Split(new[] { valuesSplitter }, StringSplitOptions.None);
+                            return values[0];
+                        }).ToList();
+                    var emails = _computerUsersRepository.GetEmailByUserIds(userIds, request.CustomerId);
+
+                    #endregion
+
+                    var orderRows = new List<string>
+                    {
+                        entity.OrderRow,
+                        entity.OrderRow2,
+                        entity.OrderRow3,
+                        entity.OrderRow4,
+                        entity.OrderRow5,
+                        entity.OrderRow6,
+                        entity.OrderRow7,
+                        entity.OrderRow8,
+                        entity.OrderInfo
+                    };
+                    var description = string.Empty;
+                    foreach (var orderRow in orderRows)
+                    {
+                        if (!string.IsNullOrEmpty(orderRow))
+                            description = description + orderRow + Environment.NewLine;
+                    }
+                    newCase.Description = string.IsNullOrEmpty(description) ? "." : description;
 
                     this._caseService.SaveCase(newCase, null, caseMailSetting, 0, userId, ei, out errors);
 
@@ -482,6 +578,9 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                     var newcase = this._caseService.GetCaseById(newCase.Id);
 
                     entity.CaseNumber = newcase.CaseNumber;
+
+                    if (emails.Any())
+                        _caseExtraFollowersService.SaveExtraFollowers(newCase.Id, emails, entity.User_Id);
 
                     ordersRep.Update(entity);
                     uow.Save();
@@ -607,43 +706,45 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
             var deliveryDepartments = departmentsRep.GetAll().GetActiveByCustomer(customerId);
             var deliveryOuIds = ousRep.GetAll();
             var administratorsWithEmails = administratorsRep.GetAll().GetActiveUsers(customerId).Where(x => x.Performer == 1 && x.Email != string.Empty);
-            var orderType = orderTypeId.HasValue ? orderTypeRep.GetAll().GetById(orderTypeId.Value).MapToName() : null;
+            var orderType = orderTypeId.HasValue ? orderTypeRep.GetAll().GetById(orderTypeId.Value) : null;
+            var orderTypeName = orderType != null ? orderType.MapToName() : null;
+            var orderTypeDesc = orderType?.MapToDescription();
+            var orderTypeDoc = orderType?.MapToDocument();
             var employmentTypes = employmentTypeRep.GetAll();
             var regions = regionsRep.GetAll().GetByCustomer(customerId);
             var accountTypes = orderFieldTypesRep.GetAll().GetByType(orderTypeId).ActiveOnly();
             var allPrograms = programsRep.GetAll().Where(x => x.IsActive != 0 && x.Customer_Id == customerId && x.ShowOnStartPage > 0);
 
             // get parentordertypename
-            if (orderTypeId != lowestchildordertypeid.Value)
+            if (lowestchildordertypeid.HasValue && orderTypeId != lowestchildordertypeid.Value)
             {
-                if (lowestchildordertypeid.HasValue)
+                var level2Name = "";
+                var level3Name = "";
+                var level4Name = "";
+
+                //get
+                var lowestchild = this._orderTypeRepository.GetById(lowestchildordertypeid.Value);
+
+                if (lowestchild.Parent_OrderType_Id.HasValue)
                 {
-                    var level2Name = "";
-                    var level3Name = "";
-                    var level4Name = "";
-
-                    //get
-                    var lowestchild = this._orderTypeRepository.GetById(lowestchildordertypeid.Value);
-
-                    if (lowestchild.Parent_OrderType_Id.HasValue)
+                    if (lowestchild.ParentOrderType.Parent_OrderType_Id.HasValue)
                     {
-                        if (lowestchild.ParentOrderType.Parent_OrderType_Id.HasValue)
-                        {
-                            level2Name = lowestchild.ParentOrderType.Parent_OrderType_Id.HasValue ? orderTypeRep.GetAll().GetById(lowestchild.ParentOrderType.Parent_OrderType_Id.Value).MapToName() : null;
-                            orderType = orderType + " - " + level2Name;
-                        }
-
-                        if (orderTypeId != lowestchild.Parent_OrderType_Id.Value)
-                        {
-                            level3Name = lowestchild.Parent_OrderType_Id.HasValue ? orderTypeRep.GetAll().GetById(lowestchild.Parent_OrderType_Id.Value).MapToName() : null;
-                            orderType = orderType + " - " + level3Name;
-                        }
+                        level2Name = orderTypeRep.GetAll().GetById(lowestchild.ParentOrderType.Parent_OrderType_Id.Value).MapToName();
+                        orderTypeName = orderTypeName + " - " + level2Name;
                     }
 
-                    level4Name = lowestchildordertypeid.HasValue ? orderTypeRep.GetAll().GetById(lowestchildordertypeid.Value).MapToName() : null;
-
-                    orderType = orderType + " - " + level4Name;
+                    if (orderTypeId != lowestchild.Parent_OrderType_Id.Value)
+                    {
+                        level3Name = orderTypeRep.GetAll().GetById(lowestchild.Parent_OrderType_Id.Value).MapToName();
+                        orderTypeName = orderTypeName + " - " + level3Name;
+                    }
                 }
+
+                var ordType = orderTypeRep.GetAll().GetById(lowestchildordertypeid.Value);
+                level4Name = ordType.MapToName();
+                orderTypeName = orderTypeName + " - " + level4Name;
+                orderTypeDesc = ordType.MapToDescription();
+                orderTypeDoc = ordType.MapToDocument();
             }
 
             var workingGroupsWithEmails = new List<GroupWithEmails>();
@@ -690,9 +791,9 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                     emailGroupsWithEmails.Add(groupWithEmails);
                 }
             }
-
+            
             return OrderEditMapper.MapToOrderEditOptions(
-                                    orderType,
+                                    orderTypeName,
                                     statuses,
                                     administrators,
                                     domains,
@@ -708,7 +809,9 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                                     employmentTypes,
                                     regions,
                                     accountTypes,
-                                    allPrograms);
+                                    allPrograms,
+                                    orderTypeDesc,
+                                    orderTypeDoc);
         }
 
         private FullOrderOverview[] Sort(FullOrderOverview[] items, SortField sort)

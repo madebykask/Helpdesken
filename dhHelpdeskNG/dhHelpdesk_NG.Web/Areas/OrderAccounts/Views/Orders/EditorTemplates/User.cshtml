@@ -67,13 +67,13 @@
                 @Html.EditorFor(m => m.Initials, "Fields/Text")
                 @Html.EditorFor(m => m.LastName, "Fields/Text")
                 @Html.EditorFor(m => m.Phone, "Fields/Text")
-                @Html.EditorFor(m => m.LastName, "Fields/Text")
+                @*@Html.EditorFor(m => m.LastName, "Fields/Text")*@
                 @Html.EditorFor(m => m.Extension, "Fields/Text")
                 @Html.EditorFor(m => m.EMail, "Fields/Text")
                 @Html.EditorFor(m => m.Title, "Fields/Text")
                 @Html.EditorFor(m => m.Location, "Fields/Text")
-                @Html.EditorFor(m => m.RoomNumber, "Fields/Text")
                 @Html.EditorFor(m => m.PostalAddress, "Fields/Text")
+                @Html.EditorFor(m => m.RoomNumber, "Fields/Text")
                 @Html.EditorFor(m => m.EmploymentType, "Fields/List", new { Source = Model.EmploymentTypes })
 
                 @if (Model.DepartmentId.Show)
@@ -83,7 +83,7 @@
                             <label>@Translation.Get("Område")</label>
                         </td>
                         <td class="span9">
-                            @Html.DropDownListFor(m => m.RegionId, Model.Regions, string.Empty, new { id = "region_dropdown" })
+                            @Html.DropDownListFor(m => m.RegionId, Model.Regions, string.Empty, new { id = "region_dropdown", disabled = "disabled" })
                         </td>
                     </tr>
                 }

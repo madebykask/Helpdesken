@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings
+﻿using DH.Helpdesk.BusinessData.Models.Orders.OrderFieldSettings.FieldSettings;
+
+namespace DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings
 {
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
@@ -10,7 +12,7 @@
         }
 
         public OrdererFieldSettingsModel(
-                TextFieldSettingsModel ordererId, 
+                MultiTextFieldSettingsModel ordererId, 
                 TextFieldSettingsModel ordererName, 
                 TextFieldSettingsModel ordererLocation, 
                 TextFieldSettingsModel ordererEmail, 
@@ -45,11 +47,12 @@
             this.OrdererId = ordererId;
         }
 
+        [LocalizedStringLength(50)]
         public string Header { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Identifierare")]
-        public TextFieldSettingsModel OrdererId { get; set; }
+        public MultiTextFieldSettingsModel OrdererId { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Namn")]

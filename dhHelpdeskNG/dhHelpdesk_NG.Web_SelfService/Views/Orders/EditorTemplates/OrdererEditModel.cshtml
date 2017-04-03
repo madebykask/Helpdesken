@@ -1,0 +1,39 @@
+﻿@model DH.Helpdesk.SelfService.Models.Orders.OrderEdit.OrdererEditModel
+
+<h4>@Model.Header</h4>
+<div class="container">
+    <div class="row form-horizontal">
+        <div class="col-md-12 dh-col ">
+
+            @if (Model.OrdererId.Show)
+            {
+                <div class="row form-group">
+                    <div class="span3">
+                        @Html.FieldCaption(Model.OrdererId)
+                    </div>
+                    <div class="span6">
+                        @Html.TextBoxFor(model => model.OrdererId.Value, new {maxlength = "40", autocomplete = "Off", data_field = "userId"})
+                    </div>
+                    <div class="span3">
+                        @Model.OrdererId.Help
+                    </div>
+                </div>
+            }
+                @*@Html.EditorFor(m => m.OrdererId, "Fields/Text", new { maxlength = "40", autocomplete = "Off", data_field = "order_OrdererId" })*@@Html.EditorFor(m => m.OrdererName, "Fields/Text", new {inputAttributes = new Dictionary<string, object> {{"id", "order_OrdererName"}}})
+            @Html.EditorFor(m => m.OrdererLocation, "Fields/Text", new {inputAttributes = new Dictionary<string, object> {{"id", "order_OrdererLocation"}}})
+            @Html.EditorFor(m => m.OrdererEmail, "Fields/Text", new {inputAttributes = new Dictionary<string, object> {{"id", "order_OrdererEmail"}}})
+            @Html.EditorFor(m => m.OrdererPhone, "Fields/Text", new {inputAttributes = new Dictionary<string, object> {{"id", "order_OrdererPhone"}}})
+            @Html.EditorFor(m => m.OrdererCode, "Fields/Text", new {inputAttributes = new Dictionary<string, object> {{"id", "order_OrdererCode"}}})
+            @Html.EditorFor(m => m.Department, "Fields/List", new {Source = Model.Departments, Id = "orderer_departmentId"})
+            @Html.EditorFor(m => m.Unit, "Fields/List", new {Source = Model.Units, Id = "orderer_unit_select"})
+            @Html.EditorFor(m => m.OrdererAddress, "Fields/Text")
+            @Html.EditorFor(m => m.OrdererInvoiceAddress, "Fields/Text")
+            @Html.EditorFor(m => m.OrdererReferenceNumber, "Fields/Text")
+            @Html.EditorFor(m => m.AccountingDimension1, "Fields/Text")
+            @Html.EditorFor(m => m.AccountingDimension2, "Fields/Text")
+            @Html.EditorFor(m => m.AccountingDimension3, "Fields/Text")
+            @Html.EditorFor(m => m.AccountingDimension4, "Fields/Text")
+            @Html.EditorFor(m => m.AccountingDimension5, "Fields/Text")
+        </div>
+    </div>
+</div>

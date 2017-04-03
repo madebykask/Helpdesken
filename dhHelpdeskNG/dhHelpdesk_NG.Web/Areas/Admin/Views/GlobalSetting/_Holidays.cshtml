@@ -202,8 +202,9 @@
     function addHolidayRow() {
         var list = $("#holiday");
         $.post('/globalsetting/AddRowToHolidays/' + '?holidayheaderId=' + $("#holidayheaderId").val() + '&holidaydate=' + $("#Holiday_HolidayDate").val() + '&timefrom=' + $("#TimeFrom").val() + '&timeuntil=' + $("#TimeTil").val() + '&holidayname=' + $("#Holiday_HolidayName").val(), function (result) {
-               
-            location.reload();
+            var part = window.location.href.split("?")[0];
+            var url = part + "?holidayDate=" + $("#Holiday_HolidayDate").val();
+            window.location.replace(url);
         });
 
         return false;

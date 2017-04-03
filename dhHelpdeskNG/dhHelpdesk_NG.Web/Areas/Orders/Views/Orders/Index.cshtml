@@ -1,4 +1,5 @@
-﻿@using System.Web.Optimization
+﻿@using System.Linq.Dynamic
+@using System.Web.Optimization
 @using DH.Helpdesk.Web.Areas.Orders.Models.Index
 @using DH.Helpdesk.Web.Infrastructure
 @model OrdersIndexModel
@@ -64,5 +65,15 @@
 }
 
 <div id="OrdersOrdersTableContainer">
-    @Html.Action("Orders", "Orders", new { model = (OrdersIndexModel)null })
+    @{
+        if (Model.Statuses.SelectedValues != null)
+        {
+            Model.StatusIds = (int[]) Model.Statuses.SelectedValues;
+        }
+        if (Model.Administrators.SelectedValues != null)
+        {
+            Model.AdministratorIds = (int[])Model.Administrators.SelectedValues;
+        }
+    }
+    @Html.Action("Orders", "Orders", new {model = Model})
 </div>

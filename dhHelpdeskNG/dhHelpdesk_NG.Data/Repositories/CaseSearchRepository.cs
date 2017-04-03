@@ -389,6 +389,8 @@ namespace DH.Helpdesk.Dal.Repositories
 					                row.Columns = cols;
 					                row.IsUnread = dr.SafeGetInteger("Status") == 1;
 					                row.IsUrgent = timeLeft.HasValue && timeLeft < 0;
+                                row.IsClosed = caseFinishingDate.HasValue;
+
 					                if (!row.Ignored)
 					                {
 					                    ret.Items.Add(row);
@@ -1185,7 +1187,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
 				//Manager Cases Only
 				case CaseListTypes.ManagerCases:
-					sb.Append(" and (tblCase.[RegUserId] = '" + userUserId.SafeForSqlInject() + "' or tblCase.[ReportedBy] = " + f.ReportedBy.SafeForSqlInject() + ")");
+					sb.Append(" and (tblCase.[RegUserId] = '" + userUserId.SafeForSqlInject() + "' or tblCase.[ReportedBy] = " + f.ReportedBy.SafeForSqlInjectForInOperator() + ")");
 					break;
 
 				//CoWorkers Cases Only
@@ -1193,12 +1195,12 @@ namespace DH.Helpdesk.Dal.Repositories
 					if (string.IsNullOrEmpty(f.ReportedBy.Replace(" ", "").Replace("'", "")))
 						sb.Append(" and (tblCase.[RegUserId] = '" + userUserId.SafeForSqlInject() + "')");
 					else
-						sb.Append(" and (((tblCase.[ReportedBy] is null or tblCase.[ReportedBy] = '') and tblCase.[RegUserId] = '" + userUserId.SafeForSqlInject() + "') or tblCase.[ReportedBy] in (" + f.ReportedBy.SafeForSqlInject() + "))");
+						sb.Append(" and (((tblCase.[ReportedBy] is null or tblCase.[ReportedBy] = '') and tblCase.[RegUserId] = '" + userUserId.SafeForSqlInject() + "') or tblCase.[ReportedBy] in (" + f.ReportedBy.SafeForSqlInjectForInOperator() + "))");
 					break;
 
 				//Manager & Coworkers Cases
 				case CaseListTypes.ManagerCoWorkerCases:
-					sb.Append(" and (tblCase.[RegUserId] = '" + userUserId.SafeForSqlInject() + "' or tblCase.[ReportedBy] in (" + f.ReportedBy.SafeForSqlInject() + "))");
+					sb.Append(" and (tblCase.[RegUserId] = '" + userUserId.SafeForSqlInject() + "' or tblCase.[ReportedBy] in (" + f.ReportedBy.SafeForSqlInjectForInOperator() + "))");
 					break;
 
 			}
@@ -1465,285 +1467,332 @@ namespace DH.Helpdesk.Dal.Repositories
 			if (!string.IsNullOrWhiteSpace(f.Department))
 			{
 				// organizationUnit
-				if (!string.IsNullOrWhiteSpace(f.OrganizationUnit))
-					sb.Append(" and (tblCase.Department_Id in (" + f.Department.SafeForSqlInject() + ") or " +
-									"tblCase.OU_Id in (" + f.OrganizationUnit.SafeForSqlInject() + "))");
-				else
-					sb.Append(" and (tblCase.Department_Id in (" + f.Department.SafeForSqlInject() + "))");
+			    if (!string.IsNullOrWhiteSpace(f.OrganizationUnit))
+			        switch (f.InitiatorSearchScope)
+			        {
+			            case CaseInitiatorSearchScope.UserAndIsAbout:
+			                sb.Append(" and (tblCase.Department_Id in (" + f.Department.SafeForSqlInject() + ") or " +
+			                          "tblCaseIsAbout.Department_Id in (" + f.Department.SafeForSqlInject() + ") or " +
+			                          "tblCase.OU_Id in (" + f.OrganizationUnit.SafeForSqlInject() + "))");
+			                break;
+			            case CaseInitiatorSearchScope.User:
+			                sb.Append(" and (tblCase.Department_Id in (" + f.Department.SafeForSqlInject() + ") or " +
+			                          "tblCase.OU_Id in (" + f.OrganizationUnit.SafeForSqlInject() + "))");
+			                break;
+			            case CaseInitiatorSearchScope.IsAbout:
+			                sb.Append(" and (tblCaseIsAbout.Department_Id in (" + f.Department.SafeForSqlInject() + ") or " +
+			                          "tblCase.OU_Id in (" + f.OrganizationUnit.SafeForSqlInject() + "))");
+			                break;
+                        default:
+                            sb.Append(" and (tblCase.Department_Id in (" + f.Department.SafeForSqlInject() + ") or " +
+                                      "tblCaseIsAbout.Department_Id in (" + f.Department.SafeForSqlInject() + ") or " +
+                                      "tblCase.OU_Id in (" + f.OrganizationUnit.SafeForSqlInject() + "))");
+                            break;
+                    }
+			    else
+			    {
+			        switch (f.InitiatorSearchScope)
+			        {
+			            case CaseInitiatorSearchScope.UserAndIsAbout:
+			                sb.Append(" and (tblCase.Department_Id in (" + f.Department.SafeForSqlInject() + ")" +
+			                          " or tblCaseIsAbout.Department_Id in (" + f.Department.SafeForSqlInject() + "))");
+			                break;
+			            case CaseInitiatorSearchScope.User:
+			                sb.Append(" and (tblCase.Department_Id in (" + f.Department.SafeForSqlInject() + "))");
+			                break;
+			            case CaseInitiatorSearchScope.IsAbout:
+			                sb.Append(" and (tblCaseIsAbout.Department_Id in (" + f.Department.SafeForSqlInject() + "))");
+			                break;
+			            default:
+			                sb.Append(" and (tblCase.Department_Id in (" + f.Department.SafeForSqlInject() + ")" +
+			                          " or tblCaseIsAbout.Department_Id in (" + f.Department.SafeForSqlInject() + "))");
+			                break;
+			        }
+			    }
 			}
 			else
 			{
-				// organizationUnit
-				if (!string.IsNullOrWhiteSpace(f.OrganizationUnit))
-					sb.Append(" and (tblCase.OU_Id in (" + f.OrganizationUnit.SafeForSqlInject() + "))");
+			    // organizationUnit
+			    if (!string.IsNullOrWhiteSpace(f.OrganizationUnit))
+			        sb.Append(" and (tblCase.OU_Id in (" + f.OrganizationUnit.SafeForSqlInject() + "))");
 			}
 
-			// användare / user            
-			if (!string.IsNullOrWhiteSpace(f.User))
-			{
-				sb.Append(" and (tblCase.User_Id in (" + f.User.SafeForSqlInject() + "))");
-			}
+		    // användare / user            
+		    if (!string.IsNullOrWhiteSpace(f.User))
+		    {
+		        sb.Append(" and (tblCase.User_Id in (" + f.User.SafeForSqlInject() + "))");
+		    }
 
-			// region
-			if (!string.IsNullOrWhiteSpace(f.Region))
-				sb.Append(" and (tblDepartment.Region_Id in (" + f.Region.SafeForSqlInject() + "))");
-			// prio
-			if (!string.IsNullOrWhiteSpace(f.Priority))
-				sb.Append(" and (tblcase.Priority_Id in (" + f.Priority.SafeForSqlInject() + "))");
-			// katagori / category
-			if (!string.IsNullOrWhiteSpace(f.Category))
-				sb.Append(" and (tblcase.Category_Id in (" + f.Category.SafeForSqlInject() + "))");
-			// status
-			if (!string.IsNullOrWhiteSpace(f.Status))
-				sb.Append(" and (tblcase.Status_Id in (" + f.Status.SafeForSqlInject() + "))");
-			// state secondery
-			if (!string.IsNullOrWhiteSpace(f.StateSecondary))
-				sb.Append(" and (tblcase.StateSecondary_Id in (" + f.StateSecondary.SafeForSqlInject() + "))");
+		    // region
+		    if (!string.IsNullOrWhiteSpace(f.Region))
+		    {
+                switch (f.InitiatorSearchScope)
+                {
+                    case CaseInitiatorSearchScope.UserAndIsAbout:
+                        sb.Append(" and (tblDepartment.Region_Id in (" + f.Region.SafeForSqlInject() + ")" + " or tblCaseIsAbout.Region_Id in (" + f.Region.SafeForSqlInject() + "))");
+                        break;
+                    case CaseInitiatorSearchScope.User:
+                        sb.Append(" and (tblDepartment.Region_Id in (" + f.Region.SafeForSqlInject() + "))");
+                        break;
+                    case CaseInitiatorSearchScope.IsAbout:
+                        sb.Append(" and (tblCaseIsAbout.Region_Id in (" + f.Region.SafeForSqlInject() + "))");
+                        break;
+                    default:
+                        sb.Append(" and (tblDepartment.Region_Id in (" + f.Region.SafeForSqlInject() + ")" + " or tblCaseIsAbout.Region_Id in (" + f.Region.SafeForSqlInject() + "))");
+                        break;
+                }
+            }
+		    // prio
+		    if (!string.IsNullOrWhiteSpace(f.Priority))
+		        sb.Append(" and (tblcase.Priority_Id in (" + f.Priority.SafeForSqlInject() + "))");
+		    // katagori / category
+		    if (!string.IsNullOrWhiteSpace(f.Category))
+		        sb.Append(" and (tblcase.Category_Id in (" + f.Category.SafeForSqlInject() + "))");
+		    // status
+		    if (!string.IsNullOrWhiteSpace(f.Status))
+		        sb.Append(" and (tblcase.Status_Id in (" + f.Status.SafeForSqlInject() + "))");
+		    // state secondery
+		    if (!string.IsNullOrWhiteSpace(f.StateSecondary))
+		        sb.Append(" and (tblcase.StateSecondary_Id in (" + f.StateSecondary.SafeForSqlInject() + "))");
 
-			if (f.CaseRegistrationDateStartFilter.HasValue)
-			{
-				sb.AppendFormat(" AND ([tblCase].[RegTime] >= '{0}')", f.CaseRegistrationDateStartFilter);
-			}
+		    if (f.CaseRegistrationDateStartFilter.HasValue)
+		    {
+		        sb.AppendFormat(" AND ([tblCase].[RegTime] >= '{0}')", f.CaseRegistrationDateStartFilter);
+		    }
 
-			if (f.CaseRegistrationDateEndFilter.HasValue)
-			{
-				sb.AppendFormat(" AND ([tblCase].[RegTime] <= '{0}')", f.CaseRegistrationDateEndFilter);
-			}
+		    if (f.CaseRegistrationDateEndFilter.HasValue)
+		    {
+		        sb.AppendFormat(" AND ([tblCase].[RegTime] <= '{0}')", f.CaseRegistrationDateEndFilter);
+		    }
 
-			if (f.CaseWatchDateStartFilter.HasValue)
-			{
-				sb.AppendFormat(" AND ([tblCase].[WatchDate] >= '{0}')", f.CaseWatchDateStartFilter);
-			}
+		    if (f.CaseWatchDateStartFilter.HasValue)
+		    {
+		        sb.AppendFormat(" AND ([tblCase].[WatchDate] >= '{0}')", f.CaseWatchDateStartFilter);
+		    }
 
-			if (f.CaseWatchDateEndFilter.HasValue)
-			{
-				sb.AppendFormat(" AND ([tblCase].[WatchDate] <= '{0}')", f.CaseWatchDateEndFilter);
-			}
+		    if (f.CaseWatchDateEndFilter.HasValue)
+		    {
+		        sb.AppendFormat(" AND ([tblCase].[WatchDate] <= '{0}')", f.CaseWatchDateEndFilter);
+		    }
 
-			if (f.CaseClosingDateStartFilter.HasValue)
-			{
-				sb.AppendFormat(" AND ([tblCase].[FinishingDate] >= '{0}')", f.CaseClosingDateStartFilter);
-			}
+		    if (f.CaseClosingDateStartFilter.HasValue)
+		    {
+		        sb.AppendFormat(" AND ([tblCase].[FinishingDate] >= '{0}')", f.CaseClosingDateStartFilter);
+		    }
 
-			if (f.CaseClosingDateEndFilter.HasValue)
-			{
-				sb.AppendFormat(" AND ([tblCase].[FinishingDate] <= '{0}')", f.CaseClosingDateEndFilter);
-			}
+		    if (f.CaseClosingDateEndFilter.HasValue)
+		    {
+		        sb.AppendFormat(" AND ([tblCase].[FinishingDate] <= '{0}')", f.CaseClosingDateEndFilter);
+		    }
 
-			if (!string.IsNullOrWhiteSpace(f.FreeTextSearch))
-			{
-				if (f.FreeTextSearch[0] == '#')
-				{
-					var text = f.FreeTextSearch.Substring(1, f.FreeTextSearch.Length - 1);
-					int res = 0;
-					if (int.TryParse(text, out res))
-					{
-						sb.Append(" AND (");
-						sb.Append("[tblCase].[CaseNumber] = " + text.SafeForSqlInject());
-						sb.Append(") ");
-					}
-					else
-					{
-						sb.Append(" AND (");
-						sb.Append(this.GetSqlLike("[tblCase].[CaseNumber]", text.SafeForSqlInject()));
-						sb.Append(") ");
-					}
-				}
-				else
-				{
-					var text = f.FreeTextSearch.SafeForSqlInject();
-					sb.Append(" AND (");
-					sb.Append(this.GetSqlLike("[tblCase].[CaseNumber]", text));
-					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[ReportedBy]", text));
-					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Name]", text));
-					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[RegUserName]", text));
-					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_EMail]", text));
-					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Phone]", text));
-					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_CellPhone]", text));
-					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Place]", text));
+		    if (!string.IsNullOrWhiteSpace(f.FreeTextSearch))
+		    {
+		        if (f.FreeTextSearch[0] == '#')
+		        {
+		            var text = f.FreeTextSearch.Substring(1, f.FreeTextSearch.Length - 1);
+		            int res = 0;
+		            if (int.TryParse(text, out res))
+		            {
+		                sb.Append(" AND (");
+		                sb.Append("[tblCase].[CaseNumber] = " + text.SafeForSqlInject());
+		                sb.Append(") ");
+		            }
+		            else
+		            {
+		                sb.Append(" AND (");
+		                sb.Append(this.GetSqlLike("[tblCase].[CaseNumber]", text.SafeForSqlInject()));
+		                sb.Append(") ");
+		            }
+		        }
+		        else
+		        {
+		            var text = f.FreeTextSearch.SafeForSqlInject();
+		            sb.Append(" AND (");
+		            sb.Append(this.GetSqlLike("[tblCase].[CaseNumber]", text));
+		            sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[ReportedBy]", text));
+		            sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Name]", text));
+		            sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[RegUserName]", text));
+		            sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_EMail]", text));
+		            sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Phone]", text));
+		            sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_CellPhone]", text));
+		            sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Place]", text));
 
-					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[ReportedBy]", text));
-					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Person_Name]", text));
-					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[UserCode]", text));
-					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Person_Email]", text));
-					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Place]", text));
-					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Person_CellPhone]", text));
-					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Person_Phone]", text));
+		            sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[ReportedBy]", text));
+		            sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Person_Name]", text));
+		            sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[UserCode]", text));
+		            sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Person_Email]", text));
+		            sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Place]", text));
+		            sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Person_CellPhone]", text));
+		            sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Person_Phone]", text));
 
-					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Caption]", text));
-					sb.AppendFormat(" OR [tblCase].[Description] LIKE N'%{0}%'", text);
-					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Miscellaneous]", text));
-					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblDepartment].[Department]", text));
-					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblDepartment].[DepartmentId]", text));
-					sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblLog] WHERE [tblLog].[Text_Internal] LIKE N'%{0}%' OR [tblLog].[Text_External] LIKE N'%{0}%'))", text);
-					sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblFormFieldValue] WHERE {0}))", this.GetSqlLike("FormFieldValue", text));
-					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[ReferenceNumber]", text));
-					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[InvoiceNumber]", text));
-					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[InventoryNumber]", text));
+		            sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Caption]", text));
+		            sb.AppendFormat(" OR [tblCase].[Description] LIKE N'%{0}%'", text);
+		            sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Miscellaneous]", text));
+		            sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblDepartment].[Department]", text));
+		            sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblDepartment].[DepartmentId]", text));
+		            sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblLog] WHERE [tblLog].[Text_Internal] LIKE N'%{0}%' OR [tblLog].[Text_External] LIKE N'%{0}%'))", text);
+		            sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblFormFieldValue] WHERE {0}))", this.GetSqlLike("FormFieldValue", text));
+		            sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[ReferenceNumber]", text));
+		            sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[InvoiceNumber]", text));
+		            sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[InventoryNumber]", text));
 
-					// Get CaseNumbers/Log Ids from Indexing Service
-					if (f.SearchThruFiles)
-					{
-						if (!string.IsNullOrEmpty(customerSetting.FileIndexingServerName) && !string.IsNullOrEmpty(customerSetting.FileIndexingCatalogName))
-						{
-							var caseNumber_caseLogId = GetCasesContainsText(customerSetting.FileIndexingServerName, customerSetting.FileIndexingCatalogName, text);
-							if (!string.IsNullOrEmpty(caseNumber_caseLogId.Item1))
-								sb.AppendFormat(" OR [tblCase].[CaseNumber] In ({0}) ", caseNumber_caseLogId.Item1.SafeForSqlInject());
+		            // Get CaseNumbers/Log Ids from Indexing Service
+		            if (f.SearchThruFiles)
+		            {
+		                if (!string.IsNullOrEmpty(customerSetting.FileIndexingServerName) && !string.IsNullOrEmpty(customerSetting.FileIndexingCatalogName))
+		                {
+		                    var caseNumber_caseLogId = GetCasesContainsText(customerSetting.FileIndexingServerName, customerSetting.FileIndexingCatalogName, text);
+		                    if (!string.IsNullOrEmpty(caseNumber_caseLogId.Item1))
+		                        sb.AppendFormat(" OR [tblCase].[CaseNumber] In ({0}) ", caseNumber_caseLogId.Item1.SafeForSqlInject());
 
-							if (!string.IsNullOrEmpty(caseNumber_caseLogId.Item2))
-								sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblLog] WHERE [tblLog].[Id] In ({0}))) ", caseNumber_caseLogId.Item2.SafeForSqlInject());
-						}
-					}
+		                    if (!string.IsNullOrEmpty(caseNumber_caseLogId.Item2))
+		                        sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblLog] WHERE [tblLog].[Id] In ({0}))) ", caseNumber_caseLogId.Item2.SafeForSqlInject());
+		                }
+		            }
 
-					sb.Append(") ");
-				}
-			}
+		            sb.Append(") ");
+		        }
+		    }
 
-			// "Caption" Search
-			if (!string.IsNullOrEmpty(f.CaptionSearch))
-			{
-				var text = f.CaptionSearch.SafeForSqlInject();
-				sb.Append(" AND (");
-				sb.AppendFormat("LOWER({0}) LIKE N'%{1}%'", "[tblCase].[Caption]", text);
-				sb.Append(") ");
-			}
+		    // "Caption" Search
+		    if (!string.IsNullOrEmpty(f.CaptionSearch))
+		    {
+		        var text = f.CaptionSearch.SafeForSqlInject();
+		        sb.Append(" AND (");
+		        sb.AppendFormat("LOWER({0}) LIKE N'%{1}%'", "[tblCase].[Caption]", text);
+		        sb.Append(") ");
+		    }
 
-			// "Initiator" search field
-			if (!string.IsNullOrEmpty(f.Initiator))
-			{
-				sb.Append(" AND (");
+		    // "Initiator" search field
+		    if (!string.IsNullOrEmpty(f.Initiator))
+		    {
+		        sb.Append(" AND (");
 
-				if (f.InitiatorSearchScope == CaseInitiatorSearchScope.User || f.InitiatorSearchScope == CaseInitiatorSearchScope.UserAndIsAbout)
-				{
-					sb.Append("(");
-					sb.AppendFormat("{0}", this.GetSqlLike("[tblCase].[ReportedBy]", f.Initiator.SafeForSqlInject(), Combinator_AND));
-					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Name]", f.Initiator.SafeForSqlInject(), Combinator_AND));
-					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[UserCode]", f.Initiator.SafeForSqlInject(), Combinator_AND));
-					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Email]", f.Initiator.SafeForSqlInject(), Combinator_AND));
-					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Place]", f.Initiator.SafeForSqlInject(), Combinator_AND));
-					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_CellPhone]", f.Initiator.SafeForSqlInject(), Combinator_AND));
-					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Phone]", f.Initiator.SafeForSqlInject(), Combinator_AND));
-					sb.Append(")");
-				}
-				if (f.InitiatorSearchScope == CaseInitiatorSearchScope.UserAndIsAbout)
-				{
-					sb.Append(" OR ");
-				}
-				if (f.InitiatorSearchScope == CaseInitiatorSearchScope.IsAbout || f.InitiatorSearchScope == CaseInitiatorSearchScope.UserAndIsAbout)
-				{
-					sb.Append("(");
-					sb.Append("(");
-					sb.AppendFormat("{0}", this.GetSqlLike("[tblCaseIsAbout].[ReportedBy]", f.Initiator.SafeForSqlInject(), Combinator_AND));
-					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Person_Name]", f.Initiator.SafeForSqlInject(), Combinator_AND));
-					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[UserCode]", f.Initiator.SafeForSqlInject(), Combinator_AND));
-					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Person_Email]", f.Initiator.SafeForSqlInject(), Combinator_AND));
-					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Place]", f.Initiator.SafeForSqlInject(), Combinator_AND));
-					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Person_CellPhone]", f.Initiator.SafeForSqlInject(), Combinator_AND));
-					sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Person_Phone]", f.Initiator.SafeForSqlInject(), Combinator_AND));
-					sb.Append(")");
+		        if (f.InitiatorSearchScope == CaseInitiatorSearchScope.User || f.InitiatorSearchScope == CaseInitiatorSearchScope.UserAndIsAbout)
+		        {
+		            sb.Append("(");
+		            sb.AppendFormat("{0}", this.GetSqlLike("[tblCase].[ReportedBy]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+		            sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Name]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+		            sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[UserCode]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+		            sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Email]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+		            sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Place]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+		            sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_CellPhone]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+		            sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Phone]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+		            sb.Append(")");
+		        }
+		        if (f.InitiatorSearchScope == CaseInitiatorSearchScope.UserAndIsAbout)
+		        {
+		            sb.Append(" OR ");
+		        }
+		        if (f.InitiatorSearchScope == CaseInitiatorSearchScope.IsAbout || f.InitiatorSearchScope == CaseInitiatorSearchScope.UserAndIsAbout)
+		        {
+		            sb.Append("(");
+		            sb.Append("(");
+		            sb.AppendFormat("{0}", this.GetSqlLike("[tblCaseIsAbout].[ReportedBy]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+		            sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Person_Name]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+		            sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[UserCode]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+		            sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Person_Email]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+		            sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Place]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+		            sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Person_CellPhone]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+		            sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCaseIsAbout].[Person_Phone]", f.Initiator.SafeForSqlInject(), Combinator_AND));
+		            sb.Append(")");
 
-					//if (!string.IsNullOrWhiteSpace(f.Region))
-					//	sb.Append(" AND ([tblCaseIsAbout].[Region_Id] IN (" + f.Region.SafeForSqlInject() + "))");
-					//if (!string.IsNullOrWhiteSpace(f.Department))
-					//{
-					//	// organizationUnit
-					//	if (!string.IsNullOrWhiteSpace(f.OrganizationUnit))
-					//		sb.Append(" AND ([tblCaseIsAbout].[Department_Id] IN (" + f.Department.SafeForSqlInject() + ") IN " +
-					//						"[tblCaseIsAbout].[OU_Id] IN (" + f.OrganizationUnit.SafeForSqlInject() + "))");
-					//	else
-					//		sb.Append(" AND ([tblCaseIsAbout].[Department_Id] IN (" + f.Department.SafeForSqlInject() + "))");
-					//}
-					//else
-					//{
-					//	// organizationUnit
-					//	if (!string.IsNullOrWhiteSpace(f.OrganizationUnit))
-					//		sb.Append(" AND ([tblCaseIsAbout].[OU_Id] IN (" + f.OrganizationUnit.SafeForSqlInject() + "))");
-					//}
+		            //if (!string.IsNullOrWhiteSpace(f.Region))
+		            //	sb.Append(" AND ([tblCaseIsAbout].[Region_Id] IN (" + f.Region.SafeForSqlInject() + "))");
+		            //if (!string.IsNullOrWhiteSpace(f.Department))
+		            //{
+		            //	// organizationUnit
+		            //	if (!string.IsNullOrWhiteSpace(f.OrganizationUnit))
+		            //		sb.Append(" AND ([tblCaseIsAbout].[Department_Id] IN (" + f.Department.SafeForSqlInject() + ") IN " +
+		            //						"[tblCaseIsAbout].[OU_Id] IN (" + f.OrganizationUnit.SafeForSqlInject() + "))");
+		            //	else
+		            //		sb.Append(" AND ([tblCaseIsAbout].[Department_Id] IN (" + f.Department.SafeForSqlInject() + "))");
+		            //}
+		            //else
+		            //{
+		            //	// organizationUnit
+		            //	if (!string.IsNullOrWhiteSpace(f.OrganizationUnit))
+		            //		sb.Append(" AND ([tblCaseIsAbout].[OU_Id] IN (" + f.OrganizationUnit.SafeForSqlInject() + "))");
+		            //}
 
-					sb.Append(")");
-				}
+		            sb.Append(")");
+		        }
 
-				sb.Append(") ");
-			}
+		        sb.Append(") ");
+		    }
 
-			//LockCaseToWorkingGroup
-			if (userGroupId < 3 && gs.LockCaseToWorkingGroup == 1)
-			{
-				sb.Append(" and (tblCase.WorkingGroup_Id in ");
-				sb.Append(" (");
-				sb.Append("select WorkingGroup_Id from tblUserWorkingGroup where [User_Id] = " + userId + " ");
-				sb.Append("and WorkingGroup_Id in (select Id from tblWorkingGroup where Customer_Id = " + f.CustomerId + ") ");
-				sb.Append(" )");
+		    //LockCaseToWorkingGroup
+		    if (userGroupId < 3 && gs.LockCaseToWorkingGroup == 1)
+		    {
+		        sb.Append(" and (tblCase.WorkingGroup_Id in ");
+		        sb.Append(" (");
+		        sb.Append("select WorkingGroup_Id from tblUserWorkingGroup where [User_Id] = " + userId + " ");
+		        sb.Append("and WorkingGroup_Id in (select Id from tblWorkingGroup where Customer_Id = " + f.CustomerId + ") ");
+		        sb.Append(" )");
 
-				if (showNotAssignedWorkingGroups == 1)
-					sb.Append(" or tblCase.WorkingGroup_Id is null ");
+		        if (showNotAssignedWorkingGroups == 1)
+		            sb.Append(" or tblCase.WorkingGroup_Id is null ");
 
-				sb.Append(" or not exists (select id from tblWorkingGroup where Customer_Id = " + f.CustomerId + ")");
-				sb.Append(") ");
-			}
+		        sb.Append(" or not exists (select id from tblWorkingGroup where Customer_Id = " + f.CustomerId + ")");
+		        sb.Append(") ");
+		    }
 
-			return sb.ToString();
+		    return sb.ToString();
 		}
 
-		private Tuple<string, string> GetCasesContainsText(string indexingServerName, string catalogName, string searchText)
-		{
-			var caseNumbers = string.Empty;
-			var logIds = string.Empty;
+	    private Tuple<string, string> GetCasesContainsText(string indexingServerName, string catalogName, string searchText)
+	    {
+	        var caseNumbers = string.Empty;
+	        var logIds = string.Empty;
 
-			if (string.IsNullOrEmpty(indexingServerName) ||
-				string.IsNullOrEmpty(catalogName) || string.IsNullOrEmpty(searchText))
-				return new Tuple<string, string>(caseNumbers, logIds);
-			else
-			{
-				var caseNumeralInfo = FileIndexingRepository.GetCaseNumeralInfoBy(indexingServerName, catalogName, searchText);
+	        if (string.IsNullOrEmpty(indexingServerName) || string.IsNullOrEmpty(catalogName) || string.IsNullOrEmpty(searchText))
+	            return new Tuple<string, string>(caseNumbers, logIds);
+	        else
+	        {
+	            var caseNumeralInfo = FileIndexingRepository.GetCaseNumeralInfoBy(indexingServerName, catalogName, searchText);
 
-				if (caseNumeralInfo.Item1.Any())
-					caseNumbers = string.Join(",", caseNumeralInfo.Item1.ToArray());
+	            if (caseNumeralInfo.Item1.Any())
+	                caseNumbers = string.Join(",", caseNumeralInfo.Item1.ToArray());
 
-				if (caseNumeralInfo.Item2.Any())
-					logIds = string.Join(",", caseNumeralInfo.Item2.ToArray());
-			}
+	            if (caseNumeralInfo.Item2.Any())
+	                logIds = string.Join(",", caseNumeralInfo.Item2.ToArray());
+	        }
 
-			return new Tuple<string, string>(caseNumbers, logIds);
-		}
+	        return new Tuple<string, string>(caseNumbers, logIds);
+	    }
 
-		private string GetSqlLike(string field, string text, string combinator = Combinator_OR)
-		{
-			var sb = new StringBuilder();
-			if (!string.IsNullOrEmpty(field) &&
-				!string.IsNullOrEmpty(text))
-			{
-				sb.Append(" (");
-				var words = text
-						.FreeTextSafeForSqlInject()
-						.ToLower()
-						.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+	    private string GetSqlLike(string field, string text, string combinator = Combinator_OR)
+	    {
+	        var sb = new StringBuilder();
+	        if (!string.IsNullOrEmpty(field) && !string.IsNullOrEmpty(text))
+	        {
+	            sb.Append(" (");
+	            var words = text.FreeTextSafeForSqlInject().ToLower().Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries);
 
-				for (var i = 0; i < words.Length; i++)
-				{
-					sb.AppendFormat("(LOWER({0}) LIKE N'%{1}%')", field, words[i].Trim());
-					if (words.Length > 1 && i < words.Length - 1)
-					{
-						sb.Append(string.Format(" {0} ", combinator));
-					}
-				}
+	            for (var i = 0; i < words.Length; i++)
+	            {
+	                sb.AppendFormat("(LOWER({0}) LIKE N'%{1}%')", field, words[i].Trim());
+	                if (words.Length > 1 && i < words.Length - 1)
+	                {
+	                    sb.Append(string.Format(" {0} ", combinator));
+	                }
+	            }
 
-				sb.Append(") ");
-			}
+	            sb.Append(") ");
+	        }
 
-			return sb.ToString();
-		}
+	        return sb.ToString();
+	    }
 
-		private string InsensitiveSearch(string fieldName)
-		{
-			var ret = fieldName;
-			var dsn = ConfigurationManager.ConnectionStrings["HelpdeskOleDbContext"].ConnectionString;
+	    private string InsensitiveSearch(string fieldName)
+	    {
+	        var ret = fieldName;
+	        var dsn = ConfigurationManager.ConnectionStrings["HelpdeskOleDbContext"].ConnectionString;
 
-			if (!dsn.Contains("SQLOLEDB"))
-				ret = "lower(" + fieldName.SafeForSqlInject() + ")";
+	        if (!dsn.Contains("SQLOLEDB"))
+	            ret = "lower(" + fieldName.SafeForSqlInject() + ")";
 
-			return ret;
-		}
-
+	        return ret;
+	    }
 	}
 }

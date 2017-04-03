@@ -206,6 +206,13 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                        : new ConfigurableFieldModel<List<CheckBoxListItem>>(setting.Caption, values, setting.Required, setting.Help);
         }
 
+        public ConfigurableFieldModel<string> CreateMultiStringField(MultiTextFieldEditSettings setting, string value)
+        {
+            return !setting.Show
+                       ? ConfigurableFieldModel<string>.CreateUnshowable()
+                       : new ConfigurableFieldModel<string>(setting.Caption, value, setting.Required, setting.Help, setting.IsMultiple);
+        }
+
         #endregion
     }
 }

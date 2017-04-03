@@ -89,7 +89,7 @@
                                        &nbsp;
                                     </td>
                                     <td>
-                                        @Html.TextAreaFor(model => model.Priority.InformUserText, new { style = "width:600px; height:125px; ", maxlength = "500" })
+                                        @Html.TextAreaFor(model => model.Priority.InformUserText, new { style = "width:600px; height:125px; ", maxlength = "500", @class = "richtexteditor" })
                                     </td>
                                 </tr>
                                 <tr id="trInformUserText2" style="display:none">
@@ -97,7 +97,7 @@
                                        &nbsp;
                                     </td>
                                     <td>
-                                        @Html.TextAreaFor(model => model.PriorityLanguage.InformUserText, new { style = "width:600px; height:125px; ", maxlength = "500" })
+                                        @Html.TextAreaFor(model => model.PriorityLanguage.InformUserText, new { style = "width:600px; height:125px; ", maxlength = "500", @class = "richtexteditor" })
                                     </td>
                                 </tr>
                                 <tr>

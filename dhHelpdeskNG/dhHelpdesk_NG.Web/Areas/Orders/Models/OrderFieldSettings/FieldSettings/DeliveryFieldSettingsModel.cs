@@ -41,6 +41,7 @@
             Phone = phone;
         }
 
+        [LocalizedStringLength(50)]
         public string Header { get; set; }
 
         [NotNull]

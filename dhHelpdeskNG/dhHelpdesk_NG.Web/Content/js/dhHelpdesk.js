@@ -296,8 +296,8 @@ function PluploadTranslation(languageId) {
             'Status': 'Status',
             'Size': 'Storlek',
             'Add files': 'Lägg till filer',
-            'Add files.': 'nnnnn',
-            'Start upload': 'ssss',
+            'Add Files': 'Ladda upp',
+            'Start Upload': 'Lägg till',
             'Stop current upload': 'Stoppa uppladdningen',
             'Start uploading queue': 'Starta uppladdningen',
             'Drag files here.': 'Dra filer hit'

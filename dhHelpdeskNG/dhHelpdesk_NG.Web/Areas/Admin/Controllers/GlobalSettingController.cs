@@ -134,7 +134,7 @@
           
         }
 
-        public ActionResult EditHoliday(int id)
+        public ActionResult EditHoliday(int id, DateTime? holidayDate = null)
         {
             //var holiday = this._holidayService.GetHoliday(id);
             var holidayheader = this._holidayService.GetHolidayHeader(id);
@@ -142,7 +142,7 @@
             if (holidayheader == null)
                 return new HttpNotFoundResult("No holiday found...");
 
-            var year = DateTime.Today.Year;
+            var year = holidayDate.HasValue ? holidayDate.Value.Year : DateTime.Today.Year;
 
             var model = this.SaveHolidayViewModel(holidayheader, year);
 

@@ -5,7 +5,7 @@
     public sealed class OrdererFieldSettings : HeaderSettings
     {
         public OrdererFieldSettings(
-                TextFieldSettings ordererId, 
+                MultiTextFieldSettings ordererId, 
                 TextFieldSettings ordererName, 
                 TextFieldSettings ordererLocation, 
                 TextFieldSettings ordererEmail, 
@@ -41,7 +41,7 @@
         }
 
         [NotNull]
-        public TextFieldSettings OrdererId { get; private set; }
+        public MultiTextFieldSettings OrdererId { get; private set; }
 
         [NotNull]
         public TextFieldSettings OrdererName { get; private set; }

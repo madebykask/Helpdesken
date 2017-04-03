@@ -5,7 +5,7 @@
     var popupFollowersInput = $("#caseAddFollowersModalInput");
     var searchSelected = false;
 
-    mainFakeFollowersInput.html(getHtmlFromEmails(mainFollowersInput.val()));
+//    mainFakeFollowersInput.html(getHtmlFromEmails(mainFollowersInput.val()));
 
     initEditableDiv();
 
@@ -144,30 +144,32 @@
             },
 
             sorter: function (items) {
-                return items.sort(function (a, b) {
-                    var itemA = JSON.parse(a);
-                    var itemB = JSON.parse(b);
-                    if (itemA.groupType > itemB.groupType) {
-                        return 1;
+                var beginswith = [], caseSensitive = [], caseInsensitive = [], other = [], item;
+                while (aItem = items.shift()) {
+                    item = JSON.parse(aItem);
+                    if (item.groupType === 0) {
+                        if (!item.userId.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
+                        else if (~item.userId.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
+                        else caseInsensitive.push(JSON.stringify(item));
+                    } else {
+                        other.push(JSON.stringify(item));
                     }
-                    if (itemA.groupType < itemB.groupType) {
-                        return -1;
-                    }
-                    return 0;
-                });
+                }
+                var initiators = beginswith.concat(caseSensitive, caseInsensitive);
+                return initiators.concat(other);
             },
 
             highlighter: function (obj) {
                 var item = JSON.parse(obj);
                 var grType = "";
                 if (item.groupType === 0)
-                    grType = window.parameters.initGroup + ": ";
+                    grType = document.parameters.initLabel + ": ";
                 if (item.groupType === 1)
-                    grType = window.parameters.adminGroup + ": ";
+                    grType = document.parameters.adminLabel + ": ";
                 if (item.groupType === 2)
-                    grType = window.parameters.wgGroup + ": ";
+                    grType = document.parameters.wgLabel + ": ";
                 if (item.groupType === 3)
-                    grType = window.parameters.emailGroup + ": ";
+                    grType = document.parameters.emailLabel + ": ";
                 var userId = item.userId != null ? item.userId + ' - ' : "";
 
                 var result = item.name + " - " + userId + item.email + " - " + item.departmentname;
@@ -202,12 +204,12 @@
             if (emails.indexOf(newToEmail) < 0)
                 mainFollowersInput.val(mainFollowersInput.val() + newToEmail + ";");
             else {
-                ShowToastModalMessage(value + " : " + window.parameters.emailAlreadyAdded, "warning");
+                ShowToastModalMessage(value + " : " + document.parameters.emailAlreadyAdded, "warning");
                 return false;
             }
             return true;
         } else {
-            ShowToastModalMessage(value + " : " + window.parameters.emailNotValid, "error");
+            ShowToastModalMessage(value + " : " + document.parameters.emailNotValid, "error");
             return false;
         }
     }
@@ -222,7 +224,7 @@
             }
             return true;
         } else {
-            ShowToastModalMessage(value + " : " + window.parameters.emailNotValid, "error");
+            ShowToastModalMessage(value + " : " + document.parameters.emailNotValid, "error");
             return false;
         }
     }

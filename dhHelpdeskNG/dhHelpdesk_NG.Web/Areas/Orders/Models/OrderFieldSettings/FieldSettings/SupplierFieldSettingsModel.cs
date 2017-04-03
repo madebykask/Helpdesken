@@ -19,6 +19,7 @@
             this.SupplierOrderNumber = supplierOrderNumber;
         }
 
+        [LocalizedStringLength(50)]
         public string Header { get; set; }
 
         [NotNull]

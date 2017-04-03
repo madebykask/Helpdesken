@@ -1,0 +1,113 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+@using System.Web.Optimization
+@using DH.Helpdesk.SelfService
+@using DH.Helpdesk.SelfService.Models.Orders
+@model OrdersIndexModel
+
+@if (Model.OrderTypesForCreateOrder.Any())
+{
+    <div class="jumbotron greybar">
+        <div class="container-fluid">
+            @using (Html.BeginForm("CreateOrder", "Orders", FormMethod.Post, new { id = "CreateOrderForm" }))
+            {
+                <ul class="secnav">
+                    <li>
+                        @Html.Hidden("customerId", SessionFacade.CurrentCustomerID)
+                        @Html.DropDownListFor(m => m.OrderTypeForCreateOrderId, Model.OrderTypesForCreateOrder, new {id = "ordertypesforcreateorder_dropdown"})
+                        <input type="submit" value="@Translation.Get("Skapa beställning")" class="btn btn-default"/>
+                    </li>
+                </ul>
+            }
+        </div>
+    </div>
+}
+<div class="container-fluid dh-container">
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a href="#fragment-1">
+                @Translation.Get("Beställningar")
+            </a>
+        </li>
+    </ul>
+
+    <div id="fragment-1" class="tab-pane active">
+        <div class="container-fluid dh-container">
+            <div class="row dh-container">
+                <div class="col-md-12">
+                    @using (Ajax.BeginForm("Orders", "Orders", null,
+            new AjaxOptions { UpdateTargetId = "OrdersOrdersTableContainer" },
+            new { id = "OrdersSearchForm", @class = "form-horizontal" }))
+                    {
+                        @Html.HiddenFor(m => m.SortField.Name, new { id = "sortFieldName" })
+                        @Html.HiddenFor(m => m.SortField.SortBy, new { id = "sortFieldBy" })
+
+                        <div class="form-group row">
+                            <div class="col-md-1">@Translation.Get("Typ")</div>
+                            <div class="col-md-11">
+                                @Html.DropDownListFor(m => m.OrderTypeId, Model.OrderTypesSearch, new { id = "ordertypes_dropdown", @style = "width:300px", data_placeholder = Translation.Get("Välj en eller flera"), @class = "" })
+                            </div>
+                        </div>
+                        @*<div class="form-group row">
+                            <div class="col-md-1">@Translation.Get("Handläggare")</div>
+                            <div class="col-md-11">@Html.DropDownListFor(m => m.AdministratorIds, Model.Administrators, new { id = "administrators_dropdown", multiple = "multiple", @class = "chosen-select", data_placeholder = Translation.Get("Välj en eller flera") })</div>
+                        </div>*@
+                        <div class="form-group row">
+                            <div class="col-md-1">
+                                @Translation.Get("Beställningsdatum")
+                            </div>
+                            <div class="col-md-11 order-date-search">
+                                @Html.EditorFor(m => m.StartDate, "DatePicker", new { id = "StartDate", @class = "" })
+                                @Html.EditorFor(m => m.EndDate, "DatePicker", new { id = "EndDate", @class = "" })
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-1">@Translation.Get("Status")</div>
+                            <div class="col-md-11">
+                                @Html.DropDownListFor(m => m.StatusIds, Model.Statuses, new { id = "statuses_dropdown", multiple = "multiple", @class = "chosen-select", data_placeholder = Translation.Get("Välj en eller flera") })
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-1">@Translation.Get("Sök")</div>
+                            <div class="col-md-11">
+                                @Html.TextBoxFor(m => m.Text, new { @style = "width:300px", @class = "" })
+                                <input type="submit" value="@Translation.Get("Sök")" class="btn" />
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12 table-responsive">
+                    <div id="OrdersOrdersTableContainer">
+                        @{
+                            if (Model.Statuses.SelectedValues != null)
+                            {
+                                Model.StatusIds = (int[])Model.Statuses.SelectedValues;
+                            }
+                            if (Model.Administrators.SelectedValues != null)
+                            {
+                                Model.AdministratorIds = (int[])Model.Administrators.SelectedValues;
+                            }
+                        }
+                        @Html.Action("Orders", "Orders", new {model = Model})
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render(BundleConfig.ScriptNames.Orders)
+    <script type="text/javascript">
+        $(function () {
+            applyIndexBehavior();
+        });
+
+    </script>
+}

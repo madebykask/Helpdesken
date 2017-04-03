@@ -20,6 +20,6 @@
 
         void UpdateSettings(FullFieldSettings settings);
 
-        FullOrderEditSettings GetOrderEditSettings(int customerId, int? orderTypeId, IUnitOfWork uow);
+        FullOrderEditSettings GetOrderEditSettings(int customerId, int? orderTypeId, IUnitOfWork uow, bool useExternal);
     }
 }

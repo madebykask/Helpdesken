@@ -47,7 +47,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         IList<UserLists> GetUserOnCases(int customerId, bool isTakeOnlyActive = false);
 
-        UserOverview GetUserByLogin(string IdName);
+        UserOverview GetUserByLogin(string IdName, int? customerId = null);
 
         UserName GetUserName(int userId);
 
@@ -409,9 +409,13 @@ namespace DH.Helpdesk.Dal.Repositories
             return query.ToList();
         }
 
-        public UserOverview GetUserByLogin(string IdName)
+        public UserOverview GetUserByLogin(string IdName, int? customerId = null)
         {
-            var user = this.GetUser(x => x.UserID == IdName && x.IsActive == 1);
+            Expression<Func<User, bool>> expression = x => x.UserID == IdName && x.IsActive == 1;
+            if (customerId.HasValue)
+                expression = x => x.UserID == IdName && x.IsActive == 1 && x.Customer_Id == customerId.Value;
+
+            var user = this.GetUser(expression);
             return user;
         }
 

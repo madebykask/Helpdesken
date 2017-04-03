@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.BusinessData.Models.Orders.Order;
+﻿using System;
+using DH.Helpdesk.BusinessData.Models.Orders.Order;
 
 namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
 {
@@ -56,6 +57,10 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
         }
 
         public bool IsNew { get; private set; }
+
+        public bool IsReturnToCase { get; set; }
+
+        public string OrderTypeDescription { get; set; }
 
         [NotNull]
         public DeliveryEditModel Delivery { get; set; }
@@ -116,5 +121,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
 
         public HistoryModel History { get; set; }
         public OrderStatusItem[] Statuses { get; set; }
+
+        public Tuple<int?, string> OrderTypeDocument { get; set; }
     }
 }

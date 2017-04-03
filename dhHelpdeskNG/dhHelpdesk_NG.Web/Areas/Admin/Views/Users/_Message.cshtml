@@ -5,14 +5,14 @@
         <tr>
             <td></td>
             <td>
-                <input type="checkbox" name="User.AllocateCaseMail" @(Model.User.AllocateCaseMail == 1 ? "checked=checked" : "") value="1"/>
+                <input type="checkbox" id="allocateCaseMail" name="User.AllocateCaseMail" @(Model.User.AllocateCaseMail == 1 ? "checked=checked" : "") value="1"/>
                 <input type="hidden" name="User.AllocateCaseMail" value="0" />
                 @Translation.Get("Skicka mail om användaren tilldelas ett ärende", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
         <tr>
             <td></td>
-            <td>
+            <td id="rowSettingForNoMail" @(Model.User.AllocateCaseMail == 1 ? "style=display" : "block") style="display:none">
                 <input type="checkbox" name="User.SettingForNoMail" @(Model.User.SettingForNoMail == 1 ? "checked=checked" : "") value="1" />
                 <input type="hidden" name="User.SettingForNoMail" value="0" />
                 @Translation.Get("Skicka mail om användaren tilldelar sig själv ett ärende", Enums.TranslationSource.TextTranslation)

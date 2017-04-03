@@ -1,0 +1,59 @@
+﻿@model DH.Helpdesk.SelfService.Models.Orders.OrderEdit.FullOrderEditModel
+@{
+    Layout = "~/Views/Shared/_OrderLayout.cshtml";
+}
+
+@section Actions
+{
+
+    <ul class="secnav">
+        <li>
+            @Html.ActionLink(Translation.Get("Spara"), null, null, new { id = "btnSave", @class = "btn btn-default" })
+        </li>
+        <li>
+            @Html.ActionLink(Translation.Get("Avbryt"), "Index", "Orders", new { customerId = SessionFacade.CurrentCustomerID }, new { @class = "btn btn-default" })
+        </li>
+        <li>
+            <i id="actionIndicator" class="gif-loader" style="display: none">&nbsp;</i>
+        </li>
+        <li>
+            @Html.CheckBoxFor(m => m.InformOrderer, new { id = "informOrderer_action", style = "display:none" })
+        </li>
+        <li>
+            @Html.CheckBoxFor(m => m.InformReceiver, new { id = "informReceiver_action", style = "display:none" })
+        </li>
+        @if (Model.Other.CaseNumber.Value == null || Model.Other.CaseNumber.Value == 0)
+        {
+            <li>
+                @Html.CheckBoxFor(m => m.CreateCase, new { id = "createCase_action", style = "display:none" })
+            </li>
+        }
+
+    </ul>
+}
+
+@section Content
+{
+    @using (Html.BeginForm("New", "Orders", FormMethod.Post, new { id = "edit_form" }))
+    {
+        if (!string.IsNullOrEmpty(Model.OrderTypeDescription))
+        {
+            <label class="alert alert-info cursor-default order-description">@Html.Raw(Model.OrderTypeDescription)</label>
+        }
+        if (Model.OrderTypeDocument.Item1.HasValue)
+        {
+            <a href="@Url.Action("DownloadDocument", new {documentId = Model.OrderTypeDocument.Item1.Value})" class="btn btn-default btn-document" title="@Model.OrderTypeDocument.Item2">
+                <span class="glyphicon glyphicon-file"></span>
+            </a>
+        }
+        @Html.EditorFor(m => m)
+    }
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        $(function () {
+            window.scrollTo(0, 0);
+        });
+    </script>
+}

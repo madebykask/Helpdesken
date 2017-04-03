@@ -181,6 +181,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         private readonly ICaseRuleFactory _caseRuleFactory;
         private readonly IOrderService _orderService;
+        private readonly IOrderAccountService _orderAccountService;
 
 
         #endregion
@@ -253,7 +254,8 @@ namespace DH.Helpdesk.Web.Controllers
 			IExternalInvoiceService externalInvoiceService,
             ICaseExtraFollowersService caseExtraFollowersService,
             ICaseRuleFactory caseRuleFactory,
-            IOrderService orderService)
+            IOrderService orderService,
+            IOrderAccountService orderAccountService)
             : base(masterDataService)
         {
             this._masterDataService = masterDataService;
@@ -325,6 +327,7 @@ namespace DH.Helpdesk.Web.Controllers
 			_caseExtraFollowersService = caseExtraFollowersService;
             _caseRuleFactory = caseRuleFactory;
             _orderService = orderService;
+            _orderAccountService = orderAccountService;
         }
 
 		#endregion
@@ -804,8 +807,9 @@ namespace DH.Helpdesk.Web.Controllers
 					{"caseIconTitle", searchRow.CaseIcon.CaseIconTitle()},
 					{"caseIconUrl", string.Format("/Content/icons/{0}", searchRow.CaseIcon.CaseIconSrc())},
 					{"isUnread", searchRow.IsUnread},
-					{"isUrgent", searchRow.IsUrgent}
-				};
+					{"isUrgent", searchRow.IsUrgent},
+                    {"isClosed", searchRow.IsUrgent}
+                };
 				var caseLockModel = GetCaseLockModel(searchRow.Id, SessionFacade.CurrentUser.Id, false);
 				if (caseLockModel.IsLocked)
 				{
@@ -1168,7 +1172,8 @@ namespace DH.Helpdesk.Web.Controllers
             int? moveToCustomerId = null, 
             bool? uni = null, 
             bool updateState = true, 
-            string backUrl = null)
+            string backUrl = null,
+            bool retToCase = true)
         {
             CaseInputViewModel m = null;
             
@@ -1199,6 +1204,15 @@ namespace DH.Helpdesk.Web.Controllers
 
                 //Get order
                 m.OrderId = _orderService.GetOrder(id)?.Id;
+
+                //Get account id
+                var account = _orderAccountService.GetAccountByCaseNumber(currentCase.CaseNumber);
+                if (account != null)
+                {
+                    m.AccountId = account.Item1;
+                    m.AccountActivityId = account.Item2;
+                }
+                
 
                 // User has not access to case
                 if (m.EditMode == Enums.AccessMode.NoAccess)
@@ -1294,10 +1308,12 @@ namespace DH.Helpdesk.Web.Controllers
             else
                 m.CaseMailSetting.DontSendMailToNotifier = false;
 
+            m.IsReturnToCase = retToCase;
+
             return this.View(m);
         }
 
-        public ActionResult EditLog(int id, int customerId)
+        public ActionResult EditLog(int id, int customerId, bool newLog = false, bool editLog = false)
         {
             CaseInputViewModel m = null;
 
@@ -1333,21 +1349,40 @@ namespace DH.Helpdesk.Web.Controllers
                     m.SendToDialogModel = this.CreateNewSendToDialogModel(customerId, responsibleUsersAvailable.ToList(), cs); //ToDo: remove after release
 	                m.MinWorkingTime = cs.MinRegWorkingTime;
 					m.CaseLog.SendMailAboutCaseToNotifier = false;
+                    m.CaseMailSetting = new CaseMailSetting(
+                        customer.NewCaseEmailList,
+                        customer.HelpdeskEmail,
+                        RequestExtension.GetAbsoluteUrl(),
+                        cs.DontConnectUserToWorkingGroup);
+
                     // check department info
                     m.ShowInvoiceFields = 0;
                     if (m.case_.Department_Id > 0 && m.case_.Department_Id.HasValue)
                     {
                         var d = this._departmentService.GetDepartment(m.case_.Department_Id.Value);
                         if (d != null)
+                        {
                             m.ShowInvoiceFields = d.Charge;
+                            m.ShowExternalInvoiceFields = d.ShowInvoice;
+                            m.TimeRequired = d.ChargeMandatory.ToBool();
+                        }
                     }
+                    
                     // check state secondary info
+                    m.CaseLog.SendMailAboutCaseToNotifier = customer.CommunicateWithNotifier.ToBool();
+
                     m.Disable_SendMailAboutCaseToNotifier = false;
                     if (m.case_.StateSecondary_Id > 0)
                         if (m.case_.StateSecondary != null)
                         {
                             m.Disable_SendMailAboutCaseToNotifier = m.case_.StateSecondary.NoMailToNotifier == 1 ? true : false;
+                            if (m.case_.StateSecondary.NoMailToNotifier == 1)
+                                m.CaseLog.SendMailAboutCaseToNotifier = false;
+                            else
+                                m.CaseLog.SendMailAboutCaseToNotifier = true;
                         }
+
+                    m.stateSecondaries = this._stateSecondaryService.GetStateSecondaries(customerId);
 
                     var acccessToGroups = this._userService.GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, customerId);
                     var deps = this._departmentService.GetDepartmentsByUserPermissions(userId, customerId);
@@ -1362,11 +1397,21 @@ namespace DH.Helpdesk.Web.Controllers
                     // User has not access to case/log
                     if (m.EditMode == Enums.AccessMode.NoAccess)
                         return this.RedirectToAction("index", "home");
+
+                    m.editLog = editLog;
+                    m.newLog = newLog;
+                    if (newLog)
+                    {
+                        m.CaseLog.OldLog_Id = m.CaseLog.Id;
+                        m.CaseLog.Id = 0;
+                    }                   
+
                 }
             }
 
             return this.View(m);
         }
+        
 
         [HttpPost]
         public RedirectToRouteResult EditLog(Case case_, CaseLog caseLog)
@@ -1402,9 +1447,9 @@ namespace DH.Helpdesk.Web.Controllers
 
         [ValidateInput(false)]
         [HttpPost]
-        public ActionResult CaseSearchUserEmails(string query, string searchKey)
+        public ActionResult CaseSearchUserEmails(string query, string searchKey, bool isInternalLog = false)
         {
-            var models = _caseSearchService.GetUserEmailsForCaseSend(SessionFacade.CurrentCustomer.Id, query, true, true, true, true);
+            var models = _caseSearchService.GetUserEmailsForCaseSend(SessionFacade.CurrentCustomer.Id, query, true, true, true, true, isInternalLog);
             return Json(new { searchKey = searchKey, result = models });
         }
 
@@ -1526,14 +1571,14 @@ namespace DH.Helpdesk.Web.Controllers
             return ret;
         }
 
-        public int ShowInvoiceFields(int? departmentId)
+        public JsonResult GetDepartmentInvoiceParameters(int? departmentId)
         {
             if (departmentId.HasValue)
             {
-                var d = this._departmentService.GetDepartment(departmentId.Value);
-                return d.Charge;
+                var d = _departmentService.GetDepartment(departmentId.Value);
+                return Json(new { ShowInvoice = d.ShowInvoice.ToBool(), ChargeMandatory = d.ChargeMandatory.ToBool(), Charge = d.Charge.ToBool() }, JsonRequestBehavior.AllowGet);
             }
-            return 0;
+            return null;
         }
 
         public JsonResult ChangeDepartment(int? id, int customerId)
@@ -3002,17 +3047,69 @@ namespace DH.Helpdesk.Web.Controllers
 
             IDictionary<string, string> errors;
 
-            if (caseLog.FinishingType != null && caseLog.FinishingType != 0)
+            var c = this._caseService.GetCaseById(caseLog.CaseId);
+
+            var customer = this._customerService.GetCustomer(c.Customer_Id);
+            var customerSetting = this._settingService.GetCustomerSetting(c.Customer_Id);
+            var basePath = _masterDataService.GetFilePath(c.Customer_Id);
+            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
+            var currentLoggedInUser = this._userService.GetUser(SessionFacade.CurrentUser.Id);
+
+            var caseMailSetting = new CaseMailSetting(
+              customer.NewCaseEmailList,
+              customer.HelpdeskEmail,
+              RequestExtension.GetAbsoluteUrl(),
+              customerSetting.DontConnectUserToWorkingGroup);
+
+            var mailSenders = new MailSenders();
+           
+            // Positive: Send Mail to...
+            if (caseMailSetting.DontSendMailToNotifier == false)
+                caseMailSetting.DontSendMailToNotifier = true;
+            else
+                caseMailSetting.DontSendMailToNotifier = false;
+
+            mailSenders.SystemEmail = caseMailSetting.HelpdeskMailFromAdress;
+
+            if (c.WorkingGroup_Id.HasValue)
             {
-                var c = this._caseService.GetCaseById(caseLog.CaseId);
-                // save case and case history
-                c.FinishingDescription = @case.FinishingDescription;
-                var ei = new CaseExtraInfo() {CreatedByApp = CreatedByApplications.Helpdesk5, LeadTimeForNow = 0, ActionLeadTime = 0, ActionExternalTime = 0 };
-                int caseHistoryId = this._caseService.SaveCase(c, caseLog, null, SessionFacade.CurrentUser.Id, this.User.Identity.Name, ei, out errors);
-                caseLog.CaseHistoryId = caseHistoryId;
+                var curWG = _workingGroupService.GetWorkingGroup(c.WorkingGroup_Id.Value);
+                if (curWG != null)
+                    if (!string.IsNullOrWhiteSpace(curWG.EMail) && _emailService.IsValidEmail(curWG.EMail))
+                        mailSenders.WGEmail = curWG.EMail;
             }
 
-            this._logService.SaveLog(caseLog, 0, out errors);
+            if (c.DefaultOwnerWG_Id.HasValue && c.DefaultOwnerWG_Id.Value > 0)
+            {
+                var defaultWGEmail = _workingGroupService.GetWorkingGroup(c.DefaultOwnerWG_Id.Value).EMail;
+                mailSenders.DefaultOwnerWGEMail = defaultWGEmail;
+            }
+            caseMailSetting.CustomeMailFromAddress = mailSenders;
+
+            // save case and case history
+            c.StateSecondary_Id = @case.StateSecondary_Id;
+ 
+            var ei = new CaseExtraInfo() {CreatedByApp = CreatedByApplications.Helpdesk5, LeadTimeForNow = 0, ActionLeadTime = 0, ActionExternalTime = 0 };
+            int caseHistoryId = this._caseService.SaveCase(c, caseLog, null, SessionFacade.CurrentUser.Id, this.User.Identity.Name, ei, out errors);
+            caseLog.CaseHistoryId = caseHistoryId;
+
+            //find files for old log
+            var logFiles = this._logFileService.FindFileNamesByLogId(caseLog.OldLog_Id.Value);
+
+            caseLog.Id = this._logService.SaveLog(caseLog, logFiles.Count, out errors);
+
+            byte[] fileContent;
+
+            foreach (var file in logFiles)
+            {
+                fileContent = this._logFileService.GetFileContentByIdAndFileName(caseLog.OldLog_Id.Value, basePath, file);
+                var logNoteFile = new CaseFileDto(fileContent, basePath, file, DateTime.UtcNow, caseLog.Id, this.workContext.User.UserId);
+                this._logFileService.AddFile(logNoteFile);
+            }
+
+
+            // send emails
+            this._caseService.SendCaseEmail(c.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, c, caseLog, null, currentLoggedInUser);
         }
         
         #endregion
@@ -3354,13 +3451,25 @@ namespace DH.Helpdesk.Web.Controllers
                 var gs = _globalSettingService.GetGlobalSettings().FirstOrDefault();
                 const bool isTakeOnlyActive = true;
                 if (gs.LockCaseToWorkingGroup == 0)
-                    fd.filterWorkingGroup = this._workingGroupService.GetAllWorkingGroupsForCustomer(cusId);
+                {
+                    var wkgrs = _workingGroupService.GetAllWorkingGroupsForCustomer(cusId);
+                    wkgrs.Insert(0, ObjectExtensions.notAssignedWorkingGroup());
+                    fd.filterWorkingGroup = wkgrs;
+                }
                 else
                 {
                     if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.UserGroupId == 2)
-                        fd.filterWorkingGroup = this._workingGroupService.GetWorkingGroups(cusId, userId, isTakeOnlyActive);
+                    {
+                        var wkgrs = _workingGroupService.GetWorkingGroups(cusId, userId, isTakeOnlyActive);
+                        wkgrs.Insert(0, ObjectExtensions.notAssignedWorkingGroup());
+                        fd.filterWorkingGroup = wkgrs;
+                    }
                     else
-                        fd.filterWorkingGroup = this._workingGroupService.GetWorkingGroups(cusId, isTakeOnlyActive);
+                    {
+                        var wkgrs = _workingGroupService.GetWorkingGroups(cusId, isTakeOnlyActive);
+                        wkgrs.Insert(0, ObjectExtensions.notAssignedWorkingGroup());
+                        fd.filterWorkingGroup = wkgrs;
+                    }
 
                     //var isAdmin = SessionFacade.CurrentUser.IsAdministrator();
                     //if (isAdmin)                    
@@ -3851,7 +3960,7 @@ namespace DH.Helpdesk.Web.Controllers
             m.CaseLock = caseLocked;
             m.MailTemplates = this._mailTemplateService.GetCustomMailTemplates(customerId).ToList();
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
-
+            
             var userHasInvoicePermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InvoicePermission);
             
             if (!isCreateNewCase)
@@ -3878,9 +3987,8 @@ namespace DH.Helpdesk.Web.Controllers
 					Charge = x.Charge,
 					InvoiceRow = x.InvoiceRow == null ? null : new InvoiceRowViewModel { Status = x.InvoiceRow.Status}
 	            }).ToList();
-                var caseFolowerUsers = _caseExtraFollowersService.GetCaseExtraFollowers(caseId).Select(x => x.Follower).ToArray();
-                var followerUsers = caseFolowerUsers.Any() ? string.Join(";", caseFolowerUsers) + ";" : string.Empty;
-                m.FollowerUsers = followerUsers;
+                var caseFolowerUsers = _caseExtraFollowersService.GetCaseExtraFollowers(caseId);
+                m.MapToFollowerUsers(caseFolowerUsers);
             }
 
             var customerUserSetting = this._customerUserService.GetCustomerSettings(customerId, userId);
@@ -3921,6 +4029,7 @@ namespace DH.Helpdesk.Web.Controllers
                         this.Request.GetIpAddress(),
                         CaseRegistrationSource.Administrator,
                         windowsUser);
+                        m.MapToFollowerUsers(m.case_.CaseFollowers);
                 }
                 else if (parentCaseId.HasValue)
                 {
@@ -4154,7 +4263,8 @@ namespace DH.Helpdesk.Web.Controllers
 
             m.standardTexts = this._standardTextService.GetStandardTexts(customerId);
             m.Languages = this._languageService.GetActiveLanguages();
-            m.SendToDialogModel = this.CreateNewSendToDialogModel(customerId, responsibleUsersList.ToList(), customerSetting); //ToDo: remove after release
+            m.SendToDialogModel = this.CreateNewSendToDialogModel(customerId, responsibleUsersList.ToList(), customerSetting, false);
+            m.FollowersModel = this.CreateNewSendToDialogModel(customerId, responsibleUsersList.ToList(), customerSetting);
             m.CaseLog = this._logService.InitCaseLog(SessionFacade.CurrentUser.Id, string.Empty);
             m.CaseKey = m.case_.Id == 0 ? m.case_.CaseGUID.ToString() : m.case_.Id.ToString(global::System.Globalization.CultureInfo.InvariantCulture);
             m.LogKey = m.CaseLog.LogGuid.ToString();
@@ -4436,12 +4546,13 @@ namespace DH.Helpdesk.Web.Controllers
                 if (d != null)
                 {
                     m.ShowInvoiceFields = d.Charge;
+                    m.ShowExternalInvoiceFields = d.ShowInvoice;
 	                m.TimeRequired = d.ChargeMandatory.ToBool();
                 }
             }
 
             // check state secondary info
-            m.CaseLog.SendMailAboutCaseToNotifier = customer.CommunicateWithNotifier.ToBool();
+            m.CaseLog.SendMailAboutCaseToNotifier = false;
 
             m.Disable_SendMailAboutCaseToNotifier = false;
             if (m.case_.StateSecondary_Id > 0)
@@ -4449,6 +4560,10 @@ namespace DH.Helpdesk.Web.Controllers
                 if (m.case_.StateSecondary != null)
                 {
                     m.Disable_SendMailAboutCaseToNotifier = m.case_.StateSecondary.NoMailToNotifier == 1;
+                    if (m.case_.StateSecondary.NoMailToNotifier == 1)
+                        m.CaseLog.SendMailAboutCaseToNotifier = false;
+                    else
+                        m.CaseLog.SendMailAboutCaseToNotifier = true;
                 }
             }
 
@@ -4926,10 +5041,10 @@ namespace DH.Helpdesk.Web.Controllers
             return ret;
         }
 
-        private SendToDialogModel CreateNewSendToDialogModel(int customerId, IList<DHDomain.User> users, Setting customerSetting)
+        private SendToDialogModel CreateNewSendToDialogModel(int customerId, IList<DHDomain.User> users, Setting customerSetting, bool includeAdmins = true)
         {            
             var emailGroups = _emailGroupService.GetEmailGroupsWithEmails(customerId);
-            var workingGroups = _workingGroupService.GetWorkingGroupsWithActiveEmails(customerId);
+            var workingGroups = _workingGroupService.GetWorkingGroupsWithActiveEmails(customerId, includeAdmins);
             var administrators = new List<ItemOverview>();
 
             if (users != null)
@@ -5708,6 +5823,7 @@ namespace DH.Helpdesk.Web.Controllers
                                     },
                                     { "isUnread", searchRow.IsUnread },
                                     { "isUrgent", searchRow.IsUrgent },
+                                    { "isClosed", searchRow.IsClosed},
                                 };
                 foreach (var col in gridSettings.columnDefs)
                 {

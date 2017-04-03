@@ -25,6 +25,7 @@
         void SavePriorityLanguage(PriorityLanguage priorityLanguage, bool update, out IDictionary<string, string> errors);
         void UpdateSavedFile(Priority priority);
         void Commit();
+        string GetPriorityInfoTextByImpactAndUrgency(int impactId, int urgentId, int currentLanguageId);
     }
 
     public class PriorityService : IPriorityService
@@ -198,6 +199,11 @@
         public void Commit()
         {
             this._unitOfWork.Commit();
+        }
+
+        public string GetPriorityInfoTextByImpactAndUrgency(int impactId, int urgentId, int languageId)
+        {
+            return this._priorityImpactUrgencyRepository.GetPriorityInfoTextByImpactAndUrgency(impactId, urgentId, languageId);
         }
     }
 }

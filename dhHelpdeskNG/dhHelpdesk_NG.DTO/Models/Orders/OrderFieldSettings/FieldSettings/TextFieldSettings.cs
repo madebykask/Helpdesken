@@ -2,14 +2,14 @@
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class TextFieldSettings : FieldSettings
+    public class TextFieldSettings : FieldSettings
     {
-        private TextFieldSettings()
+        protected TextFieldSettings()
         {            
         }
 
         [NotNull]
-        public string DefaultValue { get; private set; }
+        public string DefaultValue { get; protected set; }
 
         public static TextFieldSettings CreateUpdated(
                         bool show,

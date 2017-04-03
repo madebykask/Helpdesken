@@ -35,6 +35,7 @@
 
         [NotNull]
         [LocalizedRequired]
+        [LocalizedStringLength(50)]
         public string Label { get; set; }
 
         public bool Required { get; set; }
@@ -43,5 +44,6 @@
 
         [LocalizedStringLength(200)]
         public string Help { get; set; }
+
     }
 }

@@ -25,7 +25,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public void DeleteByCaseId(int id)
         {
-            var m2ts = this.GetAll().Where(m => m.Case_Id == id).ToList();
+            var m2ts = Table.Where(m => m.Case_Id == id).ToList();
             if (m2ts.Any())
             {
                 this.DataContext.Mail2Tickets.RemoveRange(m2ts);               
@@ -34,7 +34,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public void DeleteByLogId(int id)
         {
-            var m2ts = this.GetAll().Where(m => m.Log_Id == id).ToList();
+            var m2ts = Table.Where(m => m.Log_Id == id).ToList();
             if (m2ts.Any())
             {
                 this.DataContext.Mail2Tickets.RemoveRange(m2ts);                

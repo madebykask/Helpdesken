@@ -16,6 +16,7 @@
     }
 
     attributes.Add("data-dh-is-required", Model.IsRequired);
+    attributes.Add("disabled", "");
 }
 
 @if (!Model.Show)
@@ -29,7 +30,7 @@
     </td>
     <td class="span9">
         @Html.DropDownListFor(m => m.Value, source, string.Empty, attributes)
-        @Html.HiddenFor(m => m.IsRequired)
-        @Html.ValidationMessageFor(m => m.Value)
+@*        @Html.HiddenFor(m => m.IsRequired)*@
+@*        @Html.ValidationMessageFor(m => m.Value)*@
     </td>
 </tr>

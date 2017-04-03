@@ -14,13 +14,17 @@ namespace DH.Helpdesk.Dal.Repositories.Concrete
         {
         }
 
-        public List<WorkingGroupUsers> FindWorkingGroupsUserIds(List<int> workingGroupIds)
+        public List<WorkingGroupUsers> FindWorkingGroupsUserIds(List<int> workingGroupIds, bool includeAdmins = true)
         {
-            var workingGroupsUsers =
-                this.DataContext.UserWorkingGroups.Where(g => workingGroupIds.Contains(g.WorkingGroup_Id))
-                    .GroupBy(g => g.WorkingGroup_Id)
-                    .Select(g => new { Id = g.Key, UserIds = g.Select(group => group.User_Id) })
-                    .ToList();
+            var wGroupsUsers = this.DataContext.UserWorkingGroups.Where(g => workingGroupIds.Contains(g.WorkingGroup_Id)).AsQueryable();
+            if (!includeAdmins)
+            {
+                wGroupsUsers = wGroupsUsers.Where(x => x.UserRole == 2);
+            }
+            var workingGroupsUsers = wGroupsUsers
+                .GroupBy(g => g.WorkingGroup_Id)
+                .Select(g => new {Id = g.Key, UserIds = g.Select(group => group.User_Id)})
+                .ToList();
 
             var result = new List<WorkingGroupUsers>(workingGroupIds.Count);
 

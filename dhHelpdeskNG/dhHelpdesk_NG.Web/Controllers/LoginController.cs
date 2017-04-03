@@ -65,7 +65,7 @@
             return this.View("Login");
         }
 
-        [HttpGet]
+        [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Head)]
         public ViewResult Login()
         {          
             TempData["NumOfUsers"] = GetLiveUserCount();
@@ -73,7 +73,7 @@
             TempData["CurrentWebSiteName"] = HostingEnvironment.ApplicationHost.GetSiteName();
             
             return View();
-        } 
+        }
 
         [HttpPost]
         public ActionResult Login(FormCollection coll, string returnUrl)

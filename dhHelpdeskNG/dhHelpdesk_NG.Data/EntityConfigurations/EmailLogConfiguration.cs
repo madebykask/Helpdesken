@@ -29,7 +29,11 @@
             this.Property(l => l.SendTime).IsOptional();
             this.Property(l => l.ResponseMessage).IsOptional();
 
-            this.ToTable("tblEmaillog");
+			this.HasMany(x => x.EmailLogAttempts)
+				.WithRequired(x => x.EmailLog)
+				.HasForeignKey(x => x.EmailLog_Id);
+
+			this.ToTable("tblEmaillog");
         }
     }
 }

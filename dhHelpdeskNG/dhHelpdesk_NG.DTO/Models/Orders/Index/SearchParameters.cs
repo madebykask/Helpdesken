@@ -16,7 +16,8 @@
                 int[] statusIds, 
                 string phrase, 
                 int selectCount, 
-                SortField sortField)
+                SortField sortField,
+                int? createdBy)
         {
             this.SortField = sortField;
             this.SelectCount = selectCount;
@@ -27,6 +28,7 @@
             this.AdministratorIds = administratorIds;
             this.OrderTypeId = orderTypeId;
             this.CustomerId = customerId;
+            CreatedBy = createdBy;
         }
 
         [IsId]
@@ -51,5 +53,7 @@
         public int SelectCount { get; private set; }
 
         public SortField SortField { get; private set; }
+
+        public int? CreatedBy { get; private set; }
     }
 }

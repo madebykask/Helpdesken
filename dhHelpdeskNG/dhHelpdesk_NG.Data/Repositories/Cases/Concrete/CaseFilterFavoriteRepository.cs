@@ -32,7 +32,7 @@ using DH.Helpdesk.Domain;
          public List<CaseFilterFavorite> GetUserFavoriteFilters(int customerId, int userId)
          {
              var ret = new List<CaseFilterFavorite>();
-             var entities = this.GetAll().Where(f => f.Customer_Id == customerId && f.User_Id == userId).ToList();
+             var entities = Table.Where(f => f.Customer_Id == customerId && f.User_Id == userId).ToList();
 
              if (entities.Any())
              {
@@ -45,7 +45,7 @@ using DH.Helpdesk.Domain;
 
          public string SaveFavorite(CaseFilterFavorite favorite)
          {             
-             var entities = this.GetAll().Where(f => f.Customer_Id == favorite.CustomerId && f.User_Id == favorite.UserId).ToList();
+             var entities = Table.Where(f => f.Customer_Id == favorite.CustomerId && f.User_Id == favorite.UserId).ToList();
 
              //new mode
              if (favorite.Id == 0)
@@ -91,7 +91,7 @@ using DH.Helpdesk.Domain;
 
          public string DeleteFavorite(int favoriteId)
          {
-             var entitiy = this.GetAll().Where(f => f.Id == favoriteId).FirstOrDefault();
+             var entitiy = Table.Where(f => f.Id == favoriteId).FirstOrDefault();
 
              if (entitiy != null)
              {

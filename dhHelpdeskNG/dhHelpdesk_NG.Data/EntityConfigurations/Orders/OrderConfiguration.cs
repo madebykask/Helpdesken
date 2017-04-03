@@ -40,7 +40,7 @@
 
             this.Property(x => x.EmploymentType_Id).IsOptional();
             this.Property(o => o.OrderDate).IsOptional();
-            this.Property(o => o.UserId).IsOptional().HasMaxLength(20);
+            this.Property(o => o.UserId).IsOptional().HasMaxLength(200);
             this.Property(o => o.UserFirstName).IsOptional().HasMaxLength(20);
             this.Property(o => o.UserLastName).IsOptional().HasMaxLength(50);
             this.Property(x => x.UserPhone).IsOptional().HasMaxLength(20);
@@ -50,14 +50,14 @@
             this.Property(x => x.UserExtension).IsOptional().HasMaxLength(20);
             this.Property(x => x.UserTitle).IsOptional().HasMaxLength(50);
             this.Property(x => x.UserLocation).IsOptional().HasMaxLength(50);
-            this.Property(x => x.UserRoomNumber).IsOptional().HasMaxLength(20);
+            this.Property(x => x.UserRoomNumber).IsOptional().HasMaxLength(50);
             this.Property(x => x.UserPostalAddress).IsOptional().HasMaxLength(50);
             this.Property(x => x.Responsibility).IsOptional().HasMaxLength(50);
             this.Property(x => x.Activity).IsOptional().HasMaxLength(50);
             this.Property(x => x.Manager).IsOptional().HasMaxLength(50);
             this.Property(x => x.ReferenceNumber).IsOptional().HasMaxLength(200);
-            this.Property(x => x.InfoUser).IsOptional().HasMaxLength(20);
-            this.Property(o => o.OrdererID).IsRequired().HasMaxLength(40);
+            this.Property(x => x.InfoUser).IsOptional().HasMaxLength(200);
+            this.Property(o => o.OrdererID).IsRequired().HasMaxLength(600);
             this.Property(o => o.Orderer).IsRequired().HasMaxLength(50);
             this.Property(o => o.OrdererAddress).IsRequired().HasMaxLength(50);
             this.Property(o => o.OrdererInvoiceAddress).IsRequired().HasMaxLength(50);

@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Orders.Order
+﻿using System;
+
+namespace DH.Helpdesk.BusinessData.Models.Orders.Order
 {
     using System.Collections.Generic;
 
@@ -28,7 +30,9 @@
                 ItemOverview[] accountTypes3,
                 ItemOverview[] accountTypes4,
                 ItemOverview[] accountTypes5,
-                ItemOverview[] programs)
+                ItemOverview[] programs,
+                string orderTypeDecription,
+                Tuple<int?, string> orderTypeDoc)
         {
             OrderTypeName = orderTypeName;
             AdministratorsWithEmails = administratorsWithEmails;
@@ -50,9 +54,15 @@
             AccountTypes4 = accountTypes4;
             AccountTypes5 = accountTypes5;
             Programs = programs;
+            OrderTypeDescription = orderTypeDecription;
+            OrderTypeDocument = orderTypeDoc;
         }
 
         public string OrderTypeName { get; private set; }
+
+        public string OrderTypeDescription { get; private set; }
+
+        public Tuple<int?, string> OrderTypeDocument { get; set; }
 
         [NotNull]
         public OrderStatusItem[] Statuses { get; private set; }

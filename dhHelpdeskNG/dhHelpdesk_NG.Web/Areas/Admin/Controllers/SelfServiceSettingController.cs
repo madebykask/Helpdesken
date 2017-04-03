@@ -38,7 +38,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         public ActionResult Index(int customerId)
         {
             var customer = _customerService.GetCustomer(customerId);
-
+            var setting = _settingService.GetCustomerSetting(customerId);
             var allCategories = _documentService.GetDocumentCategories(customerId);
             var availableCats = allCategories.Where(c=> c.ShowOnExternalPage == false).Select(x => new SelectListItem
                 {
@@ -69,7 +69,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     Customer = customer,
                     AvailableCategories = availableCats,
                     SelectedCategories = selectedCats,
-                    StartPageFAQNums = numbers
+                    StartPageFAQNums = numbers,
+                    CaseComplaintDays = setting != null ? setting.CaseComplaintDays : 0
                 };
 
             return View(model);
@@ -87,7 +88,11 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             customerToSave.ShowFAQOnExternalStartPage = vmodel.Customer.ShowFAQOnExternalStartPage;
             customerToSave.ShowCoWorkersOnExternalPage = vmodel.Customer.ShowCoWorkersOnExternalPage;
             customerToSave.ShowHelpOnExternalPage = vmodel.Customer.ShowHelpOnExternalPage;
-            customerToSave.UseInternalLogNoteOnExternalPage = vmodel.Customer.UseInternalLogNoteOnExternalPage;           
+            customerToSave.UseInternalLogNoteOnExternalPage = vmodel.Customer.UseInternalLogNoteOnExternalPage;
+            customerToSave.MyCasesFollower = vmodel.Customer.MyCasesFollower;
+            customerToSave.MyCasesInitiator = vmodel.Customer.MyCasesInitiator;
+            customerToSave.MyCasesRegarding = vmodel.Customer.MyCasesRegarding;
+            customerToSave.MyCasesRegistrator = vmodel.Customer.MyCasesRegistrator;
 
             if (customerToSave == null)
                 throw new Exception("No customer found...");
@@ -106,6 +111,17 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     cat.ShowOnExternalPage = false;
 
                 _documentService.SaveDocumentCategory(cat, out errors);
+            }
+
+            var setting = _settingService.GetCustomerSetting(id);
+            if (setting != null)
+            {
+                setting.CaseComplaintDays = vmodel.CaseComplaintDays;
+                _settingService.SaveSetting(setting, out errors);
+            }
+            else
+            {
+                throw new Exception("No customer settings found...");
             }
 
             if (errors.Count == 0)
@@ -129,7 +145,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             {
                 Customer = customerToSave,
                 AvailableCategories = availableCats,
-                SelectedCategories = selectedCats
+                SelectedCategories = selectedCats,
+                CaseComplaintDays = vmodel.CaseComplaintDays
             };
 
             return this.View(model);

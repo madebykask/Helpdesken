@@ -21,6 +21,7 @@ namespace DH.Helpdesk.Dal.Repositories
         Case GetCaseByGUID(Guid GUID);
         Case GetCaseByEmailGUID(Guid GUID);             
         Case GetDetachedCaseById(int id);
+        Case GetDetachedCaseIncludesById(int id);
         List<DynamicCase> GetAllDynamicCases();
         DynamicCase GetDynamicCase(int id);
         IList<Case> GetProjectCases(int customerId, int projectId);
@@ -144,6 +145,15 @@ namespace DH.Helpdesk.Dal.Repositories
             return (from w in this.DataContext.Set<Case>().AsNoTracking()
                     where w.Id == id
                     select w).FirstOrDefault();
+        }
+
+        public Case GetDetachedCaseIncludesById(int id)
+        {
+            var result = DataContext.Cases.AsNoTracking()
+            .Include(x => x.CaseFollowers)
+            .Include(x => x.IsAbout)
+            .FirstOrDefault(x => x.Id == id);
+            return result;
         }
 
         public void SetNullProblemByProblemId(int problemId)

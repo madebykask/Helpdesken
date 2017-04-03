@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 namespace DH.Helpdesk.Services.Services
 {
@@ -16,6 +17,7 @@ namespace DH.Helpdesk.Services.Services
     {
         IList<Customer> GetCustomers(int userId);
         Customer GetCustomer(int customerId);
+        bool IsCustomerUser(int customerId, int userId);
         User GetUser(int userId);
         Setting GetCustomerSetting(int customerId);
         IList<Language> GetLanguages();
@@ -24,7 +26,7 @@ namespace DH.Helpdesk.Services.Services
         IList<CaseFieldSettingsForTranslation> GetCustomerCaseTranslations(int customerId);
         IList<CaseFieldSettingsForTranslation> GetCaseTranslations();
         Language GetLanguage(int id);
-        UserOverview GetUserForLogin(string userid);
+        UserOverview GetUserForLogin(string userid, int? customerId = null);
         void ClearCache();
         void SaveSSOLog(NewSSOLog SSOLog);
         void SaveADFSSetting(ADFSSetting adfsSetting);
@@ -48,6 +50,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly IADFSRepository _adfsRepository;
         private readonly IGlobalSettingRepository _globalSettingRepository;
         private readonly INotifierRepository _computerUserRepository;
+        private readonly ICustomerUserRepository _customerUserRepository;
 
         public MasterDataService(
             ICustomerRepository customerRepository,
@@ -59,7 +62,8 @@ namespace DH.Helpdesk.Services.Services
             ICacheProvider cache,
             IGlobalSettingRepository globalSettingRepository,
             IADFSRepository adfsRepository,
-            INotifierRepository computerUserRepository)
+            INotifierRepository computerUserRepository,
+            ICustomerUserRepository customerUserRepository)
         {
             this._customerRepository = customerRepository;
             this._languageRepository = languageRepository;
@@ -71,6 +75,7 @@ namespace DH.Helpdesk.Services.Services
             this._adfsRepository = adfsRepository;
             this._globalSettingRepository = globalSettingRepository;
             _computerUserRepository = computerUserRepository;
+            _customerUserRepository = customerUserRepository;
         }
 
         public IList<Customer> GetCustomers(int userId)
@@ -86,6 +91,11 @@ namespace DH.Helpdesk.Services.Services
         public Customer GetCustomer(int customerId)
         {
             return this._customerRepository.GetById(customerId);  
+        }
+
+        public bool IsCustomerUser(int customerId, int userId)
+        {
+            return this._customerUserRepository.IsCustomerUser(customerId, userId);
         }
 
         public User GetUser(int userId)
@@ -148,9 +158,9 @@ namespace DH.Helpdesk.Services.Services
             return this._languageRepository.GetById(id);
         }
 
-        public UserOverview GetUserForLogin(string userid)
+        public UserOverview GetUserForLogin(string userid, int? customerId = null)
         {
-            return this._userRepository.GetUserByLogin(userid);
+            return this._userRepository.GetUserByLogin(userid, customerId);
         }
 
         public void ClearCache()
@@ -195,17 +205,15 @@ namespace DH.Helpdesk.Services.Services
 
         public string GetVirtualDirectoryPath(int customerId)
         {
-            var customerFilePath = this._settingRepository.GetAll()
-                                                          .Where(s => s.Customer_Id == customerId)
-                                                          .Select(s => s.VirtualFilePath)
-                                                          .FirstOrDefault();
-            if (string.IsNullOrEmpty(customerFilePath)) {
-                var globalSetting = this._globalSettingRepository.GetAll().FirstOrDefault();
-                if (globalSetting != null)
-                    customerFilePath = globalSetting.VirtualFileFolder;
-            }
-            return (string.IsNullOrEmpty(customerFilePath) ? string.Empty : customerFilePath);
-        }
+            var virtualDirectoryPath = 
+                _settingRepository.Get(s => s.Customer_Id == customerId, s => s.VirtualFilePath);
 
+            if (string.IsNullOrEmpty(virtualDirectoryPath))
+            {
+                virtualDirectoryPath = this._globalSettingRepository.Get(s => true, s => s.VirtualFileFolder);
+            }
+
+            return virtualDirectoryPath ?? string.Empty;
+        }
     }
 }

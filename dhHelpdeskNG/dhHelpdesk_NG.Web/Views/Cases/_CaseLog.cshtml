@@ -186,7 +186,7 @@
     </table>
 		@if (Model.CustomerSettings.ModuleInvoice)
 		{
-			<table style="@Model.ShowInvoiceFields.displayHtml()">
+			<table id="tblCaseChargeSummary" style="@Model.ShowInvoiceFields.displayHtml()">
 				<tbody>
 					<tr>
 						<td>
@@ -222,9 +222,9 @@
 							@Model.Logs.Sum(x => x.EquipmentPrice).ToString("0.00")
 						</td>
 					</tr>
-					<tr>
+					<tr id="totalExternalAmountRow" style="@Model.ShowExternalInvoiceFields.displayHtml()">
 						<td>
-							@Translation.GetCoreTextTranslation("Totalt") @Translation.GetCoreTextTranslation("Fakturor"):
+							@Translation.GetCoreTextTranslation("Total") @Translation.GetCoreTextTranslation("Fakturor"):
 						</td>
 						<td id="totalExternalAmount">
 							@Model.ExternalInvoices.Sum(x => x.Amount).ToString("0.00")
@@ -245,7 +245,7 @@
         {
             return Url.Action("Problem", "Problems", new { id = log.ProblemId.Value });
         }
-        return Url.Action("editlog", "cases", new { area = "", id = log.Id, customerId = Model.case_.Customer_Id });
+        return Url.Action("editlog", "cases", new { area = "", id = log.Id, customerId = Model.case_.Customer_Id, editLog = true });
     }
 
 }

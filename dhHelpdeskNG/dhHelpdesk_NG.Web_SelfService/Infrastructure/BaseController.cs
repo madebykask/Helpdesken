@@ -44,7 +44,8 @@
             var customerId = -1;
             TempData["ShowLanguageSelect"] = true;
             SessionFacade.LastError = null;
-            customerId = RetrieveCustomer(filterContext);            
+            var sessionCustomerId = SessionFacade.CurrentCustomer != null ? SessionFacade.CurrentCustomer.Id : -1;
+            customerId = RetrieveCustomer(filterContext, sessionCustomerId);
 
             if(SessionFacade.CurrentCustomer == null && customerId == -1)
             {             
@@ -140,6 +141,9 @@
 
                                 if (pureType.CleanSpaceAndLowStr() == ConfigurationManager.AppSettings[Enums.FederationServiceKeys.ClaimEmail].ToString().CleanSpaceAndLowStr())
                                     userIdentity.Email = value;
+
+                                if (pureType.CleanSpaceAndLowStr() == ConfigurationManager.AppSettings[Enums.FederationServiceKeys.ClaimPhone].CleanSpaceAndLowStr())
+                                    userIdentity.Phone = value;
                             }
                         }
 
@@ -230,8 +234,7 @@
                         }
                     }
                 } // SSO Login
-                else
-                    if (loginMode == LoginMode.Windows)
+                else if (loginMode == LoginMode.Windows)
                 {
                     var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
                     SessionFacade.UserHasAccess = true;
@@ -254,13 +257,14 @@
                         Domain = userDomain,                        
                         FirstName = initiator?.FirstName,
                         LastName = initiator?.LastName,
-                        EmployeeNumber = employeeNum
+                        EmployeeNumber = employeeNum,
+                        Phone = initiator?.Phone,
+                        Email = initiator?.Email
                     };
 
                     SessionFacade.CurrentUserIdentity = ui;
                 }
-                else
-                        if (loginMode == LoginMode.Anonymous)
+                else if (loginMode == LoginMode.Anonymous)
                 {
                     var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
                     SessionFacade.UserHasAccess = true;
@@ -283,7 +287,9 @@
                         Domain = userDomain,
                         FirstName = initiator?.FirstName,
                         LastName = initiator?.LastName,
-                        EmployeeNumber = employeeNum
+                        EmployeeNumber = employeeNum,
+                        Phone = initiator?.Phone,
+                        Email = initiator?.Email
                     };
 
                     SessionFacade.CurrentUserIdentity = ui;
@@ -294,8 +300,12 @@
 
             } //User Idendity is null
 
+            //load user info from tblUsers if such user exist
+            LoadLocalUserInfo();
+
             this.SetTextTranslation(filterContext);
         }
+
 
         private void LoadUserInfo()
         {
@@ -315,7 +325,35 @@
             }
         }
 
-        private int RetrieveCustomer(ActionExecutingContext filterContext)
+        private void LoadLocalUserInfo()
+        {
+            if (SessionFacade.CurrentCustomer != null &&
+                SessionFacade.CurrentUserIdentity != null)
+            {
+                var userNames = SessionFacade.CurrentUserIdentity.UserId.Split(@"\");
+                var userNamesToCheck = new List<string>
+                {
+                    SessionFacade.CurrentUserIdentity.UserId
+                };
+                if(!string.IsNullOrWhiteSpace(SessionFacade.CurrentUserIdentity.Domain)) userNamesToCheck.Add($@"{SessionFacade.CurrentUserIdentity.Domain}\{SessionFacade.CurrentUserIdentity.UserId}");
+                if (userNames.Length > 1) userNamesToCheck.Add(userNames[userNames.Length - 1]);
+
+                foreach (var userName in userNamesToCheck)
+                {
+                    if(string.IsNullOrWhiteSpace(userName)) continue;
+
+                    var user = _masterDataService.GetUserForLogin(userName);
+                    if (user != null && _masterDataService.IsCustomerUser(SessionFacade.CurrentCustomer.Id, user.Id))
+                    {
+                        SessionFacade.CurrentLocalUser = user;
+                        return;
+                    }
+                }
+            }
+            SessionFacade.CurrentLocalUser = null;
+        }
+
+        private int RetrieveCustomer(ActionExecutingContext filterContext, int sessionCustomerId)
         {
             var ret = -1;
 
@@ -352,6 +390,19 @@
                 }
             }
 
+            if (sessionCustomerId <0 && ret < 0 && filterContext.HttpContext.Request.QueryString["customerId"] != null)
+            {
+                int paramCustomerId;
+                if (int.TryParse(filterContext.HttpContext.Request.QueryString["customerId"], out paramCustomerId))
+                    ret = paramCustomerId;
+                else
+                {
+                    ErrorGenerator.MakeError("Customer Id not valid!", 105);
+                    filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
+                    return -1;
+                }
+            }
+
             return ret;
         }
 
@@ -380,7 +431,7 @@
         {
             var activeLangs = _masterDataService.GetLanguages()
                                         .Where(l => l.IsActive == 1)
-                                        .Select(la => new LanguageOverview { Id = la.Id, IsActive = la.IsActive.convertIntToBool(), LanguageId = la.LanguageID, Name = la.Name })
+                                        .Select(la => new LanguageOverview { Id = la.Id, IsActive = la.IsActive.ConvertIntToBool(), LanguageId = la.LanguageID, Name = la.Name })
                                         .OrderBy(l => l.Name)
                                         .ToList();
             return activeLangs;

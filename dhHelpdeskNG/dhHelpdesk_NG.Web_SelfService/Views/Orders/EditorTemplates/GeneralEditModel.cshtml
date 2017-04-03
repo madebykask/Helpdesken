@@ -1,0 +1,40 @@
+﻿@model DH.Helpdesk.SelfService.Models.Orders.OrderEdit.GeneralEditModel
+
+<h4>@Model.Header</h4>
+<div class="container">
+    <div class="row form-horizontal">
+        <div class="col-md-12 dh-col ">
+            @if (Model.OrderNumber.Value > 0)
+                {
+                    @Html.DisplayFor(m => m.OrderNumber, "Fields/IntLabel")
+                }
+            <div class="row form-group">
+                <div class="col-md-3">
+                    @Translation.Get("Typ")
+                </div>
+                <div class="col-md-6">
+                    @Html.DisplayFor(m => m.OrderTypeName)
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+            @if (Model.Status.Show)
+            {
+                <div class="row form-group">
+                    <div class="col-md-3">
+                        @Html.FieldCaption(Model.Status)
+                    </div>
+                    <div class="col-md-6">
+                        @Html.DropDownListFor(m => m.StatusId, Model.Status.Value, new { @id = "general_status" })
+                        @Html.ValidationMessageFor(m => m.StatusId)
+                    </div>
+                    <div class="col-md-3">
+                        @Model.Status.Help
+                    </div>
+                </div>
+            }
+                @Html.EditorFor(m => m.Administrator, "Fields/List", new { Source = Model.Administrators })
+                @Html.EditorFor(m => m.Domain, "Fields/List", new { Source = Model.Domains })
+                @Html.EditorFor(m => m.OrderDate, "Fields/Date", new { id = "orderdate_datepicker" })
+        </div>
+    </div>
+</div>

@@ -38,7 +38,8 @@ CaseCharge.prototype = {
         $.ajax({
             url: self.options.getListUrl,
             data: {
-                CaseId: self.options.caseId
+                CaseId: self.options.caseId,
+                DepartmentCharge: false
     }
         })
         .done(function(responseData) {

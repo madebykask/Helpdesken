@@ -268,6 +268,23 @@ namespace DH.Helpdesk.Dal.Infrastructure
         }
 
         /// <summary>
+        /// The get.
+        /// </summary>
+        /// <param name="where">
+        /// The where.
+        /// </param>
+        /// /// <param name="selector">
+        /// The selector.
+        /// </param>
+        /// <returns>
+        /// The <see cref="TResult"/>.
+        /// </returns>
+        public virtual TResult Get<TResult>(Expression<Func<T, bool>> where, Expression<Func<T, TResult>> selector)
+        {
+            return this.dbset.Where(where).AsNoTracking<T>().Select(selector).FirstOrDefault();
+        }
+
+        /// <summary>
         /// The initialize after commit.
         /// </summary>
         /// <param name="businessModel">

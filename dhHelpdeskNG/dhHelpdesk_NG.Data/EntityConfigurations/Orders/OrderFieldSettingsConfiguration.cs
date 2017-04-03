@@ -32,6 +32,7 @@ namespace DH.Helpdesk.Dal.EntityConfigurations
             this.Property(x => x.Required).IsRequired();
             this.Property(x => x.EMailIdentifier).IsOptional().HasMaxLength(10);
             this.Property(x => x.FieldHelp).HasMaxLength(200);
+            this.Property(x => x.MultiValue).IsRequired();
 
 
             this.ToTable("tblorderfieldsettings");

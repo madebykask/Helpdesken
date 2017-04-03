@@ -153,7 +153,8 @@ namespace DH.Helpdesk.BusinessData.Models.Customer
         public bool ShowCaseOverviewInfo { get; set; }
 
         public bool ShowStatusPanel { get; set; }
-
+        public bool BulletinBoardWGRestriction { get; set; }
+        public bool CalendarWGRestriction { get; set; }
         public bool CreateCaseFromOrder { get; set; }
 
         /// <summary>

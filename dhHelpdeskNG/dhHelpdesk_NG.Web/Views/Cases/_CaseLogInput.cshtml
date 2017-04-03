@@ -10,14 +10,17 @@
 
 @Scripts.Render("~/bundles/Cases/_CaseLogInput")
 @{
-	var readonlyMode = false;
-	if ((ViewData.Keys.Any() && ViewData.Keys.Contains("readonlyLog")) || Model.EditMode == Enums.AccessMode.ReadOnly)
-	{
-		readonlyMode = Convert.ToBoolean(ViewData["readonlyLog"]);
-	}
+    var readonlyMode = false;
+    
+    var hasReadonlyLog = (ViewData.Keys.Any() && ViewData.Keys.Contains("readonlyLog"));
 
-	var translation = Translation.GetForJS("Till");
-	var btnToLabel = translation.First().ToString().ToUpper() + translation.Substring(1);
+    if (hasReadonlyLog || Model.EditMode == Enums.AccessMode.ReadOnly)
+    {
+        readonlyMode = Convert.ToBoolean(ViewData["readonlyLog"]);
+    }
+
+    var translation = Translation.GetForJS("Till");
+    var btnToLabel = translation.First().ToString().ToUpper() + translation.Substring(1);
 }
 
 <h4 style="@Model.displayLogInfoHtml()">
@@ -33,15 +36,18 @@
     <div class="secnavs secnavmarg">
         <div class="pull-left">
 	        <ul class="secnav">
-				@if (Model.CustomerSettings.ModuleInvoice)
-				{
-					<li><input type="button" id="btnCaseCharge" class="btn" style="@Model.ShowInvoiceFields.displayHtml()" value="@Translation.GetCoreTextTranslation("Debitering")"/></li>
-				}
-		        @if (Model.CustomerSettings.ModuleFaq == true && Model.customerUserSetting.User.FAQPermission == 1)
-		        {
-			        <li><a href="#" id="AddFAQ" class="btn">@Translation.Get("Ny FAQ", Enums.TranslationSource.TextTranslation)</a></li>
-			        <li class="secspace"></li>
-		        }
+                @if (!hasReadonlyLog)
+                { 
+				    if (Model.CustomerSettings.ModuleInvoice)
+				    {
+					    <li><input type="button" id="btnCaseCharge" class="btn" style="@Model.ShowInvoiceFields.displayHtml()" value="@Translation.GetCoreTextTranslation("Debitering")"/></li>
+				    }
+		            if (Model.CustomerSettings.ModuleFaq == true && Model.customerUserSetting.User.FAQPermission == 1)
+		            {
+			            <li><a href="#" id="AddFAQ" class="btn">@Translation.Get("Ny FAQ", Enums.TranslationSource.TextTranslation)</a></li>
+			            <li class="secspace"></li>
+		            }
+                }
 		        <li>
 			        <div class="checkbox">
 				        @if (Model.Disable_SendMailAboutCaseToNotifier || Model.EditMode == Enums.AccessMode.ReadOnly)
@@ -54,53 +60,56 @@
 					        @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier,
 						        new {InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool()})
 				        }
-				        <span class="lbl">@Translation.GetCoreTextTranslation("Informera initiativtagare och anhängare om åtgärder") </span>
+				        <span class="lbl">@Translation.GetCoreTextTranslation("Informera anmälare och följare om åtgärder") </span>
 			        </div>
 		        </li>
-		        <li class="secspace"></li>
-		        <li>
-			        <div class="checkbox">
-				        @if (Model.EditMode == Enums.AccessMode.ReadOnly)
-				        {
-					        @Html.CheckBoxFor(model => model.CaseLog.HighPriority, new {@disabled = true})
-				        }
-				        else
-				        {
-					        @Html.CheckBoxFor(model => model.CaseLog.HighPriority)
-				        }
-				        <span class="lbl">@Translation.Get("Hög prioritet", SessionFacade.CurrentCaseLanguageId) </span>
-			        </div>
-		        </li>
-		        @if (Model.CaseLog.Id == 0)
-		        {
-			        if (Model.standardTexts != null)
-			        {
-				        if (Model.standardTexts.Any())
-				        {
-					        <li class="secspace"></li>
-					        <li>
-						        <div class="btn-group" id="standardtextDropdownMenu">
-							        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-								        @Translation.GetCoreTextTranslation("Standardtext")&nbsp;<span class="caret"></span>
-							        </button>
-							        <ul class="dropdown-menu case-standardText-keep-open" role="menu">
-								        <li>
-									        <div id="standardTextAccordion" class="case-div-standardtext-accordion">
-										        @foreach (var e in Model.standardTexts.Where(e => e.IsActive == 1))
-										        {
-											        <h3>
-												        <div id="stHeader_@e.Id" class="case-standardtext-space standardtext-header">@Html.Raw(e.Name.Split('\n').FirstOrDefault())</div>
-											        </h3>
-											        <div class="case-div-standardtext case-standardtext-space"><span id="stText_@e.Id">@Html.Raw(e.Name)</span></div>
-										        }
-									        </div>
-								        </li>
-							        </ul>
-						        </div>
-					        </li>
-				        }
-			        }
-		        }
+                @if (!hasReadonlyLog)
+                {
+		            <li class="secspace"></li>
+		            <li>
+			            <div class="checkbox">
+				            @if (Model.EditMode == Enums.AccessMode.ReadOnly)
+                            {
+					            @Html.CheckBoxFor(model => model.CaseLog.HighPriority, new { @disabled = true })
+                            }
+                            else
+                            {
+					            @Html.CheckBoxFor(model => model.CaseLog.HighPriority)
+                            }
+				            <span class="lbl">@Translation.Get("Hög prioritet", SessionFacade.CurrentCaseLanguageId) </span>
+			            </div>
+		            </li>
+		            if (Model.CaseLog.Id == 0)
+                    {
+                        if (Model.standardTexts != null)
+                        {
+                            if (Model.standardTexts.Any())
+                            {
+					            <li class="secspace"></li>
+					            <li>
+						            <div class="btn-group" id="standardtextDropdownMenu">
+							            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+								            @Translation.GetCoreTextTranslation("Standardtext")&nbsp;<span class="caret"></span>
+							            </button>
+							            <ul class="dropdown-menu case-standardText-keep-open" role="menu">
+								            <li>
+									            <div id="standardTextAccordion" class="case-div-standardtext-accordion">
+										            @foreach (var e in Model.standardTexts.Where(e => e.IsActive == 1))
+                                                    {
+											            <h3>
+												            <div id="stHeader_@e.Id" class="case-standardtext-space standardtext-header">@Html.Raw(e.Name.Split('\n').FirstOrDefault())</div>
+											            </h3>
+											            <div class="case-div-standardtext case-standardtext-space"><span id="stText_@e.Id">@Html.Raw(e.Name)</span></div>
+                                                    }
+									            </div>
+								            </li>
+							            </ul>
+						            </div>
+					            </li>
+                            }
+                        }
+                    }
+                }
 	        </ul>
         </div>
     </div>
@@ -129,11 +138,11 @@
                 <td>
                     @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_External, CaseSolutionFields.ExternalLogNote) && !readonlyMode)
                     {
-                        @Html.TextAreaFor(model => Model.CaseLog.TextExternal, new { style = "height:105px;", maxlength = "3000" })
+                        @Html.TextAreaFor(model => Model.CaseLog.TextExternal, new { style = "height:105px;", maxlength = "3000", @class = "log-field" })
                     }
                     else
                     {
-                        @Html.TextAreaFor(model => model.CaseLog.TextExternal, new { style = "height:105px;", @readonly = true })
+                        @Html.TextAreaFor(model => model.CaseLog.TextExternal, new { style = "height:105px;", @readonly = true, @class = "log-field" })
                     }
                 </td>
                 <td>
@@ -144,6 +153,7 @@
                     @Html.HiddenFor(model => model.CaseLog.CaseId)
                     @Html.HiddenFor(model => model.CaseLog.LogGuid)
                     @Html.HiddenFor(model => model.LogKey)
+                    @Html.HiddenFor(model => model.CaseLog.OldLog_Id)
                 </td>
             </tr>
 
@@ -154,11 +164,11 @@
 				<td>
 					@if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote) && !readonlyMode)
 					{
-						@Html.TextAreaFor(model => Model.CaseLog.TextInternal, new { style = "height:105px;", maxlength = "3000" })
+						@Html.TextAreaFor(model => Model.CaseLog.TextInternal, new { style = "height:105px;", maxlength = "3000", @class = "log-field" })
 					}
 					else
 					{
-						@Html.TextAreaFor(model => model.CaseLog.TextInternal, new { style = "height:105px;", @readonly = true })
+						@Html.TextAreaFor(model => model.CaseLog.TextInternal, new { style = "height:105px;", @readonly = true, @class = "log-field" })
 					}
 				</td>
 
@@ -198,7 +208,7 @@
 			</tr>
 			@*@if (Model.templateistrue != 1)
 				{*@
-			@if (Model.CaseLog.Id == 0)
+			@if (Model.CaseLog.Id == 0 && !Model.newLog)
 			{
 				<tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Filename, CaseSolutionFields.LogFileName)">
 					<td>
@@ -226,7 +236,46 @@
 					</div>
 				</td>
 			</tr>
-			@if (SessionFacade.CurrentUser.CloseCasePermission == 1)
+            @if (Model.newLog || Model.editLog)
+            {
+                <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.StateSecondary_Id, CaseSolutionFields.StateSecondary)">
+                    <td>
+                        @CaseFieldCaption(GlobalEnums.TranslationCaseFields.StateSecondary_Id, "Understatus")
+                    </td>
+                    <td>
+                        @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.StateSecondary_Id, CaseSolutionFields.StateSecondary) && !readonlyMode)
+                        {
+                            <select id="case__StateSecondary_Id" @Model.case_.Id.HtmlReadOnlyFlag(Model.customerUserSetting.StateSecondaryPermission) name="case_.StateSecondary_Id">
+                                <option value="">&nbsp;</option>
+                                @if (Model.stateSecondaries != null)
+                                {
+                                    foreach (var e in Model.stateSecondaries.Where(e => e.IsActive == 1 || Model.case_.StateSecondary_Id == e.Id))
+                                    {
+                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.StateSecondary_Id.ToString())>@Translation.Get(e.Name)</option>
+                                    }
+                                }
+                            </select>
+                            if (Model.customerUserSetting.StateSecondaryPermission == 0)
+                            {
+                                @Html.HiddenFor(x => x.case_.StateSecondary_Id, new { @class = "readonlySubstate" })
+                            }
+                        }
+                        else
+                        {
+                            if (!Model.case_.StateSecondary_Id.HasValue)
+                            {
+                                @Html.TextBoxFor(m => m.case_.StateSecondary_Id, new { @readonly = true })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(m => m.stateSecondaries.SingleOrDefault(x => x.Id == Model.case_.StateSecondary_Id).Name, new { @readonly = true })
+                                @Html.HiddenFor(x => x.case_.StateSecondary_Id)
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+			@if (SessionFacade.CurrentUser.CloseCasePermission == 1 && !Model.newLog)
 			{
 				<tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.FinishingDescription, CaseSolutionFields.FinishingDescription)">
 					<td>
@@ -424,7 +473,7 @@
 						</div>
 								}
 @Html.Partial("ModalDialogs/_SendIntLogToDiallog", Model.SendToDialogModel)
-@if (Model.CustomerSettings.ModuleInvoice && Model.ShowInvoiceFields.ToBool())
+@if (Model.CustomerSettings.ModuleInvoice)
 {
 	@Html.Partial("ModalDialogs/_CaseCharge", Model)
 }
@@ -472,13 +521,35 @@
 		checkLength(this);
 	});
 
-	$("#" + "@Html.IdFor(x => x.CaseLog.WorkingTimeHour)" +
-		", #" + "@Html.IdFor(x => x.CaseLog.WorkingTimeMinute)" +
-		", #" + "@Html.IdFor(x => x.CaseLog.OvertimeHour)" +
-		", #" + "@Html.IdFor(x => x.CaseLog.OvertimeMinute)")
-		.on('change', function () {
-			$("#" + "@Html.IdFor(x => x.CaseLog.Charge)").attr("checked", "checked");
-	});
+	$(document)
+        .on('change'
+            , "#" + "@Html.IdFor(x => x.CaseLog.WorkingTimeHour)" +
+		    ", #" + "@Html.IdFor(x => x.CaseLog.WorkingTimeMinute)" +
+		    ", #" + "@Html.IdFor(x => x.CaseLog.OvertimeHour)" +
+		    ", #" + "@Html.IdFor(x => x.CaseLog.OvertimeMinute)"
+            , function () {
+                $("#" + "@Html.IdFor(x => x.CaseLog.Charge)").attr("checked", "checked");
+            });
+
+    $(document)
+        .on('keyup'
+            , "#" + "@Html.IdFor(x => x.CaseLog.Price)" +
+            ", #" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)" +
+            ", [id^='ExternalInvoices['][id$='].Amount']"
+            , function () {
+                var val = $(this).val();
+                if (val && val !== "0")
+                    $("#" + "@Html.IdFor(x => x.CaseLog.Charge)").attr("checked", "checked");
+            });
+
+    $(document)
+       .on('keyup'
+           , "[id^='ExternalInvoices['][id$='].Name']"
+           , function () {
+               var val = $(this).val();
+               if (val)
+                   $("#" + "@Html.IdFor(x => x.CaseLog.Charge)").attr("checked", "checked");
+           });
 
 	var maxLength = 3000;
 	function checkLength(el) {

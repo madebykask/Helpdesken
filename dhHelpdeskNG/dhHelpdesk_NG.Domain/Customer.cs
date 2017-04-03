@@ -55,6 +55,11 @@
         public int ShowHelpOnExternalPage { get; set; }
         public int UseInternalLogNoteOnExternalPage { get; set; }
 
+        public bool MyCasesInitiator { get; set; }
+        public bool MyCasesRegistrator { get; set; } = true;
+        public bool MyCasesFollower { get; set; }
+        public bool MyCasesRegarding { get; set; }
+
         public virtual Language Language { get; set; }
         public virtual ICollection<Application> Applications { get; set; }
         public virtual ICollection<Case> Cases { get; set; }

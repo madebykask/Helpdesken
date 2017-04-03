@@ -40,8 +40,8 @@
                                     <td>
                                         @Translation.Get("Beskrivning", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td>
-                                        @Html.TextAreaFor(model => model.OrderType.Description, new { style = "width:600px; height:125px;", maxlength = "500" })
+                                    <td class="pb5">
+                                        @Html.TextAreaFor(model => model.OrderType.Description, new { style = "width:600px; height:125px;", maxlength = "1500", @class = "richtexteditor"  })
                                     </td>
                                 </tr>
                                 <tr>
@@ -114,6 +114,15 @@
                             @Html.HiddenFor(model => model.OrderType.Id)
                             @Html.HiddenFor(model => model.OrderType.Customer_Id)
                             @Html.HiddenFor(model => model.OrderType.Parent_OrderType_Id)
+                            @Html.HiddenFor(model => model.OrderType.CaptionDeliveryInfo)
+                            @Html.HiddenFor(model => model.OrderType.CaptionGeneral)
+                            @Html.HiddenFor(model => model.OrderType.CaptionOrder)
+                            @Html.HiddenFor(model => model.OrderType.CaptionOrderInfo)
+                            @Html.HiddenFor(model => model.OrderType.CaptionOrdererInfo)
+                            @Html.HiddenFor(model => model.OrderType.CaptionOther)
+                            @Html.HiddenFor(model => model.OrderType.CaptionProgram)
+                            @Html.HiddenFor(model => model.OrderType.CaptionReceiverInfo)
+                            @Html.HiddenFor(model => model.OrderType.CaptionUserInfo)
                         </div>
                     </div>
                 </div>

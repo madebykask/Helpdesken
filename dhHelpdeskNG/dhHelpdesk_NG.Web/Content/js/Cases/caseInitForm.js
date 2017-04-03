@@ -599,12 +599,21 @@ function CaseInitForm() {
     });
 
     function showInvoice(departmentId) {
-        $('#divInvoice').hide();
-        $.get('/Cases/ShowInvoiceFields/', { 'departmentId': departmentId }, function (data) {
-            if (data == 1) {
-                $('#divInvoice').show();
+        var invoiceSelector = "#divInvoice, #btnCaseCharge, #tblCaseChargeSummary";
+        var externalInvoiceSelector = "#divExternalInvoice, #totalExternalAmountRow, #externalInvoiceGrid";
+        $(invoiceSelector).hide();
+        $(externalInvoiceSelector).hide();
+        $.get("/Cases/GetDepartmentInvoiceParameters/", { departmentId: departmentId }, function (data) {
+            if (data) {
+                _parameters.departmentInvoiceMandatory = data.ChargeMandatory;
+                if (data.Charge) {
+                    $(invoiceSelector).show();
+                }
+                if (data.ShowInvoice) {
+                    $(externalInvoiceSelector).show();
+                }
             }
-        }, 'json');
+        }, "json");
     }
 
     $('#case__Status_Id').change(function () {        
@@ -725,6 +734,10 @@ function CaseInitForm() {
             if (data.NoMailToNotifier == 1) {
                 $('#CaseLog_SendMailAboutCaseToNotifier').prop('checked', false);
                 $('#CaseLog_SendMailAboutCaseToNotifier').attr('disabled', true);
+            }
+            else {
+                $('#CaseLog_SendMailAboutCaseToNotifier').prop('checked', true);
+                $('#CaseLog_SendMailAboutCaseToNotifier').attr('disabled', false);
             }
             // set workinggroup id
             var exists = $('#case__WorkingGroup_Id option[value=' + data.WorkingGroup_Id + ']').length;
@@ -1170,21 +1183,29 @@ function CaseInitForm() {
             $btnSave.on('click', function () {
                 var fd = new FormData();
                 uploadModal.find('form').submit();
-                if (imgFilenameCtrl[0].validity.valid) {
-                    fd.append('name', getFileName(imgFilenameCtrl.val()));
-                    fd.append('id', key);
-                    fd.append('file', blob);
-                    $.ajax({
-                        type: 'POST',
-                        url: submitUrl,
-                        data: fd,
-                        processData: false,
-                        contentType: false
-                    }).done(function (data) {
-                        //console.log(data);
-                        refredhCallback();
-                        uploadModal.modal("hide");
-                    });
+
+                var regexp = new RegExp("[!@#=\$&\?\*]");
+                var match = regexp.exec(imgFilenameCtrl.val());
+                if (match) {
+                    ShowToastMessage(window.parameters.fileNameError, "error");
+                } else {
+                    if (imgFilenameCtrl[0].validity.valid) {
+                        fd.append('name', getFileName(imgFilenameCtrl.val()));
+                        fd.append('id', key);
+                        fd.append('file', blob);
+                        $.ajax({
+                                type: 'POST',
+                                url: submitUrl,
+                                data: fd,
+                                processData: false,
+                                contentType: false
+                            })
+                            .done(function(data) {
+                                //console.log(data);
+                                refredhCallback();
+                                uploadModal.modal("hide");
+                            });
+                    }
                 }
             });
             $btnSave.show();

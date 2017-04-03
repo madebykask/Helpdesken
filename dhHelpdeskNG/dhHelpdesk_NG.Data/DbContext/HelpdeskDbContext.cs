@@ -255,7 +255,9 @@
 
         public DbSet<EmailLog> EmailLogs { get; set; }
 
-        public DbSet<EmploymentType> EmploymentTypes { get; set; }
+		public DbSet<EmailLogAttempt> EmailLogAttempts { get; set; }
+
+		public DbSet<EmploymentType> EmploymentTypes { get; set; }
 
         public DbSet<FaqCategoryEntity> FAQCategories { get; set; }
 
@@ -672,6 +674,7 @@
             modelBuilder.Configurations.Add(new DomainConfiguration());
             modelBuilder.Configurations.Add(new EMailGroupConfiguration());
             modelBuilder.Configurations.Add(new EmailLogConfiguration());
+            modelBuilder.Configurations.Add(new EmailLogAttemptConfiguration());
             modelBuilder.Configurations.Add(new EmploymentTypeConfiguration());
             modelBuilder.Configurations.Add(new FaqCategoryConfiguration());
             modelBuilder.Configurations.Add(new FaqConfiguration());

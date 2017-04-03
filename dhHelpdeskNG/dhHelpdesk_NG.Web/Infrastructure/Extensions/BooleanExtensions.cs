@@ -1,7 +1,7 @@
 ﻿
 namespace DH.Helpdesk.Web.Infrastructure.Extensions
 {
-    public static class BooleanExtansions
+    public static class BooleanExtensions
     {
         public static bool convertStringToBool(this string value)
         {

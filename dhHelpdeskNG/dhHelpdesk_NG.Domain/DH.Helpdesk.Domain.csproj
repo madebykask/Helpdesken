@@ -129,6 +129,7 @@
     <Compile Include="Computers\ComputerType.cs" />
     <Compile Include="CaseSource.cs" />
     <Compile Include="CaseIsAbout.cs" />
+    <Compile Include="EmailLogAttempt.cs" />
     <Compile Include="EmailSendStatus.cs" />
     <Compile Include="Invoice\InvoiceArticleProductAreaEntity.cs" />
     <Compile Include="Invoice\InvoiceStatus.cs" />

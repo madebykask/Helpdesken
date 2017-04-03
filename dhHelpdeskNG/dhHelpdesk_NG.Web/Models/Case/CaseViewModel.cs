@@ -53,19 +53,23 @@
         public int DepartmentFilterFormat { get; set; }
         public int? CountryId { get; set; }
         public int ShowInvoiceFields { get; set; }
-		public bool TimeRequired { get; set; }
+        public int ShowExternalInvoiceFields { get; set; }
+        public bool TimeRequired { get; set; }
 		public CaseLockModel CaseLock { get; set; }
         public int MinWorkingTime { get; set; }        
         public Infrastructure.Enums.AccessMode EditMode { get; set; } //(-1,0,1)
         public bool Disable_SendMailAboutCaseToNotifier { get; set; }
         public int ProductAreaHasChild { get; set; }
         public int? OrderId { get; set; }
+        public int? AccountId { get; set; }
+        public int? AccountActivityId { get; set; }
 
         [Obsolete("Put all fields that you required into this CaseInputViewModel model")]
         public Case case_  { get; set; }
 
         public CaseLog CaseLog { get; set; }
         public SendToDialogModel SendToDialogModel { get; set; }
+        public SendToDialogModel FollowersModel { get; set; }
 
         public CaseMailSetting CaseMailSetting { get; set; }
         public User RegByUser { get; set; }
@@ -209,6 +213,8 @@
 
         public int? MovedFromCustomerId { get; set; }
 
+        public bool IsReturnToCase { get; set; }
+
         public bool IsItChildCase()
         {
             return this.ParentCaseInfo != null && ParentCaseInfo.ParentId != 0;
@@ -246,6 +252,9 @@
         public string FollowerUsers { get; set; }
 
         public JsonCaseIndexViewModel ConnectToParentModel { get; set; }
+        public bool newLog { get; set; }
+        public bool editLog { get; set; }
+
     }
 
     public class CaseIndexViewModel

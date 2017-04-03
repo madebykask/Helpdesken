@@ -3137,6 +3137,9 @@ body.login {
 .mb20 {
     margin-bottom: 20px;
 }
+.mb10 {
+    margin-bottom: 10px;
+}
 .container {
     margin-left: 0.5em;
 }
@@ -3952,4 +3955,21 @@ label.checkbox-label-inline {
 
 .table td.valign-middle {
     vertical-align: middle
+}
+
+.cursor-default {
+    cursor: default;
+}
+
+table .multitext input[type='text'] {
+    width: 190px;
+    margin-right: 5px;
+}
+
+table .multitext i {
+    cursor: pointer;
+}
+
+.pb5 {
+    padding-bottom: 5px !important;
 }

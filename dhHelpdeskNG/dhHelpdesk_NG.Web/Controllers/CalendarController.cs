@@ -40,6 +40,8 @@ using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
         /// </summary>
         private readonly IWorkingGroupService workingGroupService;
         private readonly IUserPermissionsChecker _userPermissionsChecker;
+        private readonly ISettingService _settingService;
+        private readonly IUserService _userService;
         /// <summary>
         /// Initializes a new instance of the <see cref="CalendarController"/> class.
         /// </summary>
@@ -56,12 +58,16 @@ using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
             ICalendarService calendarService,
             IWorkingGroupService workingGroupService,
             IMasterDataService masterDataService,
-            IUserPermissionsChecker userPermissionsChecker)
+            IUserPermissionsChecker userPermissionsChecker,
+            ISettingService settingService,
+            IUserService userService)
             : base(masterDataService)
         {
             this.calendarService = calendarService;
             this.workingGroupService = workingGroupService;
             this._userPermissionsChecker = userPermissionsChecker;
+            this._settingService = settingService;
+            this._userService = userService;
         }
 
         /// <summary>
@@ -74,17 +80,26 @@ using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
         public ActionResult Index()
         {
             var model = this.IndexViewModel();
+            var customerSetting = this._settingService.GetCustomerSettings(SessionFacade.CurrentCustomer.Id);
+            var calendarWGRestriction = customerSetting.CalendarWGRestriction;
 
             var cs = new CalendarSearch();
             if (SessionFacade.CurrentCalenderSearch != null)
             {                
                 cs = SessionFacade.CurrentCalenderSearch;
-                model.Calendars = this.calendarService.SearchAndGenerateCalendar(SessionFacade.CurrentCustomer.Id, cs);
+                if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.UserGroupId == 2)
+                    model.Calendars = this.calendarService.SearchAndGenerateCalendar(SessionFacade.CurrentCustomer.Id, cs, true, calendarWGRestriction);
+                else
+                    model.Calendars = this.calendarService.SearchAndGenerateCalendar(SessionFacade.CurrentCustomer.Id, cs);
                 model.SearchCs = cs.SearchCs;
             }
             else
             {
-                model.Calendars = this.calendarService.GetCalendars(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.CalendarDate).ToList();
+                if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.UserGroupId == 2)
+                    model.Calendars = this.calendarService.GetCalendars(SessionFacade.CurrentCustomer.Id, true, calendarWGRestriction).OrderBy(x => x.CalendarDate).ToList();
+                else
+                    model.Calendars = this.calendarService.GetCalendars(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.CalendarDate).ToList();
+
                 cs.SortBy = "CalendarDate";
                 cs.Ascending = true;
                 SessionFacade.CurrentCalenderSearch = cs;
@@ -105,6 +120,9 @@ using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
         [HttpPost]       
         public ActionResult Index(CalendarSearch searchCalendars)
         {
+            var customerSetting = this._settingService.GetCustomerSettings(SessionFacade.CurrentCustomer.Id);
+            var calendarWGRestriction = customerSetting.CalendarWGRestriction;
+
             var cs = new CalendarSearch();
             if (SessionFacade.CurrentCalenderSearch != null)
             {
@@ -112,8 +130,16 @@ using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
             }
             
             cs.SearchCs = searchCalendars.SearchCs;
-           
-            var c = this.calendarService.SearchAndGenerateCalendar(SessionFacade.CurrentCustomer.Id, cs);
+
+            var restrictsearch = false;
+            if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.UserGroupId == 2)
+            {
+                restrictsearch = true;
+            }
+            else
+                calendarWGRestriction = false;
+
+            var c = this.calendarService.SearchAndGenerateCalendar(SessionFacade.CurrentCustomer.Id, cs, restrictsearch, calendarWGRestriction);
             SessionFacade.CurrentCalenderSearch = cs;
 
             var model = this.IndexViewModel();
@@ -306,7 +332,9 @@ using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
             var wgsSelected = calendar.WGs ?? new List<WorkingGroupEntity>();
             var wgsAvailable = new List<WorkingGroupEntity>();
 
-            var workingGroups = this.workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id);
+            var user = this._userService.GetUser(SessionFacade.CurrentUser.Id);
+
+            var workingGroups = this.workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id, user.Id);
             var wgsSelectedIds = wgsSelected.Select(g => g.Id).ToArray();
 
             var userHasCalenderAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CalendarPermission);
@@ -334,6 +362,7 @@ using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
                 }).ToList(),
             };
             model.UserHasCalendarAdminPermission = userHasCalenderAdminPermission;
+            model.CurrentUser = user;
             return model;
         }
     }

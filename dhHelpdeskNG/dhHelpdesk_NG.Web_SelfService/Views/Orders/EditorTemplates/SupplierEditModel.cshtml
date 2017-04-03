@@ -1,0 +1,13 @@
+﻿@model DH.Helpdesk.SelfService.Models.Orders.OrderEdit.SupplierEditModel
+
+<h4>@Model.Header</h4>
+<div class="container">
+    <div class="row form-horizontal">
+        <div class="col-md-12 dh-col">
+            @Html.EditorFor(m => m.SupplierOrderNumber, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "20" } } })
+            @Html.EditorFor(m => m.SupplierOrderDate, "Fields/Date", new { id = "supplierorderdate_datepicker" })
+            @Html.EditorFor(m => m.SupplierOrderInfo, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "200" } } })
+            
+        </div>
+    </div>
+</div>

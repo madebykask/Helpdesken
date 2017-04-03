@@ -40,18 +40,18 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
 
             var customerId = SessionFacade.CurrentCustomer.Id;
-            var model = GetIndexViewModel(customerId);
+            var model = GetIndexViewModel(customerId, SessionFacade.CurrentLanguageId);
 
             baseFilePath = _masterDataService.GetFilePath(customerId);
 
             return View(model);
         }
 
-        private FAQIndexViewModel GetIndexViewModel(int customerId)
+        private FAQIndexViewModel GetIndexViewModel(int customerId, int languageId)
         {
             var ret = new FAQIndexViewModel();
-            var allFaqCats = _faqService.GetFaqCategories(customerId).OrderBy(c => c.Name).ToList();
-            var allFaqs = _faqService.GetFaqs(customerId);
+            var allFaqCats = _faqService.GetFaqCategories(customerId, languageId).OrderBy(c => c.Name).ToList();
+            var allFaqs = _faqService.GetFaqs(customerId, languageId, false);
 
             var parentsCategories = allFaqCats.Where(c => !c.Parent_Id.HasValue).ToList();
 

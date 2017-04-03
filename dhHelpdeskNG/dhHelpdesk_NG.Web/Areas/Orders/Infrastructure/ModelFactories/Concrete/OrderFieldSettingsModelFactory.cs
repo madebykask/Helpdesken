@@ -110,7 +110,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
         private static OrdererFieldSettingsModel CreateOrdererSettings(OrdererFieldSettings settings)
         {
             return new OrdererFieldSettingsModel(
-                        CreateTextFieldSettingModel(settings.OrdererId),
+                        CreateMultiTextFieldSettingModel(settings.OrdererId),
                         CreateTextFieldSettingModel(settings.OrdererName),
                         CreateTextFieldSettingModel(settings.OrdererLocation),
                         CreateTextFieldSettingModel(settings.OrdererEmail),
@@ -289,6 +289,20 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                         settings.FieldHelp);
         }
 
+        private static MultiTextFieldSettingsModel CreateMultiTextFieldSettingModel(MultiTextFieldSettings settings)
+        {
+            return new MultiTextFieldSettingsModel(
+                        settings.Show,
+                        settings.ShowInList,
+                        settings.ShowExternal,
+                        settings.Label,
+                        settings.Required,
+                        settings.EmailIdentifier,
+                        settings.DefaultValue,
+                        settings.FieldHelp,
+                        settings.MultiValue);
+        }
+
         #endregion
 
         #region Create model for update
@@ -338,7 +352,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
         private static OrdererFieldSettings CreateOrdererForUpdate(OrdererFieldSettingsModel settings)
         {
             return new OrdererFieldSettings(
-                        CreateTextFieldSettingForUpdate(settings.OrdererId),
+                        CreateMultiTextFieldSettingForUpdate(settings.OrdererId),
                         CreateTextFieldSettingForUpdate(settings.OrdererName),
                         CreateTextFieldSettingForUpdate(settings.OrdererLocation),
                         CreateTextFieldSettingForUpdate(settings.OrdererEmail),
@@ -510,6 +524,22 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                         settings.EmailIdentifier,
                         settings.DefaultValue,
                         settings.Help);
+        }
+
+        
+
+        private static MultiTextFieldSettings CreateMultiTextFieldSettingForUpdate(MultiTextFieldSettingsModel settings)
+        {
+            return MultiTextFieldSettings.CreateUpdated(
+                        settings.Show,
+                        settings.ShowInList,
+                        settings.ShowExternal,
+                        settings.Label,
+                        settings.Required,
+                        settings.EmailIdentifier,
+                        settings.DefaultValue,
+                        settings.Help,
+                        settings.IsMultiple);
         }
 
         #endregion

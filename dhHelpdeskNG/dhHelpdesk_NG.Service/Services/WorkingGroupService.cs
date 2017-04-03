@@ -28,7 +28,7 @@
 
         int? GetDefaultId(int customerId, int userId);
 
-        List<GroupWithEmails> GetWorkingGroupsWithActiveEmails(int customerId);
+        List<GroupWithEmails> GetWorkingGroupsWithActiveEmails(int customerId, bool includeAdmins = true);
 
         IList<UserWorkingGroup> GetUsersForWorkingGroup(int workingGroupId);
 
@@ -115,7 +115,7 @@
         public IList<WorkingGroupEntity> GetWorkingGroups(int customerId, int userId, bool isTakeOnlyActive = true)
         {
             var userWorkingGroups = this.userWorkingGroupRepository.GetAll()
-                                                                   .Where(uw=>  uw.User_Id == userId)
+                                                                   .Where(uw=>  uw.User_Id == userId && uw.UserRole == 2)
                                                                    .Select(uw => uw.WorkingGroup_Id);
             return  this.workingGroupRepository
                     .GetMany(x => x.Customer_Id == customerId && (!isTakeOnlyActive || (isTakeOnlyActive && x.IsActive == 1)))
@@ -166,13 +166,13 @@
             return this.workingGroupRepository.GetDefaultWorkingGroupId(customerId, userId);  
         }
 
-        public List<GroupWithEmails> GetWorkingGroupsWithActiveEmails(int customerId)
+        public List<GroupWithEmails> GetWorkingGroupsWithActiveEmails(int customerId, bool includeAdmins = true)
         {
             List<GroupWithEmails> workingGroupsWithEmails;
 
             var workingGroupOverviews = this.workingGroupRepository.FindActiveIdAndNameOverviews(customerId);
             var workingGroupIds = workingGroupOverviews.Select(g => g.Id).ToList();
-            var workingGroupsUserIds = this.userWorkingGroupRepository.FindWorkingGroupsUserIds(workingGroupIds);
+            var workingGroupsUserIds = this.userWorkingGroupRepository.FindWorkingGroupsUserIds(workingGroupIds, includeAdmins);
             var userIdsSet = new HashSet<int>();
             foreach (var id in workingGroupsUserIds.SelectMany(g => g.UserIds))
             {

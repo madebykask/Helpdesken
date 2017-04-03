@@ -20,6 +20,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private readonly ICustomerService _customerService;
         private readonly ILanguageService _languageService;
         private readonly IHelpdeskCache _cache;
+        private readonly ISettingService _settingService;
 
         public CustomerCaseFieldSettingsController(
             ICaseFieldSettingService caseFieldSettingService,
@@ -27,7 +28,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             ICustomerService customerService,
             ILanguageService languageService,
             IMasterDataService masterDataService,
-            IHelpdeskCache cache)
+            IHelpdeskCache cache,
+            ISettingService settingService)
             : base(masterDataService)
         {
             this._caseFieldSettingService = caseFieldSettingService;
@@ -35,6 +37,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             this._customerService = customerService;
             this._languageService = languageService;
             _cache = cache;
+            _settingService = settingService;
         }
 
         [CustomAuthorize(Roles = "3,4")]
@@ -131,6 +134,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 Customer = customer,
                 Language = language,
                 ListCaseForLabel = this._caseFieldSettingService.ListToShowOnCasePage(customer.Id, language.Id),
+                Setting = this._settingService.GetCustomerSetting(customer.Id),
                 Customers = this._customerService.GetAllCustomers().Select(x => new SelectListItem
                 {
                     Text = x.Name,

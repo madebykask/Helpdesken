@@ -13,5 +13,6 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Models
 		public DateTime? DateTo { get; set; }
 		public InvoiceStatus? Status { get; set; }
 		public int? CaseId { get; set; }
-	}
+        public bool DepartmentCharge { get; set; }
+    }
 }

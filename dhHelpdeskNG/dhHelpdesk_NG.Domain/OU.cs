@@ -22,7 +22,8 @@
         public string Code { get; set; }
         public string SearchKey { get; set; }
         //public Guid? OUGUID { get; set; }
-        
+        //public DateTime? SynchronizedDate { get; set; }
+
         public virtual Department Department { get; set; }
         public virtual OU Parent { get; set; }
         public virtual ICollection<ComputerUserGroup> ComputerUserGroups { get; set; }

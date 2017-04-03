@@ -1,0 +1,39 @@
+﻿@model DH.Helpdesk.SelfService.Models.Orders.FieldModels.AttachedFilesModel
+
+@{
+    var filesContainerId = Model.Area.ToString().ToLower() + "_files_container";
+}
+<div id="@filesContainerId">
+    <table class="table table-striped">
+        @foreach (var file in Model.Files)
+        {
+            if (string.IsNullOrEmpty(file))
+            {
+                continue;
+            }
+            <thead>
+            <tr>
+                <th>
+                    @Translation.Get("Filnamn")
+                </th>
+
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <i class="glyphicon glyphicon-file"></i>
+                    @Html.ActionLink(file, "DownloadFile", new {entityId = Model.OrderId, subtopic = Model.Area, fileName = file})
+                </td>
+                <td>
+                    <a onclick="deleteFile('@Model.Area', '@file', '@filesContainerId')" class="btn btn-default btn-sm" title="@Translation.Get("Ta bort")">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        }
+    </table>
+</div>
+

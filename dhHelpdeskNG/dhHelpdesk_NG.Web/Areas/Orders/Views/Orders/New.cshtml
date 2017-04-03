@@ -43,11 +43,20 @@
         </li>        
     </ul>        
 }
-
 @section Content
 {
-    @using (Html.BeginForm("New", "Orders", FormMethod.Post, new {id = "edit_form"}))
+    @using (Html.BeginForm("New", "Orders", FormMethod.Post, new { id = "edit_form" }))
     {
+        if (!string.IsNullOrEmpty(Model.OrderTypeDescription))
+        {
+            <label class="alert alert-info cursor-default mb10">@Html.Raw(Model.OrderTypeDescription)</label>
+        }
+        if (Model.OrderTypeDocument.Item1.HasValue)
+        {
+            <a href="@Url.Action("DownloadDocument", new {documentId = Model.OrderTypeDocument.Item1.Value})" class="btn mb10" title="@Model.OrderTypeDocument.Item2">
+                <span class="icon-file"></span>
+            </a>
+        }
         @Html.EditorFor(m => m)
     }
 }
@@ -70,9 +79,12 @@
                     {
                         @Html.Raw(string.Format("statuses: {0},", Html.SerializeObjectToJson(Model.Statuses)))
                     }
-                    searchDepartmentsByRegionIdUrl: "@Url.ApiOrdersAction(WebApiOrdersUrlName.Orders.SearchDepartmentsByRegionId, WebApiOrdersUrlName.Orders.Controller)"
+                    searchDepartmentsByRegionIdUrl: "@Url.ApiOrdersAction(WebApiOrdersUrlName.Orders.SearchDepartmentsByRegionId, WebApiOrdersUrlName.Orders.Controller)",
+                    valuesSplitter: "&,",
+                    pairSplitter: "&;"
                 });
             pageObject.init();
+            window.scrollTo(0, 0);
         });
     </script>    
 }

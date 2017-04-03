@@ -1,0 +1,11 @@
+﻿@model DH.Helpdesk.SelfService.Models.Orders.OrderEdit.ProgramEditModel
+
+<h4>@Model.Header</h4>
+<div class="container">
+    <div class="row form-horizontal">
+        <div class="col-md-12 dh-col">
+            @Html.EditorFor(m => m.Programs, "Fields/FlagsList", new { Source = Model.AllPrograms })
+            @Html.EditorFor(m => m.InfoProduct, "Fields/WideText", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "500" } } })
+        </div>
+    </div>
+</div>

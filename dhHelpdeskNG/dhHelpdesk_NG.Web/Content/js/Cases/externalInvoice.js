@@ -17,7 +17,7 @@ ExternalInvoice.prototype = {
         });
         
         $('#externalInvoices [id^=btnDeleteExternalInvoice]').on("click", function (e) {
-            self.deleteRow(e);
+            self.deleteRow(this);
         });
 
         //set validation for loaded rows
@@ -49,7 +49,7 @@ ExternalInvoice.prototype = {
 
         $('#externalInvoices > tbody').append(row);
         $('[id^=btnDeleteExternalInvoice]', row).on("click", function (e) {
-            self.deleteRow(e);
+            self.deleteRow(this);
         });
         self.$btnAdd.appendTo($('td:nth-child(3)', row));
         self._addValidation(lastRow, true);
@@ -60,7 +60,7 @@ ExternalInvoice.prototype = {
         "use strict";
         var self = this;
 
-        var btn = $(this);
+        var btn = $(e);
         var row = btn.parents(':eq(1)');
         var rowId = $('[id^=btnDeleteExternalInvoice]', row).data('rowid');
         var isLast = $('#btnAddExternalInvoice', row).length === 1;

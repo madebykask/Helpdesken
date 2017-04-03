@@ -10,12 +10,12 @@
         @Html.EditorFor(m => m.EMailTypeId, "Fields/List", new { Source = Model.EmailTypes })
         @Html.EditorFor(m => m.HomeDirectory, "Fields/Flag")
         @Html.EditorFor(m => m.Profile, "Fields/Flag")
-        @Html.EditorFor(m => m.InventoryNumber, "Fields/Text")
+        @Html.EditorFor(m => m.InventoryNumber, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "20" } } })
         @Html.EditorFor(m => m.AccountTypeId, "Fields/List", new { Source = Model.AccountTypes })
         @Html.EditorFor(m => m.AccountTypeId2, "Fields/FlagsList", new { Source = Model.AccountTypes2 })
         @Html.EditorFor(m => m.AccountTypeId3, "Fields/List", new { Source = Model.AccountTypes3 })
         @Html.EditorFor(m => m.AccountTypeId4, "Fields/List", new { Source = Model.AccountTypes4 })
         @Html.EditorFor(m => m.AccountTypeId5, "Fields/List", new { Source = Model.AccountTypes5 })
-        @Html.EditorFor(m => m.Info, "Fields/WideText")
+        @Html.EditorFor(m => m.Info, "Fields/WideText", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "500" } } })
     </tbody>
 </table>
