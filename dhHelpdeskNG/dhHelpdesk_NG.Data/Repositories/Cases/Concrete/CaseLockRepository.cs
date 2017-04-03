@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
 
@@ -64,6 +65,26 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                 this.DataContext.CaseLock.RemoveRange(recordsForCleaning);
                 this.Commit();
             }
+        }
+
+        public IDictionary<int, CaseLock> GetCasesLock(int[] caseIds)
+        {
+            var resultMap = new Dictionary<int, CaseLock>();
+
+            var items =
+                Table.Include(x => x.User)
+                    .Where(l => caseIds.Contains(l.Case_Id)).ToList();
+
+            foreach (var caseLockEntity in items)
+            {
+                var item = this._caseLockToBusinessModelMapper.Map(caseLockEntity);
+                if (!resultMap.ContainsKey(caseLockEntity.Case_Id))
+                {
+                    resultMap.Add(caseLockEntity.Case_Id, item);
+                }
+            }
+
+            return resultMap;
         }
 
         public CaseLock GetCaseLockByCaseId(int caseId)

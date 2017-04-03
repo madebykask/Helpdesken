@@ -20,6 +20,8 @@
 
         CaseLock GetCaseLockByCaseId(int caseId);
 
+        IDictionary<int, CaseLock> GetCasesLocks(int[] caseIds);
+
         void CaseLockCleanUp();
 
         void LockCase(CaseLock caseLock);

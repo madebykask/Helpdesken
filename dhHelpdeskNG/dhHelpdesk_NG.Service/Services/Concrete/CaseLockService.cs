@@ -42,6 +42,11 @@
             return this._caseLockRepository.GetCaseLockByCaseId(caseId);
         }
 
+        public IDictionary<int, CaseLock> GetCasesLocks(int[] caseIds)
+        {
+            return _caseLockRepository.GetCasesLock(caseIds);
+        }
+
         public void CaseLockCleanUp()
         {
             this._caseLockRepository.CaseLockCleanUp();

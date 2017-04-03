@@ -798,33 +798,8 @@ namespace DH.Helpdesk.Web.Controllers
 			var customerSettings = _settingService.GetCustomerSetting(f.CustomerId);
 
 			var outputFormatter = new OutputFormatter(customerSettings.IsUserFirstLastNameRepresentation == 1, userTimeZone);
-			var data = new List<Dictionary<string, object>>();
-			foreach (var searchRow in m.cases)
-			{
-				var jsRow = new Dictionary<string, object>
-				{
-					{"case_id", searchRow.Id},
-					{"caseIconTitle", searchRow.CaseIcon.CaseIconTitle()},
-					{"caseIconUrl", string.Format("/Content/icons/{0}", searchRow.CaseIcon.CaseIconSrc())},
-					{"isUnread", searchRow.IsUnread},
-					{"isUrgent", searchRow.IsUrgent},
-                    {"isClosed", searchRow.IsUrgent}
-                };
-				var caseLockModel = GetCaseLockModel(searchRow.Id, SessionFacade.CurrentUser.Id, false);
-				if (caseLockModel.IsLocked)
-				{
-					jsRow.Add("isCaseLocked", caseLockModel.IsLocked);
-					jsRow.Add("caseLockedIconTitle", string.Format("{0} {1} ({2})", caseLockModel.User.FirstName, caseLockModel.User.SurName, caseLockModel.User.UserID));
-					jsRow.Add("caseLockedIconUrl", string.Format("/Content/icons/{0}", CaseIcon.Locked.CaseIconSrc()));
-				}
-                foreach (var col in gridSettings.columnDefs)
-				{
-					var searchCol = searchRow.Columns.FirstOrDefault(it => it.Key == col.name);
-					jsRow.Add(col.name, searchCol != null ? outputFormatter.FormatField(searchCol) : string.Empty);
-				}
-
-				data.Add(jsRow);
-			}
+            
+            var data = BuildSearchResultData(m.cases, gridSettings, outputFormatter);
 
 			var remainingView = string.Empty;
             string statisticsView = null;
@@ -865,8 +840,48 @@ namespace DH.Helpdesk.Web.Controllers
             });
 		}
 
+        private IList<Dictionary<string, object>> BuildSearchResultData(IList<CaseSearchResult> caseSearchResults, GridSettingsModel gridSettings, OutputFormatter outputFormatter)
+        {
+            var data = new List<Dictionary<string, object>>();
+            var ids = caseSearchResults.Select(o => o.Id).ToArray();
+            var casesLocks = _caseLockService.GetCasesLocks(ids);
 
-		#endregion
+            foreach (var searchRow in caseSearchResults)
+            {
+                var caseId = searchRow.Id;
+
+                var jsRow = new Dictionary<string, object>
+                {
+                    {"case_id", searchRow.Id},
+                    {"caseIconTitle", searchRow.CaseIcon.CaseIconTitle()},
+                    {"caseIconUrl", $"/Content/icons/{searchRow.CaseIcon.CaseIconSrc()}"},
+                    {"isUnread", searchRow.IsUnread},
+                    {"isUrgent", searchRow.IsUrgent},
+                    {"isClosed", searchRow.IsUrgent}
+                };
+
+                var caseLock = casesLocks.ContainsKey(caseId) ? casesLocks[caseId] : null;
+                var caseLockModel = GetCaseLockModel(caseLock, searchRow.Id, SessionFacade.CurrentUser.Id, false);
+                if (caseLockModel.IsLocked)
+                {
+                    jsRow.Add("isCaseLocked", caseLockModel.IsLocked);
+                    jsRow.Add("caseLockedIconTitle", $"{caseLockModel.User.FirstName} {caseLockModel.User.SurName} ({caseLockModel.User.UserID})");
+                    jsRow.Add("caseLockedIconUrl", $"/Content/icons/{CaseIcon.Locked.CaseIconSrc()}");
+                }
+                
+                foreach (var col in gridSettings.columnDefs)
+                {
+                    var searchCol = searchRow.Columns.FirstOrDefault(it => it.Key == col.name);
+                    jsRow.Add(col.name, searchCol != null ? outputFormatter.FormatField(searchCol) : string.Empty);
+                }
+
+                data.Add(jsRow);
+            }
+
+            return data;
+        }
+
+        #endregion
 
 		#region --Favorite--
 
@@ -4931,6 +4946,11 @@ namespace DH.Helpdesk.Web.Controllers
         private CaseLockModel GetCaseLockModel(int caseId, int userId, bool isNeedLock = true)
         {
             var caseLock = this._caseLockService.GetCaseLockByCaseId(caseId);
+            return GetCaseLockModel(caseLock, caseId, userId, isNeedLock);
+        }
+
+        private CaseLockModel GetCaseLockModel(CaseLock caseLock, int caseId, int userId, bool isNeedLock = true)
+        {
             var caseIsLocked = true;
             var gs = this._globalSettingService.GetGlobalSettings().FirstOrDefault();
             var extendedSec = (gs != null && gs.CaseLockExtendTime > 0 ? gs.CaseLockExtendTime : this._defaultExtendCaseLockTime);
@@ -4938,6 +4958,7 @@ namespace DH.Helpdesk.Web.Controllers
             var bufferTime = (gs != null && gs.CaseLockBufferTime > 0 ? gs.CaseLockBufferTime : this._defaultCaseLockBufferTime);
             var caseLockGUID = string.Empty;
             var nowTime = DateTime.Now;
+
             if (caseLock == null)
             {
                 // Case is not locked 

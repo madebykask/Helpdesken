@@ -19,6 +19,8 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
 
         CaseLock GetCaseLockByCaseId(int caseId);
 
+        IDictionary<int, CaseLock> GetCasesLock(int[] caseIds);
+
         void CaseLockCleanUp();
         
         void LockCase(CaseLock caseLock);
