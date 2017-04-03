@@ -908,11 +908,22 @@ namespace DH.Helpdesk.Dal.Repositories
 			tables.Add("left outer join tblUsers as tblUsers3 on tblCase.CaseResponsibleUser_Id = tblUsers3.Id ");
 			tables.Add("left outer join tblProblem on tblCase.Problem_Id = tblProblem.Id ");
 			tables.Add("left outer join tblUsers as tblUsers4 on tblProblem.ResponsibleUser_Id = tblUsers4.Id ");
-			if (caseSettings.ContainsKey(GlobalEnums.TranslationCaseFields.CausingPart.ToString()))
+
+            //customer user comes from the same department as the case department. Should exist (check where clause)
+            tables.Add("LEFT OUTER JOIN tblDepartmentUser depUser1 ON depUser1.Department_Id = tblCase.Department_Id AND depUser1.[User_Id] = tblCustomerUser.[User_Id]");
+
+            //there's no such customerUser that comes from the same department as caseCustomer department - deUser2 should not exist (check where clause).
+            tables.Add("LEFT OUTER JOIN tblDepartment caseCustomerDepartment ON caseCustomerDepartment.Customer_Id = tblCase.Customer_Id");
+            tables.Add("LEFT OUTER JOIN tblDepartmentUser depUser2 ON caseCustomerDepartment.Id = depUser2.Department_Id AND depUser2.[User_Id] = tblCustomerUser.[User_Id]");
+
+
+            if (caseSettings.ContainsKey(GlobalEnums.TranslationCaseFields.CausingPart.ToString()))
 			{
 				tables.Add("left outer join tblCausingPart on (tblCase.CausingPartId = tblCausingPart.Id)");
 			}
+
 			#endregion
+
 			return string.Join(" ", tables);
 		}
 
@@ -1331,15 +1342,19 @@ namespace DH.Helpdesk.Dal.Repositories
 
 			sb.Append(" and (tblCustomerUser.[User_Id] = " + f.UserId + ")");
 
-			// användaren får bara se avdelningar som den har behörighet till
-			sb.Append(" and (tblCase.Department_Id In (select Department_Id from tblDepartmentUser where [User_Id] = " + userId + ")");
-			sb.Append(" or not exists (select du.Department_Id from tblDepartmentUser du " +
-												"Inner join tblDepartment d on (d.Id = du.Department_Id) " +
-									  "where (du.[User_Id] = " + userId + ") and d.customer_id = " + f.CustomerId + ")");
-			sb.Append(") ");
+            /////////////////////////////////////////////////////////////////
+            // anvandaren far bara se avdelningar som den har behorighet till
+            // note: commented out due to slow perfomance and replaced by left joins and checks for null below
+            //sb.Append(" and (tblCase.Department_Id In (select Department_Id from tblDepartmentUser where [User_Id] = " + userId + ")");
+            //sb.Append(" or not exists (select du.Department_Id from tblDepartmentUser du " +
+            //                                    "Inner join tblDepartment d on (d.Id = du.Department_Id) " +
+            //                          "where (du.[User_Id] = " + userId + ") and d.customer_id = " + f.CustomerId + ")");
+            //                          sb.Append(") ");
+            sb.Append(" AND (depUser1.User_Id is NOT NULL OR depUser2.User_Id IS NULL)");
+            /////////////////////////////////////////////////////////////////
 
-			// finns kryssruta på användaren att den bara får se sina egna ärenden
-			var restrictedCasePermission = customerUserSetting.User.RestrictedCasePermission;
+            // finns kryssruta på användaren att den bara får se sina egna ärenden
+            var restrictedCasePermission = customerUserSetting.User.RestrictedCasePermission;
 			if (restrictedCasePermission == 1)
 			{
 				if (userGroupId == 2)
