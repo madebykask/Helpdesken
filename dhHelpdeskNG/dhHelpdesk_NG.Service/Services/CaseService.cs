@@ -1353,7 +1353,7 @@ namespace DH.Helpdesk.Services.Services
             else
             {
                 #region Send template email if priority has value and Internal or External log is filled
-                if (newCase.Priority != null && log != null && (!string.IsNullOrEmpty(log.TextInternal) || !string.IsNullOrEmpty(log.TextInternal)))
+                if (newCase.Priority != null && log != null && (!string.IsNullOrEmpty(log.TextExternal) || !string.IsNullOrEmpty(log.TextInternal)))
                 {
                     if (!string.IsNullOrWhiteSpace(newCase.Priority.EMailList))
                     {
