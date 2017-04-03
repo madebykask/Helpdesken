@@ -842,28 +842,28 @@
         </ul>
     </div>
 </div>
-<div id="case_urgent_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabelCase" aria-hidden="true" style="display: none">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h5> @Translation.Get("Kritisk incident")!</h5>
-            </div>
-            <div class="modal-body padding20">
-                <label id="urgentInfoMessage"> --- </label>
-                <br/>
-                <br/>
-                <label><input type="checkbox" id="urgentAcceptChbx"/> @Translation.Get("Jag accepterar att det är kritiskt och kan komma att medföra extra kostnader")</label>
-            </div>
-            <div class="modal-body padding20 case-dropdown-area">
-                <div class="case-followers-button-done">
-                    <button type="button" id="btnChange" class="btn btn-default" data-dismiss="modal">@Translation.Get("Ändra brådskande/påverkan")</button>
-                    <button type="button" id="btnAccept" class="btn btn-default" disabled="disabled">@Translation.Get("Acceptera kritisk incident")</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+@*<div id="case_urgent_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabelCase" aria-hidden="true" style="display: none">*@
+@*    <div class="modal-dialog">*@
+@*        <div class="modal-content">*@
+@*            <div class="modal-header">*@
+@*                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>*@
+@*                <h5> @Translation.Get("Kritisk incident")!</h5>*@
+@*            </div>*@
+@*            <div class="modal-body padding20">*@
+@*                <label id="urgentInfoMessage"> --- </label>*@
+@*                <br/>*@
+@*                <br/>*@
+@*                <label><input type="checkbox" id="urgentAcceptChbx"/> @Translation.Get("Jag accepterar att det är kritiskt och kan komma att medföra extra kostnader")</label>*@
+@*            </div>*@
+@*            <div class="modal-body padding20 case-dropdown-area">*@
+@*                <div class="case-followers-button-done">*@
+@*                    <button type="button" id="btnChange" class="btn btn-default" data-dismiss="modal">@Translation.Get("Ändra brådskande/påverkan")</button>*@
+@*                    <button type="button" id="btnAccept" class="btn btn-default" disabled="disabled">@Translation.Get("Acceptera kritisk incident")</button>*@
+@*                </div>*@
+@*            </div>*@
+@*        </div>*@
+@*    </div>*@
+@*</div>*@
 @functions    {
 
     private MvcHtmlString CaseFieldCaption(GlobalEnums.TranslationCaseFields field, bool withManadatory = true)
@@ -889,7 +889,7 @@
 
     function SaveNewCase() {
         var productAreaValidation = isProductAreaValid();
-        var formValidation = isFormValid();
+        var formValidation =  isFormValid();
 
         if (!productAreaValidation || !formValidation) {
             if (!productAreaValidation) {
@@ -901,41 +901,60 @@
             return false;
         }
 
-        var urgentId = $("#NewCase_Urgency_Id").val();
-        var impactId = $("#NewCase_Impact_Id").val();
-        if (urgentId && impactId) {
-            $.ajax({
-                url: '@Url.Content("~/Case/UrgentInfoMessage")',
-                type: "POST",
-                data: { urgentId: urgentId, impactId: impactId },
-                dataType: "json",
-                success: function(result) {
-                    if (result) {
-                        $("#urgentInfoMessage").html(result);
-                    }
-                }
-            });
-            var $src = $(this);
-            var $target = $("#case_urgent_popup");
-            $target.attr("data-src", $src.attr("data-src"));
-            $target.modal("show");
-
-            $target.on('hidden.bs.modal', function (e) {
-                $('#urgentAcceptChbx').attr('checked', false);
-                $("#btnAccept").attr("disabled", true);
-            });
-
-            $('#urgentAcceptChbx').change(function() {
-                    $("#btnAccept").attr("disabled", !this.checked);
-                });
-
-            $("#btnAccept").on("click", function() {
-                CallSaving();
-                    });
-        } else {
-            CallSaving();
-        }
+        $mainForm.attr("action", '@Url.Content("~/Case/NewCase")');
+        $('.disabled').removeAttr('disabled');
+        $mainForm.submit();
     }
+
+//    function SaveNewCase() {
+//        var productAreaValidation = isProductAreaValid();
+//        var formValidation = isFormValid();
+//
+//        if (!productAreaValidation || !formValidation) {
+//            if (!productAreaValidation) {
+//                document.getElementById('divProductArea').classList.add("error");
+//                ShowToastMessage(productAreaErrMessage, "error", false);
+//            } else {
+//                ShowToastMessage('@Translation.Get("One or more mandatory fields were not filled in, please check the case.", Enums.TranslationSource.TextTranslation)', "error", false);
+//            }
+//            return false;
+//        }
+//
+//        var urgentId = $("#NewCase_Urgency_Id").val();
+//        var impactId = $("#NewCase_Impact_Id").val();
+//        if (urgentId && impactId) {
+//            $.ajax({
+//                url: '@Url.Content("~/Case/UrgentInfoMessage")',
+//                type: "POST",
+//                data: { urgentId: urgentId, impactId: impactId },
+//                dataType: "json",
+//                success: function(result) {
+//                    if (result) {
+//                        $("#urgentInfoMessage").html(result);
+//                    }
+//                }
+//            });
+//            var $src = $(this);
+//            var $target = $("#case_urgent_popup");
+//            $target.attr("data-src", $src.attr("data-src"));
+//            $target.modal("show");
+//
+//            $target.on('hidden.bs.modal', function (e) {
+//                $('#urgentAcceptChbx').attr('checked', false);
+//                $("#btnAccept").attr("disabled", true);
+//            });
+//
+//            $('#urgentAcceptChbx').change(function() {
+//                    $("#btnAccept").attr("disabled", !this.checked);
+//                });
+//
+//            $("#btnAccept").on("click", function() {
+//                CallSaving();
+//                    });
+//        } else {
+//            CallSaving();
+//        }
+//    }
 
     function CallSaving() {
         $mainForm.attr("action", '@Url.Content("~/Case/NewCase")');
