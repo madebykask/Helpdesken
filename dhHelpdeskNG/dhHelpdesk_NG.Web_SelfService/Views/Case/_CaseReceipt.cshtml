@@ -66,10 +66,16 @@
                         <div class="col-md-3">
                             @Model.CasePreview.PersonsName
                         </div>
-                        <label class="col-md-6">
+                        <label class="col-md-1">
                             @if (Model.FollowerUsers != "")
                             {
-                                @Translation.Get("Följare") @Model.FollowerUsers
+                               @Translation.Get("Följare")
+                            }
+                        </label>
+                        <label class="col-md-5">
+                            @if (Model.FollowerUsers != "")
+                            {
+                               @Model.FollowerUsers 
                             }
                         </label>
                     </div>
