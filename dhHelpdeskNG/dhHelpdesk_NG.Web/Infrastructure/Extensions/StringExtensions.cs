@@ -319,6 +319,9 @@
                 case 12:
                     ret = Translation.Get("Skicka mail när planerat åtgärdsdatum inträffar", Enums.TranslationSource.TextTranslation);
                     break;
+                case 13:
+                    ret = Translation.Get("Prioritet", Enums.TranslationSource.TextTranslation);
+                    break;
                 default:
                     if (value > 99 && customMailTemplates.Any())
                     {

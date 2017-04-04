@@ -52,6 +52,7 @@
 
         private readonly ILanguageService languageService;
 
+
         public HomeController(
             IBulletinBoardService bulletinBoardService,
             ICalendarService calendarService,
@@ -167,8 +168,11 @@
             }
 
             var customersSettings = this.userService.GetUserCustomersSettings(SessionFacade.CurrentUser.Id);
-            var currentCustomerSettings = customersSettings.FirstOrDefault(s => s.CustomerId == this.workContext.Customer.CustomerId);            
-            
+            var currentCustomerSettings = customersSettings.FirstOrDefault(s => s.CustomerId == this.workContext.Customer.CustomerId);
+            var bulletinBoardWGRestriction = currentCustomerSettings.BulletinBoardWGRestriction;
+            var calendarWGRestriction = currentCustomerSettings.CalendarWGRestriction;
+            var currentUser = this.userService.GetUser(SessionFacade.CurrentUser.Id);
+
             if (string.IsNullOrEmpty(SessionFacade.CurrentLanguageCode))
             {
                 var curLanguageId = 0;
@@ -205,10 +209,16 @@
                 switch ((Module)module.Module_Id)
                 {
                     case Module.BulletinBoard:
-                        model.BulletinBoardOverviews = this.bulletinBoardService.GetBulletinBoardOverviews(customerIdsAll, module.NumberOfRows, true);
+                        if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.UserGroupId == 2)
+                            model.BulletinBoardOverviews = this.bulletinBoardService.GetBulletinBoardOverviews(customerIdsAll, module.NumberOfRows, true, bulletinBoardWGRestriction);
+                        else
+                            model.BulletinBoardOverviews = this.bulletinBoardService.GetBulletinBoardOverviews(customerIdsAll, module.NumberOfRows, true);
                         break;
                     case Module.Calendar:
-                        model.CalendarOverviews = this.calendarService.GetCalendarOverviews(customerIdsAll, module.NumberOfRows, true, true);
+                        if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.UserGroupId == 2)
+                            model.CalendarOverviews = this.calendarService.GetCalendarOverviews(customerIdsAll, module.NumberOfRows, true, true, true, calendarWGRestriction);
+                        else
+                            model.CalendarOverviews = this.calendarService.GetCalendarOverviews(customerIdsAll, module.NumberOfRows, true, true);
                         break;
                     case Module.Customers:
                         var customerCases = this.caseService.GetCustomersCases(customersIds, this.workContext.User.UserId);                        

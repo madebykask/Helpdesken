@@ -17,12 +17,12 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
 
         public List<CaseExtraFollower> GetCaseExtraFollowers(int caseId)
         {
-            return GetAll().Where(x => x.Case_Id == caseId).ToList();
+            return Table.Where(x => x.Case_Id == caseId).ToList();
         }
 
         public List<CaseExtraFollower> GetCaseExtraFollowersByCaseAndFollower(int caseId, List<string> extraFollowers)
         {
-            return GetAll().Where(x => x.Case_Id == caseId && extraFollowers.Contains(x.Follower)).ToList();
+            return Table.Where(x => x.Case_Id == caseId && extraFollowers.Contains(x.Follower)).ToList();
         }
 
         public void SaveCaseExtraFollowers(int caseId, List<CaseExtraFollower> allFollowers)

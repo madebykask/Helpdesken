@@ -5717,5 +5717,46 @@ If not exists (select * from tblTextTranslation where text_id = 1799 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1799, 2, 'No Uploaded Files')
 GO
 
+If not exists (select * from tbltext where id = 1801)
+	insert into tbltext (id, TextString) VALUES (1801, 'Filnamn är inte giltigt. Special tecken (!@#=$&?*) är inte tillåtna')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1801 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1801, 2, 'Filename is not valid. Special character (!@#=$&?*) is not allowed')
+GO
+
+If not exists (select * from tbltext where id = 1802)
+	insert into tbltext (id, TextString) VALUES (1802, 'Begränsa innehåll för användare med endast läsrättighet till driftgruppen')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1802 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1802, 2, 'Restrict content for users with only read permissions for working group')
+GO
+
+If not exists (select * from tbltext where id = 1803)
+	insert into tbltext (id, TextString) VALUES (1803, 'Ingen data är tillgänglig')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1803 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1803, 2, 'No data available in table')
+GO
+
+If not exists (select * from tbltext where id = 1804)
+	insert into tbltext (id, TextString) VALUES (1804, 'Visa {0} av {1} poster')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1804 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1804, 2, 'Show {0} of {1} records')
+GO
+
+UPDATE tblText Set TextString = 'Om e-postmall väljs så skickas meddelande till ovanstående adresser när notering skrivs' WHERE Id=63;
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'If e-mail template is selected, a message is sent to the addresses above when log note is written' WHERE Text_Id=63 AND Language_Id=2;
+GO
+
+If not exists (select * from tbltext where id = 1805)
+	insert into tbltext (id, TextString) VALUES (1805, 'Begränsa rättigheter till')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1805 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1805, 2, 'Limit rights to')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

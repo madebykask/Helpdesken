@@ -19,29 +19,37 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IBulletinBoardService _bulletinBoardService;
         private readonly IWorkingGroupService _workingGroupService;
         private readonly IUserPermissionsChecker _userPermissionsChecker;
+        private readonly ISettingService _settingService;
+        private readonly IUserService _userService;
 
         public BulletinBoardController(
             IBulletinBoardService bulletinBoardService,
             IWorkingGroupService workingGroupService,
             IMasterDataService masterDataService,
-            IUserPermissionsChecker userPermissionsChecker)
+            IUserPermissionsChecker userPermissionsChecker,
+            ISettingService settingService,
+            IUserService userService)
             : base(masterDataService)
         {
             this._bulletinBoardService = bulletinBoardService;
             this._workingGroupService = workingGroupService;
             this._userPermissionsChecker = userPermissionsChecker;
+            this._settingService = settingService;
+            this._userService = userService;
         }
 
         public ActionResult Index()
         {
             var model = this.IndexInputViewModel();
+            var customerSetting = this._settingService.GetCustomerSettings(SessionFacade.CurrentCustomer.Id);
+            var bulletinBoardWGRestriction = customerSetting.BulletinBoardWGRestriction;
 
             BulletinBoardSearch CS = new BulletinBoardSearch();
             if (SessionFacade.CurrentBulletinBoardSearch != null)
             {                
                 CS = SessionFacade.CurrentBulletinBoardSearch;
                 if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.UserGroupId == 2)
-                    model.BulletinBoards = this._bulletinBoardService.SearchAndGenerateBulletinBoard(SessionFacade.CurrentCustomer.Id, CS, true);
+                    model.BulletinBoards = this._bulletinBoardService.SearchAndGenerateBulletinBoard(SessionFacade.CurrentCustomer.Id, CS, true, bulletinBoardWGRestriction);
                 else
                     model.BulletinBoards = this._bulletinBoardService.SearchAndGenerateBulletinBoard(SessionFacade.CurrentCustomer.Id, CS);
 
@@ -50,7 +58,7 @@ namespace DH.Helpdesk.Web.Controllers
             else
             {
                 if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.UserGroupId == 2)
-                    model.BulletinBoards = this._bulletinBoardService.GetBulletinBoards(SessionFacade.CurrentCustomer.Id, true).OrderBy(x => x.ChangedDate).ToList();
+                    model.BulletinBoards = this._bulletinBoardService.GetBulletinBoards(SessionFacade.CurrentCustomer.Id, true, bulletinBoardWGRestriction).OrderBy(x => x.ChangedDate).ToList();
                 else
                     model.BulletinBoards = this._bulletinBoardService.GetBulletinBoards(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.ChangedDate).ToList();
 
@@ -65,17 +73,26 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]
         public ActionResult Index(BulletinBoardSearch SearchBulletinBoards)
         {
+            var customerSetting = this._settingService.GetCustomerSettings(SessionFacade.CurrentCustomer.Id);
+            var bulletinBoardWGRestriction = customerSetting.BulletinBoardWGRestriction;
+
             BulletinBoardSearch CS = new BulletinBoardSearch();
             if (SessionFacade.CurrentBulletinBoardSearch != null)
                 CS = SessionFacade.CurrentBulletinBoardSearch;
 
             CS.SearchBbs = SearchBulletinBoards.SearchBbs;
 
+            
             var restrictsearch = false;
             if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.UserGroupId == 2)
+            {
                 restrictsearch = true;
+            }
+            else
+                bulletinBoardWGRestriction = false;
+                
             
-            var bb = this._bulletinBoardService.SearchAndGenerateBulletinBoard(SessionFacade.CurrentCustomer.Id, CS, restrictsearch);
+            var bb = this._bulletinBoardService.SearchAndGenerateBulletinBoard(SessionFacade.CurrentCustomer.Id, CS, restrictsearch, bulletinBoardWGRestriction);
 
             if (SearchBulletinBoards != null)
                 SessionFacade.CurrentBulletinBoardSearch = CS;
@@ -203,7 +220,9 @@ namespace DH.Helpdesk.Web.Controllers
             var wgsSelected = bulletinBoard.WGs ?? new List<WorkingGroupEntity>();
             var wgsAvailable = new List<WorkingGroupEntity>();
 
-            var workingGroups = this._workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id);
+            var user = this._userService.GetUser(SessionFacade.CurrentUser.Id);
+
+            var workingGroups = this._workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id, user.Id);
             var wgsSelectedIds = wgsSelected.Select(g => g.Id).ToArray();
 
             foreach (var wg in workingGroups)
@@ -231,6 +250,7 @@ namespace DH.Helpdesk.Web.Controllers
             };
 
             model.UserHasBulletinBoardAdminPermission = userHasBulletinBoardAdminPermission;
+            model.CurrentUser = user;
 
             return model;
         }

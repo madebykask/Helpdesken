@@ -521,13 +521,35 @@
 		checkLength(this);
 	});
 
-	$("#" + "@Html.IdFor(x => x.CaseLog.WorkingTimeHour)" +
-		", #" + "@Html.IdFor(x => x.CaseLog.WorkingTimeMinute)" +
-		", #" + "@Html.IdFor(x => x.CaseLog.OvertimeHour)" +
-		", #" + "@Html.IdFor(x => x.CaseLog.OvertimeMinute)")
-		.on('change', function () {
-			$("#" + "@Html.IdFor(x => x.CaseLog.Charge)").attr("checked", "checked");
-	});
+	$(document)
+        .on('change'
+            , "#" + "@Html.IdFor(x => x.CaseLog.WorkingTimeHour)" +
+		    ", #" + "@Html.IdFor(x => x.CaseLog.WorkingTimeMinute)" +
+		    ", #" + "@Html.IdFor(x => x.CaseLog.OvertimeHour)" +
+		    ", #" + "@Html.IdFor(x => x.CaseLog.OvertimeMinute)"
+            , function () {
+                $("#" + "@Html.IdFor(x => x.CaseLog.Charge)").attr("checked", "checked");
+            });
+
+    $(document)
+        .on('keyup'
+            , "#" + "@Html.IdFor(x => x.CaseLog.Price)" +
+            ", #" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)" +
+            ", [id^='ExternalInvoices['][id$='].Amount']"
+            , function () {
+                var val = $(this).val();
+                if (val && val !== "0")
+                    $("#" + "@Html.IdFor(x => x.CaseLog.Charge)").attr("checked", "checked");
+            });
+
+    $(document)
+       .on('keyup'
+           , "[id^='ExternalInvoices['][id$='].Name']"
+           , function () {
+               var val = $(this).val();
+               if (val)
+                   $("#" + "@Html.IdFor(x => x.CaseLog.Charge)").attr("checked", "checked");
+           });
 
 	var maxLength = 3000;
 	function checkLength(el) {

@@ -49,7 +49,7 @@ namespace DH.Helpdesk.Dal.Repositories
                 var inits = _notifierRepository.Search(customerId, searchText).Where(x => !string.IsNullOrEmpty(x.Email)).Select(x => new CaseEmailSendOverview
                 {
                     UserId = x.UserId,
-                    Name = x.SurName + " " + x.FirstName,
+                    Name = x.FirstName + " " + x.SurName,
                     Emails = new List<string>
                     {
                         x.Email
@@ -67,11 +67,11 @@ namespace DH.Helpdesk.Dal.Repositories
                     .Where(x => x.IsActive == 1 && x.CustomerUsers.Any(cu => cu.Customer_Id == customerId))
                     .Where(x => x.UserID.Contains(searchText) || x.FirstName.Contains(searchText) || x.SurName.Contains(searchText) || x.Email.Contains(searchText))
                     .Where(x => !string.IsNullOrEmpty(x.Email))
-                    .OrderBy(x => x.SurName)
+                    .OrderBy(x => x.FirstName).ThenBy(x => x.SurName).ThenBy(x => x.Id).Take(25)
                     .Select(x => new CaseEmailSendOverview
                     {
                         UserId = x.UserID,
-                        Name = x.SurName + " " + x.FirstName,
+                        Name = x.FirstName + " " + x.SurName,
                         Emails = new List<string>
                         {
                             x.Email
@@ -107,7 +107,9 @@ namespace DH.Helpdesk.Dal.Repositories
                     Emails = x.UserWorkingGroups.Select(r => r.User.Email).ToList(),
                     GroupType = CaseUserSearchGroup.WorkingGroup,
                     DepartmentName = string.Empty
-                }).Where(x => x.Emails.Any()).ToList();
+                })
+                .Where(x => x.Emails.Any())
+                .OrderBy(x => x.Name).ToList();
                 result.AddRange(newList);
             }
             if (searchInEmailGrs)
@@ -120,7 +122,9 @@ namespace DH.Helpdesk.Dal.Repositories
                     Emails = x.Members.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList(),
                     GroupType = CaseUserSearchGroup.EmailGroup,
                     DepartmentName = string.Empty
-                }).Where(x => x.Emails.Any()).ToList();
+                })
+                .Where(x => x.Emails.Any())
+                .ToList();
                 result.AddRange(newList);
             }
             return result.ToList();

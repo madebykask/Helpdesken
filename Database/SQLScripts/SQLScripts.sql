@@ -299,5 +299,31 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	end
 GO
 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'BulletinBoardWGRestriction' and sysobjects.name = N'tblSettings')
+	begin
+		ALTER TABLE tblSettings ADD BulletinBoardWGRestriction int NOT NULL Default(0)
+	end
+GO
+
+IF COL_LENGTH('tblFormSettings','CacheData') IS NULL
+BEGIN
+      ALTER TABLE tblFormSettings ADD [CacheData] bit NULL
+END
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'CalendarWGRestriction' and sysobjects.name = N'tblSettings')
+	begin
+		ALTER TABLE tblSettings ADD CalendarWGRestriction int NOT NULL Default(0)
+	end
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'Export' and sysobjects.name = N'tblOrder')
+	begin
+		ALTER TABLE tblOrder ADD Export int NOT NULL Default(0)
+	end
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.31'

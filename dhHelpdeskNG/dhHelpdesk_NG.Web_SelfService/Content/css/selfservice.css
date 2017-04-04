@@ -931,6 +931,10 @@ a.error, input[type=¨button].error .btn
     width: 90%!important;
 }
 
+.padding20 {
+    padding: 20px;
+}
+
 .order-date-search .input-group {
     display: inline-table;
 }

@@ -8,6 +8,11 @@ namespace DH.Helpdesk.BusinessData.Models.Case.CaseIntLog
 {
     public class CaseEmailSendOverview
     {
+
+        public CaseEmailSendOverview()
+        {
+            UserId = string.Empty;
+        }
         public string UserId { get; set; }
 
         public string Name { get; set; }

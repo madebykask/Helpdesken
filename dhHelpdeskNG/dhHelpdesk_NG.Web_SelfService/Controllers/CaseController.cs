@@ -62,6 +62,7 @@
         private readonly IMasterDataService _masterDataService;
         private readonly ICaseExtraFollowersService _caseExtraFollowersService;
         private readonly IRegistrationSourceCustomerService _registrationSourceCustomerService;
+        private readonly IPriorityService _priorityService;
 
         private const string ParentPathDefaultValue = "--";
         private const string EnterMarkup = "<br />";
@@ -103,7 +104,8 @@
             ICaseSolutionSettingService caseSolutionSettingService,
             IEmailService emailService,
             ICaseExtraFollowersService caseExtraFollowersService,
-            IRegistrationSourceCustomerService registrationSourceCustomerService)
+            IRegistrationSourceCustomerService registrationSourceCustomerService,
+            IPriorityService priorityService)
             : base(masterDataService, caseSolutionService)
         {
             _masterDataService = masterDataService;
@@ -140,6 +142,7 @@
             _caseSolutionSettingService = caseSolutionSettingService;
             _caseExtraFollowersService = caseExtraFollowersService;
             _registrationSourceCustomerService = registrationSourceCustomerService;
+            _priorityService = priorityService;
         }
 
 
@@ -900,6 +903,13 @@
         {
             int caseId = Save(newCase, caseMailSetting, caseFileKey, followerUsers, caseLog);
             return RedirectToAction("Index", "case", new { id = newCase.Id, showRegistrationMessage = true });
+        }
+
+        [HttpPost]
+        public ActionResult UrgentInfoMessage(int urgentId, int impactId)
+        {
+            var result = _priorityService.GetPriorityInfoTextByImpactAndUrgency(impactId, urgentId, SessionFacade.CurrentLanguageId);
+            return Json(result);
         }
 
         [HttpPost]

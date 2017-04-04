@@ -1183,21 +1183,29 @@ function CaseInitForm() {
             $btnSave.on('click', function () {
                 var fd = new FormData();
                 uploadModal.find('form').submit();
-                if (imgFilenameCtrl[0].validity.valid) {
-                    fd.append('name', getFileName(imgFilenameCtrl.val()));
-                    fd.append('id', key);
-                    fd.append('file', blob);
-                    $.ajax({
-                        type: 'POST',
-                        url: submitUrl,
-                        data: fd,
-                        processData: false,
-                        contentType: false
-                    }).done(function (data) {
-                        //console.log(data);
-                        refredhCallback();
-                        uploadModal.modal("hide");
-                    });
+
+                var regexp = new RegExp("[!@#=\$&\?\*]");
+                var match = regexp.exec(imgFilenameCtrl.val());
+                if (match) {
+                    ShowToastMessage(window.parameters.fileNameError, "error");
+                } else {
+                    if (imgFilenameCtrl[0].validity.valid) {
+                        fd.append('name', getFileName(imgFilenameCtrl.val()));
+                        fd.append('id', key);
+                        fd.append('file', blob);
+                        $.ajax({
+                                type: 'POST',
+                                url: submitUrl,
+                                data: fd,
+                                processData: false,
+                                contentType: false
+                            })
+                            .done(function(data) {
+                                //console.log(data);
+                                refredhCallback();
+                                uploadModal.modal("hide");
+                            });
+                    }
                 }
             });
             $btnSave.show();

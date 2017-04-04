@@ -26,5 +26,6 @@ namespace DH.Helpdesk.Web.Models
         public BulletinBoardInputViewModel() { }
 
         public bool UserHasBulletinBoardAdminPermission { get; set; }
+        public User CurrentUser { get; set; }
     }
 }

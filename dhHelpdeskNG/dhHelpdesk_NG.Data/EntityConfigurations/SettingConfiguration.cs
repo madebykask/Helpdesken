@@ -137,6 +137,8 @@
             this.Property(x => x.SMTPUserName).IsOptional();
             this.Property(x => x.SMTPPassWord).IsOptional();
             this.Property(x => x.IsSMTPSecured).IsRequired();
+            this.Property(x => x.BulletinBoardWGRestriction).IsRequired();
+            this.Property(x => x.CalendarWGRestriction).IsRequired();
 
             this.ToTable("tblsettings");
         }

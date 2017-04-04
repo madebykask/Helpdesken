@@ -75,6 +75,7 @@
             return this.View(model);
         }
 
+        [ValidateInput(false)]
         [HttpPost]
         public ActionResult New(Priority priority, HttpPostedFileBase fileUploadedName)
         {
@@ -127,6 +128,7 @@
             return this.View(model);
         }
 
+        [ValidateInput(false)]
         [HttpPost]
         public ActionResult Edit(int id, PriorityLanguage priorityLanguage, HttpPostedFileBase DownloadFile, int languageId)
         {

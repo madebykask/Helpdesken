@@ -1,4 +1,8 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using System.Linq.Expressions;
+using DH.Helpdesk.Common.Extensions.Integer;
+using DH.Helpdesk.Services.BusinessLogic.Specifications.Case;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System;
     using System.Collections.Generic;
@@ -173,6 +177,8 @@
         WorkingGroupEntity GetUserDefaultWorkingGroup(int userId, int customerId);
 
         bool IsUserValidAdmin(string userId, string pass);
+
+        bool VerifyUserCasePermissions(UserOverview user, int[] customerIds, int caseId);
     }
 
     public class UserService : IUserService
@@ -981,6 +987,27 @@
                                                       u.UserGroup_Id == 4)
                                           .ToList();
             return entities.Any();
+        }
+
+        public bool VerifyUserCasePermissions(UserOverview user, int[] customerIds, int caseId)
+        {
+            Expression<Func<Case, bool>> casePermissionFilter = null;
+
+            if (user.RestrictedCasePermission.ToBool())
+            {
+                switch (user.UserGroupId)
+                {
+                    case (int)BusinessData.Enums.Admin.Users.UserGroup.Administrator:
+                        casePermissionFilter = CaseSpecifications.GetByAdministratorOrResponsibleUserExpression(user.Id, user.Id);
+                        break;
+                    case (int)BusinessData.Enums.Admin.Users.UserGroup.User:
+                        casePermissionFilter = CaseSpecifications.GetByReportedByOrUserId(user.UserId, user.Id);
+                        break;
+                }
+            }
+
+            var isAuthorised = _customerUserRepository.CheckUserCasePermissions(user.Id, customerIds, caseId, casePermissionFilter);
+            return isAuthorised;
         }
 
         /// <summary>

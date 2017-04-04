@@ -115,7 +115,7 @@
         public IList<WorkingGroupEntity> GetWorkingGroups(int customerId, int userId, bool isTakeOnlyActive = true)
         {
             var userWorkingGroups = this.userWorkingGroupRepository.GetAll()
-                                                                   .Where(uw=>  uw.User_Id == userId)
+                                                                   .Where(uw=>  uw.User_Id == userId && uw.UserRole == 2)
                                                                    .Select(uw => uw.WorkingGroup_Id);
             return  this.workingGroupRepository
                     .GetMany(x => x.Customer_Id == customerId && (!isTakeOnlyActive || (isTakeOnlyActive && x.IsActive == 1)))

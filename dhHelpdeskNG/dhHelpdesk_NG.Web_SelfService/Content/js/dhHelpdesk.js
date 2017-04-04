@@ -674,14 +674,28 @@ function DestroyDataTable(tableUniqId) {
     oTable.destroy();
 };
 
-function InitDataTable(tableUniqId, perText, showingText, options, onError) {
+function InitDataTable(tableUniqId, lengthMenu, emptyTable, next, prev, search, info, infoEmpty, options, onError) {
     var dataTable = $('#' + tableUniqId);
     $.fn.dataTable.ext.errMode = 'none';
     if (onError && typeof onError === "function")
         dataTable.on('error.dt', function (e, settings, techNote, message) {
             onError(e, settings, techNote, message);
         });
-    return dataTable.DataTable($.extend({}, {
+    return dataTable.DataTable($.extend({},
+    {
+        language: {
+            "sLengthMenu": "_MENU_ " + lengthMenu,
+            "sEmptyTable": emptyTable,
+            "sInfo": info,
+            "sInfoEmpty": infoEmpty,
+            "sSearch": search,
+            "oPaginate": {
+                "sFirst": "Första",
+                "sLast": "Sista",
+                "sNext": next,
+                "sPrevious": prev
+            }
+}
         //'sError': (onError && typeof onError === "function") ? 'none' : 'throw',
         //"sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
         //"sPaginationType": "bootstrap",
