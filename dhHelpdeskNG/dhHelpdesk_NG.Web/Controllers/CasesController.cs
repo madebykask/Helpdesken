@@ -2589,17 +2589,6 @@ namespace DH.Helpdesk.Web.Controllers
 
         #endregion
 
-        #region Extended Case
-
-        [HttpGet]
-        public PartialViewResult GetProcessWorkFlow(int caseId)
-        {
-            return PartialView("_processWorkFlow");
-        }
-
-        #endregion
-
-
         #endregion
 
         #region ***Private Methods***
