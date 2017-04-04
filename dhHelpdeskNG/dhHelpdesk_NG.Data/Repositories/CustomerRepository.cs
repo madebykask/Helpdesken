@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Data.Entity;
+using System.Linq.Expressions;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
@@ -144,14 +145,11 @@ using System;
             this.customerSettingsMapper = customerSettingsMapper;
         }
 
-        public CustomerUser GetCustomerSettings(int customer, int user)
+        public CustomerUser GetCustomerSettings(int customerId, int userId)
         {
-            return (from customerUser in this.DataContext.Set<CustomerUser>()
-                    join settings in this.DataContext.Set<Setting>() on customerUser.Customer_Id equals settings.Customer_Id
-                    where customerUser.Customer_Id == customer && customerUser.User_Id == user
-                    select customerUser)
-                    .ToList()
-                    .FirstOrDefault();
+            return Table
+                    .Include(x => x.User)   
+                    .Where(cu => cu.Customer_Id == customerId && cu.User_Id == userId).FirstOrDefault();
         }
 
         public IList<UserCustomer> GetCustomerUsersForStart(int userId)

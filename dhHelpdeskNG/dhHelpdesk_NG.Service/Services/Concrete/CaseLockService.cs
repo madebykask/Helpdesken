@@ -37,12 +37,12 @@
             return this._caseLockRepository.GetCaseLockByGUID(lockGUID);
         }
 
-        public CaseLock GetCaseLockByCaseId(int caseId)
+        public ICaseLockOverview GetCaseLockByCaseId(int caseId)
         {
             return this._caseLockRepository.GetCaseLockByCaseId(caseId);
         }
 
-        public IDictionary<int, CaseLock> GetCasesLocks(int[] caseIds)
+        public IDictionary<int, ICaseLockOverview> GetCasesLocks(int[] caseIds)
         {
             return _caseLockRepository.GetCasesLock(caseIds);
         }

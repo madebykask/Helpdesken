@@ -91,15 +91,16 @@ namespace DH.Helpdesk.Dal.Repositories
                 }
             }
 			
+            var searchResult = new SearchResult<CaseSearchResult>();
+            remainingTime = new CaseRemainingTimeData();
+            aggregateData = new CaseAggregateData();
+
 			var customerUserSetting = this._customerUserRepository.GetCustomerSettings(f.CustomerId, userId);
 			IList<ProductAreaEntity> pal = this._productAreaRepository.GetMany(x => x.Customer_Id == f.CustomerId).OrderBy(x => x.Name).ToList();
-			SearchResult<CaseSearchResult> ret = new SearchResult<CaseSearchResult>();
 			var caseTypes = this.caseTypeRepository.GetCaseTypeOverviews(f.CustomerId).ToArray();
 			var displayLeftTime = userCaseSettings.Any(it => it.Name == TimeLeftColumn);
-			remainingTime = new CaseRemainingTimeData();
-			aggregateData = new CaseAggregateData();
 
-			var sql = this.ReturnCaseSearchSql(
+            var sql = this.ReturnCaseSearchSql(
 										context.f,
 										context.customerSetting,
 										customerUserSetting,
@@ -118,7 +119,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
 			if (string.IsNullOrEmpty(sql))
 			{
-				return ret;
+                return searchResult;
 			}
 
 			//TODO: use when true server paging will be implemented
@@ -170,7 +171,6 @@ namespace DH.Helpdesk.Dal.Repositories
 			//}
 
 			var workTimeCalculator = this.InitCalcFromSQL(dsn, sql, workTimeCalcFactory, now);
-
 			IDictionary<int, int> aggregateStatus = new Dictionary<int, int>();
 			IDictionary<int, int> aggregateSubStatus = new Dictionary<int, int>();
 			var secSortOrder = string.Empty;
@@ -393,7 +393,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
 					                if (!row.Ignored)
 					                {
-					                    ret.Items.Add(row);
+                                            searchResult.Items.Add(row);
 
 					                    int? curStatus = dr.SafeGetNullableInteger("aggregate_Status");
 					                    if (curStatus.HasValue)
@@ -426,7 +426,7 @@ namespace DH.Helpdesk.Dal.Repositories
 				}
 			}
 
-			var result = ret;
+            var result = searchResult;
 
 			result = SortSearchResult(result, s);
 

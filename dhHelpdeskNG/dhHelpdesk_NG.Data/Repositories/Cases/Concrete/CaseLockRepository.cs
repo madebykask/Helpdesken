@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 {
@@ -67,34 +68,56 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             }
         }
 
-        public IDictionary<int, CaseLock> GetCasesLock(int[] caseIds)
+        public IDictionary<int, ICaseLockOverview> GetCasesLock(int[] caseIds)
         {
-            var resultMap = new Dictionary<int, CaseLock>();
+            var resultMap = new Dictionary<int, ICaseLockOverview>();
 
             var items =
-                Table.Include(x => x.User)
-                    .Where(l => caseIds.Contains(l.Case_Id)).ToList();
+                Table.Where(l => caseIds.Contains(l.Case_Id))
+                     .Select(ProjectToCaseLockOverview())
+                     .ToList();
 
-            foreach (var caseLockEntity in items)
+            foreach (var caseLockItem in items)
             {
-                var item = this._caseLockToBusinessModelMapper.Map(caseLockEntity);
-                if (!resultMap.ContainsKey(caseLockEntity.Case_Id))
+                if (!resultMap.ContainsKey(caseLockItem.CaseId))
                 {
-                    resultMap.Add(caseLockEntity.Case_Id, item);
+                    resultMap.Add(caseLockItem.CaseId, caseLockItem);
                 }
             }
 
             return resultMap;
         }
 
-        public CaseLock GetCaseLockByCaseId(int caseId)
+        public ICaseLockOverview GetCaseLockByCaseId(int caseId)
         {
-            var entity = Table.Where(l => l.Case_Id == caseId).FirstOrDefault();
+            var item = Table.Where(l => l.Case_Id == caseId)
+                            .Select(ProjectToCaseLockOverview())
+                            .FirstOrDefault();
+            return item;
+        }
 
-            if (entity == null)
-                return null;
-            else
-                return this._caseLockToBusinessModelMapper.Map(entity);
+        private Expression<Func<CaseLockEntity, CaseLockOverview>> ProjectToCaseLockOverview()
+        {
+            Expression<Func<CaseLockEntity, CaseLockOverview>>  exp = 
+                l => new CaseLockOverview
+                {
+                    Id = l.Id,
+                    CaseId =  l.Case_Id,
+                    UserId = l.User_Id,
+                    LockGUID = l.LockGUID,
+                    BrowserSession = l.BrowserSession,
+                    CreatedTime = l.CreatedTime,
+                    ExtendedTime = l.ExtendedTime,
+                    User = new CaseLockUserInfo
+                    {
+                        Id = l.Id,
+                        UserId = l.User.UserID,
+                        FirstName = l.User.FirstName,
+                        LastName = l.User.SurName
+                    }
+                };
+
+            return exp;
         }
 
         public void LockCase(CaseLock caseLock)

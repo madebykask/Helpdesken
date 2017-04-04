@@ -844,8 +844,10 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var data = new List<Dictionary<string, object>>();
             var ids = caseSearchResults.Select(o => o.Id).ToArray();
-            var casesLocks = _caseLockService.GetCasesLocks(ids);
 
+            var casesLocks = _caseLockService.GetCasesLocks(ids);
+            var globalSettings = this._globalSettingService.GetGlobalSettings().FirstOrDefault();
+            
             foreach (var searchRow in caseSearchResults)
             {
                 var caseId = searchRow.Id;
@@ -861,7 +863,8 @@ namespace DH.Helpdesk.Web.Controllers
                 };
 
                 var caseLock = casesLocks.ContainsKey(caseId) ? casesLocks[caseId] : null;
-                var caseLockModel = GetCaseLockModel(caseLock, searchRow.Id, SessionFacade.CurrentUser.Id, false);
+                
+                var caseLockModel = GetCaseLockModel(caseLock, searchRow.Id, SessionFacade.CurrentUser.Id, globalSettings, false);
                 if (caseLockModel.IsLocked)
                 {
                     jsRow.Add("isCaseLocked", caseLockModel.IsLocked);
@@ -1179,7 +1182,6 @@ namespace DH.Helpdesk.Web.Controllers
 
             return this.RedirectToAction("index", "cases", new { id = customerId });
         }
-
 
         [UserCasePermissions]
         public ActionResult Edit(int id, 
@@ -4946,16 +4948,19 @@ namespace DH.Helpdesk.Web.Controllers
         private CaseLockModel GetCaseLockModel(int caseId, int userId, bool isNeedLock = true)
         {
             var caseLock = this._caseLockService.GetCaseLockByCaseId(caseId);
-            return GetCaseLockModel(caseLock, caseId, userId, isNeedLock);
+            var globalSettings = this._globalSettingService.GetGlobalSettings().FirstOrDefault();
+
+            return GetCaseLockModel(caseLock, caseId, userId, globalSettings, isNeedLock);
         }
 
-        private CaseLockModel GetCaseLockModel(CaseLock caseLock, int caseId, int userId, bool isNeedLock = true)
+        private CaseLockModel GetCaseLockModel(ICaseLockOverview caseLock, int caseId, int userId, GlobalSetting globalSettings, bool isNeedLock = true)
         {
+            CaseLockModel caseLockModel = null;
+
             var caseIsLocked = true;
-            var gs = this._globalSettingService.GetGlobalSettings().FirstOrDefault();
-            var extendedSec = (gs != null && gs.CaseLockExtendTime > 0 ? gs.CaseLockExtendTime : this._defaultExtendCaseLockTime);
-            var timerInterval = (gs != null ? gs.CaseLockTimer : 0);
-            var bufferTime = (gs != null && gs.CaseLockBufferTime > 0 ? gs.CaseLockBufferTime : this._defaultCaseLockBufferTime);
+            var extendedSec = (globalSettings != null && globalSettings.CaseLockExtendTime > 0 ? globalSettings.CaseLockExtendTime : this._defaultExtendCaseLockTime);
+            var timerInterval = (globalSettings != null ? globalSettings.CaseLockTimer : 0);
+            var bufferTime = (globalSettings != null && globalSettings.CaseLockBufferTime > 0 ? globalSettings.CaseLockBufferTime : this._defaultCaseLockBufferTime);
             var caseLockGUID = string.Empty;
             var nowTime = DateTime.Now;
 
@@ -4984,15 +4989,19 @@ namespace DH.Helpdesk.Web.Controllers
                 var now = DateTime.Now;
                 var extendedLockTime = now.AddSeconds(extendedSec);
                 var newLockGUID = Guid.NewGuid();
-                caseLockGUID = newLockGUID.ToString();
-                var user = this._userService.GetUser(userId);
-                var newCaseLock = new CaseLock(caseId, userId, newLockGUID, Session.SessionID, now, extendedLockTime, user);
+                
+                var newCaseLock = new CaseLock(caseId, userId, newLockGUID, Session.SessionID, now, extendedLockTime);
                 if (isNeedLock)
                     this._caseLockService.LockCase(newCaseLock);
-                caseLock = newCaseLock;
+
+                caseLockModel = newCaseLock.MapToViewModel(caseIsLocked, extendedSec, timerInterval);
+            }
+            else
+            {
+                caseLockModel = caseLock.MapToViewModel(caseIsLocked, extendedSec, timerInterval);
             }
 
-            return caseLock.MapToViewModel(caseIsLocked, extendedSec, timerInterval);
+            return caseLockModel;
         }
 
         private CaseStatisticsViewModel GetCaseStatisticsModel(CaseAggregateData aggregateData, int caseCount,
