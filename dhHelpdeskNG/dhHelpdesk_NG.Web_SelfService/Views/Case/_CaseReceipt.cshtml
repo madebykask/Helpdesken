@@ -69,7 +69,7 @@
                         <label class="col-md-1">
                             @if (Model.FollowerUsers != "")
                             {
-                               @Translation.Get("Följare")
+                               @Translation.Get("Followers", Enums.TranslationSource.TextTranslation)
                             }
                         </label>
                         <label class="col-md-5">
@@ -646,6 +646,16 @@
 }
 else
 {
+    <h4>@Translation.Get("Communicate", Enums.TranslationSource.TextTranslation) </h4>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8">
+                <div id="Receipt_CaseLogPartial" class="onpage com-list">
+                    @Html.Partial("_CaseLogNote", pCaseLogs)
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="logNotePopup" role="dialog" class="modal fade" aria-labelledby="myModalLabelCase_1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
