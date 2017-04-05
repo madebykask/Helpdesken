@@ -321,7 +321,7 @@
                                     }
                                 }
 
-                                @if (Model.Languages != null && Model.Languages.Where(l => l.IsActive).ToList().Count > 1)
+                                @if (Model.Languages != null && Model.Languages.Where(l => l.IsActive > 0).ToList().Count > 1)
                                 {
                                     var curLanguage = (Model.case_.Id == 0 ? SessionFacade.CurrentLanguageId : Model.case_.RegLanguage_Id);
                                     <li class="dropdown-submenu">
@@ -329,7 +329,7 @@
                                             @Translation.GetCoreTextTranslation("Språk för E-mail")
                                         </a>
                                         <ul class="dropdown-menu">
-                                            @foreach (var lang in Model.Languages.Where(l => l.IsActive).ToList())
+                                            @foreach (var lang in Model.Languages.Where(l => l.IsActive > 0).ToList())
                                             {
                                                 var langNameId = "langItem" + lang.Id;
                                                 <li>

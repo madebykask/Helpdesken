@@ -341,7 +341,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
 		private List<SelectListItem> GetEmailTemplatesList(int customerId)
 		{
-			var customMailTemplates = _mailTemplateService.GetCustomMailTemplates(customerId).ToList();
+			var customMailTemplates = _mailTemplateService.GetCustomMailTemplatesFull(customerId).ToList();
 			var activeMailTemplates =
 				customMailTemplates.Where(
 					m =>

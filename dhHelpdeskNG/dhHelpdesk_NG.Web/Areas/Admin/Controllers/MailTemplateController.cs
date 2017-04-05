@@ -610,7 +610,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 			}
 
 
-			var customMailTemplates = _mailTemplateService.GetCustomMailTemplates(customer.Id);
+			var customMailTemplates = _mailTemplateService.GetCustomMailTemplatesFull(customer.Id);
 
 			var activeMailTemplateLanguages = new List<ActiveMailTemplateLanguage>();
 			foreach (var customMailTemplate in customMailTemplates)

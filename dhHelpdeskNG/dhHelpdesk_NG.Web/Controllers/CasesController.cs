@@ -3975,7 +3975,9 @@ namespace DH.Helpdesk.Web.Controllers
             var deps = this._departmentService.GetDepartmentsByUserPermissions(userId, customerId);
             var isCreateNewCase = caseId == 0;
             m.CaseLock = caseLocked;
-            m.MailTemplates = this._mailTemplateService.GetCustomMailTemplates(customerId).ToList();
+
+            m.MailTemplates = this._mailTemplateService.GetCustomMailTemplatesList(customerId).ToList();
+
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
             
             var userHasInvoicePermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InvoicePermission);
