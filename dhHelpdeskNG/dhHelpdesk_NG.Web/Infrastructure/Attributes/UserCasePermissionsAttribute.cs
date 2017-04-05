@@ -46,11 +46,15 @@
             }
 
             var caseIdParam = httpContext.Request.RequestContext.RouteData.Values["id"] ?? httpContext.Request.Params["id"];
-            var customerIds = this._userService.GetUserProfileCustomersSettings(user.Id).Select(c => c.CustomerId).ToList();
 
-            var caseId = int.Parse((string) caseIdParam);
-            var isAuthorised = _userService.VerifyUserCasePermissions(user, customerIds.ToArray(), caseId);
-            return isAuthorised;
+            var caseId = 0;
+            if (int.TryParse(caseIdParam?.ToString(), out caseId))
+            {
+                var isAuthorised = _userService.VerifyUserCasePermissions(user, caseId);
+                return isAuthorised;
+            }
+
+            return false;
         }
 
         #endregion

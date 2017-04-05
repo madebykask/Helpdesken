@@ -178,7 +178,7 @@ namespace DH.Helpdesk.Services.Services
 
         bool IsUserValidAdmin(string userId, string pass);
 
-        bool VerifyUserCasePermissions(UserOverview user, int[] customerIds, int caseId);
+        bool VerifyUserCasePermissions(UserOverview user, int caseId);
     }
 
     public class UserService : IUserService
@@ -989,7 +989,7 @@ namespace DH.Helpdesk.Services.Services
             return entities.Any();
         }
 
-        public bool VerifyUserCasePermissions(UserOverview user, int[] customerIds, int caseId)
+        public bool VerifyUserCasePermissions(UserOverview user, int caseId)
         {
             Expression<Func<Case, bool>> casePermissionFilter = null;
 
@@ -1006,7 +1006,7 @@ namespace DH.Helpdesk.Services.Services
                 }
             }
 
-            var isAuthorised = _customerUserRepository.CheckUserCasePermissions(user.Id, customerIds, caseId, casePermissionFilter);
+            var isAuthorised = _customerUserRepository.CheckUserCasePermissions(user.Id, caseId, casePermissionFilter);
             return isAuthorised;
         }
 
