@@ -17,14 +17,20 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Common.Concrete
         private readonly ICaseSolutionService _caseSolutionService;
         private readonly IActionSettingService _actionSettingService;
         private readonly ILogService _logService;
+        private readonly IOrderTypeService _orderTypeService;
+        private readonly ISettingService _settingService;
 
         public CommonFunctions(ICaseSolutionService caseSolutionService,
                                ILogService logService,
-                               IActionSettingService actionSettingService)
+                               IActionSettingService actionSettingService,
+                               IOrderTypeService orderTypeService,
+                               ISettingService settingService)
         {
             this._caseSolutionService = caseSolutionService;
             this._actionSettingService = actionSettingService;
             this._logService = logService;
+            this._orderTypeService = orderTypeService;
+            this._settingService = settingService;
         }
 
         public List<CaseSolution> GetCaseTemplates(int customerId)
@@ -47,6 +53,18 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Common.Concrete
             var caseLogModel = new CaseLogModel { CaseId = caseId, CaseLogs = caseLogs };
             
             return caseLogModel;                            
-        }      
+        }
+
+        public bool IsOrderModuleEnabled(int customerId)
+        {
+            var settings = _settingService.GetCustomerSettings(customerId);
+            return settings != null && settings.ModuleOrder;
+        }
+
+        public bool IsUserHasOrderTypes(int userId, int customerId)
+        {
+            var isUserHasOrderTypes = _orderTypeService.IsUserHasOrderTypes(customerId, userId);
+            return isUserHasOrderTypes;
+        }
     }
 }

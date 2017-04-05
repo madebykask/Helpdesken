@@ -21,6 +21,7 @@
 
         void SaveOrderType(OrderType orderType, out IDictionary<string, string> errors);
         void Commit();
+        bool IsUserHasOrderTypes(int customerId, int userId);
     }
 
     public class OrderTypeService : IOrderTypeService
@@ -117,6 +118,11 @@
         public void Commit()
         {
             this._unitOfWork.Commit();
+        }
+
+        public bool IsUserHasOrderTypes(int customerId, int userId)
+        {
+            return this._orderTypeRepository.IsUserHasOrderTypes(customerId, userId);
         }
     }
 }

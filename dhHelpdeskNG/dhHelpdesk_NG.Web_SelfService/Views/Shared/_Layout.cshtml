@@ -10,56 +10,62 @@
 @using DH.Helpdesk.SelfService
 
 
- @{        
-        int pCustomerId = -1;
-        var appType = ConfigurationManager.AppSettings[AppSettingsKey.CurrentApplicationType].ToString().ToLower();
-        
-        if(SessionFacade.CurrentCustomer != null)
-        {
-            pCustomerId = SessionFacade.CurrentCustomer.Id;
-            SessionFacade.CurrentCustomerID = pCustomerId;
-        }
+ @{
+     int pCustomerId = -1;
+     var appType = ConfigurationManager.AppSettings[AppSettingsKey.CurrentApplicationType].ToString().ToLower();
 
-        if(pCustomerId == -1 && SessionFacade.CurrentCustomerID > 0)
-        {
-            pCustomerId = SessionFacade.CurrentCustomerID;
-            if(SessionFacade.CurrentCustomer != null)
-            {
-                SessionFacade.CurrentCustomer.Id = pCustomerId;
-            }
-        }
+     if (SessionFacade.CurrentCustomer != null)
+     {
+         pCustomerId = SessionFacade.CurrentCustomer.Id;
+         SessionFacade.CurrentCustomerID = pCustomerId;
+     }
 
-        var helper = ManualDependencyResolver.Get<ICommonFunctions>();
+     if (pCustomerId == -1 && SessionFacade.CurrentCustomerID > 0)
+     {
+         pCustomerId = SessionFacade.CurrentCustomerID;
+         if (SessionFacade.CurrentCustomer != null)
+         {
+             SessionFacade.CurrentCustomer.Id = pCustomerId;
+         }
+     }
 
-        var pCaseTemplates = helper.GetCaseTemplates(pCustomerId);
-        var pActionSettings = helper.GetActionSettings(pCustomerId);
+     var helper = ManualDependencyResolver.Get<ICommonFunctions>();
 
-        var hideMenu = false;
+     var pCaseTemplates = helper.GetCaseTemplates(pCustomerId);
+     var pActionSettings = helper.GetActionSettings(pCustomerId);
+     var orderModuleIsEnabled = helper.IsOrderModuleEnabled(pCustomerId);
+     var userHasOrderTypes = false;
+     if (SessionFacade.CurrentLocalUser != null)
+     {
+         userHasOrderTypes = helper.IsUserHasOrderTypes(SessionFacade.CurrentLocalUser.Id, pCustomerId);
+     }
 
-        if(SessionFacade.UserHasAccess == false)
-        {
-            hideMenu = true;
-        }
+     var hideMenu = false;
 
-        var showLanguageSelect = false;
-        if(TempData["ShowLanguageSelect"] != null && TempData["ShowLanguageSelect"].ToString().ToLower() == "true")
-        {
-            showLanguageSelect = true;
-        }
+     if (SessionFacade.UserHasAccess == false)
+     {
+         hideMenu = true;
+     }
 
-        CaseLogModel pCaseLogs = null;
-        var currentCaseId = ViewBag.CurrentCaseId;
-        if(currentCaseId != null)
-        {
-            pCaseLogs = helper.GetCaseLogs(currentCaseId);
-        }
+     var showLanguageSelect = false;
+     if (TempData["ShowLanguageSelect"] != null && TempData["ShowLanguageSelect"].ToString().ToLower() == "true")
+     {
+         showLanguageSelect = true;
+     }
 
-        var pHasError = false;        
-        if (SessionFacade.LastError != null && !string.IsNullOrEmpty(SessionFacade.LastError.Message))
-        {
-            pHasError = true;
-        }
-}
+     CaseLogModel pCaseLogs = null;
+     var currentCaseId = ViewBag.CurrentCaseId;
+     if (currentCaseId != null)
+     {
+         pCaseLogs = helper.GetCaseLogs(currentCaseId);
+     }
+
+     var pHasError = false;
+     if (SessionFacade.LastError != null && !string.IsNullOrEmpty(SessionFacade.LastError.Message))
+     {
+         pHasError = true;
+     }
+ }
 
 <!DOCTYPE html>
 <html>
@@ -341,7 +347,7 @@
                         }
                     }
                     
-                    @if (!hideMenu && SessionFacade.CurrentLocalUser != null)
+                    @if (!hideMenu && SessionFacade.CurrentLocalUser != null && orderModuleIsEnabled && userHasOrderTypes)
                     {
                         <li class="blue">
                             <a href="@Url.Action("Index", "Orders", new { customerId = pCustomerId, area = "" })">
