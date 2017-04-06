@@ -3118,6 +3118,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             // save case and case history
             c.StateSecondary_Id = @case.StateSecondary_Id;
+            caseLog.UserId = currentLoggedInUser.Id;
  
             var ei = new CaseExtraInfo() {CreatedByApp = CreatedByApplications.Helpdesk5, LeadTimeForNow = 0, ActionLeadTime = 0, ActionExternalTime = 0 };
             int caseHistoryId = this._caseService.SaveCase(c, caseLog, null, SessionFacade.CurrentUser.Id, this.User.Identity.Name, ei, out errors);
