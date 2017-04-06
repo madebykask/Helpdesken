@@ -140,6 +140,7 @@
             this.Property(x => x.LeadTime).IsRequired();
             this.Property(x => x.ActionLeadTime).IsRequired();
             this.Property(x => x.ActionExternalTime).IsRequired();
+            this.Property(x => x.CaseExtraFollowers).IsRequired();
             
             this.ToTable("tblcasehistory");
         }

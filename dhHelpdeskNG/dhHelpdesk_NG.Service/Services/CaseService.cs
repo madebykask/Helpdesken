@@ -84,7 +84,8 @@ namespace DH.Helpdesk.Services.Services
             string adUser,
             CaseExtraInfo caseExtraInfo,            
             out IDictionary<string, string> errors,
-            Case parentCase = null);
+            Case parentCase = null,
+            string caseExtraFollowers = null);
 
         int SaveCaseHistory(
             Case c,
@@ -93,7 +94,8 @@ namespace DH.Helpdesk.Services.Services
             string createdByApp,
             out IDictionary<string, string> errors,            
             string defaultUser = "",
-            ExtraFieldCaseHistory extraField = null);
+            ExtraFieldCaseHistory extraField = null,
+            string caseExtraFollowers = null);
 
         void SendCaseEmail(int caseId, CaseMailSetting cms, int caseHistoryId, string basePath, TimeZoneInfo userTimeZone,
                            Case oldCase = null, CaseLog log = null, List<CaseFileDto> logFiles = null, User currentLoggedInUser = null);
@@ -1032,6 +1034,7 @@ namespace DH.Helpdesk.Services.Services
         /// <param name="sendLogToParentChild">
         /// Flag to send log to parent/child case
         /// </param>
+        /// <param name="caseExtraFollowers"></param>
         /// <returns></returns>
         public int SaveCase(
                 Case cases, 
@@ -1041,7 +1044,8 @@ namespace DH.Helpdesk.Services.Services
                 string adUser, 
                 CaseExtraInfo caseExtraInfo,
                 out IDictionary<string, string> errors,
-                Case parentCase = null)
+                Case parentCase = null,
+            string caseExtraFollowers = null)
         {
             int ret = 0;
 
@@ -1103,8 +1107,8 @@ namespace DH.Helpdesk.Services.Services
             extraFields.ActionExternalTime = caseExtraInfo.ActionExternalTime;
 
             ret = userId == 0 ? 
-                this.SaveCaseHistory(c, userId, adUser, caseExtraInfo.CreatedByApp, out errors, adUser, extraFields) :
-                this.SaveCaseHistory(c, userId, adUser, caseExtraInfo.CreatedByApp, out errors, string.Empty, extraFields);
+                this.SaveCaseHistory(c, userId, adUser, caseExtraInfo.CreatedByApp, out errors, adUser, extraFields, caseExtraFollowers) :
+                this.SaveCaseHistory(c, userId, adUser, caseExtraInfo.CreatedByApp, out errors, string.Empty, extraFields, caseExtraFollowers);
 
             return ret;
         }
@@ -1116,13 +1120,14 @@ namespace DH.Helpdesk.Services.Services
             string createdByApp,
             out IDictionary<string, string> errors,
             string defaultUser = "",
-            ExtraFieldCaseHistory extraField = null)
+            ExtraFieldCaseHistory extraField = null,
+            string caseExtraFollowers = null)
         {
             if (c == null)
                 throw new ArgumentNullException("caseHistory");
 
             errors = new Dictionary<string, string>();
-            var h = this.GenerateHistoryFromCase(c, userId, adUser, defaultUser, extraField);
+            var h = this.GenerateHistoryFromCase(c, userId, adUser, defaultUser, extraField, caseExtraFollowers);
             h.CreatedByApp = createdByApp;
             this._caseHistoryRepository.Add(h);
 
@@ -2318,7 +2323,8 @@ namespace DH.Helpdesk.Services.Services
             int userId, 
             string adUser, 
             string defaultUser="", 
-            ExtraFieldCaseHistory extraField = null)
+            ExtraFieldCaseHistory extraField = null,
+            string caseExtraFollowers = null)
         {
             var h = new CaseHistory();
             var user = this._userRepository.GetUser(userId);
@@ -2348,8 +2354,14 @@ namespace DH.Helpdesk.Services.Services
                 h.CreatedByUser = user.FirstName + ' ' + user.SurName; 
                 }
             }
-                
+
+            if (c.CaseFollowers != null && string.IsNullOrEmpty(caseExtraFollowers))
+            {
+                caseExtraFollowers = string.Join(BRConstItem.Email_Separator, c.CaseFollowers.Select(x => x.Follower)) + BRConstItem.Email_Separator;
+            }
+
             h.Currency = c.Currency;
+            h.CaseExtraFollowers = string.IsNullOrEmpty(caseExtraFollowers) ? string.Empty : caseExtraFollowers;
             h.Customer_Id = c.Customer_Id;
             h.Deleted = c.Deleted; 
             h.Department_Id = c.Department_Id;  

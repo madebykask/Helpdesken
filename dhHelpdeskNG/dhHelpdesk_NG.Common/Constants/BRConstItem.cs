@@ -10,6 +10,8 @@
 
         public static string Email_Separator = ";";
 
+        public static char Email_Char_Separator = ';';
+
         public static char[] Value_Separator = {','}; 
     }
 }

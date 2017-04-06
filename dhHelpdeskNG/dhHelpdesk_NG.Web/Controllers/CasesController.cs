@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using DH.Helpdesk.BusinessData.Models.ExternalInvoice;
+using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Web.Models.Invoice;
 
 namespace DH.Helpdesk.Web.Controllers
@@ -2860,7 +2861,7 @@ namespace DH.Helpdesk.Web.Controllers
                         this.User.Identity.Name,
                         ei,
                         out errors,
-                        parentCase);                       
+                        parentCase, m.FollowerUsers);
             
             if (updateNotifierInformation.HasValue && updateNotifierInformation.Value)
             {
@@ -2982,11 +2983,23 @@ namespace DH.Helpdesk.Web.Controllers
 			        }).ToList());
 	        }
 
-	        //save extra followers
-            if (!string.IsNullOrEmpty(m.FollowerUsers))
+            //save extra followers
+            var followerUsers = new List<string>();
+            if (edit)
             {
-                var followerUsers = m.FollowerUsers.Split(';').Where(s => !string.IsNullOrWhiteSpace(s)).Select(x => x.Trim()).ToList();
+                if (!string.IsNullOrEmpty(m.FollowerUsers))
+                {
+                    followerUsers = m.FollowerUsers.Split(BRConstItem.Email_Char_Separator).Where(s => !string.IsNullOrWhiteSpace(s)).Select(x => x.Trim()).ToList();
+                }
                 _caseExtraFollowersService.SaveExtraFollowers(case_.Id, followerUsers, workContext.User.UserId);
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(m.FollowerUsers))
+                {
+                    followerUsers = m.FollowerUsers.Split(BRConstItem.Email_Char_Separator).Where(s => !string.IsNullOrWhiteSpace(s)).Select(x => x.Trim()).ToList();
+                    _caseExtraFollowersService.SaveExtraFollowers(case_.Id, followerUsers, workContext.User.UserId);
+                }
             }
 
             caseMailSetting.CustomeMailFromAddress = mailSenders;

@@ -7,6 +7,11 @@
 
     public class CaseHistory : Entity
     {
+        public CaseHistory()
+        {
+            CaseExtraFollowers = string.Empty;
+        }
+
         public Guid CaseHistoryGUID { get; set; }
         public int Case_Id { get; set; }
         public String ReportedBy { get; set; }
@@ -94,6 +99,7 @@
         public DateTime? LatestSLACountDate { get; set; }
         public int ActionLeadTime { get; set; }
         public int ActionExternalTime { get; set; }
+        public string CaseExtraFollowers { get; set; }
 
 //        /// <summary>
 //        /// Number of parent case (if any)
