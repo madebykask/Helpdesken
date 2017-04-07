@@ -151,11 +151,23 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                 var orderTypeRep = uow.GetRepository<OrderType>();
                 var administratorRep = uow.GetRepository<User>();
                 var statusRep = uow.GetRepository<OrderState>();
+                var userRep = uow.GetRepository<User>();
 
-                var orderTypes = orderTypeRep.GetAll(m => m.Users)
-                                    .GetRootOrderTypes(customerId)
-                                    .GetByUsers(userId)
-                                    .ToList();
+                var orderTypes = new List<OrderType>();
+                var user = userRep.GetById(userId);
+                if (user != null &&
+                    (user.UserGroup_Id == UserGroups.CustomerAdministrator ||
+                     user.UserGroup_Id == UserGroups.SystemAdministrator))
+                {
+                    orderTypes = orderTypeRep.GetAll().GetRootOrderTypes(customerId).ToList();
+                }
+                else
+                {
+                    orderTypes = orderTypeRep.GetAll(m => m.Users)
+                        .GetRootOrderTypes(customerId)
+                        .GetByUsers(userId)
+                        .ToList();
+                }
 
                 var orderTypesInRow = this.GetChildrenInRow(orderTypes, true).ToList();
 
