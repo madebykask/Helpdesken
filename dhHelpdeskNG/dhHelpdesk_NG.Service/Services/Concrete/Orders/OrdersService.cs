@@ -491,7 +491,6 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
 
                     //get createcasetype by ordertype
                     var orderType = this._orderTypeRepository.GetById(entity.OrderType_Id.Value);
-                    
 
                     var newCase = new Case();
 
@@ -514,7 +513,8 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                         {
                             newCase.User_Id = user.Id;
                         }
-                        var cUser = _computerUsersRepository.GetComputerUserByUserId(entity.UserId, request.CustomerId, entity.Domain_Id);
+                        var cUser = _computerUsersRepository.GetComputerUserByUserId(entity.UserId, request.CustomerId, entity.Domain_Id) ??
+                                    _computerUsersRepository.GetComputerUserByUserId(entity.UserId, request.CustomerId);
                         if (cUser != null)
                         {
                             newCase.ReportedBy = cUser.UserId;
