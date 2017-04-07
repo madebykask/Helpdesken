@@ -83,6 +83,10 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
 
         private readonly IPriorityService _priorityService;
 
+        private readonly IMasterDataService _masterDataService;
+
+        private readonly IWorkingGroupService _workingGroupService;
+
 
 		public OrdersService(
                 IUnitOfWorkFactory unitOfWorkFactory, 
@@ -108,7 +112,9 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                 IEmailSendingSettingsProvider emailSendingSettingsProvider,
                 IComputerUsersRepository computerUsersRepository,
                 ICaseExtraFollowersService caseExtraFollowersService,
-                IPriorityService priorityService)
+                IPriorityService priorityService,
+                IMasterDataService masterDataService,
+                IWorkingGroupService workingGroupService)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _orderFieldSettingsService = orderFieldSettingsService;
@@ -134,6 +140,8 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
             _computerUsersRepository = computerUsersRepository;
             _caseExtraFollowersService = caseExtraFollowersService;
             _priorityService = priorityService;
+            _masterDataService = masterDataService;
+            _workingGroupService = workingGroupService;
         }
 
         public OrdersFilterData GetOrdersFilterData(int customerId, int userId, out int[] selectedStatuses)
@@ -572,7 +580,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                     }
                     newCase.Description = string.IsNullOrEmpty(description) ? "." : description;
 
-                    this._caseService.SaveCase(newCase, null, caseMailSetting, 0, userId, ei, out errors);
+                    var caseHistoryId = this._caseService.SaveCase(newCase, null, caseMailSetting, 0, userId, ei, out errors);
 
                     //get casenumber
                     var newcase = this._caseService.GetCaseById(newCase.Id);
@@ -581,6 +589,34 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
 
                     if (emails.Any())
                         _caseExtraFollowersService.SaveExtraFollowers(newCase.Id, emails, entity.User_Id);
+
+                    #region Send New Case Emails
+
+                    var basePath = _masterDataService.GetFilePath(newCase.Customer_Id);
+                    var currentUser = _userRepository.GetById(request.UserId);
+                    var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(currentUser.TimeZoneId);
+
+                    var mailSenders = new MailSenders();
+                    caseMailSetting.CustomeMailFromAddress = mailSenders;
+
+                    mailSenders.SystemEmail = caseMailSetting.HelpdeskMailFromAdress;
+
+                    if (newCase.WorkingGroup_Id.HasValue)
+                    {
+                        var curWG = _workingGroupService.GetWorkingGroup(newCase.WorkingGroup_Id.Value);
+                        if (curWG != null)
+                            if (!string.IsNullOrWhiteSpace(curWG.EMail) && _emailService.IsValidEmail(curWG.EMail))
+                                mailSenders.WGEmail = curWG.EMail;
+                    }
+
+                    if (newCase.DefaultOwnerWG_Id.HasValue && newCase.DefaultOwnerWG_Id.Value > 0)
+                    {
+                        var defaultWGEmail = _workingGroupService.GetWorkingGroup(newCase.DefaultOwnerWG_Id.Value).EMail;
+                        mailSenders.DefaultOwnerWGEMail = defaultWGEmail;
+                    }
+                    _caseService.SendCaseEmail(newCase.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone);
+
+                    #endregion
 
                     ordersRep.Update(entity);
                     uow.Save();
