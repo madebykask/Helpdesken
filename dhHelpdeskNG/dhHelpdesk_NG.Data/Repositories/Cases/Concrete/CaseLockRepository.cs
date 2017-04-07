@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 {
@@ -66,14 +68,56 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             }
         }
 
-        public CaseLock GetCaseLockByCaseId(int caseId)
+        public IDictionary<int, ICaseLockOverview> GetCasesLock(int[] caseIds)
         {
-            var entity = Table.Where(l => l.Case_Id == caseId).FirstOrDefault();
+            var resultMap = new Dictionary<int, ICaseLockOverview>();
 
-            if (entity == null)
-                return null;
-            else
-                return this._caseLockToBusinessModelMapper.Map(entity);
+            var items =
+                Table.Where(l => caseIds.Contains(l.Case_Id))
+                     .Select(ProjectToCaseLockOverview())
+                     .ToList();
+
+            foreach (var caseLockItem in items)
+            {
+                if (!resultMap.ContainsKey(caseLockItem.CaseId))
+                {
+                    resultMap.Add(caseLockItem.CaseId, caseLockItem);
+                }
+            }
+
+            return resultMap;
+        }
+
+        public ICaseLockOverview GetCaseLockByCaseId(int caseId)
+        {
+            var item = Table.Where(l => l.Case_Id == caseId)
+                            .Select(ProjectToCaseLockOverview())
+                            .FirstOrDefault();
+            return item;
+        }
+
+        private Expression<Func<CaseLockEntity, CaseLockOverview>> ProjectToCaseLockOverview()
+        {
+            Expression<Func<CaseLockEntity, CaseLockOverview>>  exp = 
+                l => new CaseLockOverview
+                {
+                    Id = l.Id,
+                    CaseId =  l.Case_Id,
+                    UserId = l.User_Id,
+                    LockGUID = l.LockGUID,
+                    BrowserSession = l.BrowserSession,
+                    CreatedTime = l.CreatedTime,
+                    ExtendedTime = l.ExtendedTime,
+                    User = new CaseLockUserInfo
+                    {
+                        Id = l.Id,
+                        UserId = l.User.UserID,
+                        FirstName = l.User.FirstName,
+                        LastName = l.User.SurName
+                    }
+                };
+
+            return exp;
         }
 
         public void LockCase(CaseLock caseLock)

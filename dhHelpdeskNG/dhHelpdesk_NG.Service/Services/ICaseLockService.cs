@@ -18,7 +18,9 @@
 
         CaseLock GetCaseLockByGUID(Guid lockGUID);
 
-        CaseLock GetCaseLockByCaseId(int caseId);
+        ICaseLockOverview GetCaseLockByCaseId(int caseId);
+
+        IDictionary<int, ICaseLockOverview> GetCasesLocks(int[] caseIds);
 
         void CaseLockCleanUp();
 

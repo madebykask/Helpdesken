@@ -13,13 +13,12 @@
         }
 
         public CaseLock(
-            int caseId, 
-            int userId, 
+            int caseId,
+            int userId,
             Guid lockGUID,
             string browserSession,
             DateTime createTime,
-            DateTime extendedTime,
-            User user)
+            DateTime extendedTime)
         {
             this.CaseId = caseId;
             this.UserId = userId;
@@ -27,6 +26,18 @@
             this.BrowserSession = browserSession;
             this.CreatedTime = createTime;
             this.ExtendedTime = extendedTime;
+        }
+
+        public CaseLock(
+            int caseId, 
+            int userId, 
+            Guid lockGUID,
+            string browserSession,
+            DateTime createTime,
+            DateTime extendedTime,
+            User user)
+            : this(caseId, userId, lockGUID, browserSession, createTime, extendedTime)
+        {
             this.User = user;
         }
 
