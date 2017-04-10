@@ -2979,7 +2979,8 @@ namespace DH.Helpdesk.Web.Controllers
 				        InvoiceNumber = x.Name,
 				        InvoicePrice = x.Amount,
 				        CreatedDate = DateTime.UtcNow,
-				        CreatedByUserId = workContext.User.UserId
+				        CreatedByUserId = workContext.User.UserId,
+                        Charge = true
 			        }).ToList());
 	        }
 
