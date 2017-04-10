@@ -530,7 +530,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                         if (cUser != null)
                         {
                             newCase.ReportedBy = cUser.UserId;
-                            newCase.PersonsName = cUser.SurName + " " + cUser.FirstName;
+                            newCase.PersonsName = cUser.FirstName + " " + cUser.SurName;
                             newCase.PersonsEmail = cUser.Email;
                             newCase.PersonsPhone = cUser.Phone;
                             newCase.PersonsCellphone = cUser.Cellphone;
