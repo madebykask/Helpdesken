@@ -139,6 +139,7 @@
             return this.View(model);
         }
 
+        [ValidateInput(false)]
         [HttpPost]
         public ActionResult New(OperationLog operationlog, OperationLogList operationLogList, int[] WGsSelected, string[] SRsSelected, string[] UsersSelected, int OperationLogHour, int OperationLogMinute, int chkSecurity, int? chkOperationLogSMS, string txtSMS)
         {
@@ -216,6 +217,7 @@
             return this.View(model);
         }
 
+        [ValidateInput(false)]
         [HttpPost]
         public ActionResult Edit(int id, OperationLog operationlog, OperationLogList operationLogList, int[] WGsSelected, string[] SRsSelected, string[] WGsSMSSelected, string[] UsersSelected, int OperationLogHour, int OperationLogMinute, int chkSecurity, int? chkOperationLogSMS, string txtSMS)
         {
