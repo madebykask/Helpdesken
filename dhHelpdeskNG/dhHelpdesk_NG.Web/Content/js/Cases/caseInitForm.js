@@ -567,10 +567,12 @@ function CaseInitForm() {
     
     $(publicDepartmentControlName).change(function () {
         // Remove after implementing http://redmine.fastdev.se/issues/10995        
+        var departmentId = $(this).val();
+        showInvoice(departmentId);
+
         if (skipRefreshOU)
             return;
 
-        var departmentId = $(this).val();        
         var departmentFilterFormat = $('#DepartmentFilterFormat').val();
         
         var templateOU_Id = $("#CaseTemplate_OU_Id").val();
@@ -579,8 +581,6 @@ function CaseInitForm() {
             refreshOrganizationUnit(departmentId, departmentFilterFormat, templateOU_Id);                
         else 
             refreshOrganizationUnit(departmentId, departmentFilterFormat);
-        
-        showInvoice(departmentId);
     });
 
     $(publicIsAboutDepartmentControlName).change(function () {
