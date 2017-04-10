@@ -58,12 +58,12 @@ namespace DH.Helpdesk.Web.Controllers
             else
             {
                 if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.UserGroupId == 2)
-                    model.BulletinBoards = this._bulletinBoardService.GetBulletinBoards(SessionFacade.CurrentCustomer.Id, true, bulletinBoardWGRestriction).OrderBy(x => x.ChangedDate).ToList();
+                    model.BulletinBoards = this._bulletinBoardService.GetBulletinBoards(SessionFacade.CurrentCustomer.Id, true, bulletinBoardWGRestriction).OrderByDescending(x => x.ShowDate.HasValue ? x.ShowDate : x.ChangedDate).ToList();
                 else
-                    model.BulletinBoards = this._bulletinBoardService.GetBulletinBoards(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.ChangedDate).ToList();
+                    model.BulletinBoards = this._bulletinBoardService.GetBulletinBoards(SessionFacade.CurrentCustomer.Id).OrderByDescending(x => x.ShowDate.HasValue ? x.ShowDate : x.ChangedDate).ToList();
 
-                CS.SortBy = "ChangedDate";
-                CS.Ascending = true;
+                CS.SortBy = "ChangedDate"; //really sort by showdate
+                CS.Ascending = false;
                 SessionFacade.CurrentBulletinBoardSearch = CS;
             }
 
