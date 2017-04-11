@@ -727,7 +727,6 @@
                             }
                         }
                         if (blob !== null) {
-                            clearScene();
                             var URLObj = window.URL || window.webkitURL;
                             var source = URLObj.createObjectURL(blob);
                             this.paste_createImage(source);
@@ -813,17 +812,15 @@
                         });
                     }
                 }
-                
-                
-                imgFilename = 'image_' + Application.prototype.generateRandomKey();
-                
+
+                if (imgFilename.length === 0) {
+                    imgFilename = 'image_' + Application.prototype.generateRandomKey();
+                }
                 if (imgFilename.indexOf('.') === -1) {
                     imgFilename = imgFilename + '.' + extension;
                 }
-
                 imgFilenameCtrl.val(imgFilename);
 
-                
                 $btnSave.on('click', function () {
                     if (imgFilenameCtrl.val() == "")
                         return;
