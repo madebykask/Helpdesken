@@ -12,6 +12,8 @@
 
         List<ActionSetting> GetActionSettings(int customerId);
 
-        CaseLogModel GetCaseLogs(int caseId);        
+        CaseLogModel GetCaseLogs(int caseId);
+        bool IsOrderModuleEnabled(int customerId);
+        bool IsUserHasOrderTypes(int userId, int customerId);
     }
 }

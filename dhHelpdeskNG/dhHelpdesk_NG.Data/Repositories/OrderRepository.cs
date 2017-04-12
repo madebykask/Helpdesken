@@ -1,3 +1,5 @@
+using System.Data.Entity;
+
 namespace DH.Helpdesk.Dal.Repositories
 {
     using System;
@@ -117,6 +119,7 @@ namespace DH.Helpdesk.Dal.Repositories
     public interface IOrderTypeRepository : IRepository<OrderType>
     {
         void ResetDefault(int exclude, int customerId);
+        bool IsUserHasOrderTypes(int customerId, int userId);
     }
 
     public class OrderTypeRepository : RepositoryBase<OrderType>, IOrderTypeRepository
@@ -133,6 +136,15 @@ namespace DH.Helpdesk.Dal.Repositories
                 obj.IsDefault = 0;
                 this.Update(obj);
             }
+        }
+
+        public bool IsUserHasOrderTypes(int customerId, int userId)
+        {
+            return Table.Include(x => x.Users)
+                .Where(x => x.Customer_Id == customerId)
+                .Where(t => t.IsActive == 1 && t.Parent_OrderType_Id == null)
+                .Where(t => t.Users.Any(u => u.Id == userId))
+                .Any();
         }
     }
 

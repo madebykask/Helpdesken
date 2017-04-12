@@ -53,17 +53,20 @@ namespace DH.Helpdesk.Dal.Repositories
 		private readonly ICaseTypeRepository caseTypeRepository;
 
 		private readonly ILogRepository logRepository;
+	    private readonly IDepartmentRepository _departmentRepository;
 
 		public CaseSearchRepository(
 				ICustomerUserRepository customerUserRepository,
 				IProductAreaRepository productAreaRepository,
 				ICaseTypeRepository caseTypeRepository,
-				ILogRepository logRepository)
+				ILogRepository logRepository,
+                IDepartmentRepository departmentRepository)
 		{
 			this._customerUserRepository = customerUserRepository;
 			this._productAreaRepository = productAreaRepository;
 			this.caseTypeRepository = caseTypeRepository;
 			this.logRepository = logRepository;
+		    _departmentRepository = departmentRepository;
 		}
 
 		public SearchResult<CaseSearchResult> Search(CaseSearchContext context, int workingHours, out CaseRemainingTimeData remainingTime, out CaseAggregateData aggregateData)
@@ -99,6 +102,7 @@ namespace DH.Helpdesk.Dal.Repositories
 			IList<ProductAreaEntity> pal = this._productAreaRepository.GetMany(x => x.Customer_Id == f.CustomerId).OrderBy(x => x.Name).ToList();
 			var caseTypes = this.caseTypeRepository.GetCaseTypeOverviews(f.CustomerId).ToArray();
 			var displayLeftTime = userCaseSettings.Any(it => it.Name == TimeLeftColumn);
+		    var userDepartments = _departmentRepository.GetDepartmentsByUserPermissions(userId, f.CustomerId);
 
             var sql = this.ReturnCaseSearchSql(
 										context.f,
@@ -115,8 +119,8 @@ namespace DH.Helpdesk.Dal.Repositories
 										context.relatedCasesCaseId,
 										context.relatedCasesUserId,
 										context.caseIds,
-										context.userCaseSettings);
-
+										context.userCaseSettings,
+                                        userDepartments);
 			if (string.IsNullOrEmpty(sql))
 			{
                 return searchResult;
@@ -825,7 +829,8 @@ namespace DH.Helpdesk.Dal.Repositories
 					int? relatedCasesCaseId,
 					string relatedCasesUserId,
 					int[] caseIds,
-					IList<CaseSettings> userCaseSettings)
+					IList<CaseSettings> userCaseSettings,
+                    IEnumerable<Department> userDepartments)
 		{
 			var sql = new List<string>();
 			var validateUserCaseSettings = new List<CaseSettings>();
@@ -859,6 +864,7 @@ namespace DH.Helpdesk.Dal.Repositories
 					gs,
 					relatedCasesCaseId,
 					caseSettings,
+                    userDepartments, 
 					relatedCasesUserId,
 					caseIds));
 			}
@@ -898,7 +904,6 @@ namespace DH.Helpdesk.Dal.Repositories
 					tables.Add("left outer join tblWorkingGroup on tblCase.WorkingGroup_Id = tblWorkingGroup.Id ");
 				}
 			}
-
 			tables.Add("left outer join tblStatus on tblCase.Status_Id = tblStatus.Id ");
 			tables.Add("left outer join tblCategory on tblCase.category_Id = tblCategory.Id ");
 			tables.Add("left outer join tblStateSecondary on tblCase.StateSecondary_Id = tblStateSecondary.Id ");
@@ -908,14 +913,6 @@ namespace DH.Helpdesk.Dal.Repositories
 			tables.Add("left outer join tblUsers as tblUsers3 on tblCase.CaseResponsibleUser_Id = tblUsers3.Id ");
 			tables.Add("left outer join tblProblem on tblCase.Problem_Id = tblProblem.Id ");
 			tables.Add("left outer join tblUsers as tblUsers4 on tblProblem.ResponsibleUser_Id = tblUsers4.Id ");
-
-            //customer user comes from the same department as the case department. Should exist (check where clause)
-            tables.Add("LEFT OUTER JOIN tblDepartmentUser depUser1 ON depUser1.Department_Id = tblCase.Department_Id AND depUser1.[User_Id] = tblCustomerUser.[User_Id]");
-
-            //there's no such customerUser that comes from the same department as caseCustomer department - deUser2 should not exist (check where clause).
-            tables.Add("LEFT OUTER JOIN tblDepartment caseCustomerDepartment ON caseCustomerDepartment.Customer_Id = tblCase.Customer_Id");
-            tables.Add("LEFT OUTER JOIN tblDepartmentUser depUser2 ON caseCustomerDepartment.Id = depUser2.Department_Id AND depUser2.[User_Id] = tblCustomerUser.[User_Id]");
-
 
             if (caseSettings.ContainsKey(GlobalEnums.TranslationCaseFields.CausingPart.ToString()))
 			{
@@ -942,7 +939,8 @@ namespace DH.Helpdesk.Dal.Repositories
 					int? relatedCasesCaseId,
 					string relatedCasesUserId,
 					int[] caseIds,
-					IList<CaseSettings> userCaseSettings)
+					IList<CaseSettings> userCaseSettings,
+	        IEnumerable<Department> userDepartments)
 		{
 			var sql = new List<string>();
 			var validateUserCaseSettings = new List<CaseSettings>();
@@ -1142,6 +1140,7 @@ namespace DH.Helpdesk.Dal.Repositories
 					gs,
 					relatedCasesCaseId,
 					caseSettings,
+                    userDepartments,
 					relatedCasesUserId,
 					caseIds);
 			}
@@ -1288,12 +1287,17 @@ namespace DH.Helpdesk.Dal.Repositories
 		/// <param name="userGroupId"></param>
 		/// <param name="gs"></param>
 		/// <param name="relatedCasesCaseId"></param>
+	    /// <param name="caseSettingsMap"></param>
+	    /// <param name="userDepartments"></param>
 		/// <param name="relatedCasesUserId"></param>
 		/// <param name="caseIds"></param>
 		/// <param name="caseSettings"></param>
 		/// <param name="restrictedCasePermission"> User has permission to see own cases only </param>
 		/// <returns></returns>
-		private string ReturnCaseSearchWhere(CaseSearchFilter f, Setting customerSetting, CustomerUser customerUserSetting, bool isFieldResponsibleVisible, int userId, string userUserId, int showNotAssignedWorkingGroups, int userGroupId, GlobalSetting gs, int? relatedCasesCaseId, Dictionary<string, CaseSettings> caseSettingsMap, string relatedCasesUserId = null, int[] caseIds = null)
+	    private string ReturnCaseSearchWhere(CaseSearchFilter f, Setting customerSetting, CustomerUser customerUserSetting,
+	        bool isFieldResponsibleVisible, int userId, string userUserId, int showNotAssignedWorkingGroups,
+	        int userGroupId, GlobalSetting gs, int? relatedCasesCaseId, Dictionary<string, CaseSettings> caseSettingsMap,
+	        IEnumerable<Department> userDepartments, string relatedCasesUserId = null, int[] caseIds = null)
 		{
 			if (f == null || customerSetting == null || gs == null)
 			{
@@ -1342,16 +1346,13 @@ namespace DH.Helpdesk.Dal.Repositories
 
 			sb.Append(" and (tblCustomerUser.[User_Id] = " + f.UserId + ")");
 
-            /////////////////////////////////////////////////////////////////
-            // anvandaren far bara se avdelningar som den har behorighet till
+            ////////////////////////////////////////////////////////////////////////////////////
+            // användaren får bara se avdelningar som den har behörighet till
             // note: commented out due to slow perfomance and replaced by left joins and checks for null below
-            //sb.Append(" and (tblCase.Department_Id In (select Department_Id from tblDepartmentUser where [User_Id] = " + userId + ")");
-            //sb.Append(" or not exists (select du.Department_Id from tblDepartmentUser du " +
-            //                                    "Inner join tblDepartment d on (d.Id = du.Department_Id) " +
-            //                          "where (du.[User_Id] = " + userId + ") and d.customer_id = " + f.CustomerId + ")");
-            //                          sb.Append(") ");
-            sb.Append(" AND (depUser1.User_Id is NOT NULL OR depUser2.User_Id IS NULL)");
-            /////////////////////////////////////////////////////////////////
+		    if (userDepartments.Any())
+		    {
+                sb.Append(" and EXISTS(select 1 from tblDepartmentUser _depUser WHERE _depUser.Department_Id = tblCase.Department_Id AND _depUser.[User_Id] = tblCustomerUser.User_Id) ");
+            }
 
             // finns kryssruta på användaren att den bara får se sina egna ärenden
             var restrictedCasePermission = customerUserSetting.User.RestrictedCasePermission;

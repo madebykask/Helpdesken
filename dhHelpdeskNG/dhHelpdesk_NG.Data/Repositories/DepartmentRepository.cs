@@ -13,7 +13,7 @@
     public interface IDepartmentRepository : IRepository<Department>
     {
         IEnumerable<Department> GetDepartmentsForUser(int userId, int customerId = 0);
-        IEnumerable<Department> GetDepartmentsByUserPermissions(int userId, int customerId);
+        IEnumerable<Department> GetDepartmentsByUserPermissions(int userId, int customerId, bool activeOnly = true);
         void ResetDefault(int exclude);
 
         List<ItemOverview> FindActiveOverviews(int customerId);
@@ -45,14 +45,16 @@
             return query.OrderBy(x => x.DepartmentName);
         }
 
-        public IEnumerable<Department> GetDepartmentsByUserPermissions(int userId, int customerId)
+        public IEnumerable<Department> GetDepartmentsByUserPermissions(int userId, int customerId, bool activeOnly = true)
         {
-            var query = from d in this.DataContext.Departments
-                        join du in this.DataContext.DepartmentUsers on d.Id equals du.Department_Id 
-                        where d.Customer_Id == customerId && du.User_Id == userId 
+            var query = from d in Table
+                        from du in d.Users
+                        where d.Customer_Id == customerId && du.Id == userId
                         select d;
 
-            return query.Any() ? query.OrderBy(x => x.DepartmentName) : null;
+            return activeOnly
+                ? query.Where(d => d.IsActive > 0).ToList()
+                : query.ToList();
         }
         
         public void ResetDefault(int exclude)

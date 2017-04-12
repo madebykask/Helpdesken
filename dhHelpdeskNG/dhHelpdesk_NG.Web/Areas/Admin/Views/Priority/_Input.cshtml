@@ -161,7 +161,7 @@
                                         @Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @Translation.Get("Om e-postmall väljs så skickas meddelande till ovanstående adresser när ärendet ändras", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Om e-postmall väljs så skickas meddelande till ovanstående adresser när notering skrivs")
                                         <br />
                                         @Html.DropDownListFor(model => model.Priority.MailID_Change, Model.EmailTemplates, "", new { style = "width: auto;" })
                                     </td>

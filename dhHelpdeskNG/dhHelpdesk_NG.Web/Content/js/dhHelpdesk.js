@@ -597,7 +597,7 @@ function DestroyDataTable(tableUniqId) {
     oTable.destroy();
 };
 
-function InitDataTable(tableUniqId, perText, showingText, options, onError) {
+function InitDataTable(tableUniqId, perText, showingText, options, onError, emptyTable, infoEmpty) {
     var dataTable = $('#' + tableUniqId);
     $.fn.dataTable.ext.errMode = 'none';
     if (onError && typeof onError === "function")
@@ -611,6 +611,8 @@ function InitDataTable(tableUniqId, perText, showingText, options, onError) {
         "oLanguage": {
             "sLengthMenu": "_MENU_ " + perText,
             "sInfo": showingText + " _PAGE_ / _PAGES_",
+            "sEmptyTable": emptyTable,
+            "sInfoEmpty": infoEmpty,
             "oPaginate": {
                 "sFirst": "First",
                 "sLast": "Last",
