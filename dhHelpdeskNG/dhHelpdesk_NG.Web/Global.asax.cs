@@ -26,18 +26,20 @@ namespace DH.Helpdesk.Web
     public class MvcApplication : HttpApplication
     {
         private readonly IConfiguration configuration = ManualDependencyResolver.Get<IConfiguration>();
-
+        
         protected void Application_Start()
         {           
             AreaRegistration.RegisterAllAreas();
-			GlobalConfiguration.Configure(WebApiConfig.Register);
+            //MARK: Remove old Api
+            //GlobalConfiguration.Configure(WebApiConfig.Register);
 
-	        ViewEngineInit();
+            ViewEngineInit();
 
 			RegisterLocalizedAttributes();
 			FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-			FilterConfig.RegisterWebApiGlobalFilters(GlobalConfiguration.Configuration.Filters);
-			RouteConfig.RegisterRoutes(RouteTable.Routes);
+            //MARK: Remove old Api
+            //FilterConfig.RegisterWebApiGlobalFilters(GlobalConfiguration.Configuration.Filters);
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
             RegisterBinders();
             ProcessStartupTasks();
             BundleConfig.RegisterBundles(BundleTable.Bundles);
@@ -64,18 +66,20 @@ namespace DH.Helpdesk.Web
 
 		protected void Application_PostAuthorizeRequest()
 		{
-			if (IsWebApiRequest())
-			{
-				HttpContext.Current.SetSessionStateBehavior(System.Web.SessionState.SessionStateBehavior.Required);
-			}
-		}
+            //MARK: Remove old Api
+            //if (IsWebApiRequest())
+            //{
+            //	HttpContext.Current.SetSessionStateBehavior(System.Web.SessionState.SessionStateBehavior.Required);
+            //}
+        }
 
-		private bool IsWebApiRequest()
-		{
-			return HttpContext.Current.Request.AppRelativeCurrentExecutionFilePath.Contains(@"/" + WebApiConfig.UrlPrefixRelative + @"/");
-		}
+        //MARK: Remove old Api
+        //private bool IsWebApiRequest()
+        //{
+        //	return HttpContext.Current.Request.AppRelativeCurrentExecutionFilePath.Contains(@"/" + WebApiConfig.UrlPrefixRelative + @"/");
+        //}        
 
-		protected void Application_BeginRequest(object sender, EventArgs e)
+        protected void Application_BeginRequest(object sender, EventArgs e)
 		{
 			Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture = this.configuration.Application.DefaultCulture;
 		}

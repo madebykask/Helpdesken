@@ -42,7 +42,9 @@
             <br />
             <input type="hidden" id="timeZoneOffsetInJan1" name="timeZoneOffsetInJan1"/>
             <input type="hidden" id="timeZoneOffsetInJul1" name="timeZoneOffsetInJul1"/>
-            <input type="submit" value="Login" name="btnLogin" id="btnLogin" class="btn btn-large btn-success" style="width:100%;" />            
+            <input type="submit" value="Login" name="btnLogin" id="btnLogin" class="btn btn-large btn-success" style="width:100%;" />
+            <input type="button" value="Get Access Token" name="btnToken" id="btnToken" class="btn btn-large btn-danger" style="width:100%;" />
+            <input type="button" value="Send Request" name="btnRequest" id="btnRequest" class="btn btn-large btn-warning" style="width:100%;" />
         }
     </div>
     <div class="signin-bottom">
@@ -60,7 +62,33 @@
         document.getElementById('timeZoneOffsetInJan1').value = Jan1.getTimezoneOffset();
         document.getElementById('timeZoneOffsetInJul1').value = Jul1.getTimezoneOffset();
         $("input:text:visible:first").focus();
-    };    
+    };
 
+    $('#btnToken').click(function () {
+        auth1();
+    });
+
+    $('#btnRequest').click(function () {
+        request1();
+    });
+
+    function auth1() {
+        $.post("@Url.Content("~/token")",
+                "username=mg" +
+                "&password=t1" +
+                "&grant_type=password",
+                { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
+        ).success(function (data) {
+            console.log(data);
+        });
+    };
+
+    function request1() {       
+        $.ajax({
+            url: "@Url.Content("~/Api/TestApi/GetMyId")",
+            type: 'GET',            
+            headers: { "Authorization": "Bearer RJF36NVHbMYjFvCnjxTQIPFXBuYBHoxR74xga5Rf23Hs4t9SMoriAPYeS-C1tV4O3Ug0de-QuPDqc9ibCWSrW0Ik3o20lyQ_lVTbcJilyA8p3f1uv-RSvDPNdSkZSGp96SviHtzkMpoUv01JAXID-hiCh-T15PcFdjQL0vofa0cfudLy0qP4C5bt9CMvX1tBvgv_Q8NOWd1Fxr0rTuccpp6rOoM" }
+        });
+    };
 </script>
 </html>
