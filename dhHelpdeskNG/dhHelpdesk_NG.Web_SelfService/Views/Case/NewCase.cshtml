@@ -165,15 +165,16 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Persons_Name)
                                             </label>
                                             <div class="col-md-9">
-                                                @Html.TextBoxFor(p => Model.NewCase.PersonsName, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Persons_Name.ToString() })
-
-                                                <span class="case-div-width90em">
-                                                    @Html.HiddenFor(model => Model.FollowerUsers, new { @readonly = "true", id = "caseFollowerUsersInput" })
-                                                    @Html.Partial("_CaseAddFollowers", Model.SendToDialogModel)
-                                                    <a href="#case_add_followers_btn" role="button" class="btn btn-default case-usersearch-btn hasAttribute" data-toggle="modal" standardName="@GlobalEnums.TranslationCaseFields.Persons_Name.ToString()">@Translation.Get("Add followers", Enums.TranslationSource.TextTranslation)</a>
-                                                    @Html.TextAreaFor(model => model.FollowerUsers, new { id = "fakeCaseFollowerUsersInput", @class = "case-usersearch-textarea hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Persons_Name.ToString() })
-
-                                                </span>
+                                                @Html.TextBoxFor(p => Model.NewCase.PersonsName, new {@class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Persons_Name.ToString()})
+                                                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString()))
+                                                {
+                                                    <span class="case-div-width90em">
+                                                        @Html.HiddenFor(model => Model.FollowerUsers, new {@readonly = "true", id = "caseFollowerUsersInput"})
+                                                        @Html.Partial("_CaseAddFollowers", Model.SendToDialogModel)
+                                                        <a href="#case_add_followers_btn" role="button" class="btn btn-default case-usersearch-btn hasAttribute" data-toggle="modal" standardName="@GlobalEnums.TranslationCaseFields.Persons_Name.ToString()">@Translation.Get("Add followers", Enums.TranslationSource.TextTranslation)</a>
+                                                        @Html.TextAreaFor(model => model.FollowerUsers, new {id = "fakeCaseFollowerUsersInput", @class = "case-usersearch-textarea hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Persons_Name.ToString()})
+                                                    </span>
+                                                }
                                             </div>
 
 
