@@ -20,6 +20,7 @@ if not exists (SELECT name FROM sysindexes WHERE name = 'IX_tblCustomerUser_User
 	CREATE INDEX IX_tblCustomerUser_UserId ON tblCustomerUser (User_Id)
 GO
 
+
 UPDATE [dbo].[tblOrderType] SET [CaptionUserInfo] = N'Användare' WHERE [CaptionUserInfo] is NULL
 UPDATE [dbo].[tblOrderType] SET [CaptionOrdererInfo] = N'Beställare' WHERE [CaptionOrdererInfo] is NULL
 UPDATE [dbo].[tblOrderType] SET [CaptionReceiverInfo] = N'Kontakt' WHERE [CaptionReceiverInfo] is NULL
@@ -325,5 +326,137 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	end
 GO
 
+
+-----------------------------------
+-- case search optimisation indexes
+IF (NOT EXISTS(SELECT 1 FROM sys.indexes WHERE name='IX_tblCase_Id_DepartmentId' AND  object_id = OBJECT_ID(N'dbo.tblCase')))
+	CREATE NONCLUSTERED INDEX IX_tblCase_Id_DepartmentId ON [dbo].[tblCase] ([Id] ASC, [Department_Id] ASC	)
+GO
+  
+IF (NOT EXISTS(SELECT 1 FROM sys.indexes WHERE name='IX_tblCase_Customer_Id' AND  object_id = OBJECT_ID(N'dbo.tblCase')))
+	CREATE NONCLUSTERED INDEX IX_tblCase_Customer_Id ON [dbo].[tblCase] ([Customer_Id] ASC, [Deleted] ASC)
+GO
+-----------------------------------
+
+/***********************************************************************************
+ *** FULL TEXT SEARCH 
+ ************************************************************************************/
+
+IF (NOT EXISTS(SELECT 1 FROM sys.fulltext_catalogs WHERE name = N'SearchCasesFTS'))
+BEGIN
+	CREATE FULLTEXT CATALOG SearchCasesFTS 
+	WITH ACCENT_SENSITIVITY = OFF 
+	--autopopulate on by default
+END
+
+-- create temp table with existing indexes
+DECLARE @SearchCasesTableIndexes TABLE (IndexId INT, TableName nvarchar(200) NULL)
+
+INSERT INTO @SearchCasesTableIndexes(IndexId, TableName)
+SELECT i.object_id, t.name	
+FROM sys.tables t 
+	JOIN sys.fulltext_indexes i ON t.object_id = i.object_id  
+	JOIN sys.fulltext_catalogs c  ON i.fulltext_catalog_id = c.fulltext_catalog_id
+WHERE  c.name = N'SearchCasesFTS'
+
+--SELECT * FROM @SearchCasesTableIndexes
+
+---------------------------------------------------------------------------------
+-- tblCasae
+IF (NOT EXISTS(SELECT 1 FROM @SearchCasesTableIndexes WHERE TableName = N'tblCase'))
+BEGIN	
+	CREATE FULLTEXT INDEX ON dbo.tblCase  
+	(			 ReportedBy,
+					Persons_Name,
+					RegUserName,
+					Persons_EMail,
+					Persons_Phone,
+					Persons_CellPhone,
+					Place,
+					Caption,
+					[Description],
+					Miscellaneous,
+					ReferenceNumber,
+					InvoiceNumber,
+					InventoryNumber,
+					UserCode)  
+	KEY INDEX PK_tblCase
+	ON SearchCasesFTS  
+	WITH STOPLIST = SYSTEM
+END
+---------------------------------------------------------------------------------
+--CaseIsAbout
+IF (NOT EXISTS(SELECT 1 FROM @SearchCasesTableIndexes WHERE TableName = N'tblCaseIsAbout'))
+BEGIN
+		CREATE FULLTEXT INDEX ON dbo.tblCaseIsAbout  
+		(			 
+					 ReportedBy,
+					 Person_Name,
+					 UserCode,
+					 Person_Email,
+					 Place,
+					 Person_CellPhone,
+					 Person_Phone)  
+		KEY INDEX [PK_tblCaseIsAbout]
+		ON SearchCasesFTS  
+		WITH STOPLIST = SYSTEM
+END
+
+---------------------------------------------------------------------------------
+--Department
+IF (NOT EXISTS(SELECT 1 FROM @SearchCasesTableIndexes WHERE TableName = N'tblDepartment'))
+BEGIN		
+		CREATE FULLTEXT INDEX ON [dbo].[tblDepartment]
+		(			 
+			Department,
+			DepartmentId)  
+		KEY INDEX [PK_tblDepartment]
+		ON SearchCasesFTS  
+		WITH STOPLIST = SYSTEM
+END
+
+---------------------------------------------------------------------------------
+--tblLog
+IF (NOT EXISTS(SELECT 1 FROM @SearchCasesTableIndexes WHERE TableName = N'tblLog'))
+BEGIN
+		--tblLog
+		CREATE FULLTEXT INDEX ON [dbo].tblLog
+		(			 
+			Text_Internal,
+			Text_External)  
+		KEY INDEX [PK_tblLog]
+		ON SearchCasesFTS  
+		WITH STOPLIST = SYSTEM
+END
+---------------------------------------------------------------------------------
+-- FormFieldValue
+IF (NOT EXISTS(SELECT 1 FROM @SearchCasesTableIndexes WHERE TableName = N'tblFormFieldValue'))
+BEGIN
+		-- add SearchUniqueId column
+		if not exists (select 1 from syscolumns 
+					   INNER join sysobjects on sysobjects.id = syscolumns.id 
+					   WHERE syscolumns.name = N'SearchUniqueId' and sysobjects.name = N'tblFormFieldValue')
+		BEGIN
+			ALTER TABLE [dbo].[tblFormFieldValue] ADD [SearchUniqueId] [INT] IDENTITY(1,1) NOT NULL
+		END
+
+		--create index - required for full text search
+		IF (NOT EXISTS(SELECT 1 FROM sys.indexes WHERE name='IX_tblFormFieldValue_SearchUniqueId' AND  object_id = OBJECT_ID(N'dbo.tblFormFieldValue')))
+		BEGIN
+			CREATE UNIQUE NONCLUSTERED INDEX IX_tblFormFieldValue_SearchUniqueId ON [dbo].tblFormFieldValue
+			(
+				SearchUniqueId ASC
+			) ON [PRIMARY]
+		END
+
+		-- tblFormFieldValue
+		CREATE FULLTEXT INDEX ON [dbo].tblFormFieldValue (FormFieldValue)  
+		KEY INDEX [IX_tblFormFieldValue_SearchUniqueId]
+		ON SearchCasesFTS  
+		WITH STOPLIST = SYSTEM
+END
+GO
+/************************************************************************************/
+ 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.31'
