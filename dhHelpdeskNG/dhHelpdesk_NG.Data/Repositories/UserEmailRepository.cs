@@ -49,7 +49,8 @@ namespace DH.Helpdesk.Dal.Repositories
                 var inits = _notifierRepository.Search(customerId, searchText).Where(x => !string.IsNullOrEmpty(x.Email)).Select(x => new CaseEmailSendOverview
                 {
                     UserId = x.UserId,
-                    Name = x.FirstName + " " + x.SurName,
+                    FirstName = x.FirstName,
+                    SurName = x.SurName,
                     Emails = new List<string>
                     {
                         x.Email
@@ -65,13 +66,16 @@ namespace DH.Helpdesk.Dal.Repositories
                 var admins = DbContext.Users
                     .Where(x => x.Performer == 1)
                     .Where(x => x.IsActive == 1 && x.CustomerUsers.Any(cu => cu.Customer_Id == customerId))
-                    .Where(x => x.UserID.Contains(searchText) || x.FirstName.Contains(searchText) || x.SurName.Contains(searchText) || x.Email.Contains(searchText))
+                    .Where(x => x.UserID.Contains(searchText) || x.FirstName.Contains(searchText) || x.SurName.Contains(searchText) || x.Email.Contains(searchText)
+                            || (x.SurName + " " + x.FirstName).Contains(searchText)
+                            || (x.FirstName + " " + x.SurName).Contains(searchText))
                     .Where(x => !string.IsNullOrEmpty(x.Email))
                     .OrderBy(x => x.FirstName).ThenBy(x => x.SurName).ThenBy(x => x.Id).Take(25)
                     .Select(x => new CaseEmailSendOverview
                     {
                         UserId = x.UserID,
-                        Name = x.FirstName + " " + x.SurName,
+                        FirstName = x.FirstName,
+                        SurName = x.SurName,
                         Emails = new List<string>
                         {
                             x.Email
@@ -103,13 +107,13 @@ namespace DH.Helpdesk.Dal.Repositories
 
                 var newList = workGs.Select(x => new CaseEmailSendOverview
                 {
-                    Name = x.WorkingGroup.WorkingGroupName,
+                    FirstName = x.WorkingGroup.WorkingGroupName,
                     Emails = x.UserWorkingGroups.Select(r => r.User.Email).ToList(),
                     GroupType = CaseUserSearchGroup.WorkingGroup,
                     DepartmentName = string.Empty
                 })
                 .Where(x => x.Emails.Any())
-                .OrderBy(x => x.Name).ToList();
+                .OrderBy(x => x.FirstName).ToList();
                 result.AddRange(newList);
             }
             if (searchInEmailGrs)
@@ -118,7 +122,7 @@ namespace DH.Helpdesk.Dal.Repositories
                     .Where(x => x.IsActive == 1 && x.Customer_Id == customerId && (x.Members.Contains(searchText) || x.Name.Contains(searchText))).ToList();
                 var newList = emailGroups.Select(x => new CaseEmailSendOverview
                 {
-                    Name = x.Name,
+                    FirstName = x.Name,
                     Emails = x.Members.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList(),
                     GroupType = CaseUserSearchGroup.EmailGroup,
                     DepartmentName = string.Empty
