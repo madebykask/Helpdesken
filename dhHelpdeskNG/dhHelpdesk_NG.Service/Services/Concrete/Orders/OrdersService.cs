@@ -567,7 +567,8 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                         {
                             var values = s.Split(new[] { valuesSplitter }, StringSplitOptions.None);
                             return values[0];
-                        }).ToList();
+                        })
+                        .Where(x => !x.Equals(newCase.ReportedBy)).ToList();
                     var emails = _computerUsersRepository.GetEmailByUserIds(userIds, request.CustomerId);
 
                     #endregion
