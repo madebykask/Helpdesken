@@ -44,7 +44,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Where(b => b.ShowUntilDate >= DateTime.Now).ToList())
+        @foreach (var item in Model.Where(b => b.ShowUntilDate.Date >= DateTime.Now.Date).ToList())
         {                               
             <tr onclick="location.href='@Url.Action("edit", "calendar", new { id = item.Id })'" style="cursor: pointer;">
                 <td>
@@ -70,7 +70,7 @@
                 </td>
             </tr>
         }
-        @foreach (var item in Model.Where(b=> b.ShowUntilDate < DateTime.Now).ToList())
+        @foreach (var item in Model.Where(b=> b.ShowUntilDate.Date < DateTime.Now.Date).ToList())
         {                               
             <tr onclick="location.href='@Url.Action("edit", "calendar", new { id = item.Id })'" style="cursor: pointer;">
                 <td>
