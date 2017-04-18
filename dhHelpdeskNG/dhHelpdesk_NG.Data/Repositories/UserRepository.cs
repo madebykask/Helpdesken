@@ -1,6 +1,7 @@
 ﻿using DH.Helpdesk.BusinessData.Models.Users.Input;
 using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Domain.Users;
+using System.Data.Entity;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
@@ -19,7 +20,8 @@ namespace DH.Helpdesk.Dal.Repositories
     using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
-
+    using System.Threading.Tasks;   
+     
     #region USER
 
     public interface IUserRepository : IRepository<User>
@@ -43,6 +45,7 @@ namespace DH.Helpdesk.Dal.Repositories
         IList<User> GetUsersForUserSettingList(UserSearch searchUser);
         IList<User> GetUsersForUserSettingListByUserGroup(UserSearch searchUser);
         UserOverview Login(string uId, string pwd);
+        //Task <UserOverview> GetByUserIdAsync(string userId, string passw);
         UserOverview GetUser(int userid);
 
         IList<UserLists> GetUserOnCases(int customerId, bool isTakeOnlyActive = false);
@@ -397,7 +400,7 @@ namespace DH.Helpdesk.Dal.Repositories
             var user = this.GetUser(x => x.Id == userid);
             return user;
         }
-
+        
         public IList<UserLists> GetUserOnCases(int customerId, bool isTakeOnlyActive = false)
         {
             var query = from u in this.DataContext.Users
@@ -440,6 +443,50 @@ namespace DH.Helpdesk.Dal.Repositories
             return users.Select(o => new ItemOverview(o.Name, o.Value.ToString(CultureInfo.InvariantCulture)))
                         .FirstOrDefault();
         }
+
+        //public Task<UserOverview> GetByUserIdAsync(string userId, string passw)
+        //{
+        //    var ret = GetMany(u => u.UserID.EqualWith(userId, true) && u.Password == passw).Select(x => new UserOverview(
+        //                x.Id,
+        //                x.UserID,
+        //                x.Customer_Id,
+        //                x.Language_Id,
+        //                x.UserGroup_Id,
+        //                x.FollowUpPermission,
+        //                x.RestrictedCasePermission,
+        //                x.ShowNotAssignedWorkingGroups,
+        //                x.CreateCasePermission,
+        //                x.CreateSubCasePermission,
+        //                x.CopyCasePermission,
+        //                x.OrderPermission,
+        //                x.CaseSolutionPermission,
+        //                x.DeleteCasePermission,
+        //                x.DeleteAttachedFilePermission,
+        //                x.MoveCasePermission,
+        //                x.ActivateCasePermission,
+        //                x.ReportPermission,
+        //                x.CloseCasePermission,
+        //                x.CalendarPermission,
+        //                x.FAQPermission,
+        //                x.BulletinBoardPermission,
+        //                x.DocumentPermission,
+        //                x.InventoryPermission,
+        //                x.SetPriorityPermission,
+        //                x.InvoicePermission,
+        //                x.DataSecurityPermission,
+        //                x.RefreshContent,
+        //                x.FirstName,
+        //                x.SurName,
+        //                x.Phone,
+        //                x.Email,
+        //                x.UserWorkingGroups,
+        //                x.StartPage,
+        //                x.ShowSolutionTime.ToBool(),
+        //                x.ShowCaseStatistics.ToBool(),
+        //                x.TimeZoneId)).FirstOrDefault();
+
+        //    return ret;
+        //}
 
         private UserOverview GetUser(Expression<Func<User, bool>> expression)
         {

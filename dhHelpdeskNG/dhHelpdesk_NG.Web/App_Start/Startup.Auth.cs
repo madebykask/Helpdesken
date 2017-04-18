@@ -4,13 +4,17 @@ using Owin;
 using Microsoft.Owin.Security.OAuth;
 using System.Threading.Tasks;
 using System.Security.Claims;
+using DH.Helpdesk.Services.Services;
+using DH.Helpdesk.Dal.Repositories;
 
 namespace DH.Helpdesk.Web.App_Start
-{
+{    
+
     public partial class Startup
     {        
+
         public void ConfigureAuth(IAppBuilder app)
-        {
+        {            
             OAuthAuthorizationServerOptions OAuthServerOptions = new OAuthAuthorizationServerOptions()
             {
                 AllowInsecureHttp = true,
@@ -35,7 +39,10 @@ namespace DH.Helpdesk.Web.App_Start
     }
 
     public class SimpleAuthorizationServerProvider : OAuthAuthorizationServerProvider
-    {        
+    {
+
+        private readonly IUserRepository _userService = Services.Infrastructure.ManualDependencyResolver.Get<IUserRepository>();
+
         public override async Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
         {           
             context.Validated();            
@@ -45,13 +52,21 @@ namespace DH.Helpdesk.Web.App_Start
         {
 
             context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "*" });
+            
+            //var _user = await _userService.GetByUserIdAsync(context.UserName, context.Password);
 
-            /*TODO: Valiate User*/
-            var identity = new ClaimsIdentity(context.Options.AuthenticationType);
-            identity.AddClaim(new Claim("sub", context.UserName));
-            identity.AddClaim(new Claim("role", "user"));
-
-            context.Validated(identity);
+            //if (_user != null && !string.IsNullOrEmpty(_user.UserId))
+            //{
+            //    var identity = new ClaimsIdentity(context.Options.AuthenticationType);
+            //    identity.AddClaim(new Claim("sub", context.UserName));
+            //    identity.AddClaim(new Claim(ClaimTypes.Role, _user.UserGroupId.ToString()));                
+            //    context.Validated(identity);
+            //}
+            //else
+            //{
+                context.SetError("Invalid user!");
+                context.Rejected();
+            //}
 
         }
     }

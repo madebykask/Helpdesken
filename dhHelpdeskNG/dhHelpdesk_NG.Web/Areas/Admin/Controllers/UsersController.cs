@@ -85,9 +85,7 @@
         {
             var model = this.IndexInputViewModel();
             var userSearch = (UserSearch)this.Session["UserSearch"];
-
            
-
             if (this.Session["UserSearch"] == null)
             {
                 if (SessionFacade.CurrentUser.UserGroupId == 3)
