@@ -63,15 +63,19 @@
         public ActionResult Edit(int id, Customer customer, FormCollection coll, CustomerInputViewModel vmodel, int[] UsSelected)
         {
             var caseFieldStreem = coll.ReturnFormValue("SortedFields");
-            
+            var userGroupIds = coll.ReturnFormValue("UserGroupId");
+            var userGroupId = string.Empty;
+            if (!string.IsNullOrEmpty(userGroupIds))
+            {
+                userGroupId = userGroupIds.Split(_seperator).First();
+            }
             if (!string.IsNullOrEmpty(caseFieldStreem))
             {
-                var lstCaseFieldIds = new List<string>();
-                lstCaseFieldIds = caseFieldStreem.Split(_seperator).ToList();
+                var lstCaseFieldIds = caseFieldStreem.Split(_seperator).ToList();
                 _caseSettingsService.ReOrderCaseSetting(lstCaseFieldIds);
             }
-            
-            return this.RedirectToAction("edit", "customer", new { Id = customer.Id });
+
+            return RedirectToAction("Edit", new {id = customer.Id, usergroupId = userGroupId});
 
         }
 
