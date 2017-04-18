@@ -1797,8 +1797,8 @@ namespace DH.Helpdesk.Web.Controllers
         {
             //var files = this._caseFileService.GetCaseFiles(int.Parse(id));
             var files = GuidHelper.IsGuid(id)
-                                ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Cases)
-                                : this._caseFileService.FindFileNamesByCaseId(int.Parse(id));
+                                ? this.userTemporaryFilesStorage.FindFileNamesAndDates(id, ModuleName.Cases)
+                                : this._caseFileService.FindFileNamesAndDatesByCaseId(int.Parse(id));
 
             var cfs = MakeCaseFileModel(files, savedFiles);
             var customerId = 0;
@@ -4930,7 +4930,7 @@ namespace DH.Helpdesk.Web.Controllers
             return li;
         }
 
-        private List<CaseFileModel> MakeCaseFileModel(List<string> files, string savedFiles)
+        private List<CaseFileModel> MakeCaseFileModel(List<CaseFileDate> files, string savedFiles)
         {
             var res = new List<CaseFileModel>();
             int i = 0;
@@ -4940,8 +4940,8 @@ namespace DH.Helpdesk.Web.Controllers
             foreach (var f in files)
             {
                 i++;
-                var canDelete = !(savedFileList != null && savedFileList.Contains(f));
-                var cf = new CaseFileModel(i, i, f, DateTime.Now, SessionFacade.CurrentUser.FirstName + " " + SessionFacade.CurrentUser.SurName, canDelete);
+                var canDelete = !(savedFileList != null && savedFileList.Contains(f.FileName));
+                var cf = new CaseFileModel(i, i, f.FileName, f.FileDate, SessionFacade.CurrentUser.FirstName + " " + SessionFacade.CurrentUser.SurName, canDelete);
                 res.Add(cf);
             }
 
