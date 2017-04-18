@@ -41,7 +41,7 @@ namespace DH.Helpdesk.Web.App_Start
     public class SimpleAuthorizationServerProvider : OAuthAuthorizationServerProvider
     {
 
-        private readonly IUserRepository _userService = Services.Infrastructure.ManualDependencyResolver.Get<IUserRepository>();
+        
 
         public override async Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
         {           
@@ -52,21 +52,23 @@ namespace DH.Helpdesk.Web.App_Start
         {
 
             context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "*" });
-            
-            //var _user = await _userService.GetByUserIdAsync(context.UserName, context.Password);
 
-            //if (_user != null && !string.IsNullOrEmpty(_user.UserId))
-            //{
-            //    var identity = new ClaimsIdentity(context.Options.AuthenticationType);
-            //    identity.AddClaim(new Claim("sub", context.UserName));
-            //    identity.AddClaim(new Claim(ClaimTypes.Role, _user.UserGroupId.ToString()));                
-            //    context.Validated(identity);
-            //}
-            //else
-            //{
+            var _userService = Services.Infrastructure.ManualDependencyResolver.Get<IUserRepository>();
+
+            var _user = await _userService.GetByUserIdAsync(context.UserName, context.Password);
+
+            if (_user != null && !string.IsNullOrEmpty(_user.UserId))
+            {
+                var identity = new ClaimsIdentity(context.Options.AuthenticationType);
+                identity.AddClaim(new Claim("sub", context.UserName));
+                identity.AddClaim(new Claim(ClaimTypes.Role, _user.UserGroupId.ToString()));
+                context.Validated(identity);
+            }
+            else
+            {
                 context.SetError("Invalid user!");
                 context.Rejected();
-            //}
+            }
 
         }
     }

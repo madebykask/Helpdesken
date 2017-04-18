@@ -35,13 +35,13 @@ namespace DH.Helpdesk.BusinessData.Models.Case.Output
         /// Gets or sets the name.
         /// </summary>
         [Required(ErrorMessage = "Causing Part is required.")]
-        [MaxLength(100)]
+        [System.ComponentModel.DataAnnotations.MaxLength(100)]
         public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the description.
         /// </summary>
-        [MaxLength(300)]
+        [System.ComponentModel.DataAnnotations.MaxLength(300)]
         public string Description { get; set; }
 
         /// <summary>
