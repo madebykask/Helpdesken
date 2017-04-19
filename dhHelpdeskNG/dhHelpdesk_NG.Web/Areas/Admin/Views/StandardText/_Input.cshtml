@@ -4,36 +4,44 @@
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
-            <li class="active"><a href="#fragment-1">@Translation.Get("Standardtext", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>
+            <li class="active"><a href="#fragment-1">@Translation.GetCoreTextTranslation("Standardtext") - @Model.Customer.Name</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment1">
                 <div class="container">
                     @if (TempData["Error"] != null)
                     {
-                        <div class="alert alert-error">@Translation.Get("Standardtext", Enums.TranslationSource.TextTranslation)
-                            @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+                        <div class="alert alert-error">@Translation.GetCoreTextTranslation("Standardtext")
+                            @Translation.GetCoreTextTranslation("som används går inte att ta bort")
                         </div>    
                     }
-                    <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
+                    <h4>@Translation.GetCoreTextTranslation("Allmänt")</h4>
                     <div class="row">
                         <div class="span12">
                             <table class="tableform">
                                 <tr>
                                     <td class="span3">
-                                        @Translation.Get("Standardtext", Enums.TranslationSource.TextTranslation)<span class="mandatorystar">*</span>
+                                        @Translation.GetCoreTextTranslation("Namn")
                                     </td>
                                     <td class="span9">
-                                        @Html.TextAreaFor(model => model.StandardText.Name, new { style = "width:600px; height:250px;", maxlength = "1000" })
+                                        @Html.TextBoxFor(model => model.StandardText.StandardTextName, new { maxlength = "50" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.GetCoreTextTranslation("Standardtext")
+                                    </td>
+                                    <td class="span9">
+                                        @Html.TextAreaFor(model => model.StandardText.Name, new {style = "width:600px; height:250px;", maxlength = "1000"})
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Aktivera", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Aktivera")
                                     </td>
                                     <td><label class="checkbox">
-                                        <input type="checkbox" name="standardtext.IsActive" @(Model.StandardText.IsActive == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="standardtext.IsActive" value="0" />
+                                            <input type="checkbox" name="standardtext.IsActive" @(Model.StandardText.IsActive == 1 ? "checked=checked" : "") value="1"/>
+                                            <input type="hidden" name="standardtext.IsActive" value="0"/>
                                         </label>
                                     </td>
                                 </tr>

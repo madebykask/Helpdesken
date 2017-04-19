@@ -9,6 +9,7 @@
         public string Name { get; set; }
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
+        public string StandardTextName { get; set; }
 
         public virtual Customer Customer { get; set; }
     }

@@ -76,6 +76,8 @@
 
             if (string.IsNullOrEmpty(standardText.Name))
                 errors.Add("StandardText.Name", "Du måste ange en standardtext");
+            if (string.IsNullOrEmpty(standardText.StandardTextName))
+                errors.Add("StandardText.StandardTextName", "Du måste ange en standardtext");
 
             if (standardText.Id == 0)
                 this._standardTextRepository.Add(standardText);
