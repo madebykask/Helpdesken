@@ -251,6 +251,7 @@
     <Compile Include="ADFS\SSOLogEntity.cs" />
     <Compile Include="Users\ModuleEntity.cs" />
     <Compile Include="Users\UserModuleEntity.cs" />
+    <Compile Include="CaseSolutionConditionEntity.cs" />
     <Compile Include="WorkstationModules\LogicalDrive.cs" />
     <Compile Include="LogProgramEntity.cs" />
     <Compile Include="LogSync.cs" />

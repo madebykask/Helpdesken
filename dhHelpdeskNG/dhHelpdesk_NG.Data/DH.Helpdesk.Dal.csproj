@@ -149,6 +149,7 @@
     <Compile Include="EntityConfigurations\Users\ModuleConfiguration.cs" />
     <Compile Include="EntityConfigurations\Users\UserModuleConfiguration.cs" />
     <Compile Include="EntityConfigurations\Users\UsersPasswordHistoryConfiguration.cs" />
+    <Compile Include="EntityConfigurations\CaseSolutionConditionConfiguration.cs" />
     <Compile Include="Enums\Accounts\Headers.cs" />
     <Compile Include="Enums\Accounts\Fields\AccountInformationFields.cs" />
     <Compile Include="Enums\Accounts\Fields\ContactFields.cs" />
@@ -212,11 +213,13 @@
     <Compile Include="MapperData\Inventory\InventoryFieldSettingMapperDataForProcessing.cs" />
     <Compile Include="Mappers\Calendars\BusinessModelToEntity\CalendarToEntityMapper.cs" />
     <Compile Include="Mappers\Calendars\EntityToBusinessModel\CalendarToBusinessModelMapper.cs" />
+    <Compile Include="Mappers\Cases\BusinessModelToEntity\CaseSolutionConditionToEntityMapper.cs" />
     <Compile Include="Mappers\Cases\BusinessModelToEntity\CaseNotifierToEntityMapper.cs" />
     <Compile Include="Mappers\Cases\BusinessModelToEntity\CausingPartToEntityMapper.cs" />
     <Compile Include="Mappers\Cases\BusinessModelToEntity\CaseLockToEntityMapper.cs" />
     <Compile Include="Mappers\Cases\BusinessModelToEntity\CaseFilterFavoriteToEntityMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseExtraFollowersToBusinessModelMapper.cs" />
+    <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseSolutionConditionToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseLockToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseToCaseOverviewMapper.cs" />
@@ -390,10 +393,12 @@
     <Compile Include="Repositories\Cases\CaseQuestionRepository.cs" />
     <Compile Include="Repositories\Cases\CaseSettingsRepository.cs" />
     <Compile Include="Repositories\Cases\CaseSolutionSettingRepository.cs" />
+    <Compile Include="Repositories\Cases\Concrete\CaseSolutionConditionRepository.cs" />
     <Compile Include="Repositories\Cases\Concrete\CaseLockRepository.cs" />
     <Compile Include="Repositories\Cases\Concrete\CausingPartRepository.cs" />
     <Compile Include="Repositories\Cases\Concrete\CaseFilterFavoriteRepository.cs" />
     <Compile Include="Repositories\Cases\ICaseFilterFavoriteRepository.cs" />
+    <Compile Include="Repositories\ICaseSolutionConditionRepository.cs" />
     <Compile Include="Repositories\Cases\ICaseLockRepository.cs" />
     <Compile Include="Repositories\Cases\ICaseSolutionSettingRepository.cs" />
     <Compile Include="Repositories\Cases\ICausingPartRepository.cs" />

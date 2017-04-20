@@ -2335,6 +2335,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             _caseService.AddParentCase(id, parentCaseId);
 
+
             return this.RedirectToAction("Edit", "cases", new { id = parentCaseId });
         }
         
@@ -4197,7 +4198,7 @@ namespace DH.Helpdesk.Web.Controllers
 
 
             var caseTemplateButtons = _caseSolutionService.GetCaseSolutions(customerId)
-                                                          .Where(c => c.Status != 0 && c.ShowInsideCase != 0 && c.ConnectedButton.HasValue)
+                                                          .Where(c => c.Status != 0 && c.ShowInsideCase != 0 && c.ConnectedButton.HasValue && c.ConnectedButton > 0)
                                                           .Select(c => new CaseTemplateButton() 
                                                                             { 
                                                                                 CaseTemplateId = c.Id, 
@@ -4207,6 +4208,7 @@ namespace DH.Helpdesk.Web.Controllers
                                                           .OrderBy(c=> c.ButtonNumber)
                                                           .ToList();
             m.CaseTemplateButtons = caseTemplateButtons;
+            m.WorkflowSteps = _caseSolutionService.GetCaseSolutionSteps(customerId, m.case_);
 
             m.CaseMailSetting = new CaseMailSetting(
                 customer.NewCaseEmailList,

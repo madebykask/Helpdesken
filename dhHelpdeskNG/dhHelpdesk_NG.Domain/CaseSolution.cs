@@ -95,7 +95,6 @@ namespace DH.Helpdesk.Domain
         
         public int? ConnectedButton { get; set; }
         public int? SaveAndClose { get; set; }
-    
         public virtual CaseSolutionCategory CaseSolutionCategory { get; set; }
         public virtual CaseSolutionSchedule CaseSolutionSchedule { get; set; }
         public virtual CaseType CaseType { get; set; }
@@ -109,5 +108,7 @@ namespace DH.Helpdesk.Domain
         public virtual WorkingGroupEntity CaseWorkingGroup { get; set; }
         public virtual WorkingGroupEntity WorkingGroup { get; set; }
         //public virtual Problem Problem { get; set; }
+        public int SortOrder { get; set; }
+
     }
 }

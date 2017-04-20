@@ -7,6 +7,7 @@
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.Models.CaseSolution;
     using DH.Helpdesk.BusinessData.Models.Customer;
     using DH.Helpdesk.BusinessData.Models.Language.Output;
     using DH.Helpdesk.BusinessData.Models.Logs.Output;
@@ -254,6 +255,8 @@
         public JsonCaseIndexViewModel ConnectToParentModel { get; set; }
         public bool newLog { get; set; }
         public bool editLog { get; set; }
+        public IList<WorkflowStepModel> WorkflowSteps { get; set; }
+
 
     }
 

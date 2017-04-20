@@ -557,11 +557,14 @@
 
         public DbSet<CaseExtraFollower> CaseExtraFollowers { get; set; }
 
+
+        public DbSet<CaseSolutionConditionEntity> CaseSolutionConditions { get; set; }
+
         #endregion
 
-		#region Public Methods and Operators
+        #region Public Methods and Operators
 
-		public virtual void Commit()
+        public virtual void Commit()
         {
             try
             {
@@ -834,9 +837,12 @@
 			modelBuilder.Configurations.Add(new InvoiceRowConfiguration());
 			modelBuilder.Configurations.Add(new InvoiceHeaderConfiguration());
 
-			#endregion
+            //Workflow
+            modelBuilder.Configurations.Add(new CaseSolutionConditionConfiguration());
 
-			base.OnModelCreating(modelBuilder);
+            #endregion
+
+            base.OnModelCreating(modelBuilder);
         }
 
         #endregion

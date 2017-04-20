@@ -11,6 +11,9 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Cases;
     using DH.Helpdesk.Domain;
+    using System.Reflection;
+    using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.Models;
 
     public interface ICaseSolutionService
     {
@@ -32,6 +35,7 @@ namespace DH.Helpdesk.Services.Services
         void SaveCaseSolutionCategory(CaseSolutionCategory caseSolutionCategory, out IDictionary<string, string> errors);
         void SaveEmptyForm(Guid formGuid, int caseId);
         void Commit();
+        IList<WorkflowStepModel> GetCaseSolutionSteps(int customerId, Case _case);
     }
 
     public class CaseSolutionService : ICaseSolutionService
@@ -46,6 +50,8 @@ namespace DH.Helpdesk.Services.Services
         private readonly ILinkRepository _linkRepository; 
         private readonly IUnitOfWork _unitOfWork;
 
+        private readonly ICaseSolutionConditionRepository _caseSolutionConditionRepository;
+
         public CaseSolutionService(
             ICaseSolutionRepository caseSolutionRepository,
             ICaseSolutionCategoryRepository caseSolutionCategoryRepository,
@@ -54,7 +60,8 @@ namespace DH.Helpdesk.Services.Services
             IFormRepository formRepository,
             ILinkRepository linkRepository,
             ILinkService linkService,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+                        ICaseSolutionConditionRepository caseSolutionConditionRepository)
         {
             this._caseSolutionRepository = caseSolutionRepository;
             this._caseSolutionCategoryRepository = caseSolutionCategoryRepository;
@@ -64,6 +71,7 @@ namespace DH.Helpdesk.Services.Services
             this._linkService = linkService;
             _formRepository = formRepository;
             this._unitOfWork = unitOfWork;
+            this._caseSolutionConditionRepository = caseSolutionConditionRepository;
         }
 
         //public int GetAntal(int customerId, int userid)
@@ -182,6 +190,87 @@ namespace DH.Helpdesk.Services.Services
             return this._caseSolutionRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
         }
 
+        public IList<WorkflowStepModel> GetCaseSolutionSteps(int customerId, Case _case)
+        {
+            var templates = GetCaseSolutions(customerId).Where(c => c.Customer_Id == customerId && c.Status != 0 && c.ConnectedButton == 0).Select(c => new WorkflowStepModel()
+            {
+                CaseTemplateId = c.Id,
+                Caption = (!string.IsNullOrEmpty(c.Caption) ? c.Caption : c.Name),
+                SortOrder = c.SortOrder
+            }).OrderBy(c => c.SortOrder).ToList();
+
+
+
+            return templates.Where(c => showWorkflowStep(_case, c.CaseTemplateId) == true).ToList();
+
+        }
+
+
+        //TODO: PERFORMANCE
+        //Difference if its LM/HD?
+        //New case, Edit case?
+        private bool showWorkflowStep(Case _case, int caseSolution_Id)
+        {
+            //ALL conditions must be met
+            bool showWorkflowStep = false;
+
+            //If no conditions are set in (CaseSolutionCondition) for the template, do not show step in list
+            var caseSolutionConditions = this.GetCaseSolutionConditions(caseSolution_Id);
+
+            if (caseSolutionConditions == null || caseSolutionConditions.Count() == 0)
+                return false;
+
+            foreach (var condition in caseSolutionConditions)
+            {
+                try
+                {
+                    var value = "";
+
+                    //if [Any]
+                    int maxValue = int.MaxValue;
+                    if (condition.Values.IndexOf(maxValue.ToString()) > -1)
+                    {
+                        showWorkflowStep = true;
+                        continue;
+                    }
+
+                    //Get the specific property of Case in "CaseField_Name"
+                    if (_case != null && _case.Id != 0)
+                    {
+                        //Get value from Model by casting to dictionary and look for property name
+                        // value = _case.ObjectToDictionary()[condition.CaseField_Name].ToString();
+                        value = _case.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(prop => prop.Name, prop => prop.GetValue(_case, null))[condition.CaseField_Name].ToString();
+                    }
+                    //if [Null]
+                    else
+                    {
+                        //Case is new, or value is not set for the specific property
+                        value = "0";
+                    }
+
+                    // Check conditions
+                    if (condition.Values.IndexOf(value) > -1)
+                    {
+                        showWorkflowStep = true;
+                        continue;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                catch (Exception)
+                {
+                    //throw;
+                    //TODO?
+                }
+
+            }
+
+            //To be true all conditions needs to be fulfilled
+            return showWorkflowStep;
+        }
+
         public IList<CaseSolution> SearchAndGenerateCaseSolutions(int customerId, ICaseSolutionSearch SearchCaseSolutions, bool isFirstNamePresentation)
         {
             var query = (from cs in this._caseSolutionRepository.GetAll().Where(x => x.Customer_Id == customerId)
@@ -263,6 +352,11 @@ namespace DH.Helpdesk.Services.Services
                         query = (SearchCaseSolutions.Ascending) ?
                                 query.OrderBy(l => l.ConnectedButton) :
                                 query.OrderByDescending(l => l.ConnectedButton);
+                        break;
+                    case CaseSolutionIndexColumns.SortOrder:
+                        query = (SearchCaseSolutions.Ascending) ?
+                                query.OrderBy(l => l.SortOrder) :
+                                query.OrderByDescending(l => l.SortOrder);
                         break;
                     default:                        
                         query = (SearchCaseSolutions.Ascending) ?
@@ -481,6 +575,11 @@ namespace DH.Helpdesk.Services.Services
         public void Commit()
         {
             this._unitOfWork.Commit();
+        }
+
+        public IEnumerable<CaseSolutionConditionModel> GetCaseSolutionConditions(int caseSolution_Id)
+        {
+            return _caseSolutionConditionRepository.GetCaseSolutionConditions(caseSolution_Id);
         }
     }
 }

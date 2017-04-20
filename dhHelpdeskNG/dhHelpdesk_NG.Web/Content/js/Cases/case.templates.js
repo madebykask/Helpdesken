@@ -323,7 +323,7 @@ var finalActionId;
 
 var caseButtons = $('.btn.save, .btn.save-close, .btn.save-new, .btn.caseDeleteDialog, ' +
                     '#case-action-close, #divActionMenu, #btnActionMenu, #divCaseTemplate, #btnCaseTemplateTree, .btn.print-case,' +
-                    '.btn.show-inventory, .btn.previous-case, .btn.next-case, .btn.templateQuickButton');
+                    '.btn.show-inventory, .btn.previous-case, .btn.next-case, .btn.templateQuickButton, #btnGo, #steps');
 
 var templateQuickButtonIndicator = '#TemplateQuickButtonIndicator';
 
@@ -901,6 +901,11 @@ function IsValueApplicableFor(templateFieldId, val) {
     }
     return false;
 }
+
+
+$("#btnGo").on("click", function () {
+    LoadTemplate($('#steps').val());
+});
 
 function LoadTemplate(id) {
     var caseInvoiceIsActive = false;

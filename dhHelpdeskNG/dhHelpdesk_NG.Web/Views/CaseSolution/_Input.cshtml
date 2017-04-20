@@ -56,6 +56,14 @@
                                 </tr>
                                 <tr>
                                     <td>
+                                        @Translation.Get("Caption", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.CaseSolution.Caption, new { maxlength = "200" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
                                         @Translation.Get("Kategori", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
@@ -125,6 +133,14 @@
                                         {
                                             @Html.DropDownListFor(model => model.CaseSolution.ConnectedButton, Model.ButtonList, "", new { disabled = "disabled" })
                                         }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Sorteringsordning", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.CaseSolution.SortOrder, new { maxlength = "10", style = "width: 20px;" })
                                     </td>
                                 </tr>
                                 <tr>

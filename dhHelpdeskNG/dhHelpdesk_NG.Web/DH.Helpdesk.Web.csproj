@@ -3857,6 +3857,7 @@
     <Content Include="Views\Cases\ModalDialogs\_CaseCharge.cshtml" />
     <Content Include="Views\Login\GetUserCount.cshtml" />
     <Content Include="Views\Feedback\Statistics.cshtml" />
+    <Content Include="Views\Shared\WorkflowStep.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">

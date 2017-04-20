@@ -773,7 +773,8 @@ namespace DH.Helpdesk.Web.Controllers
                                                                                 ),
                                                             PriorityName = cs.Priority == null ? string.Empty : cs.Priority.Name,
                                                             IsActive = (cs.Status != 0),
-                                                            ConnectedToButton = cs.ConnectedButton.HasValue ? connectedToButton + " " + cs.ConnectedButton.Value: ""
+                                                            ConnectedToButton = (cs.ConnectedButton.HasValue && cs.ConnectedButton == 0) ? Translation.GetCoreTextTranslation(Constants.Text.WorkflowStep) : ( cs.ConnectedButton.HasValue) ? connectedToButton + " " + cs.ConnectedButton.Value: "",
+                                                            SortOrder = cs.SortOrder
                                                         }).ToArray();
 
             var activeTab = SessionFacade.FindActiveTab("CaseSolution");
@@ -888,6 +889,15 @@ namespace DH.Helpdesk.Web.Controllers
             var buttonList = new List<SelectListItem>();
             
             var buttonCaption = Translation.GetCoreTextTranslation("Knapp");
+
+            //Add workflow choise
+            buttonList.Add(new SelectListItem()
+            {
+                Value = "0",
+                Text = Translation.GetCoreTextTranslation(Constants.Text.WorkflowStep),
+                Selected = caseSolution.ConnectedButton == 0
+            });
+
             for (var i= 1; i <= MAX_QUICK_BUTTONS_COUNT; i++)
             {
                 if (!usedButtons.Contains(i))

@@ -7,5 +7,11 @@ namespace DH.Helpdesk.Web.Infrastructure
         {
             public const string MasterViewData = "MasterViewData";
         }
+
+        public static class Text
+        {
+            public const string WorkflowStep = "Workflow Step";
+            public const string SelectStep = "-- Select --";
+        }
     }
 }
