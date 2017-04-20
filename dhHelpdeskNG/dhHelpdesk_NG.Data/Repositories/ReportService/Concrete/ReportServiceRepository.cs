@@ -133,6 +133,37 @@
                             );                                        
                     break;
 
+                case "CasesPerAdministrator":
+                    ret.Add(
+                          new Tuple<string, string, int>(
+                            "CasesPerAdministrator",
+                            "SELECT tblUsers.FirstName + N' ' + tblUsers.SurName AS Name, COUNT(CASE WHEN tblCase.FinishingDate IS NULL THEN tblCase.Id ELSE NULL END) AS CasesInProgress, " +
+                                 "COUNT(CASE WHEN tblCase.FinishingDate IS NULL AND tblCase.StateSecondary_Id IS NOT NULL THEN tblCase.Id ELSE NULL END) AS CasesInRest, " +
+                                 "COUNT(CASE WHEN tblCase.FinishingDate IS NULL THEN NULL ELSE tblCase.Id END) AS CasesClosed " +
+                            "FROM tblCase INNER JOIN " +
+                                  "tblUsers ON tblCase.Performer_User_Id = tblUsers.Id " +
+                            _whereClause +
+                            " AND (tblCase.Deleted = 0 and tblUsers.UserGroup_Id <> '1') " +
+                            "GROUP BY tblUsers.FirstName + N' ' + tblUsers.SurName", (int)QueryType.SQLQUERY)
+                            );
+                    break;
+
+                case "CasesPerDepartment":
+                    ret.Add(
+                          new Tuple<string, string, int>(
+                            "CasesPerDepartment",
+                            "SELECT tblDepartment.Department AS Name, COUNT(CASE WHEN tblCase.FinishingDate IS NULL THEN tblCase.Id ELSE NULL END) AS CasesInProgress, " +
+                                "COUNT(CASE WHEN tblCase.FinishingDate IS NULL AND " +
+                                "tblCase.StateSecondary_Id IS NOT NULL THEN tblCase.Id ELSE NULL END) AS CasesInRest, " +
+                                "COUNT(CASE WHEN tblCase.FinishingDate IS NULL THEN NULL ELSE tblCase.Id END) AS CasesClosed " +
+                            "FROM tblCase INNER JOIN " +
+                                "tblDepartment ON tblCase.Department_Id = tblDepartment.Id " +
+                            _whereClause +
+                            " AND (tblCase.Deleted = 0) " +
+                            "GROUP BY tblDepartment.Department", (int)QueryType.SQLQUERY)
+                            );
+                    break;
+
                 case "CaseDetailsList":
                     ret.Add(
                             new Tuple<string, string, int>(
