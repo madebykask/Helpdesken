@@ -1197,7 +1197,7 @@ namespace DH.Helpdesk.Dal.Repositories
             return items;
         }
 
-        private string BuildContainsExpession(string field, string text, string tableAlias = "")
+        private string BuildContainsExpession(string field, string text, string tableAlias = "", bool useWildcard = true)
         {
             var safeText = text.SafeForSqlInject();
 
@@ -1205,15 +1205,9 @@ namespace DH.Helpdesk.Dal.Repositories
                                     field : 
                                     $"{tableAlias}.{field}";
 
-            var expression = $"CONTAINS ({fieldFormatted}, '{safeText}') ";
+            var searchCriteria = useWildcard ? $"'\"{safeText}*\"'" : $"{safeText}";
+            var expression = $"CONTAINS ({fieldFormatted}, {searchCriteria})";
             return expression;
-        }
-
-        private string BuildContainsExpessionPlaceHolder(string field, string columnAlias = "")
-        {
-            var fieldFormatted = string.IsNullOrEmpty(columnAlias) ? field : $"{columnAlias}.{field}";
-            var expessionFormmated = string.Format("CONTAINS ({0}, '{{0}}')", fieldFormatted);
-            return expessionFormmated;
         }
 
         private string InsensitiveSearch(string fieldName)
