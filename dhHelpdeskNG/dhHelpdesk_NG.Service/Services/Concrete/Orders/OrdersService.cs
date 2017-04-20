@@ -520,13 +520,18 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
 
                     if (!string.IsNullOrEmpty(entity.UserId))
                     {
-                        var user = _userRepository.GetUserByLogin(entity.UserId, request.CustomerId);
+                        var userIdForCase = entity.UserId;
+                        if (userIdForCase.Contains("\\"))
+                        {
+                            userIdForCase = userIdForCase.Split('\\').Last();
+                        }
+                        var user = _userRepository.GetUserByLogin(userIdForCase, request.CustomerId);
                         if (user != null)
                         {
                             newCase.User_Id = user.Id;
                         }
-                        var cUser = _computerUsersRepository.GetComputerUserByUserId(entity.UserId, request.CustomerId, entity.Domain_Id) ??
-                                    _computerUsersRepository.GetComputerUserByUserId(entity.UserId, request.CustomerId);
+                        var cUser = _computerUsersRepository.GetComputerUserByUserId(userIdForCase, request.CustomerId,
+                            entity.Domain_Id);
                         if (cUser != null)
                         {
                             newCase.ReportedBy = cUser.UserId;
