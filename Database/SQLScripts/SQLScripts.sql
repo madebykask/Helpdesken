@@ -339,6 +339,57 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	end
 GO
 
+--ADD GUID
+--tblCaseSettings
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CaseSettingsGUID' and sysobjects.name = N'tblCaseSettings')
+begin
+		EXECUTE  sp_executesql  "update tblCaseSettings set CaseSettingsGUID = newid() where CaseSettingsGUID is null" 
 
+		if not exists(select *
+					  from sys.all_columns c
+					  join sys.tables t on t.object_id = c.object_id
+					  join sys.schemas s on s.schema_id = t.schema_id
+					  join sys.default_constraints d on c.default_object_id = d.object_id
+					  where t.name = 'tblCaseSettings'
+					  and c.name = 'CaseSettingsGUID'
+					  and s.name = 'dbo'
+					  and d.name = 'DF_CaseSettingsGUID')
+		begin
+			Alter table tblCaseSettings
+			Add constraint DF_CaseSettingsGUID default (newid()) For CaseSettingsGUID		
+		end		
+end
+else
+begin
+	Alter table tblCaseSettings
+	Add CaseSettingsGUID uniqueIdentifier NOT NULL CONSTRAINT DF_CaseSettingsGUID default (newid())
+end
+GO
+
+--tblStandardText
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'StandardTextGUID' and sysobjects.name = N'tblStandardText')
+begin
+		EXECUTE  sp_executesql  "update tblStandardText set StandardTextGUID = newid() where StandardTextGUID is null" 
+
+		if not exists(select *
+					  from sys.all_columns c
+					  join sys.tables t on t.object_id = c.object_id
+					  join sys.schemas s on s.schema_id = t.schema_id
+					  join sys.default_constraints d on c.default_object_id = d.object_id
+					  where t.name = 'tblStandardText'
+					  and c.name = 'StandardTextGUID'
+					  and s.name = 'dbo'
+					  and d.name = 'DF_StandardTextGUID')
+		begin
+			Alter table tblStandardText
+			Add constraint DF_StandardTextGUID default (newid()) For StandardTextGUID		
+		end		
+end
+else
+begin
+	Alter table tblStandardText
+	Add StandardTextGUID uniqueIdentifier NOT NULL CONSTRAINT DF_StandardTextGUID default (newid())
+end
+GO
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.31'
