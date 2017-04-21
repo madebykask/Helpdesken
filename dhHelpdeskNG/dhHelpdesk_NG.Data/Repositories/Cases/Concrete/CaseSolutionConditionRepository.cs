@@ -29,8 +29,9 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
         {
         
             var entities = this.Table
-                  .Where(c => c.CaseSolution_Id == caseSolution_Id)
+                  .Where(c => c.CaseSolution_Id == caseSolution_Id && c.Status != 0)
                   .OrderBy(c => c.Sequence)
+                  .Distinct()
                   .ToList();
 
             return entities

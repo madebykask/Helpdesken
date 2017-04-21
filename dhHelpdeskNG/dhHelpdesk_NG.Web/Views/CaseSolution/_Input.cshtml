@@ -106,7 +106,23 @@
                                         <input type="hidden" name="Casesolution.ShowInsideCase" value="0" />
                                         &nbsp;
                                         <span>
-                                            <select id="savaAndClose" name="CaseSolution.SaveAndClose" style="width:285px" @(Model.CaseSolution.ShowInsideCase == 1 ? "" : "disabled='true'") ">
+                                            @if (Model.CaseSolution.ShowInsideCase == 1)
+                                            {
+                                                @Html.DropDownListFor(model => model.CaseSolution.ConnectedButton, Model.ButtonList, "", new { style = "width:285px" })
+                                            }
+                                            else
+                                            {
+                                                @Html.DropDownListFor(model => model.CaseSolution.ConnectedButton, Model.ButtonList, "", new { disabled = "disabled", style = "width:285px" })
+                                            }
+                                        </span>
+</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Koppla till", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                            <select id="savaAndClose" name="CaseSolution.SaveAndClose"  @(Model.CaseSolution.ShowInsideCase == 1 ? "" : "disabled='true'") ">
                                                 @foreach (var action in Model.ActionList)
                                                 {
                                                     <option value="@action.Value" @(action.Selected ? "selected" : "")> @action.Text </option>
@@ -117,22 +133,6 @@
                                                     <option value="-2" selected> @saveDropDownText </option>
                                                 }
                                             </select>
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        @Translation.Get("Koppla till", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                    <td>
-                                        @if (Model.CaseSolution.ShowInsideCase == 1)
-                                        {
-                                            @Html.DropDownListFor(model => model.CaseSolution.ConnectedButton, Model.ButtonList, "")
-                                        }
-                                        else
-                                        {
-                                            @Html.DropDownListFor(model => model.CaseSolution.ConnectedButton, Model.ButtonList, "", new { disabled = "disabled" })
-                                        }
                                     </td>
                                 </tr>
                                 <tr>

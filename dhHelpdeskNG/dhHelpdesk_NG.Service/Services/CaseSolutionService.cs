@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+
 namespace DH.Helpdesk.Services.Services
 {
 
@@ -49,6 +50,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly ILinkService _linkService;
         private readonly ILinkRepository _linkRepository; 
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ICacheProvider _cache;
 
         private readonly ICaseSolutionConditionRepository _caseSolutionConditionRepository;
 
@@ -61,7 +63,8 @@ namespace DH.Helpdesk.Services.Services
             ILinkRepository linkRepository,
             ILinkService linkService,
             IUnitOfWork unitOfWork,
-                        ICaseSolutionConditionRepository caseSolutionConditionRepository)
+            ICaseSolutionConditionRepository caseSolutionConditionRepository,
+            ICacheProvider cache)
         {
             this._caseSolutionRepository = caseSolutionRepository;
             this._caseSolutionCategoryRepository = caseSolutionCategoryRepository;
@@ -72,6 +75,7 @@ namespace DH.Helpdesk.Services.Services
             _formRepository = formRepository;
             this._unitOfWork = unitOfWork;
             this._caseSolutionConditionRepository = caseSolutionConditionRepository;
+            this._cache = cache;
         }
 
         //public int GetAntal(int customerId, int userid)
@@ -86,7 +90,7 @@ namespace DH.Helpdesk.Services.Services
             List<CaseTemplateCategoryNode> ret2 = new List<CaseTemplateCategoryNode>();
 
             var noneCatCaseSolutions = _caseSolutionRepository.GetMany(s => s.Customer_Id == customerId && s.CaseSolutionCategory_Id == null &&
-                                                                            s.Status != 0 &&
+                                                                            s.Status != 0 && s.ConnectedButton == null && 
                                                                         (s.WorkingGroup.UserWorkingGroups.Select(
                                                                          x => x.User_Id).Contains(userId) ||
                                                                          s.WorkingGroup_Id == null)).OrderBy(cs => cs.Name);
@@ -124,7 +128,7 @@ namespace DH.Helpdesk.Services.Services
                 curCategory.IsRootTemplate = false;
 
                 var caseSolutions = _caseSolutionRepository.GetMany(s => s.CaseSolutionCategory_Id == category.Id &&
-                                                                         s.Status != 0 &&
+                                                                         s.Status != 0 && s.ConnectedButton == null &&
                                                                          (s.WorkingGroup.UserWorkingGroups.Select(
                                                                              x => x.User_Id).Contains(userId) || s.WorkingGroup_Id == null)).OrderBy(cs => cs.Name);
                 if (caseSolutions != null)
@@ -192,7 +196,7 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<WorkflowStepModel> GetCaseSolutionSteps(int customerId, Case _case)
         {
-            var templates = GetCaseSolutions(customerId).Where(c => c.Customer_Id == customerId && c.Status != 0 && c.ConnectedButton == 0).Select(c => new WorkflowStepModel()
+            var templates = GetCaseSolutions(customerId).Where(c => c.Status != 0 && c.ConnectedButton == 0).Select(c => new WorkflowStepModel()
             {
                 CaseTemplateId = c.Id,
                 Caption = (!string.IsNullOrEmpty(c.Caption) ? c.Caption : c.Name),
@@ -228,7 +232,8 @@ namespace DH.Helpdesk.Services.Services
 
                     //if [Any]
                     int maxValue = int.MaxValue;
-                    if (condition.Values.IndexOf(maxValue.ToString()) > -1)
+                    // if (condition.Values.IndexOf(maxValue.ToString()) > -1)
+                    if (condition.Value.IndexOf(maxValue.ToString()) > -1)
                     {
                         showWorkflowStep = true;
                         continue;
@@ -239,7 +244,7 @@ namespace DH.Helpdesk.Services.Services
                     {
                         //Get value from Model by casting to dictionary and look for property name
                         // value = _case.ObjectToDictionary()[condition.CaseField_Name].ToString();
-                        value = _case.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(prop => prop.Name, prop => prop.GetValue(_case, null))[condition.CaseField_Name].ToString();
+                        value = _case.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(prop => prop.Name, prop => prop.GetValue(_case, null))[condition.Key].ToString();
                     }
                     //if [Null]
                     else
@@ -249,7 +254,7 @@ namespace DH.Helpdesk.Services.Services
                     }
 
                     // Check conditions
-                    if (condition.Values.IndexOf(value) > -1)
+                    if (condition.Value.IndexOf(value) > -1)
                     {
                         showWorkflowStep = true;
                         continue;
@@ -577,9 +582,19 @@ namespace DH.Helpdesk.Services.Services
             this._unitOfWork.Commit();
         }
 
-        public IEnumerable<CaseSolutionConditionModel> GetCaseSolutionConditions(int caseSolution_Id)
+        public Dictionary<string,string> GetCaseSolutionConditions(int caseSolution_Id)
         {
-            return _caseSolutionConditionRepository.GetCaseSolutionConditions(caseSolution_Id);
+            Dictionary<string, string> caseSolutionConditions = this._cache.Get("CaseSolutionCondition" + caseSolution_Id) as Dictionary<string, string>;
+
+            if (caseSolutionConditions == null)
+            {
+                caseSolutionConditions = _caseSolutionConditionRepository.GetCaseSolutionConditions(caseSolution_Id).Select(x => new { x.CaseField_Name, x.Values }).ToDictionary(x => x.CaseField_Name, x => x.Values);
+
+                if (caseSolutionConditions.Any())
+                    this._cache.Set("CaseSolutionCondition" + caseSolution_Id, caseSolutionConditions, 60);
+            }
+
+            return caseSolutionConditions;
         }
     }
 }
