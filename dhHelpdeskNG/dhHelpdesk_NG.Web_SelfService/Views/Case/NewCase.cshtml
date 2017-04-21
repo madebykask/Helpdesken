@@ -132,7 +132,7 @@
 
                     if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.UserInformation))
                     {
-                        <h4>@Translation.Get("User Information", Enums.TranslationSource.TextTranslation)</h4>
+                        <h4 style="@Model.DisplayUserInfo()">@Translation.Get("User Information", Enums.TranslationSource.TextTranslation)</h4>
                         <div class="row">
                             <div class="col-md-3 dh-col">
                                 <div class="container form-horizontal">
@@ -318,7 +318,7 @@
 
                     if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.ComputerInformation))
                     {
-                        <h4>@Translation.Get("Computer Information", Enums.TranslationSource.TextTranslation)</h4>
+                        <h4 style="@Model.DisplayComputerInfo()">@Translation.Get("Computer Information", Enums.TranslationSource.TextTranslation)</h4>
                         <div class="row">
                             <div class="col-md-3 dh-col">
                                 <div class="container form-horizontal">
@@ -329,7 +329,7 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.InventoryNumber)
                                             </label>
                                             <div class="col-md-9">
-                                                @Html.TextBoxFor(i => Model.NewCase.InventoryNumber, new { @class = "hasAttribute", maxlength = "20", standardName = GlobalEnums.TranslationCaseFields.InventoryNumber.ToString() })
+                                                @Html.TextBoxFor(i => Model.NewCase.InventoryNumber, new {@class = "hasAttribute", maxlength = "20", standardName = GlobalEnums.TranslationCaseFields.InventoryNumber.ToString()})
                                             </div>
                                         </div>
                                     }
@@ -340,7 +340,7 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ComputerType_Id)
                                             </label>
                                             <div class="col-md-9">
-                                                @Html.TextBoxFor(i => Model.NewCase.InventoryType, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString() })
+                                                @Html.TextBoxFor(i => Model.NewCase.InventoryType, new {@class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString()})
                                             </div>
                                         </div>
                                     }
@@ -351,7 +351,7 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.InventoryLocation)
                                             </label>
                                             <div class="col-md-9">
-                                                @Html.TextBoxFor(i => Model.NewCase.InventoryLocation, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.InventoryLocation.ToString() })
+                                                @Html.TextBoxFor(i => Model.NewCase.InventoryLocation, new {@class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.InventoryLocation.ToString()})
                                             </div>
                                         </div>
                                     }
@@ -365,11 +365,11 @@
                     <!-- Computer Information Fields -->
                     if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.CaseInfo))
                     {
-                        <h4>@Translation.Get("Case Information", Enums.TranslationSource.TextTranslation) </h4>
+                        <h4 style="@Model.DisplayCaseInfo()">@Translation.Get("Case Information", Enums.TranslationSource.TextTranslation) </h4>
                         <div class="row">
                             <div class="col-md-3 dh-col">
                                 <div class="container form-horizontal">
-                                    <div class="form-group row">
+                                    <div class="form-group row @GlobalEnums.TranslationCaseFields.Description.ToString()">
                                         <label class="col-md-3">
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.CaseType_Id)
                                         </label>
