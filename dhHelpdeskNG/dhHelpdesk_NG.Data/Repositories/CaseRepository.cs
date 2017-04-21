@@ -4,7 +4,6 @@ namespace DH.Helpdesk.Dal.Repositories
 {
     using System;
     using System.Collections.Generic;
-    using System.Configuration;
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Case;
@@ -14,6 +13,7 @@ namespace DH.Helpdesk.Dal.Repositories
     using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel;
     using DH.Helpdesk.Domain;
+    using Mappers;
 
     public interface ICaseRepository : IRepository<Case>
     {
@@ -36,6 +36,8 @@ namespace DH.Helpdesk.Dal.Repositories
 
 	    Case GetCaseIncluding(int id);
 
+        CaseModel GetCase(int id);
+
         /// <summary>
         /// The get case overview.
         /// </summary>
@@ -53,13 +55,19 @@ namespace DH.Helpdesk.Dal.Repositories
     public class CaseRepository : RepositoryBase<Case>, ICaseRepository
     {
         private readonly IWorkContext workContext;
+        private readonly IEntityToBusinessModelMapper<Case, CaseModel> _caseToBusinessModelMapper;
+        private readonly IBusinessModelToEntityMapper<CaseModel, Case> _caseModelToEntityMapper;
 
         public CaseRepository(
             IDatabaseFactory databaseFactory, 
-            IWorkContext workContext)
+            IWorkContext workContext, 
+            IEntityToBusinessModelMapper<Case, CaseModel> caseToBusinessModelMapper,
+            IBusinessModelToEntityMapper<CaseModel, Case> caseModelToEntityMapper)
             : base(databaseFactory)
         {
             this.workContext = workContext;
+            _caseModelToEntityMapper = caseModelToEntityMapper;
+            _caseToBusinessModelMapper = caseToBusinessModelMapper;
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
@@ -113,7 +121,6 @@ namespace DH.Helpdesk.Dal.Repositories
 
             return query.FirstOrDefault();
         }
-
 
         public Case GetCaseByGUID(Guid GUID)
         {
@@ -339,5 +346,11 @@ namespace DH.Helpdesk.Dal.Repositories
 				.Include(x => x.Workinggroup)
 				.FirstOrDefault(x => x.Id == id);
 		}
+
+        public CaseModel GetCase(int id)
+        {
+            var caseEntity =  DataContext.Cases.Find(id);
+            return _caseToBusinessModelMapper.Map(caseEntity);
+        }
 	}
 }

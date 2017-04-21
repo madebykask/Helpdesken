@@ -222,6 +222,7 @@
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseSolutionConditionToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseLockToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseToBusinessModelMapper.cs" />
+    <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseToCaseModelMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseToCaseOverviewMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CausingPartToOverviewMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseFilterFavoriteToBusinessModelMapper.cs" />

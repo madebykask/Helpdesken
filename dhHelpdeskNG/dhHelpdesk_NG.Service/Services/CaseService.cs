@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Reflection;
 using DH.Helpdesk.Services.BusinessLogic.Mappers.Feedback;
 
 namespace DH.Helpdesk.Services.Services
@@ -50,6 +49,8 @@ namespace DH.Helpdesk.Services.Services
 	public interface ICaseService
     {
         IList<Case> GetCases();
+
+        CaseModel GetCase(int id);
 
         IList<Case> GetProjectCases(int customerId, int projectId);
 
@@ -1858,6 +1859,11 @@ namespace DH.Helpdesk.Services.Services
                         break;                    
                 }
             }
+        }
+
+        public CaseModel GetCase(int id)
+        {
+            return _caseRepository.GetCase(id);
         }
 
         #region Private methods

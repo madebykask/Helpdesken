@@ -49,6 +49,13 @@
                 .To<CaseFilterFavoriteToBusinessModelMapper>()
                 .InSingletonScope();
 
+            this.Bind<IBusinessModelToEntityMapper<CaseModel, Case>>()
+                .To <CaseModelToEntityMapper>()
+                .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<Case, CaseModel>>()
+                .To<CaseToCaseModelMapper>()
+                .InSingletonScope();
         }
     }
 }
