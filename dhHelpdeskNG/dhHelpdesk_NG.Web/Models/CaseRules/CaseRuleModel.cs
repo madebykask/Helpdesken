@@ -395,6 +395,8 @@ namespace DH.Helpdesk.Web.Models.CaseRules
 
         public BasicSingleItemField SMS { get; set; }
 
+        public BasicSingleItemField AgreedDate { get; set; }
+
         public BasicSingleItemField Available { get; set; }
 
         public BasicSingleItemField Cost { get; set; }

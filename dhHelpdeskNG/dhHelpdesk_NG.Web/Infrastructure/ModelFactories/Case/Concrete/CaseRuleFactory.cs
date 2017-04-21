@@ -500,6 +500,12 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 StatusType = GetFieldStatusType(ruleMode, TranslationCaseFields.SMS, caseFieldSettings, CaseSolutionFields.SMS, templateSettingModel.ToList()),
             };
 
+            caseBasicInfo.AgreedDate = new BasicSingleItemField()
+            {
+                Selected = new FieldItem(currentData.AgreedDate.ToString(), string.Empty),
+                StatusType = GetFieldStatusType(ruleMode, TranslationCaseFields.AgreedDate, caseFieldSettings, CaseSolutionFields.AgreedDate, templateSettingModel.ToList()),
+            };
+
             caseBasicInfo.Available = new BasicSingleItemField()
             {
                 Selected = new FieldItem(currentData.Available, string.Empty),

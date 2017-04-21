@@ -391,5 +391,13 @@ begin
 	Add StandardTextGUID uniqueIdentifier NOT NULL CONSTRAINT DF_StandardTextGUID default (newid())
 end
 GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'AgreedDate' and sysobjects.name = N'tblCaseSolution')
+	begin
+		ALTER TABLE [dbo].[tblCaseSolution] ADD [AgreedDate] DateTime NULL
+	end
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.31'

@@ -57,6 +57,7 @@ namespace DH.Helpdesk.Domain
         public string InventoryLocation { get; set; }
         public int? Supplier_Id { get; set; }
         public Guid? FormGUID { get; set; }
+        public DateTime? AgreedDate { get; set; }
         public string Available { get; set; }
         public int Cost { get; set; }
         public int OtherCost { get; set; }

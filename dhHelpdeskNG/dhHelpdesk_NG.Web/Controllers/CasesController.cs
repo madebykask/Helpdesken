@@ -4437,6 +4437,7 @@ namespace DH.Helpdesk.Web.Controllers
                         m.case_.Currency = caseTemplate.Currency;
                         m.case_.Cost = caseTemplate.Cost;
                         m.case_.OtherCost = caseTemplate.OtherCost;
+                        m.case_.AgreedDate = caseTemplate.AgreedDate;
                         m.case_.Available = caseTemplate.Available;
                         m.case_.ContactBeforeAction = caseTemplate.ContactBeforeAction;
                         m.case_.CostCentre = caseTemplate.CostCentre;

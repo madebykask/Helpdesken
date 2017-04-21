@@ -68,6 +68,7 @@
         IsAbout_Region_Id = 64,
         IsAbout_ReportedBy = 65,
         IsAbout_UserCode = 66,
-        AddFollowersBtn = 67
+        AddFollowersBtn = 67,
+        AgreedDate = 68
     }
 }

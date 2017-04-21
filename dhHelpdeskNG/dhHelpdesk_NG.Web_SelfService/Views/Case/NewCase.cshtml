@@ -128,6 +128,8 @@
                     @Html.HiddenFor(model => model.CaseLog.TextInternal)
                     @Html.HiddenFor(model => model.CaseLog.FinishingType)
 
+                    @Html.HiddenFor(model => model.NewCase.AgreedDate)
+
                     @Html.HiddenFor(model => model.DepartmentFilterFormat, new { data_field = "departmentFilterFormat" })
 
                     if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.UserInformation))
@@ -704,7 +706,7 @@
                                         </div>
                                     }
 
-                                    @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Available.ToString()))
+                                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Available.ToString()))
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.Available.ToString()">
                                             <label class="col-md-3">

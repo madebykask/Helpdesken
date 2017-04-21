@@ -121,6 +121,7 @@
             this.Property(x => x.InventoryLocation);
             this.Property(x => x.Supplier_Id).IsOptional();
             this.Property(x => x.SMS).IsRequired();
+            this.Property(x => x.AgreedDate);
             this.Property(x => x.Available);
             this.Property(x => x.Cost).IsRequired();
             this.Property(x => x.OtherCost).IsRequired();

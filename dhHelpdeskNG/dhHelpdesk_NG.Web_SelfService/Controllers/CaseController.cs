@@ -412,6 +412,7 @@
                     model.NewCase.Miscellaneous = caseTemplate.Miscellaneous;
                     model.NewCase.ContactBeforeAction = caseTemplate.ContactBeforeAction;
                     model.NewCase.SMS = caseTemplate.SMS;
+                    model.NewCase.AgreedDate = caseTemplate.AgreedDate;
                     model.NewCase.Available = caseTemplate.Available;
                     model.NewCase.Cost = caseTemplate.Cost;
                     model.NewCase.OtherCost = caseTemplate.OtherCost;
