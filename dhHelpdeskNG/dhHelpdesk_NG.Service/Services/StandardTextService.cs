@@ -35,7 +35,7 @@
 
         public IList<StandardText> GetStandardTexts(int customerId)
         {
-            return this._standardTextRepository.GetMany(x => x.Customer_Id == customerId).ToList();
+            return this._standardTextRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.StandardTextName).ToList();
         }
 
         public StandardText GetStandardText(int id)
@@ -70,11 +70,11 @@
             if (standardText == null)
                 throw new ArgumentNullException("standardtext");
 
-            standardText.Name = Guard.Sanitize(standardText.Name);
+            standardText.Text = Guard.Sanitize(standardText.Text);
 
             errors = new Dictionary<string, string>();
 
-            if (string.IsNullOrEmpty(standardText.Name))
+            if (string.IsNullOrEmpty(standardText.Text))
                 errors.Add("StandardText.Name", "Du måste ange en standardtext");
             if (string.IsNullOrEmpty(standardText.StandardTextName))
                 errors.Add("StandardText.StandardTextName", "Du måste ange en standardtext");

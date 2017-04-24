@@ -42,7 +42,7 @@
                             <tr class="@(isInactive ? "inactive" : "")">
                                 <td><a href="@Url.Action("edit", "standardtext", new {area = "admin", id = item.Id})">@Html.Raw(item.StandardTextName)</a></td>
                                 <td>
-                                    <a href="@Url.Action("edit", "standardtext", new {area = "admin", id = item.Id})">@Html.Raw(item.Name.Replace("\r\n", "<br />"))</a>
+                                    <a href="@Url.Action("edit", "standardtext", new {area = "admin", id = item.Id})">@Html.Raw(item.Text.Replace("\r\n", "<br />"))</a>
                                 </td>
                             </tr>
                         }

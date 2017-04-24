@@ -764,6 +764,7 @@ function CaseInitForm() {
         if (txt.length > 1) {
             $(field).val($(field).val() + txt);
             $(field).focus();
+            $(field).trigger("propertychange");
 
             var input = $(field);
             input[0].selectionStart = input[0].selectionEnd = input.val().length;
