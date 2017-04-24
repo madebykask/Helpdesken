@@ -5553,7 +5553,7 @@ If not exists (select * from tblTextTranslation where text_id = 1771 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1771, 2, 'No more files allowed')
 GO
 
-UPDATE tblText Set TextString = 'Informera initiativtagare och anhängare om åtgärder' WHERE Id=1743;
+UPDATE tblText Set TextString = 'Informera anmälare och följare om åtgärder' WHERE Id=1743;
 GO
 
 If not exists (select * from tbltext where id = 1772)
