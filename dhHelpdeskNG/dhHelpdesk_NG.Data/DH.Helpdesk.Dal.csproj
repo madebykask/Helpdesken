@@ -213,6 +213,7 @@
     <Compile Include="MapperData\Inventory\InventoryFieldSettingMapperDataForProcessing.cs" />
     <Compile Include="Mappers\Calendars\BusinessModelToEntity\CalendarToEntityMapper.cs" />
     <Compile Include="Mappers\Calendars\EntityToBusinessModel\CalendarToBusinessModelMapper.cs" />
+    <Compile Include="Mappers\Cases\BusinessModelToEntity\CaseModelToEntityMapper.cs" />
     <Compile Include="Mappers\Cases\BusinessModelToEntity\CaseSolutionConditionToEntityMapper.cs" />
     <Compile Include="Mappers\Cases\BusinessModelToEntity\CaseNotifierToEntityMapper.cs" />
     <Compile Include="Mappers\Cases\BusinessModelToEntity\CausingPartToEntityMapper.cs" />

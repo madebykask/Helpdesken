@@ -304,7 +304,8 @@
     <Compile Include="App_Start\BundleConfig.Orders.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\EFormModule.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
-    <Compile Include="Areas\WebApi\Controllers\TestApiController.cs" />
+    <Compile Include="Areas\WebApi\Controllers\CaseApiController.cs" />
+    <Compile Include="Areas\WebApi\CaseAreaRegistration.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Areas\Admin\Controllers\Api\InvoiceApiController.cs" />
     <Compile Include="Areas\Invoices\Controllers\WebApi\InvoicesApiController.cs" />

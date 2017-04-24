@@ -48,9 +48,7 @@ namespace DH.Helpdesk.Services.Services
 
 	public interface ICaseService
     {
-        IList<Case> GetCases();
-
-        CaseModel GetCase(int id);
+        IList<Case> GetCases();        
 
         IList<Case> GetProjectCases(int customerId, int projectId);
 
@@ -1859,11 +1857,6 @@ namespace DH.Helpdesk.Services.Services
                         break;                    
                 }
             }
-        }
-
-        public CaseModel GetCase(int id)
-        {
-            return _caseRepository.GetCase(id);
         }
 
         #region Private methods

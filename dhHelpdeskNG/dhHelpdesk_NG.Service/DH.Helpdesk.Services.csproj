@@ -279,6 +279,7 @@
     <Compile Include="Services\CaseExtraFollowersService.cs" />
     <Compile Include="Services\CaseFollowUpService.cs" />
     <Compile Include="Services\CaseStatistic\CaseStatisticService.cs" />
+    <Compile Include="Services\UniversalCase\IUniversalCaseService.cs" />
     <Compile Include="Services\Concrete\CaseLockService.cs" />
     <Compile Include="Services\Concrete\LogProgramService.cs" />
     <Compile Include="Services\Concrete\Reports\ReportServiceService.cs" />
@@ -486,6 +487,7 @@
     <Compile Include="Services\SystemService.cs" />
     <Compile Include="Services\TemplateService.cs" />
     <Compile Include="Services\TextTranslationService.cs" />
+    <Compile Include="Services\UniversalCase\UniversalCaseService.cs" />
     <Compile Include="Services\UrgencyService.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="Infrastructure\EmailSendingSettings.cs" />
