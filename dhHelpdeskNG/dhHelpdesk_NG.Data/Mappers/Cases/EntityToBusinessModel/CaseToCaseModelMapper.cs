@@ -10,7 +10,7 @@
             if (entity == null)
                 return null;
 
-            return new CaseModel
+            var ret = new CaseModel
             {
                 #region Base
 
@@ -81,7 +81,7 @@
 
                 IsAbout_PersonsCellPhone = entity.IsAbout?.Person_Cellphone,
 
-                IsAbout_CostCentre = entity.IsAbout.CostCentre,
+                IsAbout_CostCentre = entity.IsAbout?.CostCentre,
 
                 IsAbout_Place = entity.IsAbout?.Place,
 
@@ -212,7 +212,9 @@
                 LatestSLACountDate = entity.LatestSLACountDate,
 
             #endregion
-        };
+            };
+
+            return ret;
         }
     }
 }

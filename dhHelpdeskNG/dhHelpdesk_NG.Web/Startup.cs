@@ -1,6 +1,7 @@
 ﻿using Microsoft.Owin;
 using Owin;
 using System.Web.Http;
+using Ninject.Web.WebApi;
 
 [assembly: OwinStartup(typeof(DH.Helpdesk.Web.App_Start.Startup))]
 namespace DH.Helpdesk.Web.App_Start
@@ -9,11 +10,12 @@ namespace DH.Helpdesk.Web.App_Start
     {
         public void Configuration(IAppBuilder app)
         {
-            var config = new HttpConfiguration();           
+            var config = new HttpConfiguration();            
             ConfigureAuth(app);
             WebApiConfig.Register(config);            
+            var kernel = NinjectWebCommon.Bootstrapper.Kernel;                        
+            config.DependencyResolver = new NinjectDependencyResolver(kernel);            
             app.UseWebApi(config);
-
         }
-    }
+    }       
 }
