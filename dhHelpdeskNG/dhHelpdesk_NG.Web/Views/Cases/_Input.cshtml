@@ -1480,7 +1480,6 @@
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.AgreedDate, "Överenskommet datum")
                                         </td>
                                         <td colspan="2">
-@*                                            @if (Model.EditMode == Enums.AccessMode.ReadOnly)*@
                                             @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.AgreedDate, CaseSolutionFields.AgreedDate))
                                             {
                                             @Html.EditorFor(m => m.case_.AgreedDate, "DatePicker", new { id = "divCase__AgreedDate", disabled = "disabled" })

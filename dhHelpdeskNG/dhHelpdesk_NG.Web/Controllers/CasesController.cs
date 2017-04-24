@@ -754,6 +754,8 @@ namespace DH.Helpdesk.Web.Controllers
 					PageSize = recPerPage,
 					PageNumber = recPerPage != 0 ? pageStart / recPerPage : 0
 				};
+			    if (!f.IsConnectToParent)
+			        SessionFacade.CaseOverviewGridSettings.pageOptions.recPerPage = recPerPage;
 			}
 
 			var searchResult = _caseSearchService.Search(
