@@ -53,6 +53,7 @@ namespace DH.Helpdesk.Services.Services
         IList<Case> GetCases();
 
         IList<Case> GetProjectCases(int customerId, int projectId);
+        IList<Case> GetProblemCases(int customerId, int problemId);
 
         IList<Case> GetCasesByCustomers(IEnumerable<int> customerIds);
 
@@ -880,6 +881,11 @@ namespace DH.Helpdesk.Services.Services
         public IList<Case> GetProjectCases(int customerId, int projectId)
         {
             return this._caseRepository.GetProjectCases(customerId, projectId);
+        }
+
+        public IList<Case> GetProblemCases(int customerId, int problemId)
+        {
+            return this._caseRepository.GetProblemCases(customerId, problemId);
         }
 
         public IList<Case> GetCasesByCustomers(IEnumerable<int> customerIds) 

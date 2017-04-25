@@ -130,6 +130,8 @@
                            Caption = arg.Caption,
                            RegistrationDate = arg.RegTime,
                            WatchDate = arg.WatchDate,
+                           CaseType = arg.CaseType.Name,
+                           SubState = arg.StateSecondary.Name,
                        };
         }
 
@@ -386,7 +388,7 @@
             var logs = this.problemLogService.GetProblemLogs(id);
 
             // todo!!!
-            var cases = this.caseService.GetCases().Where(x => x.Problem_Id == id);
+            var cases = this.caseService.GetProblemCases(SessionFacade.CurrentCustomer.Id, id);
             var setting = this.settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
             var isFirstName = (setting.IsUserFirstLastNameRepresentation == 1);
 
