@@ -1871,7 +1871,7 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpGet]
         public ActionResult GetCaseFilesJS(int caseId)
         {            
-            var files = _caseFileService.FindFileNamesByCaseId(caseId);
+            var files = _caseFileService.FindFileNamesAndDatesByCaseId(caseId);
             var cfs = MakeCaseFileModel(files, string.Empty);
             var customerId = 0;            
             customerId = _caseService.GetCaseById(caseId).Customer_Id;
