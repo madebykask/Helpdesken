@@ -376,6 +376,11 @@ namespace DH.Helpdesk.Dal.Repositories
             columns.Add(string.Format("'0' as [{0}]", CaseSearchConstants.TimeLeftColumn.SafeForSqlInject()));
             columns.Add("tblStateSecondary.IncludeInCaseStatistics");
 
+            if (criterias.CaseSettings.ContainsKey(GlobalEnums.TranslationCaseFields.ClosingReason.ToString()))
+            {
+                columns.Add("tblCaseHistory.ClosingReason as ClosingReason");
+            }
+
             if (criterias.CaseSettings.ContainsKey(GlobalEnums.TranslationCaseFields.CausingPart.ToString()))
             {
                 columns.Add("tblCausingPart.Name as CausingPart");
@@ -551,6 +556,11 @@ namespace DH.Helpdesk.Dal.Repositories
             tables.Add("left outer join tblUsers as tblUsers3 on tblCase.CaseResponsibleUser_Id = tblUsers3.Id ");
             tables.Add("left outer join tblProblem on tblCase.Problem_Id = tblProblem.Id ");
             tables.Add("left outer join tblUsers as tblUsers4 on tblProblem.ResponsibleUser_Id = tblUsers4.Id ");
+
+            if (caseSettings.ContainsKey(GlobalEnums.TranslationCaseFields.ClosingReason.ToString()))
+            {
+                tables.Add("left outer join (SELECT ch.Id, ch.Case_Id, ch.ClosingReason FROM [tblCaseHistory] ch INNER JOIN (SELECT [Case_Id], MAX(Id) as Id FROM [tblCaseHistory] GROUP BY Case_Id) chi ON ch.Id = chi.Id AND ch.Id = chi.Id) as tblCaseHistory on tblCaseHistory.Case_Id = tblCase.Id ");
+            }
 
             if (caseSettings.ContainsKey(GlobalEnums.TranslationCaseFields.CausingPart.ToString()))
             {
