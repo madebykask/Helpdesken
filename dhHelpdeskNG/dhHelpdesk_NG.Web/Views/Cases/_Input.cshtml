@@ -1454,7 +1454,7 @@
                                             }
                                             else
                                             {
-                                            <input type="checkbox" name="case_.ContactBeforeAction" value="@Model.case_.ContactBeforeAction" class="switchcheckbox" disabled="disabled" />
+                                                <input type="checkbox" name="case_.ContactBeforeAction" @(Model.case_.ContactBeforeAction == 1 ? "checked=checked" : "") value="1" class="switchcheckbox" disabled="disabled" />
                                             }
                                         </td>
                                     </tr>
