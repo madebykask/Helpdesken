@@ -158,7 +158,7 @@
             return this.RedirectToAction("Index");
         }
 
-        [HttpGet]
+        [HttpPost]
         public RedirectToRouteResult Delete(int id)
         {
             this.inventoryService.DeletePrinter(id);

@@ -182,7 +182,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             return this.RedirectToAction("Index");
         }
 
-        [HttpGet]
+        [HttpPost]
         public RedirectToRouteResult Delete(int id)
         {
             this.inventoryService.DeleteWorkstation(id);

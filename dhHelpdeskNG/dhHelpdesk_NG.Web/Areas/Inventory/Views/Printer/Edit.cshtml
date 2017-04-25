@@ -12,7 +12,10 @@
             <li id="menu1">
                 <input type="submit" value="@Translation.Get("Spara")" class="btn" onclick=" $('#printer_edit_form').submit(); "/>
             </li>
-            <li id="menu3">@Html.ActionLink(Translation.Get("Ta bort"), "Delete", new { id = Model.Id }, new { @class = "btn" })</li>
+            <li id="menu3">
+                @Html.ActionLink(Translation.Get("Ta bort"), "Delete", new { id = Model.Id }, new
+                      { @class = "btn deleteDialog", deleteDialogText = Translation.GetCoreTextTranslation("Är du säker på att du vill ta bort aktuell post") + "?" })
+        </li>
         }
         <li id="menu2">@Html.ActionLink(Translation.Get("Avbryt"), "Index", null, new { @class = "btn" })</li>
     </ul>
