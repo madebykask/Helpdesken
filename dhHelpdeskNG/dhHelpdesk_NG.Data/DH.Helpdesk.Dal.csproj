@@ -43,6 +43,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DbExtensions, Version=5.1.0.0, Culture=neutral, PublicKeyToken=6b3b4f54da52bca4, processorArchitecture=MSIL">
+      <HintPath>..\packages\DbExtensions.5.1.0\lib\net40\DbExtensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="DH.Helpdesk.Services">
       <HintPath>..\dhHelpdesk_NG.Web_SelfService\Bin\DH.Helpdesk.Services.dll</HintPath>
     </Reference>
@@ -66,6 +70,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -79,6 +84,11 @@
     <Compile Include="Attributes\Inventory\CreateMissingPrinterSettingsAttribute.cs" />
     <Compile Include="Attributes\Inventory\CreateMissingServerSettingsAttribute.cs" />
     <Compile Include="Attributes\Inventory\CreateMissingComputerSettingsAttribute.cs" />
+    <Compile Include="CaseSearch\CaseSearchConstants.cs" />
+    <Compile Include="CaseSearch\CaseSearchCriterias.cs" />
+    <Compile Include="CaseSearch\CaseSearchQueryBuilder.cs" />
+    <Compile Include="CaseSearch\Interfaces\ICaseSearchCriterias.cs" />
+    <Compile Include="CaseSearch\SearchQueryBuildContext.cs" />
     <Compile Include="Dal\INewRepository.cs" />
     <Compile Include="EntityConfigurations\Accounts\AccountActivityGroupConfiguration.cs" />
     <Compile Include="EntityConfigurations\Accounts\AccountEMailLogConfiguration.cs" />

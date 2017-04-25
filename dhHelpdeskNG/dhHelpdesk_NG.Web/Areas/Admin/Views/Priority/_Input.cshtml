@@ -161,7 +161,7 @@
                                         @Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @Translation.Get("Om e-postmall väljs så skickas meddelande till ovanstående adresser när ärendet ändras", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Om e-postmall väljs så skickas meddelande till ovanstående adresser när notering skrivs")
                                         <br />
                                         @Html.DropDownListFor(model => model.Priority.MailID_Change, Model.EmailTemplates, "", new { style = "width: auto;" })
                                     </td>
@@ -259,29 +259,29 @@
             });
         }
 
-        changeLanguage()
+        changeLanguage();
     }
 
     function changeInformUserText() {
-     
+
         if (document.getElementById("priority.InformUser").checked == true){
-           
+
             document.getElementById("LanguageId").style.display = "";
             document.getElementById("LanguageId").value = 1;
 
-            changeLanguage()
+            changeLanguage();
 
         }
         else {
             document.getElementById("trInformUserText").style.display = "none";
             document.getElementById("txtInformUserText_2").style.display = "none";
             document.getElementById("LanguageId").style.display = "none";
-            
+
         }
     }
 
     function changeLanguage() {
-       
+
         var Language_Id = document.getElementById("LanguageId")[document.getElementById("LanguageId").selectedIndex].value
         if (Language_Id == 1) {
             document.getElementById("trInformUserText").style.display = "";
@@ -290,9 +290,9 @@
         else {
             document.getElementById("trInformUserText").style.display = "none";
             document.getElementById("trInformUserText2").style.display = "";
-           
+
         }
-        
+
     }
 
     $(function () {
@@ -326,57 +326,74 @@
             }
         });
 
-        var validator = $("#target").validate({
-            rules: {
-                "Priority.Code": {
-                    required: true
+        $.validator.setDefaults({
+            ignore: ''
+        });
+
+        var validator = $("#target")
+            .submit(function () {
+                tinyMCE.triggerSave();
+            })
+            .validate({
+                rules: {
+                    "Priority.Code": {
+                        required: true
+                    },
+                    "Priority.Name": {
+                        required: true
+                    },
+                    //"Priority.Description": {
+                    //    required: true
+                    //},
+                    //"Priority.EMailList": {
+                    //    required: true
+                    //},
+                    "Priority.FileName": {
+                        requried: true
+                    },
+                    "Priority.InformUserText": {
+                        maxlength: 500
+                    }
                 },
-                "Priority.Name": {
-                    required: true
-                },
-                //"Priority.Description": {
-                //    required: true
-                //},
-                //"Priority.EMailList": {
-                //    required: true
-                //},
-                "Priority.FileName": {
-                    requried: true
-                }
-            },
-            messages: {
-                "Priority.Code": {
-                    required: '@Translation.GetForJS("Du måste ange prioritet", Enums.TranslationSource.TextTranslation)'
-                },
-                "Priority.Name": {
-                    required: '@Translation.GetForJS("Du måste ange ett namn", Enums.TranslationSource.TextTranslation)'
-                },
-                @*"Priority.Description": {
+                messages: {
+                    "Priority.Code": {
+                        required:
+                            '@Translation.GetForJS("Du måste ange prioritet", Enums.TranslationSource.TextTranslation)'
+                    },
+                    "Priority.Name": {
+                        required:
+                            '@Translation.GetForJS("Du måste ange ett namn", Enums.TranslationSource.TextTranslation)'
+                    },
+                    @*"Priority.Description": {
                     required: '@Translation.GetForJS("Du måste ange en beskrivning", Enums.TranslationSource.TextTranslation)'
                 },
                 "Priority.EMailList": {
                     required: '@Translation.GetForJS("Du måste fylla i listan", Enums.TranslationSource.TextTranslation)'
                 },*@
-                "Priority.FileName": {
-                    requried: '@Translation.GetForJS("Du måste bifoga en fil", Enums.TranslationSource.TextTranslation)'
+                    "Priority.FileName": {
+                        requried:
+                            '@Translation.GetForJS("Du måste bifoga en fil", Enums.TranslationSource.TextTranslation)'
+                    },
+                    "Priority.InformUserText": {
+                        maxlength: '@string.Format(Translation.GetForJS("Ange högst {0} tecken"), 500)'
+                    }
+                },
+                submitHandler: function (form) {
+                    form.submit();
                 }
-            },
-            submitHandler: function (form) {
-                form.submit();
-            }
-        });
+            });
 
-       
+
     });
 
     $('#remove').click(function () {
         $(this).parent().remove()
     });
 
-    
+
     $(document).ready(function () {
         if (document.getElementById("priority.InformUser").checked == true) {
-         
+
             document.getElementById("LanguageId").style.display = "";
             document.getElementById("LanguageId").value = 1;
         }
@@ -390,7 +407,7 @@
                 window.location.reload()
             });
         }
-    }      
+    }
 
-   
+
 </script>

@@ -61,8 +61,9 @@
     });
 
     $("#allocateCaseMail").click(function () {
-        if ($(allocateCaseMail).is(':checked')) {
+        if ($("#allocateCaseMail").is(':checked')) {
             $("#rowSettingForNoMail").attr('style', 'display:block');
+            $("#settingForNoMail").attr("checked", false);
         } else {
             $("#rowSettingForNoMail").attr('style', 'display:none');
         }

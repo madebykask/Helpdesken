@@ -67,6 +67,12 @@ function extractor(query) {
     return '';
 }
 
+function getSimpleQuery(query) {
+    var arr = query.replace(/<[^>]*>/g, "").split(";");
+    var searchText = arr[arr.length - 1];
+    return extractor(searchText);
+}
+
 function generateRandomKey() {
     function s4() {
         return Math.floor((1 + Math.random()) * 0x10000)

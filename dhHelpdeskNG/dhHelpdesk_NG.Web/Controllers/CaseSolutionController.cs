@@ -412,6 +412,7 @@ namespace DH.Helpdesk.Web.Controllers
                     caseSolution.ReferenceNumber,
                     
                     SMS = caseSolution.SMS.ToBool(),
+                    caseSolution.AgreedDate,
                     caseSolution.Available,
                     caseSolution.Cost,
                     caseSolution.OtherCost,
@@ -606,6 +607,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             #region Assign current data
 
+            currentData.AgreedDate = templateModel.AgreedDate;
             currentData.Available = templateModel.Available;
             currentData.Caption = templateModel.Caption;
             currentData.CaseType_Id = templateModel.CaseType_Id;

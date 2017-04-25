@@ -161,7 +161,7 @@
             }
 
             // Get active mail templates 
-            var customMailTemplates = _mailTemplateService.GetCustomMailTemplates(customer.Id).ToList();
+            var customMailTemplates = _mailTemplateService.GetCustomMailTemplatesFull(customer.Id).ToList();
             var activeMailTemplates = customMailTemplates.Where(m => m.TemplateLanguages
                                                                     .Where(tl => !string.IsNullOrEmpty(tl.Subject) && !string.IsNullOrEmpty(tl.Body)).Any() &&
                                                                     m.MailId >= 100

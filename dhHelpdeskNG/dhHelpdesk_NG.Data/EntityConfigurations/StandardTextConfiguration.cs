@@ -19,7 +19,8 @@
 
             this.Property(x => x.Customer_Id).IsRequired();
             this.Property(x => x.IsActive).IsRequired().HasColumnName("Status");
-            this.Property(x => x.Name).IsRequired().HasMaxLength(1000).HasColumnName("StandardText");
+            this.Property(x => x.Text).IsRequired().HasMaxLength(1000).HasColumnName("StandardText");
+            this.Property(x => x.StandardTextName).IsRequired().HasMaxLength(50);
             this.Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);

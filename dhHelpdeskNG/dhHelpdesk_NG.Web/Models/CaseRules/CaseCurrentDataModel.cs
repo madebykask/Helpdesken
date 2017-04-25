@@ -111,6 +111,8 @@ namespace DH.Helpdesk.Web.Models.CaseRules
 
         public int SMS { get; set; }
 
+        public DateTime? AgreedDate { get; set; }
+
         public string Available { get; set; }
 
         public int Cost { get; set; }

@@ -2,6 +2,7 @@
 {
     using global::System;
     using global::System.Collections.Generic;
+    using MailTemplates;
 
     public class Priority : Entity
     {
@@ -35,5 +36,7 @@
         public virtual Customer Customer { get; set; }
         public virtual ICollection<PriorityImpactUrgency> PriorityImpactUrgencies { get; set; }
         public virtual ICollection<PriorityLanguage> PriorityLanguages { get; set; }
+        //public virtual MailTemplateEntity MailTemplate { get; set; }
+
     }
 }

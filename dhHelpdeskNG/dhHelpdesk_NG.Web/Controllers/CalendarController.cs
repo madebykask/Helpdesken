@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using DH.Helpdesk.Common.Extensions.Integer;
+
 namespace DH.Helpdesk.Web.Controllers
 {
     using System;
@@ -194,7 +196,7 @@ using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
                                                           CalendarDate = today, 
                                                           ShowFromDate = today,
                                                           ShowUntilDate = today
-                                                      });
+                                                      }, true);
 
             return this.View(model);
         }
@@ -324,10 +326,11 @@ using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
         /// <param name="calendar">
         /// The calendar.
         /// </param>
+        /// <param name="isNewModel"></param>
         /// <returns>
         /// The <see cref="CalendarInputViewModel"/>.
         /// </returns>
-        private CalendarInputViewModel CreateInputViewModel(CalendarOverview calendar)
+        private CalendarInputViewModel CreateInputViewModel(CalendarOverview calendar, bool isNewModel = false)
         {
             var wgsSelected = calendar.WGs ?? new List<WorkingGroupEntity>();
             var wgsAvailable = new List<WorkingGroupEntity>();
@@ -335,7 +338,16 @@ using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
             var user = this._userService.GetUser(SessionFacade.CurrentUser.Id);
 
             var workingGroups = this.workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id, user.Id);
-            var wgsSelectedIds = wgsSelected.Select(g => g.Id).ToArray();
+            var wgsSelectedIds = wgsSelected.Select(g => g.Id).ToList();
+            if (isNewModel)
+            {
+                var defaultWg = workingGroups.FirstOrDefault(x => x.IsDefaultCalendar.ToBool());
+                if (defaultWg != null && !wgsSelectedIds.Contains(defaultWg.Id))
+                {
+                    wgsSelectedIds.Add(defaultWg.Id);
+                    wgsSelected.Add(defaultWg);
+                }
+            }
 
             var userHasCalenderAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CalendarPermission);
 
@@ -360,9 +372,9 @@ using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
                     Text = x.WorkingGroupName,
                     Value = x.Id.ToString()
                 }).ToList(),
+                UserHasCalendarAdminPermission = userHasCalenderAdminPermission,
+                CurrentUser = user,
             };
-            model.UserHasCalendarAdminPermission = userHasCalenderAdminPermission;
-            model.CurrentUser = user;
             return model;
         }
     }

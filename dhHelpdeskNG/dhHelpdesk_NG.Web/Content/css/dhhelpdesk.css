@@ -3856,6 +3856,8 @@ div.case-dropdown-div > span.btn-group > ul.multiselect-container > div.options-
 
 .case-standardtext-space {
     white-space: pre-line;
+    line-height: 1;
+    font-size: 14px;
 }
 
 .case-div-standardtext-accordion {

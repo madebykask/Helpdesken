@@ -438,7 +438,7 @@
         {
             var activeLangs = _masterDataService.GetLanguages()
                                         .Where(l => l.IsActive == 1)
-                                        .Select(la => new LanguageOverview { Id = la.Id, IsActive = la.IsActive.ConvertIntToBool(), LanguageId = la.LanguageID, Name = la.Name })
+                                        .Select(la => new LanguageOverview { Id = la.Id, IsActive = la.IsActive, LanguageId = la.LanguageID, Name = la.Name })
                                         .OrderBy(l => l.Name)
                                         .ToList();
             return activeLangs;

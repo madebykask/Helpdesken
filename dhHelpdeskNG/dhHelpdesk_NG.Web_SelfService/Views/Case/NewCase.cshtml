@@ -128,11 +128,13 @@
                     @Html.HiddenFor(model => model.CaseLog.TextInternal)
                     @Html.HiddenFor(model => model.CaseLog.FinishingType)
 
+                    @Html.HiddenFor(model => model.NewCase.AgreedDate)
+
                     @Html.HiddenFor(model => model.DepartmentFilterFormat, new { data_field = "departmentFilterFormat" })
 
                     if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.UserInformation))
                     {
-                        <h4>@Translation.Get("User Information", Enums.TranslationSource.TextTranslation)</h4>
+                        <h4 style="@Model.DisplayUserInfo()">@Translation.Get("User Information", Enums.TranslationSource.TextTranslation)</h4>
                         <div class="row">
                             <div class="col-md-3 dh-col">
                                 <div class="container form-horizontal">
@@ -165,15 +167,16 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Persons_Name)
                                             </label>
                                             <div class="col-md-9">
-                                                @Html.TextBoxFor(p => Model.NewCase.PersonsName, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Persons_Name.ToString() })
-
-                                                <span class="case-div-width90em">
-                                                    @Html.HiddenFor(model => Model.FollowerUsers, new { @readonly = "true", id = "caseFollowerUsersInput" })
-                                                    @Html.Partial("_CaseAddFollowers", Model.SendToDialogModel)
-                                                    <a href="#case_add_followers_btn" role="button" class="btn btn-default case-usersearch-btn hasAttribute" data-toggle="modal" standardName="@GlobalEnums.TranslationCaseFields.Persons_Name.ToString()">@Translation.Get("Add followers", Enums.TranslationSource.TextTranslation)</a>
-                                                    @Html.TextAreaFor(model => model.FollowerUsers, new { id = "fakeCaseFollowerUsersInput", @class = "case-usersearch-textarea hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Persons_Name.ToString() })
-
-                                                </span>
+                                                @Html.TextBoxFor(p => Model.NewCase.PersonsName, new {@class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Persons_Name.ToString()})
+                                                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString()))
+                                                {
+                                                    <span class="case-div-width90em">
+                                                        @Html.HiddenFor(model => Model.FollowerUsers, new {@readonly = "true", id = "caseFollowerUsersInput"})
+                                                        @Html.Partial("_CaseAddFollowers", Model.SendToDialogModel)
+                                                        <a href="#case_add_followers_btn" role="button" class="btn btn-default case-usersearch-btn hasAttribute" data-toggle="modal" standardName="@GlobalEnums.TranslationCaseFields.Persons_Name.ToString()">@Translation.Get("Add followers", Enums.TranslationSource.TextTranslation)</a>
+                                                        @Html.TextAreaFor(model => model.FollowerUsers, new {id = "fakeCaseFollowerUsersInput", @class = "case-usersearch-textarea hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Persons_Name.ToString()})
+                                                    </span>
+                                                }
                                             </div>
 
 
@@ -317,7 +320,7 @@
 
                     if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.ComputerInformation))
                     {
-                        <h4>@Translation.Get("Computer Information", Enums.TranslationSource.TextTranslation)</h4>
+                        <h4 style="@Model.DisplayComputerInfo()">@Translation.Get("Computer Information", Enums.TranslationSource.TextTranslation)</h4>
                         <div class="row">
                             <div class="col-md-3 dh-col">
                                 <div class="container form-horizontal">
@@ -328,7 +331,7 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.InventoryNumber)
                                             </label>
                                             <div class="col-md-9">
-                                                @Html.TextBoxFor(i => Model.NewCase.InventoryNumber, new { @class = "hasAttribute", maxlength = "20", standardName = GlobalEnums.TranslationCaseFields.InventoryNumber.ToString() })
+                                                @Html.TextBoxFor(i => Model.NewCase.InventoryNumber, new {@class = "hasAttribute", maxlength = "20", standardName = GlobalEnums.TranslationCaseFields.InventoryNumber.ToString()})
                                             </div>
                                         </div>
                                     }
@@ -339,7 +342,7 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ComputerType_Id)
                                             </label>
                                             <div class="col-md-9">
-                                                @Html.TextBoxFor(i => Model.NewCase.InventoryType, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString() })
+                                                @Html.TextBoxFor(i => Model.NewCase.InventoryType, new {@class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString()})
                                             </div>
                                         </div>
                                     }
@@ -350,7 +353,7 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.InventoryLocation)
                                             </label>
                                             <div class="col-md-9">
-                                                @Html.TextBoxFor(i => Model.NewCase.InventoryLocation, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.InventoryLocation.ToString() })
+                                                @Html.TextBoxFor(i => Model.NewCase.InventoryLocation, new {@class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.InventoryLocation.ToString()})
                                             </div>
                                         </div>
                                     }
@@ -364,11 +367,11 @@
                     <!-- Computer Information Fields -->
                     if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.CaseInfo))
                     {
-                        <h4>@Translation.Get("Case Information", Enums.TranslationSource.TextTranslation) </h4>
+                        <h4 style="@Model.DisplayCaseInfo()">@Translation.Get("Case Information", Enums.TranslationSource.TextTranslation) </h4>
                         <div class="row">
                             <div class="col-md-3 dh-col">
                                 <div class="container form-horizontal">
-                                    <div class="form-group row">
+                                    <div class="form-group row @GlobalEnums.TranslationCaseFields.Description.ToString()">
                                         <label class="col-md-3">
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.CaseType_Id)
                                         </label>
@@ -703,7 +706,7 @@
                                         </div>
                                     }
 
-                                    @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Available.ToString()))
+                                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Available.ToString()))
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.Available.ToString()">
                                             <label class="col-md-3">
@@ -912,26 +915,28 @@
                 success: function(result) {
                     if (result) {
                         $("#urgentInfoMessage").html(result);
+                        var $src = $(this);
+                        var $target = $("#case_urgent_popup");
+                        $target.attr("data-src", $src.attr("data-src"));
+                        $target.modal("show");
+
+                        $target.on('hidden.bs.modal', function (e) {
+                            $('#urgentAcceptChbx').attr('checked', false);
+                            $("#btnAccept").attr("disabled", true);
+                        });
+
+                        $('#urgentAcceptChbx').change(function() {
+                            $("#btnAccept").attr("disabled", !this.checked);
+                        });
+
+                        $("#btnAccept").on("click", function() {
+                            CallSaving();
+                        });
+                    } else {
+                        CallSaving();
                     }
                 }
             });
-            var $src = $(this);
-            var $target = $("#case_urgent_popup");
-            $target.attr("data-src", $src.attr("data-src"));
-            $target.modal("show");
-
-            $target.on('hidden.bs.modal', function (e) {
-                $('#urgentAcceptChbx').attr('checked', false);
-                $("#btnAccept").attr("disabled", true);
-            });
-
-            $('#urgentAcceptChbx').change(function() {
-                    $("#btnAccept").attr("disabled", !this.checked);
-                });
-
-            $("#btnAccept").on("click", function() {
-                CallSaving();
-                    });
         } else {
             CallSaving();
         }

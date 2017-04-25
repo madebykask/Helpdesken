@@ -1198,9 +1198,30 @@
                                         <td>
                                             @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.SMS, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.SMS)
                                         </td>
-
                                     </tr>
                                 }
+                                    @if (Model.CaseFieldSettings.Count() != 0)
+                                    {
+                                        <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.AgreedDate.ToString())">
+                                            <td>
+                                                @Translation.Get(GlobalEnums.TranslationCaseFields.AgreedDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
+                                            </td>
+                                            <td>
+                                                @Html.EditorFor(m => m.CaseSolution.AgreedDate, "DatePicker", new { id = "AgreedDate", @class = "acceptRules", standardId = GlobalEnums.TranslationCaseFields.AgreedDate.ToString() })
+@*                                                @Html.TextBoxFor(model => model.CaseSolution.AgreedDate, new {id = "AgreedDate", maxlength = "60", @class = "acceptRules", standardId = GlobalEnums.TranslationCaseFields.AgreedDate.ToString()})*@
+                                            </td>
+                                            <td>
+                                                <table>
+                                                    <tr id="stateIconPlace_@GlobalEnums.TranslationCaseFields.AgreedDate.ToString()">
+                                                        @*State icons will be added Here*@
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td>
+                                                @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.AgreedDate, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.AgreedDate)
+                                            </td>
+                                        </tr>
+                                    }
                                     @if (Model.CaseFieldSettings.Count() != 0)
                                 {
                                     <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Available.ToString())">

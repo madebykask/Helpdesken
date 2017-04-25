@@ -173,7 +173,7 @@
                                             <a href="@Url.Action("edit", "operationlog", new { id = item.Id })">@item.OperationLogDescription.ForHtmlView()</a>                                            
                                         </td>
                                         <td>
-                                            <a href="@Url.Action("edit", "operationlog", new { id = item.Id })">@item.OperationLogAction</a>                                            
+                                            <a href="@Url.Action("edit", "operationlog", new { id = item.Id })">@item.OperationLogAction.ForHtmlView()</a>                                            
                                         </td>
                                     </tr>
                                 }

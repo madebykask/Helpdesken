@@ -94,7 +94,6 @@
 </script>
 
 @Scripts.Render("~/bundles/cases/_input")
-@Scripts.Render(BundleConfig.ScriptNames.CaseFollowersAndLogCommon)
 
 
 <script type="text/javascript">
@@ -605,7 +604,7 @@
                                                 @*This line can be only used for Initiator-ReportedBy*@ 
                                                 @*@Html.Hidden("ShowReportedBy", Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString()).ShowOnStartPage)*@
 
-                                                @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy))
+                                                @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy, CaseSolutionFields.IsAbout_ReportedBy))
                                                     {
                                                     @Html.TextBoxFor(model => model.case_.IsAbout.ReportedBy, new { maxlength = "40", autocomplete = "Off", data_field = "userId" })
                                                     }
@@ -620,7 +619,7 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name, "Anmälare")
                                             </td>
                                             <td>
-                                                @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name))
+                                                @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name, CaseSolutionFields.IsAbout_PersonsName))
                                                     {
                                                     @Html.TextBoxFor(model => model.case_.IsAbout.Person_Name, new { maxlength = "50" })
                                                     }
@@ -636,7 +635,7 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail, "E-post")
                                             </td>
                                             <td class="span4">
-                                                @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail))
+                                                @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail, CaseSolutionFields.IsAbout_PersonsEmail))
                                                         {
                                                     @Html.TextBoxFor(model => model.case_.IsAbout.Person_Email, new { maxlength = "100", @readonly = "readonly" })
                                                         }
@@ -651,7 +650,7 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone, "Telefon")
                                             </td>
                                             <td class="span4">
-                                                @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone))
+                                                @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone, CaseSolutionFields.IsAbout_PersonsPhone))
                                                     {
                                                     @Html.TextBoxFor(model => model.case_.IsAbout.Person_Phone, new { maxlength = "40" })
                                                     }
@@ -666,7 +665,7 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone, "Mobil")
                                             </td>
                                             <td class="span4">
-                                                @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone))
+                                                @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone, CaseSolutionFields.IsAbout_PersonsCellPhone))
                                                     {
                                                     @Html.TextBoxFor(model => model.case_.IsAbout.Person_Cellphone, new { maxlength = "30" })
                                                     }
@@ -681,7 +680,7 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.IsAbout_Region_Id, "Område")
                                             </td>
                                             <td class="span4">
-                                                @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.IsAbout_Region_Id))
+                                                @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.IsAbout_Region_Id, CaseSolutionFields.IsAbout_Region_Id))
                                                     {
                                                         if (Model.case_.IsAbout != null)
                                                         {
@@ -725,7 +724,7 @@
                                             </td>
                                             <td class="span4">
 
-                                                @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.IsAbout_Department_Id))
+                                                @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.IsAbout_Department_Id, CaseSolutionFields.IsAbout_Department_Id))
                                                         {
                                                             if (Model.case_.IsAbout != null)
                                                             {
@@ -767,7 +766,7 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.IsAbout_OU_Id, "Enhet")
                                             </td>
                                             <td class="span4">
-                                                @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.IsAbout_OU_Id))
+                                                @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.IsAbout_OU_Id, CaseSolutionFields.IsAbout_OU_Id))
                                                         {
                                                             if (Model.case_.IsAbout != null)
                                                             {
@@ -801,7 +800,7 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.IsAbout_CostCentre, "Kostnadsställe")
                                             </td>
                                             <td class="span4">
-                                                @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.IsAbout_CostCentre))
+                                                @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.IsAbout_CostCentre, CaseSolutionFields.IsAbout_CostCentre))
                                                     {
                                                     @Html.TextBoxFor(model => model.case_.IsAbout.CostCentre, new { maxlength = "30" })
                                                     }
@@ -816,7 +815,7 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.IsAbout_Place, "Placering")
                                             </td>
                                             <td class="span4">
-                                                @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.IsAbout_Place))
+                                                @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.IsAbout_Place, CaseSolutionFields.IsAbout_Place))
                                                     {
                                                     @Html.TextBoxFor(model => model.case_.IsAbout.Place, new { maxlength = "100" })
                                                     }
@@ -832,7 +831,7 @@
                                             </td>
                                             <td class="span4">
 
-                                                @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.IsAbout_UserCode))
+                                                @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.IsAbout_UserCode, CaseSolutionFields.IsAbout_UserCode))
                                                     {
                                                     @Html.TextBoxFor(model => model.case_.IsAbout.UserCode, new { maxlength = "50" })
                                                     }
@@ -1457,7 +1456,7 @@
                                             }
                                             else
                                             {
-                                            <input type="checkbox" name="case_.ContactBeforeAction" value="@Model.case_.ContactBeforeAction" class="switchcheckbox" disabled="disabled" />
+                                                <input type="checkbox" name="case_.ContactBeforeAction" @(Model.case_.ContactBeforeAction == 1 ? "checked=checked" : "") value="1" class="switchcheckbox" disabled="disabled" />
                                             }
                                         </td>
                                     </tr>
@@ -1483,7 +1482,7 @@
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.AgreedDate, "Överenskommet datum")
                                         </td>
                                         <td colspan="2">
-                                            @if (Model.EditMode == Enums.AccessMode.ReadOnly)
+                                            @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.AgreedDate, CaseSolutionFields.AgreedDate))
                                             {
                                             @Html.EditorFor(m => m.case_.AgreedDate, "DatePicker", new { id = "divCase__AgreedDate", disabled = "disabled" })
                                             }

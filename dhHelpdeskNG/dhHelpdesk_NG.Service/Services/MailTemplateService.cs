@@ -18,7 +18,8 @@
 
         IList<MailTemplateList> GetMailTemplates(int customerId, int langaugeId);
         CustomMailTemplate GetCustomMailTemplate(int mailTemplateId);
-        IList<CustomMailTemplate> GetCustomMailTemplates(int customerId);
+        IList<CustomMailTemplate> GetCustomMailTemplatesFull(int customerId);
+        IList<CustomMailTemplate> GetCustomMailTemplatesList(int customerId);
         MailTemplateEntity GetMailTemplate(int id, int customerId);
         MailTemplateEntity GetMailTemplate(int id, int customerId, int orderTypeId);
         MailTemplateEntity GetMailTemplateForCustomer(int id, int customerId, int languageId);
@@ -80,9 +81,14 @@
             return this._mailTemplateRepository.GetCustomMailTemplate(mailTemplateId);
         }
 
-        public IList<CustomMailTemplate> GetCustomMailTemplates(int customerId)
+        public IList<CustomMailTemplate> GetCustomMailTemplatesList(int customerId)
         {
-            return this._mailTemplateRepository.GetCustomMailTemplates(customerId);
+            return this._mailTemplateRepository.GetCustomMailTemplatesList(customerId);
+        }
+
+        public IList<CustomMailTemplate> GetCustomMailTemplatesFull(int customerId)
+        {
+            return this._mailTemplateRepository.GetCustomMailTemplatesFull(customerId);
         }
 
         public IList<MailTemplateIdentifierEntity> GetMailTemplateIdentifiers()

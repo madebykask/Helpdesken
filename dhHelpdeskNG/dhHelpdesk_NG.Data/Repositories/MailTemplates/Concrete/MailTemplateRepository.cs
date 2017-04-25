@@ -72,7 +72,7 @@ namespace DH.Helpdesk.Dal.Repositories.MailTemplates.Concrete
                         Id = templateLang.Language.Id,
                         LanguageId = templateLang.Language.LanguageID,
                         Name = templateLang.Language.Name,
-                        IsActive = Convert.ToBoolean(templateLang.Language.IsActive)
+                        IsActive = templateLang.Language.IsActive
                     }
                 };
 
@@ -95,51 +95,100 @@ namespace DH.Helpdesk.Dal.Repositories.MailTemplates.Concrete
             return res;
         }
 
-        public List<CustomMailTemplate> GetCustomMailTemplates(int customerId)
+        public List<CustomMailTemplate> GetCustomMailTemplatesList(int customerId)
         {
             var res = new List<CustomMailTemplate>();
 
-            var mailTemplateEntities = this.DataContext.MailTemplates.Where(t => t.Customer_Id == customerId).ToList();
+            var items = (from mt in Table
+                         from mt_l in mt.MailTemplateLanguages
+                         let lang = mt_l.Language
+                         where mt.Customer_Id == customerId &&
+                         lang.IsActive > 0
+                         select new 
+                         {
+                             MailTemplateId = mt.Id,
+                             CustomerId = mt.Customer_Id.Value,
+                             IsStandard = mt.IsStandard,
+                             MailId = mt.MailID,
+                             OrderTypeId = mt.OrderType_Id,
+                             TemplateLanguage = new CustomMailTemplateLanguage
+                             {
+                                 Subject = mt_l.Subject,
+                                 //Body = mt_l.Body,
+                                 LanguageId = lang.Id,
+                                 TemplateName = mt_l.MailTemplateName,
+                                 Language = new LanguageOverview
+                                 {
+                                     Id = lang.Id,
+                                     LanguageId = lang.LanguageID,
+                                     Name = lang.Name,
+                                     IsActive = lang.IsActive
+                                 }
+                             }
+                         }).ToList();
 
-            var mailTemplateLanguageEntities = this.DataContext.MailTemplateLanguages
-                                                               .Where(tl => tl.Language.IsActive != 0).ToList();
+            res = items.GroupBy(k => 
+                            new 
+                            {
+                                k.MailTemplateId,
+                                k.CustomerId,
+                                k.IsStandard,
+                                k.MailId,
+                                k.OrderTypeId
+                            })
+                        .Select(gr => 
+                            new CustomMailTemplate
+                            {
+                                MailTemplateId = gr.Key.MailTemplateId,
+                                CustomerId = gr.Key.CustomerId,
+                                IsStandard = gr.Key.IsStandard,
+                                MailId = gr.Key.MailId,
+                                OrderTypeId = gr.Key.OrderTypeId,
+                                TemplateLanguages = gr.Select(o => o.TemplateLanguage).ToList()
+                            }).ToList();
 
-            foreach (var template in mailTemplateEntities)
-            {
-                var templateLanguages = new List<CustomMailTemplateLanguage>();
-                foreach (var templateLang in mailTemplateLanguageEntities.Where(ml=> ml.MailTemplate_Id == template.Id))
-                {
-                    var templateLanguage = new CustomMailTemplateLanguage
-                    {
-                        Subject = templateLang.Subject,
-                        Body = templateLang.Body,
-                        LanguageId = templateLang.Language_Id,
-                        TemplateName = templateLang.MailTemplateName,
-                        Language = new LanguageOverview
-                              {
-                                  Id = templateLang.Language.Id,
-                                  LanguageId = templateLang.Language.LanguageID,
-                                  Name = templateLang.Language.Name,
-                                  IsActive = Convert.ToBoolean(templateLang.Language.IsActive)
-                              }
-                    };
+            return res;
+        }
 
-                    templateLanguages.Add(templateLanguage);
-                }
-                
-                var mailTemplate = new CustomMailTemplate
-                        {
-                            MailTemplateId = template.Id,
-                            CustomerId = template.Customer_Id.Value,
-                            IsStandard = template.IsStandard,
-                            MailId = template.MailID,
-                            OrderTypeId = template.OrderType_Id,
-                            TemplateLanguages = templateLanguages                            
-                        };
+        public List<CustomMailTemplate> GetCustomMailTemplatesFull(int customerId)
+        {
+            var items = (from mt in Table
+                         from mt_l in mt.MailTemplateLanguages
+                         let lang = mt_l.Language
+                         where mt.Customer_Id == customerId &&
+                         lang.IsActive > 0
+                         select new
+                         {
+                             MailTemplate = mt,
+                             MailTemplateLanguage = mt_l,
+                             Language = lang
+                         }).ToList();
 
-                res.Add(mailTemplate);
-            }
-                                          
+            var res = items.GroupBy(k => k.MailTemplate)
+                        .Select(gr =>
+                            new CustomMailTemplate
+                            {
+                                MailTemplateId = gr.Key.Id,
+                                CustomerId = gr.Key.Customer_Id ?? 0,
+                                IsStandard = gr.Key.IsStandard,
+                                MailId = gr.Key.MailID,
+                                OrderTypeId = gr.Key.OrderType_Id,
+                                TemplateLanguages = gr.Select(o => 
+                                    new CustomMailTemplateLanguage
+                                    {
+                                        Subject = o.MailTemplateLanguage.Subject,
+                                        Body = o.MailTemplateLanguage.Body,
+                                        LanguageId = o.MailTemplateLanguage.Language_Id,
+                                        TemplateName = o.MailTemplateLanguage.MailTemplateName,
+                                        Language = new LanguageOverview
+                                        {
+                                            Id = o.Language.Id,
+                                            LanguageId = o.Language.LanguageID,
+                                            Name = o.Language.Name,
+                                            IsActive = o.Language.IsActive
+                                        }
+                                    }).ToList()
+                            }).ToList();
             return res;
         }
 

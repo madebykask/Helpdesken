@@ -164,7 +164,7 @@
             items: 20,
             minLength: 2,
             source: function (query, process) {
-                var arr = query.replace("&nbsp;","").replace(/<[^>]*>/g, "").split(";");
+                var arr = query.replace(/<[^>]*>/g, "").split(";");
                 var searchText = $.trim(arr[arr.length - 1]);
                 if (searchText) {
                     var lastInitiatorSearchKey = generateRandomKey();
@@ -181,10 +181,11 @@
                                 function(item) {
                                     var aItem = {
                                         userId: item.UserId,
-                                        name: item.Name,
+                                        name: item.FirstName + " " + item.SurName,
                                         email: item.Emails,
                                         groupType: item.GroupType,
-                                        departmentname: item.DepartmentName
+                                        departmentname: item.DepartmentName,
+                                        name_family: item.SurName + " " + item.FirstName
                                     };
                                     return JSON.stringify(aItem);
                                 });
@@ -196,26 +197,37 @@
                 return;
             },
 
-            matcher: function (item) {
-                var arr = this.query.replace(/<[^>]*>/g, "").split(";");
-                var searchText = arr[arr.length - 1];
-                var tquery = extractor(searchText);
+            matcher: function (obj) {
+                var item = JSON.parse(obj);
+                var tquery = getSimpleQuery(this.query);
                 if (!tquery) return false;
-                return ~item.toLowerCase().indexOf(tquery.toLowerCase());
+                if (~item.email && (item.groupType === 0 || item.groupType === 1)) {
+                    return ~item.name.toLowerCase().indexOf(tquery.toLowerCase()) ||
+                        ~item.name_family.toLowerCase().indexOf(tquery.toLowerCase()) ||
+                        ~item.userId.toLowerCase().indexOf(tquery.toLowerCase()) ||
+                        ~item.email[0].toLowerCase().indexOf(tquery.toLowerCase());
+                } else {
+                    return ~item.name.toLowerCase().indexOf(tquery.toLowerCase())
+                    || ~item.name_family.toLowerCase().indexOf(tquery.toLowerCase())
+                    || ~item.userId.toLowerCase().indexOf(tquery.toLowerCase());
+                }
             },
 
             sorter: function (items) {
-                return items.sort(function (a, b) {
-                    var itemA = JSON.parse(a);
-                    var itemB = JSON.parse(b);
-                    if (itemA.groupType > itemB.groupType) {
-                        return 1;
+                var beginswith = [], caseSensitive = [], caseInsensitive = [], other = [], item;
+                var query = getSimpleQuery(this.query);
+                while (aItem = items.shift()) {
+                    item = JSON.parse(aItem);
+                    if (item.groupType === 0) {
+                        if (!item.userId.toLowerCase().indexOf(query.toLowerCase())) beginswith.push(JSON.stringify(item));
+                        else if (~item.userId.indexOf(query)) caseSensitive.push(JSON.stringify(item));
+                        else caseInsensitive.push(JSON.stringify(item));
+                    } else {
+                        other.push(JSON.stringify(item));
                     }
-                    if (itemA.groupType < itemB.groupType) {
-                        return -1;
-                    }
-                    return 0;
-                });
+                }
+                var initiators = beginswith.concat(caseSensitive, caseInsensitive);
+                return initiators.concat(other);
             },
 
             highlighter: function (obj) {
@@ -230,10 +242,15 @@
                 if (item.groupType === 3)
                     grType = document.parameters.emailLabel + ": ";
                 var userId = item.userId != null ? item.userId + ' - ' : "";
+                var query = getSimpleQuery(this.query);
                 var result = item.name + " - " + userId + item.email + " - " + item.departmentname;
-                var query = extractor(this.query.replace(/<[^>]*>/g, "")).replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
-                return grType + result.replace(new RegExp('(' + query + ')', 'ig'),
-                    function ($1, match) {
+                var resultNameFamily = item.name_family + " - " + userId + item.email + " - " + item.departmentname;
+                if (result.toLowerCase().indexOf(query.toLowerCase()) > -1)
+                    return grType + result.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+                        return '<strong>' + match + '</strong>';
+                    });
+                else
+                    return grType + resultNameFamily.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
                         return '<strong>' + match + '</strong>';
                     });
             },

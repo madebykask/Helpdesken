@@ -144,3 +144,50 @@
 {
     width: 1125px !important;
 }
+
+/***************DATE PICKER**********************************************/
+
+.datepicker td,
+.datepicker th {
+    text-align: center;
+    width: 20px;
+    height: 20px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.datepicker td.day:hover {
+    background: #eeeeee;
+    cursor: pointer;
+}
+
+.datepicker td.day.disabled {
+    color: #eeeeee;
+}
+
+.datepicker td.today {
+    background-color: #fdf59a;
+    cursor: pointer;
+}
+
+.datepicker thead tr:first-child th {
+    cursor: pointer;
+}
+
+.datepicker td.old,
+.datepicker td.new {
+    color: #999999;
+}
+
+.datepicker .clear {
+    cursor: pointer;
+}
+
+.datepicker thead tr:first-child th:hover {
+    background: #eeeeee;
+}
+
+.datepicker .clear:hover {
+    background: #eeeeee;
+}

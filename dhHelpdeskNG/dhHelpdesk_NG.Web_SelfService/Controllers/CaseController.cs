@@ -378,10 +378,9 @@
                     var notifier = _computerService.GetInitiatorByUserId(SessionFacade.CurrentUserIdentity.UserId, customerId);
 
                     model.NewCase.ReportedBy = string.IsNullOrEmpty(caseTemplate.ReportedBy)? notifier?.UserId : caseTemplate.ReportedBy;
-                    model.NewCase.PersonsName = string.IsNullOrEmpty(caseTemplate.PersonsName) ? 
-                                                    (cs.IsUserFirstLastNameRepresentation != 0 ? string.Format("{0} {1}", notifier?.FirstName, notifier?.LastName) :
-                                                                                                 string.Format("{0} {1}", notifier?.LastName, notifier?.FirstName))  :
-                                                    caseTemplate.PersonsName;
+                    model.NewCase.PersonsName = string.IsNullOrEmpty(caseTemplate.PersonsName)
+                        ? string.Format("{0} {1}", notifier?.FirstName, notifier?.LastName)
+                        : caseTemplate.PersonsName;
 
                     model.NewCase.PersonsEmail = string.IsNullOrEmpty(caseTemplate.PersonsEmail) ? notifier?.Email: caseTemplate.PersonsEmail;
                     model.NewCase.PersonsPhone = string.IsNullOrEmpty(caseTemplate.PersonsPhone) ? notifier?.Phone : caseTemplate.PersonsPhone;
@@ -413,6 +412,7 @@
                     model.NewCase.Miscellaneous = caseTemplate.Miscellaneous;
                     model.NewCase.ContactBeforeAction = caseTemplate.ContactBeforeAction;
                     model.NewCase.SMS = caseTemplate.SMS;
+                    model.NewCase.AgreedDate = caseTemplate.AgreedDate;
                     model.NewCase.Available = caseTemplate.Available;
                     model.NewCase.Cost = caseTemplate.Cost;
                     model.NewCase.OtherCost = caseTemplate.OtherCost;

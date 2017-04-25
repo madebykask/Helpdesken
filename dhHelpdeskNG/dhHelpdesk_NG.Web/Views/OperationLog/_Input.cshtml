@@ -42,7 +42,7 @@
                                         @Translation.Get("Beskrivning", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @Html.TextAreaFor(model => model.OperationLog.LogText, new { maxlength = "2000", style = "height:100px;" })
+                                        @Html.TextAreaFor(model => model.OperationLog.LogText, new { maxlength = "2000", style = "height:100px;", @class = "richtexteditor" })
                                     </td>
                                 </tr>
                                 <tr>
@@ -50,7 +50,7 @@
                                         @Translation.Get("Åtgärd", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @Html.TextAreaFor(model => model.OperationLog.LogAction, new { maxlength = "2000", style = "height:100px;" })
+                                        @Html.TextAreaFor(model => model.OperationLog.LogAction, new { maxlength = "2000", style = "height:100px;", @class = "richtexteditor" })
                                     </td>
                                 </tr>
                                 <tr>
@@ -180,7 +180,7 @@
                                        @Translation.Get("Extern beskrivning", Enums.TranslationSource.TextTranslation)
                                    </td>
                                    <td>
-                                       @Html.TextAreaFor(model => model.OperationLog.LogTextExternal, new { maxlength = "2000", style = "height:100px;" })
+                                       @Html.TextAreaFor(model => model.OperationLog.LogTextExternal, new { maxlength = "2000", style = "height:100px;", @class = "richtexteditor" })
                                    </td>
                                </tr>
                             </table>

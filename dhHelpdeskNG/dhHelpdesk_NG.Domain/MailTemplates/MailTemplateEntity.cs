@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Domain.MailTemplates
+﻿using System.Collections.Generic;
+
+namespace DH.Helpdesk.Domain.MailTemplates
 {
     using DH.Helpdesk.Domain.Accounts;
     using DH.Helpdesk.Domain.Interfaces;
@@ -30,6 +32,8 @@
         public virtual OrderType OrderType { get; set; }
 
         public int? OrderType_Id { get; set; }
+
+        public virtual ICollection<MailTemplateLanguageEntity> MailTemplateLanguages { get; set; }
 
         #endregion
     }

@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Data.Entity;
+using System.Linq.Expressions;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
@@ -129,7 +130,7 @@ using System;
         IList<CustomerUser> GetCustomerUsersForUser(int userId);
         void UpdateUserSetting(UserCaseSetting newSetting);
         bool IsCustomerUser(int customerId, int userId);
-        bool CheckUserCasePermissions(int userId, int[] customerIds, int caseId, Expression<Func<Case, bool>> casePermissionsFilter = null);
+        bool CheckUserCasePermissions(int userId, int caseId, Expression<Func<Case, bool>> casePermissionsFilter = null);
     }
 
     public class CustomerUserRepository : RepositoryBase<CustomerUser>, ICustomerUserRepository
@@ -144,14 +145,11 @@ using System;
             this.customerSettingsMapper = customerSettingsMapper;
         }
 
-        public CustomerUser GetCustomerSettings(int customer, int user)
+        public CustomerUser GetCustomerSettings(int customerId, int userId)
         {
-            return (from customerUser in this.DataContext.Set<CustomerUser>()
-                    join settings in this.DataContext.Set<Setting>() on customerUser.Customer_Id equals settings.Customer_Id
-                    where customerUser.Customer_Id == customer && customerUser.User_Id == user
-                    select customerUser)
-                    .ToList()
-                    .FirstOrDefault();
+            return Table
+                    .Include(x => x.User)   
+                    .Where(cu => cu.Customer_Id == customerId && cu.User_Id == userId).FirstOrDefault();
         }
 
         public IList<UserCustomer> GetCustomerUsersForStart(int userId)
@@ -280,13 +278,13 @@ using System;
             return DataContext.CustomerUsers.Any(cu => cu.Customer_Id == customerId && cu.User_Id == userId);
         }
 
-        public bool CheckUserCasePermissions(int userId, int[] customerIds, int caseId, Expression<Func<Case, bool>> casePermissionsFilter = null)
+        public bool CheckUserCasePermissions(int userId, int caseId, Expression<Func<Case, bool>> casePermissionsFilter = null)
         {
-            IQueryable<Case> query = from c in DataContext.Set<Customer>()
-                        from cu in c.Users
-                        from _case in c.Cases
-                        where customerIds.Contains(c.Id) &&
-                        cu.Id == userId
+            IQueryable<Case> query =
+                        from _case in DataContext.Set<Case>()
+                        from user in _case.Customer.Users
+                        where _case.Id == caseId &&
+                        user.Id == userId
                         select _case;
 
             if (casePermissionsFilter != null)
@@ -294,8 +292,9 @@ using System;
                 query = query.Where(casePermissionsFilter);
             }
                         
-            return query.Any(o => o.Id == caseId);
+            return query.Any();
         }
+       
     }
 
     #endregion

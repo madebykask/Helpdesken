@@ -40,11 +40,11 @@
             $('#add_category_button').show();
         });
 
-        $('#show_all_answers_within_category').change(function () {
+        $('#show_all_answers_within_category').on('switchChange.bootstrapSwitch', function (event, state) {
             if (!window.selectedCategoryId) {
                 return;
             }
-            if ($(this).is(':checked')) {
+            if (state) {
                 $.get('@Url.Action("FaqsDetailed")', { categoryId: window.selectedCategoryId, now: Date.now() }, function (faqsWithDescription) {
                     refreshFaqTableWithDescription(faqsWithDescription);
                 });

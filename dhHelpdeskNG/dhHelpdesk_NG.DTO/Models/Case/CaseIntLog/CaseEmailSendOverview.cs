@@ -15,7 +15,9 @@ namespace DH.Helpdesk.BusinessData.Models.Case.CaseIntLog
         }
         public string UserId { get; set; }
 
-        public string Name { get; set; }
+        public string FirstName { get; set; }
+
+        public string SurName { get; set; }
 
         public List<string> Emails { get; set; }
 

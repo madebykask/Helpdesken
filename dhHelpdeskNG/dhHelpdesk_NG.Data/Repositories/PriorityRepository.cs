@@ -67,7 +67,7 @@ namespace DH.Helpdesk.Dal.Repositories
     public interface IPriorityImpactUrgencyRepository : IRepository<PriorityImpactUrgency>
     {
         int GetPriorityIdByImpactAndUrgency(int impactId, int urgencyId);
-        string GetPriorityInfoTextByImpactAndUrgency(int impactId, int urgentId, int languageId);
+        PriorityImpactUrgency GetPriorityImpactUrgencyByImpactAndUrgency(int impactId, int urgentId);
     }
 
     public class PriorityImpactUrgencyRepository : RepositoryBase<PriorityImpactUrgency>, IPriorityImpactUrgencyRepository
@@ -83,24 +83,12 @@ namespace DH.Helpdesk.Dal.Repositories
             return p != null ? p.Priority_Id : 0;
         }
 
-        public string GetPriorityInfoTextByImpactAndUrgency(int impactId, int urgentId, int languageId)
+        public PriorityImpactUrgency GetPriorityImpactUrgencyByImpactAndUrgency(int impactId, int urgentId)
         {
-            var priorityUrgent = DataContext.PriorityImpactUrgencies
+            return DataContext.PriorityImpactUrgencies
                 .Include(x => x.Priority.PriorityLanguages)
                 .Where(x => x.Priority.InformUser == 1 && !string.IsNullOrEmpty(x.Priority.InformUserText))
                 .FirstOrDefault(x => x.Impact_Id == impactId && x.Urgency_Id == urgentId);
-            if (priorityUrgent?.Priority != null)
-            {
-                var infoText = priorityUrgent.Priority.InformUserText;
-                var translate =
-                    priorityUrgent.Priority.PriorityLanguages.FirstOrDefault(x => x.Language_Id == languageId);
-                if (!string.IsNullOrEmpty(translate?.InformUserText))
-                {
-                    infoText = translate.InformUserText;
-                }
-                return infoText;
-            }
-            return string.Empty;
         }
     }
 

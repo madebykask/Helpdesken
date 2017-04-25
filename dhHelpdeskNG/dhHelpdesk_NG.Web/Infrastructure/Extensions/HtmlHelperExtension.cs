@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Extensions
+﻿using DH.Helpdesk.Common.Constants;
+
+namespace DH.Helpdesk.Web.Infrastructure.Extensions
 {
     
     using System.Collections.Generic;
@@ -920,6 +922,22 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
 
                         sb.Append(tdCloseMarkup);
                         sb.Append("</tr>");
+                }
+            }
+
+            // Case extra followers
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString()).ShowOnStartPage == 1)
+            {
+                if (!cur.CaseExtraFollowers.Equals(o.CaseExtraFollowers))
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.GetCoreTextTranslation("Följare") + be);
+                    sb.Append(tdOpenMarkup);
+                    sb.Append(o.CaseExtraFollowers.Replace(BRConstItem.Email_Separator, BRConstItem.Email_Separator + " "));
+                    sb.Append(from);
+                    sb.Append(cur.CaseExtraFollowers.Replace(BRConstItem.Email_Separator, BRConstItem.Email_Separator + " "));
+                    sb.Append(tdCloseMarkup);
+                    sb.Append("</tr>");
                 }
             }
 

@@ -672,4 +672,11 @@ If not exists (select * from tblTextTranslation where text_id = 1796 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1796, 1, 'Alla ärenden')
 GO
 
+If not exists (select * from tbltext where id = 1806)
+	insert into tbltext (id, TextString, TextType) VALUES (1806, 'Followers', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1806 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1806, 1, 'Följare')
+GO
+
 

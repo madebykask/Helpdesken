@@ -5553,7 +5553,7 @@ If not exists (select * from tblTextTranslation where text_id = 1771 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1771, 2, 'No more files allowed')
 GO
 
-UPDATE tblText Set TextString = 'Informera initiativtagare och anhängare om åtgärder' WHERE Id=1743;
+UPDATE tblText Set TextString = 'Informera anmälare och följare om åtgärder' WHERE Id=1743;
 GO
 
 If not exists (select * from tbltext where id = 1772)
@@ -5756,6 +5756,18 @@ If not exists (select * from tbltext where id = 1805)
 GO
 If not exists (select * from tblTextTranslation where text_id = 1805 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1805, 2, 'Limit rights to')
+GO
+
+UPDATE tblText Set TextString = 'Du måste ange ett produktområde' WHERE Id = 1317;
+GO
+
+/* Id 1806 SelfService */
+
+If not exists (select * from tbltext where id = 1807)
+	insert into tbltext (id, TextString) VALUES (1807, 'Följare')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1807 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1807, 2, 'Follower')
 GO
 
 -- *** Run this last when put translation script above this line **--

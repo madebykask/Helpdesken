@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Tools
+﻿using DH.Helpdesk.BusinessData.Models.Case;
+
+namespace DH.Helpdesk.Web.Infrastructure.Tools
 {
     using System.Collections.Generic;
 
@@ -33,5 +35,6 @@
         byte[] GetFileContent(string fileName, int objectId, params string[] subtopics);
 
         string FindFilePath(string fileName, string objectId, params string[] subtopics);
+        List<CaseFileDate> FindFileNamesAndDates(string id, params string[] subtopics);
     }
 }

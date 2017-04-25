@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Controllers
+﻿using DH.Helpdesk.Common.Extensions.Integer;
+
+namespace DH.Helpdesk.Web.Controllers
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -132,13 +134,14 @@
 
         public ActionResult New()
         {
-            var model = this.OperationLogInputViewModel(new OperationLog { Customer_Id = SessionFacade.CurrentCustomer.Id });
+            var model = this.OperationLogInputViewModel(new OperationLog { Customer_Id = SessionFacade.CurrentCustomer.Id }, true);
 
             AddViewDataValues();
 
             return this.View(model);
         }
 
+        [ValidateInput(false)]
         [HttpPost]
         public ActionResult New(OperationLog operationlog, OperationLogList operationLogList, int[] WGsSelected, string[] SRsSelected, string[] UsersSelected, int OperationLogHour, int OperationLogMinute, int chkSecurity, int? chkOperationLogSMS, string txtSMS)
         {
@@ -216,6 +219,7 @@
             return this.View(model);
         }
 
+        [ValidateInput(false)]
         [HttpPost]
         public ActionResult Edit(int id, OperationLog operationlog, OperationLogList operationLogList, int[] WGsSelected, string[] SRsSelected, string[] WGsSMSSelected, string[] UsersSelected, int OperationLogHour, int OperationLogMinute, int chkSecurity, int? chkOperationLogSMS, string txtSMS)
         {
@@ -304,7 +308,7 @@
             return Json(res, JsonRequestBehavior.AllowGet);
         }
 
-        private OperationLogInputViewModel OperationLogInputViewModel(OperationLog operationlog)
+        private OperationLogInputViewModel OperationLogInputViewModel(OperationLog operationlog, bool isNewModel = false)
         {
             var wgsSelected = operationlog.WGs ?? new List<WorkingGroupEntity>();
             var wgsAvailable = new List<WorkingGroupEntity>();
@@ -327,7 +331,17 @@
             if (cs.SMSEMailDomain != null)
                 smsEmailDomain = cs.SMSEMailDomain;
 
-            foreach (var wg in this._workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id))
+            var workingGroups = _workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id);
+            if (isNewModel)
+            {
+                var defaultWg = workingGroups.FirstOrDefault(x => x.IsDefaultOperationLog.ToBool());
+                if (defaultWg != null && !wgsSelected.Contains(defaultWg))
+                {
+                    wgsSelected.Add(defaultWg);
+                }
+            }
+
+            foreach (var wg in workingGroups)
             {                
                 if (!wgsSelected.Contains(wg))
                     wgsAvailable.Add(wg);

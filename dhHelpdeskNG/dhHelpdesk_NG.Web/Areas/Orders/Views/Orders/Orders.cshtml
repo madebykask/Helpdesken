@@ -84,6 +84,8 @@
     $(document).ready(function () {
         var perPageText = '@Translation.GetForJS("Antal per sida")';
         var perShowingText = '@Translation.GetForJS("Visar sida")';
-        InitDataTable("Orders_Table", perPageText, perShowingText);
+        var emptyTable = '@Translation.GetForJS("Ingen data är tillgänglig")';
+        var infoEmpty = '@string.Format(Translation.GetForJS("Visa {0} av {1} poster"), "0", "0")';
+        InitDataTable("Orders_Table", perPageText, perShowingText, null, null, emptyTable, infoEmpty);
     });
 </script>
