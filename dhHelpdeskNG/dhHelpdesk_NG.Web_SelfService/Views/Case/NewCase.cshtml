@@ -919,19 +919,6 @@
                         var $target = $("#case_urgent_popup");
                         $target.attr("data-src", $src.attr("data-src"));
                         $target.modal("show");
-
-                        $target.on('hidden.bs.modal', function (e) {
-                            $('#urgentAcceptChbx').attr('checked', false);
-                            $("#btnAccept").attr("disabled", true);
-                        });
-
-                        $('#urgentAcceptChbx').change(function() {
-                            $("#btnAccept").attr("disabled", !this.checked);
-                        });
-
-                        $("#btnAccept").on("click", function() {
-                            CallSaving();
-                        });
                     } else {
                         CallSaving();
                     }
@@ -941,6 +928,19 @@
             CallSaving();
         }
     }
+
+    $("#case_urgent_popup").on('hidden.bs.modal', function (e) {
+        $('#urgentAcceptChbx').attr('checked', false);
+        $("#btnAccept").attr("disabled", true);
+    });
+
+    $('#urgentAcceptChbx').change(function() {
+        $("#btnAccept").attr("disabled", !this.checked);
+    });
+
+    $("#btnAccept").on("click", function() {
+        CallSaving();
+    });
 
     function CallSaving() {
         $mainForm.attr("action", '@Url.Content("~/Case/NewCase")');
