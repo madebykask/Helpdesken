@@ -765,32 +765,32 @@
                                             </td>
                                             <td class="span4">
                                                 @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.IsAbout_OU_Id, CaseSolutionFields.IsAbout_OU_Id))
-                                                        {
-                                                            if (Model.case_.IsAbout != null)
-                                                            {
-                                                    @Html.TextBox("IsAboutOUName", Model.ous.Where(w => w.Id == Model.case_.IsAbout.OU_Id).Select(o => o.Name).SingleOrDefault(), new { id = "IsAboutOuName", @readonly = true })
-                                                    @Html.HiddenFor(m => Model.case_.IsAbout.OU_Id, new { id = "case__IsAbout_Ou_Id", name = "case_.IsAbout.OU_Id" })
-                                                            }
-                                                        }
-                                                        else
-                                                        {
+                                                {
+                                                    if (Model.case_.IsAbout != null)
+                                                    {
+                                                        @Html.TextBox("IsAboutOUName", Model.isaboutous.Where(w => w.Id == Model.case_.IsAbout.OU_Id).Select(o => o.Name).SingleOrDefault(), new {id = "IsAboutOuName", @readonly = true})
+                                                        @Html.HiddenFor(m => Model.case_.IsAbout.OU_Id, new {id = "case__IsAbout_Ou_Id", name = "case_.IsAbout.OU_Id"})
+                                                    }
+                                                }
+                                                else
+                                                {
                                                     <select id="case__IsAbout_Ou_Id" name="case_.IsAbout.OU_Id" data-field="ou">
                                                         <option value="">&nbsp;</option>
                                                         @if (Model.isaboutous != null)
-                                                                {
-                                                                    var selected_OU = string.Empty;
-                                                                    if (Model.case_.IsAbout != null && Model.case_.IsAbout.OU_Id.HasValue)
-                                                                    {
-                                                                        selected_OU = Model.case_.IsAbout.OU_Id.ToString();
-                                                                    }
+                                                        {
+                                                            var selected_OU = string.Empty;
+                                                            if (Model.case_.IsAbout != null && Model.case_.IsAbout.OU_Id.HasValue)
+                                                            {
+                                                                selected_OU = Model.case_.IsAbout.OU_Id.ToString();
+                                                            }
 
-                                                                    foreach (var ou in Model.isaboutous)
-                                                                    {
+                                                            foreach (var ou in Model.isaboutous)
+                                                            {
                                                                 <option value="@ou.Id" @ou.Id.IdIsSelected(selected_OU)>@ou.Name</option>
-                                                                    }
-                                                                }
-                                                    </select>
+                                                            }
                                                         }
+                                                    </select>
+                                                }
                                             </td>
                                         </tr>
                                         <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.IsAbout_CostCentre, CaseSolutionFields.IsAbout_CostCentre)">
