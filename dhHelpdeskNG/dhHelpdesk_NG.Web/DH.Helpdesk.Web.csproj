@@ -305,6 +305,8 @@
     <Compile Include="App_Start\NinjectModules\Modules\EFormModule.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\WebApi\Controllers\CaseApiController.cs" />
+    <Compile Include="Models\JsonModels\Base\BaseJsonModel.cs" />
+    <Compile Include="Models\JsonModels\Case\CaseJsonModel.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Areas\Admin\Controllers\Api\InvoiceApiController.cs" />
     <Compile Include="Areas\Invoices\Controllers\WebApi\InvoicesApiController.cs" />

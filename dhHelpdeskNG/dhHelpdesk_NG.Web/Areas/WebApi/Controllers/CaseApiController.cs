@@ -1,6 +1,7 @@
 ﻿using DH.Helpdesk.Services.Services.UniversalCase;
 using DH.Helpdesk.Web.Infrastructure;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
+using DH.Helpdesk.Web.Models.JsonModels.Case;
 using System.Web.Http;
 
 namespace DH.Helpdesk.Web.Areas.WebApi
@@ -17,8 +18,8 @@ namespace DH.Helpdesk.Web.Areas.WebApi
         [Authorize]
         public string GetCase(int id)
         {
-            var caseModel = _universalCaseService.GetCase(id);
-            return caseModel.ToJson();            
+            var caseModel = _universalCaseService.GetCase(id).ToJsonModel();
+            return caseModel.Serialize();
         }
     }    
 }
