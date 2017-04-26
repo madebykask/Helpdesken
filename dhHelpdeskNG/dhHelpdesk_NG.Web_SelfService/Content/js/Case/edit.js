@@ -714,8 +714,15 @@
                 pasteMode = '';
                 pasteCatcher.innerHTML = '';
                 var clipboardData = (e.clipboardData || e.originalEvent.clipboardData);
+                var isIe = !clipboardData && window.clipboardData; //IE
+                if (isIe) {
+                    clipboardData = window.clipboardData;
+                }
                 if (clipboardData) {
                     var items = clipboardData.items;
+                    if (isIe) {
+                        items = clipboardData.files; //IE
+                    }
                     if (items) {
                         pasteMode = 'auto';
                         var blob = null;
@@ -723,20 +730,20 @@
                         for (var i = 0; i < items.length; i++) {
                             if (items[i].type.indexOf("image") !== -1) {
                                 //image
-                                blob = items[i].getAsFile();
+                                if (isIe) {
+                                    blob = items[i];
+                                } else {
+                                    blob = items[i].getAsFile();
+                                }
                             }
                         }
                         if (blob !== null) {
                             var URLObj = window.URL || window.webkitURL;
                             var source = URLObj.createObjectURL(blob);
                             this.paste_createImage(source);
-                            this.allowSave(blob);                            
+                            this.allowSave(blob);
                         }
                         e.preventDefault();
-                    }
-                    else {
-                        //wait for DOMSubtreeModified event
-                        //https://bugzilla.mozilla.org/show_bug.cgi?id=891247
                     }
                 }
             };
