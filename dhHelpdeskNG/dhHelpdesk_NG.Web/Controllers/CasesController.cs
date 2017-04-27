@@ -1433,6 +1433,7 @@ namespace DH.Helpdesk.Web.Controllers
         
 
         [HttpPost]
+        [ValidateInput(false)]
         public RedirectToRouteResult EditLog(Case case_, CaseLog caseLog)
         {
             this.UpdateCaseLogForCase(case_, caseLog);
