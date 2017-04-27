@@ -19,7 +19,8 @@ namespace DH.Helpdesk.Web
             public const string InventoryUserSearch = ("~/bundles/inventory/inventorysearch");
             public const string CaseIntLogEmailSearch = ("~/bundles/case/caseintlogemailsearch");
             public const string CaseAddFollowersSearch = ("~/bundles/case/caseaddfollowerssearch");
-			public const string CaseCharge = ("~/bundles/case/CaseCharge");
+            public const string CaseUserSearchCommon = ("~/bundles/case/caseusersearchcommon");
+            public const string CaseCharge = ("~/bundles/case/CaseCharge");
 			public const string Select2 = "~/bundles/select2";
 			public const string CaseConnectToParent = "~/bundles/case/caseconnecttoparent";
 		}
@@ -437,6 +438,8 @@ namespace DH.Helpdesk.Web
                 "~/Content/js/Cases/Dialogs/_caseUserSearchCommon.js"));
             bundles.Add(new ScriptBundle(ScriptNames.CaseAddFollowersSearch).Include(
                 "~/Content/js/Cases/Dialogs/_caseAddFollowersSearch.js",
+                "~/Content/js/Cases/Dialogs/_caseUserSearchCommon.js"));
+            bundles.Add(new ScriptBundle(ScriptNames.CaseUserSearchCommon).Include(
                 "~/Content/js/Cases/Dialogs/_caseUserSearchCommon.js"));
             bundles.Add(new ScriptBundle(ScriptNames.CaseConnectToParent).Include(
                 "~/Content/js/Cases/Dialogs/_caseConnectToParent.js",

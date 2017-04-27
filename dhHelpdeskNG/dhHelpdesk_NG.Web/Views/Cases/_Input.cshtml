@@ -94,6 +94,10 @@
 </script>
 
 @Scripts.Render("~/bundles/cases/_input")
+@if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.AddFollowersBtn, CaseSolutionFields.AddFollowersBtn) && Model.caseFieldSettings.IsFieldVisible(GlobalEnums.TranslationCaseFields.AddFollowersBtn))
+{
+    @Scripts.Render(BundleConfig.ScriptNames.CaseUserSearchCommon)
+}
 
 <script type="text/javascript">
     function CalcSLA()
@@ -2706,7 +2710,12 @@
         return ret;
     }
 
-    $("#fakeCaseFollowerUsersInput").html(getHtmlFromEmails($("#caseFollowerUsersInput").val()));
+    $(function() {
+        var isVisible = @Model.caseFieldSettings.IsFieldVisible(GlobalEnums.TranslationCaseFields.AddFollowersBtn).ToJavaScriptBool();
+        if (isVisible) {
+            $("#fakeCaseFollowerUsersInput").html(getHtmlFromEmails($("#caseFollowerUsersInput").val()));
+        }
+    });
 
     $(function() {
 
