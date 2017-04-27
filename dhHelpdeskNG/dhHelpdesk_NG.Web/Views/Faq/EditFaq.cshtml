@@ -40,9 +40,9 @@
                     <!--<li><input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn" /></li>-->
                     <li><a id="delete_button" class="btn">@Translation.GetCoreTextTranslation("Ta bort")</a></li>
                 }
-                <li><a href="@Url.Action("Index")" class="btn">@Translation.GetCoreTextTranslation("Avbryt")</a></li>
+                <li><a href="@Url.Action("Index")?showDetails=@Model.ShowDetails.ToString()" class="btn">@Translation.GetCoreTextTranslation("Avbryt")</a></li>
             </ul>
         </div>
     </div>
-    @Html.Partial("FaqEditing", new EditingFaqModel(this.Model.Id.ToString(), this.Model.Category, this.Model.Question, this.Model.Answer, this.Model.InternalAnswer, this.Model.Files, this.Model.UrlOne, this.Model.UrlTwo, this.Model.WorkingGroup, this.Model.InformationIsAvailableForNotifiers, this.Model.ShowOnStartPage, Model.Languages, Model.LanguageId))
+    @Html.Partial("FaqEditing", new EditingFaqModel(this.Model.Id.ToString(), this.Model.Category, this.Model.Question, this.Model.Answer, this.Model.InternalAnswer, this.Model.Files, this.Model.UrlOne, this.Model.UrlTwo, this.Model.WorkingGroup, this.Model.InformationIsAvailableForNotifiers, this.Model.ShowOnStartPage, Model.Languages, Model.LanguageId, Model.ShowDetails))
 }

@@ -41,6 +41,8 @@
         });
 
         $('#show_all_answers_within_category').on('switchChange.bootstrapSwitch', function (event, state) {
+            var selected = $('#categories_tree').find('a.tree-selected-node');
+            window.selectedCategoryId = selected.siblings('input').val();
             if (!window.selectedCategoryId) {
                 return;
             }
@@ -67,6 +69,23 @@
                 });
             } else {
                 $.get('@Url.Action("Faqs")', { categoryId: selectedCategoryId, now: Date.now() } , function (faqs) {
+                    refreshFaqTable(faqs);
+                });
+            }
+        });
+
+        $( document ).ready(function() {
+            var selected = $('#categories_tree').find('a.tree-selected-node');
+            window.selectedCategoryId = selected.siblings('input').val();
+            if (!window.selectedCategoryId) {
+                return;
+            }
+            if ($('#show_all_answers_within_category').is(':checked')) {
+                $.get('@Url.Action("FaqsDetailed")', { categoryId: window.selectedCategoryId, now: Date.now() }, function (faqsWithDescription) {
+                    refreshFaqTableWithDescription(faqsWithDescription);
+                });
+            } else {
+                $.get('@Url.Action("Faqs")', { categoryId: window.selectedCategoryId, now: Date.now() } , function (faqs) {
                     refreshFaqTable(faqs);
                 });
             }
@@ -100,7 +119,7 @@
             delay: 300
         });*@
 
-        $('#show_all_answers_within_category_search_checkbox').change(function () {
+        $('#show_all_answers_within_category_search_checkbox').on('switchChange.bootstrapSwitch', function () {
             if (!$('#search_field').val()) {
                 return;
             }
@@ -176,14 +195,14 @@
 
         for (var i = 0; i < faqs.length; i++) {
             var faq = faqs[i];
-
+            var showDetails = $('#show_all_answers_within_category').is(':checked');
             var faqMarkup =
                 '<tr>' +
                     '<td>' +
-                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '&languageId='+@LanguageIds.Swedish + '">' + faq.CreatedDateText + '</a>' +
+                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '&languageId='+@LanguageIds.Swedish + '&showDetails='+ showDetails + '">' + faq.CreatedDateText + '</a>' +
                     '</td>' +
                     '<td>' +
-                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '&languageId='+@LanguageIds.Swedish + '">' + faq.Text + '</a>' +
+                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '&languageId='+@LanguageIds.Swedish + '&showDetails='+ showDetails + '">' + faq.Text + '</a>' +
                     '<table>' +
                     '<tr>' +
                     '<td>' +
@@ -403,7 +422,7 @@
                                 <tr>
                                     <td>
                                         @Translation.Get("Visa alla svar inom kategorin", Enums.TranslationSource.TextTranslation)
-                                        <input type="checkbox" id="show_all_answers_within_category" class="switchcheckbox" />
+                                        @Html.CheckBoxFor(m => m.ShowDetails, new { id = "show_all_answers_within_category", @class="switchcheckbox"})
                                     </td>
                                 </tr>
                             </table>

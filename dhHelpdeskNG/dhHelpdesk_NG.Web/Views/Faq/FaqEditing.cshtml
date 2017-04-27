@@ -8,6 +8,7 @@
 
 <input type="hidden" name="Id" value="@Model.Id" />
  @Html.Hidden("CurLanguageId", SessionFacade.CurrentLanguageId)
+ @Html.HiddenFor(m => m.ShowDetails)
 
 <div class="content">
 <div class="container">
