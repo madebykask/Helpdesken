@@ -123,16 +123,21 @@
 
         public static CaseOutputModel MapCase(Case arg)
         {
+            var subStateName = string.Empty;
+
+            if (arg.StateSecondary != null)
+                subStateName = arg.StateSecondary.Name;
+
             return new CaseOutputModel
-                       {
-                           Id = arg.Id,
-                           CaseNumber = arg.CaseNumber.ToString(),
-                           Caption = arg.Caption,
-                           RegistrationDate = arg.RegTime,
-                           WatchDate = arg.WatchDate,
-                           CaseType = arg.CaseType.Name,
-                           SubState = arg.StateSecondary.Name,
-                       };
+            {
+                Id = arg.Id,
+                CaseNumber = arg.CaseNumber.ToString(),
+                Caption = arg.Caption,
+                RegistrationDate = arg.RegTime,
+                WatchDate = arg.WatchDate,
+                CaseType = arg.CaseType.Name,
+                SubState = subStateName,
+            };
         }
 
         public ActionResult Index()
