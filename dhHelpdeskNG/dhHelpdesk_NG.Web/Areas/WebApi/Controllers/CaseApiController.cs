@@ -17,9 +17,17 @@ namespace DH.Helpdesk.Web.Areas.WebApi
         [HttpGet]
         [Authorize]
         public string GetCase(int id)
-        {
+        {                         
             var caseModel = _universalCaseService.GetCase(id).ToJsonModel();
             return caseModel.Serialize();
         }
+
+        [HttpPost]
+        [Authorize]
+        public string SaveCase([FromBody] CaseJsonModel model)
+        {            
+            return "OK";
+        }
+      
     }    
 }

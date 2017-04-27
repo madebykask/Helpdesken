@@ -1,27 +1,41 @@
 ﻿using System;
 using DH.Helpdesk.Web.Models.JsonModels.Base;
 using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.Common.Constants;
 
 namespace DH.Helpdesk.Web.Models.JsonModels.Case
 {
+    public class CaseJsonModelTest
+    {
+        public CaseJsonModelTest()
+        {
+
+        }
+        public int Id { get; set; }
+    }
     public class CaseJsonModel: BaseJsonModel<CaseModel>
     {
-             
+        public CaseJsonModel()
+        {
+          
+        }
+
         #region Base
 
         public int Id { get; set; }
 
-        public decimal? CaseNumber { get; set; }
+        /*Should be Converted to Guid*/
+        public string CaseGuid { get; set; }
 
-        public Guid? CaseGuid { get; set; }
+        public int CaseNumber { get; set; }        
 
-        public int? Customer_Id { get; set; }
+        public int Customer_Id { get; set; }
 
         public int? User_Id { get; set; }
 
         public string IpAddress { get; set; }
 
-        public int? RegLanguage_Id { get; set; }
+        public int RegLanguage_Id { get; set; }
 
         public string RegUserId { get; set; }
 
@@ -29,9 +43,9 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
 
         public int? ChangedByUser_Id { get; set; }
 
-        public int? ExternalTime { get; set; }
+        public int ExternalTime { get; set; }
 
-        public int? Deleted { get; set; }
+        public int Deleted { get; set; }
 
 
         #endregion
@@ -56,7 +70,7 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
 
         public string UserCode { get; set; }
 
-        public int? UpdateNotifierInformation { get; set; }
+        public int UpdateNotifierInformation { get; set; }
 
         public int? Region_Id { get; set; }
 
@@ -210,7 +224,7 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
 
         public string RegUserName { get; set; } 
 
-        public int? Moved { get; set; } 
+        public int Moved { get; set; } 
 
         public DateTime? LatestSLACountDate { get; set; }
 
@@ -223,19 +237,20 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
         {
             throw new NotImplementedException();
         }
-       
+                
         #endregion
     }
 
     public static class CaseJsonHelper
     {
+       
         public static CaseJsonModel ToJsonModel(this CaseModel model) 
         {            
             return new CaseJsonModel
             {
                 Id = model.Id,
                 Caption = model.Caption,
-                Customer_Id = model.Customer_Id
+                Customer_Id = model.Customer_Id.Value
             };
 
         }

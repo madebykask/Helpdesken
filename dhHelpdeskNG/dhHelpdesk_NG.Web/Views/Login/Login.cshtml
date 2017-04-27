@@ -44,7 +44,8 @@
             <input type="hidden" id="timeZoneOffsetInJul1" name="timeZoneOffsetInJul1"/>
             <input type="submit" value="Login" name="btnLogin" id="btnLogin" class="btn btn-large btn-success" style="width:100%;" />
             <input type="button" value="Get Access Token" name="btnToken" id="btnToken" class="btn btn-large btn-danger" style="width:100%;" />
-            <input type="button" value="Send Request" name="btnRequest" id="btnRequest" class="btn btn-large btn-warning" style="width:100%;" />
+            <input type="button" value="Get Request" name="btnRequest1" id="btnRequest1" class="btn btn-large btn-warning" style="width:100%;" />
+            <input type="button" value="Post Request" name="btnRequest2" id="btnRequest2" class="btn btn-large btn-warning" style="width:100%;" />
         }
     </div>
     <div class="signin-bottom">
@@ -68,8 +69,12 @@
         auth1();
     });
 
-    $('#btnRequest').click(function () {
+    $('#btnRequest1').click(function () {
         request1();
+    });
+
+    $('#btnRequest2').click(function () {
+        request2();
     });
 
     function auth1() {
@@ -87,7 +92,19 @@
         $.ajax({
             url: "@Url.Content("~/Api/CaseApi/GetCase?id=95879")",
             type: 'GET',            
-            headers: { "Authorization": "Bearer yyoxMaOPzFDQ5kRqUEfV2w-hoYIUZMLYDNFS9vTZ1ty7_FhCDKFgEMnTfqBdfRwg1fX4sGzOkLhkFCeHzSotJoGzKtliNQAKqRvueIWNT3Y1pW_MS-QT2YcLiglL9CvQEkGt-8oy1Ek-bHmahmLB1eqn9rsvPeyC5mk473Vly5BadgEO37ayjFEm209MaA_6Ov2ytyEsBSeG1omni_R9I8T47QMwX2RJHMVjQbL4iyIbzpHiwvQRsgcSdeo0UAIPar2ZYJWN3c7cjOlP9Bg-Zd3CGJDaKyq8HZafDlIvHCo" }
+            headers: { "Authorization": "Bearer IeHZZc_5Gddz5ZDJ2x-Ny_1PNtw1ou4pUbc2wIbrhPrm8-6y2TXQoSkUJbrSgRq-qj7L1IDUVyDHdkrn3nFLWaWl0hZp9yKKLfa1l5HqL9GSlgTq3kJHdb3zxvRxCAkDQ3G8AeJPXaOzHJrPrJANv1COXeLylaTj7MSwDZDfjbh2ZgibgIhM8nvh7Z7uJ5KrCe8DD_4WogzUw-LvKGVvj1jtPyxpTqSSvivSUgMSVCwmzoOxyn1z1fWaoSjIdBhfmg80TDlniRGlJqARZn44h4VUQ8T25bHVlHaVycofpso" }
+        });
+    };
+
+    function request2() {
+        var data1 = { Id: 1246, Caption: "Majid", test: "JJ" };
+               
+        $.ajax({
+            url: "@Url.Content("~/Api/CaseApi/SaveCase")",
+            data: JSON.stringify(data1),            
+            contentType: "application/json; charset=utf-8",            
+            type: 'POST',            
+            headers: { "Authorization": "Bearer IeHZZc_5Gddz5ZDJ2x-Ny_1PNtw1ou4pUbc2wIbrhPrm8-6y2TXQoSkUJbrSgRq-qj7L1IDUVyDHdkrn3nFLWaWl0hZp9yKKLfa1l5HqL9GSlgTq3kJHdb3zxvRxCAkDQ3G8AeJPXaOzHJrPrJANv1COXeLylaTj7MSwDZDfjbh2ZgibgIhM8nvh7Z7uJ5KrCe8DD_4WogzUw-LvKGVvj1jtPyxpTqSSvivSUgMSVCwmzoOxyn1z1fWaoSjIdBhfmg80TDlniRGlJqARZn44h4VUQ8T25bHVlHaVycofpso" }
         });
     };
 </script>
