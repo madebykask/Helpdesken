@@ -32,5 +32,7 @@
         public int CategoryId { get; set; }
 
         public int LanguageId { get; set; }
+
+        public bool ShowDetails { get; set; }
     }
 }

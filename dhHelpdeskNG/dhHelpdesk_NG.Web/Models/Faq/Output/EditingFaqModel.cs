@@ -26,7 +26,8 @@ namespace DH.Helpdesk.Web.Models.Faq.Output
             bool informationIsAvailableForNotifiers,
             bool showOnStartPage,
             SelectList languages,
-            int languageId)
+            int languageId,
+            bool showDetails = false)
         {
             if (category == null)
             {
@@ -59,6 +60,7 @@ namespace DH.Helpdesk.Web.Models.Faq.Output
 
             var ff = new FAQFileModel() { FAQId = id, FAQFiles = files, LanguageId = languageId};
             this.FAQLFile = ff;
+            this.ShowDetails = showDetails;
         }
 
         #endregion
@@ -98,6 +100,8 @@ namespace DH.Helpdesk.Web.Models.Faq.Output
         public int LanguageId { get; set; }
 
         public SelectList Languages { get; set; }
+
+        public bool ShowDetails { get; set; }
 
         public bool IsNew
         {

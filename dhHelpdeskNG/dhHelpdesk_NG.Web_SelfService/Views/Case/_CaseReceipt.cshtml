@@ -564,7 +564,7 @@
                     {
                         <div class="form-group row">
                             <label class="col-md-3">
-                                @Translation.Get("Attach file")
+                                @Translation.Get(GlobalEnums.TranslationCaseFields.Filename.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
                             </label>
                             <div class="col-md-9">
                                 <div class="form-group row">

@@ -156,7 +156,8 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                 var orderTypes = new List<OrderType>();
                 var user = userRep.GetById(userId);
                 if (user != null &&
-                    (user.UserGroup_Id == UserGroups.CustomerAdministrator ||
+                    (user.UserGroup_Id == UserGroups.Administrator ||
+                     user.UserGroup_Id == UserGroups.CustomerAdministrator ||
                      user.UserGroup_Id == UserGroups.SystemAdministrator))
                 {
                     orderTypes = orderTypeRep.GetAll().GetRootOrderTypes(customerId).ToList();

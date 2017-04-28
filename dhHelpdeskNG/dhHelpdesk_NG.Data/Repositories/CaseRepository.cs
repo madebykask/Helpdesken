@@ -25,6 +25,7 @@ namespace DH.Helpdesk.Dal.Repositories
         List<DynamicCase> GetAllDynamicCases();
         DynamicCase GetDynamicCase(int id);
         IList<Case> GetProjectCases(int customerId, int projectId);
+        IList<Case> GetProblemCases(int customerId, int problemId);
         void SetNullProblemByProblemId(int problemId);
         void UpdateFinishedDate(int problemId, DateTime? time);
         void UpdateFollowUpDate(int caseId, DateTime? time);
@@ -97,6 +98,12 @@ namespace DH.Helpdesk.Dal.Repositories
         public IList<Case> GetProjectCases(int customerId, int projectId)
         {
             var cases = this.DataContext.Cases.Where(c=> c.Customer_Id == customerId && c.Project_Id == projectId).ToList();                        
+            return cases;
+        }
+
+        public IList<Case> GetProblemCases(int customerId, int problemId)
+        {
+            var cases = this.DataContext.Cases.Where(c => c.Customer_Id == customerId && c.Problem_Id == problemId).ToList();
             return cases;
         }
 

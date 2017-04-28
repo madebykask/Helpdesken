@@ -196,8 +196,15 @@ $(function () {
                 pasteMode = '';
                 pasteCatcher.innerHTML = '';
                 var clipboardData = (e.clipboardData || e.originalEvent.clipboardData);
+                var isIe = !clipboardData && window.clipboardData; //IE
+                if (isIe) {
+                    clipboardData = window.clipboardData;
+                }
                 if (clipboardData) {
                     var items = clipboardData.items;
+                    if (isIe) {
+                        items = clipboardData.files; //IE
+                    }
                     if (items) {
                         pasteMode = 'auto';
                         var blob = null;
@@ -205,7 +212,11 @@ $(function () {
                         for (var i = 0; i < items.length; i++) {
                             if (items[i].type.indexOf("image") !== -1) {
                                 //image
-                                blob = items[i].getAsFile();
+                                if (isIe) {
+                                    blob = items[i];
+                                } else {
+                                    blob = items[i].getAsFile();
+                                }
                             }
                         }
                         if (blob !== null) {
@@ -215,10 +226,6 @@ $(function () {
                             this.allowSave(blob);
                         }
                         e.preventDefault();
-                    }
-                    else {
-                        //wait for DOMSubtreeModified event
-                        //https://bugzilla.mozilla.org/show_bug.cgi?id=891247
                     }
                 }
             };
@@ -294,7 +301,7 @@ $(function () {
                 }
 
                 if (imgFilename.length === 0) {
-                    imgFilename = 'image_' + Application.prototype.generateRandomKey();
+                    imgFilename = 'image_' + selfService.caseLog.generateRandomKey();
                 }
                 if (imgFilename.indexOf('.') === -1) {
                     imgFilename = imgFilename + '.' + extension;

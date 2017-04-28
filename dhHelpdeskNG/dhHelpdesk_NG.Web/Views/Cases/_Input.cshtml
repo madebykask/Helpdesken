@@ -94,6 +94,10 @@
 </script>
 
 @Scripts.Render("~/bundles/cases/_input")
+@if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.AddFollowersBtn, CaseSolutionFields.AddFollowersBtn) && Model.caseFieldSettings.IsFieldVisible(GlobalEnums.TranslationCaseFields.AddFollowersBtn))
+{
+    @Scripts.Render(BundleConfig.ScriptNames.CaseUserSearchCommon)
+}
 
 
 <script type="text/javascript">
@@ -767,32 +771,32 @@
                                             </td>
                                             <td class="span4">
                                                 @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.IsAbout_OU_Id, CaseSolutionFields.IsAbout_OU_Id))
-                                                        {
-                                                            if (Model.case_.IsAbout != null)
-                                                            {
-                                                    @Html.TextBox("IsAboutOUName", Model.ous.Where(w => w.Id == Model.case_.IsAbout.OU_Id).Select(o => o.Name).SingleOrDefault(), new { id = "IsAboutOuName", @readonly = true })
-                                                    @Html.HiddenFor(m => Model.case_.IsAbout.OU_Id, new { id = "case__IsAbout_Ou_Id", name = "case_.IsAbout.OU_Id" })
-                                                            }
-                                                        }
-                                                        else
-                                                        {
+                                                {
+                                                    if (Model.case_.IsAbout != null)
+                                                    {
+                                                        @Html.TextBox("IsAboutOUName", Model.isaboutous.Where(w => w.Id == Model.case_.IsAbout.OU_Id).Select(o => o.Name).SingleOrDefault(), new {id = "IsAboutOuName", @readonly = true})
+                                                        @Html.HiddenFor(m => Model.case_.IsAbout.OU_Id, new {id = "case__IsAbout_Ou_Id", name = "case_.IsAbout.OU_Id"})
+                                                    }
+                                                }
+                                                else
+                                                {
                                                     <select id="case__IsAbout_Ou_Id" name="case_.IsAbout.OU_Id" data-field="ou">
                                                         <option value="">&nbsp;</option>
                                                         @if (Model.isaboutous != null)
-                                                                {
-                                                                    var selected_OU = string.Empty;
-                                                                    if (Model.case_.IsAbout != null && Model.case_.IsAbout.OU_Id.HasValue)
-                                                                    {
-                                                                        selected_OU = Model.case_.IsAbout.OU_Id.ToString();
-                                                                    }
+                                                        {
+                                                            var selected_OU = string.Empty;
+                                                            if (Model.case_.IsAbout != null && Model.case_.IsAbout.OU_Id.HasValue)
+                                                            {
+                                                                selected_OU = Model.case_.IsAbout.OU_Id.ToString();
+                                                            }
 
-                                                                    foreach (var ou in Model.isaboutous)
-                                                                    {
+                                                            foreach (var ou in Model.isaboutous)
+                                                            {
                                                                 <option value="@ou.Id" @ou.Id.IdIsSelected(selected_OU)>@ou.Name</option>
-                                                                    }
-                                                                }
-                                                    </select>
+                                                            }
                                                         }
+                                                    </select>
+                                                }
                                             </td>
                                         </tr>
                                         <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.IsAbout_CostCentre, CaseSolutionFields.IsAbout_CostCentre)">
@@ -2698,7 +2702,7 @@
 			},
 			"CaseLog.OvertimeMinute": {
 				require_from_group: "@Translation.GetForJS("Välj en eller flera")"
-			},
+            },
         },
 //        submitHandler: function(form) {
 //        }
@@ -2723,64 +2727,63 @@
         return ret;
     }
 
-    $("#fakeCaseFollowerUsersInput").html(getHtmlFromEmails($("#caseFollowerUsersInput").val()));
+    $(function() {
+        var isVisible = @Model.caseFieldSettings.IsFieldVisible(GlobalEnums.TranslationCaseFields.AddFollowersBtn).ToJavaScriptBool();
+        if (isVisible) {
+            $("#fakeCaseFollowerUsersInput").html(getHtmlFromEmails($("#caseFollowerUsersInput").val()));
+        }
+    });
 
     $(function() {
 
         SetDynamicDropDowns();
 
-        $( ".dropdown-submenu.DynamicDropDown_Up" ).mousemove(function( event ) {
-            var target = $(event.target.parentElement);
-            if (target != undefined && target.hasClass('DynamicDropDown_Up') && target.index(0) != -1) {
-                var objPos = GetObjectPosInView(target[0].id);
-                var subMenu = "#subDropDownMenu_" + target[0].id;
-                $(subMenu).css("bottom", "auto");
-                $(subMenu).css("top", "auto");
-                if ($(".DynamicDropDown").hasClass('dropup'))
-                {
-                    if (objPos.ToTop < objPos.ToDown )
-                    {
-                        var h = -$(subMenu).height() + 25;
-                        var hstr = h+"px";
-                        $(subMenu).css("bottom",hstr);
-                    }
-                    else
-                        $(subMenu).css("bottom","0");
-                }
-                else
-                {
-                    if (objPos.ToTop < objPos.ToDown || $(subMenu).height() < objPos.ToDown)
-                        $(subMenu).css("top","0");
-                    else
-                    {
-                        var h = -$(subMenu).height() + 25;
-                        var hstr = h+"px";
-                        $(subMenu).css("top",hstr);
+        $(".dropdown-submenu.DynamicDropDown_Up")
+            .mousemove(function(event) {
+                var target = $(event.target.parentElement);
+                if (target != undefined && target.hasClass('DynamicDropDown_Up') && target.index(0) != -1) {
+                    var objPos = GetObjectPosInView(target[0].id);
+                    var subMenu = "#subDropDownMenu_" + target[0].id;
+                    $(subMenu).css("bottom", "auto");
+                    $(subMenu).css("top", "auto");
+                    if ($(".DynamicDropDown").hasClass('dropup')) {
+                        if (objPos.ToTop < objPos.ToDown) {
+                            var h = -$(subMenu).height() + 25;
+                            var hstr = h + "px";
+                            $(subMenu).css("bottom", hstr);
+                        } else
+                            $(subMenu).css("bottom", "0");
+                    } else {
+                        if (objPos.ToTop < objPos.ToDown || $(subMenu).height() < objPos.ToDown)
+                            $(subMenu).css("top", "0");
+                        else {
+                            var h = -$(subMenu).height() + 25;
+                            var hstr = h + "px";
+                            $(subMenu).css("top", hstr);
+                        }
                     }
                 }
-            }
-        });
+            });
 
-        function GetObjectPosInView(objectId)
-        {
+        function GetObjectPosInView(objectId) {
             var fixedArea = 90;
             var pageSize = $(window).height() - fixedArea;
             var scrollPos = $(window).scrollTop();
-            var elementToTop = $("#" + objectId).offset().top  - scrollPos - fixedArea;
+            var elementToTop = $("#" + objectId).offset().top - scrollPos - fixedArea;
             var elementToDown = pageSize - elementToTop;
-            return {ToTop: elementToTop, ToDown: elementToDown};
+            return { ToTop: elementToTop, ToDown: elementToDown };
         }
 
-        $(window).scroll(function() {
-            SetDynamicDropDowns()
-        });
+        $(window)
+            .scroll(function() {
+                SetDynamicDropDowns()
+            });
 
-        function SetDynamicDropDowns()
-        {
+        function SetDynamicDropDowns() {
             var fixedArea = 90;
             var pageSize = $(window).height() - fixedArea;
             var scrollPos = $(window).scrollTop();
-            var elementToTop = $(".DynamicDropDown").offset().top  - scrollPos - fixedArea;
+            var elementToTop = $(".DynamicDropDown").offset().top - scrollPos - fixedArea;
             var elementToDown = pageSize - elementToTop;
             if (elementToTop < -$(".DynamicDropDown").height())
                 $(".DynamicDropDown").removeClass('open');
@@ -2792,40 +2795,44 @@
             }
         }
 
-        $("#caseDescriptionPreview").click(function() {
-            var description = $(".case-description")
-                .attr("value")
-                .replace(/\r\n|\r|\n/g, "<br />");
-            var d = $(document.createElement("div"))
-                .html(description)
-                .dialog({
-                    title: "@Translation.Get(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)",
-                    modal: true,
-                    width: 600,
-                    height: 400,
-                    close: function() {
-                        d.dialog("destroy");
-                    }
-                });
-        });
+        $("#caseDescriptionPreview")
+            .click(function() {
+                var description = $(".case-description")
+                    .attr("value")
+                    .replace(/\r\n|\r|\n/g, "<br />");
+                var d = $(document.createElement("div"))
+                    .html(description)
+                    .dialog({
+                        title:
+                            "@Translation.Get(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)",
+                        modal: true,
+                        width: 600,
+                        height: 400,
+                        close: function() {
+                            d.dialog("destroy");
+                        }
+                    });
+            });
 
-        $(".case-description").keyup(function(ev) {
-            var visibility = 'visible';
-            if (ev.target.value.length == 0) {
-                visibility = 'hidden';
-            }
-            $("#caseDescriptionPreview").css('visibility', visibility);
-        });
+        $(".case-description")
+            .keyup(function(ev) {
+                var visibility = 'visible';
+                if (ev.target.value.length == 0) {
+                    visibility = 'hidden';
+                }
+                $("#caseDescriptionPreview").css('visibility', visibility);
+            });
 
         @if (Model.DynamicCase != null && Model.DynamicCase.ViewMode == 0)
         {
-         <text>
+            <text>
 
         var tab = $("#myTab li a");
 
-        tab.on('shown', function (e) {
-            window.scrollTo(0, 0);
-        });
+        tab.on('shown',
+            function(e) {
+                window.scrollTo(0, 0);
+            });
 
             
         
@@ -2833,9 +2840,11 @@
 
             if (ev.target.className.indexOf("case") >= 0) {
                 if ($(".secnav").hasClass("hide")) {
-                    $(".secnav").fadeIn(300, function () {
-                        $(".secnav").removeClass("hide");
-                    });
+                    $(".secnav")
+                        .fadeIn(300,
+                            function() {
+                                $(".secnav").removeClass("hide");
+                            });
                 }
                                 
                 $.ajax({
@@ -2859,9 +2868,10 @@
             if (ev.target.className.indexOf("eform") >= 0) {
                 var secnav = $(".secnav");
                 if (secnav.hasClass("hide") == false) {
-                    secnav.fadeOut(300, function () {
-                        secnav.addClass("hide");
-                    });
+                    secnav.fadeOut(300,
+                        function() {
+                            secnav.addClass("hide");
+                        });
                 }
             }
         });

@@ -175,7 +175,7 @@
         }
 
         [HttpGet]
-        public ViewResult EditFaq(int id, int languageId)
+        public ViewResult EditFaq(int id, int languageId, bool showDetails = false)
         {
             var faq = this.faqService.GetFaqById(id, languageId);
             if (faq == null)
@@ -209,7 +209,7 @@
                         o.Value.ToString())).ToList();
             var languageList = new SelectList(languageOverviews, "Value", "Name");
 
-            var model = this.editFaqModelFactory.Create(faq, categoriesWithSubcategories, fileNames, workingGroups, userHasFaqAdminPermission, languageList, languageId);
+            var model = this.editFaqModelFactory.Create(faq, categoriesWithSubcategories, fileNames, workingGroups, userHasFaqAdminPermission, languageList, languageId, showDetails);
             ViewData["FN"] = GetFAQFileNames(faq.Id.ToString());
 
             return this.View(model);
@@ -235,7 +235,7 @@
                 model.LanguageId);
 
             this.faqService.UpdateFaq(updatedFaq);
-            return this.RedirectToAction("Index");
+            return this.RedirectToAction("Index", new { showDetails = model.ShowDetails});
         }
 
         [HttpGet]
@@ -295,7 +295,7 @@
         /// The <see cref="ViewResult"/>.
         /// </returns>
         [HttpGet]
-        public ViewResult Index()
+        public ViewResult Index(bool showDetails = false)
         {
             var categoriesWithSubcategories = faqService.GetCategoriesWithSubcategoriesByCustomerId(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
 

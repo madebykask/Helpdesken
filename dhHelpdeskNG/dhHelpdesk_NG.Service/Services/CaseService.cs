@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using DH.Helpdesk.BusinessData.Enums.MailTemplates;
+using DH.Helpdesk.BusinessData.Models.Feedback;
 using DH.Helpdesk.Services.BusinessLogic.Mappers.Feedback;
 
 namespace DH.Helpdesk.Services.Services
@@ -52,6 +54,7 @@ namespace DH.Helpdesk.Services.Services
         IList<Case> GetCases();        
 
         IList<Case> GetProjectCases(int customerId, int projectId);
+        IList<Case> GetProblemCases(int customerId, int problemId);
 
         IList<Case> GetCasesByCustomers(IEnumerable<int> customerIds);
 
@@ -879,6 +882,11 @@ namespace DH.Helpdesk.Services.Services
         public IList<Case> GetProjectCases(int customerId, int projectId)
         {
             return this._caseRepository.GetProjectCases(customerId, projectId);
+        }
+
+        public IList<Case> GetProblemCases(int customerId, int problemId)
+        {
+            return this._caseRepository.GetProblemCases(customerId, problemId);
         }
 
         public IList<Case> GetCasesByCustomers(IEnumerable<int> customerIds) 
@@ -1709,28 +1717,43 @@ namespace DH.Helpdesk.Services.Services
 
                         if (!cms.DontSendMailToNotifier)
                         {                                
-                            var to = newCase.PersonsEmail.Split(';', ',').ToList();
-                            var extraFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(newCase.Id).Select(x => x.Follower).ToList();
+                            var to = newCase.PersonsEmail.Split(';', ',').Select(x => new Tuple<string,bool>(x,true)).ToList();
+                            var extraFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(newCase.Id).Select(x => new Tuple<string, bool>(x.Follower, false)).ToList();
                             to.AddRange(extraFollowers);
                             foreach (var t in to)
                             {
-                                var curMail = t.Trim();
+                                var mailBody = m.Body;
+                                var curMail = t.Item1.Trim();
                                 if (!string.IsNullOrWhiteSpace(curMail) && _emailService.IsValidEmail(curMail))
                                 {
-
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(customEmailSender2));                                    
                                     fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 9, userTimeZone);
-									var identifiers = _feedbackTemplateService.FindIdentifiers(m.Body);
-									var templateFields = _feedbackTemplateService.GetCustomerTemplates(identifiers,
-										newCase.Customer_Id, newCase.RegLanguage_Id, newCase.Id, cms.AbsoluterUrl);
-                                    fields.AddRange(templateFields.Select(tf => tf.MapToFields()));
+                                    var templateFields = new List<FeedbackField>();
+                                    var identifiers = _feedbackTemplateService.FindIdentifiers(mailBody);
+                                    if (t.Item2)
+                                    {
+                                        templateFields = _feedbackTemplateService.GetCustomerTemplates(identifiers,
+                                            newCase.Customer_Id, newCase.RegLanguage_Id, newCase.Id, cms.AbsoluterUrl);
+                                        fields.AddRange(templateFields.Select(tf => tf.MapToFields()));
+                                    }
+                                    else
+                                    {
+                                        foreach (var identifier in identifiers)
+                                        {
+                                            if (!string.IsNullOrEmpty(identifier))
+                                            {
+                                                var tag = $"[{FeedbackTemplate.FeedbackIdentifierPredicate}{identifier}]";
+                                                mailBody = m.Body.Replace(tag, string.Empty);
+                                            }
+                                        }
+                                    }
 
                                     string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
 
                                     var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
                                     var mailResponse = EmailResponse.GetEmptyEmailResponse();
                                     var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
-                                    var e_res = _emailService.SendEmail(el, customEmailSender2, el.EmailAddress, m.Subject, m.Body, fields, mailSetting, el.MessageId, false, files, siteSelfService, siteHelpdesk);
+                                    var e_res = _emailService.SendEmail(el, customEmailSender2, el.EmailAddress, m.Subject, mailBody, fields, mailSetting, el.MessageId, false, files, siteSelfService, siteHelpdesk);
                                     el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                                     var now = DateTime.Now;
                                     el.CreatedDate = now;

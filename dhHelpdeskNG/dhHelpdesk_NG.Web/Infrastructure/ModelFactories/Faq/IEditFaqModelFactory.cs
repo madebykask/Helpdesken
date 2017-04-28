@@ -17,6 +17,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Faq
             List<ItemOverview> workingGroups,
             bool userHasFaqAdminPermission,
             SelectList languages,
-            int languageId);
+            int languageId,
+            bool showDetails = false);
     }
 }
