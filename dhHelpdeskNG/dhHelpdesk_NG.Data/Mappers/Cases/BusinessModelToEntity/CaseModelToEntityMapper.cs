@@ -15,17 +15,17 @@
             #region Base
 
             entity.Id = businessModel.Id;
-            entity.CaseNumber = businessModel.CaseNumber.Value;
+            entity.CaseNumber = businessModel.CaseNumber;
             entity.CaseGUID = businessModel.CaseGuid.Value;
             entity.Customer_Id = businessModel.Customer_Id.Value;
             entity.User_Id = businessModel.User_Id;
             entity.IpAddress = businessModel.IpAddress;
-            entity.RegLanguage_Id = businessModel.RegLanguage_Id.Value;
+            entity.RegLanguage_Id = businessModel.RegLanguage_Id;
             entity.RegUserId = businessModel.RegUserId;
             entity.RegUserDomain = businessModel.RegUserDomain;
             entity.ChangeByUser_Id = businessModel.ChangedByUser_Id;
-            entity.ExternalTime = businessModel.ExternalTime.Value;
-            entity.Deleted = businessModel.Deleted.Value;             
+            entity.ExternalTime = businessModel.ExternalTime;
+            entity.Deleted = businessModel.Deleted;             
 
             #endregion
 
@@ -61,7 +61,7 @@
             #region Case Info
 
             entity.RegistrationSource = businessModel.RegistrationSource.Value;
-            entity.CaseType_Id = businessModel.CaseType_Id.Value;
+            entity.CaseType_Id = businessModel.CaseType_Id;
             entity.ProductArea_Id = businessModel.ProductArea_Id;
             entity.ProductAreaSetDate = businessModel.ProductAreaSetDate;
             entity.ProductAreaQuestionVersion_Id = businessModel.ProductAreaQuestionVersion_Id;

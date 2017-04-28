@@ -10,7 +10,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
         public int Id { get; set; }
 
-        public decimal? CaseNumber { get; set; }
+        public decimal CaseNumber { get; set; }
 
         public Guid? CaseGuid { get; set; }
 
@@ -20,7 +20,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
         public string IpAddress { get; set; }
 
-        public int? RegLanguage_Id { get; set; }
+        public int RegLanguage_Id { get; set; }
 
         public string RegUserId { get; set; }
 
@@ -28,9 +28,9 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
         public int? ChangedByUser_Id { get; set; }
 
-        public int? ExternalTime { get; set; } 
+        public int ExternalTime { get; set; } 
 
-        public int? Deleted { get; set; } 
+        public int Deleted { get; set; } 
 
 
         #endregion
@@ -55,7 +55,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
         public string UserCode { get; set; }
 
-        public int? UpdateNotifierInformation { get; set; }
+        public int UpdateNotifierInformation { get; set; }
 
         public int? Region_Id { get; set; }
 
@@ -105,7 +105,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
         public int? RegistrationSource { get; set; }
 
-        public int? CaseType_Id { get; set; }
+        public int CaseType_Id { get; set; }
 
         public int? ProductArea_Id { get; set; }
 
@@ -195,23 +195,23 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
         public int? RegistrationSourceCustomer_Id { get; set; }
 
-        public int? LockCaseToWorkingGroup_Id { get; set; } //new 
+        public int? LockCaseToWorkingGroup_Id { get; set; }
 
-        public DateTime? FollowUpDate { get; set; } //new
+        public DateTime? FollowUpDate { get; set; }
 
-        public int? RelatedCaseNumber { get; set; } //new
+        public int? RelatedCaseNumber { get; set; } 
 
-        public int? LeadTime { get; set; } //new
+        public int? LeadTime { get; set; } 
 
-        public int? CaseCleanUp_Id { get; set; } //new
+        public int? CaseCleanUp_Id { get; set; } 
 
-        public int? DefaultOwnerWG_Id { get; set; } //new
+        public int? DefaultOwnerWG_Id { get; set; } 
 
-        public string RegUserName { get; set; } //new
+        public string RegUserName { get; set; }
 
-        public int? Moved { get; set; } //new
+        public int Moved { get; set; } 
 
-        public DateTime? LatestSLACountDate { get; set; } //new
+        public DateTime? LatestSLACountDate { get; set; } 
 
         
         #endregion

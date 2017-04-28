@@ -1,7 +1,6 @@
 ﻿using System;
 using DH.Helpdesk.Web.Models.JsonModels.Base;
 using DH.Helpdesk.BusinessData.Models.Case;
-using DH.Helpdesk.Common.Constants;
 
 namespace DH.Helpdesk.Web.Models.JsonModels.Case
 {
@@ -13,11 +12,11 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
         }
         public int Id { get; set; }
     }
-    public class CaseJsonModel: BaseJsonModel<CaseModel>
+    public class CaseJsonModel : BaseJsonModel<CaseModel>
     {
         public CaseJsonModel()
         {
-          
+
         }
 
         #region Base
@@ -27,7 +26,7 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
         /*Should be Converted to Guid*/
         public string CaseGuid { get; set; }
 
-        public int CaseNumber { get; set; }        
+        public decimal CaseNumber { get; set; }
 
         public int Customer_Id { get; set; }
 
@@ -120,7 +119,7 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
 
         public int? RegistrationSource { get; set; }
 
-        public int? CaseType_Id { get; set; }
+        public int CaseType_Id { get; set; }
 
         public int? ProductArea_Id { get; set; }
 
@@ -212,19 +211,19 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
 
         public int? LockCaseToWorkingGroup_Id { get; set; }
 
-        public DateTime? FollowUpDate { get; set; } 
+        public DateTime? FollowUpDate { get; set; }
 
-        public int? RelatedCaseNumber { get; set; } 
+        public int? RelatedCaseNumber { get; set; }
 
-        public int? LeadTime { get; set; } 
+        public int? LeadTime { get; set; }
 
-        public int? CaseCleanUp_Id { get; set; } 
+        public int? CaseCleanUp_Id { get; set; }
 
-        public int? DefaultOwnerWG_Id { get; set; } 
+        public int? DefaultOwnerWG_Id { get; set; }
 
-        public string RegUserName { get; set; } 
+        public string RegUserName { get; set; }
 
-        public int Moved { get; set; } 
+        public int Moved { get; set; }
 
         public DateTime? LatestSLACountDate { get; set; }
 
@@ -237,22 +236,139 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
         {
             throw new NotImplementedException();
         }
-                
+
         #endregion
     }
 
     public static class CaseJsonHelper
     {
-       
-        public static CaseJsonModel ToJsonModel(this CaseModel model) 
-        {            
+
+        public static CaseJsonModel ToJsonModel(this CaseModel model)
+        {
             return new CaseJsonModel
             {
-                Id = model.Id,
-                Caption = model.Caption,
-                Customer_Id = model.Customer_Id.Value
-            };
+                #region Base
 
+                Id = model.Id,
+                CaseGuid = model.CaseGuid.ToString(),
+                CaseNumber = model.CaseNumber,
+                Customer_Id = model.Customer_Id.Value,
+                User_Id = model.User_Id,
+                IpAddress = model.IpAddress,
+                RegLanguage_Id = model.RegLanguage_Id,
+                RegUserId = model.RegUserId,
+                RegUserDomain = model.RegUserDomain,
+                ChangedByUser_Id = model.ChangedByUser_Id,
+                ExternalTime = model.ExternalTime,
+                Deleted = model.Deleted,
+
+                #endregion
+
+                #region Initiator              
+
+                ReportedBy = model.ReportedBy,
+                PersonsName = model.PersonsName,
+                PersonsEmail = model.PersonsEmail,
+                NoMailToNotifier = model.NoMailToNotifier,
+                PersonsPhone = model.PersonsPhone,
+                PersonsCellPhone = model.PersonsCellPhone,
+                CostCentre = model.CostCentre,
+                Place = model.Place,
+                UserCode = model.UserCode,
+                UpdateNotifierInformation = model.UpdateNotifierInformation,
+                Region_Id = model.Region_Id,
+                Department_Id = model.Department_Id,
+                OU_Id = model.OU_Id,
+
+                #endregion
+
+                #region IsAbout
+
+                IsAbout_ReportedBy = model.IsAbout_ReportedBy,
+                IsAbout_PersonsName = model.IsAbout_PersonsName,
+                IsAbout_PersonsEmail = model.IsAbout_PersonsEmail,
+                IsAbout_PersonsPhone = model.IsAbout_PersonsPhone,
+                IsAbout_PersonsCellPhone = model.IsAbout_PersonsCellPhone,
+                IsAbout_CostCentre = model.IsAbout_CostCentre,
+                IsAbout_Place = model.IsAbout_Place,
+                IsAbout_UserCode = model.IsAbout_UserCode,
+                IsAbout_Region_Id = model.IsAbout_Region_Id,
+                IsAbout_Department_Id = model.IsAbout_Department_Id,
+                IsAbout_OU_Id = model.IsAbout_OU_Id,
+
+                #endregion
+
+                #region Computer Info
+
+                InventoryNumber = model.InventoryNumber,
+                InventoryType = model.InventoryType,
+                InventoryLocation = model.InventoryLocation,
+
+                #endregion
+
+                #region Case Info
+
+                RegistrationSource = model.RegistrationSource,
+                CaseType_Id = model.CaseType_Id,
+                ProductArea_Id = model.ProductArea_Id,
+                ProductAreaSetDate = model.ProductAreaSetDate,
+                ProductAreaQuestionVersion_Id = model.ProductAreaQuestionVersion_Id,
+                System_Id = model.System_Id,
+                Urgency_Id = model.Urgency_Id,
+                Impact_Id = model.Impact_Id,
+                Category_Id = model.Category_Id,
+                Supplier_Id = model.Supplier_Id,
+                InvoiceNumber = model.InvoiceNumber,
+                ReferenceNumber = model.ReferenceNumber,
+                Caption = model.Caption,
+                Description = model.Description,
+                Miscellaneous = model.Miscellaneous,
+                ContactBeforeAction = model.ContactBeforeAction,
+                SMS = model.SMS,
+                Available = model.Available,
+                Cost = model.Cost,
+                OtherCost = model.OtherCost,
+                Currency = model.Currency,
+
+                #endregion
+
+                #region Other Info
+
+                WorkingGroup_Id = model.WorkingGroup_Id,
+                PerformerUser_Id = model.PerformerUser_Id,
+                CaseResponsibleUser_Id = model.CaseResponsibleUser_Id,
+                Priority_Id = model.Priority_Id,
+                Status_Id = model.Status_Id,
+                StateSecondary_Id = model.StateSecondary_Id,
+                Project_Id = model.Project_Id,
+                ProjectSchedule_Id = model.ProjectSchedule_Id,
+                Problem_Id = model.Problem_Id,
+                CausingPart_Id = model.CausingPart_Id,
+                Change_Id = model.Change_Id,
+                PlanDate = model.PlanDate,
+                WatchDate = model.WatchDate,
+                Verified = model.Verified,
+                VerifiedDescription = model.VerifiedDescription,
+                SolutionRate = model.SolutionRate,
+                AgreedDate = model.AgreedDate,
+                ApprovedDate = model.ApprovedDate,
+                ApprovedBy_User_Id = model.ApprovedBy_User_Id,
+                FinishingDate = model.FinishingDate,
+                FinishingDescription = model.FinishingDescription,
+                Status = model.Status,
+                RegistrationSourceCustomer_Id = model.RegistrationSourceCustomer_Id,
+                LockCaseToWorkingGroup_Id = model.LockCaseToWorkingGroup_Id,
+                FollowUpDate = model.FollowUpDate,
+                RelatedCaseNumber = model.RelatedCaseNumber,
+                LeadTime = model.LeadTime,
+                CaseCleanUp_Id = model.CaseCleanUp_Id,
+                DefaultOwnerWG_Id = model.DefaultOwnerWG_Id,
+                RegUserName = model.RegUserName,
+                Moved = model.Moved,
+                LatestSLACountDate = model.LatestSLACountDate
+
+                #endregion
+            };
         }
     }
 }

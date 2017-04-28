@@ -46,6 +46,10 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Base
                         prop.SetValue(this, NotChangedValue.DATETIME);
                         break;
 
+                    case TypeCode.Decimal:
+                        prop.SetValue(this, NotChangedValue.DECIMAL);
+                        break;
+
                     case TypeCode.Object:
                         if (type == typeof(int?))
                         {

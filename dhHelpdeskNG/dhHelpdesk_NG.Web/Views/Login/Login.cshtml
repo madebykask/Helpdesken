@@ -78,25 +78,43 @@
     });
 
     function auth1() {
+        sessionStorage.removeItem('token', '');
         $.post("@Url.Content("~/token")",
                 "username=admin" +
                 "&password=3edc4rfv" +
                 "&grant_type=password",
                 { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
         ).success(function (data) {
-            console.log(data);
+            if (data == null)
+                alert("Error occurred!");                
+            else
+                sessionStorage.setItem('token', data.access_token);                
         });
     };
 
-    function request1() {       
+    function request1() {
+        var _token = sessionStorage.getItem('token');
+        if (_token == null || _token == ""){
+            alert("Not authenticated!");
+            return;
+        }
+
         $.ajax({
             url: "@Url.Content("~/Api/CaseApi/GetCase?id=95879")",
             type: 'GET',            
-            headers: { "Authorization": "Bearer IeHZZc_5Gddz5ZDJ2x-Ny_1PNtw1ou4pUbc2wIbrhPrm8-6y2TXQoSkUJbrSgRq-qj7L1IDUVyDHdkrn3nFLWaWl0hZp9yKKLfa1l5HqL9GSlgTq3kJHdb3zxvRxCAkDQ3G8AeJPXaOzHJrPrJANv1COXeLylaTj7MSwDZDfjbh2ZgibgIhM8nvh7Z7uJ5KrCe8DD_4WogzUw-LvKGVvj1jtPyxpTqSSvivSUgMSVCwmzoOxyn1z1fWaoSjIdBhfmg80TDlniRGlJqARZn44h4VUQ8T25bHVlHaVycofpso" }
+            headers: { "Authorization": "Bearer " + _token }
+        }).done(function (result) {
+                        
         });
     };
 
     function request2() {
+        var _token = sessionStorage.getItem('token');
+        if (_token == null || _token == "") {
+            alert("Not authenticated!");
+            return;
+        }
+
         var data1 = { Id: 1246, Caption: "Majid", test: "JJ" };
                
         $.ajax({
@@ -104,7 +122,7 @@
             data: JSON.stringify(data1),            
             contentType: "application/json; charset=utf-8",            
             type: 'POST',            
-            headers: { "Authorization": "Bearer IeHZZc_5Gddz5ZDJ2x-Ny_1PNtw1ou4pUbc2wIbrhPrm8-6y2TXQoSkUJbrSgRq-qj7L1IDUVyDHdkrn3nFLWaWl0hZp9yKKLfa1l5HqL9GSlgTq3kJHdb3zxvRxCAkDQ3G8AeJPXaOzHJrPrJANv1COXeLylaTj7MSwDZDfjbh2ZgibgIhM8nvh7Z7uJ5KrCe8DD_4WogzUw-LvKGVvj1jtPyxpTqSSvivSUgMSVCwmzoOxyn1z1fWaoSjIdBhfmg80TDlniRGlJqARZn44h4VUQ8T25bHVlHaVycofpso" }
+            headers: { "Authorization": "Bearer "+ _token }
         });
     };
 </script>
