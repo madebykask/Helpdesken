@@ -20,7 +20,7 @@ namespace DH.Helpdesk.Web
             public const string CaseIntLogEmailSearch = ("~/bundles/case/caseintlogemailsearch");
             public const string CaseAddFollowersSearch = ("~/bundles/case/caseaddfollowerssearch");
             public const string CaseUserSearchCommon = ("~/bundles/case/caseusersearchcommon");
-			public const string CaseCharge = ("~/bundles/case/CaseCharge");
+            public const string CaseCharge = ("~/bundles/case/CaseCharge");
 			public const string Select2 = "~/bundles/select2";
 			public const string CaseConnectToParent = "~/bundles/case/caseconnecttoparent";
 		}

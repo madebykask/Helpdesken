@@ -422,12 +422,14 @@ namespace DH.Helpdesk.Dal.Repositories
                 {
                     strBld.AppendLine("WITH SearchFreeTextFilter (CaseId) as ( ");
 
+                    var filter = ctx.Criterias.SearchFilter;
                     var items = new List<string>
                     {
-                        BuildCaseIsAboutFreeTextSearchQueryCte(freeText),
-                        BuildLogFreeTextSearchQueryCte(freeText),
-                        BuildDepartmentFreeTextSearchQueryCte(freeText),
-                        BuilFormFieldValueFreeTextSearchQueryCte(freeText)
+                        BuildCaseFreeTextSearchQueryCte(freeText, filter),
+                        BuildCaseIsAboutFreeTextSearchQueryCte(freeText, filter),
+                        BuildLogFreeTextSearchQueryCte(freeText, filter),
+                        BuildDepartmentFreeTextSearchQueryCte(freeText, filter),
+                        BuilFormFieldValueFreeTextSearchQueryCte(freeText, filter)
                     };
 
                     strBld.AppendLine(string.Join($"{Environment.NewLine} UNION {Environment.NewLine} ", items));
@@ -446,51 +448,90 @@ namespace DH.Helpdesk.Dal.Repositories
 
         #region FreeText Search Queries
 
-        private string BuildCaseIsAboutFreeTextSearchQueryCte(string freeText)
-        {
-            var strBld = new StringBuilder();
-            strBld.AppendLine(@"SELECT Case_Id FROM tblCaseIsAbout WHERE  ");
 
-            var items = BuildFreeTextConditionsFor(freeText, _freeTextCaseIsAboutConditionFields);
+        private string BuildCaseFreeTextSearchQueryCte(string text, CaseSearchFilter filter)
+        {
+            var customerId = filter.CustomerId;
+            var strBld = new StringBuilder();
+            strBld.AppendLine(@"SELECT _case.Id FROM tblCase _case WHERE ");
+            strBld.AppendFormat("_case.Customer_Id = {0} ", customerId);
+            strBld.AppendLine(" AND (");
+
+            var items = BuildFreeTextConditionsFor(text, _freeTextCaseConditionFields, "_case");
             var formattedConditions = ConcatConditionsToString(items);
             strBld.AppendLine(formattedConditions);
 
+            strBld.AppendLine(" )");
+            strBld.AppendLine(@"GROUP BY _case.Id");
+            return strBld.ToString();
+        }
+
+        private string BuildCaseIsAboutFreeTextSearchQueryCte(string freeText, CaseSearchFilter filter)
+        {
+            var customerId = filter.CustomerId;
+            var strBld = new StringBuilder();
+
+            strBld.AppendLine(@"SELECT Case_Id FROM tblCaseIsAbout caseIsAbout INNER JOIN tblCase ON tblCase.Id = caseIsAbout.Case_Id WHERE ");
+            strBld.AppendFormat("tblCase.Customer_Id = {0} ", customerId);
+            strBld.AppendLine(" AND (");
+
+            var items = BuildFreeTextConditionsFor(freeText, _freeTextCaseIsAboutConditionFields, "caseIsAbout");
+            var formattedConditions = ConcatConditionsToString(items);
+            strBld.AppendLine(formattedConditions);
+
+            strBld.AppendLine(" )");
             strBld.AppendLine(@"GROUP BY Case_Id");
             return strBld.ToString();
         }
 
-        private string BuildLogFreeTextSearchQueryCte(string freeText)
+        private string BuildLogFreeTextSearchQueryCte(string freeText, CaseSearchFilter filter)
         {
+            var customerId = filter.CustomerId;
             var strBld = new StringBuilder();
 
-            strBld.AppendLine(@"SELECT Case_Id FROM tblLog WHERE ");
+            strBld.AppendLine(@"SELECT Case_Id FROM tblLog INNER JOIN tblCase ON tblLog.Case_Id = tblCase.Id WHERE ");
+            strBld.AppendFormat("tblCase.Customer_Id = {0} ", customerId);
+            strBld.AppendLine(" AND (");
 
             var items = BuildFreeTextConditionsFor(freeText, _freeTextLogConditionFields);
             var formattedConditions = ConcatConditionsToString(items);
             strBld.AppendLine(formattedConditions);
-            
+
+            strBld.AppendLine(" )");
             strBld.AppendLine(@"GROUP BY Case_Id");
             return strBld.ToString();
         }
 
-        private string BuildDepartmentFreeTextSearchQueryCte(string freeText)
+        private string BuildDepartmentFreeTextSearchQueryCte(string freeText, CaseSearchFilter filter)
         {
+            var customerId = filter.CustomerId;
             var strBld = new StringBuilder();
+
             strBld.AppendLine(@"SELECT caseDep.Id FROM tblDepartment dep JOIN tblCase caseDep ON dep.Id = caseDep.Department_Id WHERE ");
+            strBld.AppendFormat("caseDep.Customer_Id = {0} ", customerId);
+            strBld.AppendLine(" AND (");
 
             var items = BuildFreeTextConditionsFor(freeText, _freeTextDepartmentConditionFields);
             var formattedConditions = ConcatConditionsToString(items);
             strBld.AppendLine(formattedConditions);
-            
+
+            strBld.AppendLine(" )");
             strBld.AppendLine(@"GROUP BY caseDep.Id");
             return strBld.ToString();
         }
 
-        private string BuilFormFieldValueFreeTextSearchQueryCte(string freeText)
+        private string BuilFormFieldValueFreeTextSearchQueryCte(string freeText, CaseSearchFilter filter)
         {
+            var customerId = filter.CustomerId;
             var strBld = new StringBuilder();
-            strBld.AppendLine(@"SELECT Case_Id FROM tblFormFieldValue WHERE ");
+
+            strBld.AppendLine(@"SELECT Case_Id FROM tblFormFieldValue INNER JOIN tblCase ON tblFormFieldValue.Case_Id = tblCase.Id WHERE ");
+            strBld.AppendFormat("tblCase.Customer_Id = {0} ", customerId);
+            strBld.AppendLine(" AND (");
+
             strBld.AppendLine(BuildContainsExpession(Tables.FormFieldValue.FormFieldValueField, freeText));
+
+            strBld.AppendLine(" )");
             strBld.AppendLine(@"GROUP BY Case_Id");
             return strBld.ToString();
         }
@@ -613,7 +654,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
             }
 
-            // ärende progress - iShow i gammal helpdesk
+            // arende progress - iShow i gammal helpdesk
             switch (f.CaseProgress)
             {
                 case CaseProgressFilter.None:
@@ -728,13 +769,13 @@ namespace DH.Helpdesk.Dal.Repositories
             sb.Append(" and (tblCustomerUser.[User_Id] = " + searchFilter.UserId + ")");
 
             ////////////////////////////////////////////////////////////////////////////////////
-            // användaren får bara se avdelningar som den har behörighet till
+            // anvandaren far bara se avdelningar som den har behorighet till
             if (searchCriteria.UserDepartments.Any())
             {
                 sb.Append(" and EXISTS(select 1 from tblDepartmentUser _depUser WHERE _depUser.Department_Id = tblCase.Department_Id AND _depUser.[User_Id] = tblCustomerUser.User_Id) ");
             }
 
-            // finns kryssruta på användaren att den bara får se sina egna ärenden
+            // finns kryssruta pa anvandaren att den bara far se sina egna arenden
             var restrictedCasePermission = searchCriteria.CustomerUserSettings.User.RestrictedCasePermission;
             if (restrictedCasePermission == 1)
             {
@@ -744,7 +785,7 @@ namespace DH.Helpdesk.Dal.Repositories
                     sb.Append(" and (lower(tblCase.reportedBy) = lower('" + searchCriteria.UserUniqueId.SafeForSqlInject() + "') or tblcase.User_Id = " + searchCriteria.UserId + ")");
             }
 
-            // ärende progress - iShow i gammal helpdesk
+            // arende progress - iShow i gammal helpdesk
             switch (searchFilter.CaseProgress)
             {
                 case CaseProgressFilter.None:
@@ -801,7 +842,7 @@ namespace DH.Helpdesk.Dal.Repositories
                 sb.Append(") ");
             }
 
-            // performer/utförare
+            // performer/utforare
             if (!string.IsNullOrWhiteSpace(searchFilter.UserPerformer))
             {
                 var performersDict = searchFilter.UserPerformer.Split(',').ToDictionary(it => it, it => true);
@@ -909,7 +950,7 @@ namespace DH.Helpdesk.Dal.Repositories
                     sb.Append(" and (tblCase.OU_Id in (" + searchFilter.OrganizationUnit.SafeForSqlInject() + "))");
             }
 
-            // användare / user            
+            // anvandare / user            
             if (!string.IsNullOrWhiteSpace(searchFilter.User))
             {
                 sb.Append(" and (tblCase.User_Id in (" + searchFilter.User.SafeForSqlInject() + "))");
@@ -1004,15 +1045,11 @@ namespace DH.Helpdesk.Dal.Repositories
                     sb.Append(" AND (");
 
                     sb.Append(this.GetSqlLike("[tblCase].[CaseNumber]", text));
-                    
+
                     if (ctx.UseFreeTextCaseSearchCTE)
                     {
                         sb.AppendLine("OR freeTextSearchResults.CaseId IS NOT NULL");
                     }
-
-                    //free text search conditions for tblCase table
-                    var caseSearchConditions = BuildCaseFreeTextSearchConditions(text);
-                    sb.AppendFormat("OR {0}", caseSearchConditions);
 
                     // Get CaseNumbers/Log Ids from Indexing Service
                     if (searchFilter.SearchThruFiles)
@@ -1060,23 +1097,23 @@ namespace DH.Helpdesk.Dal.Repositories
 
                 //if (searchFilter.InitiatorSearchScope == CaseInitiatorSearchScope.IsAbout || searchFilter.InitiatorSearchScope == CaseInitiatorSearchScope.UserAndIsAbout)
                 //{
-                    //if (!string.IsNullOrWhiteSpace(f.Region))
-                    //	sb.Append(" AND ([tblCaseIsAbout].[Region_Id] IN (" + f.Region.SafeForSqlInject() + "))");
-                    //if (!string.IsNullOrWhiteSpace(f.Department))
-                    //{
-                    //	// organizationUnit
-                    //	if (!string.IsNullOrWhiteSpace(f.OrganizationUnit))
-                    //		sb.Append(" AND ([tblCaseIsAbout].[Department_Id] IN (" + f.Department.SafeForSqlInject() + ") IN " +
-                    //						"[tblCaseIsAbout].[OU_Id] IN (" + f.OrganizationUnit.SafeForSqlInject() + "))");
-                    //	else
-                    //		sb.Append(" AND ([tblCaseIsAbout].[Department_Id] IN (" + f.Department.SafeForSqlInject() + "))");
-                    //}
-                    //else
-                    //{
-                    //	// organizationUnit
-                    //	if (!string.IsNullOrWhiteSpace(f.OrganizationUnit))
-                    //		sb.Append(" AND ([tblCaseIsAbout].[OU_Id] IN (" + f.OrganizationUnit.SafeForSqlInject() + "))");
-                    //}
+                //if (!string.IsNullOrWhiteSpace(f.Region))
+                //	sb.Append(" AND ([tblCaseIsAbout].[Region_Id] IN (" + f.Region.SafeForSqlInject() + "))");
+                //if (!string.IsNullOrWhiteSpace(f.Department))
+                //{
+                //	// organizationUnit
+                //	if (!string.IsNullOrWhiteSpace(f.OrganizationUnit))
+                //		sb.Append(" AND ([tblCaseIsAbout].[Department_Id] IN (" + f.Department.SafeForSqlInject() + ") IN " +
+                //						"[tblCaseIsAbout].[OU_Id] IN (" + f.OrganizationUnit.SafeForSqlInject() + "))");
+                //	else
+                //		sb.Append(" AND ([tblCaseIsAbout].[Department_Id] IN (" + f.Department.SafeForSqlInject() + "))");
+                //}
+                //else
+                //{
+                //	// organizationUnit
+                //	if (!string.IsNullOrWhiteSpace(f.OrganizationUnit))
+                //		sb.Append(" AND ([tblCaseIsAbout].[OU_Id] IN (" + f.OrganizationUnit.SafeForSqlInject() + "))");
+                //}
                 //}
 
                 sb.AppendLine(" ) ");
@@ -1197,18 +1234,39 @@ namespace DH.Helpdesk.Dal.Repositories
             return items;
         }
 
+        #region BuildContainsExpession
+
         private string BuildContainsExpession(string field, string text, string tableAlias = "", bool useWildcard = true)
         {
             var safeText = text.SafeForSqlInject();
 
-            var fieldFormatted = string.IsNullOrEmpty(tableAlias) ? 
-                                    field : 
-                                    $"{tableAlias}.{field}";
+            var fieldFormatted = string.IsNullOrEmpty(tableAlias) ?
+                field :
+                $"{tableAlias}.{field}";
 
-            var searchCriteria = useWildcard ? $"'\"{safeText}*\"'" : $"{safeText}";
-            var expression = $"CONTAINS ({fieldFormatted}, {searchCriteria})";
+            var searchCriteria = BuildContainsConditionCriteria(safeText);
+            var expression = $"CONTAINS ({fieldFormatted}, '{searchCriteria}')";
             return expression;
         }
+
+        private string BuildContainsConditionCriteria(string text)
+        {
+
+            var words = text.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+            var searchCriteriaText = string.Join(" OR ", words.Select(w => FormatContainsConditionValue(w)));
+            return searchCriteriaText;
+        }
+
+        private string FormatContainsConditionValue(string text, bool useWildCard = true)
+        {
+            if (string.IsNullOrEmpty(text))
+                return null;
+
+            return useWildCard ? $"\"{text}*\"" : $"{text}";
+        }
+
+
+        #endregion
 
         private string InsensitiveSearch(string fieldName)
         {
