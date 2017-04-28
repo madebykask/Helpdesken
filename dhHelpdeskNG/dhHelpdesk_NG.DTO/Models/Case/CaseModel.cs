@@ -12,9 +12,9 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
         public decimal CaseNumber { get; set; }
 
-        public Guid? CaseGuid { get; set; }
+        public Guid CaseGuid { get; set; }
 
-        public int? Customer_Id { get; set; }
+        public int Customer_Id { get; set; }
 
         public int? User_Id { get; set; }
 

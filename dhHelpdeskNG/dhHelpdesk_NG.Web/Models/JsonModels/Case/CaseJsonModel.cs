@@ -234,7 +234,130 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
 
         public override CaseModel ToBussinessModel()
         {
-            throw new NotImplementedException();
+            return new CaseModel
+            {
+                #region Base
+
+                Id = Id,
+                CaseGuid = new Guid(CaseGuid),
+                CaseNumber = CaseNumber,
+                Customer_Id = Customer_Id,
+                User_Id = User_Id,
+                IpAddress = IpAddress,
+                RegLanguage_Id = RegLanguage_Id,
+                RegUserId = RegUserId,
+                RegUserDomain = RegUserDomain,
+                ChangedByUser_Id = ChangedByUser_Id,
+                ExternalTime = ExternalTime,
+                Deleted = Deleted,
+
+                #endregion
+
+                #region Initiator              
+
+                ReportedBy = ReportedBy,
+                PersonsName = PersonsName,
+                PersonsEmail = PersonsEmail,
+                NoMailToNotifier = NoMailToNotifier,
+                PersonsPhone = PersonsPhone,
+                PersonsCellPhone = PersonsCellPhone,
+                CostCentre = CostCentre,
+                Place = Place,
+                UserCode = UserCode,
+                UpdateNotifierInformation = UpdateNotifierInformation,
+                Region_Id = Region_Id,
+                Department_Id = Department_Id,
+                OU_Id = OU_Id,
+
+                #endregion
+
+                #region IsAbout
+
+                IsAbout_ReportedBy = IsAbout_ReportedBy,
+                IsAbout_PersonsName = IsAbout_PersonsName,
+                IsAbout_PersonsEmail = IsAbout_PersonsEmail,
+                IsAbout_PersonsPhone = IsAbout_PersonsPhone,
+                IsAbout_PersonsCellPhone = IsAbout_PersonsCellPhone,
+                IsAbout_CostCentre = IsAbout_CostCentre,
+                IsAbout_Place = IsAbout_Place,
+                IsAbout_UserCode = IsAbout_UserCode,
+                IsAbout_Region_Id = IsAbout_Region_Id,
+                IsAbout_Department_Id = IsAbout_Department_Id,
+                IsAbout_OU_Id = IsAbout_OU_Id,
+
+                #endregion
+
+                #region Computer Info
+
+                InventoryNumber = InventoryNumber,
+                InventoryType = InventoryType,
+                InventoryLocation = InventoryLocation,
+
+                #endregion
+
+                #region Case Info
+
+                RegistrationSource = RegistrationSource,
+                CaseType_Id = CaseType_Id,
+                ProductArea_Id = ProductArea_Id,
+                ProductAreaSetDate = ProductAreaSetDate,
+                ProductAreaQuestionVersion_Id = ProductAreaQuestionVersion_Id,
+                System_Id = System_Id,
+                Urgency_Id = Urgency_Id,
+                Impact_Id = Impact_Id,
+                Category_Id = Category_Id,
+                Supplier_Id = Supplier_Id,
+                InvoiceNumber = InvoiceNumber,
+                ReferenceNumber = ReferenceNumber,
+                Caption = Caption,
+                Description = Description,
+                Miscellaneous = Miscellaneous,
+                ContactBeforeAction = ContactBeforeAction,
+                SMS = SMS,
+                Available = Available,
+                Cost = Cost,
+                OtherCost = OtherCost,
+                Currency = Currency,
+
+                #endregion
+
+                #region Other Info
+
+                WorkingGroup_Id = WorkingGroup_Id,
+                PerformerUser_Id = PerformerUser_Id,
+                CaseResponsibleUser_Id = CaseResponsibleUser_Id,
+                Priority_Id = Priority_Id,
+                Status_Id = Status_Id,
+                StateSecondary_Id = StateSecondary_Id,
+                Project_Id = Project_Id,
+                ProjectSchedule_Id = ProjectSchedule_Id,
+                Problem_Id = Problem_Id,
+                CausingPart_Id = CausingPart_Id,
+                Change_Id = Change_Id,
+                PlanDate = PlanDate,
+                WatchDate = WatchDate,
+                Verified = Verified,
+                VerifiedDescription = VerifiedDescription,
+                SolutionRate = SolutionRate,
+                AgreedDate = AgreedDate,
+                ApprovedDate = ApprovedDate,
+                ApprovedBy_User_Id = ApprovedBy_User_Id,
+                FinishingDate = FinishingDate,
+                FinishingDescription = FinishingDescription,
+                Status = Status,
+                RegistrationSourceCustomer_Id = RegistrationSourceCustomer_Id,
+                LockCaseToWorkingGroup_Id = LockCaseToWorkingGroup_Id,
+                FollowUpDate = FollowUpDate,
+                RelatedCaseNumber = RelatedCaseNumber,
+                LeadTime = LeadTime,
+                CaseCleanUp_Id = CaseCleanUp_Id,
+                DefaultOwnerWG_Id = DefaultOwnerWG_Id,
+                RegUserName = RegUserName,
+                Moved = Moved,
+                LatestSLACountDate = LatestSLACountDate
+
+                #endregion
+            };
         }
 
         #endregion
@@ -252,7 +375,7 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
                 Id = model.Id,
                 CaseGuid = model.CaseGuid.ToString(),
                 CaseNumber = model.CaseNumber,
-                Customer_Id = model.Customer_Id.Value,
+                Customer_Id = model.Customer_Id,
                 User_Id = model.User_Id,
                 IpAddress = model.IpAddress,
                 RegLanguage_Id = model.RegLanguage_Id,

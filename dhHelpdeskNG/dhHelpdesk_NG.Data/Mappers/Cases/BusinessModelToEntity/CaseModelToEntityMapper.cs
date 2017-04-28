@@ -16,8 +16,8 @@
 
             entity.Id = businessModel.Id;
             entity.CaseNumber = businessModel.CaseNumber;
-            entity.CaseGUID = businessModel.CaseGuid.Value;
-            entity.Customer_Id = businessModel.Customer_Id.Value;
+            entity.CaseGUID = businessModel.CaseGuid;
+            entity.Customer_Id = businessModel.Customer_Id;
             entity.User_Id = businessModel.User_Id;
             entity.IpAddress = businessModel.IpAddress;
             entity.RegLanguage_Id = businessModel.RegLanguage_Id;
