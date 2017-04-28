@@ -25,7 +25,8 @@ namespace DH.Helpdesk.Web.Areas.WebApi
         [HttpPost]
         [Authorize]
         public string SaveCase([FromBody] CaseJsonModel model)
-        {            
+        {
+            var infoToSave = model.ToBussinessModel();
             return "OK";
         }
       

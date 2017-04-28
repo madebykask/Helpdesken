@@ -1,17 +1,11 @@
 ﻿using System;
 using DH.Helpdesk.Web.Models.JsonModels.Base;
 using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.Common.Extensions.String;
+using DH.Helpdesk.Common.Constants;
 
 namespace DH.Helpdesk.Web.Models.JsonModels.Case
-{
-    public class CaseJsonModelTest
-    {
-        public CaseJsonModelTest()
-        {
-
-        }
-        public int Id { get; set; }
-    }
+{    
     public class CaseJsonModel : BaseJsonModel<CaseModel>
     {
         public CaseJsonModel()
@@ -26,7 +20,8 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
         /*Should be Converted to Guid*/
         public string CaseGuid { get; set; }
 
-        public decimal CaseNumber { get; set; }
+        /*Should be Converted to Decimal*/
+        public int CaseNumber { get; set; }
 
         public int Customer_Id { get; set; }
 
@@ -239,7 +234,7 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
                 #region Base
 
                 Id = Id,
-                CaseGuid = new Guid(CaseGuid),
+                CaseGuid = CaseGuid.IsValueChanged()? new Guid(CaseGuid) : NotChangedValue.GUID,
                 CaseNumber = CaseNumber,
                 Customer_Id = Customer_Id,
                 User_Id = User_Id,
@@ -374,7 +369,7 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
 
                 Id = model.Id,
                 CaseGuid = model.CaseGuid.ToString(),
-                CaseNumber = model.CaseNumber,
+                CaseNumber = (int) model.CaseNumber,
                 Customer_Id = model.Customer_Id,
                 User_Id = model.User_Id,
                 IpAddress = model.IpAddress,

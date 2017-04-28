@@ -9,6 +9,8 @@
 
 using System.Linq;
 using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Common.Constants;
+
 namespace DH.Helpdesk.Common.Extensions.String
 {
     /// <summary>
@@ -330,6 +332,11 @@ namespace DH.Helpdesk.Common.Extensions.String
         public static string QautationFix(this string value)
         {
             return value.Replace("″", "\"");
+        }
+
+        public static bool IsValueChanged(this string value)
+        {
+            return (value != NotChangedValue.STRING);
         }
     }
 }
