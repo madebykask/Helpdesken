@@ -1,21 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
+using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.Case.CaseLock;
+using DH.Helpdesk.BusinessData.Models.Grid;
+using DH.Helpdesk.BusinessData.Models.Paging;
 using DH.Helpdesk.BusinessData.Models.Questionnaire.Input;
-using DH.Helpdesk.BusinessData.Models.Questionnaire.Read;
 using DH.Helpdesk.BusinessData.Models.Questionnaire.Write;
 using DH.Helpdesk.BusinessData.Models.Shared;
+using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Enums;
-using DH.Helpdesk.Services.Response.Questionnaire;
+using DH.Helpdesk.Domain;
 using DH.Helpdesk.Services.Services;
+using DH.Helpdesk.Services.Services.Grid;
+using DH.Helpdesk.Web.Enums;
 using DH.Helpdesk.Web.Infrastructure;
+using DH.Helpdesk.Web.Infrastructure.CaseOverview;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
+using DH.Helpdesk.Web.Infrastructure.Grid;
+using DH.Helpdesk.Web.Infrastructure.ModelFactories.CaseLockMappers;
 using DH.Helpdesk.Web.Infrastructure.UrlHelpers.Mvc;
+using DH.Helpdesk.Web.Models.Case;
+using DH.Helpdesk.Web.Models.CaseLock;
 using DH.Helpdesk.Web.Models.Feedback;
 using DH.Helpdesk.Web.Models.Questionnaire.Input;
-using DH.Helpdesk.Web.Models.Questionnaire.Output;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -28,10 +37,18 @@ namespace DH.Helpdesk.Web.Controllers
 		private readonly IFeedbackService _feedbackService;
 		private readonly ICircularService _circularService;
 		private readonly IInfoService _infoService;
+		private readonly GridSettingsService _gridSettingsService;
+		private readonly ICaseLockService _caseLockService;
+		private readonly ISettingService _settingService;
+		private readonly IGlobalSettingService _globalSettingService;
+		private readonly ICaseSearchService _caseSearchService;
+		private readonly ICaseFieldSettingService _caseFieldSettingService;
+		private readonly ICaseSettingsService _caseSettingService;
 
 		public FeedbackController(IMasterDataService masterDataService, IQestionnaireQuestionOptionService questionnaireQuestionOptionService,
 			IQestionnaireQuestionService questionnaireQuestionService, IFeedbackService feedbackService, ICircularService circularService,
-			IInfoService infoService) 
+			IInfoService infoService, GridSettingsService gridSettingsService, ICaseLockService caseLockService, ISettingService settingService,
+            IGlobalSettingService globalSettingService, ICaseSearchService caseSearchService, ICaseFieldSettingService caseFieldSettingService, ICaseSettingsService caseSettingService) 
 			: base(masterDataService)
 		{
 			_questionnaireQuestionOptionService = questionnaireQuestionOptionService;
@@ -39,6 +56,13 @@ namespace DH.Helpdesk.Web.Controllers
 			_feedbackService = feedbackService;
 			_circularService = circularService;
 			_infoService = infoService;
+            _gridSettingsService = gridSettingsService;
+            _caseLockService = caseLockService;
+            _settingService = settingService;
+            _globalSettingService = globalSettingService;
+            _caseSearchService = caseSearchService;
+            _caseFieldSettingService = caseFieldSettingService;
+            _caseSettingService = caseSettingService;
 		}
 
 		public ActionResult NewFeedback(EditFeedbackParams parameters)
@@ -331,43 +355,248 @@ namespace DH.Helpdesk.Web.Controllers
 			return View(model: html);
 		}
 
-		[HttpGet]
-		public ViewResult Statistics(int feedbackId)
-		{
-			var circularId = this._circularService.GetCircularIdByQuestionnaireId(feedbackId);
-			if (circularId < 0)
-			{
-				throw new NullReferenceException("Missing Circular for Feedback. Feedback should contain Circular");
-			}
-			var results = this._circularService.GetResult(circularId);
-			var feedbackOverview = this._circularService.GetQuestionnaire(feedbackId, OperationContext);
+	    [HttpGet]
+	    public ViewResult Statistics(int feedbackId)
+	    {
+	        var circularId = this._circularService.GetCircularIdByQuestionnaireId(feedbackId);
+	        if (circularId < 0)
+	        {
+	            throw new NullReferenceException("Missing Circular for Feedback. Feedback should contain Circular");
+	        }
+	        var results = this._circularService.GetResult(circularId);
+	        var feedbackOverview = this._circularService.GetQuestionnaire(feedbackId, OperationContext);
+            var jsonCaseIndexViewModel = GetJsonCaseIndexViewModel();
+            var viewModel = new FeedbackStatisticsViewModel(feedbackId, feedbackOverview, results, new StatisticsFilter(), jsonCaseIndexViewModel);
 
-			var viewModel = new FeedbackStatisticsViewModel(feedbackId, feedbackOverview, results, new StatisticsFilter());
-			return this.View("Statistics", viewModel);
-		}
+            return this.View("Statistics", viewModel);
+	    }
 
-		[HttpPost]
-		public PartialViewResult Statistics(int questionnaireId, StatisticsFilter statisticsFilter)
-		{
-			var circularId = this._circularService.GetCircularIdByQuestionnaireId(questionnaireId);
-			if (circularId < 0)
-			{
-				throw new NullReferenceException("Missing Circular for Feedback. Feedback should contain Circular");
-			}
-			var questionnaire = this._circularService.GetQuestionnaire(
-				questionnaireId,
-				OperationContext);
-			var results = this._circularService.GetResults(
-				circularId,
-				statisticsFilter.CircularCreatedDate.DateFrom,
-				statisticsFilter.CircularCreatedDate.DateTo);
+        [HttpPost]
+        public PartialViewResult Statistics(int questionnaireId, StatisticsFilter statisticsFilter)
+        {
+            var circularId = this._circularService.GetCircularIdByQuestionnaireId(questionnaireId);
+            if (circularId < 0)
+            {
+                throw new NullReferenceException("Missing Circular for Feedback. Feedback should contain Circular");
+            }
+            var questionnaire = this._circularService.GetQuestionnaire(
+                questionnaireId,
+                OperationContext);
+            var results = this._circularService.GetResults(
+                circularId,
+                statisticsFilter.CircularCreatedDate.DateFrom,
+                statisticsFilter.CircularCreatedDate.DateTo);
+            var jsonCaseIndexViewModel = GetJsonCaseIndexViewModel();
+            var viewModel = new FeedbackStatisticsViewModel(questionnaireId, questionnaire, results, new StatisticsFilter(), jsonCaseIndexViewModel);
 
-			var viewModel = new StatisticsViewModel(questionnaireId, questionnaire, results);
+            return this.PartialView("~/Views/Questionnaire/FeedBack/FeedbackStatisticsGrid.cshtml", viewModel);
+        }
 
-			return this.PartialView("~/Views/Questionnaire/StatisticsGrid.cshtml", viewModel);
-		}
+        [ValidateInput(false)]
+	    public ActionResult GetCases(FormCollection frm)
+	    {
+	        var customerSettings = _settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
+	        var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
+
+	        var f = new CaseSearchFilter
+	        {
+	            CustomerId = SessionFacade.CurrentCustomer.Id,
+	            UserId = SessionFacade.CurrentUser.Id
+	        };
+	        var caseIds = frm.ReturnFormValue("caseIds").Split(',').Select(int.Parse).ToArray();
+	        var gridSettings = _gridSettingsService.GetForCustomerUserGrid(
+	            SessionFacade.CurrentCustomer.Id,
+	            SessionFacade.CurrentUser.UserGroupId,
+	            SessionFacade.CurrentUser.Id,
+	            GridSettingsService.CASE_CONNECTPARENT_GRID_ID);
+
+	        var sortBy = frm.ReturnFormValue(CaseFilterFields.OrderColumnNum);
+	        var sort = frm.ReturnFormValue(CaseFilterFields.OrderColumnDir);
+	        var sortDir = !string.IsNullOrEmpty(sort)
+	            ? GridSortOptions.SortDirectionFromString(sort)
+	            : SortingDirection.Asc;
+	        gridSettings.sortOptions.sortBy = sortBy;
+	        gridSettings.sortOptions.sortDir = sortDir;
+
+	        int recPerPage;
+	        int pageStart;
+	        if (int.TryParse(frm.ReturnFormValue(CaseFilterFields.PageSize), out recPerPage) &&
+	            int.TryParse(frm.ReturnFormValue(CaseFilterFields.PageStart), out pageStart))
+	        {
+	            f.PageInfo = new PageInfo
+	            {
+	                PageSize = recPerPage,
+	                PageNumber = recPerPage != 0 ? pageStart/recPerPage : 0
+	            };
+	            gridSettings.pageOptions.recPerPage = recPerPage;
+	        }
+            var search = new Search
+            {
+                SortBy = gridSettings.sortOptions.sortBy,
+                Ascending = gridSettings.sortOptions.sortDir == SortingDirection.Asc
+            };
+
+	        var caseSettings = _caseSettingService.GetCaseSettingsWithUser(f.CustomerId, SessionFacade.CurrentUser.Id,
+	            SessionFacade.CurrentUser.UserGroupId);
+	        var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(f.CustomerId).ToArray();
+	        CaseRemainingTimeData remainingTimeData;
+	        CaseAggregateData aggregateData;
+	        var searchResult = _caseSearchService.Search(
+	            f,
+	            caseSettings,
+	            caseFieldSettings,
+	            SessionFacade.CurrentUser.Id,
+	            SessionFacade.CurrentUser.UserId,
+	            SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups,
+	            SessionFacade.CurrentUser.UserGroupId,
+	            SessionFacade.CurrentUser.RestrictedCasePermission,
+                search,
+	            SessionFacade.CurrentCustomer.WorkingDayStart,
+	            SessionFacade.CurrentCustomer.WorkingDayEnd,
+	            userTimeZone,
+	            ApplicationTypes.Helpdesk,
+	            false,
+	            out remainingTimeData,
+	            out aggregateData,
+	            null, null, caseIds);
+	        var outputFormatter = new OutputFormatter(customerSettings.IsUserFirstLastNameRepresentation == 1,
+	            userTimeZone);
+	        var data = BuildSearchResultData(searchResult.Items, gridSettings, outputFormatter);
+	        return Json(new
+	        {
+	            result = "success",
+	            data = data,
+	            recordsTotal = searchResult.Count,
+	            recordsFiltered = searchResult.Count,
+	        });
+	    }
 
 		#region Private
+
+	    private JsonCaseIndexViewModel GetJsonCaseIndexViewModel()
+	    {
+            var gridSettings = _gridSettingsService.GetForCustomerUserGrid(
+                            SessionFacade.CurrentCustomer.Id,
+                            SessionFacade.CurrentUser.UserGroupId,
+                            SessionFacade.CurrentUser.Id,
+                            GridSettingsService.CASE_CONNECTPARENT_GRID_ID);
+
+            var m = new JsonCaseIndexViewModel
+            {
+                PageSettings = new PageSettingsModel
+                {
+                    gridSettings = JsonGridSettingsMapper.ToJsonGridSettingsModel(
+                            gridSettings,
+                            SessionFacade.CurrentCustomer.Id,
+                            7,
+                            CaseColumnsSettingsModel.PageSizesModal.Select(x => x.Value).ToArray()),
+                    refreshContent = 0,
+                    messages = new Dictionary<string, string>()
+                    {
+                        {"information", Translation.GetCoreTextTranslation("Information")},
+                        {
+                            "records_limited_msg",
+                            Translation.GetCoreTextTranslation("Antal ärende som visas är begränsade till 500.")
+                        },
+                    }
+                }
+            };
+	        return m;
+	    }
+
+        private IList<Dictionary<string, object>> BuildSearchResultData(IList<CaseSearchResult> caseSearchResults, GridSettingsModel gridSettings, OutputFormatter outputFormatter)
+        {
+            var data = new List<Dictionary<string, object>>();
+            var ids = caseSearchResults.Select(o => o.Id).ToArray();
+
+            var casesLocks = _caseLockService.GetCasesLocks(ids);
+            var globalSettings = _globalSettingService.GetGlobalSettings().FirstOrDefault();
+
+            foreach (var searchRow in caseSearchResults)
+            {
+                var caseId = searchRow.Id;
+
+                var jsRow = new Dictionary<string, object>
+                {
+                    {"case_id", searchRow.Id},
+                    {"caseIconTitle", searchRow.CaseIcon.CaseIconTitle()},
+                    {"caseIconUrl", $"/Content/icons/{searchRow.CaseIcon.CaseIconSrc()}"},
+                    {"isUnread", searchRow.IsUnread},
+                    {"isUrgent", searchRow.IsUrgent},
+                    {"isClosed", searchRow.IsUrgent}
+                };
+
+                var caseLock = casesLocks.ContainsKey(caseId) ? casesLocks[caseId] : null;
+
+                var caseLockModel = GetCaseLockModel(caseLock, searchRow.Id, SessionFacade.CurrentUser.Id, globalSettings, false);
+                if (caseLockModel.IsLocked)
+                {
+                    jsRow.Add("isCaseLocked", caseLockModel.IsLocked);
+                    jsRow.Add("caseLockedIconTitle", $"{caseLockModel.User.FirstName} {caseLockModel.User.SurName} ({caseLockModel.User.UserID})");
+                    jsRow.Add("caseLockedIconUrl", $"/Content/icons/{GlobalEnums.CaseIcon.Locked.CaseIconSrc()}");
+                }
+
+                foreach (var col in gridSettings.columnDefs)
+                {
+                    var searchCol = searchRow.Columns.FirstOrDefault(it => it.Key == col.name);
+                    jsRow.Add(col.name, searchCol != null ? outputFormatter.FormatField(searchCol) : string.Empty);
+                }
+
+                data.Add(jsRow);
+            }
+
+            return data;
+        }
+
+        private CaseLockModel GetCaseLockModel(ICaseLockOverview caseLock, int caseId, int userId, GlobalSetting globalSettings, bool isNeedLock = true)
+        {
+            CaseLockModel caseLockModel;
+
+            var caseIsLocked = true;
+            var extendedSec = (globalSettings != null && globalSettings.CaseLockExtendTime > 0 ? globalSettings.CaseLockExtendTime : 30);
+            var timerInterval = (globalSettings != null ? globalSettings.CaseLockTimer : 0);
+            var bufferTime = (globalSettings != null && globalSettings.CaseLockBufferTime > 0 ? globalSettings.CaseLockBufferTime : 60);
+            var nowTime = DateTime.Now;
+
+            if (caseLock == null)
+            {
+                // Case is not locked 
+                caseIsLocked = false;
+            }
+            else
+            {
+                if ((caseLock.ExtendedTime.AddSeconds(bufferTime) < nowTime) ||
+                    (caseLock.ExtendedTime.AddSeconds(bufferTime) >= nowTime &&
+                     caseLock.UserId == userId &&
+                     caseLock.BrowserSession == Session.SessionID))
+                {
+                    // Unlock case because user has leaved the Case in anormal way (Close browser/reset computer)
+                    // Unlock case because current user was opened this case last time and recently
+                    this._caseLockService.UnlockCaseByCaseId(caseId);
+                    caseIsLocked = false;
+                }
+            }
+
+            if (!caseIsLocked)
+            {
+                // Lock Case if it's not locked
+                var now = DateTime.Now;
+                var extendedLockTime = now.AddSeconds(extendedSec);
+                var newLockGuid = Guid.NewGuid();
+
+                var newCaseLock = new CaseLock(caseId, userId, newLockGuid, Session.SessionID, now, extendedLockTime);
+                if (isNeedLock)
+                    this._caseLockService.LockCase(newCaseLock);
+
+                caseLockModel = newCaseLock.MapToViewModel(caseIsLocked, extendedSec, timerInterval);
+            }
+            else
+            {
+                caseLockModel = caseLock.MapToViewModel(caseIsLocked, extendedSec, timerInterval);
+            }
+
+            return caseLockModel;
+        }
 
         private List<SelectListItem> GetPercents()
 		{
