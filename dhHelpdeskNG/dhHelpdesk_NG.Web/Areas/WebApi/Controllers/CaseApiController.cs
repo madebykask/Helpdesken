@@ -1,7 +1,9 @@
-﻿using DH.Helpdesk.Services.Services.UniversalCase;
+﻿using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.Services.Services.UniversalCase;
 using DH.Helpdesk.Web.Infrastructure;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 using DH.Helpdesk.Web.Models.JsonModels.Case;
+using System;
 using System.Web.Http;
 
 namespace DH.Helpdesk.Web.Areas.WebApi
@@ -26,8 +28,8 @@ namespace DH.Helpdesk.Web.Areas.WebApi
         [Authorize]
         public string SaveCase([FromBody] CaseJsonModel model)
         {
-            var infoToSave = model.ToBussinessModel();
-            return "OK";
+            var infoToSave = model.ToBussinessModel();            
+            return _universalCaseService.SaveCase(infoToSave, new AuxCaseModel(1, TimeZoneInfo.FindSystemTimeZoneById("")));
         }
       
     }    

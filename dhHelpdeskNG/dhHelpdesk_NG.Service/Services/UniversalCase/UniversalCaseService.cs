@@ -18,5 +18,10 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
         {
             return _caseRepository.GetCase(id);
         }
+
+        public string SaveCase(CaseModel caseModel, AuxCaseModel auxModel)
+        {
+            return "";
+        }
     }
 }

@@ -1,0 +1,17 @@
+﻿using DH.Helpdesk.Common.Constants;
+
+namespace DH.Helpdesk.Common.Extensions.Integer
+{   
+    public static class IntExtension
+    {
+        public static bool IsValueChanged(this int value)
+        {
+            return (value != NotChangedValue.INT);
+        }
+
+        public static bool IsValueChanged(this int? value)
+        {
+            return (value != NotChangedValue.NULLABLE_INT);
+        }
+    }
+}

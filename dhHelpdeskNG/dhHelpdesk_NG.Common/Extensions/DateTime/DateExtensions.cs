@@ -9,6 +9,7 @@
 
 namespace DH.Helpdesk.Common.Extensions.DateTime
 {
+    using Constants;
     using System;
     using System.Threading;
 
@@ -72,5 +73,16 @@ namespace DH.Helpdesk.Common.Extensions.DateTime
         {
             return new DateTime(dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, dt.Second, dt.Kind);
         }
+
+        public static bool IsValueChanged(this DateTime value)
+        {
+            return (value != NotChangedValue.DATETIME);
+        }
+
+        public static bool IsValueChanged(this DateTime? value)
+        {
+            return (value != NotChangedValue.NULLABLE_DATETIME);
+        }
+
     }
 }
