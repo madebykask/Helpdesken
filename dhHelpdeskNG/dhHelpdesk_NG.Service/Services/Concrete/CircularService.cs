@@ -397,7 +397,7 @@
             this.SendMails(mails, operationContext.DateAndTime, operationContext.CustomerId);
         }
 
-        public QuestionnaireDetailedOverview GetQuestionnaire(Guid guid, OperationContext operationContext)
+        public QuestionnaireDetailedOverview GetQuestionnaire(Guid guid, int languageId)
         {
             var id = 0;
             var caseId = 0;
@@ -420,13 +420,13 @@
                 }
             }
 
-            QuestionnaireOverview overview = this.GetQuestionnaireEntity(id, operationContext);
+            QuestionnaireOverview overview = GetQuestionnaireEntity(id, languageId);
             return new QuestionnaireDetailedOverview { Questionnaire = overview, CaseId = caseId, Caption = caption };
         }
 
         public QuestionnaireOverview GetQuestionnaire(int id, OperationContext operationContext)
         {
-            QuestionnaireOverview overview = this.GetQuestionnaireEntity(id, operationContext);
+            QuestionnaireOverview overview = this.GetQuestionnaireEntity(id, operationContext.LanguageId);
             return overview;
         }
 
@@ -702,7 +702,7 @@
             return questionnarie;
         }
 
-        private QuestionnaireOverview GetQuestionnaireEntity(int id, OperationContext operationContext)
+        private QuestionnaireOverview GetQuestionnaireEntity(int id, int languageId)
         {
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
@@ -722,7 +722,7 @@
 
                 return anonymus == null
                            ? QuestionnaireOverview.GetDefault()
-                           : this.MapToQuestionnaireOverview(operationContext.LanguageId, anonymus);
+                           : this.MapToQuestionnaireOverview(languageId, anonymus);
             }
         }
 

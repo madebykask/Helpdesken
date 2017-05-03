@@ -655,7 +655,7 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpGet]
         public ViewResult Questionnaire(Guid guid)
         {
-            var detailed = this._circularService.GetQuestionnaire(guid, this.OperationContext);
+            var detailed = this._circularService.GetQuestionnaire(guid, this.OperationContext.LanguageId);
 
             List<QuestionnaireQuestionModel> questionnarieQuestionsModel = (from question in detailed.Questionnaire.Questions
                                                                             let options =

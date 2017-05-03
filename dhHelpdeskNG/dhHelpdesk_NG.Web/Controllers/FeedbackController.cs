@@ -313,48 +313,6 @@ namespace DH.Helpdesk.Web.Controllers
 			});
 		}
 
-		public ActionResult Answer(FeedbackAnswerParams parameters)
-		{
-			var detailed = _circularService.GetQuestionnaire(parameters.Guid, OperationContext);
-			var question = detailed.Questionnaire.Questions.First();
-
-			var model = new FeedbackAnswerModel
-			{
-				Guid = parameters.Guid,
-				CaseId = detailed.CaseId,
-				IsAnonym = false,
-				IsShowNote = question.IsShowNote,
-				NoteTextLabel = question.NoteText
-			};
-
-			var options = question.Options.First(o => o.Value == parameters.OptionValue);
-			model.OptionId = options.Id;
-			var ids = new List<Answer> { new Answer("", options.Id) };
-			var participant = new ParticipantForInsert(model.Guid, model.IsAnonym, OperationContext.DateAndTime, ids);
-			_circularService.SaveAnswers(participant);
-
-            //return View(model);
-            return RedirectToAction(MvcUrlName.Feedback.ThankYou, MvcUrlName.Feedback.Controller);
-        }
-
-		[HttpPost]
-		public ActionResult Answer(FeedbackAnswerModel model)
-		{
-			if (!ModelState.IsValid) return View(model);
-
-			var ids = new List<Answer> { new Answer(model.NoteText, model.OptionId) };
-			var participant = new ParticipantForInsert(model.Guid, model.IsAnonym, OperationContext.DateAndTime, ids);
-			_circularService.SaveAnswers(participant);
-
-			return RedirectToAction(MvcUrlName.Feedback.ThankYou, MvcUrlName.Feedback.Controller);
-		}
-
-		public ActionResult ThankYou()
-		{
-			var html = _infoService.GetInfoText(4, OperationContext.CustomerId, OperationContext.LanguageId).Name;
-			return View(model: html);
-		}
-
 	    [HttpGet]
 	    public ViewResult Statistics(int feedbackId)
 	    {
