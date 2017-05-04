@@ -1,5 +1,6 @@
 ﻿
 using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.Shared;
 
 namespace DH.Helpdesk.Services.Services.UniversalCase
 {
@@ -7,6 +8,6 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
     {
         CaseModel GetCase(int id);
 
-        string SaveCase(CaseModel caseModel, AuxCaseModel auxModel);
+        ProcessResult SaveCase(CaseModel caseModel, AuxCaseModel auxModel);
     }
 }

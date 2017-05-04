@@ -3110,7 +3110,7 @@ namespace DH.Helpdesk.Web.Controllers
                                                           caseMailSetting, newLogFiles);
             //Unlock Case            
             if (m.caseLock != null && !string.IsNullOrEmpty(m.caseLock.LockGUID))
-                this._caseLockService.UnlockCaseByGUID(new Guid(m.caseLock.LockGUID));
+                this._caseLockService.UnlockCaseByGUID(new Guid(m.caseLock.LockGUID)); 
 
             // delete temp folders                
             this.userTemporaryFilesStorage.ResetCacheForObject(case_.CaseGUID.ToString());

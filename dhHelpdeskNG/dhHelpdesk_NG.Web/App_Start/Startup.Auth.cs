@@ -4,7 +4,6 @@ using Owin;
 using Microsoft.Owin.Security.OAuth;
 using System.Threading.Tasks;
 using System.Security.Claims;
-using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Dal.Repositories;
 
 namespace DH.Helpdesk.Web.App_Start
@@ -59,8 +58,8 @@ namespace DH.Helpdesk.Web.App_Start
 
             if (_user != null && !string.IsNullOrEmpty(_user.UserId))
             {
-                var identity = new ClaimsIdentity(context.Options.AuthenticationType);
-                identity.AddClaim(new Claim("sub", context.UserName));
+                var identity = new ClaimsIdentity(context.Options.AuthenticationType);                
+                identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, context.UserName));
                 identity.AddClaim(new Claim(ClaimTypes.Role, _user.UserGroupId.ToString()));
                 context.Validated(identity);
             }
