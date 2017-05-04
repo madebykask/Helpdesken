@@ -168,8 +168,9 @@ namespace DH.Helpdesk.Services.Services
                                     productAreaNamesResolver = this.productAreaService,
                                     relatedCasesCaseId = relatedCasesCaseId,
                                     relatedCasesUserId = relatedCasesUserId,
-                                    caseIds = caseIds
-                              };
+                                    caseIds = caseIds,
+                                    useFullTextSearch = globalSettingService.GetGlobalSettings().First().FullTextSearch != 0
+            };
 
 			var workingHours = workingDayEnd - workingDayStart;
 			var result = this.caseSearchRepository.Search(context, workingHours, out remainingTime, out aggregateData);
