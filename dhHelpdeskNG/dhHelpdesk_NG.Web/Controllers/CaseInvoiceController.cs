@@ -235,7 +235,7 @@
 
                 var saveRes = DoInvoiceWork(caseInvoiceArticle, caseId, customerId,SessionFacade.CurrentUser.Id, orderIdToXML);
 
-                if (saveRes.IsSuccess)
+                if (saveRes.IsSucceed)
                 {
                     var caseInvoices = this.invoiceArticleService.GetCaseInvoicesWithTimeZone(caseId, TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
                     var invoiceArticles = this.invoiceArticlesModelFactory.CreateCaseInvoiceArticlesModel(caseInvoices);

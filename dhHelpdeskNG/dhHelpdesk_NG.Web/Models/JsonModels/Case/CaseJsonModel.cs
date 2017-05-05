@@ -200,6 +200,8 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
 
         public string FinishingDescription { get; set; }
 
+        public int? FinishingType_Id { get; set; }
+
         public int? Status { get; set; }
 
         public int? RegistrationSourceCustomer_Id { get; set; }
@@ -339,6 +341,7 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
                 ApprovedBy_User_Id = ApprovedBy_User_Id,
                 FinishingDate = FinishingDate,
                 FinishingDescription = FinishingDescription,
+                FinishingType_Id = FinishingType_Id,
                 Status = Status,
                 RegistrationSourceCustomer_Id = RegistrationSourceCustomer_Id,
                 LockCaseToWorkingGroup_Id = LockCaseToWorkingGroup_Id,
@@ -473,6 +476,7 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
                 ApprovedBy_User_Id = model.ApprovedBy_User_Id,
                 FinishingDate = model.FinishingDate,
                 FinishingDescription = model.FinishingDescription,
+                FinishingType_Id  = model.FinishingType_Id,
                 Status = model.Status,
                 RegistrationSourceCustomer_Id = model.RegistrationSourceCustomer_Id,
                 LockCaseToWorkingGroup_Id = model.LockCaseToWorkingGroup_Id,

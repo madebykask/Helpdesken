@@ -1,8 +1,7 @@
-﻿
-
-using DH.Helpdesk.BusinessData.Models.Case;
+﻿using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Shared;
 using DH.Helpdesk.Common.Extensions.Integer;
+using DH.Helpdesk.Common.Extensions.DateTime;
 using DH.Helpdesk.Dal.Repositories;
 using System;
 using System.Collections.Generic;
@@ -22,13 +21,16 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
         private const int _DEFAULT_SMS = 0;
 
         private readonly ICaseRepository _caseRepository;
-        private readonly ICustomerService _customerService;        
+        private readonly ICustomerService _customerService;
+        private readonly IWorkingGroupService _workingGroupService;
 
         public UniversalCaseService(ICaseRepository caseRepository,
-                                    ICustomerService customerService)
+                                    ICustomerService customerService,
+                                    IWorkingGroupService workingGroupService)
         {
             _caseRepository = caseRepository;
             _customerService = customerService;
+            _workingGroupService = workingGroupService;
         }
 
         public CaseModel GetCase(int id)
@@ -38,12 +40,16 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
 
         public ProcessResult SaveCase(CaseModel caseModel, AuxCaseModel auxModel)
         {
-            var _caseModel = Clone(caseModel, auxModel);
-            return new ProcessResult("SaveCase");
+            var _caseModel = CloneCase(caseModel, auxModel);
+            var _validationRes = ValidateCase(caseModel);
+            if (_validationRes.IsSucceed)
+                //Save Case
+                return new ProcessResult("Save Case");
+            else
+                return _validationRes;
         }
 
-
-        private CaseModel Clone(CaseModel caseModel, AuxCaseModel auxModel)
+        private CaseModel CloneCase(CaseModel caseModel, AuxCaseModel auxModel)
         {
             if (caseModel.PerformerUser_Id == 0)
                 caseModel.PerformerUser_Id = null;
@@ -105,12 +111,23 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                     retData.Add(new KeyValuePair<string, string>("CaseType_Id", "CaseType Id is not specified!"));                
             }
 
+            if (caseModel.FinishingType_Id.IsValueChanged() && caseModel.FinishingType_Id > 0)
+            {
+                if (!caseModel.FinishingDate.HasValue || !caseModel.FinishingDate.IsValueChanged())
+                    retData.Add(new KeyValuePair<string, string>("FinishingDate", "FinishingDate can not be empty or null!"));                
+            }
+
+            if (caseModel.FinishingDate.IsValueChanged() && caseModel.FinishingDate.HasValue)
+            {
+                if (!caseModel.FinishingType_Id.HasValue || !caseModel.FinishingType_Id.IsValueChanged())
+                    retData.Add(new KeyValuePair<string, string>("FinishingType_Id", "FinishingType_Id can not be null!"));
+            }
 
             if (retData.Any())            
                return new ProcessResult("CaseValidation", ResultTypeEnum.ERROR, "Case is not valid!", retData);            
 
-            #endregion
 
+            #endregion
 
             return new ProcessResult("CaseValidation");            
         }

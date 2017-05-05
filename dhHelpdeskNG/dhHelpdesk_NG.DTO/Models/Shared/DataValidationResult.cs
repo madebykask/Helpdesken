@@ -1,24 +1,23 @@
-﻿using System;
-namespace DH.Helpdesk.BusinessData.Models.Shared
+﻿namespace DH.Helpdesk.BusinessData.Models.Shared
 {
     public class DataValidationResult
     {
         public DataValidationResult()
         {
-            this.IsValid = true;
-            this.LastMessage = string.Empty;
+            IsValid = true;
+            LastMessage = string.Empty;
         }
 
         public DataValidationResult(bool isValid)
         {
-            this.IsValid = isValid;
-            this.LastMessage = string.Empty;
+            IsValid = isValid;
+            LastMessage = string.Empty;
         }
 
         public DataValidationResult(bool isValid, string lastMessage)
         {
-            this.IsValid = isValid;
-            this.LastMessage = lastMessage;
+            IsValid = isValid;
+            LastMessage = lastMessage;
         }
 
         public bool IsValid { get; private set; }
@@ -57,32 +56,32 @@ namespace DH.Helpdesk.BusinessData.Models.Shared
 
         private void CreatePrecessResult(string processName, ResultTypeEnum resultType, string lastMessage, object data)
         {
-            this.ProcessName = processName;
-            this.ResultType = resultType;
+            ProcessName = processName;
+            ResultType = resultType;
             switch (resultType)
             {
                 case ResultTypeEnum.SUCCESS:
-                    this.IsSuccess = true;
+                    IsSucceed = true;
                     break;
 
                 case ResultTypeEnum.WARNING:
-                    this.IsSuccess = true;
+                    IsSucceed = true;
                     break;
 
                 case ResultTypeEnum.ERROR:
-                    this.IsSuccess = false;
+                    IsSucceed = false;
                     break;                
             }            
 
-            this.LastMessage = lastMessage;
-            this.Data = data;
+            LastMessage = lastMessage;
+            Data = data;
         }        
 
         public string ProcessName { get; private set; }
 
         public object Data { get; private set; }
 
-        public bool IsSuccess { get; private set; }
+        public bool IsSucceed { get; private set; }
 
         public string LastMessage { get; private set; }
 
