@@ -43,5 +43,7 @@
         public string relatedCasesUserId = null;
 
         public int[] caseIds = null;
+
+        public bool useFullTextSearch;
     }
 }
