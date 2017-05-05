@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings
+﻿using DH.Helpdesk.BusinessData.Enums.Orders.Fields;
+
+namespace DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings
 {
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
@@ -29,27 +31,27 @@
         public string Header { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("ID mottagare")]
+        [LocalizedDisplay(OrderLabels.ReceiverId)]
         public TextFieldSettingsModel ReceiverId { get; set; }
          
         [NotNull]
-        [LocalizedDisplay("Namn mottagare")]
+        [LocalizedDisplay(OrderLabels.ReceiverName)]
         public TextFieldSettingsModel ReceiverName { get; set; }
          
         [NotNull]
-        [LocalizedDisplay("E-post mottagare")]
+        [LocalizedDisplay(OrderLabels.ReceiverEmail)]
         public TextFieldSettingsModel ReceiverEmail { get; set; }
          
         [NotNull]
-        [LocalizedDisplay("Telefon mottagare")]
+        [LocalizedDisplay(OrderLabels.ReceiverPhone)]
         public TextFieldSettingsModel ReceiverPhone { get; set; }
          
         [NotNull]
-        [LocalizedDisplay("Placering mottagare")]
+        [LocalizedDisplay(OrderLabels.ReceiverLocation)]
         public TextFieldSettingsModel ReceiverLocation { get; set; }
          
         [NotNull]
-        [LocalizedDisplay("Godsmärke")]
+        [LocalizedDisplay(OrderLabels.ReceiverMarkOfGoods)]
         public TextFieldSettingsModel MarkOfGoods { get; set; }     
     }
 }

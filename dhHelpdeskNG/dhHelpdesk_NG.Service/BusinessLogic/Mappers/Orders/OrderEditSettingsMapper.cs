@@ -45,20 +45,20 @@
             NamedObjectCollection<OrdersEditSettingsMapData> editSettings, string headerText)
         {
             return new DeliveryEditSettings(
-                CreateTextFieldSetting(editSettings.FindByName(DeliveryFields.DeliveryDate)),
-                CreateTextFieldSetting(editSettings.FindByName(DeliveryFields.InstallDate)),
-                CreateTextFieldSetting(editSettings.FindByName(DeliveryFields.DeliveryDepartment)),
-                CreateTextFieldSetting(editSettings.FindByName(DeliveryFields.DeliveryOu)),
-                CreateTextFieldSetting(editSettings.FindByName(DeliveryFields.DeliveryAddress)),
-                CreateTextFieldSetting(editSettings.FindByName(DeliveryFields.DeliveryPostalCode)),
-                CreateTextFieldSetting(editSettings.FindByName(DeliveryFields.DeliveryPostalAddress)),
-                CreateTextFieldSetting(editSettings.FindByName(DeliveryFields.DeliveryLocation)),
-                CreateTextFieldSetting(editSettings.FindByName(DeliveryFields.DeliveryInfo1)),
-                CreateTextFieldSetting(editSettings.FindByName(DeliveryFields.DeliveryInfo2)),
-                CreateTextFieldSetting(editSettings.FindByName(DeliveryFields.DeliveryInfo3)),
-                CreateTextFieldSetting(editSettings.FindByName(DeliveryFields.DeliveryOuId)),
-                CreateTextFieldSetting(editSettings.FindByName(DeliveryFields.DeliveryName)),
-                CreateTextFieldSetting(editSettings.FindByName(DeliveryFields.DeliveryPhone)))
+                CreateTextFieldSetting(editSettings.FindByName(OrderFields.DeliveryDate)),
+                CreateTextFieldSetting(editSettings.FindByName(OrderFields.DeliveryInstallDate)),
+                CreateTextFieldSetting(editSettings.FindByName(OrderFields.DeliveryDepartment)),
+                CreateTextFieldSetting(editSettings.FindByName(OrderFields.DeliveryOu)),
+                CreateTextFieldSetting(editSettings.FindByName(OrderFields.DeliveryAddress)),
+                CreateTextFieldSetting(editSettings.FindByName(OrderFields.DeliveryPostalCode)),
+                CreateTextFieldSetting(editSettings.FindByName(OrderFields.DeliveryPostalAddress)),
+                CreateTextFieldSetting(editSettings.FindByName(OrderFields.DeliveryLocation)),
+                CreateTextFieldSetting(editSettings.FindByName(OrderFields.DeliveryInfo1)),
+                CreateTextFieldSetting(editSettings.FindByName(OrderFields.DeliveryInfo2)),
+                CreateTextFieldSetting(editSettings.FindByName(OrderFields.DeliveryInfo3)),
+                CreateTextFieldSetting(editSettings.FindByName(OrderFields.DeliveryOuId)),
+                CreateTextFieldSetting(editSettings.FindByName(OrderFields.DeliveryName)),
+                CreateTextFieldSetting(editSettings.FindByName(OrderFields.DeliveryPhone)))
             {
                 Header = headerText
             };
@@ -68,12 +68,12 @@
             NamedObjectCollection<OrdersEditSettingsMapData> editSettings, string headerText)
         {
             return new GeneralEditSettings(
-                    CreateFieldSetting(editSettings.FindByName(GeneralFields.OrderNumber)),
-                    CreateFieldSetting(editSettings.FindByName(GeneralFields.Customer)),
-                    CreateTextFieldSetting(editSettings.FindByName(GeneralFields.Administrator)),
-                    CreateTextFieldSetting(editSettings.FindByName(GeneralFields.Domain)),
-                    CreateTextFieldSetting(editSettings.FindByName(GeneralFields.OrderDate)),
-                    CreateTextFieldSetting(editSettings.FindByName(GeneralFields.Status)))
+                    CreateFieldSetting(editSettings.FindByName(OrderFields.GeneralOrderNumber)),
+                    CreateFieldSetting(editSettings.FindByName(OrderFields.GeneralCustomer)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.GeneralAdministrator)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.GeneralDomain)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.GeneralOrderDate)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.GeneralStatus)))
             {
                 Header = headerText
             };
@@ -83,29 +83,29 @@
             NamedObjectCollection<OrdersEditSettingsMapData> editSettings)
         {
             return new LogEditSettings(
-                    CreateTextFieldSetting(editSettings.FindByName(LogFields.Log)));
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.Log)));
         }
 
         private static OrdererEditSettings CreateOrdererEditSettings(
             NamedObjectCollection<OrdersEditSettingsMapData> editSettings, string headerText)
         {
             return new OrdererEditSettings(
-                    CreateMultiTextFieldSetting(editSettings.FindByName(OrdererFields.OrdererId)),
-                    CreateTextFieldSetting(editSettings.FindByName(OrdererFields.OrdererName)),
-                    CreateTextFieldSetting(editSettings.FindByName(OrdererFields.OrdererLocation)),
-                    CreateTextFieldSetting(editSettings.FindByName(OrdererFields.OrdererEmail)),
-                    CreateTextFieldSetting(editSettings.FindByName(OrdererFields.OrdererPhone)),
-                    CreateTextFieldSetting(editSettings.FindByName(OrdererFields.OrdererCode)),
-                    CreateTextFieldSetting(editSettings.FindByName(OrdererFields.Department)),
-                    CreateTextFieldSetting(editSettings.FindByName(OrdererFields.Unit)),
-                    CreateTextFieldSetting(editSettings.FindByName(OrdererFields.OrdererAddress)),
-                    CreateTextFieldSetting(editSettings.FindByName(OrdererFields.OrdererInvoiceAddress)),
-                    CreateTextFieldSetting(editSettings.FindByName(OrdererFields.OrdererReferenceNumber)),
-                    CreateTextFieldSetting(editSettings.FindByName(OrdererFields.AccountingDimension1)),
-                    CreateFieldSetting(editSettings.FindByName(OrdererFields.AccountingDimension2)),
-                    CreateTextFieldSetting(editSettings.FindByName(OrdererFields.AccountingDimension3)),
-                    CreateFieldSetting(editSettings.FindByName(OrdererFields.AccountingDimension4)),
-                    CreateTextFieldSetting(editSettings.FindByName(OrdererFields.AccountingDimension5)))
+                    CreateMultiTextFieldSetting(editSettings.FindByName(OrderFields.OrdererId)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.OrdererName)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.OrdererLocation)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.OrdererEmail)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.OrdererPhone)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.OrdererCode)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.OrdererDepartment)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.OrdererUnit)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.OrdererAddress)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.OrdererInvoiceAddress)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.OrdererReferenceNumber)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.OrdererAccountingDimension1)),
+                    CreateFieldSetting(editSettings.FindByName(OrderFields.OrdererAccountingDimension2)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.OrdererAccountingDimension3)),
+                    CreateFieldSetting(editSettings.FindByName(OrderFields.OrdererAccountingDimension4)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.OrdererAccountingDimension5)))
             {
                 Header = headerText
             };
@@ -115,7 +115,7 @@
             NamedObjectCollection<OrdersEditSettingsMapData> editSettings, string headerText)
         {
             return new OrderEditSettings(
-                    CreateFieldSetting(editSettings.FindByName(OrderFields.Property)),
+                    CreateFieldSetting(editSettings.FindByName(OrderFields.OrderProperty)),
                     CreateTextFieldSetting(editSettings.FindByName(OrderFields.OrderRow1)),
                     CreateTextFieldSetting(editSettings.FindByName(OrderFields.OrderRow2)),
                     CreateTextFieldSetting(editSettings.FindByName(OrderFields.OrderRow3)),
@@ -124,7 +124,7 @@
                     CreateTextFieldSetting(editSettings.FindByName(OrderFields.OrderRow6)),
                     CreateTextFieldSetting(editSettings.FindByName(OrderFields.OrderRow7)),
                     CreateTextFieldSetting(editSettings.FindByName(OrderFields.OrderRow8)),
-                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.Configuration)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.OrderConfiguration)),
                     CreateTextFieldSetting(editSettings.FindByName(OrderFields.OrderInfo)),
                     CreateTextFieldSetting(editSettings.FindByName(OrderFields.OrderInfo2)))
             {
@@ -136,9 +136,9 @@
             NamedObjectCollection<OrdersEditSettingsMapData> editSettings, string headerText)
         {
             return new OtherEditSettings(
-                    CreateTextFieldSetting(editSettings.FindByName(OtherFields.FileName)),
-                    CreateTextFieldSetting(editSettings.FindByName(OtherFields.CaseNumber)),
-                    CreateTextFieldSetting(editSettings.FindByName(OtherFields.Info)))
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.OtherFileName)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.OtherCaseNumber)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.OtherInfo)))
             {
                 Header = headerText
             };
@@ -148,8 +148,8 @@
             NamedObjectCollection<OrdersEditSettingsMapData> editSettings, string headerText)
         {
             return new ProgramEditSettings(
-                CreateTextFieldSetting(editSettings.FindByName(ProgramFields.Program)),
-                CreateTextFieldSetting(editSettings.FindByName(ProgramFields.InfoProduct)))
+                CreateTextFieldSetting(editSettings.FindByName(OrderFields.Program)),
+                CreateTextFieldSetting(editSettings.FindByName(OrderFields.ProgramInfoProduct)))
             {
                 Header = headerText
             };
@@ -159,12 +159,12 @@
             NamedObjectCollection<OrdersEditSettingsMapData> editSettings, string headerText)
         {
             return new ReceiverEditSettings(
-                    CreateTextFieldSetting(editSettings.FindByName(ReceiverFields.ReceiverId)),
-                    CreateTextFieldSetting(editSettings.FindByName(ReceiverFields.ReceiverName)),
-                    CreateTextFieldSetting(editSettings.FindByName(ReceiverFields.ReceiverEmail)),
-                    CreateTextFieldSetting(editSettings.FindByName(ReceiverFields.ReceiverPhone)),
-                    CreateTextFieldSetting(editSettings.FindByName(ReceiverFields.ReceiverLocation)),
-                    CreateTextFieldSetting(editSettings.FindByName(ReceiverFields.MarkOfGoods)))
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.ReceiverId)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.ReceiverName)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.ReceiverEmail)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.ReceiverPhone)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.ReceiverLocation)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.ReceiverMarkOfGoods)))
             {
                 Header = headerText
             };
@@ -174,9 +174,9 @@
             NamedObjectCollection<OrdersEditSettingsMapData> editSettings, string headerText)
         {
             return new SupplierEditSettings(
-                    CreateTextFieldSetting(editSettings.FindByName(SupplierFields.SupplierOrderNumber)),
-                    CreateTextFieldSetting(editSettings.FindByName(SupplierFields.SupplierOrderDate)),
-                    CreateTextFieldSetting(editSettings.FindByName(SupplierFields.SupplierOrderInfo)))
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.SupplierOrderNumber)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.SupplierOrderDate)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.SupplierOrderInfo)))
             {
                 Header = headerText
             };
@@ -186,27 +186,27 @@
             NamedObjectCollection<OrdersEditSettingsMapData> editSettings, string headerText)
         {
             return new UserEditSettings(
-                    CreateTextFieldSetting(editSettings.FindByName(UserFields.UserId)),
-                    CreateTextFieldSetting(editSettings.FindByName(UserFields.UserFirstName)),
-                    CreateTextFieldSetting(editSettings.FindByName(UserFields.UserLastName)),
-                    CreateTextFieldSetting(editSettings.FindByName(UserFields.UserPhone)),
-                    CreateTextFieldSetting(editSettings.FindByName(UserFields.UserEMail)),
-                    CreateTextFieldSetting(editSettings.FindByName(UserFields.UserInitials)),
-                    CreateTextFieldSetting(editSettings.FindByName(UserFields.UserPersonalIdentityNumber)),
-                    CreateTextFieldSetting(editSettings.FindByName(UserFields.UserExtension)),
-                    CreateTextFieldSetting(editSettings.FindByName(UserFields.UserTitle)),
-                    CreateTextFieldSetting(editSettings.FindByName(UserFields.UserLocation)),
-                    CreateTextFieldSetting(editSettings.FindByName(UserFields.UserRoomNumber)),
-                    CreateTextFieldSetting(editSettings.FindByName(UserFields.UserPostalAddress)),
-                    CreateTextFieldSetting(editSettings.FindByName(UserFields.EmploymentType)),
-                    CreateTextFieldSetting(editSettings.FindByName(UserFields.UserDepartment_Id1)),
-                    CreateTextFieldSetting(editSettings.FindByName(UserFields.UserOU_Id)),
-                    CreateTextFieldSetting(editSettings.FindByName(UserFields.UserDepartment_Id2)),
-                    CreateTextFieldSetting(editSettings.FindByName(UserFields.InfoUser)),
-                    CreateTextFieldSetting(editSettings.FindByName(UserFields.Responsibility)),
-                    CreateTextFieldSetting(editSettings.FindByName(UserFields.Activity)),
-                    CreateTextFieldSetting(editSettings.FindByName(UserFields.Manager)),
-                    CreateTextFieldSetting(editSettings.FindByName(UserFields.ReferenceNumber)))
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.UserId)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.UserFirstName)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.UserLastName)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.UserPhone)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.UserEMail)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.UserInitials)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.UserPersonalIdentityNumber)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.UserExtension)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.UserTitle)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.UserLocation)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.UserRoomNumber)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.UserPostalAddress)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.UserEmploymentType)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.UserDepartment_Id1)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.UserOU_Id)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.UserDepartment_Id2)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.UserInfo)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.UserResponsibility)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.UserActivity)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.UserManager)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.UserReferenceNumber)))
             {
                 Header = headerText
             };
@@ -216,28 +216,28 @@
             NamedObjectCollection<OrdersEditSettingsMapData> editSettings)
         {
             return new AccountInfoEditSettings(
-                    CreateFieldSetting(editSettings.FindByName(AccountInfoFields.StartedDate)),
-                    CreateFieldSetting(editSettings.FindByName(AccountInfoFields.FinishDate)),
-                    CreateFieldSetting(editSettings.FindByName(AccountInfoFields.EMailTypeId)),
-                    CreateFieldSetting(editSettings.FindByName(AccountInfoFields.HomeDirectory)),
-                    CreateFieldSetting(editSettings.FindByName(AccountInfoFields.Profile)),
-                    CreateTextFieldSetting(editSettings.FindByName(AccountInfoFields.InventoryNumber)),
-                    CreateTextFieldSetting(editSettings.FindByName(AccountInfoFields.Info)),
-                    CreateFieldSetting(editSettings.FindByName(AccountInfoFields.AccountType)),
-                    CreateFieldSetting(editSettings.FindByName(AccountInfoFields.AccountType2)),
-                    CreateFieldSetting(editSettings.FindByName(AccountInfoFields.AccountType3)),
-                    CreateFieldSetting(editSettings.FindByName(AccountInfoFields.AccountType4)),
-                    CreateFieldSetting(editSettings.FindByName(AccountInfoFields.AccountType5)));
+                    CreateFieldSetting(editSettings.FindByName(OrderFields.AccountInfoStartedDate)),
+                    CreateFieldSetting(editSettings.FindByName(OrderFields.AccountInfoFinishDate)),
+                    CreateFieldSetting(editSettings.FindByName(OrderFields.AccountInfoEMailTypeId)),
+                    CreateFieldSetting(editSettings.FindByName(OrderFields.AccountInfoHomeDirectory)),
+                    CreateFieldSetting(editSettings.FindByName(OrderFields.AccountInfoProfile)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.AccountInfoInventoryNumber)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.AccountInfo)),
+                    CreateFieldSetting(editSettings.FindByName(OrderFields.AccountInfoAccountType)),
+                    CreateFieldSetting(editSettings.FindByName(OrderFields.AccountInfoAccountType2)),
+                    CreateFieldSetting(editSettings.FindByName(OrderFields.AccountInfoAccountType3)),
+                    CreateFieldSetting(editSettings.FindByName(OrderFields.AccountInfoAccountType4)),
+                    CreateFieldSetting(editSettings.FindByName(OrderFields.AccountInfoAccountType5)));
         }
 
         private static ContactEditSettings CreateContactEditSettings(
             NamedObjectCollection<OrdersEditSettingsMapData> editSettings)
         {
             return new ContactEditSettings(
-                    CreateTextFieldSetting(editSettings.FindByName(ContactFields.ContactId)),
-                    CreateTextFieldSetting(editSettings.FindByName(ContactFields.ContactName)),
-                    CreateTextFieldSetting(editSettings.FindByName(ContactFields.ContactPhone)),
-                    CreateTextFieldSetting(editSettings.FindByName(ContactFields.ContactEMail))
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.ContactId)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.ContactName)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.ContactPhone)),
+                    CreateTextFieldSetting(editSettings.FindByName(OrderFields.ContactEMail))
                 );
         }
 

@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings
+﻿using DH.Helpdesk.BusinessData.Enums.Orders.Fields;
+
+namespace DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings
 {
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
@@ -15,7 +17,7 @@
         }
 
         [NotNull]
-        [LocalizedDisplay("Logg")]
+        [LocalizedDisplay(OrderLabels.Log)]
         public TextFieldSettingsModel Log { get; set; }
     }
 }

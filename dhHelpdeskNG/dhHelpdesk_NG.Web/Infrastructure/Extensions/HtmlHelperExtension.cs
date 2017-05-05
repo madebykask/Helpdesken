@@ -210,7 +210,7 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
             else
                 return new MvcHtmlString(string.Empty);
         }
-
+         
         public static MvcHtmlString CaseTypeTreeString(this HtmlHelper helper, IList<CaseType> caseTypes)
         {
             if (caseTypes != null)

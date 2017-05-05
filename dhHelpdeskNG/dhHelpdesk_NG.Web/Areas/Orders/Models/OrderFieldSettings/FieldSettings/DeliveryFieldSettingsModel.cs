@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings
+﻿using DH.Helpdesk.BusinessData.Enums.Orders.Fields;
+
+namespace DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings
 {
     using Common.ValidationAttributes;
     using Web.Infrastructure.LocalizedAttributes;
@@ -45,60 +47,60 @@
         public string Header { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Leveransdatum")]
+        [LocalizedDisplay(OrderLabels.DeliveryDate)]
         public TextFieldSettingsModel DeliveryDate { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Installationsdatum")]
+        [LocalizedDisplay(OrderLabels.DeliveryInstallDate)]
         public TextFieldSettingsModel InstallDate { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Avdelning")]
+        [LocalizedDisplay(OrderLabels.DeliveryDepartment)]
         public TextFieldSettingsModel DeliveryDepartment { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Enhet")]
+        [LocalizedDisplay(OrderLabels.DeliveryOu)]
         public TextFieldSettingsModel DeliveryOu { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("adress")]
+        [LocalizedDisplay(OrderLabels.DeliveryAddress)]
         public TextFieldSettingsModel DeliveryAddress { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Postnummer")]
+        [LocalizedDisplay(OrderLabels.DeliveryPostalCode)]
         public TextFieldSettingsModel DeliveryPostalCode { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Postadress")]
+        [LocalizedDisplay(OrderLabels.DeliveryPostalAddress)]
         public TextFieldSettingsModel DeliveryPostalAddress { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Placering")]
+        [LocalizedDisplay(OrderLabels.DeliveryLocation)]
         public TextFieldSettingsModel DeliveryLocation { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Info")]
+        [LocalizedDisplay(OrderLabels.DeliveryInfo1)]
         public TextFieldSettingsModel DeliveryInfo1 { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Info")]
+        [LocalizedDisplay(OrderLabels.DeliveryInfo2)]
         public TextFieldSettingsModel DeliveryInfo2 { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Info")]
+        [LocalizedDisplay(OrderLabels.DeliveryInfo3)]
         public TextFieldSettingsModel DeliveryInfo3 { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Enhet")]
+        [LocalizedDisplay(OrderLabels.DeliveryOuId)]
         public TextFieldSettingsModel DeliveryOuId { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Namn")]
+        [LocalizedDisplay(OrderLabels.DeliveryName)]
         public TextFieldSettingsModel Name { get; set; }
 
 
         [NotNull]
-        [LocalizedDisplay("Telefon")]
+        [LocalizedDisplay(OrderLabels.DeliveryPhone)]
         public TextFieldSettingsModel Phone { get; set; }
     }
 }

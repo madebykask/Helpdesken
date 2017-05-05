@@ -143,8 +143,7 @@
     <Compile Include="Enums\Orders\FieldNames\ReceiverFieldNames.cs" />
     <Compile Include="Enums\Orders\FieldNames\SupplierFieldNames.cs" />
     <Compile Include="Enums\Orders\FieldNames\UserFieldNames.cs" />
-    <Compile Include="Enums\Orders\Fields\AccountInfoFields.cs" />
-    <Compile Include="Enums\Orders\Fields\ContactFields.cs" />
+    <Compile Include="Enums\Orders\Fields\OrderLabels.cs" />
     <Compile Include="Enums\Orders\OrderDeletedItem.cs" />
     <Compile Include="Enums\Orders\OrderEmailTemplate.cs" />
     <Compile Include="Enums\Orders\Subtopic.cs" />
@@ -329,16 +328,7 @@
     <Compile Include="Models\Email\MailItem.cs" />
     <Compile Include="Models\Email\QuestionnaireMailItem.cs" />
     <Compile Include="Models\Licenses\Licenses\LicenseFileModel.cs" />
-    <Compile Include="Enums\Orders\Fields\DeliveryFields.cs" />
-    <Compile Include="Enums\Orders\Fields\GeneralFields.cs" />
-    <Compile Include="Enums\Orders\Fields\LogFields.cs" />
-    <Compile Include="Enums\Orders\Fields\OrdererFields.cs" />
     <Compile Include="Enums\Orders\Fields\OrderFields.cs" />
-    <Compile Include="Enums\Orders\Fields\OtherFields.cs" />
-    <Compile Include="Enums\Orders\Fields\ProgramFields.cs" />
-    <Compile Include="Enums\Orders\Fields\ReceiverFields.cs" />
-    <Compile Include="Enums\Orders\Fields\SupplierFields.cs" />
-    <Compile Include="Enums\Orders\Fields\UserFields.cs" />
     <Compile Include="Models\Orders\Index\OrderOverview\AccountInfoOverview.cs" />
     <Compile Include="Models\Orders\Index\OrderOverview\ContactOverview.cs" />
     <Compile Include="Models\Orders\Index\OrderOverview\DeliveryOverview.cs" />

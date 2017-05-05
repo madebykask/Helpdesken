@@ -14,6 +14,8 @@
             ///////////////////////////////////////////////////////////////////////////////Old code
             var lastInitiatorSearchKey = "";
 
+            PluploadTranslation($("#order_languageId").val());
+
             $("#fileName_files_uploader").pluploadQueue({
                 url: that._options.uploadFileUrl,
                 multipart_params: { entityId: that._options.id, subtopic: that._options.fileNameSubtopic },

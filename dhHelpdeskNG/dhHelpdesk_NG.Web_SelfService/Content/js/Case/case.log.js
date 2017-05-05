@@ -28,6 +28,8 @@ $(function () {
             });
         };
 
+        PluploadTranslation($("#caseLog_languageId").val());
+
         $('#Log_uploader').pluploadQueue({
             runtimes: 'html5,html4',
             url: uploadLogFileUrl,

@@ -920,11 +920,13 @@ namespace DH.Helpdesk.Services.Services
             var customerSetting =_settingService.GetCustomerSetting(newCase.Customer_Id);
 
             var performerUserEmail = string.Empty;
+            var externalUpdateMail = 0;
             //get performerUser emailaddress
             if (newCase.Performer_User_Id.HasValue)
             {
                 var performerUser = this._userService.GetUser(newCase.Performer_User_Id.Value);
                 performerUserEmail = performerUser.Email;
+                externalUpdateMail = performerUser.ExternalUpdateMail;
             }
             
             if (!caseIsActivated)
@@ -959,7 +961,7 @@ namespace DH.Helpdesk.Services.Services
 
                 if (!String.IsNullOrEmpty(performerUserEmail))
                 {
-                    if (log.SendMailAboutCaseToNotifier && newCase.FinishingDate == null)
+                    if (log.SendMailAboutCaseToNotifier && newCase.FinishingDate == null && externalUpdateMail == 1)
                     {
                         var to = performerUserEmail.Split(';', ',').ToList();
                         var extraFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(newCase.Id).Select(x => x.Follower).ToList();

@@ -23,6 +23,7 @@ namespace DH.Helpdesk.Web
             public const string CaseCharge = ("~/bundles/case/CaseCharge");
 			public const string Select2 = "~/bundles/select2";
 			public const string CaseConnectToParent = "~/bundles/case/caseconnecttoparent";
+			public const string FeedbackStatisticsCases = "~/bundles/case/feedbackstatisticscases";
 		}
 
 
@@ -449,6 +450,9 @@ namespace DH.Helpdesk.Web
                 "~/Content/js/Cases/components/DateField.js",
                 "~/Content/js/Cases/components/JQueryChosenField.js",
                 "~/Content/js/Cases/components/DropdownButtonField.js"));
+            bundles.Add(new ScriptBundle(ScriptNames.FeedbackStatisticsCases).Include(
+                "~/Content/js/Feedback/feedbackStatisticsCases.js",
+                "~/Content/js/Cases/components/Utils.js"));
 
             RegisterOrdersAreaBundles(bundles);
 			RegisterInvoicesAreaBundles(bundles);

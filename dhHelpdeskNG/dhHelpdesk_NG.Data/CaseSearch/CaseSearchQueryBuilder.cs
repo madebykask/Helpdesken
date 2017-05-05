@@ -18,6 +18,8 @@ namespace DH.Helpdesk.Dal.Repositories
 {
     public class CaseSearchQueryBuilder
     {
+        private bool _useFts = false;
+
         #region Tables Fields Constants
 
         protected static class Tables
@@ -128,6 +130,8 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public string BuildCaseSearchSql(SearchQueryBuildContext ctx)
         {
+            _useFts = ctx.UseFullTextSearch;
+
             var search = ctx.Criterias.Search;
             var searchFilter = ctx.Criterias.SearchFilter;
 
@@ -1198,7 +1202,7 @@ namespace DH.Helpdesk.Dal.Repositories
             return new Tuple<string, string>(caseNumbers, logIds);
         }
 
-        private string GetSqlLike(string field, string text, string combinator = CaseSearchConstants.Combinator_OR)
+        private string GetSqlLike(string field, string text, string combinator = CaseSearchConstants.Combinator_OR, bool userLower = false)
         {
             var sb = new StringBuilder();
             if (!string.IsNullOrEmpty(field) && !string.IsNullOrEmpty(text))
@@ -1208,10 +1212,11 @@ namespace DH.Helpdesk.Dal.Repositories
 
                 for (var i = 0; i < words.Length; i++)
                 {
-                    sb.AppendFormat("(LOWER({0}) LIKE N'%{1}%')", field, words[i].Trim());
+                    var formattedField = userLower ? $"LOWER({field})" : field;
+                    sb.AppendFormat("({0} LIKE N'%{1}%')", formattedField, words[i].Trim());
                     if (words.Length > 1 && i < words.Length - 1)
                     {
-                        sb.Append(string.Format(" {0} ", combinator));
+                        sb.AppendFormat(" {0} ", combinator);
                     }
                 }
 
@@ -1238,33 +1243,48 @@ namespace DH.Helpdesk.Dal.Repositories
 
         private string BuildContainsExpession(string field, string text, string tableAlias = "", bool useWildcard = true)
         {
+            return (_useFts)
+                ? BuildFTSContainsExpession(field, text, tableAlias, useWildcard)
+                : BuildLikeContainsExpession(field, text, tableAlias);
+        }
+
+        private string BuildFTSContainsExpession(string field, string text, string tableAlias = "", bool useWildcard = true)
+        {
             var safeText = text.SafeForSqlInject();
 
-            var fieldFormatted = string.IsNullOrEmpty(tableAlias) ?
-                field :
-                $"{tableAlias}.{field}";
-
-            var searchCriteria = BuildContainsConditionCriteria(safeText);
+            var fieldFormatted = FormatFieldWithAlias(field, tableAlias);
+            var searchCriteria = BuildFtsContainsConditionCriteria(safeText, useWildcard);
             var expression = $"CONTAINS ({fieldFormatted}, '{searchCriteria}')";
             return expression;
         }
 
-        private string BuildContainsConditionCriteria(string text)
+        private string BuildLikeContainsExpession(string field, string text, string tableAlias = "")
         {
+            var fieldFormatted = FormatFieldWithAlias(field, tableAlias);
+            var expression = GetSqlLike(fieldFormatted, text);
+            return expression;
+        }
 
+        private string FormatFieldWithAlias(string field, string tableAlias = "")
+        {
+            var fieldFormatted = string.IsNullOrEmpty(tableAlias) ? field : $"{tableAlias}.{field}";
+            return fieldFormatted;
+        }
+
+        private string BuildFtsContainsConditionCriteria(string text, bool useWildCard = true)
+        {
             var words = text.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-            var searchCriteriaText = string.Join(" OR ", words.Select(w => FormatContainsConditionValue(w)));
+            var searchCriteriaText = string.Join(" OR ", words.Select(w => FormatFtsContainsConditionValue(w, useWildCard)));
             return searchCriteriaText;
         }
 
-        private string FormatContainsConditionValue(string text, bool useWildCard = true)
+        private string FormatFtsContainsConditionValue(string text, bool useWildCard = true)
         {
             if (string.IsNullOrEmpty(text))
                 return null;
 
             return useWildCard ? $"\"{text}*\"" : $"{text}";
         }
-
 
         #endregion
 

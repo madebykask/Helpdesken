@@ -97,9 +97,16 @@
 			}
 		}
 
-		#endregion
+        public static IEnumerable<SelectListItem> PageSizesModal => new[]
+        {
+            new SelectListItem { Value = "5", Text = "5" },
+            new SelectListItem { Value = "10", Text = "10" },
+            new SelectListItem { Value = "15", Text = "15" },
+        };
 
-		public int CustomerId { get; set; }
+        #endregion
+
+        public int CustomerId { get; set; }
 
         public int UserId { get; set; }
 

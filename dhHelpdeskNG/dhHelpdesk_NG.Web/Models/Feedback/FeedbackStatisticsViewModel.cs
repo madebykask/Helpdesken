@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using DH.Helpdesk.BusinessData.Models.Questionnaire.Read;
 using DH.Helpdesk.Services.Response.Questionnaire;
+using DH.Helpdesk.Web.Models.Case;
 using DH.Helpdesk.Web.Models.Questionnaire.Output;
 
 namespace DH.Helpdesk.Web.Models.Feedback
@@ -11,14 +12,18 @@ namespace DH.Helpdesk.Web.Models.Feedback
 			int questionnaireId,
 			QuestionnaireOverview questionnaireOverview,
 			List<OptionResult> optionResults,
-			StatisticsFilter statisticsFilter) : base(questionnaireId, questionnaireOverview, optionResults)
+			StatisticsFilter statisticsFilter,
+            JsonCaseIndexViewModel caseIndexViewModel) : base(questionnaireId, questionnaireOverview, optionResults)
 		{
 			this.QuestionnaireId = questionnaireId;
 			this.QuestionnaireOverview = questionnaireOverview;
 			this.OptionResults = optionResults;
 			this.StatisticsFilter = statisticsFilter;
+			this.FeedbackStatisticsCases = caseIndexViewModel;
 		}
 
 		public StatisticsFilter StatisticsFilter { get; set; }
-	}
+
+        public JsonCaseIndexViewModel FeedbackStatisticsCases { get; set; }
+    }
 }

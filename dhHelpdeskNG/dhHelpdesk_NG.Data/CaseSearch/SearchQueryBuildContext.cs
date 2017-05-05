@@ -38,10 +38,13 @@ namespace DH.Helpdesk.Dal.Repositories
                 UserDepartments = userDepartments,
                 CaseTypes = caseTypes
             };
+
+            UseFullTextSearch = context.useFullTextSearch;
         }
 
         #endregion
 
         public bool UseFreeTextCaseSearchCTE { get; set; }
+        public bool UseFullTextSearch { get; }
     }
 }

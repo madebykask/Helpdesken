@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings
+﻿using DH.Helpdesk.BusinessData.Enums.Orders.Fields;
+
+namespace DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings
 {
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
@@ -41,51 +43,51 @@
         public string Header { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Egenskap")]
+        [LocalizedDisplay(OrderLabels.OrderProperty)]
         public FieldSettingsModel Property { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Beställning rad")]
+        [LocalizedDisplay(OrderLabels.OrderRow1)]
         public TextFieldSettingsModel OrderRow1 { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Beställning rad")]
+        [LocalizedDisplay(OrderLabels.OrderRow2)]
         public TextFieldSettingsModel OrderRow2 { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Beställning rad")]
+        [LocalizedDisplay(OrderLabels.OrderRow3)]
         public TextFieldSettingsModel OrderRow3 { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Beställning rad")]
+        [LocalizedDisplay(OrderLabels.OrderRow4)]
         public TextFieldSettingsModel OrderRow4 { get; set; }
  
         [NotNull]
-        [LocalizedDisplay("Beställning rad")]
+        [LocalizedDisplay(OrderLabels.OrderRow5)]
         public TextFieldSettingsModel OrderRow5 { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Beställning rad")]
+        [LocalizedDisplay(OrderLabels.OrderRow6)]
         public TextFieldSettingsModel OrderRow6 { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Beställning rad")]
+        [LocalizedDisplay(OrderLabels.OrderRow7)]
         public TextFieldSettingsModel OrderRow7 { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Beställning rad")]
+        [LocalizedDisplay(OrderLabels.OrderRow8)]
         public TextFieldSettingsModel OrderRow8 { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Konfigurering")]
+        [LocalizedDisplay(OrderLabels.OrderConfiguration)]
         public TextFieldSettingsModel Configuration { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Övrigt")]
+        [LocalizedDisplay(OrderLabels.OrderInfo)]
         public TextFieldSettingsModel OrderInfo { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Info")]
+        [LocalizedDisplay(OrderLabels.OrderInfo2)]
         public TextFieldSettingsModel OrderInfo2 { get; set; }         
     }
 }

@@ -21,20 +21,9 @@ namespace DH.Helpdesk.Web.Infrastructure.UrlHelpers.Mvc
 				get { return "EditFeedback"; }
 			}
 
-			public static string Answer
-			{
-				//get { return GetAction(e => e.Answer(null)); }
-				get { return "Answer"; }
-			}
-
 			public static string Delete
 			{
 				get { return GetAction(e => e.DeleteFeedback(null)); }
-			}
-
-			public static string ThankYou
-			{
-				get { return GetAction(e => e.ThankYou()); }
 			}
 
 			public static string DeleteQuestionOption 

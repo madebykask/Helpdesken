@@ -22,7 +22,8 @@ namespace DH.Helpdesk.Services.Services.Feedback
         private readonly ICircularService _circularService;
 
         private const string MainTemplate = @"<BR>{question}<BR><table><tbody><tr>{optionTemplate}</tr></tbody></table>";
-        private const string OptionTemplate = @"<td ><a href='{baseurl}feedback/answer?guid={guid}&optionValue={value}&languageId={languageid}' style='padding: 0px 10px'><img src = '{baseurl}Content/img/{iconId}' style='width: 27px; height: 27px' alt={icontext}></a></td>";
+//        private const string OptionTemplate = @"<td ><a href='{baseurl}feedback/answer?guid={guid}&optionValue={value}&languageId={languageid}' style='padding: 0px 10px'><img src = '{baseurl}Content/img/{iconId}' style='width: 27px; height: 27px' alt={icontext}></a></td>";
+        private const string OptionTemplate = @"<td ><a href='{baseurl}FeedbackAnswer/Answer?guid={guid}&optionValue={value}&languageId={languageid}&customerId={customerId}' style='padding: 0px 10px'><img src = '{baseurl}Content/img/{iconId}' style='width: 27px; height: 27px' alt={icontext}></a></td>";
 
         private class Templates
         {
@@ -34,6 +35,7 @@ namespace DH.Helpdesk.Services.Services.Feedback
             public const string OptionValue = "{value}";
             public const string LanguageId = "{languageid}";
             public const string IconText = "{icontext}";
+            public const string CustomerId = "{customerId}";
         }
 
         public FeedbackTemplateService(IFeedbackService feedbackService, ICircularService circularService)
@@ -65,7 +67,7 @@ namespace DH.Helpdesk.Services.Services.Feedback
 
             if (feedbacks.Any())
             {
-                var fields = feedbacks.Select(f => GetField(f, languageId, caseId, absoluterUrl)).ToArray();
+                var fields = feedbacks.Select(f => GetField(f, languageId, caseId, absoluterUrl, customerId)).ToArray();
                 res.AddRange(fields);
             }
 
@@ -81,7 +83,7 @@ namespace DH.Helpdesk.Services.Services.Feedback
                 _circularService.UpdateParticipantSendDate(field.CircularPartGuid, DateTime.Now);
         }
 
-        private FeedbackField GetField(FeedbackFullItem feedback, int languageId, int caseId, string absoluterUrl)
+        private FeedbackField GetField(FeedbackFullItem feedback, int languageId, int caseId, string absoluterUrl, int customerId)
         {
             var field = new FeedbackField
             {
@@ -107,7 +109,7 @@ namespace DH.Helpdesk.Services.Services.Feedback
 
             if (participant != null)
             {
-                field.StringValue = CreateTemplate(feedback, languageId, absoluterUrl, participant.Guid);
+                field.StringValue = CreateTemplate(feedback, languageId, absoluterUrl, participant.Guid, customerId);
                 field.CircularPartGuid = participant.Guid;
             }
 
@@ -120,7 +122,7 @@ namespace DH.Helpdesk.Services.Services.Feedback
             return rand.Next(1, 101) <= chancePercents;
         }
 
-        private string CreateTemplate(FeedbackFullItem feedback, int languageId, string absoluterUrl, Guid guid)
+        private string CreateTemplate(FeedbackFullItem feedback, int languageId, string absoluterUrl, Guid guid, int customerId)
         {
             var template = new StringBuilder(MainTemplate);
             template.Replace(Templates.Question, feedback.Question.Question);
@@ -134,7 +136,8 @@ namespace DH.Helpdesk.Services.Services.Feedback
                     .Replace(Templates.OptionValue, option.Value.ToString())
                     .Replace(Templates.LanguageId, languageId.ToString())
                     .Replace(Templates.IconText, option.Text)
-                    .Replace(Templates.Guid, guid.ToString());
+                    .Replace(Templates.Guid, guid.ToString())
+                    .Replace(Templates.CustomerId, customerId.ToString());
                 optionsTemplate.Append(optionTemplate);
             }
 

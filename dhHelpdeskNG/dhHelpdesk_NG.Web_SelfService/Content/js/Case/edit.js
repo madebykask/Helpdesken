@@ -312,7 +312,7 @@
             return content.join('');
         }
 
-        
+        PluploadTranslation($("#case_languageId").val());
         var lastInitiatorSearchKey = ''
 
         $('#NewCasefile_uploader').pluploadQueue({

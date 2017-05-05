@@ -1,13 +1,16 @@
-﻿namespace DH.Helpdesk.Services.Response.Questionnaire
+﻿using System.Collections.Generic;
+
+namespace DH.Helpdesk.Services.Response.Questionnaire
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public class OptionResult
     {
-        public OptionResult(int optionId, int count)
+        public OptionResult(int optionId, int count, IEnumerable<int> caseIds)
         {
             this.OptionId = optionId;
             this.Count = count;
+            this.CaseIds = caseIds;
         }
 
         [IsId]
@@ -15,5 +18,6 @@
 
         [MinValue(0)]
         public int Count { get; private set; }
+        public IEnumerable<int> CaseIds { get; private set; }
     }
 }
