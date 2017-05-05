@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using DH.Helpdesk.BusinessData.Enums.Orders.Fields;
 using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
 namespace DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings
@@ -24,16 +21,16 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings
             Email = email;
         }
 
-        [LocalizedDisplay("Id")]
+        [LocalizedDisplay(OrderLabels.ContactId)]
         public TextFieldSettingsModel Id { get; set; }
 
-        [LocalizedDisplay("Namn")]
+        [LocalizedDisplay(OrderLabels.ContactName)]
         public TextFieldSettingsModel Name { get; set; }
 
-        [LocalizedDisplay("Telefon")]
+        [LocalizedDisplay(OrderLabels.ContactPhone)]
         public TextFieldSettingsModel Phone { get; set; }
 
-        [LocalizedDisplay("E-post")]
+        [LocalizedDisplay(OrderLabels.ContactEMail)]
         public TextFieldSettingsModel Email { get; set; }
     }
 }

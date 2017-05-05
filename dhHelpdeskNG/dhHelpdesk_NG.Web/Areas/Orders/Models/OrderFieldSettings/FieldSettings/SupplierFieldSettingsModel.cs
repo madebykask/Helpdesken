@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings
+﻿using DH.Helpdesk.BusinessData.Enums.Orders.Fields;
+
+namespace DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings
 {
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
@@ -23,15 +25,15 @@
         public string Header { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Ordernummer")]
+        [LocalizedDisplay(OrderLabels.SupplierOrderNumber)]
         public TextFieldSettingsModel SupplierOrderNumber { get; set; }
          
         [NotNull]
-        [LocalizedDisplay("Beställningsdatum")]
+        [LocalizedDisplay(OrderLabels.SupplierOrderDate)]
         public TextFieldSettingsModel SupplierOrderDate { get; set; }
          
         [NotNull]
-        [LocalizedDisplay("Info")]
+        [LocalizedDisplay(OrderLabels.SupplierOrderInfo)]
         public TextFieldSettingsModel SupplierOrderInfo { get; set; }  
     }
 }

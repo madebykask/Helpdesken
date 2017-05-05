@@ -1,4 +1,8 @@
-﻿namespace DH.Helpdesk.Services.Attributes.Orders
+﻿using System.Reflection;
+using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+using DH.Helpdesk.Services.utils;
+
+namespace DH.Helpdesk.Services.Attributes.Orders
 {
     using System;
     using System.Collections.Generic;
@@ -76,59 +80,59 @@
 
         private static void CollectDeliveryMissingFields(string[] existing, List<string> missingFields)
         {
-            CollectMissingField(DeliveryFields.DeliveryDate, existing, missingFields);
-            CollectMissingField(DeliveryFields.InstallDate, existing, missingFields);
-            CollectMissingField(DeliveryFields.DeliveryDepartment, existing, missingFields);
-            CollectMissingField(DeliveryFields.DeliveryOu, existing, missingFields);
-            CollectMissingField(DeliveryFields.DeliveryAddress, existing, missingFields);
-            CollectMissingField(DeliveryFields.DeliveryPostalCode, existing, missingFields);
-            CollectMissingField(DeliveryFields.DeliveryPostalAddress, existing, missingFields);
-            CollectMissingField(DeliveryFields.DeliveryLocation, existing, missingFields);
-            CollectMissingField(DeliveryFields.DeliveryInfo1, existing, missingFields);
-            CollectMissingField(DeliveryFields.DeliveryInfo2, existing, missingFields);
-            CollectMissingField(DeliveryFields.DeliveryInfo3, existing, missingFields);
-            CollectMissingField(DeliveryFields.DeliveryOuId, existing, missingFields);
-            CollectMissingField(DeliveryFields.DeliveryName, existing, missingFields);
-            CollectMissingField(DeliveryFields.DeliveryPhone, existing, missingFields);
+            CollectMissingField(OrderFields.DeliveryDate, existing, missingFields);
+            CollectMissingField(OrderFields.DeliveryInstallDate, existing, missingFields);
+            CollectMissingField(OrderFields.DeliveryDepartment, existing, missingFields);
+            CollectMissingField(OrderFields.DeliveryOu, existing, missingFields);
+            CollectMissingField(OrderFields.DeliveryAddress, existing, missingFields);
+            CollectMissingField(OrderFields.DeliveryPostalCode, existing, missingFields);
+            CollectMissingField(OrderFields.DeliveryPostalAddress, existing, missingFields);
+            CollectMissingField(OrderFields.DeliveryLocation, existing, missingFields);
+            CollectMissingField(OrderFields.DeliveryInfo1, existing, missingFields);
+            CollectMissingField(OrderFields.DeliveryInfo2, existing, missingFields);
+            CollectMissingField(OrderFields.DeliveryInfo3, existing, missingFields);
+            CollectMissingField(OrderFields.DeliveryOuId, existing, missingFields);
+            CollectMissingField(OrderFields.DeliveryName, existing, missingFields);
+            CollectMissingField(OrderFields.DeliveryPhone, existing, missingFields);
         }
 
         private static void CollectGeneralMissingFields(string[] existing, List<string> missingFields)
         {
-            CollectMissingField(GeneralFields.OrderNumber, existing, missingFields);
-            CollectMissingField(GeneralFields.Customer, existing, missingFields);
-            CollectMissingField(GeneralFields.Administrator, existing, missingFields);
-            CollectMissingField(GeneralFields.Domain, existing, missingFields);
-            CollectMissingField(GeneralFields.OrderDate, existing, missingFields);
+            CollectMissingField(OrderFields.GeneralOrderNumber, existing, missingFields);
+            CollectMissingField(OrderFields.GeneralCustomer, existing, missingFields);
+            CollectMissingField(OrderFields.GeneralAdministrator, existing, missingFields);
+            CollectMissingField(OrderFields.GeneralDomain, existing, missingFields);
+            CollectMissingField(OrderFields.GeneralOrderDate, existing, missingFields);
         }
 
         private static void CollectLogMissingFields(string[] existing, List<string> missingFields)
         {
-            CollectMissingField(LogFields.Log, existing, missingFields);
+            CollectMissingField(OrderFields.Log, existing, missingFields);
         }
 
         private static void CollectOrdererMissingFields(string[] existing, List<string> missingFields)
         {
-            CollectMissingField(OrdererFields.OrdererId, existing, missingFields);
-            CollectMissingField(OrdererFields.OrdererName, existing, missingFields);
-            CollectMissingField(OrdererFields.OrdererLocation, existing, missingFields);
-            CollectMissingField(OrdererFields.OrdererEmail, existing, missingFields);
-            CollectMissingField(OrdererFields.OrdererPhone, existing, missingFields);
-            CollectMissingField(OrdererFields.OrdererCode, existing, missingFields);
-            CollectMissingField(OrdererFields.Department, existing, missingFields);
-            CollectMissingField(OrdererFields.Unit, existing, missingFields);
-            CollectMissingField(OrdererFields.OrdererAddress, existing, missingFields);
-            CollectMissingField(OrdererFields.OrdererInvoiceAddress, existing, missingFields);
-            CollectMissingField(OrdererFields.OrdererReferenceNumber, existing, missingFields);
-            CollectMissingField(OrdererFields.AccountingDimension1, existing, missingFields);
-            CollectMissingField(OrdererFields.AccountingDimension2, existing, missingFields);
-            CollectMissingField(OrdererFields.AccountingDimension3, existing, missingFields);
-            CollectMissingField(OrdererFields.AccountingDimension4, existing, missingFields);
-            CollectMissingField(OrdererFields.AccountingDimension5, existing, missingFields);
+            CollectMissingField(OrderFields.OrdererId, existing, missingFields);
+            CollectMissingField(OrderFields.OrdererName, existing, missingFields);
+            CollectMissingField(OrderFields.OrdererLocation, existing, missingFields);
+            CollectMissingField(OrderFields.OrdererEmail, existing, missingFields);
+            CollectMissingField(OrderFields.OrdererPhone, existing, missingFields);
+            CollectMissingField(OrderFields.OrdererCode, existing, missingFields);
+            CollectMissingField(OrderFields.OrdererDepartment, existing, missingFields);
+            CollectMissingField(OrderFields.OrdererUnit, existing, missingFields);
+            CollectMissingField(OrderFields.OrdererAddress, existing, missingFields);
+            CollectMissingField(OrderFields.OrdererInvoiceAddress, existing, missingFields);
+            CollectMissingField(OrderFields.OrdererReferenceNumber, existing, missingFields);
+            CollectMissingField(OrderFields.OrdererAccountingDimension1, existing, missingFields);
+            CollectMissingField(OrderFields.OrdererAccountingDimension2, existing, missingFields);
+            CollectMissingField(OrderFields.OrdererAccountingDimension3, existing, missingFields);
+            CollectMissingField(OrderFields.OrdererAccountingDimension4, existing, missingFields);
+            CollectMissingField(OrderFields.OrdererAccountingDimension5, existing, missingFields);
         }
 
         private static void CollectOrderMissingFields(string[] existing, List<string> missingFields)
         {
-            CollectMissingField(OrderFields.Property, existing, missingFields);
+            CollectMissingField(OrderFields.OrderProperty, existing, missingFields);
             CollectMissingField(OrderFields.OrderRow1, existing, missingFields);
             CollectMissingField(OrderFields.OrderRow2, existing, missingFields);
             CollectMissingField(OrderFields.OrderRow3, existing, missingFields);
@@ -137,89 +141,89 @@
             CollectMissingField(OrderFields.OrderRow6, existing, missingFields);
             CollectMissingField(OrderFields.OrderRow7, existing, missingFields);
             CollectMissingField(OrderFields.OrderRow8, existing, missingFields);
-            CollectMissingField(OrderFields.Configuration, existing, missingFields);
+            CollectMissingField(OrderFields.OrderConfiguration, existing, missingFields);
             CollectMissingField(OrderFields.OrderInfo, existing, missingFields);
             CollectMissingField(OrderFields.OrderInfo2, existing, missingFields);
         }
 
         private static void CollectOtherMissingFields(string[] existing, List<string> missingFields)
         {
-            CollectMissingField(OtherFields.FileName, existing, missingFields);
-            CollectMissingField(OtherFields.CaseNumber, existing, missingFields);
-            CollectMissingField(OtherFields.Info, existing, missingFields);
-            CollectMissingField(OtherFields.Status, existing, missingFields);
+            CollectMissingField(OrderFields.OtherFileName, existing, missingFields);
+            CollectMissingField(OrderFields.OtherCaseNumber, existing, missingFields);
+            CollectMissingField(OrderFields.OtherInfo, existing, missingFields);
+            CollectMissingField(OrderFields.OtherStatus, existing, missingFields);
         }
 
         private static void CollectProgramMissingFields(string[] existing, List<string> missingFields)
         {
-            CollectMissingField(ProgramFields.Program, existing, missingFields);
-            CollectMissingField(ProgramFields.InfoProduct, existing, missingFields);
+            CollectMissingField(OrderFields.Program, existing, missingFields);
+            CollectMissingField(OrderFields.ProgramInfoProduct, existing, missingFields);
         }
 
         private static void CollectReceiverMissingFields(string[] existing, List<string> missingFields)
         {
-            CollectMissingField(ReceiverFields.ReceiverId, existing, missingFields);
-            CollectMissingField(ReceiverFields.ReceiverName, existing, missingFields);
-            CollectMissingField(ReceiverFields.ReceiverEmail, existing, missingFields);
-            CollectMissingField(ReceiverFields.ReceiverPhone, existing, missingFields);
-            CollectMissingField(ReceiverFields.ReceiverLocation, existing, missingFields);
-            CollectMissingField(ReceiverFields.MarkOfGoods, existing, missingFields);
+            CollectMissingField(OrderFields.ReceiverId, existing, missingFields);
+            CollectMissingField(OrderFields.ReceiverName, existing, missingFields);
+            CollectMissingField(OrderFields.ReceiverEmail, existing, missingFields);
+            CollectMissingField(OrderFields.ReceiverPhone, existing, missingFields);
+            CollectMissingField(OrderFields.ReceiverLocation, existing, missingFields);
+            CollectMissingField(OrderFields.ReceiverMarkOfGoods, existing, missingFields);
         }
 
         private static void CollectSupplierMissingFields(string[] existing, List<string> missingFields)
         {
-            CollectMissingField(SupplierFields.SupplierOrderNumber, existing, missingFields);
-            CollectMissingField(SupplierFields.SupplierOrderDate, existing, missingFields);
-            CollectMissingField(SupplierFields.SupplierOrderInfo, existing, missingFields);
+            CollectMissingField(OrderFields.SupplierOrderNumber, existing, missingFields);
+            CollectMissingField(OrderFields.SupplierOrderDate, existing, missingFields);
+            CollectMissingField(OrderFields.SupplierOrderInfo, existing, missingFields);
         }
 
         private static void CollectUserMissingFields(string[] existing, List<string> missingFields)
         {
-            CollectMissingField(UserFields.UserId, existing, missingFields);
-            CollectMissingField(UserFields.UserFirstName, existing, missingFields);
-            CollectMissingField(UserFields.UserLastName, existing, missingFields);
-            CollectMissingField(UserFields.UserPhone, existing, missingFields);
-            CollectMissingField(UserFields.UserEMail, existing, missingFields);
-            CollectMissingField(UserFields.UserInitials, existing, missingFields);
-            CollectMissingField(UserFields.InfoUser, existing, missingFields);
-            CollectMissingField(UserFields.Activity, existing, missingFields);
-            CollectMissingField(UserFields.UserDepartment_Id1, existing, missingFields);
-            CollectMissingField(UserFields.UserDepartment_Id2, existing, missingFields);
-            CollectMissingField(UserFields.EmploymentType, existing, missingFields);
-            CollectMissingField(UserFields.UserExtension, existing, missingFields);
-            CollectMissingField(UserFields.UserLocation, existing, missingFields);
-            CollectMissingField(UserFields.Manager, existing, missingFields);
-            CollectMissingField(UserFields.UserPersonalIdentityNumber, existing, missingFields);
-            CollectMissingField(UserFields.UserPostalAddress, existing, missingFields);
-            CollectMissingField(UserFields.ReferenceNumber, existing, missingFields);
-            CollectMissingField(UserFields.Responsibility, existing, missingFields);
-            CollectMissingField(UserFields.UserRoomNumber, existing, missingFields);
-            CollectMissingField(UserFields.UserTitle, existing, missingFields);
-            CollectMissingField(UserFields.UserOU_Id, existing, missingFields);
+            CollectMissingField(OrderFields.UserId, existing, missingFields);
+            CollectMissingField(OrderFields.UserFirstName, existing, missingFields);
+            CollectMissingField(OrderFields.UserLastName, existing, missingFields);
+            CollectMissingField(OrderFields.UserPhone, existing, missingFields);
+            CollectMissingField(OrderFields.UserEMail, existing, missingFields);
+            CollectMissingField(OrderFields.UserInitials, existing, missingFields);
+            CollectMissingField(OrderFields.UserInfo, existing, missingFields);
+            CollectMissingField(OrderFields.UserActivity, existing, missingFields);
+            CollectMissingField(OrderFields.UserDepartment_Id1, existing, missingFields);
+            CollectMissingField(OrderFields.UserDepartment_Id2, existing, missingFields);
+            CollectMissingField(OrderFields.UserEmploymentType, existing, missingFields);
+            CollectMissingField(OrderFields.UserExtension, existing, missingFields);
+            CollectMissingField(OrderFields.UserLocation, existing, missingFields);
+            CollectMissingField(OrderFields.UserManager, existing, missingFields);
+            CollectMissingField(OrderFields.UserPersonalIdentityNumber, existing, missingFields);
+            CollectMissingField(OrderFields.UserPostalAddress, existing, missingFields);
+            CollectMissingField(OrderFields.UserReferenceNumber, existing, missingFields);
+            CollectMissingField(OrderFields.UserResponsibility, existing, missingFields);
+            CollectMissingField(OrderFields.UserRoomNumber, existing, missingFields);
+            CollectMissingField(OrderFields.UserTitle, existing, missingFields);
+            CollectMissingField(OrderFields.UserOU_Id, existing, missingFields);
         }
 
         private static void CollectAccountInfoMissingFields(string[] existing, List<string> missingFields)
         {
-            CollectMissingField(AccountInfoFields.StartedDate, existing, missingFields);
-            CollectMissingField(AccountInfoFields.FinishDate, existing, missingFields);
-            CollectMissingField(AccountInfoFields.EMailTypeId, existing, missingFields);
-            CollectMissingField(AccountInfoFields.HomeDirectory, existing, missingFields);
-            CollectMissingField(AccountInfoFields.Profile, existing, missingFields);
-            CollectMissingField(AccountInfoFields.InventoryNumber, existing, missingFields);
-            CollectMissingField(AccountInfoFields.Info, existing, missingFields);
-            CollectMissingField(AccountInfoFields.AccountType, existing, missingFields);
-            CollectMissingField(AccountInfoFields.AccountType2, existing, missingFields);
-            CollectMissingField(AccountInfoFields.AccountType3, existing, missingFields);
-            CollectMissingField(AccountInfoFields.AccountType4, existing, missingFields);
-            CollectMissingField(AccountInfoFields.AccountType5, existing, missingFields);
+            CollectMissingField(OrderFields.AccountInfoStartedDate, existing, missingFields);
+            CollectMissingField(OrderFields.AccountInfoFinishDate, existing, missingFields);
+            CollectMissingField(OrderFields.AccountInfoEMailTypeId, existing, missingFields);
+            CollectMissingField(OrderFields.AccountInfoHomeDirectory, existing, missingFields);
+            CollectMissingField(OrderFields.AccountInfoProfile, existing, missingFields);
+            CollectMissingField(OrderFields.AccountInfoInventoryNumber, existing, missingFields);
+            CollectMissingField(OrderFields.AccountInfo, existing, missingFields);
+            CollectMissingField(OrderFields.AccountInfoAccountType, existing, missingFields);
+            CollectMissingField(OrderFields.AccountInfoAccountType2, existing, missingFields);
+            CollectMissingField(OrderFields.AccountInfoAccountType3, existing, missingFields);
+            CollectMissingField(OrderFields.AccountInfoAccountType4, existing, missingFields);
+            CollectMissingField(OrderFields.AccountInfoAccountType5, existing, missingFields);
         }
 
         private static void CollectContactMissingFields(string[] existing, List<string> missingFields)
         {
-            CollectMissingField(ContactFields.ContactId, existing, missingFields);
-            CollectMissingField(ContactFields.ContactName, existing, missingFields);
-            CollectMissingField(ContactFields.ContactPhone, existing, missingFields);
-            CollectMissingField(ContactFields.ContactEMail, existing, missingFields);
+            CollectMissingField(OrderFields.ContactId, existing, missingFields);
+            CollectMissingField(OrderFields.ContactName, existing, missingFields);
+            CollectMissingField(OrderFields.ContactPhone, existing, missingFields);
+            CollectMissingField(OrderFields.ContactEMail, existing, missingFields);
         }
 
 
@@ -240,16 +244,17 @@
                                 int? orderTypeId)
         {
             var now = DateTime.Now;
+            var label = GetFieldNameDefaultLabel(fieldName);
             var visibleByDefault = (
-                        fieldName == GeneralFields.OrderNumber ||
-                        fieldName == GeneralFields.OrderDate ||
-                        fieldName == OrdererFields.Department ||
+                        fieldName == OrderFields.GeneralOrderNumber ||
+                        fieldName == OrderFields.GeneralOrderDate ||
+                        fieldName == OrderFields.OrdererDepartment ||
                         fieldName == OrderFields.OrderRow1 ||
-                        fieldName == ReceiverFields.ReceiverName ||
-                        fieldName == SupplierFields.SupplierOrderNumber || 
-                        fieldName == DeliveryFields.DeliveryDate ||
-                        fieldName == OtherFields.CaseNumber ||
-                        fieldName == OtherFields.Status)
+                        fieldName == OrderFields.ReceiverName ||
+                        fieldName == OrderFields.SupplierOrderNumber || 
+                        fieldName == OrderFields.DeliveryDate ||
+                        fieldName == OrderFields.OtherCaseNumber ||
+                        fieldName == OrderFields.OtherStatus)
                         .ToInt();
             return new OrderFieldSettings
                        {
@@ -258,7 +263,7 @@
                            OrderType_Id = orderTypeId,
                            CreatedDate = now,
                            ChangedDate = now,
-                           Label = fieldName,
+                           Label = label,
                            Required = 0,
                            Show = visibleByDefault,
                            ShowExternal = 0,
@@ -267,6 +272,32 @@
                            FieldHelp = string.Empty,
                            MultiValue = false
                         };
+        }
+
+        private static string GetFieldNameDefaultLabel(string fieldName)
+        {
+            string constantName = null;
+            string fieldLabel = null;
+
+            foreach (var orderField in typeof(OrderFields).GetFields(BindingFlags.Static | BindingFlags.Public))
+            {
+                if (orderField.FieldType == typeof(string) && fieldName.Equals((string)orderField.GetValue(null)))
+                {
+                    constantName = orderField.Name;
+                }
+            }
+
+            if (constantName != null)
+            {
+                foreach (var orderLabel in typeof(OrderLabels).GetFields(BindingFlags.Static | BindingFlags.Public))
+                {
+                    if (orderLabel.FieldType == typeof(string) && orderLabel.Name.Equals(constantName))
+                    {
+                        fieldLabel = (string) orderLabel.GetValue(null);
+                    }
+                }
+            }
+            return fieldLabel ?? fieldName;
         }
     }
 }

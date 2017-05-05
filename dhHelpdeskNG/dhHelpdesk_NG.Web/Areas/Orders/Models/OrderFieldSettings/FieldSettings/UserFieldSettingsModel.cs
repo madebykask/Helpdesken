@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings
+﻿using DH.Helpdesk.BusinessData.Enums.Orders.Fields;
+
+namespace DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings
 {
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
@@ -38,71 +40,71 @@
         public string Header { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Användar ID")]
+        [LocalizedDisplay(OrderLabels.UserId)]
         public TextFieldSettingsModel UserId { get; set; }
          
         [NotNull]
-        [LocalizedDisplay("Förnamn")]
+        [LocalizedDisplay(OrderLabels.UserFirstName)]
         public TextFieldSettingsModel UserFirstName { get; set; }
          
         [NotNull]
-        [LocalizedDisplay("Efternamn")]
+        [LocalizedDisplay(OrderLabels.UserLastName)]
         public TextFieldSettingsModel UserLastName { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Telefon")]
+        [LocalizedDisplay(OrderLabels.UserPhone)]
         public TextFieldSettingsModel UserPhone { get; set; }
         
         [NotNull]
-        [LocalizedDisplay("E-post")]
+        [LocalizedDisplay(OrderLabels.UserEMail)]
         public TextFieldSettingsModel UserEMail { get; set; }
 
-        [LocalizedDisplay("Personnummer")]
+        [LocalizedDisplay(OrderLabels.UserPersonalIdentityNumber)]
         public TextFieldSettingsModel PersonalIdentityNumber { get; set; }
 
-        [LocalizedDisplay("Initialer")]
+        [LocalizedDisplay(OrderLabels.UserInitials)]
         public TextFieldSettingsModel Initials { get; set; }
 
-        [LocalizedDisplay("Anknytning")]
+        [LocalizedDisplay(OrderLabels.UserExtension)]
         public TextFieldSettingsModel Extension { get; set; }
 
-        [LocalizedDisplay("Titel")]
+        [LocalizedDisplay(OrderLabels.UserTitle)]
         public TextFieldSettingsModel Title { get; set; }
 
-        [LocalizedDisplay("Placering")]
+        [LocalizedDisplay(OrderLabels.UserLocation)]
         public TextFieldSettingsModel Location { get; set; }
 
-        [LocalizedDisplay("Rum")]
+        [LocalizedDisplay(OrderLabels.UserRoomNumber)]
         public TextFieldSettingsModel RoomNumber { get; set; }
 
-        [LocalizedDisplay("Besöksadress")]
+        [LocalizedDisplay(OrderLabels.UserPostalAddress)]
         public TextFieldSettingsModel PostalAddress { get; set; }
 
-        [LocalizedDisplay("Anställningstyp")]
+        [LocalizedDisplay(OrderLabels.UserEmploymentType)]
         public TextFieldSettingsModel EmploymentType { get; set; }
 
-        [LocalizedDisplay("Avdelning")]
+        [LocalizedDisplay(OrderLabels.UserDepartment_Id1)]
         public TextFieldSettingsModel DepartmentId1 { get; set; }
 
-        [LocalizedDisplay("Enhet")]
+        [LocalizedDisplay(OrderLabels.UserOU_Id)]
         public TextFieldSettingsModel UnitId { get; set; }
 
-        [LocalizedDisplay("Avdelning 2")]
+        [LocalizedDisplay(OrderLabels.UserDepartment_Id2)]
         public TextFieldSettingsModel DepartmentId2 { get; set; }
 
-        [LocalizedDisplay("Övrigt")]
+        [LocalizedDisplay(OrderLabels.UserInfo)]
         public TextFieldSettingsModel Info { get; set; }
 
-        [LocalizedDisplay("Ansvar")]
+        [LocalizedDisplay(OrderLabels.UserResponsibility)]
         public TextFieldSettingsModel Responsibility { get; set; }
 
-        [LocalizedDisplay("Verksamhet")]
+        [LocalizedDisplay(OrderLabels.UserActivity)]
         public TextFieldSettingsModel Activity { get; set; }
 
-        [LocalizedDisplay("Chef")]
+        [LocalizedDisplay(OrderLabels.UserManager)]
         public TextFieldSettingsModel Manager { get; set; }
 
-        [LocalizedDisplay("Referensnummer")]
+        [LocalizedDisplay(OrderLabels.UserReferenceNumber)]
         public TextFieldSettingsModel ReferenceNumber { get; set; }
     }
 }
