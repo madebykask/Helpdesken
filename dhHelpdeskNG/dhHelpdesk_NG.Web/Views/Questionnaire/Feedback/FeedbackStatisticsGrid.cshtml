@@ -48,17 +48,17 @@
                                 </td>
                             }
                             <td style="width: 10%">
-                                <div class='text-right'>
                                     @if (!string.IsNullOrEmpty(caseIds))
                                     {
-                                        <input type="hidden" name="feedbackCaseIds" value="@caseIds" />
-                                        <a data-toggle="modal" class="feedbackPopupCls" href="#">@count</a>
+                                        <div class='text-right feedbackPopupCls cursor-pointer'>
+                                            <input type="hidden" name="feedbackCaseIds" value="@caseIds"/>
+                                            @count
+                                        </div>
                                     }
                                     else
                                     {
-                                        @count
+                                        <div class='text-right'>@count</div>
                                     }
-                                </div>
                             </td>
                             <td style="width: 10%">
                                 @Translation.Get("svar")
