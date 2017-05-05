@@ -58,7 +58,8 @@ namespace DH.Helpdesk.Web.App_Start
 
             if (_user != null && !string.IsNullOrEmpty(_user.UserId))
             {
-                var identity = new ClaimsIdentity(context.Options.AuthenticationType);                
+                var identity = new ClaimsIdentity(context.Options.AuthenticationType);
+                identity.AddClaim(new Claim(ClaimTypes.Sid, _user.Id.ToString()));
                 identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, context.UserName));
                 identity.AddClaim(new Claim(ClaimTypes.Role, _user.UserGroupId.ToString()));
                 context.Validated(identity);

@@ -40,17 +40,23 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
 
         public ProcessResult SaveCase(CaseModel caseModel, AuxCaseModel auxModel)
         {
-            var _caseModel = CloneCase(caseModel, auxModel);
+            
             var _validationRes = ValidateCase(caseModel);
             if (_validationRes.IsSucceed)
-                //Save Case
+            {
+                var res = CloneCase(ref caseModel, auxModel);
+                var mailSender = GetMailSenders(caseModel);
+
                 return new ProcessResult("Save Case");
+            }
             else
                 return _validationRes;
         }
 
-        private CaseModel CloneCase(CaseModel caseModel, AuxCaseModel auxModel)
+        private ProcessResult CloneCase(ref CaseModel caseModel, AuxCaseModel auxModel)
         {
+            var retData = new List<KeyValuePair<string, string>>();
+            
             if (caseModel.PerformerUser_Id == 0)
                 caseModel.PerformerUser_Id = null;
 
@@ -82,10 +88,26 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                     caseModel.OtherCost = _DEFAULT_OTHER_COST;
 
                 if (!caseModel.SMS.IsValueChanged())
-                    caseModel.SMS = _DEFAULT_SMS;                
+                    caseModel.SMS = _DEFAULT_SMS;
+            }
+
+            var oldCase = new CaseModel();
+            if (caseModel.Id != 0)
+            {
+                oldCase = _caseRepository.GetCase(caseModel.Id);
+                if (oldCase == null || oldCase.Id != caseModel.Id)                
+                    retData.Add(new KeyValuePair<string, string>("Case_Id", "Case Id is not valid!"));
+                caseModel.Customer_Id = oldCase.Customer_Id;
             }
             
-            return caseModel;
+            var customer = _customerService.GetCustomer(caseModel.Customer_Id);
+            if (customer == null || customer.Id != caseModel.Customer_Id)
+                retData.Add(new KeyValuePair<string, string>("Customer_Id", "Customer Id is not valid!"));
+
+            if (retData.Any())
+                return new ProcessResult("CaseValidation", ResultTypeEnum.ERROR, "Case is not valid!", retData);
+
+            return new ProcessResult("CaseValidation");
         }
 
         private ProcessResult ValidateCase(CaseModel caseModel)
@@ -131,6 +153,23 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
 
             return new ProcessResult("CaseValidation");            
         }
-         
+       
+        private MailSenders GetMailSenders(CaseModel caseModel)
+        {
+            var mailSenders = new MailSenders();
+            if (caseModel.WorkingGroup_Id.HasValue && caseModel.WorkingGroup_Id.IsValueChanged())
+            {
+                var curWG = _workingGroupService.GetWorkingGroup(caseModel.WorkingGroup_Id.Value);
+                mailSenders.WGEmail = curWG.EMail;
+            }
+
+            if (caseModel.DefaultOwnerWG_Id.HasValue && caseModel.DefaultOwnerWG_Id.IsValueChanged())
+            {
+                var curWG = _workingGroupService.GetWorkingGroup(caseModel.DefaultOwnerWG_Id.Value);
+                mailSenders.DefaultOwnerWGEMail = curWG.EMail;
+            }
+
+            return mailSenders;
+        }
     }
 }

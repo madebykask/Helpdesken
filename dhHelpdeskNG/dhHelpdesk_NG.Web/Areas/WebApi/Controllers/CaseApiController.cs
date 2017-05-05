@@ -34,16 +34,32 @@ namespace DH.Helpdesk.Web.Areas.WebApi
         {
             var infoToSave = model.ToBussinessModel();
 
-            var idt = RequestContext.Principal.Identity as ClaimsIdentity;
-            if (idt == null)
-                return string.Empty;
-            var roles = idt.Claims.Where(x => x.Type == ClaimTypes.Role)
-                                   .Select(x => x.Value).FirstOrDefault();
-           
-            var res = _universalCaseService.SaveCase(infoToSave, new 
-                AuxCaseModel(1, 2, TimeZoneInfo.FindSystemTimeZoneById(""), User.Identity.Name));
+            var currentUser = GetCurrentUser();
+            var res = _universalCaseService.SaveCase(
+                    infoToSave, 
+                    new AuxCaseModel(1, currentUser.Item1, TimeZoneInfo.FindSystemTimeZoneById(""), User.Identity.Name)
+            );
 
             return JsonConvert.SerializeObject(res);
+        }
+
+        private Tuple<int, string> GetCurrentUser()
+        {
+            var idt = RequestContext.Principal.Identity as ClaimsIdentity;
+            if (idt == null)
+                return new Tuple<int, string>(-1, string.Empty);
+
+            var roles = idt.Claims.Where(x => x.Type == ClaimTypes.Role)
+                                   .Select(x => x.Value).FirstOrDefault();
+
+            var curUserIdStr = idt.Claims.Where(x => x.Type == ClaimTypes.Sid)
+                                   .Select(x => x.Value).FirstOrDefault();
+
+            int curUserId = -1;
+            if (curUserIdStr != null)
+                int.TryParse(curUserIdStr, out curUserId);
+
+            return new Tuple<int, string>(curUserId, roles);
         }
       
     }    
