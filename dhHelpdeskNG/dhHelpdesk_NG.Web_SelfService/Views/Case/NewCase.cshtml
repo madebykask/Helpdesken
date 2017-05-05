@@ -132,6 +132,8 @@
 
                     @Html.HiddenFor(model => model.DepartmentFilterFormat, new { data_field = "departmentFilterFormat" })
 
+                    @Html.Hidden("case_languageId", SessionFacade.CurrentLanguageId);
+
                     if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.UserInformation))
                     {
                         <h4 style="@Model.DisplayUserInfo()">@Translation.Get("User Information", Enums.TranslationSource.TextTranslation)</h4>

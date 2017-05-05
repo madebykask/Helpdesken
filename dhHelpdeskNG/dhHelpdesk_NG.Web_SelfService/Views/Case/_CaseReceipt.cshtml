@@ -39,6 +39,8 @@
 
 @Scripts.Render("~/Content/js/Case/log")
 
+@Html.Hidden("caseLog_languageId", SessionFacade.CurrentLanguageId);
+
 @if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.UserInformation))
 {
     <input id="CaseId" type="hidden" value="@Model.CasePreview.Id" />
