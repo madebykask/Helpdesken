@@ -20,7 +20,7 @@
         IList<TextTranslationLanguageList> GetEditListToTextTranslations(int textid);
         IList<TextTranslationLanguageList> GetIndexListToTextTranslations(int languageId);
         IList<TextTranslationList> GetNewListToTextTranslations();
-  
+        IList<CustomKeyValue<string, string>> GetTranslationsFor(IList<string> texts, int languageId);
 
         Text GetText(int id);
         TextTranslation GetTextTranslation(int id);
@@ -33,6 +33,7 @@
         TextType GetTextType(int id);
         String GetTextTypeName(int id);
         
+
 
         void SaveEditText(Text text, List<TextTranslationLanguageList> TTs, out IDictionary<string, string> errors);
         void SaveEditText(Text text, TextTranslation texttranslation, bool update, out IDictionary<string, string> errors);
@@ -322,6 +323,12 @@
         public void Commit()
         {
             this._unitOfWork.Commit();
+        }
+
+        public IList<CustomKeyValue<string, string>> GetTranslationsFor(IList<string> texts, int languageId)
+        {
+            //var preparedTexts = texts.Select(t => t.ToLower());
+            return _textTranslationRepository.GetTranslationsFor(texts, languageId);
         }
     }
 }

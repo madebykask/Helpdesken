@@ -488,6 +488,7 @@
     <Compile Include="Models\Shared\CustomSelectList.cs" />
     <Compile Include="Models\Shared\DateToDate.cs" />
     <Compile Include="Models\ReportService\ReportSelectedFilter.cs" />
+    <Compile Include="Models\Shared\CustomKeyValue.cs" />
     <Compile Include="Models\Shared\Output\SearchResult.cs" />
     <Compile Include="Models\Shared\ItemDependentOverview.cs" />
     <Compile Include="Models\TextList.cs" />

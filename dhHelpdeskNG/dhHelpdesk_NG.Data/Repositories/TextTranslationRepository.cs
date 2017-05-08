@@ -194,6 +194,7 @@ namespace DH.Helpdesk.Dal.Repositories
         TextTranslation GetTTByIdAndLanguageId(int textid, int langaugeId);
         TextTranslation GetTTById(int textid);
         List<TextTranslationLanguageList> GetTextTranslationByTextId(int textId);
+        IList<CustomKeyValue<string, string>> GetTranslationsFor(IList<string> texts, int languageId);
     }
 
     public class TextTranslationRepository : RepositoryBase<TextTranslation>, ITextTranslationRepository
@@ -325,6 +326,21 @@ namespace DH.Helpdesk.Dal.Repositories
 
             return query;
         }
+
+        public IList<CustomKeyValue<string, string>> GetTranslationsFor(IList<string> texts, int languageId)
+        {
+            var query = from t in DataContext.Texts
+                        join tt in DataContext.TextTranslations on t.Id equals tt.Text_Id
+                        where tt.Text_Id > 4999 && tt.Language_Id == languageId && texts.Contains(t.TextToTranslate)                        
+                        select new CustomKeyValue<string, string>()
+                        {
+                            Key = t.TextToTranslate,
+                            Value = tt.TextTranslated
+                        };
+
+            return query.ToList();
+        }
+
     }
 
     #endregion
