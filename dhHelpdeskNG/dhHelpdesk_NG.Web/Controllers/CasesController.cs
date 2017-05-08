@@ -5228,6 +5228,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var workingGroups = _workingGroupService.GetWorkingGroups(customerId, true).ToList();
                 ret.WorkingGroups = workingGroups;
             }
+            ret.WorkingGroups.Insert(0, ObjectExtensions.notAssignedWorkingGroup());
 
 
             //.Where(w => userWorkingGroup.Contains(w.Id))

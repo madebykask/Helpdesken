@@ -35,7 +35,7 @@
 
         public static WorkingGroupEntity notAssignedWorkingGroup()
         {
-            return new WorkingGroupEntity { Id = 0, WorkingGroupName = "-- " + Translation.Get("Ej Tilldelade", Enums.TranslationSource.TextTranslation) + " --", IsActive = 1 };
+            return new WorkingGroupEntity { Id = int.MinValue, WorkingGroupName = "-- " + Translation.Get("Ej Tilldelade", Enums.TranslationSource.TextTranslation) + " --", IsActive = 1 };
         }
 
         public static User notAssignedPerformer()
