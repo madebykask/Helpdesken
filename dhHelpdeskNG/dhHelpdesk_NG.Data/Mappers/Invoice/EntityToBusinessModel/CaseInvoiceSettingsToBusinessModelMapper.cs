@@ -20,7 +20,8 @@
                             entity.OrderNoPrefix,
                             entity.Issuer,
                             entity.OurReference,
-                            entity.DocTemplate);
+                            entity.DocTemplate,
+                            entity.Filter);
         }
     }
 }

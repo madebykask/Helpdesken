@@ -182,8 +182,11 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 return Json(answer, JsonRequestBehavior.AllowGet);
             }
             var lastSyncDate = DateTime.UtcNow;
+            var settings = caseInvoiceSettingsService.GetSettings(model.ArticlesImport.CustomerId);
+            var categoryCode = settings != null ? settings.Filter : string.Empty;
+
             var importer = this.caseInvoiceFactory.GetImporter(this.productAreaService, this.invoiceArticleService);
-            var result = importer.ImportArticles(model.ArticlesImport.File.InputStream, lastSyncDate);
+            var result = importer.ImportArticles(model.ArticlesImport.File.InputStream, lastSyncDate, categoryCode);
             if (result.Errors.Any())
             {
                 var error = new StringBuilder();
