@@ -82,8 +82,7 @@
             entity.OtherCost = businessModel.OtherCost;
             entity.Currency = businessModel.Currency;
             entity.ApprovedBy_User_Id = businessModel.ApprovedBy_User_Id;
-
-
+            
             #endregion
 
             #region Other Info
@@ -117,7 +116,8 @@
             entity.RegUserName = businessModel.RegUserName;            
             entity.LatestSLACountDate = businessModel.LatestSLACountDate;
             //entity.Moved = businessModel.Moved.Value;
-
+            entity.RegTime = businessModel.RegTime;
+            entity.ChangeTime = businessModel.ChangedTime;
             #endregion
         }
     }

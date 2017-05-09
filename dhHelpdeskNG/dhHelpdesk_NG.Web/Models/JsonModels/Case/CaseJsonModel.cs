@@ -224,6 +224,11 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
 
         public DateTime? LatestSLACountDate { get; set; }
 
+        public DateTime RegTime { get; set; }
+
+        public DateTime ChangedTime { get; set; }
+
+
         #endregion
 
 
@@ -352,8 +357,9 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
                 DefaultOwnerWG_Id = DefaultOwnerWG_Id,
                 RegUserName = RegUserName,
                 Moved = Moved,
-                LatestSLACountDate = LatestSLACountDate
-
+                LatestSLACountDate = LatestSLACountDate,
+                RegTime = RegTime,
+                ChangedTime = ChangedTime
                 #endregion
             };
         }
@@ -487,8 +493,9 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
                 DefaultOwnerWG_Id = model.DefaultOwnerWG_Id,
                 RegUserName = model.RegUserName,
                 Moved = model.Moved,
-                LatestSLACountDate = model.LatestSLACountDate
-
+                LatestSLACountDate = model.LatestSLACountDate,
+                RegTime = model.RegTime,
+                ChangedTime = model.ChangedTime
                 #endregion
             };
         }

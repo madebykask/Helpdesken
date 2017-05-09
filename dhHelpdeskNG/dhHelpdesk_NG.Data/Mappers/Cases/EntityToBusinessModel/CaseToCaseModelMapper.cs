@@ -211,6 +211,10 @@
 
                 LatestSLACountDate = entity.LatestSLACountDate,
 
+                RegTime = entity.RegTime,
+
+                ChangedTime = entity.ChangeTime
+
             #endregion
             };
 

@@ -213,9 +213,12 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
         public int Moved { get; set; } 
 
-        public DateTime? LatestSLACountDate { get; set; } 
+        public DateTime? LatestSLACountDate { get; set; }
 
-        
+        public DateTime RegTime { get; set; }
+
+        public DateTime ChangedTime { get; set; }
+
         #endregion
     }
 }
