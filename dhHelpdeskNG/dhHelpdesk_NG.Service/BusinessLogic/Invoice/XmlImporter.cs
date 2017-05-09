@@ -31,7 +31,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Invoice
             this.invoiceArticleService = invoiceArticleService;
         }
 
-        public ArticlesImportData ImportArticles(Stream stream, DateTime lastSyncDate)
+        public ArticlesImportData ImportArticles(Stream stream, DateTime lastSyncDate, string filter)
         {
             var units = new List<InvoiceArticleUnit>();
             var articles = new List<InvoiceArticle>();
@@ -51,6 +51,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Invoice
                         let blocked = items.Element("Blocked")
                         let showInCHS = items.Element("ShowInCHS")
                         let textDemand = items.Element("TextDemand")
+                        let itemCategoryCode = items.Element("ItemCategoryCode")
                         select new
                         {
                             Number = number != null ? number.Value : string.Empty,
@@ -61,7 +62,8 @@ namespace DH.Helpdesk.Services.BusinessLogic.Invoice
                             Ppu = unitPrice != null ? unitPrice.Value : string.Empty,
                             Blocked = blocked != null && XmlConvert.ToBoolean(blocked.Value),
                             ShowInCHS = showInCHS != null && XmlConvert.ToBoolean(showInCHS.Value),
-                            TextDemand = textDemand != null && XmlConvert.ToBoolean(textDemand.Value)
+                            TextDemand = textDemand != null && XmlConvert.ToBoolean(textDemand.Value),
+                            ItemCategoryCode = itemCategoryCode != null ? itemCategoryCode.Value : string.Empty,
                         }).ToList();
 
                     foreach (var xmlArticle in xmlArticles)
@@ -75,37 +77,39 @@ namespace DH.Helpdesk.Services.BusinessLogic.Invoice
                         if (result.Errors.Any())
                             return result;
 
-                        var unit = units.FirstOrDefault(u => u.Name.EqualWith(xmlArticle.UnitName));
-                        if (unit == null &&
-                            !string.IsNullOrEmpty(xmlArticle.UnitName))
+                        if (string.IsNullOrEmpty(filter) || (!string.IsNullOrEmpty(filter) && xmlArticle.ItemCategoryCode.ToLower().Equals(filter.ToLower())))
                         {
-                            unit = new InvoiceArticleUnit(xmlArticle.UnitName);
-                            units.Add(unit);
-                        }
-
-                        var article = articles.FirstOrDefault(a => a.Name.EqualWith(xmlArticle.Name) && a.NameEng.EqualWith(xmlArticle.NameEng));
-                        if (article == null)
-                        {
-                            decimal? ppu = null;
-                            decimal ppuValue;
-                            if (decimal.TryParse(xmlArticle.Ppu, out ppuValue))
+                            var unit = units.FirstOrDefault(u => u.Name.EqualWith(xmlArticle.UnitName));
+                            if (unit == null && !string.IsNullOrEmpty(xmlArticle.UnitName))
                             {
-                                ppu = ppuValue;
+                                unit = new InvoiceArticleUnit(xmlArticle.UnitName);
+                                units.Add(unit);
                             }
 
-                            var blocked = xmlArticle.Blocked || !xmlArticle.ShowInCHS;
+                            var article = articles.FirstOrDefault(a => a.Name.EqualWith(xmlArticle.Name) && a.NameEng.EqualWith(xmlArticle.NameEng));
+                            if (article == null)
+                            {
+                                decimal? ppu = null;
+                                decimal ppuValue;
+                                if (decimal.TryParse(xmlArticle.Ppu, out ppuValue))
+                                {
+                                    ppu = ppuValue;
+                                }
 
-                            article = new InvoiceArticle(
-                                xmlArticle.Number,
-                                xmlArticle.Name,
-                                xmlArticle.NameEng,
-                                xmlArticle.Description,
-                                unit,
-                                ppu,
-                                xmlArticle.TextDemand,
-                                blocked,
-                                lastSyncDate);
-                            articles.Add(article);
+                                var blocked = xmlArticle.Blocked || !xmlArticle.ShowInCHS;
+
+                                article = new InvoiceArticle(
+                                    xmlArticle.Number,
+                                    xmlArticle.Name,
+                                    xmlArticle.NameEng,
+                                    xmlArticle.Description,
+                                    unit,
+                                    ppu,
+                                    xmlArticle.TextDemand,
+                                    blocked,
+                                    lastSyncDate);
+                                articles.Add(article);
+                            }
                         }
                     }
                 }

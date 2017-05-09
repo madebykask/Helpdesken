@@ -1,4 +1,5 @@
-﻿@using DH.Helpdesk.Web.Models.Feedback
+﻿@using DH.Helpdesk.Common.Enums
+@using DH.Helpdesk.Web.Models.Feedback
 @model FeedbackStatisticsViewModel
 <div class="secnavs fixed">
     <div class="pull-left">
@@ -29,7 +30,7 @@
                             @Html.HiddenFor(x => x.QuestionnaireId)
                             <table class="tableform">
                                 <tr>
-                                    <td class="span3">@Translation.GetCoreTextTranslation("Återkoppling") @Translation.GetCoreTextTranslation("Datum")</td>
+                                    <td class="span3">@Translation.GetCoreTextTranslation("Återkopplingsdatum")</td>
                                     <td>
                                         @Html.EditorFor(m => m.StatisticsFilter.CircularCreatedDate.DateFrom, "DatePicker", new {id = "feedbackCreatedDateFrom_datepicker"})
                                         -

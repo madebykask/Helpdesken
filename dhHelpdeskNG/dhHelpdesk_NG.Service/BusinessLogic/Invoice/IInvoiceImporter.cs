@@ -6,7 +6,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Invoice
 
     public interface IInvoiceImporter
     {
-        ArticlesImportData ImportArticles(Stream stream, DateTime lastSyncDate);
+        ArticlesImportData ImportArticles(Stream stream, DateTime lastSyncDate, string filter);
 
         void SaveImportedArticles(ArticlesImportData data, int customerId, DateTime lastSyncDate);
     }

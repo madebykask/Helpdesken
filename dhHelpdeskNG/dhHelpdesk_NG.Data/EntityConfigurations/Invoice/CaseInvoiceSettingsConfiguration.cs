@@ -16,6 +16,7 @@
             this.Property(s => s.Issuer).IsOptional().HasMaxLength(50);
             this.Property(s => s.OrderNoPrefix).IsOptional().HasMaxLength(50);
             this.Property(s => s.OurReference).IsOptional().HasMaxLength(50);
+            this.Property(s => s.Filter).IsOptional().HasMaxLength(50);
 
             this.ToTable("tblCaseInvoiceSettings");
         }

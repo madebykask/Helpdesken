@@ -7,58 +7,74 @@
     <div class="container">
         <div class="row">
             <div class="span12">
+                <h4>@Translation.GetCoreTextTranslation("Export fil")</h4>
                 <table class="tableform">
                     <tr>
                         <td class="span3">
                             @Translation.GetCoreTextTranslation("Export sökväg")
                         </td>
                         <td class="span9">
-                            @Html.TextBoxFor(m => m.ExportPath, new { maxlength = "200", style="line-height: 0"})
-                        </td>                       
+                            @Html.TextBoxFor(m => m.ExportPath, new {maxlength = "200", style = "line-height: 0"})
+                        </td>
                     </tr>
                     <tr>
                         <td class="span3">
                             @Translation.GetCoreTextTranslation("Valuta")
                         </td>
                         <td class="span9">
-                            @Html.TextBoxFor(m => m.Currency, new { maxlength = "50" })
-                        </td>                       
+                            @Html.TextBoxFor(m => m.Currency, new {maxlength = "50"})
+                        </td>
                     </tr>
                     <tr>
                         <td class="span3">
                             @Translation.GetCoreTextTranslation("Utfärdare")
                         </td>
                         <td class="span9">
-                            @Html.TextBoxFor(m => m.Issuer, new { maxlength = "50" })
-                        </td>                       
+                            @Html.TextBoxFor(m => m.Issuer, new {maxlength = "50"})
+                        </td>
                     </tr>
                     <tr>
                         <td class="span3">
                             @Translation.GetCoreTextTranslation("Vår referens")
                         </td>
                         <td class="span9">
-                            @Html.TextBoxFor(m => m.OurReference, new { maxlength = "50" })
-                        </td>                       
+                            @Html.TextBoxFor(m => m.OurReference, new {maxlength = "50"})
+                        </td>
                     </tr>
                     <tr>
                         <td class="span3">
                             @Translation.GetCoreTextTranslation("Ordernummer/prefix")
                         </td>
                         <td class="span9">
-                            @Html.TextBoxFor(m => m.OrderNoPrefix, new { maxlength = "50" })
-                        </td>                       
+                            @Html.TextBoxFor(m => m.OrderNoPrefix, new {maxlength = "50"})
+                        </td>
                     </tr>
                     <tr>
                         <td class="span3">
                             @Translation.GetCoreTextTranslation("Dokumentmall")
                         </td>
                         <td class="span9">
-                            @Html.TextBoxFor(m => m.DocTemplate, new { maxlength = "50" })
-                        </td>                       
+                            @Html.TextBoxFor(m => m.DocTemplate, new {maxlength = "50"})
+                        </td>
                     </tr>
                 </table>
             </div>
-        </div>        
+        </div>
+            <div class="row">
+                <div class="span12">
+                    <h4>@Translation.GetCoreTextTranslation("Import fil")</h4>
+                    <table class="tableform">
+                        <tr>
+                            <td class="span3">
+                                @Translation.GetCoreTextTranslation("Filter")
+                            </td>
+                            <td class="span9">
+                                @Html.TextBoxFor(m => m.Filter, new { maxlength = "50" })
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
     </div>
 }
 <script type="text/javascript">

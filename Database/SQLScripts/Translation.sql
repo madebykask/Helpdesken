@@ -5770,5 +5770,26 @@ If not exists (select * from tblTextTranslation where text_id = 1807 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1807, 2, 'Follower')
 GO
 
+If not exists (select * from tbltext where id = 1808)
+	insert into tbltext (id, TextString) VALUES (1808, 'Återkopplingsdatum')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1808 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1808, 2, 'Feedback date')
+GO
+
+If not exists (select * from tbltext where id = 1809)
+	insert into tbltext (id, TextString) VALUES (1809, 'Export fil')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1809 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1809, 2, 'Export file')
+GO
+
+If not exists (select * from tbltext where id = 1810)
+	insert into tbltext (id, TextString) VALUES (1810, 'Import fil')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1810 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1810, 2, 'Import file')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using DH.Helpdesk.BusinessData.Models;
 using DH.Helpdesk.BusinessData.Models.Questionnaire.Write;
 using DH.Helpdesk.Services.Services;
-using DH.Helpdesk.Web.Infrastructure;
-using DH.Helpdesk.Web.Infrastructure.UrlHelpers.Mvc;
 using DH.Helpdesk.Web.Models.Feedback;
 
 namespace DH.Helpdesk.Web.Controllers
@@ -24,6 +20,7 @@ namespace DH.Helpdesk.Web.Controllers
             _infoService = infoService;
         }
 
+        [AllowAnonymous]
         public ActionResult Answer(FeedbackAnswerParams parameters)
         {
             var detailed = _circularService.GetQuestionnaire(parameters.Guid, parameters.LanguageId);
@@ -47,6 +44,7 @@ namespace DH.Helpdesk.Web.Controllers
             return RedirectToAction("ThankYou", new RouteValueDictionary(new { customerId = parameters.CustomerId, languageId = parameters.LanguageId }));
         }
 
+        [AllowAnonymous]
         public ActionResult ThankYou(int customerId, int languageId)
         {
             var html = _infoService.GetInfoText(4, customerId, languageId).Name;

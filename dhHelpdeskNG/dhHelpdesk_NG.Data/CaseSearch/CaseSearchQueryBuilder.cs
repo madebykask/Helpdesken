@@ -493,8 +493,28 @@ namespace DH.Helpdesk.Dal.Repositories
             var customerId = filter.CustomerId;
             var strBld = new StringBuilder();
 
-            strBld.AppendLine(@"SELECT Case_Id FROM tblLog INNER JOIN tblCase ON tblLog.Case_Id = tblCase.Id WHERE ");
-            strBld.AppendFormat("tblCase.Customer_Id = {0} ", customerId);
+            strBld.AppendLine(@"SELECT Case_Id FROM tblLog ");
+            strBld.AppendLine(@"  INNER JOIN tblCase ON tblLog.Case_Id = tblCase.Id ");
+            strBld.AppendLine(@"  INNER JOIN tblCustomer ON tblCustomer.Id = tblCase.Customer_Id ");
+            strBld.AppendLine(@"  INNER JOIN tblCustomerUser ON tblCustomerUser.Customer_Id = tblCustomer.Id");
+            strBld.AppendLine("WHERE ");
+            strBld.AppendFormat("tblCase.Customer_Id = {0} ", customerId).AppendLine();
+            strBld.AppendLine(" AND tblCase.Deleted = 0");
+            strBld.AppendFormat(" AND tblCustomerUser.User_Id = {0}", filter.UserId).AppendLine();
+            
+            
+            if (filter.CaseProgress != CaseProgressFilter.None &&
+                filter.CaseProgress != CaseProgressFilter.FinishedNotApproved &&
+                filter.CaseProgress != CaseProgressFilter.FollowUp &&
+                filter.CaseProgress != CaseProgressFilter.ClosedCases)
+            {
+                strBld.Append(" AND tblCase.FinishingDate is null").AppendLine();
+            }
+
+        //todo: add extra conditions for 
+            // 1. finishing date:
+            
+
             strBld.AppendLine(" AND (");
 
             var items = BuildFreeTextConditionsFor(freeText, _freeTextLogConditionFields);
@@ -502,7 +522,7 @@ namespace DH.Helpdesk.Dal.Repositories
             strBld.AppendLine(formattedConditions);
 
             strBld.AppendLine(" )");
-            strBld.AppendLine(@"GROUP BY Case_Id");
+            strBld.AppendLine(@"GROUP BY tblLog.Case_Id");
             return strBld.ToString();
         }
 
@@ -827,10 +847,29 @@ namespace DH.Helpdesk.Dal.Repositories
             // working group 
             if (!string.IsNullOrWhiteSpace(searchFilter.WorkingGroup))
             {
-                if (searchCriteria.CustomerSetting.CaseWorkingGroupSource == 0)
-                    sb.Append(" and (tblWorkingGroup.Id in (" + searchFilter.WorkingGroup.SafeForSqlInject() + ")) ");
-                else
-                    sb.Append(" and (coalesce(tblCase.WorkingGroup_Id, 0) in (" + searchFilter.WorkingGroup.SafeForSqlInject() + ")) ");
+                var wgDict = searchFilter.WorkingGroup.Split(',').ToDictionary(it => it, it => true);
+                var searchingUnassigned = wgDict.ContainsKey(int.MinValue.ToString());
+                if (searchingUnassigned)
+                {
+                    wgDict.Remove(int.MinValue.ToString());
+                }
+
+                sb.Append(" AND (");
+
+                if (searchingUnassigned)
+                    sb.Append("tblCase.WorkingGroup_Id is NULL");
+
+                if (wgDict.Count > 0)
+                {
+                    if (searchingUnassigned)
+                        sb.Append(" OR");
+                    if (searchCriteria.CustomerSetting.CaseWorkingGroupSource == 0)
+                        sb.Append(" tblWorkingGroup.Id in (" + string.Join(",", wgDict.Keys).SafeForSqlInject() + ")");
+                    else
+                        sb.Append(" coalesce(tblCase.WorkingGroup_Id, 0) in (" + string.Join(",", wgDict.Keys).SafeForSqlInject() + ")");
+                }
+
+                sb.Append(") ");
             }
 
             if (searchFilter.SearchInMyCasesOnly)

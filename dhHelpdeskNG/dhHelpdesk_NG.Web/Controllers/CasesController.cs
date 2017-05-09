@@ -1437,7 +1437,8 @@ namespace DH.Helpdesk.Web.Controllers
         [ValidateInput(false)]
         public RedirectToRouteResult EditLog(Case case_, CaseLog caseLog)
         {
-            this.UpdateCaseLogForCase(case_, caseLog);
+            this.NewCaselog(case_, caseLog);
+            //this.UpdateCaseLogForCase(case_, caseLog);
             return this.RedirectToAction("edit", "cases", new { id = caseLog.CaseId });
         }
 
@@ -3173,9 +3174,26 @@ namespace DH.Helpdesk.Web.Controllers
 
             var c = this._caseService.GetCaseById(caseLog.CaseId);
 
-            var customer = this._customerService.GetCustomer(c.Customer_Id);
-            var customerSetting = this._settingService.GetCustomerSetting(c.Customer_Id);
-            var basePath = _masterDataService.GetFilePath(c.Customer_Id);
+            // save case and case history
+            var ei = new CaseExtraInfo() { CreatedByApp = CreatedByApplications.Helpdesk5, LeadTimeForNow = 0, ActionLeadTime = 0, ActionExternalTime = 0 };
+            int caseHistoryId = this._caseService.SaveCase(c, caseLog, null, SessionFacade.CurrentUser.Id, this.User.Identity.Name, ei, out errors);
+            caseLog.CaseHistoryId = caseHistoryId;
+        }
+
+        private void NewCaselog(Case @case, CaseLog caseLog)
+        {
+            if (caseLog == null)
+            {
+                throw new ArgumentException("caseLog is null");
+            }
+
+            IDictionary<string, string> errors;
+
+            var oldCase = this._caseService.GetCaseById(caseLog.CaseId);
+
+            var customer = this._customerService.GetCustomer(oldCase.Customer_Id);
+            var customerSetting = this._settingService.GetCustomerSetting(oldCase.Customer_Id);
+            var basePath = _masterDataService.GetFilePath(oldCase.Customer_Id);
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
             var currentLoggedInUser = this._userService.GetUser(SessionFacade.CurrentUser.Id);
 
@@ -3186,7 +3204,7 @@ namespace DH.Helpdesk.Web.Controllers
               customerSetting.DontConnectUserToWorkingGroup);
 
             var mailSenders = new MailSenders();
-           
+
             // Positive: Send Mail to...
             if (caseMailSetting.DontSendMailToNotifier == false)
                 caseMailSetting.DontSendMailToNotifier = true;
@@ -3195,27 +3213,160 @@ namespace DH.Helpdesk.Web.Controllers
 
             mailSenders.SystemEmail = caseMailSetting.HelpdeskMailFromAdress;
 
-            if (c.WorkingGroup_Id.HasValue)
+            if (oldCase.WorkingGroup_Id.HasValue)
             {
-                var curWG = _workingGroupService.GetWorkingGroup(c.WorkingGroup_Id.Value);
+                var curWG = _workingGroupService.GetWorkingGroup(oldCase.WorkingGroup_Id.Value);
                 if (curWG != null)
                     if (!string.IsNullOrWhiteSpace(curWG.EMail) && _emailService.IsValidEmail(curWG.EMail))
                         mailSenders.WGEmail = curWG.EMail;
             }
 
-            if (c.DefaultOwnerWG_Id.HasValue && c.DefaultOwnerWG_Id.Value > 0)
+            if (oldCase.DefaultOwnerWG_Id.HasValue && oldCase.DefaultOwnerWG_Id.Value > 0)
             {
-                var defaultWGEmail = _workingGroupService.GetWorkingGroup(c.DefaultOwnerWG_Id.Value).EMail;
+                var defaultWGEmail = _workingGroupService.GetWorkingGroup(oldCase.DefaultOwnerWG_Id.Value).EMail;
                 mailSenders.DefaultOwnerWGEMail = defaultWGEmail;
             }
             caseMailSetting.CustomeMailFromAddress = mailSenders;
 
+            //Count time
+            var leadTime = 0;
+            var actionLeadTime = 0;
+            var customerTimeOffset = customerSetting.TimeZone_offset;
+            var actionExternalTime = 0;
+
+            if (oldCase.StateSecondary_Id.HasValue)
+            {
+                var caseSubState = this._stateSecondaryService.GetStateSecondary(oldCase.StateSecondary_Id.Value);
+
+                // calculating time spent in "inactive" state since last changing every save
+                if (caseSubState.IncludeInCaseStatistics == 0)
+                {
+                    var workTimeCalcFactory =
+                        new WorkTimeCalculatorFactory(
+                            ManualDependencyResolver.Get<IHolidayService>(),
+                            customer.WorkingDayStart,
+                            customer.WorkingDayEnd,
+                            TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
+                    int[] deptIds = null;
+                    if (@case.Department_Id.HasValue)
+                    {
+                        deptIds = new int[] { @case.Department_Id.Value };
+                    }
+
+                    var workTimeCalc = workTimeCalcFactory.Build(oldCase.ChangeTime, DateTime.UtcNow, deptIds);
+                    @case.ExternalTime = workTimeCalc.CalculateWorkTime(
+                        oldCase.ChangeTime,
+                        DateTime.UtcNow,
+                        oldCase.Department_Id) + oldCase.ExternalTime;
+
+
+                    workTimeCalcFactory =
+                    new WorkTimeCalculatorFactory(
+                        ManualDependencyResolver.Get<IHolidayService>(),
+                        customer.WorkingDayStart,
+                        customer.WorkingDayEnd,
+                        TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
+
+                    deptIds = null;
+                    if (@case.Department_Id.HasValue)
+                    {
+                        deptIds = new int[] { @case.Department_Id.Value };
+                    }
+
+                    workTimeCalc = workTimeCalcFactory.Build(oldCase.ChangeTime, DateTime.UtcNow, deptIds, customerTimeOffset);
+                    actionExternalTime = workTimeCalc.CalculateWorkTime(
+                        oldCase.ChangeTime,
+                        DateTime.UtcNow,
+                        oldCase.Department_Id, customerTimeOffset);
+
+                }
+            }
+
+            oldCase.LatestSLACountDate = CalculateLatestSLACountDate(oldCase.StateSecondary_Id, @case.StateSecondary_Id, oldCase.LatestSLACountDate);
+
             // save case and case history
-            c.StateSecondary_Id = @case.StateSecondary_Id;
+            oldCase.StateSecondary_Id = @case.StateSecondary_Id;
             caseLog.UserId = currentLoggedInUser.Id;
- 
-            var ei = new CaseExtraInfo() {CreatedByApp = CreatedByApplications.Helpdesk5, LeadTimeForNow = 0, ActionLeadTime = 0, ActionExternalTime = 0 };
-            int caseHistoryId = this._caseService.SaveCase(c, caseLog, null, SessionFacade.CurrentUser.Id, this.User.Identity.Name, ei, out errors);
+
+
+            if (caseLog != null && caseLog.FinishingType > 0)
+            {
+                if (caseLog.FinishingDate == null)
+                {
+                    caseLog.FinishingDate = DateTime.UtcNow;
+                }
+                else
+                {
+                    // för att få med klockslag
+                    if (caseLog.FinishingDate.Value.ToShortDateString() == DateTime.Today.ToShortDateString())
+                    {
+                        caseLog.FinishingDate = DateTime.UtcNow;
+                    }
+                    else if (oldCase != null && oldCase.ChangeTime.ToShortDateString() == caseLog.FinishingDate.Value.ToShortDateString())
+                    {
+                        var lastChangedTime = new DateTime(oldCase.ChangeTime.Year, oldCase.ChangeTime.Month, oldCase.ChangeTime.Day, 22, 59, 59);
+                        caseLog.FinishingDate = lastChangedTime;
+                    }
+                    else
+                    {
+                        caseLog.FinishingDate = DateTime.SpecifyKind(caseLog.FinishingDate.Value, DateTimeKind.Local).ToUniversalTime();
+                    }
+                }
+
+                oldCase.FinishingDate = DatesHelper.Max(oldCase.RegTime, caseLog.FinishingDate.Value);
+
+                var workTimeCalcFactory = new WorkTimeCalculatorFactory(
+                    ManualDependencyResolver.Get<IHolidayService>(),
+                    customer.WorkingDayStart,
+                    customer.WorkingDayEnd,
+                    TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
+                int[] deptIds = null;
+                if (oldCase.Department_Id.HasValue)
+                {
+                    deptIds = new int[] { oldCase.Department_Id.Value };
+                }
+
+                var workTimeCalc = workTimeCalcFactory.Build(oldCase.RegTime, oldCase.FinishingDate.Value, deptIds);
+                leadTime = workTimeCalc.CalculateWorkTime(
+                    oldCase.RegTime,
+                    oldCase.FinishingDate.Value.ToUniversalTime(),
+                    oldCase.Department_Id) - oldCase.ExternalTime;
+
+                oldCase.LeadTime = leadTime;
+
+                // ActionLeadTime Calc
+                if (oldCase != null && oldCase.Id > 0)
+                {
+                    workTimeCalcFactory = new WorkTimeCalculatorFactory(
+                        ManualDependencyResolver.Get<IHolidayService>(),
+                        customer.WorkingDayStart,
+                        customer.WorkingDayEnd,
+                        TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
+                    deptIds = null;
+                    if (oldCase.Department_Id.HasValue)
+                    {
+                        deptIds = new int[] { oldCase.Department_Id.Value };
+                    }
+
+                    workTimeCalc = workTimeCalcFactory.Build(oldCase.ChangeTime, oldCase.FinishingDate.Value, deptIds, customerTimeOffset);
+                    actionLeadTime = workTimeCalc.CalculateWorkTime(
+                        oldCase.ChangeTime,
+                        oldCase.FinishingDate.Value.ToUniversalTime(),
+                        oldCase.Department_Id, customerTimeOffset) - actionExternalTime;
+                }
+            }
+
+            var ei = new CaseExtraInfo()
+            {
+                CreatedByApp = CreatedByApplications.Helpdesk5,
+                LeadTimeForNow = leadTime,
+                ActionLeadTime = actionLeadTime,
+                ActionExternalTime = actionExternalTime
+            };
+            //End
+
+            //var ei = new CaseExtraInfo() {CreatedByApp = CreatedByApplications.Helpdesk5, LeadTimeForNow = 0, ActionLeadTime = 0, ActionExternalTime = 0 };
+            int caseHistoryId = this._caseService.SaveCase(oldCase, caseLog, null, SessionFacade.CurrentUser.Id, this.User.Identity.Name, ei, out errors);
             caseLog.CaseHistoryId = caseHistoryId;
 
             //find files for old log
@@ -3234,9 +3385,8 @@ namespace DH.Helpdesk.Web.Controllers
 
 
             // send emails
-            this._caseService.SendCaseEmail(c.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, c, caseLog, null, currentLoggedInUser);
+            this._caseService.SendCaseEmail(oldCase.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase, caseLog, null, currentLoggedInUser);
         }
-        
         #endregion
 
         #region --Get Data--
@@ -5322,6 +5472,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var workingGroups = _workingGroupService.GetWorkingGroups(customerId, true).ToList();
                 ret.WorkingGroups = workingGroups;
             }
+            ret.WorkingGroups.Insert(0, ObjectExtensions.notAssignedWorkingGroup());
 
 
             //.Where(w => userWorkingGroup.Contains(w.Id))
