@@ -167,7 +167,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
 						if (msg.To.Count > 0 || msg.Bcc.Count > 0 || msg.CC.Count > 0)
 						{
 							_smtpClient.Send(msg);
-							res = new EmailResponse(sendTime, res.ResponseMessage + " | " + _EMAIL_SEND_MESSAGE, res.NumberOfTry);
+							res = new EmailResponse(sendTime, emailsettings.Response.ResponseMessage + " | " + _EMAIL_SEND_MESSAGE, res.NumberOfTry);
 						}
 					}
 				}
@@ -180,8 +180,8 @@ namespace DH.Helpdesk.Services.Services.Concrete
 				else
 					msg = string.Format("{0}", ex.Message);
 
-				var tryCount = res.NumberOfTry + 1;
-				res = new EmailResponse(sendTime, res.ResponseMessage + " | " + msg, tryCount);
+                var tryCount = emailsettings.Response.NumberOfTry + 1;
+                res = new EmailResponse(sendTime, emailsettings.Response.ResponseMessage + " | " + msg, tryCount);
 			}
 			finally
 			{
@@ -190,9 +190,11 @@ namespace DH.Helpdesk.Services.Services.Concrete
 				Thread.CurrentThread.CurrentUICulture = oldCI;
 			}
 
-			if (res.NumberOfTry != res.NumberOfTry && res.NumberOfTry <= _MAX_NUMBER_SENDING_EMAIL)
-				res = this.SendEmail(from, to, subject, body, fields, emailsettings, mailMessageId, highPriority, files);
-
+            if (res.NumberOfTry != emailsettings.Response.NumberOfTry && res.NumberOfTry <= _MAX_NUMBER_SENDING_EMAIL)
+            {
+                emailsettings.Response.NumberOfTry = res.NumberOfTry;
+                res = this.SendEmail(from, to, subject, body, fields, emailsettings, mailMessageId, highPriority, files);
+            }
 			return res;
 
 		}
