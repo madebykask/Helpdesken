@@ -37,7 +37,11 @@ namespace DH.Helpdesk.Web.Areas.WebApi
             var currentUser = GetCurrentUser();
             var res = _universalCaseService.SaveCase(
                     infoToSave, 
-                    new AuxCaseModel(1, currentUser.Item1, TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"), User.Identity.Name)
+                    new AuxCaseModel(1, 
+                                     currentUser.Item1, 
+                                     TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"), 
+                                     User.Identity.Name, 
+                                     RequestExtension.GetAbsoluteUrl())
             );
 
             return JsonConvert.SerializeObject(res);

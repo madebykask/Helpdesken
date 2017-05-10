@@ -95,8 +95,15 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             if (res.IsSucceed)
             {
                 var _validationRes = ValidateCase(caseModel);
-                var mailSender = GetMailSenders(caseModel);
+                //if (_validationRes.IsSucceed)
 
+                //var caseMailSetting = new CaseMailSetting(
+                //    curCustomer.NewCaseEmailList,
+                //    curCustomer.HelpdeskEmail,
+                //    auxModel.AbsolutreUrl,
+                //    setting.DontConnectUserToWorkingGroup);
+
+                var mailSender = GetMailSenders(caseModel);
                 return new ProcessResult("Save Case");
             }
             else
@@ -189,8 +196,10 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             _localTranslations = _textTranslationService.GetTranslationsFor(_UNIT_TEXTS.ToList(), _currentLanguageId);
             _caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettingsWithLanguages(caseModel.Customer_Id, _currentLanguageId).ToList();
             _customerUser = _customerUserService.GetCustomerSettings(caseModel.Customer_Id, auxModel.CurrentUserId);
-
+            var curCustomer = _customerService.GetCustomer(caseModel.Customer_Id);            
+            var setting = _settingService.GetCustomerSetting(curCustomer.Id);
             var oldCase = new CaseModel();
+
             /*Apply rules*/
             if (_caseFieldSettings.FirstOrDefault(f => f.Name == GlobalEnums.TranslationCaseFields.Persons_EMail.ToString()) == null)
                 caseModel.PersonsEmail = string.Empty;
@@ -212,10 +221,11 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                     caseModel.OU_Id = NotChangedValue.NULLABLE_INT;
                     caseModel.UserCode = NotChangedValue.STRING;
                 }
-                caseModel.RegTime = NotChangedValue.DATETIME;
+                caseModel.RegTime = oldCase.RegTime;
             }
             else
             {
+                oldCase = null;
                 caseModel.RegTime = auxModel.UtcNow;
             }
 
@@ -244,6 +254,13 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
 
             if (caseModel.ProductArea_Id.HasValue && caseModel.ProductAreaSetDate == null)
                 caseModel.ProductAreaSetDate = auxModel.UtcNow;
+
+            var calculatedTimes = GetClaculatedTimes(caseModel, auxModel, oldCase);
+            caseModel.LeadTime = calculatedTimes.LeadTime;
+            caseModel.ExternalTime = calculatedTimes.ExternalTime;
+            caseModel.LatestSLACountDate = calculatedTimes.LatestSLACountDate;
+
+            
 
             return new ProcessResult("Case cloned.");
         }
@@ -334,6 +351,9 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                 LatestSLACountDate = null
             };
 
+            if (oldCase == null)
+                oldCase = _caseRepository.GetCase(caseModel.Id);
+
             var isEditMode = caseModel.Id != 0;
             var curCustomer = _customerService.GetCustomer(caseModel.Customer_Id);
             var setting = _settingService.GetCustomerSetting(curCustomer.Id);
@@ -408,7 +428,15 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
 
             #region LatestSLACountDate
 
-            ret.LatestSLACountDate = CalculateLatestSLACountDate(oldCase?.StateSecondary_Id, caseModel.StateSecondary_Id, oldCase?.LatestSLACountDate);
+            int? newStateSeconary = null;
+            if (isEditMode && !caseModel.StateSecondary_Id.IsValueChanged())
+                newStateSeconary = oldCase?.StateSecondary_Id;
+            else if (!caseModel.StateSecondary_Id.IsValueChanged())
+                newStateSeconary = null;
+            else
+                newStateSeconary = caseModel.StateSecondary_Id;
+            
+            ret.LatestSLACountDate = CalculateLatestSLACountDate(oldCase?.StateSecondary_Id, newStateSeconary, oldCase?.LatestSLACountDate);
             
             #endregion
 
