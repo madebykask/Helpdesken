@@ -1,12 +1,11 @@
 ﻿using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.Shared;
 using DH.Helpdesk.Services.Services.UniversalCase;
 using DH.Helpdesk.Web.Infrastructure;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 using DH.Helpdesk.Web.Models.JsonModels.Case;
-using Newtonsoft.Json;
 using System;
 using System.Linq;
-using System.Net.Http;
 using System.Security.Claims;
 using System.Web.Http;
 
@@ -34,37 +33,27 @@ namespace DH.Helpdesk.Web.Areas.WebApi
         {
             var infoToSave = model.ToBussinessModel();
 
-            var currentUser = GetCurrentUser();
+            int curUserId = -1;
+            var claims = RequestContext.GetClaims(ClaimTypes.Sid, ClaimTypes.Role);                        
+            if (claims.Any())
+            {
+                if (claims[0] != null)
+                    int.TryParse(claims[0], out curUserId);
+            }
+
+            if (curUserId == -1)
+                return new ProcessResult("SaveCase", ProcessResult.ResultTypeEnum.ERROR, "Could not retrieve user info").Serialize();
+            
             var res = _universalCaseService.SaveCase(
-                    infoToSave, 
-                    new AuxCaseModel(1, 
-                                     currentUser.Item1, 
-                                     TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"), 
-                                     User.Identity.Name, 
-                                     RequestExtension.GetAbsoluteUrl())
+                        infoToSave, 
+                        new AuxCaseModel(1,
+                                         curUserId,                                      
+                                         User.Identity.Name, 
+                                         RequestExtension.GetAbsoluteUrl())
             );
 
-            return JsonConvert.SerializeObject(res);
-        }
+            return res.Serialize();
+        }        
 
-        private Tuple<int, string> GetCurrentUser()
-        {
-            var idt = RequestContext.Principal.Identity as ClaimsIdentity;
-            if (idt == null)
-                return new Tuple<int, string>(-1, string.Empty);
-
-            var roles = idt.Claims.Where(x => x.Type == ClaimTypes.Role)
-                                   .Select(x => x.Value).FirstOrDefault();
-
-            var curUserIdStr = idt.Claims.Where(x => x.Type == ClaimTypes.Sid)
-                                   .Select(x => x.Value).FirstOrDefault();
-
-            int curUserId = -1;
-            if (curUserIdStr != null)
-                int.TryParse(curUserIdStr, out curUserId);
-
-            return new Tuple<int, string>(curUserId, roles);
-        }
-      
     }    
 }

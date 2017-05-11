@@ -1,7 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.Extensions
 {
-    using BusinessData.Models.Shared.Input;
-    using Models.JsonModels.Base;
+    using BusinessData.Models.Shared;
     using Newtonsoft.Json;
     using System.Collections.Generic;
     using System.Linq;
@@ -23,14 +22,11 @@
             }
 
             return modelErrors;
-        }
+        }        
 
-        public static string Serialize<T>(this BaseJsonModel<T> model) where T: INewBusinessModel
+        public static string Serialize(this ProcessResult processRes)
         {
-            if (model == null)
-                return string.Empty;
-
-            return JsonConvert.SerializeObject(model);            
+            return (processRes == null) ? string.Empty : JsonConvert.SerializeObject(processRes);
         }
 
     }

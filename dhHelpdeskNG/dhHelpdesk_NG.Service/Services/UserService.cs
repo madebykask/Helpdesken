@@ -79,6 +79,7 @@ namespace DH.Helpdesk.Services.Services
         bool UserHasActiveCase(int customerId, int userId, List<int> workingGroups);
 
         User GetUser(int id);
+        string GetUserTimeZoneId(int userId);
         UserRole GetUserRoleById(int id);
         UserWorkingGroup GetUserWorkingGroupById(int userId, int workingGroupId);
 
@@ -410,6 +411,10 @@ namespace DH.Helpdesk.Services.Services
             return this._userRepository.GetById(id);
         }
 
+        public string GetUserTimeZoneId(int userId)
+        {
+            return _userRepository.GetUserTimeZoneId(userId);
+        }
         public UserRole GetUserRoleById(int id)
         {
             return this._userRoleRepository.GetById(id);

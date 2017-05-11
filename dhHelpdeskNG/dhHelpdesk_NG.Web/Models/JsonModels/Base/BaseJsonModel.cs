@@ -1,5 +1,6 @@
 ﻿using DH.Helpdesk.BusinessData.Models.Shared.Input;
 using DH.Helpdesk.Common.Constants;
+using Newtonsoft.Json;
 using System;
 
 namespace DH.Helpdesk.Web.Models.JsonModels.Base
@@ -67,6 +68,11 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Base
                         break;
                 }
             }
+        }
+
+        public string Serialize()
+        {
+            return (this == null) ? string.Empty : JsonConvert.SerializeObject(this);
         }
     }
     

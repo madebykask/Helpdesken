@@ -1,5 +1,4 @@
-﻿
-using DH.Helpdesk.BusinessData.Models.Case;
+﻿using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Shared;
 
 namespace DH.Helpdesk.Services.Services.UniversalCase
@@ -9,5 +8,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
         CaseModel GetCase(int id);
 
         ProcessResult SaveCase(CaseModel caseModel, AuxCaseModel auxModel);
+
+        CaseTimeMetricsModel ClaculateCaseTimeMetrics(CaseModel caseModel, AuxCaseModel auxModel, CaseModel oldCase = null);
     }
 }

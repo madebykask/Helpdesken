@@ -18,17 +18,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
 {   
     public class UniversalCaseService: IUniversalCaseService
     {
-
-        private class CaseTimeMetrics
-        {
-            public int ExternalTime { get; set; }
-            public int ActionExternalTime { get; set; }
-            public int LeadTime { get; set; }
-            public int LeadTimeForNow { get; set; }
-            public int ActionLeadTime { get; set; }
-            public DateTime? LatestSLACountDate { get; set; }
-        }
-
+        
         private const string _CASE_TEXT = "ärendet";
         private const string _INVALID_TEXT = "är inte giltigt";        
         private const string _INVALID_EMPTY_TEXT = "kan inte vara tomt";        
@@ -50,6 +40,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
 
         private readonly ICaseRepository _caseRepository;
         private readonly ICustomerService _customerService;
+        private readonly IUserService _userService;
         private readonly IWorkingGroupService _workingGroupService;
         private readonly ICaseFieldSettingService _caseFieldSettingService;
         private readonly ITextTranslationService _textTranslationService;
@@ -61,6 +52,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
 
         public UniversalCaseService(ICaseRepository caseRepository,
                                     ICustomerService customerService,
+                                    IUserService userService,
                                     IWorkingGroupService workingGroupService,
                                     ICaseFieldSettingService caseFieldSettingService,
                                     ITextTranslationService textTranslationService,
@@ -71,6 +63,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
         {
             _caseRepository = caseRepository;
             _customerService = customerService;
+            _userService = userService;
             _workingGroupService = workingGroupService;
             _caseFieldSettingService = caseFieldSettingService;
             _textTranslationService = textTranslationService;
@@ -97,17 +90,126 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                 var _validationRes = ValidateCase(caseModel);
                 //if (_validationRes.IsSucceed)
 
-                //var caseMailSetting = new CaseMailSetting(
-                //    curCustomer.NewCaseEmailList,
-                //    curCustomer.HelpdeskEmail,
-                //    auxModel.AbsolutreUrl,
-                //    setting.DontConnectUserToWorkingGroup);
+               
 
                 var mailSender = GetMailSenders(caseModel);
                 return new ProcessResult("Save Case");
             }
             else
                 return res;
+        }
+
+        public CaseTimeMetricsModel ClaculateCaseTimeMetrics(CaseModel caseModel, AuxCaseModel auxModel, CaseModel oldCase = null)
+        {
+            var ret = new CaseTimeMetricsModel
+            {
+                ExternalTime = 0,
+                ActionExternalTime = 0,
+                LeadTime = 0,
+                LeadTimeForNow = 0,
+                ActionLeadTime = 0,
+                LatestSLACountDate = null
+            };
+
+            if (oldCase == null)
+                oldCase = _caseRepository.GetCase(caseModel.Id);
+
+            var isEditMode = caseModel.Id != 0;
+            var curCustomer = _customerService.GetCustomer(caseModel.Customer_Id);
+            var setting = _settingService.GetCustomerSetting(curCustomer.Id);
+            var customerTimeOffset = setting.TimeZone_offset;
+
+            if (auxModel.UserTimeZone == null)
+            {
+                auxModel.UserTimeZone = TimeZoneInfo.Local;
+                var timeZoneId = _userService.GetUserTimeZoneId(auxModel.CurrentUserId);
+                if (timeZoneId != string.Empty)
+                    auxModel.UserTimeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
+
+            }
+
+            var workTimeCalcFactory = new WorkTimeCalculatorFactory(
+                                            _holidayService,
+                                            curCustomer.WorkingDayStart,
+                                            curCustomer.WorkingDayEnd,
+                                            auxModel.UserTimeZone);
+
+            int[] deptIds = null;
+            if (caseModel.Department_Id.HasValue)
+            {
+                deptIds = new int[] { caseModel.Department_Id.Value };
+            }
+
+            #region ExtenalTime & ActionExtenalTime 
+
+            if (isEditMode && oldCase != null)
+            {
+                if (oldCase.StateSecondary_Id.HasValue)
+                {
+                    var caseSubState = _stateSecondaryService.GetStateSecondary(oldCase.StateSecondary_Id.Value);
+                    if (caseSubState.IncludeInCaseStatistics == 0)
+                    {
+                        var workTimeCalc = workTimeCalcFactory.Build(oldCase.ChangedTime, auxModel.UtcNow, deptIds);
+                        ret.ExternalTime = workTimeCalc.CalculateWorkTime(
+                            oldCase.ChangedTime,
+                            auxModel.UtcNow,
+                            oldCase.Department_Id) + oldCase.ExternalTime;
+
+                        workTimeCalc = workTimeCalcFactory.Build(oldCase.ChangedTime, auxModel.UtcNow, deptIds, customerTimeOffset);
+                        ret.ActionExternalTime = workTimeCalc.CalculateWorkTime(
+                            oldCase.ChangedTime,
+                            auxModel.UtcNow,
+                            oldCase.Department_Id, customerTimeOffset);
+                    }
+                }
+            }
+            #endregion
+
+            #region LeadTime & ActionLeadTime
+
+            var isCaseGoingToFinish = caseModel.FinishingType_Id.IsValueChanged() &&
+                                      caseModel.FinishingType_Id.HasValue &&
+                                      caseModel.FinishingType_Id.Value > 0;
+
+            DateTime uBoundDate = isCaseGoingToFinish ? caseModel.FinishingDate.Value : auxModel.UtcNow;
+
+            /*Always claculate LeadTime (FinishingTime|UtcNow)*/
+            var leadWorkTimeCalc = workTimeCalcFactory.Build(caseModel.RegTime, uBoundDate, deptIds);
+            var leadTime = leadWorkTimeCalc.CalculateWorkTime(
+                caseModel.RegTime,
+                uBoundDate.ToUniversalTime(),
+                caseModel.Department_Id) - ret.ExternalTime;
+
+            ret.LeadTime = isCaseGoingToFinish ? leadTime : NotChangedValue.INT;
+            ret.LeadTimeForNow = leadTime;
+
+            if (oldCase != null && oldCase.Id > 0)
+            {
+                var actionLeadWorkTimeCalc = workTimeCalcFactory.Build(oldCase.ChangedTime, uBoundDate, deptIds, customerTimeOffset);
+                var actionLeadTime = actionLeadWorkTimeCalc.CalculateWorkTime(
+                    oldCase.ChangedTime,
+                    uBoundDate.ToUniversalTime(),
+                    oldCase.Department_Id, customerTimeOffset) - ret.ActionExternalTime;
+                ret.ActionLeadTime = actionLeadTime;
+            }
+
+            #endregion
+
+            #region LatestSLACountDate
+
+            int? newStateSeconary = null;
+            if (isEditMode && !caseModel.StateSecondary_Id.IsValueChanged())
+                newStateSeconary = oldCase?.StateSecondary_Id;
+            else if (!caseModel.StateSecondary_Id.IsValueChanged())
+                newStateSeconary = null;
+            else
+                newStateSeconary = caseModel.StateSecondary_Id;
+
+            ret.LatestSLACountDate = CalculateLatestSLACountDate(oldCase?.StateSecondary_Id, newStateSeconary, oldCase?.LatestSLACountDate);
+
+            #endregion
+
+            return ret;
         }
 
         private ProcessResult PrimaryValidate(ref CaseModel caseModel)
@@ -195,9 +297,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             _UNIT_TEXTS = new string[] { _INVALID_TEXT, _INVALID_EMPTY_TEXT, _CASE_TEXT };
             _localTranslations = _textTranslationService.GetTranslationsFor(_UNIT_TEXTS.ToList(), _currentLanguageId);
             _caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettingsWithLanguages(caseModel.Customer_Id, _currentLanguageId).ToList();
-            _customerUser = _customerUserService.GetCustomerSettings(caseModel.Customer_Id, auxModel.CurrentUserId);
-            var curCustomer = _customerService.GetCustomer(caseModel.Customer_Id);            
-            var setting = _settingService.GetCustomerSetting(curCustomer.Id);
+            _customerUser = _customerUserService.GetCustomerSettings(caseModel.Customer_Id, auxModel.CurrentUserId);            
             var oldCase = new CaseModel();
 
             /*Apply rules*/
@@ -255,7 +355,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             if (caseModel.ProductArea_Id.HasValue && caseModel.ProductAreaSetDate == null)
                 caseModel.ProductAreaSetDate = auxModel.UtcNow;
 
-            var calculatedTimes = GetClaculatedTimes(caseModel, auxModel, oldCase);
+            var calculatedTimes = ClaculateCaseTimeMetrics(caseModel, auxModel, oldCase);
             caseModel.LeadTime = calculatedTimes.LeadTime;
             caseModel.ExternalTime = calculatedTimes.ExternalTime;
             caseModel.LatestSLACountDate = calculatedTimes.LatestSLACountDate;
@@ -319,129 +419,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
         {            
             var translations = _localTranslations.Where(t => t.Key.Equals(text, StringComparison.CurrentCultureIgnoreCase)).ToList();
             return translations.Any() ? translations.First().Value : text;
-        }
-
-        private MailSenders GetMailSenders(CaseModel caseModel)
-        {
-            var mailSenders = new MailSenders();
-            if (caseModel.WorkingGroup_Id.HasValue && caseModel.WorkingGroup_Id.IsValueChanged())
-            {
-                var curWG = _workingGroupService.GetWorkingGroup(caseModel.WorkingGroup_Id.Value);
-                mailSenders.WGEmail = curWG.EMail;
-            }
-
-            if (caseModel.DefaultOwnerWG_Id.HasValue && caseModel.DefaultOwnerWG_Id.IsValueChanged())
-            {
-                var curWG = _workingGroupService.GetWorkingGroup(caseModel.DefaultOwnerWG_Id.Value);
-                mailSenders.DefaultOwnerWGEMail = curWG.EMail;
-            }
-
-            return mailSenders;
-        }
-
-        private CaseTimeMetrics GetClaculatedTimes(CaseModel caseModel, AuxCaseModel auxModel, CaseModel oldCase = null)
-        {
-            var ret = new CaseTimeMetrics
-            {
-                ExternalTime = 0,
-                ActionExternalTime = 0,
-                LeadTime = 0,
-                LeadTimeForNow =0,
-                ActionLeadTime = 0,
-                LatestSLACountDate = null
-            };
-
-            if (oldCase == null)
-                oldCase = _caseRepository.GetCase(caseModel.Id);
-
-            var isEditMode = caseModel.Id != 0;
-            var curCustomer = _customerService.GetCustomer(caseModel.Customer_Id);
-            var setting = _settingService.GetCustomerSetting(curCustomer.Id);
-            var customerTimeOffset = setting.TimeZone_offset;
-
-            var workTimeCalcFactory = new WorkTimeCalculatorFactory(
-                                            _holidayService,
-                                            curCustomer.WorkingDayStart,
-                                            curCustomer.WorkingDayEnd,
-                                            auxModel.UserTimeZone);
-
-            int[] deptIds = null;
-            if (caseModel.Department_Id.HasValue)
-            {
-                deptIds = new int[] { caseModel.Department_Id.Value };
-            }
-
-            #region ExtenalTime & ActionExtenalTime 
-
-            if (isEditMode && oldCase != null)
-            {
-                if (oldCase.StateSecondary_Id.HasValue)
-                {
-                    var caseSubState = _stateSecondaryService.GetStateSecondary(oldCase.StateSecondary_Id.Value);                    
-                    if (caseSubState.IncludeInCaseStatistics == 0)
-                    {                        
-                        var workTimeCalc = workTimeCalcFactory.Build(oldCase.ChangedTime, auxModel.UtcNow, deptIds);
-                        ret.ExternalTime = workTimeCalc.CalculateWorkTime(
-                            oldCase.ChangedTime,
-                            auxModel.UtcNow,
-                            oldCase.Department_Id) + oldCase.ExternalTime;                       
-
-                        workTimeCalc = workTimeCalcFactory.Build(oldCase.ChangedTime, auxModel.UtcNow, deptIds, customerTimeOffset);
-                        ret.ActionExternalTime = workTimeCalc.CalculateWorkTime(
-                            oldCase.ChangedTime,
-                            auxModel.UtcNow,
-                            oldCase.Department_Id, customerTimeOffset);
-                    }
-                }
-            }
-            #endregion
-
-            #region LeadTime & ActionLeadTime
-
-            var isCaseGoingToFinish = caseModel.FinishingType_Id.IsValueChanged() &&
-                                      caseModel.FinishingType_Id.HasValue &&
-                                      caseModel.FinishingType_Id.Value > 0;
-
-            DateTime uBoundDate = isCaseGoingToFinish? caseModel.FinishingDate.Value : auxModel.UtcNow;
-                        
-            /*Always claculate LeadTime (FinishingTime|UtcNow)*/             
-            var leadWorkTimeCalc = workTimeCalcFactory.Build(caseModel.RegTime, uBoundDate, deptIds);
-            var leadTime = leadWorkTimeCalc.CalculateWorkTime(
-                caseModel.RegTime,
-                uBoundDate.ToUniversalTime(),
-                caseModel.Department_Id) - ret.ExternalTime;
-
-            ret.LeadTime = isCaseGoingToFinish? leadTime : NotChangedValue.INT;
-            ret.LeadTimeForNow = leadTime;
-
-            if (oldCase != null && oldCase.Id > 0)
-            {
-                var actionLeadWorkTimeCalc = workTimeCalcFactory.Build(oldCase.ChangedTime, uBoundDate, deptIds, customerTimeOffset);
-                var actionLeadTime = actionLeadWorkTimeCalc.CalculateWorkTime(
-                    oldCase.ChangedTime,
-                    uBoundDate.ToUniversalTime(),
-                    oldCase.Department_Id, customerTimeOffset) - ret.ActionExternalTime;
-                ret.ActionLeadTime = actionLeadTime;
-            }
-
-            #endregion
-
-            #region LatestSLACountDate
-
-            int? newStateSeconary = null;
-            if (isEditMode && !caseModel.StateSecondary_Id.IsValueChanged())
-                newStateSeconary = oldCase?.StateSecondary_Id;
-            else if (!caseModel.StateSecondary_Id.IsValueChanged())
-                newStateSeconary = null;
-            else
-                newStateSeconary = caseModel.StateSecondary_Id;
-            
-            ret.LatestSLACountDate = CalculateLatestSLACountDate(oldCase?.StateSecondary_Id, newStateSeconary, oldCase?.LatestSLACountDate);
-            
-            #endregion
-
-            return ret;
-        }
+        }                
 
         private DateTime? CalculateLatestSLACountDate(int? oldSubStateId, int? newSubStateId, DateTime? oldSLADate)
         {
@@ -484,6 +462,37 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                 ret = oldSLADate;
 
             return ret;
+        }
+
+        private MailSenders GetMailSenders(CaseModel caseModel)
+        {
+            var mailSenders = new MailSenders();
+            if (caseModel.WorkingGroup_Id.HasValue && caseModel.WorkingGroup_Id.IsValueChanged())
+            {
+                var curWG = _workingGroupService.GetWorkingGroup(caseModel.WorkingGroup_Id.Value);
+                mailSenders.WGEmail = curWG.EMail;
+            }
+
+            if (caseModel.DefaultOwnerWG_Id.HasValue && caseModel.DefaultOwnerWG_Id.IsValueChanged())
+            {
+                var curWG = _workingGroupService.GetWorkingGroup(caseModel.DefaultOwnerWG_Id.Value);
+                mailSenders.DefaultOwnerWGEMail = curWG.EMail;
+            }
+
+            return mailSenders;
+        }
+
+        private CaseMailSetting GetEmailSettings(int customerId, AuxCaseModel auxModel)
+        {
+            var curCustomer = _customerService.GetCustomer(customerId);
+            var setting = _settingService.GetCustomerSetting(customerId);
+            var caseMailSetting = new CaseMailSetting(
+                curCustomer.NewCaseEmailList,
+                curCustomer.HelpdeskEmail,
+                auxModel.AbsolutreUrl,
+                setting.DontConnectUserToWorkingGroup);
+
+            return caseMailSetting;
         }
     }
 }

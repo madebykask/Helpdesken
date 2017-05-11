@@ -67,6 +67,8 @@ namespace DH.Helpdesk.Dal.Repositories
         int? GetUserDefaultWorkingGroupId(int userId, int customerId);
 
         WorkingGroupEntity GetUserDefaultWorkingGroup(int userId, int customerId);
+
+        string GetUserTimeZoneId(int userId);
     }
 
     public sealed class UserRepository : RepositoryBase<User>, IUserRepository
@@ -131,6 +133,14 @@ namespace DH.Helpdesk.Dal.Repositories
             }
 
             return null;
+        }
+
+        public string GetUserTimeZoneId(int userId)
+        {
+            var entity = (from u in this.DataContext.Users.Where(u => u.Id == userId)                                                        
+                          select u.TimeZoneId).FirstOrDefault();
+
+            return entity == null ? string.Empty : entity;            
         }
 
         public WorkingGroupEntity GetUserDefaultWorkingGroup(int userId, int customerId)
