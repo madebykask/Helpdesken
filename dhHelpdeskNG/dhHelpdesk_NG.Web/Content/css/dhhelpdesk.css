@@ -3975,3 +3975,11 @@ table .multitext i {
 .pb5 {
     padding-bottom: 5px !important;
 }
+
+a.export-order {
+    background: url(../icons/doc-download.png) no-repeat;
+    display: block;
+    width: 15px;
+    height: 20px;
+    margin-bottom: -7px;
+}

@@ -1201,6 +1201,7 @@
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\JavaScriptConvertExtention.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\UserFormatterExtension.cs" />
     <Compile Include="Infrastructure\ModelFactories\Case\Concrete\CaseRuleFactory.cs" />
+    <Compile Include="Infrastructure\Order\OrderExportHelper.cs" />
     <Compile Include="Infrastructure\RouteValueDictionaryHelper.cs" />
     <Compile Include="Infrastructure\SelectListMapper.cs" />
     <Compile Include="Infrastructure\Enums.cs" />
