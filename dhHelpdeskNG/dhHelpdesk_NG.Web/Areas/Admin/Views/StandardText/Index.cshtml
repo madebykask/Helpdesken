@@ -40,7 +40,7 @@
                             var isInactive = item.IsActive == 0;
 
                             <tr class="@(isInactive ? "inactive" : "")">
-                                <td><a href="@Url.Action("edit", "standardtext", new {area = "admin", id = item.Id})">@Html.Raw(item.StandardTextName)</a></td>
+                                <td style="width:200px"><a href="@Url.Action("edit", "standardtext", new {area = "admin", id = item.Id})">@Html.Raw(item.StandardTextName)</a></td>
                                 <td>
                                     <a href="@Url.Action("edit", "standardtext", new {area = "admin", id = item.Id})">@Html.Raw(item.Text.Replace("\r\n", "<br />"))</a>
                                 </td>
