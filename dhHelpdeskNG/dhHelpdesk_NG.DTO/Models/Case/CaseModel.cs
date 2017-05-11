@@ -12,7 +12,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
         public decimal CaseNumber { get; set; }
 
-        public Guid CaseGuid { get; set; }
+        public Guid CaseGUID { get; set; }
 
         public int Customer_Id { get; set; }
 
@@ -26,7 +26,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
         public string RegUserDomain {get; set;}
 
-        public int? ChangedByUser_Id { get; set; }
+        public int? ChangeByUser_Id { get; set; }
 
         public int ExternalTime { get; set; } 
 
@@ -47,7 +47,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
         public string PersonsPhone { get; set; }
 
-        public string PersonsCellPhone { get; set; }
+        public string PersonsCellphone { get; set; }
 
         public string CostCentre { get; set; }
 
@@ -151,7 +151,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
         public int? WorkingGroup_Id { get; set; }
 
-        public int? PerformerUser_Id { get; set; }
+        public int? Performer_User_Id { get; set; }
 
         public int? CaseResponsibleUser_Id { get; set; }
 
@@ -167,7 +167,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
         public int? Problem_Id { get; set; }
 
-        public int? CausingPart_Id { get; set; }
+        public int? CausingPartId { get; set; }
 
         public int? Change_Id { get; set; }
 
@@ -217,7 +217,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
         public DateTime RegTime { get; set; }
 
-        public DateTime ChangedTime { get; set; }
+        public DateTime ChangeTime { get; set; }
 
         #endregion
     }

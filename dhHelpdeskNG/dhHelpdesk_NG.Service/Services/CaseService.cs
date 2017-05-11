@@ -81,8 +81,7 @@ namespace DH.Helpdesk.Services.Services
 
         int SaveCase(
             Case cases, 
-            CaseLog caseLog, 
-            CaseMailSetting caseMailSetting, 
+            CaseLog caseLog,             
             int userId, 
             string adUser,
             CaseExtraInfo caseExtraInfo,            
@@ -1048,8 +1047,7 @@ namespace DH.Helpdesk.Services.Services
         /// <returns></returns>
         public int SaveCase(
                 Case cases, 
-                CaseLog caseLog, 
-                CaseMailSetting caseMailSetting, 
+                CaseLog caseLog,                 
                 int userId, 
                 string adUser, 
                 CaseExtraInfo caseExtraInfo,

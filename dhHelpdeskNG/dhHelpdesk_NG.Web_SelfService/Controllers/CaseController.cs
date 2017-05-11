@@ -1054,7 +1054,7 @@
                 }
             }
 
-            int caseHistoryId = _caseService.SaveCase(newCase, caseLog, caseMailSetting, 0, SessionFacade.CurrentUserIdentity.UserId, ei, out errors);
+            int caseHistoryId = _caseService.SaveCase(newCase, caseLog, 0, SessionFacade.CurrentUserIdentity.UserId, ei, out errors);
 
             // save log
             caseLog.CaseId = newCase.Id;

@@ -17,7 +17,7 @@
                 Id = entity.Id,
                 CaseNumber = entity.CaseNumber,
 
-                CaseGuid = entity.CaseGUID,
+                CaseGUID = entity.CaseGUID,
 
                 Customer_Id = entity.Customer_Id,
 
@@ -31,7 +31,7 @@
 
                 RegUserDomain = entity.RegUserDomain,
 
-                ChangedByUser_Id = entity.ChangeByUser_Id,
+                ChangeByUser_Id = entity.ChangeByUser_Id,
 
                 ExternalTime = entity.ExternalTime,
 
@@ -51,7 +51,7 @@
 
                 PersonsPhone = entity.PersonsPhone,
 
-                PersonsCellPhone = entity.PersonsCellphone,
+                PersonsCellphone = entity.PersonsCellphone,
 
                 CostCentre = entity.CostCentre,
 
@@ -153,7 +153,7 @@
 
                 WorkingGroup_Id = entity.WorkingGroup_Id,
 
-                PerformerUser_Id = entity.Performer_User_Id,
+                Performer_User_Id = entity.Performer_User_Id,
 
                 CaseResponsibleUser_Id = entity.CaseResponsibleUser_Id,
 
@@ -163,11 +163,11 @@
 
                 StateSecondary_Id = entity.StateSecondary_Id,
 
-                Project_Id = entity.Priority_Id,
+                Project_Id = entity.Project_Id,
 
                 Problem_Id = entity.Problem_Id,
 
-                CausingPart_Id = entity.CausingPartId,
+                CausingPartId = entity.CausingPartId,
 
                 Change_Id = entity.Change_Id,
 
@@ -213,7 +213,7 @@
 
                 RegTime = entity.RegTime,
 
-                ChangedTime = entity.ChangeTime
+                ChangeTime = entity.ChangeTime
 
             #endregion
             };

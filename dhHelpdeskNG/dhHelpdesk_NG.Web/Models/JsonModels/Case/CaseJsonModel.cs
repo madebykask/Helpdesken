@@ -241,7 +241,7 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
                 #region Base
 
                 Id = Id,
-                CaseGuid = CaseGuid.IsValueChanged()? new Guid(CaseGuid) : NotChangedValue.GUID,
+                CaseGUID = CaseGuid.IsValueChanged()? new Guid(CaseGuid) : NotChangedValue.GUID,
                 CaseNumber = CaseNumber,
                 Customer_Id = Customer_Id,
                 User_Id = User_Id,
@@ -249,7 +249,7 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
                 RegLanguage_Id = RegLanguage_Id,
                 RegUserId = RegUserId,
                 RegUserDomain = RegUserDomain,
-                ChangedByUser_Id = ChangedByUser_Id,
+                ChangeByUser_Id = ChangedByUser_Id,
                 ExternalTime = ExternalTime,
                 Deleted = Deleted,
 
@@ -262,7 +262,7 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
                 PersonsEmail = PersonsEmail,
                 NoMailToNotifier = NoMailToNotifier,
                 PersonsPhone = PersonsPhone,
-                PersonsCellPhone = PersonsCellPhone,
+                PersonsCellphone = PersonsCellPhone,
                 CostCentre = CostCentre,
                 Place = Place,
                 UserCode = UserCode,
@@ -326,7 +326,7 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
                 #region Other Info
 
                 WorkingGroup_Id = WorkingGroup_Id,
-                PerformerUser_Id = PerformerUser_Id,
+                Performer_User_Id = PerformerUser_Id,
                 CaseResponsibleUser_Id = CaseResponsibleUser_Id,
                 Priority_Id = Priority_Id,
                 Status_Id = Status_Id,
@@ -334,7 +334,7 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
                 Project_Id = Project_Id,
                 ProjectSchedule_Id = ProjectSchedule_Id,
                 Problem_Id = Problem_Id,
-                CausingPart_Id = CausingPart_Id,
+                CausingPartId = CausingPart_Id,
                 Change_Id = Change_Id,
                 PlanDate = PlanDate,
                 WatchDate = WatchDate,
@@ -359,7 +359,7 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
                 Moved = Moved,
                 LatestSLACountDate = LatestSLACountDate,
                 RegTime = RegTime,
-                ChangedTime = ChangedTime
+                ChangeTime = ChangedTime
                 #endregion
             };
         }
@@ -377,7 +377,7 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
                 #region Base
 
                 Id = model.Id,
-                CaseGuid = model.CaseGuid.ToString(),
+                CaseGuid = model.CaseGUID.ToString(),
                 CaseNumber = (int) model.CaseNumber,
                 Customer_Id = model.Customer_Id,
                 User_Id = model.User_Id,
@@ -385,7 +385,7 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
                 RegLanguage_Id = model.RegLanguage_Id,
                 RegUserId = model.RegUserId,
                 RegUserDomain = model.RegUserDomain,
-                ChangedByUser_Id = model.ChangedByUser_Id,
+                ChangedByUser_Id = model.ChangeByUser_Id,
                 ExternalTime = model.ExternalTime,
                 Deleted = model.Deleted,
 
@@ -398,7 +398,7 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
                 PersonsEmail = model.PersonsEmail,
                 NoMailToNotifier = model.NoMailToNotifier,
                 PersonsPhone = model.PersonsPhone,
-                PersonsCellPhone = model.PersonsCellPhone,
+                PersonsCellPhone = model.PersonsCellphone,
                 CostCentre = model.CostCentre,
                 Place = model.Place,
                 UserCode = model.UserCode,
@@ -462,7 +462,7 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
                 #region Other Info
 
                 WorkingGroup_Id = model.WorkingGroup_Id,
-                PerformerUser_Id = model.PerformerUser_Id,
+                PerformerUser_Id = model.Performer_User_Id,
                 CaseResponsibleUser_Id = model.CaseResponsibleUser_Id,
                 Priority_Id = model.Priority_Id,
                 Status_Id = model.Status_Id,
@@ -470,7 +470,7 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
                 Project_Id = model.Project_Id,
                 ProjectSchedule_Id = model.ProjectSchedule_Id,
                 Problem_Id = model.Problem_Id,
-                CausingPart_Id = model.CausingPart_Id,
+                CausingPart_Id = model.CausingPartId,
                 Change_Id = model.Change_Id,
                 PlanDate = model.PlanDate,
                 WatchDate = model.WatchDate,
@@ -495,7 +495,7 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
                 Moved = model.Moved,
                 LatestSLACountDate = model.LatestSLACountDate,
                 RegTime = model.RegTime,
-                ChangedTime = model.ChangedTime
+                ChangedTime = model.ChangeTime
                 #endregion
             };
         }

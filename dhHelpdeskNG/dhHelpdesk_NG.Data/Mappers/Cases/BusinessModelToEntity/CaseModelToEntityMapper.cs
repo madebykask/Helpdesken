@@ -16,14 +16,14 @@
 
             entity.Id = businessModel.Id;
             entity.CaseNumber = businessModel.CaseNumber;
-            entity.CaseGUID = businessModel.CaseGuid;
+            entity.CaseGUID = businessModel.CaseGUID;
             entity.Customer_Id = businessModel.Customer_Id;
             entity.User_Id = businessModel.User_Id;
             entity.IpAddress = businessModel.IpAddress;
             entity.RegLanguage_Id = businessModel.RegLanguage_Id;
             entity.RegUserId = businessModel.RegUserId;
             entity.RegUserDomain = businessModel.RegUserDomain;
-            entity.ChangeByUser_Id = businessModel.ChangedByUser_Id;
+            entity.ChangeByUser_Id = businessModel.ChangeByUser_Id;
             entity.ExternalTime = businessModel.ExternalTime;
             entity.Deleted = businessModel.Deleted;             
 
@@ -38,7 +38,7 @@
             //NoMailToNotifier = entity.ma
 
             entity.PersonsPhone = businessModel.PersonsPhone;
-            entity.PersonsCellphone = businessModel.PersonsCellPhone;
+            entity.PersonsCellphone = businessModel.PersonsCellphone;
             entity.CostCentre = businessModel.CostCentre;
             entity.Place = businessModel.Place;
             entity.UserCode = businessModel.UserCode;
@@ -88,14 +88,14 @@
             #region Other Info
 
             entity.WorkingGroup_Id = businessModel.WorkingGroup_Id;
-            entity.Performer_User_Id = businessModel.PerformerUser_Id;
+            entity.Performer_User_Id = businessModel.Performer_User_Id;
             entity.CaseResponsibleUser_Id = businessModel.CaseResponsibleUser_Id;
             entity.Priority_Id = businessModel.Priority_Id;
             entity.Status_Id = businessModel.Status_Id;
             entity.StateSecondary_Id = businessModel.StateSecondary_Id;
-            entity.Project_Id = businessModel.Priority_Id;
+            entity.Project_Id = businessModel.Project_Id;
             entity.Problem_Id = businessModel.Problem_Id;
-            entity.CausingPartId = businessModel.CausingPart_Id;
+            entity.CausingPartId = businessModel.CausingPartId;
             entity.Change_Id = businessModel.Change_Id;
             entity.PlanDate = businessModel.PlanDate;
             entity.WatchDate = businessModel.WatchDate;
@@ -117,7 +117,7 @@
             entity.LatestSLACountDate = businessModel.LatestSLACountDate;
             //entity.Moved = businessModel.Moved.Value;
             entity.RegTime = businessModel.RegTime;
-            entity.ChangeTime = businessModel.ChangedTime;
+            entity.ChangeTime = businessModel.ChangeTime;
             #endregion
         }
     }

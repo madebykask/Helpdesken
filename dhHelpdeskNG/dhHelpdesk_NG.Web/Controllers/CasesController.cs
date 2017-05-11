@@ -2949,8 +2949,7 @@ namespace DH.Helpdesk.Web.Controllers
             // save case and case history
             int caseHistoryId = this._caseService.SaveCase(
                         case_,
-                        caseLog,
-                        caseMailSetting,
+                        caseLog,                        
                         SessionFacade.CurrentUser.Id,
                         this.User.Identity.Name,
                         ei,
@@ -3176,7 +3175,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             // save case and case history
             var ei = new CaseExtraInfo() { CreatedByApp = CreatedByApplications.Helpdesk5, LeadTimeForNow = 0, ActionLeadTime = 0, ActionExternalTime = 0 };
-            int caseHistoryId = this._caseService.SaveCase(c, caseLog, null, SessionFacade.CurrentUser.Id, this.User.Identity.Name, ei, out errors);
+            int caseHistoryId = this._caseService.SaveCase(c, caseLog, SessionFacade.CurrentUser.Id, this.User.Identity.Name, ei, out errors);
             caseLog.CaseHistoryId = caseHistoryId;
         }
 
@@ -3366,7 +3365,7 @@ namespace DH.Helpdesk.Web.Controllers
             //End
 
             //var ei = new CaseExtraInfo() {CreatedByApp = CreatedByApplications.Helpdesk5, LeadTimeForNow = 0, ActionLeadTime = 0, ActionExternalTime = 0 };
-            int caseHistoryId = this._caseService.SaveCase(oldCase, caseLog, null, SessionFacade.CurrentUser.Id, this.User.Identity.Name, ei, out errors);
+            int caseHistoryId = this._caseService.SaveCase(oldCase, caseLog, SessionFacade.CurrentUser.Id, this.User.Identity.Name, ei, out errors);
             caseLog.CaseHistoryId = caseHistoryId;
 
             //find files for old log

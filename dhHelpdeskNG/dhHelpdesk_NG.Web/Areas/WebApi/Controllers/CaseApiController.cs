@@ -4,7 +4,6 @@ using DH.Helpdesk.Services.Services.UniversalCase;
 using DH.Helpdesk.Web.Infrastructure;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 using DH.Helpdesk.Web.Models.JsonModels.Case;
-using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Web.Http;
