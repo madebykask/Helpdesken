@@ -108,13 +108,31 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             return res;
         }
 
-        private ProcessResult DoSaveCase(CaseModel caseModel, AuxCaseModel auxModel)
+        private ProcessResult DoSaveCase(CaseModel caseModel, AuxCaseModel auxModel, CaseTimeMetricsModel timesModel)
         {
             /*TODO: After merge CaseServices case must be sent to the Repository directly from here(No need to use CaseService) */
             /* Conver caseModel to Case entity to make ready for Save method */
 
             var caseEntity = ConvertCaseModelToCase(caseModel);
-            //var historyId = _caseService.SaveCase(ca);
+            var logEntity = GetCaseLog(caseModel);
+            var extraInfo = new CaseExtraInfo()
+            {
+                ActionExternalTime = timesModel.ActionExternalTime,
+                ActionLeadTime = timesModel.ActionLeadTime,
+                LeadTimeForNow = timesModel.LeadTimeForNow,
+                CreatedByApp = auxModel.CurrentApp 
+            };
+
+            IDictionary<string, string> errors;
+            var historyId = _caseService.SaveCase(caseEntity, logEntity, auxModel.CurrentUserId, 
+                                                  auxModel.UserIdentityName, extraInfo, out errors);
+
+            if (errors.Any())
+                return new ProcessResult("Do Save Case", ResultTypeEnum.ERROR, "Save could not be saved!", errors);
+
+            logEntity.CaseId = caseEntity.Id;
+            logEntity.CaseHistoryId = historyId;
+            // Start to Save Log
             return new ProcessResult("Do save case");
         }
 
@@ -658,5 +676,22 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             return caseEntity;
         }
         
+        private CaseLog GetCaseLog(CaseModel caseModel)
+        {
+            var ret = new CaseLog
+            {
+                Id = 0, // Will bet set after save case
+                CaseHistoryId = 0, // Will bet set after save case
+                CaseId = caseModel.Id,
+                FinishingDate = (caseModel.FinishingDate.IsValueChanged()? caseModel.FinishingDate: null),
+                FinishingType = (caseModel.FinishingType_Id.IsValueChanged() ? caseModel.FinishingType_Id : null),                
+                LogGuid = Guid.NewGuid(),
+                LogType = 0,
+                TextExternal = caseModel.Text_External,
+                TextInternal = caseModel.Text_Internal
+            };
+            
+            return ret;
+        }
     }
 }

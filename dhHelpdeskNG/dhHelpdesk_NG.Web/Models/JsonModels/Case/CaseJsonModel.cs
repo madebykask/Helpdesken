@@ -5,7 +5,7 @@ using DH.Helpdesk.Common.Extensions.String;
 using DH.Helpdesk.Common.Constants;
 
 namespace DH.Helpdesk.Web.Models.JsonModels.Case
-{    
+{
     public class CaseJsonModel : BaseJsonModel<CaseModel>
     {
         public CaseJsonModel()
@@ -231,6 +231,12 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
 
         #endregion
 
+        #region Log
+
+        public string Text_External { get; set; }
+        public string Text_Internal { get; set; }
+
+        #endregion
 
         #region Methods
 
@@ -241,7 +247,7 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
                 #region Base
 
                 Id = Id,
-                CaseGUID = CaseGuid.IsValueChanged()? new Guid(CaseGuid) : NotChangedValue.GUID,
+                CaseGUID = CaseGuid.IsValueChanged() ? new Guid(CaseGuid) : NotChangedValue.GUID,
                 CaseNumber = CaseNumber,
                 Customer_Id = Customer_Id,
                 User_Id = User_Id,
@@ -359,7 +365,14 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
                 Moved = Moved,
                 LatestSLACountDate = LatestSLACountDate,
                 RegTime = RegTime,
-                ChangeTime = ChangedTime
+                ChangeTime = ChangedTime,
+                #endregion
+
+                #region Log
+
+                Text_External = Text_External,
+                Text_Internal = Text_Internal
+
                 #endregion
             };
         }
@@ -495,9 +508,16 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
                 Moved = model.Moved,
                 LatestSLACountDate = model.LatestSLACountDate,
                 RegTime = model.RegTime,
-                ChangedTime = model.ChangeTime
+                ChangedTime = model.ChangeTime,
                 #endregion
-            };
+
+                #region Log
+
+                Text_External = model.Text_External,
+                Text_Internal = model.Text_Internal
+
+                #endregion
+    };
         }
     }
 }

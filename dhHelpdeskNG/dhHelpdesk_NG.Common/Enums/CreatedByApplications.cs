@@ -4,6 +4,8 @@
     {
         public static readonly string Helpdesk5 = "helpdesk5";        
 
-        public static readonly string SelfService5 = "selfservice5";        
+        public static readonly string SelfService5 = "selfservice5";
+
+        public static readonly string Helpdesk5Api = "helpdesk5api";
     }
 }

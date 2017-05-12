@@ -1,5 +1,6 @@
 ﻿using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Shared;
+using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Services.Services.UniversalCase;
 using DH.Helpdesk.Web.Infrastructure;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
@@ -48,7 +49,8 @@ namespace DH.Helpdesk.Web.Areas.WebApi
                         new AuxCaseModel(1,
                                          curUserId,                                      
                                          User.Identity.Name, 
-                                         RequestExtension.GetAbsoluteUrl())
+                                         RequestExtension.GetAbsoluteUrl(),
+                                         CreatedByApplications.Helpdesk5Api)
             );
 
             return res.Serialize();

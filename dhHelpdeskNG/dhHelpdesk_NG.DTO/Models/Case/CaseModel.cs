@@ -220,5 +220,13 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         public DateTime ChangeTime { get; set; }
 
         #endregion
+
+        #region Log
+        public string Text_External { get; set; }
+
+        public string Text_Internal { get; set; }
+
+        #endregion
+
     }
 }

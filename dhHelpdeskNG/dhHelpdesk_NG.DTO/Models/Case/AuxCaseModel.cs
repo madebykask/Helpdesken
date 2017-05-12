@@ -7,13 +7,14 @@ namespace DH.Helpdesk.BusinessData.Models.Case
     {
         public AuxCaseModel(int currentLanguageId, int currentUserId, 
                             string userIdentityName, string aboluteUrl,
-                            TimeZoneInfo userTimeZone = null)
+                            string currentApp, TimeZoneInfo userTimeZone = null)
         {
             UtcNow = DateTime.UtcNow;
             CurrentLanguageId = currentLanguageId;
             CurrentUserId = currentUserId;            
             UserIdentityName = userIdentityName;
             AbsolutreUrl = aboluteUrl;
+            CurrentApp = currentApp;
             UserTimeZone = userTimeZone;
         }
 
@@ -26,6 +27,8 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         public string UserIdentityName { get; }
 
         public string AbsolutreUrl { get; }
+
+        public string CurrentApp { get; }
 
         public TimeZoneInfo UserTimeZone { get; set; }
 
