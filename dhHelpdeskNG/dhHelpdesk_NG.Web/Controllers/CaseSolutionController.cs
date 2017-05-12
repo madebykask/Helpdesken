@@ -178,14 +178,15 @@ namespace DH.Helpdesk.Web.Controllers
             return PartialView("_RowsOverview", model.Rows);
         }
 
-        [HttpGet]
-        public PartialViewResult Search(string searchText)
+        [HttpPost]
+        public PartialViewResult Search(string searchText, List<int> categoryIds)
         {
             var caseSolutionSearch = new CaseSolutionSearch();
             if (SessionFacade.CurrentCaseSolutionSearch != null)
                 caseSolutionSearch = SessionFacade.CurrentCaseSolutionSearch;
 
-            caseSolutionSearch.SearchCss = searchText;            
+            caseSolutionSearch.SearchCss = searchText;
+            caseSolutionSearch.CategoryIds = categoryIds.ToList();
             SessionFacade.CurrentCaseSolutionSearch = caseSolutionSearch;
 
             var model = CreateIndexViewModel(caseSolutionSearch);

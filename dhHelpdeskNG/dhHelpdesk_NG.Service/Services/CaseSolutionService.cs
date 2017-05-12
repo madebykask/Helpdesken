@@ -202,6 +202,11 @@ namespace DH.Helpdesk.Services.Services
                                    );
             }
 
+            if (SearchCaseSolutions.CategoryIds != null && SearchCaseSolutions.CategoryIds.Any())
+            {
+                query = query.Where(x => x.CaseSolutionCategory_Id.HasValue && SearchCaseSolutions.CategoryIds.Contains(x.CaseSolutionCategory_Id.Value));
+            }
+
             #endregion
 
             #region Sort
