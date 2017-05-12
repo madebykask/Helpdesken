@@ -7,15 +7,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DH.Helpdesk.BusinessData.Models;
-using static DH.Helpdesk.BusinessData.Models.Shared.ProcessResult;
 using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Services.Utils;
 using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Common.Extensions.String;
-using System.Reflection;
 using DH.Helpdesk.Common.Extensions.Decimal;
+using DH.Helpdesk.Common.Enums.BusinessRule;
+using static DH.Helpdesk.BusinessData.Models.Shared.ProcessResult;
+using DH.Helpdesk.Common.Extensions.GUID;
 
 namespace DH.Helpdesk.Services.Services.UniversalCase
 {   
@@ -52,7 +53,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
         private readonly ISettingService _settingService;
         private readonly IHolidayService _holidayService;
         private readonly ICaseService _caseService;
-
+        private readonly ILogService _logService;
 
         public UniversalCaseService(ICaseRepository caseRepository,
                                     ICustomerService customerService,
@@ -64,7 +65,8 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                                     IStateSecondaryService stateSecondaryService,
                                     ISettingService settingService,
                                     IHolidayService holidayService,
-                                    ICaseService caseService)
+                                    ICaseService caseService,
+                                    ILogService logService)
         {
             _caseRepository = caseRepository;
             _customerService = customerService;
@@ -77,6 +79,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             _settingService = settingService;
             _holidayService = holidayService;
             _caseService = caseService;
+            _logService = logService;
         }
 
         public CaseModel GetCase(int id)
@@ -89,53 +92,23 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             var res = new ProcessResult("Save Case");
 
             res = PrimaryValidate(ref caseModel);
-            if (!res.IsSucceed)
-                return res;
-
-            res = CloneCase(ref caseModel, auxModel);            
             if (res.IsSucceed)
             {
-                res = ValidateCase(caseModel);
+                var timeMetrics = new CaseTimeMetricsModel();
+                res = CloneCase(ref caseModel, auxModel, out timeMetrics);
                 if (res.IsSucceed)
                 {
-                    res = DoSaveCase(caseModel, auxModel);
+                    res = ValidateCase(caseModel);
                     if (res.IsSucceed)
                     {
                         var emailSettings = GetEmailSettings(caseModel, auxModel);
+                        res = DoSaveCase(caseModel, auxModel, timeMetrics, emailSettings);
                     }
                 }
             }
             return res;
         }
-
-        private ProcessResult DoSaveCase(CaseModel caseModel, AuxCaseModel auxModel, CaseTimeMetricsModel timesModel)
-        {
-            /*TODO: After merge CaseServices case must be sent to the Repository directly from here(No need to use CaseService) */
-            /* Conver caseModel to Case entity to make ready for Save method */
-
-            var caseEntity = ConvertCaseModelToCase(caseModel);
-            var logEntity = GetCaseLog(caseModel);
-            var extraInfo = new CaseExtraInfo()
-            {
-                ActionExternalTime = timesModel.ActionExternalTime,
-                ActionLeadTime = timesModel.ActionLeadTime,
-                LeadTimeForNow = timesModel.LeadTimeForNow,
-                CreatedByApp = auxModel.CurrentApp 
-            };
-
-            IDictionary<string, string> errors;
-            var historyId = _caseService.SaveCase(caseEntity, logEntity, auxModel.CurrentUserId, 
-                                                  auxModel.UserIdentityName, extraInfo, out errors);
-
-            if (errors.Any())
-                return new ProcessResult("Do Save Case", ResultTypeEnum.ERROR, "Save could not be saved!", errors);
-
-            logEntity.CaseId = caseEntity.Id;
-            logEntity.CaseHistoryId = historyId;
-            // Start to Save Log
-            return new ProcessResult("Do save case");
-        }
-
+       
         public CaseTimeMetricsModel ClaculateCaseTimeMetrics(CaseModel caseModel, AuxCaseModel auxModel, CaseModel oldCase = null)
         {
             var ret = new CaseTimeMetricsModel
@@ -248,6 +221,56 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             return ret;
         }
 
+
+
+
+        private ProcessResult DoSaveCase(CaseModel caseModel, AuxCaseModel auxModel,
+                                         CaseTimeMetricsModel timesModel,
+                                         CaseMailSetting mailSettings)
+        {
+            /*TODO: After merge CaseServices case must be sent to the Repository directly from here(No need to use CaseService anymore) */
+            /* Convert caseModel to Case entity to make it ready for Save method */
+
+            var oldCase = new Case();
+            if (caseModel.Id != 0)
+                oldCase = _caseService.GetCaseById(caseModel.Id);
+
+            var caseEntity = ConvertCaseModelToCase(caseModel, oldCase);
+            var logEntity = GetCaseLog(caseModel);
+            var extraInfo = new CaseExtraInfo()
+            {
+                ActionExternalTime = timesModel.ActionExternalTime,
+                ActionLeadTime = timesModel.ActionLeadTime,
+                LeadTimeForNow = timesModel.LeadTimeForNow,
+                CreatedByApp = auxModel.CurrentApp
+            };
+
+            IDictionary<string, string> errors;
+            var historyId = _caseService.SaveCase(caseEntity, logEntity, auxModel.CurrentUserId,
+                                                  auxModel.UserIdentityName, extraInfo, out errors);
+
+            if (errors.Any())
+                return new ProcessResult("Do Save Case", ResultTypeEnum.ERROR, "Save could not be saved!", errors);
+
+            logEntity.CaseId = caseEntity.Id;
+            logEntity.CaseHistoryId = historyId;
+            var logId = _logService.SaveLog(logEntity, 0, out errors);
+            logEntity.Id = logId;
+
+            var curUser = _userService.GetUser(auxModel.CurrentUserId);
+            oldCase = oldCase.Id > 0 ? oldCase : null;
+
+            _caseService.SendCaseEmail(caseEntity.Id, mailSettings, historyId, "", auxModel.UserTimeZone,
+                                       oldCase, logEntity, null, curUser);
+
+            var actions = _caseService.CheckBusinessRules(BREventType.OnSaveCase, caseEntity, oldCase);
+            if (actions.Any())
+                _caseService.ExecuteBusinessActions(actions, caseEntity, logEntity, auxModel.UserTimeZone,
+                                                    historyId, "", auxModel.CurrentLanguageId, mailSettings);
+
+            return new ProcessResult("Case saved");
+        }
+
         private ProcessResult PrimaryValidate(ref CaseModel caseModel)
         {
             /*In this method you can't translate messages (Use validation instead) */
@@ -288,7 +311,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             return new ProcessResult("Primary Validation.");
         }
 
-        private ProcessResult CloneCase(ref CaseModel caseModel, AuxCaseModel auxModel)
+        private ProcessResult CloneCase(ref CaseModel caseModel, AuxCaseModel auxModel, out CaseTimeMetricsModel timeMetrics)
         {
             var isEditMode = caseModel.Id != 0;
 
@@ -363,6 +386,8 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             {
                 oldCase = null;
                 caseModel.RegTime = auxModel.UtcNow;
+                if (!caseModel.RegLanguage_Id.IsValueChanged())
+                    caseModel.RegLanguage_Id = auxModel.CurrentLanguageId;
             }
 
             if (caseModel.FinishingType_Id.IsValueChanged() && caseModel.FinishingType_Id > 0)
@@ -395,8 +420,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             caseModel.LeadTime = calculatedTimes.LeadTime;
             caseModel.ExternalTime = calculatedTimes.ExternalTime;
             caseModel.LatestSLACountDate = calculatedTimes.LatestSLACountDate;
-
-            
+            timeMetrics = calculatedTimes;            
 
             return new ProcessResult("Case cloned.");
         }
@@ -537,11 +561,11 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             return caseMailSetting;
         }
 
-        private Case ConvertCaseModelToCase(CaseModel caseModel)
+        private Case ConvertCaseModelToCase(CaseModel caseModel, Case oldCase)
         {
-            Case caseEntity = new Case();
-            if (caseModel.Id != 0)
-                caseEntity = _caseService.GetCaseById(caseModel.Id);
+            var caseEntity = new Case();
+            if (oldCase != null && oldCase.Id > 0)
+                caseEntity = oldCase;            
 
             #region Update Case properties
 
@@ -579,7 +603,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                             if (decimalVal.IsValueChanged())
                                 caseProperty.SetValue(caseEntity, decimalVal);
                             break;
-
+                        
                         case TypeCode.Object:
                             if (type == typeof(int?))
                             {
@@ -593,6 +617,13 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                                 var nullDateVal = (DateTime?)prop.GetValue(caseModel, null);
                                 if (nullDateVal.IsValueChanged())
                                     caseProperty.SetValue(caseEntity, nullDateVal);
+                            }
+                            else
+                            if (type == typeof(Guid))
+                            {
+                                var guidVal = (Guid)prop.GetValue(caseModel, null);
+                                if (guidVal.IsValueChanged())
+                                    caseProperty.SetValue(caseEntity, guidVal);
                             }
                             break;
 

@@ -56,7 +56,7 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
 
         public string PersonsPhone { get; set; }
 
-        public string PersonsCellPhone { get; set; }
+        public string PersonsCellphone { get; set; }
 
         public string CostCentre { get; set; }
 
@@ -268,7 +268,7 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
                 PersonsEmail = PersonsEmail,
                 NoMailToNotifier = NoMailToNotifier,
                 PersonsPhone = PersonsPhone,
-                PersonsCellphone = PersonsCellPhone,
+                PersonsCellphone = PersonsCellphone,
                 CostCentre = CostCentre,
                 Place = Place,
                 UserCode = UserCode,
@@ -411,7 +411,7 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
                 PersonsEmail = model.PersonsEmail,
                 NoMailToNotifier = model.NoMailToNotifier,
                 PersonsPhone = model.PersonsPhone,
-                PersonsCellPhone = model.PersonsCellphone,
+                PersonsCellphone = model.PersonsCellphone,
                 CostCentre = model.CostCentre,
                 Place = model.Place,
                 UserCode = model.UserCode,
