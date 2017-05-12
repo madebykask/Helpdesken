@@ -222,54 +222,9 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
         }
 
 
-
-
-        private ProcessResult DoSaveCase(CaseModel caseModel, AuxCaseModel auxModel,
-                                         CaseTimeMetricsModel timesModel,
-                                         CaseMailSetting mailSettings)
-        {
-            /*TODO: After merge CaseServices case must be sent to the Repository directly from here(No need to use CaseService anymore) */
-            /* Convert caseModel to Case entity to make it ready for Save method */
-
-            var oldCase = new Case();
-            if (caseModel.Id != 0)
-                oldCase = _caseService.GetCaseById(caseModel.Id);
-
-            var caseEntity = ConvertCaseModelToCase(caseModel, oldCase);
-            var logEntity = GetCaseLog(caseModel);
-            var extraInfo = new CaseExtraInfo()
-            {
-                ActionExternalTime = timesModel.ActionExternalTime,
-                ActionLeadTime = timesModel.ActionLeadTime,
-                LeadTimeForNow = timesModel.LeadTimeForNow,
-                CreatedByApp = auxModel.CurrentApp
-            };
-
-            IDictionary<string, string> errors;
-            var historyId = _caseService.SaveCase(caseEntity, logEntity, auxModel.CurrentUserId,
-                                                  auxModel.UserIdentityName, extraInfo, out errors);
-
-            if (errors.Any())
-                return new ProcessResult("Do Save Case", ResultTypeEnum.ERROR, "Save could not be saved!", errors);
-
-            logEntity.CaseId = caseEntity.Id;
-            logEntity.CaseHistoryId = historyId;
-            var logId = _logService.SaveLog(logEntity, 0, out errors);
-            logEntity.Id = logId;
-
-            var curUser = _userService.GetUser(auxModel.CurrentUserId);
-            oldCase = oldCase.Id > 0 ? oldCase : null;
-
-            _caseService.SendCaseEmail(caseEntity.Id, mailSettings, historyId, "", auxModel.UserTimeZone,
-                                       oldCase, logEntity, null, curUser);
-
-            var actions = _caseService.CheckBusinessRules(BREventType.OnSaveCase, caseEntity, oldCase);
-            if (actions.Any())
-                _caseService.ExecuteBusinessActions(actions, caseEntity, logEntity, auxModel.UserTimeZone,
-                                                    historyId, "", auxModel.CurrentLanguageId, mailSettings);
-
-            return new ProcessResult("Case saved");
-        }
+        /*********************************************/
+        /************ PRIVATE Methods ****************/
+        /*********************************************/
 
         private ProcessResult PrimaryValidate(ref CaseModel caseModel)
         {
@@ -416,6 +371,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             if (caseModel.ProductArea_Id.HasValue && caseModel.ProductAreaSetDate == null)
                 caseModel.ProductAreaSetDate = auxModel.UtcNow;
 
+            /*Calculate Times*/
             var calculatedTimes = ClaculateCaseTimeMetrics(caseModel, auxModel, oldCase);
             caseModel.LeadTime = calculatedTimes.LeadTime;
             caseModel.ExternalTime = calculatedTimes.ExternalTime;
@@ -454,7 +410,54 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
 
             return new ProcessResult("Case Validated.");
         }
-                 
+
+        private ProcessResult DoSaveCase(CaseModel caseModel, AuxCaseModel auxModel,
+                                         CaseTimeMetricsModel timesModel,
+                                         CaseMailSetting mailSettings)
+        {
+            /*TODO: After merge CaseServices case must be sent to the Repository directly from here(No need to use CaseService anymore) */
+            /* Convert caseModel to Case entity to make it ready for Save method */
+
+            var oldCase = new Case();
+            if (caseModel.Id != 0)
+                oldCase = _caseService.GetCaseById(caseModel.Id);
+
+            var caseEntity = ConvertCaseModelToCase(caseModel, oldCase);
+            var logEntity = GetCaseLog(caseModel);
+            var extraInfo = new CaseExtraInfo()
+            {
+                ActionExternalTime = timesModel.ActionExternalTime,
+                ActionLeadTime = timesModel.ActionLeadTime,
+                LeadTimeForNow = timesModel.LeadTimeForNow,
+                CreatedByApp = auxModel.CurrentApp
+            };
+
+            IDictionary<string, string> errors;
+            var historyId = _caseService.SaveCase(caseEntity, logEntity, auxModel.CurrentUserId,
+                                                  auxModel.UserIdentityName, extraInfo, out errors);
+
+            if (errors.Any())
+                return new ProcessResult("Do Save Case", ResultTypeEnum.ERROR, "Save could not be saved!", errors);
+
+            logEntity.CaseId = caseEntity.Id;
+            logEntity.CaseHistoryId = historyId;
+            var logId = _logService.SaveLog(logEntity, 0, out errors);
+            logEntity.Id = logId;
+
+            var curUser = _userService.GetUser(auxModel.CurrentUserId);
+            oldCase = oldCase.Id > 0 ? oldCase : null;
+
+            _caseService.SendCaseEmail(caseEntity.Id, mailSettings, historyId, "", auxModel.UserTimeZone,
+                                       oldCase, logEntity, null, curUser);
+
+            var actions = _caseService.CheckBusinessRules(BREventType.OnSaveCase, caseEntity, oldCase);
+            if (actions.Any())
+                _caseService.ExecuteBusinessActions(actions, caseEntity, logEntity, auxModel.UserTimeZone,
+                                                    historyId, "", auxModel.CurrentLanguageId, mailSettings);
+
+            return new ProcessResult("Case saved");
+        }
+
         private KeyValuePair<string, string> GenerateInvalidMessage(GlobalEnums.TranslationCaseFields caseFieldName)
         {
             var caseFieldNameStr = caseFieldName.ToString();
