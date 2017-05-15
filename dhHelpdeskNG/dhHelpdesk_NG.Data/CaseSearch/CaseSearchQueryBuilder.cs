@@ -4,7 +4,6 @@ using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using DbExtensions;
 using DH.Helpdesk.BusinessData.Enums.Case;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Case.CaseSearch;

@@ -142,23 +142,23 @@
                 return s4() + '-' + s4() + '-' + s4();
             }
 
-            function applyUserDepartmentFilter(orderId) {
-                var data = {
-                    id: orderId
-                };
-                return $.get(that._options.searchDepartmentsByRegionIdUrl,
-                    data,
-                    function (json) {
-                        var $ordererDep = $("#orderer_departmentId");
-                        $ordererDep.empty();
-                        $ordererDep.prepend("<option></option>");
-                        for (var i = 0; i < json.length; i++) {
-                            var e = json[i];
-                            $("<option>").text(e.Name).val(e.Value).appendTo($ordererDep);
-                        }
-                        $ordererDep.trigger("change");
-                    });
-            };
+            //function applyUserDepartmentFilter(orderId) {
+            //    var data = {
+            //        id: orderId
+            //    };
+            //    return $.get(that._options.searchDepartmentsByRegionIdUrl,
+            //        data,
+            //        function (json) {
+            //            var $ordererDep = $("#orderer_departmentId");
+            //            $ordererDep.empty();
+            //            $ordererDep.prepend("<option></option>");
+            //            for (var i = 0; i < json.length; i++) {
+            //                var e = json[i];
+            //                $("<option>").text(e.Name).val(e.Value).appendTo($ordererDep);
+            //            }
+            //            $ordererDep.trigger("change");
+            //        });
+            //};
 
             function applyOrdererUnitsFilter(depId) {
                 if (!that._options.units) return;

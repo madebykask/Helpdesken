@@ -7,7 +7,13 @@ namespace DH.Helpdesk.Web.Areas.Orders
 {
     public class OrdersAreaRegistration : AreaRegistration
     {
-        public override string AreaName => WebApiOrdersUrlName.Name;
+        public override string AreaName
+        {
+            get
+            {
+                return "Orders";
+            }
+        }
 
         public override void RegisterArea(AreaRegistrationContext context)
         {

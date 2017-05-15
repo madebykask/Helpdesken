@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Orders.Controllers
+﻿using DH.Helpdesk.Services.Services.Concrete;
+
+namespace DH.Helpdesk.Web.Areas.Orders.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -66,6 +68,8 @@
 
         private readonly IDocumentService _documentService;
 
+        private readonly IOrganizationService _organizationService;
+
         public OrdersController(
                 IMasterDataService masterDataService,
                 IOrdersService ordersService,
@@ -83,7 +87,8 @@
                 IOrderTypeService orderTypeService,
                 ICustomerService customerService,
                 ISettingService settingService,
-                IDocumentService documentService)
+                IDocumentService documentService,
+                IOrganizationService organizationService)
             : base(masterDataService)
         {
             _ordersService = ordersService;
@@ -433,6 +438,15 @@
                 throw new HttpException((int)HttpStatusCode.NotFound, null);
             }
             return File(file.File, MimeType.BinaryFile, file.FileName);
+        }
+
+        [HttpGet]
+        public JsonResult SearchDepartmentsByRegionId(int? regionId)
+        {
+            var models = _organizationService.GetDepartments(
+                SessionFacade.CurrentCustomer.Id,
+                regionId);
+            return this.Json(models, JsonRequestBehavior.AllowGet);
         }
 
     }

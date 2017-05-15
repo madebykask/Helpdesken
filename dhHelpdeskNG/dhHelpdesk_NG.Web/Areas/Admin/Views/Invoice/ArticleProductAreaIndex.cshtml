@@ -97,7 +97,7 @@
 				perShowingText: '@Translation.GetForJS("Visar sida")',
 				deleteText: '@Translation.GetForJS("Ta bort")',
 				deleteDialogText: '@Translation.GetForJS("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) + "?")',
-				getListUrl: "@Url.ApiAction(WebApiAdminUrlName.Invoice.GetArticleProductAreaList, WebApiAdminUrlName.Invoice.Controller)",
+				getListUrl: "@Url.Action("GetArticleProductAreaList", "Invoice")",
 				deleteUrl: "@Url.Action("DeleteArticleProductArea", "Invoice")"
 			});
 			window.pageObj = pageObj;
