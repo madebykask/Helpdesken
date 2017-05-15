@@ -201,6 +201,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly IUserService _userService;
         private readonly IEmailSendingSettingsProvider _emailSendingSettingsProvider;
         private readonly ICaseExtraFollowersService _caseExtraFollowersService;
+        private readonly IProductAreaService _productAreaService;
 
         public CaseService(
             ICaseRepository caseRepository,
@@ -237,8 +238,9 @@ namespace DH.Helpdesk.Services.Services
             IUserService userService,
             IEmailSendingSettingsProvider emailSendingSettingsProvider,
             ICaseExtraFollowersService caseExtraFollowersService,
-			IFeedbackTemplateService feedbackTemplateService
-			)
+			IFeedbackTemplateService feedbackTemplateService,
+			IProductAreaService productAreaService
+            )
 
         {
             this._unitOfWork = unitOfWork;
@@ -277,6 +279,7 @@ namespace DH.Helpdesk.Services.Services
             this._emailSendingSettingsProvider = emailSendingSettingsProvider;
             _caseExtraFollowersService = caseExtraFollowersService;
 	        _feedbackTemplateService = feedbackTemplateService;
+            _productAreaService = productAreaService;
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
@@ -2518,7 +2521,15 @@ namespace DH.Helpdesk.Services.Services
             ret.Add(new Field { Key = "[#12]", StringValue = c.Priority != null ? c.Priority.Name : string.Empty });
             ret.Add(new Field { Key = "[#20]", StringValue = c.Priority != null ? c.Priority.Description : string.Empty });
             ret.Add(new Field { Key = "[#21]", StringValue = c.WatchDate.ToString() } );
-            ret.Add(new Field { Key = "[#28]", StringValue = c.ProductArea != null ? c.ProductArea.Name : string.Empty });
+            if (c.ProductArea?.Parent_ProductArea_Id != null)
+            {
+                var names = _productAreaService.GetParentPath(c.ProductArea.Id, c.Customer_Id).ToList();
+                ret.Add(new Field { Key = "[#28]", StringValue = string.Join(" - ", names)});
+            }
+            else
+            {
+                ret.Add(new Field { Key = "[#28]", StringValue = c.ProductArea != null ? c.ProductArea.Name : string.Empty });
+            }
             if (l != null)
             {
                 ret.Add(new Field { Key = "[#10]", StringValue = l.TextExternal });
