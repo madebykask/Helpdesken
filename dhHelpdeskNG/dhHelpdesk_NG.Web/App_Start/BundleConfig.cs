@@ -24,6 +24,7 @@ namespace DH.Helpdesk.Web
 			public const string Select2 = "~/bundles/select2";
 			public const string CaseConnectToParent = "~/bundles/case/caseconnecttoparent";
 			public const string FeedbackStatisticsCases = "~/bundles/case/feedbackstatisticscases";
+			public const string QuickLinks = "~/bundles/admin/quicklinks";
 		}
 
 
@@ -427,6 +428,9 @@ namespace DH.Helpdesk.Web
                 "~/Content/js/jsrender.min.js",
                 "~/Areas/Admin/Content/js/BusinessRule/businessRuleInput.js",
                 "~/Content/js/jquery.validate.unobtrusive.min.js"));
+
+            bundles.Add(new ScriptBundle(ScriptNames.QuickLinks).Include(
+                "~/Areas/Admin/Content/js/QuickLinks/index.logic.js"));
 
             #endregion
 
