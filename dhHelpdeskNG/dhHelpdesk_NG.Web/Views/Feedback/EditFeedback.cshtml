@@ -4,6 +4,7 @@
 @model DH.Helpdesk.Web.Models.Feedback.EditFeedbackModel
 @{
     ViewBag.Title = "EditFeedback";
+    var languages = (SelectList)ViewBag.Languages;
 }
 
 @using (Html.BeginForm(MvcUrlName.Feedback.Edit, MvcUrlName.Feedback.Controller, FormMethod.Post, new { id = "feedback_edit_form" }))
@@ -60,21 +61,23 @@
                             <div class="span12">
                                 <table class="tableform">
                                     <tr>
-                                        <td class="span3">
-                                            @Translation.GetCoreTextTranslation("Språk")
-                                        </td>
-                                        <td class="span9">
-                                            @{ var languages = (SelectList) ViewBag.Languages; }
-                                            @if (Model.IsNew)
-                                            {
-                                                @Html.DropDownListFor(model => model.LanguageId, languages, new {id = "languageList", disabled = ""})
+                                        @if (Model.IsNew)
+                                        {
+                                            <td class="span3"></td>
+                                            <td class="span9">
+                                                @Html.DropDownListFor(model => model.LanguageId, languages, new {id = "languageList", style = "display: none", disabled = ""})
                                                 @Html.HiddenFor(m => m.LanguageId)
-                                            }
-                                            else
-                                            {
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="span3">
+                                                @Translation.GetCoreTextTranslation("Språk")
+                                            </td>
+                                            <td class="span9">
                                                 @Html.DropDownListFor(model => model.LanguageId, languages, new {id = "languageList"})
-                                            }
-                                        </td>
+                                            </td>
+                                        }
                                     </tr>
                                     <tr>
                                         <td class="span3">
@@ -108,7 +111,7 @@
                                             @Translation.GetCoreTextTranslation("Fråga")
                                         </td>
                                         <td class="span9">
-                                            @Html.TextAreaFor(model => model.Question, new { maxlength = "1000", style = "height:100px;" })
+                                            @Html.TextAreaFor(model => model.Question, new {maxlength = "1000", style = "height:100px;"})
                                             @Html.ValidationMessageFor(model => model.Question)
                                         </td>
                                     </tr>
@@ -117,8 +120,8 @@
                                             @Translation.GetCoreTextTranslation("Visa kommentar")
                                         </td>
                                         <td class="checkbox" style="padding-left: 20px">
-                                            <input type="checkbox" name="ShowNote" @(Model.ShowNote == 1 ? "checked=checked" : "") @(Model.LanguageId != LanguageIds.Swedish ? "disabled" : "") value="1" />
-                                            <input type="hidden" name="ShowNote" value="0" />
+                                            <input type="checkbox" name="ShowNote" @(Model.ShowNote == 1 ? "checked=checked" : "") @(Model.LanguageId != LanguageIds.Swedish ? "disabled" : "") value="1"/>
+                                            <input type="hidden" name="ShowNote" value="0"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -135,9 +138,8 @@
                                         </td>
                                         <td class="span6">
                                             @Translation.GetCoreTextTranslation("Selektera ut")
-                                            @{    var percents = (List<SelectListItem>)ViewBag.Percents;
-                                            }
-                                            @Html.DropDownListFor(model => model.SelectedPercent, percents, new { style = "width: 60px" })
+                                            @{ var percents = (List<SelectListItem>) ViewBag.Percents; }
+                                            @Html.DropDownListFor(model => model.SelectedPercent, percents, new {style = "width: 60px"})
                                             @Translation.GetCoreTextTranslation("procent av tillgängliga ärenden")
                                         </td>
                                     </tr>
