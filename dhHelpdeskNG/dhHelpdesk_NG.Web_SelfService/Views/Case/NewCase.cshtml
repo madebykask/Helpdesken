@@ -373,26 +373,28 @@
                         <div class="row">
                             <div class="col-md-3 dh-col">
                                 <div class="container form-horizontal">
-                                    <div class="form-group row @GlobalEnums.TranslationCaseFields.Description.ToString()">
-                                        <label class="col-md-3">
-                                            @CaseFieldCaption(GlobalEnums.TranslationCaseFields.CaseType_Id)
-                                        </label>
-                                        <div class="col-md-9">
-                                            <div id="divCaseType" class="btn-group">
-                                                <div class="btn btn-default hasAttribute" id="divBreadcrumbs_CaseType" standardName="@GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()">@Model.CaseTypeParantPath</div>
-                                                <button class="btn btn-default dropdown-toggle hasAttribute" data-toggle="dropdown" standardName="@GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()">
-                                                    <span class="caret"></span>
-                                                </button>
-                                                <ul class="dropdown-menu">
-                                                    <li><a href="#" value="">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
-                                                    @Html.CaseTypeDropdownButtonString(Model.CaseTypes)
-                                                </ul>
-                                                <input type="hidden" id="NewCase.CaseType_Id" name="NewCase.CaseType_Id" value="@Model.NewCase.CaseType_Id.supressZero()" />
+                                    @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()))
+                                    {
+                                        <div class="form-group row @GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()">
+                                            <label class="col-md-3">
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.CaseType_Id)
+                                            </label>
+                                            <div class="col-md-9">
+                                                <div id="divCaseType" class="btn-group">
+                                                    <div class="btn btn-default hasAttribute" id="divBreadcrumbs_CaseType" standardName="@GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()">@Model.CaseTypeParantPath</div>
+                                                    <button class="btn btn-default dropdown-toggle hasAttribute" data-toggle="dropdown" standardName="@GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()">
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="#" value="">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
+                                                        @Html.CaseTypeDropdownButtonString(Model.CaseTypes)
+                                                    </ul>
+                                                    <input type="hidden" id="NewCase.CaseType_Id" name="NewCase.CaseType_Id" value="@Model.NewCase.CaseType_Id.supressZero()" /> 
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-
-
+                                    }
+                                    <input type="hidden" id="NewCase.CaseType_Id" name="NewCase.CaseType_Id" value="@Model.NewCase.CaseType_Id.supressZero()" />  
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()))
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()">

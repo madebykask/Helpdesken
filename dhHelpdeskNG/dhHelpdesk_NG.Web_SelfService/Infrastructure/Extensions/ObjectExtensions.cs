@@ -146,9 +146,18 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
                 {
                     if (string.Compare(c.Name, valueToFind.getCaseFieldName(), true) == 0)
                     {
-                        if (c.Required == 1 && c.ShowExternal == 1)
-                            ret = 1;
-                        break;
+                        if (c.Name.ToLower() == "casetype_id")
+                        {
+                            if (c.Required == 1)
+                                ret = 1;
+                            break;
+                        }
+                        else
+                        {
+                            if (c.Required == 1 && c.ShowExternal == 1)
+                                ret = 1;
+                            break;
+                        }
                     }
                 }
 

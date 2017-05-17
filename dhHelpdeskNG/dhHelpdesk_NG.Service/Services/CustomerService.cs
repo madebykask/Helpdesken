@@ -323,7 +323,6 @@
                     
                     if (caseFieldSetting.Name.ToLower() == "casetype_id")
                     {
-                        caseFieldSetting.ShowExternal = 1;
                         caseFieldSetting.ShowOnStartPage = 1;
                         caseFieldSetting.Required = 1;
                     }
