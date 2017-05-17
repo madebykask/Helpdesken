@@ -419,7 +419,7 @@
 
         Application.prototype._GetComputerUserSearchOptions = function () {
             var me = this;
-
+            var fieldsVisibility = [];
             var options = {
                 items: 20,
                 minLength: 2,
@@ -435,7 +435,7 @@
                         success: function (result) {
                             if (result.searchKey != lastInitiatorSearchKey)
                                 return;
-
+                            fieldsVisibility = result.fieldsVisibility;
                             var resultList = jQuery.map(result.result, function (item) {
                                 var aItem = {
                                     id: item.Id
@@ -491,18 +491,40 @@
                 highlighter: function (obj) {
                     var item = JSON.parse(obj);
                     var orgQuery = this.query;
-                    if (item.departmentname == null)
-                        item.departmentname = ""
                     var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
-                    var result = item.name + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email + ' - ' + item.departmentname + ' - ' + item.usercode;
-                    var resultBy_NameFamily = item.name_family + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email + ' - ' + item.departmentname + ' - ' + item.usercode;
+                    var resultArr = [];
+                    var resultByNameFamilyArr = [];
+                    if (fieldsVisibility.Name && item.name) {
+                        resultArr.push(item.name);
+                        resultByNameFamilyArr.push(item.name_family);
+                    }
+                    resultArr.push(item.num);
+                    resultByNameFamilyArr.push(item.num);
+                    if (fieldsVisibility.Phone && item.phone) {
+                        resultArr.push(item.phone);
+                        resultByNameFamilyArr.push(item.phone);
+                    }
+                    if (fieldsVisibility.Email && item.email) {
+                        resultArr.push(item.email);
+                        resultByNameFamilyArr.push(item.email);
+                    }
+                    if (fieldsVisibility.Department && item.departmentname) {
+                        resultArr.push(item.departmentname);
+                        resultByNameFamilyArr.push(item.departmentname);
+                    }
+                    if (fieldsVisibility.UserCode && item.usercode) {
+                        resultArr.push(item.usercode);
+                        resultByNameFamilyArr.push(item.usercode);
+                    }
+                    var result = resultArr.join(" - ");
+                    var resultByNameFamily = resultByNameFamilyArr.join(" - ");
 
                     if (result.toLowerCase().indexOf(orgQuery.toLowerCase()) > -1)
                         return result.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
                             return '<strong>' + match + '</strong>';
                         });
                     else
-                        return resultBy_NameFamily.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+                        return resultByNameFamily.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
                             return '<strong>' + match + '</strong>';
                         });
 
