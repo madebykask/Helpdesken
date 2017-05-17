@@ -79,6 +79,8 @@
 
         private const string _SHOW_ACTIVE_PRODUCT_AREAS_IN_ADMIN = "SHOW_ACTIVE_PRODUCT_AREAS_IN_ADMIN";
 
+        private const string _SHOW_ACTIVE_ORDER_TYPES_IN_ADMIN = "SHOW_ACTIVE_ORDER_TYPES_IN_ADMIN";
+
         private const string _AdminUsersPageLoggedInUsersTabSelectedCustomerId = "AdminUsersPageLoggedInUsersTabSelectedCustomerId";
 
         private const string _AdminUsersPageLockedCasesTabSelectedCustomerId = "AdminUsersPageLockedCasesTabSelectedCustomerId";
@@ -633,6 +635,24 @@
             set
             {
                 SaveSetKeyValue(_SHOW_ACTIVE_PRODUCT_AREAS_IN_ADMIN, value);
+            }
+        }
+
+        public static bool ShowOnlyActiveOrderTypesInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_ORDER_TYPES_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_ORDER_TYPES_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_ORDER_TYPES_IN_ADMIN, value);
             }
         }
 

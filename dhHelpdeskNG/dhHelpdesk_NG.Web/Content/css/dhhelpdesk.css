@@ -3673,7 +3673,8 @@ a.inactive
 .operationobject.admin.content .inactive *,
 .operationlogcategory.admin.content .inactive *,
 .emailgroup.admin.content .inactive *,
-.program.admin.content .inactive *
+.program.admin.content .inactive *,
+.order-type.admin.content .inactive *
 
 
 {

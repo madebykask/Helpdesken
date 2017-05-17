@@ -25,6 +25,7 @@ namespace DH.Helpdesk.Web
 			public const string CaseConnectToParent = "~/bundles/case/caseconnecttoparent";
 			public const string FeedbackStatisticsCases = "~/bundles/case/feedbackstatisticscases";
 			public const string QuickLinks = "~/bundles/admin/quicklinks";
+			public const string OrderTypes = "~/bundles/admin/ordertypes/index";
 		}
 
 
@@ -431,6 +432,10 @@ namespace DH.Helpdesk.Web
 
             bundles.Add(new ScriptBundle(ScriptNames.QuickLinks).Include(
                 "~/Areas/Admin/Content/js/QuickLinks/index.logic.js"));
+
+            bundles.Add(new ScriptBundle(ScriptNames.OrderTypes).Include(
+                "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
+                "~/Areas/Admin/Content/js/OrderType/index.logic.js"));
 
             #endregion
 

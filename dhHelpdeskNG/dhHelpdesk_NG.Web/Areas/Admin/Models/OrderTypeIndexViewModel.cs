@@ -7,6 +7,7 @@
     public class OrderTypeIndexViewModel
     {
         public Customer Customer { get; set; }
+        public bool IsShowOnlyActive { get; set; }
         public IList<OrderType> OrderTypes { get; set; }
     }
 }
