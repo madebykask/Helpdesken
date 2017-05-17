@@ -144,7 +144,7 @@
             var parentCount = GetOrderTypeParentsCount(orderType);
 
             var caseTypes = this._caseTypeService.GetCaseTypes(SessionFacade.CurrentCustomer.Id, true);
-            var caseTypesInRow = this._caseTypeService.GetChildrenInRow(caseTypes).ToList();
+            var caseTypesInRow = this._caseTypeService.GetChildrenInRow(caseTypes, true).ToList();
 
             var model = new OrderTypeInputViewModel
             {
