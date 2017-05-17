@@ -78,7 +78,7 @@
     });
 
     function auth1() {
-        sessionStorage.removeItem('token', '');
+        localStorage.removeItem('token', '');
         $.post("@Url.Content("~/token")",
                 "username=admin" +
                 "&password=3edc4rfv" +
@@ -88,12 +88,12 @@
             if (data == null)
                 alert("Error occurred!");                
             else
-                sessionStorage.setItem('token', data.access_token);                
+                localStorage.setItem('token', data.access_token);
         });
     };
 
     function request1() {
-        var _token = sessionStorage.getItem('token');
+        var _token = localStorage.getItem('token');
         if (_token == null || _token == ""){
             alert("Not authenticated!");
             return;
@@ -109,13 +109,13 @@
     };
 
     function request2() {
-        var _token = sessionStorage.getItem('token');
+        var _token = localStorage.getItem('token');
         if (_token == null || _token == "") {
             alert("Not authenticated!");
             return;
         }
 
-        var data1 = { Id: 0, Caption: "Majid", Customer_Id: "29", CaseType_Id: 93, PersonsEmail: "mg@dhsolutions.se", test: "JJ" };
+        var data1 = { Id: 88878787, Caption: "Majid", Customer_Id: "29", CaseType_Id: 93, PersonsEmail: "mg@dhsolutions.se", test: "JJ" };
                
         $.ajax({
             url: "@Url.Content("~/Api/CaseApi/SaveCase")",

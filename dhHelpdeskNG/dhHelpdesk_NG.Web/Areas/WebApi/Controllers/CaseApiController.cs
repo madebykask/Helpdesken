@@ -5,6 +5,7 @@ using DH.Helpdesk.Services.Services.UniversalCase;
 using DH.Helpdesk.Web.Infrastructure;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 using DH.Helpdesk.Web.Models.JsonModels.Case;
+using Newtonsoft.Json.Linq;
 using System.Linq;
 using System.Security.Claims;
 using System.Web.Http;
@@ -30,9 +31,9 @@ namespace DH.Helpdesk.Web.Areas.WebApi
         [HttpPost]
         [Authorize]
         public string SaveCase([FromBody] CaseJsonModel model)
-        {
+        {        
             var infoToSave = model.ToBussinessModel();
-
+            //var infoToSave = new CaseModel();
             int curUserId = -1;
             var claims = RequestContext.GetClaims(ClaimTypes.Sid, ClaimTypes.Role);                        
             if (claims.Any())

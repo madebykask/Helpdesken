@@ -5,6 +5,7 @@ using Microsoft.Owin.Security.OAuth;
 using System.Threading.Tasks;
 using System.Security.Claims;
 using DH.Helpdesk.Dal.Repositories;
+using Microsoft.Owin.Security.Infrastructure;
 
 namespace DH.Helpdesk.Web.App_Start
 {    
@@ -20,7 +21,8 @@ namespace DH.Helpdesk.Web.App_Start
                 TokenEndpointPath = new PathString("/token"),
                 AccessTokenExpireTimeSpan = TimeSpan.FromDays(1),
                 ApplicationCanDisplayErrors = true,
-                Provider = new SimpleAuthorizationServerProvider()
+                Provider = new AccessTokenProvider(),
+                RefreshTokenProvider = new RefreshTokenProvider()
             };
             
             app.UseOAuthAuthorizationServer(OAuthServerOptions);
@@ -37,10 +39,8 @@ namespace DH.Helpdesk.Web.App_Start
         }
     }
 
-    public class SimpleAuthorizationServerProvider : OAuthAuthorizationServerProvider
-    {
-
-        
+    public class AccessTokenProvider : OAuthAuthorizationServerProvider
+    {        
 
         public override async Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
         {           
@@ -73,4 +73,17 @@ namespace DH.Helpdesk.Web.App_Start
         }
     }
 
+    public class RefreshTokenProvider : AuthenticationTokenProvider
+    {
+        public override void Create(AuthenticationTokenCreateContext context)
+        {                        
+            context.Ticket.Properties.ExpiresUtc = new DateTimeOffset(DateTime.Now.AddMinutes(5));
+            context.SetToken(context.SerializeTicket());
+        }
+
+        public override void Receive(AuthenticationTokenReceiveContext context)
+        {
+            context.DeserializeTicket(context.Token);
+        }
+    }
 }

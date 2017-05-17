@@ -15,7 +15,7 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
 
         #region Base
 
-        public int Id { get; set; }
+        public int Id { get; set; }        
 
         /*Should be Converted to Guid*/
         public string CaseGuid { get; set; }
