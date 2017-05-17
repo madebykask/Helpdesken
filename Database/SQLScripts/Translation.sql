@@ -5791,6 +5791,13 @@ If not exists (select * from tblTextTranslation where text_id = 1810 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1810, 2, 'Import file')
 GO
 
+If not exists (select * from tbltext where id = 1811)
+	insert into tbltext (id, TextString) VALUES (1811, 'Visa i lista')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1811 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1811, 2, 'Show in dropdown')
+GO
+
 UPDATE tblTextTranslation Set TextTranslation = 'Default when cases are registered by e-mail' WHERE Text_Id=854 AND Language_Id=2;
 GO
 
