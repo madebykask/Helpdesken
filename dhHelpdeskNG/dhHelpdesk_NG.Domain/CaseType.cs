@@ -24,7 +24,8 @@
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
         public Guid? CaseTypeGUID { get; set; }
-        
+        public int ShowOnExtPageCases { get; set; }
+
         public virtual CaseType ParentCaseType { get; set; }
         public virtual User Administrator { get; set; }
         public virtual ICollection<CaseType> SubCaseTypes { get; set; }

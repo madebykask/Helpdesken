@@ -40,6 +40,7 @@
             this.Property(x => x.RelatedField).IsRequired().HasMaxLength(50).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity); ;
             this.Property(x => x.CaseTypeGUID).IsOptional();
+            this.Property(x => x.ShowOnExtPageCases).IsRequired();
 
             this.ToTable("tblcasetype");
         }

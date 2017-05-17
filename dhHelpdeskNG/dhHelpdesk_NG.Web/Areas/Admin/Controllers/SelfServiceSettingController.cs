@@ -18,12 +18,14 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private readonly ICaseFieldSettingService _caseFieldSettingService;
         private readonly ISettingService _settingService;
         private readonly IDocumentService _documentService;
+        private readonly ICaseTypeService _caseTypeService;
 
         public SelfServiceSettingController(
                 ICustomerService customerService,
                 ICaseFieldSettingService caseFieldSettingService,
                 ISettingService settingService,
                 IDocumentService documentService,
+                ICaseTypeService caseTypeService,
                 IMasterDataService masterDataService)
             : base(masterDataService)
         {
@@ -31,6 +33,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             this._caseFieldSettingService = caseFieldSettingService;
             this._settingService = settingService;
             this._documentService = documentService;
+            this._caseTypeService = caseTypeService;
         }
         //
         // GET: /Admin/SelfServiceSetting/
@@ -47,6 +50,19 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 }).ToList();
 
             var selectedCats = allCategories.Where(c => c.ShowOnExternalPage).Select(x => new SelectListItem
+            {
+                Text = x.Name,
+                Value = x.Id.ToString()
+            }).ToList();
+
+            var allCaseTypes = _caseTypeService.GetCaseTypes(customerId, true);
+            var availableCaseTypes = allCaseTypes.Where(c => c.ShowOnExtPageCases == 0).Select(x => new SelectListItem
+            {
+                Text = x.Name,
+                Value = x.Id.ToString()
+            }).ToList();
+
+            var selectedCaseTypes = allCaseTypes.Where(c => c.ShowOnExtPageCases == 1).Select(x => new SelectListItem
             {
                 Text = x.Name,
                 Value = x.Id.ToString()
@@ -70,6 +86,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     AvailableCategories = availableCats,
                     SelectedCategories = selectedCats,
                     StartPageFAQNums = numbers,
+                    AvailableCaseTypes = availableCaseTypes,
+                    SelectedCaseTypes = selectedCaseTypes,
                     CaseComplaintDays = setting != null ? setting.CaseComplaintDays : 0
                 };
 
@@ -77,7 +95,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(int id, SelfServiceIndexViewModel vmodel, int[] SelectedCategories)
+        public ActionResult Edit(int id, SelfServiceIndexViewModel vmodel, int[] SelectedCategories, int[] SelectedCaseTypes)
         {
             var customerToSave = this._customerService.GetCustomer(id);
             customerToSave.PasswordRequiredOnExternalPage = vmodel.Customer.PasswordRequiredOnExternalPage;
@@ -112,6 +130,20 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
                 _documentService.SaveDocumentCategory(cat, out errors);
             }
+
+            var allCaseTypes = _caseTypeService.GetCaseTypes(id);
+
+            foreach (var type in allCaseTypes)
+            {
+                if (SelectedCaseTypes != null && SelectedCaseTypes.Contains(type.Id))
+                    type.ShowOnExtPageCases = 1;
+                else
+                    type.ShowOnExtPageCases = 0;
+
+                _caseTypeService.SaveCaseType(type, out errors);
+            }
+
+
 
             var setting = _settingService.GetCustomerSetting(id);
             if (setting != null)

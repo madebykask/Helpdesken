@@ -203,6 +203,32 @@
                                     @Html.CheckBoxFor(m => m.Customer.MyCasesRegarding) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Angående")
                                 </td>
                             </tr>
+                            <tr id="caseTypes">
+                                <td>
+                                    @Translation.Get("Ärendetyp", Enums.TranslationSource.TextTranslation)
+                                </td>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td>@Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation)</td>
+                                            <td></td>
+                                            <td>@Translation.Get("Valda", Enums.TranslationSource.TextTranslation)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                @Html.ListBox("AvailableCaseTypes", Model.AvailableCaseTypes, new { style = "width: 280px; height: 120px" })
+                                            </td>
+                                            <td style="vertical-align:middle">
+                                                <input type="button" value="&lt;" class="btn" id="removeCaseType" />
+                                                <input type="button" value="&gt;" class="btn" id="addCaseType" />
+                                            </td>
+                                            <td>
+                                                @Html.ListBox("SelectedCaseTypes", Model.SelectedCaseTypes, new { style = "width: 280px; height: 120px" })
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>                          
                         </table>
                     </div>
 
@@ -263,6 +289,20 @@
             return false;
         });
 
+        $("#addCaseType").click(function () {
+            $("#AvailableCaseTypes option:selected").remove().appendTo("#SelectedCaseTypes");
+            $("#AvailableCaseTypes").get(0).selectedIndex = -1;
+            $("#SelectedCaseTypes").get(0).selectedIndex = -1;
+            return false;
+        });
+
+        $("#removeCaseType").click(function () {
+            $("#SelectedCaseTypes option:selected").remove().appendTo("#AvailableCaseTypes");
+            $("#AvailableCaseTypes").get(0).selectedIndex = -1;
+            $("#SelectedCaseTypes").get(0).selectedIndex = -1;
+            return false;
+        });
+
         //For next release
         //$("Customer_ShowFAQOnExternalStartPage").change(function () {
         //    $("#SelectedCategories option").attr("selected", "selected");
@@ -270,6 +310,7 @@
            
         function submitForm() {
             $("#SelectedCategories option").attr("selected", "selected");
+            $("#SelectedCaseTypes option").attr("selected", "selected");
             $("#target").submit();
         }
 
