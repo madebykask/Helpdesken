@@ -309,6 +309,8 @@
                                     <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Aktivera"), "Activate", "Cases", new { id = Model.case_.Id, backUrl = Model.BackUrl }, new { @class = "btn" })</li>
                                         }
 
+
+
                                         @if (SessionFacade.CurrentUser.MoveCasePermission == 1)
                                         {
                                     <li><a data-toggle="modal" href="#divMoveCase">@Translation.GetCoreTextTranslation("Flytta")</a></li>
@@ -394,10 +396,16 @@
                         <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Aktivera"), "Activate", "Cases", new { id = Model.case_.Id, backUrl = Model.BackUrl }, new { @class = "btn" })</li>
                             }
 
-                        }
-                        @*At the moment we do not check access for this /TAN*@
-                        @Html.Partial("WorkflowStep", Model.WorkflowSteps)
 
+
+                        }
+
+                @*At the moment we do not check access for this /TAN*@
+               @if (!Model.IsItChildCase())
+                    {
+                @Html.Partial("WorkflowStep", Model.WorkflowSteps)
+                }
+                
                     </ul>
                 </div>
                 <div class="pull-right">

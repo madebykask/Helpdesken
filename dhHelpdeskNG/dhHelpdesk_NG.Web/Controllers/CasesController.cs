@@ -1366,9 +1366,8 @@ namespace DH.Helpdesk.Web.Controllers
                     var responsibleUsersAvailable = this._userService.GetAvailablePerformersOrUserId(customerId, m.case_.CaseResponsibleUser_Id);
                     m.OutFormatter = new OutputFormatter(cs.IsUserFirstLastNameRepresentation == 1, userTimeZone);
                     m.ResponsibleUsersAvailable = responsibleUsersAvailable.MapToSelectList(cs, isAddEmpty);
-                    m.SendToDialogModel = this.CreateNewSendToDialogModel(customerId, responsibleUsersAvailable.ToList(), cs); //ToDo: remove after release
+                    m.SendToDialogModel = this.CreateNewSendToDialogModel(customerId, responsibleUsersAvailable.ToList(), cs);
 	                m.MinWorkingTime = cs.MinRegWorkingTime;
-					m.CaseLog.SendMailAboutCaseToNotifier = false;
                     m.CaseMailSetting = new CaseMailSetting(
                         customer.NewCaseEmailList,
                         customer.HelpdeskEmail,
@@ -1387,15 +1386,15 @@ namespace DH.Helpdesk.Web.Controllers
                             m.TimeRequired = d.ChargeMandatory.ToBool();
                         }
                     }
-                    
-                    // check state secondary info
-                    m.CaseLog.SendMailAboutCaseToNotifier = false;// customer.CommunicateWithNotifier.ToBool();
 
+                    m.CaseLog.SendMailAboutCaseToNotifier = !string.IsNullOrEmpty(m.CaseLog.TextExternal);// customer.CommunicateWithNotifier.ToBool();
+
+                    // check state secondary info
                     m.Disable_SendMailAboutCaseToNotifier = false;
                     if (m.case_.StateSecondary_Id > 0)
                         if (m.case_.StateSecondary != null)
                         {
-                            m.Disable_SendMailAboutCaseToNotifier = m.case_.StateSecondary.NoMailToNotifier == 1 ? true : false;
+                            m.Disable_SendMailAboutCaseToNotifier = m.case_.StateSecondary.NoMailToNotifier == 1;
                             if (m.case_.StateSecondary.NoMailToNotifier == 1)
                                 m.CaseLog.SendMailAboutCaseToNotifier = false;
                             else
@@ -4232,6 +4231,7 @@ namespace DH.Helpdesk.Web.Controllers
             SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
             var acccessToGroups = this._userService.GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, customerId);
             var deps = this._departmentService.GetDepartmentsByUserPermissions(userId, customerId);
+
             var isCreateNewCase = caseId == 0;
             m.CaseLock = caseLocked;
 
@@ -4393,7 +4393,7 @@ namespace DH.Helpdesk.Web.Controllers
                                                           .OrderBy(c=> c.ButtonNumber)
                                                           .ToList();
             m.CaseTemplateButtons = caseTemplateButtons;
-            m.WorkflowSteps = _caseSolutionService.GetCaseSolutionSteps(customerId, m.case_);
+            m.WorkflowSteps = _caseSolutionService.GetGetWorkflowSteps(customerId, m.case_, SessionFacade.CurrentUser, ApplicationType.Helpdesk);
 
             m.CaseMailSetting = new CaseMailSetting(
                 customer.NewCaseEmailList,

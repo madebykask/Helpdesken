@@ -36,7 +36,10 @@
     </li>
     @if (Model.UserHasAdminOrderPermission)
     {
-
+        <li class="secspace"></li>
+        <li>
+            @Html.ActionLink(" ", "ExportOrder", "Orders", new {id = Model.Id}, new { @class = "export-order", title = Translation.GetCoreTextTranslation("Export fil") })
+        </li>
     <li class="secspace"></li>
     <li>
         @Html.CheckBoxFor(m => m.InformOrderer, new { id = "informOrderer_action"})

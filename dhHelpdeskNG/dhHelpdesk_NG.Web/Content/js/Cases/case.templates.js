@@ -904,7 +904,12 @@ function IsValueApplicableFor(templateFieldId, val) {
 
 
 $("#btnGo").on("click", function () {
-    LoadTemplate($('#steps').val());
+    var templateId = parseInt($('#steps').val()) || 0;
+    //only load if templateId exist
+    if (templateId > 0)
+        {
+        LoadTemplate(templateId);
+    }
 });
 
 function LoadTemplate(id) {

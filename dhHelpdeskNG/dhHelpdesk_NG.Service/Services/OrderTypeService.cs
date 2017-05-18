@@ -28,13 +28,16 @@
     {
         private readonly IOrderTypeRepository _orderTypeRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IOrderFieldSettingsRepository _orderFieldSettingsRepository;
 
         public OrderTypeService(
             IOrderTypeRepository orderTypeRepository,
+            IOrderFieldSettingsRepository orderFieldSettingsRepository,
             IUnitOfWork unitOfWork)
         {
             this._orderTypeRepository = orderTypeRepository;
             this._unitOfWork = unitOfWork;
+            this._orderFieldSettingsRepository = orderFieldSettingsRepository;
         }
 
         public IList<OrderType> GetOrderTypesForMailTemplate(int customerId)
@@ -75,12 +78,17 @@
             {
                 try
                 {
+                    var orderFieldsSettings = _orderFieldSettingsRepository.GetMany(x => x.Customer_Id == orderType.Customer_Id && x.OrderType_Id == id);
+                    foreach (var ofs in orderFieldsSettings)
+                    {
+                        _orderFieldSettingsRepository.Delete(ofs);
+                    }
                     this._orderTypeRepository.Delete(orderType);
                     this.Commit();
 
                     return DeleteMessage.Success;
                 }
-                catch
+                catch (Exception ex)
                 {
                     return DeleteMessage.UnExpectedError;
                 }

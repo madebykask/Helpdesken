@@ -12,12 +12,13 @@ namespace DH.Helpdesk.Dal.Mappers.Cases.BusinessModelToEntity
             return new CaseSolutionConditionModel
             {
                 Id = entity.Id,
-                CaseField_Name = entity.CaseField_Name,
+                Property_Name = entity.Property_Name,
                 CaseSolutionConditionGUID = entity.CaseSolutionConditionGUID,
                 ChangedDate = entity.ChangedDate,
                 CaseSolution_Id = entity.CaseSolution_Id,
                 CreatedDate = entity.CreatedDate,
-                Sequence = entity.Sequence,
+                ChangedByUser_Id = entity.ChangedByUser_Id,
+                CreatedByUser_Id = entity.CreatedByUser_Id,
                 Status = entity.Status,
                 Values = entity.Values
             };

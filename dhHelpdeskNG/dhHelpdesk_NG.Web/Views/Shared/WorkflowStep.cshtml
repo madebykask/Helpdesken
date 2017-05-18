@@ -1,20 +1,22 @@
 ﻿@model IList<DH.Helpdesk.BusinessData.Models.WorkflowStepModel>
+@using DH.Helpdesk.Common.Constants;
+
 @if (Model != null && Model.Any())
 {
     <li class="secspace"></li>
     <li>
         <div class="input-append">
             <select id="steps" name="steps">
-                <option value="0">@Translation.GetCoreTextTranslation(Constants.Text.SelectStep)</option>
+                <option value="0">@Translation.GetCoreTextTranslation(Text.SelectStep)</option>
                 @if (Model != null && Model.Any())
                 {
                     foreach (var step in Model)
                     {
-                        <option value="@step.CaseTemplateId">@Translation.GetMasterDataTranslation(step.Caption)</option>
+                        <option value="@step.CaseTemplateId">@Translation.GetMasterDataTranslation(step.Name)</option>
                     }
                 }
             </select>
-            <input id="btnGo" type="button" class="btn btn-default go-button" value="@Translation.GetCoreTextTranslation("Go")" />
+            <input id="btnGo" type="button" class="btn btn-default go-button" value="@Translation.GetCoreTextTranslation("Skicka")" />
         </div>
     </li>
     <li class="secspace"></li>

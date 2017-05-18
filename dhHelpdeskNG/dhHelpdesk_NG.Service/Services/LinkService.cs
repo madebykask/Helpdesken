@@ -49,6 +49,8 @@ namespace DH.Helpdesk.Services.Services
         /// The result.
         /// </returns>
         IEnumerable<LinkOverview> GetLinkOverviews(int[] customers, int? count, bool forStartPage);
+
+        IList<Link> SearchLinks(int customerId, string searchText, List<int> groupIds);
     }
 
     public class LinkService : ILinkService
@@ -201,6 +203,25 @@ namespace DH.Helpdesk.Services.Services
                         .GetLinksForStartPage(customers, count, forStartPage)
                         .MapToOverviews();
             }
+        }
+
+        public IList<Link> SearchLinks(int customerId, string searchText, List<int> groupIds)
+        {
+            IEnumerable<Link> result;
+            if (!string.IsNullOrEmpty(searchText))
+            {
+                var searched = searchText.ToLower();
+                result = _linkRepository.GetMany(x => x.Customer_Id == customerId && x.URLName.ToLower().Contains(searched));
+            }
+            else
+            {
+                result = _linkRepository.GetMany(x => x.Customer_Id == customerId);
+            }
+            if (groupIds != null && groupIds.Any())
+            {
+                result = result.Where(x => x.LinkGroup_Id.HasValue && groupIds.Contains(x.LinkGroup_Id.Value));
+            }
+            return result.ToList();
         }
 
 

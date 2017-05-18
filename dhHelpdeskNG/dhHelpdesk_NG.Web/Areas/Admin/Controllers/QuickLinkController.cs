@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
+﻿using DH.Helpdesk.Web.Infrastructure;
+
+namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -39,9 +41,20 @@
         {
             var customer = this._customerService.GetCustomer(customerId);
             var links = this._linkService.GetLinks(customer.Id);
+            var linkGroups = _linkService.GetLinkGroups(customer.Id);
+
+            var model = new QuickLinkIndexViewModel { Links = links, Customer = customer, LinkGroups = linkGroups };
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public PartialViewResult Search(string searchText, int customerId, List<int> groupIds)
+        {
+            var customer = this._customerService.GetCustomer(customerId);
+            var links = this._linkService.SearchLinks(customer.Id, searchText, groupIds);
 
             var model = new QuickLinkIndexViewModel { Links = links, Customer = customer };
-            return this.View(model);
+            return PartialView("~/Areas/Admin/Views/QuickLink/_QuickLinksRows.cshtml", model.Links);
         }
 
         public ActionResult New(int customerId)

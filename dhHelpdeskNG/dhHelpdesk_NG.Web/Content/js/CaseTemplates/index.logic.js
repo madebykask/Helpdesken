@@ -16,6 +16,7 @@ var tabCaseTemplate = '#CaseTemplateTab';
 var tabCategory = '#CategoriesTab';
 var btnSearch = '#btnCaseSolutionSearch';
 var edtSearch = '#caseSolutionSearch';
+var categories = '#caseSolFilterCategory';
 
 
 $(function () {
@@ -27,15 +28,17 @@ $(function () {
     });
     
     $(btnSearch).click(function () {
-        var searchText = $(edtSearch).val();        
-        DoSearch(searchText);
+        var searchText = $(edtSearch).val();
+        var categoryIds = $(categories).val();
+        doSearch(searchText, categoryIds);
     });
 
     $(edtSearch).keydown(function (e) {
         if (e.keyCode == 13) {
             e.preventDefault();
             var searchText = $(edtSearch).val();
-            DoSearch(searchText);
+            var categoryIds = $(categories).val();
+            doSearch(searchText, categoryIds);
             return false;
         }
     });
@@ -78,18 +81,22 @@ $(function () {
                 });
     }
 
-    var DoSearch = function (searchText) {
-        $.get(searchOverview,
-                {
-                    searchText: searchText,
-                    myTime: Date.now()
-                },
-                function (filteredModel) {
-                    $(caseSolutionRowsArea).html(filteredModel);
-                    $(edtSearch).focus();
-                    $(edtSearch).val(searchText);
-                    $(edtSearch).select();
-                });
+    function doSearch(searchText, categoryIds) {
+        $.ajax({
+            url: searchOverview,
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                searchText: searchText,
+                categoryIds: categoryIds
+            }),
+            success: function (filteredModel) {
+                $(caseSolutionRowsArea).html(filteredModel);
+                $(edtSearch).focus();
+                $(edtSearch).val(searchText);
+                $(edtSearch).select();
+            }
+        });
     }
 
 });

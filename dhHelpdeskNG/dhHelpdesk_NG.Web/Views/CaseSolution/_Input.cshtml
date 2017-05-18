@@ -45,6 +45,7 @@
                     <div class="row">
                         <div class="span12">
                             <table class="tableform" border="0">
+                                @Html.HiddenFor(model => model.CaseSolution.TemplatePath)
                                 <tr>
                                     <td style="width:200px">
                                         @Translation.Get("Ärendemall", Enums.TranslationSource.TextTranslation)
@@ -70,15 +71,7 @@
                                         @Html.DropDownListFor(model => model.CaseSolution.CaseSolutionCategory_Id, Model.CsCategories, "")
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>
-                                        @Translation.Get("Ersätt alltid befintliga värden", SessionFacade.CurrentLanguageId)
-                                    </td>
-                                    <td>
-                                        <input type="checkbox" name="CaseSolution.OverWritePopUp" @(Model.CaseSolution.OverWritePopUp == 1 ? "checked=checked" : "") value="1" class="switchcheckbox" />
-                                        <input type="hidden" name="CaseSolution.OverWritePopUp" value="0" />
-                                    </td>
-                                </tr>
+                               
                                 <tr>
                                     <td>
                                         @Translation.Get("Visa på självservice", Enums.TranslationSource.TextTranslation)
@@ -133,6 +126,15 @@
                                                     <option value="-2" selected> @saveDropDownText </option>
                                                 }
                                             </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Ersätt alltid befintliga värden", SessionFacade.CurrentLanguageId)
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="CaseSolution.OverWritePopUp" @(Model.CaseSolution.OverWritePopUp == 1 ? "checked=checked" : "") value="1" class="switchcheckbox" />
+                                        <input type="hidden" name="CaseSolution.OverWritePopUp" value="0" />
                                     </td>
                                 </tr>
                                 <tr>

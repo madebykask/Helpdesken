@@ -59,6 +59,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ICaseSolutionSettingService caseSolutionSettingService;
         private readonly ICaseRuleFactory _caseRuleFactory;
         private readonly IWatchDateCalendarService _watchDateCalendarService;
+        private readonly ICacheProvider _cache;
 
         private const int MAX_QUICK_BUTTONS_COUNT = 5;
         private const string CURRENT_USER_ITEM_CAPTION = "Inloggad användare";
@@ -96,7 +97,8 @@ namespace DH.Helpdesk.Web.Controllers
             IOrganizationService organizationService,
             IRegistrationSourceCustomerService registrationSourceCustomerService,
             ICaseRuleFactory caseRuleFactory,
-            IWatchDateCalendarService watchDateCalendarService)
+            IWatchDateCalendarService watchDateCalendarService,
+            ICacheProvider cache)
             : base(masterDataService)
         {
             this._caseFieldSettingService = caseFieldSettingService;
@@ -129,6 +131,7 @@ namespace DH.Helpdesk.Web.Controllers
             this._organizationService = organizationService;
             this._registrationSourceCustomerService = registrationSourceCustomerService;
             this._caseRuleFactory = caseRuleFactory;
+            this._cache = cache;
             _watchDateCalendarService = watchDateCalendarService;
         }        
 
@@ -178,14 +181,15 @@ namespace DH.Helpdesk.Web.Controllers
             return PartialView("_RowsOverview", model.Rows);
         }
 
-        [HttpGet]
-        public PartialViewResult Search(string searchText)
+        [HttpPost]
+        public PartialViewResult Search(string searchText, List<int> categoryIds)
         {
             var caseSolutionSearch = new CaseSolutionSearch();
             if (SessionFacade.CurrentCaseSolutionSearch != null)
                 caseSolutionSearch = SessionFacade.CurrentCaseSolutionSearch;
 
-            caseSolutionSearch.SearchCss = searchText;            
+            caseSolutionSearch.SearchCss = searchText;
+            caseSolutionSearch.CategoryIds = categoryIds.ToList();
             SessionFacade.CurrentCaseSolutionSearch = caseSolutionSearch;
 
             var model = CreateIndexViewModel(caseSolutionSearch);
@@ -480,6 +484,10 @@ namespace DH.Helpdesk.Web.Controllers
                     CaseSolutionSettingModels);
             this.caseSolutionSettingService.UpdateCaseSolutionSettings(settingsSolutionAggregate);
 
+            //Remove caching of conditions for this specific template that is used in Case
+            string cacheKey = string.Format(DH.Helpdesk.Common.Constants.CacheKey.CaseSolutionCondition, caseSolutionInputViewModel.CaseSolution.Id);
+            this._cache.Invalidate(cacheKey);
+
             if (errors.Count == 0)
             {
                 switch (PageId) // back to refrence page
@@ -496,6 +504,7 @@ namespace DH.Helpdesk.Web.Controllers
             this.TempData["RequiredFields"] = errors;
             var model = this.CreateInputViewModel(caseSolutionInputViewModel.CaseSolution);
 
+       
             return this.View(model);
         }
 
@@ -755,9 +764,12 @@ namespace DH.Helpdesk.Web.Controllers
             var isUserFirstLastNameRepresentation = this._settingService.GetCustomerSetting(customerId)
                                                                         .IsUserFirstLastNameRepresentation == 1;
 
-            //Only return casesolution where templatepath is null - these case solutions are E-Forms shown in myhr/linemanager/selfservice
-            var caseSolutions = this._caseSolutionService.SearchAndGenerateCaseSolutions(customerId, caseSolutionSearch, isUserFirstLastNameRepresentation)
-                                                         .Where(x => x.TemplatePath == null).ToList();                        
+            ////Only return casesolution where templatepath is null - these case solutions are E-Forms shown in myhr/linemanager/selfservice
+            //var caseSolutions = this._caseSolutionService.SearchAndGenerateCaseSolutions(customerId, caseSolutionSearch, isUserFirstLastNameRepresentation)
+            //                                             .Where(x => x.TemplatePath == null).ToList();                        
+
+            //I have removed the  above condition, from now on these will appear in the list /TAN
+            var caseSolutions = this._caseSolutionService.SearchAndGenerateCaseSolutions(customerId, caseSolutionSearch, isUserFirstLastNameRepresentation).ToList();
 
             var curUserItem = string.Format("-- {0} --", Translation.GetCoreTextTranslation(CURRENT_USER_ITEM_CAPTION));
             var connectedToButton = Translation.GetCoreTextTranslation("Knapp");
@@ -775,7 +787,7 @@ namespace DH.Helpdesk.Web.Controllers
                                                                                 ),
                                                             PriorityName = cs.Priority == null ? string.Empty : cs.Priority.Name,
                                                             IsActive = (cs.Status != 0),
-                                                            ConnectedToButton = (cs.ConnectedButton.HasValue && cs.ConnectedButton == 0) ? Translation.GetCoreTextTranslation(Constants.Text.WorkflowStep) : ( cs.ConnectedButton.HasValue) ? connectedToButton + " " + cs.ConnectedButton.Value: "",
+                                                            ConnectedToButton = (cs.ConnectedButton.HasValue && cs.ConnectedButton == 0) ? Translation.GetCoreTextTranslation(DH.Helpdesk.Common.Constants.Text.WorkflowStep) : ( cs.ConnectedButton.HasValue) ? connectedToButton + " " + cs.ConnectedButton.Value: "",
                                                             SortOrder = cs.SortOrder
                                                         }).ToArray();
 
@@ -896,7 +908,7 @@ namespace DH.Helpdesk.Web.Controllers
             buttonList.Add(new SelectListItem()
             {
                 Value = "0",
-                Text = Translation.GetCoreTextTranslation(Constants.Text.WorkflowStep),
+                Text = Translation.GetCoreTextTranslation(DH.Helpdesk.Common.Constants.Text.WorkflowStep),
                 Selected = caseSolution.ConnectedButton == 0
             });
 

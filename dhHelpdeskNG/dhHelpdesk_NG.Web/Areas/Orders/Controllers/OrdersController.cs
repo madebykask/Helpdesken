@@ -1,16 +1,13 @@
-﻿using DH.Helpdesk.Services.Services.Concrete;
+﻿using DH.Helpdesk.Web.Infrastructure.Order;
 
 namespace DH.Helpdesk.Web.Areas.Orders.Controllers
 {
     using System;
     using System.Collections.Generic;
-    using System.Configuration;
     using System.Linq;
     using System.Net;
     using System.Web;
     using System.Web.Mvc;
-    using System.Web.WebPages;
-
     using BusinessData.Enums.Orders;
     using BusinessData.Models.Orders.Index;
     using Common.Tools;
@@ -31,8 +28,8 @@ namespace DH.Helpdesk.Web.Areas.Orders.Controllers
     using Services.BusinessLogic.Mappers.Users;
     using BusinessData.Enums.Admin.Users;
     using BusinessData.Models.Case;
-    using Common.Enums;
     using Web.Infrastructure.Extensions;
+    using Services.Services.Concrete;
 
     public class OrdersController : BaseController
     {
@@ -449,5 +446,19 @@ namespace DH.Helpdesk.Web.Areas.Orders.Controllers
             return this.Json(models, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
+        public FileContentResult ExportOrder(int id)
+        {
+            var response = _ordersService.FindOrder(id, _workContext.Customer.CustomerId, false);
+            if (response == null)
+            {
+                throw new HttpException((int)HttpStatusCode.NotFound, null);
+            }
+            var model = _orderModelFactory.Create(response, _workContext.Customer.CustomerId);
+            var helper = new OrderExportHelper();
+            var fileContent = helper.GetOrderExportText(model);
+            var fileName = string.Format("O-{0}_{1}.txt", model.General.OrderNumber.Value, DateTime.Now.ToShortDateString());
+            return File(fileContent, MimeType.BinaryFile, fileName);
+        }
     }
 }

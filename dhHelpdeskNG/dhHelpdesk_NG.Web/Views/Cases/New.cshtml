@@ -66,6 +66,12 @@
                         <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation), null, null, new { @class = "btn save-new", id = "case-action-save-and-new" })</li>
                     }
 
+                    @if (!Model.IsItChildCase() && Model.WorkflowSteps.Count() > 0)
+                    {
+                        <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), null, null, null, new { @class = "btn save", id = "case-action-save" })</li>
+                    }
+
+
                     <li><i id="TemplateQuickButtonIndicator" class="gif-loader" style="display:none">&nbsp;</i></li>
                     <li class="secspace"></li>
                     
@@ -119,7 +125,11 @@
                     }
 
                     @*At the moment we do not check access for this /TAN*@
-                    @Html.Partial("WorkflowStep", Model.WorkflowSteps)
+        
+                    @if (!Model.IsItChildCase())
+                    {
+                        @Html.Partial("WorkflowStep", Model.WorkflowSteps)
+                    }
                 </ul>
             </div>
             <div class="pull-right">

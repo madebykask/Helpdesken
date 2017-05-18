@@ -837,7 +837,7 @@
 			modelBuilder.Configurations.Add(new InvoiceRowConfiguration());
 			modelBuilder.Configurations.Add(new InvoiceHeaderConfiguration());
 
-            //Workflow
+            //Workflow Step - Condition
             modelBuilder.Configurations.Add(new CaseSolutionConditionConfiguration());
 
             #endregion

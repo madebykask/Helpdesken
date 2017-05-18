@@ -13,14 +13,16 @@
             }
 
             entity.Id = businessModel.Id;
-            entity.CaseField_Name = businessModel.CaseField_Name;
+            entity.Property_Name = businessModel.Property_Name;
             entity.CaseSolutionConditionGUID = businessModel.CaseSolutionConditionGUID;
             entity.CaseSolution_Id = businessModel.CaseSolution_Id;
             entity.ChangedDate = businessModel.ChangedDate;
+            entity.ChangedByUser_Id = businessModel.ChangedByUser_Id;
             entity.CreatedDate = businessModel.CreatedDate;
-            entity.Sequence = businessModel.Sequence;
+            entity.CreatedByUser_Id = businessModel.CreatedByUser_Id;
             entity.Status = businessModel.Status;
             entity.Values = businessModel.Values;
+            entity.Description = businessModel.Description;
         }
     }
 }

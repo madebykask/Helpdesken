@@ -231,11 +231,11 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                 return new MvcHtmlString(string.Empty);
         }
 
-        public static MvcHtmlString OrderTypeTreeString(this HtmlHelper helper, IList<OrderType> orderTypes)
+        public static MvcHtmlString OrderTypeTreeString(this HtmlHelper helper, IList<OrderType> orderTypes, bool isShowOnlyActive = false)
         {
             if (orderTypes != null)
             {
-                return BuildOrderTypeTreeRow(orderTypes, 0);
+                return BuildOrderTypeTreeRow(orderTypes, 0, isShowOnlyActive);
             }
             else
                 return new MvcHtmlString(string.Empty);
@@ -1223,13 +1223,16 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
             return new MvcHtmlString(htmlOutput);
         }
 
-        private static MvcHtmlString BuildOrderTypeTreeRow(IList<OrderType> orderTypes, int iteration)
+        private static MvcHtmlString BuildOrderTypeTreeRow(IList<OrderType> orderTypes, int iteration, bool isShowOnlyActive = true, bool isParentInactive = false)
         {
             string htmlOutput = string.Empty;
 
-            foreach (OrderType orderType in orderTypes)
+            var orderTypesToDisplay = isShowOnlyActive ? orderTypes.Where(it => it.IsActive == 1) : orderTypes;
+
+            foreach (OrderType orderType in orderTypesToDisplay)
             {
-                htmlOutput += "<tr>";
+                var isInactive = orderType.IsActive != 1 || isParentInactive;
+                htmlOutput += string.Format("<tr class=\"{0}\">", isInactive ? "inactive" : string.Empty);
                 htmlOutput += "<td><a href='/admin/ordertype/edit/" + orderType.Id + "' style='padding-left: " + iteration + "px'><i class='icon-resize-full icon-dh'></i>" + orderType.Name + "</a></td>";
                 htmlOutput += "<td><a href='/admin/ordertype/edit/" + orderType.Id + "'>" + orderType.IsDefault.TranslateBit() + "</a></td>";
 
@@ -1242,7 +1245,7 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
 
                 if (orderType.SubOrderTypes != null)
                     if (orderType.SubOrderTypes.Count > 0)
-                        htmlOutput += BuildOrderTypeTreeRow(orderType.SubOrderTypes.OrderBy(x => x.Name).ToList(), iteration + 20);
+                        htmlOutput += BuildOrderTypeTreeRow(orderType.SubOrderTypes.OrderBy(x => x.Name).ToList(), iteration + 20, isShowOnlyActive, isInactive);
 
             }
 

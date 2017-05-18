@@ -915,8 +915,19 @@
         [HttpPost]
         public ActionResult SearchUser(string query, int customerId, string searchKey)
         {
-            var result = _computerService.SearchComputerUsers(customerId, query);            
-            return Json(new { searchKey = searchKey, result = result });              
+            var caseFieldSetting = _caseFieldSettingService.ListToShowOnCasePage(customerId, SessionFacade.CurrentLanguageId)
+                                                          .Where(c => c.ShowExternal == 1)
+                                                          .ToList();
+            var fieldsVisibility = new
+            {
+                Name = caseFieldSetting.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Persons_Name.ToString()),
+                Email = caseFieldSetting.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString()),
+                Phone = caseFieldSetting.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString()),
+                Department = caseFieldSetting.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Department_Id.ToString()),
+                UserCode = caseFieldSetting.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.UserCode.ToString())
+            };
+            var result = _computerService.SearchComputerUsers(customerId, query);
+            return Json(new { searchKey = searchKey, result = result, fieldsVisibility = fieldsVisibility });
         }
 
         [HttpPost]

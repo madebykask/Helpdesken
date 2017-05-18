@@ -1,0 +1,48 @@
+﻿@model IList<DH.Helpdesk.Domain.Link>
+
+<div id="quickLinksRowsArea">
+    <table class="table table-striped table-bordered table-hover table-cases" id="tbllink">
+        <thead>
+            <tr>
+                <th>
+                    @Translation.GetCoreTextTranslation("Namn")
+                </th>
+                <th>
+                    @Translation.GetCoreTextTranslation("adress")
+                </th>
+                <th>
+                    @Translation.GetCoreTextTranslation("Dokument")
+                </th>
+                <th>
+                    @Translation.GetCoreTextTranslation("Ärendemall")
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <a href="@Url.Action("edit", "quicklink", new {area = "admin", id = item.Id})">@Html.DisplayFor(modelItem => item.URLName)</a>
+                    </td>
+                    <td>
+                        <a href="@Url.Action("edit", "quicklink", new {area = "admin", id = item.Id})">@Html.DisplayFor(modelItem => item.URLAddress)</a>
+                    </td>
+                    <td>
+                        @if (item.Document != null)
+                        {
+                            <a href="@Url.Action("edit", "quicklink", new {area = "admin", id = item.Id})">@Translation.GetCoreTextTranslation(item.Document.Name)</a>
+                        }
+                    </td>
+                    <td>
+                        @if (item.CaseSolution != null)
+                        {
+                            <a href="@Url.Action("edit", "quicklink", new {area = "admin", id = item.Id})">@Translation.GetCoreTextTranslation(item.CaseSolution.Name)</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

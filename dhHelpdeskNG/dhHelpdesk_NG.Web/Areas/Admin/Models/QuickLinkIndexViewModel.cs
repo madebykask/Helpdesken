@@ -8,5 +8,6 @@
     {
         public Customer Customer { get; set; }
         public IList<Link> Links { get; set; }
+        public IList<LinkGroup> LinkGroups { get; set; }
     }
 }

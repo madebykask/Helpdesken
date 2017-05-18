@@ -9,6 +9,7 @@ using DH.Helpdesk.Web.Models.Feedback;
 
 namespace DH.Helpdesk.Web.Controllers
 {
+    [Authorize]
     public class FeedbackAnswerController : Controller
     {
         private readonly ICircularService _circularService;

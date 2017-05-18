@@ -3673,7 +3673,8 @@ a.inactive
 .operationobject.admin.content .inactive *,
 .operationlogcategory.admin.content .inactive *,
 .emailgroup.admin.content .inactive *,
-.program.admin.content .inactive *
+.program.admin.content .inactive *,
+.order-type.admin.content .inactive *
 
 
 {
@@ -3974,4 +3975,12 @@ table .multitext i {
 
 .pb5 {
     padding-bottom: 5px !important;
+}
+
+a.export-order {
+    background: url(../icons/doc-download.png) no-repeat;
+    display: block;
+    width: 15px;
+    height: 20px;
+    margin-bottom: -7px;
 }

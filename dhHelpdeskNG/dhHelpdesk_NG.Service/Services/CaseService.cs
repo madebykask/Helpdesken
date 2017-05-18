@@ -199,6 +199,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly IUserService _userService;
         private readonly IEmailSendingSettingsProvider _emailSendingSettingsProvider;
         private readonly ICaseExtraFollowersService _caseExtraFollowersService;
+        private readonly IProductAreaService _productAreaService;
 
         public CaseService(
             ICaseRepository caseRepository,
@@ -235,8 +236,9 @@ namespace DH.Helpdesk.Services.Services
             IUserService userService,
             IEmailSendingSettingsProvider emailSendingSettingsProvider,
             ICaseExtraFollowersService caseExtraFollowersService,
-			IFeedbackTemplateService feedbackTemplateService
-			)
+			IFeedbackTemplateService feedbackTemplateService,
+			IProductAreaService productAreaService
+            )
 
         {
             this._unitOfWork = unitOfWork;
@@ -275,6 +277,7 @@ namespace DH.Helpdesk.Services.Services
             this._emailSendingSettingsProvider = emailSendingSettingsProvider;
             _caseExtraFollowersService = caseExtraFollowersService;
 	        _feedbackTemplateService = feedbackTemplateService;
+            _productAreaService = productAreaService;
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
@@ -1368,10 +1371,21 @@ namespace DH.Helpdesk.Services.Services
                 #region Send template email if priority has value and Internal or External log is filled
                 if (newCase.Priority != null && log != null && (!string.IsNullOrEmpty(log.TextExternal) || !string.IsNullOrEmpty(log.TextInternal)))
                 {
+                    var caseHis = _caseHistoryRepository.GetCloneOfPenultimate(caseId);
+                    if (caseHis != null && caseHis.Priority_Id.HasValue)
+                    {
+                        var prevPriority = _priorityService.GetPriority(caseHis.Priority_Id.Value);
+                        if (!string.IsNullOrWhiteSpace(prevPriority.EMailList))
+                        {
+                            var copyNewCase = _caseRepository.GetDetachedCaseById(caseId);
+                            copyNewCase.Priority = prevPriority;
+                            SendPriorityMailSpecial(copyNewCase, log, cms, files, helpdeskMailFromAdress, caseHistoryId, caseId, customerSetting, smtpInfo, userTimeZone);
+                        }
+                    }
+
                     if (!string.IsNullOrWhiteSpace(newCase.Priority.EMailList))
                     {
-                        SendPriorityMailSpecial(newCase, log, cms, files, helpdeskMailFromAdress, caseHistoryId, caseId,
-                            customerSetting, smtpInfo, userTimeZone);
+                        SendPriorityMailSpecial(newCase, log, cms, files, helpdeskMailFromAdress, caseHistoryId, caseId, customerSetting, smtpInfo, userTimeZone);
                     }
                 }
                 #endregion
@@ -2504,7 +2518,15 @@ namespace DH.Helpdesk.Services.Services
             ret.Add(new Field { Key = "[#12]", StringValue = c.Priority != null ? c.Priority.Name : string.Empty });
             ret.Add(new Field { Key = "[#20]", StringValue = c.Priority != null ? c.Priority.Description : string.Empty });
             ret.Add(new Field { Key = "[#21]", StringValue = c.WatchDate.ToString() } );
-            ret.Add(new Field { Key = "[#28]", StringValue = c.ProductArea != null ? c.ProductArea.Name : string.Empty });
+            if (c.ProductArea?.Parent_ProductArea_Id != null)
+            {
+                var names = _productAreaService.GetParentPath(c.ProductArea.Id, c.Customer_Id).ToList();
+                ret.Add(new Field { Key = "[#28]", StringValue = string.Join(" - ", names)});
+            }
+            else
+            {
+                ret.Add(new Field { Key = "[#28]", StringValue = c.ProductArea != null ? c.ProductArea.Name : string.Empty });
+            }
             if (l != null)
             {
                 ret.Add(new Field { Key = "[#10]", StringValue = l.TextExternal });

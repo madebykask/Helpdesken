@@ -649,6 +649,7 @@ function CaseInitForm() {
         $.post('/Cases/ChangePriority/', { 'id': $(this).val() }, function (data) {
             if (data.ExternalLogText != null && data.ExternalLogText != "") {
                 $('#CaseLog_TextExternal').val(data.ExternalLogText);
+                $('#CaseLog_TextExternal').trigger("propertychange");
             }
         }, 'json');
     });

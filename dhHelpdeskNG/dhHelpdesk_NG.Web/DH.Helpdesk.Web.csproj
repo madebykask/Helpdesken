@@ -335,6 +335,8 @@
     <Compile Include="Areas\Invoices\InvoicesAreaRegistration.cs" />
     <Compile Include="Areas\Invoices\Models\InvoiceListItemViewModel.cs" />
     <Compile Include="Areas\Invoices\Models\LogInvoiceItemViewModel.cs" />
+    <Content Include="Areas\Admin\Content\js\OrderType\index.logic.js" />
+    <Content Include="Areas\Admin\Content\js\QuickLinks\index.logic.js" />
     <Content Include="Areas\Orders\Views\OrderFieldSettings\Partials\OrderFieldWebTypes.cshtml" />
     <Content Include="Areas\Invoices\Scripts\Pages\invoiceFiles.js" />
     <Content Include="Areas\Invoices\Views\Overview\Files.cshtml" />
@@ -1264,6 +1266,7 @@
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\JavaScriptConvertExtention.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\UserFormatterExtension.cs" />
     <Compile Include="Infrastructure\ModelFactories\Case\Concrete\CaseRuleFactory.cs" />
+    <Compile Include="Infrastructure\Order\OrderExportHelper.cs" />
     <Compile Include="Infrastructure\RouteValueDictionaryHelper.cs" />
     <Compile Include="Infrastructure\SelectListMapper.cs" />
     <Compile Include="Infrastructure\Enums.cs" />
@@ -3210,6 +3213,7 @@
     <Content Include="Areas\Invoices\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Invoices\Views\web.config" />
     <Content Include="Areas\Invoices\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Admin\Views\QuickLink\_QuickLinksRows.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx" />
     <Content Include="Content\js\Shared\custom.validation.reuiredifnotempty.js" />
@@ -3868,6 +3872,7 @@
     <Content Include="Views\Questionnaire\Feedback\_StatisticsCases.cshtml" />
     <Content Include="Views\Questionnaire\Feedback\FeedbackStatisticsGrid.cshtml" />
     <Content Include="Views\FeedbackAnswer\ThankYou.cshtml" />
+    <Content Include="Views\Shared\WorkflowStep.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">

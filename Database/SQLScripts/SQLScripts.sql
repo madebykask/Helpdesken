@@ -89,6 +89,68 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	end
 GO
 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+		where syscolumns.name = N'ShowOnExtPageCases' and sysobjects.name = N'tblCaseType')
+	begin
+		ALTER TABLE [dbo].[tblCaseType] ADD [ShowOnExtPageCases] [int] NOT NULL DEFAULT ((0))
+	end
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+		where syscolumns.name = N'ShowOnExtPageCases' and sysobjects.name = N'tblProductArea')
+	begin
+		ALTER TABLE [dbo].[tblProductArea] ADD [ShowOnExtPageCases] [int] NOT NULL DEFAULT ((0))
+	end
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'SortOrder' and sysobjects.name = N'tblCaseSolution')
+	ALTER TABLE [dbo].[tblCaseSolution] ADD [SortOrder] [int] NOT NULL DEFAULT ((0))
+GO
+
+/* Add table for CaseSolution Conditions */
+if not exists(select * from sysobjects WHERE Name = N'tblCaseSolutionCondition')
+begin
+	
+	CREATE TABLE [dbo].[tblCaseSolutionCondition](
+		[Id] [int] IDENTITY(1,1) NOT NULL,
+		[CaseSolutionConditionGUID] [uniqueidentifier] NULL,
+		[CaseSolution_Id] [int] NULL,
+		[Property_Name] [nvarchar](100) NULL,
+		[Values] [nvarchar](100) NULL,
+		[Description] [nvarchar](200) NULL,
+		[Status] [int] NULL,
+		[CreatedDate] [datetime] NULL,
+		[CreatedByUser_Id] [int] NULL,
+		[ChangedDate] [datetime] NULL,
+		[ChangedByUser_Id] [int] NULL,
+	 CONSTRAINT [PK_tblCaseSolutionCondition] PRIMARY KEY CLUSTERED 
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
+
+
+	ALTER TABLE [dbo].[tblCaseSolutionCondition] ADD  CONSTRAINT [DF_tblCaseSolutionCondition_CaseSolutionConditionGUID]  DEFAULT (newid()) FOR [CaseSolutionConditionGUID]
+
+	ALTER TABLE [dbo].[tblCaseSolutionCondition] ADD  CONSTRAINT [DF_tblCaseSolutionCondition_Status]  DEFAULT ((0)) FOR [Status]
+
+	ALTER TABLE [dbo].[tblCaseSolutionCondition] ADD  CONSTRAINT [DF_tblCaseSolutionCondition_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
+
+	ALTER TABLE [dbo].[tblCaseSolutionCondition] ADD  CONSTRAINT [DF_tblCaseSolutionCondition_ChangedDate]  DEFAULT (getdate()) FOR [ChangedDate]
+
+	ALTER TABLE [dbo].[tblCaseSolutionCondition]  WITH CHECK ADD  CONSTRAINT [FK_tblCaseSolutionCondition_tblCaseSolution] FOREIGN KEY([CaseSolution_Id])
+	REFERENCES [dbo].[tblCaseSolution] ([Id])
+
+	ALTER TABLE [dbo].[tblCaseSolutionCondition] CHECK CONSTRAINT [FK_tblCaseSolutionCondition_tblCaseSolution]
+
+end
+GO
+
+
+
+
+
+
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.32'
