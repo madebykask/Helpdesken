@@ -19,7 +19,10 @@
     using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
     using Models.Login;
     using System.Web.Hosting;
-    
+    using Infrastructure.WebApi;
+    using Infrastructure.Helpers;
+    using Models.WebApi;
+
     public class LoginController : Controller
     {
         private const string Root = "/";
@@ -67,11 +70,15 @@
 
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Head)]
         public ViewResult Login()
-        {          
-            TempData["NumOfUsers"] = GetLiveUserCount();
-            TempData["CurrentWebSiteID"] = HostingEnvironment.ApplicationHost.GetSiteID();
-            TempData["CurrentWebSiteName"] = HostingEnvironment.ApplicationHost.GetSiteName();
-            
+        {
+            var baseUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Request.ApplicationPath.TrimEnd('/'));
+            var webApiService = new WebApiService(baseUrl);
+            var token = AsyncHelper.RunSync(() => webApiService.GetAccessToken("admin", "3edc4rfv"));
+
+            if (token != null)
+            {
+                TempData["token"] = token.access_token;
+            }                
             return View();
         }
 

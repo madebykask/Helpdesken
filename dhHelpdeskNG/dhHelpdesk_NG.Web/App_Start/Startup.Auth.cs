@@ -19,7 +19,7 @@ namespace DH.Helpdesk.Web.App_Start
             {
                 AllowInsecureHttp = true,
                 TokenEndpointPath = new PathString("/token"),
-                AccessTokenExpireTimeSpan = TimeSpan.FromDays(1),
+                AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(20),
                 ApplicationCanDisplayErrors = true,
                 Provider = new AccessTokenProvider(),
                 RefreshTokenProvider = new RefreshTokenProvider()

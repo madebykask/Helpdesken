@@ -65,6 +65,9 @@
         $("input:text:visible:first").focus();
     };
 
+    localStorage.removeItem('accessToken', '');
+    localStorage.setItem('accessToken', '@TempData["token"]');
+
     $('#btnToken').click(function () {
         auth1();
     });
@@ -78,7 +81,9 @@
     });
 
     function auth1() {
-        localStorage.removeItem('token', '');
+        @*localStorage.removeItem('accessToken', '');
+        localStorage.removeItem('accessToken', '');
+
         $.post("@Url.Content("~/token")",
                 "username=admin" +
                 "&password=3edc4rfv" +
@@ -86,14 +91,17 @@
                 { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
         ).success(function (data) {
             if (data == null)
-                alert("Error occurred!");                
-            else
-                localStorage.setItem('token', data.access_token);
-        });
+                alert("Error occurred!");
+            else {
+                localStorage.setItem('accessToken', data.access_token);
+                localStorage.setItem('refeshToken', data.refresh_token);
+                
+            }
+        });*@
     };
 
     function request1() {
-        var _token = localStorage.getItem('token');
+        var _token = localStorage.getItem('accessToken');
         if (_token == null || _token == ""){
             alert("Not authenticated!");
             return;
@@ -109,7 +117,7 @@
     };
 
     function request2() {
-        var _token = localStorage.getItem('token');
+        var _token = localStorage.getItem('accessToken');
         if (_token == null || _token == "") {
             alert("Not authenticated!");
             return;
