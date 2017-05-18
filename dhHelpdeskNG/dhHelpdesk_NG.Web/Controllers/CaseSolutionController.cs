@@ -97,7 +97,7 @@ namespace DH.Helpdesk.Web.Controllers
             IOrganizationService organizationService,
             IRegistrationSourceCustomerService registrationSourceCustomerService,
             ICaseRuleFactory caseRuleFactory,
-            IWatchDateCalendarService watchDateCalendarService)
+            IWatchDateCalendarService watchDateCalendarService,
             ICacheProvider cache)
             : base(masterDataService)
         {

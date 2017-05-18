@@ -64,7 +64,7 @@ namespace DH.Helpdesk.Services.Services
             IFormRepository formRepository,
             ILinkRepository linkRepository,
             ILinkService linkService,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
             ICaseSolutionConditionRepository caseSolutionConditionRepository,
             ICacheProvider cache)
         {
