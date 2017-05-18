@@ -14,8 +14,8 @@
     <div>
         <table>
             <tr>
-                <td>
-                    <input type="text" id="caseSolutionSearch", maxlength="50", style="width: 200px;" value="@searchText"/>
+                <td>                    
+                    <input type="text" id="caseSolutionSearch", maxlength = "50", style = "width: 200px;" value="@searchText" />
                     <input type="button" id="btnCaseSolutionSearch" class="btn" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)"/>
                 </td>
             </tr>
@@ -40,18 +40,22 @@
                     @Translation.GetCoreTextTranslation("Handläggare")
                     <i class="@CaseSolutionIndexColumns.Administrator.SetCaseSolutionSortIcon()"></i>
                 </th>
-                <th class="sortable" data-sort="@CaseSolutionIndexColumns.Priority" data-asc="@_asc" style="cursor: pointer; cursor: hand; width: 20%">
                     @Translation.GetCoreTextTranslation("Prioritet")
+                <th class="sortable" data-sort="@CaseSolutionIndexColumns.Priority" data-asc="@_asc" style="cursor: pointer; cursor: hand; width: 15%">
                     <i class="@CaseSolutionIndexColumns.Priority.SetCaseSolutionSortIcon()"></i>
                 </th>
                 <th class="sortable" data-sort="@CaseSolutionIndexColumns.ConnectedToButton" data-asc="@_asc" style="cursor: pointer; cursor: hand; width: 15%">
                     @Translation.GetCoreTextTranslation("Kopplat till")
                     <i class="@CaseSolutionIndexColumns.ConnectedToButton.SetCaseSolutionSortIcon()"></i>
                 </th>
-                <th class="sortable" data-sort="@CaseSolutionIndexColumns.Status" data-asc="@_asc" style="cursor: pointer; cursor: hand; width: 15%">
                     @Translation.GetCoreTextTranslation("Aktiv")
+                <th class="sortable" data-sort="@CaseSolutionIndexColumns.Status" data-asc="@_asc" style="cursor: pointer; cursor: hand; width: 8%">
                     <i class="@CaseSolutionIndexColumns.Status.SetCaseSolutionSortIcon()"></i>
-                </th>                
+                </th>
+                <th class="sortable" data-sort="@CaseSolutionIndexColumns.SortOrder" data-asc="@_asc" style="cursor: pointer; width: 10%">
+                    @Translation.GetCoreTextTranslation("Sorteringsordning")
+                    <i class="@CaseSolutionIndexColumns.SortOrder.SetCaseSolutionSortIcon()"></i>
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -79,7 +83,10 @@
                     </td>
                      <td>
                         <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })"> @item.IsActive.BoolToYesNo()</a>
-                    </td>                    
+                    </td>      
+                    <td>
+                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.SortOrder)</a>
+                    </td>              
                 </tr>
             }
         </tbody>

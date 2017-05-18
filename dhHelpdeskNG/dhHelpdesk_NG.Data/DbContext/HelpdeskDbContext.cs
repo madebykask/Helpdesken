@@ -828,9 +828,12 @@
 			modelBuilder.Configurations.Add(new InvoiceRowConfiguration());
 			modelBuilder.Configurations.Add(new InvoiceHeaderConfiguration());
 
-			#endregion
+            //Workflow Step - Condition
+            modelBuilder.Configurations.Add(new CaseSolutionConditionConfiguration());
 
-			base.OnModelCreating(modelBuilder);
+            #endregion
+
+            base.OnModelCreating(modelBuilder);
         }
 
         #endregion

@@ -77,6 +77,7 @@ namespace DH.Helpdesk.Web.Controllers
     using Common.Enums.Settings;
     using Infrastructure.ModelFactories.Case.Concrete;
     using static BusinessData.OldComponents.GlobalEnums;
+    using System.Threading;
 
     public class CasesController : BaseController
     {        
@@ -4139,6 +4140,7 @@ namespace DH.Helpdesk.Web.Controllers
             SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
             var acccessToGroups = this._userService.GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, customerId);
             var deps = this._departmentService.GetDepartmentsByUserPermissions(userId, customerId);
+
             var isCreateNewCase = caseId == 0;
             m.CaseLock = caseLocked;
 
@@ -4290,7 +4292,7 @@ namespace DH.Helpdesk.Web.Controllers
 
 
             var caseTemplateButtons = _caseSolutionService.GetCaseSolutions(customerId)
-                                                          .Where(c => c.Status != 0 && c.ShowInsideCase != 0 && c.ConnectedButton.HasValue)
+                                                          .Where(c => c.Status != 0 && c.ShowInsideCase != 0 && c.ConnectedButton.HasValue && c.ConnectedButton > 0)
                                                           .Select(c => new CaseTemplateButton() 
                                                                             { 
                                                                                 CaseTemplateId = c.Id, 
@@ -4300,6 +4302,7 @@ namespace DH.Helpdesk.Web.Controllers
                                                           .OrderBy(c=> c.ButtonNumber)
                                                           .ToList();
             m.CaseTemplateButtons = caseTemplateButtons;
+            m.WorkflowSteps = _caseSolutionService.GetGetWorkflowSteps(customerId, m.case_, SessionFacade.CurrentUser, ApplicationType.Helpdesk);
 
             m.CaseMailSetting = new CaseMailSetting(
                 customer.NewCaseEmailList,

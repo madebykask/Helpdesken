@@ -5801,5 +5801,29 @@ GO
 UPDATE tblTextTranslation Set TextTranslation = 'Default when cases are registered by e-mail' WHERE Text_Id=854 AND Language_Id=2;
 GO
 
+Declare @Id int = 1811
+Declare @LanguageId int = 2
+If not exists (select * from tbltext where id = @Id)
+begin
+	insert into tbltext (id, TextString) VALUES (@Id, '-- Välj --')
+end
+If not exists (select * from tblTextTranslation where text_id = @Id and Language_Id = @LanguageId)
+begin
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(@Id, @LanguageId, '-- Select --')
+end
+GO
+
+Declare @Id int = 1812
+Declare @LanguageId int = 2
+If not exists (select * from tbltext where id = @Id)
+begin
+	insert into tbltext (id, TextString) VALUES (@Id, 'Arbetsflödessteg')
+end
+If not exists (select * from tblTextTranslation where text_id = @Id and Language_Id = @LanguageId)
+begin
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(@Id, @LanguageId, 'Workflow step')
+end
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

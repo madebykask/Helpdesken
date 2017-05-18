@@ -110,5 +110,7 @@ namespace DH.Helpdesk.Domain
         public virtual WorkingGroupEntity CaseWorkingGroup { get; set; }
         public virtual WorkingGroupEntity WorkingGroup { get; set; }
         //public virtual Problem Problem { get; set; }
+        public int SortOrder { get; set; }
+
     }
 }

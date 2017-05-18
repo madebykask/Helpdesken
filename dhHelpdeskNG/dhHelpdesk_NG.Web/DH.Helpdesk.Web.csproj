@@ -2616,6 +2616,7 @@
     <Content Include="Views\Questionnaire\Feedback\_StatisticsCases.cshtml" />
     <Content Include="Views\Questionnaire\Feedback\FeedbackStatisticsGrid.cshtml" />
     <Content Include="Views\FeedbackAnswer\ThankYou.cshtml" />
+    <Content Include="Views\Shared\WorkflowStep.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">

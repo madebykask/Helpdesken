@@ -21,6 +21,7 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
     using DH.Helpdesk.BusinessData.Models.Customer.Input;
     using DH.Helpdesk.BusinessData.Models.Document.Output;
     using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
+    using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.Dal.Infrastructure.Translate;
     using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Dal.Mappers.Calendars.BusinessModelToEntity;
@@ -106,6 +107,15 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
                 .To<HelpdeskCache>();
 
             this.Bind<IModulesInfoFactory>().To<ModulesInfoFactory>().InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<CaseSolutionConditionModel, CaseSolutionConditionEntity>>()
+                .To<CaseSolutionConditionToEntityMapper>()
+                .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<CaseSolutionConditionEntity, CaseSolutionConditionModel>>()
+                .To<CaseSolutionConditionToBusinessModelMapper>()
+                .InSingletonScope();
+
         }
     }
 }

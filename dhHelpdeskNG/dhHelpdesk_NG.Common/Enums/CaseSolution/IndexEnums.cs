@@ -14,6 +14,8 @@
 
         public const string Status = "Status";
 
-        public const string ConnectedToButton = "ConnectedToButton";        
+        public const string ConnectedToButton = "ConnectedToButton";
+
+        public const string SortOrder = "SortOrder";
     }
 }

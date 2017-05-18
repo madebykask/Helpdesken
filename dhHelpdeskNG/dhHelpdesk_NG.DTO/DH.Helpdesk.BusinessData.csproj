@@ -171,6 +171,7 @@
     <Compile Include="Models\CaseType\CaseTypeItem.cs" />
     <Compile Include="Models\Case\CaseFileDate.cs" />
     <Compile Include="Models\Case\CaseLock\CaseLockOverview.cs" />
+    <Compile Include="Models\Case\CaseSolutionConditionModel.cs" />
     <Compile Include="Models\Case\ExtraFollower.cs" />
     <Compile Include="Models\Case\CaseIntLog\CaseEmailSendOverview.cs" />
     <Compile Include="Models\Case\CaseLock\LockedCaseOverview.cs" />
@@ -992,6 +993,7 @@
     <Compile Include="Enums\Changes\ChangeStatus.cs" />
     <Compile Include="Enums\Changes\Subtopic.cs" />
     <Compile Include="Models\Users\UserProfileCustomerSettings.cs" />
+    <Compile Include="Models\WorkflowStepModel.cs" />
     <Compile Include="Models\WorkingGroup\WorkingGroupForSMS.cs" />
     <Compile Include="Models\WorktimeCalculator\IWorkTimeCalculatorFactory.cs" />
     <Compile Include="Models\WorktimeCalculator\WorkTimeCalculator.cs" />

@@ -154,6 +154,7 @@
             this.Property(x => x.OverWritePopUp).IsRequired();
             this.Property(x => x.ConnectedButton).IsOptional();
             this.Property(x => x.SaveAndClose).IsOptional();
+            this.Property(x => x.SortOrder).IsRequired();
 
             this.ToTable("tblcasesolution");
         }
