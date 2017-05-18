@@ -200,6 +200,14 @@ namespace DH.Helpdesk.SelfService.NinjectModules.Modules
             this.Bind<IEntityToBusinessModelMapper<CaseExtraFollower, ExtraFollower>>()
                 .To<CaseExtraFollowersToBusinessModelMapper>()
                 .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<CaseSolutionConditionModel, CaseSolutionConditionEntity>>()
+                .To<CaseSolutionConditionToEntityMapper>()
+                .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<CaseSolutionConditionEntity, CaseSolutionConditionModel>>()
+                .To<CaseSolutionConditionToBusinessModelMapper>()
+                .InSingletonScope();
         }
     }
 }

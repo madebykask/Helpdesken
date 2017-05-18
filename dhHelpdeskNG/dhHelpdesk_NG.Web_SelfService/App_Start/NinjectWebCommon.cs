@@ -288,6 +288,7 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IMailTemplateServiceNew>().To<MailTemplateServiceNew>();
             kernel.Bind<IRegistrationSourceCustomerService>().To<RegistrationSourceCustomerService>();
             kernel.Bind<IRegistrationSourceCustomerRepository>().To<RegistrationSourceCustomerRepository>();
+            kernel.Bind<ICaseSolutionConditionRepository>().To<CaseSolutionConditionRepository>();
 
             // Cache
             kernel.Bind<ICacheProvider>().To<CacheProvider>();
