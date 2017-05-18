@@ -103,6 +103,9 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	end
 GO
 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'SortOrder' and sysobjects.name = N'tblCaseSolution')
+	ALTER TABLE [dbo].[tblCaseSolution] ADD [SortOrder] [int] NOT NULL DEFAULT ((0))
+GO
 
 /* Add table for CaseSolution Conditions */
 if not exists(select * from sysobjects WHERE Name = N'tblCaseSolutionCondition')
