@@ -19,6 +19,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private readonly ISettingService _settingService;
         private readonly IDocumentService _documentService;
         private readonly ICaseTypeService _caseTypeService;
+        private readonly IProductAreaService _productAreaService;
 
         public SelfServiceSettingController(
                 ICustomerService customerService,
@@ -26,6 +27,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 ISettingService settingService,
                 IDocumentService documentService,
                 ICaseTypeService caseTypeService,
+                IProductAreaService productAreaService,
                 IMasterDataService masterDataService)
             : base(masterDataService)
         {
@@ -34,6 +36,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             this._settingService = settingService;
             this._documentService = documentService;
             this._caseTypeService = caseTypeService;
+            this._productAreaService = productAreaService;
         }
         //
         // GET: /Admin/SelfServiceSetting/
@@ -68,6 +71,19 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 Value = x.Id.ToString()
             }).ToList();
 
+            var allProductAreas = _productAreaService.GetTopProductAreas(customerId);
+            var availableProductAreas = allProductAreas.Where(p => p.ShowOnExtPageCases == 0).Select(x => new SelectListItem
+            {
+                Text = x.Name,
+                Value = x.Id.ToString()
+            }).ToList();
+
+            var selectedProductAreas = allProductAreas.Where(p => p.ShowOnExtPageCases == 1).Select(x => new SelectListItem
+            {
+                Text = x.Name,
+                Value = x.Id.ToString()
+            }).ToList();
+
             var selectedNum = 0;
             if (customer.ShowFAQOnExternalStartPage.HasValue)
               selectedNum = customer.ShowFAQOnExternalStartPage.Value;
@@ -88,6 +104,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     StartPageFAQNums = numbers,
                     AvailableCaseTypes = availableCaseTypes,
                     SelectedCaseTypes = selectedCaseTypes,
+                    AvailableProductAreas = availableProductAreas,
+                    SelectedProductAreas = selectedProductAreas,
                     CaseComplaintDays = setting != null ? setting.CaseComplaintDays : 0
                 };
 
@@ -95,7 +113,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(int id, SelfServiceIndexViewModel vmodel, int[] SelectedCategories, int[] SelectedCaseTypes)
+        public ActionResult Edit(int id, SelfServiceIndexViewModel vmodel, int[] SelectedCategories, int[] SelectedCaseTypes, int[] SelectedProductAreas)
         {
             var customerToSave = this._customerService.GetCustomer(id);
             customerToSave.PasswordRequiredOnExternalPage = vmodel.Customer.PasswordRequiredOnExternalPage;
@@ -143,6 +161,27 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 _caseTypeService.SaveCaseType(type, out errors);
             }
 
+            var allProductAreas = _productAreaService.GetTopProductAreas(id);
+
+            List<int> prodareawgs = new List<int>();
+            int[] wgs = null;
+            foreach (var prod in allProductAreas)
+            {
+                if (SelectedProductAreas != null && SelectedProductAreas.Contains(prod.Id))
+                    prod.ShowOnExtPageCases = 1;
+                else
+                    prod.ShowOnExtPageCases = 0;
+
+                if (prod.WorkingGroups.Count > 0)
+                {
+                    foreach (var wg in prod.WorkingGroups)
+                        prodareawgs.Add(wg.Id);
+
+                    wgs = prodareawgs.ToArray();
+                }
+
+                _productAreaService.SaveProductArea(prod, wgs, out errors);
+            }
 
 
             var setting = _settingService.GetCustomerSetting(id);

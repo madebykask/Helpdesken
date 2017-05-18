@@ -134,6 +134,7 @@
                             @Html.HiddenFor(model => model.ProductArea.Customer_Id)
                             @Html.HiddenFor(model => model.ProductArea.Id)
                             @Html.HiddenFor(model => model.ProductArea.Parent_ProductArea_Id)
+                            @Html.HiddenFor(model => model.ProductArea.ShowOnExtPageCases)
                         </div>
                     </div>
                     <div class="row" id="divWorkingGroup" @(Model.WgSelected.Count > 0 ? "display:block" : "")>

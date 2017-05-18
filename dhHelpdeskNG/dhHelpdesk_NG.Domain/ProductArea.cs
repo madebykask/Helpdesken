@@ -21,7 +21,8 @@
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
         //public Guid? ProductAreaGUID { get; set; }
-        
+        public int ShowOnExtPageCases { get; set; }
+
         public virtual Customer Customer { get; set; }
         public virtual MailTemplateEntity MailTemplate { get; set; }
         public virtual ProductArea ParentProductArea { get; set; }

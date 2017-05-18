@@ -228,7 +228,33 @@
                                         </tr>
                                     </table>
                                 </td>
-                            </tr>                          
+                            </tr>
+                            <tr id="productAreas">
+                                <td>
+                                    @Translation.Get("Produktområde", Enums.TranslationSource.TextTranslation)
+                                </td>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td>@Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation)</td>
+                                            <td></td>
+                                            <td>@Translation.Get("Valda", Enums.TranslationSource.TextTranslation)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                @Html.ListBox("AvailableProductAreas", Model.AvailableProductAreas, new { style = "width: 280px; height: 120px" })
+                                            </td>
+                                            <td style="vertical-align:middle">
+                                                <input type="button" value="&lt;" class="btn" id="removeProductArea" />
+                                                <input type="button" value="&gt;" class="btn" id="addProductArea" />
+                                            </td>
+                                            <td>
+                                                @Html.ListBox("SelectedProductAreas", Model.SelectedProductAreas, new { style = "width: 280px; height: 120px" })
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>                                                    
                         </table>
                     </div>
 
@@ -303,6 +329,19 @@
             return false;
         });
 
+        $("#addProductArea").click(function () {
+            $("#AvailableProductAreas option:selected").remove().appendTo("#SelectedProductAreas");
+            $("#AvailableProductAreas").get(0).selectedIndex = -1;
+            $("#SelectedProductAreas").get(0).selectedIndex = -1;
+            return false;
+        });
+
+        $("#removeProductArea").click(function () {
+            $("#SelectedProductAreas option:selected").remove().appendTo("#AvailableProductAreas");
+            $("#AvailableProductAreas").get(0).selectedIndex = -1;
+            $("#SelectedProductAreas").get(0).selectedIndex = -1;
+            return false;
+        });
         //For next release
         //$("Customer_ShowFAQOnExternalStartPage").change(function () {
         //    $("#SelectedCategories option").attr("selected", "selected");
@@ -311,6 +350,7 @@
         function submitForm() {
             $("#SelectedCategories option").attr("selected", "selected");
             $("#SelectedCaseTypes option").attr("selected", "selected");
+            $("#SelectedProductAreas option").attr("selected", "selected");
             $("#target").submit();
         }
 
