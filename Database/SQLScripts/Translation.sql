@@ -5825,5 +5825,18 @@ begin
 end
 GO
 
+Declare @Id int = 1813
+Declare @LanguageId int = 2
+If not exists (select * from tbltext where id = @Id)
+begin
+	insert into tbltext (id, TextString) VALUES (@Id, 'Koppla till åtgärd')
+end
+If not exists (select * from tblTextTranslation where text_id = @Id and Language_Id = @LanguageId)
+begin
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(@Id, @LanguageId, 'Connect to action')
+end
+GO
+
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
