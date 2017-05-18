@@ -78,6 +78,7 @@
             if (token != null)
             {
                 TempData["token"] = token.access_token;
+                TempData["refresh"] = token.refresh_token;
             }                
             return View();
         }
