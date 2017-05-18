@@ -10,7 +10,7 @@ namespace DH.Helpdesk.Dal.EntityConfigurations.CheckLists
         {
             HasKey(x => x.Id);
             Property(x => x.Customer_Id).IsRequired();
-            Property(x => x.WorkingGroup_Id);
+            Property(x => x.WorkingGroup_Id).IsOptional();
             Property(x => x.ChecklistName).IsRequired();
             Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             Property(x => x.ChangedDate).IsRequired();
