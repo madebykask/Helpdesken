@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Linq.Dynamic;
 using System.Reflection;
 using DH.Helpdesk.BusinessData.Enums.MailTemplates;
 using DH.Helpdesk.BusinessData.Models.Feedback;
@@ -1593,7 +1594,17 @@ namespace DH.Helpdesk.Services.Services
                                     if (ur.User != null)
                                         if (ur.User.IsActive == 1 && ur.User.AllocateCaseMail == 1 && _emailService.IsValidEmail(ur.User.Email) && ur.UserRole == 2)
                                         {
-                                            wgEmails = wgEmails + ur.User.Email + ";";
+                                            if (newCase.Department_Id != null && ur.User.Departments != null)
+                                            {
+                                                if (ur.User.Departments.Any(x => x.Id == newCase.Department_Id.Value))
+                                                {
+                                                    wgEmails = wgEmails + ur.User.Email + ";";
+                                                }
+                                            }
+                                            else
+                                            {
+                                                wgEmails = wgEmails + ur.User.Email + ";";
+                                            }
                                         }
                                 }
                         }
