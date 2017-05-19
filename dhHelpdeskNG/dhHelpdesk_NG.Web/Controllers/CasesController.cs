@@ -3644,7 +3644,7 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.UserGroupId == 2)
                     {
-                        var wkgrs = _workingGroupService.GetWorkingGroups(cusId, userId, isTakeOnlyActive);
+                        var wkgrs = _workingGroupService.GetWorkingGroups(cusId, userId, isTakeOnlyActive, true);
                         wkgrs.Insert(0, ObjectExtensions.notAssignedWorkingGroup());
                         fd.filterWorkingGroup = wkgrs;
                     }
