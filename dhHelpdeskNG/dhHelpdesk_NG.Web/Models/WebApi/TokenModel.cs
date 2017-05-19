@@ -1,9 +1,9 @@
 ﻿namespace DH.Helpdesk.Web.Models.WebApi
 {
-    public class ApplicationToken
+    public class SimpleToken
     {
 
-        public ApplicationToken()
+        public SimpleToken()
         {
 
         }

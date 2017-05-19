@@ -43,9 +43,9 @@
             <input type="hidden" id="timeZoneOffsetInJan1" name="timeZoneOffsetInJan1"/>
             <input type="hidden" id="timeZoneOffsetInJul1" name="timeZoneOffsetInJul1"/>
             <input type="submit" value="Login" name="btnLogin" id="btnLogin" class="btn btn-large btn-success" style="width:100%;" />
-            <input type="button" value="Get New Access Token" name="btnToken" id="btnToken" class="btn btn-large btn-danger" style="width:100%;" />
+            @*<input type="button" value="Get New Access Token" name="btnToken" id="btnToken" class="btn btn-large btn-danger" style="width:100%;" />
             <input type="button" value="Get Request" name="btnRequest1" id="btnRequest1" class="btn btn-large btn-warning" style="width:100%;" />
-            <input type="button" value="Post Request" name="btnRequest2" id="btnRequest2" class="btn btn-large btn-warning" style="width:100%;" />
+            <input type="button" value="Post Request" name="btnRequest2" id="btnRequest2" class="btn btn-large btn-warning" style="width:100%;" />*@
         }
     </div>
     <div class="signin-bottom">
@@ -64,10 +64,9 @@
         document.getElementById('timeZoneOffsetInJul1').value = Jul1.getTimezoneOffset();
         $("input:text:visible:first").focus();
     };
-
-    localStorage.removeItem('accessToken', '');
-    localStorage.setItem('accessToken', '@TempData["token"]');
-    localStorage.setItem('refreshToken', '@TempData["refresh"]');
+    
+    localStorage.removeItem("AccessToken");
+    localStorage.removeItem("RefreshToken");
 
     $('#btnToken').click(function () {
         auth1();
@@ -81,55 +80,40 @@
         request2();
     });
 
-    function auth1() {
-        localStorage.removeItem('accessToken', '');
+    function auth1() {        
         var _reftoken = localStorage.getItem('refreshToken');
-
         $.post("@Url.Content("~/token")",
                 "grant_type=refresh_token" +
-                "&refresh_token=" + _reftoken +
-                "&client_id=TokenBasedAuthentication" ,
+                "&refresh_token=" + _reftoken,
                 { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
         ).success(function (data) {
             if (data == null)
                 alert("Error occurred!");
             else {
-                localStorage.setItem('accessToken', data.access_token);
-                localStorage.setItem('refeshToken', data.refresh_token);
-
+                localStorage.setItem('AccessToken', data.access_token);
+                localStorage.setItem('RefreshToken', data.refresh_token);
             }
         });
-
-        @*var data1 = { grant_type: "refresh_token", refresh_token: _reftoken };
-
-        $.ajax({
-            url: "@Url.Content("~/token")",
-            data: JSON.stringify(data1),
-            contentType: "application/json; charset=utf-8",
-            type: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' } 
-        });*@
-
     };
 
     function request1() {
-        var _token = localStorage.getItem('accessToken');
-        if (_token == null || _token == ""){
-            alert("Not authenticated!");
-            return;
-        }
+        var _token = localStorage.getItem('AccessToken');       
 
         $.ajax({
             url: "@Url.Content("~/Api/CaseApi/GetCase?id=95879")",
             type: 'GET',
-            headers: { "Authorization": "Bearer " + _token }
-        }).done(function (result) {
-
-        });
+            headers: { "Authorization": "Bearer " + _token },
+            error: function (request, status, error) {
+                alert(request.responseText);
+            },
+            success: function (res, status, xhr) {
+                alert(xhr.getResponseHeader("test"));
+            }
+        });        
     };
 
     function request2() {
-        var _token = localStorage.getItem('accessToken');
+        var _token = localStorage.getItem('AccessToken');
         if (_token == null || _token == "") {
             alert("Not authenticated!");
             return;

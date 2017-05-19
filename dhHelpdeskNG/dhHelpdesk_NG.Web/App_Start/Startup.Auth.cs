@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 using System.Security.Claims;
 using DH.Helpdesk.Dal.Repositories;
 using Microsoft.Owin.Security.Infrastructure;
+using System.Web.Http;
+using System.Web.Http.Controllers;
+using System.Net.Http;
+using System.Net;
+using System.Net.Http.Formatting;
 
 namespace DH.Helpdesk.Web.App_Start
 {    
@@ -77,13 +82,68 @@ namespace DH.Helpdesk.Web.App_Start
     {
         public override void Create(AuthenticationTokenCreateContext context)
         {                        
-            context.Ticket.Properties.ExpiresUtc = new DateTimeOffset(DateTime.Now.AddMinutes(5));
+            context.Ticket.Properties.ExpiresUtc = new DateTimeOffset(DateTime.Now.AddHours(8));
             context.SetToken(context.SerializeTicket());
         }
 
         public override void Receive(AuthenticationTokenReceiveContext context)
         {
             context.DeserializeTicket(context.Token);
+            if (context.Ticket != null &&
+                context.Ticket.Properties.ExpiresUtc.HasValue &&
+                context.Ticket.Properties.ExpiresUtc.Value.LocalDateTime < DateTime.Now)
+            {            
+                context.OwinContext.Set("custom.ExpriredToken", true);
+            }
         }
     }
+
+
+    public class AuthorizeAttributeExtended : AuthorizeAttribute
+    {
+        protected override void HandleUnauthorizedRequest(HttpActionContext actionContext)
+        {
+            var tokenHasExpired = false;
+            var owinContext = OwinHttpRequestMessageExtensions.GetOwinContext(actionContext.Request);            
+            if (owinContext != null)
+            {
+                tokenHasExpired = owinContext.Environment.ContainsKey("oauth.token_expired");
+            }
+
+            if (tokenHasExpired)
+            {
+                actionContext.Response = new AuthenticationFailureMessage("unauthorized", actionContext.Request,
+                    new
+                    {
+                        error = "invalid_token",
+                        error_message = "The Token has expired"
+                    });
+            }
+            else
+            {                
+                actionContext.Response = new AuthenticationFailureMessage("unauthorized", actionContext.Request,
+                    new
+                    {
+                        
+                        error = "invalid_request",
+                        error_message = "The Token is invalid"
+                    });
+            }
+        }
+    }
+
+    public class AuthenticationFailureMessage : HttpResponseMessage
+    {
+        public AuthenticationFailureMessage(string reasonPhrase, HttpRequestMessage request, object responseMessage)
+            : base(HttpStatusCode.Unauthorized)
+        {
+            MediaTypeFormatter jsonFormatter = new JsonMediaTypeFormatter();
+
+            Content = new ObjectContent<object>(responseMessage, jsonFormatter);            
+            RequestMessage = request;
+            ReasonPhrase = reasonPhrase;            
+        }
+    }
+
+ 
 }

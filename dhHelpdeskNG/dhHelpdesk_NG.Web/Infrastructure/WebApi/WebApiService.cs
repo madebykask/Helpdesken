@@ -10,7 +10,7 @@ namespace DH.Helpdesk.Web.Infrastructure.WebApi
 {
     public interface IWebApiService
     {
-        Task<ApplicationToken> GetAccessToken(string userId, string password);
+        Task<SimpleToken> GetAccessToken(string userId, string password);
     }
 
     public class WebApiService: IWebApiService
@@ -23,13 +23,13 @@ namespace DH.Helpdesk.Web.Infrastructure.WebApi
             _BASE_URL = baseUrl;
         }
 
-        public async Task<ApplicationToken> GetAccessToken(string userId, string password)
+        public async Task<SimpleToken> GetAccessToken(string userId, string password)
         {            
             var res = await GetToken(userId, password);
             return res;
         }
 
-        private async Task<ApplicationToken> GetToken(string userId, string password)
+        private async Task<SimpleToken> GetToken(string userId, string password)
         {
             /* IMPORTANT: Active this line only on the debug mode  */
             //ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
@@ -51,7 +51,7 @@ namespace DH.Helpdesk.Web.Infrastructure.WebApi
                 var response = await client.PostAsync(_TOKEN_END_POINT, inputData);                    
                 if (response.IsSuccessStatusCode)
                 {
-                    var res = await response.Content.ReadAsAsync<ApplicationToken>();
+                    var res = await response.Content.ReadAsAsync<SimpleToken>();
                     return res;
                 }
             }

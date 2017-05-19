@@ -22,6 +22,8 @@
     using Infrastructure.WebApi;
     using Infrastructure.Helpers;
     using Models.WebApi;
+    using Infrastructure.Cryptography;
+    using System.Configuration;
 
     public class LoginController : Controller
     {
@@ -65,29 +67,29 @@
             }
 
             FormsAuthentication.SignOut();
+
+            TempData["Access_token"] = string.Empty;
+            TempData["Refresh_token"] = string.Empty;
+            
             return this.View("Login");
         }
 
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Head)]
         public ViewResult Login()
         {
-            var baseUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Request.ApplicationPath.TrimEnd('/'));
-            var webApiService = new WebApiService(baseUrl);
-            var token = AsyncHelper.RunSync(() => webApiService.GetAccessToken("admin", "3edc4rfv"));
+            TempData["Access_token"] = string.Empty;
+            TempData["Refresh_token"] = string.Empty;
 
-            if (token != null)
-            {
-                TempData["token"] = token.access_token;
-                TempData["refresh"] = token.refresh_token;
-            }                
             return View();
         }
 
         [HttpPost]
         public ActionResult Login(FormCollection coll, string returnUrl)
         {
+           
             string userName = coll["txtUid"].Trim();
             string password = coll["txtPwd"].Trim();
+
 
             if (this.IsValidLoginArgument(userName, password))
             {
@@ -205,7 +207,17 @@
                         this.RedirectFromLoginPage(userName, "~/Profile/Edit/", user.StartPage);
                         return null;
                     }
-                    
+
+                    var token = GetToken(userName, password);
+                    TempData["Access_token"] = string.Empty;
+                    TempData["Refresh_token"] = string.Empty;
+
+                    if (token != null)
+                    {
+                        TempData["Access_token"] = token.access_token;
+                        TempData["Refresh_token"] = token.refresh_token;
+                    }
+
                     this.RedirectFromLoginPage(userName, redirectTo, user.StartPage);
                 }
                 else
@@ -267,5 +279,27 @@
 
             this.Response.Redirect(!string.IsNullOrEmpty(returnUrl) ? returnUrl : this.routeResolver.ResolveStartPage(this.Url, startPage));
         }
+
+        private SimpleToken GetToken(string userName, string password)
+        {
+            var baseUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Request.ApplicationPath.TrimEnd('/'));
+            var webApiService = new WebApiService(baseUrl);
+            var token = AsyncHelper.RunSync(() => webApiService.GetAccessToken(userName, password));
+
+            if (token != null)
+            {
+                var encriptionKey = ConfigurationManager.AppSettings.AllKeys.Contains(AppSettingsKey.EncryptionKey) ?
+                                    ConfigurationManager.AppSettings[AppSettingsKey.EncryptionKey].ToString() : string.Empty;
+
+                var encyrptedAccessToken = AESCryptoProvider.Encrypt256(token.access_token, encriptionKey);
+                var encyrptedRefreshToken = AESCryptoProvider.Encrypt256(token.refresh_token, encriptionKey);
+
+                token.access_token = encyrptedAccessToken;
+                token.refresh_token = encyrptedRefreshToken;                
+            }
+
+            return token;
+        }
+
     }
 }

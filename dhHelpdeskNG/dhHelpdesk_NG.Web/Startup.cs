@@ -10,7 +10,8 @@ namespace DH.Helpdesk.Web.App_Start
     {
         public void Configuration(IAppBuilder app)
         {
-            var config = new HttpConfiguration();            
+            var config = new HttpConfiguration();
+            config.Filters.Add(new AuthorizeAttributeExtended());
             ConfigureAuth(app);
             WebApiConfig.Register(config);            
             var kernel = NinjectWebCommon.Bootstrapper.Kernel;                        
