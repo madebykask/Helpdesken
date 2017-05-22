@@ -13,15 +13,18 @@
     {
         private readonly IRegionService _regionService;
         private readonly ICustomerService _customerService;
+        private readonly ILanguageService _languageService;
 
         public RegionController(
             IRegionService regionService,
             ICustomerService customerService,
+            ILanguageService languageService,
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
             this._regionService = regionService;
             this._customerService = customerService;
+            this._languageService = languageService;
         }
 
         public JsonResult SetShowOnlyActiveRegionInAdmin(bool value)
@@ -113,7 +116,12 @@
             var model = new RegionInputViewModel
             {
                 Region = region,
-                Customer = customer
+                Customer = customer,
+                Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList(),
             };
 
             return model;

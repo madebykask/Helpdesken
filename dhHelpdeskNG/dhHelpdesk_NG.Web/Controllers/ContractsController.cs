@@ -16,6 +16,8 @@ using System.Net;
 using DH.Helpdesk.Dal.Enums;
 using System.IO;
 using DH.Helpdesk.Web.Infrastructure.Mvc;
+using DH.Helpdesk.BusinessData.Models.Shared.Input;
+using DH.Helpdesk.Web.Enums;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -28,7 +30,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ISupplierService _supplierService;
         private readonly IDepartmentService _departmentService;
         private readonly ITemporaryFilesCache userTemporaryFilesStorage;
-
+        private readonly ISettingService _settingService;
 
         public ContractsController(
             IUserService userService,
@@ -36,9 +38,12 @@ namespace DH.Helpdesk.Web.Controllers
             ICustomerService customerService,
             IContractService contractService,
             ISupplierService supplierService,
-            IDepartmentService departmentService,
+            IDepartmentService departmentService,            
             ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory,
-            IMasterDataService masterDataService)
+            IMasterDataService masterDataService,
+            ISettingService settingService)
+
+            
             : base(masterDataService)
         {            
             this._userService = userService;
@@ -47,6 +52,7 @@ namespace DH.Helpdesk.Web.Controllers
             this._customerService = customerService;
             this._supplierService = supplierService;
             this._departmentService = departmentService;
+            this._settingService = settingService;
             this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Contracts);
         }
 
@@ -61,12 +67,16 @@ namespace DH.Helpdesk.Web.Controllers
             var model = new ContractIndexViewModel(customer);
             var contractcategories = _contractCategoryService.GetContractCategories(customer.Id);
             var suppliers = _supplierService.GetActiveSuppliers(customer.Id);
-
+            var users = _userService.GetUsers(customer.Id);
+            var departments = _departmentService.GetDepartments(customer.Id, ActivationStatus.Active);
+            //IList<User> GetUsers(int customerId);
 
             var filter = new ContractSelectedFilter();
 
             model.Rows = GetIndexRowModel(customer.Id, filter, new ColSortModel(EnumContractFieldSettings.Number, true));
-
+            model.SearchText = string.Empty;
+            model.Departments = departments;
+            model.Users = users;
             model.ContractCategories = contractcategories.OrderBy(a => a.Name).ToList();
             model.Suppliers = suppliers.OrderBy(s => s.Name).ToList();
             model.Setting = GetSettingsModel(customer.Id);
@@ -82,6 +92,18 @@ namespace DH.Helpdesk.Web.Controllers
 
             return this.View(model);
         }
+
+
+        [HttpPost]
+        
+        public PartialViewResult Search()
+        {
+            
+            return this.PartialView("ProjectGrid", null);
+        }
+
+        
+
 
         private ContractViewInputModel CreateInputViewModel(int customerId)
         {

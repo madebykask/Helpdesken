@@ -25,7 +25,7 @@
         public string Code { get; set; }
 
         //public Guid? RegionGUID { get; set; }
-
+        public int LanguageId { get; set; }
         //public DateTime? SynchronizedDate { get; set; }
 
         public virtual ICollection<Department> Departments { get; set; }
