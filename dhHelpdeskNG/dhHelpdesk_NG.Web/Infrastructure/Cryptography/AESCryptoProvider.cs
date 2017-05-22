@@ -9,7 +9,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Cryptography
     {
         private const string _IV256 = @"SA%Z2LPE}KC4R!FM";       
 
-        public static string Encrypt256(string valueToEncypt, string key)
+        public static string Encrypt256(string valueToEncrypt, string key)
         {
             try
             {
@@ -20,7 +20,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Cryptography
                 aes.Key = Encoding.UTF8.GetBytes(key);
                 aes.Mode = CipherMode.CBC;
                 aes.Padding = PaddingMode.PKCS7;                
-                byte[] src = Encoding.Unicode.GetBytes(valueToEncypt);
+                byte[] src = Encoding.Unicode.GetBytes(valueToEncrypt);
                 
                 using (var encrypt = aes.CreateEncryptor())
                 {
@@ -34,7 +34,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Cryptography
             }
         }
 
-        public static string Decrypt256(string valueToDencypt, string key)
+        public static string Decrypt256(string valueToDecrypt, string key)
         {            
             try
             {
@@ -45,7 +45,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Cryptography
                 aes.Key = Encoding.UTF8.GetBytes(key);
                 aes.Mode = CipherMode.CBC;
                 aes.Padding = PaddingMode.PKCS7;             
-                byte[] src = Convert.FromBase64String(valueToDencypt);
+                byte[] src = Convert.FromBase64String(valueToDecrypt);
                 
                 using (var decrypt = aes.CreateDecryptor())
                 {
