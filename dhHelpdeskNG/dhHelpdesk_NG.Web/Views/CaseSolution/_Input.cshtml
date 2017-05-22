@@ -1010,7 +1010,17 @@
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>
                                         <td>
-                                            @Html.DropDownListFor(model => model.CaseSolution.Category_Id, Model.Categories, "", new { id = "Category", @class = "acceptRules", standardId = GlobalEnums.TranslationCaseFields.Category_Id.ToString() })
+                                            <div id="divCategory" class="btn-group">
+                                                <div class="btn" id="divBreadcrumbs_Category">@Model.ParantPath_Category</div>
+                                                <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="#">@Translation.GetCoreTextTranslation("--")</a></li>
+                                                    @Html.CategoryDropdownButtonString(Model.Categories)
+                                                </ul>
+                                                @Html.HiddenFor(model => model.CaseSolution.Category_Id, new {@class = "acceptRules", standardId = GlobalEnums.TranslationCaseFields.Category_Id.ToString()})
+                                            </div>
                                         </td>
                                         <td>
                                             <table>

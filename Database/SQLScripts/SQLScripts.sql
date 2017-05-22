@@ -154,7 +154,9 @@ end
 
 GO
 
-
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Parent_Category_Id' and sysobjects.name = N'tblCategory')
+	ALTER TABLE [dbo].[tblCategory] ADD [Parent_Category_Id] int null
+GO
 
 
 

@@ -12,6 +12,11 @@
         {
             this.HasKey(x => x.Id);
 
+            this.HasOptional(x => x.ParentCategory)
+                .WithMany(x => x.SubCategories)
+                .HasForeignKey(x => x.Parent_Category_Id)
+                .WillCascadeOnDelete(false);
+
             this.Property(x => x.Description).IsOptional().HasMaxLength(300).HasColumnName("CategoryDescription");
             this.Property(x => x.IsActive).IsRequired().HasColumnName("Status");
             this.Property(x => x.Name).IsRequired().HasMaxLength(50).HasColumnName("Category");

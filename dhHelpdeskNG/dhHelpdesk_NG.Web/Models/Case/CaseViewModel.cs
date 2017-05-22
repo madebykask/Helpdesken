@@ -50,6 +50,7 @@
         public string LogKey { get; set; }
         public string ParantPath_CaseType { get; set; }
         public string ParantPath_ProductArea { get; set; }
+        public string ParantPath_Category { get; set; }
         public string ParantPath_OU { get; set; }
         public int DepartmentFilterFormat { get; set; }
         public int? CountryId { get; set; }
@@ -61,6 +62,7 @@
         public Infrastructure.Enums.AccessMode EditMode { get; set; } //(-1,0,1)
         public bool Disable_SendMailAboutCaseToNotifier { get; set; }
         public int ProductAreaHasChild { get; set; }
+        public int CategoryHasChild { get; set; }
         public int? OrderId { get; set; }
         public int? AccountId { get; set; }
         public int? AccountActivityId { get; set; }

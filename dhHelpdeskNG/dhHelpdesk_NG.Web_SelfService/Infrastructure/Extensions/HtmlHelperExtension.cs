@@ -170,6 +170,16 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
                 return new MvcHtmlString(string.Empty);
         }
 
+        public static MvcHtmlString CategoryDropdownButtonString(this HtmlHelper helper, IList<Category> cats)
+        {
+            if (cats != null)
+            {
+                return BuildCategoryDropdownButton(cats);
+            }
+            else
+                return new MvcHtmlString(string.Empty);
+        }
+
         public static MvcHtmlString FinishingCauseDropdownButtonString(this HtmlHelper helper, IList<FinishingCause> causes)
         {
             if (causes != null)
@@ -627,6 +637,35 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
                 {
                     htmlOutput += "<ul class='dropdown-menu'>";
                     htmlOutput += BuildProcuctAreaDropdownButton(pa.SubProductAreas.Where(s => s.IsActive != 0 && s.ShowOnExternalPage != 0).ToList());
+                    htmlOutput += "</ul>";
+                }
+                htmlOutput += "</li>";
+            }
+
+            return new MvcHtmlString(htmlOutput);
+        }
+        private static MvcHtmlString BuildCategoryDropdownButton(IList<Category> cats)
+        {
+            string htmlOutput = string.Empty;
+
+            foreach (Category ca in cats)
+            {
+
+                bool hasChild = false;
+                if (ca.SubCategories != null)
+                    if (ca.SubCategories.Where(s => s.IsActive != 0).ToList().Count > 0)
+                        hasChild = true;
+
+                if (hasChild)
+                    htmlOutput += "<li class='dropdown-submenu'>";
+                else
+                    htmlOutput += "<li>";
+
+                htmlOutput += "<a href='#' value=" + ca.Id.ToString() + ">" + ca.Name + "</a>";
+                if (hasChild)
+                {
+                    htmlOutput += "<ul class='dropdown-menu'>";
+                    htmlOutput += BuildCategoryDropdownButton(ca.SubCategories.Where(s => s.IsActive != 0).ToList());
                     htmlOutput += "</ul>";
                 }
                 htmlOutput += "</li>";

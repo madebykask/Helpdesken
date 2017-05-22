@@ -352,6 +352,7 @@
 
             model.CaseTypeParantPath = ParentPathDefaultValue;
             model.ProductAreaParantPath = ParentPathDefaultValue;
+            model.CategoryParentPath = ParentPathDefaultValue;
 
             // Load template info
             if(caseTemplateId != null && caseTemplateId.Value > 0)
@@ -492,7 +493,24 @@
                     }
                 }
 
-                if(model.NewCase.CaseType_Id > 0)
+                if (model.NewCase.Category_Id.HasValue)
+                {
+                    var c = _categoryService.GetCategory(model.NewCase.Category_Id.GetValueOrDefault(), currentCustomer.Id);
+                    if (c != null)
+                    {
+                        var pathTexts = _categoryService.GetParentPath(c.Id, currentCustomer.Id).ToList();
+                        var translatedText = pathTexts;
+                        if (pathTexts.Any())
+                        {
+                            translatedText = new List<string>();
+                            foreach (var pathText in pathTexts.ToList())
+                                translatedText.Add(Translation.Get(pathText));
+                        }
+                        model.CategoryParentPath = string.Join(" - ", translatedText);
+                    }
+                }
+
+                if (model.NewCase.CaseType_Id > 0)
                 {
                     var ct = _caseTypeService.GetCaseType(model.NewCase.CaseType_Id);
                     var tempCTs = new List<CaseType>();
@@ -1369,7 +1387,7 @@
             var impacts = _impactService.GetImpacts(customerId);
 
             //Category List
-            var categories = _categoryService.GetCategories(customerId);
+            var categories = _categoryService.GetActiveParentCategories(customerId);
 
             //Currency List
             var currencies = _currencyService.GetCurrencies();
@@ -1412,6 +1430,7 @@
 
             model.CaseTypeParantPath = "--";
             model.ProductAreaParantPath = "--";
+            model.CategoryParentPath = "--";
             model.CaseFileKey = Guid.NewGuid().ToString();
             model.ProductAreaChildren = traversedData.Item2.ToList();
             model.SendToDialogModel = new SendToDialogModel();            

@@ -33,18 +33,24 @@
         public ActionResult Index(int customerId)
         {
             var customer = this._customerService.GetCustomer(customerId);
-            var categories = this._categoryService.GetCategories(customer.Id);
+            var categories = this._categoryService.GetAllCategories(customer.Id);
 
             var model = new CategoryIndexViewModel { Categories = categories, Customer = customer, IsShowOnlyActive = SessionFacade.ShowOnlyActiveCategoriesInAdmin };
 
             return this.View(model);
         }
 
-        public ActionResult New(int customerId)
+        public ActionResult New(int customerId, int? parentId = null)
         {
+            if (parentId.HasValue)
+            {
+                if (_categoryService.GetCategory(parentId.Value, customerId) == null)
+                    return new HttpNotFoundResult("No category found...");
+            }
+
             var customer = this._customerService.GetCustomer(customerId);
-            var category = new Category { Customer_Id = customer.Id, IsActive = 1, Id = 0 };
-            var model = new CategoryInputViewModel { Category = category, Customer = customer };
+            var category = new Category { Customer_Id = customer.Id, IsActive = 1, Id = 0, Parent_Category_Id = parentId};
+            var model = this.CreateInputViewModel(category, customer);
 
             return this.View(model);
         }
@@ -58,17 +64,14 @@
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "category", new { customerId = category.Customer_Id });
 
-
             var customer = this._customerService.GetCustomer(category.Customer_Id);
-            var model = new CategoryInputViewModel { Category = category, Customer = customer };
-
+            var model = this.CreateInputViewModel(category, customer);
 
             return this.View(model);
         }
 
         public ActionResult Edit(int id, int customerId)
         {
-
             var category = this._categoryService.GetCategory(id, customerId);
 
             if (category == null)                
@@ -116,10 +119,19 @@
 
         private CategoryInputViewModel CreateInputViewModel(Category category, Customer customer)
         {
+            const int MAX_LEVEL_DEEP = 6;
+            var ca = category;
+            var level = 1;
+            while (ca.ParentCategory != null)
+            {
+                level++;
+                ca = ca.ParentCategory;
+            }
             var model = new CategoryInputViewModel
             {
                 Category = category,
-                Customer = customer
+                Customer = customer,
+                CanAddChild = level < MAX_LEVEL_DEEP
             };
 
             return model;

@@ -909,6 +909,14 @@ function CaseInitForm() {
         
     });
 
+    $('#divCategory ul.dropdown-menu li a').click(function (e) {
+        e.preventDefault();
+        var me = this;
+        var val = $(me).attr('value');
+        $("#divBreadcrumbs_Category").text(getBreadcrumbs(me));
+        $("#case__Category_Id").val(val).trigger('change');
+    });
+
     $('#AddNotifier').click(function (e) {
         e.preventDefault();
         if ($(this).hasClass('disabled')) {

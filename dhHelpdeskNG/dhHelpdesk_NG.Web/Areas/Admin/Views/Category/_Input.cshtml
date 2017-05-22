@@ -5,24 +5,24 @@
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
-            <li class="active"><a href="#fragment-1">@Translation.Get("Kategori", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>
+            <li class="active"><a href="#fragment-1">@Translation.GetCoreTextTranslation("Kategori") - @Model.Customer.Name</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment1">
                 <div class="container">
                     @if (TempData["Error"] != null)
                     {
-                        <div class="alert alert-error">@Translation.Get("Kategori", Enums.TranslationSource.TextTranslation)
-                            @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+                        <div class="alert alert-error">@Translation.GetCoreTextTranslation("Kategori")
+                            @Translation.GetCoreTextTranslation("som används går inte att ta bort")
                         </div>    
                     }
-                    <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
+                    <h4>@Translation.GetCoreTextTranslation("Allmänt")</h4>
                     <div class="row">
                         <div class="span12">
                             <table class="tableform">
                                 <tr>
                                     <td class="span3">
-                                        @Translation.Get("Kategori", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Kategori")
                                     </td>
                                     <td class="span9">
                                         @Html.TextBoxFor(model => model.Category.Name, new { maxlength = "50" })
@@ -30,7 +30,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Beskrivning", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Beskrivning")
                                     </td>
                                     <td>
                                         @Html.TextAreaFor(model => model.Category.Description, new { style = "width:600px; height:125px;", maxlength = "300" })
@@ -38,7 +38,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Aktiv")
                                     </td>
                                     <td><label class="checkbox">
                                         <input type="checkbox" name="category.IsActive" @(Model.Category.IsActive == 1 ? "checked=checked" : "") value="1"/>
@@ -50,6 +50,7 @@
                             @Html.HiddenFor(model => model.Category.Customer_Id)
                             @Html.HiddenFor(model => model.Category.Id)
                             @Html.HiddenFor(model => model.Category.CategoryGUID)
+                            @Html.HiddenFor(model => model.Category.Parent_Category_Id)
                         </div>
                     </div>
                 </div>

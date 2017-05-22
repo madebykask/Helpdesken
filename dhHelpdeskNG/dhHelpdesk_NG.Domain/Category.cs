@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Domain
 {
     using global::System;
+    using global::System.Collections.Generic;
 
     public class Category : Entity
     {
@@ -11,5 +12,9 @@
         public Guid? CategoryGUID { get; set; }
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
+        public int? Parent_Category_Id { get; set; }
+
+        public virtual Category ParentCategory { get; set; }
+        public virtual ICollection<Category> SubCategories { get; set; }
     }
 }

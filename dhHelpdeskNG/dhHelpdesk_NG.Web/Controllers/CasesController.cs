@@ -1269,6 +1269,7 @@ namespace DH.Helpdesk.Web.Controllers
                     m.case_.WorkingGroup_Id = null;
                     m.ParantPath_CaseType = ParentPathDefaultValue;
                     m.ParantPath_ProductArea = ParentPathDefaultValue;
+                    m.ParantPath_Category = ParentPathDefaultValue;
                     m.ParantPath_OU = ParentPathDefaultValue;
                 }
 
@@ -4195,6 +4196,7 @@ namespace DH.Helpdesk.Web.Controllers
             m.DepartmentFilterFormat = customerSetting.DepartmentFilterFormat;
             m.ParantPath_CaseType = ParentPathDefaultValue;
             m.ParantPath_ProductArea = ParentPathDefaultValue;
+            m.ParantPath_Category = ParentPathDefaultValue;
             m.ParantPath_OU = ParentPathDefaultValue;
 			m.MinWorkingTime = customerSetting.MinRegWorkingTime;
 			m.CaseFilesModel = new CaseFilesModel();
@@ -4320,7 +4322,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Category_Id.ToString()).ShowOnStartPage == 1)
             {
-                m.categories = this._categoryService.GetCategories(customerId);
+                m.categories = this._categoryService.GetActiveParentCategories(customerId);
             }
 
             if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Impact_Id.ToString()).ShowOnStartPage == 1)
@@ -4725,7 +4727,23 @@ namespace DH.Helpdesk.Web.Controllers
                     }
                 }
             }
-            
+
+            // hämta parent path för Category
+            m.CategoryHasChild = 0;
+            if (m.case_.Category_Id.HasValue)
+            {
+                var c = this._categoryService.GetCategory(m.case_.Category_Id.GetValueOrDefault(), customerId);
+                if (caseTemplateButtons != null)
+                {
+                    var names =
+                        this._categoryService.GetParentPath(c.Id, customerId).Select(name => Translation.GetMasterDataTranslation(name));
+                    m.ParantPath_Category = string.Join(" - ", names);
+                    if (c.SubCategories != null && c.SubCategories.Where(s => s.IsActive != 0).ToList().Count > 0)
+                    {
+                        m.CategoryHasChild = 1;
+                    }
+                }
+            }
 
             // check department info
             m.ShowInvoiceFields = 0;

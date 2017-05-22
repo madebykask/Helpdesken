@@ -562,16 +562,17 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Category_Id)
                                             </label>
                                             <div class="col-md-9">
-                                                <select id="NewCase_Category_Id" name="NewCase.Category_Id" class="hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.Category_Id.ToString()">
-                                                    <option value="">&nbsp;</option>
-                                                    @if (Model.Categories != null)
-                                                    {
-                                                        foreach (var e in Model.Categories.Where(c => c.IsActive == 1))
-                                                        {
-                                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.NewCase.Category_Id.ToString())>@e.Name</option>
-                                                        }
-                                                    }
-                                                </select>
+                                                <div id="divCategory" class="btn-group">
+                                                    <div class="btn btn-default hasAttribute" id="divBreadcrumbs_Category" standardName="@GlobalEnums.TranslationCaseFields.Category_Id.ToString()">@Model.CategoryParentPath</div>
+                                                    <button class="btn btn-default dropdown-toggle hasAttribute" data-toggle="dropdown" standardName="@GlobalEnums.TranslationCaseFields.Category_Id.ToString()">
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="#" value="">@Translation.Get("--")</a></li>
+                                                        @Html.CategoryDropdownButtonString(Model.Categories)
+                                                    </ul>
+                                                    @Html.HiddenFor(model => model.NewCase.Category_Id)
+                                                </div>
                                             </div>
                                         </div>
                                     }

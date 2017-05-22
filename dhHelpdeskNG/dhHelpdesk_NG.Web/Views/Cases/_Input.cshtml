@@ -1123,77 +1123,53 @@
                                         <td colspan="2">
                                             @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Impact_Id, CaseSolutionFields.Impact))
                                             {
-                                            <select id="case__Impact_Id" name="case_.Impact_Id">
-                                                <option value="">&nbsp;</option>
-                                                @if (Model.impacts != null)
-                                                {
-                                                    foreach (var e in Model.impacts)
+                                                <select id="case__Impact_Id" name="case_.Impact_Id">
+                                                    <option value="">&nbsp;</option>
+                                                    @if (Model.impacts != null)
                                                     {
-                                                    <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Impact_Id.ToString())>@e.Name</option>
+                                                        foreach (var e in Model.impacts)
+                                                        {
+                                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Impact_Id.ToString())>@e.Name</option>
                                                         }
-                                                }
-                                            </select>
+                                                    }
+                                                </select>
                                             }
                                             else
                                             {
                                                 if (!Model.case_.Impact_Id.HasValue)
                                                 {
-                                            @Html.TextBoxFor(m => m.case_.Impact_Id, new { @readonly = true })
+                                                    @Html.TextBoxFor(m => m.case_.Impact_Id, new {@readonly = true})
                                                 }
                                                 else
                                                 {
-                                            @Html.TextBoxFor(m => m.impacts.SingleOrDefault(x => x.Id == Model.case_.Impact_Id).Name, new { @readonly = true })
-                                            @Html.HiddenFor(x => x.case_.Impact_Id)
+                                                    @Html.TextBoxFor(m => m.impacts.SingleOrDefault(x => x.Id == Model.case_.Impact_Id).Name, new {@readonly = true})
+                                                    @Html.HiddenFor(x => x.case_.Impact_Id)
                                                 }
                                             }
                                         </td>
                                     </tr>
-                                    <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Category_Id, CaseSolutionFields.Category)">
-                                        <td>
-                                            @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Category_Id, "Kategori")
-                                        </td>
-                                        <td colspan="2">
-                                            @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Category_Id, CaseSolutionFields.Category))
-                                            {
 
-                                            <select id="case__Category_Id" name="case_.Category_Id">
-                                                <option value="">&nbsp;</option>
-                                                @if (Model.categories != null)
-                                                {
-                                                    foreach (var e in Model.categories.Where(e => e.IsActive == 1 || Model.case_.Category_Id == e.Id))
-                                                    {
-                                                    <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Category_Id.ToString())>@Translation.GetMasterDataTranslation(e.Name)</option>
-                                                        }
-                                                }
-                                            </select>
-                                            }
-                                            else
-                                            {
-                                                var category = Model.case_.Category_Id.HasValue ? Model.categories.SingleOrDefault(x => x.Id == Model.case_.Category_Id) : null;
-
-                                                if (category == null)
-                                                {
-                                                    if (Model.case_.Category != null)
-                                                    {
-                                                        var transName = Translation.GetMasterDataTranslation(Model.case_.Category.Name);
-                                            @Html.TextBoxFor(m => transName, new { @readonly = true })
-
+                                        <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Category_Id, CaseSolutionFields.Category)">
+                                            <td>
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Category_Id, "Kategori")
+                                            </td>
+                                            <td colspan="2">
+                                                <div id="divCategory" class="btn-group DynamicDropDown">
+                                                    @{
+                                                        string disabledCategory = Model.GetDisabledString(GlobalEnums.TranslationCaseFields.Category_Id, CaseSolutionFields.Category);
                                                     }
-                                                    else
-                                                    {
-                                            @Html.TextBoxFor(m => m.case_.Category.Name, new { @readonly = true })
-                                                    }
-
-                                                }
-                                                else
-                                                {
-                                                    var transName = Translation.GetMasterDataTranslation(category.Name);
-                                            @Html.TextBoxFor(m => transName, new { @readonly = true })
-                                            @Html.HiddenFor(x => x.case_.Category_Id)
-                                                }
-                                            }
-                                        </td>
-                                    </tr>
+                                                    <div class="btn @disabledCategory" id="divBreadcrumbs_Category">@Model.ParantPath_Category</div>
+                                                    <button class="btn dropdown-toggle" data-toggle="dropdown" @disabledCategory id="dropDownBtn">
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <ul class="dropdown-menu" style="z-index:99999999999;">
+                                                        <li><a href="#">@Translation.GetCoreTextTranslation("--")</a></li>
+                                                        @Html.CategoryDropdownButtonString(Model.categories)
+                                                    </ul>
+                                                    @Html.HiddenFor(model => model.case_.Category_Id)
+                                                </div>
+                                            </td>
+                                        </tr>
                                     <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Supplier_Id, CaseSolutionFields.Supplier)">
                                         <td>
                                             @if (Model.countries != null)
