@@ -37,6 +37,7 @@
         {
             var customer = this._customerService.GetCustomer(customerId);
             var regions = this._regionService.GetRegions(customer.Id).ToList();
+            
 
             var model = new RegionIndexViewModel { Regions = regions, 
                                                    Customer = customer,
@@ -92,6 +93,7 @@
             regionToUpdate.IsActive = region.IsActive;
             regionToUpdate.IsDefault = region.IsDefault;
             regionToUpdate.Code = region.Code;
+            regionToUpdate.LanguageId = region.LanguageId;
             this._regionService.SaveRegion(regionToUpdate, out errors);
 
             if (errors.Count == 0)
