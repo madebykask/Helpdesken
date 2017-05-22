@@ -4302,7 +4302,7 @@ namespace DH.Helpdesk.Web.Controllers
                                                           .OrderBy(c=> c.ButtonNumber)
                                                           .ToList();
             m.CaseTemplateButtons = caseTemplateButtons;
-            m.WorkflowSteps = _caseSolutionService.GetGetWorkflowSteps(customerId, m.case_, SessionFacade.CurrentUser, ApplicationType.Helpdesk);
+            m.WorkflowSteps = _caseSolutionService.GetGetWorkflowSteps(customerId, m.case_, SessionFacade.CurrentUser, ApplicationType.Helpdesk, templateId);
 
             m.CaseMailSetting = new CaseMailSetting(
                 customer.NewCaseEmailList,

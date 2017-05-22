@@ -116,7 +116,7 @@ begin
 		[CaseSolutionConditionGUID] [uniqueidentifier] NULL,
 		[CaseSolution_Id] [int] NULL,
 		[Property_Name] [nvarchar](100) NULL,
-		[Values] [nvarchar](100) NULL,
+		[Values] [nvarchar](max) NULL,
 		[Description] [nvarchar](200) NULL,
 		[Status] [int] NULL,
 		[CreatedDate] [datetime] NULL,
@@ -144,6 +144,14 @@ begin
 	ALTER TABLE [dbo].[tblCaseSolutionCondition] CHECK CONSTRAINT [FK_tblCaseSolutionCondition_tblCaseSolution]
 
 end
+
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'[Values]' and sysobjects.name = N'tblCaseSolutionCondition')
+begin
+	ALTER TABLE [dbo].[tblCaseSolution] ALTER COLUMN [Values] [nvarchar](max) NULL
+end
+	
+
+
 GO
 
 

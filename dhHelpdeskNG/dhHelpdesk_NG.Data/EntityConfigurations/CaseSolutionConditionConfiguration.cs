@@ -15,7 +15,7 @@
             Property(e => e.CaseSolution_Id).IsRequired();
             Property(e => e.CaseSolutionConditionGUID).IsRequired();
             Property(e => e.Property_Name).IsRequired().HasMaxLength(100);
-            Property(e => e.Values).IsRequired().HasMaxLength(100);
+            Property(e => e.Values).IsRequired();
             Property(e => e.Description).IsOptional().HasMaxLength(200);
             Property(e => e.CreatedByUser_Id).IsOptional();
             Property(e => e.ChangedByUser_Id).IsOptional();
