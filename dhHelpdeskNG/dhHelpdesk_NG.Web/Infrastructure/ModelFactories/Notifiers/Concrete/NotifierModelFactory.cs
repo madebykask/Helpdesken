@@ -29,7 +29,8 @@
             List<ItemOverview> organizationUnits,
             List<ItemOverview> divisions,
             List<ItemOverview> managers,
-            List<ItemOverview> groups)
+            List<ItemOverview> groups,
+            List<ItemOverview> languages)
         {
             var userId = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.UserId, notifier.UserId);
 
@@ -101,6 +102,27 @@
             DropDownFieldModel region;
             DropDownFieldModel department;
             DropDownFieldModel organizationUnit;
+            DropDownFieldModel language;
+
+            if (languages != null)
+            {
+                var languageItems =
+                    languages.Select(d => new KeyValuePair<string, string>(d.Value, d.Name)).ToList();
+
+                var languageValue = notifier.LanguageId.HasValue
+                    ? notifier.LanguageId.Value.ToString(CultureInfo.InvariantCulture)
+                    : null;
+
+                language = this.notifierInputFieldModelFactory.CreateDropDownModel(
+                    settings.Language,
+                    languageItems,
+                    languageValue);
+            }
+            else
+            {
+                language = new DropDownFieldModel(false);
+            }
+
 
             if (regions != null)
             {
@@ -276,7 +298,8 @@
                 notifier.IsActive,
                 createdDate,
                 changedDate,
-                synchronizationDate);
+                synchronizationDate,
+                language);
         }
     }
 }

@@ -18,6 +18,8 @@
         IEnumerable<T> GetAll();
         IEnumerable<T> GetMany(Expression<Func<T, bool>> where);
 
+        
+
         void Commit();
     }
 }

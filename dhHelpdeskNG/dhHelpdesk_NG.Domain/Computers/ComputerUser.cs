@@ -101,6 +101,9 @@
 
         public string CostCentre { get; set; }
 
+
+        public int? LanguageId { get; set; }
+
         #endregion
     }
 }

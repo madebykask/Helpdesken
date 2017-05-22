@@ -94,6 +94,8 @@ namespace DH.Helpdesk.Dal.Repositories
             return this.DataContext.Languages.Find(languageId).LanguageID;
         }
 
+
+        
         /// <summary>
         /// The find active.
         /// </summary>

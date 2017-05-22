@@ -55,6 +55,8 @@
             var ordered = CreateDisplayRule(settings, OrdererField.Ordered);
             var changedDate = CreateDisplayRule(settings, StateField.ChangedDate);
 
+            FieldProcessingSetting language = new FieldProcessingSetting(true, false);
+
             return new NotifierProcessingSettings(
                 userId,
                 domain,
@@ -81,7 +83,8 @@
                 group,
                 other,
                 ordered,
-                changedDate);
+                changedDate,
+                language);
         } 
 
         public void UpdateSettings(FieldSettings fieldSettings)
@@ -199,6 +202,9 @@
             var changedDate = this.CreateDisplayFieldSetting(settings, StateField.ChangedDate, languageId);
             var synchronizationDate = this.CreateDisplayFieldSetting(settings, StateField.SynchronizationDate, languageId);
 
+            FieldOverviewSetting language = new FieldOverviewSetting(true,"LanguageId", false);            
+            
+
             return new NotifierOverviewSettings(
                 userId,
                 domain,
@@ -228,7 +234,8 @@
                 ordered,
                 createdDate,
                 changedDate,
-                synchronizationDate);
+                synchronizationDate,
+                language);
         }
 
         public FieldSettings FindByCustomerIdAndLanguageId(int customerId, int languageId)

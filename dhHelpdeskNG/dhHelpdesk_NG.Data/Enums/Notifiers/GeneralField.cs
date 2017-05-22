@@ -26,6 +26,7 @@
 
         public static readonly string Code = "UserCode";
 
+        public static readonly string LanguageId = "LanguageId";
     }
 
     public static class GeneralFieldLable

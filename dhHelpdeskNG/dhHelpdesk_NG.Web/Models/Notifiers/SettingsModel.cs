@@ -75,10 +75,10 @@
             this.SynchronizationDate = synchronizationDate;
         }
 
-        [NotNull]
+        //[NotNull]
         public DropDownContent Language { get; set; }
 
-        [IsId]
+        //[IsId]
         public int LanguageId { get; set; }
 
         [Required]

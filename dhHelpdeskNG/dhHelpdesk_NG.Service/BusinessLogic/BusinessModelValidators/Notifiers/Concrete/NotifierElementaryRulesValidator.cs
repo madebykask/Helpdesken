@@ -161,6 +161,13 @@
                 existingNotifier.Ordered,
                 OrdererField.Orderer,
                 CreateValidationRule(settings.Ordered));
+
+
+            this.elementaryRulesValidator.ValidateIntegerField(
+             updatedNotifier.LanguageId,
+             existingNotifier.LanguageId,
+             GeneralField.Language,
+             CreateValidationRule(settings.Language));
         }
 
         public void Validate(Notifier validatableNotifier, NotifierProcessingSettings settings)
@@ -284,6 +291,12 @@
                 validatableNotifier.Other,
                 OrganizationField.Other,
                 CreateValidationRule(settings.Other));
+
+            this.elementaryRulesValidator.ValidateIntegerField(
+               validatableNotifier.LanguageId,
+               GeneralField.Language,
+               CreateValidationRule(settings.Language));
+
         }
 
         private static ElementaryValidationRule CreateValidationRule(FieldProcessingSetting setting)

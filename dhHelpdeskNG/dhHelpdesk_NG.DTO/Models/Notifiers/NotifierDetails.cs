@@ -36,7 +36,8 @@
             bool isActive,
             DateTime createdDate,
             DateTime changedDate,
-            DateTime? synchronizationDate)
+            DateTime? synchronizationDate,
+            int? languageId)
         {
             this.Id = id;
             this.UserId = userId;
@@ -68,6 +69,7 @@
             this.CreatedDate = createdDate;
             this.ChangedDate = changedDate;
             this.SynchronizationDate = synchronizationDate;
+            this.LanguageId = languageId;
         }
 
         [IsId]
@@ -136,5 +138,8 @@
         public DateTime ChangedDate { get; private set; }
 
         public DateTime? SynchronizationDate { get; private set; }
+
+        [IsId]
+        public int? LanguageId { get; private set; }
     }
 }

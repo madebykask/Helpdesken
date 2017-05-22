@@ -27,5 +27,7 @@
         public static readonly string Code = "General.Code";
 
         public static readonly string CostCentre = "General.CostCentre";
+
+        public static readonly string Language = "General.Language";
     }
 }

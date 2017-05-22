@@ -32,6 +32,7 @@
             this.RestoreFieldIfNeeded(updatedNotifier, () => updatedNotifier.Other, existingNotifier.Other, settings.Other.Show);
             this.RestoreFieldIfNeeded(updatedNotifier, () => updatedNotifier.Ordered, existingNotifier.Ordered, settings.Ordered.Show);
             this.RestoreFieldIfNeeded(updatedNotifier, () => updatedNotifier.ChangedDateAndTime, existingNotifier.ChangedDateAndTime, settings.ChangedDate.Show);
+            this.RestoreFieldIfNeeded(updatedNotifier, () => updatedNotifier.LanguageId, existingNotifier.LanguageId, settings.Language.Show);
         }
     }
 }
