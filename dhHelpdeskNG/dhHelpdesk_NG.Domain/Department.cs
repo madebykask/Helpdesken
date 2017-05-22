@@ -40,5 +40,8 @@
         public virtual ICollection<User> Users { get; set; }
         public virtual HolidayHeader HolidayHeader { get; set; }
         public virtual WatchDateCalendar WatchDateCalendar { get; set; }
+
+        public int LanguageId { get; set; }
+        public virtual Language Language { get; set; }
     }
 }

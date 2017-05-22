@@ -17,5 +17,7 @@
         public IList<SelectListItem> WatchDateCalendar { get; set; }
 
         public CustomerSettings CustomerSettings { get; set; }
+
+        public IList<SelectListItem> Languages { get; set; }
     }
 }
