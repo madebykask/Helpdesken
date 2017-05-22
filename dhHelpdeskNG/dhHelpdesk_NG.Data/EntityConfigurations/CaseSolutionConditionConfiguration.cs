@@ -13,7 +13,7 @@
             HasKey(e => e.Id);
             Property(e => e.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             Property(e => e.CaseSolution_Id).IsRequired();
-            Property(e => e.CaseSolutionConditionGUID).IsRequired();
+            Property(e => e.CaseSolutionConditionGUID).IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             Property(e => e.Property_Name).IsRequired().HasMaxLength(100);
             Property(e => e.Values).IsRequired();
             Property(e => e.Description).IsOptional().HasMaxLength(200);
