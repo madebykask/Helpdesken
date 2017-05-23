@@ -59,7 +59,7 @@
 
 
         //[IsId]
-        public int? LanguageId { get; internal set; }
+        public int LanguageId { get; internal set; }
 
 
         [MaxLength(NotifierConstraint.InitialsMaxLength)]
@@ -143,7 +143,7 @@
             DateTime createdDateAndTime,
             DateTime? changedDateAndTime,
             DateTime? synchronizationDateAndTime,
-            int? languageId)
+            int languageId)
         {
             var notifier = new Notifier
             {
