@@ -32,7 +32,9 @@ namespace DH.Helpdesk.Dal.Repositories
           List<int> caseStatusIds,
           List<int> caseTypeId,
           DateTime? periodFrom,
-          DateTime? periodUntil);
+          DateTime? periodUntil,
+           DateTime? closeFrom,
+           DateTime? closeTo);
 
         Dictionary<DateTime, int> GetCaseAggregation(
             int customerId,
@@ -44,7 +46,9 @@ namespace DH.Helpdesk.Dal.Repositories
             List<int> caseStatusIds,
             List<int> caseTypeId,
             DateTime? periodFrom,
-            DateTime? periodUntil);
+            DateTime? periodUntil,
+            DateTime? closeFrom,
+            DateTime? closeTo);
 
     }
     public class ReportRepository : RepositoryBase<Report>, IReportRepository
@@ -64,7 +68,9 @@ namespace DH.Helpdesk.Dal.Repositories
            List<int> caseStatusIds,
            List<int> caseTypeId,
            DateTime? periodFrom,
-           DateTime? periodUntil)
+           DateTime? periodUntil,
+           DateTime? closeFrom,
+           DateTime? closeTo)
         {
             var query = GetQuery(customerId,
                 departmentIds,
@@ -75,7 +81,9 @@ namespace DH.Helpdesk.Dal.Repositories
                 caseStatusIds,
                 caseTypeId,
                 periodFrom,
-                periodUntil); 
+                periodUntil,
+                closeFrom,
+                closeTo);
 
             return query.ToList();
         }
@@ -90,7 +98,9 @@ namespace DH.Helpdesk.Dal.Repositories
            List<int> caseStatusIds,
            List<int> caseTypeId,
            DateTime? periodFrom,
-           DateTime? periodUntil)
+           DateTime? periodUntil,
+            DateTime? closeFrom,
+            DateTime? closeTo)
         {       
 
             if (!periodFrom.HasValue)
@@ -164,6 +174,10 @@ namespace DH.Helpdesk.Dal.Repositories
                 where
                     c.Customer_Id == customerId && c.Deleted != 1 &&
                     (DbFunctions.TruncateTime(c.RegTime) >= DbFunctions.TruncateTime(periodFrom) && DbFunctions.TruncateTime(c.RegTime) <= DbFunctions.TruncateTime(periodUntil))
+
+                    && (closeFrom.HasValue ? DbFunctions.TruncateTime(c.FinishingDate) >= DbFunctions.TruncateTime(closeFrom.Value) : true)
+                    && (closeTo.HasValue ? DbFunctions.TruncateTime(c.FinishingDate) <= DbFunctions.TruncateTime(closeTo.Value) : true)
+
                     && (caseTypeId.Any() ? caseTypeId.Contains(c.CaseType_Id) : true)
                     &&
                     (workingGroupIds.Any()
@@ -212,7 +226,9 @@ namespace DH.Helpdesk.Dal.Repositories
            List<int> caseStatusIds,
            List<int> caseTypeId,
            DateTime? periodFrom,
-           DateTime? periodUntil)
+           DateTime? periodUntil,
+           DateTime? closeFrom,
+           DateTime? closeTo)
         {
             if (!periodFrom.HasValue)
             {
@@ -285,6 +301,10 @@ namespace DH.Helpdesk.Dal.Repositories
                         where
                             c.Customer_Id == customerId && c.Deleted != 1 &&
                             (DbFunctions.TruncateTime(c.RegTime) >= DbFunctions.TruncateTime(periodFrom) && DbFunctions.TruncateTime(c.RegTime) <= DbFunctions.TruncateTime(periodUntil))
+
+                            && (closeFrom.HasValue ? DbFunctions.TruncateTime(c.FinishingDate) >= DbFunctions.TruncateTime(closeFrom.Value) : true)
+                    && (closeTo.HasValue ? DbFunctions.TruncateTime(c.FinishingDate) <= DbFunctions.TruncateTime(closeTo.Value) : true)
+
                             && (caseTypeId.Any() ? caseTypeId.Contains(c.CaseType_Id) : true)
                             &&
                             (workingGroupIds.Any()

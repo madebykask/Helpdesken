@@ -29,6 +29,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Infrastructure.ModelFactories.Concrete
             var caseTypeIds = filters.CaseTypeIds;
             var periodFrom = filters.PeriodFrom.HasValue ? filters.PeriodFrom.Value : DateTime.Today;
             var periodUntil = filters.PeriodUntil.HasValue ? filters.PeriodUntil.Value : DateTime.Today;
+            var closeFrom = filters.CloseFrom.HasValue ? filters.CloseFrom.Value : (DateTime?)null;
+            var closeTo = filters.CloseTo.HasValue ? filters.CloseTo.Value : (DateTime?)null;
 
             return new ReportGeneratorOptionsModel(
                                     fields,
@@ -40,7 +42,9 @@ namespace DH.Helpdesk.Web.Areas.Reports.Infrastructure.ModelFactories.Concrete
                                     periodUntil,
                                     filters.RecordsOnPage,
                                     filters.SortField == null ? "" : filters.SortField.Name,
-                                    filters.SortField == null ? (SortBy?)null : filters.SortField.SortBy);
+                                    filters.SortField == null ? (SortBy?)null : filters.SortField.SortBy,
+                                    closeFrom,
+                                    closeTo);
         }
 
         public ReportGeneratorModel GetReportGeneratorModel(ReportGeneratorData data, SortField sortField)

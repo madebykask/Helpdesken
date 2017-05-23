@@ -307,8 +307,14 @@
             if (filters.CaseCreationDate.FromDate.HasValue) 
                 _whereStr += string.Format("AND tblCase.RegTime >= '{0}' ", filters.CaseCreationDate.FromDate.Value);
 
-            if (filters.CaseCreationDate.FromDate.HasValue)
+            if (filters.CaseCreationDate.ToDate.HasValue)
                 _whereStr += string.Format("AND tblCase.RegTime <= '{0}' ", filters.CaseCreationDate.ToDate.Value);
+
+            if (filters.CaseClosingDate.FromDate.HasValue)
+                _whereStr += string.Format("AND tblCase.FinishingDate >= '{0}' ", filters.CaseClosingDate.FromDate.Value);
+
+            if (filters.CaseClosingDate.ToDate.HasValue)
+                _whereStr += string.Format("AND tblCase.FinishingDate <= '{0}' ", filters.CaseClosingDate.ToDate.Value);
 
             return _whereStr;
         }
