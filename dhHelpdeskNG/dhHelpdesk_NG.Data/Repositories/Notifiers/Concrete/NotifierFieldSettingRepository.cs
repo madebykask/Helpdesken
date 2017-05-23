@@ -201,8 +201,9 @@
             var createdDate = this.CreateDisplayFieldSetting(settings, StateField.CreatedDate, languageId);
             var changedDate = this.CreateDisplayFieldSetting(settings, StateField.ChangedDate, languageId);
             var synchronizationDate = this.CreateDisplayFieldSetting(settings, StateField.SynchronizationDate, languageId);
+            var lang = this.CreateDisplayFieldSetting(settings, GeneralField.Language, languageId);
 
-            FieldOverviewSetting language = new FieldOverviewSetting(true,"LanguageId", false);            
+            //FieldOverviewSetting language = new FieldOverviewSetting(true,"LanguageId", false);            
             
 
             return new NotifierOverviewSettings(
@@ -235,7 +236,7 @@
                 createdDate,
                 changedDate,
                 synchronizationDate,
-                language);
+                lang);
         }
 
         public FieldSettings FindByCustomerIdAndLanguageId(int customerId, int languageId)
