@@ -41,7 +41,8 @@
             SettingModel ordered,
             SettingModel createdDate,
             SettingModel changedDate,
-            SettingModel synchronizationDate)
+            SettingModel synchronizationDate,
+            SettingModel lang)
         {
             this.Language = language;
             this.UserId = userId;
@@ -73,6 +74,8 @@
             this.CreatedDate = createdDate;
             this.ChangedDate = changedDate;
             this.SynchronizationDate = synchronizationDate;
+            this.Lang = lang;
+
         }
 
         //[NotNull]
@@ -152,6 +155,8 @@
         [Required]
         [NotNull]
         public SettingModel Department { get; set; }
+
+        public SettingModel Lang { get; set; }
 
         [Required]
         [NotNull]
