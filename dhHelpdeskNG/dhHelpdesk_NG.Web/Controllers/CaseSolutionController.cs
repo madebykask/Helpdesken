@@ -765,11 +765,11 @@ namespace DH.Helpdesk.Web.Controllers
                                                                         .IsUserFirstLastNameRepresentation == 1;
 
             ////Only return casesolution where templatepath is null - these case solutions are E-Forms shown in myhr/linemanager/selfservice
-            //var caseSolutions = this._caseSolutionService.SearchAndGenerateCaseSolutions(customerId, caseSolutionSearch, isUserFirstLastNameRepresentation)
-            //                                             .Where(x => x.TemplatePath == null).ToList();                        
+            var caseSolutions = this._caseSolutionService.SearchAndGenerateCaseSolutions(customerId, caseSolutionSearch, isUserFirstLastNameRepresentation)
+                                                         .Where(x => x.TemplatePath == null).ToList();
 
-            //I have removed the  above condition, from now on these will appear in the list /TAN
-            var caseSolutions = this._caseSolutionService.SearchAndGenerateCaseSolutions(customerId, caseSolutionSearch, isUserFirstLastNameRepresentation).ToList();
+            ////I have removed the  above condition, from now on these will appear in the list /TAN
+            //var caseSolutions = this._caseSolutionService.SearchAndGenerateCaseSolutions(customerId, caseSolutionSearch, isUserFirstLastNameRepresentation).ToList();
 
             var curUserItem = string.Format("-- {0} --", Translation.GetCoreTextTranslation(CURRENT_USER_ITEM_CAPTION));
             var connectedToButton = Translation.GetCoreTextTranslation("Knapp");
