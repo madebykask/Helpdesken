@@ -57,7 +57,7 @@
 
         public static readonly string Code = "Kod";
 
-        public static readonly string LanguageId = "Språk Id";
+        public static readonly string LanguageId = "Språk";
 
         public static readonly string Language = "Språk";
 
