@@ -213,7 +213,8 @@
             FieldSetting createdDate,
             FieldSetting changedDate,
             FieldSetting synchronizationDate,
-            DateTime changedDateAndTime)
+            DateTime changedDateAndTime,
+            FieldSetting lang)
         {
             var settings = new FieldSettings
                            {
@@ -248,7 +249,8 @@
                                CreatedDate = createdDate,
                                ChangedDate = changedDate,
                                SynchronizationDate = synchronizationDate,
-                               ChangedDateAndTime = changedDateAndTime
+                               ChangedDateAndTime = changedDateAndTime,
+                               Language=lang
                            };
 
             settings.State = ModelStates.Updated;
