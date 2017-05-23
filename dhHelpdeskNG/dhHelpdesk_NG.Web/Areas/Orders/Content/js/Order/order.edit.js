@@ -11,9 +11,9 @@
         init: function () {
             var that = this;
             var lastInitiatorSearchKey = '';
-
+            
             function getOrderComputerUserSearchOptions(updateCallback) {
-
+                
                 var options = {
                     items: 20,
                     minLength: 2,

@@ -4,6 +4,7 @@ var _parameters = window.parameters;
    
 $(function () {
     var $userId = $('#case__ReportedBy');
+    
     var $updateUserInfo = $('#UpdateNotifierInformation');
 
     function hideShowSaveUserInfoBtn(userId) {
@@ -44,9 +45,11 @@ $(function () {
     });
 
     hideShowSaveUserInfoBtn($userId.val());
-
-    $userId.on('change', function(ev) {
+    
+    $userId.on('change', function (ev) {
+        
         var userId = $(ev.target).val();
+        
         hideShowSaveUserInfoBtn(userId);
     });
 

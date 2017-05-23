@@ -27,6 +27,7 @@
     });
 
     $(".case-usersearch-multiselect").multiselect({
+        
         enableFiltering: true,
         filterPlaceholder: "",
         maxHeight: 250,
@@ -36,6 +37,7 @@
             return '-- <i class="caret"></i>';
         },
         onChange: function (element, checked) {
+            
             if (element.parent().attr("id") === "caseFollowersEmailGroupsDropdown") {
                     appendDropdownsEmails(emailGroups, element.val());
             }
@@ -46,6 +48,7 @@
                     checkAndAddEmailsFromDropdown(element.val());
             }
         }
+        alert();
     });
 
     function appendDropdownsEmails(array, selectedId) {
@@ -99,6 +102,7 @@
     }
 
     function getCasesAddFollowersSearchOptions() {
+        
         var options = {
             items: 20,
             minLength: 2,

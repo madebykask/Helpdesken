@@ -259,8 +259,7 @@
         public bool editLog { get; set; }
         public IList<WorkflowStepModel> WorkflowSteps { get; set; }
 
-        
-        
+        public int LanguageId { get; set; }        
 
     }
 

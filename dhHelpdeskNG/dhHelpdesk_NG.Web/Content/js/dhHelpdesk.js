@@ -393,7 +393,7 @@ function NewNotifierEvent(id) {
 
             // Raise event about UserId changed.
             $(document).trigger("OnUserIdChanged", [data.num]);
-
+            
             $('#case__PersonsName').val(data.name);
             $('#case__PersonsEmail').val(data.email);
             $('#case__PersonsPhone').val(data.phone);

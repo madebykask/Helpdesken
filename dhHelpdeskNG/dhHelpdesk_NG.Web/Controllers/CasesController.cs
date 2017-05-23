@@ -4178,6 +4178,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var caseFolowerUsers = _caseExtraFollowersService.GetCaseExtraFollowers(caseId);
                 m.MapToFollowerUsers(caseFolowerUsers);
             }
+           
 
             var customerUserSetting = this._customerUserService.GetCustomerSettings(customerId, userId);
             if (customerUserSetting == null)

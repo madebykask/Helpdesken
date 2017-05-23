@@ -433,3 +433,5 @@ GO
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.32'
+
+

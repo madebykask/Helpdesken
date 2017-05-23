@@ -233,7 +233,8 @@ function generateRandomKey() {
     return s4() + '-' + s4() + '-' + s4();
 }
 
-function GetComputerUserSearchOptions() {    
+function GetComputerUserSearchOptions() {
+    
     var options = {
         items: 20,
         minLength: 2,
@@ -324,7 +325,7 @@ function GetComputerUserSearchOptions() {
         updater: function (obj) {
             var item = JSON.parse(obj);
             var departmentFilterFormat = $('#DepartmentFilterFormat').val();
-                        
+            
             $('#case__ReportedBy').val(item.num);
          
             // Raise event about UserId changed.
@@ -371,7 +372,8 @@ function GetComputerUserSearchOptions() {
     return options;
 }
 
-function GetComputerUserSearchOptionsForIsAbout() {    
+function GetComputerUserSearchOptionsForIsAbout() {
+    
     var options = {
         items: 20,
         minLength: 2,
@@ -385,7 +387,7 @@ function GetComputerUserSearchOptionsForIsAbout() {
                 success: function (result) {
                     if (result.searchKey != lastIsAboutSearchKey)
                         return;
-
+                    
                     var resultList = jQuery.map(result.result, function (item) {
                         var aItem = {
                             id: item.Id
@@ -511,6 +513,8 @@ function GetComputerUserSearchOptionsForIsAbout() {
 */
 function CaseInitForm() {
 
+    
+
     $('#CaseLog_TextExternal').focus(function () {
         CaseWriteTextToLogNote('');
     });
@@ -520,6 +524,7 @@ function CaseInitForm() {
     });
 
     $('#case__ReportedBy').typeahead(GetComputerUserSearchOptions());
+    
     $('#case__InventoryNumber').typeahead(GetComputerSearchOptions());
     $('#case__IsAbout_ReportedBy').typeahead(GetComputerUserSearchOptionsForIsAbout());
 

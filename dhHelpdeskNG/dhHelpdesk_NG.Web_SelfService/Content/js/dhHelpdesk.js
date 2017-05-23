@@ -468,10 +468,11 @@ function LogInitForm() {
 
 function GetComputerUserSearchOptions() {
 
+    
     var options = {
         items: 20,
         minLength: 2,
-
+        
         source: function (query, process) {
             return $.ajax({
                 url: '/case/searchuser',
@@ -534,6 +535,7 @@ function GetComputerUserSearchOptions() {
 
         updater: function (obj) {
             var item = JSON.parse(obj);
+            
             //console.log(JSON.stringify(item));
             $('#case__ReportedBy').val(item.num);
             $('#case__PersonsName').val(item.name);

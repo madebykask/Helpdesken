@@ -86,6 +86,7 @@ function IsWillBeOverwrittenByValue(domVisible, domValue, val) {
 }
 
 function IsWillBeOverwritten(fieldId, val) {
+    
     switch (fieldId) {
         case 'PersonsName':
             return IsWillBeOverwrittenByValue('#case__PersonsName', '#case__PersonsName', val);
@@ -336,6 +337,7 @@ var ApplyTemplate = function (data, doOverwrite) {
         var val = data[fieldId];
         var el;
         if (val != null && val !== '') {
+            
             switch (fieldId) {
                 case 'PersonsName':
                     el = $('#case__PersonsName');
@@ -685,7 +687,7 @@ function IsValueApplicableFor(templateFieldId, val) {
     if (val == null || val === "") {
         return false;
     }
-
+    
     switch (templateFieldId) {
         case 'PersonsName':
             return $('#case__PersonsName').is(":visible") && $('#case__PersonsName').find('a[value="' + val + '"]').length != 0;
