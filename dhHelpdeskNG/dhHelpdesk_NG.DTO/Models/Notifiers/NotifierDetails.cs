@@ -139,7 +139,7 @@
 
         public DateTime? SynchronizationDate { get; private set; }
 
-        [IsId]
+        //[IsId]
         public int? LanguageId { get; private set; }
     }
 }

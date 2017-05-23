@@ -275,6 +275,10 @@
             var changedDate = this.CreateFieldSetting(settings, StateField.ChangedDate, languageId, StateFieldLable.ChangedDate);
             var synchronizationDate = this.CreateFieldSetting(settings, StateField.SynchronizationDate, languageId, StateFieldLable.SynchronizationDate);
 
+
+            var language = this.CreateFieldSetting(settings, GeneralField.LanguageId , languageId, GeneralFieldLable.LanguageId);
+
+
             return FieldSettings.CreateForEdit(
                 userId,
                 domain,
@@ -304,7 +308,8 @@
                 ordered,
                 createdDate,
                 changedDate,
-                synchronizationDate);
+                synchronizationDate,
+                language);
         }
 
         private static FieldProcessingSetting CreateDisplayRule(List<ComputerUserFieldSettings> settings, string fieldName)

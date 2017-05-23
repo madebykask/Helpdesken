@@ -1,9 +1,11 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
-@model DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content.DropDownContent           
+@model DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content.DropDownContent
 
 @if (ViewBag.Required != null)
 {
     @Html.DropDown("department_dropdown", "DepartmentId", true, Model, (bool)ViewBag.Required)
+
+
 }
 else
 {

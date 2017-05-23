@@ -26,7 +26,9 @@
 
         public static readonly string Code = "UserCode";
 
-        public static readonly string LanguageId = "LanguageId";
+        public static readonly string LanguageId = "Language_Id";
+
+        public static readonly string Language = "Language_Id";
     }
 
     public static class GeneralFieldLable
@@ -54,6 +56,10 @@
         public static readonly string Email = "E-post";
 
         public static readonly string Code = "Kod";
+
+        public static readonly string LanguageId = "Språk Id";
+
+        public static readonly string Language = "Språk";
 
     }
 }

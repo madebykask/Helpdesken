@@ -525,9 +525,13 @@ namespace DH.Helpdesk.Web.Controllers
 
                 languages = languagesData.Select(d => new ItemOverview(d.Name, d.Id.ToString())).ToList();
 
+                ItemOverview f = new ItemOverview(" ", "0");
+                languages.Add(f);
+
+                languages = languages.OrderBy(z => z.Value).ToList();
 
                 languageId = this.customerService.GetCustomerLanguage(currentCustomerId);
-                
+
                 if (languageId != null && languageId.Value > 0)
                     inputParams.Add("LanguageId", languageId.Value.ToString()); // Takes default from setting
             }
@@ -636,16 +640,24 @@ namespace DH.Helpdesk.Web.Controllers
                     inputParams.Add("DepartmentId", departmentId.Value.ToString()); // Takes default from saved Notifier
             }
 
+            if (displaySettings.Language.Show)
+            {
+                var languageData =
+                this.languageRepository.GetActiveLanguages();
 
-            var languageData =
-                this.languageRepository.GetAll();
+                languages = languageData.Select(d => new ItemOverview(d.Name, d.Id.ToString())).ToList();
 
-            languages = languageData.Select(d => new ItemOverview(d.Name, d.Id.ToString())).ToList();
-            languageId = notifier.LanguageId;
+                ItemOverview f = new ItemOverview(" ", "0");
+                languages.Add(f);
 
-            if (languageId != null && languageId.Value > 0)
-                inputParams.Add("LanguageId", languageId.Value.ToString()); // Takes default from saved Notifier
+                languages = languages.OrderBy(z => z.Value).ToList();
 
+                languageId = notifier.LanguageId;
+
+                if (languageId != null && languageId.Value > 0)
+                    inputParams.Add("LanguageId", languageId.Value.ToString()); // Takes default from saved Notifier
+
+            }
 
             if (displaySettings.OrganizationUnit.Show)
             {
@@ -830,6 +842,44 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var isUnique = notifierRepository.IsInitiatorUserIdUnique(userId, initiatorId, SessionFacade.CurrentCustomer.Id, true);
             return Json(isUnique, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public string GetLanguageFromDepartment(string departmentid)
+
+        {
+
+            departmentid = departmentid.Replace("'", "");
+            if (departmentid != string.Empty)
+            {
+                int depid = Convert.ToInt32(departmentid);
+                int languageId = this.departmentRepository.GetDepartmentLanguage(depid);
+                return languageId.ToString();
+            }
+            else
+            {
+                return string.Empty;
+            }
+
+        }
+
+
+        [HttpGet]
+        public string GetLanguageFromRegion(string regionid)
+
+        {
+
+            regionid = regionid.Replace("'", "");
+            if (regionid != string.Empty)
+            {
+                int regid = Convert.ToInt32(regionid);
+                int languageId = this.regionRepository.GetRegionLanguage(regid);
+                return languageId.ToString();
+            }
+            else
+            {
+                return string.Empty;
+            }
         }
 
         private KeyValuePair<string, string> GetSplitedName(string fullName)

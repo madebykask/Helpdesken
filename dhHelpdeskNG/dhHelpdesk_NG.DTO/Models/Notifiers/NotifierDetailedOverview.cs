@@ -131,5 +131,6 @@
 
         public int? LanguageId { get; private set; }
 
+        public string Language { get; private set; }
     }
 }

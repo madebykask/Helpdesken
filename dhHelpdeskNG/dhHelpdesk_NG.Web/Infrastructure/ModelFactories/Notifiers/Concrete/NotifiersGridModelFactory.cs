@@ -29,6 +29,7 @@
             CreateHeaderIfNeeded(settings.CellPhone, GeneralField.CellPhone, headers);
             CreateHeaderIfNeeded(settings.Email, GeneralField.Email, headers);
             CreateHeaderIfNeeded(settings.Code, GeneralField.Code, headers);
+            CreateHeaderIfNeeded(settings.Language, GeneralField.Language, headers);
             CreateHeaderIfNeeded(settings.PostalAddress, AddressField.PostalAddress, headers);
             CreateHeaderIfNeeded(settings.PostalCode, AddressField.PostalCode, headers);
             CreateHeaderIfNeeded(settings.City, AddressField.City, headers);
@@ -64,6 +65,7 @@
                 CreateValueIfNeeded(settings.CellPhone, GeneralField.CellPhone, notifier.CellPhone, cellValues);
                 CreateValueIfNeeded(settings.Email, GeneralField.Email, notifier.Email, cellValues);
                 CreateValueIfNeeded(settings.Code, GeneralField.Code, notifier.Code, cellValues);
+                CreateValueIfNeeded(settings.Language, GeneralField.Language, notifier.Language, cellValues);
 
                 CreateValueIfNeeded(
                     settings.PostalAddress,

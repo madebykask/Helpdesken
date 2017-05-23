@@ -1,27 +1,27 @@
 ﻿@using System.Web.Optimization
 @model DH.Helpdesk.Web.Models.Notifiers.InputModel
-           
+
 @Scripts.Render("~/bundles/notifiers/notifier")
 
 <script type="text/javascript">
     window.parameters = {
-        departmentDropDownUrl: '@Url.Action("DepartmentDropDown")'            
-    };           
+        departmentDropDownUrl: '@Url.Action("DepartmentDropDown")'
+    };
 
     @if (Model.Managers.Show)
     {
         @:window.parameters.showManager = true;
-        @:window.parameters.managers = [];        
-        
+            @:window.parameters.managers = [];
+
         foreach (var manager in Model.Managers.Value.Items)
         {
             @:window.parameters.managers.push({ displayName: '@manager.Name', id: '@manager.Value' });
-        }
+            }
     }
     else
     {
         @:window.parameters.showManager = false;
-    }
+        }
 </script>
 
 <div class="content">
@@ -34,34 +34,34 @@
             </ul>
             <div class="tab-content">
                 <div class="tab-pane tab-pane-border active" id="fragment-1">
-                    @if (Model.UserId.Show || Model.Domain.Show || Model.LoginName.Show 
-                        || Model.FirstName.Show || Model.Initials.Show || Model.LastName.Show 
-                        || Model.DisplayName.Show || Model.Place.Show || Model.Phone.Show 
+                    @if (Model.UserId.Show || Model.Domain.Show || Model.LoginName.Show
+                        || Model.FirstName.Show || Model.Initials.Show || Model.LastName.Show
+                        || Model.DisplayName.Show || Model.Place.Show || Model.Phone.Show
                         || Model.CellPhone.Show || Model.Email.Show || Model.Code.Show)
                     {
                         @Html.Partial("NotifierEdit/GeneralFields", Model)
                     }
-                
+
                     @if (Model.PostalAddress.Show || Model.PostalCode.Show || Model.City.Show)
                     {
                         @Html.Partial("NotifierEdit/AddressFields", Model)
                     }
-                    
-                    @if (Model.Title.Show || Model.Department.Show || Model.Unit.Show 
-                        || Model.OrganizationUnit.Show || Model.Division.Show || Model.Managers.Show 
+
+                    @if (Model.Title.Show || Model.Department.Show || Model.Unit.Show
+                        || Model.OrganizationUnit.Show || Model.Division.Show || Model.Managers.Show
                         || Model.Group.Show || Model.Other.Show)
                     {
                         @Html.Partial("NotifierEdit/OrganizationFields", Model)
                     }
-                    
+
                     @if (Model.Ordered.Show)
                     {
                         @Html.Partial("NotifierEdit/OrdererFields", Model)
                     }
-                
+
                     @Html.Partial("NotifierEdit/StateFields", Model)
                 </div>
-             </div>
+            </div>
         </div>
     </div>
 </div>
@@ -69,9 +69,39 @@
 
 <script type="text/javascript">
 
+    $('#department_dropdown').change(function () {
+
+        var selectedVal = $('#department_dropdown option:selected').attr('value');
+        
+        $.get("/notifiers/GetLanguageFromDepartment/", { departmentid: "'" + selectedVal.toString() + "'" }, function (result) {
+
+            if (parseInt(result) > 0) {        
+                $("#language_dropdown").val(result);
+            }
+        });
+    });
+
+
+    $('#region_dropdown').change(function () {
+
+        var selectedVal = $('#region_dropdown option:selected').attr('value');
+        
+
+        $.get("/notifiers/GetLanguageFromRegion/", { regionid: "'" + selectedVal.toString() + "'" }, function (result) {
+
+            if (parseInt(result) > 0) {
+        
+                $("#language_dropdown").val(result);
+            }
+        });
+    });
+
+
+    
+
     var validationTrans = "@Translation.GetForJS("måste anges")";
     var userIdNotUnique = "@Translation.GetForJS("inte unikt")";
-    
+
     var validator = $("#target").validate({
         ignore: "",
         rules: {
@@ -87,7 +117,7 @@
                         },
                         initiatorId: function () {
                             return @Model.Id;
-                        }                        
+                        }
                     }
                 }*@
             },
@@ -182,14 +212,14 @@
 
             "Other.Value": {
                 required: getBoolean("@Model.Other.Required")
-             },
+            },
         },
         messages: {
             "UserId.Value": {
                 required: "@Model.UserId.Caption" + " " + validationTrans
                 @*,
                 remote: "@Model.UserId.Caption" + " " + userIdNotUnique*@
-            },            
+            },
 
             "DomainId": {
                 required: "@Model.Domain.Caption" + " " + validationTrans
@@ -282,7 +312,7 @@
             "Other.Value": {
                 required: "@Model.Other.Caption" + " " + validationTrans
             },
-            
+
         }
 
     });
