@@ -66,7 +66,7 @@ namespace DH.Helpdesk.Web.App_Start
                 var identity = new ClaimsIdentity(context.Options.AuthenticationType);
                 identity.AddClaim(new Claim(ClaimTypes.Sid, _user.Id.ToString()));
                 identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, context.UserName));
-                identity.AddClaim(new Claim(ClaimTypes.Role, _user.UserGroupId.ToString()));
+                identity.AddClaim(new Claim(ClaimTypes.Role, _user.UserGroupId.ToString()));                
                 context.Validated(identity);
             }
             else

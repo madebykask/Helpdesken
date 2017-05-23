@@ -1,7 +1,5 @@
 ﻿using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Shared;
-using DH.Helpdesk.Common.Extensions.Integer;
-using DH.Helpdesk.Common.Extensions.DateTime;
 using DH.Helpdesk.Dal.Repositories;
 using System;
 using System.Collections.Generic;
@@ -12,11 +10,8 @@ using DH.Helpdesk.Domain;
 using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Services.Utils;
 using DH.Helpdesk.Common.Tools;
-using DH.Helpdesk.Common.Extensions.String;
-using DH.Helpdesk.Common.Extensions.Decimal;
 using DH.Helpdesk.Common.Enums.BusinessRule;
 using static DH.Helpdesk.BusinessData.Models.Shared.ProcessResult;
-using DH.Helpdesk.Common.Extensions.GUID;
 
 namespace DH.Helpdesk.Services.Services.UniversalCase
 {   
@@ -121,7 +116,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                 LatestSLACountDate = null
             };
 
-            if (oldCase == null)
+            if (oldCase == null && caseModel.Id > 0)
                 oldCase = _caseRepository.GetCase(caseModel.Id);
 
             var isEditMode = caseModel.Id != 0;
@@ -176,8 +171,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
 
             #region LeadTime & ActionLeadTime
 
-            var isCaseGoingToFinish = caseModel.FinishingType_Id.IsValueChanged() &&
-                                      caseModel.FinishingType_Id.HasValue &&
+            var isCaseGoingToFinish = caseModel.FinishingType_Id.HasValue &&
                                       caseModel.FinishingType_Id.Value > 0;
 
             DateTime uBoundDate = isCaseGoingToFinish ? caseModel.FinishingDate.Value : auxModel.UtcNow;
@@ -189,7 +183,14 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                 uBoundDate.ToUniversalTime(),
                 caseModel.Department_Id) - ret.ExternalTime;
 
-            ret.LeadTime = isCaseGoingToFinish ? leadTime : NotChangedValue.INT;
+            if (oldCase == null)
+            {
+                ret.LeadTime = isCaseGoingToFinish ? leadTime : 0;
+            }
+            else
+            {
+                ret.LeadTime = isCaseGoingToFinish ? leadTime : oldCase.LeadTime.Value;
+            }
             ret.LeadTimeForNow = leadTime;
 
             if (oldCase != null && oldCase.Id > 0)
@@ -205,16 +206,8 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             #endregion
 
             #region LatestSLACountDate
-
-            int? newStateSeconary = null;
-            if (isEditMode && !caseModel.StateSecondary_Id.IsValueChanged())
-                newStateSeconary = oldCase?.StateSecondary_Id;
-            else if (!caseModel.StateSecondary_Id.IsValueChanged())
-                newStateSeconary = null;
-            else
-                newStateSeconary = caseModel.StateSecondary_Id;
-
-            ret.LatestSLACountDate = CalculateLatestSLACountDate(oldCase?.StateSecondary_Id, newStateSeconary, oldCase?.LatestSLACountDate);
+            
+            ret.LatestSLACountDate = CalculateLatestSLACountDate(oldCase?.StateSecondary_Id, caseModel.StateSecondary_Id, oldCase?.LatestSLACountDate);
 
             #endregion
 
@@ -234,7 +227,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
 
             #region Primary validation
 
-            if (!caseModel.Id.IsValueChanged() || caseModel.Id < 0)
+            if (caseModel.Id < 0)
                 retData.Add(new KeyValuePair<string, string>("Case_Id", "Case Id is not valid!"));
             else
             {
@@ -248,7 +241,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                         caseModel.Customer_Id = oldCase.Customer_Id;
                 }
 
-                if (!caseModel.Customer_Id.IsValueChanged() || caseModel.Customer_Id <= 0)
+                if (caseModel.Customer_Id <= 0)
                     retData.Add(new KeyValuePair<string, string>("Customer_Id", "Customer Id is not valid!"));
                 else
                 {
@@ -283,27 +276,14 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
 
             if (caseModel.Id == 0)
             {
-                caseModel.CaseGUID = Guid.NewGuid();
-                if (!caseModel.ContactBeforeAction.IsValueChanged())
-                    caseModel.ContactBeforeAction = _DEFAULT_CONTACT_BEFORE_ACTION;
-
-                if (!caseModel.Cost.IsValueChanged())
-                    caseModel.Cost = _DEFAULT_COST;
-
-                if (!caseModel.Deleted.IsValueChanged())
-                    caseModel.Deleted = _DEFAULT_DELETED;
-
-                if (!caseModel.ExternalTime.IsValueChanged())
-                    caseModel.ExternalTime = _DEFAULT_EXTERNAL_TIME;
-
-                if (!caseModel.NoMailToNotifier.IsValueChanged())
-                    caseModel.NoMailToNotifier = _DEFAULT_NO_MAIL_TO_NOTIFIER;
-
-                if (!caseModel.OtherCost.IsValueChanged())
-                    caseModel.OtherCost = _DEFAULT_OTHER_COST;
-
-                if (!caseModel.SMS.IsValueChanged())
-                    caseModel.SMS = _DEFAULT_SMS;
+                caseModel.CaseGUID = Guid.NewGuid();                
+                caseModel.ContactBeforeAction = _DEFAULT_CONTACT_BEFORE_ACTION;
+                caseModel.Cost = _DEFAULT_COST;
+                caseModel.Deleted = _DEFAULT_DELETED;
+                caseModel.ExternalTime = _DEFAULT_EXTERNAL_TIME;
+                caseModel.NoMailToNotifier = _DEFAULT_NO_MAIL_TO_NOTIFIER;
+                caseModel.OtherCost = _DEFAULT_OTHER_COST;
+                caseModel.SMS = _DEFAULT_SMS;
             }
 
             /*Load required info*/
@@ -324,16 +304,16 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
 
                 if (_customerUser.UserInfoPermission == 0)
                 {
-                    caseModel.ReportedBy = NotChangedValue.STRING;
-                    caseModel.Place = NotChangedValue.STRING;
-                    caseModel.PersonsName = NotChangedValue.STRING;
-                    caseModel.PersonsEmail = NotChangedValue.STRING;
-                    caseModel.PersonsPhone = NotChangedValue.STRING;
-                    caseModel.PersonsCellphone = NotChangedValue.STRING;
-                    caseModel.Region_Id = NotChangedValue.NULLABLE_INT;
-                    caseModel.Department_Id = NotChangedValue.NULLABLE_INT;
-                    caseModel.OU_Id = NotChangedValue.NULLABLE_INT;
-                    caseModel.UserCode = NotChangedValue.STRING;
+                    caseModel.ReportedBy = oldCase.ReportedBy;
+                    caseModel.Place = oldCase.Place;
+                    caseModel.PersonsName = oldCase.PersonsName;
+                    caseModel.PersonsEmail = oldCase.PersonsEmail;
+                    caseModel.PersonsPhone = oldCase.PersonsPhone;
+                    caseModel.PersonsCellphone = oldCase.PersonsCellphone;
+                    caseModel.Region_Id = oldCase.Region_Id;
+                    caseModel.Department_Id = oldCase.Department_Id;
+                    caseModel.OU_Id = oldCase.OU_Id;
+                    caseModel.UserCode = oldCase.UserCode;
                 }
                 caseModel.RegTime = oldCase.RegTime;
             }
@@ -341,13 +321,13 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             {
                 oldCase = null;
                 caseModel.RegTime = auxModel.UtcNow;
-                if (!caseModel.RegLanguage_Id.IsValueChanged())
+                if (caseModel.RegLanguage_Id == 0)
                     caseModel.RegLanguage_Id = auxModel.CurrentLanguageId;
             }
 
-            if (caseModel.FinishingType_Id.IsValueChanged() && caseModel.FinishingType_Id > 0)
+            if (caseModel.FinishingType_Id > 0)
             {
-                if (!caseModel.FinishingDate.HasValue || !caseModel.FinishingDate.IsValueChanged())
+                if (!caseModel.FinishingDate.HasValue)
                     caseModel.FinishingDate = auxModel.UtcNow;
                 else                
                 {                    
@@ -392,13 +372,13 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             
             if (caseModel.Id == 0)
             {                
-                if (!caseModel.CaseType_Id.IsValueChanged())
+                if (caseModel.CaseType_Id == 0)
                     retData.Add(GenerateCantBeNullOrEmptyMessage(GlobalEnums.TranslationCaseFields.CaseType_Id));
             }            
 
-            if (caseModel.FinishingDate.IsValueChanged() && caseModel.FinishingDate.HasValue)
+            if (caseModel.FinishingDate.HasValue)
             {
-                if (!caseModel.FinishingType_Id.HasValue || !caseModel.FinishingType_Id.IsValueChanged())
+                if (!caseModel.FinishingType_Id.HasValue)
                     retData.Add(GenerateCantBeNullOrEmptyMessage(GlobalEnums.TranslationCaseFields.ClosingReason));
             }
 
@@ -530,13 +510,13 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
         private MailSenders GetMailSenders(CaseModel caseModel)
         {
             var mailSenders = new MailSenders();
-            if (caseModel.WorkingGroup_Id.HasValue && caseModel.WorkingGroup_Id.IsValueChanged())
+            if (caseModel.WorkingGroup_Id.HasValue)
             {
                 var curWG = _workingGroupService.GetWorkingGroup(caseModel.WorkingGroup_Id.Value);
                 mailSenders.WGEmail = curWG.EMail;
             }
 
-            if (caseModel.DefaultOwnerWG_Id.HasValue && caseModel.DefaultOwnerWG_Id.IsValueChanged())
+            if (caseModel.DefaultOwnerWG_Id.HasValue)
             {
                 var curWG = _workingGroupService.GetWorkingGroup(caseModel.DefaultOwnerWG_Id.Value);
                 mailSenders.DefaultOwnerWGEMail = curWG.EMail;
@@ -584,49 +564,42 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                     {
                         case TypeCode.Int32:
                         case TypeCode.Int64:
-                            var intVal = (int)prop.GetValue(caseModel, null);
-                            if (intVal.IsValueChanged())
-                                caseProperty.SetValue(caseEntity, intVal);
+                            var intVal = (int)prop.GetValue(caseModel, null);                            
+                            caseProperty.SetValue(caseEntity, intVal);
                             break;
 
                         case TypeCode.String:
-                            var strVal = (string)prop.GetValue(caseModel, null);
-                            if (strVal.IsValueChanged())
-                                caseProperty.SetValue(caseEntity, strVal);
+                            var strVal = (string)prop.GetValue(caseModel, null);                            
+                            caseProperty.SetValue(caseEntity, strVal);
                             break;
 
                         case TypeCode.DateTime:
-                            var dateVal = (DateTime)prop.GetValue(caseModel, null);
-                            if (dateVal.IsValueChanged())
-                                caseProperty.SetValue(caseEntity, dateVal);
+                            var dateVal = (DateTime)prop.GetValue(caseModel, null);                            
+                            caseProperty.SetValue(caseEntity, dateVal);
                             break;
 
                         case TypeCode.Decimal:
-                            var decimalVal = (decimal)prop.GetValue(caseModel, null);
-                            if (decimalVal.IsValueChanged())
-                                caseProperty.SetValue(caseEntity, decimalVal);
+                            var decimalVal = (decimal)prop.GetValue(caseModel, null);                            
+                            caseProperty.SetValue(caseEntity, decimalVal);
                             break;
                         
                         case TypeCode.Object:
                             if (type == typeof(int?))
                             {
-                                var nullIntVal = (int?)prop.GetValue(caseModel, null);
-                                if (nullIntVal.IsValueChanged())
-                                    caseProperty.SetValue(caseEntity, nullIntVal);
+                                var nullIntVal = (int?)prop.GetValue(caseModel, null);                                
+                                caseProperty.SetValue(caseEntity, nullIntVal);
                             }
                             else
                             if (type == typeof(DateTime?))
                             {
-                                var nullDateVal = (DateTime?)prop.GetValue(caseModel, null);
-                                if (nullDateVal.IsValueChanged())
-                                    caseProperty.SetValue(caseEntity, nullDateVal);
+                                var nullDateVal = (DateTime?)prop.GetValue(caseModel, null);                                
+                                caseProperty.SetValue(caseEntity, nullDateVal);
                             }
                             else
                             if (type == typeof(Guid))
                             {
-                                var guidVal = (Guid)prop.GetValue(caseModel, null);
-                                if (guidVal.IsValueChanged())
-                                    caseProperty.SetValue(caseEntity, guidVal);
+                                var guidVal = (Guid)prop.GetValue(caseModel, null);                                
+                                caseProperty.SetValue(caseEntity, guidVal);
                             }
                             break;
 
@@ -645,57 +618,57 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             if (caseEntity.IsAbout != null)
                 isAbout = caseEntity.IsAbout;
 
-            if (caseModel.IsAbout_ReportedBy.IsValueChanged())
+            if (caseModel.IsAbout_ReportedBy != oldCase.IsAbout?.ReportedBy)
             {
                 isAbout.ReportedBy = caseModel.IsAbout_ReportedBy;
                 isAboutChanged = true;
             }
-            if (caseModel.IsAbout_PersonsName.IsValueChanged())
+            if (caseModel.IsAbout_PersonsName != oldCase.IsAbout?.Person_Name)
             {
                 isAbout.Person_Name = caseModel.IsAbout_PersonsName;
                 isAboutChanged = true;
             }
-            if (caseModel.IsAbout_PersonsEmail.IsValueChanged())
+            if (caseModel.IsAbout_PersonsEmail != oldCase.IsAbout?.Person_Email)
             {
                 isAbout.Person_Email = caseModel.IsAbout_PersonsEmail;
                 isAboutChanged = true;
             }
-            if (caseModel.IsAbout_PersonsPhone.IsValueChanged())
+            if (caseModel.IsAbout_PersonsPhone != oldCase.IsAbout?.Person_Phone)
             {
                 isAbout.Person_Phone = caseModel.IsAbout_PersonsPhone;
                 isAboutChanged = true;
             }
-            if (caseModel.IsAbout_PersonsCellPhone.IsValueChanged())
+            if (caseModel.IsAbout_PersonsCellPhone != oldCase.IsAbout?.Person_Cellphone)
             {
                 isAbout.Person_Cellphone = caseModel.IsAbout_PersonsCellPhone;
                 isAboutChanged = true;
             }
-            if (caseModel.IsAbout_Place.IsValueChanged())
+            if (caseModel.IsAbout_Place != oldCase.IsAbout?.Place)
             {
                 isAbout.Place = caseModel.IsAbout_Place;
                 isAboutChanged = true;
             }            
-            if (caseModel.IsAbout_UserCode.IsValueChanged())
+            if (caseModel.IsAbout_UserCode != oldCase.IsAbout?.UserCode)
             {
                 isAbout.UserCode = caseModel.IsAbout_UserCode;
                 isAboutChanged = true;
             }
-            if (caseModel.IsAbout_Region_Id.IsValueChanged())
+            if (caseModel.IsAbout_Region_Id != oldCase.IsAbout?.Region_Id)
             {
                 isAbout.Region_Id = caseModel.IsAbout_Region_Id;
                 isAboutChanged = true;
             }
-            if (caseModel.IsAbout_Department_Id.IsValueChanged())
+            if (caseModel.IsAbout_Department_Id != oldCase.IsAbout?.Department_Id)
             {
                 isAbout.Department_Id = caseModel.IsAbout_Department_Id;
                 isAboutChanged = true;
             }
-            if (caseModel.IsAbout_OU_Id.IsValueChanged())
+            if (caseModel.IsAbout_OU_Id != oldCase.IsAbout?.OU_Id)
             {
                 isAbout.OU_Id = caseModel.IsAbout_OU_Id;
                 isAboutChanged = true;
             }
-            if (caseModel.IsAbout_CostCentre.IsValueChanged())
+            if (caseModel.IsAbout_CostCentre != oldCase.IsAbout?.CostCentre)
             {
                 isAbout.CostCentre = caseModel.IsAbout_CostCentre;
                 isAboutChanged = true;
@@ -717,8 +690,8 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                 Id = 0, // Will bet set after save case
                 CaseHistoryId = 0, // Will bet set after save case
                 CaseId = caseModel.Id,
-                FinishingDate = (caseModel.FinishingDate.IsValueChanged()? caseModel.FinishingDate: null),
-                FinishingType = (caseModel.FinishingType_Id.IsValueChanged() ? caseModel.FinishingType_Id : null),                
+                FinishingDate = caseModel.FinishingDate,
+                FinishingType = caseModel.FinishingType_Id,                
                 LogGuid = Guid.NewGuid(),
                 LogType = 0,
                 TextExternal = caseModel.Text_External,

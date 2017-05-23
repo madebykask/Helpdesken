@@ -291,11 +291,14 @@
                 var encriptionKey = ConfigurationManager.AppSettings.AllKeys.Contains(AppSettingsKey.EncryptionKey) ?
                                     ConfigurationManager.AppSettings[AppSettingsKey.EncryptionKey].ToString() : string.Empty;
 
-                var encyrptedAccessToken = AESCryptoProvider.Encrypt256(token.access_token, encriptionKey);
-                var encyrptedRefreshToken = AESCryptoProvider.Encrypt256(token.refresh_token, encriptionKey);
+                //var encyrptedAccessToken = AESCryptoProvider.Encrypt256(token.access_token, encriptionKey);
+                //var encyrptedRefreshToken = AESCryptoProvider.Encrypt256(token.refresh_token, encriptionKey);
 
-                token.access_token = encyrptedAccessToken;
-                token.refresh_token = encyrptedRefreshToken;                
+                //token.access_token = encyrptedAccessToken;
+                //token.refresh_token = encyrptedRefreshToken;
+
+                token.access_token = token.access_token;
+                token.refresh_token = token.refresh_token;
             }
 
             return token;

@@ -62,6 +62,10 @@
 </div>
 
 <div class="startpage-brand" style="display: none;"></div>
+
+<input type="button" value="Get Request" name="btnRequest1" id="btnRequest1" class="btn btn-large btn-warning" style="width:100%;" />
+<input type="button" value="Post Request" name="btnRequest2" id="btnRequest2" class="btn btn-large btn-warning" style="width:100%;" />
+
 <div style="display: none;"
     data-usermodules="items"
     data-usermodules-userid="@(Model.UserId)" >
@@ -184,7 +188,59 @@
 }
 
 <script type="text/javascript">
-    
+    $('#btnRequest1').click(function () {
+        request1();
+    });
+
+    $('#btnRequest2').click(function () {
+        request2();
+    });
+
+    function request1() {
+        var _token = localStorage.getItem('AccessToken');
+
+        $.ajax({
+            url: "@Url.Content("~/Api/CaseApi/GetCase?id=95879")",
+            type: 'GET',
+            headers: { "Authorization": "Bearer " + _token },
+            error: function (request, status, error) {
+                alert(request.responseText);
+            },
+            success: function (res, status, xhr) {
+            }
+        });
+    };
+
+    function request2() {
+        var _token = localStorage.getItem('AccessToken');
+        if (_token == null || _token == "") {
+            alert("Not authenticated!");
+            return;
+        }
+
+        var data1 = {
+            Id: 0,
+            CaseGUID: "5d843789-7049-4c7e-b60b-4b129eb7fff6",
+            Caption: "Majid1",
+            Customer_Id: "29",
+            CaseType_Id: 93,
+            ProductAreaSetDate:"2017-05-12T12:41:55",
+            PersonsEmail: "mg@dhsolutions.se",
+            CurrentLanguageId: 1,
+            test: "JJ",
+            CaseNumber: 12,
+            mm: null
+        };
+
+        $.ajax({
+            url: "@Url.Content("~/Api/CaseApi/SaveCase")",
+            data: JSON.stringify(data1),
+            contentType: "application/json; charset=utf-8",
+            type: 'POST',
+            headers: { "Authorization": "Bearer " + _token }
+        });
+    };
+
     function UpdateLogo() {
         var columns = $(".span4");
         $("#mainContainer").find(".startpage-brand").remove();

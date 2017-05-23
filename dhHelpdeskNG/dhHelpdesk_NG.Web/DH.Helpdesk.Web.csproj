@@ -306,6 +306,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\WebApi\Controllers\CaseApiController.cs" />
     <Compile Include="Infrastructure\Cryptography\AESCryptoProvider.cs" />
+    <Compile Include="Infrastructure\Extensions\DicExtentions.cs" />
     <Compile Include="Infrastructure\Extensions\NewtonsoftJsonExtensions.cs" />
     <Compile Include="Infrastructure\Helpers\AsyncHelper.cs" />
     <Compile Include="Infrastructure\WebApi\WebApiService.cs" />

@@ -43,9 +43,9 @@
             <input type="hidden" id="timeZoneOffsetInJan1" name="timeZoneOffsetInJan1"/>
             <input type="hidden" id="timeZoneOffsetInJul1" name="timeZoneOffsetInJul1"/>
             <input type="submit" value="Login" name="btnLogin" id="btnLogin" class="btn btn-large btn-success" style="width:100%;" />
-            @*<input type="button" value="Get New Access Token" name="btnToken" id="btnToken" class="btn btn-large btn-danger" style="width:100%;" />
+            <input type="button" value="Get New Access Token" name="btnToken" id="btnToken" class="btn btn-large btn-danger" style="width:100%;" />
             <input type="button" value="Get Request" name="btnRequest1" id="btnRequest1" class="btn btn-large btn-warning" style="width:100%;" />
-            <input type="button" value="Post Request" name="btnRequest2" id="btnRequest2" class="btn btn-large btn-warning" style="width:100%;" />*@
+            <input type="button" value="Post Request" name="btnRequest2" id="btnRequest2" class="btn btn-large btn-warning" style="width:100%;" />
         }
     </div>
     <div class="signin-bottom">
@@ -64,7 +64,7 @@
         document.getElementById('timeZoneOffsetInJul1').value = Jul1.getTimezoneOffset();
         $("input:text:visible:first").focus();
     };
-    
+
     localStorage.removeItem("AccessToken");
     localStorage.removeItem("RefreshToken");
 
@@ -80,7 +80,7 @@
         request2();
     });
 
-    function auth1() {        
+    function auth1() {
         var _reftoken = localStorage.getItem('refreshToken');
         $.post("@Url.Content("~/token")",
                 "grant_type=refresh_token" +
@@ -97,36 +97,47 @@
     };
 
     function request1() {
-        var _token = localStorage.getItem('AccessToken');       
+        var _token = localStorage.getItem('AccessToken');
 
         $.ajax({
             url: "@Url.Content("~/Api/CaseApi/GetCase?id=95879")",
             type: 'GET',
-            headers: { "Authorization": "Bearer " + _token },
-            error: function (request, status, error) {
-                alert(request.responseText);
+            headers: { "Authorization": "Bearer " + "NP4jL8AWMK2TCbhjPqBnbRhNAvgfxz-ZFMhME0f05zH_Omr8UHWD9rVBc2EwEdmDufU6OqxSfUykNUn8GdP3uo8n7_yXRoYgm_OxMIrhhvjQPnN4Lhf2bkvO_hGQ6QiCLqLbVyPu5C9kHWjY55RAJn2PP9SVHZgkiOeRbZXnsXuA6lIze1h-CtFIoRPfcSKjqT19-bNJwBn1gL6-81s77W1FkTNYF6lWKnflBpsFAn2LOSC3-waenb4axZINm5L3T5RvGakbDvvMMo2R6osjkrSkD9AxlgjG5oDdBsisUgz2SQ9hoK5cIIr2lD0lZI-06w_z1xug9cGKe18Ib1N4HA" },
+            error: function (request, status, error) {                
             },
             success: function (res, status, xhr) {
-                alert(xhr.getResponseHeader("test"));
+                
             }
-        });        
+        });
     };
 
-    function request2() {
-        var _token = localStorage.getItem('AccessToken');
-        if (_token == null || _token == "") {
-            alert("Not authenticated!");
-            return;
-        }
+     function request2() {
+        //var _token = localStorage.getItem('AccessToken');
+        //if (_token == null || _token == "") {
+        //    alert("Not authenticated!");
+        //    return;
+        //}
 
-        var data1 = { Id: 88878787, Caption: "Majid", Customer_Id: "29", CaseType_Id: 93, PersonsEmail: "mg@dhsolutions.se", test: "JJ" };
+        var data1 = {
+            Id: 0,
+            CaseGUID: "5d843789-704-4c7e-b60b-4b129eb7fff6",
+            Caption: "Majid1",
+            Customer_Id: "29",
+            CaseType_Id: 93,
+            ProductAreaSetDate:"2017-05-12T12:41:55",
+            PersonsEmail: "mg@dhsolutions.se",
+            CurrentLanguageId: 1,
+            test: "JJ",
+            CaseNumber: 12,
+            mm: null
+        };
 
         $.ajax({
             url: "@Url.Content("~/Api/CaseApi/SaveCase")",
             data: JSON.stringify(data1),
             contentType: "application/json; charset=utf-8",
             type: 'POST',
-            headers: { "Authorization": "Bearer "+ _token }
+            headers: { "Authorization": "Bearer " + "M1vW4Eb8mjcl2meTpvIb01n7CBzAlghIjrH7C6q--W-4M_1PipnLXmzaBa_aaTkFUkxpp-LaOcABA4SNA3WcvsqNAwpQblf2XSANqQu-TwiV6sMv9a_B2GuI9arGaWUFFW6Il_7RP5DLVltKCAy1cm9gZTc4QJANupxoZL2ixyazQ7XxOy0EpCfaaF4Hc1wubPANED46wWP7vbGWrPaL4LGGGd8ds1jPFpoRuTkEj0q0n7coa9-KblLJXw0ZK6q8d_TCTiMBXDo8S4J15SXTbYHHEShYpBZvl80U-x35B_ixj_a_Pd9Pye4Qu6NXt-hHjyByTSW0n2lHFcICZPiAenQ" }
         });
     };
 </script>
