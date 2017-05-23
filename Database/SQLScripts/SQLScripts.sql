@@ -215,6 +215,18 @@ begin
 end
 GO
 
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE NAME = N'IX_tblEntityInfo') 
+	BEGIN
+
+	/****** Object:  Index [IX_tblEntityInfo]    Script Date: 2017-05-23 14:27:54 ******/
+	CREATE UNIQUE NONCLUSTERED INDEX [IX_tblEntityInfo] ON [dbo].[tblEntityInfo]
+	(
+		[EntityGuid] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+END
+GO
+
 IF COL_LENGTH('tblEntityInfo','Translate') IS NULL
 BEGIN
 	  ALTER TABLE [tblEntityInfo] ADD [Translate] bit NOT NULL default(0)
@@ -317,6 +329,7 @@ begin
 
 	ALTER TABLE [dbo].[tblEntityDefault] CHECK CONSTRAINT [FK_tblEntityDefault_tblEntityInfo1]
 End
+GO
 
 
 if not exists(select * from sysobjects WHERE Name = N'tblEntityAttribute')
@@ -348,6 +361,7 @@ begin
 	ALTER TABLE [dbo].[tblEntityAttribute] CHECK CONSTRAINT [FK_tblEntityAttribute_tblEntityInfo1]
 
 end
+GO
 
 /* ADD TABLES FOR META DATA */
 
