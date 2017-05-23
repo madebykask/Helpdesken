@@ -10,10 +10,10 @@
         #region Public Methods and Operators
 
         public static MvcHtmlString DropDown(
-            this HtmlHelper htmlHelper, 
-            string id, 
-            string name, 
-            bool allowEmpty, 
+            this HtmlHelper htmlHelper,
+            string id,
+            string name,
+            bool allowEmpty,
             DropDownContent dropDownContent,
             bool required = false,
             bool disabled = false)
@@ -37,18 +37,21 @@
                 htmlOutput.Append("<option></option>");
             }
 
-            foreach (var item in dropDownContent.Items)
+            if (dropDownContent !=null)
             {
-                htmlOutput.Append(
-                    item.Value == dropDownContent.SelectedValue
-                        ? string.Format(@"<option value=""{0}"" selected=""selected"">", item.Value)
-                        : string.Format(@"<option value=""{0}"">", item.Value));
+                foreach (var item in dropDownContent.Items)
+                {
+                    htmlOutput.Append(
+                        item.Value == dropDownContent.SelectedValue
+                            ? string.Format(@"<option value=""{0}"" selected=""selected"">", item.Value)
+                            : string.Format(@"<option value=""{0}"">", item.Value));
 
-                htmlOutput.Append(item.Name);
-                htmlOutput.Append("</option>");
+                    htmlOutput.Append(item.Name);
+                    htmlOutput.Append("</option>");
+                }
+
+                htmlOutput.Append("</select>");
             }
-
-            htmlOutput.Append("</select>");
             return new MvcHtmlString(htmlOutput.ToString());
         }
 
