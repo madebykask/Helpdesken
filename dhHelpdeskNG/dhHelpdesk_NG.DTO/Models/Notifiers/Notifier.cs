@@ -211,7 +211,8 @@
             string other,
             bool ordered,
             bool isActive,
-            DateTime createdDateAndTime)
+            DateTime createdDateAndTime,
+            int languageid)
         {
             var notifier = new Notifier
             {
@@ -242,7 +243,8 @@
                 Other = other,
                 Ordered = ordered,
                 IsActive = isActive,
-                CreatedDateAndTime = createdDateAndTime
+                CreatedDateAndTime = createdDateAndTime,
+                LanguageId=languageid
             };
 
             notifier.State = ModelStates.Created;
