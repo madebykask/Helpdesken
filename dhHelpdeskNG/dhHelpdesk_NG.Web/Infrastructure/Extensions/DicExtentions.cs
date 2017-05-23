@@ -31,8 +31,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
         }
 
         public static T LoadDictionaryToObject<T>(this Dictionary<string, object> dic, T defObject) where T: class
-        {            
-            var properties = defObject.GetType().GetProperties();
+        {                        
             foreach (var propName in dic.Keys)
             {
                 var objProperty = defObject.GetType().GetProperty(propName);

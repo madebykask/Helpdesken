@@ -38,36 +38,7 @@ namespace DH.Helpdesk.Web.Areas.WebApi
             var caseModel = _universalCaseService.GetCase(id);
             return JsonConvert.SerializeObject(caseModel);
         }
-
-        //[HttpPost]
-        //[Authorize]
-        //public string SaveCase([FromBody] CaseJsonModel model)
-        //{        
-        //    var infoToSave = model.ToBussinessModel();
-        //    //var infoToSave = new CaseModel();
-        //    int curUserId = -1;
-        //    var claims = RequestContext.GetClaims(ClaimTypes.Sid, ClaimTypes.Role);                        
-        //    if (claims.Any())
-        //    {
-        //        if (claims[0] != null)
-        //            int.TryParse(claims[0], out curUserId);
-        //    }
-
-        //    if (curUserId == -1)
-        //        return new ProcessResult("SaveCase", ProcessResult.ResultTypeEnum.ERROR, "Could not retrieve user info").Serialize();
-            
-        //    var res = _universalCaseService.SaveCase(
-        //                infoToSave, 
-        //                new AuxCaseModel(1,
-        //                                 curUserId,                                      
-        //                                 User.Identity.Name, 
-        //                                 RequestExtension.GetAbsoluteUrl(),
-        //                                 CreatedByApplications.Helpdesk5Api)
-        //    );
-
-        //    return res.Serialize();
-        //}
-
+        
         [HttpPost]        
         public string SaveCase([FromBody] JObject jObj)
         {

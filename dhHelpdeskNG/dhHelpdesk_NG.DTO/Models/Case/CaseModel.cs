@@ -193,7 +193,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
         public int? FinishingType_Id { get; set; }
 
-        public int? Status { get; set; }
+        //public int? Status { get; set; }
 
         public int? RegistrationSourceCustomer_Id { get; set; }
 

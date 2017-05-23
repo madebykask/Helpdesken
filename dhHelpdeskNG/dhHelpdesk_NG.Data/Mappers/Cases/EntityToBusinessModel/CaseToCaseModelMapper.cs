@@ -187,9 +187,7 @@
 
                 FinishingDate = entity.FinishingDate,
 
-                FinishingDescription = entity.FinishingDescription,
-
-                Status = entity.Status_Id,
+                FinishingDescription = entity.FinishingDescription,                
 
                 RegistrationSourceCustomer_Id = entity.RegistrationSourceCustomer_Id,
 
