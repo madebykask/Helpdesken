@@ -211,8 +211,7 @@
             string other,
             bool ordered,
             bool isActive,
-            DateTime createdDateAndTime,
-            int? languageId)
+            DateTime createdDateAndTime)
         {
             var notifier = new Notifier
                            {
@@ -243,8 +242,7 @@
                                Other = other,
                                Ordered = ordered,
                                IsActive = isActive,
-                               CreatedDateAndTime = createdDateAndTime,
-                               LanguageId= languageId
+                               CreatedDateAndTime = createdDateAndTime
             };
 
             notifier.State = ModelStates.Created;
@@ -279,8 +277,7 @@
             string other,
             bool ordered,
             bool isActive,
-            DateTime changedDateAndTime,
-            int? languageid)
+            DateTime changedDateAndTime)
         {
             var notifier = new Notifier
                            {
@@ -311,8 +308,7 @@
                                Other = other,
                                Ordered = ordered,
                                IsActive = isActive,
-                               ChangedDateAndTime = changedDateAndTime,
-                               LanguageId=languageid
+                               ChangedDateAndTime = changedDateAndTime
                            };
 
             notifier.State = ModelStates.Updated;
