@@ -119,32 +119,24 @@
 
         var caseid = document.getElementById('case__Id').value;
 
-        
+        //alert(caseid);
 
         if (caseid == 0)
         {
-            
             //CaseKey
             var reported  = document.getElementById('case__UserCode').value;
 
             var reportedId  = document.getElementById('case__ReportedBy').value;
 
             var region = document.getElementById('case__Region_Id').value;
-            
             //alert(region);
 
             var dep = document.getElementById('case__Department_Id').value;
             //alert(dep);
 
             var customer = document.getElementById('case__Customer_Id').value;
-            
-            alert(caseid);
-            alert(reported);
-            alert(reportedId);
-            alert(region);
-            alert(dep);
-            alert(customer);
-            
+            //alert(customer);
+
             $.get("/cases/LookupLanguage/", { customerid: "'" + customer.toString() + "'", notifier: "'" + reported.toString() + "'", region: "'" + region.toString() + "'", department: "'" + dep.toString() + "'", notifierid: "'" + reportedId.toString() + "'" }, function (result) {
 
                 if (parseInt(result) > 0) {

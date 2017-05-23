@@ -14,12 +14,14 @@ namespace DH.Helpdesk.Dal.Repositories
     using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel;
     using DH.Helpdesk.Domain;
+    //using System.Data.SqlClient;
+    //using System.Data;
 
     public interface ICaseRepository : IRepository<Case>
     {
         Case GetCaseById(int id, bool markCaseAsRead = false);
         Case GetCaseByGUID(Guid GUID);
-        Case GetCaseByEmailGUID(Guid GUID);             
+        Case GetCaseByEmailGUID(Guid GUID);
         Case GetDetachedCaseById(int id);
         Case GetDetachedCaseIncludesById(int id);
         List<DynamicCase> GetAllDynamicCases();
@@ -34,8 +36,9 @@ namespace DH.Helpdesk.Dal.Repositories
         void MarkCaseAsRead(int id);
         IEnumerable<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user);
         IEnumerable<CaseOverview> GetCaseOverviews(int[] customers);
+        int LookupLanguage(int custid, string notid, int regid, int depid, string notifierid);
 
-	    Case GetCaseIncluding(int id);
+        Case GetCaseIncluding(int id);
 
         /// <summary>
         /// The get case overview.
@@ -56,7 +59,7 @@ namespace DH.Helpdesk.Dal.Repositories
         private readonly IWorkContext workContext;
 
         public CaseRepository(
-            IDatabaseFactory databaseFactory, 
+            IDatabaseFactory databaseFactory,
             IWorkContext workContext)
             : base(databaseFactory)
         {
@@ -76,12 +79,13 @@ namespace DH.Helpdesk.Dal.Repositories
         public List<DynamicCase> GetAllDynamicCases()
         {
             var query = from f in this.DataContext.Forms
-                            join ff in this.DataContext.FormField on f.Id equals ff.Form_Id
-                            join ffv in this.DataContext.FormFieldValue on ff.Id equals ffv.FormField_Id                        
-                        where f.ExternalPage == 1  
-                        select new DynamicCase {
+                        join ff in this.DataContext.FormField on f.Id equals ff.Form_Id
+                        join ffv in this.DataContext.FormFieldValue on ff.Id equals ffv.FormField_Id
+                        where f.ExternalPage == 1
+                        select new DynamicCase
+                        {
                             CaseId = ffv.Case_Id,
-                            FormPath = f.FormPath                            
+                            FormPath = f.FormPath
                         };
 
             return query.Distinct().ToList();
@@ -89,7 +93,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public IList<Case> GetProjectCases(int customerId, int projectId)
         {
-            var cases = this.DataContext.Cases.Where(c=> c.Customer_Id == customerId && c.Project_Id == projectId).ToList();                        
+            var cases = this.DataContext.Cases.Where(c => c.Customer_Id == customerId && c.Project_Id == projectId).ToList();
             return cases;
         }
 
@@ -124,7 +128,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public Case GetCaseByGUID(Guid GUID)
         {
-            var caseEntity = DataContext.Cases.Where(c => c.CaseGUID == GUID )
+            var caseEntity = DataContext.Cases.Where(c => c.CaseGUID == GUID)
                                               .FirstOrDefault();
 
             return caseEntity;
@@ -184,7 +188,7 @@ namespace DH.Helpdesk.Dal.Repositories
                 cases.ApprovedDate = null;
                 cases.LeadTime = 0;
                 cases.ChangeTime = DateTime.UtcNow;
-                
+
                 foreach (var log in cases.Logs)
                 {
                     log.FinishingType = null;
@@ -229,32 +233,32 @@ namespace DH.Helpdesk.Dal.Repositories
         public void MarkCaseAsUnread(int id)
         {
             SetCaseUnreadFlag(id, 1);
-        }      
+        }
 
         public IEnumerable<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user)
         {
             var query = from c in this.DataContext.Cases
-                        where c.Customer_Id == customerId 
-                        && c.Id != id 
+                        where c.Customer_Id == customerId
+                        && c.Id != id
                         && c.ReportedBy.ToLower() == reportedBy.ToLower()
                         select c;
             //handläggare
-            if (user.RestrictedCasePermission == 1 && user.UserGroupId == 2)                 
+            if (user.RestrictedCasePermission == 1 && user.UserGroupId == 2)
                 query = query.Where(c => c.Performer_User_Id == user.Id || c.CaseResponsibleUser_Id == user.Id);
-            
+
             //anmälare
             if (user.RestrictedCasePermission == 1 && user.UserGroupId == 1)
                 query = query.Where(c => c.ReportedBy.ToLower() == user.UserId.ToLower());
 
             return query.Select(c => new CaseRelation()
-                {
-                    Id = c.Id,
-                    Caption = c.Caption,
-                    Description = c.Description,
-                    CaseNumber = c.CaseNumber,
-                    FinishingDate = c.FinishingDate,
-                    Regtime = c.RegTime
-                });
+            {
+                Id = c.Id,
+                Caption = c.Caption,
+                Description = c.Description,
+                CaseNumber = c.CaseNumber,
+                FinishingDate = c.FinishingDate,
+                Regtime = c.RegTime
+            });
         }
 
         public IEnumerable<CaseOverview> GetCaseOverviews(int[] customers)
@@ -291,22 +295,22 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public MyCase[] GetMyCases(int userId, int? count = null)
         {
-             var entities = from cs in this.DataContext.Cases
-                            join cus in this.DataContext.Customers on cs.Customer_Id equals cus.Id
-                            where (cs.Performer_User_Id == userId && cs.FinishingDate == null && cs.Deleted == 0)
-                            orderby (cs.ChangeTime) descending
-                            select new
-                            {
+            var entities = from cs in this.DataContext.Cases
+                           join cus in this.DataContext.Customers on cs.Customer_Id equals cus.Id
+                           where (cs.Performer_User_Id == userId && cs.FinishingDate == null && cs.Deleted == 0)
+                           orderby (cs.ChangeTime) descending
+                           select new
+                           {
                                Id = cs.Id,
-                               CaseNumber = cs.CaseNumber, 
+                               CaseNumber = cs.CaseNumber,
                                RegistrationDate = cs.RegTime,
-                               ChangedDate = cs.ChangeTime, 
+                               ChangedDate = cs.ChangeTime,
                                Subject = cs.Caption,
                                InitiatorName = cs.PersonsName,
                                Description = cs.Description,
                                CustomerName = cus.Name
-                            };
-        
+                           };
+
             if (count.HasValue)
             {
                 entities = entities.Take(count.Value);
@@ -316,12 +320,12 @@ namespace DH.Helpdesk.Dal.Repositories
                 .ToArray()
                 .Select(c => new MyCase(
                                 c.Id,
-                                c.CaseNumber, 
+                                c.CaseNumber,
                                 c.RegistrationDate,
-                                c.ChangedDate, 
+                                c.ChangedDate,
                                 c.Subject,
                                 c.InitiatorName,
-                                c.Description, 
+                                c.Description,
                                 c.CustomerName))
                                 .ToArray();
         }
@@ -339,12 +343,99 @@ namespace DH.Helpdesk.Dal.Repositories
             this.Commit();
         }
 
-		public Case GetCaseIncluding(int id)
-		{
-			return DataContext.Cases
-				.Include(x => x.Department)
-				.Include(x => x.Workinggroup)
-				.FirstOrDefault(x => x.Id == id);
-		}
-	}
+        public Case GetCaseIncluding(int id)
+        {
+            return DataContext.Cases
+                .Include(x => x.Department)
+                .Include(x => x.Workinggroup)
+                .FirstOrDefault(x => x.Id == id);
+        }
+
+        public int LookupLanguage(int custid, string notid, int regid, int depid, string notifierid)
+        {
+            string sql = string.Empty;
+            int langid = 0;
+            bool match = false;
+            string ConnectionString = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
+
+            //Initiation
+            if (notid != string.Empty && notifierid != string.Empty)
+            {
+
+                //var not = this.DataContext.ComputerUsers.Single(c => c.UserId == notid);
+                var not = this.DataContext.ComputerUsers.Single(c => c.UserCode == notid && c.UserId == notifierid);
+                if (not != null)
+                {
+                    if (not.LanguageId > 0)
+                    {
+                        langid = Convert.ToInt32(not.LanguageId);
+                        match = true;
+                    }
+
+                }
+            }
+
+            //Department
+            if (match == false)
+            {
+                if (depid > 0)
+                {
+                    var dep = this.DataContext.Departments.Single(c => c.Id == depid);
+                    if (dep != null)
+                    {
+                        if (dep.LanguageId > 0)
+                        {
+                            langid = Convert.ToInt32(dep.LanguageId);
+                            match = true;
+                        }
+
+                    }
+
+
+                }
+            }
+
+            //Region
+            if (match == false)
+            {
+                if (regid > 0)
+                {
+                    var reg = this.DataContext.Regions.Single(c => c.Id == regid);
+                    if (reg != null)
+                    {
+                        if (reg.LanguageId > 0)
+                        {
+                            langid = Convert.ToInt32(reg.LanguageId);
+                            match = true;
+                        }
+
+                    }
+
+
+                }
+            }
+
+            //Customer
+            if (match == false)
+            {
+                if (custid > 0)
+                {
+                    var cust = this.DataContext.Customers.Single(c => c.Id == custid);
+                    if (cust != null)
+                    {
+                        if (cust.Language_Id > 0)
+                        {
+                            langid = Convert.ToInt32(cust.Language_Id);
+                            match = true;
+                        }
+
+                    }
+
+
+                }
+            }
+            return langid;
+        }
+
+    }
 }
