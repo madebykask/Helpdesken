@@ -17,7 +17,7 @@
         private readonly INotifierFieldSettingsFactory notifierFieldSettingsFactory;
 
         public NotifierFieldSettingRepository(
-            IDatabaseFactory databaseFactory, 
+            IDatabaseFactory databaseFactory,
             INotifierFieldSettingsFactory notifierFieldSettingsFactory)
             : base(databaseFactory)
         {
@@ -85,7 +85,7 @@
                 ordered,
                 changedDate,
                 language);
-        } 
+        }
 
         public void UpdateSettings(FieldSettings fieldSettings)
         {
@@ -121,7 +121,8 @@
                                             { StateField.SynchronizationDate, fieldSettings.SynchronizationDate },
                                             { OrganizationField.Title, fieldSettings.Title },
                                             { OrganizationField.Unit, fieldSettings.Unit },
-                                            { GeneralField.UserId, fieldSettings.UserId }
+                                            { GeneralField.UserId, fieldSettings.UserId },
+                                            {GeneralField.Language, fieldSettings.Language }
                                         };
             var settingsToAdd = new Dictionary<ComputerUserFieldSettings, ComputerUserFieldSettingsLanguage>();
             foreach (var supportedSetting in supportedSettings)
@@ -141,14 +142,14 @@
                     newCustomerComputerUserFS.LDAPAttribute = settingData.LdapAttribute ?? string.Empty;
                     this.DataContext.ComputerUserFieldSettings.Add(newCustomerComputerUserFS);
                     settingsToAdd.Add(newCustomerComputerUserFS, new ComputerUserFieldSettingsLanguage
-                                                                  {
-                                                                      Language_Id =
+                    {
+                        Language_Id =
                                                                           fieldSettings
                                                                           .LanguageId,
-                                                                      Label =
+                        Label =
                                                                           settingData
                                                                           .Caption
-                                                                  });
+                    });
                 }
                 else
                 {
@@ -204,7 +205,7 @@
             var lang = this.CreateDisplayFieldSetting(settings, GeneralField.Language, languageId);
 
             //FieldOverviewSetting language = new FieldOverviewSetting(true,"LanguageId", false);            
-            
+
 
             return new NotifierOverviewSettings(
                 userId,
@@ -242,7 +243,7 @@
         public FieldSettings FindByCustomerIdAndLanguageId(int customerId, int languageId)
         {
             var settings = this.FindByCustomerId(customerId);
-            var userId = this.CreateFieldSetting(settings, GeneralField.UserId, languageId, GeneralFieldLable.UserId );
+            var userId = this.CreateFieldSetting(settings, GeneralField.UserId, languageId, GeneralFieldLable.UserId);
             var domain = this.CreateFieldSetting(settings, GeneralField.Domain, languageId, GeneralFieldLable.Domain);
             var loginName = this.CreateFieldSetting(settings, GeneralField.LoginName, languageId, GeneralFieldLable.LoginName);
             var firstName = this.CreateFieldSetting(settings, GeneralField.FirstName, languageId, GeneralFieldLable.FirstName);
@@ -277,7 +278,7 @@
             var synchronizationDate = this.CreateFieldSetting(settings, StateField.SynchronizationDate, languageId, StateFieldLable.SynchronizationDate);
 
 
-            var language = this.CreateFieldSetting(settings, GeneralField.LanguageId , languageId, GeneralFieldLable.LanguageId);
+            var language = this.CreateFieldSetting(settings, GeneralField.LanguageId, languageId, GeneralFieldLable.LanguageId);
 
 
             return FieldSettings.CreateForEdit(
@@ -333,12 +334,12 @@
             }
 
             var translation = this.GetTranslationBySettingIdAndLanguageId(setting.Id, languageId);
-            
+
             if (translation == null)
             {
                 return this.notifierFieldSettingsFactory.CreateEmpty(lableText);
             }
-            
+
             return this.notifierFieldSettingsFactory.Create(
                                                     setting.Show != 0,
                                                     setting.ShowInList != 0,
@@ -347,7 +348,7 @@
                                                     setting.Required != 0,
                                                     setting.LDAPAttribute);
         }
-        
+
         private static ComputerUserFieldSettings FilterSettingByFieldName(List<ComputerUserFieldSettings> settings, string name)
         {
             return settings.SingleOrDefault(s => s.ComputerUserField.Equals(name, StringComparison.InvariantCultureIgnoreCase));
@@ -376,11 +377,11 @@
 
             return new FieldOverviewSetting(setting.Show != 0, translation.Label, setting.Required != 0);
         }
-        
+
         private List<ComputerUserFieldSettings> FindByCustomerId(int customerId)
         {
             return this.DataContext.ComputerUserFieldSettings.Where(s => s.Customer_Id == customerId).ToList();
-        } 
+        }
 
         private void UpdateFieldSetting(
             List<ComputerUserFieldSettings> settings,
@@ -404,9 +405,10 @@
             if (translation != null)
             {
                 translation.Label = updatedSetting.Caption;
-                
+
             }
-            else {
+            else
+            {
                 ComputerUserFieldSettingsLanguage NewComputerUserFieldSettingLanguage = new ComputerUserFieldSettingsLanguage();
                 NewComputerUserFieldSettingLanguage.ComputerUserFieldSettings_Id = setting.Id;
                 NewComputerUserFieldSettingLanguage.Language_Id = languageId;
