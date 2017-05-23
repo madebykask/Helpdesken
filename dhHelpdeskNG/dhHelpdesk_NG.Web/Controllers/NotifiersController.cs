@@ -704,6 +704,7 @@ namespace DH.Helpdesk.Web.Controllers
         public RedirectToRouteResult Notifier(InputModel model)
         {
             var updatedNotifier = this.updatedNotifierFactory.Create(model, DateTime.Now);
+            //updatedNotifier.LanguageId = model.LanguageId;
             this.notifierService.UpdateNotifier(updatedNotifier, SessionFacade.CurrentCustomer.Id);
             return this.RedirectToAction("Index");
         }
