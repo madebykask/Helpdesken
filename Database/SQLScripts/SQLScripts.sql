@@ -357,7 +357,64 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 GO
 
 
+--tblPriority - make sure it does not allow null and add newid()
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'PriorityGUID' and sysobjects.name = N'tblPriority')
+begin
+		EXECUTE  sp_executesql  "update tblPriority set PriorityGUID = newid() where PriorityGUID is null"
 
+		if not exists(select *
+					  from sys.all_columns c
+					  join sys.tables t on t.object_id = c.object_id
+					  join sys.schemas s on s.schema_id = t.schema_id
+					  join sys.default_constraints d on c.default_object_id = d.object_id
+					  where t.name = 'tblPriority'
+					  and c.name = 'PriorityGUID'
+					  and s.name = 'dbo'
+					  and d.name = 'DF_PriorityGUID')
+		begin
+			Alter table tblPriority 
+			Add constraint DF_PriorityGUID default (newid()) For PriorityGUID		
+		end		
+
+		Alter table tblPriority 
+		ALTER COLUMN [PriorityGUID] uniqueIdentifier NOT NULL
+end
+else
+begin
+	Alter table tblPriority
+	Add PriorityGUID uniqueIdentifier NOT NULL CONSTRAINT DF_PriorityGUID default (newid())
+end
+GO
+
+--tblStatus - make sure it does not allow null and add newid()
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'StatusGUID' and sysobjects.name = N'tblStatus')
+begin
+		EXECUTE  sp_executesql  "update tblStatus set StatusGUID = newid() where StatusGUID is null"
+
+		if not exists(select *
+					  from sys.all_columns c
+					  join sys.tables t on t.object_id = c.object_id
+					  join sys.schemas s on s.schema_id = t.schema_id
+					  join sys.default_constraints d on c.default_object_id = d.object_id
+					  where t.name = 'tblStatus'
+					  and c.name = 'StatusGUID'
+					  and s.name = 'dbo'
+					  and d.name = 'DF_StatusGUID')
+		begin
+			Alter table tblStatus 
+			Add constraint DF_StatusGUID default (newid()) For StatusGUID		
+		end		
+
+		Alter table tblStatus 
+		ALTER COLUMN [StatusGUID] uniqueIdentifier NOT NULL
+
+end
+else
+begin
+	Alter table tblStatus
+	Add StatusGUID uniqueIdentifier NOT NULL CONSTRAINT DF_StatusGUID default (newid())
+end
+GO
 
 
 -- Last Line to update database version
