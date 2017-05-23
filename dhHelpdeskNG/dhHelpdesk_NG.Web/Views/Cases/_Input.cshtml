@@ -112,7 +112,7 @@
             });
     }
 
-    function test()
+    function GetLanguage()
     {
 
         //var caseid = document.getElementById('caseId').value;
@@ -320,7 +320,7 @@
                                                     @Html.Hidden("ShowReportedBy", Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ReportedBy.ToString()).ShowOnStartPage)
                                                     @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.ReportedBy, CaseSolutionFields.UserNumber))
                                                     {
-                                                        @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "40", autocomplete = "Off", data_field = "userId", onblur = "test()" })
+                                                        @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "40", autocomplete = "Off", data_field = "userId", onblur = "GetLanguage()" })
                                                     }
                                                     else
                                                     {

@@ -1,4 +1,4 @@
-﻿-- update DB from 5.3.31 to 5.3.32 version
+-- update DB from 5.3.31 to 5.3.32 version
 
 
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
@@ -429,6 +429,30 @@ begin
 	Add StatusGUID uniqueIdentifier NOT NULL CONSTRAINT DF_StatusGUID default (newid())
 end
 GO
+
+/* ADD Language Columns to Region, Department and ComputerUsers */
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblRegion')
+                      ALTER TABLE tblRegion 
+                      ADD LanguageId int NULL
+                      DEFAULT 0
+                      update tblRegion set languageid=0
+GO
+
+
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblDepartment')
+                      ALTER TABLE tblDepartment
+                      ADD LanguageId int NULL
+                      DEFAULT 0
+                      update tblDepartment set languageid=0
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblComputerUsers')
+                      ALTER TABLE tblComputerUsers
+                      ADD LanguageId int NULL
+                      DEFAULT 0
+                      update tblComputerUsers set languageid=0
+GO 
 
 
 -- Last Line to update database version
