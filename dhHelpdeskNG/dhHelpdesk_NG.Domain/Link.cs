@@ -31,5 +31,6 @@ namespace DH.Helpdesk.Domain
         public virtual CaseSolution CaseSolution { get; set; }
         public virtual ICollection<WorkingGroupEntity> Wg { get; set; }
 
+        
     }
 }

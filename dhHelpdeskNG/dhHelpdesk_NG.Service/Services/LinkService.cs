@@ -209,6 +209,7 @@ namespace DH.Helpdesk.Services.Services
 
         public IEnumerable<LinkOverview> GetLinkOverviews(int[] customers, int? count, bool forStartPage)
         {
+           
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var repository = uow.GetRepository<Link>();
