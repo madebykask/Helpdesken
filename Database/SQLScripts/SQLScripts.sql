@@ -455,6 +455,37 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 GO 
 
 
+ 
+-- IX_tblFormFieldValue_Case_Id
+if exists (SELECT name FROM sysindexes WHERE name = 'IX_tblFormFieldValue_Case_Id')
+	DROP INDEX [IX_tblFormFieldValue_Case_Id] ON [dbo].[tblFormFieldValue]
+GO
+
+if not exists (SELECT name FROM sysindexes WHERE name = 'IX_tblFormFieldValue_Case_Id')
+CREATE NONCLUSTERED INDEX [IX_tblFormFieldValue_Case_Id] ON [dbo].[tblFormFieldValue]
+(
+	[Case_Id] ASC
+)
+GO
+
+-- IX_tblCase_Customer_Id
+if exists (SELECT name FROM sysindexes WHERE name = 'IX_tblCase_Customer_Id')
+	DROP INDEX [IX_tblCase_Customer_Id] ON [dbo].[tblCase]
+GO
+
+if not exists (SELECT name FROM sysindexes WHERE name = 'IX_tblCase_Customer_Id')
+	CREATE NONCLUSTERED INDEX [IX_tblCase_Customer_Id] ON [dbo].[tblCase]
+	(
+		[Customer_Id] ASC,
+		[Deleted] ASC,
+		[FinishingDate] ASC
+	)
+	INCLUDE ([Casenumber]) 
+GO
+
+
+
+ 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.32'
 

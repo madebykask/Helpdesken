@@ -4,15 +4,12 @@ using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using DbExtensions;
 using DH.Helpdesk.BusinessData.Enums.Case;
 using DH.Helpdesk.BusinessData.Models.Case;
-using DH.Helpdesk.BusinessData.Models.Case.CaseSearch;
 using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Domain;
-using Log = DH.Helpdesk.BusinessData.Models.Changes.Output.Log;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
@@ -436,7 +433,7 @@ namespace DH.Helpdesk.Dal.Repositories
                         BuilFormFieldValueFreeTextSearchQueryCte(freeText, filter)
                     };
 
-                    strBld.AppendLine(string.Join($"{Environment.NewLine} UNION {Environment.NewLine} ", items));
+                    strBld.AppendLine(string.Join($"{Environment.NewLine} UNION ALL {Environment.NewLine} ", items));
                     strBld.AppendLine(") ");
 
                     ctx.UseFreeTextCaseSearchCTE = true;
@@ -452,13 +449,21 @@ namespace DH.Helpdesk.Dal.Repositories
 
         #region FreeText Search Queries
 
-
         private string BuildCaseFreeTextSearchQueryCte(string text, CaseSearchFilter filter)
         {
             var customerId = filter.CustomerId;
             var strBld = new StringBuilder();
-            strBld.AppendLine(@"SELECT _case.Id FROM tblCase _case WHERE ");
-            strBld.AppendFormat("_case.Customer_Id = {0} ", customerId);
+            strBld.AppendLine(@"SELECT _case.Id FROM tblCase _case  WITH (NOLOCK, INDEX(IX_tblCase_Customer_Id)) ");
+            strBld.AppendLine(@"  INNER JOIN tblCustomer ON tblCustomer.Id = _case.Customer_Id ");
+            strBld.AppendLine(@"  INNER JOIN tblCustomerUser ON tblCustomerUser.Customer_Id = tblCustomer.Id");
+            strBld.AppendFormat("WHERE _case.Customer_Id = {0} ", customerId).AppendLine();
+            strBld.AppendLine(" AND _case.Deleted = 0");
+            strBld.AppendFormat(" AND tblCustomerUser.User_Id = {0}", filter.UserId).AppendLine();
+
+            var finishingDateCondition = BuildFinishingDateCondition(filter, "_case");
+            if (!string.IsNullOrEmpty(finishingDateCondition))
+                strBld.AppendLine(finishingDateCondition);
+
             strBld.AppendLine(" AND (");
 
             var items = BuildFreeTextConditionsFor(text, _freeTextCaseConditionFields, "_case");
@@ -475,8 +480,9 @@ namespace DH.Helpdesk.Dal.Repositories
             var customerId = filter.CustomerId;
             var strBld = new StringBuilder();
 
-            strBld.AppendLine(@"SELECT Case_Id FROM tblCaseIsAbout caseIsAbout INNER JOIN tblCase ON tblCase.Id = caseIsAbout.Case_Id WHERE ");
-            strBld.AppendFormat("tblCase.Customer_Id = {0} ", customerId);
+            strBld.AppendLine(@"SELECT Case_Id FROM tblCaseIsAbout caseIsAbout ");
+            strBld.AppendLine(@"  INNER JOIN tblCase ON tblCase.Id = caseIsAbout.Case_Id ");
+            strBld.AppendFormat("WHERE tblCase.Customer_Id = {0} ", customerId).AppendLine();
             strBld.AppendLine(" AND (");
 
             var items = BuildFreeTextConditionsFor(freeText, _freeTextCaseIsAboutConditionFields, "caseIsAbout");
@@ -493,7 +499,7 @@ namespace DH.Helpdesk.Dal.Repositories
             var customerId = filter.CustomerId;
             var strBld = new StringBuilder();
 
-            strBld.AppendLine(@"SELECT Case_Id FROM tblLog ");
+            strBld.AppendLine(@"SELECT Case_Id FROM tblLog WITH (NOLOCK, INDEX(IX_tblLog_Case_Id))");
             strBld.AppendLine(@"  INNER JOIN tblCase ON tblLog.Case_Id = tblCase.Id ");
             strBld.AppendLine(@"  INNER JOIN tblCustomer ON tblCustomer.Id = tblCase.Customer_Id ");
             strBld.AppendLine(@"  INNER JOIN tblCustomerUser ON tblCustomerUser.Customer_Id = tblCustomer.Id");
@@ -501,20 +507,11 @@ namespace DH.Helpdesk.Dal.Repositories
             strBld.AppendFormat("tblCase.Customer_Id = {0} ", customerId).AppendLine();
             strBld.AppendLine(" AND tblCase.Deleted = 0");
             strBld.AppendFormat(" AND tblCustomerUser.User_Id = {0}", filter.UserId).AppendLine();
-            
-            
-            if (filter.CaseProgress != CaseProgressFilter.None &&
-                filter.CaseProgress != CaseProgressFilter.FinishedNotApproved &&
-                filter.CaseProgress != CaseProgressFilter.FollowUp &&
-                filter.CaseProgress != CaseProgressFilter.ClosedCases)
-            {
-                strBld.Append(" AND tblCase.FinishingDate is null").AppendLine();
-            }
 
-        //todo: add extra conditions for 
-            // 1. finishing date:
+            var finishingDateCondition = BuildFinishingDateCondition(filter);
+            if (!string.IsNullOrEmpty(finishingDateCondition))
+                strBld.AppendLine(finishingDateCondition);
             
-
             strBld.AppendLine(" AND (");
 
             var items = BuildFreeTextConditionsFor(freeText, _freeTextLogConditionFields);
@@ -531,10 +528,10 @@ namespace DH.Helpdesk.Dal.Repositories
             var customerId = filter.CustomerId;
             var strBld = new StringBuilder();
 
-            strBld.AppendLine(@"SELECT caseDep.Id FROM tblDepartment dep JOIN tblCase caseDep ON dep.Id = caseDep.Department_Id WHERE ");
-            strBld.AppendFormat("caseDep.Customer_Id = {0} ", customerId);
+            strBld.AppendLine(@"SELECT caseDep.Id FROM tblDepartment dep ");
+            strBld.AppendLine("  INNER JOIN tblCase caseDep ON dep.Id = caseDep.Department_Id ");
+            strBld.AppendFormat("WHERE caseDep.Customer_Id = {0} ", customerId).AppendLine();
             strBld.AppendLine(" AND (");
-
             var items = BuildFreeTextConditionsFor(freeText, _freeTextDepartmentConditionFields);
             var formattedConditions = ConcatConditionsToString(items);
             strBld.AppendLine(formattedConditions);
@@ -549,14 +546,25 @@ namespace DH.Helpdesk.Dal.Repositories
             var customerId = filter.CustomerId;
             var strBld = new StringBuilder();
 
-            strBld.AppendLine(@"SELECT Case_Id FROM tblFormFieldValue INNER JOIN tblCase ON tblFormFieldValue.Case_Id = tblCase.Id WHERE ");
-            strBld.AppendFormat("tblCase.Customer_Id = {0} ", customerId);
+            strBld.AppendLine(@"select tblCase.Id from tblCase WITH (NOLOCK, INDEX(IX_tblCase_Customer_Id)) ");
+            strBld.AppendLine(@"  INNER JOIN tblFormFieldValue WITH (NOLOCK, FORCESEEK, INDEX([IX_tblFormFieldValue_Case_Id])) ON tblCase.Id = tblFormFieldValue.Case_Id ");
+            strBld.AppendLine(@"  INNER JOIN tblCustomer ON tblCustomer.Id = tblCase.Customer_Id ");
+            strBld.AppendLine(@"  INNER JOIN tblCustomerUser ON tblCustomerUser.Customer_Id = tblCustomer.Id");
+            strBld.AppendLine("WHERE ");
+            strBld.AppendFormat("tblCase.Customer_Id = {0} ", customerId).AppendLine();
+            strBld.AppendLine(" AND tblCase.Deleted = 0");
+            strBld.AppendFormat(" AND tblCustomerUser.User_Id = {0}", filter.UserId).AppendLine();
+
+            var finishingDateCondition = BuildFinishingDateCondition(filter);
+            if (!string.IsNullOrEmpty(finishingDateCondition))
+                strBld.AppendLine(finishingDateCondition);
+
             strBld.AppendLine(" AND (");
 
             strBld.AppendLine(BuildContainsExpession(Tables.FormFieldValue.FormFieldValueField, freeText));
 
             strBld.AppendLine(" )");
-            strBld.AppendLine(@"GROUP BY Case_Id");
+            strBld.AppendLine(@"GROUP BY tblCase.Id");
             return strBld.ToString();
         }
 
@@ -679,39 +687,9 @@ namespace DH.Helpdesk.Dal.Repositories
             }
 
             // arende progress - iShow i gammal helpdesk
-            switch (f.CaseProgress)
-            {
-                case CaseProgressFilter.None:
-                    break;
-                case CaseProgressFilter.ClosedCases:
-                    sb.Append(" and (tblCase.FinishingDate is not null)");
-                    break;
-                case CaseProgressFilter.CasesInProgress:
-                    sb.Append(" and (tblCase.FinishingDate is null)");
-                    break;
-                case CaseProgressFilter.CasesInRest:
-                    sb.Append(" and (tblCase.FinishingDate is null and tblCase.StateSecondary_Id is not null)");
-                    break;
-                case CaseProgressFilter.UnreadCases:
-                    sb.Append(" and (tblCase.FinishingDate is null and tblCase.Status = 1)");
-                    break;
-                case CaseProgressFilter.FinishedNotApproved:
-                    sb.Append(" and (tblCase.FinishingDate is not null and tblCaseType.RequireApproving = 1 and tblCase.ApprovedDate is null)");
-                    break;
-                case CaseProgressFilter.InProgressStatusGreater1:
-                    sb.Append(" and (tblCase.FinishingDate is null and tblCase.Status > 1)");
-                    break;
-                case CaseProgressFilter.CasesWithWatchDate:
-                    sb.Append(" and (tblCase.FinishingDate is null and tblCase.WatchDate is not null)");
-                    break;
-                case CaseProgressFilter.FollowUp:
-                    //sb.Append(" and (tblCase.FollowUpdate is not null)");
-                    sb.Append(" and (tblCaseFollowUps.User_Id = " + userId + " and tblCaseFollowUps.IsActive = 1)");
-                    break;
-                default:
-                    sb.Append(" and (tblCase.FinishingDate is null)");
-                    break;
-            }
+            var caseProgressConditions = BuildCaseProgressConditions(f, userId);
+            if (!string.IsNullOrEmpty(caseProgressConditions))
+                sb.AppendLine(caseProgressConditions);
 
             if (!string.IsNullOrWhiteSpace(f.FreeTextSearch))
             {
@@ -737,6 +715,66 @@ namespace DH.Helpdesk.Dal.Repositories
             return sb.ToString();
         }
 
+        private string BuildCaseProgressConditions(CaseSearchFilter searchFilter, int userId)
+        {
+            var sb = new StringBuilder();
+
+            var finishingDateCondition = BuildFinishingDateCondition(searchFilter);
+            if (!string.IsNullOrEmpty(finishingDateCondition))
+                sb.AppendLine(finishingDateCondition);
+            
+            //note finishingDate conditions were moved to BuildFinishingDateCondition method to be shared with other methods
+            switch (searchFilter.CaseProgress)
+            {
+                case CaseProgressFilter.CasesInRest:
+                    sb.AppendLine(" and (tblCase.StateSecondary_Id is not null and tblStateSecondary.IncludeInCaseStatistics = 0)");
+                    break;
+                case CaseProgressFilter.UnreadCases:
+                    sb.AppendLine(" and (tblCase.Status = 1)");
+                    break;
+                case CaseProgressFilter.FinishedNotApproved:
+                    sb.AppendLine(" and (tblCaseType.RequireApproving = 1 and tblCase.ApprovedDate is null)");
+                    break;
+                case CaseProgressFilter.InProgressStatusGreater1:
+                    sb.AppendLine(" and (tblCase.Status > 1)");
+                    break;
+                case CaseProgressFilter.CasesWithWatchDate:
+                    sb.AppendLine(" and (tblCase.WatchDate is not null)");
+                    break;
+                case CaseProgressFilter.FollowUp:
+                    //sb.Append(" and (tblCase.FollowUpdate is not null)");
+                    sb.AppendLine(" and (tblCaseFollowUps.User_Id = " + userId + " and tblCaseFollowUps.IsActive = 1)");
+                    break;
+            }
+
+            return sb.ToString();
+        }
+
+        private string BuildFinishingDateCondition(CaseSearchFilter f,  string caseTableAlias = null)
+        {
+            var condition = string.Empty;
+            var caseTableNameOrAlias = string.IsNullOrEmpty(caseTableAlias) ? "tblCase" : caseTableAlias;
+
+            switch (f.CaseProgress)
+            {
+                case CaseProgressFilter.None:
+                case CaseProgressFilter.FollowUp:
+                    break;
+
+                case CaseProgressFilter.ClosedCases:
+                case CaseProgressFilter.FinishedNotApproved:
+                    condition = $" and ({caseTableNameOrAlias}.FinishingDate is not null)";
+                    break;
+
+                default:
+                    condition = $" and ({caseTableNameOrAlias}.FinishingDate is null)";
+                    break;
+            }
+
+            return condition;
+        }
+
+        
         private string ReturnCaseSearchWhere(SearchQueryBuildContext ctx)
         {
             var searchCriteria = ctx.Criterias;
@@ -810,39 +848,9 @@ namespace DH.Helpdesk.Dal.Repositories
             }
 
             // arende progress - iShow i gammal helpdesk
-            switch (searchFilter.CaseProgress)
-            {
-                case CaseProgressFilter.None:
-                    break;
-                case CaseProgressFilter.ClosedCases:
-                    sb.Append(" and (tblCase.FinishingDate is not null)");
-                    break;
-                case CaseProgressFilter.CasesInProgress:
-                    sb.Append(" and (tblCase.FinishingDate is null)");
-                    break;
-                case CaseProgressFilter.CasesInRest:
-                    sb.Append(" and (tblCase.FinishingDate is null and tblCase.StateSecondary_Id is not null and tblStateSecondary.IncludeInCaseStatistics = 0)");
-                    break;
-                case CaseProgressFilter.UnreadCases:
-                    sb.Append(" and (tblCase.FinishingDate is null and tblCase.Status = 1)");
-                    break;
-                case CaseProgressFilter.FinishedNotApproved:
-                    sb.Append(" and (tblCase.FinishingDate is not null and tblCaseType.RequireApproving = 1 and tblCase.ApprovedDate is null)");
-                    break;
-                case CaseProgressFilter.InProgressStatusGreater1:
-                    sb.Append(" and (tblCase.FinishingDate is null and tblCase.Status > 1)");
-                    break;
-                case CaseProgressFilter.CasesWithWatchDate:
-                    sb.Append(" and (tblCase.FinishingDate is null and tblCase.WatchDate is not null)");
-                    break;
-                case CaseProgressFilter.FollowUp:
-                    //sb.Append(" and (tblCase.FollowUpdate is not null)");
-                    sb.Append(" and (tblCaseFollowUps.User_Id = " + searchCriteria.UserId + " and tblCaseFollowUps.IsActive = 1)");
-                    break;
-                default:
-                    sb.Append(" and (tblCase.FinishingDate is null)");
-                    break;
-            }
+            var caseProgressConditions = BuildCaseProgressConditions(searchFilter, searchCriteria.UserId);
+            if (!string.IsNullOrEmpty(caseProgressConditions))
+                sb.AppendLine(caseProgressConditions);
 
             // working group 
             if (!string.IsNullOrWhiteSpace(searchFilter.WorkingGroup))
@@ -1204,8 +1212,10 @@ namespace DH.Helpdesk.Dal.Repositories
             return items;
         }
 
-        #region Helper Methods
 
+
+        #region Helper Methods
+        
         private bool IsFreeTextSearch(CaseSearchFilter searchFilter)
         {
             return !string.IsNullOrWhiteSpace(searchFilter.FreeTextSearch) &&
