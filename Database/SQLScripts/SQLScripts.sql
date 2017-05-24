@@ -92,14 +92,14 @@ GO
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
 		where syscolumns.name = N'ShowOnExtPageCases' and sysobjects.name = N'tblCaseType')
 	begin
-		ALTER TABLE [dbo].[tblCaseType] ADD [ShowOnExtPageCases] [int] NOT NULL DEFAULT ((0))
+		ALTER TABLE [dbo].[tblCaseType] ADD [ShowOnExtPageCases] [int] NOT NULL DEFAULT ((1))
 	end
 GO
 
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
 		where syscolumns.name = N'ShowOnExtPageCases' and sysobjects.name = N'tblProductArea')
 	begin
-		ALTER TABLE [dbo].[tblProductArea] ADD [ShowOnExtPageCases] [int] NOT NULL DEFAULT ((0))
+		ALTER TABLE [dbo].[tblProductArea] ADD [ShowOnExtPageCases] [int] NOT NULL DEFAULT ((1))
 	end
 GO
 

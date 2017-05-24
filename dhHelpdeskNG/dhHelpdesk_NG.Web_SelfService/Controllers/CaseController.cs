@@ -234,6 +234,11 @@
                         userHasAccessToCase = true;   
                 }
 
+                if (currentCase.CaseType.ShowOnExtPageCases == 0 || currentCase.ProductArea?.ShowOnExtPageCases == 0)
+                {
+                    userHasAccessToCase = false;
+                }
+
                 if (!userHasAccessToCase)
                 {
                         ErrorGenerator.MakeError("Case not found among your cases!");
