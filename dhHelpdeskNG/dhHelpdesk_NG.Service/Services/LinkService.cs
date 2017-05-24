@@ -29,7 +29,7 @@ namespace DH.Helpdesk.Services.Services
         DeleteMessage DeleteLinkGroup(int id);
         IList<LinkGroup> GetLinkGroups(int customerId);
 
-        void SaveLink(Link link, int[] us, out IDictionary<string, string> errors);
+        void SaveLink(Link link, int[] us, int[] wg, out IDictionary<string, string> errors);
         void SaveLinkGroup(LinkGroup linkGroup, out IDictionary<string, string> errors);
         void Commit();
 
@@ -127,7 +127,7 @@ namespace DH.Helpdesk.Services.Services
             return DeleteMessage.Error;
         }
 
-        public void SaveLink(Link link, int[] us, out IDictionary<string, string> errors)
+        public void SaveLink(Link link, int[] us, int[] wg, out IDictionary<string, string> errors)
         {
             if (link == null)
                 throw new ArgumentNullException("link");
@@ -149,6 +149,7 @@ namespace DH.Helpdesk.Services.Services
             {
                 var linkRep = uow.GetRepository<Link>();
                 var userRep = uow.GetRepository<User>();
+                var workinggroupRep = uow.GetRepository<WorkingGroupEntity>();
 
                 Link entity;
                 var now = DateTime.Now;
@@ -179,6 +180,20 @@ namespace DH.Helpdesk.Services.Services
                     {
                         User userEntity = userRep.GetById(u);                        
                         entity.Us.Add(userEntity);
+                    }
+                }
+
+                if (entity.Wg != null)
+                    entity.Wg.Clear();
+                else
+                    entity.Wg = new List<WorkingGroupEntity>();
+
+                if (wg != null)
+                {
+                    foreach (var w in wg)
+                    {
+                        WorkingGroupEntity wgEntity = workinggroupRep.GetById(w);
+                        entity.Wg.Add(wgEntity);
                     }
                 }
 

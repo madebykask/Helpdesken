@@ -73,10 +73,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult New(Link link, int[] UsSelected)
+        public ActionResult New(Link link, int[] UsSelected, int[] WgSelected)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            this._linkService.SaveLink(link, UsSelected, out errors);
+            this._linkService.SaveLink(link, UsSelected, WgSelected, out errors);
 
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "quicklink", new { customerId = link.Customer_Id });
@@ -101,10 +101,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(Link link, int[] UsSelected)
+        public ActionResult Edit(Link link, int[] UsSelected, int[] WgSelected)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            this._linkService.SaveLink(link, UsSelected, out errors);
+            this._linkService.SaveLink(link, UsSelected, WgSelected, out errors);
 
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "quicklink", new { customerId = link.Customer_Id });
