@@ -12,6 +12,8 @@
         {
             this.HasKey(x => x.Id);
 
+            
+
             this.HasOptional(x => x.Customer)
               .WithMany()
               .HasForeignKey(x => x.Customer_Id)
@@ -31,6 +33,8 @@
                 .WithMany()
                 .HasForeignKey(x => x.LinkGroup_Id)
                 .WillCascadeOnDelete(false);
+
+            
 
             this.HasMany(x => x.Us)
                 .WithMany()

@@ -34,6 +34,7 @@
         public virtual Customer Customer { get; set; }
         public virtual ICollection<BulletinBoard> BulletinBoards { get; set; }
         public virtual ICollection<Document> Documents { get; set; }
+        public virtual ICollection<Link> Links { get; set; }
         public virtual ICollection<FaqEntity> FAQs { get; set; }
         public virtual ICollection<Calendar> Calendars { get; set; }
         public virtual ICollection<UserWorkingGroup> UserWorkingGroups { get; set; }
