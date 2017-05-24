@@ -129,6 +129,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         {
             var usSelected = link.Us ?? new List<User>();
             var usAvailable = new List<User>();
+
+            var wgSelected = link.Wg ?? new List<WorkingGroupEntity>();
+            var wgAvailable = new List<WorkingGroupEntity>();
+
             var cs = this._settingService.GetCustomerSetting(customer.Id);
             var isFirstName = (cs.IsUserFirstLastNameRepresentation == 1);
 
