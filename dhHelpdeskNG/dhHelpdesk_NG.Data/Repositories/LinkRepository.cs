@@ -27,7 +27,7 @@ namespace DH.Helpdesk.Dal.Repositories
     /// </summary>
     public interface ILinkRepository : Infrastructure.IRepository<Link>
     {
-        List<LinkOverview> GetLinkOverviewsToStartPage(int[] customers, int? count, bool forStartPage);
+        List<LinkOverview> GetLinkOverviewsToStartPage(int[] customers, int? count, bool forStartPage, int userid);
     }
 
     /// <summary>
@@ -46,8 +46,34 @@ namespace DH.Helpdesk.Dal.Repositories
         {
         }
 
-        public List<LinkOverview> GetLinkOverviewsToStartPage(int[] customers, int? count, bool forStartPage)
+        public List<LinkOverview> GetLinkOverviewsToStartPage(int[] customers, int? count, bool forStartPage, int userid)
         {
+
+            customers.ToString().Split();
+            char[] delimiters = new char[] { ',' };
+            string[] words = customers.ToString().Split(delimiters);
+            string cont = string.Empty;
+            foreach (string word in words)
+            {
+                if (cont == string.Empty)
+                {
+                    cont = word;
+                }
+                else
+                {
+                    cont = cont + " | " + word;
+                }
+            }
+
+            var userGroups = this.DataContext.UserWorkingGroups.Select(u => u.WorkingGroup_Id);
+
+            var query = this.DataContext.Links.Where(s => s.Customer_Id.ToString().Contains(cont));
+
+            //query = query.Where(x => x.WorkingGroup == null || userGroups.Contains(userid));
+
+
+            //query = query.Where(x => !x.Us.Any() || x.Us.Any(u => u.Id == workContext.User.UserId));
+
 
             return null;
         }

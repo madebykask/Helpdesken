@@ -50,6 +50,8 @@ namespace DH.Helpdesk.Services.Services
         /// </returns>
         IEnumerable<LinkOverview> GetLinkOverviews(int[] customers, int? count, bool forStartPage);
 
+        IEnumerable<LinkOverview> GetLinkOverviewsForStartPage(int[] customers, int? count, bool forStartPage);
+
         IList<Link> SearchLinks(int customerId, string searchText, List<int> groupIds);
     }
 
@@ -219,6 +221,14 @@ namespace DH.Helpdesk.Services.Services
                         .GetLinksForStartPage(customers, count, forStartPage)
                         .MapToOverviews();
             }
+        }
+
+        public IEnumerable<LinkOverview> GetLinkOverviewsForStartPage(int[] customers, int? count, bool forStartPage)
+        {
+            int userid = this.workContext.User.UserId;
+            return _linkRepository.GetLinkOverviewsToStartPage(customers, count, forStartPage, userid);
+
+            
         }
 
         public IList<Link> SearchLinks(int customerId, string searchText, List<int> groupIds)
