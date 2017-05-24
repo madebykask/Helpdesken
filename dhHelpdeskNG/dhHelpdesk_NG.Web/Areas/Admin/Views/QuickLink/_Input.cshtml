@@ -107,7 +107,7 @@
                             </table>
                         </div>
                     </div>
-                    <div class="row" id="divWorkgroup" @(Model.WgSelected.Count > 0 ? "style=display" : "block") style="display:none;">
+                    <div class="row" id="divWorkgroup" @(Model.WgSelected.Count > 0 ? "style=display" : "block")>
                         <div class="span20">
                             <table class="tableform">
                                 <tr>
@@ -123,8 +123,8 @@
                                     <td></td>
                                     <td>
                                         @Html.ListBox("WgAvailable", Model.WgAvailable, new { style = "width: 400px; height: 150px" })
-                                        <input type="button" class="btn" value="&lt;" id="removeUs" />
-                                        <input type="button" class="btn" value="&gt;" id="addUs" />
+                                        <input type="button" class="btn" value="&lt;" id="removeWg" />
+                                        <input type="button" class="btn" value="&gt;" id="addWg" />
                                     </td>
                                     <td>
                                         @Html.ListBox("WgSelected", Model.WgSelected, new { style = "width: 400px; height: 150px" })
@@ -145,17 +145,18 @@
                                     <td class="span3">
                                          @Translation.Get("Användare", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td class="span9">
+                                    @*<td class="span9">
                                        <label class="checkbox">
                                         <input type="checkbox" name="link.user" id="link.user" @(Model.UsSelected.Count > 0 ? "checked=checked" : "") value="1" onclick="showUserList()"/>
                                         &nbsp;@Translation.Get("Begränsa läsrättighet till", Enums.TranslationSource.TextTranslation)
                                         </label>
-                                    </td>
+                                    </td>*@
                                 </tr>
                             </table>
                         </div>
                     </div>
-                    <div class="row" id="divUser" @(Model.UsSelected.Count > 0  ? "style=display" : "block") style="display:none;">
+                    <div class="row" id="divUser" @(Model.UsSelected.Count > 0  ? "style=display" : "block");">
+                       @* style="display:none*@
                         <div class="span20">
                             <table class="tableform">
                                 <tr>
@@ -225,6 +226,21 @@
         $("#UsSelected option:selected").remove().appendTo("#UsAvailable");
         $("#UsAvailable").get(0).selectedIndex = -1;
         $("#UsAvailable").get(0).selectedIndex = -1;
+        return false;
+    });
+
+
+    $("#addWg").click(function () {
+        $("#WgAvailable option:selected").remove().appendTo("#WgSelected");
+        $("#WgAvailable").get(0).selectedIndex = -1;
+        $("#WgSelected").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#removeWg").click(function () {
+        $("#WgSelected option:selected").remove().appendTo("#WgAvailable");
+        $("#WgAvailable").get(0).selectedIndex = -1;
+        $("#WgAvailable").get(0).selectedIndex = -1;
         return false;
     });
 
