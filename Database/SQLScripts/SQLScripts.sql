@@ -571,7 +571,9 @@ begin
 
 end
 
+Update tblCaseType set ShowOnExtPageCases = 0 where ShowOnExternalPage = 0
 
+Update tblProductArea set ShowOnExtPageCases = 0 where ShowOnExternalPage = 0
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.32'
