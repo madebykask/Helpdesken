@@ -37,21 +37,21 @@
                 htmlOutput.Append("<option></option>");
             }
 
-            if (dropDownContent !=null)
+            //if (dropDownContent !=null)
+            //{
+            foreach (var item in dropDownContent.Items)
             {
-                foreach (var item in dropDownContent.Items)
-                {
-                    htmlOutput.Append(
-                        item.Value == dropDownContent.SelectedValue
-                            ? string.Format(@"<option value=""{0}"" selected=""selected"">", item.Value)
-                            : string.Format(@"<option value=""{0}"">", item.Value));
+                htmlOutput.Append(
+                    item.Value == dropDownContent.SelectedValue
+                        ? string.Format(@"<option value=""{0}"" selected=""selected"">", item.Value)
+                        : string.Format(@"<option value=""{0}"">", item.Value));
 
-                    htmlOutput.Append(item.Name);
-                    htmlOutput.Append("</option>");
-                }
-
-                htmlOutput.Append("</select>");
+                htmlOutput.Append(item.Name);
+                htmlOutput.Append("</option>");
             }
+
+            htmlOutput.Append("</select>");
+            //}
             return new MvcHtmlString(htmlOutput.ToString());
         }
 
