@@ -525,8 +525,8 @@ namespace DH.Helpdesk.Web.Controllers
 
                 languages = languagesData.Select(d => new ItemOverview(d.Name, d.Id.ToString())).ToList();
 
-                ItemOverview f = new ItemOverview(" ", "0");
-                languages.Add(f);
+                //ItemOverview f = new ItemOverview(" ", "0");
+                //languages.Add(f);
 
                 languages = languages.OrderBy(z => z.Value).ToList();
 
@@ -647,8 +647,8 @@ namespace DH.Helpdesk.Web.Controllers
 
                 languages = languageData.Select(d => new ItemOverview(d.Name, d.Id.ToString())).ToList();
 
-                ItemOverview f = new ItemOverview(" ", "0");
-                languages.Add(f);
+                //ItemOverview f = new ItemOverview(" ", "0");
+                //languages.Add(f);
 
                 languages = languages.OrderBy(z => z.Value).ToList();
 
