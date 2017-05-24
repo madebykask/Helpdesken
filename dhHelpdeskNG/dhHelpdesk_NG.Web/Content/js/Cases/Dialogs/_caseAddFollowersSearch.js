@@ -48,7 +48,7 @@
                     checkAndAddEmailsFromDropdown(element.val());
             }
         }
-        alert();
+
     });
 
     function appendDropdownsEmails(array, selectedId) {
