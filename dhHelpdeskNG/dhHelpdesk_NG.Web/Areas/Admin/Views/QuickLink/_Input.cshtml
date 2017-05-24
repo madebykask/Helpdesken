@@ -95,6 +95,49 @@
                         </div>
                     </div>
                     <h4>@Translation.Get("Säkerhet", Enums.TranslationSource.TextTranslation)</h4>
+
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
+                                    </td>                                    
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row" id="divWorkgroup" @(Model.WgSelected.Count > 0 ? "style=display" : "block") style="display:none;">
+                        <div class="span20">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3"></td>
+                                    <td class="span15">
+                                        @Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Translation.Get("Valda", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        @Html.ListBox("WgAvailable", Model.WgAvailable, new { style = "width: 400px; height: 150px" })
+                                        <input type="button" class="btn" value="&lt;" id="removeUs" />
+                                        <input type="button" class="btn" value="&gt;" id="addUs" />
+                                    </td>
+                                    <td>
+                                        @Html.ListBox("WgSelected", Model.WgSelected, new { style = "width: 400px; height: 150px" })
+                                    </td>
+                                </tr>
+                            </table>
+                          
+                        </div>
+                    </div>
+
+
+
+
                     <div class="row">
                         <div class="span12">
                             <table class="tableform">
