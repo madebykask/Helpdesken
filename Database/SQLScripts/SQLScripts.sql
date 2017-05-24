@@ -528,6 +528,40 @@ if not exists (SELECT name FROM sysindexes WHERE name = 'IX_tblCase_Customer_Id'
 	INCLUDE ([Casenumber]) 
 GO
 
+
+if not exists(select * from sysobjects WHERE Name = N'tblLink_tblWorkingGroup')
+begin
+
+	CREATE TABLE [dbo].[tblLink_tblWorkingGroup](
+		[LinkId] [int] NOT NULL,
+		[WorkingGroup_Id] [int] NOT NULL,
+	 CONSTRAINT [PK_tblLink_tblWorkingGroup] PRIMARY KEY CLUSTERED 
+	(
+		[LinkId] ASC,
+		[WorkingGroup_Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
+
+	GO
+
+	ALTER TABLE [dbo].[tblLink_tblWorkingGroup]  WITH CHECK ADD  CONSTRAINT [FK_tblLink_tblWorkingGroup_tblLink] FOREIGN KEY([LinkId])
+	REFERENCES [dbo].[tblLink] ([Id])
+	GO
+
+	ALTER TABLE [dbo].[tblLink_tblWorkingGroup] CHECK CONSTRAINT [FK_tblLink_tblWorkingGroup_tblLink]
+	GO
+
+	ALTER TABLE [dbo].[tblLink_tblWorkingGroup]  WITH CHECK ADD  CONSTRAINT [FK_tblLink_tblWorkingGroup_tblWorkingGroup] FOREIGN KEY([WorkingGroup_Id])
+	REFERENCES [dbo].[tblWorkingGroup] ([Id])
+	GO
+
+	ALTER TABLE [dbo].[tblLink_tblWorkingGroup] CHECK CONSTRAINT [FK_tblLink_tblWorkingGroup_tblWorkingGroup]
+	GO
+
+end
+
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.32'
 

@@ -45,7 +45,14 @@
                     .ToTable("tblLink_tblUsers");
                 });
 
-
+            this.HasMany(x => x.Wg)
+              .WithMany()
+              .Map(m =>
+              {
+                  m.MapLeftKey("Link_Id")
+                  .MapRightKey("WorkingGroup_Id")
+                  .ToTable("tblLink_tblWorkingGroup");
+              });
 
             this.Property(x => x.Customer_Id).IsOptional();
             this.Property(x => x.Document_Id).IsOptional();
