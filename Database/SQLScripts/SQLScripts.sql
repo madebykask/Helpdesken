@@ -455,7 +455,52 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 GO 
 
 
- 
+		INSERT INTO [dbo].[tblComputerUserFieldSettings]
+			   ([Customer_Id]
+			   ,[ComputerUserField]
+			   ,[Show]
+			   ,[Required]
+			   ,[MinLength]
+			   ,[ShowInList]
+			   ,[LDAPAttribute])
+		SELECT  DISTINCT
+				Customer_Id,
+				'Language_Id',
+				1,
+				0,
+				0,
+				1,
+				''
+		FROM tblComputerUserFieldSettings	
+		WHERE Customer_Id IS NOT NULL AND Customer_Id NOT IN (SELECT Customer_Id From tblComputerUserFieldSettings WHERE Customer_Id IS NOT NULL AND ComputerUserField='Language_Id')
+		
+GO   
+		--Swedish		
+		INSERT INTO [dbo].[tblComputerUserFS_tblLanguage]
+				([ComputerUserFieldSettings_Id]
+				,[Language_Id]
+				,[Label])
+		SELECT    DISTINCT    Id,
+			(SELECT Id FROM tblLanguage WHERE LanguageID='SV'),
+			'Language'
+		FROM            dbo.tblComputerUserFieldSettings
+		WHERE        (ComputerUserField = 'Language_Id')
+		
+GO
+		--English
+		INSERT INTO [dbo].[tblComputerUserFS_tblLanguage]
+				([ComputerUserFieldSettings_Id]
+				,[Language_Id]
+				,[Label])
+		SELECT        Id,
+			(SELECT Id FROM tblLanguage WHERE LanguageID='EN'),
+			'Language'
+		FROM            dbo.tblComputerUserFieldSettings
+		WHERE        (ComputerUserField = 'Language_Id')
+		GROUP BY Id
+
+GO
+
 -- IX_tblFormFieldValue_Case_Id
 if exists (SELECT name FROM sysindexes WHERE name = 'IX_tblFormFieldValue_Case_Id')
 	DROP INDEX [IX_tblFormFieldValue_Case_Id] ON [dbo].[tblFormFieldValue]
@@ -483,9 +528,6 @@ if not exists (SELECT name FROM sysindexes WHERE name = 'IX_tblCase_Customer_Id'
 	INCLUDE ([Casenumber]) 
 GO
 
-
-
- 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.32'
 
