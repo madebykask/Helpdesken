@@ -454,6 +454,17 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
                       update tblComputerUsers set languageid=0
 GO 
 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'CaseSolution_Id' and sysobjects.name = N'tblCase')
+	begin
+		ALTER TABLE [dbo].[tblCase] ADD [CaseSolution_Id] int NULL
+
+		ALTER TABLE [dbo].[tblCase]  WITH NOCHECK ADD  CONSTRAINT [FK_tblCaseSolution_tblCase] FOREIGN KEY([CaseSolution_Id])
+		REFERENCES [dbo].[tblCaseSolution] ([Id])
+
+	end
+GO
+
 
 		INSERT INTO [dbo].[tblComputerUserFieldSettings]
 			   ([Customer_Id]

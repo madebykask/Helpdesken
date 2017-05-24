@@ -24,6 +24,7 @@ namespace DH.Helpdesk.Web.Models.Case.Input
         /// </summary>
         public int? Performer_Id { get; set; }
 
+        public int? CaseSolution_Id { get; set; }
         public CaseLog caseLog { get; set; }
 
         public CaseMailSetting caseMailSetting { get; set; }        
