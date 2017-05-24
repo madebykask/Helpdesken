@@ -18,6 +18,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private readonly ISettingService _settingService;
         private readonly IUserService _userService;
         private readonly ICaseSolutionService _casesolutionService;
+        private readonly IWorkingGroupService _workgroupService;
 
         public QuickLinkController(
             IDocumentService documentService,
@@ -26,7 +27,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             IUserService userService,
             ICaseSolutionService casesolutionService,
             ISettingService settingService,
-            IMasterDataService masterDataService)
+            IMasterDataService masterDataService,
+            IWorkingGroupService workgroupService)
             : base(masterDataService)
         {
             this._documentService = documentService;
@@ -35,6 +37,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             this._userService = userService;
             this._casesolutionService = casesolutionService;
             this._settingService = settingService;
+            this._workgroupService = workgroupService;
         }
 
         public ActionResult Index(int customerId)
@@ -142,9 +145,15 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     usAvailable.Add(u);
             }
 
+            foreach (var w in this._workgroupService.GetWorkingGroups(customer.Id, true))
+            {
+                if (!wgSelected.Contains(w))
+                    wgAvailable.Add(w);
+            }
+
             var model = new QuickLinkInputViewModel
             {
-                
+
                 Link = link,
                 Customer = customer,
                 Documents = this._documentService.GetDocuments(customer.Id).Select(x => new SelectListItem
@@ -175,7 +184,19 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 {
                     Text = (isFirstName ? string.Format("{0} {1}", x.FirstName, x.SurName) : string.Format("{0} {1}", x.SurName, x.FirstName)),
                     Value = x.Id.ToString()
-                }).OrderBy(s=> s.Text).ToList()
+                }).OrderBy(s => s.Text).ToList(),
+
+                WgAvailable = wgAvailable.Select(x => new SelectListItem
+                {
+                    Text = (x.WorkingGroupName),
+                    Value = x.Id.ToString()
+                }).OrderBy(a => a.Text).ToList(),
+
+                WgSelected = wgSelected.Select(x => new SelectListItem
+                {
+                    Text = (x.WorkingGroupName),
+                    Value = x.Id.ToString()
+                }).OrderBy(s => s.Text).ToList()
 
             };
 
