@@ -544,18 +544,18 @@ if not exists(select * from sysobjects WHERE Name = N'tblLink_tblWorkingGroup')
 begin
 
 	CREATE TABLE [dbo].[tblLink_tblWorkingGroup](
-		[LinkId] [int] NOT NULL,
+		[Link_Id] [int] NOT NULL,
 		[WorkingGroup_Id] [int] NOT NULL,
 	 CONSTRAINT [PK_tblLink_tblWorkingGroup] PRIMARY KEY CLUSTERED 
 	(
-		[LinkId] ASC,
+		[Link_Id] ASC,
 		[WorkingGroup_Id] ASC
 	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 
 	GO
 
-	ALTER TABLE [dbo].[tblLink_tblWorkingGroup]  WITH CHECK ADD  CONSTRAINT [FK_tblLink_tblWorkingGroup_tblLink] FOREIGN KEY([LinkId])
+	ALTER TABLE [dbo].[tblLink_tblWorkingGroup]  WITH CHECK ADD  CONSTRAINT [FK_tblLink_tblWorkingGroup_tblLink] FOREIGN KEY([Link_Id])
 	REFERENCES [dbo].[tblLink] ([Id])
 	GO
 
