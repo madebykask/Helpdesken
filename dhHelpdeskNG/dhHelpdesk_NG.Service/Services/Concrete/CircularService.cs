@@ -479,7 +479,7 @@
             }
         }
 
-        public void SaveAnswers(ParticipantForInsert businessModel)
+        public int SaveAnswers(ParticipantForInsert businessModel)
         {
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
@@ -525,6 +525,19 @@
                 }
 
                 uof.Save();
+                if (businessModel.IsFeedback)
+                {
+                    try
+                    {
+                        var result = entity.QuestionnaireQuestionResultEntities.Single();
+                        return result.Id;
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        return 0;
+                    }
+                }
+                return 0;
             }
         }
 
@@ -607,6 +620,19 @@
 
                 var entity = circularRepository.GetAll().SingleOrDefault(x => x.Questionnaire_Id == questionnaireId);
                 return entity != null ? entity.Id : -1;
+            }
+        }
+
+        public void SaveFeedbackNote(int questionId, string noteText)
+        {
+            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            {
+                var circularRepository = uof.GetRepository<QuestionnaireQuestionResultEntity>();
+
+                var entity = circularRepository.GetAll().SingleOrDefault(x => x.Id == questionId);
+                if (entity != null && string.IsNullOrEmpty(entity.QuestionnaireQuestionNote))
+                    entity.QuestionnaireQuestionNote = noteText;
+                uof.Save();
             }
         }
 

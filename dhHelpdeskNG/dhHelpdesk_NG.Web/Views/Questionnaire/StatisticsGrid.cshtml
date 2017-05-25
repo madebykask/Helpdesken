@@ -41,18 +41,21 @@
                         var hiddenNote = string.Empty;
                         if (result != null)
                         {
-                            notes = string.Join(Environment.NewLine + Environment.NewLine, result.Notes.Select(x => x.NoteText));
+                            notes = string.Join(Environment.NewLine + Environment.NewLine, result.Notes.Where(x => !string.IsNullOrEmpty(x.NoteText)).Select(x => x.NoteText));
                             foreach (var optionNote in result.Notes)
                             {
-                                var str = new StringBuilder();
-                                str.Append("<div class='brdbottom'>");
-                                str.Append("<label class='toplabel'>");
-                                str.Append(optionNote.NoteText);
-                                str.Append("</label>");
-                                str.Append("<label class='case-dropdown-div'>");
-                                str.Append(decimal.Round(optionNote.CaseId));
-                                str.Append("</label><br/></div>");
-                                hiddenNote = hiddenNote + str;
+                                if (!string.IsNullOrEmpty(optionNote.NoteText))
+                                {
+                                    var str = new StringBuilder();
+                                    str.Append("<div class='brdbottom'>");
+                                    str.Append("<label class='toplabel'>");
+                                    str.Append(optionNote.NoteText);
+                                    str.Append("</label>");
+                                    str.Append("<label class='case-dropdown-div'>");
+                                    str.Append(decimal.Round(optionNote.CaseId));
+                                    str.Append("</label><br/></div>");
+                                    hiddenNote = hiddenNote + str;
+                                }
                             }
                         }
                         <tr>

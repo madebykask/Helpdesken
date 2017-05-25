@@ -54,12 +54,13 @@ namespace DH.Helpdesk.Services.Services
 
         void Remind(string actionAbsolutePath, int circularId, OperationContext operationContext);
 
-        void SaveAnswers(ParticipantForInsert businessModel);
+        int SaveAnswers(ParticipantForInsert businessModel);
 
 	    List<BusinessLogic.MapperData.Participant> GetNotAnsweredParticipants(int circularId);
 
         void SetStatus(int circularId, CircularStates circularState);
         void UpdateParticipantSendDate(Guid participantGuid, DateTime operationDate);
         int GetCircularIdByQuestionnaireId(int questionaireId);
+        void SaveFeedbackNote(int questionId, string noteText);
     }
 }

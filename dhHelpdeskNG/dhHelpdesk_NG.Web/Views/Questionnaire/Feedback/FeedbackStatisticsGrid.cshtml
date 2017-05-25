@@ -1,4 +1,5 @@
-﻿@using DH.Helpdesk.Services.Response.Questionnaire
+﻿@using System.Text
+@using DH.Helpdesk.Services.Response.Questionnaire
 @using DH.Helpdesk.Web.Models.Questionnaire.Output
 @model DH.Helpdesk.Web.Models.Feedback.FeedbackStatisticsViewModel
 @{
@@ -25,7 +26,7 @@
                     List<OptionResult> values = Model.OptionResults.Where(x => question.Options.Select(y => y.Id).Contains(x.OptionId)).ToList();
 
                     <tr>
-                        <td colspan="5" class="header">@question.Number. @question.Question (@Translation.Get("Antal svar"): @values.Sum(x => x.Count))</td>
+                        <td colspan="6" class="header">@question.Number. @question.Question (@Translation.GetCoreTextTranslation("Antal svar"): @values.Sum(x => x.Count))</td>
                     </tr>
 
                     foreach (var option in question.Options.OrderBy(x => x.Position))
@@ -35,6 +36,28 @@
                         var caseIds = result != null ? string.Join(",", result.CaseIds) : string.Empty;
 
                         int percent = GetPercent(count, values.Select(x => x.Count).ToList());
+
+                        var notes = string.Empty;
+                        var hiddenNote = string.Empty;
+                        if (result != null)
+                        {
+                            notes = string.Join(Environment.NewLine + Environment.NewLine, result.Notes.Where(x => !string.IsNullOrEmpty(x.NoteText)).Select(x => x.NoteText));
+                            foreach (var optionNote in result.Notes)
+                            {
+                                if (!string.IsNullOrEmpty(optionNote.NoteText))
+                                {
+                                    var str = new StringBuilder();
+                                    str.Append("<div class='brdbottom'>");
+                                    str.Append("<label class='toplabel'>");
+                                    str.Append(optionNote.NoteText);
+                                    str.Append("</label>");
+                                    str.Append("<label class='case-dropdown-div'>");
+                                    str.Append(decimal.Round(optionNote.CaseId));
+                                    str.Append("</label><br/></div>");
+                                    hiddenNote = hiddenNote + str;
+                                }
+                            }
+                        }
 
                         <tr>
                             <td style="width: 40%">
@@ -61,10 +84,23 @@
                                     }
                             </td>
                             <td style="width: 10%">
-                                @Translation.Get("svar")
+                                @Translation.GetCoreTextTranslation("svar")
                             </td>
                             <td style="width: 10%">@percent%
                             </td>
+                            @if (!string.IsNullOrEmpty(notes))
+                            {
+                                <td style="width: 5%">
+                                    <div style="width: 16px;" class="qn-div-data">
+                                        <a href="#" class="feedbackNote icon-comment" title="@notes"></a>
+                                        @Html.Hidden("popupNote", hiddenNote)
+                                    </div>
+                                </td>
+                            }
+                            else
+                            {
+                                <td style="width: 2%"></td>
+                            }
                         </tr>
                     }
                 }
@@ -75,6 +111,39 @@
 <div id="divFeedbackCases" role="dialog" class="modal hide fade case-connect-to-parent" aria-labelledby="myModalLabel" aria-hidden="true">
     @Html.Partial("~/Views/Questionnaire/Feedback/_StatisticsCases.cshtml", Model)
 </div>
+
+<div id="feedback_notes_popup" role="dialog" class="modal fade" aria-labelledby="feedbNote" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h5>@Translation.GetCoreTextTranslation("Kommentarer")</h5>
+            </div>
+            <div class="overflow-visible">
+                <div id="fb_comment_content"></div>
+            </div>
+            <div class="modal-body overflow-visible">
+                <div>
+                    <button type="button" id="btnCancel" class="btn btn-cancel btn-default" data-dismiss="modal">@Translation.GetCoreTextTranslation("OK")</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        $('a.feedbackNote.icon-comment').on("click", function () {
+                    var $src = $(this);
+                    var parentDiv = $(this).closest('.qn-div-data');
+                    var popupNote = parentDiv.find("#popupNote").val();
+                    var $target = $("#feedback_notes_popup");
+                    $("#fb_comment_content").html(popupNote);
+                    $target.attr("data-src", $src.attr("data-src"));
+                    $target.modal("show");
+                });
+    });
+</script>
 @functions 
 {
 
