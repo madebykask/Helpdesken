@@ -96,7 +96,8 @@
         /// </returns>
         IEnumerable<ProductAreaOverview> GetProductAreaOverviews(int customerId);
 
-        int SaveProductArea(ProductAreaOverview productArea);        
+        int SaveProductArea(ProductAreaOverview productArea);
+        IEnumerable<ProductArea> GetActiveProductAreas(int customerId);
     }
 
     public class ProductAreaService : IProductAreaService
@@ -496,6 +497,11 @@
         public int SaveProductArea(ProductAreaOverview productArea)
         {
             return this.productAreaRepository.SaveProductArea(productArea);
+        }
+
+        public IEnumerable<ProductArea> GetActiveProductAreas(int customerId)
+        {
+            return this.productAreaRepository.GetMany(x => x.Customer_Id == customerId && x.IsActive == 1).ToList();
         }
 
         private string loopProdcuctAreas(IList<ProductAreaEntity> pal, string separator, string valueToReturn)
