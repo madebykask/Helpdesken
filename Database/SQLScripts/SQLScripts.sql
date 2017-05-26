@@ -487,28 +487,28 @@ GO
 		
 GO   
 		--Swedish		
-		INSERT INTO [dbo].[tblComputerUserFS_tblLanguage]
-				([ComputerUserFieldSettings_Id]
-				,[Language_Id]
-				,[Label])
-		SELECT    DISTINCT    Id,
-			(SELECT Id FROM tblLanguage WHERE LanguageID='SV'),
-			'Language'
-		FROM            dbo.tblComputerUserFieldSettings
-		WHERE        (ComputerUserField = 'Language_Id')
+		--INSERT INTO [dbo].[tblComputerUserFS_tblLanguage]
+		--		([ComputerUserFieldSettings_Id]
+		--		,[Language_Id]
+		--		,[Label])
+		--SELECT    DISTINCT    Id,
+		--	(SELECT Id FROM tblLanguage WHERE LanguageID='SV'),
+		--	'Language'
+		--FROM            dbo.tblComputerUserFieldSettings
+		--WHERE        (ComputerUserField = 'Language_Id')
 		
 GO
 		--English
-		INSERT INTO [dbo].[tblComputerUserFS_tblLanguage]
-				([ComputerUserFieldSettings_Id]
-				,[Language_Id]
-				,[Label])
-		SELECT        Id,
-			(SELECT Id FROM tblLanguage WHERE LanguageID='EN'),
-			'Language'
-		FROM            dbo.tblComputerUserFieldSettings
-		WHERE        (ComputerUserField = 'Language_Id')
-		GROUP BY Id
+		--INSERT INTO [dbo].[tblComputerUserFS_tblLanguage]
+		--		([ComputerUserFieldSettings_Id]
+		--		,[Language_Id]
+		--		,[Label])
+		--SELECT        Id,
+		--	(SELECT Id FROM tblLanguage WHERE LanguageID='EN'),
+		--	'Language'
+		--FROM            dbo.tblComputerUserFieldSettings
+		--WHERE        (ComputerUserField = 'Language_Id')
+		--GROUP BY Id
 
 GO
 
