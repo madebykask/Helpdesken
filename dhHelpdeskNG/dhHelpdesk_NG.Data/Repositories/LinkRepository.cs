@@ -11,7 +11,7 @@ namespace DH.Helpdesk.Dal.Repositories
 {
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
-
+    using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
@@ -27,7 +27,7 @@ namespace DH.Helpdesk.Dal.Repositories
     /// </summary>
     public interface ILinkRepository : Infrastructure.IRepository<Link>
     {
-        List<LinkOverview> GetLinkOverviewsToStartPage(int[] customers, int? count, bool forStartPage, int userid);
+        IEnumerable<LinkOverview> GetLinkOverviewsToStartPage(int[] customers, int? count, bool forStartPage, int userid, IEnumerable<UserWorkingGroup> wg);
     }
 
     /// <summary>
@@ -46,36 +46,99 @@ namespace DH.Helpdesk.Dal.Repositories
         {
         }
 
-        public List<LinkOverview> GetLinkOverviewsToStartPage(int[] customers, int? count, bool forStartPage, int userid)
+        public IEnumerable<LinkOverview> GetLinkOverviewsToStartPage(int[] customers, int? count, bool forStartPage, int userid, IEnumerable<UserWorkingGroup> wg)
         {
 
-            customers.ToString().Split();
-            char[] delimiters = new char[] { ',' };
-            string[] words = customers.ToString().Split(delimiters);
-            string cont = string.Empty;
-            foreach (string word in words)
+
+           
+
+
+
+            //Get all links by user
+            var query = this.DataContext.Links.Where(x => !x.Us.Any() || x.Us.Any(u => u.Id == userid));
+
+        
+            //Add user groups condition
+            var userGroups = wg.Select(u => u.WorkingGroup_Id);
+            query = query.Where(x => !x.Wg.Any() || x.Wg.Any(g => userGroups.Contains(g.Id)));
+
+            //Filter by customer
+            query = query.Where(l => l.Customer_Id.HasValue && customers.Contains(l.Customer_Id.Value));
+
+
+           // query = query.Where(x => customers.Contains(x.Customer_Id));
+
+
+            if (forStartPage)
             {
-                if (cont == string.Empty)
+                query = query.Where(l => l.ShowOnStartPage == 1);
+            }
+
+            query = query.OrderBy(l => l.Customer.Name)
+                        .ThenBy(l => l.SortOrder);
+
+            if (count.HasValue)
+            {
+                query = query.Take(count.Value);
+            }
+
+
+            List<LinkOverview> llist = new List<LinkOverview>();
+
+
+            foreach (var x in query)
+            {
+                LinkOverview ltemp = new LinkOverview();
+                ltemp.CaseSolutionId = x.CaseSolution_Id != null ? x.CaseSolution_Id : 0;
+                if (x.CaseSolution != null)
                 {
-                    cont = word;
+                    ltemp.CaseSolutionName = x.CaseSolution.Name != null ? x.CaseSolution.Name : string.Empty;
                 }
                 else
                 {
-                    cont = cont + " | " + word;
+                    ltemp.CaseSolutionName = string.Empty;
                 }
+                ltemp.CustomerId = x.Customer_Id != null ? x.Customer_Id : 0;
+                if (x.Customer != null)
+                {
+                    ltemp.CustomerName = x.Customer.Name != null ? x.Customer.Name : string.Empty;
+                }
+                else
+                {
+                    ltemp.CustomerName = string.Empty;
+                }
+                ltemp.DocumentId = x.Document_Id != null ? x.Document_Id : 0;
+                if (x.Document != null)
+                {
+                    ltemp.DocumentName = x.Document.Name != null ? x.Document.Name : string.Empty;
+                }
+                else
+                {
+                    ltemp.DocumentName = string.Empty;
+                }
+                ltemp.LinkGroupId = x.LinkGroup_Id != null ? x.LinkGroup_Id : 0;
+                if (x.LinkGroup != null)
+                {
+                    ltemp.LinkGroupName = x.LinkGroup.LinkGroupName != null ? x.LinkGroup.LinkGroupName : string.Empty;
+                }
+                else
+                {
+                    ltemp.LinkGroupName = string.Empty;
+                }
+                ltemp.NewWindowHeight = x.NewWindowHeight != null ? x.NewWindowHeight : 0;
+                ltemp.NewWindowWidth = x.NewWindowWidth != null ? x.NewWindowWidth : 0;
+                ltemp.OpenInNewWindow = x.OpenInNewWindow != null ? Convert.ToBoolean(x.OpenInNewWindow) : false;
+                ltemp.ShowOnStartPage = x.ShowOnStartPage != null ? Convert.ToBoolean(x.ShowOnStartPage) : false;
+                ltemp.SortOrder = x.SortOrder != null ? x.SortOrder : string.Empty;
+                ltemp.UrlAddress = x.URLAddress != null ? x.URLAddress : string.Empty;
+                ltemp.UrlName = x.URLName != null ? x.URLName : string.Empty;
+
+
+                llist.Add(ltemp);
             }
 
-            var userGroups = this.DataContext.UserWorkingGroups.Select(u => u.WorkingGroup_Id);
 
-            var query = this.DataContext.Links.Where(s => s.Customer_Id.ToString().Contains(cont));
-
-            //query = query.Where(x => x.WorkingGroup == null || userGroups.Contains(userid));
-
-
-            //query = query.Where(x => !x.Us.Any() || x.Us.Any(u => u.Id == workContext.User.UserId));
-
-
-            return null;
+            return llist;
         }
     }
 }

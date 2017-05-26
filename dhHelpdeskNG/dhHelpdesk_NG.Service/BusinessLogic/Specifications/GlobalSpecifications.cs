@@ -185,6 +185,71 @@
             return query;
         }
 
+        /// <summary>
+        /// ///////////////////////////
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="query"></param>
+        /// <param name="workContext"></param>
+        /// <returns></returns>
+        public static IQueryable<T> RestrictLinkByWorkingGroupsAndUsers<T>(this IQueryable<T> query, IWorkContext workContext)
+           where T : class, IWorkingGroupEntity, IUserEntity
+        {
+            query = query.RestrictByWorkingGroups(workContext)
+                        .RestrictByUsers(workContext);
+
+            return query;
+        }
+
+        public static IQueryable<T> RestrictLinkByWorkingGroups<T>(this IQueryable<T> query, IWorkContext workContext)
+          where T : class, IWorkingGroupEntity
+        {
+            var userGroups = workContext.User.UserWorkingGroups.Select(u => u.WorkingGroup_Id);
+
+            query = query.Where(x => !x.WGs.Any() || x.WGs.Any(g => userGroups.Contains(g.Id)));
+
+            return query;
+        }
+
+        public static IQueryable<T> RestrictLinkByUsers<T>(this IQueryable<T> query, IWorkContext workContext)
+           where T : class, IUserEntity
+        {
+            query = query.Where(x => !x.Us.Any() || x.Us.Any(u => u.Id == workContext.User.UserId));
+
+            return query;
+        }
+
+
+        public static IQueryable<T> GetLinkForStartPage<T>(
+                                   this IQueryable<T> query,
+                                   int[] customers,
+                                   int? count,
+                                   bool forStartPage)
+           where T : class, ICustomerEntity, IStartPageEntity, IDatedEntity
+        {
+            query = query.GetByCustomers(customers);
+
+            if (forStartPage)
+            {
+                query = query.Where(x => x.ShowOnStartPage == 1);
+            }
+
+            query = query.SortByCreated();
+
+            if (count.HasValue)
+            {
+                query = query.Take(count.Value);
+            }
+
+            return query;
+        }
+        /// <summary>
+        /// ////////////////////////
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="query"></param>
+        /// <returns></returns>
+
         public static IQueryable<T> SortByCreated<T>(this IQueryable<T> query)
             where T : class, IDatedEntity
         {

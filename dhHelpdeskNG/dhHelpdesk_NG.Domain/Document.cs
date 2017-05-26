@@ -7,7 +7,7 @@ namespace DH.Helpdesk.Domain
     using global::System;
     using global::System.Collections.Generic;
 
-    public class Document : Entity, IWorkingGroupEntity, IUserEntity, ICustomerEntity, IDatedEntity
+    public class Document : Entity, IWorkingGroupEntity, IUserEntity, ICustomerEntity, IDatedEntity, IStartPageEntity
     {
         public Document()
         {
@@ -28,7 +28,7 @@ namespace DH.Helpdesk.Domain
         public string Description { get; set; }
         public string FileName { get; set; }
         public string Name { get; set; }
-        public bool ShowOnStartPage { get; set; }
+        public int ShowOnStartPage { get; set; }
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
 

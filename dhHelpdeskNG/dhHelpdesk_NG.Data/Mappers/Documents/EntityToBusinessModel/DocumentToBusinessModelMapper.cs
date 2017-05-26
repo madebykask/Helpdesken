@@ -9,6 +9,7 @@
 
 namespace DH.Helpdesk.Dal.Mappers.Documents.EntityToBusinessModel
 {
+    using System;
     using DH.Helpdesk.BusinessData.Models.Document.Output;
     using DH.Helpdesk.Domain;
 
@@ -41,7 +42,7 @@ namespace DH.Helpdesk.Dal.Mappers.Documents.EntityToBusinessModel
                            Id = entity.Id,
                            Name = entity.Name,
                            Size = entity.Size,
-                           ShowOnStartPage = entity.ShowOnStartPage
+                           ShowOnStartPage = Convert.ToBoolean(entity.ShowOnStartPage)
                        };
         }
     }
