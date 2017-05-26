@@ -230,11 +230,13 @@ $(function () {
 
     $("#Casesolution_ShowInsideCase").click(function () {
         if ($('#Casesolution_ShowInsideCase').is(':checked')) {
+            $(".hideOnInsideCase").show();
             $("#CaseSolution_ConnectedButton").prop("disabled", false);
             $("#savaAndClose").prop("disabled", false);
             removeOptionByValue('savaAndClose', '-2'); // remove temporary option
         }else{
             $("#CaseSolution_ConnectedButton").prop("disabled", true);
+            $(".hideOnInsideCase").hide();
 
             // Add temporary option 
             var opt = document.createElement("option");

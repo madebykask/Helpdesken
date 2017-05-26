@@ -123,8 +123,8 @@
         public SendToDialogModel SendToDialogModel { get; set; }
 
         public List<KeyValuePair<int,string>> CaseTypeRelatedFields { get; set; }
-   
 
+        public string Information { get; set; }
     }
 
 

@@ -63,7 +63,24 @@
                                         @Html.DropDownListFor(model => model.CaseSolution.CaseSolutionCategory_Id, Model.CsCategories, "")
                                     </td>
                                 </tr>
-                               
+
+                                <tr>
+                                    <td style="width: 200px">
+                                        @Translation.GetCoreTextTranslation("Kort beskrivning")
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.CaseSolution.ShortDescription, new {id = "ShortDescription", maxlength = "100"})
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 200px">
+                                        @Translation.GetCoreTextTranslation("Information")
+                                    </td>
+                                    <td>
+                                        @Html.TextAreaFor(model => model.CaseSolution.Information, new {id = "Information", @class = "richtexteditor", style = "width:600px; height:250px;"})
+                                    </td>
+                                </tr>
+
                                 <tr>
                                     <td>
                                         @Translation.Get("Visa på självservice", Enums.TranslationSource.TextTranslation)
@@ -87,10 +104,11 @@
                                         @Translation.Get("Visa på ärende", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td class="checkbox" style="padding-left: 20px;">
-                                        <input type="checkbox" name="Casesolution.ShowInsideCase" id="Casesolution_ShowInsideCase" @(Model.CaseSolution.ShowInsideCase != 0 ? "checked=checked" : "") value="1" style="margin-top:8px" />
-                                        <input type="hidden" name="Casesolution.ShowInsideCase" value="0" />
-                                </td>
+                                        <input type="checkbox" name="Casesolution.ShowInsideCase" id="Casesolution_ShowInsideCase" @(Model.CaseSolution.ShowInsideCase != 0 ? "checked=checked" : "") value="1" style="margin-top: 8px"/>
+                                        <input type="hidden" name="Casesolution.ShowInsideCase" value="0"/>
+                                    </td>
                                 </tr>
+                                <tbody class="hideOnInsideCase" style="@(Model.CaseSolution.ShowInsideCase == 1 ? "" : "display:none")">
                                 <tr>
                                     <td>
                                         @Translation.Get("Koppla till", Enums.TranslationSource.TextTranslation)
@@ -102,7 +120,7 @@
                                         }
                                         else
                                         {
-                                            @Html.DropDownListFor(model => model.CaseSolution.ConnectedButton, Model.ButtonList, "", new { disabled = "disabled" })
+                                            @Html.DropDownListFor(model => model.CaseSolution.ConnectedButton, Model.ButtonList, "", new {disabled = "disabled"})
                                         }
                                     </td>
                                 </tr>
@@ -112,17 +130,17 @@
                                         @Translation.Get("Koppla till åtgärd", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                            <select id="savaAndClose" name="CaseSolution.SaveAndClose"  @(Model.CaseSolution.ShowInsideCase == 1 ? "" : "disabled='true'") ">
-                                                @foreach (var action in Model.ActionList)
-                                                {
-                                                    <option value="@action.Value" @(action.Selected ? "selected" : "")> @action.Text </option>
-                                                }
+                                        <select id="savaAndClose" name="CaseSolution.SaveAndClose" @(Model.CaseSolution.ShowInsideCase == 1 ? "" : "disabled='true'")>
+                                            @foreach (var action in Model.ActionList)
+                                            {
+                                                <option value="@action.Value" @(action.Selected ? "selected" : "")> @action.Text </option>
+                                            }
 
-                                                @if (Model.CaseSolution.ShowInsideCase != 1)
-                                                {
-                                                    <option value="-2" selected> @saveDropDownText </option>
-                                                }
-                                            </select>
+                                            @if (Model.CaseSolution.ShowInsideCase != 1)
+                                            {
+                                                <option value="-2" selected> @saveDropDownText </option>
+                                            }
+                                        </select>
                                     </td>
                                 </tr>
                                 <tr>
@@ -130,8 +148,8 @@
                                         @Translation.Get("Ersätt alltid befintliga värden", SessionFacade.CurrentLanguageId)
                                     </td>
                                     <td>
-                                        <input type="checkbox" name="CaseSolution.OverWritePopUp" @(Model.CaseSolution.OverWritePopUp == 1 ? "checked=checked" : "") value="1" class="switchcheckbox" />
-                                        <input type="hidden" name="CaseSolution.OverWritePopUp" value="0" />
+                                        <input type="checkbox" name="CaseSolution.OverWritePopUp" @(Model.CaseSolution.OverWritePopUp == 1 ? "checked=checked" : "") value="1" class="switchcheckbox"/>
+                                        <input type="hidden" name="CaseSolution.OverWritePopUp" value="0"/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -139,9 +157,11 @@
                                         @Translation.Get("Sorteringsordning", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @Html.TextBoxFor(model => model.CaseSolution.SortOrder, new { maxlength = "10", style = "width: 20px;" })
+                                        @Html.TextBoxFor(model => model.CaseSolution.SortOrder, new {maxlength = "10", style = "width: 20px;"})
                                     </td>
                                 </tr>
+                                </tbody>
+
                                 <tr>
                                     <td>
                                         @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)

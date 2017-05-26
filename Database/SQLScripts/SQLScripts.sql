@@ -625,6 +625,14 @@ Update tblCaseType set ShowOnExtPageCases = 0 where ShowOnExternalPage = 0
 
 Update tblProductArea set ShowOnExtPageCases = 0 where ShowOnExternalPage = 0
 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ShortDescription' and sysobjects.name = N'tblCaseSolution')
+	ALTER TABLE [dbo].[tblCaseSolution] ADD [ShortDescription] nvarchar(100) null
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Information' and sysobjects.name = N'tblCaseSolution')
+	ALTER TABLE [dbo].[tblCaseSolution] ADD [Information] nvarchar(max) null
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.32'
 
