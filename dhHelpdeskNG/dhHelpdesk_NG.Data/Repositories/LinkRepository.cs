@@ -57,6 +57,8 @@ namespace DH.Helpdesk.Dal.Repositories
             string sql = string.Empty;
             DataTable dt = null;
 
+            int custid = customers[0];
+
             int StartPage = 0;
             if (forStartPage == true)
             {
@@ -125,7 +127,7 @@ namespace DH.Helpdesk.Dal.Repositories
             sql += "WHERE([Extent1].[Id] = [Extent41].[Link_Id]) AND([Extent41].[WorkingGroup_Id] in (select WorkingGroup_Id from tblUserWorkingGroup where User_Id =  " + userid + ")) ";
             sql += ")) ";
             sql += ") ";
-            sql += "AND([Extent1].[Customer_Id] IS NOT NULL) AND([Extent1].[Customer_Id] IN(1)) AND([Extent1].[Customer_Id] IS NOT NULL) AND([Extent1].[ShowOnStartPage] = " + StartPage + ") ";
+            sql += "AND([Extent1].[Customer_Id] IS NOT NULL) AND([Extent1].[Customer_Id] IN(" + custid + ")) AND([Extent1].[Customer_Id] IS NOT NULL) AND([Extent1].[ShowOnStartPage] = " + StartPage + ") ";
             sql += ")  AS [Project3] ";
             sql += "ORDER BY[Project3].[Name] ";
             sql += "ASC, [Project3].[SortOrder] ";

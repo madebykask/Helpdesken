@@ -162,6 +162,7 @@
             var customers = this.customerUserService.GetCustomerUsersForHomeIndexPage(SessionFacade.CurrentUser.Id);
             var customerIdsAll = customers.Select(c => c.Customer.Customer_Id).ToArray();
 
+
             if (!customers.Any())
             {
                 return model;
@@ -205,6 +206,9 @@
                 var customersIds = module.NumberOfRows.HasValue
                                                   ? customers.Take(module.NumberOfRows.Value).Select(c => c.Customer.Customer_Id).ToArray()
                                                   : customers.Select(c => c.Customer.Customer_Id).ToArray();
+
+
+
 
                 switch ((Module)module.Module_Id)
                 {
