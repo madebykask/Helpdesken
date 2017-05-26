@@ -65,45 +65,44 @@ namespace DH.Helpdesk.Dal.Repositories
                 StartPage = 1;
             }
 
-            //var links = this.DataContext.Links.Where(z => z.Customer_Id == custid && z.ShowOnStartPage==StartPage);
+            //var links = this.DataContext.Links.Where(z => z.Customer_Id == custid && z.ShowOnStartPage == StartPage);
 
             //links = links.Where(x => !x.Us.Any() || x.Us.Any(u => u.Id == userid));
 
 
-            //var userGroups = this.DataContext.UserWorkingGroups.Where(u => u.User_Id==userid).Select(u=>u.WorkingGroup_Id);
+            //var userGroups = this.DataContext.UserWorkingGroups.Where(u => u.User_Id == userid).Select(u => u.WorkingGroup_Id);
 
             //links = links.Where(x => !x.Wg.Any() || x.Wg.Any(g => userGroups.Contains(g.Id)));
 
 
 
             //List<LinkOverview> llist = new List<LinkOverview>();
-            //foreach (DataRow row in dt.Rows)
+            //foreach (var r in links)
             //{
+
             //    LinkOverview ltemp = new LinkOverview();
-
-
-            //    ltemp.CaseSolutionId = row["CaseSolution_Id"].ToString() != null ? Convert.ToInt32(row["CaseSolution_Id"].ToString()) : 0;
-            //    ltemp.CaseSolutionName = row["CaseSolutionName"].ToString() != null ? Convert.ToString(row["CaseSolutionName"].ToString()) : string.Empty;
-            //    ltemp.CustomerId = row["Customer_Id"].ToString() != null ? Convert.ToInt32(row["Customer_Id"].ToString()) : 0;
-            //    ltemp.CustomerName = row["CustomerName"].ToString() != null ? Convert.ToString(row["CustomerName"].ToString()) : string.Empty;
-            //    ltemp.DocumentId = row["Document_Id"].ToString() != null ? Convert.ToInt32(row["Document_Id"].ToString()) : 0;
-            //    ltemp.DocumentName = row["DocumentName"].ToString() != null ? Convert.ToString(row["DocumentName"].ToString()) : string.Empty;
-            //    ltemp.LinkGroupId = row["LinkGroup_Id"].ToString() != null ? Convert.ToInt32(row["LinkGroup_Id"].ToString()) : 0;
-            //    ltemp.LinkGroupName = row["LinkGroupName"].ToString() != null ? Convert.ToString(row["LinkGroupName"].ToString()) : string.Empty;
-            //    ltemp.NewWindowHeight = row["NewWindowHeight"].ToString() != null ? Convert.ToInt32(row["NewWindowHeight"].ToString()) : 0;
-            //    ltemp.NewWindowWidth = row["NewWindowWidth"].ToString() != null ? Convert.ToInt32(row["NewWindowWidth"].ToString()) : 0;
-            //    if (row["OpenInNewWindow"] != null)
+            //    ltemp.CaseSolutionId = r.CaseSolution_Id.ToString() != null ? Convert.ToInt32(r.CaseSolution_Id.ToString()) : 0;
+            //    ltemp.CaseSolutionName = r.CaseSolution.Name.ToString() != null ? Convert.ToString(r.CaseSolution.Name.ToString()) : string.Empty;
+            //    ltemp.CustomerId = r.Customer_Id.ToString() != null ? Convert.ToInt32(r.Customer_Id.ToString()) : 0;
+            //    ltemp.CustomerName = r.Customer.CustomerID.ToString() != null ? Convert.ToString(r.Customer.CustomerID.ToString()) : string.Empty;
+            //    ltemp.DocumentId = r.Document_Id.ToString() != null ? Convert.ToInt32(r.Document_Id.ToString()) : 0;
+            //    ltemp.DocumentName = r.Document.Name.ToString() != null ? Convert.ToString(r.Document.Name.ToString()) : string.Empty;
+            //    ltemp.LinkGroupId = r.LinkGroup_Id.ToString() != null ? Convert.ToInt32(r.LinkGroup_Id.ToString()) : 0;
+            //    ltemp.LinkGroupName = r.LinkGroup.LinkGroupName.ToString() != null ? Convert.ToString(r.LinkGroup.LinkGroupName.ToString()) : string.Empty;
+            //    ltemp.NewWindowHeight = r.NewWindowHeight.ToString() != null ? Convert.ToInt32(r.NewWindowHeight.ToString()) : 0;
+            //    ltemp.NewWindowWidth = r.NewWindowWidth.ToString() != null ? Convert.ToInt32(r.NewWindowWidth.ToString()) : 0;
+            //    if (r.OpenInNewWindow != null)
             //    {
-            //        ltemp.OpenInNewWindow = Convert.ToBoolean(Convert.ToInt32(row["OpenInNewWindow"].ToString()));
+            //        ltemp.OpenInNewWindow = Convert.ToBoolean(Convert.ToInt32(r.OpenInNewWindow.ToString()));
             //    }
-            //    if (row["ShowOnStartPage"] != null)
+            //    if (r.ShowOnStartPage != null)
             //    {
-            //        ltemp.ShowOnStartPage = Convert.ToBoolean(Convert.ToInt32(row["ShowOnStartPage"].ToString()));
+            //        ltemp.ShowOnStartPage = Convert.ToBoolean(Convert.ToInt32(r.ShowOnStartPage.ToString()));
             //    }
 
-            //    ltemp.SortOrder = row["SortOrder"].ToString() != null ? Convert.ToString(row["SortOrder"].ToString()) : string.Empty;
-            //    ltemp.UrlAddress = row["UrlAddress"].ToString() != null ? Convert.ToString(row["UrlAddress"].ToString()) : string.Empty;
-            //    ltemp.UrlName = row["URLName"].ToString() != null ? Convert.ToString(row["URLName"].ToString()) : string.Empty;
+            //    ltemp.SortOrder = r.SortOrder.ToString() != null ? Convert.ToString(r.SortOrder.ToString()) : string.Empty;
+            //    ltemp.UrlAddress = r.URLAddress.ToString() != null ? Convert.ToString(r.URLAddress.ToString()) : string.Empty;
+            //    ltemp.UrlName = r.URLName.ToString() != null ? Convert.ToString(r.URLName.ToString()) : string.Empty;
 
             //    llist.Add(ltemp);
             //}
@@ -232,7 +231,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
 
             return llist;
-           // return links;
+            // return links;
         }
     }
 }
