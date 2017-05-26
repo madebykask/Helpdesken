@@ -42,7 +42,7 @@ namespace DH.Helpdesk.Dal.Mappers.Documents.EntityToBusinessModel
                            Id = entity.Id,
                            Name = entity.Name,
                            Size = entity.Size,
-                           ShowOnStartPage = Convert.ToBoolean(entity.ShowOnStartPage)
+                           ShowOnStartPage = entity.ShowOnStartPage
                        };
         }
     }

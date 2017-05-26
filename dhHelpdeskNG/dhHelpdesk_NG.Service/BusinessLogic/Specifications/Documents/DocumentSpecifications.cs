@@ -17,7 +17,7 @@
 
             if (forStartPage)
             {
-                query = query.Where(d => Convert.ToBoolean(d.ShowOnStartPage));
+                query = query.Where(d => d.ShowOnStartPage);
             }
 
             query = query.SortByCreated();
