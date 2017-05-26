@@ -561,6 +561,15 @@ INSERT INTO [dbo].[tblComputerUserFieldSettings]
 			DEALLOCATE Scroll_cursor1
 		--Swedish		
 	
+--IX_tblLog_Case_Id:
+if exists (SELECT name FROM sysindexes WHERE name = 'IX_tblLog_Case_Id')
+	DROP INDEX [IX_tblLog_Case_Id] ON [dbo].[tblLog]
+GO
+CREATE NONCLUSTERED INDEX [IX_tblLog_Case_Id] ON [dbo].[tblLog]
+(
+	[Case_Id] ASC
+)
+GO
 
 -- IX_tblFormFieldValue_Case_Id
 if exists (SELECT name FROM sysindexes WHERE name = 'IX_tblFormFieldValue_Case_Id')
