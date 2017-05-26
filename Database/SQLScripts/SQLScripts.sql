@@ -553,21 +553,21 @@ begin
 	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 
-	GO
+
 
 	ALTER TABLE [dbo].[tblLink_tblWorkingGroup]  WITH CHECK ADD  CONSTRAINT [FK_tblLink_tblWorkingGroup_tblLink] FOREIGN KEY([Link_Id])
 	REFERENCES [dbo].[tblLink] ([Id])
-	GO
+
 
 	ALTER TABLE [dbo].[tblLink_tblWorkingGroup] CHECK CONSTRAINT [FK_tblLink_tblWorkingGroup_tblLink]
-	GO
+
 
 	ALTER TABLE [dbo].[tblLink_tblWorkingGroup]  WITH CHECK ADD  CONSTRAINT [FK_tblLink_tblWorkingGroup_tblWorkingGroup] FOREIGN KEY([WorkingGroup_Id])
 	REFERENCES [dbo].[tblWorkingGroup] ([Id])
-	GO
+	
 
 	ALTER TABLE [dbo].[tblLink_tblWorkingGroup] CHECK CONSTRAINT [FK_tblLink_tblWorkingGroup_tblWorkingGroup]
-	GO
+
 
 end
 
