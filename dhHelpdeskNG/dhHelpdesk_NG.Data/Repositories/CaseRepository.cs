@@ -356,8 +356,7 @@ namespace DH.Helpdesk.Dal.Repositories
             string sql = string.Empty;
             int langid = 0;
             bool match = false;
-            string ConnectionString = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
-
+            
             //Initiation
             if (notid != string.Empty && notifierid != string.Empty)
             {

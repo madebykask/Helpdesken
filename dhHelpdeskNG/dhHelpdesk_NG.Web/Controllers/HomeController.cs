@@ -240,8 +240,8 @@
                         model.ProblemOverviews = this.problemService.GetProblemOverviews(customerIdsAll, module.NumberOfRows, true);
                         break;
                     case Module.QuickLinks:
-                        //model.LinksInfo = this.linkModelFactory.GetLinksViewModel(this.linkService.GetLinkOverviewsForStartPage(customerIdsAll, module.NumberOfRows, true));
-                        model.LinksInfo = this.linkModelFactory.GetLinksViewModel(this.linkService.GetLinkOverviews(customerIdsAll, module.NumberOfRows, true));
+                        model.LinksInfo = this.linkModelFactory.GetLinksViewModel(this.linkService.GetLinkOverviewsForStartPage(customerIdsAll, module.NumberOfRows, true));
+                        //model.LinksInfo = this.linkModelFactory.GetLinksViewModel(this.linkService.GetLinkOverviews(customerIdsAll, module.NumberOfRows, true));
                         break;
                     case Module.Statistics:
                         model.StatisticsOverviews = this.statisticsService.GetStatistics(customerIdsAll, this.workContext.User.UserId);

@@ -228,8 +228,8 @@ namespace DH.Helpdesk.Services.Services
         public IEnumerable<LinkOverview> GetLinkOverviewsForStartPage(int[] customers, int? count, bool forStartPage)
         {
             int userid = this.workContext.User.UserId;
-            IEnumerable<UserWorkingGroup> wg = this.workContext.User.UserWorkingGroups.ToList();
-            return _linkRepository.GetLinkOverviewsToStartPage(customers, count, forStartPage, userid, wg);
+            
+            return _linkRepository.GetLinkOverviewsToStartPage(customers, count, forStartPage, userid);
 
 
         }
