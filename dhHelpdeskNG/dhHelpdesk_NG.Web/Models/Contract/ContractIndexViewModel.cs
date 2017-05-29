@@ -75,9 +75,7 @@ namespace DH.Helpdesk.Web.Models.Contract
 
             return items;
         }
-
-        public IContractSearch COSearch_Filter { get; set; }
-
+        
         public IEnumerable<SelectListItem> ShowContracts { get; private set; }
 
         public Customer Customer { get; private set; }

@@ -82,21 +82,7 @@ namespace DH.Helpdesk.Web.Controllers
             model.Setting = GetSettingsModel(customer.Id);
 
 
-            ContractSearch CS = new ContractSearch();
-            if (SessionFacade.CurrentContractSearch != null)
-            {
-                CS = SessionFacade.CurrentContractSearch;
-                //model.OperationLogList = this._operationLogService.SearchAndGenerateOperationLog(SessionFacade.CurrentCustomer.Id, CS);
-                model.COSearch_Filter = CS;
-            }
-            else
-            {
-                //model.OperationLogs = this._operationLogService.GetOperationLogs(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.CreatedDate).ToList();
-                CS.SortBy = "CreatedDate";
-                CS.Ascending = false;
-                SessionFacade.CurrentContractSearch = CS;
-                //model.OperationLogList = this._operationLogService.SearchAndGenerateOperationLog(SessionFacade.CurrentCustomer.Id, CS);
-            }
+          
 
 
             return this.View(model);
@@ -114,7 +100,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         [HttpPost]
         
-        public PartialViewResult Search(ContractSearch COSearch_Filter)
+        public PartialViewResult Search(ContractIndexViewModel COSearch_Filter)
         {
             
             return this.PartialView("ProjectGrid", null);
