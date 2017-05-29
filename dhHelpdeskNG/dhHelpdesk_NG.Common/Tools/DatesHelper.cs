@@ -231,5 +231,19 @@ namespace DH.Helpdesk.Common.Tools
         {
             return hours.IsHoursGreaterEqualDays(days, workingHours) && hours.IsHoursLessDays(days + 1, workingHours);
         }
+
+        /// <summary>
+        /// Returns end of day.
+        /// </summary>
+        /// <param name="date">
+        /// The date.
+        /// </param>
+        /// <returns>
+        /// The <see cref="DateTime"/>.
+        /// </returns>
+        public static DateTime GetEndOfDay(this DateTime date)
+        {
+            return new DateTime(date.Year, date.Month, date.Day, 23, 59, 59);
+        }
     }
 }

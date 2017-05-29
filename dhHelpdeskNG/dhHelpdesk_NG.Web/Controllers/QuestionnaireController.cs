@@ -1,4 +1,6 @@
 ﻿using DH.Helpdesk.BusinessData.Models.Questionnaire;
+using DH.Helpdesk.Common.Tools;
+using DH.Helpdesk.Web.Infrastructure.Extensions;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -604,9 +606,7 @@ namespace DH.Helpdesk.Web.Controllers
                 this._circularService.UpdateCircular(circular);
             }
 
-            return this.RedirectToAction(
-                "CircularOverview",
-                new { questionnaireId = newCircular.QuestionnaireId, statusId = backStatusId });
+            return this.RedirectToAction("EditCircular", new { circularId = newCircular.Id, backStatusId });
         }
 
         [HttpPost]
@@ -623,7 +623,7 @@ namespace DH.Helpdesk.Web.Controllers
                 caseFilter.SelectedWorkingGroups,
                 caseFilter.SelectedProcent,
                 caseFilter.FinishingDateFrom,
-                caseFilter.FinishingDateTo,
+                caseFilter.FinishingDateTo.HasValue ? caseFilter.FinishingDateTo.Value.GetEndOfDay() : caseFilter.FinishingDateTo,
                 caseFilter.IsUniqueEmail);
 
             List<ConnectedToCircularOverview> models =
