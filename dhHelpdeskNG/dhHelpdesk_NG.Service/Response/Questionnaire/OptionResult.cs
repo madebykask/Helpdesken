@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace DH.Helpdesk.Services.Response.Questionnaire
 {
@@ -6,11 +7,12 @@ namespace DH.Helpdesk.Services.Response.Questionnaire
 
     public class OptionResult
     {
-        public OptionResult(int optionId, int count, IEnumerable<int> caseIds)
+        public OptionResult(int optionId, int count, IEnumerable<int> caseIds, IEnumerable<OptionNote> notes = null)
         {
             this.OptionId = optionId;
             this.Count = count;
             this.CaseIds = caseIds;
+            this.Notes = notes?.ToList() ?? new List<OptionNote>();
         }
 
         [IsId]
@@ -19,5 +21,7 @@ namespace DH.Helpdesk.Services.Response.Questionnaire
         [MinValue(0)]
         public int Count { get; private set; }
         public IEnumerable<int> CaseIds { get; private set; }
+
+        public List<OptionNote> Notes { get; set; }
     }
 }

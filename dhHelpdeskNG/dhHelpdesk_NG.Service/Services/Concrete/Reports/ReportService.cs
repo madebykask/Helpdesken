@@ -355,7 +355,9 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             DateTime? periodUntil,
             string text,
             SortField sort,
-            int selectCount)
+            int selectCount,
+            DateTime? closeFrom,
+            DateTime? closeTo)
         {
             using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
             {
@@ -404,7 +406,9 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
                                                caseStatusIds,
                                                caseTypeChainIds,
                                                periodFrom,
-                                               periodUntil);
+                                               periodUntil,
+                                               closeFrom,
+                                               closeTo);
                 
                 var overviews = caseData.MapToCaseOverviews(caseTypes, productAreas, ous, finishingCauses);
 
@@ -429,7 +433,9 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             DateTime? periodUntil,
             string text,
             SortField sort,
-            int selectCount)
+            int selectCount,
+            DateTime? closeFrom,
+            DateTime? closeTo)
         {
             using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
             {
@@ -459,7 +465,9 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
                                                 caseStatusIds,
                                                 caseTypeChainIds,
                                                 periodFrom,
-                                                periodUntil);
+                                                periodUntil,
+                                                closeFrom,
+                                                closeTo);
 
                 return caseData;
             }

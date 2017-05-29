@@ -80,6 +80,14 @@
                                         @Html.DropDownListFor(model => model.Department.Region_Id, Model.Regions, "")
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Språk", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(model => model.Department.LanguageId, Model.Languages, "")
+                                    </td>
+                                </tr>
                             </table>
                         </div>
                     </div>

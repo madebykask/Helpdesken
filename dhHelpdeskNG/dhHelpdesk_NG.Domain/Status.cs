@@ -12,7 +12,7 @@
         public string Name { get; set; }
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
-        //public Guid? StatusGUID { get; set; }
+        public Guid StatusGUID { get; set; }
         
         public virtual WorkingGroupEntity WorkingGroup { get; set; }
         public virtual StateSecondary StateSecondary { get; set; }

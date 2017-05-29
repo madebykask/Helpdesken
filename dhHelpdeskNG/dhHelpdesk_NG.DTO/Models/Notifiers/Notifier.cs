@@ -57,6 +57,11 @@
         [IsId]
         public int? GroupId { get; internal set; }
 
+
+        //[IsId]
+        public int LanguageId { get; internal set; }
+
+
         [MaxLength(NotifierConstraint.InitialsMaxLength)]
         public string Initials { get; internal set; }
 
@@ -137,40 +142,42 @@
             bool isActive,
             DateTime createdDateAndTime,
             DateTime? changedDateAndTime,
-            DateTime? synchronizationDateAndTime)
+            DateTime? synchronizationDateAndTime,
+            int languageId)
         {
             var notifier = new Notifier
-                           {
-                               UserId = userId,
-                               DomainId = domainId,
-                               LoginName = loginName,
-                               FirstName = firstName,
-                               Initials = initials,
-                               LastName = lastName,
-                               DisplayName = displayName,
-                               Place = place,
-                               Phone = phone,
-                               CellPhone = cellPhone,
-                               Email = email,
-                               Code = code,
-                               PostalAddress = postalAddress,
-                               PostalCode = postalCode,
-                               City = city,
-                               Title = title,
-                               DepartmentId = departmentId,
-                               Unit = unit,
-                               OrganizationUnitId = organizationUnitId,
-                               CostCentre = costCentre,
-                               DivisionId = divisionId,
-                               ManagerId = managerId,
-                               GroupId = groupId,
-                               Other = other,
-                               Ordered = ordered,
-                               IsActive = isActive,
-                               CreatedDateAndTime = createdDateAndTime,
-                               ChangedDateAndTime = changedDateAndTime ?? DateTime.Now,
-                               SynchronizationDateAndTime = synchronizationDateAndTime
-                           };
+            {
+                UserId = userId,
+                DomainId = domainId,
+                LoginName = loginName,
+                FirstName = firstName,
+                Initials = initials,
+                LastName = lastName,
+                DisplayName = displayName,
+                Place = place,
+                Phone = phone,
+                CellPhone = cellPhone,
+                Email = email,
+                Code = code,
+                PostalAddress = postalAddress,
+                PostalCode = postalCode,
+                City = city,
+                Title = title,
+                DepartmentId = departmentId,
+                Unit = unit,
+                OrganizationUnitId = organizationUnitId,
+                CostCentre = costCentre,
+                DivisionId = divisionId,
+                ManagerId = managerId,
+                GroupId = groupId,
+                Other = other,
+                Ordered = ordered,
+                IsActive = isActive,
+                CreatedDateAndTime = createdDateAndTime,
+                ChangedDateAndTime = changedDateAndTime ?? DateTime.Now,
+                SynchronizationDateAndTime = synchronizationDateAndTime,
+                LanguageId = languageId
+            };
 
             notifier.State = ModelStates.ForEdit;
             return notifier;
@@ -204,39 +211,41 @@
             string other,
             bool ordered,
             bool isActive,
-            DateTime createdDateAndTime)
+            DateTime createdDateAndTime,
+            int languageid)
         {
             var notifier = new Notifier
-                           {
-                               CustomerId = customerId,
-                               UserId = userId,
-                               DomainId = domainId,
-                               LoginName = loginName,
-                               FirstName = firstName,
-                               Initials = initials,
-                               LastName = lastName,
-                               DisplayName = displayName,
-                               Place = place,
-                               Phone = phone,
-                               CellPhone = cellPhone,
-                               Email = email,
-                               Code = code,
-                               PostalAddress = postalAddress,
-                               PostalCode = postalCode,
-                               City = city,
-                               Title = title,
-                               DepartmentId = departmentId,
-                               Unit = unit,
-                               OrganizationUnitId = organizationUnitId,
-                               CostCentre = costCentre,
-                               DivisionId = divisionId,
-                               ManagerId = managerId,
-                               GroupId = groupId,
-                               Other = other,
-                               Ordered = ordered,
-                               IsActive = isActive,
-                               CreatedDateAndTime = createdDateAndTime
-                           };
+            {
+                CustomerId = customerId,
+                UserId = userId,
+                DomainId = domainId,
+                LoginName = loginName,
+                FirstName = firstName,
+                Initials = initials,
+                LastName = lastName,
+                DisplayName = displayName,
+                Place = place,
+                Phone = phone,
+                CellPhone = cellPhone,
+                Email = email,
+                Code = code,
+                PostalAddress = postalAddress,
+                PostalCode = postalCode,
+                City = city,
+                Title = title,
+                DepartmentId = departmentId,
+                Unit = unit,
+                OrganizationUnitId = organizationUnitId,
+                CostCentre = costCentre,
+                DivisionId = divisionId,
+                ManagerId = managerId,
+                GroupId = groupId,
+                Other = other,
+                Ordered = ordered,
+                IsActive = isActive,
+                CreatedDateAndTime = createdDateAndTime,
+                LanguageId=languageid
+            };
 
             notifier.State = ModelStates.Created;
             return notifier;
@@ -270,39 +279,41 @@
             string other,
             bool ordered,
             bool isActive,
-            DateTime changedDateAndTime)
+            DateTime changedDateAndTime,
+            int languageid)
         {
             var notifier = new Notifier
-                           {
-                               Id = id,
-                               UserId = userId,
-                               DomainId = domainId,
-                               LoginName = loginName,
-                               FirstName = firstName,
-                               Initials = initials,
-                               LastName = lastName,
-                               DisplayName = displayName,
-                               Place = place,
-                               Phone = phone,
-                               CellPhone = cellPhone,
-                               Email = email,
-                               Code = code,
-                               PostalAddress = postalAddress,
-                               PostalCode = postalCode,
-                               City = city,
-                               Title = title,
-                               DepartmentId = departmentId,
-                               Unit = unit,
-                               OrganizationUnitId = organizationUnitId,
-                               CostCentre = costCentre,
-                               DivisionId = divisionId,
-                               ManagerId = managerId,
-                               GroupId = groupId,
-                               Other = other,
-                               Ordered = ordered,
-                               IsActive = isActive,
-                               ChangedDateAndTime = changedDateAndTime
-                           };
+            {
+                Id = id,
+                UserId = userId,
+                DomainId = domainId,
+                LoginName = loginName,
+                FirstName = firstName,
+                Initials = initials,
+                LastName = lastName,
+                DisplayName = displayName,
+                Place = place,
+                Phone = phone,
+                CellPhone = cellPhone,
+                Email = email,
+                Code = code,
+                PostalAddress = postalAddress,
+                PostalCode = postalCode,
+                City = city,
+                Title = title,
+                DepartmentId = departmentId,
+                Unit = unit,
+                OrganizationUnitId = organizationUnitId,
+                CostCentre = costCentre,
+                DivisionId = divisionId,
+                ManagerId = managerId,
+                GroupId = groupId,
+                Other = other,
+                Ordered = ordered,
+                IsActive = isActive,
+                ChangedDateAndTime = changedDateAndTime,
+                LanguageId = languageid
+            };
 
             notifier.State = ModelStates.Updated;
             return notifier;

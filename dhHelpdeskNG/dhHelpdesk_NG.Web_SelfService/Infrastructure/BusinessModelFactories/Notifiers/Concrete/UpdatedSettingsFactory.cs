@@ -38,6 +38,7 @@
             var createdDate = CreateFieldSetting(model.CreatedDate);
             var changedDate = CreateFieldSetting(model.ChangedDate);
             var synchronizationDate = CreateFieldSetting(model.SynchronizationDate);
+            var lang = CreateFieldSetting(model.Lang);
 
             return FieldSettings.CreateUpdated(
                 customerId,
@@ -71,7 +72,8 @@
                 createdDate,
                 changedDate,
                 synchronizationDate,
-                changedDateAndTime);
+                changedDateAndTime,
+                lang);
         }
 
         private static FieldSetting CreateFieldSetting(SettingModel model)

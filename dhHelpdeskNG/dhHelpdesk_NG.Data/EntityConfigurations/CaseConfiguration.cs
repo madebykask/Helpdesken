@@ -206,6 +206,12 @@
                 .WithRequired(x => x.Case)
                 .HasForeignKey(x => x.Case_Id);
 
+            this.HasOptional(x => x.CaseSolution)
+               .WithMany()
+               .HasForeignKey(x => x.CaseSolution_Id)
+               .WillCascadeOnDelete(false);
+
+
             this.ToTable("tblcase");
         }
     }

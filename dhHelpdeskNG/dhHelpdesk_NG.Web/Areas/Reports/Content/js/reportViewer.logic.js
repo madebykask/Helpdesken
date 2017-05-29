@@ -19,6 +19,8 @@
         var currentCustomerId = window.Params.CurrentCustomerId;
         var statusList = "#lstStatus";
         var reportGeneratorFields = "#reportGeneratorFields";
+        var caseCloseFrom = "#ReportFilter_CaseClosingDate_FromDate";
+        var caseCloseTo = "#ReportFilter_CaseClosingDate_ToDate";
 
         window.dhHelpdesk = window.dhHelpdesk || {};
         window.dhHelpdesk.reports = window.dhHelpdesk.reports || {};
@@ -33,7 +35,9 @@
                 administrators: [],
                 caseStatuses: [],
                 regDateFrom: null,
-                regDateTo: null
+                regDateTo: null,
+                closeDateFrom: null,
+                closeDateTo : null
             };
 
             $(departmentDropDown + " option:selected").each(function () {
@@ -66,6 +70,9 @@
 
             filters.regDateFrom = $(caseCreateFrom).val();
             filters.regDateTo = $(caseCreateTo).val();
+
+            filters.closeDateFrom = $(caseCloseFrom).val();
+            filters.closeDateTo = $(caseCloseTo).val();
 
             return filters;
         };
@@ -116,6 +123,9 @@
 
             $(caseCreateFrom).val(filters.regDateFrom);
             $(caseCreateTo).val(filters.regDateTo);
+
+            $(caseCloseFrom).val(filters.closeDateFrom);
+            $(caseCloseTo).val(filters.closeDateTo);
         };
 
         dhHelpdesk.reports.loadFilter = function (filterId) {
@@ -167,7 +177,9 @@
                 IsExcel: $(this).data("excel") || false,
                 IsPreview: $(this).data("preview") || false,
                 SortName: "",
-                SortBy: ""
+                SortBy: "",
+                CloseFrom: filters.closeDateFrom,
+                CloseTo: filters.closeDateTo
             }, true);
 
             var isPreview = ($(this).data("preview") === true);
@@ -266,6 +278,9 @@
             var regDateFrom = $(caseCreateFrom).val();
             var regDateTo = $(caseCreateTo).val();
 
+            var closeDateFrom = $(caseCloseFrom).val();
+            var closeDateTo = $(caseCloseTo).val();
+
             $.get(showReportUrl,
                 {
                     reportName: reportName,
@@ -278,6 +293,8 @@
                     'filter.CaseStatus': status,
                     'filter.RegisterFrom': regDateFrom,
                     'filter.RegisterTo': regDateTo,
+                    'filter.CloseFrom': closeDateFrom,
+                    'filter.CloseTo': closeDateTo,
                     curTime: new Date().getTime()
                 },
                 function (reportPresentation) {

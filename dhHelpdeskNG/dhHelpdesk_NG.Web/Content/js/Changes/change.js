@@ -130,7 +130,7 @@
     };
 
     function getChangeComputerUserSearchOptions() {
-
+        
         var options = {
             items: 20,
             minLength: 2,
@@ -142,6 +142,7 @@
                     data: { query: query, customerId: $('#change_customerId').val() },
                     dataType: 'json',
                     success: function (result) {
+                        
                         var resultList = jQuery.map(result, function (item) {
                             var aItem = {
                                 id: item.Id

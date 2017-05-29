@@ -89,6 +89,9 @@
         public FieldSetting Group { get; private set; }
 
         [NotNull]
+        public FieldSetting Language { get; private set; }
+
+        [NotNull]
         public FieldSetting Other { get; private set; }
 
         [NotNull]
@@ -137,7 +140,8 @@
             FieldSetting ordered,
             FieldSetting createdDate,
             FieldSetting changedDate,
-            FieldSetting synchronizationDate)
+            FieldSetting synchronizationDate,
+            FieldSetting language)
         {
             var settings = new FieldSettings
                            {
@@ -169,7 +173,8 @@
                                Ordered = ordered,
                                CreatedDate = createdDate,
                                ChangedDate = changedDate,
-                               SynchronizationDate = synchronizationDate
+                               SynchronizationDate = synchronizationDate,
+                               Language=language
                            };
 
             settings.State = ModelStates.ForEdit;
@@ -208,7 +213,8 @@
             FieldSetting createdDate,
             FieldSetting changedDate,
             FieldSetting synchronizationDate,
-            DateTime changedDateAndTime)
+            DateTime changedDateAndTime,
+            FieldSetting lang)
         {
             var settings = new FieldSettings
                            {
@@ -243,7 +249,8 @@
                                CreatedDate = createdDate,
                                ChangedDate = changedDate,
                                SynchronizationDate = synchronizationDate,
-                               ChangedDateAndTime = changedDateAndTime
+                               ChangedDateAndTime = changedDateAndTime,
+                               Language=lang
                            };
 
             settings.State = ModelStates.Updated;

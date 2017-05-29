@@ -1429,6 +1429,7 @@ $(function () {
         },
        
         GetUserSearchOptions: function () {
+           
             var options = {
                 items: 20,
                 minLength: 2,

@@ -69,6 +69,7 @@
         public DateTime? WatchDate { get; set; }
         public int? LockCaseToWorkingGroup_Id { get; set; }
         public int? WorkingGroup_Id { get; set; }
+        public int? CaseSolution_Id { get; set; }
 
         /// <summary>
         /// In UTC
@@ -158,6 +159,8 @@
         public virtual IList<Log> Logs { get; set; }
 
         public virtual ICollection<Mail2Ticket> Mail2Tickets { get; set; }
+
+        public virtual CaseSolution CaseSolution { get; set; }
 
         public bool IsClosed()
         {

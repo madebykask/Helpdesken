@@ -5825,5 +5825,38 @@ begin
 end
 GO
 
+Declare @Id int = 1813
+Declare @LanguageId int = 2
+If not exists (select * from tbltext where id = @Id)
+begin
+	insert into tbltext (id, TextString) VALUES (@Id, 'Koppla till åtgärd')
+end
+If not exists (select * from tblTextTranslation where text_id = @Id and Language_Id = @LanguageId)
+begin
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(@Id, @LanguageId, 'Connect to action')
+end
+GO
+
+If not exists (select * from tbltext where id = 1814)
+	insert into tbltext (id, TextString) VALUES (1814, 'Kommentarer')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1814 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1814, 2, 'Comments')
+GO
+
+If not exists (select * from tbltext where id = 1815)
+	insert into tbltext (id, TextString) VALUES (1815, 'Uppföljning')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1815 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1815, 2, 'Follow Up')
+GO
+
+If not exists (select * from tbltext where id = 1816)
+	insert into tbltext (id, TextString) VALUES (1816, 'Kort beskrivning')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1816 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1816, 2, 'Short description')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

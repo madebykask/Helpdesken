@@ -336,7 +336,9 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                     filters.PeriodUntil,
                     string.Empty,
                     filters.SortField,
-                    filters.RecordsOnPage);
+                    filters.RecordsOnPage,
+                    filters.CloseFrom,
+                    filters.CloseTo);
 
                     return this.PartialView("Reports/ReportGeneratorPreview", new ReportGeneratorAggregateModel(previewData));
                 }
@@ -357,7 +359,9 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                                     filters.PeriodUntil,
                                     string.Empty,
                                     filters.SortField,
-                                    filters.RecordsOnPage);
+                                    filters.RecordsOnPage,
+                                    filters.CloseFrom,
+                                    filters.CloseTo);
 
                 var model = GetReportGeneratorModel(data, filters.SortField);
 

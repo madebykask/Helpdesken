@@ -13,7 +13,9 @@
     {
         IDictionary<string, string> Validate(Category categoryToValidate);
         IList<Category> GetCategories(int customerId);
+        IList<Category> GetAllCategories(int customerId);
         IList<Category> GetActiveCategories(int customerId);
+        IList<Category> GetActiveParentCategories(int customerId);
         Category GetCategory(int id, int customerId);
         DeleteMessage DeleteCategory(int id);
         //IList<Category> GetCaseCategory(int customer);
@@ -38,6 +40,8 @@
         /// The <see cref="CategoryOverview"/>.
         /// </returns>
         CategoryOverview GetCategoryOverview(int id);
+
+        IEnumerable<string> GetParentPath(int id, int customerId);
     }
 
     public class CategoryService : ICategoryService
@@ -82,6 +86,16 @@
         public IList<Category> GetCategories(int customerId)
         {
             return this._categoryRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
+        }
+
+        public IList<Category> GetAllCategories(int customerId)
+        {
+            return this._categoryRepository.GetMany(x => x.Customer_Id == customerId && x.Parent_Category_Id == null).OrderBy(x => x.Name).ToList();
+        }
+
+        public IList<Category> GetActiveParentCategories(int customerId)
+        {
+            return this._categoryRepository.GetMany(x => x.Customer_Id == customerId && x.Parent_Category_Id == null && x.IsActive == 1).OrderBy(x => x.Name).ToList();
         }
 
         public IList<Category> GetActiveCategories(int customerId)
@@ -170,6 +184,35 @@
         {
             return this._categoryRepository.GetCategoryOverview(id);
         }
+
+        /// <summary>
+        /// Returns list of parent categories including supplyed category by categoryId
+        /// </summary>
+        /// <param name="categoryId"></param>
+        /// <returns></returns>
+        public IEnumerable<string> GetParentPath(int categoryId, int customerId)
+        {
+            if (this.categoryCache == null || this.cachiedForCustomer != customerId)
+            {
+                this.categoryCache = this.GetCategories(customerId).ToDictionary(it => it.Id, it => it);
+                this.cachiedForCustomer = customerId;
+            }
+
+            var recursionsMax = 10;
+            int? lookingCategoryId = categoryId;
+            var res = new List<string>();
+            while (lookingCategoryId.HasValue && this.categoryCache.ContainsKey(lookingCategoryId.Value) && recursionsMax-- > 0)
+            {
+                res.Add(this.categoryCache[lookingCategoryId.Value].Name);
+                lookingCategoryId = this.categoryCache[lookingCategoryId.Value].Parent_Category_Id;
+            }
+
+            return res.AsQueryable().Reverse().ToArray();
+        }
+
+        private Dictionary<int, Category> categoryCache;
+
+        private int cachiedForCustomer;
 
         public void Commit()
         {

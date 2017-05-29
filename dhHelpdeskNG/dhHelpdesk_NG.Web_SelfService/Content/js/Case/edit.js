@@ -631,6 +631,14 @@
             ee.setAttribute('value', val);
         });
 
+        $('#divCategory ul.dropdown-menu li a').click(function (e) {
+            e.preventDefault();
+            var val = $(this).attr('value');
+            $("#divBreadcrumbs_Category").text(getBreadcrumbs(this));
+            var ee = document.getElementById("NewCase_Category_Id");
+            ee.setAttribute('value', val);
+        });
+
         $('#divCaseType ul.dropdown-menu li a').click(function (e) {
             e.preventDefault();
             var val = $(this).attr('value');

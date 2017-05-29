@@ -5,14 +5,14 @@
 @Scripts.Render("~/bundles/contract")
 
 @{
-    var jsSerializer = new JavaScriptSerializer();    
+    var jsSerializer = new JavaScriptSerializer();
 }
 <script type="text/javascript">
     window.Params = {
         ShowSearchResult: '@Url.Action("_ContractsIndexRows", "Contracts", "")',
         SaveContractFieldsSettings: '@Url.Action("SaveContractFieldsSetting", "Contracts", "")',
         IndexUrl: '@Url.Action("index", "Contracts", null)'
-    };  
+    };
 
 
 </script>
@@ -20,61 +20,134 @@
     <div class="pull-left">
         <ul class="secnav">
             <li>@Html.ActionLink(Translation.Get("Nytt", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("avtal", Enums.TranslationSource.TextTranslation), "new", new { customerId = Model.Customer.Id }, new { @class = "btn" })</li>
-             @Html.HiddenFor(x => Model.Setting)
-        </ul>                                      
-        </div>   
+            @Html.HiddenFor(x => Model.Setting)
+        </ul>
+    </div>
 </div>
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
-            <li class="active" id="overview_Tab"><a href="#fragment-1">@Translation.Get("Avtal")</a></li> 
-             <li id="settings_tab">
-                    <a href="#fragment-2">@Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</a>
-             </li>           
+            <li class="active" id="overview_Tab"><a href="#fragment-1">@Translation.Get("Avtal")</a></li>
+            <li id="settings_tab">
+                <a href="#fragment-2">@Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</a>
+            </li>
         </ul>
-       
+
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment-1">
-              <div>
-                  <input type="hidden" id="currentCustomerId" value="@Model.Customer.Id" />
-                  <table>
-                      <tr>
-                          <td style="width:100px">@Translation.Get("Kategori", Enums.TranslationSource.TextTranslation)</td>&nbsp;
-                          <td>
-                              <select id="lstContractCategories" name="lstContractCategories" data-field="region" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
-                                     @foreach (var a in Model.ContractCategories)
-                                     {             
-                                        <option value="@a.Id">@a.Name</option>
-                                     }
-                                 </select>
-                          </td>
-                      </tr>
-                      <tr>
-                          <td style="width:100px">@Translation.Get("Leverantör", Enums.TranslationSource.TextTranslation)</td>&nbsp;
-                          <td>
-                              <select id="lstSuppliers" name="lstSuppliers" data-field="region" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
-                                     @foreach (var s in Model.Suppliers)
-                                     {             
-                                        <option value="@s.Id">@s.Name</option>
-                                     }
-                                 </select>
-                          </td>
-                          <td>
-                             @*<input type="button" class="btn" id="ShowSearchResult"  value="@Translation.Get("Sök")"/>*@
-                         </td>
-                      </tr>
-                      <tr>
-                          <td colspan="3">
-                              &nbsp;
-                          </td>
-                      </tr>
-                  </table>  
-              </div>
-              @Html.Partial("_ContractsIndexRows", Model.Rows)
+                <div>
+
+                    @using (Html.BeginForm("Search", "Contracts", FormMethod.Post, new { id = "search_form" }))
+                        {
+
+                    @*@using (Ajax.BeginForm("Search", null, new AjaxOptions { UpdateTargetId = "contracts_grid" }, new { id = "search_form" }))
+                    {*@
+
+
+                        <input type="hidden" id="currentCustomerId" value="@Model.Customer.Id" />
+                        <table>
+                            <tr>
+                                <td style="width:100px">@Translation.Get("Kategori", Enums.TranslationSource.TextTranslation)</td>&nbsp;
+                                <td>
+                                    <select id="lstContractCategories" name="lstContractCategories" data-field="region" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                        @foreach (var a in Model.ContractCategories)
+                                        {
+                                            <option value="@a.Id">@a.Name</option>
+                                        }
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width:100px">@Translation.Get("Leverantör", Enums.TranslationSource.TextTranslation)</td>&nbsp;
+                                <td>
+                                    <select id="lstSuppliers" name="lstSuppliers" data-field="region" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                        @foreach (var s in Model.Suppliers)
+                                        {
+                                            <option value="@s.Id">@s.Name</option>
+                                        }
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width:100px">@Translation.Get("Ansvarig uppföljning", Enums.TranslationSource.TextTranslation)</td>&nbsp;
+                                <td>
+                                    <select id="lstResponsible" name="lstResponsible" data-field="region" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                        @foreach (var s in Model.Users)
+                                        {
+                                            <option value="@s.Id">@s.SurName @s.FirstName</option>
+                                        }
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width:100px">@Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation)</td>&nbsp;
+                                <td>
+                                    <select id="lstDepartment" name="lstDepartment" data-field="region" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                        @foreach (var s in Model.Departments)
+                                        {
+                                            <option value="@s.Id">@s.DepartmentName</option>
+                                        }
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width:100px">@Translation.Get("Visa", Enums.TranslationSource.TextTranslation)</td>&nbsp;
+                                <td>
+                                    <select id="lstShow" name="lstShow" data-field="region" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                        @foreach (var s in Model.ShowContracts)
+                                        {
+                                            <option value="@s.Value">@s.Text</option>
+                                        }
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="span3">@Translation.GetCoreTextTranslation("Sök")</td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.SearchText, new { @style = "width:285px" })
+                                    @*<input type="submit" value="@Translation.Get("Sök")" class="btn" />*@
+
+                                    <input type="button" class="btn" id="searchQueryBtn" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" onclick="submit();" />
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    &nbsp;
+                                </td>
+                            </tr>
+                        </table>
+                    }
+                </div>
+                <div id="contracts_grid">
+                    @Html.Partial("_ContractsIndexRows", Model.Rows)
+                </div>
+                <div class="tab-pane tab-pane-border" id="fragment-2">
+                    @Html.Partial("_Settings", Model.Setting)
+                </div>
             </div>
-            <div class="tab-pane tab-pane-border" id="fragment-2">
-              @Html.Partial("_Settings", Model.Setting)                                                                     
-            </div>
-        </div>        
+        </div>
     </div>
-</div>
+
+    <script type="text/javascript">
+
+    var customerId = $("#currentCustomerId").val();
+
+    $(function () {
+        $("#currentCustomer").change(function () {
+            alert();
+            $("#search_form").submit();
+        });
+    });
+
+    $(document).on('click', 'th', function (e) {
+        var sortBy = $(this).attr('sort-data');
+        if (sortBy != undefined && sortBy != null) {
+            $.post("/Contracts/Sort", { fieldName: sortBy });
+            $("#search_form").submit();
+        }
+
+    });
+
+    </script>
+

@@ -234,6 +234,11 @@
                         userHasAccessToCase = true;   
                 }
 
+                if (currentCase.CaseType.ShowOnExtPageCases == 0 || currentCase.ProductArea?.ShowOnExtPageCases == 0)
+                {
+                    userHasAccessToCase = false;
+                }
+
                 if (!userHasAccessToCase)
                 {
                         ErrorGenerator.MakeError("Case not found among your cases!");
@@ -352,6 +357,7 @@
 
             model.CaseTypeParantPath = ParentPathDefaultValue;
             model.ProductAreaParantPath = ParentPathDefaultValue;
+            model.CategoryParentPath = ParentPathDefaultValue;
 
             // Load template info
             if(caseTemplateId != null && caseTemplateId.Value > 0)
@@ -367,112 +373,110 @@
                     ErrorGenerator.MakeError("Selected template is not available anymore!");
                     return RedirectToAction("Index", "Error");
                 }
-
-                if(caseTemplate != null)
+                if(caseTemplate.CaseType_Id != null)
                 {
-                    if(caseTemplate.CaseType_Id != null)
+                    model.NewCase.CaseType_Id = caseTemplate.CaseType_Id.Value;
+                }
+
+                var notifier = _computerService.GetInitiatorByUserId(SessionFacade.CurrentUserIdentity.UserId, customerId);
+
+                model.NewCase.ReportedBy = string.IsNullOrEmpty(caseTemplate.ReportedBy)? notifier?.UserId : caseTemplate.ReportedBy;
+                model.NewCase.PersonsName = string.IsNullOrEmpty(caseTemplate.PersonsName)
+                    ? string.Format("{0} {1}", notifier?.FirstName, notifier?.LastName)
+                    : caseTemplate.PersonsName;
+
+                model.NewCase.PersonsEmail = string.IsNullOrEmpty(caseTemplate.PersonsEmail) ? notifier?.Email: caseTemplate.PersonsEmail;
+                model.NewCase.PersonsPhone = string.IsNullOrEmpty(caseTemplate.PersonsPhone) ? notifier?.Phone : caseTemplate.PersonsPhone;
+                model.NewCase.PersonsCellphone = string.IsNullOrEmpty(caseTemplate.PersonsCellPhone) ? notifier?.CellPhone : caseTemplate.PersonsCellPhone;
+                model.NewCase.Region_Id = caseTemplate.Region_Id;
+                model.NewCase.Department_Id = caseTemplate.Department_Id.HasValue ? caseTemplate.Department_Id.Value : notifier?.DepartmentId;
+                model.NewCase.OU_Id = caseTemplate.OU_Id.HasValue ? caseTemplate.OU_Id.Value : notifier?.OrganizationUnitId;
+                model.NewCase.Place = string.IsNullOrEmpty(caseTemplate.Place) ? notifier?.Place : caseTemplate.Place;
+                model.NewCase.UserCode = string.IsNullOrEmpty(caseTemplate.UserCode) ? notifier?.Code : caseTemplate.UserCode;
+                model.NewCase.CostCentre = string.IsNullOrEmpty(caseTemplate.CostCentre) ? notifier?.CostCentre : caseTemplate.CostCentre;
+
+                model.NewCase.InventoryNumber = string.IsNullOrEmpty(caseTemplate.InventoryNumber)? Request.GetComputerName() : caseTemplate.InventoryNumber;
+                model.NewCase.InventoryType = caseTemplate.InventoryType;
+                model.NewCase.InventoryLocation = caseTemplate.InventoryLocation;
+
+                model.NewCase.ProductArea_Id = caseTemplate.ProductArea_Id;
+                model.NewCase.System_Id = caseTemplate.System_Id;
+                model.NewCase.Caption = caseTemplate.Caption;
+                model.NewCase.Description = caseTemplate.Description;
+                model.NewCase.Priority_Id = caseTemplate.Priority_Id;
+                model.NewCase.Project_Id = caseTemplate.Project_Id;
+                model.NewCase.Urgency_Id = caseTemplate.Urgency_Id;
+                model.NewCase.Impact_Id = caseTemplate.Impact_Id;
+                model.NewCase.Category_Id = caseTemplate.Category_Id;
+                model.NewCase.Supplier_Id = caseTemplate.Supplier_Id;
+
+                model.NewCase.InvoiceNumber = caseTemplate.InvoiceNumber;
+                model.NewCase.ReferenceNumber = caseTemplate.ReferenceNumber;
+                model.NewCase.Miscellaneous = caseTemplate.Miscellaneous;
+                model.NewCase.ContactBeforeAction = caseTemplate.ContactBeforeAction;
+                model.NewCase.SMS = caseTemplate.SMS;
+                model.NewCase.AgreedDate = caseTemplate.AgreedDate;
+                model.NewCase.Available = caseTemplate.Available;
+                model.NewCase.Cost = caseTemplate.Cost;
+                model.NewCase.OtherCost = caseTemplate.OtherCost;
+                model.NewCase.Currency = caseTemplate.Currency;
+
+                //Hidden fields
+                model.NewCase.Performer_User_Id = caseTemplate.PerformerUser_Id;
+                model.NewCase.CausingPartId = caseTemplate.CausingPartId;
+                model.NewCase.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id;
+                model.NewCase.Project_Id = caseTemplate.Project_Id;
+                model.NewCase.Problem_Id = caseTemplate.Problem_Id;
+                model.NewCase.PlanDate = caseTemplate.PlanDate;
+                model.NewCase.WatchDate = caseTemplate.WatchDate;
+
+                if(model.NewCase.IsAbout == null)
+                    model.NewCase.IsAbout = new CaseIsAboutEntity();
+
+                model.NewCase.IsAbout.Id = 0;
+                model.NewCase.IsAbout.ReportedBy = caseTemplate.IsAbout_ReportedBy;
+                model.NewCase.IsAbout.Person_Name = caseTemplate.IsAbout_PersonsName;
+                model.NewCase.IsAbout.Person_Email = caseTemplate.IsAbout_PersonsEmail;
+                model.NewCase.IsAbout.Person_Phone = caseTemplate.IsAbout_PersonsPhone;
+                model.NewCase.IsAbout.Person_Cellphone = caseTemplate.IsAbout_PersonsCellPhone;
+                model.NewCase.IsAbout.Region_Id = caseTemplate.IsAbout_Region_Id;
+                model.NewCase.IsAbout.Department_Id = caseTemplate.IsAbout_Department_Id;
+                model.NewCase.IsAbout.OU_Id = caseTemplate.IsAbout_OU_Id;
+                model.NewCase.IsAbout.CostCentre = caseTemplate.IsAbout_CostCentre;
+                model.NewCase.IsAbout.Place = caseTemplate.IsAbout_Place;
+                model.NewCase.IsAbout.UserCode = caseTemplate.UserCode;
+
+                model.NewCase.Status_Id = caseTemplate.Status_Id;
+                model.NewCase.StateSecondary_Id = caseTemplate.StateSecondary_Id;
+                model.NewCase.Verified = caseTemplate.Verified;
+                model.NewCase.VerifiedDescription = caseTemplate.VerifiedDescription;
+                model.NewCase.SolutionRate = caseTemplate.SolutionRate;
+
+                model.Information = caseTemplate.Information;
+
+                if (!string.IsNullOrEmpty(caseTemplate.Text_External) ||
+                    !string.IsNullOrEmpty(caseTemplate.Text_Internal) || caseTemplate.FinishingCause_Id.HasValue)
+                {
+                    model.CaseLog = new CaseLog
                     {
-                        model.NewCase.CaseType_Id = caseTemplate.CaseType_Id.Value;
-                    }
+                        LogType = 0,
+                        LogGuid = Guid.NewGuid(),
+                        TextExternal = caseTemplate.Text_External,
+                        TextInternal = caseTemplate.Text_Internal,
+                        FinishingType = caseTemplate.FinishingCause_Id
+                    };
+                }
 
-                    var notifier = _computerService.GetInitiatorByUserId(SessionFacade.CurrentUserIdentity.UserId, customerId);
-
-                    model.NewCase.ReportedBy = string.IsNullOrEmpty(caseTemplate.ReportedBy)? notifier?.UserId : caseTemplate.ReportedBy;
-                    model.NewCase.PersonsName = string.IsNullOrEmpty(caseTemplate.PersonsName)
-                        ? string.Format("{0} {1}", notifier?.FirstName, notifier?.LastName)
-                        : caseTemplate.PersonsName;
-
-                    model.NewCase.PersonsEmail = string.IsNullOrEmpty(caseTemplate.PersonsEmail) ? notifier?.Email: caseTemplate.PersonsEmail;
-                    model.NewCase.PersonsPhone = string.IsNullOrEmpty(caseTemplate.PersonsPhone) ? notifier?.Phone : caseTemplate.PersonsPhone;
-                    model.NewCase.PersonsCellphone = string.IsNullOrEmpty(caseTemplate.PersonsCellPhone) ? notifier?.CellPhone : caseTemplate.PersonsCellPhone;
-                    model.NewCase.Region_Id = caseTemplate.Region_Id;
-                    model.NewCase.Department_Id = caseTemplate.Department_Id.HasValue ? caseTemplate.Department_Id.Value : notifier?.DepartmentId;
-                    model.NewCase.OU_Id = caseTemplate.OU_Id.HasValue ? caseTemplate.OU_Id.Value : notifier?.OrganizationUnitId;
-                    model.NewCase.Place = string.IsNullOrEmpty(caseTemplate.Place) ? notifier?.Place : caseTemplate.Place;
-                    model.NewCase.UserCode = string.IsNullOrEmpty(caseTemplate.UserCode) ? notifier?.Code : caseTemplate.UserCode;
-                    model.NewCase.CostCentre = string.IsNullOrEmpty(caseTemplate.CostCentre) ? notifier?.CostCentre : caseTemplate.CostCentre;
-
-                    model.NewCase.InventoryNumber = string.IsNullOrEmpty(caseTemplate.InventoryNumber)? Request.GetComputerName() : caseTemplate.InventoryNumber;
-                    model.NewCase.InventoryType = caseTemplate.InventoryType;
-                    model.NewCase.InventoryLocation = caseTemplate.InventoryLocation;
-
-                    model.NewCase.ProductArea_Id = caseTemplate.ProductArea_Id;
-                    model.NewCase.System_Id = caseTemplate.System_Id;
-                    model.NewCase.Caption = caseTemplate.Caption;
-                    model.NewCase.Description = caseTemplate.Description;
-                    model.NewCase.Priority_Id = caseTemplate.Priority_Id;
-                    model.NewCase.Project_Id = caseTemplate.Project_Id;
-                    model.NewCase.Urgency_Id = caseTemplate.Urgency_Id;
-                    model.NewCase.Impact_Id = caseTemplate.Impact_Id;
-                    model.NewCase.Category_Id = caseTemplate.Category_Id;
-                    model.NewCase.Supplier_Id = caseTemplate.Supplier_Id;
-
-                    model.NewCase.InvoiceNumber = caseTemplate.InvoiceNumber;
-                    model.NewCase.ReferenceNumber = caseTemplate.ReferenceNumber;
-                    model.NewCase.Miscellaneous = caseTemplate.Miscellaneous;
-                    model.NewCase.ContactBeforeAction = caseTemplate.ContactBeforeAction;
-                    model.NewCase.SMS = caseTemplate.SMS;
-                    model.NewCase.AgreedDate = caseTemplate.AgreedDate;
-                    model.NewCase.Available = caseTemplate.Available;
-                    model.NewCase.Cost = caseTemplate.Cost;
-                    model.NewCase.OtherCost = caseTemplate.OtherCost;
-                    model.NewCase.Currency = caseTemplate.Currency;
-
-                    //Hidden fields
-                    model.NewCase.Performer_User_Id = caseTemplate.PerformerUser_Id;
-                    model.NewCase.CausingPartId = caseTemplate.CausingPartId;
-                    model.NewCase.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id;
-                    model.NewCase.Project_Id = caseTemplate.Project_Id;
-                    model.NewCase.Problem_Id = caseTemplate.Problem_Id;
-                    model.NewCase.PlanDate = caseTemplate.PlanDate;
-                    model.NewCase.WatchDate = caseTemplate.WatchDate;
-
-                    if(model.NewCase.IsAbout == null)
-                        model.NewCase.IsAbout = new CaseIsAboutEntity();
-
-                    model.NewCase.IsAbout.Id = 0;
-                    model.NewCase.IsAbout.ReportedBy = caseTemplate.IsAbout_ReportedBy;
-                    model.NewCase.IsAbout.Person_Name = caseTemplate.IsAbout_PersonsName;
-                    model.NewCase.IsAbout.Person_Email = caseTemplate.IsAbout_PersonsEmail;
-                    model.NewCase.IsAbout.Person_Phone = caseTemplate.IsAbout_PersonsPhone;
-                    model.NewCase.IsAbout.Person_Cellphone = caseTemplate.IsAbout_PersonsCellPhone;
-                    model.NewCase.IsAbout.Region_Id = caseTemplate.IsAbout_Region_Id;
-                    model.NewCase.IsAbout.Department_Id = caseTemplate.IsAbout_Department_Id;
-                    model.NewCase.IsAbout.OU_Id = caseTemplate.IsAbout_OU_Id;
-                    model.NewCase.IsAbout.CostCentre = caseTemplate.IsAbout_CostCentre;
-                    model.NewCase.IsAbout.Place = caseTemplate.IsAbout_Place;
-                    model.NewCase.IsAbout.UserCode = caseTemplate.UserCode;
-
-                    model.NewCase.Status_Id = caseTemplate.Status_Id;
-                    model.NewCase.StateSecondary_Id = caseTemplate.StateSecondary_Id;
-                    model.NewCase.Verified = caseTemplate.Verified;
-                    model.NewCase.VerifiedDescription = caseTemplate.VerifiedDescription;
-                    model.NewCase.SolutionRate = caseTemplate.SolutionRate;
-
-                    if (!string.IsNullOrEmpty(caseTemplate.Text_External) ||
-                        !string.IsNullOrEmpty(caseTemplate.Text_Internal) || caseTemplate.FinishingCause_Id.HasValue)
-                    {
-                        model.CaseLog = new CaseLog
-                        {
-                            LogType = 0,
-                            LogGuid = Guid.NewGuid(),
-                            TextExternal = caseTemplate.Text_External,
-                            TextInternal = caseTemplate.Text_Internal,
-                            FinishingType = caseTemplate.FinishingCause_Id
-                        };
-                    }
-
-                    if (caseTemplate.RegistrationSource.HasValue)
-                    {
-                        model.NewCase.RegistrationSourceCustomer_Id = caseTemplate.RegistrationSource.Value;
-                    }
-                    else
-                    {
-                        var registrationSource = _registrationSourceCustomerService.GetCustomersActiveRegistrationSources(customerId)
-                                .FirstOrDefault(x => x.SystemCode == (int)CaseRegistrationSource.SelfService);
-                        if (registrationSource != null)
-                            model.NewCase.RegistrationSourceCustomer_Id = registrationSource.Id;
-                    }
+                if (caseTemplate.RegistrationSource.HasValue)
+                {
+                    model.NewCase.RegistrationSourceCustomer_Id = caseTemplate.RegistrationSource.Value;
+                }
+                else
+                {
+                    var registrationSource = _registrationSourceCustomerService.GetCustomersActiveRegistrationSources(customerId)
+                            .FirstOrDefault(x => x.SystemCode == (int)CaseRegistrationSource.SelfService);
+                    if (registrationSource != null)
+                        model.NewCase.RegistrationSourceCustomer_Id = registrationSource.Id;
                 }
 
                 if(model.NewCase.ProductArea_Id.HasValue)
@@ -492,7 +496,24 @@
                     }
                 }
 
-                if(model.NewCase.CaseType_Id > 0)
+                if (model.NewCase.Category_Id.HasValue)
+                {
+                    var c = _categoryService.GetCategory(model.NewCase.Category_Id.GetValueOrDefault(), currentCustomer.Id);
+                    if (c != null)
+                    {
+                        var pathTexts = _categoryService.GetParentPath(c.Id, currentCustomer.Id).ToList();
+                        var translatedText = pathTexts;
+                        if (pathTexts.Any())
+                        {
+                            translatedText = new List<string>();
+                            foreach (var pathText in pathTexts.ToList())
+                                translatedText.Add(Translation.Get(pathText));
+                        }
+                        model.CategoryParentPath = string.Join(" - ", translatedText);
+                    }
+                }
+
+                if (model.NewCase.CaseType_Id > 0)
                 {
                     var ct = _caseTypeService.GetCaseType(model.NewCase.CaseType_Id);
                     var tempCTs = new List<CaseType>();
@@ -1369,7 +1390,7 @@
             var impacts = _impactService.GetImpacts(customerId);
 
             //Category List
-            var categories = _categoryService.GetCategories(customerId);
+            var categories = _categoryService.GetActiveParentCategories(customerId);
 
             //Currency List
             var currencies = _currencyService.GetCurrencies();
@@ -1412,6 +1433,7 @@
 
             model.CaseTypeParantPath = "--";
             model.ProductAreaParantPath = "--";
+            model.CategoryParentPath = "--";
             model.CaseFileKey = Guid.NewGuid().ToString();
             model.ProductAreaChildren = traversedData.Item2.ToList();
             model.SendToDialogModel = new SendToDialogModel();            

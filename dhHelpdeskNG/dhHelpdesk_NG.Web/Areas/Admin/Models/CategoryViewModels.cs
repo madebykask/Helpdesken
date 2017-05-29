@@ -15,5 +15,7 @@
     {
         public Customer Customer { get; set; }
         public Category Category { get; set; }
+
+        public bool CanAddChild { get; set; }
     }
 }

@@ -30,7 +30,8 @@
             FieldProcessingSetting group,
             FieldProcessingSetting other,
             FieldProcessingSetting ordered,
-            FieldProcessingSetting changedDate)
+            FieldProcessingSetting changedDate,
+            FieldProcessingSetting language)
         {
             this.UserId = userId;
             this.Domain = domain;
@@ -58,6 +59,7 @@
             this.Other = other;
             this.Ordered = ordered;
             this.ChangedDate = changedDate;
+            this.Language = language;
         }
 
         [NotNull]
@@ -124,6 +126,10 @@
 
         [NotNull]
         public FieldProcessingSetting Manager { get; private set; }
+
+
+        [NotNull]
+        public FieldProcessingSetting Language { get; private set; }
 
         [NotNull]
         public FieldProcessingSetting Group { get; private set; }

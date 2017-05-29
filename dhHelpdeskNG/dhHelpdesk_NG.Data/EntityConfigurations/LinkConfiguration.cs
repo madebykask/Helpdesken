@@ -12,6 +12,8 @@
         {
             this.HasKey(x => x.Id);
 
+
+
             this.HasOptional(x => x.Customer)
               .WithMany()
               .HasForeignKey(x => x.Customer_Id)
@@ -32,6 +34,8 @@
                 .HasForeignKey(x => x.LinkGroup_Id)
                 .WillCascadeOnDelete(false);
 
+
+
             this.HasMany(x => x.Us)
                 .WithMany()
                 .Map(m =>
@@ -41,6 +45,14 @@
                     .ToTable("tblLink_tblUsers");
                 });
 
+            this.HasMany(u => u.Wg)
+                .WithMany(a => a.Links)
+                .Map(m =>
+                {
+                    m.MapLeftKey("Link_Id");
+                    m.MapRightKey("WorkingGroup_Id");
+                    m.ToTable("tblLink_tblWorkingGroup");
+                });
 
             this.Property(x => x.Customer_Id).IsOptional();
             this.Property(x => x.Document_Id).IsOptional();

@@ -1491,6 +1491,7 @@
     <Compile Include="Models\Case\CaseInvoiceModel.cs" />
     <Compile Include="Models\CheckBoxListItem.cs" />
     <Compile Include="Models\Feedback\FeedbackStatisticsViewModel.cs" />
+    <Compile Include="Models\Feedback\FeedbackThankYouModel.cs" />
     <Compile Include="Models\Feedback\StatisticsFilter.cs" />
     <Compile Include="Models\Invoice\ExternalInvoiceModel.cs" />
     <Compile Include="Models\Case\Input\CaseEditInput.cs" />

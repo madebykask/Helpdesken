@@ -29,7 +29,8 @@
             List<ItemOverview> divisions,
             List<ItemOverview> managers,
             List<ItemOverview> groups,
-            Dictionary<string, string> inputParams)
+            Dictionary<string, string> inputParams,
+            List<ItemOverview> languages)
         {
             var userId = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.UserId, (inputParams.ContainsKey("UserId") ? inputParams["UserId"] : null));
 
@@ -72,6 +73,7 @@
             DropDownFieldModel region;
             DropDownFieldModel department;
             DropDownFieldModel organizationUnit;
+            DropDownFieldModel language;
 
             if (settings.Region.Show)
             {
@@ -82,6 +84,22 @@
             else
             {
                 region = new DropDownFieldModel(false);
+            }
+
+
+            if (settings.Language.Show)
+            {
+                var languageItems =
+                    languages.Select(d => new KeyValuePair<string, string>(d.Value, d.Name)).ToList();
+
+                language = this.notifierInputFieldModelFactory.CreateDropDownModel(
+                    settings.Language,
+                    languageItems,
+                    (inputParams.ContainsKey("LanguageId") ? inputParams["LanguageId"] : null));
+            }
+            else
+            {
+                language = new DropDownFieldModel(false);
             }
 
             if (settings.Department.Show)
@@ -188,7 +206,8 @@
                 group,
                 other,
                 ordered,
-                true);
+                true,
+                language);
         }
 
         #endregion

@@ -33,7 +33,8 @@
             FieldOverviewSetting ordered,
             FieldOverviewSetting createdDate,
             FieldOverviewSetting changedDate,
-            FieldOverviewSetting synchronizationDate)
+            FieldOverviewSetting synchronizationDate,
+            FieldOverviewSetting language)
         {
             this.UserId = userId;
             this.Domain = domain;
@@ -64,6 +65,7 @@
             this.CreatedDate = createdDate;
             this.ChangedDate = changedDate;
             this.SynchronizationDate = synchronizationDate;
+            this.Language = language;
         }
 
         [NotNull]
@@ -152,5 +154,10 @@
 
         [NotNull]
         public FieldOverviewSetting SynchronizationDate { get; private set; }
+
+        [NotNull]
+        public FieldOverviewSetting Language { get; private set; }
+
+
     }
 }

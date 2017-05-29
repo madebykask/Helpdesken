@@ -10,13 +10,13 @@
         <div class="span12">
             <table class="tableform">
                 @Html.EditorFor(m => m.Title, "TextBox")
-                                    
+
                 @if (Model.Region.Show)
                 {
                     <tr>
                         <td class="span3">
-                            @* Region in Notifier is only for filtering help*@ 
-                            @(Translation.Get(Model.Region.Caption, Enums.TranslationSource.TextTranslation)) 
+                            @* Region in Notifier is only for filtering help*@
+                            @(Translation.Get(Model.Region.Caption, Enums.TranslationSource.TextTranslation))
                         </td>
                         <td>
                             @Html.DropDown("region_dropdown", "RegionId", !Model.Region.Required, Model.Region.Value)
@@ -33,6 +33,7 @@
                         <td>
                             <div id="department_dropdown_container">
                                 @Html.Partial("DepartmentDropDown", Model.Department.Value, new ViewDataDictionary { { "Required", Model.Department.Required } })
+
                             </div>
                         </td>
                     </tr>
@@ -51,10 +52,10 @@
                         </td>
                     </tr>
                 }
-                                
+
                 @Html.EditorFor(m => m.CostCentre, "TextBox")
 
-                @Html.EditorFor(m => m.Unit, "TextBox")                                                    
+                @Html.EditorFor(m => m.Unit, "TextBox")
 
                 @if (Model.Division.Show)
                 {
@@ -67,7 +68,7 @@
                         </td>
                     </tr>
                 }
-                                    
+
                 @if (Model.Managers.Show)
                 {
                     <tr>
@@ -89,8 +90,8 @@
                             <input id="manager_id_hidden" type="hidden" name="ManagerId" value="@selectedManagerId" />
                         </td>
                     </tr>
-                }
-                
+                                }
+
                 @if (Model.Group.Show)
                 {
                     <tr>
@@ -102,7 +103,7 @@
                         </td>
                     </tr>
                 }
-                
+
                 @Html.EditorFor(m => m.Other, "TextArea")
             </table>
         </div>

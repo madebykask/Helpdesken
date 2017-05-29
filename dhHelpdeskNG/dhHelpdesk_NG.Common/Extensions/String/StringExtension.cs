@@ -338,5 +338,13 @@ namespace DH.Helpdesk.Common.Extensions.String
         {
             return (value != NotChangedValue.STRING);
         }
+
+        /// <summary>
+        /// Removes \r and \n from string and Trims
+        /// </summary>
+        public static string Tidy(this string value)
+        {
+            return value.Replace("\r", "").Replace("\n", "").Trim();
+        }
     }
 }

@@ -19,6 +19,7 @@
         private readonly ICustomerService _customerService;
         private readonly IWatchDateCalendarService _watchDateCalendarService;
         private readonly ISettingService _settingService;
+        private readonly ILanguageService _languageService;
 
         public DepartmentController(
             ICountryService countryService,
@@ -28,7 +29,8 @@
             IWatchDateCalendarService watchDateCalendarService,
             ICustomerService customerService,
             IMasterDataService masterDataService,
-            ISettingService settingService)
+            ISettingService settingService,
+            ILanguageService languageService)
             : base(masterDataService)
         {
             this._countryService = countryService;
@@ -38,6 +40,8 @@
             this._watchDateCalendarService = watchDateCalendarService;
             this._customerService = customerService;
             this._settingService = settingService;
+            this._languageService = languageService;
+
         }
 
         public JsonResult SetShowOnlyActiveDepartmentInAdmin(bool value)
@@ -151,7 +155,12 @@
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
-                }).ToList()
+                }).ToList(),
+                Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList(),
             };
 
             return model;

@@ -765,11 +765,11 @@ namespace DH.Helpdesk.Web.Controllers
                                                                         .IsUserFirstLastNameRepresentation == 1;
 
             ////Only return casesolution where templatepath is null - these case solutions are E-Forms shown in myhr/linemanager/selfservice
-            //var caseSolutions = this._caseSolutionService.SearchAndGenerateCaseSolutions(customerId, caseSolutionSearch, isUserFirstLastNameRepresentation)
-            //                                             .Where(x => x.TemplatePath == null).ToList();                        
+            var caseSolutions = this._caseSolutionService.SearchAndGenerateCaseSolutions(customerId, caseSolutionSearch, isUserFirstLastNameRepresentation)
+                                                         .Where(x => x.TemplatePath == null).ToList();
 
-            //I have removed the  above condition, from now on these will appear in the list /TAN
-            var caseSolutions = this._caseSolutionService.SearchAndGenerateCaseSolutions(customerId, caseSolutionSearch, isUserFirstLastNameRepresentation).ToList();
+            ////I have removed the  above condition, from now on these will appear in the list /TAN
+            //var caseSolutions = this._caseSolutionService.SearchAndGenerateCaseSolutions(customerId, caseSolutionSearch, isUserFirstLastNameRepresentation).ToList();
 
             var curUserItem = string.Format("-- {0} --", Translation.GetCoreTextTranslation(CURRENT_USER_ITEM_CAPTION));
             var connectedToButton = Translation.GetCoreTextTranslation("Knapp");
@@ -955,11 +955,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                 CaseWorkingGroups = workingGroupList, 
 
-                Categories = this._categoryService.GetCategories(curCustomerId).Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString()
-                }).ToList(),
+                Categories = this._categoryService.GetActiveParentCategories(curCustomerId),
 
                 FinishingCauses = this._finishingCauseService.GetFinishingCauses(curCustomerId),
                 
@@ -1039,6 +1035,14 @@ namespace DH.Helpdesk.Web.Controllers
 
                 ActionList = actionList
             };
+
+            model.ParantPath_Category = "--";
+            if (caseSolution.Category_Id.HasValue)
+            {
+                var c = this._categoryService.GetCategory(caseSolution.Category_Id.Value, curCustomerId);
+                if (c != null)
+                    model.ParantPath_Category = string.Join(" - ", this._categoryService.GetParentPath(c.Id, curCustomerId));
+            }
 
             if (model.CaseSolution.Id == 0)
             {

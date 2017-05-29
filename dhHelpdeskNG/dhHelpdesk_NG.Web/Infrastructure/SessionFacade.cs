@@ -51,6 +51,8 @@
 
         private const string _CURRENT_OPERATIONLOG_SEARCH = "CURRENT_OPERATIONLOG_SEARCH";
 
+        
+
         private const string _CURRENT_INVOICE_ARTICLE_PRODUCTAREA_SEARCH = "CURRENT_INVOICE_ARTICLE_PRODUCTAREA_SEARCH";
 
         private const string _CURRENT_USER = "CURRENT_USER";
@@ -473,6 +475,8 @@
                 }
             }
         }
+
+      
 
         public static InvoiceArticleProductAreaSelectedFilter CurrentInvoiceArticleProductAreaSearch
         {

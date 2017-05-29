@@ -20,7 +20,7 @@
 
         IList<WorkingGroupForSMS> GetWorkingGroupsForSMS(int customerId, bool isTakeOnlyActive = true);
 
-        IList<WorkingGroupEntity> GetWorkingGroups(int customerId, int userId, bool isTakeOnlyActive = true);
+        IList<WorkingGroupEntity> GetWorkingGroups(int customerId, int userId, bool isTakeOnlyActive = true, bool caseOverviewFilter = false);
 
         IList<WorkingGroupEntity> GetAllWorkingGroupsForCustomer(int customerId, bool isTakeOnlyActive = true);
 
@@ -112,11 +112,19 @@
                     .OrderBy(x => x.WorkingGroupName).ToList();
         }
 
-        public IList<WorkingGroupEntity> GetWorkingGroups(int customerId, int userId, bool isTakeOnlyActive = true)
+        public IList<WorkingGroupEntity> GetWorkingGroups(int customerId, int userId, bool isTakeOnlyActive = true, bool caseOverviewFilter = false)
         {
-            var userWorkingGroups = this.userWorkingGroupRepository.GetAll()
-                                                                   .Where(uw=>  uw.User_Id == userId && uw.UserRole == 2)
-                                                                   .Select(uw => uw.WorkingGroup_Id);
+            IEnumerable<int> userWorkingGroups;
+            if (caseOverviewFilter)
+            {
+                userWorkingGroups = userWorkingGroupRepository.GetAll()
+                .Where(uw => uw.User_Id == userId && uw.UserRole != 0).Select(uw => uw.WorkingGroup_Id);
+            }
+            else
+            {
+                userWorkingGroups = userWorkingGroupRepository.GetAll()
+                .Where(uw => uw.User_Id == userId && uw.UserRole == 2).Select(uw => uw.WorkingGroup_Id);
+            }
             return  this.workingGroupRepository
                     .GetMany(x => x.Customer_Id == customerId && (!isTakeOnlyActive || (isTakeOnlyActive && x.IsActive == 1)))
                     .Where(w=> userWorkingGroups.Contains(w.Id))

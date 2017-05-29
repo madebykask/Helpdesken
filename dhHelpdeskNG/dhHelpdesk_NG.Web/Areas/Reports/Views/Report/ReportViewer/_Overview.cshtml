@@ -115,6 +115,19 @@
                             </td>
                         </tr>   
                     }
+@*                    @if (Model.ReportFilter.CaseClosingDate != null)*@
+@*                    {*@
+                        <tr class="date-block">
+                            <td>
+                                @Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)
+                            </td>
+                            <td>
+                                @Html.EditorFor(m => Model.ReportFilter.CaseClosingDate.FromDate, "DatePicker", new { id = "CaseClosingFromDate" })
+                                &nbsp;
+                                @Html.EditorFor(m => Model.ReportFilter.CaseClosingDate.ToDate, "DatePicker", new { id = "CaseClosingToDate" })
+                            </td>
+                        </tr>
+@*                    }*@
                     @{
                     var selectedFields = new SelectedItems(Model.ReportGeneratorOptions.FieldIds).GetSelectedStr();
                         <tr id="reportGeneratorFields" style="display: none">

@@ -29,7 +29,7 @@ namespace DH.Helpdesk.Services.Services
         DeleteMessage DeleteLinkGroup(int id);
         IList<LinkGroup> GetLinkGroups(int customerId);
 
-        void SaveLink(Link link, int[] us, out IDictionary<string, string> errors);
+        void SaveLink(Link link, int[] us, int[] wg, out IDictionary<string, string> errors);
         void SaveLinkGroup(LinkGroup linkGroup, out IDictionary<string, string> errors);
         void Commit();
 
@@ -50,6 +50,8 @@ namespace DH.Helpdesk.Services.Services
         /// </returns>
         IEnumerable<LinkOverview> GetLinkOverviews(int[] customers, int? count, bool forStartPage);
 
+        IEnumerable<LinkOverview> GetLinkOverviewsForStartPage(int[] customers, int? count, bool forStartPage);
+
         IList<Link> SearchLinks(int customerId, string searchText, List<int> groupIds);
     }
 
@@ -68,8 +70,8 @@ namespace DH.Helpdesk.Services.Services
             ILinkRepository linkRepository,
             ILinkGroupRepository linkGroupRepository,
             IUserRepository userRepository,
-            IUnitOfWork unitOfWork, 
-            IWorkContext workContext, 
+            IUnitOfWork unitOfWork,
+            IWorkContext workContext,
             IUnitOfWorkFactory unitOfWorkFactory)
         {
             this._linkRepository = linkRepository;
@@ -127,7 +129,7 @@ namespace DH.Helpdesk.Services.Services
             return DeleteMessage.Error;
         }
 
-        public void SaveLink(Link link, int[] us, out IDictionary<string, string> errors)
+        public void SaveLink(Link link, int[] us, int[] wg, out IDictionary<string, string> errors)
         {
             if (link == null)
                 throw new ArgumentNullException("link");
@@ -149,6 +151,7 @@ namespace DH.Helpdesk.Services.Services
             {
                 var linkRep = uow.GetRepository<Link>();
                 var userRep = uow.GetRepository<User>();
+                var workinggroupRep = uow.GetRepository<WorkingGroupEntity>();
 
                 Link entity;
                 var now = DateTime.Now;
@@ -171,19 +174,33 @@ namespace DH.Helpdesk.Services.Services
                 if (entity.Us != null)
                     entity.Us.Clear();
                 else
-                    entity.Us = new List<User>();                                
+                    entity.Us = new List<User>();
 
                 if (us != null)
                 {
                     foreach (var u in us)
                     {
-                        User userEntity = userRep.GetById(u);                        
+                        User userEntity = userRep.GetById(u);
                         entity.Us.Add(userEntity);
                     }
                 }
 
+                if (entity.Wg != null)
+                    entity.Wg.Clear();
+                else
+                    entity.Wg = new List<WorkingGroupEntity>();
+
+                if (wg != null)
+                {
+                    foreach (var w in wg)
+                    {
+                        WorkingGroupEntity wgEntity = workinggroupRep.GetById(w);
+                        entity.Wg.Add(wgEntity);
+                    }
+                }
+
                 uow.Save();
-            }                        
+            }
 
         }
 
@@ -194,6 +211,7 @@ namespace DH.Helpdesk.Services.Services
 
         public IEnumerable<LinkOverview> GetLinkOverviews(int[] customers, int? count, bool forStartPage)
         {
+
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var repository = uow.GetRepository<Link>();
@@ -203,6 +221,17 @@ namespace DH.Helpdesk.Services.Services
                         .GetLinksForStartPage(customers, count, forStartPage)
                         .MapToOverviews();
             }
+        }
+
+
+
+        public IEnumerable<LinkOverview> GetLinkOverviewsForStartPage(int[] customers, int? count, bool forStartPage)
+        {
+            int userid = this.workContext.User.UserId;
+            
+            return _linkRepository.GetLinkOverviewsToStartPage(customers, count, forStartPage, userid);
+
+
         }
 
         public IList<Link> SearchLinks(int customerId, string searchText, List<int> groupIds)
@@ -234,7 +263,7 @@ namespace DH.Helpdesk.Services.Services
         {
             var linkGroup = _linkGroupRepository.GetById(id);
 
-            if(linkGroup != null)
+            if (linkGroup != null)
             {
                 try
                 {
@@ -254,20 +283,20 @@ namespace DH.Helpdesk.Services.Services
 
         public void SaveLinkGroup(LinkGroup linkGroup, out IDictionary<string, string> errors)
         {
-            if(linkGroup == null)
+            if (linkGroup == null)
                 throw new ArgumentNullException("linkGroup");
 
             errors = new Dictionary<string, string>();
 
-            if(string.IsNullOrEmpty(linkGroup.LinkGroupName))
+            if (string.IsNullOrEmpty(linkGroup.LinkGroupName))
                 errors.Add("LinkGroup.LinkGroupName", "Du måste ange ett namn");
 
-            if(linkGroup.Id == 0)
+            if (linkGroup.Id == 0)
                 _linkGroupRepository.Add(linkGroup);
             else
                 _linkGroupRepository.Update(linkGroup);
 
-            if(errors.Count == 0)
+            if (errors.Count == 0)
                 this.Commit();
         }
     }

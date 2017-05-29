@@ -38,7 +38,8 @@
                 StringFieldModel.GetValueOrDefault(model.Other),
                 BooleanFieldModel.GetValueOrDefault(model.Ordered),
                 model.IsActive,
-                changedDateAndTime);
+                changedDateAndTime,
+                model.LanguageId);
         }
     }
 }

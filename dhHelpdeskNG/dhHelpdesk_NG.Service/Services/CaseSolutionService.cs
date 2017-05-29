@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace DH.Helpdesk.Services.Services
 {
-
+    using DH.Helpdesk.Common.Extensions.String;
     using DH.Helpdesk.Common.Enums.CaseSolution;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
@@ -38,7 +38,7 @@ namespace DH.Helpdesk.Services.Services
         void SaveCaseSolutionCategory(CaseSolutionCategory caseSolutionCategory, out IDictionary<string, string> errors);
         void SaveEmptyForm(Guid formGuid, int caseId);
         void Commit();
-        IList<WorkflowStepModel> GetGetWorkflowSteps(int customerId, Case _case, UserOverview user, ApplicationType applicationType);
+        IList<WorkflowStepModel> GetGetWorkflowSteps(int customerId, Case _case, UserOverview user, ApplicationType applicationType, int? templateId);
     }
 
     public class CaseSolutionService : ICaseSolutionService
@@ -50,11 +50,12 @@ namespace DH.Helpdesk.Services.Services
         private readonly ICaseSolutionSettingRepository caseSolutionSettingRepository;
         private readonly IFormRepository _formRepository;
         private readonly ILinkService _linkService;
-        private readonly ILinkRepository _linkRepository; 
+        private readonly ILinkRepository _linkRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICacheProvider _cache;
 
         private readonly ICaseSolutionConditionRepository _caseSolutionConditionRepository;
+        private readonly IWorkingGroupService _workingGroupService;
 
         public CaseSolutionService(
             ICaseSolutionRepository caseSolutionRepository,
@@ -66,7 +67,8 @@ namespace DH.Helpdesk.Services.Services
             ILinkService linkService,
             IUnitOfWork unitOfWork,
             ICaseSolutionConditionRepository caseSolutionConditionRepository,
-            ICacheProvider cache)
+            ICacheProvider cache,
+            IWorkingGroupService workingGroupService)
         {
             this._caseSolutionRepository = caseSolutionRepository;
             this._caseSolutionCategoryRepository = caseSolutionCategoryRepository;
@@ -78,6 +80,7 @@ namespace DH.Helpdesk.Services.Services
             this._unitOfWork = unitOfWork;
             this._caseSolutionConditionRepository = caseSolutionConditionRepository;
             this._cache = cache;
+            this._workingGroupService = workingGroupService;
         }
 
         //public int GetAntal(int customerId, int userid)
@@ -196,7 +199,7 @@ namespace DH.Helpdesk.Services.Services
             return this._caseSolutionRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
         }
 
-        public IList<WorkflowStepModel> GetGetWorkflowSteps(int customerId, Case _case, UserOverview user, ApplicationType applicationType)
+        public IList<WorkflowStepModel> GetGetWorkflowSteps(int customerId, Case _case, UserOverview user, ApplicationType applicationType, int? templateId)
         {
             var templates = GetCaseSolutions(customerId).Where(c => c.Status != 0 && c.ConnectedButton == 0).Select(c => new WorkflowStepModel()
             {
@@ -205,15 +208,11 @@ namespace DH.Helpdesk.Services.Services
                 SortOrder = c.SortOrder
             }).OrderBy(c => c.SortOrder).ToList();
 
-            
-            return templates.Where(c => showWorkflowStep(_case, c.CaseTemplateId, user, applicationType) == true).ToList();
+
+            return templates.Where(c => showWorkflowStep(customerId, _case, c.CaseTemplateId, user, applicationType, templateId) == true).ToList();
         }
 
-
-        //TODO: PERFORMANCE
-        //Difference if its LM/HD?
-        //New case, Edit case?
-        private bool showWorkflowStep(Case _case, int caseSolution_Id, UserOverview user, ApplicationType applicationType)
+        private bool showWorkflowStep(int customerId, Case _case, int caseSolution_Id, UserOverview user, ApplicationType applicationType, int? templateId)
         {
             //ALL conditions must be met
             bool showWorkflowStep = false;
@@ -226,37 +225,48 @@ namespace DH.Helpdesk.Services.Services
 
             foreach (var condition in caseSolutionConditions)
             {
-                //TODO: make function for replacing this
-                var conditionValue = condition.Value.Replace("\r", "").Replace("\n", "").Trim();
-                var conditionKey = condition.Key.Replace("\r", "").Replace("\n", "").Trim();
+                var conditionValue = condition.Value.Tidy().ToLower();
+                var conditionKey = condition.Key.Tidy();
 
                 try
                 {
                     var value = "";
 
-                    //if [Any]
-                    int maxValue = int.MaxValue;
-                    // if (condition.Values.IndexOf(maxValue.ToString()) > -1)
-                    if (conditionValue.IndexOf(maxValue.ToString()) > -1)
-                    {
-                        showWorkflowStep = true;
-                        continue;
-                    }
-
-                    //Get the specific property of Case in "Property_Name"
-                    if (_case != null && _case.Id != 0 && conditionKey.ToLower().StartsWith("case_"))
-                    {
-                        conditionKey = conditionKey.Replace("case_", "");
-
-                        //GET FROM CASE
-                        //Get value from Model by casting to dictionary and look for property name
-                        value = _case.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(prop => prop.Name, prop => prop.GetValue(_case, null))[conditionKey].ToString();
-                    }
                     //GET FROM APPLICATION
-                    else if (conditionKey.ToLower() == "application_type")
+                    if (conditionKey.ToLower() == "application_type")
                     {
                         int appType = (int)((ApplicationType)Enum.Parse(typeof(ApplicationType), applicationType.ToString()));
                         value = appType.ToString();
+                    }
+                    //GET FROM USER
+                    else if (conditionKey.ToLower().StartsWith("user_workinggroup"))
+                    {
+                        var workingGroups = this._workingGroupService.GetWorkingGroups(customerId, user.Id);
+                        bool wgShowWorkflowStep = false;
+
+                        conditionKey = conditionKey.Replace("user_workinggroup", "");
+
+                        string[] conditionValues = conditionValue.Split(',').Select(sValue => sValue.Trim()).ToArray();
+
+                        for (int i = 0; i < conditionValues.Length; i++)
+                        {
+                            var val = conditionValues[i];
+
+                            //if (workingGroups.Where(x => x.Id == int.Parse(conditionValues[i])).Count() > 0)
+                            if (workingGroups.Where(x => x.WorkingGroupGUID.ToString().ToLower() == conditionValues[i]).Count() > 0)
+                            {
+                                wgShowWorkflowStep = true;
+                                //it is enough with one hit
+                                break;
+                            }
+                        }
+
+                        //no match
+                        if (wgShowWorkflowStep == false)
+                            return false;
+
+                        //leave foreach loop
+                        continue;
                     }
                     //GET FROM USER
                     else if (conditionKey.ToLower().StartsWith("user_"))
@@ -265,15 +275,61 @@ namespace DH.Helpdesk.Services.Services
                         //Get value from Model by casting to dictionary and look for property name
                         value = user.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(prop => prop.Name, prop => prop.GetValue(user, null))[conditionKey].ToString();
                     }
-                    //if [Null]
-                    else
+                    //Get the specific property of Case in "Property_Name"
+                    else if (_case != null && _case.Id != 0 && conditionKey.ToLower().StartsWith("case_"))
+                    {
+                        conditionKey = conditionKey.Replace("case_", "");
+
+                        if (!conditionKey.Contains("."))
+                        {
+                            //Get value from Case Model by casting to dictionary and look for property name
+                            value = _case.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(prop => prop.Name, prop => prop.GetValue(_case, null))[conditionKey].ToString();
+                        }
+                        else
+                        {
+                            var parentClassName = string.Concat(conditionKey.TakeWhile((c) => c != '.'));
+                            var propertyName = conditionKey.Substring(conditionKey.LastIndexOf('.') + 1);
+
+                            var parentClass = _case.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(prop => prop.Name, prop => prop.GetValue(_case, null))[parentClassName];
+                            value = parentClass.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(prop => prop.Name, prop => prop.GetValue(parentClass, null))[propertyName].ToString();
+                        }
+                    }
+
+                    //if [Null] = we do not have any caseID yet.Only valid for Case Condition
+                    else if (conditionKey.ToLower().StartsWith("case_"))
                     {
                         //Case is new, or value is not set for the specific property
-                        value = "0";
+                        value = "new";
+                    }
+                    //THIS IS USED ON NEW CASE, get templateId from the template that is opening the case.
+                    else if (conditionKey.ToLower().StartsWith("casesolution_"))
+                    {
+                        conditionKey = conditionKey.Replace("casesolution_", "");
+
+                        int tempId = (templateId.HasValue) ? templateId.Value : 0;
+
+                        if (tempId > 0)
+                        {
+                            var caseTemplate = GetCaseSolution(tempId);
+
+                            if (!conditionKey.Contains("."))
+                            {
+                                //Get value from Case Solution Model by casting to dictionary and look for property name
+                                value = caseTemplate.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(prop => prop.Name, prop => prop.GetValue(caseTemplate, null))[conditionKey].ToString();
+                            }
+                            else
+                            {
+                                var parentClassName = string.Concat(conditionKey.TakeWhile((c) => c != '.'));
+                                var propertyName = conditionKey.Substring(conditionKey.LastIndexOf('.') + 1);
+
+                                var parentClass = caseTemplate.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(prop => prop.Name, prop => prop.GetValue(caseTemplate, null))[parentClassName];
+                                value = parentClass.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(prop => prop.Name, prop => prop.GetValue(parentClass, null))[propertyName].ToString();
+                            }
+                        }
                     }
 
                     // Check conditions
-                    if (conditionValue.IndexOf(value) > -1)
+                    if (conditionValue.IndexOf(value.ToLower()) > -1)
                     {
                         showWorkflowStep = true;
                         continue;
@@ -293,7 +349,6 @@ namespace DH.Helpdesk.Services.Services
                     //TODO?
                     return false;
                 }
-
             }
 
             //To be true all conditions needs to be fulfilled
@@ -353,25 +408,25 @@ namespace DH.Helpdesk.Services.Services
                         break;
 
                     case CaseSolutionIndexColumns.Administrator:
-                        if (SearchCaseSolutions.Ascending)                        
+                        if (SearchCaseSolutions.Ascending)
                             query = isFirstNamePresentation ?
                                         query.OrderBy(l => (l.PerformerUser != null ? l.PerformerUser.FirstName : string.Empty))
                                             .ThenBy(l => (l.PerformerUser != null ? l.PerformerUser.SurName : string.Empty)) :
 
                                         query.OrderBy(l => (l.PerformerUser != null ? l.PerformerUser.SurName : string.Empty))
-                                        .ThenBy(l => (l.PerformerUser != null ? l.PerformerUser.FirstName : string.Empty));                        
-                        else                        
+                                        .ThenBy(l => (l.PerformerUser != null ? l.PerformerUser.FirstName : string.Empty));
+                        else
                             query = isFirstNamePresentation ?
                                        query.OrderByDescending(l => (l.PerformerUser != null ? l.PerformerUser.FirstName : string.Empty))
                                            .ThenByDescending(l => (l.PerformerUser != null ? l.PerformerUser.SurName : string.Empty)) :
 
                                        query.OrderByDescending(l => (l.PerformerUser != null ? l.PerformerUser.SurName : string.Empty))
-                                       .ThenByDescending(l => (l.PerformerUser != null ? l.PerformerUser.FirstName : string.Empty));                     
+                                       .ThenByDescending(l => (l.PerformerUser != null ? l.PerformerUser.FirstName : string.Empty));
                         break;
 
                     case CaseSolutionIndexColumns.Priority:
-                        query = (SearchCaseSolutions.Ascending)?
-                                    query.OrderBy(l => (l.Priority != null ? l.Priority.Name : string.Empty)):                        
+                        query = (SearchCaseSolutions.Ascending) ?
+                                    query.OrderBy(l => (l.Priority != null ? l.Priority.Name : string.Empty)) :
                                     query.OrderByDescending(l => (l.Priority != null ? l.Priority.Name : string.Empty));
                         break;
 
@@ -516,7 +571,7 @@ namespace DH.Helpdesk.Services.Services
 
             if (caseSolution.Text_Internal != null && caseSolution.Text_Internal.Length > 3000)
                 caseSolution.Text_Internal = caseSolution.Text_Internal.Substring(0, 3000);
-            
+
             if (caseSolution.Id == 0)
                 this._caseSolutionRepository.Add(caseSolution);
             else
@@ -619,12 +674,15 @@ namespace DH.Helpdesk.Services.Services
             if (caseSolutionConditions == null)
             {
                 caseSolutionConditions = _caseSolutionConditionRepository.GetCaseSolutionConditions(caseSolution_Id).Select(x => new { x.Property_Name, x.Values }).ToDictionary(x => x.Property_Name, x => x.Values);
-
-                if (caseSolutionConditions.Any())
-                    this._cache.Set(string.Format(DH.Helpdesk.Common.Constants.CacheKey.CaseSolutionCondition, caseSolution_Id), caseSolutionConditions, DH.Helpdesk.Common.Constants.Cache.Duration);
+                
+                //TODO: add this again when test is OK
+                //if (caseSolutionConditions.Any())
+                //    this._cache.Set(string.Format(DH.Helpdesk.Common.Constants.CacheKey.CaseSolutionCondition, caseSolution_Id), caseSolutionConditions, DH.Helpdesk.Common.Constants.Cache.Duration);
             }
 
             return caseSolutionConditions;
         }
+
+
     }
 }

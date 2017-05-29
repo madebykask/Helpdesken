@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq.Expressions;
+    
 
     public interface IRepository<T> where T : class
     {
@@ -17,6 +18,8 @@
         TResult Get<TResult>(Expression<Func<T, bool>> where, Expression<Func<T, TResult>> selector);
         IEnumerable<T> GetAll();
         IEnumerable<T> GetMany(Expression<Func<T, bool>> where);
+
+      
 
         void Commit();
     }

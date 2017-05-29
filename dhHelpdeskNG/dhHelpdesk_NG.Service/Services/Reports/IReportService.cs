@@ -90,7 +90,9 @@ namespace DH.Helpdesk.Services.Services.Reports
                                     DateTime? periodUntil,
                                     string text,
                                     SortField sort,
-                                    int selectCount);
+                                    int selectCount,
+                                    DateTime? closeFrom,
+                                    DateTime? closeTo);
 
         Dictionary<DateTime, int> GetReportGeneratorAggregation(
             int customerId,
@@ -108,7 +110,9 @@ namespace DH.Helpdesk.Services.Services.Reports
             DateTime? periodUntil,
             string text,
             SortField sort,
-            int selectCount);
+            int selectCount,
+            DateTime? closeFrom,
+            DateTime? closeTo);
 
         LeadtimeFinishedCasesOptions GetLeadtimeFinishedCasesOptions(int customerId);
 
