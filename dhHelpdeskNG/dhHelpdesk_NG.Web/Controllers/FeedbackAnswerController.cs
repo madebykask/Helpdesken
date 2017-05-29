@@ -34,12 +34,11 @@ namespace DH.Helpdesk.Web.Controllers
                 CaseId = detailed.CaseId,
                 IsAnonym = false,
                 IsShowNote = question.IsShowNote,
-                NoteTextLabel = question.NoteText
+                NoteTextLabel = question.NoteText,
+                OptionId = parameters.OptionId
             };
+            var ids = new List<Answer> { new Answer("", parameters.OptionId) };
 
-            var options = question.Options.First(o => o.Value == parameters.OptionValue);
-            model.OptionId = options.Id;
-            var ids = new List<Answer> {new Answer("", options.Id)};
             var participant = new ParticipantForInsert(model.Guid, model.IsAnonym, DateTime.Now, ids, true);
             var questionId = _circularService.SaveAnswers(participant);
 

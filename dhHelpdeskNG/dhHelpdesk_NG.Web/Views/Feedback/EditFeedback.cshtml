@@ -197,7 +197,7 @@
                 var qOptions = $(".question_option");
                 if (qOptions.length > 0) {
                     for (var i = 0; i < qOptions.length; i++) {
-                        if ($(qOptions[i]).val().trim() === optionValue.trim()) {
+                        if (optionValue !== '0' && $(qOptions[i]).val().trim() === optionValue.trim()) {
                             ShowToastMessage(translations.OptionUnique, "error");
                             event.preventDefault();
                             return;
@@ -235,7 +235,7 @@
                 function unique(array) {
                     var resArray = [];
                     $.each(array, function (i, item) {
-                        if ($.inArray(item, resArray) === -1) {
+                        if ($.inArray(item, resArray) === -1 || item === '0') {
                             resArray.push(item);
                         }
                     });

@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Dynamic;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using DH.Helpdesk.BusinessData.Enums.MailTemplates;
 using DH.Helpdesk.BusinessData.Models.Feedback;
-using DH.Helpdesk.BusinessData.Models.Questionnaire.Output;
 using DH.Helpdesk.BusinessData.Models.Questionnaire.Write;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.Cases;
-using DH.Helpdesk.Common.ValidationAttributes;
-using DH.Helpdesk.Domain;
 
 namespace DH.Helpdesk.Services.Services.Feedback
 {
@@ -23,7 +18,7 @@ namespace DH.Helpdesk.Services.Services.Feedback
 
         private const string MainTemplate = @"<BR>{question}<BR><table><tbody><tr>{optionTemplate}</tr></tbody></table>";
 //        private const string OptionTemplate = @"<td ><a href='{baseurl}feedback/answer?guid={guid}&optionValue={value}&languageId={languageid}' style='padding: 0px 10px'><img src = '{baseurl}Content/img/{iconId}' style='width: 27px; height: 27px' alt={icontext}></a></td>";
-        private const string OptionTemplate = @"<td ><a href='{baseurl}FeedbackAnswer/Answer?guid={guid}&optionValue={value}&languageId={languageid}&customerId={customerId}' style='padding: 0px 10px'><img src = '{baseurl}Content/img/{iconId}' style='width: 27px; height: 27px' alt={icontext}></a></td>";
+        private const string OptionTemplate = @"<td ><a href='{baseurl}FeedbackAnswer/Answer?guid={guid}&optionId={id}&languageId={languageid}&customerId={customerId}' style='padding: 0px 10px'><img src = '{baseurl}Content/img/{iconId}' style='width: 27px; height: 27px' alt={icontext}></a></td>";
 
         private class Templates
         {
@@ -32,7 +27,7 @@ namespace DH.Helpdesk.Services.Services.Feedback
             public const string IconId = "{iconId}";
             public const string BaseUrl = "{baseurl}";
             public const string Guid = "{guid}";
-            public const string OptionValue = "{value}";
+            public const string OptionId = "{id}";
             public const string LanguageId = "{languageid}";
             public const string IconText = "{icontext}";
             public const string CustomerId = "{customerId}";
@@ -133,7 +128,7 @@ namespace DH.Helpdesk.Services.Services.Feedback
                 var optionTemplate = OptionTemplate
                     .Replace(Templates.IconId, option.IconId)
                     .Replace(Templates.BaseUrl, absoluterUrl)
-                    .Replace(Templates.OptionValue, option.Value.ToString())
+                    .Replace(Templates.OptionId, option.Id.ToString())
                     .Replace(Templates.LanguageId, languageId.ToString())
                     .Replace(Templates.IconText, option.Text)
                     .Replace(Templates.Guid, guid.ToString())
