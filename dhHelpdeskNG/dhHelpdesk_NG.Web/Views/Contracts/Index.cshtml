@@ -38,10 +38,10 @@
                 <div>
 
                     @using (Html.BeginForm("Search", "Contracts", FormMethod.Post, new { id = "search_form" }))
-                        {
+                    {
 
-                    @*@using (Ajax.BeginForm("Search", null, new AjaxOptions { UpdateTargetId = "contracts_grid" }, new { id = "search_form" }))
-                    {*@
+                        @*@using (Ajax.BeginForm("Search", null, new AjaxOptions { UpdateTargetId = "contracts_grid" }, new { id = "search_form" }))
+                            {*@
 
 
                         <input type="hidden" id="currentCustomerId" value="@Model.Customer.Id" />
@@ -104,10 +104,13 @@
                             <tr>
                                 <td class="span3">@Translation.GetCoreTextTranslation("Sök")</td>
                                 <td>
-                                    @Html.TextBoxFor(m => m.SearchText, new { @style = "width:285px" })
+                                    @Html.TextBoxFor(m => m.SearchText, new { @style = "width:285px", @id="txtSearch" })
                                     @*<input type="submit" value="@Translation.Get("Sök")" class="btn" />*@
 
-                                    <input type="button" class="btn" id="searchQueryBtn" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" onclick="submit();" />
+                                    @*<input type="button" class="btn" id="searchQueryBtn" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" onclick="submit();" />*@
+
+                                    <input type="button" class="btn" id="searchQueryBtn" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" onclick="removeFromCart();"/>
+
 
                                 </td>
                             </tr>
@@ -129,25 +132,56 @@
         </div>
     </div>
 
+
+
     <script type="text/javascript">
 
-    var customerId = $("#currentCustomerId").val();
+        function removeFromCart(id, lunch) {
 
-    $(function () {
-        $("#currentCustomer").change(function () {
-            alert();
-            $("#search_form").submit();
-        });
-    });
+            var customer = document.getElementById('currentCustomerId').value;
+            
+            var categories = $('select#lstContractCategories').val();
+            
+            var suppliers = $('select#lstSuppliers').val();
+            
+            var responsible = $('select#lstResponsible').val();
+            
+            var department = $('select#lstDepartment').val();
+            
+            var show = $('select#lstShow').val();
+            
+            var search = document.getElementById('txtSearch').value;
+            
+            if (customer == null) {
+                customer = '';
+            }
+            if (categories == null) {
+                categories = '';
+            }
+            if (suppliers == null) {
+                suppliers = '';
+            }
+            if (responsible == null) {
+                responsible = '';
+            }
+            if (department == null) {
+                department = '';
+            }
+            if (show == null)
+            {
+                show = '';
+            }
+            if (search == null) {
+                search = '';
+            }
 
-    $(document).on('click', 'th', function (e) {
-        var sortBy = $(this).attr('sort-data');
-        if (sortBy != undefined && sortBy != null) {
-            $.post("/Contracts/Sort", { fieldName: sortBy });
-            $("#search_form").submit();
+            $.get("/Contracts/Search/" + customer + "", { Categories: "'" + categories.toString() + "'", Suppliers: "'" + suppliers.toString() + "'", Responsible: "'" + responsible.toString() + "'", Department: "'" + department.toString() + "'", Show: "'" + show.toString() + "'", Search: "'" + search.toString() + "'" }, function (returnHtml) {
+                $('#_ContractsIndexRows').html($(returnHtml));
+            });
+
+
         }
 
-    });
+
 
     </script>
-

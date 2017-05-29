@@ -642,6 +642,11 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	ALTER TABLE [dbo].[tblCaseSolution] ADD [Information] nvarchar(max) null
 GO
 
+--Update old casesolutions with new field "AgreedDate"
+insert into tblCaseSolutionFieldSettings(casesolution_id, fieldname_id, mode)
+select id, 68, 1 from tblCaseSolution
+where id not in (select casesolution_id from  tblCaseSolutionFieldSettings where fieldname_id = 68 )
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.32'
 

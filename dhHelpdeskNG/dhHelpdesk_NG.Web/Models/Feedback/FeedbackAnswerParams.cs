@@ -6,7 +6,7 @@ namespace DH.Helpdesk.Web.Models.Feedback
 	{
 		public Guid Guid { get; set; }
 		public int LanguageId { get; set; }
-		public int OptionValue { get; set; }
+		public int OptionId { get; set; }
 		public int CustomerId { get; set; }
 	}
 }
