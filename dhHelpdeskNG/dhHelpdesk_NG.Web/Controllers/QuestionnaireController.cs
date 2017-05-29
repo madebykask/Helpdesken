@@ -606,9 +606,7 @@ namespace DH.Helpdesk.Web.Controllers
                 this._circularService.UpdateCircular(circular);
             }
 
-            return this.RedirectToAction(
-                "CircularOverview",
-                new { questionnaireId = newCircular.QuestionnaireId, statusId = backStatusId });
+            return this.RedirectToAction("EditCircular", new { circularId = newCircular.Id, backStatusId });
         }
 
         [HttpPost]
