@@ -11,6 +11,7 @@ namespace DH.Helpdesk.Web.Models.Contract
 
     public class ContractIndexViewModel
     {
+       
 
         public ContractIndexViewModel(Customer customer)
         {

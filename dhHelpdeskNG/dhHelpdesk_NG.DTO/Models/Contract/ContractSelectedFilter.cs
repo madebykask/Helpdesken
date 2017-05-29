@@ -21,6 +21,7 @@
             this.SelectedDepartments = new SelectedItems();
             this.State = Show.Active;
             this.SearchText = string.Empty;
+            this.ShowState = new SelectedItems();
         }
 
         public int CustomerId { get; set; }
@@ -32,6 +33,8 @@
         public SelectedItems SelectedResponsibles { get; set; }
 
         public SelectedItems SelectedDepartments { get; set; }
+
+        public SelectedItems ShowState { get; set; }
 
         public Show State { get; set; }
 
