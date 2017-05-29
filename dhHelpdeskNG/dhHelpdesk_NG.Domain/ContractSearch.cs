@@ -6,7 +6,7 @@ namespace DH.Helpdesk.Domain
     using global::System.ComponentModel.DataAnnotations;
 
 
-    public interface ICaseSearch : ISearch
+    public interface IContractSearch : ISearch
     {
         int CustomerId { get; set; }
         List<int> CategoryId { get; set; }
@@ -22,7 +22,7 @@ namespace DH.Helpdesk.Domain
         string Text_Filter { get; set; }
     }
 
-    public class CaseSearch : Search, ICaseSearch
+    public class ContractSearch : Search, IContractSearch
     {
         public int CustomerId { get; set; }
 
