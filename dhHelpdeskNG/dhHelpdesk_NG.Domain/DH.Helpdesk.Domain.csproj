@@ -76,6 +76,7 @@
     <Compile Include="BusinessRules\BRActionEntity.cs" />
     <Compile Include="BusinessRules\BRActionParamEntity.cs" />
     <Compile Include="CalendarSearch.cs" />
+    <Compile Include="CaseSearch.cs" />
     <Compile Include="CaseSettings.cs" />
     <Compile Include="CaseSolution.cs" />
     <Compile Include="CaseSolutionCategory.cs" />
