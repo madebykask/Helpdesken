@@ -180,7 +180,7 @@ namespace DH.Helpdesk.Web.Controllers
             model.Rows = GetIndexRowModel(id, filter, new ColSortModel(EnumContractFieldSettings.Number, true));
             //filter.SelectedContractCategories=
 
-            return this.PartialView("ProjectGrid", null);
+            return this.PartialView("_ContractsIndexRows", model.Rows);
         }
 
 
@@ -436,7 +436,7 @@ namespace DH.Helpdesk.Web.Controllers
                 if (selectedFilter.SearchText.Any())
                 {
 
-                    allContracts = allContracts.Where(t => t.ContractNumber.Contains(selectedFilter.SearchText) | t.Info.Contains(selectedFilter.SearchText)).ToList();
+                    allContracts = allContracts.Where(t => t.ContractNumber.Contains(selectedFilter.SearchText)).ToList();
                 }
             }
 
