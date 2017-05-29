@@ -96,7 +96,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         [HttpPost]
         
-        public PartialViewResult Search()
+        public PartialViewResult Search(CaseSearch OLSearch_Filter)
         {
             
             return this.PartialView("ProjectGrid", null);
