@@ -36,9 +36,13 @@
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment-1">
                 <div>
-                    @using (Ajax.BeginForm("Search", null, new AjaxOptions { UpdateTargetId = "contracts_grid" }, new { id = "search_form" }))
-                    {
-                        
+
+                    @using (Html.BeginForm("Search", "Contracts", FormMethod.Post, new { id = "search_form" }))
+                        {
+
+                    @*@using (Ajax.BeginForm("Search", null, new AjaxOptions { UpdateTargetId = "contracts_grid" }, new { id = "search_form" }))
+                    {*@
+
 
                         <input type="hidden" id="currentCustomerId" value="@Model.Customer.Id" />
                         <table>
@@ -99,7 +103,13 @@
                             </tr>
                             <tr>
                                 <td class="span3">@Translation.GetCoreTextTranslation("Sök")</td>
-                                <td>@Html.TextBoxFor(m => m.SearchText, new { @style = "width:285px" }) <input type="submit" value="@Translation.Get("Sök")" class="btn" /></td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.SearchText, new { @style = "width:285px" })
+                                    @*<input type="submit" value="@Translation.Get("Sök")" class="btn" />*@
+
+                                    <input type="button" class="btn" id="searchQueryBtn" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" onclick="submit();" />
+
+                                </td>
                             </tr>
                             <tr>
                                 <td colspan="3">
@@ -118,3 +128,26 @@
             </div>
         </div>
     </div>
+
+    <script type="text/javascript">
+
+    var customerId = $("#currentCustomerId").val();
+
+    $(function () {
+        $("#currentCustomer").change(function () {
+            alert();
+            $("#search_form").submit();
+        });
+    });
+
+    $(document).on('click', 'th', function (e) {
+        var sortBy = $(this).attr('sort-data');
+        if (sortBy != undefined && sortBy != null) {
+            $.post("/Contracts/Sort", { fieldName: sortBy });
+            $("#search_form").submit();
+        }
+
+    });
+
+    </script>
+

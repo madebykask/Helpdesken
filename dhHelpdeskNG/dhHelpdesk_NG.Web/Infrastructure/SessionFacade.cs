@@ -51,6 +51,8 @@
 
         private const string _CURRENT_OPERATIONLOG_SEARCH = "CURRENT_OPERATIONLOG_SEARCH";
 
+        private const string _CURRENT_CONTRACT_SEARCH = "CURRENT_CONTRACT_SEARCH";
+
         private const string _CURRENT_INVOICE_ARTICLE_PRODUCTAREA_SEARCH = "CURRENT_INVOICE_ARTICLE_PRODUCTAREA_SEARCH";
 
         private const string _CURRENT_USER = "CURRENT_USER";
@@ -450,6 +452,29 @@
                 else
                 {
                     HttpContext.Current.Session[_CURRENT_OPERATIONLOG_SEARCH] = value;
+                }
+            }
+        }
+
+        public static ContractSearch CurrentContractSearch
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_CURRENT_CONTRACT_SEARCH] == null)
+                {
+                    return null;
+                }
+                return (ContractSearch)HttpContext.Current.Session[_CURRENT_CONTRACT_SEARCH];
+            }
+            set
+            {
+                if (HttpContext.Current.Session[_CURRENT_CONTRACT_SEARCH] == null)
+                {
+                    HttpContext.Current.Session.Add(_CURRENT_CONTRACT_SEARCH, value);
+                }
+                else
+                {
+                    HttpContext.Current.Session[_CURRENT_CONTRACT_SEARCH] = value;
                 }
             }
         }

@@ -188,15 +188,17 @@
 <script type="text/javascript">
 
     var customerId = $("#currentCustomerId").val();
-
+    
     $(function () {
         $("#currentCustomer").change(function () {
+            
             $("#search").submit();
         });
     });
 
     $(document).on('click', 'th', function (e) {
         var sortBy = $(this).attr('sort-data');
+        
         if (sortBy != undefined && sortBy != null) {
             $.post("/OperationLog/Sort", { fieldName: sortBy });
             $("#search").submit();
