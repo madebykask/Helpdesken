@@ -327,6 +327,8 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
                 return ContactInformationFields.CreateDefault();
             }
 
+            if (string.IsNullOrEmpty(fieldsModel.UserStringId.Value))
+                fieldsModel.UserId = null;
             // todo
             var fields = new ContactInformationFields(fieldsModel.UserId);
 
