@@ -121,6 +121,16 @@
             return ret;
         }
 
+        public static string IdIsSelected(this int id, List<int> selectedIds)
+        {
+            var ret = string.Empty;
+            if (selectedIds != null && selectedIds.Any())
+                if (selectedIds.Contains(id))
+                    ret = "selected";
+
+            return ret;
+        }
+
         public static string ValueIsSelected(this string value, string selectedValues)
         {
             string ret = string.Empty;

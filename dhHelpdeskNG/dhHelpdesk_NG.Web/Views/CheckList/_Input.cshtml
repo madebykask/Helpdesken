@@ -30,7 +30,7 @@
             <tbody>
                 @foreach (var item in Model.ListOfExistances)
                 {                       
-                    <tr style="cursor: pointer" onclick="window.location.href = '@Url.Action("getSelectedCheckList", new RouteValueDictionary { { "id", item.Value } })'">
+                    <tr style="cursor: pointer" onclick="window.location.href = '@Url.Action("edit", "checklist", new { id = item.Value })'">
                         <td>
                             <a href="@Url.Action("edit", "checklist", new { id = item.Value })">@Html.DisplayFor(modelItem => item.Text)</a>
                         </td>

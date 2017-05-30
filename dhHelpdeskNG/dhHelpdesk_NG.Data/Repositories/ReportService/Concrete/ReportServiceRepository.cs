@@ -133,6 +133,41 @@
                             );                                        
                     break;
 
+                case "CasesPerAdministrator":
+                    ret.Add(
+                          new Tuple<string, string, int>(
+                            "CasesPerAdministrator",
+                            "SELECT  tblUsers.FirstName + N' ' + tblUsers.SurName AS Name, " +
+                                "COUNT(CASE WHEN tblCase.FinishingDate IS NULL THEN tblCase.Id ELSE NULL END) AS CasesInProgress, " +
+                                "COUNT(CASE WHEN tblCase.FinishingDate IS NULL AND tblCase.StateSecondary_Id IS NOT NULL AND tblStateSecondary.IncludeInCaseStatistics = 0 THEN tblCase.Id ELSE NULL END) AS CasesInRest, " +
+                                "COUNT(CASE WHEN tblCase.FinishingDate IS NULL THEN NULL ELSE tblCase.Id END) AS CasesClosed " +
+                            "FROM tblCase " +
+                                "INNER JOIN tblUsers ON tblCase.Performer_User_Id = tblUsers.Id " +
+                                "LEFT OUTER JOIN tblStateSecondary ON tblCase.StateSecondary_Id = tblStateSecondary.Id " +
+                            _whereClause +
+                            " AND (tblCase.Deleted = 0 and tblUsers.UserGroup_Id <> '1') " +
+                            "GROUP BY tblUsers.FirstName + N' ' + tblUsers.SurName", (int)QueryType.SQLQUERY)
+                            );
+                    break;
+
+                case "CasesPerDepartment":
+                    ret.Add(
+                          new Tuple<string, string, int>(
+                            "CasesPerDepartment",
+                            "SELECT  tblDepartment.Department AS Name, " +
+                                "COUNT(CASE WHEN tblCase.FinishingDate IS NULL THEN tblCase.Id ELSE NULL END) AS CasesInProgress, " +
+                                "COUNT(CASE WHEN tblCase.FinishingDate IS NULL AND tblCase.StateSecondary_Id IS NOT NULL AND tblStateSecondary.IncludeInCaseStatistics = 0 " +
+                                    "THEN tblCase.Id ELSE NULL END) AS CasesInRest, " +
+                                "COUNT(CASE WHEN tblCase.FinishingDate IS NULL THEN NULL ELSE tblCase.Id END) AS CasesClosed " +
+                            "FROM tblCase " +
+                                "INNER JOIN tblDepartment ON tblCase.Department_Id = tblDepartment.Id " +
+                                "LEFT OUTER JOIN tblStateSecondary ON tblCase.StateSecondary_Id = tblStateSecondary.Id " +
+                            _whereClause +
+                            " AND (tblCase.Deleted = 0) " +
+                            "GROUP BY tblDepartment.Department", (int)QueryType.SQLQUERY)
+                            );
+                    break;
+
                 case "CaseDetailsList":
                     ret.Add(
                             new Tuple<string, string, int>(
@@ -272,8 +307,14 @@
             if (filters.CaseCreationDate.FromDate.HasValue) 
                 _whereStr += string.Format("AND tblCase.RegTime >= '{0}' ", filters.CaseCreationDate.FromDate.Value);
 
-            if (filters.CaseCreationDate.FromDate.HasValue)
+            if (filters.CaseCreationDate.ToDate.HasValue)
                 _whereStr += string.Format("AND tblCase.RegTime <= '{0}' ", filters.CaseCreationDate.ToDate.Value);
+
+            if (filters.CaseClosingDate.FromDate.HasValue)
+                _whereStr += string.Format("AND tblCase.FinishingDate >= '{0}' ", filters.CaseClosingDate.FromDate.Value);
+
+            if (filters.CaseClosingDate.ToDate.HasValue)
+                _whereStr += string.Format("AND tblCase.FinishingDate <= '{0}' ", filters.CaseClosingDate.ToDate.Value);
 
             return _whereStr;
         }

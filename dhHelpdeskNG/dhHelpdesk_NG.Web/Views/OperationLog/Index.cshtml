@@ -173,7 +173,7 @@
                                             <a href="@Url.Action("edit", "operationlog", new { id = item.Id })">@item.OperationLogDescription.ForHtmlView()</a>                                            
                                         </td>
                                         <td>
-                                            <a href="@Url.Action("edit", "operationlog", new { id = item.Id })">@item.OperationLogAction</a>                                            
+                                            <a href="@Url.Action("edit", "operationlog", new { id = item.Id })">@item.OperationLogAction.ForHtmlView()</a>                                            
                                         </td>
                                     </tr>
                                 }
@@ -188,15 +188,17 @@
 <script type="text/javascript">
 
     var customerId = $("#currentCustomerId").val();
-
+    
     $(function () {
         $("#currentCustomer").change(function () {
+            
             $("#search").submit();
         });
     });
 
     $(document).on('click', 'th', function (e) {
         var sortBy = $(this).attr('sort-data');
+        
         if (sortBy != undefined && sortBy != null) {
             $.post("/OperationLog/Sort", { fieldName: sortBy });
             $("#search").submit();

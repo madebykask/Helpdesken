@@ -25,6 +25,8 @@ using System.Collections.Generic;
 
         public DateToDate CaseCreationDate { get; set; }
 
+        public DateToDate CaseClosingDate { get; set; }
+
         public SelectedItems SelectedCustomers { get; set; }
 
         public SelectedItems SeletcedDepartments { get; set; }

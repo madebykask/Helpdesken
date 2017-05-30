@@ -25,7 +25,7 @@
         void SavePriorityLanguage(PriorityLanguage priorityLanguage, bool update, out IDictionary<string, string> errors);
         void UpdateSavedFile(Priority priority);
         void Commit();
-        string GetPriorityInfoTextByImpactAndUrgency(int impactId, int urgentId, int currentLanguageId);
+        string GetPriorityInfoTextByImpactAndUrgency(int impactId, int urgentId, int languageId);
     }
 
     public class PriorityService : IPriorityService
@@ -203,7 +203,19 @@
 
         public string GetPriorityInfoTextByImpactAndUrgency(int impactId, int urgentId, int languageId)
         {
-            return this._priorityImpactUrgencyRepository.GetPriorityInfoTextByImpactAndUrgency(impactId, urgentId, languageId);
+            var priorityUrgent = _priorityImpactUrgencyRepository.GetPriorityImpactUrgencyByImpactAndUrgency(impactId, urgentId);
+            if (priorityUrgent?.Priority != null)
+            {
+                var infoText = priorityUrgent.Priority.InformUserText;
+                var translate =
+                    priorityUrgent.Priority.PriorityLanguages.FirstOrDefault(x => x.Language_Id == languageId);
+                if (!string.IsNullOrEmpty(translate?.InformUserText))
+                {
+                    infoText = translate.InformUserText;
+                }
+                return infoText;
+            }
+            return string.Empty;
         }
     }
 }

@@ -87,8 +87,10 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                 {"-1", "CasesPerCasetype"},
                 {"-2", "CasesPerDate"},
                 {"-3", "CasesPerSource"},
-                {"-4", "CasesPerWorkingGroup"}
-            };
+                {"-4", "CasesPerWorkingGroup"},
+                {"-5", "CasesPerAdministrator"},
+                {"-6", "CasesPerDepartment"}
+        };
         }
 
         [HttpGet]
@@ -334,7 +336,9 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                     filters.PeriodUntil,
                     string.Empty,
                     filters.SortField,
-                    filters.RecordsOnPage);
+                    filters.RecordsOnPage,
+                    filters.CloseFrom,
+                    filters.CloseTo);
 
                     return this.PartialView("Reports/ReportGeneratorPreview", new ReportGeneratorAggregateModel(previewData));
                 }
@@ -355,7 +359,9 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                                     filters.PeriodUntil,
                                     string.Empty,
                                     filters.SortField,
-                                    filters.RecordsOnPage);
+                                    filters.RecordsOnPage,
+                                    filters.CloseFrom,
+                                    filters.CloseTo);
 
                 var model = GetReportGeneratorModel(data, filters.SortField);
 
@@ -674,6 +680,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             ret.Items.AddItem("-2", "CasesPerDate");
             ret.Items.AddItem("-3", "CasesPerSource");
             ret.Items.AddItem("-4", "CasesPerWorkingGroup");
+            ret.Items.AddItem("-5", "CasesPerAdministrator");
+            ret.Items.AddItem("-6", "CasesPerDepartment");
 
             foreach (var customReport in reports)
             {

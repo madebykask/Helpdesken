@@ -3,7 +3,7 @@
 @model DH.Helpdesk.Web.Models.CaseSolution.CaseSolutionIndexViewModel
 
 @{
-    ViewBag.Title = "Index";   
+    ViewBag.Title = "Index";
 
     var menu1Style = "";
     var menu2Style = "";
@@ -11,7 +11,7 @@
     var menu1TabClass = "";
     var menu2TabClass = "";
 
-    if (!string.IsNullOrEmpty(Model.ActiveTab)) 
+    if (!string.IsNullOrEmpty(Model.ActiveTab))
     {
         switch (Model.ActiveTab.ToLower())
         {
@@ -31,15 +31,17 @@
                 break;
         }
     }
-            
+    var searchCategories = (SessionFacade.CurrentCaseSolutionSearch != null &&
+                     SessionFacade.CurrentCaseSolutionSearch.CategoryIds != null && SessionFacade.CurrentCaseSolutionSearch.CategoryIds.Any()) 
+                     ? SessionFacade.CurrentCaseSolutionSearch.CategoryIds : null;
 }
 
-@Scripts.Render("~/bundles/casetemplates/index")
+@*@Scripts.Render("~/bundles/casetemplates/index")*@
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
-            <li id="menu1" style="@menu1Style">@Html.ActionLink(Translation.Get("Ny ärendemall", Enums.TranslationSource.TextTranslation), "new", null, new { @class = "btn" })</li>
-            <li id="menu2" style="@menu2Style">@Html.ActionLink(Translation.Get("Ny kategori", Enums.TranslationSource.TextTranslation), "newcategory", null, new { @class = "btn" })</li>
+            <li id="menu1" style="@menu1Style">@Html.ActionLink(Translation.GetCoreTextTranslation("Ny ärendemall"), "new", null, new { @class = "btn" })</li>
+            <li id="menu2" style="@menu2Style">@Html.ActionLink(Translation.GetCoreTextTranslation("Ny kategori"), "newcategory", null, new { @class = "btn" })</li>
         </ul>
     </div>
 </div>
@@ -47,26 +49,41 @@
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
             <li id="CaseTemplateTab" class="@menu1TabClass">
-                <a href="#fragment-1">@Translation.Get("Ärendemallar", Enums.TranslationSource.TextTranslation)</a>
+                <a href="#fragment-1">@Translation.GetCoreTextTranslation("Ärendemallar")</a>
             </li>
             <li id="CategoriesTab" class="@menu2TabClass">
-                <a href="#fragment-2">@Translation.Get("Kategorier", Enums.TranslationSource.TextTranslation)</a>
+                <a href="#fragment-2">@Translation.GetCoreTextTranslation("Kategorier")</a>
             </li>
         </ul>
 
         <div class="tab-content">
-            <div class="tab-pane tab-pane-border @menu1TabClass" id="fragment-1">                                
-                 @Html.Partial("_RowsOverview", Model.Rows)                
+            <div class="tab-pane tab-pane-border @menu1TabClass" id="fragment-1">
+                <table class="tableform">
+                    <tr>
+                        <td>
+                            @Translation.GetCoreTextTranslation("Kategori")
+                        </td>
+                        <td>
+                            <select id="caseSolFilterCategory" data-field="region" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" multiple="multiple" class="chosen-select">
+                                @foreach (var e in Model.CaseSolutionCategories)
+                                {
+                                    <option value="@e.Id" @e.Id.IdIsSelected(searchCategories)>@e.Name</option>
+                                }
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+                @Html.Partial("_RowsOverview", Model.Rows)
             </div>
             <div class="tab-pane tab-pane-border @menu2TabClass" id="fragment-2">
                 <table class="table table-striped table-bordered table-hover" id="tblCaseSolutionCategory">
                     <thead>
                         <tr>
                             <th style="width: 20%">
-                                @Translation.Get("Kategori", Enums.TranslationSource.TextTranslation)
+                                @Translation.GetCoreTextTranslation("Kategori")
                             </th>
                             <th>
-                                @Translation.Get("Standard", Enums.TranslationSource.TextTranslation)
+                                @Translation.GetCoreTextTranslation("Standard")
                             </th>
                         </tr>
                     </thead>

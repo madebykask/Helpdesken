@@ -162,6 +162,7 @@
             var customers = this.customerUserService.GetCustomerUsersForHomeIndexPage(SessionFacade.CurrentUser.Id);
             var customerIdsAll = customers.Select(c => c.Customer.Customer_Id).ToArray();
 
+
             if (!customers.Any())
             {
                 return model;
@@ -206,6 +207,9 @@
                                                   ? customers.Take(module.NumberOfRows.Value).Select(c => c.Customer.Customer_Id).ToArray()
                                                   : customers.Select(c => c.Customer.Customer_Id).ToArray();
 
+
+
+
                 switch ((Module)module.Module_Id)
                 {
                     case Module.BulletinBoard:
@@ -240,7 +244,8 @@
                         model.ProblemOverviews = this.problemService.GetProblemOverviews(customerIdsAll, module.NumberOfRows, true);
                         break;
                     case Module.QuickLinks:
-                        model.LinksInfo = this.linkModelFactory.GetLinksViewModel(this.linkService.GetLinkOverviews(customerIdsAll, module.NumberOfRows, true));
+                        model.LinksInfo = this.linkModelFactory.GetLinksViewModel(this.linkService.GetLinkOverviewsForStartPage(customerIdsAll, module.NumberOfRows, true));
+                        //model.LinksInfo = this.linkModelFactory.GetLinksViewModel(this.linkService.GetLinkOverviews(customerIdsAll, module.NumberOfRows, true));
                         break;
                     case Module.Statistics:
                         model.StatisticsOverviews = this.statisticsService.GetStatistics(customerIdsAll, this.workContext.User.UserId);

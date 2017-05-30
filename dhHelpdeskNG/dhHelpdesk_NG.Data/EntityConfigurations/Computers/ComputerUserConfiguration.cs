@@ -81,7 +81,7 @@
             this.Property(u => u.RegTime).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(u => u.ChangeTime).IsRequired();
             this.Property(u => u.SyncChangedDate).IsOptional();
-
+            this.Property(u => u.LanguageId).IsOptional();
             this.ToTable("tblComputerUsers");
         }
     }

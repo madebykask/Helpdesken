@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings
+﻿using DH.Helpdesk.BusinessData.Enums.Orders.Fields;
+
+namespace DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings
 {
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
@@ -23,15 +25,15 @@
         public string Header { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Filnamn")]
+        [LocalizedDisplay(OrderLabels.OtherFileName)]
         public TextFieldSettingsModel FileName { get; set; }
          
         [NotNull]
-        [LocalizedDisplay("Ärendenummer")]
+        [LocalizedDisplay(OrderLabels.OtherCaseNumber)]
         public TextFieldSettingsModel CaseNumber { get; set; }
          
         [NotNull]
-        [LocalizedDisplay("Övrigt")]
+        [LocalizedDisplay(OrderLabels.OtherInfo)]
         public TextFieldSettingsModel Info { get; set; }
            
     }

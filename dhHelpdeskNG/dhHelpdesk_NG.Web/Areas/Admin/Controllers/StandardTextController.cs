@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using DH.Helpdesk.Common.Extensions.String;
+
 namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
    
@@ -34,6 +37,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         {
             var customer = this._customerService.GetCustomer(customerId);
             var standardTexts = this._textService.GetStandardTexts(customer.Id);
+            foreach (var standardText in standardTexts)
+            {
+                standardText.Text = string.Join("\r\n", standardText.Text.Split("\r\n").Take(3));
+            }
 
             var model = new StandardTextIndexViewModel { StandardTexts = standardTexts, Customer = customer, IsShowOnlyActive = SessionFacade.ShowOnlyActiveStandardTextsInAdmin };
             return this.View(model);

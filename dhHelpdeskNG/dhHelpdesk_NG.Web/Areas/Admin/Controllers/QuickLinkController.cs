@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
+﻿using DH.Helpdesk.Web.Infrastructure;
+
+namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -16,6 +18,7 @@
         private readonly ISettingService _settingService;
         private readonly IUserService _userService;
         private readonly ICaseSolutionService _casesolutionService;
+        private readonly IWorkingGroupService _workgroupService;
 
         public QuickLinkController(
             IDocumentService documentService,
@@ -24,7 +27,8 @@
             IUserService userService,
             ICaseSolutionService casesolutionService,
             ISettingService settingService,
-            IMasterDataService masterDataService)
+            IMasterDataService masterDataService,
+            IWorkingGroupService workgroupService)
             : base(masterDataService)
         {
             this._documentService = documentService;
@@ -33,15 +37,27 @@
             this._userService = userService;
             this._casesolutionService = casesolutionService;
             this._settingService = settingService;
+            this._workgroupService = workgroupService;
         }
 
         public ActionResult Index(int customerId)
         {
             var customer = this._customerService.GetCustomer(customerId);
             var links = this._linkService.GetLinks(customer.Id);
+            var linkGroups = _linkService.GetLinkGroups(customer.Id);
+
+            var model = new QuickLinkIndexViewModel { Links = links, Customer = customer, LinkGroups = linkGroups };
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public PartialViewResult Search(string searchText, int customerId, List<int> groupIds)
+        {
+            var customer = this._customerService.GetCustomer(customerId);
+            var links = this._linkService.SearchLinks(customer.Id, searchText, groupIds);
 
             var model = new QuickLinkIndexViewModel { Links = links, Customer = customer };
-            return this.View(model);
+            return PartialView("~/Areas/Admin/Views/QuickLink/_QuickLinksRows.cshtml", model.Links);
         }
 
         public ActionResult New(int customerId)
@@ -57,10 +73,10 @@
         }
 
         [HttpPost]
-        public ActionResult New(Link link, int[] UsSelected)
+        public ActionResult New(Link link, int[] UsSelected, int[] WgSelected)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            this._linkService.SaveLink(link, UsSelected, out errors);
+            this._linkService.SaveLink(link, UsSelected, WgSelected, out errors);
 
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "quicklink", new { customerId = link.Customer_Id });
@@ -85,10 +101,10 @@
         }
 
         [HttpPost]
-        public ActionResult Edit(Link link, int[] UsSelected)
+        public ActionResult Edit(Link link, int[] UsSelected, int[] WgSelected)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            this._linkService.SaveLink(link, UsSelected, out errors);
+            this._linkService.SaveLink(link, UsSelected, WgSelected, out errors);
 
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "quicklink", new { customerId = link.Customer_Id });
@@ -116,6 +132,10 @@
         {
             var usSelected = link.Us ?? new List<User>();
             var usAvailable = new List<User>();
+
+            var wgSelected = link.Wg ?? new List<WorkingGroupEntity>();
+            var wgAvailable = new List<WorkingGroupEntity>();
+
             var cs = this._settingService.GetCustomerSetting(customer.Id);
             var isFirstName = (cs.IsUserFirstLastNameRepresentation == 1);
 
@@ -125,9 +145,15 @@
                     usAvailable.Add(u);
             }
 
+            foreach (var w in this._workgroupService.GetWorkingGroups(customer.Id, true))
+            {
+                if (!wgSelected.Contains(w))
+                    wgAvailable.Add(w);
+            }
+
             var model = new QuickLinkInputViewModel
             {
-                
+
                 Link = link,
                 Customer = customer,
                 Documents = this._documentService.GetDocuments(customer.Id).Select(x => new SelectListItem
@@ -158,7 +184,19 @@
                 {
                     Text = (isFirstName ? string.Format("{0} {1}", x.FirstName, x.SurName) : string.Format("{0} {1}", x.SurName, x.FirstName)),
                     Value = x.Id.ToString()
-                }).OrderBy(s=> s.Text).ToList()
+                }).OrderBy(s => s.Text).ToList(),
+
+                WgAvailable = wgAvailable.Select(x => new SelectListItem
+                {
+                    Text = (x.WorkingGroupName),
+                    Value = x.Id.ToString()
+                }).OrderBy(a => a.Text).ToList(),
+
+                WgSelected = wgSelected.Select(x => new SelectListItem
+                {
+                    Text = (x.WorkingGroupName),
+                    Value = x.Id.ToString()
+                }).OrderBy(s => s.Text).ToList()
 
             };
 

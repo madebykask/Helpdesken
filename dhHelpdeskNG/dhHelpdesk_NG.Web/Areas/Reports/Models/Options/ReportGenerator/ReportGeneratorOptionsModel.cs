@@ -35,7 +35,9 @@ namespace DH.Helpdesk.Web.Areas.Reports.Models.Options.ReportGenerator
                 DateTime periodUntil, 
                 int recordsOnPage,
                 string sortName,
-                 SortBy? sortBy)
+                 SortBy? sortBy,
+                 DateTime? closeFrom,
+                 DateTime? closeTo)
         {
             this.SortName = sortName;
             this.SortBy = sortBy;
@@ -47,6 +49,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Models.Options.ReportGenerator
             this.PeriodFrom = periodFrom;
             this.PeriodUntil = periodUntil;
             this.CaseTypeIds = caseTypeIds;
+            this.CloseFrom = closeFrom;
+            this.CloseTo = closeTo;
         }
 
         //[NotNull]
@@ -89,6 +93,12 @@ namespace DH.Helpdesk.Web.Areas.Reports.Models.Options.ReportGenerator
         [LocalizedDisplay("Period till")]
         public DateTime? PeriodUntil { get; set; }
 
+//        [LocalizedDisplay("Period från")]
+        public DateTime? CloseFrom { get; set; }
+
+//        [LocalizedDisplay("Period till")]
+        public DateTime? CloseTo { get; set; }
+
         public bool IsExcel { get; set; }
 
         public bool IsPreview { get; set; }
@@ -121,7 +131,9 @@ namespace DH.Helpdesk.Web.Areas.Reports.Models.Options.ReportGenerator
                         this.PeriodFrom,
                         this.PeriodUntil,
                         this.RecordsOnPage,
-                        sortField);
+                        sortField,
+                        CloseFrom,
+                        CloseTo);
         }
     }
 }

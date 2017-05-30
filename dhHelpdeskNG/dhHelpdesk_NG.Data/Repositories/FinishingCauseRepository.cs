@@ -36,7 +36,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public List<FinishingCauseOverview> GetFinishingCauseOverviews(int customerId)
         {
-            var causeEntities = this.DataContext.FinishingCauses.Where(c => c.Customer_Id == customerId).ToList();
+            var causeEntities = this.DataContext.FinishingCauses.Where(c => c.Customer_Id == customerId && c.IsActive == 1).ToList();
             var parentCauses = causeEntities.Where(c => c.Parent_FinishingCause_Id == null).ToList();
             var categories = new List<FinishingCauseOverview>(parentCauses.Count);
 

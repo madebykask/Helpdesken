@@ -55,6 +55,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Notifiers.Concrete
             var createdDate = CreateSettingModel(settings.CreatedDate);
             var changedDate = CreateSettingModel(settings.ChangedDate);
             var synchronizationDate = CreateSettingModel(settings.SynchronizationDate);
+            var language = CreateSettingModel(settings.Language);
 
             return new SettingsModel(
                 languageDropDownContent,
@@ -86,7 +87,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Notifiers.Concrete
                 ordered,
                 createdDate,
                 changedDate,
-                synchronizationDate);
+                synchronizationDate,
+                language);
         }
 
         #endregion

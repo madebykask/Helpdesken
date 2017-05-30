@@ -1,0 +1,25 @@
+﻿@model DH.Helpdesk.Web.Models.Feedback.FeedbackThankYouModel
+@{
+    ViewBag.Title = "Feedback Completed";
+}
+
+<div class="content">
+    <div class="container">
+        @Html.Raw(Model.Html)
+        @using (Html.BeginForm("SaveComment", "FeedbackAnswer", new { customerId = Model.CustomerId, languageId = Model.LanguageId, questionId = Model.QuestionId, noteText = Model.NoteText }, FormMethod.Post))
+        {
+            if (Model.IsShowNote)
+            {
+                @Html.DisplayFor(m => m.NoteLabel)
+                <br />
+                @Html.TextAreaFor(m => m.NoteText)
+                @Html.ValidationMessageFor(m => m.NoteText)
+                @Html.HiddenFor(m => m.CustomerId)
+                @Html.HiddenFor(m => m.LanguageId)
+                @Html.HiddenFor(m => m.QuestionId)
+                <br/>
+                <input type="submit" value="Save" />
+            }
+        }
+    </div>
+</div>

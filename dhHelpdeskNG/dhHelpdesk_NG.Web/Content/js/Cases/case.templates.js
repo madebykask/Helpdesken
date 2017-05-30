@@ -86,6 +86,7 @@ function IsWillBeOverwrittenByValue(domVisible, domValue, val) {
 }
 
 function IsWillBeOverwritten(fieldId, val) {
+    
     switch (fieldId) {
         case 'PersonsName':
             return IsWillBeOverwrittenByValue('#case__PersonsName', '#case__PersonsName', val);
@@ -323,7 +324,7 @@ var finalActionId;
 
 var caseButtons = $('.btn.save, .btn.save-close, .btn.save-new, .btn.caseDeleteDialog, ' +
                     '#case-action-close, #divActionMenu, #btnActionMenu, #divCaseTemplate, #btnCaseTemplateTree, .btn.print-case,' +
-                    '.btn.show-inventory, .btn.previous-case, .btn.next-case, .btn.templateQuickButton');
+                    '.btn.show-inventory, .btn.previous-case, .btn.next-case, .btn.templateQuickButton, #btnGo, #steps');
 
 var templateQuickButtonIndicator = '#TemplateQuickButtonIndicator';
 
@@ -336,6 +337,7 @@ var ApplyTemplate = function (data, doOverwrite) {
         var val = data[fieldId];
         var el;
         if (val != null && val !== '') {
+            
             switch (fieldId) {
                 case 'PersonsName':
                     el = $('#case__PersonsName');
@@ -685,7 +687,7 @@ function IsValueApplicableFor(templateFieldId, val) {
     if (val == null || val === "") {
         return false;
     }
-
+    
     switch (templateFieldId) {
         case 'PersonsName':
             return $('#case__PersonsName').is(":visible") && $('#case__PersonsName').find('a[value="' + val + '"]').length != 0;
@@ -901,6 +903,16 @@ function IsValueApplicableFor(templateFieldId, val) {
     }
     return false;
 }
+
+
+$("#btnGo").on("click", function () {
+    var templateId = parseInt($('#steps').val()) || 0;
+    //only load if templateId exist
+    if (templateId > 0)
+        {
+        LoadTemplate(templateId);
+    }
+});
 
 function LoadTemplate(id) {
     var caseInvoiceIsActive = false;

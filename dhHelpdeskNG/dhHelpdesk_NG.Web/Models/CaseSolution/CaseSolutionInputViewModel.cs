@@ -28,6 +28,7 @@
         public string[] ScheduleMonth { get; set; }
         public string Finishing_Cause_Path { get; set; }
         public string ParantPath_ProductArea { get; set; }
+        public string ParantPath_Category { get; set; }
         public string ParantPath_CaseType { get; set; }
         public int? CountryId { get; set; }
 
@@ -39,7 +40,8 @@
         public IList<SelectListItem> CsCategories { get; set; }
         public IList<CaseType> CaseTypes { get; set; }
         public IList<SelectListItem> CaseWorkingGroups { get; set; }
-        public IList<SelectListItem> Categories { get; set; }
+//        public IList<SelectListItem> Categories { get; set; }
+        public IList<Category> Categories { get; set; }
         public IList<SelectListItem> Departments { get; set; }
         public IList<FinishingCause> FinishingCauses { get; set; }
 

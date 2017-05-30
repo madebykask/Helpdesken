@@ -108,7 +108,7 @@
             this.Property(x => x.Place).IsRequired().HasMaxLength(100);
             this.Property(x => x.PlanDate).IsOptional();
             this.Property(x => x.ProductAreaSetDate).IsOptional();
-            this.Property(x => x.ReferenceNumber).IsOptional().HasMaxLength(50);
+            this.Property(x => x.ReferenceNumber).IsOptional().HasMaxLength(200);
             this.Property(x => x.RegistrationSource).IsRequired();
             this.Property(x => x.RelatedCaseNumber).IsRequired();
             this.Property(x => x.RegUserDomain).IsOptional().HasMaxLength(20);
@@ -140,6 +140,7 @@
             this.Property(x => x.LeadTime).IsRequired();
             this.Property(x => x.ActionLeadTime).IsRequired();
             this.Property(x => x.ActionExternalTime).IsRequired();
+            this.Property(x => x.CaseExtraFollowers).IsRequired();
             
             this.ToTable("tblcasehistory");
         }

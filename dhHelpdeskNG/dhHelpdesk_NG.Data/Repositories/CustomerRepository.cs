@@ -34,6 +34,9 @@ using System;
         ItemOverview GetOverview(int customerId);
 
         int? GetCustomerIdByEMailGUID(Guid GUID);
+
+        int GetCustomerLanguage(int customerid);
+     
     }
 
     public sealed class CustomerRepository : RepositoryBase<Customer>, ICustomerRepository
@@ -46,6 +49,11 @@ using System;
         public string GetCustomerName(int customerId)
         {
             return this.DataContext.Customers.Where(c => c.Id == customerId).Select(c => c.Name).Single();
+        }
+
+        public int GetCustomerLanguage(int customerId)
+        {
+            return this.DataContext.Customers.Where(c => c.Id == customerId).Select(c => c.Language_Id).Single();
         }
 
         public int? GetCustomerIdByEMailGUID(Guid GUID)

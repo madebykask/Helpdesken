@@ -61,20 +61,20 @@
 
         private static DeliveryFieldSettingsOverview CreateDeliveryFieldSettingsOverview(NamedObjectCollection<OrdersFieldSettingsOverviewMapData> fieldSettings)
         {
-            var deliveryDate = CreateFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryDate));
-            var installDate = CreateFieldSetting(fieldSettings.FindByName(DeliveryFields.InstallDate));
-            var deliveryDepartment = CreateFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryDepartment));
-            var deliveryOu = CreateFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryOu));
-            var deliveryAddress = CreateFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryAddress));
-            var deliveryPostalCode = CreateFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryPostalCode));
-            var deliveryPostalAddress = CreateFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryPostalAddress));
-            var deliveryLocation = CreateFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryLocation));
-            var deliveryInfo1 = CreateFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryInfo1));
-            var deliveryInfo2 = CreateFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryInfo2));
-            var deliveryInfo3 = CreateFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryInfo3));
-            var deliveryOuId = CreateFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryOuId));
-            var deliveryName = CreateFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryName));
-            var deliveryPhone = CreateFieldSetting(fieldSettings.FindByName(DeliveryFields.DeliveryPhone));
+            var deliveryDate = CreateFieldSetting(fieldSettings.FindByName(OrderFields.DeliveryDate));
+            var installDate = CreateFieldSetting(fieldSettings.FindByName(OrderFields.DeliveryInstallDate));
+            var deliveryDepartment = CreateFieldSetting(fieldSettings.FindByName(OrderFields.DeliveryDepartment));
+            var deliveryOu = CreateFieldSetting(fieldSettings.FindByName(OrderFields.DeliveryOu));
+            var deliveryAddress = CreateFieldSetting(fieldSettings.FindByName(OrderFields.DeliveryAddress));
+            var deliveryPostalCode = CreateFieldSetting(fieldSettings.FindByName(OrderFields.DeliveryPostalCode));
+            var deliveryPostalAddress = CreateFieldSetting(fieldSettings.FindByName(OrderFields.DeliveryPostalAddress));
+            var deliveryLocation = CreateFieldSetting(fieldSettings.FindByName(OrderFields.DeliveryLocation));
+            var deliveryInfo1 = CreateFieldSetting(fieldSettings.FindByName(OrderFields.DeliveryInfo1));
+            var deliveryInfo2 = CreateFieldSetting(fieldSettings.FindByName(OrderFields.DeliveryInfo2));
+            var deliveryInfo3 = CreateFieldSetting(fieldSettings.FindByName(OrderFields.DeliveryInfo3));
+            var deliveryOuId = CreateFieldSetting(fieldSettings.FindByName(OrderFields.DeliveryOuId));
+            var deliveryName = CreateFieldSetting(fieldSettings.FindByName(OrderFields.DeliveryName));
+            var deliveryPhone = CreateFieldSetting(fieldSettings.FindByName(OrderFields.DeliveryPhone));
 
             return new DeliveryFieldSettingsOverview(
                                                 deliveryDate,
@@ -95,11 +95,11 @@
 
         private static GeneralFieldSettingsOverview CreateGeneralFieldSettingsOverview(NamedObjectCollection<OrdersFieldSettingsOverviewMapData> fieldSettings)
         {
-            var orderNumber = CreateFieldSetting(fieldSettings.FindByName(GeneralFields.OrderNumber));
-            var customer = CreateFieldSetting(fieldSettings.FindByName(GeneralFields.Customer));
-            var administrator = CreateFieldSetting(fieldSettings.FindByName(GeneralFields.Administrator));
-            var domain = CreateFieldSetting(fieldSettings.FindByName(GeneralFields.Domain));
-            var orderDate = CreateFieldSetting(fieldSettings.FindByName(GeneralFields.OrderDate));
+            var orderNumber = CreateFieldSetting(fieldSettings.FindByName(OrderFields.GeneralOrderNumber));
+            var customer = CreateFieldSetting(fieldSettings.FindByName(OrderFields.GeneralCustomer));
+            var administrator = CreateFieldSetting(fieldSettings.FindByName(OrderFields.GeneralAdministrator));
+            var domain = CreateFieldSetting(fieldSettings.FindByName(OrderFields.GeneralDomain));
+            var orderDate = CreateFieldSetting(fieldSettings.FindByName(OrderFields.GeneralOrderDate));
 
             return new GeneralFieldSettingsOverview(
                                                 orderNumber,
@@ -111,29 +111,29 @@
 
         private static LogFieldSettingsOverview CreateLogFieldSettingsOverview(NamedObjectCollection<OrdersFieldSettingsOverviewMapData> fieldSettings)
         {
-            var log = CreateFieldSetting(fieldSettings.FindByName(LogFields.Log));
+            var log = CreateFieldSetting(fieldSettings.FindByName(OrderFields.Log));
 
             return new LogFieldSettingsOverview(log);
         }
 
         private static OrdererFieldSettingsOverview CreateOrdererFieldSettingsOverview(NamedObjectCollection<OrdersFieldSettingsOverviewMapData> fieldSettings)
         {
-            var ordererId = CreateFieldSetting(fieldSettings.FindByName(OrdererFields.OrdererId));
-            var ordererName = CreateFieldSetting(fieldSettings.FindByName(OrdererFields.OrdererName));
-            var ordererLocation = CreateFieldSetting(fieldSettings.FindByName(OrdererFields.OrdererLocation));
-            var ordererEmail = CreateFieldSetting(fieldSettings.FindByName(OrdererFields.OrdererEmail));
-            var ordererPhone = CreateFieldSetting(fieldSettings.FindByName(OrdererFields.OrdererPhone));
-            var ordererCode = CreateFieldSetting(fieldSettings.FindByName(OrdererFields.OrdererCode));
-            var department = CreateFieldSetting(fieldSettings.FindByName(OrdererFields.Department));
-            var unit = CreateFieldSetting(fieldSettings.FindByName(OrdererFields.Unit));
-            var ordererAddress = CreateFieldSetting(fieldSettings.FindByName(OrdererFields.OrdererAddress));
-            var ordererInvoiceAddress = CreateFieldSetting(fieldSettings.FindByName(OrdererFields.OrdererInvoiceAddress));
-            var ordererReferenceNumber = CreateFieldSetting(fieldSettings.FindByName(OrdererFields.OrdererReferenceNumber));
-            var accountingDimension1 = CreateFieldSetting(fieldSettings.FindByName(OrdererFields.AccountingDimension1));
-            var accountingDimension2 = CreateFieldSetting(fieldSettings.FindByName(OrdererFields.AccountingDimension2));
-            var accountingDimension3 = CreateFieldSetting(fieldSettings.FindByName(OrdererFields.AccountingDimension3));
-            var accountingDimension4 = CreateFieldSetting(fieldSettings.FindByName(OrdererFields.AccountingDimension4));
-            var accountingDimension5 = CreateFieldSetting(fieldSettings.FindByName(OrdererFields.AccountingDimension5));
+            var ordererId = CreateFieldSetting(fieldSettings.FindByName(OrderFields.OrdererId));
+            var ordererName = CreateFieldSetting(fieldSettings.FindByName(OrderFields.OrdererName));
+            var ordererLocation = CreateFieldSetting(fieldSettings.FindByName(OrderFields.OrdererLocation));
+            var ordererEmail = CreateFieldSetting(fieldSettings.FindByName(OrderFields.OrdererEmail));
+            var ordererPhone = CreateFieldSetting(fieldSettings.FindByName(OrderFields.OrdererPhone));
+            var ordererCode = CreateFieldSetting(fieldSettings.FindByName(OrderFields.OrdererCode));
+            var department = CreateFieldSetting(fieldSettings.FindByName(OrderFields.OrdererDepartment));
+            var unit = CreateFieldSetting(fieldSettings.FindByName(OrderFields.OrdererUnit));
+            var ordererAddress = CreateFieldSetting(fieldSettings.FindByName(OrderFields.OrdererAddress));
+            var ordererInvoiceAddress = CreateFieldSetting(fieldSettings.FindByName(OrderFields.OrdererInvoiceAddress));
+            var ordererReferenceNumber = CreateFieldSetting(fieldSettings.FindByName(OrderFields.OrdererReferenceNumber));
+            var accountingDimension1 = CreateFieldSetting(fieldSettings.FindByName(OrderFields.OrdererAccountingDimension1));
+            var accountingDimension2 = CreateFieldSetting(fieldSettings.FindByName(OrderFields.OrdererAccountingDimension2));
+            var accountingDimension3 = CreateFieldSetting(fieldSettings.FindByName(OrderFields.OrdererAccountingDimension3));
+            var accountingDimension4 = CreateFieldSetting(fieldSettings.FindByName(OrderFields.OrdererAccountingDimension4));
+            var accountingDimension5 = CreateFieldSetting(fieldSettings.FindByName(OrderFields.OrdererAccountingDimension5));
 
             return new OrdererFieldSettingsOverview(
                                                 ordererId,
@@ -156,7 +156,7 @@
 
         private static OrderFieldSettingsOverview CreateOrderFieldSettingsOverview(NamedObjectCollection<OrdersFieldSettingsOverviewMapData> fieldSettings)
         {
-            var property = CreateFieldSetting(fieldSettings.FindByName(OrderFields.Property));
+            var property = CreateFieldSetting(fieldSettings.FindByName(OrderFields.OrderProperty));
             var orderRow1 = CreateFieldSetting(fieldSettings.FindByName(OrderFields.OrderRow1));
             var orderRow2 = CreateFieldSetting(fieldSettings.FindByName(OrderFields.OrderRow2));
             var orderRow3 = CreateFieldSetting(fieldSettings.FindByName(OrderFields.OrderRow3));
@@ -165,7 +165,7 @@
             var orderRow6 = CreateFieldSetting(fieldSettings.FindByName(OrderFields.OrderRow6));
             var orderRow7 = CreateFieldSetting(fieldSettings.FindByName(OrderFields.OrderRow7));
             var orderRow8 = CreateFieldSetting(fieldSettings.FindByName(OrderFields.OrderRow8));
-            var configuration = CreateFieldSetting(fieldSettings.FindByName(OrderFields.Configuration));
+            var configuration = CreateFieldSetting(fieldSettings.FindByName(OrderFields.OrderConfiguration));
             var orderInfo = CreateFieldSetting(fieldSettings.FindByName(OrderFields.OrderInfo));
             var orderInfo2 = CreateFieldSetting(fieldSettings.FindByName(OrderFields.OrderInfo2));
 
@@ -186,10 +186,10 @@
 
         private static OtherFieldSettingsOverview CreateOtherFieldSettingsOverview(NamedObjectCollection<OrdersFieldSettingsOverviewMapData> fieldSettings)
         {
-            var fileName = CreateFieldSetting(fieldSettings.FindByName(OtherFields.FileName));
-            var caseNumber = CreateFieldSetting(fieldSettings.FindByName(OtherFields.CaseNumber));
-            var info = CreateFieldSetting(fieldSettings.FindByName(OtherFields.Info));
-            var status = CreateFieldSetting(fieldSettings.FindByName(OtherFields.Status));
+            var fileName = CreateFieldSetting(fieldSettings.FindByName(OrderFields.OtherFileName));
+            var caseNumber = CreateFieldSetting(fieldSettings.FindByName(OrderFields.OtherCaseNumber));
+            var info = CreateFieldSetting(fieldSettings.FindByName(OrderFields.OtherInfo));
+            var status = CreateFieldSetting(fieldSettings.FindByName(OrderFields.OtherStatus));
 
             return new OtherFieldSettingsOverview(
                                                 fileName,
@@ -200,20 +200,20 @@
 
         private static ProgramFieldSettingsOverview CreateProgramFieldSettingsOverview(NamedObjectCollection<OrdersFieldSettingsOverviewMapData> fieldSettings)
         {
-            var program = CreateFieldSetting(fieldSettings.FindByName(ProgramFields.Program));
-            var infoProduct = CreateFieldSetting(fieldSettings.FindByName(ProgramFields.InfoProduct));
+            var program = CreateFieldSetting(fieldSettings.FindByName(OrderFields.Program));
+            var infoProduct = CreateFieldSetting(fieldSettings.FindByName(OrderFields.ProgramInfoProduct));
 
             return new ProgramFieldSettingsOverview(program, infoProduct);
         }
 
         private static ReceiverFieldSettingsOverview CreateReceiverFieldSettingsOverview(NamedObjectCollection<OrdersFieldSettingsOverviewMapData> fieldSettings)
         {
-            var receiverId = CreateFieldSetting(fieldSettings.FindByName(ReceiverFields.ReceiverId));
-            var receiverName = CreateFieldSetting(fieldSettings.FindByName(ReceiverFields.ReceiverName));
-            var receiverEmail = CreateFieldSetting(fieldSettings.FindByName(ReceiverFields.ReceiverEmail));
-            var receiverPhone = CreateFieldSetting(fieldSettings.FindByName(ReceiverFields.ReceiverPhone));
-            var receiverLocation = CreateFieldSetting(fieldSettings.FindByName(ReceiverFields.ReceiverLocation));
-            var markOfGoods = CreateFieldSetting(fieldSettings.FindByName(ReceiverFields.MarkOfGoods));
+            var receiverId = CreateFieldSetting(fieldSettings.FindByName(OrderFields.ReceiverId));
+            var receiverName = CreateFieldSetting(fieldSettings.FindByName(OrderFields.ReceiverName));
+            var receiverEmail = CreateFieldSetting(fieldSettings.FindByName(OrderFields.ReceiverEmail));
+            var receiverPhone = CreateFieldSetting(fieldSettings.FindByName(OrderFields.ReceiverPhone));
+            var receiverLocation = CreateFieldSetting(fieldSettings.FindByName(OrderFields.ReceiverLocation));
+            var markOfGoods = CreateFieldSetting(fieldSettings.FindByName(OrderFields.ReceiverMarkOfGoods));
 
             return new ReceiverFieldSettingsOverview(
                                                 receiverId,
@@ -226,9 +226,9 @@
 
         private static SupplierFieldSettingsOverview CreateSupplierFieldSettingsOverview(NamedObjectCollection<OrdersFieldSettingsOverviewMapData> fieldSettings)
         {
-            var supplierOrderNumber = CreateFieldSetting(fieldSettings.FindByName(SupplierFields.SupplierOrderNumber));
-            var supplierOrderDate = CreateFieldSetting(fieldSettings.FindByName(SupplierFields.SupplierOrderDate));
-            var supplierOrderInfo = CreateFieldSetting(fieldSettings.FindByName(SupplierFields.SupplierOrderInfo));
+            var supplierOrderNumber = CreateFieldSetting(fieldSettings.FindByName(OrderFields.SupplierOrderNumber));
+            var supplierOrderDate = CreateFieldSetting(fieldSettings.FindByName(OrderFields.SupplierOrderDate));
+            var supplierOrderInfo = CreateFieldSetting(fieldSettings.FindByName(OrderFields.SupplierOrderInfo));
 
             return new SupplierFieldSettingsOverview(
                                                 supplierOrderNumber,
@@ -238,27 +238,27 @@
 
         private static UserFieldSettingsOverview CreateUserFieldSettingsOverview(NamedObjectCollection<OrdersFieldSettingsOverviewMapData> fieldSettings)
         {
-            var userId = CreateFieldSetting(fieldSettings.FindByName(UserFields.UserId));
-            var userFirstName = CreateFieldSetting(fieldSettings.FindByName(UserFields.UserFirstName));
-            var userLastName = CreateFieldSetting(fieldSettings.FindByName(UserFields.UserLastName));
-            var userPhone = CreateFieldSetting(fieldSettings.FindByName(UserFields.UserPhone));
-            var userEMail = CreateFieldSetting(fieldSettings.FindByName(UserFields.UserEMail));
-            var userInitials = CreateFieldSetting(fieldSettings.FindByName(UserFields.UserInitials));
-            var userPersonalIdentityNumber = CreateFieldSetting(fieldSettings.FindByName(UserFields.UserPersonalIdentityNumber));
-            var userExtension = CreateFieldSetting(fieldSettings.FindByName(UserFields.UserExtension));
-            var userTitle = CreateFieldSetting(fieldSettings.FindByName(UserFields.UserTitle));
-            var userLocation = CreateFieldSetting(fieldSettings.FindByName(UserFields.UserLocation));
-            var userRoomNumber = CreateFieldSetting(fieldSettings.FindByName(UserFields.UserRoomNumber));
-            var userPostalAddress = CreateFieldSetting(fieldSettings.FindByName(UserFields.UserPostalAddress));
-            var responsibility = CreateFieldSetting(fieldSettings.FindByName(UserFields.Responsibility));
-            var activity = CreateFieldSetting(fieldSettings.FindByName(UserFields.Activity));
-            var manager = CreateFieldSetting(fieldSettings.FindByName(UserFields.Manager));
-            var referenceNumber = CreateFieldSetting(fieldSettings.FindByName(UserFields.ReferenceNumber));
-            var infoUser = CreateFieldSetting(fieldSettings.FindByName(UserFields.InfoUser));
-            var userOU_Id = CreateFieldSetting(fieldSettings.FindByName(UserFields.UserOU_Id));
-            var employmentType = CreateFieldSetting(fieldSettings.FindByName(UserFields.EmploymentType));
-            var userDepartment_Id1 = CreateFieldSetting(fieldSettings.FindByName(UserFields.UserDepartment_Id1));
-            var userDepartment_Id2 = CreateFieldSetting(fieldSettings.FindByName(UserFields.UserDepartment_Id2));
+            var userId = CreateFieldSetting(fieldSettings.FindByName(OrderFields.UserId));
+            var userFirstName = CreateFieldSetting(fieldSettings.FindByName(OrderFields.UserFirstName));
+            var userLastName = CreateFieldSetting(fieldSettings.FindByName(OrderFields.UserLastName));
+            var userPhone = CreateFieldSetting(fieldSettings.FindByName(OrderFields.UserPhone));
+            var userEMail = CreateFieldSetting(fieldSettings.FindByName(OrderFields.UserEMail));
+            var userInitials = CreateFieldSetting(fieldSettings.FindByName(OrderFields.UserInitials));
+            var userPersonalIdentityNumber = CreateFieldSetting(fieldSettings.FindByName(OrderFields.UserPersonalIdentityNumber));
+            var userExtension = CreateFieldSetting(fieldSettings.FindByName(OrderFields.UserExtension));
+            var userTitle = CreateFieldSetting(fieldSettings.FindByName(OrderFields.UserTitle));
+            var userLocation = CreateFieldSetting(fieldSettings.FindByName(OrderFields.UserLocation));
+            var userRoomNumber = CreateFieldSetting(fieldSettings.FindByName(OrderFields.UserRoomNumber));
+            var userPostalAddress = CreateFieldSetting(fieldSettings.FindByName(OrderFields.UserPostalAddress));
+            var responsibility = CreateFieldSetting(fieldSettings.FindByName(OrderFields.UserResponsibility));
+            var activity = CreateFieldSetting(fieldSettings.FindByName(OrderFields.UserActivity));
+            var manager = CreateFieldSetting(fieldSettings.FindByName(OrderFields.UserManager));
+            var referenceNumber = CreateFieldSetting(fieldSettings.FindByName(OrderFields.UserReferenceNumber));
+            var infoUser = CreateFieldSetting(fieldSettings.FindByName(OrderFields.UserInfo));
+            var userOU_Id = CreateFieldSetting(fieldSettings.FindByName(OrderFields.UserOU_Id));
+            var employmentType = CreateFieldSetting(fieldSettings.FindByName(OrderFields.UserEmploymentType));
+            var userDepartment_Id1 = CreateFieldSetting(fieldSettings.FindByName(OrderFields.UserDepartment_Id1));
+            var userDepartment_Id2 = CreateFieldSetting(fieldSettings.FindByName(OrderFields.UserDepartment_Id2));
 
             return new UserFieldSettingsOverview(
                                                 userId,
@@ -287,18 +287,18 @@
         private static AccountInfoFieldSettingsOverview CreateAccountInfoFieldSettingsOverview(
             NamedObjectCollection<OrdersFieldSettingsOverviewMapData> fieldSettings)
         {
-            var startDate = CreateFieldSetting(fieldSettings.FindByName(AccountInfoFields.StartedDate));
-            var endDate = CreateFieldSetting(fieldSettings.FindByName(AccountInfoFields.FinishDate));
-            var emailType = CreateFieldSetting(fieldSettings.FindByName(AccountInfoFields.EMailTypeId));
-            var homeDirectory = CreateFieldSetting(fieldSettings.FindByName(AccountInfoFields.HomeDirectory));
-            var profile = CreateFieldSetting(fieldSettings.FindByName(AccountInfoFields.Profile));
-            var inventoryNumber = CreateFieldSetting(fieldSettings.FindByName(AccountInfoFields.InventoryNumber));
-            var accountType = CreateFieldSetting(fieldSettings.FindByName(AccountInfoFields.AccountType));
-            var accountType2 = CreateFieldSetting(fieldSettings.FindByName(AccountInfoFields.AccountType2));
-            var accountType3 = CreateFieldSetting(fieldSettings.FindByName(AccountInfoFields.AccountType3));
-            var accountType4 = CreateFieldSetting(fieldSettings.FindByName(AccountInfoFields.AccountType4));
-            var accountType5 = CreateFieldSetting(fieldSettings.FindByName(AccountInfoFields.AccountType5));
-            var info = CreateFieldSetting(fieldSettings.FindByName(AccountInfoFields.Info));
+            var startDate = CreateFieldSetting(fieldSettings.FindByName(OrderFields.AccountInfoStartedDate));
+            var endDate = CreateFieldSetting(fieldSettings.FindByName(OrderFields.AccountInfoFinishDate));
+            var emailType = CreateFieldSetting(fieldSettings.FindByName(OrderFields.AccountInfoEMailTypeId));
+            var homeDirectory = CreateFieldSetting(fieldSettings.FindByName(OrderFields.AccountInfoHomeDirectory));
+            var profile = CreateFieldSetting(fieldSettings.FindByName(OrderFields.AccountInfoProfile));
+            var inventoryNumber = CreateFieldSetting(fieldSettings.FindByName(OrderFields.AccountInfoInventoryNumber));
+            var accountType = CreateFieldSetting(fieldSettings.FindByName(OrderFields.AccountInfoAccountType));
+            var accountType2 = CreateFieldSetting(fieldSettings.FindByName(OrderFields.AccountInfoAccountType2));
+            var accountType3 = CreateFieldSetting(fieldSettings.FindByName(OrderFields.AccountInfoAccountType3));
+            var accountType4 = CreateFieldSetting(fieldSettings.FindByName(OrderFields.AccountInfoAccountType4));
+            var accountType5 = CreateFieldSetting(fieldSettings.FindByName(OrderFields.AccountInfoAccountType5));
+            var info = CreateFieldSetting(fieldSettings.FindByName(OrderFields.AccountInfo));
 
             return new AccountInfoFieldSettingsOverview(
                 startDate,
@@ -318,10 +318,10 @@
         private static ContactFieldSettingsOverview CreateContactFieldSettingsOverview(
             NamedObjectCollection<OrdersFieldSettingsOverviewMapData> fieldSettings)
         {
-            var id = CreateFieldSetting(fieldSettings.FindByName(ContactFields.ContactId));
-            var name = CreateFieldSetting(fieldSettings.FindByName(ContactFields.ContactName));
-            var phone = CreateFieldSetting(fieldSettings.FindByName(ContactFields.ContactPhone));
-            var email = CreateFieldSetting(fieldSettings.FindByName(ContactFields.ContactEMail));
+            var id = CreateFieldSetting(fieldSettings.FindByName(OrderFields.ContactId));
+            var name = CreateFieldSetting(fieldSettings.FindByName(OrderFields.ContactName));
+            var phone = CreateFieldSetting(fieldSettings.FindByName(OrderFields.ContactPhone));
+            var email = CreateFieldSetting(fieldSettings.FindByName(OrderFields.ContactEMail));
 
             return new ContactFieldSettingsOverview(id,
                 name,

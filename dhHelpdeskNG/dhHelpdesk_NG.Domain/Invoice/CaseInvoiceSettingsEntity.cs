@@ -15,5 +15,7 @@
         public string OurReference { get; set; }
 
         public string DocTemplate { get; set; }
+
+        public string Filter { get; set; }
     }
 }

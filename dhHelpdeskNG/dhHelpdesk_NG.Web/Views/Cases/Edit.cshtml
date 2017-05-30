@@ -300,6 +300,8 @@
                                     <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Aktivera"), "Activate", "Cases", new { id = Model.case_.Id, backUrl = Model.BackUrl }, new { @class = "btn" })</li>
                                 }
 
+
+
                                 @if (SessionFacade.CurrentUser.MoveCasePermission == 1)
                                 {
                                     <li><a data-toggle="modal" href="#divMoveCase">@Translation.GetCoreTextTranslation("Flytta")</a></li>
@@ -321,7 +323,7 @@
                                     }
                                 }
 
-                                @if (Model.Languages != null && Model.Languages.Where(l => l.IsActive).ToList().Count > 1)
+                                @if (Model.Languages != null && Model.Languages.Where(l => l.IsActive > 0).ToList().Count > 1)
                                 {
                                     var curLanguage = (Model.case_.Id == 0 ? SessionFacade.CurrentLanguageId : Model.case_.RegLanguage_Id);
                                     <li class="dropdown-submenu">
@@ -329,7 +331,7 @@
                                             @Translation.GetCoreTextTranslation("Språk för E-mail")
                                         </a>
                                         <ul class="dropdown-menu">
-                                            @foreach (var lang in Model.Languages.Where(l => l.IsActive).ToList())
+                                            @foreach (var lang in Model.Languages.Where(l => l.IsActive > 0).ToList())
                                             {
                                                 var langNameId = "langItem" + lang.Id;
                                                 <li>
@@ -384,7 +386,16 @@
                         <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Aktivera"), "Activate", "Cases", new { id = Model.case_.Id, backUrl = Model.BackUrl }, new { @class = "btn" })</li>
                     }
 
+
+
                 }
+
+                @*At the moment we do not check access for this /TAN*@
+               @if (!Model.IsItChildCase())
+                    {
+                @Html.Partial("WorkflowStep", Model.WorkflowSteps)
+                }
+                
             </ul>
         </div>
         <div class="pull-right">

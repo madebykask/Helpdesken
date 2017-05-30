@@ -25,7 +25,8 @@ namespace DH.Helpdesk.Web.Models.Faq.Output
             bool showOnStartPage, 
             bool userHasFaqAdminPermission,
             int languageId,
-            SelectList languages)
+            SelectList languages,
+            bool showDetails = false)
         {
             this.UserHasFaqAdminPermission = userHasFaqAdminPermission;
             //if (id <= 0)
@@ -71,6 +72,7 @@ namespace DH.Helpdesk.Web.Models.Faq.Output
             this.ShowOnStartPage = showOnStartPage;
             this.LanguageId = languageId;
             this.Languages = languages;
+            this.ShowDetails = showDetails;
         }
 
         #endregion
@@ -104,6 +106,8 @@ namespace DH.Helpdesk.Web.Models.Faq.Output
         public int LanguageId { get; set; }
 
         public SelectList Languages { get; set; }
+
+        public bool ShowDetails { get; set; }
 
         #endregion
     }

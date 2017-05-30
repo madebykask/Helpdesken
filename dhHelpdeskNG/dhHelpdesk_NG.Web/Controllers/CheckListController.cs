@@ -67,7 +67,7 @@ namespace DH.Helpdesk.Web.Controllers
                 Value = x.Id.ToString()
             }).ToList();
 
-            wgs.Insert(0,new SelectListItem {Text = "", Value = "0", Selected=true});
+            wgs.Insert(0,new SelectListItem {Text = "", Value = null, Selected=true});
             
             model.WorkingGroups = wgs;            
 
@@ -213,14 +213,14 @@ namespace DH.Helpdesk.Web.Controllers
 
             this._CheckListActionService.SaveCheckListAction(new_Action);
 
-            return this.RedirectToAction("Edit", "CheckList", new { id = ch_Service.CheckList_Id }); 
+            return this.RedirectToAction("Edit", "CheckList", new { id = ch_Service.CheckList_Id });
 
         }
 
 
         //private CheckListActionsInputModel SaveAction(int selectedServiceId, CheckListServiceModel ch_Service, CheckListActionsInputModel cL_Action)
         //{
-           
+
         //        var new_Action = new CheckListActionBM
         //        (
         //            ch_Service.Service_Id,
@@ -229,10 +229,10 @@ namespace DH.Helpdesk.Web.Controllers
         //            DateTime.Now,
         //            DateTime.Now
         //       );
-                           
-            
+
+
         //    this._CheckListActionService.SaveCheckListAction(new_Action);
-            
+
 
         //    return cL_Action;
         //}
@@ -278,32 +278,32 @@ namespace DH.Helpdesk.Web.Controllers
             var workingGroups = this._WorkingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id);
             var chLServices = this._CheckListServiceService.GetCheckListServices(checklist.Id).ToList();
 
-            var new_Service = (dynamic)null;
+//            var new_Service = (dynamic)null;
             var checkListActions = new List<CheckListActionBM>();
 
-            if (chLServices != null)
-            {
+//            if (chLServices != null)
+//            {
                 foreach (var s in chLServices)
                 {
                     checkListActions = this._CheckListActionService.GetActions(s.Id).ToList();
                 }
 
-                new_Service = chLServices.Select(s => new CheckListServiceModel()).ToList();
-            }
+//                new_Service = chLServices.Select(s => new CheckListServiceModel()).ToList();
+//            }
             //else
             //    new_Service = new CheckListServiceModel(checklist.Id, 0, 1, "");
 
             var wgs = workingGroups.Select(x => new SelectListItem
             {
-                Selected = (x.Id == checklist.WorkingGroupId ? true : false),
+                Selected = (x.Id == checklist.WorkingGroupId),
                 Text = x.WorkingGroupName,
                 Value = x.Id.ToString()
             }).ToList();
 
-            wgs.Insert(0, new SelectListItem { Text = "", Value = "0", Selected = true });
+            wgs.Insert(0, new SelectListItem { Text = "", Value = null, Selected = true });
 
 
-            var new_CheckList = new CheckListInputModel()
+            var new_CheckList = new CheckListInputModel
             {
                 CheckListId = checklist.Id,
                 WGId = checklist.WorkingGroupId,

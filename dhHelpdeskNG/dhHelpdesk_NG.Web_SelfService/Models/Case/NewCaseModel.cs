@@ -66,6 +66,8 @@
 
         public string ProductAreaParantPath { get; set; }
 
+        public string CategoryParentPath { get; set; }
+
         public string CaseFileKey { get; set; }
 
         public string ExLogFileGuid { get; set; }
@@ -121,8 +123,8 @@
         public SendToDialogModel SendToDialogModel { get; set; }
 
         public List<KeyValuePair<int,string>> CaseTypeRelatedFields { get; set; }
-   
 
+        public string Information { get; set; }
     }
 
 

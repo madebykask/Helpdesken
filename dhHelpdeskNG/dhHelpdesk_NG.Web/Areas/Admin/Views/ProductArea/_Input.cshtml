@@ -106,12 +106,12 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Visa", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Visa i lista", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td><label class="checkbox">
                                         <input type="checkbox" name="productarea.ShowOnExternalPage" @(Model.ProductArea.ShowOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="productarea.ShowOnExternalPage" value="0" />
-                                        &nbsp;@Translation.Get("Visa produktområde på självservice", Enums.TranslationSource.TextTranslation)
+                                        &nbsp;@Translation.Get("Självservice", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
                                 </tr>
@@ -134,6 +134,7 @@
                             @Html.HiddenFor(model => model.ProductArea.Customer_Id)
                             @Html.HiddenFor(model => model.ProductArea.Id)
                             @Html.HiddenFor(model => model.ProductArea.Parent_ProductArea_Id)
+                            @Html.HiddenFor(model => model.ProductArea.ShowOnExtPageCases)
                         </div>
                     </div>
                     <div class="row" id="divWorkingGroup" @(Model.WgSelected.Count > 0 ? "display:block" : "")>
@@ -178,7 +179,7 @@
                             <thead>
                                 <tr>
                                     <th>
-                                        @Translation.Get("Ämnesområde", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Produktområde", Enums.TranslationSource.TextTranslation)
                                     </th>
                                     <th>
                                         @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
@@ -210,7 +211,7 @@
             },
             messages: {
                 "ProductArea.Name": {
-                    required: "@Translation.GetForJS("Du måste ange ett ämnesområde", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS("Du måste ange ett produktområde", Enums.TranslationSource.TextTranslation)"
                 }
             },
             submitHandler: function (form) {

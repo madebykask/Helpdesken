@@ -9,5 +9,7 @@
         public string Name { get; set; }
 
         public int ShowOnExternalPage { get; set; }
+
+        public int ShowOnExtPageCases { get; set; }
     }
 }

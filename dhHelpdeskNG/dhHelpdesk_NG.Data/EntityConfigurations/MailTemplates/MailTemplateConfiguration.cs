@@ -19,6 +19,10 @@
             this.Property(t => t.OrderType_Id).IsOptional();
             this.HasOptional(t => t.OrderType).WithMany().HasForeignKey(t => t.OrderType_Id).WillCascadeOnDelete(false);
             this.Property(t => t.AccountActivity_Id).IsOptional();
+            
+            this.HasMany(t => t.MailTemplateLanguages)
+		         .WithRequired(l => l.MailTemplate)
+                 .HasForeignKey(t => t.MailTemplate_Id);
 
             this.HasOptional(t => t.AccountActivity)
                 .WithMany()

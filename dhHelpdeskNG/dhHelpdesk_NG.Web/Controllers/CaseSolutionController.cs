@@ -59,6 +59,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ICaseSolutionSettingService caseSolutionSettingService;
         private readonly ICaseRuleFactory _caseRuleFactory;
         private readonly IWatchDateCalendarService _watchDateCalendarService;
+        private readonly ICacheProvider _cache;
 
         private const int MAX_QUICK_BUTTONS_COUNT = 5;
         private const string CURRENT_USER_ITEM_CAPTION = "Inloggad användare";
@@ -96,7 +97,8 @@ namespace DH.Helpdesk.Web.Controllers
             IOrganizationService organizationService,
             IRegistrationSourceCustomerService registrationSourceCustomerService,
             ICaseRuleFactory caseRuleFactory,
-            IWatchDateCalendarService watchDateCalendarService)
+            IWatchDateCalendarService watchDateCalendarService,
+            ICacheProvider cache)
             : base(masterDataService)
         {
             this._caseFieldSettingService = caseFieldSettingService;
@@ -129,6 +131,7 @@ namespace DH.Helpdesk.Web.Controllers
             this._organizationService = organizationService;
             this._registrationSourceCustomerService = registrationSourceCustomerService;
             this._caseRuleFactory = caseRuleFactory;
+            this._cache = cache;
             _watchDateCalendarService = watchDateCalendarService;
         }        
 
@@ -178,14 +181,15 @@ namespace DH.Helpdesk.Web.Controllers
             return PartialView("_RowsOverview", model.Rows);
         }
 
-        [HttpGet]
-        public PartialViewResult Search(string searchText)
+        [HttpPost]
+        public PartialViewResult Search(string searchText, List<int> categoryIds)
         {
             var caseSolutionSearch = new CaseSolutionSearch();
             if (SessionFacade.CurrentCaseSolutionSearch != null)
                 caseSolutionSearch = SessionFacade.CurrentCaseSolutionSearch;
 
-            caseSolutionSearch.SearchCss = searchText;            
+            caseSolutionSearch.SearchCss = searchText;
+            caseSolutionSearch.CategoryIds = categoryIds.ToList();
             SessionFacade.CurrentCaseSolutionSearch = caseSolutionSearch;
 
             var model = CreateIndexViewModel(caseSolutionSearch);
@@ -412,6 +416,7 @@ namespace DH.Helpdesk.Web.Controllers
                     caseSolution.ReferenceNumber,
                     
                     SMS = caseSolution.SMS.ToBool(),
+                    caseSolution.AgreedDate,
                     caseSolution.Available,
                     caseSolution.Cost,
                     caseSolution.OtherCost,
@@ -479,6 +484,10 @@ namespace DH.Helpdesk.Web.Controllers
                     CaseSolutionSettingModels);
             this.caseSolutionSettingService.UpdateCaseSolutionSettings(settingsSolutionAggregate);
 
+            //Remove caching of conditions for this specific template that is used in Case
+            string cacheKey = string.Format(DH.Helpdesk.Common.Constants.CacheKey.CaseSolutionCondition, caseSolutionInputViewModel.CaseSolution.Id);
+            this._cache.Invalidate(cacheKey);
+
             if (errors.Count == 0)
             {
                 switch (PageId) // back to refrence page
@@ -495,6 +504,7 @@ namespace DH.Helpdesk.Web.Controllers
             this.TempData["RequiredFields"] = errors;
             var model = this.CreateInputViewModel(caseSolutionInputViewModel.CaseSolution);
 
+       
             return this.View(model);
         }
 
@@ -606,6 +616,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             #region Assign current data
 
+            currentData.AgreedDate = templateModel.AgreedDate;
             currentData.Available = templateModel.Available;
             currentData.Caption = templateModel.Caption;
             currentData.CaseType_Id = templateModel.CaseType_Id;
@@ -753,9 +764,12 @@ namespace DH.Helpdesk.Web.Controllers
             var isUserFirstLastNameRepresentation = this._settingService.GetCustomerSetting(customerId)
                                                                         .IsUserFirstLastNameRepresentation == 1;
 
-            //Only return casesolution where templatepath is null - these case solutions are E-Forms shown in myhr/linemanager/selfservice
+            ////Only return casesolution where templatepath is null - these case solutions are E-Forms shown in myhr/linemanager/selfservice
             var caseSolutions = this._caseSolutionService.SearchAndGenerateCaseSolutions(customerId, caseSolutionSearch, isUserFirstLastNameRepresentation)
-                                                         .Where(x => x.TemplatePath == null).ToList();                        
+                                                         .Where(x => x.TemplatePath == null).ToList();
+
+            ////I have removed the  above condition, from now on these will appear in the list /TAN
+            //var caseSolutions = this._caseSolutionService.SearchAndGenerateCaseSolutions(customerId, caseSolutionSearch, isUserFirstLastNameRepresentation).ToList();
 
             var curUserItem = string.Format("-- {0} --", Translation.GetCoreTextTranslation(CURRENT_USER_ITEM_CAPTION));
             var connectedToButton = Translation.GetCoreTextTranslation("Knapp");
@@ -773,7 +787,8 @@ namespace DH.Helpdesk.Web.Controllers
                                                                                 ),
                                                             PriorityName = cs.Priority == null ? string.Empty : cs.Priority.Name,
                                                             IsActive = (cs.Status != 0),
-                                                            ConnectedToButton = cs.ConnectedButton.HasValue ? connectedToButton + " " + cs.ConnectedButton.Value: ""
+                                                            ConnectedToButton = (cs.ConnectedButton.HasValue && cs.ConnectedButton == 0) ? Translation.GetCoreTextTranslation(DH.Helpdesk.Common.Constants.Text.WorkflowStep) : ( cs.ConnectedButton.HasValue) ? connectedToButton + " " + cs.ConnectedButton.Value: "",
+                                                            SortOrder = cs.SortOrder
                                                         }).ToArray();
 
             var activeTab = SessionFacade.FindActiveTab("CaseSolution");
@@ -888,6 +903,15 @@ namespace DH.Helpdesk.Web.Controllers
             var buttonList = new List<SelectListItem>();
             
             var buttonCaption = Translation.GetCoreTextTranslation("Knapp");
+
+            //Add workflow choise
+            buttonList.Add(new SelectListItem()
+            {
+                Value = "0",
+                Text = Translation.GetCoreTextTranslation(DH.Helpdesk.Common.Constants.Text.WorkflowStep),
+                Selected = caseSolution.ConnectedButton == 0
+            });
+
             for (var i= 1; i <= MAX_QUICK_BUTTONS_COUNT; i++)
             {
                 if (!usedButtons.Contains(i))
@@ -931,11 +955,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                 CaseWorkingGroups = workingGroupList, 
 
-                Categories = this._categoryService.GetCategories(curCustomerId).Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString()
-                }).ToList(),
+                Categories = this._categoryService.GetActiveParentCategories(curCustomerId),
 
                 FinishingCauses = this._finishingCauseService.GetFinishingCauses(curCustomerId),
                 
@@ -1015,6 +1035,14 @@ namespace DH.Helpdesk.Web.Controllers
 
                 ActionList = actionList
             };
+
+            model.ParantPath_Category = "--";
+            if (caseSolution.Category_Id.HasValue)
+            {
+                var c = this._categoryService.GetCategory(caseSolution.Category_Id.Value, curCustomerId);
+                if (c != null)
+                    model.ParantPath_Category = string.Join(" - ", this._categoryService.GetParentPath(c.Id, curCustomerId));
+            }
 
             if (model.CaseSolution.Id == 0)
             {

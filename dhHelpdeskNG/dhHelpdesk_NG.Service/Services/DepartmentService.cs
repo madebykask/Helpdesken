@@ -242,7 +242,7 @@
             department.IsEMailDefault = department.IsEMailDefault;
             department.ChangedDate = DateTime.UtcNow;
             department.OverTimeAmount = department.OverTimeAmount;
-            
+            department.LanguageId = department.LanguageId;
             if (department.Id == 0)
             {
                 department.DepartmentGUID = Guid.NewGuid();

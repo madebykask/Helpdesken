@@ -52,7 +52,8 @@
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             this.Property(x => x.ShowOnExternalPage).IsRequired();
-            //this.Property(x => x.ProductAreaGUID).IsOptional();
+            this.Property(x => x.ShowOnExtPageCases).IsRequired();
+            this.Property(x => x.ProductAreaGUID).IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
 
             this.ToTable("tblproductarea");
         }

@@ -57,6 +57,7 @@ namespace DH.Helpdesk.Domain
         public string InventoryLocation { get; set; }
         public int? Supplier_Id { get; set; }
         public Guid? FormGUID { get; set; }
+        public DateTime? AgreedDate { get; set; }
         public string Available { get; set; }
         public int Cost { get; set; }
         public int OtherCost { get; set; }
@@ -95,6 +96,9 @@ namespace DH.Helpdesk.Domain
         
         public int? ConnectedButton { get; set; }
         public int? SaveAndClose { get; set; }
+
+        public string ShortDescription { get; set; }
+        public string Information { get; set; }
     
         public virtual CaseSolutionCategory CaseSolutionCategory { get; set; }
         public virtual CaseSolutionSchedule CaseSolutionSchedule { get; set; }
@@ -109,5 +113,7 @@ namespace DH.Helpdesk.Domain
         public virtual WorkingGroupEntity CaseWorkingGroup { get; set; }
         public virtual WorkingGroupEntity WorkingGroup { get; set; }
         //public virtual Problem Problem { get; set; }
+        public int SortOrder { get; set; }
+
     }
 }

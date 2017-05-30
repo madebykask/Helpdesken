@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Services.BusinessLogic.Specifications.Documents
 {
+    using System;
     using System.Linq;
 
     using DH.Helpdesk.Domain;

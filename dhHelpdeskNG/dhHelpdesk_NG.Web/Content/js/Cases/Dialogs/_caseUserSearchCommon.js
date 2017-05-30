@@ -1,4 +1,5 @@
 ﻿function onRemoveKeyDown(e, fakeInput, mainInput) {
+    alert();
     e.stopImmediatePropagation();
     var text = mainInput.val();
     var email = getEmailsToRemove();
@@ -30,6 +31,12 @@ function extractor(query) {
     if (result && result[1])
         return result[1].trim();
     return '';
+}
+
+function getSimpleQuery(query) {
+    var arr = query.replace(/<[^>]*>/g, "").split(";");
+    var searchText = arr[arr.length - 1];
+    return extractor(searchText);
 }
 
 function generateRandomKey() {

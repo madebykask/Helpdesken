@@ -3,7 +3,9 @@
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
     using DH.Helpdesk.Web.Models.Notifiers.ConfigurableFields;
-
+    using DH.Helpdesk.Domain;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
     public sealed class InputModel
     {
         #region Constructors and Destructors
@@ -43,7 +45,8 @@
             bool isActive,
             StringFieldModel createdDate,
             StringFieldModel changedDate,
-            StringFieldModel synchronizationDate)
+            StringFieldModel synchronizationDate,
+            DropDownFieldModel language)
             : this(
                 userId,
                 domain,
@@ -71,7 +74,8 @@
                 group,
                 other,
                 ordered,
-                isActive)
+                isActive,
+                language)
         {
             this.Id = id;
             this.IsNew = false;
@@ -107,7 +111,8 @@
             DropDownFieldModel group,
             StringFieldModel other,
             BooleanFieldModel ordered,
-            bool isActive)
+            bool isActive,
+            DropDownFieldModel language)
         {
             this.IsNew = true;
             this.UserId = userId;
@@ -137,6 +142,7 @@
             this.Other = other;
             this.Ordered = ordered;
             this.IsActive = isActive;
+            this.Language = language;
         }
 
         #endregion
@@ -228,6 +234,10 @@
 
         public StringFieldModel SynchronizationDate { get; set; }
 
+        public int LanguageId { get; set; }
+        //public virtual Language Language { get; set; }
+
+        public DropDownFieldModel Language { get; set; }
         #endregion
 
     }

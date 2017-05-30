@@ -63,7 +63,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         {
             var customer = customerService.GetCustomer(customerId);
             var model = new InvoiceArticleProductAreaIndexModel(customer);
-            var productAreas = productAreaService.GetAll(customerId);
+            var productAreas = productAreaService.GetActiveProductAreas(customerId);
             var lastLevels = new List<ProductArea>();
         
             foreach (var p in productAreas)
@@ -75,7 +75,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 }
             }
             
-            var allInvoiceArticles = invoiceArticleService.GetArticles(customerId);
+            var allInvoiceArticles = invoiceArticleService.GetActiveArticles(customerId);
 
             // TODO: need to get latest filter from session 
             InvoiceArticleProductAreaSelectedFilter CS = new InvoiceArticleProductAreaSelectedFilter();
@@ -142,8 +142,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
         private InvoiceArticleProductAreaInputViewModel CreateInputViewModel(Customer customer)
         {
-            var allInvoiceArticles = invoiceArticleService.GetArticles(customer.Id).OrderBy(a => a.Number);
-            var productAreas = productAreaService.GetAll(customer.Id);
+            var allInvoiceArticles = invoiceArticleService.GetActiveArticles(customer.Id).OrderBy(a => a.Number);
+            var productAreas = productAreaService.GetActiveProductAreas(customer.Id);
             var lastLevels = new List<ProductArea>();
 
             foreach (var p in productAreas)
@@ -182,8 +182,11 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 return Json(answer, JsonRequestBehavior.AllowGet);
             }
             var lastSyncDate = DateTime.UtcNow;
+            var settings = caseInvoiceSettingsService.GetSettings(model.ArticlesImport.CustomerId);
+            var categoryCode = settings != null ? settings.Filter : string.Empty;
+
             var importer = this.caseInvoiceFactory.GetImporter(this.productAreaService, this.invoiceArticleService);
-            var result = importer.ImportArticles(model.ArticlesImport.File.InputStream, lastSyncDate);
+            var result = importer.ImportArticles(model.ArticlesImport.File.InputStream, lastSyncDate, categoryCode);
             if (result.Errors.Any())
             {
                 var error = new StringBuilder();

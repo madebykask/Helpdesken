@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using System.Linq;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System.Collections.Generic;
 
@@ -21,6 +23,7 @@
         void DeleteByCaseIdAndFileName(int caseId, string basePath, string fileName);
 
         CaseFileModel[] GetCaseFiles(int caseId, bool canDelete);
+        List<CaseFileDate> FindFileNamesAndDatesByCaseId(int caseId);
     }
 
     public class CaseFileService : ICaseFileService
@@ -83,6 +86,16 @@
         public CaseFileModel[] GetCaseFiles(int caseId, bool canDelete)
         {
             return this._caseFileRepository.GetCaseFiles(caseId, canDelete);
+        }
+
+        public List<CaseFileDate> FindFileNamesAndDatesByCaseId(int caseId)
+        {
+            var files = this._caseFileRepository.GetCaseFilesByCaseId(caseId);
+            return files.Select(x => new CaseFileDate
+            {
+                FileDate = x.CreatedDate,
+                FileName = x.FileName
+            }).ToList();
         }
 
         public List<string> FindFileNamesByCaseId(int caseId)

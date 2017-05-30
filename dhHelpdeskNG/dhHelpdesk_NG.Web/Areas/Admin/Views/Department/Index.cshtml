@@ -39,6 +39,9 @@
                             <th>
                                 @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
                             </th>
+                            <th>
+                                @Translation.Get("Språk", Enums.TranslationSource.TextTranslation)
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -58,6 +61,9 @@
                                 </td>
                                 <td>
                                     <a href="@Url.Action("edit", "department", new { area = "admin", id = item.Id })">@Translation.Get(item.IsActive.TranslateBit(), Enums.TranslationSource.TextTranslation)</a>
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("edit", "department", new { area = "admin", id = item.Id })">@Html.DisplayFor(modelItem => item.Language.Name)</a>
                                 </td>
                             </tr>
                         }

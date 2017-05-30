@@ -21,6 +21,8 @@
         IList<CustomerReportList> GetCustomerReportList(int id);
         IList<Report> GetAllReports();
 
+        int GetCustomerLanguage(int customerid);
+
         Customer GetCustomer(int id);
         ReportCustomer GetReportCustomerById(int customerId, int reportId);
 
@@ -32,7 +34,7 @@
         void SaveCaseFieldSettingsForCustomerCopy(int customerId, int languageId, CaseFieldSetting caseFieldSetting, out IDictionary<string, string> errors);
         void SaveCaseFieldSettingsLangForCustomerCopy(CaseFieldSettingLanguage caseFieldSettingLanguage, out IDictionary<string, string> errors);
         void SaveEditCustomer(Customer customer, Setting setting, int[] us, int LanguageId, out IDictionary<string, string> errors);
-        void SaveEditCustomer(Customer customer, out IDictionary<string, string> errors);        
+        void SaveEditCustomer(Customer customer, out IDictionary<string, string> errors);
         void SaveNewCustomerToGetId(Customer customer, out IDictionary<string, string> errors);
         void Commit();
 
@@ -53,7 +55,7 @@
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICaseSettingRepository _caseSettingRepository;
-        
+
 
         private readonly ICaseFieldSettingService _caseFieldSettingService;
         private readonly ISettingService _settingService;
@@ -92,6 +94,11 @@
         public IList<Customer> GetAllCustomers()
         {
             return this._customerRepository.GetAll().OrderBy(x => x.Name).ToList();
+        }
+
+        public int  GetCustomerLanguage(int customerid)
+        {
+            return this._customerRepository.GetCustomerLanguage(customerid);
         }
 
         public IList<Customer> GetCustomers(int customerId)
@@ -150,6 +157,8 @@
             return this._reportCustomerRepository.GetCustomerReportListForCustomer(id).ToList();
         }
 
+        
+
         public IList<Report> GetAllReports()
         {
             return this._reportRepository.GetAll().ToList();
@@ -169,7 +178,7 @@
         {
             var customer = this._customerRepository.GetById(id);
 
-            if(customer != null)
+            if (customer != null)
             {
                 try
                 {
@@ -186,10 +195,10 @@
 
             return DeleteMessage.Error;
         }
-        
+
         public void SaveEditCustomer(Customer customer, Setting setting, int[] us, int LanguageId, out IDictionary<string, string> errors)
         {
-            if(customer == null)
+            if (customer == null)
                 throw new ArgumentNullException("customer");
 
             errors = new Dictionary<string, string>();
@@ -221,36 +230,36 @@
             var helpdeskEMail = "";
             if (customer.HelpdeskEmail != null)
                 helpdeskEMail = customer.HelpdeskEmail.TrimStart().TrimEnd();
- 
+
             customer.HelpdeskEmail = helpdeskEMail;
 
             #endregion
 
-            if(string.IsNullOrEmpty(customer.Name))
+            if (string.IsNullOrEmpty(customer.Name))
                 errors.Add("Customer.Name", "Du måste ange ett kundnamn");
 
             #region Users
 
-            if(customer.Users != null)
-                foreach(var delete in customer.Users.ToList())
+            if (customer.Users != null)
+                foreach (var delete in customer.Users.ToList())
                     customer.Users.Remove(delete);
             else
                 customer.Users = new List<User>();
 
-            if(us != null)
+            if (us != null)
             {
-                foreach(int id in us)
+                foreach (int id in us)
                 {
                     var u = this._userRepository.GetById(id);
 
-                    if(u != null)
+                    if (u != null)
                         customer.Users.Add(u);
                 }
             }
 
             #endregion            
 
-            if(customer.Id == 0)
+            if (customer.Id == 0)
                 this._customerRepository.Add(customer);
             else
                 this._customerRepository.Update(customer);
@@ -259,10 +268,10 @@
                 this.Commit();
 
             if (setting != null)
-               this._settingService.SaveSettingForCustomerEdit(setting, out errors);
+                this._settingService.SaveSettingForCustomerEdit(setting, out errors);
 
 
-            
+
         }
 
         public void SaveEditCustomer(Customer customer, out IDictionary<string, string> errors)
@@ -303,12 +312,12 @@
             customer.HelpdeskEmail = helpdeskEMail;
 
             #endregion
-            
-            if (customer.Id != 0)                
+
+            if (customer.Id != 0)
                 this._customerRepository.Update(customer);
 
             if (errors.Count == 0)
-                this.Commit();            
+                this.Commit();
 
         }
 
@@ -316,14 +325,13 @@
         {
             errors = new Dictionary<string, string>();
 
-            if(caseFieldSettings != null)
+            if (caseFieldSettings != null)
             {
-                foreach(var caseFieldSetting in caseFieldSettings)
+                foreach (var caseFieldSetting in caseFieldSettings)
                 {
-                    
+
                     if (caseFieldSetting.Name.ToLower() == "casetype_id")
                     {
-                        caseFieldSetting.ShowExternal = 1;
                         caseFieldSetting.ShowOnStartPage = 1;
                         caseFieldSetting.Required = 1;
                     }
@@ -333,7 +341,7 @@
                     {
                         caseFieldSetting.CaseFieldSettingsGUID = Guid.NewGuid();
                         _caseFieldSettingRepository.Add(caseFieldSetting);
-                    }    
+                    }
                     else
                         _caseFieldSettingRepository.Update(caseFieldSetting);
                 }
@@ -341,16 +349,16 @@
 
             _caseFieldSettingRepository.Commit();
 
-            if(caseFieldSettingWithLanguages.Any())
+            if (caseFieldSettingWithLanguages.Any())
             {
                 _caseFieldSettingLanguageRepository.DeleteByLanguageId(languageId, customerId);
 
                 var newCaseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
 
-                foreach(var caseFieldSetting in newCaseFieldSettings)
+                foreach (var caseFieldSetting in newCaseFieldSettings)
                 {
                     var cfsl = caseFieldSettingWithLanguages.FirstOrDefault(x => x.Name == caseFieldSetting.Name);
-                    if(cfsl == null) continue;
+                    if (cfsl == null) continue;
 
                     var upd = new CaseFieldSettingLanguage
                     {
@@ -375,7 +383,7 @@
                 _caseFieldSettingRepository.Add(caseFieldSetting);
             else
                 _caseFieldSettingRepository.Update(caseFieldSetting);
-              
+
 
             _caseFieldSettingRepository.Commit();
 
@@ -401,23 +409,23 @@
             errors = new Dictionary<string, string>();
 
             var upd = new CaseFieldSettingLanguage
-                    {
-                        CaseFieldSettings_Id = caseFieldSettingLanguage.CaseFieldSettings_Id,
-                        Language_Id = caseFieldSettingLanguage.Language_Id,
-                        Label = caseFieldSettingLanguage.Label,
-                        FieldHelp = caseFieldSettingLanguage.FieldHelp
-                    };
+            {
+                CaseFieldSettings_Id = caseFieldSettingLanguage.CaseFieldSettings_Id,
+                Language_Id = caseFieldSettingLanguage.Language_Id,
+                Label = caseFieldSettingLanguage.Label,
+                FieldHelp = caseFieldSettingLanguage.FieldHelp
+            };
 
-                    _caseFieldSettingLanguageRepository.Add(upd);
-              
+            _caseFieldSettingLanguageRepository.Add(upd);
 
-                _caseFieldSettingLanguageRepository.Commit();
+
+            _caseFieldSettingLanguageRepository.Commit();
         }
 
 
         public void SaveCaseFieldSettingsForCustomer(Customer customer, IEnumerable<CaseFieldSettingsWithLanguage> caseFieldSettingWithLanguages, int[] us, List<CaseFieldSetting> CaseFieldSettings, int LanguageId, out IDictionary<string, string> errors)
         {
-            if(customer == null)
+            if (customer == null)
                 throw new ArgumentNullException("customer");
 
             errors = new Dictionary<string, string>();
@@ -448,24 +456,24 @@
 
             #endregion
 
-            if(string.IsNullOrEmpty(customer.Name))
+            if (string.IsNullOrEmpty(customer.Name))
                 errors.Add("Customer.Name", "Du måste ange ett kundnamn");
 
             #region Users
 
-            if(customer.Users != null)
-                foreach(var delete in customer.Users.ToList())
+            if (customer.Users != null)
+                foreach (var delete in customer.Users.ToList())
                     customer.Users.Remove(delete);
             else
                 customer.Users = new List<User>();
 
-            if(us != null)
+            if (us != null)
             {
-                foreach(int id in us)
+                foreach (int id in us)
                 {
                     var u = this._userRepository.GetById(id);
 
-                    if(u != null)
+                    if (u != null)
                         customer.Users.Add(u);
                 }
             }
@@ -474,20 +482,20 @@
 
             #region CaseFieldSettings
 
-            if(customer.CaseFieldSettings != null)
-                foreach(var delete in customer.CaseFieldSettings.ToList())
+            if (customer.CaseFieldSettings != null)
+                foreach (var delete in customer.CaseFieldSettings.ToList())
                     customer.CaseFieldSettings.Remove(delete);
             else
                 customer.CaseFieldSettings = new List<CaseFieldSetting>();
 
             //TODO ALF: här ska jag spara ner ny och befintlig förändring i Customer, flik Case. I befintlig funkar den, men när en kund inte har några casefieldsettings på sig blir den galen!
-            if(CaseFieldSettings != null)
+            if (CaseFieldSettings != null)
             {
-                foreach(var change in CaseFieldSettings)
+                foreach (var change in CaseFieldSettings)
                 {
                     var rowCfs = this._caseFieldSettingRepository.Get(x => x.Customer_Id == customer.Id);
                     //TODO ALF: kollar först ovan om det finns inställningar på denna kund, men annars skall den skapa nya inställningar
-                    if(rowCfs == null)
+                    if (rowCfs == null)
                     {
                         rowCfs = new CaseFieldSetting() { Customer_Id = customer.Id };
                     }
@@ -500,7 +508,7 @@
                     //    rowCfsl = new CaseFieldSettingLanguage() { CaseFieldSettings_Id = rowCfs.Id };
                     //}
 
-                    foreach(var label in this._caseFieldSettingRepository.GetAll().Where(x => x.Id == rowCfs.Id))
+                    foreach (var label in this._caseFieldSettingRepository.GetAll().Where(x => x.Id == rowCfs.Id))
                     {
                         rowCfs.Customer_Id = customer.Id;
                         rowCfs.DefaultValue = change.DefaultValue;
@@ -516,7 +524,7 @@
                         //rowCfsl.Language_Id = LanguageId;
                         //rowCfsl.Label = label.NameOrigin;
 
-                        if(rowCfs != null)
+                        if (rowCfs != null)
                             customer.CaseFieldSettings.Add(rowCfs);
 
                         //if (rowCfsl != null)
@@ -528,7 +536,7 @@
 
             #endregion
 
-            if(customer.Id == 0)
+            if (customer.Id == 0)
                 this._customerRepository.Add(customer);
             else
                 this._customerRepository.Update(customer);
@@ -536,13 +544,13 @@
 
             // _settingService.SaveSettingForCustomerEdit(setting, out errors);
 
-            if(errors.Count == 0)
+            if (errors.Count == 0)
                 this.Commit();
         }
 
         public void SaveCustomerSettings(Customer customer, Setting setting, List<ReportCustomer> ReportCustomers, int LanguageId, out IDictionary<string, string> errors)
         {
-            if(customer == null)
+            if (customer == null)
                 throw new ArgumentNullException("customer");
 
             errors = new Dictionary<string, string>();
@@ -550,7 +558,7 @@
             #region ReportCustomers
 
             if (customer.ReportCustomers != null && ReportCustomers != null)
-            {            
+            {
                 var currentExistReports = this._reportCustomerRepository.GetAll().Where(rc => rc.Customer_Id == customer.Id).ToList();
                 foreach (var change in ReportCustomers)
                 {
@@ -570,16 +578,16 @@
                                 this._reportCustomerRepository.Update(reportForUpdate);
                             }
                         }
-                    }                                        
+                    }
                 }
-            }            
+            }
 
             #endregion
-            
+
             customer.NDSPath = customer.NDSPath ?? string.Empty;
             this._settingService.SaveSetting(setting, out errors);
 
-            if(errors.Count == 0)
+            if (errors.Count == 0)
                 this.Commit();
         }
 
@@ -590,7 +598,7 @@
 
         public void SaveNewCustomerToGetId(Customer customer, out IDictionary<string, string> errors)
         {
-            if(customer == null)
+            if (customer == null)
                 throw new ArgumentNullException("customer");
 
             errors = new Dictionary<string, string>();
@@ -621,13 +629,13 @@
 
             customer.HelpdeskEmail = helpdeskEMail;
 
-            if(string.IsNullOrEmpty(customer.Name))
+            if (string.IsNullOrEmpty(customer.Name))
                 errors.Add("Customer.Name", "Du måste ange ett kundnamn");
 
-            if(customer.Id == 0)
+            if (customer.Id == 0)
                 this._customerRepository.Add(customer);
 
-            if(errors.Count == 0)
+            if (errors.Count == 0)
                 this.Commit();
         }
 

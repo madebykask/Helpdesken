@@ -1,0 +1,52 @@
+﻿@using System.Web.Script.Serialization
+@using DH.Helpdesk.Web
+@model DH.Helpdesk.Web.Models.Feedback.FeedbackStatisticsViewModel
+@{
+    var jsSerializer = new JavaScriptSerializer();
+    var perPageText = Translation.GetForJS("Antal per sida");
+    var perShowingText = Translation.GetForJS("Visar sida");
+}
+<script type="text/javascript">
+    $(function () {
+        var pageSettings = @Html.Raw(jsSerializer.Serialize(Model.FeedbackStatisticsCases.PageSettings));
+        pageSettings.perPageText = '@perPageText';
+        pageSettings.perShowingText = '@perShowingText';
+        pageSettings.curUserId = '@(SessionFacade.CurrentUser != null ? SessionFacade.CurrentUser.UserId.ToLower(): string.Empty)';
+
+        $(".feedbackPopupCls").on("click", function () {
+            var $src = $(this);
+            var casesIds = $src.closest("div.text-right").find("input[name='feedbackCaseIds']").val();
+            var $target = $("#divFeedbackCases");
+            $target.attr("data-src", $src.attr("data-src"));
+            $target.modal("show");
+            LoadFeedbackCases(pageSettings, casesIds);
+        });
+        
+    });
+</script>
+
+<button type="button" class="close" data-dismiss="modal" style="margin-right: 5px;">&times;</button>
+<div id="feedback_statistics_case_popup">
+    <div class="content modalpopup">
+        <div>
+            <div class="tab-content">
+                <div class="tab-pane tab-pane-border active" id="fragment-1">
+                    <div>@Translation.GetCoreTextTranslation("Poster i sökresultat"): <span data-field="TotalAmountCases"></span><span id="feedback_caseLimitInfo" style="display: none;">&nbsp;(@Translation.GetCoreTextTranslation("Antal ärende som visas är begränsade till 500."))</span></div>
+                    <div class="container" id="feedback_cases_result">
+                        <table id="feedback_caseResults" class="table table-striped table-bordered table-hover table-cases"><thead></thead><tbody></tbody></table>
+                        <div class="nofields-msg">@Translation.GetCoreTextTranslation("Inga standardkolumner har valts för din användare på denna kund, för att visa kolumner, klicka på fliken Inställningar och gå till Filter Ärendeöversikt")</div>
+                        <div class="noavailablefields-msg">@Translation.GetCoreTextTranslation("Inga ärendefält har valts för denna kund, kontakta systemadministratören.")</div>
+                        <div class="loading-msg">
+                            <div class="content-wrapper">
+                                <div class="loader">@Translation.GetCoreTextTranslation("Laddar...")</div>
+                            </div>
+                        </div>
+                        <div class="no-data-msg">&nbsp;</div>
+                        <div class="error-msg">@Html.Raw(string.Format(Translation.GetCoreTextTranslation("Ett fel inträffade, klicka") + " {0}" + Translation.GetCoreTextTranslation("här") + "{1} " + Translation.GetCoreTextTranslation("för att ladda om sidan."), "<a href=\"#refresh\" class=\"refresh-grid\">", "</a>"))</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@Scripts.Render(BundleConfig.ScriptNames.FeedbackStatisticsCases)

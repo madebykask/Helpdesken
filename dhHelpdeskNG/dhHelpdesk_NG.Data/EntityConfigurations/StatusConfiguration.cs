@@ -28,7 +28,7 @@
             this.Property(x => x.Name).IsRequired().HasMaxLength(50).HasColumnName("StatusName");
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            //this.Property(x => x.StatusGUID).IsOptional();
+            this.Property(x => x.StatusGUID).IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
 
             this.ToTable("tblstatus");
         }

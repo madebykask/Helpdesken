@@ -1,4 +1,4 @@
-﻿using DH.Helpdesk.BusinessData.Models.Orders.OrderFieldSettings.FieldSettings;
+﻿using DH.Helpdesk.BusinessData.Enums.Orders.Fields;
 
 namespace DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings
 {
@@ -51,67 +51,67 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings
         public string Header { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Identifierare")]
+        [LocalizedDisplay(OrderLabels.OrdererId)]
         public MultiTextFieldSettingsModel OrdererId { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Namn")]
+        [LocalizedDisplay(OrderLabels.OrdererName)]
         public TextFieldSettingsModel OrdererName { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Placering")]
+        [LocalizedDisplay(OrderLabels.OrdererLocation)]
         public TextFieldSettingsModel OrdererLocation { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("E-post")]
+        [LocalizedDisplay(OrderLabels.OrdererEmail)]
         public TextFieldSettingsModel OrdererEmail { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Telefon")]
+        [LocalizedDisplay(OrderLabels.OrdererPhone)]
         public TextFieldSettingsModel OrdererPhone { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Ansvarskod")]
+        [LocalizedDisplay(OrderLabels.OrdererCode)]
         public TextFieldSettingsModel OrdererCode { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Avdelning")]
+        [LocalizedDisplay(OrderLabels.OrdererDepartment)]
         public TextFieldSettingsModel Department { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Enhet")]
+        [LocalizedDisplay(OrderLabels.OrdererUnit)]
         public TextFieldSettingsModel Unit { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("adress")]
+        [LocalizedDisplay(OrderLabels.OrdererAddress)]
         public TextFieldSettingsModel OrdererAddress { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Fakturaadress")]
+        [LocalizedDisplay(OrderLabels.OrdererInvoiceAddress)]
         public TextFieldSettingsModel OrdererInvoiceAddress { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Referensnummer")]
+        [LocalizedDisplay(OrderLabels.OrdererReferenceNumber)]
         public TextFieldSettingsModel OrdererReferenceNumber { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Kontodimension")]
+        [LocalizedDisplay(OrderLabels.OrdererAccountingDimension1)]
         public TextFieldSettingsModel AccountingDimension1 { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Kontodimension")]
+        [LocalizedDisplay(OrderLabels.OrdererAccountingDimension2)]
         public FieldSettingsModel AccountingDimension2 { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Kontodimension")]
+        [LocalizedDisplay(OrderLabels.OrdererAccountingDimension3)]
         public TextFieldSettingsModel AccountingDimension3 { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Kontodimension")]
+        [LocalizedDisplay(OrderLabels.OrdererAccountingDimension4)]
         public FieldSettingsModel AccountingDimension4 { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Kontodimension")]
+        [LocalizedDisplay(OrderLabels.OrdererAccountingDimension5)]
         public TextFieldSettingsModel AccountingDimension5 { get; set; }     
     }
 }

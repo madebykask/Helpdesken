@@ -69,6 +69,8 @@ namespace DH.Helpdesk.Web.Controllers
 
         private readonly IOrganizationService organizationService;
 
+        private readonly ICustomerService customerService;
+
         #endregion
 
         #region Public Methods and Operators
@@ -94,7 +96,8 @@ namespace DH.Helpdesk.Web.Controllers
             ISettingsModelFactory settingsModelFactory,
             IUpdatedNotifierFactory updatedNotifierFactory,
             INewNotifierFactory newNotifierFactory,
-            IOrganizationService organizationService)
+            IOrganizationService organizationService,
+            ICustomerService customerService)
             : base(masterDataService)
         {
             this.departmentRepository = departmentRepository;
@@ -119,6 +122,7 @@ namespace DH.Helpdesk.Web.Controllers
             this.updatedNotifierFactory = updatedNotifierFactory;
             this.newNotifierFactory = newNotifierFactory;
             this.organizationService = organizationService;
+            this.customerService = customerService;
         }
 
         [HttpGet]
@@ -157,14 +161,14 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 var curRegion = this.regionRepository.GetById(regionId.Value);
                 if (curRegion.IsActive == 0)
-                    regionId = null; 
+                    regionId = null;
             }
 
             var departmentsData =
                     this.departmentRepository.GetActiveDepartmentsBy(SessionFacade.CurrentCustomer.Id, regionId).ToArray();
 
             departments = departmentsData.Select(d => new ItemOverview(d.DepartmentName, d.Id.ToString())).ToList();
-            
+
             var model = new DropDownContent(departments.Select(d => new DropDownItem(d.Name, d.Value)).ToList());
             return this.PartialView(model);
         }
@@ -172,7 +176,7 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpGet]
         public PartialViewResult OrganizationUnitDropDown(int? departmentId)
         {
-            List<ItemOverview> organizationUnits;           
+            List<ItemOverview> organizationUnits;
             organizationUnits = organizationUnits = this.organizationService.GetOrganizationUnits(departmentId);
 
             var model = new DropDownContent(organizationUnits.Select(d => new DropDownItem(d.Name, d.Value)).ToList());
@@ -259,15 +263,15 @@ namespace DH.Helpdesk.Web.Controllers
 
                 var searchResult = this.notifierRepository.Search(parameters);
 
-               model = this.indexModelFactory.Create(
-                    settings,
-                    searchDomains,
-                    searchRegions,
-                    searchDepartments,
-                    searchOrganizationUnit,
-                    searchDivisions,
-                    filters,
-                    searchResult);
+                model = this.indexModelFactory.Create(
+                     settings,
+                     searchDomains,
+                     searchRegions,
+                     searchDepartments,
+                     searchOrganizationUnit,
+                     searchDivisions,
+                     filters,
+                     searchResult);
             }
 
 
@@ -280,10 +284,10 @@ namespace DH.Helpdesk.Web.Controllers
         public RedirectToRouteResult NewNotifier(InputModel model)
         {
             if (((model.FirstName == null || !model.FirstName.Show || string.IsNullOrEmpty(model.FirstName.Value)) ||
-                 (model.LastName == null || !model.LastName.Show || string.IsNullOrEmpty(model.LastName.Value))) && model.DisplayName != null && 
+                 (model.LastName == null || !model.LastName.Show || string.IsNullOrEmpty(model.LastName.Value))) && model.DisplayName != null &&
                !string.IsNullOrEmpty(model.DisplayName.Value))
             {
-                var splitedName = GetSplitedName(model.DisplayName != null? model.DisplayName.Value : string.Empty);
+                var splitedName = GetSplitedName(model.DisplayName != null ? model.DisplayName.Value : string.Empty);
 
                 if (model.FirstName == null || !model.FirstName.Show || string.IsNullOrEmpty(model.FirstName.Value))
                     model.FirstName = new StringFieldModel(false, "FirstName", splitedName.Key);
@@ -313,7 +317,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         [ValidateInput(false)]
         [BadRequestOnNotValid]
-        [HttpPost]        
+        [HttpPost]
         public JsonResult NewNotifierPopup(InputModel model)
         {
             if (((model.FirstName == null || !model.FirstName.Show || string.IsNullOrEmpty(model.FirstName.Value)) ||
@@ -356,14 +360,14 @@ namespace DH.Helpdesk.Web.Controllers
             string email,
             string phone,
             string placement,
-            string cellPhone, 
-            int? regionId, 
-            int? departmentId, 
+            string cellPhone,
+            int? regionId,
+            int? departmentId,
             int? organizationUnitId,
             string costcentre)
         {
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
-            var inputParams = new Dictionary<string,string>();
+            var inputParams = new Dictionary<string, string>();
 
             var settings =
                 this.notifierFieldSettingRepository.FindDisplayFieldSettingsByCustomerIdAndLanguageId(
@@ -377,6 +381,7 @@ namespace DH.Helpdesk.Web.Controllers
             List<ItemOverview> divisions = null;
             List<ItemOverview> managers = null;
             List<ItemOverview> groups = null;
+            List<ItemOverview> languages = null;
 
             if (settings.Domain.Show)
             {
@@ -401,9 +406,9 @@ namespace DH.Helpdesk.Web.Controllers
                 if (departmentId != null && departmentId.Value > 0)
                     inputParams.Add("DepartmentId", departmentId.Value.ToString()); // Takes default from Case page                
             }
-                       
+
             if (settings.OrganizationUnit.Show)
-            {                
+            {
                 organizationUnits = this.organizationService.GetOrganizationUnits(departmentId);
 
                 if (organizationUnitId != null && organizationUnitId.Value > 0)
@@ -425,6 +430,11 @@ namespace DH.Helpdesk.Web.Controllers
                 groups = this.notifierGroupRepository.FindOverviewsByCustomerId(currentCustomerId);
             }
 
+            if (settings.Language.Show)
+            {
+                languages = this.languageRepository.FindActiveOverviews();
+            }
+
             if (!string.IsNullOrEmpty(userId))
             {
                 userId = userId.Replace("<", "").Replace(">", "");
@@ -432,10 +442,10 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             var splitedName = GetSplitedName(fName);
-            inputParams.Add("FName", fName);                
-            inputParams.Add("FirstName", splitedName.Key);                
-            inputParams.Add("LastName", splitedName.Value);                
-            
+            inputParams.Add("FName", fName);
+            inputParams.Add("FirstName", splitedName.Key);
+            inputParams.Add("LastName", splitedName.Value);
+
 
             if (!string.IsNullOrEmpty(email))
                 inputParams.Add("Email", email);
@@ -451,7 +461,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (!string.IsNullOrEmpty(costcentre))
                 inputParams.Add("CostCentre", costcentre);
-            
+
             var model = this.newNotifierModelFactory.Create(
                 settings,
                 domains,
@@ -461,15 +471,16 @@ namespace DH.Helpdesk.Web.Controllers
                 divisions,
                 managers,
                 groups,
-                inputParams);
-            
+                inputParams,
+                languages);
+
             return this.View(model);
         }
 
         [HttpGet]
         public ViewResult NewNotifier()
         {
-            
+
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
             var inputParams = new Dictionary<string, string>();
 
@@ -485,10 +496,12 @@ namespace DH.Helpdesk.Web.Controllers
             List<ItemOverview> divisions = null;
             List<ItemOverview> managers = null;
             List<ItemOverview> groups = null;
+            List<ItemOverview> languages = null;
 
             int? regionId = null;
             int? departmentId = null;
             int? organizationUnitId = null;
+            int? languageId = null;
 
             if (settings.Domain.Show)
             {
@@ -502,6 +515,25 @@ namespace DH.Helpdesk.Web.Controllers
                 regionId = this.regionRepository.GetDefaultRegion(currentCustomerId);
                 if (regionId != null && regionId.Value > 0)
                     inputParams.Add("RegionId", regionId.Value.ToString()); // Takes default from setting
+            }
+
+
+            if (settings.Language.Show)
+            {
+                var languagesData =
+                    this.languageRepository.GetActiveLanguages().ToArray();
+
+                languages = languagesData.Select(d => new ItemOverview(d.Name, d.Id.ToString())).ToList();
+
+                //ItemOverview f = new ItemOverview(" ", "0");
+                //languages.Add(f);
+
+                languages = languages.OrderBy(z => z.Value).ToList();
+
+                languageId = this.customerService.GetCustomerLanguage(currentCustomerId);
+
+                if (languageId != null && languageId.Value > 0)
+                    inputParams.Add("LanguageId", languageId.Value.ToString()); // Takes default from setting
             }
 
             if (settings.Department.Show)
@@ -518,10 +550,10 @@ namespace DH.Helpdesk.Web.Controllers
             if (settings.OrganizationUnit.Show)
             {
                 organizationUnits = this.organizationService.GetOrganizationUnits(departmentId);
-                                                
+
                 if (organizationUnitId != null && organizationUnitId.Value > 0)
                     inputParams.Add("OrganizationUnitId", organizationUnitId.Value.ToString()); // Takes default from setting
-            }            
+            }
 
             if (settings.Division.Show)
             {
@@ -547,7 +579,8 @@ namespace DH.Helpdesk.Web.Controllers
                 divisions,
                 managers,
                 groups,
-                inputParams);
+                inputParams,
+                languages);
 
             return this.View(model);
         }
@@ -571,16 +604,18 @@ namespace DH.Helpdesk.Web.Controllers
             List<ItemOverview> divisions = null;
             List<ItemOverview> managers = null;
             List<ItemOverview> groups = null;
+            List<ItemOverview> languages = null;
 
             int? departmentRegionId = null;
             int? departmentId = null;
             int? organizationUnitId = null;
+            int? languageId = null;
 
             if (displaySettings.Domain.Show)
             {
                 domains = this.domainRepository.FindByCustomerId(currentCustomerId);
             }
-                        
+
             if (displaySettings.Region.Show)
             {
                 regions = this.regionRepository.FindByCustomerId(currentCustomerId);
@@ -588,8 +623,8 @@ namespace DH.Helpdesk.Web.Controllers
                 // As each "Department" must has a "Region" in defination, we get notifier RegionId from Department.
                 if (notifier.DepartmentId != null)
                     departmentRegionId = this.departmentRepository.GetById(notifier.DepartmentId.Value).Region_Id;
-                 
-                if (departmentRegionId != null && departmentRegionId.Value > 0) 
+
+                if (departmentRegionId != null && departmentRegionId.Value > 0)
                     inputParams.Add("RegionId", departmentRegionId.Value.ToString()); // Takes default from saved Notifier
             }
 
@@ -600,9 +635,28 @@ namespace DH.Helpdesk.Web.Controllers
 
                 departments = departmentsData.Select(d => new ItemOverview(d.DepartmentName, d.Id.ToString())).ToList();
                 departmentId = notifier.DepartmentId;
-                
+
                 if (departmentId != null && departmentId.Value > 0)
                     inputParams.Add("DepartmentId", departmentId.Value.ToString()); // Takes default from saved Notifier
+            }
+
+            if (displaySettings.Language.Show)
+            {
+                var languageData =
+                this.languageRepository.GetActiveLanguages();
+
+                languages = languageData.Select(d => new ItemOverview(d.Name, d.Id.ToString())).ToList();
+
+                //ItemOverview f = new ItemOverview(" ", "0");
+                //languages.Add(f);
+
+                languages = languages.OrderBy(z => z.Value).ToList();
+
+                languageId = notifier.LanguageId;
+
+                if (languageId != null && languageId.Value > 0)
+                    inputParams.Add("LanguageId", languageId.Value.ToString()); // Takes default from saved Notifier
+
             }
 
             if (displaySettings.OrganizationUnit.Show)
@@ -612,8 +666,8 @@ namespace DH.Helpdesk.Web.Controllers
 
                 if (organizationUnitId != null && organizationUnitId.Value > 0)
                     inputParams.Add("OrganizationUnitId", organizationUnitId.Value.ToString()); // Takes default from saved Notifier
-            }            
-            
+            }
+
             if (displaySettings.Division.Show)
             {
                 divisions = this.divisionRepository.FindByCustomerId(currentCustomerId);
@@ -639,7 +693,8 @@ namespace DH.Helpdesk.Web.Controllers
                 organizationUnits,
                 divisions,
                 managers,
-                groups);
+                groups,
+                languages);
 
             return this.View(model);
         }
@@ -649,6 +704,7 @@ namespace DH.Helpdesk.Web.Controllers
         public RedirectToRouteResult Notifier(InputModel model)
         {
             var updatedNotifier = this.updatedNotifierFactory.Create(model, DateTime.Now);
+            //updatedNotifier.LanguageId = model.LanguageId;
             this.notifierService.UpdateNotifier(updatedNotifier, SessionFacade.CurrentCustomer.Id);
             return this.RedirectToAction("Index");
         }
@@ -787,6 +843,44 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var isUnique = notifierRepository.IsInitiatorUserIdUnique(userId, initiatorId, SessionFacade.CurrentCustomer.Id, true);
             return Json(isUnique, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public string GetLanguageFromDepartment(string departmentid)
+
+        {
+
+            departmentid = departmentid.Replace("'", "");
+            if (departmentid != string.Empty)
+            {
+                int depid = Convert.ToInt32(departmentid);
+                int languageId = this.departmentRepository.GetDepartmentLanguage(depid);
+                return languageId.ToString();
+            }
+            else
+            {
+                return string.Empty;
+            }
+
+        }
+
+
+        [HttpGet]
+        public string GetLanguageFromRegion(string regionid)
+
+        {
+
+            regionid = regionid.Replace("'", "");
+            if (regionid != string.Empty)
+            {
+                int regid = Convert.ToInt32(regionid);
+                int languageId = this.regionRepository.GetRegionLanguage(regid);
+                return languageId.ToString();
+            }
+            else
+            {
+                return string.Empty;
+            }
         }
 
         private KeyValuePair<string, string> GetSplitedName(string fullName)

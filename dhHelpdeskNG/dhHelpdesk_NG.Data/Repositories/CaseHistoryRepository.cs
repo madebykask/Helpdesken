@@ -13,6 +13,7 @@
         void SetNullProblemByProblemId(int problemId);
 
         CaseHistory GetCloneOfLatest(int caseId);
+        CaseHistory GetCloneOfPenultimate(int caseId);
     }
 
     public class CaseHistoryRepository : RepositoryBase<CaseHistory>, ICaseHistoryRepository
@@ -46,6 +47,16 @@
                 .AsNoTracking()
                 .Where(it => it.Case_Id == caseId)
                 .OrderByDescending(it => it.Id)
+                .FirstOrDefault();
+        }
+
+        public CaseHistory GetCloneOfPenultimate(int caseId)
+        {
+            return DataContext.Set<CaseHistory>()
+                .AsNoTracking()
+                .Where(it => it.Case_Id == caseId)
+                .OrderByDescending(it => it.Id)
+                .Skip(1).Take(1)
                 .FirstOrDefault();
         }
     }

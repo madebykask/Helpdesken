@@ -66,6 +66,12 @@
                         <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation), null, null, new { @class = "btn save-new", id = "case-action-save-and-new" })</li>
                     }
 
+                    @if (!Model.IsItChildCase() && Model.WorkflowSteps.Count() > 0)
+                    {
+                        <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), null, null, null, new { @class = "btn save", id = "case-action-save" })</li>
+                    }
+
+
                     <li><i id="TemplateQuickButtonIndicator" class="gif-loader" style="display:none">&nbsp;</i></li>
                     <li class="secspace"></li>
                     
@@ -78,7 +84,7 @@
                                 <span class="caret">&nbsp;</span>
                             </button>
                             <ul class="dropdown-menu">                                                               
-                                @if (Model.Languages != null && Model.Languages.Where(l => l.IsActive).ToList().Count > 1)
+                                @if (Model.Languages != null && Model.Languages.Where(l => l.IsActive > 0).ToList().Count > 1)
                                 {     
                                     var curLanguage = (Model.case_.Id == 0? SessionFacade.CurrentLanguageId:Model.case_.RegLanguage_Id);                               
                                     <li class="dropdown-submenu">
@@ -87,7 +93,7 @@
                                             @Translation.Get("Språk för E-mail")
                                         </a>
                                         <ul class="dropdown-menu">
-                                            @foreach (var lang in Model.Languages.Where(l => l.IsActive).ToList())
+                                            @foreach (var lang in Model.Languages.Where(l => l.IsActive > 0).ToList())
                                             {
                                                 var langNameId = "langItem" + lang.Id;
                                                 <li>
@@ -116,7 +122,14 @@
                         <li id="btnCaseTemplate">
                             @Html.Partial("_CaseTemplateTree", Model.CaseTemplateTreeButton, t)
                         </li>
-                     }
+                    }
+
+                    @*At the moment we do not check access for this /TAN*@
+        
+                    @if (!Model.IsItChildCase())
+                    {
+                        @Html.Partial("WorkflowStep", Model.WorkflowSteps)
+                    }
                 </ul>
             </div>
             <div class="pull-right">

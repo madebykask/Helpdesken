@@ -5553,7 +5553,7 @@ If not exists (select * from tblTextTranslation where text_id = 1771 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1771, 2, 'No more files allowed')
 GO
 
-UPDATE tblText Set TextString = 'Informera initiativtagare och anhängare om åtgärder' WHERE Id=1743;
+UPDATE tblText Set TextString = 'Informera anmälare och följare om åtgärder' WHERE Id=1743;
 GO
 
 If not exists (select * from tbltext where id = 1772)
@@ -5758,7 +5758,105 @@ If not exists (select * from tblTextTranslation where text_id = 1805 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1805, 2, 'Limit rights to')
 GO
 
+UPDATE tblText Set TextString = 'Du måste ange ett produktområde' WHERE Id = 1317;
+GO
+
 /* Id 1806 SelfService */
+
+If not exists (select * from tbltext where id = 1807)
+	insert into tbltext (id, TextString) VALUES (1807, 'Följare')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1807 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1807, 2, 'Follower')
+GO
+
+If not exists (select * from tbltext where id = 1808)
+	insert into tbltext (id, TextString) VALUES (1808, 'Återkopplingsdatum')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1808 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1808, 2, 'Feedback date')
+GO
+
+If not exists (select * from tbltext where id = 1809)
+	insert into tbltext (id, TextString) VALUES (1809, 'Export fil')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1809 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1809, 2, 'Export file')
+GO
+
+If not exists (select * from tbltext where id = 1810)
+	insert into tbltext (id, TextString) VALUES (1810, 'Import fil')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1810 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1810, 2, 'Import file')
+GO
+
+If not exists (select * from tbltext where id = 1811)
+	insert into tbltext (id, TextString) VALUES (1811, 'Visa i lista')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1811 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1811, 2, 'Show in dropdown')
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'Default when cases are registered by e-mail' WHERE Text_Id=854 AND Language_Id=2;
+GO
+
+Declare @Id int = 1811
+Declare @LanguageId int = 2
+If not exists (select * from tbltext where id = @Id)
+begin
+	insert into tbltext (id, TextString) VALUES (@Id, '-- Välj --')
+end
+If not exists (select * from tblTextTranslation where text_id = @Id and Language_Id = @LanguageId)
+begin
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(@Id, @LanguageId, '-- Select --')
+end
+GO
+
+Declare @Id int = 1812
+Declare @LanguageId int = 2
+If not exists (select * from tbltext where id = @Id)
+begin
+	insert into tbltext (id, TextString) VALUES (@Id, 'Arbetsflödessteg')
+end
+If not exists (select * from tblTextTranslation where text_id = @Id and Language_Id = @LanguageId)
+begin
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(@Id, @LanguageId, 'Workflow step')
+end
+GO
+
+Declare @Id int = 1813
+Declare @LanguageId int = 2
+If not exists (select * from tbltext where id = @Id)
+begin
+	insert into tbltext (id, TextString) VALUES (@Id, 'Koppla till åtgärd')
+end
+If not exists (select * from tblTextTranslation where text_id = @Id and Language_Id = @LanguageId)
+begin
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(@Id, @LanguageId, 'Connect to action')
+end
+GO
+
+If not exists (select * from tbltext where id = 1814)
+	insert into tbltext (id, TextString) VALUES (1814, 'Kommentarer')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1814 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1814, 2, 'Comments')
+GO
+
+If not exists (select * from tbltext where id = 1815)
+	insert into tbltext (id, TextString) VALUES (1815, 'Uppföljning')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1815 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1815, 2, 'Follow Up')
+GO
+
+If not exists (select * from tbltext where id = 1816)
+	insert into tbltext (id, TextString) VALUES (1816, 'Kort beskrivning')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1816 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1816, 2, 'Short description')
+GO
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

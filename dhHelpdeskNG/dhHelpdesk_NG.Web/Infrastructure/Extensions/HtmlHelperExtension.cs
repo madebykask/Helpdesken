@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Extensions
+﻿using DH.Helpdesk.Common.Constants;
+
+namespace DH.Helpdesk.Web.Infrastructure.Extensions
 {
     
     using System.Collections.Generic;
@@ -189,6 +191,16 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                 return new MvcHtmlString(string.Empty);
         }
 
+        public static MvcHtmlString CategoryDropdownButtonString(this HtmlHelper helper, IList<Category> cats, bool isTakeOnlyActive = true)
+        {
+            if (cats != null)
+            {
+                return BuildCategoryDropdownButton(cats, isTakeOnlyActive);
+            }
+            else
+                return new MvcHtmlString(string.Empty);
+        }
+
         public static MvcHtmlString ProductAreasList(this HtmlHelper helper, IEnumerable<ProductAreaItem> productAreas)
         {
             return productAreas == null ? MvcHtmlString.Empty : BuildProductAreasList(productAreas);
@@ -208,7 +220,7 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
             else
                 return new MvcHtmlString(string.Empty);
         }
-
+         
         public static MvcHtmlString CaseTypeTreeString(this HtmlHelper helper, IList<CaseType> caseTypes)
         {
             if (caseTypes != null)
@@ -229,11 +241,11 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                 return new MvcHtmlString(string.Empty);
         }
 
-        public static MvcHtmlString OrderTypeTreeString(this HtmlHelper helper, IList<OrderType> orderTypes)
+        public static MvcHtmlString OrderTypeTreeString(this HtmlHelper helper, IList<OrderType> orderTypes, bool isShowOnlyActive = false)
         {
             if (orderTypes != null)
             {
-                return BuildOrderTypeTreeRow(orderTypes, 0);
+                return BuildOrderTypeTreeRow(orderTypes, 0, isShowOnlyActive);
             }
             else
                 return new MvcHtmlString(string.Empty);
@@ -268,6 +280,16 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
             if (productAreas != null)
             {
                 return BuildProductAreaTreeRow(productAreas, 0, isShowOnlyActive);
+            }
+            else
+                return new MvcHtmlString(string.Empty);
+        }
+
+        public static MvcHtmlString CategoryTreeString(this HtmlHelper helper, IList<Category> categories, int customerId, bool isShowOnlyActive = false)
+        {
+            if (categories != null)
+            {
+                return BuildCategoryTreeRow(categories, 0, customerId, isShowOnlyActive);
             }
             else
                 return new MvcHtmlString(string.Empty);
@@ -923,6 +945,22 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                 }
             }
 
+            // Case extra followers
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString()).ShowOnStartPage == 1)
+            {
+                if (!cur.CaseExtraFollowers.Equals(o.CaseExtraFollowers))
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.GetCoreTextTranslation("Följare") + be);
+                    sb.Append(tdOpenMarkup);
+                    sb.Append(o.CaseExtraFollowers.Replace(BRConstItem.Email_Separator, BRConstItem.Email_Separator + " "));
+                    sb.Append(from);
+                    sb.Append(cur.CaseExtraFollowers.Replace(BRConstItem.Email_Separator, BRConstItem.Email_Separator + " "));
+                    sb.Append(tdCloseMarkup);
+                    sb.Append("</tr>");
+                }
+            }
+
             return new MvcHtmlString(sb.ToString());
         }
 
@@ -1166,6 +1204,53 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
             return new MvcHtmlString(htmlOutput);
         }
 
+        private static MvcHtmlString BuildCategoryDropdownButton(
+            IList<Category> cats,
+            bool isTakeOnlyActive = true)
+        {
+            string htmlOutput = string.Empty;
+
+            foreach (Category ca in cats)
+            {
+                List<Category> childList = null;
+                if (ca.SubCategories != null)
+                {
+                    var childs = isTakeOnlyActive
+                                 ? ca.SubCategories.Where(p => p.IsActive != 0)
+                                 : ca.SubCategories;
+
+                    childList = childs.ToList();
+                }
+
+                var cls = ca.IsActive == 1 ? string.Empty : "inactive";
+                if (childList != null && childList.Count > 0)
+                {
+                    htmlOutput += string.Format("<li class=\"dropdown-submenu {0} {1}\" id=\"{2}\">", cls, "DynamicDropDown_Up", ca.Id);
+                }
+                else
+                {
+                    htmlOutput += string.Format("<li class=\"{0} \" >", cls);
+                }
+
+                htmlOutput +=
+                    string.Format(
+                        "<a href='#' value=\"{0}\">{1}</a>",
+                        ca.Id,
+                        Translation.GetMasterDataTranslation(ca.Name));
+
+                if (childList != null && childList.Count > 0)
+                {
+                    htmlOutput += string.Format("<ul class='dropdown-menu' id=\"subDropDownMenu_{0}\" >", ca.Id);
+                    htmlOutput += BuildCategoryDropdownButton(childList.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList(), isTakeOnlyActive);
+                    htmlOutput += "</ul>";
+                }
+
+                htmlOutput += "</li>";
+            }
+
+            return new MvcHtmlString(htmlOutput);
+        }
+
         private static MvcHtmlString BuildFinishingCauseTreeRow(IList<FinishingCause> finishingCauses, int iteration, 
                 bool isShowOnlyActive = true,
                 bool isParentInactive = false)
@@ -1205,13 +1290,16 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
             return new MvcHtmlString(htmlOutput);
         }
 
-        private static MvcHtmlString BuildOrderTypeTreeRow(IList<OrderType> orderTypes, int iteration)
+        private static MvcHtmlString BuildOrderTypeTreeRow(IList<OrderType> orderTypes, int iteration, bool isShowOnlyActive = true, bool isParentInactive = false)
         {
             string htmlOutput = string.Empty;
 
-            foreach (OrderType orderType in orderTypes)
+            var orderTypesToDisplay = isShowOnlyActive ? orderTypes.Where(it => it.IsActive == 1) : orderTypes;
+
+            foreach (OrderType orderType in orderTypesToDisplay)
             {
-                htmlOutput += "<tr>";
+                var isInactive = orderType.IsActive != 1 || isParentInactive;
+                htmlOutput += string.Format("<tr class=\"{0}\">", isInactive ? "inactive" : string.Empty);
                 htmlOutput += "<td><a href='/admin/ordertype/edit/" + orderType.Id + "' style='padding-left: " + iteration + "px'><i class='icon-resize-full icon-dh'></i>" + orderType.Name + "</a></td>";
                 htmlOutput += "<td><a href='/admin/ordertype/edit/" + orderType.Id + "'>" + orderType.IsDefault.TranslateBit() + "</a></td>";
 
@@ -1224,7 +1312,7 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
 
                 if (orderType.SubOrderTypes != null)
                     if (orderType.SubOrderTypes.Count > 0)
-                        htmlOutput += BuildOrderTypeTreeRow(orderType.SubOrderTypes.OrderBy(x => x.Name).ToList(), iteration + 20);
+                        htmlOutput += BuildOrderTypeTreeRow(orderType.SubOrderTypes.OrderBy(x => x.Name).ToList(), iteration + 20, isShowOnlyActive, isInactive);
 
             }
 
@@ -1311,6 +1399,43 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                         htmlOutput += BuildProductAreaTreeRow(
                             productArea.SubProductAreas.OrderBy(x => x.Name).ToList(),
                             iteration + 20,
+                            isShowOnlyActive,
+                            isInactive);
+                    }
+                }
+            }
+
+            return new MvcHtmlString(htmlOutput);
+        }
+
+        private static MvcHtmlString BuildCategoryTreeRow(
+            IList<Category> categories,
+            int iteration,
+            int customerId,
+            bool isShowOnlyActive = true,
+            bool isParentInactive = false)
+        {
+            string htmlOutput = string.Empty;
+            var categoriesToDisplay = isShowOnlyActive ? categories.Where(it => it.IsActive == 1) : categories;
+
+            foreach (Category category in categoriesToDisplay)
+            {
+                var isInactive = category.IsActive != 1 || isParentInactive;
+                htmlOutput += string.Format("<tr class=\"{0}\">", isInactive ? "inactive" : string.Empty);
+                htmlOutput += "<td><a href='/admin/category/edit/" + category.Id + "?customerId=" + customerId + "' style='padding-left: " + iteration + "px'><i class='icon-resize-full icon-dh'></i>" + category.Name + "</a></td>";
+                htmlOutput += "<td><a href='/admin/category/edit/" + category.Id + "?customerId=" + customerId + "'>" + category.IsActive.TranslateBit() + "</a></td>";
+                htmlOutput += "</tr>";
+
+                if (category.SubCategories != null)
+                {
+                    if (category.SubCategories.Count > 0 && (
+                        (isShowOnlyActive && !isInactive)
+                        || !isShowOnlyActive))
+                    {
+                        htmlOutput += BuildCategoryTreeRow(
+                            category.SubCategories.OrderBy(x => x.Name).ToList(),
+                            iteration + 20,
+                            customerId,
                             isShowOnlyActive,
                             isInactive);
                     }

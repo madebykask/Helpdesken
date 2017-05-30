@@ -140,8 +140,7 @@
     <Compile Include="Enums\Orders\FieldNames\ReceiverFieldNames.cs" />
     <Compile Include="Enums\Orders\FieldNames\SupplierFieldNames.cs" />
     <Compile Include="Enums\Orders\FieldNames\UserFieldNames.cs" />
-    <Compile Include="Enums\Orders\Fields\AccountInfoFields.cs" />
-    <Compile Include="Enums\Orders\Fields\ContactFields.cs" />
+    <Compile Include="Enums\Orders\Fields\OrderLabels.cs" />
     <Compile Include="Enums\Orders\OrderDeletedItem.cs" />
     <Compile Include="Enums\Orders\OrderEmailTemplate.cs" />
     <Compile Include="Enums\Orders\Subtopic.cs" />
@@ -170,7 +169,9 @@
     <Compile Include="Models\BusinessRules\BusinessRuleModel.cs" />
     <Compile Include="Models\BusinessRules\BusinessRuleReadModel.cs" />
     <Compile Include="Models\CaseType\CaseTypeItem.cs" />
+    <Compile Include="Models\Case\CaseFileDate.cs" />
     <Compile Include="Models\Case\CaseLock\CaseLockOverview.cs" />
+    <Compile Include="Models\Case\CaseSolutionConditionModel.cs" />
     <Compile Include="Models\Case\ExtraFollower.cs" />
     <Compile Include="Models\Case\CaseIntLog\CaseEmailSendOverview.cs" />
     <Compile Include="Models\Case\CaseLock\LockedCaseOverview.cs" />
@@ -323,16 +324,7 @@
     <Compile Include="Models\Email\MailItem.cs" />
     <Compile Include="Models\Email\QuestionnaireMailItem.cs" />
     <Compile Include="Models\Licenses\Licenses\LicenseFileModel.cs" />
-    <Compile Include="Enums\Orders\Fields\DeliveryFields.cs" />
-    <Compile Include="Enums\Orders\Fields\GeneralFields.cs" />
-    <Compile Include="Enums\Orders\Fields\LogFields.cs" />
-    <Compile Include="Enums\Orders\Fields\OrdererFields.cs" />
     <Compile Include="Enums\Orders\Fields\OrderFields.cs" />
-    <Compile Include="Enums\Orders\Fields\OtherFields.cs" />
-    <Compile Include="Enums\Orders\Fields\ProgramFields.cs" />
-    <Compile Include="Enums\Orders\Fields\ReceiverFields.cs" />
-    <Compile Include="Enums\Orders\Fields\SupplierFields.cs" />
-    <Compile Include="Enums\Orders\Fields\UserFields.cs" />
     <Compile Include="Models\Orders\Index\OrderOverview\AccountInfoOverview.cs" />
     <Compile Include="Models\Orders\Index\OrderOverview\ContactOverview.cs" />
     <Compile Include="Models\Orders\Index\OrderOverview\DeliveryOverview.cs" />
@@ -1001,6 +993,7 @@
     <Compile Include="Enums\Changes\ChangeStatus.cs" />
     <Compile Include="Enums\Changes\Subtopic.cs" />
     <Compile Include="Models\Users\UserProfileCustomerSettings.cs" />
+    <Compile Include="Models\WorkflowStepModel.cs" />
     <Compile Include="Models\WorkingGroup\WorkingGroupForSMS.cs" />
     <Compile Include="Models\WorktimeCalculator\IWorkTimeCalculatorFactory.cs" />
     <Compile Include="Models\WorktimeCalculator\WorkTimeCalculator.cs" />

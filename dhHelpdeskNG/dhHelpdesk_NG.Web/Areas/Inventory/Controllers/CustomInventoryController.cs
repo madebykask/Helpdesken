@@ -150,7 +150,7 @@
             return this.RedirectToAction("Index", new { inventoryTypeId = inventoryViewModel.InventoryTypeId });
         }
 
-        [HttpGet]
+        [HttpPost]
         public RedirectToRouteResult Delete(int inventoryTypeId, int id)
         {
             this.inventoryService.DeleteInventory(id);

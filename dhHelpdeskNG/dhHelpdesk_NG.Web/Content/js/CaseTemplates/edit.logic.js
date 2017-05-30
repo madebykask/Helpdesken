@@ -144,6 +144,13 @@ $(function () {
         $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(this));
         $("#CaseSolution_ProductArea_Id").val(val).trigger('change');
     });
+
+    $('#divCategory ul.dropdown-menu li a').click(function (e) {
+        e.preventDefault();
+        var val = $(this).attr('value');
+        $("#divBreadcrumbs_Category").text(getBreadcrumbs(this));
+        $("#CaseSolution_Category_Id").val(val).trigger('change');
+    });
     
     $("select").change(function () {
 
@@ -223,11 +230,13 @@ $(function () {
 
     $("#Casesolution_ShowInsideCase").click(function () {
         if ($('#Casesolution_ShowInsideCase').is(':checked')) {
+            $(".hideOnInsideCase").show();
             $("#CaseSolution_ConnectedButton").prop("disabled", false);
             $("#savaAndClose").prop("disabled", false);
             removeOptionByValue('savaAndClose', '-2'); // remove temporary option
         }else{
             $("#CaseSolution_ConnectedButton").prop("disabled", true);
+            $(".hideOnInsideCase").hide();
 
             // Add temporary option 
             var opt = document.createElement("option");

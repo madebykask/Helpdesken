@@ -51,6 +51,8 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
         public string ParantPath_ProductArea = DropDownButtonDefaultValue;
 
+        public string ParantPath_Category = DropDownButtonDefaultValue;
+
         public string ParantPath_CaseType = DropDownButtonDefaultValue;
 
         public string ParentPathClosingReason = DropDownButtonDefaultValue;

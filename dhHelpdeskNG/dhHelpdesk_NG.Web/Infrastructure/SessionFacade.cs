@@ -51,6 +51,8 @@
 
         private const string _CURRENT_OPERATIONLOG_SEARCH = "CURRENT_OPERATIONLOG_SEARCH";
 
+        
+
         private const string _CURRENT_INVOICE_ARTICLE_PRODUCTAREA_SEARCH = "CURRENT_INVOICE_ARTICLE_PRODUCTAREA_SEARCH";
 
         private const string _CURRENT_USER = "CURRENT_USER";
@@ -78,6 +80,8 @@
         private const string _TZ_MSG_KEY = "TZ_MSG_RESULT";
 
         private const string _SHOW_ACTIVE_PRODUCT_AREAS_IN_ADMIN = "SHOW_ACTIVE_PRODUCT_AREAS_IN_ADMIN";
+
+        private const string _SHOW_ACTIVE_ORDER_TYPES_IN_ADMIN = "SHOW_ACTIVE_ORDER_TYPES_IN_ADMIN";
 
         private const string _AdminUsersPageLoggedInUsersTabSelectedCustomerId = "AdminUsersPageLoggedInUsersTabSelectedCustomerId";
 
@@ -452,6 +456,8 @@
             }
         }
 
+      
+
         public static InvoiceArticleProductAreaSelectedFilter CurrentInvoiceArticleProductAreaSearch
         {
             get
@@ -633,6 +639,24 @@
             set
             {
                 SaveSetKeyValue(_SHOW_ACTIVE_PRODUCT_AREAS_IN_ADMIN, value);
+            }
+        }
+
+        public static bool ShowOnlyActiveOrderTypesInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_ORDER_TYPES_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_ORDER_TYPES_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_ORDER_TYPES_IN_ADMIN, value);
             }
         }
 

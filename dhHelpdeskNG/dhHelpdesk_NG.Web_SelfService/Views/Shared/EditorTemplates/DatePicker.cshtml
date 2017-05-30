@@ -16,8 +16,11 @@
 <script type="text/javascript">
     $(function() {
         $('#@controlId').datepicker({
-            format: '@Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern.ToLower()',
-            autoclose: true
+            format: '@DateExtensions.GetDateFormat().ToLowerInvariant()',
+            autoclose: true,
+            weekStart: 1,
+            todayHighlight: true,
+            clearBtn: true
         });
     });
 </script>

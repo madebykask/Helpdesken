@@ -24,6 +24,8 @@
         ItemOverview FindActiveOverview(int departmentId);
 
         IEnumerable<Department> GetActiveDepartmentsBy(int customerId, int? regionId = null);
+
+        int GetDepartmentLanguage(int departmentId);
     }
 
     public sealed class DepartmentRepository : RepositoryBase<Department>, IDepartmentRepository
@@ -90,6 +92,11 @@
             return
                 departmentOverviews.Select(
                     o => new ItemOverview(o.DepartmentName, o.Id.ToString(CultureInfo.InvariantCulture))).OrderBy(x => x.Name).ToList();
+        }
+
+        public int GetDepartmentLanguage(int departmentId)
+        {
+            return this.DataContext.Departments.Where(d => d.Id == departmentId).Select(d => d.LanguageId).FirstOrDefault();
         }
 
         public string GetDepartmentName(int departmentId)

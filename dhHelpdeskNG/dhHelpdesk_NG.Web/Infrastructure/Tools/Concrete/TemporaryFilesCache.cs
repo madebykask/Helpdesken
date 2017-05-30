@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Tools.Concrete
+﻿using System;
+using DH.Helpdesk.BusinessData.Models.Case;
+
+namespace DH.Helpdesk.Web.Infrastructure.Tools.Concrete
 {
     using DH.Helpdesk.Common.Enums;
     using System.Collections.Generic;
@@ -123,6 +126,20 @@
             return Directory.Exists(directory)
                        ? Directory.GetFiles(directory).FirstOrDefault(f => Path.GetFileName(f) == fileName)
                        : string.Empty;
+        }
+
+        public List<CaseFileDate> FindFileNamesAndDates(string id, params string[] subtopics)
+        {
+            var directory = this.ComposeDirectoryPath(id, subtopics);
+
+            var fileNames = Directory.Exists(directory)
+                       ? Directory.GetFiles(directory).Select(Path.GetFileName).ToList()
+                       : new List<string>(0);
+            return fileNames.Select(x => new CaseFileDate
+            {
+                FileName = x,
+                FileDate = DateTime.Now
+            }).ToList();
         }
 
         public List<WebTemporaryFile> FindFiles(string objectId, params string[] subtopics)

@@ -500,6 +500,12 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 StatusType = GetFieldStatusType(ruleMode, TranslationCaseFields.SMS, caseFieldSettings, CaseSolutionFields.SMS, templateSettingModel.ToList()),
             };
 
+            caseBasicInfo.AgreedDate = new BasicSingleItemField()
+            {
+                Selected = new FieldItem(currentData.AgreedDate.ToString(), string.Empty),
+                StatusType = GetFieldStatusType(ruleMode, TranslationCaseFields.AgreedDate, caseFieldSettings, CaseSolutionFields.AgreedDate, templateSettingModel.ToList()),
+            };
+
             caseBasicInfo.Available = new BasicSingleItemField()
             {
                 Selected = new FieldItem(currentData.Available, string.Empty),
@@ -1949,6 +1955,25 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
 
             #endregion
 
+            #region AgreedDate
+
+            curField = TranslationCaseFields.AgreedDate.ToString();
+            var attrAgreedDate = new FieldAttributeModel()
+            {
+                FieldId = curField,
+                FieldName = curField,
+                FieldCaption = Translation.Get(curField, Enums.TranslationSource.CaseTranslation, customerId),
+                FieldType = CaseFieldType.DateField,
+                DefaultItem = new FieldItem(string.Empty, string.Empty, true),
+                Selected = basicInformation.AgreedDate.Selected,
+                IsAvailableOnHelpdesk = caseFieldSettings.getShowOnStartPage(curField).ToBool(),
+                IsAvailableOnSelfService = caseFieldSettings.getShowExternal(curField).ToBool(),
+                IsMandatory = caseFieldSettings.getRequired(curField).ToBool(),
+                StatusType = basicInformation.AgreedDate.StatusType
+            };
+            ret.Add(attrAgreedDate);
+
+            #endregion
             #endregion
 
             // *** Other Info ***

@@ -23,7 +23,7 @@
         #region Constructors and Destructors
 
         public NotifierRepository(
-            IDatabaseFactory databaseFactory, 
+            IDatabaseFactory databaseFactory,
             IBusinessModelToEntityMapper<CaseNotifier, ComputerUser> caseNotifierToEntityMapper)
             : base(databaseFactory)
         {
@@ -37,45 +37,46 @@
         public void AddNotifier(Notifier notifier)
         {
             var notifierEntity = new ComputerUser
-                                     {
-                                         Cellphone = notifier.CellPhone ?? string.Empty, 
-                                         City = notifier.City ?? string.Empty, 
-                                         ComputerUserGroup_Id = notifier.GroupId, 
-                                         Customer_Id = notifier.CustomerId, 
-                                         Department_Id = notifier.DepartmentId, 
-                                         DisplayName = notifier.DisplayName ?? string.Empty, 
-                                         Division_Id = notifier.DivisionId, 
-                                         Domain_Id = notifier.DomainId, 
-                                         Email = notifier.Email ?? string.Empty, 
-                                         FirstName = notifier.FirstName ?? string.Empty, 
-                                         FullName = string.Empty, 
-                                         Info = notifier.Other ?? string.Empty, 
-                                         Initials = notifier.Initials ?? string.Empty, 
-                                         Location = notifier.Place ?? string.Empty, 
-                                         LogonName = notifier.LoginName ?? string.Empty, 
-                                         ManagerComputerUser_Id = notifier.ManagerId, 
-                                         NDSpath = string.Empty, 
-                                         OU_Id = notifier.OrganizationUnitId, 
-                                         OrderPermission = notifier.Ordered ? 1 : 0, 
-                                         Password = string.Empty,
-                                         Phone = notifier.Phone ?? string.Empty, 
-                                         Phone2 = string.Empty, 
-                                         PostalAddress = notifier.PostalAddress ?? string.Empty, 
-                                         Postalcode = notifier.PostalCode ?? string.Empty, 
-                                         RegTime = notifier.CreatedDateAndTime, 
-                                         SOU = notifier.Unit ?? string.Empty, 
-                                         Status = notifier.IsActive ? 1 : 0, 
-                                         SurName = notifier.LastName ?? string.Empty, 
-                                         Title = notifier.Title ?? string.Empty, 
-                                         UserCode = notifier.Code ?? string.Empty, 
-                                         UserGUID = string.Empty, 
-                                         UserId = notifier.UserId ?? string.Empty, 
-                                         homeDirectory = string.Empty, 
-                                         homeDrive = string.Empty,
-                                         CostCentre = notifier.CostCentre,
-                                         ChangeTime = DateTime.Now
-                                     };
-            
+            {
+                Cellphone = notifier.CellPhone ?? string.Empty,
+                City = notifier.City ?? string.Empty,
+                ComputerUserGroup_Id = notifier.GroupId,
+                Customer_Id = notifier.CustomerId,
+                Department_Id = notifier.DepartmentId,
+                DisplayName = notifier.DisplayName ?? string.Empty,
+                Division_Id = notifier.DivisionId,
+                Domain_Id = notifier.DomainId,
+                Email = notifier.Email ?? string.Empty,
+                FirstName = notifier.FirstName ?? string.Empty,
+                FullName = string.Empty,
+                Info = notifier.Other ?? string.Empty,
+                Initials = notifier.Initials ?? string.Empty,
+                Location = notifier.Place ?? string.Empty,
+                LogonName = notifier.LoginName ?? string.Empty,
+                ManagerComputerUser_Id = notifier.ManagerId,
+                NDSpath = string.Empty,
+                OU_Id = notifier.OrganizationUnitId,
+                OrderPermission = notifier.Ordered ? 1 : 0,
+                Password = string.Empty,
+                Phone = notifier.Phone ?? string.Empty,
+                Phone2 = string.Empty,
+                PostalAddress = notifier.PostalAddress ?? string.Empty,
+                Postalcode = notifier.PostalCode ?? string.Empty,
+                RegTime = notifier.CreatedDateAndTime,
+                SOU = notifier.Unit ?? string.Empty,
+                Status = notifier.IsActive ? 1 : 0,
+                SurName = notifier.LastName ?? string.Empty,
+                Title = notifier.Title ?? string.Empty,
+                UserCode = notifier.Code ?? string.Empty,
+                UserGUID = string.Empty,
+                UserId = notifier.UserId ?? string.Empty,
+                homeDirectory = string.Empty,
+                homeDrive = string.Empty,
+                CostCentre = notifier.CostCentre,
+                ChangeTime = DateTime.Now,
+                LanguageId = notifier.LanguageId,
+            };
+
             this.DataContext.ComputerUsers.Add(notifierEntity);
             this.InitializeAfterCommit(notifier, notifierEntity);
         }
@@ -99,71 +100,73 @@
                 notifiers.Select(
                     n =>
                     new
-                        {
-                            PostalAddress = n.PostalAddress != string.Empty ? n.PostalAddress : null, 
-                            CellPhone = n.Cellphone != string.Empty ? n.Cellphone : null, 
-                            ChangedDate = n.ChangeTime, 
-                            City = n.City != string.Empty ? n.City : null, 
-                            Code = n.UserCode != string.Empty ? n.UserCode : null, 
-                            CreatedDate = n.RegTime, 
-                            Region = n.Department.Region.Name, // Takes Department's Region instead
-                            Department = n.Department.DepartmentName, 
-                            Division = n.Division.Name, 
-                            Domain = n.Domain.Name, 
-                            Email = n.Email != string.Empty ? n.Email : null, 
-                            FirstName = n.FirstName != string.Empty ? n.FirstName : null, 
-                            Group = n.ComputerUserGroup.Name != string.Empty ? n.ComputerUserGroup.Name : null, 
-                            Id = n.Id, 
-                            Initials = n.Initials != string.Empty ? n.Initials : null, 
-                            LastName = n.SurName != string.Empty ? n.SurName : null, 
-                            LoginName = n.LogonName != string.Empty ? n.LogonName : null, 
-                            Manager = n.ManagerComputerUser.UserId, 
-                            DisplayName = n.DisplayName != string.Empty ? n.DisplayName : null, 
-                            Ordered = n.OrderPermission != 0,
-                            OrganizationUnit = n.OU.Parent_OU_Id == null ? n.OU.Name : n.OU.Parent.Name + " - " + n.OU.Name, 
-                            Other = n.Info != string.Empty ? n.Info : null, 
-                            Phone = n.Phone != string.Empty ? n.Phone : null, 
-                            Place = n.Location != string.Empty ? n.Location : null, 
-                            PostalCode = n.Postalcode != string.Empty ? n.Postalcode : null, 
-                            SynchronizationDate = n.SyncChangedDate, 
-                            Title = n.Title != string.Empty ? n.Title : null, 
-                            Unit = n.SOU != string.Empty ? n.SOU : null, 
-                            UserId = n.UserId
-                        }).ToList();
+                    {
+                        PostalAddress = n.PostalAddress != string.Empty ? n.PostalAddress : null,
+                        CellPhone = n.Cellphone != string.Empty ? n.Cellphone : null,
+                        ChangedDate = n.ChangeTime,
+                        City = n.City != string.Empty ? n.City : null,
+                        Code = n.UserCode != string.Empty ? n.UserCode : null,
+                        CreatedDate = n.RegTime,
+                        Region = n.Department.Region.Name, // Takes Department's Region instead
+                        Department = n.Department.DepartmentName,
+                        Division = n.Division.Name,
+                        Domain = n.Domain.Name,
+                        Email = n.Email != string.Empty ? n.Email : null,
+                        FirstName = n.FirstName != string.Empty ? n.FirstName : null,
+                        Group = n.ComputerUserGroup.Name != string.Empty ? n.ComputerUserGroup.Name : null,
+                        Id = n.Id,
+                        Initials = n.Initials != string.Empty ? n.Initials : null,
+                        LastName = n.SurName != string.Empty ? n.SurName : null,
+                        LoginName = n.LogonName != string.Empty ? n.LogonName : null,
+                        Manager = n.ManagerComputerUser.UserId,
+                        DisplayName = n.DisplayName != string.Empty ? n.DisplayName : null,
+                        Ordered = n.OrderPermission != 0,
+                        OrganizationUnit = n.OU.Parent_OU_Id == null ? n.OU.Name : n.OU.Parent.Name + " - " + n.OU.Name,
+                        Other = n.Info != string.Empty ? n.Info : null,
+                        Phone = n.Phone != string.Empty ? n.Phone : null,
+                        Place = n.Location != string.Empty ? n.Location : null,
+                        PostalCode = n.Postalcode != string.Empty ? n.Postalcode : null,
+                        SynchronizationDate = n.SyncChangedDate,
+                        Title = n.Title != string.Empty ? n.Title : null,
+                        Unit = n.SOU != string.Empty ? n.SOU : null,
+                        UserId = n.UserId,
+                        LanguageId = n.LanguageId
+                    }).ToList();
 
             return
                 overviews.Select(
                     o =>
                     new NotifierDetailedOverview(
-                        o.Id, 
-                        o.UserId, 
-                        o.Domain, 
-                        o.LoginName, 
-                        o.FirstName, 
-                        o.Initials, 
-                        o.LastName, 
-                        o.DisplayName, 
-                        o.Place, 
-                        o.Phone, 
-                        o.CellPhone, 
-                        o.Email, 
-                        o.Code, 
-                        o.PostalAddress, 
-                        o.PostalCode, 
-                        o.City, 
-                        o.Title, 
+                        o.Id,
+                        o.UserId,
+                        o.Domain,
+                        o.LoginName,
+                        o.FirstName,
+                        o.Initials,
+                        o.LastName,
+                        o.DisplayName,
+                        o.Place,
+                        o.Phone,
+                        o.CellPhone,
+                        o.Email,
+                        o.Code,
+                        o.PostalAddress,
+                        o.PostalCode,
+                        o.City,
+                        o.Title,
                         o.Region,
-                        o.Department, 
-                        o.Unit, 
-                        o.OrganizationUnit, 
-                        o.Division, 
-                        o.Manager, 
-                        o.Group, 
-                        o.Other, 
-                        o.Ordered, 
-                        o.CreatedDate, 
-                        o.ChangedDate, 
-                        o.SynchronizationDate)).ToList();
+                        o.Department,
+                        o.Unit,
+                        o.OrganizationUnit,
+                        o.Division,
+                        o.Manager,
+                        o.Group,
+                        o.Other,
+                        o.Ordered,
+                        o.CreatedDate,
+                        o.ChangedDate,
+                        o.SynchronizationDate,
+                        o.LanguageId)).ToList();
         }
 
         public Notifier FindExistingNotifierById(int notifierId)
@@ -199,7 +202,8 @@
                 notifierEntity.Status != 0,
                 notifierEntity.RegTime,
                 notifierEntity.ChangeTime,
-                notifierEntity.SyncChangedDate);
+                notifierEntity.SyncChangedDate,
+                notifierEntity.LanguageId);
         }
 
         public NotifierDetails FindNotifierDetailsById(int notifierId)
@@ -207,36 +211,37 @@
             var notifierEntity = this.DataContext.ComputerUsers.Find(notifierId);
 
             return new NotifierDetails(
-                notifierEntity.Id, 
-                notifierEntity.UserId != string.Empty ? notifierEntity.UserId : null, 
-                notifierEntity.Domain_Id, 
-                notifierEntity.LogonName != string.Empty ? notifierEntity.LogonName : null, 
-                notifierEntity.FirstName != string.Empty ? notifierEntity.FirstName : null, 
-                notifierEntity.Initials != string.Empty ? notifierEntity.Initials : null, 
-                notifierEntity.SurName != string.Empty ? notifierEntity.SurName : null, 
-                notifierEntity.DisplayName != string.Empty ? notifierEntity.DisplayName : null, 
-                notifierEntity.Location != string.Empty ? notifierEntity.Location : null, 
-                notifierEntity.Phone != string.Empty ? notifierEntity.Phone : null, 
-                notifierEntity.Cellphone != string.Empty ? notifierEntity.Cellphone : null, 
-                notifierEntity.Email != string.Empty ? notifierEntity.Email : null, 
-                notifierEntity.UserCode != string.Empty ? notifierEntity.UserCode : null, 
-                notifierEntity.PostalAddress != string.Empty ? notifierEntity.PostalAddress : null, 
-                notifierEntity.Postalcode != string.Empty ? notifierEntity.Postalcode : null, 
-                notifierEntity.City != string.Empty ? notifierEntity.City : null, 
-                notifierEntity.Title != string.Empty ? notifierEntity.Title : null, 
-                notifierEntity.Department_Id, 
-                notifierEntity.SOU != string.Empty ? notifierEntity.SOU : null, 
+                notifierEntity.Id,
+                notifierEntity.UserId != string.Empty ? notifierEntity.UserId : null,
+                notifierEntity.Domain_Id,
+                notifierEntity.LogonName != string.Empty ? notifierEntity.LogonName : null,
+                notifierEntity.FirstName != string.Empty ? notifierEntity.FirstName : null,
+                notifierEntity.Initials != string.Empty ? notifierEntity.Initials : null,
+                notifierEntity.SurName != string.Empty ? notifierEntity.SurName : null,
+                notifierEntity.DisplayName != string.Empty ? notifierEntity.DisplayName : null,
+                notifierEntity.Location != string.Empty ? notifierEntity.Location : null,
+                notifierEntity.Phone != string.Empty ? notifierEntity.Phone : null,
+                notifierEntity.Cellphone != string.Empty ? notifierEntity.Cellphone : null,
+                notifierEntity.Email != string.Empty ? notifierEntity.Email : null,
+                notifierEntity.UserCode != string.Empty ? notifierEntity.UserCode : null,
+                notifierEntity.PostalAddress != string.Empty ? notifierEntity.PostalAddress : null,
+                notifierEntity.Postalcode != string.Empty ? notifierEntity.Postalcode : null,
+                notifierEntity.City != string.Empty ? notifierEntity.City : null,
+                notifierEntity.Title != string.Empty ? notifierEntity.Title : null,
+                notifierEntity.Department_Id,
+                notifierEntity.SOU != string.Empty ? notifierEntity.SOU : null,
                 notifierEntity.OU == null ? (int?)null : notifierEntity.OU.Id,
                 notifierEntity.CostCentre != string.Empty ? notifierEntity.CostCentre : null,
-                notifierEntity.Division_Id, 
-                notifierEntity.ManagerComputerUser_Id, 
-                notifierEntity.ComputerUserGroup_Id, 
-                notifierEntity.Info != string.Empty ? notifierEntity.Info : null, 
-                notifierEntity.OrderPermission != 0, 
-                notifierEntity.Status != 0, 
-                notifierEntity.RegTime, 
-                notifierEntity.ChangeTime, 
-                notifierEntity.SyncChangedDate);
+                notifierEntity.Division_Id,
+                notifierEntity.ManagerComputerUser_Id,
+                notifierEntity.ComputerUserGroup_Id,
+                notifierEntity.Info != string.Empty ? notifierEntity.Info : null,
+                notifierEntity.OrderPermission != 0,
+                notifierEntity.Status != 0,
+                notifierEntity.RegTime,
+                notifierEntity.ChangeTime,
+                notifierEntity.SyncChangedDate,
+                notifierEntity.LanguageId);
         }
 
         public List<ItemOverview> FindOverviewsByCustomerId(int customerId)
@@ -280,38 +285,38 @@
                             cu.Customer_Id == customerId &&
                             cu.Status != 0
                             && (cu.UserId.ToLower().Contains(s) || cu.FirstName.ToLower().Contains(s)
-                                || cu.SurName.ToLower().Contains(s) || cu.Phone.ToLower().Contains(s)                                
+                                || cu.SurName.ToLower().Contains(s) || cu.Phone.ToLower().Contains(s)
                                 || cu.Email.ToLower().Contains(s) || cu.UserCode.ToLower().Contains(s)
                                 || (cu.SurName.ToLower() + " " + cu.FirstName.ToLower()).Contains(s)
                                 || (cu.FirstName.ToLower() + " " + cu.SurName.ToLower()).Contains(s))
 
-                                /* Disabled because they shouldn't be searchable*/
-                                //|| cu.Location.ToLower().Contains(s) 
-                                //|| cu.Cellphone.ToLower().Contains(s)
-                                //|| cu.Department.DepartmentName.ToLower().Contains(s))
-                                
+                        /* Disabled because they shouldn't be searchable*/
+                        //|| cu.Location.ToLower().Contains(s) 
+                        //|| cu.Cellphone.ToLower().Contains(s)
+                        //|| cu.Department.DepartmentName.ToLower().Contains(s))
+
                         select
                             new UserSearchResults
-                                {
-                                    CellPhone = cu.Cellphone, 
-                                    Email = cu.Email, 
-                                    FirstName = cu.FirstName, 
-                                    Id = cu.Id, 
-                                    Location = cu.Location, 
-                                    Phone = cu.Phone, 
-                                    SurName = cu.SurName, 
-                                    Department_Id = cu.Department_Id, 
-                                    OU_Id = cu.OU_Id,
-                                    CostCentre = cu.CostCentre,
-                                    Region_Id = k.Region_Id, 
-                                    UserCode = cu.UserCode, 
-                                    UserId = (cu.UserId != null ? cu.UserId : string.Empty),
-                                    RegionName = k.Region.Name,
-                                    DepartmentName = cu.Department.DepartmentName,
-                                    OUName = (cu.OU.Parent != null ? cu.OU.Parent.Name + " - " : "") + cu.OU.Name
-                                };
+                            {
+                                CellPhone = cu.Cellphone,
+                                Email = cu.Email,
+                                FirstName = cu.FirstName,
+                                Id = cu.Id,
+                                Location = cu.Location,
+                                Phone = cu.Phone,
+                                SurName = cu.SurName,
+                                Department_Id = cu.Department_Id,
+                                OU_Id = cu.OU_Id,
+                                CostCentre = cu.CostCentre,
+                                Region_Id = k.Region_Id,
+                                UserCode = cu.UserCode,
+                                UserId = (cu.UserId != null ? cu.UserId : string.Empty),
+                                RegionName = k.Region.Name,
+                                DepartmentName = cu.Department.DepartmentName,
+                                OUName = (cu.OU.Parent != null ? cu.OU.Parent.Name + " - " : "") + cu.OU.Name
+                            };
 
-            return query.OrderBy(x => x.FirstName).ThenBy(x => x.SurName).ThenBy(x=> x.Id).Take(25).ToList();
+            return query.OrderBy(x => x.FirstName).ThenBy(x => x.SurName).ThenBy(x => x.Id).Take(25).ToList();
         }
 
         public SearchResult Search(SearchParameters parameters)
@@ -364,38 +369,39 @@
                 notifiersRequest.Select(
                     r =>
                     new
-                        {
-                            PostalAddress = r.PostalAddress != string.Empty ? r.PostalAddress : null,
-                            CellPhone = r.Cellphone != string.Empty ? r.Cellphone : null,
-                            ChangedDate = r.ChangeTime,
-                            City = r.City != string.Empty ? r.City : null,
-                            Code = r.UserCode != string.Empty ? r.UserCode : null,
-                            CreatedDate = r.RegTime,
-                            Region = r.Department.Region.Name, // Takes Department's Region instead
-                            Department = r.Department.DepartmentName,
-                            Division = r.Division.Name,
-                            Domain = r.Domain.Name,
-                            Email = r.Email != string.Empty ? r.Email : null,
-                            FirstName = r.FirstName != string.Empty ? r.FirstName : null,
-                            Group = r.ComputerUserGroup.Name != string.Empty ? r.ComputerUserGroup.Name : null,
-                            Id = r.Id,
-                            Initials = r.Initials != string.Empty ? r.Initials : null,
-                            LastName = r.SurName != string.Empty ? r.SurName : null,
-                            LoginName = r.LogonName != string.Empty ? r.LogonName : null,
-                            Manager = r.ManagerComputerUser.UserId,
-                            DisplayName = r.DisplayName != string.Empty ? r.DisplayName : null,
-                            Ordered = r.OrderPermission != 0,
-                            OrganizationUnit = r.OU.Parent_OU_Id == null ? r.OU.Name : r.OU.Parent.Name + " - " + r.OU.Name,
-                            Other = r.Info != string.Empty ? r.Info : null,
-                            Password = r.Password != string.Empty ? r.Password : null,
-                            Phone = r.Phone != string.Empty ? r.Phone : null,
-                            Place = r.Location != string.Empty ? r.Location : null,
-                            PostalCode = r.Postalcode != string.Empty ? r.Postalcode : null,
-                            SynchronizationDate = r.SyncChangedDate,
-                            Title = r.Title != string.Empty ? r.Title : null,
-                            Unit = r.SOU != string.Empty ? r.SOU : null,
-                            UserId = r.UserId
-                        }).ToList();
+                    {
+                        PostalAddress = r.PostalAddress != string.Empty ? r.PostalAddress : null,
+                        CellPhone = r.Cellphone != string.Empty ? r.Cellphone : null,
+                        ChangedDate = r.ChangeTime,
+                        City = r.City != string.Empty ? r.City : null,
+                        Code = r.UserCode != string.Empty ? r.UserCode : null,
+                        CreatedDate = r.RegTime,
+                        Region = r.Department.Region.Name, // Takes Department's Region instead
+                        Department = r.Department.DepartmentName,
+                        Division = r.Division.Name,
+                        Domain = r.Domain.Name,
+                        Email = r.Email != string.Empty ? r.Email : null,
+                        FirstName = r.FirstName != string.Empty ? r.FirstName : null,
+                        Group = r.ComputerUserGroup.Name != string.Empty ? r.ComputerUserGroup.Name : null,
+                        Id = r.Id,
+                        Initials = r.Initials != string.Empty ? r.Initials : null,
+                        LastName = r.SurName != string.Empty ? r.SurName : null,
+                        LoginName = r.LogonName != string.Empty ? r.LogonName : null,
+                        Manager = r.ManagerComputerUser.UserId,
+                        DisplayName = r.DisplayName != string.Empty ? r.DisplayName : null,
+                        Ordered = r.OrderPermission != 0,
+                        OrganizationUnit = r.OU.Parent_OU_Id == null ? r.OU.Name : r.OU.Parent.Name + " - " + r.OU.Name,
+                        Other = r.Info != string.Empty ? r.Info : null,
+                        Password = r.Password != string.Empty ? r.Password : null,
+                        Phone = r.Phone != string.Empty ? r.Phone : null,
+                        Place = r.Location != string.Empty ? r.Location : null,
+                        PostalCode = r.Postalcode != string.Empty ? r.Postalcode : null,
+                        SynchronizationDate = r.SyncChangedDate,
+                        Title = r.Title != string.Empty ? r.Title : null,
+                        Unit = r.SOU != string.Empty ? r.SOU : null,
+                        UserId = r.UserId,
+                        LanguageId = r.LanguageId
+                    }).ToList();
 
             var notifiers =
                 searchResult.Select(
@@ -429,7 +435,8 @@
                         r.Ordered,
                         r.CreatedDate,
                         r.ChangedDate,
-                        r.SynchronizationDate)).ToList();
+                        r.SynchronizationDate,
+                        r.LanguageId)).ToList();
 
             return new SearchResult(notifiersFound, notifiers);
         }
@@ -475,6 +482,7 @@
             notifierEntity.Postalcode = notifier.PostalCode ?? string.Empty;
             notifierEntity.Title = notifier.Title ?? string.Empty;
             notifierEntity.SOU = notifier.Unit ?? string.Empty;
+            notifierEntity.LanguageId = notifier.LanguageId;
 
             this.Update(notifierEntity);
         }
@@ -484,9 +492,9 @@
             var notifier = DataContext.ComputerUsers
                                       .Where(cu => cu.Customer_Id == customerId &&
                                                    cu.LogonName.ToLower() == userId.ToLower() &&
-                                                   (activeOnly? cu.Status != 0 : true)).FirstOrDefault();
-            
-             
+                                                   (activeOnly ? cu.Status != 0 : true)).FirstOrDefault();
+
+
             if (notifier == null)
             {
                 notifier = DataContext.ComputerUsers
@@ -524,7 +532,8 @@
                     string.Empty,
                     false,
                     true,
-                    notifier.RegTime);
+                    notifier.RegTime,
+                    notifier.LanguageId);
 
             return null;
         }

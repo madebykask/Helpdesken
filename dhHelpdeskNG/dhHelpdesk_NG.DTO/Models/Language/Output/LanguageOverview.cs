@@ -22,7 +22,7 @@ namespace DH.Helpdesk.BusinessData.Models.Language.Output
         /// <summary>
         /// Gets or sets a value indicating whether is active.
         /// </summary>
-        public bool IsActive { get; set; }
+        public int IsActive { get; set; }
 
         /// <summary>
         /// Gets or sets the language id.

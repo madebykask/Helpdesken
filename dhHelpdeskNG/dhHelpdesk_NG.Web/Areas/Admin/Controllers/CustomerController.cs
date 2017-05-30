@@ -1061,7 +1061,7 @@
             };
 
             //Get Category to copy
-            var categoriesToCopy = this._categoryService.GetCategories(customerToCopy.Id);
+            var categoriesToCopy = this._categoryService.GetAllCategories(customerToCopy.Id);
 
             foreach (var c in categoriesToCopy)
             {
@@ -1071,6 +1071,7 @@
                 newCustomerCategory.Name = c.Name;
                 newCustomerCategory.Description = c.Description;
                 newCustomerCategory.IsActive = c.IsActive;
+                newCustomerCategory.Parent_Category_Id = c.Parent_Category_Id;
                 newCustomerCategory.CreatedDate = DateTime.UtcNow;
                 newCustomerCategory.ChangedDate = DateTime.UtcNow;
 
@@ -1098,7 +1099,7 @@
             }
 
 
-            //Get Category to copy
+            //Get Product area to copy
             var productAreasToCopy = this._productAreaService.GetAllProductAreas(customerToCopy.Id);
 
             foreach (var p in productAreasToCopy)

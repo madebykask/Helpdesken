@@ -32,7 +32,9 @@
             DateTime? periodFrom, 
             DateTime? periodUntil, 
             int recordsOnPage,
-            SortField sortField)
+            SortField sortField,
+            DateTime? closeFrom,
+            DateTime? closeTo)
         {
             this.SortField = sortField;
             this.PeriodUntil = periodUntil;
@@ -45,6 +47,8 @@
             this.DepartmentIds = departmentIds;
             this.FieldIds = fieldIds;
             this.RecordsOnPage = recordsOnPage;
+            this.CloseFrom = closeFrom;
+            this.CloseTo = closeTo;
         }
 
         [NotNull]
@@ -71,6 +75,10 @@
         public DateTime? PeriodFrom { get; private set; }
 
         public DateTime? PeriodUntil { get; private set; }
+
+        public DateTime? CloseFrom { get; private set; }
+
+        public DateTime? CloseTo { get; private set; }
 
         [MinValue(0)]
         public int RecordsOnPage { get; private set; }

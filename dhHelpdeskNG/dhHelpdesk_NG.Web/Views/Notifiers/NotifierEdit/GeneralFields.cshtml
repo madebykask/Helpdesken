@@ -40,7 +40,20 @@
                 @Html.EditorFor(m => m.CellPhone, "TextBox")
                 @Html.EditorFor(m => m.Email, "TextBox")
                 @Html.EditorFor(m => m.Code, "TextBox")
-               
+                
+
+                @if (Model.Language.Show)
+                {
+                    <tr>
+                        <td>
+                            @(Translation.Get(Model.Language.Caption, Enums.TranslationSource.TextTranslation) + (Model.Language.Required ? "*" : string.Empty))
+                        </td>
+                        <td>
+                            @Html.DropDown("language_dropdown", "LanguageId", !Model.Language.Required, Model.Language.Value)
+                        </td>
+                    </tr>
+                }
+
             </table>
         </div>
     </div>

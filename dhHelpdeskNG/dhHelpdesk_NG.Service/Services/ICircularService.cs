@@ -27,8 +27,7 @@ namespace DH.Helpdesk.Services.Services
         void DeleteConnectedCase(int cirularId, int caseId);
 	    List<int> GetAllCircularCasesIds(int circularId);
 
-		QuestionnaireDetailedOverview GetQuestionnaire(Guid guid, OperationContext operationContext);
-
+        QuestionnaireDetailedOverview GetQuestionnaire(Guid guid, int languageId);
         QuestionnaireOverview GetQuestionnaire(int id, OperationContext operationContext);
 
         List<OptionResult> GetResult(int circularId);
@@ -55,12 +54,13 @@ namespace DH.Helpdesk.Services.Services
 
         void Remind(string actionAbsolutePath, int circularId, OperationContext operationContext);
 
-        void SaveAnswers(ParticipantForInsert businessModel);
+        int SaveAnswers(ParticipantForInsert businessModel);
 
 	    List<BusinessLogic.MapperData.Participant> GetNotAnsweredParticipants(int circularId);
 
         void SetStatus(int circularId, CircularStates circularState);
         void UpdateParticipantSendDate(Guid participantGuid, DateTime operationDate);
         int GetCircularIdByQuestionnaireId(int questionaireId);
+        void SaveFeedbackNote(int questionId, string noteText);
     }
 }

@@ -16,6 +16,11 @@ using System.Net;
 using DH.Helpdesk.Dal.Enums;
 using System.IO;
 using DH.Helpdesk.Web.Infrastructure.Mvc;
+using DH.Helpdesk.BusinessData.Models.Shared.Input;
+using DH.Helpdesk.Web.Enums;
+using DH.Helpdesk.BusinessData.Models.Shared;
+
+
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -28,7 +33,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ISupplierService _supplierService;
         private readonly IDepartmentService _departmentService;
         private readonly ITemporaryFilesCache userTemporaryFilesStorage;
-
+        private readonly ISettingService _settingService;
 
         public ContractsController(
             IUserService userService,
@@ -38,15 +43,19 @@ namespace DH.Helpdesk.Web.Controllers
             ISupplierService supplierService,
             IDepartmentService departmentService,
             ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory,
-            IMasterDataService masterDataService)
+            IMasterDataService masterDataService,
+            ISettingService settingService)
+
+
             : base(masterDataService)
-        {            
+        {
             this._userService = userService;
             this._contractCategoryService = contractCategoryService;
             this._contractService = contractService;
             this._customerService = customerService;
             this._supplierService = supplierService;
             this._departmentService = departmentService;
+            this._settingService = settingService;
             this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Contracts);
         }
 
@@ -61,19 +70,27 @@ namespace DH.Helpdesk.Web.Controllers
             var model = new ContractIndexViewModel(customer);
             var contractcategories = _contractCategoryService.GetContractCategories(customer.Id);
             var suppliers = _supplierService.GetActiveSuppliers(customer.Id);
-
+            var users = _userService.GetUsers(customer.Id);
+            var departments = _departmentService.GetDepartments(customer.Id, ActivationStatus.Active);
+            //IList<User> GetUsers(int customerId);
 
             var filter = new ContractSelectedFilter();
 
             model.Rows = GetIndexRowModel(customer.Id, filter, new ColSortModel(EnumContractFieldSettings.Number, true));
-
+            model.SearchText = string.Empty;
+            model.Departments = departments;
+            model.Users = users;
             model.ContractCategories = contractcategories.OrderBy(a => a.Name).ToList();
             model.Suppliers = suppliers.OrderBy(s => s.Name).ToList();
             model.Setting = GetSettingsModel(customer.Id);
-           
+
+
+
+
+
             return this.View(model);
         }
-         
+
         public ActionResult New(int customerId)
         {
             var customer = this._customerService.GetCustomer(customerId);
@@ -83,11 +100,97 @@ namespace DH.Helpdesk.Web.Controllers
             return this.View(model);
         }
 
+
+        [HttpGet]
+        public PartialViewResult Search(int id, string Categories, string Suppliers, string Responsible, string Department, string Show, string Search)
+        {
+            Categories = Categories.Replace("'", "");
+            Suppliers = Suppliers.Replace("'", "");
+            Responsible = Responsible.Replace("'", "");
+            Department = Department.Replace("'", "");
+            Show = Show.Replace("'", "");
+            Search = Search.Replace("'", "");
+
+            SelectedItems itemsCat = new SelectedItems();
+            string[] words = Categories.Split(',');
+            foreach (string word in words)
+            {
+                if (word != string.Empty)
+                {
+                    itemsCat.AddItems(word);
+                }
+
+            }
+
+            SelectedItems itemsSup = new SelectedItems();
+            words = Suppliers.Split(',');
+            foreach (string word in words)
+            {
+                if (word != string.Empty)
+                {
+                    itemsSup.AddItems(word);
+                }
+
+            }
+
+            SelectedItems itemsResp = new SelectedItems();
+            words = Responsible.Split(',');
+            foreach (string word in words)
+            {
+                if (word != string.Empty)
+                {
+                    itemsResp.AddItems(word);
+                }
+
+            }
+
+            SelectedItems itemsDep = new SelectedItems();
+            words = Department.Split(',');
+            foreach (string word in words)
+            {
+                if (word != string.Empty)
+                {
+                    itemsDep.AddItems(word);
+                }
+
+            }
+
+            SelectedItems itemsState = new SelectedItems();
+            words = Show.Split(',');
+            foreach (string word in words)
+            {
+                itemsState.AddItems(word);
+
+                //Inactive = 0,
+            //Active = 1,
+            //All = 2
+            }
+
+            var filter = new ContractSelectedFilter();
+            filter.CustomerId = id;
+            filter.SelectedContractCategories = itemsCat;
+            filter.SelectedSuppliers = itemsSup;
+            filter.SelectedResponsibles = itemsResp;
+            filter.SelectedDepartments = itemsDep;
+            filter.SearchText = Search;
+            filter.ShowState = itemsState;
+            
+            var customer = _customerService.GetCustomer(id);
+            var model = new ContractIndexViewModel(customer);
+            model.Rows = GetIndexRowModel(id, filter, new ColSortModel(EnumContractFieldSettings.Number, true));
+            //filter.SelectedContractCategories=
+
+            return this.PartialView("_ContractsIndexRows", model.Rows);
+        }
+
+
+
+
         private ContractViewInputModel CreateInputViewModel(int customerId)
         {
             var customer = _customerService.GetCustomer(customerId);
             var model = new ContractViewInputModel();
-            var contractFields = this.GetSettingsModel(customerId);            
+            var contractFields = this.GetSettingsModel(customerId);
             var contractcategories = _contractCategoryService.GetContractCategories(customerId).OrderBy(a => a.Name).ToList();
             var suppliers = _supplierService.GetActiveSuppliers(customerId);
             var departments = _departmentService.GetDepartments(customerId);
@@ -97,77 +200,77 @@ namespace DH.Helpdesk.Web.Controllers
 
             //if (contractFields != null)
             //{          
-                //model.NoticeTime.Insert(0, emptyChoice);
-                model.NoticeTimes.Add(new SelectListItem() { Selected = false, Text = "1 månad", Value = "1" });
+            //model.NoticeTime.Insert(0, emptyChoice);
+            model.NoticeTimes.Add(new SelectListItem() { Selected = false, Text = "1 månad", Value = "1" });
 
-                for (int i = 2; i <= 12; i++)
-                {
-                    model.NoticeTimes.Add(new SelectListItem() { Selected = false, Text = i.ToString() + " månader", Value = i.ToString() });
-                }
-                                       
-                model.SettingsModel = contractFields.SettingRows.Select(conf => new ContractsSettingRowViewModel
-                    {
-                        Id = conf.Id,
-                        ContractField = conf.ContractField.ToLower(),
-                        ContractFieldLable = conf.ContractFieldLable,
-                        ContractFieldLable_Eng = conf.ContractFieldLable_Eng,
-                        Show = conf.Show,
-                        ShowInList = conf.ShowInList,
-                        Required = conf.Required
-                    }).ToList();
+            for (int i = 2; i <= 12; i++)
+            {
+                model.NoticeTimes.Add(new SelectListItem() { Selected = false, Text = i.ToString() + " månader", Value = i.ToString() });
+            }
 
-                model.ContractFiles = new List<ContractFileViewModel>();
-                model.ContractFileKey = Guid.NewGuid().ToString();
+            model.SettingsModel = contractFields.SettingRows.Select(conf => new ContractsSettingRowViewModel
+            {
+                Id = conf.Id,
+                ContractField = conf.ContractField.ToLower(),
+                ContractFieldLable = conf.ContractFieldLable,
+                ContractFieldLable_Eng = conf.ContractFieldLable_Eng,
+                Show = conf.Show,
+                ShowInList = conf.ShowInList,
+                Required = conf.Required
+            }).ToList();
+
+            model.ContractFiles = new List<ContractFileViewModel>();
+            model.ContractFileKey = Guid.NewGuid().ToString();
 
             model.ContractCategories = contractcategories.Select(x => new SelectListItem
-                {
-                    Selected = (x.Id == model.CategoryId ? true : false),
-                    Text = x.Name,
-                    Value = x.Id.ToString()
-                }).ToList();
-                model.ContractCategories.Insert(0, emptyChoice);
+            {
+                Selected = (x.Id == model.CategoryId ? true : false),
+                Text = x.Name,
+                Value = x.Id.ToString()
+            }).ToList();
+            model.ContractCategories.Insert(0, emptyChoice);
 
-                model.Suppliers = suppliers.Select(x => new SelectListItem
-                {
-                    Selected = (x.Id == model.SupplierId ? true : false),
-                    Text = x.Name,
-                    Value = x.Id.ToString()
-                }).ToList();
-                model.Suppliers.Insert(0, emptyChoice);
+            model.Suppliers = suppliers.Select(x => new SelectListItem
+            {
+                Selected = (x.Id == model.SupplierId ? true : false),
+                Text = x.Name,
+                Value = x.Id.ToString()
+            }).ToList();
+            model.Suppliers.Insert(0, emptyChoice);
 
-                model.Departments = departments.Select(x => new SelectListItem
-                {
-                    Selected = (x.Id == model.DepartmentId ? true : false),
-                    Text = x.DepartmentName,
-                    Value = x.Id.ToString()
-                }).ToList();
-                model.Departments.Insert(0, emptyChoice);
-
-
-                model.ResponsibleUsers = users.Select(x => new SelectListItem
-                {
-                    Selected = (x.Id == model.ResponsibleUserId ? true : false),
-                    Text = x.SurName + " " + x.FirstName,
-                    Value = x.Id.ToString()
-                }).ToList();
-                model.ResponsibleUsers.Insert(0, emptyChoice);
-
-                model.FollowUpIntervals.Insert(0, emptyChoice);
-                model.FollowUpIntervals.Add(new SelectListItem() { Selected = false, Text = "månadsvis", Value = "1" });
-                model.FollowUpIntervals.Add(new SelectListItem() { Selected = false, Text = "kvartalsvis", Value = "3" });
-                model.FollowUpIntervals.Add(new SelectListItem() { Selected = false, Text = "tertialvis", Value = "4" });
-                model.FollowUpIntervals.Add(new SelectListItem() { Selected = false, Text = "halvårsvis", Value = "6" });
-                model.FollowUpIntervals.Add(new SelectListItem() { Selected = false, Text = "årsvis", Value = "12" });
+            model.Departments = departments.Select(x => new SelectListItem
+            {
+                Selected = (x.Id == model.DepartmentId ? true : false),
+                Text = x.DepartmentName,
+                Value = x.Id.ToString()
+            }).ToList();
+            model.Departments.Insert(0, emptyChoice);
 
 
+            model.ResponsibleUsers = users.Select(x => new SelectListItem
+            {
+                Selected = (x.Id == model.ResponsibleUserId ? true : false),
+                Text = x.SurName + " " + x.FirstName,
+                Value = x.Id.ToString()
+            }).ToList();
+            model.ResponsibleUsers.Insert(0, emptyChoice);
 
-                model.FollowUpResponsibleUsers = users.Select(x => new SelectListItem
-                {
-                    Selected = (x.Id == model.FollowUpResponsibleUserId ? true : false),
-                    Text = x.SurName + " " + x.FirstName,
-                    Value = x.Id.ToString()
-                }).ToList();
-                model.FollowUpResponsibleUsers.Insert(0, emptyChoice);
+            model.FollowUpIntervals.Insert(0, emptyChoice);
+            model.FollowUpIntervals.Add(new SelectListItem() { Selected = false, Text = "månadsvis", Value = "1" });
+            model.FollowUpIntervals.Add(new SelectListItem() { Selected = false, Text = "kvartalsvis", Value = "3" });
+            model.FollowUpIntervals.Add(new SelectListItem() { Selected = false, Text = "tertialvis", Value = "4" });
+            model.FollowUpIntervals.Add(new SelectListItem() { Selected = false, Text = "halvårsvis", Value = "6" });
+            model.FollowUpIntervals.Add(new SelectListItem() { Selected = false, Text = "årsvis", Value = "12" });
+
+
+
+            model.FollowUpResponsibleUsers = users.Select(x => new SelectListItem
+            {
+                Selected = (x.Id == model.FollowUpResponsibleUserId ? true : false),
+                Text = x.SurName + " " + x.FirstName,
+                Value = x.Id.ToString()
+            }).ToList();
+            model.FollowUpResponsibleUsers.Insert(0, emptyChoice);
 
             //}
 
@@ -180,20 +283,20 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var cId = this.SaveContract(contractInput);
             var temporaryFiles = userTemporaryFilesStorage.FindFiles(contractFileKey.ToString());
-            var contractFiles = temporaryFiles.Select(f => new ContractFileModel(0, cId, f.Content, null, MimeMapping.GetMimeMapping(f.Name), f.Name, DateTime.UtcNow, DateTime.UtcNow, Guid.NewGuid())).ToList();           
+            var contractFiles = temporaryFiles.Select(f => new ContractFileModel(0, cId, f.Content, null, MimeMapping.GetMimeMapping(f.Name), f.Name, DateTime.UtcNow, DateTime.UtcNow, Guid.NewGuid())).ToList();
 
-            foreach(var contractFile in contractFiles)
-            {                
+            foreach (var contractFile in contractFiles)
+            {
                 this._contractService.SaveContracFile(contractFile);
                 userTemporaryFilesStorage.DeleteFile(contractFile.FileName, contractInput.ContractFileKey);
-            }            
+            }
 
             if (actiontype != "Spara och stäng")
-            {             
+            {
                 return this.RedirectToAction("Edit", "Contracts", new { id = cId });
-            }                    
-            
-            return RedirectToAction("index", "Contracts");            
+            }
+
+            return RedirectToAction("index", "Contracts");
         }
 
         [HttpPost]
@@ -206,12 +309,12 @@ namespace DH.Helpdesk.Web.Controllers
                 currentCustomerId = SessionFacade.CurrentCustomer.Id;
 
             var allFieldsSettingRows = _contractService.GetContractsSettingRows(currentCustomerId);
-            
+
             try
             {
                 var contractSettingModels = new List<ContractsSettingRowModel>();
                 var now = DateTime.Now;
-                
+
                 for (int i = 0; i < contractSettings.Length; i++)
                 {
                     var oldRow = allFieldsSettingRows.Where(s => s.ContractField.ToLower() == contractSettings[i].ContractField).FirstOrDefault();
@@ -239,7 +342,7 @@ namespace DH.Helpdesk.Web.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new {state = false, message=ex.Message}, JsonRequestBehavior.AllowGet);
+                return Json(new { state = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
             }
 
             return Json(new { state = true, message = Translation.GetCoreTextTranslation("Saved success!") }, JsonRequestBehavior.AllowGet);
@@ -254,15 +357,90 @@ namespace DH.Helpdesk.Web.Controllers
         private ContractsIndexRowsModel GetIndexRowModel(int customerId, ContractSelectedFilter selectedFilter, ColSortModel sort)
         {
             var customer = _customerService.GetCustomer(customerId);
-            var model = new ContractsIndexRowsModel(customer);           
+            var model = new ContractsIndexRowsModel(customer);
             var allContracts = _contractService.GetContracts(customerId);
             var settings = GetSettingsModel(customer.Id);
             var selectedContracts = new List<Contract>();
 
-            if (selectedFilter != null && selectedFilter.SelectedContractCategories.Any())
+
+
+            int z = 0;
+            if (selectedFilter != null)
             {
-               
+                //Categories
+                if (selectedFilter.SelectedContractCategories.Any())
+                {
+                    var idList = new int[selectedFilter.SelectedContractCategories.Count()];
+
+                    foreach (object i in selectedFilter.SelectedContractCategories)
+                    {
+                        idList[z] = Convert.ToInt32(i.ToString());
+                        z = z + 1;
+
+                    }
+                    //allContracts = allContracts.Where(c => c.ContractCategory_Id.ToString().Contains(search)).ToList();
+
+
+                    allContracts = allContracts.Where(t => idList.Contains(t.ContractCategory_Id)).ToList();
+                }
+
+                //Department                
+                z = 0;
+                if (selectedFilter.SelectedDepartments.Any())
+                {
+                    var idList = new int?[selectedFilter.SelectedDepartments.Count()];
+                    foreach (object i in selectedFilter.SelectedDepartments)
+                    {
+                        idList[z] = Convert.ToInt32(i.ToString());
+                        z = z + 1;
+
+                    }
+
+                    allContracts = allContracts.Where(t => idList.Contains(t.Department_Id)).ToList();
+                }
+
+
+                //Responsibles                
+                z = 0;
+                if (selectedFilter.SelectedResponsibles.Any())
+                {
+                    var idList = new int?[selectedFilter.SelectedResponsibles.Count()];
+                    foreach (object i in selectedFilter.SelectedResponsibles)
+                    {
+                        idList[z] = Convert.ToInt32(i.ToString());
+                        z = z + 1;
+
+                    }
+
+                    allContracts = allContracts.Where(t => idList.Contains(t.ResponsibleUser_Id)).ToList();
+                }
+
+
+                //Suppliers                
+                z = 0;
+                if (selectedFilter.SelectedSuppliers.Any())
+                {
+                    var idList = new int?[selectedFilter.SelectedSuppliers.Count()];
+                    foreach (object i in selectedFilter.SelectedSuppliers)
+                    {
+                        idList[z] = Convert.ToInt32(i.ToString());
+                        z = z + 1;
+
+                    }
+
+                    allContracts = allContracts.Where(t => idList.Contains(t.Supplier_Id)).ToList();
+                }
+
+                //Text                
+                z = 0;
+                if (selectedFilter.SearchText.Any())
+                {
+
+                    allContracts = allContracts.Where(t => t.ContractNumber.Contains(selectedFilter.SearchText)).ToList();
+                }
             }
+
+
 
             model.Columns = settings.SettingRows.Where(s => s.ShowInList == true)
                                                 .ToList();
@@ -295,7 +473,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             model.Data = SortData(model.Data, sort);
             model.SortBy = sort;
-                 
+
             return model;
         }
 
@@ -312,7 +490,7 @@ namespace DH.Helpdesk.Web.Controllers
                 case EnumContractFieldSettings.Category:
                     return sort.IsAsc ? data.OrderBy(d => d.ContractCategory.Name).ToList() : data.OrderByDescending(d => d.ContractCategory.Name).ToList();
 
-                case EnumContractFieldSettings.Supplier:                   
+                case EnumContractFieldSettings.Supplier:
                     return sort.IsAsc ? data.OrderBy(t => t.Supplier != null && t.Supplier.Name != null
                                          ? t.Supplier.Name : string.Empty).ToList() :
                                         data.OrderByDescending(t => t.Supplier != null && t.Supplier.Name != null
@@ -323,7 +501,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                 case EnumContractFieldSettings.ResponsibleUser:
                     return sort.IsAsc ? data.OrderBy(t => t.ResponsibleUser != null && t.ResponsibleUser.SurName != null
-                                         ? t.ResponsibleUser.SurName : string.Empty).ToList() : 
+                                         ? t.ResponsibleUser.SurName : string.Empty).ToList() :
                                         data.OrderByDescending(t => t.ResponsibleUser != null && t.ResponsibleUser.SurName != null
                                          ? t.ResponsibleUser.SurName : string.Empty).ToList();
 
@@ -380,8 +558,8 @@ namespace DH.Helpdesk.Web.Controllers
                 ContractFieldLable = s.ContractFieldLable,
                 ContractFieldLable_Eng = s.ContractFieldLable_Eng,
                 Show = s.show,
-                ShowInList = s.showInList,                
-                Required = s.reguired              
+                ShowInList = s.showInList,
+                Required = s.reguired
             }).ToList();
             //settingsRows.Add(
             model.SettingRows = settingsRows;
@@ -401,14 +579,14 @@ namespace DH.Helpdesk.Web.Controllers
             if (GuidHelper.IsGuid(id))
             {
                 if (this.userTemporaryFilesStorage.FileExists(name, id))
-                {                    
+                {
                     userTemporaryFilesStorage.DeleteFile(name, id);
                     //throw new HttpException((int)HttpStatusCode.Conflict, null); because it take a long time.
                 }
                 this.userTemporaryFilesStorage.AddFile(uploadedData, name, id);
             }
         }
-       
+
 
         [HttpGet]
         public UnicodeFileContentResult DownloadFile(string id, string fileName, string filePlace)
@@ -417,9 +595,9 @@ namespace DH.Helpdesk.Web.Controllers
             if (id == "0")
                 fileContent = userTemporaryFilesStorage.GetFileContent(fileName.Trim(), filePlace, "");
             else
-            {                
-                fileContent = _contractService.GetContractFile(int.Parse(id)).Content;                
-            }        
+            {
+                fileContent = _contractService.GetContractFile(int.Parse(id)).Content;
+            }
 
             Response.AddHeader("Content-Disposition", string.Format("attachment; filename=\"{0}\"", fileName));
 
@@ -435,7 +613,7 @@ namespace DH.Helpdesk.Web.Controllers
                 if (id == "0")
                     userTemporaryFilesStorage.DeleteFile(fileName.Trim(), filePlace);
                 else
-                {                    
+                {
                     this._contractService.DeleteContractFile(int.Parse(id));
                 }
                 return Json(new { result = true, message = string.Empty }, JsonRequestBehavior.AllowGet);
@@ -444,20 +622,20 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 return Json(new { result = false, message = ex.Message });
             }
-            
+
         }
 
         [HttpGet]
-        public JsonResult GetAllFiles(string id , int cId)
+        public JsonResult GetAllFiles(string id, int cId)
         {
-            string[] fileNames = { };           
+            string[] fileNames = { };
             var tempFiles = userTemporaryFilesStorage.FindFiles(id);
 
             if (tempFiles.Any())
             {
                 fileNames = tempFiles.Select(f => f.Name).ToArray();
             }
-         
+
             return Json(fileNames, JsonRequestBehavior.AllowGet);
         }
 
@@ -494,11 +672,11 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             return cId;
-        }       
+        }
 
         private List<ContractFileViewModel> CreateContractFilesModel(int contractId, string CFileKey)
         {
-            var contractFiles = this._contractService.GetContractFiles(contractId);            
+            var contractFiles = this._contractService.GetContractFiles(contractId);
 
             var contractFilesInput = contractFiles.Select(conf => new ContractFileViewModel()
             {
@@ -526,9 +704,9 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         private ContractFileModel findContractFile(int fileId, string fileName)
-        {            
+        {
             var contractFile = this._contractService.GetContractFile(fileId);
-           
+
             return contractFile;
         }
 
@@ -542,7 +720,7 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     filesToAdd.Add(new WebTemporaryFile(f.Content, f.FileName));
                     this.userTemporaryFilesStorage.AddFile(f.Content, f.FileName, contractFilesKey);
-                }                
+                }
             }
             return filesToAdd;
         }
@@ -572,14 +750,14 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 // TODO: Add insert logic here
 
-                return RedirectToAction("Index");                
+                return RedirectToAction("Index");
             }
             catch
             {
                 return View();
             }
         }
-        
+
         //
         // GET: /Contract/Edit/5
 
@@ -627,10 +805,10 @@ namespace DH.Helpdesk.Web.Controllers
         // POST: /Contract/Edit/5
 
         [HttpPost]
-        public ActionResult Edit(int id, ContractViewInputModel contractInput , string actiontype , string contractFileKey)
+        public ActionResult Edit(int id, ContractViewInputModel contractInput, string actiontype, string contractFileKey)
         {
             try
-            {                
+            {
                 var cId = SaveContract(contractInput);
                 var temporaryFiles = userTemporaryFilesStorage.FindFiles(contractFileKey);
                 var contractsExistingFiles = this._contractService.GetContractFiles(id);
@@ -657,9 +835,9 @@ namespace DH.Helpdesk.Web.Controllers
 
         //
         // GET: /Contract/Delete/5
- 
+
         public ActionResult Delete(int id)
-        {          
+        {
             return this.RedirectToAction("index", "Contracts");
             //return View();
         }

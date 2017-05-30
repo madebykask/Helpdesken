@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using DH.Helpdesk.BusinessData.Enums.Orders.Fields;
 using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
 namespace DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings
@@ -39,40 +36,40 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings
             AccountType5 = accountType5;
         }
 
-        [LocalizedDisplay("Startdatum")]
+        [LocalizedDisplay(OrderLabels.AccountInfoStartedDate)]
         public TextFieldSettingsModel StartedDate { get; set; }
 
-        [LocalizedDisplay("Slutdatum")]
+        [LocalizedDisplay(OrderLabels.AccountInfoFinishDate)]
         public TextFieldSettingsModel FinishDate { get; set; }
 
-        [LocalizedDisplay("E-posttyp")]
+        [LocalizedDisplay(OrderLabels.AccountInfoEMailTypeId)]
         public TextFieldSettingsModel EMailTypeId { get; set; }
 
-        [LocalizedDisplay("Hemkatalog")]
+        [LocalizedDisplay(OrderLabels.AccountInfoHomeDirectory)]
         public TextFieldSettingsModel HomeDirectory { get; set; }
 
-        [LocalizedDisplay("Profil")]
+        [LocalizedDisplay(OrderLabels.AccountInfoProfile)]
         public TextFieldSettingsModel Profile { get; set; }
 
-        [LocalizedDisplay("Inventarienummer")]
+        [LocalizedDisplay(OrderLabels.AccountInfoInventoryNumber)]
         public TextFieldSettingsModel InventoryNumber { get; set; }
 
-        [LocalizedDisplay("Vallista 1")]
+        [LocalizedDisplay(OrderLabels.AccountInfoAccountType)]
         public OrderFieldTypeSettingsModel AccountType { get; set; }
 
-        [LocalizedDisplay("Vallista 2")]
+        [LocalizedDisplay(OrderLabels.AccountInfoAccountType2)]
         public OrderFieldTypeSettingsModel AccountType2 { get; set; }
 
-        [LocalizedDisplay("Vallista 3")]
+        [LocalizedDisplay(OrderLabels.AccountInfoAccountType3)]
         public OrderFieldTypeSettingsModel AccountType3 { get; set; }
 
-        [LocalizedDisplay("Vallista 4")]
+        [LocalizedDisplay(OrderLabels.AccountInfoAccountType4)]
         public OrderFieldTypeSettingsModel AccountType4 { get; set; }
 
-        [LocalizedDisplay("Vallista 5")]
+        [LocalizedDisplay(OrderLabels.AccountInfoAccountType5)]
         public OrderFieldTypeSettingsModel AccountType5 { get; set; }
 
-        [LocalizedDisplay("Övrigt")]
+        [LocalizedDisplay(OrderLabels.AccountInfoInfo)]
         public TextFieldSettingsModel Info { get; set; }
 
     }

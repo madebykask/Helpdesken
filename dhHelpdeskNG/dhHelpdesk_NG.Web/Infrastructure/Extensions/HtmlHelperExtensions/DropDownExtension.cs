@@ -10,10 +10,10 @@
         #region Public Methods and Operators
 
         public static MvcHtmlString DropDown(
-            this HtmlHelper htmlHelper, 
-            string id, 
-            string name, 
-            bool allowEmpty, 
+            this HtmlHelper htmlHelper,
+            string id,
+            string name,
+            bool allowEmpty,
             DropDownContent dropDownContent,
             bool required = false,
             bool disabled = false)
@@ -37,6 +37,8 @@
                 htmlOutput.Append("<option></option>");
             }
 
+            //if (dropDownContent !=null)
+            //{
             foreach (var item in dropDownContent.Items)
             {
                 htmlOutput.Append(
@@ -49,6 +51,7 @@
             }
 
             htmlOutput.Append("</select>");
+            //}
             return new MvcHtmlString(htmlOutput.ToString());
         }
 

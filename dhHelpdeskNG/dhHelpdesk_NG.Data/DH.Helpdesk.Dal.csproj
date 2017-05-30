@@ -95,6 +95,7 @@
     <Compile Include="EntityConfigurations\BusinessRules\BRConditionConfiguration.cs" />
     <Compile Include="EntityConfigurations\BusinessRules\BRActionConfiguration.cs" />
     <Compile Include="EntityConfigurations\BusinessRules\BRActionParamsConfiguration.cs" />
+    <Compile Include="EntityConfigurations\CaseSolutionConditionConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CaseExtraFollowerConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CaseFollowUpConfiguration.cs" />
     <Compile Include="EntityConfigurations\ContractFileConfiguration.cs" />
@@ -133,6 +134,9 @@
     <Compile Include="EntityConfigurations\Licenses\ProductConfiguration.cs" />
     <Compile Include="EntityConfigurations\Licenses\VendorConfiguration.cs" />
     <Compile Include="EntityConfigurations\MailTemplates\MailTemplateLanguageConfiguration.cs" />
+    <Compile Include="EntityConfigurations\MetaDataEntity\EntityRelationshipConfiguration.cs" />
+    <Compile Include="EntityConfigurations\MetaDataEntity\MetaDataConfiguration.cs" />
+    <Compile Include="EntityConfigurations\MetaDataEntity\EntityInfoConfiguration.cs" />
     <Compile Include="EntityConfigurations\OperationLogEmailLogConfiguration.cs" />
     <Compile Include="EntityConfigurations\Orders\OrderFieldTypeConfiguration.cs" />
     <Compile Include="EntityConfigurations\Orders\OrderEMailLogConfiguration.cs" />
@@ -215,11 +219,13 @@
     <Compile Include="Mappers\Calendars\BusinessModelToEntity\CalendarToEntityMapper.cs" />
     <Compile Include="Mappers\Calendars\EntityToBusinessModel\CalendarToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Cases\BusinessModelToEntity\CaseNotifierToEntityMapper.cs" />
+    <Compile Include="Mappers\Cases\BusinessModelToEntity\CaseSolutionConditionToEntityMapper.cs" />
     <Compile Include="Mappers\Cases\BusinessModelToEntity\CausingPartToEntityMapper.cs" />
     <Compile Include="Mappers\Cases\BusinessModelToEntity\CaseLockToEntityMapper.cs" />
     <Compile Include="Mappers\Cases\BusinessModelToEntity\CaseFilterFavoriteToEntityMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseExtraFollowersToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseLockToBusinessModelMapper.cs" />
+    <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseSolutionConditionToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseToCaseOverviewMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CausingPartToOverviewMapper.cs" />
@@ -393,6 +399,7 @@
     <Compile Include="Repositories\Cases\CaseSettingsRepository.cs" />
     <Compile Include="Repositories\Cases\CaseSolutionSettingRepository.cs" />
     <Compile Include="Repositories\Cases\Concrete\CaseLockRepository.cs" />
+    <Compile Include="Repositories\Cases\Concrete\CaseSolutionConditionRepository.cs" />
     <Compile Include="Repositories\Cases\Concrete\CausingPartRepository.cs" />
     <Compile Include="Repositories\Cases\Concrete\CaseFilterFavoriteRepository.cs" />
     <Compile Include="Repositories\Cases\ICaseFilterFavoriteRepository.cs" />
@@ -453,6 +460,7 @@
     <Compile Include="Repositories\Changes\IChangeGroupRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeLogRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeFileRepository.cs" />
+    <Compile Include="Repositories\ICaseSolutionConditionRepository.cs" />
     <Compile Include="Repositories\Invoice\InvoiceRepository.cs" />
     <Compile Include="Repositories\IOrderEmailLogRepository.cs" />
     <Compile Include="Repositories\OrderEmailLogRepository.cs" />

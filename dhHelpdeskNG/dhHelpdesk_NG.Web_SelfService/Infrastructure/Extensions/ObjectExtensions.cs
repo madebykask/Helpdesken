@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
+﻿using DH.Helpdesk.SelfService.Models.Case;
+
+namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -144,9 +146,18 @@
                 {
                     if (string.Compare(c.Name, valueToFind.getCaseFieldName(), true) == 0)
                     {
-                        if (c.Required == 1 && c.ShowExternal == 1)
-                            ret = 1;
-                        break;
+                        if (c.Name.ToLower() == "casetype_id")
+                        {
+                            if (c.Required == 1)
+                                ret = 1;
+                            break;
+                        }
+                        else
+                        {
+                            if (c.Required == 1 && c.ShowExternal == 1)
+                                ret = 1;
+                            break;
+                        }
                     }
                 }
 
@@ -224,45 +235,100 @@
             return cfsl.ToList().getCaseFieldSettingsLanguageValue(valueToFind).FieldHelp;
         }
 
-        public static string displayUserInfoHtml(this IList<CaseFieldSetting> cfs)
+        public static string DisplayUserInfo(this NewCaseModel model)
         {
             var ret = "display:none";
 
-            if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.ReportedBy.ToString()).ShowOnStartPage == 1)
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.ReportedBy.ToString()))
                 return string.Empty;
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Persons_EMail.ToString()).ShowOnStartPage == 1)
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.Persons_EMail.ToString()))
                 return string.Empty;
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Persons_Name.ToString()).ShowOnStartPage == 1)
-                return string.Empty; 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Persons_Phone.ToString()).ShowOnStartPage == 1)
-                return string.Empty;  
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString()).ShowOnStartPage == 1)
-                return string.Empty;  
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Region_Id.ToString()).ShowOnStartPage == 1)
-                return string.Empty;  
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Department_Id.ToString()).ShowOnStartPage == 1)
-                return string.Empty;  
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Place.ToString()).ShowOnStartPage == 1)
-                return string.Empty;  
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.OU_Id.ToString()).ShowOnStartPage == 1)
-                return string.Empty;  
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.UserCode.ToString()).ShowOnStartPage == 1)
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.Persons_Name.ToString()))
+                return string.Empty;
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.Persons_Phone.ToString()))
+                return string.Empty;
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString()))
+                return string.Empty;
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.Region_Id.ToString()))
+                return string.Empty;
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.Department_Id.ToString()))
+                return string.Empty;
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.Place.ToString()))
+                return string.Empty;
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.OU_Id.ToString()))
+                return string.Empty;
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.UserCode.ToString()))
                 return string.Empty;
 
             return ret;
         }
 
-        public static string displayComputerInfoHtml(this IList<CaseFieldSetting> cfs)
+        public static string DisplayComputerInfo(this NewCaseModel model)
         {
             var ret = "display:none";
 
-            if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString()).ShowOnStartPage == 1)
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString()))
                 return string.Empty;
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.InventoryNumber.ToString()).ShowOnStartPage == 1)
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.InventoryNumber.ToString()))
+                return string.Empty;
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.InventoryLocation.ToString()))
                 return string.Empty;
 
             return ret;
         }
 
+        public static string DisplayCaseInfo(this NewCaseModel model)
+        {
+            var ret = "display:none";
+
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()))
+                return string.Empty;
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()))
+                return string.Empty;
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.System_Id.ToString()))
+                return string.Empty;
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()))
+                return string.Empty;
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.Impact_Id.ToString()))
+                return string.Empty;
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.Category_Id.ToString()))
+                return string.Empty;
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.Supplier_Id.ToString()))
+                return string.Empty;
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString()))
+                return string.Empty;
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString()))
+                return string.Empty;
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.Caption.ToString()))
+                return string.Empty;
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.Description.ToString()))
+                return string.Empty;
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.Miscellaneous.ToString()))
+                return string.Empty;
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString()))
+                return string.Empty;
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.SMS.ToString()))
+                return string.Empty;
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.Available.ToString()))
+                return string.Empty;
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.Cost.ToString()))
+                return string.Empty;
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.Filename.ToString()))
+                return string.Empty;
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.SMS.ToString()))
+                return string.Empty;
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.SMS.ToString()))
+                return string.Empty;
+
+            return ret;
+        }
+
+        private static bool IsJsFieldVisible(this NewCaseModel model, string value)
+        {
+            var fs = model.JsFieldSettings.FirstOrDefault(f => f.FieldName.Equals(value));
+            if (fs != null)
+                return fs.IsVisible;
+            return true;
+        }
     }
 }

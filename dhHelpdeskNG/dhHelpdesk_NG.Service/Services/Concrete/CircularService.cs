@@ -397,7 +397,7 @@
             this.SendMails(mails, operationContext.DateAndTime, operationContext.CustomerId);
         }
 
-        public QuestionnaireDetailedOverview GetQuestionnaire(Guid guid, OperationContext operationContext)
+        public QuestionnaireDetailedOverview GetQuestionnaire(Guid guid, int languageId)
         {
             var id = 0;
             var caseId = 0;
@@ -420,13 +420,13 @@
                 }
             }
 
-            QuestionnaireOverview overview = this.GetQuestionnaireEntity(id, operationContext);
+            QuestionnaireOverview overview = GetQuestionnaireEntity(id, languageId);
             return new QuestionnaireDetailedOverview { Questionnaire = overview, CaseId = caseId, Caption = caption };
         }
 
         public QuestionnaireOverview GetQuestionnaire(int id, OperationContext operationContext)
         {
-            QuestionnaireOverview overview = this.GetQuestionnaireEntity(id, operationContext);
+            QuestionnaireOverview overview = this.GetQuestionnaireEntity(id, operationContext.LanguageId);
             return overview;
         }
 
@@ -479,7 +479,7 @@
             }
         }
 
-        public void SaveAnswers(ParticipantForInsert businessModel)
+        public int SaveAnswers(ParticipantForInsert businessModel)
         {
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
@@ -525,6 +525,19 @@
                 }
 
                 uof.Save();
+                if (businessModel.IsFeedback)
+                {
+                    try
+                    {
+                        var result = entity.QuestionnaireQuestionResultEntities.Single();
+                        return result.Id;
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        return 0;
+                    }
+                }
+                return 0;
             }
         }
 
@@ -607,6 +620,19 @@
 
                 var entity = circularRepository.GetAll().SingleOrDefault(x => x.Questionnaire_Id == questionnaireId);
                 return entity != null ? entity.Id : -1;
+            }
+        }
+
+        public void SaveFeedbackNote(int questionId, string noteText)
+        {
+            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            {
+                var circularRepository = uof.GetRepository<QuestionnaireQuestionResultEntity>();
+
+                var entity = circularRepository.GetAll().SingleOrDefault(x => x.Id == questionId);
+                if (entity != null && string.IsNullOrEmpty(entity.QuestionnaireQuestionNote))
+                    entity.QuestionnaireQuestionNote = noteText;
+                uof.Save();
             }
         }
 
@@ -702,7 +728,7 @@
             return questionnarie;
         }
 
-        private QuestionnaireOverview GetQuestionnaireEntity(int id, OperationContext operationContext)
+        private QuestionnaireOverview GetQuestionnaireEntity(int id, int languageId)
         {
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
@@ -722,7 +748,7 @@
 
                 return anonymus == null
                            ? QuestionnaireOverview.GetDefault()
-                           : this.MapToQuestionnaireOverview(operationContext.LanguageId, anonymus);
+                           : this.MapToQuestionnaireOverview(languageId, anonymus);
             }
         }
 

@@ -123,14 +123,21 @@
 
         public static CaseOutputModel MapCase(Case arg)
         {
+            var subStateName = string.Empty;
+
+            if (arg.StateSecondary != null)
+                subStateName = arg.StateSecondary.Name;
+
             return new CaseOutputModel
-                       {
-                           Id = arg.Id,
-                           CaseNumber = arg.CaseNumber.ToString(),
-                           Caption = arg.Caption,
-                           RegistrationDate = arg.RegTime,
-                           WatchDate = arg.WatchDate,
-                       };
+            {
+                Id = arg.Id,
+                CaseNumber = arg.CaseNumber.ToString(),
+                Caption = arg.Caption,
+                RegistrationDate = arg.RegTime,
+                WatchDate = arg.WatchDate,
+                CaseType = arg.CaseType.Name,
+                SubState = subStateName,
+            };
         }
 
         public ActionResult Index()
@@ -386,7 +393,7 @@
             var logs = this.problemLogService.GetProblemLogs(id);
 
             // todo!!!
-            var cases = this.caseService.GetCases().Where(x => x.Problem_Id == id);
+            var cases = this.caseService.GetProblemCases(SessionFacade.CurrentCustomer.Id, id);
             var setting = this.settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
             var isFirstName = (setting.IsUserFirstLastNameRepresentation == 1);
 

@@ -13,6 +13,10 @@
         public IList<SelectListItem> AvailableCategories { get; set; }
 
         public IList<SelectListItem> SelectedCategories { get; set; }
+        public IList<SelectListItem> AvailableCaseTypes { get; set; }
+        public IList<SelectListItem> SelectedCaseTypes { get; set; }
+        public IList<SelectListItem> AvailableProductAreas { get; set; }
+        public IList<SelectListItem> SelectedProductAreas { get; set; }
 
         public int CaseComplaintDays { get; set; }
     }

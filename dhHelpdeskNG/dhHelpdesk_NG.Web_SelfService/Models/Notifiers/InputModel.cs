@@ -157,6 +157,8 @@
         [IsId]
         public int? DepartmentId { get; set; }
 
+        public int LanguageId { get; set; }
+
         public StringFieldModel DisplayName { get; set; }
 
         public DropDownFieldModel Division { get; set; }

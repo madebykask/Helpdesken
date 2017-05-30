@@ -9,6 +9,7 @@
 
 namespace DH.Helpdesk.Dal.Mappers.Documents.EntityToBusinessModel
 {
+    using System;
     using DH.Helpdesk.BusinessData.Models.Document.Output;
     using DH.Helpdesk.Domain;
 

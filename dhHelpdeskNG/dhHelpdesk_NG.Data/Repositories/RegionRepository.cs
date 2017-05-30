@@ -17,6 +17,7 @@
         int? GetDefaultRegion(int customerId);
         IList<Region> GetRegionsWithDepartments(int customerId);
         void ResetDefault(int exclude);
+        int GetRegionLanguage(int regiondid);
     }
 
     public class RegionRepository : RepositoryBase<Region>, IRegionRepository
@@ -24,6 +25,11 @@
         public RegionRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
+        }
+
+        public int GetRegionLanguage(int regiondid)
+        {
+            return this.DataContext.Regions.Where(d => d.Id == regiondid).Select(d => d.LanguageId).FirstOrDefault();
         }
 
         public IList<Region> GetRegionsWithDepartments(int customerId)

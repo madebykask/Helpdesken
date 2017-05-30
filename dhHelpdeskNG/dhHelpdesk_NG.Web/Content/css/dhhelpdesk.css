@@ -3673,7 +3673,8 @@ a.inactive
 .operationobject.admin.content .inactive *,
 .operationlogcategory.admin.content .inactive *,
 .emailgroup.admin.content .inactive *,
-.program.admin.content .inactive *
+.program.admin.content .inactive *,
+.order-type.admin.content .inactive *
 
 
 {
@@ -3856,6 +3857,8 @@ div.case-dropdown-div > span.btn-group > ul.multiselect-container > div.options-
 
 .case-standardtext-space {
     white-space: pre-line;
+    line-height: 1;
+    font-size: 14px;
 }
 
 .case-div-standardtext-accordion {
@@ -3972,4 +3975,21 @@ table .multitext i {
 
 .pb5 {
     padding-bottom: 5px !important;
+}
+
+a.export-order {
+    background: url(../icons/doc-download.png) no-repeat;
+    display: block;
+    width: 15px;
+    height: 20px;
+    margin-bottom: -7px;
+}
+
+.brdbottom {
+    border-bottom: 1px solid #eee;
+}
+
+.toplabel {
+    padding: 5px 5px 0px 10px;
+    word-wrap: break-word;
 }

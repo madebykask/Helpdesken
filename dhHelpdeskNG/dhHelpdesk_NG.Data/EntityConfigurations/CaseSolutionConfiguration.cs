@@ -121,6 +121,7 @@
             this.Property(x => x.InventoryLocation);
             this.Property(x => x.Supplier_Id).IsOptional();
             this.Property(x => x.SMS).IsRequired();
+            this.Property(x => x.AgreedDate);
             this.Property(x => x.Available);
             this.Property(x => x.Cost).IsRequired();
             this.Property(x => x.OtherCost).IsRequired();
@@ -153,6 +154,9 @@
             this.Property(x => x.OverWritePopUp).IsRequired();
             this.Property(x => x.ConnectedButton).IsOptional();
             this.Property(x => x.SaveAndClose).IsOptional();
+            this.Property(x => x.SortOrder).IsRequired();
+            this.Property(x => x.ShortDescription).IsOptional().HasMaxLength(100);
+            this.Property(x => x.Information).IsOptional();
 
             this.ToTable("tblcasesolution");
         }

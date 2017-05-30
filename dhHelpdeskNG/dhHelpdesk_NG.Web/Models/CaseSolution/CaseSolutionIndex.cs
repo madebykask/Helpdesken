@@ -22,6 +22,9 @@
         public bool IsActive { get; set; }
 
         public string ConnectedToButton { get; set; }
+
+        public int SortOrder { get; set; }
+
     }
 
     public static class CaseSolutionRowIndexMapper
@@ -60,7 +63,8 @@
                                        PerformerUserName = userName,
                                        PriorityName =
                                            it.Priority == null ? string.Empty : it.Priority.Name,
-                                       IsActive = (it.Status != 0)
+                                       IsActive = (it.Status != 0),
+                                       SortOrder = it.SortOrder
                                    };
                     }).ToArray();
         }

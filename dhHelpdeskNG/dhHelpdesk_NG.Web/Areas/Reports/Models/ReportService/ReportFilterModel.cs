@@ -28,6 +28,11 @@ namespace DH.Helpdesk.Web.Areas.Reports.Models.ReportService
         public DateTime? RegisterFrom { get; set; }
 
         public DateTime? RegisterTo { get; set; }
+
+        public DateTime? CloseFrom { get; set; }
+
+        public DateTime? CloseTo { get; set; }
+
         public string Fields { get; set; }
     }
 
@@ -46,6 +51,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Models.ReportService
             ret.SelectedProductAreas.AddItems(reportFilter.ProductAreas);
             ret.SelectedCaseStatus.AddItems(reportFilter.CaseStatus);
             ret.CaseCreationDate = new DateToDate(reportFilter.RegisterFrom, reportFilter.RegisterTo);
+            ret.CaseClosingDate = new DateToDate(reportFilter.CloseFrom, reportFilter.CloseTo);
             return ret;
         }
 

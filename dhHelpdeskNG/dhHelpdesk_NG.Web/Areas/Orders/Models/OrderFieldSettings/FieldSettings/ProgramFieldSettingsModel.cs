@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings
+﻿using DH.Helpdesk.BusinessData.Enums.Orders.Fields;
+
+namespace DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings
 {
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
@@ -19,10 +21,10 @@
         public string Header { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Program")]
+        [LocalizedDisplay(OrderLabels.Program)]
         public TextFieldSettingsModel Program { get; set; }
 
-        [LocalizedDisplay("Övrigt program")]
+        [LocalizedDisplay(OrderLabels.ProgramInfoProduct)]
         public TextFieldSettingsModel InfoProduct { get; set; }
     }
 }

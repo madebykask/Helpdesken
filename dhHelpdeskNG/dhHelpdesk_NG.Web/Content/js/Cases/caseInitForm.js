@@ -233,7 +233,8 @@ function generateRandomKey() {
     return s4() + '-' + s4() + '-' + s4();
 }
 
-function GetComputerUserSearchOptions() {    
+function GetComputerUserSearchOptions() {
+    
     var options = {
         items: 20,
         minLength: 2,
@@ -324,7 +325,7 @@ function GetComputerUserSearchOptions() {
         updater: function (obj) {
             var item = JSON.parse(obj);
             var departmentFilterFormat = $('#DepartmentFilterFormat').val();
-                        
+            
             $('#case__ReportedBy').val(item.num);
          
             // Raise event about UserId changed.
@@ -371,7 +372,8 @@ function GetComputerUserSearchOptions() {
     return options;
 }
 
-function GetComputerUserSearchOptionsForIsAbout() {    
+function GetComputerUserSearchOptionsForIsAbout() {
+    
     var options = {
         items: 20,
         minLength: 2,
@@ -385,7 +387,7 @@ function GetComputerUserSearchOptionsForIsAbout() {
                 success: function (result) {
                     if (result.searchKey != lastIsAboutSearchKey)
                         return;
-
+                    
                     var resultList = jQuery.map(result.result, function (item) {
                         var aItem = {
                             id: item.Id
@@ -511,6 +513,8 @@ function GetComputerUserSearchOptionsForIsAbout() {
 */
 function CaseInitForm() {
 
+    
+
     $('#CaseLog_TextExternal').focus(function () {
         CaseWriteTextToLogNote('');
     });
@@ -520,6 +524,7 @@ function CaseInitForm() {
     });
 
     $('#case__ReportedBy').typeahead(GetComputerUserSearchOptions());
+    
     $('#case__InventoryNumber').typeahead(GetComputerSearchOptions());
     $('#case__IsAbout_ReportedBy').typeahead(GetComputerUserSearchOptionsForIsAbout());
 
@@ -567,10 +572,12 @@ function CaseInitForm() {
     
     $(publicDepartmentControlName).change(function () {
         // Remove after implementing http://redmine.fastdev.se/issues/10995        
+        var departmentId = $(this).val();
+        showInvoice(departmentId);
+
         if (skipRefreshOU)
             return;
 
-        var departmentId = $(this).val();        
         var departmentFilterFormat = $('#DepartmentFilterFormat').val();
         
         var templateOU_Id = $("#CaseTemplate_OU_Id").val();
@@ -579,8 +586,6 @@ function CaseInitForm() {
             refreshOrganizationUnit(departmentId, departmentFilterFormat, templateOU_Id);                
         else 
             refreshOrganizationUnit(departmentId, departmentFilterFormat);
-        
-        showInvoice(departmentId);
     });
 
     $(publicIsAboutDepartmentControlName).change(function () {
@@ -649,6 +654,7 @@ function CaseInitForm() {
         $.post('/Cases/ChangePriority/', { 'id': $(this).val() }, function (data) {
             if (data.ExternalLogText != null && data.ExternalLogText != "") {
                 $('#CaseLog_TextExternal').val(data.ExternalLogText);
+                $('#CaseLog_TextExternal').trigger("propertychange");
             }
         }, 'json');
     });
@@ -764,6 +770,7 @@ function CaseInitForm() {
         if (txt.length > 1) {
             $(field).val($(field).val() + txt);
             $(field).focus();
+            $(field).trigger("propertychange");
 
             var input = $(field);
             input[0].selectionStart = input[0].selectionEnd = input.val().length;
@@ -905,6 +912,14 @@ function CaseInitForm() {
             $("#case__ProductArea_Id").val(val).trigger('change');
         }
         
+    });
+
+    $('#divCategory ul.dropdown-menu li a').click(function (e) {
+        e.preventDefault();
+        var me = this;
+        var val = $(me).attr('value');
+        $("#divBreadcrumbs_Category").text(getBreadcrumbs(me));
+        $("#case__Category_Id").val(val).trigger('change');
     });
 
     $('#AddNotifier').click(function (e) {

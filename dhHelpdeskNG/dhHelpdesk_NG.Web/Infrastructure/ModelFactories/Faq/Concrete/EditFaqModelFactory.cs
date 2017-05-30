@@ -20,7 +20,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Faq.Concrete
             List<ItemOverview> workingGroups,
             bool userHasFaqAdminPermission,
             SelectList languages,
-            int languageId)
+            int languageId,
+            bool showDetails = false)
         {
             var categoryDropDownItems = categories.Select(this.CategoryToDropDownItem).ToList();
 
@@ -54,7 +55,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Faq.Concrete
                 faq.ShowOnStartPage,
                 userHasFaqAdminPermission,
                 languageId,
-                languages);
+                languages,
+                showDetails);
         }
 
         private DropDownWithSubmenusItem CategoryToDropDownItem(CategoryWithSubcategories categoryWithSubcategories)

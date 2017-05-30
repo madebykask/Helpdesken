@@ -23,7 +23,7 @@
             this.Property(x => x.Code).IsOptional().HasMaxLength(20);
             //this.Property(x => x.RegionGUID).IsOptional();
             //this.Property(x => x.SynchronizedDate).IsOptional();
-
+            this.Property(x => x.LanguageId).IsOptional();
             this.ToTable("tblregion");
         }
     }

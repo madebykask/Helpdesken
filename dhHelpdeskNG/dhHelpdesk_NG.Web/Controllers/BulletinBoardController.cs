@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using DH.Helpdesk.Common.Extensions.Integer;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -58,12 +59,12 @@ namespace DH.Helpdesk.Web.Controllers
             else
             {
                 if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.UserGroupId == 2)
-                    model.BulletinBoards = this._bulletinBoardService.GetBulletinBoards(SessionFacade.CurrentCustomer.Id, true, bulletinBoardWGRestriction).OrderBy(x => x.ChangedDate).ToList();
+                    model.BulletinBoards = this._bulletinBoardService.GetBulletinBoards(SessionFacade.CurrentCustomer.Id, true, bulletinBoardWGRestriction).OrderByDescending(x => x.ShowDate.HasValue ? x.ShowDate : x.ChangedDate).ToList();
                 else
-                    model.BulletinBoards = this._bulletinBoardService.GetBulletinBoards(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.ChangedDate).ToList();
+                    model.BulletinBoards = this._bulletinBoardService.GetBulletinBoards(SessionFacade.CurrentCustomer.Id).OrderByDescending(x => x.ShowDate.HasValue ? x.ShowDate : x.ChangedDate).ToList();
 
-                CS.SortBy = "ChangedDate";
-                CS.Ascending = true;
+                CS.SortBy = "ChangedDate"; //really sort by showdate
+                CS.Ascending = false;
                 SessionFacade.CurrentBulletinBoardSearch = CS;
             }
 
@@ -139,7 +140,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         public ActionResult New()
         {
-            var model = this.CreateInputViewModel(new BulletinBoard { Customer_Id = SessionFacade.CurrentCustomer.Id, ShowDate = DateTime.Now, ShowUntilDate = DateTime.Now });
+            var model = this.CreateInputViewModel(new BulletinBoard { Customer_Id = SessionFacade.CurrentCustomer.Id, ShowDate = DateTime.Now, ShowUntilDate = DateTime.Now }, true);
 
             return this.View(model);
         }
@@ -215,7 +216,7 @@ namespace DH.Helpdesk.Web.Controllers
             return model;
         }
 
-        private BulletinBoardInputViewModel CreateInputViewModel(BulletinBoard bulletinBoard)
+        private BulletinBoardInputViewModel CreateInputViewModel(BulletinBoard bulletinBoard, bool isNewModel = false)
         {
             var wgsSelected = bulletinBoard.WGs ?? new List<WorkingGroupEntity>();
             var wgsAvailable = new List<WorkingGroupEntity>();
@@ -223,7 +224,16 @@ namespace DH.Helpdesk.Web.Controllers
             var user = this._userService.GetUser(SessionFacade.CurrentUser.Id);
 
             var workingGroups = this._workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id, user.Id);
-            var wgsSelectedIds = wgsSelected.Select(g => g.Id).ToArray();
+            var wgsSelectedIds = wgsSelected.Select(g => g.Id).ToList();
+            if (isNewModel)
+            {
+                var defaultWg = workingGroups.FirstOrDefault(x => x.IsDefaultBulletinBoard.ToBool());
+                if (defaultWg != null && !wgsSelectedIds.Contains(defaultWg.Id))
+                {
+                    wgsSelectedIds.Add(defaultWg.Id);
+                    wgsSelected.Add(defaultWg);
+                }
+            }
 
             foreach (var wg in workingGroups)
             {
@@ -247,10 +257,10 @@ namespace DH.Helpdesk.Web.Controllers
                     Text = x.WorkingGroupName,
                     Value = x.Id.ToString()
                 }).ToList(),
+                UserHasBulletinBoardAdminPermission = userHasBulletinBoardAdminPermission,
+                CurrentUser = user,
             };
 
-            model.UserHasBulletinBoardAdminPermission = userHasBulletinBoardAdminPermission;
-            model.CurrentUser = user;
 
             return model;
         }

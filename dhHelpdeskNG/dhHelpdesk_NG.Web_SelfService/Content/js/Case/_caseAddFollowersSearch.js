@@ -135,9 +135,10 @@ function InitCaseAddFollowersSearch(searchUriPath) {
                             function (item) {
                                 var aItem = {
                                     userId: item.UserId,
-                                    name: item.Name,
+                                    name: item.FirstName + " " + item.SurName,
                                     email: item.Emails,
-                                    groupType: item.GroupType
+                                    groupType: item.GroupType,
+                                    name_family: item.SurName + " " + item.FirstName
                                 };
                                 return JSON.stringify(aItem);
                             });
@@ -147,21 +148,30 @@ function InitCaseAddFollowersSearch(searchUriPath) {
                 });
             },
 
-            matcher: function (item) {
-                var arr = this.query.split(";");
-                var searchText = arr[arr.length - 1];
-                var tquery = extractor(searchText);
+            matcher: function (obj) {
+                var item = JSON.parse(obj);
+                var tquery = getSimpleQuery(this.query);
                 if (!tquery) return false;
-                return ~item.toLowerCase().indexOf(tquery.toLowerCase());
+                if (~item.email) {
+                    return ~item.name.toLowerCase().indexOf(tquery.toLowerCase()) ||
+                        ~item.name_family.toLowerCase().indexOf(tquery.toLowerCase()) ||
+                        ~item.userId.toLowerCase().indexOf(tquery.toLowerCase()) ||
+                        ~item.email[0].toLowerCase().indexOf(tquery.toLowerCase());
+                } else {
+                    return ~item.name.toLowerCase().indexOf(tquery.toLowerCase())
+                    || ~item.name_family.toLowerCase().indexOf(tquery.toLowerCase())
+                    || ~item.userId.toLowerCase().indexOf(tquery.toLowerCase());
+                }
             },
 
             sorter: function (items) {
                 var beginswith = [], caseSensitive = [], caseInsensitive = [], other = [], item;
+                var query = getSimpleQuery(this.query);
                 while (aItem = items.shift()) {
                     item = JSON.parse(aItem);
                     if (item.groupType === 0) {
-                        if (!item.userId.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
-                        else if (~item.userId.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
+                        if (!item.userId.toLowerCase().indexOf(query.toLowerCase())) beginswith.push(JSON.stringify(item));
+                        else if (~item.userId.indexOf(query)) caseSensitive.push(JSON.stringify(item));
                         else caseInsensitive.push(JSON.stringify(item));
                     } else {
                         other.push(JSON.stringify(item));
@@ -174,13 +184,16 @@ function InitCaseAddFollowersSearch(searchUriPath) {
             highlighter: function (obj) {
                 var item = JSON.parse(obj);
                 var grType = window.parameters.initGroup + ": ";
-                
                 var userId = item.userId != null ? item.userId + ' - ' : "";
-
-                var result = item.name + ' - ' + userId + item.email;
-                var query = extractor(this.query).replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
-                return grType + result.replace(new RegExp('(' + query + ')', 'ig'),
-                    function ($1, match) {
+                var query = getSimpleQuery(this.query);
+                var result = item.name + " - " + userId + item.email;
+                var resultNameFamily = item.name_family + " - " + userId + item.email;
+                if (result.toLowerCase().indexOf(query.toLowerCase()) > -1)
+                    return grType + result.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+                        return '<strong>' + match + '</strong>';
+                    });
+                else
+                    return grType + resultNameFamily.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
                         return '<strong>' + match + '</strong>';
                     });
             },

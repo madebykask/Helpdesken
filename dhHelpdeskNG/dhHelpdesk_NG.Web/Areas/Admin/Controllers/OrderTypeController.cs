@@ -31,12 +31,18 @@
             this._customerService = customerService;
         }
 
+        public JsonResult SetShowOnlyActiveOrderTypesInAdmin(bool value)
+        {
+            SessionFacade.ShowOnlyActiveOrderTypesInAdmin = value;
+            return this.Json(new { result = "success" });
+        }
+
         public ActionResult Index(int customerId)
         {
             var customer = this._customerService.GetCustomer(customerId);
             var orderTypes = this._orderTypeService.GetOrderTypes(customer.Id);
 
-            var model = new OrderTypeIndexViewModel { OrderTypes = orderTypes, Customer = customer };
+            var model = new OrderTypeIndexViewModel { OrderTypes = orderTypes, Customer = customer, IsShowOnlyActive = SessionFacade.ShowOnlyActiveOrderTypesInAdmin };
             return this.View(model);
         }
 
@@ -57,6 +63,7 @@
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult New(OrderType orderType)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
@@ -143,7 +150,7 @@
             var parentCount = GetOrderTypeParentsCount(orderType);
 
             var caseTypes = this._caseTypeService.GetCaseTypes(SessionFacade.CurrentCustomer.Id, true);
-            var caseTypesInRow = this._caseTypeService.GetChildrenInRow(caseTypes).ToList();
+            var caseTypesInRow = this._caseTypeService.GetChildrenInRow(caseTypes, true).ToList();
 
             var model = new OrderTypeInputViewModel
             {

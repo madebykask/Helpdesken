@@ -1301,8 +1301,8 @@
                                 <input type="hidden" name="CaseFieldSettings[18].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString())" />
                             </td>
                             <td>
-                                <input type="checkbox" name="CaseFieldSettings[18].ShowExternal" checked="checked" value="1" disabled="disabled"/>
-                                <input type="hidden" name="CaseFieldSettings[18].ShowExternal" value="1" />
+                                <input type="checkbox" name="CaseFieldSettings[18].ShowExternal"  @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
+                                <input type="hidden" name="CaseFieldSettings[18].ShowExternal" value="0" />
                             </td>
                             <td>@RenderLockedFieldOption("CaseFieldSettings[18].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()))</td>
                             <td>
@@ -1918,7 +1918,7 @@
                         </tr>
                         <tr>
                             <th colspan="9">
-                                @Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)
+                                @Translation.Get("Ärendehantering", Enums.TranslationSource.TextTranslation)
                             </th>
                         </tr>
                         <tr>
@@ -2131,86 +2131,80 @@
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[41].FieldHelp" value="0" />
                             </td>
                         </tr>
-                        @if (Model.Setting.ModuleProject != 0)
-                        {
-                            <tr>
-                                <td>
-                                    <i class="dh-icon-select" rel="tooltip" title="@Translation.Get("Vallista - dropdown", Enums.TranslationSource.TextTranslation)"></i>
-                                </td>
-                                <td>
-                                    @Translation.Get("Projekt", Enums.TranslationSource.TextTranslation)
-                                </td>
-                                <td>
-                                    <input type="checkbox" name="CaseFieldSettings[71].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Project.ToString()) == 1 ? "checked=checked" : "") value="1" />
-                                    <input type="hidden" name="CaseFieldSettings[71].ShowOnStartPage" value="0" />
-                                    <input type="hidden" name="CaseFieldSettings[71].Customer_Id" value="@Model.Customer.Id" />
-                                    <input type="hidden" name="CaseFieldSettings[71].Name" value="Project" />
-                                    <input type="hidden" name="CaseFieldSettings[71].Id" value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Project.ToString())" />
-                                    <input type="hidden" name="CaseFieldSettings[71].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.Project.ToString())" />
-                                    <input type="hidden" name="CaseFieldSettings[71].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.Project.ToString())" />
-                                </td>
-                                <td>
-                                    <input type="checkbox" name="CaseFieldSettings[71].ShowExternal" disabled="disabled" />
-                                    <input type="hidden" name="CaseFieldSettings[71].ShowExternal" value="0" />
-                                </td>
-                                <td>@RenderLockedFieldOption("CaseFieldSettings[71].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.Project.ToString()))</td>
-                                <td>
-                                    <input type="text" name="CaseFieldSettingWithLangauges[71].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.Project.ToString())" />
-                                    <input type="hidden" name="CaseFieldSettingWithLangauges[71].Name" value="Project" />
-                                </td>
-                                <td>
-                                    <input type="checkbox" name="CaseFieldSettings[71].Required" @(Model.CaseFieldSettings.getRequired(GlobalEnums.TranslationCaseFields.Project.ToString()) == 1 ? "checked=checked" : "") value="1" />
-                                    <input type="hidden" name="CaseFieldSettings[71].Required" value="0" />
-                                </td>
-                                <td>
-                                    &nbsp;
-                                </td>
-                                <td>
-                                    <input type="text" name="CaseFieldSettingWithLangauges[71].FieldHelp" value="@Model.CaseFieldSettingWithLangauges.getFieldHelp(GlobalEnums.TranslationCaseFields.Project.ToString())" />
-                                    <input type="hidden" name="CaseFieldSettingWithLangauges[71].FieldHelp" value="0" />
-                                </td>
-                            </tr>
-                        }
-                        @if (Model.Setting.ModuleProblem != 0)
-                        {
-                            <tr>
-                                <td>
-                                    <i class="dh-icon-select" rel="tooltip" title="@Translation.Get("Vallista - dropdown", Enums.TranslationSource.TextTranslation)"></i>
-                                </td>
-                                <td>
-                                    @Translation.Get("Problem", Enums.TranslationSource.TextTranslation)
-                                </td>
-                                <td>
-                                    <input type="checkbox" name="CaseFieldSettings[72].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Problem.ToString()) == 1 ? "checked=checked" : "") value="1" />
-                                    <input type="hidden" name="CaseFieldSettings[72].ShowOnStartPage" value="0" />
-                                    <input type="hidden" name="CaseFieldSettings[72].Customer_Id" value="@Model.Customer.Id" />
-                                    <input type="hidden" name="CaseFieldSettings[72].Name" value="Problem" />
-                                    <input type="hidden" name="CaseFieldSettings[72].Id" value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Problem.ToString())" />
-                                    <input type="hidden" name="CaseFieldSettings[72].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.Problem.ToString())" />
-                                    <input type="hidden" name="CaseFieldSettings[72].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.Problem.ToString())" />
-                                </td>
-                                <td>
-                                    <input type="checkbox" name="CaseFieldSettings[72].ShowExternal" disabled="disabled" />
-                                    <input type="hidden" name="CaseFieldSettings[72].ShowExternal" value="0" />
-                                </td>
-                                <td>@RenderLockedFieldOption("CaseFieldSettings[72].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.Problem.ToString()))</td>
-                                <td>
-                                    <input type="text" name="CaseFieldSettingWithLangauges[72].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.Problem.ToString())" />
-                                    <input type="hidden" name="CaseFieldSettingWithLangauges[72].Name" value="Problem" />
-                                </td>
-                                <td>
-                                    <input type="checkbox" name="CaseFieldSettings[72].Required" @(Model.CaseFieldSettings.getRequired(GlobalEnums.TranslationCaseFields.Problem.ToString()) == 1 ? "checked=checked" : "") value="1" />
-                                    <input type="hidden" name="CaseFieldSettings[72].Required" value="0" />
-                                </td>
-                                <td>
-                                    &nbsp;
-                                </td>
-                                <td>
-                                    <input type="text" name="CaseFieldSettingWithLangauges[72].FieldHelp" value="@Model.CaseFieldSettingWithLangauges.getFieldHelp(GlobalEnums.TranslationCaseFields.Problem.ToString())" />
-                                    <input type="hidden" name="CaseFieldSettingWithLangauges[72].FieldHelp" value="0" />
-                                </td>
-                            </tr>
-                        }
+                        <tr>
+                            <td>
+                                <i class="dh-icon-select" rel="tooltip" title="@Translation.Get("Vallista - dropdown", Enums.TranslationSource.TextTranslation)"></i>
+                            </td>
+                            <td>
+                                @Translation.Get("Projekt", Enums.TranslationSource.TextTranslation)
+                            </td>
+                            <td>
+                                <input type="checkbox" name="CaseFieldSettings[71].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Project.ToString()) == 1 ? "checked=checked" : "") value="1" />
+                                <input type="hidden" name="CaseFieldSettings[71].ShowOnStartPage" value="0" />
+                                <input type="hidden" name="CaseFieldSettings[71].Customer_Id" value="@Model.Customer.Id" />
+                                <input type="hidden" name="CaseFieldSettings[71].Name" value="Project" />
+                                <input type="hidden" name="CaseFieldSettings[71].Id" value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Project.ToString())" />
+                                <input type="hidden" name="CaseFieldSettings[71].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.Project.ToString())" />
+                                <input type="hidden" name="CaseFieldSettings[71].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.Project.ToString())" />
+                            </td>
+                            <td>
+                                <input type="checkbox" name="CaseFieldSettings[71].ShowExternal" disabled="disabled" />
+                                <input type="hidden" name="CaseFieldSettings[71].ShowExternal" value="0" />
+                            </td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[71].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.Project.ToString()))</td>
+                            <td>
+                                <input type="text" name="CaseFieldSettingWithLangauges[71].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.Project.ToString())" />
+                                <input type="hidden" name="CaseFieldSettingWithLangauges[71].Name" value="Project" />
+                            </td>
+                            <td>
+                                <input type="checkbox" name="CaseFieldSettings[71].Required" @(Model.CaseFieldSettings.getRequired(GlobalEnums.TranslationCaseFields.Project.ToString()) == 1 ? "checked=checked" : "") value="1" />
+                                <input type="hidden" name="CaseFieldSettings[71].Required" value="0" />
+                            </td>
+                            <td>
+                                &nbsp;
+                            </td>
+                            <td>
+                                <input type="text" name="CaseFieldSettingWithLangauges[71].FieldHelp" value="@Model.CaseFieldSettingWithLangauges.getFieldHelp(GlobalEnums.TranslationCaseFields.Project.ToString())" />
+                                <input type="hidden" name="CaseFieldSettingWithLangauges[71].FieldHelp" value="0" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <i class="dh-icon-select" rel="tooltip" title="@Translation.Get("Vallista - dropdown", Enums.TranslationSource.TextTranslation)"></i>
+                            </td>
+                            <td>
+                                @Translation.Get("Problem", Enums.TranslationSource.TextTranslation)
+                            </td>
+                            <td>
+                                <input type="checkbox" name="CaseFieldSettings[72].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Problem.ToString()) == 1 ? "checked=checked" : "") value="1" />
+                                <input type="hidden" name="CaseFieldSettings[72].ShowOnStartPage" value="0" />
+                                <input type="hidden" name="CaseFieldSettings[72].Customer_Id" value="@Model.Customer.Id" />
+                                <input type="hidden" name="CaseFieldSettings[72].Name" value="Problem" />
+                                <input type="hidden" name="CaseFieldSettings[72].Id" value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Problem.ToString())" />
+                                <input type="hidden" name="CaseFieldSettings[72].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.Problem.ToString())" />
+                                <input type="hidden" name="CaseFieldSettings[72].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.Problem.ToString())" />
+                            </td>
+                            <td>
+                                <input type="checkbox" name="CaseFieldSettings[72].ShowExternal" disabled="disabled" />
+                                <input type="hidden" name="CaseFieldSettings[72].ShowExternal" value="0" />
+                            </td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[72].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.Problem.ToString()))</td>
+                            <td>
+                                <input type="text" name="CaseFieldSettingWithLangauges[72].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.Problem.ToString())" />
+                                <input type="hidden" name="CaseFieldSettingWithLangauges[72].Name" value="Problem" />
+                            </td>
+                            <td>
+                                <input type="checkbox" name="CaseFieldSettings[72].Required" @(Model.CaseFieldSettings.getRequired(GlobalEnums.TranslationCaseFields.Problem.ToString()) == 1 ? "checked=checked" : "") value="1" />
+                                <input type="hidden" name="CaseFieldSettings[72].Required" value="0" />
+                            </td>
+                            <td>
+                                &nbsp;
+                            </td>
+                            <td>
+                                <input type="text" name="CaseFieldSettingWithLangauges[72].FieldHelp" value="@Model.CaseFieldSettingWithLangauges.getFieldHelp(GlobalEnums.TranslationCaseFields.Problem.ToString())" />
+                                <input type="hidden" name="CaseFieldSettingWithLangauges[72].FieldHelp" value="0" />
+                            </td>
+                        </tr>
                         <tr>
                             <td><i class="dh-icon-calendar" rel="tooltip" title="@Translation.Get("Datumfält", Enums.TranslationSource.TextTranslation)"></i>
                             </td>
