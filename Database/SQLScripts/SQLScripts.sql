@@ -1,4 +1,4 @@
--- update DB from 5.3.31 to 5.3.32 version
+﻿-- update DB from 5.3.31 to 5.3.32 version
 
 
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
@@ -555,85 +555,22 @@ INSERT INTO [dbo].[tblComputerUserFieldSettings]
 				''
 		FROM tblComputerUserFieldSettings	
 		WHERE Customer_Id IS NOT NULL AND Customer_Id NOT IN (SELECT Customer_Id From tblComputerUserFieldSettings WHERE Customer_Id IS NOT NULL AND ComputerUserField='Language_Id')
-		
-
-		DECLARE @ComputerUserFieldSettings_Id int
-		DECLARE  @Language_Id int
-		DECLARE  @Label nvarchar(max)
-
 			
-            
-		--Swedish
-		DECLARE Scroll_cursor1 SCROLL CURSOR FOR 
-		SELECT    DISTINCT    Id,
-			(SELECT Id FROM tblLanguage WHERE LanguageID='SV'),
-			'Language'
-			FROM            dbo.tblComputerUserFieldSettings
-			WHERE        (ComputerUserField = 'Language_Id')
-
-			OPEN Scroll_cursor1	
-			FETCH NEXT FROM Scroll_cursor1 INTO @ComputerUserFieldSettings_Id, @Language_Id, @Label
-
-				WHILE (@@FETCH_STATUS=0)
-
-					BEGIN	
-						IF NOT EXISTS(Select ComputerUserFieldSettings_Id FROM  [tblComputerUserFS_tblLanguage]
-							WHERE ComputerUserFieldSettings_Id = @ComputerUserFieldSettings_Id AND Language_Id=@Language_Id)
-							BEGIN
-								INSERT INTO [dbo].[tblComputerUserFS_tblLanguage] 
-									([ComputerUserFieldSettings_Id]
-									,[Language_Id]
-									,[Label])
-								VALUES
-									(
-										@ComputerUserFieldSettings_Id,
-										@Language_Id, 
-										@Label
-									)
-							END
-						FETCH NEXT FROM Scroll_cursor1 INTO @ComputerUserFieldSettings_Id, @Language_Id, @Label
-
-					END
-			CLOSE Scroll_cursor1
-			DEALLOCATE Scroll_cursor1
-		--Swedish		
 		
-		
+	--Swedish
+	insert into  tblComputerUserFS_tblLanguage 
+	Select fs.Id, 1, 'Språk', '' from  tblComputerUserFieldSettings fs left join 
+					tblComputerUserFS_tblLanguage fsl on (fs.Id = fsl.ComputerUserFieldSettings_Id and fsl.Language_Id = 1)
+	where fsl.ComputerUserFieldSettings_Id is null and  fs.ComputerUserField = 'Language_Id' 
 
-		--English
-		DECLARE Scroll_cursor1 SCROLL CURSOR FOR 
-		SELECT    DISTINCT    Id,
-			(SELECT Id FROM tblLanguage WHERE LanguageID='EN'),
-			'Language'
-			FROM            dbo.tblComputerUserFieldSettings
-			WHERE        (ComputerUserField = 'Language_Id')
 
-			OPEN Scroll_cursor1	
-			FETCH NEXT FROM Scroll_cursor1 INTO @ComputerUserFieldSettings_Id, @Language_Id, @Label
+	--English
+	insert into  tblComputerUserFS_tblLanguage 
+	Select fs.Id, 2, 'Language', '' from  tblComputerUserFieldSettings fs left join 
+					tblComputerUserFS_tblLanguage fsl on (fs.Id = fsl.ComputerUserFieldSettings_Id and fsl.Language_Id = 2)
+	where fsl.ComputerUserFieldSettings_Id is null and  fs.ComputerUserField = 'Language_Id' 
 
-				WHILE (@@FETCH_STATUS=0)
-
-					BEGIN	
-						IF NOT EXISTS(Select ComputerUserFieldSettings_Id FROM  [tblComputerUserFS_tblLanguage]
-							WHERE ComputerUserFieldSettings_Id = @ComputerUserFieldSettings_Id AND Language_Id=@Language_Id)
-							BEGIN
-								INSERT INTO [dbo].[tblComputerUserFS_tblLanguage] 
-									([ComputerUserFieldSettings_Id]
-									,[Language_Id]
-									,[Label])
-								VALUES
-									(
-										@ComputerUserFieldSettings_Id,
-										@Language_Id, 
-										@Label
-									)
-							END
-						FETCH NEXT FROM Scroll_cursor1 INTO @ComputerUserFieldSettings_Id, @Language_Id, @Label
-
-					END
-			CLOSE Scroll_cursor1
-			DEALLOCATE Scroll_cursor1
-		--Swedish	
+				
 
 if not exists(select * from sysobjects WHERE Name = N'tblLink_tblWorkingGroup')
 begin
