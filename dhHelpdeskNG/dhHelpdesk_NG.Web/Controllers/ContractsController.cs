@@ -83,8 +83,34 @@ namespace DH.Helpdesk.Web.Controllers
             model.ContractCategories = contractcategories.OrderBy(a => a.Name).ToList();
             model.Suppliers = suppliers.OrderBy(s => s.Name).ToList();
             model.Setting = GetSettingsModel(customer.Id);
+            model.TotalCases = model.Rows.Data.Count();
+            model.OnGoingCases = model.Rows.Data.Where(z => z.Finished == 0).Count();
+            model.FinishedCases = model.Rows.Data.Where(z => z.Finished == 1).Count();
+
+            int iContractNoticeOfRemovalCount = 0;
+            foreach (ContractsIndexRowModel ci in model.Rows.Data)
+            {
+                if (isInNoticeOfRemoval(ci.Finished, ci.NoticeDate.ToString()))
+                {
+                    iContractNoticeOfRemovalCount = iContractNoticeOfRemovalCount + 1;
+                }
+            }
+            model.ContractNoticeOfRemovalCount = iContractNoticeOfRemovalCount;
 
 
+            int iContractFollowUpCount = 0;
+            foreach (ContractsIndexRowModel ci in model.Rows.Data)
+            {
+                if (isInFollowUp(ci.Finished, ci.ContractStartDate.ToString(), ci.ContractEndDate.ToString(), ci.FollowUpInterval))
+                {
+                    iContractFollowUpCount = iContractFollowUpCount + 1;
+                }
+            }
+            model.ContractFollowUpCount = iContractFollowUpCount;
+
+            model.RunningCases = model.Rows.Data.Where(z => z.Running == 1).Count();
+
+            
 
 
 
@@ -183,12 +209,91 @@ namespace DH.Helpdesk.Web.Controllers
 
 
             model.Rows = GetIndexRowModel(id, filter, new ColSortModel(EnumContractFieldSettings.Number, true), selectedstatus);
+            model.TotalCases = model.Rows.Data.Count();
+            model.OnGoingCases = model.Rows.Data.Where(z => z.Finished == 0).Count();
+            model.FinishedCases = model.Rows.Data.Where(z => z.Finished == 1).Count();
+            int iContractNoticeOfRemovalCount = 0;
+            foreach (ContractsIndexRowModel ci in model.Rows.Data)
+            {
+                if (isInNoticeOfRemoval(ci.Finished, ci.NoticeDate.ToString()))
+                {
+                    iContractNoticeOfRemovalCount = iContractNoticeOfRemovalCount + 1;
+                }
+            }
+            model.ContractNoticeOfRemovalCount = iContractNoticeOfRemovalCount;
 
-            //filter.SelectedContractCategories=
+            int iContractFollowUpCount = 0;
+            foreach (ContractsIndexRowModel ci in model.Rows.Data)
+            {
+                if (isInFollowUp(ci.Finished, ci.ContractStartDate.ToString(), ci.ContractEndDate.ToString(), ci.FollowUpInterval))
+                {
+                    iContractFollowUpCount = iContractFollowUpCount + 1;
+                }
+            }
+            model.ContractFollowUpCount = iContractFollowUpCount;
+            model.RunningCases = model.Rows.Data.Where(z => z.Running == 1).Count();
 
             return this.PartialView("_ContractsIndexRows", model.Rows);
         }
 
+        private bool isInFollowUp(int Finished, string ContractStartDate, string ContractEndDate, int FollowUpInterval)
+        {
+            bool flag = false;
+            string sDate = string.Empty;
+            int i = 0;
+            string sContractEndDate = string.Empty;
+
+            if (ParseDate(ContractStartDate) == false)
+            {
+                return false;
+            }
+            if (Finished == 0 && FollowUpInterval > 0)
+            {
+                if (ParseDate(ContractEndDate) == false)
+                {
+                    DateTime endDate = DateTime.Now.AddMonths(1);
+                    sContractEndDate = endDate.ToString();
+                }
+                else
+                {
+                    sContractEndDate = ContractEndDate;
+
+                }
+
+
+                sDate = ContractStartDate.ToString();
+
+                do
+                {
+                    //Do While sDate < sContractEndDate
+                    DateTime endDate = DateTime.Now.AddMonths(1);
+                    if (Convert.ToDateTime(endDate) > Convert.ToDateTime(sDate) && Convert.ToDateTime(sDate) < Convert.ToDateTime(DateTime.Now))
+                    {
+                        flag = true;
+
+
+                        break;
+                    }
+
+                    DateTime endDate1 = Convert.ToDateTime(sDate).AddMonths(FollowUpInterval);
+                    sDate = endDate1.ToString();
+
+
+                    i = i + 1;
+
+
+                    if (i > 100)
+                    {
+                        break;
+                    }
+
+
+                    //Loop
+                } while (Convert.ToDateTime(sDate) < Convert.ToDateTime(sContractEndDate));
+            }
+
+            return flag;
+        }
 
         private bool isInNoticeOfRemoval(int Finished, string NoticeDate)
         {
@@ -551,7 +656,8 @@ namespace DH.Helpdesk.Web.Controllers
                     ResponsibleUser = con.ResponsibleUser,
                     FollowUpResponsibleUser = con.FollowUpResponsibleUser,
                     SelectedShowStatus = showstatus,
-                    IsInNoticeOfRemoval = isInNoticeOfRemoval(con.Finished, con.NoticeDate.ToString())
+                    IsInNoticeOfRemoval = isInNoticeOfRemoval(con.Finished, con.NoticeDate.ToString()),
+                    IsInFollowUp = isInFollowUp(con.Finished, con.ContractStartDate.ToString(), con.ContractEndDate.ToString(), con.FollowUpInterval),
                 });
             }
 

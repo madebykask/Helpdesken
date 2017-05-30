@@ -94,8 +94,16 @@ namespace DH.Helpdesk.Web.Models.Contract
 
         public string SearchText { get; set; }
 
-        
+        public int TotalCases { get; set; }
+        public int OnGoingCases { get; set; }
 
+        public int FinishedCases { get; set; }
+
+        public int ContractNoticeOfRemovalCount { get; set; }
+
+        public int ContractFollowUpCount { get; set; }
+
+        public int RunningCases { get; set; }
     }
 
     
@@ -107,9 +115,12 @@ namespace DH.Helpdesk.Web.Models.Contract
         {
             SelectedShowStatus = 10;
             IsInNoticeOfRemoval = false;
+            IsInFollowUp = false;
         }
 
         public bool IsInNoticeOfRemoval { get; set; }
+
+        public bool IsInFollowUp { get; set; }
         public int SelectedShowStatus { get; set; }
 
         public int ContractId { get; set; }
