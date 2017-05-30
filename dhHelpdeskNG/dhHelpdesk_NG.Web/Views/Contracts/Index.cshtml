@@ -54,7 +54,7 @@
                         <table style="width:100%">
                             <tr>
                                 <td style="width:100px">@Translation.Get("Kategori", Enums.TranslationSource.TextTranslation)</td>&nbsp;
-                                
+
                                 <td>
                                     <select id="lstContractCategories" name="lstContractCategories" data-field="region" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                         @foreach (var a in Model.ContractCategories)
@@ -197,10 +197,22 @@
                 <div id="contracts_grid">
                     @Html.Partial("_ContractsIndexRows", Model.Rows)
                 </div>
-                <div class="tab-pane tab-pane-border" id="fragment-2">
+            
+                @*<div id="SettingsTableContainer">
+
                     @Html.Partial("_Settings", Model.Setting)
-                </div>
+                </div>*@
+
             </div>
+            <div class="tab-pane tab-pane-border" id="fragment-2">
+                @using (Html.BeginForm("Settings", "Contracts", FormMethod.Post, new { id = "contractSetting" }))
+                {
+                    @Html.Partial("_Settings", Model.Setting)
+                }
+            </div>
+
+            
+            
         </div>
     </div>
 

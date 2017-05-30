@@ -3,18 +3,20 @@
 @model DH.Helpdesk.Web.Models.CheckLists.CheckListIndexViewModel
 
 @{
-    ViewBag.Title = "Index"; 
+    ViewBag.Title = "Index";
 }
 
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
-            <li id="btnAdd">@Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " +
-            Translation.Get("Checklista", Enums.TranslationSource.TextTranslation), "new", null, new { @class = "btn" })</li>
-            @*<li> @Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "Save", "Checklists", null, new { @class = "btn" }) </li>  *@          
-           @* <li> @Html.EditorFor(model => model.CreatDate, "DatePicker", new { id = "CreatDate" })</li>*@
-       </ul>
-    </div>
+            <li id="btnAdd">
+                @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " +
+            Translation.Get("Checklista", Enums.TranslationSource.TextTranslation), "new", null, new { @class = "btn" })
+        </li>
+        @*<li> @Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "Save", "Checklists", null, new { @class = "btn" }) </li>  *@
+        @* <li> @Html.EditorFor(model => model.CreatDate, "DatePicker", new { id = "CreatDate" })</li>*@
+    </ul>
+</div>
 </div>
 <div class="content">
     <div class="container">
@@ -29,19 +31,19 @@
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment-1">
 
-                  @*  @using (Html.BeginForm("index", "Checklist", FormMethod.Post, new { id = "checkLists" }))
-                {                                        
-                      
-                }*@
-                @Html.Partial("_CheckListsAction", Model)            
+                @*  @using (Html.BeginForm("index", "Checklist", FormMethod.Post, new { id = "checkLists" }))
+                    {
+
+                    }*@
+                @Html.Partial("_CheckListsAction", Model)
             </div>
 
-            <div class="tab-pane tab-pane-border" id="fragment-2">                                            
-                @using (Html.BeginForm("index", "Checklist", FormMethod.Post, new { id = "checkLists" }))
-                {                                        
-                      @Html.Partial("_Input")
+            <div class="tab-pane tab-pane-border" id="fragment-2">
+                @using (Html.BeginForm("Settings", "Contracts", FormMethod.Post, new { id = "settings" }))
+                {
+                    @Html.Partial("_Input")
                 }
-            </div>            
+            </div>
         </div>
     </div>
 </div>
