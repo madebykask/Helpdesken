@@ -13,6 +13,9 @@
     public interface IContractService
     {
         List<Contract> GetContracts(int customerId);
+
+        List<Contract> GetContractsNotFinished(int customerId);
+        
         Contract GetContract(int contractId);
         List<ContractsSettingRowModel> GetContractsSettingRows(int customerId);
         void SaveContractSettings(List<ContractsSettingRowModel> ContractSettings);
@@ -60,6 +63,12 @@
             return this._contractRepository.GetContracts(customerId).OrderBy(c => c.ContractNumber).ToList();
         }
 
+        public List<Contract> GetContractsNotFinished(int customerId)
+        {
+            return this._contractRepository.GetContractsNotFinished(customerId).OrderBy(c => c.ContractNumber).ToList();
+        }
+
+        
         public Contract GetContract(int contractId)
         {
             return this._contractRepository.GetContract(contractId);

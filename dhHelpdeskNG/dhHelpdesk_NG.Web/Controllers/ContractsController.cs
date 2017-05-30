@@ -507,7 +507,7 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var customer = _customerService.GetCustomer(customerId);
             var model = new ContractsIndexRowsModel(customer);
-            var allContracts = _contractService.GetContracts(customerId);
+            var allContracts = _contractService.GetContractsNotFinished(customerId);
             var settings = GetSettingsModel(customer.Id);
             var selectedContracts = new List<Contract>();
 
