@@ -429,30 +429,7 @@ begin
 	Add StatusGUID uniqueIdentifier NOT NULL CONSTRAINT DF_StatusGUID default (newid())
 end
 GO
-
-/* ADD Language Columns to Region, Department and ComputerUsers */
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblRegion')
-                      ALTER TABLE tblRegion 
-                      ADD LanguageId int NULL
-                      DEFAULT 0
-                      update tblRegion set languageid=0
-GO
-
-
-
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblDepartment')
-                      ALTER TABLE tblDepartment
-                      ADD LanguageId int NULL
-                      DEFAULT 0
-                      update tblDepartment set languageid=0
-GO
-
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblComputerUsers')
-                      ALTER TABLE tblComputerUsers
-                      ADD LanguageId int NULL
-                      DEFAULT 0
-                      update tblComputerUsers set languageid=0
-GO 
+ 
 
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
                where syscolumns.name = N'CaseSolution_Id' and sysobjects.name = N'tblCase')
@@ -465,6 +442,100 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	end
 GO
 
+
+
+	
+	
+--IX_tblLog_Case_Id:
+if exists (SELECT name FROM sysindexes WHERE name = 'IX_tblLog_Case_Id')
+	DROP INDEX [IX_tblLog_Case_Id] ON [dbo].[tblLog]
+GO
+CREATE NONCLUSTERED INDEX [IX_tblLog_Case_Id] ON [dbo].[tblLog]
+(
+	[Case_Id] ASC
+)
+GO
+
+-- IX_tblFormFieldValue_Case_Id
+if exists (SELECT name FROM sysindexes WHERE name = 'IX_tblFormFieldValue_Case_Id')
+	DROP INDEX [IX_tblFormFieldValue_Case_Id] ON [dbo].[tblFormFieldValue]
+GO
+
+if not exists (SELECT name FROM sysindexes WHERE name = 'IX_tblFormFieldValue_Case_Id')
+CREATE NONCLUSTERED INDEX [IX_tblFormFieldValue_Case_Id] ON [dbo].[tblFormFieldValue]
+(
+	[Case_Id] ASC
+)
+GO
+
+-- IX_tblCase_Customer_Id
+if exists (SELECT name FROM sysindexes WHERE name = 'IX_tblCase_Customer_Id')
+	DROP INDEX [IX_tblCase_Customer_Id] ON [dbo].[tblCase]
+GO
+
+if not exists (SELECT name FROM sysindexes WHERE name = 'IX_tblCase_Customer_Id')
+	CREATE NONCLUSTERED INDEX [IX_tblCase_Customer_Id] ON [dbo].[tblCase]
+	(
+		[Customer_Id] ASC,
+		[Deleted] ASC,
+		[FinishingDate] ASC
+	)
+	INCLUDE ([Casenumber]) 
+GO
+
+
+
+
+/* ADD Language Columns to Region, Department and ComputerUsers */
+DECLARE @addlng bit=0
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblRegion')
+	begin
+		SET @addlng=1
+	end
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblRegion')
+                      ALTER TABLE tblRegion 
+                      ADD LanguageId int NULL
+                      DEFAULT 0
+                    
+	if @addlng=1
+		BEGIN
+			update tblRegion set languageid=0
+		END
+GO
+
+DECLARE @addlng bit = 0
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblDepartment')
+	BEGIN
+		SET @addlng=1
+	END
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblDepartment')
+                      ALTER TABLE tblDepartment
+                      ADD LanguageId int NULL
+                      DEFAULT 0
+           
+
+		if @addlng=1
+			BEGIN
+				update tblDepartment set languageid=0
+			END
+GO
+
+DECLARE @addlng bit = 0
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblComputerUsers')
+	BEGIN
+		SET @addlng=1
+	END
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblComputerUsers')
+                      ALTER TABLE tblComputerUsers
+                      ADD LanguageId int NULL
+                      DEFAULT 0
+		if @addlng=1
+			BEGIN
+				update tblComputerUsers set languageid=0
+			END
+GO
 
 INSERT INTO [dbo].[tblComputerUserFieldSettings]
 			   ([Customer_Id]
@@ -490,6 +561,8 @@ INSERT INTO [dbo].[tblComputerUserFieldSettings]
 		DECLARE  @Language_Id int
 		DECLARE  @Label nvarchar(max)
 
+			
+		--Swedish
 		DECLARE Scroll_cursor1 SCROLL CURSOR FOR 
 		SELECT    DISTINCT    Id,
 			(SELECT Id FROM tblLanguage WHERE LanguageID='SV'),
@@ -559,45 +632,7 @@ INSERT INTO [dbo].[tblComputerUserFieldSettings]
 					END
 			CLOSE Scroll_cursor1
 			DEALLOCATE Scroll_cursor1
-		--Swedish		
-	
---IX_tblLog_Case_Id:
-if exists (SELECT name FROM sysindexes WHERE name = 'IX_tblLog_Case_Id')
-	DROP INDEX [IX_tblLog_Case_Id] ON [dbo].[tblLog]
-GO
-CREATE NONCLUSTERED INDEX [IX_tblLog_Case_Id] ON [dbo].[tblLog]
-(
-	[Case_Id] ASC
-)
-GO
-
--- IX_tblFormFieldValue_Case_Id
-if exists (SELECT name FROM sysindexes WHERE name = 'IX_tblFormFieldValue_Case_Id')
-	DROP INDEX [IX_tblFormFieldValue_Case_Id] ON [dbo].[tblFormFieldValue]
-GO
-
-if not exists (SELECT name FROM sysindexes WHERE name = 'IX_tblFormFieldValue_Case_Id')
-CREATE NONCLUSTERED INDEX [IX_tblFormFieldValue_Case_Id] ON [dbo].[tblFormFieldValue]
-(
-	[Case_Id] ASC
-)
-GO
-
--- IX_tblCase_Customer_Id
-if exists (SELECT name FROM sysindexes WHERE name = 'IX_tblCase_Customer_Id')
-	DROP INDEX [IX_tblCase_Customer_Id] ON [dbo].[tblCase]
-GO
-
-if not exists (SELECT name FROM sysindexes WHERE name = 'IX_tblCase_Customer_Id')
-	CREATE NONCLUSTERED INDEX [IX_tblCase_Customer_Id] ON [dbo].[tblCase]
-	(
-		[Customer_Id] ASC,
-		[Deleted] ASC,
-		[FinishingDate] ASC
-	)
-	INCLUDE ([Casenumber]) 
-GO
-
+		--Swedish	
 
 if not exists(select * from sysobjects WHERE Name = N'tblLink_tblWorkingGroup')
 begin
