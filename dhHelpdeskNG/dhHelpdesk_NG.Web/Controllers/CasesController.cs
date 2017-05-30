@@ -3834,7 +3834,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.UserGroupId == 2)
                 {
-                    fd.filterWorkingGroup = this._workingGroupService.GetWorkingGroups(cusId, userId, IsTakeOnlyActive);
+                    fd.filterWorkingGroup = this._workingGroupService.GetWorkingGroups(cusId, userId, IsTakeOnlyActive, true);
                 }
                 else
                 {
@@ -3946,7 +3946,7 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.UserGroupId == 2)
                     {
-                        specificFilter.WorkingGroupList = this._workingGroupService.GetWorkingGroups(customerId, userId, IsTakeOnlyActive);
+                        specificFilter.WorkingGroupList = this._workingGroupService.GetWorkingGroups(customerId, userId, IsTakeOnlyActive, true);
                     }
                     else
                     {
@@ -5446,7 +5446,7 @@ namespace DH.Helpdesk.Web.Controllers
             //if (isAdmin)
             if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.UserGroupId == 2)
             {
-                var workingGroups = _workingGroupService.GetWorkingGroups(customerId, userId, true).ToList();
+                var workingGroups = _workingGroupService.GetWorkingGroups(customerId, userId, true, true).ToList();
                 ret.WorkingGroups = workingGroups;
             }
             else
