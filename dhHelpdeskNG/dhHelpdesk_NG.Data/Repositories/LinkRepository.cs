@@ -103,11 +103,11 @@ namespace DH.Helpdesk.Dal.Repositories
                 }
                 if (r.CaseSolution != null)
                 {
-                    ltemp.CaseSolutionName = r.CaseSolution.Name.ToString() != null ? Convert.ToString(r.CaseSolution.Name.ToString()) : string.Empty;
+                    ltemp.CaseSolutionName = r.CaseSolution.Name.ToString() != null ? Convert.ToString(r.CaseSolution.Name.ToString()) : null;
                 }
                 else
                 {
-                    ltemp.CaseSolutionName = string.Empty;
+                    ltemp.CaseSolutionName = null;
                 }
                 if (r.Customer_Id != null)
                 {
@@ -119,11 +119,12 @@ namespace DH.Helpdesk.Dal.Repositories
                 }
                 if (r.Customer != null)
                 {
-                    ltemp.CustomerName = r.Customer.Name.ToString() != null ? Convert.ToString(r.Customer.Name.ToString()) : string.Empty;
+                    ltemp.CustomerName = r.Customer.Name.ToString() != null ? Convert.ToString(r.Customer.Name.ToString()) : null;
                 }
                 else
                 {
-                    ltemp.CustomerName = string.Empty;
+                    ltemp.CustomerName = null
+                        ;
                 }
                 if (r.Document_Id != null)
                 {
@@ -135,11 +136,11 @@ namespace DH.Helpdesk.Dal.Repositories
                 }
                 if (r.Document != null)
                 {
-                    ltemp.DocumentName = r.Document.Name.ToString() != null ? Convert.ToString(r.Document.Name.ToString()) : string.Empty;
+                    ltemp.DocumentName = r.Document.Name.ToString() != null ? Convert.ToString(r.Document.Name.ToString()) : null;
                 }
                 else
                 {
-                    ltemp.DocumentName = string.Empty;
+                    ltemp.DocumentName = null;
                 }
                 if (r.LinkGroup_Id != null)
                 {
@@ -151,11 +152,11 @@ namespace DH.Helpdesk.Dal.Repositories
                 }
                 if (r.LinkGroup != null)
                 {
-                    ltemp.LinkGroupName = r.LinkGroup.LinkGroupName.ToString() != null ? Convert.ToString(r.LinkGroup.LinkGroupName.ToString()) : string.Empty;
+                    ltemp.LinkGroupName = r.LinkGroup.LinkGroupName.ToString() != null ? Convert.ToString(r.LinkGroup.LinkGroupName.ToString()) : null;
                 }
                 else
                 {
-                    ltemp.LinkGroupName = string.Empty;
+                    ltemp.LinkGroupName = null;
                 }
 
                 if (r.NewWindowHeight != null)
