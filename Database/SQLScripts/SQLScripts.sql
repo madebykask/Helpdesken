@@ -493,10 +493,11 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 		SET @addlng=1
 	end
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblRegion')
+BEGIN
                       ALTER TABLE tblRegion 
                       ADD LanguageId int NULL
                       DEFAULT 0
-                    
+END                    
 	if @addlng=1
 		BEGIN
 			update tblRegion set languageid=0
@@ -510,10 +511,12 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	END
 
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblDepartment')
+BEGIN
                       ALTER TABLE tblDepartment
                       ADD LanguageId int NULL
                       DEFAULT 0
            
+END
 
 		if @addlng=1
 			BEGIN
@@ -528,9 +531,12 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	END
 
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblComputerUsers')
+BEGIN
                       ALTER TABLE tblComputerUsers
                       ADD LanguageId int NULL
                       DEFAULT 0
+                      
+END					
 		if @addlng=1
 			BEGIN
 				update tblComputerUsers set languageid=0
