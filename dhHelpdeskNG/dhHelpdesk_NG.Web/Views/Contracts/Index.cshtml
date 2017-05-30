@@ -175,8 +175,8 @@
                 search = '';
             }
 
-            $.get("/Contracts/Search/" + customer + "", { Categories: "'" + categories.toString() + "'", Suppliers: "'" + suppliers.toString() + "'", Responsible: "'" + responsible.toString() + "'", Department: "'" + department.toString() + "'", Show: "'" + show.toString() + "'", Search: "'" + search.toString() + "'" }, function (returnHtml) {
-                $('#_ContractsIndexRows').html($(returnHtml));
+            $.get("/Contracts/Search/" + customer + "", { Categories: "'" + categories.toString() + "'", Suppliers: "'" + suppliers.toString() + "'", Responsible: "'" + responsible.toString() + "'", Department: "'" + department.toString() + "'", Show: "'" + show.toString() + "'", Search: "'" + search.toString() + "'" }, function (returnHtml) {              
+                $('#contracts_grid').html($(returnHtml));
             });
 
 

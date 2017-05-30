@@ -1,4 +1,4 @@
--- update DB from 5.3.31 to 5.3.32 version
+﻿-- update DB from 5.3.31 to 5.3.32 version
 
 
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
@@ -429,30 +429,7 @@ begin
 	Add StatusGUID uniqueIdentifier NOT NULL CONSTRAINT DF_StatusGUID default (newid())
 end
 GO
-
-/* ADD Language Columns to Region, Department and ComputerUsers */
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblRegion')
-                      ALTER TABLE tblRegion 
-                      ADD LanguageId int NULL
-                      DEFAULT 0
-                      update tblRegion set languageid=0
-GO
-
-
-
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblDepartment')
-                      ALTER TABLE tblDepartment
-                      ADD LanguageId int NULL
-                      DEFAULT 0
-                      update tblDepartment set languageid=0
-GO
-
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblComputerUsers')
-                      ALTER TABLE tblComputerUsers
-                      ADD LanguageId int NULL
-                      DEFAULT 0
-                      update tblComputerUsers set languageid=0
-GO 
+ 
 
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
                where syscolumns.name = N'CaseSolution_Id' and sysobjects.name = N'tblCase')
@@ -466,100 +443,8 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 GO
 
 
-INSERT INTO [dbo].[tblComputerUserFieldSettings]
-			   ([Customer_Id]
-			   ,[ComputerUserField]
-			   ,[Show]
-			   ,[Required]
-			   ,[MinLength]
-			   ,[ShowInList]
-			   ,[LDAPAttribute])
-		SELECT  DISTINCT
-				Customer_Id,
-				'Language_Id',
-				1,
-				0,
-				0,
-				1,
-				''
-		FROM tblComputerUserFieldSettings	
-		WHERE Customer_Id IS NOT NULL AND Customer_Id NOT IN (SELECT Customer_Id From tblComputerUserFieldSettings WHERE Customer_Id IS NOT NULL AND ComputerUserField='Language_Id')
-		
 
-		DECLARE @ComputerUserFieldSettings_Id int
-		DECLARE  @Language_Id int
-		DECLARE  @Label nvarchar(max)
-
-		DECLARE Scroll_cursor1 SCROLL CURSOR FOR 
-		SELECT    DISTINCT    Id,
-			(SELECT Id FROM tblLanguage WHERE LanguageID='SV'),
-			'Language'
-			FROM            dbo.tblComputerUserFieldSettings
-			WHERE        (ComputerUserField = 'Language_Id')
-
-			OPEN Scroll_cursor1	
-			FETCH NEXT FROM Scroll_cursor1 INTO @ComputerUserFieldSettings_Id, @Language_Id, @Label
-
-				WHILE (@@FETCH_STATUS=0)
-
-					BEGIN	
-						IF NOT EXISTS(Select ComputerUserFieldSettings_Id FROM  [tblComputerUserFS_tblLanguage]
-							WHERE ComputerUserFieldSettings_Id = @ComputerUserFieldSettings_Id AND Language_Id=@Language_Id)
-							BEGIN
-								INSERT INTO [dbo].[tblComputerUserFS_tblLanguage] 
-									([ComputerUserFieldSettings_Id]
-									,[Language_Id]
-									,[Label])
-								VALUES
-									(
-										@ComputerUserFieldSettings_Id,
-										@Language_Id, 
-										@Label
-									)
-							END
-						FETCH NEXT FROM Scroll_cursor1 INTO @ComputerUserFieldSettings_Id, @Language_Id, @Label
-
-					END
-			CLOSE Scroll_cursor1
-			DEALLOCATE Scroll_cursor1
-		--Swedish		
-		
-		
-
-		--English
-		DECLARE Scroll_cursor1 SCROLL CURSOR FOR 
-		SELECT    DISTINCT    Id,
-			(SELECT Id FROM tblLanguage WHERE LanguageID='EN'),
-			'Language'
-			FROM            dbo.tblComputerUserFieldSettings
-			WHERE        (ComputerUserField = 'Language_Id')
-
-			OPEN Scroll_cursor1	
-			FETCH NEXT FROM Scroll_cursor1 INTO @ComputerUserFieldSettings_Id, @Language_Id, @Label
-
-				WHILE (@@FETCH_STATUS=0)
-
-					BEGIN	
-						IF NOT EXISTS(Select ComputerUserFieldSettings_Id FROM  [tblComputerUserFS_tblLanguage]
-							WHERE ComputerUserFieldSettings_Id = @ComputerUserFieldSettings_Id AND Language_Id=@Language_Id)
-							BEGIN
-								INSERT INTO [dbo].[tblComputerUserFS_tblLanguage] 
-									([ComputerUserFieldSettings_Id]
-									,[Language_Id]
-									,[Label])
-								VALUES
-									(
-										@ComputerUserFieldSettings_Id,
-										@Language_Id, 
-										@Label
-									)
-							END
-						FETCH NEXT FROM Scroll_cursor1 INTO @ComputerUserFieldSettings_Id, @Language_Id, @Label
-
-					END
-			CLOSE Scroll_cursor1
-			DEALLOCATE Scroll_cursor1
-		--Swedish		
+	
 	
 --IX_tblLog_Case_Id:
 if exists (SELECT name FROM sysindexes WHERE name = 'IX_tblLog_Case_Id')
@@ -598,6 +483,100 @@ if not exists (SELECT name FROM sysindexes WHERE name = 'IX_tblCase_Customer_Id'
 	INCLUDE ([Casenumber]) 
 GO
 
+
+
+
+/* ADD Language Columns to Region, Department and ComputerUsers */
+DECLARE @addlng bit=0
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblRegion')
+	begin
+		SET @addlng=1
+	end
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblRegion')
+BEGIN
+                      ALTER TABLE tblRegion 
+                      ADD LanguageId int NULL
+                      DEFAULT 0
+END                    
+	if @addlng=1
+		BEGIN
+			update tblRegion set languageid=0
+		END
+GO
+
+DECLARE @addlng bit = 0
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblDepartment')
+	BEGIN
+		SET @addlng=1
+	END
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblDepartment')
+BEGIN
+                      ALTER TABLE tblDepartment
+                      ADD LanguageId int NULL
+                      DEFAULT 0
+           
+END
+
+		if @addlng=1
+			BEGIN
+				update tblDepartment set languageid=0
+			END
+GO
+
+DECLARE @addlng bit = 0
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblComputerUsers')
+	BEGIN
+		SET @addlng=1
+	END
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblComputerUsers')
+BEGIN
+                      ALTER TABLE tblComputerUsers
+                      ADD LanguageId int NULL
+                      DEFAULT 0
+                      
+END					
+		if @addlng=1
+			BEGIN
+				update tblComputerUsers set languageid=0
+			END
+GO
+
+INSERT INTO [dbo].[tblComputerUserFieldSettings]
+			   ([Customer_Id]
+			   ,[ComputerUserField]
+			   ,[Show]
+			   ,[Required]
+			   ,[MinLength]
+			   ,[ShowInList]
+			   ,[LDAPAttribute])
+		SELECT  DISTINCT
+				Customer_Id,
+				'Language_Id',
+				1,
+				0,
+				0,
+				1,
+				''
+		FROM tblComputerUserFieldSettings	
+		WHERE Customer_Id IS NOT NULL AND Customer_Id NOT IN (SELECT Customer_Id From tblComputerUserFieldSettings WHERE Customer_Id IS NOT NULL AND ComputerUserField='Language_Id')
+			
+		
+	--Swedish
+	insert into  tblComputerUserFS_tblLanguage 
+	Select fs.Id, 1, 'Språk', '' from  tblComputerUserFieldSettings fs left join 
+					tblComputerUserFS_tblLanguage fsl on (fs.Id = fsl.ComputerUserFieldSettings_Id and fsl.Language_Id = 1)
+	where fsl.ComputerUserFieldSettings_Id is null and  fs.ComputerUserField = 'Language_Id' 
+
+
+	--English
+	insert into  tblComputerUserFS_tblLanguage 
+	Select fs.Id, 2, 'Language', '' from  tblComputerUserFieldSettings fs left join 
+					tblComputerUserFS_tblLanguage fsl on (fs.Id = fsl.ComputerUserFieldSettings_Id and fsl.Language_Id = 2)
+	where fsl.ComputerUserFieldSettings_Id is null and  fs.ComputerUserField = 'Language_Id' 
+
+				
 
 if not exists(select * from sysobjects WHERE Name = N'tblLink_tblWorkingGroup')
 begin
