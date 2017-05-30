@@ -24,8 +24,10 @@ namespace DH.Helpdesk.Web.Models.Contract
 
             selectListItems.AddRange(GetSelectListItem());
 
+            
+            ShowContracts = GetSelectListItem();
 
-            ShowContracts = selectListItems;
+
         }
 
         private static IEnumerable<SelectListItem> GetSelectListItem()
@@ -36,41 +38,41 @@ namespace DH.Helpdesk.Web.Models.Contract
             {
                 Text = string.Format("{0} {1}", "", "Pågående"),
                 Value = "1",
-                Selected = true
+                Selected = false
             });
 
             items.Add(new SelectListItem
             {
                 Text = string.Format("{0} {1}", "", "För uppföljning"),
                 Value = "2",
-                Selected = true
+                Selected = false
             });
 
             items.Add(new SelectListItem
             {
                 Text = string.Format("{0} {1}", "", "För uppsägning"),
                 Value = "3",
-                Selected = true
+                Selected = false
             });
 
             items.Add(new SelectListItem
             {
                 Text = string.Format("{0} {1}", "", "Löpande"),
                 Value = "4",
-                Selected = true
+                Selected = false
             });
 
             items.Add(new SelectListItem
             {
                 Text = string.Format("{0} {1}", "", "Avslutade"),
-                Value = "5",
-                Selected = true
+                Value = "9",
+                Selected = false
             });
 
             items.Add(new SelectListItem
             {
                 Text = string.Format("{0} {1}", "", "Alla"),
-                Value = "6",
+                Value = "10",
                 Selected = true
             });
 
@@ -92,6 +94,7 @@ namespace DH.Helpdesk.Web.Models.Contract
 
         public string SearchText { get; set; }
 
+        
 
     }
 
@@ -102,8 +105,10 @@ namespace DH.Helpdesk.Web.Models.Contract
 
         public ContractsIndexRowModel()
         {
-
+            SelectedShowStatus = 10;
         }
+
+        public int SelectedShowStatus { get; set; }
 
         public int ContractId { get; set; }
 
@@ -143,12 +148,15 @@ namespace DH.Helpdesk.Web.Models.Contract
             Data = new List<ContractsIndexRowModel>();
             Customer = customer;
             Columns = new List<ContractsSettingRowViewModel>();
+            SelectedShowStatus = 10;
         }
 
         public Customer Customer { get; private set; }
         public List<ContractsIndexRowModel> Data { get; set; }
         public List<ContractsSettingRowViewModel> Columns { get; set; }
         public ColSortModel SortBy { get; set; }
+
+        public int SelectedShowStatus { get; set; }
 
     }
 

@@ -93,10 +93,10 @@
                             <tr>
                                 <td style="width:100px">@Translation.Get("Visa", Enums.TranslationSource.TextTranslation)</td>&nbsp;
                                 <td>
-                                    <select id="lstShow" name="lstShow" data-field="region" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                    <select id="lstShow" name="lstShow" data-field="region" data-placeholder="@Translation.Get("Välj", Enums.TranslationSource.TextTranslation)" class="chosen-select">
                                         @foreach (var s in Model.ShowContracts)
                                         {
-                                            <option value="@s.Value">@s.Text</option>
+                                            <option selected="@s.Selected" value="@s.Value">@s.Text</option>
                                         }
                                     </select>
                                 </td>
@@ -109,7 +109,7 @@
 
                                     @*<input type="button" class="btn" id="searchQueryBtn" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" onclick="submit();" />*@
 
-                                    <input type="button" class="btn" id="searchQueryBtn" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" onclick="removeFromCart();"/>
+                                    <input type="button" class="btn" id="searchQueryBtn" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" onclick="commit();"/>
 
 
                                 </td>
@@ -136,7 +136,7 @@
 
     <script type="text/javascript">
 
-        function removeFromCart(id, lunch) {
+        function commit(id, lunch) {
 
             var customer = document.getElementById('currentCustomerId').value;
             

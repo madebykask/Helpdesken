@@ -76,7 +76,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var filter = new ContractSelectedFilter();
 
-            model.Rows = GetIndexRowModel(customer.Id, filter, new ColSortModel(EnumContractFieldSettings.Number, true));
+            model.Rows = GetIndexRowModel(customer.Id, filter, new ColSortModel(EnumContractFieldSettings.Number, true), 10);
             model.SearchText = string.Empty;
             model.Departments = departments;
             model.Users = users;
@@ -157,13 +157,16 @@ namespace DH.Helpdesk.Web.Controllers
 
             SelectedItems itemsState = new SelectedItems();
             words = Show.Split(',');
+            int selectedstatus = 0;
             foreach (string word in words)
             {
                 itemsState.AddItems(word);
 
+                selectedstatus = Convert.ToInt32(word);
+                break;
                 //Inactive = 0,
-            //Active = 1,
-            //All = 2
+                //Active = 1,
+                //All = 2
             }
 
             var filter = new ContractSelectedFilter();
@@ -177,7 +180,10 @@ namespace DH.Helpdesk.Web.Controllers
             
             var customer = _customerService.GetCustomer(id);
             var model = new ContractIndexViewModel(customer);
-            model.Rows = GetIndexRowModel(id, filter, new ColSortModel(EnumContractFieldSettings.Number, true));
+            
+            
+            model.Rows = GetIndexRowModel(id, filter, new ColSortModel(EnumContractFieldSettings.Number, true), selectedstatus);
+           
             //filter.SelectedContractCategories=
 
             return this.PartialView("_ContractsIndexRows", model.Rows);
@@ -348,13 +354,13 @@ namespace DH.Helpdesk.Web.Controllers
             return Json(new { state = true, message = Translation.GetCoreTextTranslation("Saved success!") }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult SortBy(int customerId, string colName, bool isAsc)
+        public ActionResult SortBy(int customerId, string colName, bool isAsc, int ShowStatus)
         {
-            var model = GetIndexRowModel(customerId, null, new ColSortModel(colName, isAsc));
+            var model = GetIndexRowModel(customerId, null, new ColSortModel(colName, isAsc), ShowStatus);
             return PartialView("_ContractsIndexRows", model);
         }
 
-        private ContractsIndexRowsModel GetIndexRowModel(int customerId, ContractSelectedFilter selectedFilter, ColSortModel sort)
+        private ContractsIndexRowsModel GetIndexRowModel(int customerId, ContractSelectedFilter selectedFilter, ColSortModel sort, int showstatus)
         {
             var customer = _customerService.GetCustomer(customerId);
             var model = new ContractsIndexRowsModel(customer);
@@ -431,6 +437,42 @@ namespace DH.Helpdesk.Web.Controllers
                     allContracts = allContracts.Where(t => idList.Contains(t.Supplier_Id)).ToList();
                 }
 
+
+                //State
+                z = 0;
+                if (selectedFilter.ShowState.Any())
+                {
+                    var idList = new int?[selectedFilter.ShowState.Count()];
+                    foreach (object i in selectedFilter.ShowState)
+                    {
+                        idList[z] = Convert.ToInt32(i.ToString());
+                        z = z + 1;
+
+                    }
+
+                    string[] arr = new string[idList.Count()];
+                    int p = 0;
+                    foreach (object d in idList)
+                    {
+                        arr[p] = d.ToString();
+                        p = p + 1;
+                    }
+
+                    if (arr.Contains("9"))
+                    {
+                        allContracts = allContracts.Where(t => t.Finished == 1).ToList();
+                    }
+                    else if (!arr.Contains("10"))
+                    {
+                        allContracts = allContracts.Where(t => t.Finished == 0).ToList();
+                    }
+
+                    if (arr.Contains("4"))
+                    {
+                        allContracts = allContracts.Where(t => t.Running == 1).ToList();
+                    }
+                }
+
                 //Text                
                 z = 0;
                 if (selectedFilter.SearchText.Any())
@@ -449,6 +491,7 @@ namespace DH.Helpdesk.Web.Controllers
                 col.SetOrder();
 
             model.Columns = model.Columns.OrderBy(s => s.VirtualOrder).ToList();
+            model.SelectedShowStatus = showstatus;
 
             foreach (var con in allContracts)
             {
@@ -467,7 +510,8 @@ namespace DH.Helpdesk.Web.Controllers
                     ContractCategory = con.ContractCategory,
                     Department = con.Department,
                     ResponsibleUser = con.ResponsibleUser,
-                    FollowUpResponsibleUser = con.FollowUpResponsibleUser
+                    FollowUpResponsibleUser = con.FollowUpResponsibleUser,
+                    SelectedShowStatus=showstatus
                 });
             }
 
