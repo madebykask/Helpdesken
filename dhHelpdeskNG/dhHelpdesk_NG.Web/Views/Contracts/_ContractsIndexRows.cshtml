@@ -62,7 +62,7 @@
 
                         //If(iStatus = 10) Or(iStatus <> 3 And iStatus <> 2) Or(iStatus = 3 And CBool(isInNoticeOfRemoval(rsDH_Support("Finished"), rsDH_Support("NoticeDate"))) = True)  Or(iStatus = 2 And CBool(isInFollowUp(rsDH_Support("Finished"), rsDH_Support("ContractStartDate"), rsDH_Support("ContractEndDate"), rsDH_Support("FollowUpInterval"))) = True) Then
 
-                        if ((Model.SelectedShowStatus == 10) || (Model.SelectedShowStatus!=3 && Model.SelectedShowStatus!=2))
+                        if ((Model.SelectedShowStatus == 10) || (Model.SelectedShowStatus!=3 && Model.SelectedShowStatus!=2)  || (Model.SelectedShowStatus==3 && row.IsInNoticeOfRemoval==true)  )
                         {
                         <tr>
                             @foreach (var s in Model.Columns)

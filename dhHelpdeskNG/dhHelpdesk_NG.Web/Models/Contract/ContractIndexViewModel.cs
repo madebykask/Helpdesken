@@ -106,8 +106,10 @@ namespace DH.Helpdesk.Web.Models.Contract
         public ContractsIndexRowModel()
         {
             SelectedShowStatus = 10;
+            IsInNoticeOfRemoval = false;
         }
 
+        public bool IsInNoticeOfRemoval { get; set; }
         public int SelectedShowStatus { get; set; }
 
         public int ContractId { get; set; }
@@ -157,6 +159,8 @@ namespace DH.Helpdesk.Web.Models.Contract
         public ColSortModel SortBy { get; set; }
 
         public int SelectedShowStatus { get; set; }
+
+        
 
     }
 

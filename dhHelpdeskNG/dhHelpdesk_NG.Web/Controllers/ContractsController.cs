@@ -177,20 +177,58 @@ namespace DH.Helpdesk.Web.Controllers
             filter.SelectedDepartments = itemsDep;
             filter.SearchText = Search;
             filter.ShowState = itemsState;
-            
+
             var customer = _customerService.GetCustomer(id);
             var model = new ContractIndexViewModel(customer);
-            
-            
+
+
             model.Rows = GetIndexRowModel(id, filter, new ColSortModel(EnumContractFieldSettings.Number, true), selectedstatus);
-           
+
             //filter.SelectedContractCategories=
 
             return this.PartialView("_ContractsIndexRows", model.Rows);
         }
 
 
+        private bool isInNoticeOfRemoval(int Finished, string NoticeDate)
+        {
+            bool flag = false;
+            string sDate = string.Empty;
 
+            if (Finished == 0 && ParseDate(NoticeDate))
+            {
+                if (Convert.ToDateTime(NoticeDate) < Convert.ToDateTime(DateTime.Now))
+                {
+                    sDate = DateTime.Now.ToString();
+                }
+                else
+                {
+
+                    sDate = NoticeDate.ToString();
+                }
+
+                DateTime endDate = DateTime.Now.AddMonths(1);
+
+                if (Convert.ToDateTime(endDate) >= Convert.ToDateTime(sDate) && Convert.ToDateTime(sDate) >= Convert.ToDateTime(DateTime.Now))
+                {
+                    flag = true;
+                }
+            }
+
+            return flag;
+        }
+
+
+
+        public bool ParseDate(string value)
+        {
+
+            string text1 = value;
+            DateTime dt1;
+            bool res = DateTime.TryParse(value, out dt1);
+            return res;
+
+        }
 
         private ContractViewInputModel CreateInputViewModel(int customerId)
         {
@@ -493,6 +531,7 @@ namespace DH.Helpdesk.Web.Controllers
             model.Columns = model.Columns.OrderBy(s => s.VirtualOrder).ToList();
             model.SelectedShowStatus = showstatus;
 
+
             foreach (var con in allContracts)
             {
                 model.Data.Add(new ContractsIndexRowModel
@@ -511,7 +550,8 @@ namespace DH.Helpdesk.Web.Controllers
                     Department = con.Department,
                     ResponsibleUser = con.ResponsibleUser,
                     FollowUpResponsibleUser = con.FollowUpResponsibleUser,
-                    SelectedShowStatus=showstatus
+                    SelectedShowStatus = showstatus,
+                    IsInNoticeOfRemoval = isInNoticeOfRemoval(con.Finished, con.NoticeDate.ToString())
                 });
             }
 
