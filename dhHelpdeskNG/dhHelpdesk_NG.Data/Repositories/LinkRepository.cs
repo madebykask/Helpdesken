@@ -53,14 +53,14 @@ namespace DH.Helpdesk.Dal.Repositories
 
 
 
-        public IEnumerable<LinkOverview> GetLinkOverviewsToStartPage(int[] customers, int? count, bool forStartPage, int userid)
+        public IEnumerable<LinkOverview> GetLinkOverviewsToStartPage(int[] customersIdAll, int? count, bool forStartPage, int userid)
         {
 
 
             string sql = string.Empty;
             DataTable dt = null;
 
-            int custid = customers[0];
+            // int custid = customers[0];
 
             int StartPage = 0;
             if (forStartPage == true)
@@ -68,7 +68,6 @@ namespace DH.Helpdesk.Dal.Repositories
                 StartPage = 1;
             }
 
-            //var links = this.DataContext.Links.Where(z => z.Customer_Id == custid && z.ShowOnStartPage == StartPage);
 
             var links =
                 from links1 in this.DataContext.Links
@@ -76,9 +75,8 @@ namespace DH.Helpdesk.Dal.Repositories
                 join documents in this.DataContext.Documents on links1.Document_Id equals documents.Id into linksdocument
                 join linkgroup in this.DataContext.LinkGroups on links1.LinkGroup_Id equals linkgroup.Id into linkslinkgroup
                 join customer in this.DataContext.Customers on links1.Customer_Id equals customer.Id into linkscustomer
-                where (links1.Customer_Id == custid && links1.ShowOnStartPage == StartPage)
+                where customersIdAll.Contains(links1.Customer_Id.Value)
                 select new { links1.CaseSolution_Id, links1.CaseSolution, links1.Us, links1.Wg, links1.Customer_Id, links1.Document_Id, links1.LinkGroup_Id, links1.NewWindowHeight, links1.NewWindowWidth, links1.OpenInNewWindow, links1.SortOrder, links1.URLAddress, links1.URLName, links1.ShowOnStartPage, links1.Document, links1.LinkGroup, links1.Customer };
-
 
 
             links = links.Where(x => !x.Us.Any() || x.Us.Any(u => u.Id == userid));
@@ -159,21 +157,69 @@ namespace DH.Helpdesk.Dal.Repositories
                 {
                     ltemp.LinkGroupName = string.Empty;
                 }
-                ltemp.NewWindowHeight = r.NewWindowHeight.ToString() != null ? Convert.ToInt32(r.NewWindowHeight.ToString()) : 0;
-                ltemp.NewWindowWidth = r.NewWindowWidth.ToString() != null ? Convert.ToInt32(r.NewWindowWidth.ToString()) : 0;
+
+                if (r.NewWindowHeight != null)
+                {
+                    ltemp.NewWindowHeight = r.NewWindowHeight.ToString() != null ? Convert.ToInt32(r.NewWindowHeight.ToString()) : 0;
+                }
+                else
+                {
+                    ltemp.NewWindowHeight = 0;
+                }
+
+                if (r.NewWindowWidth != null)
+                {
+                    ltemp.NewWindowWidth = r.NewWindowWidth.ToString() != null ? Convert.ToInt32(r.NewWindowWidth.ToString()) : 0;
+                }
+                else
+                {
+                    ltemp.NewWindowWidth = 0;
+                }
+
                 if (r.OpenInNewWindow != null)
                 {
                     ltemp.OpenInNewWindow = Convert.ToBoolean(Convert.ToInt32(r.OpenInNewWindow.ToString()));
                 }
+                else
+                {
+                    ltemp.OpenInNewWindow = false;
+                }
+
                 if (r.ShowOnStartPage != null)
                 {
                     ltemp.ShowOnStartPage = Convert.ToBoolean(Convert.ToInt32(r.ShowOnStartPage.ToString()));
                 }
+                else
+                {
+                    ltemp.ShowOnStartPage = false;
+                }
 
-                ltemp.SortOrder = r.SortOrder.ToString() != null ? Convert.ToString(r.SortOrder.ToString()) : string.Empty;
-                ltemp.UrlAddress = r.URLAddress.ToString() != null ? Convert.ToString(r.URLAddress.ToString()) : string.Empty;
-                ltemp.UrlName = r.URLName.ToString() != null ? Convert.ToString(r.URLName.ToString()) : string.Empty;
+                if (r.SortOrder != null)
+                {
+                    ltemp.SortOrder = r.SortOrder.ToString() != null ? Convert.ToString(r.SortOrder.ToString()) : string.Empty;
+                }
+                else
+                {
+                    ltemp.SortOrder = string.Empty;
+                }
 
+                if (r.URLAddress != null)
+                {
+                    ltemp.UrlAddress = r.URLAddress.ToString() != null ? Convert.ToString(r.URLAddress.ToString()) : string.Empty;
+                }
+                else
+                {
+                    ltemp.UrlAddress = string.Empty;
+                }
+
+                if (r.URLName != null)
+                {
+                    ltemp.UrlName = r.URLName.ToString() != null ? Convert.ToString(r.URLName.ToString()) : string.Empty;
+                }
+                else
+                {
+                    ltemp.UrlName = string.Empty;
+                }
                 llist1.Add(ltemp);
             }
 
