@@ -562,6 +562,7 @@ INSERT INTO [dbo].[tblComputerUserFieldSettings]
 		DECLARE  @Label nvarchar(max)
 
 			
+            
 		--Swedish
 		DECLARE Scroll_cursor1 SCROLL CURSOR FOR 
 		SELECT    DISTINCT    Id,
