@@ -101,7 +101,7 @@ function IsWillBeOverwritten(fieldId, val) {
             return IsWillBeOverwrittenByValue('#divCaseType', '#case__CaseType_Id', val);
             break;
         case 'Category_Id':
-            return IsWillBeOverwrittenByValue('#case__Category_Id', '#case__Category_Id', val);
+            return IsWillBeOverwrittenByValue('#divCategory', '#case__Category_Id', val);
             break;
         case 'ReportedBy':
             return IsWillBeOverwrittenByValue('#case__ReportedBy', '#case__ReportedBy', val);
@@ -355,8 +355,7 @@ var ApplyTemplate = function (data, doOverwrite) {
                     SetValueToBtnGroup('#divCaseType', "#divBreadcrumbs_CaseType", "#case__CaseType_Id", val, doOverwrite);
                     break;
                 case 'Category_Id':
-                    el = $('#case__Category_Id');
-                    SetValueIfElVisible(el, val, cfg);
+                    SetValueToBtnGroup('#divCategory', "#divBreadcrumbs_Category", "#case__Category_Id", val, doOverwrite);
                     break;
                 case 'ReportedBy':
                     el = $('#case__ReportedBy');
