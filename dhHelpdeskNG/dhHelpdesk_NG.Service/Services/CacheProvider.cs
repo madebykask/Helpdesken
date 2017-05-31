@@ -2,6 +2,7 @@
 {
     using System;
     using System.Runtime.Caching;
+    using System.Collections.Generic;
 
     public interface ICacheProvider
     {
@@ -9,6 +10,8 @@
         void Set(string key, object data, int cacheTime);
         bool IsSet(string key);
         void Invalidate(string key);
+        Dictionary<string, string> GetByStartsWith(string startsWith);
+        void InvalidateStartsWith(string startsWith);
     }
 
     public class CacheProvider : ICacheProvider
@@ -36,6 +39,28 @@
         public void Invalidate(string key)
         {
             this.Cache.Remove(key);
+        }
+
+        public void InvalidateStartsWith(string startsWith)
+        {
+            foreach (var item in this.Cache)
+            {
+                if (item.Key.ToLower().StartsWith(startsWith.ToLower()))
+                    this.Cache.Remove(item.Key);
+            }
+        }
+
+        public Dictionary<string, string> GetByStartsWith(string startsWith)
+        {
+            var dictionary = new Dictionary<string, string>();
+
+            foreach (var item in MemoryCache.Default)
+            {
+                if (item.Key.ToLower().StartsWith(startsWith.ToLower()))
+                    dictionary.Add(item.Key, item.Value.ToString());
+            }
+
+            return dictionary;
         }
     }
 }

@@ -342,7 +342,7 @@ namespace DH.Helpdesk.Services.Services
                 catch (Exception ex)
                 {
                     //Remove caching of conditions for this specific template that is used in Case
-                    string cacheKey = string.Format(DH.Helpdesk.Common.Constants.CacheKey.CaseSolutionCondition, caseSolution_Id);
+                    string cacheKey = string.Format(DH.Helpdesk.Common.Constants.CacheKey.CaseSolutionConditionWithId, caseSolution_Id);
                     this._cache.Invalidate(cacheKey);
 
                     //throw;
@@ -675,9 +675,8 @@ namespace DH.Helpdesk.Services.Services
             {
                 caseSolutionConditions = _caseSolutionConditionRepository.GetCaseSolutionConditions(caseSolution_Id).Select(x => new { x.Property_Name, x.Values }).ToDictionary(x => x.Property_Name, x => x.Values);
                 
-                //TODO: add this again when test is OK
-                //if (caseSolutionConditions.Any())
-                //    this._cache.Set(string.Format(DH.Helpdesk.Common.Constants.CacheKey.CaseSolutionCondition, caseSolution_Id), caseSolutionConditions, DH.Helpdesk.Common.Constants.Cache.Duration);
+                if (caseSolutionConditions.Any())
+                    this._cache.Set(string.Format(DH.Helpdesk.Common.Constants.CacheKey.CaseSolutionConditionWithId, caseSolution_Id), caseSolutionConditions, DH.Helpdesk.Common.Constants.Cache.Duration);
             }
 
             return caseSolutionConditions;
